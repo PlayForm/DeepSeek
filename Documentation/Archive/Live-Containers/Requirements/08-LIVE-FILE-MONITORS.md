@@ -20,11 +20,17 @@ statuses:
 
 # CAN-7 - LIVE FILE MONITORS (operational edits over live-running software)
 
-Date: 2026-10-20 Status: requirements only (the durable spec for the D3 DESIGN agent; written by the
-wave-3 research agent, R3). Base: Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md
-(v1) + Requirements 00-07 (wave 2, incl. 01's BINDING CONSTRAINTS 12.1/12.2 - the command-only
-detach and the sandbox/fail-open rules). Wave 3 EXTENDS the same package
-(Classic/packages/hook-dsh-live-containers) and never contradicts the verified seams.
+Date: 2026-10-20.
+
+Status: requirements only (the durable spec for the D3 DESIGN agent; written by the wave-3 research
+agent, R3).
+
+Base: Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md (v1) + Requirements 00-07
+(wave 2, incl. 01's BINDING CONSTRAINTS 12.1/12.2 - the command-only detach and the
+sandbox/fail-open rules).
+
+Wave 3 EXTENDS the same package (Classic/packages/hook-dsh-live-containers) and never contradicts
+the verified seams.
 
 ---
 
@@ -48,8 +54,10 @@ does things, not a token-wasting back-and-forth."
 
 Concrete reading: for every file the session (or a configured watchlist) touches, a monitor block
 renders that file's check status - recomputed per request from jobs the plugin runs BETWEEN turns,
-not from tool calls the model spends on checking. The model edits; the monitor reports; the loop
-closes without the model ever typing `tsc --noEmit` to find out whether it should.
+not from tool calls the model spends on checking.
+
+The model edits, the monitor reports, and the loop closes without the model ever typing
+`tsc --noEmit` to find out whether it should.
 
 ## 2. The verified machinery this rides on
 
@@ -86,72 +94,137 @@ closes without the model ever typing `tsc --noEmit` to find out whether it shoul
 
 ## 3. The monitor lifecycle (severe extension)
 
-1. **Enrollment** - a file enters the monitor set when:
+1. **Enrollment.**
+
+    A file enters the monitor set when:
+
     - the plugin observes an fs/observed event whose target matches an enrolled watchlist glob
       (point 5), OR
     - the model explicitly asks (`live_monitor <path>` - the escape hatch's positive side, point 6),
       OR
-    - a parent plants a monitor into a child's coordination scope (point 8). Unobserved files are
-      NEVER monitored (no scan, no watch-all).
-2. **Classification** - the file's basename/extension maps to a check set from the watchlist config
-   (point 5): `Apply.ts` -> `tsc --noEmit` + the format check scoped to the file's project;
-   `Cargo.toml` -> `cargo check`; `package.json` -> the dependency checks (the governor/pinner's own
-   verbs, not duplicated: a monitor on package.json links the GOVERNANCE outcome, it does not re-run
-   npm). The map is config, not code.
-3. **Debounce** - an fs/observed event schedules the file's FAST checks via a per-file debounce
-   window (default 1500ms, volatile): edits landing in quick succession coalesce into one check run.
-   The debounce timer is plugin state; the checks dispatch as ctx.jobs with kind `monitor`.
-4. **Run between turns** - the jobs run whenever the registry admits them; their settle events
-   update the per-file state (version checked, exit codes, output tails). Nothing in this path
-   touches the conversation.
-5. **Render per request** - the assemble listener renders one monitor standing block per enrolled
-   file (or one compact band per file inside a single section, per point 4), with the
-   freshness/provenance metadata (point 1) and the no-problem indicator (point 2). Blocks whose file
-   was not touched for `retireMs` (default 600000) render one closing line and withdraw (the
-   CAN-1/06.6 retirement discipline - standing blocks must not outlive their truth).
-6. **Restart recovery** - on mount, the plugin loads the persisted monitor state (point 9): results
-   younger than `staleMs` (default 300000) render as-is with their original provenance; older ones
-   render STALE with the persisted facts and "not re-checked this session" - never silently fresh.
+    - a parent plants a monitor into a child's coordination scope (point 8).
+
+    Unobserved files are NEVER monitored (no scan, no watch-all).
+
+2. **Classification.**
+
+    The file's basename/extension maps to a check set from the watchlist config (point 5):
+    `Apply.ts` -> `tsc --noEmit` + the format check scoped to the file's project; `Cargo.toml` ->
+    `cargo  check`; `package.json` -> the dependency checks (the governor/pinner's own verbs, not
+    duplicated: a monitor on package.json links the GOVERNANCE outcome, it does not re-run npm).
+
+    The map is config, not code.
+
+3. **Debounce.**
+
+    An fs/observed event schedules the file's FAST checks via a per-file debounce window (default
+    1500ms, volatile): edits landing in quick succession coalesce into one check run.
+
+    The debounce timer is plugin state, and the checks dispatch as ctx.jobs with kind `monitor`.
+
+4. **Run between turns.**
+
+    The jobs run whenever the registry admits them, and their settle events update the per-file
+    state (version checked, exit codes, output tails).
+
+    Nothing in this path touches the conversation.
+
+5. **Render per request.**
+
+    The assemble listener renders one monitor standing block per enrolled file (or one compact band
+    per file inside a single section, per point 4), with the freshness/provenance metadata (point 1)
+    and the no-problem indicator (point 2).
+
+    Blocks whose file was not touched for `retireMs` (default 600000) render one closing line and
+    withdraw (the CAN-1/06.6 retirement discipline - standing blocks must not outlive their truth).
+
+6. **Restart recovery.**
+
+    On mount, the plugin loads the persisted monitor state (point 9): results younger than `staleMs`
+    (default 300000) render as-is with their original provenance, and older ones render STALE with
+    the persisted facts and "not re-checked this session" - never silently fresh.
 
 ## 4. The scenarios (most varied)
 
-1. **The single-file monitor**: the model edits Apply.ts three times in one turn. fs/observed fires
-   three times; the debounce coalesces; one tsc job runs after the last edit; the next request's
-   monitor block shows `clean (∄)` with the post-edit version stamp - the model never ran tsc.
-2. **The multi-file watchlist**: five files of three types edited across a turn; the section renders
-   one band per file, ordered by last-change, capped at `maxMonitors` (default 8; overflow collapses
-   to a one-line count, never silently dropped - the ledger records the collapse).
-3. **The slow check on schedule**: `cargo check` is too slow for per-edit debounce. It is classified
-   slow; it runs on demand (the model's `live_monitor_check <path>` or the explicit deep-check path,
-   point 6) and on a schedule (`slowCheckIntervalMs`, default 0 = off; when on, one job per slow
-   check set per interval, admission-guarded). While a slow check has never run, the band renders
-   `not run yet (∅?)` - honest initial state (point 7).
-4. **The stale-truth edge**: the model edits Config.ts at T0 (monitor clean); then edits its
-   dependency State.ts at T1. The Config.ts band's facts are now about an older version: the band
-   flips to `STALE (file changed after check)` at the next request WITHOUT re-running anything -
-   staleness is computed from the persisted version vs the current fs/observed version, cheap and
-   synchronous. The model reads: trust the fresh bands, distrust the stale ones.
-5. **The check failure**: the tsc job exits non-zero. The band renders `PROBLEM` with the first
-   lines of the stderr tail (2 KiB cap), exit code, and the checked version. A check that itself
-   crashes (producer error, not exit code) renders `check failed (infrastructure)` - the plugin
-   never renders a problem that came from its own plumbing as a code problem.
-6. **The restart recovery**: the session restarts between the edit and the next request. The
-   persisted band renders with its original check time and the `recovered` provenance flag; if the
-   domain never opened (absent facility - the P5 silent-skip posture), the band renders
-   `not run yet` - loss of the store degrades to honesty, never to a fabricated clean.
-7. **The multi-agent view**: two agents edit the same file. The band's provenance line lists the
-   last writer per version; a parent whose child edits files in the parent's watchlist sees the
-   bands update at the parent's next request - the CAN-2 board aggregation (point 8) carries the
-   per-child monitor summaries.
-8. **The check storm**: a loop edits 30 files rapidly. Admission guards cap concurrent monitor jobs
-   (`maxMonitorJobs`, default 3); excess checks coalesce per (file, check set) - only the newest
-   pending run survives. The ledger records every coalesced run; no check is silently lost.
-9. **The sandbox denial**: the platform sandbox denies the check command. The band renders
-   `check denied (sandbox)` - same as an inline denial; never interpreted as a code problem (the
-   12.2 acceptance property, monitor-side).
-10. **The escape hatch**: the model needs the full compiler output. It runs tsc itself (inline,
-    undiminished) or calls the monitor's deep-check path; the monitors add information, they never
-    remove an ability (point 6).
+1. **The single-file monitor.**
+
+    The model edits Apply.ts three times in one turn.
+
+    fs/observed fires three times, the debounce coalesces, one tsc job runs after the last edit, and
+    the next request's monitor block shows `clean (∄)` with the post-edit version stamp - the model
+    never ran tsc.
+
+2. **The multi-file watchlist.**
+
+    Five files of three types edited across a turn: the section renders one band per file, ordered
+    by last-change, capped at `maxMonitors` (default 8; overflow collapses to a one-line count,
+    never silently dropped - the ledger records the collapse).
+
+3. **The slow check on schedule.**
+
+    `cargo check` is too slow for per-edit debounce, so it is classified slow and runs on demand
+    (the model's `live_monitor_check <path>` or the explicit deep-check path, point 6) and on a
+    schedule (`slowCheckIntervalMs`, default 0 = off; when on, one job per slow check set per
+    interval, admission-guarded).
+
+    While a slow check has never run, the band renders `not run yet (∅?)` - honest initial state
+    (point 7).
+
+4. **The stale-truth edge.**
+
+    The model edits Config.ts at T0 (monitor clean), then edits its dependency State.ts at T1.
+
+    The facts of the Config.ts band are now about an older version, so the band changes to
+    `STALE  (file changed after check)` at the next request WITHOUT re-running anything - staleness
+    is computed from the persisted version vs the current fs/observed version, cheap and
+    synchronous.
+
+    The model reads: trust the fresh bands, distrust the stale ones.
+
+5. **The check failure.**
+
+    The tsc job exits non-zero: the band renders `PROBLEM` with the first lines of the stderr tail
+    (2 KiB cap), exit code, and the checked version.
+
+    A check that itself crashes (producer error, not exit code) renders
+    `check failed  (infrastructure)` - the plugin never renders a problem that came from its own
+    plumbing as a code problem.
+
+6. **The restart recovery.**
+
+    The session restarts between the edit and the next request: the persisted band renders with its
+    original check time and the `recovered` provenance flag.
+
+    If the domain never opened (absent facility - the P5 silent-skip posture), the band renders
+    `not  run yet` - loss of the store degrades to honesty, never to a fabricated clean.
+
+7. **The multi-agent view.**
+
+    Two agents edit the same file: the provenance line of the band lists the last writer per
+    version, and a parent whose child edits files in the parent's watchlist sees the bands update at
+    the parent's next request - the CAN-2 board aggregation (point 8) carries the per-child monitor
+    summaries.
+
+8. **The check storm.**
+
+    A loop edits 30 files rapidly: admission guards cap concurrent monitor jobs (`maxMonitorJobs`,
+    default 3), and excess checks coalesce per (file, check set) - only the newest pending run
+    survives.
+
+    The ledger records every coalesced run; no check is silently lost.
+
+9. **The sandbox denial.**
+
+    The platform sandbox denies the check command, and the band renders `check denied (sandbox)` -
+    same as an inline denial; never interpreted as a code problem (the 12.2 acceptance property,
+    monitor-side).
+
+10. **The escape hatch.**
+
+    The model needs the full compiler output: it runs tsc itself (inline, undiminished) or calls the
+    deep-check path of the monitor.
+
+    The monitors add information, they never remove an ability (point 6).
 
 ## 5. The seam map
 
@@ -203,101 +276,193 @@ MISSING (the gap list for D3):
 | 9   | Cross-restart persistence                                        | ADOPTED                         | Check results + monitor state persist through the P5 storage domain (a dedicated monitor domain or extension records - M5). On mount: reload, mark recovered bands with original provenance, degrade to `not run yet` when the domain is absent. Job state itself does not resume (jobs-local contract, 01 section 9.10) - persisted RESULTS do; a result whose backing process is gone is still a valid fact about a version, which is exactly why provenance is per-version (point 1).                |
 | 10  | The control-loop framing                                         | ADOPTED (as the design mandate) | The monitor section IS the system's observable state vector; the model's edits are the control inputs; the checks are the observers; the loop closes per request. D3 must treat latency (debounce -> job -> next request) as the loop's sample time and document it; no machinery is required beyond what sections 2-4 specify - this is framing that constrains the design (band ordering by recency, the summary band as the aggregated state, staleness as observer aging), not a new subsystem.     |
 
-No point is rejected. Points 1, 2, 7 are HARD (the honesty cluster); the others are design-binding
-but tunable via config.
+No point is rejected.
+
+Points 1, 2, 7 are HARD (the honesty cluster), and the others are design-binding but tunable via
+config.
 
 ## 7. The extensions
 
 SEVERE (next after v1 of monitors):
 
-1. The **linkage alerts**: when a monitored file's problem persists across N versions (default 3),
-   the band escalates to the tool-coach's channel 4 with a targeted note
-   (`Apply.ts: problem unchanged across 3 edits - read  the tail before the next edit`). The CAN-4
-   posture: ledger by default, note on escalation, capped by failsafesPerTurn.
-2. The **cross-file problem attribution**: a check failure on file A that mentions file B (compiler
-   diagnostics) annotates B's band with `problem via A` - the model sees which edit to revert.
-   Text-level parsing of the check tail only, config-gated.
-3. The **CI-parity check set**: a project-level config file (`.live-monitors.json`) the USER (not
-   the model) authors, defining the check sets per project; the plugin reads it read-only and never
-   writes it.
-4. The **monitor-aware dedup**: before the model's own inline check command matches a pending/recent
-   monitor job for the same (command, cwd), the tools pre-execute listener appends one line to the
-   call's post-execute result:
-   `[monitor] same check ran <n>s ago (<job-id>) - job_output for the  tail.` - never a deny, never
-   a detach (12.1: this is an observability note on an inline call, legal).
+1. **The linkage alerts.**
 
-COMPREHENSIVE (the later stage): 5. The **programmable monitors**: per-glob `program:` checks
-executed by the ptc-runtime under the v1 research section 5 caps (2s, 16 KiB, no fs writes, no
-network) - the user's "wrap the file in a sandbox" fully realized: the sandbox is the ptc runtime,
-the program is arbitrary, the output contract is the band grammar. 6. The **aggregate health
-block**: a session-wide `health: files=23 (∄21 !2)` gauge template (CAN-3's catalog gains a `health`
-kind) fed from the monitor state - the user's "fully abstracting its view of the system over
-each/every file". 7. The **GUI sidecar**: the monitor events join the CAN-6.8 JSONL sidecar
-(`live-containers-events.jsonl`) as monitor-enrolled / check-ran / problem-found records - user
-observability without conversational presence. 8. The **cross-session monitor memory**: the
-persisted bands' history (problem counts per file over sessions) surfaces in the band's provenance
-line as `problems: 3 this week` - cheap, from the domain, honest.
+    When a monitored file's problem persists across N versions (default 3), the band escalates to
+    the tool-coach's channel 4 with a targeted note
+    (`Apply.ts: problem unchanged across 3 edits -  read  the tail before the next edit`).
+
+    The CAN-4 posture: ledger by default, note on escalation, capped by failsafesPerTurn.
+
+2. **The cross-file problem attribution.**
+
+    A check failure on file A that mentions file B (compiler diagnostics) annotates B's band with
+    `problem via A` - the model observes which edit to revert.
+
+    Text-level parsing of the check tail only, config-gated.
+
+3. **The CI-parity check set.**
+
+    A project-level config file (`.live-monitors.json`) the USER (not the model) authors, defining
+    the check sets per project; the plugin reads it read-only and never writes it.
+
+4. **The monitor-aware dedup.**
+
+    Before the model's own inline check command matches a pending/recent monitor job for the same
+    (command, cwd), the tools pre-execute listener appends one line to the post-execute result of
+    the call: `[monitor] same check ran <n>s ago (<job-id>) - job_output for the  tail.` - never a
+    deny, never a detach (12.1: this is an observability note on an inline call, legal).
+
+COMPREHENSIVE (the later stage):
+
+5. **The programmable monitors.**
+
+    Per-glob `program:` checks executed by the ptc-runtime under the v1 research section 5 caps (2s,
+    16 KiB, no fs writes, no network) - the user's "wrap the file in a sandbox" fully realized: the
+    sandbox is the ptc runtime, the program is arbitrary, the output contract is the band grammar.
+
+6. **The aggregate health block.**
+
+    A session-wide `health: files=23 (∄21 !2)` gauge template (CAN-3's catalog gains a `health`
+    kind) fed from the monitor state - the user's "fully abstracting its view of the system over
+    each/every file".
+
+7. **The GUI sidecar.**
+
+    The monitor events join the CAN-6.8 JSONL sidecar (`live-containers-events.jsonl`) as
+    monitor-enrolled / check-ran / problem-found records - user observability without conversational
+    presence.
+
+8. **The cross-session monitor memory.**
+
+    The persisted history of the bands (problem counts per file over sessions) surfaces in the
+    provenance line of the band as `problems: 3 this week` - cheap, from the domain, honest.
 
 ## 8. The acceptance criteria
 
-1. An enrolled `.ts` file edit produces, at the next request, a band with version, check time, exit,
-   and `∄` on exit 0 - and the model issued no check command (provable via the smoke's call log).
-2. A second edit before the next request flips the earlier band to `~` STALE at that request without
-   a re-run; a later request shows the fresh result.
-3. A non-zero exit renders `!` with a capped stderr tail; an infrastructure failure renders `x`,
-   never `!`.
-4. Every internal error path is fail-open: no throw reaches fs/observed or assemble in any test; a
-   broken renderer degrades to the ledger.
-5. No `∄` ever renders without a matching observed exit-0 job settlement for the current version
-   (the false-pass guard, testable by injecting a settle-less version bump).
-6. Restart: persisted bands reload with original provenance; absent domain renders `not run yet`;
-   nothing fabricates.
-7. The command-only/sandbox rules hold: monitor jobs run through the governed bash path; a
-   sandbox-denied check renders `check denied  (sandbox)`; monitor checks never detach or gate a
-   content-mutating tool call (12.1 has no conflict here - monitors only OBSERVE writes).
-8. The token budget: band <= 2 KiB, section <= 4 KiB with recorded collapse; the summary band is one
-   line.
-9. The plugin ships disabled; the monitor layer is a second explicit flip after the plugin's own
-   enable (the CAN-4 posture).
-10. Ledger strings byte-exact per the SCHEME (D3 authors the list; `live- containers: ` prefix, one
+1. **The single edit.**
+
+    An enrolled `.ts` file edit produces, at the next request, a band with version, check time,
+    exit, and `∄` on exit 0 - and the model issued no check command (provable via the smoke's call
+    log).
+
+2. **The stale flip.**
+
+    A second edit before the next request changes the earlier band to `~` STALE at that request
+    without a re-run, and a later request shows the fresh result.
+
+3. **The failure rendering.**
+
+    A non-zero exit renders `!` with a capped stderr tail, and an infrastructure failure renders
+    `x`, never `!`.
+
+4. **Fail-open.**
+
+    Every internal error path is fail-open: no throw reaches fs/observed or assemble in any test,
+    and a broken renderer degrades to the ledger.
+
+5. **No false pass.**
+
+    No `∄` ever renders without a matching observed exit-0 job settlement for the current version
+    (the false-pass guard, testable by injecting a settle-less version bump).
+
+6. **Restart.**
+
+    Persisted bands reload with original provenance, an absent domain renders `not run yet`, and
+    nothing fabricates.
+
+7. **The command-only/sandbox rules.**
+
+    Monitor jobs run through the governed bash path, a sandbox-denied check renders
+    `check denied  (sandbox)`, and monitor checks never detach or gate a content-mutating tool call
+    (12.1 has no conflict here - monitors only OBSERVE writes).
+
+8. **The token budget.**
+
+    Band <= 2 KiB, section <= 4 KiB with recorded collapse, and the summary band is one line.
+
+9. **The disabled ship.**
+
+    The plugin ships disabled, and the monitor layer is a second explicit flip after the plugin's
+    own enable (the CAN-4 posture).
+
+10. **Byte-exact ledger.**
+
+    Ledger strings byte-exact per the SCHEME (D3 authors the list; `live- containers: ` prefix, one
     log per module).
 
 ## 9. D3-DESIGN-BRIEF (the design mandate for the next lane)
 
-You are the D3 DESIGN agent. Design the monitor layer for Classic/packages/hook-dsh-live-containers.
+You are the D3 DESIGN agent.
+
+Design the monitor layer for Classic/packages/hook-dsh-live-containers.
+
 Constraints and openings:
 
-1. **Reuse, do not fork**: the monitor layer lives in the SAME package. Its listeners join the
-   existing Apply wiring (fs/observed joins via the factory's Wire pattern; the assemble section
-   GROWS a `monitors` stanza inside the existing live-containers section - one section, two stanzas,
-   the summary band first).
-2. **Resolve M5 first**: the storage decision (new domain `live_containers_monitors` vs extension
-   records in an existing one) gates the schema of everything persisted. Follow the Open.ts v2
-   contract: a new event name means a new domain version; per-record layout; backup-and-skip; the
-   boot-window buffer already exists - use it.
-3. **The band grammar is a contract**: author the byte-exact band template (now), the summary band
-   template, and the ledger strings in the SCHEME as part of the design - the coders implement to
-   your bytes. Keep `∄`/ `∅` written as `\u2204`/`\u2205` escapes in source; rendered as the
-   characters.
-4. **State shape**: per (agent or session, path): { enrolledAt, lastVersion, lastWriter, checks: [{
-   setId, ranAt, checkedVersion, exit, tailRef, provenance: "live"|"recovered" }] }. Derive
-   staleness at render time from lastVersion vs the latest observed version - never store staleness.
-5. **Concurrency**: maxMonitorJobs admission, per-(file, checkSet) coalescing, the debounce window -
-   specify the exact timer/queue mechanics against the jobs registry's admission behavior (jobs that
-   cannot start are coalesced, not queued - the CAN-1 admission posture).
-6. **The 12.2 inheritance is literal**: the check producer is the same governed-bash wrapper G2
-   specified for CAN-1 (one wrapper, two callers: the detach path and the monitor path). Do not
-   design a second execution path.
-7. **The tool surface**: `live_monitor` (enroll/off/list) and `live_monitor_check` (deep run) -
-   minimal, read-only semantics, never a write path. The plant/child aggregation rides the existing
-   live_plant report channel - extend the board row grammar, not the transport.
-8. **The KV-cache budget**: the monitors stanza is stable-until-event; specify exactly which state
-   changes mutate it (enrollment, settle, version bump, retirement) so the coders can test the
-   change-set.
-9. **The IDLE-forever posture**: monitors: "off" by default even when the plugin is enabled; the
-   summary band renders only when monitors are on.
-10. **Deliverables**: the design document (the band/summary templates, the state shape, the storage
-    schema, the config surface with volatile marking, the ledger-string list, the module split
-    against the existing Source/Function tree - expected new modules: Monitors.ts, Watchlist.ts,
-    Band.ts or their exact placement), the updated SCHEME sections, and the smoke battery plan (M7)
-    with R/D ids.
+1. **Reuse, do not fork.**
+
+    The monitor layer lives in the SAME package.
+
+    Its listeners join the existing Apply wiring (fs/observed joins via the factory's Wire pattern;
+    the assemble section GROWS a `monitors` stanza inside the existing live-containers section - one
+    section, two stanzas, the summary band first).
+
+2. **Resolve M5 first.**
+
+    The storage decision (new domain `live_containers_monitors` vs extension records in an existing
+    one) gates the schema of everything persisted.
+
+    Follow the Open.ts v2 contract: a new event name means a new domain version, per-record layout,
+    backup-and-skip, and the boot-window buffer already exists - use it.
+
+3. **The band grammar is a contract.**
+
+    Author the byte-exact band template (now), the summary band template, and the ledger strings in
+    the SCHEME as part of the design - the coders implement to your bytes.
+
+    Keep `∄`/ `∅` written as `\u2204`/`\u2205` escapes in source, rendered as the characters.
+
+4. **State shape.**
+
+    Per (agent or session, path): { enrolledAt, lastVersion, lastWriter, checks: [{ setId, ranAt,
+    checkedVersion, exit, tailRef, provenance: "live"|"recovered" }] }.
+
+    Derive staleness at render time from lastVersion vs the latest observed version - never store
+    staleness.
+
+5. **Concurrency.**
+
+    maxMonitorJobs admission, per-(file, checkSet) coalescing, the debounce window - specify the
+    exact timer/queue mechanics against the admission behavior of the jobs registry (jobs that
+    cannot start are coalesced, not queued - the CAN-1 admission posture).
+
+6. **The 12.2 inheritance is literal.**
+
+    The check producer is the same governed-bash wrapper G2 specified for CAN-1 (one wrapper, two
+    callers: the detach path and the monitor path).
+
+    Do not design a second execution path.
+
+7. **The tool surface.**
+
+    `live_monitor` (enroll/off/list) and `live_monitor_check` (deep run) - minimal, read-only
+    semantics, never a write path.
+
+    The plant/child aggregation rides the existing live_plant report channel - extend the board row
+    grammar, not the transport.
+
+8. **The KV-cache budget.**
+
+    The monitors stanza is stable-until-event; specify exactly which state changes mutate it
+    (enrollment, settle, version bump, retirement) so the coders can test the change-set.
+
+9. **The IDLE-forever posture.**
+
+    monitors: "off" by default even when the plugin is enabled, and the summary band renders only
+    when monitors are on.
+
+10. **Deliverables.**
+
+    The design document (the band/summary templates, the state shape, the storage schema, the config
+    surface with volatile marking, the ledger-string list, the module split against the existing
+    Source/Function tree - expected new modules: Monitors.ts, Watchlist.ts, Band.ts or their exact
+    placement), the updated SCHEME sections, and the smoke battery plan (M7) with R/D ids.

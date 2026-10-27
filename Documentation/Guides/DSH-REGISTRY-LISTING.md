@@ -21,46 +21,55 @@ statuses:
 
 # DSH-REGISTRY-LISTING - the npm registry listing for the DSH plugin family
 
-> The listing the family publishes under once the npm lane arms the publish.
-> `.github/workflows/NPM.yml` is armed for the 0.1.0 release (the publish itself is the user's
-> call). Everything sits at version `0.1.0`; the 0.0.1 release remains on the registry and is
-> immutable. This file is the filled template: the registry identity, the package roster with the
-> exact install commands, and the byte-exact rule the listing text must obey. Prepared by the
-> PLUGIN-REG lane. DOCUMENTATION ONLY - nothing is committed (the user commits).
+> The listing that the family publishes under once the npm lane arms the publish.
+>
+> `.github/workflows/NPM.yml` is armed for the 0.1.0 release, and the publish itself is the user's
+> call.
+>
+> Everything sits at version `0.1.0`, and the 0.0.1 release stays on the registry and is immutable.
+>
+> This file is the filled template: the registry identity, the package roster with the exact install
+> commands, and the byte-exact rule that the listing text must obey.
+>
+> The PLUGIN-REG lane prepared it.
+>
+> DOCUMENTATION ONLY - nothing is committed (the user commits).
 
 ---
 
 ## 1. THE REGISTRY IDENTITY
 
-- **The scope:** `@playform` - the ONLY available scope, shared by the whole family (SPLICE-ETS
+- **The scope.** `@playform` is the ONLY available scope, and the whole family shares it (SPLICE-ETS
   section 1.2).
-- **The topic:** the family lists under the **`dsh-plugin`** topic - the DeepSeek Harness plugin
-  topic that the registry surfaces (npm keywords + the GitHub repo topics) carry. EVERY package's
-  `keywords` include `dsh-plugin` alongside `deepseek`, `harness`, and `plugin`.
-- **The version:** `0.1.0` across the family. The sibling entries in EVERY manifest pin the EXACT
-  `0.1.0`. So the FIRST publish must land the layers in the dependency order (SPLICE-ETS section
-  5.1), or the dependent tarballs resolve against nothing.
-- **The source of the install form:** the site already ships the final command shape on EVERY plugin
-  page and in the hero: `pnpm add @playform/<pkg>`. `Site/Source/Component/Terminal.astro` defaults
-  to `pnpm add @playform/lib-dsh-core`. `Site/Source/pages/plugins.astro` carries ONE install row
-  per package. The listing below repeats that form BYTE-EXACT.
+- **The topic.** The family lists under the **`dsh-plugin`** topic, which the registry surfaces (npm
+  keywords + the GitHub repo topics) carry.
+- EVERY package's `keywords` include `dsh-plugin` alongside `deepseek`, `harness`, and `plugin`.
+- **The version.** `0.1.0` covers the family, and the sibling entries in EVERY manifest pin the
+  EXACT `0.1.0`.
+- The FIRST publish must land the layers in the dependency order (SPLICE-ETS section 5.1), or the
+  dependent tarballs resolve against nothing.
+- **The source of the install form.** The site already ships the final command shape on EVERY plugin
+  page and in the hero: `pnpm add @playform/<pkg>`.
+- `Site/Source/Component/Terminal.astro` defaults to `pnpm add @playform/lib-dsh-core`, and
+  `Site/Source/pages/plugins.astro` carries ONE install row per package.
+- The listing below repeats that form BYTE-EXACT.
 
 ## 2. THE ROSTER - the OPERATING NAMES (the original groups + the base)
 
-The splice has executed (SPLICE-ETS section 8 S2/S4): the trees carry UNIQUE names.
+The splice has run (SPLICE-ETS section 8 S2/S4), so the trees now carry UNIQUE names.
 
-The Classic tree carries the plain `@playform/{lib,hook,plugin}-dsh-*` names.
+The Classic tree keeps the plain `@playform/{lib,hook,plugin}-dsh-*` names.
 
-The EffectTS tree carries the `@playform/ets-*` names plus the base `@playform/ets-base-dsh`
-(verified in the manifests).
+The EffectTS tree keeps the `@playform/ets-*` names plus the base `@playform/ets-base-dsh`, as the
+manifests verify.
 
-The registry listing uses exactly these.
+The registry listing uses exactly these names.
 
 **This roster covers the ORIGINAL 31 packages.**
 
 The 2026-10-22 delivery adds 36 Classic packages and 30 EffectTS twins (the workspace family, the
-suggesters, the orchestration set, the client family) - the full inventory and one-line roles:
-Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md.
+suggesters, the orchestration set, the client family), and
+Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md holds the full inventory with one-line roles.
 
 Every new package follows the same install form (`pnpm add @playform/<pkg>`) and the same bootstrap
 tier (2-planned / 3-candidates).
@@ -114,49 +123,50 @@ So the publish order is the layer order (section 5).
 
 ## 4. THE BYTE-EXACT RULE
 
-The install command strings in this listing, on the site, and in the READMEs are the byte-identical
+The install command strings in this listing, on the site, and in the READMEs form the byte-identical
 contract:
 
 - Every install row is exactly `pnpm add @playform/<pkg>` - NO `--save`, NO `-D`, NO registry URL,
   NO version suffix in the display form.
-- The package tokens must match the manifest `name` byte-for-byte. A renamed package (the splice)
-  rewrites the command AND the listing row in the same change set.
+- The package tokens must match the manifest `name` byte-for-byte.
+- A renamed package (the splice) rewrites the command AND the listing row in the same change set.
 - The smoke suite reference strings and the ledger totals (359 suites / 5,337 checks across both
-  trees) are untouched by ANY listing edit. The suites are the arbiter (SPLICE-ETS section 6.1,
-  section 10).
-- `Site/Target/**` is build output. The site's install rows are edited in `Site/Source/**` ONLY,
-  NEVER hand-edited in Target.
+  trees) are untouched by ANY listing edit.
+- The suites are the arbiter (SPLICE-ETS section 6.1, section 10).
+- `Site/Target/**` is build output.
+- The site's install rows are edited in `Site/Source/**` ONLY, NEVER hand-edited in Target.
 
 ## 5. THE PUBLISH GATES (the residual checklist)
 
 1. **The splice.**
 
-    The splice lands first (the unique names) - a pre-splice publish would ship the collision into
-    the registry.
+    The splice lands first with the unique names, because a pre-splice publish would ship the
+    collision into the registry.
 
 2. **The workflow arming.**
 
-    `NPM.yml` armed per layer: L0 `@playform/ets-base-dsh` -> L1 the four foundations -> L2 the
+    `NPM.yml` is armed per layer: L0 `@playform/ets-base-dsh` -> L1 the four foundations -> L2 the
     twenty-six consumers (SPLICE-ETS section 5.1).
 
 3. **The fresh-install gate.**
 
-    Fresh-install gate green: `pnpm install` -> `pnpm run build` -> `pnpm test` = 97/97 packages,
-    359 suites / 5,337 checks, zero failures.
+    The fresh-install gate is green: `pnpm install` -> `pnpm run build` -> `pnpm test` = 97/97
+    packages, 359 suites / 5,337 checks, zero failures.
 
 4. **The site rows.**
 
-    The site's `Install:` rows + the `/setup/` flow copy already match the `pnpm add` form -
+    The site's `Install:` rows and the `/setup/` flow copy already match the `pnpm add` form,
     verified byte-exact against this roster at publish time.
 
 ## 6. THE RESIDUALS
 
 - ~~The listing's Section 2 names are PRE-SPLICE~~ Resolved: the splice landed (SPLICE-ETS section 8
-  S2/S4). Section 2 now carries BOTH groups' operating names. The PENDING_NAMESPACES section is
-  collapsed into the roster.
-- The per-package `keywords: ["dsh-plugin", ...]` entries are NOT yet in the manifests. Adding them
-  is part of the npm lane's manifest pass, NOT this lane.
-- The GitHub repo topics (`dsh-plugin` et al.) are a repo-settings action - the user's call, outside
+  S2/S4).
+- Section 2 now carries BOTH groups' operating names, and the PENDING_NAMESPACES section collapses
+  into the roster.
+- The per-package `keywords: ["dsh-plugin", ...]` entries are NOT yet in the manifests.
+- Adding them is part of the npm lane's manifest pass, NOT this lane.
+- The GitHub repo topics (`dsh-plugin` et al.) are a repo-settings action, the user's call, outside
   the tree.
-- The publish remains the user's call (`NPM.yml` runs only via `workflow_dispatch`/`release`; the
-  workflow is armed for 0.1.0).
+- The publish remains the user's call (`NPM.yml` runs only via `workflow_dispatch`/`release`, and
+  the workflow is armed for 0.1.0).

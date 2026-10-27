@@ -1,4 +1,4 @@
-import type Dispatcher from "../Function/Dispatcher.js";
+import type Dispatcher from "@Function/Dispatcher.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {

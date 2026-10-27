@@ -11,13 +11,13 @@
 | Injects                | `pluginFactory`                             |
 | Probes (never injects) | `lesson` (the review service)               |
 
-The loader contract is the function form (the suggester precedent): the default export carries
-`name`, `apply`, `Config` and `inject` - all four, because the default object shadows the named
-exports and a service accessor without `inject` throws.
+The loader contract is the function form of the suggester precedent: the default export carries
+`name`, `apply`, `Config`, and `inject`, which is all four, because the default object shadows the
+named exports and a service accessor without `inject` throws.
 
-`lesson` is deliberately NOT injected. An inject failure is a LOAD failure, and a profile that
-enables the nudge without the review service should get one warning and an inert hook, not a plugin
-that refuses to mount.
+`lesson` is deliberately NOT injected, because an inject failure is a LOAD failure, and a profile
+that enables the nudge without the review service should get one warning and an inert hook rather
+than a plugin that refuses to mount.
 
 ## The event surface
 
@@ -27,8 +27,10 @@ One listener, one event:
 | -------------- | ---- | ------------------------------------------------------ |
 | `agent/status` | emit | the `idle` edge is the only moment a review may claim. |
 
-`idle` means no driver is scheduled or active - the phase `agent.runMaintenance` exists to claim for
-non-turn work. Reviewing on any other edge puts a second model call beside the live turn's.
+`idle` means that no driver is scheduled or active, which is the phase that `agent.runMaintenance`
+exists to claim for non-turn work.
+
+Reviewing on any other edge puts a second model call beside the live turn.
 
 ## The four gates (in order, cheapest first)
 
@@ -42,16 +44,18 @@ non-turn work. Reviewing on any other edge puts a second model call beside the l
 
 3. **The service.**
 
-    `ctx.get("lesson")` is probed per transition (the service may load after this hook); absent
-    means ONE warn per process and no work.
+    `ctx.get("lesson")` is probed per transition, because the service may load after this hook, and
+    absent means ONE warn per process and no work.
 
 4. **The cadence.**
 
-    `Lesson.Tick(agent).due` and the hook's own `maxReviewsPerSession` cap are the cadence.
+    `Lesson.Tick(agent).due` and the own `maxReviewsPerSession` cap of the hook are the cadence.
 
-The cap is the runaway guard, not the cadence: the cadence belongs to the service (`intervalTurns`).
-A profile that mis-sets the service's interval to 1 still gets at most `maxReviewsPerSession`
-reviews per agent.
+The cap is the runaway guard and not the cadence, because the cadence belongs to the service
+(`intervalTurns`).
+
+A profile that mis-sets the service interval to 1 still gets at most `maxReviewsPerSession` reviews
+per agent.
 
 ## Config
 
@@ -62,10 +66,11 @@ reviews per agent.
 | `maxReviewsPerSession` | `3`      | the per-agent runaway guard                |
 | `policy`               | D6 block | the shared per-action allowlist            |
 
-The D6 block is the factory's: `read`/`index`/`record`/`suggest`/`message` are `auto`,
-`write`/`commit`/`spawn` stay the shipped `approve`. The nudge reads a status and claims a
-maintenance task - it never writes a file, commits, or creates a subagent (a maintenance task is not
-a subagent).
+The D6 block belongs to the factory: `read`/`index`/`record`/`suggest`/`message` are `auto`, and
+`write`/`commit`/`spawn` stay the shipped `approve`.
+
+The nudge reads a status and claims a maintenance task, so it never writes a file, commits, or
+creates a subagent, because a maintenance task is not a subagent.
 
 ## Ledger strings (module-owned, byte-stable)
 
@@ -82,14 +87,16 @@ Warnings go to the logger, not the ledger: `no lesson service; the nudge is iner
 
 ## Fail-open posture
 
-Every listener body is one `try/catch`. A throw inside a status emit breaks the harness's status
-publication, which is far worse than a skipped review: the catch warns and returns. The maintenance
-task is detached from the emit (`void Promise.resolve(task).catch(...)`) so a status listener
-returns immediately and a rejected review cannot become an unhandled rejection.
+Every listener body is one `try/catch`, because a throw inside a status emit breaks the status
+publication of the harness, which is far worse than a skipped review, so the catch warns and
+returns.
+
+The maintenance task is detached from the emit (`void Promise.resolve(task).catch(...)`), so a
+status listener returns immediately and a rejected review cannot become an unhandled rejection.
 
 ## What this package does NOT own
 
-- The corpus, the usage store, the prompt, the judge, the queue - all
+- The corpus, the usage store, the prompt, the judge, and the queue, which all belong to
   `@playform/plugin-dsh-lesson-review`.
-- The session projection: the snapshot comes from `Lesson.Snapshot(agent)`, so one session has one
-  digest regardless of who asked.
+- The session projection, because the snapshot comes from `Lesson.Snapshot(agent)`, so one session
+  has one digest regardless of who asked.

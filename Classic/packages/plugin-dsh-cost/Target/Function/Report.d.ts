@@ -27,6 +27,13 @@ type FactorRow = {
     Calls: number;
     Cost: number;
 };
+type EditRow = {
+    Path: string;
+    LinesAdded: number;
+    LinesRemoved: number;
+    Hunks: number;
+    Cost: number;
+};
 declare const Row: (Scope: Row["Scope"], Raw: Record<string, unknown>) => Row;
 export default _default;
 declare function _default(Database: DatabaseSync): {
@@ -38,4 +45,5 @@ declare function _default(Database: DatabaseSync): {
     Lifetime: (Path?: string) => readonly LifetimeRow[];
     Stages: (Path?: string) => readonly StageRow[];
     Factors: () => readonly FactorRow[];
+    Edits: (Path?: string) => readonly EditRow[];
 };

@@ -23,9 +23,12 @@ statuses:
 ## 1. The requirement statement (the user's intent, faithful)
 
 A child subagent can have a PLANTED LIVE block in the PARENT's conversation - a TODO list that fills
-in dynamically WITHOUT the parent awaiting the full chain. A plantType LIVE block programmed with
-how many agents are active - ALL 5 report their progress into the ONE block. Multi-step, multi-level
-macro coordination.
+in dynamically WITHOUT the parent awaiting the full chain.
+
+A plantType LIVE block programmed with how many agents are active - ALL 5 report their progress into
+the ONE block.
+
+Multi-step, multi-level macro coordination.
 
 ## 2. The verified machinery this rides on
 
@@ -47,7 +50,9 @@ macro coordination.
 ## 3. The plantType block grammar (severe extension)
 
 A planted block is a standing assemble-section block whose STATE is fed by reports from child
-agents. Grammar (the config + the tool surface):
+agents.
+
+Grammar (the config + the tool surface):
 
 ```
 plant:
@@ -75,8 +80,10 @@ total: 1 done / 2 running / 1 stalled / 1 empty
 --- END LIVE PLANT <id> ---
 ```
 
-`todo-fill` variant: the block is the parent's TODO list. EACH child's report carries a `todo` line
-that marks ONE list item's state (the todo items are the block's slots, NOT the agents).
+`todo-fill` variant: the block is the parent's TODO list.
+
+EACH child's report carries a `todo` line that marks ONE list item's state (the todo items are the
+block's slots, NOT the agents).
 
 `aggregate` variant: a single computed line from ALL members (e.g.
 `files changed: 17 | tests: 3 failing`), recomputed per report.
@@ -97,15 +104,15 @@ that marks ONE list item's state (the todo items are the block's slots, NOT the 
         to the parent. The parent-side plugin listener picks the report up and updates the member's
         lastReport. This is the highest-fidelity carrier and the ONE that makes "all 5 report their
         progress into the one block" literal.
-- **No report for `stallMs` (default 45000)**: the member's row flips to `[stalled]`. The block
+- **No report for `stallMs` (default 45000)**: the member's row changes to `[stalled]`. The block
   itself surfaces the stalled member WITHOUT ANY model noticing and asking (a CAN-4-adjacent
   property).
 
 ## 5. The parent-side update mechanics
 
 - The block lives in the parent's assemble section and is RECOMPUTED at EACH parent request (the v1
-  seam). A report that lands between requests shows up at the parent's next ask-time automatically.
-  NO push into history is needed.
+  seam). A report that arrives between requests shows up at the parent's next ask-time
+  automatically. NO push into history is needed.
 - OPTIONAL push (v1.1): when the LAST member settles, the plugin also lets the stock completion
   notice path inform the parent (the board closing is a job settlement for the parent's own
   aggregate job) so the parent is woken to consume the finished board rather than discovering it
@@ -154,13 +161,33 @@ that marks ONE list item's state (the todo items are the block's slots, NOT the 
 
 ## 9. The acceptance criteria
 
-1. A parent with `expectAgents: 5` board sees five rows. A child settling flips its row to done with
-   an elapsed time at the parent's next request.
-2. An explicit child report updates the parent's board at the next request WITHOUT ANY parent tool
-   call about it.
-3. A stalled member (no report past stallMs) renders `[stalled]` WITHOUT ANY model action.
-4. A dead child renders `[failed]` with the reason; the count NEVER lies.
-5. Multi-level: a child with its own board shows its board in its own section. The parent's board
-   shows ONLY the child's completion line.
-6. Board close withdraws the block after ONE closing request. Ledger strings byte-exact; NO throw
-   into the assemble waterfall ever.
+1. **Five rows and the done flip.**
+
+    A parent with `expectAgents: 5` board sees five rows.
+
+    A child settling changes its row to done with an elapsed time at the parent's next request.
+
+2. **An explicit report.**
+
+    An explicit child report updates the parent's board at the next request WITHOUT ANY parent tool
+    call about it.
+
+3. **A stalled member.**
+
+    A stalled member (no report past stallMs) renders `[stalled]` WITHOUT ANY model action.
+
+4. **A dead child.**
+
+    A dead child renders `[failed]` with the reason, and the count NEVER lies.
+
+5. **Multi-level.**
+
+    A child with its own board shows its board in its own section.
+
+    The parent's board shows ONLY the completion line of the child.
+
+6. **Board close.**
+
+    Board close withdraws the block after ONE closing request.
+
+    Ledger strings byte-exact, and NO throw into the assemble waterfall ever.

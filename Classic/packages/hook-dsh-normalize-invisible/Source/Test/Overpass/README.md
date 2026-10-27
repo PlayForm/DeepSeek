@@ -6,19 +6,18 @@ What this test verifies.
 
 The overpass arms and the human command (Run O): the tool-results arm
 (tools/post-execute, prepended), the step-batch arm (agent/pre-step, default
-ordering), the normalize-overpass command registration and its grammars, and
-the per-arm behaviors - toolResults off by default then flipped on via the
-volatile-update dispatch (removal + the exact ledger line), the exemption
-list (`read` passes by identity), non-text blocks untouched in mixed
+ordering), the registration of the normalize-overpass command and its
+grammars, and the per-arm behaviors - toolResults off by default then flipped
+on through the volatile-update dispatch (removal + the exact ledger line), the
+exemption list (`read` passes by identity), non-text blocks untouched in mixed
 content, the N=0 no-op rules, the value-carrying canonical decision, the CCR
 marker guard, the downstream-content basis, the batch arm off-then-on
 (normalized messages + the exact ledger line), the N=0 batch, the one-shot
 batch grammar armed by the command and consumed after exactly one use, the
-rejected step untouched, and the command's remaining grammars (the scopes
+rejected step untouched, and the remaining grammars of the command (the scopes
 report, the declined files sweep, the usage errors, the results-on settings
-path). The assertions are moved verbatim from
-`Classic/smokes/invisible-smoke.mjs` section "Run O (additive): the overpass
-arms + the command".
+path). The assertions are moved verbatim from section "Run O (additive): the
+overpass arms + the command" of `Classic/smokes/invisible-smoke.mjs`.
 
 ## Scenario
 
@@ -95,18 +94,17 @@ arms + the command".
 ## Fixtures
 
 The shared harness (`../Harness.js`): the REAL factory instance (`Furnace`),
-the fake ctx, the REAL `apply` and the ledger path
-`/tmp/invisible-smoke-ledger.log` (removed at the folder's start). The
+the fake ctx, the REAL `apply`, and the ledger path
+`/tmp/invisible-smoke-ledger.log` (removed at the start of the folder). The
 config is hand-built with a MUTABLE scopes object (the stable-reference
-simulation) plus `replacement: ""` - the removal default, explicit because
-the defaults are bypassed. SCOPES_DEFAULT is duplicated from the Scopes
-folder (each folder is its own process, and the source suite defined the
-const in the Run S section and reused it here via spread). The fixtures use
-this flavor's own character - a zero-width space (U+200B) inside the tool
-result text, the batch messages and the tool-call JSON; normalization
-REMOVES it, so the rewritten expectations contain double spaces (e.g.
-"a  b") where the invisible char vanished, and the exempt/marker/JSON paths
-stay byte-identical.
+simulation) plus `replacement: ""` - the removal default, explicit because the
+defaults are bypassed. SCOPES_DEFAULT is duplicated from the Scopes folder
+(each folder is its own process, and the source suite defined the const in the
+Run S section and reused it here through spread). The fixtures use the own
+character of this flavor - a zero-width space (U+200B) inside the tool result
+text, the batch messages, and the tool-call JSON; normalization REMOVES it, so
+the rewritten expectations contain double spaces (e.g. "a  b") where the
+invisible char vanished, and the exempt/marker/JSON paths stay byte-identical.
 
 ## Expected ledger strings (byte-exact)
 
@@ -125,14 +123,14 @@ rules; O13/O14 assert no strings.)
 - The exemption and marker guards are identity comparisons - the decision
   object must pass through untouched, not rewritten-and-equal.
 - The no-op arithmetic is pinned: LinesBeforeO5 is captured before O5 and
-  re-checked after O7, and LinesBeforeO11 before/after O11 - any stray
-  ledger line fails.
+  re-checked after O7, and LinesBeforeO11 before/after O11 - any stray ledger
+  line fails.
 - The one-shot grammar is stateful: armed with the batch scope OFF, it fires
   exactly once and is cleared, so the following batch passes untouched.
-- The command's grammars are exact: `scopes` reports the effective values,
-  `files` is declined (owned by normalize-file), bare `results` and unknown
-  input are usage errors, and `results on` with no settings/config-editor
-  service reports the settings path.
+- The grammars of the command are exact: `scopes` reports the effective
+  values, `files` is declined (owned by normalize-file), bare `results` and
+  unknown input are usage errors, and `results on` with no
+  settings/config-editor service reports the settings path.
 
 ## Expected count
 

@@ -1,27 +1,33 @@
 # Contributing Guidelines
 
-Welcome to our community! This repository holds @playform/hook-dsh-package-pinner (0.1.0), one of
-the release packages of the DeepSeek Harness Plugin Family: the silent package.json version pinner:
-hooking fs/observed and deterministically rewriting every ranged dependency version to its static
-version. Contributions are welcome under the CC0 dedication in the LICENSE file.
+Welcome to our community!
+
+This repository holds @playform/hook-dsh-package-pinner (0.1.0), one of the release packages of the
+DeepSeek Harness Plugin Family: the silent package.json version pinner.
+
+The pinner hooks fs/observed and deterministically rewrites every ranged dependency version to its
+static version.
+
+Contributions are welcome under the CC0 dedication in the LICENSE file.
 
 ## Before You Start
 
-Please read and adhere to the Code of Conduct (CODE_OF_CONDUCT.md in this repository; the same
-Contributor Covenant, version 2.1, is adopted at the monorepo root). By participating in our
-community, you agree to abide by these guidelines.
+Read and obey the Code of Conduct (CODE_OF_CONDUCT.md in this repository; the same Contributor
+Covenant, version 2.1, is adopted at the monorepo root).
+
+By taking part in our community, you agree to follow these guidelines.
 
 ## Development
 
-- The source lives in `Source/`; the build configuration in `Configuration/` (`ESBuild.ts`,
-  `TypeScript.noemit.json`) and `tsconfig.json`.
+- The source lives in `Source/`, and the build configuration lives in `Configuration/`
+  (`ESBuild.ts`, `TypeScript.noemit.json`) and `tsconfig.json`.
 - The build runs through the package's `prepublishOnly` script from the package directory and emits
-  to `Target/` (regenerated per build).
+  to `Target/`, which each build regenerates.
 - The dependencies restore with pnpm from the package directory (`pnpm install --ignore-scripts`).
-- The family's smoke suites are the arbiter after every change: they run against the built `Target/`
-  output and must stay green.
-- The style is the family's: the ledger strings and the source comments are part of the contract;
-  tabs for indentation; no personal paths in any release-facing file.
+- The family's smoke suites are the arbiter after every change, and they run against the built
+  `Target/` output and must stay green.
+- The style is the family's: the ledger strings and the source comments are part of the contract,
+  indentation uses tabs, and no release-facing file carries a personal path.
 
 ## Reporting Issues
 

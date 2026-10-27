@@ -25,8 +25,10 @@ statuses:
 
 > A framework for LIVE-TESTING the DSH plugin family from a NEW conversation (e.g. after restarting
 > the app and opening a conversation in the DeepSeek folder), WITHOUT restarting the app between
-> tests. The loop: toggle a setting -> launch a quick low-effort subagent with a mock execution task
-> -> observe the feedback (ledgers + transcript) -> tune the knobs -> verify.
+> tests.
+>
+> The loop: toggle a setting -> launch a quick low-effort subagent with a mock execution task ->
+> observe the feedback (ledgers + transcript) -> tune the knobs -> verify.
 
 ## 1. THE LIVE-RELOAD TRUTH TABLE (what is live, what needs a restart)
 
@@ -45,9 +47,9 @@ statuses:
   (`scopes.conversation/reasoning/toolInput/toolResults/batch/files`) make each behavior inactive
   independently;
 - the loader-level `disabled` (composition) is the whole-plugin switch - flip it via
-  `plugin_manager` at runtime. Recommended posture for testing: keep the loader rows
-  `disabled: false` (loaded), and toggle behavior via the volatile knobs (or the tool-coach
-  `enabled` master) - zero restarts.
+  `plugin_manager` at runtime.
+- Recommended posture for testing: keep the loader rows `disabled: false` (loaded), and toggle
+  behavior via the volatile knobs (or the tool-coach `enabled` master) - zero restarts.
 
 ## 2. THE PER-PLUGIN TEST LOOP
 
@@ -109,19 +111,20 @@ For EACH plugin under test, run this loop:
 - Route: `cloudflare-workers-ai` / `@cf/zai-org/glm-5.3-flash` / `low` (quick + cheap; correctness
   is verified by the deterministic observations).
 - The prompt: SELF-CONTAINED (the subagent sees no session context): the exact mock task, the exact
-  commands/files, and a report format ("what I did; what I observed; the exact outputs"). Instruct
-  it to use the harness TOOLS (NEVER bash content edits) so the governed chain fires.
-- One subagent per probe. The parent (the testing LLM) reads the ledgers afterwards - NEVER trust
-  the subagent's prose over the ledgers.
+  commands/files, and a report format ("what I did; what I observed; the exact outputs").
+- Instruct it to use the harness TOOLS (NEVER bash content edits) so the governed chain fires.
+- One subagent per probe.
+- The parent (the testing LLM) reads the ledgers afterwards - NEVER trust the subagent's prose over
+  the ledgers.
 
 ## 5. THE OBSERVATION SURFACES
 
-- `~/.dsh/<plugin>.log` - the per-module ledgers (activation + behavior lines). **LIVE-BATTERY
-  FINDING (2026-10-19)**: the ledger writer does NOT resolve `~` in `logFile` config values - a
-  `logFile: ~/.dsh/x.log` silently fails to write (no file, no error). ALWAYS use absolute paths
-  (`/Users/nikola/.dsh/x.log`) in the profile config rows. (The Classic bundle patches' own
-  `~/.dsh/...` logFile defaults carry the same latent issue when running live - a future family
-  fix.)
+- `~/.dsh/<plugin>.log` - the per-module ledgers (activation + behavior lines).
+- **LIVE-BATTERY FINDING (2026-10-19)**: the ledger writer does NOT resolve `~` in `logFile` config
+  values - a `logFile: ~/.dsh/x.log` silently fails to write (no file, no error).
+- ALWAYS use absolute paths (`/Users/nikola/.dsh/x.log`) in the profile config rows.
+- (The Classic bundle patches' own `~/.dsh/...` logFile defaults carry the same latent issue when
+  running live - a future family fix.)
 - `~/.dsh/governor.log`, `pinner.log`, `cargo-governor.log` - the governance trail (update stages,
   pins).
 - `plugin_manager` list_plugins - enabled/fiberPhase per entry (the entryId carries the `include:`
@@ -166,5 +169,5 @@ is needed ONLY for profile-structural changes (the restart matrix, section
 - Adding/removing a plugin from `dsh.profile.bundles` (package.json).
 - First-time activation of an entry the loader has never mounted (or if `plugin_manager` is
   unavailable in the conversation).
-- Any profile structural change (new patch rows for plugins not yet loaded). Everything else -
-  knobs, scopes, masters, enforce tiers, plain-field re-applies - is live.
+- Any profile structural change (new patch rows for plugins not yet loaded).
+- Everything else - knobs, scopes, masters, enforce tiers, plain-field re-applies - is live.

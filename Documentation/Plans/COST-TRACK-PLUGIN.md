@@ -47,8 +47,8 @@ statuses:
       state: resolved
       evidence: section 13
     - name: the migration v2 columns and tables
-      state: open
-      evidence: section 14
+      state: implemented
+      evidence: package Source/Function/Schema.ts and Open.ts; the Migrate smoke (4 PASS)
     - name: the analytics surface as the deliverable, the invoice deferred
       state: resolved
       evidence: section 16
@@ -74,8 +74,18 @@ statuses:
       state: resolved
       evidence: section 17.5
     - name: the v3 factor pass and the v4 edit and telemetry pass
+      state: implemented
+      evidence:
+          package Source/Function (Price, Edit, Telemetry, Forecast, Schema, Open); 56 checks across
+          12 folders, all green
+    - name: the revert verdict reached in production
       state: open
-      evidence: section 17.7
+      evidence:
+          section 14 - needs the FileVersion hash comparison; Edit.BeforeHash is still unpopulated
+    - name: the live install in the profile
+      state: open
+      evidence:
+          the bundle row is written but the package is not installed, so no live ledger exists yet
 ---
 
 # The cost-track plugin - per-file inference pricing
@@ -596,6 +606,12 @@ read-kind touches is `read`; a file written and then restored to its earlier has
 verdict is the input to the `surviving-only` discount, and it is recomputable from `Touch` and
 `FileVersion` alone.
 
+**v2 limitation, recorded honestly.** The session log carries no restore signal, so the drain feeds
+`Restored = false` and a `reverted` verdict cannot be reached in v2 - the rule is exercised in the
+stage smoke, but nothing in production produces it yet. Reaching it needs the content hash at each
+write, which is the `FileVersion` comparison planned for v4. Until then the verdict is `changed` or
+`read`, which is correct for every session that did not undo its own work.
+
 ## 15. What the research changed
 
 The digest at [INFERENCE-COST-ATTRIBUTION.md](../Researches/INFERENCE-COST-ATTRIBUTION.md) was
@@ -838,3 +854,41 @@ dimension is worse than one that does not know it at all:
 
 Each pass ships with its own smokes, and the conservation smoke from section 9 runs after every one
 of them, because the one thing that must never drift is that the allocations still sum to the bill.
+
+## 18. The twelve open decisions, answered
+
+The digest closes with twelve questions it could not settle. Each one now has an answer, and the
+answer is a design clause rather than a preference, so a later reader can see why the code looks the
+way it does.
+
+1. **Canonical token shape** - exclusive, matching the harness's own `TokenUsage`; an inclusive
+   source is converted once at the boundary and a smoke asserts the conversion.
+2. **Default attribution model** - the hybrid (direct for output, amortized for input). Shapley is
+   documented but not built: it needs a counterfactual the ledger cannot observe.
+3. **Shared-context policy** - informed-ignore for the system prompt and tool schemas (funded
+   centrally, allocated to no file), proportional for file content. The choice is recorded on the
+   call, not left implicit.
+4. **Price join key** - the request model, because that is what the caller chose and what the rate
+   card keys on; a differing response model is stored on the call for audit but does not select the
+   rate.
+5. **Rate source** - a self-maintained rate card in config plus the `Price` table, optionally seeded
+   from the LiteLLM map. The map is community-maintained and its only expiry signal is
+   `deprecation_date`, so it is a convenience, not the authority.
+6. **Token provenance for per-file shares** - the estimator for the weights, the provider's usage
+   for the money. Weights are ratios, so estimator error cancels; cost is never estimated.
+7. **Cache-write allocation** - spread over the cached set rather than charged to the first toucher,
+   because the set that benefits from the later reads is the set that should pay for the write. v2
+   folds the write into the uncached side; v3 moves it.
+8. **Time-of-day pricing** - store the tokens, the resolved `PriceId`, and the computed dollars. The
+   dollars make the report cheap, the tokens and the effective-dated price row make a retroactive
+   correction possible without re-reading a session.
+9. **Write topology** - one connection per host process, WAL, one writer. Subagents run in the same
+   host, so there is no second writer to contend with.
+10. **Payload detail** - TEXT JSON when a raw payload is kept, never JSONB: the ledger's queries are
+    over typed columns, and an opaque blob would only be parsed in a debugging session.
+11. **Rollup engine** - SQLite views over `Allocation`, rebuilt on demand. DuckDB is a fine second
+    engine for an analysis pass, and the export can hand it a Parquet file without the ledger
+    depending on it.
+12. **Annotation surface** - in-file comments, off by default, marker-delimited, and always paired
+    with the CSV sidecar. The comment is for the reader of the file; the sidecar is for the
+    accountant.

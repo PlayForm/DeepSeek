@@ -8,14 +8,14 @@
 
 ## The role
 
-A DeepSeek Harness plugin that keeps **dynamic, modifiable conversation blocks in the system
-prompt**: each enabled block is a labeled stanza recomputed at every request - the canonical example
-is a time block that always holds the current time at ask-time while the rest of the conversation
-stays static.
+This DeepSeek Harness plugin keeps **dynamic, modifiable conversation blocks in the system prompt**:
+each enabled block is a labeled stanza recomputed at every request, and the canonical example is a
+time block that always holds the current time at ask-time while the rest of the conversation stays
+static.
 
 The blocks ride the `system-prompt/assemble` waterfall as ONE appended section named
 `live-containers` (`interpolate: false`, so only the plugin's own substitution engine touches its
-`{{token}}` groups - the harness's unresolved-variable failure is never inherited), each block
+`{{token}}` groups - the harness's unresolved-variable failure is never inherited), with each block
 inside a fixed frame so the model cannot mistake it for harness state:
 
 ```

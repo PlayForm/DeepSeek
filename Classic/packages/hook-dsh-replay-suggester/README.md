@@ -5,52 +5,52 @@
 
 ## The role
 
-The replay-suggester hook: a DeepSeek Harness plugin that answers the question **"the last time this
-was done, what did the model actually touch and how did it verify?"**
+The replay-suggester hook is a DeepSeek Harness plugin that answers the question **"the last time
+this was done, what did the model actually touch and how did it verify?"**
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) §9.3).
 
 When the model searches with an intent it has pursued before, the hook recalls the matching record
 from its history store and prepends ONE labeled `additionalContexts` notice: the files touched last
 time and the verification command.
 
-- The history store: `~/.dsh/replay-suggester/history.json` (the seed of the search-suggester's
-  journal per §9.3; the offline learner and the journal adapter are the end-phase wiring).
+- The history store is `~/.dsh/replay-suggester/history.json` (the seed of the search-suggester's
+  journal per §9.3, while the offline learner and the journal adapter are the end-phase wiring).
 
-    Loaded once at apply; a missing or corrupt store degrades to silence with a ledger line, never
-    to a guess.
+    The store loads once at apply, and a missing or corrupt store degrades to silence with a ledger
+    line, never to a guess.
 
 - The recall store has a **producer** (the wave 2c re-spec,
   [03-SUGGESTERS.md](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md)): every judged call
   is recorded, and a later call recalls the paths that accompanied a similar prior call.
 
     The producer's store is its own (the `replay_history` storage domain, or the JSON fallback
-    beside the seeded store); the seeded store still wins when it matches.
+    beside the seeded store), and the seeded store still wins when it matches.
 
-- Without a recalled record the hook **abstains** (`replay no-memory`): a replay answer without a
-  record is a guess, and the plan forbids the guess (§2.4).
+- Without a recalled record the hook **abstains** (`replay no-memory`), because a replay answer
+  without a record is a guess and the plan forbids the guess (§2.4).
 - Privacy posture (plan §5.4): repo-relative paths only, no file contents, no user text, local only.
 
 ## The surfaces
 
-- The `tools/post-execute` waterfall listener (after the ccr's `{prepend: true}` listener): one
-  `additionalContexts` notice, never a content replacement.
-- The `agent/pre-step` listener: the per-turn reset of the note counter.
-- The recall store: the `replay_history` storage-domain KV domain, or the JSON fallback beside the
+- The `tools/post-execute` waterfall listener (after the ccr's `{prepend: true}` listener) adds one
+  `additionalContexts` notice and never a content replacement.
+- The `agent/pre-step` listener resets the note counter for each turn.
+- The recall store is the `replay_history` storage-domain KV domain, or the JSON fallback beside the
   seeded store (`~/.dsh/replay-suggester/`).
 
 - Injected services: `pluginFactory`.
 
-    No tool, no provided service.
+    There is no tool and no provided service.
 
 ## How it works
 
 1. **The post-execute listener.**
 
-    The `tools/post-execute` listener (waterfall, plain registration - after the ccr's
+    The `tools/post-execute` listener (waterfall, plain registration, after the ccr's
     `{prepend: true}` listener) calls `next()` first.
 
-    Then the hook runs record (the producer) -> recall (the seeded store, then the live history) ->
-    detect -> gate -> prepend ONE notice.
+    Then the hook runs record (the producer), recall (the seeded store, then the live history),
+    detect, gate, and prepend ONE notice.
 
     Content is never replaced.
 
@@ -61,7 +61,7 @@ time and the verification command.
 ## The recall store (the producer)
 
 On every judged call that names a path, the hook appends one entry
-`{ seq, path, intent, outcome, at, probe }` to the recall history - the per-agent ring plus the
+`{ seq, path, intent, outcome, at, probe }` to the recall history: the per-agent ring plus the
 durable tier.
 
 The durable tier is the storage-domain KV domain `replay_history` (version 1, per-record, tables
@@ -71,7 +71,7 @@ The durable tier is the storage-domain KV domain `replay_history` (version 1, pe
 
 The recall matches the most recent prior entry with the same tool and either a contained probe
 literal or the same path directory, then names the paths recorded within `learnWindow` calls of it
-(the episode) - "the last time this area was touched, these files were touched".
+(the episode), which means "the last time this area was touched, these files were touched".
 
 The `recorded` line, the recovery lines (`store recovered <n> entries (replay_history|file)`,
 `store empty (starting fresh)`), and the failure lines are byte-exact in [SCHEME.md](./SCHEME.md).
@@ -82,11 +82,11 @@ The `Repeat` intent is **pack-driven**: the built-in pack (this monorepo's defau
 [`@playform/lib-dsh-pack`](../lib-dsh-pack) and is projected here as the `replay/` domain.
 
 A repository that ships `.dsh/pack.yml` (or a user-layer pack at
-`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `replay/` intent and caveat; a repository
+`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `replay/` intent and caveat, and a repository
 without a pack stays silent.
 
-The recalled companion still comes from the history store - the pack supplies the gate and the
-caveat, never the companion.
+The recalled companion still comes from the history store, because the pack supplies the gate and
+the caveat, never the companion.
 
 ## The ledger
 
@@ -140,8 +140,8 @@ Every field is a volatile cell:
 The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
 tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
-The smoke folders: `History-Producer`, `Loader-And-History`, `Pack-Driven`, `Pipeline-And-Recall`,
-`Workspace-Gate`.
+The smoke folders are `History-Producer`, `Loader-And-History`, `Pack-Driven`,
+`Pipeline-And-Recall`, and `Workspace-Gate`.
 
 ## The plan
 
@@ -150,11 +150,12 @@ The smoke folders: `History-Producer`, `Loader-And-History`, `Pack-Driven`, `Pip
 - [Completion-Spec/03-SUGGESTERS](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md) - the
   wave 2c re-spec (the producer).
 
-- The package, the Source, the smoke suites and the build pass are complete, and the recall store's
-  producer landed; the live activation (the profile row flip and the restart) is the remaining
-  end-phase step (POC-BRIEF.md §8).
+- The package, the Source, the smoke suites, and the build pass are complete, and the recall store's
+  producer landed.
+- The live activation (the profile row flip and the restart) is the remaining end-phase step
+  (POC-BRIEF.md §8).
 
-    Ships `enabled: false` in the bundle patch.
+    It ships `enabled: false` in the bundle patch.
 
 ## License
 

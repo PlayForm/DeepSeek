@@ -1,4 +1,4 @@
-import type Dispatcher from "../Function/Dispatcher.js";
+import type Dispatcher from "@Function/Dispatcher.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { Allowlist, State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type Task from "./Task.js";

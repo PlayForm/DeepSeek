@@ -1,8 +1,9 @@
 # SCHEME - @playform/client-dsh-panel-family
 
-The package's contract scheme, v4.1 (Documentation/Plans/Completion-Spec/04-CLIENT.md,
-Documentation/Plans/UI-FAMILY-V4-1.md). Everything below is what the code does today; nothing else
-is claimed.
+This file states the contract scheme of the package at v4.1, which follows
+Documentation/Plans/Completion-Spec/04-CLIENT.md and Documentation/Plans/UI-FAMILY-V4-1.md.
+
+Everything below is what the code does today, and the file claims nothing else.
 
 ## 1. Identity
 
@@ -18,8 +19,10 @@ is claimed.
 
 ## 2. The loader contract
 
-Object form: `name`, `apply` (empty - the pure client posture), `Config` (the Schemastery schema),
-`inject` (`[]` - no host services). The default object carries all four.
+The object form carries `name`, `apply` (empty, which is the pure client posture), `Config` (the
+Schemastery schema), and `inject` (`[]`, because there are no host services).
+
+The default object carries all four.
 
 ## 3. The panel contract (`Source/Interface/Panel.ts`)
 
@@ -36,12 +39,13 @@ Object form: `name`, `apply` (empty - the pure client posture), `Config` (the Sc
   `{ id, bundle, namespace, title, order, slot?, mount?, activation?, traceKinds?, match?, enabled?, render? }`.
 - `PanelRegistry` = `{ register, unregister, entries, subscribe, getVersion, open }`.
 
-The contract is types only (it emits nothing); adapters import it with `import type` only. The
-supporting contracts live beside it: `Interface/Trace.ts` (the live source), `Interface/Form.ts`
-(the settings view and the generated form), `Interface/Bridge.ts` (the plain-field bridge),
-`Interface/Ports.ts` (what a section receives), `Interface/Client.ts` (the client context face:
-cordis's `Context` INTERSECTED with `locale` and `slots` - never a module augmentation, which would
-shadow the re-exported `Context`).
+The contract is types only and it emits nothing, so adapters import it with `import type` only.
+
+The supporting contracts live beside it: `Interface/Trace.ts` for the live source,
+`Interface/Form.ts` for the settings view and the generated form, `Interface/Bridge.ts` for the
+plain-field bridge, `Interface/Ports.ts` for what a section receives, and `Interface/Client.ts` for
+the client context face, which is the `Context` of cordis INTERSECTED with `locale` and `slots` and
+never a module augmentation, because an augmentation would shadow the re-exported `Context`.
 
 ## 4. The child-slot model
 
@@ -52,21 +56,28 @@ Each mount registration declares its child slot in `children`:
 | `conversation.view` / `playform-family`     | `playform.panel.section` | `list` / `session` |
 | `shell.overlay` / `playform-family-overlay` | `playform.panel.overlay` | `list` / `root`    |
 
-The components render their declared slot through the `renderSlot` prop; the registry supplies the
-data (the occupancy count for the empty state, the manifests). An adapter registers one child per
-slot through `Source/Function/Adapter.ts`, which also registers the manifest.
+The components render their declared slot through the `renderSlot` prop, and the registry supplies
+the data, which is the occupancy count for the empty state and the manifests.
 
-The registry is SLOT-AWARE: sections are keyed by id and owned per `(slot, bundle)`. One adapter per
-bundle per slot - a second adapter id claiming an occupied pair is refused with the documented line,
-changes nothing, and returns a no-op disposer. Re-registering the same id replaces in place.
-Unregister releases the ownership. A registration without `slot` maps its `mount` (`family-tab` ->
-`playform.panel.section`, `overlay` -> `playform.panel.overlay`). `entries(slot?)` orders by
-`(order, id)`.
+An adapter registers one child per slot through `Source/Function/Adapter.ts`, which also registers
+the manifest.
+
+The registry is SLOT-AWARE, so sections are keyed by id and owned per `(slot, bundle)`.
+
+One adapter per bundle per slot runs, and a second adapter id that claims an occupied pair is
+refused with the documented line, changes nothing, and returns a no-op disposer.
+
+Re-registering the same id replaces in place, and unregister releases the ownership.
+
+A registration without `slot` maps its `mount`, where `family-tab` becomes `playform.panel.section`
+and `overlay` becomes `playform.panel.overlay`.
+
+`entries(slot?)` orders by `(order, id)`.
 
 ## 5. The adapter contract and the reference adapters
 
-`Source/Function/Adapter.ts` is the wiring template: inside `ctx.effect` it (1) registers the
-manifest in the registry and (2) injects the declared child slot and registers the section
+`Source/Function/Adapter.ts` is the wiring template: inside `ctx.effect` it first registers the
+manifest in the registry, and then it injects the declared child slot and registers the section
 component, whose registration `inject` face carries `{ section, ports }`.
 
 The three reference adapters (`Source/Variable/Reference/`):
@@ -77,38 +88,47 @@ The three reference adapters (`Source/Variable/Reference/`):
 | tool-coach | `@playform/hook-dsh-tool-coach`           | `hook-dsh-tool-coach`           | 30    | `enabled` (Config default)                    |
 | suggester  | `@playform/hook-dsh-convention-suggester` | `hook-dsh-convention-suggester` | 40    | `enabled` (Config default)                    |
 
-The ten residual adapters (same pattern, shipped beside them in `Source/Variable/Reference/` and
-wired through Function/Reference.ts): the five remaining normalize flavors
-(`hook-dsh-normalize-quotes` 11, `-ellipsis` 12, `-spaces` 13, `-invisible` 14, `-fullwidth` 15),
-`plugin-dsh-normalize-file` 20, the three governors (`hook-dsh-package-governor` 50,
-`hook-dsh-package-pinner` 55, `hook-dsh-cargo-governor` 60), and `hook-dsh-ccr` 70. All declare the
-`playform.panel.section` slot, the static `enabled` posture (none of their schemas has a master
-switch), and the three D5 trace names.
+The ten residual adapters follow the same pattern and ship beside them in
+`Source/Variable/Reference/`, wired through Function/Reference.ts: the five remaining normalize
+flavors (`hook-dsh-normalize-quotes` 11, `-ellipsis` 12, `-spaces` 13, `-invisible` 14, `-fullwidth`
+15), `plugin-dsh-normalize-file` 20, the three governors (`hook-dsh-package-governor` 50,
+`hook-dsh-package-pinner` 55, `hook-dsh-cargo-governor` 60), and `hook-dsh-ccr` 70.
+
+All of them declare the `playform.panel.section` slot, the static `enabled` posture, because none of
+their schemas has a master switch, and the three D5 trace names.
 
 ## 6. The status and the trace source
 
-The panel resolves the D5 trace from the client context (`ctx.get("trace")`; only `on` is required,
-`ring` is used when present). It seeds the tail from the bus's recent ring (filtered to the adapter
-kinds) and then subscribes to the names each adapter declares (`Variable/Trace.ts`: `observe/stamp`,
-`graph/indexed`, `graph/invalidated`), keeping the recent envelopes newest first, bounded to 8. A
-tail line is `<kind> <path>` - the payload's `path` when it is a non-empty string, else the
-envelope's `trace` id. The status is `live: true` when the trace exists; the activation is the
-adapter's static posture unless the newest matching envelope carries `payload.activation`
-(`"enabled"` / `"disabled"`). A missing trace is the documented static fallback (`live: false`,
-empty tail).
+The panel resolves the D5 trace from the client context through `ctx.get("trace")`, where only `on`
+is required and `ring` is used when present.
+
+It seeds the tail from the recent ring of the bus, filtered to the adapter kinds, and then
+subscribes to the names that each adapter declares (`Variable/Trace.ts`: `observe/stamp`,
+`graph/indexed`, `graph/invalidated`), keeping the recent envelopes newest first and bounded to 8.
+
+A tail line is `<kind> <path>`, which is the `path` of the payload when it is a non-empty string and
+otherwise the `trace` id of the envelope.
+
+The status is `live: true` when the trace exists.
+
+The activation is the static posture of the adapter unless the newest matching envelope carries
+`payload.activation` (`"enabled"` or `"disabled"`).
+
+A missing trace gives the documented static fallback, with `live: false` and an empty tail.
 
 ## 7. The config form and the plain-field bridge
 
-`Source/Function/Form.ts` derives the form from the namespace's serialized Schemastery schema
-(`{ uid, refs }` envelope; refs resolved), flattening object fields to dotted paths:
+`Source/Function/Form.ts` derives the form from the serialized Schemastery schema of the namespace,
+which is a `{ uid, refs }` envelope with the refs resolved, and it flattens the object fields to
+dotted paths:
 
-- `volatile` = the node's `meta.volatile` or an ancestor object's; `secret` =
-  `meta.role === "secret"`; `hidden` = `meta.hidden === true` (skipped); `options` = a union of
-  const nodes.
-- `value` / `base` come from the namespace view; `overridden` is the presence of the path in the
-  user layer (not a value comparison).
+- `volatile` comes from `meta.volatile` of the node or of an ancestor object; `secret` comes from
+  `meta.role === "secret"`; `hidden` comes from `meta.hidden === true` and is skipped; `options` is
+  a union of const nodes.
+- `value` and `base` come from the namespace view, and `overridden` is the presence of the path in
+  the user layer rather than a value comparison.
 - The form status is `unavailable` without the settings client, `loading` before the namespace view
-  arrives, `ready` otherwise; `secret` marks a namespace that declares a secret.
+  arrives, and `ready` otherwise, and `secret` marks a namespace that declares a secret.
 
 Writes (`Source/Function/Apply.ts`):
 
@@ -120,13 +140,17 @@ Writes (`Source/Function/Apply.ts`):
 | plain, namespace has a secret    | refused                                                              | `plain-field secret refused for <ns>` (warn)     |
 | plain, no bridge                 | refused                                                              | `plain-field bridge unavailable for <ns>` (warn) |
 
-The bridge resolution order: the `panelFamilyBridge` client service, then
-`remote.playformFamilyPanel.editFull`. The host endpoint over `ctx.configEditor.edit()` is the
-companion package's (`@playform/client-dsh-panel-family-host`), not this one.
+The bridge resolution order tries the `panelFamilyBridge` client service first and then
+`remote.playformFamilyPanel.editFull`.
+
+The host endpoint over `ctx.configEditor.edit()` belongs to the companion package
+(`@playform/client-dsh-panel-family-host`) and not to this one.
 
 ## 8. The client half (`./client`)
 
-Named exports `inject = ["slots", "locale"]` and `apply(ctx)`. The body:
+The module has the named exports `inject = ["slots", "locale"]` and `apply(ctx)`.
+
+The body does six things:
 
 1. `ctx.reflect.provide("playformFamilyPanel", registry)`.
 2. `ctx.effect` - locale dictionaries (`Variable/Locale-en.json`, `Variable/Locale-zh.json`).
@@ -138,14 +162,15 @@ Named exports `inject = ["slots", "locale"]` and `apply(ctx)`. The body:
 6. `ctx.effect` per shipped adapter (thirteen) - `panel: adapter <id>` (the registry entry and the
    child registration).
 
-Everything unwinds with the plugin. The package manifest's `dsh.client.inject` lists
-`@deepseek-ai/dsh-client-ui-settings` (the `ctx.configForms` owner) alongside the locale, the
-layout, and the api-remotes gateway.
+Everything unwinds with the plugin.
+
+The `dsh.client.inject` entry of the package manifest lists `@deepseek-ai/dsh-client-ui-settings`
+(the `ctx.configForms` owner) alongside the locale, the layout, and the api-remotes gateway.
 
 ## 9. The ledger lines
 
-The client half keeps no ledger file (pure browser module); its documented lines go through the
-client logger (`Source/Variable/Lines.ts`), byte-exact:
+The client half keeps no ledger file, because it is a pure browser module, so its documented lines
+go through the client logger (`Source/Variable/Lines.ts`) and stay byte-exact:
 
 ```text
 client-dsh-panel-family: duplicate adapter refused for <bundle> in <slot>
@@ -157,14 +182,14 @@ client-dsh-panel-family: plain-field secret refused for <namespace>
 ## 10. Verification
 
 - `prepublishOnly` builds `Target/`, writes `Target/Client.bundle.js` through
-  `Maintain/Build-Client-Bundle.mjs`, builds `Target/Test/`, runs the harness selfcheck, and
+  `Maintain/Build-Client-Bundle.mjs`, builds `Target/Test/`, runs the selfcheck of the harness, and
   type-checks the Test tree.
-- The five smoke folders: `Contract-And-Wiring` 13 PASS, `Registry-And-Sections` 7 PASS,
-  `Child-Slot-Model` 10 PASS, `Reference-Adapter` 14 PASS, `All-Adapters` 9 PASS (the
-  thirteen-manifest roster, the forms, the two write routes, and the built bundle executed through a
-  fake `window.__ModuleLoader__`).
+- The five smoke folders hold the counts: `Contract-And-Wiring` 13 PASS, `Registry-And-Sections` 7
+  PASS, `Child-Slot-Model` 10 PASS, `Reference-Adapter` 14 PASS, and `All-Adapters` 9 PASS, which
+  covers the thirteen-manifest roster, the forms, the two write routes, and the built bundle
+  executed through a fake `window.__ModuleLoader__`.
 
 ## 11. The EffectTS twin
 
-Deferred to the ETS parity wave (wave 5 of the completion spec); the Classic tree is the contract
-source for it.
+This twin is deferred to the ETS parity wave, which is wave 5 of the completion spec, and the
+Classic tree is its contract source.

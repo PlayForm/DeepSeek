@@ -9,17 +9,16 @@ mechanics (called exactly once, synchronously, before any upstream
 iteration), the deep-frozen options invariant, the passthrough-by-identity
 groups (block-start, tool-call-delta with its raw JSON argumentsDelta, usage,
 finish), the removal groups (the replacement is the empty string, so the
-invisible characters vanish from the text-delta, the reasoning-delta and the
+invisible characters vanish from the text-delta, the reasoning-delta, and the
 three block-end fields while every rewritten chunk is a new object with the
 index preserved), the count ledger line ("normalized 9 invisible char(s) in
-one stream" - 3 delta + 2 reasoning + 2 block-end + 1 thinking), the byte
-exact logger line and the P5 journal routing of the count event (the
-factory-level PRE-BIND buffer, stage 2, not the per-State queue, stage 3).
-The assertions are moved verbatim from `Classic/smokes/invisible-smoke.mjs`
-sections "The waterfall listener, exercised" and "Run 1 (P5 journal): the
-count event lands in the shared storage domain" (the source suite stays in
-place during the migration; this folder is the future home of the same
-contract).
+one stream" - 3 delta + 2 reasoning + 2 block-end + 1 thinking), the byte-exact
+logger line, and the P5 journal routing of the count event (the factory-level
+PRE-BIND buffer, stage 2, not the per-State queue, stage 3). The assertions
+are moved verbatim from sections "The waterfall listener, exercised" and
+"Run 1 (P5 journal): the count event lands in the shared storage domain" of
+`Classic/smokes/invisible-smoke.mjs` (the source suite stays in place during
+the migration; this folder is the future home of the same contract).
 
 ## Scenario
 
@@ -96,15 +95,15 @@ contract).
 ## Fixtures
 
 The shared harness (`../Harness.js`): the REAL factory instance (`Furnace`),
-the fake ctx, the REAL `apply`, `Validate` and the ledger path
-`/tmp/invisible-smoke-ledger.log` (removed at the folder's start). The stream
-fixture embeds this flavor's own character class: the text-delta carries the
-zero-width space (U+200B), the zero-width non-joiner (U+200C) and the soft
-hyphen (U+00AD); the reasoning-delta the zero-width joiner (U+200D) and the
-BOM (U+FEFF); the block-end fields the word joiner (U+2060), the LRM
-(U+200E), the LRE (U+202A) and the RLO (U+202E); the tool-call JSON a
-zero-width space. Nine replacements total in one stream. The options object
-is deep-frozen to prove non-mutation.
+the fake ctx, the REAL `apply`, `Validate`, and the ledger path
+`/tmp/invisible-smoke-ledger.log` (removed at the start of the folder). The
+stream fixture embeds the own character class of this flavor: the text-delta
+carries the zero-width space (U+200B), the zero-width non-joiner (U+200C), and
+the soft hyphen (U+00AD); the reasoning-delta the zero-width joiner (U+200D)
+and the BOM (U+FEFF); the block-end fields the word joiner (U+2060), the LRM
+(U+200E), the LRE (U+202A), and the RLO (U+202E); the tool-call JSON a
+zero-width space. Nine replacements total in one stream. The options object is
+deep-frozen to prove non-mutation.
 
 ## Expected ledger strings (byte-exact)
 

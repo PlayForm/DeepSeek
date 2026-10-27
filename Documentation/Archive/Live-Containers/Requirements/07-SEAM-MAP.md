@@ -77,38 +77,77 @@ research and re-cited).
 
 ## 3. The sequencing recommendation (for the DESIGN agent)
 
-1. G1 first (it gates CAN-1's shape).
-2. G2, G4, G3 -> CAN-1 end-to-end with mode "long-running".
-3. G7 -> CAN-3 (independent of CAN-1; ships first in a real schedule).
-4. E3-based standing section from day one (the templates need no jobs).
-5. G5, G6 -> CAN-2 after CAN-1 (boards consume job settle events).
-6. G8 -> CAN-4 after CAN-2 (stall detection reuses board state).
-7. G9 -> CAN-5 last (it suggests what 1-4 make possible).
-8. The v1 research's A1/A2/A3 specs remain valid for the assemble-side plugin; wave 2 extends the
-   same package rather than forking a second one (one plugin, two feature halves: templates + live
-   execution).
+1. **G1 first.**
+
+    It gates CAN-1's shape.
+
+2. **G2, G4, G3.**
+
+    These give CAN-1 end-to-end with mode "long-running".
+
+3. **G7.**
+
+    This gives CAN-3, independent of CAN-1, and it ships first in a real schedule.
+
+4. **The E3-based standing section from day one.**
+
+    The templates need no jobs.
+
+5. **G5, G6.**
+
+    These give CAN-2 after CAN-1 (boards consume job settle events).
+
+6. **G8.**
+
+    This gives CAN-4 after CAN-2 (stall detection reuses board state).
+
+7. **G9.**
+
+    This gives CAN-5 last (it suggests what 1-4 make possible).
+
+8. **The v1 research's A1/A2/A3 specs.**
+
+    They remain valid for the assemble-side plugin, and wave 2 extends the same package rather than
+    forking a second one (one plugin, two feature halves: templates + live execution).
 
 ## 4. The open questions carried forward
 
-1. G1's decision shape (above).
-2. Does the idle-agent wake turn count as a "user-visible" event for CAN-4's channel model? (It is
-   model-visible; the user sees the wake in the GUI - classify as channel 4, and document.)
-3. Withdrawal vs KV-cache: confirm that removing a standing section block after delivery is
-   acceptable prompt-tail churn per settlement (01 section 8 takes the position that honesty beats
-   cache).
-4. Whether the suggester's verbatim prompt forwarding needs an explicit user consent surface beyond
-   the config flag (05 section on privacy takes the position: the SCHEME disclosure plus a default
-   of redact for any non-local route).
+1. **G1's decision shape.**
+
+    It is the question above.
+
+2. **The idle-agent wake turn.**
+
+    Does it count as a "user-visible" event for CAN-4's channel model?
+
+    It is model-visible, and the user observes the wake in the GUI - classify as channel 4, and
+    document.
+
+3. **Withdrawal vs KV-cache.**
+
+    Confirm that removing a standing section block after delivery is acceptable prompt-tail churn
+    per settlement (01 section 8 takes the position that honesty beats cache).
+
+4. **The suggester's verbatim prompt forwarding.**
+
+    Does it need an explicit user consent surface beyond the config flag?
+
+    The 05 section on privacy takes the position: the SCHEME disclosure plus a default of redact for
+    any non-local route.
 
 ## 5. BINDING CONSTRAINTS (appended by the I1 requirement-guard agent, 2026-10-19 - HARD requirements for the DESIGN agent; they scope the gaps above without rewriting them)
 
 ### 5.1 THE COMMAND-ONLY DETACH RULE (hard)
 
 The detach transform (G2/G4) applies ONLY to command-executing tools (`bash`, `pwsh`, and the
-command-runner family: `cargo`, `npm`, `pnpm`, `make`, ...). The content-mutating tools - `write`,
-`edit`, `raw-write`, `normalize-file` - NEVER detach in any mode, because the fs/observed governance
-chain (governors/pinner/normalize family) fires synchronously on tool-layer writes; a detached write
-races that chain and silently breaks the pin/govern discipline. Consequences for the gap list:
+command-runner family: `cargo`, `npm`, `pnpm`, `make`, ...).
+
+The content-mutating tools - `write`, `edit`, `raw-write`, `normalize-file` - NEVER detach in any
+mode, because the fs/observed governance chain (governors/pinner/normalize family) fires
+synchronously on tool-layer writes; a detached write races that chain and silently breaks the
+pin/govern discipline.
+
+Consequences for the gap list:
 
 - G4's policy engine must treat the mutation family as permanently non-detachable (rejected even
   under `all` and `selected`); `all`'s "EVERY tool call" wording in 01 section 5 is bounded by this
@@ -120,18 +159,27 @@ races that chain and silently breaks the pin/govern discipline. Consequences for
 
 ### 5.2 THE SANDBOX + FAIL-OPEN RULE (hard)
 
-1. Detached commands run under the SAME sandbox + deadlines + output caps as the ptc/inline runtime:
-   G2's producer must go through the governed bash execution path (sandbox unmodified);
-   `liveTimeoutMs` must be <= the inline deadline for the tool family; the job ring caps are the
-   output caps (2 KiB tail max in any rendered block). Detachment never buys weaker isolation or
-   more runtime.
-2. The transform listener is FAIL-OPEN: it never throws into the tools/pre-execute waterfall (the
-   CCR/tool-coach precedent, E1/E2); on any internal error it returns pass-through, kills any
-   half-started job (`marker-failed`), and ledgers `transform failed <tool> -> inline`.
-3. The "still running" marker is the failure fallback: no completion block is ever rendered without
-   an observed `settled` event; markers that outlive their registry render `status: lost` (01
-   section 9.10).
+1. **The same isolation as the ptc/inline runtime.**
+
+    Detached commands run under the SAME sandbox + deadlines + output caps as the ptc/inline
+    runtime: G2's producer must go through the governed bash execution path (sandbox unmodified),
+    `liveTimeoutMs` must be <= the inline deadline for the tool family, and the job ring caps are
+    the output caps (2 KiB tail max in any rendered block).
+
+    Detachment never buys weaker isolation or more runtime.
+
+2. **The fail-open transform listener.**
+
+    The transform listener is FAIL-OPEN: it never throws into the tools/pre-execute waterfall (the
+    CCR/tool-coach precedent, E1/E2), and on any internal error it returns pass-through, stops any
+    half-started job (`marker-failed`), and ledgers `transform failed <tool> -> inline`.
+
+3. **The "still running" marker as the failure fallback.**
+
+    No completion block is ever rendered without an observed `settled` event, and markers that
+    outlive their registry render `status: lost` (01 section 9.10).
 
 Sequencing note: 5.1 narrows G2 (design cost down), and 5.2's fail-open clause makes 01 section 7's
-first bullet acceptance-testable (01 section 12.2 acceptance additions). No other gap in section 2
-is re-scoped.
+first bullet acceptance-testable (01 section 12.2 acceptance additions).
+
+No other gap in section 2 is re-scoped.

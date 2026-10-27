@@ -4,37 +4,37 @@ What this test verifies.
 
 ## Intent
 
-The Run-2 through Run-7 matrix: the reasoning-off passthrough, the MAP's
-special half-width values mapped literally in one segment, the
-upstream-throw propagation, the identity stream, the fresh-state (HMR-safety)
-probe and the tool-args normalization - including their cumulative pre-bind
-journal counts. Each run is its own mini-scenario against a fresh apply:
-Run 2 proves the reasoning gate (nothing replaced means no count line and no
-new journal record), Run 3 proves the special values of the Fullwidth table
-(U+FF04, U+FF3C, U+FF3E, U+FF5C) come out literally - a function replacer,
-no replacement-pattern interpretation - with the journal record added, Run 4
-proves an upstream throw propagates without leaving a count line or a
-record, Run 5 proves the identity passthrough for a clean chunk, Run 6
-proves two applies build two distinct State objects (no module-level globals
-- the HMR-safety contract), and Run 7 proves the tool-args normalization
-end-to-end (deltas AND the assembled block agree, one journal record for the
-pair). The assertions are moved verbatim from
-`Classic/smokes/fullwidth-smoke.mjs` sections "Run 2" through "Run 7".
+The Run-2 through Run-7 matrix: the reasoning-off passthrough, the special
+half-width values of the MAP mapped literally in one segment, the propagation
+of an upstream throw, the identity stream, the fresh-state (HMR-safety) probe,
+and the tool-args normalization - including their cumulative pre-bind journal
+counts. Each run is its own mini-scenario against a fresh apply: Run 2 proves
+the reasoning gate (nothing replaced means no count line and no new journal
+record), Run 3 proves that the special values of the Fullwidth table (U+FF04,
+U+FF3C, U+FF3E, U+FF5C) come out literally - a function replacer, with no
+replacement-pattern interpretation - and adds the journal record, Run 4 proves
+that an upstream throw propagates without leaving a count line or a record,
+Run 5 proves the identity passthrough for a clean chunk, Run 6 proves that two
+applies build two distinct State objects (no module-level globals - the
+HMR-safety contract), and Run 7 proves the tool-args normalization end to end
+(the deltas AND the assembled block agree, with one journal record for the
+pair). The assertions are moved verbatim from sections "Run 2" through "Run 7"
+of `Classic/smokes/fullwidth-smoke.mjs`.
 
 ## The silent seed (this folder's special fixture)
 
-The source suite ran Runs 1-7 in ONE process, so Runs 2-7's cumulative
-journal assertions count the Run-1 waterfall's `normalized` record in the
-factory's pre-bind buffer (Run 2 expects 1 prior record, Run 3 expects its
-own record to be the second, Run 7's to be the third). Each test folder here
-runs in its OWN process, so this folder begins by silently replaying the
-Run-1 waterfall (the same data and drive as Stream-Contract, NO Check
-calls): the replay exists only to place that one prior record. If the replay
-fails to produce it, Run 2's first cumulative assertion fails loudly - the
-seed cannot make the folder vacuously green. No assertion is duplicated by
-the replay; every Check in this folder belongs to Runs 2-7 exactly as the
-source suite ordered them. Run 6 references the replay's State object as
-`Run1.State` - the same name the source suite used.
+The source suite ran Runs 1-7 in ONE process, so the cumulative journal
+assertions of Runs 2-7 count the `normalized` record of the Run-1 waterfall in
+the pre-bind buffer of the factory (Run 2 expects 1 prior record, Run 3
+expects its own record to be the second, and Run 7's to be the third). Each
+test folder here runs in its OWN process, so this folder begins with a silent
+replay of the Run-1 waterfall (the same data and drive as Stream-Contract, NO
+Check calls): the replay exists only to place that one prior record. If the
+replay fails to produce it, the first cumulative assertion of Run 2 fails
+loudly - the seed cannot make the folder vacuously green. The replay
+duplicates no assertion; every Check in this folder belongs to Runs 2-7
+exactly as the source suite ordered them. Run 6 references the State object of
+the replay as `Run1.State` - the same name that the source suite used.
 
 ## Scenario
 
@@ -80,12 +80,13 @@ source suite ordered them. Run 6 references the replay's State object as
 ## Fixtures
 
 The shared harness (`../Harness.js`): `Furnace`, the fake ctx, the REAL
-`apply`, `Validate` and the ledger path `/tmp/fullwidth-smoke-ledger.log`
+`apply`, `Validate`, and the ledger path `/tmp/fullwidth-smoke-ledger.log`
 (removed before the seed and again before every run, exactly as the source
 suite does). The silent seed replays the Run-1 ten-replacement stream. Run 3
 streams the special values of the Fullwidth table (U+FF04, U+FF3C, U+FF3E,
-U+FF5C) in one text-delta; Run 4's upstream generator throws "transport
-boom"; Run 7's tool-call fixtures embed U+FF1A (fullwidth colon) in `path`.
+U+FF5C) in one text-delta; the upstream generator of Run 4 throws "transport
+boom"; the tool-call fixtures of Run 7 embed U+FF1A (fullwidth colon) in
+`path`.
 
 ## Expected ledger strings (byte-exact)
 
@@ -94,21 +95,21 @@ boom"; Run 7's tool-call fixtures embed U+FF1A (fullwidth colon) in `path`.
 - `hook-dsh-normalize-fullwidth: normalized 2 fullwidth char(s) in one stream`
   (Run 7, ledger file and journal detail)
 
-(Run 2, Run 4 and Run 5 assert the ABSENCE of count lines and records - the
-N=0 rules. Run 6 asserts State identity, no strings. The activation line of
-Run 7 is asserted by its `toolArgs=on` tail.)
+(Run 2, Run 4, and Run 5 assert the ABSENCE of count lines and records - the
+N=0 rules. Run 6 asserts State identity, with no strings. The activation line
+of Run 7 is asserted by its `toolArgs=on` tail.)
 
 ## Edge cases
 
-- The cumulative journal arithmetic is the point of the folder: 1 record
-  after the seed, 2 after Run 3, still 2 after Runs 4 and 5, 3 after Run 7 -
-  any drift fails loudly.
-- Run 3's mapping is exact: the four special code points in, four ASCII
-  chars out (`$\^|`), 1:1 - the literal values prove there is no
+- The cumulative journal arithmetic is the point of the folder: 1 record after
+  the seed, 2 after Run 3, still 2 after Runs 4 and 5, and 3 after Run 7 - any
+  drift fails loudly.
+- The mapping of Run 3 is exact: the four special code points in, four ASCII
+  chars out (`$\^|`), 1:1 - the literal values prove that there is no
   replacement-pattern interpretation of the MAP flavor.
 - Run 4: the throw must leave NOTHING behind - no count line, no record.
-- Run 6 compares State objects by reference (`!==`), plus the Reasoning
-  flag on both, pinning the no-module-globals contract.
+- Run 6 compares State objects by reference (`!==`), plus the Reasoning flag
+  on both, which pins the no-module-globals contract.
 
 ## Expected count
 

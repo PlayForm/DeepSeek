@@ -5,8 +5,8 @@
 
 ## The role
 
-The batch-decision hook: the thin workflow owner between the suggester, the pass-on, the ingester
-and the live view.
+This hook owns the batch decision: it is the thin workflow owner between the suggester, the pass-on,
+the ingester, and the live view.
 
 Plan: `Documentation/Plans/PASS-ON-AND-INGESTER.md` (section 5, the decision workflow).
 
@@ -21,8 +21,8 @@ Plan: `Documentation/Plans/PASS-ON-AND-INGESTER.md` (section 5, the decision wor
 
 ## What it does
 
-- Listens for `batch/proposed` (emit, synchronous recorder) carrying a `BatchProposal`; records it,
-  evaluates expiry, and evaluates the auto-approve policy.
+- It listens for `batch/proposed` (emit, synchronous recorder) carrying a `BatchProposal`; it
+  records the proposal, evaluates the expiry, and evaluates the auto-approve policy.
 - An auto-approval records a `BatchDecision` (`approved`, by `policy`), emits `batch/decision`, and
   logs one ledger line.
 
@@ -32,10 +32,10 @@ Plan: `Documentation/Plans/PASS-ON-AND-INGESTER.md` (section 5, the decision wor
     The target is the proposal's `origin`, then the harness initiator, then the first live agent; no
     live agent is an honest ledger line.
 
-- The `batch_decision` tool is the one entry point the user interacts with: no args lists pending
-  proposals; `id` + `approve=true|false` records the user's decision; an approved batch is handed to
-  the ingester service when one is present (the declared `batchIngester` seam first, then the live
-  `ingester` service, which receives the proposal AND the decision).
+- The `batch_decision` tool is the one entry point that the user interacts with: no args lists
+  pending proposals; `id` + `approve=true|false` records the user's decision; an approved batch goes
+  to the ingester service when one is present (the declared `batchIngester` seam first, then the
+  live `ingester` service, which receives the proposal AND the decision).
 
 ## The conservative policy (the first-batch rule)
 
@@ -45,7 +45,7 @@ approval of the same intent class.
 
 The first batch of any intent class always requires the user.
 
-The policy never approves an expired proposal - expiry produces the `expired` decision by `policy`
+The policy never approves an expired proposal - the expiry makes the `expired` decision by `policy`
 on first touch (lazy; no timers).
 
 ### The policy block (D6) - the outer gate
@@ -60,13 +60,11 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The policy is the **outer** gate, `autoApprove` the **inner** one.
+The policy is the **outer** gate and `autoApprove` is the **inner** one.
 
-An `approve` verdict for `commit`
-
-- the shipped default - refuses the policy auto-approval even with the knob on, and the ledger
-  records the byte-exact `decision held <id> (policy commit=approve)` line: the proposal stays
-  **pending** and waits for the user's `batch_decision` approval.
+An `approve` verdict for `commit` - the shipped default - refuses the policy auto-approval even with
+the knob on, and the ledger records the byte-exact `decision held <id> (policy commit=approve)`
+line: the proposal stays **pending** and waits for the user's `batch_decision` approval.
 
 The precedence is **policy approve > knob**: the knob can never widen an approve verdict, while a
 knob that is off still requires the user and writes no held line.
@@ -76,7 +74,7 @@ pack's `policy` section overrides the defaults per action (the wiring is the nex
 
 ## It never writes
 
-The hook does not implement the pass-on or the ingester and never writes files.
+The hook does not implement the pass-on or the ingester, and it never writes files.
 
 Sibling service shapes are declared structurally (`Source/Interface/Siblings.ts`) and resolved via
 `Context.get` at use time: the declared seams `batchPassOn`, `batchIngester`, `approval`, then the

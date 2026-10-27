@@ -6,11 +6,11 @@ What this test verifies.
 
 The apply-time wiring of the dash flavor: what a single `apply(ctx, config)` builds
 before any stream flows. This is its own folder because the wiring is the
-contract every other behavior sits on - the volatile cells arrive as
+contract that every other behavior sits on - the volatile cells arrive as
 `{ get }` references, the schema defaults decide the dispatch posture, the
 four-listener set defines what the flavor reacts to, and the State unwraps
-decide what the transform actually uses. The source suite's Run 1 and Run 6,
-moved verbatim.
+decide what the transform actually uses. The Run 1 and Run 6 of the source
+suite, moved verbatim.
 
 ## Scenario
 
@@ -42,11 +42,11 @@ moved verbatim.
 
 The harness fake ctx (listener/logger capture, the tool/fs seams with a bare
 backend, the waterfall delegate, the synchronous emit recorder, the self-root
-seam) + the REAL factory instance (the harness Furnace) + the REAL dash apply
-from this bundle's built Target. One `Validate({ logFile })` config built
-through the exported schema; two applies for the Run 6 comparison. The
-harness clears the ledger file at folder start; the folder reads no ledger
-content.
+seam) plus the REAL factory instance (the harness Furnace) plus the REAL dash
+apply from the built Target of this bundle. One `Validate({ logFile })` config
+built through the exported schema, and two applies for the Run 6 comparison.
+The harness clears the ledger file at folder start, and the folder reads no
+ledger content.
 
 ## Expected ledger strings (byte-exact)
 

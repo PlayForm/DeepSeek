@@ -7,19 +7,22 @@ status: active
 registry: Documentation/Guides/Governor-TRIO-GRAPH.md
 index: Documentation/INDEX.md
 statuses:
-    - name: the API-surface graph (what the trio calls / does not)
+    — name: the API-surface graph (what the trio calls / does not)
       state: implemented
       evidence: documents the shipped packages; the exemptions documented in-code
-    - name: the research verdict (section 6)
+    — name: the research verdict (section 6)
       state: resolved
       evidence: the exploration agent's docs-anchored verdict
 ---
 
 # The Trio — Internals & API-Surface Graph
 
-> One of the four Governor guides migrated to `Documentation/Guides/`. The companion docs are
-> `Governor-README.md`, `Governor-SCHEME.md`, and `Governor-CASCADES.md` in this folder. The handoff
-> context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
+> One of the four Governor guides migrated to `Documentation/Guides/`.
+>
+> The companion docs are `Governor-README.md`, `Governor-SCHEME.md`, and `Governor-CASCADES.md` in
+> this folder.
+>
+> The handoff context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
 
 Static analysis of all 89 Source files (2026-10-03, post-equalization pass in flight).
 
@@ -52,7 +55,7 @@ Legend: `⟶` = call / event flow · `✗` = deliberately absent · `EX` = exemp
          │     pure transform (Decode / Pin / Satisfy+Normalize)  ←── EX:       │
          │              internal calculations (JSON/TOML-aware line surgery)    │
          │     refusal guard (non-dep sections never touched)                   │
-         │     ctx.fs.writeText(Target, …, replaceIfVersion,                    │
+         │     ctx.fs.writeText(Target, ..., replaceIfVersion,                    │
          │              {mode:"danger-full-access"})  ←── the write seam        │
          │     ctx.emit(fs/observed, outcome.version, same actor)  ←── P₃       │
          │              (refreshes the policy record — no FS_STALE_VERSION)     │
@@ -158,20 +161,25 @@ to adopt).
 ### The headline corrections
 
 - **F1 — `ctx.jobs` is NOT off-limits at root.** `JobRegistry.attachController(name)` is callable
-  from any context. An unscoped controller "serves every owner". `start({owner: undefined})` = an
-  UNOWNED job "open to any caller until service disposal" (jobs.md:398, 42-46, 488-493). Our live
-  probe failed on ADMISSION ("no job controller serves this agent"), NOT on scoping. The sanctioned
-  root-plugin background pattern is a jobs controller + unowned jobs (detached continuation as the
-  probed fallback when the deployment has no jobs service) — proposal P1.
-- **F3 — LIVE PING-PONG BUG (governor × pinner).** Both hook package.json. Governor canonicalizes
-  chain pins to `^resolved` → re-emits. Pinner strips the `^` → re-emits. EACH consumes the other's
-  fresh version, so `replaceIfVersion` never fails. This is an **infinite rewrite loop when both are
-  active in a registry-governed workspace** (earlier live tests didn't trip it ONLY because the
-  sandbox root has no registry). Minimal fix (P3): the pinner unions its keep-list with
-  `registry.effectiveLatest` keys — chain pins are NEVER stripped.
+  from any context.
+- An unscoped controller "serves every owner".
+- `start({owner: undefined})` = an UNOWNED job "open to any caller until service disposal"
+  (jobs.md:398, 42-46, 488-493).
+- Our live probe failed on ADMISSION ("no job controller serves this agent"), NOT on scoping.
+- The sanctioned root-plugin background pattern is a jobs controller + unowned jobs (detached
+  continuation as the probed fallback when the deployment has no jobs service) — proposal P1.
+- **F3 — LIVE PING-PONG BUG (governor × pinner).** Both hook package.json.
+- Governor canonicalizes chain pins to `^resolved` → re-emits, and the pinner strips the `^` →
+  re-emits.
+- EACH consumes the other's fresh version, so `replaceIfVersion` never fails.
+- This is an **infinite rewrite loop when both are active in a registry-governed workspace**
+  (earlier live tests didn't trip it ONLY because the sandbox root has no registry).
+- Minimal fix (P3): the pinner unions its keep-list with `registry.effectiveLatest` keys — chain
+  pins are NEVER stripped.
 - **F2 — no disposal of in-flight updates**: the unowned AbortControllers in Dispatch violate
-  defensive-patterns.md:19-21 ("dispose must reach quiescence"). P1 fixes it via registry disposal.
-  Otherwise State must own the controllers + a `ctx.effect` disposer.
+  defensive-patterns.md:19-21 ("dispose must reach quiescence").
+- P1 fixes it via registry disposal.
+- Otherwise State must own the controllers + a `ctx.effect` disposer.
 
 ### The adopt/stay verdict
 

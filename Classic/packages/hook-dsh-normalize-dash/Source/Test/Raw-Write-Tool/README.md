@@ -4,13 +4,13 @@ What this test verifies.
 
 ## Intent
 
-The raw-write tool surface: the tool this flavor registers alongside its
-stream listener. This is its own folder because the tool is a complete
-second product - a registration schema, an execution path through the shared
-write executor, a per-call flavor selection, and a govern path - none of
-which touches the llm/stream waterfall the other folders cover. This folder
-is the post-blueprint growth of the suite (the source suite's Run 8, Run 9
-and Run 10 incl. its addendum), moved verbatim.
+The raw-write tool surface: the tool that this flavor registers alongside its
+stream listener. This is its own folder because the tool is a complete second
+product - a registration schema, an execution path through the shared write
+executor, a per-call flavor selection, and a govern path - and none of these
+touches the llm/stream waterfall that the other folders cover. This folder is
+the post-blueprint growth of the suite (Run 8, Run 9, and Run 10 including its
+addendum from the source suite), moved verbatim.
 
 ## Scenario
 
@@ -117,19 +117,20 @@ and Run 10 incl. its addendum), moved verbatim.
 ## Fixtures
 
 The harness fake ctx (the capturing fs seams, the waterfall delegate, the
-synchronous emit recorder, the self-root) + the REAL factory + the REAL dash
-apply. Three applies: one for Run 8 (the registration + exec + the
-replacement-knob sub-run + the abort sub-run), one for Run 9 (the
-selection), one for Run 10 (the govern path). The `Exec` helper builds the
-call identity (signal, undefined agent, callId `call_smoke`). The two govern probes register on the harness Furnace
-(sync "pin" and async "slow"). The write-count arithmetic inside Run 10 is
-kept relative exactly as the source suite does it (the addendum re-baselines
-after the main block; see the comment in the test). The durable ledger is
-cleared at folder start and before the replacement-knob sub-run.
+synchronous emit recorder, the self-root), the REAL factory, and the REAL dash
+apply. Three applies: one for Run 8 (the registration, the exec, the
+replacement-knob sub-run, and the abort sub-run), one for Run 9 (the
+selection), and one for Run 10 (the govern path). The `Exec` helper builds the
+call identity (signal, undefined agent, callId `call_smoke`). The two govern
+probes register on the harness Furnace (sync "pin" and async "slow"). The
+write-count arithmetic inside Run 10 stays relative exactly as the source
+suite does it (the addendum re-baselines after the main block; see the comment
+in the test). The durable ledger is cleared at folder start and before the
+replacement-knob sub-run.
 
 ## Expected ledger strings (byte-exact)
 
-None asserted in this folder - the tool path's count lines belong to the
+None asserted in this folder - the count lines of the tool path belong to the
 executor, and this folder pins behavior/schema/identity instead. The
 govern/normalize union enums are the byte-exact contracts here:
 `dash,quotes,ellipsis,spaces,invisible,fullwidth` and

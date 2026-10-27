@@ -5,11 +5,11 @@
 
 ## The role
 
-The convention-suggester hook: a DeepSeek Harness plugin that carries the repo's conventions as a
-pattern pack and names them **before** the model violates them.
+This hook is the convention suggester: a DeepSeek Harness plugin that carries the repo's conventions
+as a pattern pack and names them **before** the model violates them.
 
-On every `write`/`edit`/`raw-write` call it classifies the target path deterministically and
-prepends ONE labeled `additionalContexts` notice naming the companion targets the convention
+On every `write`/`edit`/`raw-write` call it classifies the target path deterministically and it
+prepends ONE labeled `additionalContexts` notice that names the companion targets the convention
 requires:
 
 - **Layout** - the entry stays wiring-only (`name`, `apply`, `Config`, `inject`); one definition per
@@ -25,11 +25,11 @@ The arbiter is the smoke suite that asserts the convention
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) §9.4).
 
 The hook is READ-ONLY by design except the opt-in learner: it never edits, never rewrites arguments,
-never denies - its surfaces are the notice and, only when learning is on, one PROPOSAL file (never
-the live pack).
+and never denies - its surfaces are the notice and, only when learning is on, one PROPOSAL file
+(never the live pack).
 
 The conventions are **pack-driven**: the built-in pack (this monorepo's default) lives in
-[`@playform/lib-dsh-pack`](../lib-dsh-pack) and is projected here as the `convention/` domain.
+[`@playform/lib-dsh-pack`](../lib-dsh-pack) and it is projected here as the `convention/` domain.
 
 A repository that ships `.dsh/pack.yml` (or a user-layer pack at
 `~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `convention/` intents; a repository without a
@@ -85,8 +85,8 @@ the repo itself and writes it as a **proposal**, never as a live pack.
 
 - **The note.**
 
-    One `additionalContexts` notice naming the proposal path, the family count and the install step,
-    with the ledger line `learned proposal <slug> <n> families <path>`.
+    One `additionalContexts` notice that names the proposal path, the family count, and the install
+    step, with the ledger line `learned proposal <slug> <n> families <path>`.
 
 The refine-from-edits layer (an accepted suggestion moving a companion's weight) is the later D8
 lane.

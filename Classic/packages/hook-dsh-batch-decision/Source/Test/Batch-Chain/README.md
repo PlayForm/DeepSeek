@@ -1,7 +1,7 @@
 # Batch-Chain - the end-to-end batch chain (the wave-1 acceptance proof)
 
-One process, one shared fake context, the REAL built libraries of all five
-packages:
+The suite runs one process and one shared fake context against the REAL built libraries
+of all five packages:
 
 ```
 pass-on.Prepare
@@ -17,32 +17,33 @@ pass-on.Prepare
 
 ## Scenarios
 
-- C1: the pass-on prepares the batch and delivers it into the inbox (one
-  `agent.inject`, the `[BATCH PROPOSAL - <id>]` envelope).
-- C2: the board spliced the proposal with the byte-exact
+- C1: the pass-on prepares the batch and delivers it into the inbox with one `agent.inject`
+  and the `[BATCH PROPOSAL - <id>]` envelope.
+- C2: the board splices the proposal with the byte-exact
   `batchstate: proposal <id> spliced (intent version-bump, targets 1, rev 1,
-  origin agent-a)` line; the entry status is `proposed`.
-- C3: the decision hook recorded the proposal (byte-exact line) and the
-  ingester holds it.
-- C4: the approval applied the change through the content fence (one
-  `applied` journal record for the target).
-- C5: the decision reached the board through the inbox - the status is
-  `approved`, with the byte-exact board and hook handoff lines.
-- C6: the hook logged the decision and the ingester handoff byte-exactly.
-- C7: the batch outcome fed the feedback journal (`event: batch`) and the
-  session's summary (`outcomes`).
-- C8: the same decision was applied exactly once (the claim held: one edit,
-  one `applied` record).
-- C9: the pass-on's delivery journaled the inbox handoff byte-exactly.
+  origin agent-a)` line, and the entry status is `proposed`.
+- C3: the decision hook records the proposal with its byte-exact line, and the ingester
+  holds it.
+- C4: the approval applies the change through the content fence, with one `applied`
+  journal record for the target.
+- C5: the decision reaches the board through the inbox, so the status is `approved`, with
+  the byte-exact board line and the byte-exact hook handoff line.
+- C6: the hook logs the decision and the ingester handoff byte-exactly.
+- C7: the batch outcome feeds the feedback journal (`event: batch`) and the summary of
+  the session (`outcomes`).
+- C8: the same decision is applied exactly once, which holds the claim: one edit and one
+  `applied` record.
+- C9: the delivery of the pass-on journals the inbox handoff byte-exactly.
 
 ## Fixtures
 
-The chain harness: one bus with a multi-listener registry, one service
-registry behind `Context.get`, the real factory, the real built library of
-every package, a capturing governed fs, and a fake agent registry whose
-`inject` mirrors the harness's own inbox commit (the durable
-`agent/inbox/spliced` event plus the live `agent/inbox/inserted` emit). No
-sleeps: the ingester's `WhenIdle` drains the apply.
+The chain harness supplies one bus with a multi-listener registry, one service registry
+behind `Context.get`, the real factory, the real built library of every package, a
+capturing governed fs, and a fake agent registry whose `inject` mirrors the inbox commit
+of the harness, which is the durable `agent/inbox/spliced` event plus the live
+`agent/inbox/inserted` emit.
+
+No sleeps run, because `WhenIdle` of the ingester drains the apply.
 
 ## Expected ledger strings (byte-exact)
 

@@ -81,50 +81,51 @@ const MedianOf = (Rates: readonly number[]): number => {
 	}
 };
 
-export default (Database: DatabaseSync) => (Days: number): readonly Row[] => {
-	const Window = Number.isFinite(Days) && Days > 0 ? Math.round(Days) : Period;
-	const Found = Database.prepare(
-		"SELECT Scope, Key, Day, Cost FROM Rollup ORDER BY Scope, Key, Day",
-	).all() as { Scope: unknown; Key: unknown; Day: unknown; Cost: unknown }[];
-	const Series = new Map<string, Series>();
-	for (const One of Found) {
-		const Scope = typeof One.Scope === "string" ? One.Scope : "";
-		const Key = typeof One.Key === "string" ? One.Key : "";
-		const Stamp = StampOf(typeof One.Day === "string" ? One.Day : "");
-		const Cost = Number(One.Cost);
-		if (!Number.isFinite(Stamp) || !Number.isFinite(Cost)) {
-			continue;
+export default (Database: DatabaseSync) =>
+	(Days: number): readonly Row[] => {
+		const Window = Number.isFinite(Days) && Days > 0 ? Math.round(Days) : Period;
+		const Found = Database.prepare(
+			"SELECT Scope, Key, Day, Cost FROM Rollup ORDER BY Scope, Key, Day",
+		).all() as { Scope: unknown; Key: unknown; Day: unknown; Cost: unknown }[];
+		const Series = new Map<string, Series>();
+		for (const One of Found) {
+			const Scope = typeof One.Scope === "string" ? One.Scope : "";
+			const Key = typeof One.Key === "string" ? One.Key : "";
+			const Stamp = StampOf(typeof One.Day === "string" ? One.Day : "");
+			const Cost = Number(One.Cost);
+			if (!Number.isFinite(Stamp) || !Number.isFinite(Cost)) {
+				continue;
+			}
+			const Identity = JSON.stringify([Scope, Key]);
+			const Held = Series.get(Identity) ?? { Scope, Key, Rates: new Map<number, number>() };
+			Held.Rates.set(Stamp, (Held.Rates.get(Stamp) ?? 0) + Cost);
+			Series.set(Identity, Held);
 		}
-		const Identity = JSON.stringify([Scope, Key]);
-		const Held = Series.get(Identity) ?? { Scope, Key, Rates: new Map<number, number>() };
-		Held.Rates.set(Stamp, (Held.Rates.get(Stamp) ?? 0) + Cost);
-		Series.set(Identity, Held);
-	}
-	const Rows: Row[] = [];
-	for (const Held of Series.values()) {
-		const Rates = Windowed(Held, Window);
-		if (Rates.length === 0) {
-			continue;
+		const Rows: Row[] = [];
+		for (const Held of Series.values()) {
+			const Rates = Windowed(Held, Window);
+			if (Rates.length === 0) {
+				continue;
+			}
+			const Mean = Rates.reduce((Sum, Rate) => Sum + Rate, 0) / Rates.length;
+			const Recent = Rates.slice(Math.max(0, Rates.length - Tail));
+			const Projected = Mean * Period;
+			const Ordered = [...Rates].sort((One, Other) => One - Other);
+			const Low = Ordered[0] ?? 0;
+			const High = Ordered[Ordered.length - 1] ?? 0;
+			Rows.push({
+				Scope: Held.Scope,
+				Key: Held.Key,
+				Mean: Round(Mean),
+				Median: Round(MedianOf(Rates)),
+				LastSeven: Round(Recent.reduce((Sum, Rate) => Sum + Rate, 0) / Recent.length),
+				Projected: Round(Projected),
+				// the confidence band (section 17.5): the observed daily spread
+				// times the period; a history of fewer than two days carries no
+				// spread, so the band collapses onto the projection itself
+				Minimum: Round(Rates.length < 2 ? Projected : Low * Period),
+				Maximum: Round(Rates.length < 2 ? Projected : High * Period),
+			});
 		}
-		const Mean = Rates.reduce((Sum, Rate) => Sum + Rate, 0) / Rates.length;
-		const Recent = Rates.slice(Math.max(0, Rates.length - Tail));
-		const Projected = Mean * Period;
-		const Ordered = [...Rates].sort((One, Other) => One - Other);
-		const Low = Ordered[0] ?? 0;
-		const High = Ordered[Ordered.length - 1] ?? 0;
-		Rows.push({
-			Scope: Held.Scope,
-			Key: Held.Key,
-			Mean: Round(Mean),
-			Median: Round(MedianOf(Rates)),
-			LastSeven: Round(Recent.reduce((Sum, Rate) => Sum + Rate, 0) / Recent.length),
-			Projected: Round(Projected),
-			// the confidence band (section 17.5): the observed daily spread
-			// times the period; a history of fewer than two days carries no
-			// spread, so the band collapses onto the projection itself
-			Minimum: Round(Rates.length < 2 ? Projected : Low * Period),
-			Maximum: Round(Rates.length < 2 ? Projected : High * Period),
-		});
-	}
-	return Rows.sort((One, Other) => Other.Projected - One.Projected);
-};
+		return Rows.sort((One, Other) => Other.Projected - One.Projected);
+	};

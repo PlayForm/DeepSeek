@@ -5,15 +5,15 @@
 
 ## The role
 
-The graph-suggester hook: a DeepSeek Harness plugin that upgrades the suggester family's candidate
-list from paths and globs to the **connected component around the symbol**
+This hook is the graph suggester: a DeepSeek Harness plugin that upgrades the suggester family's
+candidate list from paths and globs to the **connected component around the symbol**
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) §9.2).
 
 When the model reads or greps a source file, the hook asks the workspace v4.1 graph service for the
-code-block neighborhood (the definition, the callers, the tests, the doc block) and prepends ONE
-labeled `additionalContexts` notice naming it.
+code-block neighborhood (the definition, the callers, the tests, the doc block), and it prepends ONE
+labeled `additionalContexts` notice that names the neighborhood.
 
-Two intents in the embedded pack (`Source/Variable/Defaults.ts`):
+Two intents live in the embedded pack (`Source/Variable/Defaults.ts`):
 
 - **Neighborhood** - resolved through the graph service; a static fallback set is appended only when
   the graph answers with an _empty_ component.

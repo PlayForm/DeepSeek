@@ -1,4 +1,4 @@
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 export default _default;
 declare function _default(State: State): {
     name: string;
@@ -18,7 +18,7 @@ declare function _default(State: State): {
         board: string;
         tasks: {
             id: string;
-            state: import("../Interface/Task.js").TaskState;
+            state: import("../Interface/Task").TaskState;
             priority: number;
             agent: string | undefined;
             route: string | undefined;

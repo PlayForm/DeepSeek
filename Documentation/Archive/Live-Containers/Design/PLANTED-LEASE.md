@@ -1,5 +1,5 @@
 ---
-title: PLANTED-LEASE (I5) — the planted-block lease + the stale declaration
+title: PLANTED-LEASE (I5) - the planted-block lease + the stale declaration
 category: Archive/Live-Containers
 kind: one-shot-record
 date: 2026-10-19
@@ -23,50 +23,75 @@ statuses:
 
 # PLANTED-LEASE (I5) - the planted-block lease + the stale declaration, independently resolved
 
-Status: RATIFICATION addendum for D2's IMPLEMENTATION-DESIGN.md sections 3.4
+Status: RATIFICATION addendum for D2's IMPLEMENTATION-DESIGN.md sections 3.4 and 4.4, written
+against the I3 APPEND-SEAM carrier (the registered dynamic context) and the I4 COMPLETION-ERGONOMICS
+batched form.
 
-- 4.4, written against the I3 APPEND-SEAM carrier (the registered dynamic context) and the I4
-  COMPLETION-ERGONOMICS batched form. Where this file conflicts with D2's 3.4/4.4, the RESOLVED
-  rules below win for the C2 dispatch unless the CONFLICT TABLE shows D2's wording survived. ASCII +
-  tabs throughout.
+Where this file conflicts with D2's 3.4/4.4, the RESOLVED rules below win for the C2 dispatch unless
+the CONFLICT TABLE shows D2's wording survived.
+
+ASCII + tabs throughout.
 
 ## 0. The one-paragraph decision
 
-A planted block is not a passive board: it is a LEASE. The board declares its reporters (the
-enrolled agent ids + the slot expectations) and a window of N consecutive parent turns without a
-foldable report from a running member; on expiry the block SELF-DECLARES
-`STALE (agent <agentId> unreported)` in its own frame - a model-visible note the parent's next
-request carries - and that declaration IS the CAN-4 delegation-stall failsafe trigger: the failsafe
-engine does not run a parallel timer, it reacts to the lease's declaration (the row flip, the prune,
-the re-dispatch hint). The lease is turn-counted, with a wall-clock backstop for parents whose turns
-are not observable; both units are config, neither is invented at render time.
+A planted block is not a passive board: it is a LEASE.
+
+The board declares its reporters (the enrolled agent ids + the slot expectations) and a window of N
+consecutive parent turns without a foldable report from a running member.
+
+On expiry the block SELF-DECLARES `STALE (agent <agentId> unreported)` in its own frame - a
+model-visible note that the parent's next request carries - and that declaration IS the CAN-4
+delegation-stall failsafe trigger: the failsafe engine does not run a parallel timer, it reacts to
+the declaration of the lease (the row flip, the prune, the re-dispatch hint).
+
+The lease is turn-counted, with a wall-clock backstop for parents whose turns are not observable,
+and both units are config, neither is invented at render time.
 
 ## 1. The verified machinery this rides on
 
-1.1 The board state is the parent's per-agent WeakMap (D2 3.4; 02 section 7 "the parent dies") - the
-lease is part of that state, dies with the parent, and survives nothing else. No lease can outlive
-its owning agent.
+1.1 **Board state.**
 
-1.2 The report channel is L7 (D2 3.5): `agent/inbox/spliced` with `data.inserted.length > 0`, the
-message's first line matching `[live-report] <plantId> <agentId> <status> <payload>`; child-job
+The board state is the parent's per-agent WeakMap (D2 3.4; 02 section 7 "the parent dies") - the
+lease is part of that state, dies with the parent, and survives nothing else.
+
+No lease can outlive its owning agent.
+
+1.2 **Report channel.**
+
+The report channel is L7 (D2 3.5): `agent/inbox/spliced` with `data.inserted.length > 0`, the
+message's first line matching `[live-report] <plantId> <agentId> <status> <payload>`, and child-job
 settlements and progress lines arrive through L6 (D2 3.6 step 6) and count as reports for lease
-purposes. ALL THREE carriers (02 section 4) reset the member's lease counter - a lease that ignores
-the settlement carrier would declare a finished agent stale.
+purposes.
 
-1.3 The render surfaces are two, per I3 2.6: the standing section carries running boards; a STALE
+ALL THREE carriers (02 section 4) reset the member's lease counter - a lease that ignores the
+settlement carrier would declare a finished agent stale.
+
+1.3 **Render surfaces.**
+
+The render surfaces are two, per I3 2.6: the standing section carries running boards, and a STALE
 declaration is a section change (channel 4 at the next parent request, D2 section 6 scenario 6).
+
 There is no completion-style dynamic context for boards - a board is RUNNING state, not a settle
 event; it lives in the standing section until close (I3 2.6 leaves exactly this scope there).
 
-1.4 The turn unit: a parent turn is one admission (the loop's request boundary - the same unit I4
-1.1 uses for the completion window). The plugin observes parent turns via the assemble waterfall
-(the section renders once per request, so the request count is the turn count). A child turn is the
-child's own step; the plugin does NOT observe child turns directly - only their reports. So the
-lease window is counted in PARENT turns between foldable reports from a member.
+1.4 **Turn unit.**
+
+A parent turn is one admission (the loop's request boundary - the same unit I4 1.1 uses for the
+completion window).
+
+The plugin observes parent turns via the assemble waterfall (the section renders once per request,
+so the request count is the turn count).
+
+A child turn is the child's own step, and the plugin does NOT observe child turns directly - only
+their reports.
+
+So the lease window is counted in PARENT turns between foldable reports from a member.
 
 ## 2. The lease grammar (the block's declared reporters + the window)
 
-2.1 The lease record, per board, in the per-agent WeakMap state:
+2.1 **The lease record.**
+
+The lease record sits per board in the per-agent WeakMap state:
 
     lease:
     	reporters: { agentId: { turnWindow: <n>, remaining: <n>,
@@ -75,76 +100,112 @@ lease window is counted in PARENT turns between foldable reports from a member.
     	clockFallbackMs: <n>	// plant.stallMs, default 45000
     	state: "open" | "stale" | "closed"
 
-`reporters` starts as the enrolled members (expectAgents slots auto-enroll; memberIds pins them). A
-member with status done/error/failed LEAVES the lease (settled members cannot go stale - 1.2). A
-member with status running or stalled holds an entry.
+`reporters` starts as the enrolled members (expectAgents slots auto-enroll; memberIds pins them).
 
-2.2 The window: `remaining` decrements by one at each parent turn (assemble) in which NO foldable
-report from that member was folded since the previous parent turn. Any foldable report (L7 match or
-L6 settle/progress) RESETS `remaining` to the member's window. The declared reporter set is exactly
-the board's running members: the grammar is "the block declares WHO owes it a report, and how many
-parent turns of silence it forgives".
+A member with status done/error/failed LEAVES the lease (settled members cannot go stale - 1.2).
 
-2.3 Expiry behavior: when `remaining` reaches 0 the member's lease EXPIRES and the member's row
-flips to the STALE declaration (section 3) at the next assembly; `declared: true` + `declaredTurn`
-are recorded and the ledger records `lease expired <plantId> <agentId> (after <n> turns)`. The
-declaration is emitted ONCE (declared guards it); the row stays `[stalled]`/ STALE-flavored on later
-renders without re-declaring (no per-turn nag - the count line already shows the stalled count).
+A member with status running or stalled holds an entry.
 
-2.4 The wall-clock backstop: the turn counter needs parent turns to tick; an orphaned parent (no
-requests) cannot decrement it. The dual gate:
+2.2 **The window.**
+
+`remaining` decrements by one at each parent turn (assemble) in which NO foldable report from that
+member was folded since the previous parent turn.
+
+Any foldable report (L7 match or L6 settle/progress) RESETS `remaining` to the member's window.
+
+The declared reporter set is exactly the board's running members: the grammar is "the block declares
+WHO owes it a report, and how many parent turns of silence it forgives".
+
+2.3 **Expiry behavior.**
+
+When `remaining` reaches 0 the member's lease EXPIRES and the member's row changes to the STALE
+declaration (section 3) at the next assembly.
+
+`declared: true` + `declaredTurn` are recorded and the ledger records
+`lease expired <plantId> <agentId> (after <n> turns)`.
+
+The declaration is emitted ONCE (declared guards it), and the row stays `[stalled]`/ STALE-flavored
+on later renders without re-declaring (no per-turn nag - the count line already shows the stalled
+count).
+
+2.4 **The wall-clock backstop.**
+
+The turn counter needs parent turns to tick, and an orphaned parent (no requests) cannot decrement
+it.
+
+The dual gate:
 
     stale := (remaining == 0) OR (now - lastReportAt > clockFallbackMs
     	AND at least one parent turn has occurred since open)
 
 The clock clause alone (a parent gone for minutes) is the ORPHAN case (D2 scenario 6) and renders
 the board-level STALE (section 3.4's variant), not a per-member declaration - the parent cannot act
-while absent anyway; the orphan declaration is for the parent's RETURN, the per-member declaration
-is for the parent's next decision.
+while absent anyway, so the orphan declaration is for the parent's RETURN and the per-member
+declaration is for the parent's next decision.
 
-2.5 Why parent turns, not wall-clock seconds, as the primary unit: the board's whole contract is
-"recomputed per parent request" (02 section 5) - the only event the board can act on is a parent
-turn. A 45 s wall clock on a parent that thinks for 90 s between tool calls declares healthy agents
-stale; a turn counter forgives slow reasoning and only punishes real silence across the board's
-actual update boundaries. The clock clause (2.4) covers the gap; the default N=3 parent turns (~ the
-I4 batch window's scale) is the ratified compromise.
+2.5 **Why parent turns, not wall-clock seconds, as the primary unit.**
+
+The board's whole contract is "recomputed per parent request" (02 section 5), and the only event the
+board can act on is a parent turn.
+
+A 45 s wall clock on a parent that thinks for 90 s between tool calls declares healthy agents stale,
+while a turn counter forgives slow reasoning and only punishes real silence across the board's
+actual update boundaries.
+
+The clock clause (2.4) covers the gap, and the default N=3 parent turns (~ the I4 batch window's
+scale) is the ratified compromise.
 
 ## 3. The self-declaration shape (byte-exact)
 
-3.1 The per-member declaration (the row; replaces the `[stalled]` row content from D2 4.4):
+3.1 **The per-member declaration.**
+
+The per-member declaration replaces the `[stalled]` row content from D2 4.4:
 
     [stale]     <agentId> - unreported for <n> parent turns; re-dispatch or mark failed
 
 The row key is `[stale]` (7 chars + spaces aligns the D2 4.4 column: done/
 running/stalled/failed/unboarded are rendered with the label then spaces to column 12; `stale` is 5
-chars like `failed`, so the alignment holds). `<n>` is the expired window's turn count (the member's
-own N).
+chars like `failed`, so the alignment holds).
 
-3.2 The board-level declaration (orphan case, D2 4.4 verbatim - ratified):
+`<n>` is the expired window's turn count (the member's own N).
+
+3.2 **The board-level declaration.**
+
+The board-level declaration covers the orphan case (D2 4.4 verbatim - ratified):
 
     --- LIVE PLANT <id> (agent-board; expect <n>; status: STALE - no parent requests for <n>s) ---
 
-3.3 The re-dispatch hint line (the parent-actionable form; appended as the LAST line of the board
-frame when any member's lease has expired AND failsafes are "on" - the I4 2.1 idiom, one hint per
+3.3 **The re-dispatch hint line.**
+
+The re-dispatch hint line is the parent-actionable form, appended as the LAST line of the board
+frame when any member's lease has expired AND failsafes are "on" (the I4 2.1 idiom, one hint per
 frame, composed not free-form):
 
     [live] next: <agentId> unreported for <n> turns - re-dispatch, or accept and prune (live_plant prune <plantId> <agentId>).
 
 The prune action is the stallAction "prune" path (D2 section 6 scenario 2) surfaced as the model's
-own tool call - the failsafe's automatic prune is config-gated; the hint makes the manual twin
-available. With stallAction "warn-only" (the default) the hint still renders: it is channel 4 (a
-model-visible note), not a silent modification, so the meta-budget (scenario 7) does not consume it.
+own tool call - the failsafe's automatic prune is config-gated, and the hint makes the manual twin
+available.
 
-3.4 Restart honesty: a board record surviving a process restart without a live registry renders
-`status: lost (process exit)` once, then withdraws (D2 4.4 verbatim). A lease record never outlives
-its board; the restart path is unchanged and the lease adds no restart surface.
+With stallAction "warn-only" (the default) the hint still renders: it is channel 4 (a model-visible
+note), not a silent modification, so the meta-budget (scenario 7) does not consume it.
+
+3.4 **Restart honesty.**
+
+A board record surviving a process restart without a live registry renders
+`status: lost (process exit)` once, then withdraws (D2 4.4 verbatim).
+
+A lease record never outlives its board; the restart path is unchanged and the lease adds no restart
+surface.
 
 ## 4. The interplay with the task-based failsafes (CAN-4)
 
-4.1 THE DECLARATION IS THE TRIGGER: D2 section 6 scenario 2 ("THE DELEGATION STALLS - a board member
-[stalled] past stallBudgetMs") runs on a wall-clock threshold that DUPLICATES the lease's clock
-clause and ignores the turn clause. RESOLVED: the failsafe engine consumes the lease state instead
-of timing the board itself -
+4.1 **The declaration is the trigger.**
+
+D2 section 6 scenario 2 ("THE DELEGATION STALLS - a board member [stalled] past stallBudgetMs") runs
+on a wall-clock threshold that DUPLICATES the clock clause of the lease and ignores the turn clause.
+
+RESOLVED: the failsafe engine consumes the lease state instead of timing the board itself -
 
     trigger := lease.declared == true for any member (the row flip in 3.1)
     action  := stallAction ("warn-only": nothing further, the row IS the
@@ -156,94 +217,149 @@ of timing the board itself -
 
 The `stallBudgetMs` knob becomes the BACKSTOP for the clock clause's own escalation (a member stale
 past clockFallbackMs + stallBudgetMs with no declaration possible because the parent never turned =
-the orphan path, 2.4). One truth source, one trigger, no duplicate timers.
+the orphan path, 2.4).
 
-4.2 The failsafe ordering: the lease expires during the assemble (the turn decrement is an
-assemble-time computation, before render); the declaration renders in the SAME assembly's frame; the
-failsafe's prune (if configured) acts after the render, mutating the state for the NEXT assembly.
+One truth source, one trigger, no duplicate timers.
+
+4.2 **The failsafe ordering.**
+
+The lease expires during the assemble (the turn decrement is an assemble-time computation, before
+render), the declaration renders in the SAME assembly's frame, and the failsafe's prune (if
+configured) acts after the render, mutating the state for the NEXT assembly.
+
 The declared row and the prune are therefore never in the same rendered frame - the model always
-sees the stale row at least one turn before any automatic drop. This is the disclosure discipline
-(D2 section 6: failsafes key on observable shape, the plugin is a pure observer).
+observes the stale row at least one turn before any automatic drop.
 
-4.3 The meta-budget: the prune is the lease's only automatic modification; it counts against
-failsafesPerTurn (5). The declaration itself is a render, not a modification, and never counts.
+This is the disclosure discipline (D2 section 6: failsafes key on observable shape, the plugin is a
+pure observer).
 
-4.4 `failsafes: "off"` (the default): the lease still expires and the row still flips (that is the
-board's own render, the CAN-2 surface) - only the automatic prune and the 3.3 hint line are gated
-off. The board's honesty is not a failsafe; the failsafe's ACTION is.
+4.3 **The meta-budget.**
+
+The prune is the lease's only automatic modification, and it counts against failsafesPerTurn (5).
+
+The declaration itself is a render, not a modification, and never counts.
+
+4.4 **`failsafes: "off"` (the default).**
+
+The lease still expires and the row still changes (that is the board's own render, the CAN-2
+surface) - only the automatic prune and the 3.3 hint line are gated off.
+
+The board's honesty is not a failsafe; the ACTION of the failsafe is.
 
 ## 5. The multi-agent count mismatch
 
-5.1 A reporter reports twice: reports are IDEMPOTENT per (plantId, agentId, turn). A second report
-from the same agent in the same parent turn resets the same lease entry (remaining := window) and
-updates lastReport; the row shows the newest payload (the coalescing rule, section 6). No counter
-inflates, no row duplicates. Ledger `report <plantId> <agentId> (<n> bytes)` once per folded report
-regardless of repeats.
+5.1 **Idempotent reports.**
 
-5.2 A dead agent's slot: the settle event (L6) flips the row to `[failed] <reason>` or `[done]` and
-REMOVES the lease entry (2.1) - a dead agent cannot be stale, it is already terminal. If the child
-was killed without a settlement reaching L6 (cause teardown, owner gone), the lease WINS: the entry
-stays running until expiry declares it stale - the parent then re-dispatches or prunes. The board
-never shows a phantom running agent unless the harness itself has no truth (exactly the case the
-lease exists for).
+A reporter reports twice: reports are IDEMPOTENT per (plantId, agentId, turn).
 
-5.3 Fewer children than expectAgents: empty slots render `[none] slot-<n>` (02 section 7) and hold
-NO lease entry - nothing owes a report. After closeMs the empty slots are dropped and the board
-closes (D2 3.4, ratified). A slot auto-enrolls LATE (a child the plugin observes while slots are
-free - 02 section 4): the enrollment opens the entry with the FULL window, not a partial one; the
-board's open time does not eat the new member's grace.
+A second report from the same agent in the same parent turn resets the same lease entry (remaining
+:= window) and updates lastReport, and the row shows the newest payload (the coalescing rule,
+section 6).
 
-5.4 More children than slots: overflow members render `[unboarded]` (02 section 7) and are NOT
-reporters - no lease entry, no stale declaration, their completions still count in the total line
-(D2 3.4). An unboarded child's report (`[live-report]` with an unenrolled agentId) is folded into
-the total counts only, never into a row.
+No counter inflates, no row duplicates.
 
-5.5 Count invariants: `total: <d> done / <r> running / <s> stale / <e> empty` - the third field is
-`stale` (declared members) not `stalled` (pre-declaration), so the header count and the row labels
-cannot disagree; D2 4.4's `<s> stalled` slot is REDEFINED to count stale-declared members (the
-pre-declaration `[stalled]` row still exists between the last report and expiry - it counts into
-`<s>` too; the label distinction is row-level, the count field is the union).
+Ledger `report <plantId> <agentId> (<n> bytes)` once per folded report regardless of repeats.
+
+5.2 **A dead agent's slot.**
+
+The settle event (L6) changes the row to `[failed] <reason>` or `[done]` and REMOVES the lease entry
+(2.1) - a dead agent cannot be stale, it is already terminal.
+
+If the child was killed without a settlement reaching L6 (cause teardown, owner gone), the lease
+WINS: the entry stays running until expiry declares it stale, and the parent then re-dispatches or
+prunes.
+
+The board never shows a phantom running agent unless the harness itself has no truth (exactly the
+case the lease exists for).
+
+5.3 **Fewer children than expectAgents.**
+
+Empty slots render `[none] slot-<n>` (02 section 7) and hold NO lease entry - nothing owes a report.
+
+After closeMs the empty slots are dropped and the board closes (D2 3.4, ratified).
+
+A slot auto-enrolls LATE (a child the plugin observes while slots are free - 02 section 4): the
+enrollment opens the entry with the FULL window, not a partial one, so the board's open time does
+not eat the new member's grace.
+
+5.4 **More children than slots.**
+
+Overflow members render `[unboarded]` (02 section 7) and are NOT reporters - no lease entry, no
+stale declaration, and their completions still count in the total line (D2 3.4).
+
+An unboarded child's report (`[live-report]` with an unenrolled agentId) is folded into the total
+counts only, never into a row.
+
+5.5 **Count invariants.**
+
+`total: <d> done / <r> running / <s> stale / <e> empty` - the third field is `stale` (declared
+members) not `stalled` (pre-declaration), so the header count and the row labels cannot disagree.
+
+D2 4.4's `<s> stalled` slot is REDEFINED to count stale-declared members (the pre-declaration
+`[stalled]` row still exists between the last report and expiry, and it counts into `<s>` too; the
+label distinction is row-level, the count field is the union).
 
 ## 6. The report-rate coalescing + the aggregate runner
 
-6.1 Coalescing (D2 3.4 + 02 section 7, ratified): per-member `reportRateMs` (default 2000) - the
-FIRST report in any 2 s window is folded and counted (it resets the lease, 2.2); later reports in
-the window coalesce into the LAST (they overwrite the row's `lastReport` payload and bump
-`lastReportAt` WITHOUT resetting the lease clock again - one reset per window is the bound). A
-coalesced report never expires a lease: the `lastReportAt` bump serves the clock clause (2.4).
+6.1 **Coalescing.**
 
-6.2 The aggregate runner: an `aggregate` board recomputes its one computed line
-(`files changed: 17 | tests: 3 failing`) on EVERY fold - per report and per L6 settle, at fold time,
-not render time. The lease applies to aggregate boards identically (each contributing member holds
-an entry); the computed line is NOT the report. The recompute is pure (read members' statuses +
-payloads -> format) so it can run at render time when a fold lands between the decrement and the
-assembly; C2 may compute lazily at render either way - the only contract is that the line never lags
-its inputs by more than one fold.
+Coalescing (D2 3.4 + 02 section 7, ratified) is per-member at `reportRateMs` (default 2000): the
+FIRST report in any 2 s window is folded and counted (it resets the lease, 2.2), and later reports
+in the window coalesce into the LAST (they overwrite the row's `lastReport` payload and bump
+`lastReportAt` WITHOUT resetting the lease clock again - one reset per window is the bound).
 
-6.3 The todo-fill variant: the report grammar is
-`[live-report] <plantId> <agentId> todo <itemIndex> <done|running>` (D2 4.4). The lease entry stays
-per-AGENT (not per-item): an agent working through 5 todo items reports per item; each fold resets
-the agent's lease. An agent with no un-started items left is settled by its own final report
-(`todo <itemIndex> done` for its last assignment) - the plugin marks the member done when the
-child's L6 settle confirms; until then the lease guards it.
+A coalesced report never expires a lease: the `lastReportAt` bump serves the clock clause (2.4).
+
+6.2 **The aggregate runner.**
+
+An `aggregate` board recomputes its one computed line (`files changed: 17 | tests: 3 failing`) on
+EVERY fold - per report and per L6 settle, at fold time, not render time.
+
+The lease applies to aggregate boards identically (each contributing member holds an entry), and the
+computed line is NOT the report.
+
+The recompute is pure (read members' statuses + payloads -> format), so it can run at render time
+when a fold lands between the decrement and the assembly; C2 may compute lazily at render either
+way - the only contract is that the line never lags its inputs by more than one fold.
+
+6.3 **The todo-fill variant.**
+
+The report grammar is `[live-report] <plantId> <agentId> todo <itemIndex> <done|running>` (D2 4.4).
+
+The lease entry stays per-AGENT (not per-item): an agent working through 5 todo items reports per
+item, and each fold resets the agent's lease.
+
+An agent with no un-started items left is settled by its own final report (`todo <itemIndex> done`
+for its last assignment) - the plugin marks the member done when the child's L6 settle confirms, and
+until then the lease guards it.
 
 ## 7. Alignment with the I3 carrier + the I4 ergonomics
 
-7.1 The board is RUNNING state and stays in the standing section (I3 2.6); the lease's declarations
-are section changes on the same surface. The cache cost per declaration is I3 3.3's cost (in-history
-append of the full prompt on capable routes; node-0 miss on incapable routes) - bounded because
-declarations are at-most-once per member per board (2.3), so a board costs at most (members + 1
-orphan) section changes beyond its open/close.
+7.1 **Cache cost.**
 
-7.2 When the board CLOSES (all members settled), the closing line renders for one request, then
-withdraws (D2 3.4). If a board closes with stale-declared members pruned by 4.1, the closing line
-counts them honestly: `board closed: 3/5 done, 2 pruned stale in 41s` (byte-exact variant of 02
-section 6's closing line; `0 pruned` renders `board closed: <n>/<n> done in <n>s` exactly as 02
-wrote it).
+The board is RUNNING state and stays in the standing section (I3 2.6), and the declarations of the
+lease are section changes on the same surface.
 
-7.3 No completion-carrier interaction: board events are not job settlements for the parent's own
-jobs and never produce an I3/I4 snapshot; the only cross-surface case is 02 section 5's optional
-push (v1.1, the parent woken on the last settle) - out of scope here, unchanged.
+The cache cost per declaration is I3 3.3's cost (in-history append of the full prompt on capable
+routes; node-0 miss on incapable routes), bounded because declarations are at-most-once per member
+per board (2.3), so a board costs at most (members + 1 orphan) section changes beyond its
+open/close.
+
+7.2 **The closing line.**
+
+When the board CLOSES (all members settled), the closing line renders for one request, then
+withdraws (D2 3.4).
+
+If a board closes with stale-declared members pruned by 4.1, the closing line counts them honestly:
+`board closed: 3/5 done, 2 pruned stale in 41s` (byte-exact variant of 02 section 6's closing line;
+`0 pruned` renders `board closed: <n>/<n> done in <n>s` exactly as 02 wrote it).
+
+7.3 **No completion-carrier interaction.**
+
+Board events are not job settlements for the parent's own jobs and never produce an I3/I4 snapshot.
+
+The only cross-surface case is 02 section 5's optional push (v1.1, the parent woken on the last
+settle) - out of scope here, unchanged.
 
 ## 8. The knobs (the addition to D2 2.4's plant block)
 
@@ -252,8 +368,8 @@ push (v1.1, the parent woken on the last settle) - out of scope here, unchanged.
     plant.stallMs (renamed in prose only - the knob keeps D2's name and
     default 45000; this file calls it the clock clause's budget).
 
-No other new knob: stallBudgetMs keeps its role as the orphan-escalation backstop (4.1);
-stallAction, reportRateMs, closeMs, orphanBudgetMs, boardsPerAgent unchanged.
+No other new knob: stallBudgetMs keeps its role as the orphan-escalation backstop (4.1), and
+stallAction, reportRateMs, closeMs, orphanBudgetMs, boardsPerAgent stay unchanged.
 
 ## 9. The acceptance criteria
 

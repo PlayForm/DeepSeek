@@ -1,38 +1,38 @@
 # Changelog
 
-All notable changes to this package will be documented in this file.
+This file records all notable changes to this package.
 
 ## 0.3.0
 
 ### Changed
 
-- The 0.3.0 release line: the manifest version, the `@playform/` sibling pins and the host
-  devDependencies move together - the host line to `0.2.1-rc.4` and zod to 4.6.7.
+- The 0.3.0 release line moves the manifest version, the `@playform/` sibling pins, and the host
+  devDependencies together to the `0.2.1-rc.4` host line and zod 4.6.7.
 
 ## 0.2.0
 
 ### Changed
 
-- The D4-D8 release pass (the pack and trace libraries ship across both trees): the pinner's source,
-  its scheme and its bundle patch move with it.
-- The role-prefix contract applied to the pinner's ledger strings and manifest.
-- The `@deepseek-ai/dsh-fs`, `@deepseek-ai/dsh-sandbox` and `@deepseek-ai/dsh-subprocess`
-  devDependencies bumped to the 0.2.1-rc.2 line (Dependabot).
-- Line endings normalized and the LICENSE text wrapped.
-- The repository-wide markdown clean-up and the README role / surfaces / ledger pass.
+- The D4-D8 release pass ships the pack and trace libraries across both trees, and the pinner's
+  source, scheme, and bundle patch move with it.
+- The role-prefix contract now applies to the pinner's ledger strings and manifest.
+- Dependabot bumps the `@deepseek-ai/dsh-fs`, `@deepseek-ai/dsh-sandbox`, and
+  `@deepseek-ai/dsh-subprocess` devDependencies to the 0.2.1-rc.2 line.
+- Line endings are normalized, and the LICENSE text is wrapped.
+- The repository-wide markdown clean-up and the README role, surfaces, and ledger pass land.
 
 ## 0.1.0
 
 ### Changed
 
-- The 0.1.0 family release: the package ships at 0.1.0 with the 31-package family, every
-  `@playform/` sibling pin reads 0.1.0, and the role-prefix contract settles its
-  `@playform/hook-dsh-package-pinner` identity.
+- The 0.1.0 family release ships this package at 0.1.0 with the 31-package family, and every
+  `@playform/` sibling pin reads 0.1.0.
+- The role-prefix contract settles its `@playform/hook-dsh-package-pinner` identity.
 
 ## 0.0.1
 
 ### Added
 
-- The initial release of @playform/hook-dsh-package-pinner: the silent package.json version pinner:
-  hooking fs/observed and deterministically rewriting every ranged dependency version to its static
-  version (the Classic release of the DeepSeek Harness Plugin Family).
+- The initial release of @playform/hook-dsh-package-pinner is the silent package.json version
+  pinner, which hooks fs/observed and deterministically rewrites every ranged dependency version to
+  its static version (the Classic release of the DeepSeek Harness Plugin Family).

@@ -1,5 +1,5 @@
 ---
-title: APPEND-SEAM (I3) — the completion-append seam
+title: APPEND-SEAM (I3) - the completion-append seam
 category: Archive/Live-Containers
 kind: one-shot-record
 date: 2026-10-19
@@ -23,8 +23,8 @@ statuses:
 
 # APPEND-SEAM (I3) - the completion-append seam, independently resolved
 
-Status: RATIFICATION addendum for D2's IMPLEMENTATION-DESIGN.md section 3.3. Where this file
-conflicts with D2's 3.3, THIS FILE WINS for the C2 dispatch (the CONFLICT TABLE at the end). All
+Status: RATIFICATION addendum for section 3.3 of D2's IMPLEMENTATION-DESIGN.md. Where this file
+conflicts with 3.3 of D2, THIS FILE WINS for the C2 dispatch (the CONFLICT TABLE at the end). All
 anchors were verified first-hand 2026-10-19 against the asar READMEs, read in place from
 /Applications/DeepSeek Harness.app/Contents/Resources/app.asar/dsh/. ASCII + tabs throughout.
 
@@ -32,50 +32,51 @@ anchors were verified first-hand 2026-10-19 against the asar READMEs, read in pl
 
 The completion block is NOT appended as a hand-written session log event and NOT delivered through
 the stock notice path. It is a REGISTERED DYNAMIC CONTEXT contribution
-(`ctx.systemPrompt.context(...)`). The plugin flips its text from the completed frame to empty
+(`ctx.systemPrompt.context(...)`), and the plugin flips its text from the completed frame to empty
 exactly ONCE per settlement. The agent loop turns a present, non-empty context into a SOURCED
 USER-ROLE SNAPSHOT appended to model history (dsh-system-prompt README: "contexts become sourced
-user-role snapshots in model history under the loop"). An absent context produces NO event at all.
-So the withdrawal after delivery is free (absence, NOT a rewrite). The standing section keeps ONLY
+user-role snapshots in model history under the loop"). An absent context produces NO event at all,
+so the withdrawal after delivery is free (absence, NOT a rewrite). The standing section keeps ONLY
 the running frames and the out-of-order caveat line. On prompt-capable routes the secondary carrier
-(the section itself) is an in-history APPEND, NOT a tail rewrite. On incapable routes a section
-change is a node-0 consolidation and loses the WHOLE prefix. That is a cost D2's "honesty beats
-cache" position understated and that this carrier choice avoids entirely.
+(the section itself) is an in-history APPEND and NOT a tail rewrite. On incapable routes a section
+change is a node-0 consolidation and loses the WHOLE prefix, which is a cost that the "honesty beats
+cache" position of D2 understated and that this carrier choice avoids entirely.
 
 ## 1. The verified machinery (the anchors)
 
-1.1 The stock notice path is NOT composable (D2 verified; re-confirmed): dsh-tool-jobs README
-"Completion notices" - the notice string
-`background job <id> (<kind>: <label>) finished [status: ...]. Read its output with job_output.` is
-fixed. The plugin decides ONLY the LANE (wakeup turn on an idle owner, or injection into a busy
-owner's next-step inbox). NO hook exists for sibling notice text. REJECTED as the carrier. It is
-retained as the wake mechanism that covers the idle-agent gap.
+1.1 The stock notice path is NOT composable (verified by D2 and re-confirmed here): the
+dsh-tool-jobs README "Completion notices" section fixes the notice string
+`background job <id> (<kind>: <label>) finished [status: ...]. Read its output with job_output.`.
+The plugin decides ONLY the LANE (a wakeup turn on an idle owner, or injection into the next-step
+inbox of a busy owner), and NO hook exists for sibling notice text. It is REJECTED as the carrier
+and retained as the wake mechanism that covers the idle-agent gap.
 
-1.2 The direct session-log append path is CLOSED to plugins: dsh-session README - surface events
-(`user/message`, `system/message`, ...) are validated, projected, and owned by the loop ("the loop
-is the production acquisition point for session write handles"). `appendPluginRecord` is forbidden
-to plugins. It records "never enter the model-visible surface" anyway. A plugin CANNOT hand-append a
-message event. REJECTED.
+1.2 The direct session-log append path is CLOSED to plugins: the dsh-session README says that
+surface events (`user/message`, `system/message`, ...) are validated, projected, and owned by the
+loop ("the loop is the production acquisition point for session write handles"), and
+`appendPluginRecord` is forbidden to plugins. That record "never enter the model-visible surface"
+anyway, so a plugin CANNOT hand-append a message event. REJECTED.
 
-1.3 The REAL conversation-append surfaces the loop itself exposes: (a) system/message surface nodes:
-the rendered prompt reaches the model as a system-role message - "surface node 0, or the latest
-system node after an in-history update" (dsh-system-prompt README). Route dependent admission
-(dsh-agent-loop README): WITHOUT `systemPromptUpdate`, a non-empty prompt change consolidates at the
-first system node through logged per-node replacements. The cache misses from the FIRST changed
-token (node 0 = the WHOLE prefix). WITH `systemPromptUpdate: 'in-history'`, "the agent loop appends
-a non-empty changed prompt after the cached history inside a continuing request series, so the
-prefix through that history stays reusable". Retained in-history nodes stay model-visible until a
-later consolidation. (b) dynamic contexts: "Ordered dynamic contexts are separate from sections and
-become sourced user-role snapshots only when present" (dsh-system-prompt README). A context that is
-present and non-empty at admission time becomes a user-role message appended to history. Ordinary
-history growth "is append-only and preserves reusable entries" (dsh-agent-loop README). An
-absent/empty context contributes NOTHING and logs NOTHING. That is withdrawal by absence.
+1.3 The REAL conversation-append surfaces that the loop itself exposes are two. (a) The
+system/message surface nodes: the rendered prompt reaches the model as a system-role message, at
+"surface node 0, or the latest system node after an in-history update" (dsh-system-prompt README),
+and admission is route dependent (dsh-agent-loop README). WITHOUT `systemPromptUpdate`, a non-empty
+prompt change consolidates at the first system node through logged per-node replacements, and the
+cache misses from the FIRST changed token (node 0 = the WHOLE prefix). WITH
+`systemPromptUpdate: 'in-history'`, "the agent loop appends a non-empty changed prompt after the
+cached history inside a continuing request series, so the prefix through that history stays
+reusable", and retained in-history nodes stay model-visible until a later consolidation. (b) The
+dynamic contexts: "Ordered dynamic contexts are separate from sections and become sourced user-role
+snapshots only when present" (dsh-system-prompt README), so a context that is present and non-empty
+at admission time becomes a user-role message appended to history. Ordinary history growth "is
+append-only and preserves reusable entries" (dsh-agent-loop README), and an absent or empty context
+contributes NOTHING and logs NOTHING, which is withdrawal by absence.
 
-1.4 The plugin-accessible registration: `ctx.systemPrompt.context({...})` with an order,
-optional/required flag, and a provider read "again before admission" (dsh-system-prompt README
+1.4 The plugin-accessible registration is `ctx.systemPrompt.context({...})` with an order, an
+optional/required flag, and a provider read "again before admission" (dsh-system-prompt README:
 "refreshes registered runtime facts after pre-step and route preparation"). `refreshContext`
-"preserves accepted sections ... contributed only by the assembly waterfall". Our contribution must
-be a REGISTERED context, NOT a waterfall-mutated one, to ride the refresh path.
+"preserves accepted sections ... contributed only by the assembly waterfall", so our contribution
+must be a REGISTERED context and NOT a waterfall-mutated one to ride the refresh path.
 
 ## 2. The mechanism (the decision)
 
@@ -88,99 +89,101 @@ be a REGISTERED context, NOT a waterfall-mutated one, to ride the refresh path.
     	provider: () => pendingFrameText()	// see 2.3
     })
 
-2.2 Delivery: on the L6 settled subscription (D2 section 3.6), if the owner agent is gone -> ledger
-`owner gone <job-id>`, NOTHING renders (the tool-jobs skip contract, mirrored). Otherwise the plugin
-formats the COMPLETED FRAME (D2 section 4.2 bytes, wrapped per 2.5) into the per-agent pending slot.
-The loop reads the provider before the next admission. The frame becomes ONE sourced user-role
-snapshot appended after the cached history. The stock notice (1.1) still runs on its own lane. It
-wakes an idle owner so a request actually happens, or rides the busy step the owner is already
-paying for. `awaited` settlements (job settled by a live job_output wait) need NO wake. The model is
-active and the next attempt renders the frame.
+2.2 Delivery: on the L6 settled subscription (section 3.6 of D2), a gone owner agent gives the
+ledger line `owner gone <job-id>` and NOTHING renders (the tool-jobs skip contract, mirrored).
+Otherwise the plugin formats the COMPLETED FRAME (the section 4.2 bytes of D2, wrapped per 2.5) into
+the per-agent pending slot, and the loop reads the provider before the next admission. The frame
+becomes ONE sourced user-role snapshot appended after the cached history, and the stock notice (1.1)
+still runs on its own lane: it wakes an idle owner so that a request actually happens, or it rides
+the busy step that the owner is already paying for. `awaited` settlements (a job settled by a live
+job_output wait) need NO wake, because the model is active and the next attempt renders the frame.
 
 2.3 The emit-at-most-once discipline (the self-deduplication trick): the provider returns the
-pending frame text exactly while the frame is pending. The plugin CLEARS the slot when the frame is
-durably rendered. The clearing is observed as the session event whose user message carries the
-context snapshot (a session/event observer keyed on the job id). It is NOT observed on provider
-read. Consume-on-read is WRONG. A read followed by a rejected decision or an aborted attempt (the
-loop commits "neither" the pending prompt nor the users) would strand the frame silently.
-Consume-on-logged-snapshot makes the frame re-deliver on the next attempt if an attempt dies. It
-makes the batched form natural. N jobs settling between two attempts produce ONE pending text
-carrying N frames -> ONE snapshot. After clearing, ledger `withdrawn <job-id> (completed)`.
+pending frame text exactly while the frame is pending, and the plugin CLEARS the slot when the frame
+is durably rendered. The clearing is observed as the session event whose user message carries the
+context snapshot (a session/event observer keyed on the job id), and it is NOT observed on a
+provider read, because consume-on-read is WRONG: a read followed by a rejected decision or an
+aborted attempt (the loop commits "neither" the pending prompt nor the users) would strand the frame
+silently. Consume-on-logged-snapshot makes the frame re-deliver on the next attempt if an attempt
+dies, and it makes the batched form natural, so N jobs settling between two attempts produce ONE
+pending text that carries N frames and thus ONE snapshot. After the clearing, the ledger gets
+`withdrawn <job-id> (completed)`.
 
-2.4 Withdrawal: there is NO withdrawal event. The context goes empty. The next requests carry NO
-snapshot. The DELIVERED snapshot remains in history permanently. That is correct. The completion
-record is exactly the durable "this is how the command executed" fact 01 section 3 step 6 wanted. It
-survives compaction rules like ANY user-role message. The KV-cache penalty D2 accepted per
-settlement does NOT exist on this carrier.
+2.4 Withdrawal: there is NO withdrawal event, because the context goes empty and the next requests
+carry NO snapshot. The DELIVERED snapshot remains in history permanently, which is correct: the
+completion record is exactly the durable "this is how the command executed" fact that step 6 of
+section 3 in 01 wanted. It survives compaction rules like ANY user-role message, and the KV-cache
+penalty that D2 accepted per settlement does NOT exist on this carrier.
 
 2.5 The wrapper line (the ONE grammar addition): a bare user-role snapshot reads as a user
-instruction. So the pending text is wrapped with ONE line above D2's 4.2 block, byte-exact:
+instruction, so the pending text is wrapped with ONE line above the 4.2 block of D2, byte-exact:
 
     [live] completion report (harness-appended; not a user request):
 
     then the 4.2 block verbatim, then the 4.2 resume-hint line verbatim.
     See section 5 for the full candidate.
 
-2.6 The standing section stays (E3, D2 section 3.1) and shrinks in scope: it carries the running
+2.6 The standing section stays (E3, section 3.1 of D2) and shrinks in scope: it carries the running
 frames, the fleet line, and the caveat line
 `--- LIVE CONTAINERS (background tasks; completions may arrive out of 	order) ---`. It NO longer
-carries completed frames. Its text changes ONLY when jobs START (and at fleet drain). So the section
-is stable-until-start. That means fewer prompt events than D2's design, which also changed the
-section at settle/withdraw.
+carries completed frames, and its text changes ONLY when jobs START (and at fleet drain), so the
+section is stable-until-start. That means fewer prompt events than the design of D2, which also
+changed the section at settle and withdraw.
 
-2.7 What happens on routes WITHOUT in-history admission: the section changes (a job started) trigger
-node-0 consolidation = full-prefix miss per start. This is a cost of the RUNNING surface, NOT of the
-completion carrier. It is disclosed in the SCHEME (residual R3).
+2.7 On routes WITHOUT in-history admission, the section changes (a job started) trigger node-0
+consolidation, which is a full-prefix miss per start. This is a cost of the RUNNING surface and NOT
+of the completion carrier, and the SCHEME discloses it (residual R3).
 
 ## 3. The KV-cache + conversation-order consequences
 
-3.1 Completion delivery: append-only user-role snapshot AFTER the cached history. The reusable
-prefix through the entire history is preserved. The marginal cache cost is the frame's own bytes. NO
-replacement, NO projection, NO contentGeneration bump (context snapshots are ordinary history
-growth, NOT surface replacements).
+3.1 Completion delivery is an append-only user-role snapshot AFTER the cached history, so the
+reusable prefix through the entire history stays preserved and the marginal cache cost is the own
+bytes of the frame. There is NO replacement, NO projection, and NO contentGeneration bump, because
+context snapshots are ordinary history growth and NOT surface replacements.
 
-3.2 Withdrawal: ZERO cache cost, ZERO events. The delivered snapshot stays. NO "honesty beats cache"
-tail rewrite exists on this carrier. The 01 section 8 position is thereby SATISFIED more cheaply
-than it argued.
+3.2 Withdrawal has ZERO cache cost and ZERO events, and the delivered snapshot stays. NO "honesty
+beats cache" tail rewrite exists on this carrier, so the position of section 8 in 01 is thereby
+SATISFIED more cheaply than it argued.
 
-3.3 The running section on in-history routes: EVERY section text change (start of a job, fleet
-drain) appends the FULL new rendered prompt as a new system node after the history. The per-change
-cost is the whole prompt text, NOT the delta. Old states remain visible until consolidation. This is
-a cost D2's 11.1(a) did NOT count. It bounds fine for long-running-detach (starts are rare). It is
-documented in the SCHEME, NOT worked around.
+3.3 The running section on in-history routes: EVERY section text change (the start of a job, the
+fleet drain) appends the FULL new rendered prompt as a new system node after the history. The
+per-change cost is the whole prompt text and NOT the delta, and old states remain visible until
+consolidation, which is a cost that section 11.1(a) of D2 did NOT count. It bounds fine for
+long-running-detach, because starts are rare, and the SCHEME documents it and does NOT work around
+it.
 
-3.4 On incapable routes the same section change is a node-0 rewrite: full-prefix miss per start. The
-SCHEME must state that detach is cache-cheapest on in-history-capable routes. It costs ONE full miss
-per job start otherwise.
+3.4 On incapable routes the same section change is a node-0 rewrite, which is a full-prefix miss per
+start. The SCHEME must state that detach is cache-cheapest on in-history-capable routes and that it
+costs ONE full miss per job start otherwise.
 
-3.5 Conversation order: the completion snapshot appears in history AFTER whatever user/assistant
-turns precede the next attempt. The model can see a completion for a job whose tool call it issued
-turns ago. Snapshots for several jobs merge into one message in settle order (first-wins order), NOT
-tool-call order. The standing caveat line discloses this (unchanged from D2). Timestamps inside the
-frame make the ordering reconstructible.
+3.5 Conversation order: the completion snapshot appears in history AFTER whatever user and assistant
+turns precede the next attempt, so the model can see a completion for a job whose tool call it
+issued turns ago. Snapshots for several jobs merge into one message in settle order (first-wins
+order) and NOT in tool-call order, and the standing caveat line discloses this (unchanged from D2).
+The timestamps inside the frame make the ordering reconstructible.
 
-3.6 Honesty: the frame is NEVER rendered without an observed `settled` event. A marker surviving a
-restart without a live registry renders `status: lost (process exit)` in the standing section (01
-section 9.10, mirrored). A pending frame lost to a process exit renders NOTHING (the ledger record
-is the truth). The stock notice is equally gone. The model's world model degrades to the lost marker
-line.
+3.6 Honesty: the frame is NEVER rendered without an observed `settled` event. A marker that survives
+a restart without a live registry renders `status: lost (process exit)` in the standing section
+(section 9.10 of 01, mirrored), and a pending frame lost to a process exit renders NOTHING, because
+the ledger record is the truth. The stock notice is equally gone, so the world model of the model
+degrades to the lost marker line.
 
 ## 4. Fallback carrier (if the context semantics fail C2's verification)
 
-If verification of the dynamic-context admission shows anything other than "present non-empty
+If the verification of dynamic-context admission shows anything other than "present non-empty
 context -> one sourced user-role snapshot, absent -> nothing" (for example a snapshot per request
 while present, or no snapshot route for plugin-registered optional contexts), the fallback is the
-STANDING SECTION carrier exactly as D2 section 3.3 defines it. It is amended by this file's section
-3 cache corrections. Delivery happens at the next assembly. Withdrawal happens by section edit. The
-withdrawal's cache cost is stated as "node-0 full miss on incapable routes, in-history append on
-capable routes". The pending-frame/consume-on-commit discipline of 2.3 carries over unchanged.
-Clearing after the assemble that rendered the frame is observable via the next waterfall pass and is
-ledgered identically.
+STANDING SECTION carrier exactly as section 3.3 of D2 defines it, amended by the cache corrections
+of section 3 here. Delivery happens at the next assembly, and withdrawal happens by section edit,
+with its cache cost stated as "node-0 full miss on incapable routes, in-history append on capable
+routes". The pending-frame/consume-on-commit discipline of 2.3 carries over unchanged, and a
+clearing after the assemble that rendered the frame is observable through the next waterfall pass
+and is ledgered identically.
 
 ## 5. The byte-exact candidate shape of the pending text
 
-Per job (wrapped frame; N jobs merge into one pending text, frames in settle order, blank-line
-separated, one wrapper line per pending text):
+Per job (a wrapped frame, where N jobs merge into one pending text with the frames in settle order,
+blank-line separated, and one wrapper line per pending text):
 
     [live] completion report (harness-appended; not a user request):
     --- LIVE CONTAINER <job-id> completed ---
@@ -193,10 +196,10 @@ separated, one wrapper line per pending text):
     --- END LIVE CONTAINER <job-id> ---
     [live] job_output <job-id> to read the full output.
 
-Everything below the wrapper line is D2 section 4.2 verbatim (ratified). The failure variant is
-`status: error`. The kill variant is `status: killed` with the kill reason. Total pending text cap:
-2 KiB per frame plus the wrapper, bounded by the producer ring tail (07 section 5.2 clause 1). ASCII
-only.
+Everything below the wrapper line is section 4.2 of D2 verbatim (ratified). The failure variant is
+`status: error`, and the kill variant is `status: killed` with the kill reason. The total pending
+text cap is 2 KiB per frame plus the wrapper, bounded by the producer ring tail (clause 1 of section
+5.2 in 07). ASCII only.
 
 ## 6. RESIDUALS
 

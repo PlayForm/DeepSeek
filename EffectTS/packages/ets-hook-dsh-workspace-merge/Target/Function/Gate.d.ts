@@ -1,6 +1,6 @@
 import type { FsTarget } from "@deepseek-ai/dsh-fs";
-import type Operation from "../Interface/Operation.js";
-import type State from "../Interface/State.js";
+import type Operation from "@Interface/Operation.js";
+import type State from "@Interface/State.js";
 export interface GatedFile {
     path: string;
     target: FsTarget;

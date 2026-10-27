@@ -1,4 +1,4 @@
-import type Reply from "./Reply.js";
+import type Reply from "@Interface/Reply.js";
 export default interface Commit {
     id: string;
     status: "applied" | "partial" | "rejected";

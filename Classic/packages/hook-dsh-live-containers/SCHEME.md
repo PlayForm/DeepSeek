@@ -1,18 +1,22 @@
 # SCHEME.md - @playform/hook-dsh-live-containers (v0.3.0, TypeScript, function plugin)
 
-Status: **IMPLEMENTED and VERIFIED** (deterministic build zero errors; minified build; the
-package-internal per-test suite green - 203 checks across 14 folders, see section 9; the wave-2 half
-is section 12; the wave-3 monitors half is section 13).
+Status: **IMPLEMENTED and VERIFIED**, with a deterministic build of zero errors, a minified build,
+and a green package-internal per-test suite of 203 checks across 14 folders in section 9, where the
+wave-2 half is section 12 and the wave-3 monitors half is section 13.
 
 ## 0. What this plugin is
 
-The live-containers hook: dynamic, modifiable conversation blocks in the system prompt. Each enabled
-block is a labeled stanza recomputed at every request (the canonical example is a time block that
-always holds the current time at ask-time), appended as ONE `system-prompt/assemble` section named
-`live-containers` with `interpolate: false` - the harness's own prompt variables never resolve (or
-fail on) the section's `{{token}}` groups; only the plugin's own substitution engine touches them,
-so the harness's unresolved-variable failure is never inherited. Each block renders inside the FIXED
-frame so the model cannot mistake it for harness state:
+The live-containers hook gives the system prompt dynamic and modifiable conversation blocks.
+
+Each enabled block is a labeled stanza that is recomputed at every request, and the canonical
+example is a time block that always holds the current time at ask-time.
+
+The hook appends the blocks as ONE `system-prompt/assemble` section named `live-containers` with
+`interpolate: false`, so the prompt variables of the harness never resolve or fail on the
+`{{token}}` groups of the section and only the substitution engine of the plugin touches them, which
+means the unresolved-variable failure of the harness is never inherited.
+
+Each block renders inside the FIXED frame, so the model cannot mistake it for harness state:
 
 ```
 --- LIVE CONTAINER <id> (recomputed each request; not harness state) ---
@@ -45,29 +49,31 @@ ctx.on("system-prompt/assemble", async (Assembly, AssembleContext, Next) => {
 });
 ```
 
-- **L1 `system-prompt/assemble`** (waterfall, `next()` first, append-only): the ONE live section;
-  global TTL cache when `refresh: "ttl"`; fail-open try/catch, a render failure skips the block and
-  logs; the section carries `interpolate: false`.
-- **L4 `tools/post-execute`** (waterfall, plain registration): records the tool facts the
-  counter/gauge blocks read (last-tool timestamp, per-turn attempt counts) and marks event-trigger
-  blocks dirty. Pure observer.
+- **L1 `system-prompt/assemble`** (waterfall, `next()` first, append-only): the ONE live section,
+  with a global TTL cache when `refresh: "ttl"`; a fail-open try/catch, where a render failure skips
+  the block and logs; and the section carries `interpolate: false`.
+- **L4 `tools/post-execute`** (waterfall, plain registration): records the tool facts that the
+  counter and gauge blocks read (last-tool timestamp, per-turn attempt counts) and marks the
+  event-trigger blocks dirty, as a pure observer.
 - **L8 `agent/pre-step`** (waterfall, plain): the user-message detection counts messages, advances
-  the turn, resets the per-turn counters and marks event-trigger blocks dirty (the tool-coach
-  precedent).
-- **L9 `tools/change`** (emit): clears every scope's section cache so the next assembly rebuilds
-  from the new registry.
+  the turn, resets the per-turn counters, and marks the event-trigger blocks dirty, following the
+  tool-coach precedent.
+- **L9 `tools/change`** (emit): clears the section cache of every scope, so the next assembly
+  rebuilds from the new registry.
 
-THE WATERFALL DISCIPLINE: `next()` is ALWAYS awaited first; pass-through returns the downstream
-decision unchanged; FAIL-OPEN: every listener body is one try/catch - on any error a warn records it
-and the downstream result is returned UNCHANGED. A live block never fails an assembly.
+THE WATERFALL DISCIPLINE: `next()` is ALWAYS awaited first, pass-through returns the downstream
+decision unchanged, and every listener body is one try/catch that records any error with a warn and
+returns the downstream result UNCHANGED, so a live block never fails an assembly.
 
 ## 2. Config (the full schema, every knob volatile)
 
-Composed via the factory's standalone `Schema(false, {...})` helper - the NON-MANIFEST posture (no
-fs/observed machinery advertised). EVERY knob is `.volatile()` (hot edits commit without remounting
-via the loader's `loader/volatile-update` event). The block TABLE is the volatile cell; its leaves
-stay plain (schemastery rejects volatile leaves under an enclosing volatile field - the tool-coach's
-patternTable precedent).
+The schema is composed through the standalone `Schema(false, {...})` helper of the factory, which is
+the NON-MANIFEST posture that advertises no fs/observed machinery.
+
+EVERY knob is `.volatile()`, so hot edits commit without remounting through the
+`loader/volatile-update` event of the loader, and the block TABLE is the volatile cell while its
+leaves stay plain, because schemastery rejects volatile leaves under an enclosing volatile field, as
+the patternTable precedent of the tool-coach shows.
 
 | Field                | Type                 | Default                                        | Meaning                                                                                         |
 | -------------------- | -------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------- |
@@ -118,13 +124,16 @@ required - an unknown kind fails LOUD at load), `template` (string, required, no
 default 8, >= 1), `scope` (`'always' | 'when-agents-active' | 'when-tasks-live' | 'never'`, default
 `'always'`).
 
-Fail-loud validation runs BEFORE the State build: invalid config throws at load, never silently
-defaults.
+Fail-loud validation runs BEFORE the State build, so an invalid config throws at load and never
+silently defaults.
 
 ## 3. The block kinds table
 
-One registry (`KINDS`, 20 entries), two consumers: the fail-loud config validation and the render
-dispatch. The PHASE-1 rendered kinds:
+One registry (`KINDS`, 20 entries) serves two consumers: the fail-loud config validation and the
+render dispatch.
+
+The PHASE-1 rendered kinds are the `time`, `counter`, `manifest`, `gauge`, `note`, and `template`
+kinds in the table above.
 
 | Kind       | Built-in tokens                              | Notes                                                                                                         |
 | ---------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
@@ -138,57 +147,74 @@ dispatch. The PHASE-1 rendered kinds:
 The full built-in token set: `{{time}}`, `{{date}}`, `{{tz}}`, `{{messageCount}}`, `{{turnCount}}`,
 `{{sinceLastTool}}`, `{{sessionId}}`, `{{cwd}}`.
 
-The WAVE-2 catalog kinds (14 shipped in the default block table - `todo-list`,
-`agent-progress-board`, `task-failsafe-guard`, `command-runner`, `countdown-expiry`,
-`session-stats`, `diff-summary`, `constraint-reminder`, `scoreboard`, `live-manifest`,
-`memory-block`, `validator`, `environment-drift`, `delegation-inbox`) are ACCEPTED IN CONFIG from
-day one and render as skipped blocks - reason `unknown kind` - until the wave-2 render engine lands.
+The WAVE-2 catalog kinds, 14 of which ship in the default block table, are ACCEPTED IN CONFIG from
+day one and render as skipped blocks with the reason `unknown kind` until the wave-2 render engine
+lands.
+
+Those kinds are `todo-list`, `agent-progress-board`, `task-failsafe-guard`, `command-runner`,
+`countdown-expiry`, `session-stats`, `diff-summary`, `constraint-reminder`, `scoreboard`,
+`live-manifest`, `memory-block`, `validator`, `environment-drift`, and `delegation-inbox`.
+
 The three enabled-by-default wave-2 entries (`todo-list`, `command-runner`, `session-stats`)
-therefore cost nothing and render nothing in phase 1. Tokens the phase-1 engine does not resolve
-(`{{set:NAME}}`) render LITERALLY and log `render unknown <id> <token>`. This is documented
-honestly, not papered over.
+therefore cost nothing and render nothing in phase 1, and tokens that the phase-1 engine does not
+resolve (`{{set:NAME}}`) render LITERALLY and log `render unknown <id> <token>`.
+
+This is documented honestly and not papered over.
 
 ## 4. The substitution engine
 
-`{{token}}` replace ONLY - no eval, no expressions, no `new Function` (the programmable stage routes
-evaluation through the ptc-runtime LATER; see section 8). One strict regex pass, no nesting. An
-unknown token renders LITERALLY and logs `render unknown <id> <token>` (once per token per pass) -
-never a failure. The per-kind variable view narrows the shared table to the kind's built-in tokens;
+The engine does `{{token}}` replace ONLY, with no eval, no expressions, and no `new Function`,
+because the programmable stage routes evaluation through the ptc-runtime LATER in section 8.
+
+It runs one strict regex pass with no nesting.
+
+An unknown token renders LITERALLY and logs `render unknown <id> <token>` once per token per pass,
+and it is never a failure.
+
+The per-kind variable view narrows the shared table to the built-in tokens of the kind, and the
 per-block `vars` override everything.
 
 ## 5. The frame, the TTL and the failsafe
 
-- Fixed frame per rendered block (section 0). Frame dashes from `separator`.
-- Per-block triggers: `request` re-renders per assembly (subject to the global refresh policy),
+- Fixed frame per rendered block (section 0), with the frame dashes from `separator`.
+- Per-block triggers: `request` re-renders per assembly subject to the global refresh policy,
   `event` re-renders when an observer marked the block dirty, `ttl` re-renders every `ttlCalls`
-  assemblies, `manual` never re-renders (skip reason `manual`). `scope` other than `always` skips
-  (reason `scope`); a disabled block skips (reason `disabled`).
-- Global refresh: `request` re-renders per assembly and keeps no global cache; `ttl` caches the
-  whole body and rebuilds every `ttlCalls` assemblies (ledger `section rebuilt (ttl <n>)`), plus a
-  `tools/change` invalidation (`section rebuilt (tools/change)`).
+  assemblies, and `manual` never re-renders with the skip reason `manual`; a `scope` other than
+  `always` skips with the reason `scope`, and a disabled block skips with the reason `disabled`.
+- Global refresh: `request` re-renders per assembly and keeps no global cache, while `ttl` caches
+  the whole body and rebuilds every `ttlCalls` assemblies with the ledger line
+  `section rebuilt (ttl <n>)`, plus a `tools/change` invalidation that writes
+  `section rebuilt (tools/change)`.
 - Failsafe: when the body exceeds `sectionBudgetBytes`, the OLDEST frames collapse to one-line
-  summaries (the last frame never collapses) - never silently dropped (ledger
-  `failsafe section-collapse <n>`).
-- Skip lines log only when the reason CHANGES (the ledger stays quiet on steady state, the
-  tool-coach discipline).
+  summaries and the last frame never collapses, so nothing is silently dropped, and the ledger
+  carries `failsafe section-collapse <n>`.
+- Skip lines log only when the reason CHANGES, so the ledger stays quiet on steady state, which is
+  the tool-coach discipline.
 
 ## 6. The counters
 
-Per-scope state in a WeakMap (the tool-coach precedent). PHASE-1 ATTRIBUTION: the counters are
-MODULE-GLOBAL - the assemble context exposes only an opaque scope key (never parsed, the family's
-capability rule), so the plugin counts what it observes harness-wide; the WeakMap structure stays
-keyed per object for wave 2. `{{sinceLastTool}}` is elapsed seconds since the last
-`tools/post-execute` observation, or `none`. Exact token counts are NOT available to plugins
-(research residual 3) - the gauge variables are honest approximations. All time reads go through the
-Clock module (the fake-clock seam; production falls back to `Date.now()`).
+Per-scope state lives in a WeakMap, following the tool-coach precedent.
+
+PHASE-1 ATTRIBUTION: the counters are MODULE-GLOBAL, because the assemble context exposes only an
+opaque scope key that is never parsed under the capability rule of the family, so the plugin counts
+what it observes harness-wide, while the WeakMap structure stays keyed per object for wave 2.
+
+`{{sinceLastTool}}` is the elapsed seconds since the last `tools/post-execute` observation, or
+`none`.
+
+Exact token counts are NOT available to plugins, which is research residual 3, so the gauge
+variables are honest approximations, and all time reads go through the Clock module, which is the
+fake-clock seam, with production falling back to `Date.now()`.
 
 ## 7. The ledger strings (the contract)
 
-One log per module - `logFile` (default `~/.dsh/playform/hook-dsh-live-containers.log`), one of the
-two universal volatile cells plus the plugin's own default. The strings are the module's OWN (the
-factory never owns them) and asserted byte-exact by the test suite; the durable file lines are the
-`[ISO] message` forms with the `live-containers: ` logger prefix (the factory's Append layer adds
-the prefix and the timestamp - never the module):
+One log covers each module at `logFile` (default `~/.dsh/playform/hook-dsh-live-containers.log`),
+which is one of the two universal volatile cells plus the own default of the plugin.
+
+The strings are the module's OWN, because the factory never owns them, and the test suite asserts
+them byte-exact, while the durable file lines are the `[ISO] message` forms with the
+`live-containers: ` logger prefix, where the Append layer of the factory adds the prefix and the
+timestamp and never the module:
 
 ```
 live-containers: disabled (enabled=false)
@@ -260,44 +286,52 @@ live-containers: monitor off <glob>
 live-containers: monitor stale <path> (<reason>)
 ```
 
-Durable activation proof: "did it activate" is answerable from the ledger alone -
-`disabled (enabled=false)` on a cold mount, else the activated line with the bundle version, the
-block count and the refresh policy.
+The durable activation proof means that "did it activate" is answerable from the ledger alone:
+`disabled (enabled=false)` on a cold mount, and otherwise the activated line with the bundle
+version, the block count, and the refresh policy.
 
 ## 8. The programmable stage - FUTURE, NOT IN v1
 
-**FUTURE - NOT IN THIS PACKAGE.** The substitution engine is token replace ONLY; there is NO
-evaluation path in v1 (provable by grep in the test suite). What research section 5 designs for the
-LATER stage - and this package does NOT ship yet:
+**FUTURE - NOT IN THIS PACKAGE.**
 
-- `kind: "program"` blocks with `program` (the source) and `context` (`time | counters | full`),
-  executed through the ptc-runtime (`@deepseek-ai/dsh-ptc-runtime-node` - model-written TS in a
-  fresh Node process under the sandbox, deadline + output-cap + heap limits). NEVER through
-  `new Function` or arbitrary eval in the plugin's own process.
-- Caps: per-call timeout (default 2s), output cap 16 KiB, no filesystem, no network; the LLM writes
-  programs through a `live_container_program` tool; programs versioned in the ledger.
-- Safety invariants: a program failure never fails the assembly; a program never sees message
-  CONTENT unless `context: 'full'` is explicitly enabled per block; output is always framed by the
-  LIVE CONTAINER markers.
-- The Rust/Rhai path (optional later): `kind: "dylib"` behind the koffi pattern.
+The substitution engine is token replace ONLY, and there is NO evaluation path in v1, which the test
+suite proves by grep.
 
-Do not configure for it, do not expect it from this package: these are design notes for a later
-wave.
+What research section 5 designs for the LATER stage, and what this package does NOT ship yet:
+
+- `kind: "program"` blocks with `program` for the source and `context` (`time | counters | full`),
+  executed through the ptc-runtime (`@deepseek-ai/dsh-ptc-runtime-node`, which is model-written TS
+  in a fresh Node process under the sandbox with a deadline, an output cap, and heap limits), and
+  NEVER through `new Function` or arbitrary eval in the process of the plugin.
+- Caps: a per-call timeout of 2s by default, an output cap of 16 KiB, no filesystem, and no network,
+  where the LLM writes programs through a `live_container_program` tool and the programs are
+  versioned in the ledger.
+- Safety invariants: a program failure never fails the assembly, a program never sees message
+  CONTENT unless `context: 'full'` is explicitly enabled per block, and the output is always framed
+  by the LIVE CONTAINER markers.
+- The Rust/Rhai path is an optional later `kind: "dylib"` behind the koffi pattern.
+
+Do not configure for it and do not expect it from this package, because these are design notes for a
+later wave.
 
 ## 9. The test battery (the package-internal per-test folders)
 
-The tests live in `Source/Test/` - one folder per test, each holding one singular TypeScript test
-file (`Test.ts`) and a `README.md` (the intent, the scenario tree, the fixtures, the expected ledger
-strings and the expected PASS count), compiled by the package's `Configuration/Test-ESBuild.ts` step
-into `Target/Test/` (runs SECOND in `prepublishOnly.sh`, after the plugin build which wipes
-`Target/` recursively; the THIRD step type-checks the Test tree against the built Target d.ts chain
-through its own noemit config, and the FOURTH step regenerates the shipped declarations
-synchronously to avoid the background tsc/tsc-alias race). The shared harness
-(`Source/Test/Harness.ts`) owns the fake ctx + the REAL factory + the REAL built Target, the tmpdir
-ledger, the FAKE CLOCK (the plugin reads time ONLY through the Clock seam; the tests advance the
-clock, never sleep) and the selfcheck backstop (`node Target/Test/Harness.js --selfcheck`).
+The tests live in `Source/Test/`, one folder per test, and each folder holds one singular TypeScript
+test file (`Test.ts`) and a `README.md` with the intent, the scenario tree, the fixtures, the
+expected ledger strings, and the expected PASS count.
 
-The fourteen folders and their PASS counts (203 checks total, per tree):
+The package's `Configuration/Test-ESBuild.ts` step compiles them into `Target/Test/`, and it runs
+SECOND in `prepublishOnly.sh`, after the plugin build that wipes `Target/` recursively, while the
+THIRD step type-checks the Test tree against the built Target d.ts chain through its own noemit
+config, and the FOURTH step regenerates the shipped declarations synchronously to avoid the
+background tsc/tsc-alias race.
+
+The shared harness (`Source/Test/Harness.ts`) owns the fake ctx, the REAL factory, the REAL built
+Target, the tmpdir ledger, the FAKE CLOCK that the plugin reads time through only (so the tests
+advance the clock and never sleep), and the selfcheck backstop at
+`node Target/Test/Harness.js --selfcheck`.
+
+The fourteen folders and their PASS counts give 203 checks in total per tree:
 
 | Folder                   | PASS | Covers                                                                                                                 |
 | ------------------------ | ---- | ---------------------------------------------------------------------------------------------------------------------- |
@@ -317,41 +351,53 @@ The fourteen folders and their PASS counts (203 checks total, per tree):
 | `Monitors-Boards`        | 7    | the wave-3 boards: the monitored rows, the [live-report] monitored fold, the skip guard                                |
 
 Every folder runs standalone (`node Target/Test/<Name>/Test.js`) and under the aggregate
-(`node Maintain/Run-Smokes.mjs`, which guards each folder's printed PASS count against its README).
+(`node Maintain/Run-Smokes.mjs`), which guards the printed PASS count of each folder against its
+README.
 
 ## 10. What this plugin does NOT do (phase scoping)
 
-No programmable blocks (section 8 is FUTURE), no wave-2 render engine (the catalog kinds skip as
-`unknown kind`), no per-agent counter attribution (the scope key is opaque), no exact token counts
-(plugins cannot see them), no `{{live:...}}` in-body marker in logged messages (no plugin seam
-exists - the harness-side follow-up), and no profile activation (the IDLE-forever posture: the
-plugin ships disabled and enables only by an explicit ACTIVATE).
+No programmable blocks, because section 8 is FUTURE, and no wave-2 render engine, because the
+catalog kinds skip as `unknown kind`.
+
+No per-agent counter attribution, because the scope key is opaque, and no exact token counts,
+because plugins cannot see them.
+
+No `{{live:...}}` in-body marker in logged messages, because no plugin seam exists and the follow-up
+is harness-side, and no profile activation, because of the IDLE-forever posture where the plugin
+ships disabled and enables only by an explicit ACTIVATE.
 
 ## 11. The EffectTS twin
 
 `EffectTS/packages/ets-hook-dsh-live-containers` (`@playform/ets-hook-dsh-live-containers`) is the
-same plugin re-expressed on Effect v4 (the Classic twin behind Effect v4): identical config surface,
-identical fixed frame, identical block kinds, identical ledger strings with the UNCHANGED
-`live-containers: ` prefix (the module id stays `hook-dsh-live-containers` - the tree identity lives
-in the npm package name, not in the log lines). The dependencies differ (`@playform/ets-*`
-packages + `effect` 4.0.5); the behavior contract is byte-identical.
+same plugin restated on Effect v4, and it is the Classic twin behind Effect v4: the config surface,
+the fixed frame, the block kinds, and the ledger strings are identical, with the UNCHANGED
+`live-containers: ` prefix, because the module id stays `hook-dsh-live-containers` and the tree
+identity lives in the npm package name rather than in the log lines.
+
+The dependencies differ (`@playform/ets-*` packages plus `effect` 4.0.5), and the behavior contract
+is byte-identical.
 
 ## 12. The wave-2 live half (CAN-1/2/4/5)
 
 The wave-2 extension lives in its own Function modules (Policy, Jobs, Detach, Completion, Board,
-Failsafe, Suggester, Set, Plant) plus Variable/Catalog; Apply only REGISTERS them. New listeners:
-`tools/pre-execute` (the decision arm), `tools/execute` (the carrier arm), the jobs events
-subscription (the settled truth + the deadline checkpoints), and `session/event` (the report
-pickup + the completion delivery observer). New tools: `live_container_set` (the per-agent state
-writer + the accept/dismiss/plant/prune verbs) and `live_plant`. One registered dynamic context:
+Failsafe, Suggester, Set, Plant) plus Variable/Catalog, and Apply only REGISTERS them.
+
+The new listeners are `tools/pre-execute` for the decision arm, `tools/execute` for the carrier arm,
+the jobs events subscription for the settled truth and the deadline checkpoints, and `session/event`
+for the report pickup and the completion delivery observer.
+
+The new tools are `live_container_set`, which is the per-agent state writer plus the accept,
+dismiss, plant, and prune verbs, and `live_plant`, and one registered dynamic context is
 `live-containers-completion`.
 
 ### 12.1 The arming gate
 
-The wave-2 listeners arm only when the jobs stack is composed (`State.Wave.Jobs !== undefined`). In
-production `inject` guarantees `ctx.jobs` (the loader throws at mount otherwise), so the gate is
-always open in a real deployment; the bare phase-1 test fixture (no services) mounts the phase-1
-listener set unchanged, byte-for-byte.
+The wave-2 listeners arm only when the jobs stack is composed, which means
+`State.Wave.Jobs !== undefined`.
+
+In production `inject` guarantees `ctx.jobs`, because the loader throws at mount otherwise, so the
+gate is always open in a real deployment, and the bare phase-1 test fixture with no services mounts
+the phase-1 listener set unchanged and byte-for-byte.
 
 ### 12.2 The detach transform (CAN-1)
 
@@ -488,19 +534,22 @@ against the ETS factory's built Target.
 
 ## 13. The wave-3 monitors half (CAN-7, live file monitors)
 
-The monitor layer lives in its own modules: `Monitors` (the engine: the fs/observed observer, the
-checkpoint scan, the dispatch, the settle fold, the stanza part), `Watchlist` (the classification +
-the glob matcher), `Band` (the byte-exact renderer), `Storage` (the P5-style monitor-domain open +
-recovery) and `MonitorTools` (live_monitor + live_monitor_check), plus the shipped catalog
-`Variable/DefaultCheckSets`. Board gains ONE behavior edit (the monitor settle skip guard) and the
-monitors plantType branch.
+The monitor layer lives in its own modules: `Monitors` for the engine (the fs/observed observer, the
+checkpoint scan, the dispatch, the settle fold, and the stanza part), `Watchlist` for the
+classification and the glob matcher, `Band` for the byte-exact renderer, `Storage` for the P5-style
+monitor-domain open and recovery, and `MonitorTools` for live_monitor and live_monitor_check, plus
+the shipped catalog `Variable/DefaultCheckSets`.
+
+Board gains ONE behavior edit, which is the monitor settle skip guard, and the monitors plantType
+branch.
 
 ### 13.1 The IDLE-forever posture and the second flip
 
-`monitors: "off"` is the default EVEN when the plugin is enabled. With monitors off the section body
-is byte-identical with the wave-2 behavior (no stanza, no listener work); the monitor layer is the
-second explicit flip after the plugin's own enable, and its on-state is proven by its own activation
-line `monitors enabled (<n> watchlist entries)`.
+`monitors: "off"` is the default EVEN when the plugin is enabled, and with monitors off the section
+body is byte-identical with the wave-2 behavior, with no stanza and no listener work.
+
+The monitor layer is the second explicit flip after the own enable of the plugin, and its on-state
+is proven by its own activation line `monitors enabled (<n> watchlist entries)`.
 
 ### 13.2 The config surface (appended; every cell volatile)
 

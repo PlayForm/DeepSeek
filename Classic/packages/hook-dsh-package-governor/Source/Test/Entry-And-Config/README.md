@@ -4,17 +4,15 @@ What this test verifies.
 
 ## Intent
 
-The governor's loader contract and its Config schema are the two surfaces every
-other folder (and every consumer) silently depends on: the plugin entry must
-export `name`/`apply`/`Config`/`inject` with the factory + fs injections, the
-BUILT Target must resolve the factory exclusively through the injected ctx
-service (except the Config module's standalone Schema import, the module-load
-use), and the schema must validate the shared volatile cells (`log`, `logFile`,
-`updateCooldownMs`, `mutationTools`) and the plain module defaults
-(`strict`, `maxUpdateFailures`, `updateMode`, `ncuBin`, `policyFile`,
-`exclude`). A drift here breaks every later folder, so it is its own folder.
-The assertions are moved verbatim from `Classic/smokes/governor-smoke.mjs`
-sections 1-2 (the source suite stays in place during the migration).
+The loader contract of the governor and its Config schema are the two surfaces that every other
+folder (and every consumer) silently depends on: the plugin entry must export
+`name`/`apply`/`Config`/`inject` with the factory + fs injections, the BUILT Target must resolve the
+factory exclusively through the injected ctx service (except the standalone Schema import of the
+Config module, the module-load use), and the schema must validate the shared volatile cells (`log`,
+`logFile`, `updateCooldownMs`, `mutationTools`) and the plain module defaults (`strict`,
+`maxUpdateFailures`, `updateMode`, `ncuBin`, `policyFile`, `exclude`). A drift here breaks every
+later folder, so it is its own folder. The assertions are moved verbatim from sections 1-2 of
+`Classic/smokes/governor-smoke.mjs` (the source suite stays in place during the migration).
 
 ## Scenario
 
@@ -36,23 +34,20 @@ sections 1-2 (the source suite stays in place during the migration).
 
 ## Fixtures
 
-None beyond the harness ledger path: the Config check validates
-`Governor.Config({ logFile: Ledger })` with the harness tmpdir ledger. The
-consumption walk reads the built Target directory of the package itself (the
-same bytes the live loader loads). No fake ctx, no factory, no apply.
+None beyond the harness ledger path: the Config check validates `Governor.Config({ logFile: Ledger
+})` with the ledger in the harness tmpdir. The consumption walk reads the built Target directory of
+the package itself (the same bytes that the live loader loads). No fake ctx, no factory, no apply.
 
 ## Expected ledger strings (byte-exact)
 
-None. This folder asserts the entry shape and the schema defaults, not log
-lines.
+None. This folder asserts the shape of the entry and the schema defaults, not log lines.
 
 ## Edge cases
 
-- The consumption walk is the negative control for the "governor never imports
-  the factory directly" architecture rule: any second importer fails the
-  deepEqual.
-- The volatile cells are exercised with `.get()` (they must be callable);
-  the plain fields must NOT be cells (asserted by equality, not `.get`).
+- The consumption walk is the negative control for the "governor never imports the factory directly"
+  architecture rule: any second importer fails the deepEqual.
+- The volatile cells are exercised with `.get()` (they must be callable); the plain fields must NOT
+  be cells (asserted by equality, not `.get`).
 
 ## Expected count
 

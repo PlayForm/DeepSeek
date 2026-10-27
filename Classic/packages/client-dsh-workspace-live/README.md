@@ -3,17 +3,17 @@
 > v0.1.0 - UNPUBLISHED - plan:
 > [Workspace-Family/LIVE](../../Documentation/Plans/Workspace-Family/LIVE.md)
 
-The workspace family's **live client**: the client half of the workspace live view
+This package is the workspace family's **live client**: the client half of the workspace live view
 (Documentation/Plans/Workspace-Family/LIVE.md).
 
 ## The role
 
-The presentation, **stable-until-event**:
+The presentation is **stable-until-event**:
 
 - The live view does NOT re-render continuously.
 
-    It stays stable until a workspace event or a D5 trace envelope surfaces a change; it presents at
-    the END of the invisible flow (... -> the audit lines -> the live view presents).
+    It stays stable until a workspace event or a D5 trace envelope surfaces a change, and it
+    presents at the END of the invisible flow (... -> the audit lines -> the live view presents).
 
 - It presents the workspace's REPRESENTATIONS of the Entity/Presentation/Interaction model.
 
@@ -24,8 +24,8 @@ The presentation, **stable-until-event**:
 
 ## The surfaces
 
-Pure client package: no host service, no tool, no event listener - the host half of the Loader row
-is an empty `apply()`.
+This is a pure client package: it has no host service, no tool, and no event listener, and the host
+half of the Loader row is an empty `apply()`.
 
 The surfaces are the client service `workspaceLive` (`getSnapshot`, `subscribe`, `ingest`,
 `refresh`), the `conversation.view` tab `workspace-live`, the client bundle (`exports["./client"]`),
@@ -46,9 +46,9 @@ and the structurally-read D5 trace (`ctx.get("trace")`).
   the recent envelopes NEWEST FIRST, bounded by `maxEvents`.
 
     A new envelope notifies the view; a missing trace is the documented STATIC state (`live: false`,
-    empty tail) - never an error.
+    empty tail) and never an error.
 
-- **The tab**: `conversation.view` entry `workspace-live` (default order 25) rendering the
+- **The tab**: the `conversation.view` entry `workspace-live` (default order 25) renders the
   representations, the empty note, and the stored trace tail.
 - **The child-slot model** (when the panel family is composed, i.e. `playformFamilyPanel` is
   present): the tab registration declares `workspace.live.section` in its `children` table and
@@ -71,7 +71,7 @@ locally in `Source/Interface/Siblings.ts` from the W1 frozen contract
 No runtime import of a sibling package exists yet; the end-phase wires the real imports and the real
 channels.
 
-The trace source needs no sibling import: the bus is read structurally from the client context.
+The trace source needs no sibling import: the client context gives the bus structurally.
 
 ## The configuration
 

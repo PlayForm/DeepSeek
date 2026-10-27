@@ -45,13 +45,23 @@ The v2 analytics columns (schema migration, additive, `PRAGMA user_version` 1 to
 
 The v3 factor columns and tables (schema migration, additive, `PRAGMA user_version` 2 to 3):
 
-| Column or table                 | On             | What it stores                                                                         |
-| ------------------------------- | -------------- | -------------------------------------------------------------------------------------- |
-| `TierFrom`, `TierTo`            | `Price`        | the bounds of one tier of a marginal rate card; a NULL `TierTo` is the open top tier   |
-| `Mode`, `Region`                | `Price`, `Call`| the pricing mode and residency region; a NULL means "any"                              |
-| `Tier`                          | `Call`         | the tier floor of the rate card that priced the call                                   |
-| `Modifier`                      | table          | one effective-dated multiplier for one pricing mode, optionally scoped to one model    |
-| `Factor`, `CallFactor`          | tables         | one classification dimension value and its weight on one call - a classifier is a row  |
+| Column or table        | On              | What it stores                                                                        |
+| ---------------------- | --------------- | ------------------------------------------------------------------------------------- |
+| `TierFrom`, `TierTo`   | `Price`         | the bounds of one tier of a marginal rate card; a NULL `TierTo` is the open top tier  |
+| `Mode`, `Region`       | `Price`, `Call` | the pricing mode and residency region; a NULL means "any"                             |
+| `Tier`                 | `Call`          | the tier floor of the rate card that priced the call                                  |
+| `Modifier`             | table           | one effective-dated multiplier for one pricing mode, optionally scoped to one model   |
+| `Factor`, `CallFactor` | tables          | one classification dimension value and its weight on one call - a classifier is a row |
+
+The v4 edit and telemetry grain (schema migration, additive, `PRAGMA user_version` 3 to 4):
+
+| Column or table                                | On      | What it stores                                                                                      |
+| ---------------------------------------------- | ------- | --------------------------------------------------------------------------------------------------- |
+| `Edit`                                         | table   | one hunk a write or edit tool call produced, unique per (touch, ordinal), with lines, bytes, hashes |
+| `LatencyMs`, `FirstTokenMs`, `TokensPerSecond` | `Call`  | the step-to-message latency, the first stream token, the output tokens per second                   |
+| `Attempts`, `ErrorCode`                        | `Call`  | the assistant/attempt count between the step and the message; the first failure code                |
+| `ContextWindow`, `Utilization`                 | `Call`  | the request's context window and the surface tokens' share of it                                    |
+| `DurationMs`, `ResultBytes`                    | `Touch` | the tool's duration and the rendered result bytes (reserved; not written by the drain yet)          |
 
 ## The stages
 
@@ -69,15 +79,16 @@ session - not inferred at report time:
 
 ## The commands
 
-The four human commands run through the `commands` service - none of them is a tool and none enters
+The five human commands run through the `commands` service - none of them is a tool and none enters
 the model context. One registered command owns the grammar and the verb is its first word:
 
-| Invocation                                  | What it does                                                                                                                          |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `/cost report [scope] [range]`              | the rollup for `file`, `project`, `client`, `model` or `session`; `range` is one UTC day                                              |
-| `/cost export <csv\|json\|markdown> [path]` | the client-facing bundle: RFC 4180 CSV, the re-derivable JSON, or the markdown invoice                                                |
-| `/cost annotate [path]`                     | write the cost comment into the named files, or every file the ledger knows for the project                                           |
-| `/cost assess [session]`                    | one session's spend bucketed as `delivered`, `explored`, `reverted`, `overhead` and `carry`, plus the derived cost per surviving line |
+| Invocation                                  | What it does                                                                                                                                                         |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/cost report [scope] [range]`              | the rollup for `file`, `project`, `client`, `model` or `session`; `range` is one UTC day                                                                             |
+| `/cost export <csv\|json\|markdown> [path]` | the client-facing bundle: RFC 4180 CSV, the re-derivable JSON, or the markdown invoice                                                                               |
+| `/cost annotate [path]`                     | write the cost comment into the named files, or every file the ledger knows for the project                                                                          |
+| `/cost assess [session]`                    | one session's spend bucketed as `delivered`, `explored`, `reverted`, `overhead` and `carry`, plus the derived cost per surviving line and the edit-grain line totals |
+| `/cost forecast [days]`                     | the daily rate per scope and key over the last `days` (thirty by default), projected to a thirty-day period with its confidence band                                 |
 
 The assessment buckets are descriptive and always stored as rows the ledger can re-derive (`Verdict`
 per session and file, the unattributed allocation rows for overhead); the discount policies stay an

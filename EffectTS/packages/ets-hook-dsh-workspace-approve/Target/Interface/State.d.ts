@@ -1,6 +1,6 @@
-import type Binding from "./Binding.js";
-import type DomainHandle from "./Domain.js";
-import type FactoryHandle from "./Factory.js";
+import type Binding from "@Interface/Binding.js";
+import type DomainHandle from "@Interface/Domain.js";
+import type FactoryHandle from "@Interface/Factory.js";
 import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** The master switch (mapped from config `enabled` by the State build's

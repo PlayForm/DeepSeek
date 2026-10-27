@@ -1,18 +1,25 @@
 # Classic - the DeepSeek Harness Plugin Family for PlayForm
 
-The CLASSIC release of the PlayForm plugin family for DeepSeek Harness: twelve TypeScript packages
-under `packages/`, each one a verified, smoke-arbitrated package - the core library, the factory
-service, the governance trio (package governor, version pinner, Cargo.toml governor) and the
-seven-member normalize family (six stream flavors plus the file tool).
+This tree is the CLASSIC release of the PlayForm plugin family for DeepSeek Harness.
 
-The release identity follows the user-approved reversed hierarchical naming (the "@-sentence"
-identity): the scope stays `@playform`, the old `dsh-` prefix moves out of the package name, and the
-family/type marker leads - `hook-dsh-*`, `lib-dsh-*` and `plugin-dsh-*` - so a package name reads as
-a sentence about what it is: a DeepSeek Harness hook, a library, or the DeepSeek Harness plugin
-factory.
+It holds twelve TypeScript packages in `packages/`, and every one of them passed verification and
+smoke arbitration.
 
-Each package carries its own one-sentence self-description (its @-sentence), quoted in the inventory
-below.
+The set is the core library, the factory service, the governance trio (package governor, version
+pinner, Cargo.toml governor), and the seven-member normalize family (six stream flavors plus the
+file tool).
+
+The release identity uses the user-approved reversed hierarchical naming, which this family calls
+the "@-sentence" identity.
+
+The scope stays `@playform`, the old `dsh-` prefix leaves the package name, and the family and type
+marker leads: `hook-dsh-*`, `lib-dsh-*`, and `plugin-dsh-*`.
+
+A package name therefore reads as a sentence about what the package is: a DeepSeek Harness hook, a
+library, or the DeepSeek Harness plugin factory.
+
+Each package carries its own one-sentence self-description, its @-sentence, and the inventory below
+quotes it.
 
 [![variant](https://img.shields.io/static/v1?label=variant&message=CLASSIC&color=blue)](packages/)
 [![sibling](https://img.shields.io/static/v1?label=sibling&message=EFFECT-TS&color=white)](../EffectTS/)
@@ -20,17 +27,19 @@ below.
 
 ## The variants (CLASSIC vs EFFECT-TS)
 
-- **CLASSIC** (this tree): the twelve contracts in plain TypeScript — classes, Maps and plain
-  functions, zero runtime framework dependencies; the release built here and verified by the twelve
-  smokes below.
-- **EFFECT-TS** (the sibling tree, `../EffectTS/`): the same twelve contracts re-expressed on
-  Effect-TS services and layers — same behavior, same smokes, different runtime plumbing.
+- **CLASSIC** (this tree): the twelve contracts in plain TypeScript - classes, Maps and plain
+  functions, with zero runtime framework dependencies; this release builds here and the twelve
+  smokes below verify it.
+- **EFFECT-TS** (the sibling tree, `../EffectTS/`): the same twelve contracts restated on Effect-TS
+  services and layers - same behavior, same smokes, different runtime plumbing.
 
 ## The variant toggle (CLASSIC vs EFFECT-TS)
 
-One name, two builds: every package in this tree ships BOTH implementations in the same tarball -
-`Target/` (the CLASSIC build, the default) and `Target-EffectTS/` (the EFFECT-TS build, assembled
-byte-exactly from the sibling tree by `Maintain/DualSource.sh`).
+One name covers two builds.
+
+Every package in this tree ships BOTH implementations in the same tarball: `Target/` is the CLASSIC
+build and the default, and `Target-EffectTS/` is the EFFECT-TS build that `Maintain/DualSource.sh`
+assembles byte-exactly from the sibling tree.
 
 **Install once, toggle at the loader.**
 
@@ -38,11 +47,14 @@ byte-exactly from the sibling tree by `Maintain/DualSource.sh`).
 pnpm add @playform/lib-dsh-core @playform/plugin-dsh-factory @playform/hook-dsh-package-governor
 ```
 
-One install - every package ships BOTH the CLASSIC build (plain TypeScript, the default) and the
-EFFECT-TS build (effect-backed, the same contract) in the same tarball. No postinstall builds, no
-user-side compilation - the toggle is pure resolution:
+One install is enough, because every package ships BOTH the CLASSIC build (plain TypeScript, the
+default) and the EFFECT-TS build (effect-backed, the same contract) in the same tarball.
 
-- **CLASSIC (default):** just import - `import { Govern } from "@playform/plugin-dsh-factory"`.
+No postinstall build runs and no user-side compilation happens, because the toggle is pure
+resolution:
+
+- **CLASSIC (default):** import the package and nothing else -
+  `import { Govern } from "@playform/plugin-dsh-factory"`.
 - **EFFECT-TS (whole family, one flag):**
     - Node: `node --conditions=effect-ts` (or `NODE_OPTIONS="--conditions=effect-ts"`)
     - TypeScript: `"customConditions": ["effect-ts"]` in `compilerOptions`
@@ -52,13 +64,17 @@ user-side compilation - the toggle is pure resolution:
   `import { ... } from "@playform/lib-dsh-core/effect-ts"` (or `/classic`) - deterministic in every
   toolchain.
 
-The whole family toggles together - never mix variants in one graph (the effect-ts `Update` returns
-Effect envelopes, not the classic dispatch envelope). `effect` v4.0.2 comes as a dependency with the
-same single install.
+The whole family toggles together, so never mix variants in one graph, because the effect-ts
+`Update` returns Effect envelopes and not the classic dispatch envelope.
 
-This tree is the canonical publish home: the published tarball ships `Target/` + `Target-EffectTS/`
-(the manifests' `files` whitelists); the EffectTS tree's tarball is the mirror (`Target/` +
-`Target-Classic/`). In-tree, each tree's `default` condition routes to its own build.
+The same single install brings `effect` v4.0.2 as a dependency.
+
+This tree is the canonical publish home, so the published tarball ships `Target/` and
+`Target-EffectTS/` through the `files` whitelists of the manifests.
+
+The tarball from the EffectTS tree is the mirror, with `Target/` and `Target-Classic/`.
+
+In-tree, the `default` condition of each tree routes to its own build.
 
 ## The twelve packages
 
@@ -85,32 +101,34 @@ Classic/
   smokes/            the twelve smoke suites, one per bundle
 ```
 
-Each package is self-contained: its own `package.json`, its own deterministic build (`Source/` ->
-`Target/` via ESBuild + `tsc` + `tsc-alias`), and its own
+Each package is self-contained.
+
+It carries its own `package.json`, its own deterministic build (`Source/` -> `Target/` through
+ESBuild, `tsc`, and `tsc-alias`), and its own
 [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml)
 where the bundle ships one.
 
 ## Build (per bundle, deterministic)
 
-The base library and the factory first, then the consumers:
+Build the base library and the factory first, then the consumers:
 
 ```
 cd packages/lib-dsh-core      && pnpm install --ignore-scripts && pnpm run prepublishOnly
 cd packages/plugin-dsh-factory && pnpm run prepublishOnly
 ```
 
-Then each consumer bundle (the governance trio, the seven normalize flavors):
+Then build each consumer bundle, which is the governance trio and the seven normalize flavors:
 
 ```
 cd packages/<bundle> && pnpm run prepublishOnly
 ```
 
-Standalone-workspace packages (`lib-dsh-core` and the flavors with their own `pnpm-workspace.yaml`)
-also take a per-bundle `pnpm install --ignore-scripts`.
+The standalone-workspace packages, `lib-dsh-core` and the flavors with their own
+`pnpm-workspace.yaml`, also take a per-bundle `pnpm install --ignore-scripts`.
 
-The remaining bundles resolve their dev dependencies from the family workspace root.
+The remaining bundles get their dev dependencies from the family workspace root.
 
-The ten consumer bundles import their siblings through the
+The ten consumer bundles reach their siblings through the
 `packages/<consumer>/node_modules/@playform/` directory links:
 
 ```
@@ -120,8 +138,9 @@ The ten consumer bundles import their siblings through the
 
 ## Test (the smokes are the arbiter)
 
-One suite per bundle, run from `Classic/smokes/`; each prints its count and exits non-zero on any
-failure:
+One suite covers each bundle, and you run it from `Classic/smokes/`.
+
+Each suite prints its count and exits non-zero when any check fails:
 
 ```
 node smokes/core-smoke.mjs            # 14
@@ -138,29 +157,31 @@ node smokes/fullwidth-smoke.mjs       # 62
 node smokes/normalize-file-smoke.mjs  # 71
 ```
 
-Every suite loads the REAL built Target of its bundle (plus the REAL factory service where the
-bundle consumes it) and asserts the full behavioral contract: the loader contract, the byte-exact
-ledger strings, the identity assertions (`name`, `State.Module`, the `<module>: ` logger prefixes,
-the `~/.dsh/<identity>.log` ledger defaults) and the effect wiring.
+Every suite loads the REAL built Target of its bundle, plus the REAL factory service where the
+bundle consumes it, and it asserts the full behavioral contract.
 
-The counts above are the release contract: they must not change.
+That contract covers the loader contract, the byte-exact ledger strings, the identity assertions
+(`name`, `State.Module`, the `<module>: ` logger prefixes, the `~/.dsh/<identity>.log` ledger
+defaults), and the effect wiring.
+
+The counts above are the release contract, and they must not change.
 
 ## Known limits
 
-The documented gaps, stated as they are:
+This section states the documented gaps as they are:
 
 - **The verifyCommand trap** - an update-policy `verifyCommand` can fail with a non-zero status on a
-  vendored-fork workspace (the forks are not on the public registry): the ledger records
-  `update: verifyCommand failed (status 1)` - the documented cordis registry trap, the expected
-  outcome, not a bug. Exit 127 (the runner unavailable) is non-fatal; any other failure trips the
-  circuit breaker.
-- **Load order is not list order** - the pinner can activate before the governor at boot; the
-  sequential fold and the fresh-version writes make the order irrelevant.
-- **The smoke/live fidelity gap** - the smokes prove the mechanics; the live battery proves the
-  wiring; every real bug was found live, not by the smokes.
+  vendored-fork workspace, because the forks are not on the public registry, and then the ledger
+  records `update: verifyCommand failed (status 1)`, which is the documented cordis registry trap,
+  the expected outcome, and not a bug. Exit 127, where the runner is unavailable, is non-fatal, and
+  any other failure trips the circuit breaker.
+- **Load order is not list order** - the pinner can activate before the governor at boot, and the
+  sequential fold with the fresh-version writes makes the order irrelevant.
+- **The smoke/live fidelity gap** - the smokes prove the mechanics and the live battery proves the
+  wiring, and every real bug appeared live rather than in the smokes.
 - **The fixture paths** - the `Test/` fixtures carry the neutralized display forms (`<repo-root>/`,
-  `$DSH_HOME/`), never the personal absolute paths of the internal Boilerplate copies.
-- **The byte-integrity law** - a write that emits bytes the file's format forbids corrupts the file
-  (the NUL-byte incident class); verbatim is the default and the byte-scan is the arbiter.
+  `$DSH_HOME/`) and never the personal absolute paths of the internal Boilerplate copies.
+- **The byte-integrity law** - a write that emits bytes the file's format forbids corrupts the file,
+  as the NUL-byte incident class shows; verbatim is the default and the byte-scan is the arbiter.
 
 [dsh-fs]: https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/fs/fs/src/index.ts

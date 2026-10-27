@@ -4,20 +4,20 @@ What this test verifies.
 
 ## Intent
 
-The full llm/stream waterfall contract of the Run-1 stream: the wrapper's
-next() mechanics, the untouched options, the passthrough-by-identity groups,
-the rewrite groups, the count ledger line and the P5 journal routing of the
-count event. This is the stream flavor's core behavior - a single mixed
-stream (four curly quotes in the text, a tool-call delta, a reasoning delta,
-three block-end shapes, usage and finish) exercises every branch of the
-wrapper in one pass: block-start/usage/finish pass through BY IDENTITY, the
-tool-call-delta passes through untouched (the arguments are execution-critical
-raw JSON at defaults), the text-delta/reasoning-delta/block-end fields are
-rewritten as new objects, exactly one count line is written to the ledger AND
-logged, and the count event lands in the factory's pre-bind journal buffer
-(stage 2), not the per-State queue (stage 3). The assertions are moved
-verbatim from `Classic/smokes/quotes-smoke.mjs` sections "The waterfall
-listener, exercised" and "Run 1 (P5 journal)".
+The full llm/stream waterfall contract of the Run-1 stream: the next()
+mechanics of the wrapper, the untouched options, the passthrough-by-identity
+groups, the rewrite groups, the count ledger line, and the P5 journal routing
+of the count event. This is the core behavior of the stream flavor - a single
+mixed stream (four curly quotes in the text, a tool-call delta, a reasoning
+delta, three block-end shapes, usage, and finish) exercises every branch of
+the wrapper in one pass: block-start/usage/finish pass through BY IDENTITY,
+the tool-call-delta passes through untouched (at defaults the arguments are
+execution-critical raw JSON), the text-delta/reasoning-delta/block-end fields
+are rewritten as new objects, exactly one count line is written to the ledger
+AND logged, and the count event lands in the pre-bind journal buffer of the
+factory (stage 2), not in the per-State queue (stage 3). The assertions are
+moved verbatim from sections "The waterfall listener, exercised" and
+"Run 1 (P5 journal)" of `Classic/smokes/quotes-smoke.mjs`.
 
 ## Scenario
 
@@ -61,20 +61,20 @@ listener, exercised" and "Run 1 (P5 journal)".
 ## Fixtures
 
 The shared harness (`../Harness.js`): `Furnace` (the REAL factory), the fake
-ctx, the REAL `apply`, `Validate` and the ledger path
-`/tmp/quotes-smoke-ledger.log` (removed at the folder's start). The stream
-data: one text-delta carrying four curly quotes, one tool-call-delta whose
-argumentsDelta embeds a curly quote, one reasoning-delta, three block-end
-shapes (text, reasoning rc.2, reasoning with runtime `thinking`), usage and
-finish. The options object is double-frozen to prove the wrapper never
-touches it.
+ctx, the REAL `apply`, `Validate`, and the ledger path
+`/tmp/quotes-smoke-ledger.log` (removed at the start of the folder). The
+stream data: one text-delta carrying four curly quotes, one tool-call-delta
+whose argumentsDelta embeds a curly quote, one reasoning-delta, three
+block-end shapes (text, reasoning rc.2, reasoning with runtime `thinking`),
+usage, and finish. The options object is double-frozen to prove that the
+wrapper never touches it.
 
 ## Expected ledger strings (byte-exact)
 
 - `hook-dsh-normalize-quotes: normalized 10 quote char(s) in one stream`
 
 (The count line: asserted in the ledger file, in the logger capture, and as
-the journal record's `detail`. The record also carries `path: ""` and a
+the `detail` of the journal record. The record also carries `path: ""` and a
 numeric `at`. The rewrite labels above use ASCII arrows; the Test.ts source
 spells them as U+2192 escapes.)
 
@@ -84,10 +84,10 @@ spells them as U+2192 escapes.)
   still verbatim inside the raw JSON (normalizeToolArguments=false).
 - The block-end rc.2 `text` field and the runtime `thinking` field are both
   rewritten - two spellings of the same payload, both covered.
-- The identity negatives: block-start, usage and finish are compared by
+- The identity negatives: block-start, usage, and finish are compared by
   reference (===), not deepEqual - a cloned object would fail.
 - The journal record is asserted to be ABSENT from the per-State Queue even
-  though it exists in the pre-bind buffer - the routing, not just the
+  though it exists in the pre-bind buffer - the routing, not only the
   presence, is the contract.
 
 ## Expected count

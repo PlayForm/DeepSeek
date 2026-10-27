@@ -26,26 +26,46 @@ statuses:
 
 # LIVE CONTAINERS - Research
 
-Date: 2026-10-19 Status: research only (read-only pass; this file is the sole deliverable) Prepared
-by: the researcher subagent (GLM-5.3-Flash, cloudflare-workers-ai) Routing law: every subagent =
-provider cloudflare-workers-ai / model @cf/zai-org/glm-5.3-flash / reasoningEffort low.
+Date: 2026-10-19.
+
+Status: research only (read-only pass; this file is the sole deliverable).
+
+Prepared by: the researcher subagent (GLM-5.3-Flash, cloudflare-workers-ai).
+
+Routing law: every subagent = provider cloudflare-workers-ai / model @cf/zai-org/glm-5.3-flash /
+reasoningEffort low.
 
 ---
 
 ## 1. The idea (the user's words, faithful)
 
-LIVE CONTAINERS: dynamic, modifiable conversation blocks. EACH time the harness sends the full
-conversation to the LLM API, the LIVE blocks get RECOMPUTED and RE-INSERTED into the conversation.
-The blocks are re-inserted WITHOUT modifying anything else. Canonical example: "can you tell me the
-time". Either the LLM or the user constructs a LIVE block that (at conversation time) contains the
-time. On EVERY subsequent request the block is recomputed and re-inserted. So the block ALWAYS holds
-the CURRENT time at ask-time. The rest of the conversation stays static. The block is a prefill, but
-dynamic.
+LIVE CONTAINERS: dynamic, modifiable conversation blocks.
 
-LATER STAGE (a future date, to be prepared for): the blocks become fully PROGRAMMABLE. They can be
-TypeScript, Rhai, Rust or whatever the harness can run dynamically. A block can be a validator. A
-block can hold variables (conversation length, scores, token counts). A block can be programmed by
-the LLM itself, e.g.:
+EACH time the harness sends the full conversation to the LLM API, the LIVE blocks get RECOMPUTED and
+RE-INSERTED into the conversation.
+
+The blocks are re-inserted WITHOUT modifying anything else.
+
+Canonical example: "can you tell me the time".
+
+Either the LLM or the user constructs a LIVE block that (at conversation time) holds the time.
+
+On EVERY subsequent request the block is recomputed and re-inserted, so the block ALWAYS holds the
+CURRENT time at ask-time.
+
+The rest of the conversation stays static.
+
+The block is a prefill, but dynamic.
+
+LATER STAGE (a future date, to be prepared for): the blocks become fully PROGRAMMABLE.
+
+They can be TypeScript, Rhai, Rust or whatever the harness can run dynamically.
+
+A block can be a validator.
+
+A block can hold variables (conversation length, scores, token counts).
+
+A block can be programmed by the LLM itself, e.g.:
 
     (if this.context.message.length > 10) {
     	echo "This conversation is exceeding the set limit";
@@ -53,23 +73,37 @@ the LLM itself, e.g.:
     	echo "This is the first message in the conversation";
     }
 
-The user wants: (1) a feasibility verdict with the exact seams. The user wants: (2) a rich but
-succinct brainstorm of pre-programmed blocks. The user wants: (3) the programmable-stage design
-grounded in what the harness can actually run dynamically. The user wants: (4) three fully
-self-contained agent specs so the work can be dispatched later.
+The user wants: (1) a feasibility verdict with the exact seams.
+
+The user wants: (2) a rich but succinct brainstorm of pre-programmed blocks.
+
+The user wants: (3) the programmable-stage design grounded in what the harness can actually run
+dynamically.
+
+The user wants: (4) three fully self-contained agent specs so the work can be dispatched later.
 
 ---
 
 ## 2. The feasibility verdict + the seams map
 
-VERDICT: **POSSIBLE for the core mechanic, with ONE caveat.** A per-request
-recomputed-and-re-inserted block already exists in the harness as a first-class seam. That seam is
-the `system-prompt/assemble` waterfall (the tool-coach's channel 2 is the LIVE precedent). The
-caveat: that seam inserts the block into the SYSTEM PROMPT (or, via dynamic contexts, as a sourced
-user-role snapshot). It does NOT insert the block into an arbitrary position inside the conversation
-body. There is NO plugin seam today that rewrites a marker block inside the derived message body
-between the session log and the API request. The design below therefore hosts v1 in the assembly
-seam. It proposes the in-body marker block as a future harness-side addition.
+VERDICT: **POSSIBLE for the core mechanic, with ONE caveat.**
+
+A per-request recomputed-and-re-inserted block already exists in the harness as a first-class seam.
+
+That seam is the `system-prompt/assemble` waterfall (the tool-coach's channel 2 is the LIVE
+precedent).
+
+The caveat: that seam inserts the block into the SYSTEM PROMPT (or, via dynamic contexts, as a
+sourced user-role snapshot).
+
+It does NOT insert the block into an arbitrary position inside the conversation body.
+
+There is NO plugin seam today that rewrites a marker block inside the derived message body between
+the session log and the API request.
+
+The design below therefore hosts v1 in the assembly seam.
+
+It proposes the in-body marker block as a future harness-side addition.
 
 ### The verified seams (file:line anchors)
 
@@ -133,13 +167,24 @@ seam. It proposes the in-body marker block as a future harness-side addition.
 ## 3. The proof-of-concept v1 shape
 
 **Seam choice:** v1 hosts EACH LIVE block as a `system-prompt/assemble` SECTION named
-`live-containers`. The section is appended after `next()` exactly like the tool-coach's tier-2
-section (Apply.ts:540-543). EACH configured block contributes ONE labeled stanza recomputed at
-assembly time. For blocks that should read as part of the conversation rather than as instructions,
-v1 can additionally register a dynamic CONTEXT (user-role snapshot) provider. The harness re-reads
-context text per request via `refreshContext()` (dsh-system-prompt README). An in-body marker block
-(a `{{live:...}}` token inside a logged message that the LOOP renders at derive time) is explicitly
-OUT of scope for v1. NO plugin seam exists for it. It is the harness-side follow-up.
+`live-containers`.
+
+The section is appended after `next()` exactly like the tool-coach's tier-2 section
+(Apply.ts:540-543).
+
+EACH configured block contributes ONE labeled stanza recomputed at assembly time.
+
+For blocks that should read as part of the conversation rather than as instructions, v1 can
+additionally register a dynamic CONTEXT (user-role snapshot) provider.
+
+The harness re-reads context text per request via `refreshContext()` (dsh-system-prompt README).
+
+An in-body marker block (a `{{live:...}}` token inside a logged message that the LOOP renders at
+derive time) is explicitly OUT of scope for v1.
+
+NO plugin seam exists for it.
+
+It is the harness-side follow-up.
 
 **v1 config surface (all volatile cells, hot-editable, no remount):**
 
@@ -163,8 +208,10 @@ OUT of scope for v1. NO plugin seam exists for it. It is the harness-side follow
 (elapsed seconds, updated on `tools/post-execute`), `{{sessionId}}`, `{{cwd}}` (via
 `ctx.systemPrompt`-registered values the plugin owns).
 
-**Recompute trigger:** the assemble listener runs per request by definition. `refresh: "ttl"` merely
-caches the rendered text for N assemblies (KV-cache friendliness - see below).
+**Recompute trigger:** the assemble listener runs per request by definition.
+
+`refresh: "ttl"` merely caches the rendered text for N assemblies (KV-cache friendliness - see
+below).
 
 **Ledger strings (byte-exact contract, `live-containers: ` prefix):** `disabled (enabled=false)`,
 `activated blocks=<n> refresh=<policy>`, `block rendered <id> (<len> bytes)`,
@@ -172,8 +219,8 @@ caches the rendered text for N assemblies (KV-cache friendliness - see below).
 
 **Order-safety + byte-identity:**
 
-- The family's ledger strings stay byte-exact. The LIVE block content is NOT a ledger string. It is
-  the plugin's own dynamic output.
+- The family's ledger strings stay byte-exact, and the LIVE block content is NOT a ledger string -
+  it is the plugin's own dynamic output.
 - EVERY block renders inside a fixed frame so the model cannot confuse it with the harness's real
   state:
 
@@ -181,12 +228,12 @@ caches the rendered text for N assemblies (KV-cache friendliness - see below).
         <rendered body>
         --- END LIVE CONTAINER <id> ---
 
-- The section is APPEND-ONLY in the waterfall (after `next()`). NOTHING else in the assembly is
+- The section is APPEND-ONLY in the waterfall (after `next()`), and NOTHING else in the assembly is
   touched (the tool-coach discipline, Apply.ts:493-497).
 - KV-cache honesty: a block whose text changes EVERY request invalidates provider prefix reuse from
   its FIRST changed token (dsh-system-prompt README, KV Cache effect). The design says so plainly.
-  Refresh "request" is cache-hostile. Refresh "ttl" with ttlCalls >= 8 is the recommended default
-  for always-differing blocks like time-with-seconds. Stable-until-event blocks (scoreboard,
+  Refresh "request" is cache-hostile, and refresh "ttl" with ttlCalls >= 8 is the recommended
+  default for always-differing blocks like time-with-seconds. Stable-until-event blocks (scoreboard,
   manifest) cost nothing extra.
 
 ---
@@ -195,51 +242,150 @@ caches the rendered text for N assemblies (KV-cache friendliness - see below).
 
 EACH entry: what the LLM sees (shape), the recompute trigger, the knobs.
 
-1. **The time/date block** (the canonical example). Shape:
-   `--- LIVE CONTAINER time --- 2026-10-19T17:09:45+03:00  [Europe/Sofia] --- END ---`. Trigger:
-   EVERY request (or TTL 60 calls for cache hygiene). Knobs: timezone, format, ttlCalls.
-2. **The conversation-state block** (the user's pseudo-code, concrete). Shape:
-   `messages=17 turns=5 sinceLastTool=42s headroom=~118k tokens`. Trigger: EVERY request. Knobs:
-   which gauges, warning thresholds. The validator variant renders the user's echo lines:
-   `if messages > 10 -> "This conversation is exceeding the set limit"` else ->
-   `"This is the first message in the conversation"`.
-3. **The scoreboard/checklist block** - progress through a multi-step task. Shape:
-   `TODO 3/7 done | current: "write smoke C4" | next: "docs"`. Trigger: recompute per request; STATE
-   advanced by the LLM asking (a tiny `live_container_set` tool) or by watching tool calls. Knobs:
-   items list, done-marker token.
-4. **The live-manifest block** - the family's own state surfaced INSIDE the conversation. Shape: one
-   line per plugin: `tool-coach=on tier=2 | ccr=on stored=41 | normalize=dash scopes=3`. Trigger:
-   per request (cheap string concat over the plugins' ledgers or debug attachments). Knobs: which
-   plugins, depth.
-5. **The guard/validator block** - threshold warnings. Shape:
-   `WARNING: tool retries >= 3 this turn - consider a different  approach` (or silence when under
-   threshold). Trigger: EVERY request; fires ONLY when a threshold trips. Knobs: thresholds, echo
-   lines.
-6. **The counter block** - attempts, retries, elapsed time since the last tool call. Shape:
-   `bash attempts this turn: 2 | last tool 42s ago`. Trigger: EVERY request. Knobs: window,
-   reset-on-user-message (the tool-coach's agent/pre-step reset precedent, Apply.ts:456-490).
-7. **The interactive-coach block** - a tool-coach-style note that updates itself. Shape:
-   `Tip: use the edit tool for file content (last 3 calls  were bash reads)`. Trigger: recompute per
-   request from the plugin's own counters. Knobs: tips table, cooldown.
-8. **The memory block** - the LLM's own pinned notes, re-injected EVERY request so they survive
-   context growth. Shape: `PIN: the build command  is pnpm -r build; tests live in Target/`.
-   Trigger: per request; state set via a `live_container_set memory=...` tool. Knobs: max bytes.
-9. **The constraint-reminder block** - standing rules the user wants undeniable at ask-time. Shape:
-   `NEVER run git mutations. ASCII only.  Tabs only.` Trigger: per request. Knobs: free-text rule
-   list.
-10. **The session-stats block** - token/context meters. Shape:
-    `approx chars sent last request: 84k | sections: 6`. Trigger: per request or TTL. Knobs: metrics
-    set, format.
-11. **The TODO-tracker block** - the harness-equivalent of the todo list, kept current WITHOUT the
-    LLM re-stating it. Shape: rendered checklist from the plugin's state. Trigger: per request.
+1. **The time/date block.**
+
+    The canonical example.
+
+    Shape: `--- LIVE CONTAINER time --- 2026-10-19T17:09:45+03:00  [Europe/Sofia] --- END ---`.
+
+    Trigger: EVERY request (or TTL 60 calls for cache hygiene).
+
+    Knobs: timezone, format, ttlCalls.
+
+2. **The conversation-state block.**
+
+    The user's pseudo-code, concrete.
+
+    Shape: `messages=17 turns=5 sinceLastTool=42s headroom=~118k tokens`.
+
+    Trigger: EVERY request.
+
+    Knobs: which gauges, warning thresholds.
+
+    The validator variant renders the user's echo lines:
+    `if messages > 10 -> "This conversation is exceeding the set limit"` else ->
+    `"This is the first message in the conversation"`.
+
+3. **The scoreboard/checklist block.**
+
+    Progress through a multi-step task.
+
+    Shape: `TODO 3/7 done | current: "write smoke C4" | next: "docs"`.
+
+    Trigger: recompute per request, with STATE advanced by the LLM asking (a tiny
+    `live_container_set` tool) or by watching tool calls.
+
+    Knobs: items list, done-marker token.
+
+4. **The live-manifest block.**
+
+    The family's own state surfaced INSIDE the conversation.
+
+    Shape: one line per plugin: `tool-coach=on tier=2 | ccr=on stored=41 | normalize=dash scopes=3`.
+
+    Trigger: per request (cheap string concat over the plugins' ledgers or debug attachments).
+
+    Knobs: which plugins, depth.
+
+5. **The guard/validator block.**
+
+    Threshold warnings.
+
+    Shape: `WARNING: tool retries >= 3 this turn - consider a different  approach` (or silence when
+    under threshold).
+
+    Trigger: EVERY request, and it fires ONLY when a threshold trips.
+
+    Knobs: thresholds, echo lines.
+
+6. **The counter block.**
+
+    Attempts, retries, elapsed time since the last tool call.
+
+    Shape: `bash attempts this turn: 2 | last tool 42s ago`.
+
+    Trigger: EVERY request.
+
+    Knobs: window, reset-on-user-message (the tool-coach's agent/pre-step reset precedent,
+    Apply.ts:456-490).
+
+7. **The interactive-coach block.**
+
+    A tool-coach-style note that updates itself.
+
+    Shape: `Tip: use the edit tool for file content (last 3 calls  were bash reads)`.
+
+    Trigger: recompute per request from the plugin's own counters.
+
+    Knobs: tips table, cooldown.
+
+8. **The memory block.**
+
+    The LLM's own pinned notes, re-injected EVERY request so they survive context growth.
+
+    Shape: `PIN: the build command  is pnpm -r build; tests live in Target/`.
+
+    Trigger: per request, with state set via a `live_container_set memory=...` tool.
+
+    Knobs: max bytes.
+
+9. **The constraint-reminder block.**
+
+    Standing rules the user wants undeniable at ask-time.
+
+    Shape: `NEVER run git mutations. ASCII only.  Tabs only.`
+
+    Trigger: per request.
+
+    Knobs: free-text rule list.
+
+10. **The session-stats block.**
+
+    Token/context meters.
+
+    Shape: `approx chars sent last request: 84k | sections: 6`.
+
+    Trigger: per request or TTL.
+
+    Knobs: metrics set, format.
+
+11. **The TODO-tracker block.**
+
+    The harness-equivalent of the todo list, kept current WITHOUT the LLM re-stating it.
+
+    Shape: rendered checklist from the plugin's state.
+
+    Trigger: per request.
+
     Knobs: item schema.
-12. **The diff-summary block** - a rolling summary of files the session touched (from fs/tool
-    observation). Shape: `changed: Apply.ts +40-12, Config.ts +6`. Trigger: TTL (expensive to
-    build). Knobs: watch list.
-13. **The countdown/expiry block** - "research deadline in 2h 14m" or "goal round 4 of 8". Trigger:
-    per request. Knobs: target time, label.
-14. **The environment-drift block** - cwd, branch (read-only), free disk, battery of the workspace.
-    Shape: one compact line. Trigger: TTL. Knobs: which facts.
+
+12. **The diff-summary block.**
+
+    A rolling summary of files the session touched (from fs/tool observation).
+
+    Shape: `changed: Apply.ts +40-12, Config.ts +6`.
+
+    Trigger: TTL (expensive to build).
+
+    Knobs: watch list.
+
+13. **The countdown/expiry block.**
+
+    "research deadline in 2h 14m" or "goal round 4 of 8".
+
+    Trigger: per request.
+
+    Knobs: target time, label.
+
+14. **The environment-drift block.**
+
+    cwd, branch (read-only), free disk, battery of the workspace.
+
+    Shape: one compact line.
+
+    Trigger: TTL.
+
+    Knobs: which facts.
 
 ---
 
@@ -255,8 +401,8 @@ EACH entry: what the LLM sees (shape), the recompute trigger, the knobs.
   `koffi` (Documentation/Plans/ APHRODITE-RUST-DYLIB-INTEGRATION.md:14-65). Feasible, but adds
   binary distribution and signing concerns (open question 5 there: Gatekeeper).
 - Rhai (or WASM): NO existing harness facility. It would require shipping an interpreter/wasm
-  runtime inside the bundle. WASM via a pure-JS engine is possible but slow. Rhai would need a wasm
-  or napi build. Deferred.
+  runtime inside the bundle. WASM via a pure-JS engine is possible but slow, and Rhai would need a
+  wasm or napi build. Deferred.
 - What the harness can NOT do: arbitrary `eval` in the plugin's own process is NOT a sanctioned
   surface. Plugin code ships as bundled TS. A LIVE block must NEVER `eval` its template. v1
   therefore uses a safe substitution engine (token replace ONLY, NO expressions). The programmable
@@ -287,8 +433,11 @@ EACH entry: what the LLM sees (shape), the recompute trigger, the knobs.
 ## 6. The 3-agent specs
 
 Routing triple for ALL three: provider cloudflare-workers-ai, model @cf/zai-org/glm-5.3-flash,
-reasoningEffort low. All three specs are COMPLETE and self-contained. **NOT to be executed until the
-ACTIVATE message arrives.**
+reasoningEffort low.
+
+All three specs are COMPLETE and self-contained.
+
+**NOT to be executed until the ACTIVATE message arrives.**
 
 ---
 
@@ -298,9 +447,10 @@ ROLE: implement `Classic/packages/hook-dsh-live-containers/` (the Classic + Effe
 of the family; mirror the tool-coach's anatomy exactly: package.json, cordis.patch.yml,
 Configuration, Source/{Function, Interface,Variable}, Target, README.md, SCHEME.md).
 
-SURFACE: ONLY `Classic/packages/hook-dsh-live-containers/**`. Read first:
-Classic/packages/hook-dsh-tool-coach/Source/Function/Apply.ts (the five listeners + the waterfall
-discipline + the State build), the tool-coach README.md + SCHEME.md,
+SURFACE: ONLY `Classic/packages/hook-dsh-live-containers/**`.
+
+Read first: Classic/packages/hook-dsh-tool-coach/Source/Function/Apply.ts (the five listeners + the
+waterfall discipline + the State build), the tool-coach README.md + SCHEME.md,
 Classic/packages/plugin-dsh-factory/SCHEME.md (the State builder + volatile cells),
 Classic/packages/hook-dsh-normalize-dash/ Source/Variable/Config.ts (the volatile Config schema
 pattern), Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md sections 3-5 (the v1
@@ -328,8 +478,8 @@ DELIVERABLES:
 6. package.json + cordis.patch.yml mirroring the tool-coach's (enabled by config only). The profile
    wiring is NOT part of this spec. The plugin must ship DISABLED, the IDLE-forever posture.
 
-ARBITER: the family smoke suite (A2's deliverable) must pass. The ledger strings must match
-SCHEME.md byte-exactly. NO other package may be modified.
+ARBITER: the family smoke suite (A2's deliverable) must pass, the ledger strings must match
+SCHEME.md byte-exactly, and NO other package may be modified.
 
 REPORT FORMAT: one message - the file tree created, per-file one-line summary, the exact ledger
 strings shipped, the smoke results (pass/fail counts), and any deviation from the research doc with
@@ -371,8 +521,9 @@ DELIVERABLES:
    NOT a broken assembly).
 
 ARBITER: the suite must be runnable by the orchestrator with the family's standard smoke command
-(mirror the tool-coach's smoke wiring). ALL green is the acceptance condition. A1's code is the
-system under test. Report bugs. Do NOT patch A1's files.
+(mirror the tool-coach's smoke wiring), and ALL green is the acceptance condition.
+
+A1's code is the system under test. Report bugs. Do NOT patch A1's files.
 
 REPORT FORMAT: one message - the test inventory (ids + one-line purpose), the pass/fail counts, and
 the list of any A1 bugs found with the minimal reproducer.
@@ -409,8 +560,9 @@ DELIVERABLES:
    and the status line "planned - not yet in the profile" (the IDLE-forever posture stated plainly).
 
 ARBITER: family doc conventions (tab-indented markdown code, ASCII only, the ledger strings must
-match A1's SCHEME exactly). A mismatch with A1's shipped strings is a defect to report, NOT to paper
-over.
+match A1's SCHEME exactly).
+
+A mismatch with A1's shipped strings is a defect to report, NOT to paper over.
 
 REPORT FORMAT: one message - the files written, the section outline of each, and any mismatch found
 between the docs and A1's actual config or ledger strings.
@@ -423,27 +575,65 @@ SPEC RETAINED - IDLE
 
 ## 7. The residuals + the open questions
 
-1. **NO in-body seam.** The true "block inside the conversation body, recomputed per request" does
-   NOT exist as a plugin seam. The loop's `deriveMessages()` is internal and message identities are
-   deep-frozen (dsh-agent-loop README). v1 lives in the system prompt / dynamic-context seams. A
-   harness-side proposal would be a `live/message` content-block type that the LOOP renders at
-   derive time. It is future work, upstream.
-2. **KV-cache cost.** Every-request-changing blocks rewrite the prompt tail and lose prefix reuse
-   from the first changed token (dsh-system-prompt README). Mitigation shipped in v1: the TTL
-   refresh + the in-history append when the route declares `systemPromptUpdate: 'in-history'`.
-3. **Counter sources.** v1 counts what the plugin itself observes (agent/pre-step,
-   tools/post-execute). Exact token counts are NOT available to plugins (the loop does NOT expose
-   usage to listeners in the verified docs). The gauge blocks report approximations and say so.
-4. **Variable collision.** `{{token}}` substitution must NOT collide with the harness's own prompt
-   variables (dsh-system-prompt resolves `{{name}}` too and FAILS assembly on unresolved
-   references). v1 must use `interpolate: false` on its section (the documented escape hatch) so
-   ONLY the plugin's own engine touches its tokens. Verified in the dsh-system-prompt README ("No
-   inline escape syntax" limitation).
-5. **The IDLE-forever posture** (the user's mandate): the plugin ships DISABLED, NEVER appears in
-   the profile's bundles, enables ONLY by an explicit ACTIVATE. EVERY spec above restates it. The
-   activation proof logs `disabled (enabled=false)` on a cold mount.
-6. **Open questions for the ACTIVATE round:** (a) does a `live_container_set` tool (for
-   LLM-programmed state) belong in v1 or the programmable stage; (b) the exact TTL default per block
-   kind; (c) whether the dynamic-context (user-role snapshot) variant is v1 or v1.1 - it is the
-   closest thing to an in-conversation block and costs one design pass against the harness's context
-   refresh rules.
+1. **NO in-body seam.**
+
+    The true "block inside the conversation body, recomputed per request" does NOT exist as a plugin
+    seam.
+
+    The loop's `deriveMessages()` is internal and message identities are deep-frozen (dsh-agent-loop
+    README).
+
+    v1 lives in the system prompt / dynamic-context seams.
+
+    A harness-side proposal would be a `live/message` content-block type that the LOOP renders at
+    derive time.
+
+    It is future work, upstream.
+
+2. **KV-cache cost.**
+
+    Every-request-changing blocks rewrite the prompt tail and lose prefix reuse from the first
+    changed token (dsh-system-prompt README).
+
+    Mitigation shipped in v1: the TTL refresh + the in-history append when the route declares
+    `systemPromptUpdate: 'in-history'`.
+
+3. **Counter sources.**
+
+    v1 counts what the plugin itself observes (agent/pre-step, tools/post-execute).
+
+    Exact token counts are NOT available to plugins (the loop does NOT expose usage to listeners in
+    the verified docs).
+
+    The gauge blocks report approximations and say so.
+
+4. **Variable collision.**
+
+    `{{token}}` substitution must NOT collide with the harness's own prompt variables
+    (dsh-system-prompt resolves `{{name}}` too and FAILS assembly on unresolved references).
+
+    v1 must use `interpolate: false` on its section (the documented escape hatch) so ONLY the
+    plugin's own engine touches its tokens.
+
+    Verified in the dsh-system-prompt README ("No inline escape syntax" limitation).
+
+5. **The IDLE-forever posture** (the user's mandate).
+
+    The plugin ships DISABLED, NEVER appears in the profile's bundles, enables ONLY by an explicit
+    ACTIVATE.
+
+    EVERY spec above restates it.
+
+    The activation proof logs `disabled (enabled=false)` on a cold mount.
+
+6. **Open questions for the ACTIVATE round.**
+
+    (a) Does a `live_container_set` tool (for LLM-programmed state) belong in v1 or the programmable
+    stage?
+
+    (b) What is the exact TTL default per block kind?
+
+    (c) Is the dynamic-context (user-role snapshot) variant v1 or v1.1?
+
+    The dynamic-context variant is the closest thing to an in-conversation block and costs one
+    design pass against the harness's context refresh rules.

@@ -17,9 +17,12 @@ statuses:
 
 # @playform/hook-dsh-package-governor
 
-> ONE of the four Governor guides migrated to `Documentation/Guides/`. The companion docs are
-> `Governor-CASCADES.md`, `Governor-SCHEME.md`, and `Governor-TRIO-GRAPH.md` in this folder. The
-> handoff context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
+> ONE of the four Governor guides migrated to `Documentation/Guides/`.
+>
+> The companion docs are `Governor-CASCADES.md`, `Governor-SCHEME.md`, and `Governor-TRIO-GRAPH.md`
+> in this folder.
+>
+> The handoff context is `../Handoff/Overview.md` and `../Handoff/Packages/Package-03.md`.
 
 _The DeepSeek Harness Plugin Family for PlayForm._
 
@@ -34,11 +37,13 @@ _The DeepSeek Harness Plugin Family for PlayForm._
 > The **silent package.json governor** of the DeepSeek Harness - a plugin on the
 > [`fs/observed`][dsh-fs] event (the
 > [cordis](https://github.com/deepseek-ai/deepseek-harness/tree/master/vendor/cordis) event **EVERY
-> harness file write dispatches**; the tool layer is the ONLY dispatcher). It governs EVERY
-> `package.json` written by ANY agent, anywhere.
+> harness file write dispatches**; the tool layer is the ONLY dispatcher).
 >
-> A pure chain pass canonicalizes chain-governed dependency pins. Then an update stage lets
-> npm-check-updates bump the public ones - and the author NEVER learns.
+> It governs EVERY `package.json` written by ANY agent, anywhere.
+>
+> A pure chain pass canonicalizes chain-governed dependency pins.
+>
+> Then an update stage lets npm-check-updates bump the public ones - and the author NEVER learns.
 >
 > _A factory flavor: the family's furnace does the plumbing; this package is the model logic._
 >
@@ -72,22 +77,24 @@ normalize** (the cargo module's precedence), **keep-list wins** (the pinner's
 [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source/Function/Transform.ts)
 keeps ranges as authored).
 
-The ledgers are separate; activating ONE NEVER implies another.
+The ledgers are separate, and activating ONE NEVER implies another.
 
 Machinery-wise it is a **factory flavor**: `inject: ["fs", "pluginFactory"]`
 
 - the gates, the discovery, the guarded write, the refresh, the continuation, the effects and the
   schema come from
   [`plugin-dsh-factory`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source).
-  The pure helpers (`Suppress`, the policy loader) come from
+- The pure helpers (`Suppress`, the policy loader) come from
   [`lib-dsh-core`](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source).
-  This bundle keeps ONLY its own vocabulary: the Config extension, the chain pass
+- This bundle keeps ONLY its own vocabulary: the Config extension, the chain pass
   (Function/Transform), the update engine (Function/Follow → Dispatch → Execute → Update/* → Settle)
-  and EVERY ledger string. Besides the [`fs/observed`][dsh-fs] event path, its two steps are
-  registered with the factory's direct-govern registry at apply
-  (`Factory.RegisterGovern("package.json", "canonicalize" | "update", …)` — factory SCHEME.md
-  §2.16). So the `raw-write` tool's per-call `govern` selection can drive the same chain pass and
-  update stage directly through
+  and EVERY ledger string.
+- Besides the [`fs/observed`][dsh-fs] event path, its two steps are registered with the factory's
+  direct-govern registry at apply
+  (`Factory.RegisterGovern("package.json", "canonicalize" | "update", ...)` - factory SCHEME.md
+  §2.16).
+- So the `raw-write` tool's per-call `govern` selection can drive the same chain pass and update
+  stage directly through
   [Factory.Govern](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Govern.ts)
   (Function/Direct - same machinery, same ledger strings).
 
@@ -211,21 +218,24 @@ The [`fs/write-intent`][dsh-fs] waterfall carries a version guard but NEVER the 
 Key properties, all enforced by construction:
 
 - **Anywhere mode, exclusion-first.** NO roots allowlist: ANY agent (main, subagent, workflow child)
-  writing a `package.json` via the harness fs tools is governed. The exception is a path containing
-  an excluded segment (`node_modules`, `.git`, `.dsh`, ...).
+  writing a `package.json` via the harness fs tools is governed.
+- The exception is a path containing an excluded segment (`node_modules`, `.git`, `.dsh`, ...).
 - **No recursion.** The governor's rewrites go through the `ctx.fs` service (which dispatches NO
   `fs/*` events - ONLY the tool layer does) and the update stage is a continuation, NOT an author
-  tool call. The P3/U2 refresh re-emit re-enters this listener, and the Stash token gate makes it a
-  no-op.
-- **Version coherence.** The rewrite carries `replaceIfVersion` at the observed version. A racing
-  author write makes it fail safely (no clobber). The service-issued fresh version is re-emitted
-  with the same actor, so the author's next guarded write NEVER fails `FS_STALE_VERSION`.
+  tool call.
+- The P3/U2 refresh re-emit re-enters this listener, and the Stash token gate makes it a no-op.
+- **Version coherence.** The rewrite carries `replaceIfVersion` at the observed version.
+- A racing author write makes it fail safely (no clobber).
+- The service-issued fresh version is re-emitted with the same actor, so the author's next guarded
+  write NEVER fails `FS_STALE_VERSION`.
 - **The cordis-trap guard.** ncu's reject list is ALWAYS `policy.reject ∪` the chain-governed dep
-  names. ncu must NEVER bump a chain pin to public npm latest (`-x` is ONE comma-delimited argument,
-  ncu 23.x).
+  names.
+- ncu must NEVER bump a chain pin to public npm latest (`-x` is ONE comma-delimited argument, ncu
+  23.x).
 - **Silence.** The model-facing write result is built from the author's own content
-  (`after = normalizeLineEndings(content)`, no disk re-read, no checksum). A listener throw is
-  contained logger-only (the core's `Suppress` composer). The ledger is best-effort.
+  (`after = normalizeLineEndings(content)`, no disk re-read, no checksum).
+- A listener throw is contained logger-only (the core's `Suppress` composer), and the ledger is
+  best-effort.
 
 The G4 update-stage envelope - the Dispatch/Settle pair of the diagram above (the gates, the jobs
 envelope, the breaker update, the U2 refresh) - lives in the core
@@ -454,8 +464,9 @@ Install the group you run:
 - **The CLASSIC group.** `import ... from "@playform/hook-dsh-package-governor"` - zero framework
   dependencies.
 - **The EFFECT-TS group.** `import ... from "@playform/ets-hook-dsh-package-governor"` - the same
-  contract on Effect-TS services and layers. It has `effect` v4.0.2 as the runtime dependency. The
-  base `@playform/ets-base-dsh` package carries the plumbing EVERY ets-* package builds on.
+  contract on Effect-TS services and layers.
+- It has `effect` v4.0.2 as the runtime dependency.
+- The base `@playform/ets-base-dsh` package carries the plumbing EVERY ets-* package builds on.
 
 NEVER mix the groups in ONE graph (the effect-ts `Update` returns Effect envelopes, NOT the classic
 dispatch envelope).

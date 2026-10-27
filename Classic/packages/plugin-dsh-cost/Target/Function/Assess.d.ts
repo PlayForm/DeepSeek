@@ -7,6 +7,8 @@ type Row = {
     Overhead: number;
     Carry: number;
     CostPerLine: number;
+    LinesAdded: number;
+    LinesRemoved: number;
 };
 export default _default;
 declare function _default(Database: DatabaseSync): (SessionId?: string) => readonly Row[];

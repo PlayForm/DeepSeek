@@ -1,7 +1,7 @@
-import type BatchRecord from "@Interface/Batch.js";
-import type DomainHandle from "@Interface/Domain.js";
-import type EntryRecord from "@Interface/Entry.js";
-import type FactoryHandle from "@Interface/Factory.js";
+import type BatchRecord from "./Batch.js";
+import type DomainHandle from "./Domain.js";
+import type EntryRecord from "./Entry.js";
+import type FactoryHandle from "./Factory.js";
 import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** The master switch (config `enabled` - the IDLE-forever posture). */

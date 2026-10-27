@@ -9,13 +9,14 @@
 
 ## The role
 
-The **invisible-character normalizer for model output** - a DeepSeek Harness plugin that hooks the
+This package is the **invisible-character normalizer for model output** - a DeepSeek Harness plugin
+that hooks the
 [`llm/stream`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm/src/index.ts)
 waterfall (the interceptable wrapper around EVERY streaming model call, bound to the LlmRuntime) and
 normalizes the zero-width/invisible character family in model output, live in the transcript - by
 REMOVING it: zero-width spaces, joiners, bidi controls and the BOM character simply vanish.
 
-A **CLASS flavor** of the normalize family: the core's `Invisible` class plus a configurable
+It is a **CLASS flavor** of the normalize family: the core's `Invisible` class plus a configurable
 `replacement` string (default `""` - removal).
 
 The @-sentence identity: **Hook @ DSH @ Normalize @ Invisible**.
@@ -66,9 +67,9 @@ hook-dsh-normalize-invisible: overpass: normalized N char(s) in tool result <too
 hook-dsh-normalize-invisible: overpass: normalized N char(s) in step batch (turn T step S)
 ```
 
-The activation line is written by `apply()`; the count line and the overpass lines only appear on a
-normal completion / an N > 0 pass (N = 0 is a true no-op - no ledger line; a thrown-away stream
-writes no line).
+`apply()` writes the activation line; the count line and the overpass lines only appear on a normal
+completion / an N > 0 pass (N = 0 is a true no-op - no ledger line; a thrown-away stream writes no
+line).
 
 ## The build and the tests
 

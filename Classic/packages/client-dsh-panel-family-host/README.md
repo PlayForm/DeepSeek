@@ -6,13 +6,13 @@
 
 ## The role
 
-The **host half** of the UI family's panel: the companion package that gives the central panel live
-data and its ONE trusted write surface (Documentation/Plans/UI-Family/
+This package is the **host half** of the UI family's panel: the companion package that gives the
+central panel live data and its ONE trusted write surface (Documentation/Plans/UI-Family/
 PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md, PHASE-7-PLAIN-FIELD-BRIDGE.md).
 
 ## The surfaces (the services)
 
-Three services, provided with `ctx.provide` (removed with the plugin):
+It provides three services with `ctx.provide` (the plugin removal takes them away):
 
 | Service             | Methods                             | Posture                                                   |
 | ------------------- | ----------------------------------- | --------------------------------------------------------- |
@@ -24,27 +24,27 @@ Three services, provided with `ctx.provide` (removed with the plugin):
 
 - **`tail(namespace, lines)`** - the last N lines of the owning module's `~/.dsh/<namespace>.log`.
 
-    The namespace must be a family module name (`[a-z0-9-]+`); anything else is _rejected_, not
-    sanitized (no path traversal).
+    The namespace must be a family module name (`[a-z0-9-]+`); the host _rejects_ anything else and
+    does not sanitize it (no path traversal).
 
-    Returns `{ ok: true, namespace, lines }` or
+    It returns `{ ok: true, namespace, lines }` or
     `{ ok: false, code: "rejected" | "not-found", message }`.
 
 - **`stats()`** - the ccr store summary (log path, byte size, line count).
 
-    The ccr LRU internals are not exposed by any existing remote; the Typert spike (end-phase)
-    decides whether they ever are.
+    No existing remote exposes the ccr LRU internals; the Typert spike (end-phase) decides whether
+    they ever are.
 
 - **`fiberPhases` are NOT here** - they come from the already-remote `remote.pluginManager`.
 
 ### `panelFamilyBridge` (the write surface)
 
 `editFull(namespace, patch)` applies the namespace's **whole resolved config** through
-`ctx.configEditor.edit()` - the same validate/persist/reconcile path a hand edit takes, so a plain
-(non-volatile) field applies on remount.
+`ctx.configEditor.edit()` - the same validate/persist/reconcile path that a hand edit takes, so a
+plain (non-volatile) field applies on remount.
 
-The patch is never merged or reshaped here; the editor validates it, and **the audit line comes from
-the editor** (this package logs no success line).
+The host never merges or reshapes the patch here; the editor validates it, and **the audit line
+comes from the editor** (this package logs no success line).
 
 The host refuses, in order (each line byte-exact, see "Ledger lines"):
 
@@ -83,7 +83,7 @@ The host process's D5 bus is `ctx.trace` (provided by `@playform/plugin-dsh-fact
 context already owns that name, so this package exposes its forwarder as **`panelFamilyTrace`** with
 the panel's `on(kind, listener)` / `ring(limit)` face.
 
-It reads the bus structurally (only `on` is required; `ring` is used when the bus has one) and
+It reads the bus structurally (only `on` is required; it uses `ring` when the bus has one) and it
 provides nothing when the bus is absent - the panel's documented static fallback.
 
 ## The forwarding path (the browser)
@@ -100,7 +100,7 @@ panel: ctx.get("panelFamilyBridge") / ctx.get("trace")
 
 The browser half (`Source/Client.ts`) waits for the `remote.playformFamilyPanel` namespace service
 (`ctx.inject`), re-publishes `editFull` under `panelFamilyBridge` (normalizing the gateway's
-`{ ok }` envelope to the panel's boolean contract) and the trace face under `trace`, and provides
+`{ ok }` envelope to the panel's boolean contract) and the trace face under `trace`, and it provides
 nothing when the namespace is absent.
 
 **The residual**: the generated Remote contribution (the Typert codegen artifacts plus the
@@ -108,7 +108,7 @@ nothing when the namespace is absent.
 harness's Client Remote refuses SRC descriptors and its registration values come from the generated
 `lib/typert.remote-client.*` artifacts.
 
-Until that contribution lands, the browser half is inert and the panel keeps its documented
+Until that contribution lands, the browser half stays inert and the panel keeps its documented
 fallbacks (plain fields read-only, static status).
 
 The host services themselves are complete and smoke-covered.

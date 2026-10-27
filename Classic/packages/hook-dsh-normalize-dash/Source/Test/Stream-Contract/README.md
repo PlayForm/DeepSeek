@@ -6,12 +6,12 @@ What this test verifies.
 
 The llm/stream waterfall contract of the dash flavor: what the registered
 listener promises to every upstream consumer. This is its own folder because
-the contract is structural, not just behavioral - next() is called exactly
+the contract is structural, not only behavioral - next() is called exactly
 once and synchronously before any iteration, the request options are never
-mutated, the chunk sequence is preserved one-for-one, the non-text chunks
-pass through BY IDENTITY, and every rewrite is a new object with an exact
-ledger string. The source suite's waterfall section plus Run 2 (reasoning
-off) and the Run 5 identity leaf, moved verbatim.
+mutated, the chunk sequence is preserved one-for-one, the non-text chunks pass
+through BY IDENTITY, and every rewrite is a new object with an exact ledger
+string. The waterfall section of the source suite plus Run 2 (reasoning off)
+and the Run 5 identity leaf, moved verbatim.
 
 ## Scenario
 
@@ -56,13 +56,13 @@ off) and the Run 5 identity leaf, moved verbatim.
 
 ## Fixtures
 
-The harness fake ctx + the REAL factory + the REAL dash apply. The waterfall
-stream is the source suite's nine-chunk sequence (block-start, text-delta
+The harness fake ctx, the REAL factory, and the REAL dash apply. The waterfall
+stream is the nine-chunk sequence of the source suite (block-start, text-delta
 with the four dash codepoints, tool-call-delta, reasoning-delta, three
 block-ends, usage, finish) driven through a counting next(); the request
-options are double Object.freeze-ed. The durable ledger is the harness's
-fixed path; the folder clears it at start and after each stream read point
-(the source suite's rm points). The 10ms settle waits before every ledger
+options are double Object.freeze-ed. The durable ledger is the fixed path of
+the harness; the folder clears it at start and after each stream read point
+(the rm points of the source suite). The 10ms settle waits before every ledger
 read are kept.
 
 ## Expected ledger strings (byte-exact)

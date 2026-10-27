@@ -7,18 +7,18 @@ What this test verifies.
 The Run-1 defaults of the invisible flavor: what a plain `apply(ctx, config)`
 does before any stream flows. The validated config arrives with its volatile
 fields as `{ get }` cells (including the `replacement` cell - this is a CLASS
-flavor, the core's Invisible class driven by a configurable replacement whose
-schema default is the empty string, i.e. REMOVAL); the schema defaults carry
-`normalizeReasoning=true` and `normalizeToolArguments=false`. The apply
-registers exactly four listeners (the llm/stream hook, the factory's P10
-loader/volatile-update refresh and the two overpass arms) and builds a State
-through the REAL factory: the volatile cells unwrapped into
-`State.Ledger`/`State.Enabled`/`State.Replacement`, the plain fields and the
-module identity. The activation line is the module's own string and is
+flavor, the Invisible class of the core driven by a configurable replacement
+whose schema default is the empty string, i.e. REMOVAL); the schema defaults
+carry `normalizeReasoning=true` and `normalizeToolArguments=false`. The apply
+registers exactly four listeners (the llm/stream hook, the P10
+loader/volatile-update refresh of the factory, and the two overpass arms) and
+builds a State through the REAL factory: the volatile cells unwrapped into
+`State.Ledger`/`State.Enabled`/`State.Replacement`, the plain fields, and the
+module identity. The activation line is the own string of the module and is
 asserted byte-exact (it names `replacement=` - the empty default). The
-assertions are moved verbatim from `Classic/smokes/invisible-smoke.mjs`
-section "Run 1: defaults" (the source suite stays in place during the
-migration; this folder is the future home of the same contract).
+assertions are moved verbatim from section "Run 1: defaults" of
+`Classic/smokes/invisible-smoke.mjs` (the source suite stays in place during
+the migration; this folder is the future home of the same contract).
 
 ## Scenario
 
@@ -64,20 +64,20 @@ migration; this folder is the future home of the same contract).
 ## Fixtures
 
 The shared harness (`../Harness.js`): the REAL factory instance (`Furnace`,
-constructed exactly the way the factory's own smoke does), the fake ctx
+constructed exactly the way the smoke of the factory does), the fake ctx
 (on/get/logger capture seams), the REAL `apply` from the built
-`Target/Library.js`, the `Validate` helper (the schema call) and the ledger
-path `/tmp/invisible-smoke-ledger.log` (removed at the folder's start). The
-config is `Validate({ logFile: Ledger })` - every other field at schema
-defaults, which puts the `replacement` cell at the empty string. No temp
-files beyond the ledger log.
+`Target/Library.js`, the `Validate` helper (the schema call), and the ledger
+path `/tmp/invisible-smoke-ledger.log` (removed at the start of the folder).
+The config is `Validate({ logFile: Ledger })`, with every other field at the
+schema defaults, which puts the `replacement` cell at the empty string. There
+are no temp files beyond the ledger log.
 
 ## Expected ledger strings (byte-exact)
 
 - `hook-dsh-normalize-invisible: activated (replacement=, reasoning=on, toolArgs=off, logFile=/tmp/invisible-smoke-ledger.log)`
 
-(The logger line is captured in the fake ctx's Lines; the same string is also
-appended to the ledger file by the factory's Append. No other strings are
+(The logger line is captured in the Lines of the fake ctx; the factory's
+Append also appends the same string to the ledger file. No other strings are
 asserted in this folder.)
 
 ## Edge cases
@@ -85,11 +85,11 @@ asserted in this folder.)
 - The CLASS-flavor positive: unlike the MAP flavors, the `replacement` field
   EXISTS in the schema and the `Replacement` field EXISTS in the State - the
   volatile cell is asserted as `{ get }` before apply and as the unwrapped
-  `""` after, pinning the removal default.
+  `""` after, which pins the removal default.
 - The listener-count guard is exact: four listeners, not more - a fifth
   registration would fail the count check.
-- The volatile cells are asserted before apply (the schema's `{ get }`
-  shape) AND after (the unwrapped State fields) - both halves of the cell
+- The volatile cells are asserted before apply (the `{ get }` shape of the
+  schema) AND after (the unwrapped State fields) - both halves of the cell
   unwrap are pinned.
 
 ## Expected count

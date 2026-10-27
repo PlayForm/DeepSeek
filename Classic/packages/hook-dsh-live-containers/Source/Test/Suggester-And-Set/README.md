@@ -7,21 +7,22 @@ the accept/dismiss verbs, and the autoPlant dormant block.
 
 ## Scenarios
 
-- S1: with suggester "off" (the default) - zero subagent spawns, zero frames.
-- S2: a qualifying user turn spawns exactly ONE detached activation with the
-  composed prompt; privacy "redact" (the default) forwards the first 200
-  chars plus the total length; "verbatim" (explicit config) forwards the
-  whole excerpt (the consent surface is the config flag).
-- S3: the skip words, the gate length, and the rate cap are each independently
-  asserted (a short message, a message naming "plant", and the 7th suggestion
-  in an hour all spawn nothing).
+- S1: with suggester "off" (the default) - zero subagent spawns and zero
+  frames.
+- S2: a user turn that qualifies spawns exactly ONE detached activation with
+  the composed prompt; privacy "redact" (the default) forwards the first 200
+  chars plus the total length; "verbatim" (explicit config) forwards the whole
+  excerpt (the config flag is the consent surface).
+- S3: the skip words, the gate length, and the rate cap are each asserted on
+  their own (a short message, a message that names "plant", and the 7th
+  suggestion in an hour all spawn nothing).
 - S4: a parse failure produces only the ledger line `suggestion parse failed`.
 - S5: a fit=yes "plant" suggestion renders the section 4 configured frame
   exactly once with the clamped tokens, then withdraws with
-  `suggestion expired <sid>`; the frame states the lease, the accept and the
-  dismiss verbs.
-- S6: clamping - an out-of-range expectAgents clamps to 8 with the
-  `suggestion clamped <sid> <field>` ledger line before the frame renders.
+  `suggestion expired <sid>`; the frame states the lease, the accept verb,
+  and the dismiss verb.
+- S6: clamping - an expectAgents value that is out of range clamps to 8 with
+  the `suggestion clamped <sid> <field>` ledger line before the frame renders.
 - S7: `accept=<sid>` instantiates the stored configuration verbatim (the
   board opens with the suggested expectAgents; ledger `suggestion accepted
   <sid> (<templateId>)`); `accept` on an expired sid -> `accept failed <sid>

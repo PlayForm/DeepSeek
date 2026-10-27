@@ -1,6 +1,6 @@
-import type DomainHandle from "./Domain.js";
-import type FactoryHandle from "./Factory.js";
-import type Record from "./Record.js";
+import type DomainHandle from "@Interface/Domain.js";
+import type FactoryHandle from "@Interface/Factory.js";
+import type Record from "@Interface/Record.js";
 import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** Config `enabled` - the master switch (volatile; the State builder's

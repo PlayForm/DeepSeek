@@ -8,12 +8,12 @@ status: active
 
 # 03-normalize
 
-> **The capability.** The model's typography is rewritten as it streams: em dashes, curly quotes,
-> the ellipsis, unicode spaces, zero-width characters and full-width forms become their ASCII
-> counterparts in the live UI and the durable transcript, at the moment the model emits them. The
-> rewrite is deliberately visible - it _is_ the feature. Six families run as six independent stream
-> hooks, and the seventh applies all six to a file already on disk, writing only when something
-> changed.
+> **The capability.** The typography of the model is rewritten as it streams: em dashes, curly
+> quotes, the ellipsis, unicode spaces, zero-width characters, and full-width forms become their
+> ASCII counterparts in the live UI and the durable transcript, at the moment the model emits them.
+> The rewrite is deliberately visible, because it _is_ the feature. Six families run as six
+> independent stream hooks, and the seventh applies all six to a file already on disk and writes
+> only when something changed.
 
 ## The harness surfaces
 
@@ -49,30 +49,39 @@ status: active
 ### @playform/hook-dsh-normalize-dash
 
 **Classic.** What it does. The dash flavor maps the unicode dash family to ASCII hyphen-minus: the
-em dash, the en dash, the U+2010-U+2015 family and seventeen exotic relatives (Armenian hyphen,
+em dash, the en dash, the U+2010-U+2015 family, and seventeen exotic relatives (Armenian hyphen,
 Hebrew maqaf, Mongolian soft hyphen, double oblique hyphen, two- and three-em dash, wave dash, the
-vertical presentation dashes, fullwidth hyphen-minus).
-
-It also registers `raw-write`.
+vertical presentation dashes, fullwidth hyphen-minus). It also registers `raw-write`.
 
 **The chain.**
 
-1. `llm/stream` fires; the listener calls `next()` unconditionally and never touches `options`.
-2. The async generator dispatches per chunk: text always rewrites, reasoning behind
-   `normalizeReasoning`, tool arguments behind `normalizeToolArguments` with the `edit` /
-   `raw-write` / `normalize-file` exemptions and the `{"__normalize":false` marker.
-3. `Replace(text, Dashes, replacement)` runs a fresh regex with a function replacer; `count === 0`
-   keeps the chunk by identity.
-4. On normal completion with `N > 0`, the module appends `normalized N dash char(s) in one stream`.
+1. **Listener.**
 
-**The config that matters.** `replacement` (`-`, volatile), `normalizeReasoning` (`true`),
-`normalizeToolArguments` (`false`; the shipped row turns it on), `logFile`
+    `llm/stream` fires, and the listener calls `next()` unconditionally and never touches `options`.
+
+2. **Dispatch.**
+
+    The async generator dispatches per chunk: text always rewrites, reasoning behind
+    `normalizeReasoning`, and tool arguments behind `normalizeToolArguments` with the `edit` /
+    `raw-write` / `normalize-file` exemptions and the `{"__normalize":false` marker.
+
+3. **Replace.**
+
+    `Replace(text, Dashes, replacement)` runs a fresh regex with a function replacer, and
+    `count === 0` keeps the chunk by identity.
+
+4. **Count.**
+
+    On normal completion with `N > 0`, the module appends `normalized N dash char(s) in one stream`.
+
+**The config that matters.** The keys are `replacement` (`-`, volatile), `normalizeReasoning`
+(`true`), `normalizeToolArguments` (`false`; the shipped row turns it on), and `logFile`
 (`~/.dsh/hook-dsh-normalize-dash.log`).
 
-**The safety.** An upstream throw propagates unchanged and writes no line; the single-character
+**The safety.** An upstream throw propagates unchanged and writes no line, and the single-character
 rewrite cannot disagree with whole-text application.
 
-**The ledger.** `~/.dsh/hook-dsh-normalize-dash.log`: activation
+**The ledger.** The file `~/.dsh/hook-dsh-normalize-dash.log` holds the activation line
 (`activated (replacement=-, reasoning=on, toolArgs=off, logFile=...)`), the count line, and the
 overpass lines.
 
@@ -80,73 +89,98 @@ overpass lines.
 
 ### @playform/hook-dsh-normalize-quotes
 
-**Classic.** What it does. The quotes flavor maps eight typographic quote code points - U+2018,
-U+2019, U+201A, U+201B to `'`, and U+201C, U+201D, U+201E, U+201F to `"` - through the core's
-`Quotes` map. It has no `replacement` knob.
+**Classic.** What it does. The quotes flavor maps eight typographic quote code points (U+2018,
+U+2019, U+201A, U+201B to `'`, and U+201C, U+201D, U+201E, U+201F to `"`) through the `Quotes` map
+of the core. It has no `replacement` knob.
 
 **The chain.**
 
-1. `llm/stream` fires; `next()` is called first, then the per-chunk dispatch reaches the text arm,
-   the reasoning arm behind `normalizeReasoning`, and the tool-args arm behind
-   `normalizeToolArguments`.
-2. `ReplaceMap(text, Quotes)` substitutes one code point at a time through a function replacer.
-3. A zero count keeps the chunk by identity; on normal completion with `N > 0` the module appends
-   `normalized N quote char(s) in one stream`.
+1. **Listener.**
 
-**The config that matters.** `normalizeReasoning` (`true`), `normalizeToolArguments` (`false`; the
-row turns it on), `logFile` (`~/.dsh/hook-dsh-normalize-quotes.log`).
+    `llm/stream` fires, `next()` is called first, and then the per-chunk dispatch reaches the text
+    arm, the reasoning arm behind `normalizeReasoning`, and the tool-args arm behind
+    `normalizeToolArguments`.
 
-**The safety.** The map is quote-only: an em dash belongs to the dash flavor and stays untouched.
+2. **Replace.**
 
-**The ledger.** `~/.dsh/hook-dsh-normalize-quotes.log`: activation
+    `ReplaceMap(text, Quotes)` substitutes one code point at a time through a function replacer.
+
+3. **Count.**
+
+    A zero count keeps the chunk by identity, and on normal completion with `N > 0` the module
+    appends `normalized N quote char(s) in one stream`.
+
+**The config that matters.** The keys are `normalizeReasoning` (`true`), `normalizeToolArguments`
+(`false`; the row turns it on), and `logFile` (`~/.dsh/hook-dsh-normalize-quotes.log`).
+
+**The safety.** The map is quote-only, so an em dash belongs to the dash flavor and stays untouched.
+
+**The ledger.** The file `~/.dsh/hook-dsh-normalize-quotes.log` holds the activation line
 (`activated (reasoning=on, toolArgs=off, logFile=...)`) and the count line.
 
 **The diagram.** [quotes.mmd](Classic/quotes.mmd) and ([SVG](Classic/quotes.svg)).
 
 ### @playform/hook-dsh-normalize-ellipsis
 
-**Classic.** What it does. The ellipsis flavor matches exactly U+2026 and replaces it with `...`. A
-pre-existing three-dot run and Unicode's other ellipsis forms are never touched.
+**Classic.** What it does. The ellipsis flavor matches exactly U+2026 and replaces it with `...`. It
+never touches a pre-existing three-dot run or the other ellipsis forms of Unicode.
 
 **The chain.**
 
-1. `llm/stream` fires; `next()` is called first, then the per-chunk dispatch reaches the text,
-   reasoning and tool-args arms.
-2. `Replace(text, Ellipsis, replacement)` substitutes each U+2026; each replaced code point counts
-   once even though the default emits three characters.
-3. On normal completion with `N > 0`, the module appends
-   `normalized N ellipsis char(s) in one stream`.
+1. **Listener.**
 
-**The config that matters.** `replacement` (`...`), `normalizeReasoning` (`true`),
-`normalizeToolArguments` (`false`), `logFile` (`~/.dsh/hook-dsh-normalize-ellipsis.log`).
+    `llm/stream` fires, `next()` is called first, and then the per-chunk dispatch reaches the text,
+    reasoning, and tool-args arms.
 
-**The safety.** No lookahead, no context.
+2. **Replace.**
 
-**The ledger.** `~/.dsh/hook-dsh-normalize-ellipsis.log`: activation
+    `Replace(text, Ellipsis, replacement)` substitutes each U+2026, and each replaced code point
+    counts once even though the default emits three characters.
+
+3. **Count.**
+
+    On normal completion with `N > 0`, the module appends
+    `normalized N ellipsis char(s) in one stream`.
+
+**The config that matters.** The keys are `replacement` (`...`), `normalizeReasoning` (`true`),
+`normalizeToolArguments` (`false`), and `logFile` (`~/.dsh/hook-dsh-normalize-ellipsis.log`).
+
+**The safety.** The match uses no lookahead and no context.
+
+**The ledger.** The file `~/.dsh/hook-dsh-normalize-ellipsis.log` holds the activation line
 (`activated (replacement=..., reasoning=on, toolArgs=off, logFile=...)`) and the count line.
 
 **The diagram.** [ellipsis.mmd](Classic/ellipsis.mmd) and ([SVG](Classic/ellipsis.svg)).
 
 ### @playform/hook-dsh-normalize-spaces
 
-**Classic.** What it does. The spaces flavor maps Unicode's Zs category minus the ASCII space to the
-plain space: U+00A0, U+1680, U+2000 through U+200A, U+202F, U+205F and U+3000. Tabs and newlines are
-not spaces and never match.
+**Classic.** What it does. The spaces flavor maps the Zs category of Unicode minus the ASCII space
+to the plain space: U+00A0, U+1680, U+2000 through U+200A, U+202F, U+205F, and U+3000. Tabs and
+newlines are not spaces and never match.
 
 **The chain.**
 
-1. `llm/stream` fires; `next()` is called first, then the per-chunk dispatch reaches the text,
-   reasoning and tool-args arms.
-2. `Replace(text, Spaces, replacement)` substitutes each space character with the configured string.
-3. A zero count keeps the chunk by identity; on normal completion with `N > 0` the module appends
-   `normalized N space char(s) in one stream`.
+1. **Listener.**
 
-**The config that matters.** `replacement` (`" "`), `normalizeReasoning` (`true`),
-`normalizeToolArguments` (`false`), `logFile` (`~/.dsh/hook-dsh-normalize-spaces.log`).
+    `llm/stream` fires, `next()` is called first, and then the per-chunk dispatch reaches the text,
+    reasoning, and tool-args arms.
+
+2. **Replace.**
+
+    `Replace(text, Spaces, replacement)` substitutes each space character with the configured
+    string.
+
+3. **Count.**
+
+    A zero count keeps the chunk by identity, and on normal completion with `N > 0` the module
+    appends `normalized N space char(s) in one stream`.
+
+**The config that matters.** The keys are `replacement` (`" "`), `normalizeReasoning` (`true`),
+`normalizeToolArguments` (`false`), and `logFile` (`~/.dsh/hook-dsh-normalize-spaces.log`).
 
 **The safety.** The class is exactly Zs-minus-ASCII.
 
-**The ledger.** `~/.dsh/hook-dsh-normalize-spaces.log`: activation
+**The ledger.** The file `~/.dsh/hook-dsh-normalize-spaces.log` holds the activation line
 (`activated (replacement= , reasoning=on, toolArgs=off, logFile=...)`) and the count line.
 
 **The diagram.** [spaces.mmd](Classic/spaces.mmd) and ([SVG](Classic/spaces.svg)).
@@ -155,25 +189,34 @@ not spaces and never match.
 
 **Classic.** What it does. The invisible flavor removes the zero-width and format characters: soft
 hyphen U+00AD, zero-width space U+200B, the joiners U+200C and U+200D, the marks U+200E and U+200F,
-the bidi controls U+202A through U+202E, the word joiner U+2060 and the BOM U+FEFF. The default
-`replacement` is empty, so removal is the replacement.
+the bidi controls U+202A through U+202E, the word joiner U+2060, and the BOM U+FEFF. The default
+`replacement` is empty, so the removal is the replacement.
 
 **The chain.**
 
-1. `llm/stream` fires; `next()` is called first, then the per-chunk dispatch reaches the text,
-   reasoning and tool-args arms.
-2. `Replace(text, Invisible, replacement)` deletes each matched code point when the replacement is
-   empty.
-3. A zero count keeps the chunk by identity; on normal completion with `N > 0` the module appends
-   `normalized N invisible char(s) in one stream`.
+1. **Listener.**
 
-**The config that matters.** `replacement` (`""` - removal), `normalizeReasoning` (`true`),
-`normalizeToolArguments` (`false`), `logFile` (`~/.dsh/hook-dsh-normalize-invisible.log`).
+    `llm/stream` fires, `next()` is called first, and then the per-chunk dispatch reaches the text,
+    reasoning, and tool-args arms.
 
-**The safety.** The characters are deleted, not rewritten to a glyph, so a spoofed identifier loses
-its payload.
+2. **Replace.**
 
-**The ledger.** `~/.dsh/hook-dsh-normalize-invisible.log`: activation
+    `Replace(text, Invisible, replacement)` deletes each matched code point when the replacement is
+    empty.
+
+3. **Count.**
+
+    A zero count keeps the chunk by identity, and on normal completion with `N > 0` the module
+    appends `normalized N invisible char(s) in one stream`.
+
+**The config that matters.** The keys are `replacement` (`""` - removal), `normalizeReasoning`
+(`true`), `normalizeToolArguments` (`false`), and `logFile`
+(`~/.dsh/hook-dsh-normalize-invisible.log`).
+
+**The safety.** The characters are deleted and not rewritten to a glyph, so a spoofed identifier
+loses its payload.
+
+**The ledger.** The file `~/.dsh/hook-dsh-normalize-invisible.log` holds the activation line
 (`activated (replacement=, reasoning=on, toolArgs=off, logFile=...)`) and the count line.
 
 **The diagram.** [invisible.mmd](Classic/invisible.mmd) and ([SVG](Classic/invisible.svg)).
@@ -181,56 +224,75 @@ its payload.
 ### @playform/hook-dsh-normalize-fullwidth
 
 **Classic.** What it does. The fullwidth flavor maps the whole FULLWIDTH FORMS range U+FF01 through
-U+FF5E to its ASCII half-width counterpart - 94 entries covering punctuation, digits, capitals and
-small letters. It uses the core's `Fullwidth` map and has no `replacement` knob.
+U+FF5E to its ASCII half-width counterpart, which is 94 entries covering punctuation, digits,
+capitals, and small letters. It uses the `Fullwidth` map of the core and has no `replacement` knob.
 
 **The chain.**
 
-1. `llm/stream` fires; `next()` is called first, then the per-chunk dispatch reaches the text,
-   reasoning and tool-args arms.
-2. `ReplaceMap(text, Fullwidth)` substitutes one full-width code point at a time.
-3. A zero count keeps the chunk by identity; on normal completion with `N > 0` the module appends
-   `normalized N fullwidth char(s) in one stream`.
+1. **Listener.**
 
-**The config that matters.** `normalizeReasoning` (`true`), `normalizeToolArguments` (`false`),
-`logFile` (`~/.dsh/hook-dsh-normalize-fullwidth.log`).
+    `llm/stream` fires, `next()` is called first, and then the per-chunk dispatch reaches the text,
+    reasoning, and tool-args arms.
 
-**The safety.** The range is exact: U+3000 belongs to the spaces flavor.
+2. **Replace.**
 
-**The ledger.** `~/.dsh/hook-dsh-normalize-fullwidth.log`: activation
+    `ReplaceMap(text, Fullwidth)` substitutes one full-width code point at a time.
+
+3. **Count.**
+
+    A zero count keeps the chunk by identity, and on normal completion with `N > 0` the module
+    appends `normalized N fullwidth char(s) in one stream`.
+
+**The config that matters.** The keys are `normalizeReasoning` (`true`), `normalizeToolArguments`
+(`false`), and `logFile` (`~/.dsh/hook-dsh-normalize-fullwidth.log`).
+
+**The safety.** The range is exact, so U+3000 belongs to the spaces flavor.
+
+**The ledger.** The file `~/.dsh/hook-dsh-normalize-fullwidth.log` holds the activation line
 (`activated (reasoning=on, toolArgs=off, logFile=...)`) and the count line.
 
 **The diagram.** [fullwidth.mmd](Classic/fullwidth.mmd) and ([SVG](Classic/fullwidth.svg)).
 
 ### @playform/plugin-dsh-normalize-file
 
-**Classic.** What it does. The bundle registers the `normalize-file` tool: one agent-chosen file per
-call is read, the six transforms are applied in the family's fixed order, and the content is written
-back through the factory's shared write executor only when the count is greater than zero. It
+**Classic.** What it does. The bundle registers the `normalize-file` tool: it reads one agent-chosen
+file per call, applies the six transforms in the fixed order of the family, and writes the content
+back through the shared write executor of the factory only when the count is greater than zero. It
 registers no event listener.
 
 **The chain.**
 
-1. The agent calls `normalize-file { file_path }`; `ctx.fs.resolve` turns the path into a stable
-   target.
-2. `ctx.fs.readText` reads it; a missing file, a directory, a binary target, a permission failure or
-   an abort rejects with an error result and no write.
-3. `Rewrite(content, replacement)` runs Dashes, Quotes, Ellipsis, Spaces, Invisible and Fullwidth in
-   that order, summing each count into `N`.
-4. `N == 0` writes nothing and returns `changed: false`; otherwise `Factory.Write` writes with the
-   call's exec as the actor and emits `fs/observed`, and the result carries
-   `{ path, count, changed, before, after }`.
+1. **Resolve.**
 
-**The config that matters.** `logFile` (`~/.dsh/plugin-dsh-normalize-file.log`), `replacement`
-(`"-"` - the dash step's replacement). The minimal `shared: false` block plus the two knobs is the
-whole surface.
+    The agent calls `normalize-file { file_path }`, and `ctx.fs.resolve` turns the path into a
+    stable target.
 
-**The safety.** The tool is name-exempt in the stream gate beside `edit` and `raw-write`; its writes
-emit `fs/observed`, but `normalize-file` is never in a governor's `mutationTools`, so no chain pass
-runs.
+2. **Read.**
 
-**The ledger.** `~/.dsh/plugin-dsh-normalize-file.log`: activation and the pass line
-(`normalized N char(s) in <path>`); an `N = 0` call writes neither.
+    `ctx.fs.readText` reads it, and a missing file, a directory, a binary target, a permission
+    failure, or an abort rejects with an error result and no write.
+
+3. **Rewrite.**
+
+    `Rewrite(content, replacement)` runs Dashes, Quotes, Ellipsis, Spaces, Invisible, and Fullwidth
+    in that order and sums each count into `N`.
+
+4. **Write.**
+
+    `N == 0` writes nothing and returns `changed: false`, and otherwise `Factory.Write` writes with
+    the exec of the call as the actor and emits `fs/observed`, while the result carries
+    `{ path, count, changed, before, after }`.
+
+**The config that matters.** The keys are `logFile` (`~/.dsh/plugin-dsh-normalize-file.log`) and
+`replacement` (`"-"`, the replacement of the dash step). The minimal `shared: false` block plus the
+two knobs is the whole surface.
+
+**The safety.** The tool is name-exempt in the stream gate beside `edit` and `raw-write`, and its
+writes emit `fs/observed`, but `normalize-file` is never in the `mutationTools` of a governor, so no
+chain pass runs.
+
+**The ledger.** The file `~/.dsh/plugin-dsh-normalize-file.log` holds the activation line and the
+pass line (`normalized N char(s) in <path>`), and a call with `N = 0` writes neither.
 
 **The diagram.** [normalize-file.mmd](Classic/normalize-file.mmd) and
 ([SVG](Classic/normalize-file.svg)).
@@ -238,27 +300,28 @@ runs.
 ### @playform/ets-hook-dsh-normalize-dash
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-normalize-dash`, built on
-`@playform/ets-base-dsh`, `@playform/ets-lib-dsh-core` and the `@playform/ets-plugin-dsh-factory`
+`@playform/ets-base-dsh`, `@playform/ets-lib-dsh-core`, and the `@playform/ets-plugin-dsh-factory`
 service.
 
-The Effect delta is the stream pipeline: the Classic async-generator wrapper becomes the base's real
-`Stream/Gate` transformer, adapted with `Stream.fromAsyncIterable(Next(), onError)` and an identity
-`onError`, and the module keeps only the `OnCount` callback, run as the final non-emitting section.
+The Effect delta is the stream pipeline: the Classic async-generator wrapper becomes the real
+`Stream/Gate` transformer of the base, adapted with `Stream.fromAsyncIterable(Next(), onError)` and
+an identity `onError`, and the module keeps only the `OnCount` callback, which runs as the final
+non-emitting section.
 
-Per-stream state lives in the Gate's `Stream.suspend` closure; the line is byte-identical and the
-ledger is `~/.dsh/ets-hook-dsh-normalize-dash.log`. The diagram is [dash.mmd](EffectTS/dash.mmd) and
-([SVG](EffectTS/dash.svg)).
+Per-stream state lives in the `Stream.suspend` closure of the Gate, the line stays byte-identical,
+and the ledger is `~/.dsh/ets-hook-dsh-normalize-dash.log`. The diagram is
+[dash.mmd](EffectTS/dash.mmd) and ([SVG](EffectTS/dash.svg)).
 
 ### @playform/ets-hook-dsh-normalize-quotes
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-normalize-quotes`, built on the same
 three ETS packages.
 
-The delta is the same shape: `Stream.fromAsyncIterable` into the base's `Stream/Gate`, the `Quotes`
-map as the flavor, and the `OnCount` callback as the final non-emitting section, so an abandoned
-stream writes no line.
+The delta has the same shape: `Stream.fromAsyncIterable` into the `Stream/Gate` of the base, the
+`Quotes` map as the flavor, and the `OnCount` callback as the final non-emitting section, so an
+abandoned stream writes no line.
 
-The strings are byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-quotes.log`. The
+The strings stay byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-quotes.log`. The
 diagram is [quotes.mmd](EffectTS/quotes.mmd) and ([SVG](EffectTS/quotes.svg)).
 
 ### @playform/ets-hook-dsh-normalize-ellipsis
@@ -266,10 +329,10 @@ diagram is [quotes.mmd](EffectTS/quotes.mmd) and ([SVG](EffectTS/quotes.svg)).
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-normalize-ellipsis`, built on the
 same three ETS packages.
 
-The Gate transformer owns the per-chunk dispatch and the three-way tool-args gate; the module
+The Gate transformer owns the per-chunk dispatch and the three-way tool-args gate, and the module
 supplies the `Ellipsis` transform and the count callback.
 
-The line is byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-ellipsis.log`. The
+The line stays byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-ellipsis.log`. The
 diagram is [ellipsis.mmd](EffectTS/ellipsis.mmd) and ([SVG](EffectTS/ellipsis.svg)).
 
 ### @playform/ets-hook-dsh-normalize-spaces
@@ -277,21 +340,21 @@ diagram is [ellipsis.mmd](EffectTS/ellipsis.mmd) and ([SVG](EffectTS/ellipsis.sv
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-normalize-spaces`, built on the same
 three ETS packages.
 
-The pipeline is the shared `Stream/Gate`; the flavor supplies the `Spaces` table and the count
-callback, and the accumulator lives in the Gate's `Stream.suspend` closure so concurrent streams
-never share it.
+The pipeline is the shared `Stream/Gate`, the flavor supplies the `Spaces` table and the count
+callback, and the accumulator lives in the `Stream.suspend` closure of the Gate so concurrent
+streams never share it.
 
-The line is byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-spaces.log`. The diagram
-is [spaces.mmd](EffectTS/spaces.mmd) and ([SVG](EffectTS/spaces.svg)).
+The line stays byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-spaces.log`. The
+diagram is [spaces.mmd](EffectTS/spaces.mmd) and ([SVG](EffectTS/spaces.svg)).
 
 ### @playform/ets-hook-dsh-normalize-invisible
 
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-normalize-invisible`, built on the
 same three ETS packages.
 
-The Gate transformer and the `Invisible` table do the work; the module keeps the count callback.
+The Gate transformer and the `Invisible` table do the work, and the module keeps the count callback.
 
-The line is byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-invisible.log`. The
+The line stays byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-invisible.log`. The
 diagram is [invisible.mmd](EffectTS/invisible.mmd) and ([SVG](EffectTS/invisible.svg)).
 
 ### @playform/ets-hook-dsh-normalize-fullwidth
@@ -299,10 +362,10 @@ diagram is [invisible.mmd](EffectTS/invisible.mmd) and ([SVG](EffectTS/invisible
 **EffectTS twin.** The exact package is `@playform/ets-hook-dsh-normalize-fullwidth`, built on the
 same three ETS packages.
 
-The pipeline is the base's `Stream/Gate`, the flavor is the `Fullwidth` map, and the module's only
-residue is the count callback and its strings.
+The pipeline is the `Stream/Gate` of the base, the flavor is the `Fullwidth` map, and the only
+residue of the module is the count callback and its strings.
 
-The line is byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-fullwidth.log`. The
+The line stays byte-identical and the ledger is `~/.dsh/ets-hook-dsh-normalize-fullwidth.log`. The
 diagram is [fullwidth.mmd](EffectTS/fullwidth.mmd) and ([SVG](EffectTS/fullwidth.svg)).
 
 ### @playform/ets-plugin-dsh-normalize-file
@@ -311,54 +374,58 @@ diagram is [fullwidth.mmd](EffectTS/fullwidth.mmd) and ([SVG](EffectTS/fullwidth
 three ETS packages.
 
 It has no Effect-native stage of its own: the tool reads through `ctx.fs`, applies the same six
-transforms in the same order, and writes through the factory's shared executor, which in the ETS
-tree is the Effect-backed `WriteService`.
+transforms in the same order, and writes through the shared executor of the factory, which in the
+ETS tree is the Effect-backed `WriteService`.
 
-The line is byte-identical and the ledger is `~/.dsh/ets-plugin-dsh-normalize-file.log`. The diagram
-is [normalize-file.mmd](EffectTS/normalize-file.mmd) and ([SVG](EffectTS/normalize-file.svg)).
+The line stays byte-identical and the ledger is `~/.dsh/ets-plugin-dsh-normalize-file.log`. The
+diagram is [normalize-file.mmd](EffectTS/normalize-file.mmd) and
+([SVG](EffectTS/normalize-file.svg)).
 
 ## How the group composes
 
 All six stream flavors share the `llm/stream` waterfall. Each wraps the downstream result and always
-calls `next()`, so it composes regardless of registration order. Because every transform is a
-per-chunk, single-character replacement with no lookahead and no multi-character sequence, the
-flavors are **order-independent** and **chunk-boundary-safe**: the dash pass before or after the
-quotes pass produces the same bytes.
+calls `next()`, so it composes regardless of registration order. Every transform is a per-chunk,
+single-character replacement with no lookahead and no multi-character sequence, so the flavors are
+**order-independent** and **chunk-boundary-safe**: the dash pass before or after the quotes pass
+produces the same bytes.
 
-`normalizeReasoning` defaults **on** - the deltas and the assembled reasoning block must agree.
-`normalizeToolArguments` defaults **off**, because tool-call arguments are execution-critical raw
-JSON; with it on, the gate exempts `edit`, `raw-write` and `normalize-file` by name, plus any call
-opening with the `{"__normalize":false` marker. The shipped rows turn it on as an explicit opt-in.
+`normalizeReasoning` defaults **on**, because the deltas and the assembled reasoning block must
+agree. `normalizeToolArguments` defaults **off**, because tool-call arguments are execution-critical
+raw JSON; with it on, the gate exempts `edit`, `raw-write`, and `normalize-file` by name, plus any
+call that opens with the `{"__normalize":false` marker. The shipped rows turn it on as an explicit
+opt-in.
 
-`normalize-file` is the on-disk sibling: same six transforms, same order, one whole-file pass, no-op
-no-write. `raw-write` is the per-call opt-in: `normalize` absent or `false` writes verbatim, `true`
-or `"all"` applies all six, an array applies only the named flavors.
+`normalize-file` is the on-disk sibling: same six transforms, same order, one whole-file pass, and a
+no-op no-write. `raw-write` is the per-call opt-in: `normalize` absent or `false` writes verbatim,
+`true` or `"all"` applies all six, and an array applies only the named flavors.
 
-The `scopes` object gates every arm independently and is entirely volatile (`conversation` on,
-`reasoning` on, `toolInput` off, `toolResults` off, `files` on, `batch` off); one grouped override
-turns the whole family off in one edit. `toolResultsExempt` keeps a listed tool's result byte-exact.
+The `scopes` object gates every arm independently and stays entirely volatile (`conversation` on,
+`reasoning` on, `toolInput` off, `toolResults` off, `files` on, `batch` off), and one grouped
+override turns the whole family off in one edit. `toolResultsExempt` keeps the result of a listed
+tool byte-exact.
 
-Activating one flavor never implies another. Six flavors, six ledgers, six activation lines.
+Activating one flavor never implies another: six flavors, six ledgers, six activation lines.
 
 ## How it plugs into the harness
 
 Each stream bundle is one `insert:` row with `log: true`, its `logFile`, its `replacement` where it
-has one, and `normalizeReasoning: true`. The flavors inject `["pluginFactory"]`; the dash flavor
+has one, and `normalizeReasoning: true`. The flavors inject `["pluginFactory"]`, the dash flavor
 adds `fs` and `tools` for `raw-write`, and normalize-file adds all three. The listener is a plain
-`ctx.on("llm/stream", ...)`, fiber-owned and removed on unload; the factory's `Wire` is not used
-because it is `fs/observed`-hardwired and this rewrite must be visible.
+`ctx.on("llm/stream", ...)`, fiber-owned and removed on unload, and the `Wire` of the factory is not
+used because it is `fs/observed`-hardwired and this rewrite must be visible.
 
-Boot order is: profile bundles → factory service → each flavor registers and writes its activation
-line. A `file:` dependency alone is not activation: the package must be in `dsh.profile.bundles` and
-the host restarted.
+The boot order is: profile bundles → factory service → each flavor registers and writes its
+activation line. A `file:` dependency alone is not activation: the package must be in
+`dsh.profile.bundles` and the host restarted.
 
 ## What the user experiences
 
-- Em dashes, curly quotes and ellipses become `-`, `'`/`"` and `...` as they stream, in the live UI
-  and the transcript.
-- Zero-width and bidi characters disappear, so a spoofed identifier cannot hide payload.
+- Em dashes, curly quotes, and ellipses become `-`, `'`/`"`, and `...` as they stream, in the live
+  UI and the transcript.
+- Zero-width and bidi characters disappear, so a spoofed identifier cannot hide a payload.
 - A full-width sentence is rendered half-width without a second pass.
-- A pre-existing file can be normalized on demand; a file with nothing to change is untouched.
+- A pre-existing file can be normalized on demand, and a file with nothing to change stays
+  untouched.
 - Tool-call arguments stay byte-exact unless the user opts in.
 
 ## Sources

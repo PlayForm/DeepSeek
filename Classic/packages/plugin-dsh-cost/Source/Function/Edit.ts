@@ -54,7 +54,10 @@ const Written = (Entry: Record<string, unknown>, At: number): Hunk => {
 // The edit entries of one call: the arguments' own "edits" key when it is an
 // array of objects (multi_edit) or a single object, else the arguments
 // object itself when the tool carries its edit inline (edit).
-const Entries = (Fields: Record<string, unknown>): readonly Record<string, unknown>[] => {
+const Entries = (
+	Tool: string,
+	Fields: Record<string, unknown>,
+): readonly Record<string, unknown>[] => {
 	const Raw = Fields["edits"];
 	switch (true) {
 		case Array.isArray(Raw):
@@ -64,8 +67,10 @@ const Entries = (Fields: Record<string, unknown>): readonly Record<string, unkno
 			);
 		case Raw !== null && typeof Raw === "object" && !Array.isArray(Raw):
 			return [Raw as Record<string, unknown>];
-		default:
+		case Tool === "edit":
 			return [Fields];
+		default:
+			return [];
 	}
 };
 
@@ -84,7 +89,7 @@ export default (Tool: string, Arguments: string, At: number): readonly Hunk[] =>
 		case Tool === "write":
 			return [Written(Fields, At)];
 		case Tool === "edit" || Tool === "multi_edit":
-			return Entries(Fields).map((One, Index) => HunkOf(One, Index, At));
+			return Entries(Tool, Fields).map((One, Index) => HunkOf(One, Index, At));
 		default:
 			return [];
 	}

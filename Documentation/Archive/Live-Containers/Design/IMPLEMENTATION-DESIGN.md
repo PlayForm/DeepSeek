@@ -29,8 +29,11 @@ statuses:
 
 # LIVE CONTAINERS - IMPLEMENTATION DESIGN (D2)
 
-Date: 2026-10-19. Status: implementation design. This is the byte-ready specification that the CODER
-(C2) executes.
+Date: 2026-10-19.
+
+Status: implementation design.
+
+This document is the byte-ready specification that the CODER (C2) executes.
 
 Prepared by: the DESIGN lane D2 (cloudflare-workers-ai / @cf/zai-org/glm-5.3-flash / low).
 
@@ -39,16 +42,18 @@ Base: `Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md` (v1),
 (00 section 5.7-5.8, 01 section 12, 07 section 5).
 
 Scope: one package with two twins: `Classic/packages/hook-dsh-live-containers` and
-`EffectTS/packages/ets-hook-dsh-live-containers`. Wave 2 extends the same package (07 section 3.8).
+`EffectTS/packages/ets-hook-dsh-live-containers`.
 
-This design sets the phase boundaries so the v1 coders (A1/A2/A3) and the wave-2 coder (C2) never
+Wave 2 extends that same package (07 section 3.8).
+
+This design fixes the phase boundaries so the v1 coders (A1/A2/A3) and the wave-2 coder (C2) never
 collide.
 
 Addenda coverage: the DESIGN lane wrote this document before the five DESIGN ADDENDA (I2-I6:
-AWAIT-MARKER, APPEND-SEAM, COMPLETION-ERGONOMICS, PLANTED-LEASE, SUGGESTER-CONFIGURED) landed in
+AWAIT-MARKER, APPEND-SEAM, COMPLETION-ERGONOMICS, PLANTED-LEASE, SUGGESTER-CONFIGURED) arrived in
 `Documentation/Archive/Live-Containers/Design/` (checked at the start and twice during the run).
 
-This document designs those five areas here (sections 4, 5, 6, 3.4, and 2) and flags them in the
+This document designs those five areas here (sections 4, 5, 6, 3.4, and 2) and marks them in the
 report for ratification against the final texts of the lanes at the C2 dispatch.
 
 ---
@@ -59,13 +64,13 @@ report for ratification against the final texts of the lanes at the C2 dispatch.
 
     A tools/pre-execute decision cannot carry a synthetic non-error tool result.
 
-    The harness confirms this limit.
+    The harness verifies this limit.
 
     In `dsh-tools` (`app.asar` `dsh/node_modules/@deepseek-ai/dsh-tools/lib/index.js`,
     `prepareExecution`), the only decision kinds are allow, deny, ask, and cancel.
 
     A deny produces `content: [{type:"text", text:"Error: <reason>"}], isError: true`, so the model
-    sees an ERROR result and never a completed one.
+    observes an ERROR result and never a completed one.
 
     The pre-execute surface has no accept-with-content shape.
 
@@ -83,7 +88,7 @@ report for ratification against the final texts of the lanes at the C2 dispatch.
 
     The pre-execute listener decides, starts the job, and tags the exec object in a `WeakMap`.
 
-    The tools/execute listener sees the tag and returns a fabricated canonical-value result
+    The tools/execute listener observes the tag and returns a fabricated canonical-value result
     `{ kind: "foreground", ... stdout: {text: <the marker bytes>} }` without calling `next()`.
 
     The bash body never runs, and the pipeline renders a SUCCESSFUL (`isError: false`) tool result
@@ -97,15 +102,15 @@ report for ratification against the final texts of the lanes at the C2 dispatch.
 
 2. **G2: the producer re-dispatch.**
 
-    The design uses a command-runner wrapper only (I1 5.1).
+    The design applies a command-runner wrapper only (I1 5.1).
 
-    The wrapper replicates the background adapter of the bash tool (`dsh-tool-bash` `lib/index.js`
+    The wrapper copies the background adapter of the bash tool (`dsh-tool-bash` `lib/index.js`
     `startJob`/`processJob`/`processSources`) over the same governed path: `ctx.shell.resolve` +
     `ctx.shell.execute` (sandbox and deadlines unchanged), `ctx.shellEnv.collect(exec)`,
     `ctx.workingDirectory.ensure(agent, signal)`, `ctx.get("sandboxPolicy")?.resolve({session})`,
     and `ctx.jobs.start({kind, label, toolCall, owner, output, run})`.
 
-    The content-mutating family (write, edit, raw-write, normalize-file) is permanently
+    The content-mutating family (write, edit, raw-write, normalize-file) stays permanently
     non-detachable in every mode and is hardcoded in `Policy.ts` (section 5.1).
 
 3. **G5: the child-to-parent report pickup.**
@@ -115,7 +120,7 @@ report for ratification against the final texts of the lanes at the C2 dispatch.
     `dsh-agent-loop` `lib/index.js` verifies that every inbox mutation commits one normalized event
     with data `{ target, start, removedCount?, inserted, outcome? }`.
 
-    A `send_message` report from a child lands in the parent inbox as an insertion, so the
+    A `send_message` report from a child arrives in the parent inbox as an insertion, so the
     `inserted` messages of the splice are the pickup surface.
 
     The board truth is settlement-first (jobs settled events), with the explicit report as the
@@ -126,11 +131,11 @@ report for ratification against the final texts of the lanes at the C2 dispatch.
     (a) The design ratifies "honesty beats cache": withdrawal after delivery is one prompt-tail
     rewrite per settlement, and the design accepts that cost.
 
-    (b) The suggester privacy default is "redact" for every route (first 200 chars + length);
+    (b) The suggester privacy default is "redact" for every route (first 200 chars + length),
     "verbatim" applies only by explicit config, and the SCHEME disclosure is the consent surface.
 
-    (c) The design ratifies the idle-wake turn as channel 4 (model-visible; the user sees the wake
-    in the GUI).
+    (c) The design ratifies the idle-wake turn as channel 4 (model-visible, and the user observes
+    the wake in the GUI).
 
     (d) The phase order is PHASE 1 = the v1 assemble-side plugin (A1/A2/A3), PHASE 2 = the wave-2
     extension (C2) on the same package, strictly sequential, with an exact file-ownership map
@@ -149,8 +154,8 @@ report for ratification against the final texts of the lanes at the C2 dispatch.
 ### 1.1 The two twins
 
 - `Classic/packages/hook-dsh-live-containers/` is the primary package, and the build makes it first.
-- `EffectTS/packages/ets-hook-dsh-live-containers/` is the twin. It carries the same contract behind
-  Effect v4 (the `ets-base-dsh` + `ets-plugin-dsh-factory` layer), keeps the ledger strings
+- `EffectTS/packages/ets-hook-dsh-live-containers/` is the twin, and it holds the same contract
+  behind Effect v4 (the `ets-base-dsh` + `ets-plugin-dsh-factory` layer), keeps the ledger strings
   byte-identical, and mirrors the anatomy of `ets-hook-dsh-tool-coach` exactly.
 
 The ETS twin ships after the team accepts the Classic twin (the last step of phase 2), per the split
@@ -219,7 +224,7 @@ wipes only `Target/Test`.
 The negation is mandatory: `Source/**/*.ts` matches the Test tree, and without the negation the
 plugin build fails on test-only syntax and ships Test output inside `Target`.
 
-Then `package.json` carries:
+Then `package.json` holds:
 
     "scripts": {
     	"prepublishOnly": "sh prepublishOnly.sh && tsc -p tsconfig.json && tsc-alias -f -p tsconfig.json"
@@ -269,7 +274,7 @@ truth.
 The loader contract is verbatim from the family: `export const name`, `export const apply`,
 `export const Config`, `export const inject`, and `export default { name, apply, Config, inject }`.
 
-The default object carries all of them.
+The default object holds all of them.
 
 A missing member on the default object throws `cannot get property "fs" without inject` at runtime,
 and a smoke that calls `apply` directly never catches this (`Library.ts:7-11` of `tool-coach`).
@@ -343,7 +348,7 @@ refreshes them in place.
     		default "always"
 
 The default config ships the full 14-entry catalog (03 section 3) with sensible enablements:
-`todo-list`, `command-runner`, and `session-stats` ON; the rest dormant (`enabled: false`); the
+`todo-list`, `command-runner`, and `session-stats` ON, the rest dormant (`enabled: false`), and the
 plugin still disabled.
 
 The defaults live in `Variable/DefaultBlocks.ts` (data, not code).
@@ -446,12 +451,10 @@ The kind registry maps each kind to its trigger default and its frame (section 4
 `Render.ts` dispatches by kind, and every kind is data-driven (no eval, no expressions; the
 substitution engine, section 3.1).
 
----
-
 ## 3. THE LISTENER SET
 
 Every listener calls `next()` first, wraps its body in a fail-open `try/catch`, never throws into a
-waterfall, and writes to the plugin's own ledger file only.
+waterfall, and writes only to the plugin's own ledger file.
 
 `Apply.ts` registers L1..L8 in the order below (plain registration unless noted).
 
@@ -505,7 +508,7 @@ The body has this order (each part is its own byte-exact block, section 4):
     assemblies (the `tool-coach` `sectionTtl` pattern, `Apply.ts:516-538`); `refresh = "request"`
     re-renders per assembly.
 
-    For the per-block event trigger wiring (03 section 2), each block carries a dirty flag.
+    For the per-block event trigger wiring (03 section 2), each block holds a dirty flag.
 
     The assemble listener recomputes dirty blocks and keeps the others cache-stable.
 
@@ -513,11 +516,11 @@ The body has this order (each part is its own byte-exact block, section 4):
     triggers).
 
     For the section budget, when the rendered body exceeds `sectionBudgetBytes`, the oldest frames
-    collapse to one-line summaries (the failsafe 8 path, section 6); the plugin never drops them
+    collapse to one-line summaries (the failsafe 8 path, section 6), and the plugin never drops them
     silently (ledger `failsafe section-collapse <n>`).
 
-    A render failure skips the block and logs `render failed <id> -> skipped`; the assembly still
-    resolves.
+    A render failure skips the block and logs `render failed <id> -> skipped`, and the assembly
+    still resolves.
 
 ### 3.2 L2 + L3 - tools/pre-execute + tools/execute (the detach transform; phase 2)
 
@@ -597,12 +600,12 @@ then:
 
     The L3 arm reads the tag, and the completion path reads the per-agent record.
 
-    If the marker text cannot be composed, kill the just-started job with reason `marker-failed`,
+    If the marker text cannot be composed, stop the just-started job with reason `marker-failed`,
     untag, and return `Downstream` (the I1 half-detached rule, 01 section 12.2.2).
 
     The code wraps every branch.
 
-    On any internal error, untag, kill any just-started job (`marker-failed`), ledger
+    On any internal error, untag, stop any just-started job (`marker-failed`), ledger
     `transform failed <tool> -> inline`, and return `Downstream`, so the call runs inline exactly as
     if the plugin were not mounted.
 
@@ -632,15 +635,15 @@ is present:
     The `dsh-tools` `normalizeDispatchResult` path validates this value against the foreground
     branch of the bash output schema and renders it through the bash tool's own `renderResult`.
 
-    With exit code 0 and no markers, the model sees exactly the marker bytes as a SUCCESSFUL tool
-    result (`isError: false`).
+    With exit code 0 and no markers, the model observes exactly the marker bytes as a SUCCESSFUL
+    tool result (`isError: false`).
 
     The smoke pins the schema shape: the bash output contract of the harness is stable, a harness
     upgrade that changes it is caught by the smoke, and the SCHEME documents the coupling.
 
 4. **Failure.**
 
-    On any internal error in L3 (marker compose, tagged-record read), kill the tagged job with
+    On any internal error in L3 (marker compose, tagged-record read), stop the tagged job with
     reason `marker-failed`, untag, ledger `transform failed <tool> -> inline`, and return `Next()`,
     so the real dispatch runs inline (the fail-open rule, 01 section 12.2.2).
 
@@ -671,10 +674,10 @@ The completion block therefore rides the standing section (01 section 3 step 6 c
 
 2. **Frame.**
 
-    The per-agent record of the job flips from running to settled.
+    The per-agent record of the job changes from running to settled.
 
-    The standing section renders the completed frame (section 4.2) at the next assembly; the frame
-    carries status, cause, elapsed, and the tail that the producer captured (section 5.4).
+    The standing section renders the completed frame (section 4.2) at the next assembly, and the
+    frame carries status, cause, elapsed, and the tail that the producer captured (section 5.4).
 
 3. **Withdrawal.**
 
@@ -713,13 +716,13 @@ It creates the board in the per-agent state of the calling agent (the `WeakMap`,
 The lease (the PLANTED-LEASE design):
 
 - The board lives in the assemble section of the parent and is recomputed per parent request (the v1
-  seam). A report that lands between requests shows up at the next ask-time automatically, with no
-  push into history.
-- The board closes when all expected members settle. It renders the closing line for one request and
-  then withdraws (the CAN-1 withdrawal discipline, generalized; ledger
+  seam), so a report that arrives between requests shows up at the next ask-time automatically, with
+  no push into history.
+- The board closes when all expected members settle, and it renders the closing line for one request
+  and then withdraws (the CAN-1 withdrawal discipline, generalized; ledger
   `board closed <id> (<n>/<expect> in <n>s)`).
-- A board with empty slots renders `[none]` rows. After `closeMs`, the empty slots are dropped and
-  the board closes (02 section 7).
+- A board with empty slots renders `[none]` rows, and after `closeMs` the empty slots are dropped
+  and the board closes (02 section 7).
 - An orphaned board (no parent requests for `orphanBudgetMs` while members are live) is not
   withdrawn (the parent may return; 04 scenario 6), but its header renders the STALE declaration:
   `status: STALE (no parent requests for <n>s)` (02 + the restart-honesty line, section 4.4).
@@ -729,16 +732,16 @@ The lease (the PLANTED-LEASE design):
 
 ### 3.5 L7 - the report pickup (G5)
 
-The child-to-parent report channel is verified: a `send_message` from a child to the parent lands in
-the parent inbox as an insertion.
+The child-to-parent report channel is verified: a `send_message` from a child to the parent arrives
+in the parent inbox as an insertion.
 
 Every inbox mutation commits one normalized `agent/inbox/spliced` event (`dsh-agent-loop` README
 "Create or resume agents programmatically"; `dsh-agent-loop` `lib/index.js` splice construction:
 `{ target, start, removedCount?, inserted, outcome? }`), and each insertion also emits
 `agent/inbox/inserted { message }`.
 
-The parent plugin listener (emit mode, plain `ctx.on`, host scope; a host listener sees every agent
-event and filters by agent id):
+The parent plugin listener (emit mode, plain `ctx.on`, host scope; a host listener observes every
+agent event and filters by agent id):
 
 1. **Splice pickup.**
 
@@ -750,7 +753,7 @@ event and filters by agent id):
 
     The report grammar is `[live-report] <plantId> <agentId> <status> <payload>`.
 
-    A child that knows the board reports through its own `send_message`; the board updates the
+    A child that knows the board reports through its own `send_message`, the board updates the
     member row (`status`/`lastReport`/`lastReportAt`), and the next assembly reflects it (02 section
     4 carrier 3, the highest-fidelity carrier; carriers 1 and 2, the child job settle + progress
     line, come through L6, section 3.6).
@@ -759,7 +762,7 @@ event and filters by agent id):
 
 2. **Fail-open.**
 
-    A parse miss is silently ignored (no ledger line per miss; the inbox carries the model's own
+    A parse miss is silently ignored (no ledger line per miss; the inbox holds the model's own
     steering, and only a matching report is folded), and the listener never throws into the emit
     dispatch.
 
@@ -801,7 +804,7 @@ The listener:
 
 6. **Planted boards.**
 
-    A child job settlement flips the member row to done/error with the elapsed time and the first
+    A child job settlement changes the member row to done/error with the elapsed time and the first
     line of the answer (capped), the board truth source (02 section 4 carriers 1-2).
 
 7. **Record cleanup.**
@@ -846,12 +849,12 @@ The suggestion runs detached:
 `Context.subagent.startActivation({ provider: <suggesterRoute.provider>, label: "live-containers-suggester", request: <the composed prompt>, signal: <an AbortController armed with suggestTimeoutMs>, delivery: none })`
 (the verified surface, `dsh-subagent` README:62, returns `{ childId, result, dispose }`).
 
-The composed prompt contains the request excerpt (redacted or verbatim per `suggesterPrivacy`,
+The composed prompt holds the request excerpt (redacted or verbatim per `suggesterPrivacy`,
 `<= maxPromptBytes`), the template catalog (name + one-line use + shape; `Catalog.ts`), and the task
 facts that the plugin already holds (live jobs count, open boards, turn count).
 
 The output contract is the strict JSON
-`{ fit: "yes" | "no" | "unknown", templateId, rationale, tokens? }`; a parse failure yields no
+`{ fit: "yes" | "no" | "unknown", templateId, rationale, tokens? }`, and a parse failure yields no
 suggestion (fail-open; ledger `suggestion parse failed`).
 
 Delivery: the plugin stores the suggestion in the per-agent state and renders it as the LIVE
@@ -863,7 +866,7 @@ carrier 3; default false).
 
 The accept/dismiss grammar: the model accepts by `live_container_set plant=<templateId> expect=<n>`
 (the instantiation path) and dismisses by `live_container_set dismiss=<suggestionId>` (ledger
-`suggestion dismissed <id>`); doing nothing dismisses (the one-turn withdrawal).
+`suggestion dismissed <id>`), and doing nothing dismisses (the one-turn withdrawal).
 
 A spawn/timeout/parse failure produces only a ledger line (`suggestion skipped (<reason>)`) and
 never a conversation artifact.
@@ -1010,16 +1013,15 @@ planted frame header.
 
 ### 5.1 The producer re-dispatch (G2 - the command-runner wrapper)
 
-The wrapper in `Function/Jobs.ts` replicates the background adapter of the bash tool
-(`dsh-tool-bash` `lib/index.js` `startJob` + `processJob` + `processSources`) against the same
-governed path.
+The wrapper in `Function/Jobs.ts` copies the background adapter of the bash tool (`dsh-tool-bash`
+`lib/index.js` `startJob` + `processJob` + `processSources`) against the same governed path.
 
 The design implements I1 12.2.1 ("the producer re-dispatch runs the command through the bash tool's
 own governed execution path") by reusing the shell seam exactly:
 
 1. **Resolve the spec at detach time.**
 
-    The pre-execute listener resolves the spec so the model sees the same cwd/env/policy as the
+    The pre-execute listener resolves the spec so the model observes the same cwd/env/policy as the
     inline call.
 
     - `standingPolicy = ctx.get("sandboxPolicy")?.resolve(exec.agent ? { session: exec.agent.session } : {});`
@@ -1029,7 +1031,7 @@ own governed execution path") by reusing the shell seam exactly:
     - `dshEnv = ctx.shellEnv.collect(exec);`
     - `spec = ctx.shell.resolve({ command: args.command, ...(workdir !== undefined ? { workdir } : {}), ...(args.timeoutMs !== undefined ? { timeoutMs: args.timeoutMs } : {}), dshEnv, ...(policy !== undefined ? { sandboxPolicy: policy } : {}), onExpiry: "none" })`.
 
-    `onExpiry "none"` means the executor never kills the detached process, and the plugin's own
+    `onExpiry "none"` means the executor never stops the detached process, and the plugin's own
     `liveTimeoutMs` timer is the only guard (01 section 7; the stock inline timeout policy does not
     apply to detached jobs).
 
@@ -1040,12 +1042,12 @@ own governed execution path") by reusing the shell seam exactly:
     `outputLimitBytes: 2048` is the producer-owned output cap, and the `tool-jobs` capping contract
     keeps the complete model-facing read bounded.
 
-    `processSources(() => proc)` provides the pull sources that the registry pumps at `pumpPollMs`,
+    `processSources(() => proc)` supplies the pull sources that the registry pumps at `pumpPollMs`,
     read from `proc().observed[channel].readFrom`.
 
     The shapes match `tool-bash` exactly: the starter receives the job-owned `AbortController`
-    signal; the outcome maps killed/completed + exit code + sandbox notes; the adapter cancel kills
-    the process (job-owned cancellation, so the registry kill -> process kill).
+    signal, the outcome maps killed/completed + exit code + sandbox notes, and the adapter cancel
+    stops the process (job-owned cancellation, so the registry kill -> process kill).
 
 3. **Capture the tail.**
 
@@ -1106,8 +1108,8 @@ per-agent completion fan-out, and it is not in the C2 scope.
   fabricate a completion; the frame renders only from the observed settled event).
 - **Model kill.** `job_kill` gives cause kill, and the completed frame renders status killed with
   the reason; there is no second notice (the `tool-jobs` kill-set contract belongs to the
-  `tool-jobs` plugin; our subscription just renders the frame, and the model already saw the kill
-  result).
+  `tool-jobs` plugin; our subscription just renders the frame, and the model already observed the
+  kill result).
 - **Live timeout.** The plugin arms a timer per job at `liveTimeoutMs` ->
   `ctx.jobs.kill(jobId, agentId, "live-timeout")` -> the completed frame renders status killed
   (reason live-timeout). The timer is the only guard (`onExpiry "none"`; the inline timeout policy
@@ -1124,11 +1126,11 @@ per-agent completion fan-out, and it is not in the C2 scope.
   standing section can only render from live records, so it cannot) renders `status: lost` only if
   the plugin keeps a restart-surviving record, and it does not in v2 (the pins store, 06 idea 9, is
   FUTURE). The orphaned-marker handling therefore reads: the standing section renders only from live
-  per-agent records, so a restarted session section contains no ghost frames. The "status: lost"
-  line is specified for the board records (section 4.4) and for the FUTURE pins store. The I1
-  requirement (a marker that cannot be withdrawn after restart renders `status: lost`, never
-  silently disappearing) is satisfied by the honest-empty section plus the lifecycle events in the
-  ledger (the session timing records the user reads). The SCHEME states this explicitly.
+  per-agent records, so a restarted session section holds no ghost frames. The "status: lost" line
+  is specified for the board records (section 4.4) and for the FUTURE pins store. The I1 requirement
+  (a marker that cannot be withdrawn after restart renders `status: lost`, never silently
+  disappearing) is satisfied by the honest-empty section plus the lifecycle events in the ledger
+  (the session timing records the user reads). The SCHEME states this explicitly.
 
 ### 5.4 The ring + the rendering caps
 
@@ -1172,8 +1174,9 @@ scenario:
 
 5. **User-visible through existing surfaces only.**
 
-    The user sees the change through surfaces that the user already reads (the jobs session timing
-    records in the GUI, the ledger file, the debug attachments), never through a new push surface.
+    The user observes the change through surfaces that the user already reads (the jobs session
+    timing records in the GUI, the ledger file, the debug attachments), never through a new push
+    surface.
 
 The eight scenarios (04 section 3) each define a trigger, an automatic action, a channel, and a
 containment:
@@ -1183,9 +1186,9 @@ containment:
     A detached command has zero new output bytes past `hangBudgetMs`.
 
     The hang detector compares the tail byte-count delta of the per-job record against the clock.
-    The producer sees every pump append, so the detector is a pure per-record counter, and the ring
-    offsets of the registry give the same truth for free through the `total` field of the output
-    events.
+    The producer observes every pump append, so the detector is a pure per-record counter, and the
+    ring offsets of the registry give the same truth for free through the `total` field of the
+    output events.
 
     Action: ledger `failsafe hang <job-id> (<n>s no output)`; on `hangAction "kill"`,
     `ctx.jobs.kill(jobId, agentId, "live-hang")`.
@@ -1196,8 +1199,8 @@ containment:
 
 2. **The delegation stalls.**
 
-    A board member stays `[stalled]` past `stallBudgetMs`, and the row flips (channel 4 at the next
-    request, the board render).
+    A board member stays `[stalled]` past `stallBudgetMs`, and the row changes (channel 4 at the
+    next request, the board render).
 
     On `stallAction "prune"`, the member is dropped from the expect count so the board closes
     cleanly (ledger `member dropped <id> <agentId> (pruned)`).
@@ -1233,9 +1236,9 @@ containment:
     A board whose parent requests have not run for `orphanBudgetMs` while members are live: ledger
     only.
 
-    The board is not withdrawn (the parent may return), the reports of its members keep landing, and
-    the frame header gains the STALE declaration (channel 4 at the next parent request, disclosed by
-    the frame itself).
+    The board is not withdrawn (the parent may return), the reports of its members keep arriving,
+    and the frame header gains the STALE declaration (channel 4 at the next parent request,
+    disclosed by the frame itself).
 
 7. **The silent-modification budget.**
 
@@ -1264,7 +1267,7 @@ logs and passes through.
 
 The layer can never deny a call, drop content, or cancel a job because of its own internal error.
 
-Killing is the only destructive action, and it goes through the registry kill, gated behind
+Stopping is the only destructive action, and it goes through the registry kill, gated behind
 `hangAction`/config.
 
 The meta-budget bounds the power of the layer, and `failsafes: "off"` is the default even when the
@@ -1359,26 +1362,27 @@ the fake clock advances past liveTimeoutMs -> the fake registry's kill received 
 "live-timeout"; J8 the awaited settlement: the settled event with awaited: true -> no frame, ledger
 `completion skipped <job-id> (awaited)`; J9 the capacity path: the fake registry's start throws the
 capacity error -> inline + `capacity full <owner> -> inline`; J10 the
-minLatencyMs/minHistoricalMs/history heuristics (the fake clock
+minLatencyMs/minHistoricalMs/history heuristics (the fake clock plus the recorded post-execute
+durations); J11 the __await marker: an arguments object whose first key is __await:true -> inline +
+`await marker -> inline <tool>`; the marker survives in the logged arguments (nothing stripped).
 
-- the recorded post-execute durations); J11 the __await marker: an arguments object whose first key
-  is __await:true -> inline + `await marker -> inline <tool>`; the marker survives in the logged
-  arguments (nothing stripped). B-series (boards): the five-row board with enrollment by settle; an
-  explicit [live-report] splice pickup updates the row at the next assembly (G5); the stalled row
-  after stallMs on the fake clock; the failed row from a kill-caused settlement; the overflow row +
-  the total line; the board close + withdrawal; the STALE header; the multi-level summary (the
-  child's board is the child's section - the smoke mounts two agents and asserts the sections are
-  per-agent); the report-rate coalescing. F-series (failsafes): the hang ledger + the hangAction
-  kill; the stalled member flip + prune; the admission inline ledger; the drift WARN line; the
-  retry-loop marker extension; the orphaned board ledger + STALE; the meta-budget summary + the
-  pass-through-forever remainder of the turn; the section-collapse; with failsafes "off": ZERO
-  behavior modification with all templates enabled; the "not even notifying" posture provable by
-  asserting NO model-visible artifact on channel-1 scenarios. S-series (suggester): with suggester
-  off: zero spawns, zero sections; on: one qualifying turn spawns exactly one activation with the
-  composed prompt (redact: the excerpt is the first 200 chars + length; verbatim: the full excerpt -
-  the privacy asserts); a fit=yes result renders the LIVE SUGGESTION frame exactly once then
-  withdraws; a parse failure produces only the ledger line; autoPlant instantiates the dormant
-  suggested block; the rate bounds.
+B-series (boards): the five-row board with enrollment by settle; an explicit [live-report] splice
+pickup updates the row at the next assembly (G5); the stalled row after stallMs on the fake clock;
+the failed row from a kill-caused settlement; the overflow row + the total line; the board close +
+withdrawal; the STALE header; the multi-level summary (the child's board is the child's section -
+the smoke mounts two agents and asserts the sections are per-agent); the report-rate coalescing.
+
+F-series (failsafes): the hang ledger + the hangAction kill; the stalled member flip + prune; the
+admission inline ledger; the drift WARN line; the retry-loop marker extension; the orphaned board
+ledger + STALE; the meta-budget summary + the pass-through-forever remainder of the turn; the
+section-collapse; with failsafes "off": ZERO behavior modification with all templates enabled; the
+"not even notifying" posture provable by asserting NO model-visible artifact on channel-1 scenarios.
+
+S-series (suggester): with suggester off: zero spawns, zero sections; on: one qualifying turn spawns
+exactly one activation with the composed prompt (redact: the excerpt is the first 200 chars +
+length; verbatim: the full excerpt - the privacy asserts); a fit=yes result renders the LIVE
+SUGGESTION frame exactly once then withdraws; a parse failure produces only the ledger line;
+autoPlant instantiates the dormant suggested block; the rate bounds.
 
 The family counts: the phase-1 suite targets the tool-coach's 129-check size reference; the wave-2
 suite is its own counted series (the README of each Source/Test folder declares its PASS count for
@@ -1639,8 +1643,8 @@ mechanics pass and HIGH for the verification pass per the task-routing skill).
 
     A parent board with `expectAgents: 5` sees five rows.
 
-    A child settle flips the row at the next request, and an explicit `[live-report]` splice pickup
-    updates the row without any parent tool call (B-series).
+    A child settle changes the row at the next request, and an explicit `[live-report]` splice
+    pickup updates the row without any parent tool call (B-series).
 
     A stalled member renders `[stalled]` with no model action, a dead child renders `[failed]`, and
     the count never lies.
@@ -1693,7 +1697,7 @@ sentence that names the forwarding.
 
 The design ratifies this per the position of 07 section 4.4.
 
-(c) **Idle-wake turns.** Channel 4 is model-visible, and the user sees the wake in the GUI; the
+(c) **Idle-wake turns.** Channel 4 is model-visible, and the user observes the wake in the GUI; the
 `tool-jobs` wakeup turn is a real model request that the user did not ask for.
 
 The design ratifies this per 07 section 4.2, and the SCHEME documents the classification.
@@ -1705,10 +1709,10 @@ rule is the file-ownership map.
 
 ### 11.2 The addenda coverage (I2-I6)
 
-None of the five addenda had landed when the DESIGN lane wrote this document (checked at the start
+None of the five addenda had arrived when the DESIGN lane wrote this document (checked at the start
 and twice during the run).
 
-This document designs them here and flags them for ratification at the C2 dispatch:
+This document designs them here and marks them for ratification at the C2 dispatch:
 
 - AWAIT-MARKER -> section 4.3 (the `{"__await":true` first-key arguments marker; fire-and-forget by
   default; verified legal against the compiled parameter schemas).
@@ -1722,9 +1726,9 @@ This document designs them here and flags them for ratification at the C2 dispat
 - SUGGESTER-CONFIGURED -> section 2.6 (the full knob set: mode, privacy, gate, rate bounds, timeout,
   `autoPlant`, the route triple).
 
-If any addendum lands before the C2 dispatch, the orchestrator folds its text over the corresponding
-section here (the addendum wins on conflict), and the report to the parent lists exactly which areas
-need that ratification.
+If any addendum arrives before the C2 dispatch, the orchestrator folds its text over the
+corresponding section here (the addendum wins on conflict), and the report to the parent lists
+exactly which areas need that ratification.
 
 ---
 

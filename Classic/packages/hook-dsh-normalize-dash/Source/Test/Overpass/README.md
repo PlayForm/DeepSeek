@@ -4,13 +4,13 @@ What this test verifies.
 
 ## Intent
 
-The overpass layer: the tools/post-execute arm (normalizing tool results in
-the transcript), the agent/pre-step arm (normalizing incoming step batches),
-the human-facing `normalize-over` command that drives both, and the history-
-safety invariant. This is its own folder because the arms are a separate
-integration surface with their own registration contract, their own scope
-gates (both off by default), their own exemption list and their own ledger
-strings. The source suite's Run O (O0-O14), moved verbatim.
+The overpass layer: the tools/post-execute arm (which normalizes tool results
+in the transcript), the agent/pre-step arm (which normalizes incoming step
+batches), the human-facing `normalize-over` command that drives both, and the
+history-safety invariant. This is its own folder because the arms are a
+separate integration surface with their own registration contract, their own
+scope gates (both off by default), their own exemption list, and their own
+ledger strings. The Run O (O0-O14) of the source suite, moved verbatim.
 
 ## Scenario
 
@@ -67,13 +67,14 @@ strings. The source suite's Run O (O0-O14), moved verbatim.
 
 ## Fixtures
 
-The harness fake ctx + the REAL factory + the REAL dash apply. One apply
+The harness fake ctx, the REAL factory, and the REAL dash apply. One apply
 with a hand-built config whose `scopes` volatile cell returns a mutable
 object; the O2/O10/O12 flips mutate that object and dispatch through the
 registered `loader/volatile-update` listener. `PostO`/`PreO` are the
 registered listeners; `NextAcceptO` and the value/content-returning
 alternatives are the downstream decisions; `ExecO("bash")` builds the call
-identity. The durable ledger is cleared at folder start; no ledger reads.
+identity. The durable ledger is cleared at folder start, and there are no
+ledger reads.
 
 ## Expected ledger strings (byte-exact)
 
@@ -85,8 +86,8 @@ identity. The durable ledger is cleared at folder start; no ledger reads.
 
 ## Edge cases
 
-- Both arms off by default; the O2/O10 flips are live (no remount).
-- Non-text blocks, value-carrying decisions, CCR marker text and rejected
+- Both arms are off by default; the O2/O10 flips are live (no remount).
+- Non-text blocks, value-carrying decisions, CCR marker text, and rejected
   steps all pass through untouched - the marker guard makes any load order
   safe.
 - The one-shot arm fires exactly once and is consumed.

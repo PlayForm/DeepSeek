@@ -9,9 +9,9 @@ status: active
 # The DSH plugin family in diagrams
 
 This folder is the reference for all **31 packages** of the DeepSeek Harness plugin family,
-generated **2026-10-21**. Six folders group the packages by functionality; each has one Mermaid
-flowchart per package, a group overview, and a rendered `.svg` sibling for every `.mmd`, so the
-library reads without the Line9 CLI. Four integration diagrams and a root map complete the set.
+generated **2026-10-21**. Six folders group the packages by function, and each folder has one
+Mermaid flowchart per package, a group overview, and a rendered `.svg` sibling for every `.mmd`, so
+the library reads without the Line9 CLI. Four integration diagrams and a root map complete the set.
 
 The family is published at **0.1.0** in two trees: **Classic** (plain TypeScript, 15 packages) and
 **EffectTS** (Effect 4.0.5, 16 packages). The host bundles (`dsh-base`, `dsh-web-app`, the
@@ -19,30 +19,30 @@ experimental bundles) appear as "the DSH host", with no per-package folder.
 
 ## The family in one page
 
-**Two trees, one contract.** Classic is `lib-dsh-core`, `plugin-dsh-factory` and thirteen
+**Two trees, one contract.** Classic is `lib-dsh-core`, `plugin-dsh-factory`, and thirteen
 `hook-dsh-*` / `plugin-dsh-*` bundles; EffectTS is `ets-base-dsh`, `ets-lib-dsh-core`,
-`ets-plugin-dsh-factory` and thirteen `ets-*` bundles. Both implement the same loader contract,
-event surfaces, config keys and ledger strings.
+`ets-plugin-dsh-factory`, and thirteen `ets-*` bundles. Both implement the same loader contract,
+event surfaces, config keys, and ledger strings.
 
-**The loader contract** is four fields on the default export: `name` (the identity, agreeing with
-the package name), `apply` (returns nothing - a returned value silently kills event delivery),
-`Config` (a Schemastery schema, validated at load, failing loud), and `inject` (the services the
-plugin needs, which also orders the loads: the loader holds a consumer PENDING until its services
-exist).
+**The loader contract** is four fields on the default export: `name` (the identity, in agreement
+with the package name), `apply` (returns nothing, because a returned value silently kills event
+delivery), `Config` (a Schemastery schema, validated at load and failing loud), and `inject` (the
+services that the plugin needs, which also orders the loads, because the loader holds a consumer
+PENDING until its services exist).
 
-**`ctx.pluginFactory`** is the family's one service: nineteen methods covering the ledger, the
-exclusion match, discovery, the union keep-list, the gate set, the write executor, the `fs/observed`
-re-emit, the continuation, the state builder, the wiring, the lifecycle effects, the journal, the
-schema factory, the seam, the inflight key, and the direct-govern registry and entry. The factory
-owns the shared machinery; each module owns its leaves and its ledger strings.
+**`ctx.pluginFactory`** is the one service of the family: nineteen methods that cover the ledger,
+the exclusion match, discovery, the union keep-list, the gate set, the write executor, the
+`fs/observed` re-emit, the continuation, the state builder, the wiring, the lifecycle effects, the
+journal, the schema factory, the seam, the inflight key, and the direct-govern registry and entry.
+The factory owns the shared mechanism, and each module owns its leaves and its ledger strings.
 
-**The ledger-string law.** Every activation line, refusal line, chain-pass line and journal record
-is asserted byte-identically by the smoke suites, in both trees. One ledger per plugin,
-`~/.dsh/<identity>.log`; the activation line answers "did it activate".
+**The ledger-string law.** The smoke suites assert every activation line, refusal line, chain-pass
+line, and journal record byte-identically, in both trees. One ledger per plugin at
+`~/.dsh/<identity>.log`, and the activation line answers "did it activate".
 
-**14 Classic bundles are active in this desktop profile; the 16 ETS packages are a parallel release
-and are not active there.** `lib-dsh-core` is a library, not a bundle. The ETS tree is published,
-built and smoke-tested; it is not running in this profile.
+**14 Classic bundles are active in this desktop profile, and the 16 ETS packages are a parallel
+release that is not active there.** `lib-dsh-core` is a library and not a bundle. The ETS tree is
+published, built, and smoke-tested, and it does not run in this profile.
 
 ## The map
 
@@ -103,24 +103,24 @@ built and smoke-tested; it is not running in this profile.
 
 ## How to read this library
 
-Read `01-foundation` first: it explains the ledger, gate, write executor and state builder every
-other folder assumes. Then `02-governance` (write path), `03-normalize` (stream path),
-`04-guardians` (tool pipeline), `05-live-context` (prompt), and `06-harness-integration` (the
-seams).
+Read `01-foundation` first, because it explains the ledger, the gate, the write executor, and the
+state builder that every other folder assumes. Then read `02-governance` (write path),
+`03-normalize` (stream path), `04-guardians` (tool pipeline), `05-live-context` (prompt), and
+`06-harness-integration` (the seams).
 
 ## Rendering
 
-`line9 render <file>` opens the viewer; `line9 render <file> --out <file>.svg` renders headless. The
-rendered `.svg` siblings let the library browse without the CLI; the `.mmd` source wins when they
-disagree. Sources are ASCII-only, 2-space indented, with `title:` and `line9.theme: boardroom`
-frontmatter.
+`line9 render <file>` opens the viewer, and `line9 render <file> --out <file>.svg` renders headless.
+The rendered `.svg` siblings let the library browse without the CLI, and the `.mmd` source wins when
+they disagree. The sources are ASCII-only and 2-space indented, with `title:` and
+`line9.theme: boardroom` frontmatter.
 
 ## Sources and accuracy
 
 The authoritative registry is
 [Documentation/Plugins/PLUGIN-FAMILY.md](../Documentation/Plugins/PLUGIN-FAMILY.md). Every claim
-traces to a package `README.md`, `SCHEME.md`, `cordis.patch.yml` or `Source/` file, or to that
-registry. Where a package document and its source tree disagree, the source tree wins; the known
-cases are the `effect` version (manifests pin `4.0.5`, some prose says `4.0.2`) and the ETS lib-core
-export list (thirteen names in source, four stale ones in its README). The planned orchestration
-plugins are not implemented and are out of scope.
+traces to a package `README.md`, `SCHEME.md`, `cordis.patch.yml`, or `Source/` file, or to that
+registry. Where a package document and its source tree disagree, the source tree wins, and the known
+cases are the `effect` version (the manifests pin `4.0.5`, and some prose says `4.0.2`) and the ETS
+lib-core export list (thirteen names in source and four stale ones in its README). The planned
+orchestration plugins are not implemented and are out of scope.

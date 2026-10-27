@@ -1,5 +1,5 @@
 ---
-title: COMPLETION-ERGONOMICS (I4) — the completion-block ergonomics
+title: COMPLETION-ERGONOMICS (I4) - the completion-block ergonomics
 category: Archive/Live-Containers
 kind: one-shot-record
 date: 2026-10-19
@@ -26,29 +26,29 @@ statuses:
 
 # COMPLETION-ERGONOMICS (I4) - the completion-block ergonomics, independently resolved
 
-Status: RATIFICATION addendum for D2's IMPLEMENTATION-DESIGN.md section 4.2, written against the I3
-APPEND-SEAM carrier (the registered dynamic context). Where this file conflicts with D2's 4.2, the
-RESOLVED rules below win for the C2 dispatch unless I3 already ratified D2's bytes (the CONFLICT
-TABLE at the end). ASCII + tabs throughout.
+Status: RATIFICATION addendum for section 4.2 of D2's IMPLEMENTATION-DESIGN.md, written against the
+I3 APPEND-SEAM carrier (the registered dynamic context). Where this file conflicts with 4.2 of D2,
+the RESOLVED rules below win for the C2 dispatch unless I3 already ratified the bytes of D2 (the
+CONFLICT TABLE at the end). ASCII + tabs throughout.
 
 ## 0. The one-paragraph decision
 
 A detached batch of N commands must NOT produce N separate completion blocks: every settle between
 two admissions merges into ONE pending text (one wrapper line + N frames + ONE resume-hint line),
 delivered as ONE sourced user-role snapshot (I3 2.3). The block ends with a single "what to do next"
-line so the model's next move is productive continuation (the schedule-more loop), not surprise. The
-aggregation window is PER TURN (admission-to-admission), never per-count or per-time: the loop
-admits when it admits, so the turn is the only boundary the carrier actually has. Ordering inside
-the merged text is SETTLE ORDER (the same first-wins order I3 3.5 verified for the carrier),
-disclosed by the standing caveat line; the frame's own timestamp + job id make the dispatch order
-reconstructible.
+line so that the next move of the model is a productive continuation (the schedule-more loop) and
+not surprise. The aggregation window is PER TURN (admission-to-admission) and never per-count or
+per-time, because the loop admits when it admits, so the turn is the only boundary that the carrier
+actually has. Ordering inside the merged text is SETTLE ORDER (the same first-wins order that I3 3.5
+verified for the carrier) and the standing caveat line discloses it, while the own timestamp and job
+id of the frame make the dispatch order reconstructible.
 
 ## 1. The batched-append rule
 
-1.1 The window: the pending slot (I3 2.3's per-agent slot) is the aggregation buffer. A settled job
-APPENDS its wrapped frame to the slot; the slot drains to zero when the frame text is durably
-delivered (consume-on-logged-snapshot) and is cleared. Everything that settles before the next
-admission therefore ships as one snapshot; everything after waits for the following one.
+1.1 The window: the pending slot (the per-agent slot of I3 2.3) is the aggregation buffer. A settled
+job APPENDS its wrapped frame to the slot, and the slot drains to zero when the frame text is
+durably delivered (consume-on-logged-snapshot) and is cleared. Everything that settles before the
+next admission therefore ships as one snapshot, and everything after waits for the following one.
 
     - window = one turn (one admission). NOT "first N then flush":
       the loop's admission cadence is not under plugin control, and a
@@ -58,22 +58,22 @@ admission therefore ships as one snapshot; everything after waits for the follow
     - no re-batching across turns: a delivered snapshot is final; a
       later settle starts a NEW pending text with a fresh wrapper line.
 
-1.2 The merge shape: frames in settle order, blank-line separated, ONE wrapper line above the first
-frame, ONE resume-hint line below the last frame (section 3). The per-job "[live] job_output ... to
-read the full output." line stays INSIDE each frame (D2 4.2 verbatim, I3-ratified); the shared
-resume hint is the LAST line of the merged text.
+1.2 The merge shape: frames in settle order, blank-line separated, with ONE wrapper line above the
+first frame and ONE resume-hint line below the last frame (section 3). The per-job line "[live]
+job_output ... to read the full output." stays INSIDE each frame (D2 4.2 verbatim, I3-ratified), and
+the shared resume hint is the LAST line of the merged text.
 
-1.3 The byte cap: the pending text is bounded at 4 KiB total (N x 2 KiB-per-frame unbounded was
-never acceptable). When a merge would exceed the cap, the OLDEST frames are truncated first: the
+1.3 The byte cap: the pending text is bounded at 4 KiB total, because N x 2 KiB-per-frame unbounded
+was never acceptable. When a merge would exceed the cap, the OLDEST frames are truncated first: the
 frame keeps its header, status, and elapsed lines, its output tail is shortened to the remaining
 budget (minimum 256 bytes or the marker
 `output (tail elided; cap reached - job_output <job-id> for the full output)`), and the ledger
 records `completion truncated <job-id> (<kept> bytes)`. Failed frames are NEVER truncated before
-running frames in the same batch - the error tail is the higher-value content (section 4.3).
+running frames in the same batch, because the error tail is the higher-value content (section 4.3).
 
-1.4 Why batched: (a) the conversation stays lean - one user-role snapshot per turn regardless of N;
-(b) the KV-cache cost is the merged text's own bytes, appended once (I3 3.1); (c) the model reads
-one coherent report instead of interleaved per-command interrupts.
+1.4 Why batched: (a) the conversation stays lean, with one user-role snapshot per turn regardless of
+N; (b) the KV-cache cost is the own bytes of the merged text, appended once (I3 3.1); (c) the model
+reads one coherent report and not interleaved per-command interrupts.
 
 ## 2. The resume-hint rule
 
@@ -81,8 +81,8 @@ one coherent report instead of interleaved per-command interrupts.
 
     [live] next: <hint>
 
-2.2 The hint is COMPOSED, not free-form, from the batch's aggregate state, in this priority order
-(first matching rule wins):
+2.2 The hint is COMPOSED and not free-form, from the aggregate state of the batch, in this priority
+order (first matching rule wins):
 
     - any failed/killed frame:
     	[live] next: <job-id> failed (<cause>) - read job_output <job-id>, fix, and re-run the failed steps before continuing the remaining ones.
@@ -96,16 +96,16 @@ one coherent report instead of interleaved per-command interrupts.
     - the batch contains only running-adjacent context (cannot occur in
       a completion text; reserved for the fallback carrier).
 
-2.3 Grammar: the hint is ONE line, ASCII, <= 200 bytes, no job output echoed into it (the frame
-carries the output; the hint only names the action). The phrase "continue the build steps" is the
-template's stand-in for the batch's own command domain: the composer derives the domain noun from
-the first cmdHead in the batch (its first token: cargo/npm/pnpm/make/bash -> "the <token> steps";
-unknown -> "the build steps"). The schedule-more loop this enables is the point: the model gets a
-concrete, cheap next action instead of deciding from silence.
+2.3 Grammar: the hint is ONE line, ASCII, <= 200 bytes, with no job output echoed into it, because
+the frame carries the output and the hint only names the action. The phrase "continue the build
+steps" is the stand-in of the template for the own command domain of the batch: the composer derives
+the domain noun from the first cmdHead in the batch (its first token: cargo/npm/pnpm/make/bash ->
+"the <token> steps"; unknown -> "the build steps"). The schedule-more loop that this enables is the
+point, because the model gets a concrete, cheap next action instead of deciding from silence.
 
-2.4 The hint is part of the DELIVERED snapshot; it is not re-rendered in later turns. A hint that
-turns out wrong (the model already acted) costs nothing - it is one stale line in history, like any
-completion record.
+2.4 The hint is part of the DELIVERED snapshot and is not re-rendered in later turns. A hint that
+turns out wrong (the model already acted) costs nothing, because it is one stale line in history,
+like any completion record.
 
 ## 3. The byte-exact shape
 
@@ -133,28 +133,30 @@ The merged pending text (N=2 example; wrapper + frames + hint):
     [live] job_output <job-id-b> to read the full output.
     [live] next: <hint>
 
-Rules: N=1 is the same text with one frame (degenerate batch = D2 4.2 verbatim between the wrapper
-and the hint). The wrapper line is I3 2.5 byte-exact. The frame bytes are D2 4.2 byte-exact (I3
-ratified). The hint line is NEW (this file, section 2). The last-line stack "[live] job_output ... /
-[live] next: ..." is intentional: the per-frame pointer is per-job, the hint is per-batch. Blank
-line between frames; NO blank line between the last frame's job_output line and the hint. Tab-free
-render (spaces in frames exactly as D2 4.2 shows); ASCII only.
+Rules: N=1 is the same text with one frame (a degenerate batch = D2 4.2 verbatim between the wrapper
+and the hint). The wrapper line is I3 2.5 byte-exact, the frame bytes are D2 4.2 byte-exact (I3
+ratified), and the hint line is NEW (this file, section 2). The last-line stack "[live] job_output
+... / [live] next: ..." is intentional, because the per-frame pointer is per-job and the hint is
+per-batch. A blank line separates the frames, and NO blank line separates the job_output line of the
+last frame from the hint. The render is tab-free (spaces in frames exactly as D2 4.2 shows) and
+ASCII only.
 
 ## 4. Ordering and failure entries
 
-4.1 Ordering: SETTLE ORDER inside the merged text (the order the plugin appended frames to the
-slot). Rationale: it is the only order the carrier guarantees anyway (I3 3.5 - one message in settle
-order), and fabricating dispatch order would require re-sorting frames the carrier already merged.
-Dispatch order is RECOVERABLE, not rendered: each frame carries the job id and elapsed, and the
-standing section's fleet line plus the frame timestamps reconstruct the dispatch sequence when the
-model needs it. The standing caveat line (`completions may arrive out of order`) already discloses
-this; the hint's k/n counts are settle-aggregates and never imply order.
+4.1 Ordering: SETTLE ORDER inside the merged text (the order in which the plugin appended frames to
+the slot). Rationale: it is the only order that the carrier guarantees anyway (I3 3.5, one message
+in settle order), and fabricating the dispatch order would require re-sorting frames that the
+carrier already merged. Dispatch order is RECOVERABLE and not rendered: each frame carries the job
+id and the elapsed time, and the fleet line of the standing section plus the frame timestamps
+reconstruct the dispatch sequence when the model needs it. The standing caveat line
+(`completions may arrive out of order`) already discloses this, and the k/n counts of the hint are
+settle-aggregates that never imply order.
 
 4.2 Cross-turn ordering: a job dispatched in turn T may complete in the snapshot of turn T+2
-alongside a turn-T+1 job. This is correct and disclosed; no cross-turn regrouping is attempted.
+alongside a turn-T+1 job, which is correct and disclosed, and no cross-turn regrouping is attempted.
 
-4.3 Failed-command entries: a failure is a FIRST-CLASS frame, same shape as D2 4.2's failure
-variant:
+4.3 Failed-command entries: a failure is a FIRST-CLASS frame with the same shape as the failure
+variant of D2 4.2:
 
     --- LIVE CONTAINER <job-id> completed ---
     status: error (cause: producer)

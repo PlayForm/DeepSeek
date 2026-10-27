@@ -1,6 +1,6 @@
 # SCHEME - @playform/hook-dsh-graph-suggester
 
-The complete scheme: every config field, every surface, every ledger string.
+This file holds the complete scheme: every config field, every surface, and every ledger string.
 
 ## Config (Schemastery, validated at load)
 
@@ -28,16 +28,20 @@ The complete scheme: every config field, every surface, every ledger string.
 
 ## The real graph (the consumer chain, verified 2026-10-23)
 
-`@playform/plugin-dsh-workspace-graph` now SERVES the declared query: `ctx.workspaceGraph` exposes
-`neighborhood(path, limit)` (and `indexWorkspace` to populate the graph in the first place), derived
-from the W1 `contains`/`imports` edges. The `Real-Graph-Neighborhood` folder proves the chain
-against the real service - the note lists the anchor (definition), the importing test file (tests)
-and the other importer, and an anchor the graph does not know honestly falls back to the static set.
-The anchor is the first quoted `.ts` path in the tool's arguments; the graph matches it by exact
-display path, else by path suffix (a repo-relative anchor works).
+`@playform/plugin-dsh-workspace-graph` now SERVES the declared query, so `ctx.workspaceGraph`
+exposes `neighborhood(path, limit)`, and `indexWorkspace` populates the graph in the first place,
+all derived from the W1 `contains`/`imports` edges.
 
-W1 still has no `calls`/`references` edges, so the component carries importers rather than callers:
-the pack's note text still says "callers", and the graph's own SCHEME documents the deferral.
+The `Real-Graph-Neighborhood` folder proves the chain against the real service: the note lists the
+anchor as the definition, the importing test file as tests, and the other importer, and an anchor
+that the graph does not know falls back honestly to the static set.
+
+The anchor is the first quoted `.ts` path in the arguments of the tool, and the graph matches it by
+exact display path or else by path suffix, so a repo-relative anchor works.
+
+W1 still has no `calls`/`references` edges, so the component carries importers rather than callers,
+and the note text of the pack still says "callers" while the SCHEME of the graph documents the
+deferral.
 
 ## Surfaces
 
@@ -53,11 +57,12 @@ the pack's note text still says "callers", and the graph's own SCHEME documents 
 | `Neighborhood` | 1        | 0.6       | path-shape (0.4), symbol-shape (0.5), glob-shape (0.3) | `workspaceGraph.neighborhood(anchor)`; empty component → static fallback; absent/failed → abstain |
 | `Sibling`      | 2        | 0.5       | usage-shape (0.5), family-shape (0.3)                  | Static: `Documentation/Plugins/PLUGIN-FAMILY.md`, the inventory, `**/README.md`                   |
 
-Confidence: `k = sigmoid(Σ weights − 0.6)`; the note emits iff `k ≥ gate`, the candidate set
-survives the cap and the exclusion, and the cooldown/cap allow it. The pack's per-intent thresholds
-(0.6 / 0.5) are set so that only full-evidence probes cross them (Neighborhood needs all three
-signals: k 0.65; Sibling needs both: k 0.55) - the config `threshold` may raise the gate, never
-lower it below the pack floor.
+The confidence is `k = sigmoid(Σ weights − 0.6)`, and the note emits only when `k ≥ gate`, the
+candidate set survives the cap and the exclusion, and the cooldown and cap allow it.
+
+The per-intent thresholds of the pack (0.6 / 0.5) are set so that only full-evidence probes cross
+them, because Neighborhood needs all three signals for k 0.65 and Sibling needs both for k 0.55, and
+the config `threshold` may raise the gate but never lower it below the pack floor.
 
 ## Ledger strings (byte-exact, module-owned)
 

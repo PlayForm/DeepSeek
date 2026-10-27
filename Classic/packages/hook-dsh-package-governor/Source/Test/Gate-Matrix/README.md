@@ -4,14 +4,12 @@ What this test verifies.
 
 ## Intent
 
-The g1 gate matrix is the governor's first line of defense: every `fs/observed`
-event that is not a mutation-actor write of a package.json body must be
-handled silently, and the one gate that DOES speak (exclusion-first) must speak
-in its exact byte-identical form with its P5 journal record and zero writes.
-The gates are exercised through the REAL wired listener (the same listener the
-live bus calls), so this folder proves the Factory.Gate composition, not just
-the predicate. The assertions are moved verbatim from
-`Classic/smokes/governor-smoke.mjs` section 4.
+The g1 gate matrix is the first line of defense of the governor: every `fs/observed` event that is
+not a mutation-actor write of a package.json body must be handled silently, and the one gate that
+DOES speak (exclusion-first) must speak in its exact byte-identical form with its P5 journal record
+and zero writes. The gates are exercised through the REAL wired listener (the same listener that the
+live bus calls), so this folder proves the Factory.Gate composition, not only the predicate. The
+assertions are moved verbatim from section 4 of `Classic/smokes/governor-smoke.mjs`.
 
 ## Scenario
 
@@ -29,11 +27,10 @@ the predicate. The assertions are moved verbatim from
 
 ## Fixtures
 
-The harness world (Boot) + the wired `fs/observed` listener from the Events
-capture. A `gates/` directory under the harness Root for the gate targets; the
-exclusion fixture is a `package.json` under `<Root>/.git/inner/` (an excluded
-prefix). The Stash idempotence gate seeds `Probe.Stash` directly and cleans it
-up. No registry, no manifest content - the silent gates must not even read.
+The harness world (Boot) + the wired `fs/observed` listener from the Events capture. A `gates/`
+directory under the harness Root for the gate targets; the exclusion fixture is a `package.json`
+under `<Root>/.git/inner/` (an excluded prefix). The Stash idempotence gate seeds `Probe.Stash`
+directly and cleans it up. No registry, no manifest content - the silent gates must not even read.
 
 ## Expected ledger strings (byte-exact)
 
@@ -42,14 +39,13 @@ up. No registry, no manifest content - the silent gates must not even read.
 
 ## Edge cases
 
-- The five silent gates share ONE `before` baseline (the source suite's
-  single variable): any gate that added even one line would break every later
-  count - that is the negative control.
-- A vanished manifest (the `gates/package.json` never exists) silently fails
-  the chain pass: no line, no write, no throw.
-- The throw-containment check flips `Probe.Factory` to undefined to force the
-  listener body to throw, asserts no rethrow, restores the factory, and
-  asserts the `listener error (suppressed)` logger line.
+- The five silent gates share ONE `before` baseline (the single variable of the source suite): any
+  gate that added even one line would break every later count - that is the negative control.
+- A vanished manifest (the `gates/package.json` never exists) silently fails the chain pass: no
+  line, no write, no throw.
+- The throw-containment check flips `Probe.Factory` to undefined to force the body of the listener to
+  throw, asserts no rethrow, restores the factory, and asserts the `listener error (suppressed)`
+  logger line.
 
 ## Expected count
 

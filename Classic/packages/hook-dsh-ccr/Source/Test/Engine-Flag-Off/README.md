@@ -1,20 +1,22 @@
 # Engine-Flag-Off
 
-What this test verifies.
+This file states what the test verifies.
 
 ## Intent
 
-The fully inert postures with the context engine flag OFF (the default): no
-engine runtime is built, NO agent/pre-step listener is registered (the extra
-listener beyond tools/post-execute is the State builder's P10
-volatile-update refresh), post-execute traffic leaves no engine traces and no
-engine ledger lines - plus the byte-identical pass-throughs that hold
-regardless of the engine: the six exempt tools (write, edit, raw-write,
-subagent, ask_user_question, ccr_retrieve), the failing result with
-compressFailures=false, the value-carrying accepted decision, and the block
-decision. These are the negative controls of the compression gate: each
-returns the downstream decision by IDENTITY with no marker and no store. This
-is the source suite's Run 10, Run 4 and Run 6, moved verbatim.
+The suite covers the fully inert postures with the context engine flag OFF, which is the default: no
+engine runtime is built, NO agent/pre-step listener is registered (the extra listener beyond
+tools/post-execute is the P10 volatile-update refresh of the State builder), and post-execute traffic
+leaves no engine traces and no engine ledger lines.
+
+It also covers the byte-identical pass-throughs that hold regardless of the engine: the six exempt
+tools (write, edit, raw-write, subagent, ask_user_question, ccr_retrieve), the failing result with
+compressFailures=false, the value-carrying accepted decision, and the block decision.
+
+These are the negative controls of the compression gate, because each returns the downstream decision
+by IDENTITY with no marker and no store.
+
+The suite is Run 10, Run 4, and Run 6 of the source suite, moved verbatim.
 
 ## Scenario
 
@@ -41,26 +43,24 @@ is the source suite's Run 10, Run 4 and Run 6, moved verbatim.
 
 ## Fixtures
 
-- The Harness fake ctx + the REAL factory + the REAL ccr apply; each group
-  gets a fresh `Rm()` and its own `Make(Validate(...))` run exactly as the
-  source suite does (Run 10 default config, Run 4 and Run 6 with
-  `autoExpand: false`).
-- The 5000-byte `PlainText` content for the exempt and failure scenarios;
-  the `Decision`/`ValueDecision`/`BlockDecision` downstream stubs.
+- The Harness fake ctx with the REAL factory and the REAL ccr apply, where each group gets a fresh
+  `Rm()` and its own `Make(Validate(...))` run exactly as the source suite does (Run 10 with the
+  default config, and Run 4 and Run 6 with `autoExpand: false`).
+- The 5000-byte `PlainText` content serves the exempt and failure scenarios, and the
+  `Decision`/`ValueDecision`/`BlockDecision` downstream stubs stand in for the decisions.
 
 ## Expected ledger strings (byte-exact)
 
-None - the folder asserts ABSENCE: no compressed or stored lines, no engine
-lines, and decision identity for every pass-through.
+None, because the folder asserts ABSENCE: no compressed or stored lines, no engine lines, and
+decision identity for every pass-through.
 
 ## Edge cases
 
-- The exempt list covers mutators, the plugin's own tool, agents' briefs and
-  user gates - all six pass through even at 5000 bytes.
-- Failing results, value-carrying decisions and block decisions are never
-  touched when compressFailures=false (the fail-open envelope).
-- The two-listener posture is itself the flag-off signature (agent/pre-step
-  absent).
+- The exempt list covers mutators, the own tool of the plugin, the briefs of agents, and the user
+  gates, so all six pass through even at 5000 bytes.
+- Failing results, value-carrying decisions, and block decisions are never touched when
+  compressFailures=false, which is the fail-open envelope.
+- The two-listener posture is itself the flag-off signature, because agent/pre-step is absent.
 
 ## Expected count
 

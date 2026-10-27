@@ -4,22 +4,19 @@ What this test verifies.
 
 ## Intent
 
-The update stage is the governor's second half, probed directly through its
-own exported machinery: the pure leaves (Decode, Filter, Satisfy), the three
-update gates (circuit breaker, in-flight, cooldown - each with its
-byte-identical line and the joint "gates log, nothing else" window), the FAILED
-path (ncu exit 1, the breaker increment, the update-failed journal, the
-U-sub-2 refresh that runs even on failure), the first-wins Resolve pick (own
-directory, then registry-adjacent, then the configured global, then the
-built-in default), the policy engine (the file read, the verifyCommand through
-the /bin/sh -c seam, the merged rejects, the policy-naming dispatched line),
-the verifyCommand exit-code matrix (0 ok, 127 non-fatal, other fails the
-stage), the absent/unparsable policy fallbacks, the programmatic npm-check-updates
-mode, the P1 job-ring piping, the detached fallbacks (no registry service and
-the preflight rejection), the Follow passage/Filter gates, the factory
-keep-list wiring on the observe path, and the ledger-prefix invariant over the
-folder's whole logger capture. The assertions are moved verbatim from
-`Classic/smokes/governor-smoke.mjs` sections 7-9 and 12.
+The update stage is the second half of the governor, probed directly through its own exported
+machinery: the pure leaves (Decode, Filter, Satisfy), the three update gates (circuit breaker,
+in-flight, cooldown - each with its byte-identical line and the joint "gates log, nothing else"
+window), the FAILED path (ncu exit 1, the breaker increment, the update-failed journal, the U-sub-2
+refresh that runs even on failure), the first-wins Resolve pick (own directory, then
+registry-adjacent, then the configured global, then the built-in default), the policy engine (the
+file read, the verifyCommand through the /bin/sh -c seam, the merged rejects, the policy-naming
+dispatched line), the exit-code matrix of verifyCommand (0 ok, 127 non-fatal, other fails the stage),
+the absent/unparsable policy fallbacks, the programmatic npm-check-updates mode, the P1 job-ring
+piping, the detached fallbacks (no registry service and the preflight rejection), the Follow
+passage/Filter gates, the keep-list wiring of the factory on the observe path, and the ledger-prefix
+invariant over the whole logger capture of the folder. The assertions are moved verbatim from
+sections 7-9 and 12 of `Classic/smokes/governor-smoke.mjs`.
 
 ## Scenario
 
@@ -65,19 +62,16 @@ folder's whole logger capture. The assertions are moved verbatim from
 
 ## Fixtures
 
-The harness world (Boot) with `Probe.Mode = "bin"`; proj-f as the recurring
-dispatch target (its breaker count, Stash stamp and in-flight set are seeded
-and cleaned around each gate check); the Spawn knobs (Exits queue, Out text)
-drive the bin-mode runs; proj-g/proj-g2/registry-adjacent for Resolve; proj-np
-for the policy fallbacks; proj-j for the programmatic mode (the
-npm-check-updates import is heavy - the source's 200x50ms poll loop is kept);
-proj-k for the observe-path wiring.
+The harness world (Boot) with `Probe.Mode = "bin"`; proj-f as the recurring dispatch target (its
+breaker count, Stash stamp, and in-flight set are seeded and cleaned around each gate check); the
+Spawn knobs (Exits queue, Out text) drive the bin-mode runs; proj-g/proj-g2/registry-adjacent for
+Resolve; proj-np for the policy fallbacks; proj-j for the programmatic mode (the npm-check-updates
+import is heavy - the 200x50ms poll loop of the source is kept); proj-k for the observe-path wiring.
 
-INTERLEAVED CAPTURES: where the source suite asserted BETWEEN two fixture
-actions (the generic default-policy count between the two fallback dispatches;
-the dispatched count between the two detached-fallback runs), the folder
-captures that intermediate count in the fixture phase and the check asserts the
-captured value - the same point in the flow, the same semantics.
+INTERLEAVED CAPTURES: where the source suite asserted BETWEEN two fixture actions (the generic
+default-policy count between the two fallback dispatches; the dispatched count between the two
+detached-fallback runs), the folder captures that intermediate count in the fixture phase and the
+check asserts the captured value - the same point in the flow, the same semantics.
 
 ## Expected ledger strings (byte-identical)
 
@@ -99,12 +93,11 @@ captured value - the same point in the flow, the same semantics.
 ## Edge cases
 
 - The three gates share one window: exactly 3 lines total, nothing else.
-- The breaker increments on failure and resets on success; the U-sub-2 refresh
-  re-emits with the stat version even on the FAILED path.
-- 127 from the verify runner is non-fatal (the stage completes); any other
-  non-zero fails the stage.
-- The programmatic run is polled (the library import is heavy); the Mode field
-  is restored to "bin" afterwards.
+- The breaker increments on failure and resets on success; the U-sub-2 refresh re-emits with the
+  stat version even on the FAILED path.
+- 127 from the verify runner is non-fatal (the stage completes); any other non-zero fails the stage.
+- The programmatic run is polled (the library import is heavy); the Mode field is restored to "bin"
+  afterwards.
 
 ## Expected count
 

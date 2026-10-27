@@ -14,18 +14,19 @@ The **fullwidth normalizer for model output** - a DeepSeek Harness plugin that h
 waterfall (the interceptable wrapper around EVERY streaming model call, bound to the LlmRuntime) and
 normalizes the full-width family in model output, live in the transcript: the entire FULLWIDTH FORMS
 range U+FF01-U+FF5E maps to its ASCII half-width counterpart U+0021-U+007E - the whole story,
-letters, punctuation and digits included.
+letters, punctuation, and digits included.
 
-A **MAP flavor** of the normalize family: the core's `Fullwidth` char-to-char table owns the
+A **MAP flavor** of the normalize family: the `Fullwidth` char-to-char table of the core owns the
 substitution - no `replacement` config knob.
 
 The @-sentence identity: **Hook @ DSH @ Normalize @ Fullwidth**.
 
-The family's `raw-write` tool (registered by [hook-dsh-normalize-dash](../hook-dsh-normalize-dash))
-bypasses this flavor's transforms too - the exemption is family-wide, so the tool's explicit
-`normalize` parameter (default false = verbatim) is the only normalization it applies.
+The `raw-write` tool of the family (registered by
+[hook-dsh-normalize-dash](../hook-dsh-normalize-dash)) bypasses the transforms of this flavor too -
+the exemption is family-wide, so the explicit `normalize` parameter of the tool (default false =
+verbatim) is the only normalization it applies.
 
-Unlike the governance family, the rewrite flows into both the live UI and the durable transcript -
+Unlike the governance family, the rewrite flows into the live UI and into the durable transcript -
 the normalization is deliberately **VISIBLE; it IS the feature**.
 
 ## The surfaces
@@ -33,8 +34,8 @@ the normalization is deliberately **VISIBLE; it IS the feature**.
 | Kind           | Name               | What                                                                                                                              |
 | -------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
 | listener       | llm/stream         | normalizes the full-width family live in the transcript (text/reasoning deltas, assembled block-end blocks, tool arguments gated) |
-| listener       | tools/post-execute | overpass arm, opt-in via scopes.toolResults (prepended, outermost vs the ccr gate)                                                |
-| listener       | agent/pre-step     | overpass arm, opt-in via scopes.batch                                                                                             |
+| listener       | tools/post-execute | overpass arm, opt-in through scopes.toolResults (prepended, outermost vs the ccr gate)                                            |
+| listener       | agent/pre-step     | overpass arm, opt-in through scopes.batch                                                                                         |
 | config/command | normalize-overpass | arms the one-shot batch overpass, flips scopes.toolResults, reports the scopes - the files sweep is declined                      |
 
 ## The configuration
@@ -55,10 +56,10 @@ the normalization is deliberately **VISIBLE; it IS the feature**.
 | `toolResultsExempt`      | string[] | `read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`, `ask_user_question` | a tool result whose exec name is listed passes the tool-results arm by identity (volatile)                                                     |
 
 The module composes the factory helper with `shared: false`, so the shared block is only `log` and
-`logFile`; the module's own fields follow in schema order.
+`logFile`; the own fields of the module follow in schema order.
 
-There is no `replacement` field: this is a MAP flavor - the substitution is the core's `Fullwidth`
-char-to-char table.
+There is no `replacement` field: this is a MAP flavor - the substitution is the `Fullwidth`
+char-to-char table of the core.
 
 ## The ledger
 
@@ -69,8 +70,8 @@ hook-dsh-normalize-fullwidth: overpass: normalized N char(s) in tool result <too
 hook-dsh-normalize-fullwidth: overpass: normalized N char(s) in step batch (turn T step S)
 ```
 
-The activation line is written by `apply()`; the count line and the overpass lines only appear on a
-normal completion / an N > 0 pass (N = 0 is a true no-op - no ledger line; a thrown-away stream
+`apply()` writes the activation line; the count line and the overpass lines appear only on a normal
+completion / an N > 0 pass (N = 0 is a true no-op - no ledger line; a stream that is thrown away
 writes no line).
 
 ## The build and the tests

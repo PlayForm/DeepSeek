@@ -4,12 +4,13 @@ The idle edge, the four gates, and the fail-open posture.
 
 ## Intent
 
-The hook is small and almost every branch is a way to NOT review. That is the
-point: a status listener that throws breaks the harness's status publication,
-and a listener that reviews on every idle edge turns a mis-set interval into a
-model call per turn. This folder pins each gate in order, then the one path that
-does review - asserting that the review ran inside `runMaintenance`, with the
-service's own snapshot and the maintenance signal.
+The hook is small, and almost every branch is a way to NOT review.
+
+That is the point: a status listener that throws breaks the status publication of the harness, and a
+listener that reviews on every idle edge turns a mis-set interval into a model call per turn.
+
+This folder pins each gate in order, and then the one path that does review, where it asserts that the
+review ran inside `runMaintenance` with the snapshot of the service and the maintenance signal.
 
 ## Scenario
 
@@ -32,11 +33,14 @@ service's own snapshot and the maintenance signal.
 
 ## Fixtures
 
-The shared Harness: the REAL built `apply` from `Target/Library.js`, the fake
-ctx with the listener capture, the fake plugin factory (the State builder + the
-ledger), `FakeLesson` (recorded Tick/Snapshot/Review calls, a settable `due`) and
-`FakeAgent` (a session id and a `runMaintenance` that records then runs the task
-on the microtask queue). `Settle()` is the whole waiting story.
+The shared Harness supplies the REAL built `apply` from `Target/Library.js`, the fake ctx with the
+listener capture, and the fake plugin factory with the State builder and the ledger.
+
+`FakeLesson` records the Tick, Snapshot, and Review calls and offers a settable `due`, and `FakeAgent`
+carries a session id and a `runMaintenance` that records the task and then runs it on the microtask
+queue.
+
+`Settle()` is the whole waiting story.
 
 ## Expected ledger strings (byte-exact)
 
@@ -46,8 +50,8 @@ on the microtask queue). `Settle()` is the whole waiting story.
 - `hook-dsh-lesson-nudge: cap reached (<n> reviews)`
 - `hook-dsh-lesson-nudge: skipped (agent cannot run maintenance)`
 
-The factory's `Append` prefixes `<module>: `; the harness's fake factory does the
-same, so the assertions are on the whole line.
+The `Append` of the factory prefixes `<module>: `, and the fake factory of the harness does the same,
+so the assertions are on the whole line.
 
 ## Expected count
 

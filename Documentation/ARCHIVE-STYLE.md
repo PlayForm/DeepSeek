@@ -32,20 +32,20 @@ statuses:
 
 # ARCHIVE-STYLE - The Single Document Template for the Documentation Tree
 
-> One style for EVERY document in the Documentation tree, so ANY later document - and ANY reader -
-> can navigate the archive the same way EVERY time. The style takes its conventions from the HPC
+> One style for EVERY document in the Documentation tree, so ANY later document, and ANY reader, can
+> navigate the archive the same way EVERY time. The style takes its conventions from the HPC
 > (Halted-Process Classification) system and the plans in
 > ~/Developer/Application/PlayForm/Aphrodite/.hermes: ONE fixed metadata schema everywhere, a real
-> YAML frontmatter block at the very top of the document carrying BOTH the document facts AND the
-> per-functionality status entries, then the original body. Per the user's amendments (2026-10-20):
-> NO markdown tables for status anywhere in the archive, and NO prose key-value headers - the
-> metadata is an actual YAML frontmatter block (delimited by --- lines, YAML fields and nested
-> lists/objects).
+> YAML frontmatter block at the very top of the document that carries BOTH the document facts AND
+> the per-functionality status entries, then the original body. Per the amendments of the user
+> (2026-10-20): NO markdown tables for status anywhere in the archive, and NO prose key-value
+> headers, because the metadata is an actual YAML frontmatter block (delimited by --- lines, YAML
+> fields and nested lists/objects).
 
 > **The 2026-10-21 role-prefix migration**: the four packages renamed that day read `lib-dsh-core`,
 > `ets-lib-dsh-core`, `plugin-dsh-normalize-file` and `ets-plugin-dsh-normalize-file`, and the
-> planned panel packages read `client-dsh-panel-family` and `client-dsh-panel-family-host`; the
-> documents below carry the new names, and the original names remain in git history.
+> planned panel packages read `client-dsh-panel-family` and `client-dsh-panel-family-host`. The
+> documents below carry the new names, and the original names stay in git history.
 
 ---
 
@@ -57,20 +57,20 @@ EVERY document is built from two parts, in this order:
 
     The very first thing in the file, delimited by `---` lines.
 
-    The frontmatter block: the document fields (section 2) plus the `statuses:` list (section 3),
-    ONE entry per functionality described.
+    The frontmatter block holds the document fields (section 2) plus the `statuses:` list (section
+    3), with ONE entry per functionality described.
 
 2. **The body.**
 
-    The original content starting with its own title heading, untouched.
+    The original content, which starts with its own title heading, untouched.
 
-    The prose, the sections, the quoted ledger strings stay byte-exact.
+    The prose, the sections, and the quoted ledger strings stay byte-exact.
 
 Nothing from the original content is removed or rewritten when a document is converted.
 
-The conversion is the frontmatter block + updated cross-references.
+The conversion is the frontmatter block plus the updated cross-references.
 
-The `statuses:` entries are the document's face toward the archive.
+The `statuses:` entries are the face of the document toward the archive.
 
 The body is the one-shot record of what was attempted.
 
@@ -89,14 +89,15 @@ Seven fields, always the same keys, plain YAML scalars:
     ---
 
 The document-level `status` values: active (living and current), complete (the attempt is finished),
-superseded (a later document replaced it), planned (NOTHING started yet).
+superseded (a later document replaced it), and planned (NOTHING started yet).
 
 ## 3. The statuses list (the frontmatter, part two)
 
-After the fields, the `statuses:` key with ONE list entry PER FUNCTIONALITY, FEATURE, DECISION, OR
-PROBLEM the document describes - the things a reader would want to check against reality.
+After the fields, the `statuses:` key holds ONE list entry PER FUNCTIONALITY, FEATURE, DECISION, OR
+PROBLEM that the document describes, which are the things a reader would want to check against
+reality.
 
-EACH entry is a nested mapping (the YAML object-in-list style of the user's example):
+EACH entry is a nested mapping (the YAML object-in-list style of the example of the user):
 
     statuses:
       - name: smoke-suite restructure
@@ -112,15 +113,16 @@ EACH entry is a nested mapping (the YAML object-in-list style of the user's exam
 - `name` - the functionality, named the way the body names it. NO markdown, NO quotes; avoid a colon
   inside the value.
 - `state` - ONE value from the vocabulary in section 4.
-- `evidence` - the concrete proof: a command's last line, a commit hash, a file path - or "this
+- `evidence` - the concrete proof: the last line of a command, a commit hash, a file path, or "this
   document only" when NOTHING exists outside the document. Keep the value a plain YAML scalar (NO
   colon-space, NO leading dash, NO quotes unless required).
 
 ## 4. The status vocabulary (fixed, seven values)
 
-- **implemented** - the functionality exists in code and is verified by its arbiter (the smokes, the
+- **implemented** - the functionality exists in code and its arbiter verifies it (the smokes, the
   build, the live battery). Use `implemented (PoC)` when a PoC covers the functionality but the full
-  plan has open gaps (the grades in Documentation/Reports/POC-GAP-ANALYSIS.md) - never "complete".
+  plan has open gaps (the grades in Documentation/Reports/POC-GAP-ANALYSIS.md), and never
+  "complete".
 - **resolved** - the problem or decision was settled.
 - **in-progress** - started but NOT landed its final verification.
 - **open** - described or decided but NOTHING exists yet.
@@ -130,18 +132,20 @@ EACH entry is a nested mapping (the YAML object-in-list style of the user's exam
 
 ## 5. The evidence discipline
 
-- EVERY status entry cites something checkable - or honestly says "this document only".
-- Statuses come from the actual state, NEVER from the document's own optimism. The authoritative
-  sources are: the document itself, Documentation/Plans/TOMORROW-REVIEW.md (the full record), the
-  git log, the runner (node Maintain/Run/Smokes/Index.mjs - its last line), and the built site.
+- EVERY status entry cites something checkable, or honestly says "this document only".
+- Statuses come from the actual state and NEVER from the own optimism of the document. The
+  authoritative sources are the document itself, Documentation/Plans/TOMORROW-REVIEW.md (the full
+  record), the git log, the runner (node Maintain/Run/Smokes/Index.mjs, its last line), and the
+  built site.
 - An entry may be open even in a document whose document-level status is complete. The statuses list
-  records per-functionality truth. The document-level status records the document's lifecycle.
+  records per-functionality truth, and the document-level status records the lifecycle of the
+  document.
 
 ## 6. The section structure (the body)
 
 The body keeps the original content.
 
-Where a document is written new, it follows this four-part arc (the HPC plans' shape):
+Where a document is written new, it follows this four-part arc (the shape of the HPC plans):
 
 1. The intent - what was attempted and why.
 2. The attempt - the design, the plan, the research.
@@ -154,8 +158,8 @@ Where a document is written new, it follows this four-part arc (the HPC plans' s
 
     ASCII only in new content.
 
-    The existing unicode in the original bodies stays byte-exact (the quoted ledger strings are part
-    of the smoke contract and are NEVER rewritten).
+    The existing unicode in the original bodies stays byte-exact, because the quoted ledger strings
+    are part of the smoke contract and are NEVER rewritten.
 
 2. **The position.**
 
@@ -165,21 +169,20 @@ Where a document is written new, it follows this four-part arc (the HPC plans' s
 
 3. **The schema.**
 
-    One fixed schema across the whole tree - a key's meaning is the same in EVERY document (the HPC
-    convention).
+    One fixed schema across the whole tree, so the meaning of a key is the same in EVERY document
+    (the HPC convention).
 
 4. **The metadata form.**
 
-    NO markdown tables for status anywhere in the archive and NO prose key-value headers - the
-    metadata is real YAML frontmatter only (the user's amendments, 2026-10-20).
+    NO markdown tables for status anywhere in the archive and NO prose key-value headers, because
+    the metadata is real YAML frontmatter only (the amendments of the user, 2026-10-20).
 
-    Ordinary tables inside the original bodies are untouched.
+    Ordinary tables inside the original bodies stay untouched.
 
 5. **The cross-references.**
 
     Cross-references use paths from the Documentation root, e.g.
-    Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md - so a moved file is found by
-    grep.
+    Documentation/Archive/Live-Containers/LIVE-CONTAINERS-RESEARCH.md, so grep finds a moved file.
 
 6. **The registration.**
 
@@ -188,27 +191,26 @@ Where a document is written new, it follows this four-part arc (the HPC plans' s
 
 7. **The paragraphs.**
 
-    The prose paragraphs: one idea per paragraph.
+    The prose paragraphs hold one idea per paragraph.
 
     A long paragraph (over ~400 characters, or one that runs several ideas together) is split at the
-    topic-sentence boundary - each new paragraph starts with its own lead sentence
-    (`It also registers...`, `The @-sentence identity:`) and is separated from the previous one by
-    ONE blank line.
+    topic-sentence boundary, each new paragraph starts with its own lead sentence
+    (`It also registers...`, `The @-sentence identity:`), and ONE blank line separates it from the
+    previous one.
 
-    Long enumerations of methods or features become bullet lists; the inline markdown (bold, links,
-    code spans) is preserved verbatim.
+    Long enumerations of methods or features become bullet lists, and the inline markdown (bold,
+    links, code spans) stays verbatim.
 
     Prettier re-wraps each paragraph at the configured printWidth.
 
-    The worked example (2026-10-25): the dash-normalizer README's single block becomes three
-    paragraphs - the role, the raw-write tool, the identity and the visibility - with the same
-    words.
+    The worked example (2026-10-25): the single block of the dash-normalizer README becomes three
+    paragraphs (the role, the raw-write tool, the identity and the visibility) with the same words.
 
 ## 8. The conversion procedure
 
 1. **The move.**
 
-    The file moves to its category folder (mv - byte fidelity, NO content change on the move).
+    The file moves to its category folder (mv, byte fidelity, NO content change on the move).
 
 2. **The frontmatter.**
 
@@ -216,7 +218,7 @@ Where a document is written new, it follows this four-part arc (the HPC plans' s
 
 3. **The statuses.**
 
-    The statuses list is written, ONE entry per functionality, states from the actual state.
+    The statuses list is written, ONE entry per functionality, with states from the actual state.
 
 4. **The references.**
 
@@ -251,5 +253,5 @@ Where a document is written new, it follows this four-part arc (the HPC plans' s
 
 The untouched trees (Handoff/, Skill/) keep their own internal structure.
 
-Handoff/ is the original delivery record, Skill/ is the loadable skills home - BOTH are referenced
-by path from the harness and from this document.
+Handoff/ is the original delivery record and Skill/ is the home of the loadable skills, and BOTH are
+referenced by path from the harness and from this document.

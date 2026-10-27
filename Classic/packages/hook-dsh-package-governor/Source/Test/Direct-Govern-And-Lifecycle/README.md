@@ -4,16 +4,14 @@ What this test verifies.
 
 ## Intent
 
-The direct-govern path is the raw-write tool's per-call `govern` route: the
-steps registered at apply run through the DIRECT path - a simulated
-raw-write-style invocation with a real target and the observed version. It
-must match the event-path behavior (the same g2 lines, the same guarded write,
-the same ledger strings, the Stash seeding), the selection fold must be
-deterministic, and the two-chain-writer fold must converge in both
-registration orders. The lifecycle checks close the folder: the cooldown
-idempotence on a second author write, the P2 disposal, the P5 close, and the
-P5-absent retirement. These assertions are moved verbatim from
-`Classic/smokes/governor-smoke.mjs` sections 10b-11.
+The direct-govern path is the per-call `govern` route of the raw-write tool: the steps registered at
+apply run through the DIRECT path - a simulated raw-write-style invocation with a real target and the
+observed version. It must match the behavior of the event path (the same g2 lines, the same guarded
+write, the same ledger strings, the Stash seeding), the selection fold must be deterministic, and the
+two-chain-writer fold must converge in both registration orders. The lifecycle checks close the
+folder: the cooldown idempotence on a second author write, the P2 disposal, the P5 close, and the
+P5-absent retirement. These assertions are moved verbatim from sections 10b-11 of
+`Classic/smokes/governor-smoke.mjs`.
 
 ## Scenario
 
@@ -44,17 +42,15 @@ P5-absent retirement. These assertions are moved verbatim from
 
 ## Fixtures
 
-The harness world (Boot) plus: a second factory instance (`FactoryR`) built on
-a fresh `MakeContext` sharing the same Files map and Root for the reverse
-registration order; the sim steps (`fold-pin`, `fold-pin-r`, `fold-can-r`)
-registered through `factory.RegisterGovern` with chain-writing transforms
-(`foldPinT`/`foldCanT`); the `UngovernedEmit` helper that blanks the listener
-capture around each fold run (the sim states are not the live listener's
-state). The idempotence fixture arms the cooldown itself (the no-flap rule
-removed the no-registry dispatch that previously stamped proj-b): proj-b
-carries a registry and a stale chain pin, so the first author write
-governed-writes and dispatches, and the second author write - the stale pin
-re-introduced - is the cooldown-gated one.
+The harness world (Boot) plus: a second factory instance (`FactoryR`) built on a fresh
+`MakeContext` that shares the same Files map and Root for the reverse registration order; the sim
+steps (`fold-pin`, `fold-pin-r`, `fold-can-r`) registered through `factory.RegisterGovern` with
+chain-writing transforms (`foldPinT`/`foldCanT`); the `UngovernedEmit` helper that blanks the
+listener capture around each fold run (the sim states are not the state of the live listener). The
+idempotence fixture arms the cooldown itself (the no-flap rule removed the no-registry dispatch that
+previously stamped proj-b): proj-b carries a registry and a stale chain pin, so the first author
+write governed-writes and dispatches, and the second author write - the stale pin re-introduced - is
+the one that the cooldown gates.
 
 ## Expected ledger strings (byte-identical)
 
@@ -70,13 +66,12 @@ re-introduced - is the cooldown-gated one.
 ## Edge cases
 
 - The P2 collision window: both passes coexist under distinct keys
-  (`update:<targetKey>` vs the plain key); the chain's settlement deletes only
-  its own; the unload disposal still aborts the surviving update run.
-- Unknown step names run NOTHING (the ledger length assertion is the negative
-  control).
-- The reverse registration order converges to the SAME final dependencies as
-  the forward order - the deterministic-convergence control.
-- P5 absent: the Journal sink is retired, the queue never grows.
+  (`update:<targetKey>` vs the plain key); the settlement of the chain deletes only its own; the
+  unload disposal still aborts the surviving update run.
+- Unknown step names run NOTHING (the ledger length assertion is the negative control).
+- The reverse registration order converges to the SAME final dependencies as the forward order - the
+  deterministic-convergence control.
+- P5 absent: the Journal sink is retired, and the queue never grows.
 
 ## Expected count
 

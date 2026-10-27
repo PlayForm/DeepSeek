@@ -1,5 +1,5 @@
 ---
-title: SUGGESTER-CONFIGURED (I6) — the configured-block suggestion flow
+title: SUGGESTER-CONFIGURED (I6) - the configured-block suggestion flow
 category: Archive/Live-Containers
 kind: one-shot-record
 date: 2026-10-19
@@ -23,48 +23,69 @@ statuses:
 
 # SUGGESTER-CONFIGURED (I6) - the configured-block suggestion flow, independently resolved
 
-Status: RATIFICATION addendum for D2's IMPLEMENTATION-DESIGN.md sections 2.6
+Status: RATIFICATION addendum for D2's IMPLEMENTATION-DESIGN.md sections 2.6 and 4.5, written
+against the 05 MINI-CONVERSATION-SUGGESTER research file, the 02 planted-block grammar, the 03
+template catalog, and the I5 PLANTED-LEASE addendum.
 
-- 4.5, written against the 05 MINI-CONVERSATION-SUGGESTER research file, the 02 planted-block
-  grammar, the 03 template catalog, and the I5 PLANTED-LEASE addendum. Where this file conflicts
-  with D2's 2.6/4.5, the RESOLVED rules below win for the C2 dispatch unless the CONFLICT TABLE
-  (section 10) shows D2's wording survived. ASCII + tabs throughout.
+Where this file conflicts with D2's 2.6/4.5, the RESOLVED rules below win for the C2 dispatch unless
+the CONFLICT TABLE (section 10) shows D2's wording survived.
+
+ASCII + tabs throughout.
 
 ## 0. The one-paragraph decision
 
-The suggester does not suggest a template NAME; it suggests a CONFIGURED block. The
-mini-conversation (one detached one-shot subagent on the exploration strain) receives the user's
+The suggester does not suggest a template NAME; it suggests a CONFIGURED block.
+
+The mini-conversation (one detached one-shot subagent on the exploration strain) receives the user's
 request excerpt + the CAN-3 template catalog + the plugin's own task facts, and returns a strict
-JSON suggestion that carries not only the templateId but the block's opening variables: the
-estimated steps, the agent count, and nothing else - the lease is NEVER model-chosen. The suggestion
-then arrives AS A PLANTED BLOCK: a byte-exact SUGGESTION frame that previews the exact configured
-block the main conversation would get, and the main conversation ACCEPTS or DISMISSES it with a
-ONE-WORD command (`accept=<sid>` / `dismiss=<sid>` on the existing live_container_set tool). Accept
-instantiates the stored, plugin-clamped configuration verbatim - no re-typing, no drift between what
-was suggested and what was planted.
+JSON suggestion that carries not only the templateId but the opening variables of the block: the
+estimated steps, the agent count, and nothing else - the lease is NEVER model-chosen.
+
+The suggestion then arrives AS A PLANTED BLOCK: a byte-exact SUGGESTION frame that previews the
+exact configured block the main conversation would get, and the main conversation ACCEPTS or
+DISMISSES it with a ONE-WORD command (`accept=<sid>` / `dismiss=<sid>` on the existing
+live_container_set tool).
+
+Accept instantiates the stored, plugin-clamped configuration verbatim - no re-typing, no drift
+between what was suggested and what was planted.
 
 ## 1. The verified machinery this rides on
 
-1.1 The mini-conversation is the harness's own subagent infrastructure (05 section 2): one detached
+1.1 **The mini-conversation.**
+
+The mini-conversation is the harness's own subagent infrastructure (05 section 2): one detached
 one-shot subagent per qualifying user turn, spawned via ctx.subagent.startActivation (D2 2.6's route
 triple: cloudflare-workers-ai / @cf/zai-org/glm-5.3-flash / reasoningEffort low, surfaced as
-volatile config). It must never delay the main model's step.
+volatile config).
 
-1.2 The catalog is CAN-3's 14 entries (03 section 3), each with a known shape and known variables;
-the catalog doubles as the suggester's input, compressed to `id + one-line use + variables` (<= 2000
+It must never delay the main model's step.
+
+1.2 **The catalog.**
+
+The catalog is CAN-3's 14 entries (03 section 3), each with a known shape and known variables.
+
+The catalog doubles as the suggester's input, compressed to `id + one-line use + variables` (<= 2000
 bytes static text, built once and cached - it never changes within a process).
 
-1.3 The delivery surface is the assemble section (the v1 seam, D2 3.1): the suggestion frame renders
-at the NEXT assembly after the detached suggestion job settles, exactly once, then withdraws. No
-mid-conversation history surgery; late suggestions are never injected into the past.
+1.3 **The delivery surface.**
 
-1.4 The accept/dismiss surface is the existing live_container_set tool (D2 2.7's per-agent-only
-writes): two new verbs on the same tool, not a new tool. The suggestion state lives in the per-agent
-WeakMap and dies with the agent.
+The delivery surface is the assemble section (the v1 seam, D2 3.1): the suggestion frame renders at
+the NEXT assembly after the detached suggestion job settles, exactly once, then withdraws.
 
-1.5 The instantiated block is D2 4.4's planted frame governed by the I5 lease; the suggestion's
-stored variables become the board's opening state (expectAgents slots, todo items, report grammar
-unchanged).
+No mid-conversation history surgery, and late suggestions are never injected into the past.
+
+1.4 **The accept/dismiss surface.**
+
+The accept/dismiss surface is the existing live_container_set tool (D2 2.7's per-agent-only writes):
+two new verbs on the same tool, not a new tool.
+
+The suggestion state lives in the per-agent WeakMap and dies with the agent.
+
+1.5 **The instantiated block.**
+
+The instantiated block is D2 4.4's planted frame governed by the I5 lease, and the stored variables
+of the suggestion become the opening state of the board (expectAgents slots, todo items, report
+grammar unchanged).
 
 ## 2. The mini-model inference input
 
@@ -92,12 +113,15 @@ The output contract (byte-exact JSON, size-capped by the small model's short ans
       "tokens": { "expectAgents": <n>, "steps": ["<step>", ...] } }
 
 Parse failure, a missing field, or an unknown templateId -> no suggestion (fail-open; ledger
-`suggestion parse failed`). The suggestion is pure observation: the mini-conversation can influence
-nothing else.
+`suggestion parse failed`).
+
+The suggestion is pure observation: the mini-conversation can influence nothing else.
 
 ## 3. The configured-block suggestion (what "configured" means)
 
-3.1 The suggestion pre-fills the template's OPENING variables, nothing more:
+3.1 **What the suggestion pre-fills.**
+
+The suggestion pre-fills the OPENING variables of the template, nothing more:
 
     - expectAgents: the agent count for board-shaped templates
       (agent-progress-board, delegation-inbox). Bound: 1..8.
@@ -108,13 +132,20 @@ nothing else.
       mini-model never chooses lease terms; the lease is a failsafe
       contract, not a suggestion variable.
 
-3.2 CLAMPING (the plugin never trusts the mini-model): out-of-range or malformed tokens are clamped
-to the nearest legal value and the ledger records `suggestion clamped <sid> <field>`; a clamped
-suggestion is still offerable (it is a preview, not an execution). Unknown templateId or an empty
-tokens object for a template that requires it -> no suggestion.
+3.2 **Clamping.**
 
-3.3 The suggestion id: `<sid> = sug-<4 hex>`, per-agent-keyed (`agentId/sid`, the 02 section 7
-plant-id collision rule). Two agents may hold identical-looking suggestions independently.
+The plugin never trusts the mini-model: out-of-range or malformed tokens are clamped to the nearest
+legal value and the ledger records `suggestion clamped <sid> <field>`, and a clamped suggestion is
+still offerable (it is a preview, not an execution).
+
+Unknown templateId or an empty tokens object for a template that requires it -> no suggestion.
+
+3.3 **The suggestion id.**
+
+The suggestion id is `<sid> = sug-<4 hex>`, per-agent-keyed (`agentId/sid`, the 02 section 7
+plant-id collision rule).
+
+Two agents may hold identical-looking suggestions independently.
 
 ## 4. The suggestion arrives AS A PLANTED BLOCK (byte-exact)
 
@@ -132,11 +163,15 @@ keeps D2 4.5's plain LIVE SUGGESTION note, below):
     dismiss: live_container_set dismiss=<sid>
     --- END LIVE SUGGESTION <sid> ---
 
-Line rules: `expect agents:` only for board-shaped templates; `steps:` only for list-shaped
-templates (the other line is omitted, not blanked); `lease:` always present (it names the terms the
-instantiated board will run under); `why:` always present; the accept/dismiss lines always present.
+Line rules: `expect agents:` only for board-shaped templates, `steps:` only for list-shaped
+templates (the other line is omitted, not blanked), `lease:` always present (it names the terms the
+instantiated board will run under), `why:` always present, and the accept/dismiss lines always
+present.
+
 A board-shaped suggestion with steps, or a list-shaped one with expectAgents, is a parse failure
-(3.2). All ASCII, the whole frame <= 1200 bytes.
+(3.2).
+
+All ASCII, the whole frame <= 1200 bytes.
 
 The "section" mode's plain note (D2 4.5 verbatim, kept for the lighter opt-in tier):
 
@@ -148,78 +183,127 @@ The "section" mode's plain note (D2 4.5 verbatim, kept for the lighter opt-in ti
 
 ## 5. The accept/dismiss grammar (one word each)
 
-5.1 ACCEPT: the model calls the existing tool with the single verb
+5.1 **Accept.**
+
+The model calls the existing tool with the single verb
 
     live_container_set accept=<sid>
 
 The plugin instantiates the STORED, CLAMPED configuration verbatim (3.2): the planted block opens
-with the suggested expectAgents and steps already in place, the lease at the config default. The
-model never re-types plant= or expect= - the configured suggestion's whole point is that the
-parameters travel with the suggestion. Ledger `suggestion accepted <sid> (<templateId>)`; the frame
-withdraws immediately.
+with the suggested expectAgents and steps already in place, the lease at the config default.
 
-5.2 DISMISS: `live_container_set dismiss=<sid>`. Ledger `suggestion dismissed <sid>`. Any OTHER
-live_container_set action while a suggestion is open also dismisses it (the model moved on; ledger
-`suggestion dismissed <sid> (superseded)`).
+The model never re-types plant= or expect= - the whole point of the configured suggestion is that
+the parameters travel with the suggestion.
 
-5.3 NO ACTION: the frame renders for ONE assembly, then withdraws (the cache-stability rule, D2
-4.5) - ledger `suggestion expired <sid>`. A late suggestion that would first render at a later turn
-renders its one assembly there and expires on the same terms; it is never injected into the past.
+Ledger `suggestion accepted <sid> (<templateId>)`, and the frame withdraws immediately.
 
-5.4 The verbs are taught in the frame itself (section 4's last two lines) - no additional
-system-prompt instruction line is added; the SCHEME carries the same grammar list (the I5 R4
-discipline: additive coverage in the smokes).
+5.2 **Dismiss.**
 
-5.5 autoPlant=true (D2 2.6, default false): the plugin skips the preview frame and instantiates the
-suggestion DIRECTLY as a DORMANT planted block - the planted frame's header carries
+`live_container_set dismiss=<sid>`, with ledger `suggestion dismissed <sid>`.
+
+Any OTHER live_container_set action while a suggestion is open also dismisses it (the model moved
+on; ledger `suggestion dismissed <sid> (superseded)`).
+
+5.3 **No action.**
+
+The frame renders for ONE assembly, then withdraws (the cache-stability rule, D2 4.5) - ledger
+`suggestion expired <sid>`.
+
+A late suggestion that would first render at a later turn renders its one assembly there and expires
+on the same terms; it is never injected into the past.
+
+5.4 **Where the verbs are taught.**
+
+The verbs are taught in the frame itself (section 4's last two lines), and no additional
+system-prompt instruction line is added.
+
+The SCHEME carries the same grammar list (the I5 R4 discipline: additive coverage in the smokes).
+
+5.5 **autoPlant=true.**
+
+With autoPlant=true (D2 2.6, default false), the plugin skips the preview frame and instantiates the
+suggestion DIRECTLY as a DORMANT planted block: the header of the planted frame carries
 `status: suggested - accept=<sid> to start` (extending D2 4.5's
 `status: suggested - start it when ready` with the one-word verb), the board renders with `[none]`
 rows for the suggested slots, and the SAME accept=<sid> verb ACTIVATES the dormant block (opens the
-lease, starts expecting reports). dismiss=<sid> withdraws the dormant block; it was never live, so
-the ledger line is `suggestion dismissed <sid> (dormant)`. Under autoPlant the frame cost is one
-planted frame instead of one suggestion frame - the section budget accounting is unchanged.
+lease, starts expecting reports).
+
+dismiss=<sid> withdraws the dormant block, and because it was never live the ledger line is
+`suggestion dismissed <sid> (dormant)`.
+
+Under autoPlant the frame cost is one planted frame instead of one suggestion frame, and the section
+budget accounting is unchanged.
 
 ## 6. The trigger conditions (when the suggester fires)
 
-6.1 Fire on a NEW user message that satisfies ALL of: - it is the FIRST user message of a turn (the
-pre-step listener's user-message detection, the tool-coach Apply.ts:464-467 shape); - its length >=
-suggestGateMinChars (default 40) - the "implement feature X" shape; - it does not contain the words
-"live container", "plant", or "suggestion" (the user is driving manually - D2 2.6's skip rule,
-extended with "suggestion"); - the per-agent rate cap allows it: maxSuggestionsPerHour (default 6)
-and at most ONE suggestion per user turn (the debounce, 05 section 2).
+6.1 **The firing conditions.**
 
-6.2 A complexity gate ("fire only on complex requests") was CONSIDERED and REJECTED for v1:
-complexity is not observable cheaply or reliably by a plugin (no token counts - 03 section 3's
-residual 3; a keyword heuristic would misfire silently). The rate cap + the first-message-of-turn
-debounce + the skip words ARE the complexity proxy in practice: every qualifying turn gets exactly
-one cheap look, and the mini-model's fit=no/unknown answer consumes one rate slot and nothing else.
+The suggester fires on a NEW user message that satisfies ALL of:
+
+- It is the FIRST user message of a turn (the pre-step listener's user-message detection, the
+  tool-coach Apply.ts:464-467 shape).
+- Its length is >= suggestGateMinChars (default 40) - the "implement feature X" shape.
+- It does not contain the words "live container", "plant", or "suggestion" (the user is driving
+  manually - D2 2.6's skip rule, extended with "suggestion").
+- The per-agent rate cap allows it: maxSuggestionsPerHour (default 6) and at most ONE suggestion per
+  user turn (the debounce, 05 section 2).
+
+6.2 **The rejected complexity gate.**
+
+A complexity gate ("fire only on complex requests") was CONSIDERED and REJECTED for v1: complexity
+is not observable cheaply or reliably by a plugin (no token counts - 03 section 3's residual 3; a
+keyword heuristic would misfire silently).
+
+The rate cap + the first-message-of-turn debounce + the skip words ARE the complexity proxy in
+practice: every qualifying turn gets exactly one cheap look, and the mini-model's fit=no/unknown
+answer consumes one rate slot and nothing else.
+
 Residual R3.
 
-6.3 Zero-subagent guarantee: with suggester "off" (the default) nothing spawns, nothing renders,
-provable by the smoke harness's spawn counter.
+6.3 **Zero-subagent guarantee.**
+
+With suggester "off" (the default) nothing spawns and nothing renders, provable by the spawn counter
+of the smoke harness.
 
 ## 7. The cost + latency bounds
 
-7.1 Cost: one mini-model call per qualifying user turn, on the exploration strain's cost profile.
+7.1 **Cost.**
+
+Cost is one mini-model call per qualifying user turn, on the cost profile of the exploration strain.
+
 The prompt is bounded: the redacted excerpt (<= 200 chars) or the verbatim excerpt (<=
 maxPromptBytes 4000) + the compressed catalog (<= 2000 bytes, cached) + the facts line (<= 200
-bytes). The answer is a small JSON object by construction. The catalog and the facts are static per
+bytes).
+
+The answer is a small JSON object by construction, and the catalog and the facts are static per
 process; only the excerpt varies.
 
-7.2 Latency: DETACHED always (its own one-shot subagent job). The main step's latency is unchanged -
-provable by timestamp delta in the smoke harness (05 acceptance 2). suggestTimeoutMs (default 8000)
-bounds the job: a timeout, a spawn failure, or a parse failure produces ONLY a ledger line
-(`suggestion skipped (<reason>)` / `suggestion parse failed`) - never a conversation artifact, never
-a retry storm (no automatic re-spawn within the same turn).
+7.2 **Latency.**
 
-7.3 Delivery window: the suggestion lands at the next assembly after the job settles - usually the
-same turn, mid-step; if it arrives after the turn's last assembly it renders at the next turn's
-first request (5.3's late rule). The one-assembly render keeps the cache cost at exactly one section
-change per suggestion (the I3 3.3 accounting).
+Latency: DETACHED always (its own one-shot subagent job).
 
-7.4 The meta-budget: a suggestion is a render, not a modification; it never counts against
-failsafesPerTurn. The instantiated block from accept=<sid> is a normal planted block under D2 3.4's
-admission (boardsPerAgent).
+The latency of the main step is unchanged - provable by timestamp delta in the smoke harness (05
+acceptance 2).
+
+suggestTimeoutMs (default 8000) bounds the job: a timeout, a spawn failure, or a parse failure
+produces ONLY a ledger line (`suggestion skipped (<reason>)` / `suggestion parse failed`) - never a
+conversation artifact, never a retry storm (no automatic re-spawn within the same turn).
+
+7.3 **Delivery window.**
+
+The suggestion arrives at the next assembly after the job settles - usually the same turn, mid-step;
+if it arrives after the last assembly of the turn it renders at the first request of the next turn
+(5.3's late rule).
+
+The one-assembly render keeps the cache cost at exactly one section change per suggestion (the I3
+3.3 accounting).
+
+7.4 **The meta-budget.**
+
+A suggestion is a render, not a modification, and it never counts against failsafesPerTurn.
+
+The instantiated block from accept=<sid> is a normal planted block under D2 3.4's admission
+(boardsPerAgent).
 
 ## 8. The opt-in / opt-out
 
@@ -234,10 +318,14 @@ admission (boardsPerAgent).
     	defaults = the task-routing exploration strain)
 
 "section" = D2 4.5's plain note tier; "plant" = this file's configured-block flow (implies section's
-detached mechanics). The privacy default is "redact" per the ratified D2 2.6 decision - this
-RESOLVES the 05 research file's contrary "verbatim by default when enabled" (05 section 2, opt-out
-list); the conflict table records it as already settled. The SCHEME must name the privacy behavior
-and the disclosure paragraph (1.2 of D2 2.6) in both tiers.
+detached mechanics).
+
+The privacy default is "redact" per the ratified D2 2.6 decision - this RESOLVES the 05 research
+file's contrary "verbatim by default when enabled" (05 section 2, opt-out list), and the conflict
+table records it as already settled.
+
+The SCHEME must name the privacy behavior and the disclosure paragraph (1.2 of D2 2.6) in both
+tiers.
 
 ## 9. The acceptance criteria
 
@@ -294,7 +382,7 @@ and the disclosure paragraph (1.2 of D2 2.6) in both tiers.
         withdrew) should re-render the preview instead of erroring is
         left to C2 with the default NO - the ledger line is
         `accept failed <sid> (expired)` and the model re-derives from
-        its own context; keeping a withdrawn suggestion resurrsectable
+        its own context; keeping a withdrawn suggestion resurrectable
         would need state retention past the one-assembly window.
 
 ## 11. CONFLICT TABLE (this file vs D2 2.6/4.5 vs the winner)

@@ -4,21 +4,18 @@ What this test verifies.
 
 ## Intent
 
-The chain pass is the governor's core rewrite engine exercised end to end
-through the real wired listener: Factory.Continue reads the manifest, runs the
-module transform, and lands the guarded write (the replaceIfVersion intent at
-the fresh-stat CURRENT version, the task-owned abort signal, no fence on a bare
-backend), then the version-coherence machinery runs (the byte-identical
-`governed <path> -> <version>` line on the ledger AND the module-prefixed
-logger, the P5 journal record, the same-actor re-emit, the Stash
-pre-registration so the re-emit is a no-op), the P2 Inflight lifecycle is
-verified around the read, and the settled continuation's update stage runs the
-bin-mode engine through the subprocess seam (resolved binary, built-in dep
-groups, concurrency, the reject merge, the target pin, the DONE line) before
-the settlement cleanup and the silent re-entrant pass. It is its own folder
-because it is the longest single scenario chain in the suite and every later
-folder's ledger arithmetic is relative to it. The assertions are moved
-verbatim from `Classic/smokes/governor-smoke.mjs` section 5.
+The chain pass is the core rewrite engine of the governor, exercised end to end through the real
+wired listener: Factory.Continue reads the manifest, runs the transform of the module, and lands the
+guarded write (the replaceIfVersion intent at the fresh-stat CURRENT version, the task-owned abort
+signal, no fence on a bare backend), then the version-coherence machinery runs (the byte-identical
+`governed <path> -> <version>` line on the ledger AND the module-prefixed logger, the P5 journal
+record, the same-actor re-emit, the Stash pre-registration so the re-emit is a no-op), the P2
+Inflight lifecycle is verified around the read, and the update stage of the settled continuation runs
+the bin-mode engine through the subprocess seam (resolved binary, built-in dep groups, concurrency,
+the reject merge, the target pin, the DONE line) before the settlement cleanup and the silent
+re-entrant pass. It is its own folder because it is the longest single scenario chain in the suite
+and the ledger arithmetic of every later folder is relative to it. The assertions are moved verbatim
+from section 5 of `Classic/smokes/governor-smoke.mjs`.
 
 ## Scenario
 
@@ -52,11 +49,10 @@ verbatim from `Classic/smokes/governor-smoke.mjs` section 5.
 
 ## Fixtures
 
-The harness world (Boot) with `Probe.Mode = "bin"`; a `proj-a` directory with a
-real `registry.json` (`effectiveLatest: { leftpad: "1.0.0" }`) and the manifest
-in the harness Files map; the readText probe patch records Inflight size at
-read time (`Inflight.DuringRead`). The subprocess stub serves the bin-mode
-engine run.
+The harness world (Boot) with `Probe.Mode = "bin"`; a `proj-a` directory with a real `registry.json`
+(`effectiveLatest: { leftpad: "1.0.0" }`) and the manifest in the harness Files map; the readText
+probe patch records the Inflight size at read time (`Inflight.DuringRead`). The subprocess stub
+serves the bin-mode engine run.
 
 ## Expected ledger strings (byte-identical)
 
@@ -70,10 +66,9 @@ engine run.
 
 ## Edge cases
 
-- The write intent's version is the fresh-stat CURRENT version (`stat-v9`,
-  this mock's stat), not the observed `v1` - the sequential-fold fix.
-- The re-emit after the write is a no-op (Stash pre-registration): exactly one
-  write for the path.
+- The version of the write intent is the fresh-stat CURRENT version (`stat-v9`, the stat of this
+  mock), not the observed `v1` - the sequential-fold fix.
+- The re-emit after the write is a no-op (Stash pre-registration): exactly one write for the path.
 - The final ledger window is `before + 5` - the re-entrant pass adds nothing.
 
 ## Expected count

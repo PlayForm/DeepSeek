@@ -6,23 +6,22 @@ What this test verifies.
 
 The overpass arms and the human command (Run O): the tool-results arm
 (tools/post-execute), the step-batch arm (agent/pre-step), the
-normalize-overpass command, the ordering guard and the history-safety
+normalize-overpass command, the ordering guard, and the history-safety
 invariant. The stream flavors do not only normalize live model output - they
-can also sweep already-produced content: tool results flowing back into the
-transcript and the message batch entering a step, each behind its own scope
-gate (both off by default) and driven live through the factory's
-volatile-update dispatch. The folder pins the whole contract: the
-registration facts (the post-execute arm PREPENDS, the pre-step arm uses
-default ordering, the command registers under "normalize-overpass" without a
-slash), the toolResults flip with its byte-exact ledger line, the `read`
-exemption, the untouched tool-call blocks, the N=0 no-op rule, the canonical
-value decision, the CCR marker guard (normalization never touches a ccr
-replacement), the downstream-decision content basis, the batch flip with its
-byte-exact ledger line, the one-shot batch grammar (armed once, consumed
-once, exactly one use), the reject passthrough, and the command's other
-grammars. The assertions are moved verbatim from
-`Classic/smokes/spaces-smoke.mjs` section "Run O (additive): the overpass
-arms + the command".
+can also sweep content that is already produced: tool results flowing back
+into the transcript and the message batch entering a step, each behind its own
+scope gate (both off by default) and driven live through the volatile-update
+dispatch of the factory. The folder pins the whole contract: the registration
+facts (the post-execute arm PREPENDS, the pre-step arm uses default ordering,
+the command registers under "normalize-overpass" without a slash), the
+toolResults flip with its byte-exact ledger line, the `read` exemption, the
+untouched tool-call blocks, the N=0 no-op rule, the canonical value decision,
+the CCR marker guard (normalization never touches a ccr replacement), the
+content basis of the downstream decision, the batch flip with its byte-exact
+ledger line, the one-shot batch grammar (armed once, consumed once, exactly
+one use), the reject passthrough, and the other grammars of the command. The
+assertions are moved verbatim from section "Run O (additive): the overpass
+arms + the command" of `Classic/smokes/spaces-smoke.mjs`.
 
 ## Scenario
 
@@ -99,20 +98,20 @@ arms + the command".
 
 ## Fixtures
 
-The shared harness (`../Harness.js`): `Furnace` (the REAL factory - the
-O2 check proves the arm runs against it, no direct fs access), the fake ctx
-including the `commands` registry seam, the REAL `apply` and the ledger path
-`/tmp/spaces-smoke-ledger.log` (removed at the folder's start). The config
-is hand-built with `replacement: " "` and a MUTABLE scopes object - a copy
-of the Run-S section's SCOPES_DEFAULT (the source suite defines it in Run S
-and reads it in Run O; this standalone folder carries its own duplicate) -
-so the O2/O10 flips go through the `loader/volatile-update` dispatch with
+The shared harness (`../Harness.js`): `Furnace` (the REAL factory - the O2
+check proves that the arm runs against it, with no direct fs access), the fake
+ctx including the `commands` registry seam, the REAL `apply`, and the ledger
+path `/tmp/spaces-smoke-ledger.log` (removed at the start of the folder). The
+config is hand-built with `replacement: " "` and a MUTABLE scopes object - a
+copy of SCOPES_DEFAULT from the Run-S section (the source suite defines it in
+Run S and reads it in Run O; this standalone folder carries its own duplicate)
+- so the O2/O10 flips go through the `loader/volatile-update` dispatch with
 the `[["scopes", ...]]` shape. The post-execute fixtures carry
 `{isError, value, content}` decisions and an Exec shape with
 `callId: "call_smoke"`; the pre-step fixtures carry
-`{agent, messages, turn, step, signal}` and downstream decisions; the
-command fixtures call `handler({ rawInput })` with the batch/scopes/files/
-results grammars.
+`{agent, messages, turn, step, signal}` and downstream decisions; the command
+fixtures call `handler({ rawInput })` with the batch/scopes/files/results
+grammars.
 
 ## Expected ledger strings (byte-exact)
 
@@ -121,8 +120,8 @@ results grammars.
 - `hook-dsh-normalize-spaces: overpass: normalized 1 char(s) in step batch (turn 4 step 0)` (O12)
 
 (O5/O6/O7 and O11 assert the ABSENCE of lines - the ledger-line counter must
-not move. The command's success texts are asserted by content substrings,
-not byte-exactly.)
+not move. The success texts of the command are asserted by content
+substrings, not byte-exactly.)
 
 ## Edge cases
 

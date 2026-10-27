@@ -1,17 +1,17 @@
 # Overpass
 
-What this test verifies.
+This file states what the test verifies.
 
 ## Intent
 
-The overpass arm of the comment filter: the tools/post-execute listener that
-strips code comments from `read` and `ccr_retrieve` tool results before they
-re-enter the model, and the agent/pre-step listener that stashes the per-task
-intent the arm is gated on. This is its own folder because the arm is a
-separate integration surface with its own registration contract (prepended,
-like the family's other arms), its own deliberate target/exemption table
-(`read` is TARGETED here, the opposite of the normalize flavors), its own
-transform contract (the read envelope) and its own ledger strings.
+The suite covers the overpass arm of the comment filter: the tools/post-execute listener that strips
+code comments from `read` and `ccr_retrieve` tool results before they re-enter the model, and the
+agent/pre-step listener that stashes the per-task intent the arm is gated on.
+
+It has its own folder because the arm is a separate integration surface with its own registration
+contract (prepended, like the other arms of the family), its own deliberate target and exemption table
+(where `read` is TARGETED, the opposite of the normalize flavors), its own transform contract (the
+read envelope), and its own ledger strings.
 
 ## Scenario
 
@@ -52,14 +52,18 @@ transform contract (the read envelope) and its own ledger strings.
 
 ## Fixtures
 
-The harness fake ctx + the REAL factory + the REAL comment-filter apply. One
-apply with the REAL schema defaults (`Validate({ logFile: Ledger })` fills
-every default, so the O0 checks prove the mission's default table too);
-`PostO` is the registered tools/post-execute listener; `NextAcceptO` is the
-downstream decision; `Exec(name)` builds the call identity. The O8 fail-open
-case uses a SECOND apply whose `Notice` cell is replaced by a throwing getter
-(so the transform throws after a successful scan) and asserts the downstream
-decision survives. The durable ledger is cleared at folder start.
+The harness supplies the fake ctx with the REAL factory and the REAL comment-filter apply.
+
+One apply uses the REAL schema defaults, and `Validate({ logFile: Ledger })` fills every default, so
+the O0 checks prove the default table of the mission too.
+
+`PostO` is the registered tools/post-execute listener, `NextAcceptO` is the downstream decision, and
+`Exec(name)` builds the call identity.
+
+The O8 fail-open case uses a SECOND apply whose `Notice` cell is replaced by a throwing getter, so the
+transform throws after a successful scan, and it asserts that the downstream decision survives.
+
+The durable ledger is cleared at folder start.
 
 ## Expected ledger strings (byte-exact)
 
@@ -69,17 +73,15 @@ decision survives. The durable ledger is cleared at folder start.
 
 ## Edge cases
 
-- `read` and `ccr_retrieve` are TARGETED, not exempt - the deliberate opposite
-  of the normalize flavors.
-- A full-line comment becomes an empty line (the line-number prefix is
-  preserved byte-exactly); a trailing comment is removed from its start.
-- A `//` inside a string is a string, not a comment; an unknown extension is
-  never parsed, so it passes by identity.
-- N=0 (nothing stripped) keeps the downstream decision and writes NO ledger
-  line.
-- The CCR marker guard and the fail-open both preserve the downstream
-  decision untouched - never throw into the waterfall, never touch a CCR
-  replacement.
+- `read` and `ccr_retrieve` are TARGETED and not exempt, which is the deliberate opposite of the
+  normalize flavors.
+- A full-line comment becomes an empty line with the line-number prefix preserved byte-exactly, and a
+  trailing comment is removed from its start.
+- A `//` inside a string is a string and not a comment, and an unknown extension is never parsed, so
+  it passes by identity.
+- N=0, where nothing is stripped, keeps the downstream decision and writes NO ledger line.
+- The CCR marker guard and the fail-open both preserve the downstream decision untouched, so the code
+  never throws into the waterfall and never touches a CCR replacement.
 
 ## Expected count
 

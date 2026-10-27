@@ -7,21 +7,21 @@
 ## The role
 
 The **silent package.json governor** of the DeepSeek Harness - a plugin on the `fs/observed` event
-(the cordis event every harness file write dispatches; the tool layer is the only dispatcher) that
-governs every `package.json` written by any agent, anywhere.
+(the cordis event that every harness file write dispatches; the tool layer is the only dispatcher)
+that governs every `package.json` that any agent writes, anywhere.
 
-A pure chain pass canonicalizes chain-governed dependency pins to the effective registry's
-`^resolved`, then an update stage lets npm-check-updates bump the public ones (programmatic by
-default or the ncu bin in bin mode, policy-driven, chain deps rejected) as a detached, contained
-continuation - and the author never learns.
+A pure chain pass canonicalizes chain-governed dependency pins to the `^resolved` range of the
+effective registry, then an update stage lets npm-check-updates bump the public ones (programmatic
+by default, or the ncu bin in bin mode, policy-driven, with chain deps rejected) as a detached,
+contained continuation - and the author never learns.
 
-Fully API-aware: the governed manifest is read/rewritten through `ctx.fs` with a version-guarded
+Fully API-aware: the governed manifest is read and rewritten through `ctx.fs` with a version-guarded
 `replaceIfVersion` write (the service owns version tokens), configuration is a validated Schemastery
 Config schema with defaults, and the authoring agent is never notified: the tool result is built
-from the author's own content, and the observation-policy's version record is refreshed by
-re-emitting `fs/observed` with the service-issued fresh version.
+from the own content of the author, and the version record of the observation policy is refreshed by
+re-emitting `fs/observed` with the fresh version that the service issues.
 
-A factory flavor: the family's furnace does the plumbing; this package is the model logic.
+A factory flavor: the furnace of the family does the plumbing; this package is the model logic.
 
 ## The surfaces
 
@@ -81,11 +81,10 @@ update: DONE — pins bumped per policy
 update: FAILED — see lines above
 ```
 
-Each line is `[<ISO>] <message>` in the file (the logger prefix is the factory's `Append`; the
+Each line is `[<ISO>] <message>` in the file (the logger prefix is the `Append` of the factory; the
 module identity is `hook-dsh-governor-package`).
 
-The activation line is written by `apply()` - "did it activate" must be answerable from the ledger
-alone.
+`apply()` writes the activation line - "did it activate" must be answerable from the ledger alone.
 
 ## The build and the tests
 

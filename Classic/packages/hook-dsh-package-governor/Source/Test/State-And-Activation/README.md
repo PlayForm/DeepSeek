@@ -4,15 +4,13 @@ What this test verifies.
 
 ## Intent
 
-The governor's apply-time wiring is the whole runtime posture in one place:
-`apply` returns nothing, the state probe is attached to the context, every
-state field is factory-built from the config cells, the machinery collections
-are fresh, the Attach step registers the P1 jobs controller and the P2/P5
-lifecycle effects, the Wire registers exactly one `fs/observed` listener, and
-the activation journals its durable proof line in the byte-identical
-`[ISO] activated (anywhere mode, ...)` shape. A drift in any of these changes
-every downstream behavior, so it is its own folder. The assertions are moved
-verbatim from `Classic/smokes/governor-smoke.mjs` section 3.
+The apply-time wiring of the governor is the whole runtime posture in one place: `apply` returns
+nothing, the state probe is attached to the context, every state field is factory-built from the
+config cells, the machinery collections are fresh, the Attach step registers the P1 jobs controller
+and the P2/P5 lifecycle effects, the Wire registers exactly one `fs/observed` listener, and the
+activation journals its durable proof line in the byte-identical `[ISO] activated (anywhere mode,
+...)` shape. A drift in any of these changes every downstream behavior, so it is its own folder. The
+assertions are moved verbatim from section 3 of `Classic/smokes/governor-smoke.mjs`.
 
 ## Scenario
 
@@ -38,11 +36,10 @@ verbatim from `Classic/smokes/governor-smoke.mjs` section 3.
 
 ## Fixtures
 
-The harness world: the fake ctx (on/emit/effect/get/fs/reflect + the root
-seam) with the subprocess/jobs/storageDomain service stubs, the REAL factory
-instance constructed against it, and one `Governor.apply(ctx,
-Governor.Config({ logFile: Ledger }))`. The storage stub opens immediately, so
-the activation record drains on the first settle.
+The harness world: the fake ctx (on/emit/effect/get/fs/reflect + the root seam) with the
+subprocess/jobs/storageDomain service stubs, the REAL factory instance constructed against it, and
+one `Governor.apply(ctx, Governor.Config({ logFile: Ledger }))`. The storage stub opens immediately,
+so the activation record drains on the first settle.
 
 ## Expected ledger strings (byte-exact)
 
@@ -54,12 +51,11 @@ the activation record drains on the first settle.
 
 ## Edge cases
 
-- `apply` returning a value would kill event delivery - the `undefined`
-  assertion is the negative control for that regression.
-- The `effects.length = 0` reset from the source suite is kept (a no-op in a
-  fresh folder process; the effect-label deepEqual is the real control).
-- Probe.Mode is flipped to "bin" only AFTER the Mode === "programmatic"
-  assertion.
+- An `apply` that returns a value would kill event delivery - the `undefined` assertion is the
+  negative control for that regression.
+- The `effects.length = 0` reset from the source suite is kept (a no-op in a fresh folder process;
+  the effect-label deepEqual is the real control).
+- Probe.Mode is flipped to "bin" only AFTER the Mode === "programmatic" assertion.
 
 ## Expected count
 

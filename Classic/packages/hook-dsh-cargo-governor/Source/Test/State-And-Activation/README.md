@@ -1,25 +1,28 @@
 # State-And-Activation
 
-What this test verifies.
+This file states what the test verifies.
 
 ## Intent
 
-The activation posture and the factory-built state of the cargo governor:
-the ledger's single activation line in its exact regex byte-shape (the cargo
-flavor, the separate logFile under the harness Root, `updateMode=cargo`,
-`cargoBin=cargo`, the six-entry exclude list, both discovery placeholders)
-with the logger prefix composed from State.Module; the full shared state
-shape (Module, PolicyName `pin-policy.json`, Policy, Ledger, Enabled, Tool,
-List, Strict, Wait, Limit, CargoBin, KeepFile, Mode, the Stash/Inflight/Seams
-Maps, the Queue array, the Stamp/Set/Count collections, the P9 Subprocess
-seam probed at State build, the P5 Journal sink); the wire posture (exactly
-ONE fiber-owned fs/observed registration plus exactly one other hook - the
-State builder's P10 loader/volatile-update refresh, never fs/write-intent,
-never tools/*); and the attach posture (the P1/P2/P5 effect labels
-`...-jobs`, `...-inflight`, `...-storage`, no controller without a jobs
-service, and the P1 root controller attached with the jobs service). The
-assertions are moved verbatim from `Classic/smokes/cargo-smoke.mjs`
-section 3.
+The suite covers the activation posture and the factory-built state of the cargo governor.
+
+The ledger's single activation line carries its exact regex byte-shape, which is the cargo flavor,
+the separate logFile under the harness Root, `updateMode=cargo`, `cargoBin=cargo`, the six-entry
+exclude list, and both discovery placeholders, with the logger prefix composed from State.Module.
+
+The full shared state shape holds Module, PolicyName `pin-policy.json`, Policy, Ledger, Enabled, Tool,
+List, Strict, Wait, Limit, CargoBin, KeepFile, Mode, the Stash/Inflight/Seams Maps, the Queue array,
+the Stamp/Set/Count collections, the P9 Subprocess seam probed at State build, and the P5 Journal
+sink.
+
+The wire posture is exactly ONE fiber-owned fs/observed registration plus exactly one other hook,
+which is the P10 loader/volatile-update refresh of the State builder, never fs/write-intent and never
+tools/*.
+
+The attach posture covers the P1/P2/P5 effect labels `...-jobs`, `...-inflight`, and `...-storage`,
+with no controller without a jobs service and the P1 root controller attached with the jobs service.
+
+The assertions are moved verbatim from `Classic/smokes/cargo-smoke.mjs` section 3.
 
 ## Scenario
 
@@ -37,10 +40,9 @@ section 3.
 
 ## Fixtures
 
-Per-scenario harness worlds with the `subprocess` SeamStub and the real
-Furnace wired as `ctx.pluginFactory`; the attach scenario's second world
-carries a jobs service whose `attachController` records into the captured
-controllers.
+The harness builds per-scenario worlds with the `subprocess` SeamStub and the real Furnace wired as
+`ctx.pluginFactory`, and the second world of the attach scenario carries a jobs service whose
+`attachController` records into the captured controllers.
 
 ## Expected ledger strings (byte-identical)
 
@@ -53,11 +55,9 @@ controllers.
 
 ## Edge cases
 
-- The wire check counts BOTH directions: exactly one fs/observed listener
-  AND exactly one non-fs/observed hook (the P10 refresh) - any extra hook
-  fails it.
-- The effect labels are asserted as an exact deepEqual array in the
-  P1/P2/P5 registration order.
+- The wire check counts BOTH directions, so exactly one fs/observed listener AND exactly one
+  non-fs/observed hook (the P10 refresh) must hold, and any extra hook fails it.
+- The effect labels are asserted as an exact deepEqual array in the P1/P2/P5 registration order.
 
 ## Expected count
 

@@ -20,10 +20,14 @@ statuses:
 
 # DOGFOOD-TESTING - The `~/.dsh` Integration-Test Specialization
 
-> Status: **PLAN** (documentation only; no code, no installs executed). Scope: extend the family's
-> test coverage from the 24 fake-ctx smokes to the LIVE harness runtime. This uses a **scratch
-> profile** that installs this monorepo's packages with **NO SYMLINKS**. The user's real profiles
-> (`~/.dsh/profiles/desktop`, `~/.dsh/profiles/web`) are READ-ONLY throughout.
+> Status: **PLAN** (documentation only; no code, no installs executed).
+>
+> Scope: extend the family's test coverage from the 24 fake-ctx smokes to the LIVE harness runtime.
+>
+> This uses a **scratch profile** that installs this monorepo's packages with **NO SYMLINKS**.
+>
+> The user's real profiles (`~/.dsh/profiles/desktop`, `~/.dsh/profiles/web`) are READ-ONLY
+> throughout.
 
 ---
 
@@ -125,14 +129,15 @@ Two equivalent isolation levels.
 
 **B is the default** (fully isolated, CI-safe):
 
-- **A. Scratch profile inside the real `~/.dsh`:** create `~/.dsh/profiles/dsh-test/`. The harness
-  enumerates `$HOME/.dsh/profiles/*`. A new profile directory is inert until a session is launched
-  against it. The running `desktop`/`web` sessions are NEVER pointed at it. Destroy = ONE `rm -rf`.
-- **B. Redirected home (`DSH_HOME`):** the harness boot reads `DSH_HOME`. Verified in
-  `dsh/lib/profile-boot-*.js`: the home patch layer is `$DSH_HOME/cordis.patch.yml`, "`$DSH_HOME`
-  may be set by the test or launcher after import". Set `DSH_HOME=$SCRATCH` and the entire home -
-  profiles, ledgers, skills - lives in a throwaway directory. Zero writes anywhere under the real
-  `~/.dsh`.
+- **A. Scratch profile inside the real `~/.dsh`.** Create `~/.dsh/profiles/dsh-test/`.
+- The harness enumerates `$HOME/.dsh/profiles/*`, and a new profile directory stays inert until a
+  session launches against it.
+- The running `desktop`/`web` sessions are NEVER pointed at it, and destroy is ONE `rm -rf`.
+- **B. Redirected home (`DSH_HOME`).** The harness boot reads `DSH_HOME`, as
+  `dsh/lib/profile-boot-*.js` verifies: the home patch layer is `$DSH_HOME/cordis.patch.yml`, and
+  "`$DSH_HOME` may be set by the test or launcher after import".
+- Set `DSH_HOME=$SCRATCH` and the entire home - profiles, ledgers, skills - lives in a throwaway
+  directory, with zero writes anywhere under the real `~/.dsh`.
 
 ### 2.2 The no-symlink constraint - install mechanics
 
@@ -141,8 +146,8 @@ The LIVE `desktop` profile installs EVERY family package with
 
 The scratch profile must NOT: `link:` and workspace deps create symlinks.
 
-The goal is **copied artifacts** so the test exercises exactly what `npm install <tarball>` consumes
-after publishing.
+The goal is **copied artifacts**, so the test exercises exactly what `npm install <tarball>`
+consumes after publishing.
 
 **Method 1 - `pnpm pack` tarballs (canonical, publish-identical):**
 
@@ -252,14 +257,16 @@ $SCRATCH/                          # DSH_HOME (method B) or ~/.dsh (method A)
 
     Perform writes through the governed write path of the scratch session.
 
-    - **normalize flavors**: `write`/`raw-write` a file containing mdashes, curly quotes, ellipses,
-      unicode spaces, invisibles, fullwidth chars. The stream events normalize them. The ledger logs
-      the activation line and the `normalized N ... char(s) in one stream` line.
-    - **normalize-file**: `normalize-file` a pre-existing non-conforming file. The six-transform
-      family runs. This produces the per-file ledger lines.
-    - **governor/pinner/cargo**: `write`/`edit` real files (governed). That yields `governor.log`
-      chain-pass lines, `pinner.log` version-guard lines, `cargo-governor.log` cargo-flavor lines.
-      Attempt a governed-path violation to capture a REFUSAL line (the negative case, safely, in the
+    - **normalize flavors.** `write`/`raw-write` a file containing mdashes, curly quotes, ellipses,
+      unicode spaces, invisibles, fullwidth chars.
+    - The stream events normalize them, and the ledger logs the activation line and the
+      `normalized N ... char(s) in one stream` line.
+    - **normalize-file.** `normalize-file` a pre-existing non-conforming file.
+    - The six-transform family runs, which produces the per-file ledger lines.
+    - **governor/pinner/cargo.** `write`/`edit` real files (governed), which yields `governor.log`
+      chain-pass lines, `pinner.log` version-guard lines, and `cargo-governor.log` cargo-flavor
+      lines.
+    - Attempt a governed-path violation to capture a REFUSAL line (the negative case, safely, in the
       scratch tree ONLY).
 
 5. **The verification.**
@@ -296,36 +303,45 @@ The throwaway scratch (§2.4) is the isolation variant.
 
 The persistent variant is the same scaffold, created ONCE and left in place:
 
-- **Location:** `~/.dsh-dogfood` (a dedicated `DSH_HOME` - the user's real `~/.dsh` is NEVER
-  written). It has **ONE subhome per tree**: `classic/` and `ets/`. The profile name is `dsh-test`
-  in BOTH. The two scaffolds install different package groups (the Classic `@playform/hook-dsh-*` /
+- **Location.** `~/.dsh-dogfood` is a dedicated `DSH_HOME`, and the user's real `~/.dsh` is NEVER
+  written.
+- It has **ONE subhome per tree**: `classic/` and `ets/`, and the profile name is `dsh-test` in
+  BOTH.
+- The two scaffolds install different package groups (the Classic `@playform/hook-dsh-*` /
   `@playform/plugin-dsh-factory` names vs the EffectTS `@playform/ets-hook-dsh-*` /
-  `@playform/ets-plugin-dsh-factory` group). A single home cannot serve BOTH trees - the subhome
-  split is the plan's variant of §2.1's isolation levels. EACH profile is produced by the
-  wiring-live scaffold (`wiring-live.mjs` -> `EnsureScratch`), which is the configurator of record.
-  The scaffold provides the 12 `file:` tarball deps (no symlinks beyond pnpm's own `.bin` shims),
+  `@playform/ets-plugin-dsh-factory` group).
+- A single home cannot serve BOTH trees, so the subhome split is the plan's variant of §2.1's
+  isolation levels.
+- EACH profile is produced by the wiring-live scaffold (`wiring-live.mjs` -> `EnsureScratch`), which
+  is the configurator of record.
+- The scaffold provides the 12 `file:` tarball deps (no symlinks beyond pnpm's own `.bin` shims),
   the empty `cordis.yml` root, the minimal user layer, `overlay.yml` / `overlay-nf.yml`, the
   scratch-only exercise driver (`@local/dsh-wiring-exercise`), the fake cargo shim, and the exercise
-  workspaces with their registries. The `.wiring-ready.json` marker makes subsequent runs reuse a
-  subhome as-is.
-- **CLI verification (read-only):** `DSH_HOME=~/.dsh-dogfood dsh --profile dsh-test --dump-config` -
-  the composed tree shows the base stack plus ALL family plugins. The plugins are
-  `plugin-dsh-factory`, the governor/pinner/cargo hooks, the six flavors and normalize-file.
-  `--dump-config-schema` prints the profile entry/patch schema.
-- **Headless one-task mode:** `dsh headless "<task>"` with the dedicated home exported selects the
-  profile implicitly (it is the ONLY profile there). Example:
-  `DSH_HOME=~/.dsh-dogfood dsh headless "run the tests"`. It answers ONE task, prints the result to
-  stdout (diagnostics to stderr), and exits. `--json` emits newline-delimited run events.
-  `--session-id` resumes. A model round-trip needs a provider credential in the launching
-  environment (see the residual in §7). The profile boots and reaches the LLM layer WITHOUT one. The
-  REAL flows (normalize / governor / pinner / cargo) need NO model at all. They are driven by the
-  exercise driver inside the booted profile, which is how the wiring suites exercise them today. A
-  credentialed headless task is the variant that triggers the same flows through an agent's tool
+  workspaces with their registries.
+- The `.wiring-ready.json` marker makes subsequent runs reuse a subhome as-is.
+- **CLI verification (read-only).** `DSH_HOME=~/.dsh-dogfood dsh --profile dsh-test --dump-config`
+  shows the base stack plus ALL family plugins in the composed tree.
+- The plugins are `plugin-dsh-factory`, the governor/pinner/cargo hooks, the six flavors and
+  normalize-file, and `--dump-config-schema` prints the profile entry/patch schema.
+- **Headless one-task mode.** `dsh headless "<task>"` with the dedicated home exported selects the
+  profile implicitly (it is the ONLY profile there).
+- Example: `DSH_HOME=~/.dsh-dogfood dsh headless "run the tests"`.
+- It answers ONE task, prints the result to stdout (diagnostics to stderr), and exits.
+- `--json` emits newline-delimited run events, and `--session-id` resumes.
+- A model round-trip needs a provider credential in the launching environment (see the residual in
+  §7).
+- The profile boots and reaches the LLM layer WITHOUT one, and the REAL flows (normalize / governor
+  / pinner / cargo) need NO model at all.
+- They are driven by the exercise driver inside the booted profile, which is how the wiring suites
+  exercise them today.
+- A credentialed headless task is the variant that triggers the same flows through an agent's tool
   calls and asserts the ledgers afterwards.
-- **Battery integration:** `Maintain/Run/Wiring/Index.mjs` honours `DSH_WIRING_HOME=<base home>` -
-  the fast path. On the fast path, EACH tree reuses its configured subhome: no repack/reinstall,
-  nothing destroyed. WITHOUT it, the temp scratch lifecycle (create -> ... -> destroy) runs as
-  before: ONE throwaway home per tree. BOTH paths run the same 7 suites x 2 trees.
+- **Battery integration.** `Maintain/Run/Wiring/Index.mjs` honours `DSH_WIRING_HOME=<base home>` -
+  the fast path.
+- On the fast path, EACH tree reuses its configured subhome: no repack/reinstall, nothing destroyed.
+- WITHOUT it, the temp scratch lifecycle (create -> ... -> destroy) runs as before: ONE throwaway
+  home per tree.
+- BOTH paths run the same 7 suites x 2 trees.
 
 ```bash
 # the fast path (the configured profile):
@@ -430,46 +446,54 @@ test -z "$(find "$SCRATCH" -type l)" && echo "NO SYMLINKS - OK"
 
 ## 7. Residuals (as implemented)
 
-- **Verification record:** the full wiring battery is green through the configured profile:
+- **Verification record.** The full wiring battery is green through the configured profile:
   `DSH_WIRING_HOME=~/.dsh-dogfood pnpm test:wiring` -> ALL 14 suites (7 per tree, 202 wiring checks)
-  ALL PASS. The run is repeatable over the persistent subhomes. The runner resets EACH subhome's
-  ledgers and the exercise work areas to their seeds per run, so reruns are deterministic. BOTH
-  profiles dump-compose (`dsh --profile dsh-test --dump-config`) with ALL family entries present.
-  Headless boots the profile and reaches the LLM layer (`MISSING_CREDENTIAL` without a key).
-- **The EffectTS scaffold was renamed mid-batch and had NEVER run green:** it packed from
-  `Classic/packages` with pre-#15 directory candidates. It patched entry ids `hook-dsh-*` that the
-  ets bundles don't register (their ids are `ets-hook-dsh-*`). The ets packages' dependency on the
-  base `@playform/ets-base-dsh` was neither packed nor overridden (a registry 404 at install).
-  Fixed: the scaffold packs from `EffectTS/packages` (13 tarballs incl. the base). It overrides ALL
-  three internal names. It targets the `ets-` entry ids. The suites assert the ets names.
-- **The journal-open race is ledger-owner-dependent:** which module's ledger records
+  ALL PASS.
+- The run is repeatable over the persistent subhomes.
+- The runner resets EACH subhome's ledgers and the exercise work areas to their seeds per run, so
+  reruns are deterministic.
+- BOTH profiles dump-compose (`dsh --profile dsh-test --dump-config`) with ALL family entries
+  present.
+- Headless boots the profile and reaches the LLM layer (`MISSING_CREDENTIAL` without a key).
+- **The EffectTS scaffold was renamed mid-batch and had NEVER run green.** It packed from
+  `Classic/packages` with pre-#15 directory candidates.
+- It patched entry ids `hook-dsh-*` that the ets bundles don't register (their ids are
+  `ets-hook-dsh-*`).
+- The ets packages' dependency on the base `@playform/ets-base-dsh` was neither packed nor
+  overridden (a registry 404 at install).
+- Fixed: the scaffold packs from `EffectTS/packages` (13 tarballs incl. the base), overrides ALL
+  three internal names, targets the `ets-` entry ids, and the suites assert the ets names.
+- **The journal-open race is ledger-owner-dependent.** Which module's ledger records
   `storage journal open failed: domain 'package_governance' is already open` depends on which
-  best-effort open loses the race. The loser is the governor in the Classic boots, pinner/cargo in
-  the ets boots. The live-ledger suites scan the family ledgers. Likewise the pinner/governor
-  activation stamps race at millisecond resolution. The profile-assembly suites compare within a 50
-  ms race window (a gross inversion still fails).
-- **NO API credential in the dedicated home's launching environment:** the headless one-task flow
+  best-effort open loses the race.
+- The loser is the governor in the Classic boots, pinner/cargo in the ets boots.
+- The live-ledger suites scan the family ledgers, and the pinner/governor activation stamps likewise
+  race at millisecond resolution.
+- The profile-assembly suites compare within a 50 ms race window (a gross inversion still fails).
+- **NO API credential in the dedicated home's launching environment.** The headless one-task flow
   was verified to boot `dsh-test` and fail fast with the harness's own `MISSING_CREDENTIAL`
-  diagnostic. A full model round-trip needs `DEEPSEEK_API_KEY` (or the cloudflare route config +
-  key) exported at launch. The flows under test need NO model. The exercise driver path is
-  credential-free and fully verified.
-- **pnpm `.bin` shims:** the ONLY symlinks in the dedicated home are pnpm's own `node_modules/.bin`
-  entries (npm-check-updates/ncu). EVERY package directory is a real copied file: install. The
-  no-symlink invariant holds.
-- **The persistent subhomes are NOT auto-refreshed:** after package changes, delete
-  `~/.dsh-dogfood/classic` / `~/.dsh-dogfood/ets` (or just its `.wiring-ready.json`). Let the
-  scaffold recreate them. The temp scratch path ALWAYS packs fresh.
+  diagnostic.
+- A full model round-trip needs `DEEPSEEK_API_KEY` (or the cloudflare route config + key) exported
+  at launch.
+- The flows under test need NO model, and the exercise driver path is credential-free and fully
+  verified.
+- **pnpm `.bin` shims.** The ONLY symlinks in the dedicated home are pnpm's own `node_modules/.bin`
+  entries (npm-check-updates/ncu).
+- EVERY package directory is a real copied file: install, so the no-symlink invariant holds.
+- **The persistent subhomes are NOT auto-refreshed.** After package changes, delete
+  `~/.dsh-dogfood/classic` / `~/.dsh-dogfood/ets` (or just its `.wiring-ready.json`).
+- Let the scaffold recreate them, and the temp scratch path ALWAYS packs fresh.
 
 ---
 
 ## 6. Disciplines
 
 - The implementation followed the user's explicit activation (the profiles, the battery integration,
-  the verification). Nothing else was touched.
+  the verification), and nothing else was touched.
 - NEVER commit. The user commits.
-- The real `~/.dsh` profiles are read-only-inspected. EVERY mutation targets the scratch home.
-  Destroy leaves NO residue.
-- The ledger strings are the contract everywhere. They stay byte-identical, NEVER reworded, in
+- The real `~/.dsh` profiles are read-only-inspected, EVERY mutation targets the scratch home, and
+  destroy leaves NO residue.
+- The ledger strings are the contract everywhere, and they stay byte-identical, NEVER reworded, in
   smokes and in live assertions alike.
-- Totals stay truthful: 359 smoke suites / 5,337 checks across both trees (the aggregate). The
+- Totals stay truthful: 359 smoke suites / 5,337 checks across both trees (the aggregate), and the
   wiring checks are reported separately, NEVER folded into those numbers.
