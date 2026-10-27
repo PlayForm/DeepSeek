@@ -1,18 +1,14 @@
 # Policy-Defaults
 
-The policy block (D6) on the workspace-context service: the defaults, the State
-mapping, and the proof that this read-only package has no gated action.
+This folder covers the policy block (D6) on the workspace-context service: the defaults, the State mapping, and the proof that this read-only package has no gated action.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The context service only reads the
-sibling graph and builds the orientation packet, so it has NO gated action: the
-shared block's `read`/`index`/`record` verdicts are `auto` and nothing in the
-plugin consults `Decide` to refuse. This folder proves the block is real config,
-not dead text - the schema fills the D6 defaults, the apply maps the block to
-`State.Allow`, an explicit override replaces exactly one key, every action class
-the package uses decides `auto` with no policy/held line, and a representative
-read-only packet build still proceeds and writes no file.
+D6 makes automation a per-plugin allowlist.
+
+The context service only reads the sibling graph and builds the orientation packet, so it has NO gated action: the shared block's `read`/`index`/`record` verdicts are `auto`, and nothing in the plugin consults `Decide` to refuse.
+
+This folder proves the block is real config, not dead text: the schema fills the D6 defaults, the apply maps the block to `State.Allow`, an explicit override replaces exactly one key, every action class the package uses decides `auto` with no policy/held line, and a representative read-only packet build still proceeds and writes no file.
 
 ## Scenario
 
@@ -37,15 +33,16 @@ read-only packet build still proceeds and writes no file.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` apply, the real factory
-instance, and the fake ctx (the read-only fs purity guard with its `writes`
-recorder). No sibling graph is attached: the absent-graph packet is the
-cheapest representative read. No gate is exercised because the package has none.
+The harness is the shared Harness: the real built `Target/Library.js` apply, the real factory instance, and the fake ctx with the read-only fs purity guard and its `writes` recorder.
+
+No sibling graph is attached, because the absent-graph packet is the cheapest representative read.
+
+No gate is exercised because the package has none.
 
 ## Expected ledger strings (byte-exact, `context: ` prefix)
 
-The unchanged activation line `activated (budget=2000/4000, lenses=3)` and the
-unchanged packet line `packet (none) (<tokens> tok, lens code)`.
+The unchanged activation line `activated (budget=2000/4000, lenses=3)` and the unchanged packet line `packet (none) (<tokens> tok, lens code)`.
+
 No policy or held line exists on this package's path.
 
 ## Expected count

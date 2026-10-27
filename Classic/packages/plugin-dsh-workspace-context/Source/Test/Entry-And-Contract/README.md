@@ -1,7 +1,6 @@
 # Entry-And-Contract - the loader contract and the mount
 
-The object-form loader contract and the IDLE-forever posture: the default
-object, the cold mount, the fail-loud validation, the enabled mount.
+This folder covers the object-form loader contract and the IDLE-forever posture: the default object, the cold mount, the fail-loud validation, and the enabled mount.
 
 ## Scenarios
 
@@ -21,9 +20,7 @@ object, the cold mount, the fail-loud validation, the enabled mount.
 
 ## Fixtures
 
-The shared Harness (fake ctx with a DISTINCT root object, the real factory
-instance, the real built Target, the tools facility capture, the fs purity
-capture, a fresh temporary directory per folder process).
+The harness is the shared Harness: a fake ctx with a DISTINCT root object, the real factory instance, the real built Target, the tools facility capture, the fs purity capture, and a fresh temporary directory per folder process.
 
 ## Expected ledger strings (byte-exact, `context: ` prefix)
 

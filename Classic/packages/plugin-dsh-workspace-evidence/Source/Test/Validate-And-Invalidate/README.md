@@ -1,8 +1,6 @@
 # Validate-And-Invalidate - the validation objects and the Acar seam
 
-The service's core behavior against the fake ctx: the record shape, the
-fail-loud validation, the supersede path, the explicit invalidation, the
-store cap, and the read surface.
+This folder covers the service's core behavior against the fake ctx: the record shape, the fail-loud validation, the supersede path, the explicit invalidation, the store cap, and the read surface.
 
 ## Scenarios
 
@@ -25,8 +23,7 @@ store cap, and the read surface.
 
 ## Fixtures
 
-The shared Harness (real built Target; the durable ledger pointed at a
-nonexistent path so only the logger lines are asserted in this folder).
+The harness is the shared Harness with the real built Target, and it points the durable ledger at a nonexistent path so only the logger lines are asserted in this folder.
 
 ## Expected ledger strings (byte-exact, `evidence: ` prefix)
 

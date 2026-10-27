@@ -1,9 +1,6 @@
 # Packet-And-Budget - the packet build and the budget clamp
 
-The orientation packet against a fake sibling workspace-graph: the eight
-fixed sections, the ranked neighbors, the lens filtering, the honest
-degradation, the staleness contract, the budget clamp, the optional token
-meter, the tool surface, and the purity.
+This folder covers the orientation packet against a fake sibling workspace-graph: the eight fixed sections, the ranked neighbors, the lens filtering, the honest degradation, the staleness contract, the budget clamp, the optional token meter, the tool surface, and the purity.
 
 ## Scenarios
 
@@ -31,9 +28,7 @@ meter, the tool surface, and the purity.
 
 ## Fixtures
 
-The shared Harness (fake sibling graph with three file nodes and three
-edges; the real built Target including the Render module, recomputed for
-the byte-exact token assertions).
+The harness is the shared Harness: a fake sibling graph with three file nodes and three edges, plus the real built Target including the Render module, recomputed for the byte-exact token assertions.
 
 ## Expected ledger strings (byte-exact, `context: ` prefix)
 

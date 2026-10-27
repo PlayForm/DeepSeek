@@ -1,7 +1,8 @@
 # The workspace graph - schema and behavior
 
-The service `ctx.workspaceGraph` (registered under the exact name `workspaceGraph`). Everything
-below is what the code does today; nothing else is claimed.
+The service `ctx.workspaceGraph` registers under the exact name `workspaceGraph`.
+
+Everything below is what the code does today, and nothing else is claimed.
 
 ## 1. Identity
 
@@ -28,8 +29,7 @@ below is what the code does today; nothing else is claimed.
 | limitMaximum    | number                       | 500                                             |
 | policy          | Allowlist                    | the D6 defaults                                 |
 
-`maxFiles` is the one field the INDEXING TRIGGER added to the frozen W1 table: it bounds the
-`indexWorkspace` walk (a caller's explicit `maxFiles` option overrides it for that call).
+`maxFiles` is the one field the INDEXING TRIGGER added to the frozen W1 table, and it bounds the `indexWorkspace` walk (a caller's explicit `maxFiles` option overrides it for that call).
 
 Fail-loud at construction (exact messages, asserted by the smoke):
 
@@ -42,8 +42,7 @@ Fail-loud at construction (exact messages, asserted by the smoke):
 
 ## The policy block (D6)
 
-The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
-block), mapped to `State.Allow`:
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's block), mapped to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -52,15 +51,13 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The graph's actions are index, all **AUTOMATIC**; it has **no gated action** (no file write, no
-batch commit, no spawn), so the block documents the posture and refuses nothing. The block is one
-volatile object, so a policy flip is hot-editable without a remount; a resolved pack's `policy`
-section overrides the defaults per action (the wiring is the next refinement).
+The graph's actions are index, all **AUTOMATIC**, and it has **no gated action** (no file write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
 
-The plain `Configuration` keeps the frozen W1 table (no hidden knobs); the block rides from the
-schema straight onto `State.Allow` in the constructor.
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
-No new ledger line: the package has no gated action.
+The plain `Configuration` keeps the frozen W1 table (no hidden knobs), and the block rides from the schema straight onto `State.Allow` in the constructor.
+
+No new ledger line exists, because the package has no gated action.
 
 ## 3. Node and edge kinds (W1)
 
@@ -80,28 +77,28 @@ No new ledger line: the package has no gated action.
 | references    | the using node (the enclosing Symbol, else the File) -> the used Symbol node | yes, only with the semantics service (section 6.3) |
 | calls / tests | -                                                                            | no (deferred, not faked)                           |
 
-`<path>` is the resolved display path. The qualified name of a Symbol is its declaration name;
-nested names are not resolved in v0. A test path is `*.test.ts`, `*.test.tsx`, `*.test.js` (also the
-jsx/mjs/cjs variants) or a `Test.ts` segment.
+`<path>` is the resolved display path, and the qualified name of a Symbol is its declaration name, because nested names are not resolved in v0.
+
+A test path is `*.test.ts`, `*.test.tsx`, `*.test.js` (also the jsx/mjs/cjs variants) or a `Test.ts` segment.
 
 ## 4. Spans and fingerprints
 
 - `Span` is 1-based, inclusive on both ends.
 - A Symbol's span runs from its declaration line to its closing brace (brace counting; a declaration
   without a brace ends at its statement line). A Block's span is the symbol's body: the line after
-  the brace-open through the closing brace line - always inside the symbol's span. A symbol whose
+  the brace-open through the closing brace line, always inside the symbol's span. A symbol whose
   closing brace sits on the declaration line has no Block.
 - The fingerprint is `sha256(normalized text + "\n" + kind + "\n" + name)` in hex, where the
   normalized text is the node's span text with CRLF -> LF and trailing whitespace stripped per line;
-  a node without a name hashes the empty name. The stable id survives edits; the fingerprint detects
-  content change.
-- Every edge carries a source span: a `contains` edge carries the contained node's span; an
+  a node without a name hashes the empty name. The stable id survives edits, and the fingerprint
+  detects content change.
+- Every edge carries a source span: a `contains` edge carries the contained node's span, and an
   `imports` edge carries the import's line.
 
 ## 5. Parser limits (v0 honesty)
 
 - TypeScript/JavaScript: line/regex scanning, no compiler API. Comment lines are skipped. Braces
-  inside strings are counted naively - a string with an unbalanced brace can skew a span.
+  inside strings are counted naively, so a string with an unbalanced brace can skew a span.
 - Imports: static `from "..."` and dynamic `import("...")`. Only relative specifiers produce an edge
   (the target id is the specifier resolved against the file's directory, no extension added); a
   non-relative specifier is counted (State.SkippedImports) and produces no node and no edge.
@@ -124,7 +121,7 @@ jsx/mjs/cjs variants) or a `Test.ts` segment.
   honored - `0` indexes nothing; an absent, negative or non-finite option falls back to
   `Config.maxFiles`, so the walk can never run unbounded), and call `indexFile` for every
   candidate - the per-file gates are never duplicated. `indexed` / `skipped` / `failed` are this
-  run's outcome tallies; `files` is the number of file records the graph holds afterwards. A root
+  run's outcome tallies, and `files` is the number of file records the graph holds afterwards. A root
   that cannot be listed rejects (never an honest-looking zero).
 - `async removeFile(path) -> boolean` - delete the record from the mirror and the store, bump,
   persist, ledger `removed <path>`; false silently when there is no record.
@@ -138,7 +135,7 @@ jsx/mjs/cjs variants) or a `Test.ts` segment.
   path, else by path suffix; entries are the anchor (`definition`), the files importing it (`test`
   when the path is a test path, else `importer`), the files it imports (`dependency`), and the
   DocSections in the anchor's own file (`doc`); deduplicated by path, ordered by role rank then
-  path, sliced to `limit` (default 7). The component derives from `contains`/`imports` only: the
+  path, sliced to `limit` (default 7). The component derives from `contains`/`imports` only, so the
   `references` edges (section 6.3) are not folded into it, and callers still need the deferred
   `calls` edges.
 - `snapshot() -> GraphSnapshot` - the loadAll read; a record that fails validation is skipped and
@@ -147,16 +144,13 @@ jsx/mjs/cjs variants) or a `Test.ts` segment.
 
 ## 6.1 The trace adapter (the incremental wiring)
 
-Registered ONCE from the constructor through `Trace/Adapter.ts` and ONLY when the graph is enabled
-at construction - a disabled graph wires nothing. The graph consumes `observe/stamp` from the
-family's trace bus (`ctx.trace`, provided by `@playform/plugin-dsh-factory`) instead of registering
-`ctx.root.on("fs/observed")` directly (D5: the indexer is inferred from the bus - no separate
-process, no separate indexer plugin). The bus is PROBED (`ctx.get("trace")`), never injected: the
-loader contract's `inject` stays `["fs", "storage"]`, so direct construction and standalone use are
-unchanged; the factory's bundle must load first (the family's dependency-order rule).
+It is registered ONCE from the constructor through `Trace/Adapter.ts` and ONLY when the graph is enabled at construction, so a disabled graph wires nothing.
 
-The consumer (`Trace/Consume.ts`) is synchronous, reads no file, never throws into the bus, and
-applies this filter chain:
+The graph consumes `observe/stamp` from the family's trace bus (`ctx.trace`, provided by `@playform/plugin-dsh-factory`) instead of registering `ctx.root.on("fs/observed")` directly (D5: the indexer is inferred from the bus, with no separate process and no separate indexer plugin).
+
+The bus is PROBED (`ctx.get("trace")`), never injected: the loader contract's `inject` stays `["fs", "storage"]`, so direct construction and standalone use are unchanged, and the factory's bundle must load first (the family's dependency-order rule).
+
+The consumer (`Trace/Consume.ts`) is synchronous, reads no file, never throws into the bus, and applies this filter chain:
 
 | Condition                              | Action                                                                                              |
 | -------------------------------------- | --------------------------------------------------------------------------------------------------- |
@@ -166,32 +160,30 @@ applies this filter chain:
 | the stamp's version is `absent`        | emit `graph/invalidated` (reason `absent`); no re-index (the stale record stays until `removeFile`) |
 | the path is already in flight          | ignore - the DETACHED LOOP coalesces it into the running re-index                                   |
 
-The first accepted stamp schedules one detached re-index through the existing `indexFile` and
-ledgers `reindexed <resolved path> (<status>)`. The coalescing is the trace library's detached loop
-(`@playform/lib-dsh-trace`, `Loop`): a queue keyed by the payload's path, ONE in-flight task per
-key, no timer or wall clock, fail-open, and `State.Flush` is the loop's flush promise so a caller
-(the smoke) can await it deterministically. The adapter's subscription and the loop are disposed on
-the fiber effect (`graph-trace`).
+The first accepted stamp schedules one detached re-index through the existing `indexFile` and ledgers `reindexed <resolved path> (<status>)`.
+
+The coalescing is the trace library's detached loop (`@playform/lib-dsh-trace`, `Loop`): a queue keyed by the payload's path, ONE in-flight task per key, no timer or wall clock, and fail-open, with `State.Flush` as the loop's flush promise so a caller (the smoke) can await it deterministically.
+
+The adapter's subscription and the loop are disposed on the fiber effect (`graph-trace`).
 
 ## 6.2 The trace emissions
 
-The graph emits two events (no ledger line is added - the module's strings stay byte-exact):
+The graph emits two events, and no ledger line is added (the module's strings stay byte-exact):
 
 | Event               | When                                                                                                                                                                                                         | Payload                       |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------- |
 | `graph/indexed`     | a record was stored (a first index or a replacement)                                                                                                                                                         | `{ path, version, revision }` |
 | `graph/invalidated` | the record previously held for a path is no longer valid: `reason` is `replaced` (a re-index replaced it; the previous `version` is included), `removed` (`removeFile`), or `absent` (an absent observation) | `{ path, reason, version? }`  |
 
-The consumers (the context packet memo) drop what they cached for the path. An absent bus (no
-factory mounted, a bare fixture) is a silent skip: the graph's store and ledger work exactly as
-before.
+The consumers (the context packet memo) drop what they cached for the path.
+
+An absent bus (no factory mounted, a bare fixture) is a silent skip, so the graph's store and ledger work exactly as before.
 
 ## 6.3 The references edge (the semantics consumer wiring)
 
-After the parse, `indexFile` ASKS the workspace-semantics service for the file's reference list and
-turns every resolved reference into one `references` edge. The service is PROBED (`ctx.get`), never
-injected: `inject` stays `["fs", "storage"]`. The probed names are `workspaceSemantics` (the
-registered name) and the plan's short alias `semantics`.
+After the parse, `indexFile` ASKS the workspace-semantics service for the file's reference list and turns every resolved reference into one `references` edge.
+
+The service is PROBED (`ctx.get`), never injected, so `inject` stays `["fs", "storage"]`; the probed names are `workspaceSemantics` (the registered name) and the plan's short alias `semantics`.
 
 | Condition                                                                     | Action                                                         |
 | ----------------------------------------------------------------------------- | -------------------------------------------------------------- |
@@ -201,21 +193,19 @@ registered name) and the plan's short alias `semantics`.
 | the use site falls outside every Symbol span                                  | the edge starts at the File node (`from`)                      |
 | otherwise                                                                     | `{ kind: "references", from, to, span }`, the use site's lines |
 
-The service reads the file through its own fs seam (its model is its own); the graph hands it the
-text it already read only to convert the service's character offsets into the graph's 1-based line
-spans. The `graph: indexed ...` line's edge count includes the references edges; no new ledger line
-is added (the module's strings stay byte-exact). A
-`graph: indexed <path> ... (<n> nodes, <m> edges)` line with no service is therefore exactly what it
-was before this edge existed.
+The service reads the file through its own fs seam (its model is its own), and the graph hands it the text it already read only to convert the service's character offsets into the graph's 1-based line spans.
+
+The `graph: indexed ...` line's edge count includes the references edges, and no new ledger line is added (the module's strings stay byte-exact).
+
+A `graph: indexed <path> ... (<n> nodes, <m> edges)` line with no service is therefore exactly what it was before this edge existed.
 
 ## 7. Store
 
-The KV facet through the storage domain: the domain named `Config.domain` (version 1, per-record
-layout, `invalidRecords: "backup-and-skip"`), one `records` table, one record per path keyed by the
-display path, plus the meta record keyed `__meta` carrying `{ indexRevision }`. An absent facility
-is a silent skip (in-memory only); a failed open is one best-effort ledger line
-(`storage open failed (...)`). On open, stored records load into the mirror after validation and the
-meta revision is restored when ahead.
+The KV facet runs through the storage domain: the domain named `Config.domain` (version 1, per-record layout, `invalidRecords: "backup-and-skip"`), one `records` table, one record per path keyed by the display path, plus the meta record keyed `__meta` carrying `{ indexRevision }`.
+
+An absent facility is a silent skip (in-memory only), and a failed open is one best-effort ledger line (`storage open failed (...)`).
+
+On open, stored records load into the mirror after validation, and the meta revision is restored when ahead.
 
 ## 8. Ledger lines (byte-stable, module-owned)
 
@@ -231,11 +221,8 @@ graph: workspace capped at <maxFiles> files
 graph: reindexed <path> (<status>)
 ```
 
-The last three are the INDEXING TRIGGER's lines (the first four and the store line are the W1
-contract's). `workspace indexed` closes every `indexWorkspace` call; `workspace capped at` is
-emitted only when the walk stopped at the bound; `reindexed` is emitted once per fs/observed
-re-index, with the status `indexFile` reported.
+The last three are the INDEXING TRIGGER's lines, while the first four and the store line are the W1 contract's.
 
-Every line goes through the module's own Append: logger first (`graph: <message>`), then the durable
-ledger file (`[ISO] graph: <message>`) when the internal `State.Ledger` seam is set - the frozen
-config table has no ledger knob, so the logger is the default surface.
+`workspace indexed` closes every `indexWorkspace` call, `workspace capped at` is emitted only when the walk stopped at the bound, and `reindexed` is emitted once per fs/observed re-index, with the status `indexFile` reported.
+
+Every line goes through the module's own Append: logger first (`graph: <message>`), then the durable ledger file (`[ISO] graph: <message>`) when the internal `State.Ledger` seam is set, because the frozen config table has no ledger knob and the logger is the default surface.

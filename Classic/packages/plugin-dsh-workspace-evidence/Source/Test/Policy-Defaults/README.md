@@ -1,17 +1,16 @@
 # Policy-Defaults
 
-The policy block (D6) on the evidence service: the defaults, the State mapping
-on `Allow`, the override, and the service's read-only posture.
+This folder covers the policy block (D6) on the evidence service: the defaults, the State mapping on `Allow`, the override, and the service's read-only posture.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The evidence service validates and
-records and never writes, commits or spawns, so its own action classes are
-`read` and `record` - both automatic. This folder proves the block is real
-config, not dead text: the schema fills the D6 defaults, the apply maps them to
-`State.Allow`, an explicit override replaces exactly one key, and the package
-has NO gated action - no verdict can refuse a call, and a representative
-`validate` still proceeds and touches no file content.
+D6 makes automation a per-plugin allowlist.
+
+The evidence service validates and records, and it never writes, commits, or spawns, so its own action classes are `read` and `record`, both automatic.
+
+This folder proves the block is real config, not dead text: the schema fills the D6 defaults, the apply maps them to `State.Allow`, an explicit override replaces exactly one key, and the package has NO gated action.
+
+No verdict can refuse a call, and a representative `validate` still proceeds and touches no file content.
 
 ## Scenario
 
@@ -35,17 +34,17 @@ has NO gated action - no verdict can refuse a call, and a representative
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` apply, the real factory
-instance, the fake ctx, the fake fs (a write records and throws), and the
-schema's own validation (`Validate`). The factory's own `Decide` verdict
-lookup is imported from the factory's built `Target/Library.js` - the same
-helper a consumer's gate would call.
+The harness is the shared Harness: the real built `Target/Library.js` apply, the real factory instance, the fake ctx, the fake fs (a write records and throws), and the schema's own validation (`Validate`).
+
+The factory's own `Decide` verdict lookup is imported from the factory's built `Target/Library.js`, which is the same helper a consumer's gate would call.
 
 ## Expected ledger strings (byte-exact)
 
-None new - the block and its mapping log nothing; the mount's only line is the
-unchanged `evidence: activated (domain=workspace_evidence)`. The defaults are
-the contract and are asserted as an object.
+This folder adds none, because the block and its mapping log nothing.
+
+The mount's only line is the unchanged `evidence: activated (domain=workspace_evidence)`.
+
+The defaults are the contract and are asserted as an object.
 
 ## Expected count
 

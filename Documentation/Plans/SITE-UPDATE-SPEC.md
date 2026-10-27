@@ -38,18 +38,18 @@ statuses:
 # SITE-UPDATE-SPEC - the site's per-file content delta
 
 > The binding worklist for the website lane after the completion program. The site still tells a
-> fifteen-package story inside a 101-package tree: the ledger paths point at files no plugin writes,
-> every install box promises an npm release that does not exist, and the 36 new packages plus the
-> trace bus, the pack layer, the policy block, the storage domains and the client family are absent
-> from the copy. This document is the delta: every finding keeps its file and line, the corrected
-> fact and its source in the tree, and the acceptance check that proves it fixed. The auditor was
-> read-only: nothing under `Site/` was edited by the audit.
+> fifteen-package story inside a 101-package tree, because the ledger paths point at files that no
+> plugin writes, every install box promises an npm release that does not exist, and the 36 new
+> packages plus the trace bus, the pack layer, the policy block, the storage domains, and the client
+> family are absent from the copy. This document is the delta: every finding keeps its file and line,
+> the corrected fact and its source in the tree, and the acceptance check that proves the fix. The
+> auditor was read-only, so nothing under `Site/` was edited by the audit.
 
 ## 0. How to use this document
 
-1. Read section 1 (the verdict) - it is the measured state, not an impression.
-2. Execute section 7 in order: P0, then P1, then P2. Every item names its files, its corrected facts
-   and its acceptance check.
+1. Read section 1 (the verdict), because it is the measured state and not an impression.
+2. Execute section 7 in order: P0, then P1, then P2, where every item names its files, its corrected
+   facts, and its acceptance check.
 3. The gate is always the same two commands plus one grep:
 
 ```sh
@@ -60,11 +60,11 @@ grep -r '~/\.dsh/[a-z-]*\.log' Site/Target --include=*.html | grep -v playform #
 
 4. The lane laws still apply: no `astro dev`, no `tsc`, no git mutation, the build is the arbiter,
    every dynamic figure comes from `Source/Library/Content.ts`, and a claim about packages, counts,
-   versions, npm or features is verified against the tree, never against a document.
+   versions, npm, or features is verified against the tree and never against a document.
 
 ### 0.1 The state this spec is written against
 
-The `site-content` lane rewrote the content model during the audit. The pages are untouched.
+The `site-content` lane rewrote the content model during the audit, while the pages are untouched.
 
 | Artifact                                             | State at the audit           | Meaning                                                             |
 | ---------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------- |
@@ -74,13 +74,13 @@ The `site-content` lane rewrote the content model during the audit. The pages ar
 | `Site/Target/`                                       | rebuilt (11:51), 25 HTML     | the shipped artifact; 24 pages + 404                                |
 | `Site/Source/pages/*.astro`, `Layout/`, `Component/` | untouched since 11:21        | every finding below still stands                                    |
 
-A second lane (`site-content`) may still be editing the model while this spec executes. Re-run the
-gate after every change set; do not hand-edit a figure that the model already publishes.
+A second lane (`site-content`) may still be editing the model while this spec executes, so re-run the
+gate after every change set and do not hand-edit a figure that the model already publishes.
 
 ## 1. The verdict
 
-The content model is now essentially correct. The pages are not. The site ships a broken install
-path and a stale ledger vocabulary.
+The content model is now essentially correct, but the pages are not, and the site ships a broken
+install path and a stale ledger vocabulary.
 
 | Measure                                          | In `Site/Target/` (built 11:51)          | The tree's truth                             | Source                                                                           |
 | ------------------------------------------------ | ---------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------- |
@@ -91,20 +91,21 @@ path and a stale ledger vocabulary.
 | HTML pages                                       | 25                                       | 24 pages + the 404                           | `find Site/Target -name "*.html"`                                                |
 | Nav / 404 / sitemap parity                       | 9 / 9 / 9                                | holds                                        | `Layout/Base.astro:24-34`; `Public/404.html:105-115`                             |
 
-What the numbers mean, in the site's own terms:
+What the numbers mean, in the terms of the site:
 
 - The install box is the primary conversion path, and it 404s on 141 surfaces.
-- The ledger is the site's "did it activate" proof. Every sample points at a file that no plugin
-  writes any more, because wave 0b standardised the log path to `~/.dsh/playform/<package>.log`.
+- The ledger is the "did it activate" proof of the site, and every sample points at a file that no
+  plugin writes any more, because wave 0b standardised the log path to
+  `~/.dsh/playform/<package>.log`.
 - The family grew from 15 to 101 packages, and the copy still says fifteen in 47 places.
-- The 13 Drift failures are exactly the stale ledger samples. Fix them and the guard goes green.
+- The 13 Drift failures are exactly the stale ledger samples, so fixing them turns the guard green.
 
 ## 2. The content model
 
 ### 2.1 The verified figures (do not re-derive by hand)
 
 Every figure below was re-derived from the tree by the audit and independently reproduced. The
-readers in `Live.ts` compute them; `Content.ts` publishes them; the pages must read them.
+readers in `Live.ts` compute them, `Content.ts` publishes them, and the pages must read them.
 
 | Export                                                         | Value                                                                                | Derivation                                                                                                                        |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |

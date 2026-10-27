@@ -1,8 +1,6 @@
 # Watch-And-Storage - the invalidation seam and the storage domain
 
-The fs/observed listener through the real root Wire and the P5-style
-storage domain: the guard chain, the persistence, the restart recovery,
-the loud open failure, the absent facility, and the purity.
+This folder covers the fs/observed listener through the real root Wire and the P5-style storage domain: the guard chain, the persistence, the restart recovery, the loud open failure, the absent facility, and the purity.
 
 ## Scenarios
 
@@ -36,9 +34,7 @@ the loud open failure, the absent facility, and the purity.
 
 ## Fixtures
 
-The shared Harness (fake storage facility with seeded records for the
-restart; the real built Target including the Storage module driven
-directly, the Monitors-Persist precedent) and the `State.Now` clock seam.
+The harness is the shared Harness: a fake storage facility with seeded records for the restart, the real built Target including the Storage module driven directly (the Monitors-Persist precedent), and the `State.Now` clock seam.
 
 ## Expected ledger strings (byte-exact, `evidence: ` prefix)
 
