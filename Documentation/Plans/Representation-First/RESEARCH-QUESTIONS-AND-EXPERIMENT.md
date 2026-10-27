@@ -39,8 +39,8 @@ statuses:
 
 ## 2. The first experiment (the recommended scope)
 
-- **THE SCOPE**: ONE language, the symbol rename, the preview and apply, the revision checks, and the
-  audit record.
+- **THE SCOPE**: ONE language, the symbol rename, the preview and apply, the revision checks, and
+  the audit record.
 - **THE COMPARISON**: against the conventional read and edit workflows on correctness, tokens,
   interaction count, conflict handling, and recovery effort.
 - **THE REFERENCE CASE**: the `State: State -> State: Operational` example of the user.

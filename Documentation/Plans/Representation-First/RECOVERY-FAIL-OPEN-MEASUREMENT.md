@@ -28,9 +28,9 @@ statuses:
 
 ## 1. The recovery before the rollback (the early requirement)
 
-- **THE INDEPENDENT WORK**: the work persists INDEPENDENTLY of the conversational memory of the agent
-  through the workItem of the identifier, the objective, the scope, the ownerLease, the proposal, the
-  status, and the lastDurableCheckpoint.
+- **THE INDEPENDENT WORK**: the work persists INDEPENDENTLY of the conversational memory of the
+  agent through the workItem of the identifier, the objective, the scope, the ownerLease, the
+  proposal, the status, and the lastDurableCheckpoint.
 - **THE RESTART PROTOCOL**: a restarted agent receives the EXPLICIT work record and inspects its
   status, and it never infers the ownership from the sibling edits or reconstructs the assignment
   from an old transcript.
@@ -59,13 +59,13 @@ statuses:
 
 ## 3. The hypothesis test (the honest measurement)
 
-- **THE HONEST METRIC**: NOT "one call replaces twenty", but the cost and reliability of the complete
-  workflow, which covers the indexing, the validation, the conflicts, and the recovery.
+- **THE HONEST METRIC**: NOT "one call replaces twenty", but the cost and reliability of the
+  complete workflow, which covers the indexing, the validation, the conflicts, and the recovery.
 - **THE THREE IMPLEMENTATIONS** measured on the SAME tasks: the read and edit workflow as the
   baseline, the semantic editing adapter with the structured operations alone, and the governed
   workspace with the persistent state and the policy.
-- **THE MEASURES**: the task correctness, the unintended changes, the model tokens, the elapsed time,
-  the stale-proposal rejection, the interruption recovery, and the human review effort.
+- **THE MEASURES**: the task correctness, the unintended changes, the model tokens, the elapsed
+  time, the stale-proposal rejection, the interruption recovery, and the human review effort.
 - **THE DIFFICULT CASES** (deliberately): the duplicate names, the unresolved references, the
   external edits, the expired leases, and the failure midway through the persistence.
 - **THE STRONGEST CLAIM**: the demonstrated improvement in the COORDINATION AND CONTROL and not

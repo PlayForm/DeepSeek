@@ -47,8 +47,8 @@ statuses:
 
 - **THE LENSES**: observe(resource, revision) -> representation, propose(representation, operation)
   -> candidate change, and reconcile(resource, candidate) -> applied | conflict | rejection.
-- **THE AMBIGUITY RULE**: every abstract edit may have multiple concrete interpretations, such as the
-  symbol rename, the docs, the serialized key, or the combination for a displayed name, and the
+- **THE AMBIGUITY RULE**: every abstract edit may have multiple concrete interpretations, such as
+  the symbol rename, the docs, the serialized key, or the combination for a displayed name, and the
   system must EXPOSE the ambiguity.
 - **THE REFUSAL TO GUESS** is a first-class result.
 
@@ -56,8 +56,8 @@ statuses:
 
 - **CAPABILITY**: the permission to perform a specific operation under the object-capabilities model
   with the unforgeable references and the revocation through the revocable intermediaries, where the
-  prototype validates the capability references INSIDE the harness and an agent-created identifier or
-  self-declared permission is never proof of authority.
+  prototype validates the capability references INSIDE the harness and an agent-created identifier
+  or self-declared permission is never proof of authority.
 - **OWNERSHIP LEASE**: the temporary coordination claim over the work, which another worker may
   acquire on expiry.
 - **RESIDENCY POLICY**: whether a representation stays loaded, because its in-memory state may be

@@ -45,18 +45,19 @@ statuses:
 - **OBSERVED**: what a particular observation established, such as the file contents at revision 93.
 - **PROPOSED**: a change that is not yet accepted, such as the rename of a resolved symbol.
 - **VALIDATED**: a claim checked under stated conditions, such as the type check that passed for
-  candidate 108, and it ALWAYS answers: validated against what, using which check, at which revision?
+  candidate 108, and it ALWAYS answers: validated against what, using which check, at which
+  revision?
 - **COMMITTED**: an effect recorded as applied, such as candidate 108 persisted.
-- **THE SEPARATION**: a proposal can be coherent but unauthorized, a validation can succeed and later
-  become stale, and a commit can complete without every downstream consequence checked.
+- **THE SEPARATION**: a proposal can be coherent but unauthorized, a validation can succeed and
+  later become stale, and a commit can complete without every downstream consequence checked.
 
 ## 3. The evidence dependencies (the validation objects)
 
-- **THE DURABLE OBJECT**: each validation is a durable object with dependencies on the candidate, the
-  checker and its configurationRevision, the inputs of the sourceSnapshot, the dependencyLockfile,
-  and the compilerVersion, and the outcome.
-- **THE INVALIDATION RULE**: if a relevant input changes, the result INVALIDATES, and a green badge is
-  never preserved because the check once succeeded.
+- **THE DURABLE OBJECT**: each validation is a durable object with dependencies on the candidate,
+  the checker and its configurationRevision, the inputs of the sourceSnapshot, the
+  dependencyLockfile, and the compilerVersion, and the outcome.
+- **THE INVALIDATION RULE**: if a relevant input changes, the result INVALIDATES, and a green badge
+  is never preserved because the check once succeeded.
 - **THE CONNECTION**: the self-adjusting computation tracks the dependencies and propagates the
   changes, which here serves the EVIDENCE VALIDITY and not the automatic rerunning of every agent
   thought.
@@ -69,7 +70,7 @@ statuses:
   semantic operations record the dependencies on the DISCOVERY QUERIES as well as the individual
   resources, such as `resource: file:41 @ revision:93` plus
   `query: references-to-symbol:4821 @ indexRevision: index:26` plus the scope.
-- **THE FOUNDATION**: the optimistic-concurrency foundation of the read sets, the write sets, and the
-  validation before publication.
+- **THE FOUNDATION**: the optimistic-concurrency foundation of the read sets, the write sets, and
+  the validation before publication.
 - **THE DESIGN QUESTION**: how to represent "these are all the references I found" WITHOUT claiming
   more completeness than the index can establish.

@@ -14,7 +14,8 @@ The config surface below has all fields volatile, and the schema defaults are th
 
 ## The policy block (D6)
 
-The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's block), mapped to `State.Allow`:
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -23,9 +24,11 @@ The config carries the shared per-action allowlist (`policy: Policy()`, composed
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-This package's actions are read-only and record, all AUTOMATIC, and it has NO gated action (no file write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
+This package's actions are read-only and record, all AUTOMATIC, and it has NO gated action (no file
+write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 No new ledger line exists, because the package has no gated action.
 
@@ -43,10 +46,14 @@ The four truth kinds (`TruthKind`): `reality`, `observation`, `representation`, 
 
 ## The repeat-event guard (Function/Duplicate)
 
-The fs/observed listener coalesces repeat events: a repeat for the same path carrying the same version within a short window (2 s on the module's clock; the `State.Now` test seam overrides it; no real timer anywhere) runs no invalidation pass and records nothing.
+The fs/observed listener coalesces repeat events: a repeat for the same path carrying the same
+version within a short window (2 s on the module's clock; the `State.Now` test seam overrides it; no
+real timer anywhere) runs no invalidation pass and records nothing.
 
-The version token identifies the file state, so that state's invalidation already ran, and any validation created since is fresh against the same state.
+The version token identifies the file state, so that state's invalidation already ran, and any
+validation created since is fresh against the same state.
 
 A different version, or the same version after the window, runs the pass normally.
 
-The service's explicit `invalidate(key)` calls are never coalesced, and no new ledger line appears, because a coalesced repeat records nothing.
+The service's explicit `invalidate(key)` calls are never coalesced, and no new ledger line appears,
+because a coalesced repeat records nothing.

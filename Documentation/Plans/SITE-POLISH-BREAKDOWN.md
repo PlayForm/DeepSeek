@@ -33,13 +33,18 @@ statuses:
 
 # The Site Polish Breakdown
 
-The site is current on its big figures of 1008/1021 and fifteen packages, and it still ships broken promises in specific places.
+The site is current on its big figures of 1008/1021 and fifteen packages, and it still ships broken
+promises in specific places.
 
-This document is the worklist of content, wording, and structure, where every item is anchored to a file that I checked, every rewrite brief carries the voice standard, and every task names its acceptance check.
+This document is the worklist of content, wording, and structure, where every item is anchored to a
+file that I checked, every rewrite brief carries the voice standard, and every task names its
+acceptance check.
 
-The scope is the 24 content pages (9 top-level and 15 plugin detail pages) plus the 404, the nav, the registry, and the content model.
+The scope is the 24 content pages (9 top-level and 15 plugin detail pages) plus the 404, the nav,
+the registry, and the content model.
 
-Not in scope: the design system, the Mermaid pipeline, and the build configuration, which are working.
+Not in scope: the design system, the Mermaid pipeline, and the build configuration, which are
+working.
 
 ## 1. The voice standard (mine, applied to every rewrite)
 
@@ -53,7 +58,8 @@ Not in scope: the design system, the Mermaid pipeline, and the build configurati
 
 3. **Concrete verbs.**
 
-    Write rewrites, refuses, appends, gates, and normalizes, and never "leverage", "seamless", "robust", "powerful", or "by construction".
+    Write rewrites, refuses, appends, gates, and normalizes, and never "leverage", "seamless",
+    "robust", "powerful", or "by construction".
 
 4. **No absolutes unless they are literally true.**
 
@@ -61,7 +67,8 @@ Not in scope: the design system, the Mermaid pipeline, and the build configurati
 
 5. **One term per concept.**
 
-    Plugin is the package, hook is the event listener, flavor is a transform, normalizer is the family, ledger is the log, and family is the whole, and a glossary lands with the rewrite.
+    Plugin is the package, hook is the event listener, flavor is a transform, normalizer is the
+    family, ledger is the log, and family is the whole, and a glossary lands with the rewrite.
 
 6. **Short declaratives.**
 
@@ -103,8 +110,8 @@ The rewrite:
 - Fix: publish the three packages, or change the copy to the verified set and mark those three
   snippets "publish pending - build from source", and use `${Versions.Release}` and not the literal
   `0.0.1`.
-- Acceptance: every install snippet on `/plugins/` resolves, the copy matches the registry state, and
-  the version comes from `Content.ts`.
+- Acceptance: every install snippet on `/plugins/` resolves, the copy matches the registry state,
+  and the version comes from `Content.ts`.
 
 ### P0.2 The newest model is missing
 
@@ -182,17 +189,17 @@ The rewrite:
   delta alone.
 - Fix: make `Live.ts` sum the per-folder `## Expected count` values or regenerate the manifest from
   them, and then let every page read the derived total, and do not hardcode a new number.
-- Acceptance: the displayed total equals the sum that the runner guards, `pnpm Drift` passes, and the
-  root README and `Site/README.md` quote the same derived number.
+- Acceptance: the displayed total equals the sum that the runner guards, `pnpm Drift` passes, and
+  the root README and `Site/README.md` quote the same derived number.
 
 ### P0.8 "ALL PASS" is a partial green
 
 - Files: `Site/Source/Library/Content.ts:213-214` with the "14 SUITES · 1008 CHECKS · ALL PASS"
   banner, and `versions.astro:19` with "EVERY suite loads the real built Target".
 - The seven wiring suites (scratch-profile, profile-assembly, patch-layer, live-ledger,
-  governed-write, refusal-path, and introspection) exercise the live `~/.dsh` harness, skip with exit
-  0 when `DSH_TEST_SCRATCH` is unset, and are never forced green in the aggregate. The totals sum
-  only the 14 mechanics suites, so the banner claims a green that was never executed.
+  governed-write, refusal-path, and introspection) exercise the live `~/.dsh` harness, skip with
+  exit 0 when `DSH_TEST_SCRATCH` is unset, and are never forced green in the aggregate. The totals
+  sum only the 14 mechanics suites, so the banner claims a green that was never executed.
 - Fix: make the banner state the coverage as "14 mechanics suites green; 7 wiring suites skipped
   without a scratch home; live-containers 280 checks", and derive it and do not hardcode it.
 - Acceptance: the banner names what ran and what skipped, and no page says "ALL PASS" without the
@@ -218,14 +225,14 @@ The rewrite:
   at `~/.dsh/playform/hook-dsh-ccr.log` which the hardcoded path never creates off-nikola, and the
   Configurator labels logger-form strings as "the activation ledger lines" while the file form is
   `[ISO] activated (...)` with no plugin prefix.
-- Fix: one canonical ledger path and one canonical line shape in the table, the Configurator, and the
-  verify instructions, and add a default-path assertion to the smoke.
+- Fix: one canonical ledger path and one canonical line shape in the table, the Configurator, and
+  the verify instructions, and add a default-path assertion to the smoke.
 - Acceptance: the documented path and shape match what the code writes.
 
 ### P0.11 The ccr page names the wrong ledger prefix
 
-- File: `hook-dsh-ccr.astro:831` says that Append adds "the hook-dsh-ccr prefix", while `State.Module`
-  is `"ccr"`, so logger lines read `ccr: ...` and the file line has no prefix.
+- File: `hook-dsh-ccr.astro:831` says that Append adds "the hook-dsh-ccr prefix", while
+  `State.Module` is `"ccr"`, so logger lines read `ccr: ...` and the file line has no prefix.
 - Fix: say `ccr: ...`.
 - Acceptance: the page matches the smoke-asserted string.
 
@@ -319,11 +326,12 @@ The rewrite:
 ## 5. P3 - the content model
 
 - Move the hardcoded figures to `Content.ts`: fifteen and 15, 0.0.1, 146/129, "Four steps", and
-  "Eleven". Keep the era "twelve" of the case study because it is history, and core's "thirteen" is a
-  dependent count and not a package count.
+  "Eleven". Keep the era "twelve" of the case study because it is history, and core's "thirteen" is
+  a dependent count and not a package count.
 - Derive the totals and the green scope from the per-folder counts and the wiring-suite state under
   P0.7 and P0.8.
-- Remove the unused exports (`Methods.Metadata`, `Copyright.Year`, and `Fallback.Totals`) or use them.
+- Remove the unused exports (`Methods.Metadata`, `Copyright.Year`, and `Fallback.Totals`) or use
+  them.
 - Fix the stale comments: `StatsBand.astro:3` "12 packages / 733 + 746", `Terminal.astro:5` "ALL 25
   packages", and `Site/README.md:71` "21 pages".
 - Run `pnpm Drift` after every figure change.
@@ -378,6 +386,7 @@ The rewrite:
 
 ## 8. What not to change
 
-The design system of blue and white, hairlines, and zero elevation, the `Content.ts` and `Live.ts` model, the Mermaid pipeline, and the per-page structure are working.
+The design system of blue and white, hairlines, and zero elevation, the `Content.ts` and `Live.ts`
+model, the Mermaid pipeline, and the per-page structure are working.
 
 This is an accuracy, wording, and discovery pass and not a redesign.

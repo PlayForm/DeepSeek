@@ -5,9 +5,13 @@
 
 ## The role
 
-The workspace-evidence service supplies the DeepSeek Harness's validation objects, the evidence dependencies, the four kinds of truth, and the stale-validation invalidation (the family map's EVIDENCE role, `Documentation/Plans/Workspace-Family/EVIDENCE.md`).
+The workspace-evidence service supplies the DeepSeek Harness's validation objects, the evidence
+dependencies, the four kinds of truth, and the stale-validation invalidation (the family map's
+EVIDENCE role, `Documentation/Plans/Workspace-Family/EVIDENCE.md`).
 
-It is phase 4 of the invisible flow (with semantics + approve): the evidence service validates the workspace's claims, which are the qualified freshness, the OutcomeEvidence, and the justified assertions.
+It is phase 4 of the invisible flow (with semantics + approve): the evidence service validates the
+workspace's claims, which are the qualified freshness, the OutcomeEvidence, and the justified
+assertions.
 
 ## The surfaces
 
@@ -29,8 +33,8 @@ It is phase 4 of the invisible flow (with semantics + approve): the evidence ser
   `invalidate(key)`), every dependent object goes stale in one pass (the incremental-computation
   principle - the Acar seam).
 
-    A stale object is never guessed back to fresh, because a revalidation is a new validation object,
-    superseding the old.
+    A stale object is never guessed back to fresh, because a revalidation is a new validation
+    object, superseding the old.
 
     A **repeat event** (the same path carrying the same version within the coalescing window) runs
     no pass and records no line, because that file state's invalidation already ran (the version
@@ -51,7 +55,8 @@ It is phase 4 of the invisible flow (with semantics + approve): the evidence ser
 
 ## The ledger
 
-Its own strings carry the prefix `evidence:` (module-owned, byte-stable), and there is one log per module (default `~/.dsh/playform/plugin-dsh-workspace-evidence.log`).
+Its own strings carry the prefix `evidence:` (module-owned, byte-stable), and there is one log per
+module (default `~/.dsh/playform/plugin-dsh-workspace-evidence.log`).
 
 The lines (byte-stable): `disabled (enabled=false)`,
 `validated <id> (<kind>, <subject>, N dependencies, <verdict>, sequence N)`,
@@ -76,7 +81,8 @@ Every field is a volatile cell.
 
 ## The build and the tests
 
-The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test tree excluded), the Test build, the harness selfcheck, and the Test type-check.
+The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
+tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 ## The plan
 
@@ -91,7 +97,8 @@ CC0-1.0.
 
 ### The policy block (D6)
 
-The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's block), mapped to `State.Allow`:
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -100,8 +107,10 @@ The config carries the shared per-action allowlist (`policy: Policy()`, composed
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-This package's actions are read-only and record, all AUTOMATIC, and it has NO gated action (no file write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
+This package's actions are read-only and record, all AUTOMATIC, and it has NO gated action (no file
+write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.

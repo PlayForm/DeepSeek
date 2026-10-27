@@ -41,9 +41,9 @@ statuses:
 > fifteen-package story inside a 101-package tree, because the ledger paths point at files that no
 > plugin writes, every install box promises an npm release that does not exist, and the 36 new
 > packages plus the trace bus, the pack layer, the policy block, the storage domains, and the client
-> family are absent from the copy. This document is the delta: every finding keeps its file and line,
-> the corrected fact and its source in the tree, and the acceptance check that proves the fix. The
-> auditor was read-only, so nothing under `Site/` was edited by the audit.
+> family are absent from the copy. This document is the delta: every finding keeps its file and
+> line, the corrected fact and its source in the tree, and the acceptance check that proves the fix.
+> The auditor was read-only, so nothing under `Site/` was edited by the audit.
 
 ## 0. How to use this document
 
@@ -74,8 +74,8 @@ The `site-content` lane rewrote the content model during the audit, while the pa
 | `Site/Target/`                                       | rebuilt (11:51), 25 HTML     | the shipped artifact; 24 pages + 404                                |
 | `Site/Source/pages/*.astro`, `Layout/`, `Component/` | untouched since 11:21        | every finding below still stands                                    |
 
-A second lane (`site-content`) may still be editing the model while this spec executes, so re-run the
-gate after every change set and do not hand-edit a figure that the model already publishes.
+A second lane (`site-content`) may still be editing the model while this spec executes, so re-run
+the gate after every change set and do not hand-edit a figure that the model already publishes.
 
 ## 1. The verdict
 

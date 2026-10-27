@@ -32,25 +32,36 @@ Tool: `workspace_context` (read-only).
 
 ## The packet memo and the trace invalidation
 
-`packet(query)` is served through a bounded memo (`Function/Cached`, 256 entries) keyed by `Function/CacheKey`: the query's five fields plus the service's own knobs, because a volatile flip changes the packet and the memo never survives it.
+`packet(query)` is served through a bounded memo (`Function/Cached`, 256 entries) keyed by
+`Function/CacheKey`: the query's five fields plus the service's own knobs, because a volatile flip
+changes the packet and the memo never survives it.
 
-A hit returns the SAME packet object, so the graph reads, the ranking, and the budget clamp are skipped, and no second `packet` ledger line is written.
+A hit returns the SAME packet object, so the graph reads, the ranking, and the budget clamp are
+skipped, and no second `packet` ledger line is written.
 
-The graph's `indexRevision` is deliberately NOT part of the key, because the memo is stable-until-event.
+The graph's `indexRevision` is deliberately NOT part of the key, because the memo is
+stable-until-event.
 
-The invalidation is the trace's (D5): the graph emits `graph/invalidated` when a record it held is replaced, removed, or observed absent.
+The invalidation is the trace's (D5): the graph emits `graph/invalidated` when a record it held is
+replaced, removed, or observed absent.
 
-`Source/Trace/Adapter.ts` (wired from apply only after the enabled gate, disposed with the fiber) consumes it through `Source/Trace/Invalidate.ts`, which clears the memo wholesale (a packet may cite any path in FOCUS/NEIGHBORS/EVIDENCE).
+`Source/Trace/Adapter.ts` (wired from apply only after the enabled gate, disposed with the fiber)
+consumes it through `Source/Trace/Invalidate.ts`, which clears the memo wholesale (a packet may cite
+any path in FOCUS/NEIGHBORS/EVIDENCE).
 
-The caller-focus tracker (`State.Focus`) is NOT touched, because the STALE contract is about the version the caller held, which an invalidation does not change.
+The caller-focus tracker (`State.Focus`) is NOT touched, because the STALE contract is about the
+version the caller held, which an invalidation does not change.
 
-The invalidation is silent, with no new ledger line (the module's strings stay byte-exact), and the trace ring is the evidence.
+The invalidation is silent, with no new ledger line (the module's strings stay byte-exact), and the
+trace ring is the evidence.
 
-The bus (`ctx.trace`, provided by `@playform/plugin-dsh-factory`, which the service already injects) is optional, so without it the memo simply lives until the process ends.
+The bus (`ctx.trace`, provided by `@playform/plugin-dsh-factory`, which the service already injects)
+is optional, so without it the memo simply lives until the process ends.
 
 ## Packet bands
 
-The packet is built from `ctx.workspaceGraph` (the real W1 service when it is mounted; an absent sibling degrades to the honest `workspace graph unavailable` OPEN line).
+The packet is built from `ctx.workspaceGraph` (the real W1 service when it is mounted; an absent
+sibling degrades to the honest `workspace graph unavailable` OPEN line).
 
 The bands are:
 
@@ -65,13 +76,16 @@ The bands are:
 | OPEN      | the honest gaps (absent graph, unknown lens, neighbor truncation), else `(none)`                              |
 | STALE     | only when the caller's held version differs from the focus version                                            |
 
-The MAP band groups by the file's parent directory: the real graph stores resolved absolute paths, whose first segment is empty, so the older first-segment form collapsed every real workspace into one nameless band (the `Real-Graph-Packet` folder pins the parent-directory form).
+The MAP band groups by the file's parent directory: the real graph stores resolved absolute paths,
+whose first segment is empty, so the older first-segment form collapsed every real workspace into
+one nameless band (the `Real-Graph-Packet` folder pins the parent-directory form).
 
 State probe: `ctx.__pluginDshWorkspaceContextState`.
 
 ## The policy block (D6)
 
-The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's block), mapped to `State.Allow`:
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
+block), mapped to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -80,8 +94,10 @@ The config carries the shared per-action allowlist (`policy: Policy()`, composed
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The context service's actions are read-only, all **AUTOMATIC**, and it has **no gated action** (no file write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
+The context service's actions are read-only, all **AUTOMATIC**, and it has **no gated action** (no
+file write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 No new ledger line exists, because the package has no gated action.

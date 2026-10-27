@@ -28,8 +28,8 @@ statuses:
 
     Write `Source/Test/Harness.ts` as the fake context, adapted from the reference
     `Classic/packages/hook-dsh-workspace-observe/Source/Test/Harness.ts`, which is the freshest
-    greenfield harness with registration capture, effect, get, reflect, fs capture, waterfall, logger,
-    root identity, and state probe.
+    greenfield harness with registration capture, effect, get, reflect, fs capture, waterfall,
+    logger, root identity, and state probe.
 
 2. **The folders.**
 
@@ -40,12 +40,13 @@ statuses:
 
     The build in `Source/prepublishOnly.sh` and `Source/Run.sh` runs the plugin build FIRST and the
     test build SECOND under the live-containers pattern of the negation on the plugin pattern, the
-    Harness selfcheck, and the Test noemit tsc. The `Configuration/Test-ESBuild.ts` and `.js` and the
-    `TypeScript-Test.noemit.json` already exist in every new package.
+    Harness selfcheck, and the Test noemit tsc. The `Configuration/Test-ESBuild.ts` and `.js` and
+    the `TypeScript-Test.noemit.json` already exist in every new package.
 
 4. **The build and the run.**
 
-    Build with `pnpm --config.verify-deps-before-run=false --dir Classic/packages/<pkg> run prepublishOnly`,
+    Build with
+    `pnpm --config.verify-deps-before-run=false --dir Classic/packages/<pkg> run prepublishOnly`,
     where the flag is mandatory, then run each folder with
     `node Classic/packages/<pkg>/Target/Test/<Folder>/Test.js` and compare the printed
     `N PASS - <Name>` with the README.

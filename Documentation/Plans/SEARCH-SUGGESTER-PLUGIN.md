@@ -114,15 +114,15 @@ Every session record is a zstd-compressed JSONL event log:
 ~/.dsh/sessions/<workspace>/<session-id>/session.v4.jsonl.zstd
 ```
 
-`zstd -dc` then parse the lines, where `tool/call` carries `data.name` and `data.arguments` as a JSON
-string, and `tool/result` carries `data.message.toolCallId` and `data.message.content[].text`.
+`zstd -dc` then parse the lines, where `tool/call` carries `data.name` and `data.arguments` as a
+JSON string, and `tool/result` carries `data.message.toolCallId` and `data.message.content[].text`.
 
 A search-class call is `grep`, `glob`, `read`, or a `bash` whose command contains `grep`, `rg `,
 `find `, `ls `, `sed -n`, or `awk`. A repeat read is a second read of the same `file_path`, and a
 repeat grep is a second grep with the same `pattern`.
 
-Scanned: all 394 sessions of this workspace with 33,834 tool calls, 6,418 reads, 1,147 greps, and 130
-globs, then this session and its 16 subagents in detail with 2,658 calls.
+Scanned: all 394 sessions of this workspace with 33,834 tool calls, 6,418 reads, 1,147 greps, and
+130 globs, then this session and its 16 subagents in detail with 2,658 calls.
 
 The parent session was still live at measurement time (2026-10-21T01:1x local), so its count is a
 floor.
@@ -147,17 +147,18 @@ tokens of tool results at 4.0M characters and roughly 4 characters per token.
 
 The three worst lanes are not the same intent:
 
-- `release` (session `4f6e7976-d2fa-40cf-8e4c-684bab941790`): 30 of its 46 greps are the then-current
-  version literal `0.0.1`, while the tree is now at 0.1.0; 165 reads across 153 distinct files; 190
-  edits across 143 distinct targets in 17.5 minutes. It edited 38 `README.md`, 32 `package.json`, 30
-  `CONTRIBUTING.md` and `SCHEME.md`, 14 `Site/**`, 11 `Documentation/**`, 10 smoke `Test.ts`, 6
-  `Source/Function/Apply.ts` with the `const Version`, `CHANGELOG.md`, and `.github/workflows/NPM.yml`.
-- `overpass` (session `ebce681f-ef44-4340-81de-de05be54abfd`): 32 of its 58 greps are `error TS`, with
-  40 repeat greps, 101 reads, and 34 minutes, which is the test and build intent where the answer is
-  the failing suite and not a file.
+- `release` (session `4f6e7976-d2fa-40cf-8e4c-684bab941790`): 30 of its 46 greps are the
+  then-current version literal `0.0.1`, while the tree is now at 0.1.0; 165 reads across 153
+  distinct files; 190 edits across 143 distinct targets in 17.5 minutes. It edited 38 `README.md`,
+  32 `package.json`, 30 `CONTRIBUTING.md` and `SCHEME.md`, 14 `Site/**`, 11 `Documentation/**`, 10
+  smoke `Test.ts`, 6 `Source/Function/Apply.ts` with the `const Version`, `CHANGELOG.md`, and
+  `.github/workflows/NPM.yml`.
+- `overpass` (session `ebce681f-ef44-4340-81de-de05be54abfd`): 32 of its 58 greps are `error TS`,
+  with 40 repeat greps, 101 reads, and 34 minutes, which is the test and build intent where the
+  answer is the failing suite and not a file.
 - `parent`: 12 greps of `^[0-9]+ PASS`, 69 repeat reads, and 163 reads across 94 files, which is the
-  "what is the current count or status" intent that lives in the smoke READMEs, the site content, and
-  the plans.
+  "what is the current count or status" intent that lives in the smoke READMEs, the site content,
+  and the plans.
 
 ### 1.3 The repetition, corrected
 
@@ -173,26 +174,26 @@ identifiers, and prose fragments that a static rule set cannot name and a learne
 
 ### 1.4 The sequences
 
-The pipeline is stable and it is `grep -> read -> edit`, with the read doing the verification and the
-edit doing the discovery:
+The pipeline is stable and it is `grep -> read -> edit`, with the read doing the verification and
+the edit doing the discovery:
 
 - Read-before-edit holds, because 182 of 186 edits in `release`, 125 of 130 in the parent, and 50 of
-  53 in `site-totals` were preceded by a read of the same file. The suggestion must never replace the
-  read and must aim it.
-- Grep-to-read adjacency is 1 to 2 calls, because the grep names files, the read opens one or two, and
-  the edit follows. The model rarely reads the whole match list.
-- The misses are the un-grepped families, because the per-package `README.md`, `CONTRIBUTING.md`, and
-  `SCHEME.md` in the release lane were never found by a grep and were found by a later and broader
-  sweep, or by editing the manifest and noticing the sibling pattern.
+  53 in `site-totals` were preceded by a read of the same file. The suggestion must never replace
+  the read and must aim it.
+- Grep-to-read adjacency is 1 to 2 calls, because the grep names files, the read opens one or two,
+  and the edit follows. The model rarely reads the whole match list.
+- The misses are the un-grepped families, because the per-package `README.md`, `CONTRIBUTING.md`,
+  and `SCHEME.md` in the release lane were never found by a grep and were found by a later and
+  broader sweep, or by editing the manifest and noticing the sibling pattern.
 
 ### 1.5 The cost, in the units that matter
 
 - Tokens: `release` 202k, parent 207k, `site-totals` 119k, and `overpass` 138k, where the read
   results dominate with 118k of the parent's 207k and the grep results are 10k to 40k.
-- Time: 17.5 minutes for the release lane, 34 minutes for overpass, and 172 minutes for the whole task
-  of the parent.
-- The own cost of the suggestion is a 120 to 200 token note, so it pays for itself if it removes even
-  two reads of a 3k-token file.
+- Time: 17.5 minutes for the release lane, 34 minutes for overpass, and 172 minutes for the whole
+  task of the parent.
+- The own cost of the suggestion is a 120 to 200 token note, so it pays for itself if it removes
+  even two reads of a 3k-token file.
 
 ### 1.6 What the evidence does NOT show
 
@@ -209,7 +210,9 @@ edit doing the discovery:
 
 ## 2. The general model: the pattern graph
 
-The general design lives in [PATTERN-GRAPH-PLUGIN.md](./PATTERN-GRAPH-PLUGIN.md), and this section restates only what the search consumer must obey, because the full model, the family roster, and the phases are there.
+The general design lives in [PATTERN-GRAPH-PLUGIN.md](./PATTERN-GRAPH-PLUGIN.md), and this section
+restates only what the search consumer must obey, because the full model, the family roster, and the
+phases are there.
 
 ### 2.1 The four patternize-able conditions
 
@@ -224,11 +227,16 @@ A behavior is patternize-able when ALL FOUR hold:
 
 If any one is missing, the plugin abstains.
 
-The special case of the search suggester is that the behavior it patterns is LOCATE and not EDIT, because its transform is the read set of "open these files", which is deterministic and bounded, while the edit that follows is the transform of the edit consumer and the search consumer never claims it.
+The special case of the search suggester is that the behavior it patterns is LOCATE and not EDIT,
+because its transform is the read set of "open these files", which is deterministic and bounded,
+while the edit that follows is the transform of the edit consumer and the search consumer never
+claims it.
 
-That is why this plugin is a READ-ONLY suggester and never an editor: it can name the target subgraph and point at the arbiter, but it cannot claim that the change is mechanical.
+That is why this plugin is a READ-ONLY suggester and never an editor: it can name the target
+subgraph and point at the arbiter, but it cannot claim that the change is mechanical.
 
-The moment a suggestion would have to decide the edit, the pattern is out of scope and the plugin abstains.
+The moment a suggestion would have to decide the edit, the pattern is out of scope and the plugin
+abstains.
 
 ### 2.2 The behavior graph
 
@@ -259,9 +267,9 @@ it.
 - **Sequence**: a rename is `SymbolRewrite`, then `TestUpdates`, then `DocUpdates`, and the Path and
   Symbol intents of the search suggester carry the sequence as an ordered candidate list and not as
   an execution plan.
-- **Parameterization**: the same `VersionBump` pattern applies to any package, and the parameters are
-  the package set and the version. The candidate list is generated from the parameters and is never
-  hard-coded per package.
+- **Parameterization**: the same `VersionBump` pattern applies to any package, and the parameters
+  are the package set and the version. The candidate list is generated from the parameters and is
+  never hard-coded per package.
 - **Abstention**: a match below the threshold yields the empty suggestion and not a guess, because
   the identity element of the algebra is silence.
 
@@ -294,7 +302,10 @@ is measured, not assumed.
 
 ### 2.5 The learner
 
-The general learner in the pattern graph document runs from the sessions to the frequent subgraphs and then to the registry, and the version of the search consumer in section 6 uses the same corpus with a narrower label of the ten intent kinds, a narrower subgraph of the target set per intent, and the same refresh discipline of the offline seed, the online accept or reject, and the decay.
+The general learner in the pattern graph document runs from the sessions to the frequent subgraphs
+and then to the registry, and the version of the search consumer in section 6 uses the same corpus
+with a narrower label of the ten intent kinds, a narrower subgraph of the target set per intent, and
+the same refresh discipline of the offline seed, the online accept or reject, and the decay.
 
 The division of labor:
 
@@ -306,11 +317,14 @@ The division of labor:
 
 ### 2.6 `Searchable<X>` as the first instance
 
-`Searchable<X>` is the name of the search consumer for the pattern, where `X` is the intent, the trigger is the search tool call, the target is the subgraph where `X` usually lives, the transform is the read set of the deterministic "open these", and the arbiter is the eventual build or test.
+`Searchable<X>` is the name of the search consumer for the pattern, where `X` is the intent, the
+trigger is the search tool call, the target is the subgraph where `X` usually lives, the transform
+is the read set of the deterministic "open these", and the arbiter is the eventual build or test.
 
 The edit that follows is the transform of the edit consumer and not this one's.
 
-The next section defines `Searchable<X>` fully, and the other consumers of section 8 are the same shape with a different trigger and a different target.
+The next section defines `Searchable<X>` fully, and the other consumers of section 8 are the same
+shape with a different trigger and a different target.
 
 ## 3. The intent model: `Searchable<X>`
 
@@ -544,15 +558,21 @@ edit.
 
 ### 4.1 The archetype
 
-A HOOK and not a service plugin for now, because it has no public API, no store that the other plugins read, and no lifecycle of its own beyond a ledger and a JSON file.
+A HOOK and not a service plugin for now, because it has no public API, no store that the other
+plugins read, and no lifecycle of its own beyond a ledger and a JSON file.
 
-The loader contract is the family's: `name`, `apply`, `Config`, and `inject: ["pluginFactory"]` for the State builder and the ledger only, with no `tools` needed unless the optional query tool ships.
+The loader contract is the family's: `name`, `apply`, `Config`, and `inject: ["pluginFactory"]` for
+the State builder and the ledger only, with no `tools` needed unless the optional query tool ships.
 
-The package name is `@playform/hook-dsh-search-suggester` in Classic and `@playform/ets-hook-dsh-search-suggester` in EffectTS, and the bundle patch row is `insert: - id: search-suggester`.
+The package name is `@playform/hook-dsh-search-suggester` in Classic and
+`@playform/ets-hook-dsh-search-suggester` in EffectTS, and the bundle patch row is
+`insert: - id: search-suggester`.
 
-The core (`plugin-dsh-pattern`, section 8) is the service that the plural family shares, and the search consumer ships first as a standalone hook so that the evidence arrives before the extraction.
+The core (`plugin-dsh-pattern`, section 8) is the service that the plural family shares, and the
+search consumer ships first as a standalone hook so that the evidence arrives before the extraction.
 
-The two-consumer extraction rule of the family applies, because the core is extracted only after the search consumer and ONE other consumer exist.
+The two-consumer extraction rule of the family applies, because the core is extracted only after the
+search consumer and ONE other consumer exist.
 
 ### 4.2 The surfaces
 
@@ -598,8 +618,8 @@ No LLM sits in the hot path, because the classifier is a pure function over:
 - The rules are regexes and path predicates that are compiled once at apply.
 - The cost is O(10 intents x ~6 rules) plus a map lookup, with no I/O and no allocation beyond the
   note, and the target is under 1 ms per call measured in the smoke.
-- The index is loaded once at apply through a JSON read on the boot path and not the hot path, and it
-  is held as a frozen object.
+- The index is loaded once at apply through a JSON read on the boot path and not the hot path, and
+  it is held as a frozen object.
 - The memory write to the journal is a detached append through `ctx.jobs.start` or a buffered flush
   at the next pre-step, so the hot path never awaits a disk write.
 
@@ -841,10 +861,10 @@ Two files under `~/.dsh/search-suggester/`, never the repo:
   that reveals what the file said.
 - The note itself quotes only paths and one reason phrase, and it never quotes a line of code or a
   document.
-- A `--reset`, or deleting the directory, erases everything, and the plugin rebuilds from the index on
-  the next boot.
-- The offline learner reads the session transcripts ONLY when the user explicitly runs it, because it
-  is a Maintain script and not a plugin behavior.
+- A `--reset`, or deleting the directory, erases everything, and the plugin rebuilds from the index
+  on the next boot.
+- The offline learner reads the session transcripts ONLY when the user explicitly runs it, because
+  it is a Maintain script and not a plugin behavior.
 
 ## 6. The learning
 
@@ -859,16 +879,16 @@ Two files under `~/.dsh/search-suggester/`, never the repo:
    files read within the next 20 calls.
 4. Attribute each target to the intent of the nearest preceding search call, and count the hits per
    candidate.
-5. Write the seed counts into `knowledge.json` with a `seed: true` marker so that the online learning
-   can outvote it.
+5. Write the seed counts into `knowledge.json` with a `seed: true` marker so that the online
+   learning can outvote it.
 
 The seed is how the index learns the repo-specific long tail of the 68 README, CONTRIBUTING, and
 SCHEME files, the site pages, and the smokes, and it is also the ground truth of the replay
 benchmark.
 
-The same corpus feeds the CORE learner of the pattern graph document in section 3, where the frequent
-`search -> read -> edit -> verify` subgraphs become candidate patterns in the shared registry, and the
-seed of the search consumer is one projection of that registry.
+The same corpus feeds the CORE learner of the pattern graph document in section 3, where the
+frequent `search -> read -> edit -> verify` subgraphs become candidate patterns in the shared
+registry, and the seed of the search consumer is one projection of that registry.
 
 ### 6.2 Online (the signal)
 
@@ -881,9 +901,9 @@ The learner watches the calls AFTER a note within `learnWindow` (2) calls:
 - `near-miss`: the model reads or edits a path that was NOT a candidate, so that path gets
   `count += 1` and `followed += 1` because the index missed it, and the untouched candidates get the
   `ignored` penalty.
-- `dismissed`: an explicit dismissal excludes the path for the session and raises the threshold of the
-  intent by 0.05 for the session, because the user is telling us that the intent is wrong and not the
-  path.
+- `dismissed`: an explicit dismissal excludes the path for the session and raises the threshold of
+  the intent by 0.05 for the session, because the user is telling us that the intent is wrong and
+  not the path.
 
 ### 6.3 The update rule
 
@@ -900,9 +920,11 @@ journal).
 
 ### 6.4 The cold start
 
-The static index alone is enough to emit, because every canonical location has `prior 1.0` and the first session needs no history.
+The static index alone is enough to emit, because every canonical location has `prior 1.0` and the
+first session needs no history.
 
-The learned layer is an optimization and not a prerequisite, so with `learn: false` the plugin is fully functional and deterministic.
+The learned layer is an optimization and not a prerequisite, so with `learn: false` the plugin is
+fully functional and deterministic.
 
 ## 7. The delivery format
 
@@ -980,11 +1002,11 @@ search consumer's status:
 - The CORE owns the service through `ctx.pattern.match(context) -> PatternMatch`, together with the
   registry, the store, the confidence math, and the learner.
 - The CONSUMERS own their pattern packs and their delivery surface. A pack is DATA with the intents,
-  the signals, the target rules, the reasons, and the thresholds, so a new domain is a pack and not a
-  package until it proves two consumers.
-- The **two-consumer extraction rule** extracts the core only after the search consumer and one other
-  consumer exist. Until then, the search consumer carries a private and embedded pack of the ten
-  intents, the candidates, and the rules, with no shared service, which keeps the first delivery
+  the signals, the target rules, the reasons, and the thresholds, so a new domain is a pack and not
+  a package until it proves two consumers.
+- The **two-consumer extraction rule** extracts the core only after the search consumer and one
+  other consumer exist. Until then, the search consumer carries a private and embedded pack of the
+  ten intents, the candidates, and the rules, with no shared service, which keeps the first delivery
   cheap and the extraction honest.
 
 ### 8.2 The pack schema (the data, not code)
@@ -1104,14 +1126,14 @@ Search-class calls per task, before and after, on the same task type:
 | parent (mixed) | 257                   | 81      | call 74             |
 | ets rename     | 56                    | 23      | call 10             |
 
-Success means at least a 25% reduction in search-class calls on the version bump and the rename, with
-no increase in wrong-file edits.
+Success means at least a 25% reduction in search-class calls on the version bump and the rename,
+with no increase in wrong-file edits.
 
 ### 10.2 First-hit accuracy
 
-The fraction of the eventual target set that the FIRST suggestion of an intent names. The baseline is
-6% for release, 9% for overpass, 19% for the parent, and 57% for site-totals, and the target is 80% on
-Version and Path and 60% on Test and Doc.
+The fraction of the eventual target set that the FIRST suggestion of an intent names. The baseline
+is 6% for release, 9% for overpass, 19% for the parent, and 57% for site-totals, and the target is
+80% on Version and Path and 60% on Test and Doc.
 
 ### 10.3 Acceptance rate
 
@@ -1134,12 +1156,12 @@ tokens of results in the release lane give the headroom.
 2. Freeze the memory at the pre-session state.
 3. Replay each call through the real built classifier and resolver.
 4. Score the intent precision and recall against the hand labels, the candidate recall@7 against the
-   eventual target set, the call index of the first note against the call index of the first edit, the
-   notes per turn, and the abstention rate with its correctness for the abstentions that would have
-   been wrong suggestions.
+   eventual target set, the call index of the first note against the call index of the first edit,
+   the notes per turn, and the abstention rate with its correctness for the abstentions that would
+   have been wrong suggestions.
 
-The replay is deterministic, so it is the regression gate, because a rule change that lowers recall@7
-on the corpus fails the build.
+The replay is deterministic, so it is the regression gate, because a rule change that lowers
+recall@7 on the corpus fails the build.
 
 ## 11. The phases P0-P6
 
@@ -1174,8 +1196,8 @@ candidates, a reason per candidate, and the abstention path of section 2.4, beca
 suggestion is the expensive error and the abstention is the cheap one.
 
 **The pattern overreach.** The suggester drifts into planning the edit and says "change these 12
-files to 0.1.1". Mitigate because the search consumer never owns the Transform node: the transform is
-the model's, and the ledger of the plugin says so.
+files to 0.1.1". Mitigate because the search consumer never owns the Transform node: the transform
+is the model's, and the ledger of the plugin says so.
 
 **Privacy.** The knowledge file leaks paths and intents. Mitigate with repo-relative paths only, no
 contents, 0600, a documented reset, and the offline learner as an explicit user action.
@@ -1194,9 +1216,9 @@ line of intent plus a short list and not a paragraph.
 Mitigate with the source label, the 120-char summary, the `notice` form, and `enabled: false` as the
 escape hatch.
 
-**The tool-coach collision.** Both plugins can add a context to the same call. Mitigate with disjoint
-trigger sets, where the coach judges `bash` content-class offenses and the suggester judges search
-intents, plus the own source kind of the suggester and the per-turn cap counted per plugin.
+**The tool-coach collision.** Both plugins can add a context to the same call. Mitigate with
+disjoint trigger sets, where the coach judges `bash` content-class offenses and the suggester judges
+search intents, plus the own source kind of the suggester and the per-turn cap counted per plugin.
 
 **The CCR interaction.** The CCR replaces content and the note is a separate message, so there is no
 conflict by construction, but the order is asserted in the smoke that the note survives a compressed
@@ -1210,55 +1232,98 @@ stays embedded until the second consumer lands.
 
 1. **The name.**
 
-    `hook-dsh-search-suggester` is descriptive and long, `hook-dsh-searchable` is the formalism of the user, and `hook-dsh-target-suggester` is the third option. The recommendation is the first, because the package name is the identity and "searchable" reads as an adjective.
+    `hook-dsh-search-suggester` is descriptive and long, `hook-dsh-searchable` is the formalism of
+    the user, and `hook-dsh-target-suggester` is the third option. The recommendation is the first,
+    because the package name is the identity and "searchable" reads as an adjective.
 
 2. **The archetype.**
 
-    A hook with no service is recommended for v1, against a plugin with a `searchSuggester.lookup(intent)` service that the orchestration plugins could query. The service is a P6 option and not a P0 requirement.
+    A hook with no service is recommended for v1, against a plugin with a
+    `searchSuggester.lookup(intent)` service that the orchestration plugins could query. The service
+    is a P6 option and not a P0 requirement.
 
 3. **The index.**
 
-    Generated at build as a committed JSON, at boot as a generated cache under `~/.dsh`, or on demand. The recommendation is the boot cache with a committed seed for the canonical set, so that a fresh machine works before the first generation.
+    Generated at build as a committed JSON, at boot as a generated cache under `~/.dsh`, or on
+    demand. The recommendation is the boot cache with a committed seed for the canonical set, so
+    that a fresh machine works before the first generation.
 
 4. **The memory location.**
 
-    A directory `~/.dsh/search-suggester/` or a single JSON. The recommendation is the directory, because the index and the knowledge have different lifetimes.
+    A directory `~/.dsh/search-suggester/` or a single JSON. The recommendation is the directory,
+    because the index and the knowledge have different lifetimes.
 
 5. **The learning.**
 
-    Online only, or online with the offline seed. The recommendation is both, with the offline seed as a Maintain script that the user runs.
+    Online only, or online with the offline seed. The recommendation is both, with the offline seed
+    as a Maintain script that the user runs.
 
 6. **The LLM.**
 
-    None in the hot path, which is binding. The offline clustering may use one later, and that is a separate script and not the plugin.
+    None in the hot path, which is binding. The offline clustering may use one later, and that is a
+    separate script and not the plugin.
 
 7. **The default.**
 
-    Enabled or disabled. The recommendation is enabled with `threshold 0.75` and `maxNotesPerTurn 3`, because the live-containers precedent of the family ships disabled but a suggester that ships disabled teaches nothing. The A/B in P3 decides.
+    Enabled or disabled. The recommendation is enabled with `threshold 0.75` and
+    `maxNotesPerTurn 3`, because the live-containers precedent of the family ships disabled but a
+    suggester that ships disabled teaches nothing. The A/B in P3 decides.
 
 8. **The pattern language.**
 
-    A JSON pack is recommended, because the data is the contract and the smokes assert it, against a TypeScript DSL compiled to the registry. The JSON pack is what the learner writes and the replay scores.
+    A JSON pack is recommended, because the data is the contract and the smokes assert it, against a
+    TypeScript DSL compiled to the registry. The JSON pack is what the learner writes and the replay
+    scores.
 
 9. **The pack boundary.**
 
-    One package with packs, or one package per domain after two consumers. The recommendation is the latter under the extraction rule of the family.
+    One package with packs, or one package per domain after two consumers. The recommendation is the
+    latter under the extraction rule of the family.
 
 10. **The INDEX row.**
 
-    The row is left to the parent, because the plan is written and the INDEX is being edited concurrently by the release lane, so one row is the follow-up.
+    The row is left to the parent, because the plan is written and the INDEX is being edited
+    concurrently by the release lane, so one row is the follow-up.
 
 ## 14. The relation to the existing plugins
 
-**Why not the tool-coach.** The coach teaches the TOOL and not the TARGET, because its detection is a bash-content classifier of write, read, search, discovery, and control, its remedy is a tool name, and its state is a strike counter. It cannot say "the version lives in 36 package.json and 6 Apply.ts" because it has no repo index and no intent algebra, and merging would couple its zero-noise guarantee to a much noisier signal and would make its tier-2 section carry file lists. What the suggester REUSES is the note builder and the source label (`Note.ts`), the waterfall discipline of `next()` first and fail-open, the per-agent WeakMap, the volatile-config posture, the ledger style, and the smoke harness. They are siblings and not one plugin.
+**Why not the tool-coach.** The coach teaches the TOOL and not the TARGET, because its detection is
+a bash-content classifier of write, read, search, discovery, and control, its remedy is a tool name,
+and its state is a strike counter. It cannot say "the version lives in 36 package.json and 6
+Apply.ts" because it has no repo index and no intent algebra, and merging would couple its
+zero-noise guarantee to a much noisier signal and would make its tier-2 section carry file lists.
+What the suggester REUSES is the note builder and the source label (`Note.ts`), the waterfall
+discipline of `next()` first and fail-open, the per-agent WeakMap, the volatile-config posture, the
+ledger style, and the smoke harness. They are siblings and not one plugin.
 
-**Why not the ccr.** The ccr reduces the cost of ONE result through compress, cache, and retrieve, while the suggester reduces the NUMBER of calls. The `{prepend: true}` listener of the ccr runs first and replaces content, and the suggester runs after and only adds `additionalContexts`, so they compose without overlap and the note of the suggester must never be compressed because it is a message and not content.
+**Why not the ccr.** The ccr reduces the cost of ONE result through compress, cache, and retrieve,
+while the suggester reduces the NUMBER of calls. The `{prepend: true}` listener of the ccr runs
+first and replaces content, and the suggester runs after and only adds `additionalContexts`, so they
+compose without overlap and the note of the suggester must never be compressed because it is a
+message and not content.
 
-**Why not the live-containers Suggester.** That suggester is an LLM mini-conversation, where a detached one-shot subagent receives a request excerpt plus a catalog and returns a strict JSON template suggestion, planted as a block or shown as a section and accepted or dismissed by a one-word command. It is not in the tool path, it costs a model call, and its subject is a live-container template and not a file. The search suggester is deterministic, synchronous, in the tool path, and its subject is the repo index. What it REUSES is the accept and dismiss vocabulary, the privacy posture of redaction by default, the gate of first-of-turn and rate cap, and the "suggestion as a labeled artifact" pattern. What it REJECTS is the LLM route, which the brief of the user forbids in the hot path.
+**Why not the live-containers Suggester.** That suggester is an LLM mini-conversation, where a
+detached one-shot subagent receives a request excerpt plus a catalog and returns a strict JSON
+template suggestion, planted as a block or shown as a section and accepted or dismissed by a
+one-word command. It is not in the tool path, it costs a model call, and its subject is a
+live-container template and not a file. The search suggester is deterministic, synchronous, in the
+tool path, and its subject is the repo index. What it REUSES is the accept and dismiss vocabulary,
+the privacy posture of redaction by default, the gate of first-of-turn and rate cap, and the
+"suggestion as a labeled artifact" pattern. What it REJECTS is the LLM route, which the brief of the
+user forbids in the hot path.
 
-**The pattern graph.** The general model ([PATTERN-GRAPH-PLUGIN.md](./PATTERN-GRAPH-PLUGIN.md)) owns the behavior graph, the four patternize-able conditions, the family roster, and the learner, and this document is its first instance as the `Searchable<X>` consumer with the search evidence and the concrete pack. The pattern graph document should not repeat the search numbers, and this document should not repeat the general algebra.
+**The pattern graph.** The general model ([PATTERN-GRAPH-PLUGIN.md](./PATTERN-GRAPH-PLUGIN.md)) owns
+the behavior graph, the four patternize-able conditions, the family roster, and the learner, and
+this document is its first instance as the `Searchable<X>` consumer with the search evidence and the
+concrete pack. The pattern graph document should not repeat the search numbers, and this document
+should not repeat the general algebra.
 
-**The orchestration plans.** ROUTING-ENFORCER is the closest shape with a deterministic resolver, a silent injection, and a ledger, and HONEST-FEEDBACK is the closest format with a fixed block and a fixed vocabulary. BATCH-STATE and SUBAGENT-QUEUE own stores that the suggester does not need. The suggester is a KNOWLEDGE plugin and not an orchestration one, and later the BATCH-STATE compiler could read its intent as a gate such as "this lane is a version bump; the version targets are ...", but that is a P6 integration and not a dependency.
+**The orchestration plans.** ROUTING-ENFORCER is the closest shape with a deterministic resolver, a
+silent injection, and a ledger, and HONEST-FEEDBACK is the closest format with a fixed block and a
+fixed vocabulary. BATCH-STATE and SUBAGENT-QUEUE own stores that the suggester does not need. The
+suggester is a KNOWLEDGE plugin and not an orchestration one, and later the BATCH-STATE compiler
+could read its intent as a gate such as "this lane is a version bump; the version targets are ...",
+but that is a P6 integration and not a dependency.
 
 ## 15. Appendix - the evidence commands
 

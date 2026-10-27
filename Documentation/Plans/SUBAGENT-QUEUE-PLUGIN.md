@@ -36,8 +36,8 @@ statuses:
 - The active-child cap of the harness (`maxActiveSubagents`, which is now 1 after the concurrency
   flood fix) blocked the parallel dispatch, so the resumed session could run ONLY ONE subagent at a
   time, the "pair" lanes ran back-to-back, and the 8-lane queue serialized entirely.
-- The IDLE pattern of the paused agents with the specs retained in their contexts holds the agent and
-  the spec in the conversation, which is context-costly and slot-bound.
+- The IDLE pattern of the paused agents with the specs retained in their contexts holds the agent
+  and the spec in the conversation, which is context-costly and slot-bound.
 - The model of the user is that the MAIN conversation holds up to 10 subagents as IDLE
   settled-or-continuable children in the slots of the pool, while the fan-out of the CHILD subagents
   is capped at 2, so the workflow flood is prevented structurally.
@@ -67,8 +67,8 @@ statuses:
 
 ### 2.1 The queue store (the task as data)
 
-- EACH task carries the id, the spec as the full self-contained prompt, the role or task type for the
-  routing, the priority and the dependencies, the state from queued to dispatched, running, and
+- EACH task carries the id, the spec as the full self-contained prompt, the role or task type for
+  the routing, the priority and the dependencies, the state from queued to dispatched, running, and
   completed, failed, or interrupted, the assigned-agent id, and the result hash.
 - The store rides the journal conventions of the family with the v2 domain, the byte integrity, and
   the tabs, plus the store of the batch-state plugin, because the state of the queue is part of the
@@ -76,9 +76,9 @@ statuses:
 
 ### 2.2 The dispatcher (the capacity management)
 
-- The capacity model of the user holds up to 10 subagents in the MAIN conversation as IDLE-held lanes
-  in the reserved slots of the pool, and the fan-out of the CHILD subagents is capped at 2 under the
-  per-depth policy that limits the depth-1 children of ANY agent to 2 concurrent.
+- The capacity model of the user holds up to 10 subagents in the MAIN conversation as IDLE-held
+  lanes in the reserved slots of the pool, and the fan-out of the CHILD subagents is capped at 2
+  under the per-depth policy that limits the depth-1 children of ANY agent to 2 concurrent.
 - The logic of the dispatcher:
     ```
     Queue(t) -> the pending tasks (the priority + the dependency order)
@@ -98,8 +98,8 @@ statuses:
 ### 2.3 The IDLE integration (the best of both)
 
 - The IDLE-held lanes of the 10-slot reservation remain supported, and the reserved slots of the
-  dispatcher and the pending tasks of the queue coexist, so the orchestrator chooses per task between
-  the IDLE for the long-lived lanes and the queue for the dispatch-later tasks.
+  dispatcher and the pending tasks of the queue coexist, so the orchestrator chooses per task
+  between the IDLE for the long-lived lanes and the queue for the dispatch-later tasks.
 - The settled IDLE children release their active slots under the harness fact, and the dispatcher of
   the queue assigns the pending tasks to the freed slots automatically.
 
@@ -118,29 +118,38 @@ statuses:
 
 1. **The pool semantics.**
 
-    The exact surface is the per-root-lineage pool that the other session found, and the open question is whether a plugin can reserve the pool slots of the main and the per-agent child caps programmatically. The probe is the same shared probe as the batch-state and the routing-enforcer.
+    The exact surface is the per-root-lineage pool that the other session found, and the open
+    question is whether a plugin can reserve the pool slots of the main and the per-agent child caps
+    programmatically. The probe is the same shared probe as the batch-state and the
+    routing-enforcer.
 
 2. **The config knobs.**
 
-    The question is `maxActiveSubagents` as the single knob against the own capacity policy of the plugin, where the plugin enforces its model at the dispatch level and the knob of the harness stays the backstop.
+    The question is `maxActiveSubagents` as the single knob against the own capacity policy of the
+    plugin, where the plugin enforces its model at the dispatch level and the knob of the harness
+    stays the backstop.
 
 3. **The IDLE against the queue memory.**
 
-    The comparison is the store of the queue against the IDLE contexts, measured by the context-budget comparison and the preference of the user per lane.
+    The comparison is the store of the queue against the IDLE contexts, measured by the
+    context-budget comparison and the preference of the user per lane.
 
 4. **The child cap of 2.**
 
-    The enforcement point is either the own launches of the spawned agents through the service of the plugin at the spawn, or the harness-level knob when the probe finds one.
+    The enforcement point is either the own launches of the spawned agents through the service of
+    the plugin at the spawn, or the harness-level knob when the probe finds one.
 
 5. **The restart semantics.**
 
-    The store of the queue survives through the journal, and the in-flight dispatches resume after the restart with the task states reconciled.
+    The store of the queue survives through the journal, and the in-flight dispatches resume after
+    the restart with the task states reconciled.
 
 ## 4. The implementation phases
 
 1. **The probe.**
 
-    The probe is shared with the two sibling plugins and covers the pool, the reservation surface, and the per-depth knobs.
+    The probe is shared with the two sibling plugins and covers the pool, the reservation surface,
+    and the per-depth knobs.
 
 2. **The queue store.**
 
@@ -166,15 +175,17 @@ statuses:
 
 - The capacity model of the user is the law of 10 held and 2 children, and the plugin enforces it
   while the override of the user wins.
-- The specs of the tasks are the same self-contained prompts and the queue NEVER alters them, because
-  the dispatcher ONLY schedules.
-- The plugin discipline of the family holds: the smokes, the loader contract, and the no-commit rule.
+- The specs of the tasks are the same self-contained prompts and the queue NEVER alters them,
+  because the dispatcher ONLY schedules.
+- The plugin discipline of the family holds: the smokes, the loader contract, and the no-commit
+  rule.
 - The fallback: WITHOUT the plugin, the manual queue of the orchestrator with the handoff's Tasks/
   files and the slot bookkeeping stays, and the plugin automates it.
 
 ## 6. The deliverables
 
-- The source of the plugin and the smokes, where the determinism of the dispatcher is smoke-asserted.
+- The source of the plugin and the smokes, where the determinism of the dispatcher is
+  smoke-asserted.
 - The queue store and the task schema.
 - The capacity model and the child-cap enforcement.
 - The batch-state and routing integrations.

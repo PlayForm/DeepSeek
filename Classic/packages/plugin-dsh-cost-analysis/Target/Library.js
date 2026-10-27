@@ -1,0 +1,1 @@
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";const n="plugin-dsh-cost-analysis",p=t,i=["pluginFactory","commands"],r=o;var c={name:n,apply:r,Config:p,inject:i};export{p as Config,r as apply,c as default,i as inject,n as name};

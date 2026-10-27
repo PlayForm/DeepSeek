@@ -89,23 +89,15 @@ statuses:
 
 # TOMORROW-REVIEW - The Descriptive Plan (preserved 2026-10-07 for tomorrow's review)
 
-> The complete state + the plan for the next session. The user will run the whole process again.
-> This document is the descriptive reference. It covers what exists, what is in flight, what is
-> missing, and how tomorrow's process runs. Originally preserved at the monorepo root. Now migrated
-> into `Documentation/Plans/` with the rest of the documentation tree.
+> The complete state and the plan for the next session.
+> The user will run the whole process again.
+> This document is the descriptive reference.
+> It covers what exists, what is in flight, what is missing, and how tomorrow's process runs.
+> The team preserved it at the monorepo root first, then migrated it into `Documentation/Plans/` with the rest of the documentation tree.
 >
-> GRANULAR ACCESS: the descriptive plan's core sections (1-9) are also distilled as per-topic
-> documents under Documentation/Archive/Tomorrow-Review/ (CURRENT-STATE-2026-10-07,
-> IN-FLIGHT-WORK-2026-10-07, MISSING-AND-OPEN-DECISIONS, TOMORROWS-PROCESS, RUNNING-FACTS,
-> NEXT-BATCH-2026-10-08, APHRODITE-WEBSITE-SESSION, BATCH-COMPLETE-AND-SLIP-2026-10-09) -
-> byte-preserved copies for per-topic reading. THE CHRONOLOGICAL BATCH LOG (the dated sections,
-> 2026-10-19/20) is likewise split into per-topic records under the same folder
-> (BATCH-LOG-RESTRUCTURE-2026-10-19, BATCH-LOG-SITE-UPDATE-2026-10-19,
-> BATCH-LOG-LIVE-CONTAINERS-2026-10-19, BATCH-LOG-DEPENDENCY-UPGRADE-2026-10-20,
-> BATCH-LOG-LIVE-TESTING-2026-10-20, BATCH-LOG-ALIAS-SWEEP-2026-10-20,
-> BATCH-LOG-ARCHIVE-AND-SKILL-RESTRUCTURE-2026-10-20, BATCH-LOG-FEATURE-LOG-2026-10-20) - distilled
-> per-topic views for per-topic reading. THIS document remains the master record and the
-> authoritative source for BOTH parts.
+> GRANULAR ACCESS: the descriptive plan's core sections (1-9) also appear as per-topic documents under Documentation/Archive/Tomorrow-Review/ (CURRENT-STATE-2026-10-07, IN-FLIGHT-WORK-2026-10-07, MISSING-AND-OPEN-DECISIONS, TOMORROWS-PROCESS, RUNNING-FACTS, NEXT-BATCH-2026-10-08, APHRODITE-WEBSITE-SESSION, BATCH-COMPLETE-AND-SLIP-2026-10-09), which are byte-preserved copies for per-topic reading.
+> The chronological batch log (the dated sections, 2026-10-19/20) is likewise split into per-topic records under the same folder (BATCH-LOG-RESTRUCTURE-2026-10-19, BATCH-LOG-SITE-UPDATE-2026-10-19, BATCH-LOG-LIVE-CONTAINERS-2026-10-19, BATCH-LOG-DEPENDENCY-UPGRADE-2026-10-20, BATCH-LOG-LIVE-TESTING-2026-10-20, BATCH-LOG-ALIAS-SWEEP-2026-10-20, BATCH-LOG-ARCHIVE-AND-SKILL-RESTRUCTURE-2026-10-20, BATCH-LOG-FEATURE-LOG-2026-10-20), which are distilled per-topic views for per-topic reading.
+> THIS document remains the master record and the authoritative source for both parts.
 
 ---
 
@@ -331,15 +323,12 @@ The user will run the whole process again - the review-driven pass:
 
 ## 5. THE RUNNING FACTS (for the re-run)
 
-- The family: 12 packages × 3 implementations (Boilerplate / Classic / EffectTS) + the Site + the
-  Test archive + the Documentation tree.
-- The names: the #15 reversed hierarchical naming (the @-sentences: Hook @ DSH @ Governor @
-  Cargo...).
+- The family: 12 packages × 3 implementations (Boilerplate, Classic, and EffectTS), plus the Site, the Test archive, and the Documentation tree.
+- The names: the #15 reversed hierarchical naming, which gives the @-sentences such as Hook @ DSH @ Governor @ Cargo.
 - The versions: all release packages at 0.0.1.
 - The ledger strings: the byte-identical smoke contract across all three implementations.
-- The formatting: tabs everywhere (YAML excepted).
-- The regime: development through coder subagents; the smokes + the site build as the arbiters; the
-  user commits; nothing committed by agents.
+- The formatting: tabs everywhere, with YAML as the exception.
+- The regime: development through coder subagents, the smokes and the site build as the arbiters, the user commits, and agents commit nothing.
 
 ---
 
@@ -387,15 +376,15 @@ The user will run the whole process again - the review-driven pass:
 
 ## 7. TOMORROW'S OTHER SESSION (user-instructed 2026-10-08 - NOT scheduled here): THE APHRODITE WEBSITE
 
-The .md files with the MOST COMPREHENSIVE instructions for the creation FROM SCRATCH of a website in
-~/Developer/Application/PlayForm/Aphrodite/Site. The instructions are specialized for the Aphrodite
-branch (the same order of magnitude if not larger, but a COMPLETELY DIFFERENT style). The generating
-agents (10 or more, tomorrow's separate session) must INSPECT CLOSELY what the Aphrodite repository
-does + how it integrates with Hermes. THE STYLE DIRECTION (user-set): red on black, cybernetic,
-kisses, compression-oriented, artsy, BIG BIG fonts. THE PARENT'S DESIGN SUGGESTIONS (for there): the
-brutalist/cyberpunk display typography (the massive type statements), the compression visualization
-(the animated savings counters - the measured real-world savings), the kiss motif as the signature
-graphic, the red-on-black CRT/scanline texture, the terminal aesthetics, the aphoristic big-font
+The .md files hold the most comprehensive instructions for the creation from scratch of a website in
+~/Developer/Application/PlayForm/Aphrodite/Site.
+The instructions are specialized for the Aphrodite branch, at the same order of magnitude if not larger, but in a completely different style.
+The generating agents (10 or more, in tomorrow's separate session) must inspect closely what the Aphrodite repository
+does and how it integrates with Hermes.
+THE STYLE DIRECTION (user-set): red on black, cybernetic, kisses, compression-oriented, artsy, big, big fonts.
+THE PARENT'S DESIGN SUGGESTIONS for that site: the brutalist and cyberpunk display typography, the massive type
+statements, the compression visualization with the animated savings counters, the kiss motif as the signature
+graphic, the red-on-black CRT and scanline texture, the terminal aesthetics, and the aphoristic big-font
 sections.
 
 ## 8. BATCH COMPLETE (2026-10-09 - the 8-lane site queue closed)
