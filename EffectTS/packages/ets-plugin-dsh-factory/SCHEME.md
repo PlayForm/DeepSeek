@@ -33,8 +33,8 @@ probe).
 ## 1. The shared state (Interface/State)
 
 Every method takes the model's state - the shape Function/State builds, plus the model's own fields
-(a model declares `interface State extends FactoryState { Section: string[]; ... }`; its instances are
-assignable to the factory's shape).
+(a model declares `interface State extends FactoryState { Section: string[]; ... }`; its instances
+are assignable to the factory's shape).
 
 Fields:
 
@@ -53,8 +53,8 @@ Fields:
 | `Queue` / `Journal` / `Domain` | the P5 storage sink, pre-open queue (capped 256), open handle                                                                                                                                                |
 | `JournalDomain`                | the P5 domain name (the `journalDomain` setup option; the `package_governance` default lives in Function/Open)                                                                                               |
 
-Opaque identity types (`FsTargetKey`, `FsVersion`) are stored and compared, never parsed or
-computed (subsystems/filesystem.md).
+Opaque identity types (`FsTargetKey`, `FsVersion`) are stored and compared, never parsed or computed
+(subsystems/filesystem.md).
 
 ## 2. The 19 callable methods (18 sections; Write + GuardedWrite share §2.7), exact signatures
 
@@ -167,6 +167,7 @@ over?: {
   tool's ctx would not reach the governance hooks).
 
     `observe: false` skips it (the guarded path delegates the re-emit to Refresh §2.8 instead).
+
 - `stash: true` pre-registers the outcome's fresh version in `state.Stash` BEFORE the emit/return,
   so a re-entrant listener call hits the idempotence gate.
 - `transform` is the caller's content step, applied before the write (raw-write's six-fold Rewrite
@@ -174,8 +175,9 @@ over?: {
 
 **The guarded alias** `GuardedWrite(state, target, content, version, signal?)` =
 `Write(state, target, content, { intent: { kind: "replaceIfVersion", version }, signal, policy: "p4", stash: true, observe: false })`
+
 - `ctx.fs.writeText` with the version-guarded intent and the P4 fence; on success, it pre-registers
-the outcome's fresh version in `state.Stash` (before any re-emit).
+  the outcome's fresh version in `state.Stash` (before any re-emit).
 
 Logs nothing - the caller composes its own ledger line from the outcome.
 
@@ -219,8 +221,9 @@ Lifecycle:
 
     Writing against the current version makes the fold converge in ANY step order: each step reads
     the file, transforms, stats, and writes against the version it just observed;
+
 6. the model's `message` - string logged verbatim, or `message({ version: outcome.version })` logged
-   - via `Append`;
+    - via `Append`;
 7. `Refresh(state, target, actor, written.version)`;
 8. `finally: state.Inflight.delete(String(targetKey))`; any throw →
    `logger.error("<Module>: continuation error (suppressed): <cause>")` (logger-only; never the
@@ -368,11 +371,11 @@ step reads the file.
 
 Selection semantics:
 
-| selection                                | behavior                                                                    |
-| ---------------------------------------- | --------------------------------------------------------------------------- |
-| `true` / `"all"`                         | every registered step for the basename                                      |
+| selection                                  | behavior                                                                    |
+| ------------------------------------------ | --------------------------------------------------------------------------- |
+| `true` / `"all"`                           | every registered step for the basename                                      |
 | `["canonicalize", ...]` (or a single name) | ONLY the named steps; unknown names match nothing (ignored by construction) |
-| `false` / `null` / absent                | no governance at all (the escape hatch; the tool omits the call)            |
+| `false` / `null` / absent                  | no governance at all (the escape hatch; the tool omits the call)            |
 
 Contained: one try/catch per step - never throws, never affects the caller (the family's silence
 invariant; a step's own async continuations are contained by the step).
@@ -423,6 +426,7 @@ A model supplies:
     It decodes, applies the model logic, logs its own no-op/refusal lines, and returns null for
     every no-op path; on change it returns the next content + count + (optionally) the success line
     (string, or a function of `{ version }`).
+
 4. **An observe function** - Gate → own lines → Discover/Parse → Stash seed →
    `Factory.Continue(...)`.
 5. **apply** - State → Attach → own activation proof (Append + Journal) → Wire.

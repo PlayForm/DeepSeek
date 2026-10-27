@@ -47,7 +47,7 @@ The batch-state plugin: a DeepSeek Harness plugin that is the cooperative batch'
 7. **The Presentation.**
 
     The dynamic table-of-contents block is recompiled on every state change:
-    `Context =  Compile(State)`.
+    `Context = Compile(State)`.
 
     Every block is a COMPILED OUTPUT of a deterministic compiler (pure functions), and the LLM's
     only role is to READ it.

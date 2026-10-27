@@ -1,3 +1,3 @@
 import type { WorkspaceGraph } from "@Interface/Graph.js";
+declare const _default: (Graph_: WorkspaceGraph, Path: string) => string;
 export default _default;
-declare function _default(Graph_: WorkspaceGraph, Path: string): string;

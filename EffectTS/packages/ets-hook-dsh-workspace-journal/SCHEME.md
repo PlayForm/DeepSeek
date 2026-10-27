@@ -1,10 +1,12 @@
 # SCHEME - @playform/hook-dsh-workspace-journal
 
-The formal scheme of the workspace-journal hook: the domain schema, the record shapes, the lifecycle, and the ledger lines.
+The formal scheme of the workspace-journal hook: the domain schema, the record shapes, the
+lifecycle, and the ledger lines.
 
 ## 1. The storage domain
 
-One KV domain, named by config `domain` (default `workspace_journal`), version 1, layout `per-record`, `invalidRecords: backup-and-skip`, with three tables:
+One KV domain, named by config `domain` (default `workspace_journal`), version 1, layout
+`per-record`, `invalidRecords: backup-and-skip`, with three tables:
 
 | Table     | Key                        | Record                                    |
 | --------- | -------------------------- | ----------------------------------------- |
@@ -72,15 +74,22 @@ The config carries the shared per-action allowlist (`policy: Policy()`), mapped 
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The revert is the ONE gated action of the hook (it writes the pre-images back), while the recording surface (open/seal/recover) is `record` = automatic.
+The revert is the ONE gated action of the hook (it writes the pre-images back), while the recording
+surface (open/seal/recover) is `record` = automatic.
 
-The gate is evaluated after the existence and state checks of the batch and before any file is touched.
+The gate is evaluated after the existence and state checks of the batch and before any file is
+touched.
 
-An `approve` verdict for `write` logs the byte-exact `revert held (<n> files) (policy write=approve)` line, refuses the pass with `batch <id> is held by the policy (write=approve)`, performs zero writes, keeps the state of the batch, and persists no record, so the batch stays reversible and waits for the user.
+An `approve` verdict for `write` logs the byte-exact
+`revert held (<n> files) (policy write=approve)` line, refuses the pass with
+`batch <id> is held by the policy (write=approve)`, performs zero writes, keeps the state of the
+batch, and persists no record, so the batch stays reversible and waits for the user.
 
 `auto` proceeds.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount, and the `policy` section of a resolved pack overrides the defaults per action (the wiring is the next refinement).
+The block is one volatile object, so a policy flip is hot-editable without a remount, and the
+`policy` section of a resolved pack overrides the defaults per action (the wiring is the next
+refinement).
 
 ## 6. The ledger lines (module-owned, byte-stable)
 
@@ -114,4 +123,5 @@ storage open failed: <reason>
 
 Every line is prefixed by the `Append` of the factory with the module identity (`journal: `).
 
-The strings live in the modules (the factory never owns them) and are renamed mechanically, never edited ad hoc.
+The strings live in the modules (the factory never owns them) and are renamed mechanically, never
+edited ad hoc.

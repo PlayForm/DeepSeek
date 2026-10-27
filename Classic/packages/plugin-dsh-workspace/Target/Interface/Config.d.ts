@@ -1,4 +1,4 @@
-import type { NodeKind } from "./Graph.js";
+import type { NodeKind } from "@Interface/Graph.js";
 import type { Allowlist } from "@playform/plugin-dsh-factory";
 /** The agent's config (the family's surface knobs, all volatile). */
 export default interface Config {

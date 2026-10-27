@@ -67,6 +67,10 @@ export default (State_: State, Append: Log) =>
 						},
 					},
 					truncated: { type: "boolean", required: true },
+					// The pagination cursor: Query.Map adds it when the hot-symbol
+					// list pages, so the output contract must declare it or the
+					// pipeline rejects the whole result (additionalProperties false).
+					cursor: { type: "string" },
 				},
 			},
 			render: (_args, value) => [

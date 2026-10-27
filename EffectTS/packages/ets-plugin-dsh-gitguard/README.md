@@ -19,7 +19,7 @@ terminal/exec tool surface (Documentation/Plugins/ORCHESTRATION-PLUGINS.md secti
 2. **The Guarded Operations.**
 
     It intercepts terminal commands before execution and denies ANY git mutation pattern -
-    `git  add`, `commit`, `reset`, `push`, `tag`, `rm`, `checkout`, `branch`, `merge`, `stash`,
+    `git add`, `commit`, `reset`, `push`, `tag`, `rm`, `checkout`, `branch`, `merge`, `stash`,
     `clean`, `rebase`, `revert`, `cherry-pick`, `mv`, `apply`, `am`, `bisect`, `gc`, `prune`,
     `worktree`, `submodule`, `notes`.
 
