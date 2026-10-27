@@ -8,10 +8,10 @@
 The batch edit engine for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
 plugin family (the Classic release).
 
-One tool - `batch_edit` - that turns files into **processes held in state**: you open a machine,
-insert files into it, and the files process like a state machine in one go.
+One tool - `batch_edit` - turns files into **processes held in state**: you open a machine, insert
+files into it, and the files process like a state machine in one go.
 
-Each file on the system is a process the harness holds (`Process<File>`), not inert bytes - the
+Each file on the system is a process that the harness holds (`Process<File>`), not inert bytes - the
 reversed view of the default UNIX file.
 
 The philosophy and the research live in
@@ -42,8 +42,9 @@ errored   -> observed  (agent corrects the op)
 any       -> halted    (machine close with in-flight work: settle-first)
 ```
 
-A held file touched externally between insert and commit **halts** with the `stale` reason; the
-machine stays open; you resume it explicitly.
+A held file touched externally between insert and commit **halts** with the `stale` reason.
+
+The machine stays open, and you resume it explicitly.
 
 ## The transition table (one line per op)
 
@@ -66,12 +67,13 @@ fresh-stat version guard), the `govern` actor marker so the event path skips the
 the governed basenames (`package.json`, `Cargo.toml`) re-run through the factory's **direct** path
 exactly once per write.
 
-The gate is all-or-nothing on the apply loop: a planning failure halts or errors that file alone; a
-write failure stops the loop and returns the unwritten remainder to observed.
+The gate is all-or-nothing on the apply loop: a planning failure halts or errors that file alone,
+and a write failure stops the loop and returns the unwritten remainder to observed.
 
 A commit exceeding the in-line deadline (capped at 120000, the composition contract) continues as
-one background job and returns the typed `jobId`; the settle truth arrives through the jobs
-subscription and the next `state` presentation.
+one background job and returns the typed `jobId`.
+
+The settle truth arrives through the jobs subscription and the next `state` presentation.
 
 No plugin-owned timers anywhere.
 
@@ -92,7 +94,9 @@ The `commit` action consults `Decide(State.Allow, "write")` **before any plan or
 The shipped default is `write: approve`, so an apply is **refused** with the byte-exact
 `apply refused <id> (policy write=approve)` line (in the ledger and as the thrown error): nothing is
 read or written, the machine stays open with its cells `observed`, and the batch waits for the
-user's approval - the existing approve binding (flip `policy.write` to `auto`, or approve the batch
+user's approval.
+
+The approval is the existing approve binding (flip `policy.write` to `auto`, or approve the batch
 through the batch-decision hook).
 
 With `write: auto` the commit proceeds exactly as described above.
@@ -140,7 +144,7 @@ Every knob is volatile (hot-editable without remounting):
 
 ## The plan
 
-Classic PoC (source complete; the smoke suite, the build pass and the EffectTS twin are end-phase
+Classic PoC (source complete; the smoke suite, the build pass, and the EffectTS twin are end-phase
 work - see [Documentation/Plans/POC-BRIEF.md](../../../Documentation/Plans/POC-BRIEF.md)).
 
 ## License

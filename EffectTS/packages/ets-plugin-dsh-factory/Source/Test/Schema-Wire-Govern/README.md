@@ -4,18 +4,18 @@ What this test verifies.
 
 ## Intent
 
-The three remaining service surfaces: `Schema` (the shared volatile fields -
-log, logFile, updateCooldownMs, mutationTools - with the per-module defaults,
-the real schemastery validation producing the volatile cells, the Unwrap
-machinery, and the module field slots appended verbatim after the shared
-block), `Wire` (the fiber-owned fs/observed registration with the
-module-supplied activation proof) and the direct-govern registry
-(`RegisterGovern` storage per basename in registration order, `Govern`'s
-selection resolution - true/all/array/name/false - with the basename routing,
-the per-step containment and the in-place re-registration). They are their own
-folder because the schema's field ORDER and the governance selection
-semantics are contracts shared by every module leaf. This is the source
-suite's sections 15, 13 and 17, moved verbatim.
+The three remaining service surfaces: `Schema` (the shared volatile fields - log, logFile,
+updateCooldownMs, mutationTools - with the per-module defaults, the real schemastery validation
+producing the volatile cells, the Unwrap machinery, and the module field slots appended verbatim
+after the shared block), `Wire` (the fiber-owned fs/observed registration with the module-supplied
+activation proof), and the direct-govern registry (`RegisterGovern` storage per basename in
+registration order, `Govern`'s selection resolution - true/all/array/name/false - with the basename
+routing, the per-step containment, and the in-place re-registration).
+
+They are their own folder because the schema's field ORDER and the governance selection semantics
+are contracts shared by every module leaf.
+
+This is the source suite's sections 15, 13, and 17, moved verbatim.
 
 ## Scenario
 
@@ -53,31 +53,27 @@ suite's sections 15, 13 and 17, moved verbatim.
 
 ## Fixtures
 
-- The Harness fake ctx + the REAL factory instance; a fresh OS tmpdir root
-  with `ledger.log` and `flavor-ledger.log`; the source suite's st1 State
-  rebuilt verbatim (the Wire target); a `proj` directory for the Govern
-  targets; `target`/`present`/`actor` fixtures verbatim.
+- The Harness fake ctx + the REAL factory instance; a fresh OS tmpdir root with `ledger.log` and
+  `flavor-ledger.log`; the source suite's st1 State rebuilt verbatim (the Wire target); a `proj`
+  directory for the Govern targets; `target`/`present`/`actor` fixtures verbatim.
 - Unwrap and SectionList are imported from the REAL built Target subpaths
-  (`Target/Function/Unwrap.js`, `Target/Variable/Default.js`) - the same
-  dynamic imports the source suite performs, hoisted to static imports.
-- `ran` records each govern step's [name, targetPath, actor, version]; the
-  govern selection values (true, arrays, names, false/null/undefined) are
-  passed verbatim.
+  (`Target/Function/Unwrap.js`, `Target/Variable/Default.js`) - the same dynamic imports that the
+  source suite performs, hoisted to static imports.
+- `ran` records each govern step's [name, targetPath, actor, version]; the govern selection values
+  (true, arrays, names, false/null/undefined) are passed verbatim.
 
 ## Expected ledger strings (byte-exact)
 
-- `activated (smoke)` in the durable ledger file (the Wire group's
-  module-supplied activation proof, behind the [ISO] stamp and the
-  `smoke-flavor: ` logger prefix).
+- `activated (smoke)` in the durable ledger file (the Wire group's module-supplied activation proof,
+  behind the [ISO] stamp and the `smoke-flavor: ` logger prefix).
 
 ## Edge cases
 
 - The empty-registry Govern call is a contained no-op.
-- Unknown names, false/null/undefined selections - all run nothing.
-- A throwing step never propagates; later steps still run.
-- Same-name re-registration replaces in place (no duplicate) and the
-  replaced closure runs.
-- exclude is NOT volatile; module fields keep their own volatility.
+- Unknown names and false/null/undefined selections - all run nothing.
+- A throwing step never propagates, and later steps still run.
+- Same-name re-registration replaces in place (no duplicate), and the replaced closure runs.
+- exclude is NOT volatile, and module fields keep their own volatility.
 
 ## Expected count
 

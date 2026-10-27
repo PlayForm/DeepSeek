@@ -17,6 +17,7 @@
 import type { Context } from "@deepseek-ai/cordis";
 import BridgeFn from "@Function/Bridge.js";
 import StatsFn from "@Function/Stats.js";
+import StreamFn from "@Function/Stream.js";
 import TailFn from "@Function/Tail.js";
 import TraceFn from "@Function/Trace.js";
 import type Config from "@Interface/Config.js";
@@ -76,6 +77,11 @@ export default function Apply(ctx: Context, config: Config): void {
 		default:
 			break;
 	}
+	// The SSE bridge: the static `inject` in Library.ts orders this apply after
+	// the harness webServer, so the route registers here and its disposer rides
+	// the fiber (one teardown, no leak). A composition without a webServer
+	// never reaches apply at all - the loader keeps the row PENDING.
+	ctx.effect(() => StreamFn(ctx) ?? (() => {}), "panel: trace stream");
 	// The activation line (ledger string, byte-stable):
 	// `host: activated (enabled=<enabled>)`.
 	ctx.logger.info(`host: activated (enabled=${String(enabled)})`);

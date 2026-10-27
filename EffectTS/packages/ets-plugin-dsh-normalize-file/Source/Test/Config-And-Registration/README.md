@@ -4,12 +4,14 @@ What this test verifies.
 
 ## Intent
 
-The apply-time wiring of the file flavor: what a single `apply(ctx, config)`
-builds before any tool call. This is its own folder because the file flavor
-is the family's first listener-less tool - the empty stream registry, the
-exactly-one-tool registration and the minimal schema are the posture that
-distinguishes it from every stream flavor. The source suite's Run 1 and the
-Run 8 fresh-state leaf, moved verbatim.
+The apply-time wiring of the file flavor: what a single `apply(ctx, config)` builds before any tool
+call.
+
+This is its own folder because the file flavor is the family's first listener-less tool - the empty
+stream registry, the exactly-one-tool registration, and the minimal schema are the posture that
+distinguishes it from every stream flavor.
+
+The source suite's Run 1 and the Run 8 fresh-state leaf are moved verbatim.
 
 ## Scenario
 
@@ -48,15 +50,17 @@ Run 8 fresh-state leaf, moved verbatim.
 
 ## Fixtures
 
-The harness fake ctx (listener capture, the read/write fs seams with a bare
-backend, the waterfall delegate with the actor, the synchronous emit
-recorder, the self-root) + the REAL factory instance (the harness Furnace) +
-the REAL normalize-file apply from this bundle's built Target. One
-`Validate({ logFile })` config plus a second `Validate({ replacement: "$&" })`
-apply for the fresh-state probe. No tool call is made in this folder, so the
-journal counters stay at zero exactly as the source suite requires. The
-harness clears the ledger file at folder start; the folder reads no ledger
-content.
+The harness fake ctx (listener capture, the read/write fs seams with a bare backend, the waterfall
+delegate with the actor, the synchronous emit recorder, and the self-root) + the REAL factory
+instance (the harness Furnace) + the REAL normalize-file apply from this bundle's built Target.
+
+The folder uses one `Validate({ logFile })` config plus a second `Validate({ replacement: "$&" })`
+apply for the fresh-state probe.
+
+No tool call is made in this folder, so the journal counters stay at zero exactly as the source
+suite requires.
+
+The harness clears the ledger file at folder start, and the folder reads no ledger content.
 
 ## Expected ledger strings (byte-exact)
 
@@ -64,11 +68,11 @@ content.
 
 ## Edge cases
 
-- The stream listener registry must be EMPTY (a registered `llm/stream`
-  would fail the three-listener check).
+- The stream listener registry must be EMPTY (a registered `llm/stream` would fail the
+  three-listener check).
 - The volatile cells must be `{ get }` references at the config boundary.
-- Two applies must not share state (the HMR probe) - a module-level global
-  would fail the identity check.
+- Two applies must not share state (the HMR probe) - a module-level global would fail the identity
+  check.
 - Apply itself must journal nothing - only the tool's N>0 count journals.
 
 ## Expected count

@@ -262,8 +262,10 @@ const runTest = async () => {
     const Bare = MakeClient({ remote: {} });
     ClientPlugin.apply(Bare.Context);
     Bare.Open();
-    Check(Count, "C5: without the namespace the client half provides nothing", () => {
-      assert.deepEqual(Bare.Provided, {});
+    Check(Count, "C5: without the namespace the client half provides only the SSE trace stream", () => {
+      assert.deepEqual(Object.keys(Bare.Provided), ["trace"]);
+      assert.equal(Bare.Provided["trace"].live, false);
+      assert.deepEqual(Bare.Provided["trace"].tail(), []);
     });
   }
   Check(Count, "K1: the client bundle is a closure factory that executes", () => {

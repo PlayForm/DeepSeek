@@ -1,9 +1,10 @@
 # SCHEME - @playform/plugin-dsh-batch-edit
 
 The structural scheme of the batch edit engine: the anatomy, the machine, the op grammar, the write
-path, the contract strings, and the exact seams it consumes. Source of truth alongside
-`Documentation/Plans/Batch-Edit-Tool/` (SCHEMA, STATE-MACHINE, PACKAGE-AND-GOVERNANCE,
-ACCEPTANCE-CRITERIA).
+path, the contract strings, and the exact seams that it consumes.
+
+Source of truth alongside `Documentation/Plans/Batch-Edit-Tool/` (SCHEMA, STATE-MACHINE,
+PACKAGE-AND-GOVERNANCE, ACCEPTANCE-CRITERIA).
 
 ## 1. The anatomy
 
@@ -34,24 +35,27 @@ Configuration/          the build configs (ESBuild.ts/.js, Test-ESBuild.ts/.js,
 ## 2. The loader contract
 
 `name = "plugin-dsh-batch-edit"`, `apply` (returns nothing), `Config` (Schemastery, validated at
-load, fail-loud in Function/Apply's `Validate`), `inject = ["pluginFactory", "tools", "jobs"]`. The
-default object carries all four (the default-object-shadows pitfall). The identity agrees in the
-four places: package name, `name` export, the State build's `module:` option, and the logFile
-default (`~/.dsh/playform/ets-plugin-dsh-batch-edit.log`).
+load, fail-loud in Function/Apply's `Validate`), `inject = ["pluginFactory", "tools", "jobs"]`.
+
+The default object carries all four (the default-object-shadows pitfall).
+
+The identity agrees in the four places: package name, `name` export, the State build's `module:`
+option, and the logFile default (`~/.dsh/playform/ets-plugin-dsh-batch-edit.log`).
 
 ## 3. The machine
 
 - Registry: `State.Machines: Map<agentId, Map<machineId, MachineRecord>>` (the planted-board lease
-  semantics); `machinesPerAgent` caps each map.
+  semantics), and `machinesPerAgent` caps each map.
 - Machine ids: `mach-<n>`, a deterministic counter (never a clock).
 - `MachineRecord`: id, scope, `searches: Map<name, SearchSpec>`, `ops: OpLine[]`,
   `files: Map<path, ProcessCell>`, persistent, closed, misses.
 - `ProcessCell`: path, status (`observed | running | halted | done | errored`), version (the license
   stamp), freshVersion, haltReason (`stale | deadline | pause | interrupted`), error, diff, opAt.
 - The fs/observed observer (`Machine.OnObserved`, registered through the factory's `Wire` on the
-  ROOT context) is a synchronous cell flipper: no awaits, no I/O. It skips the `govern`-marked
-  actors (our own writes) and flips a held cell to `halted("stale")` only when the version token
-  moved - logged only on an actual flip (the silence invariant).
+  ROOT context) is a synchronous cell flipper: no awaits, no I/O.
+
+    It skips the `govern`-marked actors (our own writes) and flips a held cell to `halted("stale")`
+    only when the version token moved - logged only on an actual flip (the silence invariant).
 
 ## 4. The op grammar and semantics
 
@@ -66,9 +70,11 @@ default (`~/.dsh/playform/ets-plugin-dsh-batch-edit.log`).
 | `append`        | Append `with` at the end (no search needed)                |
 | `prepend`       | Prepend `with` at the start (no search needed)             |
 
-Selectors match exact held paths or a simple glob (`*` in one segment, `**` across). Searches:
-`name=pattern` (literal, line-contains) or `name=re:/pattern/flags` (simple regex). The `opfile`
-path ingests prepared op lines from a file (`#` comments and blank lines skipped).
+Selectors match exact held paths or a simple glob (`*` in one segment, `**` across).
+
+Searches are `name=pattern` (literal, line-contains) or `name=re:/pattern/flags` (simple regex).
+
+The `opfile` path ingests prepared op lines from a file (`#` comments and blank lines skipped).
 
 ## 5. The commit (Ops.Commit)
 
@@ -78,23 +84,24 @@ path ingests prepared op lines from a file (`#` comments and blank lines skipped
 
     The shipped default is `write: approve`, so the apply is refused with the byte-exact
     `apply refused <id> (policy write=approve)` line (the ledger line AND the thrown error), nothing
-    is read or written, and the machine stays open with its cells `observed` - the batch waits for
-    the user's approval (the existing approve binding: flip `policy.write` to `auto`, or approve the
-    batch through the batch-decision hook).
+    is read or written, and the machine stays open with its cells `observed`.
+
+    The batch waits for the user's approval through the existing approve binding: flip
+    `policy.write` to `auto`, or approve the batch through the batch-decision hook.
 
     `auto` proceeds to step 1.
 
     The block is the shared factory policy (`policy: Policy()` composed into the schema, mapped to
-    `State.Allow`); a resolved pack's `policy` section overrides the defaults per action (the wiring
-    is the next refinement).
+    `State.Allow`), and a resolved pack's `policy` section overrides the defaults per action (the
+    wiring is the next refinement).
 
 1. **The plan.**
 
     Plan every selected cell (`observed`, `halted`, `errored` - the resume paths): stat (the
-    fresh-version guard - a mismatch halts the file with `stale`, the machine stays open), read,
-    apply the ops, diff.
+    fresh-version guard, where a mismatch halts the file with `stale` and the machine stays open),
+    read, apply the ops, diff.
 
-    Errors mark the file `errored`; neither aborts the batch.
+    Errors mark the file `errored`, and neither aborts the batch.
 
     Zero-changed files are the designed no-op (back to `observed`, nothing logged).
 
@@ -112,8 +119,8 @@ path ingests prepared op lines from a file (`#` comments and blank lines skipped
 
     The deadline is scanned between files with a clock read (capped at 120000).
 
-    Overflow continues as one `batch-edit-continue` job via the jobs hub (`jobId` in the output);
-    without a hub the remainder halts with `deadline`.
+    Overflow continues as one `batch-edit-continue` job via the jobs hub (`jobId` in the output),
+    and without a hub the remainder halts with `deadline`.
 
 4. **The one-shot close.**
 
@@ -146,16 +153,19 @@ the advisory `advisory intercept <tool> on a held file`.
 ## 7. The silence invariant
 
 `Present.Cells` and `Present.Prose` are pure functions of the machine state: no clocks, no relative
-ages, no per-request variation. An idle machine with no events produces byte-identical cells and
-prose across requests.
+ages, no per-request variation.
+
+An idle machine with no events produces byte-identical cells and prose across requests.
 
 ## 8. The self-contained seams (the PoC rule)
 
 `Interface/Factory.ts` (the factory service: Append, State, Wire, Write, Govern, RegisterGovern),
 `Interface/Fs.ts` (FsTarget/FsObservation/FsVersion/ FsWriteOutcome), and `Interface/Events.ts` (the
 tool/jobs/step payloads) are structural declarations typed from the family contract - no imports
-from sibling workspace packages. The end-phase wires the real typed imports
-(`@playform/ets-plugin-dsh-factory`, `@deepseek-ai/dsh-fs`).
+from sibling workspace packages.
+
+The end-phase wires the real typed imports (`@playform/ets-plugin-dsh-factory`,
+`@deepseek-ai/dsh-fs`).
 
 ## 9. Future work (labeled FUTURE, not present)
 

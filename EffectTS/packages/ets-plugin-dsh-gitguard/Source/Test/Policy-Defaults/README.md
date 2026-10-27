@@ -1,16 +1,18 @@
 # Policy-Defaults
 
-The policy block (D6) on the git guard: the defaults, the State mapping on
-`Verdicts`, the override, and the guard's read-only posture.
+The policy block (D6) on the git guard: the defaults, the State mapping on `Verdicts`, the override,
+and the guard's read-only posture.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The guard classifies and ledgers
-and never writes, commits or spawns, so its own action classes are `read` and
-`record` - both automatic. This folder pins the shared block's defaults in the
-schema and on the built State (mapped to `Verdicts`, because `Allow` is
-already the git allow-list) and the documented family posture for the actions
-the guard never takes.
+D6 makes automation a per-plugin allowlist.
+
+The guard classifies and ledgers and never writes, commits, or spawns, so its own action classes are
+`read` and `record` - both automatic.
+
+This folder pins the shared block's defaults in the schema and on the built State (mapped to
+`Verdicts`, because `Allow` is already the git allow-list) and the documented family posture for the
+actions the guard never takes.
 
 ## Scenario
 
@@ -27,13 +29,13 @@ the guard never takes.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` apply, the real factory
-instance, the fake ctx, and the schema's own validation (`Validate`).
+The shared Harness: the real built `Target/Library.js` apply, the real factory instance, the fake
+ctx, and the schema's own validation (`Validate`).
 
 ## Expected ledger strings (byte-exact)
 
-None new - the block and its mapping log nothing; the defaults are the
-contract and are asserted as an object.
+None new - the block and its mapping log nothing, and the defaults are the contract and are
+asserted as an object.
 
 ## Expected count
 

@@ -5,10 +5,10 @@
 
 ## The role
 
-The **workspace-audit hook**: a DeepSeek Harness plugin that is the workspace's **accountability** -
-the event records and the ledger lines.
+The **workspace-audit hook** is a DeepSeek Harness plugin that is the **accountability** of the
+workspace: the event records and the ledger lines.
 
-It is the AUDIT role of the workspace family's invisible flow:
+It is the AUDIT role of the invisible flow of the workspace family:
 
 > ... → the merge commits → the journal records → **the audit lines** → the live view presents
 
@@ -17,32 +17,35 @@ It is the AUDIT role of the workspace family's invisible flow:
 
 ## What it does
 
-- **Accountability records**: one line per event, stored in the plugin's own KV storage domain
-  `workspace_audit` and in the plugin's ledger.
+- **Accountability records.** One line per event is stored in the own KV storage domain
+  `workspace_audit` of the plugin and in its ledger.
 
-    A **repeat event** - the same path carrying the same version within the coalescing window -
-    records no line: that observed write was already recorded, and the last distinct version always
-    wins (the guard is on the fs/observed listener only; the service's manual lines are never
-    coalesced).
+    A **repeat event** (the same path carrying the same version within the coalescing window)
+    records no line, because that observed write was already recorded and the last distinct version
+    always wins.
 
-- **The traceability graph**: the audit lines are the OutcomeEvidence on the intent model's graph -
-  Announcement → Interpretation → IntentRevision → Commitment → PlanRevision → ProposedChange →
-  AuthorizationDecision → ExecutionAttempt → OutcomeEvidence → IntentAssessment.
+    The guard is on the fs/observed listener only, so the manual lines of the service are never
+    coalesced.
 
-    `ctx.workspaceAudit.line` records any node; `ctx.workspaceAudit.assessment` closes the loop
-    against the IntentSpecification's satisfaction contract.
+- **The traceability graph.** The audit lines are the OutcomeEvidence on the graph of the intent
+  model: Announcement → Interpretation → IntentRevision → Commitment → PlanRevision → ProposedChange
+  → AuthorizationDecision → ExecutionAttempt → OutcomeEvidence → IntentAssessment.
 
-- **The recursion-prevention law**: every line carries the operation identifier, the parent
-  identifier, and the event category - chains compose without recursion.
+    `ctx.workspaceAudit.line` records any node, and `ctx.workspaceAudit.assessment` closes the loop
+    against the satisfaction contract of the IntentSpecification.
 
-- **The fs/observed listener** (ROOT context): every observed write becomes an OutcomeEvidence line
+- **The recursion-prevention law.** Every line carries the operation identifier, the parent
+  identifier, and the event category, so chains compose without recursion.
+
+- **The fs/observed listener** (ROOT context). Every observed write becomes an OutcomeEvidence line
   (`success` on presence, `failure` on absence).
 
-    The repeat-event guard (`Function/Duplicate`, the monitor's clock pattern - no timer) drops a
-    repeat event for the same path carrying the same version within the coalescing window (2 s, the
-    `State.Now` test seam overrides it in tests): the version token identifies the file state, so
-    the line for it is already recorded; a different version, or the same version after the window,
-    is recorded normally.
+    The repeat-event guard (`Function/Duplicate`, the clock pattern of the monitor, no timer) drops
+    a repeat event for the same path carrying the same version within the coalescing window (2 s,
+    which the `State.Now` test seam overrides in tests).
+
+    The version token identifies the file state, so the line for it is already recorded; a different
+    version, or the same version after the window, is recorded normally.
 
 ## Service
 
@@ -70,13 +73,13 @@ Every knob is a volatile cell (hot edits commit without remounting):
 | `exclude`  | `["node_modules/**", "**/Target/**", "**/.git/**"]` | Excluded paths                           |
 | `policy.*` | see below                                           | The D6 per-action allowlist              |
 
-The plugin ships **disabled** - it never appears in the profile's bundles and enables only by an
+The plugin ships **disabled**: it never appears in the bundles of the profile and enables only by an
 explicit ACTIVATE.
 
 ### The policy block (D6)
 
-The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
-block), mapped to `State.Allow`:
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the block of
+the factory), mapped to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -85,11 +88,12 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
-commit, no spawn), so the block documents the posture and refuses nothing.
+The actions of this package are record, all AUTOMATIC; it has NO gated action (no file write, no
+batch commit, no spawn), so the block documents the posture and refuses nothing.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
-pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
+The block is one volatile object, so a policy flip is hot-editable without a remount, and the
+`policy` section of a resolved pack overrides the defaults per action (the wiring is the next
+refinement).
 
 ## The plan
 

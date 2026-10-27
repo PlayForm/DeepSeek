@@ -7,21 +7,23 @@ spec's D5 ("the indexer is inferred from the event bus").
 source plugin --adapter--> trace bus --adapter--> consumer plugin
 ```
 
-- **The bus is a service, not a process.**
+1. **The Bus Is a Service, Not a Process.**
 
     `ctx.trace` is provided once by [`@playform/ets-plugin-dsh-factory`](../ets-plugin-dsh-factory)
     (the family's shared-machinery owner).
 
     There is no separate indexer process and no separate indexer plugin.
 
-- **This library holds the vocabulary and the loop.**
+2. **The Vocabulary and the Loop.**
 
     Every adapting plugin carries its own `Source/Trace/` adapter and imports these names and
     types - no plugin imports another plugin.
 
-- **The detached loop** is the "daemon trace": a coalescing queue keyed by path, ONE in-flight task
-  per key, no timers in the hot path, fail-open, a `Flush` promise for deterministic smokes, and a
-  disposer.
+3. **The Detached Loop.**
+
+    The "daemon trace" is a coalescing queue keyed by path, with ONE in-flight task per key, no
+    timers in the hot path, fail-open behavior, a `Flush` promise for deterministic smokes, and a
+    disposer.
 
 ## Install
 
@@ -47,7 +49,7 @@ pnpm add @playform/ets-lib-dsh-trace
 | `Queue`      | type  | `{ Schedule(key), Flush, Dispose() }`                                                                |
 
 The service's own surface (`emit`, `on`, `flush`, `ring`) is documented in the factory's
-README/SCHEME - this library never provides a service.
+README/SCHEME, and this library never provides a service.
 
 ## Usage
 

@@ -25,10 +25,11 @@ export const name = "client-dsh-panel-family-host";
 
 export const Config = Definition;
 
-// No host services are required: the host reads the filesystem directly
-// (read-only) and resolves the config editor and the trace bus structurally
-// through ctx.get, so nothing is injected.
-export const inject: string[] = [];
+// The webServer is required: the SSE trace bridge registers its route during
+// apply, so the loader must order this row after the harness webServer (the
+// PENDING seam). Every other host dependency is still resolved structurally
+// through ctx.get - the config editor and the trace bus.
+export const inject: string[] = ["webServer"];
 
 /**
  * Apply: provide the three services and log the activation.

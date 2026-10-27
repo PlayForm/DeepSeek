@@ -1,33 +1,30 @@
 # Entry-And-Contract - the loader contract and the mount
 
-The object-form loader contract and the IDLE-forever posture: the default
-object, the cold mount, the fail-loud validation, the enabled mount.
+The suite covers the object-form loader contract and the IDLE-forever posture: the default object, the cold mount, the fail-loud validation, and the enabled mount.
 
 ## Scenarios
 
-- E1: the default object carries name (`plugin-dsh-workspace-evidence`),
-  `apply`, `Config` and `inject` (`["pluginFactory"]`).
-- E2: the cold mount (enabled=false): apply returns nothing, the service is
-  still provided (name `workspaceEvidence`), the byte-exact
-  `evidence: disabled (enabled=false)` line (logger AND durable `[ISO]`
-  file), no root listener, no effect, and the service still answers
-  honestly (a validate fails loud with
-  `evidence: service is disabled (enabled=false)`; an invalidate finds
-  nothing).
-- E3: the fail-loud validation - empty domain and zero maxValidations with
-  the byte-exact `evidence: ` messages; a non-array `exclude` is caught
-  earlier by the schema itself (`$.exclude expected array but got nope`).
-- E4: the enabled mount - the byte-exact
-  `evidence: activated (domain=workspace_evidence)` line, the root
-  `fs/observed` listener through the factory's Wire, the
-  `evidence-storage` effect, and the volatile cells arriving as
-  `{ get }` cells and unwrapping onto the state.
+- **E1.**
+
+    The default object carries name (`plugin-dsh-workspace-evidence`), `apply`, `Config`, and `inject` (`["pluginFactory"]`).
+
+- **E2.**
+
+    The cold mount (enabled=false) returns nothing from apply, still provides the service (name `workspaceEvidence`), and writes the byte-exact `evidence: disabled (enabled=false)` line to the logger AND the durable `[ISO]` file.
+
+    The mount has no root listener and no effect, and the service still answers honestly: a validate fails loud with `evidence: service is disabled (enabled=false)`, and an invalidate finds nothing.
+
+- **E3.**
+
+    The fail-loud validation rejects an empty domain and zero maxValidations with the byte-exact `evidence: ` messages, and the schema itself catches a non-array `exclude` earlier: `$.exclude expected array but got nope`.
+
+- **E4.**
+
+    The enabled mount writes the byte-exact `evidence: activated (domain=workspace_evidence)` line, installs the root `fs/observed` listener through the Wire of the factory and the `evidence-storage` effect, and the volatile cells arrive as `{ get }` cells and unwrap onto the state.
 
 ## Fixtures
 
-The shared Harness (fake ctx with a DISTINCT root object, the real factory
-instance, the real built Target, a fresh temporary directory per folder
-process).
+The shared Harness supplies a fake ctx with a DISTINCT root object, the real factory instance, the real built Target, and a fresh temporary directory for each folder process.
 
 ## Expected ledger strings (byte-exact, `evidence: ` prefix)
 

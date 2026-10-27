@@ -1,50 +1,78 @@
 # Live-Ledger / Live-Assertions
 
-The scratch run's ledger files, read from real log files instead of synthetic
-captures.
+The folder reads the ledger files of the scratch run from real log files instead of synthetic captures.
 
 ## Intent
 
-The exercised boot must leave real ledger files under `$SCRATCH/ledgers` (the
-storage domain under the redirected `DSH_HOME`), every family module's
-activation line must match the smoke-contract string byte-for-byte with the
-scratch paths substituted, every ledger line must be the `[ISO] message`
-form, the one root `llm/stream` waterfall must produce the exact per-flavor
-count lines, and the exercised writes must leave the governor's, pinner's and
-cargo governor's chain lines - including the visible storage-domain open
-failure edge.
+The exercised boot must leave real ledger files under `$SCRATCH/ledgers` (the storage domain under the redirected `DSH_HOME`).
+
+Every activation line of a family module must match the smoke-contract string byte-for-byte with the scratch paths substituted, and every ledger line must be the `[ISO] message` form.
+
+The one root `llm/stream` waterfall must produce the exact per-flavor count lines, and the exercised writes must leave the chain lines of the governor, the pinner, and the cargo governor, including the visible storage-domain open failure edge.
 
 ## Scenario
 
-- Group: the ledger files exist
-  - Leaf 1-10: `governor`, `pinner`, `cargo-governor`, `normalize-dash`,
-    `quotes`, `ellipsis`, `spaces`, `invisible`, `fullwidth`,
-    `normalize-file` each have a `.log` under the scratch home.
-- Group: the activation lines (byte-identical)
-  - Leaf 11-20: one per module - the activation line with the scratch logFile
-    substituted (governor, pinner, cargo-governor, normalize-dash, quotes,
-    ellipsis, spaces, invisible, fullwidth, normalize-file).
-- Group: the ISO form
-  - Leaf 21: every governor ledger line is ISO-stamped.
-- Group: the flavor counts per exercised stream
-  - Leaf 22-27: one per flavor - `normalized N ... char(s) in one stream`.
-- Group: the governance chain lines
-  - Leaf 28: the governed event-path write logged the governor's governed
-    line.
-  - Leaf 29: the pinner logged its no-changes line for the governed manifest.
-  - Leaf 30: the cargo direct fold logged the governed line for the chain
-    Cargo.toml.
-  - Leaf 31: the cargo chain discovery logged the no-registry line.
-  - Leaf 32: the refusal attempt logged the byte-identical REFUSED line.
-- Group: the storage-domain gap
-  - Leaf 33: the storage journal open failure is recorded (the silent-catch
-    era's visible edge; the carrying ledger varies by boot).
+- **Group: the ledger files exist.**
+
+    - **Leaf 1-10.**
+
+        `governor`, `pinner`, `cargo-governor`, `normalize-dash`, `quotes`, `ellipsis`, `spaces`, `invisible`, `fullwidth`, and `normalize-file` each have a `.log` under the scratch home.
+
+- **Group: the activation lines (byte-identical).**
+
+    - **Leaf 11-20.**
+
+        The check runs once per module: the activation line with the scratch logFile substituted (governor, pinner, cargo-governor, normalize-dash, quotes, ellipsis, spaces, invisible, fullwidth, normalize-file).
+
+- **Group: the ISO form.**
+
+    - **Leaf 21.**
+
+        Every governor ledger line is ISO-stamped.
+
+- **Group: the flavor counts per exercised stream.**
+
+    - **Leaf 22-27.**
+
+        The check runs once per flavor: `normalized N ... char(s) in one stream`.
+
+- **Group: the governance chain lines.**
+
+    - **Leaf 28.**
+
+        The governed event-path write logged the governed line of the governor.
+
+    - **Leaf 29.**
+
+        The pinner logged its no-changes line for the governed manifest.
+
+    - **Leaf 30.**
+
+        The cargo direct fold logged the governed line for the chain Cargo.toml.
+
+    - **Leaf 31.**
+
+        The cargo chain discovery logged the no-registry line.
+
+    - **Leaf 32.**
+
+        The refusal attempt logged the byte-identical REFUSED line.
+
+- **Group: the storage-domain gap.**
+
+    - **Leaf 33.**
+
+        The open failure of the storage journal is recorded (the visible edge of the silent-catch era, and the carrying ledger varies by boot).
 
 ## Fixtures
 
-- The exercise boot (via `Exercise()`): the ledgers are its product - it must
-  run first.
-- `$DSH_TEST_SCRATCH/ledgers/*.log`: the real log files this folder reads.
+- **The exercise boot.**
+
+    The boot (via `Exercise()`) is the product of the ledgers, so it must run first.
+
+- **The real log files.**
+
+    The folder reads `$DSH_TEST_SCRATCH/ledgers/*.log`.
 
 ## Expected ledger strings (byte-exact)
 
@@ -69,27 +97,24 @@ failure edge.
 
 ## Edge cases
 
-- WHICH module's ledger carries the storage-journal open failure depends on
-  which open loses the best-effort race - the check scans the family
-  ledgers.
-- The activation strings contain the scratch paths - the logFile value is
-  part of the contract string.
+- **The storage-journal failure.**
+
+    WHICH ledger of a module carries the open failure of the storage journal depends on which open loses the best-effort race, so the check scans the family ledgers.
+
+- **The activation strings.**
+
+    The activation strings contain the scratch paths, because the logFile value is part of the contract string.
 
 ## Env gate
 
-`DSH_TEST_SCRATCH` must be set. Unset means `SKIPPED (no scratch home)` with
-exit 0 - identical to the `.mjs` suite this folder was split from. The folder
-is never forced green in `Maintain/Run-Smokes.mjs`; it runs under
-`Maintain/Run-Wiring.mjs`, which always sets the gate.
+`DSH_TEST_SCRATCH` must be set, and an unset variable means `SKIPPED (no scratch home)` with exit 0, identical to the `.mjs` suite from which this folder was split.
+
+The folder is never forced green in `Maintain/Run-Smokes.mjs`, and it runs under `Maintain/Run-Wiring.mjs`, which always sets the gate.
 
 ## Expected count
 
 33 PASS.
 
-Note (recorded 2026-10-20, the lane's fresh baseline): with the CURRENT built
-targets the five post-dash flavors' stream lines do not appear (the boot log
-shows `command "normalize-overpass" is already registered` - the later
-flavors fail to finish mounting), so the folder currently prints
-`28 PASS - ...` with the five stream-count checks failing. The expected count
-above is the healthy battery's count; the failures are pre-existing live
-state, not a property of this folder.
+Note (recorded 2026-10-20, the fresh baseline of the lane): with the CURRENT built targets the stream lines of the five post-dash flavors do not appear (the boot log shows `command "normalize-overpass" is already registered`, so the later flavors fail to finish mounting), and the folder currently prints `28 PASS - ...` with the five stream-count checks failing.
+
+The expected count above is the count of the healthy battery, and the failures are pre-existing live state and not a property of this folder.

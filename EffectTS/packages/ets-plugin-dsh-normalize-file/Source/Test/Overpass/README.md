@@ -4,14 +4,16 @@ What this test verifies.
 
 ## Intent
 
-The overpass layer for the file flavor: the tools/post-execute arm (the
-SIX-FOLD rewrite of tool results in the transcript), the agent/pre-step arm
-(the same chain on incoming batches), the human-facing `normalize-overpass`
-command as the FILES SWEEP owner, and the history-safety invariant. This is
-its own folder because the arms are a separate integration surface with
-their own scope gates (both off by default), the sweep as the command's
-unique grammar on this flavor, and its own ledger strings. The source
-suite's Run O (O1-O12), moved verbatim.
+The overpass layer for the file flavor: the tools/post-execute arm (the SIX-FOLD rewrite of tool
+results in the transcript), the agent/pre-step arm (the same chain on incoming batches), the
+human-facing `normalize-overpass` command as the FILES SWEEP owner, and the history-safety
+invariant.
+
+This is its own folder because the arms are a separate integration surface with their own scope
+gates (both off by default), the sweep as the command's unique grammar on this flavor, and its own
+ledger strings.
+
+The source suite's Run O (O1-O12) is moved verbatim.
 
 ## Scenario
 
@@ -60,16 +62,20 @@ suite's Run O (O1-O12), moved verbatim.
 ## Fixtures
 
 The harness fake ctx + the REAL factory + the REAL normalize-file apply.
-One apply with a hand-built config whose `scopes` volatile cell returns a
-mutable object; the O2/O9 flips mutate that object and dispatch through the
-registered `loader/volatile-update` listener. The sweep seeds
-`/tmp/normalize-file-smoke-sweep-a.txt` with All6 and
-`/tmp/normalize-file-smoke-sweep-b.txt` with clean text in the in-memory
-Files map; the sweep handler receives `rawInput: "files <a> <b>"` and the
-error cases receive the source suite's exact inputs. `PostO`/`PreO` are the
-registered listeners; `ExecO` builds the call identity. The durable ledger
-is cleared at folder start; no direct ledger reads (ledger lines are checked
-via the captured logger lines and their `includes` matches).
+
+One apply uses a hand-built config whose `scopes` volatile cell returns a mutable object, and the
+O2/O9 flips mutate that object and dispatch through the registered `loader/volatile-update`
+listener.
+
+The sweep seeds `/tmp/normalize-file-smoke-sweep-a.txt` with All6 and
+`/tmp/normalize-file-smoke-sweep-b.txt` with clean text in the in-memory Files map; the sweep
+handler receives `rawInput: "files <a> <b>"`, and the error cases receive the source suite's exact
+inputs.
+
+`PostO`/`PreO` are the registered listeners, and `ExecO` builds the call identity.
+
+The durable ledger is cleared at folder start, and no direct ledger reads occur (the ledger lines
+are checked via the captured logger lines and their `includes` matches).
 
 ## Expected ledger strings (byte-exact)
 
@@ -81,11 +87,10 @@ via the captured logger lines and their `includes` matches).
 
 ## Edge cases
 
-- Both arms off by default; the flips are live (no remount).
-- Non-text blocks, value-carrying decisions and CCR marker text pass
-  through untouched.
-- The sweep is the only overpass path allowed to write (exactly one write
-  and one emit for the changed file; the clean file untouched).
+- Both arms are off by default, and the flips are live (no remount).
+- Non-text blocks, value-carrying decisions, and CCR marker text pass through untouched.
+- The sweep is the only overpass path allowed to write (exactly one write and one emit for the
+  changed file, with the clean file untouched).
 
 ## Expected count
 

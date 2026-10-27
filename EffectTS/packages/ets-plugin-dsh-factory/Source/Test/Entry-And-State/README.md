@@ -4,19 +4,21 @@ What this test verifies.
 
 ## Intent
 
-The factory's entry contract and the State builder - the two surfaces every
-consumer touches first. `PluginFactory` must be a class extending the cordis
-Service base with `static inject = ["fs"]`, registered as
-`ctx.pluginFactory` through the Service constructor's `ctx.reflect.provide`,
-carrying all 15 service methods. The State builder is the shared machinery
-the module leaves call once per apply: it unwraps the volatile config cells
-(`mutationTools`), maps the shared config fields (log -> Enabled, logFile ->
-Ledger, policyFile -> Policy, exclude -> List), maps the module's own fields
-through `options.fields`, probes the `subprocess` service once (P9), tolerates
-a bare config, namespaces update-stage Inflight keys (P2's `UpdateKey`), and
-registers ONE instance-local `loader/volatile-update` listener (P10) that
-refreshes volatile fields in place without a remount. This is the source
-suite's sections 1-3, the bare-config/UpdateKey edge checks, and the P10
+The factory's entry contract and the State builder are the two surfaces that every consumer touches
+first.
+
+`PluginFactory` must be a class extending the cordis Service base with `static inject = ["fs"]`,
+registered as `ctx.pluginFactory` through the Service constructor's `ctx.reflect.provide`, carrying
+all 15 service methods.
+
+The State builder is the shared machinery that a module calls once per apply: it unwraps the
+volatile config cells (`mutationTools`), maps the shared config fields (log -> Enabled, logFile ->
+Ledger, policyFile -> Policy, exclude -> List), maps the module's own fields through
+`options.fields`, probes the `subprocess` service once (P9), tolerates a bare config, namespaces
+update-stage Inflight keys (P2's `UpdateKey`), and registers ONE instance-local
+`loader/volatile-update` listener (P10) that refreshes volatile fields in place without a remount.
+
+This is the source suite's sections 1-3, the bare-config/UpdateKey edge checks, and the P10
 volatile-refresh section, moved verbatim.
 
 ## Scenario
@@ -73,17 +75,15 @@ volatile-refresh section, moved verbatim.
 
 ## Fixtures
 
-- The Harness fake ctx (on/emit/effect/get/reflect/fs captures, the ROOT seam
-  making the ctx its own root) + the REAL factory class constructed against
-  it; one factory instance per folder process.
-- A fresh OS tmpdir root (`mkdtempSync`, prefix "factory-smoke-") and the
-  ledger path inside it (`ledger.log`).
-- `volatileCell = { get: () => ["write","edit"] }` and, for the P10 group, the
-  mutable getter cells (`Cell`, `LogCell`, `ObjCell`) whose getters are
-  reassigned between dispatches.
-- The `loader/volatile-update` listeners are captured through the ctx's `on`
-  (the State builder registers on the root scope; the fake ctx is its own
-  root) and dispatched directly - the same dispatch shape the loader uses.
+- The Harness fake ctx (on/emit/effect/get/reflect/fs captures, the ROOT seam making the ctx its own
+  root) + the REAL factory class constructed against it; one factory instance per folder process.
+- A fresh OS tmpdir root (`mkdtempSync`, prefix "factory-smoke-") and the ledger path inside it
+  (`ledger.log`).
+- `volatileCell = { get: () => ["write","edit"] }` and, for the P10 group, the mutable getter cells
+  (`Cell`, `LogCell`, `ObjCell`) whose getters are reassigned between dispatches.
+- The `loader/volatile-update` listeners are captured through the ctx's `on` (the State builder
+  registers on the root scope, and the fake ctx is its own root) and dispatched directly - the same
+  dispatch shape that the loader uses.
 
 ## Expected ledger strings (byte-exact)
 
@@ -98,12 +98,11 @@ volatile-refresh section, moved verbatim.
 
 ## Edge cases
 
-- Subprocess seam absent -> `State.Subprocess` is undefined; present -> probed
-  once.
+- Subprocess seam absent -> `State.Subprocess` is undefined; present -> probed once.
 - Seam's cached undefined: a missing service is cached, not re-probed.
-- The P10 negative controls: unknown key paths, malformed paths (a bare
-  string, a number, undefined), non-volatile keys (`logFile`), and a throwing
-  getter all leave the State's previous value in place without throwing.
+- The P10 negative controls: unknown key paths, malformed paths (a bare string, a number, undefined),
+  non-volatile keys (`logFile`), and a throwing getter all leave the State's previous value in place
+  without throwing.
 - State object identity is preserved across dispatches (`Same === stV`).
 
 ## Expected count

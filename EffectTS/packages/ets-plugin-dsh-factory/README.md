@@ -11,21 +11,22 @@ Harness plugin family.
 
 Loading it registers one class plugin (`export default class PluginFactory extends Service`,
 `super(ctx, "pluginFactory")`, `static inject = ["fs"]`) that exposes **`ctx.pluginFactory`**: a
-single service holding every piece of common machinery the family's hooks used to duplicate (the
-ledger, the exclusion match, the auxiliary registry/policy discovery, the union keep-list
+single service holding every piece of common machinery that the family's hooks used to duplicate
+(the ledger, the exclusion match, the auxiliary registry/policy discovery, the union keep-list
 resolution, the gate set, the version-guarded sandbox-fenced write, the observation-policy refresh,
 the detached contained continuation, the State builder, the wiring helpers, the effects, the
-Schemastery schema factory and the probe-once seam accessor).
+Schemastery schema factory, and the probe-once seam accessor).
 
 One service, nineteen methods (the direct-govern pair `RegisterGovern` + `Govern` and the
-`GovernSteps` registry among them) - the hooks bring their own metal; the factory pours the mold.
+`GovernSteps` registry among them) - the hooks bring their own metal, and the factory pours the
+mold.
 
 The factory is the hub of the eleven-package DSH family: the three governance hooks inject the
 service, and the six normalize flavors consume `State`/`Append` and the `Schema` helper.
 
-The lowest layer of that machinery - the ledger `Append`, the shared journal and the activation-line
-composer - lives in the family's base package `ets-base-dsh`, which the factory re-exposes as part
-of the one service.
+The lowest layer of that machinery - the ledger `Append`, the shared journal, and the
+activation-line composer - lives in the family's base package `ets-base-dsh`, which the factory
+re-exposes as part of the one service.
 
 ## The surfaces
 
@@ -61,16 +62,17 @@ The shared block the helper composes, in helper order:
 | `policyFile`       | string   | `""`                                                                          | Global policy file; empty means discovery (`Function/Resolve`).            |
 | `exclude`          | string[] | `["node_modules", ".git", ".dsh", ".pnpm", ".store", "DeepSeek Harness.app"]` | Excluded path segments (anywhere mode, exclusion-first).                   |
 
-With `shared: false` the block is only `log` and `logFile` (the two universal volatile cells); a
+With `shared: false` the block is only `log` and `logFile` (the two universal volatile cells), and a
 module supplies its own `logFile` default through its own fields.
 
 The State builder also accepts the optional `journalDomain` - Function/Open's P5 storage-domain
 name.
 
 It defaults to the shared `package_governance` inside Function/Open, so a consumer that does not set
-it keeps its behavior; a module may pass its own distinct name (lowercase letters, digits and
-underscores - the storage unit-name rule) to keep its journal open out of the shared domain's
-single-open contention.
+it keeps its behavior.
+
+A module may pass its own distinct name (lowercase letters, digits, and underscores - the storage
+unit-name rule) to keep its journal open out of the shared domain's single-open contention.
 
 The Journal routing is unchanged: post-open records still flow through the first bound shared sink
 when one is bound.
@@ -86,7 +88,7 @@ storage journal open failed: <cause>
 
 The factory registers no activation line and owns no consumer strings - every string a hook logs is
 composed and logged by the hook, through the factory's `Append` (the first two lines above are the
-wrappers `Append` puts around the consumer's message; the last two are the factory's own
+wrappers `Append` puts around the consumer's message, and the last two are the factory's own
 parameterized lines).
 
 ## The build and the tests

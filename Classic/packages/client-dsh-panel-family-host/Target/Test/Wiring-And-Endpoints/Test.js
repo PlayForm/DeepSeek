@@ -18,7 +18,7 @@ const runTest = async () => {
       assert.equal(Plugin.name, "client-dsh-panel-family-host");
       assert.equal(typeof Plugin.apply, "function");
       assert.ok(Plugin.Config);
-      assert.deepEqual(Plugin.inject, []);
+      assert.deepEqual(Plugin.inject, ["webServer"]);
     });
     Check(Count, "L1: apply returns NOTHING and the service is provided", () => {
       assert.equal(Run.Returned, void 0);

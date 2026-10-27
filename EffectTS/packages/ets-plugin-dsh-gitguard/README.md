@@ -10,29 +10,36 @@ terminal/exec tool surface (Documentation/Plugins/ORCHESTRATION-PLUGINS.md secti
 
 ## The role
 
-- **The dirty-tree discipline, enforced**: the git checks-only law lives in the skills (the WHY) -
-  but skills are behavioral and CAN slip.
+1. **The Dirty-Tree Discipline, Enforced.**
+
+    The git checks-only law lives in the skills (the WHY), but skills are behavioral and CAN slip.
 
     The plugin carries the CANNOT.
 
-- **The guarded operations**: it intercepts terminal commands before execution and denies ANY git
-  mutation pattern - `git add`, `commit`, `reset`, `push`, `tag`, `rm`, `checkout`, `branch`,
-  `merge`, `stash`, `clean`, `rebase`, `revert`, `cherry-pick`, `mv`, `apply`, `am`, `bisect`, `gc`,
-  `prune`, `worktree`, `submodule`, `notes`.
-- **The allowed operations**: the read-only checks - `git status`, `log`, `diff`, `show`,
-  `rev-parse`, `ls-files`, `fetch`.
+2. **The Guarded Operations.**
 
-- **The refusal lines**: denials surface ONCE as the pre-execute refusal (the tool result), never
-  punish - the agent's correct path is simply the only executable one.
+    It intercepts terminal commands before execution and denies ANY git mutation pattern -
+    `git  add`, `commit`, `reset`, `push`, `tag`, `rm`, `checkout`, `branch`, `merge`, `stash`,
+    `clean`, `rebase`, `revert`, `cherry-pick`, `mv`, `apply`, `am`, `bisect`, `gc`, `prune`,
+    `worktree`, `submodule`, `notes`.
+
+3. **The Allowed Operations.**
+
+    The read-only checks: `git status`, `log`, `diff`, `show`, `rev-parse`, `ls-files`, `fetch`.
+
+4. **The Refusal Lines.**
+
+    Denials surface ONCE as the pre-execute refusal (the tool result) and never punish - the agent's
+    correct path is simply the only executable one.
 
     Every denied attempt is ledgered for the user's audit.
 
 ## The anatomy
 
-- `Source/Library.ts` - the loader contract (`name`, `apply`, `Config`, `inject`; `apply` returns
-  nothing).
+- `Source/Library.ts` - the loader contract (`name`, `apply`, `Config`, `inject`, and `apply`
+  returns nothing).
 - `Source/Function/` - one definition per file: the entry (`Apply`), the intercept (`Guard`), the
-  classifier (`Decide`), the subcommand extractor (`Subcommand`), the compound splitter
+  classifier (`Decide`), the subcommand extractor (`Subcommand`), and the compound splitter
   (`Segments`).
 - `Source/Interface/` - the types (`State`, `Config`, `Decision`, `Factory`).
 - `Source/Variable/Config.ts` - the Schemastery schema (every knob a volatile cell).
@@ -42,8 +49,9 @@ terminal/exec tool surface (Documentation/Plugins/ORCHESTRATION-PLUGINS.md secti
 ## The posture
 
 The plugin ships DISABLED (the IDLE-forever posture): it never appears in the profile's bundles and
-enables only by an explicit ACTIVATE; a cold mount logs `disabled (enabled=false)` and wires
-nothing.
+enables only by an explicit ACTIVATE.
+
+A cold mount logs `disabled (enabled=false)` and wires nothing.
 
 ## The policy block (D6)
 
@@ -57,9 +65,9 @@ block), mapped to `State.Verdicts` (`Allow` is already the git allow-list):
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The guard is read-only - it classifies and ledgers, never writes, commits or spawns - so its own
-action classes are `read` and `record` (automatic); the write/commit/spawn verdicts are declared for
-uniformity and stay the shipped `approve`.
+The guard is read-only - it classifies and ledgers, never writes, commits, or spawns - so its own
+action classes are `read` and `record` (automatic), and the write/commit/spawn verdicts are declared
+for uniformity and stay the shipped `approve`.
 
 The block is one volatile object (a policy flip is hot-editable), and a resolved pack's `policy`
 section overrides the defaults per action (the wiring is the next refinement).

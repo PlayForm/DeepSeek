@@ -10,19 +10,19 @@ layer.
 
 One agent-chosen file per call: the target's content is read, the family's SIX transforms (the
 core's Dashes/Quotes/Ellipsis/Spaces/Invisible/Fullwidth tables through the shared
-Replace/ReplaceMap replacers, the same chain the raw-write `normalize: true` applies) are applied
-with a per-character count, and only when N > 0 is the rewritten content written back through the
-factory's ONE shared write executor (resolve-side read, `fs/write-intent` waterfall, standing
-sandbox policy, `writeText`, the root-context `fs/observed` present emit).
+Replace/ReplaceMap replacers, the same chain that the raw-write `normalize: true` applies) are
+applied with a per-character count, and only when N > 0 is the rewritten content written back
+through the factory's ONE shared write executor (resolve-side read, `fs/write-intent` waterfall,
+standing sandbox policy, `writeText`, the root-context `fs/observed` present emit).
 
 N = 0 writes NOTHING - the no-op no-write rule.
 
-The rewrite is explicit, visible (a diff card showing the before/after) and opt-in by construction:
+The rewrite is explicit, visible (a diff card showing the before/after), and opt-in by construction:
 the family's first LISTENER-LESS flavor (no `llm/stream`, no `fs/observed` - the background-rewrite
 posture of the design report is deliberately deferred, because it would break the edit tool's
 `old_string` contract).
 
-The lowest plumbing layer - the ledger `Append`, the shared journal and the activation-line
+The lowest plumbing layer - the ledger `Append`, the shared journal, and the activation-line
 composer - lives in the family's base package `ets-base-dsh`, reached through the factory.
 
 ## The surfaces
@@ -67,8 +67,8 @@ plugin-dsh-normalize-file: command "normalize-overpass" registration skipped (th
 
 Written through the factory's `Append` (the durable file line is `[<ISO>] <message>`).
 
-The activation line is written by `apply()`; the count line follows only a successful N > 0 write -
-a no-op writes no line, and a failed read or an aborted call writes none either.
+The activation line is written by `apply()`, and the count line follows only a successful N > 0
+write - a no-op writes no line, and a failed read or an aborted call writes none either.
 
 Each N > 0 write also journals one `normalized` record into the shared `package_governance` v2
 domain.
@@ -88,5 +88,5 @@ domain.
 
 ## The plan
 
-This package ships no `SCHEME.md` (it is not in the package.json `exports` map and not on disk); the
-reusable family scheme lives in the sibling packages' `SCHEME.md` files.
+This package ships no `SCHEME.md` (it is not in the package.json `exports` map and not on disk), and
+the reusable family scheme lives in the sibling packages' `SCHEME.md` files.

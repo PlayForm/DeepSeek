@@ -4,16 +4,16 @@ What this test verifies.
 
 ## Intent
 
-`Continue` - the detached, contained continuation chain a module's update
-engine runs after an fs/observed event: it re-reads the file, resolves the
-union keep-list, hands the text to the module's transform, registers the
-Inflight entry during the transform, writes through GuardedWrite against the
-FRESH stat version, logs the module's message through the ledger, re-emits
-fs/observed with the SAME actor, and always removes the Inflight entry. It is
-its own folder because it is the largest single behavior in the factory and
-every scenario here is async (the sequential fold). This is the source
-suite's section 12 (12a-12f) plus the string-message edge check, moved
-verbatim.
+`Continue` is the detached, contained continuation chain that a module's update engine runs after an
+fs/observed event: it re-reads the file, resolves the union keep-list, hands the text to the module's
+transform, registers the Inflight entry during the transform, writes through GuardedWrite against the
+FRESH stat version, logs the module's message through the ledger, re-emits fs/observed with the SAME
+actor, and always removes the Inflight entry.
+
+It is its own folder because it is the largest single behavior in the factory, and every scenario
+here is async (the sequential fold).
+
+This is the source suite's section 12 (12a-12f) plus the string-message edge check, moved verbatim.
 
 ## Scenario
 
@@ -57,18 +57,16 @@ verbatim.
 
 - A fresh OS tmpdir root with the `proj` directory, `registry.json`
   (`{"effectiveLatest":{"leftpad":"1.0.0"}}` - the chain source),
-  `global-policy.json` (`{"keep":["g","a"]}`), and `flavor-ledger.log`. NO
-  pin-policy.json anywhere (the source suite unlinks both before this
-  section so they stay out of the module's keep-list).
-- The mini module: the `miniTransform` closure over the mutable `CURRENT`
-  binding (verbatim from the source suite, the `->` inside the message
-  template is U+2192 at runtime), plus one fresh Harness fake ctx per
-  scenario (`files` fixtures, and the overriding `stat` for the raced 12f)
-  and a fresh stC/stN/stZ/stU/stT/stK/stRace/stM State with `lastTarget`
-  attached.
-- The `writes`/`stats`/`emitted`/`loggerLines` captures come from each
-  scenario's own fake ctx, so `writes.at(-1)` etc. observe the scenario's
-  own call.
+  `global-policy.json` (`{"keep":["g","a"]}`), and `flavor-ledger.log`.
+
+    NO pin-policy.json anywhere (the source suite unlinks both before this section so they stay out
+    of the module's keep-list).
+- The mini module: the `miniTransform` closure over the mutable `CURRENT` binding (verbatim from the
+  source suite, the `->` inside the message template is U+2192 at runtime), plus one fresh Harness
+  fake ctx per scenario (`files` fixtures, and the overriding `stat` for the raced 12f) and a fresh
+  stC/stN/stZ/stU/stT/stK/stRace/stM State with `lastTarget` attached.
+- The `writes`/`stats`/`emitted`/`loggerLines` captures come from each scenario's own fake ctx, so
+  `writes.at(-1)` etc. observe the scenario's own call.
 
 ## Expected ledger strings (byte-exact)
 
@@ -86,10 +84,10 @@ verbatim.
 
 ## Edge cases
 
-- Null transform, count 0, unreadable content, a throwing transform - all
-  contained, all with Inflight cleaned.
-- The unraced intent equals the observed version BY DESIGN; the raced intent
-  is the fresh stat version, never the stale observed one.
+- Null transform, count 0, unreadable content, and a throwing transform are all contained, all with
+  Inflight cleaned.
+- The unraced intent equals the observed version BY DESIGN, and the raced intent is the fresh stat
+  version, never the stale observed one.
 
 ## Expected count
 

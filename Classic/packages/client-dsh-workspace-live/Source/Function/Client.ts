@@ -85,7 +85,7 @@ function LiveTab(props: {
 		};
 	}, []);
 	switch (true) {
-		case props.slot !== undefined:
+		case props.slot != null:
 			return props.slot;
 		default:
 			return createElement(View, {

@@ -4,16 +4,17 @@ What this test verifies.
 
 ## Intent
 
-The write path: `Gate` (the full g1 matrix deciding whether an fs/observed
-event may proceed), `GuardedWrite` (the ONE shared write executor - the
-replaceIfVersion intent, the two sandbox postures with the P4 fence, the
-fresh-version Stash pre-registration, the abort-signal forwarding) and
-`Refresh` (the same-actor fs/observed re-emit with best-effort containment).
-They are their own folder because the gate's reason strings and the write's
-intent/fence shapes are contracts every module's update engine rides on, and
-the negative controls (the six failing gate reasons, the bus-down refresh)
-are as important as the pass. This is the source suite's sections 7, 10 and
-11 plus the empty-tool-list and abort-signal edge checks, moved verbatim.
+The write path: `Gate` (the full g1 matrix that decides whether an fs/observed event may proceed),
+`GuardedWrite` (the ONE shared write executor - the replaceIfVersion intent, the two sandbox
+postures with the P4 fence, the fresh-version Stash pre-registration, and the abort-signal
+forwarding), and `Refresh` (the same-actor fs/observed re-emit with best-effort containment).
+
+They are their own folder because the gate's reason strings and the write's intent/fence shapes are
+contracts that every module's update engine rides on, and the negative controls (the six failing
+gate reasons, the bus-down refresh) are as important as the pass.
+
+This is the source suite's sections 7, 10, and 11 plus the empty-tool-list and abort-signal edge
+checks, moved verbatim.
 
 ## Scenario
 
@@ -46,30 +47,28 @@ are as important as the pass. This is the source suite's sections 7, 10 and
 
 ## Fixtures
 
-- The Harness fake ctx + the REAL factory instance; the source suite's st1
-  State rebuilt verbatim (exclude ["x"], the volatile mutationTools cell); a
-  `proj` directory in the temp root; the Gate fixtures (`target`, `actor`,
-  `present`, `base`) verbatim; `st3` with the `zwrite` tool and `stE` with an
-  empty tool list.
-- The `writes` capture from the fake fs records every writeText call (path,
-  content, intent, signal, fence); `emitted` records the re-emit; the
-  sandbox posture is flipped by mutating `ctx.fs.sandboxMode` exactly like
-  the source suite does.
+- The Harness fake ctx + the REAL factory instance; the source suite's st1 State rebuilt verbatim
+  (exclude ["x"], the volatile mutationTools cell); a `proj` directory in the temp root; the Gate
+  fixtures (`target`, `actor`, `present`, `base`) verbatim; `st3` with the `zwrite` tool and `stE`
+  with an empty tool list.
+- The `writes` capture from the fake fs records every writeText call (path, content, intent, signal,
+  fence); `emitted` records the re-emit; the sandbox posture is flipped by mutating
+  `ctx.fs.sandboxMode` exactly as the source suite does.
 
 ## Expected ledger strings (byte-exact)
 
-None - this folder is fs/emit-bound; it writes `{}` payloads through the
-capturing fs and asserts no ledger lines. (The `pass` reason strings -
-"target", "actor", "kind", "idempotent", "basename", "excluded", "govern" -
-are the contract; they are asserted verbatim above.)
+None - this folder is fs/emit-bound; it writes `{}` payloads through the capturing fs and asserts no
+ledger lines.
+
+(The `pass` reason strings - "target", "actor", "kind", "idempotent", "basename", "excluded",
+"govern" - are the contract, and they are asserted verbatim above.)
 
 ## Edge cases
 
 - The six failing gate reasons, each asserted with its exact string.
-- The govern marker skips REGARDLESS of its value (false included) - the
-  direct path is the governance channel.
-- The bare backend produces no fence; the confined backend fences at the
-  file's own directory.
+- The govern marker skips REGARDLESS of its value (false included) - the direct path is the
+  governance channel.
+- The bare backend produces no fence, and the confined backend fences at the file's own directory.
 - The Stash pre-registration and the abort-signal forwarding.
 
 ## Expected count

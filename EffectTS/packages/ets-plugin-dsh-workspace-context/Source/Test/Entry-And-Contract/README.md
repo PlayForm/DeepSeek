@@ -1,29 +1,30 @@
 # Entry-And-Contract - the loader contract and the mount
 
-The object-form loader contract and the IDLE-forever posture: the default
-object, the cold mount, the fail-loud validation, the enabled mount.
+The suite covers the object-form loader contract and the IDLE-forever posture: the default object, the cold mount, the fail-loud validation, and the enabled mount.
 
 ## Scenarios
 
-- E1: the default object carries name (`plugin-dsh-workspace-context`),
-  `apply`, `Config` and `inject` (`["pluginFactory"]`).
-- E2: the cold mount (enabled=false): apply returns nothing, the service
-  is still provided (name `workspaceContext`), the byte-exact
-  `context: disabled (enabled=false)` line (logger AND durable `[ISO]`
-  file), no tool, no root seam, no effect.
-- E3: the fail-loud validation - five invalid configs throw at load (four
-  with the byte-exact `context: ` messages; a non-array `lenses` is caught
-  earlier by the schema itself: `$.lenses expected array but got nope`).
-- E4: the enabled mount - the byte-exact
-  `context: activated (budget=2000/4000, lenses=3)` line, the
-  `workspace_context` tool registered, the volatile cells arriving as
-  `{ get }` cells and unwrapping onto the state.
+- **E1.**
+
+    The default object carries name (`plugin-dsh-workspace-context`), `apply`, `Config`, and `inject` (`["pluginFactory"]`).
+
+- **E2.**
+
+    The cold mount (enabled=false) returns nothing from apply, still provides the service (name `workspaceContext`), and writes the byte-exact `context: disabled (enabled=false)` line to the logger AND the durable `[ISO]` file.
+
+    The mount has no tool, no root seam, and no effect.
+
+- **E3.**
+
+    The fail-loud validation throws at load for five invalid configs, four of them with the byte-exact `context: ` messages, and the schema itself catches a non-array `lenses` earlier: `$.lenses expected array but got nope`.
+
+- **E4.**
+
+    The enabled mount writes the byte-exact `context: activated (budget=2000/4000, lenses=3)` line, registers the `workspace_context` tool, and the volatile cells arrive as `{ get }` cells and unwrap onto the state.
 
 ## Fixtures
 
-The shared Harness (fake ctx with a DISTINCT root object, the real factory
-instance, the real built Target, the tools facility capture, the fs purity
-capture, a fresh temporary directory per folder process).
+The shared Harness supplies a fake ctx with a DISTINCT root object, the real factory instance, the real built Target, the tools facility capture, the fs purity capture, and a fresh temporary directory for each folder process.
 
 ## Expected ledger strings (byte-exact, `context: ` prefix)
 

@@ -5,46 +5,58 @@
 
 ## The role
 
-The workspace-evidence service: the DeepSeek Harness's validation objects + the evidence
-dependencies + the four kinds of truth + the stale-validation invalidation (the family map's
-EVIDENCE role, `Documentation/Plans/Workspace-Family/EVIDENCE.md`).
+The workspace-evidence service supplies the validation objects of the DeepSeek Harness, the evidence
+dependencies, the four kinds of truth, and the stale-validation invalidation (the EVIDENCE role of
+the family map, `Documentation/Plans/Workspace-Family/EVIDENCE.md`).
 
-Phase 4 of the invisible flow (with semantics + approve): the evidence service validates the
-workspace's claims - the qualified freshness, the OutcomeEvidence, the justified assertions.
+Phase 4 of the invisible flow (with semantics + approve): the evidence service validates the claims
+of the workspace - the qualified freshness, the OutcomeEvidence, and the justified assertions.
 
-- **The service**: `ctx.workspaceEvidence` - `validate(id, kind, subject, dependencies, verdict?)`
-  records one validation object, `check(id)` reads its status, `invalidate(key)` is the explicit
-  Acar seam, `list(status?)` and `statistics()` report.
+- **The service.**
 
-- **The four kinds of truth** (the Representation-First research): reality, observation,
-  representation, intent - different truth claims, different proof.
+    The service is `ctx.workspaceEvidence`: `validate(id, kind, subject, dependencies, verdict?)`
+    records one validation object, `check(id)` reads its status, `invalidate(key)` is the explicit
+    Acar seam, and `list(status?)` and `statistics()` report.
+
+- **The four kinds of truth** (the Representation-First research).
+
+    The four kinds are reality, observation, representation, and intent - different truth claims
+    with different proof.
 
     The service owns the taxonomy and validates the kind at the call boundary.
 
-- **The evidence dependencies**: every validation object declares its dependencies; when a
-  dependency changes (an fs/observed event through the factory's Wire, or an explicit
-  `invalidate(key)`), every dependent object goes stale in one pass (the incremental-computation
-  principle - the Acar seam).
+- **The evidence dependencies.**
 
-    A stale object is never guessed back to fresh: a revalidation is a new validation object,
-    superseding the old.
+    Every validation object declares its dependencies, and when a dependency changes (an fs/observed
+    event through the Wire of the factory, or an explicit `invalidate(key)`), every dependent object
+    goes stale in one pass (the incremental-computation principle - the Acar seam).
 
-    A **repeat event** - the same path carrying the same version within the coalescing window - runs
-    no pass and records no line: that file state's invalidation already ran (the version token
-    identifies the state).
+    The service never guesses a stale object back to fresh: a revalidation is a new validation
+    object that supersedes the old.
 
-    The guard (`Function/Duplicate`, the monitor's clock pattern - no timer, 2 s, the `State.Now`
-    test seam overrides it) is on the listener only; the explicit `invalidate(key)` calls are never
-    coalesced.
+    A **repeat event** (the same path carrying the same version within the coalescing window) runs
+    no pass and records no line, because the invalidation of that file state already ran (the
+    version token identifies the state).
 
-- **The honesty rule**: the service records the caller's verdict; it never invents one.
+    The guard (`Function/Duplicate`, the clock pattern of the monitor - no timer, 2 s, the
+    `State.Now` test seam overrides it) is on the listener only, and the explicit `invalidate(key)`
+    calls are never coalesced.
 
-    The sequence is the service's own monotonic counter - never a wall clock.
+- **The honesty rule.**
 
-- **The idle-forever posture**: ships disabled (`enabled: false`), never appears in the profile's
-  bundles, enables only by an explicit ACTIVATE.
-- **The ledger**: its own strings, prefix `evidence:` (module-owned, byte-stable), one log per
-  module (default `~/.dsh/playform/ets-plugin-dsh-workspace-evidence.log`).
+    The service records the verdict of the caller and never invents one.
+
+    The sequence is the monotonic counter of the service, never a wall clock.
+
+- **The idle-forever posture.**
+
+    The plugin ships disabled (`enabled: false`), never appears in the bundles of the profile, and
+    enables only by an explicit ACTIVATE.
+
+- **The ledger.**
+
+    The ledger uses its own strings with the prefix `evidence:` (module-owned, byte-stable), one log
+    per module (default `~/.dsh/playform/ets-plugin-dsh-workspace-evidence.log`).
 
 ## The ledger
 
@@ -59,7 +71,7 @@ A coalesced repeat event (the repeat-event guard) records nothing and adds no li
 ### The policy block (D6)
 
 The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
-block), mapped to `State.Allow`:
+block) and maps it to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -68,11 +80,15 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-This package's actions are read-only and record, all AUTOMATIC; it has NO gated action (no file
-write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
+The actions of this package are read-only and record, all AUTOMATIC.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
-pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
+It has NO gated action (no file write, no batch commit, no spawn), so the block documents the
+posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount.
+
+The `policy` section of a resolved pack overrides the defaults for each action (the wiring is the
+next refinement).
 
 The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
@@ -80,8 +96,10 @@ The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 - [Workspace-Family/EVIDENCE](../../../Documentation/Plans/Workspace-Family/EVIDENCE.md) - the
   evidence role.
-- The idle-forever posture: ships disabled (`enabled: false`), never appears in the profile's
-  bundles, enables only by an explicit ACTIVATE.
+- **The idle-forever posture.**
+
+    The plugin ships disabled (`enabled: false`), never appears in the bundles of the profile, and
+    enables only by an explicit ACTIVATE.
 
 ## License
 

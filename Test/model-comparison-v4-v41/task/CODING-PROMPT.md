@@ -1,16 +1,16 @@
 # CODING-PROMPT.md - The General Coding Prompt (Template)
 
-This is the verbatim launch prompt for every subagent run in the v4-vs-v4.1
-comparison. The orchestrator substitutes the two placeholders and pastes the
-whole thing into the subagent launch:
+This is the verbatim launch prompt for every subagent run in the v4-vs-v4.1 comparison.
 
-- `{{RESULTS_DIR}}` -> the run's results folder (absolute path), e.g.
+The orchestrator substitutes the two placeholders and pastes the whole thing into the subagent launch:
+
+- `{{RESULTS_DIR}}` -> the results folder of the run (absolute path), e.g.
   `.../model-comparison-v4-v41/round-1-v4-orchestrator/results/subagent-v4`
 - `{{TASK_SPEC_PATH}}` -> the canonical spec file (absolute path):
   `.../model-comparison-v4-v41/task/TASK.md`
 
-The prompt is deliberately model-agnostic: the routing (provider, model,
-effort) is decided by the orchestrator per RUN.md, never inside the prompt.
+The prompt is deliberately model-agnostic, because the routing (provider, model, effort) is decided by
+the orchestrator per RUN.md and never inside the prompt.
 
 ---
 

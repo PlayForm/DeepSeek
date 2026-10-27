@@ -1,18 +1,20 @@
 # Policy-Defaults
 
-The policy block (D6) on the batch edit tool: the defaults, the State
-mapping, and the apply gate's two ways - the shipped `approve` refusal and the
-`auto` apply.
+The policy block (D6) on the batch edit tool: the defaults, the State mapping, and the apply gate's
+two ways - the shipped `approve` refusal and the `auto` apply.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The batch edit tool's gated action
-is the apply (the write of every planned transition): the shared block's
-`write` verdict is the OUTER gate in front of the commit. This folder proves
-the block is real config, not dead text - an `approve` verdict refuses the
-apply BEFORE any plan or write with the documented line, and an `auto` verdict
-proceeds through the factory's write executor - and it pins the shipped
-posture: a default mount can never write.
+D6 makes automation a per-plugin allowlist.
+
+The batch edit tool's gated action is the apply (the write of every planned transition), and the
+shared block's `write` verdict is the OUTER gate in front of the commit.
+
+This folder proves the block is real config, not dead text: an `approve` verdict refuses the apply
+BEFORE any plan or write with the documented line, and an `auto` verdict proceeds through the
+factory's write executor.
+
+It also pins the shipped posture: a default mount can never write.
 
 ## Scenario
 
@@ -42,11 +44,11 @@ posture: a default mount can never write.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` apply, the real
-factory instance, the fake ctx with the content-backed fake fs (the write and
-read recorders), and the `Setup` mount (enabled + the ledger). The default
-mount keeps the shipped `write: approve`; a scenario opens the gate
-explicitly.
+The shared Harness: the real built `Target/Library.js` apply, the real factory instance, the fake
+ctx with the content-backed fake fs (the write and read recorders), and the `Setup` mount (enabled +
+the ledger).
+
+The default mount keeps the shipped `write: approve`, and a scenario opens the gate explicitly.
 
 ## Expected ledger strings (byte-exact, `plugin-dsh-batch-edit: ` prefix)
 

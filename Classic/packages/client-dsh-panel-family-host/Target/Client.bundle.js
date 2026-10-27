@@ -35,6 +35,64 @@ __export(Client_exports, {
 });
 module.exports = __toCommonJS(Client_exports);
 
+// Source/Function/BrowserStream.ts
+var BOUND = 200;
+function BrowserStream() {
+  switch (true) {
+    case typeof EventSource === "undefined":
+      return {
+        live: false,
+        tail: () => [],
+        on: () => () => void 0,
+        subscribe: () => () => void 0,
+        dispose: () => void 0
+      };
+    default: {
+      const Source = new EventSource("/api/playform-family/trace");
+      const Tail = [];
+      const Subscribers = /* @__PURE__ */ new Set();
+      const KindListeners = /* @__PURE__ */ new Map();
+      const Publish = (Envelope) => {
+        Tail.unshift(Envelope);
+        while (Tail.length > BOUND) Tail.pop();
+        for (const Subscriber of Subscribers) Subscriber();
+        for (const Listener of KindListeners.get(Envelope.kind) ?? []) Listener(Envelope);
+      };
+      Source.onmessage = (Event) => {
+        try {
+          const Envelope = JSON.parse(Event.data);
+          switch (true) {
+            case typeof Envelope?.kind !== "string":
+              break;
+            default:
+              Publish(Envelope);
+          }
+        } catch {
+        }
+      };
+      return {
+        live: true,
+        tail: () => [...Tail],
+        on(kind, listener) {
+          const Listeners = KindListeners.get(kind) ?? /* @__PURE__ */ new Set();
+          Listeners.add(listener);
+          KindListeners.set(kind, Listeners);
+          return () => Listeners.delete(listener);
+        },
+        subscribe(listener) {
+          Subscribers.add(listener);
+          return () => Subscribers.delete(listener);
+        },
+        dispose() {
+          Source.close();
+          Subscribers.clear();
+          KindListeners.clear();
+        }
+      };
+    }
+  }
+}
+
 // Source/Function/Client.ts
 var IsRecord = (Value) => typeof Value === "object" && Value !== null && !Array.isArray(Value);
 var Accepted = (Result) => Result === true || IsRecord(Result) && Result["ok"] === true;
@@ -68,6 +126,27 @@ function Client(ctx) {
   ctx.inject(["remote.playformFamilyPanel"], (Ready) => {
     Provide(Ready);
   });
+  ctx.effect(() => {
+    let Provided = false;
+    switch (true) {
+      case ctx.get("trace") === void 0:
+        ctx.provide("trace", BrowserStream());
+        Provided = true;
+        break;
+      default:
+        break;
+    }
+    return () => {
+      const Stream = ctx.get("trace");
+      switch (true) {
+        case (Provided && typeof Stream?.dispose === "function"):
+          Stream.dispose();
+          break;
+        default:
+          break;
+      }
+    };
+  }, "panel family: browser trace stream");
 }
 
 // Source/Client.ts

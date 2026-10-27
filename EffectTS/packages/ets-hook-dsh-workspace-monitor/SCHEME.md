@@ -15,8 +15,8 @@ The configuration schema (all knobs volatile; hot edits commit without remountin
 | `checksets`       | dict name -> spec | the shipped catalog (tsc, format, cargo, governance) |
 | `policy`          | `Allowlist`       | the D6 defaults (see below)                          |
 
-One check-set spec: `{ glob, command?, fast, intervalMs? }` - the classification only; `command` is
-never executed by this hook.
+One check-set spec is `{ glob, command?, fast, intervalMs? }`, which is the classification only;
+this hook never executes `command`.
 
 Ledger lines (module-owned, byte-stable, prefixed `monitor: `):
 
@@ -32,7 +32,8 @@ sweep <path> (<age>ms)
 failed <path> (<reason>)
 ```
 
-State probe: `ctx.__hookDshWorkspaceMonitorState` - `{ Watch, Events, Sweeps, LastSweepAt, ... }`.
+State probe: `ctx.__hookDshWorkspaceMonitorState`, holding
+`{ Watch, Events, Sweeps, LastSweepAt, ... }`.
 
 ## The policy block (D6)
 
@@ -45,9 +46,11 @@ The config carries the shared per-action allowlist (`policy: Policy()`), mapped 
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
-commit, no spawn), so the block documents the posture and refuses nothing. The block is one volatile
-object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
-overrides the defaults per action (the wiring is the next refinement).
+The actions of this package are record, all AUTOMATIC; it has NO gated action (no file write, no
+batch commit, no spawn), so the block documents the posture and refuses nothing.
 
-No new ledger line: the package has no gated action.
+The block is one volatile object, so a policy flip is hot-editable without a remount, and the
+`policy` section of a resolved pack overrides the defaults per action (the wiring is the next
+refinement).
+
+No new ledger line exists, because the package has no gated action.

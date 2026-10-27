@@ -5,18 +5,18 @@
 
 ## The role
 
-The workspace-reflect service for the
+The workspace-reflect service serves the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
 release).
 
-The **later stage** service-provider role: the code-block reflective ops - the AST-aware
+It fills the **later stage** service-provider role: the code-block reflective ops, the AST-aware
 rename/connect/replace from a **single call** each, over the managed representations.
 
 ## The one-call semantics
 
-Each operation bundles the whole transformation - one call instead of a tool choreography.
+Each operation bundles the whole transformation, so one call replaces a tool choreography.
 
-The spans are 1-based and inclusive (the graph's span grammar).
+The spans are 1-based and inclusive (the span grammar of the graph).
 
 | Op        | Request                                               | Behavior                                                                                                                                                                                                       |
 | --------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -26,66 +26,84 @@ The spans are 1-based and inclusive (the graph's span grammar).
 
 ## The AST-aware targeting
 
-A `replace` may name the workspace graph's frozen node id (`node: "Block:<path>:<line>:body"`) and
-the node's content-derived fingerprint.
+A `replace` may name the frozen node id of the workspace graph (`node: "Block:<path>:<line>:body"`)
+and the content-derived fingerprint of the node.
 
-The graph (`ctx.workspaceGraph`, probed never injected) supplies the span, the fingerprint is
-verified against the current text with the graph's own formula, and only that span is rewritten - a
-mismatch refuses with `rejected <path> (fingerprint mismatch)` and writes nothing.
+The graph (`ctx.workspaceGraph`, probed and never injected) supplies the span, and the plugin
+verifies the fingerprint against the current text with the formula of the graph and rewrites only
+that span.
 
-With the graph absent the caller's explicit span is the fallback and the fingerprint is still
-verified.
+A mismatch refuses with `rejected <path> (fingerprint mismatch)` and writes nothing.
 
-A `rename` asks the workspace-semantics service (`ctx.workspaceSemantics`, probed never injected)
-for the scope-resolved plan - the service may deepen it through the harness LSP seam - and applies
-the plan's edits inside the operation's scope; the textual whole-word engine is the fallback when
-the service is absent, refuses, or has no edit in scope.
+With the graph absent the explicit span of the caller is the fallback, and the plugin still verifies
+the fingerprint.
+
+A `rename` asks the workspace-semantics service (`ctx.workspaceSemantics`, probed and never
+injected) for the scope-resolved plan, which the service may deepen through the harness LSP seam,
+and it applies the edits of the plan inside the scope of the operation.
+
+The textual whole-word engine is the fallback when the service is absent, refuses, or has no edit in
+scope.
 
 ## The reply is part of the type
 
-Every operation returns the CommitReply union (Interface/Reply.ts), never a boolean or a thrown
+Every operation returns the CommitReply union (Interface/Reply.ts) and never a boolean or a thrown
 error:
 
 ```ts
 status: "applied" | "conflict" | "denied" | "rejected" | "recovery-required" | "outcome-unknown";
 ```
 
-- `applied` - written; the new version travels with the reply.
-- `conflict` - the version fence failed; the file moved under the operation, nothing overwritten.
-- `denied` - the plugin is disabled (the cold mount answers denied).
-- `rejected` - refused before any write (malformed request, oversized file or span, no matches,
-  already connected, a stale fingerprint, an absent graph).
-- `outcome-unknown` - the write failed in a way that is neither a version conflict nor a confirmed
-  failure.
+- **`applied`.**
+
+    The operation is written, and the new version travels with the reply.
+
+- **`conflict`.**
+
+    The version fence failed, so the file moved under the operation and nothing was overwritten.
+
+- **`denied`.**
+
+    The plugin is disabled, so the cold mount answers denied.
+
+- **`rejected`.**
+
+    The plugin refused before any write: a malformed request, an oversized file or span, no matches,
+    an already connected path, a stale fingerprint, or an absent graph.
+
+- **`outcome-unknown`.**
+
+    The write failed in a way that is neither a version conflict nor a confirmed failure.
 
 ## The publish path and the carry
 
-Writes go only through the factory's guarded write (the `replaceIfVersion` fence, the P4 sandbox
-policy, the stash pre-registration) - never a raw fs write.
+Writes go only through the guarded write of the factory (the `replaceIfVersion` fence, the P4
+sandbox policy, the stash pre-registration), never through a raw fs write.
 
-After an applied operation the optional `workspaceGraph` sibling service is probed (never injected)
-and asked to re-index the changed file - the reflective carry; an absent graph is an honest skip.
+After an applied operation the plugin probes the optional `workspaceGraph` sibling service (never
+injected) and asks it to re-index the changed file (the reflective carry), and an absent graph is an
+honest skip.
 
 ## Service surface (`ctx.workspaceReflect`)
 
-`rename(op)`, `connect(op)`, `replace(op)`, and `act(op)` (the dispatch by kind) - all async, all
-returning the reply union.
+The surface is `rename(op)`, `connect(op)`, `replace(op)`, and `act(op)` (the dispatch by kind), all
+async and all returning the reply union.
 
 ## The configuration
 
-Every knob is volatile (hot-editable without remounting): `logFile`
+Every knob is volatile and hot-editable without remounting: `logFile`
 (`~/.dsh/playform/ets-plugin-dsh-workspace-reflect.log`), `log`, `enabled` (false - the IDLE-forever
-posture), `propagate` (`block` | `file`, default `block`), `maxFileBytes` (1000000), `maxBlockLines`
-(5000).
+posture), `propagate` (`block` | `file`, default `block`), `maxFileBytes` (1000000), and
+`maxBlockLines` (5000).
 
 The plugin ships disabled and enables only by an explicit ACTIVATE.
 
-No new knob: the graph and the semantics service are optional siblings.
+The plugin adds no new knob, because the graph and the semantics service are optional siblings.
 
 ### The policy block (D6) - the write gate
 
 The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
-block), mapped to `State.Allow`:
+block) and maps it to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -94,22 +112,24 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The reflective WRITES are the gated actions: `replace` and `rename` consult the `write` verdict
-before the file is read or written.
+The reflective WRITES are the gated actions, so `replace` and `rename` consult the `write` verdict
+before the plugin reads or writes the file.
 
 An `approve` verdict (the shipped default) refuses the operation with the byte-exact
 `replace held <path> (policy write=approve)` or `rename held <path> (policy write=approve)` line,
 the reply is `rejected` with `the policy holds the replace|rename (write=approve)`, and **zero
 writes** reach the filesystem.
 
-The fingerprint targeting is unchanged: the policy is the OUTER check, the fingerprint verification
-the inner one.
+The fingerprint targeting is unchanged: the policy is the OUTER check, and the fingerprint
+verification is the inner one.
 
 Flip `policy.write` to `auto` (or let a resolved pack override it) to let the next operation reach
 the write path.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
-pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
+The block is one volatile object, so a policy flip is hot-editable without a remount.
+
+The `policy` section of a resolved pack overrides the defaults for each action (the wiring is the
+next refinement).
 
 ## The ledger
 

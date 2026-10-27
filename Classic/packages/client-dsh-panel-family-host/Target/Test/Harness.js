@@ -52,6 +52,14 @@ const Make = (Raw, Services = {}) => {
     provide: (Name, Value) => {
       Provided[Name] = Value ?? true;
       return () => true;
+    },
+    // The fiber seam: the real cordis context owns the disposer of whatever
+    // the callback returns; the fixture runs it once and hands back a
+    // no-op teardown (the suite asserts the route registration, not the
+    // fiber).
+    effect: (Callback) => {
+      Callback();
+      return () => true;
     }
   };
   const Run = {
@@ -136,6 +144,13 @@ const MakeClient = (Options = {}) => {
     },
     inject: (Deps, Callback) => {
       Injects.push({ deps: Deps, callback: Callback });
+      return () => true;
+    },
+    // The client fiber seam: the real client context owns the disposer of
+    // whatever the callback returns; the fixture runs it once and hands
+    // back a no-op teardown.
+    effect: (Callback) => {
+      Callback();
       return () => true;
     }
   };

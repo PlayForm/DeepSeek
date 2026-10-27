@@ -1,6 +1,6 @@
 # SCHEME - @playform/plugin-dsh-workspace-context
 
-The configuration schema (all knobs volatile; hot edits commit without remounting):
+The configuration schema has every knob volatile, and hot edits commit without remounting:
 
 | Field           | Type      | Default                                                |
 | --------------- | --------- | ------------------------------------------------------ |
@@ -27,31 +27,45 @@ stale <id> (caller held <version>)
 focus <caller> -> <id>
 ```
 
-Service: `ctx.workspaceContext` - `packet(query)`, `lenses()`, `focusOf(caller)`, `statistics()`.
-Tool: `workspace_context` (read-only).
+The service is `ctx.workspaceContext` with `packet(query)`, `lenses()`, `focusOf(caller)`, and
+`statistics()`.
+
+The tool is `workspace_context`, and it is read-only.
 
 ## The packet memo and the trace invalidation
 
-`packet(query)` is served through a bounded memo (`Function/Cached`, 256 entries) keyed by
-`Function/CacheKey`: the query's five fields plus the service's own knobs (a volatile flip changes
-the packet, so the memo never survives it). A hit returns the SAME packet object - the graph reads,
-the ranking and the budget clamp are skipped, and no second `packet` ledger line is written. The
-graph's `indexRevision` is deliberately NOT part of the key: the memo is stable-until-event.
+The service serves `packet(query)` through a bounded memo (`Function/Cached`, 256 entries) keyed by
+`Function/CacheKey`: the five fields of the query plus the knobs of the service, because a volatile
+flip changes the packet and the memo never survives it.
 
-The invalidation is the trace's (D5): the graph emits `graph/invalidated` when a record it held is
-replaced, removed or observed absent, and `Source/Trace/Adapter.ts` (wired from apply only after the
-enabled gate, disposed with the fiber) consumes it through `Source/Trace/Invalidate.ts`, which
-clears the memo wholesale (a packet may cite any path in FOCUS/NEIGHBORS/EVIDENCE). The caller-focus
-tracker (`State.Focus`) is NOT touched: the STALE contract is about the version the caller held,
-which an invalidation does not change. The invalidation is silent - no new ledger line (the module's
-strings stay byte-exact); the trace ring is the evidence. The bus (`ctx.trace`, provided by
-`@playform/ets-plugin-dsh-factory`, which the service already injects) is optional: without it the
-memo simply lives until the process ends.
+A hit returns the SAME packet object, so the graph reads, the ranking, and the budget clamp are
+skipped, and no second `packet` ledger line is written.
+
+The `indexRevision` of the graph is deliberately NOT part of the key: the memo is
+stable-until-event.
+
+The trace owns the invalidation (D5): the graph emits `graph/invalidated` when a record that it held
+is replaced, removed, or observed absent.
+
+`Source/Trace/Adapter.ts` (wired from apply only after the enabled gate, disposed with the fiber)
+consumes the event through `Source/Trace/Invalidate.ts`, which clears the memo wholesale, because a
+packet may cite any path in FOCUS/NEIGHBORS/EVIDENCE.
+
+The caller-focus tracker (`State.Focus`) is NOT touched: the STALE contract is about the version the
+caller held, which an invalidation does not change.
+
+The invalidation is silent, with no new ledger line (the strings of the module stay byte-exact), and
+the trace ring is the evidence.
+
+The bus (`ctx.trace`, provided by `@playform/ets-plugin-dsh-factory`, which the service already
+injects) is optional: without it the memo simply lives until the process ends.
 
 ## Packet bands
 
-The packet is built from `ctx.workspaceGraph` (the real W1 service when it is mounted; an absent
-sibling degrades to the honest `workspace graph unavailable` OPEN line). The bands:
+The plugin builds the packet from `ctx.workspaceGraph`, the real W1 service when it is mounted, and
+an absent sibling degrades to the honest `workspace graph unavailable` OPEN line.
+
+The bands are:
 
 | Band      | Content                                                                                                       |
 | --------- | ------------------------------------------------------------------------------------------------------------- |
@@ -64,16 +78,18 @@ sibling degrades to the honest `workspace graph unavailable` OPEN line). The ban
 | OPEN      | the honest gaps (absent graph, unknown lens, neighbor truncation), else `(none)`                              |
 | STALE     | only when the caller's held version differs from the focus version                                            |
 
-The MAP band groups by the file's parent directory: the real graph stores resolved absolute paths,
-whose first segment is empty, so the older first-segment form collapsed every real workspace into
-one nameless band (the `Real-Graph-Packet` folder pins the parent-directory form).
+The MAP band groups by the parent directory of the file: the real graph stores resolved absolute
+paths, whose first segment is empty.
+
+The older first-segment form collapsed every real workspace into one nameless band, and the
+`Real-Graph-Packet` folder pins the parent-directory form.
 
 State probe: `ctx.__pluginDshWorkspaceContextState`.
 
 ## The policy block (D6)
 
 The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
-block), mapped to `State.Allow`:
+block) and maps it to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -82,9 +98,14 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The context service's actions are read-only, all **AUTOMATIC**; it has **no gated action** (no file
-write, no batch commit, no spawn), so the block documents the posture and refuses nothing. The block
-is one volatile object, so a policy flip is hot-editable without a remount; a resolved pack's
-`policy` section overrides the defaults per action (the wiring is the next refinement).
+The actions of the context service are read-only, all **AUTOMATIC**.
 
-No new ledger line: the package has no gated action.
+It has **no gated action** (no file write, no batch commit, no spawn), so the block documents the
+posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount.
+
+The `policy` section of a resolved pack overrides the defaults for each action (the wiring is the
+next refinement).
+
+The package adds no ledger line, because it has no gated action.

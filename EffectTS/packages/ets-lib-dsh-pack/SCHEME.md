@@ -1,9 +1,12 @@
 # SCHEME - @playform/ets-lib-dsh-pack
 
 The workspace-pack library of the suggester family: the pack schema, the layered resolution, the
-strict YAML-subset parser, the merge rules, the workspace locator and the built-in pack for this
-monorepo. **Not a plugin bundle** - no cordis patch, no loader contract, no ledger strings of its
-own. The consumers own their ledger strings; this library only reads data and resolves roots.
+strict YAML-subset parser, the merge rules, the workspace locator, and the built-in pack for this
+monorepo.
+
+**Not a plugin bundle** - no cordis patch, no loader contract, no ledger strings of its own.
+
+The consumers own their ledger strings, and this library only reads data and resolves roots.
 
 ## 1. The surface (named exports)
 
@@ -72,9 +75,11 @@ learning: # optional: the learning settings (a later lane consumes it)
 ```
 
 The `families` key is **domain-qualified**: `<domain>/<id>`, where the domain is the consumer
-(`doc`, `edit`, `search`, `convention`, `test`, `replay`). The family's `id` stays unqualified
-because it is the ledger's name. A bare key (no `/`) is kept but belongs to no domain, so no
-suggester selects it.
+(`doc`, `edit`, `search`, `convention`, `test`, `replay`).
+
+The family's `id` stays unqualified because it is the ledger's name.
+
+A bare key (no `/`) is kept but belongs to no domain, so no suggester selects it.
 
 ## 3. The resolution (D2)
 
@@ -82,8 +87,8 @@ suggester selects it.
 
 1. **The repo layer.**
 
-    The resolution reads the repo layer (`<root>/.dsh/pack.yml`, then `.yaml`, then `.json`) to
-    discover a declared `slug`; the user layer is keyed by it.
+    The resolution reads the repo layer (`<root>/.dsh/pack.yml`, then `.yaml`, then `.json`) to find
+    a declared `slug`, and the user layer is keyed by it.
 
 2. **The user layer.**
 
@@ -102,55 +107,80 @@ suggester selects it.
 
 5. **The merge order.**
 
-    The resolution merges the base packs first, then the user layer, then the repo layer - so the
-    repo overrides the user, and both override their bases.
+    The resolution merges the base packs first, then the user layer, then the repo layer, so the
+    repo overrides the user and both override their bases.
 
 6. **The normalization.**
 
-    The resolution normalizes the merged result once (section 2's defaults; a structurally invalid
-    pack throws).
+    The resolution normalizes the merged result once (section 2's defaults, and a structurally
+    invalid pack throws).
 
 `Load(Root, { home })` memoizes `Resolve` per `(home, root)` for the process: a pack edit lands on
 the next process by contract (a boot-time memo, not a watcher).
 
-`Families(Pack, Domain)` selects the keys prefixed `<domain>/`, sorts by `priority` (lower wins) and
-memoizes the list per pack object and domain.
+`Families(Pack, Domain)` selects the keys prefixed `<domain>/`, sorts by `priority` (lower wins),
+and memoizes the list per pack object and domain.
 
 ## 4. The merge rules
 
-- **families by id** (the qualified key): the override's DECLARED scalars replace (`priority`,
-  `threshold`, `note`, `id`); its `signals` array replaces; its `targets` merge **by path** - a
-  same-path target replaces the base target in place, a new path appends in override order;
-- **targets** are replaced wholesale (a target is one row, not a field-merged object);
-- **arrays replace** (`signature`, `familyGlobs`, `scope`, `excludes`, `languages`, `extends`);
-- **scalars replace** (`slug`, `maxFiles`, `propose`, `refine`, `window`);
-- **nested section objects** (`indexer`, `policy`, `learning`) merge key by key with the same rule;
-- an **absent field never overwrites** the base: the layers are merged raw, then normalized once.
+1. **Families by Id.**
+
+    The override's DECLARED scalars replace (`priority`, `threshold`, `note`, `id`), its `signals`
+    array replaces, and its `targets` merge **by path**: a same-path target replaces the base target
+    in place, and a new path appends in override order.
+
+2. **Targets.**
+
+    Targets are replaced wholesale (a target is one row, not a field-merged object).
+
+3. **Arrays.**
+
+    Arrays replace (`signature`, `familyGlobs`, `scope`, `excludes`, `languages`, `extends`).
+
+4. **Scalars.**
+
+    Scalars replace (`slug`, `maxFiles`, `propose`, `refine`, `window`).
+
+5. **Nested Sections.**
+
+    The nested section objects (`indexer`, `policy`, `learning`) merge key by key with the same
+    rule.
+
+6. **Absent Fields.**
+
+    An **absent field never overwrites** the base: the layers are merged raw, then normalized once.
 
 ## 5. The workspace gate
 
 `Locate(Path, Cwd, { home })` resolves the call path against the session cwd (when supplied, else
 `process.cwd()`), starts at the path's directory (or its nearest existing ancestor), and walks UP to
-the filesystem root. A directory is a CANDIDATE when it carries a repo layer, a user layer for its
-slug, or the default signature. For a candidate it loads the pack and checks the signature: at least
-ONE declared marker exists under the directory (the pack's `signature`, default
-`Documentation/ARCHIVE-STYLE.md`). The first match returns `{ root, pack }`; no match returns
-`undefined` - the suggester's `abstained foreign-workspace` silence.
+the filesystem root.
 
-A foreign workspace WITH a pack resolves (its pack declares its own signature); the same workspace
-WITHOUT the pack does not.
+A directory is a CANDIDATE when it carries a repo layer, a user layer for its slug, or the default
+signature.
+
+For a candidate it loads the pack and checks the signature: at least ONE declared marker exists
+under the directory (the pack's `signature`, default `Documentation/ARCHIVE-STYLE.md`).
+
+The first match returns `{ root, pack }`, and no match returns `undefined` - the suggester's
+`abstained foreign-workspace` silence.
+
+A foreign workspace WITH a pack resolves (its pack declares its own signature), and the same
+workspace WITHOUT the pack does not.
 
 ## 6. The parser subset
 
 Supported: block mappings; block sequences (`- value`, `- key: value` map items); plain,
-single-quoted (`''` escape) and double-quoted (JSON escapes) scalars; `true`/`false`; `null`/`~`;
+single-quoted (`''` escape), and double-quoted (JSON escapes) scalars; `true`/`false`; `null`/`~`;
 integers and decimals; flow sequences of scalars (`[a, b]`); the empty flow `[]` and `{}`; comments
 (`#` at the line start or after whitespace); blank lines; `---` / `...` document markers.
 
 Refused with a line-numbered error (never guessed): tabs, anchors (`&name`), aliases (`*name`), tags
 (`!tag`), block scalars (`|`, `>`), non-empty flow mappings (`{a: b}`), multi-document files,
 duplicate keys, bad indentation, an unterminated quote, and a sequence map item whose following keys
-are not aligned under the item's content. A `.json` pack bypasses the parser entirely.
+are not aligned under the item's content.
+
+A `.json` pack bypasses the parser entirely.
 
 ## 7. The built-in pack
 
@@ -166,19 +196,26 @@ packs:
 | `test`       | 2        | Suite, Counts                                                              |
 | `replay`     | 1        | Repeat                                                                     |
 
-`Builtin.slug` is `deepseek`; `Builtin.signature` is `["Documentation/ARCHIVE-STYLE.md"]`. The
-built-in pack carries no `indexer`, `policy` or `learning` section (those lanes land later).
+`Builtin.slug` is `deepseek`, and `Builtin.signature` is `["Documentation/ARCHIVE-STYLE.md"]`.
+
+The built-in pack carries no `indexer`, `policy`, or `learning` section (those lanes land later).
 
 ## 8. Config fields
 
-The library has **no Config schema** (it is not a plugin). The pack file IS the configuration; every
-field is listed in section 2 with its default. A consumer's own Config (the suggesters') is
-unchanged by this package - the pack is resolved per call, not configured.
+The library has **no Config schema** (it is not a plugin).
+
+The pack file IS the configuration, and every field is listed in section 2 with its default.
+
+A consumer's own Config (the suggesters') is unchanged by this package: the pack is resolved per
+call, not configured.
 
 ## 9. Ledger strings
 
-None. The library owns no ledger strings; the consumers keep their byte-exact lines. The new
-`Pack-Driven` smoke folder in each suggester asserts the existing
+None.
+
+The library owns no ledger strings, and the consumers keep their byte-exact lines.
+
+The new `Pack-Driven` smoke folder in each suggester asserts the existing
 `suggest`/`abstained foreign-workspace` lines against a temp pack.
 
 ## 10. The test folders

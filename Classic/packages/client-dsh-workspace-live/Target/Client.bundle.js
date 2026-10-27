@@ -287,7 +287,7 @@ function LiveTab(props) {
     };
   }, []);
   switch (true) {
-    case props.slot !== void 0:
+    case props.slot != null:
       return props.slot;
     default:
       return (0, import_react3.createElement)(View, {

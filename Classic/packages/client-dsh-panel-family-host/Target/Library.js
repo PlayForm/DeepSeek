@@ -1,1 +1,1 @@
-import p from"./Function/Apply.js";import e from"./Variable/Config.js";const r="client-dsh-panel-family-host",n=e,i=[];function a(t,o){p(t,o)}var m={name:r,apply:a,Config:n,inject:i};export{n as Config,a as apply,m as default,i as inject,r as name};
+import o from"./Function/Apply.js";import p from"./Variable/Config.js";const r="client-dsh-panel-family-host",n=p,i=["webServer"];function a(t,e){o(t,e)}var m={name:r,apply:a,Config:n,inject:i};export{n as Config,a as apply,m as default,i as inject,r as name};

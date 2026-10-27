@@ -5,14 +5,14 @@
 
 ## The role
 
-The workspace-authority service: the authority step of the workspace family's invisible flow -
-operate proposes → the govern gates → **the authority licenses** → the approve binds.
+The workspace-authority service supplies the authority step of the invisible flow of the workspace
+family: operate proposes → the govern gates → **the authority licenses** → the approve binds.
 
-The service keeps the **three separate authority records** (v4.1 section 3.9, correcting the
-corpus's own conflation) and owns the **eviction dispositions**.
+The service keeps the **three separate authority records** (v4.1 section 3.9, which corrects the
+conflation in the corpus) and owns the **eviction dispositions**.
 
 The plugin ships **disabled** (the idle-forever posture): the service registers and reads honestly,
-but grants, leases and evictions are refused with a byte-stable ledger line until enabled.
+but it refuses grants, leases, and evictions with a byte-stable ledger line until enabled.
 
 ## The three records (never one object)
 
@@ -22,20 +22,23 @@ but grants, leases and evictions are refused with a byte-stable ledger line unti
 | Lease      | for how long          | holder, resource, acquisition, expiry (lazy expiry sweep)                  |
 | Residency  | what stays in store   | resource, kind, **weight** (representation-only field), promoted flag      |
 
-The license/weight conflation is a logged pitfall: priority, retention and permission are never
-interchangeable - the capability carries no weight and the policy never reads the weight except to
-order candidates.
+The license/weight conflation is a logged pitfall: priority, retention, and permission are never
+interchangeable.
+
+The capability carries no weight, and the policy reads the weight only to order candidates.
 
 ## The eviction dispositions
 
-`keep` · `defer` · `evict` · `discard` · `promote` - decided by the policy table (rules per resource
-kind, with defaults, TTLs and the revocation timing); **the license decides, the weight only
-ranks**.
+The dispositions are `keep` · `defer` · `evict` · `discard` · `promote`, and the policy table
+decides them (rules per resource kind, with defaults, TTLs, and the revocation timing).
+
+**The license decides, and the weight only ranks.**
 
 Two shields force `keep`: an open non-expired lease, and an active capability (a revoked one shields
 only within the revocation grace).
 
-`evict` keeps the record in the graveyard (recoverable); `discard` removes it permanently.
+`evict` keeps the record in the graveyard, so the record stays recoverable, and `discard` removes it
+permanently.
 
 ## Service
 
@@ -64,7 +67,7 @@ only within the revocation grace).
 ### The policy block (D6) - the `automation` key
 
 The config carries the shared per-action allowlist (`automation: Policy()`, composed from the
-factory's block), mapped to `State.Allow`:
+factory's block) and maps it to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -73,15 +76,20 @@ factory's block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The key is `automation`, NOT `policy`: this package's `policy` is already the residency RULE TABLE
-above (`kind` -> `disposition`), a different contract - the `plugin-dsh-route` precedent, which
-keyed its D6 block `automation` for the same reason.
+The key is `automation`, NOT `policy`, because the `policy` of this package is already the residency
+RULE TABLE above (`kind` -> `disposition`), a different contract.
 
-This package's actions are read-only and record, all AUTOMATIC; it has NO gated action (no file
-write, no batch commit, no spawn), so the block documents the posture and refuses nothing.
+The `plugin-dsh-route` precedent keyed its D6 block `automation` for the same reason.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
-pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
+The actions of this package are read-only and record, all AUTOMATIC.
+
+It has NO gated action (no file write, no batch commit, no spawn), so the block documents the
+posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount.
+
+The `policy` section of a resolved pack overrides the defaults for each action (the wiring is the
+next refinement).
 
 The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
@@ -106,9 +114,11 @@ authority: evicted <resource> (<disposition>)
 
 - [Workspace-Family/AUTHORITY](../../../Documentation/Plans/Workspace-Family/AUTHORITY.md) - the
   authority step.
-- The plugin ships **disabled** (the idle-forever posture): the service registers and reads
-  honestly, but grants, leases and evictions are refused with a byte-stable ledger line until
-  enabled.
+- **The disabled posture.**
+
+    The plugin ships **disabled** (the idle-forever posture): the service registers and reads
+    honestly, but it refuses grants, leases, and evictions with a byte-stable ledger line until
+    enabled.
 
 ## License
 

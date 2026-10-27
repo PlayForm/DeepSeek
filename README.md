@@ -5,13 +5,14 @@
 [![packages](https://img.shields.io/static/v1?label=packages&message=54%20%2B%2048&color=white)](Classic/packages/)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](LICENSE)
 
-Tame the model's output and govern the project's files with one hundred and two TypeScript packages -
-54 Classic and 48 EffectTS.
+Tame the model's output and govern the project's files with one hundred and two TypeScript
+packages - 54 Classic and 48 EffectTS.
 
 The set holds the original 14 plugins (the factory, the core, the governance trio, the seven-member
-normalize family, the two guardians and the live block) plus the 36 plugins of the 2026-10-22 delivery
-(the workspace family, the suggesters, the orchestration set, the client panels) and their ETS twins,
-plus the completion-program libraries (lib-dsh-trace, lib-dsh-pack) and the comment filter.
+normalize family, the two guardians and the live block) plus the 36 plugins of the 2026-10-22
+delivery (the workspace family, the suggesters, the orchestration set, the client panels) and their
+ETS twins, plus the completion-program libraries (lib-dsh-trace, lib-dsh-pack) and the comment
+filter.
 
 All of it arrives in two implementations ([the Classic release][classic], [the Effect-TS
 release][ets]) under one ledger-string contract, with 511 smoke suites / 6,612 checks.
@@ -98,9 +99,9 @@ separate configuration UI exists.
     (`packages: [.]`), so an install inside a bundle under the workspace of the profile acts on the
     workspace root and does nothing to the bundle.
 
-    Remote routes enter the same list through `dsh plugin --profile <name> add <tarball>` for a built
-    bundle today, or through `pnpm add @playform/<pkg>` in the profile directory once the family
-    publishes to npm (the publishing is a later item).
+    Remote routes enter the same list through `dsh plugin --profile <name> add <tarball>` for a
+    built bundle today, or through `pnpm add @playform/<pkg>` in the profile directory once the
+    family publishes to npm (the publishing is a later item).
 
 2. **Add the patch entries** (the profile's
    [cordis.patch.yml](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/cordis.patch.yml)) -
@@ -167,8 +168,8 @@ returns Effect envelopes and not the classic dispatch envelope:
   builds on.
 
 The one-line roster lives in
-[Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md](Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md), and the
-per-plugin live test plans live in [Documentation/Testing/](Documentation/Testing/README.md).
+[Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md](Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md), and
+the per-plugin live test plans live in [Documentation/Testing/](Documentation/Testing/README.md).
 
 By area:
 
@@ -190,16 +191,17 @@ By area:
 
 Two quiet kinds of rot appear in every agent session:
 
-- **The model's typography.** Every streamed transcript accumulates the unicode that the model reaches
-  for: em and en dashes, curly quotes, the horizontal ellipsis, exotic spaces, zero-width characters,
-  fullwidth forms. Those characters survive into files, diffs, searches and terminals, where they break
-  byte-exact comparisons and look wrong everywhere else.
+- **The model's typography.** Every streamed transcript accumulates the unicode that the model
+  reaches for: em and en dashes, curly quotes, the horizontal ellipsis, exotic spaces, zero-width
+  characters, fullwidth forms. Those characters survive into files, diffs, searches and terminals,
+  where they break byte-exact comparisons and look wrong everywhere else.
 - **The project's manifests.** `package.json` chain pins point at resolutions that drifted out from
   under them, ranged dependencies resolve differently on every machine, and `Cargo.toml` entries
   accumulate versions that no one canonicalized.
 
 The DeepSeek Harness exposes the seams to fix both ([`fs/observed`][dsh-fs] for file events and the
-[`llm/stream`][dsh-llm] waterfall for model output) and ships no plugins that use them for this work.
+[`llm/stream`][dsh-llm] waterfall for model output) and ships no plugins that use them for this
+work.
 
 The family is those plugins.
 
@@ -216,18 +218,18 @@ Three seams, three behaviors, and one service underneath:
 ```
 
 - **[The stream gate](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source/Stream)** -
-  each normalize flavor hooks the [`llm/stream`][dsh-llm] waterfall (the interceptable wrapper around
-  every streaming model call) and rewrites its character family live in the transcript: the dash family
-  to `-`, the eight curly quote code points to their straight counterparts, the ellipsis to `...`, the
-  unicode space family to the plain space, the zero-width/invisible family removed, and the fullwidth
-  forms to their ASCII half-width counterparts. The dispatch machinery (`Chunk`/`Block`, the assembled
-  reasoning block, the tool-arguments gate) is shared from the core, and each flavor contributes one
-  table and one replacement.
-- **The observed-file seam** - the governance trio hooks [`fs/observed`][dsh-fs]: a governed write by a
-  mutation tool passes the gate set, then the pass runs as a detached, contained continuation (the
-  chain pass for the governor, the pin pass for the pinner, the TOML surgery for the cargo governor),
-  and the update stage dispatches on a cooldown with a circuit breaker. Every plugin writes its own
-  ledger (`~/.dsh/<identity>.log`) and journals to the shared `package_governance`
+  each normalize flavor hooks the [`llm/stream`][dsh-llm] waterfall (the interceptable wrapper
+  around every streaming model call) and rewrites its character family live in the transcript: the
+  dash family to `-`, the eight curly quote code points to their straight counterparts, the ellipsis
+  to `...`, the unicode space family to the plain space, the zero-width/invisible family removed,
+  and the fullwidth forms to their ASCII half-width counterparts. The dispatch machinery
+  (`Chunk`/`Block`, the assembled reasoning block, the tool-arguments gate) is shared from the core,
+  and each flavor contributes one table and one replacement.
+- **The observed-file seam** - the governance trio hooks [`fs/observed`][dsh-fs]: a governed write
+  by a mutation tool passes the gate set, then the pass runs as a detached, contained continuation
+  (the chain pass for the governor, the pin pass for the pinner, the TOML surgery for the cargo
+  governor), and the update stage dispatches on a cooldown with a circuit breaker. Every plugin
+  writes its own ledger (`~/.dsh/<identity>.log`) and journals to the shared `package_governance`
   [storage domain](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/storage/storage-domain).
 - **[The direct-govern registry][ours-govern]** - the per-call `govern` selection of the `raw-write`
   tool drives the same chain directly through [factory.Govern][ours-govern] ([the sequential
@@ -241,18 +243,18 @@ The original 14 plugins (plus `lib-dsh-core`) each read as an @-sentence:
 
 - **[plugin-dsh-factory][ours-plugin-dsh-factory]** (Plugin @ DSH @ Factory) - the first service of
   the family: loading it registers one class plugin (`static inject = ["fs"]`) that exposes
-  `ctx.pluginFactory` with nineteen callable methods covering everything the hooks used to duplicate -
-  the ledger (`Append`), the exclusion match (`Match`), the registry discovery (`Discover`/`Parse`),
-  the union keep-list (`ResolvePolicy`), the gate set (`Gate`),
+  `ctx.pluginFactory` with nineteen callable methods covering everything the hooks used to
+  duplicate - the ledger (`Append`), the exclusion match (`Match`), the registry discovery
+  (`Discover`/`Parse`), the union keep-list (`ResolvePolicy`), the gate set (`Gate`),
   [the shared write executor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/plugin-dsh-factory/Source/Function/Write.ts)
   (`Write`/`GuardedWrite`, the version-guarded fenced writes), the [fs/observed][dsh-fs] re-emit
   (`Refresh`), the detached contained continuation (`Continue`), the State builder, the fiber-owned
   wiring (`Wire`), the effect registrations (`Attach` - jobs, inflight, storage), the P5 journal
   (`Journal`), the schema factory (`Schema`), the probe-once seam (`Seam`), the Inflight key
-  (`UpdateKey`), and [the direct-govern registry][ours-govern] and entry
-  (`RegisterGovern`/`Govern`, the sequential fold).
-- **`lib-dsh-core`** (Lib @ DSH @ Core) - the pure library layer with zero runtime dependencies, not a
-  plugin: the dependency-section lists, the exclusion segments, the suppression-line composer, the
+  (`UpdateKey`), and [the direct-govern registry][ours-govern] and entry (`RegisterGovern`/`Govern`,
+  the sequential fold).
+- **`lib-dsh-core`** (Lib @ DSH @ Core) - the pure library layer with zero runtime dependencies, not
+  a plugin: the dependency-section lists, the exclusion segments, the suppression-line composer, the
   update-policy loader,
   [the refusal guard](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/lib-dsh-core/Source/Function/Refusal.ts),
   the update envelope, the activation-line composer, and the normalize/stream machinery (the six
@@ -261,18 +263,18 @@ The original 14 plugins (plus `lib-dsh-core`) each read as an @-sentence:
   (Hook @ DSH @ Governor @ Package) - the silent `package.json` governor: it hooks
   [`fs/observed`][dsh-fs], rewrites chain-governed pins (`^x`, `~x`, `workspace:*`) to the resolved
   versions of the effective registry, and runs the update stage (`ncu`, programmatic library or
-  external binary through [the subprocess seam][dsh-subprocess]) on a cooldown with a circuit breaker;
-  `strict` strips unknown dependencies, explicitly only and never as a default delete.
+  external binary through [the subprocess seam][dsh-subprocess]) on a cooldown with a circuit
+  breaker; `strict` strips unknown dependencies, explicitly only and never as a default delete.
 - **[hook-dsh-package-pinner](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source)**
   (Hook @ DSH @ Pinner @ Package) - the silent version pinner: it deterministically rewrites every
   ranged dependency version to its static version (`^0.3.4` -> `0.3.4`), protected by the
   [pin-policy.json](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-package-pinner/Source/Function/Transform.ts)
   keep-list, where the keep-list wins over pinning and never over the chain.
 - **[hook-dsh-cargo-governor](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-cargo-governor/Source)**
-  (Hook @ DSH @ Governor @ Cargo) - the Rust-sided flavor of the governor: surgical chain-pin rewrites
-  on the raw TOML lines (comments survive), full-version normalization (`1.0` -> `1.0.0`), and
-  `cargo upgrade` (cargo-edit) through [the subprocess seam][dsh-subprocess] as the only update path,
-  because Rust does not co-opt into the TypeScript ecosystem; `strict` removes the whole
+  (Hook @ DSH @ Governor @ Cargo) - the Rust-sided flavor of the governor: surgical chain-pin
+  rewrites on the raw TOML lines (comments survive), full-version normalization (`1.0` -> `1.0.0`),
+  and `cargo upgrade` (cargo-edit) through [the subprocess seam][dsh-subprocess] as the only update
+  path, because Rust does not co-opt into the TypeScript ecosystem; `strict` removes the whole
   `name = "..."` entry and never an inherited or path/git entry.
 - **[hook-dsh-normalize-dash](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-dash/Source)**
   (Hook @ DSH @ Normalize @ Dash) - the dash flavor: em and en dashes and their exotic relatives to
@@ -284,8 +286,8 @@ The original 14 plugins (plus `lib-dsh-core`) each read as an @-sentence:
   (Hook @ DSH @ Normalize @ Ellipsis) - the ellipsis flavor: the horizontal ellipsis (U+2026) to the
   plain three-dot sequence.
 - **[hook-dsh-normalize-spaces](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-spaces/Source)**
-  (Hook @ DSH @ Normalize @ Spaces) - the spaces flavor: the unicode space family (Zs minus the ASCII
-  space) to the plain space.
+  (Hook @ DSH @ Normalize @ Spaces) - the spaces flavor: the unicode space family (Zs minus the
+  ASCII space) to the plain space.
 - **[hook-dsh-normalize-invisible](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-normalize-invisible/Source)**
   (Hook @ DSH @ Normalize @ Invisible) - the invisible flavor: the zero-width/invisible character
   family (soft hyphen, zero-width spaces and joiners, bidi controls, BOM) removed.
@@ -297,13 +299,13 @@ The original 14 plugins (plus `lib-dsh-core`) each read as an @-sentence:
   pipeline that applies all six transforms to a file already on disk and writes only when something
   changed.
 - **[hook-dsh-ccr](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-ccr/Source)**
-  (Hook @ DSH @ CCR) - the compress-cache-retrieve guardian: oversized allow-listed tool results become
-  a one-line type-aware preview plus a retrieval marker, with the original bytes restored on demand by
-  the `ccr_retrieve` tool.
+  (Hook @ DSH @ CCR) - the compress-cache-retrieve guardian: oversized allow-listed tool results
+  become a one-line type-aware preview plus a retrieval marker, with the original bytes restored on
+  demand by the `ccr_retrieve` tool.
 - **[hook-dsh-tool-coach](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-tool-coach/Source)**
-  (Hook @ DSH @ Tool @ Coach) - the terminal-content coaching guardian: the four-tier ladder (ledger,
-  notice, persistent section, opt-in deny) over terminal calls, naming the correct dedicated tool with
-  its live registry description.
+  (Hook @ DSH @ Tool @ Coach) - the terminal-content coaching guardian: the four-tier ladder
+  (ledger, notice, persistent section, opt-in deny) over terminal calls, naming the correct
+  dedicated tool with its live registry description.
 - **[hook-dsh-live-containers](https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/hook-dsh-live-containers/Source)**
   (Hook @ DSH @ Live @ Containers) - the dynamic system-prompt blocks: one `live-containers` section
   whose labeled stanzas are recomputed at request time, shipped disabled and enabled only by an
@@ -355,14 +357,14 @@ plus four orchestration candidates have no twin, which gives 30 twins for the 36
 
 ### The factory and the ledger-string contract
 
-Every activation line, refusal line, chain-pass line and journal record is asserted byte-identically by
-the smokes.
+Every activation line, refusal line, chain-pass line and journal record is asserted byte-identically
+by the smokes.
 
 The strings are the contract: they must not change, and they are the same strings in both trees.
 
 One ledger per plugin lives at `~/.dsh/<identity>.log`, and the smokes load the real built
-`Target/Library.js` of each bundle and assert the full behavioral contract on top of the strings (the
-loader contract, the identity assertions, the effect wiring).
+`Target/Library.js` of each bundle and assert the full behavioral contract on top of the strings
+(the loader contract, the identity assertions, the effect wiring).
 
 ## Tools and configuration
 
@@ -377,8 +379,9 @@ Two tools ship with the family:
 
 ### Configuration
 
-Every plugin's config schema is built through the `Schema` factory of the factory: one shared volatile
-block (`log`, `logFile`, `updateCooldownMs`, `mutationTools`) plus the own fields of the module.
+Every plugin's config schema is built through the `Schema` factory of the factory: one shared
+volatile block (`log`, `logFile`, `updateCooldownMs`, `mutationTools`) plus the own fields of the
+module.
 
 The surface, grouped by plugin kind:
 
@@ -398,9 +401,9 @@ The surface, grouped by plugin kind:
 |                     | `toolResultsExempt`                      | volatile list of exec names that pass the tool-results arm by identity (`read`, `edit`, `raw-write`, `normalize-file`, `ccr_retrieve`, `subagent`, `ask_user_question`)                                                                                                                                         |
 | The file tool       | `normalize` (per call)                   | absent/false = verbatim, `true` = all six transforms, or the flavor-name array                                                                                                                                                                                                                                  |
 
-The defaults-off posture keeps `strict` off, `normalizeToolArguments` off, `raw-write` `normalize` off,
-and `scopes.toolInput` / `scopes.toolResults` / `scopes.batch` off, so the family changes nothing until
-it is told to.
+The defaults-off posture keeps `strict` off, `normalizeToolArguments` off, `raw-write` `normalize`
+off, and `scopes.toolInput` / `scopes.toolResults` / `scopes.batch` off, so the family changes
+nothing until it is told to.
 
 The escape hatches are the `exclude` fence, the keep-list sidecars, the raw-marker opt-out, and the
 `govern: false` selection.
@@ -426,11 +429,11 @@ remount and no new activation line:
 Repeat the block for the other flavors (or just the ones you want dark), because every scope is
 volatile and flipping it applies to the next dispatch.
 
-The overpass arms (both opt-in and off by default) normalize content at its natural boundaries without
-ever rewriting the durable transcript:
+The overpass arms (both opt-in and off by default) normalize content at its natural boundaries
+without ever rewriting the durable transcript:
 
-- `tools/post-execute` - the tool result is normalized before it re-enters the model and is appended to
-  the transcript going forward (text blocks only; the `read`/`edit`/`raw-write`/`normalize-file`/
+- `tools/post-execute` - the tool result is normalized before it re-enters the model and is appended
+  to the transcript going forward (text blocks only; the `read`/`edit`/`raw-write`/`normalize-file`/
   `ccr_retrieve`/`subagent`/`ask_user_question` exec names pass by identity via `toolResultsExempt`,
   and the `<<<CCR:` marker bytes make the arm order-safe against the ccr hook).
 - `agent/pre-step` - the incoming user-role batch is normalized before the model sees it, never the
@@ -458,13 +461,14 @@ The suites are the speed and coverage story:
 - **269 Classic / 242 EffectTS suites, 6,612 checks, all green.** The aggregate runner is
   `node Maintain/Run/Smokes/Index.mjs`, and the heaviest single original suite (cargo, 62 checks
   including the real TOML surgery and the subprocess-seam stubs) runs in ~0.6 s.
-- **Zero runtime framework dependencies in Classic** - the release tree runs on plain TypeScript, and
-  EffectTS adds the single `effect` 4.0.2 dependency.
-- **Deterministic builds** - ESBuild + `tsc` + `tsc-alias`, minified `Target/` with `.d.ts` twins, and
-  byte-identical ledger strings on every rebuild.
+- **Zero runtime framework dependencies in Classic** - the release tree runs on plain TypeScript,
+  and EffectTS adds the single `effect` 4.0.2 dependency.
+- **Deterministic builds** - ESBuild + `tsc` + `tsc-alias`, minified `Target/` with `.d.ts` twins,
+  and byte-identical ledger strings on every rebuild.
 
-One suite per test folder per tree runs with the aggregate `node Maintain/Run/Smokes/Index.mjs`, which
-also guards each folder's printed PASS count against its folder README (the vacuously-green guard):
+One suite per test folder per tree runs with the aggregate `node Maintain/Run/Smokes/Index.mjs`,
+which also guards each folder's printed PASS count against its folder README (the vacuously-green
+guard):
 
 | Measure                   | Value                                                                                  |
 | ------------------------- | -------------------------------------------------------------------------------------- |
@@ -514,19 +518,19 @@ The workflow, root-first - every step is a root `package.json` script:
 | `pnpm lychee`                                | `Maintain/Check/Lychee/Index.sh` - the three-pass link check composing `lychee-report.md`                       |
 | `pnpm format` / `format:check`               | `Maintain/Format/Index.sh` - line endings + Prettier (never the markdown - byte-integrity-protected)            |
 
-The regime: the smokes (and the site build) are the arbiter after every change, the ledger strings stay
-byte-identical at the same counts, the byte-scan stays clean (no NUL bytes in the tracked tree), and
-the tree is committed by the maintainer, never by tooling.
+The regime: the smokes (and the site build) are the arbiter after every change, the ledger strings
+stay byte-identical at the same counts, the byte-scan stays clean (no NUL bytes in the tracked
+tree), and the tree is committed by the maintainer, never by tooling.
 
 The hazards, documented:
 
 - ~~The duplicate-name relink.~~ Resolved by the namespace split (SPLICE-ETS.md): the two trees now
-  carry unique names (`@playform/dsh-*` vs `@playform/ets-*`), so no install can re-relink a consumer's
-  `@playform/*` links to the other tree. Re-run the smokes after every install anyway.
-- **The verifyCommand trap.** An update-policy `verifyCommand` fails on a vendored-fork workspace (no
-  registry to install from), and the ledger records it, which is the expected outcome.
-- **The smoke/live fidelity gap.** The smokes prove the mechanics, the live battery proves the wiring,
-  and the ledgers answer "did it activate".
+  carry unique names (`@playform/dsh-*` vs `@playform/ets-*`), so no install can re-relink a
+  consumer's `@playform/*` links to the other tree. Re-run the smokes after every install anyway.
+- **The verifyCommand trap.** An update-policy `verifyCommand` fails on a vendored-fork workspace
+  (no registry to install from), and the ledger records it, which is the expected outcome.
+- **The smoke/live fidelity gap.** The smokes prove the mechanics, the live battery proves the
+  wiring, and the ledgers answer "did it activate".
 
 ## Troubleshooting
 
@@ -537,10 +541,10 @@ The known gaps stay stated as they are, with the corrected claims kept and no ma
   sequential fold and the fresh-version writes make the order irrelevant, and each plugin's ledger
   answers for its own activation.
 - **The verifyCommand trap.** An update-policy `verifyCommand` can fail with a non-zero status: on a
-  vendored-fork workspace (the live battery of the family), `pnpm install` has no registry to install
-  from, and the ledger records the failure as the documented cordis registry trap, the expected
-  outcome and not a bug. Exit 127 (the runner unavailable) is non-fatal, while any other failure fails
-  the stage and counts toward the circuit breaker (`maxUpdateFailures`):
+  vendored-fork workspace (the live battery of the family), `pnpm install` has no registry to
+  install from, and the ledger records the failure as the documented cordis registry trap, the
+  expected outcome and not a bug. Exit 127 (the runner unavailable) is non-fatal, while any other
+  failure fails the stage and counts toward the circuit breaker (`maxUpdateFailures`):
 
     ```text
     update: running verifyCommand: pnpm install
@@ -550,25 +554,26 @@ The known gaps stay stated as they are, with the corrected claims kept and no ma
     ```
 
 - **The smoke/live fidelity gap.** The smokes prove the mechanics and the live battery proves the
-  wiring. Every real bug (the patch layers, the v2 journal open, the version guard) was found live and
-  not by the smokes, so both green does not prove the profile wiring; the ledgers do.
+  wiring. Every real bug (the patch layers, the v2 journal open, the version guard) was found live
+  and not by the smokes, so both green does not prove the profile wiring; the ledgers do.
 - **The fixture paths.** The `Test/` fixtures carry the neutralized display forms (`<repo-root>/`,
-  `$DSH_HOME/`), and the personal absolute paths exist only in the internal Boilerplate copies. Never
-  copy a live battery into the release archive as-is.
-- **The byte-integrity law.** The NUL-byte incident class: a write that emits bytes the format of the
-  file forbids (NUL bytes) corrupts the file, which is the URL-registry corruption lesson. Verbatim is
-  the default, the normalize family restores the integrity, and the byte-scan is the arbiter.
+  `$DSH_HOME/`), and the personal absolute paths exist only in the internal Boilerplate copies.
+  Never copy a live battery into the release archive as-is.
+- **The byte-integrity law.** The NUL-byte incident class: a write that emits bytes the format of
+  the file forbids (NUL bytes) corrupts the file, which is the URL-registry corruption lesson.
+  Verbatim is the default, the normalize family restores the integrity, and the byte-scan is the
+  arbiter.
 - **The timestamp confusion.** The ledger lines are ISO UTC, the storage records are epoch
   milliseconds, and the local display adds +03, so the "missing records" scares were filter mistakes
   and not lost data.
-- **The raw-write marker semantics.** An absent `govern` means no chain (the escape hatch), and the raw
-  marker (`__normalize: false`) passes a call through unnormalized. Markers are stripped before the
-  tool validates, because the harness tools reject unknown argument keys.
+- **The raw-write marker semantics.** An absent `govern` means no chain (the escape hatch), and the
+  raw marker (`__normalize: false`) passes a call through unnormalized. Markers are stripped before
+  the tool validates, because the harness tools reject unknown argument keys.
 
 ## Relationship to deepseek-ai/deepseek-harness
 
-The family extends the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH), the
-desktop agent platform published as the `@deepseek-ai` packages.
+The family extends the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH),
+the desktop agent platform published as the `@deepseek-ai` packages.
 
 Everything the family builds on is the public plugin API of the harness:
 
@@ -580,8 +585,8 @@ Everything the family builds on is the public plugin API of the harness:
 | [`@deepseek-ai/dsh-subprocess`][dsh-subprocess]                                                                    | [the subprocess seam][dsh-subprocess] - the `ncu` and `cargo upgrade` dispatches                        |
 | [`@deepseek-ai/dsh-sandbox`](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/sandbox/sandbox) | the sandbox policy - the fenced write postures                                                          |
 
-The harness ships the seams and no plugins that use them this way, so the family adds the normalization
-and the governance on top.
+The harness ships the seams and no plugins that use them this way, so the family adds the
+normalization and the governance on top.
 
 ## Contributing
 
@@ -592,8 +597,8 @@ and the governance on top.
 | Change behavior       | the smokes first - the counts (511 suites / 6,612 checks) and the ledger strings are the contract |
 | Understand the design | `Documentation/FRAMEWORK.md` and the skills under `Documentation/Skill/`                          |
 
-The regime: the smokes (and the site build) are the arbiter after every change, the ledger strings stay
-byte-identical, and the tree is committed by the maintainer, never by tooling.
+The regime: the smokes (and the site build) are the arbiter after every change, the ledger strings
+stay byte-identical, and the tree is committed by the maintainer, never by tooling.
 
 ## License
 

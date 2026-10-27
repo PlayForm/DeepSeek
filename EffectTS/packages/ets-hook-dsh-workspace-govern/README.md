@@ -5,14 +5,14 @@
 
 ## The role
 
-The workspace-govern hook: the governance gate of the workspace family's invisible flow - operate
-proposes → **the govern gates** → the authority licenses → the approve binds.
+The workspace-govern hook is the governance gate of the invisible flow of the workspace family:
+operate proposes → **the govern gates** → the authority licenses → the approve binds.
 
 On every gated `tools/pre-execute` call, and for every proposal handed to the `workspaceGovern`
 service, the hook runs the four **independent means-checks** on the ProposedChange before any
 AuthorizationDecision downstream.
 
-An intent must not authorize its own means: the gate checks the means; the intent is never the
+An intent must not authorize its own means: the gate checks the means, and the intent is never the
 permission.
 
 The plugin ships **disabled** (the idle-forever posture) and enables only by an explicit ACTIVATE.
@@ -34,16 +34,16 @@ An override list in the config replaces rows.
 
 ## The gate outcomes
 
-- **pass** - the downstream decision is returned unchanged (the checks saw no denial and no policy
-  rule forced otherwise).
-- **deny** - the waterfall returns `{ kind: "deny", reason: "govern: ..." }`: the proposals become
+- **pass.** The downstream decision is returned unchanged, because the checks saw no denial and no
+  policy rule forced otherwise.
+- **deny.** The waterfall returns `{ kind: "deny", reason: "govern: ..." }`, so the proposals become
   the effects ONLY through the gates.
-- **escalate** - the waterfall returns `{ kind: "ask", ... }`: the approval is the approve family's
-  step, not this one.
+- **escalate.** The waterfall returns `{ kind: "ask", ... }`, because the approval is the step of
+  the approve family, not this one.
 
-Recursion prevention: every proposal carries the operation identifier, the parent identifier and the
-event category; an operation identifier gated more than `loopBound` times is dropped with a ledger
-line.
+Recursion prevention: every proposal carries the operation identifier, the parent identifier, and
+the event category, and an operation identifier gated more than `loopBound` times is dropped with a
+ledger line.
 
 ## The configuration (all volatile)
 
@@ -62,11 +62,11 @@ line.
 
 ### The policy block (D6) - the `automation` key
 
-The config carries the shared per-action allowlist (`automation: Policy()`, composed from the
-factory's block), mapped to `State.Allow`.
+The config carries the shared per-action allowlist (`automation: Policy()`, composed from the block
+of the factory), mapped to `State.Allow`.
 
-The key is `automation`, **not** `policy`, because `policy` is already this hook's decision rule
-table (a different contract; the `plugin-dsh-route` precedent):
+The key is `automation`, **not** `policy`, because `policy` is already the decision rule table of
+this hook (a different contract, the `plugin-dsh-route` precedent):
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -75,21 +75,23 @@ table (a different contract; the `plugin-dsh-route` precedent):
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-This hook's action class is RECORD (it records a gate decision), and that class is **automatic**.
+The action class of this hook is RECORD (it records a gate decision), and that class is
+**automatic**.
 
-The hook has **NO gated action** - it never writes a file, commits a batch or spawns an agent - so
+The hook has **NO gated action** (it never writes a file, commits a batch, or spawns an agent), so
 the block documents the posture and refuses nothing.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
-pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
+The block is one volatile object, so a policy flip is hot-editable without a remount, and the
+`policy` section of a resolved pack overrides the defaults per action (the wiring is the next
+refinement).
 
 ## Service
 
 `ctx.workspaceGovern` (registered from apply):
 
-- `gate(proposal)` - run the four checks on one proposal record, get the gate decision.
-- `decisions(limit?)` - the decision ring, newest first.
-- `statistics()` - `{ decisions, sequence }`.
+- `gate(proposal)` runs the four checks on one proposal record and returns the gate decision.
+- `decisions(limit?)` returns the decision ring, newest first.
+- `statistics()` returns `{ decisions, sequence }`.
 
 ## The ledger (module-owned, byte-stable)
 

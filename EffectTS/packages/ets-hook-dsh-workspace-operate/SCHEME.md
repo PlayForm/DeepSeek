@@ -14,13 +14,18 @@
 
 ## The types
 
-- `Outcome` - `{ status: "proposed" \| "refused", proposal?, refusal? }`; exactly one of
-  proposal/refusal.
-- `Proposal` -
-  `{ id: "<kind>-<seq>", kind, status: "proposed" \| "withdrawn", path, version (the fence), sequence, kind-specific fields }`
-  (rename: `name`, `to`; connect: `from`, `target`, `edge`; replace: `span`, `content`).
-- `Refusal` - `{ kind, reason, detail }` with the frozen reason vocabulary in
-  `Source/Interface/Refusal.ts`.
+- **Outcome.**
+
+    `{ status: "proposed" | "refused", proposal?, refusal? }`, with exactly one of proposal/refusal.
+
+- **Proposal.**
+
+    `{ id: "<kind>-<seq>", kind, status: "proposed" | "withdrawn", path, version (the fence), sequence, kind-specific fields }`
+    (rename: `name`, `to`; connect: `from`, `target`, `edge`; replace: `span`, `content`).
+
+- **Refusal.**
+
+    `{ kind, reason, detail }`, with the frozen reason vocabulary in `Source/Interface/Refusal.ts`.
 
 ## The resolution rules (in evaluation order)
 
@@ -39,16 +44,16 @@
 
 4. **The missing version.**
 
-    `missing-version` is the fence: the caller's version, else the hook's own observed version for
-    the path; a version is never invented.
+    `missing-version` is the fence: the version of the caller, else the own observed version of the
+    hook for the path, and a version is never invented.
 
 5. **The stale version.**
 
-    `stale-version` is the fence against the hook's observed version and the file's stat.
+    `stale-version` is the fence against the observed version of the hook and the stat of the file.
 
 6. **The span beyond the file.**
 
-    `span-beyond-file` is the replace span against the file's real line count.
+    `span-beyond-file` is the replace span against the real line count of the file.
 
 7. **The full table.**
 
@@ -67,12 +72,12 @@
 | `logFile`      | string    | `~/.dsh/playform/ets-hook-dsh-workspace-operate.log` |
 | `policy`       | Allowlist | the D6 defaults (see below)                          |
 
-All volatile. Invalid config fails loud at load.
+All fields are volatile, and an invalid config fails loud at load.
 
 ## The policy block (D6)
 
-The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
-block), mapped to `State.Allow`:
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the block of
+the factory), mapped to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -81,13 +86,19 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The hook's action class is SUGGEST, which is **automatic**: it records a typed proposal and never
-applies it. The package has **NO gated action** (no file write, no batch commit, no spawn), so the
-block documents the posture and refuses nothing. The block is one volatile object, so a policy flip
-is hot-editable without a remount; a resolved pack's `policy` section overrides the defaults per
-action (the wiring is the next refinement). No new ledger line: the package has no gated action.
+The action class of the hook is SUGGEST, which is **automatic**: it records a typed proposal and
+never applies it.
+
+The package has **NO gated action** (no file write, no batch commit, no spawn), so the block
+documents the posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount, and the
+`policy` section of a resolved pack overrides the defaults per action (the wiring is the next
+refinement).
+
+No new ledger line exists, because the package has no gated action.
 
 ## Storage layout (domain `workspace_operate`, version 1, per-record)
 
-- `proposals` - one record per proposal, keyed by `id`.
-- `meta` - one record `__meta`: `{ sequence, refused }`.
+- `proposals` holds one record per proposal, keyed by `id`.
+- `meta` holds one record `__meta`: `{ sequence, refused }`.

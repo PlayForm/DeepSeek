@@ -14,10 +14,10 @@ The batch-state plugin: the cooperative batch's live state board
 
 ## 2. The loader contract
 
-- Object form: `name`, `apply`, `Config`, `inject`, the default object carries all four.
-- `inject: ["pluginFactory"]` - the factory provides the State builder (cell unwrap + shared
-  fields + the P10 volatile refresh) and the ledger.
-- `apply` returns NOTHING (a returned value silently kills event delivery); the state is exposed
+- Object form: `name`, `apply`, `Config`, `inject`, and the default object carries all four.
+- `inject: ["pluginFactory"]` - the factory provides the State builder (cell unwrap + shared fields
+    - the P10 volatile refresh) and the ledger.
+- `apply` returns NOTHING (a returned value silently kills event delivery), and the state is exposed
   through the `ctx.__pluginDshBatchstateState` attachment (the test probe).
 - The `batchstate` service is registered from apply (the Service base constructor calls
   `ctx.reflect.provide("batchstate", this)`), with the typed accessor and the typed
@@ -39,7 +39,9 @@ The batch-state plugin: the cooperative batch's live state board
 
 Fail-loud validation runs BEFORE the State build: `stateFile` non-empty, `domain` a lowercase unit
 name matching `/^[a-z][a-z0-9_]*$/`, `maxRecent` an integer >= 1, `maxProposals` an integer >= 1,
-`batch` non-empty - an invalid config throws at load, never silently defaults.
+`batch` non-empty.
+
+An invalid config throws at load, never silently defaults.
 
 ### 3.1 The policy block (D6)
 
@@ -53,11 +55,14 @@ it to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The board is a RECORDER/projection: it reads, records and suggests (all automatic) and never writes
-files, commits or spawns - those verdicts are declared for uniformity with the family's block and
-stay the shipped `approve`. A resolved pack's `policy` section overrides the defaults per action
-(the wiring is the next refinement; the type already exists in `@playform/ets-lib-dsh-pack`). The
-defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
+The board is a RECORDER/projection: it reads, records, and suggests (all automatic) and never writes
+files, commits, or spawns - those verdicts are declared for uniformity with the family's block and
+stay the shipped `approve`.
+
+A resolved pack's `policy` section overrides the defaults per action (the wiring is the next
+refinement; the type already exists in `@playform/ets-lib-dsh-pack`).
+
+The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 ## 4. The service API (`ctx.batchstate`)
 
@@ -95,7 +100,9 @@ The board registers on the harness agent-team inbox and projects every batch blo
 | `agent/inbox/inserted` (`packages/core/agent/src/runtime-types.ts:288`)                                | the live per-agent notification           |
 
 Both fire for one inserted message, so the listener de-duplicates on the message id (the live emit
-and the durable splice are one delivery). The block format is the cross-package contract:
+and the durable splice are one delivery).
+
+The block format is the cross-package contract:
 
 ```
 [BATCH PROPOSAL - <id>]
@@ -108,40 +115,56 @@ and the durable splice are one delivery). The block format is the cross-package 
 ```
 
 A proposal is spliced when its revision is newer than the held one
-(`proposal <id> skipped (revision not newer)` otherwise); a decision moves the proposal's status. A
-decision for a proposal the board does not hold is refused, never guessed. The proposal's `origin`
-is the DELIVERING session (the return address), not the payload's own origin field.
+(`proposal <id> skipped (revision not newer)` otherwise), and a decision moves the proposal's
+status.
+
+A decision for a proposal the board does not hold is refused, never guessed.
+
+The proposal's `origin` is the DELIVERING session (the return address), not the payload's own origin
+field.
 
 ## 5. The event
 
 `batch/state-change` - `{ batch, id, kind }` with
-`kind: "task" | "status" | "scope" | "queue" | "clear" | "proposal" | "decision" | "gate"`. Emitted
-AFTER the state is updated and persisted; the consumers are the splice trigger and any agent
-listening.
+`kind: "task" | "status" | "scope" | "queue" | "clear" | "proposal" | "decision" | "gate"`.
+
+It is emitted AFTER the state is updated and persisted, and the consumers are the splice trigger and
+any agent listening.
 
 ## 6. The stores (primary and fallback)
 
-The plugin owns TWO stores, one recovery. The **PRIMARY** store is the harness's `ctx.storage` KV
-domain - probed once at apply (`ctx.storage.domain`, else the provided `ctx.storageDomain`),
-declared as
+The plugin owns TWO stores, one recovery.
+
+The **PRIMARY** store is the harness's `ctx.storage` KV domain - probed once at apply
+(`ctx.storage.domain`, else the provided `ctx.storageDomain`), declared as
 `defineDomain({ name: <config domain>, version: 1, layout: "per-record", invalidRecords: "backup-and-skip", tables: { members, queue, proposals, gates } })`
-and closed by the plugin's own effect disposer. The domain declares NO `compatibleVersions`: the
-library rejects an entry that is not strictly below the declared version, so `[1]` against version 1
-throws at load. Every state change writes the FULL state into the four tables and RECONCILES each
-table first (a record the live state no longer holds is deleted, so a `clear` cannot resurrect a
-member on the next restart); the writes are serialized on the plugin's own chain, so the
-open/recovery always lands before the first write and the smokes await the chain without a sleep.
+and closed by the plugin's own effect disposer.
+
+The domain declares NO `compatibleVersions`: the library rejects an entry that is not strictly below
+the declared version, so `[1]` against version 1 throws at load.
+
+Every state change writes the FULL state into the four tables and RECONCILES each table first (a
+record the live state no longer holds is deleted, so a `clear` cannot resurrect a member on the next
+restart).
+
+The writes are serialized on the plugin's own chain, so the open/recovery always lands before the
+first write and the smokes await the chain without a sleep.
 
 The **FALLBACK** store is the well-known JSON file (default `~/.dsh/batch-state.json`), holding
-`{ members: Member[], queue: string[], proposals: Entry[], gates: Gate[] }`. It is written and read
-only when no storage facility is provided or the domain's open fails (the loud
-`storage open failed: <reason>` line, then the fallback recovers). Its write is SYNCHRONOUS - the
-file-only lane's behavior, unchanged.
+`{ members: Member[], queue: string[], proposals: Entry[], gates: Gate[] }`.
 
-On mount the recovery restores the members, the queue, the spliced proposals and the gates from
-whichever store is active (the shared `Function/Restore`); a member that recovered as `active` is
-honestly downgraded to `interrupted` (the owning process is gone after a restart). A missing or
-corrupt store starts the batch EMPTY - never guessed.
+It is written and read only when no storage facility is provided or the domain's open fails (the
+loud `storage open failed: <reason>` line, then the fallback recovers).
+
+Its write is SYNCHRONOUS - the file-only lane's behavior, unchanged.
+
+On mount the recovery restores the members, the queue, the spliced proposals, and the gates from
+whichever store is active (the shared `Function/Restore`).
+
+A member that recovered as `active` is honestly downgraded to `interrupted` (the owning process is
+gone after a restart).
+
+A missing or corrupt store starts the batch EMPTY - never guessed.
 
 The state file is the plugin's OWN store: plain fs read/write, not a governed file (the same
 documented exemption the ledger carries - `ctx.fs` has no append, and re-reading + rewriting the
@@ -174,43 +197,53 @@ gate <name>: <state> (owner <owner>)
 ```
 
 The `<id>` forms are emitted by the inbox splice (`Function/Inbox`) when a `[BATCH PROPOSAL - <id>]`
-/ `[BATCH DECISION - <id>]` marker carries an unparseable JSON body; `<id>` is the marker's trimmed
-id (empty only for a whitespace-only marker). The id-less `proposal rejected (malformed payload)`
-and `decision rejected (malformed payload)` forms are emitted by `Function/Propose` /
-`Function/Decide` when a parsed payload fails their validation.
+/ `[BATCH DECISION - <id>]` marker carries an unparseable JSON body, and `<id>` is the marker's
+trimmed id (empty only for a whitespace-only marker).
+
+The id-less `proposal rejected (malformed payload)` and `decision rejected (malformed payload)`
+forms are emitted by `Function/Propose` / `Function/Decide` when a parsed payload fails their
+validation.
 
 `storage open failed: <reason>` is the ONE line the storage migration adds (the family's P5 v2
 posture: a present facility whose open fails must be diagnosable; the reason is the library's own
-error message, e.g. `version-mismatch: stored 2, declared 1`). The `recovered (...)` line is shared
-by both stores, so it stays byte-exact.
+error message, e.g. `version-mismatch: stored 2, declared 1`).
+
+The `recovered (...)` line is shared by both stores, so it stays byte-exact.
 
 ## 8. The presentation (Context = Compile(State))
 
-Every block the agents receive is a COMPILED OUTPUT of the deterministic compiler
-(Function/Compile - pure functions over the state): the TOC, the scope view, the "you are never
-alone" block, the Gates block and the queue projection. The LLM's only role is to READ the output.
-The blocks are bounded (the compact TOC + the scope + the pending - never the histories). The
-presentation is READ-ONLY for the agents - the injected context is clearly delimited, never their
-own content.
+Every block the agents receive is a COMPILED OUTPUT of the deterministic compiler (Function/Compile
+
+- pure functions over the state): the TOC, the scope view, the "you are never alone" block, the
+  Gates block, and the queue projection.
+
+The LLM's only role is to READ the output.
+
+The blocks are bounded (the compact TOC + the scope + the pending - never the histories).
+
+The presentation is READ-ONLY for the agents - the injected context is clearly delimited, never
+their own content.
 
 The compiled block's line order is: header, `RUNNING`, `IDLE`, [`GATES`], [`QUEUE`], `YOUR SCOPE`,
-`PENDING`. The two bracketed lines render only when there is a truth to render:
+`PENDING`.
+
+The two bracketed lines render only when there is a truth to render:
 
 - `GATES: <name> <state>[, <name> <state> (owner <owner>)]` (sorted by name) when the board holds at
-  least one gate; the block omits the line otherwise (`getGates()`/`GATES: none` reads the empty
+  least one gate, and the block omits the line otherwise (`getGates()`/`GATES: none` reads the empty
   form directly);
 - the queue service's OWN compiled line, verbatim, when `ctx.dshQueue` is mounted (read-only - the
-  queue package is never modified); omitted otherwise (`getQueue()` returns `QUEUE: none`).
+  queue package is never modified), and omitted otherwise (`getQueue()` returns `QUEUE: none`).
 
 The conditional rendering is what keeps every pre-splice block byte-identical: with no gates and no
 queue service the compiled context is exactly the PoC's.
 
 ## 9. The safe-composition notes
 
-- The member upsert (Function/Ensure) copies nothing the caller owns; the scope arrays are copied on
-  write (no aliasing).
+- The member upsert (Function/Ensure) copies nothing the caller owns, and the scope arrays are
+  copied on write (no aliasing).
 - The listener path has no awaits and never throws (the silence invariant): a dead consumer, a
-  malformed block and a broken queue service are all contained.
+  malformed block, and a broken queue service are all contained.
 - A contained exception logs to the logger and the ledger only.
 - The queue projection reads `ctx.dshQueue.Board()` at use time (the optional-service rule) and
   never writes into the queue package.

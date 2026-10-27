@@ -11,6 +11,7 @@
 // panel keeps its documented fallbacks (plain fields read-only, static
 // status).
 import type { Context } from "@deepseek-ai/cordis";
+import BrowserStream from "@Function/BrowserStream.js";
 import type HostTrace from "@Interface/Trace.js";
 
 type RemoteFace = {
@@ -66,4 +67,29 @@ export default function Client(ctx: Context): void {
 	ctx.inject(["remote.playformFamilyPanel"], (Ready) => {
 		Provide(Ready);
 	});
+	// The stream fallback: the generated remote namespace does not exist in
+	// this repo, so without it the browser half feeds the panel's `trace`
+	// service from the host's SSE route. The stream is created and disposed
+	// inside ctx.effect so a plugin unload closes the EventSource.
+	ctx.effect(() => {
+		let Provided = false;
+		switch (true) {
+			case ctx.get("trace") === undefined:
+				ctx.provide("trace", BrowserStream());
+				Provided = true;
+				break;
+			default:
+				break;
+		}
+		return () => {
+			const Stream = ctx.get("trace");
+			switch (true) {
+				case Provided && typeof Stream?.dispose === "function":
+					Stream.dispose();
+					break;
+				default:
+					break;
+			}
+		};
+	}, "panel family: browser trace stream");
 }

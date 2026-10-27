@@ -21,9 +21,11 @@ TRANSFERRED: <the path: child -> parent -> ... - the mechanical chain>
 READ-STATUS: unread / read-at <session>
 ```
 
-The block is transferred through the parentage MECHANICALLY - the block flows up the tree as text
-(the inbox splice machinery), one hop per session boundary, and it is ALWAYS modified in the parent
-sessions: the parents APPEND their deltas, they never edit or sanitize the honest content.
+The block is transferred through the parentage MECHANICALLY: the block flows up the tree as text
+(the inbox splice machinery), one hop per session boundary, and the parent sessions ALWAYS modify
+it.
+
+The parents APPEND their deltas, and they never edit or sanitize the honest content.
 
 The reading is the recipient's CHOICE - the transfer never forces the reading.
 
@@ -63,7 +65,7 @@ The session and the agent are the proposal's `origin`.
 ### The policy block (D6)
 
 The schema composes the factory's shared block (`policy: Policy()`) into the plugin's own
-`Schema.object` call; the validated shape is `State.Config.policy`:
+`Schema.object` call, and the validated shape is `State.Config.policy`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -72,9 +74,9 @@ The schema composes the factory's shared block (`policy: Policy()`) into the plu
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The member is a passive collector - `record` and `suggest` are automatic; the write/commit/spawn
+The member is a passive collector - `record` and `suggest` are automatic, and the write/commit/spawn
 verdicts are declared for uniformity and stay the shipped `approve` (the member never writes,
-commits or spawns).
+commits, or spawns).
 
 A resolved pack's `policy` section overrides the defaults per action (the wiring is the next
 refinement).
@@ -94,7 +96,7 @@ The defaults are smoke-arbitrated in `Source/Test/Policy-Defaults`.
 
 The honest content is NEVER sanitized or filtered.
 
-The parents append deltas, NEVER rewrite the agents' signals.
+The parents append deltas, and they NEVER rewrite the agents' signals.
 
 The read is ALWAYS the recipient's choice.
 

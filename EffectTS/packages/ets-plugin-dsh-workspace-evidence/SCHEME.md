@@ -1,6 +1,6 @@
 # SCHEME - @playform/plugin-dsh-workspace-evidence
 
-The config surface (all volatile; the schema defaults are the truth).
+The config surface is all volatile, and the schema defaults are the truth.
 
 | Field            | Type      | Default                                                 | Meaning                                                |
 | ---------------- | --------- | ------------------------------------------------------- | ------------------------------------------------------ |
@@ -15,7 +15,7 @@ The config surface (all volatile; the schema defaults are the truth).
 ## The policy block (D6)
 
 The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
-block), mapped to `State.Allow`:
+block) and maps it to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -24,12 +24,17 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-This package's actions are read-only and record, all AUTOMATIC; it has NO gated action (no file
-write, no batch commit, no spawn), so the block documents the posture and refuses nothing. The block
-is one volatile object, so a policy flip is hot-editable without a remount; a resolved pack's
-`policy` section overrides the defaults per action (the wiring is the next refinement).
+The actions of this package are read-only and record, all AUTOMATIC.
 
-No new ledger line: the package has no gated action.
+It has NO gated action (no file write, no batch commit, no spawn), so the block documents the
+posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount.
+
+The `policy` section of a resolved pack overrides the defaults for each action (the wiring is the
+next refinement).
+
+The package adds no ledger line, because it has no gated action.
 
 The service surface (`ctx.workspaceEvidence`):
 
@@ -41,14 +46,19 @@ The service surface (`ctx.workspaceEvidence`):
 | `list`       | `(status?) => Validation[]`                                                                                                  | The objects, oldest sequence first.                                                                         |
 | `statistics` | `() => { validations, fresh, stale, superseded, sequence }`                                                                  | The store counters.                                                                                         |
 
-The four truth kinds (`TruthKind`): `reality`, `observation`, `representation`, `intent`.
+The four truth kinds (`TruthKind`) are `reality`, `observation`, `representation`, and `intent`.
 
 ## The repeat-event guard (Function/Duplicate)
 
-The fs/observed listener coalesces repeat events: a repeat for the same path carrying the same
-version within a short window (2 s on the module's clock; the `State.Now` test seam overrides it; no
-real timer anywhere) runs no invalidation pass and records nothing - the version token identifies
-the file state, so that state's invalidation already ran, and any validation created since is fresh
-against the same state. A different version, or the same version after the window, runs the pass
-normally. The service's explicit `invalidate(key)` calls are never coalesced. No new ledger line: a
-coalesced repeat records nothing.
+The fs/observed listener coalesces repeat events: a repeat for the same path that carries the same
+version within a short window (2 s on the clock of the module; the `State.Now` test seam overrides
+it; no real timer anywhere) runs no invalidation pass and records nothing.
+
+The version token identifies the file state, so the invalidation of that state already ran, and any
+validation created since is fresh against the same state.
+
+A different version, or the same version after the window, runs the pass normally.
+
+The explicit `invalidate(key)` calls of the service are never coalesced.
+
+A coalesced repeat adds no ledger line and records nothing.

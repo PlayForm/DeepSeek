@@ -4,19 +4,22 @@ What this test verifies.
 
 ## Intent
 
-The ETS tree's #14 additive coverage: the `{ steps, parallel }` object form of
-the direct-govern selection, alongside the legacy boolean/string/array
-selections. The inner selection resolves exactly as before; `parallel: true`
-switches the fold's concurrency to unbounded (`Effect.all`, fiber scheduling).
-Sequential remains the DEFAULT (the live-verified race fix - unchanged), which
-its own group asserts on the same marker form WITHOUT the flag. The marker's
-documented SAFETY CONDITION is disjoint targets only - same-file steps race -
-so this folder exercises only DISJOINT-safe steps (each step's effects land on
-its OWN file) and asserts the marker semantics plus the containment
-invariants; the conflicting same-file race outcomes are deliberately NOT
-asserted. This folder is ETS-only: the Classic factory suite has no parallel
-section, so there is no Classic twin (the parity diff intentionally adds this
-folder).
+The ETS tree's #14 additive coverage: the `{ steps, parallel }` object form of the direct-govern
+selection, alongside the legacy boolean/string/array selections.
+
+The inner selection resolves exactly as before, and `parallel: true` switches the fold's concurrency
+to unbounded (`Effect.all`, fiber scheduling).
+
+Sequential remains the DEFAULT (the live-verified race fix, unchanged), and its own group asserts
+that on the same marker form WITHOUT the flag.
+
+The marker's documented SAFETY CONDITION is disjoint targets only - same-file steps race - so this
+folder exercises only DISJOINT-safe steps (each step's effects land on its OWN file) and asserts the
+marker semantics plus the containment invariants; the conflicting same-file race outcomes are
+deliberately NOT asserted.
+
+This folder is ETS-only: the Classic factory suite has no parallel section, so there is no Classic
+twin (the parity diff intentionally adds this folder).
 
 ## Scenario
 
@@ -51,29 +54,25 @@ folder).
 
 ## Fixtures
 
-- The Harness fake ctx + a DEDICATED factory instance (`factoryP`) - the
-  parallel steps are registered on its own GovernSteps registry, disjoint
-  from every other folder's registry.
-- A `proj-parallel` directory with three disjoint step files
-  (`parallel-a.txt`, `parallel-b.txt`, `parallel-c.txt`); each step records
-  `name:start`, waits its delay, writes its OWN file with plain fs, records
-  `name:done`.
-- The delays (25/15/10 ms) are what make the unbounded-overlap group
-  distinguishable from a sequential fold.
+- The Harness fake ctx + a DEDICATED factory instance (`factoryP`) - the parallel steps are
+  registered on its own GovernSteps registry, disjoint from every other folder's registry.
+- A `proj-parallel` directory with three disjoint step files (`parallel-a.txt`, `parallel-b.txt`,
+  `parallel-c.txt`); each step records `name:start`, waits its delay, writes its OWN file with
+  plain fs, and records `name:done`.
+- The delays (25/15/10 ms) are what make the unbounded-overlap group distinguishable from a
+  sequential fold.
 
 ## Expected ledger strings (byte-exact)
 
-None - the marker groups assert event sequences and settled files, not ledger
-lines (the governed steps write directly, not through the factory's Append).
+None - the marker groups assert event sequences and settled files, not ledger lines (the governed
+steps write directly, not through the factory's Append).
 
 ## Edge cases
 
 - The throwing par-boom step: contained in both modes.
-- The unselected step's effect is ABSENT (its file removed before the call
-  and not recreated).
+- The unselected step's effect is ABSENT (its file removed before the call and not recreated).
 - false/null/undefined inner selections remain no-ops inside the marker form.
-- Sequential (the default) is re-asserted on the object form without the
-  flag.
+- Sequential (the default) is re-asserted on the object form without the flag.
 
 ## Expected count
 

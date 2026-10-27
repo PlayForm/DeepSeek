@@ -28,45 +28,70 @@ The user's capacity model is the law:
 
 - **Child cap: 2.**
 
-    Every spawned agent's own child fan-out is capped at 2 - the two-active regime; the workflow
+    Every spawned agent's own child fan-out is capped at 2 - the two-active regime, so the workflow
     fan-out flood is prevented structurally.
 
-- The harness's own `maxActiveSubagents` knob stays the backstop; the plugin enforces its model at
-  the dispatch level.
+- The harness's own `maxActiveSubagents` knob stays the backstop, and the plugin enforces its model
+  at the dispatch level.
 
 ## What it does
 
-- **Enqueue** (`queue_enqueue` tool or `dshQueue.Enqueue`): a task carries the id, the
-  self-contained spec (never altered), the role for the routing, the priority, the dependencies, the
-  state and the result hash.
+1. **Enqueue.**
+
+    A task carries the id, the self-contained spec (never altered), the role for the routing, the
+    priority, the dependencies, the state, and the result hash (`queue_enqueue` tool or
+    `dshQueue.Enqueue`).
 
     No agent context is consumed while it waits.
 
-- **Dispatch** (`dshQueue.Dispatch`): the deterministic order - dependencies satisfied first, then
-  priority descending, then FIFO by enqueue sequence; a seat is taken from the agent's pool, the
-  state flips to `dispatched`.
+2. **Dispatch.**
 
-- **Spawn** (`autoSpawn`, off by default): an assignment actually **starts a subagent through the
-  harness's own subagent service** (`ctx.subagents.startActivation`) - never a private spawn, never
-  a shell.
+    The deterministic order is dependencies satisfied first, then priority descending, then FIFO by
+    enqueue sequence (`dshQueue.Dispatch`).
+
+    A seat is taken from the agent's pool, and the state flips to `dispatched`.
+
+3. **Spawn.**
+
+    With `autoSpawn` on (off by default), an assignment actually **starts a subagent through the
+    harness's own subagent service** (`ctx.subagents.startActivation`) - never a private spawn,
+    never a shell.
 
     The spec goes to the child verbatim, the resolved route goes as its `agentOptions`, the parent
     is the exact live Agent from `ctx.agents.currentInitiator()`, and the child's own result settles
     the task (`completed`, or `failed` for any other stop reason).
 
-- **Idle-slot automation:** with `autoDispatch` and `autoSpawn` both on, an enqueue or a released
-  seat pulls the next queued task into the free slot - the queue runs itself.
-- **Routed dispatch:** when the routing enforcer (`dshRoute`) is present, the route is resolved per
-  the user's policy, silently; absent, the dispatch proceeds unrouted (a contained skip).
-- **Settle** (`Complete` / `Fail` / `Interrupt`): the seat is released, the journal records the
-  flip; `Interrupt` also fires the spawn's own abort signal, canceling the child.
-- **Restart reconcile** (`dshQueue.Reconcile(persisted?)`): the caller hands back the previous
-  process's `Snapshot().tasks`; every active task whose agent is not live is **requeued** once
-  (`attempts` 0 -> 1) and **failed honestly** on the second detection - never silently dropped.
-- **The board:** the queue's state compiles into the batch-state context block as one TOC line:
-  `QUEUE: <n> pending - next: <id|none> - running: <m>/<limit>`.
-- **The journal:** every state flip writes a best-effort P5 journal record plus one byte-stable
-  ledger line - the restart reconciliation's raw data.
+4. **Idle-Slot Automation.**
+
+    With `autoDispatch` and `autoSpawn` both on, an enqueue or a released seat pulls the next queued
+    task into the free slot - the queue runs itself.
+
+5. **Routed Dispatch.**
+
+    When the routing enforcer (`dshRoute`) is present, the route is resolved per the user's policy,
+    silently; absent, the dispatch proceeds unrouted (a contained skip).
+
+6. **Settle.**
+
+    The seat is released and the journal records the flip (`Complete` / `Fail` / `Interrupt`), and
+    `Interrupt` also fires the spawn's own abort signal, canceling the child.
+
+7. **Restart Reconcile.**
+
+    The caller hands back the previous process's `Snapshot().tasks`
+    (`dshQueue.Reconcile(persisted?)`), and every active task whose agent is not live is
+    **requeued** once (`attempts` 0 -> 1) and **failed honestly** on the second detection - never
+    silently dropped.
+
+8. **The Board.**
+
+    The queue's state compiles into the batch-state context block as one TOC line:
+    `QUEUE: <n> pending - next: <id|none> - running: <m>/<limit>`.
+
+9. **The Journal.**
+
+    Every state flip writes a best-effort P5 journal record plus one byte-stable ledger line - the
+    restart reconciliation's raw data.
 
 ## The service
 
@@ -102,9 +127,9 @@ The plugin registers the `dshQueue` service:
 It ships `false` on purpose: a spawn is a privileged action (D6 of the completion spec), so the
 queue assigns seats and ledgers until the user turns the launch on.
 
-With `autoSpawn: false` there is no `ctx.subagents` call and no spawn ledger line; the idle-slot
-automation is off too (an automatic assignment the plugin cannot launch would strand the task with a
-held seat).
+With `autoSpawn: false` there is no `ctx.subagents` call and no spawn ledger line, and the idle-slot
+automation is off too (an automatic assignment that the plugin cannot launch would strand the task
+with a held seat).
 
 With `autoSpawn: true` the dispatcher launches, the child's result settles the task, and a released
 seat pulls the next queued task.
@@ -121,7 +146,7 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The policy is the **outer** gate, `autoSpawn` the **inner** one.
+The policy is the **outer** gate, and `autoSpawn` is the **inner** one.
 
 An `approve` verdict for `spawn` refuses the launch even with the knob on: the task stays
 `dispatched` with its seat held, and the ledger records the byte-exact
@@ -132,7 +157,7 @@ to `auto` to let the next assignment launch, or settle it explicitly with
 The precedence is **policy approve > knob**: the knob can never widen an approve verdict, while a
 knob that is off still refuses on its own and writes no line at all.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
 pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 The ledger lines of the spawn (documented in `SCHEME.md` section 3): `spawned <id> -> <child>`,
@@ -141,8 +166,8 @@ The ledger lines of the spawn (documented in `SCHEME.md` section 3): `spawned <i
 
 ## The plan
 
-The spawn, the idle-slot automation and the restart reconcile are implemented and smoke-arbitrated
-(`Source/Test/Spawn-And-Reconcile`); the policy gate and its precedence are arbitrated by
+The spawn, the idle-slot automation, and the restart reconcile are implemented and smoke-arbitrated
+(`Source/Test/Spawn-And-Reconcile`), and the policy gate and its precedence are arbitrated by
 `Source/Test/Policy-Defaults`.
 
 The durable queue store is the remaining piece: the reconcile takes the caller's persisted record

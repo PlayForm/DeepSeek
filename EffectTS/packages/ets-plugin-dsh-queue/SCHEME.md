@@ -1,7 +1,8 @@
 # SCHEME - @playform/plugin-dsh-queue
 
-The subagent-queue plugin's scheme: the modules, the contracts, the ledger strings. Plan:
-`Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md`.
+The subagent-queue plugin's scheme: the modules, the contracts, and the ledger strings.
+
+Plan: `Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md`.
 
 ## 1. The module map
 
@@ -39,50 +40,82 @@ Source/
 ## 2. The contracts
 
 - **Loader contract:** `name` = `plugin-dsh-queue` (the four agreeing places: the package name, the
-  `name` export, the State build's `module:` option, the `logFile` default
+  `name` export, the State build's `module:` option, and the `logFile` default
   `~/.dsh/playform/ets-plugin-dsh-queue.log`); `apply` returns nothing;
   `inject = ["pluginFactory", "tools"]`.
-- **The capacity law:** `capacity.main` (10) is the main conversation's pool; `capacity.child` (2)
-  caps every spawned agent's own children - the two-active regime. The harness knob stays the
-  backstop.
+- **The capacity law:** `capacity.main` (10) is the main conversation's pool, and `capacity.child`
+  (2) caps every spawned agent's own children - the two-active regime.
+
+    The harness knob stays the backstop.
+
 - **The schedule contract:** deterministic - the same store always produces the same order;
-  dependencies block (never silently skipped over), priority descending, FIFO by seq.
-- **The spec law:** the queue never alters a task's spec; the dispatcher only schedules. The spawn
-  hands the spec to the child as ONE text block, verbatim.
+  dependencies block (never silently skipped over), priority descends, and FIFO orders by seq.
+- **The spec law:** the queue never alters a task's spec, and the dispatcher only schedules.
+
+    The spawn hands the spec to the child as ONE text block, verbatim.
+
 - **The spawn law (the completion re-spec):** the launch goes through the HARNESS subagent service
   (`ctx.subagents.startActivation`, the `spawnProvider` backend) - never a private spawn, never a
-  shell. The parent is the EXACT live Agent from `ctx.agents.currentInitiator()` (the harness
-  identity-compares it); `delivery: "caller"` (the queue owns the task's terminal arm, not the
-  model's inbox); the resolved route rides as `agentOptions`.
-- **The approval posture:** `autoSpawn` ships **false** (D6: a spawn is a privileged action). False
-  = assign and ledger only; no spawn call, no spawn line. The idle-slot automation is gated on
-  `autoDispatch && autoSpawn`, so the manual posture's ledger stays byte-identical to the PoC's.
+  shell.
+
+    The parent is the EXACT live Agent from `ctx.agents.currentInitiator()` (the harness
+    identity-compares it).
+
+    The call uses `delivery: "caller"` (the queue owns the task's terminal arm, not the model's
+    inbox), and the resolved route rides as `agentOptions`.
+
+- **The approval posture:** `autoSpawn` ships **false** (D6: a spawn is a privileged action).
+
+    False means assign and ledger only: no spawn call, no spawn line.
+
+    The idle-slot automation is gated on `autoDispatch && autoSpawn`, so the manual posture's ledger
+    stays byte-identical to the PoC's.
+
 - **The policy block (D6):** the config carries the shared per-action allowlist
   (`policy: Policy()` - read/index/record/suggest/message = `auto`, write/commit/spawn = `approve`),
-  mapped to `State.Allow`. It is the **OUTER** gate in front of `autoSpawn` (the **INNER** one): an
-  `approve` verdict for `spawn` refuses the launch even with the knob on, logs the byte-exact
-  `spawn held <id> (policy spawn=approve)` line, and leaves the task `dispatched` with its seat held
-    - the task waits for the user (flip `policy.spawn` to `auto`, or settle it explicitly). The
-      precedence is **policy approve > knob**: the knob can never widen an approve verdict, while a
-      knob that is off still refuses on its own and writes no line. The block is one volatile
-      object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
-      overrides the defaults per action (the wiring is the next refinement).
+  mapped to `State.Allow`.
+
+    It is the **OUTER** gate in front of `autoSpawn` (the **INNER** one): an `approve` verdict for
+    `spawn` refuses the launch even with the knob on, logs the byte-exact
+    `spawn held <id> (policy spawn=approve)` line, and leaves the task `dispatched` with its seat
+    held.
+
+    The task then waits for the user (flip `policy.spawn` to `auto`, or settle it explicitly).
+
+    The precedence is **policy approve > knob**: the knob can never widen an approve verdict, while
+    a knob that is off still refuses on its own and writes no line.
+
+    The block is one volatile object, so a policy flip is hot-editable without a remount, and a
+    resolved pack's `policy` section overrides the defaults per action (the wiring is the next
+    refinement).
+
 - **The settlement law:** the child's own result settles its task - `completed` when the child
-  stopped with `completed`, `failed` otherwise; a rejected `startActivation` logs `spawn failed` and
-  fails the task (a task whose launch was refused cannot run). A `spawn skipped` (no service, no
-  parent) leaves the task dispatched - the seat is held and the orchestrator decides.
+  stopped with `completed`, `failed` otherwise.
+
+    A rejected `startActivation` logs `spawn failed` and fails the task (a task whose launch was
+    refused cannot run).
+
+    A `spawn skipped` (no service, no parent) leaves the task dispatched - the seat is held and the
+    orchestrator decides.
+
 - **The routing law:** `dshRoute` is probed at dispatch time (the tool-jobs precedent), never an
-  injection dependency - the routing enforcer ships disabled independently; a missing service is a
-  contained skip.
+  injection dependency - the routing enforcer ships disabled independently, and a missing service is
+  a contained skip.
 - **The restart contract:** `Reconcile(persisted?)` restores the caller's `Snapshot().tasks` (the
   family has no storage domain yet), then compares every ACTIVE task with the live agents
-  (`ctx.agents.get(childId)`). An orphan is requeued on first detection (`attempts` 0 -> 1) and
-  failed on the second - never silently dropped. An in-memory active task with no `childId` is a
-  MANUAL assignment and is left alone; a restored one is stale and is reconciled.
+  (`ctx.agents.get(childId)`).
+
+    An orphan is requeued on first detection (`attempts` 0 -> 1) and failed on the second - never
+    silently dropped.
+
+    An in-memory active task with no `childId` is a MANUAL assignment and is left alone, while a
+    restored one is stale and is reconciled.
+
 - **The service contract:** `dshQueue` is registered at apply (constructor registration, removed
-  with the owning fiber) and published through `Interface/Queue.ts`'s declaration merging. The
-  surface adds `Reconcile(persisted?)` and `Flush()` (the spawn join point for tests/reconcile; it
-  never waits for a live child).
+  with the owning fiber) and published through `Interface/Queue.ts`'s declaration merging.
+
+    The surface adds `Reconcile(persisted?)` and `Flush()` (the spawn join point for
+    tests/reconcile; it never waits for a live child).
 
 ## 3. The ledger strings (module-owned, byte-stable)
 
@@ -107,12 +140,15 @@ spawn lines, never on the activation proof.
 
 ## 4. The decisions recorded for the end-phase
 
-- The dispatcher launches through the harness service and the child's result settles the task; the
-  automation is otherwise fire-and-forget, joined by `Flush()`.
-- Restart reconciliation restores the caller's persisted record (there is no storage domain yet; the
-  wave-3 storage migration is the natural home for a durable store). Every flip is journaled, so a
-  future rebuild can read the journal instead of the caller's snapshot.
-- The IDLE coexistence shares the main pool's seats: an IDLE-held lane occupies a reserved slot, the
-  queue fills only the freed remainder.
-- A `spawn skipped` task keeps its seat: the queue never silently drops an assignment it could not
-  launch, and the orchestrator settles it (`Complete` / `Fail` / `Interrupt`).
+- The dispatcher launches through the harness service and the child's result settles the task, and
+  the automation is otherwise fire-and-forget, joined by `Flush()`.
+- Restart reconciliation restores the caller's persisted record (there is no storage domain yet, and
+  the wave-3 storage migration is the natural home for a durable store).
+
+    Every flip is journaled, so a future rebuild can read the journal instead of the caller's
+    snapshot.
+
+- The IDLE coexistence shares the main pool's seats: an IDLE-held lane occupies a reserved slot, and
+  the queue fills only the freed remainder.
+- A `spawn skipped` task keeps its seat: the queue never silently drops an assignment that it could
+  not launch, and the orchestrator settles it (`Complete` / `Fail` / `Interrupt`).

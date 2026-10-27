@@ -1,17 +1,18 @@
 # Policy-Defaults
 
-The policy block (D6) on the batch-state board: the defaults, the State
-mapping on `Allow`, the override, and the recorder posture.
+The policy block (D6) on the batch-state board: the defaults, the State mapping on `Allow`, the
+override, and the recorder posture.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The board is a recorder and a
-projection: it reads the members, records the state changes and suggests the
-compiled block, and it never writes files, commits or spawns. This folder
-pins the shared block's defaults in the schema and on the built State (mapped
-to `Allow`, because the factory's shared State already owns `Policy` - the
-global policy file path) and the documented family posture for the actions
-the board never takes.
+D6 makes automation a per-plugin allowlist.
+
+The board is a recorder and a projection: it reads the members, records the state changes, and
+suggests the compiled block, and it never writes files, commits, or spawns.
+
+This folder pins the shared block's defaults in the schema and on the built State (mapped to
+`Allow`, because the factory's shared State already owns `Policy` - the global policy file path) and
+the documented family posture for the actions the board never takes.
 
 ## Scenario
 
@@ -28,15 +29,14 @@ the board never takes.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` apply, the real factory
-instance, the fake ctx, the schema's own validation (`Validate`), and a temp
-state file (the JSON fallback store) so the mount never touches the user's
-home.
+The shared Harness: the real built `Target/Library.js` apply, the real factory instance, the fake
+ctx, the schema's own validation (`Validate`), and a temp state file (the JSON fallback store) so
+the mount never touches the user's home.
 
 ## Expected ledger strings (byte-exact)
 
-None new - the block and its mapping log nothing; the defaults are the
-contract and are asserted as an object.
+None new - the block and its mapping log nothing, and the defaults are the contract and are
+asserted as an object.
 
 ## Expected count
 

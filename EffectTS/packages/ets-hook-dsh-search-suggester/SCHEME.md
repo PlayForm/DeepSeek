@@ -7,9 +7,11 @@ tool and replay benchmark, and the fifteen smoke folders (126 PASS) are in the S
 
 The search-intent **target suggester**: when a search-class tool call (`grep`, `glob`, `read`,
 search-shaped `bash`) matches one of the ten intent kinds, the plugin prepends ONE labeled
-`additionalContexts` note on the `tools/post-execute` waterfall naming the likely target set - the
-standard locations where that intent lives - before the model finishes searching. Deterministic (no
-LLM in the hot path), gated hard, fail-open, and silent by default (ships `enabled: false`).
+`additionalContexts` note on the `tools/post-execute` waterfall naming the likely target set, the
+standard locations where that intent lives, before the model finishes searching.
+
+It is deterministic (no LLM in the hot path), gated hard, fail-open, and silent by default (it ships
+`enabled: false`).
 
 Source of truth: `Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md`.
 
@@ -72,27 +74,36 @@ search-suggester: section rebuilt (ttl <n>)
 search-suggester: section invalidated (tools/change)
 ```
 
-The activation line uses the core's `Activate` composer and the module's own field list; every other
-string is composed in Function/Apply (the dismiss record line in Function/Dismiss).
+The activation line uses the `Activate` composer of the core and the own field list of the module,
+and every other string is composed in Function/Apply (the dismiss record line in Function/Dismiss).
 
-THE P2 GRAPH PROJECTION adds NO ledger string: the projection is proven by the note's order and the
-sticky section's text, never by a line. THE DISMISS TOOL adds two: the record line
-`dismissed <Intent> <path|*>` (`*` is the family dismissal) and the suppression
-`suppressed dismissed <Intent>` (the family dismissal, or the dismissal that emptied the candidate
-list, holds the note back until the entry expires).
+THE P2 GRAPH PROJECTION adds NO ledger string: the projection is proven by the order of the note and
+the text of the sticky section, never by a line.
 
-The post-execute listener resolves the workspace root before the score (the nearest ancestor whose
-PACK SIGNATURE matches; the signature is the resolved pack's `signature` list, defaulting to
-`Documentation/ARCHIVE-STYLE.md`, from the call path plus the session cwd). A foreign workspace has
-no pack and logs `abstained foreign-workspace  0.00` (the gate runs before the intent is known, so
-the intent segment is empty and the kappa is the no-signal 0.00). The resolved pack's `search/`
-intents (`Families(pack, "search")`) drive Detect, so a repo pack overrides the built-in intents
-without a restart. With the root known, a candidate is kept when it exists under ANY of the call's
-three bases - the repo root, the package root (the nearest ancestor of the resolved call path
-carrying `package.json`, at or below the repo root) and the package parent - so repo-relative,
-package-relative and sibling-relative pack paths all survive. A winning intent with none left logs
-`abstained no-companions <Intent> <k>`. The sticky section (`system-prompt/assemble`) resolves the
-same way from the process's workspace pack.
+THE DISMISS TOOL adds two: the record line `dismissed <Intent> <path|*>` (`*` is the family
+dismissal) and the suppression `suppressed dismissed <Intent>`, where the family dismissal, or the
+dismissal that emptied the candidate list, holds the note back until the entry expires.
+
+The post-execute listener resolves the workspace root before the score, using the nearest ancestor
+whose PACK SIGNATURE matches, where the signature is the `signature` list of the resolved pack
+(defaulting to `Documentation/ARCHIVE-STYLE.md`) taken from the call path plus the session cwd.
+
+A foreign workspace has no pack and logs `abstained foreign-workspace  0.00`, because the gate runs
+before the intent is known, so the intent segment is empty and the kappa is the no-signal 0.00.
+
+The `search/` intents of the resolved pack (`Families(pack, "search")`) drive Detect, so a repo pack
+overrides the built-in intents without a restart.
+
+With the root known, a candidate is kept when it exists under ANY of the three bases of the call:
+the repo root, the package root (the nearest ancestor of the resolved call path that carries
+`package.json`, at or below the repo root), and the package parent.
+
+Thus repo-relative, package-relative, and sibling-relative pack paths all survive.
+
+A winning intent with none left logs `abstained no-companions <Intent> <k>`.
+
+The sticky section (`system-prompt/assemble`) resolves the same way from the workspace pack of the
+process.
 
 ## 4. The architecture
 
@@ -132,31 +143,45 @@ Source/
 
 ## 5. The current state
 
-The P2/P3/P4 items of the plan, landed:
+The P2/P3/P4 items of the plan landed.
 
-- THE GRAPH PROJECTION (P2): the neutral 0.5 literal is replaced by the `ctx.workspaceGraph`
-  projection (`Function/Projection`, `Function/Measure`, `Function/Projected`); the sticky section
-  renders the projected index; the absent/empty graph keeps the documented neutral fallback.
-  `indexPath` is retired (never read).
-- THE OFFLINE SEED (P3): `Function/Seed` at load, source = the built-in pack's canonical
-  candidates + the graph projection; persisted by the existing store on the next real write.
-- THE DISMISS TOOL (P4): `suggestion_dismiss` through the loader's tool API; the durable dismissal
-  with the `dismissTtl` expiry; two documented ledger strings.
-- THE REPLAY BENCHMARK (P4): `Variable/Sequence` + `Function/Benchmark`; the recorded baseline
-  `calls=50 notes=5 precision=1.00 recall=0.70 first-note=1`.
+- **THE GRAPH PROJECTION (P2).**
+
+    The neutral 0.5 literal is replaced by the `ctx.workspaceGraph` projection
+    (`Function/Projection`, `Function/Measure`, `Function/Projected`), the sticky section renders
+    the projected index, and the absent/empty graph keeps the documented neutral fallback.
+
+    `indexPath` is retired (never read).
+
+- **THE OFFLINE SEED (P3).**
+
+    `Function/Seed` runs at load, with source = the canonical candidates of the built-in pack + the
+    graph projection, and the existing store persists it on the next real write.
+
+- **THE DISMISS TOOL (P4).**
+
+    `suggestion_dismiss` runs through the tool API of the loader, the dismissal is durable with the
+    `dismissTtl` expiry, and two ledger strings are documented.
+
+- **THE REPLAY BENCHMARK (P4).**
+
+    `Variable/Sequence` + `Function/Benchmark`, with the recorded baseline
+    `calls=50 notes=5 precision=1.00 recall=0.70 first-note=1`.
 
 The nine suites exist: `Classification`, `Threshold-And-Cooldown`, `Delivery-And-Label` (covered by
 Post-Execute-And-Learning), `Abstention`, `Learning-Update` (covered by Post-Execute-And-Learning),
-`Persistence`, `Index-Refresh` (re-specified onto the projection), `Noise`, `Ledger` (covered by
-Wiring-And-Ledger). The wave adds four capability folders (`Projection`, `Dismiss`, `Seed`,
-`Benchmark`); fifteen folders, 126 PASS.
+`Persistence`, `Index-Refresh` (re-specified onto the projection), `Noise`, and `Ledger` (covered by
+Wiring-And-Ledger).
+
+The wave adds four capability folders (`Projection`, `Dismiss`, `Seed`, `Benchmark`), for fifteen
+folders and 126 PASS.
 
 Residuals (not silently dropped):
 
-- the plan's section 3.4 scope override (a lockfile grep is Dependency, not Version) is not
-  implemented - the signals carry no scope weight;
-- the plan's section 2.4 search-specific abstentions 4 and 5 (the exploratory-question gate, the
+- the scope override of plan section 3.4 (a lockfile grep is Dependency, not Version) is not
+  implemented, because the signals carry no scope weight;
+- the search-specific abstentions 4 and 5 of plan section 2.4 (the exploratory-question gate and the
   read-only-subagent threshold bump) are not implemented;
-- the near-miss rule and the `history -= 0.2` ignored penalty (plan 6.2) are not implemented; an
+- the near-miss rule and the `history -= 0.2` ignored penalty (plan 6.2) are not implemented, and an
   ignored window moves the stats and the journal only;
-- the ETS twin (`@playform/ets-hook-dsh-search-suggester`) is deferred by the wave's scope.
+- the ETS twin (`@playform/ets-hook-dsh-search-suggester`) is deferred by the scope of the wave.

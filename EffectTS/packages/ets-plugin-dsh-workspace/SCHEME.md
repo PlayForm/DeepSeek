@@ -1,8 +1,9 @@
 # SCHEME - @playform/plugin-dsh-workspace
 
-The workspace agent: the operational view, the five tools, the query surface. Loader contract:
-`name: plugin-dsh-workspace`, `apply` (returns nothing), `Config` (Schemastery, all volatile),
-`inject: ["workspaceGraph", "pluginFactory", "tools"]`.
+The workspace agent supplies the operational view, the five tools, and the query surface.
+
+The loader contract is `name: plugin-dsh-workspace`, `apply` (returns nothing), `Config`
+(Schemastery, all volatile), and `inject: ["workspaceGraph", "pluginFactory", "tools"]`.
 
 ## Identity (four agreeing places)
 
@@ -32,12 +33,12 @@ The workspace agent: the operational view, the five tools, the query surface. Lo
 | policy             | Allowlist  | the D6 defaults                                |
 
 Validation is fail-loud at load: `findLimitMax >= findLimit`, `packetTokenMax >= packetTokenBudget`,
-`expandDepth in 1..3`, kinds checked against the graph's node kinds.
+`expandDepth in 1..3`, and the kinds checked against the node kinds of the graph.
 
 ## The policy block (D6)
 
 The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
-block), mapped to `State.Allow`:
+block) and maps it to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -46,12 +47,17 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The workspace agent's actions are read-only, all **AUTOMATIC**; it has **no gated action** (no file
-write, no batch commit, no spawn), so the block documents the posture and refuses nothing. The block
-is one volatile object, so a policy flip is hot-editable without a remount; a resolved pack's
-`policy` section overrides the defaults per action (the wiring is the next refinement).
+The actions of the workspace agent are read-only, all **AUTOMATIC**.
 
-No new ledger line: the package has no gated action.
+It has **no gated action** (no file write, no batch commit, no spawn), so the block documents the
+posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount.
+
+The `policy` section of a resolved pack overrides the defaults for each action (the wiring is the
+next refinement).
+
+The package adds no ledger line, because it has no gated action.
 
 ## The five tools (V4-1 §3.4 plus the indexing trigger)
 
@@ -63,12 +69,15 @@ No new ledger line: the package has no gated action.
 | `workspace_context` | `id?`, `query?`, `budget?`, `version?`            | `ContextResult` | `workspace: packet <focus> (<tokens> tokens, budget <budget>)`                                   |
 | `workspace_index`   | `path?` (default = session cwd), `maxFiles?`      | `IndexResult`   | `workspace: index <path> (<indexed> indexed, <skipped> skipped, <failed> failed, <files> files)` |
 
-Every result carries `indexRevision`; pagination is by cursor (the last node's id), never offset.
+Every result carries `indexRevision`, and pagination is by cursor (the id of the last node), never
+offset.
 
-`workspace_index` is the INDEXING TRIGGER: it delegates to the graph service's
-`indexWorkspace(path, { maxFiles })` - the walk, the per-file gates, the bound and the counts all
-live in `@playform/plugin-dsh-workspace-graph`; the agent stays a pure consumer and never touches
-`ctx.fs`. The tool refuses with the family's byte-exact error shape when the plugin is disabled.
+`workspace_index` is the INDEXING TRIGGER: it delegates to `indexWorkspace(path, { maxFiles })` of
+the graph service, so the walk, the per-file gates, the bound, and the counts all live in
+`@playform/plugin-dsh-workspace-graph`.
+
+The agent stays a pure consumer and never touches `ctx.fs`, and the tool refuses with the byte-exact
+error shape of the family when the plugin is disabled.
 
 ## Module-owned ledger strings (byte-stable)
 
@@ -82,58 +91,61 @@ workspace: packet <focus> (<tokens> tokens, budget <budget>)
 workspace: index <path> (<indexed> indexed, <skipped> skipped, <failed> failed, <files> files)
 ```
 
-The activation line's `tools` count moved from 4 to 5 with the fifth tool; the string is
+The `tools` count of the activation line moved from 4 to 5 with the fifth tool, and the string is
 module-owned and asserted byte-exactly by the smoke.
 
 ## Decisions (the smallest faithful readings)
 
 1. **Honesty over fake data.**
 
-    The W1 graph parses only `contains`/`imports` edges; requesting `references`/`calls`/`tests`
-    returns an empty set and the packet's OPEN lines name exactly what cannot be answered.
+    The W1 graph parses only `contains`/`imports` edges, so requesting `references`/`calls`/`tests`
+    returns an empty set and the OPEN lines of the packet name exactly what cannot be answered.
 
 2. **Hotness proxy.**
 
-    `workspace_map`'s hot symbols = symbols in files with inbound `imports` edges (the W1 graph has
-    no reference counts).
+    The hot symbols of `workspace_map` are the symbols in files with inbound `imports` edges,
+    because the W1 graph has no reference counts.
 
 3. **Token estimate.**
 
-    No token counter is injected in v0; the packet budget is enforced via `tokenCharsPerToken`
-    (default 4), documented as an estimate.
+    No token counter is injected in v0, so the packet budget is enforced via `tokenCharsPerToken`
+    (default 4) and documented as an estimate.
 
 4. **Query surface = tools + query layer.**
 
-    No second service handle is provided in v0; the `workspaceAgent` accessor is deliberately not
-    declared in the Context augmentation.
+    No second service handle is provided in v0, and the `workspaceAgent` accessor is deliberately
+    not declared in the Context augmentation.
 
     Consumers go through the tools and the graph service.
 
 5. **Self-contained.**
 
     The graph contract is declared in `Interface/Graph.ts` from WAVE-1-BRIEF section 4.3 (plus the
-    indexing trigger's `indexWorkspace`); the packet renderer is a local twin of the lib renderer.
+    `indexWorkspace` of the indexing trigger), and the packet renderer is a local twin of the lib
+    renderer.
 
     The end-phase wires the real imports.
 
 6. **The role lookup.**
 
-    The role lookup uses the graph's declared `find` semantics: `pattern` is a case-insensitive
+    The role lookup uses the declared `find` semantics of the graph: `pattern` is a case-insensitive
     SUBSTRING over the node id and name (never a glob).
 
-    The old `<path>*` form only matched the FakeGraph's glob and never the real service;
+    The old `<path>*` form only matched the glob of the FakeGraph and never the real service, and
     `Function/Role.ts` now matches the declared way and re-checks the exact path (the real-graph
     smoke caught it).
 
 7. **Real-graph coverage.**
 
     `Real-Graph-And-Tools` drives all five tools over a graph populated by the real
-    `indexWorkspace`; the other folders keep the deterministic FakeGraph.
+    `indexWorkspace`, and the other folders keep the deterministic FakeGraph.
 
-    Both shapes are pinned: the real `expand` carries the start node first, the FakeGraph fixture
-    does not.
+    Both shapes are pinned: the real `expand` carries the start node first, and the FakeGraph
+    fixture does not.
 
 ## Status
 
-Built and smoked: `Wiring-And-Contract` (17), `Tools-And-Packet` (19, FakeGraph) and
-`Real-Graph-And-Tools` (10, the real populated graph). Ships disabled in the bundle patch.
+The plugin is built and smoked: `Wiring-And-Contract` (17), `Tools-And-Packet` (19, FakeGraph), and
+`Real-Graph-And-Tools` (10, the real populated graph).
+
+It ships disabled in the bundle patch.

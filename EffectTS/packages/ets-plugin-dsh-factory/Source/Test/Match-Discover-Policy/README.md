@@ -4,16 +4,17 @@ What this test verifies.
 
 ## Intent
 
-The factory's pure resolution helpers: `Match` (the exclusion-first segment
-match), `Discover` (the walk-up search for the auxiliary registry with the
-node_modules boundary and the nearest-wins rule), `Parse` (the contained JSON
-read) and `ResolvePolicy` (the union keep-list: global policy, then the
-directory policy, then the found-adjacent registry, then the P3 chain keys,
-with the unreadable-source skip and the Options parameterization). They are
-their own folder because they are filesystem-touching but write-free - every
-scenario reads real files from a temp root, and the union ORDER is a contract
-the module leaves depend on. This is the source suite's sections 4-6 plus the
-nearest-wins/directory/absent-policy edge checks, moved verbatim.
+The factory's pure resolution helpers: `Match` (the exclusion-first segment match), `Discover` (the
+walk-up search for the auxiliary registry with the node_modules boundary and the nearest-wins rule),
+`Parse` (the contained JSON read), and `ResolvePolicy` (the union keep-list: global policy, then the
+directory policy, then the found-adjacent registry, then the P3 chain keys, with the
+unreadable-source skip and the Options parameterization).
+
+They are their own folder because they are filesystem-touching but write-free - every scenario reads
+real files from a temp root, and the union ORDER is a contract that the module leaves depend on.
+
+This is the source suite's sections 4-6 plus the nearest-wins/directory/absent-policy edge checks,
+moved verbatim.
 
 ## Scenario
 
@@ -46,19 +47,16 @@ nearest-wins/directory/absent-policy edge checks, moved verbatim.
 
 ## Fixtures
 
-- The Harness fake ctx + the REAL factory instance; a fresh OS tmpdir root
-  (prefix "factory-smoke-") with the ledger path and the source suite's st1
-  State rebuilt verbatim (needed by the Options-parameterized scenario).
-- Real files in the temp root: `registry.json`
-  (`{"effectiveLatest":{"leftpad":"1.0.0"}}`), `bad.json` ("{ nope"),
-  `global-policy.json` (rewritten several times: `{"keep":["g","a"]}` then
-  "{ nope"), `proj/pin-policy.json` (`{"keep":["a","b"]}`),
-  `pin-policy.json` at the root (`{"keep":["b","c"]}`), a `proj/deeper`
-  directory with a rewritten nearest registry, and a `node_modules/deep`
-  directory for the walk-up boundary.
-- NO pin-policy.json survives this folder - the source suite deletes both
-  before the Continue section, and the same absence is part of the
-  ResolvePolicy scenarios' state.
+- The Harness fake ctx + the REAL factory instance; a fresh OS tmpdir root (prefix "factory-smoke-")
+  with the ledger path and the source suite's st1 State rebuilt verbatim (needed by the
+  Options-parameterized scenario).
+- Real files in the temp root: `registry.json` (`{"effectiveLatest":{"leftpad":"1.0.0"}}`),
+  `bad.json` ("{ nope"), `global-policy.json` (rewritten several times: `{"keep":["g","a"]}` then
+  "{ nope"), `proj/pin-policy.json` (`{"keep":["a","b"]}`), `pin-policy.json` at the root
+  (`{"keep":["b","c"]}`), a `proj/deeper` directory with a rewritten nearest registry, and a
+  `node_modules/deep` directory for the walk-up boundary.
+- NO pin-policy.json survives this folder - the source suite deletes both before the Continue
+  section, and the same absence is part of the ResolvePolicy scenarios' state.
 
 ## Expected ledger strings (byte-exact)
 
@@ -73,7 +71,7 @@ The configured-but-absent case writes NO ledger line (the negative control).
 
 - Match with an empty list and with null - both false.
 - Discover at the filesystem root and inside node_modules - both null.
-- Parse on a corrupt file, a missing file and a directory - all null.
+- Parse on a corrupt file, a missing file, and a directory - all null.
 - The union order (global, dir, found, chain) and the unreadable skip.
 
 ## Expected count

@@ -1,16 +1,18 @@
 # Policy-Defaults
 
-The policy block (D6) on the feedback member: the defaults, the built State's
-carried block, the override, and the passive-collector posture.
+The policy block (D6) on the feedback member: the defaults, the built State's carried block, the
+override, and the passive-collector posture.
 
 ## Intent
 
-D6 makes automation a per-plugin allowlist. The feedback member is a passive
-collector: it records outcomes and suggests summaries, and it never writes,
-commits or spawns. This folder pins the shared block's defaults in the
-schema and on the built State (`State.Config.policy` - the class form has no
-factory State to map) and the documented family posture for the actions the
-member never takes.
+D6 makes automation a per-plugin allowlist.
+
+The feedback member is a passive collector: it records outcomes and suggests summaries, and it never
+writes, commits, or spawns.
+
+This folder pins the shared block's defaults in the schema and on the built State
+(`State.Config.policy` - the class form has no factory State to map) and the documented family
+posture for the actions the member never takes.
 
 ## Scenario
 
@@ -27,13 +29,13 @@ member never takes.
 
 ## Fixtures
 
-The shared Harness: the real built `Target/Library.js` class, the fake ctx,
-the schema's own validation (`Validate`), and the `Make` constructor mount.
+The shared Harness: the real built `Target/Library.js` class, the fake ctx, the schema's own
+validation (`Validate`), and the `Make` constructor mount.
 
 ## Expected ledger strings (byte-exact)
 
-None new - the block and its mapping log nothing; the defaults are the
-contract and are asserted as an object.
+None new - the block and its mapping log nothing, and the defaults are the contract and are
+asserted as an object.
 
 ## Expected count
 
