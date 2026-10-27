@@ -295,6 +295,262 @@
 		"note": "recovered substitution: example source from the paper.js repository, standing in for the bot-walled paperjs.org page"
 	},
 	{
+		"source": "https://docs.anthropic.com/en/docs/about-claude/pricing",
+		"slug": "anthropic-pricing",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching",
+		"slug": "anthropic-prompt-caching",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://platform.openai.com/docs/pricing",
+		"slug": "openai-pricing",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://api-docs.deepseek.com/quick_start/pricing",
+		"slug": "deepseek-pricing",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://developers.cloudflare.com/workers-ai/platform/pricing/",
+		"slug": "cloudflare-workers-ai-pricing",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://ai.google.dev/gemini-api/docs/pricing",
+		"slug": "google-gemini-api-pricing",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://focus.finops.org/focus-specification/",
+		"slug": "focus-specification",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://www.finops.org/framework/capabilities/allocation/",
+		"slug": "allocation",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://www.finops.org/framework/capabilities/unit-economics/",
+		"slug": "unit-economics",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://en.wikipedia.org/wiki/Cost_allocation",
+		"slug": "cost-allocation",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://en.wikipedia.org/wiki/Shapley_value",
+		"slug": "shapley-value",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/",
+		"slug": "opentelemetry-gen-ai-spans",
+		"role": "sources",
+		"status": "stub",
+		"note": "601-byte page is a Moved notice pointing at the semantic-conventions-genai repository; the span conventions were recovered from the repository as opentelemetry-genai-repo-gen-ai-spans"
+	},
+	{
+		"source": "https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/",
+		"slug": "opentelemetry-gen-ai-metrics",
+		"role": "sources",
+		"status": "stub",
+		"note": "601-byte page is a Moved notice pointing at the semantic-conventions-genai repository; the metric conventions were recovered from the repository as opentelemetry-genai-repo-gen-ai-metrics"
+	},
+	{
+		"source": "https://github.com/open-telemetry/semantic-conventions-genai",
+		"slug": "opentelemetry-semantic-conventions-genai",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/",
+		"slug": "opentelemetry-gen-ai-attributes",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-spans.md",
+		"slug": "opentelemetry-genai-repo-gen-ai-spans",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-metrics.md",
+		"slug": "opentelemetry-genai-repo-gen-ai-metrics",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-token-metrics.md",
+		"slug": "opentelemetry-genai-repo-token-metrics",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/client-inference.md",
+		"slug": "opentelemetry-genai-repo-client-inference",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://github.com/open-telemetry/semantic-conventions-genai/tree/main/docs",
+		"slug": "opentelemetry-genai-repo-docs-tree",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://github.com/open-telemetry/semantic-conventions-genai/tree/main/docs/gen-ai",
+		"slug": "opentelemetry-genai-repo-docs-gen-ai-tree",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://langfuse.com/docs/model-usage-and-cost",
+		"slug": "langfuse-model-usage-and-cost",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://docs.litellm.ai/docs/completion/token_usage",
+		"slug": "litellm-token-usage",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
+		"slug": "litellm-model-prices-and-context-window",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://posthog.com/docs/llm-analytics",
+		"slug": "posthog-llm-analytics",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "",
+		"slug": "TelemetryStandards",
+		"role": "sources",
+		"status": "converted",
+		"note": "distilled note in Curated/, not a fetched page; no source URL"
+	},
+	{
+		"source": "https://docs.anthropic.com/en/docs/claude-code/costs",
+		"slug": "anthropic-claude-code-costs",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://docs.cursor.com/en/account/plans-and-usage",
+		"slug": "cursor-plans-and-usage",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://docs.github.com/en/copilot/managing-copilot/monitoring-usage-and-entitlements/about-premium-requests",
+		"slug": "github-copilot-premium-requests",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://openai.com/codex/pricing/",
+		"slug": "openai-codex-pricing",
+		"role": "sources",
+		"status": "stub",
+		"note": "81-byte 404 page kept as evidence; openai.com serves a Cloudflare JS challenge and the source is also recorded as unavailable (retryable)"
+	},
+	{
+		"source": "https://www.sqlite.org/stricttables.html",
+		"slug": "sqlite-stricttables",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://www.sqlite.org/wal.html",
+		"slug": "sqlite-wal",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://www.sqlite.org/json1.html",
+		"slug": "sqlite-json1",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://duckdb.org/why_duckdb",
+		"slug": "duckdb-why-duckdb",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://martinfowler.com/eaaDev/EventSourcing.html",
+		"slug": "martinfowler-event-sourcing",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://en.wikipedia.org/wiki/Slowly_changing_dimension",
+		"slug": "wikipedia-slowly-changing-dimension",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://en.wikipedia.org/wiki/Double-entry_bookkeeping",
+		"slug": "wikipedia-double-entry-bookkeeping",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://doc.rust-lang.org/reference/comments.html",
+		"slug": "rust-reference-comments",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html",
+		"slug": "typescript-jsdoc-supported-types",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://peps.python.org/pep-0257/",
+		"slug": "python-pep-0257",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://www.rfc-editor.org/rfc/rfc4180",
+		"slug": "rfc-editor-rfc4180",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://www.rfc-editor.org/rfc/rfc3339",
+		"slug": "rfc-editor-rfc3339",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
 		"source": "https://paperjs.org/examples/division-raster/",
 		"role": "sources",
 		"status": "bot-walled",
@@ -357,5 +613,45 @@
 		"disposition": "substitutable",
 		"substitute": "https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths",
 		"note": "MDN Paths tutorial substitute already in the shelf as svg-from-scratch-paths"
+	},
+	{
+		"source": "https://www.finops.org/framework/capabilities/chargeback-showback/",
+		"slug": "chargeback-showback",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "https://www.finops.org/framework/capabilities/chargeback-showback/ returned HTTP 404 ('Sorry, this page has not been found'); fit pass wrote 687 bytes of nav plus the 404 heading, the single --filter raw retry confirmed status_code 404 with identical final_url, so no capability content exists at that URL; the 7920-byte error page is kept at Reference/Raw/chargeback-showback.md as evidence and recorded as a failed source in the curated note",
+		"disposition": "retryable"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/spans.md",
+		"slug": "opentelemetry-genai-repo-spans",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "read_url: crawl failed: Blocked by anti-bot protection: Structural: minimal_text on small page (228 bytes, 14 chars visible). GitHub 404: wrong path; the real doc is docs/gen-ai/gen-ai-spans.md (fetched successfully). Retried once with --filter raw, same result. No file written; fetch-errors.log is owned by another lane, so the failure is recorded in the curated note.",
+		"disposition": "retryable"
+	},
+	{
+		"source": "https://openai.com/codex/pricing/",
+		"slug": "openai-codex-pricing",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "First capture (crawl4ai:fit, exit 0) wrote an 81-byte 404 haiku page; mandated retry with --filter raw failed: read_url: crawl failed for https://openai.com/codex/pricing/: Blocked by anti-bot protection: Cloudflare JS challenge. Stub file kept at Reference/Raw/openai-codex-pricing.md.",
+		"disposition": "retryable"
+	},
+	{
+		"source": "https://spdx.github.io/spdx-spec/v2.3/package-information/",
+		"slug": "spdx-package-information",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "Blocked by anti-bot protection: Structural: minimal_text, no_content_elements, script_heavy_shell (1849 bytes, 0 chars visible). Retried once with --filter raw per procedure; same exit 5. No file written to Reference/Raw/spdx-package-information.md. SPDX tag/value field vocabulary left unverified and cited nowhere; listed in the curated note's Open questions.",
+		"disposition": "retryable"
 	}
 ]

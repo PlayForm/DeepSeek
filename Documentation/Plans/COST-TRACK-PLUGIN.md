@@ -31,6 +31,21 @@ statuses:
     - name: the backfill of sessions that predate the plugin
       state: open
       evidence: section 6
+    - name: the cross-conversation file identity (project key, alias, branch)
+      state: resolved
+      evidence: section 10
+    - name: the cost rings (direct, context, credit)
+      state: resolved
+      evidence: section 11
+    - name: assessment versus discount (the billing policy)
+      state: resolved
+      evidence: section 12
+    - name: the contribution plugin as a second package
+      state: resolved
+      evidence: section 13
+    - name: the migration v2 columns and tables
+      state: open
+      evidence: section 14
 ---
 
 # The cost-track plugin - per-file inference pricing
@@ -384,3 +399,160 @@ The cases that must exist:
    unrelated trailing comment is untouched outside the markers.
 6. **Silence** - the plugin registers no tool, adds no prompt section, and its listeners never
    throw; a throw in `session/event` is the one failure mode that could damage a tool call.
+
+## 10. Across conversations, projects, and renames
+
+The ledger is **global** (`~/.dsh/cost/ledger.db`), not per session and not per project. A file's
+cost is therefore an aggregate over every conversation that ever touched it, and the question "what
+did this file cost me" has one answer no matter how many sessions, subagents, or restarts were
+involved.
+
+Three identity rules make that hold:
+
+- **The file is keyed by `(ProjectId, Path)`, not by session.** `Allocation` hangs off `Call`,
+  `Call` hangs off `Session`, and `File` is independent of both. A new conversation is one more
+  `Session` row and more `Call` rows against the same `FileId`; nothing needs to be merged
+  afterwards.
+- **A rename does not split the cost.** When a move or rename is observed, an `Alias` row records
+  `(FileId, FromPath, ToPath, At)` and the `FileId` survives. `File.Path` is the current path; the
+  lifetime query joins through `Alias` so history follows the file, not the string.
+- **The project is resolved from the session `cwd`, not from a config field.** Two projects that
+  contain a `src/index.ts` are two files, because a client is billed per project. The optional
+  `Touch.Branch` column records the branch at the touch, so a file's cost can be split per branch or
+  merged across them, and a worktree does not create a phantom second file.
+
+Subagent sessions are ordinary sessions with a `ParentSessionId`; their cost is recorded against the
+files they touched and rolls up to the parent through the session tree, so a delegated lane's spend
+is never lost and never double-counted.
+
+## 11. What can be factored into the cost of one file
+
+Three rings, from the certain to the estimable. Every ring is stored; the export decides which rings
+a client sees.
+
+**Ring A - direct, the step that touched the file.**
+
+1. The output tokens of the step: the model's decision to change this file and the payload of the
+   change itself, which for an edit tool is the JSON of the patch.
+2. Reasoning tokens, where the provider bills them (DeepSeek and GLM bill them as output).
+3. The retry cost of a failed attempt: a step that errored and was re-issued burned tokens that
+   delivered nothing, and they belong to the file the failed attempt was aimed at.
+4. The echo of the write: the diff the tool returns enters the _next_ step's input, so a large edit
+   pays again in context. It is Ring A in origin and Ring B in billing.
+
+**Ring B - context, the input side, amortized.**
+
+5. The file's content in the request: the first read, every later read, and the diffs of its own
+   earlier edits.
+6. The file's content carried forward into every subsequent step. This is the dominant term and the
+   reason a one-line change can cost a whole conversation.
+7. Cache economics: `cacheReadTokens` are billed at 2-20% of the input rate depending on the
+   provider, and `cacheWriteTokens` carry a premium on some providers and none on others.
+8. Shared context that belongs to no file: the system prompt, the tool schemas, the conversation
+   history, the working agreement. It is either allocated proportionally or informed-ignored, and
+   the choice is recorded rather than implied.
+9. Other files' content in the same request: the cross-subsidy that makes a single-file invoice
+   wrong if it ignores it.
+10. Compaction summaries: a real model call, billed in full, whose content is derived from the files
+    it summarized, so it is allocable to them.
+11. Subagent calls: the delegated conversation's own calls, priced identically and rolled up.
+
+**Ring C - credit and second order, the contribution side.**
+
+12. **Read credit.** Reading a file warms the prompt cache, so every later step that carries it pays
+    the cache-read rate instead of the full input rate. The saving is exact and computable from the
+    same rows: `cacheReadTokens * (inputRate - cacheReadRate) / 1e6`, minus any cache-write premium.
+    It is a _negative_ cost contribution attributable to the file that was read.
+13. **Avoided rework.** A file read before it was edited tends to be edited once instead of three
+    times. The counterfactual is not in the ledger, but the two facts that make it estimable are:
+    whether the file was read before its first edit (`Touch.ReadBeforeEdit`), and what the retries
+    cost. The estimate belongs to the analysis plugin, not to the ledger.
+14. **Survivorship.** A file touched whose change was later reverted, or never committed, delivered
+    nothing to the client. That is the discount the export applies, and it is a verdict on the
+    session, not a rewrite of the history.
+
+## 12. Assessment and discount are different objects
+
+The user's instinct is right and the two must not be fused.
+
+**Assessment** is descriptive and always stored. For one session it buckets the spend:
+
+| Bucket      | Meaning                                                              |
+| ----------- | -------------------------------------------------------------------- |
+| `delivered` | the file's change survived to the end of the session                 |
+| `explored`  | the file was read or searched but never changed                      |
+| `reverted`  | the file was changed and then undone inside the session              |
+| `overhead`  | retries, compaction, title generation, tooling                       |
+| `carry`     | the amortized input mass, which is the part a client always disputes |
+
+From those buckets the ledger derives the numbers a client actually argues about: cost per surviving
+line, cost per delivered file, exploration ratio, rework ratio, and cache hit ratio.
+
+**Discount** is a policy applied at export, never at capture. Three policies:
+
+- `all-touched` - every touched file pays its share; nothing is discounted. The honest default for
+  internal analysis.
+- `surviving-only` - only `delivered` files are billable per file; `explored`, `reverted`, and
+  `overhead` move to a single named overhead line that the client sees but does not pay per file.
+  The recommended default for a client invoice.
+- `capped` - a file's amortized share is capped at `k` times its direct share and the excess is
+  redistributed across the other delivered files. For clients who object to context carry in
+  principle but accept it in moderation.
+
+The ledger always stores the undiscounted truth. A discount is a view over it, so an invoice can be
+re-derived, disputed, and reversed without losing a row.
+
+## 13. The contribution plugin is a second package
+
+The ledger records facts; it should not acquire opinions. The analysis that turns facts into
+judgements - read credit, read-before-edit effectiveness, cost per surviving line, cache efficiency
+per file, exploration overhead, the counterfactual "did reading this file make the later edit
+cheaper" - belongs in `plugin-dsh-cost-analysis`, a second package that reads the same database and
+writes nothing to it.
+
+That split is deliberate: the ledger must stay cheap enough to run on every session, and an analysis
+pass is allowed to be expensive, occasional, and wrong in interesting ways. It also means the
+analysis can be re-run against history whenever its model improves, without re-instrumenting
+anything.
+
+The three columns the ledger must store **now** for that plugin to exist later are
+`Call.CacheSaving`, `Touch.ReadBeforeEdit`, and `Touch.Branch`. Everything else it needs is already
+in the schema.
+
+## 14. The schema additions (migration v2)
+
+Additive only; `PRAGMA user_version` goes from 1 to 2 on first open of the new build.
+
+```sql
+ALTER TABLE Call ADD COLUMN CacheSaving REAL NOT NULL DEFAULT 0;
+ALTER TABLE Touch ADD COLUMN Branch TEXT;
+ALTER TABLE Touch ADD COLUMN ReadBeforeEdit INTEGER NOT NULL DEFAULT 0;
+
+CREATE TABLE Alias (
+    AliasId INTEGER PRIMARY KEY, FileId INTEGER NOT NULL REFERENCES File (FileId),
+    FromPath TEXT NOT NULL, ToPath TEXT NOT NULL, At INTEGER NOT NULL
+) STRICT;
+
+CREATE TABLE Verdict (
+    SessionId TEXT NOT NULL REFERENCES Session (SessionId),
+    FileId INTEGER NOT NULL REFERENCES File (FileId),
+    State TEXT NOT NULL, LinesAdded INTEGER NOT NULL DEFAULT 0,
+    LinesRemoved INTEGER NOT NULL DEFAULT 0, At INTEGER NOT NULL,
+    PRIMARY KEY (SessionId, FileId)
+) STRICT;
+
+CREATE VIEW FileLifetime AS
+SELECT f.FileId, f.Path, count(DISTINCT c.SessionId) AS Sessions,
+       sum(a.DirectCost) AS Direct, sum(a.AmortizedCost) AS Amortized,
+       sum(a.DirectCost + a.AmortizedCost) AS Cost
+FROM File AS f
+JOIN Allocation AS a ON a.FileId = f.FileId
+JOIN Call AS c ON c.CallId = a.CallId
+GROUP BY f.FileId;
+```
+
+`Verdict` is written at session end (`turn/end` with a terminal reason, or `session/disposed`) from
+the touch log: a file with a write-kind touch and no later revert is `changed`; a file with only
+read-kind touches is `read`; a file written and then restored to its earlier hash is `reverted`. The
+verdict is the input to the `surviving-only` discount, and it is recomputable from `Touch` and
+`FileVersion` alone.

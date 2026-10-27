@@ -58,7 +58,7 @@
 			"status": "converted",
 			"title": "GitHub - AngusJohnson/Clipper2: Polygon Clipping, Offsetting & ...",
 			"quality": {
-				"long-line": 1
+				"long-line": 2
 			}
 		},
 		{
@@ -70,8 +70,7 @@
 			"status": "converted",
 			"title": "Clipper2 - Polygon Clipping Offsetting & Triangulating",
 			"quality": {
-				"raw-html": 4,
-				"long-line": 1
+				"raw-html": 4
 			}
 		},
 		{
@@ -261,8 +260,7 @@
 			"title": "GitHub - svgdotjs/svg.js: The lightweight library for manipulating and ...",
 			"quality": {
 				"heading-duplicate": 1,
-				"heading-jump": 1,
-				"long-line": 1
+				"heading-jump": 1
 			}
 		},
 		{
@@ -313,8 +311,7 @@
 			"quality": {
 				"heading-duplicate": 1,
 				"heading-jump": 9,
-				"raw-html": 10,
-				"long-line": 16
+				"raw-html": 10
 			}
 		},
 		{
@@ -327,8 +324,7 @@
 			"title": "fill-rule - SVG | MDN",
 			"quality": {
 				"heading-duplicate": 1,
-				"table-escaped-pipe": 1,
-				"long-line": 1
+				"table-escaped-pipe": 1
 			}
 		},
 		{
@@ -338,10 +334,7 @@
 			"content": "Archive/HTML/attribute-stroke-miterlimit.content.html",
 			"converted": "Raw/attribute-stroke-miterlimit.md",
 			"status": "converted",
-			"title": "stroke-miterlimit - SVG | MDN",
-			"quality": {
-				"long-line": 1
-			}
+			"title": "stroke-miterlimit - SVG | MDN"
 		},
 		{
 			"source": "https://svgwg.org/specs/strokes/",
@@ -353,8 +346,7 @@
 			"title": "SVG Strokes",
 			"quality": {
 				"table-escaped-pipe": 8,
-				"raw-html": 126,
-				"long-line": 1
+				"raw-html": 126
 			}
 		},
 		{
@@ -451,8 +443,7 @@
 			"status": "converted",
 			"title": "OpenCV: Image Segmentation with Distance Transform and Watershed ...",
 			"quality": {
-				"heading-multi-h1": 1,
-				"long-line": 11
+				"heading-multi-h1": 1
 			}
 		},
 		{
@@ -488,10 +479,7 @@
 			"content": "Archive/HTML/svg-from-scratch-paths.content.html",
 			"converted": "Raw/svg-from-scratch-paths.md",
 			"status": "converted",
-			"title": "Paths - SVG | MDN",
-			"quality": {
-				"long-line": 2
-			}
+			"title": "Paths - SVG | MDN"
 		},
 		{
 			"source": "https://www.joshwcomeau.com/svg/interactive-guide-to-paths/",
@@ -539,7 +527,7 @@
 			"status": "converted",
 			"title": "Geometry Processing Functions \u2014 PyMesh 0.2.1 documentation",
 			"quality": {
-				"long-line": 1
+				"long-line": 3
 			}
 		},
 		{
@@ -590,6 +578,581 @@
 				"long-line": 1
 			},
 			"note": "recovered substitution: example source from the paper.js repository, standing in for the bot-walled paperjs.org page"
+		},
+		{
+			"source": "https://docs.anthropic.com/en/docs/about-claude/pricing",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/anthropic-pricing.md",
+			"status": "converted",
+			"title": "anthropic-pricing",
+			"quality": {
+				"heading-duplicate": 1,
+				"heading-no-h1": 1,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"table-row-mismatch": 80
+			}
+		},
+		{
+			"source": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/anthropic-prompt-caching.md",
+			"status": "converted",
+			"title": "Request 2 caches its request content (not the response)",
+			"quality": {
+				"heading-no-h1": 1,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"table-row-mismatch": 28,
+				"long-line": 12
+			}
+		},
+		{
+			"source": "https://platform.openai.com/docs/pricing",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/openai-pricing.md",
+			"status": "converted",
+			"title": "openai-pricing",
+			"quality": {
+				"heading-duplicate": 8,
+				"heading-no-h1": 1,
+				"fence-no-language": 1,
+				"table-row-mismatch": 69,
+				"long-line": 123
+			}
+		},
+		{
+			"source": "https://api-docs.deepseek.com/quick_start/pricing",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/deepseek-pricing.md",
+			"status": "converted",
+			"title": "Models & Pricing",
+			"quality": {
+				"table-row-mismatch": 18,
+				"invisible": 3
+			}
+		},
+		{
+			"source": "https://developers.cloudflare.com/workers-ai/platform/pricing/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/cloudflare-workers-ai-pricing.md",
+			"status": "converted",
+			"title": "Pricing",
+			"quality": {
+				"table-row-mismatch": 4
+			}
+		},
+		{
+			"source": "https://ai.google.dev/gemini-api/docs/pricing",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/google-gemini-api-pricing.md",
+			"status": "converted",
+			"title": "Gemini Developer API pricing",
+			"quality": {
+				"heading-jump": 1,
+				"table-row-mismatch": 385
+			}
+		},
+		{
+			"source": "https://focus.finops.org/focus-specification/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/focus-specification.md",
+			"status": "converted",
+			"title": "FOCUS Specification 1.4"
+		},
+		{
+			"source": "https://www.finops.org/framework/capabilities/allocation/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/allocation.md",
+			"status": "converted",
+			"title": "Allocation",
+			"quality": {
+				"heading-duplicate": 3,
+				"heading-jump": 2
+			}
+		},
+		{
+			"source": "https://www.finops.org/framework/capabilities/unit-economics/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/unit-economics.md",
+			"status": "converted",
+			"title": "Unit Economics",
+			"quality": {
+				"heading-duplicate": 10,
+				"heading-jump": 4
+			}
+		},
+		{
+			"source": "https://en.wikipedia.org/wiki/Cost_allocation",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/cost-allocation.md",
+			"status": "converted",
+			"title": "cost-allocation",
+			"quality": {
+				"heading-no-h1": 1,
+				"long-line": 5
+			}
+		},
+		{
+			"source": "https://en.wikipedia.org/wiki/Shapley_value",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/shapley-value.md",
+			"status": "converted",
+			"title": "shapley-value",
+			"quality": {
+				"heading-no-h1": 1
+			}
+		},
+		{
+			"source": "https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/opentelemetry-gen-ai-spans.md",
+			"status": "stub",
+			"title": "Moved: Generative AI semantic conventions",
+			"note": "601-byte page is a Moved notice pointing at the semantic-conventions-genai repository; the span conventions were recovered from the repository as opentelemetry-genai-repo-gen-ai-spans"
+		},
+		{
+			"source": "https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/opentelemetry-gen-ai-metrics.md",
+			"status": "stub",
+			"title": "Moved: Generative AI semantic conventions",
+			"note": "601-byte page is a Moved notice pointing at the semantic-conventions-genai repository; the metric conventions were recovered from the repository as opentelemetry-genai-repo-gen-ai-metrics"
+		},
+		{
+			"source": "https://github.com/open-telemetry/semantic-conventions-genai",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/opentelemetry-semantic-conventions-genai.md",
+			"status": "converted",
+			"title": "OpenTelemetry GenAI Semantic Conventions",
+			"quality": {
+				"heading-duplicate": 4,
+				"table-row-mismatch": 2
+			}
+		},
+		{
+			"source": "https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/opentelemetry-gen-ai-attributes.md",
+			"status": "converted",
+			"title": "Gen AI",
+			"quality": {
+				"table-row-mismatch": 146,
+				"long-line": 52
+			}
+		},
+		{
+			"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-spans.md",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/opentelemetry-genai-repo-gen-ai-spans.md",
+			"status": "converted",
+			"title": "Semantic conventions for generative client AI spans",
+			"quality": {
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"code-non-ascii": 1,
+				"long-line": 1
+			}
+		},
+		{
+			"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-metrics.md",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/opentelemetry-genai-repo-gen-ai-metrics.md",
+			"status": "converted",
+			"title": "Semantic conventions for generative AI metrics",
+			"quality": {
+				"fence-no-language": 1,
+				"fence-blank-padded": 1
+			}
+		},
+		{
+			"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-token-metrics.md",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/opentelemetry-genai-repo-token-metrics.md",
+			"status": "converted",
+			"title": "Semantic conventions for generative AI inference token metrics",
+			"quality": {
+				"fence-no-language": 1,
+				"fence-blank-padded": 1
+			}
+		},
+		{
+			"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/client-inference.md",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/opentelemetry-genai-repo-client-inference.md",
+			"status": "converted",
+			"title": "Semantic conventions for generative AI client inference",
+			"quality": {
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"long-line": 4,
+				"code-non-ascii": 4
+			}
+		},
+		{
+			"source": "https://github.com/open-telemetry/semantic-conventions-genai/tree/main/docs",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/opentelemetry-genai-repo-docs-tree.md",
+			"status": "converted",
+			"title": "docs",
+			"quality": {
+				"heading-anchor": 1,
+				"heading-multi-h1": 1,
+				"table-row-mismatch": 1
+			}
+		},
+		{
+			"source": "https://github.com/open-telemetry/semantic-conventions-genai/tree/main/docs/gen-ai",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/opentelemetry-genai-repo-docs-gen-ai-tree.md",
+			"status": "converted",
+			"title": "gen-ai",
+			"quality": {
+				"heading-anchor": 1,
+				"heading-multi-h1": 1,
+				"fence-blank-padded": 1,
+				"table-row-mismatch": 1,
+				"raw-html": 2,
+				"glued-code": 6
+			}
+		},
+		{
+			"source": "https://langfuse.com/docs/model-usage-and-cost",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/langfuse-model-usage-and-cost.md",
+			"status": "converted",
+			"title": "[Model Usage & Cost ...",
+			"quality": {
+				"heading-anchor": 14,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"table-row-mismatch": 18,
+				"long-line": 1,
+				"link-run": 2
+			}
+		},
+		{
+			"source": "https://docs.litellm.ai/docs/completion/token_usage",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/litellm-token-usage.md",
+			"status": "converted",
+			"title": "litellm-token-usage",
+			"quality": {
+				"heading-no-h1": 1,
+				"fence-no-language": 1,
+				"invisible": 10,
+				"code-non-ascii": 2
+			}
+		},
+		{
+			"source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/litellm-model-prices-and-context-window.md",
+			"status": "converted",
+			"title": "litellm-model-prices-and-context-window",
+			"quality": {
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"long-line": 1
+			}
+		},
+		{
+			"source": "https://posthog.com/docs/llm-analytics",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/posthog-llm-analytics.md",
+			"status": "converted",
+			"title": "AI Observability",
+			"quality": {
+				"heading-jump": 1
+			}
+		},
+		{
+			"source": "",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "",
+			"status": "converted",
+			"title": "TelemetryStandards",
+			"note": "distilled note in Curated/, not a fetched page; no source URL"
+		},
+		{
+			"source": "https://docs.anthropic.com/en/docs/claude-code/costs",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/anthropic-claude-code-costs.md",
+			"status": "converted",
+			"title": "Compact instructions",
+			"quality": {
+				"heading-no-h1": 1,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"table-row-mismatch": 5,
+				"code-non-ascii": 1,
+				"long-line": 5
+			}
+		},
+		{
+			"source": "https://docs.cursor.com/en/account/plans-and-usage",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/cursor-plans-and-usage.md",
+			"status": "converted",
+			"title": "Cursor Documentation",
+			"quality": {
+				"heading-anchor": 4,
+				"table-row-mismatch": 1,
+				"link-run": 10
+			}
+		},
+		{
+			"source": "https://docs.github.com/en/copilot/managing-copilot/monitoring-usage-and-entitlements/about-premium-requests",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/github-copilot-premium-requests.md",
+			"status": "converted",
+			"title": "Requests in GitHub Copilot (legacy)",
+			"quality": {
+				"heading-anchor": 7,
+				"table-row-mismatch": 8
+			}
+		},
+		{
+			"source": "https://openai.com/codex/pricing/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/openai-codex-pricing.md",
+			"status": "stub",
+			"title": "404",
+			"note": "81-byte 404 page kept as evidence; openai.com serves a Cloudflare JS challenge and the source is also recorded as unavailable (retryable)"
+		},
+		{
+			"source": "https://www.sqlite.org/stricttables.html",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/sqlite-stricttables.md",
+			"status": "converted",
+			"title": "1. Introduction",
+			"quality": {
+				"heading-multi-h1": 1,
+				"fence-no-language": 1,
+				"table-row-mismatch": 1
+			}
+		},
+		{
+			"source": "https://www.sqlite.org/wal.html",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/sqlite-wal.md",
+			"status": "converted",
+			"title": "1. Overview",
+			"quality": {
+				"heading-multi-h1": 1,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1
+			}
+		},
+		{
+			"source": "https://www.sqlite.org/json1.html",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/sqlite-json1.md",
+			"status": "converted",
+			"title": "1. Overview",
+			"quality": {
+				"heading-multi-h1": 1,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"table-row-mismatch": 9
+			}
+		},
+		{
+			"source": "https://duckdb.org/why_duckdb",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/duckdb-why-duckdb.md",
+			"status": "converted",
+			"title": "duckdb-why-duckdb",
+			"quality": {
+				"heading-anchor": 7,
+				"heading-no-h1": 1,
+				"invisible": 15,
+				"glued-code": 1
+			}
+		},
+		{
+			"source": "https://martinfowler.com/eaaDev/EventSourcing.html",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/martinfowler-event-sourcing.md",
+			"status": "converted",
+			"title": "Event Sourcing",
+			"quality": {
+				"fence-no-language": 1,
+				"fence-blank-padded": 1
+			}
+		},
+		{
+			"source": "https://en.wikipedia.org/wiki/Slowly_changing_dimension",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/wikipedia-slowly-changing-dimension.md",
+			"status": "converted",
+			"title": "wikipedia-slowly-changing-dimension",
+			"quality": {
+				"heading-no-h1": 1,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"table-row-mismatch": 36,
+				"long-line": 5
+			}
+		},
+		{
+			"source": "https://en.wikipedia.org/wiki/Double-entry_bookkeeping",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/wikipedia-double-entry-bookkeeping.md",
+			"status": "converted",
+			"title": "wikipedia-double-entry-bookkeeping",
+			"quality": {
+				"heading-no-h1": 1,
+				"table-row-mismatch": 17,
+				"long-line": 6
+			}
+		},
+		{
+			"source": "https://doc.rust-lang.org/reference/comments.html",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/rust-reference-comments.md",
+			"status": "converted",
+			"title": "[Comments](https://doc.rust-lang.org/reference/comments.html#comments)",
+			"quality": {
+				"heading-anchor": 4,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"glued-code": 1
+			}
+		},
+		{
+			"source": "https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/typescript-jsdoc-supported-types.md",
+			"status": "converted",
+			"title": "JSDoc Reference",
+			"quality": {
+				"heading-duplicate": 4,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"code-non-ascii": 1,
+				"long-line": 1
+			}
+		},
+		{
+			"source": "https://peps.python.org/pep-0257/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/python-pep-0257.md",
+			"status": "converted",
+			"title": "PEP 257 \u2013 Docstring Conventions",
+			"quality": {
+				"heading-anchor": 9,
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"raw-html": 2
+			}
+		},
+		{
+			"source": "https://www.rfc-editor.org/rfc/rfc4180",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/rfc-editor-rfc4180.md",
+			"status": "converted",
+			"title": "RFC 4180: Common Format and MIME Type for Comma-Separated Values (CSV) ...",
+			"quality": {
+				"fence-no-language": 1,
+				"fence-blank-padded": 1,
+				"code-non-ascii": 5
+			}
+		},
+		{
+			"source": "https://www.rfc-editor.org/rfc/rfc3339",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/rfc-editor-rfc3339.md",
+			"status": "converted",
+			"title": "RFC 3339: Date and Time on the Internet: Timestamps",
+			"quality": {
+				"fence-no-language": 1,
+				"fence-blank-padded": 1
+			}
 		},
 		{
 			"source": "https://paperjs.org/examples/division-raster/",
@@ -682,6 +1245,54 @@
 			"note": "MDN Paths tutorial substitute already in the shelf as svg-from-scratch-paths",
 			"exit": 5,
 			"message": "read_url: crawl failed for https://www.w3.org/TR/SVG2/paths.html: Blocked by anti-bot protection: Cloudflare JS challenge"
+		},
+		{
+			"source": "https://www.finops.org/framework/capabilities/chargeback-showback/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/chargeback-showback.md",
+			"status": "unavailable",
+			"title": "Sorry, this page has not been found",
+			"disposition": "retryable",
+			"exit": 0,
+			"message": "https://www.finops.org/framework/capabilities/chargeback-showback/ returned HTTP 404 ('Sorry, this page has not been found'); fit pass wrote 687 bytes of nav plus the 404 heading, the single --filter raw retry confirmed status_code 404 with identical final_url, so no capability content exists at that URL; the 7920-byte error page is kept at Reference/Raw/chargeback-showback.md as evidence and recorded as a failed source in the curated note"
+		},
+		{
+			"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/spans.md",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "",
+			"status": "unavailable",
+			"title": "opentelemetry-genai-repo-spans",
+			"disposition": "retryable",
+			"exit": 5,
+			"message": "read_url: crawl failed: Blocked by anti-bot protection: Structural: minimal_text on small page (228 bytes, 14 chars visible). GitHub 404: wrong path; the real doc is docs/gen-ai/gen-ai-spans.md (fetched successfully). Retried once with --filter raw, same result. No file written; fetch-errors.log is owned by another lane, so the failure is recorded in the curated note."
+		},
+		{
+			"source": "https://openai.com/codex/pricing/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "Raw/openai-codex-pricing.md",
+			"status": "unavailable",
+			"title": "404",
+			"disposition": "retryable",
+			"exit": 5,
+			"message": "First capture (crawl4ai:fit, exit 0) wrote an 81-byte 404 haiku page; mandated retry with --filter raw failed: read_url: crawl failed for https://openai.com/codex/pricing/: Blocked by anti-bot protection: Cloudflare JS challenge. Stub file kept at Reference/Raw/openai-codex-pricing.md."
+		},
+		{
+			"source": "https://spdx.github.io/spdx-spec/v2.3/package-information/",
+			"kind": "HTML",
+			"archive": "",
+			"content": "",
+			"converted": "",
+			"status": "unavailable",
+			"title": "spdx-package-information",
+			"disposition": "retryable",
+			"exit": 5,
+			"message": "Blocked by anti-bot protection: Structural: minimal_text, no_content_elements, script_heavy_shell (1849 bytes, 0 chars visible). Retried once with --filter raw per procedure; same exit 5. No file written to Reference/Raw/spdx-package-information.md. SPDX tag/value field vocabulary left unverified and cited nowhere; listed in the curated note's Open questions."
 		}
 	]
 }

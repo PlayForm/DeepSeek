@@ -1,4 +1,4 @@
-import type Enforcer from "../Function/Enforcer.js";
+import type Enforcer from "@Function/Enforcer.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {

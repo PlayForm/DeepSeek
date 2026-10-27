@@ -6,5 +6,5 @@ All notable changes to this package will be documented in this file.
 
 ### Added
 
-- The per-file inference cost ledger: the initial ledger - the configuration schema, the SQLite
-  DDL, the database open and the plugin wiring, with the shipped price book.
+- The per-file inference cost ledger: the initial ledger - the configuration schema, the SQLite DDL,
+  the database open and the plugin wiring, with the shipped price book.

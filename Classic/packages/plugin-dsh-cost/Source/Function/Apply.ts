@@ -9,8 +9,9 @@
 // flush listeners plus the commands (Documentation/Plans/
 // COST-TRACK-PLUGIN.md sections 1 and 5). The plugin stays silent - no tool,
 // no prompt section, no model-visible message.
-import type { Context } from "@deepseek-ai/cordis";
 import { basename } from "node:path";
+
+import type { Context } from "@deepseek-ai/cordis";
 import type Factory from "@playform/plugin-dsh-factory";
 
 import type Config from "../Interface/Config.js";
