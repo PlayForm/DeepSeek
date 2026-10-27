@@ -42,7 +42,7 @@ A flattened image does not uniquely reveal its layers. Two boundaries converging
 two strokes touching, one bent stroke, a filled polygon, a wider stroke with a subtractive cut, or
 two overlapping strokes with a hidden intersection. Keep the ambiguity:
 
-```js
+```text
 {
   observation: { region: "upper-right", appearance: "two boundaries converge to a pointed terminal" },
   hypotheses: [
@@ -107,7 +107,7 @@ randomising attributes to selecting compatible combinations.
 
 Each method declares what must stay true under parameter changes:
 
-```js
+```text
 {
   method: "split-hook",
   invariants: {
@@ -147,7 +147,7 @@ Change exactly one functional feature, keep identity fixed: streaming off/on, va
 tool/four tools, two transforms/three, Classic/Effect, revision zero/one. Declare allowed changes
 and protected properties:
 
-```js
+```text
 {
   intervention: "validation:false->true",
   allowedChanges: ["validation-associated components", "local spacing repairs"],

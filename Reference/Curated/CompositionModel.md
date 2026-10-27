@@ -150,7 +150,7 @@ Paper.js `flatten(flatness)` subdivides to a maximum geometric error [fetched:
 Do not hash the entire manifest into one seed: adding one capability must not change every colour,
 position, and method at once. Record provenance next to each decision:
 
-```js
+```text
 { decision: "body.relationship", value: "directional-sequence",
   because: { feature: "streaming", source: "reviewed-manifest" },
   rule: "streaming-direction-v2" }

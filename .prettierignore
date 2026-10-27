@@ -53,6 +53,14 @@ Reference/Archive/**
 Reference/Raw
 Reference/Raw/**
 
+# The documentation archive - the historical record. Its documents quote
+# illustrative pseudo-code in ```ts / ```css fences that was never valid
+# source (a declaration with a comment for an initializer, a CSS shorthand
+# with an ellipsis), so the embedded-language printer fails on them. A
+# record is not reformatted: the prose stays as written.
+Documentation/Archive
+Documentation/Archive/**
+
 # The generated static market index - written byte-for-byte by
 # Maintain/Generate/Marketplace/Index.mjs; prettier would break its --check.
 marketplace.json

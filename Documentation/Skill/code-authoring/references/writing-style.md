@@ -127,12 +127,12 @@ Three or more `if (condition) return value;` lines become:
 
 ```typescript
 switch (true) {
-  case Exists(Candidate):
-    return Candidate;
-  case Exists(Fallback):
-    return Fallback;
-  default:
-    throw new Error("no candidate found");
+	case Exists(Candidate):
+		return Candidate;
+	case Exists(Fallback):
+		return Fallback;
+	default:
+		throw new Error("no candidate found");
 }
 ```
 
