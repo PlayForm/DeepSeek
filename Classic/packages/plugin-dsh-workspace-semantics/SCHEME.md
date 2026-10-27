@@ -1,6 +1,6 @@
 # SCHEME - @playform/plugin-dsh-workspace-semantics
 
-The config surface (all volatile; the schema defaults are the truth).
+The config surface, all volatile, where the schema defaults are the truth.
 
 | Field        | Type      | Default                                              | Meaning                                                                                                                              |
 | ------------ | --------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
@@ -20,8 +20,7 @@ An unknown `adapters` name fails loud at load:
 
 ## The policy block (D6)
 
-The config carries the shared per-action allowlist (`policy: Policy()`, composed from the factory's
-block), mapped to `State.Allow`:
+The config carries the shared per-action allowlist (`policy: Policy()`, composed from the block of the factory) and maps it to `State.Allow`:
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -30,13 +29,11 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-This package's actions are read-only, all AUTOMATIC; it has NO gated action (no file write, no batch
-commit, no spawn - the rename plan goes to the operate proposals), so the block documents the
-posture and refuses nothing. The block is one volatile object, so a policy flip is hot-editable
-without a remount; a resolved pack's `policy` section overrides the defaults per action (the wiring
-is the next refinement).
+The actions of this package are read-only and all AUTOMATIC, so it has NO gated action (no file write, no batch commit, no spawn, because the rename plan goes to the operate proposals), and the block therefore documents the posture and refuses nothing.
 
-No new ledger line: the package has no gated action.
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a `policy` section of a resolved pack overrides the defaults per action (the wiring is the next refinement).
+
+The package adds no new ledger line, because it has no gated action.
 
 The service surface (`ctx.workspaceSemantics`):
 
@@ -51,10 +48,11 @@ The service surface (`ctx.workspaceSemantics`):
 
 ## The adapters
 
-An adapter owns either a set of extensions or an exact basename. The lookup checks the basename
-FIRST (a file adapter such as `package.json` never falls through to the extension adapter), then the
-lowercase dotted extension. The default registration is the TypeScript/JavaScript adapter (seven
-extensions); the `adapters` names add the rest.
+An adapter owns either a set of extensions or an exact basename.
+
+The lookup checks the basename FIRST, so a file adapter such as `package.json` never falls through to the extension adapter, and then checks the lowercase dotted extension.
+
+The default registration is the TypeScript/JavaScript adapter with seven extensions, and the `adapters` names add the rest.
 
 | Name       | Keys                               | Symbols                                            | References                                    | Rename                                            |
 | ---------- | ---------------------------------- | -------------------------------------------------- | --------------------------------------------- | ------------------------------------------------- |
@@ -64,39 +62,34 @@ extensions); the `adapters` names add the rest.
 | `markdown` | `.md .markdown`                    | every heading (`heading`)                          | every link target                             | every link target equal to the span's text        |
 | `package`  | `package.json`                     | every dependency name (`dependency`)               | a name repeated in another dependency section | every occurrence of the name in the four sections |
 
-The symbol kinds are the v0 TypeScript set plus the any-file kinds `key`, `heading` and
-`dependency`. The spans are character offsets into the file; the rename plan's edits are the token's
-inner range (a JSON/YAML key's quotes are never part of the edit). A Markdown heading rename is the
-adapter's refusal: the anchor slug the renderer derives is not derivable honestly from the text.
+The symbol kinds are the v0 TypeScript set plus the any-file kinds `key`, `heading` and `dependency`.
+
+The spans are character offsets into the file, and the edits of the rename plan are the inner range of the token, so the quotes of a JSON/YAML key are never part of the edit.
+
+A Markdown heading rename is the refusal of the adapter, because the renderer derives the anchor slug in a way that the text does not honestly give.
 
 ## The deepener (the harness LSP seam)
 
-`ctx.lsp` (`@deepseek-ai/dsh-lsp`) is the harness's language-server seam. It exposes exactly four
-read operations - `goToDefinition`, `findReferences`, `goToImplementation`, `hover` - and no symbol
-enumeration or rename/WorkspaceEdit, so the service adopts it as the PRIMARY reference answer for
-the TypeScript/JavaScript extensions while the SYMBOLS still come from the lexical scan:
+`ctx.lsp` (`@deepseek-ai/dsh-lsp`) is the language-server seam of the harness.
 
-- one `findReferences` query per declared symbol, at the identifier's offset inside its declaration
-  span, with `workspaceRoot` from config `root`;
+It exposes exactly four read operations (`goToDefinition`, `findReferences`, `goToImplementation`, `hover`) and no symbol enumeration or rename/WorkspaceEdit, so the service adopts it as the PRIMARY reference answer for the TypeScript/JavaScript extensions while the SYMBOLS still come from the lexical scan:
+
+- one `findReferences` query per declared symbol, at the offset of the identifier inside its declaration span, with `workspaceRoot` from the config `root`;
 - only same-file locations are kept (the model is per file);
-- an answer replaces the lexical reference list and ledgers
-  `deepened <path> (<n> references via lsp)`;
+- an answer replaces the lexical reference list and ledgers `deepened <path> (<n> references via lsp)`;
 - the rename is derived from the same locations (`certainty: "references"`).
 
-The seam is PROBED (`ctx.get("lsp")`), never injected (`inject` stays `["pluginFactory", "fs"]`).
-Every "cannot answer" path - the seam absent, no provider for the extension, a failed query, a
-non-`locations` result, an empty symbol list - is `undefined`: the lexical answer stands and no line
-is added.
+The seam is PROBED (`ctx.get("lsp")`) and never injected (`inject` stays `["pluginFactory", "fs"]`).
+
+Every "cannot answer" path (the seam absent, no provider for the extension, a failed query, a non-`locations` result, an empty symbol list) is `undefined`, so the lexical answer stands and no line is added.
 
 ## The repeat-event guard (Function/Duplicate)
 
-The fs/observed listener coalesces repeat events: a repeat for the same path carrying the same
-version within a short window (2 s on the module's clock; the `State.Now` test seam overrides it; no
-real timer anywhere) runs no invalidation and records nothing - the version token identifies the
-file state, so the model for that state is already dropped, and a model rebuilt since was built from
-the same version and stays fresh. A different version, or the same version after the window,
-invalidates normally: the last distinct version always wins. No new ledger line: a coalesced repeat
-records nothing.
+The fs/observed listener coalesces repeat events: a repeat for the same path carrying the same version within a short window (2 s on the clock of the module, which the `State.Now` test seam overrides, with no real timer anywhere) runs no invalidation and records nothing, because the version token identifies the file state, so the model for that state is already dropped and a model rebuilt since was built from the same version and stays fresh.
+
+A different version, or the same version after the window, invalidates normally, so the last distinct version always wins.
+
+The guard adds no ledger line, because a coalesced repeat records nothing.
 
 ## The ledger strings (module-owned, byte-stable)
 
@@ -116,6 +109,6 @@ semantics: failed <path> (<reason>)
 semantics: storage open failed: <reason>
 ```
 
-`deepened` is the ONE line this wave adds; every other line is unchanged. The count in
-`adapters registered (<n> extensions)` is the registry size - extensions plus file names - so the
-default registration stays exactly `adapters registered (7 extensions)`.
+`deepened` is the ONE line that this wave adds, and every other line is unchanged.
+
+The count in `adapters registered (<n> extensions)` is the size of the registry (extensions plus file names), so the default registration stays exactly `adapters registered (7 extensions)`.

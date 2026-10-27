@@ -14,12 +14,12 @@ statuses:
 
 # APPENDIX A - THE LIVE INSPECT CAPTURES (PHASE 0 STEP 4 FILLS THIS)
 
-> Granular document of the UI Family Implementation Plan. The parent hub:
-> Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md.
+> This is a granular document of the UI Family Implementation Plan.
+> The parent hub is Documentation/Plans/UI-FAMILY-IMPLEMENTATION-PLAN.md.
 
 ---
 
-[Pending phase 0. To be filled with: the plugins.detail.section owner-prop bag; the
+[Pending phase 0. Phase 0 fills this appendix with the plugins.detail.section owner-prop bag; the
 plugins.row.config / plugins.bundle.config absence proof; the conversation.view chat + trajectory
-entry props; the pluginNavigation service surface; the profile patch row ids + disabled flags for
+entry props; the pluginNavigation service surface; and the profile patch row ids + disabled flags for
 all 13 bundles.]

@@ -1,29 +1,15 @@
 # Resolve-And-Rename - the resolve/rename/refusal semantics
 
-The lazy model build through the default TypeScript adapter, the byte-exact
-resolve and refusal lines, the symbol lookup and the reference list, the
-invalidation-driven rebuild, the index cap, the any-file adapter seam, the
-rename plan and its refusal arms, and the statistics triple.
+The test covers the lazy model build through the default TypeScript adapter, the byte-exact resolve and refusal lines, the symbol lookup and the reference list, the rebuild driven by invalidation, the index cap, the any-file adapter seam, the rename plan and its refusal arms, and the statistics triple.
 
 ## Scenarios
 
-- R1: resolve builds the model through the adapter (the exact symbols,
-  references, dependencies, freshness); the resolve line is byte-exact and
-  the file is read exactly once; the lookup and the reference list read the
-  built model.
-- R2: a path with no adapter refuses (`refused <path> (no adapter for
-  .md)`); an excluded path refuses before any read; an empty path and a
-  missing file fail with byte-exact lines.
-- R3: without a text reader the resolve fails byte-exactly (`failed <path>
-  (no fs text reader)`).
-- R4: an observed write invalidates the model and forces a rebuild; the
-  index caps at maxEntries by oldest revision.
-- R5: adapt() registers an any-file adapter (the 8-extensions line); a
-  re-registration replaces the adapter (last wins).
-- R6: the rename plan rewrites every occurrence at reference certainty
-  (`planned rename foo -> baz in <path> (3 edits, references)`); a
-  non-identifier span, an empty new name, an unadapted extension, and an
-  unresolved excluded path each refuse with their byte-exact line.
+- R1: resolve builds the model through the adapter with the exact symbols, references, dependencies, and freshness, the resolve line is byte-exact, the file is read exactly once, and the lookup and the reference list read the built model.
+- R2: a path with no adapter refuses (`refused <path> (no adapter for .md)`), an excluded path refuses before any read, and an empty path and a missing file fail with byte-exact lines.
+- R3: without a text reader the resolve fails byte-exactly (`failed <path> (no fs text reader)`).
+- R4: an observed write invalidates the model and forces a rebuild, and the index caps at maxEntries by oldest revision.
+- R5: adapt() registers an any-file adapter (the 8-extensions line), and a re-registration replaces the adapter (last wins).
+- R6: the rename plan rewrites every occurrence at reference certainty (`planned rename foo -> baz in <path> (3 edits, references)`), while a non-identifier span, an empty new name, an unadapted extension, and an unresolved excluded path each refuse with their byte-exact line.
 - R7: the rename plans without writing anything (zero writeText).
 
 ## Expected ledger strings (byte-exact, `semantics: ` prefix)

@@ -39,12 +39,10 @@ statuses:
 
 # UI-FAMILY-IMPLEMENTATION-PLAN - THE HUB
 
-The expanded, exact, step-by-step plan for implementing the researched DeepSeek Harness UI features
-for the @playform plugin family. Written 2026-10-20 by the PLAN-EXPANDER explorer agent. ASCII +
-tabs. This plan is the handoff document for a NEW conversation that begins implementation. This
-document is the HUB: the plan was distilled into granular phase/topic-subdocuments under
-Documentation/Plans/UI-Family/ - every step, anchor, acceptance line, risk, extension, and appendix
-preserved in them; this hub holds the map.
+This document holds the expanded, exact, step-by-step plan for implementing the researched DeepSeek Harness UI features for the @playform plugin family.
+The PLAN-EXPANDER explorer agent wrote it on 2026-10-20 in ASCII with tabs.
+The plan is the handoff document for a NEW conversation that begins implementation.
+This document is the HUB: the plan was distilled into granular phase and topic subdocuments under Documentation/Plans/UI-Family/, which preserve every step, anchor, acceptance line, risk, extension, and appendix, and this hub holds the map.
 
 Foundations (read these first, in this order):
 Documentation/Researches/HARNESS-UI-PLUGIN-RESEARCH.md (R-UI-1: the Plugins page slots)
