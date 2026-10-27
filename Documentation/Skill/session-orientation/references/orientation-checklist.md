@@ -45,14 +45,14 @@ Before launching a subagent:
 
 ## D. Failure modes this checklist prevents
 
-| Failure                        | What it looks like                                     |
-| ------------------------------ | ------------------------------------------------------ |
-| Acting before orientation      | Edits in the wrong tree; a law violated in step one    |
-| Trusting prose counts          | Repeating 733/746 or 25 packages after the tree moved  |
-| Reading plans as shipped truth | Documenting a planned plugin as if it exists           |
-| Wrong git surface              | Root `git status` missing `Site/` changes              |
-| Delegation without the laws    | A child edits through the terminal, or commits         |
-| Stale model route              | A delegation without the explicit triple               |
+| Failure                        | What it looks like                                    |
+| ------------------------------ | ----------------------------------------------------- |
+| Acting before orientation      | Edits in the wrong tree; a law violated in step one   |
+| Trusting prose counts          | Repeating 733/746 or 25 packages after the tree moved |
+| Reading plans as shipped truth | Documenting a planned plugin as if it exists          |
+| Wrong git surface              | Root `git status` missing `Site/` changes             |
+| Delegation without the laws    | A child edits through the terminal, or commits        |
+| Stale model route              | A delegation without the explicit triple              |
 
 ## E. The six answers
 

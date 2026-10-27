@@ -35,14 +35,14 @@ The generic Cordis API is `plugin-development`; the smoke discipline is `smoke-w
 
 Two release groups, one contract:
 
-| Group    | Names                                                                                             | Runtime                          |
-| -------- | ------------------------------------------------------------------------------------------------- | -------------------------------- |
-| Classic  | `@scope/lib-dsh-*`, `@scope/hook-dsh-*`, `@scope/plugin-dsh-*`, `@scope/client-dsh-*`            | Plain TypeScript                 |
-| EffectTS | `@scope/ets-*` (the base `ets-base-dsh` plus one twin per covered package)                       | Effect 4.0.5 services and layers |
+| Group    | Names                                                                                 | Runtime                          |
+| -------- | ------------------------------------------------------------------------------------- | -------------------------------- |
+| Classic  | `@scope/lib-dsh-*`, `@scope/hook-dsh-*`, `@scope/plugin-dsh-*`, `@scope/client-dsh-*` | Plain TypeScript                 |
+| EffectTS | `@scope/ets-*` (the base `ets-base-dsh` plus one twin per covered package)            | Effect 4.0.5 services and layers |
 
 58 Classic packages, 48 EffectTS packages - the original 14 plugins (plus `lib-dsh-core`) plus the
-36 packages of the 2026-10-22 delivery (the workspace family, the suggesters, the orchestration
-set, the client family) and 30 ETS twins, with seven later Classic additions (`plugin-dsh-cost`,
+36 packages of the 2026-10-22 delivery (the workspace family, the suggesters, the orchestration set,
+the client family) and 30 ETS twins, with seven later Classic additions (`plugin-dsh-cost`,
 `plugin-dsh-cost-analysis`, `plugin-dsh-lesson-review`, `hook-dsh-comment-filter`,
 `hook-dsh-lesson-nudge`, `lib-dsh-pack`, `lib-dsh-trace`) and the `ets-lib-dsh-pack` and
 `ets-lib-dsh-trace` twins.

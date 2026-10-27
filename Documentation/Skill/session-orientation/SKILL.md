@@ -77,15 +77,15 @@ section without opening another file.
 
 ## The repository map
 
-| Path             | What it is                                                                   |
-| ---------------- | ---------------------------------------------------------------------------- |
-| `Classic/`       | The plain-TypeScript release: 58 packages plus the smoke suites              |
-| `EffectTS/`      | The Effect-TS release: 48 packages plus `ets-base-dsh` and the smokes        |
-| `Site/`          | The Astro static site; its own git repository, gitignored from the root      |
-| `Test/`          | Fixture archives, governance batteries, probes                               |
-| `Documentation/` | Framework, guides, plans, skills, archive, reports                           |
-| `Maintain/`      | The formatting, smoke, wiring, and link-check entry points                   |
-| `diagrams/`      | Source diagrams                                                              |
+| Path             | What it is                                                              |
+| ---------------- | ----------------------------------------------------------------------- |
+| `Classic/`       | The plain-TypeScript release: 58 packages plus the smoke suites         |
+| `EffectTS/`      | The Effect-TS release: 48 packages plus `ets-base-dsh` and the smokes   |
+| `Site/`          | The Astro static site; its own git repository, gitignored from the root |
+| `Test/`          | Fixture archives, governance batteries, probes                          |
+| `Documentation/` | Framework, guides, plans, skills, archive, reports                      |
+| `Maintain/`      | The formatting, smoke, wiring, and link-check entry points              |
+| `diagrams/`      | Source diagrams                                                         |
 
 `Boilerplate/` no longer exists.
 

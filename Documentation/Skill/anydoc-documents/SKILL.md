@@ -6,8 +6,8 @@ description:
     extractors."
 whenToUse:
     "Load when a task needs a PDF, DOCX, PPTX, XLSX, EPUB, ODT, ODP, ODS, RTF, DOC, PPT, or CSV
-    file's text or structure, or one converted to markdown. Not for layout rendering, PDF export,
-    or authoring Office files."
+    file's text or structure, or one converted to markdown. Not for layout rendering, PDF export, or
+    authoring Office files."
 version: 1.1.0
 updated: 2026-10-28
 ---
@@ -25,15 +25,15 @@ extractor stack to answer a question that one command answers in under a second.
 ## When to use
 
 - Read or extract text from a PDF, DOCX, PPTX, XLSX, EPUB, ODT, ODP, ODS, RTF, DOC, PPT, or CSV
-    file.
+  file.
 - Convert one of those formats to Markdown for indexing, quoting, diffing, or input to another model
-    or tool.
+  or tool.
 - Summarize a paper, contract, deck, or spreadsheet without opening it.
 - Extract text in bulk across a directory of mixed documents.
 - Do not use this skill for visual layout, page images, or rendering fidelity (see the
-    `office-render` skill), for a PDF (see `office-export-pdf`), for authoring or editing DOCX,
-    PPTX, or XLSX (see `office-docx`, `office-pptx`, `office-xlsx`), or for HTML input, which anydoc
-    does not support.
+  `office-render` skill), for a PDF (see `office-export-pdf`), for authoring or editing DOCX, PPTX,
+  or XLSX (see `office-docx`, `office-pptx`, `office-xlsx`), or for HTML input, which anydoc does
+  not support.
 
 ## The rules
 
@@ -164,13 +164,10 @@ extractor stack to answer a question that one command answers in under a second.
 
 ## Verification
 
-Run `anydoc --version` and
-expect `0.2.4`. Run
-`anydoc "<file>" -o "<file>.md"; echo $?`
-and expect `0` with an output file that is not empty. A non-zero code is a
-true failure of this skill's path and not a reason to try another tool
-without a word, so report the code and the file. The full format list is the
-`--format` line of `anydoc --help`:
+Run `anydoc --version` and expect `0.2.4`. Run `anydoc "<file>" -o "<file>.md"; echo $?` and expect
+`0` with an output file that is not empty. A non-zero code is a true failure of this skill's path
+and not a reason to try another tool without a word, so report the code and the file. The full
+format list is the `--format` line of `anydoc --help`:
 
 ```text
 doc, docx, odt, pdf, ppt, pptx, rtf, epub, xlsx, ods, odp, csv

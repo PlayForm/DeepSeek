@@ -255,9 +255,9 @@ that might. Split at the point where a build would have caught the mistake.
 
 ## References
 
-| File                             | Covers                                                         | Read when                   |
-| -------------------------------- | -------------------------------------------------------------- | --------------------------- |
-| `references/strains.md`          | Each strain's surfaces, protocol, and failure path             | Writing a spec for a strain |
-| `references/reasoning-record.md` | The `Detail/` mirror, the pairing, the provenance, the coverage | An artifact needs a record |
-| `references/delegation-loop.md`  | The seven stages in detail, with the formalization items       | Running a delegation        |
-| `references/environment.md`      | Concurrency, tree state, scope, and edit discipline            | Working beside other lanes  |
+| File                             | Covers                                                          | Read when                   |
+| -------------------------------- | --------------------------------------------------------------- | --------------------------- |
+| `references/strains.md`          | Each strain's surfaces, protocol, and failure path              | Writing a spec for a strain |
+| `references/reasoning-record.md` | The `Detail/` mirror, the pairing, the provenance, the coverage | An artifact needs a record  |
+| `references/delegation-loop.md`  | The seven stages in detail, with the formalization items        | Running a delegation        |
+| `references/environment.md`      | Concurrency, tree state, scope, and edit discipline             | Working beside other lanes  |

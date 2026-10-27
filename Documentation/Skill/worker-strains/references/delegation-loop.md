@@ -18,14 +18,14 @@ The raw sentence is not delegated, because the child would inherit the ambiguity
 
 The spec is written with six items:
 
-| Item          | The question it answers                                   |
-| ------------- | --------------------------------------------------------- |
-| Scope         | What exactly is in and out of the task                    |
-| Surface       | Which files, packages, or pages may be touched            |
-| Exclusions    | What must not change, and the known traps                 |
-| Sequence      | The order of the steps, and what depends on what          |
-| Arbiter       | The command that decides success, and its expected output |
-| Acceptance    | The check that proves the lane is done                    |
+| Item       | The question it answers                                   |
+| ---------- | --------------------------------------------------------- |
+| Scope      | What exactly is in and out of the task                    |
+| Surface    | Which files, packages, or pages may be touched            |
+| Exclusions | What must not change, and the known traps                 |
+| Sequence   | The order of the steps, and what depends on what          |
+| Arbiter    | The command that decides success, and its expected output |
+| Acceptance | The check that proves the lane is done                    |
 
 The shared facts the child cannot look up are attached: the current counts, the ledger strings, the
 laws it must follow.

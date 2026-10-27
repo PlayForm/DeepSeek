@@ -14,8 +14,8 @@
 `astro.config.ts`:
 
 - `srcDir: "./Source"`, `publicDir: "./Public"`, `outDir: "./Target"`.
-- `site`: `https://<site-host>` in a build, `localhost:9999` in development. Keep it in
-  sync with `Links.Site`.
+- `site`: `https://<site-host>` in a build, `localhost:9999` in development. Keep it in sync with
+  `Links.Site`.
 - `compressHTML: true`; prefetch on hover.
 - Integrations: the service worker (production only), the sitemap, the critical-CSS inliner
   (Beasties with `pruneSource: false`), and the compressor.

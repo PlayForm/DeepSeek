@@ -125,10 +125,10 @@ The parent does not call `wait_agent`, sleep, or poll the task board.
   over: `interrupt_agent` every running lane, message each one "STAND DOWN - do not write", check
   the tree ONCE at the takeover, and then do the work. Never monitor a handover.
 - The incident that made this a law is recorded in `references/queue.md`. The second incident, on 25
-  October 2026, is recorded there as well: the Lead dispatched three lanes, then called
-  `wait_agent` twice and inspected the lanes' output paths between waits while its own code work sat
-  undone; the user stopped it with "STOP WAITING FOR AGENTS". Stage 5 ("Monitor") licensed that
-  shape; it is now "Continue".
+  October 2026, is recorded there as well: the Lead dispatched three lanes, then called `wait_agent`
+  twice and inspected the lanes' output paths between waits while its own code work sat undone; the
+  user stopped it with "STOP WAITING FOR AGENTS". Stage 5 ("Monitor") licensed that shape; it is now
+  "Continue".
 
 ## The information broker
 

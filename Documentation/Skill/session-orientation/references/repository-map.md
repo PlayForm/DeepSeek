@@ -26,10 +26,10 @@ Any document that still calls it a third implementation is stale.
 
 ## The two release groups
 
-| Group    | Names                                                                                    | Runtime                          |
-| -------- | ---------------------------------------------------------------------------------------- | -------------------------------- |
-| Classic  | `@scope/lib-dsh-*`, `@scope/hook-dsh-*`, `@scope/plugin-dsh-*`, `@scope/client-dsh-*`    | Plain TypeScript, no framework   |
-| EffectTS | `@scope/ets-*` (the base `ets-base-dsh` plus one twin per covered package)               | Effect 4.0.5 services and layers |
+| Group    | Names                                                                                 | Runtime                          |
+| -------- | ------------------------------------------------------------------------------------- | -------------------------------- |
+| Classic  | `@scope/lib-dsh-*`, `@scope/hook-dsh-*`, `@scope/plugin-dsh-*`, `@scope/client-dsh-*` | Plain TypeScript, no framework   |
+| EffectTS | `@scope/ets-*` (the base `ets-base-dsh` plus one twin per covered package)            | Effect 4.0.5 services and layers |
 
 All packages sit at `0.3.0` (unpublished).
 

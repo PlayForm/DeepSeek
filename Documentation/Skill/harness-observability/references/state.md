@@ -28,10 +28,10 @@ The subagents' usage is computable from their files.
 
 Two homes, byte-identical:
 
-| Home                     | Role                         |
-| ------------------------ | ---------------------------- |
-| `Documentation/Skill/`   | The repo's specialized truth |
-| `${DSH_HOME}/skills/`    | The global fallback          |
+| Home                   | Role                         |
+| ---------------------- | ---------------------------- |
+| `Documentation/Skill/` | The repo's specialized truth |
+| `${DSH_HOME}/skills/`  | The global fallback          |
 
 Where the two disagree, the repo copy wins, and the fix is synced to both.
 

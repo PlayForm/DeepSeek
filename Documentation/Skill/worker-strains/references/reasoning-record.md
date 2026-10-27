@@ -104,8 +104,8 @@ reports "done" because it has no way to say "three of ten".
 
     A status word is only as strong as its column header.
 
-    A table headed "Where it is settled" quietly redefined `green` from "verified" to
-    "confirmable", and four rows rested on vendor documentation while they claimed verification.
+    A table headed "Where it is settled" quietly redefined `green` from "verified" to "confirmable",
+    and four rows rested on vendor documentation while they claimed verification.
 
     Name the column after the semantics, and keep the status vocabulary owned by one skill.
 

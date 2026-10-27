@@ -41,15 +41,15 @@ short.
 
 ## When this skill applies
 
-| Scenario | What is done |
-| --- | --- |
-| The request spans references, a plan, GitHub tasks, and code. | The workflow is loaded. |
-| The user names several agents, a workflow, a flight plan, or a decomposition. | The workflow is loaded. |
-| A demo, a proof of concept, and a real product must be kept apart in the same tree. | The workflow is loaded. |
-| The task is a single delegation. | `worker-strains` is used instead. |
-| The task is the lane contract. | `idle-agent-protocol` is used instead. |
-| The task is the queue. | `orchestrator-batch` is used instead. |
-| The task is the route. | `task-routing` is used instead. |
+| Scenario                                                                            | What is done                           |
+| ----------------------------------------------------------------------------------- | -------------------------------------- |
+| The request spans references, a plan, GitHub tasks, and code.                       | The workflow is loaded.                |
+| The user names several agents, a workflow, a flight plan, or a decomposition.       | The workflow is loaded.                |
+| A demo, a proof of concept, and a real product must be kept apart in the same tree. | The workflow is loaded.                |
+| The task is a single delegation.                                                    | `worker-strains` is used instead.      |
+| The task is the lane contract.                                                      | `idle-agent-protocol` is used instead. |
+| The task is the queue.                                                              | `orchestrator-batch` is used instead.  |
+| The task is the route.                                                              | `task-routing` is used instead.        |
 
 ## Size the scope before the waves
 
@@ -210,29 +210,29 @@ point every lane at the document, and put only the lane's scope and its arbiter 
 paraphrase in the brief is where the drift enters, because the lane cannot check the paraphrase
 against the source.
 
-| Date       | Lesson                                                                                                                                   |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| 2026-10-27 | Three lanes built one package from a design document carrying the DDL and the formulas; no reconciliation pass was needed.               |
+| Date       | Lesson                                                                                                                                            |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-10-27 | Three lanes built one package from a design document carrying the DDL and the formulas; no reconciliation pass was needed.                        |
 | 2026-10-27 | A write-only lane that cannot build needs the strict flags and the exact signatures in the spec; two builds failed on `noUncheckedIndexedAccess`. |
-| 2026-10-27 | Fixtures passed 56 checks while the live replay found a directory ranked as a file and every edit reading `+0/-0`.                        |
+| 2026-10-27 | Fixtures passed 56 checks while the live replay found a directory ranked as a file and every edit reading `+0/-0`.                                |
 
 ## Verification
 
 The loop ran correctly when the plan's statuses and the README name the same scope, when the board
-has the epic and the sub-issues nested and the Target dates are set, when `python3
-Maintain/Verify.py` prints PASS, and when each lane's arbiter printed its result and the parent
-grepped the artifact for each claimed fix.
+has the epic and the sub-issues nested and the Target dates are set, when
+`python3 Maintain/Verify.py` prints PASS, and when each lane's arbiter printed its result and the
+parent grepped the artifact for each claimed fix.
 
 ## Anti-patterns
 
-| Mistake | Cost | Do instead |
-| --- | --- | --- |
-| A recon scout reads pages and shelves none. | The evidence disappears with the session. | Shelve every URL before the scout returns. |
-| The parent plans the content instead of the process. | The parent becomes a second, uncoordinated worker. | Frame, decompose, verify, and record only. |
-| A public site is implied when the product is the Control Panel. | The scope expands into a surface the user did not ask for. | Name the public site as absent. |
-| The board is a flat task list instead of nested sub-issues. | The decomposition cannot be verified. | Nest the sub-issues under the epic. |
-| The scope gate is skipped after a correction. | The out-of-scope work is smuggled into the plan. | Park the out-of-scope work and correct the plan in the same pass. |
-| A failed plugin is left enabled. | The hook strips or blocks the work. | Disable the failed plugin and keep the guards. |
+| Mistake                                                         | Cost                                                       | Do instead                                                        |
+| --------------------------------------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------- |
+| A recon scout reads pages and shelves none.                     | The evidence disappears with the session.                  | Shelve every URL before the scout returns.                        |
+| The parent plans the content instead of the process.            | The parent becomes a second, uncoordinated worker.         | Frame, decompose, verify, and record only.                        |
+| A public site is implied when the product is the Control Panel. | The scope expands into a surface the user did not ask for. | Name the public site as absent.                                   |
+| The board is a flat task list instead of nested sub-issues.     | The decomposition cannot be verified.                      | Nest the sub-issues under the epic.                               |
+| The scope gate is skipped after a correction.                   | The out-of-scope work is smuggled into the plan.           | Park the out-of-scope work and correct the plan in the same pass. |
+| A failed plugin is left enabled.                                | The hook strips or blocks the work.                        | Disable the failed plugin and keep the guards.                    |
 
 ## References
 

@@ -23,7 +23,7 @@ A skill that restates another skill's rules fails the single-owner rule (section
 ## 2. The corpus map (one owner per domain)
 
 | Skill                   | Owns                                                                                         | Does not own                                                                          |
-| ------------------------ | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| ----------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
 | `session-orientation`   | First-load order, repository map, current-state pointers, law index                          | The laws themselves (each has an owner below)                                         |
 | `code-authoring`        | File-write tool discipline, byte integrity, git checks-only, code style                      | Plugin contracts, routing, smokes                                                     |
 | `plugin-development`    | The DSH/Cordis plugin API: dispatch, anatomy, config, services, tools                        | The family's bundle conventions                                                       |
@@ -64,7 +64,7 @@ task nouns and verbs), not a slogan.
 ### 3.2 Body sections (in this order, none omitted)
 
 1. **Title + purpose** - one paragraph: the decision this skill governs and the failure it prevents.
-    No history unless the history is a rule.
+   No history unless the history is a rule.
 2. **When to use** - bullets; include "Do not use for:" with the owner of the excluded work.
 3. **The rules** - numbered, imperative, each one action. The reason is a clause, not a paragraph.
 4. **The workflow** - numbered steps with exact paths and commands. Ends with the verification gate.
@@ -88,12 +88,12 @@ If no, the missing rule belongs in the body, not in a reference.
 
 - One topic per file, kebab-case, under `references/`.
 - The file opens with a one-sentence purpose, then the rule, then the detail (inventory, examples,
-    incident, environment notes).
+  incident, environment notes).
 - A reference may be long; a reference may not be vague. Every claim is verifiable or marked as
-    history.
+  history.
 - No reference exists without a pointer from its SKILL.md; no pointer exists without a file.
 - Scripts live in `scripts/` and get a reference that states purpose, inputs, outputs, and failure
-    modes.
+  modes.
 
 ## 5. Voice and style
 
@@ -131,17 +131,17 @@ printed arbiter output, and the commit or `READY-TO-COMMIT`.
 
 - Second person, imperative: "Run", "Do not", "Verify".
 - One idea per sentence, and each sentence should carry enough of its reason to stand on its own; a
-    short sentence is for a command, a path, or a single prohibition. Short sentences win.
+  short sentence is for a command, a path, or a single prohibition. Short sentences win.
 - Active voice. Name the actor.
 - No hedging ("should probably", "may want to"), no rhetoric, no slogans.
 - ASCII only: hyphen-minus, straight quotes, three dots. The normalize hooks are active; a
-    deliberate glyph needs `raw-write` (see `instructional-writing`).
+  deliberate glyph needs `raw-write` (see `instructional-writing`).
 - Tables for enumerable decisions; numbered lists for order; bullets for unordered sets.
 - Tabs for indentation; lines at or under 100 characters.
 - Do not write "the full philosophy lives in the references" or any other meta-commentary about the
-    corpus.
+  corpus.
 - Do not put a spoken reply, a report shape, a sentence count, or a verbatim line in a skill. State
-    the artifact and its acceptance check.
+  the artifact and its acceptance check.
 
 ## 6. The single-owner rule
 
@@ -224,8 +224,8 @@ Point to the owner or the source file (a manifest, a smoke README,
 - [ ] No rule appears in two skills (the ownership table, section 2).
 - [ ] No drifting fact lacks a verify command.
 - [ ] No instruction prescribes a spoken reply, a report shape, or a verbatim line.
-- [ ] The body is continuous prose with paragraphs separated by blank lines; no telegraphic
-    fragment lists.
+- [ ] The body is continuous prose with paragraphs separated by blank lines; no telegraphic fragment
+      lists.
 - [ ] The content is ASCII (no curly quotes, dashes, ellipsis glyphs).
 - [ ] The repo copy and the global copy are byte-identical.
 

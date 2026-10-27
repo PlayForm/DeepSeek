@@ -686,5 +686,11 @@
 		"exitCode": 5,
 		"message": "Blocked by anti-bot protection: Cloudflare JS challenge on both the default pass and the one --filter raw retry. No file written; the disclosure-pattern claims stay unverified and are cited nowhere.",
 		"disposition": "retryable"
+	},
+	{
+		"source": "https://deepseek.playform.cloud/plugins/",
+		"slug": "deepseek-playform-cloud-plugins",
+		"role": "sources",
+		"status": "converted"
 	}
 ]

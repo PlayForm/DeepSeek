@@ -60,7 +60,7 @@ Do not reason from the label.
 
 | Preset                                           | Why low                                 |
 | ------------------------------------------------ | --------------------------------------- |
-| Get from a known corpus, cite file:line         | reading and quoting, no judgment        |
+| Get from a known corpus, cite file:line          | reading and quoting, no judgment        |
 | Mechanical sweep with a complete spec            | rename, path replace, frontmatter block |
 | Small code change with an obvious diff           | a constant, a guard, an off-by-one      |
 | Add a test from an explicit expected behavior    | the spec is the work, not the model     |
@@ -71,7 +71,7 @@ Do not reason from the label.
 | Inventory, counting, manifest building           | enumeration                             |
 | Run a known checker and report its output        | execution                               |
 | Write a report from evidence already collected   | assembly                                |
-| Summarize a page or a diff                      | compression of given material           |
+| Summarize a page or a diff                       | compression of given material           |
 | Add a CLI flag that follows an existing pattern  | the pattern is the spec                 |
 | Wire a config value through existing plumbing    | the seam already exists                 |
 | Run the final verification of a known-green tree | execution of a stated battery           |

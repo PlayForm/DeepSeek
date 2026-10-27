@@ -68,12 +68,12 @@ The methods are read-only; they are not business services and cannot change the 
 
 ## The `${DSH_HOME}` state
 
-| Path                     | What it holds                                     |
-| ------------------------ | ------------------------------------------------- |
-| `${DSH_HOME}/sessions/`  | Session transcripts (zstd JSONL) with token usage |
-| `${DSH_HOME}/skills/`    | The global skill corpus                           |
-| `${DSH_HOME}/profiles/`  | Bundles, `cordis.patch.yml`, settings             |
-| `${DSH_HOME}/*.log`      | The governance ledgers                            |
+| Path                    | What it holds                                     |
+| ----------------------- | ------------------------------------------------- |
+| `${DSH_HOME}/sessions/` | Session transcripts (zstd JSONL) with token usage |
+| `${DSH_HOME}/skills/`   | The global skill corpus                           |
+| `${DSH_HOME}/profiles/` | Bundles, `cordis.patch.yml`, settings             |
+| `${DSH_HOME}/*.log`     | The governance ledgers                            |
 
 ## The honest limits
 

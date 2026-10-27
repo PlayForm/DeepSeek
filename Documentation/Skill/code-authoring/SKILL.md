@@ -243,15 +243,15 @@ A failure is fixed before the next file, not reported as a residual.
 
 ## Anti-patterns
 
-| Mistake                                   | Cost                                        | Do instead                             |
-| ----------------------------------------- | ------------------------------------------- | -------------------------------------- |
-| `sed -i` or a heredoc to patch a file     | Invisible to the record; unverifiable bytes | `edit` with a literal match            |
-| `cat`/`head` to inspect a file            | Bypasses the read surface and the hooks     | `read` with offset and limit           |
-| Streaming a curly quote into `write`      | The normalize hooks replace it silently     | ASCII, or `raw-write`                  |
-| Weakening a smoke to pass a change        | The arbiter stops arbitrating               | Fix the change (`smoke-writing`)       |
+| Mistake                                   | Cost                                        | Do instead                              |
+| ----------------------------------------- | ------------------------------------------- | --------------------------------------- |
+| `sed -i` or a heredoc to patch a file     | Invisible to the record; unverifiable bytes | `edit` with a literal match             |
+| `cat`/`head` to inspect a file            | Bypasses the read surface and the hooks     | `read` with offset and limit            |
+| Streaming a curly quote into `write`      | The normalize hooks replace it silently     | ASCII, or `raw-write`                   |
+| Weakening a smoke to pass a change        | The arbiter stops arbitrating               | Fix the change (`smoke-writing`)        |
 | Committing because the work "looks ready" | The user loses control of the tree          | Step's files staged, then `git gcommit` |
-| Named exports spreading through the tree  | Uniformity decays; import sites multiply    | Anonymous defaults; contract only      |
-| Abbreviations "just this once"            | The table becomes advisory                  | Full words, documented exceptions      |
+| Named exports spreading through the tree  | Uniformity decays; import sites multiply    | Anonymous defaults; contract only       |
+| Abbreviations "just this once"            | The table becomes advisory                  | Full words, documented exceptions       |
 
 ## The moved tree
 

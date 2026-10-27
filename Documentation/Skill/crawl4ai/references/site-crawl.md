@@ -1,22 +1,22 @@
 # Site crawl and the delegation contract
 
-This file covers how a whole-site or sub-seed crawl runs as plain commands against the
-local Crawl4AI server, and what a delegated subagent sends back to its parent.
+This file covers how a whole-site or sub-seed crawl runs as plain commands against the local
+Crawl4AI server, and what a delegated subagent sends back to its parent.
 
 Path: `<crawl4ai>/scripts/crawl_site.py`
 
 Interpreter: `/usr/bin/python3` (3.9.6), standard library only, executable.
 
-The script imports `read_url.py` from the same directory for the URL policy, the token,
-the server check, and the `/crawl` call, so each rule has one implementation.
+The script imports `read_url.py` from the same directory for the URL policy, the token, the server
+check, and the `/crawl` call, so each rule has one implementation.
 
 ## Purpose
 
-The purpose is to turn a seed URL into a bounded set of Markdown files on disk plus a
-manifest, and to return a report small enough to travel in a message.
+The purpose is to turn a seed URL into a bounded set of Markdown files on disk plus a manifest, and
+to return a report small enough to travel in a message.
 
-A crawl is bulk work: without this shape, the pages land in the context window and the
-parent loses the thread.
+A crawl is bulk work: without this shape, the pages land in the context window and the parent loses
+the thread.
 
 ## The delegation contract
 
@@ -24,27 +24,25 @@ A parent that delegates a crawl gets exactly three things back:
 
 1. **The report.**
 
-    The report gives the pages written, the pages failed, the pages skipped, the depth
-    reached, the elapsed time, and the absolute paths of the output directory and the
-    manifest.
+    The report gives the pages written, the pages failed, the pages skipped, the depth reached, the
+    elapsed time, and the absolute paths of the output directory and the manifest.
 
 2. **The manifest.**
 
-    The manifest (`index.json`) holds one entry per page with `url`, `file`, `title`,
-    `depth`, `chars`, and `status`, plus a `pending` list of URLs that were discovered
-    but not fetched.
+    The manifest (`index.json`) holds one entry per page with `url`, `file`, `title`, `depth`,
+    `chars`, and `status`, plus a `pending` list of URLs that were discovered but not fetched.
 
     That list is what `--resume` continues from.
 
 3. **The page files.**
 
-    The page files are Markdown, one per page, each with a frontmatter block that
-    carries `url`, `title`, `depth`, `chars`, and `untrusted: true`.
+    The page files are Markdown, one per page, each with a frontmatter block that carries `url`,
+    `title`, `depth`, `chars`, and `untrusted: true`.
 
 The parent never receives page bodies in the report.
 
-It reads a specific page with the `read` tool when it needs the text, using the `file`
-path from the manifest.
+It reads a specific page with the `read` tool when it needs the text, using the `file` path from the
+manifest.
 
 That shape keeps a 40-page crawl to a few hundred bytes of message.
 
@@ -80,8 +78,8 @@ The parent has these obligations:
 
     Read only the pages that the task needs.
 
-The mechanics of delegating and of reporting live in the `worker-strains` and
-`orchestrator-batch` skills, and this file states only the artifact contract.
+The mechanics of delegating and of reporting live in the `worker-strains` and `orchestrator-batch`
+skills, and this file states only the artifact contract.
 
 ## Usage
 
@@ -153,15 +151,15 @@ output:   /tmp/c4site
 manifest: /tmp/c4site/index.json
 ```
 
-`--json` emits the same facts as an object: `seed`, `host`, `pages`, `failed`,
-`skipped`, `documents_skipped`, `depth_reached`, `depth_requested`, `out_dir`,
-`manifest`, `summary`, `page_urls`, `failures`, `pending`, and `elapsed_s`.
+`--json` emits the same facts as an object: `seed`, `host`, `pages`, `failed`, `skipped`,
+`documents_skipped`, `depth_reached`, `depth_requested`, `out_dir`, `manifest`, `summary`,
+`page_urls`, `failures`, `pending`, and `elapsed_s`.
 
-A `pending` count above zero means that the page cap or the depth limit stopped the
-crawl with work left.
+A `pending` count above zero means that the page cap or the depth limit stopped the crawl with work
+left.
 
-Re-running the same command with `--resume` continues from that frontier without
-refetching a single page.
+Re-running the same command with `--resume` continues from that frontier without refetching a single
+page.
 
 ## Bounds and politeness
 
@@ -174,8 +172,8 @@ refetching a single page.
 | Assets and documents | never fetched | Images, CSS, JS, PDF and Office files are skipped |
 | Cache                | enabled       | A bulk crawl should not refetch what it has       |
 
-Robots handling is a deliberate subset: `User-agent` groups, `Disallow`, `Allow`, `*`
-wildcards, `$` anchors, and longest-match precedence.
+Robots handling is a deliberate subset: `User-agent` groups, `Disallow`, `Allow`, `*` wildcards, `$`
+anchors, and longest-match precedence.
 
 It does not implement crawl-delay, sitemaps, or request-rate directives.
 
@@ -183,8 +181,7 @@ If the seed itself is disallowed, the crawl stops with exit 3 and says so.
 
 Documents found while crawling are recorded as `document` skips, not fetched.
 
-Read one when it matters with `read_url.py "<document url>"`, which routes it to
-anydoc.
+Read one when it matters with `read_url.py "<document url>"`, which routes it to anydoc.
 
 ## Exit codes
 
@@ -202,25 +199,25 @@ Per-page failures do not change the exit code, and they are listed in the report
 ## Examples
 
 ```bash
-S=<crawl4ai>/scripts
+S= < crawl4ai > /scripts
 
 # what would this crawl reach?
 "$S/crawl_site.py" https://docs.example.com/ --dry-run
 
 # a documentation section, two hops, forty pages
 "$S/crawl_site.py" https://docs.example.com/ --depth 2 --max-pages 40 \
-  --include "/docs/" --out /tmp/docs
+	--include "/docs/" --out /tmp/docs
 
 # the sub-seed: one page and everything it links to
 "$S/crawl_site.py" https://example.com/blog/ --depth 1 --max-pages 15
 
 # extend a finished crawl without refetching
 "$S/crawl_site.py" https://docs.example.com/ --depth 3 --max-pages 80 \
-  --include "/docs/" --out /tmp/docs --resume
+	--include "/docs/" --out /tmp/docs --resume
 
 # a polite crawl of a small site
 "$S/crawl_site.py" https://small.example/ --depth 2 --max-pages 30 \
-  --delay-ms 250 --json
+	--delay-ms 250 --json
 ```
 
 ## Verification
@@ -239,5 +236,5 @@ ls /tmp/c4check /tmp/c4check/pages
 head -c 200 /tmp/c4check/index.json
 ```
 
-A missing `index.json` means that the crawl aborted before the manifest step, so report
-the exit code and do not read a partial directory as a finished crawl.
+A missing `index.json` means that the crawl aborted before the manifest step, so report the exit
+code and do not read a partial directory as a finished crawl.

@@ -290,17 +290,17 @@ The parent verifies before accepting:
 
 ## Anti-patterns
 
-| Mistake                                             | Cost                                          | Do instead                                                  |
-| --------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------- |
-| Omitting the route                                  | Inherits the expensive lane; unauditable      | Pass provider, model, effort                                |
-| Sending exploration to DeepSeek                     | Several times more for identical correctness  | Use the GLM at `low`                                        |
-| Calling a mechanical sweep "routine"                | Pays `high` for no gain                       | Classify by difficulty                                      |
-| Inventing a DeepSeek `high` row for semantic coding | Pays the premium without the predicted gain   | Use the GLM at `high`                                       |
-| Treating a specified implementation as "design"     | Sends GLM coding to the expensive lane        | The design is the parent's; the coding is the GLM's         |
-| Self-authorizing coding `max`                       | Several times more for identical correctness  | Only on explicit user request                               |
-| Escalating without artifacts                        | Reproduces the failure                        | Pass the failure state                                      |
-| A teammate room as the default route                | The room silently runs the expensive lane     | Route the lanes via `subagent`; record the teammate default |
-| LLM re-review of a report                           | Destroys the economics                        | Shell checks only                                           |
+| Mistake                                             | Cost                                         | Do instead                                                  |
+| --------------------------------------------------- | -------------------------------------------- | ----------------------------------------------------------- |
+| Omitting the route                                  | Inherits the expensive lane; unauditable     | Pass provider, model, effort                                |
+| Sending exploration to DeepSeek                     | Several times more for identical correctness | Use the GLM at `low`                                        |
+| Calling a mechanical sweep "routine"                | Pays `high` for no gain                      | Classify by difficulty                                      |
+| Inventing a DeepSeek `high` row for semantic coding | Pays the premium without the predicted gain  | Use the GLM at `high`                                       |
+| Treating a specified implementation as "design"     | Sends GLM coding to the expensive lane       | The design is the parent's; the coding is the GLM's         |
+| Self-authorizing coding `max`                       | Several times more for identical correctness | Only on explicit user request                               |
+| Escalating without artifacts                        | Reproduces the failure                       | Pass the failure state                                      |
+| A teammate room as the default route                | The room silently runs the expensive lane    | Route the lanes via `subagent`; record the teammate default |
+| LLM re-review of a report                           | Destroys the economics                       | Shell checks only                                           |
 
 ## References
 

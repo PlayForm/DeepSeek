@@ -1,1368 +1,1382 @@
 {
-	"sources": [
-		{
-			"source": "https://github.com/paperjs/paper.js",
-			"kind": "HTML",
-			"archive": "Archive/HTML/paperjs-paper-js.html",
-			"content": "Archive/HTML/paperjs-paper-js.content.html",
-			"converted": "Raw/paperjs-paper-js.md",
-			"status": "converted",
-			"title": "GitHub - paperjs/paper.js: The Swiss Army Knife of Vector Graphics ...",
-			"quality": {
-				"fence-no-language": 1
-			}
-		},
-		{
-			"source": "https://paperjs.org/reference/path/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/reference-path.html",
-			"content": "Archive/HTML/reference-path.content.html",
-			"converted": "Raw/reference-path.md",
-			"status": "converted",
-			"title": "Paper.js \u2014 Path",
-			"quality": {
-				"heading-duplicate": 15,
-				"heading-jump": 6,
-				"fence-no-language": 1
-			}
-		},
-		{
-			"source": "https://paperjs.org/tutorials/paths/smoothing-simplifying-flattening/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/paths-smoothing-simplifying-flattening.html",
-			"content": "Archive/HTML/paths-smoothing-simplifying-flattening.content.html",
-			"converted": "Raw/paths-smoothing-simplifying-flattening.md",
-			"status": "converted",
-			"title": "Paper.js \u2014 Smoothing, Simplifying & Flattening"
-		},
-		{
-			"source": "https://github.com/glenzli/paperjs-offset",
-			"kind": "HTML",
-			"archive": "Archive/HTML/glenzli-paperjs-offset.html",
-			"content": "Archive/HTML/glenzli-paperjs-offset.content.html",
-			"converted": "Raw/glenzli-paperjs-offset.md",
-			"status": "converted",
-			"title": "GitHub - glenzli/paperjs-offset: Path offset and stroke outline helpers ...",
-			"quality": {
-				"heading-duplicate": 1,
-				"fence-no-language": 1,
-				"code-non-ascii": 32
-			}
-		},
-		{
-			"source": "https://github.com/AngusJohnson/Clipper2",
-			"kind": "HTML",
-			"archive": "Archive/HTML/angusjohnson-clipper2.html",
-			"content": "Archive/HTML/angusjohnson-clipper2.content.html",
-			"converted": "Raw/angusjohnson-clipper2.md",
-			"status": "converted",
-			"title": "GitHub - AngusJohnson/Clipper2: Polygon Clipping, Offsetting & ...",
-			"quality": {
-				"long-line": 2
-			}
-		},
-		{
-			"source": "https://www.angusj.com/clipper2/Docs/Overview.htm",
-			"kind": "HTML",
-			"archive": "Archive/HTML/docs-overview.html",
-			"content": "Archive/HTML/docs-overview.content.html",
-			"converted": "Raw/docs-overview.md",
-			"status": "converted",
-			"title": "Clipper2 - Polygon Clipping Offsetting & Triangulating",
-			"quality": {
-				"raw-html": 4
-			}
-		},
-		{
-			"source": "https://www.npmjs.com/package/clipper2-wasm",
-			"kind": "HTML",
-			"archive": "Archive/HTML/package-clipper2-wasm.html",
-			"content": "Archive/HTML/package-clipper2-wasm.content.html",
-			"converted": "Raw/package-clipper2-wasm.md",
-			"status": "stub",
-			"title": "clipper2-wasm - npm",
-			"quality": {
-				"heading-jump": 1
-			},
-			"note": "npm page carries no README (756-byte body); the README lives on the jsDelivr mirror and was recovered as its own source (clipper2-wasm)"
-		},
-		{
-			"source": "https://github.com/countertype/clipper2-ts",
-			"kind": "HTML",
-			"archive": "Archive/HTML/countertype-clipper2-ts.html",
-			"content": "Archive/HTML/countertype-clipper2-ts.content.html",
-			"converted": "Raw/countertype-clipper2-ts.md",
-			"status": "converted",
-			"title": "GitHub - countertype/clipper2-ts: TypeScript port of Clipper2 polygon ..."
-		},
-		{
-			"source": "https://github.com/steveruizok/perfect-freehand",
-			"kind": "HTML",
-			"archive": "Archive/HTML/steveruizok-perfect-freehand.html",
-			"content": "Archive/HTML/steveruizok-perfect-freehand.content.html",
-			"converted": "Raw/steveruizok-perfect-freehand.md",
-			"status": "converted",
-			"title": "GitHub - steveruizok/perfect-freehand: Draw perfect pressure-sensitive ..."
-		},
-		{
-			"source": "https://github.com/mfogel/polygon-clipping",
-			"kind": "HTML",
-			"archive": "Archive/HTML/mfogel-polygon-clipping.html",
-			"content": "Archive/HTML/mfogel-polygon-clipping.content.html",
-			"converted": "Raw/mfogel-polygon-clipping.md",
-			"status": "converted",
-			"title": "GitHub - mfogel/polygon-clipping: Apply boolean polygon clipping ..."
-		},
-		{
-			"source": "https://github.com/danmarshall/svg-path-outline",
-			"kind": "HTML",
-			"archive": "Archive/HTML/danmarshall-svg-path-outline.html",
-			"content": "Archive/HTML/danmarshall-svg-path-outline.content.html",
-			"converted": "Raw/danmarshall-svg-path-outline.md",
-			"status": "converted",
-			"title": "GitHub - danmarshall/svg-path-outline: Create an outline surrounding an ...",
-			"quality": {
-				"fence-no-language": 1
-			}
-		},
-		{
-			"source": "https://danmarshall.github.io/svg-path-outline/browser/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/svg-path-outline-browser.html",
-			"content": "Archive/HTML/svg-path-outline-browser.content.html",
-			"converted": "Raw/svg-path-outline-browser.md",
-			"status": "stub",
-			"title": "svg-path-outline",
-			"note": "interactive canvas application; the page DOM carries almost no text (248-byte body), so there is nothing to convert"
-		},
-		{
-			"source": "https://github.com/alexbol99/flatten-js",
-			"kind": "HTML",
-			"archive": "Archive/HTML/alexbol99-flatten-js.html",
-			"content": "Archive/HTML/alexbol99-flatten-js.content.html",
-			"converted": "Raw/alexbol99-flatten-js.md",
-			"status": "converted",
-			"title": "GitHub - alexbol99/flatten-js: Javascript library for 2d geometry \u00b7 ...",
-			"quality": {
-				"fence-no-language": 1
-			}
-		},
-		{
-			"source": "https://github.com/rveciana/svg-path-properties",
-			"kind": "HTML",
-			"archive": "Archive/HTML/rveciana-svg-path-properties.html",
-			"content": "Archive/HTML/rveciana-svg-path-properties.content.html",
-			"converted": "Raw/rveciana-svg-path-properties.md",
-			"status": "converted",
-			"title": "GitHub - rveciana/svg-path-properties: Pure Javascript alternative to ...",
-			"quality": {
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"code-non-ascii": 1
-			}
-		},
-		{
-			"source": "https://geoexamples.com/svg-path-properties/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/svg-path-properties.html",
-			"content": "Archive/HTML/svg-path-properties.content.html",
-			"converted": "Raw/svg-path-properties.md",
-			"status": "converted",
-			"title": "svg-path-properties",
-			"quality": {
-				"fence-no-language": 1
-			}
-		},
-		{
-			"source": "https://github.com/herrstrietzel/svg-path-intersections",
-			"kind": "HTML",
-			"archive": "Archive/HTML/herrstrietzel-svg-path-intersections.html",
-			"content": "Archive/HTML/herrstrietzel-svg-path-intersections.content.html",
-			"converted": "Raw/herrstrietzel-svg-path-intersections.md",
-			"status": "converted",
-			"title": "GitHub - herrstrietzel/svg-path-intersections: Get all intersections ...",
-			"quality": {
-				"fence-no-language": 1,
-				"fence-blank-padded": 1
-			}
-		},
-		{
-			"source": "https://github.com/davidbau/seedrandom",
-			"kind": "HTML",
-			"archive": "Archive/HTML/davidbau-seedrandom.html",
-			"content": "Archive/HTML/davidbau-seedrandom.content.html",
-			"converted": "Raw/davidbau-seedrandom.md",
-			"status": "converted",
-			"title": "GitHub - davidbau/seedrandom: seeded random number generator for ...",
-			"quality": {
-				"fence-no-language": 1
-			}
-		},
-		{
-			"source": "https://github.com/jwagner/simplex-noise.js",
-			"kind": "HTML",
-			"archive": "Archive/HTML/jwagner-simplex-noise-js.html",
-			"content": "Archive/HTML/jwagner-simplex-noise-js.content.html",
-			"converted": "Raw/jwagner-simplex-noise-js.md",
-			"status": "converted",
-			"title": "GitHub - jwagner/simplex-noise.js: A fast simplex noise implementation ...",
-			"quality": {
-				"heading-no-h1": 1,
-				"fence-no-language": 1,
-				"code-non-ascii": 3
-			}
-		},
-		{
-			"source": "https://culorijs.org/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/culorijs-org.html",
-			"content": "Archive/HTML/culorijs-org.content.html",
-			"converted": "Raw/culorijs-org.md",
-			"status": "converted",
-			"title": "Color functions for JavaScript \u00b7 culori"
-		},
-		{
-			"source": "https://colorjs.io/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/colorjs-io.html",
-			"content": "Archive/HTML/colorjs-io.content.html",
-			"converted": "Raw/colorjs-io.md",
-			"status": "converted",
-			"title": "Color.js: Let\u2019s get serious about color \u2022 Color.js",
-			"quality": {
-				"heading-multi-h1": 1,
-				"heading-jump": 1,
-				"fence-blank-padded": 1,
-				"raw-html": 16
-			}
-		},
-		{
-			"source": "https://svgjs.dev/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/svgjs-dev.html",
-			"content": "Archive/HTML/svgjs-dev.content.html",
-			"converted": "Raw/svgjs-dev.md",
-			"status": "converted",
-			"title": "SVG.js v3.2 | Home",
-			"quality": {
-				"heading-duplicate": 1,
-				"heading-multi-h1": 1,
-				"fence-no-language": 1
-			}
-		},
-		{
-			"source": "https://github.com/svgdotjs/svg.js",
-			"kind": "HTML",
-			"archive": "Archive/HTML/svgdotjs-svg-js.html",
-			"content": "Archive/HTML/svgdotjs-svg-js.content.html",
-			"converted": "Raw/svgdotjs-svg-js.md",
-			"status": "converted",
-			"title": "GitHub - svgdotjs/svg.js: The lightweight library for manipulating and ...",
-			"quality": {
-				"heading-duplicate": 1,
-				"heading-jump": 1
-			}
-		},
-		{
-			"source": "https://roughjs.com/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/roughjs-com.html",
-			"content": "Archive/HTML/roughjs-com.content.html",
-			"converted": "Raw/roughjs-com.md",
-			"status": "converted",
-			"title": "Rough.js",
-			"quality": {
-				"heading-duplicate": 1,
-				"heading-jump": 1
-			}
-		},
-		{
-			"source": "https://github.com/svg/svgo",
-			"kind": "HTML",
-			"archive": "Archive/HTML/svg-svgo.html",
-			"content": "Archive/HTML/svg-svgo.content.html",
-			"converted": "Raw/svg-svgo.md",
-			"status": "converted",
-			"title": "GitHub - svg/svgo: SVG Optimizer for Node.js and CLI. \u2699\ufe0f \u00b7 GitHub",
-			"quality": {
-				"heading-no-h1": 1
-			}
-		},
-		{
-			"source": "https://github.com/thx/resvg-js",
-			"kind": "HTML",
-			"archive": "Archive/HTML/thx-resvg-js.html",
-			"content": "Archive/HTML/thx-resvg-js.content.html",
-			"converted": "Raw/thx-resvg-js.md",
-			"status": "converted",
-			"title": "GitHub - thx/resvg-js: A high-performance SVG renderer and toolkit, ...",
-			"quality": {
-				"heading-duplicate": 1
-			}
-		},
-		{
-			"source": "https://fab.cba.mit.edu/classes/865.18/design/generative/shapeAlgorithms.pdf",
-			"kind": "Document",
-			"archive": "Archive/Documents/generative-shapealgorithms.pdf",
-			"content": "",
-			"converted": "Raw/generative-shapealgorithms-pdf.md",
-			"status": "converted",
-			"title": "Tdesigners and (or) automate parts of the design process. The ability",
-			"quality": {
-				"heading-duplicate": 1,
-				"heading-jump": 9,
-				"raw-html": 10
-			}
-		},
-		{
-			"source": "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/fill-rule",
-			"kind": "HTML",
-			"archive": "Archive/HTML/attribute-fill-rule.html",
-			"content": "Archive/HTML/attribute-fill-rule.content.html",
-			"converted": "Raw/attribute-fill-rule.md",
-			"status": "converted",
-			"title": "fill-rule - SVG | MDN",
-			"quality": {
-				"heading-duplicate": 1,
-				"table-escaped-pipe": 1
-			}
-		},
-		{
-			"source": "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-miterlimit",
-			"kind": "HTML",
-			"archive": "Archive/HTML/attribute-stroke-miterlimit.html",
-			"content": "Archive/HTML/attribute-stroke-miterlimit.content.html",
-			"converted": "Raw/attribute-stroke-miterlimit.md",
-			"status": "converted",
-			"title": "stroke-miterlimit - SVG | MDN"
-		},
-		{
-			"source": "https://svgwg.org/specs/strokes/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/specs-strokes.html",
-			"content": "Archive/HTML/specs-strokes.content.html",
-			"converted": "Raw/specs-strokes.md",
-			"status": "converted",
-			"title": "SVG Strokes",
-			"quality": {
-				"table-escaped-pipe": 8,
-				"raw-html": 126
-			}
-		},
-		{
-			"source": "https://docs.aspose.com/svg/tutorial/fills-and-strokes/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/tutorial-fills-and-strokes.html",
-			"content": "Archive/HTML/tutorial-fills-and-strokes.content.html",
-			"converted": "Raw/tutorial-fills-and-strokes.md",
-			"status": "converted",
-			"title": "SVG Fill and Stroke \u2013 colors, width, dashes \u2013 Aspose.SVG",
-			"quality": {
-				"heading-duplicate": 1,
-				"fence-no-language": 1
-			}
-		},
-		{
-			"source": "https://www.w3schools.com/graphics/svg_stroking.asp",
-			"kind": "HTML",
-			"archive": "Archive/HTML/graphics-svg-stroking.html",
-			"content": "Archive/HTML/graphics-svg-stroking.content.html",
-			"converted": "Raw/graphics-svg-stroking.md",
-			"status": "converted",
-			"title": "SVG Stroke Attributes",
-			"quality": {
-				"heading-duplicate": 2,
-				"heading-jump": 1
-			}
-		},
-		{
-			"source": "https://paperjs.org/tutorials/paths/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/tutorials-paths.html",
-			"content": "Archive/HTML/tutorials-paths.content.html",
-			"converted": "Raw/tutorials-paths.md",
-			"status": "stub",
-			"title": "Paper.js \u2014 Paths",
-			"note": "tutorials index page; after cleaning the body is a bare link list (190 bytes)"
-		},
-		{
-			"source": "https://paperjs.typogram.co/paths/pathitem",
-			"kind": "HTML",
-			"archive": "Archive/HTML/paths-pathitem.html",
-			"content": "Archive/HTML/paths-pathitem.content.html",
-			"converted": "Raw/paths-pathitem.md",
-			"status": "converted",
-			"title": "PathItem | paper.js",
-			"quality": {
-				"fence-blank-padded": 1
-			}
-		},
-		{
-			"source": "https://deepwiki.com/paperjs/paper.js/3.1-path-creation-and-manipulation",
-			"kind": "HTML",
-			"archive": "Archive/HTML/paper-js-3-1-path-creation-and-manipulation.html",
-			"content": "Archive/HTML/paper-js-3-1-path-creation-and-manipulation.content.html",
-			"converted": "Raw/paper-js-3-1-path-creation-and-manipulation.md",
-			"status": "converted",
-			"title": "Path Creation and Manipulation | paperjs/paper.js | DeepWiki",
-			"quality": {
-				"fence-no-language": 1,
-				"code-non-ascii": 16
-			}
-		},
-		{
-			"source": "https://deepwiki.com/paperjs/paper.js/3-path-system",
-			"kind": "HTML",
-			"archive": "Archive/HTML/paper-js-3-path-system.html",
-			"content": "Archive/HTML/paper-js-3-path-system.content.html",
-			"converted": "Raw/paper-js-3-path-system.md",
-			"status": "converted",
-			"title": "Path System | paperjs/paper.js | DeepWiki",
-			"quality": {
-				"fence-no-language": 1
-			}
-		},
-		{
-			"source": "https://scikit-image.org/docs/stable/auto_examples/edges/plot_skeleton.html",
-			"kind": "HTML",
-			"archive": "Archive/HTML/edges-plot-skeleton.html",
-			"content": "Archive/HTML/edges-plot-skeleton.content.html",
-			"converted": "Raw/edges-plot-skeleton.md",
-			"status": "converted",
-			"title": "Skeletonize \u2014 skimage 0.26.0 documentation",
-			"quality": {
-				"heading-jump": 1
-			}
-		},
-		{
-			"source": "https://docs.opencv.org/4.13.0/d2/dbd/tutorial_distance_transform.html",
-			"kind": "HTML",
-			"archive": "Archive/HTML/dbd-tutorial-distance-transform.html",
-			"content": "Archive/HTML/dbd-tutorial-distance-transform.content.html",
-			"converted": "Raw/dbd-tutorial-distance-transform.md",
-			"status": "converted",
-			"title": "OpenCV: Image Segmentation with Distance Transform and Watershed ...",
-			"quality": {
-				"heading-multi-h1": 1
-			}
-		},
-		{
-			"source": "https://pypi.org/project/svgpathtools/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/project-svgpathtools.html",
-			"content": "Archive/HTML/project-svgpathtools.content.html",
-			"converted": "Raw/project-svgpathtools.md",
-			"status": "converted",
-			"title": "Client Challenge",
-			"quality": {
-				"long-line": 2
-			}
-		},
-		{
-			"source": "https://github.com/mathandy/svgpathtools",
-			"kind": "HTML",
-			"archive": "Archive/HTML/mathandy-svgpathtools.html",
-			"content": "Archive/HTML/mathandy-svgpathtools.content.html",
-			"converted": "Raw/mathandy-svgpathtools.md",
-			"status": "converted",
-			"title": "GitHub - mathandy/svgpathtools: A collection of tools for manipulating ...",
-			"quality": {
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"raw-html": 4
-			}
-		},
-		{
-			"source": "https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths",
-			"kind": "HTML",
-			"archive": "Archive/HTML/svg-from-scratch-paths.html",
-			"content": "Archive/HTML/svg-from-scratch-paths.content.html",
-			"converted": "Raw/svg-from-scratch-paths.md",
-			"status": "converted",
-			"title": "Paths - SVG | MDN"
-		},
-		{
-			"source": "https://www.joshwcomeau.com/svg/interactive-guide-to-paths/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/svg-interactive-guide-to-paths.html",
-			"content": "Archive/HTML/svg-interactive-guide-to-paths.content.html",
-			"converted": "Raw/svg-interactive-guide-to-paths.md",
-			"status": "converted",
-			"title": "An Interactive Guide to SVG Paths \u2022 Josh W. Comeau",
-			"quality": {
-				"fence-no-language": 1,
-				"raw-html": 32
-			}
-		},
-		{
-			"source": "https://github.com/libigl/libigl/blob/main/include/igl/signed_distance.h",
-			"kind": "HTML",
-			"archive": "Archive/HTML/igl-signed-distance-h.html",
-			"content": "Archive/HTML/igl-signed-distance-h.content.html",
-			"converted": "Raw/igl-signed-distance-h.md",
-			"status": "stub",
-			"title": "libigl/include/igl/signed_distance.h at main \u00b7 libigl/libigl \u00b7 GitHub",
-			"note": "GitHub blob page; the converted body is a link shell (392 bytes) because the file's content is C++ code the page loads separately"
-		},
-		{
-			"source": "https://libigl.github.io/tutorial/",
-			"kind": "HTML",
-			"archive": "Archive/HTML/tutorial.html",
-			"content": "Archive/HTML/tutorial.content.html",
-			"converted": "Raw/tutorial.md",
-			"status": "converted",
-			"title": "Tutorial - libigl",
-			"quality": {
-				"fence-no-language": 1,
-				"raw-html": 126,
-				"glued-code": 1
-			}
-		},
-		{
-			"source": "https://pymesh.readthedocs.io/en/latest/api_geometry_processing.html",
-			"kind": "HTML",
-			"archive": "Archive/HTML/latest-api-geometry-processing.html",
-			"content": "Archive/HTML/latest-api-geometry-processing.content.html",
-			"converted": "Raw/latest-api-geometry-processing.md",
-			"status": "converted",
-			"title": "Geometry Processing Functions \u2014 PyMesh 0.2.1 documentation",
-			"quality": {
-				"long-line": 3
-			}
-		},
-		{
-			"source": "https://github.com/vistuleB/svgpathsio",
-			"kind": "HTML",
-			"archive": "Archive/HTML/vistuleb-svgpathsio.html",
-			"content": "Archive/HTML/vistuleb-svgpathsio.content.html",
-			"converted": "Raw/vistuleb-svgpathsio.md",
-			"status": "converted",
-			"title": "GitHub - vistuleB/svgpathsio: A collection of tools for manipulating ..."
-		},
-		{
-			"source": "https://www.jsdelivr.com/package/npm/clipper2-wasm",
-			"kind": "HTML",
-			"archive": "Archive/HTML/clipper2-wasm.html",
-			"content": "Archive/HTML/clipper2-wasm.content.html",
-			"converted": "Raw/clipper2-wasm.md",
-			"status": "converted",
-			"title": "clipper2-wasm CDN by jsDelivr - A CDN for npm and GitHub",
-			"quality": {
-				"heading-multi-h1": 1,
-				"fence-no-language": 1
-			},
-			"note": "recovered substitution: jsDelivr mirror carries the README the npm page lacks; stands in for the package-clipper2-wasm source"
-		},
-		{
-			"source": "https://raw.githubusercontent.com/paperjs/paper.js/develop/examples/Paperjs.org/DivisionRaster.html",
-			"kind": "HTML",
-			"archive": "Archive/HTML/division-raster.html",
-			"content": "Archive/HTML/division-raster.content.html",
-			"converted": "Raw/division-raster.md",
-			"status": "converted",
-			"title": "division-raster",
-			"quality": {
-				"long-line": 1
-			},
-			"note": "recovered substitution: example source from the paper.js repository, standing in for the bot-walled paperjs.org page"
-		},
-		{
-			"source": "https://raw.githubusercontent.com/paperjs/paper.js/develop/examples/Paperjs.org/Qbertify.html",
-			"kind": "HTML",
-			"archive": "Archive/HTML/q-bertify.html",
-			"content": "Archive/HTML/q-bertify.content.html",
-			"converted": "Raw/q-bertify.md",
-			"status": "converted",
-			"title": "q-bertify",
-			"quality": {
-				"long-line": 1
-			},
-			"note": "recovered substitution: example source from the paper.js repository, standing in for the bot-walled paperjs.org page"
-		},
-		{
-			"source": "https://docs.anthropic.com/en/docs/about-claude/pricing",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/anthropic-pricing.md",
-			"status": "converted",
-			"title": "anthropic-pricing",
-			"quality": {
-				"heading-duplicate": 1,
-				"heading-no-h1": 1,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"table-row-mismatch": 80
-			}
-		},
-		{
-			"source": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/anthropic-prompt-caching.md",
-			"status": "converted",
-			"title": "Request 2 caches its request content (not the response)",
-			"quality": {
-				"heading-no-h1": 1,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"table-row-mismatch": 28,
-				"long-line": 12
-			}
-		},
-		{
-			"source": "https://platform.openai.com/docs/pricing",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/openai-pricing.md",
-			"status": "converted",
-			"title": "openai-pricing",
-			"quality": {
-				"heading-duplicate": 8,
-				"heading-no-h1": 1,
-				"fence-no-language": 1,
-				"table-row-mismatch": 69,
-				"long-line": 123
-			}
-		},
-		{
-			"source": "https://api-docs.deepseek.com/quick_start/pricing",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/deepseek-pricing.md",
-			"status": "converted",
-			"title": "Models & Pricing",
-			"quality": {
-				"table-row-mismatch": 18,
-				"invisible": 3
-			}
-		},
-		{
-			"source": "https://developers.cloudflare.com/workers-ai/platform/pricing/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/cloudflare-workers-ai-pricing.md",
-			"status": "converted",
-			"title": "Pricing",
-			"quality": {
-				"table-row-mismatch": 4
-			}
-		},
-		{
-			"source": "https://ai.google.dev/gemini-api/docs/pricing",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/google-gemini-api-pricing.md",
-			"status": "converted",
-			"title": "Gemini Developer API pricing",
-			"quality": {
-				"heading-jump": 1,
-				"table-row-mismatch": 385
-			}
-		},
-		{
-			"source": "https://focus.finops.org/focus-specification/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/focus-specification.md",
-			"status": "converted",
-			"title": "FOCUS Specification 1.4"
-		},
-		{
-			"source": "https://www.finops.org/framework/capabilities/allocation/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/allocation.md",
-			"status": "converted",
-			"title": "Allocation",
-			"quality": {
-				"heading-duplicate": 3,
-				"heading-jump": 2
-			}
-		},
-		{
-			"source": "https://www.finops.org/framework/capabilities/unit-economics/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/unit-economics.md",
-			"status": "converted",
-			"title": "Unit Economics",
-			"quality": {
-				"heading-duplicate": 10,
-				"heading-jump": 4
-			}
-		},
-		{
-			"source": "https://en.wikipedia.org/wiki/Cost_allocation",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/cost-allocation.md",
-			"status": "converted",
-			"title": "cost-allocation",
-			"quality": {
-				"heading-no-h1": 1,
-				"long-line": 5
-			}
-		},
-		{
-			"source": "https://en.wikipedia.org/wiki/Shapley_value",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/shapley-value.md",
-			"status": "converted",
-			"title": "shapley-value",
-			"quality": {
-				"heading-no-h1": 1
-			}
-		},
-		{
-			"source": "https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/opentelemetry-gen-ai-spans.md",
-			"status": "stub",
-			"title": "Moved: Generative AI semantic conventions",
-			"note": "601-byte page is a Moved notice pointing at the semantic-conventions-genai repository; the span conventions were recovered from the repository as opentelemetry-genai-repo-gen-ai-spans"
-		},
-		{
-			"source": "https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/opentelemetry-gen-ai-metrics.md",
-			"status": "stub",
-			"title": "Moved: Generative AI semantic conventions",
-			"note": "601-byte page is a Moved notice pointing at the semantic-conventions-genai repository; the metric conventions were recovered from the repository as opentelemetry-genai-repo-gen-ai-metrics"
-		},
-		{
-			"source": "https://github.com/open-telemetry/semantic-conventions-genai",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/opentelemetry-semantic-conventions-genai.md",
-			"status": "converted",
-			"title": "OpenTelemetry GenAI Semantic Conventions",
-			"quality": {
-				"heading-duplicate": 4,
-				"table-row-mismatch": 2
-			}
-		},
-		{
-			"source": "https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/opentelemetry-gen-ai-attributes.md",
-			"status": "converted",
-			"title": "Gen AI",
-			"quality": {
-				"table-row-mismatch": 146,
-				"long-line": 52
-			}
-		},
-		{
-			"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-spans.md",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/opentelemetry-genai-repo-gen-ai-spans.md",
-			"status": "converted",
-			"title": "Semantic conventions for generative client AI spans",
-			"quality": {
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"code-non-ascii": 1,
-				"long-line": 1
-			}
-		},
-		{
-			"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-metrics.md",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/opentelemetry-genai-repo-gen-ai-metrics.md",
-			"status": "converted",
-			"title": "Semantic conventions for generative AI metrics",
-			"quality": {
-				"fence-no-language": 1,
-				"fence-blank-padded": 1
-			}
-		},
-		{
-			"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-token-metrics.md",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/opentelemetry-genai-repo-token-metrics.md",
-			"status": "converted",
-			"title": "Semantic conventions for generative AI inference token metrics",
-			"quality": {
-				"fence-no-language": 1,
-				"fence-blank-padded": 1
-			}
-		},
-		{
-			"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/client-inference.md",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/opentelemetry-genai-repo-client-inference.md",
-			"status": "converted",
-			"title": "Semantic conventions for generative AI client inference",
-			"quality": {
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"long-line": 4,
-				"code-non-ascii": 4
-			}
-		},
-		{
-			"source": "https://github.com/open-telemetry/semantic-conventions-genai/tree/main/docs",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/opentelemetry-genai-repo-docs-tree.md",
-			"status": "converted",
-			"title": "docs",
-			"quality": {
-				"heading-anchor": 1,
-				"heading-multi-h1": 1,
-				"table-row-mismatch": 1
-			}
-		},
-		{
-			"source": "https://github.com/open-telemetry/semantic-conventions-genai/tree/main/docs/gen-ai",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/opentelemetry-genai-repo-docs-gen-ai-tree.md",
-			"status": "converted",
-			"title": "gen-ai",
-			"quality": {
-				"heading-anchor": 1,
-				"heading-multi-h1": 1,
-				"fence-blank-padded": 1,
-				"table-row-mismatch": 1,
-				"raw-html": 2,
-				"glued-code": 6
-			}
-		},
-		{
-			"source": "https://langfuse.com/docs/model-usage-and-cost",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/langfuse-model-usage-and-cost.md",
-			"status": "converted",
-			"title": "[Model Usage & Cost ...",
-			"quality": {
-				"heading-anchor": 14,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"table-row-mismatch": 18,
-				"long-line": 1,
-				"link-run": 2
-			}
-		},
-		{
-			"source": "https://docs.litellm.ai/docs/completion/token_usage",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/litellm-token-usage.md",
-			"status": "converted",
-			"title": "litellm-token-usage",
-			"quality": {
-				"heading-no-h1": 1,
-				"fence-no-language": 1,
-				"invisible": 10,
-				"code-non-ascii": 2
-			}
-		},
-		{
-			"source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/litellm-model-prices-and-context-window.md",
-			"status": "converted",
-			"title": "litellm-model-prices-and-context-window",
-			"quality": {
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"long-line": 1
-			}
-		},
-		{
-			"source": "https://posthog.com/docs/llm-analytics",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/posthog-llm-analytics.md",
-			"status": "converted",
-			"title": "AI Observability",
-			"quality": {
-				"heading-jump": 1
-			}
-		},
-		{
-			"source": "https://docs.anthropic.com/en/docs/claude-code/costs",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/anthropic-claude-code-costs.md",
-			"status": "converted",
-			"title": "Compact instructions",
-			"quality": {
-				"heading-no-h1": 1,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"table-row-mismatch": 5,
-				"code-non-ascii": 1,
-				"long-line": 5
-			}
-		},
-		{
-			"source": "https://docs.cursor.com/en/account/plans-and-usage",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/cursor-plans-and-usage.md",
-			"status": "converted",
-			"title": "Cursor Documentation",
-			"quality": {
-				"heading-anchor": 4,
-				"table-row-mismatch": 1,
-				"link-run": 10
-			}
-		},
-		{
-			"source": "https://docs.github.com/en/copilot/managing-copilot/monitoring-usage-and-entitlements/about-premium-requests",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/github-copilot-premium-requests.md",
-			"status": "converted",
-			"title": "Requests in GitHub Copilot (legacy)",
-			"quality": {
-				"heading-anchor": 7,
-				"table-row-mismatch": 8
-			}
-		},
-		{
-			"source": "https://openai.com/codex/pricing/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/openai-codex-pricing.md",
-			"status": "stub",
-			"title": "404",
-			"note": "81-byte 404 page kept as evidence; openai.com serves a Cloudflare JS challenge and the source is also recorded as unavailable (retryable)"
-		},
-		{
-			"source": "https://www.sqlite.org/stricttables.html",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/sqlite-stricttables.md",
-			"status": "converted",
-			"title": "1. Introduction",
-			"quality": {
-				"heading-multi-h1": 1,
-				"fence-no-language": 1,
-				"table-row-mismatch": 1
-			}
-		},
-		{
-			"source": "https://www.sqlite.org/wal.html",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/sqlite-wal.md",
-			"status": "converted",
-			"title": "1. Overview",
-			"quality": {
-				"heading-multi-h1": 1,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1
-			}
-		},
-		{
-			"source": "https://www.sqlite.org/json1.html",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/sqlite-json1.md",
-			"status": "converted",
-			"title": "1. Overview",
-			"quality": {
-				"heading-multi-h1": 1,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"table-row-mismatch": 9
-			}
-		},
-		{
-			"source": "https://duckdb.org/why_duckdb",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/duckdb-why-duckdb.md",
-			"status": "converted",
-			"title": "duckdb-why-duckdb",
-			"quality": {
-				"heading-anchor": 7,
-				"heading-no-h1": 1,
-				"invisible": 15,
-				"glued-code": 1
-			}
-		},
-		{
-			"source": "https://martinfowler.com/eaaDev/EventSourcing.html",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/martinfowler-event-sourcing.md",
-			"status": "converted",
-			"title": "Event Sourcing",
-			"quality": {
-				"fence-no-language": 1,
-				"fence-blank-padded": 1
-			}
-		},
-		{
-			"source": "https://en.wikipedia.org/wiki/Slowly_changing_dimension",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/wikipedia-slowly-changing-dimension.md",
-			"status": "converted",
-			"title": "wikipedia-slowly-changing-dimension",
-			"quality": {
-				"heading-no-h1": 1,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"table-row-mismatch": 36,
-				"long-line": 5
-			}
-		},
-		{
-			"source": "https://en.wikipedia.org/wiki/Double-entry_bookkeeping",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/wikipedia-double-entry-bookkeeping.md",
-			"status": "converted",
-			"title": "wikipedia-double-entry-bookkeeping",
-			"quality": {
-				"heading-no-h1": 1,
-				"table-row-mismatch": 17,
-				"long-line": 6
-			}
-		},
-		{
-			"source": "https://doc.rust-lang.org/reference/comments.html",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/rust-reference-comments.md",
-			"status": "converted",
-			"title": "[Comments](https://doc.rust-lang.org/reference/comments.html#comments)",
-			"quality": {
-				"heading-anchor": 4,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"glued-code": 1
-			}
-		},
-		{
-			"source": "https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/typescript-jsdoc-supported-types.md",
-			"status": "converted",
-			"title": "JSDoc Reference",
-			"quality": {
-				"heading-duplicate": 4,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"code-non-ascii": 1,
-				"long-line": 1
-			}
-		},
-		{
-			"source": "https://peps.python.org/pep-0257/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/python-pep-0257.md",
-			"status": "converted",
-			"title": "PEP 257 \u2013 Docstring Conventions",
-			"quality": {
-				"heading-anchor": 9,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"raw-html": 2
-			}
-		},
-		{
-			"source": "https://www.rfc-editor.org/rfc/rfc4180",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/rfc-editor-rfc4180.md",
-			"status": "converted",
-			"title": "RFC 4180: Common Format and MIME Type for Comma-Separated Values (CSV) ...",
-			"quality": {
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"code-non-ascii": 5
-			}
-		},
-		{
-			"source": "https://www.rfc-editor.org/rfc/rfc3339",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/rfc-editor-rfc3339.md",
-			"status": "converted",
-			"title": "RFC 3339: Date and Time on the Internet: Timestamps",
-			"quality": {
-				"fence-no-language": 1,
-				"fence-blank-padded": 1
-			}
-		},
-		{
-			"source": "https://paperjs.org/examples/division-raster/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "",
-			"status": "bot-walled",
-			"title": "",
-			"disposition": "substitutable",
-			"substitute": "https://raw.githubusercontent.com/paperjs/paper.js/develop/examples/Paperjs.org/DivisionRaster.html",
-			"note": "recovered: substitute fetched from the repository and converted as its own source (division-raster)",
-			"exit": 5,
-			"message": "read_url: crawl failed for https://paperjs.org/examples/division-raster/: Blocked by anti-bot protection: Structural: minimal_text, no_content_elements, script_heavy_shell (1392 bytes, 0 chars visible)"
-		},
-		{
-			"source": "https://paperjs.org/examples/q-bertify/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "",
-			"status": "bot-walled",
-			"title": "",
-			"disposition": "substitutable",
-			"substitute": "https://raw.githubusercontent.com/paperjs/paper.js/develop/examples/Paperjs.org/Qbertify.html",
-			"note": "recovered: substitute fetched from the repository and converted as its own source (q-bertify)",
-			"exit": 5,
-			"message": "read_url: crawl failed for https://paperjs.org/examples/q-bertify/: Blocked by anti-bot protection: Structural: minimal_text, no_content_elements, script_heavy_shell (1386 bytes, 0 chars visible)"
-		},
-		{
-			"source": "https://mgv.sggw.pl/article/view/9131",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "",
-			"status": "timeout",
-			"title": "",
-			"disposition": "retryable",
-			"exit": 4,
-			"message": "read_url: probe failed for https://mgv.sggw.pl/article/view/9131: timed out"
-		},
-		{
-			"source": "https://dl.acm.org/doi/full/10.1145/3757377.3764004",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "",
-			"status": "bot-walled",
-			"title": "",
-			"disposition": "unavailable",
-			"exit": 5,
-			"message": "read_url: crawl failed for https://dl.acm.org/doi/full/10.1145/3757377.3764004: Blocked by anti-bot protection: Cloudflare JS challenge"
-		},
-		{
-			"source": "https://www.w3.org/TR/SVG2/painting.html",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "",
-			"status": "bot-walled",
-			"title": "",
-			"disposition": "substitutable",
-			"substitute": "https://svgwg.org/svg2-draft/painting.html",
-			"note": "substitute identified but not fetched in this run",
-			"exit": 5,
-			"message": "read_url: crawl failed for https://www.w3.org/TR/SVG2/painting.html: Blocked by anti-bot protection: Cloudflare JS challenge"
-		},
-		{
-			"source": "https://www.w3.org/TR/2000/WD-SVG-20000629/painting.html",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "",
-			"status": "bot-walled",
-			"title": "",
-			"disposition": "unavailable",
-			"exit": 5,
-			"message": "read_url: crawl failed for https://www.w3.org/TR/2000/WD-SVG-20000629/painting.html: Blocked by anti-bot protection: Cloudflare JS challenge"
-		},
-		{
-			"source": "https://www.w3.org/TR/SVG2/paths.html",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "",
-			"status": "bot-walled",
-			"title": "",
-			"disposition": "substitutable",
-			"substitute": "https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths",
-			"note": "MDN Paths tutorial substitute already in the shelf as svg-from-scratch-paths",
-			"exit": 5,
-			"message": "read_url: crawl failed for https://www.w3.org/TR/SVG2/paths.html: Blocked by anti-bot protection: Cloudflare JS challenge"
-		},
-		{
-			"source": "https://www.finops.org/framework/capabilities/chargeback-showback/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/chargeback-showback.md",
-			"status": "unavailable",
-			"title": "Sorry, this page has not been found",
-			"disposition": "retryable",
-			"exit": 0,
-			"message": "https://www.finops.org/framework/capabilities/chargeback-showback/ returned HTTP 404 ('Sorry, this page has not been found'); fit pass wrote 687 bytes of nav plus the 404 heading, the single --filter raw retry confirmed status_code 404 with identical final_url, so no capability content exists at that URL; the 7920-byte error page is kept at Reference/Raw/chargeback-showback.md as evidence and recorded as a failed source in the curated note"
-		},
-		{
-			"source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/spans.md",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "",
-			"status": "unavailable",
-			"title": "opentelemetry-genai-repo-spans",
-			"disposition": "retryable",
-			"exit": 5,
-			"message": "read_url: crawl failed: Blocked by anti-bot protection: Structural: minimal_text on small page (228 bytes, 14 chars visible). GitHub 404: wrong path; the real doc is docs/gen-ai/gen-ai-spans.md (fetched successfully). Retried once with --filter raw, same result. No file written; fetch-errors.log is owned by another lane, so the failure is recorded in the curated note."
-		},
-		{
-			"source": "https://openai.com/codex/pricing/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/openai-codex-pricing.md",
-			"status": "unavailable",
-			"title": "404",
-			"disposition": "retryable",
-			"exit": 5,
-			"message": "First capture (crawl4ai:fit, exit 0) wrote an 81-byte 404 haiku page; mandated retry with --filter raw failed: read_url: crawl failed for https://openai.com/codex/pricing/: Blocked by anti-bot protection: Cloudflare JS challenge. Stub file kept at Reference/Raw/openai-codex-pricing.md."
-		},
-		{
-			"source": "https://spdx.github.io/spdx-spec/v2.3/package-information/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "",
-			"status": "unavailable",
-			"title": "spdx-package-information",
-			"disposition": "retryable",
-			"exit": 5,
-			"message": "Blocked by anti-bot protection: Structural: minimal_text, no_content_elements, script_heavy_shell (1849 bytes, 0 chars visible). Retried once with --filter raw per procedure; same exit 5. No file written to Reference/Raw/spdx-package-information.md. SPDX tag/value field vocabulary left unverified and cited nowhere; listed in the curated note's Open questions."
-		},
-		{
-			"source": "https://designsystem.digital.gov/components/header/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/designsystem-digital-gov-components-header.md",
-			"status": "converted",
-			"title": "designsystem-digital-gov-components-header",
-			"quality": {
-				"heading-duplicate": 6,
-				"heading-no-h1": 1,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"table-row-mismatch": 1
-			}
-		},
-		{
-			"source": "https://designsystem.digital.gov/components/footer/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/designsystem-digital-gov-components-footer.md",
-			"status": "converted",
-			"title": "designsystem-digital-gov-components-footer",
-			"quality": {
-				"heading-no-h1": 1,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"table-row-mismatch": 1
-			}
-		},
-		{
-			"source": "https://designsystem.digital.gov/components/card/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/designsystem-digital-gov-components-card.md",
-			"status": "converted",
-			"title": "designsystem-digital-gov-components-card",
-			"quality": {
-				"heading-no-h1": 1,
-				"fence-no-language": 1,
-				"fence-blank-padded": 1,
-				"table-row-mismatch": 1
-			}
-		},
-		{
-			"source": "https://diataxis.fr/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/diataxis-fr.md",
-			"status": "converted",
-			"title": "Di\u00e1taxis[\u00b6](https://diataxis.fr/#diataxis \"Link to this heading\")"
-		},
-		{
-			"source": "https://carbondesignsystem.com/components/UI-shell-header/usage/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "Raw/carbondesignsystem-com-components-UI-shell-header-usage.md",
-			"status": "converted",
-			"title": "carbondesignsystem-com-components-UI-shell-header-usage",
-			"quality": {
-				"heading-no-h1": 1,
-				"table-row-mismatch": 3
-			}
-		},
-		{
-			"source": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "",
-			"status": "unavailable",
-			"title": "wai-aria-apg-patterns-disclosure",
-			"disposition": "retryable",
-			"exit": 5,
-			"message": "Blocked by anti-bot protection: Cloudflare JS challenge on both the default pass and the one --filter raw retry. No file written; the disclosure-pattern claims stay unverified and are cited nowhere."
-		}
-	]
+  "sources": [
+    {
+      "source": "https://github.com/paperjs/paper.js",
+      "kind": "HTML",
+      "archive": "Archive/HTML/paperjs-paper-js.html",
+      "content": "Archive/HTML/paperjs-paper-js.content.html",
+      "converted": "Raw/paperjs-paper-js.md",
+      "status": "converted",
+      "title": "GitHub - paperjs/paper.js: The Swiss Army Knife of Vector Graphics ...",
+      "quality": {
+        "fence-no-language": 1
+      }
+    },
+    {
+      "source": "https://paperjs.org/reference/path/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/reference-path.html",
+      "content": "Archive/HTML/reference-path.content.html",
+      "converted": "Raw/reference-path.md",
+      "status": "converted",
+      "title": "Paper.js \u2014 Path",
+      "quality": {
+        "heading-duplicate": 15,
+        "heading-jump": 6,
+        "fence-no-language": 1
+      }
+    },
+    {
+      "source": "https://paperjs.org/tutorials/paths/smoothing-simplifying-flattening/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/paths-smoothing-simplifying-flattening.html",
+      "content": "Archive/HTML/paths-smoothing-simplifying-flattening.content.html",
+      "converted": "Raw/paths-smoothing-simplifying-flattening.md",
+      "status": "converted",
+      "title": "Paper.js \u2014 Smoothing, Simplifying & Flattening"
+    },
+    {
+      "source": "https://github.com/glenzli/paperjs-offset",
+      "kind": "HTML",
+      "archive": "Archive/HTML/glenzli-paperjs-offset.html",
+      "content": "Archive/HTML/glenzli-paperjs-offset.content.html",
+      "converted": "Raw/glenzli-paperjs-offset.md",
+      "status": "converted",
+      "title": "GitHub - glenzli/paperjs-offset: Path offset and stroke outline helpers ...",
+      "quality": {
+        "heading-duplicate": 1,
+        "fence-no-language": 1,
+        "code-non-ascii": 32
+      }
+    },
+    {
+      "source": "https://github.com/AngusJohnson/Clipper2",
+      "kind": "HTML",
+      "archive": "Archive/HTML/angusjohnson-clipper2.html",
+      "content": "Archive/HTML/angusjohnson-clipper2.content.html",
+      "converted": "Raw/angusjohnson-clipper2.md",
+      "status": "converted",
+      "title": "GitHub - AngusJohnson/Clipper2: Polygon Clipping, Offsetting & ...",
+      "quality": {
+        "long-line": 2
+      }
+    },
+    {
+      "source": "https://www.angusj.com/clipper2/Docs/Overview.htm",
+      "kind": "HTML",
+      "archive": "Archive/HTML/docs-overview.html",
+      "content": "Archive/HTML/docs-overview.content.html",
+      "converted": "Raw/docs-overview.md",
+      "status": "converted",
+      "title": "Clipper2 - Polygon Clipping Offsetting & Triangulating",
+      "quality": {
+        "raw-html": 4
+      }
+    },
+    {
+      "source": "https://www.npmjs.com/package/clipper2-wasm",
+      "kind": "HTML",
+      "archive": "Archive/HTML/package-clipper2-wasm.html",
+      "content": "Archive/HTML/package-clipper2-wasm.content.html",
+      "converted": "Raw/package-clipper2-wasm.md",
+      "status": "stub",
+      "title": "clipper2-wasm - npm",
+      "quality": {
+        "heading-jump": 1
+      },
+      "note": "npm page carries no README (756-byte body); the README lives on the jsDelivr mirror and was recovered as its own source (clipper2-wasm)"
+    },
+    {
+      "source": "https://github.com/countertype/clipper2-ts",
+      "kind": "HTML",
+      "archive": "Archive/HTML/countertype-clipper2-ts.html",
+      "content": "Archive/HTML/countertype-clipper2-ts.content.html",
+      "converted": "Raw/countertype-clipper2-ts.md",
+      "status": "converted",
+      "title": "GitHub - countertype/clipper2-ts: TypeScript port of Clipper2 polygon ..."
+    },
+    {
+      "source": "https://github.com/steveruizok/perfect-freehand",
+      "kind": "HTML",
+      "archive": "Archive/HTML/steveruizok-perfect-freehand.html",
+      "content": "Archive/HTML/steveruizok-perfect-freehand.content.html",
+      "converted": "Raw/steveruizok-perfect-freehand.md",
+      "status": "converted",
+      "title": "GitHub - steveruizok/perfect-freehand: Draw perfect pressure-sensitive ..."
+    },
+    {
+      "source": "https://github.com/mfogel/polygon-clipping",
+      "kind": "HTML",
+      "archive": "Archive/HTML/mfogel-polygon-clipping.html",
+      "content": "Archive/HTML/mfogel-polygon-clipping.content.html",
+      "converted": "Raw/mfogel-polygon-clipping.md",
+      "status": "converted",
+      "title": "GitHub - mfogel/polygon-clipping: Apply boolean polygon clipping ..."
+    },
+    {
+      "source": "https://github.com/danmarshall/svg-path-outline",
+      "kind": "HTML",
+      "archive": "Archive/HTML/danmarshall-svg-path-outline.html",
+      "content": "Archive/HTML/danmarshall-svg-path-outline.content.html",
+      "converted": "Raw/danmarshall-svg-path-outline.md",
+      "status": "converted",
+      "title": "GitHub - danmarshall/svg-path-outline: Create an outline surrounding an ...",
+      "quality": {
+        "fence-no-language": 1
+      }
+    },
+    {
+      "source": "https://danmarshall.github.io/svg-path-outline/browser/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svg-path-outline-browser.html",
+      "content": "Archive/HTML/svg-path-outline-browser.content.html",
+      "converted": "Raw/svg-path-outline-browser.md",
+      "status": "stub",
+      "title": "svg-path-outline",
+      "note": "interactive canvas application; the page DOM carries almost no text (248-byte body), so there is nothing to convert"
+    },
+    {
+      "source": "https://github.com/alexbol99/flatten-js",
+      "kind": "HTML",
+      "archive": "Archive/HTML/alexbol99-flatten-js.html",
+      "content": "Archive/HTML/alexbol99-flatten-js.content.html",
+      "converted": "Raw/alexbol99-flatten-js.md",
+      "status": "converted",
+      "title": "GitHub - alexbol99/flatten-js: Javascript library for 2d geometry \u00b7 ...",
+      "quality": {
+        "fence-no-language": 1
+      }
+    },
+    {
+      "source": "https://github.com/rveciana/svg-path-properties",
+      "kind": "HTML",
+      "archive": "Archive/HTML/rveciana-svg-path-properties.html",
+      "content": "Archive/HTML/rveciana-svg-path-properties.content.html",
+      "converted": "Raw/rveciana-svg-path-properties.md",
+      "status": "converted",
+      "title": "GitHub - rveciana/svg-path-properties: Pure Javascript alternative to ...",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 1
+      }
+    },
+    {
+      "source": "https://geoexamples.com/svg-path-properties/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svg-path-properties.html",
+      "content": "Archive/HTML/svg-path-properties.content.html",
+      "converted": "Raw/svg-path-properties.md",
+      "status": "converted",
+      "title": "svg-path-properties",
+      "quality": {
+        "fence-no-language": 1
+      }
+    },
+    {
+      "source": "https://github.com/herrstrietzel/svg-path-intersections",
+      "kind": "HTML",
+      "archive": "Archive/HTML/herrstrietzel-svg-path-intersections.html",
+      "content": "Archive/HTML/herrstrietzel-svg-path-intersections.content.html",
+      "converted": "Raw/herrstrietzel-svg-path-intersections.md",
+      "status": "converted",
+      "title": "GitHub - herrstrietzel/svg-path-intersections: Get all intersections ...",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      }
+    },
+    {
+      "source": "https://github.com/davidbau/seedrandom",
+      "kind": "HTML",
+      "archive": "Archive/HTML/davidbau-seedrandom.html",
+      "content": "Archive/HTML/davidbau-seedrandom.content.html",
+      "converted": "Raw/davidbau-seedrandom.md",
+      "status": "converted",
+      "title": "GitHub - davidbau/seedrandom: seeded random number generator for ...",
+      "quality": {
+        "fence-no-language": 1
+      }
+    },
+    {
+      "source": "https://github.com/jwagner/simplex-noise.js",
+      "kind": "HTML",
+      "archive": "Archive/HTML/jwagner-simplex-noise-js.html",
+      "content": "Archive/HTML/jwagner-simplex-noise-js.content.html",
+      "converted": "Raw/jwagner-simplex-noise-js.md",
+      "status": "converted",
+      "title": "GitHub - jwagner/simplex-noise.js: A fast simplex noise implementation ...",
+      "quality": {
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "code-non-ascii": 3
+      }
+    },
+    {
+      "source": "https://culorijs.org/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/culorijs-org.html",
+      "content": "Archive/HTML/culorijs-org.content.html",
+      "converted": "Raw/culorijs-org.md",
+      "status": "converted",
+      "title": "Color functions for JavaScript \u00b7 culori"
+    },
+    {
+      "source": "https://colorjs.io/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/colorjs-io.html",
+      "content": "Archive/HTML/colorjs-io.content.html",
+      "converted": "Raw/colorjs-io.md",
+      "status": "converted",
+      "title": "Color.js: Let\u2019s get serious about color \u2022 Color.js",
+      "quality": {
+        "heading-multi-h1": 1,
+        "heading-jump": 1,
+        "fence-blank-padded": 1,
+        "raw-html": 16
+      }
+    },
+    {
+      "source": "https://svgjs.dev/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svgjs-dev.html",
+      "content": "Archive/HTML/svgjs-dev.content.html",
+      "converted": "Raw/svgjs-dev.md",
+      "status": "converted",
+      "title": "SVG.js v3.2 | Home",
+      "quality": {
+        "heading-duplicate": 1,
+        "heading-multi-h1": 1,
+        "fence-no-language": 1
+      }
+    },
+    {
+      "source": "https://github.com/svgdotjs/svg.js",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svgdotjs-svg-js.html",
+      "content": "Archive/HTML/svgdotjs-svg-js.content.html",
+      "converted": "Raw/svgdotjs-svg-js.md",
+      "status": "converted",
+      "title": "GitHub - svgdotjs/svg.js: The lightweight library for manipulating and ...",
+      "quality": {
+        "heading-duplicate": 1,
+        "heading-jump": 1
+      }
+    },
+    {
+      "source": "https://roughjs.com/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/roughjs-com.html",
+      "content": "Archive/HTML/roughjs-com.content.html",
+      "converted": "Raw/roughjs-com.md",
+      "status": "converted",
+      "title": "Rough.js",
+      "quality": {
+        "heading-duplicate": 1,
+        "heading-jump": 1
+      }
+    },
+    {
+      "source": "https://github.com/svg/svgo",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svg-svgo.html",
+      "content": "Archive/HTML/svg-svgo.content.html",
+      "converted": "Raw/svg-svgo.md",
+      "status": "converted",
+      "title": "GitHub - svg/svgo: SVG Optimizer for Node.js and CLI. \u2699\ufe0f \u00b7 GitHub",
+      "quality": {
+        "heading-no-h1": 1
+      }
+    },
+    {
+      "source": "https://github.com/thx/resvg-js",
+      "kind": "HTML",
+      "archive": "Archive/HTML/thx-resvg-js.html",
+      "content": "Archive/HTML/thx-resvg-js.content.html",
+      "converted": "Raw/thx-resvg-js.md",
+      "status": "converted",
+      "title": "GitHub - thx/resvg-js: A high-performance SVG renderer and toolkit, ...",
+      "quality": {
+        "heading-duplicate": 1
+      }
+    },
+    {
+      "source": "https://fab.cba.mit.edu/classes/865.18/design/generative/shapeAlgorithms.pdf",
+      "kind": "Document",
+      "archive": "Archive/Documents/generative-shapealgorithms.pdf",
+      "content": "",
+      "converted": "Raw/generative-shapealgorithms-pdf.md",
+      "status": "converted",
+      "title": "Tdesigners and (or) automate parts of the design process. The ability",
+      "quality": {
+        "heading-duplicate": 1,
+        "heading-jump": 9,
+        "raw-html": 10
+      }
+    },
+    {
+      "source": "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/fill-rule",
+      "kind": "HTML",
+      "archive": "Archive/HTML/attribute-fill-rule.html",
+      "content": "Archive/HTML/attribute-fill-rule.content.html",
+      "converted": "Raw/attribute-fill-rule.md",
+      "status": "converted",
+      "title": "fill-rule - SVG | MDN",
+      "quality": {
+        "heading-duplicate": 1,
+        "table-escaped-pipe": 1
+      }
+    },
+    {
+      "source": "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/stroke-miterlimit",
+      "kind": "HTML",
+      "archive": "Archive/HTML/attribute-stroke-miterlimit.html",
+      "content": "Archive/HTML/attribute-stroke-miterlimit.content.html",
+      "converted": "Raw/attribute-stroke-miterlimit.md",
+      "status": "converted",
+      "title": "stroke-miterlimit - SVG | MDN"
+    },
+    {
+      "source": "https://svgwg.org/specs/strokes/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/specs-strokes.html",
+      "content": "Archive/HTML/specs-strokes.content.html",
+      "converted": "Raw/specs-strokes.md",
+      "status": "converted",
+      "title": "SVG Strokes",
+      "quality": {
+        "table-escaped-pipe": 8,
+        "raw-html": 126
+      }
+    },
+    {
+      "source": "https://docs.aspose.com/svg/tutorial/fills-and-strokes/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/tutorial-fills-and-strokes.html",
+      "content": "Archive/HTML/tutorial-fills-and-strokes.content.html",
+      "converted": "Raw/tutorial-fills-and-strokes.md",
+      "status": "converted",
+      "title": "SVG Fill and Stroke \u2013 colors, width, dashes \u2013 Aspose.SVG",
+      "quality": {
+        "heading-duplicate": 1,
+        "fence-no-language": 1
+      }
+    },
+    {
+      "source": "https://www.w3schools.com/graphics/svg_stroking.asp",
+      "kind": "HTML",
+      "archive": "Archive/HTML/graphics-svg-stroking.html",
+      "content": "Archive/HTML/graphics-svg-stroking.content.html",
+      "converted": "Raw/graphics-svg-stroking.md",
+      "status": "converted",
+      "title": "SVG Stroke Attributes",
+      "quality": {
+        "heading-duplicate": 2,
+        "heading-jump": 1
+      }
+    },
+    {
+      "source": "https://paperjs.org/tutorials/paths/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/tutorials-paths.html",
+      "content": "Archive/HTML/tutorials-paths.content.html",
+      "converted": "Raw/tutorials-paths.md",
+      "status": "stub",
+      "title": "Paper.js \u2014 Paths",
+      "note": "tutorials index page; after cleaning the body is a bare link list (190 bytes)"
+    },
+    {
+      "source": "https://paperjs.typogram.co/paths/pathitem",
+      "kind": "HTML",
+      "archive": "Archive/HTML/paths-pathitem.html",
+      "content": "Archive/HTML/paths-pathitem.content.html",
+      "converted": "Raw/paths-pathitem.md",
+      "status": "converted",
+      "title": "PathItem | paper.js",
+      "quality": {
+        "fence-blank-padded": 1
+      }
+    },
+    {
+      "source": "https://deepwiki.com/paperjs/paper.js/3.1-path-creation-and-manipulation",
+      "kind": "HTML",
+      "archive": "Archive/HTML/paper-js-3-1-path-creation-and-manipulation.html",
+      "content": "Archive/HTML/paper-js-3-1-path-creation-and-manipulation.content.html",
+      "converted": "Raw/paper-js-3-1-path-creation-and-manipulation.md",
+      "status": "converted",
+      "title": "Path Creation and Manipulation | paperjs/paper.js | DeepWiki",
+      "quality": {
+        "fence-no-language": 1,
+        "code-non-ascii": 16
+      }
+    },
+    {
+      "source": "https://deepwiki.com/paperjs/paper.js/3-path-system",
+      "kind": "HTML",
+      "archive": "Archive/HTML/paper-js-3-path-system.html",
+      "content": "Archive/HTML/paper-js-3-path-system.content.html",
+      "converted": "Raw/paper-js-3-path-system.md",
+      "status": "converted",
+      "title": "Path System | paperjs/paper.js | DeepWiki",
+      "quality": {
+        "fence-no-language": 1
+      }
+    },
+    {
+      "source": "https://scikit-image.org/docs/stable/auto_examples/edges/plot_skeleton.html",
+      "kind": "HTML",
+      "archive": "Archive/HTML/edges-plot-skeleton.html",
+      "content": "Archive/HTML/edges-plot-skeleton.content.html",
+      "converted": "Raw/edges-plot-skeleton.md",
+      "status": "converted",
+      "title": "Skeletonize \u2014 skimage 0.26.0 documentation",
+      "quality": {
+        "heading-jump": 1
+      }
+    },
+    {
+      "source": "https://docs.opencv.org/4.13.0/d2/dbd/tutorial_distance_transform.html",
+      "kind": "HTML",
+      "archive": "Archive/HTML/dbd-tutorial-distance-transform.html",
+      "content": "Archive/HTML/dbd-tutorial-distance-transform.content.html",
+      "converted": "Raw/dbd-tutorial-distance-transform.md",
+      "status": "converted",
+      "title": "OpenCV: Image Segmentation with Distance Transform and Watershed ...",
+      "quality": {
+        "heading-multi-h1": 1
+      }
+    },
+    {
+      "source": "https://pypi.org/project/svgpathtools/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/project-svgpathtools.html",
+      "content": "Archive/HTML/project-svgpathtools.content.html",
+      "converted": "Raw/project-svgpathtools.md",
+      "status": "converted",
+      "title": "Client Challenge",
+      "quality": {
+        "long-line": 2
+      }
+    },
+    {
+      "source": "https://github.com/mathandy/svgpathtools",
+      "kind": "HTML",
+      "archive": "Archive/HTML/mathandy-svgpathtools.html",
+      "content": "Archive/HTML/mathandy-svgpathtools.content.html",
+      "converted": "Raw/mathandy-svgpathtools.md",
+      "status": "converted",
+      "title": "GitHub - mathandy/svgpathtools: A collection of tools for manipulating ...",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "raw-html": 4
+      }
+    },
+    {
+      "source": "https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svg-from-scratch-paths.html",
+      "content": "Archive/HTML/svg-from-scratch-paths.content.html",
+      "converted": "Raw/svg-from-scratch-paths.md",
+      "status": "converted",
+      "title": "Paths - SVG | MDN"
+    },
+    {
+      "source": "https://www.joshwcomeau.com/svg/interactive-guide-to-paths/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/svg-interactive-guide-to-paths.html",
+      "content": "Archive/HTML/svg-interactive-guide-to-paths.content.html",
+      "converted": "Raw/svg-interactive-guide-to-paths.md",
+      "status": "converted",
+      "title": "An Interactive Guide to SVG Paths \u2022 Josh W. Comeau",
+      "quality": {
+        "fence-no-language": 1,
+        "raw-html": 32
+      }
+    },
+    {
+      "source": "https://github.com/libigl/libigl/blob/main/include/igl/signed_distance.h",
+      "kind": "HTML",
+      "archive": "Archive/HTML/igl-signed-distance-h.html",
+      "content": "Archive/HTML/igl-signed-distance-h.content.html",
+      "converted": "Raw/igl-signed-distance-h.md",
+      "status": "stub",
+      "title": "libigl/include/igl/signed_distance.h at main \u00b7 libigl/libigl \u00b7 GitHub",
+      "note": "GitHub blob page; the converted body is a link shell (392 bytes) because the file's content is C++ code the page loads separately"
+    },
+    {
+      "source": "https://libigl.github.io/tutorial/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/tutorial.html",
+      "content": "Archive/HTML/tutorial.content.html",
+      "converted": "Raw/tutorial.md",
+      "status": "converted",
+      "title": "Tutorial - libigl",
+      "quality": {
+        "fence-no-language": 1,
+        "raw-html": 126,
+        "glued-code": 1
+      }
+    },
+    {
+      "source": "https://pymesh.readthedocs.io/en/latest/api_geometry_processing.html",
+      "kind": "HTML",
+      "archive": "Archive/HTML/latest-api-geometry-processing.html",
+      "content": "Archive/HTML/latest-api-geometry-processing.content.html",
+      "converted": "Raw/latest-api-geometry-processing.md",
+      "status": "converted",
+      "title": "Geometry Processing Functions \u2014 PyMesh 0.2.1 documentation",
+      "quality": {
+        "long-line": 3
+      }
+    },
+    {
+      "source": "https://github.com/vistuleB/svgpathsio",
+      "kind": "HTML",
+      "archive": "Archive/HTML/vistuleb-svgpathsio.html",
+      "content": "Archive/HTML/vistuleb-svgpathsio.content.html",
+      "converted": "Raw/vistuleb-svgpathsio.md",
+      "status": "converted",
+      "title": "GitHub - vistuleB/svgpathsio: A collection of tools for manipulating ..."
+    },
+    {
+      "source": "https://www.jsdelivr.com/package/npm/clipper2-wasm",
+      "kind": "HTML",
+      "archive": "Archive/HTML/clipper2-wasm.html",
+      "content": "Archive/HTML/clipper2-wasm.content.html",
+      "converted": "Raw/clipper2-wasm.md",
+      "status": "converted",
+      "title": "clipper2-wasm CDN by jsDelivr - A CDN for npm and GitHub",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1
+      },
+      "note": "recovered substitution: jsDelivr mirror carries the README the npm page lacks; stands in for the package-clipper2-wasm source"
+    },
+    {
+      "source": "https://raw.githubusercontent.com/paperjs/paper.js/develop/examples/Paperjs.org/DivisionRaster.html",
+      "kind": "HTML",
+      "archive": "Archive/HTML/division-raster.html",
+      "content": "Archive/HTML/division-raster.content.html",
+      "converted": "Raw/division-raster.md",
+      "status": "converted",
+      "title": "division-raster",
+      "quality": {
+        "long-line": 1
+      },
+      "note": "recovered substitution: example source from the paper.js repository, standing in for the bot-walled paperjs.org page"
+    },
+    {
+      "source": "https://raw.githubusercontent.com/paperjs/paper.js/develop/examples/Paperjs.org/Qbertify.html",
+      "kind": "HTML",
+      "archive": "Archive/HTML/q-bertify.html",
+      "content": "Archive/HTML/q-bertify.content.html",
+      "converted": "Raw/q-bertify.md",
+      "status": "converted",
+      "title": "q-bertify",
+      "quality": {
+        "long-line": 1
+      },
+      "note": "recovered substitution: example source from the paper.js repository, standing in for the bot-walled paperjs.org page"
+    },
+    {
+      "source": "https://docs.anthropic.com/en/docs/about-claude/pricing",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/anthropic-pricing.md",
+      "status": "converted",
+      "title": "anthropic-pricing",
+      "quality": {
+        "heading-duplicate": 1,
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 80
+      }
+    },
+    {
+      "source": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/anthropic-prompt-caching.md",
+      "status": "converted",
+      "title": "Request 2 caches its request content (not the response)",
+      "quality": {
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 28,
+        "long-line": 12
+      }
+    },
+    {
+      "source": "https://platform.openai.com/docs/pricing",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/openai-pricing.md",
+      "status": "converted",
+      "title": "openai-pricing",
+      "quality": {
+        "heading-duplicate": 8,
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "table-row-mismatch": 69,
+        "long-line": 123
+      }
+    },
+    {
+      "source": "https://api-docs.deepseek.com/quick_start/pricing",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/deepseek-pricing.md",
+      "status": "converted",
+      "title": "Models & Pricing",
+      "quality": {
+        "table-row-mismatch": 18,
+        "invisible": 3
+      }
+    },
+    {
+      "source": "https://developers.cloudflare.com/workers-ai/platform/pricing/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/cloudflare-workers-ai-pricing.md",
+      "status": "converted",
+      "title": "Pricing",
+      "quality": {
+        "table-row-mismatch": 4
+      }
+    },
+    {
+      "source": "https://ai.google.dev/gemini-api/docs/pricing",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/google-gemini-api-pricing.md",
+      "status": "converted",
+      "title": "Gemini Developer API pricing",
+      "quality": {
+        "heading-jump": 1,
+        "table-row-mismatch": 385
+      }
+    },
+    {
+      "source": "https://focus.finops.org/focus-specification/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/focus-specification.md",
+      "status": "converted",
+      "title": "FOCUS Specification 1.4"
+    },
+    {
+      "source": "https://www.finops.org/framework/capabilities/allocation/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/allocation.md",
+      "status": "converted",
+      "title": "Allocation",
+      "quality": {
+        "heading-duplicate": 3,
+        "heading-jump": 2
+      }
+    },
+    {
+      "source": "https://www.finops.org/framework/capabilities/unit-economics/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/unit-economics.md",
+      "status": "converted",
+      "title": "Unit Economics",
+      "quality": {
+        "heading-duplicate": 10,
+        "heading-jump": 4
+      }
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Cost_allocation",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/cost-allocation.md",
+      "status": "converted",
+      "title": "cost-allocation",
+      "quality": {
+        "heading-no-h1": 1,
+        "long-line": 5
+      }
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Shapley_value",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/shapley-value.md",
+      "status": "converted",
+      "title": "shapley-value",
+      "quality": {
+        "heading-no-h1": 1
+      }
+    },
+    {
+      "source": "https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/opentelemetry-gen-ai-spans.md",
+      "status": "stub",
+      "title": "Moved: Generative AI semantic conventions",
+      "note": "601-byte page is a Moved notice pointing at the semantic-conventions-genai repository; the span conventions were recovered from the repository as opentelemetry-genai-repo-gen-ai-spans"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/opentelemetry-gen-ai-metrics.md",
+      "status": "stub",
+      "title": "Moved: Generative AI semantic conventions",
+      "note": "601-byte page is a Moved notice pointing at the semantic-conventions-genai repository; the metric conventions were recovered from the repository as opentelemetry-genai-repo-gen-ai-metrics"
+    },
+    {
+      "source": "https://github.com/open-telemetry/semantic-conventions-genai",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/opentelemetry-semantic-conventions-genai.md",
+      "status": "converted",
+      "title": "OpenTelemetry GenAI Semantic Conventions",
+      "quality": {
+        "heading-duplicate": 4,
+        "table-row-mismatch": 2
+      }
+    },
+    {
+      "source": "https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/opentelemetry-gen-ai-attributes.md",
+      "status": "converted",
+      "title": "Gen AI",
+      "quality": {
+        "table-row-mismatch": 146,
+        "long-line": 52
+      }
+    },
+    {
+      "source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-spans.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/opentelemetry-genai-repo-gen-ai-spans.md",
+      "status": "converted",
+      "title": "Semantic conventions for generative client AI spans",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 1,
+        "long-line": 1
+      }
+    },
+    {
+      "source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-metrics.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/opentelemetry-genai-repo-gen-ai-metrics.md",
+      "status": "converted",
+      "title": "Semantic conventions for generative AI metrics",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      }
+    },
+    {
+      "source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-token-metrics.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/opentelemetry-genai-repo-token-metrics.md",
+      "status": "converted",
+      "title": "Semantic conventions for generative AI inference token metrics",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      }
+    },
+    {
+      "source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/client-inference.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/opentelemetry-genai-repo-client-inference.md",
+      "status": "converted",
+      "title": "Semantic conventions for generative AI client inference",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "long-line": 4,
+        "code-non-ascii": 4
+      }
+    },
+    {
+      "source": "https://github.com/open-telemetry/semantic-conventions-genai/tree/main/docs",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/opentelemetry-genai-repo-docs-tree.md",
+      "status": "converted",
+      "title": "docs",
+      "quality": {
+        "heading-anchor": 1,
+        "heading-multi-h1": 1,
+        "table-row-mismatch": 1
+      }
+    },
+    {
+      "source": "https://github.com/open-telemetry/semantic-conventions-genai/tree/main/docs/gen-ai",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/opentelemetry-genai-repo-docs-gen-ai-tree.md",
+      "status": "converted",
+      "title": "gen-ai",
+      "quality": {
+        "heading-anchor": 1,
+        "heading-multi-h1": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 1,
+        "raw-html": 2,
+        "glued-code": 6
+      }
+    },
+    {
+      "source": "https://langfuse.com/docs/model-usage-and-cost",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/langfuse-model-usage-and-cost.md",
+      "status": "converted",
+      "title": "[Model Usage & Cost ...",
+      "quality": {
+        "heading-anchor": 14,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 18,
+        "long-line": 1,
+        "link-run": 2
+      }
+    },
+    {
+      "source": "https://docs.litellm.ai/docs/completion/token_usage",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/litellm-token-usage.md",
+      "status": "converted",
+      "title": "litellm-token-usage",
+      "quality": {
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "invisible": 10,
+        "code-non-ascii": 2
+      }
+    },
+    {
+      "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/litellm-model-prices-and-context-window.md",
+      "status": "converted",
+      "title": "litellm-model-prices-and-context-window",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "long-line": 1
+      }
+    },
+    {
+      "source": "https://posthog.com/docs/llm-analytics",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/posthog-llm-analytics.md",
+      "status": "converted",
+      "title": "AI Observability",
+      "quality": {
+        "heading-jump": 1
+      }
+    },
+    {
+      "source": "https://docs.anthropic.com/en/docs/claude-code/costs",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/anthropic-claude-code-costs.md",
+      "status": "converted",
+      "title": "Compact instructions",
+      "quality": {
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 5,
+        "code-non-ascii": 1,
+        "long-line": 5
+      }
+    },
+    {
+      "source": "https://docs.cursor.com/en/account/plans-and-usage",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/cursor-plans-and-usage.md",
+      "status": "converted",
+      "title": "Cursor Documentation",
+      "quality": {
+        "heading-anchor": 4,
+        "table-row-mismatch": 1,
+        "link-run": 10
+      }
+    },
+    {
+      "source": "https://docs.github.com/en/copilot/managing-copilot/monitoring-usage-and-entitlements/about-premium-requests",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-copilot-premium-requests.md",
+      "status": "converted",
+      "title": "Requests in GitHub Copilot (legacy)",
+      "quality": {
+        "heading-anchor": 7,
+        "table-row-mismatch": 8
+      }
+    },
+    {
+      "source": "https://openai.com/codex/pricing/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/openai-codex-pricing.md",
+      "status": "stub",
+      "title": "404",
+      "note": "81-byte 404 page kept as evidence; openai.com serves a Cloudflare JS challenge and the source is also recorded as unavailable (retryable)"
+    },
+    {
+      "source": "https://www.sqlite.org/stricttables.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/sqlite-stricttables.md",
+      "status": "converted",
+      "title": "1. Introduction",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "table-row-mismatch": 1
+      }
+    },
+    {
+      "source": "https://www.sqlite.org/wal.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/sqlite-wal.md",
+      "status": "converted",
+      "title": "1. Overview",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      }
+    },
+    {
+      "source": "https://www.sqlite.org/json1.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/sqlite-json1.md",
+      "status": "converted",
+      "title": "1. Overview",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 9
+      }
+    },
+    {
+      "source": "https://duckdb.org/why_duckdb",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/duckdb-why-duckdb.md",
+      "status": "converted",
+      "title": "duckdb-why-duckdb",
+      "quality": {
+        "heading-anchor": 7,
+        "heading-no-h1": 1,
+        "invisible": 15,
+        "glued-code": 1
+      }
+    },
+    {
+      "source": "https://martinfowler.com/eaaDev/EventSourcing.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/martinfowler-event-sourcing.md",
+      "status": "converted",
+      "title": "Event Sourcing",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      }
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Slowly_changing_dimension",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/wikipedia-slowly-changing-dimension.md",
+      "status": "converted",
+      "title": "wikipedia-slowly-changing-dimension",
+      "quality": {
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 36,
+        "long-line": 5
+      }
+    },
+    {
+      "source": "https://en.wikipedia.org/wiki/Double-entry_bookkeeping",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/wikipedia-double-entry-bookkeeping.md",
+      "status": "converted",
+      "title": "wikipedia-double-entry-bookkeeping",
+      "quality": {
+        "heading-no-h1": 1,
+        "table-row-mismatch": 17,
+        "long-line": 6
+      }
+    },
+    {
+      "source": "https://doc.rust-lang.org/reference/comments.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/rust-reference-comments.md",
+      "status": "converted",
+      "title": "[Comments](https://doc.rust-lang.org/reference/comments.html#comments)",
+      "quality": {
+        "heading-anchor": 4,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "glued-code": 1
+      }
+    },
+    {
+      "source": "https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/typescript-jsdoc-supported-types.md",
+      "status": "converted",
+      "title": "JSDoc Reference",
+      "quality": {
+        "heading-duplicate": 4,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 1,
+        "long-line": 1
+      }
+    },
+    {
+      "source": "https://peps.python.org/pep-0257/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/python-pep-0257.md",
+      "status": "converted",
+      "title": "PEP 257 \u2013 Docstring Conventions",
+      "quality": {
+        "heading-anchor": 9,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "raw-html": 2
+      }
+    },
+    {
+      "source": "https://www.rfc-editor.org/rfc/rfc4180",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/rfc-editor-rfc4180.md",
+      "status": "converted",
+      "title": "RFC 4180: Common Format and MIME Type for Comma-Separated Values (CSV) ...",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 5
+      }
+    },
+    {
+      "source": "https://www.rfc-editor.org/rfc/rfc3339",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/rfc-editor-rfc3339.md",
+      "status": "converted",
+      "title": "RFC 3339: Date and Time on the Internet: Timestamps",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      }
+    },
+    {
+      "source": "https://paperjs.org/examples/division-raster/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "bot-walled",
+      "title": "",
+      "disposition": "substitutable",
+      "substitute": "https://raw.githubusercontent.com/paperjs/paper.js/develop/examples/Paperjs.org/DivisionRaster.html",
+      "note": "recovered: substitute fetched from the repository and converted as its own source (division-raster)",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://paperjs.org/examples/division-raster/: Blocked by anti-bot protection: Structural: minimal_text, no_content_elements, script_heavy_shell (1392 bytes, 0 chars visible)"
+    },
+    {
+      "source": "https://paperjs.org/examples/q-bertify/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "bot-walled",
+      "title": "",
+      "disposition": "substitutable",
+      "substitute": "https://raw.githubusercontent.com/paperjs/paper.js/develop/examples/Paperjs.org/Qbertify.html",
+      "note": "recovered: substitute fetched from the repository and converted as its own source (q-bertify)",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://paperjs.org/examples/q-bertify/: Blocked by anti-bot protection: Structural: minimal_text, no_content_elements, script_heavy_shell (1386 bytes, 0 chars visible)"
+    },
+    {
+      "source": "https://mgv.sggw.pl/article/view/9131",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "timeout",
+      "title": "",
+      "disposition": "retryable",
+      "exit": 4,
+      "message": "read_url: probe failed for https://mgv.sggw.pl/article/view/9131: timed out"
+    },
+    {
+      "source": "https://dl.acm.org/doi/full/10.1145/3757377.3764004",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "bot-walled",
+      "title": "",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://dl.acm.org/doi/full/10.1145/3757377.3764004: Blocked by anti-bot protection: Cloudflare JS challenge"
+    },
+    {
+      "source": "https://www.w3.org/TR/SVG2/painting.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "bot-walled",
+      "title": "",
+      "disposition": "substitutable",
+      "substitute": "https://svgwg.org/svg2-draft/painting.html",
+      "note": "substitute identified but not fetched in this run",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://www.w3.org/TR/SVG2/painting.html: Blocked by anti-bot protection: Cloudflare JS challenge"
+    },
+    {
+      "source": "https://www.w3.org/TR/2000/WD-SVG-20000629/painting.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "bot-walled",
+      "title": "",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://www.w3.org/TR/2000/WD-SVG-20000629/painting.html: Blocked by anti-bot protection: Cloudflare JS challenge"
+    },
+    {
+      "source": "https://www.w3.org/TR/SVG2/paths.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "bot-walled",
+      "title": "",
+      "disposition": "substitutable",
+      "substitute": "https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths",
+      "note": "MDN Paths tutorial substitute already in the shelf as svg-from-scratch-paths",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://www.w3.org/TR/SVG2/paths.html: Blocked by anti-bot protection: Cloudflare JS challenge"
+    },
+    {
+      "source": "https://www.finops.org/framework/capabilities/chargeback-showback/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/chargeback-showback.md",
+      "status": "unavailable",
+      "title": "Sorry, this page has not been found",
+      "disposition": "retryable",
+      "exit": 0,
+      "message": "https://www.finops.org/framework/capabilities/chargeback-showback/ returned HTTP 404 ('Sorry, this page has not been found'); fit pass wrote 687 bytes of nav plus the 404 heading, the single --filter raw retry confirmed status_code 404 with identical final_url, so no capability content exists at that URL; the 7920-byte error page is kept at Reference/Raw/chargeback-showback.md as evidence and recorded as a failed source in the curated note"
+    },
+    {
+      "source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/spans.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "opentelemetry-genai-repo-spans",
+      "disposition": "retryable",
+      "exit": 5,
+      "message": "read_url: crawl failed: Blocked by anti-bot protection: Structural: minimal_text on small page (228 bytes, 14 chars visible). GitHub 404: wrong path; the real doc is docs/gen-ai/gen-ai-spans.md (fetched successfully). Retried once with --filter raw, same result. No file written; fetch-errors.log is owned by another lane, so the failure is recorded in the curated note."
+    },
+    {
+      "source": "https://openai.com/codex/pricing/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/openai-codex-pricing.md",
+      "status": "unavailable",
+      "title": "404",
+      "disposition": "retryable",
+      "exit": 5,
+      "message": "First capture (crawl4ai:fit, exit 0) wrote an 81-byte 404 haiku page; mandated retry with --filter raw failed: read_url: crawl failed for https://openai.com/codex/pricing/: Blocked by anti-bot protection: Cloudflare JS challenge. Stub file kept at Reference/Raw/openai-codex-pricing.md."
+    },
+    {
+      "source": "https://spdx.github.io/spdx-spec/v2.3/package-information/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "spdx-package-information",
+      "disposition": "retryable",
+      "exit": 5,
+      "message": "Blocked by anti-bot protection: Structural: minimal_text, no_content_elements, script_heavy_shell (1849 bytes, 0 chars visible). Retried once with --filter raw per procedure; same exit 5. No file written to Reference/Raw/spdx-package-information.md. SPDX tag/value field vocabulary left unverified and cited nowhere; listed in the curated note's Open questions."
+    },
+    {
+      "source": "https://designsystem.digital.gov/components/header/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/designsystem-digital-gov-components-header.md",
+      "status": "converted",
+      "title": "designsystem-digital-gov-components-header",
+      "quality": {
+        "heading-duplicate": 6,
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 3
+      }
+    },
+    {
+      "source": "https://designsystem.digital.gov/components/footer/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/designsystem-digital-gov-components-footer.md",
+      "status": "converted",
+      "title": "designsystem-digital-gov-components-footer",
+      "quality": {
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 2
+      }
+    },
+    {
+      "source": "https://designsystem.digital.gov/components/card/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/designsystem-digital-gov-components-card.md",
+      "status": "converted",
+      "title": "designsystem-digital-gov-components-card",
+      "quality": {
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 2
+      }
+    },
+    {
+      "source": "https://diataxis.fr/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/diataxis-fr.md",
+      "status": "converted",
+      "title": "Di\u00e1taxis[\u00b6](https://diataxis.fr/#diataxis \"Link to this heading\")"
+    },
+    {
+      "source": "https://carbondesignsystem.com/components/UI-shell-header/usage/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/carbondesignsystem-com-components-UI-shell-header-usage.md",
+      "status": "converted",
+      "title": "carbondesignsystem-com-components-UI-shell-header-usage",
+      "quality": {
+        "heading-no-h1": 1,
+        "table-row-mismatch": 3
+      }
+    },
+    {
+      "source": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "wai-aria-apg-patterns-disclosure",
+      "disposition": "retryable",
+      "exit": 5,
+      "message": "Blocked by anti-bot protection: Cloudflare JS challenge on both the default pass and the one --filter raw retry. No file written; the disclosure-pattern claims stay unverified and are cited nowhere."
+    },
+    {
+      "source": "https://deepseek.playform.cloud/plugins/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/deepseek-playform-cloud-plugins.md",
+      "status": "converted",
+      "title": "deepseek-playform-cloud-plugins",
+      "quality": {
+        "heading-no-h1": 1,
+        "table-row-mismatch": 16,
+        "raw-html": 106
+      }
+    }
+  ]
 }

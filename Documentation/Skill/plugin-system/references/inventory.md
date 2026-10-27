@@ -6,10 +6,10 @@ The package directories are the source of truth; the prose counts in older docum
 
 ## The two groups
 
-| Group    | Names                                                                                             | Runtime                          | Version |
-| -------- | ------------------------------------------------------------------------------------------------- | -------------------------------- | ------- |
-| Classic  | `@scope/lib-dsh-*`, `@scope/hook-dsh-*`, `@scope/plugin-dsh-*`, `@scope/client-dsh-*`             | Plain TypeScript                 | 0.3.0   |
-| EffectTS | `@scope/ets-*` (the base `ets-base-dsh` plus one twin per covered package)                        | Effect 4.0.5 services and layers | 0.3.0   |
+| Group    | Names                                                                                 | Runtime                          | Version |
+| -------- | ------------------------------------------------------------------------------------- | -------------------------------- | ------- |
+| Classic  | `@scope/lib-dsh-*`, `@scope/hook-dsh-*`, `@scope/plugin-dsh-*`, `@scope/client-dsh-*` | Plain TypeScript                 | 0.3.0   |
+| EffectTS | `@scope/ets-*` (the base `ets-base-dsh` plus one twin per covered package)            | Effect 4.0.5 services and layers | 0.3.0   |
 
 Counts: 58 Classic packages, 48 EffectTS packages.
 
@@ -69,8 +69,8 @@ The aggregate runner is `node Maintain/Run/Smokes/Index.mjs` (`pnpm test`): **35
 5,337 checks across both trees** (184 Classic + 175 EffectTS test folders), all green at the
 2026-10-22 delivery.
 
-The smoke manifest line names the 14 mechanics suites: core, factory, governor, pinner, cargo,
-dash, quotes, ellipsis, spaces, invisible, fullwidth, normalize-file, ccr, and tool-coach.
+The smoke manifest line names the 14 mechanics suites: core, factory, governor, pinner, cargo, dash,
+quotes, ellipsis, spaces, invisible, fullwidth, normalize-file, ccr, and tool-coach.
 
 The per-folder READMEs are the arbiter; the manifest must be regenerated or derived, never quoted
 as-is, because the manifest line is a summary that lags the per-folder tests.

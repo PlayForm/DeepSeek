@@ -123,14 +123,14 @@ activation and not your own investigation.
 
 ## Decision table
 
-| Situation                         | Action                                        |
-| --------------------------------- | --------------------------------------------- |
-| Launched paused with a spec       | Retain the spec and produce no tool call      |
-| Amendment arrives while idle      | Retain the amended spec; still no tool call   |
-| Amendment arrives while working   | Apply only if compatible; flag if not         |
-| Activation arrives                | Execute the retained spec; run the arbiter    |
-| The spec conflicts with the tree  | Verify the tree, flag the conflict            |
-| A shared file is already modified | Read before edit; report the conflict         |
+| Situation                         | Action                                      |
+| --------------------------------- | ------------------------------------------- |
+| Launched paused with a spec       | Retain the spec and produce no tool call    |
+| Amendment arrives while idle      | Retain the amended spec; still no tool call |
+| Amendment arrives while working   | Apply only if compatible; flag if not       |
+| Activation arrives                | Execute the retained spec; run the arbiter  |
+| The spec conflicts with the tree  | Verify the tree, flag the conflict          |
+| A shared file is already modified | Read before edit; report the conflict       |
 
 ## Verification
 
@@ -144,13 +144,13 @@ activation and not your own investigation.
 
 ## Anti-patterns
 
-| Mistake                                 | Cost                                                     | Do instead             |
-| --------------------------------------- | -------------------------------------------------------- | ---------------------- |
-| Starting work before activation         | Works on a spec that may change                          | Wait for ACTIVATE      |
-| Acknowledging an amendment and stopping | The queue looks busy; nothing executes                   | Execute at ACTIVATE    |
-| Deviating from the spec silently        | The deviation enters the record as if it were intended   | Name the deviation     |
-| Paraphrasing the spec in the report     | The parent cannot match work to spec                     | Quote the spec's items |
-| Silently fixing a conflict              | The change is invisible to the parent                    | Flag it in the report  |
+| Mistake                                 | Cost                                                   | Do instead             |
+| --------------------------------------- | ------------------------------------------------------ | ---------------------- |
+| Starting work before activation         | Works on a spec that may change                        | Wait for ACTIVATE      |
+| Acknowledging an amendment and stopping | The queue looks busy; nothing executes                 | Execute at ACTIVATE    |
+| Deviating from the spec silently        | The deviation enters the record as if it were intended | Name the deviation     |
+| Paraphrasing the spec in the report     | The parent cannot match work to spec                   | Quote the spec's items |
+| Silently fixing a conflict              | The change is invisible to the parent                  | Flag it in the report  |
 
 ## The amendment that does nothing
 
@@ -164,7 +164,7 @@ answer is also the cheap one.
 
 ## References
 
-| File                      | Covers                                                          | Read when             |
-| ------------------------- | --------------------------------------------------------------- | --------------------- |
-| `references/contract.md`  | The idle contract, the no-acknowledgment rule, the amendments   | You are launched idle |
-| `references/execution.md` | Activation, the pre-work checks, execution, flagging, the result | You are activated    |
+| File                      | Covers                                                           | Read when             |
+| ------------------------- | ---------------------------------------------------------------- | --------------------- |
+| `references/contract.md`  | The idle contract, the no-acknowledgment rule, the amendments    | You are launched idle |
+| `references/execution.md` | Activation, the pre-work checks, execution, flagging, the result | You are activated     |

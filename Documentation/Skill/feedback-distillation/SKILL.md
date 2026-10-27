@@ -27,7 +27,7 @@ The general rule holds no real name, no private path, and no project-specific id
 - The user asks to save the pattern or to prepare a future pack.
 - A new project starts and the old lessons must be loaded first.
 - Do not use this skill for a single task instruction (the `delivery-workflow`), for the route
-    (`task-routing`), or for the queue (`orchestrator-batch`).
+  (`task-routing`), or for the queue (`orchestrator-batch`).
 
 ## The method
 
@@ -70,18 +70,18 @@ The rows below are the anonymized requests from the delivery that produced this 
 
 The roles stand in for the names, and the shape is the rule.
 
-| The request | The lesson | The rule |
-| --- | --- | --- |
-| "The client is not the demo; the client and the provider develop the product together." | The client, the provider, the product, and the demo are four distinct roles. | The roles are named once and never collapsed. |
-| "There is no public site yet; this is the operator surface." | A public surface that does not exist is named as absent, not implied. | The scope gate. |
-| "Preserve every URL." | A page read but not shelved is a failed read. | The reference shelf: `crawl4ai`, `reference-intake`, `source-pipeline`, `anydoc`. |
-| "The full source is in the module directory; use the reset script." | The local sources are reset before they are read. | The local sources: `--list`, then `--only <names>`; clone if missing. |
-| "Use low-cost agents; you manage." | The lanes are low; the parent formalises, dispatches, verifies, and records. | `task-routing` and `orchestrator-batch`. |
-| "The issues have links that go nowhere." | A plain path in an issue is a broken reference. | The link rule: files `blob/Current/<path>`, directories `tree/Current/<path>`. |
-| "Disable the limiting plugins." | A failed or blocking plugin is disabled, not worked around. | The plugin hygiene. |
-| "Save this as a repeatable pattern." | The pattern is a skill, not a conversation. | This skill and `request-pack`. |
-| "Do not stop until everything is done." | The batch continues across rounds; the goal holds the objective. | The goal and the no-wait law. |
-| "You are not to plan or reason; let them." | The agents reason about the content; the parent reasons about progress and needs. | The delivery loop. |
+| The request                                                                             | The lesson                                                                        | The rule                                                                          |
+| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| "The client is not the demo; the client and the provider develop the product together." | The client, the provider, the product, and the demo are four distinct roles.      | The roles are named once and never collapsed.                                     |
+| "There is no public site yet; this is the operator surface."                            | A public surface that does not exist is named as absent, not implied.             | The scope gate.                                                                   |
+| "Preserve every URL."                                                                   | A page read but not shelved is a failed read.                                     | The reference shelf: `crawl4ai`, `reference-intake`, `source-pipeline`, `anydoc`. |
+| "The full source is in the module directory; use the reset script."                     | The local sources are reset before they are read.                                 | The local sources: `--list`, then `--only <names>`; clone if missing.             |
+| "Use low-cost agents; you manage."                                                      | The lanes are low; the parent formalises, dispatches, verifies, and records.      | `task-routing` and `orchestrator-batch`.                                          |
+| "The issues have links that go nowhere."                                                | A plain path in an issue is a broken reference.                                   | The link rule: files `blob/Current/<path>`, directories `tree/Current/<path>`.    |
+| "Disable the limiting plugins."                                                         | A failed or blocking plugin is disabled, not worked around.                       | The plugin hygiene.                                                               |
+| "Save this as a repeatable pattern."                                                    | The pattern is a skill, not a conversation.                                       | This skill and `request-pack`.                                                    |
+| "Do not stop until everything is done."                                                 | The batch continues across rounds; the goal holds the objective.                  | The goal and the no-wait law.                                                     |
+| "You are not to plan or reason; let them."                                              | The agents reason about the content; the parent reasons about progress and needs. | The delivery loop.                                                                |
 
 ## The anonymization
 

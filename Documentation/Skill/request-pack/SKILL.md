@@ -29,26 +29,26 @@ The roles are generic: the user, the client, the provider, the product, and the 
 - A handoff must name the skill that a future request will load.
 - The user asks to prepare the next pack.
 - Do not use this skill for a request that is genuinely new, because you classify it with
-    `feedback-distillation` first and then add a row here.
+  `feedback-distillation` first and then add a row here.
 
 ## The translation
 
-| The request | The skill or rule | The output | The arbiter |
-| --- | --- | --- | --- |
-| "Continue the delivery." | `delivery-workflow` | the next wave from the board and the plan | the wave's printed result |
-| "Add the next components or patterns." | the component catalog and the cluster tests | the library's next cluster | the cluster's matrix tests |
-| "Build the pages or the families." | the shell and the state matrix | the operator surface's next family | the built route's states |
-| "Preserve these references." | `crawl4ai`, `reference-intake`, `source-pipeline` | the shelf with the new sources | the shelf's index and status table |
-| "Link the issues or the docs." | the link rule | every path as a markdown link | a sampled link resolves |
-| "Restructure the repository." | the law and the migration table | the moved tree | the tree's verifier |
-| "Rename the product or the roles." | the naming law and the scope gate | the corrected docs and boards | the same names in every artifact |
-| "Create the board or the milestones." | the GitHub decomposition | the board, the epic, the sub-issues | the sub-issue count and the Target dates |
-| "Prepare a flight plan." | the plan | the phases, the milestones, the issue specs | the plan's statuses and the issue payload |
-| "Review the work." | the feedback loop | the findings as nested issues | the variant-table diff |
-| "Run the assurance." | the checks | the state matrix, the accessibility, the version | the named check per issue |
-| "Clean the plugins." | the plugin hygiene | the profile with the failed and blocking plugins off | the plugin list shows them disabled |
-| "Save the pattern." | `feedback-distillation` | a dated, anonymized skill | the skill catalog and the tree's verifier |
-| "Launch many agents." | the workflow and the low lanes | the results | each lane's arbiter |
+| The request                            | The skill or rule                                 | The output                                           | The arbiter                               |
+| -------------------------------------- | ------------------------------------------------- | ---------------------------------------------------- | ----------------------------------------- |
+| "Continue the delivery."               | `delivery-workflow`                               | the next wave from the board and the plan            | the wave's printed result                 |
+| "Add the next components or patterns." | the component catalog and the cluster tests       | the library's next cluster                           | the cluster's matrix tests                |
+| "Build the pages or the families."     | the shell and the state matrix                    | the operator surface's next family                   | the built route's states                  |
+| "Preserve these references."           | `crawl4ai`, `reference-intake`, `source-pipeline` | the shelf with the new sources                       | the shelf's index and status table        |
+| "Link the issues or the docs."         | the link rule                                     | every path as a markdown link                        | a sampled link resolves                   |
+| "Restructure the repository."          | the law and the migration table                   | the moved tree                                       | the tree's verifier                       |
+| "Rename the product or the roles."     | the naming law and the scope gate                 | the corrected docs and boards                        | the same names in every artifact          |
+| "Create the board or the milestones."  | the GitHub decomposition                          | the board, the epic, the sub-issues                  | the sub-issue count and the Target dates  |
+| "Prepare a flight plan."               | the plan                                          | the phases, the milestones, the issue specs          | the plan's statuses and the issue payload |
+| "Review the work."                     | the feedback loop                                 | the findings as nested issues                        | the variant-table diff                    |
+| "Run the assurance."                   | the checks                                        | the state matrix, the accessibility, the version     | the named check per issue                 |
+| "Clean the plugins."                   | the plugin hygiene                                | the profile with the failed and blocking plugins off | the plugin list shows them disabled       |
+| "Save the pattern."                    | `feedback-distillation`                           | a dated, anonymized skill                            | the skill catalog and the tree's verifier |
+| "Launch many agents."                  | the workflow and the low lanes                    | the results                                          | each lane's arbiter                       |
 
 ## The frame
 

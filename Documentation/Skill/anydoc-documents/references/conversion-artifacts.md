@@ -87,8 +87,8 @@ The symptom looks like a table with merged cells flattened into one column, a ro
 differs from its header, a nested table turned into a run of lines, or a table that arrived as an
 image and produced no text at all.
 
-The cause is that GFM has no merged cells and no nested tables, so the converter picks a
-rectangular approximation, and a table drawn as an image has no text to read.
+The cause is that GFM has no merged cells and no nested tables, so the converter picks a rectangular
+approximation, and a table drawn as an image has no text to read.
 
 The damage matters because a table read as data is wrong on every merged row, and the loss stays
 invisible unless the header is counted.
