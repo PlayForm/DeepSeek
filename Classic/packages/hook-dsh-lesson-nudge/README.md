@@ -1,15 +1,16 @@
 # @playform/hook-dsh-lesson-nudge
 
-The post-turn nudge of the lesson-review family: it turns the `idle` edge of `agent/status` into a
+The post-turn nudge of the lesson-review family changes the `idle` edge of `agent/status` into a
 self-improvement review.
 
 **Hook @ DSH @ Nudge @ Lesson.**
 
-It owns no corpus and no prompt.
+It has no corpus and no prompt.
 
-It watches the agent's lifecycle, asks `@playform/plugin-dsh-lesson-review` whether a review is due,
-and runs that review from the true idle phase (`agent.runMaintenance`) - so the review never
-competes with the live turn for the endpoint and never enters the turn's own log.
+The hook monitors the agent lifecycle and sends a query to `@playform/plugin-dsh-lesson-review`
+about whether a review is due. It then runs that review from the idle phase through
+`agent.runMaintenance`. Thus the review never shares the endpoint with the live turn, and it never
+writes to the log of that turn.
 
 ## Why the split
 
@@ -17,59 +18,63 @@ The family separates a SERVICE (state, storage, writes) from a HOOK (an event su
 
 The review needs both: a corpus with a usage store and a queue, and a moment to run.
 
-Splitting them means either half can be replaced - a different trigger (a cron, a manual tool) can
-drive the same service, and a different review implementation can be driven by the same trigger.
+Each half can change independently. A different trigger, such as a cron or a manual tool, can start
+the same service, and the same trigger can start a different review implementation.
 
 ## The four gates
 
-1. **The switch.**
+1. **Switch.**
 
-    The switch checks `enabled` inside the listener body, so a hot flip lands without a remount.
+    The listener body checks `enabled`, so the next status transition makes a change to the cell
+    active without a remount.
 
-2. **The edge.**
+2. **Edge.**
 
     The edge is `status === "idle"`.
 
-3. **The service.**
+3. **Service.**
 
-    The service is `ctx.get("lesson")`, probed per transition; absent is ONE warning per process,
-    never a throw.
+    The hook gets the service from `ctx.get("lesson")` at each transition.
 
-4. **The cadence.**
+    If the service is absent, the hook writes one warning for each process and does not throw.
 
-    The cadence is `Lesson.Tick(agent).due`, then this hook's own `maxReviewsPerSession` cap (the
-    runaway guard for a mis-set service interval).
+4. **Cadence.**
 
-## Fail-open, always
+    The cadence is `Lesson.Tick(agent).due`.
 
-A throw inside a status emit breaks the harness's status publication.
+    Then this hook applies its own `maxReviewsPerSession` cap, the runaway guard for an incorrect
+    service interval.
 
-Every body is one `try/catch`; the maintenance task is detached from the emit so the listener
-returns immediately and a rejected review cannot become an unhandled rejection.
+## Fail open
+
+A throw inside a status emit breaks the status publication of the harness.
+
+Each listener body has one `try/catch` block. The hook detaches the maintenance task from the emit,
+so the listener returns immediately, and a rejected review cannot become an unhandled rejection.
 
 ## Ships disabled
 
-`enabled: false` is the schema default and the patch row - the family's idle-forever posture.
+The schema default and the patch row set `enabled: false`, the idle-forever posture of the family.
 
-A cold mount logs `disabled (enabled=false)` and registers the listener inert; flipping the cell
-lands on the next status transition.
+A cold mount logs `disabled (enabled=false)` and the listener stays inert. The next status transition
+makes a change to the cell active.
 
 ## Wiring
 
-1. **The bundle rows.**
+1. **Bundle rows.**
 
-    Add `@playform/plugin-dsh-lesson-review` and `@playform/hook-dsh-lesson-nudge` to the profile's
-    `dsh.profile.bundles` (and its `link:` dependencies).
+    Add `@playform/plugin-dsh-lesson-review` and `@playform/hook-dsh-lesson-nudge` to the
+    `dsh.profile.bundles` of the profile and to its `link:` dependencies.
 
-2. **The patch rows.**
+2. **Patch rows.**
 
-    Add both patch rows to the profile's `cordis.patch.yml`.
+    Add both patch rows to `cordis.patch.yml` of the profile.
 
-3. **The restart.**
+3. **Restart.**
 
     Restart the host.
 
-4. **The ledgers.**
+4. **Ledgers.**
 
     Read each ledger: `~/.dsh/playform/hook-dsh-lesson-nudge.log` and
     `~/.dsh/playform/plugin-dsh-lesson-review.log`.

@@ -1,5 +1,5 @@
-import type { CheckResult, MonitorEntry } from "../Interface/Events.js";
-import type State from "../Interface/State.js";
+import type { CheckResult, MonitorEntry } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
 /** The bytes of one string. */
 export declare const Bytes: (Text: string) => number;
 /** The version display: the raw token verbatim when <= 12 bytes, else the

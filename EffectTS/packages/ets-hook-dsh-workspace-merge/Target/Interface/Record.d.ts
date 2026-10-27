@@ -1,4 +1,4 @@
-import type Reply from "@Interface/Reply.js";
+import type Reply from "./Reply.js";
 export default interface Record {
     id: string;
     status: "applied" | "partial" | "rejected";
