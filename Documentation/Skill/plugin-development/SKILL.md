@@ -9,7 +9,7 @@ whenToUse:
     consuming a service, registering a tool, packing a bundle, or diagnosing a plugin that did not
     activate. For the family contract, load plugin-system too.
 version: 2.0.0
-updated: 2026-10-20
+updated: 2026-10-28
 ---
 
 # DSH Plugin Development

@@ -6,15 +6,15 @@ Know which one you are in before you edit; most early mistakes are wrong-tree mi
 
 ## The trees
 
-| Path             | Role                                                                                       | Git                |
-| ---------------- | ------------------------------------------------------------------------------------------ | ------------------ |
-| `Classic/`       | The plain-TypeScript release: 51 packages, each with its own `Target/`                     | Root repo          |
-| `EffectTS/`      | The Effect-TS release: 46 packages (incl. `ets-base-dsh`)                                  | Root repo          |
-| `Site/`          | The Astro static site, built into `Site/Target/`                                           | Its own repository |
-| `Test/`          | Fixture archives, governance batteries, probes                                             | Root repo          |
-| `Documentation/` | Framework, guides, plans, skills, reports, research, archive                               | Root repo          |
-| `Maintain/`      | `Run/Smokes/Index.mjs`, `Run/Wiring/Index.mjs`, `Format/Index.sh`, `Check/Lychee/Index.sh` | Root repo          |
-| `diagrams/`      | Source diagrams                                                                            | Root repo          |
+| Path             | Role                                                                   | Git                |
+| ---------------- | ---------------------------------------------------------------------- | ------------------ |
+| `Classic/`       | The plain-TypeScript release: 58 packages, each with its own `Target/` | Root repo          |
+| `EffectTS/`      | The Effect-TS release: 48 packages, each with its own `Target/`        | Root repo          |
+| `Site/`          | The Astro static site, built into `Site/Target/`                       | Its own repository |
+| `Test/`          | Fixture archives, governance batteries, probes                         | Root repo          |
+| `Documentation/` | Framework, guides, plans, skills, reports, research, archive           | Root repo          |
+| `Maintain/`      | `Run/Smokes`, `Run/Wiring`, `Format/Index.sh`, `Check/Lychee`          | Root repo          |
+| `diagrams/`      | Source diagrams                                                        | Root repo          |
 
 `Site/` is listed in the root `.gitignore`.
 
@@ -26,15 +26,16 @@ Any document that still calls it a third implementation is stale.
 
 ## The two release groups
 
-| Group    | Names                                                                                             | Runtime                          |
-| -------- | ------------------------------------------------------------------------------------------------- | -------------------------------- |
-| Classic  | `@playform/lib-dsh-*`, `@playform/hook-dsh-*`, `@playform/plugin-dsh-*`, `@playform/client-dsh-*` | Plain TypeScript, no framework   |
-| EffectTS | `@playform/ets-*` (the base `ets-base-dsh` plus one twin per covered package)                     | Effect 4.0.5 services and layers |
+| Group    | Names                                                                                    | Runtime                          |
+| -------- | ---------------------------------------------------------------------------------------- | -------------------------------- |
+| Classic  | `@scope/lib-dsh-*`, `@scope/hook-dsh-*`, `@scope/plugin-dsh-*`, `@scope/client-dsh-*`    | Plain TypeScript, no framework   |
+| EffectTS | `@scope/ets-*` (the base `ets-base-dsh` plus one twin per covered package)               | Effect 4.0.5 services and layers |
 
-All packages sit at `0.1.0` (unpublished).
+All packages sit at `0.3.0` (unpublished).
 
 The original 14 plugins were joined on 2026-10-22 by 36 new Classic packages (the workspace family,
-the suggesters, the orchestration set, the client family) and 30 of their ETS twins.
+the suggesters, the orchestration set, the client family) and 30 of their ETS twins, and the tree
+has grown since.
 
 Never mix the groups in one dependency graph: the EffectTS `Update` returns Effect envelopes, not
 the Classic dispatch envelope.
@@ -64,9 +65,6 @@ grep -h '"version"' Classic/packages/*/package.json EffectTS/packages/*/package.
   `hook-dsh-tool-coach` (behavioral coaching through the tool surface).
 - **`hook-dsh-live-containers`** - live system-prompt blocks recomputed per request. It ships
   disabled by default.
-- **The 2026-10-22 delivery** - the workspace family (15 packages + `lib-dsh-workspace-live`), the
-  seven suggester hooks, the orchestration set (10 packages), and the three `client-dsh-*` panels.
-  Full roster: `Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md`.
 
 ## The event surfaces
 
@@ -83,8 +81,8 @@ The site is an Astro static build: `Source/` in, `Target/` out.
 
 Its own `package.json`, `astro.config.ts`, and `README.md`.
 
-24 built HTML pages: the landing page, the plugins registry, 15 plugin detail pages, setup,
-versions, flavors, models, workbench, matrix, case study, and the 404.
+The built site: the landing page, the plugins registry, the plugin detail pages, and the supporting
+pages (setup, versions, flavors, models, workbench, matrix, case study, and the 404).
 
 Verify:
 

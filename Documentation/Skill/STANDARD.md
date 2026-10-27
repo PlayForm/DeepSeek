@@ -1,4 +1,4 @@
-# The Skill Corpus Standard (v2, 2026-10-20)
+# The Skill Corpus Standard (v2.2, 2026-10-28)
 
 This document is the specification every skill in this repository follows.
 
@@ -22,20 +22,27 @@ A skill that restates another skill's rules fails the single-owner rule (section
 
 ## 2. The corpus map (one owner per domain)
 
-| Skill                   | Owns                                                                     | Does not own                                  |
-| ----------------------- | ------------------------------------------------------------------------ | --------------------------------------------- |
-| `session-orientation`   | First-load order, repository map, current-state pointers, law index      | The laws themselves (each has an owner below) |
-| `code-authoring`        | File-write tool discipline, byte integrity, git checks-only, code style  | Plugin contracts, routing, smokes             |
-| `plugin-development`    | The DSH/Cordis plugin API: dispatch, anatomy, config, services, tools    | The family's bundle conventions               |
-| `plugin-system`         | The family contract: inventory, bundle anatomy, build, ledger, ownership | The generic Cordis API                        |
-| `smoke-writing`         | The smoke suites: harness pattern, assertions, traps, parity             | Build and ledger ownership (plugin-system)    |
-| `task-routing`          | Model catalog, difficulty classification, routing table, ladder          | Strain definitions, batch bookkeeping         |
-| `worker-strains`        | The three strains, spec-writing, cultivation, delegation loop            | The model policy (task-routing)               |
-| `orchestrator-batch`    | The parent's batch loop: queue, reconfiguration, verification, report    | The child's idle behavior                     |
-| `idle-agent-protocol`   | The idle child's contract: retain, wait, execute, report                 | The parent's queue                            |
-| `harness-observability` | What the agent can see and how to inspect it                             | What to do with the facts                     |
-| `instructional-writing` | Files whose value is literal typographic characters                      | Ordinary prose and code                       |
-| `site-authoring`        | The Site/ lane: build, structure, design system, content, deploy         | Plugin code and smokes                        |
+| Skill                   | Owns                                                                                         | Does not own                                                                          |
+| ------------------------ | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `session-orientation`   | First-load order, repository map, current-state pointers, law index                          | The laws themselves (each has an owner below)                                         |
+| `code-authoring`        | File-write tool discipline, byte integrity, git checks-only, code style                      | Plugin contracts, routing, smokes                                                     |
+| `plugin-development`    | The DSH/Cordis plugin API: dispatch, anatomy, config, services, tools                        | The family's bundle conventions                                                       |
+| `plugin-system`         | The family contract: inventory, bundle anatomy, build, ledger, ownership                     | The generic Cordis API                                                                |
+| `smoke-writing`         | The smoke suites: harness pattern, assertions, traps, parity                                 | Build and ledger ownership (plugin-system)                                            |
+| `task-routing`          | Model catalog, difficulty classification, routing table, ladder                              | Strain definitions, batch bookkeeping                                                 |
+| `worker-strains`        | The four strains, spec-writing, cultivation, delegation loop                                 | The model policy (task-routing)                                                       |
+| `orchestrator-batch`    | The parent's batch loop: queue, reconfiguration, verification, report                        | The child's idle behavior                                                             |
+| `idle-agent-protocol`   | The idle child's contract: retain, wait, execute, report                                     | The parent's queue                                                                    |
+| `harness-observability` | What the agent can see and how to inspect it                                                 | What to do with the facts                                                             |
+| `instructional-writing` | Files whose value is literal typographic characters                                          | Ordinary prose and code                                                               |
+| `anydoc-documents`      | Document-to-Markdown conversion (PDF, DOCX, PPTX, XLSX, EPUB)                                | PDF layout rendering, PDF export, Office authoring                                    |
+| `crawl4ai`              | Reading a URL as Markdown: fetch policy, JavaScript rendering, site crawls, document routing | Document conversion (anydoc-documents), URL discovery (web_search)                    |
+| `delivery-workflow`     | The multi-agent delivery loop: frame, recon, flight plan, board, waves, assurance, lessons   | The model policy (task-routing), the queue mechanics (orchestrator-batch)             |
+| `feedback-distillation` | Turning corrections into dated, anonymized rules and skills                                  | The rules themselves (their owners)                                                   |
+| `reference-intake`      | The Reference shelf: fetch, convert, index, status, failures                                 | Reading a page to answer a question (crawl4ai), on-disk conversion (anydoc-documents) |
+| `request-pack`          | The request classes and the skill each one loads                                             | The skills themselves                                                                 |
+| `source-pipeline`       | Raw source plus converted Markdown as two artifacts: archive, convert, index                 | URL reading (crawl4ai), document conversion (anydoc-documents)                        |
+| `site-authoring`        | The Site/ lane: build, structure, design system, content, deploy                             | Plugin code and smokes                                                                |
 
 ## 3. The SKILL.md specification
 
@@ -57,7 +64,7 @@ task nouns and verbs), not a slogan.
 ### 3.2 Body sections (in this order, none omitted)
 
 1. **Title + purpose** - one paragraph: the decision this skill governs and the failure it prevents.
-   No history unless the history is a rule.
+    No history unless the history is a rule.
 2. **When to use** - bullets; include "Do not use for:" with the owner of the excluded work.
 3. **The rules** - numbered, imperative, each one action. The reason is a clause, not a paragraph.
 4. **The workflow** - numbered steps with exact paths and commands. Ends with the verification gate.
@@ -81,25 +88,60 @@ If no, the missing rule belongs in the body, not in a reference.
 
 - One topic per file, kebab-case, under `references/`.
 - The file opens with a one-sentence purpose, then the rule, then the detail (inventory, examples,
-  incident, environment notes).
+    incident, environment notes).
 - A reference may be long; a reference may not be vague. Every claim is verifiable or marked as
-  history.
+    history.
 - No reference exists without a pointer from its SKILL.md; no pointer exists without a file.
 - Scripts live in `scripts/` and get a reference that states purpose, inputs, outputs, and failure
-  modes.
+    modes.
 
 ## 5. Voice and style
 
+This section governs documents, not the agent's replies.
+
+The agent's turn is a sequence of tool calls; it does not narrate.
+
+Write skills as continuous prose with one sentence per paragraph block, separated by a blank line.
+
+Include the reasoning, the context, and the failure that the rule prevents.
+
+Do not compress the rule into an epigram.
+
+Do not write a skill as a list of fragments or one-line rules, because a later agent reads the file
+and may mistake its register for the voice it should think and answer in.
+
+The skill is a specification to be understood, not a style sample.
+
+A trigger section is a scenario table with a scenario column and an action column, not a collapsed
+prose sentence and not a bullet list.
+
+An anti-pattern section is a table with the mistake, the cost, and the correct move, and a decision
+table is a table with the situation and the action.
+
+The relationship between a skill and the artifact is inverse: the skill is read long and the
+artifact is produced short.
+
+The skill must say so explicitly, so that a model does not mistake the skill's length for the target
+length of its own output.
+
+A commit message stays one line, and a code comment stays one or two sentences.
+
+A document follows the project's document standard, and a delegated result names the files, the
+printed arbiter output, and the commit or `READY-TO-COMMIT`.
+
 - Second person, imperative: "Run", "Do not", "Verify".
-- One idea per sentence. Short sentences win.
+- One idea per sentence, and each sentence should carry enough of its reason to stand on its own; a
+    short sentence is for a command, a path, or a single prohibition. Short sentences win.
 - Active voice. Name the actor.
 - No hedging ("should probably", "may want to"), no rhetoric, no slogans.
 - ASCII only: hyphen-minus, straight quotes, three dots. The normalize hooks are active; a
-  deliberate glyph needs `raw-write` (see `instructional-writing`).
+    deliberate glyph needs `raw-write` (see `instructional-writing`).
 - Tables for enumerable decisions; numbered lists for order; bullets for unordered sets.
 - Tabs for indentation; lines at or under 100 characters.
 - Do not write "the full philosophy lives in the references" or any other meta-commentary about the
-  corpus.
+    corpus.
+- Do not put a spoken reply, a report shape, a sentence count, or a verbatim line in a skill. State
+    the artifact and its acceptance check.
 
 ## 6. The single-owner rule
 
@@ -156,9 +198,21 @@ Point to the owner or the source file (a manifest, a smoke README,
 6. **The install.**
 
     The same content is written to the repo copy (`Documentation/Skill/<name>/`) and the global copy
-    (`~/.dsh/skills/<name>/`).
+    (`${DSH_HOME}/skills/<name>/`).
 
     The two are byte-identical, and the repo copy wins by policy, not by a marker.
+
+7. **The adaptation.**
+
+    A project repository may adapt a skill instead of copying it, when the project's tooling or laws
+    genuinely differ.
+
+    An adaptation is a file with its own name that states at the top which global skill it adapts
+    and what it changed.
+
+    The byte-identity rule applies to copies, not to adaptations.
+
+    A diverged copy is the one state never allowed, because it is indistinguishable from drift.
 
 ## 9. The verification checklist (run before reporting done)
 
@@ -169,6 +223,9 @@ Point to the owner or the source file (a manifest, a smoke README,
 - [ ] Every file under `references/` is pointed to by the SKILL.md.
 - [ ] No rule appears in two skills (the ownership table, section 2).
 - [ ] No drifting fact lacks a verify command.
+- [ ] No instruction prescribes a spoken reply, a report shape, or a verbatim line.
+- [ ] The body is continuous prose with paragraphs separated by blank lines; no telegraphic
+    fragment lists.
 - [ ] The content is ASCII (no curly quotes, dashes, ellipsis glyphs).
 - [ ] The repo copy and the global copy are byte-identical.
 

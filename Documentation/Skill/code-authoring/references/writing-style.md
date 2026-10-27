@@ -81,7 +81,7 @@ Impl -> Implementation    Dep -> Dependency            Expr -> Expression
 Attr -> Attribute         Exec -> Execute              Txt -> Text
 Temp -> Temporary         Prev -> Previous             Cur -> Current
 Req -> Request            Resp -> Response             Val -> Value
-Max -> Maximum            Min -> Minimum                Meta -> Metadata
+Max -> Maximum            Min -> Minimum               Meta -> Metadata
 Sync -> Synchronize       Async -> Asynchronous        Doc -> Documentation
 App -> Application        Btn -> Button                Fac -> Factory
 Gov -> Governor           Id -> Identifier             Spec -> Specification
@@ -127,12 +127,12 @@ Three or more `if (condition) return value;` lines become:
 
 ```typescript
 switch (true) {
-	case Exists(Candidate):
-		return Candidate;
-	case Exists(Fallback):
-		return Fallback;
-	default:
-		throw new Error("no candidate found");
+  case Exists(Candidate):
+    return Candidate;
+  case Exists(Fallback):
+    return Fallback;
+  default:
+    throw new Error("no candidate found");
 }
 ```
 

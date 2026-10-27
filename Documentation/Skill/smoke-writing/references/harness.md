@@ -53,7 +53,7 @@ The bundles' sibling `node_modules` symlinks are not pnpm-managed; recreate them
 A single folder:
 
 ```sh
-node Classic/packages/ < bundle > /Target/Test/ < Name > /Test.js
+node Classic/packages/<bundle>/Target/Test/<Name>/Test.js
 ```
 
 The aggregate:

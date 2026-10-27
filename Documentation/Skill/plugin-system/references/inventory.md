@@ -8,17 +8,22 @@ The package directories are the source of truth; the prose counts in older docum
 
 | Group    | Names                                                                                             | Runtime                          | Version |
 | -------- | ------------------------------------------------------------------------------------------------- | -------------------------------- | ------- |
-| Classic  | `@playform/lib-dsh-*`, `@playform/hook-dsh-*`, `@playform/plugin-dsh-*`, `@playform/client-dsh-*` | Plain TypeScript                 | 0.1.0   |
-| EffectTS | `@playform/ets-*` (the base `ets-base-dsh` plus one twin per covered package)                     | Effect 4.0.5 services and layers | 0.1.0   |
+| Classic  | `@scope/lib-dsh-*`, `@scope/hook-dsh-*`, `@scope/plugin-dsh-*`, `@scope/client-dsh-*`             | Plain TypeScript                 | 0.3.0   |
+| EffectTS | `@scope/ets-*` (the base `ets-base-dsh` plus one twin per covered package)                        | Effect 4.0.5 services and layers | 0.3.0   |
 
-Counts: 51 Classic packages, 46 EffectTS packages.
+Counts: 58 Classic packages, 48 EffectTS packages.
 
 The original 14 plugins (plus `lib-dsh-core`) were joined on 2026-10-22 by 36 new Classic packages
 (the workspace family, the suggesters, the orchestration set, the client family) and 30 of their ETS
 twins (all but the two client panels and `plugin-dsh-pass-on`, `plugin-dsh-ingester`,
 `plugin-dsh-pattern`, `hook-dsh-batch-decision`).
 
-All packages are 0.1.0 and UNPUBLISHED.
+Since that delivery the tree has added seven more Classic packages (`plugin-dsh-cost`,
+`plugin-dsh-cost-analysis`, `plugin-dsh-lesson-review`, `hook-dsh-comment-filter`,
+`hook-dsh-lesson-nudge`, and the `lib-dsh-pack` and `lib-dsh-trace` libraries) and two more ETS
+twins (`ets-lib-dsh-pack`, `ets-lib-dsh-trace`).
+
+All packages are 0.3.0 and UNPUBLISHED.
 
 Verify:
 
@@ -64,8 +69,13 @@ The aggregate runner is `node Maintain/Run/Smokes/Index.mjs` (`pnpm test`): **35
 5,337 checks across both trees** (184 Classic + 175 EffectTS test folders), all green at the
 2026-10-22 delivery.
 
+The smoke manifest line names the 14 mechanics suites: core, factory, governor, pinner, cargo,
+dash, quotes, ellipsis, spaces, invisible, fullwidth, normalize-file, ccr, and tool-coach.
+
 The per-folder READMEs are the arbiter; the manifest must be regenerated or derived, never quoted
-as-is.
+as-is, because the manifest line is a summary that lags the per-folder tests.
+
+When you quote a total, say which set it covers.
 
 Verify:
 
@@ -80,7 +90,7 @@ The orchestration, UI, and workspace family packages now EXIST as PoCs (the 2026
 do not describe them as "planned, no packages".
 
 What remains plan-level is the PoC gap: the PoC-vs-plan grades live in
-`Documentation/Reports/POC-GAP-ANALYSIS.md`, and the Aphrodite and release-polish plans remain
+`Documentation/Reports/POC-GAP-ANALYSIS.md`, and the product and release-polish plans remain
 designs.
 
 Check the plan statuses before claiming either way.

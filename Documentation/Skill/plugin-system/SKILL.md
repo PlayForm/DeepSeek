@@ -9,7 +9,7 @@ whenToUse:
     governance step, or ledger string; wiring bundles into a profile; when a build, activation, or
     ledger line misbehaves.
 version: 2.0.0
-updated: 2026-10-20
+updated: 2026-10-28
 ---
 
 # The Plugin System
@@ -37,14 +37,17 @@ Two release groups, one contract:
 
 | Group    | Names                                                                                             | Runtime                          |
 | -------- | ------------------------------------------------------------------------------------------------- | -------------------------------- |
-| Classic  | `@playform/lib-dsh-*`, `@playform/hook-dsh-*`, `@playform/plugin-dsh-*`, `@playform/client-dsh-*` | Plain TypeScript                 |
-| EffectTS | `@playform/ets-*` (the base `ets-base-dsh` plus one twin per covered package)                     | Effect 4.0.5 services and layers |
+| Classic  | `@scope/lib-dsh-*`, `@scope/hook-dsh-*`, `@scope/plugin-dsh-*`, `@scope/client-dsh-*`            | Plain TypeScript                 |
+| EffectTS | `@scope/ets-*` (the base `ets-base-dsh` plus one twin per covered package)                       | Effect 4.0.5 services and layers |
 
-51 Classic packages, 46 EffectTS packages - the original 14 plugins (plus `lib-dsh-core`) plus the
-36 packages of the 2026-10-22 delivery (the workspace family, the suggesters, the orchestration set,
-the client family) and 30 ETS twins.
+58 Classic packages, 48 EffectTS packages - the original 14 plugins (plus `lib-dsh-core`) plus the
+36 packages of the 2026-10-22 delivery (the workspace family, the suggesters, the orchestration
+set, the client family) and 30 ETS twins, with seven later Classic additions (`plugin-dsh-cost`,
+`plugin-dsh-cost-analysis`, `plugin-dsh-lesson-review`, `hook-dsh-comment-filter`,
+`hook-dsh-lesson-nudge`, `lib-dsh-pack`, `lib-dsh-trace`) and the `ets-lib-dsh-pack` and
+`ets-lib-dsh-trace` twins.
 
-All at 0.1.0, all UNPUBLISHED.
+All at 0.3.0, all UNPUBLISHED.
 
 The full roster: `Documentation/Plugins/PLUGIN-SUITE-SUMMARY.md`.
 

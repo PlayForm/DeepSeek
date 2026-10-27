@@ -1,5 +1,17 @@
 # Verification: The Lanes' Arbiters and the Non-Execution Law
 
+Verification is the part of the batch where the parent decides whether the result of a lane is
+evidence or merely a claim.
+
+The discipline exists because a result that is accepted without verification enters the record as if
+it were true, and every later decision then builds on it.
+
+The role of the parent in verification is deliberately narrow: it reads the arbiter output that the
+lane printed, it greps the artifact for the remediations that the result claims, and it runs
+read-only spot checks over committed or built output.
+
+It does not execute the work of the lane, and it does not re-run the build of the lane.
+
 ## The arbiters are the lanes' own
 
 Every activation carries the arbiter mandate: the lane runs its own verification and reports the
@@ -47,6 +59,8 @@ The rule is asymmetric: printed totals are trusted; contradicting prose is disca
 
 The 795/808 incident is the precedent: prose numbers that arithmetic on the real counts could not
 support.
+
+The incident is why the parent reads the printed line rather than the sentence around it.
 
 ## The read-only spot check
 

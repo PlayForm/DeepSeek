@@ -70,8 +70,8 @@ ESCALATION: <concrete reason>
 
 ## Why the edge cases are mandatory
 
-The v1 high-effort replica passed its own test suite while carrying a lock flaw: false timeouts on
-non-repo directories.
+The first high-effort replica passed its own test suite while carrying a lock flaw: false timeouts
+on non-repo directories.
 
 Only an edge case beyond the spec's list found it.
 

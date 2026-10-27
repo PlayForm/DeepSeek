@@ -1,13 +1,15 @@
 ---
 name: session-orientation
 description:
-    "The first-load protocol for this repository: loads the repo's skills, current state, and laws
-    before any action; gives the repository map, skill routing table, and orientation checklist."
+    "The first-load protocol for this repository: it loads the repository's own skills, its current
+    state, and the laws that govern the work before any action is taken, and it supplies the
+    repository map, the skill routing table, and the orientation checklist that every later action
+    assumes."
 whenToUse:
     At the start of every fresh session here, and after any resume, fork, or long gap; before the
-    first read that informs work and before any write, build, or delegation.
-version: 2.0.0
-updated: 2026-10-20
+    first read that informs real work and before any write, build, or delegation.
+version: 3.1.0
+updated: 2026-10-28
 ---
 
 # Session Orientation
@@ -20,20 +22,23 @@ and it gives the map and the laws that every later action assumes.
 Skipping it does not save time; it produces work against a stale or invented picture of the
 repository.
 
+The orientation is deliberately a reading protocol rather than a writing protocol: it tells you what
+to load and in what order, and it ends when you can answer the six questions in the verification
+section without opening another file.
+
 ## When to use
 
 - First action of a new session in this repository.
 - After a resume, fork, crash, or a gap long enough that the tree moved.
 - Before delegating: the delegated agent does not see this conversation, so the parent must carry
   the current facts into the spec.
-- Do not use for: the rules themselves. Each law has an owner (section 6); load the owner when you
-  act on it.
+- Do not use for: the rules themselves. Each law has an owner; load the owner when you act on it.
 
 ## The loading order
 
 1. **The repo's own skills.**
 
-    `Documentation/Skill/` is the specialized truth for this monorepo; `~/.dsh/skills/` is the
+    `Documentation/Skill/` is the specialized truth for this monorepo; `${DSH_HOME}/skills/` is the
     fallback for sessions outside it.
 
     Where the two disagree, the repo copy wins, and the fix is synced to both.
@@ -44,9 +49,9 @@ repository.
 
     The order is `README.md` (the family's public state), `Documentation/INDEX.md` (the
     documentation map), the active documents in `Documentation/Plans/`, then the relevant manual in
-    `Documentation/Guides/`.
+    `Documentation/Guides/` for the deep detail.
 
-    Plans are the state of the work; Guides are the deep manuals.
+    Plans are the state of the work; Guides are the manuals.
 
     The whole tree is not read.
 
@@ -74,8 +79,8 @@ repository.
 
 | Path             | What it is                                                                   |
 | ---------------- | ---------------------------------------------------------------------------- |
-| `Classic/`       | The plain-TypeScript release: 51 packages + the smoke suites                 |
-| `EffectTS/`      | The Effect-TS release: 46 packages (incl. `ets-base-dsh`) + the smoke suites |
+| `Classic/`       | The plain-TypeScript release: 58 packages plus the smoke suites              |
+| `EffectTS/`      | The Effect-TS release: 48 packages plus `ets-base-dsh` and the smokes        |
 | `Site/`          | The Astro static site; its own git repository, gitignored from the root      |
 | `Test/`          | Fixture archives, governance batteries, probes                               |
 | `Documentation/` | Framework, guides, plans, skills, archive, reports                           |
@@ -133,7 +138,7 @@ You are oriented when you can answer, without opening another file:
 
 A wrong answer means re-run the step that owns the fact.
 
-Do not proceed on a guess.
+Do not proceed on a guess; a guess at this stage propagates into every later decision.
 
 ## Anti-patterns
 

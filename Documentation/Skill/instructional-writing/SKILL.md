@@ -8,7 +8,7 @@ whenToUse:
     Writing or editing a fixture, byte-faithful copy, demo pair showing a curly quote or em dash, or
     any file whose point is the exact glyph; also when a written glyph arrives as ASCII.
 version: 2.0.0
-updated: 2026-10-20
+updated: 2026-10-28
 ---
 
 # Instructional Writing

@@ -8,7 +8,7 @@ The EffectTS tree implements the same contract behind Effect 4.0.5:
 - Effect services and layers for the behavior;
 - tracing that defaults to a no-op.
 
-The two trees carry different npm names (`@playform/hook-dsh-*` versus `@playform/ets-hook-dsh-*`),
+The two trees carry different npm names (`@scope/hook-dsh-*` versus `@scope/ets-hook-dsh-*`),
 so they never collide in a graph.
 
 They never mix in one dependency graph: the EffectTS `Update` returns Effect envelopes, not the

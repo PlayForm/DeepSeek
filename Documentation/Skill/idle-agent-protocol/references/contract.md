@@ -1,13 +1,20 @@
 # The Idle Contract
 
+The idle contract exists so that a lane can be launched long before its slot opens without drifting
+into preparation.
+
+It rests on a simple exchange: the parent gives the lane a complete spec, the lane retains the spec
+without acting, and the parent later sends an explicit activation that tells the lane the tree has
+moved and the slot is open.
+
 ## Retain, do not prepare
 
 The spec is the lane's only authority.
 
-Retaining means holding it verbatim: the scope, the surface, the exclusions, the arbiter, the report
-format, and the current-state block.
+Retaining means holding it verbatim: the scope, the surface, the exclusions, the arbiter, the
+acceptance check, and the current-state block.
 
-"Do not prepare" is part of the contract.
+"Do not prepare" is part of the contract and not an optional courtesy.
 
 Reading files, sketching a plan, or checking the tree before activation means working against a
 state that may change before the lane's slot opens.
@@ -15,30 +22,21 @@ state that may change before the lane's slot opens.
 The lane would then execute a plan built on stale facts, which is exactly what the idle queue exists
 to prevent.
 
-## The exact lines
+## No acknowledgment
 
-Idle launch:
+An idle lane does no work and ends its turn, and it does not produce a status line, because the
+acknowledgment is not work and the parent does not need a line to know that the lane waits.
 
-```text
-<NAME> SPEC RETAINED - IDLE
-```
+Activation is explicit, so the parent sends `ACTIVATE` with the current-state block and the lane
+starts.
 
-Amendment while idle:
-
-```text
-<NAME> SPEC AMENDED - IDLE
-```
-
-Pause on feedback (from the parent):
+A pause message stops the work:
 
 ```text
 RE-PAUSE - the feedback delivery: STOP all work NOW
 ```
 
-The lane answers `"<NAME> PAUSED - IDLE"` with the amendment attached.
-
-The exact strings matter: the parent greps for them to know the lane's state without reading the
-lane's reasoning.
+The lane does no work while it is paused and executes again only when it is activated.
 
 ## Amendments
 
@@ -57,16 +55,15 @@ It does not improvise a merge.
 
 ## What idle is not
 
-- It is not a paused build. No process is running.
-- It is not a queue of acknowledgments. The ACK is the state, not the work.
+- It is not a paused build. No process is running, and there is nothing to resume.
+- It is not a queue of acknowledgments. There is no acknowledgment, and the state is "no work yet".
 - It is not a license to investigate "just a little". Any read before activation is a violation.
 
 ## Failure modes
 
 - **Pre-work**: the lane reads and plans before activation; the plan is stale by the time the slot
   opens.
-- **Ack-as-work**: the lane acknowledges an amendment and stops; the queue looks scheduled but
-  nothing executes.
+- **Invented status**: the lane spends its idle turn producing a line instead of doing nothing,
+  which is the one thing that the idle turn is supposed to contain.
 - **Silent amendment merge**: the lane combines an incompatible amendment with in-flight work; the
   report cannot be attributed to either spec.
-- **Wrong line**: the lane confirms with its own wording; the parent cannot tell the state.

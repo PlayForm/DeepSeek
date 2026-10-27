@@ -7,7 +7,8 @@ can act on.
 
 ## Stage 1: Receive
 
-The parent accepts the request as it arrives.
+The parent accepts the request as it arrives, and reads it once for the outcome rather than for the
+steps.
 
 Structuring it is the parent's job, not the user's.
 
@@ -24,7 +25,7 @@ The spec is written with six items:
 | Exclusions    | What must not change, and the known traps                 |
 | Sequence      | The order of the steps, and what depends on what          |
 | Arbiter       | The command that decides success, and its expected output |
-| Report format | The shape of the answer, with `file:line` anchors         |
+| Acceptance    | The check that proves the lane is done                    |
 
 The shared facts the child cannot look up are attached: the current counts, the ledger strings, the
 laws it must follow.
@@ -72,9 +73,14 @@ The report contains:
 - the residuals and the decisions the user must make;
 - the READY-TO-COMMIT list with a suggested message.
 
-The user commits.
+The user commits when the spec says that the lane does not.
 
-Agents never do.
+The parent stages the integrations and runs `git gcommit`.
+
+Agents never push the work of another lane.
+
+The result of the delegation is the commit, the printed arbiter, and the residual decisions, and
+those three artifacts are what the next stage of the batch builds on.
 
 ## The non-execution boundary
 

@@ -7,8 +7,8 @@ description:
 whenToUse:
     Before every subagent call, workflow agent() call, or any model and effort decision; also when a
     delegation fails and you must choose retry or escalate.
-version: 2.2.0
-updated: 2026-10-25
+version: 3.1.0
+updated: 2026-10-28
 ---
 
 # Task Routing
@@ -19,6 +19,8 @@ Every other skill that mentions routing points here.
 
 The policy exists to spend tokens where judgment is needed and nowhere else; its safety depends on
 the parent verifying results deterministically, not on trusting a cheap model.
+
+The expensive model is reserved for decisions that a mechanical check cannot make.
 
 ## When to use
 
@@ -52,8 +54,8 @@ the parent verifying results deterministically, not on trusting a cheap model.
 
 4. **The recovery.**
 
-    After a crash or a dead agent, the persisted sessions and artifacts are read and the unfinished
-    work is resumed.
+    A crashed or dead agent is recovered, not run again: the persisted sessions and artifacts are
+    read and the unfinished work is resumed.
 
     The agent-loop config is never edited while subagents run, because a live re-apply can destroy
     inbox projections and crash the host.
@@ -72,13 +74,13 @@ the parent verifying results deterministically, not on trusting a cheap model.
 The user rejected high-effort editing lanes: they did small edits at `high` and the effort was
 wasted.
 
-For this profile, every piece of work is broken into small, mechanical, self-contained specs, and
-EVERY editing lane runs at GLM `low`.
+For this profile, each piece of work is broken into small, mechanical, self-contained specs, and
+each editing lane runs on the GLM at `low`.
 
 The parent does the splitting - exact files, exact edits, exact expected values - so the cheap lane
 executes rather than judges.
 
-Many small lanes is the default; one large high lane is not.
+Many small lanes is the default; one large high lane is the exception.
 
 `high` and `max` are used only when the user asks for them by name.
 
@@ -117,12 +119,32 @@ design is coding, not design.**
 A lane handed a detailed spec (the interfaces, the file layout, the contracts) is doing semantic
 coding, not architecture, even when the change is large or novel.
 
+Text edits, vocabulary, spelling, Americanization, formatting, rewording, and Markdown prose changes
+are mechanical when the rule is given; they do not become semantic because the file is long or the
+task touches many files.
+
+A style rewrite changes vocabulary as well as line structure: the approved words, American spelling,
+active voice, and the approved term. A pass that only adds labels, splits paragraphs, or rewraps
+lines has not done the rewrite.
+
+Downloaded and parsed files are never reworded: the Reference shelf, vendored dependencies,
+`node_modules`, `Target`, and any file captured from an external source stay byte-identical.
+
+The 27 October 2026 correction is binding: documentation rewrites for vocabulary, spelling, and
+formatting had run on the DeepSeek lane at `max`, which was over-routing, because the rule was given
+and the work was mechanical. Text edits, vocabulary, spelling, Americanization, formatting, and
+rewording run at `low`; `max` is reserved for planning, architecture, design, and adjudication.
+
+A long file or a large file count does not raise the tier; the difficulty of the operation is the
+rule, not the volume.
+
 ## The routing table (closed)
 
 | Task class                                                 | Model                      | Effort          |
 | ---------------------------------------------------------- | -------------------------- | --------------- |
 | Exploration, any, always                                   | `glm-5.3-flash`            | `low`           |
 | Coding, mechanical (a complete spec)                       | `glm-5.3-flash`            | `low`           |
+| Text edits, vocabulary, spelling, formatting, rewording    | `glm-5.3-flash`            | `low`           |
 | Coding, semantic (the design is given by the parent)       | `glm-5.3-flash`            | `high`          |
 | Coding, exhaustive verification (an explicit user request) | `glm-5.3-flash`            | `max`           |
 | The parent's planning, architecture, design, adjudication  | `deepseek-v4.1-flash-1017` | `max`           |
@@ -135,8 +157,8 @@ The semantic coding lane runs on the GLM at `high`; the DeepSeek lane appears at
 planning, the design, the advanced debugging) and as the same-effort fallback when the cheap route
 is unavailable.
 
-A DeepSeek `high` delegation is a row invention: it pays 2x the input and 2.4x the output for a
-correctness gain the table does not predict.
+A DeepSeek `high` delegation invents a row: it pays twice the input and about two and a half times
+the output for a correctness gain the table does not predict.
 
 The main agent runs the DeepSeek lane at `max`; its current default is `deepseek-v4.1-flash-1017`.
 
@@ -268,17 +290,17 @@ The parent verifies before accepting:
 
 ## Anti-patterns
 
-| Mistake                                                 | Cost                                      | Do instead                                                  |
-| ------------------------------------------------------- | ----------------------------------------- | ----------------------------------------------------------- |
-| Omitting the route                                      | Inherits the expensive lane; unauditable  | Pass provider, model, effort                                |
-| Sending exploration to DeepSeek                         | 5.8x cost for identical correctness       | GLM at `low`                                                |
-| Calling a mechanical sweep "routine"                    | Pays `high` for no gain                   | Difficulty first                                            |
-| The DeepSeek `high` for semantic coding (row invention) | 2x input, 2.4x output, no gain            | GLM at `high`                                               |
-| Treating a specified implementation as "design"         | Sends the coding to the DeepSeek lane     | The design is the parent's; the coding is the GLM           |
-| Self-authorizing coding `max`                           | 6.4x cost for identical correctness       | Only on explicit user request                               |
-| Escalating without artifacts                            | Reproduces the failure                    | Pass the failure state                                      |
-| A teammate room as the default route                    | The room silently runs the expensive lane | Route the lanes via `subagent`; record the teammate default |
-| LLM re-review of a report                               | Destroys the economics                    | Shell checks only                                           |
+| Mistake                                             | Cost                                          | Do instead                                                  |
+| --------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------- |
+| Omitting the route                                  | Inherits the expensive lane; unauditable      | Pass provider, model, effort                                |
+| Sending exploration to DeepSeek                     | Several times more for identical correctness  | Use the GLM at `low`                                        |
+| Calling a mechanical sweep "routine"                | Pays `high` for no gain                       | Classify by difficulty                                      |
+| Inventing a DeepSeek `high` row for semantic coding | Pays the premium without the predicted gain   | Use the GLM at `high`                                       |
+| Treating a specified implementation as "design"     | Sends GLM coding to the expensive lane        | The design is the parent's; the coding is the GLM's         |
+| Self-authorizing coding `max`                       | Several times more for identical correctness  | Only on explicit user request                               |
+| Escalating without artifacts                        | Reproduces the failure                        | Pass the failure state                                      |
+| A teammate room as the default route                | The room silently runs the expensive lane     | Route the lanes via `subagent`; record the teammate default |
+| LLM re-review of a report                           | Destroys the economics                        | Shell checks only                                           |
 
 ## References
 

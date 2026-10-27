@@ -1,6 +1,6 @@
 # The Orientation Checklist
 
-Run this checklist once per fresh session.
+Run this checklist once per fresh session, and again after a resume or a fork.
 
 It takes minutes and prevents the most expensive class of error: acting on a stale map.
 
@@ -39,20 +39,20 @@ Before launching a subagent:
 1. The spec is self-contained: the child cannot see this conversation.
 2. The routing triple is explicit and matches `task-routing`.
 3. The verification command and its expected output are in the spec.
-4. The report format is in the spec: per-item before and after with `file:line` anchors, plus the
+4. The acceptance check is in the spec: per-item before and after with `file:line` anchors, plus the
    printed arbiter results.
 5. The child knows the laws it must follow (file writes, git, no dev server).
 
 ## D. Failure modes this checklist prevents
 
-| Failure                        | What it looks like                                                  |
-| ------------------------------ | ------------------------------------------------------------------- |
-| Acting before orientation      | Edits in the wrong tree; a law violated in step one                 |
-| Trusting prose counts          | Repeating 733/746, 1314/1324, or "15 packages" after the tree moved |
-| Reading plans as shipped truth | Documenting a planned plugin as if it exists                        |
-| Wrong git surface              | Root `git status` missing `Site/` changes                           |
-| Delegation without the laws    | A child edits through the terminal, or commits                      |
-| Stale model route              | A delegation without the explicit triple                            |
+| Failure                        | What it looks like                                     |
+| ------------------------------ | ------------------------------------------------------ |
+| Acting before orientation      | Edits in the wrong tree; a law violated in step one    |
+| Trusting prose counts          | Repeating 733/746 or 25 packages after the tree moved  |
+| Reading plans as shipped truth | Documenting a planned plugin as if it exists           |
+| Wrong git surface              | Root `git status` missing `Site/` changes              |
+| Delegation without the laws    | A child edits through the terminal, or commits         |
+| Stale model route              | A delegation without the explicit triple               |
 
 ## E. The six answers
 
@@ -64,10 +64,5 @@ You are oriented when you can state, without opening another file:
 4. The three models and the main agent's model.
 5. The file-write law and the git law, in one sentence each.
 6. The active plans.
-
-The expected package answer as of 2026-10-22: 51 Classic + 46 EffectTS packages, all 0.1.0,
-unpublished; the verify command is `ls Classic/packages EffectTS/packages`.
-
-The expected smoke answer: 359 suites / 5,337 checks via `node Maintain/Run/Smokes/Index.mjs`.
 
 If any answer is a guess, return to the step that owns it.

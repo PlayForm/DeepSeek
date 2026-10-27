@@ -2,14 +2,14 @@
 name: harness-observability
 description:
     "What this agent can observe in the running harness: Inspect providers, agent-control surface,
-    background jobs and goals, ~/.dsh state (sessions, token usage, skills, profiles, governance
-    ledgers), filesystem and web access, honest limits."
+    background jobs and goals, ${DSH_HOME} state (sessions, token usage, skills, profiles,
+    governance ledgers), filesystem and web access, honest limits."
 whenToUse:
     When the user asks what you can see or do, when you need runtime facts (services, events,
-    configs, tools, slots, themes), when inspecting ~/.dsh state, or before building tooling on the
-    observable surface.
+    configs, tools, slots, themes), when inspecting ${DSH_HOME} state, or before building tooling on
+    the observable surface.
 version: 2.0.0
-updated: 2026-10-20
+updated: 2026-10-28
 ---
 
 # Harness Observability
@@ -66,14 +66,14 @@ The methods are read-only; they are not business services and cannot change the 
 | `plugin_manager`                   | The profile's plugins and bundles |
 | `get_goal`/`update_goal`           | The persisted goal state          |
 
-## The ~/.dsh state
+## The `${DSH_HOME}` state
 
-| Path               | What it holds                                     |
-| ------------------ | ------------------------------------------------- |
-| `~/.dsh/sessions/` | Session transcripts (zstd JSONL) with token usage |
-| `~/.dsh/skills/`   | The global skill corpus                           |
-| `~/.dsh/profiles/` | Bundles, `cordis.patch.yml`, settings             |
-| `~/.dsh/*.log`     | The governance ledgers                            |
+| Path                     | What it holds                                     |
+| ------------------------ | ------------------------------------------------- |
+| `${DSH_HOME}/sessions/`  | Session transcripts (zstd JSONL) with token usage |
+| `${DSH_HOME}/skills/`    | The global skill corpus                           |
+| `${DSH_HOME}/profiles/`  | Bundles, `cordis.patch.yml`, settings             |
+| `${DSH_HOME}/*.log`      | The governance ledgers                            |
 
 ## The honest limits
 

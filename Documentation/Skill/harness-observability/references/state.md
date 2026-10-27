@@ -1,8 +1,8 @@
-# The ~/.dsh State
+# The `${DSH_HOME}` State
 
 ## Sessions
 
-Path: `~/.dsh/sessions/<workspace>/<agent-id>/session.v4.jsonl.zstd`.
+Path: `${DSH_HOME}/sessions/<workspace>/<agent-id>/session.v4.jsonl.zstd`.
 
 Each subagent's transcript is zstd-compressed JSONL.
 
@@ -28,16 +28,16 @@ The subagents' usage is computable from their files.
 
 Two homes, byte-identical:
 
-| Home                   | Role                         |
-| ---------------------- | ---------------------------- |
-| `Documentation/Skill/` | The repo's specialized truth |
-| `~/.dsh/skills/`       | The global fallback          |
+| Home                     | Role                         |
+| ------------------------ | ---------------------------- |
+| `Documentation/Skill/`   | The repo's specialized truth |
+| `${DSH_HOME}/skills/`    | The global fallback          |
 
 Where the two disagree, the repo copy wins, and the fix is synced to both.
 
 ## Profiles
 
-Path: `~/.dsh/profiles/<name>/`.
+Path: `${DSH_HOME}/profiles/<name>/`.
 
 - `package.json`: the bundles as dependencies and the `dsh.profile.bundles` list.
 - `cordis.patch.yml`: the plugin entries and their configs.
@@ -51,7 +51,7 @@ Config changes need a restart with no active subagents.
 
 ## The governance ledgers
 
-Path: `~/.dsh/<identity>.log`.
+Path: `${DSH_HOME}/<identity>.log`.
 
 Each plugin writes its own activation line at boot and its chain-pass, refusal, and update lines
 thereafter.

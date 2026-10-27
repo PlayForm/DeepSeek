@@ -1,15 +1,16 @@
 ---
 name: orchestrator-batch
 description:
-    "The parent's batch orchestration: incremental delegation loop, two-active queue regime,
-    no-blocking-wait law, information-broker protocol, spec-reconfiguration authority,
-    idle-amendment law, verification by the lanes' arbiters, report-as-claim rule, resume protocol."
+    "The parent's batch orchestration: the incremental delegation loop, the two-active queue regime,
+    the no-blocking-wait law, the information-broker protocol, the spec-reconfiguration authority,
+    the idle-amendment law, verification by the lanes' arbiters, the result-as-claim rule, and the
+    resume protocol."
 whenToUse:
     When running a multi-agent batch here, deciding lane order or concurrency, when user feedback
     amends a lane's spec, when a lane needs history from earlier sessions, or when resuming a batch
     in a new session.
-version: 2.4.0
-updated: 2026-10-25
+version: 3.1.0
+updated: 2026-10-28
 ---
 
 # Orchestrator Batch
@@ -19,13 +20,34 @@ The parent's discipline for running several lanes without losing control of the 
 The core split: the lanes execute and verify their own work; the parent formalizes, dispatches,
 relays, and spot-checks read-only.
 
+The parent does not become a second coder, a build server, or a monitor: each of those roles would
+duplicate a lane, blur the evidence, or consume the parent's turn without producing information.
+
 ## When to use
 
 - A request that lands as several delegated tasks (site work, docs, corrections, scans).
-- The user asks to launch, pause, re-pause, or amend an idle lane.
+- The user asks to launch, pause, re-pause, amend, or resume an idle lane.
 - A batch resumes in a new session.
 - Do not use for: a single delegation (`worker-strains`), the child's idle contract
   (`idle-agent-protocol`), or the route itself (`task-routing`).
+
+## Size the scope before the spec
+
+The parent counts the files and the lines in the instructed scope before it writes a spec, because a
+scope larger than one agent's context window has to be split before any lane starts.
+
+The split is a named file list per batch, not a priority order and not a vague "all", and each batch
+fits one agent.
+
+When the scope is larger than one agent, the batches run as a waterfall: one lane finishes its list,
+the parent passes the state and the next list to the next lane, and the next lane starts only after
+the previous one stops.
+
+Each file in the scope gets a decision, either changed or left alone with a named reason, and "it
+has no numbered rows" is not a reason to skip a file when the task is a prose rewrite.
+
+A partial pass is reported as partial with the exact remaining list, and the parent continues the
+waterfall until the scope is covered or the user stops it.
 
 ## The loop
 
@@ -35,16 +57,22 @@ relays, and spot-checks read-only.
 
 2. **The formalization.**
 
-    The brief is formalized: scope, surface, exclusions, sequence, arbiter, report format, shared
-    facts.
+    The spec is written: the scope, the surface, the exclusions and the known traps, the sequence,
+    the arbiter, the acceptance check, and the shared facts the lane cannot look up.
+
+    The spec also states the tool restriction: the lane uses only read, write, and edit; the parent
+    runs the verifiers.
 
 3. **The strain and the route.**
 
-    The strain and the route are picked (`worker-strains`, `task-routing`).
+    The strain and the route are picked (`worker-strains`, `task-routing`), and the route is passed
+    explicitly, because a lane that is not told its route inherits whatever default the harness
+    happens to have.
 
 4. **The delegation.**
 
-    The parent delegates to an active lane, or to an idle lane with a retained spec.
+    The parent delegates to an active lane, or to an idle lane with a retained spec; in both cases
+    the spec is self-contained, because the child does not see the parent's conversation.
 
 5. **The own work.**
 
@@ -66,14 +94,16 @@ relays, and spot-checks read-only.
 
     The record is paired (`worker-strains`, rule 8) in the slot the lane vacated.
 
+    The parent commits the integrations with `git gcommit`.
+
 ## The two-active regime
 
 - Exactly two lanes are active at any moment; all others are paused with retained specs. The cap is
   the API throttle, not a preference.
 - The next pair releases only when the current pair has delivered both reports.
 - Every feedback delivery pauses the receiving lane first. It executes only when its slot opens.
-- An amendment ACK is not work. A lane that stops at the ACK gets a "CONTINUE + deliver the report"
-  nudge.
+- An idle lane does not acknowledge its state with a status line, because the acknowledgment is not
+  work. The parent does not need a line to know that the lane waits.
 - "RE-PAUSE" stops all work now; partial state persists for the resume.
 
 ## The no-blocking-wait law
@@ -85,8 +115,8 @@ It runs, finishes, and reports; the report arrives as a message.
 The parent does not call `wait_agent`, sleep, or poll the task board.
 
 - Inactivity is not a result: it says nothing about success, failure, or progress.
-- The parent's next action after a dispatch is its own next unit of work. If none is left, it
-  reports progress to the user and ends its turn.
+- The parent's next action after a dispatch is its own next unit of work. If none is left, it ends
+  the turn instead of inventing a reason to watch the lane.
 - The board is read when the parent has a reason to act, never on a timer.
 - **No progress inspection.** The parent does not `ls`, `git status`, `find`, or read a lane's
   output path to learn whether the lane started. That is the same wait in a different coat: it costs
@@ -95,10 +125,10 @@ The parent does not call `wait_agent`, sleep, or poll the task board.
   over: `interrupt_agent` every running lane, message each one "STAND DOWN - do not write", check
   the tree ONCE at the takeover, and then do the work. Never monitor a handover.
 - The incident that made this a law is recorded in `references/queue.md`. The second incident, on 25
-  October 2026, is recorded here: the Lead dispatched three lanes, then called `wait_agent` twice
-  and inspected the lanes' output paths between waits while its own code work sat undone; the user
-  stopped it with "STOP WAITING FOR AGENTS". Stage 5 ("Monitor") licensed that shape; it is now
-  "Continue".
+  October 2026, is recorded there as well: the Lead dispatched three lanes, then called
+  `wait_agent` twice and inspected the lanes' output paths between waits while its own code work sat
+  undone; the user stopped it with "STOP WAITING FOR AGENTS". Stage 5 ("Monitor") licensed that
+  shape; it is now "Continue".
 
 ## The information broker
 
@@ -107,7 +137,7 @@ harness (`send_message` rejects it), and it does not wait.
 
 Recorded history reaches a lane only through the parent, in two forms:
 
-- **Pre-supply** in the brief: the facts the lane will need from prior sessions, the ledgers, or
+- **Pre-supply** in the spec: the facts the lane will need from prior sessions, the ledgers, or
   earlier agent attempts, with their coordinates.
 - **On a reported NEED**: pull the exact slice from the session corpus with the session tools
   (`session_search`, `session_event_search`, `session_trace`, `session_event_read`) - never a whole
@@ -121,7 +151,7 @@ A NEED report is not a failure and not a stall: it is a request the parent answe
 dispatch.
 
 The broker never edits the requester's files and never paraphrases a record: the shaped data keeps
-its coordinates.
+its coordinates, and the requester must be able to trace each fact back to its source.
 
 When a lane is expected to need mid-flight steering or a decision, spawn it as a durable teammate
 (`spawn_teammate`), which has an addressable mailbox; reserve `subagent` lanes for work that cannot
@@ -132,11 +162,15 @@ and the parent must re-dispatch a continuation that redoes part of its work.
 
 ## Spec reconfiguration
 
-The parent may amend an idle lane's spec ("SPEC AMENDED - IDLE"), amend a working lane mid-flight
-only when the change is compatible, re-apply changed requirements to lanes that have not started,
-and re-dispatch a failed lane.
+The parent may amend an idle lane's spec by sending the amendment, amend a working lane mid-flight
+only when the change is compatible with the work already done, re-apply changed requirements to
+lanes that have not started, and re-dispatch a failed lane with the corrected spec and the failure
+summary.
 
-Amendments override the base spec where they conflict.
+The mid-flight amendment message names what changed and what must be re-verified, so that the lane
+can align its work without silently merging two specs.
+
+Amendments override the base spec where they conflict; the lane keeps the rest.
 
 **The idle-amendment law:** a new idea, suggestion, or improvement never amends a working lane
 mid-flight.
@@ -183,6 +217,7 @@ On resume:
 2. Check the tree state in the root and in `Site/`.
 3. Re-verify every count before repeating it.
 4. Re-read the owner skill for any law that changed.
+5. Restore the queue with its active, paused, and queued lanes; finished work is not re-run.
 
 ## Decision table
 
@@ -197,7 +232,7 @@ On resume:
 | A lane reports a NEED for recorded history | Pull the exact slice, shape it, re-dispatch the lane |
 | A subagent must be steered mid-run         | It cannot be; amend the spec and re-dispatch         |
 | A lane stalls                              | Nudge with its last verified checkpoint              |
-| A lane is running and no own work is left  | Report progress and stop; never wait or poll         |
+| A lane is running and no own work is left  | End the turn; never wait or poll                     |
 | A lane fails                               | Verify the tree, then re-dispatch with the fix       |
 | The pair finishes                          | Release the next pair only after both reports        |
 | A resumed session                          | Read the plan and the queue, re-verify counts        |
@@ -230,7 +265,7 @@ On resume:
 | Accepting prose "all pass"               | A broken tree reported as done                     | Read the printed totals                      |
 | Accepting a claimed remediation          | A phantom fix enters the record                    | Grep the artifact for it                     |
 | Reporting coverage as a boolean          | A partial record reads as complete                 | Print `covered N of M`                       |
-| Messaging a subagent mid-run             | The harness has no mailbox; the call fails         | Pre-supply in the brief, or re-dispatch      |
+| Messaging a subagent mid-run             | The harness has no mailbox; the call fails         | Pre-supply in the spec, or re-dispatch       |
 | `wait_agent` after a dispatch            | Costs a turn, adds no information, reads as stress | Do the parent's own work; the report arrives |
 | `ls`/`git status` on a lane's output     | The same wait in a different coat; no result       | Continue your own work; the report arrives   |
 | Monitoring a handover after a stand-down | The takeover is one check, not a watch             | Interrupt, stand down, check once, execute   |
@@ -264,6 +299,6 @@ the same file? If they can, serialize them.
 | File                                       | Covers                                                  | Read when                          |
 | ------------------------------------------ | ------------------------------------------------------- | ---------------------------------- |
 | `references/loop.md`                       | The seven stages, formalization, and the report shape   | Running or reviewing a batch       |
-| `references/queue.md`                      | Two-active, pair release, ack trap, re-pause, stalls    | Managing active and idle lanes     |
+| `references/queue.md`                      | Two-active, pair release, re-pause, stalls, dead lanes  | Managing active and idle lanes     |
 | `references/verification.md`               | The lanes' arbiters, the non-execution law, spot checks | Verifying a report                 |
 | `references/reconfiguration-and-resume.md` | Spec amendments, the idle-amendment law, the resume     | Feedback arrives, or a new session |

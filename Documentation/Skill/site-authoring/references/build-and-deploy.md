@@ -14,7 +14,7 @@
 `astro.config.ts`:
 
 - `srcDir: "./Source"`, `publicDir: "./Public"`, `outDir: "./Target"`.
-- `site`: `https://deepseek.playform.cloud` in a build, `localhost:9999` in development. Keep it in
+- `site`: `https://<site-host>` in a build, `localhost:9999` in development. Keep it in
   sync with `Links.Site`.
 - `compressHTML: true`; prefetch on hover.
 - Integrations: the service worker (production only), the sitemap, the critical-CSS inliner

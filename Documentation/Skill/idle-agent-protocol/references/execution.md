@@ -1,4 +1,9 @@
-# Execution, Verification, and the Report
+# Execution, Verification, and the Result
+
+When the activation arrives, the lane stops being an idle holder of a spec and becomes a worker with
+a slot.
+
+This document covers the short window between the activation and the result.
 
 ## Activation
 
@@ -10,7 +15,8 @@ The activation message carries:
 
 The current-state block is part of the spec.
 
-Read it before touching the tree.
+Read it before touching the tree, because the tree may have moved while the lane was idle and the
+activation is the only view of the tree at the moment the lane starts.
 
 ## The pre-work check
 
@@ -24,14 +30,19 @@ The tree may carry the user's mid-session commits or another lane's edits.
 
 Do not clean up what you did not create; read before edit.
 
-## Execute exactly
+An edit that assumes a clean tree will overwrite work that arrived while the lane was idle.
 
-The spec's scope, exclusions, sequence, and report format are constraints, not suggestions.
+## Execute the spec
+
+The spec's scope, exclusions, sequence, and acceptance check are constraints, not suggestions.
 
 When the spec says "if X exists, verify and adjust", verify first and adjust minimally.
 
 When the spec is silent on a detail, choose the reading that preserves the spec's intent and state
-the assumption in the report.
+the assumption in the result.
+
+Do not widen the scope to include work that seems related: the related work belongs to another lane
+or to a later dispatch, and widening the scope is how a lane loses its spec boundary.
 
 ## Flag, do not silently fix
 
@@ -42,7 +53,8 @@ Raise these to the parent instead of resolving them alone:
 - a file that another lane owns or has already modified;
 - a spec item that cannot be satisfied as written.
 
-A silent fix hides a decision the parent needed to make.
+A silent fix hides a decision the parent needed to make, and the hidden decision is worse than the
+conflict because it enters the record as if the parent had approved it.
 
 ## Verify
 
@@ -52,9 +64,10 @@ Run the arbiter the spec names and report its printed result:
 - site: `cd Site && pnpm prepublishOnly`, then grep the built output;
 - docs: re-read the changed span.
 
-A report without the printed result has not verified anything.
+A report without the printed result has not verified anything: the sentence that says the work is
+done is not the same thing as the verifier that proves it.
 
-## The report format
+## The result
 
 ```text
 <NAME> - <task> - <DONE | PARTIAL | BLOCKED>
@@ -69,16 +82,17 @@ Arbiter:
 Flags:
 - <conflict or decision needed>
 
-READY-TO-COMMIT
+READY-TO-COMMIT (or the commit hash)
 Files:
   <list>
 Suggested message:
   <message>
 ```
 
-The report is the lane's whole output.
+The result is the lane's whole output.
 
-The parent relays it; the user decides.
+The parent relays it; the user decides what happens next, which is why the result must carry the
+evidence rather than a summary of the evidence.
 
 ## Failure modes
 

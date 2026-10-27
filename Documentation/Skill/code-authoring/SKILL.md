@@ -2,15 +2,15 @@
 name: code-authoring
 description:
     "Authoring discipline for every file operation and code write in this repository: the
-    write/raw-write/edit tool API, byte integrity, git checks-only, and the atomized style (one
-    definition per file, nameless default exports, full-word PascalCase names, inlined single-use
-    bindings, switch (true) guards)."
+    write/raw-write/edit tool API, byte integrity, git checks-only with the staged gcommit, and the
+    atomized style (one definition per file, nameless default exports, full-word PascalCase names,
+    inlined single-use bindings, switch (true) guards)."
 whenToUse:
     Before every file modification and code-writing task, including docs, scripts, and manifests;
     also when a write may hold a deliberate unicode glyph, a bulk transformation is proposed, or a
     commit is requested.
-version: 2.0.0
-updated: 2026-10-20
+version: 3.0.0
+updated: 2026-10-28
 ---
 
 # Code Authoring
@@ -27,7 +27,8 @@ The second half is the writing style; it exists so any definition can be borrowe
 - Any file creation, replacement, or edit.
 - Any code write: plugin source, site source, scripts, tests, configs.
 - Any bulk transformation or rename sweep.
-- Any commit request: the answer is READY-TO-COMMIT, never a commit.
+- Any commit request: `git gcommit` with only the step's files staged; the retired variants of the
+  commit alias are not used.
 - Do not use for: reading files (use the `read` tool directly) or for the typographic-fixture
   rationale (that is `instructional-writing`).
 
@@ -53,8 +54,8 @@ The second half is the writing style; it exists so any definition can be borrowe
 
 3. **Read before edit.**
 
-    The `edit` tool matches literal text; if the match fails, the exact bytes are re-read and the
-    call is retried.
+    The `edit` tool matches literal text; if the match fails, the file changed or the memory of it
+    is wrong, so the exact bytes are re-read and the call is retried.
 
     A shell rewrite is never a fallback.
 
@@ -109,19 +110,21 @@ The second half is the writing style; it exists so any definition can be borrowe
 
 11. **The allowed list.**
 
-    Git is read-only checks.
+    Git is read-only checks plus the staged commit.
 
     Allowed: `status`, `log`, `diff`, `show`, `rev-parse`, `ls-files`, `fetch`,
-    `log --diff-filter=D`.
+    `log --diff-filter=D`, and `git gcommit` for the step's staged files.
 
     Forbidden: `add`, `commit`, `reset`, `push`, `tag`, `rm`, `checkout`, `branch`, `merge`,
-    `stash`, `clean`.
+    `stash`, `clean`, and every retired variant of the commit alias.
 
 12. **The commit.**
 
-    The report is READY-TO-COMMIT.
+    The commit is `git gcommit`, which stages only the step's files and never uses `git add -A`.
 
-    A finished deliverable lists the exact files and a suggested commit message; the user commits.
+    A lane commits its own files only when its spec says so, and the parent commits the
+    integrations; a lane that does not commit ends with READY-TO-COMMIT, naming the exact files and
+    a suggested message.
 
 ### Writing style
 
@@ -166,6 +169,8 @@ The second half is the writing style; it exists so any definition can be borrowe
 
     Depth is earned by specificity; barrels group siblings; the most-used modules sit shallowest.
 
+    The tree's shape is a map of how the code is used, not an arbitrary filing system.
+
 ## The workflow
 
 1. **The read.**
@@ -202,6 +207,8 @@ The second half is the writing style; it exists so any definition can be borrowe
     The report lists the files touched, the arbiter's printed result, and READY-TO-COMMIT with the
     suggested message.
 
+    It does not end with a narrative about the change.
+
 ## Decision table
 
 | Situation                          | Writer        | Note                                      |
@@ -218,23 +225,33 @@ The second half is the writing style; it exists so any definition can be borrowe
 - **Tool discipline:** the transcript shows every content change as a `write`/`raw-write`/`edit`
   call; no shell command modified content.
 - **Byte integrity:** the scan prints zero NUL bytes and valid UTF-8.
-- **Git:** the session contains no mutating git command; the report carries READY-TO-COMMIT.
+- **Git:** the session holds no mutating git command except the staged `git gcommit`; the report
+  carries READY-TO-COMMIT or the commit hash.
 - **Style:** every non-entry leaf has one anonymous default export; the naming table passes; guard
   chains of three or more are `switch (true)`.
+
+A checker, when one is written, strips fenced code blocks and inline code spans before it counts,
+because a checker that reads a shell comment starting with `# ` as a heading or a forbidden token
+quoted in backticks as a violation reports a defect in a correct file.
+
+On 21 October 2026 a heading count without that exemption reported twenty-seven false headings in a
+file that had one, and a law that quoted the token that it forbade flagged itself.
+
+A checker must also be able to fail, so prove it with a mutated copy before you trust its `PASS`.
 
 A failure is fixed before the next file, not reported as a residual.
 
 ## Anti-patterns
 
-| Mistake                                   | Cost                                        | Do instead                        |
-| ----------------------------------------- | ------------------------------------------- | --------------------------------- |
-| `sed -i` or a heredoc to patch a file     | Invisible to the record; unverifiable bytes | `edit` with a literal match       |
-| `cat`/`head` to inspect a file            | Bypasses the read surface and the hooks     | `read` with offset and limit      |
-| Streaming a curly quote into `write`      | The normalize hooks replace it silently     | ASCII, or `raw-write`             |
-| Weakening a smoke to pass a change        | The arbiter stops arbitrating               | Fix the change (`smoke-writing`)  |
-| Committing because the work "looks ready" | The user loses control of the tree          | READY-TO-COMMIT report            |
-| Named exports spreading through the tree  | Uniformity decays; import sites multiply    | Anonymous defaults; contract only |
-| Abbreviations "just this once"            | The table becomes advisory                  | Full words, documented exceptions |
+| Mistake                                   | Cost                                        | Do instead                             |
+| ----------------------------------------- | ------------------------------------------- | -------------------------------------- |
+| `sed -i` or a heredoc to patch a file     | Invisible to the record; unverifiable bytes | `edit` with a literal match            |
+| `cat`/`head` to inspect a file            | Bypasses the read surface and the hooks     | `read` with offset and limit           |
+| Streaming a curly quote into `write`      | The normalize hooks replace it silently     | ASCII, or `raw-write`                  |
+| Weakening a smoke to pass a change        | The arbiter stops arbitrating               | Fix the change (`smoke-writing`)       |
+| Committing because the work "looks ready" | The user loses control of the tree          | Step's files staged, then `git gcommit` |
+| Named exports spreading through the tree  | Uniformity decays; import sites multiply    | Anonymous defaults; contract only      |
+| Abbreviations "just this once"            | The table becomes advisory                  | Full words, documented exceptions      |
 
 ## The moved tree
 

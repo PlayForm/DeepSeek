@@ -1,18 +1,25 @@
 # Spec Reconfiguration and Resume
 
+A batch is not frozen once it starts, because the feedback of the user arrives while the lanes run
+and the parent has to decide whether the feedback amends an existing lane or becomes a new one.
+
+This document also covers how a new session reconstructs a batch that an earlier session left
+unfinished.
+
 ## The reconfiguration authority
 
 The parent may:
 
 1. **The idle amendment.**
 
-    The amendment is sent; the lane answers `"<NAME> SPEC AMENDED - IDLE"` and retains the new spec.
+    The amendment is sent; the lane retains the new spec and does no work until it is activated.
 
 2. **The mid-flight amendment.**
 
     A working lane is amended only when the change is compatible with the work already done.
 
-    The message is a checkpoint: state what changed and what must be re-verified.
+    The message is a checkpoint: state what changed and what must be re-verified, so that the lane
+    can align its work without silently merging two specs.
 
 3. **The re-application.**
 
@@ -39,7 +46,7 @@ The reason is the spec boundary: a lane working against spec A, amended to spec 
 re-verify work it already did and may be unable to tell which parts of the tree belong to which
 spec.
 
-The new-lane rule keeps every report attributable.
+The new-lane rule keeps every report attributable to exactly one spec.
 
 ## Resume
 

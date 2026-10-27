@@ -13,6 +13,9 @@ notes.
 Known drift: updated 2026-10-22 - the header and layout now reflect the full suite (51 Classic + 46
 EffectTS packages, 359 smoke suites / 5,337 checks).
 
+The tree has 58 Classic packages and 48 EffectTS packages, all at `0.3.0`; treat any prose count as
+stale until it is verified against the directories.
+
 The tree is the arbiter; if the README and the directories disagree, the directories win.
 
 ## 2. `Documentation/INDEX.md` - the documentation map
@@ -56,6 +59,8 @@ Their completeness grades: Documentation/Reports/POC-GAP-ANALYSIS.md.
 
 Do not claim "complete" without checking the grades.
 
+Do not put them on the site or in a skill as if they ship.
+
 ## 4. `Documentation/Guides/` - the deep manuals
 
 | Guide                         | Read when                                   |
@@ -86,11 +91,25 @@ Read them when a plan's rationale is not enough.
 
 When documents disagree, use this order:
 
-1. The package directories and manifests (`ls`, `package.json`).
-2. The built site (`Site/Target/`) for site claims.
-3. The smoke READMEs and their per-folder counts.
-4. `Documentation/Plans/` frontmatter for work state.
-5. `README.md`, the registry documents, and the guides last.
+1. **The manifests.**
+
+    The package directories and manifests (`ls`, `package.json`).
+
+2. **The built site.**
+
+    The built site (`Site/Target/`) for site claims.
+
+3. **The smoke counts.**
+
+    The smoke READMEs and their per-folder counts.
+
+4. **The plan state.**
+
+    `Documentation/Plans/` frontmatter for work state.
+
+5. **The prose last.**
+
+    `README.md`, the registry documents, and the guides last.
 
 Documents lag; the tree does not.
 

@@ -34,7 +34,7 @@ them with free, deterministic checks.
 4. **The cost.**
 
     When reporting, extract the token usage from the subagent's session log at
-    `~/.dsh/sessions/<workspace>/<agent-id>/session.v4.jsonl.zstd`: `data.usage.inputTokens`,
+    `${DSH_HOME}/sessions/<workspace>/<agent-id>/session.v4.jsonl.zstd`: `data.usage.inputTokens`,
     `outputTokens`, `cacheReadTokens` per assistant message.
 
 5. **The free check.**
