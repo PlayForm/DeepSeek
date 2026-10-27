@@ -28,7 +28,7 @@ import { Activate } from "@playform/ets-base-dsh";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).
-const Version = "0.2.0";
+const Version = "0.3.0";
 
 export default (Context: Context, Options: Config): void => {
 	// Fail-loud validation BEFORE the State build: invalid config throws at

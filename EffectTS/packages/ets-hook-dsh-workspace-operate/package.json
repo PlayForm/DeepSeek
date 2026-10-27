@@ -1,6 +1,6 @@
 {
 	"name": "@playform/ets-hook-dsh-workspace-operate",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "The operation engine of the workspace family (ctx.workspaceOperate): TYPED PROPOSALS - rename, connect, replace - with the resolution rules that decide what CAN be proposed and the first-class REFUSAL-TO-GUESS that declares what CANNOT. A proposal is never guessed: every rule failure returns a typed refusal (graph unavailable, unknown symbol, name collision, duplicate edge, incompatible edge, missing version, stale version, span beyond file), the proposal is recorded only when the rules pass, and every proposal carries the version fence it was made against (stale-marked by its own fs/observed tracker). Proposals live in the hook's own KV domain (workspace_operate); the model surface is the workspace_propose and workspace_proposals tools, registered from apply per the family's tools-live-in-their-owning-hook law. The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/Workspace-Family/OPERATE.md + Documentation/Plans/WORKSPACE-FAMILY-V4-1.md sections 3.7-3.8.",
 	"repository": {
 		"type": "git",
@@ -31,21 +31,21 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/ets-base-dsh": "0.2.0",
-		"@playform/ets-plugin-dsh-factory": "0.2.0"
+		"@playform/ets-base-dsh": "0.3.0",
+		"@playform/ets-plugin-dsh-factory": "0.3.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
-		"@deepseek-ai/dsh-fs": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-storage": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-storage-domain": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-tools": "0.2.1-rc.3",
+		"@deepseek-ai/dsh-fs": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-storage": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-storage-domain": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-tools": "0.2.1-rc.4",
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
 		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2",
-		"zod": "4.4.3"
+		"zod": "4.6.7"
 	},
 	"publishConfig": {
 		"access": "public",

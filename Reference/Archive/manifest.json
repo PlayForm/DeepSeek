@@ -917,16 +917,6 @@
 			}
 		},
 		{
-			"source": "",
-			"kind": "HTML",
-			"archive": "",
-			"content": "",
-			"converted": "",
-			"status": "converted",
-			"title": "TelemetryStandards",
-			"note": "distilled note in Curated/, not a fetched page; no source URL"
-		},
-		{
 			"source": "https://docs.anthropic.com/en/docs/claude-code/costs",
 			"kind": "HTML",
 			"archive": "",

@@ -103,10 +103,20 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 				layout: "per-record",
 				invalidRecords: "backup-and-skip",
 				tables: {
-					members: Domain.domainTable(Member),
-					queue: Domain.domainTable(Zod.array(Zod.string())),
-					proposals: Domain.domainTable(Entry),
-					gates: Domain.domainTable(Gate),
+					members: Domain.domainTable(
+						Member as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
+					queue: Domain.domainTable(
+						Zod.array(Zod.string()) as unknown as Parameters<
+							typeof Domain.domainTable
+						>[0],
+					),
+					proposals: Domain.domainTable(
+						Entry as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
+					gates: Domain.domainTable(
+						Gate as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
 				},
 			}),
 		);

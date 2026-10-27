@@ -40,12 +40,24 @@ statuses:
     - name: assessment versus discount (the billing policy)
       state: resolved
       evidence: section 12
+    - name: the discount policies built
+      state: open
+      evidence: section 12 and section 16 - designed, deliberately unbuilt
     - name: the contribution plugin as a second package
       state: resolved
       evidence: section 13
     - name: the migration v2 columns and tables
       state: open
       evidence: section 14
+    - name: the analytics surface as the deliverable, the invoice deferred
+      state: resolved
+      evidence: section 16
+    - name: the semantic pipeline stages per file
+      state: resolved
+      evidence: section 16.1
+    - name: the inside, outside, and cross metric catalogue
+      state: resolved
+      evidence: sections 16.2-16.4
 ---
 
 # The cost-track plugin - per-file inference pricing
@@ -141,6 +153,12 @@ attached `F`. `surfaceTokens(S)` is the sum over every surface node before `S`.
 A file that was read early and never again still carries its mass into every later step, which is
 the honest answer to "a single line change can cost a whole conversation".
 
+Refined per bucket, because a single ratio misprices a file whose tokens are cached against one
+whose tokens are not: prompt caching is prefix-based, so the surface is walked in order and the
+first `cacheReadTokens` worth of nodes are the cached ones. Each file then carries an uncached mass
+and a cached mass, and the input cost splits as `inputRate` on the uncached mass plus
+`cacheReadRate` on the cached mass. The same walk produces `Call.CacheSaving`.
+
 ### 2.3 Conservation
 
     sum over F of (direct(F, S) + amortized(F, S)) + unattributed(S) = costTotal(S)
@@ -169,9 +187,12 @@ The dimensions exist so one ledger serves many projects and many clients:
   session's `cwd` and creates it on first sight.
 - `Session` - the conversation, with `ParentSessionId` so a subagent's cost rolls into its parent.
 - `File` - the path within the project; `FileVersion` - the content hash and size at a touch.
-- `Price` - append-only and effective-dated: `(Provider, Model, EffectiveFrom)` unique,
-  `EffectiveTo` open until a later row closes it. A price row is never updated; a change inserts a
-  new row. That is what makes a historical invoice reproducible after a provider raises its rates.
+- `Price` - append-only and effective-dated: `(Provider, Model, EffectiveFrom, Window)` unique,
+  `EffectiveTo` open until a later row closes it, and `Window` a label such as `any`, `peak`, or
+  `offpeak` resolved from the call's own timestamp against the config's `priceWindows` (DeepSeek
+  charges double inside its peak window, so the date alone is not enough). A price row is never
+  updated; a change inserts a new row. That is what makes a historical invoice reproducible after a
+  provider raises its rates.
 - `Call` - one model request, with the usage, the resolved `PriceId`, and the computed cost columns.
 - `Touch` - one file interaction from one `tool/call`.
 - `ContextMass` - the per-file token mass of one call's surface.
@@ -556,3 +577,89 @@ the touch log: a file with a write-kind touch and no later revert is `changed`; 
 read-kind touches is `read`; a file written and then restored to its earlier hash is `reverted`. The
 verdict is the input to the `surviving-only` discount, and it is recomputable from `Touch` and
 `FileVersion` alone.
+
+## 15. What the research changed
+
+The digest at [INFERENCE-COST-ATTRIBUTION.md](../Researches/INFERENCE-COST-ATTRIBUTION.md) was
+written from 35 cited sources after the schema was drafted. Four of its findings amend this plan,
+and three of them are already folded into the sections above.
+
+1. **The bucket convention is exclusive, and it is converted once.** OpenTelemetry's
+   `gen_ai.usage.input_tokens` is inclusive - it "SHOULD include all types of input tokens,
+   including cached tokens" - while Langfuse stores exclusive buckets and converts at ingest. This
+   ledger stores the exclusive form, which is also what the harness's own `TokenUsage` already
+   reports (`inputTokens` is the uncached remainder, verified live on 2026-10-27). Any inclusive
+   source is converted at the boundary, in one function, and the conversion is asserted by a smoke.
+   Storing an inclusive total into an exclusive schema double-counts every cached call.
+2. **Time of day is a price dimension, not just a date.** DeepSeek bills cache-hit input at
+   $0.003/$0.006 and output at $0.60/$1.20 inside and outside its peak window, so the same tokens
+   cost double depending on wall clock. `Price.Window` and `config.priceWindows` exist for that
+   reason, and `Price.Resolve` takes the call's timestamp rather than the current time.
+3. **Cache storage is a duration, not a token count.** Gemini prices context-cache storage per
+   million tokens per hour. A pure per-call model cannot express it, so the ledger books storage as
+   a separate `Call`-adjacent row when a provider charges it, and leaves the field null otherwise
+   rather than inventing an hourly rate.
+4. **A file touch is not a priced event in any provider's vocabulary.** No fetched source meters
+   cost per file; the finest native grains are Claude Code's component percentages and Copilot's
+   per-prompt premium requests. That is the justification for the whole plugin, and it is why the
+   allocation is this repository's own synthesis rather than a reimplementation of a vendor metric.
+
+Two smaller consequences: CSV export uses CRLF line endings per RFC 4180 (readers accept LF, the RFC
+does not promise it), and the price book can optionally be seeded from the LiteLLM
+`model_prices_and_context_window.json` map, whose rows are already USD per token with a `source` URL
+and a `deprecation_date` - the shipped defaults stay the three Cloudflare rows so the plugin works
+offline.
+
+## 16. Analytics first, invoice later
+
+The invoice is an on-demand or monthly artifact, not the product. What has to exist now is the
+measurement: the fullest set of metrics for every file, from inside its own history and from outside
+it, so that any later invoice, comparison, or client conversation is a query rather than a rebuild.
+The discount policies in section 12 stay designed but unbuilt; the export stays but is not the
+deliverable of this pass.
+
+### 16.1 The semantic pipeline, per file
+
+A file does not "get touched"; it moves through stages, and each stage has a different cost shape.
+The stage is derivable from the tool and the file's own history in the session, so `Touch.Stage` is
+recorded rather than inferred at report time:
+
+| Stage      | Detected from                                         | What it means                       |
+| ---------- | ----------------------------------------------------- | ----------------------------------- |
+| `discover` | `glob`, `grep`, a search result naming the file       | the file was located, not read      |
+| `read`     | `read`, or a `grep` with line matches                 | the content entered the context     |
+| `reread`   | a second `read` after an `edit`                       | the model went back to check itself |
+| `edit`     | `write`, `edit`, `multi_edit`, `batch_edit`           | the content changed                 |
+| `verify`   | a `read` or `grep` after the last `edit` of that file | the change was checked              |
+| `revert`   | an `edit` whose result restores an earlier hash       | the change was undone               |
+
+`ReadBeforeEdit` is then just "a `read` stage exists earlier in the session than the first `edit`",
+which is why it is a stored column and not a report-time join.
+
+### 16.2 Inside metrics - the file's own history
+
+Versions (count, first and last hash, bytes and lines over time); stage counts and the tokens spent
+in each stage; direct cost and amortized cost per stage; cached versus uncached mass and the cache
+saving the file's reads produced; churn (lines added and removed, edits per session, the number of
+sessions that edited it); lifespan (first seen, last touched, active days); and the per-version
+cost, so the question "what did version 7 of this file cost" has an answer.
+
+### 16.3 Outside metrics - the file in its context
+
+The sessions, turns, models, tools, projects and clients that touched it; per-model cost for this
+file specifically; whether the touch came from a user session or a delegated subagent; and the
+file's rank within each session, which separates the file the conversation was about from the file
+that happened to be in the way.
+
+### 16.4 Cross metrics - the ones that answer the user's question
+
+Cost per surviving line; the read-before-edit delta (what an edit costs in sessions where the file
+was read first versus sessions where it was not); the exploration ratio (read-only spend over total
+spend for this file); the rework ratio (edits followed by a revert or a second edit of the same
+lines); the carry ratio (amortized over direct, the number that says how much of this file's cost is
+context rather than change); and the cache hit ratio, which is the measurable half of "did reading
+this file make the later edit cheaper".
+
+Every one of them is a view over `Call`, `Touch`, `ContextMass`, `Allocation` and `FileVersion`.
+None of them requires a new event, which is the test of whether the ledger was designed at the right
+grain.

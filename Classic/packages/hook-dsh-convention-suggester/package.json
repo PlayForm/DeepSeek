@@ -1,6 +1,6 @@
 {
 	"name": "@playform/hook-dsh-convention-suggester",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "The convention-suggester hook: a DeepSeek Harness plugin that carries the repo's conventions as a pattern pack and names them BEFORE the model violates them. When the model writes or edits a file, the hook classifies the path deterministically (the layout family, the naming family, the docs family, the ledger-string family) and prepends ONE labeled additionalContexts notice naming the companion targets the convention requires: the entry stays wiring-only, one definition per file with nameless default exports, a package ships README + SCHEME, and the ledger strings are module-owned and byte-stable with the four identity places agreeing. Deterministic classifier, no LLM in the hot path; the arbiter is the smoke suite that asserts the convention. Plan: Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md (sections 3.4, 4, 8, 9.4).",
 	"repository": {
 		"type": "git",
@@ -31,14 +31,14 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/lib-dsh-core": "0.2.0",
-		"@playform/lib-dsh-pack": "0.2.0",
-		"@playform/plugin-dsh-factory": "0.2.0"
+		"@playform/lib-dsh-core": "0.3.0",
+		"@playform/lib-dsh-pack": "0.3.0",
+		"@playform/plugin-dsh-factory": "0.3.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
-		"@deepseek-ai/dsh-llm": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-tools": "0.2.1-rc.3",
+		"@deepseek-ai/dsh-llm": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-tools": "0.2.1-rc.4",
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",

@@ -1,6 +1,6 @@
 {
 	"name": "@playform/ets-hook-dsh-package-governor",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Silent package.json governor: hooks fs/observed — the cordis event every tool-layer file write dispatches — and deterministically rewrites chain-governed pins to the effective registry's ^resolved, then runs the update stage (npm-check-updates, programmatic by default or the ncu bin in bin mode, policy-driven, chain deps rejected) as a detached, contained continuation. Fully API-aware: the governed manifest is read/rewritten through ctx.fs with a version-guarded replaceIfVersion write (the service owns version tokens), configuration is a validated Schemastery Config schema with defaults, and the authoring agent is never notified: the tool result is built from the author's own content, and the observation-policy's version record is refreshed by re-emitting fs/observed with the service-issued fresh version.",
 	"repository": {
 		"type": "git",
@@ -31,25 +31,25 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/ets-base-dsh": "0.2.0",
-		"@playform/ets-lib-dsh-core": "0.2.0",
-		"@playform/ets-plugin-dsh-factory": "0.2.0",
+		"@playform/ets-base-dsh": "0.3.0",
+		"@playform/ets-lib-dsh-core": "0.3.0",
+		"@playform/ets-plugin-dsh-factory": "0.3.0",
 		"effect": "4.0.6",
 		"npm-check-updates": "23.1.1"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
-		"@deepseek-ai/dsh-fs": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-sandbox": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-storage": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-storage-domain": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-subprocess": "0.2.1-rc.3",
+		"@deepseek-ai/dsh-fs": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-sandbox": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-storage": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-storage-domain": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-subprocess": "0.2.1-rc.4",
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
 		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2",
-		"zod": "4.4.3"
+		"zod": "4.6.7"
 	},
 	"publishConfig": {
 		"access": "public",

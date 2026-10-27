@@ -89,8 +89,12 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 				// precedent).
 				invalidRecords: "backup-and-skip",
 				tables: {
-					bindings: Domain.domainTable(Binding),
-					ring: Domain.domainTable(Zod.array(Binding)),
+					bindings: Domain.domainTable(
+						Binding as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
+					ring: Domain.domainTable(
+						Zod.array(Binding) as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
 				},
 			}),
 		);

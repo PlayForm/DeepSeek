@@ -12,7 +12,7 @@ schema fail-loud, and the mount purity.
   `disabled (enabled=false)` line (logger and durable ledger), and both
   listeners still wired on the plugin ctx.
 - L3: the enabled mount - the byte-exact activation line
-  `activated (bundle 0.2.0, intents 2, threshold 0.75)` (logger and ledger),
+  `activated (bundle 0.3.0, intents 2, threshold 0.75)` (logger and ledger),
   the listener registration order on the plugin ctx, and a distinct root.
 - L4: the pass-through discipline - a non-judged tool returns the decision
   unchanged; the `intents` config filter keeps only `Counts` (and the
@@ -30,8 +30,8 @@ clock: the plugin has no clock dependency.
 ## Expected ledger strings (byte-exact, `test-suggester: ` prefix)
 
 `disabled (enabled=false)`,
-`activated (bundle 0.2.0, intents 2, threshold 0.75)`,
-`activated (bundle 0.2.0, intents 1, threshold 0.75)`.
+`activated (bundle 0.3.0, intents 2, threshold 0.75)`,
+`activated (bundle 0.3.0, intents 1, threshold 0.75)`.
 
 ## Expected count
 

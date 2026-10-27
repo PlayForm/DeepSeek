@@ -15,7 +15,7 @@ defaults and the cold knowledge load on the built State, and the fs purity.
   `agent/pre-step`, `system-prompt/assemble`, `tools/change`) plus the
   factory's `loader/volatile-update` register on the plugin context only
   (never on the root; the fake root is a distinct object), and the
-  activation line `activated (bundle 0.2.0, intents 10, threshold 0.75)` is
+  activation line `activated (bundle 0.3.0, intents 10, threshold 0.75)` is
   byte-exact in the logger form and in the durable `[ISO]` form (exactly
   one line).
 - W3: the disabled mount - `disabled (enabled=false)` is byte-exact in both
@@ -40,7 +40,7 @@ assertion is on the ring's counters and the learning window.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-search-suggester: ` prefix)
 
-`activated (bundle 0.2.0, intents 10, threshold 0.75)`,
+`activated (bundle 0.3.0, intents 10, threshold 0.75)`,
 `disabled (enabled=false)`.
 
 ## Expected count

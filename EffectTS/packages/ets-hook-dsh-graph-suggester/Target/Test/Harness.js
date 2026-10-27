@@ -247,7 +247,7 @@ if (InvokedDirectly) {
     assert.deepEqual(Run.CtxListeners["agent/pre-step"] instanceof Function, true);
     assert.ok(Run.State !== void 0);
     assert.ok(
-      Run.Lines.includes("graph-suggester: activated (bundle 0.2.0, intents 2, threshold 0.75)")
+      Run.Lines.includes("graph-suggester: activated (bundle 0.3.0, intents 2, threshold 0.75)")
     );
   });
   if (Count.N === 3 && Count.F === 1) {

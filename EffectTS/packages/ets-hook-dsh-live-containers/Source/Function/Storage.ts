@@ -174,7 +174,7 @@ export default async (
 							infra: Zod.string().nullable(),
 							tail: Zod.string(),
 							provenance: Zod.enum(["live", "recovered"]),
-						}),
+						}) as unknown as Parameters<typeof Domain.domainTable>[0],
 					),
 				},
 			}),

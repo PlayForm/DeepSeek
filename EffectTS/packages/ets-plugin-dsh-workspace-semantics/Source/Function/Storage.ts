@@ -99,8 +99,12 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 				// hook's precedent).
 				invalidRecords: "backup-and-skip",
 				tables: {
-					models: Domain.domainTable(Model),
-					meta: Domain.domainTable(Zod.number()),
+					models: Domain.domainTable(
+						Model as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
+					meta: Domain.domainTable(
+						Zod.number() as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
 				},
 			}),
 		);

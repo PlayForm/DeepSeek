@@ -36,7 +36,7 @@ import type Config from "../Interface/Config.js";
 import type State from "../Interface/State.js";
 
 /** The bundle version, mirrored from package.json (the activation proof). */
-const Version = "0.2.0";
+const Version = "0.3.0";
 
 /** The lesson service surface this hook consumes (structural, not imported). */
 interface Lesson {
@@ -104,7 +104,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone:
-	//   hook-dsh-lesson-nudge: activated (bundle=0.2.0, cap=3)
+	//   hook-dsh-lesson-nudge: activated (bundle=0.3.0, cap=3)
 	Append(
 		State.On
 			? Activate([

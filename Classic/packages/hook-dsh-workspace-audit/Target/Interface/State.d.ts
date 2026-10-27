@@ -1,6 +1,6 @@
-import type DomainHandle from "@Interface/Domain.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type Line from "@Interface/Line.js";
+import type DomainHandle from "./Domain.js";
+import type FactoryHandle from "./Factory.js";
+import type Line from "./Line.js";
 import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 interface Extra {
     /** The master switch (config `enabled` - the IDLE-forever posture). */

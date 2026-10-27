@@ -1,5 +1,5 @@
-import type Stamp from "@Interface/Stamp.js";
-import type State from "@Interface/State.js";
+import type Stamp from "../Interface/Stamp.js";
+import type State from "../Interface/State.js";
 /** The latest stamp for one path, or undefined. */
 export declare const Latest: (State: State, Path: string) => Stamp | undefined;
 /** The ring, NEWEST first; an optional limit slices the head. */

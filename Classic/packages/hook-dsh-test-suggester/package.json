@@ -1,6 +1,6 @@
 {
 	"name": "@playform/hook-dsh-test-suggester",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "The test-suggester hook: a DeepSeek Harness plugin that answers the test task intent with a target set. When the model searches for proof (a grep for PASS/FAIL/error TS, a read of a Test.ts, a bash error sweep), the hook classifies the call deterministically and names the likely targets BEFORE the model finishes searching: the suite's Test.ts assertion body, the suite README carrying the expected count, the aggregate runner (Maintain/Run-Smokes.mjs), and the README badge that must agree with the count. Deterministic classifier, no LLM in the hot path; high threshold, at most maxCandidates candidates, a stated reason per candidate, a cooldown, and an abstention path - a wrong target set costs more than a missing one. Plan: Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md (sections 3, 4, 8).",
 	"repository": {
 		"type": "git",
@@ -31,14 +31,14 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/lib-dsh-core": "0.2.0",
-		"@playform/lib-dsh-pack": "0.2.0",
-		"@playform/plugin-dsh-factory": "0.2.0"
+		"@playform/lib-dsh-core": "0.3.0",
+		"@playform/lib-dsh-pack": "0.3.0",
+		"@playform/plugin-dsh-factory": "0.3.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
-		"@deepseek-ai/dsh-llm": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-tools": "0.2.1-rc.3",
+		"@deepseek-ai/dsh-llm": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-tools": "0.2.1-rc.4",
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",

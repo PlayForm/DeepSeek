@@ -1,4 +1,4 @@
-import type Proposal from "@Interface/Proposal.js";
+import type Proposal from "./Proposal.js";
 export default interface Entry {
     /** The proposal as it arrived (the contract, verbatim). */
     proposal: Proposal;

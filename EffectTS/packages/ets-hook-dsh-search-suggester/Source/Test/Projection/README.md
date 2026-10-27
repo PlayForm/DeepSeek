@@ -35,7 +35,7 @@ also sees it.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-search-suggester: ` prefix)
 
-`activated (bundle 0.2.0, intents 10, threshold 0.75)`,
+`activated (bundle 0.3.0, intents 10, threshold 0.75)`,
 `suggest Version 0.92 7 candidates`.
 
 ## Expected count

@@ -1,6 +1,6 @@
 {
 	"name": "@playform/hook-dsh-search-suggester",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "The search-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a search-class call (grep, glob, read, or a search-shaped bash) matches one of the ten intent kinds (Version, Path, Ledger, Config, Dependency, Test, Symbol, Doc, Usage, Owner), prepends ONE labeled additionalContexts note naming the likely target set - the standard locations where that intent lives in this repo - BEFORE the model burns the searches. Deterministic: no LLM in the hot path, a compiled rule table over the call and the last 8 calls, a confidence gate (default 0.75, 0.85 for the destructive intents), at most 7 candidates each with a stated reason, a cooldown, a dedupe, a per-turn cap, and an explicit abstention path - every abstention a ledger line (Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md).",
 	"repository": {
 		"type": "git",
@@ -31,15 +31,15 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/lib-dsh-core": "0.2.0",
-		"@playform/lib-dsh-pack": "0.2.0",
-		"@playform/plugin-dsh-factory": "0.2.0"
+		"@playform/lib-dsh-core": "0.3.0",
+		"@playform/lib-dsh-pack": "0.3.0",
+		"@playform/plugin-dsh-factory": "0.3.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
-		"@deepseek-ai/dsh-llm": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-system-prompt": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-tools": "0.2.1-rc.3",
+		"@deepseek-ai/dsh-llm": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-system-prompt": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-tools": "0.2.1-rc.4",
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",

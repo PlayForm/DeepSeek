@@ -230,7 +230,7 @@ if (InvokedDirectly) {
     assert.ok(Run.Provided["dshQueue"] !== void 0);
     assert.deepEqual(Run.Tools.map((T) => T.name), ["queue_enqueue", "queue_status"]);
     assert.deepEqual(Run.Lines, [
-      "plugin-dsh-queue: activated (bundle 0.2.0, capacity=main=10 child=2, routedDispatch=true)"
+      "plugin-dsh-queue: activated (bundle 0.3.0, capacity=main=10 child=2, routedDispatch=true)"
     ]);
     assert.ok(Run.State !== void 0);
   });

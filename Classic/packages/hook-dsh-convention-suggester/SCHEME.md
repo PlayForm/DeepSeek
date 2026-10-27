@@ -116,7 +116,7 @@ lane.
 ## Ledger strings (byte-exact, module-owned)
 
 ```
-convention-suggester: activated (bundle 0.2.0, intents <n>, threshold <t>)
+convention-suggester: activated (bundle 0.3.0, intents <n>, threshold <t>)
 convention-suggester: disabled (enabled=false)
 convention-suggester: suggest <Intent> <k> <n> candidates call <tool>
 convention-suggester: abstained ambiguous <Intent> <k>

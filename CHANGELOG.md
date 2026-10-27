@@ -9,6 +9,24 @@ All notable changes to this project will be documented in this file.
 - The empty-graph gap: the workspace family has no indexing trigger yet, so a fresh workspace graph
   stays empty until `workspace_index` is called (documented and open).
 
+## 0.3.0 - 2026-10-27
+
+### Changed
+
+- The 105-package family moves one minor version up: every manifest at 0.3.0, every `@playform/`
+  sibling pin at 0.3.0, and the activation version constant (`const Version`) at 0.3.0.
+- The host devDependencies move to the `0.2.1-rc.4` line and zod to 4.6.7: the `ncu` pass over the
+  workspace, with the host packages taken from their `next` tag because their npm `latest` tag is
+  stale at 0.0.1-rc.1.
+- Every package `CHANGELOG.md` gains its 0.3.0 section.
+
+### Fixed
+
+- The 27 packages that failed with TS2589
+  (`Type instantiation is excessively deep and possibly infinite`) after the zod 4.6.7 bump:
+  `@deepseek-ai/dsh-storage-domain` types `domainTable` against its own zod 4.4.3, so the 54 zod
+  4.6.7 table schemas are cast to the library's parameter type.
+
 ## 0.2.0 - 2026-10-25
 
 ### Added

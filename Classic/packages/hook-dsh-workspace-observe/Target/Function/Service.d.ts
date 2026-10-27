@@ -1,6 +1,6 @@
 import { Service, type Context } from "@deepseek-ai/cordis";
-import type Stamp from "@Interface/Stamp.js";
-import type State from "@Interface/State.js";
+import type Stamp from "../Interface/Stamp.js";
+import type State from "../Interface/State.js";
 export default class WorkspaceObserve extends Service {
     /** The apply-built state the methods read and write. */
     State: State;

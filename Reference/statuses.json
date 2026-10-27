@@ -447,13 +447,6 @@
 		"status": "converted"
 	},
 	{
-		"source": "",
-		"slug": "TelemetryStandards",
-		"role": "sources",
-		"status": "converted",
-		"note": "distilled note in Curated/, not a fetched page; no source URL"
-	},
-	{
 		"source": "https://docs.anthropic.com/en/docs/claude-code/costs",
 		"slug": "anthropic-claude-code-costs",
 		"role": "sources",

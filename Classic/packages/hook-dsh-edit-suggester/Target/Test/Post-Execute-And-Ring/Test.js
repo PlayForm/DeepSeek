@@ -79,7 +79,7 @@ const runTest = async () => {
       const Decision = { kind: "allow", additionalContexts: [] };
       const Out = await Post(Run, { name: "bash", arguments: { command: "ls" }, agent: AgentOf("a") }, Decision);
       assert.equal(Out, Decision);
-      assert.deepEqual(Run.Lines, ["hook-dsh-edit-suggester: activated (bundle 0.2.0, families 7, threshold 0.75)"]);
+      assert.deepEqual(Run.Lines, ["hook-dsh-edit-suggester: activated (bundle 0.3.0, families 7, threshold 0.75)"]);
     });
     await CheckAsync(Count, "E2: next() is awaited before any judgment", async () => {
       let NextCalled = false;
@@ -111,7 +111,7 @@ const runTest = async () => {
       const Out = await Post(Raised, VersionEdit("a"), { kind: "allow", additionalContexts: [] });
       assert.deepEqual(Out.additionalContexts, []);
       assert.ok(Raised.Lines.includes("hook-dsh-edit-suggester: abstained low-confidence Version 0.87"));
-      assert.ok(Raised.Lines.includes("hook-dsh-edit-suggester: activated (bundle 0.2.0, families 7, threshold 0.9)"));
+      assert.ok(Raised.Lines.includes("hook-dsh-edit-suggester: activated (bundle 0.3.0, families 7, threshold 0.9)"));
     });
   }
   {

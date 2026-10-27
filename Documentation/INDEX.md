@@ -214,7 +214,7 @@ decision layer) · [04-CLIENT](Plans/Completion-Spec/04-CLIENT.md) (the 3 client
 existing plugins, the twins) · [06-VERIFICATION](Plans/Completion-Spec/06-VERIFICATION.md) (the
 acceptance bar, the activation loop, the dogfood scenarios).
 
-### Researches - the research outputs (8)
+### Researches - the research outputs (9)
 
 | Document (Documentation/Researches/)                                                      | Status   | Kind            |
 | ----------------------------------------------------------------------------------------- | -------- | --------------- |
@@ -226,6 +226,7 @@ acceptance bar, the activation loop, the dogfood scenarios).
 | [NORMALIZE-GRANULAR-CONFIG-RESEARCH.md](Researches/NORMALIZE-GRANULAR-CONFIG-RESEARCH.md) | complete | research-output |
 | [NORMALIZE-OVERPASS-RESEARCH.md](Researches/NORMALIZE-OVERPASS-RESEARCH.md)               | complete | research-output |
 | [TOOL-COACH-RESEARCH.md](Researches/TOOL-COACH-RESEARCH.md)                               | complete | research-output |
+| [INFERENCE-COST-ATTRIBUTION.md](Researches/INFERENCE-COST-ATTRIBUTION.md)                 | complete | research-output |
 
 ### Guides - the operating manuals (7)
 

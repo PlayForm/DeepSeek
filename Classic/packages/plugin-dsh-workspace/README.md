@@ -1,6 +1,6 @@
 # @playform/plugin-dsh-workspace
 
-> v0.2.0 - UNPUBLISHED - plan:
+> v0.3.0 - UNPUBLISHED - plan:
 > [Workspace/WORKSPACE-AGENT](../../Documentation/Plans/Workspace/WORKSPACE-AGENT.md)
 
 ## The role
@@ -43,7 +43,7 @@ Its byte-exact ledger line (the one NEW line this work adds; the rest are unchan
 workspace: index <path> (<indexed> indexed, <skipped> skipped, <failed> failed, <files> files)
 ```
 
-The activation line moved with the fifth tool: `workspace: activated (bundle 0.2.0, tools=5)`.
+The activation line moved with the fifth tool: `workspace: activated (bundle 0.3.0, tools=5)`.
 
 ## The configuration
 
@@ -88,7 +88,7 @@ Plan: `Documentation/Plans/Workspace-Family/WORKSPACE-AGENT.md`;
 ## The ledger
 
 ```text
-workspace: activated (bundle 0.2.0, tools=5)
+workspace: activated (bundle 0.3.0, tools=5)
 workspace: index <path> (<indexed> indexed, <skipped> skipped, <failed> failed, <files> files)
 ```
 

@@ -75,7 +75,7 @@ import type { ReviewInput, ReviewMessage, ReviewResult } from "./Interface/Revie
 import Definition from "./Variable/Config.js";
 
 /** The bundle version, mirrored from package.json (the activation proof). */
-const Version = "0.2.0";
+const Version = "0.3.0";
 
 /** Expand a leading `~` (the family's path convention for every knob). */
 const Expand = (Path: string): string =>

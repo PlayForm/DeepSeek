@@ -2,9 +2,9 @@
 
 All notable changes to this package will be documented in this file.
 
-## 0.2.0 - 2026-10-27
+## 0.3.0
 
-### Added
+### Changed
 
-- The per-file inference cost ledger: the initial ledger - the configuration schema, the SQLite DDL,
-  the database open and the plugin wiring, with the shipped price book.
+- The 0.3.0 release line: the manifest version, the `@playform/` sibling pins and the host
+  devDependencies move together - the host line to `0.2.1-rc.4` and zod to 4.6.7.

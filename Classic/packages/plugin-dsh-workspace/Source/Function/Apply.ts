@@ -28,7 +28,7 @@ import { Activate } from "@playform/lib-dsh-core";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).
-const Version = "0.2.0";
+const Version = "0.3.0";
 
 /** Unwrap one possibly-volatile config cell (`{ get }` reference or value):
  * the loader hands volatile fields as cells, so every validation read goes

@@ -15,7 +15,7 @@ schema defaults and the compiled pack on the built State, and the fs purity.
   `agent/pre-step`) plus the factory's `loader/volatile-update` register on
   the plugin context only (never on the root; the fake root is a distinct
   object), the root identity is not the plugin ctx, and the activation line
-  `activated (bundle 0.2.0, intents 4, threshold 0.75)` is byte-exact in
+  `activated (bundle 0.3.0, intents 4, threshold 0.75)` is byte-exact in
   the logger form and in the durable `[ISO]` form (exactly one line).
 - W3: the disabled mount - `disabled (enabled=false)` is byte-exact in both
   forms, and every call passes through with zero new lines.
@@ -40,8 +40,8 @@ anchored regex.
 
 ## Expected ledger strings (byte-exact, `convention-suggester: ` prefix)
 
-`activated (bundle 0.2.0, intents 4, threshold 0.75)`,
-`activated (bundle 0.2.0, intents 1, threshold 0.75)`,
+`activated (bundle 0.3.0, intents 4, threshold 0.75)`,
+`activated (bundle 0.3.0, intents 1, threshold 0.75)`,
 `disabled (enabled=false)`.
 
 ## Expected count

@@ -56,8 +56,12 @@ export default async (
 				layout: "per-record",
 				invalidRecords: "backup-and-skip",
 				tables: {
-					history: Domain.domainTable(Entry),
-					meta: Domain.domainTable(Zod.number()),
+					history: Domain.domainTable(
+						Entry as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
+					meta: Domain.domainTable(
+						Zod.number() as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
 				},
 			}),
 		);

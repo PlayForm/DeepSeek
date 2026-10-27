@@ -48,7 +48,7 @@ const runTest = async () => {
     });
     Check(Count, "W2: the activation line is byte-exact", () => {
       assert.deepEqual(Run.Lines, [
-        "plugin-dsh-route: activated (bundle 0.2.0, defaultRole=explorer, models=3)"
+        "plugin-dsh-route: activated (bundle 0.3.0, defaultRole=explorer, models=3)"
       ]);
     });
     Check(Count, "W2: the plugin touches no files and sets no timers (no fs, no effects)", () => {

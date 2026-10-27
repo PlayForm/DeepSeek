@@ -93,13 +93,13 @@ export const runTest = async (): Promise<number> => {
 			const Decision = { kind: "allow", additionalContexts: [] };
 			const Out = await Post(Run, { name: "bash", arguments: { command: "ls" }, agent: AgentOf("a") }, Decision);
 			assert.equal(Out, Decision);
-			assert.deepEqual(Run.Lines, ["convention-suggester: activated (bundle 0.2.0, intents 4, threshold 0.75)"]);
+			assert.deepEqual(Run.Lines, ["convention-suggester: activated (bundle 0.3.0, intents 4, threshold 0.75)"]);
 		});
 		await CheckAsync(Count, "E2: a judged call with no matching intent stays silent (no ledger line)", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
 			const Out = await Post(Run, { name: "write", arguments: { file_path: "random/path/file.txt" }, agent: AgentOf("a") }, Decision);
 			assert.equal(Out, Decision);
-			assert.deepEqual(Run.Lines, ["convention-suggester: activated (bundle 0.2.0, intents 4, threshold 0.75)"]);
+			assert.deepEqual(Run.Lines, ["convention-suggester: activated (bundle 0.3.0, intents 4, threshold 0.75)"]);
 		});
 		await CheckAsync(Count, "E2: next() is awaited before any judgment", async () => {
 			let NextCalled = false;

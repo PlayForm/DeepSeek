@@ -187,10 +187,10 @@ const runTest = async () => {
   }
   const Run1 = Make(Raw1);
   {
-    const Sub = "activation ledger line byte-exact: 'ccr: activated (bundle 0.2.0, targets 8, budget 268435456)'";
+    const Sub = "activation ledger line byte-exact: 'ccr: activated (bundle 0.3.0, targets 8, budget 268435456)'";
     Check(Count, Sub, () => {
       assert.ok(
-        Run1.Lines.includes("ccr: activated (bundle 0.2.0, targets 8, budget 268435456)")
+        Run1.Lines.includes("ccr: activated (bundle 0.3.0, targets 8, budget 268435456)")
       );
     });
   }
@@ -199,14 +199,14 @@ const runTest = async () => {
     Check(Count, Sub, () => {
       assert.ok(
         Furnace.PendingJournal.some(
-          (R) => R.event === "activated" && R.detail === "activated (bundle 0.2.0, targets 8, budget 268435456)"
+          (R) => R.event === "activated" && R.detail === "activated (bundle 0.3.0, targets 8, budget 268435456)"
         )
       );
     });
   }
   Rm();
   {
-    const Sub = "the durable ledger file: '[ISO] activated (bundle 0.2.0, targets 8, budget 268435456)' (the file form has no module prefix)";
+    const Sub = "the durable ledger file: '[ISO] activated (bundle 0.3.0, targets 8, budget 268435456)' (the file form has no module prefix)";
     const Run8 = Make(Validate({ autoExpand: false, logFile: Ledger }));
     {
       const Content = TextBlock(TerminalText("l".repeat(96), 26));
@@ -221,7 +221,7 @@ const runTest = async () => {
     Check(Count, Sub, () => {
       assert.ok(
         Log1.split("\n").some(
-          (L) => /^\[[^\]]+\] activated \(bundle 0\.2\.0, targets 8, budget 268435456\)$/.test(L)
+          (L) => /^\[[^\]]+\] activated \(bundle 0\.3\.0, targets 8, budget 268435456\)$/.test(L)
         )
       );
     });

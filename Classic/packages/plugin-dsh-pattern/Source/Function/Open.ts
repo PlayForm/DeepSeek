@@ -44,8 +44,12 @@ export default async (Name: string, Facility: unknown): Promise<Handle> => {
 			layout: "per-record",
 			invalidRecords: "backup-and-skip",
 			tables: {
-				patterns: Domain.domainTable(Shape),
-				meta: Domain.domainTable(Zod.number()),
+				patterns: Domain.domainTable(
+					Shape as unknown as Parameters<typeof Domain.domainTable>[0],
+				),
+				meta: Domain.domainTable(
+					Zod.number() as unknown as Parameters<typeof Domain.domainTable>[0],
+				),
 			},
 		}),
 	);

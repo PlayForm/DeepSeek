@@ -77,8 +77,12 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 				layout: "per-record",
 				invalidRecords: "backup-and-skip",
 				tables: {
-					stamps: Domain.domainTable(Stamp),
-					ring: Domain.domainTable(Zod.array(Stamp)),
+					stamps: Domain.domainTable(
+						Stamp as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
+					ring: Domain.domainTable(
+						Zod.array(Stamp) as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
 				},
 			}),
 		);

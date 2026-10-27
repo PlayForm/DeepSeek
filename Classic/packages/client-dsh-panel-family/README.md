@@ -1,6 +1,6 @@
 # @playform/client-dsh-panel-family
 
-> v0.2.0 - UNPUBLISHED - plan: [UI-FAMILY-V4-1](../../Documentation/Plans/UI-FAMILY-V4-1.md)
+> v0.3.0 - UNPUBLISHED - plan: [UI-FAMILY-V4-1](../../Documentation/Plans/UI-FAMILY-V4-1.md)
 
 ## The role
 

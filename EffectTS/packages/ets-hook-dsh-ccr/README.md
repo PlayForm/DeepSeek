@@ -1,6 +1,6 @@
 # @playform/ets-hook-dsh-ccr - the compress-cache-retrieve hook for oversized tool output
 
-> Version 0.2.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+> Version 0.3.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
 >
 > Plan: [SCHEME.md](./SCHEME.md) -
 > [APHRODITE-TOOL-COMPRESSION-PLUGIN.md](../../Documentation/Plans/APHRODITE-TOOL-COMPRESSION-PLUGIN.md).
@@ -100,7 +100,7 @@ the `<<<CCR:` marker guard makes any load order safe.
 ## The ledger
 
 ```text
-ccr: activated (bundle 0.2.0, targets <n>, budget <n>)
+ccr: activated (bundle 0.3.0, targets <n>, budget <n>)
 ccr: stored <tool> <type> <size> -> <hash>
 ccr: compressed <tool> <type> <size> -> <hash>
 ccr: evicted <hash> (<reason>)

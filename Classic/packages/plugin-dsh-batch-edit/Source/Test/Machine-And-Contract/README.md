@@ -12,7 +12,7 @@ machinesPerAgent cap.
 - M2: a cold mount logs the byte-exact
   `plugin-dsh-batch-edit: disabled (enabled=false)` line; the tool still
   registers and refuses loudly while disabled.
-- M3: the activation line is byte-exact (`activated bundle 0.2.0
+- M3: the activation line is byte-exact (`activated bundle 0.3.0
   (machinesPerAgent 2, opsPerCommit 64, deadlineMs 120000, strictMode
   false, interceptBash false)`); the fs/observed observer sits on the ROOT
   context; the pre-step listener sits on the ctx; no pre-execute listener

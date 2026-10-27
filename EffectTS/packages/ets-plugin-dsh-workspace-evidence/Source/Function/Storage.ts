@@ -84,8 +84,12 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 				compatibleVersions: [],
 				invalidRecords: "backup-and-skip",
 				tables: {
-					validations: Domain.domainTable(Validation),
-					meta: Domain.domainTable(Zod.number()),
+					validations: Domain.domainTable(
+						Validation as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
+					meta: Domain.domainTable(
+						Zod.number() as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
 				},
 			}),
 		);

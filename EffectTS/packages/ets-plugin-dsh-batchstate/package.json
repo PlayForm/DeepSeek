@@ -1,6 +1,6 @@
 {
 	"name": "@playform/ets-plugin-dsh-batchstate",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "The batch-state plugin: a DeepSeek Harness plugin that is the cooperative batch's live state board. It owns the open-batch state (the members: id, role, the CURRENT ACTIVITY task, the status idle/active/completed/failed/interrupted, the queue position, the owned surfaces, the started/finished timestamps), the write API (setTask/setStatus/setScope - the parent's activations and the agents' phase reports), the read API (the batchstate service: getState/getContext/getScope/whoElse), the compiled presentation (the dynamic table-of-contents block, recompiled on every state change - Context = Compile(State)), and the ledger (one global log per module). Every state change emits the batch/state-change event and persists the snapshot into the well-known JSON state file (the plan's file-based fallback). The presentation is READ-ONLY for the agents - it never modifies their own content. The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/BATCH-STATE-PLUGIN.md.",
 	"repository": {
 		"type": "git",
@@ -30,8 +30,8 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/ets-base-dsh": "0.2.0",
-		"@playform/ets-plugin-dsh-factory": "0.2.0"
+		"@playform/ets-base-dsh": "0.3.0",
+		"@playform/ets-plugin-dsh-factory": "0.3.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",

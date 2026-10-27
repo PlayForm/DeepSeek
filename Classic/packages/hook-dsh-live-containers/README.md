@@ -1,6 +1,6 @@
 # @playform/hook-dsh-live-containers - dynamic, modifiable conversation blocks, live jobs, planted boards, failsafes and the suggester
 
-> Version 0.2.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+> Version 0.3.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
 >
 > Plan: [SCHEME.md](./SCHEME.md) -
 > [LIVE-CONTAINERS-RESEARCH.md](../../Documentation/Plans/LIVE-CONTAINERS-RESEARCH.md) -
@@ -117,7 +117,7 @@ file lines are the `[ISO] message` forms with the `hook-dsh-live-containers: ` p
 
 ```text
 disabled (enabled=false)
-activated (bundle 0.2.0, blocks=<n>, refresh=<policy>)
+activated (bundle 0.3.0, blocks=<n>, refresh=<policy>)
 monitors enabled (<n> watchlist entries)
 block rendered <id> (<len> bytes)
 block skipped <id> (<reason>)

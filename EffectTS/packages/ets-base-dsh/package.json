@@ -1,6 +1,6 @@
 {
 	"name": "@playform/ets-base-dsh",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "The BASE of the ets-* group (@playform/ets-base-dsh): the shared Effect-TS plumbing every ets-* package depends on - the runtime wiring (the Context services, the layer graph and the materialize() runtime assembled for the factory shell), the fiber/stream machinery (the Gate transformer and the pure reducers, the Update envelope) and the shared contract types (the factory's Interface/* structural contracts). Usable outside the harness entirely (the PlayForm ecosystem).",
 	"repository": {
 		"type": "git",
@@ -31,17 +31,17 @@
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
-		"@deepseek-ai/dsh-fs": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-sandbox": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-subprocess": "0.2.1-rc.3",
+		"@deepseek-ai/dsh-fs": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-sandbox": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-subprocess": "0.2.1-rc.4",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
 		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2"
 	},
 	"peerDependencies": {
-		"@deepseek-ai/dsh-fs": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-sandbox": "0.2.1-rc.3"
+		"@deepseek-ai/dsh-fs": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-sandbox": "0.2.1-rc.4"
 	},
 	"publishConfig": {
 		"access": "public",

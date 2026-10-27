@@ -1,9 +1,9 @@
 import { Service, type Context } from "@deepseek-ai/cordis";
-import type Entry from "@Interface/Entry.js";
-import type GateShape from "@Interface/Gate.js";
-import type Scope from "@Interface/Scope.js";
-import type Snapshot from "@Interface/Snapshot.js";
-import type State from "@Interface/State.js";
+import type Entry from "../Interface/Entry.js";
+import type GateShape from "../Interface/Gate.js";
+import type Scope from "../Interface/Scope.js";
+import type Snapshot from "../Interface/Snapshot.js";
+import type State from "../Interface/State.js";
 export default class BatchState extends Service {
     /** The apply-built state the methods read and write. */
     State: State;
@@ -52,6 +52,6 @@ declare module "@deepseek-ai/cordis" {
     interface Events {
         /** One batch state transition (the plan's broadcast; the consumers:
          *  the splice trigger and any agent listening). */
-        "batch/state-change"(Change: import("@Interface/Change.js").default): void;
+        "batch/state-change"(Change: import("../Interface/Change.js").default): void;
     }
 }

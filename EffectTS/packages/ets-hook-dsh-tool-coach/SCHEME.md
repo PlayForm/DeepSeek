@@ -1,4 +1,4 @@
-# SCHEME.md - @playform/hook-dsh-tool-coach (v0.2.0, TypeScript, function plugin)
+# SCHEME.md - @playform/hook-dsh-tool-coach (v0.3.0, TypeScript, function plugin)
 
 Status: **IMPLEMENTED and VERIFIED** (deterministic build zero errors; minified build;
 `tool-coach-smoke.mjs` green - fake ctx + the REAL factory + the REAL built Target; 129 checks:

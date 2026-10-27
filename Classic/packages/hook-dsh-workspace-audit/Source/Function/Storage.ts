@@ -82,8 +82,12 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 				// hook's precedent).
 				invalidRecords: "backup-and-skip",
 				tables: {
-					lines: Domain.domainTable(Line),
-					ring: Domain.domainTable(Zod.array(Line)),
+					lines: Domain.domainTable(
+						Line as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
+					ring: Domain.domainTable(
+						Zod.array(Line) as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
 				},
 			}),
 		);

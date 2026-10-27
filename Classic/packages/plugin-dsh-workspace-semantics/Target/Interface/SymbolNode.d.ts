@@ -1,4 +1,4 @@
-import type Span from "@Interface/Span.js";
+import type Span from "./Span.js";
 export default interface SymbolNode {
     /** The symbol kind (the v0 TypeScript set plus the any-file kinds). */
     kind: "function" | "class" | "type" | "const" | "interface" | "key" | "heading" | "dependency";

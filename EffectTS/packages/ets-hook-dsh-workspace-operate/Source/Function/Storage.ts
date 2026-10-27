@@ -74,8 +74,12 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 				compatibleVersions: [1],
 				invalidRecords: "backup-and-skip",
 				tables: {
-					proposals: Domain.domainTable(Proposal),
-					meta: Domain.domainTable(Zod.unknown()),
+					proposals: Domain.domainTable(
+						Proposal as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
+					meta: Domain.domainTable(
+						Zod.unknown() as unknown as Parameters<typeof Domain.domainTable>[0],
+					),
 				},
 			}),
 		);

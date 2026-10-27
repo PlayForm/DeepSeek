@@ -55,7 +55,7 @@ const runTest = async () => {
     Check(Count, "L3: the activation line is byte-exact", () => {
       assert.ok(
         Run.Lines.includes(
-          "replay-suggester: activated (bundle 0.2.0, intents 1, threshold 0.75, history 0)"
+          "replay-suggester: activated (bundle 0.3.0, intents 1, threshold 0.75, history 0)"
         )
       );
     });

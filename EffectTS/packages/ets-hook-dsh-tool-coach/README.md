@@ -1,6 +1,6 @@
 # @playform/ets-hook-dsh-tool-coach - the four-tier ladder that teaches the model to keep file content out of the terminal
 
-> Version 0.2.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
+> Version 0.3.0 - UNPUBLISHED (the npm bootstrap tier 2-planned / 3-candidates).
 >
 > Plan: [SCHEME.md](./SCHEME.md) -
 > [TOOL-COACH-OPERATIVE-PLAN.md](../../Documentation/Plans/TOOL-COACH-OPERATIVE-PLAN.md) -
@@ -115,7 +115,7 @@ One log per module: `~/.dsh/playform/hook-dsh-tool-coach.log` (config `logFile`)
 lines are the `[ISO] message` forms with the `hook-dsh-tool-coach: ` prefix.
 
 ```text
-activated (bundle 0.2.0, threshold=<t>/<w>, cooldown=<c>, escalate=<e>, clean=<cl>, enforce=<off|write|all>@<et>, judge=<list>, fetch=live|static)
+activated (bundle 0.3.0, threshold=<t>/<w>, cooldown=<c>, escalate=<e>, clean=<cl>, enforce=<off|write|all>@<et>, judge=<list>, fetch=live|static)
 disabled (enabled=false)
 offense <tool> <class> <pattern>
 strike <n>/<t> <tool> <class> -> note <tool>

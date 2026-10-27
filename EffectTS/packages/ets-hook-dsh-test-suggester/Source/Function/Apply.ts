@@ -65,7 +65,7 @@ import Reconciled from "./Reconciled.js";
 
 // The bundle version, mirrored from package.json (the activation proof's
 // first field; a release bumps both together).
-const Version = "0.2.0";
+const Version = "0.3.0";
 
 /** Fresh per-agent memory. */
 const FreshMemory = (): AgentMemory => ({

@@ -131,7 +131,7 @@ export default async (
 							path: Zod.string(),
 							detail: Zod.string(),
 							at: Zod.number(),
-						}),
+						}) as unknown as Parameters<typeof Domain.domainTable>[0],
 					),
 				},
 			}),

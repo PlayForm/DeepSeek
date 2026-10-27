@@ -1,8 +1,12 @@
 # Contributing Guidelines
 
-Welcome to our community! We are committed to creating a welcoming and inclusive environment for all
-contributors. Before you get started, please read and adhere to the following code of conduct. By
-participating in our community, you agree to abide by these guidelines.
+Welcome to our community!
+
+We are committed to creating a welcoming and inclusive environment for all contributors.
+
+Before you get started, please read and adhere to the following code of conduct.
+
+By participating in our community, you agree to abide by these guidelines.
 
 ## Our Pledge
 
@@ -10,8 +14,10 @@ We, as members, contributors, and leaders, pledge to make participation in our c
 harassment-free experience for everyone, regardless of age, body size, visible or invisible
 disability, ethnicity, sex characteristics, gender identity and expression, level of experience,
 education, socio-economic status, nationality, personal appearance, race, caste, color, religion, or
-sexual identity and orientation. We pledge to act and interact in ways that contribute to an open,
-welcoming, diverse, inclusive, and healthy community.
+sexual identity and orientation.
+
+We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and
+healthy community.
 
 ## Our Standards
 
@@ -37,24 +43,30 @@ Examples of unacceptable behavior include:
 
 Community leaders are responsible for clarifying and enforcing our standards of acceptable behavior
 and will take appropriate and fair corrective action in response to any behavior that they deem
-inappropriate, threatening, offensive, or harmful. Community leaders have the right and
-responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other
-contributions that are not aligned with this Code of Conduct, and will communicate reasons for
-moderation decisions when appropriate.
+inappropriate, threatening, offensive, or harmful.
+
+Community leaders have the right and responsibility to remove, edit, or reject comments, commits,
+code, wiki edits, issues, and other contributions that are not aligned with this Code of Conduct,
+and will communicate reasons for moderation decisions when appropriate.
 
 ## Scope
 
 This Code of Conduct applies within all community spaces, and also applies when an individual is
-officially representing the community in public spaces. Examples of representing our community
-include using an official e-mail address, posting via an official social media account, or acting as
-an appointed representative at an online or offline event.
+officially representing the community in public spaces.
+
+Examples of representing our community include using an official e-mail address, posting via an
+official social media account, or acting as an appointed representative at an online or offline
+event.
 
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community
-leaders responsible for enforcement at Community@PlayForm.Cloud. All complaints will be reviewed and
-investigated promptly and fairly. All community leaders are obligated to respect the privacy and
-security of the reporter of any incident.
+leaders responsible for enforcement at Community@PlayForm.Cloud.
+
+All complaints will be reviewed and investigated promptly and fairly.
+
+All community leaders are obligated to respect the privacy and security of the reporter of any
+incident.
 
 ## Enforcement Guidelines
 
@@ -67,17 +79,23 @@ any action they deem in violation of this Code of Conduct:
 unwelcome in the community.
 
 **Consequence**: A private, written warning from community leaders, providing clarity around the
-nature of the violation and an explanation of why the behavior was inappropriate. A public apology
-may be requested.
+nature of the violation and an explanation of why the behavior was inappropriate.
+
+A public apology may be requested.
 
 ### 2. Warning
 
 **Community Impact**: A violation through a single incident or series of actions.
 
-**Consequence**: A warning with consequences for continued behavior. No interaction with the people
-involved, including unsolicited interaction with those enforcing the Code of Conduct, for a
-specified period of time. This includes avoiding interactions in community spaces as well as
-external channels like social media. Violating these terms may lead to a temporary or permanent ban.
+**Consequence**: A warning with consequences for continued behavior.
+
+No interaction with the people involved, including unsolicited interaction with those enforcing the
+Code of Conduct, for a specified period of time.
+
+This includes avoiding interactions in community spaces as well as external channels like social
+media.
+
+Violating these terms may lead to a temporary or permanent ban.
 
 ### 3. Temporary Ban
 
@@ -85,9 +103,12 @@ external channels like social media. Violating these terms may lead to a tempora
 behavior.
 
 **Consequence**: A temporary ban from any sort of interaction or public communication with the
-community for a specified period of time. No public or private interaction with the people involved,
-including unsolicited interaction with those enforcing the Code of Conduct, is allowed during this
-period. Violating these terms may lead to a permanent ban.
+community for a specified period of time.
+
+No public or private interaction with the people involved, including unsolicited interaction with
+those enforcing the Code of Conduct, is allowed during this period.
+
+Violating these terms may lead to a permanent ban.
 
 ### 4. Permanent Ban
 
@@ -100,12 +121,15 @@ of classes of individuals.
 ## Attribution
 
 This Code of Conduct is adapted from the [`Contributor Covenant`][homepage], version 2.1, available
-at [`HTTPS://www.contributor-covenant.org/version/2/1/code_of_conduct.html`][v2.1]. Community Impact
-Guidelines were inspired by [Mozilla's code of conduct enforcement ladder][Mozilla CoC].
+at [`HTTPS://www.contributor-covenant.org/version/2/1/code_of_conduct.html`][v2.1].
+
+Community Impact Guidelines were inspired by [Mozilla's code of conduct enforcement
+ladder][Mozilla CoC].
 
 For answers to common questions about this code of conduct, see the FAQ at
-[`HTTPS://www.contributor-covenant.org/faq`][FAQ]. Translations are available at
-[`HTTPS://www.contributor-covenant.org/translations`][translations].
+[`HTTPS://www.contributor-covenant.org/faq`][FAQ].
+
+Translations are available at [`HTTPS://www.contributor-covenant.org/translations`][translations].
 
 [homepage]: HTTPS://www.contributor-covenant.org
 [v2.1]: HTTPS://www.contributor-covenant.org/version/2/1/code_of_conduct.html

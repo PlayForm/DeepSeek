@@ -1,6 +1,6 @@
 {
 	"name": "@playform/ets-plugin-dsh-workspace-graph",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "The WORKSPACE GRAPH: a DeepSeek Harness service (@playform/plugin-dsh-workspace-graph, ctx.workspaceGraph) that builds the W1 graph schema v0 over the workspace files - four node kinds (File, Symbol, Block, Test) plus Markdown DocSections, three edge kinds (contains, imports, references), stable ids, content-derived fingerprints, and the indexRevision the graph was built from. The v0 parser is a line/regex scanner (no compiler API): TypeScript/JavaScript declarations with brace-counted spans, relative-import edges, test-path detection, and one DocSection per Markdown heading. The references edges come from the workspace-semantics service (probed through ctx.get, never injected; no service means no references edges) and the remaining deferred node/edge kinds (ConfigKey, calls, tests) are NOT faked. Records live in the KV facet through the storage domain (one record per path plus the __meta revision), the ledger strings are module-owned and byte-stable, and the plugin writes nothing outside its own domain.",
 	"repository": {
 		"type": "git",
@@ -31,21 +31,21 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/ets-base-dsh": "0.2.0",
-		"@playform/ets-lib-dsh-trace": "0.2.0",
-		"@playform/ets-plugin-dsh-factory": "0.2.0"
+		"@playform/ets-base-dsh": "0.3.0",
+		"@playform/ets-lib-dsh-trace": "0.3.0",
+		"@playform/ets-plugin-dsh-factory": "0.3.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
-		"@deepseek-ai/dsh-fs": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-storage": "0.2.1-rc.3",
-		"@deepseek-ai/dsh-storage-domain": "0.2.1-rc.3",
+		"@deepseek-ai/dsh-fs": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-storage": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-storage-domain": "0.2.1-rc.4",
 		"@deepseek-ai/schemastery": "3.18.5",
 		"@playform/build": "0.3.4",
 		"@types/node": "26.6.5",
 		"tsc-alias": "1.9.9",
 		"typescript": "7.0.2",
-		"zod": "4.4.3"
+		"zod": "4.6.7"
 	},
 	"publishConfig": {
 		"access": "public",

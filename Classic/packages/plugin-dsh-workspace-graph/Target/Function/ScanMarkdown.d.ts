@@ -1,4 +1,4 @@
-import type { Span } from "@Interface/Node.js";
+import type { Span } from "../Interface/Node.js";
 export interface SectionMatch {
     level: number;
     title: string;

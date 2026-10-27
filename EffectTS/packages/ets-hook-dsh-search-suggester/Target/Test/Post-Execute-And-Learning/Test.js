@@ -85,7 +85,7 @@ const runTest = async () => {
       const Decision = { kind: "allow", additionalContexts: [] };
       const Out = await Post(Run, { name: "webfetch", arguments: { url: "https://example.com" }, agent: AgentOf("a") }, Decision);
       assert.equal(Out, Decision);
-      assert.deepEqual(Run.Lines, ["hook-dsh-search-suggester: activated (bundle 0.2.0, intents 10, threshold 0.75)"]);
+      assert.deepEqual(Run.Lines, ["hook-dsh-search-suggester: activated (bundle 0.3.0, intents 10, threshold 0.75)"]);
     });
     await CheckAsync(Count, "E2: a bash call is judged through its command text", async () => {
       const Out = await Post(Run, { name: "bash", arguments: { command: "npm version 1.2.3" }, agent: AgentOf("a") }, { kind: "allow", additionalContexts: [] });

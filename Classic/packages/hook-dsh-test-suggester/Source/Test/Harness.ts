@@ -336,7 +336,7 @@ if (InvokedDirectly) {
 		assert.ok(Run.CtxListeners["agent/pre-step"] instanceof Function);
 		assert.ok(Run.State !== undefined);
 		assert.ok(
-			Run.Lines.includes("test-suggester: activated (bundle 0.2.0, intents 2, threshold 0.75)"),
+			Run.Lines.includes("test-suggester: activated (bundle 0.3.0, intents 2, threshold 0.75)"),
 		);
 	});
 	if (Count.N === 3 && Count.F === 1) {

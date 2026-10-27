@@ -24,7 +24,7 @@ default policy, and the no-fs / no-timer posture.
 ## Expected ledger strings (byte-exact, `plugin-dsh-route: ` prefix)
 
 `disabled (enabled=false)`,
-`activated (bundle 0.2.0, defaultRole=explorer, models=3)`.
+`activated (bundle 0.3.0, defaultRole=explorer, models=3)`.
 
 ## Expected count
 

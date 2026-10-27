@@ -47,7 +47,7 @@ export default async (StateRef: State): Promise<void> => {
 							nodes: Zod.array(Zod.unknown()).optional(),
 							edges: Zod.array(Zod.unknown()).optional(),
 							indexRevision: Zod.number().optional(),
-						}),
+						}) as unknown as Parameters<typeof DomainModule.domainTable>[0],
 					),
 				},
 			}),

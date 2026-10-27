@@ -305,7 +305,7 @@ if (InvokedDirectly) {
 		assert.deepEqual(Object.keys(Run.RootListeners), ["fs/observed"]);
 		assert.ok(Run.State !== undefined);
 		assert.deepEqual(Run.Lines, [
-			"plugin-dsh-batch-edit: activated bundle 0.2.0 (machinesPerAgent 2, opsPerCommit 64, deadlineMs 120000, strictMode false, interceptBash false)",
+			"plugin-dsh-batch-edit: activated bundle 0.3.0 (machinesPerAgent 2, opsPerCommit 64, deadlineMs 120000, strictMode false, interceptBash false)",
 		]);
 	});
 	if (Count.N === 3 && Count.F === 1) {

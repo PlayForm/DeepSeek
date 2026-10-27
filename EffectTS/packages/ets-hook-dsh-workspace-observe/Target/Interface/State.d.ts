@@ -1,5 +1,5 @@
-import type DomainHandle from "@Interface/Domain.js";
-import type Stamp from "@Interface/Stamp.js";
+import type DomainHandle from "./Domain.js";
+import type Stamp from "./Stamp.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
