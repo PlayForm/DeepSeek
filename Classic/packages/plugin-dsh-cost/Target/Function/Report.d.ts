@@ -21,6 +21,12 @@ type StageRow = {
     Tokens: number;
     Cost: number;
 };
+type FactorRow = {
+    Key: string;
+    Value: string;
+    Calls: number;
+    Cost: number;
+};
 declare const Row: (Scope: Row["Scope"], Raw: Record<string, unknown>) => Row;
 export default _default;
 declare function _default(Database: DatabaseSync): {
@@ -31,4 +37,5 @@ declare function _default(Database: DatabaseSync): {
     Session: (Id?: string) => readonly Row[];
     Lifetime: (Path?: string) => readonly LifetimeRow[];
     Stages: (Path?: string) => readonly StageRow[];
+    Factors: () => readonly FactorRow[];
 };

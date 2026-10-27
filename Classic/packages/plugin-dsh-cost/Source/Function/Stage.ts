@@ -6,11 +6,7 @@
 // read after an edit verifies, a read after a read rereads, a first read
 // reads, every mutating touch edits - and anything the classifier cannot
 // place is a discovery, never a guess.
-export default (
-	Prior: readonly string[],
-	Kind: string,
-	Restored: boolean,
-): string => {
+export default (Prior: readonly string[], Kind: string, Restored: boolean): string => {
 	switch (true) {
 		case Kind === "search":
 			return "discover";

@@ -8,4 +8,8 @@ export default interface Price {
     readonly CacheWriteRate: number | null;
     readonly ReasoningRate: number | null;
     readonly EffectiveFrom: number;
+    readonly TierFrom: number;
+    readonly TierTo: number | null;
+    readonly Mode: string;
+    readonly Region: string | null;
 }

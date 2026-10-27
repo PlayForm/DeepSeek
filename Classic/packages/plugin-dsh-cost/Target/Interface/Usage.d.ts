@@ -12,4 +12,6 @@ export default interface Usage {
     readonly ReasoningTokens: number | null;
     readonly TotalTokens: number | null;
     readonly At: number;
+    readonly Mode?: string;
+    readonly Region?: string | null;
 }

@@ -10,7 +10,10 @@
 // pipeline's stage spend, section 16.1). The factor read (section 17.1)
 // groups CallFactor joined to Factor: one row per (Key, Value) with the
 // call count and the summed call cost, so a classification factor is a
-// slice, not a schema change. Each returns plain rows whose cost columns
+// slice, not a schema change. The v4 edit-grain read (section 17.3) groups
+// Edit through Touch to File: one row per file with the lines added and
+// removed, the hunk count and the summed cost. Each returns plain rows whose
+// cost columns
 // are rounded to six decimals, so a report, an export and a re-derivation
 // land the same numbers at the same precision. The FileCost view carries no
 // token column, so file rows report Tokens zero.
@@ -45,6 +48,14 @@ type FactorRow = {
 	Key: string;
 	Value: string;
 	Calls: number;
+	Cost: number;
+};
+
+type EditRow = {
+	Path: string;
+	LinesAdded: number;
+	LinesRemoved: number;
+	Hunks: number;
 	Cost: number;
 };
 
@@ -197,12 +208,42 @@ export default (Database: DatabaseSync) => ({
 				"FROM CallFactor " +
 				"JOIN Factor ON Factor.FactorId = CallFactor.FactorId " +
 				"JOIN Call ON Call.CallId = CallFactor.CallId" +
-			") GROUP BY Key, Value ORDER BY Cost DESC",
+				") GROUP BY Key, Value ORDER BY Cost DESC",
 		).all() as Record<string, unknown>[];
 		return Found.map((One) => ({
 			Key: typeof One["Key"] === "string" ? One["Key"] : "",
 			Value: typeof One["Value"] === "string" ? One["Value"] : "",
 			Calls: typeof One["Calls"] === "number" ? One["Calls"] : 0,
+			Cost: Round(One["Cost"]),
+		}));
+	},
+	// The edit-grain read (section 17.3): Edit grouped through Touch to File,
+	// one row per file with the summed lines added and removed, the hunk
+	// count, and the touched calls' allocated cost - the cost read once per
+	// touch, so a multi-hunk touch never multiplies its own allocation.
+	Edits: (Path?: string): readonly EditRow[] => {
+		const Argument = Path === undefined || Path.length === 0 ? undefined : Path;
+		const Statement = Database.prepare(
+			"SELECT Path, SUM(LinesAdded) AS LinesAdded, SUM(LinesRemoved) AS LinesRemoved, " +
+				"SUM(Hunks) AS Hunks, SUM(Cost) AS Cost FROM (" +
+				"SELECT File.Path AS Path, SUM(Edit.LinesAdded) AS LinesAdded, " +
+				"SUM(Edit.LinesRemoved) AS LinesRemoved, COUNT(*) AS Hunks, " +
+				"COALESCE((SELECT Allocation.DirectCost + Allocation.AmortizedCost FROM Allocation " +
+				"WHERE Allocation.CallId = Touch.CallId AND Allocation.FileId = Touch.FileId LIMIT 1), 0) AS Cost " +
+				"FROM Edit " +
+				"JOIN Touch ON Touch.TouchId = Edit.TouchId " +
+				"JOIN File ON File.FileId = Touch.FileId " +
+				"WHERE (? IS NULL OR File.Path = ?) GROUP BY Touch.TouchId" +
+				") GROUP BY Path ORDER BY Cost DESC",
+		);
+		const Found = (
+			Argument === undefined ? Statement.all(null, null) : Statement.all(Argument, Argument)
+		) as Record<string, unknown>[];
+		return Found.map((One) => ({
+			Path: typeof One["Path"] === "string" ? One["Path"] : "",
+			LinesAdded: typeof One["LinesAdded"] === "number" ? One["LinesAdded"] : 0,
+			LinesRemoved: typeof One["LinesRemoved"] === "number" ? One["LinesRemoved"] : 0,
+			Hunks: typeof One["Hunks"] === "number" ? One["Hunks"] : 0,
 			Cost: Round(One["Cost"]),
 		}));
 	},

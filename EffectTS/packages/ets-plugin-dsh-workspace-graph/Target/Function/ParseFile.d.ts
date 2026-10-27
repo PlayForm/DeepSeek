@@ -1,5 +1,5 @@
-import type Edge from "../Interface/Edge.js";
-import type Node from "../Interface/Node.js";
+import type Edge from "@Interface/Edge.js";
+import type Node from "@Interface/Node.js";
 export interface Parsed {
     nodes: Node[];
     edges: Edge[];

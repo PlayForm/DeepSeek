@@ -80,7 +80,9 @@ const PriceWindow = () =>
 	Schema.object({
 		label: Schema.string()
 			.required()
-			.description("Window name a price row's Window column is matched against, for example peak."),
+			.description(
+				"Window name a price row's Window column is matched against, for example peak.",
+			),
 		startUtcHour: Schema.number()
 			.required()
 			.description("First whole UTC hour the window covers."),

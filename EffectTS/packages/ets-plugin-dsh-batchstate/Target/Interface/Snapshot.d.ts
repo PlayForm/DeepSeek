@@ -1,6 +1,6 @@
-import type Entry from "./Entry.js";
-import type Gate from "./Gate.js";
-import type Member from "./Member.js";
+import type Entry from "@Interface/Entry.js";
+import type Gate from "@Interface/Gate.js";
+import type Member from "@Interface/Member.js";
 export default interface Snapshot {
     /** The batch key (multi-batch support). */
     batch: string;

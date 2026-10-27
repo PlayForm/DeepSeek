@@ -1,12 +1,14 @@
 // Schema - the ledger's DDL (Documentation/Plans/COST-TRACK-PLUGIN.md
 // sections 3, 14 and 17.6): one exported string constant per table plus the
 // cost views, in creation order inside the exported Ddl array - a fresh file
-// creates the v3 schema directly, with the price book's tier, mode and
-// region columns inline and the Modifier, Factor and CallFactor tables of
-// the factor layer. The additive rungs are also exported one constant each
-// and rolled up into the Migration array (v1 to v2) and the MigrationFactor
-// array (v2 to v3), which Function/Open runs inside one transaction each
-// when the ledger's user_version sits below 3. Every table is STRICT; money
+// creates the v4 schema directly, with the price book's tier, mode and
+// region columns inline, the Modifier, Factor and CallFactor tables of
+// the factor layer, the Edit table of the edit grain and the telemetry
+// columns of the Call and Touch rows. The additive rungs are also exported
+// one constant each and rolled up into the Migration array (v1 to v2), the
+// MigrationFactor array (v2 to v3) and the MigrationTelemetry array (v3 to
+// v4), which Function/Open runs inside one transaction each when the
+// ledger's user_version sits below 4. Every table is STRICT; money
 // is REAL in one currency per row with rates stored per million tokens; the
 // price book is append-only and effective-dated so a historical invoice
 // stays reproducible, and one effective-dated rate card is now a family of
@@ -64,6 +66,9 @@ export const Call = `CREATE TABLE Call (
     SurfaceTokens INTEGER NOT NULL DEFAULT 0, Purpose TEXT,
     CacheSaving REAL NOT NULL DEFAULT 0, At INTEGER NOT NULL,
     Mode TEXT NOT NULL DEFAULT 'standard', Region TEXT, Tier INTEGER,
+    LatencyMs INTEGER, FirstTokenMs INTEGER, TokensPerSecond REAL,
+    Attempts INTEGER NOT NULL DEFAULT 1, ErrorCode TEXT,
+    ContextWindow INTEGER, Utilization REAL,
     UNIQUE (SessionId, Turn, Step)
 ) STRICT;`;
 
@@ -74,6 +79,7 @@ export const Touch = `CREATE TABLE Touch (
     VersionId INTEGER REFERENCES FileVersion (VersionId), Kind TEXT NOT NULL,
     Stage TEXT, Branch TEXT, ReadBeforeEdit INTEGER NOT NULL DEFAULT 0,
     BytesBefore INTEGER, BytesAfter INTEGER, BytesDelta INTEGER, LinesDelta INTEGER,
+    DurationMs INTEGER, ResultBytes INTEGER,
     Seq INTEGER NOT NULL, At INTEGER NOT NULL,
     UNIQUE (SessionId, CallKey, FileId)
 ) STRICT;`;
@@ -238,6 +244,41 @@ export const CallRegion = `ALTER TABLE Call ADD COLUMN Region TEXT;`;
 
 export const CallTier = `ALTER TABLE Call ADD COLUMN Tier INTEGER;`;
 
+// The v4 additions (sections 17.3 and 17.4), exported one statement each:
+// the edit grain's own table - one row per hunk a write or edit tool call
+// produced, unique per (touch, ordinal), with the line and byte counts and
+// the optional before and after hashes - and the telemetry columns the
+// session log already carries, ALTERed onto the Call row (the latency, the
+// first token, the tokens-per-second rate, the retry count, the failure
+// code, the context window and its utilization) and onto the Touch row (the
+// tool duration and the rendered result bytes).
+export const Edit = `CREATE TABLE Edit (
+    EditId INTEGER PRIMARY KEY,
+    TouchId INTEGER NOT NULL REFERENCES Touch (TouchId),
+    Ordinal INTEGER NOT NULL, LinesAdded INTEGER NOT NULL DEFAULT 0,
+    LinesRemoved INTEGER NOT NULL DEFAULT 0, BytesAdded INTEGER NOT NULL DEFAULT 0,
+    BytesRemoved INTEGER NOT NULL DEFAULT 0, BeforeHash TEXT, AfterHash TEXT,
+    At INTEGER NOT NULL, UNIQUE (TouchId, Ordinal)
+) STRICT;`;
+
+export const CallLatency = `ALTER TABLE Call ADD COLUMN LatencyMs INTEGER;`;
+
+export const CallFirstToken = `ALTER TABLE Call ADD COLUMN FirstTokenMs INTEGER;`;
+
+export const CallRate = `ALTER TABLE Call ADD COLUMN TokensPerSecond REAL;`;
+
+export const CallAttempts = `ALTER TABLE Call ADD COLUMN Attempts INTEGER NOT NULL DEFAULT 1;`;
+
+export const CallError = `ALTER TABLE Call ADD COLUMN ErrorCode TEXT;`;
+
+export const CallWindow = `ALTER TABLE Call ADD COLUMN ContextWindow INTEGER;`;
+
+export const CallUtilization = `ALTER TABLE Call ADD COLUMN Utilization REAL;`;
+
+export const TouchDuration = `ALTER TABLE Touch ADD COLUMN DurationMs INTEGER;`;
+
+export const TouchBytes = `ALTER TABLE Touch ADD COLUMN ResultBytes INTEGER;`;
+
 // The migration ladder's v2 rung: the ALTERs in dependency-free order, then
 // the new tables and the view, then the version stamp - run inside one
 // transaction by Function/Open when the ledger's user_version is 1.
@@ -271,6 +312,24 @@ export const MigrationFactor: readonly string[] = [
 	"PRAGMA user_version = 3;",
 ];
 
+// The migration ladder's v4 rung (sections 17.3 and 17.4): the edit grain's
+// table, then the Call and Touch telemetry ALTERs, then the version stamp -
+// run inside one transaction by Function/Open when the ledger's user_version
+// is 3, and after the earlier rungs when it sits lower.
+export const MigrationTelemetry: readonly string[] = [
+	Edit,
+	CallLatency,
+	CallFirstToken,
+	CallRate,
+	CallAttempts,
+	CallError,
+	CallWindow,
+	CallUtilization,
+	TouchDuration,
+	TouchBytes,
+	"PRAGMA user_version = 4;",
+];
+
 export const Ddl: readonly string[] = [
 	Price,
 	Client,
@@ -295,6 +354,7 @@ export const Ddl: readonly string[] = [
 	Modifier,
 	Factor,
 	CallFactor,
+	Edit,
 ];
 
 export default Ddl;

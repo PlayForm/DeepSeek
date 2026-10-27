@@ -150,7 +150,8 @@ export default (
 			// bucket's input against: the whole bucket goes unattributed
 			Unattributed.Amortized =
 				(SurfaceUncached > 0
-					? UncachedInput - (UncachedInput * UncachedMassed * UncachedCoverage) / SurfaceUncached
+					? UncachedInput -
+						(UncachedInput * UncachedMassed * UncachedCoverage) / SurfaceUncached
 					: UncachedInput) +
 				(CachedSurface > 0
 					? CachedInput - (CachedInput * CachedMassed * CachedCoverage) / CachedSurface
@@ -170,7 +171,8 @@ export default (
 			AmortizedCost:
 				Config.attribution.amortized === "context" && Surface > 0
 					? (SurfaceUncached > 0
-							? (UncachedInput * (Share.Uncached * UncachedCoverage)) / SurfaceUncached
+							? (UncachedInput * (Share.Uncached * UncachedCoverage)) /
+								SurfaceUncached
 							: 0) +
 						(CachedSurface > 0
 							? (CachedInput * (Share.Cached * CachedCoverage)) / CachedSurface

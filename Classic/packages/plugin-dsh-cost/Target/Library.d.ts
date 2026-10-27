@@ -57,6 +57,32 @@ export declare const Config: import("@deepseek-ai/schemastery").default<Schemast
         effectiveFrom: import("@deepseek-ai/schemastery").default<string, string, "defined">;
         currency: import("@deepseek-ai/schemastery").default<string, string, "defined">;
     }>>[], "defined">;
+    modifiers: import("@deepseek-ai/schemastery").default<({
+        provider?: string | null;
+        model?: string | null;
+        kind?: string | null;
+        value?: string | null;
+        multiplier?: number | null;
+        effectiveFrom?: string | null;
+        effectiveTo?: string | null;
+    } & import("@deepseek-ai/cosmokit").Dict)[], Schemastery.ObjectT<NoInfer<{
+        provider: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+        model: import("@deepseek-ai/schemastery").default<string, string, "plain">;
+        kind: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+        value: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+        multiplier: import("@deepseek-ai/schemastery").default<number, number, "defined">;
+        effectiveFrom: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+        effectiveTo: import("@deepseek-ai/schemastery").default<string, string, "plain">;
+    }>>[], "defined">;
+    priceWindows: import("@deepseek-ai/schemastery").default<({
+        label?: string | null;
+        startUtcHour?: number | null;
+        endUtcHour?: number | null;
+    } & import("@deepseek-ai/cosmokit").Dict)[], Schemastery.ObjectT<NoInfer<{
+        label: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+        startUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
+        endUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
+    }>>[], "defined">;
     log: import("@deepseek-ai/schemastery").default<boolean, boolean, "defined">;
     logFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
 }>>, Schemastery.ObjectT<NoInfer<{
@@ -116,6 +142,32 @@ export declare const Config: import("@deepseek-ai/schemastery").default<Schemast
         reasoning: import("@deepseek-ai/schemastery").default<number, number, "plain">;
         effectiveFrom: import("@deepseek-ai/schemastery").default<string, string, "defined">;
         currency: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+    }>>[], "defined">;
+    modifiers: import("@deepseek-ai/schemastery").default<({
+        provider?: string | null;
+        model?: string | null;
+        kind?: string | null;
+        value?: string | null;
+        multiplier?: number | null;
+        effectiveFrom?: string | null;
+        effectiveTo?: string | null;
+    } & import("@deepseek-ai/cosmokit").Dict)[], Schemastery.ObjectT<NoInfer<{
+        provider: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+        model: import("@deepseek-ai/schemastery").default<string, string, "plain">;
+        kind: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+        value: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+        multiplier: import("@deepseek-ai/schemastery").default<number, number, "defined">;
+        effectiveFrom: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+        effectiveTo: import("@deepseek-ai/schemastery").default<string, string, "plain">;
+    }>>[], "defined">;
+    priceWindows: import("@deepseek-ai/schemastery").default<({
+        label?: string | null;
+        startUtcHour?: number | null;
+        endUtcHour?: number | null;
+    } & import("@deepseek-ai/cosmokit").Dict)[], Schemastery.ObjectT<NoInfer<{
+        label: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+        startUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
+        endUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
     }>>[], "defined">;
     log: import("@deepseek-ai/schemastery").default<boolean, boolean, "defined">;
     logFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
@@ -183,6 +235,32 @@ declare const _default: {
             effectiveFrom: import("@deepseek-ai/schemastery").default<string, string, "defined">;
             currency: import("@deepseek-ai/schemastery").default<string, string, "defined">;
         }>>[], "defined">;
+        modifiers: import("@deepseek-ai/schemastery").default<({
+            provider?: string | null;
+            model?: string | null;
+            kind?: string | null;
+            value?: string | null;
+            multiplier?: number | null;
+            effectiveFrom?: string | null;
+            effectiveTo?: string | null;
+        } & import("@deepseek-ai/cosmokit").Dict)[], Schemastery.ObjectT<NoInfer<{
+            provider: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+            model: import("@deepseek-ai/schemastery").default<string, string, "plain">;
+            kind: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+            value: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+            multiplier: import("@deepseek-ai/schemastery").default<number, number, "defined">;
+            effectiveFrom: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+            effectiveTo: import("@deepseek-ai/schemastery").default<string, string, "plain">;
+        }>>[], "defined">;
+        priceWindows: import("@deepseek-ai/schemastery").default<({
+            label?: string | null;
+            startUtcHour?: number | null;
+            endUtcHour?: number | null;
+        } & import("@deepseek-ai/cosmokit").Dict)[], Schemastery.ObjectT<NoInfer<{
+            label: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+            startUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
+            endUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
+        }>>[], "defined">;
         log: import("@deepseek-ai/schemastery").default<boolean, boolean, "defined">;
         logFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
     }>>, Schemastery.ObjectT<NoInfer<{
@@ -242,6 +320,32 @@ declare const _default: {
             reasoning: import("@deepseek-ai/schemastery").default<number, number, "plain">;
             effectiveFrom: import("@deepseek-ai/schemastery").default<string, string, "defined">;
             currency: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+        }>>[], "defined">;
+        modifiers: import("@deepseek-ai/schemastery").default<({
+            provider?: string | null;
+            model?: string | null;
+            kind?: string | null;
+            value?: string | null;
+            multiplier?: number | null;
+            effectiveFrom?: string | null;
+            effectiveTo?: string | null;
+        } & import("@deepseek-ai/cosmokit").Dict)[], Schemastery.ObjectT<NoInfer<{
+            provider: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+            model: import("@deepseek-ai/schemastery").default<string, string, "plain">;
+            kind: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+            value: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+            multiplier: import("@deepseek-ai/schemastery").default<number, number, "defined">;
+            effectiveFrom: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+            effectiveTo: import("@deepseek-ai/schemastery").default<string, string, "plain">;
+        }>>[], "defined">;
+        priceWindows: import("@deepseek-ai/schemastery").default<({
+            label?: string | null;
+            startUtcHour?: number | null;
+            endUtcHour?: number | null;
+        } & import("@deepseek-ai/cosmokit").Dict)[], Schemastery.ObjectT<NoInfer<{
+            label: import("@deepseek-ai/schemastery").default<string, string, "defined">;
+            startUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
+            endUtcHour: import("@deepseek-ai/schemastery").default<number, number, "defined">;
         }>>[], "defined">;
         log: import("@deepseek-ai/schemastery").default<boolean, boolean, "defined">;
         logFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;

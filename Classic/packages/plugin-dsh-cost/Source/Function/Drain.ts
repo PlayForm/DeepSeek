@@ -14,7 +14,11 @@
 // session Cursor advanced to the highest sequence folded. The call's own
 // pricing dimensions (section 17.1) - Mode, Region and the resolved tier -
 // are written on the Call row, and the cache split's CacheSaving is
-// measured against the modifier-adjusted rates (section 17.2). Every insert
+// measured against the modifier-adjusted rates (section 17.2). The v4 grain
+// rides the same fold: the Edit rows per touch (section 17.3), read from the
+// tool call's own arguments, and the telemetry columns on the Call row
+// (section 17.4), read from the batch's records up to each message. Every
+// insert
 // is INSERT OR IGNORE against the DDL's unique keys (the Verdict is
 // REPLACE), so draining the same events twice writes the same rows and no
 // duplicates. The drain never throws into the parallel dispatch: one failed
@@ -28,9 +32,11 @@ import type Config from "../Interface/Config.js";
 import type Touched from "../Interface/Touch.js";
 import type Usage from "../Interface/Usage.js";
 import Allocate from "./Allocate.js";
+import Edit from "./Edit.js";
 import Mass from "./Mass.js";
 import Price from "./Price.js";
 import StageOf from "./Stage.js";
+import Telemetry from "./Telemetry.js";
 import Touch from "./Touch.js";
 
 type EventRecord = {
@@ -58,6 +64,7 @@ type TouchRow = { Path: string; Kind: "read" | "write" | "edit" | "delete" | "se
 type PendingCall = {
 	CallKey: string;
 	Tool: string;
+	Arguments: string;
 	Seq: number;
 	At: number;
 	Touched: readonly TouchRow[];
@@ -182,8 +189,9 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 	const InsertCall = Database.prepare(
 		"INSERT OR IGNORE INTO Call (SessionId, Turn, Step, Seq, Provider, Model, PriceId, InputTokens, OutputTokens, " +
 			"CacheReadTokens, CacheWriteTokens, ReasoningTokens, TotalTokens, CostInput, CostOutput, CostCacheRead, " +
-			"CostCacheWrite, CostReasoning, CostTotal, Currency, SurfaceTokens, CacheSaving, At, Mode, Region, Tier) " +
-			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			"CostCacheWrite, CostReasoning, CostTotal, Currency, SurfaceTokens, CacheSaving, At, Mode, Region, Tier, " +
+			"LatencyMs, FirstTokenMs, TokensPerSecond, Attempts, ErrorCode, ContextWindow, Utilization) " +
+			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 	);
 	const SelectPriceId = Database.prepare(
 		"SELECT PriceId FROM Price WHERE Provider = ? AND Model = ? AND EffectiveFrom = ? " +
@@ -196,6 +204,13 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 	const InsertTouch = Database.prepare(
 		"INSERT OR IGNORE INTO Touch (CallId, SessionId, Turn, Step, CallKey, Tool, FileId, Kind, Stage, ReadBeforeEdit, Seq, At) " +
 			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+	);
+	const SelectTouchId = Database.prepare(
+		"SELECT TouchId FROM Touch WHERE SessionId = ? AND CallKey = ? AND FileId = ?",
+	);
+	const InsertEdit = Database.prepare(
+		"INSERT OR IGNORE INTO Edit (TouchId, Ordinal, LinesAdded, LinesRemoved, BytesAdded, BytesRemoved, At) " +
+			"VALUES (?, ?, ?, ?, ?, ?, ?)",
 	);
 	const InsertVerdict = Database.prepare(
 		"INSERT OR REPLACE INTO Verdict (SessionId, FileId, State, LinesAdded, LinesRemoved, At) " +
@@ -400,7 +415,8 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 					// state recomputes when one does.
 					const Prior = History.get(Row.Path) ?? [];
 					const Staged = StageOf(Prior, Row.Kind, false);
-					const Read = WriteKind(Row.Kind) && Prior.some((Kind) => Kind === "read") ? 1 : 0;
+					const Read =
+						WriteKind(Row.Kind) && Prior.some((Kind) => Kind === "read") ? 1 : 0;
 					InsertTouch.run(
 						CallId,
 						SessionId,
@@ -418,6 +434,27 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 					const Seen = History.get(Row.Path) ?? [];
 					Seen.push(Row.Kind);
 					History.set(Row.Path, Seen);
+					// the edit grain (section 17.3): the hunks the tool call
+					// produced, read from its own arguments and inserted
+					// against the touch they belong to - a non-edit tool's
+					// arguments parse to no rows, so the insert is skipped
+					const Held = SelectTouchId.get(SessionId, Entry.CallKey, FileId) as
+						{ TouchId: unknown } | undefined;
+					const TouchId = typeof Held?.TouchId === "number" ? Held.TouchId : undefined;
+					if (TouchId === undefined) {
+						continue;
+					}
+					for (const Hunk of Edit(Entry.Tool, Entry.Arguments, Entry.At)) {
+						InsertEdit.run(
+							TouchId,
+							Hunk.Ordinal,
+							Hunk.LinesAdded,
+							Hunk.LinesRemoved,
+							Hunk.BytesAdded,
+							Hunk.BytesRemoved,
+							Hunk.At,
+						);
+					}
 				}
 			};
 
@@ -532,7 +569,11 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 			// --- the fold: one transaction over the whole batch ---------------
 			Database.exec("BEGIN IMMEDIATE");
 			try {
-				for (const Record of Records) {
+				for (let Index = 0; Index < Records.length; Index++) {
+					const Record = Records[Index];
+					if (Record === undefined) {
+						continue;
+					}
 					const Seq = typeof Record.seq === "number" ? Record.seq : -1;
 					if (Seq >= 0) {
 						if (Seq <= LastSeq) {
@@ -571,6 +612,7 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 								CallKey:
 									Seq >= 0 ? String(Seq) : `${TurnOfCall}/${StepOfCall}/${Name}`,
 								Tool: Name,
+								Arguments,
 								Seq: Seq >= 0 ? Seq : 0,
 								At: Math.round(At),
 								Touched: Rows,
@@ -603,7 +645,10 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 							// surface event folded so far, this one not yet - and
 							// the call's cacheReadTokens is the budget the replay
 							// splits the cached prefix by (section 2.2)
-							const Massed = Replay(Surfaces.get(SessionId) ?? [], Usage.CacheReadTokens ?? 0);
+							const Massed = Replay(
+								Surfaces.get(SessionId) ?? [],
+								Usage.CacheReadTokens ?? 0,
+							);
 							const Surface = Math.max(0, Math.round(Massed.Surface));
 							const PerPath = new Map<string, number>();
 							for (const [Path, Tokens] of Massed.PerPath) {
@@ -642,11 +687,27 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 								{
 									InputRate: Rate.InputRate * Lift,
 									CacheReadRate:
-										Rate.CacheReadRate === null ? null : Rate.CacheReadRate * Lift,
+										Rate.CacheReadRate === null
+											? null
+											: Rate.CacheReadRate * Lift,
 									CacheWriteRate:
-										Rate.CacheWriteRate === null ? null : Rate.CacheWriteRate * Lift,
+										Rate.CacheWriteRate === null
+											? null
+											: Rate.CacheWriteRate * Lift,
 								},
 							);
+							// The telemetry the log already carries (section
+							// 17.4), read from this batch's records up to and
+							// including the message: the retry count, the
+							// step-to-message latency, the first stream token,
+							// the context window and its utilization, the
+							// failure code - and the tokens-per-second rate
+							// from the call's own output tokens over it.
+							const Measured = Telemetry(Records.slice(0, Index + 1), Surface);
+							const PerSecond =
+								Measured.LatencyMs !== null && Measured.LatencyMs > 0
+									? Usage.OutputTokens / (Measured.LatencyMs / 1000)
+									: null;
 							InsertCall.run(
 								SessionId,
 								Usage.Turn,
@@ -674,6 +735,13 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 								Usage.Mode ?? "standard",
 								Usage.Region ?? null,
 								Rate.EffectiveFrom === 0 ? null : Rate.TierFrom,
+								Measured.LatencyMs,
+								Measured.FirstTokenMs,
+								PerSecond,
+								Measured.Attempts,
+								Measured.ErrorCode,
+								Measured.ContextWindow,
+								Measured.Utilization,
 							);
 							const CallId = Called(Usage.Turn, Usage.Step);
 							if (CallId === undefined) {

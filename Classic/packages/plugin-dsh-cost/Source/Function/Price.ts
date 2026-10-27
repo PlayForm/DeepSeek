@@ -73,10 +73,9 @@ const Product = (
 			Rule.EffectiveFrom <= At &&
 			(Rule.EffectiveTo === null || At <= Rule.EffectiveTo),
 	);
-	const Specific =
-		Fitting.some((Rule) => Rule.Model === Model)
-			? Fitting.filter((Rule) => Rule.Model === Model)
-			: Fitting.filter((Rule) => Rule.Model === null);
+	const Specific = Fitting.some((Rule) => Rule.Model === Model)
+		? Fitting.filter((Rule) => Rule.Model === Model)
+		: Fitting.filter((Rule) => Rule.Model === null);
 	return Specific.reduce((Factor, Rule) => Factor * Rule.Multiplier, 1);
 };
 
@@ -84,7 +83,11 @@ const Product = (
 // tier's window, priced at that tier's rate and summed. A tier with a NULL
 // TierTo is the open top tier and takes everything above its floor; the
 // walk never prices a token twice, because the windows tile the axis.
-const Walk = (Tokens: number, Tiers: readonly TierRow[], Rate: (Row: TierRow) => number | null): number => {
+const Walk = (
+	Tokens: number,
+	Tiers: readonly TierRow[],
+	Rate: (Row: TierRow) => number | null,
+): number => {
 	let Sum = 0;
 	for (const Row of Tiers) {
 		const Reach = Tokens - Row.TierFrom;
@@ -101,7 +104,14 @@ export default (
 	Database: DatabaseSync,
 	Config: Config,
 ): {
-	Resolve(Provider: string, Model: string, At: number, Mode?: string, Region?: string | null, Window?: string): Price;
+	Resolve(
+		Provider: string,
+		Model: string,
+		At: number,
+		Mode?: string,
+		Region?: string | null,
+		Window?: string,
+	): Price;
 	Cost(Record: Usage, Rate: Price, Modifiers?: readonly Rule[]): Costed;
 	Applied(Provider: string, Kind: string, Model: string, At: number): number;
 } => {
@@ -132,7 +142,9 @@ export default (
 		Multiplier: Row.multiplier,
 		EffectiveFrom: Epoch(Row.effectiveFrom),
 		EffectiveTo:
-			Row.effectiveTo === undefined || Row.effectiveTo.length === 0 ? null : Epoch(Row.effectiveTo),
+			Row.effectiveTo === undefined || Row.effectiveTo.length === 0
+				? null
+				: Epoch(Row.effectiveTo),
 	}));
 
 	// The configured book's rows for this provider and model, seeded into the
@@ -253,7 +265,14 @@ export default (
 			Rate.EffectiveFrom,
 			Rate.Mode ?? null,
 			Rate.Region ?? null,
-		) as { TierFrom: number; TierTo: number | null; InputRate: number; OutputRate: number; CacheReadRate: number | null; CacheWriteRate: number | null }[];
+		) as {
+			TierFrom: number;
+			TierTo: number | null;
+			InputRate: number;
+			OutputRate: number;
+			CacheReadRate: number | null;
+			CacheWriteRate: number | null;
+		}[];
 		const Ladder: readonly TierRow[] =
 			Family.length > 0
 				? Family
@@ -282,7 +301,8 @@ export default (
 			Walk(Record.CacheWriteTokens ?? 0, Ladder, (Row) => Row.CacheWriteRate ?? 0) * Factor;
 		// The reasoning bucket carries no tier column of its own; it prices
 		// flat against the row's ReasoningRate at the same modifier product.
-		const Reasoning = ((Record.ReasoningTokens ?? 0) / 1e6) * (Rate.ReasoningRate ?? 0) * Factor;
+		const Reasoning =
+			((Record.ReasoningTokens ?? 0) / 1e6) * (Rate.ReasoningRate ?? 0) * Factor;
 		return {
 			Input,
 			Output,

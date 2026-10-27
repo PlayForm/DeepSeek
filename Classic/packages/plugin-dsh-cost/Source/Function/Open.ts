@@ -3,9 +3,10 @@
 // document's (section 3): journal_mode=WAL, foreign_keys=ON,
 // synchronous=NORMAL, every table STRICT. The schema runs exactly once per
 // file - a fresh file (user_version 0) takes every DDL statement inside one
-// transaction and is stamped version 3 directly; a v1 ledger runs the v2
-// rung and then the v3 rung of the ladder (sections 14 and 17.6), a v2
-// ledger runs the v3 rung alone, and version 3 and higher opens as-is. The
+// transaction and is stamped version 4 directly; a v1 ledger runs the v2,
+// v3 and v4 rungs of the ladder (sections 14, 17.6, 17.3 and 17.4), a v2
+// ledger runs the v3 and v4 rungs, a v3 ledger runs the v4 rung alone, and
+// version 4 and higher opens as-is. The
 // import is the static `node:sqlite` core module (DatabaseSync), which needs
 // no native build.
 import { mkdirSync } from "node:fs";
@@ -15,7 +16,7 @@ import { DatabaseSync } from "node:sqlite";
 import { Expand } from "@playform/lib-dsh-core";
 
 import type Config from "../Interface/Config.js";
-import Ddl, { Migration, MigrationFactor } from "./Schema.js";
+import Ddl, { Migration, MigrationFactor, MigrationTelemetry } from "./Schema.js";
 
 export default (Config: Config): { Database: DatabaseSync; Close(): void } => {
 	// The tilde expansion (lib-dsh-core's Expand): a config-supplied path is
@@ -40,10 +41,11 @@ export default (Config: Config): { Database: DatabaseSync; Close(): void } => {
 	// The durability postures (section 3), one exec, every pragma.
 	Database.exec("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; PRAGMA synchronous=NORMAL;");
 
-	// The schema, guarded by user_version (sections 3, 14 and 17.6): a fresh
-	// file takes the whole DDL inside one transaction and stamps version 3;
-	// a v1 ledger runs the two migration rungs in order (v1 to v2, then v2
-	// to v3), a v2 ledger runs only the v3 rung - each rung inside its own
+	// The schema, guarded by user_version (sections 3, 14, 17.6, 17.3 and
+	// 17.4): a fresh file takes the whole DDL inside one transaction and
+	// stamps version 4; a v1 ledger runs the three migration rungs in order
+	// (v1 to v2, then v2 to v3, then v3 to v4), a v2 ledger runs the v3 and
+	// v4 rungs, a v3 ledger runs only the v4 rung - each rung inside its own
 	// transaction, whose last statement is the rung's stamp itself. A failed
 	// statement rolls the whole rung back - the ledger never opens
 	// half-built, and the ladder never skips a rung.
@@ -63,14 +65,19 @@ export default (Config: Config): { Database: DatabaseSync; Close(): void } => {
 	switch (Row.user_version) {
 		case 0:
 			Rung(Ddl);
-			Database.exec("PRAGMA user_version = 3");
+			Database.exec("PRAGMA user_version = 4");
 			break;
 		case 1:
 			Rung(Migration);
 			Rung(MigrationFactor);
+			Rung(MigrationTelemetry);
 			break;
 		case 2:
 			Rung(MigrationFactor);
+			Rung(MigrationTelemetry);
+			break;
+		case 3:
+			Rung(MigrationTelemetry);
 			break;
 		default:
 	}

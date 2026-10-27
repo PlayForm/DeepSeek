@@ -1,7 +1,7 @@
-import type Member from "../Interface/Member.js";
-import type Scope from "../Interface/Scope.js";
-import type Snapshot from "../Interface/Snapshot.js";
-import type State from "../Interface/State.js";
+import type Member from "@Interface/Member.js";
+import type Scope from "@Interface/Scope.js";
+import type Snapshot from "@Interface/Snapshot.js";
+import type State from "@Interface/State.js";
 /** The surfaces another lane owns exclusively - the OFF-LIMITS list for one
  *  agent. A surface the agent shares with the owner is NOT off-limits (it
  *  is a shared overlap, reported by Scope). */

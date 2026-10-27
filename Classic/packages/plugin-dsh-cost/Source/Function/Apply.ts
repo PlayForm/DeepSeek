@@ -4,7 +4,7 @@
 // listeners while the ledger is open and closes it on dispose), the project
 // resolution from the session cwd, the durable activation proof, and THE
 // HUMAN SURFACE (Documentation/Plans/COST-TRACK-PLUGIN.md section 5): the
-// four /cost verbs - report, export, annotate, assess - plus the backfill job
+// five /cost verbs - report, export, annotate, assess, forecast - plus the backfill job
 // when the capture gate asks for it (section 6). The function returns NOTHING
 // (the loader treats apply returns specially - a returned value silently
 // kills event delivery).
@@ -22,7 +22,8 @@
 // THE HUMAN SURFACE: the registry's name law allows no spaces in a command
 // name, so ONE command owns the grammar and the verb is its first word -
 // "report [scope] [range]", "export <csv|json|markdown> [path]",
-// "annotate [path]", "assess [session]" - the four /cost invocations. The
+// "annotate [path]", "assess [session]", "forecast [days]" - the five /cost
+// invocations. The
 // registration is fail-open (the normalize-file precedent): a missing or
 // already-registered commands service skips the surface and the mount
 // continues with the silent listeners. The backfill is a JOB (section 6,
@@ -41,6 +42,7 @@ import Backfill from "./Backfill.js";
 import Capture from "./Capture.js";
 import Drain from "./Drain.js";
 import Export from "./Export.js";
+import Forecast from "./Forecast.js";
 import Open from "./Open.js";
 import Report from "./Report.js";
 
@@ -165,11 +167,12 @@ export default (Context: Context, Options: Config): void => {
 		const Store = Ledger;
 		const Views = Report(Store.Database);
 		const Assessor = Assess(Store.Database);
+		const Forecaster = Forecast(Store.Database);
 		const Exporter = Export(Store.Database, Options);
 		const AnnotateFile = Annotate(Context, Store.Database, Options);
 		const Usage =
 			"plugin-dsh-cost: usage - report [scope] [range] | export <csv|json|markdown> [path] | " +
-			"annotate [path] | assess [session]";
+			"annotate [path] | assess [session] | forecast [days]";
 
 		// One report rendering: the title, up to twenty rows in the reading
 		// shape, and the remainder counted.
@@ -317,21 +320,63 @@ export default (Context: Context, Options: Config): void => {
 		// when given, every session when not.
 		const AssessVerb = (Rest: string[]): CommandResult => {
 			const Session = Rest[0];
-			const Rows = Assessor(Session === undefined || Session.length === 0 ? undefined : Session);
+			const Rows = Assessor(
+				Session === undefined || Session.length === 0 ? undefined : Session,
+			);
 			const Shown = Rows.slice(0, 20);
 			const Lines = [
 				`cost assess${Session === undefined || Session.length === 0 ? "" : ` ${Session}`} - ${Rows.length} session(s)`,
-				...Shown.map(
-					(One) =>
+				...Shown.map((One) => {
+					const Row =
 						`${One.SessionId}  delivered ${Money(One.Delivered)}  explored ${Money(One.Explored)}  ` +
 						`reverted ${Money(One.Reverted)}  overhead ${Money(One.Overhead)}  carry ${Money(One.Carry)}  ` +
-						`per-line ${Money(One.CostPerLine)}`,
-				),
+						`per-line ${Money(One.CostPerLine)}`;
+					// the edit-grain totals (section 17.3): appended only when
+					// the session actually edited something
+					return One.LinesAdded > 0 || One.LinesRemoved > 0
+						? `${Row}  edits +${One.LinesAdded}/-${One.LinesRemoved}`
+						: Row;
+				}),
 			];
 			if (Rows.length > Shown.length) {
 				Lines.push(`... ${Rows.length - Shown.length} more session(s)`);
 			}
 			return { kind: "success", text: Lines.join("\n") };
+		};
+
+		// The forecast verb (section 17.5): the daily rate per (scope, key)
+		// over the last window of days - thirty when the day count is absent -
+		// projected to a thirty-day period with its confidence band, rendered
+		// as the estimate it is (the forecast never writes a row).
+		const ForecastVerb = (Rest: string[]): CommandResult => {
+			const Asked = Rest[0];
+			const Parsed = Number(Asked ?? 30);
+			const Days = Number.isFinite(Parsed) && Parsed > 0 ? Math.round(Parsed) : 0;
+			switch (true) {
+				case Asked !== undefined && Days === 0:
+					return {
+						kind: "error",
+						text: `plugin-dsh-cost: the forecast window is a day count, not "${Asked}"`,
+					};
+				default: {
+					const Window = Days > 0 ? Days : 30;
+					const Rows = Forecaster(Window);
+					const Shown = Rows.slice(0, 20);
+					const Lines = [
+						`cost forecast ${Window} day(s) - ${Rows.length} row(s)`,
+						...Shown.map(
+							(One) =>
+								`${One.Scope}/${One.Key}  mean ${Money(One.Mean)}  median ${Money(One.Median)}  ` +
+								`last-seven ${Money(One.LastSeven)}  projected ${Money(One.Projected)}  ` +
+								`band ${Money(One.Minimum)} - ${Money(One.Maximum)}`,
+						),
+					];
+					if (Rows.length > Shown.length) {
+						Lines.push(`... ${Rows.length - Shown.length} more row(s)`);
+					}
+					return { kind: "success", text: Lines.join("\n") };
+				}
+			}
 		};
 
 		const Commands = Context.commands;
@@ -340,8 +385,9 @@ export default (Context: Context, Options: Config): void => {
 				Commands.register({
 					name: "cost",
 					description:
-						"Cost report | export | annotate | assess: 'report [scope] [range]' | " +
-						"'export <csv|json|markdown> [path]' | 'annotate [path]' | 'assess [session]'",
+						"Cost report | export | annotate | assess | forecast: 'report [scope] [range]' | " +
+						"'export <csv|json|markdown> [path]' | 'annotate [path]' | 'assess [session]' | " +
+						"'forecast [days]'",
 					handler: async (Invocation): Promise<CommandResult> => {
 						const Raw =
 							typeof Invocation?.rawInput === "string"
@@ -359,6 +405,8 @@ export default (Context: Context, Options: Config): void => {
 								return await AnnotateVerb(Rest);
 							case Verb === "assess":
 								return AssessVerb(Rest);
+							case Verb === "forecast":
+								return ForecastVerb(Rest);
 							default:
 								return { kind: "error", text: Usage };
 						}

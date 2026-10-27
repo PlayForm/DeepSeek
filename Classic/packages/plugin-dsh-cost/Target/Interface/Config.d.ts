@@ -8,6 +8,8 @@ export default interface Config {
     readonly annotate: Annotate;
     readonly export: Export;
     readonly prices: readonly Price[];
+    readonly modifiers: readonly Modifier[];
+    readonly priceWindows: readonly PriceWindow[];
     readonly log: boolean;
     readonly logFile: string;
 }
@@ -39,5 +41,19 @@ interface Price {
     readonly reasoning?: number;
     readonly effectiveFrom: string;
     readonly currency: string;
+}
+interface Modifier {
+    readonly provider: string;
+    readonly model?: string;
+    readonly kind: string;
+    readonly value: string;
+    readonly multiplier: number;
+    readonly effectiveFrom: string;
+    readonly effectiveTo?: string;
+}
+interface PriceWindow {
+    readonly label: string;
+    readonly startUtcHour: number;
+    readonly endUtcHour: number;
 }
 export {};

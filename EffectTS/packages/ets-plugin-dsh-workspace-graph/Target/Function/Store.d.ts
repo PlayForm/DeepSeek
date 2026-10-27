@@ -1,4 +1,4 @@
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 declare const _default: {
     put(StateRef: State, Key: string, Value: unknown): Promise<void>;
     remove(StateRef: State, Key: string): Promise<boolean>;

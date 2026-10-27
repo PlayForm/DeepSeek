@@ -57,6 +57,32 @@ declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
         effectiveFrom: Schema<string, string, "defined">;
         currency: Schema<string, string, "defined">;
     }>>[], "defined">;
+    modifiers: Schema<({
+        provider?: string | null;
+        model?: string | null;
+        kind?: string | null;
+        value?: string | null;
+        multiplier?: number | null;
+        effectiveFrom?: string | null;
+        effectiveTo?: string | null;
+    } & import("@deepseek-ai/cosmokit").Dict)[], Schemastery.ObjectT<NoInfer<{
+        provider: Schema<string, string, "defined">;
+        model: Schema<string, string, "plain">;
+        kind: Schema<string, string, "defined">;
+        value: Schema<string, string, "defined">;
+        multiplier: Schema<number, number, "defined">;
+        effectiveFrom: Schema<string, string, "defined">;
+        effectiveTo: Schema<string, string, "plain">;
+    }>>[], "defined">;
+    priceWindows: Schema<({
+        label?: string | null;
+        startUtcHour?: number | null;
+        endUtcHour?: number | null;
+    } & import("@deepseek-ai/cosmokit").Dict)[], Schemastery.ObjectT<NoInfer<{
+        label: Schema<string, string, "defined">;
+        startUtcHour: Schema<number, number, "defined">;
+        endUtcHour: Schema<number, number, "defined">;
+    }>>[], "defined">;
     log: Schema<boolean, boolean, "defined">;
     logFile: Schema<string, string, "defined">;
 }>>, Schemastery.ObjectT<NoInfer<{
@@ -116,6 +142,32 @@ declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
         reasoning: Schema<number, number, "plain">;
         effectiveFrom: Schema<string, string, "defined">;
         currency: Schema<string, string, "defined">;
+    }>>[], "defined">;
+    modifiers: Schema<({
+        provider?: string | null;
+        model?: string | null;
+        kind?: string | null;
+        value?: string | null;
+        multiplier?: number | null;
+        effectiveFrom?: string | null;
+        effectiveTo?: string | null;
+    } & import("@deepseek-ai/cosmokit").Dict)[], Schemastery.ObjectT<NoInfer<{
+        provider: Schema<string, string, "defined">;
+        model: Schema<string, string, "plain">;
+        kind: Schema<string, string, "defined">;
+        value: Schema<string, string, "defined">;
+        multiplier: Schema<number, number, "defined">;
+        effectiveFrom: Schema<string, string, "defined">;
+        effectiveTo: Schema<string, string, "plain">;
+    }>>[], "defined">;
+    priceWindows: Schema<({
+        label?: string | null;
+        startUtcHour?: number | null;
+        endUtcHour?: number | null;
+    } & import("@deepseek-ai/cosmokit").Dict)[], Schemastery.ObjectT<NoInfer<{
+        label: Schema<string, string, "defined">;
+        startUtcHour: Schema<number, number, "defined">;
+        endUtcHour: Schema<number, number, "defined">;
     }>>[], "defined">;
     log: Schema<boolean, boolean, "defined">;
     logFile: Schema<string, string, "defined">;
