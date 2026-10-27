@@ -5,12 +5,12 @@
 
 ## The role
 
-The workspace-approve hook for the
+The workspace-approve hook serves the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
 release).
 
-A DeepSeek Harness plugin that binds the **exact human approval** - the candidate-bound approval +
-the constraints - the approve step of the workspace family's invisible flow:
+A DeepSeek Harness plugin binds the **exact human approval** (the candidate-bound approval + the
+constraints), which is the approve step of the workspace family's invisible flow:
 
 ```
 ... -> the authority licenses -> the approve binds -> the merge commits -> ...
@@ -18,18 +18,18 @@ the constraints - the approve step of the workspace family's invisible flow:
 
 ## The surfaces
 
-- The service `ctx.workspaceApprove` (the table below) - the only programmatic surface.
-- The `fs/observed` invalidation listener (heard on the ROOT context through the factory's Wire) - a
-  synchronous recorder.
-- The KV storage domain `workspace_approve` (config `domain`).
-- No tool, no provided service beyond `ctx.workspaceApprove`.
+- The service `ctx.workspaceApprove` (the table below) is the only programmatic surface.
+- The `fs/observed` invalidation listener (heard on the ROOT context through the factory's Wire) is
+  a synchronous recorder.
+- The KV storage domain is `workspace_approve` (config `domain`).
+- There is no tool and no provided service beyond `ctx.workspaceApprove`.
 
 ## The exact-approval semantics
 
-An approval binds to the **exact candidate** - the concrete change set, identified by its path, its
-content fingerprint, and the file version observed at the approval - never a fuzzy intent.
+An approval binds to the **exact candidate** (the concrete change set, identified by its path, its
+content fingerprint, and the file version observed at the approval), never a fuzzy intent.
 
-The constraints **travel with the approval**: a changed constraint set at approval time is a
+The constraints **travel with the approval**, so a changed constraint set at approval time is a
 rejection, not an amendment.
 
 The decision records the **Commitment** (who accepted responsibility).
@@ -39,7 +39,7 @@ The merge/execute side derives its **AuthorizationDecision** from the service's 
 **An intent must not authorize its own means**: the approval of an intention never authorizes the
 implementation the agent later produces.
 
-The check only validates the implementation against the approved candidate; the independent
+The check only validates the implementation against the approved candidate, because the independent
 authority licensing happened earlier in the flow.
 
 ## The service surface (`ctx.workspaceApprove`)
@@ -59,14 +59,15 @@ On `fs/observed` (heard on the ROOT context through the factory's Wire), a bindi
 observed at a different version than the one bound in the approval is invalidated
 (`decision: "invalidated"`, ledger `invalidated <id> (version changed)`).
 
-The listener is a synchronous recorder: no awaits, no throws, no I/O; own-actor events are ignored.
+The listener is a synchronous recorder: no awaits, no throws, no I/O, and own-actor events are
+ignored.
 
 ## The ledger (storage and lines)
 
 State lives in the hook's own KV domain named `workspace_approve` (config `domain`): one record per
 binding plus a bounded ring snapshot (the last `maxBindings`, default 1000).
 
-The sequence is the plugin's own monotonic counter - never a wall clock.
+The sequence is the plugin's own monotonic counter, never a wall clock.
 
 Ledger lines (module-owned, prefixed `approve:`): `activated`, `disabled`, `bound`, `decided`,
 `rejected`, `revoked`, `refused`, `unknown`, `invalidated`, `checked`, `capped`, `failed`,
@@ -92,10 +93,10 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
-commit, no spawn), so the block documents the posture and refuses nothing.
+This package's actions are record, all AUTOMATIC, and it has NO gated action (no file write, no
+batch commit, no spawn), so the block documents the posture and refuses nothing.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
 pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## The build and the tests

@@ -1,4 +1,4 @@
-import type { ReplayRecord } from "@Interface/History.js";
+import type { ReplayRecord } from "../Interface/History.js";
 export default _default;
 /**
  * Load the store once at apply.

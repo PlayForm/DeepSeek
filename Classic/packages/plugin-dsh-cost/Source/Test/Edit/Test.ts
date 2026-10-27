@@ -22,8 +22,8 @@ export const runTest = async (): Promise<number> => {
 		const Row = Rows[0];
 		assert.ok(Row !== undefined, "the single hunk exists");
 		assert.equal(Row.Ordinal, 0, `ordinal ${Row.Ordinal}`);
-		assert.equal(Row.LinesRemoved, 2, `lines removed ${Row.LinesRemoved}`);
-		assert.equal(Row.LinesAdded, 1, `lines added ${Row.LinesAdded}`);
+		assert.equal(Row.LinesRemoved, 3, `lines removed ${Row.LinesRemoved}`);
+		assert.equal(Row.LinesAdded, 2, `lines added ${Row.LinesAdded}`);
 		assert.equal(Row.BytesRemoved, 5, `bytes removed ${Row.BytesRemoved}`);
 		assert.equal(Row.BytesAdded, 3, `bytes added ${Row.BytesAdded}`);
 	});
@@ -48,11 +48,11 @@ export const runTest = async (): Promise<number> => {
 		);
 		const First = Rows[0];
 		assert.ok(First !== undefined, "the first hunk exists");
-		assert.equal(First.LinesAdded, 1, `first added ${First.LinesAdded}`);
-		assert.equal(First.LinesRemoved, 0, `first removed ${First.LinesRemoved}`);
+		assert.equal(First.LinesAdded, 2, `first added ${First.LinesAdded}`);
+		assert.equal(First.LinesRemoved, 1, `first removed ${First.LinesRemoved}`);
 		const Second = Rows[1];
 		assert.ok(Second !== undefined, "the second hunk exists");
-		assert.equal(Second.LinesRemoved, 1, `second removed ${Second.LinesRemoved}`);
+		assert.equal(Second.LinesRemoved, 2, `second removed ${Second.LinesRemoved}`);
 	});
 	Check(Count, "E3: a write yields one row from the content", () => {
 		const Rows = Edit(

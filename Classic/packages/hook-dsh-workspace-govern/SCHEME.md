@@ -9,15 +9,19 @@ observe stamps → semantics resolve → operate proposes → GOVERN GATES →
 authority licenses → approve binds → merge → journal → audit → live
 ```
 
-The gate is the enforcement boundary: the proposals become the effects ONLY through the gates. The
-conversation never sees the gate until an outcome surfaces one.
+The gate is the enforcement boundary: the proposals become the effects ONLY through the gates.
+
+The conversation never sees the gate until an outcome surfaces one.
 
 ## The means-check law (binding)
 
-AN INTENT MUST NOT AUTHORIZE ITS OWN MEANS. The gate runs the independent checks (contributes +
-authorized scope + policy + preconditions) on the ProposedChange BEFORE the AuthorizationDecision
-downstream. The gate carries no intent of its own and reads no authority record: the licensing is
-the next step (`plugin-dsh-workspace-authority`), not this one.
+AN INTENT MUST NOT AUTHORIZE ITS OWN MEANS.
+
+The gate runs the independent checks (contributes + authorized scope + policy + preconditions) on
+the ProposedChange BEFORE the AuthorizationDecision downstream.
+
+The gate carries no intent of its own and reads no authority record, because the licensing is the
+next step (`plugin-dsh-workspace-authority`), not this one.
 
 ## The fail-open recovery table
 
@@ -33,9 +37,10 @@ Configurable per row via the `recovery` config field.
 ## The policy block (D6) - the `automation` key
 
 The config carries the shared per-action allowlist (`automation: Policy()`, composed from the
-factory's block), mapped to `State.Allow`. The key is `automation`, **not** `policy`, because
-`policy` is already this hook's decision rule table (a different contract; the `plugin-dsh-route`
-precedent):
+factory's block), mapped to `State.Allow`.
+
+The key is `automation`, **not** `policy`, because `policy` is already this hook's decision rule
+table (a different contract; the `plugin-dsh-route` precedent):
 
 | action    | default | action    | default   |
 | --------- | ------- | --------- | --------- |
@@ -45,15 +50,20 @@ precedent):
 | `suggest` | `auto`  | `message` | `auto`    |
 
 The hook's action class is RECORD, which is **automatic**: it records a gate decision and nothing
-else. The package has **NO gated action** (no file write, no batch commit, no spawn), so the block
-documents the posture and refuses nothing. The block is one volatile object, so a policy flip is
-hot-editable without a remount; a resolved pack's `policy` section overrides the defaults per action
-(the wiring is the next refinement). No new ledger line: the package has no gated action.
+else.
+
+The package has **NO gated action** (no file write, no batch commit, no spawn), so the block
+documents the posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
+
+No new ledger line: the package has no gated action.
 
 ## Records
 
 - **Proposal** (`Source/Interface/Proposal.ts`): the operate family's ProposedChange,
-  self-contained - `operation`, `parent`, `category` (the recursion-prevention trio), `kind`,
+  self-contained, with `operation`, `parent`, `category` (the recursion-prevention trio), `kind`,
   `target`, `contribution`, `scope`, `preconditions`, `holder`, `declared`.
 - **Decision** (`Source/Interface/Decision.ts`): `decision` (pass / deny / escalate), `reason`,
   per-obligation outcomes, `operation`.
@@ -63,13 +73,18 @@ hot-editable without a remount; a resolved pack's `policy` section overrides the
 ## The gate in the waterfall
 
 `tools/pre-execute`, next() first, fail-open envelope: pass → unchanged; deny →
-`{ kind: "deny", reason }`; escalate → `{ kind: "ask", reason }`. `tools/post-execute` records the
-observed outcome of a gated call. Excluded targets (`exclude` globs) are never gated, in silence.
+`{ kind: "deny", reason }`; escalate → `{ kind: "ask", reason }`.
+
+`tools/post-execute` records the observed outcome of a gated call.
+
+Excluded targets (`exclude` globs) are never gated, in silence.
+
 The hook's own activity (the `Self` marker) is never gated.
 
 ## The license/weight separation
 
-This hook holds no weights and no priorities: the gate decides pass / deny / escalate only. The
-scheduling weights and the residency dispositions live in the authority service
-(`plugin-dsh-workspace-authority`) - the license is the authority, the weight is the representation
-(the logged pitfall).
+This hook holds no weights and no priorities: the gate decides pass / deny / escalate only.
+
+The scheduling weights and the residency dispositions live in the authority service
+(`plugin-dsh-workspace-authority`), because the license is the authority and the weight is the
+representation (the logged pitfall).

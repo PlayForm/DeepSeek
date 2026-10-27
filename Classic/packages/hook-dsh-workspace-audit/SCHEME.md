@@ -1,20 +1,21 @@
 # SCHEME - @playform/hook-dsh-workspace-audit
 
-The formal scheme of the workspace-audit hook: the domain schema, the line shape, the traceability
-graph, and the ledger lines.
+The formal scheme of the workspace-audit hook covers the domain schema, the line shape, the
+traceability graph, and the ledger lines.
 
 ## 1. The storage domain
 
-One KV domain, named config `domain` (default `workspace_audit`), version 1, layout `per-record`,
-`invalidRecords: backup-and-skip`, two tables:
+One KV domain is named config `domain` (default `workspace_audit`), version 1, layout `per-record`,
+`invalidRecords: backup-and-skip`, with two tables:
 
 | Table   | Key                  | Record                                    |
 | ------- | -------------------- | ----------------------------------------- |
 | `lines` | `id` (`a<sequence>`) | AuditLine                                 |
 | `ring`  | `__ring`             | `AuditLine[]` - the bounded ring snapshot |
 
-An absent `storageDomain` facility is a silent skip: the lines live in memory only. A failed open is
-loud: one `storage open failed: <reason>` ledger line, never rethrown.
+An absent `storageDomain` facility is a silent skip, so the lines live in memory only.
+
+A failed open is loud: one `storage open failed: <reason>` ledger line, never rethrown.
 
 ## 2. AuditLine
 
@@ -50,15 +51,17 @@ Announcement → Interpretation → IntentRevision → Commitment
   → ExecutionAttempt → OutcomeEvidence → IntentAssessment
 ```
 
-The fs/observed listener records the OutcomeEvidence nodes; the service's `line` records the rest as
-the other services feed them; `assessment` closes the loop against the IntentSpecification's
+The fs/observed listener records the OutcomeEvidence nodes, the service's `line` records the rest as
+the other services feed them, and `assessment` closes the loop against the IntentSpecification's
 satisfaction contract.
 
-The repeat-event guard (`Function/Duplicate`, the monitor's clock pattern - no timer): a repeat
-event for the same path carrying the same version within the coalescing window (2 s; the `State.Now`
-test seam overrides it) records no line - the version token identifies the file state, so the line
-for it is already recorded; a different version, or the same version after the window, is recorded
-normally. The guard lives on the listener only: the service's manual lines are never coalesced.
+The repeat-event guard (`Function/Duplicate`, the monitor's clock pattern with no timer) records no
+line for a repeat event on the same path carrying the same version within the coalescing window (2
+s, which the `State.Now` test seam overrides): the version token identifies the file state, so the
+line for it is already recorded, while a different version, or the same version after the window, is
+recorded normally.
+
+The guard lives on the listener only, so the service's manual lines are never coalesced.
 
 ## 4. The ledger lines (module-owned, byte-stable)
 
@@ -75,9 +78,12 @@ failed <path> (<reason>)
 storage open failed: <reason>
 ```
 
-Every line is prefixed by the factory's Append with the module identity (`audit: `). The strings
-live in the modules (the factory never owns them) and are renamed mechanically, never edited ad hoc.
-The repeat-event guard adds no line: a coalesced repeat event records nothing.
+Every line is prefixed by the factory's Append with the module identity (`audit: `).
+
+The strings live in the modules (the factory never owns them) and are renamed mechanically, never
+edited ad hoc.
+
+The repeat-event guard adds no line, because a coalesced repeat event records nothing.
 
 ## The policy block (D6)
 
@@ -90,9 +96,10 @@ The config carries the shared per-action allowlist (`policy: Policy()`), mapped 
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
-commit, no spawn), so the block documents the posture and refuses nothing. The block is one volatile
-object, so a policy flip is hot-editable without a remount; a resolved pack's `policy` section
-overrides the defaults per action (the wiring is the next refinement).
+This package's actions are record, all AUTOMATIC, and it has NO gated action (no file write, no
+batch commit, no spawn), so the block documents the posture and refuses nothing.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 No new ledger line: the package has no gated action.

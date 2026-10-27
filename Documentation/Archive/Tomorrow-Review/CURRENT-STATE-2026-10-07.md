@@ -20,11 +20,11 @@ statuses:
 
 ---
 
-**The monorepo** (`~/Developer/Application/PlayForm/DeepSeek/`): The git repo inited by the user.
+**The monorepo** (`~/Developer/Application/PlayForm/DeepSeek/`): the git repo that the user inited.
 
-Everything STAGED or MODIFIED.
+Everything is STAGED or MODIFIED.
 
-NOTHING COMMITTED.
+NOTHING IS COMMITTED.
 
 The user holds all commits:
 

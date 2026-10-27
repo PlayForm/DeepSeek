@@ -16,10 +16,12 @@ type Hunk = {
 	At: number;
 };
 
-// The newline count of one string, counted with a split; a non-string field
-// counts as no lines and no bytes, never a guess.
-const Newlines = (Text: unknown): number =>
-	typeof Text === "string" ? Text.split("\n").length - 1 : 0;
+// The line count of one side of a hunk, counted with a split: a non-empty
+// string is its newline count plus one, so a one-line replacement reads as
+// +1/-1 rather than +0/-0; a non-string field counts as no lines and no
+// bytes, never a guess.
+const Lines = (Text: unknown): number =>
+	typeof Text === "string" && Text.length > 0 ? Text.split("\n").length : 0;
 
 // The byte count of one string.
 const Bytes = (Text: unknown): number => (typeof Text === "string" ? Text.length : 0);
@@ -28,22 +30,21 @@ const Bytes = (Text: unknown): number => (typeof Text === "string" ? Text.length
 // added side from the new one.
 const HunkOf = (Entry: Record<string, unknown>, Ordinal: number, At: number): Hunk => ({
 	Ordinal,
-	LinesAdded: Newlines(Entry["new_string"]),
-	LinesRemoved: Newlines(Entry["old_string"]),
+	LinesAdded: Lines(Entry["new_string"]),
+	LinesRemoved: Lines(Entry["old_string"]),
 	BytesAdded: Bytes(Entry["new_string"]),
 	BytesRemoved: Bytes(Entry["old_string"]),
 	At,
 });
 
-// The write's single hunk: the line count is the content's newline count
-// plus one when the content is non-empty, the byte count the content's own
-// length; a write removes nothing.
+// The write's single hunk: the line count is the content's own line count,
+// the byte count the content's own length; a write removes nothing.
 const Written = (Entry: Record<string, unknown>, At: number): Hunk => {
 	const Content = Entry["content"];
 	const Text = typeof Content === "string" ? Content : "";
 	return {
 		Ordinal: 0,
-		LinesAdded: Text.length > 0 ? Newlines(Text) + 1 : 0,
+		LinesAdded: Lines(Text),
 		LinesRemoved: 0,
 		BytesAdded: Text.length,
 		BytesRemoved: 0,

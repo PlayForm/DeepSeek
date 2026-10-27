@@ -5,8 +5,8 @@
 
 ## The role
 
-The **workspace-journal hook**: a DeepSeek Harness plugin that is the workspace's **evidence
-record** - the undo, the recovery checkpoints, and the crash recovery.
+The **workspace-journal hook** is a DeepSeek Harness plugin that is the workspace's **evidence
+record**: the undo, the recovery checkpoints, and the crash recovery.
 
 It is the JOURNAL role of the workspace family's invisible flow:
 
@@ -18,19 +18,19 @@ sections 3.7-3.8.)
 
 ## What it does
 
-- **Per-batch records**: the merge journals a batch _before_ its writes land -
+- **Per-batch records**: the merge journals a batch _before_ its writes land, and
   `ctx.workspaceJournal.open(batch, entries)` stores the batch record (state `applying`) and the
   per-file pre-images in the plugin's own KV storage domain `workspace_journal`.
 
-    No journal, no writes: "the workspace transaction is the ordered set of those writes plus the
-    journal".
+    There is no journal and no writes: "the workspace transaction is the ordered set of those writes
+    plus the journal".
 
 - **Revert data**: the per-file pre-images (content + version captured before the write) are the
-  entries; `ctx.workspaceJournal.revert(batchId)` replays them backward through the factory's
-  version-fenced write executor - a fence mismatch is a reported conflict, never a silent overwrite;
-  a truncated pre-image is skipped with a ledger line, never half-applied.
+  entries, and `ctx.workspaceJournal.revert(batchId)` replays them backward through the factory's
+  version-fenced write executor, where a fence mismatch is a reported conflict and never a silent
+  overwrite, and a truncated pre-image is skipped with a ledger line, never half-applied.
 - **Recovery checkpoints**: the fs/observed listener (registered on the ROOT context) counts the
-  writes landing against open batches and persists the progress - how far a crash got.
+  writes landing against open batches and persists the progress, which records how far a crash got.
 
 - **Crash recovery**: at boot, every batch still `applying` is marked `recovery-required` with its
   identity.
@@ -68,7 +68,7 @@ Every knob is a volatile cell (hot edits commit without remounting):
 | `exclude`       | `["node_modules/**", "**/Target/**", "**/.git/**"]` | Excluded paths                                |
 | `policy.*`      | see below                                           | The D6 per-action allowlist (the revert gate) |
 
-The plugin ships **disabled** - it never appears in the profile's bundles and enables only by an
+The plugin ships **disabled**, so it never appears in the profile's bundles and enables only by an
 explicit ACTIVATE.
 
 ### The policy block (D6) - the revert gate
@@ -83,17 +83,17 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The revert is the hook's ONE gated action because it **writes** the pre-images back; recording
+The revert is the hook's ONE gated action because it **writes** the pre-images back, while recording
 (open/seal/recover) is `record` and stays automatic.
 
 An `approve` verdict for `write` refuses the whole pass before any file is touched: the ledger
 records the byte-exact `revert held (<n> files) (policy write=approve)` line, **zero writes** reach
-the filesystem, the batch keeps its `applying`/`verified` state and no record is persisted - the
+the filesystem, the batch keeps its `applying`/`verified` state, and no record is persisted, so the
 revert waits for the user.
 
 Flip `policy.write` to `auto` (or let a resolved pack override it) to let the next revert replay.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
 pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 The documented refusal line: `journal: revert held (<n> files) (policy write=approve)`.
@@ -125,8 +125,8 @@ journal: failed unknown (malformed event: displayPath is not a string)
 
 - The ledger file is appended with plain `appendFileSync` (ctx.fs has no append operation; the
   Append precedent).
-- Reverting an absent pre-image file unlinks it through `node:fs` (ctx.fs has no delete operation);
-  every _write_ goes through the factory's shared version-fenced executor.
+- Reverting an absent pre-image file unlinks it through `node:fs` (ctx.fs has no delete operation),
+  while every _write_ goes through the factory's shared version-fenced executor.
 
 ## The build and the tests
 

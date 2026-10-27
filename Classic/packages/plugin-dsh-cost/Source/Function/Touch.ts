@@ -65,6 +65,16 @@ const Paths = (Args: Record<string, unknown>): string[] => {
 	return Found;
 };
 
+// A search tool names a directory or a pattern, not a file: "glob src/**" and
+// "grep -r foo src" both carry a path that the ledger would otherwise record
+// as a file and rank above the real ones. A basename with no dot is a
+// directory, so a search touch survives only when it names something that
+// looks like a file.
+const FileLike = (Path: string): boolean => {
+	const Name = Path.slice(Path.lastIndexOf("/") + 1);
+	return Name.includes(".");
+};
+
 export default (Name: string, Arguments: string, Cwd: string): readonly Touched[] => {
 	const Kind = KindOf(Name);
 	if (Kind === undefined) {
@@ -79,8 +89,10 @@ export default (Name: string, Arguments: string, Cwd: string): readonly Touched[
 	if (Parsed === null || typeof Parsed !== "object" || Array.isArray(Parsed)) {
 		return [];
 	}
-	return Paths(Parsed as Record<string, unknown>).map((Path) => ({
-		Path: resolve(Cwd, Path),
-		Kind,
-	}));
+	return Paths(Parsed as Record<string, unknown>)
+		.map((Path) => ({
+			Path: resolve(Cwd, Path),
+			Kind,
+		}))
+		.filter((Touched) => Touched.Kind !== "search" || FileLike(Touched.Path));
 };

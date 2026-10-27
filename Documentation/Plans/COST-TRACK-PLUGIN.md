@@ -86,6 +86,11 @@ statuses:
       state: open
       evidence:
           the bundle row is written but the package is not installed, so no live ledger exists yet
+    - name: the end-to-end replay against real transcripts
+      state: implemented
+      evidence:
+          section 19 - two sessions, 80 calls, $0.243893, conservation delta 0, three files
+          aggregated across both
 ---
 
 # The cost-track plugin - per-file inference pricing
@@ -892,3 +897,36 @@ way it does.
 12. **Annotation surface** - in-file comments, off by default, marker-delimited, and always paired
     with the CSV sidecar. The comment is for the reader of the file; the sidecar is for the
     accountant.
+
+## 19. The end-to-end proof
+
+The 56 unit checks run on fixtures. On 2026-10-27 the ledger was also replayed against two real
+session transcripts from this repository, through `Open`, `Drain`, `Price`, `Allocate` and `Rollup`
+into a scratch database, and read back through `Report`.
+
+| Session    | Events | Calls |     Total |    Direct | Amortized |
+| ---------- | -----: | ----: | --------: | --------: | --------: |
+| `cc34aa03` |   1966 |    58 | $0.195288 | $0.032693 | $0.162595 |
+| `31324528` |    206 |    22 | $0.048605 | $0.008591 | $0.040014 |
+| combined   |   2172 |    80 | $0.243893 | $0.041284 | $0.202609 |
+
+The combined ledger held 101 files, 594 touches and 436 edit hunks, drained in under 150 ms per
+session, and `sum(Allocation) - sum(Call.CostTotal)` was exactly 0. Three files appeared in both
+sessions with their cost correctly summed across conversations, which is the property section 10
+claims.
+
+The replay found two defects the fixtures could not:
+
+1. **A directory ranked as the top file.** A `glob` or `grep` carries a directory path, and the
+   touch mapper recorded it as a file, so the highest-cost "file" in the first run was
+   `Site/Source/Content/Mermaid`. Search touches now survive only when the basename contains a dot.
+2. **Every edit read `+0/-0`.** The hunk parser counted newlines, so a one-line replacement - which
+   has no newline - reported no lines at all. A non-empty side now counts as its newline count plus
+   one, and the edit test's expectations moved with it.
+
+Both fixes are in, the suite is still 56 green, and the replay was re-run to confirm the directory
+left the ranking and the hunks read `+26/-26` rather than `+0/-0`.
+
+The proportions are the point: 83% of the bill is context carry, not change. The direct half - the
+actual edits - is $0.041 of $0.244. That is the number the plugin exists to make visible, and it is
+the number a per-token invoice cannot show.

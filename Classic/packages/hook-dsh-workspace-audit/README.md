@@ -5,8 +5,8 @@
 
 ## The role
 
-The **workspace-audit hook**: a DeepSeek Harness plugin that is the workspace's **accountability** -
-the event records and the ledger lines.
+The **workspace-audit hook** is a DeepSeek Harness plugin that is the workspace's
+**accountability**: the event records and the ledger lines.
 
 It is the AUDIT role of the workspace family's invisible flow:
 
@@ -20,29 +20,29 @@ It is the AUDIT role of the workspace family's invisible flow:
 - **Accountability records**: one line per event, stored in the plugin's own KV storage domain
   `workspace_audit` and in the plugin's ledger.
 
-    A **repeat event** - the same path carrying the same version within the coalescing window -
+    A **repeat event** (the same path carrying the same version within the coalescing window)
     records no line: that observed write was already recorded, and the last distinct version always
-    wins (the guard is on the fs/observed listener only; the service's manual lines are never
+    wins (the guard is on the fs/observed listener only, and the service's manual lines are never
     coalesced).
 
-- **The traceability graph**: the audit lines are the OutcomeEvidence on the intent model's graph -
-  Announcement → Interpretation → IntentRevision → Commitment → PlanRevision → ProposedChange →
-  AuthorizationDecision → ExecutionAttempt → OutcomeEvidence → IntentAssessment.
+- **The traceability graph**: the audit lines are the OutcomeEvidence on the intent model's graph
+  (Announcement → Interpretation → IntentRevision → Commitment → PlanRevision → ProposedChange →
+  AuthorizationDecision → ExecutionAttempt → OutcomeEvidence → IntentAssessment).
 
-    `ctx.workspaceAudit.line` records any node; `ctx.workspaceAudit.assessment` closes the loop
+    `ctx.workspaceAudit.line` records any node, and `ctx.workspaceAudit.assessment` closes the loop
     against the IntentSpecification's satisfaction contract.
 
 - **The recursion-prevention law**: every line carries the operation identifier, the parent
-  identifier, and the event category - chains compose without recursion.
+  identifier, and the event category, so chains compose without recursion.
 
 - **The fs/observed listener** (ROOT context): every observed write becomes an OutcomeEvidence line
   (`success` on presence, `failure` on absence).
 
-    The repeat-event guard (`Function/Duplicate`, the monitor's clock pattern - no timer) drops a
-    repeat event for the same path carrying the same version within the coalescing window (2 s, the
-    `State.Now` test seam overrides it in tests): the version token identifies the file state, so
-    the line for it is already recorded; a different version, or the same version after the window,
-    is recorded normally.
+    The repeat-event guard (`Function/Duplicate`, the monitor's clock pattern with no timer) drops a
+    repeat event for the same path carrying the same version within the coalescing window (2 s,
+    which the `State.Now` test seam overrides in tests): the version token identifies the file
+    state, so the line for it is already recorded, while a different version, or the same version
+    after the window, is recorded normally.
 
 ## The surfaces
 
@@ -70,7 +70,7 @@ Every knob is a volatile cell (hot edits commit without remounting):
 | `exclude`  | `["node_modules/**", "**/Target/**", "**/.git/**"]` | Excluded paths                           |
 | `policy.*` | see below                                           | The D6 per-action allowlist              |
 
-The plugin ships **disabled** - it never appears in the profile's bundles and enables only by an
+The plugin ships **disabled**, so it never appears in the profile's bundles and enables only by an
 explicit ACTIVATE.
 
 ### The policy block (D6)
@@ -85,10 +85,10 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
-commit, no spawn), so the block documents the posture and refuses nothing.
+This package's actions are record, all AUTOMATIC, and it has NO gated action (no file write, no
+batch commit, no spawn), so the block documents the posture and refuses nothing.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
 pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## The ledger

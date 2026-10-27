@@ -5,48 +5,50 @@
 
 ## The role
 
-The workspace family's **monitor hook**: the watch/sweep forms - the wave-3 machinery with **no real
-timers**.
+The workspace family's **monitor hook** provides the watch and sweep forms, the wave-3 machinery
+with **no real timers**.
 
-- **Watch**: on every `fs/observed` event (heard on the ROOT context, the factory's Wire
+- **Watch**: on every `fs/observed` event (heard on the ROOT context through the factory's Wire
   registration) the hook records one watch entry (path, observed version, clock stamp, classified
   check sets) with a debounce deadline computed from the module's Clock.
 
-    The listener is a synchronous recorder: no awaits, no subprocess work, no file content ever
+    The listener is a synchronous recorder: no awaits, no subprocess work, and no file content ever
     read.
 
-- **Sweep**: the **clock-based schedule** - a deadline scan that runs inside the event-driven
+- **Sweep**: the **clock-based schedule** is a deadline scan that runs inside the event-driven
   checkpoints and re-arms each entry from the Clock.
 
-    There is no `setTimeout` and no `setInterval` anywhere: the next event is the bound.
+    There is no `setTimeout` and no `setInterval` anywhere, because the next event is the bound.
 
-- **Check sets**: the shipped classification catalog (tsc, format, cargo, governance - the
+- **Check sets**: the shipped classification catalog (tsc, format, cargo, governance, following the
   live-containers monitor precedent) maps a watched path to its check-set identifiers, recorded for
   the accountability trail.
 
-    The monitor **never executes a command**; execution stays with the live-containers monitor.
+    The monitor **never executes a command**, because execution stays with the live-containers
+    monitor.
 
 - **Ledger**: every decision carries a byte-stable module-owned line
-  (`monitor: watch/ignored/capped/sweep/failed/disabled`); the health and performance counters
+  (`monitor: watch/ignored/capped/sweep/failed/disabled`), and the health and performance counters
   (events, sweeps, last sweep stamp) live on the state probed as
   `ctx.__hookDshWorkspaceMonitorState`.
 
-The plugin ships **disabled** (the IDLE-forever posture): it never appears in the profile's bundles
-and enables only by an explicit ACTIVATE.
+The plugin ships **disabled** (the IDLE-forever posture), so it never appears in the profile's
+bundles and enables only by an explicit ACTIVATE.
 
 ## The surfaces
 
-- The `fs/observed` listener on the ROOT context (the factory's Wire registration) - the watch
-  recorder (synchronous: no awaits, no subprocess work, no file content ever read).
-- The clock-based deadline sweep inside the event-driven checkpoints.
-- The state probed as `ctx.__hookDshWorkspaceMonitorState`.
-- No tool, no provided service; the monitor never executes a command.
+- The `fs/observed` listener on the ROOT context (the factory's Wire registration) is the watch
+  recorder (synchronous: no awaits, no subprocess work, and no file content ever read).
+- The clock-based deadline sweep runs inside the event-driven checkpoints.
+- The state is probed as `ctx.__hookDshWorkspaceMonitorState`.
+- There is no tool and no provided service, and the monitor never executes a command.
 
 ## The ledger
 
 Every decision carries a byte-stable module-owned line (prefix `monitor:`):
-`watch/ignored/capped/sweep/failed/disabled`; the health and performance counters (events, sweeps,
-last sweep stamp) live on the probed state.
+`watch/ignored/capped/sweep/failed/disabled`.
+
+The health and performance counters (events, sweeps, last sweep stamp) live on the probed state.
 
 ## The configuration
 
@@ -75,10 +77,10 @@ block), mapped to `State.Allow`:
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-This package's actions are record, all AUTOMATIC; it has NO gated action (no file write, no batch
-commit, no spawn), so the block documents the posture and refuses nothing.
+This package's actions are record, all AUTOMATIC, and it has NO gated action (no file write, no
+batch commit, no spawn), so the block documents the posture and refuses nothing.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
 pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## The build and the tests
@@ -90,7 +92,7 @@ tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
 - [Workspace-Family/MONITOR](../../../Documentation/Plans/Workspace-Family/MONITOR.md) - the
   watch/sweep machinery.
-- The plugin ships **disabled** (the IDLE-forever posture): it never appears in the profile's
+- The plugin ships **disabled** (the IDLE-forever posture), so it never appears in the profile's
   bundles and enables only by an explicit ACTIVATE.
 
 ## License

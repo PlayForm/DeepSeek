@@ -9,8 +9,8 @@
 
 ## The role
 
-A DeepSeek Harness plugin that teaches the model to stop using the terminal for file content: it
-watches the **terminal tool calls** (`bash`, `pwsh` - config `judgeTools`; the dedicated tools are
+A DeepSeek Harness plugin teaches the model to stop using the terminal for file content: it watches
+the **terminal tool calls** (`bash`, `pwsh`, config `judgeTools`, while the dedicated tools are
 never judged) and runs a four-tier coaching ladder that escalates from silent observation to a
 persistent system-prompt section to an optional hard deny.
 
@@ -18,7 +18,7 @@ The one-sentence rule the coach enforces: **the terminal runs COMMANDS (builds, 
 managers); the tools handle CONTENT.**
 
 Any bash segment that reads file content into the conversation or mutates file content on disk is a
-regression class match - because terminal file edits are invisible to the plugin system: the
+regression class match, because terminal file edits are invisible to the plugin system: the
 harness's `fs/observed` chain (the trigger of the governor, pinner, and normalize plugins) fires
 ONLY on tool-layer writes.
 
@@ -26,14 +26,14 @@ Detection is deliberately adversarial: the command is normalized before any matc
 stripped, `$(...)`/backticks -> `«sub»`, `$VAR`/`${VAR}` -> `«var»`, `$IFS` -> space, quote layers
 removed), then the pattern rows, an intent-marker scan (redirect to a real path = write; pipe into a
 shell = write; `--in-place` = write), a craft library for the obfuscated variants, and a
-**catch-all** - any write-intent marker on a non-`/dev/null` path lands as write even when no row
-matches, so novel zero-day forms still count.
+**catch-all** where any write-intent marker on a non-`/dev/null` path lands as write even when no
+row matches, so novel zero-day forms still count.
 
 Exemptions (builds, tests, git, package managers, file lifecycle) are checked per pipeline AFTER
-normalization: an exempt head dominates its pipe (`git diff > patch.txt` is exempt), a bare
+normalization: an exempt head dominates its pipe (`git diff > patch.txt` is exempt), while a bare
 `echo x > tracked.md` is not.
 
-The five classes: **write, read, search, discovery, control** - with class-priority resolution
+The five classes are **write, read, search, discovery, control**, with class-priority resolution
 across chained segments (`cat a; sed -i ...` counts once, as write).
 
 Every note names the correct tool with its LIVE registry data, fetched through
@@ -41,22 +41,22 @@ Every note names the correct tool with its LIVE registry data, fetched through
 primary parameter key.
 
 Any fetch failure degrades to the static `STATIC_TOOL_LINES` table and logs
-`schema fetch failed -> static fallback` - a note never fails a waterfall.
+`schema fetch failed -> static fallback`, so a note never fails a waterfall.
 
 `fetchLive: false` (the escape hatch) uses the static table unconditionally.
 
 The three model-facing note texts (`notes.first` the tier-1 notice, `notes.persistent` the tier-2
-section, `notes.denied` the tier-3 deny reason) are volatile config cells: a profile patch that
+section, `notes.denied` the tier-3 deny reason) are volatile config cells, so a profile patch that
 replaces any of them retexts a tier without touching the package.
 
 The templates keep the placeholder grammar of `Function/Compose` (`${command}`, `${class}`,
-`${count}`, `${traceability}`, `${tool.name}`, `${tool.description}`, `${tool.param}`, `${table}`);
-inserted user data is escaped before substitution, so a composed note never gains an unfilled
+`${count}`, `${traceability}`, `${tool.name}`, `${tool.description}`, `${tool.param}`, `${table}`),
+and inserted user data is escaped before substitution, so a composed note never gains an unfilled
 placeholder.
 
-The intended override appends the "Live-container grammar" block to `notes.persistent` so the tier-2
-section also teaches the live-containers machinery - the lesson is the SECTION, not the notice; see
-the live-containers README's "Teaching the grammar (the tool-coach note)".
+The intended override appends the "Live-container grammar" block to `notes.persistent`, so the
+tier-2 section also teaches the live-containers machinery; the lesson is the SECTION, not the
+notice, and the live-containers README's "Teaching the grammar (the tool-coach note)" describes it.
 
 ## The surfaces
 
@@ -70,17 +70,18 @@ the live-containers README's "Teaching the grammar (the tool-coach note)".
 | config   | `SCHEME.md`              | the full Schemastery schema (see the table below)                                                                                                                   |
 
 The four tiers: tier 0 fires on every detected offense (ledger only, the model sees nothing); tier 1
-fires when a class reaches `threshold` (3) strikes within `window` (8) judged calls, `cooldown` (10)
-between notes; tier 2 escalates at `escalateThreshold` (6) offenses since the last note and turns
-off again after `cleanWindow` (12) clean calls; tier 3 fires at `enforceThreshold` (4) strikes.
+fires when a class reaches `threshold` (3) strikes within `window` (8) judged calls, with `cooldown`
+(10) between notes; tier 2 escalates at `escalateThreshold` (6) offenses since the last note and
+turns off again after `cleanWindow` (12) clean calls; tier 3 fires at `enforceThreshold` (4)
+strikes.
 
-Tier 3 is off by default (`enforce: 'off'`); `write` denies only write-class segments, `all` adds
-read and search.
+Tier 3 is off by default (`enforce: 'off'`), where `write` denies only write-class segments and
+`all` adds read and search.
 
-Discovery and control are **never denied**, even at `all` - flagging them hard would dilute the
-write/read signal.
+Discovery and control are **never denied**, even at `all`, because flagging them hard would dilute
+the write/read signal.
 
-Every knob is **volatile** - hot-edited without remounting; a flip lands on the next judged call.
+Every knob is **volatile**, hot-edited without remounting, and a flip lands on the next judged call.
 
 ## The configuration
 
@@ -106,8 +107,8 @@ Every knob is **volatile** - hot-edited without remounting; a flip lands on the 
 
 ## The ledger
 
-One log per module: `~/.dsh/playform/hook-dsh-tool-coach.log` (config `logFile`); the durable file
-lines are the `[ISO] message` forms with the `hook-dsh-tool-coach: ` prefix.
+One log per module: `~/.dsh/playform/hook-dsh-tool-coach.log` (config `logFile`), where the durable
+file lines are the `[ISO] message` forms with the `hook-dsh-tool-coach: ` prefix.
 
 ```text
 activated (bundle 0.3.0, threshold=<t>/<w>, cooldown=<c>, escalate=<e>, clean=<cl>, enforce=<off|write|all>@<et>, judge=<list>, fetch=live|static)

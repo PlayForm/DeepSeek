@@ -5,21 +5,21 @@
 
 ## The role
 
-The workspace-govern hook: the governance gate of the workspace family's invisible flow - operate
+The workspace-govern hook is the governance gate of the workspace family's invisible flow: operate
 proposes → **the govern gates** → the authority licenses → the approve binds.
 
 On every gated `tools/pre-execute` call, and for every proposal handed to the `workspaceGovern`
 service, the hook runs the four **independent means-checks** on the ProposedChange before any
 AuthorizationDecision downstream.
 
-An intent must not authorize its own means: the gate checks the means; the intent is never the
+An intent must not authorize its own means: the gate checks the means, and the intent is never the
 permission.
 
 The plugin ships **disabled** (the idle-forever posture) and enables only by an explicit ACTIVATE.
 
 ## The surfaces
 
-- The `tools/pre-execute` waterfall listener: every gated tool call runs the four checks.
+- The `tools/pre-execute` waterfall listener runs the four checks on every gated tool call.
 - The service `ctx.workspaceGovern` (registered from apply):
 
 - `gate(proposal)` - run the four checks on one proposal record, get the gate decision.
@@ -50,9 +50,9 @@ An override list in the config replaces rows.
 - **escalate** - the waterfall returns `{ kind: "ask", ... }`: the approval is the approve family's
   step, not this one.
 
-Recursion prevention: every proposal carries the operation identifier, the parent identifier and the
-event category; an operation identifier gated more than `loopBound` times is dropped with a ledger
-line.
+Recursion prevention: every proposal carries the operation identifier, the parent identifier, and
+the event category, and an operation identifier gated more than `loopBound` times is dropped with a
+ledger line.
 
 ## The configuration (all volatile)
 
@@ -86,10 +86,10 @@ table (a different contract; the `plugin-dsh-route` precedent):
 
 This hook's action class is RECORD (it records a gate decision), and that class is **automatic**.
 
-The hook has **NO gated action** - it never writes a file, commits a batch or spawns an agent - so
+The hook has **NO gated action** (it never writes a file, commits a batch, or spawns an agent), so
 the block documents the posture and refuses nothing.
 
-The block is one volatile object, so a policy flip is hot-editable without a remount; a resolved
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
 pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## The ledger (module-owned, byte-stable)

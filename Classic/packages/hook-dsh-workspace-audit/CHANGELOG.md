@@ -1,14 +1,14 @@
 # Changelog
 
-All notable changes to this package will be documented in this file.
+This file records all notable changes to this package.
 
 ## 0.3.0
 
 ### Changed
 
-- The 0.3.0 release line: the manifest version, the `@playform/` sibling pins and the host
-  devDependencies move together - the host line to `0.2.1-rc.4` and zod to 4.6.7.
-- The storage-domain table cast: the zod 4.6.7 schemas are cast to the host library's `domainTable`
+- The 0.3.0 release line moves the manifest version, the `@playform/` sibling pins, and the host
+  devDependencies together to the `0.2.1-rc.4` host line and zod 4.6.7.
+- The storage-domain table cast casts the zod 4.6.7 schemas to the host library's `domainTable`
   parameter type, because `@deepseek-ai/dsh-storage-domain` types its tables against its own zod
   4.4.3 and the inference otherwise fails with TS2589.
 
@@ -16,19 +16,19 @@ All notable changes to this package will be documented in this file.
 
 ### Added
 
-- The workspace audit hook: the audit log over the workspace operations, with its storage, its
-  build, its tests and its bundle patch.
+- The workspace audit hook adds the audit log over the workspace operations with its storage, its
+  build, its tests, and its bundle patch.
 
 ### Changed
 
 - The D4-D8 release pass (the pack and trace libraries ship across both trees) refines the hook's
-  source, its config, its scheme and its bundle patch.
-- The documentation passes: the repository-wide markdown clean-up, the README restructured onto the
-  role / surfaces / ledger template, and the static market index committed alongside.
+  source, its config, its scheme, and its bundle patch.
+- The documentation passes include the repository-wide markdown clean-up, the README restructure
+  onto the role / surfaces / ledger template, and the static market index committed alongside.
 
 ## 0.1.0
 
 ### Changed
 
-- No package-local history: the package does not exist in the 0.1.0 release and lands afterwards
-  with the 2026-10-22 PoC delivery.
+- No package-local history exists, because the package does not exist in the 0.1.0 release and lands
+  afterwards with the 2026-10-22 PoC delivery.

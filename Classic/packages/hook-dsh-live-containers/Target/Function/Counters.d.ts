@@ -1,5 +1,5 @@
-import type { AgentState, Variables } from "@Interface/Execution.js";
-import type State from "@Interface/State.js";
+import type { AgentState, Variables } from "../Interface/Execution.js";
+import type State from "../Interface/State.js";
 /** The module's default scope key (a dispatch without a scope shares it). */
 export declare const DefaultKey: object;
 export default _default;

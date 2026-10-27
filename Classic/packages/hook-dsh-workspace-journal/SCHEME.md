@@ -1,12 +1,12 @@
 # SCHEME - @playform/hook-dsh-workspace-journal
 
-The formal scheme of the workspace-journal hook: the domain schema, the record shapes, the
+The formal scheme of the workspace-journal hook covers the domain schema, the record shapes, the
 lifecycle, and the ledger lines.
 
 ## 1. The storage domain
 
-One KV domain, named config `domain` (default `workspace_journal`), version 1, layout `per-record`,
-`invalidRecords: backup-and-skip`, three tables:
+One KV domain is named config `domain` (default `workspace_journal`), version 1, layout
+`per-record`, `invalidRecords: backup-and-skip`, with three tables:
 
 | Table     | Key                        | Record                                    |
 | --------- | -------------------------- | ----------------------------------------- |
@@ -14,8 +14,9 @@ One KV domain, named config `domain` (default `workspace_journal`), version 1, l
 | `entries` | `` `${batchId}:${path}` `` | EntryRecord (the revert data)             |
 | `ring`    | `__ring`                   | `string[]` - the bounded ring of batchIds |
 
-An absent `storageDomain` facility is a silent skip: the records live in memory only. A failed open
-is loud: one `storage open failed: <reason>` ledger line, never rethrown.
+An absent `storageDomain` facility is a silent skip, so the records live in memory only.
+
+A failed open is loud: one `storage open failed: <reason>` ledger line, never rethrown.
 
 ## 2. BatchRecord
 
@@ -73,14 +74,19 @@ The config carries the shared per-action allowlist (`policy: Policy()`), mapped 
 | `record`  | `auto`  | `spawn`   | `approve` |
 | `suggest` | `auto`  | `message` | `auto`    |
 
-The revert is the hook's ONE gated action (it writes the pre-images back); the recording surface
-(open/seal/recover) is `record` = automatic. The gate is evaluated after the batch's existence and
-state checks and before any file is touched: an `approve` verdict for `write` logs the byte-exact
+The revert is the hook's ONE gated action (it writes the pre-images back), while the recording
+surface (open/seal/recover) is `record` = automatic.
+
+The gate is evaluated after the batch's existence and state checks and before any file is touched:
+an `approve` verdict for `write` logs the byte-exact
 `revert held (<n> files) (policy write=approve)` line, refuses the pass with
-`batch <id> is held by the policy (write=approve)`, performs zero writes, keeps the batch's state
-and persists no record - the batch stays reversible and waits for the user. `auto` proceeds. The
-block is one volatile object, so a policy flip is hot-editable without a remount; a resolved pack's
-`policy` section overrides the defaults per action (the wiring is the next refinement).
+`batch <id> is held by the policy (write=approve)`, performs zero writes, keeps the batch's state,
+and persists no record, so the batch stays reversible and waits for the user.
+
+`auto` proceeds.
+
+The block is one volatile object, so a policy flip is hot-editable without a remount, and a resolved
+pack's `policy` section overrides the defaults per action (the wiring is the next refinement).
 
 ## 6. The ledger lines (module-owned, byte-stable)
 
@@ -112,5 +118,7 @@ failed <path> (<reason>)
 storage open failed: <reason>
 ```
 
-Every line is prefixed by the factory's Append with the module identity (`journal: `). The strings
-live in the modules (the factory never owns them) and are renamed mechanically, never edited ad hoc.
+Every line is prefixed by the factory's Append with the module identity (`journal: `).
+
+The strings live in the modules (the factory never owns them) and are renamed mechanically, never
+edited ad hoc.
