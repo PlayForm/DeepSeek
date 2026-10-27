@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-normalize-fullwidth",n=t,r=["pluginFactory"],e=o;var c={name:p,apply:e,Config:n,inject:r};export{n as Config,e as apply,c as default,r as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import r from"./Variable/Version.js";const p="hook-dsh-normalize-fullwidth",e=t,i=["pluginFactory"],n=o;var c={name:p,apply:n,Config:e,inject:i};export{e as Config,r as Version,n as apply,c as default,i as inject,p as name};

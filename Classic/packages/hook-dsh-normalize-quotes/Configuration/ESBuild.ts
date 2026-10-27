@@ -4,9 +4,10 @@ import type { BuildOptions, Plugin } from "esbuild";
 
 // The package manifest, read at config-load time: its name and version become
 // the build-time constants the define block below compiles into the Target.
-const Package = JSON.parse(
-	readFileSync(new URL("../package.json", import.meta.url), "utf8"),
-) as { name?: string; version?: string };
+const Package = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
+	name?: string;
+	version?: string;
+};
 
 const Version = Package.version ?? "0.0.0";
 const Name = Package.name ?? "";

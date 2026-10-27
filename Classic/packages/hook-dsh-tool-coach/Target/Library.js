@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-tool-coach",n=t,r=["pluginFactory","tools"],e=o;var l={name:p,apply:e,Config:n,inject:r};export{n as Config,e as apply,l as default,r as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import p from"./Variable/Version.js";const r="hook-dsh-tool-coach",e=t,n=["pluginFactory","tools"],i=o;var f={name:r,apply:i,Config:e,inject:n};export{e as Config,p as Version,i as apply,f as default,n as inject,r as name};

@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-pinner-package",n=t,e=["fs","pluginFactory"],r=o;var a={name:p,apply:r,Config:n,inject:e};export{n as Config,r as apply,a as default,e as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import p from"./Variable/Version.js";const r="hook-dsh-pinner-package",e=t,n=["fs","pluginFactory"],i=o;var s={name:r,apply:i,Config:e,inject:n};export{e as Config,p as Version,i as apply,s as default,n as inject,r as name};

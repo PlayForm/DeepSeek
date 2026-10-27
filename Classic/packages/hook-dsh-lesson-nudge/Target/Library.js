@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const n="hook-dsh-lesson-nudge",p=t,e=["pluginFactory"],r=o;var c={name:n,apply:r,Config:p,inject:e};export{p as Config,r as apply,c as default,e as inject,n as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import p from"./Variable/Version.js";const r="hook-dsh-lesson-nudge",e=t,n=["pluginFactory"],i=o;var f={name:r,apply:i,Config:e,inject:n};export{e as Config,p as Version,i as apply,f as default,n as inject,r as name};

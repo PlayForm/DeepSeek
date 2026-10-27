@@ -1,1 +1,1 @@
-import t from"./Function/Apply.js";import o from"./Variable/Config.js";const e="test-suggester",p=o,r=["pluginFactory"],n=t;var c={name:e,apply:n,Config:p,inject:r};export{p as Config,n as apply,c as default,r as inject,e as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import r from"./Variable/Version.js";const e="test-suggester",p=t,n=["pluginFactory"],i=o;var f={name:e,apply:i,Config:p,inject:n};export{p as Config,r as Version,i as apply,f as default,n as inject,e as name};

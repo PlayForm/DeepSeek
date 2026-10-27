@@ -1,3 +1,4 @@
+import Version from "./Variable/Version.js";
 export declare const name = "graph-suggester";
 export declare const Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
     log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
@@ -20,6 +21,7 @@ export declare const Config: import("@deepseek-ai/schemastery").default<Schemast
     policyFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
     exclude: import("@deepseek-ai/schemastery").default<string[], string[], "defined">;
 }>>, "plain">;
+export { Version };
 export declare const inject: string[];
 export declare const apply: (Context: import("@deepseek-ai/cordis").Context, Options: import("./Interface/Config.js").default) => void;
 declare const _default: {

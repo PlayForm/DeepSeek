@@ -4,13 +4,13 @@ import { type Registry as GovernRegistry, type Selection as GovernSelection } fr
 import PolicyFn from "./Function/Policy.js";
 import SchemaFn from "./Function/Schema.js";
 import { type Over as WriteOver } from "./Function/Write.js";
-import Version from "./Variable/Version.js";
 import type Allowlist from "./Interface/Allowlist.js";
 import type Decision from "./Interface/Gate.js";
 import type Setup from "./Interface/Options.js";
 import type Shape from "./Interface/State.js";
 import type Trace from "./Interface/Trace.js";
 import type Transform from "./Interface/Transform.js";
+import Version from "./Variable/Version.js";
 export type { default as State } from "./Interface/State.js";
 export type { default as Options } from "./Interface/Options.js";
 export type { default as Gate } from "./Interface/Gate.js";

@@ -20,9 +20,7 @@
 // relying on the build tool's default define.
 import { readFileSync } from "node:fs";
 
-const Package = JSON.parse(
-	readFileSync(new URL("../package.json", import.meta.url), "utf8"),
-);
+const Package = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
 
 const Version = Package.version ?? "0.0.0";
 const Name = Package.name ?? "";
