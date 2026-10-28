@@ -57,4 +57,3 @@ export declare const Register: (Agent: State, SystemPrompt: {
         }) => string);
     }): () => void;
 }) => void;
-id;

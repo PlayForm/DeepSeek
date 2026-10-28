@@ -1,0 +1,20 @@
+{
+	"$schema": "https://v2-9-6.turborepo.dev/schema.json",
+	"globalDependencies": ["package.json", "pnpm-workspace.yaml", "turbo.json"],
+	"tasks": {
+		"prepublishOnly": {
+			"dependsOn": ["^prepublishOnly"],
+			"inputs": ["$TURBO_DEFAULT$", "!Target/**"],
+			"outputLogs": "new-only",
+			"outputs": ["Target/**"]
+		},
+		"Run": {
+			"cache": false,
+			"dependsOn": ["^prepublishOnly"],
+			"outputLogs": "new-only",
+			"outputs": ["Target/**"],
+			"persistent": true
+		}
+	},
+	"ui": "stream"
+}

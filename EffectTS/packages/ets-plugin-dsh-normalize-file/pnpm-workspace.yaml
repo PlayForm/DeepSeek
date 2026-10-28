@@ -1,6 +1,0 @@
-packages:
-    - .
-
-nodeLinker: hoisted
-allowBuilds:
-    esbuild: true

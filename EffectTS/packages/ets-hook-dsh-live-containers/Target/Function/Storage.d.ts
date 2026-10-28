@@ -17,4 +17,3 @@ declare function _default(State: State, Facility: {
         };
     }>;
 }, Append: Log): Promise<void>;
-d>;
