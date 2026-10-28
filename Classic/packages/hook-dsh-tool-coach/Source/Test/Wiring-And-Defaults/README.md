@@ -46,8 +46,8 @@ The ledger file lives in a fresh per-process mkdtemp directory.
 
 ## Expected ledger strings (byte-exact)
 
-- `hook-dsh-tool-coach: activated (bundle 0.3.0, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)` (the in-memory info line)
-- The same activation summary after the `[ISO] ` stamp in the durable ledger file: `] activated (bundle 0.3.0, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)`
+- `hook-dsh-tool-coach: activated (bundle 0.2.1, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)` (the in-memory info line)
+- The same activation summary after the `[ISO] ` stamp in the durable ledger file: `] activated (bundle 0.2.1, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)`
 - The refusal error messages (thrown, not logged): `hook-dsh-tool-coach: threshold must be >= 1`, `...duplicates a built-in pattern...`, `hook-dsh-tool-coach: maxSectionTools must be between 1 and 24`
 
 ## Edge cases

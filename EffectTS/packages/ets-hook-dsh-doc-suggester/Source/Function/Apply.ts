@@ -167,7 +167,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone:
-	//   doc-suggester: activated (bundle 0.3.0, families 7, threshold 0.75)
+	//   doc-suggester: activated (bundle 0.2.1, families 7, threshold 0.75)
 	if (!State.On) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {

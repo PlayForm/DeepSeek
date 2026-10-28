@@ -12,7 +12,7 @@ durable forms, the config fail-loud, the schema defaults on the built State, and
 - W2: the enabled mount - the two listeners (`tools/post-execute`, `agent/pre-step`) plus the
   `loader/volatile-update` of the factory register on the plugin context only and never on the root,
   because the fake root is a distinct object, the root identity is not the plugin ctx, and the
-  activation line `activated (bundle 0.3.0, families 7, threshold 0.75)` is byte-exact in the logger
+  activation line `activated (bundle 0.2.1, families 7, threshold 0.75)` is byte-exact in the logger
   form and in the durable `[ISO]` form as exactly one line.
 - W3: the disabled mount - `disabled (enabled=false)` is byte-exact in both forms, and every call
   passes through with zero new lines.
@@ -33,7 +33,7 @@ stamps of the durable ledger are matched with an anchored regex.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-edit-suggester: ` prefix)
 
-`activated (bundle 0.3.0, families 7, threshold 0.75)`,
+`activated (bundle 0.2.1, families 7, threshold 0.75)`,
 `disabled (enabled=false)`.
 
 ## Expected count

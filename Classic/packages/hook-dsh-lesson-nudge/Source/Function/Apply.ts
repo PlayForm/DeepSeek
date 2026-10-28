@@ -102,7 +102,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone:
-	//   hook-dsh-lesson-nudge: activated (bundle=0.3.0, cap=3)
+	//   hook-dsh-lesson-nudge: activated (bundle=0.2.1, cap=3)
 	Append(
 		State.On
 			? Activate([

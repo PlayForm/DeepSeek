@@ -11,7 +11,7 @@ must arrive as `{ get }` cells; every default must match the shipped schema;
 four plugin listeners plus the State builder's P10 volatile refresh); the state
 probe must carry the REAL factory instance and the unwrapped cell values; the
 cold mount must log its byte-exact `disabled (enabled=false)` line, and an
-activated mount its byte-exact `activated (bundle 0.3.0, blocks=<n>,
+activated mount its byte-exact `activated (bundle 0.2.1, blocks=<n>,
 refresh=<policy>)` line - both in memory and durably ([ISO] prefixed in the
 file); and the schema must fail LOUD on invalid configs. A drift here breaks
 every later folder, so it has its own folder.
@@ -38,7 +38,7 @@ every later folder, so it has its own folder.
     - Sub: "state unwraps the defaults (On=false, refresh=request, ttlCalls=8)".
     - Sub: "cold-mount ledger line byte-exact: disabled (enabled=false)" and
       "the durable ledger file carries the [ISO] disabled line".
-    - Sub: "activation ledger line byte-exact" (bundle 0.3.0, blocks=2,
+    - Sub: "activation ledger line byte-exact" (bundle 0.2.1, blocks=2,
       refresh=request) and "the durable [ISO] activation line" and the ttl
       flavor (blocks=14, refresh=ttl).
 - Group: fail-loud validation.
@@ -65,7 +65,7 @@ The ledger file lives in a fresh mkdtemp directory for each process.
 - `hook-dsh-live-containers: disabled (enabled=false)` (the cold mount, the
   in-memory info line)
 - The same line after the `[ISO] ` stamp in the durable ledger file
-- `hook-dsh-live-containers: activated (bundle 0.3.0, blocks=2,
+- `hook-dsh-live-containers: activated (bundle 0.2.1, blocks=2,
   refresh=request)` (and the blocks=14/refresh=ttl flavor)
 - The refusal error messages (thrown, not logged), each with the
   `hook-dsh-live-containers: ` prefix

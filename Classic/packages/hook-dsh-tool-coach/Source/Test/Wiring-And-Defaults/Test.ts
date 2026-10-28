@@ -172,7 +172,7 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "activation ledger line byte-exact", () => {
 			assert.ok(
 				Run1.Lines.includes(
-					"hook-dsh-tool-coach: activated (bundle 0.3.0, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)",
+					"hook-dsh-tool-coach: activated (bundle 0.2.1, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)",
 				),
 			);
 		});
@@ -180,7 +180,7 @@ export const runTest = async (): Promise<number> => {
 			assert.ok(
 				FileSystem.existsSync(Ledger) &&
 					FileSystem.readFileSync(Ledger, "utf8").includes(
-						"] activated (bundle 0.3.0, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)",
+						"] activated (bundle 0.2.1, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)",
 					),
 			);
 		});

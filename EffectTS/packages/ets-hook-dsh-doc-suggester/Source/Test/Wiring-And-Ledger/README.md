@@ -14,7 +14,7 @@ config fail-loud, the schema defaults on the built State, and the fs purity.
   `agent/pre-step`) plus the factory's `loader/volatile-update` register on
   the plugin context only (never on the root; the fake root is a distinct
   object), the root identity is not the plugin ctx, and the activation line
-  `activated (bundle 0.3.0, families 7, threshold 0.75)` is byte-exact in
+  `activated (bundle 0.2.1, families 7, threshold 0.75)` is byte-exact in
   the logger form and in the durable `[ISO]` form (exactly one line).
 - W3: the disabled mount - `disabled (enabled=false)` is byte-exact in both
   forms, and every call passes through with zero new lines.
@@ -35,7 +35,7 @@ the ISO stamps of the durable ledger are matched with an anchored regex.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-doc-suggester: ` prefix)
 
-`activated (bundle 0.3.0, families 7, threshold 0.75)`,
+`activated (bundle 0.2.1, families 7, threshold 0.75)`,
 `disabled (enabled=false)`.
 
 ## Expected count

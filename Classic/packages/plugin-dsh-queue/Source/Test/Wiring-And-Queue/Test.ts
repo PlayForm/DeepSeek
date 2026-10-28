@@ -73,7 +73,7 @@ export const runTest = async (): Promise<number> => {
 		const Run = Setup();
 		Check(Count, "W2: the activation line is byte-exact", () => {
 			assert.deepEqual(Run.Lines, [
-				"plugin-dsh-queue: activated (bundle 0.3.0, capacity=main=10 child=2, routedDispatch=true)",
+				"plugin-dsh-queue: activated (bundle 0.2.1, capacity=main=10 child=2, routedDispatch=true)",
 			]);
 		});
 		Check(Count, "W2: the dshQueue service is the apply-registered instance", () => {

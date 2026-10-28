@@ -15,7 +15,7 @@ import type { DatabaseSync } from "node:sqlite";
 import type Config from "../Interface/Config.js";
 
 // The bundle version, mirrored from package.json (a release bumps both).
-const Version = "0.3.0";
+const Version = "0.2.1";
 
 type Row = Record<string, unknown>;
 

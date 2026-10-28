@@ -12,7 +12,7 @@ mount purity.
   `disabled (enabled=false)` line is byte-exact in the logger and the durable ledger, and both
   listeners are still wired on the plugin ctx.
 - L3: the enabled mount - the activation line
-  `activated (bundle 0.3.0, intents 2, threshold 0.75)` is byte-exact in the logger and the ledger, the
+  `activated (bundle 0.2.1, intents 2, threshold 0.75)` is byte-exact in the logger and the ledger, the
   listener registration order on the plugin ctx is `loader/volatile-update`, then
   `tools/post-execute`, then `agent/pre-step`, and the root object is distinct.
 - L4: the pass-through discipline - a non-judged tool returns the downstream decision UNCHANGED, and
@@ -32,8 +32,8 @@ No fake clock runs, because the plugin has no clock dependency.
 ## Expected ledger strings (byte-exact, `graph-suggester: ` prefix)
 
 `disabled (enabled=false)`,
-`activated (bundle 0.3.0, intents 2, threshold 0.75)`,
-`activated (bundle 0.3.0, intents 1, threshold 0.75)`.
+`activated (bundle 0.2.1, intents 2, threshold 0.75)`,
+`activated (bundle 0.2.1, intents 1, threshold 0.75)`.
 
 ## Expected count
 

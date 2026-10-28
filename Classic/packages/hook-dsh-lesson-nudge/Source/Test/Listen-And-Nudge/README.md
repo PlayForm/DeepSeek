@@ -44,7 +44,7 @@ queue.
 
 ## Expected ledger strings (byte-exact)
 
-- `hook-dsh-lesson-nudge: activated (bundle=0.3.0, cap=<n>)`
+- `hook-dsh-lesson-nudge: activated (bundle=0.2.1, cap=<n>)`
 - `hook-dsh-lesson-nudge: disabled (enabled=false)`
 - `hook-dsh-lesson-nudge: reviewed <outcome> (<a> applied, <q> queued)`
 - `hook-dsh-lesson-nudge: cap reached (<n> reviews)`

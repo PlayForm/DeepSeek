@@ -34,7 +34,7 @@ The R1 group drives ten `Post` waterfall passes, the fail-open group drives one 
 
 ## Expected ledger strings (byte-exact)
 
-- `hook-dsh-tool-coach: activated (bundle 0.3.0, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)` - the ONLY line the R1 group's run is allowed to have logged (asserted as "the only ledger line is the activation").
+- `hook-dsh-tool-coach: activated (bundle 0.2.1, threshold=3/8, cooldown=10, escalate=6, clean=12, enforce=off@4, judge=bash,pwsh, fetch=live)` - the ONLY line the R1 group's run is allowed to have logged (asserted as "the only ledger line is the activation").
 - No offense/exempt/strike lines anywhere in this folder; the fail-open warning is a logger.warn line starting with the `hook-dsh-tool-coach: ` prefix.
 
 ## Edge cases

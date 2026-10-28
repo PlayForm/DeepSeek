@@ -13,7 +13,7 @@ invariant.
   `hook-dsh-batch-decision: disabled (enabled=false)` line to the logger and to the
   durable file, and the disabled listener is a full passthrough.
 - P3: the activation line of the enabled mount is byte-exact
-  (`activated (bundle 0.3.0, autoApprove=on, allowlist=1)`), the batch/proposed listener
+  (`activated (bundle 0.2.1, autoApprove=on, allowlist=1)`), the batch/proposed listener
   sits on the ctx, no root listeners exist, the batch_decision tool registers once, and
   the State probe carries the knobs.
 - P4: a bad autoApprove, a missing allowlist, pendingTtlMs < 1000, minConfidence out of

@@ -263,7 +263,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone. Format (plan section 4.9):
-	//   search-suggester: activated (bundle 0.3.0, intents 10, threshold 0.75)
+	//   search-suggester: activated (bundle 0.2.1, intents 10, threshold 0.75)
 	if (!State.On) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {

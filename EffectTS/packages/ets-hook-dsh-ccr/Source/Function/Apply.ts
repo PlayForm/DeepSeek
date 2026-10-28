@@ -124,7 +124,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// Durable activation proof - "did it activate" must be answerable from the
 	// ledger alone. Format (asserted byte-identical by the smoke):
-	//   ccr: activated (bundle 0.3.0, targets 8, budget 268435456)
+	//   ccr: activated (bundle 0.2.1, targets 8, budget 268435456)
 	// The line's string mechanics (the `activated (` prefix, the `k=v` join,
 	// the `)` suffix) live in the core's Activate composer; the FIELD LIST is
 	// the module's own (the empty-key pair renders the bare leading segment).

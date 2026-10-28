@@ -20,7 +20,7 @@ This folder covers the loader contract (apply returns nothing, the default objec
 ## Expected ledger strings (byte-exact, `plugin-dsh-route: ` prefix)
 
 `disabled (enabled=false)`,
-`activated (bundle 0.3.0, defaultRole=explorer, models=3)`.
+`activated (bundle 0.2.1, defaultRole=explorer, models=3)`.
 
 ## Expected count
 

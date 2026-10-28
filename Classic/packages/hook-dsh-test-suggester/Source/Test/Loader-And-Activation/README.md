@@ -6,7 +6,7 @@ The test-suggester's loader wiring covers the default object, the cold mount, th
 
 - L1: the loader contract, where the default object carries name/apply/Config/inject and `inject` is `["pluginFactory"]`.
 - L2: the cold disabled mount, where apply returns NOTHING, the byte-exact `disabled (enabled=false)` line appears in the logger and the durable ledger, and both listeners stay wired on the plugin ctx.
-- L3: the enabled mount, where the byte-exact activation line `activated (bundle 0.3.0, intents 2, threshold 0.75)` appears in the logger and ledger, the listener registration order holds on the plugin ctx, and the root is distinct.
+- L3: the enabled mount, where the byte-exact activation line `activated (bundle 0.2.1, intents 2, threshold 0.75)` appears in the logger and ledger, the listener registration order holds on the plugin ctx, and the root is distinct.
 - L4: the pass-through discipline, where a non-judged tool returns the decision unchanged and the `intents` config filter keeps only `Counts` (and the activation line says `intents 1`).
 - L5: the fail-loud validation, where a non-numeric `threshold` and a non-boolean `enabled` throw at load through the schema.
 - L6: the mount purity, where ZERO fs operations occur and the state probe carries the factory's module identity and the compiled pack.
@@ -20,8 +20,8 @@ There is no fake clock, because the plugin has no clock dependency.
 ## Expected ledger strings (byte-exact, `test-suggester: ` prefix)
 
 `disabled (enabled=false)`,
-`activated (bundle 0.3.0, intents 2, threshold 0.75)`,
-`activated (bundle 0.3.0, intents 1, threshold 0.75)`.
+`activated (bundle 0.2.1, intents 2, threshold 0.75)`,
+`activated (bundle 0.2.1, intents 1, threshold 0.75)`.
 
 ## Expected count
 
