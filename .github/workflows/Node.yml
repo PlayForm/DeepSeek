@@ -63,7 +63,6 @@ jobs:
 
             - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
               with:
-                  version: 9.3.0
                   run_install: |
                       - recursive: true
                         args: [
@@ -80,13 +79,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/client-dsh-panel-family-host/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/client-dsh-panel-family-host
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/client-dsh-panel-family-host
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -99,13 +98,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/client-dsh-panel-family/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/client-dsh-panel-family
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/client-dsh-panel-family
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -118,13 +117,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/client-dsh-workspace-live/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/client-dsh-workspace-live
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/client-dsh-workspace-live
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -137,13 +136,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-batch-decision/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-batch-decision
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-batch-decision
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -156,13 +155,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-cargo-governor/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-cargo-governor
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-cargo-governor
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -175,13 +174,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-ccr/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-ccr
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-ccr
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -192,13 +191,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-comment-filter/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-comment-filter
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-comment-filter
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -211,13 +210,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-convention-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-convention-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-convention-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -230,13 +229,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-doc-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-doc-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-doc-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -249,13 +248,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-edit-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-edit-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-edit-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -268,13 +267,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-graph-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-graph-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-graph-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -287,13 +286,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-lesson-nudge/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-lesson-nudge
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-lesson-nudge
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -306,13 +305,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-live-containers/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-live-containers
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-live-containers
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -325,13 +324,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-normalize-dash/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-normalize-dash
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-normalize-dash
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -344,13 +343,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-normalize-ellipsis/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-normalize-ellipsis
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-normalize-ellipsis
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -363,13 +362,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-normalize-fullwidth/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-normalize-fullwidth
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-normalize-fullwidth
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -382,13 +381,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-normalize-invisible/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-normalize-invisible
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-normalize-invisible
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -401,13 +400,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-normalize-quotes/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-normalize-quotes
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-normalize-quotes
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -420,13 +419,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-normalize-spaces/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-normalize-spaces
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-normalize-spaces
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -439,13 +438,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-package-governor/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-package-governor
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-package-governor
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -458,13 +457,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-package-pinner/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-package-pinner
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-package-pinner
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -477,13 +476,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-replay-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-replay-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-replay-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -496,13 +495,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-search-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-search-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-search-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -515,13 +514,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-test-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-test-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-test-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -534,13 +533,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-tool-coach/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-tool-coach
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-tool-coach
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -552,13 +551,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-workspace-approve/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-workspace-approve
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-workspace-approve
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -571,13 +570,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-workspace-audit/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-workspace-audit
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-workspace-audit
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -590,13 +589,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-workspace-govern/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-workspace-govern
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-workspace-govern
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -609,13 +608,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-workspace-journal/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-workspace-journal
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-workspace-journal
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -628,13 +627,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-workspace-merge/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-workspace-merge
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-workspace-merge
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -647,13 +646,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-workspace-monitor/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-workspace-monitor
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-workspace-monitor
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -666,13 +665,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-workspace-observe/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-workspace-observe
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-workspace-observe
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -685,13 +684,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/hook-dsh-workspace-operate/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/hook-dsh-workspace-operate
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/hook-dsh-workspace-operate
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -704,13 +703,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/lib-dsh-conversation/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/lib-dsh-conversation
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/lib-dsh-conversation
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -722,13 +721,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/lib-dsh-core/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/lib-dsh-core
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/lib-dsh-core
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -739,13 +738,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/lib-dsh-pack/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/lib-dsh-pack
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/lib-dsh-pack
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -756,13 +755,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/lib-dsh-trace/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/lib-dsh-trace
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/lib-dsh-trace
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -773,13 +772,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/lib-dsh-workspace-live/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/lib-dsh-workspace-live
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/lib-dsh-workspace-live
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -792,13 +791,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-batch-edit/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-batch-edit
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-batch-edit
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -811,13 +810,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-batchstate/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-batchstate
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-batchstate
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -830,13 +829,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-cost-analysis/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-cost-analysis
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-cost-analysis
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -849,13 +848,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-cost/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-cost
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-cost
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -866,13 +865,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-factory/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-factory
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-factory
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -883,13 +882,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-feedback/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-feedback
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-feedback
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -901,13 +900,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-gitguard/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-gitguard
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-gitguard
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -919,13 +918,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-ingester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-ingester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-ingester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -937,13 +936,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-lesson-review/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-lesson-review
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-lesson-review
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -956,13 +955,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-normalize-file/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-normalize-file
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-normalize-file
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -975,13 +974,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-pass-on/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-pass-on
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-pass-on
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -992,13 +991,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-pattern/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-pattern
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-pattern
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1009,13 +1008,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-queue/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-queue
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-queue
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1026,13 +1025,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-route/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-route
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-route
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1043,13 +1042,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-workspace-authority/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-workspace-authority
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-workspace-authority
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1062,13 +1061,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-workspace-context/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-workspace-context
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-workspace-context
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1081,13 +1080,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-workspace-evidence/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-workspace-evidence
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-workspace-evidence
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1100,13 +1099,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-workspace-graph/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-workspace-graph
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-workspace-graph
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1119,13 +1118,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-workspace-reflect/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-workspace-reflect
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-workspace-reflect
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1138,13 +1137,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-workspace-semantics/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-workspace-semantics
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-workspace-semantics
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1157,13 +1156,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Classic/packages/plugin-dsh-workspace/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Classic/packages/plugin-dsh-workspace
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./Classic/packages/plugin-dsh-workspace
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1175,13 +1174,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-base-dsh/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-base-dsh
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-base-dsh
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1192,13 +1191,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-client-dsh-workspace-live/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-client-dsh-workspace-live
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-client-dsh-workspace-live
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1211,13 +1210,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-cargo-governor/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-cargo-governor
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-cargo-governor
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1230,13 +1229,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-ccr/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-ccr
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-ccr
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1247,13 +1246,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-convention-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-convention-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-convention-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1266,13 +1265,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-doc-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-doc-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-doc-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1285,13 +1284,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-edit-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-edit-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-edit-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1304,13 +1303,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-graph-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-graph-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-graph-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1323,13 +1322,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-live-containers/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-live-containers
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-live-containers
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1342,13 +1341,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-normalize-dash/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-dash
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-dash
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1361,13 +1360,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-normalize-ellipsis/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-ellipsis
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-ellipsis
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1380,13 +1379,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-normalize-fullwidth/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-fullwidth
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-fullwidth
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1399,13 +1398,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-normalize-invisible/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-invisible
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-invisible
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1418,13 +1417,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-normalize-quotes/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-quotes
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-quotes
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1437,13 +1436,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-normalize-spaces/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-spaces
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-spaces
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1456,13 +1455,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-package-governor/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-package-governor
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-package-governor
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1475,13 +1474,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-package-pinner/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-package-pinner
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-package-pinner
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1494,13 +1493,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-replay-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-replay-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-replay-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1513,13 +1512,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-search-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-search-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-search-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1532,13 +1531,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-test-suggester/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-test-suggester
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-test-suggester
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1551,13 +1550,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-tool-coach/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-tool-coach
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-tool-coach
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1570,13 +1569,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-workspace-approve/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-approve
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-approve
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1589,13 +1588,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-workspace-audit/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-audit
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-audit
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1608,13 +1607,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-workspace-govern/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-govern
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-govern
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1627,13 +1626,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-workspace-journal/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-journal
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-journal
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1646,13 +1645,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-workspace-merge/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-merge
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-merge
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1665,13 +1664,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-workspace-monitor/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-monitor
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-monitor
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1684,13 +1683,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-workspace-observe/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-observe
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-observe
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1703,13 +1702,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-hook-dsh-workspace-operate/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-operate
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-operate
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1722,13 +1721,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-lib-dsh-core/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-lib-dsh-core
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-lib-dsh-core
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1739,13 +1738,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-lib-dsh-pack/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-lib-dsh-pack
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-lib-dsh-pack
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1756,13 +1755,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-lib-dsh-trace/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-lib-dsh-trace
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-lib-dsh-trace
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1773,13 +1772,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-lib-dsh-workspace-live/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-lib-dsh-workspace-live
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-lib-dsh-workspace-live
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1792,13 +1791,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-batch-edit/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-batch-edit
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-batch-edit
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1811,13 +1810,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-batchstate/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-batchstate
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-batchstate
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1830,13 +1829,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-factory/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-factory
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-factory
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1849,13 +1848,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-feedback/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-feedback
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-feedback
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1868,13 +1867,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-gitguard/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-gitguard
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-gitguard
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1887,13 +1886,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-normalize-file/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-normalize-file
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-normalize-file
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1906,13 +1905,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-queue/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-queue
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-queue
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1925,13 +1924,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-route/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-route
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-route
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1944,13 +1943,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-workspace-authority/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-authority
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-authority
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1963,13 +1962,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-workspace-context/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-context
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-context
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -1982,13 +1981,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-workspace-evidence/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-evidence
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-evidence
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -2001,13 +2000,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-workspace-graph/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-graph
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-graph
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -2020,13 +2019,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-workspace-reflect/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-reflect
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-reflect
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -2039,13 +2038,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-workspace-semantics/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-semantics
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-semantics
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -2058,13 +2057,13 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./EffectTS/packages/ets-plugin-dsh-workspace/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace
 
             - run: pnpm run prepublishOnly
-              working-directory: .
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace
 
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
@@ -2077,7 +2076,7 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Test/fixtures/manifest/governed-chain/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Test/fixtures/manifest/governed-chain
@@ -2086,7 +2085,7 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Test/fixtures/manifest/governed-test/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Test/fixtures/manifest/governed-test
@@ -2095,7 +2094,7 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "pnpm"
-                  cache-dependency-path: ./Test/probes/raw-write-probe/pnpm-lock.yaml
+                  cache-dependency-path: ./pnpm-lock.yaml
 
             - run: pnpm install
               working-directory: ./Test/probes/raw-write-probe
