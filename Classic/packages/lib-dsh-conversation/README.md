@@ -1,6 +1,6 @@
 # @playform/lib-dsh-conversation
 
-> v0.3.0 - UNPUBLISHED - plan:
+> v0.2.1 - UNPUBLISHED - plan:
 > [RFC-CONVERSATION-SPINE](../../Documentation/Plans/RFC-CONVERSATION-SPINE.md)
 
 ## What it owns

@@ -1,6 +1,6 @@
 # @playform/hook-dsh-replay-suggester
 
-> v0.3.0 - UNPUBLISHED - plan:
+> v0.2.1 - UNPUBLISHED - plan:
 > [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
 
 ## The role

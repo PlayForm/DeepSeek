@@ -82,7 +82,7 @@ error shape of the family when the plugin is disabled.
 ## Module-owned ledger strings (byte-stable)
 
 ```text
-workspace: activated (bundle 0.3.0, tools=5)
+workspace: activated (bundle 0.2.1, tools=5)
 workspace: disabled (enabled=false)
 workspace: map <path> (<modules> modules, <files> files)
 workspace: find <query> (<n> nodes)

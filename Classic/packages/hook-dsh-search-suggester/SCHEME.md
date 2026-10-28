@@ -1,4 +1,4 @@
-# SCHEME.md - @playform/hook-dsh-search-suggester (v0.3.0, TypeScript, function plugin)
+# SCHEME.md - @playform/hook-dsh-search-suggester (v0.2.1, TypeScript, function plugin)
 
 Status: **IMPLEMENTED (wave 2d)**.
 
@@ -58,7 +58,7 @@ Source of truth: `Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md`.
 
 ```
 search-suggester: disabled (enabled=false)
-search-suggester: activated (bundle 0.3.0, intents 10, threshold 0.75)
+search-suggester: activated (bundle 0.2.1, intents 10, threshold 0.75)
 search-suggester: suggest <Intent> <k> <n> candidates
 search-suggester: abstained low-confidence <Intent> <k>
 search-suggester: abstained ambiguous-target <Intent> <k>

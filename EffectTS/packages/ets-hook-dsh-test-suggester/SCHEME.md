@@ -104,7 +104,7 @@ may raise the gate, never lower it below the floor of the pack.
 ## Ledger strings (byte-exact, module-owned)
 
 ```
-test-suggester: activated (bundle 0.3.0, intents <n>, threshold <t>)
+test-suggester: activated (bundle 0.2.1, intents <n>, threshold <t>)
 test-suggester: disabled (enabled=false)
 test-suggester: suggest <Intent> <k> <n> candidates call <tool>
 test-suggester: abstained ambiguous <Intent> <k>

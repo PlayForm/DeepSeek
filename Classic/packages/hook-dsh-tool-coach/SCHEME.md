@@ -1,4 +1,4 @@
-# SCHEME.md - @playform/hook-dsh-tool-coach (v0.3.0, TypeScript, function plugin)
+# SCHEME.md - @playform/hook-dsh-tool-coach (v0.2.1, TypeScript, function plugin)
 
 Status: **IMPLEMENTED and VERIFIED**.
 

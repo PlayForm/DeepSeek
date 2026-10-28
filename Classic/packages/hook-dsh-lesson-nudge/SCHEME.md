@@ -76,7 +76,7 @@ creates a subagent, because a maintenance task is not a subagent.
 
 The factory's `Append` prefixes `<module>: `, so each line reads `hook-dsh-lesson-nudge: <message>`:
 
-- `activated (bundle=0.3.0, cap=<n>)`
+- `activated (bundle=0.2.1, cap=<n>)`
 - `disabled (enabled=false)`
 - `reviewed <outcome> (<a> applied, <q> queued)`
 - `cap reached (<n> reviews)`

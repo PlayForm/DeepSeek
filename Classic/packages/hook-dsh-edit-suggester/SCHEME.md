@@ -1,4 +1,4 @@
-# SCHEME.md - @playform/hook-dsh-edit-suggester (v0.3.0, TypeScript, function plugin)
+# SCHEME.md - @playform/hook-dsh-edit-suggester (v0.2.1, TypeScript, function plugin)
 
 Status: **IMPLEMENTED (PoC phase plus the D8 learning layer)**, because the Source is complete, the
 build and the five smoke folders pass, and the decision-record, follow-through, and learned-rate
@@ -52,7 +52,7 @@ shared algebra of section 3.
 
 ```
 edit-suggester: disabled (enabled=false)
-edit-suggester: activated (bundle 0.3.0, families 7, threshold 0.75)
+edit-suggester: activated (bundle 0.2.1, families 7, threshold 0.75)
 edit-suggester: suggest <Family> <k> <n> companions <edited path>
 edit-suggester: decided <Family> <k> <n> companions <head path> <values> weights <weights> store=<pattern|memory>
 edit-suggester: accepted <Family> <companion>

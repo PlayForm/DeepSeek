@@ -1,4 +1,4 @@
-# SCHEME.md - @playform/ets-hook-dsh-ccr (v0.3.0, TypeScript, function plugin)
+# SCHEME.md - @playform/ets-hook-dsh-ccr (v0.2.1, TypeScript, function plugin)
 
 Status: **IMPLEMENTED and VERIFIED** (deterministic build with zero errors; minified build;
 `ccr-smoke.mjs` green - fake ctx + the REAL factory + the REAL built Target).
@@ -181,7 +181,7 @@ The strings are the module's OWN (the factory never owns them) and asserted byte
 smoke:
 
 ```
-ccr: activated (bundle 0.3.0, targets 8, budget 268435456)
+ccr: activated (bundle 0.2.1, targets 8, budget 268435456)
 ccr: compressed <tool> <type> <bytes> -> <hash>
 ccr: stored <tool> <type> <bytes> -> <hash>
 ccr: evicted <hash> (budget)

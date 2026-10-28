@@ -1,6 +1,6 @@
 # @playform/plugin-dsh-workspace
 
-> v0.3.0 - UNPUBLISHED - plan:
+> v0.2.1 - UNPUBLISHED - plan:
 > [Workspace/WORKSPACE-AGENT](../../Documentation/Plans/Workspace/WORKSPACE-AGENT.md)
 
 ## The role
@@ -45,7 +45,7 @@ SCHEME.md):
 workspace: index <path> (<indexed> indexed, <skipped> skipped, <failed> failed, <files> files)
 ```
 
-The activation line moved with the fifth tool: `workspace: activated (bundle 0.3.0, tools=5)`.
+The activation line moved with the fifth tool: `workspace: activated (bundle 0.2.1, tools=5)`.
 
 ## The configuration
 

@@ -130,7 +130,7 @@ and the hook abstains, because the replay answer requires the memory, never a gu
 ## Ledger strings (byte-exact, module-owned)
 
 ```
-replay-suggester: activated (bundle 0.3.0, intents <n>, threshold <t>, history <h>)
+replay-suggester: activated (bundle 0.2.1, intents <n>, threshold <t>, history <h>)
 replay-suggester: disabled (enabled=false)
 replay-suggester: history loaded <n> records
 replay-suggester: history missing (starting empty)

@@ -67,7 +67,7 @@ the config `threshold` may raise the gate but never lower it below the pack floo
 ## Ledger strings (byte-exact, module-owned)
 
 ```
-graph-suggester: activated (bundle 0.3.0, intents <n>, threshold <t>)
+graph-suggester: activated (bundle 0.2.1, intents <n>, threshold <t>)
 graph-suggester: disabled (enabled=false)
 graph-suggester: suggest <Intent> <k> <n> candidates call <tool>
 graph-suggester: abstained graph-unavailable <Intent> <k>

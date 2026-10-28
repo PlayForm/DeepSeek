@@ -1,6 +1,6 @@
 # @playform/plugin-dsh-cost
 
-> v0.3.0 - UNPUBLISHED - plan: [COST-TRACK-PLUGIN](../../Documentation/Plans/COST-TRACK-PLUGIN.md)
+> v0.2.1 - UNPUBLISHED - plan: [COST-TRACK-PLUGIN](../../Documentation/Plans/COST-TRACK-PLUGIN.md)
 
 ## What it measures
 

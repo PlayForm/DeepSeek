@@ -1,6 +1,6 @@
 # @playform/plugin-dsh-queue
 
-> v0.3.0 - UNPUBLISHED - plan:
+> v0.2.1 - UNPUBLISHED - plan:
 > [SUBAGENT-QUEUE-PLUGIN](../../Documentation/Plans/SUBAGENT-QUEUE-PLUGIN.md)
 
 ## The role

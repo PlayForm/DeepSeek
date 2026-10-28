@@ -101,7 +101,7 @@ resolved pack overrides the defaults per action, with the wiring left as the nex
 ## Ledger strings (module-owned, byte-stable)
 
 - `disabled (enabled=false)`
-- `bundle 0.3.0 autoApprove <off|on> allowlist <n>` (the Activate line)
+- `bundle 0.2.1 autoApprove <off|on> allowlist <n>` (the Activate line)
 - `proposal <id> recorded (intent <intent>, targets <n>, rev <n>)`
 - `proposal <id> ignored (revision not newer)`
 - `decision <outcome> <id> (by <user|policy>)`

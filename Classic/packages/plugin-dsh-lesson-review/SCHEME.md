@@ -165,7 +165,7 @@ A refusal is returned and never thrown, so one bad operation cannot discard the 
 
 Every line is `lesson: <message> (logFile <logFile>)`:
 
-- `activated (bundle=0.3.0, interval=<n> turns, corpus=<root>, write=<verdict>)`
+- `activated (bundle=0.2.1, interval=<n> turns, corpus=<root>, write=<verdict>)`
 - `disabled (enabled=false)`
 - `restored <n> usage records` / `usage store unreadable: <reason>; starting empty`
 - `due after <n> turns`

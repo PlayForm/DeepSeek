@@ -1,4 +1,4 @@
-# SCHEME.md - @playform/hook-dsh-ccr (v0.3.0, TypeScript, function plugin)
+# SCHEME.md - @playform/hook-dsh-ccr (v0.2.1, TypeScript, function plugin)
 
 Status: **IMPLEMENTED and VERIFIED**, with a deterministic build of zero errors, a minified build,
 and a green `ccr-smoke.mjs` that runs a fake ctx against the REAL factory and the REAL built Target.
@@ -167,7 +167,7 @@ The strings are the module's OWN, because the factory never owns them, and the s
 byte-identical:
 
 ```
-ccr: activated (bundle 0.3.0, targets 8, budget 268435456)
+ccr: activated (bundle 0.2.1, targets 8, budget 268435456)
 ccr: compressed <tool> <type> <bytes> -> <hash>
 ccr: stored <tool> <type> <bytes> -> <hash>
 ccr: evicted <hash> (budget)
@@ -299,5 +299,5 @@ respected, and the archive stores through the real compress path and is retrieva
 
 The suite is the Boilerplate reference copied with ONLY the import paths
 (`../packages/hook-dsh-ccr/...`, `../packages/plugin-dsh-factory/...`) and the identity-driven
-activation version (`bundle 0.3.0`, the package convention of the Classic tree) changed, so every
+activation version (`bundle 0.2.1`, the package convention of the Classic tree) changed, so every
 other assertion is byte-identical.

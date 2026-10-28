@@ -1,6 +1,6 @@
 # @playform/hook-dsh-test-suggester
 
-> v0.3.0 - UNPUBLISHED - plan:
+> v0.2.1 - UNPUBLISHED - plan:
 > [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md)
 
 ## The role
@@ -97,7 +97,7 @@ per module), asserted byte-exactly by the end-phase smokes.
 ## The ledger
 
 ```
-test-suggester: activated (bundle 0.3.0, intents 2, threshold 0.75)
+test-suggester: activated (bundle 0.2.1, intents 2, threshold 0.75)
 test-suggester: disabled (enabled=false)
 test-suggester: suggest Suite 0.84 4 candidates call grep
 test-suggester: abstained ambiguous Suite 0.62
