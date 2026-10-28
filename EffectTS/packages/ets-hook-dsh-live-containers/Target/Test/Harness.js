@@ -1,2 +1,573 @@
-import c from"node:assert/strict";import*as d from"node:fs";import*as P from"node:os";import*as x from"node:path";import u from"../../Target/Library.js";import A from"../../../ets-plugin-dsh-factory/Target/Library.js";import{DEFAULT_BLOCKS as f}from"../../Target/Variable/DefaultBlocks.js";import{Frame as C}from"../../Target/Function/Render.js";const q=f.map(e=>e.id),L=()=>({N:0,F:0}),y=(e,t,n)=>{e.N++;try{n(),console.log(`PASS - ${t}`)}catch(s){e.F++,console.log(`FAIL - ${t}`),console.log(s instanceof Error?s.message:String(s))}},U=async(e,t,n)=>{e.N++;try{await n(),console.log(`PASS - ${t}`)}catch(s){e.F++,console.log(`FAIL - ${t}`),console.log(s instanceof Error?s.message:String(s))}},V=(e,t)=>{if(e.F!==0)throw new Error(`${t}: ${e.F} failed check(s)`);return e.N},E=d.mkdtempSync(x.join(P.tmpdir(),"live-containers-smoke-")),g=x.join(E,"live-containers.log"),M=()=>{try{d.rmSync(g)}catch{}},N=()=>(()=>{try{return d.readFileSync(g,"utf8").split(`
-`).filter(Boolean)}catch{return[]}})(),h=new A({reflect:{provide:()=>{}}}),k={Now:17e11},b=()=>k.Now,Z=e=>{k.Now+=e},v=Symbol.for("cosmokit.volatile.write"),_=(e,t)=>{const n=e;if(typeof n?.[v]!="function")throw new Error("Flip: not a volatile cell (no cosmokit write symbol)");n[v](t)},p=(e,t)=>{const n={},s=[],o=[],r={pluginFactory:h,tools:{schemas:()=>[]},on:(i,S)=>(n[i]=S,()=>!0),get:i=>{switch(i){case"pluginFactory":return h;case"tools":return r.tools;default:return}},logger:{info:i=>{s.push(i)},warn:i=>{o.push(i)}},get root(){return r}},a={Context:r,Listeners:n,Lines:s,Warns:o,Raw:e};t?.(r,a);const F=u.apply(r,e);return a.Returned=F,a.State=r.__hookDshLiveContainersState,a},I=e=>u.Config({...e}),K=e=>{const t=p(e);return t.State.Now=b,t},z=(e,t,n,s={})=>({id:e,kind:t,template:n,enabled:!0,vars:{},trigger:"request",ttlCalls:8,scope:"always",...s}),G=(e,t)=>e.Lines.filter(n=>n.includes(t)),Q=e=>N().filter(t=>t.includes(e)),O={kind:"accept"},l={id:"agent-a"},X={key:"scope-a"},R=async(e,t,n=void 0)=>e.Listeners["system-prompt/assemble"](t,n===void 0?{}:{scope:n},async()=>t),Y=async(e,t=void 0)=>R(e,{sections:[{name:"base",text:"BASE"}],contexts:[],tools:[],variables:{}},t),ee=async(e,t=1)=>{const n={agent:l,messages:Array.from({length:t},()=>({source:{kind:"user"}}))};return e.Listeners["agent/pre-step"](n,async()=>({stepped:!0}))},te=async(e,t="bash")=>e.Listeners["tools/post-execute"]({callId:"call_smoke",name:t,arguments:{command:"ls"},agent:l,signal:void 0},{isError:!1,value:"",content:[]},async()=>O),ne=e=>e.sections.find(t=>t.name==="live-containers"),se=async(e,t=l)=>{const n={sections:[{name:"base",text:"BASE"}],contexts:[],tools:[],variables:{}};return e.Listeners["system-prompt/assemble"](n,{scope:t,agent:t},async()=>n)},oe=async(e,t)=>{let n=!1;return{decision:await e.Listeners["tools/pre-execute"](t,async()=>(n=!0,{kind:"allow"})),nextCalled:n}},re=async(e,t,n)=>e.Listeners["tools/execute"](t,n??(async()=>({isError:!1,value:{real:!0},content:[]}))),ae=(e,t)=>{if(e.JobsHub===void 0)throw new Error("FireJobs: the mount has no jobs service (pass jobs: FakeJobsHub() to MakeWave)");for(const n of e.JobsHub.listeners)n(t)},ie=(e,t)=>{e.Listeners["session/event"]({id:"session-1"},t)},T=()=>{const e={status:"running",exitCode:null,signal:null,stdout:{chunks:"",offset:0},stderr:{chunks:"",offset:0}},t=o=>({text:o.chunks.slice(o.offset),nextOffset:o.chunks.length,lossy:!1}),n={get status(){return e.status},get exitCode(){return e.exitCode},get signal(){return e.signal},observed:{stdout:{readFrom:o=>({text:e.stdout.chunks.slice(o),nextOffset:e.stdout.chunks.length,lossy:!1})},stderr:{readFrom:o=>({text:e.stderr.chunks.slice(o),nextOffset:e.stderr.chunks.length,lossy:!1})}},done:void 0,resolve:void 0,kill:()=>(e.status==="running"&&(e.status="killed",e.signal=e.signal??"SIGTERM"),!0),result:async()=>({exitCode:e.exitCode,signal:e.signal,timedOut:!1,aborted:!1,timeoutMs:12e4,stdout:{text:t(e.stdout).text,truncated:!1},stderr:{text:t(e.stderr).text,truncated:!1}}),feed:(o,r)=>{e[o].chunks+=r},settle:(o,r=null)=>{e.exitCode=o,e.signal=r,e.status==="running"&&(e.status=r!==null?"killed":"completed"),s?.(void 0)}};let s;return n.done=new Promise(o=>{s=o}),n},le=()=>{const e={started:[],killed:[],listeners:[],next:0,processes:[]};return e.registry={start:t=>{e.next+=1;const n=`bash-${e.next.toString(16).padStart(16,"0")}`;return e.started.push({id:n,spec:t}),n},events:{subscribe:(t,n)=>(e.listeners.push(n),()=>!0)},kill:(t,n,s)=>(e.killed.push({id:t,caller:n,reason:s}),"requested"),list:()=>[],get:()=>({id:"x",kind:"bash",label:"x",status:"running",startedAt:0,output:{total:0,earliest:0}}),readAt:()=>({text:"",nextOffset:0,lossy:!1}),wait:async()=>({id:"x",status:"running",startedAt:0,output:{total:0,earliest:0}}),remove:()=>{},attachController:()=>{}},e.settled=(t,n={})=>({type:"settled",job:{id:t,kind:e.started.find(s=>s.id===t)?.spec.kind??"bash",label:"cargo build",...n.owner!==void 0?{owner:n.owner}:{},status:n.status??"completed",detail:n.detail,startedAt:0,output:{total:0,earliest:0}},cause:n.cause??"producer",awaited:n.awaited??!1}),e},ce=()=>{const e={resolved:[],executed:[],processes:[]};return e.registry={sandboxMode:void 0,resolve:t=>{const n={...t};return e.resolved.push(n),n},execute:async t=>{const n=T();return e.executed.push(t),e.processes.push(n),n}},e},D=(e="workspace-write")=>({mode:e,resolve:t=>({mode:e,session:t?.session})}),de=()=>{const e={spawns:[],resolvers:[]};return e.registry={startActivation:t=>{e.spawns.push(t);let n=()=>{};const s=new Promise(o=>{n=o});return e.resolvers.push(n),{childId:`child-${e.spawns.length}`,result:s,dispose:async()=>{}}}},e.answer=(t,n)=>{e.resolvers[t]?.({output:n,stopReason:"end_turn"})},e},ue=(...e)=>{const t=new Map(e.map(n=>[n,{id:n,status:"idle"}]));return{get:n=>t.get(n)}},ye=(e,t={})=>{const n=p(e,(s,o)=>{o.JobsHub=t.jobs,s.jobs=t.jobs?.registry,s.shell=t.shell?.registry,s.shellEnv={collect:r=>({DSH_SESSION:r?.agent?.id??"none"})},s.workingDirectory={ensure:async()=>"/session"},s.sandboxPolicy=t.policy??D(),s.subagent=t.subagent?.registry,s.agents=t.agents,o.tools={},s.tools={schemas:()=>[],register:r=>(o.tools[r.name]=r,()=>!0)},o.contexts={},s.systemPrompt={context:r=>(o.contexts[r.name]=r,()=>!0)}});return n.State.Now=b,n},m=async(e,t,n,s=l)=>e.tools[t].execute(n,{agent:s,callId:"call_tool",rootCallId:"call_tool",signal:void 0}),ge=async(e,t,n)=>m(e,"live_plant",n,t),pe=async(e,t,n)=>m(e,"live_container_set",n,t),me=async(e,t,n)=>m(e,"live_monitor",n,t),xe=(e,t=l)=>e.contexts["live-containers-completion"]?.text({agent:t,scope:t})??"",fe=(e={})=>{const t={spec:void 0,records:new Map,failOpen:e.failOpen===!0};return t.facility={open:async n=>{if(t.failOpen)throw new Error("storage unavailable");return t.spec=n,{close:async()=>{},table:s=>({put:async(o,r)=>{t.records.set(o,r)},get:o=>t.records.get(o),entries:()=>t.records.entries(),keys:()=>t.records.keys(),get size(){return t.records.size},delete:async o=>t.records.delete(o),update:async(o,r)=>{const a=r(t.records.get(o));return t.records.set(o,a),a}})}}},t.seed=(n,s)=>{t.records.set(n,s)},t},he=async(e,t)=>{await(await import("../../Target/Function/Storage.js")).default(e.State,t,s=>e.State.Factory.Append(e.State,s))},ke=(e,t,n,s={agent:{id:"agent-a",session:void 0}})=>{e.Listeners["fs/observed"]({displayPath:t,targetKey:t},{kind:"present",version:n},s)},be=(e,t,n)=>{_(e.Raw[t],n),e.Listeners["loader/volatile-update"]([t])},ve=(e={})=>({monitors:"on",watchlist:[{glob:"**/*.ts",checks:["tsc","format"]}],monitor:{debounceMs:1500,maxMonitors:8,maxMonitorJobs:3,retireMs:6e5,staleMs:3e5,slowCheckIntervalMs:0,bandCapBytes:2048,checkTimeoutMs:12e4,linkageAlertVersions:3,dedupWindowMs:3e4},...e}),we=(e,t={})=>({callId:`call_${Math.random().toString(16).slice(2,8)}`,rootCallId:"call_root",name:"bash",arguments:{description:"run",command:e,...t},agent:l,signal:void 0}),Fe=e=>new Intl.DateTimeFormat("en-GB",{timeZone:w(),hour12:!1,hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(new Date(e)),Se=e=>new Intl.DateTimeFormat("en-CA",{timeZone:w(),year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(e)),w=()=>{try{return new Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC"}catch{return"UTC"}},$=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if($){const e=L();y(e,"selfcheck: a passing assertion counts as PASS",()=>{c.equal(1,1)}),y(e,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{c.equal(1,2)}),M();const t=p(I({logFile:g}));y(e,"selfcheck: the fake ctx registers the plugin's apply-time wiring",()=>{c.equal(Object.keys(t.Listeners).length,5),c.equal(t.State.Module,"hook-dsh-live-containers"),c.ok(t.Lines.some(n=>n.startsWith("hook-dsh-live-containers: disabled")))}),e.N===3&&e.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${e.N}, F=${e.F})`),process.exitCode=1)}export{O as ACCEPT,Z as Advance,l as AgentA,Y as Assemble,R as AssembleBase,z as Block,m as CallTool,y as Check,U as CheckAsync,k as ClockBox,u as Containers,f as DEFAULT_BLOCKS,q as DEFAULT_BLOCKS_IDS,we as Exec,re as Execute,Se as ExpectedDate,Fe as ExpectedTime,ue as FakeAgents,b as FakeClock,le as FakeJobsHub,D as FakePolicy,T as FakeProcess,ce as FakeShell,fe as FakeStorage,de as FakeSubagent,V as Finish,ae as FireJobs,ke as FireObserved,ie as FireSession,_ as Flip,be as FlipLive,C as Frame,h as Furnace,g as Ledger,N as LedgerLines,Q as LedgerWith,G as LinesWith,ne as LiveSection,p as Make,K as MakeClocked,L as MakeCounter,ye as MakeWave,ve as MonitorConfig,he as OpenStorage,xe as PendingText,te as Post,oe as Pre,ee as PreStep,E as Root,X as ScopeA,I as Validate,se as WaveAssemble,w as Zone,me as live_monitor,ge as live_plant,pe as live_set,M as rm};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Containers from "../../Target/Library.js";
+import FactoryClass from "../../../ets-plugin-dsh-factory/Target/Library.js";
+import { DEFAULT_BLOCKS } from "../../Target/Variable/DefaultBlocks.js";
+import { Frame } from "../../Target/Function/Render.js";
+const DEFAULT_BLOCKS_IDS = DEFAULT_BLOCKS.map((Block2) => Block2.id);
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "live-containers-smoke-"));
+const Ledger = Path.join(Root, "live-containers.log");
+const rm = () => {
+  try {
+    FileSystem.rmSync(Ledger);
+  } catch {
+  }
+};
+const LedgerLines = () => (() => {
+  try {
+    return FileSystem.readFileSync(Ledger, "utf8").split("\n").filter(Boolean);
+  } catch {
+    return [];
+  }
+})();
+const Furnace = new FactoryClass({
+  reflect: { provide: () => void 0 }
+});
+const ClockBox = { Now: 17e11 };
+const FakeClock = () => ClockBox.Now;
+const Advance = (Ms) => {
+  ClockBox.Now += Ms;
+};
+const Write = /* @__PURE__ */ Symbol.for("cosmokit.volatile.write");
+const Flip = (CellValue, New) => {
+  const Cell = CellValue;
+  if (typeof Cell?.[Write] !== "function") {
+    throw new Error("Flip: not a volatile cell (no cosmokit write symbol)");
+  }
+  Cell[Write](New);
+};
+const Make = (Raw, Attach) => {
+  const Listeners = {}, Lines = [], Warns = [];
+  const Context = {
+    pluginFactory: Furnace,
+    tools: { schemas: () => [] },
+    on: (Name, Listener) => {
+      Listeners[Name] = Listener;
+      return () => true;
+    },
+    get: (Name) => {
+      switch (Name) {
+        case "pluginFactory":
+          return Furnace;
+        case "tools":
+          return Context.tools;
+        default:
+          return void 0;
+      }
+    },
+    logger: {
+      info: (M) => {
+        Lines.push(M);
+      },
+      warn: (M) => {
+        Warns.push(M);
+      }
+    },
+    get root() {
+      return Context;
+    }
+  };
+  const Run = { Context, Listeners, Lines, Warns, Raw };
+  Attach?.(Context, Run);
+  const Returned = Containers.apply(Context, Raw);
+  Run.Returned = Returned;
+  Run.State = Context.__hookDshLiveContainersState;
+  return Run;
+};
+const Validate = (Raw) => Containers.Config({ ...Raw });
+const MakeClocked = (Raw) => {
+  const Run = Make(Raw);
+  Run.State.Now = FakeClock;
+  return Run;
+};
+const Block = (ID, Kind, Template, Extra = {}) => ({
+  id: ID,
+  kind: Kind,
+  template: Template,
+  enabled: true,
+  vars: {},
+  trigger: "request",
+  ttlCalls: 8,
+  scope: "always",
+  ...Extra
+});
+const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
+const LedgerWith = (Needle) => LedgerLines().filter((L) => L.includes(Needle));
+const ACCEPT = { kind: "accept" };
+const AgentA = { id: "agent-a" };
+const ScopeA = { key: "scope-a" };
+const AssembleBase = async (Run, Base, Scope = void 0) => Run.Listeners["system-prompt/assemble"](
+  Base,
+  Scope === void 0 ? {} : { scope: Scope },
+  async () => Base
+);
+const Assemble = async (Run, Scope = void 0) => {
+  const Assembly = {
+    sections: [{ name: "base", text: "BASE" }],
+    contexts: [],
+    tools: [],
+    variables: {}
+  };
+  return AssembleBase(Run, Assembly, Scope);
+};
+const PreStep = async (Run, Users = 1) => {
+  const Step = {
+    agent: AgentA,
+    messages: Array.from({ length: Users }, () => ({ source: { kind: "user" } }))
+  };
+  return Run.Listeners["agent/pre-step"](Step, async () => ({ stepped: true }));
+};
+const Post = async (Run, Name = "bash") => Run.Listeners["tools/post-execute"](
+  { callId: "call_smoke", name: Name, arguments: { command: "ls" }, agent: AgentA, signal: void 0 },
+  { isError: false, value: "", content: [] },
+  async () => ACCEPT
+);
+const LiveSection = (Out) => Out.sections.find((S) => S.name === "live-containers");
+const WaveAssemble = async (Run, Agent = AgentA) => {
+  const Assembly = {
+    sections: [{ name: "base", text: "BASE" }],
+    contexts: [],
+    tools: [],
+    variables: {}
+  };
+  return Run.Listeners["system-prompt/assemble"](
+    Assembly,
+    { scope: Agent, agent: Agent },
+    async () => Assembly
+  );
+};
+const Pre = async (Run, Exec2) => {
+  let nextCalled = false;
+  const decision = await Run.Listeners["tools/pre-execute"](Exec2, async () => {
+    nextCalled = true;
+    return { kind: "allow" };
+  });
+  return { decision, nextCalled };
+};
+const Execute = async (Run, Exec2, Next) => Run.Listeners["tools/execute"](Exec2, Next ?? (async () => ({ isError: false, value: { real: true }, content: [] })));
+const FireJobs = (Run, Event) => {
+  if (Run.JobsHub === void 0) {
+    throw new Error("FireJobs: the mount has no jobs service (pass jobs: FakeJobsHub() to MakeWave)");
+  }
+  for (const Listener of Run.JobsHub.listeners) {
+    Listener(Event);
+  }
+};
+const FireSession = (Run, Event) => {
+  Run.Listeners["session/event"]({ id: "session-1" }, Event);
+};
+const FakeProcess = () => {
+  const State = {
+    status: "running",
+    exitCode: null,
+    signal: null,
+    stdout: { chunks: "", offset: 0 },
+    stderr: { chunks: "", offset: 0 }
+  };
+  const Read = (Buffer_) => ({
+    text: Buffer_.chunks.slice(Buffer_.offset),
+    nextOffset: Buffer_.chunks.length,
+    lossy: false
+  });
+  const Handle = {
+    get status() {
+      return State.status;
+    },
+    get exitCode() {
+      return State.exitCode;
+    },
+    get signal() {
+      return State.signal;
+    },
+    observed: {
+      stdout: { readFrom: (From) => ({ text: State.stdout.chunks.slice(From), nextOffset: State.stdout.chunks.length, lossy: false }) },
+      stderr: { readFrom: (From) => ({ text: State.stderr.chunks.slice(From), nextOffset: State.stderr.chunks.length, lossy: false }) }
+    },
+    done: void 0,
+    resolve: void 0,
+    kill: () => {
+      if (State.status === "running") {
+        State.status = "killed";
+        State.signal = State.signal ?? "SIGTERM";
+      }
+      return true;
+    },
+    result: async () => ({
+      exitCode: State.exitCode,
+      signal: State.signal,
+      timedOut: false,
+      aborted: false,
+      timeoutMs: 12e4,
+      stdout: { text: Read(State.stdout).text, truncated: false },
+      stderr: { text: Read(State.stderr).text, truncated: false }
+    }),
+    /** Feed one channel with output (the smoke's pump stand-in). */
+    feed: (Channel, Text) => {
+      State[Channel].chunks += Text;
+    },
+    /** Settle the process (exit or kill). */
+    settle: (ExitCode, Signal = null) => {
+      State.exitCode = ExitCode;
+      State.signal = Signal;
+      if (State.status === "running") {
+        State.status = Signal !== null ? "killed" : "completed";
+      }
+      ResolveDone?.(void 0);
+    }
+  };
+  let ResolveDone;
+  Handle.done = new Promise((Resolve) => {
+    ResolveDone = Resolve;
+  });
+  return Handle;
+};
+const FakeJobsHub = () => {
+  const Hub = {
+    started: [],
+    killed: [],
+    listeners: [],
+    next: 0,
+    processes: []
+  };
+  Hub.registry = {
+    start: (Specification) => {
+      Hub.next += 1;
+      const ID = `bash-${Hub.next.toString(16).padStart(16, "0")}`;
+      Hub.started.push({ id: ID, spec: Specification });
+      return ID;
+    },
+    events: {
+      subscribe: (_Filter, Listener) => {
+        Hub.listeners.push(Listener);
+        return () => true;
+      }
+    },
+    kill: (ID, Caller, Reason) => {
+      Hub.killed.push({ id: ID, caller: Caller, reason: Reason });
+      return "requested";
+    },
+    list: () => [],
+    get: () => ({ id: "x", kind: "bash", label: "x", status: "running", startedAt: 0, output: { total: 0, earliest: 0 } }),
+    readAt: () => ({ text: "", nextOffset: 0, lossy: false }),
+    wait: async () => ({ id: "x", status: "running", startedAt: 0, output: { total: 0, earliest: 0 } }),
+    remove: () => void 0,
+    attachController: () => void 0
+  };
+  Hub.settled = (JobID, Options = {}) => ({
+    type: "settled",
+    job: {
+      id: JobID,
+      kind: Hub.started.find((S) => S.id === JobID)?.spec.kind ?? "bash",
+      label: "cargo build",
+      ...Options.owner !== void 0 ? { owner: Options.owner } : {},
+      status: Options.status ?? "completed",
+      detail: Options.detail,
+      startedAt: 0,
+      output: { total: 0, earliest: 0 }
+    },
+    cause: Options.cause ?? "producer",
+    awaited: Options.awaited ?? false
+  });
+  return Hub;
+};
+const FakeShell = () => {
+  const Shell = {
+    resolved: [],
+    executed: [],
+    processes: []
+  };
+  Shell.registry = {
+    sandboxMode: void 0,
+    resolve: (Request) => {
+      const Specification = { ...Request };
+      Shell.resolved.push(Specification);
+      return Specification;
+    },
+    execute: async (Specification) => {
+      const Process = FakeProcess();
+      Shell.executed.push(Specification);
+      Shell.processes.push(Process);
+      return Process;
+    }
+  };
+  return Shell;
+};
+const FakePolicy = (Mode = "workspace-write") => ({
+  mode: Mode,
+  resolve: (Input) => ({ mode: Mode, session: Input?.session })
+});
+const FakeSubagent = () => {
+  const Sub = { spawns: [], resolvers: [] };
+  Sub.registry = {
+    startActivation: (Specification) => {
+      Sub.spawns.push(Specification);
+      let ResolveResult = () => void 0;
+      const Result = new Promise((Resolve) => {
+        ResolveResult = Resolve;
+      });
+      Sub.resolvers.push(ResolveResult);
+      return { childId: `child-${Sub.spawns.length}`, result: Result, dispose: async () => void 0 };
+    }
+  };
+  Sub.answer = (Index, Output) => {
+    Sub.resolvers[Index]?.({ output: Output, stopReason: "end_turn" });
+  };
+  return Sub;
+};
+const FakeAgents = (...IDs) => {
+  const Map_ = new Map(IDs.map((ID) => [ID, { id: ID, status: "idle" }]));
+  return { get: (ID) => Map_.get(ID) };
+};
+const MakeWave = (Raw, Services = {}) => {
+  const Run = Make(Raw, (Context, Run_) => {
+    Run_.JobsHub = Services.jobs;
+    Context.jobs = Services.jobs?.registry;
+    Context.shell = Services.shell?.registry;
+    Context.shellEnv = { collect: (Exec2) => ({ DSH_SESSION: Exec2?.agent?.id ?? "none" }) };
+    Context.workingDirectory = { ensure: async () => "/session" };
+    Context.sandboxPolicy = Services.policy ?? FakePolicy();
+    Context.subagent = Services.subagent?.registry;
+    Context.agents = Services.agents;
+    Run_.tools = {};
+    Context.tools = {
+      schemas: () => [],
+      register: (Definition) => {
+        Run_.tools[Definition.name] = Definition;
+        return () => true;
+      }
+    };
+    Run_.contexts = {};
+    Context.systemPrompt = {
+      context: (Context_) => {
+        Run_.contexts[Context_.name] = Context_;
+        return () => true;
+      }
+    };
+  });
+  Run.State.Now = FakeClock;
+  return Run;
+};
+const CallTool = async (Run, Name, Args, Agent = AgentA) => Run.tools[Name].execute(Args, { agent: Agent, callId: "call_tool", rootCallId: "call_tool", signal: void 0 });
+const live_plant = async (Run, Agent, Args) => CallTool(Run, "live_plant", Args, Agent);
+const live_set = async (Run, Agent, Args) => CallTool(Run, "live_container_set", Args, Agent);
+const live_monitor = async (Run, Agent, Args) => CallTool(Run, "live_monitor", Args, Agent);
+const PendingText = (Run, Agent = AgentA) => Run.contexts["live-containers-completion"]?.text({ agent: Agent, scope: Agent }) ?? "";
+const FakeStorage = (Options = {}) => {
+  const Store = {
+    spec: void 0,
+    records: /* @__PURE__ */ new Map(),
+    failOpen: Options.failOpen === true
+  };
+  Store.facility = {
+    open: async (Specification) => {
+      if (Store.failOpen) {
+        throw new Error("storage unavailable");
+      }
+      Store.spec = Specification;
+      return {
+        close: async () => void 0,
+        table: (_Name) => ({
+          put: async (Key, Value) => {
+            Store.records.set(Key, Value);
+          },
+          get: (Key) => Store.records.get(Key),
+          entries: () => Store.records.entries(),
+          keys: () => Store.records.keys(),
+          get size() {
+            return Store.records.size;
+          },
+          delete: async (Key) => Store.records.delete(Key),
+          update: async (Key, Fn) => {
+            const Next = Fn(Store.records.get(Key));
+            Store.records.set(Key, Next);
+            return Next;
+          }
+        })
+      };
+    }
+  };
+  Store.seed = (Key, Record) => {
+    Store.records.set(Key, Record);
+  };
+  return Store;
+};
+const OpenStorage = async (Run, Facility) => {
+  const Storage = await import("../../Target/Function/Storage.js");
+  await Storage.default(
+    Run.State,
+    Facility,
+    (Message) => Run.State.Factory.Append(Run.State, Message)
+  );
+};
+const FireObserved = (Run, Path2, Version, Actor = { agent: { id: "agent-a", session: void 0 } }) => {
+  Run.Listeners["fs/observed"](
+    { displayPath: Path2, targetKey: Path2 },
+    { kind: "present", version: Version },
+    Actor
+  );
+};
+const FlipLive = (Run, Key, Value) => {
+  Flip(Run.Raw[Key], Value);
+  Run.Listeners["loader/volatile-update"]([Key]);
+};
+const MonitorConfig = (Extra = {}) => ({
+  monitors: "on",
+  watchlist: [{ glob: "**/*.ts", checks: ["tsc", "format"] }],
+  monitor: {
+    debounceMs: 1500,
+    maxMonitors: 8,
+    maxMonitorJobs: 3,
+    retireMs: 6e5,
+    staleMs: 3e5,
+    slowCheckIntervalMs: 0,
+    bandCapBytes: 2048,
+    checkTimeoutMs: 12e4,
+    linkageAlertVersions: 3,
+    dedupWindowMs: 3e4
+  },
+  ...Extra
+});
+const Exec = (Command, Extra = {}) => ({
+  callId: `call_${Math.random().toString(16).slice(2, 8)}`,
+  rootCallId: "call_root",
+  name: "bash",
+  arguments: { description: "run", command: Command, ...Extra },
+  agent: AgentA,
+  signal: void 0
+});
+const ExpectedTime = (Ms) => new Intl.DateTimeFormat("en-GB", {
+  timeZone: Zone(),
+  hour12: false,
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit"
+}).format(new Date(Ms));
+const ExpectedDate = (Ms) => new Intl.DateTimeFormat("en-CA", {
+  timeZone: Zone(),
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit"
+}).format(new Date(Ms));
+const Zone = () => {
+  try {
+    return new Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  } catch {
+    return "UTC";
+  }
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  rm();
+  const Run = Make(Validate({ logFile: Ledger }));
+  Check(Count, "selfcheck: the fake ctx registers the plugin's apply-time wiring", () => {
+    assert.equal(Object.keys(Run.Listeners).length, 5);
+    assert.equal(Run.State.Module, "hook-dsh-live-containers");
+    assert.ok(
+      Run.Lines.some((L) => L.startsWith("hook-dsh-live-containers: disabled"))
+    );
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  ACCEPT,
+  Advance,
+  AgentA,
+  Assemble,
+  AssembleBase,
+  Block,
+  CallTool,
+  Check,
+  CheckAsync,
+  ClockBox,
+  Containers,
+  DEFAULT_BLOCKS,
+  DEFAULT_BLOCKS_IDS,
+  Exec,
+  Execute,
+  ExpectedDate,
+  ExpectedTime,
+  FakeAgents,
+  FakeClock,
+  FakeJobsHub,
+  FakePolicy,
+  FakeProcess,
+  FakeShell,
+  FakeStorage,
+  FakeSubagent,
+  Finish,
+  FireJobs,
+  FireObserved,
+  FireSession,
+  Flip,
+  FlipLive,
+  Frame,
+  Furnace,
+  Ledger,
+  LedgerLines,
+  LedgerWith,
+  LinesWith,
+  LiveSection,
+  Make,
+  MakeClocked,
+  MakeCounter,
+  MakeWave,
+  MonitorConfig,
+  OpenStorage,
+  PendingText,
+  Post,
+  Pre,
+  PreStep,
+  Root,
+  ScopeA,
+  Validate,
+  WaveAssemble,
+  Zone,
+  live_monitor,
+  live_plant,
+  live_set,
+  rm
+};
+//# sourceMappingURL=Harness.js.map
