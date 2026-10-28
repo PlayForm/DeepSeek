@@ -1,23 +1,3 @@
-# ============================================================
-# NPM - the publish workflow. Every package in the two release
-# trees publishes from THIS monorepo, in the order of the packages'
-# own dependency graph. The order is DERIVED at run time by
-# Maintain/Publish/Packages/Index.mjs - never hand-listed - so a package
-# added to Classic/packages or EffectTS/packages publishes with no
-# workflow edit.
-# The npm publish itself remains the USER'S call (their token):
-# this workflow runs only via workflow_dispatch / release in CI.
-# Publishing is OIDC trusted-publisher based: the job's id-token:
-# write lets npm publish --provenance attest each tarball to this
-# repository and workflow - no NODE_AUTH_TOKEN secret is needed in
-# CI; every npm package must have its trusted publisher configured
-# to github.com/PlayForm/DeepSeek + .github/workflows/NPM.yml + env
-# Release. Temporary/npm-bootstrap/README.md binds them with
-# `npm trust github`.
-# A version already on the registry is skipped, so a re-run is safe;
-# a package whose dependency failed to publish is blocked instead of
-# published against a missing dependency.
-# ============================================================
 name: NPM
 
 concurrency:
@@ -86,18 +66,656 @@ jobs:
             - run: npm install -g npm@latest
               continue-on-error: true
 
-            - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-              with:
-                  version: 11.18.0
+            - name: Publish .
+              continue-on-error: true
+              working-directory: .
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
 
-            - run: pnpm install
+            - name: Publish ./Classic/packages/client-dsh-panel-family-host
+              continue-on-error: true
+              working-directory: ./Classic/packages/client-dsh-panel-family-host
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
 
-            # The whole-build trigger: the build order is the packages'
-            # own dependency graph (SPLICE-ETS.md §3.3).
-            - run: pnpm run build
+            - name: Publish ./Classic/packages/client-dsh-panel-family
+              continue-on-error: true
+              working-directory: ./Classic/packages/client-dsh-panel-family
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
 
-            # The publish: one derived pass over every workspace package.
-            # The order is the packages' own dependency graph, computed by
-            # Maintain/Publish/Packages/Index.mjs; a version already on the registry
-            # is skipped, so a re-run is safe.
-            - run: node Maintain/Publish/Packages/Index.mjs
+            - name: Publish ./Classic/packages/client-dsh-workspace-live
+              continue-on-error: true
+              working-directory: ./Classic/packages/client-dsh-workspace-live
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-batch-decision
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-batch-decision
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-cargo-governor
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-cargo-governor
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-ccr
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-ccr
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-comment-filter
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-comment-filter
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-convention-suggester
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-convention-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-doc-suggester
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-doc-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-edit-suggester
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-edit-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-graph-suggester
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-graph-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-lesson-nudge
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-lesson-nudge
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-live-containers
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-live-containers
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-normalize-dash
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-normalize-dash
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-normalize-ellipsis
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-normalize-ellipsis
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-normalize-fullwidth
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-normalize-fullwidth
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-normalize-invisible
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-normalize-invisible
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-normalize-quotes
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-normalize-quotes
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-normalize-spaces
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-normalize-spaces
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-package-governor
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-package-governor
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-package-pinner
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-package-pinner
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-replay-suggester
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-replay-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-search-suggester
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-search-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-test-suggester
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-test-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-tool-coach
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-tool-coach
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-workspace-approve
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-workspace-approve
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-workspace-audit
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-workspace-audit
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-workspace-govern
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-workspace-govern
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-workspace-journal
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-workspace-journal
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-workspace-merge
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-workspace-merge
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-workspace-monitor
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-workspace-monitor
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-workspace-observe
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-workspace-observe
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/hook-dsh-workspace-operate
+              continue-on-error: true
+              working-directory: ./Classic/packages/hook-dsh-workspace-operate
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/lib-dsh-conversation
+              continue-on-error: true
+              working-directory: ./Classic/packages/lib-dsh-conversation
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/lib-dsh-core
+              continue-on-error: true
+              working-directory: ./Classic/packages/lib-dsh-core
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/lib-dsh-pack
+              continue-on-error: true
+              working-directory: ./Classic/packages/lib-dsh-pack
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/lib-dsh-trace
+              continue-on-error: true
+              working-directory: ./Classic/packages/lib-dsh-trace
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/lib-dsh-workspace-live
+              continue-on-error: true
+              working-directory: ./Classic/packages/lib-dsh-workspace-live
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-batch-edit
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-batch-edit
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-batchstate
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-batchstate
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-cost-analysis
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-cost-analysis
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-cost
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-cost
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-factory
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-factory
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-feedback
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-feedback
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-gitguard
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-gitguard
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-ingester
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-ingester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-lesson-review
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-lesson-review
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-normalize-file
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-normalize-file
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-pass-on
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-pass-on
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-pattern
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-pattern
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-queue
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-queue
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-route
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-route
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-workspace-authority
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-workspace-authority
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-workspace-context
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-workspace-context
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-workspace-evidence
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-workspace-evidence
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-workspace-graph
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-workspace-graph
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-workspace-reflect
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-workspace-reflect
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-workspace-semantics
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-workspace-semantics
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./Classic/packages/plugin-dsh-workspace
+              continue-on-error: true
+              working-directory: ./Classic/packages/plugin-dsh-workspace
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-base-dsh
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-base-dsh
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-client-dsh-workspace-live
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-client-dsh-workspace-live
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-cargo-governor
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-cargo-governor
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-ccr
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-ccr
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-convention-suggester
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-convention-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-doc-suggester
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-doc-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-edit-suggester
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-edit-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-graph-suggester
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-graph-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-live-containers
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-live-containers
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-normalize-dash
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-dash
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-normalize-ellipsis
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-ellipsis
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-normalize-fullwidth
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-fullwidth
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-normalize-invisible
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-invisible
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-normalize-quotes
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-quotes
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-normalize-spaces
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-normalize-spaces
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-package-governor
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-package-governor
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-package-pinner
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-package-pinner
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-replay-suggester
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-replay-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-search-suggester
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-search-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-test-suggester
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-test-suggester
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-tool-coach
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-tool-coach
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-workspace-approve
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-approve
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-workspace-audit
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-audit
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-workspace-govern
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-govern
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-workspace-journal
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-journal
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-workspace-merge
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-merge
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-workspace-monitor
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-monitor
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-workspace-observe
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-observe
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-hook-dsh-workspace-operate
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-hook-dsh-workspace-operate
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-lib-dsh-core
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-lib-dsh-core
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-lib-dsh-pack
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-lib-dsh-pack
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-lib-dsh-trace
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-lib-dsh-trace
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-lib-dsh-workspace-live
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-lib-dsh-workspace-live
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-batch-edit
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-batch-edit
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-batchstate
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-batchstate
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-factory
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-factory
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-feedback
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-feedback
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-gitguard
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-gitguard
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-normalize-file
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-normalize-file
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-queue
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-queue
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-route
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-route
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-workspace-authority
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-authority
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-workspace-context
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-context
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-workspace-evidence
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-evidence
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-workspace-graph
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-graph
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-workspace-reflect
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-reflect
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-workspace-semantics
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace-semantics
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish ./EffectTS/packages/ets-plugin-dsh-workspace
+              continue-on-error: true
+              working-directory: ./EffectTS/packages/ets-plugin-dsh-workspace
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts
+
+            - name: Publish .
+              continue-on-error: true
+              working-directory: .
+              run: |
+                  npm publish --legacy-peer-deps --ignore-scripts

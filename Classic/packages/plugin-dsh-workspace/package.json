@@ -1,6 +1,7 @@
 {
 	"name": "@playform/plugin-dsh-workspace",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The workspace agent: a DeepSeek Harness plugin that IS the workspace regime's conversational surface - the OPERATIONAL VIEW the conversation addresses. It consumes the Wave-1 graph service (ctx.workspaceGraph) and presents the graph-like, systematically self-correcting view through the FOUR navigation primitives as tools: workspace_map (path or module, depth -> top-level modules, file count, entry points, hot symbols), workspace_find (name or pattern, kind, limit -> matching nodes with id, path, span, kind), workspace_expand (node id, edge kinds, depth -> the neighbors: references, calls, imports, tests) and workspace_context (node id or query, budget -> the orientation packet: WORKSPACE/SCOPE/MAP/FOCUS/NEIGHBORS/EVIDENCE/OPEN/STALE, bounded and ranked). Pagination is by cursor, never by offset; no full file bodies unless a specific span is asked for. Everything else is the INVISIBLE plugin flow (the stamps, the indexes, the validations) until an event surfaces it - the visibility rule. Ships DISABLED (enabled=false, the family's posture). Plan: Documentation/Plans/Workspace-Family/WORKSPACE-AGENT.md; the navigation contract and the orientation packet are Documentation/Plans/WORKSPACE-FAMILY-V4-1.md sections 3.4-3.5; the consumed graph contract is Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md section 4.3.",
 	"repository": {
 		"type": "git",

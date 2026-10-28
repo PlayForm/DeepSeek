@@ -1,6 +1,7 @@
 {
 	"name": "@playform/plugin-dsh-workspace-semantics",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The workspace-semantics service: a DeepSeek Harness plugin that owns the semantic model - the symbols + the references + the dependencies + the index (the family map's SEMANTICS role). It registers the workspaceSemantics service (ctx.workspaceSemantics) and is the second step of the invisible flow, right after the observe stamps: on every fs/observed event heard through the factory's Wire registration the stale model for the path is dropped and the index revision advances; a resolve() call builds the model lazily through the file type's adapter. The adapters: the default lexical TypeScript/JavaScript one plus the opt-in any-file ones (config adapters: json keys, yaml keys, markdown link targets, package.json dependency names; a file adapter owns its exact basename). The harness LSP seam (ctx.lsp, four read operations) is the PRIMARY TypeScript reference answer - findReferences per declared symbol, same-file locations, the rename derived from them - and the lexical adapter is the fallback on every cannot-answer path. The rename semantics are per-adapter; an extension with no adapter, or an adapter that cannot be certain, gets the refusal-to-guess answer, never a guessed plan. The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/Workspace-Family/SEMANTICS.md.",
 	"repository": {
 		"type": "git",

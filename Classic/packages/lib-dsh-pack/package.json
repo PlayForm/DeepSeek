@@ -1,6 +1,7 @@
 {
 	"name": "@playform/lib-dsh-pack",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The PACKS: the pure, dependency-light, harness-free workspace-pack library of the suggester family (@playform/lib-dsh-pack) - the pack schema, the layered resolution (the user layer, the repo layer, the cycle-guarded extends chain), the strict YAML-subset parser, the merge rules, the workspace locator and the built-in pack for this monorepo. A repository with a pack gets the suggester family; a repository without one stays silent. Not a plugin bundle: no cordis patch, no loader contract, publishable on its own.",
 	"repository": {
 		"type": "git",

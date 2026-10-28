@@ -1,6 +1,7 @@
 {
 	"name": "@playform/ets-plugin-dsh-queue",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The subagent-queue plugin: a DeepSeek Harness plugin that turns subagent work into a QUEUE (the tasks as data, not the agents as contexts). The user's capacity model is the law: the MAIN conversation holds up to 10 subagents (the pool's reserved slots) while every spawned agent's own child fan-out is capped at 2 - the two-active regime that prevents the workflow flood structurally. The orchestrator QUEUES tasks (each carries the id, the self-contained spec, the role/task type for the routing, the priority, the dependencies, the state queued/dispatched/running/completed/failed/interrupted, the assigned agent and the result hash); the store rides the family's journal conventions; NO agent context is consumed while a task waits. The dispatcher's deterministic order (dependencies satisfied first, then priority descending, then FIFO by enqueue sequence) assigns the next task when a slot frees - the settled IDLE children release their active slots and the dispatcher fills them automatically. The dispatched tasks carry their routes: the dispatcher consults the routing-enforcer's dshRoute service when it is present (the routed dispatch, silently per the user's policy) and skips routing when it is absent. The queue's state compiles into the batch-state context block as one TOC line (QUEUE: n pending - next: task). The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/SUBAGENT-QUEUE-PLUGIN.md.",
 	"repository": {
 		"type": "git",

@@ -1,6 +1,7 @@
 {
 	"name": "@playform/plugin-dsh-cost",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The per-file inference cost ledger: a DeepHarness plugin that reads the session log and prices every model call from the provider's own TokenUsage (uncached input, cache read, cache write, output, reasoning - never the estimator), then splits each call's price across the files the conversation touched: a direct half for the model's output, weighted by the changed bytes of the files the step wrote, and an amortized half for the input context, weighted by each file's token mass in the surface. The whole ledger lives in one SQLite database (effective-dated prices, one ledger for many projects and clients), the accumulated cost exports as a client-facing CSV/JSON/markdown bundle, and it can be written back into a file as a marker-delimited comment (off by default). The plugin is a reader only: no tool, no prompt section, no model-visible message. Plan: Documentation/Plans/COST-TRACK-PLUGIN.md.",
 	"repository": {
 		"type": "git",

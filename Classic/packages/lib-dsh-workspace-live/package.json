@@ -1,6 +1,7 @@
 {
 	"name": "@playform/lib-dsh-workspace-live",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The workspace-live LIBRARY (the lib-dsh-* role): the shared client machinery of the Workspace Plugin Family's live view - the operational-view section types (kind, title, framed lines, version stamp) and the render helpers (the section framer, the budget collapse, the orientation-packet renderer in the WORKSPACE/SCOPE/MAP/FOCUS/NEIGHBORS/EVIDENCE/OPEN/STALE line format). NO Config, NO apply - the library is not a plugin bundle: no loader contract, no cordis patch, publishable on its own. The consumers (the workspace agent's operational view, the client-dsh-* panels) keep their own ledger strings, tools and configs; the library owns only the pure, harness-free section mechanics. Plan: Documentation/Plans/Workspace-Family/SHARED-LIBRARY.md + LIVE.md; the packet format is WORKSPACE-FAMILY-V4-1.md section 3.5.",
 	"repository": {
 		"type": "git",

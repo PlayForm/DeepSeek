@@ -1,6 +1,7 @@
 {
 	"name": "@playform/plugin-dsh-ingester",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The INGESTER (ctx.ingester): the apply direction of the batch flow (Documentation/Plans/PASS-ON-AND-INGER.md section 4). A DeepSeek Harness service that turns an approved batch proposal into file operations: per target, in the proposal's order, through the governed filesystem (ctx.fs.editText with the version guard - the version-fenced literal edit). The version fence: a target edited between the preview and the apply is a conflict, not a silent overwrite; the digest and versions must still match. A conflict or a write failure stops at that target and reports conflict / recovery-required; the applied targets are reported honestly - no invisible intermediate state. THE ONLY WRITER: the pass-on and the decision never write.",
 	"repository": {
 		"type": "git",

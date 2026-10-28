@@ -1,6 +1,7 @@
 {
 	"name": "@playform/hook-dsh-replay-suggester",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The replay-suggester hook: a DeepSeek Harness plugin that answers the question 'the last time this was done, what did the model actually touch and how did it verify?' from the session history. When the model searches with an intent it has pursued before, the hook recalls the matching record from its history store (~/.dsh/replay-suggester/history.json, the seed of the search-suggester's journal per SEARCH-SUGGESTER-PLUGIN.md section 9.3) and prepends ONE labeled additionalContexts notice: the files touched last time and the command that verified. The history store is loaded once at apply (a JSON read on the boot path, not the hot path); a missing or corrupt store degrades to silence, never to a guess. Deterministic classifier, no LLM in the hot path; repo-relative paths only, local only. Plan: Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md (sections 8, 9.3, 5).",
 	"repository": {
 		"type": "git",

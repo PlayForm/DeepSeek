@@ -1,6 +1,7 @@
 {
 	"name": "@playform/ets-hook-dsh-convention-suggester",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The convention-suggester hook: a DeepSeek Harness plugin that carries the repo's conventions as a pattern pack and names them BEFORE the model violates them. When the model writes or edits a file, the hook classifies the path deterministically (the layout family, the naming family, the docs family, the ledger-string family) and prepends ONE labeled additionalContexts notice naming the companion targets the convention requires: the entry stays wiring-only, one definition per file with nameless default exports, a package ships README + SCHEME, and the ledger strings are module-owned and byte-stable with the four identity places agreeing. Deterministic classifier, no LLM in the hot path; the arbiter is the smoke suite that asserts the convention. Plan: Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md (sections 3.4, 4, 8, 9.4).",
 	"repository": {
 		"type": "git",

@@ -8,7 +8,1118 @@ updates:
           interval: "daily"
 
     - package-ecosystem: "npm"
+      directory: "/Classic/packages/client-dsh-panel-family-host"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/client-dsh-panel-family"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/client-dsh-workspace-live"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-batch-decision"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-cargo-governor"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-ccr"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-comment-filter"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-convention-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-doc-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-edit-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-graph-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-lesson-nudge"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-live-containers"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-normalize-dash"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-normalize-ellipsis"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-normalize-fullwidth"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-normalize-invisible"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-normalize-quotes"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-normalize-spaces"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-package-governor"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-package-pinner"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-replay-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-search-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-test-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-tool-coach"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-workspace-approve"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-workspace-audit"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-workspace-govern"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-workspace-journal"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-workspace-merge"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-workspace-monitor"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-workspace-observe"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/hook-dsh-workspace-operate"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/lib-dsh-conversation"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/lib-dsh-core"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/lib-dsh-pack"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/lib-dsh-trace"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/lib-dsh-workspace-live"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-batch-edit"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-batchstate"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-cost-analysis"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-cost"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-factory"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-feedback"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-gitguard"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-ingester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-lesson-review"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-normalize-file"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-pass-on"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-pattern"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-queue"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-route"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-workspace-authority"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-workspace-context"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-workspace-evidence"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-workspace-graph"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-workspace-reflect"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-workspace-semantics"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Classic/packages/plugin-dsh-workspace"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-base-dsh"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-client-dsh-workspace-live"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-cargo-governor"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-ccr"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-convention-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-doc-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-edit-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-graph-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-live-containers"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-normalize-dash"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-normalize-ellipsis"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-normalize-fullwidth"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-normalize-invisible"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-normalize-quotes"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-normalize-spaces"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-package-governor"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-package-pinner"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-replay-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-search-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-test-suggester"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-tool-coach"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-workspace-approve"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-workspace-audit"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-workspace-govern"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-workspace-journal"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-workspace-merge"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-workspace-monitor"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-workspace-observe"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-hook-dsh-workspace-operate"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-lib-dsh-core"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-lib-dsh-pack"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-lib-dsh-trace"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-lib-dsh-workspace-live"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-batch-edit"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-batchstate"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-factory"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-feedback"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-gitguard"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-normalize-file"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-queue"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-route"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-workspace-authority"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-workspace-context"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-workspace-evidence"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-workspace-graph"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-workspace-reflect"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-workspace-semantics"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/EffectTS/packages/ets-plugin-dsh-workspace"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "cargo"
+      directory: "/Test/fixtures/manifest/cargo-fixture"
+      schedule:
+          interval: "daily"
+      versioning-strategy: lockfile-only
+      
+
+    - package-ecosystem: "npm"
+      directory: "/Test/fixtures/manifest/governed-chain"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Test/fixtures/manifest/governed-test"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
+      directory: "/Test/probes/raw-write-probe"
+      schedule:
+          interval: "daily"
+      versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"
+
+    - package-ecosystem: "npm"
       directory: "/"
       schedule:
           interval: "daily"
       versioning-strategy: increase
+      ignore:
+          - dependency-name: "tailwindcss"
+            versions:
+                - "^4.0.0"

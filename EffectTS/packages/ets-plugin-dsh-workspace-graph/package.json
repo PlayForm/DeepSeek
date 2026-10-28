@@ -1,6 +1,7 @@
 {
 	"name": "@playform/ets-plugin-dsh-workspace-graph",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The WORKSPACE GRAPH: a DeepSeek Harness service (@playform/plugin-dsh-workspace-graph, ctx.workspaceGraph) that builds the W1 graph schema v0 over the workspace files - four node kinds (File, Symbol, Block, Test) plus Markdown DocSections, three edge kinds (contains, imports, references), stable ids, content-derived fingerprints, and the indexRevision the graph was built from. The v0 parser is a line/regex scanner (no compiler API): TypeScript/JavaScript declarations with brace-counted spans, relative-import edges, test-path detection, and one DocSection per Markdown heading. The references edges come from the workspace-semantics service (probed through ctx.get, never injected; no service means no references edges) and the remaining deferred node/edge kinds (ConfigKey, calls, tests) are NOT faked. Records live in the KV facet through the storage domain (one record per path plus the __meta revision), the ledger strings are module-owned and byte-stable, and the plugin writes nothing outside its own domain.",
 	"repository": {
 		"type": "git",

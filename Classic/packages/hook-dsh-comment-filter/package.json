@@ -1,6 +1,7 @@
 {
 	"name": "@playform/hook-dsh-comment-filter",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The comment-filter hook: a DeepSeek Harness plugin and a NEW overpass flavor that strips code comments from `read` and `ccr_retrieve` tool results at tools/post-execute, gated per task intent stashed at agent/pre-step. The transform understands the read tool's model-facing envelope (the <path>/<type>file</type>/<content> wrapper with its `{n}: {line}` body and the `(End of file ...)` footer), preserves every line-number prefix and every line byte-for-byte, blanks comment spans instead of deleting lines, and is string-aware per language (quotes, JS/TS/Go backtick templates, Python triple-quoted docstrings, C# verbatim strings, escapes) so it never strips what only looks like a comment. The intent gate is the point: a task whose last user message is ABOUT comments (docstrings, license headers, jsdoc, ...) leaves the read result untouched; any other task strips. It is the deliberate opposite of the normalize flavors on one point: `read` is NOT exempt here (they exempt it as byte-contracted), because the whole feature is the deliberate omission of comment bytes from the model's context.",
 	"repository": {
 		"type": "git",

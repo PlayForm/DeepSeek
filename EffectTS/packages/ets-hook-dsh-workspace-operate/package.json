@@ -1,6 +1,7 @@
 {
 	"name": "@playform/ets-hook-dsh-workspace-operate",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The operation engine of the workspace family (ctx.workspaceOperate): TYPED PROPOSALS - rename, connect, replace - with the resolution rules that decide what CAN be proposed and the first-class REFUSAL-TO-GUESS that declares what CANNOT. A proposal is never guessed: every rule failure returns a typed refusal (graph unavailable, unknown symbol, name collision, duplicate edge, incompatible edge, missing version, stale version, span beyond file), the proposal is recorded only when the rules pass, and every proposal carries the version fence it was made against (stale-marked by its own fs/observed tracker). Proposals live in the hook's own KV domain (workspace_operate); the model surface is the workspace_propose and workspace_proposals tools, registered from apply per the family's tools-live-in-their-owning-hook law. The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/Workspace-Family/OPERATE.md + Documentation/Plans/WORKSPACE-FAMILY-V4-1.md sections 3.7-3.8.",
 	"repository": {
 		"type": "git",

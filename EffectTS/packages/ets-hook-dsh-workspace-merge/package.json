@@ -1,6 +1,7 @@
 {
 	"name": "@playform/ets-hook-dsh-workspace-merge",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The batch merge of the workspace family (ctx.workspaceMerge): the ATOMIC GATES, the per-file commits through the factory's shared write executor (the factory's Write method - the explicit replaceIfVersion intent, the P4 sandbox fence, the root-context fs/observed emit), and the COMMIT REPLY UNION - applied / conflict / denied / rejected / recovery-required / outcome-unknown - derived from the v4.1 edit lifecycle, not a separate six-way enum. The gates decide how a batch lands: the preflight (empty batch, maxFiles, maxTotalBytes, duplicate paths, missing version fences, unresolved paths, stale fences) runs before any write; in all-or-nothing mode any gate failure rejects the whole batch, a mid-batch write failure marks the remaining files recovery-required (recoverable partial states, never an invisible intermediate state); in survivors mode conflicts and failures are per-file replies. The v1 engine promises preview, version fence, and an explicit conflict - never a three-way merge (W4.1 section 3.8). The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/Workspace-Family/MERGE.md + Documentation/Plans/WORKSPACE-FAMILY-V4-1.md sections 3.7-3.8.",
 	"repository": {
 		"type": "git",

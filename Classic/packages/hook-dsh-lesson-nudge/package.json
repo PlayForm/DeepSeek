@@ -1,6 +1,7 @@
 {
 	"name": "@playform/hook-dsh-lesson-nudge",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The lesson-nudge hook: a DeepSeek Harness plugin that turns the post-turn IDLE transition into a self-improvement review. It listens to `agent/status`, asks the lesson-review service whether a review is due, and runs the review inside `agent.runMaintenance` - the true idle phase, so the review never competes with the live turn for the endpoint and never enters the turn's own log. One review per interval, a hard per-session cap, and a missing service is a warn (the nudge never throws into a status emit). The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/LESSON-REVIEW-PLUGIN.md.",
 	"repository": {
 		"type": "git",

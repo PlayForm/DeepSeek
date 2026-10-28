@@ -1,6 +1,7 @@
 {
 	"name": "@playform/plugin-dsh-pattern",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The pattern-graph service plugin: a DeepSeek Harness plugin that owns the pattern registry, the matcher, the confidence store and the learner behind the suggester family. A pattern is a parameterized behavior graph (PATTERN-GRAPH-PLUGIN.md section 2): an intent, its trigger signals, its target subgraph (globs over the file graph), its ordered transform steps, its arbiter, and a confidence. The service provides ctx.pattern with Put/Get/List (the registry), Match (the ranked match with ABSTENTION below the threshold - the empty result, never a guess), Record (the accept/reject/applied/failed feedback that moves the confidence), Decay (the time-based half-life sweep) and Save (the best-effort JSON snapshot under ~/.dsh). The cold start is the shipped static catalog (Variable/DefaultPatterns), not an empty registry. The match is a lookup plus arithmetic, never an LLM call. Plan: Documentation/Plans/PATTERN-GRAPH-PLUGIN.md (the chosen service, open decision 1 settled).",
 	"repository": {
 		"type": "git",

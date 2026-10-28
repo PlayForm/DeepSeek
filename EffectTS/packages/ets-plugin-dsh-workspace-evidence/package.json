@@ -1,6 +1,7 @@
 {
 	"name": "@playform/ets-plugin-dsh-workspace-evidence",
 	"version": "0.3.0",
+	"private": false,
 	"description": "The workspace-evidence service: a DeepSeek Harness plugin that owns the validation objects + the evidence dependencies + the four kinds of truth + the stale-validation invalidation (the family map's EVIDENCE role). It registers the workspaceEvidence service (ctx.workspaceEvidence): a claim is validated into one validation object (the truth kind - reality, observation, representation, or intent), the object declares its dependencies, and the invalidation is the Acar seam - on every fs/observed event heard through the factory's Wire registration, or on an explicit invalidate(key), every validation whose dependencies include the key goes stale (never guessed back to fresh; a revalidation is a new validation). The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/Workspace-Family/EVIDENCE.md.",
 	"repository": {
 		"type": "git",
