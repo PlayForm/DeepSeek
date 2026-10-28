@@ -1,6 +1,6 @@
 {
 	"name": "@playform/plugin-dsh-lesson-review",
-	"version": "0.3.0",
+	"version": "0.2.1",
 	"private": false,
 	"description": "The lesson-review service: a DeepSeek Harness plugin providing the POST-TURN SELF-IMPROVEMENT REVIEW - the Hermes background-review fork and curator, re-expressed over this harness's surfaces (the family map's review role). It owns the nudge counter, the bounded digest, the byte-stable review prompt, the strict proposal parse, the deterministic acceptance judge, the guarded corpus write, the usage store and the staleness/archive transitions. The model call is ONE hand-built `ctx.llm.stream` request - it carries no agent-loop marker, so it never touches the live turn, and the fork runs from the true idle phase (`agent.runMaintenance`). The review PROPOSES by default: `policy.write` is the shipped `approve`, so nothing lands in the skill corpus until it is accepted; an accepted write goes through the exact-file fence (create refuses an existing path, patch refuses a missing one). Every proposal, acceptance, rejection and transition is a byte-stable ledger line, and every run writes `run.json` + `REPORT.md` under `~/.dsh/lesson/reports/`. The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/LESSON-REVIEW-PLUGIN.md.",
 	"repository": {

@@ -1,6 +1,6 @@
 {
 	"name": "@playform/ets-hook-dsh-doc-suggester",
-	"version": "0.3.0",
+	"version": "0.2.1",
 	"private": false,
 	"description": "The doc-suggester hook: a DeepSeek Harness plugin that hooks the tools/post-execute waterfall and, when a call touches a documentation task - a plan, guide, skill, index, or site content path in read, grep, glob, or an edit - prepends ONE labeled additionalContexts note naming the doc graph companions the task conventionally requires: the INDEX row, the frontmatter statuses/registry/index block, the archive style, the cross-references, the site mirror. The third consumer of the search-suggester's pattern algebra (Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md section 8): deterministic path rules over the documentation tree, a hard gate, a cooldown, a dedupe, a per-turn cap, and an abstention line for every silence.",
 	"repository": {

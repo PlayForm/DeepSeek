@@ -1,6 +1,6 @@
 {
 	"name": "@playform/hook-dsh-test-suggester",
-	"version": "0.3.0",
+	"version": "0.2.1",
 	"private": false,
 	"description": "The test-suggester hook: a DeepSeek Harness plugin that answers the test task intent with a target set. When the model searches for proof (a grep for PASS/FAIL/error TS, a read of a Test.ts, a bash error sweep), the hook classifies the call deterministically and names the likely targets BEFORE the model finishes searching: the suite's Test.ts assertion body, the suite README carrying the expected count, the aggregate runner (Maintain/Run-Smokes.mjs), and the README badge that must agree with the count. Deterministic classifier, no LLM in the hot path; high threshold, at most maxCandidates candidates, a stated reason per candidate, a cooldown, and an abstention path - a wrong target set costs more than a missing one. Plan: Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md (sections 3, 4, 8).",
 	"repository": {

@@ -1,6 +1,6 @@
 {
 	"name": "@playform/plugin-dsh-pass-on",
-	"version": "0.3.0",
+	"version": "0.2.1",
 	"private": false,
 	"description": "The PASS-ON (ctx.passOn): the prepare direction of the batch flow (Documentation/Plans/PASS-ON-AND-INGER.md section 3). A DeepSeek Harness service that turns an intent - a suggestion from the search suggester, a user/agent intent, or a hand-authored batch - into a batch proposal: the resolved targets (path, version, why), the deterministic operations, the bounded before/after preview, and the content-derived digest that fences the apply. READ-ONLY: the pass-on never writes a file; the decision decides; the ingester (plugin-dsh-ingester) applies. If the proposal is empty or ambiguous the pass-on returns no batch, not an empty one.",
 	"repository": {

@@ -1,6 +1,6 @@
 {
 	"name": "@playform/hook-dsh-workspace-approve",
-	"version": "0.3.0",
+	"version": "0.2.1",
 	"private": false,
 	"description": "The workspace-approve hook: a DeepSeek Harness plugin that binds the EXACT human approval - the candidate-bound approval + the constraints (the family's approve step of the invisible flow: the authority licenses -> the approve binds -> the merge commits). An approval binds to the EXACT candidate - the concrete change set identified by its path, its content fingerprint and the file version observed at the approval - never a fuzzy intent; the constraints travel with the approval and a changed constraint set is a rejection, not an approval. The approval records the Commitment (who accepted responsibility) and serves as the AuthorizationDecision the merge/execute side checks through the service: a check matches the exact fingerprint, and a file whose version moved after the approval is stale, not approved (the fs/observed listener invalidates such bindings; AN INTENT MUST NOT AUTHORIZE ITS OWN MEANS - the approval of an intention never authorizes the implementation produced later). State lives in the hook's own KV domain named workspace_approve; the ledger strings are module-owned (approve: ...). The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/Workspace-Family/APPROVE.md.",
 	"repository": {

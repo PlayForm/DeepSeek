@@ -1,6 +1,6 @@
 {
 	"name": "@playform/lib-dsh-conversation",
-	"version": "0.3.0",
+	"version": "0.2.1",
 	"private": false,
 	"description": "The CONVERSATION: the conversation bus's vocabulary and pure fold - the names (the service name `conversation` and the event names conversation/turn, conversation/step, conversation/call, conversation/tool, conversation/touch, conversation/end), the envelope { SessionId, Seq, Turn, Step, At, Kind, Data }, the pure fold from the session log's records to the conversation state (the current turn and step, the calls with their usage, the tool calls, the resolved file touches, the distinct files), and the coalescing loop the factory's service runs when it replays new events. The SERVICE lives in @playform/plugin-dsh-factory (ctx.conversation), beside ctx.trace; every adapting plugin carries its own adapter in its own Source/Conversation/ folder and imports this vocabulary - no plugin imports another. Usable outside the harness entirely (the PlayForm ecosystem).",
 	"repository": {

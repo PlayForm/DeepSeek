@@ -1,6 +1,6 @@
 {
 	"name": "@playform/plugin-dsh-feedback",
-	"version": "0.3.0",
+	"version": "0.2.1",
 	"private": false,
 	"description": "The FEEDBACK member (ctx.feedback): a DeepSeek Harness service that collects the honest signals. Every agent's completion carries an HONEST feedback block (LIKED / DISLIKED / DELTAS / TRANSFERRED / READ-STATUS); the block is transferred through the parentage mechanically - child -> parent -> grandparent - WITHOUT being read by the passers, and it is ALWAYS modified in the parent sessions (the parents append their deltas, never edit the honest content). The reading is the recipient's choice (know/disknow): feedback.Read records the status when the recipient opens a block; feedback.Summary is the council view. The journal is the durable record (one log per module). Plan: Documentation/Plans/HONEST-FEEDBACK-PLUGIN.md.",
 	"repository": {
