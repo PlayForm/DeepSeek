@@ -31,8 +31,8 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/ets-base-dsh": "0.3.0",
-		"@playform/ets-plugin-dsh-factory": "0.3.0"
+		"@playform/ets-base-dsh": "0.2.1",
+		"@playform/ets-plugin-dsh-factory": "0.2.1"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",

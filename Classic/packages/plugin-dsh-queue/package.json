@@ -31,8 +31,8 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"dependencies": {
-		"@playform/lib-dsh-core": "0.3.0",
-		"@playform/plugin-dsh-factory": "0.3.0"
+		"@playform/lib-dsh-core": "0.2.1",
+		"@playform/plugin-dsh-factory": "0.2.1"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
