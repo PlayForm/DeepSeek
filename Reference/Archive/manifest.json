@@ -346,7 +346,8 @@
       "title": "SVG Strokes",
       "quality": {
         "table-escaped-pipe": 8,
-        "raw-html": 126
+        "raw-html": 126,
+        "long-line": 1
       }
     },
     {
@@ -586,13 +587,10 @@
       "content": "",
       "converted": "Raw/anthropic-pricing.md",
       "status": "converted",
-      "title": "anthropic-pricing",
+      "title": "Pricing",
       "quality": {
         "heading-duplicate": 1,
-        "heading-no-h1": 1,
-        "fence-no-language": 1,
-        "fence-blank-padded": 1,
-        "table-row-mismatch": 80
+        "fence-no-language": 1
       }
     },
     {
@@ -618,13 +616,9 @@
       "content": "",
       "converted": "Raw/openai-pricing.md",
       "status": "converted",
-      "title": "openai-pricing",
+      "title": "Pricing",
       "quality": {
-        "heading-duplicate": 8,
-        "heading-no-h1": 1,
-        "fence-no-language": 1,
-        "table-row-mismatch": 69,
-        "long-line": 123
+        "heading-duplicate": 8
       }
     },
     {
@@ -662,7 +656,7 @@
       "title": "Gemini Developer API pricing",
       "quality": {
         "heading-jump": 1,
-        "table-row-mismatch": 385
+        "raw-html": 304
       }
     },
     {
@@ -765,11 +759,7 @@
       "content": "",
       "converted": "Raw/opentelemetry-gen-ai-attributes.md",
       "status": "converted",
-      "title": "Gen AI",
-      "quality": {
-        "table-row-mismatch": 146,
-        "long-line": 52
-      }
+      "title": "Gen AI"
     },
     {
       "source": "https://raw.githubusercontent.com/open-telemetry/semantic-conventions-genai/main/docs/gen-ai/gen-ai-spans.md",
@@ -1371,11 +1361,9 @@
       "content": "",
       "converted": "Raw/deepseek-playform-cloud-plugins.md",
       "status": "converted",
-      "title": "deepseek-playform-cloud-plugins",
+      "title": "Plugins",
       "quality": {
-        "heading-no-h1": 1,
-        "table-row-mismatch": 16,
-        "raw-html": 106
+        "heading-duplicate": 1
       }
     },
     {
@@ -1927,6 +1915,1867 @@
       "disposition": "unavailable",
       "exit": 0,
       "message": "The site's own link is dead: the page serves a 324-byte 'Page Fot Found' stub. The real chapter was captured under its correct URL instead."
+    },
+    {
+      "source": "https://flywheel.paradigma.inc/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/flywheel-home.html",
+      "content": "",
+      "converted": "Raw/flywheel-home.md",
+      "status": "stub",
+      "title": "flywheel-home",
+      "disposition": "stub",
+      "exit": 0,
+      "message": "Client-rendered canvas application: the extractor returns an empty body (9-byte file) even with --filter raw and --scan-full-page. The interaction behavior is documented on the Flywheel docs pages that are shelved beside it."
+    },
+    {
+      "source": "https://flywheel.paradigma.inc/tl",
+      "kind": "HTML",
+      "archive": "Archive/HTML/flywheel-timeline.html",
+      "content": "",
+      "converted": "Raw/flywheel-timeline.md",
+      "status": "stub",
+      "title": "flywheel-timeline",
+      "disposition": "stub",
+      "exit": 0,
+      "message": "Client-rendered canvas application: the extractor returns an empty body (9-byte file) even with --filter raw and --scan-full-page. The interaction behavior is documented on the Flywheel docs pages that are shelved beside it."
+    },
+    {
+      "source": "https://docs.flywheel.paradigma.inc/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/flywheel-docs.md",
+      "status": "converted",
+      "title": "Flywheel Docs",
+      "quality": {
+        "heading-anchor": 1,
+        "long-line": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 1691-byte Markdown body."
+    },
+    {
+      "source": "https://docs.flywheel.paradigma.inc/concepts/graph-model",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/flywheel-graph-model.md",
+      "status": "converted",
+      "title": "Graph Model",
+      "quality": {
+        "fence-no-language": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 3329-byte Markdown body."
+    },
+    {
+      "source": "https://docs.flywheel.paradigma.inc/tutorial",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/flywheel-tutorial.md",
+      "status": "converted",
+      "title": "Flywheel Tutorial",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 36575-byte Markdown body."
+    },
+    {
+      "source": "https://docs.flywheel.paradigma.inc/terminal-preview",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/flywheel-terminal-preview.md",
+      "status": "converted",
+      "title": "Terminal preview",
+      "quality": {
+        "fence-no-language": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 10476-byte Markdown body."
+    },
+    {
+      "source": "https://docs.flywheel.paradigma.inc/concepts/repos",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/flywheel-repos.md",
+      "status": "converted",
+      "title": "Repositories",
+      "quality": {
+        "heading-anchor": 11,
+        "long-line": 4,
+        "link-run": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 17743-byte Markdown body."
+    },
+    {
+      "source": "https://docs.flywheel.paradigma.inc/cli/repo-init",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/flywheel-cli-repo-init.md",
+      "status": "converted",
+      "title": "repo:init",
+      "quality": {
+        "heading-anchor": 7,
+        "fence-no-language": 1,
+        "table-row-mismatch": 18,
+        "link-run": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 4280-byte Markdown body."
+    },
+    {
+      "source": "https://js.cytoscape.org/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/cytoscape-js.md",
+      "status": "converted",
+      "title": "Cytoscape.js",
+      "quality": {
+        "heading-duplicate": 12,
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "raw-html": 1,
+        "long-line": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 324001-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/iVis-at-Bilkent/cytoscape.js-fcose",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/cytoscape-fcose.md",
+      "status": "converted",
+      "title": "cytoscape-fcose",
+      "quality": {
+        "fence-no-language": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 13105-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/cytoscape/cytoscape.js-elk",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/cytoscape-elk.md",
+      "status": "converted",
+      "title": "cytoscape-elk",
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 8294-byte Markdown body."
+    },
+    {
+      "source": "https://blog.js.cytoscape.org/2021/02/08/fcose-2.0.0-release/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/fcose-release.md",
+      "status": "converted",
+      "title": "Cytoscape.js-fcose 2.0.0 released",
+      "quality": {
+        "heading-jump": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 1956-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/kieler/elkjs",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/elkjs.md",
+      "status": "converted",
+      "title": "FAQs and Recurring Issues",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "code-non-ascii": 2
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 23231-byte Markdown body."
+    },
+    {
+      "source": "https://eclipse.dev/elk/reference/algorithms/org-eclipse-elk-layered.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/elk-layered.md",
+      "status": "converted",
+      "title": "ELK Layered",
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 61612-byte Markdown body."
+    },
+    {
+      "source": "https://docs.astro.build/en/guides/view-transitions/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/astro-view-transitions.md",
+      "status": "converted",
+      "title": "View transitions",
+      "quality": {
+        "fence-no-language": 1,
+        "raw-html": 3
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 38349-byte Markdown body."
+    },
+    {
+      "source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/docs/architecture.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/dsh-architecture.md",
+      "status": "converted",
+      "title": "DeepSeek Harness Architecture",
+      "quality": {
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 5,
+        "long-line": 2
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 18895-byte Markdown body."
+    },
+    {
+      "source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/docs/tool-execution-pipeline.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/dsh-tool-pipeline.md",
+      "status": "converted",
+      "title": "Tool Execution Pipeline",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 4491-byte Markdown body."
+    },
+    {
+      "source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/docs/agent-lifecycle.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/dsh-agent-lifecycle.md",
+      "status": "converted",
+      "title": "Agent Turn And Step Lifecycle",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 5777-byte Markdown body."
+    },
+    {
+      "source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/docs/subsystems/session.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/dsh-session.md",
+      "status": "converted",
+      "title": "Sessions",
+      "quality": {
+        "heading-duplicate": 3,
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "raw-html": 34,
+        "code-non-ascii": 36,
+        "long-line": 2
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 77975-byte Markdown body."
+    },
+    {
+      "source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/docs/subsystems/llm-streaming.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/dsh-llm-streaming.md",
+      "status": "converted",
+      "title": "LLM Streaming",
+      "quality": {
+        "heading-duplicate": 2,
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "raw-html": 22,
+        "code-non-ascii": 17,
+        "long-line": 4
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 70688-byte Markdown body."
+    },
+    {
+      "source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/docs/subsystems/session-telemetry.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/dsh-session-telemetry.md",
+      "status": "converted",
+      "title": "SessionTelemetryBackend",
+      "quality": {
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "raw-html": 10,
+        "code-non-ascii": 9,
+        "long-line": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 12834-byte Markdown body."
+    },
+    {
+      "source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/packages/client/ui-trajectory/README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/dsh-trajectory.md",
+      "status": "converted",
+      "title": "@deepseek-ai/dsh-client-ui-trajectory",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 12,
+        "long-line": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 12648-byte Markdown body."
+    },
+    {
+      "source": "https://perfetto.dev/docs/visualization/perfetto-ui",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/perfetto-ui.md",
+      "status": "converted",
+      "title": "Perfetto UI",
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 4839-byte Markdown body."
+    },
+    {
+      "source": "https://deepseek.playform.cloud/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/playform-site.md",
+      "status": "converted",
+      "title": "Tame the model's output and govern the project's files.",
+      "quality": {
+        "fence-no-language": 1,
+        "raw-html": 2,
+        "link-run": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 17339-byte Markdown body."
+    },
+    {
+      "source": "https://www.deepseek.com/en/harness/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/deepseek-harness-page.md",
+      "status": "converted",
+      "title": "DeepSeek HarnessReady to use. Right now.",
+      "quality": {
+        "fence-no-language": 1,
+        "glued-code": 2,
+        "link-run": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched for the observatory overhaul: 4578-byte Markdown body."
+    },
+    {
+      "source": "https://deepseek.playform.cloud",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/deepseek-playform-cloud.md",
+      "status": "converted",
+      "title": "Tame the model's output and govern the project's files.",
+      "quality": {
+        "fence-no-language": 1,
+        "raw-html": 2,
+        "link-run": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "17339-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/PlayForm/DeepSeek",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-playform-deepseek.md",
+      "status": "converted",
+      "title": "DeepSeek Harness Plugin Family for PlayForm",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 14,
+        "raw-html": 2,
+        "long-line": 2,
+        "code-non-ascii": 5,
+        "link-run": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "75928-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness.md",
+      "status": "converted",
+      "title": "Conflicts:",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "table-row-mismatch": 1,
+        "raw-html": 2,
+        "glued-code": 28
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "963320-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/client/ui-trajectory/README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-packages-client-ui-trajectory-readme-m.md",
+      "status": "converted",
+      "title": "README.md",
+      "quality": {
+        "heading-multi-h1": 1,
+        "heading-jump": 1,
+        "long-line": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "13726-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/tool-execution-pipeline.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-docs-tool-execution-pipeline-md.md",
+      "status": "converted",
+      "title": "tool-execution-pipeline.md",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "4925-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/session-telemetry.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-docs-subsystems-session-telemetry-md.md",
+      "status": "converted",
+      "title": "session-telemetry.md",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 6,
+        "long-line": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "13837-byte Markdown body."
+    },
+    {
+      "source": "https://reactflow.dev/examples/grouping/sub-flows",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/reactflow-dev-examples-grouping-sub-flows.md",
+      "status": "converted",
+      "title": "Sub Flow",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "8005-byte Markdown body."
+    },
+    {
+      "source": "https://reactflow.dev/examples/layout/expand-collapse",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/reactflow-dev-examples-layout-expand-collapse.md",
+      "status": "converted",
+      "title": "Expand and Collapse",
+      "quality": {
+        "heading-jump": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "1299-byte Markdown body."
+    },
+    {
+      "source": "https://deepseek-harness.github.io/deepseek-harness/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/deepseek-harness-github-io-deepseek-harness.md",
+      "status": "converted",
+      "title": "\u4f7f\u7528 Web UI ...",
+      "quality": {
+        "invisible": 5
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "2066-byte Markdown body."
+    },
+    {
+      "source": "https://docs.flywheel.io/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/docs-flywheel-io.md",
+      "status": "stub",
+      "title": "Flywheel Documentation",
+      "disposition": "stub",
+      "exit": 0,
+      "message": "367-byte Markdown body."
+    },
+    {
+      "source": "https://docs.flywheel.io/user/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/docs-flywheel-io-user.md",
+      "status": "converted",
+      "title": "Welcome to Flywheel",
+      "disposition": "converted",
+      "exit": 0,
+      "message": "4254-byte Markdown body."
+    },
+    {
+      "source": "https://apidog.com/blog/what-is-deepseek-harness/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/apidog-com-blog-what-is-deepseek-harness.md",
+      "status": "converted",
+      "title": "apidog-com-blog-what-is-deepseek-harness",
+      "quality": {
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "15509-byte Markdown body."
+    },
+    {
+      "source": "https://pub.towardsai.net/everything-is-a-plugin-inside-deepseek-harness-the-week-the-scaffolding-became-the-product-b854517e5e3f",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/pub-towardsai-net-everything-is-a-plugin-inside-deepseek-harness-the-week-the-scaffolding.md",
+      "status": "converted",
+      "title": "Everything Is a Plugin: Inside DeepSeek Harness, the Week the ...",
+      "disposition": "converted",
+      "exit": 0,
+      "message": "2938-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/topics/deepseek-harness-plugin",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-topics-deepseek-harness-plugin.md",
+      "status": "converted",
+      "title": "deepseek-harness-plugin",
+      "quality": {
+        "long-line": 10,
+        "link-run": 20
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "28393-byte Markdown body."
+    },
+    {
+      "source": "https://a2aprotocol.ai/insights/deepseek-harness-2026-guide",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/a2aprotocol-ai-insights-deepseek-harness-2026-guide.md",
+      "status": "converted",
+      "title": "DeepSeek Harness 2026: Everything Is a Plugin \u2014 Developer Preview Guide",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "18706-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/xianyu110/awesome-deepseek-harness-0xsline",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-xianyu110-awesome-deepseek-harness-0xsline.md",
+      "status": "converted",
+      "title": "Awesome DeepSeek Harness",
+      "quality": {
+        "fence-no-language": 1,
+        "table-row-mismatch": 1,
+        "link-run": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "143162-byte Markdown body."
+    },
+    {
+      "source": "https://blog.stackademic.com/the-developers-guide-to-deepseek-harness-edee5aa7a856",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/blog-stackademic-com-the-developers-guide-to-deepseek-harness-edee5aa7a856.md",
+      "status": "converted",
+      "title": "The Developer\u2019s Guide to DeepSeek Harness",
+      "disposition": "converted",
+      "exit": 0,
+      "message": "2719-byte Markdown body."
+    },
+    {
+      "source": "https://www.mindstudio.ai/blog/deepseek-harness-agentic-coding",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/www-mindstudio-ai-blog-deepseek-harness-agentic-coding.md",
+      "status": "converted",
+      "title": "www-mindstudio-ai-blog-deepseek-harness-agentic-coding",
+      "quality": {
+        "heading-no-h1": 1,
+        "long-line": 1,
+        "link-run": 2
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "21183-byte Markdown body."
+    },
+    {
+      "source": "https://www.verdent.ai/guides/coding/best-coding-harnesses-deepseek-v4",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/www-verdent-ai-guides-coding-best-coding-harnesses-deepseek-v4.md",
+      "status": "stub",
+      "title": "www-verdent-ai-guides-coding-best-coding-harnesses-deepseek-v4",
+      "disposition": "stub",
+      "exit": 0,
+      "message": "367-byte Markdown body."
+    },
+    {
+      "source": "https://android.googlesource.com/platform//external/perfetto/+/922c3327a0847fa0e42fbd784fda94b2ece85e23/docs/README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/android-googlesource-com-platform-external-perfetto-922c3327a0847fa0e42fbd784fda94b2ece85e.md",
+      "status": "converted",
+      "title": "Perfetto - System profiling, app tracing and trace analysis",
+      "disposition": "converted",
+      "exit": 0,
+      "message": "9882-byte Markdown body."
+    },
+    {
+      "source": "https://source.android.com/docs/core/power/wattson/how-to-wattson",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/source-android-com-docs-core-power-wattson-how-to-wattson.md",
+      "status": "converted",
+      "title": "Collect and view traces Stay organized with collections Save and ...",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 4
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "13889-byte Markdown body."
+    },
+    {
+      "source": "https://perfetto.dev/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/perfetto-dev.md",
+      "status": "converted",
+      "title": "System profiling, app tracing and trace analysis",
+      "quality": {
+        "link-run": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "1996-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/google/perfetto",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-google-perfetto.md",
+      "status": "converted",
+      "title": "shell \\(2000\\) is not listed, statsd\\(1066\\) is",
+      "quality": {
+        "heading-duplicate": 5,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "57607-byte Markdown body."
+    },
+    {
+      "source": "https://stately.ai/docs/packages/graph/react-flow-elk-pipeline",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/stately-ai-docs-packages-graph-react-flow-elk-pipeline.md",
+      "status": "converted",
+      "title": "React Flow + ELK: automatic layout cookbook",
+      "quality": {
+        "heading-anchor": 8,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 5,
+        "link-run": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "10807-byte Markdown body."
+    },
+    {
+      "source": "https://news.ycombinator.com/item?id=45771019",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/news-ycombinator-com-item-id-45771019.md",
+      "status": "converted",
+      "title": "news-ycombinator-com-item-id-45771019",
+      "quality": {
+        "fence-no-language": 1,
+        "table-row-mismatch": 5,
+        "long-line": 7
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "22948-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/xyflow/xyflow/discussions/4830",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-xyflow-xyflow-discussions-4830.md",
+      "status": "converted",
+      "title": "github-com-xyflow-xyflow-discussions-4830",
+      "quality": {
+        "heading-no-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "5064-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/justinfernald/react-flow-tree-expand-collapse",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-justinfernald-react-flow-tree-expand-collapse.md",
+      "status": "converted",
+      "title": "React Flow Expand and Collapse Reimplementation",
+      "quality": {
+        "table-row-mismatch": 3
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "2511-byte Markdown body."
+    },
+    {
+      "source": "https://www.visualflow.dev/paid-examples/group-flow",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/www-visualflow-dev-paid-examples-group-flow.md",
+      "status": "converted",
+      "title": "www-visualflow-dev-paid-examples-group-flow",
+      "quality": {
+        "heading-no-h1": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "3023-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/orgs/theflywheel/repositories",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-orgs-theflywheel-repositories.md",
+      "status": "converted",
+      "title": "github-com-orgs-theflywheel-repositories",
+      "quality": {
+        "heading-no-h1": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "14853-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/base/flywheel",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-base-flywheel.md",
+      "status": "converted",
+      "title": "Flywheel Protocol",
+      "quality": {
+        "heading-duplicate": 2,
+        "heading-jump": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 1,
+        "code-non-ascii": 4
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "56515-byte Markdown body."
+    },
+    {
+      "source": "https://borris.dev/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/borris-dev.md",
+      "status": "converted",
+      "title": "Autonomous framework for long-running agents",
+      "quality": {
+        "fence-no-language": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "18238-byte Markdown body."
+    },
+    {
+      "source": "https://www.techtimes.com/ai-timeline",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/www-techtimes-com-ai-timeline.md",
+      "status": "converted",
+      "title": "AI Model Release Timeline",
+      "disposition": "converted",
+      "exit": 0,
+      "message": "5255-byte Markdown body."
+    },
+    {
+      "source": "https://eclipse.dev/elk/documentation/tooldevelopers/graphdatastructure.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/eclipse-dev-elk-documentation-tooldevelopers-graphdatastructure-html.md",
+      "status": "converted",
+      "title": "Graph Data Structure",
+      "quality": {
+        "heading-duplicate": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "12094-byte Markdown body."
+    },
+    {
+      "source": "https://arxiv.org/pdf/2311.00533.pdf",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/arxiv-org-pdf-2311-00533-pdf.md",
+      "status": "converted",
+      "title": "arXiv:2311.00533v1 [cs.DS] 1 Nov 2023",
+      "quality": {
+        "heading-jump": 1,
+        "long-line": 14
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "50244-byte Markdown body."
+    },
+    {
+      "source": "https://run.unl.pt/bitstreams/e3f55697-668f-4db5-bd57-f271b0d6f2a6/download",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/run-unl-pt-bitstreams-e3f55697-668f-4db5-bd57-f271b0d6f2a6-download.md",
+      "status": "stub",
+      "title": "Making sure you're not a bot!",
+      "disposition": "stub",
+      "exit": 0,
+      "message": "858-byte Markdown body."
+    },
+    {
+      "source": "https://la.lzyess.com/product/fess/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/la-lzyess-com-product-fess.md",
+      "status": "converted",
+      "title": "la-lzyess-com-product-fess",
+      "quality": {
+        "heading-no-h1": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "2369-byte Markdown body."
+    },
+    {
+      "source": "https://deepwiki.com/openedges/elk-rs/3-layout-engine-and-algorithm-pipeline",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/deepwiki-com-openedges-elk-rs-3-layout-engine-and-algorithm-pipeline.md",
+      "status": "converted",
+      "title": "Layout Engine and Algorithm Pipeline",
+      "quality": {
+        "table-row-mismatch": 2
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "12560-byte Markdown body."
+    },
+    {
+      "source": "https://deepwiki.com/kieler/elkjs/5.3-layout-configuration",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/deepwiki-com-kieler-elkjs-5-3-layout-configuration.md",
+      "status": "converted",
+      "title": "Layout Configuration",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 3
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "12623-byte Markdown body."
+    },
+    {
+      "source": "https://fy.lzyess.com/product/fess/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "fy-lzyess-com-product-fess",
+      "disposition": "unavailable",
+      "exit": 4,
+      "message": "read_url: probe failed for https://fy.lzyess.com/product/fess/: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is no"
+    },
+    {
+      "source": "https://es.tradingview.com/symbols/MUN-45C/ideas/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/es-tradingview-com-symbols-mun-45c-ideas.md",
+      "status": "converted",
+      "title": "Ideas de trading en profundidad",
+      "quality": {
+        "invisible": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "2799-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/eclipse-elk/elk/blob/master/plugins/org.eclipse.elk.alg.layered/src/org/eclipse/elk/alg/layered/ElkLayered.java",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-eclipse-elk-elk-blob-master-plugins-org-eclipse-elk-alg-layered-src-org-eclipse.md",
+      "status": "stub",
+      "title": "ElkLayered.java",
+      "disposition": "stub",
+      "exit": 0,
+      "message": "740-byte Markdown body."
+    },
+    {
+      "source": "https://arxiv.org/html/2311.00533v1",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/arxiv-org-html-2311-00533v1.md",
+      "status": "converted",
+      "title": "The Eclipse Layout Kernel",
+      "quality": {
+        "heading-jump": 4,
+        "long-line": 9
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "50837-byte Markdown body."
+    },
+    {
+      "source": "https://reactflow.dev/examples/layout/elkjs-multiple-handles",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/reactflow-dev-examples-layout-elkjs-multiple-handles.md",
+      "status": "converted",
+      "title": "Elkjs Multiple Handles",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 2
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "3280-byte Markdown body."
+    },
+    {
+      "source": "https://reactflow.dev/learn/advanced-use/performance",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/reactflow-dev-learn-advanced-use-performance.md",
+      "status": "converted",
+      "title": "Performance",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "4976-byte Markdown body."
+    },
+    {
+      "source": "https://reactflow.dev/learn/advanced-use/computing-flows",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/reactflow-dev-learn-advanced-use-computing-flows.md",
+      "status": "converted",
+      "title": "Computing Flows",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "9981-byte Markdown body."
+    },
+    {
+      "source": "https://www.jointjs.com/demos/elk-layout-with-ports-and-clusters",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/www-jointjs-com-demos-elk-layout-with-ports-and-clusters.md",
+      "status": "converted",
+      "title": "ELK Layout with Ports and Clusters",
+      "quality": {
+        "heading-duplicate": 6,
+        "heading-multi-h1": 1,
+        "heading-jump": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "3708-byte Markdown body."
+    },
+    {
+      "source": "https://stackoverflow.com/questions/68852762/how-to-get-cytoscape-js-to-fill-the-canvas-more-evenly",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/stackoverflow-com-questions-68852762-how-to-get-cytoscape-js-to-fill-the-canvas-more-evenl.md",
+      "status": "converted",
+      "title": "[How to get cytoscape.js to fill the canvas more ...",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "9586-byte Markdown body."
+    },
+    {
+      "source": "https://visualflow.dev/blogs/scale-studio-pro",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/visualflow-dev-blogs-scale-studio-pro.md",
+      "status": "converted",
+      "title": "Architecting for Massive Scale in React Flow",
+      "quality": {
+        "heading-duplicate": 3,
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "5811-byte Markdown body."
+    },
+    {
+      "source": "https://www.synergycodes.com/blog/react-flow-everything-you-need-to-know",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/www-synergycodes-com-blog-react-flow-everything-you-need-to-know.md",
+      "status": "converted",
+      "title": "www-synergycodes-com-blog-react-flow-everything-you-need-to-know",
+      "quality": {
+        "heading-no-h1": 1,
+        "raw-html": 2,
+        "invisible": 6
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "32080-byte Markdown body."
+    },
+    {
+      "source": "https://liambx.com/blog/tuning-edge-animations-reactflow-optimal-performance",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/liambx-com-blog-tuning-edge-animations-reactflow-optimal-performance.md",
+      "status": "converted",
+      "title": "Tuning Edge Animations in Reactflow for Optimal Performance",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "8862-byte Markdown body."
+    },
+    {
+      "source": "https://deepwiki.com/kieler/elkjs/5-usage-guide",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/deepwiki-com-kieler-elkjs-5-usage-guide.md",
+      "status": "converted",
+      "title": "Usage Guide",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 2,
+        "raw-html": 4
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "13910-byte Markdown body."
+    },
+    {
+      "source": "http://cytoscape.org/cytoscape.js-elk/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "cytoscape-org-cytoscape-js-elk",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for http://cytoscape.org/cytoscape.js-elk/: Blocked by anti-bot protection: Structural: minimal_text, no_content_elem"
+    },
+    {
+      "source": "https://unpkg.com/elkjs@0.9.2/README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/unpkg-com-elkjs-0-9-2-readme-md.md",
+      "status": "converted",
+      "title": "FAQs and Recurring Issues",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "15458-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/cytoscape/cytoscape.js-elk/blob/master/package.json",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-cytoscape-cytoscape-js-elk-blob-master-package-json.md",
+      "status": "stub",
+      "title": "package.json",
+      "disposition": "stub",
+      "exit": 0,
+      "message": "386-byte Markdown body."
+    },
+    {
+      "source": "https://repos.ecosyste.ms/hosts/GitHub/repositories/cytoscape%2Fcytoscape.js-elk?sha=v1.2.2\\&path=README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/repos-ecosyste-ms-hosts-github-repositories-cytoscape-2fcytoscape-js-elk-sha-v1-2-2-path-r.md",
+      "status": "stub",
+      "title": "[cytoscape.js-elk](https://github.com/cytoscape/cytoscape.js-elk)",
+      "disposition": "stub",
+      "exit": 0,
+      "message": "878-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/iVis-at-Bilkent/cytoscape.js-fcose/releases",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-ivis-at-bilkent-cytoscape-js-fcose-releases.md",
+      "status": "converted",
+      "title": "github-com-ivis-at-bilkent-cytoscape-js-fcose-releases",
+      "quality": {
+        "heading-duplicate": 1,
+        "heading-no-h1": 1,
+        "fence-no-language": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "4976-byte Markdown body."
+    },
+    {
+      "source": "https://ivis-at-bilkent.github.io/cytoscape.js-fcose/demo/demo-constraint.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/ivis-at-bilkent-github-io-cytoscape-js-fcose-demo-demo-constraint-html.md",
+      "status": "stub",
+      "title": "cytoscape-fcose demo (constraint)",
+      "disposition": "stub",
+      "exit": 0,
+      "message": "36-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/romanbsd/fcose/blob/master/README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-romanbsd-fcose-blob-master-readme-md.md",
+      "status": "converted",
+      "title": "README.md",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "9192-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/PlayForm/Site-DeepSeek",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-playform-site-deepseek.md",
+      "status": "converted",
+      "title": "@playform / DSH Family - Site",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 2,
+        "raw-html": 8,
+        "long-line": 2,
+        "code-non-ascii": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "51093-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/session-format-status.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-docs-session-format-status-md.md",
+      "status": "converted",
+      "title": "session-format-status.md",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "6850-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/session.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-docs-subsystems-session-md.md",
+      "status": "converted",
+      "title": "session.md",
+      "quality": {
+        "heading-duplicate": 3,
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 23,
+        "long-line": 3
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "80376-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/session/session-persistence/README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-packages-session-session-persistence-r.md",
+      "status": "converted",
+      "title": "README.md",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 5,
+        "long-line": 1,
+        "glued-code": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "17868-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/session/session-persistence-jsonl/README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-packages-session-session-persistence-j.md",
+      "status": "converted",
+      "title": "README.md",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 7,
+        "long-line": 5
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "21475-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/session/README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-packages-core-session-readme-md.md",
+      "status": "converted",
+      "title": "README.md",
+      "quality": {
+        "heading-duplicate": 3,
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 6,
+        "long-line": 3,
+        "glued-code": 2
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "24758-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/llm/llm/README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-packages-llm-llm-readme-md.md",
+      "status": "converted",
+      "title": "README.md",
+      "quality": {
+        "heading-multi-h1": 1,
+        "heading-jump": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 9,
+        "long-line": 2,
+        "glued-code": 3
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "21552-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/llm/llm-deepseek/README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-packages-llm-llm-deepseek-readme-md.md",
+      "status": "converted",
+      "title": "README.md",
+      "quality": {
+        "heading-duplicate": 3,
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "table-row-mismatch": 1,
+        "long-line": 8,
+        "glued-code": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "31406-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/session-projection.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-docs-subsystems-session-projection-md.md",
+      "status": "converted",
+      "title": "session-projection.md",
+      "quality": {
+        "heading-duplicate": 1,
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "long-line": 1,
+        "code-non-ascii": 19
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "30244-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/llm-streaming.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-docs-subsystems-llm-streaming-md.md",
+      "status": "converted",
+      "title": "llm-streaming.md",
+      "quality": {
+        "heading-duplicate": 2,
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "long-line": 5,
+        "code-non-ascii": 8,
+        "glued-code": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "72549-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/agent-lifecycle.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-docs-agent-lifecycle-md.md",
+      "status": "converted",
+      "title": "agent-lifecycle.md",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "6270-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/llm/plugin-package-inventory-deepseek/README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-packages-llm-plugin-package-inventory.md",
+      "status": "converted",
+      "title": "README.md",
+      "quality": {
+        "heading-multi-h1": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "5584-byte Markdown body."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/session/session-log-deepseek/README.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-deepseek-ai-deepseek-harness-blob-master-packages-session-session-log-deepseek.md",
+      "status": "converted",
+      "title": "README.md",
+      "quality": {
+        "heading-multi-h1": 1,
+        "long-line": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "7191-byte Markdown body."
+    },
+    {
+      "source": "https://developer.chrome.com/blog/local-network-access",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/developer-chrome-com-blog-local-network-access.md",
+      "status": "converted",
+      "title": "New permission prompt for Local Network Access Stay organized with ...",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "9519-byte Markdown body."
+    },
+    {
+      "source": "https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Mixed_content",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/developer-mozilla-org-en-us-docs-web-security-defenses-mixed-content.md",
+      "status": "converted",
+      "title": "Mixed content",
+      "quality": {
+        "heading-anchor": 11,
+        "long-line": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "15286-byte Markdown body."
+    },
+    {
+      "source": "https://cheatsheetseries.owasp.org/cheatsheets/WebSocket_Security_Cheat_Sheet.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/cheatsheetseries-owasp-org-cheatsheets-websocket-security-cheat-sheet-html.md",
+      "status": "converted",
+      "title": "WebSocket Security Cheat ...",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "15725-byte Markdown body."
+    },
+    {
+      "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Permissions-Policy/loopback-network",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/developer-mozilla-org-en-us-docs-web-http-reference-headers-permissions-policy-loopback-ne.md",
+      "status": "converted",
+      "title": "Permissions-Policy: loopback-network directive",
+      "quality": {
+        "heading-anchor": 7,
+        "long-line": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "5720-byte Markdown body."
+    },
+    {
+      "source": "https://chromestatus.com/feature/5152728072060928",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "chromestatus-com-feature-5152728072060928",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://chromestatus.com/feature/5152728072060928: Blocked by anti-bot protection: Structural: minimal_text, no_c"
+    },
+    {
+      "source": "https://wicg.github.io/local-network-access/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/wicg-github-io-local-network-access.md",
+      "status": "converted",
+      "title": "Local Network Access",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "table-row-mismatch": 17
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "81230-byte Markdown body."
+    },
+    {
+      "source": "https://blog.openreplay.com/chrome-local-network-access-lna-permission/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/blog-openreplay-com-chrome-local-network-access-lna-permission.md",
+      "status": "converted",
+      "title": "Chrome's Local Network Access (LNA) Permission Explained",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1,
+        "code-non-ascii": 2
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "8601-byte Markdown body."
+    },
+    {
+      "source": "https://stackoverflow.com/questions/37043719/how-can-i-allow-mixed-contents-http-with-https-using-content-security-policy-m",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/stackoverflow-com-questions-37043719-how-can-i-allow-mixed-contents-http-with-https-using.md",
+      "status": "converted",
+      "title": "[How can I allow Mixed contents (http with https) using ...",
+      "quality": {
+        "fence-no-language": 1,
+        "fence-blank-padded": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "9510-byte Markdown body."
+    },
+    {
+      "source": "https://www.launchscaler.com/blog/mixed-content-error",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/www-launchscaler-com-blog-mixed-content-error.md",
+      "status": "stub",
+      "title": "www-launchscaler-com-blog-mixed-content-error",
+      "disposition": "stub",
+      "exit": 0,
+      "message": "67-byte Markdown body."
+    },
+    {
+      "source": "https://unmasked.goodfriends.workers.dev/megan-https-developer.mozilla.org/en-US/docs/Web/Security/Defenses/Mixed_content",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "unmasked-goodfriends-workers-dev-megan-https-developer-mozilla-org-en-us ...",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://unmasked.goodfriends.workers.dev/megan-https-developer.mozilla.org/en-US/docs/Web/Security/Defenses/Mixed"
+    },
+    {
+      "source": "https://github.com/WICG/local-network-access/blob/main/explainer.md",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/github-com-wicg-local-network-access-blob-main-explainer-md.md",
+      "status": "converted",
+      "title": "explainer.md",
+      "quality": {
+        "heading-multi-h1": 1,
+        "fence-no-language": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "27337-byte Markdown body."
+    },
+    {
+      "source": "https://devdoc.net/web/developer.mozilla.org/en-US/docs/Security/MixedContent.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/devdoc-net-web-developer-mozilla-org-en-us-docs-security-mixedcontent-html.md",
+      "status": "converted",
+      "title": "Mixed content",
+      "quality": {
+        "long-line": 3
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "13465-byte Markdown body."
+    },
+    {
+      "source": "https://community.retool.com/t/chrome-access-control-allow-private-network/62988",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/community-retool-com-t-chrome-access-control-allow-private-network-62988.md",
+      "status": "converted",
+      "title": "[ Chrome Access-Control-Allow-Private-Network ...",
+      "quality": {
+        "heading-jump": 1,
+        "table-row-mismatch": 5
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "7841-byte Markdown body."
+    },
+    {
+      "source": "https://www.w3.org/TR/tabular-metadata/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "www-w3-org-tr-tabular-metadata",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://www.w3.org/TR/tabular-metadata/: Blocked by anti-bot protection: Cloudflare JS challenge "
+    },
+    {
+      "source": "https://www.w3.org/ns/csvw",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "www-w3-org-ns-csvw",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://www.w3.org/ns/csvw: Blocked by anti-bot protection: Cloudflare JS challenge "
+    },
+    {
+      "source": "https://www.w3.org/TR/2015/WD-tabular-metadata-20150108/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "www-w3-org-tr-2015-wd-tabular-metadata-20150108",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://www.w3.org/TR/2015/WD-tabular-metadata-20150108/: Blocked by anti-bot protection: Cloudflare JS challenge"
+    },
+    {
+      "source": "https://www.w3.org/TR/tabular-data-model/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "www-w3-org-tr-tabular-data-model",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://www.w3.org/TR/tabular-data-model/: Blocked by anti-bot protection: Cloudflare JS challenge "
+    },
+    {
+      "source": "https://www.w3.org/TR/tabular-data-primer/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "www-w3-org-tr-tabular-data-primer",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://www.w3.org/TR/tabular-data-primer/: Blocked by anti-bot protection: Cloudflare JS challenge "
+    },
+    {
+      "source": "https://datapackage.org/guides/csvw-data-package/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/datapackage-org-guides-csvw-data-package.md",
+      "status": "converted",
+      "title": "Comparison with CSVW",
+      "disposition": "converted",
+      "exit": 0,
+      "message": "13965-byte Markdown body."
+    },
+    {
+      "source": "https://csvw.readthedocs.io/en/stable/csvw.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "csvw-readthedocs-io-en-stable-csvw-html",
+      "disposition": "unavailable",
+      "exit": 5,
+      "message": "read_url: crawl failed for https://csvw.readthedocs.io/en/stable/csvw.html: Blocked by anti-bot protection: Structural: minimal_text, no_con"
+    },
+    {
+      "source": "https://csvw.org/standards.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/csvw-org-standards-html.md",
+      "status": "converted",
+      "title": "csvw-org-standards-html",
+      "disposition": "converted",
+      "exit": 0,
+      "message": "5689-byte Markdown body."
+    },
+    {
+      "source": "https://foundry.helix-db.com/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/foundry-helix-db.md",
+      "status": "converted",
+      "title": "Your company\u2019s data, connected into one ontology",
+      "quality": {
+        "fence-no-language": 1,
+        "long-line": 1
+      },
+      "disposition": "converted",
+      "exit": 0,
+      "message": "Fetched as visual inspiration for graph and ontology exploration: entity counts, key columns, match ratios, and the in/out relationship panel."
     }
   ]
 }

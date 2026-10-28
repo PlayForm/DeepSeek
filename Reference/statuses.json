@@ -1000,5 +1000,1185 @@
 		"exitCode": 0,
 		"message": "The site's own link is dead: the page serves a 324-byte 'Page Fot Found' stub. The real chapter was captured under its correct URL instead.",
 		"disposition": "unavailable"
+	},
+	{
+		"source": "https://flywheel.paradigma.inc/",
+		"slug": "flywheel-home",
+		"role": "sources",
+		"status": "stub",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Client-rendered canvas application: the extractor returns an empty body (9-byte file) even with --filter raw and --scan-full-page. The interaction behavior is documented on the Flywheel docs pages that are shelved beside it.",
+		"disposition": "stub"
+	},
+	{
+		"source": "https://flywheel.paradigma.inc/tl",
+		"slug": "flywheel-timeline",
+		"role": "sources",
+		"status": "stub",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Client-rendered canvas application: the extractor returns an empty body (9-byte file) even with --filter raw and --scan-full-page. The interaction behavior is documented on the Flywheel docs pages that are shelved beside it.",
+		"disposition": "stub"
+	},
+	{
+		"source": "https://docs.flywheel.paradigma.inc/",
+		"slug": "flywheel-docs",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 1691-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://docs.flywheel.paradigma.inc/concepts/graph-model",
+		"slug": "flywheel-graph-model",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 3329-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://docs.flywheel.paradigma.inc/tutorial",
+		"slug": "flywheel-tutorial",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 36575-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://docs.flywheel.paradigma.inc/terminal-preview",
+		"slug": "flywheel-terminal-preview",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 10476-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://docs.flywheel.paradigma.inc/concepts/repos",
+		"slug": "flywheel-repos",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 17743-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://docs.flywheel.paradigma.inc/cli/repo-init",
+		"slug": "flywheel-cli-repo-init",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 4280-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://js.cytoscape.org/",
+		"slug": "cytoscape-js",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 324001-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/iVis-at-Bilkent/cytoscape.js-fcose",
+		"slug": "cytoscape-fcose",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 13105-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/cytoscape/cytoscape.js-elk",
+		"slug": "cytoscape-elk",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 8294-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://blog.js.cytoscape.org/2021/02/08/fcose-2.0.0-release/",
+		"slug": "fcose-release",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 1956-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/kieler/elkjs",
+		"slug": "elkjs",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 23231-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://eclipse.dev/elk/reference/algorithms/org-eclipse-elk-layered.html",
+		"slug": "elk-layered",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 61612-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://docs.astro.build/en/guides/view-transitions/",
+		"slug": "astro-view-transitions",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 38349-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/docs/architecture.md",
+		"slug": "dsh-architecture",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 18895-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/docs/tool-execution-pipeline.md",
+		"slug": "dsh-tool-pipeline",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 4491-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/docs/agent-lifecycle.md",
+		"slug": "dsh-agent-lifecycle",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 5777-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/docs/subsystems/session.md",
+		"slug": "dsh-session",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 77975-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/docs/subsystems/llm-streaming.md",
+		"slug": "dsh-llm-streaming",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 70688-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/docs/subsystems/session-telemetry.md",
+		"slug": "dsh-session-telemetry",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 12834-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/master/packages/client/ui-trajectory/README.md",
+		"slug": "dsh-trajectory",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 12648-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://perfetto.dev/docs/visualization/perfetto-ui",
+		"slug": "perfetto-ui",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 4839-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://deepseek.playform.cloud/",
+		"slug": "playform-site",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 17339-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://www.deepseek.com/en/harness/",
+		"slug": "deepseek-harness-page",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched for the observatory overhaul: 4578-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://deepseek.playform.cloud",
+		"slug": "deepseek-playform-cloud",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "17339-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/PlayForm/DeepSeek",
+		"slug": "github-com-playform-deepseek",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "75928-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness",
+		"slug": "github-com-deepseek-ai-deepseek-harness",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "963320-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/client/ui-trajectory/README.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-packages-client-ui-trajectory-readme-m",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "13726-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/tool-execution-pipeline.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-docs-tool-execution-pipeline-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "4925-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/session-telemetry.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-docs-subsystems-session-telemetry-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "13837-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://reactflow.dev/examples/grouping/sub-flows",
+		"slug": "reactflow-dev-examples-grouping-sub-flows",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "8005-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://reactflow.dev/examples/layout/expand-collapse",
+		"slug": "reactflow-dev-examples-layout-expand-collapse",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "1299-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://deepseek-harness.github.io/deepseek-harness/",
+		"slug": "deepseek-harness-github-io-deepseek-harness",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "2066-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://docs.flywheel.io/",
+		"slug": "docs-flywheel-io",
+		"role": "sources",
+		"status": "stub",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "367-byte Markdown body.",
+		"disposition": "stub"
+	},
+	{
+		"source": "https://docs.flywheel.io/user/",
+		"slug": "docs-flywheel-io-user",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "4254-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://apidog.com/blog/what-is-deepseek-harness/",
+		"slug": "apidog-com-blog-what-is-deepseek-harness",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "15509-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://pub.towardsai.net/everything-is-a-plugin-inside-deepseek-harness-the-week-the-scaffolding-became-the-product-b854517e5e3f",
+		"slug": "pub-towardsai-net-everything-is-a-plugin-inside-deepseek-harness-the-week-the-scaffolding",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "2938-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/topics/deepseek-harness-plugin",
+		"slug": "github-com-topics-deepseek-harness-plugin",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "28393-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://a2aprotocol.ai/insights/deepseek-harness-2026-guide",
+		"slug": "a2aprotocol-ai-insights-deepseek-harness-2026-guide",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "18706-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/xianyu110/awesome-deepseek-harness-0xsline",
+		"slug": "github-com-xianyu110-awesome-deepseek-harness-0xsline",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "143162-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://blog.stackademic.com/the-developers-guide-to-deepseek-harness-edee5aa7a856",
+		"slug": "blog-stackademic-com-the-developers-guide-to-deepseek-harness-edee5aa7a856",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "2719-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://www.mindstudio.ai/blog/deepseek-harness-agentic-coding",
+		"slug": "www-mindstudio-ai-blog-deepseek-harness-agentic-coding",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "21183-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://www.verdent.ai/guides/coding/best-coding-harnesses-deepseek-v4",
+		"slug": "www-verdent-ai-guides-coding-best-coding-harnesses-deepseek-v4",
+		"role": "sources",
+		"status": "stub",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "367-byte Markdown body.",
+		"disposition": "stub"
+	},
+	{
+		"source": "https://android.googlesource.com/platform//external/perfetto/+/922c3327a0847fa0e42fbd784fda94b2ece85e23/docs/README.md",
+		"slug": "android-googlesource-com-platform-external-perfetto-922c3327a0847fa0e42fbd784fda94b2ece85e",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "9882-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://source.android.com/docs/core/power/wattson/how-to-wattson",
+		"slug": "source-android-com-docs-core-power-wattson-how-to-wattson",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "13889-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://perfetto.dev/",
+		"slug": "perfetto-dev",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "1996-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/google/perfetto",
+		"slug": "github-com-google-perfetto",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "57607-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://stately.ai/docs/packages/graph/react-flow-elk-pipeline",
+		"slug": "stately-ai-docs-packages-graph-react-flow-elk-pipeline",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "10807-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://news.ycombinator.com/item?id=45771019",
+		"slug": "news-ycombinator-com-item-id-45771019",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "22948-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/xyflow/xyflow/discussions/4830",
+		"slug": "github-com-xyflow-xyflow-discussions-4830",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "5064-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/justinfernald/react-flow-tree-expand-collapse",
+		"slug": "github-com-justinfernald-react-flow-tree-expand-collapse",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "2511-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://www.visualflow.dev/paid-examples/group-flow",
+		"slug": "www-visualflow-dev-paid-examples-group-flow",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "3023-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/orgs/theflywheel/repositories",
+		"slug": "github-com-orgs-theflywheel-repositories",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "14853-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/base/flywheel",
+		"slug": "github-com-base-flywheel",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "56515-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://borris.dev/",
+		"slug": "borris-dev",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "18238-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://www.techtimes.com/ai-timeline",
+		"slug": "www-techtimes-com-ai-timeline",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "5255-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://eclipse.dev/elk/documentation/tooldevelopers/graphdatastructure.html",
+		"slug": "eclipse-dev-elk-documentation-tooldevelopers-graphdatastructure-html",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "12094-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://arxiv.org/pdf/2311.00533.pdf",
+		"slug": "arxiv-org-pdf-2311-00533-pdf",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "50244-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://run.unl.pt/bitstreams/e3f55697-668f-4db5-bd57-f271b0d6f2a6/download",
+		"slug": "run-unl-pt-bitstreams-e3f55697-668f-4db5-bd57-f271b0d6f2a6-download",
+		"role": "sources",
+		"status": "stub",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "858-byte Markdown body.",
+		"disposition": "stub"
+	},
+	{
+		"source": "https://la.lzyess.com/product/fess/",
+		"slug": "la-lzyess-com-product-fess",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "2369-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://deepwiki.com/openedges/elk-rs/3-layout-engine-and-algorithm-pipeline",
+		"slug": "deepwiki-com-openedges-elk-rs-3-layout-engine-and-algorithm-pipeline",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "12560-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://deepwiki.com/kieler/elkjs/5.3-layout-configuration",
+		"slug": "deepwiki-com-kieler-elkjs-5-3-layout-configuration",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "12623-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://fy.lzyess.com/product/fess/",
+		"slug": "fy-lzyess-com-product-fess",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 4,
+		"exitCode": 4,
+		"message": "read_url: probe failed for https://fy.lzyess.com/product/fess/: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is no",
+		"disposition": "unavailable"
+	},
+	{
+		"source": "https://es.tradingview.com/symbols/MUN-45C/ideas/",
+		"slug": "es-tradingview-com-symbols-mun-45c-ideas",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "2799-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/eclipse-elk/elk/blob/master/plugins/org.eclipse.elk.alg.layered/src/org/eclipse/elk/alg/layered/ElkLayered.java",
+		"slug": "github-com-eclipse-elk-elk-blob-master-plugins-org-eclipse-elk-alg-layered-src-org-eclipse",
+		"role": "sources",
+		"status": "stub",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "740-byte Markdown body.",
+		"disposition": "stub"
+	},
+	{
+		"source": "https://arxiv.org/html/2311.00533v1",
+		"slug": "arxiv-org-html-2311-00533v1",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "50837-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://reactflow.dev/examples/layout/elkjs-multiple-handles",
+		"slug": "reactflow-dev-examples-layout-elkjs-multiple-handles",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "3280-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://reactflow.dev/learn/advanced-use/performance",
+		"slug": "reactflow-dev-learn-advanced-use-performance",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "4976-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://reactflow.dev/learn/advanced-use/computing-flows",
+		"slug": "reactflow-dev-learn-advanced-use-computing-flows",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "9981-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://www.jointjs.com/demos/elk-layout-with-ports-and-clusters",
+		"slug": "www-jointjs-com-demos-elk-layout-with-ports-and-clusters",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "3708-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://stackoverflow.com/questions/68852762/how-to-get-cytoscape-js-to-fill-the-canvas-more-evenly",
+		"slug": "stackoverflow-com-questions-68852762-how-to-get-cytoscape-js-to-fill-the-canvas-more-evenl",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "9586-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://visualflow.dev/blogs/scale-studio-pro",
+		"slug": "visualflow-dev-blogs-scale-studio-pro",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "5811-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://www.synergycodes.com/blog/react-flow-everything-you-need-to-know",
+		"slug": "www-synergycodes-com-blog-react-flow-everything-you-need-to-know",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "32080-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://liambx.com/blog/tuning-edge-animations-reactflow-optimal-performance",
+		"slug": "liambx-com-blog-tuning-edge-animations-reactflow-optimal-performance",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "8862-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://deepwiki.com/kieler/elkjs/5-usage-guide",
+		"slug": "deepwiki-com-kieler-elkjs-5-usage-guide",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "13910-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "http://cytoscape.org/cytoscape.js-elk/",
+		"slug": "cytoscape-org-cytoscape-js-elk",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "read_url: crawl failed for http://cytoscape.org/cytoscape.js-elk/: Blocked by anti-bot protection: Structural: minimal_text, no_content_elem",
+		"disposition": "unavailable"
+	},
+	{
+		"source": "https://unpkg.com/elkjs@0.9.2/README.md",
+		"slug": "unpkg-com-elkjs-0-9-2-readme-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "15458-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/cytoscape/cytoscape.js-elk/blob/master/package.json",
+		"slug": "github-com-cytoscape-cytoscape-js-elk-blob-master-package-json",
+		"role": "sources",
+		"status": "stub",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "386-byte Markdown body.",
+		"disposition": "stub"
+	},
+	{
+		"source": "https://repos.ecosyste.ms/hosts/GitHub/repositories/cytoscape%2Fcytoscape.js-elk?sha=v1.2.2\\&path=README.md",
+		"slug": "repos-ecosyste-ms-hosts-github-repositories-cytoscape-2fcytoscape-js-elk-sha-v1-2-2-path-r",
+		"role": "sources",
+		"status": "stub",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "878-byte Markdown body.",
+		"disposition": "stub"
+	},
+	{
+		"source": "https://github.com/iVis-at-Bilkent/cytoscape.js-fcose/releases",
+		"slug": "github-com-ivis-at-bilkent-cytoscape-js-fcose-releases",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "4976-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://ivis-at-bilkent.github.io/cytoscape.js-fcose/demo/demo-constraint.html",
+		"slug": "ivis-at-bilkent-github-io-cytoscape-js-fcose-demo-demo-constraint-html",
+		"role": "sources",
+		"status": "stub",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "36-byte Markdown body.",
+		"disposition": "stub"
+	},
+	{
+		"source": "https://github.com/romanbsd/fcose/blob/master/README.md",
+		"slug": "github-com-romanbsd-fcose-blob-master-readme-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "9192-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/PlayForm/Site-DeepSeek",
+		"slug": "github-com-playform-site-deepseek",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "51093-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/session-format-status.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-docs-session-format-status-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "6850-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/session.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-docs-subsystems-session-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "80376-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/session/session-persistence/README.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-packages-session-session-persistence-r",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "17868-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/session/session-persistence-jsonl/README.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-packages-session-session-persistence-j",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "21475-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/session/README.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-packages-core-session-readme-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "24758-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/llm/llm/README.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-packages-llm-llm-readme-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "21552-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/llm/llm-deepseek/README.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-packages-llm-llm-deepseek-readme-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "31406-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/session-projection.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-docs-subsystems-session-projection-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "30244-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/llm-streaming.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-docs-subsystems-llm-streaming-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "72549-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/agent-lifecycle.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-docs-agent-lifecycle-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "6270-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/llm/plugin-package-inventory-deepseek/README.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-packages-llm-plugin-package-inventory",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "5584-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/session/session-log-deepseek/README.md",
+		"slug": "github-com-deepseek-ai-deepseek-harness-blob-master-packages-session-session-log-deepseek",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "7191-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://developer.chrome.com/blog/local-network-access",
+		"slug": "developer-chrome-com-blog-local-network-access",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "9519-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Mixed_content",
+		"slug": "developer-mozilla-org-en-us-docs-web-security-defenses-mixed-content",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "15286-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://cheatsheetseries.owasp.org/cheatsheets/WebSocket_Security_Cheat_Sheet.html",
+		"slug": "cheatsheetseries-owasp-org-cheatsheets-websocket-security-cheat-sheet-html",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "15725-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Permissions-Policy/loopback-network",
+		"slug": "developer-mozilla-org-en-us-docs-web-http-reference-headers-permissions-policy-loopback-ne",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "5720-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://chromestatus.com/feature/5152728072060928",
+		"slug": "chromestatus-com-feature-5152728072060928",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "read_url: crawl failed for https://chromestatus.com/feature/5152728072060928: Blocked by anti-bot protection: Structural: minimal_text, no_c",
+		"disposition": "unavailable"
+	},
+	{
+		"source": "https://wicg.github.io/local-network-access/",
+		"slug": "wicg-github-io-local-network-access",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "81230-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://blog.openreplay.com/chrome-local-network-access-lna-permission/",
+		"slug": "blog-openreplay-com-chrome-local-network-access-lna-permission",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "8601-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://stackoverflow.com/questions/37043719/how-can-i-allow-mixed-contents-http-with-https-using-content-security-policy-m",
+		"slug": "stackoverflow-com-questions-37043719-how-can-i-allow-mixed-contents-http-with-https-using",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "9510-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://www.launchscaler.com/blog/mixed-content-error",
+		"slug": "www-launchscaler-com-blog-mixed-content-error",
+		"role": "sources",
+		"status": "stub",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "67-byte Markdown body.",
+		"disposition": "stub"
+	},
+	{
+		"source": "https://unmasked.goodfriends.workers.dev/megan-https-developer.mozilla.org/en-US/docs/Web/Security/Defenses/Mixed_content",
+		"slug": "unmasked-goodfriends-workers-dev-megan-https-developer-mozilla-org-en-us-docs-web-security",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "read_url: crawl failed for https://unmasked.goodfriends.workers.dev/megan-https-developer.mozilla.org/en-US/docs/Web/Security/Defenses/Mixed",
+		"disposition": "unavailable"
+	},
+	{
+		"source": "https://github.com/WICG/local-network-access/blob/main/explainer.md",
+		"slug": "github-com-wicg-local-network-access-blob-main-explainer-md",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "27337-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://devdoc.net/web/developer.mozilla.org/en-US/docs/Security/MixedContent.html",
+		"slug": "devdoc-net-web-developer-mozilla-org-en-us-docs-security-mixedcontent-html",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "13465-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://community.retool.com/t/chrome-access-control-allow-private-network/62988",
+		"slug": "community-retool-com-t-chrome-access-control-allow-private-network-62988",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "7841-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://www.w3.org/TR/tabular-metadata/",
+		"slug": "www-w3-org-tr-tabular-metadata",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "read_url: crawl failed for https://www.w3.org/TR/tabular-metadata/: Blocked by anti-bot protection: Cloudflare JS challenge ",
+		"disposition": "unavailable"
+	},
+	{
+		"source": "https://www.w3.org/ns/csvw",
+		"slug": "www-w3-org-ns-csvw",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "read_url: crawl failed for https://www.w3.org/ns/csvw: Blocked by anti-bot protection: Cloudflare JS challenge ",
+		"disposition": "unavailable"
+	},
+	{
+		"source": "https://www.w3.org/TR/2015/WD-tabular-metadata-20150108/",
+		"slug": "www-w3-org-tr-2015-wd-tabular-metadata-20150108",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "read_url: crawl failed for https://www.w3.org/TR/2015/WD-tabular-metadata-20150108/: Blocked by anti-bot protection: Cloudflare JS challenge",
+		"disposition": "unavailable"
+	},
+	{
+		"source": "https://www.w3.org/TR/tabular-data-model/",
+		"slug": "www-w3-org-tr-tabular-data-model",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "read_url: crawl failed for https://www.w3.org/TR/tabular-data-model/: Blocked by anti-bot protection: Cloudflare JS challenge ",
+		"disposition": "unavailable"
+	},
+	{
+		"source": "https://www.w3.org/TR/tabular-data-primer/",
+		"slug": "www-w3-org-tr-tabular-data-primer",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "read_url: crawl failed for https://www.w3.org/TR/tabular-data-primer/: Blocked by anti-bot protection: Cloudflare JS challenge ",
+		"disposition": "unavailable"
+	},
+	{
+		"source": "https://datapackage.org/guides/csvw-data-package/",
+		"slug": "datapackage-org-guides-csvw-data-package",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "13965-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://csvw.readthedocs.io/en/stable/csvw.html",
+		"slug": "csvw-readthedocs-io-en-stable-csvw-html",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 5,
+		"exitCode": 5,
+		"message": "read_url: crawl failed for https://csvw.readthedocs.io/en/stable/csvw.html: Blocked by anti-bot protection: Structural: minimal_text, no_con",
+		"disposition": "unavailable"
+	},
+	{
+		"source": "https://csvw.org/standards.html",
+		"slug": "csvw-org-standards-html",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "5689-byte Markdown body.",
+		"disposition": "converted"
+	},
+	{
+		"source": "https://foundry.helix-db.com/",
+		"slug": "foundry-helix-db",
+		"role": "sources",
+		"status": "converted",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "Fetched as visual inspiration for graph and ontology exploration: entity counts, key columns, match ratios, and the in/out relationship panel.",
+		"disposition": "converted"
 	}
 ]

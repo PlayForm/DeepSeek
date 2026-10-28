@@ -8,8 +8,8 @@ whenToUse:
     Before editing any file under Site/ (pages, components, layout, library, styles, public assets,
     diagrams), adding a page or nav entry, changing the 404 or deploy config, or verifying a site
     claim about the family.
-version: 2.0.0
-updated: 2026-10-20
+version: 2.1.0
+updated: 2026-10-29
 ---
 
 # Site Authoring
@@ -74,19 +74,35 @@ Site/
                              Terminal, CodeBlock, Compare, Concept,
                              Configurator, FlavorBadge, InstallDemo,
                              Seams, Showcase, StatsBand, SupportsButton,
-                             TerminalTray, BrandIcon, ArrowIcon
-    pages/                   index, plugins, setup, versions, flavors,
-                             models, workbench, matrix, case-study,
-                             plugins/<15 detail pages>
+                             TerminalTray, BrandIcon, ArrowIcon,
+                             GraphPreview, EvidenceStrip, ScenarioCard
+    Component/Graph/         Explorer, Toolbar, SwitchGroup, SourceBadge,
+                             GraphCanvas, Inspector, AccessibleList,
+                             ControlBar, GraphLegend
+    Component/Reference/     Models, Flavors, Matrix, Versions, Workbench
+    pages/                   index, plugins, setup, reference, case-study,
+                             marketplace, connect, showcase, explore, tl,
+                             showcase/<slug> (one per story),
+                             plugins/<one detail page per package>
     Library/                 Content.ts (the facts), Live.ts (build-time
                              readers), Links.ts (the URL registry),
-                             FileIcon.ts, DiagramNav.ts
+                             FileIcon.ts, DiagramNav.ts, Screens.ts
+    Library/Graph/           Groups.mjs (the ten-group roster), Model.mjs
+                             (validation and projection), Catalogue.server.mjs
+                             (the snapshot loader), Stories.mjs (the sixteen
+                             story records), Traces.mjs (the validated traces),
+                             World.browser.mjs, Timeline.browser.mjs,
+                             TimelineController.mjs, ElkModel.mjs, Client.mjs
+    Content/Graph/           Catalogue.snapshot.json (the committed
+                             inventory), Showcase/<slug>.json (the traces)
     Content/Mermaid/         Render.mjs (the diagram pipeline)
     Script/                  client scripts
-    Stylesheet/              Base.css (Tailwind), Global.css (tokens)
+    Stylesheet/              Base.css (Tailwind), Global.css (tokens),
+                             Observatory.css (the graph surface)
   Public/                    static assets: 404.html, _headers,
                              Manifest.json, robots.txt, assets/
-  Scripts/                   Drift-Guard.mjs
+  Scripts/                   Drift-Guard.mjs, Export-Graph-Catalogue.mjs
+  Tests/Observatory/         Model, Catalogue and Timeline suites
   Target/                    the built site (the deployment artifact)
 ```
 
@@ -217,6 +233,31 @@ Before shipping a claim:
 Never say a package is on npm unless the registry confirms that package at that version.
 
 The install snippets on a detail page are a promise; a 404 breaks the primary conversion path.
+
+## The Astro scoping rules
+
+An Astro frontmatter helper is not visible inside `getStaticPaths`.
+
+Astro lifts `getStaticPaths` out of the page's frontmatter to module scope, where only the imports are
+visible, so a function defined later in the frontmatter is undefined when `getStaticPaths` runs and
+the build fails with `TitleFor is not defined` or `TraceFiles is not defined` - two builds failed
+exactly that way. Data that a route generator needs comes from an import (`@Library/Graph/Stories.mjs`,
+`@Library/Graph/Groups.mjs`, `@Library/Graph/Traces.mjs`), and `Source/pages/showcase/[slug].astro`
+is the pattern: it resolves the roster titles inside `getStaticPaths` from the imported roster.
+
+## The layout rules for mounted components
+
+A component built as a full-viewport application frame needs an explicit bounded height when it is
+mounted inside an article page, because the component's own layout assumes the whole viewport. The
+Explorer's workbench grid computes its height as `calc(100vh - var(--header-height))` from the
+stylesheet, so a page that embeds the explorer mounts it with the `Compact` prop, whose inline
+`--explorer-height` (520px by default) replaces the viewport-derived height; a mount that skips the
+bound lets the frame swallow the page and pushes the article's own sections below the fold.
+
+A component mounted as a direct grid child must not become a fourth auto-placed child of a three-row
+template, because a grid whose template names exactly three rows turns the extra child into an
+implicit fourth row that steals the canvas row's height. The Explorer's legend therefore rides inside
+the `ControlBar` as a collapsed disclosure rather than standing beside it in the grid.
 
 ## The workflow
 

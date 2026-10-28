@@ -36,6 +36,29 @@ that nobody can find again.
 - Do not use this skill to read one page for an answer (the `crawl4ai` skill owns the fetch), or for
   a document already on local disk (the `anydoc-documents` skill owns the conversion).
 
+## What the shelf is for
+
+The shelf holds the material a project argues from, and that is a narrower set than every URL that
+was ever seen.
+
+It holds documentation of libraries and APIs, articles, visible research papers, standards and
+specifications, layouts and worked examples, and an issue thread when the thread explains a behavior.
+It holds a page because someone will quote it, check a claim against it, or build a layout from it.
+
+It does not hold a social announcement. A post on X, LinkedIn, YouTube, Facebook, or Instagram that
+says a thing shipped is discovery rather than evidence: it is how the source was found, and the source
+it points at is what gets shelved. The same applies to a repost aggregator, a bare image or video, and
+a link that only announces an event. Fetching those spends the crawl budget and fills the index with
+rows nobody can quote.
+
+Sensitive material never reaches the shelf at all. A private conversation, a credential, a customer
+record, or a local absolute path belongs in the project's `Temporary/` directory or nowhere, while an
+article, a documentation page, a paper, and a layout are ordinary public material and carry no such
+restriction.
+
+When a batch of URLs mixes the two, filter the list before the fetch rather than after the index: the
+social and media hosts are cheaper to skip than to delete.
+
 ## The rules
 
 1. **The shelf layout.**

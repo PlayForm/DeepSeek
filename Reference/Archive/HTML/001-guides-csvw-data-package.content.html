@@ -1,0 +1,443 @@
+<div><div class="page sl-flex astro-vrdttmbt"> <div class="main-frame astro-vrdttmbt"> <div class="lg:sl-flex astro-67yu43on">  <div class="main-pane astro-67yu43on"> <main class="astro-bguv2lll"> <div class="content-panel astro-7nkwcw3z"> <div class="sl-container astro-7nkwcw3z"> <h1 class="astro-j6tvhyss" id="_top">Comparison with CSVW</h1> </div> </div> <div class="content-panel astro-7nkwcw3z"> <div class="sl-container astro-7nkwcw3z"> <div class="sl-markdown-content"> <table>
+<tbody>
+<tr>
+<th>Authors</th>
+<td>Peter Desmet, Evgeny Karev, Sara Petti</td>
+</tr>
+</tbody>
+</table>
+<p>In 2016, a working group chartered by W3C created a set of recommendations for documenting and accessing CSV files, collectively called </p>
+<p>Below we give an overview of the (dis)similarities between the CSVW and Data Package.</p>
+
+<p>CSVW is a set of specifications to describe delimited text files (CSV, TSV) only (i.e. </p>
+<p>Data Package is a set of specifications to describe datasets, data files and tabular data. It can describe data files that are not tabular and includes extra specifications for those that are (i.e. <a href="/standard/table-dialect/">Table Dialect</a> and <a href="/standard/table-schema/">Table Schema</a>).</p>
+<h2 id="maintenance"><a href="#maintenance">Maintenance</a></h2>
+<p>CSVW was published in 2016. Its working group was closed at the time. There is currently a community group, but it does </p>
+<p>Data Package was published in 2012, updated to v1.0 in 2017 and v2.0 in 2024. It is maintained by the <a href="/overview/governance/#decision-making">decided upon</a> by a <a href="/overview/governance/">working group</a> which includes members from several organizations.</p>
+<h2 id="adoption-and-software-support"><a href="#adoption-and-software-support">Adoption and Software Support</a></h2>
+<p>We could not find documentation on CSVW adoption, but Swirrl maintains a website at </p>
+<p>Data Package has been adopted by a wide range of <a href="/overview/adoption/">organizations and projects</a>, many of which have extended the standard and created software. <a href="/overview/software/">Software libraries</a> are available for 9 programming languages (Go, Java, Javascript, Julia, PHP, Python, R, Ruby, Swift), with </p>
+<h2 id="extensibility-and-use-of-other-standards"><a href="#extensibility-and-use-of-other-standards">Extensibility and Use of Other Standards</a></h2>
+<p>CSVW makes extensive use of other standards (such as </p>
+<p>Data Package defines its own properties for often-used properties (such as description, contributors, licences, sources), none of which are required. Users can include properties from other standards as <a href="/standard/glossary/#custom-properties">custom properties</a>. Data Package is defined as a JSON Schema and is designed to be extensible: developers can add or extend properties by referencing a JSON schema in <a href="/standard/data-package/#dollar-schema">@schema</a>, which are then automatically picked up by validation software. There is also </p>
+<h2 id="linking-data-with-metadata"><a href="#linking-data-with-metadata">Linking Data with Metadata</a></h2>
+<p>CSVW defines </p>
+<p>Data Package metadata are described in a <a href="/standard/data-package/#descriptor">descriptor file</a> named <code>datapackage.json</code>. This file links to the data file(s) using <a href="/standard/data-resource/#path-or-data">resource.path</a> and can reference external dialects, schemas, and (domain-specific) specifications.</p>
+<h2 id="property-comparison"><a href="#property-comparison">Property Comparison</a></h2>
+<p>Below is a list of all properties defined in CSVW’s </p>
+<h3 id="property-syntax"><a href="#property-syntax">Property Syntax</a></h3>
+<table>
+<thead><tr>
+<th>CSVW property</th>
+<th>Data Package support</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+
+<tr>
+
+<td>Partial</td>
+<td>
+<a href="/standard/glossary/#url-or-path">URLs and paths</a> are supported, but not with a <code>@context</code>
+</td>
+</tr>
+
+<tr>
+
+<td>Yes</td>
+<td>E.g. <a href="/standard/table-schema/#primaryKey">schema.primaryKey</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>E.g. <a href="/standard/data-resource/#schema">resource.schema</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>E.g. <a href="/standard/data-resource/#path-or-data">resource.path</a>
+</td>
+</tr>
+
+</tbody>
+</table>
+<h3 id="top-level-properties"><a href="#top-level-properties">Top-level Properties</a></h3>
+<table>
+<thead><tr>
+<th>CSVW property</th>
+<th>Data Package support</th>
+<th>Details</th>
+</tr></thead>
+
+</table>
+<h3 id="table-groups"><a href="#table-groups">Table Groups</a></h3>
+
+<table>
+<thead><tr>
+<th>CSVW property</th>
+<th>Data Package support</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr>
+
+<td>Yes</td>
+<td>Tables can be defined as <a href="/standard/data-package/#resources">package.resources</a> with <code>"type": "table"</code>.Tables that are the same in terms of structure, format, dialect, etc. can be defined as a single resource with multiple files in <a href="/standard/data-resource/#path-or-data">resource.path</a>. Implementations will concatenate those tables.</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/data-resource/#dialect">resource.dialect</a> for multiple files in <a href="/standard/data-resource/#path-or-data">resource.path</a>
+</td>
+</tr>
+<tr>
+
+<td>Custom property</td>
+
+</tr>
+
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/data-resource/#schema">resource.schema</a> for multiple files in <a href="/standard/data-resource/#path-or-data">resource.path</a>
+</td>
+</tr>
+
+<tr>
+
+<td>Custom property</td>
+
+</tr>
+
+</tbody>
+</table>
+<h3 id="tables"><a href="#tables">Tables</a></h3>
+<table>
+<thead><tr>
+<th>CSVW property</th>
+<th>Data Package support</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/data-resource/#path-or-data">resource.path</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/data-resource/#dialect">resource.dialect</a>
+</td>
+</tr>
+<tr>
+
+<td>Custom property</td>
+
+</tr>
+
+
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/data-resource/#schema">resource.schema</a>
+</td>
+</tr>
+
+<tr>
+
+<td>Custom property</td>
+<td>Tables are identified by <a href="/standard/data-resource/#name">resource.name</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/data-resource/#type">resource.type</a>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="schemas"><a href="#schemas">Schemas</a></h3>
+
+<table>
+<thead><tr>
+<th>CSVW property</th>
+<th>Data Package support</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#fields">schema.fields</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#foreignKeys">schema.foreignKeys</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#primaryKey">schema.primaryKey</a>
+</td>
+</tr>
+<tr>
+
+<td>No</td>
+<td>Titles are defined per field as <a href="/standard/table-schema/#title">field.title</a>
+</td>
+</tr>
+<tr>
+
+<td>Custom property</td>
+
+</tr>
+
+</tbody>
+</table>
+<h3 id="columns"><a href="#columns">Columns</a></h3>
+<table>
+<thead><tr>
+<th>CSVW property</th>
+<th>Data Package support</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr>
+
+<td>Yes</td>
+
+</tr>
+
+<tr>
+
+<td>Partial</td>
+<td>As <a href="/standard/table-schema/#title">field.title</a> (a single value)</td>
+</tr>
+
+<tr>
+
+<td>Custom property</td>
+
+</tr>
+
+</tbody>
+</table>
+<h3 id="inherited-properties"><a href="#inherited-properties">Inherited Properties</a></h3>
+<p>Data Package properties do not inherit from their parent, unless otherwise specified (e.g. <a href="/standard/data-resource/#sources">resource.sources</a>). The properties listed below only exist at one level in Data Package, except for <code>missingValues</code>.</p>
+<table>
+<thead><tr>
+<th>CSVW property</th>
+<th>Data Package support</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr>
+
+<td>Custom property</td>
+
+</tr>
+<tr>
+
+<td>Yes</td>
+
+</tr>
+
+<tr>
+
+<td>No</td>
+<td>Suggested as <a href="/recipes/translation-support/">recipe</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#field-missingValues">field.missingValues</a> and <a href="/standard/table-schema/#missingValues">schema.missingValues</a> with options to define multiple values and labels</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#categoriesOrdered">field.categoriesOrdered</a>
+</td>
+</tr>
+<tr>
+
+<td>Partial</td>
+<td>As <a href="/standard/table-schema/#rdfType">field.rdfType</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#required">required</a> field constraint</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#list">delimiter</a> in <code>list</code> field type</td>
+</tr>
+
+
+</tbody>
+</table>
+<h3 id="common-properties"><a href="#common-properties">Common Properties</a></h3>
+<p>Common properties can be added in Data Package as <a href="/standard/glossary/#custom-properties">custom properties</a>, which just like CSVW recommends prefixed names. Note however that Data Package has its own definitions for often-used properties (e.g. description), which can exist at all levels.</p>
+<h3 id="dialect-descriptions"><a href="#dialect-descriptions">Dialect Descriptions</a></h3>
+
+<table>
+<thead><tr>
+<th>CSVW property</th>
+<th>Data Package support</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-dialect/#commentChar">dialect.commentChar</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-dialect/#delimiter">dialect.delimiter</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-dialect/#doubleQuote">dialect.doubleQuote</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/data-resource/#encoding">resource.encoding</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-dialect/#header">dialect.header</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-dialect/#headerRows">dialect.headerRows</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-dialect/#lineTerminator">dialect.lineTerminator</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-dialect/#quoteChar">dialect.quoteChar</a>
+</td>
+</tr>
+
+
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-dialect/#skipInitialSpace">dialect.skipInitialSpace</a>
+</td>
+</tr>
+<tr>
+
+<td>No</td>
+<td>As <a href="/standard/table-dialect/#commentRows">dialect.commentRows</a>
+</td>
+</tr>
+
+<tr>
+
+<td>Custom property</td>
+
+</tr>
+
+</tbody>
+</table>
+<h3 id="transformation-definitions"><a href="#transformation-definitions">Transformation Definitions</a></h3>
+<p>Not supported in Data Package.</p>
+<h3 id="data-types"><a href="#data-types">Data Types</a></h3>
+<p>CSVW defines data types as built-in data types and derived data types. A derived data type extends a built-in data type with formats, constraints, etc. Data Package does not make that distinction, but rather defines a number of <a href="/standard/table-schema/#field-types">Field Types</a>. Depending on the type, it can be extended with a <code>format</code> and <a href="/standard/table-schema/#field-constraints">constraints</a>.</p>
+
+<table>
+<thead><tr>
+<th>CSVW property</th>
+<th>Data Package support</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr>
+
+<td>No</td>
+<td>All types are defined as <a href="/standard/table-schema/#type-and-format">field.type</a>
+</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+
+</tr>
+
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#minLength">minLength</a> field constraint</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#maxLength">maxLength</a> field constraint</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#minimum">minimum</a> field constraint</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#maximum">maximum</a> field constraint</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#minimum">minimum</a> field constraint</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#maximum">maximum</a> field constraint</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#exclusiveMinimum">exclusiveMinimum</a> field constraint</td>
+</tr>
+<tr>
+
+<td>Yes</td>
+<td>As <a href="/standard/table-schema/#exclusiveMaximum">exclusiveMaximum</a> field constraint</td>
+</tr>
+<tr>
+
+<td>Custom property</td>
+
+</tr>
+
+</tbody>
+</table> </div>  </div> </div> </main> </div> </div> </div> </div></div>

@@ -124,6 +124,33 @@ Reference/
   `anydoc Reference/Archive/Documents/<slug>.<ext> -o Reference/Raw/<slug>.md` Exit 3 means that the
   pages need OCR: log it, do not convert, and do not substitute a converter.
 
+#### The whole archived shelf at once
+
+When the shelf already holds rendered DOMs under `Reference/Archive/HTML/`, convert every page that
+has no usable Markdown yet in one pass, instead of converting them one at a time:
+
+```bash
+for Page in Reference/Archive/HTML/*.html; do
+  Name=$(basename "$Page" .html)
+  [ -s "Reference/Raw/$Name.md" ] && continue
+  python3 <source-pipeline>/scripts/html_to_md.py "$Page" "Reference/Raw/$Name.md"
+done
+```
+
+The guard skips a page that already has a body, so the loop is safe to re-run after a partial
+conversion, and a page that failed can be retried by deleting its empty file. The loop prints one
+status line per page; a `stub` line means the archived DOM carried no readable content, and that page
+belongs in the index with an explanation rather than in the failure log.
+
+This path is for pages that were archived with `crawl_site.py --save-html`. A page captured only
+through `read_url.py` has no DOM on disk, so its Markdown comes from the fetch itself and cannot be
+regenerated later; that is the reason the archive is written before the conversion in the first
+place.
+
+After a batch conversion, run the indexer and read its audit line, because a conversion that produced
+structure the Markdown auditor rejects must be re-converted with `--filter raw` or repaired before the
+shelf is cited.
+
 ### 4. Index
 
 Run the generator instead of writing the index by hand:

@@ -1,0 +1,163 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <title>Perfetto UI - Perfetto Tracing Docs</title>
+  <meta property="og:title" content="Perfetto UI - Perfetto Tracing Docs">
+  <meta property="og:site_name" content="Perfetto">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en">
+  <meta property="og:url" content="https://perfetto.dev/docs/visualization/perfetto-ui">
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="canonical" href="https://perfetto.dev/docs/visualization/perfetto-ui">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,500,600,800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Roboto+Mono" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/tomorrow-night.css">
+  <link rel="shortcut icon" href="/assets/favicon.png">
+
+  <script type="text/javascript" src="/assets/script.js"></script>
+</head>
+<body style="margin-right: 0px; padding-right: 0px; overflow: auto;">
+
+<div class="docs">
+  
+
+  <main class="md-content" data-md-file="/docs/visualization/perfetto-ui">
+    <h1>Perfetto UI</h1><p>The <a href="https://ui.perfetto.dev">Perfetto UI</a> enables you to view and analyze
+traces in the browser. It supports several different tracing formats, including
+the perfetto proto trace format and the legacy json trace format.</p>
+<h2><a name="loading-a-trace" class="anchor" href="#loading-a-trace"></a>Loading a Trace</h2><p>Click one of the examples in the 'New Trace' section of the sidebar to get
+going.</p>
+<p>Drag and drop a trace from your file explorer, or click 'Open trace file' in the
+sidebar to open a local trace file.</p>
+<p>Selecting or dropping several files at once merges them onto a single shared
+timeline via a configuration dialog: see
+<a href="/docs/visualization/merging-traces">Merging traces in the UI</a>.</p>
+<h2><a name="navigating-the-timeline" class="anchor" href="#navigating-the-timeline"></a>Navigating the Timeline</h2><p>Use the WASD cluster to zoom and pan around the timeline. W and S zoom in and
+out, and A and D pan left and right respectively.</p>
+<video width="800" controls="">
+  <source src="https://storage.googleapis.com/perfetto-misc/keyboard-nav.webm" type="video/webm">
+</video>
+
+<p>Alternatively you can use Shift+Drag to pan using the mouse. Ctrl+MouseWheel
+zooms in and out.</p>
+<video width="800" controls="">
+  <source src="https://storage.googleapis.com/perfetto-misc/mouse-nav.webm" type="video/webm">
+</video>
+
+<h2><a name="track-event-selections" class="anchor" href="#track-event-selections"></a>Track Event Selections</h2><p>Selecting entities on the trace is the primary way to dig into events of a trace
+and reveal more data about those events.</p>
+<p>Select a track event by clicking on it. Details about the selected event will
+appear in the 'Current Selection' tab in the tab drawer.</p>
+<video width="800" controls="">
+  <source src="https://storage.googleapis.com/perfetto-misc/select-event.webm" type="video/webm">
+</video>
+
+<p>Use '.' and ',' to navigate between adjacent slices on the same track.</p>
+<video width="800" controls="">
+  <source src="https://storage.googleapis.com/perfetto-misc/next-prev-events.webm" type="video/webm">
+</video>
+
+<p>Press 'F' to fit the selected entity to the viewport. This can be useful for
+really short events that cannot otherwise be seen clearly at the current zoom
+level.</p>
+<video width="800" controls="">
+  <source src="https://storage.googleapis.com/perfetto-misc/focus-event.webm" type="video/webm">
+</video>
+
+<p>At any point, press 'escape' or click on some empty space in the timeline to
+clear the selection.</p>
+<h2><a name="area-selections" class="anchor" href="#area-selections"></a>Area Selections</h2><p>Click and drag over the timeline to make an area selection. An area selection
+consists of a start + end time and a list of tracks. Click+drag on the markers
+to move the start and end times. Check or uncheck the checkboxes in the track
+shells to modify the list of tracks in the selection.</p>
+<video width="800" controls="">
+  <source src="https://storage.googleapis.com/perfetto-misc/area-selection.webm" type="video/webm">
+</video>
+
+<p>You can also convert a single selection into an area selection using the 'R'
+hotkey. This turns the currently selected track event in to an area selection
+using the bounds of the selected event.</p>
+<h2><a name="commands" class="anchor" href="#commands"></a>Commands</h2><p>Commands provide a quick way to run common tasks throughout the UI. Press
+'Ctrl+Shift+P' ('Cmd+Shift+P' on Mac) to open the command palette, or by
+entering '&gt;' in the omnibox. The omnibox transforms into a command palette.
+Commands can be searched using fuzzy matching. Press up or down to highlight a
+command and Enter to run it.</p>
+<video width="800" controls="">
+  <source src="https://storage.googleapis.com/perfetto-misc/commands.webm" type="video/webm">
+</video>
+
+<p>For comprehensive documentation on automating the UI with commands, startup
+commands, and macros, see
+<a href="/docs/visualization/ui-automation">Commands and Macros</a>. For an overview of
+all extension mechanisms, see
+<a href="/docs/visualization/extending-the-ui">Extending the UI</a>.</p>
+<h2><a name="showing-hiding-the-tab-drawer" class="anchor" href="#showing-hiding-the-tab-drawer"></a>Showing/hiding the tab drawer</h2><p>Press 'Q' to toggle the tab drawer.</p>
+<h2><a name="finding-tracks" class="anchor" href="#finding-tracks"></a>Finding Tracks</h2><p>Press 'Ctrl+P' (or 'Cmd+P' on Mac) to open the track finder and start
+typing to fuzzy find tracks.</p>
+<video width="800" controls="">
+  <source src="https://storage.googleapis.com/perfetto-misc/finding-tracks.webm" type="video/webm">
+</video>
+
+<h2><a name="filtering-tracks" class="anchor" href="#filtering-tracks"></a>Filtering Tracks</h2><p>Click the filter icon in the timeline toolbar to filter which tracks are shown
+on the timeline. Type comma separated terms to filter tracks by name, or use
+the dropdowns to only show tracks belonging to specific processes or threads.</p>
+<p>Filters are non-destructive: press 'Clear All Filters' to show all tracks
+again. While filters are active, the filter icon appears filled.</p>
+<video width="800" controls="">
+  <source src="https://storage.googleapis.com/perfetto-misc/filtering-tracks.webm" type="video/webm">
+</video>
+
+<h2><a name="pinning-tracks" class="anchor" href="#pinning-tracks"></a>Pinning Tracks</h2><p>Press the 'Pin' icon in the track shell to pin a track to the top of the
+timeline. This operation moves the track to the top of the workspace. This can
+be handy if you want to keep important tracks in view while scrolling through
+the main timeline.</p>
+<video width="800" controls="">
+  <source src="https://storage.googleapis.com/perfetto-misc/pinning-tracks.webm" type="video/webm">
+</video>
+
+<h2><a name="hotkeys" class="anchor" href="#hotkeys"></a>Hotkeys</h2><p>Hotkey bindings are displayed to the right of the commands in the command
+palette, or press the '?' hotkey to display all configured hotkeys.</p>
+<h2><a name="next-steps" class="anchor" href="#next-steps"></a>Next Steps</h2><p>Once you're comfortable with the basic UI interactions, you can customize and
+extend the UI to speed up your analysis workflow:</p>
+<ul>
+<li><strong>Automate repetitive tasks:</strong> Use
+<a href="/docs/visualization/ui-automation">commands and macros</a> to configure
+startup commands that automatically pin tracks or create debug tracks every
+time you open a trace, and create macros for specific analysis workflows you
+run occasionally.</li>
+<li><strong>Share workflows with your team:</strong> Use
+<a href="/docs/visualization/extension-servers">extension servers</a> to distribute
+macros, SQL modules, and proto descriptors to your team.</li>
+<li><strong>See all extension options:</strong>
+<a href="/docs/visualization/extending-the-ui">Extending the UI</a> covers all the
+ways to customize Perfetto, from simple macros to plugins.</li>
+</ul>
+
+  </main>
+
+  <section class="toc"><ul><li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#loading-a-trace">Loading a Trace</a></li><li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#navigating-the-timeline">Navigating the Timeline</a></li><li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#track-event-selections">Track Event Selections</a></li><li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#area-selections">Area Selections</a></li><li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#commands">Commands</a></li><li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#showing-hiding-the-tab-drawer">Showing/hiding the tab drawer</a></li><li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#finding-tracks">Finding Tracks</a></li><li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#filtering-tracks">Filtering Tracks</a></li><li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#pinning-tracks">Pinning Tracks</a></li><li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#hotkeys">Hotkeys</a></li><li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#next-steps">Next Steps</a></li></ul></section>
+
+  
+<footer class="site-footer">
+  <p class="footer-notice">
+    Except as otherwise noted, the content of this page is licensed under the
+    <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
+    Attribution 4.0 License</a>, and code samples are licensed
+    under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0
+    License</a>. Java is a registered trademark of Oracle and/or its affiliates.
+  </p>
+  <ul>
+    <li><a href="//creativecommons.org/licenses/by/4.0/">Site CC BY 4.0</a></li>
+    <li><a href="//www.google.com/intl/en/policies/privacy/">Privacy</a></li>
+  </ul>
+</footer>
+</div>
+
+
+
+</body></html>

@@ -1,0 +1,124 @@
+<div><div class="docs">
+<main class="md-content">
+<h1>Perfetto UI</h1>
+<p>The <a href="https://ui.perfetto.dev">Perfetto UI</a> enables you to view and analyze
+traces in the browser. It supports several different tracing formats, including
+the perfetto proto trace format and the legacy json trace format.</p>
+<h2>
+Loading a Trace</h2>
+<p>Click one of the examples in the 'New Trace' section of the sidebar to get
+going.</p>
+<p>Drag and drop a trace from your file explorer, or click 'Open trace file' in the
+sidebar to open a local trace file.</p>
+<p>Selecting or dropping several files at once merges them onto a single shared
+timeline via a configuration dialog: see
+<a href="/docs/visualization/merging-traces">Merging traces in the UI</a>.</p>
+<h2>
+Navigating the Timeline</h2>
+<p>Use the WASD cluster to zoom and pan around the timeline. W and S zoom in and
+out, and A and D pan left and right respectively.</p>
+
+<p>Alternatively you can use Shift+Drag to pan using the mouse. Ctrl+MouseWheel
+zooms in and out.</p>
+
+<h2>
+Track Event Selections</h2>
+<p>Selecting entities on the trace is the primary way to dig into events of a trace
+and reveal more data about those events.</p>
+<p>Select a track event by clicking on it. Details about the selected event will
+appear in the 'Current Selection' tab in the tab drawer.</p>
+
+<p>Use '.' and ',' to navigate between adjacent slices on the same track.</p>
+
+<p>Press 'F' to fit the selected entity to the viewport. This can be useful for
+really short events that cannot otherwise be seen clearly at the current zoom
+level.</p>
+
+<p>At any point, press 'escape' or click on some empty space in the timeline to
+clear the selection.</p>
+<h2>
+Area Selections</h2>
+<p>Click and drag over the timeline to make an area selection. An area selection
+consists of a start + end time and a list of tracks. Click+drag on the markers
+to move the start and end times. Check or uncheck the checkboxes in the track
+shells to modify the list of tracks in the selection.</p>
+
+<p>You can also convert a single selection into an area selection using the 'R'
+hotkey. This turns the currently selected track event in to an area selection
+using the bounds of the selected event.</p>
+<h2>
+Commands</h2>
+<p>Commands provide a quick way to run common tasks throughout the UI. Press
+'Ctrl+Shift+P' ('Cmd+Shift+P' on Mac) to open the command palette, or by
+entering '&gt;' in the omnibox. The omnibox transforms into a command palette.
+Commands can be searched using fuzzy matching. Press up or down to highlight a
+command and Enter to run it.</p>
+
+<p>For comprehensive documentation on automating the UI with commands, startup
+commands, and macros, see
+<a href="/docs/visualization/ui-automation">Commands and Macros</a>. For an overview of
+all extension mechanisms, see
+<a href="/docs/visualization/extending-the-ui">Extending the UI</a>.</p>
+<h2>
+Showing/hiding the tab drawer</h2>
+<p>Press 'Q' to toggle the tab drawer.</p>
+<h2>
+Finding Tracks</h2>
+<p>Press 'Ctrl+P' (or 'Cmd+P' on Mac) to open the track finder and start
+typing to fuzzy find tracks.</p>
+
+<h2>
+Filtering Tracks</h2>
+<p>Click the filter icon in the timeline toolbar to filter which tracks are shown
+on the timeline. Type comma separated terms to filter tracks by name, or use
+the dropdowns to only show tracks belonging to specific processes or threads.</p>
+<p>Filters are non-destructive: press 'Clear All Filters' to show all tracks
+again. While filters are active, the filter icon appears filled.</p>
+
+<h2>
+Pinning Tracks</h2>
+<p>Press the 'Pin' icon in the track shell to pin a track to the top of the
+timeline. This operation moves the track to the top of the workspace. This can
+be handy if you want to keep important tracks in view while scrolling through
+the main timeline.</p>
+
+<h2>
+Hotkeys</h2>
+<p>Hotkey bindings are displayed to the right of the commands in the command
+palette, or press the '?' hotkey to display all configured hotkeys.</p>
+<h2>
+Next Steps</h2>
+<p>Once you're comfortable with the basic UI interactions, you can customize and
+extend the UI to speed up your analysis workflow:</p>
+<ul>
+<li>
+<strong>Automate repetitive tasks:</strong> Use
+<a href="/docs/visualization/ui-automation">commands and macros</a> to configure
+startup commands that automatically pin tracks or create debug tracks every
+time you open a trace, and create macros for specific analysis workflows you
+run occasionally.</li>
+<li>
+<strong>Share workflows with your team:</strong> Use
+<a href="/docs/visualization/extension-servers">extension servers</a> to distribute
+macros, SQL modules, and proto descriptors to your team.</li>
+<li>
+<strong>See all extension options:</strong>
+<a href="/docs/visualization/extending-the-ui">Extending the UI</a> covers all the
+ways to customize Perfetto, from simple macros to plugins.</li>
+</ul>
+</main>
+<section class="toc"><ul>
+
+<li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#navigating-the-timeline">Navigating the Timeline</a></li>
+<li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#track-event-selections">Track Event Selections</a></li>
+
+
+<li><a href="https://perfetto.dev/docs/visualization/perfetto-ui#showing-hiding-the-tab-drawer">Showing/hiding the tab drawer</a></li>
+
+
+
+
+
+</ul></section>
+
+</div></div>

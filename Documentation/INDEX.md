@@ -126,6 +126,7 @@ statuses:
 | [ETS-TWINS-BRIEF.md](Plans/ETS-TWINS-BRIEF.md)                                                 | complete          | living-plan (the 29-30 ETS twins' mirror brief)        |
 | [SMOKE-PASS-BRIEF.md](Plans/SMOKE-PASS-BRIEF.md)                                               | complete          | living-plan (the smoke pass brief)                     |
 | [SITE-UPDATE-SPEC.md](Plans/SITE-UPDATE-SPEC.md)                                               | active            | living-plan (the site's per-file content delta)        |
+| [SITE-OBSERVATORY.md](Plans/SITE-OBSERVATORY.md)                                               | active            | working-plan (the site overhaul's requirement ledger)  |
 
 ### Plans/Batch-Edit-Tool - the batch edit tool's granular topics (19)
 

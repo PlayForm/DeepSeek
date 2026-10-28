@@ -1,0 +1,1016 @@
+<div><div class="container-fluid td-outer">
+<div class="td-main"><div class="row flex-xl-nowrap">
+<main class="col-12 col-md-9 col-xl-8 ps-md-5"><div class="td-content">
+<h1>Gen AI</h1>
+<ul>
+<li><a href="#genai-attributes-moved">GenAI Attributes (Moved)</a></li>
+<li><a href="#deprecated-genai-attributes">Deprecated GenAI Attributes</a></li>
+<li><a href="#deprecated-openai-genai-attributes">Deprecated OpenAI GenAI Attributes</a></li>
+</ul>
+<h2 id="genai-attributes-moved">GenAI Attributes (Moved)
+</h2>
+<p>Generative AI (GenAI) attributes have moved to the </p>
+<p><strong>Attributes:</strong></p>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Stability</th>
+<th>Value Type</th>
+<th>Description</th>
+<th>Example Values</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><a href="#gen-ai-agent-description" id="gen-ai-agent-description"><code>gen_ai.agent.description</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>Free-form description of the GenAI agent provided by the application.</td>
+<td>
+<code>Helps with math problems</code>; <code>Generates fiction stories</code>
+</td>
+</tr>
+<tr>
+
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The unique identifier of the GenAI agent.</td>
+<td><code>asst_5j66UpCpwteGg4YSxUnt7lPY</code></td>
+</tr>
+<tr>
+
+<td>
+Moved to the </td>
+<td>string</td>
+<td>Human-readable name of the GenAI agent provided by the application.</td>
+<td>
+<code>Math Tutor</code>; <code>Fiction Writer</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-agent-version" id="gen-ai-agent-version"><code>gen_ai.agent.version</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The version of the GenAI agent.</td>
+<td>
+<code>1.0.0</code>; <code>2025-05-01</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-conversation-id" id="gen-ai-conversation-id"><code>gen_ai.conversation.id</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The unique identifier for a conversation (session, thread), used to store and correlate messages within this conversation.</td>
+<td><code>conv_5j66UpCpwteGg4YSxUnt7lPY</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-data-source-id" id="gen-ai-data-source-id"><code>gen_ai.data_source.id</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The data source identifier. [1]</td>
+<td><code>H7STPQYOND</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-embeddings-dimension-count" id="gen-ai-embeddings-dimension-count"><code>gen_ai.embeddings.dimension.count</code></a></td>
+<td>
+Moved to the </td>
+<td>int</td>
+<td>The number of dimensions the resulting output embeddings should have.</td>
+<td>
+<code>512</code>; <code>1024</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-evaluation-explanation" id="gen-ai-evaluation-explanation"><code>gen_ai.evaluation.explanation</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>A free-form explanation for the assigned score provided by the evaluator.</td>
+<td><code>The response is factually accurate but lacks sufficient detail to fully address the question.</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-evaluation-name" id="gen-ai-evaluation-name"><code>gen_ai.evaluation.name</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The name of the evaluation metric used for the GenAI response.</td>
+<td>
+<code>Relevance</code>; <code>IntentResolution</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-evaluation-score-label" id="gen-ai-evaluation-score-label"><code>gen_ai.evaluation.score.label</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>Human readable label for evaluation. [2]</td>
+<td>
+<code>relevant</code>; <code>not_relevant</code>; <code>correct</code>; <code>incorrect</code>; <code>pass</code>; <code>fail</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-evaluation-score-value" id="gen-ai-evaluation-score-value"><code>gen_ai.evaluation.score.value</code></a></td>
+<td>
+Moved to the </td>
+<td>double</td>
+<td>The evaluation score returned by the evaluator.</td>
+<td><code>4.0</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-input-messages" id="gen-ai-input-messages"><code>gen_ai.input.messages</code></a></td>
+<td>
+Moved to the </td>
+<td>any</td>
+<td>The chat history provided to the model as an input. [3]</td>
+<td>[  {    “role”: “user”,    “parts”: [      {        “type”: “text”,        “content”: “Weather in Paris?"      }    ]  },  {    “role”: “assistant”,    “parts”: [      {        “type”: “tool_call”,        “id”: “call_VSPygqKTWdrhaFErNvMV18Yl”,        “name”: “get_weather”,        “arguments”: {          “location”: “Paris”        }      }    ]  },  {    “role”: “tool”,    “parts”: [      {        “type”: “tool_call_response”,        “id”: " call_VSPygqKTWdrhaFErNvMV18Yl”,        “result”: “rainy, 57°F”      }    ]  }]</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-operation-name" id="gen-ai-operation-name"><code>gen_ai.operation.name</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The name of the operation being performed. [4]</td>
+<td>
+<code>chat</code>; <code>generate_content</code>; <code>text_completion</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-output-messages" id="gen-ai-output-messages"><code>gen_ai.output.messages</code></a></td>
+<td>
+Moved to the </td>
+<td>any</td>
+<td>Messages returned by the model where each message represents a specific model response (choice, candidate). [5]</td>
+<td>[  {    “role”: “assistant”,    “parts”: [      {        “type”: “text”,        “content”: “The weather in Paris is currently rainy with a temperature of 57°F."      }    ],    “finish_reason”: “stop”  }]</td>
+</tr>
+<tr>
+
+<td>
+Moved to the </td>
+<td>string</td>
+<td>Represents the content type requested by the client. [6]</td>
+<td>
+<code>text</code>; <code>json</code>; <code>image</code>
+</td>
+</tr>
+<tr>
+
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The name of the prompt that uniquely identifies it.</td>
+<td><code>analyze-code</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-provider-name" id="gen-ai-provider-name"><code>gen_ai.provider.name</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The Generative AI provider as identified by the client or server instrumentation. [7]</td>
+<td>
+<code>openai</code>; <code>gcp.gen_ai</code>; <code>gcp.vertex_ai</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-request-choice-count" id="gen-ai-request-choice-count"><code>gen_ai.request.choice.count</code></a></td>
+<td>
+Moved to the </td>
+<td>int</td>
+<td>The target number of candidate completions to return.</td>
+
+</tr>
+<tr>
+<td><a href="#gen-ai-request-encoding-formats" id="gen-ai-request-encoding-formats"><code>gen_ai.request.encoding_formats</code></a></td>
+<td>
+Moved to the </td>
+<td>string[]</td>
+<td>The encoding formats requested in an embeddings operation, if specified. [8]</td>
+<td>
+<code>["base64"]</code>; <code>["float", "binary"]</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-request-frequency-penalty" id="gen-ai-request-frequency-penalty"><code>gen_ai.request.frequency_penalty</code></a></td>
+<td>
+Moved to the </td>
+<td>double</td>
+<td>The frequency penalty setting for the GenAI request.</td>
+<td><code>0.1</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-request-max-tokens" id="gen-ai-request-max-tokens"><code>gen_ai.request.max_tokens</code></a></td>
+<td>
+Moved to the </td>
+<td>int</td>
+<td>The maximum number of tokens the model generates for a request.</td>
+<td><code>100</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-request-model" id="gen-ai-request-model"><code>gen_ai.request.model</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The name of the GenAI model a request is being made to.</td>
+<td><code>gpt-4</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-request-presence-penalty" id="gen-ai-request-presence-penalty"><code>gen_ai.request.presence_penalty</code></a></td>
+<td>
+Moved to the </td>
+<td>double</td>
+<td>The presence penalty setting for the GenAI request.</td>
+<td><code>0.1</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-request-seed" id="gen-ai-request-seed"><code>gen_ai.request.seed</code></a></td>
+<td>
+Moved to the </td>
+<td>int</td>
+<td>Requests with same seed value more likely to return same result.</td>
+<td><code>100</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-request-stop-sequences" id="gen-ai-request-stop-sequences"><code>gen_ai.request.stop_sequences</code></a></td>
+<td>
+Moved to the </td>
+<td>string[]</td>
+<td>List of sequences that the model will use to stop generating further tokens.</td>
+<td><code>["forest", "lived"]</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-request-stream" id="gen-ai-request-stream"><code>gen_ai.request.stream</code></a></td>
+<td>
+Moved to the </td>
+<td>boolean</td>
+<td>Indicates whether the GenAI request was made in streaming mode.</td>
+
+</tr>
+<tr>
+<td><a href="#gen-ai-request-temperature" id="gen-ai-request-temperature"><code>gen_ai.request.temperature</code></a></td>
+<td>
+Moved to the </td>
+<td>double</td>
+<td>The temperature setting for the GenAI request.</td>
+<td><code>0.0</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-request-top-k" id="gen-ai-request-top-k"><code>gen_ai.request.top_k</code></a></td>
+<td>
+Moved to the </td>
+<td>double</td>
+<td>The top_k sampling setting for the GenAI request.</td>
+<td><code>1.0</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-request-top-p" id="gen-ai-request-top-p"><code>gen_ai.request.top_p</code></a></td>
+<td>
+Moved to the </td>
+<td>double</td>
+<td>The top_p sampling setting for the GenAI request.</td>
+<td><code>1.0</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-response-finish-reasons" id="gen-ai-response-finish-reasons"><code>gen_ai.response.finish_reasons</code></a></td>
+<td>
+Moved to the </td>
+<td>string[]</td>
+<td>Array of reasons the model stopped generating tokens, corresponding to each generation received.</td>
+<td>
+<code>["stop"]</code>; <code>["stop", "length"]</code>
+</td>
+</tr>
+<tr>
+
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The unique identifier for the completion.</td>
+<td><code>chatcmpl-123</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-response-model" id="gen-ai-response-model"><code>gen_ai.response.model</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The name of the model that generated the response.</td>
+<td><code>gpt-4-0613</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-response-time-to-first-chunk" id="gen-ai-response-time-to-first-chunk"><code>gen_ai.response.time_to_first_chunk</code></a></td>
+<td>
+Moved to the </td>
+<td>double</td>
+<td>Time to first chunk in a streaming response, measured from request issuance, in seconds. The value is measured from when the client issues the generation request to when the first chunk is received in the response stream.</td>
+<td>
+<code>0.5</code>; <code>1.2</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-retrieval-documents" id="gen-ai-retrieval-documents"><code>gen_ai.retrieval.documents</code></a></td>
+<td>
+Moved to the </td>
+<td>any</td>
+<td>The documents retrieved. [9]</td>
+<td>[  {    “id”: “doc_123”,    “score”: 0.95  },  {    “id”: “doc_456”,    “score”: 0.87  },  {    “id”: “doc_789”,    “score”: 0.82  }]</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-retrieval-query-text" id="gen-ai-retrieval-query-text"><code>gen_ai.retrieval.query.text</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The query text used for retrieval. [10]</td>
+<td>
+<code>What is the capital of France?</code>; <code>weather in Paris</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-system-instructions" id="gen-ai-system-instructions"><code>gen_ai.system_instructions</code></a></td>
+<td>
+Moved to the </td>
+<td>any</td>
+<td>The system message or instructions provided to the GenAI model separately from the chat history. [11]</td>
+<td>[  {    “type”: “text”,    “content”: “You are an Agent that greet users, always use greetings tool to respond”  }]; [  {    “type”: “text”,    “content”: “You are a language translator."  },  {    “type”: “text”,    “content”: “Your mission is to translate text in English to French."  }]</td>
+</tr>
+<tr>
+
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The type of token being counted.</td>
+<td>
+<code>input</code>; <code>output</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-tool-call-arguments" id="gen-ai-tool-call-arguments"><code>gen_ai.tool.call.arguments</code></a></td>
+<td>
+Moved to the </td>
+<td>any</td>
+<td>Parameters passed to the tool call. [12]</td>
+<td>{    “location”: “San Francisco?”,    “date”: “2025-10-01”}</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-tool-call-id" id="gen-ai-tool-call-id"><code>gen_ai.tool.call.id</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The tool call identifier.</td>
+<td><code>call_mszuSIzqtI65i1wAUOE8w5H4</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-tool-call-result" id="gen-ai-tool-call-result"><code>gen_ai.tool.call.result</code></a></td>
+<td>
+Moved to the </td>
+<td>any</td>
+<td>The result returned by the tool call (if any and if execution was successful). [13]</td>
+<td>{  “temperature_range”: {    “high”: 75,    “low”: 60  },  “conditions”: “sunny”}</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-tool-definitions" id="gen-ai-tool-definitions"><code>gen_ai.tool.definitions</code></a></td>
+<td>
+Moved to the </td>
+<td>any</td>
+<td>The list of tool definitions available to the GenAI agent or model. [14]</td>
+<td>[  {    “type”: “function”,    “name”: “get_current_weather”,    “description”: “Get the current weather in a given location”,    “parameters”: {      “type”: “object”,      “properties”: {        “location”: {          “type”: “string”,          “description”: “The city and state, e.g. San Francisco, CA”        },        “unit”: {          “type”: “string”,          “enum”: [            “celsius”,            “fahrenheit”          ]        }      },      “required”: [        “location”,        “unit”      ]    }  }]</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-tool-description" id="gen-ai-tool-description"><code>gen_ai.tool.description</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>The tool description.</td>
+<td><code>Multiply two numbers</code></td>
+</tr>
+<tr>
+
+<td>
+Moved to the </td>
+<td>string</td>
+<td>Name of the tool utilized by the agent.</td>
+<td><code>Flights</code></td>
+</tr>
+<tr>
+
+<td>
+Moved to the </td>
+<td>string</td>
+<td>Type of the tool utilized by the agent [15]</td>
+<td>
+<code>function</code>; <code>extension</code>; <code>datastore</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-usage-cache-creation-input-tokens" id="gen-ai-usage-cache-creation-input-tokens"><code>gen_ai.usage.cache_creation.input_tokens</code></a></td>
+<td>
+Moved to the </td>
+<td>int</td>
+<td>The number of input tokens written to a provider-managed cache. [16]</td>
+
+</tr>
+<tr>
+<td><a href="#gen-ai-usage-cache-read-input-tokens" id="gen-ai-usage-cache-read-input-tokens"><code>gen_ai.usage.cache_read.input_tokens</code></a></td>
+<td>
+Moved to the </td>
+<td>int</td>
+<td>The number of input tokens served from a provider-managed cache. [17]</td>
+
+</tr>
+<tr>
+<td><a href="#gen-ai-usage-input-tokens" id="gen-ai-usage-input-tokens"><code>gen_ai.usage.input_tokens</code></a></td>
+<td>
+Moved to the </td>
+<td>int</td>
+<td>The number of tokens used in the GenAI input (prompt). [18]</td>
+<td><code>100</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-usage-output-tokens" id="gen-ai-usage-output-tokens"><code>gen_ai.usage.output_tokens</code></a></td>
+<td>
+Moved to the </td>
+<td>int</td>
+<td>The number of tokens used in the GenAI response (completion).</td>
+<td><code>180</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-usage-reasoning-output-tokens" id="gen-ai-usage-reasoning-output-tokens"><code>gen_ai.usage.reasoning.output_tokens</code></a></td>
+<td>
+Moved to the </td>
+<td>int</td>
+<td>The number of output tokens used for reasoning (e.g. chain-of-thought, extended thinking). [19]</td>
+
+</tr>
+<tr>
+<td><a href="#gen-ai-workflow-name" id="gen-ai-workflow-name"><code>gen_ai.workflow.name</code></a></td>
+<td>
+Moved to the </td>
+<td>string</td>
+<td>Human-readable name of the GenAI workflow provided by the application. [20]</td>
+<td>
+<code>multi_agent_rag</code>; <code>customer_support_pipeline</code>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>[1] <code>gen_ai.data_source.id</code>:</strong> Data sources are used by AI agents and RAG applications to store grounding data. A data source may be an external database, object store, document collection, website, or any other storage system used by the GenAI agent or application. The <code>gen_ai.data_source.id</code> SHOULD match the identifier used by the GenAI system rather than a name specific to the external storage, such as a database or object store. Semantic conventions referencing <code>gen_ai.data_source.id</code> MAY also leverage additional attributes, such as <code>db.*</code>, to further identify and describe the data source.</p>
+<p><strong>[2] <code>gen_ai.evaluation.score.label</code>:</strong> This attribute provides a human-readable interpretation of the evaluation score produced by an evaluator. For example, a score value of 1 could mean “relevant” in one evaluation system and “not relevant” in another, depending on the scoring range and evaluator. The label SHOULD have low cardinality. Possible values depend on the evaluation metric and evaluator used; implementations SHOULD document the possible values.</p>
+<p><strong>[3] <code>gen_ai.input.messages</code>:</strong> Instrumentations MUST follow </p>
+<p>Messages MUST be provided in the order they were sent to the model.
+Instrumentations MAY provide a way for users to filter or truncate
+input messages.</p>
+<div class="td-alert td-alert--md alert alert-warning">
+<div class="td-alert-heading alert-heading">Warning</div>
+<div class="td-alert-body"><p>This attribute is likely to contain sensitive information including user/PII data.</p></div>
+</div>
+<p>See </p>
+<p><strong>[4] <code>gen_ai.operation.name</code>:</strong> If one of the predefined values applies, but specific system uses a different name it’s RECOMMENDED to document it in the semantic conventions for specific GenAI system and use system-specific name in the instrumentation. If a different name is not documented, instrumentation libraries SHOULD use applicable predefined value.</p>
+<p><strong>[5] <code>gen_ai.output.messages</code>:</strong> Instrumentations MUST follow </p>
+<p>Each message represents a single output choice/candidate generated by
+the model. Each message corresponds to exactly one generation
+(choice/candidate) and vice versa - one choice cannot be split across
+multiple messages or one message cannot contain parts from multiple choices.</p>
+<p>When the attribute is recorded on events, it MUST be recorded in structured
+form. When recorded on spans, it MAY be recorded as a JSON string if structured
+format is not supported and SHOULD be recorded in structured form otherwise.</p>
+<p>Instrumentations MAY provide a way for users to filter or truncate
+output messages.</p>
+<div class="td-alert td-alert--md alert alert-warning">
+<div class="td-alert-heading alert-heading">Warning</div>
+<div class="td-alert-body"><p>This attribute is likely to contain sensitive information including user/PII data.</p></div>
+</div>
+<p>See </p>
+<p><strong>[6] <code>gen_ai.output.type</code>:</strong> This attribute SHOULD be used when the client requests output of a specific type. The model may return zero or more outputs of this type.
+This attribute specifies the output modality and not the actual output format. For example, if an image is requested, the actual output could be a URL pointing to an image file.
+Additional output format details may be recorded in the future in the <code>gen_ai.output.{type}.*</code> attributes.</p>
+<p><strong>[7] <code>gen_ai.provider.name</code>:</strong> The attribute SHOULD be set based on the instrumentation’s best
+knowledge and may differ from the actual model provider.</p>
+<p>Multiple providers, including Azure OpenAI, Gemini, and AI hosting platforms
+are accessible using the OpenAI REST API and corresponding client libraries,
+but may proxy or host models from different providers.</p>
+<p>The <code>gen_ai.request.model</code>, <code>gen_ai.response.model</code>, and <code>server.address</code>
+attributes may help identify the actual system in use.</p>
+<p>The <code>gen_ai.provider.name</code> attribute acts as a discriminator that
+identifies the GenAI telemetry format flavor specific to that provider
+within GenAI semantic conventions.
+It SHOULD be set consistently with provider-specific attributes and signals.
+For example, GenAI spans, metrics, and events related to AWS Bedrock
+should have the <code>gen_ai.provider.name</code> set to <code>aws.bedrock</code> and include
+applicable <code>aws.bedrock.*</code> attributes and are not expected to include
+<code>openai.*</code> attributes.</p>
+<p><strong>[8] <code>gen_ai.request.encoding_formats</code>:</strong> In some GenAI systems the encoding formats are called embedding types. Also, some GenAI systems only accept a single format per request.</p>
+<p><strong>[9] <code>gen_ai.retrieval.documents</code>:</strong> Instrumentations MUST follow </p>
+<p>Each document object SHOULD contain at least the following properties:
+<code>id</code> (string): A unique identifier for the document, <code>score</code> (double): The relevance score of the document</p>
+<p><strong>[10] <code>gen_ai.retrieval.query.text</code>:</strong></p>
+<div class="td-alert td-alert--md alert alert-warning">
+<div class="td-alert-heading alert-heading">Warning</div>
+<div class="td-alert-body"><p>This attribute may contain sensitive information.</p></div>
+</div>
+<p><strong>[11] <code>gen_ai.system_instructions</code>:</strong> This attribute SHOULD be used when the corresponding provider or API
+allows to provide system instructions or messages separately from the
+chat history.</p>
+<p>Instructions that are part of the chat history SHOULD be recorded in
+<code>gen_ai.input.messages</code> attribute instead.</p>
+<p>Instrumentations MUST follow </p>
+<p>When recorded on spans, it MAY be recorded as a JSON string if structured
+format is not supported and SHOULD be recorded in structured form otherwise.</p>
+<p>Instrumentations MAY provide a way for users to filter or truncate
+system instructions.</p>
+<div class="td-alert td-alert--md alert alert-warning">
+<div class="td-alert-heading alert-heading">Warning</div>
+<div class="td-alert-body"><p>This attribute may contain sensitive information.</p></div>
+</div>
+<p>See </p>
+<p><strong>[12] <code>gen_ai.tool.call.arguments</code>:</strong></p>
+<div class="td-alert td-alert--md alert alert-warning">
+<div class="td-alert-heading alert-heading">Warning</div>
+<div class="td-alert-body"><p>This attribute may contain sensitive information.</p></div>
+</div>
+<p>It’s expected to be an object - in case a serialized string is available
+to the instrumentation, the instrumentation SHOULD do the best effort to
+deserialize it to an object. When recorded on spans, it MAY be recorded as a JSON string if structured format is not supported and SHOULD be recorded in structured form otherwise.</p>
+<p><strong>[13] <code>gen_ai.tool.call.result</code>:</strong></p>
+<div class="td-alert td-alert--md alert alert-warning">
+<div class="td-alert-heading alert-heading">Warning</div>
+<div class="td-alert-body"><p>This attribute may contain sensitive information.</p></div>
+</div>
+<p>It’s expected to be an object - in case a serialized string is available
+to the instrumentation, the instrumentation SHOULD do the best effort to
+deserialize it to an object. When recorded on spans, it MAY be recorded as a JSON string if structured format is not supported and SHOULD be recorded in structured form otherwise.</p>
+<p><strong>[14] <code>gen_ai.tool.definitions</code>:</strong> Instrumentations MUST follow </p>
+<p>When the attribute is recorded on events, it MUST be recorded in structured
+form. When recorded on spans, it MAY be recorded as a JSON string if structured
+format is not supported and SHOULD be recorded in structured form otherwise.</p>
+<p>Since this attribute could be large, it’s NOT RECOMMENDED to populate
+non-required properties by default. Instrumentations MAY provide a way
+to enable populating optional properties.</p>
+<p><strong>[15] <code>gen_ai.tool.type</code>:</strong> Extension: A tool executed on the agent-side to directly call external APIs, bridging the gap between the agent and real-world systems.
+Agent-side operations involve actions that are performed by the agent on the server or within the agent’s controlled environment.
+Function: A tool executed on the client-side, where the agent generates parameters for a predefined function, and the client executes the logic.
+Client-side operations are actions taken on the user’s end or within the client application.
+Datastore: A tool used by the agent to access and query structured or unstructured external data for retrieval-augmented tasks or knowledge updates.</p>
+<p><strong>[16] <code>gen_ai.usage.cache_creation.input_tokens</code>:</strong> The value SHOULD be included in <code>gen_ai.usage.input_tokens</code>.</p>
+<p><strong>[17] <code>gen_ai.usage.cache_read.input_tokens</code>:</strong> The value SHOULD be included in <code>gen_ai.usage.input_tokens</code>.</p>
+<p><strong>[18] <code>gen_ai.usage.input_tokens</code>:</strong> This value SHOULD include all types of input tokens, including cached tokens.
+Instrumentations SHOULD make a best effort to populate this value, using a total
+provided by the provider when available or, depending on the provider API,
+by summing different token types parsed from the provider output.</p>
+<p><strong>[19] <code>gen_ai.usage.reasoning.output_tokens</code>:</strong> The value SHOULD be included in <code>gen_ai.usage.output_tokens</code>.</p>
+<p><strong>[20] <code>gen_ai.workflow.name</code>:</strong> This attribute can be populated in different frameworks eg: name of the first chain in LangChain OR name of the crew in CrewAI.</p>
+
+<p><code>gen_ai.operation.name</code> has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.</p>
+<table>
+<thead><tr>
+<th>Value</th>
+<th>Description</th>
+<th>Stability</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>chat</code></td>
+<td>Chat completion operation such as </td>
+
+</tr>
+<tr>
+<td><code>create_agent</code></td>
+<td>Create GenAI agent</td>
+
+</tr>
+<tr>
+<td><code>embeddings</code></td>
+<td>Embeddings operation such as </td>
+
+</tr>
+<tr>
+<td><code>execute_tool</code></td>
+<td>Execute a tool</td>
+
+</tr>
+<tr>
+<td><code>generate_content</code></td>
+<td>Multimodal content generation operation such as </td>
+
+</tr>
+<tr>
+<td><code>invoke_agent</code></td>
+<td>Invoke GenAI agent</td>
+
+</tr>
+<tr>
+<td><code>invoke_workflow</code></td>
+<td>Invoke GenAI workflow</td>
+
+</tr>
+<tr>
+<td><code>retrieval</code></td>
+<td>Retrieval operation such as </td>
+
+</tr>
+<tr>
+<td><code>text_completion</code></td>
+<td>Text completions operation such as </td>
+
+</tr>
+</tbody>
+</table>
+
+<p><code>gen_ai.output.type</code> has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.</p>
+<table>
+<thead><tr>
+<th>Value</th>
+<th>Description</th>
+<th>Stability</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>image</code></td>
+<td>Image</td>
+
+</tr>
+<tr>
+<td><code>json</code></td>
+<td>JSON object with known or unknown schema</td>
+
+</tr>
+<tr>
+<td><code>speech</code></td>
+<td>Speech</td>
+
+</tr>
+<tr>
+<td><code>text</code></td>
+<td>Plain text</td>
+
+</tr>
+</tbody>
+</table>
+
+<p><code>gen_ai.provider.name</code> has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.</p>
+<table>
+<thead><tr>
+<th>Value</th>
+<th>Description</th>
+<th>Stability</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>anthropic</code></td>
+
+
+</tr>
+<tr>
+<td><code>aws.bedrock</code></td>
+
+
+</tr>
+<tr>
+<td><code>azure.ai.inference</code></td>
+<td>Azure AI Inference</td>
+
+</tr>
+<tr>
+<td><code>azure.ai.openai</code></td>
+
+
+</tr>
+<tr>
+<td><code>cohere</code></td>
+
+
+</tr>
+<tr>
+<td><code>deepseek</code></td>
+
+
+</tr>
+<tr>
+<td><code>gcp.gemini</code></td>
+
+
+</tr>
+<tr>
+<td><code>gcp.gen_ai</code></td>
+<td>Any Google generative AI endpoint [22]</td>
+
+</tr>
+<tr>
+<td><code>gcp.vertex_ai</code></td>
+
+
+</tr>
+
+<tr>
+<td><code>ibm.watsonx.ai</code></td>
+
+
+</tr>
+<tr>
+<td><code>mistral_ai</code></td>
+
+
+</tr>
+<tr>
+<td><code>openai</code></td>
+
+
+</tr>
+<tr>
+<td><code>perplexity</code></td>
+
+
+</tr>
+
+</tbody>
+</table>
+<p><strong>[21]:</strong> Used when accessing the ‘generativelanguage.googleapis.com’ endpoint. Also known as the AI Studio API.</p>
+<p><strong>[22]:</strong> May be used when specific backend is unknown.</p>
+<p><strong>[23]:</strong> Used when accessing the ‘aiplatform.googleapis.com’ endpoint.</p>
+
+<p><code>gen_ai.token.type</code> has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.</p>
+<table>
+<thead><tr>
+<th>Value</th>
+<th>Description</th>
+<th>Stability</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>input</code></td>
+<td>Input tokens (prompt, input, etc.)</td>
+
+</tr>
+<tr>
+<td><code>output</code></td>
+<td>Output tokens (completion, response, etc.)</td>
+
+</tr>
+</tbody>
+</table>
+<h2 id="deprecated-genai-attributes">Deprecated GenAI Attributes
+</h2>
+<p>Describes deprecated <code>gen_ai</code> attributes.</p>
+<p><strong>Attributes:</strong></p>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Stability</th>
+<th>Value Type</th>
+<th>Description</th>
+<th>Example Values</th>
+</tr></thead>
+<tbody>
+<tr>
+
+<td>
+Removed, no replacement at this time.</td>
+<td>string</td>
+<td>Deprecated, use Event API to report completions contents.</td>
+<td><code>[{'role': 'assistant', 'content': 'The capital of France is Paris.'}]</code></td>
+</tr>
+<tr>
+
+<td>
+Removed, no replacement at this time.</td>
+<td>string</td>
+<td>Deprecated, use Event API to report prompt contents.</td>
+<td><code>[{'role': 'user', 'content': 'What is the capital of France?'}]</code></td>
+</tr>
+<tr>
+
+<td>
+Replaced by <code>gen_ai.provider.name</code>, which has moved to the </td>
+<td>string</td>
+<td>Deprecated, use <code>gen_ai.provider.name</code> instead.</td>
+<td>
+<code>openai</code>; <code>gcp.gen_ai</code>; <code>gcp.vertex_ai</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-usage-completion-tokens" id="gen-ai-usage-completion-tokens"><code>gen_ai.usage.completion_tokens</code></a></td>
+<td>
+Replaced by <code>gen_ai.usage.output_tokens</code>, which has moved to the </td>
+<td>int</td>
+<td>Deprecated, use <code>gen_ai.usage.output_tokens</code> instead.</td>
+
+</tr>
+<tr>
+<td><a href="#gen-ai-usage-prompt-tokens" id="gen-ai-usage-prompt-tokens"><code>gen_ai.usage.prompt_tokens</code></a></td>
+<td>
+Replaced by <code>gen_ai.usage.input_tokens</code>, which has moved to the </td>
+<td>int</td>
+<td>Deprecated, use <code>gen_ai.usage.input_tokens</code> instead.</td>
+
+</tr>
+</tbody>
+</table>
+
+<p><code>gen_ai.system</code> has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.</p>
+<table>
+<thead><tr>
+<th>Value</th>
+<th>Description</th>
+<th>Stability</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>anthropic</code></td>
+<td>Anthropic</td>
+
+</tr>
+<tr>
+<td><code>aws.bedrock</code></td>
+<td>AWS Bedrock</td>
+
+</tr>
+<tr>
+<td><code>azure.ai.inference</code></td>
+<td>Azure AI Inference</td>
+
+</tr>
+<tr>
+<td><code>azure.ai.openai</code></td>
+<td>Azure OpenAI</td>
+
+</tr>
+<tr>
+<td><code>cohere</code></td>
+<td>Cohere</td>
+
+</tr>
+<tr>
+<td><code>deepseek</code></td>
+<td>DeepSeek</td>
+
+</tr>
+<tr>
+<td><code>gcp.gemini</code></td>
+<td>Gemini [24]</td>
+
+</tr>
+<tr>
+<td><code>gcp.gen_ai</code></td>
+<td>Any Google generative AI endpoint [25]</td>
+
+</tr>
+<tr>
+<td><code>gcp.vertex_ai</code></td>
+<td>Vertex AI [26]</td>
+
+</tr>
+<tr>
+<td><code>groq</code></td>
+<td>Groq</td>
+
+</tr>
+<tr>
+<td><code>ibm.watsonx.ai</code></td>
+<td>IBM Watsonx AI</td>
+
+</tr>
+<tr>
+<td><code>mistral_ai</code></td>
+<td>Mistral AI</td>
+
+</tr>
+<tr>
+<td><code>openai</code></td>
+<td>OpenAI</td>
+
+</tr>
+<tr>
+<td><code>perplexity</code></td>
+<td>Perplexity</td>
+
+</tr>
+<tr>
+<td><code>xai</code></td>
+<td>xAI</td>
+
+</tr>
+</tbody>
+</table>
+<p><strong>[24]:</strong> This refers to the ‘generativelanguage.googleapis.com’ endpoint. Also known as the AI Studio API. May use common attributes prefixed with ‘gcp.gen_ai.’.</p>
+<p><strong>[25]:</strong> May be used when specific backend is unknown. May use common attributes prefixed with ‘gcp.gen_ai.’.</p>
+<p><strong>[26]:</strong> This refers to the ‘aiplatform.googleapis.com’ endpoint. May use common attributes prefixed with ‘gcp.gen_ai.’.</p>
+<h2 id="deprecated-openai-genai-attributes">Deprecated OpenAI GenAI Attributes
+</h2>
+<p>Describes deprecated <code>gen_ai.openai</code> attributes.</p>
+<p><strong>Attributes:</strong></p>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Stability</th>
+<th>Value Type</th>
+<th>Description</th>
+<th>Example Values</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><a href="#gen-ai-openai-request-response-format" id="gen-ai-openai-request-response-format"><code>gen_ai.openai.request.response_format</code></a></td>
+<td>
+Replaced by <code>gen_ai.output.type</code>, which has moved to the </td>
+<td>string</td>
+<td>Deprecated, use <code>gen_ai.output.type</code>.</td>
+<td>
+<code>text</code>; <code>json_object</code>; <code>json_schema</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-openai-request-seed" id="gen-ai-openai-request-seed"><code>gen_ai.openai.request.seed</code></a></td>
+<td>
+Replaced by <code>gen_ai.request.seed</code>, which has moved to the </td>
+<td>int</td>
+<td>Deprecated, use <code>gen_ai.request.seed</code>.</td>
+<td><code>100</code></td>
+</tr>
+<tr>
+<td><a href="#gen-ai-openai-request-service-tier" id="gen-ai-openai-request-service-tier"><code>gen_ai.openai.request.service_tier</code></a></td>
+<td>
+Replaced by <code>openai.request.service_tier</code>, which has moved to the </td>
+<td>string</td>
+<td>Deprecated, use <code>openai.request.service_tier</code>.</td>
+<td>
+<code>auto</code>; <code>default</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-openai-response-service-tier" id="gen-ai-openai-response-service-tier"><code>gen_ai.openai.response.service_tier</code></a></td>
+<td>
+Replaced by <code>openai.response.service_tier</code>, which has moved to the </td>
+<td>string</td>
+<td>Deprecated, use <code>openai.response.service_tier</code>.</td>
+<td>
+<code>scale</code>; <code>default</code>
+</td>
+</tr>
+<tr>
+<td><a href="#gen-ai-openai-response-system-fingerprint" id="gen-ai-openai-response-system-fingerprint"><code>gen_ai.openai.response.system_fingerprint</code></a></td>
+<td>
+Replaced by <code>openai.response.system_fingerprint</code>, which has moved to the </td>
+<td>string</td>
+<td>Deprecated, use <code>openai.response.system_fingerprint</code>.</td>
+<td><code>fp_44709d6fcb</code></td>
+</tr>
+</tbody>
+</table>
+
+<p><code>gen_ai.openai.request.response_format</code> has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.</p>
+<table>
+<thead><tr>
+<th>Value</th>
+<th>Description</th>
+<th>Stability</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>json_object</code></td>
+<td>JSON object response format</td>
+
+</tr>
+<tr>
+<td><code>json_schema</code></td>
+<td>JSON schema response format</td>
+
+</tr>
+<tr>
+<td><code>text</code></td>
+<td>Text response format</td>
+
+</tr>
+</tbody>
+</table>
+
+<p><code>gen_ai.openai.request.service_tier</code> has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.</p>
+<table>
+<thead><tr>
+<th>Value</th>
+<th>Description</th>
+<th>Stability</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>auto</code></td>
+<td>The system will utilize scale tier credits until they are exhausted.</td>
+
+</tr>
+<tr>
+<td><code>default</code></td>
+<td>The system will utilize the default scale tier.</td>
+
+</tr>
+</tbody>
+</table>
+<div class="d-print-none">
+<h2 class="feedback--title">Feedback</h2>
+<p class="feedback--question">Was this page helpful?</p>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-yes">Yes</button>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-no">No</button><p class="feedback--response feedback--response-yes">Thank you. Your feedback is appreciated!</p>
+<p class="feedback--response feedback--response-no">Please let us know </p>
+</div>
+
+</div></main>
+</div></div>
+
+</div></div>
