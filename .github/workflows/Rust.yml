@@ -73,8 +73,12 @@ jobs:
                       ~/.cargo/git/db/
                       target/
                       Target/
-                  key: ${{ runner.os }}-cargo-${{ hashFiles('./Test/fixtures/manifest/cargo-fixture/Cargo.toml') }}
+                  key:
+                      ${{ runner.os }}-cargo-${{
+                      hashFiles('./Test/fixtures/manifest/cargo-fixture/Cargo.toml') }}
             - uses: actions-rs/cargo@844f36862e911db73fe0815f00a4a2602c279505 # v1.0.3
               with:
-                command: build
-                args: --release --all-features --manifest-path ./Test/fixtures/manifest/cargo-fixture/Cargo.toml
+                  command: build
+                  args:
+                      --release --all-features --manifest-path
+                      ./Test/fixtures/manifest/cargo-fixture/Cargo.toml
