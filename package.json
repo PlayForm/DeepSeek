@@ -1,6 +1,6 @@
 {
 	"name": "@playform/dsh-family-monorepo",
-	"version": "0.3.0",
+	"version": "0.2.1",
 	"private": true,
 	"description": "The DeepSeek Harness Plugin Family for PlayForm - the monorepo: the Classic release, the Effect-TS release, the Site, and the Test archive.",
 	"scripts": {

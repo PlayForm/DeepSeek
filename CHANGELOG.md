@@ -9,6 +9,14 @@ This file records all notable changes to this project.
 - The empty-graph gap: the workspace family has no indexing trigger yet, so a fresh workspace graph
   stays empty until a call to `workspace_index` (documented and open).
 
+## 0.2.1 - 2026-10-28
+
+### Changed
+
+- The release line is renumbered to `0.2.1` across the whole family, one patch above the `0.2.0`
+  that is live on npm, so every package manifest, its changelog and the build-time version constant
+  (`process.env.VERSION_PACKAGE`) read the same version again.
+
 ## 0.3.0 - 2026-10-27
 
 ### Changed

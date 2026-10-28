@@ -1,15 +1,15 @@
 {
 	"format": 1,
 	"counts": {
-		"packages": 106,
-		"classic": 58,
+		"packages": 107,
+		"classic": 59,
 		"effectTS": 48,
 		"hook": 57,
 		"plugin": 36,
 		"client": 4,
-		"lib": 9,
-		"mono": 106,
-		"colour": 106
+		"lib": 10,
+		"mono": 107,
+		"colour": 107
 	},
 	"icons": [
 		{
@@ -41,17 +41,17 @@
 			"kind": "client",
 			"tree": "Classic",
 			"version": "0.3.0",
-			"seed": "a4bc07c452f7b5d4c7de3ee1b9b36dbad86e4e31dbd48fefe08240e8600e1e6a",
+			"seed": "ac3c3b3a6a50838cc31b6a33ae12a3f4b1c224f14ac444497491a02660857349",
 			"grammar": "quatrefoil",
 			"order": 12,
-			"arms": 4,
-			"rings": 0,
+			"arms": 6,
+			"rings": 1,
 			"orbit": 8,
-			"rim": "square",
+			"rim": "scallop",
 			"mode": "single",
 			"hash": {
-				"mono": "d72eaa90ee00704eb5c4c1512ac3d989c9122d477839623978dc7b7beb1cf35b",
-				"colour": "3d1f16748d5d48364e8179d87d29b61b4362f2d75142322ee444e07836c4e897"
+				"mono": "c1bf4eeb26ca9a90013dc939e289d621d5fd135bce5409517845171531a757f3",
+				"colour": "576dab7aa64eeaa459d433826e972e4c4dfb0209f1d34b5c73eff882a344a8a0"
 			},
 			"path": {
 				"mono": "Site/Public/Icons/client-dsh-panel-family-host.svg",
@@ -1873,6 +1873,29 @@
 			"path": {
 				"mono": "Site/Public/Icons/hook-dsh-workspace-operate.svg",
 				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-operate.svg"
+			}
+		},
+		{
+			"package": "@playform/lib-dsh-conversation",
+			"dir": "lib-dsh-conversation",
+			"kind": "lib",
+			"tree": "Classic",
+			"version": "0.3.0",
+			"seed": "df144ed96c5f8008464fe81b1112bb6701c9cfc284fe2c4b15a42d3bc2711603",
+			"grammar": "crescent-ring",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "1e53040a96cf0df2561c4c083a68d7e603d828f7665898abf4b7ca3a1f69056a",
+				"colour": "b06e5b1ff41be673b4bb3071e97141016e3b40927dea520e0bb3bad6495e7e38"
+			},
+			"path": {
+				"mono": "Site/Public/Icons/lib-dsh-conversation.svg",
+				"colour": "Site/Public/Icons/Color/lib-dsh-conversation.svg"
 			}
 		},
 		{
