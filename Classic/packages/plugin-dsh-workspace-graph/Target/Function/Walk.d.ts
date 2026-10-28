@@ -1,4 +1,4 @@
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 /** The minimal structural view of a resolved directory target. */
 interface Target {
     targetKey: string;

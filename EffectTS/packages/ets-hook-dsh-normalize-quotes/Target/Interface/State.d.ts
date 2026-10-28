@@ -1,4 +1,4 @@
-import type { Scopes } from "@Interface/Config.js";
+import type { Scopes } from "./Config.js";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type { Scope } from "effect";

@@ -1,5 +1,5 @@
-import type State from "../Interface/State.js";
-import type Validation from "../Interface/Validation.js";
+import type State from "@Interface/State.js";
+import type Validation from "@Interface/Validation.js";
 /** The current status of one validation object, or undefined. */
 declare const Check: (State: State, Id: string) => Validation["status"] | undefined;
 /** The objects, optionally filtered by status, oldest sequence first. */

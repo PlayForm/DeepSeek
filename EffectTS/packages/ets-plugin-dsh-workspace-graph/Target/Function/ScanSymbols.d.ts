@@ -1,4 +1,4 @@
-import type { Span } from "../Interface/Node.js";
+import type { Span } from "@Interface/Node.js";
 export interface SymbolMatch {
     name: string;
     keyword: string;

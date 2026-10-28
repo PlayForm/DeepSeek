@@ -2,10 +2,9 @@
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"noEmit": true,
-		"checkJs": false
+		"checkJs": false,
+		"rootDir": "../../"
 	},
-	"include": [
-		"../Source/Test/**/*.ts"
-	],
+	"include": ["../Source/Test/**/*.ts"],
 	"exclude": []
 }

@@ -1,2 +1,133 @@
-import o from"node:assert/strict";import*as c from"node:fs";import*as f from"node:os";import*as g from"node:path";import d from"../../Target/Library.js";const k=()=>({N:0,F:0}),l=(e,n,s)=>{e.N++;try{s(),console.log(`PASS - ${n}`)}catch(r){e.F++,console.log(`FAIL - ${n}`),console.log(r instanceof Error?r.message:String(r))}},L=(e,n)=>{if(e.F!==0)throw new Error(`${n}: ${e.F} failed check(s)`);return e.N},m=c.mkdtempSync(g.join(f.tmpdir(),"feedback-smoke-")),u=g.join(m,"feedback.log"),h=()=>{try{c.rmSync(u)}catch{}},y=()=>(()=>{try{return c.readFileSync(u,"utf8").split(`
-`).filter(Boolean).map(e=>JSON.parse(e))}catch{return[]}})(),v=()=>y().map(e=>e.event),x=e=>d.Config({...e}),S=e=>{const n={},s=[],r={},i={logger:{info:t=>{s.push(t)},warn:t=>{s.push(`WARN: ${t}`)}},on:(t,a)=>(n[t]=a,()=>!0),reflect:{provide:(t,a)=>(r[t]=a??!0,i[t]=a,()=>!0)}},p=new d(i,e);return{Context:i,Service:p,Listeners:n,Lines:s,Provided:r,Raw:e,State:p.State}},$=(e,n)=>{e.Listeners["session/event"](void 0,n)},F=(e={})=>({agentId:"agent-a",task:"write the smoke",session:"session-child",liked:"the harness was clear",disliked:"the registry lagged",deltas:[],transferred:[],readStatus:"unread",at:1e3,...e}),w=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(w){const e=k();l(e,"selfcheck: a passing assertion counts as PASS",()=>{o.equal(1,1)}),l(e,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{o.equal(1,2)}),h();const n=S(x({logFile:u}));l(e,"selfcheck: the constructor registers the service and the listener",()=>{o.ok(n.Provided.feedback!==void 0),o.ok(n.Listeners["session/event"]!==void 0),o.equal(n.State.Config.enabled,!0),n.Service.Record(F()),o.equal(v()[0],"recorded")}),e.N===3&&e.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${e.N}, F=${e.F})`),process.exitCode=1)}export{F as Block,l as Check,L as Finish,$ as Fire,v as JournalEvents,y as JournalLines,u as Ledger,S as Make,k as MakeCounter,d as Plugin,m as Root,x as Validate,h as rm};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "feedback-smoke-"));
+const Ledger = Path.join(Root, "feedback.log");
+const rm = () => {
+  try {
+    FileSystem.rmSync(Ledger);
+  } catch {
+  }
+};
+const JournalLines = () => (() => {
+  try {
+    return FileSystem.readFileSync(Ledger, "utf8").split("\n").filter(Boolean).map((Line) => JSON.parse(Line));
+  } catch {
+    return [];
+  }
+})();
+const JournalEvents = () => JournalLines().map((Line) => Line.event);
+const Validate = (Raw) => Plugin.Config({ ...Raw });
+const Make = (Raw) => {
+  const Listeners = {};
+  const Lines = [];
+  const Provided = {};
+  const Context = {
+    logger: {
+      info: (M) => {
+        Lines.push(M);
+      },
+      warn: (M) => {
+        Lines.push(`WARN: ${M}`);
+      }
+    },
+    on: (Name, Listener) => {
+      Listeners[Name] = Listener;
+      return () => true;
+    },
+    reflect: {
+      provide: (Name, Value) => {
+        Provided[Name] = Value ?? true;
+        Context[Name] = Value;
+        return () => true;
+      }
+    }
+  };
+  const Service = new Plugin(Context, Raw);
+  const Run = {
+    Context,
+    Service,
+    Listeners,
+    Lines,
+    Provided,
+    Raw,
+    State: Service.State
+  };
+  return Run;
+};
+const Fire = (Run, Event) => {
+  Run.Listeners["session/event"](void 0, Event);
+};
+const Block = (Overrides = {}) => ({
+  agentId: "agent-a",
+  task: "write the smoke",
+  session: "session-child",
+  liked: "the harness was clear",
+  disliked: "the registry lagged",
+  deltas: [],
+  transferred: [],
+  readStatus: "unread",
+  at: 1e3,
+  ...Overrides
+});
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  rm();
+  const Run = Make(Validate({ logFile: Ledger }));
+  Check(Count, "selfcheck: the constructor registers the service and the listener", () => {
+    assert.ok(Run.Provided["feedback"] !== void 0);
+    assert.ok(Run.Listeners["session/event"] !== void 0);
+    assert.equal(Run.State.Config.enabled, true);
+    Run.Service.Record(Block());
+    assert.equal(JournalEvents()[0], "recorded");
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  Block,
+  Check,
+  Finish,
+  Fire,
+  JournalEvents,
+  JournalLines,
+  Ledger,
+  Make,
+  MakeCounter,
+  Plugin,
+  Root,
+  Validate,
+  rm
+};
+//# sourceMappingURL=Harness.js.map

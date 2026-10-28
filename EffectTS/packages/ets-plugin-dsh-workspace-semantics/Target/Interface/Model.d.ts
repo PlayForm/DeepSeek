@@ -1,5 +1,5 @@
-import type ReferenceNode from "./ReferenceNode.js";
-import type SymbolNode from "./SymbolNode.js";
+import type ReferenceNode from "@Interface/ReferenceNode.js";
+import type SymbolNode from "@Interface/SymbolNode.js";
 export default interface Model {
     /** The path the model was built for (as the caller addressed it). */
     path: string;
