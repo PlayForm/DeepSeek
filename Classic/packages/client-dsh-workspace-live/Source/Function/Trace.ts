@@ -9,6 +9,13 @@
 // polling, no timer). Without a bus the tail is empty, `live` is false, and
 // every subscription is a no-op - the documented static state, never an
 // error.
+//
+// THE BUS IS RESOLVED ON FIRST USE, NOT AT CONSTRUCTION. The client graph is
+// composed in dependency order, so the panel-family host that provides the
+// browser `trace` service may apply AFTER this plugin; a construction-time
+// capture would freeze the static face forever. The tab mounts on a click,
+// long after every plugin applied, so the first `tail()` / `live` read is the
+// earliest moment the bus is guaranteed to be observable.
 import type { Context } from "@deepseek-ai/cordis";
 import type LiveTrace from "@Interface/Trace.js";
 import type { TraceEnvelope } from "@Interface/Trace.js";
@@ -25,27 +32,51 @@ const IsBus = (Candidate: unknown): Candidate is Bus =>
 	typeof (Candidate as Bus).on === "function";
 
 export default function Trace(ctx: Context, Bound: number): LiveTrace {
-	const Candidate = ctx.get(Names.service);
-	const Bus = IsBus(Candidate) ? Candidate : undefined;
 	const Tail: TraceEnvelope[] = [];
 	const Listeners = new Set<() => void>();
-	const Seed =
-		Bus !== undefined && typeof Bus.ring === "function"
-			? Bus.ring(Bound).filter((Envelope) =>
-					(Names.kinds as readonly string[]).includes(Envelope.kind),
-				)
-			: [];
-	Tail.push(...Seed.slice(0, Bound));
+	const Unsubscribes: (() => void)[] = [];
+	let Bus: Bus | undefined;
 	const Publish = (Envelope: TraceEnvelope): void => {
 		Tail.unshift(Envelope);
 		while (Tail.length > Bound) Tail.pop();
 		for (const Listener of Listeners) Listener();
 	};
-	const Unsubscribes = Bus === undefined ? [] : Names.kinds.map((Kind) => Bus.on(Kind, Publish));
+	/** Resolve the bus once, seed the tail from its ring, and subscribe. */
+	const Attach = (): void => {
+		switch (true) {
+			case Bus !== undefined:
+				return;
+			default:
+				break;
+		}
+		const Candidate = ctx.get(Names.service);
+		const Found = IsBus(Candidate) ? Candidate : undefined;
+		switch (true) {
+			case Found === undefined:
+				return;
+			default:
+				Bus = Found;
+		}
+		const Seed =
+			typeof Found.ring === "function"
+				? Found.ring(Bound).filter((Envelope) =>
+						(Names.kinds as readonly string[]).includes(Envelope.kind),
+					)
+				: [];
+		Tail.push(...Seed.slice(0, Bound));
+		for (const Kind of Names.kinds) Unsubscribes.push(Found.on(Kind, Publish));
+	};
 	return {
-		live: Bus !== undefined,
-		tail: () => [...Tail],
+		get live() {
+			Attach();
+			return Bus !== undefined;
+		},
+		tail() {
+			Attach();
+			return [...Tail];
+		},
 		subscribe(Listener) {
+			Attach();
 			Listeners.add(Listener);
 			return () => Listeners.delete(Listener);
 		},

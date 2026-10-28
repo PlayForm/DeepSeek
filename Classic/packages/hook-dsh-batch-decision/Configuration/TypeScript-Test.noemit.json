@@ -1,8 +1,11 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
-		"noEmit": true
+		"noEmit": true,
+		"checkJs": false
 	},
-	"include": ["../Source/Test/**/*.ts"],
+	"include": [
+		"../Source/Test/**/*.ts"
+	],
 	"exclude": []
 }

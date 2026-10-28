@@ -43,6 +43,7 @@ function BrowserStream() {
       return {
         live: false,
         tail: () => [],
+        ring: () => [],
         on: () => () => void 0,
         subscribe: () => () => void 0,
         dispose: () => void 0
@@ -73,6 +74,10 @@ function BrowserStream() {
       return {
         live: true,
         tail: () => [...Tail],
+        // The same newest-first slice the host bus exposes, so a consumer
+        // that mounts later (the Workspace tab) seeds its own tail from
+        // the frames already received instead of waiting for the next one.
+        ring: (limit) => limit === void 0 ? [...Tail] : Tail.slice(0, limit),
         on(kind, listener) {
           const Listeners = KindListeners.get(kind) ?? /* @__PURE__ */ new Set();
           Listeners.add(listener);

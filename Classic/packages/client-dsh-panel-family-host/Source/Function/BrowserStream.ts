@@ -17,6 +17,7 @@ const BOUND = 200;
 export default function BrowserStream(): {
 	live: boolean;
 	tail(): PanelEnvelope[];
+	ring(limit?: number): PanelEnvelope[];
 	on(kind: string, listener: (envelope: PanelEnvelope) => void): () => void;
 	subscribe(listener: () => void): () => void;
 	dispose(): void;
@@ -26,6 +27,7 @@ export default function BrowserStream(): {
 			return {
 				live: false,
 				tail: () => [],
+				ring: () => [],
 				on: () => () => undefined,
 				subscribe: () => () => undefined,
 				dispose: () => undefined,
@@ -57,6 +59,10 @@ export default function BrowserStream(): {
 			return {
 				live: true,
 				tail: () => [...Tail],
+				// The same newest-first slice the host bus exposes, so a consumer
+				// that mounts later (the Workspace tab) seeds its own tail from
+				// the frames already received instead of waiting for the next one.
+				ring: (limit?: number) => (limit === undefined ? [...Tail] : Tail.slice(0, limit)),
 				on(kind, listener) {
 					const Listeners = KindListeners.get(kind) ?? new Set();
 					Listeners.add(listener);

@@ -211,24 +211,47 @@ var Trace_default = {
 // Source/Function/Trace.ts
 var IsBus = (Candidate) => typeof Candidate === "object" && Candidate !== null && typeof Candidate.on === "function";
 function Trace(ctx, Bound) {
-  const Candidate = ctx.get(Trace_default.service);
-  const Bus = IsBus(Candidate) ? Candidate : void 0;
   const Tail = [];
   const Listeners = /* @__PURE__ */ new Set();
-  const Seed = Bus !== void 0 && typeof Bus.ring === "function" ? Bus.ring(Bound).filter(
-    (Envelope) => Trace_default.kinds.includes(Envelope.kind)
-  ) : [];
-  Tail.push(...Seed.slice(0, Bound));
+  const Unsubscribes = [];
+  let Bus;
   const Publish = (Envelope) => {
     Tail.unshift(Envelope);
     while (Tail.length > Bound) Tail.pop();
     for (const Listener of Listeners) Listener();
   };
-  const Unsubscribes = Bus === void 0 ? [] : Trace_default.kinds.map((Kind) => Bus.on(Kind, Publish));
+  const Attach = () => {
+    switch (true) {
+      case Bus !== void 0:
+        return;
+      default:
+        break;
+    }
+    const Candidate = ctx.get(Trace_default.service);
+    const Found = IsBus(Candidate) ? Candidate : void 0;
+    switch (true) {
+      case Found === void 0:
+        return;
+      default:
+        Bus = Found;
+    }
+    const Seed = typeof Found.ring === "function" ? Found.ring(Bound).filter(
+      (Envelope) => Trace_default.kinds.includes(Envelope.kind)
+    ) : [];
+    Tail.push(...Seed.slice(0, Bound));
+    for (const Kind of Trace_default.kinds) Unsubscribes.push(Found.on(Kind, Publish));
+  };
   return {
-    live: Bus !== void 0,
-    tail: () => [...Tail],
+    get live() {
+      Attach();
+      return Bus !== void 0;
+    },
+    tail() {
+      Attach();
+      return [...Tail];
+    },
     subscribe(Listener) {
+      Attach();
       Listeners.add(Listener);
       return () => Listeners.delete(Listener);
     },
