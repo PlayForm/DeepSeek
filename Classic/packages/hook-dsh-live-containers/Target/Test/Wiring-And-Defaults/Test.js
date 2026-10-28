@@ -137,7 +137,7 @@ const runTest = async () => {
     );
     Check(Count, "activation ledger line byte-exact", () => {
       assert.deepEqual(Run2.Lines, [
-        "hook-dsh-live-containers: activated (bundle 0.3.0, blocks=2, refresh=request)"
+        "hook-dsh-live-containers: activated (bundle 0.2.1, blocks=2, refresh=request)"
       ]);
     });
     Check(Count, "the durable ledger file carries the [ISO] activation line", () => {
@@ -151,7 +151,7 @@ const runTest = async () => {
       rm();
       const Run3 = Make(Validate({ logFile: Ledger, enabled: true, refresh: "ttl" }));
       assert.deepEqual(Run3.Lines, [
-        "hook-dsh-live-containers: activated (bundle 0.3.0, blocks=14, refresh=ttl)"
+        "hook-dsh-live-containers: activated (bundle 0.2.1, blocks=14, refresh=ttl)"
       ]);
     });
   }

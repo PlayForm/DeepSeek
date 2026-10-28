@@ -128,7 +128,7 @@ if (InvokedDirectly) {
   });
   Check(Count, "selfcheck: the activation line names the corpus and the write posture", () => {
     assert.deepEqual(Messages(Run), [
-      "lesson: activated (bundle=0.3.0, interval=10 turns, corpus=~/.dsh/skills, write=approve)"
+      "lesson: activated (bundle=0.2.1, interval=10 turns, corpus=~/.dsh/skills, write=approve)"
     ]);
   });
   if (Count.N === 4 && Count.F === 1) {

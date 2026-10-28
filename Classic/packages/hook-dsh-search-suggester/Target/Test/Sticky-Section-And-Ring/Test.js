@@ -92,7 +92,7 @@ const runTest = async () => {
     await CheckAsync(Count, "S4: an assemble with no cooled intent passes through with no section", async () => {
       const Out = await Assemble(Run, void 0);
       assert.deepEqual(Out.sections, [{ name: "base", text: "b" }]);
-      assert.deepEqual(Run.Lines, ["hook-dsh-search-suggester: activated (bundle 0.3.0, intents 10, threshold 0.75)"]);
+      assert.deepEqual(Run.Lines, ["hook-dsh-search-suggester: activated (bundle 0.2.1, intents 10, threshold 0.75)"]);
       assert.deepEqual(Run.Warns, []);
     });
   }

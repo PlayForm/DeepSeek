@@ -12,7 +12,7 @@ the apply-time wiring, the pass-through discipline, the schema fail-loud, and th
   (logger and durable ledger), and both listeners are still wired on the
   plugin ctx.
 - L3: the enabled mount - the byte-exact activation line
-  `activated (bundle 0.3.0, intents 2, threshold 0.75)` (logger and ledger),
+  `activated (bundle 0.2.1, intents 2, threshold 0.75)` (logger and ledger),
   the listener registration order on the plugin ctx
   (`loader/volatile-update`, `tools/post-execute`, `agent/pre-step`), and a
   distinct root object.
@@ -33,8 +33,8 @@ No fake clock is needed, because the plugin has no clock dependency.
 ## Expected ledger strings (byte-exact, `graph-suggester: ` prefix)
 
 `disabled (enabled=false)`,
-`activated (bundle 0.3.0, intents 2, threshold 0.75)`,
-`activated (bundle 0.3.0, intents 1, threshold 0.75)`.
+`activated (bundle 0.2.1, intents 2, threshold 0.75)`,
+`activated (bundle 0.2.1, intents 1, threshold 0.75)`.
 
 ## Expected count
 

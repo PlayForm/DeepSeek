@@ -338,7 +338,7 @@ if (InvokedDirectly) {
       ]
     );
     assert.ok(Run.State !== void 0);
-    assert.deepEqual(Run.Lines, ["plugin-dsh-workspace: activated (bundle 0.3.0, tools=5)"]);
+    assert.deepEqual(Run.Lines, ["plugin-dsh-workspace: activated (bundle 0.2.1, tools=5)"]);
   });
   if (Count.N === 3 && Count.F === 1) {
     console.log("Harness selfcheck OK");

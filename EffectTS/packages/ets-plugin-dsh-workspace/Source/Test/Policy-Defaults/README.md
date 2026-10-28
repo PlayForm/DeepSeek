@@ -48,7 +48,7 @@ No gate is exercised, because the package has none.
 
 ## Expected ledger strings (byte-exact, `plugin-dsh-workspace: ` prefix)
 
-The expected lines are the unchanged activation line `activated (bundle 0.3.0, tools=5)` and the unchanged map line `workspace: map (root) (2 modules, 2 files)`.
+The expected lines are the unchanged activation line `activated (bundle 0.2.1, tools=5)` and the unchanged map line `workspace: map (root) (2 modules, 2 files)`.
 
 No policy or held line exists on the path of this package.
 

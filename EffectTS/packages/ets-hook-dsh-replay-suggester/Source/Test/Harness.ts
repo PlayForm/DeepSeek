@@ -453,7 +453,7 @@ if (InvokedDirectly) {
 		assert.ok(Run.State !== undefined);
 		assert.ok(
 			Run.Lines.includes(
-				"replay-suggester: activated (bundle 0.3.0, intents 1, threshold 0.75, history 0)",
+				"replay-suggester: activated (bundle 0.2.1, intents 1, threshold 0.75, history 0)",
 			),
 		);
 		assert.ok(Run.Lines.includes("replay-suggester: history missing (starting empty)"));

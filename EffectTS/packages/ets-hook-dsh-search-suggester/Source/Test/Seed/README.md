@@ -24,7 +24,7 @@ The seed never overwrites an existing row, runs only with `learn` and `seed` on 
 
 ## Expected ledger strings (byte-exact, `hook-dsh-search-suggester: ` prefix)
 
-`activated (bundle 0.3.0, intents 10, threshold 0.75)` only, because the seed adds no line.
+`activated (bundle 0.2.1, intents 10, threshold 0.75)` only, because the seed adds no line.
 
 ## Expected count
 

@@ -16,7 +16,7 @@ The folder covers the loader contract, the IDLE-forever cold mount, the byte-exa
 
 - **W3.**
 
-    The activation line of the enabled mount is byte-exact (`activated (bundle 0.3.0, tools=5)`), and the five tools register in contract order (map, find, expand, context, index).
+    The activation line of the enabled mount is byte-exact (`activated (bundle 0.2.1, tools=5)`), and the five tools register in contract order (map, find, expand, context, index).
 
     No root listeners and no services are registered (a pure consumer), only the loader/volatile-update of the factory sits on the ctx, and the State probe carries the contract fields.
 

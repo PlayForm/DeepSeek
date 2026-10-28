@@ -53,7 +53,7 @@ const runTest = async () => {
         Durable("suggest Version 0.92 7 candidates")
       );
       assert.deepEqual(Run.Lines, [
-        "hook-dsh-search-suggester: activated (bundle 0.3.0, intents 10, threshold 0.75)",
+        "hook-dsh-search-suggester: activated (bundle 0.2.1, intents 10, threshold 0.75)",
         "hook-dsh-search-suggester: suggest Version 0.92 7 candidates"
       ]);
     });
