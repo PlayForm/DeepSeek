@@ -75,6 +75,7 @@ import type State from "@Interface/State.js";
 import type Statistics from "@Interface/Statistics.js";
 import type { Allowlist } from "@playform/plugin-dsh-factory";
 import Definition from "@Variable/Config.js";
+import Version from "@Variable/Version.js";
 
 import Adapter from "./Trace/Adapter.js";
 
@@ -90,6 +91,12 @@ export type { default as Snapshot } from "@Interface/Snapshot.js";
 export type { default as Statistics } from "@Interface/Statistics.js";
 export type { default as IndexSummary } from "@Interface/IndexSummary.js";
 export type { default as Neighborhood } from "@Interface/Neighborhood.js";
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define) - NOT a loader key: the contract's names are unchanged
+// (the class form's default export with static inject/Config), and Version
+// sits beside the other named exports, not on the class.
+export { Version };
 
 export default class WorkspaceGraph extends Service {
 	static inject = ["fs", "storage"];

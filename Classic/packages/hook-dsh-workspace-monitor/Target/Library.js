@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-workspace-monitor",r=t,n=["pluginFactory"],e=o;var m={name:p,apply:e,Config:r,inject:n};export{r as Config,e as apply,m as default,n as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import r from"./Variable/Version.js";const p="hook-dsh-workspace-monitor",e=t,n=["pluginFactory"],i=o;var f={name:p,apply:i,Config:e,inject:n};export{e as Config,r as Version,i as apply,f as default,n as inject,p as name};

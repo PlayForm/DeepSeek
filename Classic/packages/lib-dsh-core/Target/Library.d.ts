@@ -1,3 +1,4 @@
+import Version from "./Variable/Version.js";
 export { default as Section } from "./Variable/Section.js";
 export { default as Default } from "./Variable/Default.js";
 export { default as Suppress } from "./Function/Suppress.js";
@@ -21,3 +22,4 @@ export { default as StepBatch } from "./Overpass/StepBatch.js";
 export { default as ToolResults } from "./Overpass/ToolResults.js";
 export { default as Command } from "./Overpass/Command.js";
 export type { CommandResult, CommandsService, ConfigEditorService, SettingsService, } from "./Overpass/Command.js";
+export { Version };

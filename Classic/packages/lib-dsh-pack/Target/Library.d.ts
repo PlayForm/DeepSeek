@@ -1,3 +1,4 @@
+import Version from "./Variable/Version.js";
 export { default as Builtin } from "./Variable/Builtin.js";
 export { default as Signature } from "./Variable/Signature.js";
 export { default as Placement } from "./Variable/Placement.js";
@@ -27,3 +28,4 @@ export type { default as Policy } from "./Interface/Policy.js";
 export type { default as Learning } from "./Interface/Learning.js";
 export type { default as Located } from "./Interface/Located.js";
 export type { default as Options } from "./Interface/Options.js";
+export { Version };

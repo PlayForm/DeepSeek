@@ -39,12 +39,19 @@
 // for a no-config service; the authority's tunables are real config).
 import Apply from "./Function/Apply.js";
 import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
 
 export const name = "plugin-dsh-workspace-authority";
 
 // Loader contract (cordis): the exported schema is validated and defaulted
 // while the plugin loads; apply receives a plain validated config object.
 export const Config = Definition;
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define) - NOT a loader key: the contract's four names (name, apply,
+// Config, inject) are unchanged, and the default object below stays exactly
+// { name, apply, Config, inject }.
+export { Version };
 
 // Required services. `pluginFactory` provides the State builder (cell unwrap
 // + shared fields + the P10 volatile refresh) and the ledger. No `fs` inject:

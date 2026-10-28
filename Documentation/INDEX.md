@@ -114,6 +114,7 @@ statuses:
 | [RFC-DRIFT-GATE.md](Plans/RFC-DRIFT-GATE.md)                                                   | planned           | queued-plan (the fallback generator)                   |
 | [RFC-SMOKE-AGGREGATE.md](Plans/RFC-SMOKE-AGGREGATE.md)                                         | planned           | queued-plan (the Source-vs-Target audit)               |
 | [RFC-PUBLICATION.md](Plans/RFC-PUBLICATION.md)                                                 | planned           | queued-plan (the 0.3.0 release staging)                |
+| [RFC-CONVERSATION-SPINE.md](Plans/RFC-CONVERSATION-SPINE.md)                                   | planned           | queued-plan (the conversation bus)                     |
 | [SITE-POLISH-BREAKDOWN.md](Plans/SITE-POLISH-BREAKDOWN.md)                                     | planned           | queued-plan (site content and wording)                 |
 | [FAMILY-ORGANISATION-ANALYSIS.md](Plans/FAMILY-ORGANISATION-ANALYSIS.md)                       | planned           | queued-plan (duplication, functionality, placement)    |
 | [IMPLEMENTATION-WAVE-1.md](Plans/IMPLEMENTATION-WAVE-1.md)                                     | active            | living-plan (the decision record and workstreams)      |

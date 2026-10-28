@@ -1,1 +1,1 @@
-import t from"./Function/Apply.js";import o from"./Variable/Config.js";const p="plugin-dsh-batchstate",n=o,e=["pluginFactory"],r=t;var a={name:p,apply:r,Config:n,inject:e};export{n as Config,r as apply,a as default,e as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import p from"./Variable/Version.js";const r="plugin-dsh-batchstate",e=t,n=["pluginFactory"],i=o;var a={name:r,apply:i,Config:e,inject:n};export{e as Config,p as Version,i as apply,a as default,n as inject,r as name};

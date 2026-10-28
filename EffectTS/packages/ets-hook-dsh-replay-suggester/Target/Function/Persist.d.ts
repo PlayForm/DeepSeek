@@ -1,5 +1,5 @@
-import type Entry from "@Interface/Entry.js";
-import type State from "@Interface/State.js";
+import type Entry from "../Interface/Entry.js";
+import type State from "../Interface/State.js";
 export default _default;
 declare function _default(
 /** The plugin state (the handle, the mirror, the record path, the ledger). */

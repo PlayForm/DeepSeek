@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import p from"./Variable/Config.js";const t="plugin-dsh-workspace",r=p,e=["workspaceGraph","pluginFactory","tools"],n=o;var s={name:t,apply:n,Config:r,inject:e};export{r as Config,n as apply,s as default,e as inject,t as name};
+import o from"./Function/Apply.js";import p from"./Variable/Config.js";import t from"./Variable/Version.js";const r="plugin-dsh-workspace",e=p,n=["workspaceGraph","pluginFactory","tools"],i=o;var m={name:r,apply:i,Config:e,inject:n};export{e as Config,t as Version,i as apply,m as default,n as inject,r as name};

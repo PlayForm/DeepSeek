@@ -73,9 +73,7 @@ import type { Corpus } from "./Interface/Corpus.js";
 import type { Op, Proposal } from "./Interface/Proposal.js";
 import type { ReviewInput, ReviewMessage, ReviewResult } from "./Interface/Review.js";
 import Definition from "./Variable/Config.js";
-
-/** The bundle version, mirrored from package.json (the activation proof). */
-const Version = "0.3.0";
+import Version from "./Variable/Version.js";
 
 /** Expand a leading `~` (the family's path convention for every knob). */
 const Expand = (Path: string): string =>
@@ -694,3 +692,10 @@ export default class LessonService extends Service {
 		return Result;
 	}
 }
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define) - NOT a loader key: the contract's names are unchanged
+// (the class form's default export with static inject/Config), and Version
+// is a standalone named export, not on the class. It replaces the previous
+// hardcoded bundle-version mirror.
+export { Version };

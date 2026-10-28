@@ -59,10 +59,17 @@ import type Pattern from "./Interface/Pattern.js";
 import type Snapshot from "./Interface/Snapshot.js";
 import Definition from "./Variable/Config.js";
 import DefaultPatterns from "./Variable/DefaultPatterns.js";
+import Version from "./Variable/Version.js";
 
 /** The neutral ledger line builder (module-owned strings, byte-stable). */
 const Line = (Message: string, State: { logFile: string }): string =>
 	`pattern: ${Message} (logFile ${State.logFile})`;
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define) - NOT a loader key: the contract's names are unchanged
+// (the class form's default export with static inject/Config), and Version
+// is a standalone named export, not on the class.
+export { Version };
 
 export default class PatternService extends Service {
 	static inject: string[] = [];

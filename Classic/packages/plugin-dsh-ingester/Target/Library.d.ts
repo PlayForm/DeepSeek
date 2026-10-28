@@ -3,6 +3,7 @@ import type Config from "./Interface/Config.js";
 import type Decision from "./Interface/Decision.js";
 import type Proposal from "./Interface/Proposal.js";
 import type Result from "./Interface/Result.js";
+import Version from "./Variable/Version.js";
 export default class Ingester extends Service {
     static inject: string[];
     static Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
@@ -68,3 +69,4 @@ export default class Ingester extends Service {
     /** The recorded proposals (the decision consumer's read). */
     Proposals(): Proposal[];
 }
+export { Version };

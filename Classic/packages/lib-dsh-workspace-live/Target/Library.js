@@ -1,1 +1,1 @@
-import{default as o}from"./Function/Render.js";import{default as a}from"./Function/Collapse.js";import{default as f}from"./Function/Packet.js";export{a as Collapse,f as Packet,o as Render};
+import e from"./Variable/Version.js";import{default as a}from"./Function/Render.js";import{default as f}from"./Function/Collapse.js";import{default as l}from"./Function/Packet.js";export{f as Collapse,l as Packet,a as Render,e as Version};

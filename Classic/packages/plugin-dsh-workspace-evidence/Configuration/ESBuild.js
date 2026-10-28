@@ -8,8 +8,17 @@
 // `minify: true` - the PRODUCTION build is minified, and that is safe: every
 // ledger message is a runtime-evaluated string literal (template literals
 // built at call time and written through Factory.Append), so minification
-// cannot touch them, and the loader contract is name/export based. No
-// `define` block - the evidence service needs no build-time constants.
+// cannot touch them, and the loader contract is name/export based. The
+// `define` block makes the build-time constants explicit: the package's own
+// name and version (read at config-load time) compile into
+// `process.env.NAME_PACKAGE` and `process.env.VERSION_PACKAGE` rather than
+// relying on the build tool's default define.
+import { readFileSync } from "node:fs";
+
+const Package = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+
+const Version = Package.version ?? "0.0.0";
+const Name = Package.name ?? "";
 const Remove = {
 	name: "Target",
 	setup({ onStart, initialOptions: { outdir } }) {
@@ -39,5 +48,9 @@ export default {
 	target: "esnext",
 	tsconfig: "tsconfig.json",
 	write: true,
+	define: {
+		"process.env.VERSION_PACKAGE": JSON.stringify(Version),
+		"process.env.NAME_PACKAGE": JSON.stringify(Name),
+	},
 	plugins: [Remove],
 };

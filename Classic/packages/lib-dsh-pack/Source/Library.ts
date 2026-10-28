@@ -17,6 +17,8 @@
 //
 //   Interface - the pack schema (Pack, Family, Signal, Target, Indexer,
 //   Policy, Learning), the locator's answer and the resolution seam.
+import Version from "./Variable/Version.js";
+
 export { default as Builtin } from "./Variable/Builtin.js";
 export { default as Signature } from "./Variable/Signature.js";
 export { default as Placement } from "./Variable/Placement.js";
@@ -46,3 +48,10 @@ export type { default as Policy } from "./Interface/Policy.js";
 export type { default as Learning } from "./Interface/Learning.js";
 export type { default as Located } from "./Interface/Located.js";
 export type { default as Options } from "./Interface/Options.js";
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define). This is a LIBRARY, not a plugin bundle: no cordis patch,
+// no loader contract and no Config export - Version sits beside the other
+// named exports rather than after a `Config` export, and the contract's four
+// names do not exist here to keep unchanged.
+export { Version };

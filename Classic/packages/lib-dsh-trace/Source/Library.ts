@@ -22,6 +22,8 @@
 //   Interface - the types: the envelope (Envelope), the emitter's draft
 //   (Draft), the bus contract (Adapter), the observe/stamp payload (Stamp) and
 //   the detached loop's contract (Queue).
+import Version from "./Variable/Version.js";
+
 export { default as Names } from "./Variable/Names.js";
 export { default as Bound } from "./Variable/Bound.js";
 export { default as Complete } from "./Function/Complete.js";
@@ -34,3 +36,10 @@ export type { default as Draft } from "./Interface/Draft.js";
 export type { default as Adapter } from "./Interface/Adapter.js";
 export type { default as Stamp } from "./Interface/Stamp.js";
 export type { default as Queue } from "./Interface/Queue.js";
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define). This is a LIBRARY, not a plugin bundle: no cordis patch,
+// no loader contract and no Config export - Version sits beside the other
+// named exports rather than after a `Config` export, and the contract's four
+// names do not exist here to keep unchanged.
+export { Version };

@@ -2,6 +2,7 @@ import { Service, type Context } from "@deepseek-ai/cordis";
 import type Config from "./Interface/Config.js";
 import type Intent from "./Interface/Intent.js";
 import type Proposal from "./Interface/Proposal.js";
+import Version from "./Variable/Version.js";
 export default class PassOn extends Service {
     static inject: string[];
     static Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
@@ -84,3 +85,4 @@ export default class PassOn extends Service {
      *  self-contained rule; a context without an emitter is a silent no-op). */
     private Publish;
 }
+export { Version };

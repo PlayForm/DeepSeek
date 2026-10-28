@@ -1,3 +1,4 @@
+import Version from "./Variable/Version.js";
 export { default as Names } from "./Variable/Names.js";
 export { default as Bound } from "./Variable/Bound.js";
 export { default as Complete } from "./Function/Complete.js";
@@ -10,3 +11,4 @@ export type { default as Draft } from "./Interface/Draft.js";
 export type { default as Adapter } from "./Interface/Adapter.js";
 export type { default as Stamp } from "./Interface/Stamp.js";
 export type { default as Queue } from "./Interface/Queue.js";
+export { Version };

@@ -3,6 +3,8 @@ import type Configuration from "./Interface/Config.js";
 import type { MatchResult } from "./Interface/Match.js";
 import type { Outcome } from "./Interface/Outcome.js";
 import type Pattern from "./Interface/Pattern.js";
+import Version from "./Variable/Version.js";
+export { Version };
 export default class PatternService extends Service {
     static inject: string[];
     /** The loader-contract Config (validated at load; knobs via Configure). */

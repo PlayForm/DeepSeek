@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="plugin-dsh-gitguard",n=t,r=["pluginFactory"],i=o;var a={name:p,apply:i,Config:n,inject:r};export{n as Config,i as apply,a as default,r as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import p from"./Variable/Version.js";const r="plugin-dsh-gitguard",i=t,n=["pluginFactory"],e=o;var s={name:r,apply:e,Config:i,inject:n};export{i as Config,p as Version,e as apply,s as default,n as inject,r as name};

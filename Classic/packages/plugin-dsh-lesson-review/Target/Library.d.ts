@@ -5,6 +5,7 @@ import { type ParseResult } from "./Function/Parse.js";
 import type Configuration from "./Interface/Config.js";
 import type { Op, Proposal } from "./Interface/Proposal.js";
 import type { ReviewInput, ReviewMessage, ReviewResult } from "./Interface/Review.js";
+import Version from "./Variable/Version.js";
 /** The nudge verdict. */
 export interface Tick {
     /** Whether a review is due now. */
@@ -118,3 +119,4 @@ export default class LessonService extends Service {
     /** Finish a review that never reached the model (or failed on the way). */
     private Settle;
 }
+export { Version };

@@ -18,8 +18,17 @@
 //   Packet - the orientation-packet renderer: PacketView -> the fixed
 //       eight-line WORKSPACE/SCOPE/MAP/FOCUS/NEIGHBORS/EVIDENCE/OPEN/STALE
 //       grammar.
+import Version from "./Variable/Version.js";
+
 export type { PacketView, Section, SectionKind } from "./Interface/Section.js";
 export { default as Render } from "./Function/Render.js";
 export { default as Collapse } from "./Function/Collapse.js";
 export type { CollapseEntry } from "./Function/Collapse.js";
 export { default as Packet } from "./Function/Packet.js";
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define). This is a LIBRARY, not a plugin bundle: no cordis patch,
+// no loader contract and no Config export - Version sits beside the other
+// named exports rather than after a `Config` export, and the contract's four
+// names do not exist here to keep unchanged.
+export { Version };

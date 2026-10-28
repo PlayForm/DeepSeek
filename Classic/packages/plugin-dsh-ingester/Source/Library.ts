@@ -44,6 +44,7 @@ import type Proposal from "./Interface/Proposal.js";
 import type Result from "./Interface/Result.js";
 import type State from "./Interface/State.js";
 import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
 
 export default class Ingester extends Service {
 	static inject = ["fs"];
@@ -95,3 +96,9 @@ export default class Ingester extends Service {
 		return [...this.State.Proposals.values()];
 	}
 }
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define) - NOT a loader key: the contract's names are unchanged
+// (the class form's default export with static inject/Config), and Version
+// is a standalone named export, not on the class.
+export { Version };

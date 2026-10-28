@@ -49,6 +49,7 @@ import type Outcome from "./Interface/Outcome.js";
 import type State from "./Interface/State.js";
 import type Summary from "./Interface/Summary.js";
 import Definition from "./Variable/Config.js";
+import Version from "./Variable/Version.js";
 
 const BLOCK = "[HONEST FEEDBACK";
 
@@ -166,3 +167,9 @@ export default class Feedback extends Service {
 }
 
 export { BLOCK as BlockMarker };
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define) - NOT a loader key: the contract's names are unchanged
+// (the class form's default export with static inject/Config), and Version
+// sits beside the other named exports, not on the class.
+export { Version };

@@ -28,6 +28,8 @@
 //   pre-step listener and the tool-results post-execute listener) and the
 //   generic `normalize-overpass` command handler, with the flavor's
 //   transform, line composer and ledger sink INJECTED.
+import Version from "./Variable/Version.js";
+
 export { default as Section } from "./Variable/Section.js";
 export { default as Default } from "./Variable/Default.js";
 export { default as Suppress } from "./Function/Suppress.js";
@@ -65,3 +67,10 @@ export type {
 	ConfigEditorService,
 	SettingsService,
 } from "./Overpass/Command.js";
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define). This is a LIBRARY, not a plugin bundle: no cordis patch,
+// no loader contract and no Config export - Version sits beside the other
+// named exports rather than after a `Config` export, and the contract's four
+// names do not exist here to keep unchanged.
+export { Version };
