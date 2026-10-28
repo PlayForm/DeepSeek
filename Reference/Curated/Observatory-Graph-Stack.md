@@ -17,9 +17,9 @@
   recorded layout must survive a reload, such as the story pages' static frames.
 - fixedNodeConstraint pins exact positions: "fixedNodeConstraint: [{nodeId: 'n1', position: {x: 100,
   y: 200}}, {...}]". Adopt it to anchor the nodes a captured layout depends on.
-- packComponents packs disconnected components, but "cytoscape-layout-utilities extension should also
-  be registered in the application". Adopt: register cytoscape-layout-utilities first or leave the
-  option unset.
+- packComponents packs disconnected components, but "cytoscape-layout-utilities extension should
+  also be registered in the application". Adopt: register cytoscape-layout-utilities first or leave
+  the option unset.
 - The constraint set has three forms, fixed node, alignment, and relative placement, and the 2.0.0
   release note adds per-element values for nodeRepulsion, idealEdgeLength, and edgeElasticity.
 
@@ -27,8 +27,9 @@
 
 - fCoSE "supports user-defined placement constraints as well as its full support for compound
   graphs", and "These constraints may be defined for simple nodes." The two capabilities are
-  separate: the ten group containers can be laid out as compounds, but fixed, alignment, and relative
-  placement constraints bind to simple nodes only. The site must not constrain a group container.
+  separate: the ten group containers can be laid out as compounds, but fixed, alignment, and
+  relative placement constraints bind to simple nodes only. The site must not constrain a group
+  container.
 
 ## ELK layered for a left-to-right progression
 
@@ -82,7 +83,9 @@
 ## Sources
 
 - https://github.com/iVis-at-Bilkent/cytoscape.js-fcose - Reference/Raw/cytoscape-fcose.md
-- Cytoscape.js news post "Cytoscape.js-fcose 2.0.0 released" (URL not recorded in the capture) - Reference/Raw/fcose-release.md
+- Cytoscape.js news post "Cytoscape.js-fcose 2.0.0 released" (URL not recorded in the capture) -
+  Reference/Raw/fcose-release.md
 - https://github.com/cytoscape/cytoscape.js-elk - Reference/Raw/cytoscape-elk.md
 - https://github.com/kieler/elkjs - Reference/Raw/elkjs.md
-- https://eclipse.dev/elk/reference/algorithms/org-eclipse-elk-layered.html - Reference/Raw/elk-layered.md
+- https://eclipse.dev/elk/reference/algorithms/org-eclipse-elk-layered.html -
+  Reference/Raw/elk-layered.md

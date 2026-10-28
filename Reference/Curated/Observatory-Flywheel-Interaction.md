@@ -1,11 +1,11 @@
 # Flywheel interaction: the two projections and what they demonstrate
 
 > Statement: The Flywheel sources establish a research graph as a directed acyclic graph of durable
-> nodes that hold questions, claims, hypotheses, tasks, results, and decisions, with branch and merge
-> as first-class graph operations and a Web UI that shows the graph as a draggable canvas plus an
-> optional linear timeline view. They also establish `flywheel ui` as a strictly read-only local
-> browser view of committed and staged work, which is the only documented model for a "local browser"
-> mode on the PlayForm site.
+> nodes that hold questions, claims, hypotheses, tasks, results, and decisions, with branch and
+> merge as first-class graph operations and a Web UI that shows the graph as a draggable canvas plus
+> an optional linear timeline view. They also establish `flywheel ui` as a strictly read-only local
+> browser view of committed and staged work, which is the only documented model for a "local
+> browser" mode on the PlayForm site.
 
 ## What the two projections demonstrate
 
@@ -23,8 +23,8 @@
 
 ## The ordering rule
 
-- Flywheel keeps alternatives visible "without flattening everything into one timeline"; its timeline
-  toggle is a linear view of the same graph, not a different dataset.
+- Flywheel keeps alternatives visible "without flattening everything into one timeline"; its
+  timeline toggle is a linear view of the same graph, not a different dataset.
 - The harness session log is append-only and "seq is the monotonic position in the log", so any
   timeline the site builds orders nodes by recorded sequence and recorded start times, never by
   invented or interpolated time.
@@ -44,17 +44,17 @@
 Flywheel names the roles a node can hold; the harness names the events a session records. The site's
 node kinds come from the right-hand column.
 
-| Flywheel role | Harness concept | Durable event the site renders |
-| --- | --- | --- |
-| Question | an open question claimed into a turn | user/message |
-| Claim | the model's settled statement | assistant/message |
-| Hypothesis | a stated alternative the model weighs before acting | assistant/message content; a branch when alternatives diverge |
-| Task | work proposed for a tool | tool/call (callId, name, raw JSON arguments) |
-| Result | the tool's model-facing outcome | tool/result |
-| Decision | the policy outcome between call and result | no event kind: the pre-execute, monotonic-guard, and approval stage; a denial still records tool/result |
-| Branch | a fork at a turn boundary | the fork seed and the `forked` turn/end reason |
-| Merge | the reconciling step that succeeds both branches | a later assistant/message; the log records no merge event, the site renders the merge from topology |
-| Artifact | durable evidence | attachments, fs/observed, tool/result meta |
+| Flywheel role | Harness concept                                     | Durable event the site renders                                                                          |
+| ------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Question      | an open question claimed into a turn                | user/message                                                                                            |
+| Claim         | the model's settled statement                       | assistant/message                                                                                       |
+| Hypothesis    | a stated alternative the model weighs before acting | assistant/message content; a branch when alternatives diverge                                           |
+| Task          | work proposed for a tool                            | tool/call (callId, name, raw JSON arguments)                                                            |
+| Result        | the tool's model-facing outcome                     | tool/result                                                                                             |
+| Decision      | the policy outcome between call and result          | no event kind: the pre-execute, monotonic-guard, and approval stage; a denial still records tool/result |
+| Branch        | a fork at a turn boundary                           | the fork seed and the `forked` turn/end reason                                                          |
+| Merge         | the reconciling step that succeeds both branches    | a later assistant/message; the log records no merge event, the site renders the merge from topology     |
+| Artifact      | durable evidence                                    | attachments, fs/observed, tool/result meta                                                              |
 
 Traceability quotes:
 
@@ -89,9 +89,9 @@ Not established, so the site must not claim these as sourced behavior:
 
 ## Stub pages
 
-- Reference/Raw/flywheel-docs.md is the docs landing page: nine lines, one sentence of substance plus
-  a link list. It contributes nothing beyond naming the doc set and is cited nowhere else in this
-  note.
+- Reference/Raw/flywheel-docs.md is the docs landing page: nine lines, one sentence of substance
+  plus a link list. It contributes nothing beyond naming the doc set and is cited nowhere else in
+  this note.
 
 ## Sources
 
@@ -101,4 +101,5 @@ Not established, so the site must not claim these as sourced behavior:
 - https://docs.flywheel.paradigma.inc/concepts/repos - Reference/Raw/flywheel-repos.md
 - https://docs.flywheel.paradigma.inc/ (index only) - Reference/Raw/flywheel-docs.md
 - https://deepseek.playform.cloud/ - Reference/Raw/playform-site.md
-- DeepSeek Harness Trajectory package README (URL not recorded in the capture) - Reference/Raw/dsh-trajectory.md
+- DeepSeek Harness Trajectory package README (URL not recorded in the capture) -
+  Reference/Raw/dsh-trajectory.md

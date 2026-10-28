@@ -13,20 +13,20 @@
   indicators and for changing the navigation direction.
 - astro:after-preparation: "fires at the end of the preparation phase, after the new page's content
   has been loaded and parsed into a document." It occurs before the view transition phase.
-- astro:before-swap: "fires before the new document (which is populated during the preparation phase)
-  replaces the current document. This event occurs inside of the view transition". The event exposes
-  newDocument and a replaceable swap implementation.
+- astro:before-swap: "fires before the new document (which is populated during the preparation
+  phase) replaces the current document. This event occurs inside of the view transition". The event
+  exposes newDocument and a replaceable swap implementation.
 - astro:after-swap: "fires immediately after the new page replaces the old page"; the documented use
-  is passing DOM state across the swap, and it "occurs immediately after the browser history has been
-  updated and the scroll position has been set".
+  is passing DOM state across the swap, and it "occurs immediately after the browser history has
+  been updated and the scroll position has been set".
 - astro:page-load: "fires at the end of page navigation, after the new page is visible to the user
   and blocking styles and scripts are loaded"; it "fires this event both on initial page navigation
   for a pre-rendered page and on any subsequent navigation".
 
 ## The one-time module execution rule
 
-- "Bundled module scripts, which are the default scripts in Astro, are only ever executed once. After
-  initial execution they will be ignored, even if the script exists on the new page after a
+- "Bundled module scripts, which are the default scripts in Astro, are only ever executed once.
+  After initial execution they will be ignored, even if the script exists on the new page after a
   transition."
 - Inline scripts "have the potential to be re-executed during a user's visit to a site", and
   data-astro-rerun forces re-execution for inline scripts only: "Adding any attribute to a script
@@ -42,10 +42,11 @@ Mount:
 
 - Register document-level astro:page-load handling once at module scope; do per-page work inside the
   handler, because it fires on first load and after every navigation.
-- Build the canvas in astro:page-load, not on DOMContentLoaded: "event listeners for DOMContentLoaded
-  can be replaced by the astro:page-load lifecycle event".
+- Build the canvas in astro:page-load, not on DOMContentLoaded: "event listeners for
+  DOMContentLoaded can be replaced by the astro:page-load lifecycle event".
 - The body is "completely replaced with the new page's body", so nothing built inside the body
-  survives navigation; state kept on window, or in an island marked transition:persist, does survive.
+  survives navigation; state kept on window, or in an island marked transition:persist, does
+  survive.
 
 Dispose:
 
@@ -60,8 +61,8 @@ Dispose:
 
 Router controls the explorer may use:
 
-- data-astro-reload forces "a full-page navigation"; "Links with the data-astro-reload attribute will
-  be ignored by the router".
+- data-astro-reload forces "a full-page navigation"; "Links with the data-astro-reload attribute
+  will be ignored by the router".
 - data-astro-history with "push", "replace", or "auto" controls whether navigation writes a new
   history entry.
 - navigate(href) from astro:transitions/client triggers navigation from scripts or hydrated

@@ -238,12 +238,13 @@ The install snippets on a detail page are a promise; a 404 breaks the primary co
 
 An Astro frontmatter helper is not visible inside `getStaticPaths`.
 
-Astro lifts `getStaticPaths` out of the page's frontmatter to module scope, where only the imports are
-visible, so a function defined later in the frontmatter is undefined when `getStaticPaths` runs and
-the build fails with `TitleFor is not defined` or `TraceFiles is not defined` - two builds failed
-exactly that way. Data that a route generator needs comes from an import (`@Library/Graph/Stories.mjs`,
-`@Library/Graph/Groups.mjs`, `@Library/Graph/Traces.mjs`), and `Source/pages/showcase/[slug].astro`
-is the pattern: it resolves the roster titles inside `getStaticPaths` from the imported roster.
+Astro lifts `getStaticPaths` out of the page's frontmatter to module scope, where only the imports
+are visible, so a function defined later in the frontmatter is undefined when `getStaticPaths` runs
+and the build fails with `TitleFor is not defined` or `TraceFiles is not defined` - two builds
+failed exactly that way. Data that a route generator needs comes from an import
+(`@Library/Graph/Stories.mjs`, `@Library/Graph/Groups.mjs`, `@Library/Graph/Traces.mjs`), and
+`Source/pages/showcase/[slug].astro` is the pattern: it resolves the roster titles inside
+`getStaticPaths` from the imported roster.
 
 ## The layout rules for mounted components
 
@@ -256,8 +257,8 @@ bound lets the frame swallow the page and pushes the article's own sections belo
 
 A component mounted as a direct grid child must not become a fourth auto-placed child of a three-row
 template, because a grid whose template names exactly three rows turns the extra child into an
-implicit fourth row that steals the canvas row's height. The Explorer's legend therefore rides inside
-the `ControlBar` as a collapsed disclosure rather than standing beside it in the grid.
+implicit fourth row that steals the canvas row's height. The Explorer's legend therefore rides
+inside the `ControlBar` as a collapsed disclosure rather than standing beside it in the grid.
 
 ## The workflow
 

@@ -2,14 +2,14 @@
 
 > Statement: The harness sources establish one vocabulary for what a session records: a turn is zero
 > or more steps, a step is one model request plus the tools it calls, a request is the assembled
-> model call reconstructed from the log, a tool call and its result are paired durable events, and an
-> attempt is a model call that committed no surface message. The append-only session log is the
+> model call reconstructed from the log, a tool call and its result are paired durable events, and
+> an attempt is a model call that committed no surface message. The append-only session log is the
 > source of truth, and every graph the site draws must fold from it.
 
 ## The six distinctions, quoted
 
-- Turn: "A **turn** is zero or more steps: it opens before its first input is claimed and closes once
-  nothing is owed." It opens with turn/start carrying the turn number and closes with turn/end
+- Turn: "A **turn** is zero or more steps: it opens before its first input is claimed and closes
+  once nothing is owed." It opens with turn/start carrying the turn number and closes with turn/end
   carrying the turn number and a reason; the reason vocabulary is completed, aborted, blocked,
   error, max-tokens, interrupted, and forked.
 - Step: "A **step** is one model request plus the tools it calls." It opens with step/start and
@@ -69,22 +69,25 @@ duration, input, output, timing, images, and attachment summaries". The site's i
 ## What we reject
 
 - A request is not a turn and a step is not a request; the architecture separates all three.
-- "Policy decision" is not a session event kind: the durable events remain tool/call and tool/result,
-  and the decision is the pipeline stage between them, which "applies policy, hooks, sandboxing,
-  filesystem guards ... without changing the loop".
+- "Policy decision" is not a session event kind: the durable events remain tool/call and
+  tool/result, and the decision is the pipeline stage between them, which "applies policy, hooks,
+  sandboxing, filesystem guards ... without changing the loop".
 - An attempt is not model history and must not be drawn as one.
 - Empty assistant content is not model history: "An **empty-content** `assistant/message` is also
   skipped".
-- Live agent/* frames are not durable: "SDK users that need replayable transcript data should consume
-  `session/event`; `agent/*` is the live coordination API".
+- Live agent/* frames are not durable: "SDK users that need replayable transcript data should
+  consume `session/event`; `agent/*` is the live coordination API".
 - A time value the log does not record: each event carries `time` in epoch milliseconds and nothing
   carries a duration for unfinished work.
 
 ## Sources
 
-- DeepSeek Harness architecture (URL not recorded in the capture) - Reference/Raw/dsh-architecture.md
-- DeepSeek Harness agent turn and step lifecycle (generated sequence diagram) - Reference/Raw/dsh-agent-lifecycle.md
-- DeepSeek Harness tool execution pipeline (generated flowchart) - Reference/Raw/dsh-tool-pipeline.md
+- DeepSeek Harness architecture (URL not recorded in the capture) -
+  Reference/Raw/dsh-architecture.md
+- DeepSeek Harness agent turn and step lifecycle (generated sequence diagram) -
+  Reference/Raw/dsh-agent-lifecycle.md
+- DeepSeek Harness tool execution pipeline (generated flowchart) -
+  Reference/Raw/dsh-tool-pipeline.md
 - DeepSeek Harness sessions (packages/core/session) - Reference/Raw/dsh-session.md
 - DeepSeek Harness LLM streaming (packages/llm) - Reference/Raw/dsh-llm-streaming.md
 - @deepseek-ai/dsh-client-ui-trajectory README - Reference/Raw/dsh-trajectory.md
