@@ -1,0 +1,961 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Cut Vertices</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 25</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>With this chapter, we embark on the topic of connectivity: exploring
+how many vertices or edges must be deleted from a graph to make it
+disconnected, or disconnected in some specific way.</p>
+<p>This is the final part of the textbook, so I will spend more time
+pointing out the connections between the new topics covered in each
+chapter and other parts of graph theory. (For this chapter, none of the
+previous topics are critical for understanding; they only serve as
+examples. Later on, this will change.)</p>
+<p>As a graph theorist, I naturally have a graph-theoretic explanation
+of why pointing out these connections is important. I think of
+mathematical concepts as forming a very large graph of ideas in my head,
+with edges representing these connections. This is an undirected graph;
+in this textbook, I go through some of its vertices in a specific order,
+but if two ideas are related, either one helps understand the other.</p>
+<p>Sometimes you forget things, and the graph of ideas loses a vertex.
+This is natural. But you want your graph to be resilient to forgetting
+things. If you lose a vertex with many neighbors, then you can easily
+recover: you can remember the adjacent ideas and how they related to
+what you forgot. Don’t let your graph of ideas have cut vertices!</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="counting-paths">Counting paths</h2>
+<p>Let me begin with a puzzle.</p>
+<div class="problem" id="problem:counting-paths">
+<p><strong>Problem 25.1</strong>. <em>In <a class="booklink" href="#fig:counting-paths-puzzle">Figure 25.1(a)</a>, several Tetris
+pieces have been placed on an   grid. How many ways are there to get from point  (the bottom left corner) to point  (the top right corner) by a path
+through the square in the grid that does not pass through any Tetris
+pieces and does not visit a square more than once?</em></p>
+</div>
+<figure class="bookfig" id="fig:counting-paths">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:counting-paths-puzzle">
+
+<figcaption>The puzzle, with one sample path</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:counting-paths-marked">
+
+<figcaption>A few useful squares</figcaption>
+</figure>
+</div>
+<figcaption>Count the paths from 
+to !</figcaption>
+</figure>
+<p>This is a book, so I can’t ask you to think about the puzzle on your
+own for a bit before I reveal the answer. However, I really do think
+it’s a good idea for you to think about it: you’ll internalize the ideas
+in this chapter better if you come up with some of them on your own
+first. You should especially try to think of a way to solve the problem
+systematically and with as little brute force as possible: there’s many
+paths, so you don’t want to just list them all.</p>
+<p>When you’ve done all the thinking you want to do, keep reading.</p>
+<p>No rush—take your time.</p>
+<p>Alright! So: the first insight that cuts down on the work required is
+that the square marked  in
+<a class="booklink" href="#fig:counting-paths-marked">Figure 25.1(b)</a> is special. All paths
+from  to  have to go through  (and they are only allowed to go
+through  once). So every   path is the union of an   path and a   path; conversely, the union of every
+  path and every   path is an   path. This means that to get our
+final count, we can multiply the number of paths from  to  by the number of paths from  to .</p>
+<details class="qa">
+<summary>Which graph are all these paths in?</summary>
+<p>The graph obtained from the   grid graph by deleting every
+vertex covered by a Tetris piece. Squares like , , and  are vertices of this graph.</p>
+</details>
+<p>Let’s make up some notation, just for this problem: let  be the number of paths from  to . In this notation, we are looking for
+, but we’ve just discovered
+that  .</p>
+<details class="qa">
+<summary>What is ?</summary>
+<p>It is just : from , we can go up and then right, or right
+and then up, but the grey square Tetris piece stops us from doing
+anything else.</p>
+</details>
+<p>Next, we can simplify 
+with just a bit of casework. We can arrive at  either from the left (through the
+square marked ) or from below
+(through the square marked ). So
+we can count both kinds of paths separately.</p>
+<details class="qa">
+<summary>Is it true that  ?</summary>
+<p>No: as we’ve defined it,  counts all paths from  to , including ones that go through  first—and we can’t follow those up by
+going back to .</p>
+</details>
+<p>Instead, let’s define a second function , to be the number of paths from
+ to  that don’t go through . Now it’s okay to say that  . Let’s compute
+ first, and come back to look
+at  second.</p>
+<p>Without going through , every
+path from  to  must pass through  first: like our initial identity, this
+lets us factor  as  . What’s more, the
+paths cannot go through squares 
+or : if they do, there’s no way to
+return! So  can be computed
+just by looking at a  
+rectangle in the bottom left corner, and  can be computed just by looking at
+a   rectangle. I have no
+more tricks to suggest here, but there’s not many paths, so we can just
+count them:   and  .</p>
+<p>When we move on to , the
+role of certain squares is reversed. The path cannot go through , because that cuts off our path of
+retreat. It must go through , and
+then it must go through . (There
+is only one way to get from  to
+ at this point.) So we can factor
+ as  . Once again, these
+are small problems we can solve in just one corner of the grid by
+listing out all the paths; you should get   and  .</p>
+<p>We are now ready to combine the answers we got: </p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="cut-vertices">Cut vertices</h2>
+<p>The graph-theoretic concept at work in our solution to <a class="booklink" href="#problem:counting-paths">Problem 25.1</a> is the notion of a cut
+vertex.</p>
+<p>A <strong>cut vertex</strong> 
+of a graph  is a vertex such that
+  has more connected components
+than . Most commonly,  is a connected graph, in which case
+ is a cut vertex if and only if
+  is not connected.</p>
+<p>For example, in the graph representing <a class="booklink" href="#problem:counting-paths">Problem 25.1</a>, vertex  is a cut vertex: deleting it separates
+ from . (Several other vertices marked in
+<a class="booklink" href="#fig:counting-paths-marked">Figure 25.1(b)</a>, such as  and , are cut vertices of subgraphs of this
+graph.)</p>
+<p>The definition of a cut vertex might resemble the definition of a
+bridge given in <a class="booklink" href="../trees/spanning.html">Chapter 9</a>: we defined a
+bridge to be an edge that disconnects a graph (or increases the number
+of connected components) when we remove it. For this reason, bridges are
+sometimes called cut edges.</p>
+<details class="qa">
+<summary>We know that in a tree, every edge is a
+bridge. Which vertices in a tree are cut vertices?</summary>
+<p>The cut vertices are exactly the vertices
+which are not leaves. When a leaf is deleted, a smaller tree is left;
+however, deleting a vertex of degree   leaves  connected components, one for every
+neighbor of the deleted vertex.</p>
+</details>
+<p>What are cut vertices good for? It’s hard to give a complete answer
+to a question like that in graph theory, because an easy-to-define
+concept can pop up in seemingly unrelated questions. On their own, cut
+vertices are good in applications because they tell us about the
+reliability of computer networks  or supply networks , just to name two examples. Usually,
+identifying the cut vertices does not tell the complete story; in this
+part of the textbook, you will learn some more complicated measures of
+reliability, as well.</p>
+<p>It can also be helpful to know when a graph has a cut vertex no
+matter which problem we’re trying to solve, because it can help us break
+down the problem into smaller and simpler problems: we saw that in
+action in <a class="booklink" href="#problem:counting-paths">Problem 25.1</a>. Let’s be a bit more
+specific about this, though. Given a connected graph , suppose that  is a cut vertex of . Where do we find the subproblems?</p>
+<p>Well, we could start by identifying , the connected components of  . But that’s not usually quite what we
+want, because none of these connected components “remember” how they fit
+together. Instead, we want subgraphs  that all come together at . Formally, let  be the subgraph of  induced by  ; this subgraph includes
+only one connected component of  , but also keeps track of how that
+component is attached to . An
+example is shown in <a class="booklink" href="#fig:cut-vertex-breakdown">Figure 25.2</a>.</p>
+<figure class="bookfig" id="fig:cut-vertex-breakdown">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:cut-vertex">
+
+<figcaption>A cut vertex in </figcaption>
+</figure>
+
+</div>
+<figcaption>Using a cut vertex to break  down into </figcaption>
+</figure>
+<p>Let’s look at some examples to see how this helps us solve a few of
+the problems that have been covered so far in this book.</p>
+<details class="qa">
+<summary>How does determining whether  are planar help us
+decide if  is planar?</summary>
+<p>If all  subgraphs are planar, their plane
+embeddings can be combined by placing them around  like the petals of a flower, so  is also planar; <a class="booklink" href="#fig:cut-vertex-breakdown">Figure 25.2</a> is an example of this.
+If one of the subgraphs is not planar, then  as a whole isn’t planar, either.</p>
+</details>
+<details class="qa">
+<summary>How does coloring the graphs  help us find a
+coloring of ?</summary>
+<p>Though the colorings are not
+necessarily compatible “out of the box”, we can permute the colors used
+on each subgraph so that all of them give  the same color. Then, by combining the
+colorings, we get a coloring of all of .</p>
+<p>In particular,  .</p>
+</details>
+<details class="qa">
+<summary>How does finding the largest clique in
+ help us find
+the largest clique in ?</summary>
+<p>A clique in  must be entirely contained in some
+: if we take two vertices other
+than  from different subgraphs,
+then they won’t be adjacent.</p>
+<p>In particular,  .</p>
+</details>
+<details class="qa">
+<summary>How does finding a spanning tree of  help us find a
+spanning tree of ?</summary>
+<p>We can just take the union of the spanning
+trees of all the subgraphs. This is always a spanning tree of , and every spanning tree of  is obtained in this way, so this can be
+used to count the spanning trees of , or to find a minimum-cost spanning
+tree.</p>
+</details>
+<p>There are many more examples, but let’s move on.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="connected-graphs">2-connected graphs</h2>
+<p>What happens if we split up a graph at its cut vertices (as in the
+previous section) as many times as possible? Eventually, we arrive at a
+bunch of smaller graphs with no more cut vertices.</p>
+<p>We’ll probably have to use some other tools to solve whatever problem
+we were trying to solve in those small graphs. However, maybe the
+property of having no cut vertices will make them special somehow? We
+should study graphs with no cut vertices to see if we can learn anything
+useful about them.</p>
+<p>(From the point of view of reliability of a network, graphs with no
+cut vertices are also special: they are the graphs that stay connected
+even if something happens to one of the vertices.)</p>
+<p>I’m going to do something a bit strange with the definition here, and
+say that a <em>-connected</em>
+graph is a connected graph with at least  vertices and no cut vertices. Why is that clause “at least  vertices” there?</p>
+<p>It’s possible to have a -vertex
+graph with no cut vertices: the graph . (We even saw  among the smaller graphs we got in
+<a class="booklink" href="#fig:cut-vertex-breakdown">Figure 25.2</a>.) However, in many
+ways,  is unusual for graphs
+with no cut vertices. The reason is that we can rephrase the definition
+as saying “For any three different vertices , , and , if  is deleted, there is still a path from
+ to .” A graph that doesn’t have three
+different vertices satisfies this definition in a trivial way.</p>
+<p>Many of the theorems we prove about -connected graphs will be false for
+, which is why we exclude it
+from the definition. This starts with the following theorem, which would
+be false if  were considered to
+be a -connected graph:</p>
+<div class="theorem" id="thm:common-cycle">
+<p><strong>Theorem 25.1</strong>. <em>A graph  is -connected if and only if any two
+vertices of  lie on a common
+cycle. (That is, for all   there exists a cycle in  through both  and .)</em></p>
+</div>
+<p><a class="booklink" href="#thm:common-cycle">Theorem 25.1</a> is an if-and-only-if result,
+so it is saying two things:</p>
+<ol>
+<li><p>If any two vertices of  lie
+on a common cycle, then  is -connected.</p></li>
+<li><p>If  is -connected, then any two vertices of
+ lie on a common cycle.</p></li>
+</ol>
+<p>Of these, statement 1 is the easier of the two directions to show, so
+we will go ahead and prove it right away; we will return and prove the
+second direction of the theorem later in this chapter.</p>
+<div class="proof">
+<p><em>Proof of half of <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a>.</em> Suppose that any two
+vertices of a graph  lie on a
+common cycle. (In particular, 
+must contain at least one cycle, which means that there must be at least
+ vertices.)</p>
+<p>Let  be any vertex of . To verify that   is connected, let  and  be two vertices of  . How do we show that in  , there is a   path?</p>
+<p>Well, in , there is a cycle
+containing both  and . We can represent this cycle by a
+closed walk  where  
+and   for some . This walk can be split in two:  Both of these walks
+represent   paths, and they have
+no vertices other than  and  in common. Therefore  (the vertex we delete) can only appear
+as a vertex on one of the paths, which means that the other   path survives to  . ◻</p>
+</div>
+<p>Through <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a>, -connected graphs have some ties to
+topics covered earlier in this book. Here’s a quick example:</p>
+<div class="prop" id="prop:2-connected-ham">
+<p><strong>Proposition 25.2</strong>. <em>If  is a Hamiltonian graph, then it is
+-connected.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> If  has a
+Hamilton cycle, then any two vertices of  lie on that cycle, so  is -connected by <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a>. ◻</p>
+</div>
+<details class="qa">
+<summary>In fact, <a class="booklink" href="#prop:2-connected-ham">Proposition 25.2</a> is a special case of an
+earlier result about Hamiltonian graphs. How?</summary>
+<p>From <a class="booklink" href="../hard/hamilton.html#cor:tough-graphs">Corollary 17.3</a>, we know that
+all Hamiltonian graphs are tough: if   vertices are deleted, at most  connected components are left. In the
+special case  , this tells us
+that there cannot be any cut vertices.</p>
+</details>
+<p>Much of the early work on -connected graphs and connectivity in
+general was done by Hassler Whitney, who proved <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a>, <a class="booklink" href="#thm:ear-decomposition">Theorem 25.4</a>, <a class="booklink" href="#prop:2-connected-planar">Proposition 25.5</a>, and <a class="booklink" href="../connectivity/connectivity.html#thm:kappa-delta">Theorem 26.3</a> in 1932 .</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="ear-decompositions">Ear decompositions</h2>
+<p>Many times in this textbook, we’ve discussed the following kind of
+question: if you’ve solved a graph-theoretic problem, how do you give a
+short but convincing demonstration that your solution is correct? Let’s
+recap a few instances of this:</p>
+<ul>
+<li>
+<p>If two graphs are isomorphic, then we can write down an
+isomorphism, and it will be tedious but straightforward to check that it
+is an isomorphism.</p>
+<p>If two graphs are not isomorphic, a quick way to demonstrate this is
+by finding a graph invariant that the two graphs disagree in. However,
+finding such an invariant might be hard.</p>
+</li>
+<li><p>If we want to know the matching number  of a bipartite graph, and
+we’ve found a large matching ,
+that’s only a proof that  . What if there’s a larger matching? But by Kőnig’s
+theorem (<a class="booklink" href="../matchings/konig.html#thm:konig">Theorem 14.2</a>), we can always find a vertex
+cover  with  , and use it as a proof that
+ is as large as possible.</p></li>
+<li>
+<p>If a graph is Hamiltonian, we might still have to work very hard
+to find a Hamilton cycle; but once we’ve found it, it is very easy to
+check.</p>
+<p>What do we do if a graph  is
+not Hamiltonian? Sometimes, if we’re lucky, the graph will not be
+<em>tough</em> (as defined in <a class="booklink" href="../hard/hamilton.html">Chapter 17</a>), either. In that case,
+after yet more hard work, we can find a set   such that   has more than  connected components, proving that
+ is not tough and not Hamiltonian.
+But there are graphs for which this will not work; we might not always
+have a short proof.</p>
+</li>
+<li><p>If a graph is planar, then we can demonstrate this by drawing a
+plane embedding. What if the graph is not planar? Kuratowski’s theorem
+(<a class="booklink" href="../planar/testing.html#thm:kuratowski">Theorem 22.7</a>) tells us that we
+can demonstrate this by finding a subdivision of  or  inside the graph. Finding the
+subdivision might take some work, but checking it takes much less work;
+it’s great for busy teachers grading graph theory homework.</p></li>
+</ul>
+<p>These ideas are not just important when applied to individual graphs.
+They also often come up when writing a proof! Often, proving that
+something does exist is a lot easier than proving that something does
+not exist. The ideas here tell us how we can turn the second kind of
+proof-writing back into the first kind.</p>
+<p>Let’s think about how the idea of short demonstrations applies to
+-connected graphs.</p>
+<details class="qa">
+<summary>Suppose a connected graph  is not -connected. How can you demonstrate
+this?</summary>
+<p>You could find a cut vertex .</p>
+</details>
+<details class="qa">
+<summary>Okay, but how do you demonstrate that
+ is a cut vertex?</summary>
+<p>You’d need to show that   is not connected; <a class="booklink" href="../beginning/walks.html#lemma:disconnected">Lemma 3.2</a> can be a
+useful tool for this.</p>
+</details>
+<p>It’s less straightforward to consider the other direction: if a graph
+is -connected, and you want to
+prove it, how do you do so? Working directly from the definition, you
+could check for every vertex  that
+  is connected, perhaps by giving
+a spanning tree of   (but
+verifying that a graph is a tree also takes some work). We could also
+try to find a collection of cycles so that every pair of vertices lies
+on a common cycle in our collection, and apply <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a>. However, we might need a lot
+of cycles to make this happen, and checking them will not be easy.</p>
+<p>All this is a lengthy introduction to a new idea: ears, and ear
+decompositions.</p>
+<p>Let an <strong>ear</strong> of a graph  be a path in  in which every vertex except the first
+and last has degree . From now on,
+we will also refer to the vertices of a path except the first and last
+as the <strong>internal</strong> vertices of the path, to make them
+easier to refer to.</p>
+<p>When we <strong>add an ear</strong> to a graph , we pick two different vertices  and  already in ; we add new vertices  and new edges
+.
+This creates the ear represented by the walk .</p>
+<figure class="bookfig" id="fig:adding-an-ear">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:cube-with-no-ears">
+
+<figcaption>The cube graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:cube-with-one-ear">
+
+<figcaption>The cube, plus an ear</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:cube-with-two-ears">
+
+<figcaption>The cube, plus two ears</figcaption>
+</figure>
+</div>
+<figcaption>Adding ears to a cube graph</figcaption>
+</figure>
+<p>It’s easier to show what it means to add an ear by means of a
+picture, rather than with words. <a class="booklink" href="#fig:adding-an-ear">Figure 25.3</a>
+shows how, starting with a cube graph (<a class="booklink" href="#fig:cube-with-no-ears">Figure 25.3(a)</a>), we add an ear to arrive
+at <a class="booklink" href="#fig:cube-with-one-ear">Figure 25.3(b)</a>. This particular ear has
+many internal vertices, but that’s not necessary. Adding an edge to a
+graph (as in <a class="booklink" href="#fig:cube-with-two-ears">Figure 25.3(c)</a>) is a special case of
+adding an ear: it’s adding an ear of length .</p>
+<p>The following lemma is the reason why we introduce ears.</p>
+<div class="lemma" id="lemma:add-ear">
+<p><strong>Lemma 25.3</strong>. <em>If  is a -connected graph and we add an ear to
+, the resulting graph is also
+-connected.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  be a graph
+obtained from  by adding an ear
+: an   path for two different vertices   whose internal vertices only
+exist in . We will prove that the
+new graph  still does not have a
+cut vertex.</p>
+<p>To do this, we see what happens when we delete a vertex of :</p>
+<ul>
+<li><p>Suppose we delete a vertex   other than  or . Because   is connected, all vertices of   are in the same connected component
+of  . Also, vertices of  all have a path to  and  (because  is connected), so they are also in that
+same connected component:   is
+connected.</p></li>
+<li><p>If we delete , essentially
+the same thing happens. The only change is that an internal vertex of
+the ear we added to  has only only
+one path to the connected component of  : its path to  in  . Swapping the roles of  and , the same thing happens if we delete
+.</p></li>
+<li><p>If we delete a vertex 
+which is an internal vertex of ,
+then  remains connected, and   is divided into two path components:
+one containing  and one containing
+. Every internal vertex of  other than  still has a path to either  or , so it is in the same connected
+component as the vertices of .</p></li>
+</ul>
+<p>In all cases,  remains
+connected when we delete a vertex, so it is -connected. ◻</p>
+</div>
+<p>In particular, if we start with a cycle and repeatedly add ears, the
+result will be connected by <a class="booklink" href="#lemma:add-ear">Lemma 25.3</a> and by
+induction. We can use this to give a short proof that a graph  is -connected, if we can find a way to
+build  from a cycle inside  by adding ears. <a class="booklink" href="#fig:cube-ear-decomposition">Figure 25.4</a> shows a way to do
+this for the cube graph .</p>
+<figure class="bookfig" id="fig:cube-ear-decomposition">
+
+<figcaption>An ear decomposition of the cube graph</figcaption>
+</figure>
+<p>We refer to a demonstration of -connectedness via <a class="booklink" href="#lemma:add-ear">Lemma 25.3</a> as an ear decomposition. Since
+we’d like to use ear decompositions in proofs, let’s give a formal
+definition. An <strong>ear decomposition</strong> of a graph  is a sequence  of subgraphs of
+ with the following
+properties:</p>
+<ol>
+<li><p> is a cycle.</p></li>
+<li><p> is an ear of   for all
+ .</p></li>
+<li>
+<p>Each edge of  is in exactly
+one of the subgraphs .</p>
+<p>As a consequence,  .</p>
+</li>
+</ol>
+<p>(The last of these three properties is, as you might remember,
+exactly what we mean by a decomposition in general.)</p>
+<p>Does such a proof always exist? Yes!</p>
+<div class="theorem" id="thm:ear-decomposition">
+<p><strong>Theorem 25.4</strong>. <em>A graph  is -connected if and only if it has an ear
+decomposition.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> In both directions of this proof, we will have a
+sequence  of
+subgraphs of , which we will
+either assume to be an ear decomposition or prove to be all or part of
+one. To simplify notation, let’s write  for the union  . In the
+case of an ear decomposition, 
+should be an ear of , and we
+obtain  from  by adding the ear .</p>
+<p>If  has an ear decomposition,
+then it is -connected by repeated
+use of <a class="booklink" href="#lemma:add-ear">Lemma 25.3</a> in a short induction. Let the
+sequence  be
+the ear decomposition; then we prove by induction on  that  is -connected. The base case   holds because cycles are -connected: deleting any vertex from
+ leaves a path. Since  is obtained from  by adding an ear, <a class="booklink" href="#lemma:add-ear">Lemma 25.3</a> is exactly the induction step we
+need. Finally,  , so reaching
+  proves that  is -connected.</p>
+<p>To prove the other direction of the if-and-only-if statement, we have
+to reason in the opposite way from <a class="booklink" href="#lemma:add-ear">Lemma 25.3</a>,
+building up the ear decomposition  step by step.</p>
+<p>We can start by letting  be
+any cycle in . Why does a cycle
+exist? Well, we know  is connected
+and has at least three vertices. If  contained a leaf , then the only neighbor of  would be a cut vertex, separating  from the rest of the graph. This is not
+allowed, so  must have minimum
+degree at least , giving it a
+cycle by <a class="booklink" href="../beginning/degrees.html#thm:min-degree-cycle">Theorem 4.4</a>.</p>
+<details class="qa">
+<summary>Doesn’t this also follow from <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a>?</summary>
+<p>It does, but I want to avoid that
+argument. We are soon going to use ear decompositions to prove
+<a class="booklink" href="#thm:common-cycle">Theorem 25.1</a>, and I want to make sure that
+proof is not circular.</p>
+</details>
+<p>Next, suppose we’ve gotten partway through the process, finding the
+subgraphs .
+These should satisfy the first two properties of an ear decomposition.
+Because we’re not done yet, they don’t have to satisfy the third
+property. However, we assume that  share no edges, and that   is
+a subgraph of . We would like to
+make  bigger by adding an ear,
+which we’ll call ; however,
+we want to add an ear that’s still entirely contained in .</p>
+<p>The first question we ask is this: is  ? If so, then we’re nearly
+done, and continuing the ear decomposition is easy. Pick any edge   that is not in , and make that edge (or, more
+precisely, the subgraph consisting of , , and edge ) be the ear  we add next.</p>
+<details class="qa">
+<summary>What will steps   look like, in this
+case?</summary>
+<p>Since   as well, we’ll stay in
+this case until the end. We will add the remaining edges of , one at a time, as ears of length .</p>
+</details>
+<p>So it’s the early steps that we have to worry about, when  is still not all of . In this case, let  be any edge where   and  ; we will try to construct
+an ear that begins with the edge .</p>
+<details class="qa">
+<summary>How do we know such an edge  exists?</summary>
+<p>If there is no such edge, then  would not have any edges between  and its complement  , so it would not be
+connected.</p>
+</details>
+<p>Since  is -connected, in particular   is connected, so we can find a path
+in   from  to any other vertex. Choose that other
+vertex to be a vertex  ,
+not equal to , of course. There is
+a   path in  ; represent it by a walk  with   and  . By setting  ,
+we get an walk ; this walk represents an   path that starts and ends in .</p>
+<details class="qa">
+<summary>Is this path an ear we can add to ?</summary>
+<p>Not necessarily.</p>
+</details>
+<details class="qa">
+<summary>What could be the matter with it?</summary>
+<p>We don’t know for sure that none of its
+internal vertices are in . We
+only know this about , because
+  was chosen for this
+purpose.</p>
+</details>
+<p>To fix this, let   be the
+first positive number such that  . (Since   and
+ , we know that  exists, but it’s possible that we
+return to  before
+reaching ; in that case,  .) Now the truncated walk  represents an
+ear we can add to : if we define
+ to be the path represented
+by this walk, then  is an
+ear of  .</p>
+<details class="qa">
+<summary>How do we know this?</summary>
+<p>All the internal vertices of  are not in , so in  , they only have two
+neighbors: their neighbors along the path . This also shows that the edges
+ are not in , because they all involve at least
+one of these internal vertices.</p>
+</details>
+<p>To recap, we’ve shown that in all cases, if we’ve picked , then we can
+continue by picking  that
+can be part of the ear decomposition. At each step, we add at least one
+edge that wasn’t in the partial ear decomposition yet; therefore we’re
+guaranteed to eventually build all of , and obtain an ear decomposition of
+. ◻</p>
+</div>
+<p>An important observation is that no matter how we’ve constructed
+, if we haven’t
+finished, then we can always choose  somehow. This makes the algorithm
+in the proof a greedy one! The initial cycle  can be any cycle, and later on, each
+ear  can be any ear. We don’t
+have to worry about making choices that lead us to a dead end later.</p>
+<p>In particular, the strategy of picking vertices , finding a   path, and seeing where it returns to
+ is just one way to guarantee
+that we find an ear. We do not have to follow this strategy if have an
+alternative. If we’re working with a small graph, such as the cube graph
+whose ear decomposition we found in <a class="booklink" href="#fig:cube-ear-decomposition">Figure 25.4</a>, then it’s much
+easier to just look at the graph and find an ear among the vertices and
+edges we haven’t included yet.</p>
+<details class="qa">
+<summary>Is there a shorter ear decomposition of
+the cube graph?</summary>
+<p>Yes and no. We can work to get to a
+spanning subgraph more quickly, at which point we just have edges to
+add; for example, we could let 
+be a Hamilton cycle in the cube graph. However, we’ll have to add those
+edges one at a time, and we’ll still have the same total number of
+steps.</p>
+</details>
+<p>In a practice problem at the end of this chapter, I’ll ask you to
+prove that this is always true: two ear decompositions of the same graph
+always have the same number of pieces.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="induction-on-ears">Induction on ears</h2>
+<p><a class="booklink" href="#thm:ear-decomposition">Theorem 25.4</a> can be thought of as an
+inductive definition of -connected
+graphs: a graph  is -connected if and only if it is either a
+cycle, or the result of adding an ear to a smaller -connected graph. Whenever we have such
+a definition of a combinatorial object of any kind, it suggests that
+induction is a good strategy for proving properties of such an object.
+(See <a class="booklink" href="../appendix/induction.html">Appendix B</a> for more details about
+such definitions.)</p>
+<p>Let me begin by giving you an example, which is an application of
+-connectedness to planar graphs.
+(I will be lighter on the geometric details, because they are not the
+focus here. In a more careful approach, using <a class="booklink" href="../planar/planar.html#lemma:planar-bridge">Lemma 21.2</a> to
+confirm that all edges must separate two faces is a key step.)</p>
+<div class="prop" id="prop:2-connected-planar">
+<p><strong>Proposition 25.5</strong>. <em>If a planar graph  is -connected, then in every plane
+embedding of , the boundary of
+every face is a single cycle.</em></p>
+</div>
+<details class="qa">
+<summary>What are all the ways in which the
+boundary of a face might fail to be a cycle?</summary>
+<p>It’s possible that a face has multiple
+boundary walks. This happens when 
+is not connected, and the face touches multiple components of .</p>
+<p>It’s possible that a boundary walk does not represent a cycle because
+repeats an edge; we know that this happens when the edge is a
+bridge.</p>
+<p>Finally, a boundary walk might not repeat any edges, but still repeat
+a vertex . In this case,  is a cut vertex; intuitively, because
+we can draw a closed curve in the face that only crosses the embedding
+at , and separates two parts of
+. In a plane embedding of  , the same closed curve will separate
+two connected components.</p>
+</details>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#prop:2-connected-planar">Proposition 25.5</a>.</em> Since  is planar, begin by picking a plane
+embedding of .</p>
+<p>Since  is -connected, let  be an ear
+decomposition of  (which exists by
+<a class="booklink" href="#thm:ear-decomposition">Theorem 25.4</a>) and let  .
+Since  is a subgraph of , the plane embedding of  contains a plane embedding of : just erase every vertex and edge of
+ that’s not in .</p>
+<p>We will prove by induction on 
+that in this plane embedding of , the boundary of every face is a
+single cycle. The base case is  .
+In this case,   is a cycle; in every plane embedding of the cycle, there are two faces, an inner
+face and an outer face, and the entire cycle is the boundary between
+them.</p>
+<p>Now assume for some   that
+in the plane embedding of ,
+the boundary of every face is a single cycle. Then  is obtained from  by adding the ear : a path whose ends are in , but whose internal vertices are
+not. In the plane embedding, this path cannot cross any edges of , so there must be some face  in  that contains it entirely. The
+boundary of  in  is a cycle, by the induction
+hypothesis.</p>
+<figure class="bookfig" id="fig:planar-ear-decomposition">
+
+<figcaption>In a plane embedding of the cube graph, each ear divides a
+face in two</figcaption>
+</figure>
+<p>In ,  is divided by  into two faces  . Their boundaries must share
+the path , and divide up the
+original boundary of  somehow. The
+only way to do this is by two cycles, each of which follows the boundary
+of  from one endpoint of  to the other, and returns along . See <a class="booklink" href="#fig:planar-ear-decomposition">Figure 25.5</a> for an
+illustration of such induction steps in a planar ear decomposition of
+the cube graph; in each diagram, the two faces divided by the recently
+added ear are shaded.</p>
+<p>This completes the induction. Now, <a class="booklink" href="#prop:2-connected-planar">Proposition 25.5</a> follows from the   case, because  is all of . ◻</p>
+</div>
+<p>In general, inducting on ear decompositions follows the pattern of
+this proof. First, we choose an ear decomposition, and verify that the
+claim holds for  (a cycle).
+Next, we verify that if the claim is true for , it holds for : in other words, that the claim
+continues to hold if we add an ear.</p>
+<p>Earlier, we observed that an ear decomposition can be found greedily;
+in particular, that we can begin the ear decomposition by choosing  to be any cycle we like. This is
+occasionally useful when writing a proof by induction, since we can make
+sure that some key vertices end up in .</p>
+<p>Of course, if we want to do this, we need to prove that the cycle we
+want exists, first. Once we’ve shown <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a>, it
+will be an excellent tool for the base case, because it’s all about
+cycles existing. Unfortunately, my plan for <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a> is to use an induction on ear
+decompositions! So we will need to begin with a silly lemma that will no
+longer be necessary once <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a> is
+there to replace it, but will be useful in that particular proof.</p>
+<div class="lemma" id="lemma:cycle-through-x">
+<p><strong>Lemma 25.6</strong>. <em>If  is -connected, and  is any vertex, then  has a cycle containing .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> To have any hope of finding a cycle through , we need to know that  has two neighbors. Well, if  had only one neighbor, we’d be able to
+delete that neighbor to disconnect  from the rest of the graph: the
+neighbor of  would be a cut
+vertex.</p>
+<p>So we can choose two neighbors of ; call them  and .</p>
+<p>Because  is -connected,   is still connected, and in particular
+there is a   path  in  . We obtain a cycle through  from  by adding vertex  and edges  to . ◻</p>
+</div>
+<details class="qa">
+<summary><a class="booklink" href="#thm:common-cycle">Theorem 25.1</a>
+would be false if we considered 
+to be a -connected graph, and so
+would <a class="booklink" href="#lemma:cycle-through-x">Lemma 25.6</a>. At which step would the
+proof fail, if  ?</summary>
+<p>When we talk about a vertex deletion that
+would “disconnect  from the rest
+of the graph”, we assume that there is a rest of the graph, which is
+false in the case of .</p>
+</details>
+<p>In the next section, we will see two more examples of induction on
+ear decompositions, and we will see how <a class="booklink" href="#lemma:cycle-through-x">Lemma 25.6</a> fits in.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="finding-common-cycles">Finding common cycles</h2>
+<p>Before we prove <a class="booklink" href="#thm:ear-decomposition">Theorem 25.4</a>, we will prove a second
+lemma. Unlike <a class="booklink" href="#lemma:cycle-through-x">Lemma 25.6</a>, this one remains useful
+in the study of -connected graphs;
+it’s not just a tool for this one particular proof.</p>
+<div class="lemma" id="lemma:path-through-x">
+<p><strong>Lemma 25.7</strong>. <em>If  is -connected, and  are any three vertices, then  contains a   path that passes through .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> By <a class="booklink" href="#lemma:cycle-through-x">Lemma 25.6</a>,  contains a cycle containing . Let  be an ear decomposition of  in which  is a cycle containing , and let  .
+We will prove by induction on 
+that if  and  are any two vertices in , then  contains a   path that passes through .</p>
+<p>When  , the graph  consists only of the ear : it is a cycle. No matter where  and  are on the cycle, there are two   paths going around the cycle from
+ in either direction, and one of
+them passes through , proving the
+base case.</p>
+<p>Now assume that for some   that the paths we want exist in . Then  is obtained from  by adding the ear . Let  and  be arbitrary vertices of ; we consider three cases for where
+they might be, illustrated in <a class="booklink" href="#fig:x-path-cases">Figure 25.6</a>.</p>
+<figure class="bookfig" id="fig:x-path-cases">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:x-path-case-1">
+
+<figcaption>Case 1</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:x-path-case-2">
+
+<figcaption>Case 2</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:x-path-case-3">
+
+<figcaption>Case 3</figcaption>
+</figure>
+</div>
+<figcaption>Three cases in the induction step of <a class="booklink" href="#lemma:path-through-x">Lemma 25.7</a></figcaption>
+</figure>
+<p><strong>Case 1.</strong> Both 
+and  are vertices of . By the induction hypothesis,
+ contains a   path through . This is also a path in .</p>
+<p><strong>Case 2.</strong> Only one of  and  is a vertex of ; without loss of generality,
+  and  is an internal vertex of . In this case, let  be the start or end of . By the induction hypothesis,  contains a   path through . We can extend it to a   path through  in  if we begin by going from  to  along the ear .</p>
+<p><strong>Case 3.</strong> Both 
+and  are internal vertices of
+. In this case, let  and  be the ends of  closer to  and to , respectively; that is,  is a path of the form . By the induction hypothesis,  contains a   path through . We can extend it to a   path through  in  if we begin by going from  to  and end by going from  to , both along the ear .</p>
+<p>In all cases, we’ve found the   path through  we wanted; therefore  contains such a path for any  . By induction, this is
+true for all  and in particular
+for  ; because  , this proves the lemma. ◻</p>
+</div>
+<p>With the aid of <a class="booklink" href="#lemma:add-ear">Lemma 25.3</a>, a
+second induction on the ear decomposition is now enough to prove
+<a class="booklink" href="#thm:common-cycle">Theorem 25.1</a> that any two vertices  and  of a -connected graph  lie on a common cycle.</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a>.</em> Let  and  be two vertices of a -connected graph ; we want to show that there is a cycle
+in  containing both  and .</p>
+<p>By <a class="booklink" href="#lemma:cycle-through-x">Lemma 25.6</a>,  contains a cycle containing . Let  be an ear decomposition of  in which  is a cycle containing , and let  .
+We will prove by induction on 
+that if  , then  contains a cycle that passes through
+both  and .</p>
+<p>When  , this is automatic:
+  is the cycle we want.</p>
+<p>Now assume for some   that
+every vertex   lies
+on a cycle in  that also
+passes through . We would like to
+prove the same thing for , which
+is obtained from  by adding
+the ear . Since we have the
+induction hypothesis, we only need to find a cycle through  and  when  is one of the new vertices: an internal
+vertex of .</p>
+<p>Let  and  be the ends of ear . By <a class="booklink" href="#lemma:cycle-through-x">Lemma 25.6</a>, there is a   path  in  passing through . The paths  and  have only their ends  and  in common: none of the internal
+vertices of  are in , and all vertices of  are. Therefore the union   is a cycle containing  (because  contains ) and  (because  contains ).</p>
+<p>By induction, for every   there is a cycle in  that passes through  and ; since  , this proves the theorem. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Give an example of each of the following:</p>
+<ol>
+<li><p>A -vertex graph with  cut vertices.</p></li>
+<li><p>A graph with the same number of vertices and edges as in (a), but
+only one cut vertex.</p></li>
+<li><p>A regular graph with only one cut vertex.</p></li>
+</ol>
+</li>
+<li>
+<p>Let  be a graph consisting
+of two copies of  joined at a
+vertex:</p>
+
+<p>How many spanning trees does 
+have?</p>
+</li>
+<li>
+<p>Suppose  has a cut vertex
+, and that the graphs  are the subgraphs
+of  meeting at  (as in <a class="booklink" href="#fig:cut-vertex-breakdown">Figure 25.2</a>).</p>
+<ol>
+<li><p>Explain why knowing the independence numbers  is not enough to find .</p></li>
+<li><p>Without knowing , if all I
+tell you is the values of , what are the minimum and
+maximum possible values of ?</p></li>
+</ol>
+</li>
+<li><p>Prove that if  is -connected, and  is a <em>subdivision</em> of  (as defined in <a class="booklink" href="../planar/testing.html">Chapter 22</a>), then  is -connected.</p></li>
+<li>
+<p>Find an ear decomposition of:</p>
+<ol>
+
+
+<li><p> for every .</p></li>
+</ol>
+</li>
+<li>
+<p>You might wonder: is there a shortest ear decomposition in a
+graph? In fact, every ear decomposition contains the same number of
+pieces.</p>
+<ol>
+<li>
+<p>Suppose that  has the ear
+decomposition ,
+where  is a cycle of length
+ and for each  ,  is a path of length .</p>
+<p>Find the number of edges in  in
+terms of .</p>
+</li>
+<li><p>Find the number of vertices in  in terms of .</p></li>
+<li>
+<p>If  has  vertices,  edges, and  ears in an ear decomposition, find a
+relationship between , , and  from your answers to the first two
+parts.</p>
+<p>Conclude that the value of  is
+predetermined by , and doesn’t
+depend on the ear decomposition.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>One way to interpret <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a> is
+that for any two vertices  in a
+-connected graph , there are two   paths that share none of their
+internal vertices. (Such paths are said to be <em>internally
+disjoint</em>, a term we will introduce in <a class="booklink" href="../connectivity/connectivity.html">Chapter 26</a>.) Here is an
+INCORRECT proof of a FALSE generalization:</p>
+<p><strong>Claim.</strong> If  is
+-connected and  is any   path, there is a second   path  that shares no vertices with  other than  and .</p>
+<p><strong>“Proof”.</strong> Suppose there is no such path . That means that all other paths
+ end up sharing some other
+vertex of . But then, deleting
+that vertex of  destroys all   paths, and so that vertex was a cut
+vertex. This cannot happen in a -connected graph; contradiction! So a
+path  must exist.</p>
+<ol>
+<li><p>Point out the mistake in the proof.</p></li>
+<li><p>Give a counterexample to the claim.</p></li>
+</ol>
+</li>
+<li>
+<p>Let  be a connected graph
+with at least  vertices in which
+ is a bridge (that is,   is not connected.)</p>
+<ol>
+<li><p>Prove that either  or  is a cut vertex of . Give an example showing that they’re
+not necessarily both cut vertices of .</p></li>
+<li><p>Prove that  is a cut
+vertex of the line graph .</p></li>
+</ol>
+</li>
+<li>
+<p>In a -regular graph:</p>
+<ol>
+<li><p>Prove that a vertex  is a
+cut vertex if and only if it is incident to a bridge.</p></li>
+<li><p>Prove that every cut vertex is incident to either  or  bridges.</p></li>
+<li><p>Prove that the number of cut vertices is even.</p></li>
+</ol>
+</li>
+<li>
+<p>The ear decompositions in this chapter are sometimes called
+proper ear decompositions. There is also a corresponding notion of
+improper ear decompositions. In the improper case, an ear of a graph
+ is also allowed to
+be a cycle in which every vertex except one has degree . (That is, when we add an ear, we are
+allowed to start and end at the same vertex.)</p>
+<ol>
+<li><p>Prove by example that a graph with an improper ear decomposition
+is not necessarily -connected.</p></li>
+</ol>
+<p>Instead, improper ear decompositions correspond to
+<em>2-edge-connected</em> graphs: connected graphs with no bridges.
+(These are a special case of a definition we will make in <a class="booklink" href="../connectivity/connectivity.html">Chapter 26</a>.)</p>
+<ol>
+<li><p>Prove that if a graph  has
+an improper ear decomposition, then it is 2-edge-connected.</p></li>
+<li><p>Prove that if a graph is 2-edge-connected, then it has an
+improper ear decomposition.</p></li>
+</ol>
+</li>
+<li>
+<p>There is an alternate proof of <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a> which does not use ear
+decompositions. Instead, we prove that any two vertices  lie on a common cycle (equivalently,
+there are two   paths with no
+internal vertices in common) by inducting on the distance .</p>
+<ol>
+<li><p>For the base case, prove (without relying on any of our other
+results) that if  is -connected, then for any edge  , there is a cycle containing
+.</p></li>
+<li>
+<p>For the induction step, we assume that <a class="booklink" href="#thm:common-cycle">Theorem 25.1</a> holds for any two vertices at
+some distance  , and let
+ and  be two vertices with  . To apply the induction
+hypothesis, we let  be the first
+vertex on a shortest   path, so
+that  . Let  and  be two internally disjoint   paths, and let  be an   path in  , as shown below:</p>
+
+<p>Prove that no matter how 
+intersects  and , we can find two   paths with no internal vertices in
+common.</p>
+</li>
+</ol>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>I am also making this an italicized, “minor” definition,
+because in <a class="booklink" href="../connectivity/connectivity.html">Chapter 26</a>, we will define
+what it means for a graph to be <em>-connected</em>, and will not need to
+refer to this special case again.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+<li id="fn2"><p>An “improper” ear decomposition should maybe be called a
+“not-necessarily-proper” ear decomposition: it could be proper, it just
+doesn’t have to be.<a class="footnote-back" href="#fnref2">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 25</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

@@ -1,0 +1,17 @@
+---
+title: hook-dsh-ccr
+line9:
+    theme: boardroom
+---
+flowchart LR
+	seamPost("tools/post-execute") -->|registers| plugin(hook-dsh-ccr)
+	seamPre("agent/pre-step") -->|registers| plugin
+	seamFactory(pluginFactory) -->|injects| plugin
+	seamTools(tools) -->|injects| plugin
+	plugin -->|registers| prodTool(ccr_retrieve)
+	plugin -->|writes| prodLedger("ledger hook-dsh-ccr.log")
+	plugin -->|writes| prodJournal("store journal JSONL")
+	plugin -->|emits| prodPreview("preview plus marker")
+	class seamPost,seamPre,seamFactory,seamTools seam
+	class plugin plugin
+	class prodTool,prodLedger,prodJournal,prodPreview product

@@ -17,6 +17,13 @@
 //
 //   Interface - the pack schema (Pack, Family, Signal, Target, Indexer,
 //   Policy, Learning), the locator's answer and the resolution seam.
+import Version from "./Variable/Version.js";
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define). This package has NO loader contract and NO Config - the
+// version sits beside the other named exports; it is not a loader key.
+export { Version };
+
 export { default as Builtin } from "./Variable/Builtin.js";
 export { default as Signature } from "./Variable/Signature.js";
 export { default as Placement } from "./Variable/Placement.js";

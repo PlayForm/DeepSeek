@@ -100,7 +100,6 @@ The identity lives in four agreeing places: the package name, the `name` export,
   Configuration/
     ESBuild.ts            the build config
     ESBuild.js            the twin the build loader swaps to
-    TypeScript.noemit.json
   Target/                 the build output (never hand-edited)
 ```
 
@@ -109,16 +108,19 @@ output paths by the build.
 
 ## The build
 
-`prepublishOnly` runs, in order:
+`prepublishOnly` runs one command:
 
 ```text
-Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts \
-  --TypeScript Configuration/TypeScript.noemit.json
-&& tsc -p tsconfig.json
-&& tsc-alias -f -p tsconfig.json
+Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts
 ```
 
-A red `tsc` fails the build; there is no waiver.
+`Build` owns the whole chain: ESBuild writes `Target/*.js`, its own `tsc -p tsconfig.json` pass
+(emitDeclarationOnly) writes `Target/*.d.ts`, and its own `tsc-alias -f -p tsconfig.json` pass
+rewrites the Source aliases to relative output paths in `Target/`. `tsconfig.json` is the only
+TypeScript config in a package - there is no second config and no separate `tsc` step.
+
+The tsc pass reports diagnostics without failing the build, so `pnpm run test:types` is the gate
+that goes red.
 
 Rebuild the factory before any consumer: consumers type-check against its built `Target/`.
 

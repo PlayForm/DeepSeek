@@ -1,3 +1,5 @@
+import Version from "./Variable/Version.js";
+export { Version };
 export { default as Names } from "./Variable/Names.js";
 export { default as Bound } from "./Variable/Bound.js";
 export { default as Complete } from "./Function/Complete.js";

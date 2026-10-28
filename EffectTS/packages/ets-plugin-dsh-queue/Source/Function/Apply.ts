@@ -25,10 +25,7 @@ import Validate from "@Function/Validate.js";
 import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
-
-// The bundle version, mirrored from package.json (the activation proof's
-// first field; a release bumps both together).
-const Version = "0.3.0";
+import Version from "@Variable/Version.js";
 
 export default (Context: Context, Options: Config): void => {
 	// Fail-loud validation BEFORE the State build: invalid config throws at

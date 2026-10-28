@@ -1,5 +1,5 @@
-import { type AgentState, type BlockSpecification, type Variables } from "@Interface/Execution.js";
-import type State from "@Interface/State.js";
+import { type AgentState, type BlockSpecification, type Variables } from "../Interface/Execution.js";
+import type State from "../Interface/State.js";
 /** The ledger sink Apply passes down (Factory.Append with the State bound). */
 export type Log = (Message: string) => void;
 /** Substitute {{token}} groups from the variable table. A token the table

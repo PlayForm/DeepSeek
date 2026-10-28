@@ -1,0 +1,713 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Euler Tours</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 8</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>This chapter concludes the part of this book devoted to vertex
+degrees. It is an application of the concept of vertex degrees, as well
+as some results from <a class="booklink" href="../beginning/degrees.html">Chapter 4</a>, to
+solve a problem that could be said to be the beginning of graph
+theory.</p>
+<p>There is a striking contrast in graph theory between the theory of
+Euler tours and Eulerian graphs, discussed in this chapter, and the
+theorem of Hamilton cycles and Hamiltonian graphs, discussed in
+<a class="booklink" href="../hard/hamilton.html">Chapter 17</a>. Superficially, the two
+problems are very similar, yet we are able to pin down the exact
+circumstances in which an Euler tour exists; for Hamiltonian cycles,
+hard work is required in most cases.</p>
+<p>Everything we say about the Euler tour problem for graphs remains
+true for multigraphs, with no substantial change. For directed graphs,
+the situation is a bit more complicated, and it is discussed at the end
+of the chapter. However, many of the important applications of Euler
+tours, such as the one in <a class="booklink" href="../hard/line.html">Chapter 20</a>, are
+applications to directed graphs, so this is an important case of the
+problem to understand.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="dont-lift-your-pencil">Don’t lift your pencil!</h2>
+<figure class="bookfig" id="fig:pencil-drawings">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:challenge-1">
+
+<figcaption>Can you draw this figure without lifting your
+pencil?</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:solution-1">
+
+<figcaption>Solution to the challenge in <a class="booklink" href="#fig:challenge-1">Figure 8.1(a)</a></figcaption>
+</figure>
+<figure class="booksubfig" id="fig:challenge-multigraph">
+
+<figcaption>Modeling the puzzle as a multigraph</figcaption>
+</figure>
+</div>
+<figcaption>Drawing without lifting your pencil</figcaption>
+</figure>
+<p>You might have seen a brainteaser like this before! Look at the
+diagram in <a class="booklink" href="#fig:challenge-1">Figure 8.1(a)</a>. Can you draw this shape on
+paper without lifting your pencil (or pen), and without going over the
+same line more than once?</p>
+<p>You can: <a class="booklink" href="#fig:solution-1">Figure 8.1(b)</a> shows you one particularly
+symmetric way to do it. (To make it clear what the solution is, the
+lines are bent away from each other slightly to indicate where the path
+does or does not cross itself.) As a bonus, the path in <a class="booklink" href="#fig:solution-1">Figure 8.1(b)</a> returns to where it started.</p>
+<p>This is a book on graph theory, though, not on pencil drawings. So
+what does this question have to do with graph theory? This is the same
+question that this book started with: how do we model this problem as a
+graph?</p>
+<p>The places in the drawing that matter most are the places where
+several lines meet: when tracing the drawing with your pencil, those are
+the only places where we make a decision. So it makes sense to have a
+vertex for each of those points. The rest of the drawing consists of
+lines that go from one such point to another, and their shape does not
+matter for solving the puzzle: only the starting and ending point
+matters. So for every such line, we will add an edge between the two
+vertices it joins. If we apply idea to <a class="booklink" href="#fig:challenge-1">Figure 8.1(a)</a>, the
+result is shown in <a class="booklink" href="#fig:challenge-multigraph">Figure 8.1(c)</a>.</p>
+<details class="qa">
+<summary>The result is a multigraph; how did that
+happen?</summary>
+<p>We get parallel edges whenever there are
+two or more lines that start and end at the same pair of intersection
+points.</p>
+</details>
+<details class="qa">
+<summary>What sort of graph-theoretic object are we
+looking for when we solve the brainteaser?</summary>
+<p>We are looking for a walk in the graph
+which uses every edge exactly once.</p>
+</details>
+<p>There are two other well-known puzzles that are an instance of the
+same type of problem. One is the five rooms puzzle, shown in <a class="booklink" href="#fig:five-rooms">Figure 8.2(a)</a>. Here, five rooms are connected
+by a total of  doors, and the
+challenge is to plot a path through the rooms that passes exactly once
+through every door.</p>
+<figure class="bookfig" id="fig:euler-puzzles">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:five-rooms">
+
+<figcaption>The five rooms puzzle</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:konigsberg">
+
+<figcaption>The bridges of Königsberg</figcaption>
+</figure>
+</div>
+<figcaption>Two more puzzles equivalent to pencil drawing</figcaption>
+</figure>
+<details class="qa">
+<summary>What should the vertices and edges be in
+the multigraph that makes the five rooms puzzle equivalent to the
+pencil-drawing puzzle?</summary>
+<p>There should be six vertices: one for each
+room, where we consider the outside region to be a room as well. Each
+door between two rooms should be an edge incident to both rooms.</p>
+</details>
+<p>Another such puzzle, the problem of the seven bridges of Königsberg,
+has historical significance. It was first studied by Leonhard Euler, in
+1736 , and it may be
+one of the first mathematical problems to be abstracted into a
+graph-theoretic model before being solved. (It predates modern graph
+theory, so the terminology used by Euler was quite different from what
+you are reading here.) The problem itself is based on a map of the city
+of Königsberg, shown somewhat abstractly in <a class="booklink" href="#fig:konigsberg">Figure 8.2(b)</a>. In Euler’s time, there were
+seven bridges connecting the two sides of the river and the two large
+islands in the middle of the river. The challenge was to find a path
+through the city that crossed each bridge exactly once.</p>
+<details class="qa">
+<summary>What should the vertices and edges be in
+the multigraph that models the bridges of Königsberg?</summary>
+<p>There should be a vertex for each of the
+four landmasses, with an edge for every bridge.</p>
+</details>
+<p>The problem we are solving in all three of these puzzles is named in
+Euler’s honor.</p>
+<div class="defn">
+<p><strong>Definition 8.1</strong>. <em>A walk that contains every edge
+of a graph or multigraph exactly once is called an <strong>Euler
+walk</strong>. If, additionally, the Euler walk is closed, it is called
+an <strong>Euler tour</strong>.</em></p>
+</div>
+<p>All three puzzles we have looked at are about finding an Euler walk.
+Even though the solution in <a class="booklink" href="#fig:solution-1">Figure 8.1(b)</a>
+happens to be an Euler tour, we have not had a reason to consider Euler
+tours for their own sake so far. However, you are about to see in this
+chapter that Euler tours are actually the more fundamental and more
+natural object. This is reflected in the following definition:</p>
+<div class="defn">
+<p><strong>Definition 8.2</strong>. <em>A graph or multigraph is called
+<strong>Eulerian</strong> if it has an Euler tour.</em></p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="first-steps">First steps</h2>
+<p>The key to determining whether an Euler walk or Euler tour exists
+turns out to depend on the degree of the vertices. To simplify
+terminology just for this chapter, we will call a vertex <em>odd</em> or
+<em>even</em> if it has odd degree or even degree, respectively.</p>
+<p>The following result does not completely answer our question, but is
+easier to prove than the main theorem of this chapter, so it is where we
+will begin. I will give the proof in the language of multigraphs, so
+that we can be sure it works even then.</p>
+<div class="lemma" id="lemma:even-is-necessary">
+<p><strong>Lemma 8.1</strong>. <em>In an Eulerian multigraph, every
+vertex must be even.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  be an
+Eulerian multigraph, and let the walk  with   be an Euler tour of . We prove a stronger statement: if a
+vertex  appears  times among , then  . Intuitively, the argument
+for this is that if we follow the Euler tour around , then every time the tour enters and
+leaves , it uses  more edges incident to .</p>
+<p>Formally, let  be the set  : the set of all positive positions in the Euler tour where
+ appears. If  , then the  edges   and the 
+edges   are all
+the edges incident to ,
+contributing  to . This has two caveats:</p>
+<ul>
+<li><p>If   for
+some , then edge  is double-counted in the argument
+above. However, in this case, edge  is a loop with both endpoints at
+, contributing  to : it should be
+double-counted.</p></li>
+<li><p>If  , then there is no
+edge  to count. However, in
+this case,   as well, so edge
+ should be counted
+instead.</p></li>
+</ul>
+<p>So in both unusual cases, the total contribution to the degree of
+ is still .</p>
+<p>Every edge of  appears in the
+Euler tour exactly once, and so by counting the contribution of edges
+ to the degree of
+, we compute the degree
+completely. This shows that  , an even number; since  was arbitrary, all vertices must be
+even. ◻</p>
+</div>
+<details class="qa">
+<summary>Why doesn’t <a class="booklink" href="#lemma:even-is-necessary">Lemma 8.1</a> solve the problem
+completely?</summary>
+<p>If every vertex in a multigraph is even,
+the lemma doesn’t guarantee that the multigraph really does have an
+Euler tour.</p>
+</details>
+<p>In other words, we have shown that the condition “every vertex in
+ is even” is a necessary condition
+for  to be Eulerian: that is,
+ can’t be Eulerian without it. We
+have not determined whether it is a sufficient condition for  to be Eulerian: whether all graphs that
+satisfy the condition do in fact have Euler tours.</p>
+<details class="qa">
+<summary>If  were an Euler walk, but not an
+Euler tour, what would change in the proof of <a class="booklink" href="#lemma:even-is-necessary">Lemma 8.1</a>?</summary>
+<p>When  , it would no longer be true that
+  as well, so the degree of
+ would be   rather than :  would be odd. Also, when  , the argument wouldn’t “notice” the
+contribution of edge  to ’s degree, because  only contains positive integers, so
+ would be odd in this cases as
+well.</p>
+</details>
+<p>Following this reasoning carefully gives us the following claim:</p>
+<div class="lemma" id="lemma:necessary-for-walk">
+<p><strong>Lemma 8.2</strong>. <em>If a multigraph  has an   Euler walk, where  , then vertices  and  must be odd, while all other vertices
+must be even.</em></p>
+</div>
+<details class="qa">
+<summary>Which of the puzzles in <a class="booklink" href="#fig:euler-puzzles">Figure 8.2</a> have solutions?</summary>
+<p>Neither puzzle has a solution. If we
+convert them to multigraphs, then in both cases there will be four odd
+vertices. However, <a class="booklink" href="#lemma:necessary-for-walk">Lemma 8.2</a> implies that a graph
+with an Euler walk can have at most two odd vertices.</p>
+</details>
+<p>The condition “at most two odd vertices” is a bit more complicated
+than the condition “no odd vertices”, but that’s not the real reason
+that Euler tours are taken to be more fundamental than Euler walks.</p>
+<p>Imagine for a moment that we had a method for finding Euler tours,
+but not Euler walks, and suppose that we were faced with a graph  where only two vertices,  and , were odd. Well, we could fix this
+quite easily: we could simply add an edge  with endpoints  and . In the new graph
+, all vertices would be even, so
+ would have an Euler tour.</p>
+<p>In our imagination, we already have a method for finding Euler tours,
+so we could easily find an Euler tour in . That Euler tour would have to use the
+new edge  at some point. Well, if
+we simply delete edge  from the
+tour, we could follow the tour starting from  and visit all the other edges, ending
+at . This is an Euler walk in
+.</p>
+<p>Outside our imagination, we don’t have any systematic method of
+finding Euler walks or Euler tours, yet. However, this argument lets us
+reduce the Euler walk problem to the Euler tour problem. It tells us
+that all we need to focus on is finding Euler tours in graphs where all
+vertices are even. As soon as we find an algorithm to do this, we will
+immediately have an algorithm for Euler walks as well!</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="cycle-decompositions">Cycle decompositions</h2>
+<p>Let’s take a detour and consider cycle
+decompositions.</p>
+<p>In general, a decomposition of 
+is a set of subgraphs  such that every edge of  is an edge of exactly one subgraph
+. We have already seen one kind
+of decomposition: the decomposition of a graph into its connected
+components. We will encounter two other examples of decompositions
+later: -factorizations in
+<a class="booklink" href="../matchings/general.html">Chapter 16</a> and ear decompositions in
+<a class="booklink" href="../connectivity/cut-vertices.html">Chapter 25</a>.</p>
+<p>In particular, a <em>cycle decomposition</em> of  is a set of cycles in  such that every edge of  is an edge of exactly one of the
+cycles. This uses the terminology in a straightforward way, but one
+thing is awkward: the notation. We cannot write a cycle decomposition
+, because
+the notation  already refers to
+the -vertex cycle graph. When we
+must, we resort to a standard option all mathematicians take when not
+allowed to use subscripts: use superscripts instead, writing the cycle
+decomposition as .</p>
+<p>When studying the Euler tour problem in 1912, Oswald Veblen realized
+that a single closed walk and a collection of many cycles share a common
+feature: in both cases, if they visit a vertex  times, they use  edges incident to that vertex.
+Therefore the necessary condition for Eulerian graphs is also necessary
+for having a cycle decomposition. However, Veblen was able to
+prove  that for
+cycle decompositions, this condition is both necessary and
+sufficient!</p>
+<p>A key step of this proof uses <a class="booklink" href="../beginning/degrees.html#thm:min-degree-cycle">Theorem 4.4</a>: if a
+graph has minimum degree at least , then it contains a cycle. We proved
+this theorem for simple graphs, but if you go back and examine our
+argument, you should be able to convince yourself that it can be carried
+out in multigraphs as well.</p>
+<details class="qa">
+<summary>Alternatively, there is a way to
+generalize the theorem to multigraphs without looking at the proof of
+<a class="booklink" href="../beginning/degrees.html#thm:min-degree-cycle">Theorem 4.4</a> at all.
+How?</summary>
+<p>If a multigraph has a loop, it has a cycle
+of length , and if it has two
+parallel edges, it has a cycle of length . In both cases, we already get the
+conclusion we want. If the multigraph has neither of these, then we can
+think of it as a simple graph.</p>
+</details>
+<div class="theorem" id="thm:veblen">
+<p><strong>Theorem 8.3</strong>. <em>A graph has a cycle decomposition
+if and only if all of its vertices are even.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Suppose first that  is a graph with a cycle decomposition
+, and let  be an arbitrary vertex of .</p>
+<p>Cycles are -regular graphs, so
+for every cycle  
+with  ,  . Together, the cycles in
+ include each edge of
+ exactly once, so we can split up
+the degree  as a sum over
+the degree of  on cycles. Let
+ be the set of all
+cycles in  containing
+: then  In particular,
+ must be even.</p>
+<p>This argument shows that the condition is necessary; now, we must
+prove that it is sufficient. So let  be a graph in which all vertices are
+even; our task is to find a cycle decomposition of . We will do this by strong induction on
+the number of edges in . As our
+base case, if  has  edges, then the empty set is a cycle
+decomposition: it includes every edge exactly once, because there are no
+edges to include.</p>
+<p>Suppose  has   edges. Pick any connected
+component of  that has at least
+one edge. In that component, no vertices can have degree : an isolated vertex would be a
+component with no edges, all by itself. Also, no vertices can have
+degree : by assumption, all
+vertices in  are even. Therefore
+the component has minimum degree at least . By <a class="booklink" href="../beginning/degrees.html#thm:min-degree-cycle">Theorem 4.4</a>, this
+component contains a cycle .</p>
+<figure class="bookfig" id="fig:veblen-example">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:veblen-start">
+
+<figcaption>The initial graph </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:veblen-cycle">
+
+<figcaption>Deleting a cycle </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:veblen-end">
+
+<figcaption>Vertex degrees in  </figcaption>
+</figure>
+</div>
+<figcaption>Finding a cycle decomposition, one cycle at a
+time</figcaption>
+</figure>
+<p>In   (the graph we get by
+deleting the edges of , leaving
+the vertices as they are), all vertices are still even: the degree of
+every vertex that lies on  goes
+down by , and all other degrees
+are unchanged. (An example of such a deletion is illustrated in
+<a class="booklink" href="#fig:veblen-example">Figure 8.3</a>.) Also,   has fewer than  edges (since  has at least one edge), so our
+induction hypothesis applies to it:   has a cycle decomposition. Add  to that cycle decomposition, and we get
+a cycle decomposition of .</p>
+<p>By induction, a cycle decomposition exists for any number of
+edges. ◻</p>
+</div>
+<p>This proof also gives us an algorithm for finding a cycle
+decomposition. Simply find any cycle, set it aside, and repeat with the
+remainder of the graph until we are out of edges. How do we find a
+cycle? Well, the proof of <a class="booklink" href="../beginning/degrees.html#thm:min-degree-cycle">Theorem 4.4</a> begins
+by taking a longest path, but this is done only to simplify the proof.
+Really, we can build up a path by aimless wandering through the graph,
+taking care only not to leave a vertex by the same edge we used to enter
+it. As soon as we revisit the vertex, we obtain a cycle in the same way
+that we obtained it from the longest path.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="gluing-cycles-together">Gluing cycles together</h2>
+<p>Before we go on, let me clear the air about one thing: the condition
+that all vertices are even is not sufficient to guarantee that a graph
+is Eulerian. However, the exception is rather silly.</p>
+<details class="qa">
+<summary>How can you find a graph where all
+vertices are even, but which does not have an Euler tour? (Small
+examples include a multigraph with  edges and a simple graph with  edges.)</summary>
+<p>Just make sure that your graph has
+multiple connected components with edges in them! A walk can never jump
+from one component to another, so you can never include all edges of the
+graph in a single walk.</p>
+</details>
+<p>This is a minor quibble; we will be fine if we restrict our attention
+to connected graphs. We can even allow graphs with multiple components,
+as long as all components except for one are merely isolated vertices.
+The cycle decomposition we get from <a class="booklink" href="#thm:veblen">Theorem 8.3</a> is the key
+ingredient in putting together an Euler tour.</p>
+<div class="theorem" id="thm:eulerian">
+<p><strong>Theorem 8.4</strong>. <em>A graph is Eulerian if and only if
+it is connected (except possibly for isolated vertices) and all of its
+vertices are even.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We know that both parts of this condition are
+necessary: by <a class="booklink" href="#lemma:even-is-necessary">Lemma 8.1</a>, all vertices must be
+even, and we have just discussed why the graph cannot have two
+components with edges. It remains to show that together, these two
+conditions are sufficient.</p>
+<p>Let  be a graph which has only
+one connected component aside from isolated vertices, and in which every
+vertex of  is even. For
+simplicity, delete all the isolated vertices (which will not affect our
+argument) so that we can simply assume  is connected. (If  has only isolated vertices, then a walk
+of length  is an Euler tour.) The
+first thing we’ll do is use <a class="booklink" href="#thm:veblen">Theorem 8.3</a> to find a
+cycle decomposition  of
+.</p>
+<p>Next, we’ll build an Euler tour step by step. This is a proof by
+algorithm. Throughout this process, we will update the following
+objects:</p>
+<ul>
+<li><p>a “partial tour” , which
+is a closed walk that uses each edge at most once, but might miss some
+edges.</p></li>
+<li><p>A subgraph  whose edges are
+exactly the edges missed by .</p></li>
+<li><p>A set  of
+“unprocessed cycles”: a cycle decomposition of .</p></li>
+</ul>
+<p>Initially, we’ll take  to be a
+walk representing one cycle  . Let  , and
+let  . We will stop when  .</p>
+<p>One by one, we will remove a cycle from , and splice it into . To make this possible, it’s important
+to find a cycle in  that
+contains one of the vertices visited by .</p>
+<p>There must always be such a cycle! Assuming otherwise, let  be the set of vertices visited by :  is not empty, but also does not contain
+any vertices of the cycles in . Every edge of  is
+either used by  (and joins two
+vertices in ) or is an edge of a
+cycle in  (and joins two
+vertices not in ). No edge of
+ has exactly one endpoint in , and by <a class="booklink" href="../beginning/walks.html#lemma:disconnected">Lemma 3.2</a>,  is not connected, which is a
+contradiction.</p>
+<p>So let’s suppose that we have found such a cycle . Let  be the closed walk  and
+let   be a cycle
+containing a vertex . Choose a
+closed walk  to represent  with
+the property that  . Then
+to incorporate  into , replace  by the closed walk 
+That is, the vertex  is replaced
+by the entire closed walk representing . Replace  by  , and  by
+ .</p>
+<p>After this process, every edge used by the old  is still used by the new , and so is every edge in : after all,  , and all of these appear as pairs of consecutive
+vertices in the new . Therefore
+ is still the subgraph whose edges
+are exactly the edges missed by ,
+and  is still a cycle
+decomposition of . Also, it’s
+still true that the new  uses
+every edge at most once: all of the new edges came from , so they did not appear in the old
+.</p>
+<p>Repeat this until  is
+empty. Throughout the algorithm, it’s been true that all edges of  are either part of , or part of a cycle in . Now that there are no cycles
+in , all edges must be
+part of , so  is an Euler tour. ◻</p>
+</div>
+<p>To truly understand the proof and the algorithm, let’s go through an
+example, finding an Euler tour of the graph in <a class="booklink" href="#fig:example-eulerian-graph">Figure 8.4(a)</a>. We will begin with
+a cycle decomposition. The one shown in <a class="booklink" href="#fig:example-cycle-decomposition">Figure 8.4(b)</a> is actually
+not the best one to use—life would be easier for us if we had fewer
+longer cycles. The decomposition with many short cycles will let us see
+more steps of the algorithm in action.</p>
+<figure class="bookfig" id="fig:example-euler-algorithm">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:example-eulerian-graph">
+
+<figcaption>A modified cube graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:example-cycle-decomposition">
+
+<figcaption>A cycle decomposition </figcaption>
+</figure>
+</div>
+<figcaption>A graph and its cycle decomposition, in preparation for
+finding an Euler tour</figcaption>
+</figure>
+<ol>
+<li><p>Initially, our partial tour  is a walk  representing .</p></li>
+<li>
+<p>Next, we want to add a cycle that shares a vertex with : that is, we can’t use . Let’s take  instead;  would also work.</p>
+<p>The only vertex of 
+appearing on  is vertex . So we choose to represent  by the closed walk , and replace the  in  by this closed walk: now, </p>
+</li>
+<li><p>At this point,  has lots
+of vertices, so we can add either remaining cycle. Let’s add . It shares vertex  with , so we represent  by  and splice it into : now, </p></li>
+<li><p>Finally, only  is
+left to add; it shares many vertices with , but in particular, it shares vertex
+, so we choose to represent it by
+. We replace
+the first occurrence of  in  by this closed walk, getting the final
+result: </p></li>
+</ol>
+<p>To check that  is an Euler
+tour for yourself, draw all the vertices of the graph in <a class="booklink" href="#fig:example-eulerian-graph">Figure 8.4(a)</a>, with no edges
+between them. Then, follow ,
+drawing each edge as you use it. As you go, check that you never draw an
+edge more than once; at the end, check that you have drawn all of
+<a class="booklink" href="#fig:example-eulerian-graph">Figure 8.4(a)</a>.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="variations-on-euler-tours">Variations on Euler tours</h2>
+<p>Of course, now that we have an algorithm for Euler tours, we
+immediately have an algorithm for Euler walks, as well as a test for
+their existence. The only thing that changes is that a graph with two
+odd vertices can still have an Euler walk.</p>
+<details class="qa">
+<summary>In a graph with exactly two odd vertices,
+is it possible for them to be in different connected components?</summary>
+<p>It is not: if this happened, then looking
+at one of those components by itself, we’d see a subgraph with only one
+odd vertex. However, by <a class="booklink" href="../beginning/degrees.html#cor:odd-vertices">Corollary 4.2</a> to the
+handshake lemma, the number of odd vertices in any graph is even.</p>
+</details>
+<details class="qa">
+<summary>Can you think of a way to modify the
+algorithm for Euler tours so that it finds an   Euler walk instead?</summary>
+<p>Instead of a partial tour , begin with a partial walk  representing an   path , and let  . In , all
+vertices are even, so we can take  to be a cycle decomposition of . From here, the algorithm can be
+continued as before.</p>
+</details>
+<p>Another interesting problem is the problem of finding Euler tours in
+a directed graph. The first novelty in the directed setting is that we
+no longer check for whether a vertex is even: entering and leaving a
+vertex has a different effect on its indegree and outdegree.</p>
+<details class="qa">
+<summary>If a directed graph  has an Euler tour, what can you say
+about the degree of a vertex that appears on the tour  times?</summary>
+<p>Each arc into the vertex adds  to its indegree, and each arc out of
+the vertex adds  to its outdegree.
+Thus, the vertex will have indegree  and outdegree .</p>
+</details>
+<details class="qa">
+<summary>What, then, is the corresponding necessary
+condition for a digraph to be Eulerian?</summary>
+<p>Every vertex must have an indegree equal
+to its outdegree. (We can call such vertices <em>balanced</em>.)</p>
+</details>
+<p>To prove a necessary and sufficient condition for directed graphs, we
+must retrace the steps we took in the undirected setting. The only new
+ingredient is the result we use to find a single cycle; we proved it in
+<a class="booklink" href="../degrees/multigraphs.html">Chapter 7</a>. Can you
+anticipate it before it is used?</p>
+<div class="lemma" id="lemma:directed-veblen">
+<p><strong>Lemma 8.5</strong>. <em>A digraph has a cycle decomposition
+if and only if all of its vertices are balanced.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Suppose first that  is a digraph with a cycle decomposition
+, and let  be an arbitrary vertex of .</p>
+<p>In the directed cycle graph , every vertex has
+indegree  and outdegree . Together, the cycles in  include each arc of  exactly once, so we can split up the
+indegree and outdegree of  as a
+sum over cycles. Let 
+be the set of all cycles in  containing : then  In particular,  :  is balanced.</p>
+<p>This argument shows that the degree condition is necessary; now, we
+must prove that it is sufficient. So let  be a digraph in which all vertices are
+balanced; our task is to find a cycle decomposition of . We will do this by strong induction on
+the number of arcs in . As our
+base case, if  has  arcs, then the empty set is a cycle
+decomposition: it includes every arc exactly once, because there are no
+arcs to include.</p>
+<p>Suppose  has   arcs; the same is true if we pass
+to  by deleting all isolated
+vertices of . If a balanced vertex
+has outdegree , it also has
+indegree , so it is an isolated
+vertex; therefore for all  ,  . By <a class="booklink" href="../degrees/multigraphs.html#thm:no-sink-cycle">Theorem 7.2</a>,  contains a cycle .</p>
+<p>Delete the arcs of  from  to get a digraph   with fewer arcs: by the induction
+hypothesis, it has a cycle decomposition. Add  to that decomposition to obtain a cycle
+decomposition of , completing the
+proof. ◻</p>
+</div>
+<p>Starting from a cycle decomposition, the algorithm for finding an
+Euler tour is the same as it was for undirected graphs. However, there
+is a further difficulty with stating the final result. We do not know
+exactly which graphs it applies to, because do not yet know what it
+means for a directed graph to be connected.</p>
+<p>I will give you the statement first, and then we will determine what
+it means. This is the proper way to go about it: we figure out what we
+should prove by figuring out the assumptions we need to use.</p>
+<div class="corollary" id="cor:eulerian-digraph">
+<p><strong>Corollary 8.6</strong>. <em>A directed graph is Eulerian if
+and only if it is weakly connected (except possibly for isolated
+vertices) and all of its vertices are balanced.</em></p>
+</div>
+<p>The proof is the same as the proof of <a class="booklink" href="#thm:eulerian">Theorem 8.4</a>: we
+start with a cycle decomposition, and splice the cycles into a partial
+Euler tour, one by one.</p>
+<details class="qa">
+<summary>Looking at the proof of <a class="booklink" href="#thm:eulerian">Theorem 8.4</a>, where did we need the graph to be
+connected?</summary>
+<p>We needed it to be impossible for the
+partial tour  and the unused
+cycles  to have no
+vertices in common.</p>
+</details>
+<p>So the notion of connectedness we need is simply that it should be
+impossible to split the vertices of our digraph  into two sets, with no arcs between
+them in either direction: that’s what we’d get if  and the cycles of  shared no vertices. This is a
+notion of connectedness that ignores the orientations of the arcs.</p>
+<p>Formally, we call a digraph 
+<em>weakly connected</em> if the underlying graph is connected. Now we
+know what <a class="booklink" href="#cor:eulerian-digraph">Corollary 8.6</a>
+means!</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>The classic brainteaser in the “draw without lifting your pencil”
+genre is the picture of a stylized house shown below:</p>
+
+<p>In order to draw this picture without lifting your pencil or
+retracing any line, where must you start and end? (Of course, you can
+always swap the start and end.)</p>
+</li>
+<li><p>Find a cycle decomposition of the circulant graph , and use it
+to find an Euler tour of .</p></li>
+<li><p>Find an Euler tour of the -dimensional hypercube graph, .</p></li>
+<li>
+<p>Let  be the graph below.
+Find a vertex  such that   is Eulerian.</p>
+
+</li>
+<li>
+<p>The graph below is not Eulerian, because some of its vertices are
+odd. What is the maximum length of a closed walk in this graph that does
+not use any edge more than once? Prove your answer.</p>
+
+</li>
+<li>
+<p>In the complete graph ,
+every vertex has degree , so by
+<a class="booklink" href="#thm:veblen">Theorem 8.3</a>,  has a cycle decomposition.</p>
+<ol>
+<li><p>Suppose we wanted to decompose  into as few cycles as possible. How
+many cycles would we want to use, and of what lengths? Give an example
+of such a decomposition.</p></li>
+<li><p>Suppose we wanted to decompose  into as many cycles as possible. How
+many cycles would we want to use, and of what lengths? Give an example
+of such a decomposition.</p></li>
+</ol>
+</li>
+<li><p>Suppose that the complete graph , where  , has a cycle decomposition in which every cycle
+has length . What must the value
+of  be?</p></li>
+<li><p>Prove that every connected graph has a “double tour”: a closed walk which
+uses every edge exactly two times, once in each direction. (That is, for
+every edge , the walk contains
+one segment  and
+one segment .)</p></li>
+<li>
+<p>This exercise presents part of a method due to Noga Alon  for finding perfect
+matchings (which we will cover in detail starting in <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a>) using Euler tours.</p>
+<ol>
+<li>
+<p>Let  be a <em>bipartite
+graph</em>: that is,  is the
+union of two sets  and , with  , such that all edges of  have one endpoint in  and one endpoint in .</p>
+<p>Prove that if every vertex of 
+is even, then  has an even number
+of edges.</p>
+</li>
+<li><p>Let  be a graph in which
+every vertex is even and (as in part (a)) the number of edges is even.
+Prove that  has a spanning
+subgraph  such that for every
+vertex ,  .</p></li>
+<li><p>Prove by induction on  that
+for all  , every -regular bipartite graph has a -regular spanning subgraph.</p></li>
+</ol>
+</li>
+<li><p>(BMO 1977) Prove that for each integer   it is possible to construct a
+necklace having  beads in all,
+these being of  different colors,
+in such a way that for each pair of different colors there is at least
+one pair of adjacent beads of these two colors. Is it possible to do the
+same using   beads in all?
+Give a reason for your answer.</p></li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>Or multigraph: even if  is a simple graph, it might already
+have an edge , so we need to
+switch to a multigraph model to add edge .<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+<li id="fn2"><p>Heh-heh.<a class="footnote-back" href="#fnref2">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 8</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

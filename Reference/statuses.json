@@ -692,5 +692,313 @@
 		"slug": "deepseek-playform-cloud-plugins",
 		"role": "sources",
 		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/",
+		"slug": "vertex-degree",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/beginning/examples",
+		"slug": "vertex-degree-beginning-examples",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/beginning/isomorphism",
+		"slug": "vertex-degree-beginning-isomorphism",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/beginning/walks",
+		"slug": "vertex-degree-beginning-walks",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/beginning/degrees",
+		"slug": "vertex-degree-beginning-degrees",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/appendix-bibliography.html",
+		"slug": "vertex-appendix-bibliography",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/appendix-index.html",
+		"slug": "vertex-appendix-index",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/appendix-induction.html",
+		"slug": "vertex-appendix-induction",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/appendix-proof-writing.html",
+		"slug": "vertex-appendix-proof-writing",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/author.html",
+		"slug": "vertex-author",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/beginning-degrees.html",
+		"slug": "vertex-beginning-degrees",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/beginning-examples.html",
+		"slug": "vertex-beginning-examples",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/beginning-index.html",
+		"slug": "vertex-beginning-index",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/beginning-isomorphism.html",
+		"slug": "vertex-beginning-isomorphism",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/beginning-walks.html",
+		"slug": "vertex-beginning-walks",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/book.html",
+		"slug": "vertex-book",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/connectivity-connectivity.html",
+		"slug": "vertex-connectivity-connectivity",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/connectivity-cut-vertices.html",
+		"slug": "vertex-connectivity-cut-vertices",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/connectivity-flows.html",
+		"slug": "vertex-connectivity-flows",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/connectivity-index.html",
+		"slug": "vertex-connectivity-index",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/connectivity-menger.html",
+		"slug": "vertex-connectivity-menger",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/contents.html",
+		"slug": "vertex-contents",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/degrees-euler.html",
+		"slug": "vertex-degrees-euler",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/degrees-graphic.html",
+		"slug": "vertex-degrees-graphic",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/degrees-index.html",
+		"slug": "vertex-degrees-index",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/degrees-multigraphs.html",
+		"slug": "vertex-degrees-multigraphs",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/degrees-regular.html",
+		"slug": "vertex-degrees-regular",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/hard-cliques.html",
+		"slug": "vertex-hard-cliques",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/hard-coloring.html",
+		"slug": "vertex-hard-coloring",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/hard-hamilton.html",
+		"slug": "vertex-hard-hamilton",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/hard-index.html",
+		"slug": "vertex-hard-index",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/hard-line.html",
+		"slug": "vertex-hard-line",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/history.html",
+		"slug": "vertex-history",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/matchings-bipartite.html",
+		"slug": "vertex-matchings-bipartite",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/matchings-general.html",
+		"slug": "vertex-matchings-general",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/matchings-hall.html",
+		"slug": "vertex-matchings-hall",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/matchings-index.html",
+		"slug": "vertex-matchings-index",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/matchings-konig.html",
+		"slug": "vertex-matchings-konig",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/planar-coloring-maps.html",
+		"slug": "vertex-planar-coloring-maps",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/planar-index.html",
+		"slug": "vertex-planar-index",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/planar-planar.html",
+		"slug": "vertex-planar-planar",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/planar-polyhedra.html",
+		"slug": "vertex-planar-polyhedra",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/planar-testing.html",
+		"slug": "vertex-planar-testing",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/trees-cayley.html",
+		"slug": "vertex-trees-cayley",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/trees-dags.html",
+		"slug": "vertex-trees-dags",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/trees-index.html",
+		"slug": "vertex-trees-index",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/trees-properties.html",
+		"slug": "vertex-trees-properties",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/trees-spanning.html",
+		"slug": "vertex-trees-spanning",
+		"role": "sources",
+		"status": "converted"
+	},
+	{
+		"source": "https://vertex.degree/matching/bipartite.html",
+		"slug": "vertex-matching-bipartite-dead",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "The site's own link is dead: the page serves a 324-byte 'Page Fot Found' stub. The real chapter was captured under its correct URL instead.",
+		"disposition": "unavailable"
+	},
+	{
+		"source": "https://vertex.degree/planar/map-coloring.html",
+		"slug": "vertex-planar-map-coloring-dead",
+		"role": "sources",
+		"status": "unavailable",
+		"exit": 0,
+		"exitCode": 0,
+		"message": "The site's own link is dead: the page serves a 324-byte 'Page Fot Found' stub. The real chapter was captured under its correct URL instead.",
+		"disposition": "unavailable"
 	}
 ]

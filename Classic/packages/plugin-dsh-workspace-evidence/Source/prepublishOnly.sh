@@ -10,9 +10,10 @@
 # (fast-glob); the second positional pattern excludes it. Without it the
 # plugin build fails on test-only syntax and would ship Test output inside
 # Target.
-# NOTE: `pnpm exec` instead of `./node_modules/.bin/tsc` because the workspace
-# installs with `nodeLinker: hoisted` - the package-local .bin does not exist
-# in this trio; pnpm resolves tsc from the root store.
+# Build alone owns the pipeline: ESBuild writes Target/*.js, then the CLI's
+# own tsc pass emits Target/*.d.ts from the package tsconfig.json
+# (emitDeclarationOnly) and its tsc-alias pass rewrites the Source aliases
+# (@Function, @Interface, @Variable) to relative output paths.
 # The smoke suite is the END-PHASE's deliverable (POC-BRIEF section 2); when
 # Source/Test exists, the second Build plus the selfcheck run; until then the
 # script builds the plugin tree only.
@@ -20,14 +21,11 @@
 set -e
 
 Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
-	--ESBuild Configuration/ESBuild.ts \
-	--TypeScript Configuration/TypeScript.noemit.json
+	--ESBuild Configuration/ESBuild.ts
 
 if [ -d Source/Test ]; then
 	Build "Source/Test/**/*.ts" \
 		--ESBuild Configuration/Test-ESBuild.ts
 
 	node Target/Test/Harness.js --selfcheck || exit 1
-
-	pnpm exec tsc -p Configuration/TypeScript-Test.noemit.json
 fi

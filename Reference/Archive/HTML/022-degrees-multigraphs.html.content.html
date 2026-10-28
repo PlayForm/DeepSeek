@@ -1,0 +1,632 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Multigraphs and Digraphs</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 7</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>The first half of this chapter introduces multigraphs: a more general
+version of graphs, allowing loops and duplicate (parallel) edges. By
+putting this content here, I’ve made my choice between two unsatisfying
+options: should multigraphs be an exception, or should they be the
+default?</p>
+<p>I’ve decided they should be the exception, not introduced until
+<a class="booklink" href="../degrees/multigraphs.html">Chapter 7</a>, and not
+considered to be graphs except in a few asides in later chapters. The
+advantage of this option is that it simplifies some definitions,
+especially early on when you have enough new complexity to worry about;
+also, in many applications, it is all you need from graph theory.</p>
+<p>The option I didn’t take would have been to make <a class="booklink" href="#defn:multigraph">Definition 7.1</a> the definition of a graph, and
+to refer to graphs without loops and parallel edges as simple graphs. (I
+will still use this term when I need to emphasize that I’m not
+considering a multigraph.) The advantage of this option is that it lets
+you state and prove every result in fuller generality.</p>
+<p>In practice, the differences between simple graphs and multigraphs
+almost always fall somewhere on the following spectrum:</p>
+<ol>
+<li><p>They apply to multigraphs only: even when you start with a simple
+graph, you will be forced to handle multigraphs to proceed.</p></li>
+<li><p>They apply to both simple graphs and multigraphs, and there are
+applications where the multigraph version is useful.</p></li>
+<li><p>They apply to both simple graphs and multigraphs, but not in a
+way that’s useful: maybe the loops and parallel edges can always be
+ignored, or maybe their existence trivializes the problem.</p></li>
+<li><p>They apply only to simple graphs.</p></li>
+</ol>
+<p>In future chapters, I will clearly call out situations of the first
+two types, and try to mention the other situations in passing if it
+seems unclear.</p>
+<p>When it comes to directed graphs, introduced in the second half of
+the chapter, the situation is a bit different. Although some of the
+theory is the same as for undirected graphs, by default, results don’t
+carry over. Accordingly, I will discuss directed graphs in a few big
+chunks, outside this chapter: all of <a class="booklink" href="../trees/dags.html">Chapter 12</a> and
+<a class="booklink" href="../connectivity/flows.html">Chapter 28</a> deal with directed
+graphs, and one section is devoted to them in <a class="booklink" href="../degrees/euler.html">Chapter 8</a> and in <a class="booklink" href="../hard/line.html">Chapter 20</a>.</p>
+<p>Notably, the problem of finding Euler tours discussed in <a class="booklink" href="../degrees/euler.html">Chapter 8</a> is important to solve for both
+multigraphs and for directed graphs, and I think it’s the first such
+problem in the textbook; this is one of the reasons I’ve placed this
+chapter right before it.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="multigraphs">Multigraphs</h2>
+<p>Consider a game with the following rules. There are
+six pebbles, split between three piles; each pile must contain at least
+one pebble. There are two types of valid moves: you may swap two piles,
+or you may move a pebble from one pile to another, as long as the
+starting pile has at least two pebbles in it.</p>
+<figure class="bookfig" id="fig:pebble-multigraph">
+
+<figcaption>A multigraph representation of the -pebble game</figcaption>
+</figure>
+<p><a class="booklink" href="#fig:pebble-multigraph">Figure 7.1</a> shows a graph of the
+possible states of the -pebble
+game (with vertex  representing
+a state with , , and  pebbles in the three piles); edges in
+the graph represent valid moves. Well… it doesn’t quite show a graph of
+the game: it has some edges that a graph cannot have. These edges
+represent moves that do not change the state, as well as situations
+where two different moves accomplish the same result.</p>
+<details class="qa">
+<summary>Why would we draw a loop from vertex  back to itself?</summary>
+<p>Swapping the first two piles in state
+ just takes us back to state
+, since the two piles have the
+same number of pebbles.</p>
+</details>
+<details class="qa">
+<summary>Why are there two edges between vertices
+ and ?</summary>
+<p>The game has two ways to turn  into  (or the reverse): we can move a
+pebble from the -pebble pile to
+the -pebble pile, or we can swap
+the -pebble pile with the -pebble pile.</p>
+</details>
+<details class="qa">
+<summary>Okay, so what’s going on at vertex ?</summary>
+<p>The six “reasonable” edges out of vertex
+, going to vertices , , , , , and , all represent moving a pebble from
+one pile to another. There are also three moves that accomplish nothing:
+we can pick any two piles and swap them.</p>
+</details>
+<p>We cannot have these edges in a graph, so we define a multigraph to
+be a more general kind of structure that allows these edges to exist.
+The formal definition needs to be a bit more complicated, though.</p>
+<div class="defn" id="defn:multigraph">
+<p><strong>Definition 7.1</strong>. <em>A <strong>multigraph</strong>
+ is a triple consisting of an
+arbitrary set of <strong>vertices</strong> , an arbitrary set of
+<strong>edges</strong> , and a
+symmetric <strong>incidence relation</strong> between them: we say that
+vertex  is
+<strong>incident</strong> to edge , or  is incident to , if they are related by the incidence
+relation.</em></p>
+<p><em>In a multigraph, two vertices are called
+<strong>adjacent</strong> if there is an edge incident to both.</em></p>
+</div>
+<p>Previously, we defined edges as pairs of vertices. This is no longer
+possible, because two edges can have the same pair of endpoints; to
+distinguish them, there must be something more to their identity. In
+diagrams (such as in <a class="booklink" href="#fig:pebble-multigraph">Figure 7.1</a>) we often don’t mark the
+difference between such edges, but to deal with them formally, we would
+need to give them individual labels.</p>
+<p>We have special names for the two situations that can exist in a
+multigraph, but not in a simple graph:</p>
+<div class="defn">
+<p><strong>Definition 7.2</strong>. <em>An edge in a multigraph which
+has only one endpoint is called a <strong>loop</strong>. Two edges are
+called <strong>parallel</strong> if they have the same set of
+endpoints.</em></p>
+</div>
+<p>For example, in <a class="booklink" href="#fig:pebble-multigraph">Figure 7.1</a>, there is a loop incident
+to vertex , two parallel edges
+joining vertices  and , and three parallel loops incident to
+vertex .</p>
+<p>There are relationships between graphs and multigraphs in both
+directions:</p>
+<div class="defn">
+<p><strong>Definition 7.3</strong>. <em>A <strong>simple graph</strong>
+is a graph. The <strong>simplification</strong> of a multigraph  is the simple graph with the same
+vertex set, and an edge 
+(for   with  ) whenever  has at least one edge incident to both
+ and . Effectively, this removes all loops,
+and replaces parallel edges with a single edge.</em></p>
+<p><em>When a multigraph has no loops or parallel edges, we will treat
+it as the same object as its simplification; even though on a low level
+they are defined differently, reasoning about them in practice yields
+identical outcomes.</em></p>
+</div>
+<p>Many notions that we’ve introduced for graphs still make sense for
+multigraphs, with some modifications. There are two relatively large
+changes that are worth spending some time discussing: one related to
+walks, paths, and cycles, and another related to vertex degrees.</p>
+<p>A walk in a multigraph is no longer just a sequence of vertices: it
+matters how we get from one vertex to another. For example, in the -pebble game, we consider a multigraph
+model if it matters which kind of move we used at each step. (If this
+distinction does not matter, then we do not need the added complexity of
+multigraphs.) Thus:</p>
+<div class="defn" id="defn:multi-walk">
+<p><strong>Definition 7.4</strong>. <em>An <strong>  walk of length </strong> in a multigraph  is a sequence  that alternates between vertices and edges of , satisfying the following:  ,  , and for each  , the endpoints of edge  are  and .</em></p>
+</div>
+<p>For example, suppose that we start in state  of the pebble game, and we make three
+moves: we swap the first two piles, then move one pebble from the last
+pile to the first, then swap the first two piles again. To represent
+this as a walk, we’ll in the -pebble multigraph, we will first need
+to invent notation for the different types of edges. Let’s say that
+ denotes a move
+between states  and  by swapping piles  and , and , denotes a move between
+states  and  by moving a pebble between piles  and . (Keep in mind that edges don’t have a
+distinguished start and end, so  is the same edge as .) Then our walk would be
+represented by the sequence  This is very cumbersome, so usually we don’t pull out the
+full notation unless we need it. Even if we’re not looking this closely,
+though, the definition still matters. For example, when listing the
+different walks between two vertices, it is important to know when two
+walks are considered to be different: they are different if the two
+sequences are different.</p>
+<p>Paths and cycles have the same definition, but with new implications.
+Previously, we were not able to define cycle graphs  or ; this is possible in the world of
+multigraphs. The multigraph  is
+a single vertex with a loop; the multigraph  has two vertices and two edges
+between them.</p>
+<p>In all cases, to pick out a path and cycle in a multigraph, we need
+to specify not only the vertices and the order in which they occur, but
+also the specific edges we use between those vertices. The upshot is
+that paths and cycles can still be represented by walks (closed walks,
+in the case of a cycle), but they must be the multigraph walks defined
+in <a class="booklink" href="#defn:multi-walk">Definition 7.4</a>.</p>
+<p>If there’s any bright side to this, it is that it’s easier to tell
+when a closed walk represents a cycle. This is true of a closed walk
+ as long as  are distinct, vertices  are distinct,
+and  .</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="degrees-in-multigraphs">Degrees in multigraphs</h2>
+<p>We would like to generalize the definition of vertex degrees to apply
+to multigraphs, while giving the same answer as our old definition for
+simple graphs when there happen to be no loops or parallel edges. It is
+not obvious how to do so in a natural way, so let’s stop and think for a
+moment about it.</p>
+<p>Definitions are not set in stone: as mathematicians, we can choose
+how to make them. However, we should try to make interesting and useful
+definitions. Pay attention to the reasoning here if you want to
+understand why definitions are the way they are!</p>
+<p>To begin with, for simple graphs, we can count the degree of a vertex
+ in two equivalent ways: by
+counting the edges incident to ,
+or by counting the vertices adjacent to . In a multigraph, these two methods can
+give different answers: for example, in <a class="booklink" href="#fig:pebble-multigraph">Figure 7.1</a>, vertex  is incident to  edges, but only has  neighbors!</p>
+<p>We must immediately reject the second method of counting, because it
+completely ignores the multigraph structure: why bother having two edges
+between  and  if it’s not going to affect the
+degree of either vertex? In other words, counting vertices adjacent to
+ yields the degree in the
+simplification of the multigraph.</p>
+<p>The first method of counting is not bad, and could have ended up the
+definition. However, it also has a problem.</p>
+<p>By this rule, the degree sequence of the -pebble graph would be . By the
+handshake lemma (<a class="booklink" href="../beginning/degrees.html#handshake-lemma">Lemma 4.1</a>), which we proved
+in <a class="booklink" href="../beginning/degrees.html">Chapter 4</a> for simple graphs, the sum of
+degrees in a graph is twice the number of edges; applying that here, we
+would conclude that the graph has   edges. But this is incorrect: if
+you count the edges in <a class="booklink" href="#fig:pebble-multigraph">Figure 7.1</a>
+one by one, you will get .</p>
+<details class="qa">
+<summary>Where does the discrepancy between  and  come from?</summary>
+<p>It comes from loops: when we naively apply
+the handshake lemma, the  loops in
+the graph only get counted as .</p>
+</details>
+<details class="qa">
+<summary>Looking at the proof of the handshake
+lemma, why does this happen?</summary>
+<p>In the proof, we assumed that adding an
+edge to a graph increases the degree sum by . However, if the degree of a vertex
+were defined to be the number of incident edges, then a loop would only
+increase the degree of a single vertex by .</p>
+</details>
+<p>The handshake lemma is so valuable that we are willing to add a
+special case to our definition, just for this purpose. To rescue the
+lemma, we need the degree sum to increase by  when a loop is added to a graph. It
+wouldn’t make any sense for a loop incident to a vertex  to increase the degree of any vertex
+other than ; thus, it must
+contribute  to the degree of . This tells us what the definition of
+vertex degree must be:</p>
+<div class="defn">
+<p><strong>Definition 7.5</strong>. <em>The <strong>degree</strong> of a
+vertex  in a multigraph  is the number of edges incident to
+, counting every loop incident to
+ twice.</em></p>
+</div>
+<p>By this definition, the degree sequence of the -pebble graph is .</p>
+<p>You might ask: is there a graphic sequence problem for multigraphs?
+There is, but the answer to it is much less exciting than it is for
+graphs. <a class="booklink" href="#pp:multigraphic">Practice problem 3</a> at the end of
+this chapter gives the condition, and asks you to discover the proof
+yourself.</p>
+<p>Finally, the definition of a graph isomorphism changes when it is
+applied to multigraphs. There are two equivalent ways to make that
+change:</p>
+<ul>
+<li><p>We could say that an isomorphism between multigraphs  and  is still a bijection  , but with a
+slightly different condition on . Rather than simply preserving
+adjacency, it should be the case that for any vertices  and  in  (possibly equal) the number of edges
+between  and  should be the same as the number of
+edges between  and .</p></li>
+<li><p>We could also say that an isomorphism between multigraphs  and  is a pair of bijections: a bijection
+ , and a
+second bijection  . The condition relating these should now be that for a
+vertex   and an edge  ,  is incident to  if and only if  is incident to : the bijections  and  preserve the incidence
+relation.</p></li>
+</ul>
+<p>These two options are equivalent, and therefore equally good, but the
+second is more in the spirit of our definition of a multigraph. The
+intuition you should have is that a discrete structure (like a graph or
+a multigraph) consists of two parts: some objects, and some
+relationships between them. In the case of a multigraph, the objects are
+the vertices and edges, and the relationships between them are given by
+the incidence relation. An isomorphism between two discrete structures
+should be a bijection between the objects that preserves the
+relationships. This idea will guide you to the correct definition of an
+isomorphism both in graph theory and outside it.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="directed-graphs">Directed graphs</h2>
+<figure class="bookfig" id="fig:digraph-example">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:numerical-maze">
+
+<figcaption>A numerical maze</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:maze-digraph">
+
+<figcaption>A digraph representation of the maze</figcaption>
+</figure>
+</div>
+<figcaption>Solving a maze using directed graphs</figcaption>
+</figure>
+<p><a class="booklink" href="#fig:numerical-maze">Figure 7.2(a)</a> shows an unusual kind of
+maze: a numerical maze. Like a normal maze, it has a start (the top left
+cell) and an end (the bottom right cell). Instead of paths and walls,
+however, you solve the maze by using the numbers: if you’re in a cell
+with the number , then you can
+jump to another cell that’s  steps
+away either horizontally or vertically.</p>
+<p>We might try to represent an ordinary maze by a graph, so that a path
+in the graph from the start vertex to the end vertex will give us a
+solution to the maze. In the numerical maze, we encounter an unexpected
+difficulty: the jumps we make in the maze are often one-way. From the
+top left corner, which has a  in
+it, we can jump to a cell three steps to the left or to a cell three
+steps down. However, neither of these numbers contains a , so neither of them will let us return
+to where we just were! As a result, a graph is unsuitable as a model for
+this maze: adjacency between the cells is an asymmetric
+relationship.</p>
+<p>The structure we use in such cases is called directed graph, or
+digraph for short. In a diagram, we draw a directed graph by making each
+edge an arrow, rather than a line, as in <a class="booklink" href="#fig:maze-digraph">Figure 7.2(b)</a>. An arrow from vertex  to vertex  represents, informally, an adjacency
+that exists only when going from 
+to , not when going from  to . The formal definition is:</p>
+<div class="defn">
+<p><strong>Definition 7.6</strong>. <em>A <strong>directed
+graph</strong> or <strong>digraph</strong>  is a pair consisting of an arbitrary
+set of vertices  and a set of
+<strong>arcs</strong> or <strong>directed edges</strong> . Each arc is an ordered pair  where  .</em></p>
+<p><em>We say that arc 
+<strong>starts</strong> at  and
+<strong>ends</strong> at ; it is
+an arc <strong>from  to </strong>, or <strong>out of </strong> and <strong>into </strong>.</em></p>
+</div>
+<p>In principle, we could combine this definition with the definition of
+a multigraph in the previous section, obtaining the concept of a
+directed multigraph. I will not do so in this book; juggling all these
+definitions is complicated enough as it is! However, even without that
+added flexibility, we allow the arcs  and  to coexist in a digraph: after all,
+these are not the same arc. For example, in <a class="booklink" href="#fig:maze-digraph">Figure 7.2(b)</a>, arcs  and  both exist: we can jump in either
+direction between this pair of cells, because they are  steps apart, and both contain a . The pair  is also a valid ordered pair, so it
+can also be an arc in a directed graph: it represents a loop from  to .</p>
+<p>It is sometimes convenient to forget about the directions of the
+arcs, and go back to an undirected object.</p>
+<div class="defn">
+<p><strong>Definition 7.7</strong>. <em>The <strong>underlying
+graph</strong> of a digraph  is
+the multigraph  with vertex set
+  and an edge incident to
+ and  for each arc  . The digraph  is called an orientation of .</em></p>
+</div>
+<p>In directed graphs, the notion of vertex degrees becomes even more
+muddled than it was for multigraphs. Properly speaking, we should not
+describe the degree of a vertex by a single number. Instead, we count
+the number of arcs into a vertex and the number of arcs out of a vertex
+separately.</p>
+<div class="defn">
+<p><strong>Definition 7.8</strong>. <em>The <strong>indegree</strong> of
+a vertex  in a digraph , denoted , is the number of arcs into
+.</em></p>
+<p><em>The <strong>outdegree</strong> of a vertex  in a digraph , denoted , is the number of arcs out
+of .</em></p>
+</div>
+<p>As with the ordinary notion of degree, we drop the subscript and
+write  and  if it is clear which digraph
+containing vertex  we mean.</p>
+<p>An even more powerful version of the handshake lemma holds for
+indegrees and outdegrees in directed graphs. Before reading ahead to see
+how to prove it, see if you can figure out a proof of <a class="booklink" href="#lemma:handshake-dilemma">Lemma 7.1</a> yourself, by
+imitating the proof of <a class="booklink" href="../beginning/degrees.html#handshake-lemma">Lemma 4.1</a> in <a class="booklink" href="../beginning/degrees.html">Chapter 4</a>.</p>
+<div class="lemma" id="lemma:handshake-dilemma">
+<p><strong>Lemma 7.1</strong>. <em>In any digraph , the vertex indegrees add up to the
+number of arcs, as do the vertex outdegrees: </em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We will prove that for any directed graph with  edges, the identity in the lemma holds,
+and we will do it by induction on .</p>
+<p>The base case is  . The lemma
+holds in this case because the sum of indegrees, the number of arcs, and
+the sum of outdegrees are all equal to : there are no arcs, so no vertex has a
+nonzero indegree or outdegree.</p>
+<p>Assume that the lemma holds for all directed graphs with   arcs. Let  be a directed graph with  arcs, and let  be any arc of . We can apply the induction hypothesis
+to  , a digraph with   arcs.</p>
+<p>What is the relationship between the indegrees and outdegrees in
+ and in  ? There are three cases:</p>
+<ul>
+<li><p>In , the outdegree of  is  higher than in  , because arc  contributes  to that outdegree.</p></li>
+<li><p>In , the indegree of  is  higher than in  , because arc  contributes  to that indegree.</p></li>
+<li><p>  and   in all other cases.</p></li>
+</ul>
+<p>Adding up all the changes, we see that  and  By the induction hypothesis, both of
+the right-hand sides are equal to  , proving the lemma for : an arbitrary -arc directed graph. Then, by induction,
+the lemma holds for directed graphs with any number of arcs. ◻</p>
+</div>
+<p>Less commonly, in addition to the indegree and outdegree of a vertex,
+we define the net degree of  to be
+  and the total degree of  to be  .</p>
+<details class="qa">
+<summary>How can we interpret the net degree and
+the total degree of ?</summary>
+<p>The net degree measures how many more arcs
+at  go out, compared to in; it
+tells us whether  is a “net
+exporter” or “net importer” of arcs. The total degree is the degree of
+ in the underlying graph.</p>
+</details>
+<details class="qa">
+<summary>What do the net degrees add up to in a
+directed graph?</summary>
+<p>We can write the sum of net degrees as
+ which
+simplifies to  by <a class="booklink" href="#lemma:handshake-dilemma">Lemma 7.1</a>.</p>
+</details>
+<details class="qa">
+<summary>What do the total degrees add up to?</summary>
+<p>For a similar reason, they add up to . This also follows from the
+handshake lemma applied to the underlying graph of .</p>
+</details>
+<p>In directed graphs, the notion of isolated vertices (with indegree
+and outdegree ) still makes sense,
+but it is sometimes useful to consider the indegree and outdegree
+separately. We call a vertex  in a
+digraph a <em>source</em> if  , and a <em>sink</em> of  .</p>
+<details class="qa">
+<summary>Does the graph in <a class="booklink" href="#fig:maze-digraph">Figure 7.2(b)</a> contain any sources?</summary>
+<p>Yes: vertices  and  are sources. (You might be tempted to
+call  a source because it’s a
+starting point, but it’s not: it’s possible to return to vertex  after leaving it.)</p>
+</details>
+<details class="qa">
+<summary>Does it contain any sinks?</summary>
+<p>Yes: vertex  is a sink, because the number in the
+center of the grid is , and there
+are no cells to hop to that are 
+spaces away in any direction. Sinks in such a graph represent “dead
+ends” in the maze which cannot be left.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="directed-walks-paths-and-cycles">Directed walks, paths, and
+cycles</h2>
+<p>Moving on, the other big change with directed graphs—and, often, the
+reason we study directed graphs to begin with—is the behavior of walks,
+paths, and cycles. The definition of a walk in a digraph superficially
+does not seem very different from the definition we saw in <a class="booklink" href="../beginning/walks.html">Chapter 3</a> for undirected graphs:</p>
+<div class="defn">
+<p><strong>Definition 7.9</strong>. <em>An <strong>  walk of length </strong> in a digraph  is a sequence  of vertices
+of  where  ,  , and for each  ,  is an
+arc of .</em></p>
+</div>
+<p>The difference is that this definition requires all the arcs  to point in the same
+direction along the directed walk, and this small difference is a
+dramatic change. While an   walk
+in an undirected graph is essentially the same as an   walk except for which way you go, a
+directed graph might have an  
+walk but no   walk.</p>
+<p>By analogy with  and , there are two families of directed
+graphs: the <em>directed path graph</em>  has vertex set  with an arc   for  , and the <em>directed
+cycle graph</em>  is obtained from
+ by adding the
+arc . Both of these are
+defined for all  .</p>
+<p>When dealing with directed graphs, the terms <em>path</em> and
+<em>cycle</em> refer to copies of the directed path graph and the
+directed cycle graph, respectively; I may use the terms “directed path”,
+“directed cycle”, or “directed walk” for emphasis. A directed path or
+cycle is represented by a walk  if it has vertices  and arcs . In
+the case of a cycle, it follows that the walk representing it is closed,
+with  .</p>
+<p>To finish this introduction to directed graphs, let’s put the new
+ideas about directed graphs together into a theorem: the directed
+version of <a class="booklink" href="../beginning/degrees.html#thm:min-degree-cycle">Theorem 4.4</a> from
+<a class="booklink" href="../beginning/degrees.html">Chapter 4</a>.</p>
+<div class="theorem" id="thm:no-sink-cycle">
+<p><strong>Theorem 7.2</strong>. <em>Every directed graph  with no sinks contains a
+cycle.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let the walk  represent a path in  of the largest possible length. Because
+ has no sinks, we know in
+particular that  ,
+so there must exist some arc  that starts at .</p>
+<p>If  , then the walk  would represent a longer path, contrary to
+our assumption. Therefore  
+for some , and the closed walk
+
+represents the cycle we wanted. ◻</p>
+</div>
+<details class="qa">
+<summary>Does the same result hold for directed
+graphs with no sources?</summary>
+<p>Yes: we can write a similar proof, but
+look for a vertex  with an arc
+into , rather than out of .</p>
+</details>
+<details class="qa">
+<summary>Does the converse hold? That is, if  has a cycle, is it true that it has no
+sources or sinks?</summary>
+<p>No, and the digraph in <a class="booklink" href="#fig:maze-digraph">Figure 7.2(b)</a> is a counterexample. This
+digraph has two sources and a sink, and yet it still has many cycles:
+for example, the length- cycle
+represented by .</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Consider the -pebble
+multigraph in <a class="booklink" href="#fig:pebble-multigraph">Figure 7.1</a>.</p>
+<ol>
+<li><p>How many   walks of
+length  does it have?</p></li>
+<li><p>What about length ?</p></li>
+<li><p>What about length ?</p></li>
+<li><p>For practice, write out one of the length- walks as a sequence of vertices and
+edges, using the  and
+ notation for
+edges.</p></li>
+</ol>
+</li>
+<li>
+<p>Consider the multigraph below. How many closed walks of length
+ begin and end at the vertex on
+the left?</p>
+
+</li>
+<li>
+<p>
+Here is why we consider the graphic sequence problem for simple graphs,
+and not for multigraphs.</p>
+<ol>
+<li><p>Let   be a sequence of nonnegative integers. Show that it is the
+degree sequence of a multigraph if and only if   is even.</p></li>
+<li><p>Let   be a sequence of nonnegative integers. Show that it is the
+degree sequence of a multigraph with no loops if and only if   is even and  .</p></li>
+</ol>
+</li>
+<li>
+<p>Let  be a simple graph with
+ vertices and maximum degree . We assume that  is even, so that an -regular graph on  vertices exists. (But  might not be -regular; some of its vertices can have
+degree less than .)</p>
+<ol>
+<li><p>Prove that there is an -regular multigraph , with  , such that  is a
+subgraph of . (In other words: we
+can add edges to  to make it
+regular.)</p></li>
+<li><p>Give an example of a graph 
+for which the graph  in part (a)
+cannot possibly be a simple graph.</p></li>
+</ol>
+</li>
+<li>
+<p>Solve the numerical maze in <a class="booklink" href="#fig:numerical-maze">Figure 7.2(a)</a>.
+What kind of graph-theoretic object represents your solution?</p>
+<p>For an extra challenge, use breadth-first-search, as described in
+<a class="booklink" href="../beginning/walks.html">Chapter 3</a>, and find the shortest path
+through the maze.</p>
+</li>
+<li>
+<p>A game is played with two piles of stones. On a turn, a player
+picks a pile which is not empty, and takes one or more stones from it.
+The game ends once both piles are empty.</p>
+<p>We can represent this game by a digraph whose vertices are the
+states, with arcs representing the valid moves. Let  be the digraph we get when the
+game is played with a pile of size  and a pile of size .</p>
+<ol>
+<li><p>Draw a diagram of .
+(It should have 
+vertices.)</p></li>
+<li><p>Which vertices of 
+are sources? Which are sinks?</p></li>
+<li><p>Are there any values of 
+and  for which  contains a cycle?</p></li>
+</ol>
+</li>
+<li>
+<p>The game RPS-7 ,
+invented by David C. Lovelace, is an extension of Rock-Paper-Scissors to
+ gestures: Rock, Paper, Scissors,
+Air, Fire, Sponge, and Water. The gestures have the following
+relationships:</p>
+<ul>
+<li><p>Rock pounds out Fire, crushes Scissors, and crushes
+Sponge.</p></li>
+<li><p>Fire melts Scissors, burns Paper, and burns Sponge.</p></li>
+<li><p>Scissors swish through Air, cut Paper, and cut Sponge.</p></li>
+<li><p>Sponge soaks paper, uses Air pockets, and absorbs Water.</p></li>
+<li><p>Paper fans Air, covers Rock, and floats on Water.</p></li>
+<li><p>Air blows out Fire, erodes Rock, and evaporates Water.</p></li>
+<li><p>Water erodes Rock, puts out Fire, and rusts Scissors.</p></li>
+</ul>
+<p>Let  be the graph whose
+vertices are the  gestures, with
+an arc  whenever gesture  beats gesture .</p>
+<ol>
+<li><p>Find a cycle of length  in
+ for each  .</p></li>
+<li><p>For which  can an RPS- game be constructed so that each object
+beats the same number of other objects?</p></li>
+</ol>
+</li>
+<li><ol>
+<li><p>Write a reasonable definition of an isomorphism between two
+directed graphs.</p></li>
+<li>
+<p>Here are three directed graphs with isomorphic underlying
+graphs.</p>
+
+<p>Prove that as directed graphs, none of these are isomorphic.</p>
+</li>
+</ol></li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>It’s a “game” because it has rules, but there is no
+victory condition. Sorry.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 7</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

@@ -36,13 +36,10 @@ import type { AgentMemory } from "@Interface/State.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/lib-dsh-core";
 import Defaults from "@Variable/Defaults.js";
+import Version from "@Variable/Version.js";
 
 import Detect, { Compile } from "./Detect.js";
 import BuildNote, { Prepend } from "./Note.js";
-
-// The bundle version, mirrored from package.json (the activation proof's
-// first field; a release bumps both together).
-const Version = "0.3.0";
 
 /** Fresh per-agent memory. */
 const FreshMemory = (): AgentMemory => ({

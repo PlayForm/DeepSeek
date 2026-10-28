@@ -1,0 +1,841 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Hall’s theorem</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 15</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>Applications of bipartite matchings to other areas of math are
+often all-or-nothing: either we find a perfect matching, or else we
+have made no progress. Additionally, the graphs we face are not
+arbitrary: they obey some mathematical laws defining their edges.</p>
+<p>In such a scenario, Hall’s theorem is usually the way to proceed.
+Hall’s condition is a necessary and sufficient condition for the
+matching we want, and the abstract definition of our graph means it’s
+often easy to verify. In this chapter, we will deduce Hall’s theorem
+from Kőnig’s theorem and then—because this is not enough to make a
+complete chapter—we will see some applications, ranging from
+recreational mathematics to serious combinatorics.</p>
+<p>Hall’s theorem is also often referred to as Hall’s marriage theorem,
+and Hall’s condition is then called the marriage condition. I’m not
+philosophically opposed to this (it can sometimes be handled poorly when
+teaching, but it can also be handled well), but I don’t like the
+terminology, so I’ve left it out of this chapter.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="halls-theorem">Hall’s theorem</h2>
+<p><a class="booklink" href="../matchings/konig.html">Chapter 14</a> was devoted to proving Kőnig’s
+theorem (<a class="booklink" href="../matchings/konig.html#thm:konig">Theorem 14.2</a>), which is the result you
+want to use for finding a maximum matching in a bipartite graph. In many
+applications, that is absolutely the wrong question to ask, because only
+a perfect matching counts as a solution; if no perfect matching exists,
+we don’t care if the largest matching leaves  vertices or  vertices uncovered.</p>
+<p>Of course, Kőnig’s theorem can also tell us when a perfect matching
+exists, in terms of the number of vertices in a minimum vertex cover,
+but this feels like the wrong way of thinking. In a graph  with bipartition , where  , we want to distinguish between
+  and   to determine whether a
+perfect matching exists, and this doesn’t feel like a dramatic change.
+What’s more, a vertex cover containing   vertices isn’t a very intuitive
+explanation of why there is no perfect matching.</p>
+<p>However, there are some situations in which we can tell a clear story
+about why a perfect matching fails to exist.</p>
+<details class="qa">
+<summary>What if the graph contains an isolated
+vertex, ?</summary>
+<p>Then there is no perfect matching, because
+there is no matching that covers .</p>
+</details>
+<details class="qa">
+<summary>What if vertices  and  have degree  and share the same neighbor ?</summary>
+<p>Then a matching can contain edge  and cover , or contain edge  and cover , but not both: so there is still no
+perfect matching.</p>
+</details>
+<p>Generalizing these concepts, we can describe a minimum requirement
+for a graph to have a perfect matching. First, we need a new
+definition.</p>
+<div class="defn">
+<p><strong>Definition 15.1</strong>. <em>The
+<strong>neighborhood</strong>  of a set   in a graph  is the set of all vertices of  adjacent to at least one vertex in
+. If the graph  is clear from context, we simply write
+.</em></p>
+</div>
+<p>For example, a vertex  is
+isolated if  .
+Two leaf vertices  and  share their only neighbor  if  . What do these
+situations have in common? A set of vertices has a neighborhood which is
+too small:  is smaller than
+ itself.</p>
+<details class="qa">
+<summary>Let 
+be an arbitrary subset of . Can
+there be a perfect matching if  ?</summary>
+<p>No: a perfect matching must pair each
+vertex of  with a different vertex
+in , which is impossible if
+there are not  different
+vertices in  to use.</p>
+</details>
+<p>This explains why this condition is necessary for a perfect matching
+to exist. Hall’s theorem (proved by Philip Hall in 1935 ) states that the condition
+is also sufficient:</p>
+<div class="theorem" id="thm:hall">
+<p><strong>Theorem 15.1</strong> (Hall’s theorem). <em>A bipartite graph
+ with the bipartition  has a matching that covers all
+vertices in  if and only if it
+satisfies <em>Hall’s condition</em>: for all subsets  ,  .</em></p>
+<p><em>In particular, when  ,
+ has a perfect matching if and
+only if it satisfies Hall’s condition.</em></p>
+</div>
+<details class="qa">
+<summary>What if  ?</summary>
+<p>Then Hall’s condition will not be
+satisfied if we take  , because
+  and therefore
+ .</p>
+</details>
+<details class="qa">
+<summary>What if  ?</summary>
+<p>Then there is no perfect matching. In this
+case, Hall’s theorem promises us a matching that covers every vertex in
+, but leaves some vertices in
+ uncovered.</p>
+</details>
+<p>Applying Hall’s theorem when   can still be very useful if
+the vertices in  are different in
+type from the vertices in . For
+example, in the magic trick, we really want a matching that covers every
+vertex  corresponding to a
+set of  cards: then the matching
+tells my assistant what to do when handed such a set. It would be fine
+if the matching did not cover some ordered pairs : that would mean that my assistant
+will never hand me those two cards.</p>
+<p>By proving Kőnig’s theorem, we have done all the hard work of proving
+Hall’s theorem, and can now deduce it as a corollary. (It would also
+have been possible to go the other way, and prove Kőnig’s theorem as a
+corollary of Hall’s theorem.)</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#thm:hall">Theorem 15.1</a>.</em> We already know that Hall’s
+condition is necessary for a matching to cover  to exist: if Hall’s condition is
+violated for some subset  , then there is not even a matching that covers every vertex
+in . It remains to prove that
+Hall’s condition is sufficient. We will do this by assuming that there
+is no matching that covers , and
+finding a set  for which Hall’s
+condition is violated.</p>
+<p>Every edge in a matching has one endpoint in  and one endpoint in . So if there is no matching that covers
+, then there is no matching with
+ edges:  . By Kőnig’s
+theorem,  : there
+is a vertex cover  such that  .</p>
+<p>This set  is a small set of
+vertices with a lot of neighbors, since every edge of  has at least one endpoint in . To find a set  for which Hall’s condition is violated,
+we want the opposite: a large set of vertices with few neighbors. So we
+define  to be  : the set of all vertices in  that are not part of the vertex
+cover.</p>
+<p>For all vertices  , if
+ is adjacent to , then  contains one endpoint of , but  does not contain , so  must contain . Therefore all of  is contained in . In addition to the vertices of  (which are all on side ),  contains all of   (on side ); therefore  However, we also know  , so  . This can be rearranged to get  , proving that  violates Hall’s condition. ◻</p>
+</div>
+<details class="qa">
+<summary>Suppose I give you a set  which violates Hall’s condition. Can
+you use it to find a vertex cover with fewer than  vertices?</summary>
+<p>Yes: the set   is a vertex cover. For
+every edge , where   and  , we have two cases: if  , then  is in the vertex cover, and if  , then  is in the vertex cover.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="regular-bipartite-graphs">Regular bipartite graphs</h2>
+<p>It is important to be clear about how Hall’s theorem is meant to be
+used. It is not meant to be wielded like a hammer, going through the
+subsets of  one by one and
+searching for one that violates Hall’s condition. Such an algorithm
+would take an exponentially long time! No: if you have a concrete graph
+in front of you, and it has no short mathematical description, use the
+augmenting path algorithm in <a class="booklink" href="../matchings/konig.html">Chapter 14</a> to
+find a maximum matching and a minimum vertex cover. (There’s one
+exception: if you can quickly spot a small set that violates Hall’s
+condition, of course you should use that.)</p>
+<p>Instead, we use Hall’s theorem when dealing with a graph or a family
+of graphs in which the edges follow a regular mathematical pattern, and
+we can prove that Hall’s condition is satisfied.</p>
+<p>Our first example predates both Kőnig’s theorem and Hall’s theorem:
+it originally appeared in 1894, in a thesis by Ernst Steinitz about
+point-line configurations , though it was not stated in the
+language of graph theory.</p>
+<div class="theorem" id="thm:regular-matching">
+<p><strong>Theorem 15.2</strong>. <em>For all  , if  is an -regular bipartite graph, then it has a
+perfect matching.</em></p>
+</div>
+<p>I admit that I am so fond of this theorem that I’ve put two versions
+of it in a practice problem already, once in <a class="booklink" href="../degrees/euler.html">Chapter 8</a> and
+once in <a class="booklink" href="../matchings/konig.html">Chapter 14</a>. But we have not had the
+opportunity to use Hall’s theorem to prove it, so let’s do that.</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#thm:regular-matching">Theorem 15.2</a>.</em> Here’s a starting
+observation that proves it’s permissible to at least hope for a perfect
+matching. If  has a bipartition
+, then we can count the edges
+of  in two ways. First, we could
+sum the degrees of all vertices in  and get : this counts every edge once,
+because every edge has an endpoint in . We could also sum the degrees of all
+vertices in  and get . The two methods must give the same
+answer, so  , and  .</p>
+<p>To prove that a perfect matching exists, we show that Hall’s
+condition holds for an arbitrary subset  . As in the previous paragraph, there are  edges with an endpoint in . Similarly, there are  edges with an endpoint in . By definition, every edge with an
+endpoint in  has the other
+endpoint in ; in other words,
+the  edges with an endpoint
+in  include among them all
+ edges with an endpoint in
+. This gives the inequality  , or  . ◻</p>
+</div>
+<p><a class="booklink" href="#thm:regular-matching">Theorem 15.2</a> is one of the few results
+in matching theory that is useful for multigraphs, not just simple
+graphs. You would not expect this to happen! After all, loops and
+parallel edges can never help us find a larger matching: a matching has
+maximum degree , which means it is
+always a simple graph. In fact, bipartite graphs cannot contain loops in
+the first place, though they can have parallel edges: a loop can never
+have one endpoint in  and the
+other in .</p>
+<details class="qa">
+<summary>So why would it matter that <a class="booklink" href="#thm:regular-matching">Theorem 15.2</a> is true for
+multigraphs?</summary>
+<p>It is possible that a bipartite multigraph
+is only -regular due to the
+presence of parallel edges, and if we eliminate those, then checking
+Hall’s condition becomes much harder.</p>
+</details>
+<p>I should emphasize that when we go from an -regular multigraph to a simple graph,
+Hall’s condition will still be true: it will just no longer follow
+automatically from <a class="booklink" href="#thm:regular-matching">Theorem 15.2</a>.</p>
+<p>To confirm for ourselves that <a class="booklink" href="#thm:regular-matching">Theorem 15.2</a>
+still does work for multigraphs, we could go through all our proofs and
+verify that nothing changes in the presence of parallel edges. (We would
+need to go through many proofs because of the dependencies between
+them.) However, there is a shortcut.</p>
+<p>Let  be a bipartite -regular multigraph, and let  be the simplification of . We can quickly check that the
+two-paragraph proof of <a class="booklink" href="#thm:regular-matching">Theorem 15.2</a>
+still works for multigraphs, and therefore  satisfies Hall’s condition. Therefore
+ also satisfies Hall’s
+condition: adjacent vertices in 
+are still adjacent in , so
+neighborhoods don’t change at all. Therefore  has a perfect matching, which
+corresponds to a perfect matching in .</p>
+<p>It is possible to generalize the result of <a class="booklink" href="#thm:regular-matching">Theorem 15.2</a>. Suppose that some
+vertices in  can have degree more
+than , and some vertices in  can have degree less than . Then  is a lower bound on the number of
+edges with an endpoint in , while
+ is an upper bound on the
+number of edges with an endpoint in , but this only extends the
+inequalities we have; we are still able to obtain   and verify Hall’s
+condition.</p>
+<details class="qa">
+<summary>Does this give us a perfect matching?</summary>
+<p>No, because it’s now possible that  .</p>
+</details>
+<p>However, we can still obtain the following corollary:</p>
+<div class="corollary" id="cor:inequality-matching">
+<p><strong>Corollary 15.3</strong>. <em>For all , if  is a bipartite graph with bipartition
+ such that every vertex in
+ has degree at least , while every vertex in  has degree at most , then  has a matching that covers .</em></p>
+</div>
+<p>Armed with Hall’s theorem and several of its variants, we are now
+ready to tackle some problems outside graph theory.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="a-three-card-magic-trick">A three-card magic trick</h2>
+<p>Here is a mathematical card trick I know. A version of it using the
+ordinary -card deck was invented
+by Fitch Cheney , but I
+will present a simplified version with a deck of  cards, numbered  through .</p>
+<p>You choose  cards from the
+deck, however you like, and give them to my assistant, while I look away
+or even temporarily leave the room. The assistant then hands me two of
+the cards, one at a time, and hands the third card back to you, for
+reference.</p>
+<p>I have not seen the third card you’re holding, at any point.
+Nevertheless, I can now perform some quick mental arithmetic and name
+the number on that card!</p>
+<p>How is this possible? The answer doesn’t involve any hidden
+communication: my assistant doesn’t try to communicate the third card
+via eyebrow gestures and split-second timing. The answer involves only
+mathematics. Before describing a particular implementation of this
+trick, let’s understand how it is even possible to make the trick
+work.</p>
+<p>Consider the following bipartite graph. On one side of the
+bipartition, the vertices are sets of three cards:  through . In the magic trick, you choose
+three cards, which we can represent by a choice of one of these
+vertices. On the other side, the vertices are ordered pairs of two
+cards: , , and so on through . In the magic trick, this
+represents the information I get: the order in which the assistant hands
+me the cards makes the pair an ordered pair.</p>
+<figure class="bookfig" id="fig:magic-trick">
+
+<figcaption>The bipartite graph for the three-card magic
+trick</figcaption>
+</figure>
+<p>For the edges, join each set of three cards to the  ordered pairs that can be formed from
+it: these represent the  choices
+my assistant has, in deciding which two cards to give me and in which
+order. The graph has  vertices,
+so it is too big to draw in full, but <a class="booklink" href="#fig:magic-trick">Figure 15.1</a> shows
+a portion of it: enough to see all the neighbors of vertices  on the first side and of  and  on the second side.</p>
+<p>My assistant’s strategy, whatever it might be, picks a designated
+neighbor of each vertex on the first side of the graph; for example, if
+ is the designated neighbor of
+, then if you choose the
+cards numbered , , and , my assistant will hand me card  and then card . Let  (for “magic”) be the spanning subgraph
+containing only the edges between a vertex on the first side and its
+designated neighbor; by construction, every vertex on the first side has
+degree  in .</p>
+<p>I presumably know  ahead of
+time, so if I am handed card  and
+then card , I should think about
+the edges of  incident to vertex
+. If the edge between  and  is the only such edge in , then I know that the third card must
+have been . If, however, there are
+multiple edges of  incident to
+, then I have many theories,
+and cannot identify the third card. In other words, the magic trick only
+works if every vertex on the second side has degree at most  in : if  is a matching!</p>
+<p>Does such a matching exist? A first step is to check the number of
+vertices. There are   vertices on the first side: the
+number of ways to choose a set of 
+objects out of . There are   vertices on the second
+side: the number of ways to choose a pair of  distinct objects out of . So it’s conceivable to have a matching
+ that covers all  vertices on the first side, as long as
+it also covers all  vertices on
+the second side: it must be a perfect matching. We haven’t ruled out the
+possibility that the magic trick works.</p>
+<details class="qa">
+<summary>Why do we divide by  in , but don’t divide by anything in  ?</summary>
+<p>In the first case, we’re counting sets,
+which are unordered, so we divide by the  ways to order the elements. In the
+second case, we’re counting ordered pairs: my assistant hands me a first
+card and a second card.</p>
+</details>
+<p>To see that the graph for the -card magic trick has a perfect
+matching, all we have to do is observe that it is -regular and apply <a class="booklink" href="#thm:regular-matching">Theorem 15.2</a>.</p>
+<details class="qa">
+<summary>Why is the graph -regular?</summary>
+<p>For every pair of cards I see, there are
+ possibilities for the missing
+third card. For every three cards my assistant sees, there are  possible actions:  ways to choose the first card to pass
+me, multiplied by  ways to choose
+the second card.</p>
+</details>
+<p>We can generalize to a -card
+magic trick: you choose  cards
+from a (potentially very large) deck, my assistant hands me   of them in some order, and I must
+guess the last card.</p>
+<div class="prop" id="prop:magic-trick">
+<p><strong>Proposition 15.4</strong>. <em>The -card magic trick can be performed if
+the deck contains at most   cards.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Suppose the deck contains  cards; construct the bipartite graph
+with bipartition  where  is the set of all unordered -card hands,  is the set of all ordered sequences of
+  cards, and there is an edge
+whenever a -card hand contains all
+cards in the  -card
+sequence.</p>
+<p>Then every vertex in  has
+degree  : when my
+assistant takes a -card hand and
+hands me   cards in some order,
+there are  ways to choose which
+card I don’t get to see, and  
+ways to sort the cards I do see. Every vertex in  has degree  : when I am handed   cards, the number of -card hands they could have come from is
+equal to the number of possibilities for the <sup>th</sup> card, which is   because that card can be any of
+the cards except for the   I
+see.</p>
+<p>If we let  , then every
+vertex in  has degree at least
+(actually, exactly) . Provided
+ , every vertex in  has degree at most ; this inequality is equivalent to  . When this happens, by
+<a class="booklink" href="#cor:inequality-matching">Corollary 15.3</a>, the graph has a
+matching  that covers all vertices
+in .</p>
+<p>At least in principle, if my assistant and I agree on a matching
+, then we have a strategy for the
+-card trick. When handed  cards, my finds that -card hand as a vertex in , and looks at the only neighbor of that
+vertex to see which   cards to
+give me, and in which order. When I am handed that sequence of   cards, I can do the reverse: find
+that sequence as a vertex in , and
+look at the only neighbor of that vertex to see which  cards were chosen. (If  , not all sequence of
+  cards are covered by , but every sequence my assistant
+actually hands is guaranteed to be covered!) This tells me, in
+particular, which card is the hidden card. ◻</p>
+</div>
+<details class="qa">
+<summary>What’s the problem with implementing this
+strategy?</summary>
+<p>For an arbitrary matching, too much
+memorization is necessary! Essentially, my assistant and I have to
+memorize what to do in every possible situation.</p>
+</details>
+<p>In 2002, Michael Kleber  not only proved <a class="booklink" href="#prop:magic-trick">Proposition 15.4</a>, but also described a strategy
+for the -card trick that can be
+implemented in practice, and I will finish our discussion of magic
+tricks by describing it in the three-card case.</p>
+<p>My assistant’s job is to add up the numbers on the three cards, and
+find the remainder when the sum is divided by . The card my assistant hands back to
+you is the smallest of the three cards if the remainder is , the middle card if the remainder is
+, and the largest card if the
+remainder is . My assistant hands
+me the other two cards in increasing order if the missing card is one of
+the three smallest cards I won’t see, and in decreasing order
+otherwise.</p>
+<details class="qa">
+<summary>What will my assistant do if you choose
+the cards ?</summary>
+<p> , which leaves a remainder of
+ when divided by , so my assistant will hand you the
+middle card: . Of the cards I
+won’t see, the three smallest ones are , of which  is one, so
+my assistant hands me , then .</p>
+</details>
+<p>My job is to label the unseen cards, in order from largest to
+smallest, as  ,  ,  ,  ,  , and  . I then guess the one where the
+inequality sign ( or ) matches the relationship between
+the first and second card I am given, and the number (, , or ) matches the remainder when the sum of
+my two cards is divided by .</p>
+<details class="qa">
+<summary>What will I do if I am handed the cards
+ and  in that order?</summary>
+<p>Since   and   leaves a remainder of  when divided by , I want the card labeled  : the second-smallest unseen card.
+So I guess card .</p>
+</details>
+<p>Though this strategy is workable, and generalizes well, I wonder if
+there’s a simpler procedure specifically for the three-card magic trick.
+Maybe you will find one!</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="generalized-tic-tac-toe">Generalized tic-tac-toe</h2>
+<p>The ordinary game of tic-tac-toe is played on a   grid. Players take turns
+placing their mark to claim an empty space in the grid: a for the first
+player and a for the second player. A player wins by claiming all three
+spaces in a horizontal, vertical, or diagonal line; if this does not
+happen when the board is filled, then the game is a draw.</p>
+<p>The ordinary game of tic-tac-toe is not very interesting once you’ve
+learned how to play: every game between two skilled players ends in a
+draw. However, there are many ways to generalize it. The game gomoku is
+played on a   board, and
+the winning condition is to get 
+consecutive pieces in a row. Mathematicians have also tried playing
+tic-tac-toe in three (or more?) dimensions. A   game is not very
+interesting, because the first player has an insurmountable advantage
+when claiming the center space, but   tic-tac-toe is worth playing. You just have to learn
+to spot the winning lines (one example is shown in <a class="booklink" href="#fig:4x4x4-tic-tac-toe">Figure 15.2</a>).</p>
+<figure class="bookfig" id="fig:4x4x4-tic-tac-toe">
+
+<figcaption>A winning line in   tic-tac-toe</figcaption>
+</figure>
+<p>We will consider tic-tac-toe in even further abstraction: there is a
+set of points , which the
+players take turns claiming, and a set of winning lines . Each element of  is a subset of , and a player that claims all
+the elements of a winning line wins.</p>
+<p>Graph theory cannot solve all possible tic-tac-toe games at once, but
+an application of Hall’s theorem can let us stop thinking about games
+that are too boring: either player can easily guarantee a draw by a
+strategy with very little interaction.</p>
+<div class="prop" id="prop:tic-tac-toe">
+<p><strong>Proposition 15.5</strong>. <em>In a generalized tic-tac-toe
+game where every set of  winning
+lines contain at least  points in
+total, either player can guarantee themselves at least a draw.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We will construct a somewhat unusual bipartite graph
+to represent the game. On one side of the bipartition, we will have
+: the set of points. On
+the other side of the bipartition, we will not put , but rather two disjoint sets
+called  and . For every winning line
+ , we put a
+“positive vertex”  into  and a “negative vertex”
+ into . Both  and  will be adjacent to the same set
+of points in : all the
+points contained in .</p>
+<p>Next, we set out to check Hall’s condition for a matching in this
+graph to cover  . Let   be an arbitrary set. Then either   or   is at least : either at least half the
+vertices in  are positive, or at
+least half the vertices are negative. The two situations are symmetric,
+so we assume  .</p>
+<p>If  ,
+then there are  winning lines
+corresponding to vertices in  , and by the condition we’ve assumed, there are at least
+ points on these lines. All these
+points are in  , and therefore in particular they are in . Therefore  , and Hall’s
+condition holds.</p>
+<p>Hall’s theorem gives us a matching in our unusually constructed
+graph, but what do we do with this matching? Well, for every line , the matching gives us two points on
+: the point matched to  and the point matched to . In other words, from every
+winning line we’ve selected two points, such that each point has been
+selected from at most one of the winning lines through it.</p>
+<p>Using these selected points, you can obtain a draw whether you are
+the first player or the second. Suppose your opponent has played on one
+of the points selected from winning line . Then respond by claiming the other
+point selected from , if you
+have not claimed it already. In all other cases—if your opponent’s move
+is not the point selected from any line, or if you’ve already claimed
+the other point, or if it’s the first move of the game—play arbitrarily.
+(A strategy of this type is called a pairing strategy in game
+theory.)</p>
+<details class="qa">
+<summary>What if your opponent plays on that point
+with the goal of winning along some line other than ?</summary>
+<p>You don’t care, because that other line
+has two selected points of its own.</p>
+</details>
+<p>If you use the pairing strategy, you will never lose, because your
+opponent can never claim all the points on any line. To do so,
+eventually your opponent would need to claim one of the selected points
+from that line, but then you will just claim the other point. You will
+probably not win, either, because the pairing strategy makes absolutely
+no effort to do so; it’s possible that you will win accidentally.
+However, you are guaranteed at least a draw. ◻</p>
+</div>
+<p>The condition of <a class="booklink" href="#prop:tic-tac-toe">Proposition 15.5</a>
+seems hard to check, but for many tic-tac-toe games, it turns out  winning lines will contain far more
+than  points in most cases, leaving only
+a few cases to check. For example, consider a   board. A single line is
+guaranteed to have  points; a
+second line is guaranteed to add 
+new ones; a third line is guaranteed to add  new ones, for a total of .</p>
+<details class="qa">
+<summary>How can we argue rigorously that  lines contain at least  points?</summary>
+<p>They have   points if we double-count the
+intersections, and  lines have at
+most  intersection points.</p>
+</details>
+<p>Since  points is enough for up
+to  lines, we can skip ahead to
+considering a set of  lines. These
+cover most of the board, and with a little bit more thinking, we can
+conclude that the worst case is a set of all   lines, which cover all  points. Therefore <a class="booklink" href="#prop:tic-tac-toe">Proposition 15.5</a> applies to tic-tac-toe on a
+  board.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="incomparable-sets">Incomparable sets</h2>
+<p>Our setting in this section will be the world of subsets of an -element sets; we might as well assume
+they are subsets of , because the exact
+elements won’t matter.</p>
+<p>Two subsets  and  are called <em>comparable</em> if   or  , and <em>incomparable</em>
+otherwise. For example, the set  is comparable to (and a subset
+of) the set ; it is
+incomparable to . You can
+imagine that if the elements represent objects you want to own, then
+ is clearly not as good as
+, but it is not certain
+which of  or  is better. For example, what if
+elements , , and  are different kinds of cookies, while
+element  is an expensive car?</p>
+<p>Suppose we want to pick a family of sets in which no two
+sets are comparable. An example is the family .</p>
+<details class="qa">
+<summary>What is largest family of subsets of  in which no two are
+comparable?</summary>
+<p>, the family
+of all -element subsets.</p>
+</details>
+<p>In general, if we take the family of all -element subsets, for any , then any two subsets in the family
+will be incomparable. The number of sets in this family is given by the
+binomial coefficient  . This is maximized when  : for example, when   we have  So we want the family of all -element subsets. We will call this
+the <em>middle layer</em> family.</p>
+<details class="qa">
+<summary>What if  is odd?</summary>
+<p>When  is odd, there are two equally good
+middle layers: the family of -element subsets, and the
+family of -element
+subsets. (For example, if  , then
+ .</p>
+</details>
+<p>By convention, let’s round 
+down if  is odd. The notation for
+rounding down is , so the formula  tells us
+the size of the middle layer family.</p>
+<p>In 1928, Emanuel Sperner proved  that this is the best we can do, for any
+. He did not use Hall’s theorem to
+do this, but we will.</p>
+<div class="theorem" id="thm:sperner">
+<p><strong>Theorem 15.6</strong>. <em>If  is a family of subsets of
+ such that no two
+different sets  
+are comparable, then  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> In <a class="booklink" href="../beginning/degrees.html">Chapter 4</a>, I
+mentioned that the hypercube graph  can be useful when reasoning about
+set families, and that’s what we will do here. We defined the vertex set
+of  to be the set of -bit strings: sequences  where each  is either  or . To relate this to set families, a
+vertex  can be
+identified with the subset of  containing an element  whenever  . The edges, which join -bit strings that differ in only one
+position, now tell us which two sets differ only by the presence or
+absence of one element. For the rest of the proof, I will switch to
+using set-related terminology. <a class="booklink" href="#fig:hypercube-graph-sets">Figure 15.3(a)</a> shows, for example,
+ with the vertices interpreted
+as subsets (and  written
+as  to simplify the
+diagram).</p>
+<figure class="bookfig" id="fig:sperner">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:hypercube-graph-sets">
+
+<figcaption>, interpreting
+vertices as subsets</figcaption>
+</figure>
+
+</div>
+<figcaption>Diagrams accompanying the proof of <a class="booklink" href="#thm:sperner">Theorem 15.6</a></figcaption>
+</figure>
+<p>We proved in <a class="booklink" href="../matchings/bipartite.html#prop:cube-bipartite">Proposition 13.2</a> that
+ as a whole is bipartite, but a
+perfect matching in  will not
+help us. Instead, we will write 
+as a union of bipartite graphs:  where  is the subgraph of  induced by the sets of size  or  . In other words:</p>
+<ul>
+<li><p> has the bipartition
+ where  is the set of -element subsets of , and  is the set of  -element subsets;</p></li>
+<li><p>An edge  with   and   exists whenever we can add one more element to  to make . (It will be important later that when
+this happens,  is a subset of
+.)</p></li>
+</ul>
+<p>In , every vertex   has   neighbors in : there are   elements of  not already in  which we can add. Every vertex   has   neighbors in : it has   elements which we can remove.
+Provided  , or  , <a class="booklink" href="#cor:inequality-matching">Corollary 15.3</a> applies, giving us a
+matching in  that covers
+.</p>
+<details class="qa">
+<summary>What kind of matching can we get if  ?</summary>
+<p>In this case, <a class="booklink" href="#cor:inequality-matching">Corollary 15.3</a> would apply if we
+switched the roles of  and , so there is a matching that covers
+.</p>
+</details>
+<p>In either case, call this matching . As a general rule,  covers the side of  with fewer elements, which is the
+side further from the middle layer(s).</p>
+<p>Now the magic happens! Consider the union  , and call it .
+<a class="booklink" href="#fig:m-and-h">Figure 15.3(b)</a> shows one possible union  in the case  .</p>
+<p>Consider a vertex of 
+corresponding to a subset of size , for any . This vertex has degree  or  in : if  , it is incident to one edge in  and maybe also one edge in , while if  , then it is
+guaranteed one edge in  and
+possibly also an edge in . We
+can follow these edges “up” the graph (increasing the number of
+elements) and “down” the graph (decreasing the number of elements) until
+we hit a dead end—a vertex of degree . So the connected component containing
+the vertex we chose is a path, which means that every component of  is a path.</p>
+<p>How many connected components are there? Well, from each vertex, we
+can always follow edges of  to get
+closer to the middle layer(s): those are the guaranteed edges. Therefore
+each component of  contains one
+vertex in the middle layer (or in each middle layer, for odd ). There are  vertices in
+the middle layer, and therefore there are 
+components.</p>
+<p>So far, we have only looked at the structure of subsets of , but now we are ready to
+consider the set family 
+that <a class="booklink" href="#thm:sperner">Theorem 15.6</a> is all about. You see,  can never contain two sets in
+the same connected component of .
+If it did, then we could start at the set with fewer elements, and
+follow it up the path to get to the one with more elements. At each
+step, we’re adding an element, so the first set will be a subset of the
+second—but we’ve assumed that  does not contain two such sets.</p>
+<p>Therefore  contains at
+most one set from each connected component of ; since there are  components,
+we know that  contains at
+most 
+elements. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Is it possible to circle a letter in each of the words below so
+that all  circled letters are
+different? Either find a way to do it, or prove that it’s impossible
+using Hall’s condition.</p>
+<div class="minifig">
+<table>
+<tbody>
+<tr>
+<td>AREA</td>
+<td>APART</td>
+<td>ERRATA</td>
+</tr>
+<tr>
+<td>GRAPH</td>
+<td>PAPER</td>
+<td>RETREAT</td>
+</tr>
+<tr>
+<td>THEORY</td>
+<td>TREE</td>
+<td>YOGA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li>
+<p>The multiples-of-six graph from <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a>
+is shown again below:</p>
+
+<p>Prove that it does not have a perfect matching, but this time, using
+Hall’s theorem.</p>
+</li>
+<li>
+<p>Let  be a bipartite graph
+with  vertices on each side of the
+bipartition whose minimum degree  is greater than .</p>
+<p>Prove that  has a perfect
+matching.</p>
+</li>
+<li><p>Prove that when  , it is impossible to perform the -card magic trick with an -card deck and guarantee that I guess
+the <sup>th</sup> card. (This is
+not a problem about graph theory; it is a matter of counting.)</p></li>
+<li><p>Find a pairing strategy for tic-tac-toe on a   board, where the goal is to win
+by claiming all  spaces along a
+horizontal, vertical, or diagonal line.</p></li>
+<li>
+<p>Let  be a bipartite graph,
+with bipartition , that has
+the following properties:</p>
+<ul>
+<li><p>Every vertex on side  has
+degree  or ;</p></li>
+<li><p>Every vertex on side  has
+degree  or ;</p></li>
+<li><p>There are no edges between vertices of degree  and vertices of degree .</p></li>
+</ul>
+<p>Prove that  has a matching that
+covers all vertices in .</p>
+</li>
+<li>
+<p>Suppose that we mark several points at integer coordinates in the
+-plane in such a way that for
+every marked point , the lines
+  and   each contain two other marked points.
+This can be done by making a   grid, or in other, more complicated ways, such as in the
+first diagram below.</p>
+
+<p>Prove that it is guaranteed to be possible to give the marked points
+ different colors, as in the
+second diagram above, so that no horizontal or vertical line passes
+through two marked points of the same color.</p>
+</li>
+<li><p>(Putnam 2012) A round-robin tournament of  teams lasted for   days, as follows. On each day, every
+team played one game against another team, with one team winning and one
+team losing in each of the  games.
+Over the course of the tournament, each team played every other team
+exactly once. Can one necessarily choose one winning team from each day
+without choosing any team more than once?</p></li>
+<li>
+<p>An   Latin square is
+an   grid filled with the
+integers  through  in such a way that every row and every
+column contains each integer exactly once. For example, the first   grid below is a Latin
+square.</p>
+<div class="minifig">
+<table class="grid">
+<tbody>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>4</td>
+<td>5</td>
+<td>2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>3</td>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>5</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>5</td>
+<td>2</td>
+<td>3</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<table class="grid">
+<tbody>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td>5</td>
+<td>3</td>
+<td>4</td>
+<td>1</td>
+<td>2</td>
+</tr>
+
+
+
+</tbody>
+</table>
+</div>
+<p>Suppose that, as in the second grid above, the first  rows in the   grid are filled with integers
+ through  in a way that does not cause any
+contradictions: each of the  rows
+use each integer exactly once, and no column contains any duplicates.
+Prove that we can fill in the last   rows to get a Latin square.</p>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>A “family” of sets is just a set of sets, but we give it
+a different word to make it easier to distinguish it from its
+elements.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 15</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

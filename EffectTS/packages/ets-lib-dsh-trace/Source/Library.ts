@@ -22,6 +22,13 @@
 //   Interface - the types: the envelope (Envelope), the emitter's draft
 //   (Draft), the bus contract (Adapter), the observe/stamp payload (Stamp) and
 //   the detached loop's contract (Queue).
+import Version from "./Variable/Version.js";
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define). This package has NO loader contract and NO Config - the
+// version sits beside the other named exports; it is not a loader key.
+export { Version };
+
 export { default as Names } from "./Variable/Names.js";
 export { default as Bound } from "./Variable/Bound.js";
 export { default as Complete } from "./Function/Complete.js";

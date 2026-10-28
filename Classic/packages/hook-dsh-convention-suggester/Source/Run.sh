@@ -10,8 +10,7 @@
 set -e
 
 Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
-	--ESBuild Configuration/ESBuild.ts \
-	--TypeScript Configuration/TypeScript.noemit.json
+	--ESBuild Configuration/ESBuild.ts
 
 Build "Source/Test/**/*.ts" \
 	--ESBuild Configuration/Test-ESBuild.ts \

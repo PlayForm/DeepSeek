@@ -1,7 +1,7 @@
-import type DomainHandle from "@Interface/Domain.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type { GraphHandle } from "@Interface/Graph.js";
-import type Proposal from "@Interface/Proposal.js";
+import type DomainHandle from "./Domain.js";
+import type FactoryHandle from "./Factory.js";
+import type { GraphHandle } from "./Graph.js";
+import type Proposal from "./Proposal.js";
 import type { Allowlist, State as Base } from "@playform/ets-plugin-dsh-factory";
 interface Extra {
     /** Config `enabled` - the master switch (volatile; the State builder's

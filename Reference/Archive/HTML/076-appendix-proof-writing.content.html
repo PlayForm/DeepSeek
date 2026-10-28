@@ -1,0 +1,935 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Review of Proof-Writing</h1>
+<ul class="breadcrumb">
+
+
+
+<li>A</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>While I hope that these little sections at the beginning of each
+chapter are always useful, the note in this chapter is much more
+important to read!</p>
+<p>It would be far too ambitious of me to hope to write a single chapter
+that will teach you how to write a proof. Entire books have been written
+on this subject. Here are a couple that have been made freely available
+online by their authors:</p>
+<ul>
+<li>
+<p><em>Book of Proof</em> by Richard Hammack .</p>
+<p>You can find it online at </p>
+</li>
+<li>
+<p><em>An Infinite Descent into Pure Mathematics</em> by Clive
+Newstead .</p>
+<p>You can find it online at </p>
+</li>
+</ul>
+<p>A classic book that should also be mentioned is <em>How to Solve
+It</em> by George Pólya . It is not a book about the method of
+writing a proof, but will give you advice on how to come up with an idea
+for it, which is maybe even more valuable.</p>
+<p>Usually, when you learn proof-writing, you begin by proving
+statements that are mathematically easy, so you don’t have to struggle
+with two things at once. After you’ve done that, you might not yet be
+comfortable with writing proofs on topics that challenge you
+mathematically. If this is the level you’re at, then this chapter is for
+you.</p>
+<p>I will try to prepare you for the kind of proofs you will encounter
+in this book by showing you how the general ideas of proof-writing
+specialize to graph theory. A proof is a proof in every area of math,
+but there are some ideas that show up in graph theory much more often
+than in number theory or real analysis, for example. When you get used
+to proofs in several areas of math, you will be an experienced
+mathematician. You’ll be able to jump into a new topic much more
+confidently.</p>
+<p>So that you can benefit from this chapter early, I’ll limit myself to
+examples from the first part of this book (<a class="booklink" href="../beginning/examples.html">Chapter 1</a> through <a class="booklink" href="../beginning/degrees.html">Chapter 4</a>), but I will mention chapters
+later in the book where you’ll see more examples.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="conditional-statements">Conditional statements</h2>
+<p>In the moment when you first start trying to prove a theorem, you may
+not yet know how the proof will go. However, just from the statement of
+the theorem, you can have a rough overall idea of the strategy you need
+to take. This is a good way to fight “blank page syndrome”, where you’re
+staring at a problem and have no clue what to write!</p>
+<p>So what do we look for in a statement? A big part of it is
+conditional statements: statements that can be expressed in the form “If
+, then ”. If you’re trying to prove such a
+statement, you can try:</p>
+<ul>
+<li><p>A <strong>direct proof</strong>, where you assume that  is true, and try to prove that  is true.</p></li>
+<li><p>A <strong>proof by contrapositive</strong>, where you assume the
+negation of , and try to prove the
+negation of . (This is a direct
+proof of the <strong>contrapositive</strong>, “If not , then not ”, which is an equivalent form of the
+original conditional statement.)</p></li>
+<li><p>A <strong>proof by contradiction</strong>, where you
+simultaneously assume both  and
+the negation of , and try to prove
+any statement you know is false.</p></li>
+</ul>
+<p>A big reason why conditional statements are confusing to beginners is
+that the informal meaning of “if ,
+then ” in the English language is
+under-specified. If you say a sentence like this in casual conversation,
+only context can determine what you mean in the case that  is not true. Consider the following
+examples:</p>
+<ul>
+<li><p>“If you’ve lived in Paris your whole life (), you’re French ().” Here,  can still be true even if  is false: many French people have never
+been to Paris.</p></li>
+<li><p>“If you spend at least $50 (), you will get free shipping ().” Here, the offer implies that you
+will not get free shipping unless you spend at least $50: when  is false,  is also false.</p></li>
+<li><p>“If you’re hungry (),
+there’s pizza in the fridge ().”
+Here, the condition is irrelevant, and  is true regardless of the status of
+.</p></li>
+</ul>
+<p>In formal mathematics, an “if ,
+then ” statement always goes
+hand-in-hand with an implicit “and if not , then anything could be true”. It is an
+assertion that  is true, but
+limited only to situations where 
+is true, without making any claim about situations where  is false. When we want to talk about
+both situations, and say that when  is false,  must also be false, the standard
+formulation is “ if and only if
+”.</p>
+<p>Even mathematicians are not perfect at maintaining this distinction
+in all circumstances. One place where you will often see the word “if”
+misused, from a formal point of view, is in definitions. Though I have
+avoided it in this book, it is common to see definitions phrased as, for
+example, “A walk  is closed if  .” All definitions should be read as if-and-only-if
+statements: a walk is closed if  , and not otherwise.</p>
+<p>Finally, let me say a bit about necessary conditions and sufficient
+conditions. This is another view of conditional statements. If the
+statement “If , then ” always holds, we say that  is a <strong>sufficient
+condition</strong> for : knowing
+that  is true is enough to know
+that  is true. We call  a <strong>necessary condition</strong>
+for , in the sense that without
+ happening,  can’t happen either: this is a
+paraphrase of the contrapositive, “If not , then not ”. We don’t always use these terms,
+though: we use them to emphasize specific ways of thinking about a
+conditional statement.</p>
+<p>We say that  is a sufficient
+condition for  to emphasize that
+we’re in a scenario where  is
+normally a difficult statement to evaluate, but  is an easy-to-check test that can
+sometimes tell us that  is true.
+For example, <a class="booklink" href="../beginning/degrees.html#cor:n-edge-cycle">Corollary 4.7</a> is a
+conditional statement where  is “A
+graph  with  vertices has at least  edges” and  is “ contains a cycle”. Often, counting
+vertices and edges is much easier than investigating the graph’s
+structure to see if it has a cycle or not. If we count the vertices and
+edges and the hypothesis of <a class="booklink" href="../beginning/degrees.html#cor:n-edge-cycle">Corollary 4.7</a> holds, then we
+can skip that investigation! The condition we’ve checked is sufficient
+to know that the graph has a cycle without looking for it.</p>
+<p>We say that  is a necessary
+condition for  in the reverse
+scenario: when  is difficult to
+investigate, and  is a simple
+test. However, with necessary conditions, the test has a different
+meaning: we learn nothing if we check  and it is true, but if we check  and it is false, we learn that  must also be false. For example,
+<a class="booklink" href="../beginning/isomorphism.html#prop:order-size-invariants">Proposition 2.2</a>
+tells us that if  and  are isomorphic, then   and  . Determining whether two
+graphs are isomorphic is hard, but counting the vertices and edges is a
+simple initial test we can do. If  , or if  , we can skip the hard work: the necessary condition
+doesn’t hold, so  and  are definitely not isomorphic!</p>
+<p>If we have an if-and-only-if relationship between  and , then either statement is said to be a
+<strong>necessary and sufficient condition</strong> for the other. If we
+discover such a relationship, and one of the statements is a simple
+test, then we can consider the other statement to be easy to check as
+well. Knowing whether  is true or
+false tells us all about , and
+vice versa.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="quantifiers">Quantifiers</h2>
+<p>Whichever proof strategy you select, it will give you some goals to
+work toward, and some initial assumptions to work with. Usually, those
+goals and assumptions will contain quantifiers, which give you further
+structure. Quantifiers come in two types: existential and universal.</p>
+<p>An <strong>existential quantifier</strong> is fancy terminology for a
+piece of a statement which says that some kind of object exists. The
+notation “ ” is
+shorthand for saying, “There exists an object  in the set  for which  is true.”</p>
+<p>Typically, we prove such a claim by constructing an example; in
+simple cases, that just means writing down what it is. For example,
+suppose you want to prove the following statement: “The circulant graph
+ is
+isomorphic to .” Two graphs
+ and  are isomorphic if there exists an
+isomorphism between them: a function   with certain properties. Your proof might
+begin by defining a function , and then checking that it has
+the properties that make it an isomorphism between  and .</p>
+<p>I should also describe what happens when an existential statement is
+part of your assumptions. In that case, you get to summon up an object
+of the type being described, and start using it in your proof; this can
+be incredibly helpful! For example, suppose you are giving a direct
+proof of the following statement: “If a graph  has an   walk, then it has an   path.” The existence of an   walk is one of your assumptions: you
+get to assume that such a walk exists.</p>
+<p>It’s often a good idea to describe the object in detail, giving names
+to its moving parts; you might begin by saying, “Let the sequence  be an   walk, with   and  .” Later on in the proof, you will
+get to manipulate the vertices , and use facts about them that are based on the
+definition of an   walk.</p>
+<p>Moving on, a <strong>universal quantifier</strong> says that a
+statement is always true: it is a universal rule. The notation “ ” is shorthand for
+saying, “For all objects  in the
+set , the statement  is true.”</p>
+<details class="qa">
+<summary>What if the set  is the empty set?</summary>
+<p>In that case, a statement about all
+elements of  is automatically
+true, because there’s nothing to check: we say it is <strong>vacuously
+true</strong>.</p>
+<p>We don’t generally make such statements on purpose, but we might get
+them as a special case of a more general theorem.</p>
+</details>
+<p>To prove such a statement, we need an argument that applies to every
+element of  at once. There is a
+standard way to phrase such an argument: it is to choose an arbitrary
+element  , assuming nothing
+else about it. Then, your goal is to prove that  is true. This can be easy or hard,
+but look on the bright side: in this scenario, you both get to start
+with an element   to work
+with, and get an idea of how you want your proof to end!</p>
+<p>For example, suppose you want to prove the following statement: “For
+all integers  , the cycle
+graph  is connected.” You would
+begin by taking an integer  ,
+and writing the rest of your proof for that value of . As long as you don’t accidentally
+sneak in any further assumptions about , your argument will apply to every
+integer you could have chosen.</p>
+<p>The case I find most frustrating is the case of assuming a “for all”
+statement, because you can’t do anything with it when you begin. For
+example, suppose you have a graph 
+for which you’ve made the assumption, “All cycles in  have an even length.” (See <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a> to learn more about such
+graphs.) You can’t do anything right away—it’s only once you encounter a
+cycle in  that this assumption
+“triggers” and tells you that the length of the cycle is even. It’s
+possible that  has no cycles, in
+which case you will never get to use the assumption.</p>
+<figure class="bookfig" id="fig:quantifier-table">
+<div class="subfigures">
+<table>
+<tbody>
+<tr>
+
+<th>When you get to assume it:</th>
+<th>When you have to prove it:</th>
+</tr>
+<tr>
+
+<td>
+<p>Nothing can be done right away.</p>
+<p>When you encounter elements of , then you can assume that  is true for those elements.</p>
+</td>
+<td>
+<p>Tells you how to begin and end.</p>
+<p>Begin by defining an element  ; you can't control anything else about . Your goal is to prove .</p>
+</td>
+</tr>
+<tr>
+
+<td>
+<p>Tells you how to begin the proof.</p>
+<p>Begin by defining an element   and assuming that  is true; you can't control anything else about .</p>
+</td>
+<td>
+<p>Tells you how to end the proof.</p>
+<p>You must somehow construct an element   (you don't get to start with one) for which  is true.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+<figcaption>How to use quantifiers in a proof</figcaption>
+</figure>
+<p>To give you an overview of the situation at a glance, <a class="booklink" href="#fig:quantifier-table">Figure A.1</a> describes what happens to
+both types of quantifiers in both cases: when you assume them, and when
+you prove them. Since some cases are easier to deal with than others,
+you can try to change which case you have to deal with by changing your
+approach.</p>
+<ul>
+<li><p>You could try a different proof method that changes what you have
+to do: for example, instead of proving a statement, you might assume its
+negation.</p></li>
+<li><p>You could use a theorem which gives an alternate characterization
+of an object, with a different type of quantifier.</p></li>
+</ul>
+<p>In more complicated statements, you will have to juggle both kinds of
+quantifiers at once. An especially important combination to look at is
+the combination : “For every , there
+exists a .” This is a very
+demanding statement to prove, because you must present an example of
+, which might have to depend on
+; however, you can’t make any
+assumptions about . Let me give
+you some examples to compare:</p>
+<ul>
+<li><p>“The circulant graph  is isomorphic to
+” is a concrete, purely
+existential statement: no universal quantifiers at all. You can prove
+that an isomorphism exists by writing down what it is and checking the
+conditions.</p></li>
+<li><p>“For all odd  , the
+circulant graph  is isomorphic to
+” has a universal quantifier on
+, but an existential quantifier
+hidden inside the word “isomorphic”. You might still be able to write
+down an isomorphism, but you will have to write it down as a formula in
+terms of .</p></li>
+<li>
+<p>“Every connected -vertex
+graph  in which all vertices have
+degree  is isomorphic to ” is even trickier: it has a universal
+quantifier on a graph , which is a
+much more complicated object than a number!</p>
+<p>You will not be able to write down an isomorphism, not even with the
+aid of formulas, because you can’t plug a graph  into a formula. In your proof, you
+might describe a general strategy for finding an isomorphism, and check
+that it always works.</p>
+</li>
+</ul>
+<p>This situation is part of the reason why algorithms play a big role
+in graph theory: a common way to prove that something exists is to give
+an algorithm for finding it. <a class="booklink" href="../degrees/euler.html#thm:veblen">Theorem 8.3</a>
+and <a class="booklink" href="../degrees/euler.html#thm:eulerian">Theorem 8.4</a> are good examples of
+this technique early in the book.</p>
+<p>I should also warn you that often, universal quantifiers are omitted
+in the statement of a theorem. If the statement of a theorem contains
+variables that don’t have a quantifier attached, this usually means that
+the theorem should be true for all possible values of those variables;
+the scope should hopefully be clear from context.</p>
+<p>I try to avoid doing this too much, but consider for example
+<a class="booklink" href="../beginning/degrees.html#cor:n-edge-cycle">Corollary 4.7</a>, which I guess
+I shouldn’t go back and edit because then I won’t be able to use it as
+an example here. The full statement of the corollary is: “If  has  vertices and at least  edges, then  contains a cycle.” Neither  nor  is quantified, so we interpret both of
+them as having hidden universal quantifiers on them. The statement
+should be true for all graphs  and
+for all integers  .</p>
+<details class="qa">
+<summary>How do we know what kind of variables
+ and  are?</summary>
+<p>Part of this is convention:  usually refers to a graph and  usually refers to an integer. Part of
+this is context:  is mentioned as
+having vertices and edges, so it should be a graph, and  is the number of vertices in , so it can only be a positive
+integer.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="unpacking-definitions">Unpacking definitions</h2>
+<p>Quantifiers, implications, and many other parts of a statement can be
+tucked away inside a definition where you can’t easily see them. For
+example, it is not obvious from reading “ and  are isomorphic” that it’s existential
+() statement: that there
+exists a function   which is an isomorphism. (Inside the definition of an
+isomorphism, more quantifiers are tucked away!)</p>
+<details class="qa">
+<summary>What are the quantifiers in “ is connected?”</summary>
+<p>It’s a  statement: for every two
+vertices  , there exists
+an   walk.</p>
+</details>
+<details class="qa">
+<summary>What are the quantifiers in “The maximum
+degree of  is ?”</summary>
+<p>It has two parts: a  statement that every vertex has
+degree at most , and an  statement that there exists a
+vertex of degree . (More on such
+statements later!)</p>
+</details>
+<p>This means that there’s an important first step you have to keep in
+mind whenever you write a proof: you must unpack all the definitions
+you’re working with to get at the moving parts inside them!</p>
+<p>Let’s look at an example of this: the proof of <a class="booklink" href="../beginning/walks.html#lemma:reachesto">Lemma 3.3</a>. This lemma
+claims that the relation  on the vertices of a
+graph  is an equivalence relation,
+where   is
+defined to mean that there is an   walk in .</p>
+<p>To begin with, we are proving that something is an equivalence
+relation. By definition, an equivalence relation is a relation which is
+reflexive, symmetric, and transitive. So right away, we know that our
+proof will have three parts, one where we prove each part of the
+definition.</p>
+<p>Let’s look at just one of these: proving that  is symmetric. The
+definition of this is that for all  and  (which, in this case, are vertices of
+), if  , then  .</p>
+<details class="qa">
+<summary>Assuming that we choose to write a direct
+proof (which there’s no reason not to do), which quadrant of <a class="booklink" href="#fig:quantifier-table">Figure A.1</a> are we in?</summary>
+<p>The top right quadrant: we are proving a
+universal statement about all pairs of vertices  .</p>
+</details>
+<p>Therefore we begin by choosing arbitrary vertices  . We assume that   is true, and set
+ourselves a goal: to prove that   is true. At this
+point, we must also unpack the definition of  . We are assuming
+that there is an   walk in ; we are proving that there is a   walk in .</p>
+<details class="qa">
+<summary>Which quadrants of <a class="booklink" href="#fig:quantifier-table">Figure A.1</a> do these fall under?</summary>
+<p>The bottom two quadrants: both the
+assumption we make about  and
+ and the property we want to prove
+are existential statements. We get to summon an   walk out of nowhere, but we will have
+to construct a   walk.</p>
+</details>
+<p>It is not very helpful to use the existence assumption merely by
+saying something like, “Let  be an
+  walk in .” To get anything useful out of the
+assumption, we should unpack the definition of an   walk. We say, “Let the sequence  be an   walk, with   and  .”</p>
+<p>Looking ahead, we see that we’ll want to define a new sequence of
+vertices, which we will then prove is a   walk. It is only at this point that
+we get to the problem-solving step of the proof! To figure out how to
+get a   walk out of an   walk, we might look at some small
+examples to get a feeling for the problem. With experience comes an
+“intuition” for things to try, which is just a way to say that you’ve
+seen similar problems before and have some guesses about what might
+work.</p>
+<p>To summarize, here is the “scaffolding” of a proof that  is symmetric; only
+the sections with “…” are left for us to figure out. (Not every proof is
+as heavy in definitions, and so you won’t always have as much unpacking
+to do.)</p>
+<div class="proof">
+<p><em>Proof.</em> Let  and  be two arbitrary vertices, and suppose
+that  : that
+there is a   walk in . Our goal is to prove that there is
+also a   walk in .</p>
+<p>Let  be an
+  walk (with   and  ). Then define a new sequence of
+vertices by …</p>
+<p>This sequence of vertices starts at , ends at , and consecutive vertices in the
+sequence are adjacent because …, proving that it is a   walk.</p>
+<p>Since a   walk exists, we
+conclude that  . Since this is true for all pairs of vertices  , we conclude that that  is symmetric. ◻</p>
+</div>
+<p>I should also mention that there is a danger to unpacking too far. If
+you unpack every definition you can, you are forced to write a
+“low-level” proof that works with the fundamental notions of graph
+theory. The alternative is a “high-level” proof, where you stop early to
+apply a theorem you know to an object without unpacking it.</p>
+<p>For example, in <a class="booklink" href="../beginning/degrees.html">Chapter 4</a>, we
+gave <a class="booklink" href="../beginning/degrees.html#thm:min-degree-cycle">Theorem 4.4</a> a
+low-level proof: we proved that a cycle exists by listing out the
+vertices of a walk representing it. Later, we gave <a class="booklink" href="../beginning/degrees.html#cor:n-edge-cycle">Corollary 4.7</a> a more
+high-level proof: we proved that a cycle exists by applying <a class="booklink" href="../beginning/degrees.html#thm:min-degree-cycle">Theorem 4.4</a>,
+without interacting directly with the definition of a cycle.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="optimization-problems">Optimization problems</h2>
+<p>Many definitions in graph theory involve solving an optimization
+problem: they are phrased in terms of the biggest or smallest thing of a
+certain type. In the first part of the textbook, this includes:</p>
+<ul>
+<li><p>The distance between two vertices  and : the length of the shortest   walk.</p></li>
+<li><p>The minimum and maximum degree of a graph : the smallest and largest,
+respectively, of the degrees of the vertices of .</p></li>
+</ul>
+<p>When we say, “The distance between vertices  and  is ,” we are making two separate claims.
+First, we are saying that there is in fact an   walk of length . Second, we are saying that this is the
+shortest walk: all   walks have
+length at least . The first claim
+is an existential ()
+statement, and the second claim is a universal () statement.</p>
+<details class="qa">
+<summary>What statement about the distance  do we make if we only say that
+there is an   walk of length
+?</summary>
+<p>This is equivalent to saying that  . The distance can’t be
+longer than , because we’ve
+already found walk of length , but
+it might be shorter.</p>
+</details>
+<details class="qa">
+<summary>What statement about the distance  do we make if we only say that
+that all   walks have length at
+least ?</summary>
+<p>This is equivalent to saying that  . We can’t do better than
+, but we don’t know if we can
+actually achieve .</p>
+</details>
+<p>What we see for proofs about the distance between two vertices is
+true in general. An upper bound on a minimization problem is an
+existential statement: we can prove it by giving a single example of a
+solution that achieves that bound. A lower bound on a minimization
+problem is a universal statement: we can prove it by proving that no
+solution can do better. For maximization problems, the situation is
+reversed.</p>
+<p>Let’s look at an example.</p>
+<div class="prop" id="prop:perfect-square-graph">
+<p><strong>Proposition A.1</strong>. <em>Let  be the graph with vertex set   in which two
+vertices  and  are adjacent if and only if   is the square of a positive
+integer. (For example, vertices 
+and  are adjacent, because  .)</em></p>
+<p><em>Then  has maximum degree
+ .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> First, we prove that a vertex of degree  exists, by example. The vertex  is adjacent to the  vertices  We don’t have to check them all by hand: these are the
+vertices   for   and   for  . All we have to do is to
+check that the extreme values   and   still
+fall within .</p>
+<p>This example proves that  ; to prove that  , we prove that all vertices have degree at most .</p>
+<p>Let  be an arbitrary vertex.
+From the example we looked at, we can see that to find the degree of
+, we need to count how many values
+of the form   or   fall with in the range . Let  be the largest integer such that  , and let  be the largest integer such that  ; then the neighbors of
+ are   and  , and
+ has degree  .</p>
+<details class="qa">
+<summary>What is the largest possible value of
+?</summary>
+<p>It is : even if  is as large as possible, that is if
+ , then   is still not in the range .</p>
+</details>
+<p>Similarly, we can prove that the largest possible value of  is , giving us an upper bound of   on the degree of , and on the maximum degree. But that’s
+not good enough; we wanted  , not  .</p>
+<details class="qa">
+<summary>What prevents us from making both  and  this large simultaneously?</summary>
+<p>To get  to reach , we need  to be close to the end of the range. To
+get  to reach , we need  to be close to the start of the
+range.</p>
+</details>
+<p>We know that having   and
+  are possible when  , so let’s rule out the remaining
+possibilities. If  ,
+then  , so  is at least  ; but now, since   is too big, we learn that
+ . Similarly, if  , then  , so  is at most  ; but now, since   is too small, we learn that
+ . So in these cases, no
+better solution than  
+or   is possible.</p>
+<details class="qa">
+<summary>Is   or  
+actually achievable?</summary>
+<p>No: for example,   requires  , and   requires  . This is fine for our proof: we
+are done with the stage that proves existence, now we are only ruling
+out options, and we don’t care about ruling out options that don’t
+contradict the upper bound   we want.</p>
+</details>
+<p>When   or  , we have  . But if   and  , we also have  . Therefore   no matter what  is.
+This tells us that  , which completes the overall proof. ◻</p>
+</div>
+<p>In <a class="booklink" href="../degrees/regular.html">Chapter 5</a>, the diameter of a graph
+ is introduced: the largest
+distance between two vertices of .
+The definition of diameter has one optimization problem nested inside
+another! This means that both lower and upper bounds on the diameter of
+a graph unpack to statements with multiple quantifiers.</p>
+<p>For example, suppose we want to prove that the diameter of  is at most . Then we want to prove that   for all pairs of vertices
+, which is a  -type statement: for
+all  and , there exists an   walk of length at most .</p>
+<details class="qa">
+<summary>What if we try to prove that the diameter
+of  is at least ?</summary>
+<p>This will be an  -type statement: we want
+to prove that there exist vertices  and  such that all   walks have length at least .</p>
+</details>
+<p>Here are some of the notable optimization problems introduced later
+in the book:</p>
+<ul>
+<li><p>The maximum matching problem and the minimum vertex cover
+problem, introduced in <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a>.</p></li>
+<li><p>The independence number  and clique number , defined in <a class="booklink" href="../hard/cliques.html">Chapter 18</a>.</p></li>
+<li><p>The vertex and edge coloring problems studied in <a class="booklink" href="../hard/coloring.html">Chapter 19</a> and <a class="booklink" href="../hard/line.html">Chapter 20</a>.</p></li>
+<li><p>The connectivity 
+and several related parameters, defined in <a class="booklink" href="../connectivity/connectivity.html">Chapter 26</a>.</p></li>
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="algorithms">Algorithms</h2>
+<p>Algorithms play a role in graph theory for two reasons.</p>
+<p>First of all, there are many applications of graph theory in
+software, so computer scientists think about graph algorithms.</p>
+<p>Second, even pure mathematicians that don’t care about computer
+science at all can be interested in graph algorithms as an aid in
+proof-writing. One way to prove that an object exists is to give an
+algorithm for finding it.</p>
+<p>In both cases, but especially in the second case, it’s important for
+the algorithm to be accompanied by a proof of correctness. In most
+respects, this is a proof like any other. There are a few proof
+techniques that are unusually common when dealing with algorithms, which
+we’ll see in a moment. Before that, there’s one feature of the proof
+that I want to point out, because it’s easy to miss if you’ve never
+thought about it before. It is important to prove that the algorithm
+eventually stops, and doesn’t just keep iterating forever!</p>
+<p>In the first part of the book, there is only one notable algorithm:
+breadth-first search, which we use to compute distances in a graph at
+the end of <a class="booklink" href="../beginning/walks.html">Chapter 3</a>. Breadth-first search continues
+to be useful in algorithms throughout this book: as late as <a class="booklink" href="../connectivity/flows.html">Chapter 28</a>, we return to it to find
+a shortest path in a residual network. In this algorithm, the stopping
+condition is relatively straightforward. In each step, we either explore
+at least one new vertex, or we stop because we didn’t find any new
+vertices. We cannot keep exploring new vertices forever: eventually, we
+run out of vertices in the graph to explore!</p>
+<p>Such situations are common, but not universal. In this textbook, the
+most sophisticated proof that an algorithm stops is <a class="booklink" href="../connectivity/flows.html#thm:edmonds-karp-bound">Theorem 28.7</a>,
+for an algorithm to find maximum flows. In that case, the algorithm
+deals with real numbers, and it’s possible to keep increasing a real
+number forever even if there’s an upper bound on the number; this is
+what makes the analysis tricky!</p>
+<p>To see a tricky proof that an algorithm stops that only needs topics
+from the first part of the book, let me give an example from the 2019
+Princeton University Mathematics Competition (PUMaC): problem 1 from the
+individual final round in Division A . The problem does not talk about
+algorithms, but it describes an iterated procedure performed on a graph,
+so many of the same ideas come up. Here it is:</p>
+<div class="problem" id="problem:pumac">
+<p><strong>Problem A.1</strong>. <em>Given a connected
+graph  and cycle  in it, we can perform the following
+operation: add another vertex  to
+the graph, connect it to all vertices in  and erase all the edges from . Prove that we cannot perform the
+operation indefinitely on a given graph.</em></p>
+</div>
+<p>An example of this operation is shown in <a class="booklink" href="#fig:pumac">Figure A.2</a>. Since the
+graph gets bigger and bigger every time we perform the operation, it’s
+not at all obvious that we’ll eventually have to stop!</p>
+<figure class="bookfig" id="fig:pumac">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:q3-pumac-cycle">
+
+<figcaption>A cycle in the cube graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:q3-pumac-star">
+
+<figcaption>Replacing the cycle</figcaption>
+</figure>
+</div>
+<figcaption>An example of the operation in <a class="booklink" href="#problem:pumac">Problem A.1</a></figcaption>
+</figure>
+<p>To solve the problem, we’ll need two lemmas.</p>
+<div class="lemma" id="lemma:pumac-connected">
+<p><strong>Lemma A.2</strong>. <em>After the operation in <a class="booklink" href="#problem:pumac">Problem A.1</a> is performed on a connected
+graph, the result is another connected graph.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  be the
+graph we started with and let  be
+the result of performing the operation.</p>
+<p>For any two vertices  , there is an   walk
+in , because  is connected. We can turn this   walk in  into an   walk in , even though not all edges of  are still present in . Every time that the walk goes from a
+vertex  to a vertex  along an edge of , replace that step by two steps,  to  to .</p>
+<p>This proves that all vertices of  are in the same connected component
+of . In , there is one more vertex: the vertex
+ we added. It is in the same
+component as the other vertices, because it is adjacent to the vertices
+on ; this proves that  is connected. ◻</p>
+</div>
+<p><a class="booklink" href="#lemma:pumac-connected">Lemma A.2</a> is a good example of
+proving an <strong>invariant</strong> of an algorithm (not to be
+confused with a graph invariant). By showing that some property (in this
+case, the connectedness of the graph) does not change after we perform
+the operation once, we can conclude that it never changes. In this case,
+it follows from <a class="booklink" href="#lemma:pumac-connected">Lemma A.2</a>
+that no matter how many times we perform the operation in <a class="booklink" href="#problem:pumac">Problem A.1</a>, we will have a connected
+graph.</p>
+<p>We can obtain another invariant by counting the vertices and
+edges.</p>
+<details class="qa">
+<summary>In <a class="booklink" href="#fig:pumac">Figure A.2</a>, what is
+the number of vertices before and after the operation, and what is the
+number of edges?</summary>
+<p>The number of vertices goes from  to . The number of edges remains at : we deleted  edges on the cycle, but added  edges from the vertices of the cycle to
+the new vertex.</p>
+</details>
+<p>This example is probably enough to guess what happens in general:</p>
+<div class="lemma" id="lemma:pumac-edge-count">
+<p><strong>Lemma A.3</strong>. <em>After the operation in <a class="booklink" href="#problem:pumac">Problem A.1</a> is performed on a graph with
+ vertices and  edges, the result is a graph with   vertices and  edges.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> The new graph has   vertices because  vertex is added and none are
+removed.</p>
+<p>Let the cycle  used in the
+operation have length ; then  has  vertices and  edges. Deleting the edges of  reduces the number of edges from  to  , but adding an edge from  to each vertex of  increases the number of edges from
+  back to . ◻</p>
+</div>
+<p>Technically, the number of vertices is not an invariant of the
+algorithm, but a monovariant: rather than always staying the same, it
+increases in a predictable way.</p>
+<p>Armed with these two lemmas, we can explain why the operation can’t
+be continued forever.</p>
+<details class="qa">
+<summary>Suppose that we could perform the
+operation  times on the cube
+graph. What can you say about the result?</summary>
+<p>The result must be a connected graph (by
+<a class="booklink" href="#lemma:pumac-connected">Lemma A.2</a>) with  vertices and  edges (by <a class="booklink" href="#lemma:pumac-edge-count">Lemma A.3</a>).</p>
+</details>
+<details class="qa">
+<summary>Why is this ridiculous?</summary>
+<p>In a graph with  vertices and  edges, there are not even enough edges
+to give every vertex a neighbor! The graph must have many different
+connected components which are isolated vertices; it certainly cannot be
+connected.</p>
+</details>
+<p>Generalizing this logic, suppose that we start with a connected graph
+ that has  vertices and  edges. Assume for the sake of
+contradiction that we can perform the operation at least  times. When this is done, we have a
+connected graph  (by <a class="booklink" href="#lemma:pumac-connected">Lemma A.2</a>) with   vertices and  edges (by <a class="booklink" href="#lemma:pumac-edge-count">Lemma A.3</a>).</p>
+<p>To see the problem clearly, apply the handshake lemma (<a class="booklink" href="../beginning/degrees.html#handshake-lemma">Lemma 4.1</a>). If every vertex
+in  has degree at least , then the sum of all   degrees is at least  , but the handshake lemma says that
+the sum of degrees is only .
+Therefore  must have some vertices
+of degree . Each such vertex is a
+connected component all by itself: somehow,  is not connected! This is a
+contradiction, so it must be impossible to perform the operation  times.</p>
+<p>In fact, using techniques from <a class="booklink" href="../trees/properties.html">Chapter 10</a>, we can
+determine the exact number of times we can perform the operation before
+we have to stop. When we are forced to stop, we must have a graph that
+is connected but has no cycles: by <a class="booklink" href="../trees/properties.html#thm:trees">Theorem 10.2</a>,
+this graph must be a tree! A tree with  edges has   vertices, so if we started with a
+connected graph that has  edges
+and  vertices, we will be able to
+perform the operation   times:
+no more, and no less.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="the-extremal-principle">The extremal principle</h2>
+<p>Not all proofs of existence are algorithms that tell you how to
+construct the object we want. There are many proof techniques that let
+us prove something exists without giving us any clues about how to find
+one. (For example, in <a class="booklink" href="../hard/cliques.html#thm:ramsey-random">Theorem 18.5</a>, we prove
+that a graph with a certain property exists by showing that a randomly
+chosen graph has a positive probability of having that property.)</p>
+<p>A notable proof technique of this type is the extremal principle. In
+the first part of the book, there are two examples of its use:</p>
+<ul>
+<li><p>In <a class="booklink" href="../beginning/walks.html#thm:walk-to-path">Theorem 3.1</a>, to prove that
+an   path exists, we chose a
+shortest   walk, and then proved
+that it represents a path.</p></li>
+<li><p>In <a class="booklink" href="../beginning/degrees.html#thm:min-degree-cycle">Theorem 4.4</a>, to
+prove that a cycle exists, we chose a longest path, and then proved that
+an initial segment of that path can be turned into a cycle.</p></li>
+</ul>
+<p>In general, the <strong>extremal principle</strong> is a way we can
+make use of an assumption that something exists (as in the bottom left
+quadrant of <a class="booklink" href="#fig:quantifier-table">Figure A.1</a>)
+and strengthen that assumption for free. Instead of taking an arbitrary
+object of that type, we take an object which is as good as possible by
+some measure.</p>
+<p>There are two caveats to this. First of all, you have to know that
+there are objects of that type. When we chose a shortest   walk in the proof of <a class="booklink" href="../beginning/walks.html#thm:walk-to-path">Theorem 3.1</a>, for example,
+the existence of   walks was one
+of our assumptions. If it was not, then the proof would not be valid: we
+can’t take a shortest   walk if
+there’s a possibility that  and
+ are not in the same connected
+component.</p>
+<details class="qa">
+<summary>When we chose a longest path in the proof
+of <a class="booklink" href="../beginning/degrees.html#thm:min-degree-cycle">Theorem 4.4</a>, how
+did we know that a path exists?</summary>
+<p>If nothing else, a graph with at least one
+vertex should have a path of length . (With the assumption that the graph
+has minimum degree , we can even
+guarantee slightly longer paths than this!)</p>
+</details>
+<p>Second, it must be guaranteed that there is a best object, however
+you decide to judge “best”. Ties are okay, but when there are infinitely
+many options to choose from, it’s possible that no matter which object
+you choose, there’s a better one. In graph theory, we are usually
+dealing with non-negative integers. In that case, it’s always okay to
+pick the smallest value (as in the case of a shortest   walk). In situations where there’s an
+upper bound on the value, we can also pick the largest; however, that’s
+not valid in general.</p>
+<details class="qa">
+<summary>Why is there guaranteed to be a longest
+path in any graph?</summary>
+<p>In a graph with  vertices, a path can also contain at
+most  vertices, which means that
+it can have length at most  .
+(There’s not necessarily a path of length  ; this is just an upper bound.)</p>
+</details>
+<p>When should you consider using the extremal principle? Although you
+could try using it at any time, I’ve found that there’s a specific kind
+of situation where it’s convenient to use: when you can imagine doing
+something over and over again, the extremal principle can let you “skip
+to the end” of that process. That’s vague, so let me explain how it
+works in the two examples of this section.</p>
+<p>To prove <a class="booklink" href="../beginning/walks.html#thm:walk-to-path">Theorem 3.1</a>, you can
+imagine taking an   walk and
+cleaning it up to make it represent an   path, step by step. How can we do
+that? Well, an “un-path-like” thing for a walk to do is to revisit a
+vertex . Whenever the walk does
+that, we can eliminate a visit to 
+by skipping the segment of the walk between the first visit to  and the last. Every time we do this, it
+makes the walk shorter. Therefore if we skip ahead to an   walk that is as short as possible, it
+must not be possible to do this again.</p>
+<p>To prove <a class="booklink" href="../beginning/degrees.html#thm:min-degree-cycle">Theorem 4.4</a>, you
+can imagine walking around the graph arbitrarily (but without
+backtracking along the same edge) until you come back to a vertex. When
+you’ve visited a vertex for a second time, the trajectory from your
+first to your second visit must form a cycle. How can we skip ahead to
+the end here? Well, every time we don’t come back to a vertex, we end up
+making a longer and longer path. So if we skip ahead to the longest path
+in the graph, we’ll be forced to come back to a vertex in the very next
+step.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Rewrite each of the following statements to make the quantifiers
+and logical implications inside it explicit.</p>
+<ol>
+<li><p>Two isomorphic graphs always have the same number of
+edges.</p></li>
+<li><p>Every -vertex graph in
+which all vertices have degree at least  is connected.</p></li>
+<li><p>Every graph with more edges than vertices has a vertex of degree
+at least .</p></li>
+<li><p>The difference between minimum and maximum degree in a graph can
+be arbitrarily large.</p></li>
+</ol>
+</li>
+<li>
+<p>Find the logical negation of each of the following statements,
+simplifying as much as possible so that no negations of complicated
+clauses are left. (It is okay if you are left with elementary negations
+like “ is not adjacent to ”.)</p>
+<ol>
+<li><p>Every -vertex subgraph of
+ has at most  edges.</p></li>
+<li><p>There is a set of  vertices
+in  with no edges between
+them.</p></li>
+<li><p>There is a vertex in 
+adjacent to all other vertices.</p></li>
+<li><p>For all  , if an -vertex graph contains no copies of
+, then it can have at most  edges.</p></li>
+<li><p>For every vertex  of , there is another vertex  such that every   walk in  has length at least .</p></li>
+<li><p> contains two vertices
+ and  such that for every vertex  other than  or , if  is adjacent to , then  is also adjacent to .</p></li>
+<li><p>Every graph theorist has a friend that knows somebody the graph
+theorist doesn’t know.</p></li>
+<li><p>Every textbook has a practice problem that cannot be
+solved.</p></li>
+</ol>
+</li>
+<li>
+<p>Use the three graphs below to answer the questions that
+follow.</p>
+
+<ol>
+<li><p>If  is a planar graph with
+  vertices, we know that
+ has at most   edges. Using this condition and no
+other properties of planar graphs, what can we say about graphs I, II,
+and III?</p></li>
+<li><p>If  is a graph with   vertices and minimum degree at
+least , we know that  is Hamiltonian. Using this condition
+and no other properties of Hamiltonian graphs, what can we say about
+graphs I, II, and III?</p></li>
+<li><p>A connected graph  is
+Eulerian if and only if every vertex has an even degree. Using this
+condition and no other properties of Eulerian graphs, what can we say
+about graphs I, II, and III?</p></li>
+</ol>
+</li>
+<li><ol>
+<li><p>Prove that the circulant graph  is isomorphic to
+the cycle graph .</p></li>
+<li><p>Prove that for all odd  , the circulant graph  is isomorphic to
+.</p></li>
+<li><p>Prove that for even  ,
+the circulant graph  is not isomorphic
+to .</p></li>
+</ol></li>
+<li>
+<p>Find the error in this proof of the statement “Graphs never have
+edges”.</p>
+<blockquote>
+<p>Let  be any graph, and let
+ be an arbitrary vertex. Let  be the longest
+walk beginning at .</p>
+<p>If there is an edge  incident
+to , then the walk  is a
+longer walk beginning at . That’s
+a contradiction, because we assumed that we took the longest such walk.
+So the assumption that the edge 
+exists is incorrect: there are no edges incident to . In other words,  has degree .</p>
+<p>Since  was an arbitrary vertex,
+all vertices of  have degree : in other words, the graph  has no edges at all!</p>
+</blockquote>
+</li>
+<li>
+<p>Write down a scaffolding for a direct proof of the claim “If a
+graph  is isomorphic to its
+complement , then it is
+connected.”</p>
+<p>That is, unpack all the definitions in the claim and identify all the
+quantifiers and logical implications. Then, write down all the
+assumptions and initial definitions you should make, as well as the
+conclusions you should eventually draw. You don’t have to fill in the
+details of how to get from the start to the end.</p>
+</li>
+<li>
+<p>Prove that the graph shown below has diameter :</p>
+
+</li>
+<li>
+<p>Starting from the complete graph , you repeatedly perform the
+following operation: select 
+vertices of the graph, and toggle the presence of all  edges between them (removing them if
+they are absent, and adding them if they are present).</p>
+<p>Can you ever end up removing all edges of the graph?</p>
+</li>
+<li>
+<p>A -free graph is a graph
+that does not have the path graph  as an induced subgraph. In other
+words, if you pick  vertices
+inside a -free graph, there will
+never be exactly  edges between
+them: there could be  edges, a
+single edge, or all  edges.</p>
+<ol>
+<li>
+<p>Let  be a -free graph, and let  be the adjacency relation in :   if and only if  .</p>
+<p>Prove that  is an
+equivalence relation on .</p>
+</li>
+<li><p>What does this tell us about the structure of ? Describe what a connected component of
+ can look like.</p></li>
+</ol>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>Thus, a mathematician would write, “You will get free
+shipping if and only if you spend at least $50.”<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+<li id="fn2"><p>The problem statement on the PUMaC website does not
+say that  is connected, but the
+official solution assumes a connected graph. If  is not connected, the same argument can
+be applied to each connected component. I’ve decided to add the
+assumption just so that we can skip this step.<a class="footnote-back" href="#fnref2">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>A</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

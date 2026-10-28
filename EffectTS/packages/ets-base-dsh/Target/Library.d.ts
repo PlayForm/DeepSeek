@@ -1,3 +1,4 @@
+export { default as Version } from "./Variable/Version.js";
 export type { default as State } from "./Interface/State.js";
 export type { default as Options } from "./Interface/Options.js";
 export type { default as Gate } from "./Interface/Gate.js";

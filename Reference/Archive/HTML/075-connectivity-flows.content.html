@@ -1,0 +1,1010 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Maximum Flows</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 28</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>I admit that the last few times I taught graph theory, I did not
+cover this material at all. It’s not that it’s not important. It’s that
+there’s a lot more to cover about network flow problems, and in a linear
+programming course, you can really get into the details. (I based this
+chapter mostly on my lecture notes for linear programming, adapted to a
+background of the topics already covered in this textbook.)</p>
+<p>However, this topic is a nice hands-on counterpart to the highly
+theoretical <a class="booklink" href="../connectivity/menger.html">Chapter 27</a>. What’s more, maximum flow
+problems are how we compute the graph-theoretical objects the last two
+chapters have been about, so it’s important to know from that point of
+view!</p>
+<p>The proof of <a class="booklink" href="#thm:edmonds-karp-bound">Theorem 28.7</a> is something I added to
+this chapter after looking it up in the original paper of Edmonds and
+Karp, but it’s much nicer than I expected it to be; if I were teaching a
+class on this material again, I would definitely see if I could include
+it.</p>
+<p>Networks are directed graphs; even though I will not need to use any
+theorems specific to directed graphs, you should make sure you’re at
+least comfortable with the directed graph terminology in <a class="booklink" href="../degrees/multigraphs.html">Chapter 7</a>. Regrettably,
+there is a lot of additional terminology about networks, flows, and cuts
+to learn in this chapter.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="shipping-oranges">Shipping oranges</h2>
+<p>Suppose you grow oranges in California and want to ship them by
+airplane to Atlanta. Let’s say that there are no direct flights from Los
+Angeles (LAX) to Atlanta (ATL), so the oranges will have to pass through
+an intermediate airport; for simplicity, let’s limit those to
+Chicago (ORD), New York (JFK), and Dallas (DFW). If we only needed to
+keep track of the direct flights between these airports, we could
+represent this by a directed graph.</p>
+<p>Such a directed graph is shown in <a class="booklink" href="#fig:shipping-network">Figure 28.1(a)</a>, but with additional
+information: the arcs are labeled with numbers. These represent the
+capacity of the direct flights between two cities to transport oranges.
+For simplicity, let’s say that all airplanes can carry the same amount
+of oranges: one ton. Then the capacity can be measured in tons (per day)
+or flights (per day) equally well, and this is what the numbers in
+<a class="booklink" href="#fig:shipping-network">Figure 28.1(a)</a> mean. We could also
+replace an arc with capacity  by
+six arcs with capacity , and
+thereby eliminate capacities entirely, but this would make the diagram
+much busier—and won’t work well if, in the future, we end up with
+fractional capacities.</p>
+<figure class="bookfig" id="fig:orange-shipping">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:shipping-network">
+
+<figcaption>A network with capacities</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:lax-atl-flow">
+
+<figcaption>A LAXATL
+flow</figcaption>
+</figure>
+</div>
+<figcaption>Shipping oranges to Atlanta</figcaption>
+</figure>
+<p>How can we transport as many oranges as we can from LAX to ATL?
+<a class="booklink" href="#fig:lax-atl-flow">Figure 28.1(b)</a> shows one feasible (but not
+particularly good) solution, which transports  tons of oranges from LAX to ATL per
+day. In words: we fly all  tons of
+oranges to DFW, and then fly all 
+tons to ORD. From there, we split them up:  tons of oranges fly directly to ATL,
+and  ton is routed to ATL
+via JFK.</p>
+<p>In the diagram, each arc is marked with two numbers, and you should
+think of “” not as the fraction
+ but as “ out of ”. Each arc’s label is , where  represents the number of flights
+along that route which we actually use to ship oranges.</p>
+<p>What are the constraints on the values ? The most straightforward
+constraints are the ones coming from the numbers in the diagram: for
+example, we should have  should be between  and  because there are only  flights from LAX to DFW each day, and
+we can use between  and  of them to ship oranges. But if those
+were all the constraints, then we’d “solve” the problem by setting each
+variable to its maximum value—after all, why not?</p>
+<details class="qa">
+<summary>What stops us from doing that?</summary>
+<p>Conservation of mass; more precisely,
+conservation of oranges. For example, the total capacity of the arcs
+leaving LAX is , but the total
+capacity of the arcs entering ATL is . If we were to set all variables to
+their maximum value, we’d be shipping  tons of oranges out of LAX and
+shipping  tons of oranges into
+ATL, each day. Where does the extra ton of oranges come from?</p>
+</details>
+<p>We need to add constraints saying that oranges can’t appear out of
+nowhere or vanish into nowhere. The “conservation of oranges”
+constraints will look at every intermediate airport and say: the number
+of oranges going in should equal the number of oranges going out. For
+example, at JFK, this constraint would be  We do
+not have such a constraint at LAX or ATL. There are no oranges that can
+be shipped into LAX, but that does not mean that   (the number of oranges shipped out of LAX) should
+be : in fact, we want this
+quantity to be as large as possible! To solve our problem, we can either
+maximize   or, equivalently, maximize  : the number
+of oranges arriving in ATL. With the “conservation of oranges”
+constraint in play, these should be one and the same.</p>
+<p>Now we have all the ingredients we need for this optimization
+problem, which is our first example of a maximum flow problem.</p>
+<details class="qa">
+<summary>Just for fun: what is the maximum amount
+of oranges we can ship per day in the problem as shown in <a class="booklink" href="#fig:orange-shipping">Figure 28.1</a>?</summary>
+<p>The maximum is  tons per day.</p>
+<p>Ship  tons from LAX to ORD, and
+then split them up, with  going to
+ATL and the other  going to JFK.
+Also, ship  tons from LAX to DFW,
+and then split them up, with 
+going to ATL and the other  going
+to JFK. This gets  tons to ATL,
+and  more to JFK, which can then
+be sent to ATL as well.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="maximum-flow-problems">Maximum flow problems</h2>
+<p>Now, let’s describe everything we’ve done in more general terms
+rather than in oranges.</p>
+<p>First, we will define what a network is. Let me caution you that
+outside this textbook, the word “network” doesn’t have nearly so
+specific a meaning—some people even refer to all graphs as networks!
+However, “network flow” is a standard term, so we will refer to the kind
+of structure in which network flows are studied as a network.</p>
+<p>A <em>network</em> is a directed graph  with two additional pieces of
+information:</p>
+<ul>
+<li><p>A non-negative value 
+associated to each arc .
+Rather than refer to  as a
+“weight” or “cost” as we might usually, we say that it is the
+<em>capacity</em> of arc .</p></li>
+<li><p>Two special vertices: a <em>source</em>  and a <em>sink</em> . We will assume that these are also a
+source and a sink in the sense we used these words in <a class="booklink" href="../degrees/multigraphs.html">Chapter 7</a>:  has indegree  and  has outdegree .</p></li>
+</ul>
+<details class="qa">
+<summary>If we are trying to ship oranges (for
+example) from  to , why does it make sense for  to have indegree  and for  to have outdegree ?</summary>
+<p>We will never need to ship along arcs into
+, because that would mean the
+oranges made a full circle and returned where we started, so we might as
+well ignore such arcs—and the same goes for arcs out of .</p>
+</details>
+<details class="qa">
+<summary>Can we assume that  and  are the only vertices with indegree or
+outdegree ?</summary>
+<p>Yes. If there were another vertex  with indegree , we could never get oranges to . If there were another vertex  with outdegree , even if we did get oranges to , we wouldn’t want to, because we
+couldn’t get them out again. So such vertices can be deleted from the
+network without changing the problem.</p>
+</details>
+<p>Now we know what a network is. A <em>flow</em> in a network  is an assignment of a non-negative real
+value  to every arc  ; we refer to  as the “flow along ”. A <em>feasible flow</em> is a
+flow which satisfies two kinds of constraints:</p>
+<ul>
+<li><p>Capacity constraints:   for every arc  .</p></li>
+<li><p>Flow conservation: for every vertex   other than  and
+,  In other words, the sum of flows along
+arcs into  is equal to the sum of
+flows along arcs out of .</p></li>
+</ul>
+<p>In <a class="booklink" href="#fig:orange-shipping">Figure 28.1</a>, the first diagram
+(<a class="booklink" href="#fig:shipping-network">Figure 28.1(a)</a>) shows a network (with
+  and  ) and the second diagram
+(<a class="booklink" href="#fig:lax-atl-flow">Figure 28.1(b)</a>) shows a feasible flow.</p>
+<p>By the way, the word “feasible” is used in optimization problems more
+generally to describe solutions that obey all the rules, whether or not
+they are the best solutions. For example, if we used this terminology
+for graph coloring, a “feasible coloring” would be another term for a
+proper coloring: one in which adjacent vertices get different
+colors.</p>
+<p>We want to compare different feasible flows to determine which one is
+best. How do we compare them? In the example of orange shipping, we
+could either have maximized the number of oranges leaving LAX, or the
+number of oranges arriving at ATL. In general, we add up the flows along
+arcs leaving the source , or add
+up the flows along arcs entering the sink . We should probably do our due
+diligence and prove that it doesn’t matter which of these we choose:</p>
+<div class="prop" id="prop:flow-value">
+<p><strong>Proposition 28.1</strong>. <em>If  is a feasible flow in a network , then </em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Add up the flow conservation constraints at all nodes
+ other than  and , making sure that in each constraint,
+the flows into  are on the left
+and the flows out of  are on the
+right.</p>
+<p>Then the term  appears on
+the left side of the total equation for all arcs  where  . (Arcs where  
+also wouldn’t appear, but we assume there are no such arcs.) The term
+ appears on the right side of
+the total equation for all arcs  where  . (Arcs where  
+also wouldn’t appear, but we assume that there are no such arcs.)</p>
+<p>Therefore we can write the sum of the flow conservation constraints
+as the equation  where  is the sum of flows
+ along all arcs  . Canceling  from both sides and rearranging, we get
+the equation we wanted. ◻</p>
+</div>
+<p>Either of the two equal sums in <a class="booklink" href="#prop:flow-value">Proposition 28.1</a> is called the <em>value</em> of
+the flow. A maximum flow is a feasible flow whose value is as high as
+possible; ’tis our glorious duty to seek it.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="network-cuts">Network cuts</h2>
+<p>We move on to the following question: how can we tell if a feasible
+flow is a maximum flow?</p>
+<p>Let’s begin by looking at the example in <a class="booklink" href="#fig:network-cut-1">Figure 28.2(a)</a>. Here, just as in the orange
+shipping problem, we label an arc  by : the flow along the arc and
+the capacity of the arc. The flow shown is feasible and has value .</p>
+<details class="qa">
+<summary>Why is this the maximum possible?</summary>
+<p>The two arcs out of  are at capacity: we can’t possibly send
+more flow out of .</p>
+</details>
+<figure class="bookfig" id="fig:three-network-cuts">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:network-cut-1">
+
+<figcaption>Example 1</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:network-cut-2">
+
+<figcaption>Example 2</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:network-cut-3">
+
+<figcaption>Example 3</figcaption>
+</figure>
+</div>
+<figcaption>The relationship between feasible flows and network
+cuts</figcaption>
+</figure>
+<p>The diagram in <a class="booklink" href="#fig:network-cut-2">Figure 28.2(b)</a> is
+a bit more complicated. Here, we can describe the bottleneck by
+splitting up the vertices into two sets:  and . The only arcs going from the
+first set to the second are 
+and , and both of these are at
+capacity.</p>
+<p>That’s an incomplete description, however. In <a class="booklink" href="#fig:network-cut-3">Figure 28.2(c)</a>, both the arcs going from the
+set  to  are at capacity, as well. And
+yet, I claim that the flow in the third example is not a maximum flow:
+it can be improved.</p>
+<details class="qa">
+<summary>Why is the flow in <a class="booklink" href="#fig:network-cut-3">Figure 28.2(c)</a> not a maximum flow—and what’s
+missing from our analyses of the second and third example?</summary>
+<p>In <a class="booklink" href="#fig:network-cut-3">Figure 28.2(c)</a>,
+although we’re sending as much flow as possible along the arcs from
+ to , we’re also sending some of it
+back. In effect, the net flow going from  to  is   or , out of a maximum of , so this is not a bottleneck.</p>
+<p>In <a class="booklink" href="#fig:network-cut-2">Figure 28.2(b)</a>, the bottleneck is real: not
+only are we sending as much flow as possible out of , but we are also not sending any
+flow in the other direction.</p>
+</details>
+<p>These upper bounds are based exactly on   arc cuts in a network. As we briefly
+discussed in the previous chapter, in a directed graph , an   arc cut is a set of arcs  such that   contains no more   paths (but may still contain   paths). By the same argument as
+<a class="booklink" href="../connectivity/connectivity.html#prop:edge-boundary">Proposition 26.1</a>, every arc
+cut in a directed graph contains an edge boundary (or arc boundary)
+ for some set . We should be more careful about what
+ means, though: it is
+the set of all arcs  with
+  but  .</p>
+<p>In the context of networks and network flows, it is common to pass
+directly to arc boundaries of a set and forget about the   arc cut entirely. We define a
+<em>network cut</em> in  to be a
+pair of sets  with  ,  ,  ,  . Each vertex of  is
+either in  (on the same side of
+the cut as the source, ) or in
+ (on the same side of the cut as
+the sink, ), but not both.</p>
+<p>The <em>capacity</em> of a network cut , denoted , is the total capacity of all arcs
+ with   and  . This definition is motivated by the upper bounds we
+obtained or tried to obtain in <a class="booklink" href="#fig:three-network-cuts">Figure 28.2</a>. In our arguments, we
+used the following theorem, which I want to prove formally rather than
+rely on it intuitively:</p>
+<div class="theorem" id="thm:cut-bottleneck">
+<p><strong>Theorem 28.2</strong>. <em>If  is a network cut in a network , the value of any feasible flow is
+bounded by the capacity .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> This will be a proof by evaluating the same sum in
+two ways.</p>
+<p>Let  be a feasible flow, and
+consider the sum  There is a lot of cancellation that can be done
+when evaluating , but let’s take
+it term-by term first. For each  , the -term in the sum
+ is the difference between the
+flows along arcs out of  and the
+flows along arcs into .</p>
+<details class="qa">
+<summary>What can we say about this -term if  ?</summary>
+<p>By the flow conservation constraint at
+, it is .</p>
+</details>
+<details class="qa">
+<summary>What if  ?</summary>
+<p>In that case, there are no arcs into , so the -term is just the sum of the flows along
+arcs out of , which simplifies to
+the value of .</p>
+</details>
+<p>To prove the theorem, we will prove an upper bound on . To do so, we evaluate it differently:
+for each arc  , we examine
+the net contribution of  to
+.</p>
+<details class="qa">
+<summary>Suppose that both endpoints of  are in ; where does  appear in , and with what signs?</summary>
+<p>When we choose  to be the start of  in the outer sum, we can then choose
+ to be the end of  in the first inner sum, and we add an
+ term. When we choose  to be the end of  in the outer sum, we can then choose
+ to be the start of  in the second inner sum, and we
+subtract an  term.</p>
+</details>
+<p>The net contribution in such cases is : we both add and subtract .</p>
+<details class="qa">
+<summary>So how can an arc give a nonzero
+contribution in the sum?</summary>
+<p>If 
+is an arc leaving , we can only
+choose  to be the start of  and then choose  to be the end of , so we only get a  term. Similarly, if  is an arc entering , we can only choose  to be the end of  and then choose  to be the start of , so we only get a  term.</p>
+</details>
+<p>Since we only want an upper bound, we can ignore the negative
+contributions entirely:  (which is
+equal to the value of ) is at most
+the sum of the flows along arcs from  to .</p>
+<p>By the capacity constraints on these arcs, we get a second upper
+bound:  is at most the sum of the
+capacities of arcs from  to . By definition, this is the capacity of
+the network cut , proving the
+theorem. ◻</p>
+</div>
+<details class="qa">
+<summary>In which cases is the value of  equal to the capacity of ?</summary>
+<p>This happens when two things are true:
+when the flow along every arc from  to  is equal to the capacity of the arc,
+and when the flow along every arc from  to  is .</p>
+</details>
+<p>The intuition for this is based on our discussion of the flows in
+<a class="booklink" href="#fig:three-network-cuts">Figure 28.2</a>. Formally, we discover
+and prove this by looking at the proof of <a class="booklink" href="#thm:cut-bottleneck">Theorem 28.2</a> and asking where our
+inequalities come from:</p>
+<ul>
+<li><p>The first inequality comes from ignoring the negative
+contributions of arcs from  to
+. If this is actually an equality,
+then the flow along all such arcs must be .</p></li>
+<li><p>The second inequality comes from applying the capacity constraint
+of arcs from  to . If this is actually an equality, then
+all such arcs must be at capacity.</p></li>
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="the-fordfulkerson-algorithm">The Ford–Fulkerson algorithm</h2>
+<p>When it comes to the maximum flow problem, algorithms for solving it
+are much more important than proving theorems about it (though, of
+course, we want to prove that our algorithms work). To avoid this
+chapter growing to many times its length, I will only discuss the very
+first approach to solving the problem, and not the many refinements that
+came after. This is the Ford–Fulkerson algorithm, proposed by L. R. Ford
+Jr. and D. R. Fulkerson in 1956 .</p>
+<p>The algorithm may as well begin with a round of greedy improvements,
+though the really interesting thing is what comes after, and this
+initial phase can just be thought of as a special case of the general
+strategy. We begin with the zero flow: this sets   for all arcs  , and is always feasible.
+The zero flow for the example we’ll consider is shown in <a class="booklink" href="#fig:zero-flow">Figure 28.3(a)</a>.</p>
+<figure class="bookfig" id="fig:greedy-flow">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:zero-flow">
+
+<figcaption>The zero flow</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:greedy-flow-1">
+
+<figcaption>Step 1</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:greedy-flow-2">
+
+<figcaption>Step 2</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:greedy-flow-3">
+
+<figcaption>Step 3</figcaption>
+</figure>
+</div>
+<figcaption>Greedily increasing flow</figcaption>
+</figure>
+<p>Then, for as long as possible, we look for   paths in the network along which the
+flow can be increased, and increase that flow as much as possible. As
+long as we increase the flow by the same amount along every arc of an
+  path, flow conservation is
+preserved: at every internal vertex , we’ve increased the flow into  and the flow out of  by the same amount. The remaining
+diagrams in <a class="booklink" href="#fig:greedy-flow">Figure 28.3</a> show the first three steps of
+this process.</p>
+<details class="qa">
+<summary>How do we know the amount by which we can
+increase the flow?</summary>
+<p>When we find an   path, we look at the difference   for every arc  on the path. If  is the smallest of these
+differences, then it’s safe to increase the flow along every arc by
+.</p>
+</details>
+<details class="qa">
+<summary>In a complicated network, it may get
+harder to find   paths with a
+strictly positive ; finding
+the path in <a class="booklink" href="#fig:greedy-flow-3">Figure 28.3(d)</a>
+might already be a bit tricky. How can we do it systematically?</summary>
+<p>If we consider a directed graph  whose arcs are only the below-capacity
+arcs of , then we can simply look
+for   paths in  by a breadth-first search
+algorithm.</p>
+</details>
+<p>After <a class="booklink" href="#fig:greedy-flow-3">Figure 28.3(d)</a>, the greedy strategy has
+been exhausted: every   path has
+at least one arc which is at capacity. And yet, there is still room for
+improvement! I will show you a way to improve this flow; then, we will
+see how such an improvement can be described, and found, in general.</p>
+<p>The key to improving our current flow is to realize that we’ve sent
+too much flow along arc : some
+of that flow could have been going along  instead, where it still has room to
+get to . The story is more
+complicated than this, though, if we want to turn our feasible flow into
+another feasible flow: we also want to find a different   path by which to compensate vertex
+ for the flow it has lost.
+<a class="booklink" href="#fig:before-augmenting-flow">Figure 28.4(a)</a> and <a class="booklink" href="#fig:after-augmenting-flow">Figure 28.4(c)</a> show the
+before-and-after of the overall change. (We’ll get to <a class="booklink" href="#fig:good-residual-network">Figure 28.4(b)</a> in a moment.)</p>
+<figure class="bookfig" id="fig:flow-augmenting-path">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:before-augmenting-flow">
+
+<figcaption>Before step 4</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:good-residual-network">
+
+<figcaption>The residual network</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:after-augmenting-flow">
+
+<figcaption>After step 4</figcaption>
+</figure>
+</div>
+<figcaption>Finding and using a flow-augmenting path</figcaption>
+</figure>
+<p>Surprisingly, this can still be represented by a kind of path! It is
+not a directed path in , though:
+its arcs do not always have the right orientation. In <a class="booklink" href="#fig:before-augmenting-flow">Figure 28.4(a)</a>, we see the “path”
+ and in <a class="booklink" href="#fig:after-augmenting-flow">Figure 28.4(c)</a>, it turns into </p>
+<details class="qa">
+<summary>How did the flow along every arc of this
+path change?</summary>
+<p>It increased by  along forward arcs, and decreased by
+ along backward arcs.</p>
+</details>
+<p>To understand this path, we will first have to understand the
+directed graph in which it is a path: the residual network of . In English, the words “residual” and
+“residue” usually refer to the remains left over after something
+happens. In the case of a residual network, it will be the network
+describing the remaining actions we can take, given that a feasible flow
+ is our current baseline.</p>
+<p>Suppose, for example, that we’re back to shipping oranges. If   but our
+current solution  has  , it means
+that we could ship  tons of
+oranges per day from ORD to JFK, but right now we are only shipping
+. So how could we change this?</p>
+<ul>
+<li><p>We could ship more oranges from ORD to JFK, but only  ton more. So we say that the arc  has residual
+capacity . We’ve already used
+ tons of capacity; there is only
+ ton of capacity
+remaining.</p></li>
+<li>
+<p>We also say that the arc  has residual capacity . This is weirder: first of all, because
+this arc doesn’t exist in the orange-shipping network at all!</p>
+<p>To make sense of this, consider that there is a sense in which we
+could move up to  tons of oranges
+per day from JFK to ORD: we could reduce our shipping from ORD to JFK by
+up to  tons. This feels like some
+kind of accounting trick, but mathematically, it doesn’t matter how we
+go about increasing the amount of oranges at ORD in exchange for
+decreasing the amount of oranges at JFK.</p>
+</li>
+</ul>
+<p>So let’s make the general definition. If  is a feasible flow in a network , the <em>residual network</em> of  is a network  with   and the following arcs:</p>
+<ol>
+<li><p>For every arc  
+with  , there is a
+<em>forward arc</em>  
+with <em>residual capacity</em>  .</p></li>
+<li><p>For every arc  
+with  , there is a
+<em>backward arc</em>   with residual capacity  .</p></li>
+</ol>
+<p><a class="booklink" href="#fig:good-residual-network">Figure 28.4(b)</a> shows the residual
+network of the flow in <a class="booklink" href="#fig:before-augmenting-flow">Figure 28.4(a)</a>. What’s more, the
+arcs we modify in <a class="booklink" href="#fig:after-augmenting-flow">Figure 28.4(c)</a>, which were so hard
+to make sense of before, now have a straightforward meaning: they
+correspond to a path in the residual network!</p>
+<p>In general, a directed   path
+ in the residual network of  is called a <em>-augmenting path</em>. We give it this
+name because it is what we use to improve the flow . It is similar in spirit to the
+augmenting paths we introduced in <a class="booklink" href="../matchings/konig.html">Chapter 14</a>, and
+in principle, the analogy could be made precise; we’ve already seen in
+<a class="booklink" href="../connectivity/menger.html">Chapter 27</a> that the matching problem is
+closely related to what we’re doing here.</p>
+<p>Generally speaking,  is not
+even a subgraph of the original network ; it might have arcs pointing in the
+wrong directions. However, if all arcs of  are forward arcs, then  really is a directed   path in , as well. This describes each of the
+directed   paths we found in the
+“greedy” phase of the Ford–Fulkerson algorithm.</p>
+<p>For a general -augmenting path,
+we still have to describe how to use it to improve a flow . Formally, let  be an -augmenting path and let  be the minimum residual capacity
+of any arc of . When we
+<em>augment  along </em>, we get another flow  such that for every arc  along :</p>
+<ul>
+<li><p>If  is a forward arc of
+the residual network of , then
+ .</p></li>
+<li><p>If  is a backward arc
+of the residual network of , then
+ .</p></li>
+<li><p>In all other cases,  .</p></li>
+</ul>
+<p>We should verify that this works in general:</p>
+<div class="prop" id="prop:augmenting-flow">
+<p><strong>Proposition 28.3</strong>. <em>Let  be a feasible flow in a network  and let  be an -augmenting path such that  is the minimum residual capacity
+of any arc of . Then augmenting
+ along  produces another feasible flow . Moreover, the value of  is greater than the value of  by .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  be the
+residual network of , and let
+ be the result of augmenting  along .</p>
+<p>The residual capacities are defined so that every flow along arc
+ can be increased by up to
+ or decreased by up to  without violating  . Since we
+increase or decrease by ,
+which is at most the relevant residual capacity, that’s exactly what we
+do: individual arc constraints are satisfied.</p>
+<p>For every vertex  which is an
+internal vertex of , we made a
+change and so we must check that flow conservation is still satisfied at
+. This has four cases, according
+to whether we enter and exit  by a
+forward or backward arc of . They
+are very similar, so I will just check one, and leave the rest to you.
+If we enter  by a backward arc
+ and leave  by a forward arc , then   while  : the total flow
+out of  remains the same, but
+ more of it now goes to  rather than .</p>
+<p>Finally, when it comes to , the
+starting vertex of , we can only
+leave it by a forward arc: there are no arcs of  into , so there can be no backward arcs of
+ out of . Therefore   for some node
+. Since  cannot visit  again, this is the only change for arcs
+out of , and so we see that the
+value of  is greater than the
+value of  by . ◻</p>
+</div>
+<p>The Ford–Fulkerson algorithm repeatedly finds augmenting paths to
+increase the value of the flow, and we’ve seen how it does that. What
+happens when this can no longer be done? That’s shown in <a class="booklink" href="#fig:ford-fulkerson-cut">Figure 28.5</a>, with the flow we
+arrived at most recently shown again in <a class="booklink" href="#fig:before-residual-cut">Figure 28.5(a)</a>, and the residual
+network shown in <a class="booklink" href="#fig:bad-residual-network">Figure 28.5(b)</a>.</p>
+<figure class="bookfig" id="fig:ford-fulkerson-cut">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:before-residual-cut">
+
+<figcaption>Before step 5</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:bad-residual-network">
+
+<figcaption>The residual network</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:after-residual-cut">
+
+<figcaption>The network cut found in step 5</figcaption>
+</figure>
+</div>
+<figcaption>How the Ford–Fulkerson algorithm ends</figcaption>
+</figure>
+<details class="qa">
+<summary>What goes wrong when we try to use the
+residual network in <a class="booklink" href="#fig:bad-residual-network">Figure 28.5(b)</a> to find an -augmenting path?</summary>
+<p>There is no directed   path in the residual network! In
+fact, the only useful arc is the arc : there are no other arcs leaving
+ or .</p>
+</details>
+<p>This seems disappointing, but actually it is good news. What could be
+better than improving the value of our flow? Well, finding out that
+we’ve found a maximum flow, of course! In this case, the flow in
+<a class="booklink" href="#fig:before-residual-cut">Figure 28.5(a)</a> has value : we send   flow out of . The three arcs , , and  are a network cut with capacity
+, proving that we’ve found a
+maximum flow. What’s more, these three arcs are  for  : exactly the vertices we were
+able to explore in the residual network . The network cut  we find appears to be something we
+can directly learn from .</p>
+<p>We can prove that this happens whenever we find a maximum flow.</p>
+<div class="prop" id="prop:residual-cut">
+<p><strong>Proposition 28.4</strong>. <em>If  is a feasible flow in a network , and the residual network of  has no   path, let  be the set of vertices reachable from
+ in the residual network of , and let  . Then  is
+a network cut whose capacity 
+is equal to the value of .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> For every arc  with   and  , we know
+that  is reachable from  in the residual network, but  is not. Therefore the residual network
+cannot have a forward arc ,
+which means that  .</p>
+<p>For every arc  with   and  , we know that  is
+reachable from  in the residual
+network, but  is not. Therefore
+the residual network cannot have a backward arc , which means that  .</p>
+<p>Earlier in this chapter, we saw that the value of a feasible flow
+ is equal to the capacity of a
+network cut  exactly when
+these conditions hold: when   for all arcs from 
+to , and   for all arcs from  to . This proves the proposition. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="counting-iterations">Counting iterations</h2>
+<p>We can now prove that when the Ford–Fulkerson algorithm ends, it
+produces a maximum flow .
+<a class="booklink" href="#prop:residual-cut">Proposition 28.4</a> can be used to produce a
+network cut whose capacity 
+is equal to the value of , and by
+<a class="booklink" href="#thm:cut-bottleneck">Theorem 28.2</a>, no other flow can have a
+value greater than .</p>
+<details class="qa">
+<summary>What else is there to prove to know that
+the algorithm works?</summary>
+<p>We must prove that the algorithm does,
+eventually, end.</p>
+</details>
+<p>Unfortunately, this is a bit tricky. If there’s nothing more to the
+algorithm than what we’ve described, the following theorem is the best
+we can do:</p>
+<div class="theorem" id="thm:ford-fulkerson-bound">
+<p><strong>Theorem 28.5</strong>. <em>In a network  where all capacities are integers and
+ is the maximum value of any flow,
+the Ford–Fulkerson algorithm produces a maximum flow in at most  iterations. Moreover, in the output,
+the flow along every arc is an integer.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Say that a flow  is an <em>integer flow</em> if  is an integer for all arcs  . The Ford–Fulkerson
+algorithm begins with an integer flow: the flow that is  everywhere. This is the base case of a
+proof by induction that the flow remains an integer flow throughout the
+algorithm.</p>
+<p>At every iteration, if the current feasible flow  is an integer flow, then the residual
+capacities are all integers: either   (the difference of two integers) or  . Therefore if  is an -augmenting path and  is the minimum residual capacity
+of any arc of , then  is an integer. When we augment
+ along , the flows along some arcs change, but
+only by , so they remain
+integers. This proves the inductive step: by induction, the
+Ford–Fulkerson algorithm always stays at an integer flow.</p>
+<p>What’s more, the value of the integer flow increases by at least
+ with every step. It starts
+at  and ends at , so it can increase at most  times. ◻</p>
+</div>
+<p>This upper bound on the number of steps isn’t completely useless,
+since at the very least, it’s finite.</p>
+<details class="qa">
+<summary>Is there any upper bound on  that we can know ahead of time, without
+having a maximum flow to look at?</summary>
+<p>Yes: the capacity of any network cut. For
+example, the cut  with   and   has an easy-to-compute
+capacity: it is the sum of the capacities of all arcs out of .</p>
+</details>
+<p>However, this upper bound can be incredibly large, and it doesn’t
+apply at all if the capacities can be arbitrary real numbers. What’s
+more, you might wonder if the large upper bound of <a class="booklink" href="#thm:ford-fulkerson-bound">Theorem 28.5</a> and the requirement of
+integer capacities are just consequences of our proof technique—they’re
+not! There are examples where the upper bound on the number of steps is
+achieved, and examples with irrational capacities where the algorithm
+never even gets close to a maximum flow.</p>
+<details class="qa">
+<summary>Can we still get an upper bound from
+<a class="booklink" href="#thm:ford-fulkerson-bound">Theorem 28.5</a> if the capacities are
+rational numbers?</summary>
+<p>Yes, but it will be even worse: at each
+step, the value of a flow increases by at least , where  is the least common denominator of all
+the capacities, so it can increase at most  times.</p>
+</details>
+<p>Fortunately, the modification necessary to get a more reasonable
+bound is not so dire. In 1972, Jack Edmonds and Richard Karp
+proved  that if
+the -augmenting path chosen at
+every iteration is as short as possible, then there is a bound on the
+number of iterations which does not depend on the capacities at all.
+Edmonds and Karp point out that this improvement is “so simple that it
+is likely to be incorporated innocently into a computer implementation”:
+if the -augmenting path is found
+via breadth-first search in the residual network, which is a natural way
+to do it, then it will automatically be as short as possible!</p>
+<p>The proof of the Edmonds–Karp bound requires a lemma which I
+personally think would be interesting even if it had no practical
+applications. Provided that we augment by shortest -augmenting paths each time, the lemma
+says that the distances from  to
+other vertices can only ever go up, not down.</p>
+<div class="lemma" id="lemma:edmonds-karp-distance">
+<p><strong>Lemma 28.6</strong>. <em>Let  and  be feasible flows in a network  such that  is obtained from  by augmenting along a shortest -augmenting path. Let  and  be the residual networks of  and , respectively. Then for every vertex
+ ,  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Pick any vertex . If there is no   path in , then   and the lemma holds automatically. Otherwise, let the walk 
+with   and   represent a shortest   path in . By induction on , we will prove that  . The base case   holds because  .</p>
+<p>Now suppose that for some  ,  .
+If arc  exists in
+, then it can be added to the end
+of an   path of length at
+most   to prove the induction
+step. If  does not
+exist in , it must have appeared
+in  because we augmented
+along a path containing the reverse arc .</p>
+<p>The -augmenting path is a
+shortest path, so in particular it reaches  in at most   steps: otherwise, we could have
+shortened it by using the  
+path in , instead. It reaches
+ right before it reaches : in at most   steps. So in this case,  , as well.</p>
+<p>This completes the induction; taking   tells us that  . Since   and  , we conclude that  . ◻</p>
+</div>
+<details class="qa">
+<summary>What does <a class="booklink" href="#lemma:edmonds-karp-distance">Lemma 28.6</a> mean if there is no
+  path in one of the residual
+networks?</summary>
+<p>In such cases, we say that the distance is
+. Infinity is bigger than
+every finite number, and greater than or equal to itself. It follows
+from <a class="booklink" href="#lemma:edmonds-karp-distance">Lemma 28.6</a> that if  is finite, so is ; equivalently, once  can no longer be reached from  in some residual network, it will never
+be reachable from  again in any
+following iteration, either.</p>
+</details>
+<p>We are now ready to prove a bound on the number of iterations
+required by the algorithm. Often, you will see this bound reported as a
+“big-Oh” bound of 
+elementary steps, rather than as a bound on the number of iterations:
+this is because an iteration of the Ford–Fulkerson algorithm still takes
+some nontrivial time to perform. (In fact, one of the ways later algorithms improve on the Ford–Fulkerson algorithm is by avoiding the cost of a depth-first search in each iteration.) But counting the iterations will be
+good enough for us here.</p>
+<div class="theorem" id="thm:edmonds-karp-bound">
+<p><strong>Theorem 28.7</strong>. <em>Let  be a network with  vertices and  arcs. If the -augmenting paths we choose in the
+Ford–Fulkerson algorithm are always shortest   paths in the residual network, then
+the algorithm produces a maximum flow in at most  
+iterations.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> In each each iteration of the Ford–Fulkerson
+algorithm, let’s identify a <em>bottleneck arc</em>. The bottleneck arc
+is whichever arc  of the -augmenting path  that stopped us from augmenting  even more than we did: the minimum
+residual capacity  comes from
+. Wouldn’t it be nice if each
+arc could be a bottleneck arc at most once? Then there would be a limit
+of  iterations, one for each arc.
+This is not true, but Edmonds and Karp prove something similar, by
+proving a limit on how many times  can be a bottleneck arc.</p>
+<details class="qa">
+<summary>After we augment along , what happens to the bottleneck arc
+ in the new residual
+network?</summary>
+<p>It’s no longer there: if it was a forward
+arc, then the flow along  is
+now at capacity, and if it was a backward arc, then the flow along  is now at .</p>
+</details>
+<p>There is some fine print that needs to be included: if the network
+ contains both arcs  and , as for instance in <a class="booklink" href="#fig:orange-shipping">Figure 28.1</a> with DFW and JFK, then we
+could have two arcs  in the
+residual network, one as a forward arc due to  and one as a backward arc due to
+. Some simplifications can be
+made in this case, but for this proof it’s enough if we think of the
+forward arc  as being a
+different arc from the backward arc . That is, we separately track when
+each of them is a bottleneck arc.</p>
+<details class="qa">
+<summary>How can arc  be a bottleneck arc twice?</summary>
+<p>In between the iterations when it was a
+bottleneck arc, we must have augmented along the residual arc , which has the effect of increasing
+the residual capacity of .</p>
+</details>
+<p>Now <a class="booklink" href="#lemma:edmonds-karp-distance">Lemma 28.6</a> comes to the
+rescue! The first time that arc  is a bottleneck arc,  and  appear as the  and  vertices along an
+augmenting path, for some , and
+since that augmenting path was as short as possible, it was true that
+  and  .</p>
+<p>Later on, the arc  appears
+on an augmenting path. At that time, we still have  , by <a class="booklink" href="#lemma:edmonds-karp-distance">Lemma 28.6</a>: this distance can
+never decrease. This time,  is the
+vertex after  on the augmenting
+path, so  .</p>
+<p>Even later, the arc 
+appears as a bottleneck arc for the second time. At this point, we must
+still have  , again by
+<a class="booklink" href="#lemma:edmonds-karp-distance">Lemma 28.6</a>. In between
+occurrences of  as a
+bottleneck arc, the distance 
+must increase by at least .</p>
+<p>The distance  is always
+between  and   in any residual network, so it can
+increase by  at most  times, which means  can be a bottleneck arc at most
+ 
+times. Altogether, the  arcs of
+ can be bottleneck arcs at most
+  times, and
+since there is a bottleneck arc at each iteration, this is also a bound
+on the number of iterations. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="consequences">Consequences</h2>
+<p>If we return from the world of algorithms back to the world of graph
+theory, then we can obtain some theoretical results from these very
+practical ones.</p>
+<p>The first is sometimes known as the min-cut max-flow theorem:</p>
+<div class="theorem" id="thm:min-cut-max-flow">
+<p><strong>Theorem 28.8</strong>. <em>In any network, the value of a
+maximum flow is equal to the minimum capacity of a network cut.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  be a
+maximum flow, and attempt to improve it using the Ford–Fulkerson
+algorithm. It won’t work, because there’s no flow with a greater value
+than . Therefore by <a class="booklink" href="#prop:residual-cut">Proposition 28.4</a>, there is a network cut  with capacity equal to the value of
+.</p>
+<p>Okay, technically, you might be skeptical of one more thing: how do
+we know that there is any maximum flow at all? Isn’t it possible that
+there’s an infinite sequence of ever-better flows, approaching but never
+reaching the largest possible value?</p>
+<p>This possibility can be dismissed using some facts from real
+analysis, or by applying <a class="booklink" href="#thm:edmonds-karp-bound">Theorem 28.7</a>: since we have an
+algorithm guaranteed to find a maximum flow in some finite number of
+iterations, then in particular a maximum flow must exist. ◻</p>
+</div>
+<p>It is sometimes said that many theorems in combinatorics are
+corollaries of the min-cut max-flow theorem. This is not quite true,
+because in general, flows along an arc could be arbitrary fractional
+numbers, which are hard to turn into combinatorial facts. However, in
+the statement of <a class="booklink" href="#thm:ford-fulkerson-bound">Theorem 28.5</a>, I’ve included an
+important fact: if the capacities are all integers, then Ford–Fulkerson
+finds an integer maximum flow. In particular, if the capacities are all
+integers, then there is an integer maximum flow.</p>
+<p>With this addition, we can indeed deduce many facts from the min-cut
+max-flow theorem! For example, we obtain an alternate proof of Menger’s
+theorem (<a class="booklink" href="../connectivity/menger.html#thm:menger">Theorem 27.1</a>) in this way.  Let’s see how.</p>
+<p>Given a directed graph  and two
+vertices  and , turn it into a network by giving each
+arc capacity ; delete any arcs
+into  or out of , if they are present. A network cut
+ in this case corresponds to
+the   arc cut , and the capacity  is just the number of edges in the
+  arc cut. From <a class="booklink" href="#thm:ford-fulkerson-bound">Theorem 28.5</a> and <a class="booklink" href="#thm:min-cut-max-flow">Theorem 28.8</a>, we know that there is an
+integer maximum flow with value .</p>
+<p>The arcs all have capacity , so
+an integer maximum flow has   for each arc  . Define a subgraph  of  by keeping only those arcs of  with flow  along them. In this subgraph, the
+outdegree  is , the value of the flow, and every
+vertex  other than  and  satisfies a discrete version of flow
+conservation: the indegree  is equal to the outdegree .</p>
+<p>Now, to prove Menger’s theorem, we will find a set of  edge-disjoint   paths in the subgraph . Now that we’ve eliminated the
+arcs we don’t need, these paths can be found by wandering aimlessly
+around ! Start at , and follow arbitrary arcs that we have
+not yet used until, eventually, we get to .</p>
+<details class="qa">
+<summary>Why can’t we get stuck at an intermediate
+vertex, unable to leave without using an arc we’ve already used?</summary>
+<p>If we’re visiting a vertex  for the <sup>th</sup> time, we’ve entered it
+ times, so  and  are at least . But we’ve only left it   times, so there’s an arc out of  we have not used yet.</p>
+</details>
+<p>Once we’ve arrived at , start
+again from , avoiding all the arcs
+used before (and in particular, leaving  by a different arc). Repeat until we’ve
+left  a total of   times, finding a total
+of  edge-disjoint   walks. By skipping unnecessary
+cycles, in the manner of <a class="booklink" href="../beginning/walks.html#thm:walk-to-path">Theorem 3.1</a>, we turn these
+walks into   paths, which remain
+edge-disjoint to each other. This proves Menger’s theorem.</p>
+<p>The vertex version of Menger’s theorem is also possible to obtain
+from the maximum flow problem, but it requires some trickery; I will
+leave the details to you in a practice problem. One useful trick is to
+give some arcs capacity  when
+you really don’t want them to be part of any network cut. (If you object
+that  is not an integer, you
+can also use a large integer constant  which is greater than the capacity of
+every network cut using only “approved” arcs.)</p>
+<p>From here, we can go back and obtain results about matchings. From
+<a class="booklink" href="../connectivity/menger.html#lemma:konig-to-menger">Lemma 27.2</a>, we
+already know that Kőnig’s theorem (<a class="booklink" href="../matchings/konig.html#thm:konig">Theorem 14.2</a>)
+can be obtained from Menger’s theorem. By constructing the right
+network, we can also prove Kőnig’s theorem and Hall’s theorem
+(<a class="booklink" href="../matchings/hall.html#thm:hall">Theorem 15.1</a>) directly.</p>
+<p>Why bother? Well, the Ford–Fulkerson algorithm, and later more
+efficient variants, are computationally useful. Simply determining the
+capacity of a network cut in the appropriate network (which the
+Ford–Fulkerson algorithm certainly does) is enough to compute the   vertex and edge connectivity in a
+directed graph. We can use this, in turn, to compute  and  for an arbitrary graph
+, directed or undirected, and this
+is one of the best ways we have of accomplishing such a thing!</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Find all possible -augmenting paths for the flow  given in the diagram below. Determine
+which one can be used to augment 
+by the largest amount possible.</p>
+
+</li>
+<li>
+<p>Find an example of a network in which all arcs have capacity
+ or capacity , where  can be set to any large value, and in
+which the Ford–Fulkerson algorithm, by choosing the -augmenting path badly at each
+iteration, can take more than 
+iterations to find a maximum flow.</p>
+<p>(The example given by Edmonds and Karp in  has only  vertices.)</p>
+</li>
+<li>
+<p>The diagram below gives a residual network for a network flow
+problem.</p>
+
+<ol>
+<li><p>Use the residual network to reconstruct the original network,
+determining the arcs it has and their capacities.</p></li>
+<li><p>Find the feasible flow which produces this residual
+network.</p></li>
+<li><p>Find a network cut whose capacity is equal to the value of the
+flow.</p></li>
+</ol>
+</li>
+<li><ol>
+<li><p>Give an example showing that even if the capacities in a network
+are all integers, it’s possible to have a maximum flow  such that not every value  is an integer. (All we’ve proved
+in this chapter is that the Ford–Fulkerson algorithm will never find
+such a maximum flow.)</p></li>
+<li><p>Prove that if  and  are two feasible flows, then the flow
+  (that is, the
+flow  with   for
+all arcs ) is also a feasible
+flow, and if  and  are both maximum flows, then so is
+.</p></li>
+</ol></li>
+<li>
+<p>To prove the vertex version of Menger’s theorem using maximum
+flows, we have to get a bit creative. In this practice problem, that’s
+your job!</p>
+<p>Given a directed graph  with
+two vertices  and , not adjacent to each other, construct
+a network  with integer capacities
+and the following properties:</p>
+<ul>
+<li><p>Given a -vertex   cut in , we can find a network cut in  with capacity .</p></li>
+<li><p>Given an integer flow in 
+with value , we can find a set of
+ internally-disjoint   paths in .</p></li>
+</ul>
+<p>(If  has  vertices and  arcs, then it’s possible to construct
+ so that it has   vertices and   arcs.)</p>
+</li>
+<li>
+<p>Prove that any maximum flow can be obtained by augmenting along paths that exist in the network itself (without needing to use the residual network or any backward arcs).</p>
+<p>You do not need to strictly obey the Ford–Fulkerson algorithm: you may choose to increase the flow along a path by any  you like, provided you do not exceed any capacities.</p>
+<p>(This fact is not very useful in practice, since knowing the right steps to take requires knowing the desired maximum flow in advance.)</p>
+</li>
+<li><ol>
+<li>
+<p>Find an integer flow in the network below. (The arcs whose
+capacities are not marked should all be assumed to have capacity .)</p>
+
+</li>
+<li><p>Find a bipartite graph with bipartition   and
+degree sequence </p></li>
+<li><p>Explain the connection between parts (a) and (b), and how the
+network could be modified to find a bipartite graph with a different
+bipartition and degree sequence.</p></li>
+</ol></li>
+<li>
+<p>In <a class="booklink" href="../hard/hamilton.html">Chapter 17</a>, we defined a <em>-factor</em> in a graph  to be a -regular spanning subgraph of .</p>
+<p>Explain how to use the Ford–Fulkerson algorithm to solve the
+following problem: given a graph ,
+either find a -factor in , or determine that no -factor exists.</p>
+</li>
+<li>
+<p>Let  be a network with  vertices (counting  and ) and  arcs. To simplify counting, assume that  never has both arc  and arc  for any vertices  and .</p>
+<p>Prove that  has a maximum flow whose residual graph has at most   arcs.</p>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 28</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

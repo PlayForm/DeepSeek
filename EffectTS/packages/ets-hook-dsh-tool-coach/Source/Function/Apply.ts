@@ -54,10 +54,7 @@ import type { AgentState, CoachRow, Decision, Detection } from "@Interface/Execu
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
-
-// The bundle version, mirrored from package.json (the activation proof's
-// first field; a release bumps both together).
-const Version = "0.3.0";
+import Version from "@Variable/Version.js";
 
 /** The tools-service surface the coach needs (structural view). */
 interface ToolsService {

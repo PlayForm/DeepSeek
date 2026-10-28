@@ -22,6 +22,7 @@ pages leaves five rows, not six.
 | [SiteStructure.md](SiteStructure.md)           | Site structure                   | Navigation grouping, footer as sitemap, card anatomy, and the per-item page rule                  |
 | [TelemetryStandards.md](TelemetryStandards.md) | LLM telemetry                    | The OpenTelemetry GenAI fields, the inclusive-versus-exclusive trap, and the LiteLLM rate map     |
 | [Toolchain.md](Toolchain.md)                   | Rendering toolchain              | The rendering toolchain decision and the trade-offs behind it                                     |
+| [VertexGraph.md](VertexGraph.md)               | Graph assembly                   | Vertices, edges, walks and components - and the gaps a plugin graph has to fill itself            |
 
 ## Naming
 

@@ -1,3 +1,5 @@
+import Version from "./Variable/Version.js";
+export { Version };
 export { default as Section } from "./Variable/Section.js";
 export { default as Default } from "./Variable/Default.js";
 export { default as Suppress } from "./Function/Suppress.js";

@@ -1,0 +1,776 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Walks, Paths, and Cycles</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 3</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>Without learning about walks in a graph first, we would find it hard
+to study almost anything else. Do you want to understand regular graphs
+(<a class="booklink" href="../degrees/regular.html">Chapter 5</a>)? Cycles are the
+quintessential regular graph. Euler tours (<a class="booklink" href="../degrees/euler.html">Chapter 8</a>)? A
+kind of closed walk. Trees (<a class="booklink" href="../trees/spanning.html">Chapter 9</a>)? They are
+connected, and they have no cycles, both properties that come back to
+this chapter. Matchings (<a class="booklink" href="../matchings/bipartite.html">Chapter 13</a>)? Understanding
+augmenting paths is key to finding larger matchings. I could go on, but
+I already have a section devoted to topics that this chapter will help
+you understand: the table of contents.</p>
+<p>This chapter is one of the first in which different will give you
+slightly different definitions of the concepts we introduce. I have
+chosen to define paths and cycles as subgraphs which are represented by,
+but not the same as, walks. Other authors say that paths and cycles are
+a type of walk, and still other authors use the word “path” to mean
+“walk” and say “simple path” instead of “path”. In my opinion, the
+terminology I’ve picked is the terminology that best reflects actual
+usage by mathematicians: no matter how we define paths and cycles, we
+treat them as subgraphs, count them as subgraphs, and do things with
+them that can only be done with graphs. By saying that a walk
+<em>represents</em> a path or cycle, I also help us remember that there
+can be multiple such representations.</p>
+<p>Anyway, justification aside, this also goes to warn you that in graph
+theory, not every source you read will give you the same definitions.
+The definitions should be interchangeable, once you learn how. After
+all, all graph theorists are still doing the same math, no matter how we
+talk about it.</p>
+<p>I include the proof of <a class="booklink" href="#thm:walk-to-path">Theorem 3.1</a> in
+this chapter, because it would be strange to postpone the proof to an
+appendix; however, the natural place to study the proof is in
+<a class="booklink" href="../appendix/proof-writing.html">Appendix A</a>, because it is
+a good early example of a proof by the extremal principle. Similarly,
+<a class="booklink" href="#lemma:reachesto">Lemma 3.3</a> is a good example of unpacking
+definitions, which I also discuss in <a class="booklink" href="../appendix/proof-writing.html">Appendix A</a>.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="walks-and-paths">Walks and paths</h2>
+<p>Last time we looked at walks in a graph, it was in the context of the
+Towers of Hanoi puzzle, in <a class="booklink" href="../beginning/examples.html">Chapter 1</a>; this time, let’s look at
+a simpler puzzle.</p>
+<figure class="bookfig" id="fig:cup-puzzle">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:cup-puzzle-graph">
+
+<figcaption>The state graph of the three cup puzzle</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:cup-puzzle-path">
+
+<figcaption>Not a solution</figcaption>
+</figure>
+</div>
+<figcaption>The three cup puzzle</figcaption>
+</figure>
+<p>To set up this puzzle, you will need three empty cups; ideally, they
+are empty mugs of beer, because this puzzle is not difficult enough to
+challenge anyone sober for very long. They are placed in a row on the
+table, right side up:  . A valid move in this
+puzzle is to take two cups that are next to each other—the first two, or
+the last two—and flip them over. From the starting state, a single move
+can take us to the   state if the first two
+cups are flipped, or to the   state if the last two
+cups are flipped. The goal of the puzzle is to flip all three cups
+upside down.</p>
+<p><a class="booklink" href="#fig:cup-puzzle-graph">Figure 3.1(a)</a> shows a graph of all the
+states possible in the three cup puzzle, where two vertices are adjacent
+if it’s possible to move from one state to the other. (This is a
+symmetric relation, because all valid moves are reversible.)</p>
+<p>In <a class="booklink" href="../beginning/isomorphism.html">Chapter 2</a>, we defined paths
+in a graph : copies of the path
+graph , for some . A big part of the reason why we define
+paths is exactly to describe situations like the three cup puzzle. For
+example, the subgraph shown in <a class="booklink" href="#fig:cup-puzzle-path">Figure 3.1(b)</a>
+is a -vertex path. By following
+the edges of the path, we can get from   to  . If only we could find
+a different subgraph: a path which included vertices   and  . This would tell us
+how to solve the impossible puzzle!</p>
+<p>It’s frequently useful to summarize a path by listing all the
+vertices along it from one end to the other; for example, for the path
+in <a class="booklink" href="#fig:cup-puzzle-path">Figure 3.1(b)</a>, we could write down the
+sequence  In general, for a subgraph  isomorphic to  by the isomorphism  , we could
+write the sequence . In such a sequence, there is an edge
+between each pair of consecutive vertices.</p>
+<p>There are other such sequences, that do not represent paths, and if
+you find a suitable victim for the three cups puzzle, you will discover
+many of them by writing down your victim’s fruitless attempts. For
+example, the sequence  also has the property that there is an
+edge between each pair of consecutive vertices, but it does not
+represent a path.</p>
+<details class="qa">
+<summary>Why doesn’t it represent a path?</summary>
+<p>In a sequence of the form , all 
+vertices would be different, because  is an isomorphism and therefore a
+bijection. Here, some vertices do repeat.</p>
+</details>
+<p>Let’s make some definitions to generalize this idea:</p>
+<div class="defn">
+<p><strong>Definition 3.1</strong>. <em>A <strong>walk</strong> in a
+graph  is a sequence  of vertices of
+, such that for each  , vertices  and  are adjacent:  . A walk whose first
+vertex is  and whose last vertex
+is  is an <strong>  walk</strong>.</em></p>
+<p><em>A walk  <strong>represents</strong> a path  in  when   and  ; a walk represents a
+path if and only if all its vertices are distinct. We say that  is an <strong>  path</strong> if it can be
+represented by an  
+walk.</em></p>
+</div>
+<p>Occasionally, such as when we discuss Euler tours in <a class="booklink" href="../degrees/euler.html">Chapter 8</a> or increasing walks in
+<a class="booklink" href="../matchings/general.html">Chapter 16</a>, we will be interested in walks
+for their own sake. For the most part, though, walks are convenient
+because they’re an easy-to-check version of paths. To know that a
+sequence of vertices is a walk, we only have to check that consecutive
+vertices are adjacent. To know that a sequence of vertices represents a
+path, we have to check a global condition: that none of the vertices in
+the sequence repeat.</p>
+<p>“But wait,” you might ask, “Why are you acting like we can choose
+which definition to check? Surely if a problem calls for a path, we need
+to find a path, and if a problem calls for a walk, we need to find a
+walk.”</p>
+<p>Well, if all we care about is whether one of these objects exists, it
+turns out that it doesn’t matter which one we use! We will prove the
+following theorem later in this chapter:</p>
+<div class="theorem" id="thm:walk-to-path">
+<p><strong>Theorem 3.1</strong>. <em>Let  and  be two vertices of a graph . Then there is an   walk in  if and only if there is an   path in .</em></p>
+</div>
+<p><a class="booklink" href="#thm:walk-to-path">Theorem 3.1</a> means that if we need to prove
+that one of these objects exists, it’s enough to aim for an   walk: this will be easier. On the
+other hand, if one of our assumptions is that one of these objects
+exists, we can pick either an  
+walk or an   path, whichever is
+convenient.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="connected-graphs">Connected graphs</h2>
+<p>Whether it’s in the three cups puzzle, the Towers of Hanoi puzzle, or
+a complicated graph that appears in serious and dignified study of math,
+the first question we want an answer for is the existence question:
+given vertices  and , does an   walk exist in the graph?</p>
+<p>In the simplest scenario, the answer is always “yes”:</p>
+<div class="defn">
+<p><strong>Definition 3.2</strong>. <em>A graph  is <strong>connected</strong> when an
+  walk exists for all  .</em></p>
+</div>
+<p>The state graph of the three cups puzzle is not connected. We can
+demonstrate this fact (both in this specific example, and in general) by
+showing how to split the vertex set into two parts with no edges between
+them. This is done in <a class="booklink" href="#fig:cup-puzzle-components">Figure 3.2</a>, where the two halves
+are “pulled apart”: it is much easier to see here that there are no
+edges between  and .</p>
+<figure class="bookfig" id="fig:cup-puzzle-components">
+
+<figcaption>The two connected components of the three cup puzzle
+graph</figcaption>
+</figure>
+<p>When a graph is defined by a sufficiently nice combinatorial rule,
+such a split often comes with a reason behind it. That is the case with
+the three cups puzzle. We could in theory confirm that it has no
+solution by checking each of the states  ,  ,  , and   to verify that all
+possible moves from these states lead to another one of these states.
+But we obtain the most insight—and have to exert the least effort—if we
+notice that the two halves of the graph are characterized by whether the
+number of ’s (cups which are
+right side up) is even or odd. A move either increases the number of
+’s by two, leaves it the
+same, or decreases it by two; therefore it’s impossible to go from an
+odd- state like   to an even- state like  .</p>
+<p>Let me describe this splitting tactic more generally, by a lemma we
+will be able to use in later chapters.</p>
+<div class="lemma" id="lemma:disconnected">
+<p><strong>Lemma 3.2</strong>. <em>For a graph , if there is a set of vertices  such that  is not empty,  is not all of , and there are no edges with exactly
+one endpoint in , then  is not connected.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Suppose such a set  exists; let   (guaranteed to exist since  is not empty) and let   (guaranteed to exist since
+ is not all of ). Then we will show that there is no
+  walk in .</p>
+<p>Assume for contradiction that an   walk  exists, and let
+ be the first vertex of the walk
+which is not in . Then the edge
+ has exactly one endpoint
+in , contradicting our choice of
+:  , but  .</p>
+<details class="qa">
+<summary>Why does  exist?</summary>
+<p>Because  , so not every vertex of the walk is in ; of the vertices not in , there must be a first vertex.</p>
+</details>
+<details class="qa">
+<summary>Why does  exist? (And why should we ask
+that question?)</summary>
+<p>We must ask that question because if  , then there is no vertex “” in the walk. This is something we
+must always watch out for when dealing with subscripts like   or  . But in this case, we know  , because   and  , but  .</p>
+</details>
+<p>We’ve arrived at a contradiction, so our assumption of an   walk must be invalid. Therefore  is not connected. ◻</p>
+</div>
+<p><a class="booklink" href="#lemma:disconnected">Lemma 3.2</a> is not a very deep result. I
+want to stop and point it out anyway, because it’s important from a
+proof-writing point of view. You see, when working directly from the
+definition, “ is not connected” is
+an awkward statement to prove: we’re trying to prove that for some
+vertices  and , an   walk does not exist, and proving that
+something does not exist is tricky. The lemma gives us a different
+target to aim for: to prove that 
+is not connected, we have to find the set . Moreover, the properties of  we have to check to apply the lemma are
+simple ones.</p>
+<p>A single set  is enough to show
+that a graph is not connected, but sometimes it is possible to split the
+graph into even more pieces with no edges between them. The most
+fine-grained split possible is a split into connected components:
+writing the graph  as a disjoint
+union of any number of connected graphs.</p>
+<div class="defn" id="def:component">
+<p><strong>Definition 3.3</strong>. <em>The <strong>connected
+components</strong>  are subgraphs of 
+such that</em></p>
+<ul>
+<li><p><em>For all ,  is connected. In other words, for all
+  and  , there is an   walk in  (and therefore in ).</em></p></li>
+<li><p><em>For all   and
+  where  , there is no   walk in .</em></p></li>
+<li><p><em> is the disjoint union
+of its connected components.</em></p></li>
+</ul>
+</div>
+<p>In order to satisfy the third part of the definition, connected
+components must be induced subgraphs. We could define a connected
+component on its own as a subgraph that is connected, but cannot be made
+any bigger and still remain connected. I did not do this because I think
+a big part of the definition is that together, the connected components
+of  tell the entire story of when
+  walks exist in .</p>
+<p><a class="booklink" href="#def:component">Definition 3.3</a> is a definition that should be
+accompanied by a theorem: I’ve given you no proof of the claim that
+every graph can be written as the disjoint union of such subgraphs. It
+is too easy to believe that this is true with no justification, so
+before we prove it, let me try to persuade you that it isn’t quite so
+obvious after all.</p>
+<p>Suppose, for example, that the edges in our graphs stopped being
+symmetric: that you could walk somewhere, and not be able to get back.
+In that case, instead of being able to split the graph into connected
+components, we’d end up with a hierarchy of vertices from which we can
+reach fewer and fewer destinations—maybe even with some “dead end”
+vertices that we can walk to, but never leave.</p>
+<p>Or suppose that, unlike the infinitely-patient walker that we
+imagined when defining walks, we consider a walker that gets tired, so
+that our walks should contain at most (say)  steps. Then it’s possible that by
+going in different directions from vertex , you can reach both vertices  and , and yet there is no component
+containing , , and —because  is too far from  to walk between the two.</p>
+<p>So you should take a moment to appreciate the simplicity of the
+answer we’re about to get to the question, “When is there an   walk in graph ?” It should be a bit remarkable that
+the answer will be, “We can split up  into several parts called connected
+components, and the answer is ‘yes’ whenever  and  are in the same part, and ‘no’
+otherwise.” In a slightly different world, the answer could have been
+much more complicated!</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="equivalence-relations">Equivalence relations</h2>
+<p>To understand the connected components of a graph , we first define a relation  on pairs of vertices
+ :   if there is an
+  walk in . This relation is often not given any
+kind of formal name, but it’s sometimes called “reachability”:   means that from
+, we can reach  by following edges in .</p>
+<details class="qa">
+<summary>In the three cup puzzle, for which
+vertices  does   hold?</summary>
+<p>For the vertex   itself, for its
+neighbors   and
+ , and finally for
+the vertex   that
+can reach   in two
+steps.</p>
+</details>
+<p>To proceed, we will need to prove the following result:</p>
+<div class="lemma" id="lemma:reachesto">
+<p><strong>Lemma 3.3</strong>. <em>The relation  is an equivalence
+relation on .</em></p>
+</div>
+<p>Before we do that, though, let’s talk about equivalence
+relations.</p>
+<p>You may have already seen the definition elsewhere (or not). An
+<em>equivalence relation</em> 
+on a set  is a relation (that is,
+the statement   is either
+true or false for all   and
+ ) satisfying three
+poperties:</p>
+<ol>
+<li><p>It is <em>reflexive</em>: for all  ,  .</p></li>
+<li><p>It is <em>symmetric</em>: for all  , if  , then
+ .</p></li>
+<li><p>It is <em>transitive</em>: for all  , if   and
+ , then  .</p></li>
+</ol>
+<p>But these are not just nice properties we want to prove because we
+like how they sound! There is a purpose to showing that something is an
+equivalence relation. These three properties are exactly the things we
+need to check in order to know that we can partition  into equivalence classes: non-empty,
+disjoint sets  such
+that  
+and we have   exactly when
+ and  are in the same class.</p>
+<p>In the case of our relation , we will use these
+equivalence classes to find the connected components of .</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#lemma:reachesto">Lemma 3.3</a>.</em>
+Let’s check all three properties of an equivalence relation.</p>
+<p>We check that  is reflexive: for
+any vertex , there is an   walk in . Well, one such walk that’s guaranteed
+to exist is the walk which is a sequence with only one term; . There may or may not be others.</p>
+<p>We check that  is symmetric: if
+there is an   walk in , there is also a   walk. Well, suppose that  is an   walk (with   and  ). Then reverse it:  is a   walk. It starts at , ends at , and consecutive vertices in the
+sequence are adjacent, because they were also consecutive in the   walk.</p>
+<p>Finally, we check that  is transitive.
+Suppose  are vertices in  such that there is an   walk  and a   walk . We know that
+ ,  , and  . Then there is also an   walk: the sequence  This definitely starts at   and ends at  .
+All consecutive vertices are adjacent, because they were already
+consecutive in the two walks we started with, with the exception of one
+pair we need to look at more closely:  and . These are adjacent because  , and  and  are consecutive in the   walk.</p>
+<p>Having checked all three properties, we know that  is an equivalence
+relation. ◻</p>
+</div>
+<p>The proof of <a class="booklink" href="#lemma:reachesto">Lemma 3.3</a> gives
+us a useful operation on walks: we can join an   walk and a   walk to get an   walk. We
+will make use of this frequently: apart from specifying a walk directly
+by listing the sequence of vertices, the most common way to construct a
+walk is by building it out of smaller walks.</p>
+<p>Using <a class="booklink" href="#lemma:reachesto">Lemma 3.3</a> and the properties of
+equivalence relations, we know that we can partition  into equivalence classes of . These equivalence
+classes are non-empty sets  satisfying three properties:</p>
+<ol>
+<li><p>They are pairwise disjoint: if  , then  .</p></li>
+<li><p>Together, they include all the vertices:  .</p></li>
+<li><p>For  , we have
+  if and
+only if there is a single  such
+that   and  .</p></li>
+</ol>
+<p>These three properties are exactly what we need to say what the
+connected components of  are, and
+prove the following theorem:</p>
+<div class="theorem" id="thm:component-partition">
+<p><strong>Theorem 3.4</strong>. <em>Any graph  is the disjoint union of connected
+components satisfying <a class="booklink" href="#def:component">Definition 3.3</a>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> For all , let
+ be the induced subgraph . Property 3 of equivalence classes
+(as stated above) tells us that an   walk exists for two vertices   exactly when  and  are both in  for some . That gives us most of the definition
+of connected components right there.</p>
+<p>By the first two properties of equivalence classes, the subgraphs
+ are disjoint
+and include every vertex of . But
+do they include every edge? Well, for each edge  , the short sequence  is an   walk, so  . This means that
+there is some  such that   and  . But then, because  is the induced subgraph , we have  . We conclude that each edge
+appears in one of the subgraphs on our list, completing the proof that
+they are the connected components of . ◻</p>
+</div>
+<details class="qa">
+<summary>What are the connected components if  is a connected graph?</summary>
+<p>In this case there is just one connected
+component:  . There is a walk
+from every vertex to every other vertex.</p>
+</details>
+<p>Connected components aren’t just useful for answering questions about
+walks! Because there are no edges between different connected
+components, they basically do not interact with each other. A lot of the
+time, if we’re asking a question about graphs, we can work with each
+connected component separately.</p>
+<p>Suppose, for example, that a country’s land is separated into two
+islands, with each island made up of several regions. The two islands
+will be connected components in a graph that models the country’s
+regions. If we want to find a way to color the map of this country so
+that adjacent regions get different colors, as we did in the example at
+the beginning of <a class="booklink" href="../beginning/examples.html">Chapter 1</a>, then we get separate
+coloring problems for each island.</p>
+<details class="qa">
+<summary>Suppose we want to know if two graphs
+ and  are isomorphic. How does knowing the
+connected components of  and of
+ help?</summary>
+<p>There must be a bijection between their
+connected components, which pairs each connected component of  with a connected component of  isomorphic to it.</p>
+<p>For example, suppose  has a
+-vertex connected component and
+ does not. Then  and  cannot be isomorphic, regardless of
+what else is going on.</p>
+</details>
+<p>A final consequence of <a class="booklink" href="#thm:component-partition">Theorem 3.4</a> is that when a graph is
+not connected, we can always use <a class="booklink" href="#lemma:disconnected">Lemma 3.2</a> to
+prove it. If  is the disjoint
+union  , where  , then
+ is one possibility for a set
+ satisfying the hypotheses of
+<a class="booklink" href="#lemma:disconnected">Lemma 3.2</a>.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="closed-walks-and-cycles">Closed walks and cycles</h2>
+<p>Once we know where we can start and end a walk, we can start looking
+at ways that a walk can return to where it started. Adding this
+condition on its own, though, isn’t very useful, because there are many
+examples that shed absolutely no light on the structure of the
+graph:</p>
+<ul>
+<li><p>No matter what graph  we
+take, for any vertex , the walk
+ ends where it started.</p></li>
+<li><p>For every edge  ,
+the walks  and  and so on give infinitely
+many more examples.</p></li>
+</ul>
+<p>It is much more interesting to find a cycle in : a subgraph isomorphic to  for some . Just like paths, cycles can be
+represented by walks. So we make two definitions: the general one that’s
+easy to check but not useful on its own, and the one that tells us how
+cycles and walks are related.</p>
+<div class="defn">
+<p><strong>Definition 3.4</strong>. <em>A <strong>closed walk</strong>
+is a walk . Such a closed walk <strong>represents</strong> a cycle
+ in  when   and  .</em></p>
+</div>
+<p>The conditions that tell us when a closed walk 
+represents some cycle are a bit tricky. First, the vertices  all need to
+be distinct. Second, because a cycle needs at least  vertices, we must have  : the closed walk  does not represent a cycle.</p>
+<details class="qa">
+<summary>If a cycle is represented by the closed
+walk , how many closed walks can represent it, in total?</summary>
+<p>There are  possibilities: we can start at any
+vertex , and we can go in either
+direction around the cycle.</p>
+<p>For example, a cycle represented by  could also be represented by
+, , , , and .</p>
+</details>
+<p>In <a class="booklink" href="#fig:cup-puzzle">Figure 3.1</a>, the closed walk  represents a cycle, but perhaps at this
+point in the chapter we need a fresh example.</p>
+<figure class="bookfig" id="fig:cube-graph-and-cycles">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:cube-graph">
+
+<figcaption>The cube graph </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:cube-6-cycle">
+
+<figcaption>A -cycle in </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:cube-ham-cycle">
+
+<figcaption>A Hamilton cycle in </figcaption>
+</figure>
+</div>
+<figcaption>The cube graph and some cycles in it</figcaption>
+</figure>
+<p>Suppose that instead of flipping two cups at a time in the three cups
+puzzle, we could flip any one cup; the puzzle is no longer challenging
+in any way, but it is more interesting as a mathematical object. So we
+abandon cups; instead of using the symbols  and , we switch to the symbols  and , so that the vertices are -bit sequences. The resulting graph is
+shown in <a class="booklink" href="#fig:cube-graph">Figure 3.3(a)</a>. It is called the <em>cube
+graph</em> because, in addition to the combinatorial description, it has
+a geometric one: the corners and (geometric) edges of the unit cube
+ are exactly the vertices
+and edges of the cube graph.</p>
+<p>We use the notation  for the
+cube graph because in <a class="booklink" href="../beginning/degrees.html">Chapter 4</a>, we
+will generalize this graph to the <em>hypercube graph</em> , with a geometric interpretation in
+ dimensions.</p>
+<details class="qa">
+<summary>In terms of , how many vertices does  have?</summary>
+<p>
+vertices: there are  sequences
+of  bits, because there are  choices ( or ) for each bit.</p>
+</details>
+<p>The shortest cycles found in 
+have  vertices, such as the cycle
+represented by the closed walk . We also have -vertex cycles such as the one shown in
+<a class="booklink" href="#fig:cube-6-cycle">Figure 3.3(b)</a>: this one is represented by
+the closed walk . There are even cycles through all  vertices such as the one represented by
+, which is shown in <a class="booklink" href="#fig:cube-ham-cycle">Figure 3.3(c)</a>. A
+cycle through all the vertices of a graph has a special name: it is
+called a <em>Hamilton cycle</em>. We will study these in more detail in
+<a class="booklink" href="../hard/hamilton.html">Chapter 17</a>.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="lengths-of-walks">Lengths of walks</h2>
+<p>Finally, once we know that an   walk exists, we ask: how many steps
+does it need to have?</p>
+<div class="defn">
+<p><strong>Definition 3.5</strong>. <em>A walk  has
+<strong>length</strong> . We also
+say that a path or cycle has length  if it is represented by a walk of
+length .</em></p>
+</div>
+<p>This is one of two possible definitions: it counts the edges used by
+the walk, but we could also have counted the vertices. We choose to
+count the edges because it makes more sense: the walk that goes nowhere
+has length , and in an application
+where the walk is a sequence of steps taken (such as in a puzzle), the
+length of a walk is the number of steps required.</p>
+<p>One slightly strange consequence is that while the cycle graph  has length , the path graph  has length  . For this reason, some authors define
+ to be a path with   vertices and  edges. In my opinion, this causes more
+problems than it solves: I am happier if graph families like , ,  and others are indexed by the number
+of vertices they have, whenever possible.</p>
+<p>The main reason to define the length of a walk is so that we can look
+for a shortest   walk, avoiding
+walking back and forth inefficiently. Walks that don’t revisit any
+vertices are exactly the ones that correspond to paths, and in fact,
+that is how we will prove <a class="booklink" href="#thm:walk-to-path">Theorem 3.1</a>:
+that a graph has an   walk if and
+only if it has an   path.</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#thm:walk-to-path">Theorem 3.1</a>.</em> If a graph  has an   path, the walk representing it is an
+  walk, which proves one
+direction of the theorem.</p>
+<p>For the other direction, suppose  has an   walk. In that case, let , with   and  , be an   walk of the smallest length possible.
+We will show that this walk represents a path.</p>
+<p>Suppose not, for the sake of contradiction. If the walk fails to
+represent a path, then the vertices are not all distinct, which means we
+can pick two positions  and  with   such that  . But now, consider the sequence
+ in which we skip vertices . This is
+still an   walk! It still starts
+at , still ends at , and every two consecutive vertices are
+adjacent because they were also adjacent in the original walk. (This is
+not obvious for the pair , but because  , it is the same as the pair .)</p>
+<p>So we’ve found an   walk which
+has length  : strictly less
+than . This contradicts our
+assumption that we took an   walk
+of the smallest length possible. So a shortest   walk cannot have repeated vertices:
+it must represent an  
+path. ◻</p>
+</div>
+<p>We are now in a position where we can measure distances in a graph,
+by the lengths of walks connecting them. This is a graph-theoretic
+distance, not a geometric one: even if there is a way to measure
+distances between vertices of a graph  geometrically, this might disagree from
+the graph-theoretic measure.</p>
+<p>For example, imagine a graph defined on the streets in a city by
+placing vertices at points  meter
+apart along every street, and joining vertices along the same street.
+The length of a walk in this graph tells us the “walking distance”: how
+far we’d have to go along the streets of the city to get from one point
+to another. This might be very different from distance between two
+points “as the crow flies”, if the points are very close together but
+without convenient streets between them. It is the “walking distance”,
+and its generalizations to other situations, that we use to define
+distance between vertices in a graph.</p>
+<div class="defn">
+<p><strong>Definition 3.6</strong>. <em>The <strong>distance</strong>
+between two vertices  and  in a graph  (sometimes written , or  if the graph is clear from
+context) is the length of the shortest   walk, which we now know is also the
+length of the shortest  
+path.</em></p>
+</div>
+<p>If  and  are in different connected components,
+then there is no such walk, and we sometimes say that   in that case.</p>
+<p>For example, in <a class="booklink" href="#fig:cube-bfs-3">Figure 3.4(c)</a>, all
+vertices of the cube graph  have
+been labeled with their distance to the bottom left vertex, . Take note of the label  on vertex  itself. This is
+there because vertex  has
+distance  to itself, as measured
+by the length- walk .</p>
+<figure class="bookfig" id="fig:cube-distances">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:cube-bfs-1">
+
+<figcaption>Step 1</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:cube-bfs-2">
+
+<figcaption>Step 2</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:cube-bfs-3">
+
+<figcaption>Step 3</figcaption>
+</figure>
+</div>
+<figcaption>Finding distances in the cube graph</figcaption>
+</figure>
+<p>What’s going on in the other parts of <a class="booklink" href="#fig:cube-distances">Figure 3.4</a>? These are illustrations of
+the steps of an algorithm by which all the distances from a single
+vertex may be computed.</p>
+<p>Let  be that starting vertex,
+in an arbitrary graph . We begin
+by knowing only one distance in :
+the distance  .</p>
+<p>In Step 1, we take all the neighbors of ; for each vertex  adjacent to , we set  . This is the correct distance,
+because the walk  has length
+, and there cannot be a
+length- walk from  to any vertex other than . Moreover, all length- walks from  end at a neighbor from , so we’ve found all the vertices at
+distance ; this will be important
+later. The end result of Step 1 when   is shown in <a class="booklink" href="#fig:cube-bfs-2">Figure 3.4(b)</a>.</p>
+<p>From then on, we repeat the following procedure, of which our Step 1
+is a special case. In Step , we
+consider every vertex  for which
+ , and every neighbor
+ of such a vertex for which  is still unknown; we set  . Why is this correct? There’s
+two parts to the verification:</p>
+<ol>
+<li><p>First of all, there is an   walk of length . To find it, take the   walk of length   (which must exist, assuming the
+previous steps of our algorithm were correct) and append vertex  to the end of that sequence.</p></li>
+<li><p>Second, there are no shorter   walks; that’s because, at step  , we found all the vertices at
+distance at most   from .</p></li>
+</ol>
+<p>Now let’s re-confirm point 2 above for Step , so we can use it in future steps.
+Suppose that  ; then for
+some  , there is a walk  with   and  . The walk  has length
+ , so  , and we’ve found
+vertex  at Step   or earlier: before Step . Finally, in the next step after we
+computed , we would
+have considered  (a neighbor of
+), and determined .</p>
+<p>In the cube graph , the
+result of Step 2 is shown in <a class="booklink" href="#fig:cube-bfs-2">Figure 3.4(b)</a> and
+the result of Step 3 is shown in <a class="booklink" href="#fig:cube-bfs-3">Figure 3.4(c)</a>.
+Here, if we were to try to do a Step 4, we would accomplish nothing: all
+neighbors of the vertex labeled with  already have known distances. At this
+point, we stop.</p>
+<p>This stopping condition is guaranteed to happen in an -vertex graph by Step   or earlier: if we were to do more
+steps than that while computing a new distance at every step, we’d run
+out of distances to compute. (This is an important thing to check about
+every algorithm—that it halts!) After the stopping condition is reached,
+let  be the set of all vertices
+whose distances to  we’ve
+computed. There is a walk between any two vertices in , because all of them have a walk to
+; however, no vertex   has a neighbor  , because we would have
+computed the value of  a step
+after computing  if not
+earlier.</p>
+<p>Therefore  is the connected
+component of  containing . If  is connected, then we’ve computed all
+distances, and we’re done. Otherwise, we can set  to  for all  .</p>
+<details class="qa">
+<summary>Is there an -vertex graph for which this algorithm
+doesn’t stop before Step  ?</summary>
+<p>Yes: the path graph , if we start measuring distances from
+one end of the path graph. In this graph, it takes   steps to go from one end to the
+other.</p>
+</details>
+<p>This distance-finding algorithm is a special instance of
+breadth-first search, or BFS for short. It is a way of exploring the
+graph to eventually visit all the vertices in a connected component.
+It’s called “breadth-first” because it tries to go outward from the
+starting vertex in every direction at once: first a little bit, then a
+little bit more, and so on.</p>
+<p>In the distance-finding algorithm, we used a breadth-first search to
+compute distances, but this algorithm can be used for other purposes as
+well; Edward Moore, one of the first people to discover it, used it to
+find the shortest path through a maze . Later on in the book, we will see other
+problems that can be solved using a similar algorithm.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Let  be the graph whose
+vertices are the numbers , with an edge between 
+and  if   or if  . (For example, vertex 11 is
+adjacent to vertices 7 and 15, because  , as well as to vertex
+, because  .</p>
+<ol>
+<li><p>Draw a diagram of .</p></li>
+<li><p>What are the connected components of ?</p></li>
+</ol>
+</li>
+<li><ol>
+<li><p>Draw a diagram of the circulant graph .</p></li>
+<li><p>Choose any vertex of , and use the
+distance-finding algorithm to label every vertex with its distance from
+your chosen vertex.</p></li>
+<li><p>The graph  has cycles of
+four different lengths. What are they? Give an example of each. As a
+stretch goal, prove that there are no cycles of other lengths; if you do
+not figure out how, see <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a>.</p></li>
+</ol></li>
+<li>
+<p>How can we find the shortest path through a maze, as Edward Moore
+did, by using breadth-first search on a graph? Try it out on the maze
+below:</p>
+
+</li>
+<li><p>Suppose we generalize the -cup puzzle to an -cup puzzle, where a valid move is to
+take any two cups that are next to each other and flip them over. Prove
+that from any starting state with an even number of cups placed right
+side up, it is possible to reach the state where all  cups are upside down.</p></li>
+<li>
+<p>Prove that the distance between vertices in a connected graph
+satisfies the following properties, for all vertices , , and sometimes :</p>
+<ol>
+<li><p>  if and only if
+ .</p></li>
+
+
+</ol>
+<p>Some of these properties are easier than others, but I am listing
+them for two reasons. First of all, in some way, they correspond to the
+proof of <a class="booklink" href="#lemma:reachesto">Lemma 3.3</a>. Second, they are the three
+properties that make a connected graph a metric space with metric ; this is not something I will cover in
+this textbook, but it is interesting in a context outside graph
+theory.</p>
+</li>
+<li>
+<p>To really understand the proof of <a class="booklink" href="#lemma:reachesto">Lemma 3.3</a>, it helps to try to generalize
+it and see what works and what doesn’t. Take the following two relations
+on the vertices of a graph :</p>
+<ul>
+<li><p>  if there is a
+  walk of odd length.</p></li>
+<li><p>  if there is a
+  walk of even length.</p></li>
+</ul>
+<p>For one of these, we can copy the proof of <a class="booklink" href="#lemma:reachesto">Lemma 3.3</a> almost word-for-word and prove
+that it is also an equivalence relation. For the other one, this will
+not work: there are two places where the proof will fail. Find those
+places!</p>
+</li>
+<li><p>(Putnam 2010) There are 
+boxes labeled , and  balls
+have been distributed among them, for some positive integer . You may redistribute the balls by a
+sequence of moves, each of which consists of choosing an  and moving exactly  balls from box  into any one other box. For which
+values of  is it possible to reach
+the distribution with exactly 
+balls in each box, regardless of the initial distribution of
+balls?</p></li>
+<li><p>(IMO 1991) Suppose  is a
+connected graph with  edges. Prove
+that it is possible to label the edges  in such a way that at each vertex which belongs to two
+or more edges, the greatest common divisor of the integers labeling
+those edges is .</p></li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>To make the puzzle appear possible to solve, you can do
+the following: set up the puzzle in the alternating   state, and make a few
+moves back and forth before arriving at the desired  . Then explain that
+you’re “resetting” the puzzle, and bring it back to an alternating state
+before letting your victim try solving it—but make it, instead, the
+  state. After
+this, the puzzle will be impossible. You can further disguise the nature
+of the puzzle by using  cups
+instead of .<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+<li id="fn2"><p>Keep in mind that this is not quite the same as joining
+the sequences together: the last vertex of the   walk and the first vertex of the
+  walk are both , and only one of those ’s should be kept in the   walk.<a class="footnote-back" href="#fnref2">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 3</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

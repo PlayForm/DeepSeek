@@ -1,0 +1,12 @@
+---
+title: hook-dsh-ccr
+line9:
+  theme: boardroom
+---
+flowchart LR
+	POST["tools/post-execute"] -- "registers" --> PKG["hook-dsh-ccr"]
+	PRESTEP["agent/pre-step"] -- "registers" --> PKG
+	FACTORY["pluginFactory"] -- "injects" --> PKG
+	TOOLS["tools"] -- "injects" --> PKG
+	PKG -- "registers" --> RETRIEVE["ccr_retrieve"]
+	PKG -- "writes" --> LEDGER["the ledger"]

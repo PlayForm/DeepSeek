@@ -1,0 +1,648 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">The Degree of a Vertex</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 4</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>After this chapter, I have a whole part of the textbook devoted to
+the degrees of vertices and the properties of graphs that we can deduce
+from them. Originally, I had placed this chapter at the beginning of
+that part, but after writing more of the book, I realized that an
+introduction to the basics of vertex degrees is too fundamental: the
+ideas in this chapter will appear over and over again.</p>
+<p>To reflect this, I’ve moved this chapter to be the end of the first
+part of the textbook. After finishing it, you should feel a bit more
+free to skip around this book depending on what you’re interested in.
+You may still need to read each part of the textbook in order, and I do
+assume the knowledge of some things that are covered in previous parts,
+but there’s less interdependence.</p>
+<p>The first half of this chapter consists of computational problems
+that I find fairly light-hearted; the second half contains some more
+serious proofs, and it may be a spike in difficulty. If you’re new to
+writing proofs in graph theory, it is important to study the proof of
+<a class="booklink" href="#lemma:avg-degree">Lemma 4.6</a> until you are comfortable with
+it; it is a good example of how (and why) to induct on the number of
+vertices in a graph.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="the-hypercube-graphs">The hypercube graphs</h2>
+<p>Before we begin discussing vertex degrees, let me introduce a new
+family of graphs to you: the hypercube graphs. The family of hypercube
+graphs generalizes the cube graph previously mentioned in <a class="booklink" href="../beginning/walks.html">Chapter 3</a>:</p>
+<div class="defn">
+<p><strong>Definition 4.1</strong>. <em>The <strong>-dimensional hypercube graph </strong> has:</em></p>
+<ul>
+<li><p><em>Vertex set  , which we will denote with -bit strings . For example,  .</em></p></li>
+<li><p><em>An edge between every pair of vertices that differ only in
+one position. For example, in ,
+vertex  is adjacent to vertices
+, , and .</em></p></li>
+</ul>
+<p><em>The -dimensional hypercube
+graph  is also known as the
+<strong>cube graph</strong>.</em></p>
+</div>
+<details class="qa">
+<summary>In , what are the neighbors of vertex
+?</summary>
+<p>Vertices , , , and : we get  by flipping the first bit,  by flipping the second bit,  by flipping the third bit, and  by flipping the fourth bit.</p>
+</details>
+<figure class="bookfig" id="fig:hypercube-graphs">
+
+<figcaption>Three hypercube graphs of three different
+dimensions</figcaption>
+</figure>
+<p>In <a class="booklink" href="../appendix/induction.html">Appendix B</a>, I give an alternate,
+recursive definition of : useful
+when proving any of its properties by induction on .</p>
+<p><a class="booklink" href="#fig:hypercube-graphs">Figure 4.1</a> shows three examples of
+hypercube graphs: , , and . You may notice that  resembles a -dimensional square, and  resembles a -dimensional cube; in general,  is the graph that describes the
+geometrical structure of an -dimensional hypercube. However,  also has a variety of applications
+that have nothing to do with geometry:</p>
+<ul>
+<li><p>For computer scientists, it is the graph of -bit sequences with adjacency defined by
+flipping bits. When is that kind of adjacency useful? For example, when
+designing error-correcting codes, which need to detect accidental bit
+flips. The code words in an error correcting code are vertices of  all at a high distance from each
+other.</p></li>
+<li><p>We can also think of the vertices of  as subsets of the set , where an -bit string  corresponds to the
+subset  . With
+this interpretation, the graph theory behind  can tell us about the combinatorics
+of set families.</p></li>
+<li><p>In graph theory,  can be
+useful as a simple construction of a graph with many vertices and lots
+of symmetry; additionally, despite having relatively few edges for how
+many vertices it has, none of the vertices are very far apart.</p></li>
+</ul>
+<p>But “relatively few edges for how many vertices it has” is a vague
+statement. How many vertices does  have, and how many edges?</p>
+<p>To count the vertices, it’s enough to think about the number of ways
+to choose an element  : for each bit ,
+there are  choices, and each
+choice can be made independently of the others, so there are  choices overall.</p>
+<p>To find the number of edges in , we will first develop a bit of the
+theory of vertex degrees, which will make the problem much easier.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="the-handshake-lemma">The handshake lemma</h2>
+<p>Let’s begin with the main definition:</p>
+<div class="defn">
+<p><strong>Definition 4.2</strong>. <em>The <strong>degree</strong> of a
+vertex is the number of incident edges it has. The degree of vertex
+ in a graph  is written , or just  if the graph is clear from
+context.</em></p>
+</div>
+<p><a class="booklink" href="#fig:degree-example">Figure 4.2</a> shows an -vertex graph with vertices labeled
+according to their degree.</p>
+<figure class="bookfig" id="fig:degree-example">
+
+<figcaption>An -vertex graph
+labeled with the degrees of its vertices</figcaption>
+</figure>
+<details class="qa">
+<summary>In a graph with  vertices, what is the largest number
+that could be the degree of a vertex?</summary>
+<p>: if
+a vertex  is adjacent to every
+other vertex, then  . In
+general, in an -vertex graph, the
+largest degree possible is  .</p>
+</details>
+<p>There is a lot of associated terminology.</p>
+<div class="defn">
+<p><strong>Definition 4.3</strong>. <em>An <strong>isolated
+vertex</strong> is a vertex whose degree is ; a <strong>leaf</strong> is a vertex
+whose degree is .</em></p>
+</div>
+<p>Isolated vertices are interesting because they are the smallest
+possible connected components in a graph. Leaves are less obviously
+notable; we will (appropriately) find out what’s interesting about them
+when we study trees in <a class="booklink" href="../trees/properties.html">Chapter 10</a>.</p>
+<div class="defn">
+<p><strong>Definition 4.4</strong>. <em>The <strong>maximum
+degree</strong>  of a
+graph  is the largest degree of
+any vertex. The <strong>minimum degree</strong>  of a graph  is the smallest degree of any
+vertex.</em></p>
+</div>
+<p>The notation  and  is only the beginning of a
+general trend to use Greek letters for numerical properties of graphs;
+for the important properties, these letters are mostly standard. (If you
+are unfamiliar with the Greek alphabet,  and  are an uppercase and lowercase
+“delta”, respectively; this is a “d” for “degree”, uppercase for maximum
+and lowercase for minimum. It’s not entirely random.)</p>
+<p>The handshake lemma, or degree sum formula, is the first tool that
+gives degrees any sort of purpose. In my opinion, it is one of the main
+results from graph theory that mathematicians from all fields should
+know: not just for its statement, but to use as a way of thinking about
+graphs. The other result that I’d put in that category is Hall’s theorem
+(<a class="booklink" href="../matchings/hall.html#thm:hall">Theorem 15.1</a>), which we’ll prove in
+<a class="booklink" href="../matchings/hall.html">Chapter 15</a>.</p>
+<div class="lemma" id="handshake-lemma">
+<p><strong>Lemma 4.1</strong> (Handshake lemma). <em>In any graph , the vertex degrees add up to twice the
+number of edges: </em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Many proofs exist; for the sake of practice, let’s do
+a proof by induction. We will prove that for any graph with  edges, the sum of degrees is , by induction on .</p>
+<p>The base case is  . Here, we
+have a graph with no edges. No matter how many vertices we have, their
+degrees are all , the sum of the
+degrees is , and  is also .</p>
+<p>Assume that the degree sum formula holds for all  -edge graphs. Let  be a graph with   edges, and let  be any edge of . We can apply the induction hypothesis
+to   (the graph we get by
+deleting edge  from ), a graph with   edges.</p>
+<p>What is the relationship between the degrees of  and the degrees of  ? Both  and  have one extra incident edge in  that they don’t have in  : edge  itself. So  For any other vertex ,   and  have the same number of edges, so we
+have 
+Also,   and  have the same set of vertices. So if we
+add up the vertex degrees in  
+and , the result is that  Applying the induction hypothesis, we
+get that the degree sum in   is
+ , so the degree sum in  is  .</p>
+<p>By induction, the degree sum formula holds for all graphs. ◻</p>
+</div>
+<p>Using the handshake lemma, we can immediately answer our earlier
+question: how many edges does the hypercube  have? There are  vertices in , and each of them has  neighbors: every bit sequence  has  places in which a bit an be toggled. So
+the sum of degrees is  ,
+and therefore the number of edges is  .</p>
+<p>Here are some other questions we can answer quickly using the
+handshake lemma:</p>
+<div class="problem" id="problem:7-vertex-cubic-graph">
+<p><strong>Problem 4.1</strong>. <em>In particular,  has  vertices of degree . Can we have a -vertex graph where all the vertices
+have degree ?</em></p>
+</div>
+<div class="proof">
+<p><em>Answer to <a class="booklink" href="#problem:7-vertex-cubic-graph">Problem 4.1</a>.</em> No: then the
+degree sum would be  ,
+so there would be  edges, which
+is impossible. ◻</p>
+</div>
+<div class="problem" id="problem:soccer-ball">
+<p><strong>Problem 4.2</strong>. <em>A soccer ball has  black pentagonal panels (and some
+white hexagonal panels I’m too lazy to count). Panels are stitched along
+their edges, and meet at corners; at each corner, a pentagon and two
+hexagons meet. How many edges are there where two panels meet?</em></p>
+</div>
+<div class="proof">
+<p><em>Answer to <a class="booklink" href="#problem:soccer-ball">Problem 4.2</a>.</em> Each black pentagon
+has  corners, which will be the
+  vertices of our
+graph; the edges will be the edges where panels meet. Here, each vertex
+has degree , so the sum of degrees
+is  , and there are
+ edges.</p>
+<p>(Some slightly fancier logic can convince us that there are  hexagons; see the practice problems at
+the end of this chapter.) ◻</p>
+</div>
+<div class="problem" id="problem:minimum-degree">
+<p><strong>Problem 4.3</strong>. <em>Suppose you have a graph  with  vertices and  edges. What can the minimum degree
+ of this graph
+be?</em></p>
+</div>
+<div class="proof">
+<p><em>Answer to <a class="booklink" href="#problem:minimum-degree">Problem 4.3</a>.</em> Since the sum of
+the degrees is  , the
+average of the degrees is  . So the minimum degree can be at most : if every vertex had degree  or more, then the sum of degrees would
+be at least  . We can
+find -vertex, -edge graphs with a minimum degree of
+each of , , , , or ; try it yourself! ◻</p>
+</div>
+<figure class="bookfig" id="fig:full-binary-tree">
+
+<figcaption>An full binary tree with  vertices; the marked vertices are
+leaves.</figcaption>
+</figure>
+<div class="problem" id="problem:full-binary-tree">
+<p><strong>Problem 4.4</strong>. <em>In computer science, a full binary
+tree is a graph where every vertex is adjacent to up to  vertices: a parent and up to  children. Every vertex except one (the
+root) has a parent; every vertex has either  children or  children. (The parent-child
+relationship is symmetric.) <a class="booklink" href="#fig:full-binary-tree">Figure 4.3</a>
+shows a -vertex full binary tree;
+ of its vertices are leaves. In a
+-vertex full binary tree, how
+many leaves would there be?</em></p>
+</div>
+<div class="proof">
+<p><em>Answer to <a class="booklink" href="#problem:full-binary-tree">Problem 4.4</a>.</em> Suppose there
+are  leaves, which each have
+degree ; there is  root, with degree , leaving   vertices with degree  (a parent and  children). So the total degree is   or  .</p>
+<p>By the handshake lemma, this is twice the number of edges. But we can
+count the edges differently! Each edge is between a parent and a child;
+all  vertices except the root
+have a parent, so there are 
+edges. Setting  
+equal to   and solving for
+, we get  : there must be  leaves. ◻</p>
+</div>
+<p>We can generalize the answer to <a class="booklink" href="#problem:7-vertex-cubic-graph">Problem 4.1</a>:</p>
+<div class="corollary" id="cor:odd-vertices">
+<p><strong>Corollary 4.2</strong>. <em>Every graph  must have an even number of vertices
+(possibly ) whose degree is
+odd.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> What is the parity of the sum of degrees of : is it odd or even?</p>
+<p>One way to answer that question is simply to add up all the degrees.
+Starting from  (an even number),
+when we add an even degree to the total, it does not change the parity;
+when we add an odd degree to the total, it flips the parity. So if the
+number of odd degrees is even, the parity is flipped an even number of
+times, and ends at an even number; if the number of odd degrees is odd,
+the parity is flipped an odd number of times, and ends at an odd
+number.</p>
+<p>Another way to answer the question, however, is to use the handshake
+lemma. The sum of degrees of  is
+definitely an even number, because it’s twice the number of edges!</p>
+<p>For the two answers to agree, as we know they must, there must be an
+even number of vertices with odd degree. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="degrees-and-connectedness">Degrees and connectedness</h2>
+<p>Here’s another way we can use the minimum degree of a graph:</p>
+<div class="prop" id="prop:min-degree-connected">
+<p><strong>Proposition 4.3</strong>. <em>Let  be a graph with  vertices whose minimum degree  is at least . Then  is connected.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We want to show that given any two vertices  and , 
+must have an   walk.</p>
+<p>This is definitely true if  is
+an edge of : in this case, the
+sequence  is an   walk. So let’s suppose that  .</p>
+<p>There are   vertices in  other than  and . Of these   vertices, at least  are adjacent to , and at least  are adjacent to . Together,   adds up to
+more than  , so there must be
+some overlap! That overlap is a vertex  adjacent to both  and .</p>
+<p>In this case,  is an
+  walk, completing our
+proof. ◻</p>
+</div>
+<p>(Actually, we’ve shown more: we’ve shown that the distance between
+any two vertices is at most . In
+such cases, we say that  has
+<em>diameter</em> at most : more
+on this topic in <a class="booklink" href="../degrees/regular.html">Chapter 5</a>.)</p>
+<p><a class="booklink" href="#prop:min-degree-connected">Proposition 4.3</a> is a very common type
+of theorem to prove; it is, in some sense, our first glimpse of extremal
+graph theory. Extremal graph theory is the sub-discipline of graph
+theory that explores the relationships between possible values of
+different graph properties. Here are a couple of ways this can go:</p>
+<ul>
+<li>
+<p>Suppose we consider two numerical invariants of graphs:  and . It is very rare that knowing  will tell us , if we’ve bothered to define both
+numbers at all. However, maybe knowing  will give us a range of possible
+values of : there is a region
+in the -plane where the points
+ can go.</p>
+<p>To describe that region, it’s natural to explore its boundaries.
+That’s why extremal graph theory is “extremal”: it studies the extreme
+(highest or lowest) values that one invariant can have, based on
+another. We might describe the relationship between the two invariants
+by an inequality: for example, the inequality   is a rather silly
+statement of extremal graph theory.</p>
+</li>
+<li><p>Suppose we consider a numerical invariant  and a property  that a graph  either has or does not have. Then the
+“extremal” question we can ask is this: among graphs that have , what is the range of possible values
+of ? What about graphs that do
+not have ? Using this, we might be
+able to deduce whether a graph 
+has property  or not, based on the
+value of .</p></li>
+</ul>
+<p><a class="booklink" href="#prop:min-degree-connected">Proposition 4.3</a> is an example of the
+second type of statement, describing the relationship between minimum
+degree and connectedness. It is very common in extremal graph theory to
+ask: what is a lower bound   that will guarantee that  has a certain property?</p>
+<p>Of course, we have to try to find a good lower bound. It is much
+easier to prove the statement, “If an -vertex graph  has minimum degree  , then  is connected,” because the only -vertex graph  with minimum degree   is the complete graph . However, <a class="booklink" href="#prop:min-degree-connected">Proposition 4.3</a> is stronger: it
+applies to more graphs. Is it as strong as possible?</p>
+<p>To answer that question, we look for a so-called “extremal example”.
+If we can find a graph  which just
+barely fails the condition  , but is not connected, then we know that
+<a class="booklink" href="#prop:min-degree-connected">Proposition 4.3</a> cannot be improved
+any further: that graph  is the
+limit. (Ideally, we’d find such a graph for many possible values of
+, to give an example that applies
+to all situations.)</p>
+<p>There is such an example. Suppose  is even, and  has two connected components which are
+complete graphs with 
+vertices each. Then each vertex is adjacent to the   other vertices in its
+component, and  , yet  is not
+connected.</p>
+<details class="qa">
+<summary>Suppose that  is odd:   for some . What is the largest possible degree in
+a graph  which is not
+connected?</summary>
+<p>It is  , which we can achieve when one
+component of  is a -vertex complete graph, and the other is
+a  -vertex complete graph.</p>
+</details>
+<details class="qa">
+<summary>How do we know we can’t do better than
+this example?</summary>
+<p>The next integer after   is , which is exactly equal to : at this point, by
+<a class="booklink" href="#prop:min-degree-connected">Proposition 4.3</a>, we know that the
+graph must be connected.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="degrees-and-cycles">Degrees and cycles</h2>
+<p>The following theorem, and <a class="booklink" href="#cor:n-edge-cycle">Corollary 4.7</a> in
+the next section, will both be very useful to us many times in future
+chapters; notably, in <a class="booklink" href="../degrees/euler.html">Chapter 8</a> to
+find cycle decompositions and in <a class="booklink" href="../trees/properties.html">Chapter 10</a> to study
+graphs with no cycles. In the meantime, they will show a few other ways
+we can use vertex degrees in proofs.</p>
+<div class="theorem" id="thm:min-degree-cycle">
+<p><strong>Theorem 4.4</strong>. <em>Every graph  whose minimum degree  is at least  contains a cycle.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let the walk  represent a longest path in .</p>
+<p>We know   and
+therefore in particular  . Is it possible that 
+has a neighbor  which is not one
+of ? No! In
+that case, the walk  would represent a longer path.</p>
+<p>So  has at least two
+neighbors, and they are all in the set . <a class="booklink" href="#fig:going-back-to-xi">Figure 4.4(a)</a> shows an example in which
+the walk representing the longest path is , and   is adjacent to vertices , , and .</p>
+<p>One of ’s neighbors is : the previous vertex on the path.
+This doesn’t help us. But there must be another vertex  with   which is also adjacent to .</p>
+<p>Then the closed walk  represents the cycle we wanted. ◻</p>
+</div>
+<details class="qa">
+<summary>How do we know that a longest path in
+ exists?</summary>
+<p>There’s an upper limit to the length of a
+path: in an -vertex graph, there
+can be no path of length  or
+larger, because such a path would need to contain   different vertices.</p>
+</details>
+<details class="qa">
+<summary>Why does this matter for our proof?</summary>
+<p>If we begin our proof by taking a longest
+path in , then it had better be
+the case that such an object exists. We could not begin a proof by
+saying, “Let  be a longest walk in ,” because there are often arbitrarily
+long walks.</p>
+</details>
+<figure class="bookfig" id="fig:min-degree-cycle">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:going-back-to-xi">
+
+<figcaption>From a longest path to a cycle</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:no-long-cycle">
+
+<figcaption>An extremal example</figcaption>
+</figure>
+</div>
+<figcaption>Illustrations for <a class="booklink" href="#thm:min-degree-cycle">Theorem 4.4</a>
+and <a class="booklink" href="#prop:min-degree-long-cycle">Proposition 4.5</a></figcaption>
+</figure>
+<p>What if we raise the minimum degree, and assume  , or  ? In that case, we have
+greater flexibility in choosing vertex , because  will have more neighbors among . One
+possible way to use that flexibility is to strengthen the result in
+<a class="booklink" href="#thm:min-degree-cycle">Theorem 4.4</a> by choosing the vertex
+ that will give us the longest
+cycle. For example, in <a class="booklink" href="#fig:going-back-to-xi">Figure 4.4(a)</a>,
+going from vertex  back to vertex
+ gives us a cycle of length , but going back all the way to vertex
+ gives a cycle of length .</p>
+<p>What lower bound can we prove on the length of this cycle, in terms
+of ? This is an instance
+in which, if you are feeling sufficiently motivated, you should stop
+reading and take a moment to try to state, and prove, a stronger result
+on your own.</p>
+<p>If not, join me and continue!</p>
+<div class="prop" id="prop:min-degree-long-cycle">
+<p><strong>Proposition 4.5</strong>. <em>Every graph  with   contains a cycle of
+length at least  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> As in the proof of <a class="booklink" href="#thm:min-degree-cycle">Theorem 4.4</a>, if the walk  represents a
+longest path in , then  has at least  neighbors, which are all in the
+set .</p>
+<p>We are still going to continue by choosing a vertex  adjacent to  and looking at the closed walk , but
+we’re trying to find a long cycle.</p>
+<details class="qa">
+<summary>Which  should we pick to make the closed
+walk as long as possible?</summary>
+<p>The  with the least value of .</p>
+</details>
+<p>As long as  , the
+ with the least  will come before , so the closed walk  really
+will represent a cycle. (All that’s necessary here is that it has length
+at least .) What’s more, the
+vertices of the cycle include 
+as well as every neighbor of ,
+because we went back to the earliest neighbor we could. This tells us
+that the cycle has at least   vertices, and therefore its
+length is at least  . ◻</p>
+</div>
+<p>As before, we should ask if this is the best possible result: can we
+find examples where no cycle has length more than  ? One example where we cannot
+exceed this is a complete graph: in , the minimum degree is   and no cycle has length more than
+.</p>
+<p><a class="booklink" href="#fig:no-long-cycle">Figure 4.4(b)</a> shows a more satisfying kind
+of example, in my opinion. Here, we take the union of several copies of
+ that overlap in individual
+vertices. If we arrange them with some care, then the minimum degree is
+still   and there is still no
+cycle of length more than . But
+the number of vertices can be made arbitrarily large, so it is clear
+that it’s not the limiting factor.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="average-degree">Average degree</h2>
+<p>Even if you have lots and lots and lots of edges, your minimum degree
+can be very small. For example, a -vertex graph might consist of a -vertex complete graph and a single
+isolated vertex. This has 
+edges, which is close to the maximum number of edges a -vertex graph can have: . And yet the minimum degree is , and we can’t apply any nice results
+like <a class="booklink" href="#thm:min-degree-cycle">Theorem 4.4</a> to this graph.</p>
+<p>The following lemma partially solves this problem, and is very
+commonly used in extremal graph theory. It was first proved by Pál Erdős
+in 1964  to solve a
+problem relating average degree to the existence of certain subgraphs,
+though special cases of it were used even earlier.</p>
+<div class="lemma" id="lemma:avg-degree">
+<p><strong>Lemma 4.6</strong>. <em>Let  be a graph with average degree at least
+, where  is a positive integer. Then  contains a subgraph  with  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We induct on ,
+the number of vertices in . (This
+proof carefully follows the induction template from <a class="booklink" href="../appendix/induction.html">Appendix B</a>, to avoid any
+errors.)</p>
+<p>When  , the theorem “holds
+trivially”: that is, when  ,
+the highest possible degree in  is
+ , so  cannot have average degree  or more to begin with! We could use
+that as our base case, but it’s a bit more satisfying to use  .</p>
+<p>In this case, the highest possible degree in the graph is . The average degree can only be this
+high if every vertex has degree :
+if  . In this case,  itself is the subgraph  we’re looking for. This base case also
+holds.</p>
+<p>Either way, suppose that the theorem holds for all  -vertex graphs with average degree
+at least . Let  be an -vertex graph with average degree at
+least .</p>
+<p>At this point, let’s say something about average degree. If  has vertices , then the average of
+the degrees is  by the handshake
+lemma. This equation tells us that the average degree of  is  times the number of edges in . In particular, the statement “ has average degree at least ” is equivalent to the statement “ has at least  edges”.</p>
+<p>We’re assuming  has average
+degree at least , so we’re
+assuming that  has at least  edges. Also, if  , then we are
+already done: we were looking for a subgraph with this minimum degree,
+and  itself can be that subgraph!
+So we can add on a further assumption for free: that  has a vertex  with  .</p>
+<p>In that case, let  :
+the graph obtained from  by
+deleting . We know that  has   vertices and at least   edges: we started
+with at least  edges, and
+we lost at most  of them
+from deleting . This simplifies to
+ , so  has at least   edges, which means  has average degree at least , too!</p>
+<p>By applying the induction hypothesis to , we learn that  has a subgraph  with  . Since  is a subgraph of , and  is a subgraph of , we have found the subgraph of  we wanted.</p>
+<p>By induction, the theorem holds for graphs with any number of
+vertices. ◻</p>
+</div>
+<p>Using <a class="booklink" href="#lemma:avg-degree">Lemma 4.6</a>, we can convert minimum-degree
+results to average-degree results. For example, we can use <a class="booklink" href="#lemma:avg-degree">Lemma 4.6</a> to turn <a class="booklink" href="#thm:min-degree-cycle">Theorem 4.4</a> into a result about
+average degree—or, equivalently, about the number of edges.</p>
+<div class="corollary" id="cor:n-edge-cycle">
+<p><strong>Corollary 4.7</strong>. <em>If  has  vertices and at least  edges, then  contains a cycle.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> If  has  vertices and at least  edges, it has average degree at least
+ . By <a class="booklink" href="#lemma:avg-degree">Lemma 4.6</a>,  has a subgraph  with  . If  , then  , so by <a class="booklink" href="#thm:min-degree-cycle">Theorem 4.4</a>,  contains a cycle. This is also a cycle
+in . ◻</p>
+</div>
+<details class="qa">
+<summary>Is the lower bound “at least  edges” in <a class="booklink" href="#cor:n-edge-cycle">Corollary 4.7</a> the best lower bound
+possible?</summary>
+<p>Yes: a graph with  vertices and   edges does not need to contain a
+cycle. For example, the graph 
+has  vertices,   edges, and no cycles.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Suppose that  is a graph
+with  vertices and  edges. For which pairs  is it possible that   and  ?</p>
+<p>For the cases where it is possible, give an example. For the cases
+where it is not possible, explain why not.</p>
+</li>
+<li>
+<p>The five <em>Platonic solids</em> (defined in more detail in
+<a class="booklink" href="../planar/polyhedra.html">Chapter 23</a>) are:</p>
+<ul>
+<li><p>The tetrahedron, which has 
+vertices and  triangular faces,
+with  faces meeting at every
+corner.</p></li>
+<li><p>The cube, which has 
+vertices and  square faces, with
+ faces meeting at every
+corner.</p></li>
+<li><p>The octahedron, which has 
+vertices and  triangular faces,
+with  faces meeting at every
+corner.</p></li>
+<li><p>The dodecahedron, which has  vertices and  pentagonal faces, with  faces meeting at every corner.</p></li>
+<li><p>The icosahedron, which has  vertices and  triangular faces, with  faces meeting at every corner.</p></li>
+</ul>
+<p>In each case, find the number of edges where two faces meet.</p>
+</li>
+<li>
+<p>Let’s return to the soccer ball in <a class="booklink" href="#problem:soccer-ball">Problem 4.2</a>. Let the soccer ball have
+ pentagons and  hexagons. Each pentagon borders  hexagons; each hexagon borders  pentagons and  other hexagons.</p>
+<p>Consider a different graph describing the soccer ball: its vertices
+are the pentagonal and hexagonal panels, and two vertices are adjacent
+whenever the panels are stitched together.</p>
+<ol>
+<li><p>Use the handshake lemma to compute the number of edges in this
+graph.</p></li>
+<li><p>Use the handshake lemma on a subgraph of this graph to find the
+number of edges corresponding to hexagon-to-hexagon boundaries.</p></li>
+<li><p>Solve for .</p></li>
+</ol>
+</li>
+<li>
+<p>Prove that when  , every -vertex graph with at least   edges is connected.</p>
+<p>(You should think of this bound in the following way: every -vertex graph which is missing at most
+  edges is connected.)</p>
+<p>Is this the best bound possible? Is there an example of an -vertex graph with   edges which is not connected?</p>
+</li>
+<li>
+<p>Let  be the subgraph of
+ induced by the vertices in
+which the total number of ’s is
+either  or . (For example, the vertices of  are .)</p>
+<ol>
+<li><p>Draw a diagram of , and
+find the degree of each vertex.</p></li>
+<li><p>How many edges does 
+have, as a function of ?</p></li>
+</ol>
+</li>
+<li><ol>
+<li><p>A connected graph  has the
+property that for every edge ,
+ . Prove that all
+vertices of  have the same
+degree.</p></li>
+<li><p>A connected graph  has the
+property that for every vertex ,
+the degree of  is at most the
+average degree of the neighbors of . That is, if the neighbors of  are , then  Prove that
+all vertices of  have the same
+degree.</p></li>
+</ol></li>
+<li>
+<p>An open problem called Conway’s -graph problem is to determine whether
+there is a -vertex graph with the
+following properties:</p>
+<ul>
+<li><p>Every two adjacent vertices have exactly one common
+neighbor;</p></li>
+<li><p>Every two non-adjacent vertices have exactly two common
+neighbors.</p></li>
+</ul>
+<p>If such a graph exists, then every vertex in it must have the same
+degree, . What is ?</p>
+<p>(I am not asking you to find the graph. John Conway offered a $1000
+reward  for a
+solution to the problem! That gives you an idea of how hard that would
+be.)</p>
+</li>
+<li><p>(IMO 1971) Prove that for every positive integer  we can find a finite set  of points in the plane, such that given
+any point  of , there are exactly  points in  at unit distance from .</p></li>
+</ol>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 4</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

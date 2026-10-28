@@ -4,7 +4,7 @@ import Path from "node:path";
 const TreeDirectories = { classic: "Classic", "effect-ts": "EffectTS" };
 
 // The packages: every directory under each tree's packages/ that carries the
-// noemit TypeScript configuration.
+// package TypeScript configuration (the one `Build` compiles from).
 export default (Scopes) => {
 	const Packages = [];
 	for (const Tree of Scopes) {
@@ -14,7 +14,7 @@ export default (Scopes) => {
 				continue;
 			}
 			const Package = Path.join(Root, Entry.name);
-			if (FileSystem.existsSync(Path.join(Package, "Configuration/TypeScript.noemit.json"))) {
+			if (FileSystem.existsSync(Path.join(Package, "tsconfig.json"))) {
 				Packages.push({ Tree, Package });
 			}
 		}

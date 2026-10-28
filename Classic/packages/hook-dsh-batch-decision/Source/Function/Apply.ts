@@ -42,10 +42,7 @@ import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/lib-dsh-core";
 import { Decide } from "@playform/plugin-dsh-factory";
-
-// The bundle version, mirrored from package.json (the activation proof's
-// first field; a release bumps both together).
-const Version = "0.3.0";
+import Version from "@Variable/Version.js";
 
 /** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
 const Cell = (Value: unknown): unknown =>

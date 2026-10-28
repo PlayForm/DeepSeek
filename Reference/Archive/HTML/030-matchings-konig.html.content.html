@@ -1,0 +1,805 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Kőnig’s theorem</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 14</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>This chapter presents the algorithmic view of matchings in bipartite
+graphs. The augmenting path algorithm is the most serious algorithm seen
+in this textbook so far; accordingly, I’ve given it the most serious
+treatment, with a detailed proof that the algorithm works correctly, and
+an example of how the algorithm is used. I do not intend to treat every
+algorithm similarly; this is not a computer science textbook. This is,
+however, an introductory graph theory textbook, so I hope that this
+chapter introduces you to the algorithmic side of graph theory.</p>
+<p>In my opinion, Kőnig’s theorem (<a class="booklink" href="#thm:konig">Theorem 14.2</a>) is the
+right setting to consider the algorithmic questions, because it is a
+result comparing two optimization problems, which is how we usually
+encounter matchings in algorithmic applications. Of course, Kőnig’s
+theorem has its uses in pure mathematics, and Hall’s theorem (<a class="booklink" href="../matchings/hall.html#thm:hall">Theorem 15.1</a> in the next chapter) can also
+be proved by giving an algorithm. However, most uses of Hall’s theorem
+are about abstractly proving the existence of a perfect matching in a
+general, incompletely specified family of graphs—and that is the sort of
+problem we will consider in the next chapter.</p>
+<p>Kőnig’s theorem will also become important in <a class="booklink" href="../connectivity/cut-vertices.html">Chapter 25</a> through <a class="booklink" href="../connectivity/flows.html">Chapter 28</a>. We will use it to prove
+Menger’s theorem (<a class="booklink" href="../connectivity/menger.html#thm:menger">Theorem 27.1</a>).
+In the other direction, algorithms for the maximum flow problem can be
+used to solve the bipartite matching problem.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="kőnigs-theorem">Kőnig’s theorem</h2>
+<p>As we’ve already seen in <a class="booklink" href="../beginning/degrees.html">Chapter 4</a>
+with the notation for minimum degree () and maximum degree (), graph theorists like to use
+Greek letters for numerical invariants of graphs. We have recently
+learned two new such invariants, so let’s learn the notation for
+them.</p>
+<div class="defn">
+<p><strong>Definition 14.1</strong>. <em>The <strong>matching
+number</strong>  of a
+graph  is the number of edges in a
+maximum (largest) matching of .</em></p>
+</div>
+<div class="defn">
+<p><strong>Definition 14.2</strong>. <em>The <strong>vertex cover
+number</strong>  of a graph
+ is the number of vertices in a
+minimum (smallest) vertex cover of .</em></p>
+</div>
+<p>Unfortunately, the letters  (“alpha”) and  (“beta”) here have no particular
+meaning to help you remember them. There is a meaning to the apostrophe
+present in  but not
+in : it indicates that the
+invariant is an “edge version” of another invariant. This means that you
+can already begin to guess what  (the “vertex version” of the
+matching number) might mean: later on, in <a class="booklink" href="../hard/cliques.html">Chapter 18</a>,
+you will learn if your guess was right.</p>
+<p>Using the new notation, we can rewrite <a class="booklink" href="../matchings/bipartite.html#prop:weak-duality">Proposition 13.4</a>, which we
+stated as an inequality between  (the number of edges in a matching
+) and  (the number of vertices in a vertex
+cover ). The new version
+reads:</p>
+<div class="prop" id="prop:weak-duality-v2">
+<p><strong>Proposition 14.1</strong>. <em>In any graph ,  .</em></p>
+</div>
+<p>Actually, it might not be immediately obvious that <a class="booklink" href="../matchings/bipartite.html#prop:weak-duality">Proposition 13.4</a> and
+<a class="booklink" href="#prop:weak-duality-v2">Proposition 14.1</a> are the same: the first is
+talking about an arbitrary matching and vertex cover, and the second is
+only talking about maximum matchings and minimum vertex covers.</p>
+<p>However, if <a class="booklink" href="../matchings/bipartite.html#prop:weak-duality">Proposition 13.4</a> holds for all
+ and , then in particular it holds when  is a maximum matching and  is a minimum vertex cover, which proves
+<a class="booklink" href="#prop:weak-duality-v2">Proposition 14.1</a>. Conversely, if
+<a class="booklink" href="#prop:weak-duality-v2">Proposition 14.1</a> holds, then for any
+matching  and vertex cover , we have  , proving <a class="booklink" href="../matchings/bipartite.html#prop:weak-duality">Proposition 13.4</a>. (The
+inequalities   and   come from the meanings of the words “maximum” and
+“minimum”.)</p>
+<p>The main theorem of this chapter was proved in 1931 by Dénes
+Kőnig . Actually, it
+is ambiguous which result you mean if you say “Kőnig’s theorem”, because
+Kőnig proved many results in graph theory: he was, in fact, the author
+of the first graph theory textbook , written in 1936. In
+this textbook, the theorem we’ll call Kőnig’s theorem is the
+following:</p>
+<div class="theorem" id="thm:konig">
+<p><strong>Theorem 14.2</strong> (Kőnig’s theorem). <em>For any bipartite
+graph ,  .</em></p>
+</div>
+<p>We will prove this theorem by finding an algorithm. Given a matching
+, the algorithm will either
+construct a larger matching ,
+or find a vertex cover  with  .</p>
+<details class="qa">
+<summary>If we find such a , what can we conclude?</summary>
+<p>Since every matching has at most  edges, and  has exactly  edges, we know that  is a maximum matching by <a class="booklink" href="../matchings/bipartite.html#prop:weak-duality">Proposition 13.4</a>. By similar
+reasoning,  is a minimum vertex
+cover.</p>
+</details>
+<p>However, we know that we cannot always improve a sub-optimal matching
+simply by adding edges. So what does it take to improve a sub-optimal
+matching?</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="augmenting-paths">Augmenting paths</h2>
+<p>We will need a set-theoretic operation that is not as well-known as
+union and intersection, but is the natural operation to consider when
+tracking changes. (This remains true whether we’re tracking changes made
+to a matching in a graph, or tracking changes made to a Wikipedia entry,
+for example.) At its most basic, it’s defined on sets: if  and  are two sets, then their
+<strong>symmetric difference  </strong> is the set  : the set containing all elements in , or in , but not in both  and .</p>
+<p>We can think of   as a
+summary of the changes that need to be made to  to get . If we start with , and “toggle” all the elements of   (removing them from  if they are in , and adding them to  if not), then the result is .</p>
+<details class="qa">
+<summary>If we know  and  , what operation on them lets us find ?</summary>
+<p>It’s the symmetric difference again:  is  . The elements in   but not  are the elements only in , which we need to add to ; the elements in both  and   are exactly the ones not in , which we need to remove.</p>
+</details>
+<details class="qa">
+<summary>Which elements does a triple symmetric
+difference  
+contain?</summary>
+<p>The elements contained in an odd number
+(one, or all three) of the sets . This rule generalizes, and can also be used to prove that
+ is associative:  , because the rule applies to both sides.</p>
+</details>
+<p>For example, <a class="booklink" href="#fig:imo-results">Figure 14.1</a> shows
+a table listing the top ten countries in the International Mathematical
+Olympiad in 2024 and in 2025. If we think of these lists as sets, we can
+take the symmetric difference, shown in the third column. This symmetric
+difference shows the six countries whose status changed from 2024 to
+2025: Belarus, the United Kingdom, and Hungary left the top ten list,
+while Japan, Israel, and Vietnam entered it.</p>
+<figure class="bookfig" id="fig:imo-results">
+<div class="subfigures">
+<table>
+<thead>
+<tr>
+<th><strong>IMO 2024</strong></th>
+<th><strong>IMO 2025</strong></th>
+<th><strong>2024 ⊕ 2025</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>United States of America</td>
+<td>People’s Republic of China</td>
+<td>Belarus</td>
+</tr>
+<tr>
+<td>People’s Republic of China</td>
+<td>United States of America</td>
+<td>United Kingdom</td>
+</tr>
+<tr>
+<td>Republic of Korea</td>
+<td>Republic of Korea</td>
+<td>Hungary</td>
+</tr>
+<tr>
+<td>India</td>
+<td>Japan</td>
+<td>Japan</td>
+</tr>
+<tr>
+<td>Belarus</td>
+<td>Poland</td>
+<td>Israel</td>
+</tr>
+<tr>
+<td>Singapore</td>
+<td>Israel</td>
+<td>Vietnam</td>
+</tr>
+<tr>
+<td>United Kingdom</td>
+<td>India</td>
+
+</tr>
+<tr>
+<td>Hungary</td>
+<td>Singapore</td>
+
+</tr>
+<tr>
+<td>Poland</td>
+<td>Vietnam</td>
+
+</tr>
+<tr>
+<td>Türkiye</td>
+<td>Türkiye</td>
+
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption>Top ten IMO teams in 2024 and in 2025</figcaption>
+</figure>
+<p>Rather than continue thinking about competition performance, let’s
+switch to thinking about graphs. Given two graphs  and , the <strong>symmetric difference  </strong> is the graph with
+vertex set   and edge set  . We’re taking the symmetric difference of the
+edge sets, which are the star of the show; we take the union of the
+vertex sets to be sure that we’ve included the endpoints of every edge
+we need.</p>
+<p>We want to use this idea to see what changes need to be made to get
+from one matching to another. We are looking for small, incremental
+changes. So we will compare two matchings  and  such that  only has one more edge than .</p>
+<p><a class="booklink" href="#fig:grid-matchings">Figure 14.2</a> shows one such example. To
+make the drawing more clear, I have not included the edges of the
+original graph (which you may assume to be a   grid graph). Matching  (in <a class="booklink" href="#fig:matching-m1">Figure 14.2(a)</a>) has
+only  edges, while  (in <a class="booklink" href="#fig:matching-m2">Figure 14.2(b)</a>) is a
+perfect matching with  edges.</p>
+<figure class="bookfig" id="fig:grid-matchings">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:matching-m1">
+
+<figcaption>Matching </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:matching-m2">
+
+<figcaption>Matching </figcaption>
+</figure>
+
+</div>
+<figcaption>Two matchings in a   grid</figcaption>
+</figure>
+<p>As a graph,   (shown in
+<a class="booklink" href="#fig:matching-m1-xor-m2">Figure 14.2(c)</a>) consists of four
+connected components. Two of them are just isolated vertices, and don’t
+have a lot to tell us. Another, with the vertices , is a cycle, and
+represents only that the matchings  and  match those four vertices in two
+different ways.</p>
+<p>The last component is the most interesting one: the path represented
+by . It’s
+this component that tells us how to improve matching : we must swap the two edges  and  for the three edges , , and .</p>
+<p>We will call such a subgraph an -augmenting path (or just an augmenting
+path, if it is clear what matching  it is meant to augment). In general, if
+ is a matching in a graph , then an <strong>-augmenting path</strong> is a path in
+ with the following
+properties:</p>
+<ul>
+<li><p>The path begins and ends at two vertices that are not covered by
+.</p></li>
+<li><p>The edges used by the path alternate between edges not in  and edges in .</p></li>
+</ul>
+<p>In a symmetric difference of two matchings, we can also see connected
+components (paths or cycles) that satisfy only the second property, but
+not the first: we call such paths and cycles <em>-alternating</em>.</p>
+<p>The length of an -augmenting
+path must be odd, or else it will not end at an uncovered vertex. If it
+has length  , then the  edges are not part of , while the  edges are.</p>
+<p>If we find a path  in   that helps us improve  to be more like , then we should apply that difference
+to  by taking the symmetric
+difference  . This is
+generalized by the following lemma:</p>
+<div class="lemma" id="lemma:augment">
+<p><strong>Lemma 14.3</strong>. <em>Let  be a matching in a graph  and let  be an -augmenting path. Then   is a matching with one more
+edge than .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We verify that   is a matching by checking the degree of every vertex in  .</p>
+<p>Let  be an   path; then  . Because  is an -augmenting path,  . Therefore
+ and  have degree  in   as well; they each get an incident edge from , and do not gain or lose anything from
+.</p>
+<p>For every vertex  
+other than  and , the path  has two edges incident to , one of which is in  and the other is not (because  is -alternating). In  , the edge in  is lost, but the edge not in  is kept, so  .</p>
+<p>Finally, all vertices not on the path are unaffected by the change
+from  to  : they still have the same
+degree they had in , which is at
+most . Therefore   is a matching.</p>
+<p>Looking above, we can see that vertices  and  have degree  in  , but degree  in ; for every other vertex, its degree in
+ and   is the same. Therefore   is a matching that covers two more vertices than , which means it has one more edge than
+. ◻</p>
+</div>
+<p>In general, given two matchings  and , the symmetric difference   is a graph with maximum degree
+: each vertex has at most one
+incident edge in each matching. The connected components of such a graph
+are -alternating paths and -alternating cycles.</p>
+<p>Suppose now that, as in our example,  is a slight improvement over :  . Then, after canceling out the edges common between
+ and , the symmetric difference   still has one more edge from
+ than from . So there must also be at least one
+connected component of  
+where this is true!</p>
+<details class="qa">
+<summary>If a connected component of   is a cycle, can it contain
+more edges from  than from ?</summary>
+<p>No: to be -alternating, exactly half of its edges
+must be from , and exactly half
+must be from .</p>
+</details>
+<details class="qa">
+<summary>If a connected component of   is a path, can it contain more
+edges from  than from ?</summary>
+<p>Only if it is an -alternating path of odd length where
+the first and last edge both come from . This is an -augmenting path!</p>
+</details>
+<p>In particular, this argument proves that there exists an -augmenting path, but not usefully: to
+find it, we needed to know the bigger matching . In our proof of Kőnig’s theorem, we
+will see how to find an -augmenting path in a more helpful
+fashion, but only in bipartite graphs.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="the-augmenting-path-algorithm">The augmenting path
+algorithm</h2>
+<p>Let  be a bipartite graph with
+bipartition , and let  be a matching in . The main tool we need to prove Kőnig’s
+theorem is an algorithm for finding an -augmenting path.</p>
+<p>Our algorithm will be yet another breadth-first search algorithm.
+However, we will not explore the graph along all possible trajectories,
+but only along ones that can form an -augmenting path.</p>
+<p>We are searching for a path between two uncovered vertices, so let’s
+introduce some notation to help us. Write  as  , where the vertices in  are uncovered by  and the vertices in  are covered by . (That is,   if  has degree  in .) Split  into  and  in the same way.</p>
+<p>Since an augmenting path has odd length, and every path in  alternates between  and , an augmenting path must have one end
+in  and one end in . We will arbitrarily choose to start
+our exploration in , with the
+goal of eventually reaching a vertex in .</p>
+<p>To keep track of our progress, let  and  be the set of
+<strong>exp</strong>lored vertices in  and in , respectively. These will change over
+the course of the algorithm. Since we start our exploration in , initially   and  .</p>
+<p>Finally, we will also want to know how we reached the explored
+vertices: when we add a new vertex  to  , we make note of , the vertex <strong>f</strong>rom
+which we explored . This will help
+us find an augmenting path, if one exists.</p>
+<p>The augmenting path algorithm repeats the following steps, which I’ve
+given short names to help us refer to them.</p>
+<ol>
+<li><p><strong>Explore:</strong> For each vertex  , explore all its
+neighbors: if a neighbor  of  is not already in , add it, and set  . (After the first iteration,
+this only needs to be done for the vertices newly added to .)</p></li>
+<li>
+<p><strong>Check:</strong> At this step, there are two stopping
+conditions to check, which conclude the algorithm with different
+results.</p>
+<ul>
+<li><p><strong>Path?</strong> If there is a vertex   (an explored
+vertex uncovered by ), stop and
+return the path represented by the walk  that traces back the vertices from which
+we reached , ending at a vertex in
+. We will show that this is an
+-augmenting path.</p></li>
+<li><p><strong>Cover?</strong> If no new vertices were added to  in the most recent
+<strong>Explore</strong> step, stop and return the set  defined to
+be  . We
+will show that  is a vertex cover
+and  .</p></li>
+</ul>
+</li>
+<li><p><strong>Match:</strong> Otherwise,  : all the vertices
+in  are covered by . For each vertex  added to  in the most recent
+<strong>Explore</strong> step, find the edge   incident to . Explore vertex  (the vertex that  is matched to): add it to , and set  .</p></li>
+</ol>
+<p>To prove the correctness of this algorithm, we must show that when
+the <strong>Path</strong> or <strong>Cover</strong> stopping conditions
+are met, the path really is an -augmenting path and the cover really is
+a vertex cover of the same size as .</p>
+<details class="qa">
+<summary>We must also show that the algorithm
+cannot loop forever. Why must it halt?</summary>
+<p>At every iteration in which we don’t stop
+by the <strong>Cover</strong> condition, we add a new vertex to , and  is limited in size by .</p>
+</details>
+<p>In practice, this algorithm is applied multiple times. Starting from
+an initial matching, which does not need to be very good, we repeatedly
+use the algorithm to grow the matching by one edge. Eventually, we
+either find a perfect matching, or find a vertex cover that proves we
+cannot proceed any further. This self-certifying feature, in addition to
+being theoretically useful in the proof of Kőnig’s theorem, is also
+practically convenient: it means that we can verify the output of the
+algorithm independently if we’re not certain that an implementation of
+it is bug-free.</p>
+<p>Which initial matching do we start with? One option is to begin with
+the empty matching:  .</p>
+<details class="qa">
+<summary>What does the algorithm do if  ?</summary>
+<p>We start with all vertices of  already in , and all vertices of  in . If even a single edge exists, we
+will explore a vertex of  and
+halt in the first step, returning a path of length .</p>
+</details>
+<details class="qa">
+<summary>When a path of length  is an -augmenting path, what does this
+mean?</summary>
+<p>It means that the edge on that path can be
+added to  without removing any
+edges.</p>
+</details>
+<p>Starting from the empty matching, not just the first time we augment
+the matching but the first few times will typically end equally quickly:
+they will find an edge between two uncovered vertices. In effect, this
+is no different from a greedy algorithm. Only once the greedy algorithm
+would give up, because it cannot add any more edges, does the augmenting
+path algorithm start finding longer augmenting paths.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="analyzing-the-algorithm">Analyzing the algorithm</h2>
+<p>A common technique when analyzing an algorithm is to prove an
+invariant of the algorithm. Just like a graph invariant is a property
+that does not change when the graph is relabeled, an invariant of an
+algorithm is also a property that does not change—it does not change
+over the course of the algorithm. <a class="booklink" href="../appendix/proof-writing.html">Appendix A</a> discusses this
+proof technique, but this is the first time we really need it in the
+main body of the textbook.</p>
+<p>There are two invariants we track for the augmenting path algorithm:
+one invariant to help us find an -augmenting path, and one invariant
+that</p>
+<p>For the first invariant, we define a path  for each vertex  . It is the
+path represented by  that starts at 
+and traces back the vertices from which we reached , ending at a vertex in . Recall that in the
+<strong>Path</strong> stopping condition, this is the path we return,
+for a vertex  .</p>
+<div class="lemma" id="lemma:augmenting-path-invariant">
+<p><strong>Lemma 14.4</strong>. <em>For any vertex  , the path
+ is an -alternating path.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> More precisely, we prove the following: each edge
+ is in  if  , and not in 
+if  . The path  must alternate between  and : like any other path in , it alternates between  and , and it only passes through explored
+vertices. So this claim will prove that  is an -alternating path.</p>
+<p>Let   be a vertex
+on . Then either   (in which case, it is the end
+of the path) or else  was explored
+from a vertex  . We
+explore from vertices in 
+in a <strong>Match</strong> step; therefore  .</p>
+<p>Let   be a vertex
+on . Then  was explored from a vertex  ; we must prove that
+ . If  , this is automatic, because
+then  has no edges incident
+to . Otherwise,  was itself explored from some vertex
+, and as we’ve proved above,
+ . Therefore
+ , because  cannot be incident to two edges of
+. This completes the proof. ◻</p>
+</div>
+<p>Next, we turn our attention to the set  , which we return if the
+<strong>Cover</strong> stopping condition is satisfied. First of all,
+let’s understand where this set comes from.</p>
+<details class="qa">
+<summary>If a vertex cover  satisfies  , can  ever use both endpoints of an edge in
+?</summary>
+<p>No: if we select just one endpoint of each
+edge in , we’ve already selected
+ different vertices. Choosing
+both endpoints of an edge in  is
+wasteful and we cannot afford it.</p>
+</details>
+<details class="qa">
+<summary>If a vertex cover  satisfies  , how must it treat  and ?</summary>
+<p>
+cannot contain any vertices in 
+and . Again, we’ve already
+reached  vertices just by
+selecting a vertex from each edge in . We can’t select any more without going
+over our limit, so we can’t select any vertices not covered by .</p>
+</details>
+<p>These two guiding questions tell us what to do to the vertices we
+explore. Our initial set 
+consists just of : these
+vertices cannot be part of . This
+means that to cover the edges with an endpoint in , we must add all their other
+endpoints to . These neighbors are
+exactly what we put in  in
+the <strong>Explore</strong> step. Next, if a vertex  we’ve added to  is an endpoint of an edge  , we can’t put the other
+endpoint of  in  as well, so  . So the vertices matched to
+ cannot be part of , and these are exactly the vertices we
+put in  in the
+<strong>Match</strong> step.</p>
+<p>This logic continues: at each step, vertices we put in  are vertices we know cannot be
+part of , and vertices we put in
+ are vertices we know must
+be part of . Since we don’t know
+anything about vertices outside  , a reasonable first try is to define  , and we
+we will see that this turns out to work.</p>
+<p>We can define   at any point over the course of the algorithm, not
+just at the end. It is not a vertex cover before the end, but it
+satisfies an invariant of its own:</p>
+<div class="lemma" id="lemma:vertex-cover-invariant">
+<p><strong>Lemma 14.5</strong>. <em>Immediately before every
+<strong>Explore</strong> step,  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> At the beginning of the algorithm,   and  ; therefore  . Every edge of  has one endpoint in  and one endpoint in ; therefore  .</p>
+<p>In the <strong>Explore</strong> step, some vertices are added to
+. Then, in the
+<strong>Match</strong> step, for every vertex  that we added to , we add a vertex  to : the vertex  such that  . Such a vertex  cannot already have been in : it is not in  (because  ), and so it can only be
+explored in the <strong>Match</strong> step, and only from .</p>
+<p>Therefore, if we add  vertices
+to  in the
+<strong>Explore</strong> step, we also add  vertices to  in the <strong>Match</strong>
+step (provided we do not stop before then). As a result,   decreases by  and  increases by , so   remains unchanged.</p>
+<p>Since  starts equal to , and a single
+<strong>Explore</strong>–<strong>Check</strong>–<strong>Match</strong>
+iteration of the algorithm does not change , we must also have   before every
+<strong>Explore</strong> step. ◻</p>
+</div>
+<p>Many uses of invariants to study algorithms are proofs by induction
+in disguise, and you can see that in the proof of <a class="booklink" href="#lemma:vertex-cover-invariant">Lemma 14.5</a>. Here, we begin
+with a base case: we show that   at the beginning of the algorithm. Next, we show that
+whenever this property holds, it still holds after one more
+iteration.</p>
+<p>Together, <a class="booklink" href="#lemma:augmenting-path-invariant">Lemma 14.4</a> and <a class="booklink" href="#lemma:vertex-cover-invariant">Lemma 14.5</a> are not enough to
+draw any conclusions about what happens at the end of the algorithm: we
+need to see how the stopping conditions contribute.</p>
+<div class="prop" id="prop:path-stopping-condition">
+<p><strong>Proposition 14.6</strong>. <em>If the <strong>Path</strong>
+stopping condition holds, then for a vertex  , the path  is an -augmenting path.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We already know from <a class="booklink" href="#lemma:augmenting-path-invariant">Lemma 14.4</a> that  is an -alternating path. Moreover, its
+endpoints are uncovered by : its
+start is , which is in , and its end can only be a vertex in
+, because all other explored
+vertices were explored from somewhere. Therefore  is an -augmenting path. ◻</p>
+</div>
+<div class="prop" id="prop:cover-stopping-condition">
+<p><strong>Proposition 14.7</strong>. <em>If the <strong>Cover</strong>
+stopping condition holds, then   is a vertex cover with  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> To show that 
+is a vertex cover, take any edge  , where   and
+ . If  , then in the most recent
+explore step, we would have made sure that   (if it was not already there for some other
+reason); in this case,  . But
+if  , then  . In either case, one of the
+endpoints of  is in .</p>
+<p>From <a class="booklink" href="#lemma:vertex-cover-invariant">Lemma 14.5</a>, we know that
+  before any
+<strong>Explore</strong> step. If the <strong>Cover</strong> stopping
+condition holds, then no new vertices were added to  in the explore step, so  did not change; therefore   at the end of the
+algorithm. ◻</p>
+</div>
+<p>This completes the proof that the algorithm is correct. It also gives
+us all the tools we need to prove Kőnig’s theorem.</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#thm:konig">Theorem 14.2</a>.</em> Let  be a maximum matching in the bipartite
+graph ; starting with the matching
+, run the augmenting path
+algorithm.</p>
+<p>The algorithm cannot find an -augmenting path, because by <a class="booklink" href="#lemma:augment">Lemma 14.3</a>, we could use it to obtain a
+bigger matching, which contradicts our choice of . So it must stop by satisfying the
+<strong>Cover</strong> stopping condition. By <a class="booklink" href="#prop:cover-stopping-condition">Proposition 14.7</a>, the algorithm
+outputs a vertex cover  with  .</p>
+<p>Since  
+(by our choice of ) and   (the minimum vertex
+cover is at least as small as ),
+we conclude that  . From <a class="booklink" href="#prop:weak-duality-v2">Proposition 14.1</a>,
+we know  ; therefore the two are equal. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="using-the-algorithm">Using the algorithm</h2>
+<p>Algorithms like the augmenting path algorithm are not really intended
+to be performed by hand. Very rarely, if a graph is neither so small
+that we can find a matching without any algorithms, nor too big to deal
+with by hand, we can use the algorithm to check a matching we suspect to
+be optimal. Most of the time, though, you should use a computer. So the
+purpose of the example here is simply as an illustration, so that you
+can better understand the algorithm and its proof by seeing it in
+action. (You will gain even better understanding if you try doing this
+yourself, and I’ve included a practice problem about this. After you
+understand the algorithm perfectly, there’s no point.)</p>
+<p>The graph we will use as an example is a graph I’ve called
+<em>volcano graph</em>, shown in <a class="booklink" href="#fig:volcano-graph">Figure 14.3(a)</a>. It
+does not really have any special properties, but I defined it and named
+it and I have a hat with the volcano graph on it, so it is my favorite.
+One of my whims about the definition is that I insist that the top of
+the volcano graph must always be drawn in red.</p>
+<figure class="bookfig" id="fig:volcano-step-1">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:volcano-graph">
+
+<figcaption>The volcano graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:volcano-4-matching">
+
+<figcaption>A -edge matching </figcaption>
+</figure>
+</div>
+<figcaption>The volcano graph and an initial matching</figcaption>
+</figure>
+<details class="qa">
+<summary>Why is the volcano graph bipartite?</summary>
+<p>All edges have one endpoint in  and one endpoint in .</p>
+</details>
+<p>I have mentioned that the first few rounds of finding augmenting
+paths are essentially equivalent to a greedy algorithm, so I will skip
+them to avoid wasting time on cases that don’t help us understand
+anything. We will begin with the matching  shown in <a class="booklink" href="#fig:volcano-4-matching">Figure 14.3(b)</a>, with  .</p>
+<p>We must make an arbitrary choice between the two sides: let’s say
+that side  (the side that we
+explore from) is .
+For our initial matching, we start with   and  .</p>
+<p>The algorithm proceeds as follows:</p>
+<ol>
+<li><p><strong>Explore</strong> vertices  and , adding them to , with   and  .</p></li>
+<li>
+<p><strong>Check</strong> the stopping conditions:</p>
+<ul>
+<li><p>Is there a <strong>Path?</strong> No:  .</p></li>
+<li><p>Is there a <strong>Cover?</strong> No: we added  new vertices to .</p></li>
+</ul>
+</li>
+<li><p><strong>Match</strong> vertex  to vertex  and vertex  to vertex . Add  and  to , with   and  .</p></li>
+<li><p><strong>Explore</strong> vertices  and , with  . As before, add them to
+.</p></li>
+<li>
+<p><strong>Check</strong> the stopping conditions:</p>
+<ul>
+<li><p>Is there a <strong>Path?</strong> Yes:  .</p></li>
+</ul>
+<p>We stop, and output the augmenting path represented by </p>
+</li>
+</ol>
+<p>Of the edges on the augmenting path, edge  is part of , while edges  and  are not. Therefore we improve our
+matching  by removing , adding  and  instead. The resulting matching
+(call it ) is shown in
+<a class="booklink" href="#fig:volcano-5-matching">Figure 14.4(b)</a>.</p>
+<p>It is common to represent the exploration process by a forest, with
+the vertices arranged in levels. At the top level are the vertices in
+; from there, the levels
+alternate between vertices added to  in an <strong>Explore</strong>
+step and vertices added to 
+in a <strong>Match</strong> step. The forest we get in this example is
+shown in <a class="booklink" href="#fig:volcano-exploration">Figure 14.4(a)</a>.</p>
+<details class="qa">
+<summary>How can we tell which edges of this forest
+are edges of ?</summary>
+<p>They are the edges whose top vertex is in
+a  level and whose bottom
+vertex is in an  level. In
+<a class="booklink" href="#fig:volcano-exploration">Figure 14.4(a)</a>, these are just the
+edges down from , but if we
+had kept going, any edges down from  would also have been in .</p>
+</details>
+<figure class="bookfig" id="fig:volcano-step-2">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:volcano-exploration">
+
+<figcaption>The exploration forest</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:volcano-5-matching">
+
+<figcaption>A -edge matching </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:volcano-vertex-cover">
+
+<figcaption>The vertex cover </figcaption>
+</figure>
+</div>
+<figcaption>An example of the augmenting path algorithm</figcaption>
+</figure>
+<details class="qa">
+<summary>The forest in <a class="booklink" href="#fig:volcano-exploration">Figure 14.4(a)</a> looks like it has other
+augmenting paths, such as the one represented by . Could we have used this
+path instead?</summary>
+<p>No: this path only looks like an
+augmenting path because we stopped before the next
+<strong>Match</strong> step, but in reality, vertex  is covered by . If we had kept going, we would have
+found a longer augmenting path.</p>
+</details>
+<p>We have improved the matching, but we’re still not done, so we
+continue with another round of the algorithm. The edges of the new
+matching are , so the uncovered vertices are given by
+  and  . Now we:</p>
+<ol>
+<li><p><strong>Explore</strong> vertices  and , adding them to , with  .</p></li>
+<li>
+<p><strong>Check</strong> the stopping conditions:</p>
+<ul>
+<li><p>Is there a <strong>Path?</strong> No:  .</p></li>
+<li><p>Is there a <strong>Cover?</strong> No: we added  new vertices to .</p></li>
+</ul>
+</li>
+<li><p><strong>Match</strong> vertex  to vertex  and vertex  to vertex . Add  and  to , with   and  .</p></li>
+<li><p><strong>Explore</strong>, but fail to find any vertices: vertices
+ and  are only adjacent to vertices  and , which are already in .</p></li>
+<li>
+<p><strong>Check</strong> the stopping conditions:</p>
+<ul>
+<li><p>Is there a <strong>Path?</strong> No:  .</p></li>
+<li><p>Is there a <strong>Cover?</strong> Yes: we did not add any new
+vertices to .</p></li>
+</ul>
+<p>We stop, and output the vertex cover </p>
+</li>
+</ol>
+<p>Indeed, the vertex   shown in <a class="booklink" href="#fig:volcano-vertex-cover">Figure 14.4(c)</a> really is a vertex
+cover: it consists of the middle two layers of the volcano graph. Every
+edge between the first two layers is incident to  or , every edge between the last two layers
+is incident to , , or , and every edge between the second and
+third layer has both endpoints in . Since  , we conclude that
+ is a maximum matching.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li><p>Use the augmenting path algorithm to improve the matching in
+<a class="booklink" href="#fig:matching-m1">Figure 14.2(a)</a>. Does this result in the
+perfect matching in <a class="booklink" href="#fig:matching-m2">Figure 14.2(b)</a>, or a
+different one?</p></li>
+<li><p>Viewing the domino tiling in <a class="booklink" href="bipartite.html#fig:clumsy-dominoes">Figure 13.3</a> as a
+matching, find a set of 
+augmenting paths (with no vertices in common) that will transform it
+into a perfect matching.</p></li>
+<li>
+<p>On the chessboard below, how many rooks can be placed so that no
+two rooks occupy the same row or column, and all the crossed-out squares
+are empty? A -rook solution is shown. Use
+the augmenting path algorithm to find either an -rook solution, or a vertex cover
+proving that the -rook solution is
+optimal.</p>
+
+</li>
+<li>
+<p>(Problem due to Cat Pierro) What is the maximum number of dominoes that can be placed on the “rhino” shown below without overlap?</p>
+
+</li>
+<li>
+<p>Let  be a bipartite graph
+with bipartition  and minimum
+degree ; let  be a vertex cover that does not contain
+either  or .</p>
+<ol>
+<li><p>Prove that  . When does it follow that  , and
+why?</p></li>
+<li><p>In the case   and
+ , give an example of a
+bipartite graph in which this lower bound is true:  .</p></li>
+</ol>
+</li>
+<li>
+<p>If  is not bipartite, then
+<a class="booklink" href="#prop:weak-duality-v2">Proposition 14.1</a> still guarantees that
+ , but
+the two quantities may be different.</p>
+<ol>
+<li><p>Find  and
+ when  , a cycle graph with an odd
+number of vertices, in terms of .
+Verify that they are, in fact, different.</p></li>
+<li><p>Find a graph  which
+satisfies  , but is not bipartite.</p></li>
+</ol>
+</li>
+<li>
+<p>Let  be an -regular bipartite graph
+ with bipartition .</p>
+<ol>
+<li><p>Let  . Prove that   as well,
+and find  in terms of  and .</p></li>
+<li><p>Prove that a set of 
+vertices in  can cover at most
+ of the edges. What does this say
+about the size of a vertex cover?</p></li>
+<li><p>Use Kőnig’s theorem to prove that  must have a perfect matching.</p></li>
+</ol>
+</li>
+<li>
+<p>Prove if the augmenting path algorithm is applied to a maximum
+matching, then  is the set
+of all vertices on side  which are
+left uncovered by some maximum matching in the graph.</p>
+<p>(You must prove two things: that if  , then there is some maximum matching which does not
+cover , and that if  , then all maximum
+matchings cover .)</p>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>By a happy coincidence, this is 200 years after Euler
+first modeled a problem—the problem of the seven bridges of
+Königsberg—using what we’d now call a graph.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+<li id="fn2"><p>When learning about this algorithm for the first time,
+this definition may feel like it came out of nowhere! In the next
+section, we’ll discuss where this formula for the vertex cover comes
+from.<a class="footnote-back" href="#fnref2">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 14</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

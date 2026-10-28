@@ -112,6 +112,7 @@ import UpdateKey from "./Function/UpdateKey.js";
 import Wire from "./Function/Wire.js";
 import type Allowlist from "./Interface/Allowlist.js";
 import type Trace from "./Interface/Trace.js";
+import Version from "./Variable/Version.js";
 
 // The NAMED TYPE exports (P0-1): the four structural contracts + the output
 // shape, re-exported from the entry so consumers can `import type { State,
@@ -134,6 +135,12 @@ export type { default as Allowlist } from "./Interface/Allowlist.js";
 // The `ctx.trace` service view (D5): the emit/on Adapter plus the factory's
 // flush/ring/dispose seams.
 export type { default as Trace } from "./Interface/Trace.js";
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define) - NOT a loader key: the contract's names are unchanged
+// (the class form's default export with static inject/Config), and Version
+// sits beside the other named exports, not on the class.
+export { Version };
 
 // The standalone SCHEMA helper (v0.1.1, P1): the module-level composition of
 // the shared block + the module's own fields - `Schema(shared?, module?)`,

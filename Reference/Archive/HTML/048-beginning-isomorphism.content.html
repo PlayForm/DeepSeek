@@ -1,0 +1,875 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Isomorphisms and Subgraphs</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 2</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>The definition of a graph isomorphism is sufficiently fundamental
+that no self-respecting graph theory book could skip it. Most authors
+wouldn’t put this chapter so close to the beginning of the book,
+though.</p>
+<p>The reason I wanted to introduce isomorphic graphs early on is for
+the sake of the isomorphism game in <a class="booklink" href="#section:isomorphism-game">Section 2.3</a>. By playing this game,
+you can discover concepts like vertex degree, subgraphs, connected
+components, and others naturally: that is, you come up with them because
+you need them for something. Later chapters will tell you the full story
+of these concepts, and I will then try to motivate them by telling you
+what they’re good for—but another answer to what they’re all good for is
+to act as graph invariants.</p>
+<p>I begin with the definition of circulant graphs for several reasons.
+They will be useful to us many times later on, because they’re a very
+flexible family of graphs. Their definition is also good to understand
+now: it will give you some practice with modular arithmetic, which will
+help us with other constructions in graph theory that have rotational
+symmetry. Finally, they give some good examples of “unexpected” graph
+isomorphisms, as in <a class="booklink" href="#prop:circulant-isomorphism">Proposition 2.1</a>, and in exercises at
+the end of this chapter.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="circulant-graphs">Circulant graphs</h2>
+<p>I have a surprising question to ask you, but before I do, I want to
+tell you about a family of graphs: the circulant graphs. (A set of
+graphs is called a “family” for the same reason that a set of people is
+called a family: when they’re all related. But the relationship between
+graphs in a family is more abstract and metaphorical: they are graphs
+that all share an important property, or that are all defined in similar
+ways.)</p>
+<p>To pick out a specific circulant graph, we need two pieces of
+information: an integer  (which
+will just be the number of vertices) and a set  of offsets, or
+jumps: integers between  and . Once we have this information, the
+informal way to define the circulant graph is as follows: we put  vertices in a circle, and join two
+vertices by an edge if they are 
+steps apart in the circle, for some . For example, <a class="booklink" href="#fig:circulant-8-12">Figure 2.1(a)</a> shows a circulant graph with
+  vertices and with the set of
+jumps : two vertices are
+adjacent if they are next to each other around the circle, or two steps
+apart.</p>
+<figure class="bookfig" id="fig:circulant-graphs">
+
+<figcaption>Three circulant graphs</figcaption>
+</figure>
+<p>This is only an informal definition because we prefer not to define
+graphs in terms of how they’re drawn: it’s not forbidden to do so, but
+it’s discouraged, because we don’t want to get attached to one specific
+way of drawing the graph. After all, a graph is not the drawing: it is
+just a set of vertices and edges.</p>
+<p>The mathematically precise way to describe the rules that define a
+circulant graph is with modular arithmetic. If you are already familiar
+with it, feel free to skip ahead to <a class="booklink" href="#def:circulant-graph">Definition 2.2</a>. We will need to use
+modular arithmetic several times throughout this book, so let me
+introduce it now in a bit more detail than we need just to understand
+circulant graphs.</p>
+<p>The fundamental notion of modular arithmetic is congruence modulo
+, defined as follows:</p>
+<div class="defn">
+<p><strong>Definition 2.1</strong>. <em>Two integers  and  are <strong>congruent modulo</strong> a
+positive integer  when  and  differ by a multiple of :   for some . We write
+this  .</em></p>
+<p><em>For all  , every
+integer  is congruent to exactly
+one element of the set   modulo ; we refer to that element of   as <strong> modulo </strong>, written .</em></p>
+</div>
+<p>Modular arithmetic is used in situations where numbers “wrap around
+to the start” after , so that
+  is the same as , and   is the same as , and so on. A common real-life
+situation of this type is clock arithmetic: the hours are labeled  through , but the hour after  is , not . The hours on a clock are placed in a
+circle, just as the vertices of a circulant graph, and we’re going to
+use modular arithmetic for the same purpose!</p>
+<p>You can treat the statement   as being a relaxed kind of equality. Like equality, you
+can often apply the same operation to both sides to get another true
+statement:</p>
+<ul>
+<li><p> , so
+ , or  .</p></li>
+<li><p> , so
+ , or  .</p></li>
+<li><p> , so
+ , or  .</p></li>
+</ul>
+<p>The one common operation you must be careful about is division. It is
+not always okay to go from   to  . This is only allowed if  and  have no divisors in common! For
+example, we can divide both sides of   by 
+to get  : a
+true statement. But if we divided both sides by , we’d get  , which is false! (A quick way to see this:
+two positive integers are congruent modulo  if and only if their last digits are
+the same.)</p>
+<p>There is much more to learn about modular arithmetic, but we’ve seen
+enough to get us through this book. So let’s finally state the formal
+definition of a circulant graph:</p>
+<div class="defn" id="def:circulant-graph">
+<p><strong>Definition 2.2</strong>. <em>For any   and any set of integers  all between
+ and , the <strong>circulant graph </strong> is the graph with vertex set   in which two vertices
+ are adjacent whenever   for some .</em></p>
+</div>
+<p>Looking back at <a class="booklink" href="#fig:circulant-graphs">Figure 2.1</a>,
+you should check that this definition matches what you see in the
+diagrams, and that it matches what you’d expect from the informal
+definition.</p>
+<details class="qa">
+<summary>Why do we say that  must be between
+ and ?</summary>
+<p>Larger offsets would not mess up the
+definition, but they’re unnecessary. If we had an offset  bigger than , we could replace it by the
+offset . If we had an
+offset  between  and , we could replace it by  .</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="are-these-the-same">Are these the same?</h2>
+<p>The surprising question that I want to ask you now is this: are the
+graphs  and
+ the same?
+Before you answer, “No, obviously not,” let me make my case.</p>
+<figure class="bookfig" id="fig:circulant-isomorphism">
+
+<figcaption>Comparing  to </figcaption>
+</figure>
+<p>In <a class="booklink" href="#fig:circulant-isomorphism">Figure 2.2</a>, the first two
+diagrams are just the standard diagrams of  and . However,
+<a class="booklink" href="#fig:circulant-9-14-v2">Figure 2.2(c)</a> is something slightly
+different: it is also a diagram of , but it has the
+same “shape”—the edges are drawn in all the same places—as <a class="booklink" href="#fig:circulant-9-12">Figure 2.2(a)</a>, which shows .</p>
+<details class="qa">
+<summary>How do we know <a class="booklink" href="#fig:circulant-9-14-v2">Figure 2.2(c)</a> is also a diagram of
+?</summary>
+<p>For each vertex, you can check that its
+neighbors are the same in both <a class="booklink" href="#fig:circulant-9-14">Figure 2.2(b)</a>
+and <a class="booklink" href="#fig:circulant-9-14-v2">Figure 2.2(c)</a>. For example, the
+neighbors of vertex  are vertices
+, , , and  in both diagrams.</p>
+</details>
+<p>I can’t argue with the definitions, though:  and  are not the same
+graph, because they have a different set of edges. For example,  
+but  . And yet, <a class="booklink" href="#fig:circulant-9-12">Figure 2.2(a)</a> and <a class="booklink" href="#fig:circulant-9-14-v2">Figure 2.2(c)</a> show us that the two
+graphs are almost identical: you can turn one into the other just by
+renaming the vertices! If you think about the sort of questions we asked
+in <a class="booklink" href="examples.html">Chapter 1</a>—for example, the largest
+number of vertices we can select that are all adjacent—it’s clear that
+any answer we find in  will also work
+in , and
+vice versa.</p>
+<details class="qa">
+<summary>In , the vertices
+, , and  form a triangle: the edges , , and  are all present. Does this correspond
+in any way to a triangle in ?</summary>
+<p>Yes, but we have to do some “translation”.
+Vertices , , and  are in the same place in <a class="booklink" href="#fig:circulant-9-14-v2">Figure 2.2(c)</a> as vertices , , and  in <a class="booklink" href="#fig:circulant-9-12">Figure 2.2(a)</a>,
+so vertices , , and  form a triangle in .</p>
+</details>
+<p>When this relationship exists between two graphs  and —when we can turn  into  by just changing the names of the
+vertices—we say that  and  are isomorphic. For small graphs, this
+is often easy to show with a diagram, as in <a class="booklink" href="#fig:circulant-isomorphism">Figure 2.2</a>, but it would be
+difficult both to draw and to check if the graphs were larger. If we had
+to describe how  and  correspond to
+each other without drawing the diagram, we’d want to make a list of the
+way we rename the vertices. For example, to turn <a class="booklink" href="#fig:circulant-9-14-v2">Figure 2.2(c)</a> into <a class="booklink" href="#fig:circulant-9-12">Figure 2.2(a)</a>, we rename vertex  to , vertex  to , vertex  to , and so on. The mathematical object
+that describes such a correspondence is a function: a function  . In general,  should be a function from  to . Not just any function will do,
+however:</p>
+<div class="defn">
+<p><strong>Definition 2.3</strong>. <em>An <strong>isomorphism</strong>
+from a graph  to a graph  is a function   that
+satisfies the following properties:</em></p>
+<ul>
+<li>
+<p><em> is a bijection:
+for every vertex   there
+should be a vertex   such
+that  . In other
+words,  should have an
+inverse  .</em></p>
+<p><em>This makes the function a true correspondence, pairing each
+vertex in one graph with a vertex in the other.</em></p>
+</li>
+<li><p><em> preserves the
+edges: for every two vertices  , we have the equivalence  In other words,
+applying the function  to go
+from  to  does not change which vertices are
+adjacent to each other.</em></p></li>
+</ul>
+<p><em>When there is an isomorphism from  to , the graphs  and  are <strong>isomorphic</strong> to each
+other.</em></p>
+</div>
+<p>You should not be surprised by the two properties we asked for in
+this definition. If you think about the things you’d do to check if the
+diagrams in <a class="booklink" href="#fig:circulant-9-12">Figure 2.2(a)</a>
+and <a class="booklink" href="#fig:circulant-9-14-v2">Figure 2.2(c)</a> are the same, the two
+properties are just formally describing what you’d do. First, you’d
+check that for every vertex in one diagram, there’s a vertex in the same
+place in the other diagram (verifying that  is defined for all inputs, and
+that it’s a bijection). Second, you’d want to check that every edge
+drawn in one diagram is also present in the other diagram (verifying
+that  preserves the
+edges.)</p>
+<p><a class="booklink" href="#fig:circulant-isomorphism">Figure 2.2</a> suggests a particular
+isomorphism , given by the
+following table:  This is one possible concise way to specify an
+isomorphism, although for small graphs, a diagram like in <a class="booklink" href="#fig:circulant-isomorphism">Figure 2.2</a> is just as good. You
+should think of  as being
+like a dictionary that translates from names in  to names in
+. In the
+“language” of , the statement
+“ is adjacent to , but not to ” is true. That’s a false statement
+about , but
+it becomes a true one after it’s been “translated”! When translated, it
+becomes “ is adjacent to
+, but not to ”, or “ is adjacent to , but not to ”.</p>
+<p>(Just as with foreign languages, such a dictionary can have cognates:
+vertices like  that have the same
+role in both graphs. It can also have false cognates: both graphs have a
+vertex , but ’s vertex  does not correspond to ’s vertex .)</p>
+<p>In practice, the best reason to work with the function  formally is in a proof: if you
+have two graphs of arbitrary size given by abstract rules, and you want
+to prove they’re isomorphic, then you can’t draw a diagram—you have to
+give an isomorphism and verify that it works. Here’s an example of such
+a proof:</p>
+<div class="prop" id="prop:circulant-isomorphism">
+<p><strong>Proposition 2.1</strong>. <em>For all odd integers , the graph  is
+isomorphic to .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Modular arithmetic gave us the formal definition of
+the circulant graphs, and it can also give us the isomorphism! To find
+it, we need to find a pattern in the   case (where we already have an
+isomorphism) and generalize.</p>
+<details class="qa">
+<summary>Is there a pattern in the table defining
+the isomorphism  from  to ?</summary>
+<p>Yes; probably the first one you will spot
+is that the values of  in
+the table begin by going up by ’s
+from left to right.</p>
+</details>
+<p>In fact, we can check that the formula   works for every
+value in the table, and so to prove the generalization we want, we can
+try defining  .</p>
+<p>To check that  is a
+bijection, we can find an inverse for it. In this case, there happens to
+be an inverse with a short formula:  . We can check that this really is an inverse, because  When working modulo ,
+multiplication by 
+undoes multiplication by , and
+vice versa. This is usually the best way to proceed: it’s possible to
+check that  is a bijection
+by checking that it’s injective and surjective (one-to-one and onto),
+but this doesn’t usually save us any work, and the inverse might be
+useful for us.</p>
+<p>Next, we check that  maps
+vertices adjacent in  to
+vertices in . If two vertices
+ and  are adjacent in , it could be for
+four reasons; we could have  , or  , or  , or  .</p>
+<ul>
+<li><p>If  ,
+then  .</p></li>
+<li><p>If  ,
+then  .</p></li>
+<li><p>If  , then  .</p></li>
+<li><p>Finally, if  , then  , which
+simplifies to  , and  .</p></li>
+</ul>
+<p>We have an if-and-only-if statement, so normally the next step would
+be to check the converse: either that  sends non-adjacent vertices in
+ to
+non-adjacent vertices in , or that  sends adjacent vertices in
+ to
+adjacent vertices in . In
+this case, however, we can skip that step by doing some counting
+instead.</p>
+<p>Both  and
+ both have
+ edges: each one is a circulant
+graph with two offsets, and for each offset , there are  pairs  such that  .</p>
+<details class="qa">
+<summary>Is it always true for circulant graphs
+that the number of offsets tells you the number of edges?</summary>
+<p>Almost always, with one exception: when
+ is even, the offset  only produces half the edges
+you’d expect. This is because   and   are the same condition! Intuitively, going
+ steps left around the
+circle is the same as going  steps right when  is
+even: both go to the opposite vertex on the circle.</p>
+</details>
+<p>We’ve already checked that  is a bijection that sends each of
+the  edges of  to
+an edge of . This “uses up”
+all  edges of . So for a pair
+of vertices that are not adjacent in ,
+their images cannot be adjacent in , verifying the
+converse.</p>
+<p>This completes the proof that  is an isomorphism from  to
+, showing
+also that the two graphs are isomorphic. ◻</p>
+</div>
+<p>An isomorphism from  to  reveals a way in which  is the same as , so an isomorphism from a graph  to  itself reveals a way in which  is the same as . This doesn’t seem useful at first: we
+already know that  is the same as
+. However, it is useful: it
+reveals symmetry in the graph. For example, one of the main reasons
+circulant graphs matter in graph theory is their cyclic symmetry:
+rotating one of the diagrams in <a class="booklink" href="#fig:circulant-graphs">Figure 2.1</a>
+by , or one of the graphs
+in <a class="booklink" href="#fig:circulant-isomorphism">Figure 2.2</a> by , doesn’t change the shape of the
+diagram. To state this precisely, we need to discuss automorphisms.</p>
+<div class="defn">
+<p><strong>Definition 2.4</strong>. <em>An <strong>automorphism</strong>
+of a graph  is an isomorphism from
+ to itself.</em></p>
+</div>
+<p>To describe the symmetry of an -vertex circulant graph, we might say
+that the function  which
+rotates its standard diagram by  is an
+automorphism.</p>
+<details class="qa">
+<summary>What is the definition of  using modular arithmetic?</summary>
+<p>It is the function from   to   given by  .</p>
+</details>
+<p>We can also spot a different kind of symmetry in the diagrams of our
+circulant graphs: if you reflect them, swapping left and right, the
+shape does not change. This corresponds to a different isomorphism  , where  .</p>
+<p>Different diagrams can make different automorphisms easier to see,
+although the automorphism does not depend on the diagram:  and  are automorphisms of a circulant
+graph directly from the definition, regardless of how we draw it. More
+complicated symmetries might not even be possible to illustrate in a
+diagram!</p>
+<p>Even if a graph  has no
+symmetries to speak of, the function   defined by   for all   is an automorphism of . This is called the <em>identity
+automorphism</em> or <em>trivial automorphism</em>, and is much less
+exciting to discover. (It has a name mostly so that we can talk about
+automorphisms other than the trivial one, or about graphs that do or
+don’t have nontrivial automorphisms.)</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="section:isomorphism-game">The isomorphism game</h2>
+<p>How do we find an isomorphism between two graphs when their diagrams
+don’t completely line up? And when an isomorphism doesn’t exist, how can
+we tell? We don’t want to use brute force: with two -vertex graphs, there are  possible bijections, which is too many
+to check by hand even for fairly small .</p>
+<p>To teach you how to do it, I will teach you to play the “isomorphism
+game”. In this game, I show you three graphs. Two of them are isomorphic
+to each other, and the third is different. The goal is to identify which
+graph is the odd one out, and to find an isomorphism between the other
+two. Let me show you how the game is played on an example.</p>
+<figure class="bookfig" id="fig:isomorphism-game-example">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:iso-example-g1">
+
+<figcaption>The graph </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:iso-example-g2">
+
+<figcaption>The graph </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:iso-example-g3">
+
+<figcaption>The graph </figcaption>
+</figure>
+</div>
+<figcaption>A three-graph set for the isomorphism game</figcaption>
+</figure>
+<p>In <a class="booklink" href="#fig:isomorphism-game-example">Figure 2.3</a>, if we consider
+the possibility that  and  are isomorphic, how could we begin to
+find the isomorphism? A good start is to look for a distinguishing
+feature of some of the vertices. Be careful, though! Something like, “In
+, vertex  is all by itself in the middle, unlike
+the others, which are arranged in a circle” is not a distinguishing
+feature of vertex ’s role in the
+graph, but merely in the diagram; it’s not useful.</p>
+<p>We look, instead, for distinguishing features that can’t disappear
+when we rearrange the vertices and relabel them. For example, vertex
+ of  has four neighbors: , , , and . An isomorphism   must
+preserve the edges :
+the pairs ,
+, , and  must be edges of
+. So  is a vertex of  with four neighbors: , , , and . Which vertex can that be? It
+can only be vertex . So we can
+deduce that if the isomorphism  exists, then  .</p>
+<p>This has given us a foothold, and now we can build on it: to a
+complete isomorphism, or to a contradiction. Vertices  (the neighbors of ) in  must be sent to vertices  in : the neighbors of , which is . But can we distinguish them
+further? Well, in ,  and  are also adjacent to each other, so
+ and  must be adjacent. The only
+adjacent pair of neighbors that vertex  has in  is the pair . So  must be equal
+to , in some order.</p>
+<p>We don’t like the words “in some order”—that way lies brute-force
+checking of cases. But in this case, there’s an explanation for it. Do
+you see that in <a class="booklink" href="#fig:iso-example-g1">Figure 2.3(a)</a>,
+if we draw a straight line passing through vertices  and , then it is a line of symmetry of the
+diagram? That symmetry gives us an automorphism of , and that automorphism swaps vertices
+ and . This means that vertices  and  play identical roles, as far as
+isomorphisms go: anything one of them can do, the other can do just as
+well. We can arbitrarily decide   and   without fear of an error.
+(See how useful automorphisms can be, after all?)</p>
+<p>At this point, the rest of  can be determined. The neighbors
+of  in  are , , and . The neighbors of   in  are  ,  , and . Two out
+of three neighbors have already been matched up by , so the remaining pair must also
+go together:  . Going
+around the circle, we can find where  sends  and get the following
+isomorphism:  We’re halfway done with the game. How do we play
+the other half, and explain why 
+and  are not isomorphic?</p>
+<p>The argument begins with the same way; we look for a distinguishing
+feature. As before, if   is an isomorphism, then  must be a vertex of  with four neighbors: , , , and . Which vertex can that be? Well,
+there is no such vertex! In ,
+vertices  and  have two neighbors, and the rest each
+have three neighbors; no vertex has four. So  cannot exist:  and  are not isomorphic.</p>
+<details class="qa">
+<summary>Is it correct to say that  is not isomorphic to  because vertex  has three neighbors in , but only two neighbors in ?</summary>
+<p>No: an isomorphism is allowed to change
+which vertex is “vertex ”.</p>
+</details>
+<details class="qa">
+<summary>Is it correct to say that  is not isomorphic to  because  has three vertices (, , and ) with two neighbors each, but  has only two such vertices ( and )?</summary>
+<p>Yes: if there were an isomorphism  , then , , and  would be three different vertices
+with two neighbors each. But there are not three such vertices in .</p>
+</details>
+<details class="qa">
+<summary>Is it correct to say that  is isomorphic to  just because for every number , the two graphs have the same number of
+vertices with  neighbors?</summary>
+<p>No: we must find the isomorphism before we
+draw this conclusion. It’s possible for two graphs to agree in this way,
+and yet not be isomorphic, and you’ll see examples of this on the next
+page.</p>
+</details>
+<p>In general, to prove that two graphs are not isomorphic, it’s enough
+to find any difference between the two graphs that any isomorphism must
+preserve: something that’s inherent to the structure of the graph, and
+not a feature of the vertex labels or the way the graph is drawn.</p>
+<p>Before telling you more about such properties, I will let you
+discover some of them for yourself as you play the isomorphism game.
+(Try doing this yourself before you look at any spoilers.)</p>
+<div class="problem" id="first-iso-game">
+<p><strong>Problem 2.1</strong>. <em>Determine which of the three graphs
+below is the odd one out, and find an isomorphism between the other
+two.</em></p>
+
+</div>
+<div class="problem">
+<p><strong>Problem 2.2</strong>. <em>Determine which of the three graphs
+below is the odd one out, and find an isomorphism between the other
+two.</em></p>
+
+</div>
+<div class="problem">
+<p><strong>Problem 2.3</strong>. <em>Determine which of the three graphs
+below is the odd one out, and find an isomorphism between the other
+two.</em></p>
+
+</div>
+<div class="problem">
+<p><strong>Problem 2.4</strong>. <em>Determine which of the three graphs
+below is the odd one out, and find an isomorphism between the other
+two.</em></p>
+
+</div>
+<div class="problem">
+<p><strong>Problem 2.5</strong>. <em>Determine which of the three graphs
+below is the odd one out, and find an isomorphism between the other
+two.</em></p>
+
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="graph-invariants">Graph invariants</h2>
+<p>When playing the isomorphism game, you may say things like, “These
+two graphs are not the same as that other graph, because these two
+graphs both , and that other graph
+does not . But a graph that  can’t be isomorphic to a graph that
+does not .” Whenever you can say
+that,  is called a graph
+invariant:</p>
+<div class="defn">
+<p><strong>Definition 2.5</strong>. <em>A <strong>graph
+invariant</strong> is any property of a graph (a result of any kind that
+can be computed from the graph) such that, whenever two graphs  and  are isomorphic, they must agree in that
+property.</em></p>
+</div>
+<p>Graph invariants can be binary (true or false), or numerical (like
+the number of vertices or edges), or even more complicated, such as a
+sequence of numbers. They’re called “invariants” because don’t vary:
+they can’t be changed by drawing the diagram differently, or by
+relabeling the vertices. In other words, two isomorphic graphs have to
+agree on all graph invariants.</p>
+<p>Sometimes graph invariants are also called “graph properties”. Using
+the word “graph property” is also taking a philosophical stance: it’s
+implying that the only true graph properties—the only properties of
+graphs that are worth studying in the discipline of graph theory—are
+graph invariants! I think this is true, though I will carve one or two
+exceptions out for myself in a couple of pages.</p>
+<p>Of course, as mathematicians we can’t just intuit our way into
+claiming something is a graph invariant: we have to prove it. I will
+show you two of these proofs, one for a numerical invariant and one for
+a true/false invariant. Lots of these proofs are very similar to each
+other, and become boring once you get the hang of them, but I encourage
+you to try writing one or two yourself until you get to the point where
+you can see how you’d go about writing it before you even start.</p>
+<div class="prop" id="prop:order-size-invariants">
+<p><strong>Proposition 2.2</strong>. <em>The number of vertices and the
+number of edges of a graph are both graph invariants.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> In combinatorics, the classical way to prove that two
+sets are equal in size is to find a bijection between them. So to prove
+this theorem, we want to show that if two graphs  and  are isomorphic, then there’s a
+bijection between  and , as well as a bijection between
+ and .</p>
+<p>One of these proofs is very short! By definition, an isomorphism from
+ to  is a bijection  , which is
+exactly what we needed, and which automatically means that  . We conclude that the
+number of vertices is a graph property.</p>
+<p>For the number of edges, we need to work harder: we need to use  to construct a bijection  , which we’ll call . For an edge  , we’ll define  to be the edge . There are two
+checks necessary to make sure that this is legitimate:</p>
+<ul>
+<li><p> really is
+an element of . That’s because
+ is a graph isomorphism, so
+it preserves edges:  and  are adjacent, so  and  must be adjacent, which means
+that  is an
+edge of .</p></li>
+<li><p>The edge  also goes by a
+different name:  is the same
+edge. We want to make sure  does the same thing to it
+when it’s going by a different name. Fortunately,  
+is another name for  .</p></li>
+</ul>
+<p>Next, we check that 
+is a bijection. One way to do this is to construct an inverse for it,
+and that’s convenient to do here because we already know that  has an inverse  . So
+define   for every edge  . As before, there are two
+checks to make sure that this is legitimate, but they are the same as
+for . Finally, we want
+to check that  and
+ are inverses. For
+an edge  , 
+simplifies to 
+or just ; similarly, for an edge
+ , 
+simplifies to .</p>
+<p>This proves that 
+and  are inverses,
+so we conclude that  is
+a bijection; this is exactly what we needed to know that  , and that completes the
+proof that the number of edges in a graph is a graph invariant. ◻</p>
+</div>
+<p>For the next example, I will give you a graph invariant that feels
+ad-hoc and doesn’t have a name, just to make the point that something
+ad-hoc with no name can still be a graph invariant.</p>
+<div class="prop" id="prop:dominating-vertex-invariant">
+<p><strong>Proposition 2.3</strong>. <em>The property of having a vertex
+adjacent to all other vertices is a graph invariant.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  and  be two isomorphic graphs, and let   be an
+isomorphism between them. Suppose that  has a vertex  adjacent to all other vertices of ; then to complete our proof, we must
+show that  has such a vertex,
+too.</p>
+<p>Well, vertex  in  corresponds to vertex  in , so it’s natural to suppose that  is the vertex of  adjacent to all others. Now we must
+prove it. To do so, let  be an
+arbitrary vertex of  not equal to
+.</p>
+<p>Because  is an
+isomorphism, it’s a bijection, and has an inverse  . So
+ has a vertex ; we know that   because we picked
+ to be different from .</p>
+<p>Since  is adjacent to all other
+vertices of , and  is one of them, in
+particular  is adjacent to . Because  is an isomorphism, it preserves
+adjacency, which means that  is adjacent to  . We chose
+ to be an arbitrary vertex of
+ other than , so this proves that  is adjacent to all such
+vertices, completing the proof of the theorem. ◻</p>
+</div>
+<p>Let me discuss some of the other graph invariants you may or may not
+have discovered in the course of playing the isomorphism game.</p>
+<p>Whether a graph is <em>connected</em> is a graph invariant: if it’s
+not, the number of <em>connected components</em> is a graph invariant.
+(Two vertices are in the same component if you can get from one to the
+other by following edges; more on this in <a class="booklink" href="walks.html">Chapter 3</a>.)</p>
+<p>Whether a graph has a “piece” of a certain form is also an invariant;
+to make this formal, we will need the idea of subgraphs, which are
+discussed in the final section of this chapter.</p>
+<p>If we’re careful, we can get a graph invariant out of vertex degrees:
+the <em>degree</em> of a vertex is the number of edges incident to it.
+(We’ll discuss vertex degrees in more detail in <a class="booklink" href="degrees.html">Chapter 4</a>.)</p>
+<p>We have to be careful because something like “the degree of vertex
+” is not an invariant: an
+isomorphism can change which vertex is . But the binary property “there exists
+a vertex of degree ” is invariant,
+and so is “the number of vertices of degree ”.</p>
+<p>The ultimate way to track the vertex degrees would be a tally of how
+many vertices have each degree, such as for example “ vertices of degree , 
+vertices of degree , and  vertex of degree ” for the first graph in <a class="booklink" href="#first-iso-game">Problem 2.1</a>. It would be reasonable to call
+this a “degree tally”, but the convention instead is to sort the degrees
+from largest to smallest (such as ) and call this the <em>degree
+sequence</em>. (See <a class="booklink" href="../degrees/regular.html">Chapter 5</a>
+and <a class="booklink" href="../degrees/graphic.html">Chapter 6</a> for
+more details.)</p>
+<p>Here is a subtle example of a graph property: we say that a graph is
+<em>planar</em> if it can be drawn in the plane without any edges
+crossing, and whether or not a graph is planar is a graph invariant.
+This does not mean that “do any of the edges cross?” is a graph
+invariant—it’s not, because it depends on the way the graph is drawn!
+But the potential to have a crossing-free drawing is something that
+cannot be taken away with an isomorphism. (See <a class="booklink" href="../planar/planar.html">Chapter 21</a> for more details.) The
+subtlety in the previous paragraph is one of the exceptions that I
+wanted to mention about what does and doesn’t count as an invariant.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="subgraphs-and-some-common-small-graphs">Subgraphs and some
+common small graphs</h2>
+<p>Some of the graph invariants you may have made use of involve finding
+smaller graphs that appear inside bigger ones. We introduce subgraphs to
+make this idea precise.</p>
+<figure class="bookfig" id="fig:circulant-subgraphs">
+<div class="subfigures">
+
+<figure class="booksubfig" id="fig:induced-subgraph">
+
+<figcaption>An induced subgraph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:spanning-subgraph">
+
+<figcaption>A spanning subgraph</figcaption>
+</figure>
+</div>
+<figcaption>Two subgraphs of a circulant graph</figcaption>
+</figure>
+<p><a class="booklink" href="#fig:circulant-subgraphs">Figure 2.4</a> shows the circulant
+graph  and
+some of its subgraphs.</p>
+<div class="defn">
+<p><strong>Definition 2.6</strong>. <em>A <strong>subgraph</strong>
+ of a graph  is a graph that includes some of ’s vertices and some of ’s edges:   and  .</em></p>
+</div>
+<p>Keep in mind that we cannot include an edge  in the subgraph unless we have
+included vertices  and ; otherwise, that edge just wouldn’t
+make sense.</p>
+<p>There are two special types of subgraphs that deserve special
+mention. First:</p>
+<div class="defn">
+<p><strong>Definition 2.7</strong>. <em>A <strong>spanning
+subgraph</strong>  of a graph
+ is a subgraph such that  .</em></p>
+</div>
+<p>There are no requirements to include any edges: one possible spanning
+subgraph is the subgraph with all of ’s vertices, but no edges at all.
+<a class="booklink" href="#fig:spanning-subgraph">Figure 2.4(c)</a> shows a spanning
+subgraph of .</p>
+<div class="defn">
+<p><strong>Definition 2.8</strong>. <em>An <strong>induced
+subgraph</strong>  of a graph
+ is a subgraph that includes all
+the edges it possibly could: for all edges   such that   and  , it is true that  . The <strong>subgraph of
+ induced by </strong>, written , is the unique induced subgraph of
+ with vertex set , where  is a subset of .</em></p>
+</div>
+<p><a class="booklink" href="#fig:induced-subgraph">Figure 2.4(b)</a> shows an example: the
+subgraph of  induced by the
+set .</p>
+<p>It’s also common to define a subgraph that contains almost of  by deleting vertices or edges. To
+delete a single edge: if  , then we write  
+for the subgraph including all vertices of  and all edges except edge . To delete a single vertex: if  , then we write   for the subgraph including all
+vertices of  except , and all edges except those incident to
+. (Those have to go; they have no
+meaning if  is no longer a
+vertex.) More generally, if  is a
+set of vertices or of edges, we write   for the subgraph where all elements
+of , and all edges with an
+endpoint in , are deleted. For
+example, <a class="booklink" href="#fig:induced-subgraph">Figure 2.4(b)</a>
+could also be described as  .</p>
+<p>We can get graph invariants by looking at subgraphs of various graphs
+isomorphic to some fixed graph .
+Some terminology helps us concisely refer to this situation, which is
+very common (especially when  is
+small):</p>
+<div class="defn">
+<p><strong>Definition 2.9</strong>. <em>A <strong>copy of </strong> is a graph isomorphic to ; we often say that a graph  <strong>contains a copy of </strong> if  has a subgraph isomorphic to .</em></p>
+</div>
+<p>For any graph , the true/false
+property “contains a copy of ” and
+the numerical value “the number of copies of ” are both graph invariants.</p>
+<figure class="bookfig" id="fig:common-graphs">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:k5">
+
+<figcaption>The graph </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:p5">
+
+<figcaption>The graph </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:c5">
+
+<figcaption>The graph </figcaption>
+</figure>
+</div>
+<figcaption>Several common graphs</figcaption>
+</figure>
+<p>There are several families of graphs that are very commonly
+encountered, and so they’re given names that any graph theorist would
+recognize. They are useful subgraphs to look for in a graph, as well. I
+will define three of them in this chapter:</p>
+<div class="defn">
+<p><strong>Definition 2.10</strong>. <em>For any  , the <strong>complete graph </strong> is the graph with vertex set
+ and all  possible edges  where  .</em></p>
+</div>
+<p>A copy of  in a graph is
+often called a <em>clique</em>, though when I introduce this term
+officially in <a class="booklink" href="../hard/cliques.html">Chapter 18</a>, I will give it a related
+but slightly different meaning.</p>
+<div class="defn">
+<p><strong>Definition 2.11</strong>. <em>For any  , the <strong>path graph </strong> is the graph with vertex set
+ and   edges: the edges   where  . A copy of  (that is, a graph isomorphic to ) is simply called a
+<strong>path</strong>.</em></p>
+</div>
+<div class="defn">
+<p><strong>Definition 2.12</strong>. <em>For any  , the <strong>cycle graph </strong> has all the vertices and
+edges of , plus one additional
+edge: the edge . A copy of
+ is simply called a
+<strong>cycle</strong>.</em></p>
+</div>
+<p>In the next chapter, we will learn more about paths and cycles.</p>
+<details class="qa">
+<summary>Why does our definition of  require  ?</summary>
+<p>For   and  , adding the edge  to  doesn’t make sense. When  , we’d be adding the set , which is not an edge, and when
+ , the edge  would already be present in . In <a class="booklink" href="../degrees/multigraphs.html">Chapter 7</a>, we will
+encounter two <em>multigraphs</em> that could be called  and .</p>
+</details>
+<p><a class="booklink" href="#fig:common-graphs">Figure 2.5</a> includes an example of each
+of these families. I should mention that while every graph theorist will
+draw the same unlabeled diagram of each graph, there is no agreement on
+what the vertex sets , , and  are. I have chosen to use the set
+ in all three cases,
+because in my opinion, that’s a good concrete default.</p>
+<p>The reason there is no agreement about the vertex sets among graph
+theorists is because the exact vertex set is hardly ever relevant. If
+you want to answer questions like, “What is the number of copies of
+ in a graph ?” then your answer will be the same no
+matter what names you gave to the vertices of .</p>
+<p>Similarly, the graphs  and  are isomorphic, but not equal by the
+definitions we gave: the vertices of  are   (which helps with the
+modular arithmetic) while the vertices of  are . However, we are often
+fine saying that “ is a cycle graph”
+and “ is a circulant graph”,
+because the important thing about the definition of these graphs is
+their structure, not the vertex set.</p>
+<details class="qa">
+<summary>Is  a circulant graph, in this
+sense?</summary>
+<p>Yes: it is isomorphic to 
+or , depending on whether  is odd or even: a circulant graph with
+all the possible offsets, in either case.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Prove that none of these five graphs are isomorphic: find
+invariants distinguishing them all from each other.</p>
+
+</li>
+<li><p>Find  different graphs
+with  vertices so that no two of
+the graphs are isomorphic.</p></li>
+<li><p>In each of the circulant graphs in <a class="booklink" href="#fig:circulant-graphs">Figure 2.1</a>, count the number of
+copies of .</p></li>
+<li>
+<p>Find all four automorphisms of the graph shown below.</p>
+
+</li>
+<li>
+<p>Find two different isomorphisms between the two graphs below:</p>
+
+</li>
+<li><ol>
+<li><p>How many induced subgraphs with at least one vertex does the
+complete graph  have?</p></li>
+<li><p>How many spanning subgraphs does  have?</p></li>
+<li><p>How many subgraphs of any kind (but with at least one vertex)
+does  have? This one is
+trickier; you will need to think about the structure of .</p></li>
+</ol></li>
+<li>
+<p>Let  and  be isomorphic graphs. Prove the
+following:</p>
+<ol>
+<li><p> and  have the same number of vertices of
+degree .</p></li>
+<li><p>If  contains a copy of
+, then  contains a copy of .</p></li>
+</ol>
+</li>
+<li><p>Show that the circulant graphs  and  are
+isomorphic.</p></li>
+<li>
+<p>When an automorphism of 
+takes a vertex  to another vertex
+, then we say that  and  are similar.</p>
+<ol>
+<li><p>Prove that if  and  are similar, then   and   are isomorphic.</p></li>
+</ol>
+<p>On the other hand, the converse to (a) is false! Let  be the graph below:</p>
+
+<ol>
+<li><p>Prove that   is isomorphic
+to  .</p></li>
+<li><p>Prove that  and  are not similar. (In fact,  has no isomorphisms other than the
+identity automorphism.)</p></li>
+</ol>
+</li>
+<li>
+<p>The -vertex Möbius ladder
+graph is defined for every even  . It has that name because it resembles a Möbius strip, which
+can be made out of a long strip of paper by taping the ends together,
+with a twist. Similarly, the Möbius ladder graph is obtained by taking a
+“long strip” (two copies of 
+with edges between their corresponding vertices, as shown below on the
+left) and joining the ends together with a twist (as shown below on the
+right).</p>
+
+<ol>
+<li><p>Give a formal definition of the Möbius ladder graph based on the
+diagram above, naming the vertices however you like.</p></li>
+<li><p>Prove that for all even  , the -vertex Möbius ladder graph is
+isomorphic to the circulant graph .</p></li>
+</ol>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>Some people like to say that the number of vertices
+in a graph is its order, and the number of edges is the graph’s size. I
+won’t use this terminology, because it feels too arbitrary, and it’s not
+like “number of vertices” takes too long to say.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 2</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

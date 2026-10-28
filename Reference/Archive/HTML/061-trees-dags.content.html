@@ -1,0 +1,622 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Directed Acyclic Graphs</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 12</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>It may be a slightly odd choice to put a chapter on directed acyclic
+graphs in the part of the book about trees, but I think there is a
+thematic fit. We will see some analogies between directed acyclic graphs
+and trees. (Or should it be forests?)</p>
+<p>Additionally, just as trees can help us study connected graphs,
+directed acyclic graphs can help us study the connectedness of digraphs,
+via strongly connected components and condensations. This is mostly a
+coincidence, though; the use of directed acyclic graphs is very
+different from the use of trees. However, in this way, we can take a
+second look at some of the concepts from <a class="booklink" href="../beginning/walks.html">Chapter 3</a>, and
+how they change when the graph is directed.</p>
+<p>Since we’ll be dealing exclusively with directed graphs for the
+entire chapter, be sure to keep the definitions and results from the
+second half of <a class="booklink" href="../degrees/multigraphs.html">Chapter 7</a> in mind as you
+read.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="directed-acyclic-graphs">Directed acyclic graphs</h2>
+<p><a class="booklink" href="#fig:ksu-classes">Figure 12.1(a)</a> shows one example of the kind
+of graph we will study in this chapter—loosely inspired by real life. It
+represents the course prerequisite relationship between several math
+courses offered at Kennesaw State University. It also includes one
+fictional course: MATH 3333, which is what I imagine the course number
+for a course on random graphs would be. (MATH 3333 doesn’t really exist,
+but I have often thought that if it did, it would have been so fun to
+teach.)</p>
+<p>With or without this fictional innovation, there is one important
+property that the digraph in <a class="booklink" href="#fig:ksu-classes">Figure 12.1(a)</a>
+should have, from the point of view of graph theory. Unless something is
+very wrong, it should not have a cycle!</p>
+<details class="qa">
+<summary>What would go wrong if we had a cycle? For
+example, what would go wrong if we added an arc ?</summary>
+<p>There would be no way to take the courses
+in the cycle while obeying the prerequisites. Each course in the set
+ has a
+prerequisite in that set, giving no starting point.</p>
+</details>
+<p>This is such a common restriction (equally applicable to course
+offerings, baking recipes, or assembly lines) that the directed graphs
+obeying it have their own name.</p>
+<div class="defn">
+<p><strong>Definition 12.1</strong>. <em>An <strong>directed acyclic
+graph</strong>, or sometimes “dag” for short, is a directed graph that
+contains no cycles.</em></p>
+</div>
+<figure class="bookfig" id="fig:dag-examples">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:ksu-classes">
+
+<figcaption>Do not use as academic advice</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:tech-tree">
+
+<figcaption>An example of a research tree</figcaption>
+</figure>
+</div>
+<figcaption>Two examples of directed acyclic graphs</figcaption>
+</figure>
+<p><a class="booklink" href="#fig:tech-tree">Figure 12.1(b)</a> shows another example of a
+directed acyclic graph: my own simplified representation of a research
+tree from a game like <em>Civilization</em>. This one also represents
+prerequisites: this time, for acquiring new technologies in the game. We
+imagine that, for example, until a civilization masters the use of
+writing, it cannot possibly hope to invent the calendar: hence the arc
+from the “writing” node to the “calendar” node.</p>
+<p>Although this structure is called a research tree, it doesn’t exactly
+resemble the undirected graphs we call trees in every way. For one, we
+don’t require the digraph to be connected. (If we also
+included all the German classes at KSU in <a class="booklink" href="#fig:ksu-classes">Figure 12.1(a)</a>, we would probably not see any
+arcs between the two types of classes.) This means that there is no
+lower bound on the number of arcs; we should be comparing directed
+acyclic graphs to forests, not trees. However, the upper bound on the
+number of arcs is much weaker as well.</p>
+<details class="qa">
+<summary>Suppose you can alter the course of
+history and change the relationships between the  technologies in <a class="booklink" href="#fig:tech-tree">Figure 12.1(b)</a> to any directed acyclic graph you
+like. What is the maximum number of arcs you can make?</summary>
+<p>If the only requirement is to avoid
+cycles, we can have up to  arcs,
+by arranging the  technologies in
+a line and drawing arcs from each technology to all those that come
+after it.</p>
+</details>
+<p>This -arc solution has some
+redundant arcs: if arcs  and
+ exist, then as far as
+modeling prerequisites goes, there is no need for arc . But redundancy can’t take all the
+blame.</p>
+<details class="qa">
+<summary>What is the maximum number of arcs if we
+never include arc  as long as
+both  and  exist?</summary>
+<p>We can still get up to  arcs by dividing the technologies into
+four “basic” and four “advanced” ones, and adding an arc from each basic
+technology to each advanced technology.</p>
+</details>
+<p>There are some parallels between directed acyclic graphs and trees,
+though. In trees, we have learned to look for leaves: vertices of degree
+. In directed acyclic graphs, we
+instead look for <em>sources</em> (vertices of indegree , as defined in <a class="booklink" href="../degrees/multigraphs.html">Chapter 7</a>) and
+<em>sinks</em> (vertices of outdegree ).</p>
+<div class="lemma" id="lemma:dag-source-sink">
+<p><strong>Lemma 12.1</strong>. <em>Every directed acyclic graph has at
+least one source and at least one sink.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> As far as the existence of a source goes, this is
+exactly the contrapositive of <a class="booklink" href="../degrees/multigraphs.html#thm:no-sink-cycle">Theorem 7.2</a>, and the
+existence of a sink is the contrapositive of a “mirror version” of that
+theorem. But we can also prove this result from scratch.</p>
+<p>Let  be a directed acyclic
+graph, and let the walk  represent the longest path in . There cannot be an arc  for any  : if  is a vertex on the path, then a cycle
+is created, and if not, then the walk  represents a longer path. Therefore  is a source.</p>
+<p>Similarly, there cannot be an arc  for any  : if
+ is a vertex on the path, then a
+cycle is created, and if not, then the walk  represents a
+longer path. Therefore  is a
+sink. ◻</p>
+</div>
+<p>The parallel is not only in the proof technique (which, by the way,
+could be directly adapted to a proof of <a class="booklink" href="../trees/properties.html#lemma:leaves">Lemma 10.5</a> on the existence of
+leaves in a tree). Just like leaves, sources and sinks are the best
+choice when writing a proof by induction on directed acyclic graphs, or
+when coming up with a recursive algorithm. Although it’s true that for
+every vertex  in a directed
+acyclic graph , the digraph   also has no cycles, it is still best
+to remove a source or sink, because they’re often easiest to put
+back.</p>
+<p>To give an example, suppose we are given a directed acyclic graph
+, and want to compute the length
+of a longest path in . To do so,
+we’ll set ourselves a slightly harder task: for every vertex  , we will compute the value
+ equal to the length of the
+longest path in  ending at . (If we want the absolute longest path,
+simply find the largest value of 
+over all vertices.)</p>
+<p>If the directed acyclic graph 
+has only one vertex, we will assign that vertex a value of , because  cannot have a path of any positive
+length. If  has more vertices,
+then we compute  recursively: let
+ be any sink in , and apply our algorithm to  .</p>
+<p>In , for any vertex  , the value  should be the same as in  . There cannot be any path ending at
+ that goes through , because it’s impossible for a path to
+leave . So we only need to
+evaluate . To do this, let
+ be the
+vertices with an arc to : then
+every path to  is either the
+length- path that starts at , or enters  via some , so we define  Now we have computed  for every vertex of .</p>
+<details class="qa">
+<summary>If all we needed was a longest path in
+, and we did not care where it
+ended, why did we decide to compute ?</summary>
+<p>If we want to work recursively, but only
+compute longest paths, we might miss the longest path in  if it didn’t extend a longest path in a
+subgraph of .</p>
+</details>
+<details class="qa">
+<summary>Why is it necessary for the removed vertex
+ to be a sink?</summary>
+<p>If 
+is not a sink, then in going from   to , we might have to change many other
+-values in addition to .</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="topological-orders">Topological orders</h2>
+<p>Suppose you buy a piece of furniture which comes disassembled with a
+set of instructions for how to put it together. In principle, the
+necessary steps could form an arbitrary directed acyclic graph, and
+there is some freedom in deciding which steps to perform before which
+others. However, the instructions probably list the steps in order, to
+avoid confusion.</p>
+<p>Given a directed acyclic graph , a <strong>topological order</strong>
+of  is a generalization of this
+idea. It is a sequence  listing all the vertices of  such that for every arc  , vertex  comes before vertex  in the topological order:  . For example, given the class
+prerequisites shown in <a class="booklink" href="#fig:ksu-classes">Figure 12.1(a)</a>, one
+possible topological order is  which puts the courses in numerical order. (I assume
+that most departments in most universities make sure that the numerical
+order on their courses is also a topological order, though it is not
+always the only order or the best order in which to take the
+courses.)</p>
+<div class="prop" id="prop:top-order">
+<p><strong>Proposition 12.2</strong>. <em>Every directed acyclic graph
+ has a topological order.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We induct on the vertices of . If  has only one vertex, then there is only
+way to list the vertices in a sequence, and it is vacuously a
+topological order.</p>
+<p>Let  ; suppose  has  vertices, and that every  -vertex directed acyclic graph has a
+topological order. By <a class="booklink" href="#lemma:dag-source-sink">Lemma 12.1</a>,  has a sink . By the inductive hypothesis,   has a topological order . Let  . Then for every arc , we consider three cases:</p>
+<ul>
+<li><p>If   and  , then  is an arc of  , and since we chose  to be a
+topological order of  , we must
+have  .</p></li>
+<li><p>If   and  , then   by substitution, with no need for
+graph theory.</p></li>
+<li><p>The case   and   is impossible, because   is a sink, and there are no arcs
+out of it.</p></li>
+</ul>
+<p>In all possible cases,  ,
+and so  is a
+topological order of . By
+induction, topological orders exist for directed acyclic graphs with any
+number of vertices. ◻</p>
+</div>
+<details class="qa">
+<summary>Can a directed graph  have a topological order if it has a
+cycle?</summary>
+<p>No: if  has a topological order , then no path that
+leaves  can return it, because
+all arcs only take you forward in the topological order. Therefore  cannot contain any cycles.</p>
+</details>
+<p><a class="booklink" href="#prop:top-order">Proposition 12.2</a> is a good illustration of how we
+can use <a class="booklink" href="#lemma:dag-source-sink">Lemma 12.1</a> to prove properties of
+directed acyclic graphs by induction. However, in many cases, it also
+makes induction (and recursive algorithms) unnecessary. For example, the
+algorithm in our previous section for computing the longest directed
+graph can now be rephrased more directly. First, choose a topological
+order . Then,
+for each  , compute
+ by using the values of some
+of the previous vertices .</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="strongly-connected">Strongly connected</h2>
+<p>We will now abandon directed acyclic graphs for a moment and turn to
+a seemingly unrelated topic: the question of what it means for a
+directed graph to be connected.</p>
+<p>In <a class="booklink" href="../degrees/euler.html">Chapter 8</a>, we had to develop one
+definition of connectedness for directed graphs. We defined a <em>weakly
+connected</em> digraph to be a digraph whose underlying graph is
+connected. This is not always the wrong definition, and in fact, we
+developed it with the best intentions possible: it was the definition we
+needed! However, I also find it vaguely unsatisfying, because it doesn’t
+tell us anything about directed walks at all.</p>
+<p>The opposite approach is to directly copy the definition of
+connectedness. We will say that a directed graph  is <em>strongly connected</em> if, for
+every   and every  , there is a directed   walk. Because we could have chosen
+ instead of , there must also be a directed   walk. (For directed graphs that are
+not strongly connected, this is not guaranteed to be true.)</p>
+<details class="qa">
+<summary>Is a directed path graph  strongly connected?
+What about a directed cycle graph ?</summary>
+<p>The directed path graph is not strongly
+connected for  : in fact, it’s
+a directed acyclic graph! You can never get to an earlier vertex from a
+later vertex.</p>
+<p>Meanwhile, 
+is strongly connected: for any 
+and any , if you follow the cycle
+starting at , you will eventually
+reach .</p>
+</details>
+<p>It’s useful to observe that <a class="booklink" href="../beginning/walks.html#thm:walk-to-path">Theorem 3.1</a> (and its proof)
+continue to work for directed graphs: whenever there is an   walk, there is also a   path.</p>
+<p>We used connectedness in undirected graphs to define connected
+components, and we could use strong connectedness to define strongly
+connected components in the same way: using equivalence relations. Since
+we have a second chance to look at such a problem, though, let’s take
+that chance to arrive at our destination differently.</p>
+<p>We will define a <em>strongly connected component</em> of a digraph
+ to be a maximal strongly
+connected subgraph of : a subgraph
+ which is strongly connected,
+and which is not a subgraph of any other strongly connected subgraph of
+. In other words, we cannot add
+any more vertices or arcs of  to
+ and still get a strongly
+connected result.</p>
+<figure class="bookfig" id="fig:strong-component-example">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:numerical-maze-2">
+
+<figcaption>A numerical maze</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:maze-strong-component">
+
+<figcaption>A strongly connected component</figcaption>
+</figure>
+</div>
+<figcaption>Strongly connected components in a numerical
+maze</figcaption>
+</figure>
+<p><a class="booklink" href="#fig:strong-component-example">Figure 12.2</a> shows an example
+of a strongly connected component in the same numerical maze that we
+used as an example in <a class="booklink" href="../degrees/multigraphs.html">Chapter 7</a>. The subgraph
+induced by the marked vertices in <a class="booklink" href="#fig:maze-strong-component">Figure 12.2(b)</a> is a large strongly
+connected component in the directed graph. From any marked vertex, it is
+possible to reach any other; the other vertices either cannot be reached
+from the marked vertices, or cannot reach any marked vertex.</p>
+<p>I found the strongly connected component by starting with just vertex
+ and looking for cycles. Whenever
+I found a cycle that contained a marked vertex, I also marked every
+other vertex of the cycle.</p>
+<details class="qa">
+<summary>Why does this guarantee that the result is
+a strongly connected component?</summary>
+<p>From every vertex on the cycle, we can
+reach the marked vertex on the cycle, and from there, we already know we
+can reach every previously-marked vertex. This strategy also works in
+reverse.</p>
+</details>
+<p>Compared to what we did in <a class="booklink" href="../beginning/walks.html">Chapter 3</a>,
+we’ve definitely done less work to define what a strongly connected
+component is. However, now we must do more work to ensure that the
+definition behaves:</p>
+<div class="theorem" id="thm:strong-partition">
+<p><strong>Theorem 12.3</strong>. <em>If  are the strongly connected components of a
+directed graph , then  are a
+partition of .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> When we say that  are a partition of , we say two things: first, that
+every   is in  for some , and second, that no   is in both  and  where  .</p>
+<p>For the first claim, to find a strongly connected component
+containing a vertex , start with
+the subgraph consisting of 
+alone.</p>
+<details class="qa">
+<summary>Why is this subgraph strongly
+connected?</summary>
+<p>There is only one thing to check: that
+there is an   walk. The sequence
+ is an   walk of length .</p>
+</details>
+<p>Either this subgraph is a strongly connected component, or else (by
+the contrapositive of that definition) it must be contained in a bigger
+strongly connected subgraph. That subgraph, in turn, is either a
+strongly connected component, or contained in a bigger strongly
+connected subgraph. We can skip to the end by applying the extremal
+principle: take a strongly connected subgraph containing  which has as many vertices and arcs as
+possible. From the way we chose it, we know that it cannot be contained
+in a larger strongly connected subgraph, so it satisfies the definition
+of a strongly connected component.</p>
+<p>For the second claim, suppose for the sake of contradiction that
+  for some
+ . The contradiction is this:
+the union of directed graphs   is a bigger strongly connected subgraph of . To see this, take any   and  . Then there is a
+  walk: if  , this is true because   and  is strongly connected, and if  , this is true because   and  is strongly connected. There is also
+an   walk, for the same
+reason.</p>
+<p>Joining these walks together, we get a   walk, proving that   is strongly connected. But
+then  and  are both subgraphs of  , which is a strongly
+connected subgraph of , so they
+cannot be strongly connected components. This contradiction tells us
+that  cannot be in two different
+strongly connected components, proving the theorem. ◻</p>
+</div>
+<p>The proof of <a class="booklink" href="#thm:strong-partition">Theorem 12.3</a>
+is a special case of the general proof that, given an equivalence
+relation on a set , its
+equivalence classes form a partition of . If you look closely, you can see where
+elements of this proof rely on the three defining properties of an
+equivalence relation.</p>
+<p>Be careful, however: it is not true that  is equal to  , the
+union of its strongly connected components! As we are about to see,
+there are other arcs  might
+have.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="condensations">Condensations</h2>
+<p>When we worked with undirected graphs, the connected components told
+us the whole story of which vertices can reach which other vertices:
+there is an   walk in  if and only if  and  are in the same connected component of
+. With directed graphs and
+strongly connected components, this is no longer true.</p>
+<details class="qa">
+<summary>Why are strongly connected components
+different?</summary>
+<p>If 
+and  are in different strongly
+connected components, there can still be either an   walk or a   walk; just not both.</p>
+</details>
+<p>We can, however, guarantee at least one thing: if we know the
+relationship between two vertices 
+and , then the same relationship
+holds between every vertex 
+in ’s strongly connected component
+and every vertex  in ’s strongly connected component. For
+example, if there is an   walk,
+then there is also an  
+walk: we go from  to  to  to .</p>
+<p>For this reason, once we find the strongly connected components  of a digraph , we can summarize the relationship
+between different strongly connected components much more concisely. We
+define a new directed graph called the <em>condensation</em> of  to be the directed graph whose vertices
+are , with an
+arc  if   and there is an   walk where   and  .</p>
+<p>To give an example of this, I will add a frankly unnecessary twist to
+a classic puzzle. In this puzzle, two white knights and two black
+knights are placed on a  
+chessboard, as shown in the leftmost vertex of <a class="booklink" href="#fig:condensation">Figure 12.3</a>. The knights move as in
+ordinary chess: two squares in one direction and one square in a
+perpendicular direction. The objective of the puzzle is to switch the
+positions of the black and white squares. The puzzle can be solved if
+black and white must take turns, but for the purposes of this example, I
+will not require this.</p>
+<figure class="bookfig" id="fig:condensation">
+
+<figcaption>The condensation of the state digraph of the four knights
+puzzle</figcaption>
+</figure>
+<p>My unnecessary twist is to allow moves where a knight captures a
+knight of the opposite color. Obviously, once you do this, you have no
+hope of solving the puzzle, since you can’t put back the captured piece.
+It also means that if we want to define a graph whose vertices are the
+possible states of the puzzle, it must be a directed graph: some moves
+cannot be undone.</p>
+<p><a class="booklink" href="#fig:condensation">Figure 12.3</a> doesn’t show this state
+digraph, but rather, its condensation. Each   board shows a single vertex of
+its strongly connected component.</p>
+<details class="qa">
+<summary>What are the strongly connected components
+of this digraph, then?</summary>
+<p>For each possible collection of pieces we
+can have, there is a strongly connected component. By making moves that
+are not captures, we can rearrange the pieces however we like; a capture
+takes us to a different strongly connected component. For example, each
+of the rightmost   boards,
+with only one knight on it, represents a strongly connected component
+with  vertices, one for each
+possible position of the remaining knight.</p>
+</details>
+<p>You might notice something else about <a class="booklink" href="#fig:condensation">Figure 12.3</a>: it is a directed acyclic
+graph. This is not an accident, but it is true in general.</p>
+<div class="theorem" id="thm:condensation">
+<p><strong>Theorem 12.4</strong>. <em>The condensation of any directed
+graph is a directed acyclic graph.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  be a
+directed graph, and suppose for the sake of contradiction that the
+condensation of  contains a cycle.
+Let 
+represent one such cycle; each 
+here is a vertex of the condensation, so it is a strongly connected
+component of .</p>
+<p>By definition of the condensation, for each  , there is some   and some   such that  is an arc of ; when  , there is some   such that  is an arc. Because each
+ is strongly connected, it has a
+  path. Using the arcs
+ to join these paths
+together, we obtain a cycle 
+containing a vertex from multiple strongly connected components.</p>
+<p>But then, the union   is strongly connected: if   and  , there is a   walk in , an   walk that follows cycle , and a   walk in , so
+there is a   walk. This
+invalidates the assumption that the individual ’s are strongly connected components,
+since they are contained in a bigger strongly connected subgraph. ◻</p>
+</div>
+<p>This result makes it easy to use the condensation as a reference to
+see which vertices in the original digraph can reach which other
+vertices. To see if there is an  
+walk, look up the strongly connected components of  and , and see if there is an   walk between them in the
+condensation. Not only are we potentially reducing the size of the
+problem, we are also simplifying it, because now we are working with a
+directed acyclic graph.</p>
+<details class="qa">
+<summary>What is the condensation of a directed
+acyclic graph ?</summary>
+<p>It is essentially  itself: each strongly connected
+component of  is just a vertex.
+Once we follow an arc out of a vertex , we can never return to , because that would imply the existence
+of a cycle.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li><p>Draw the condensation of the graph in <a class="booklink" href="#fig:strong-component-example">Figure 12.2</a>.</p></li>
+<li>
+<p>Medieval alchemists valued above all the following seven
+materials:</p>
+<ul>
+<li><p>Alkahest: the universal solvent, made by adding crushed
+Bluemyrtle to molten Firemetal.</p></li>
+<li><p>Bluemyrtle: a plant that can only be harvested with tools made of
+Firemetal.</p></li>
+<li><p>Calomel: a dry powder left after dissolving Gold in
+Alkahest.</p></li>
+<li><p>Dreadwater: the infusion of Bluemyrtle in plain water.</p></li>
+<li><p>Elixir: a potent potion obtained by adding Gold powder to
+Dreadwater.</p></li>
+<li><p>Firemetal: a mystical transformation of Gold.</p></li>
+<li><p>Gold: could be transmuted from common dirt by adding Alkahest and
+Dreadwater.</p></li>
+</ul>
+<p>Let  be the directed graph
+whose vertices are these compounds, with an arcs  representing that  is needed to synthesize .</p>
+<ol>
+<li><p>Find a cycle in , and
+explain why this would have been a problem for medieval
+alchemists.</p></li>
+<li><p>Describe the strongly connected components of .</p></li>
+<li>
+<p>Suppose that you are a very rich medieval alchemist with an
+unlimited supply of Gold. For you, the graph  must be modified to delete all arcs to
+this vertex, since you don’t need anything else to synthesize it.</p>
+<p>Find a topological order of the modified graph.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>In the directed graph shown below, find an arc  such that if it is reversed
+(deleted and replaced by ),
+the result is a directed acyclic graph. Give a topological order of the
+result.</p>
+
+</li>
+<li>
+<p>If  is a set of integers,
+let the divisibility digraph of 
+be the directed acyclic graph with vertex set  and an arc  whenever   and  is divisible by . For example, if  , then the divisibility
+digraph of  has arc set .</p>
+<ol>
+<li><p>Draw a diagram of the divisibility digraph of .</p></li>
+<li><p>Prove that for every set ,
+the default order of the vertices (from smallest to largest) is a
+topological order of the divisibility digraph.</p></li>
+<li><p>For the divisibility digraph in (a), find a different topological
+order: one in which  comes after
+.</p></li>
+<li><p>Let  be the divisibility
+digraph of the set . Which vertex in this
+graph has indegree  and outdegree
+?</p></li>
+</ol>
+</li>
+<li>
+<p>A game is played with two piles of stones. On a turn, a player
+picks a pile which is not empty, and takes one or more stones from it.
+The game ends once both piles are empty.</p>
+<p>We can represent this game by a digraph whose vertices are the
+states, with arcs representing the valid moves. Let  be the digraph we get when the
+game is played with a pile of size  and a pile of size .</p>
+<ol>
+<li><p>Draw a diagram of .
+(It should have 
+vertices.)</p></li>
+<li><p>Why is  always a
+directed acyclic graph?</p></li>
+<li><p>Find a topological order of . (There are many.)</p></li>
+</ol>
+</li>
+<li>
+<p>Prove that in the four knights puzzle, from the first position shown below, we can reach the second position (solving the classical puzzle) but not the third.</p>
+
+</li>
+<li>
+<p>Call a vertex  in a
+directed graph  “safe” if it is
+impossible to leave  and get lost:
+for every vertex  such that  has an   walk,  also has a   walk.</p>
+<p>Prove that every directed graph has a safe vertex.</p>
+</li>
+<li>
+<p>Let  be an -vertex tree.</p>
+<ol>
+<li><p>How many directed acyclic graphs are there whose underlying graph is ?</p></li>
+<li><p>How many of these directed graphs have exactly one sink?</p></li>
+</ol>
+</li>
+<li>
+<p>A well-known brainteaser asks the following question: given a
+  grid, how many ways are
+there to go from the bottom left vertex to the top right vertex while
+only going up or to the right? We can phrase this in terms of directed
+graphs: how many paths are there from the bottom left vertex to the top
+right vertex of the first graph below?</p>
+
+<ol>
+<li><p>Solve this brainteaser; see if you can generalize to   grids with a combinatorial
+formula.</p></li>
+<li><p>How many paths are there from the bottom left vertex to the top
+right vertex in the second graph above? See if you can generalize this
+problem, as well.</p></li>
+<li><p>How can this problem be solved efficiently for arbitrary directed
+acyclic graphs?</p></li>
+</ol>
+</li>
+<li><p>(AIME 2007) A frog is placed at the origin on the number line,
+and moves according to the following rule: in a given move, the frog
+advances to either the closest point with a greater integer coordinate
+that is a multiple of , or to the
+closest point with a greater integer coordinate that is a multiple of
+. A “move sequence” is a sequence
+of coordinates which correspond to valid moves, beginning with , and ending with . For example,  is a move
+sequence. How many move sequences are possible for the frog?</p></li>
+</ol>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 12</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

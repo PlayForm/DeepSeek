@@ -1,0 +1,899 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Planar Graphs</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 21</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>This chapter is an introduction to the ideas you’ll need to learn
+about planar graphs. Most applications of graph theory to geometry are
+based on Euler’s formula and the face length formula, which you will see
+in this chapter.</p>
+<p>The toughest decision for me in presenting this material was to
+decide how much of the technical geometry to include. The truth is that
+when working with planar graphs, we don’t want to, and also don’t have
+to, worry about these details. The standard academic solution is to
+begin with a section of technical preliminaries. However, this is also a
+good way to bore all my readers before we get to the good part.</p>
+<p>My compromise was to include rigorous technical proofs of the
+geometric claims in the last section of this chapter, for the interested
+reader only. Usually, I cite earlier theorems and lemmas in the textbook
+when I use them, but in this case, I won’t, so that if you don’t want to
+think about these details, you won’t have to. However, I have taken care
+to make sure that every argument in this part of the textbook can be
+made rigorous using one of the claims in this section.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="three-utilities">Three utilities</h2>
+<p>Some puzzles are invented because they have a clever solution. Other
+puzzles are invented because they have no solution; I suspect that
+sometimes, the motivation is to keep a clever child quietly working on
+the puzzle for a long time without worries that the child will actually
+ever solve the puzzle and bother you again.</p>
+<p>A classic entry in this genre of puzzles is the three utilities
+problem . Here,
+three houses (which we will number , , and ) need to be provided water, gas, and
+electricity by lines from three central utilities (which we will label
+<span class="smallcaps">w</span>, <span class="smallcaps">g</span>, and
+<span class="smallcaps">e</span>). The required connections are shown in
+<a class="booklink" href="#fig:utility-graph">Figure 21.1(a)</a>; however, this diagram is not
+a solution because (for some reason that’s never been clear to me) water
+lines, gas lines, and electricity lines cannot cross. Perhaps the
+utility providers in this town have not yet learned about the third
+dimension.</p>
+<figure class="bookfig" id="fig:three-utilities">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:utility-graph">
+
+<figcaption>The utility graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:utility-unsolution">
+
+<figcaption>Not a solution</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:utility-hexagon">
+
+<figcaption>A mandatory hexagon</figcaption>
+</figure>
+</div>
+<figcaption>The three utilities problem</figcaption>
+</figure>
+<p>In any case, there is no way to solve the problem. Many attempts look
+like the diagram in <a class="booklink" href="#fig:utility-unsolution">Figure 21.1(b)</a>; here, curved paths that
+circle around each other in complicated ways may confuse even the solver
+into forgetting that house 2 still does not have electricity. (The
+inhabitants of house 2 are presumably very clear on this point,
+however.)</p>
+<p>But why do all attempts fail? Before presenting you with any general
+theory, let me give a specific argument for the utility graph. (This is
+not the most common argument, and  contains another simple solution. I
+follow the same approach as West’s <em>Introduction to Graph
+Theory</em> , and for
+the same reason: it is a special case of the overlap graph technique we
+will see in <a class="booklink" href="../planar/testing.html">Chapter 22</a>.)</p>
+<details class="qa">
+<summary>The utility graph shown in <a class="booklink" href="#fig:utility-graph">Figure 21.1(a)</a> is isomorphic to another
+graph we have a name for; what is it?</summary>
+<p>We have a couple of names, actually! The
+utility graph is isomorphic to the complete bipartite graph ; it is also isomorphic to the
+circulant graph .</p>
+</details>
+<p>The utility graph is Hamiltonian; one possible Hamilton cycle is
+represented by  No matter how this cycle is
+drawn in a hypothetical solution, it will be a closed loop in the plane
+with an inside and an outside. (This is even true in <a class="booklink" href="#fig:utility-unsolution">Figure 21.1(b)</a>, though the closed loop
+is rather complicated!) To help us visualize the closed loop, I will
+draw it as a regular hexagon in <a class="booklink" href="#fig:utility-hexagon">Figure 21.1(c)</a>,
+though of course the loop doesn’t have to look anything like this.</p>
+<p>There are still three edges that we have not drawn: the edges , , and . Only one of these edges can
+be drawn inside the loop. For example, if we draw edge  inside the loop, then it
+separates vertices  and  from vertices  and , so neither  nor  can also be drawn inside the
+loop.</p>
+<p>Of course, we can still draw either of those edges outside the loop.
+However, an identical problem occurs there. Suppose we decide to draw
+edge  outside the loop.
+No matter how we do it, the edge and the loop divide the outside into
+two pieces: one (call this )
+bounded by the edges  and one (call this
+) bounded by the edges . One of these pieces will be finite and the other
+infinite, but that doesn’t concern us in any way.</p>
+<p>What does concern us is that once we’ve drawn edge  outside the loop, we can’t do
+the same thing with edge  or . A curve in the plane from
+ to  drawn outside the loop, for
+example, would start in  and end
+in , so at some point it would
+have to cross one of the boundaries.</p>
+<p>Of course, neither drawing  inside the loop nor drawing
+ outside the loop is
+required, but we’re stuck no matter what we try: the loop has two sides
+(inside and outside) and each side only has room for one edge, but we
+have three edges left to draw. Because  , the three utilities problem has
+no solution.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="planar-graphs">Planar graphs</h2>
+<p>The three utilities problem is one special case of a general problem
+in graph theory: which graphs can be drawn in the plane without
+crossings?</p>
+<p>Sometimes answering this question is easy. For example, <a class="booklink" href="#fig:k4-is-planar">Figure 21.2(a)</a> shows two ways to draw the
+complete graph . In the standard
+one, the two diagonal edges cross; however, we can draw one of the two
+edges differently and eliminate that crossing.</p>
+<figure class="bookfig" id="fig:planar-examples">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:k4-is-planar">
+
+<figcaption>Two drawings of </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:which-is-planar">
+
+<figcaption>Which graph is planar?</figcaption>
+</figure>
+</div>
+<figcaption>Planar and non-planar graphs</figcaption>
+</figure>
+<p>Sometimes answering this question is hard. Both of the graphs in
+<a class="booklink" href="#fig:which-is-planar">Figure 21.2(b)</a> are drawn with many
+crossing edges. For one of them, this can be fixed; for the other, there
+is no way to avoid crossings. However, it is far from obvious which
+graph has which property; we will need to learn more before we answer
+this question.</p>
+<details class="qa">
+<summary>In <a class="booklink" href="#fig:k4-is-planar">Figure 21.2(a)</a>, we
+avoid crossings by curving one of the edges. However, we can also draw
+ in the plane with  straight edges that don’t cross;
+how?</summary>
+<p>Put 
+vertices of  at the corners of a
+triangle, and put the <sup>th</sup> vertex inside the
+triangle.</p>
+</details>
+<p>It’s important to distinguish between two similar concepts: “a graph
+that can be drawn in the plane with no crossings” and “a drawing of a
+graph in the plane with no crossings.” The first of these is a graph
+invariant. If  and  are two isomorphic graphs, and we can
+draw  in the plane with no
+crossings, then we can draw  in
+the plane with no crossings: just relabel the drawing of .</p>
+<p>However, whether or not a graph is drawn with no crossings is not a
+graph invariant! <a class="booklink" href="#fig:k4-is-planar">Figure 21.2(a)</a>
+makes this clear: the graph  can
+be drawn with crossings, but it can also be drawn without crossings,
+without changing the graph itself.</p>
+<p>Accordingly, we have two definitions to separate these concepts.</p>
+<div class="defn">
+<p><strong>Definition 21.1</strong>. <em>A <strong>plane
+embedding</strong> of a graph  is
+a drawing of  in the plane with no
+crossings.</em></p>
+<p><em>A <strong>planar graph</strong> is a graph that has a plane
+embedding.</em></p>
+</div>
+<p>This means that our discussion of the the three utilities problem can
+be taken as a proof of the following proposition:</p>
+<div class="prop" id="prop:k33-is-not-planar">
+<p><strong>Proposition 21.1</strong>. <em>The complete bipartite graph
+ is not planar.</em></p>
+</div>
+<p>Let me emphasize again that a planar graph and a plane embedding are
+two different things. A planar graph is still just an abstract object: a
+set of vertices and a set of edges. We haven’t picked a particular
+drawing for it, and there could be many drawings that are different from
+each other in important ways.</p>
+<p>When using the assumption that a graph  is planar in a proof, we should usually
+begin by choosing a plane embedding of . However, we should be careful when
+talking about properties of that plane embedding: they are not
+properties of the graph  itself,
+unless we can prove that all plane embeddings of  share those properties. In this
+chapter, we will see some examples where we can prove this, and some
+examples where we can’t.</p>
+<p>We will occasionally have reason to talk about plane embeddings of
+multigraphs, rather than graphs. This will not come up when deciding if
+a graph is planar or not: a multigraph is planar if and only if its
+simplification is planar. But we sometimes want to consider plane
+embeddings of multigraphs as objects of study in their own right.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="faces">Faces</h2>
+<p>The diagrams in <a class="booklink" href="#fig:faces">Figure 21.3</a> show two plane embeddings in which
+I’ve highlighted several regions of the plane. (The shading in regions
+that I’ve labeled  in both
+diagrams is meant to indicate that they are infinite regions, extending
+outward to the rest of the plane.) We call these the faces of the plane
+embedding.</p>
+<div class="defn">
+<p><strong>Definition 21.2</strong>. <em>The <strong>faces</strong> of a
+plane embedding are the connected regions of the plane separated by the
+edges of the plane embedding. One of the faces is infinite, and contains
+all points sufficiently far from the plane embedding; it is called the
+<strong>outer face</strong>.</em></p>
+</div>
+<figure class="bookfig" id="fig:faces">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:simple-faces">
+
+<figcaption>Simple faces</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:weird-faces">
+
+<figcaption>More unusual faces</figcaption>
+</figure>
+</div>
+<figcaption>Examples of faces in plane embeddings</figcaption>
+</figure>
+<p>Faces are the link between the geometry of a plane embedding and the
+abstract structure of the graph .
+In the graph  itself, a region of
+points does not exist. So what does? What’s left is the boundary of the
+face: the vertices and edges that separate it from the other faces.</p>
+<p>In ideal circumstances, the boundary of a face is a cycle, in which
+case (as usual) it is represented by a closed walk. Don’t forget that
+the cycle doesn’t have a prescribed starting point or direction, so it
+can be represented by many different closed walks.</p>
+<details class="qa">
+<summary>In <a class="booklink" href="#fig:simple-faces">Figure 21.3(a)</a>,
+which closed walks represent the boundary of the faces?</summary>
+<p>The boundary of  is represented by , the boundary of  is represented by , and the boundary of  is represented by .</p>
+</details>
+<p>However, the boundary of a face is not always as nice. In <a class="booklink" href="#fig:weird-faces">Figure 21.3(b)</a>, the boundaries of faces  and  are a bit more unusual:</p>
+<ul>
+<li><p>In the case of , we would
+like edge  to be taken into
+account, even though it only separates face  from itself, so the boundary is not a
+cycle. However, the closed walk  still seems to represent
+the boundary.</p></li>
+<li><p>In the case of , the
+boundary is not even connected! We need two closed walks:  and .</p></li>
+</ul>
+<p>In general, the boundary of a face is represented by one or more
+<strong>boundary walks</strong>. A boundary walk is found by starting at
+any vertex on the boundary of the face, and following edges out of it in
+some direction, while staying inside the face. <a class="booklink" href="#fig:boundary-walks">Figure 21.4</a> shows the boundary walks of
+the faces of the two example graphs we looked at.</p>
+<figure class="bookfig" id="fig:boundary-walks">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:simple-faces-walks">
+
+<figcaption>Simple faces</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:weird-faces-walks">
+
+<figcaption>More unusual faces</figcaption>
+</figure>
+</div>
+<figcaption>Boundary walks of the faces in <a class="booklink" href="#fig:faces">Figure 21.3</a></figcaption>
+</figure>
+<details class="qa">
+<summary>Looking at <a class="booklink" href="#fig:weird-faces">Figure 21.3(b)</a>, why does face  have two boundary walks?</summary>
+<p>The graph has multiple connected
+components, each of which contributes a boundary walk to .</p>
+</details>
+<details class="qa">
+<summary>Why is edge  in <a class="booklink" href="#fig:weird-faces">Figure 21.3(b)</a> on
+the boundary walk of 
+twice?</summary>
+<p>The same face, , is on both sides of the edge.</p>
+</details>
+<p>Every edge  is either on two
+boundary walks of two different faces, or on the boundary walk of the
+same face twice. The difference between these two cases comes down to
+the following test:</p>
+<div class="lemma" id="lemma:planar-bridge">
+<p><strong>Lemma 21.2</strong>. <em>If edge  is a bridge of planar graph , then in every plane embedding of , it appears on the boundary walk of the
+same face twice.</em></p>
+<p><em>If edge  is not a bridge,
+then in every plane embedding of ,
+it separates two faces, and appears once on the boundary walk of each
+face.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> If the same face  is on both sides of edge  when it is drawn in the plane
+embedding, then we can draw a curve from one side of  to the other while always staying
+inside . If  is deleted, we can complete that curve
+to a closed loop drawn entirely inside . Of the two vertices  and , one is drawn inside that closed loop
+and the other outside it, and no edges cross the loop; therefore there
+is no way to get from  to . This makes  a bridge.</p>
+<p>If edge  separates two faces
+ and , then each of them has a boundary
+walk using edge  once. Without
+loss of generality, such a boundary walk goes from  to , and returns along some   walk without using edge  again: that walk exists in  . Every   walk contains a   path (by <a class="booklink" href="../beginning/walks.html#thm:walk-to-path">Theorem 3.1</a>), so there is
+an   path in  . This means that in , there is a cycle containing , so  is not a bridge.</p>
+<p>The above arguments tell us whether  is a bridge or not based on what it
+does in one plane embedding. But regardless of the plane embedding, edge
+ either is a bridge in graph
+ or it isn’t, so it must have the
+same behavior in every plane embedding. ◻</p>
+</div>
+<p>The most important property of the boundary of a face is its length.
+The <strong>length</strong> of a face , written , is the sum of the
+lengths of boundary walks of .
+Equivalently, 
+is the number of edges on the boundary of , counting an edge twice if it is not on
+the boundary of any other face.</p>
+<p>When we give the definition of  in its second form,
+it seems unnatural and artificial, though you may remember that when we
+defined the degree of a vertex of a multigraph in <a class="booklink" href="../degrees/multigraphs.html">Chapter 7</a>, we did something
+similar. Just like back then, it is all in service of making sure a nice
+lemma holds in all possible cases:</p>
+<div class="lemma" id="lemma:face-length-formula">
+<p><strong>Lemma 21.3</strong> (Face length formula). <em>If  is a planar graph with  edges, and a plane embedding of  has faces , then </em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Each edge of 
+appears once on boundary walks of two faces, or twice on the boundary
+walks of one face. In either case, it contributes  to the sum of face lengths, so the
+contributions of all  edges add up
+to . ◻</p>
+</div>
+<p>The face length formula tells us that the sum of the lengths of the
+faces does not depend on the plane embedding chosen. (After all, it is
+equal to , which certainly cannot
+change based on the plane embedding!) The individual lengths, however,
+certainly do depend on the embedding!</p>
+<figure class="bookfig" id="fig:three-embeddings">
+
+<figcaption>Three embeddings of the same graph</figcaption>
+</figure>
+<p><a class="booklink" href="#fig:three-embeddings">Figure 21.5</a> shows three different
+plane embeddings of the same -vertex graph. (I have deliberately not
+used consistent colors to discourage you from the temptation of feeling
+that the faces of one embedding correspond in any way to the faces of
+another.) However, the face lengths vary:</p>
+<ul>
+<li><p>The embedding in <a class="booklink" href="#fig:embedding-1">Figure 21.5(a)</a> has
+two faces of length , one face of
+length , and an outer face of
+length .</p></li>
+<li><p>The embedding in <a class="booklink" href="#fig:embedding-2">Figure 21.5(b)</a> has
+two faces of length , and two
+faces (including the outer face) of length .</p></li>
+<li><p>The embedding in <a class="booklink" href="#fig:embedding-3">Figure 21.5(c)</a> is
+almost like the one in <a class="booklink" href="#fig:embedding-1">Figure 21.5(a)</a>: it
+also has faces of lengths . However, in this case, the embedding of length  is the outer face.</p></li>
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="eulers-formula">Euler’s formula</h2>
+<p>The face length formula is one of two important identities regarding
+the faces of a plane embedding. The other one is Euler’s formula (one of
+several mathematical statements by that name!), which helps us count the
+faces in a plane embedding. You may have noticed that no matter how hard
+we tried to find different plane embeddings in <a class="booklink" href="#fig:three-embeddings">Figure 21.5</a>,all of them had four
+faces. This is not a coincidence, and it will follow from Euler’s
+formula that the number of faces in a plane embedding depends only on
+the graph.</p>
+<p><a class="booklink" href="#thm:euler-formula">Theorem 21.4</a> bears Euler’s name because he
+was the first to look at the problem in a general case . Euler did not consider
+the problem for planar graphs, but for polyhedra, which we will study in
+<a class="booklink" href="../planar/polyhedra.html">Chapter 23</a>. Many other
+mathematicians later approached the formula from different directions;
+see  for a
+brief history, as well as further references and many different
+proofs.</p>
+<p>Euler’s formula is often stated as  , where  is the number of vertices,  is the number of edges, and  is the number of faces. I can’t bring
+myself to do this, since I think of  and  as sets, not numbers. In graph theory,
+ and  are the standard variables to use when
+you want to count the vertices and edges in a graph, respectively. There
+is no standard variable for faces, so I will use  (for “region”). Meanwhile,  will be our variable of choice for
+connected components, as it already was in <a class="booklink" href="../trees/properties.html">Chapter 10</a>.</p>
+<div class="theorem" id="thm:euler-formula">
+<p><strong>Theorem 21.4</strong> (Euler’s formula). <em>If a connected
+plane embedding (of a graph or a multigraph) has  vertices,  edges, and  faces, then  In general, if there are
+ connected components, this
+formula becomes </em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We induct on the number of edges, . Since removing an edge from a graph
+may disconnect it, we should work directly with the second, more general
+form of Euler’s formula; the first form will follow by setting  .</p>
+<p>Our base case is  . Here,
+ (the number of vertices) is equal
+to  (the number of connected
+components), and there is only one face:  . So   starts out at .</p>
+<p>Now assume for some   that
+Euler’s formula holds for all plane embeddings with   edges, and consider a plane embedding
+of a graph  with  edges. We will arbitrarily pick an edge
+ to delete.</p>
+<details class="qa">
+<summary>How can the deletion of edge  affect , , , and ?</summary>
+<p>It never affects , and always decreases  by .</p>
+<p>It may decrease  by , if  previously separated two faces.</p>
+<p>It may increase  by , if  was the only way to get from  to .</p>
+</details>
+<p>We would like   to
+stay the same, so we would like exactly one one of two things to happen:
+either  decreases by , or  increases by , but not both.</p>
+<p>Fortunately, this is exactly what <a class="booklink" href="#lemma:planar-bridge">Lemma 21.2</a> tells us! If edge  is a bridge, its deletion increases
+ by ; however, in every plane embedding, the
+same face is on both sides of ,
+so  stays the same. If edge  is not a bridge, then it separates two
+faces, so deleting it decreases 
+by ; however, it is not a bridge
+so its deletion does not affect .</p>
+<p>In summary: the number of vertices, edges, faces, and components in
+the plane embedding of  , which
+we’ll denote , is either   or  . By
+the induction hypothesis,  , which tells us either that   or that  ; both of these
+simplify to  .</p>
+<figure class="bookfig" id="fig:euler-induction">
+
+<figcaption>How the triple 
+changes as we erase edges in a plane embedding</figcaption>
+</figure>
+<p>By induction, the formula holds for all plane embeddings. You can see
+the induction in action in <a class="booklink" href="#fig:euler-induction">Figure 21.6</a>.
+Here, we’ve chosen to delete only edges that keep the graph connected,
+so going from <a class="booklink" href="#fig:euler-r=4">Figure 21.6(a)</a> to <a class="booklink" href="#fig:euler-r=1">Figure 21.6(d)</a>,  decreases at each step while  remains equal to . At this point, if we delete more
+edges, it will decrease  and
+increase  while keeping  and  the same. ◻</p>
+</div>
+<p>In Euler’s formula, the variables , , and  are properties of the graph , while  is computed from a specific plane
+embedding. However, we can solve for  in terms of , , and : it is  , or just  
+if  is connected.</p>
+<details class="qa">
+<summary>How can these observations be
+reconciled?</summary>
+<p>It means that although different plane
+embeddings can have faces with different shapes and with different
+lengths, two plane embeddings of the same graph are guaranteed to have
+the same number of faces: the number predicted by Euler’s formula.</p>
+</details>
+<p>We should still avoid talking about “the faces of ”, because that is not a well-defined
+concept, as <a class="booklink" href="#fig:three-embeddings">Figure 21.5</a>
+shows. Talking about the number of faces that  has is also incorrect, but if you said
+it to my face, I would only disapprove a little; after all, if we pick
+different embeddings, we will still not disagree about the number of
+faces.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="barycentric-subdivisions">Barycentric subdivisions</h2>
+<p>Euler’s formula and the face length formula have applications to
+geometry in scenarios where the problem can be modeled as a graph. To
+illustrate this, let me tell you about a problem that once misled me
+until I thought of applying Euler’s formula to solve it.</p>
+<p>The <em>barycentric subdivision</em> of a triangle subdivides it into
+six triangles, by drawing the three medians: the lines connecting each
+corner of the triangle to the midpoint of the opposite sides. (The three
+lines in this way always intersect at a single point, which is called
+the centroid of the triangle.) An example is shown in <a class="booklink" href="#fig:bcs-1">Figure 21.7(b)</a>, though the triangle we start with
+does not have to be equilateral.</p>
+<figure class="bookfig" id="fig:barycentric">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:bcs-0">
+
+<figcaption>Stage 0</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:bcs-1">
+
+<figcaption>Stage 1</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:bcs-2">
+
+<figcaption>Stage 2</figcaption>
+</figure>
+</div>
+<figcaption>Iterated barycentric subdivisions</figcaption>
+</figure>
+<p>We can iterate this process: start with the barycentric subdivision
+of a triangle, and then take the barycentric subdivision of each of the
+six small triangles that result. This is shown in <a class="booklink" href="#fig:bcs-2">Figure 21.7(c)</a>, but we don’t have to stop there; we
+can keep going, by taking the barycentric subdivision of each of the
+ small triangles in that diagram.
+Let’s say that stage  of this
+process is the result we get when we apply the operation “take the
+barycentric subdivision of every triangle which does not have any
+smaller triangles inside it” 
+times.</p>
+<p>I was interested in the number of vertices in this diagram: I placed
+a vertex at every point where two or more segments met, or in other
+words, at every point which is the corner of one or more triangles. If
+you count the vertices in <a class="booklink" href="#fig:barycentric">Figure 21.7</a>, you
+get  vertices in <a class="booklink" href="#fig:bcs-0">Figure 21.7(a)</a>,  vertices in <a class="booklink" href="#fig:bcs-1">Figure 21.7(b)</a>, and  vertices in <a class="booklink" href="#fig:bcs-2">Figure 21.7(c)</a>. I went one step further and
+laboriously computed the number of vertices in Stage 3, which turned out
+to be .</p>
+<p>I did not even want to think about drawing Stage 4, so my next step
+was to go to the . At the
+time, there was essentially one candidate formula in the search results
+(plus a few minor variants which were clearly wrong for this problem),
+but it was a very nice formula: it suggested that the <sup>th</sup> stage would contain   vertices.</p>
+<details class="qa">
+<summary>At this point, there is a quick way to see
+that this formula can’t possibly be right for all , because the number of vertices grows
+at most exponentially. Why?</summary>
+<p>The number of triangles in the subdivision
+is much easier to count: it is 
+in the <sup>th</sup> stage,
+because each triangle gets subdivided into six triangles. Each triangle
+has  corners, giving   vertices total. This counts
+some vertices many times, because some vertices are the corners of many
+triangles; however, it counts each vertex at least once, so there are at
+most   vertices.</p>
+</details>
+<p>Unfortunately, I only thought of this quick way later. At the time, I
+spent a while trying to prove the formula   combinatorially. Maybe we should
+label the vertices with permutations of   elements, but leave the central
+vertex unlabeled? In the end, it occurred to me to try Euler’s formula,
+and that’s when my house of cards fell apart.</p>
+<p>Why Euler’s formula? Well, the diagrams shown in <a class="booklink" href="#fig:barycentric">Figure 21.7</a> and the ones that come after
+are all plane embeddings: the vertices are exactly as I have defined
+them already, and the edges are the line segments connecting the
+vertices. We can hope that the edges and faces will be easier to count
+than the vertices, replacing one hard counting problem with two easier
+ones.</p>
+<p>In this case, to apply Euler’s formula, we should start with the
+faces. It is not quite true that there are  faces, all with  sides, because there is also an outer
+face; there are   faces
+total.</p>
+<details class="qa">
+<summary>What is the length of the outer face?</summary>
+<p>It is  : in the <sup>th</sup>
+stage, each side of the triangle has been divided into  segments, which are all edges of the
+plane embedding.</p>
+</details>
+<details class="qa">
+<summary>How can we find the number of edges?</summary>
+<p>We can add up the lengths of the faces and
+apply the face length formula.</p>
+</details>
+<p>With  faces of length  and one face of length  , the sum of face lengths is
+ , so there
+
+edges. Solving for the number of vertices in Euler’s formula, we get
+ which simplifies to  . When
+ , the first case I did not
+consider, this formula tells us that there are  vertices. This is the first time the
+true answer disagrees with the incorrect formula   (which gives ).</p>
+<p>This story has a happy ending, of sorts. Future mathematicians who
+stumble upon this problem will not have the experience I did, because
+the correct answer now also shows up in the OEIS: as sequence
+A380996 .</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="technical-details">Technical details</h2>
+<p>This section contains all the geometric arguments that we will need,
+in this part of the textbook, to confirm our intuition about how planar
+graphs can, and cannot be drawn. Though I will not cite specific claims,
+I have made sure that every geometric fact we need is contained
+somewhere in this section.</p>
+<p>First of all, we should be more precise about what a plane embedding
+exactly is. There is not much to say about vertices: every vertex is
+drawn as a point in the plane. An edge should be drawn as some path
+between its two endpoints; two edges do not contain any common interior
+points, and in particular their interiors do not pass through any
+vertices. But what kind of paths should we allow?</p>
+<p>In principle, any kind of continuous simple curve will do: the image
+of a continuous injective function  , where the points  and  are the two endpoints of the edge.
+However, studying such things will drown us in a sea of topology for no
+practical benefit.</p>
+<p>It is sufficient to consider edges which are <em>polygonal
+curves</em>: made up of finitely many line segments joined end to end
+(and not intersecting otherwise). In a closed polygonal curve, or
+<em>polygon</em>, the last line segment ends where the first segment
+starts. Polygonal curves and polygons can approximate any crazier shape
+arbitrarily well; you won’t be able to tell the difference. Practically
+speaking, when you encounter a planar graph (for example, derived from a
+map specified by latitude and longitude coordinates), it will already
+have edges in this form. Paths and cycles in a planar graph also become
+polygonal curves and polygons, respectively, in a plane embedding.</p>
+<p>To define faces in a plane embedding, we want to be able to tell
+which points are in the same connected region of the plane (separated by
+the edges). Our test for this also uses polygonal curves: two points
+ and  are in the same face if there is a
+polygonal curve from  to  that does not intersect the plane
+embedding.</p>
+<details class="qa">
+<summary>Why is this notion of connectedness
+practically useful to us?</summary>
+<p>It tells us which new edges we could add
+to the plane embedding, because the edges are also polygonal
+curves.</p>
+</details>
+<p>There are a few more things to say about this notion of
+connectedness. From the point of view of theory, the most fundamental is
+the Jordan curve theorem, which states an obvious-seeming fact: every
+polygon separates the plane into exactly two connected regions, an
+inside and an outside, with the polygon as their boundary. (That is,
+points on the polygon are exactly the points arbitrarily close to both
+the inside and the outside.) The Jordan curve theorem holds for all
+continuous curves, not just polygons, but even in the polygonal case it
+is not easy to prove; I will skip it, to avoid too lengthy a geometric
+detour.</p>
+<p>From the point of view of algorithms, it is not that interesting to
+know merely that every polygon has an inside and an outside; we would
+like to know what they are! A standard test for this is the ray casting
+algorithm: given a point  and a
+polygon , draw an infinite ray (or
+half-line) starting at . Then
+ is inside  if the ray crosses  an odd number of times, and outside
+ if the ray crosses  an even number of times.</p>
+<p>The choice of ray doesn’t matter, and in programming applications,
+it’s often fine to take a horizontal or vertical ray, for simplicity. We
+do run into some technicalities if the ray passes through a corner of
+ or contains an entire line
+segment of . It’s possible to make
+sense of this situation: we say that if a segment of  has an endpoint on the ray, that
+segment crosses the ray if it lies to the left of the ray, but not if it
+lies to the right. But this is very technical, and it’s easier to avoid
+it if possible.</p>
+<p>We can get a more general test as a consequence of this
+algorithm:</p>
+<div class="claim" id="claim:p-curve-test">
+<p><strong>Claim 21.5</strong>. <em>Let  be a polygon, and let points  and  be connected by a polygonal curve whose
+segments never start or end on ,
+and never intersect a segment of 
+in a sub-segment, only in a point.</em></p>
+<p><em>Then  and  are on the same side of  if and only if the polygonal curve
+connecting them crosses  an even
+number of times.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We can subdivide the   polygonal curve into segments that
+each cross  at most once. If a
+segment crosses  once, its
+endpoints are on opposite sides: this is verified by the ray casting
+algorithm with a ray parallel to the segment, starting at either
+endpoint. So with every crossing, the polygonal curve switches to a
+different side of .</p>
+<p>Since there are only two sides, the polygonal curve ends on the same
+side as it started if and only if it switched sides an even number of
+times. ◻</p>
+</div>
+<p>We can now easily test which points lie in the same face, but do not
+have an easy definition of the boundary of a face. To obtain it, we need
+a geometric understanding of boundary walks.</p>
+<p>Given a plane embedding, pick a value   much smaller than every
+distance between a line segment and an endpoint of another end segment.
+Then surround every line segment by a thin rectangular loop: if the line
+segment has length , draw a
+  rectangle with the line segment at its center.
+Orient each of these loops counterclockwise.</p>
+<p>To find a boundary walk containing a particular segment, start going
+around its thin rectangular loop on either of the long sides. If this
+trajectory hits the loop around a different line segment (which only
+happens near the end of the segment), switch to following that loop.
+Keep going like this until this trajectory returns where it started (as
+it must, because we only have finitely many segments).</p>
+<p>The result is a polygon that never crosses the plane embedding. It
+also stays within distance  of a walk in the planar
+graph: it can only switch from following one edge to following another a
+vertex they share, because it never gets close enough to another edge
+anywhere else. We say that this walk is a boundary walk in the graph,
+and the polygon is the corresponding boundary walk in the plane
+embedding. Although boundary walks do not always represent cycles, we
+still consider two boundary walks to be the same if one is a shifted
+and/or reversed version of another.</p>
+<p>The following is immediate from the definition.</p>
+<ul>
+<li><p>Each edge either lies on one boundary walk twice, or on two
+boundary walks, since each thin rectangular loop has two long
+sides.</p></li>
+<li><p>Each boundary walk in the plane embedding is contained entirely
+in one face, and we say it is a boundary walk of that face; a face can
+have multiple boundary walks.</p></li>
+</ul>
+<p>Let  be an edge of a planar
+graph , and let  be the polygonal curve representing
+ in a plane embedding of . Many times, such as in the proof of
+Euler’s formula, we want to understand edge  by comparing the plane embedding of
+ and the plane embedding of   obtained by erasing . In that second plane embedding,  stays entirely in some face , because  does not cross any other edge. The
+following claim is a more careful formal proof of <a class="booklink" href="#lemma:planar-bridge">Lemma 21.2</a>.</p>
+<div class="claim" id="claim:plane-bridge">
+<p><strong>Claim 21.6</strong>. <em>Either   is a single face in the plane
+embedding of ,  lies on its boundary walk twice, and
+ is a bridge of ; or   is the union of two faces in the
+plane embedding of ,  lies on each of their boundary walks
+once, and  is not a bridge of
+.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Starting from either side of a segment of , construct boundary walks using , letting  and  be the corresponding polygons in the
+plane embedding; possibly,  .
+If  , then follow this
+polygon from one side of  to a
+point  away on the
+other side, and connect by cutting across . The result is a polygon  that only crosses , and only once. No edge of   crosses , and  and  are on opposite sides (because  crosses  once), so there is no   path in  :  is a bridge. If  , then each boundary walk in
+ uses edge  only once, so it also contains an
+  path in  , proving that  is not a bridge.</p>
+<p>Each point   can be
+joined to a point of  by a
+polygonal curve not crossing the plane embedding of  ; before it touches , it must cross either  or . So all points of   are in the face containing  or the face containing . (The exception is points within
+ of , which can reach  or  by taking a step of length at most
+ away from .) So there are at most  faces, and if  , there is only one face.</p>
+<p>Conversely, if   is a single
+face in the plane embedding of ,
+then take a line segment of length  from  to  that cuts across ; its endpoints are both in  , so this line segment can be
+completed to a polygon  that does
+not cross the plane embedding of 
+again. As before, no edge of  
+crosses , and  and  are on opposite sides (because  crosses  once), so there is no   path in  :  is a bridge. ◻</p>
+</div>
+<p>The machinery we’ve built so far is enough to prove Euler’s formula.
+As a special case, consider a planar graph  with no cycles: a forest. With  vertices and  connected components, the forest has
+  edges, by <a class="booklink" href="../trees/properties.html#thm:n-m">Theorem 10.1</a>. Substituting this into Euler’s
+formula, we learn that the forest only has one face.</p>
+<p>With at least two faces, the picture changes:</p>
+<div class="claim" id="claim:boundary-cycle">
+<p><strong>Claim 21.7</strong>. <em>If a plane embedding of  has at least two faces, then some
+boundary walk of every face contains a cycle.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  be any
+face; since it is not the only face, we can pick a point   and a point  . The line segment  leaves , so at some point it must cross an edge
+ on a boundary walk of  to do so. Replace  by a short sub-segment, if necessary,
+to ensure that  only crosses
+ once, and does not cross any
+other edge of the plane embedding.</p>
+<p>In the plane embedding of  ,
+points  and  are part of the same face (since  no longer crosses any edge). By
+<a class="booklink" href="#claim:plane-bridge">Claim 21.6</a>, the boundary walk of  using  only uses it once: after going from
+ to , it is a   walk that does not use edge . That   walk contains a   path, which together with edge  becomes a cycle. ◻</p>
+</div>
+<p>So far, we’ve been using the geometry of polygons to understand plane
+embeddings, but we can do this in reverse, as well.</p>
+<div class="claim" id="claim:cycle+e">
+<p><strong>Claim 21.8</strong>. <em>If  and  are two points on a polygon, then a
+polygonal curve that joins  and
+ divides one side of the polygon
+into two connected regions.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Here, we think of the polygon plus the curve joining
+ and  as a plane embedding of a cycle graph
+with an extra edge (whose endpoints are drawn at  and ). That extra edge falls under the
+second case of <a class="booklink" href="#claim:plane-bridge">Claim 21.6</a>,
+proving the claim. ◻</p>
+</div>
+<div class="claim" id="claim:cycle+2e">
+<p><strong>Claim 21.9</strong>. <em>If , , , and  are four points appearing on a polygon
+ in that order, then a polygonal
+curve joining  and  cannot be drawn on the same side of the
+polygon as a polygonal curve joining  and  without crossing it.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Suppose such a diagram existed; then it would be an
+embedding of , with vertices
+placed at , , , and . Such an embedding does exist:  is a planar graph. But it cannot have
+the shape it needs to have here!</p>
+<p>By Euler’s formula, there are 
+faces total ( ). One face of
+the plane embedding is the side 
+containing neither of the added curves; it has length . We know less about the others, but by
+<a class="booklink" href="#claim:boundary-cycle">Claim 21.7</a> each contains a cycle, so
+has length at least . The sum of
+the face lengths is at least  , but it must also be  by the face length formula, which is a
+contradiction. Therefore the diagram we started with cannot exist. ◻</p>
+</div>
+<p>There is one final claim that we will need to construct new plane
+embeddings of graphs:</p>
+<ul>
+<li><p>Going from a plane embedding of  to a plane embedding of   in <a class="booklink" href="../planar/testing.html">Chapter 22</a>;</p></li>
+<li><p>Finding the dual graph of a plane embedding in <a class="booklink" href="../planar/polyhedra.html">Chapter 23</a>;</p></li>
+<li><p>Finding a plane embedding of the graph of adjacencies of a map in
+<a class="booklink" href="../planar/coloring-maps.html">Chapter 24</a>.</p></li>
+</ul>
+<div class="claim" id="claim:center-point">
+<p><strong>Claim 21.10</strong>. <em>Given a plane embedding with a face
+, a point  , and points  on the boundary of
+, it is possible to draw polygonal
+curves from  to each of  that don’t cross each
+other or the boundary of  (and
+therefore stay inside ).</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We will draw the polygonal curves one at a time.
+First, draw a polygonal curve from  to a point on the same boundary walk as
+ (which is possible by
+definition of both points being in ). Then, follow that boundary walk until
+its closest approach to , and
+end with a straight line segment.</p>
+<p>(It is useful to observe that that last line segment can never
+intersect any part of the plane embedding: it is entirely contained in
+one of the rectangular loops around a segment of an edge, which is too
+close to that segment to touch any other segments.)</p>
+<p>Once this is done, we can think of the result as a bigger plane
+embedding where the point  and the
+polygonal curve we drew are part of the boundary of a face  contained in . We add another polygonal curve by
+taking a short step out to the point  on the boundary walk nearest , then drawing a polygonal curve from
+ to the next  in the same manner as before.</p>
+<p>In general, this process can divide  into two faces, and it’s not
+guaranteed that the remaining points among  are all on the
+boundary of the same one. However, if this happens, then  is on the boundary of both of them,
+because the polygonal curve we drew from  is on the boundary of both, and we can
+repeat on each of the faces formed separately. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Find a plane embedding of the <em>volcano graph</em>, shown
+below.</p>
+
+</li>
+<li>
+<p>Consider the following planar multigraph:</p>
+
+<p>Draw the following plane embeddings:</p>
+<ol>
+<li><p>One where the outer face has length , with vertices  and edge  on its boundary, and the other faces
+have lengths , , and .</p></li>
+<li><p>One where the outer face has length , with vertices  and  on its boundary, and the other faces
+have lengths , , and .</p></li>
+<li><p>One where the outer face has length , with edges  and  on its boundary.</p></li>
+</ol>
+</li>
+<li>
+<p>Let  be a connected planar
+graph. Suppose that a plane embedding of  has  faces, all of length .</p>
+<ol>
+<li><p>Use the face length formula to find the number of edges of  (in terms of ).</p></li>
+<li><p>Use Euler’s formula to find the number of vertices of  (in terms of ).</p></li>
+<li><p>Can you find such a graph for  ? What about for  ?</p></li>
+</ol>
+</li>
+<li><p>Use an argument similar to the proof of <a class="booklink" href="#prop:k33-is-not-planar">Proposition 21.1</a> to show that the
+complete graph  is not planar.
+Start with a Hamilton cycle in ,
+then reason about where the remaining  edges can go.</p></li>
+<li>
+<p>Prove that all trees are planar graphs. Moreover, show that any
+tree has a plane embedding in which all the edges are straight
+lines.</p>
+<p>(Hint: use induction. You’ll need to show that if  is a leaf of , then a plane embedding of   can be extended to a plane embedding
+of .)</p>
+</li>
+<li>
+<p>Here is another deceptive problem whose real solution can be
+found with Euler’s formula. (It is documented along with many deceptive
+patterns in “The Strong Law of Small Numbers” by Richard Guy .)</p>
+<p>Put  points around a circle in
+random positions (not equally spaced) and draw all  chords between those points;
+wiggle the  points around, if
+necessary, until no intersection point inside the circle lies on three
+or more chords.</p>
+
+<p>In the examples above (where  ) the chords divide the circle into , , , , and  pieces, so you might be forgiven for
+thinking that the number for general  is ; it’s not! Use Euler’s formula to
+find the correct answer.</p>
+</li>
+<li><ol>
+<li>
+<p>Let  be a planar graph and
+let  be a cycle of length  in . In every plane embedding of , the cycle is a closed curve, but not
+necessarily the boundary of a face: its interior might be divided into
+several faces 
+by edges that are not part of .</p>
+<p>Prove that in all such cases, the sum   has the same parity as : both are even, or both are
+odd.</p>
+</li>
+<li><p>Use part (a) to prove that if  has a plane embedding in which every
+face has even length, then  is
+bipartite.</p></li>
+</ol></li>
+</ol>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 21</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

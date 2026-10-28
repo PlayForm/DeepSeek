@@ -1,0 +1,1 @@
+var o={service:"conversation",turn:"conversation/turn",step:"conversation/step",call:"conversation/call",tool:"conversation/tool",touch:"conversation/touch",end:"conversation/end"};export{o as default};

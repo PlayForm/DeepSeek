@@ -1,0 +1,12 @@
+---
+title: plugin-dsh-cost
+line9:
+  theme: boardroom
+---
+flowchart LR
+	EVENT["session/event"] -- "registers" --> PKG["plugin-dsh-cost"]
+	FLUSH["session/flush"] -- "registers" --> PKG
+	FACTORY["pluginFactory"] -- "injects" --> PKG
+	METER["tokenMeter"] -- "injects" --> PKG
+	COMMANDS["commands"] -- "injects" --> PKG
+	PKG -- "registers" --> COST["the cost command"]

@@ -10,8 +10,7 @@
 set -e
 
 Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
-	--ESBuild Configuration/ESBuild.ts \
-	--TypeScript Configuration/TypeScript.noemit.json
+	--ESBuild Configuration/ESBuild.ts
 
 # The client half (the harness closure-factory bundle); regenerate on every
 # dev run so the served ./client export matches the source.

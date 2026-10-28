@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-normalize-ellipsis",e=t,i=["pluginFactory"],n=o;var s={name:p,apply:n,Config:e,inject:i};export{e as Config,n as apply,s as default,i as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import p from"./Variable/Version.js";const r="hook-dsh-normalize-ellipsis",e=t,i=["pluginFactory"],n=o;var c={name:r,apply:n,Config:e,inject:i};export{e as Config,p as Version,n as apply,c as default,i as inject,r as name};

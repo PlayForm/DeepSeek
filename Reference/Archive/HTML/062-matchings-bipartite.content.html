@@ -1,0 +1,744 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Bipartite Matching</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 13</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>In this chapter, we will not yet see any of the big theorems about
+matchings. Here, we will only lay the foundations and begin to study
+bipartite graphs, matchings, and vertex covers.</p>
+<p>I have gone to some trouble in this textbook to postpone the
+definition of bipartite graphs until this chapter. This is done for two
+reasons. First, I do not want the first few chapters to be overloaded
+with definitions and nothing but definitions—as much as I can help it,
+at least. Second, I do not want to give a definition when we have no use
+for it. This is because, to the extent I can, I want the definitions we
+make and the questions we ask about them to seem like reasonable
+definitions we make and reasonable questions to ask.</p>
+<p>As a result, it is only now that I define bipartite graphs, because
+now we can ask the bipartite matching problem. Here, it is reasonable to
+ask whether (and in which way) a graph is bipartite, and so I hope that
+the definitions and initial theorems do not feel pointless.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="two-chess-puzzles">Two chess puzzles</h2>
+<p>The title of this section may be a slight exaggeration; you will not
+need to know the rules of chess. These are, instead, two puzzles about
+placing pieces on a chessboard.</p>
+<p>The first is a classic puzzle about placing dominoes on a chessboard.
+A complete set of dominoes has 
+dominoes; enough to completely cover an   grid. If I take away one
+domino, then it’s possible to cover every square of the grid except for
+two opposite corners: <a class="booklink" href="#fig:dominoes-8x7">Figure 13.1(a)</a>
+shows one of many solutions.</p>
+<p>But the standard chessboard is  . So suppose you have 
+dominoes: a complete set with three extras. Can you cover every square
+of the   chessboard except
+for two opposite corners?</p>
+<figure class="bookfig" id="fig:bipartite-chess">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:dominoes-8x7">
+
+<figcaption>Dominoes on a  
+chessboard</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:8-rooks">
+
+<figcaption>Rooks on a chessboard</figcaption>
+</figure>
+</div>
+<figcaption>Placing pieces on a chessboard</figcaption>
+</figure>
+<p>A second puzzle is shown in <a class="booklink" href="#fig:8-rooks">Figure 13.1(b)</a>. Here, we
+place  rooks on a chessboard. A
+rook can move any number of spaces horizontally or vertically; we don’t
+want the rooks to get in the way of each other, so we want to place them
+so that no two rooks are in the same row or column.
+I’ll add a condition to make this more difficult in a moment, but
+first…</p>
+<details class="qa">
+<summary>How many ways are there to place  rooks on an   chessboard so that no two rooks
+are in the same row or column?</summary>
+<p>There are   ways.</p>
+<p>If we pick a column for the rook in row 1, then the rook in row 2,
+and so on, then we will have 
+options for the first rook,  for
+the second rook,  for the third
+rook, and so forth. By the product principle, we can multiply these
+numbers together, getting   or  arrangements.</p>
+</details>
+<p>Now I can ask you the real puzzle. Suppose we exclude the   area highlighted in <a class="booklink" href="#fig:8-rooks">Figure 13.1(b)</a>. Is it still possible to place
+ rooks on the chessboard, still in
+different rows and columns, so that this area remains empty?</p>
+<p>We will be able to answer both questions with the tools in this
+chapter. But first, let’s take a moment to ask the question we’ve been
+asking since <a class="booklink" href="../beginning/examples.html">Chapter 1</a>: how do we model each
+puzzle with a graph? In both cases, there are actually two reasonable
+approaches!</p>
+<p>Let’s start with the domino puzzle. We’ve already seen a tiling
+puzzle in <a class="booklink" href="../beginning/examples.html">Chapter 1</a>, and we can model this
+puzzle in the same way. Create a graph with a vertex for each valid way
+to place a single domino: on an   chessboard with two opposite vertices removed, there will be
+ vertices. Then, add an edge
+between two vertices if they represent incompatible placements: dominoes
+that share a square of the board. To place  dominoes, we are looking for a -vertex <em>independent set</em>: a set
+of  vertices that do not have any
+edges between them.</p>
+<p>As we will see in <a class="booklink" href="../hard/cliques.html">Chapter 18</a>,
+finding independent sets is a hard problem. So let’s instead take a
+different graph to start with: the   grid graph , with
+vertices  and  removed.</p>
+<details class="qa">
+<summary>If we model the chessboard with this
+graph, how do we interpret placing dominoes?</summary>
+<p>Each placed domino corresponds to an edge
+of the graph. So we are looking for a way to select  edges that do not share any
+vertices.</p>
+</details>
+<p>Such a set of edges is called a matching. This part of the textbook
+is all about finding matchings! Please be patient, though; I will
+introduce matchings formally a bit later on in this chapter.</p>
+<p>Now, let’s move on to the rook puzzle. It, too, has two models: in
+one, we’re looking for an independent set, and in the other, we’re
+looking for a matching. We’ll want to use the second model to solve the
+problem!</p>
+<details class="qa">
+<summary>How do we model the rook puzzle with a
+graph so that a valid placement of rooks is an independent set?</summary>
+<p>For this, let every square of the
+chessboard be a vertex (excluding the forbidden squares highlighted in
+<a class="booklink" href="#fig:8-rooks">Figure 13.1(b)</a>, if we want to avoid them). Make
+two vertices adjacent if they share a row or column.</p>
+</details>
+<details class="qa">
+<summary>How do we model the rook puzzle with a
+graph so that a valid placement of rooks is a matching?</summary>
+<p>For this, take a -vertex graph, with a vertex for each
+row or column. Make a row vertex adjacent to a column vertex if we allow
+a rook to be placed at the intersection of that row and column.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="bipartite-graphs">Bipartite graphs</h2>
+<p>The graph we just defined for the rook placement problem has an
+unusual feature. Its vertices come in two types: the vertices
+representing rows, and the vertices representing columns. There is a
+special name for such graphs.</p>
+<div class="defn">
+<p><strong>Definition 13.1</strong>. <em>A <strong>bipartite
+graph</strong>  is a graph for
+which we can choose disjoint sets 
+and , with  , such that every edge of
+ has one endpoint in  and one endpoint in . The pair  is called a
+<strong>bipartition</strong> of ,
+and the sets  and  are called the two
+<strong>sides</strong> of the bipartition.</em></p>
+</div>
+<p>In the rook placement problem, we can take the bipartition  with   (the columns of
+the chessboard) and   (the rows). <a class="booklink" href="#fig:rooks-graphs">Figure 13.2</a> shows the two graphs we get in
+this way: <a class="booklink" href="#fig:8-rooks-graph">Figure 13.2(a)</a> shows the graph for placing
+rooks with no restrictions, and <a class="booklink" href="#fig:8-rooks-subgraph">Figure 13.2(b)</a>
+shows the subgraph when we forbid a   rectangle on the board.</p>
+<p>As always, we can draw a graph in any way we like; however, when we
+want to make it visually clear that a graph is bipartite it is
+traditional to arrange the two sides  and  in two columns (as in <a class="booklink" href="#fig:rooks-graphs">Figure 13.2</a>) or in two rows.</p>
+<figure class="bookfig" id="fig:rooks-graphs">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:8-rooks-graph">
+
+<figcaption>Graph for the entire chessboard</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:8-rooks-subgraph">
+
+<figcaption>Subgraph excluding the forbidden squares</figcaption>
+</figure>
+</div>
+<figcaption>Modeling rook placements with bipartite graphs</figcaption>
+</figure>
+<p>The graph in <a class="booklink" href="#fig:8-rooks-graph">Figure 13.2(a)</a>
+representing the entire chessboard is a special case: it is isomorphic
+to a complete bipartite graph. (Just as the complete graph has all the
+edges a graph could possibly have, a complete bipartite graph has all
+the edges a bipartite graph could possibly have.) Here is one general
+definition:</p>
+<div class="defn">
+<p><strong>Definition 13.2</strong>. <em>For any   and  , the <strong>complete bipartite
+graph </strong> is the graph
+with   vertices   and all  possible edges  where   and  .</em></p>
+</div>
+<p>We have already seen one special case: the star graph  is isomorphic to the complete
+bipartite graph .</p>
+<p>In the case of the graphs for the rook placement problem, the
+bipartition  is a natural part
+of the definition of the graph. The two vertices come in two types,
+representing the rows and the columns of the chessboard, and the rule
+defining adjacency is a relationship between the two types of
+vertex.</p>
+<p>It turns out that the grid graph representing the domino problem is
+also a bipartite graph. Here, though, the bipartition  is not given to us. In order to see
+that the graph is bipartite, we have to find a pair  satisfying the definition of a
+bipartition.</p>
+<details class="qa">
+<summary>Can you think of a way to classify the
+squares of any chessboard into two types, so that every domino we place
+covers one square of each type?</summary>
+<p>The classification is by color: let  be the set of light squares and let
+ be the set of dark squares.</p>
+</details>
+<p>The chessboard-style coloring proves that every grid graph  (and every subgraph of a grid
+graph) is bipartite. (If we remove opposite corners of the chessboard,
+we delete two vertices of the grid graph, but it remains bipartite when
+we do so.) Now, let’s talk about how to find the pair  in general.</p>
+<p>A problem that involves labeling the vertices of a graph (such as
+with two sides  and ) might be difficult because we might
+have to guess, make mistakes, and backtrack. In the case of a
+bipartition, we are actually quite lucky: there are frequent forced
+deductions. In a bipartite graph, if there is an edge  where  , then we know that   without guessing. The following algorithm relies only on
+making such forced deductions.</p>
+<p>Given a graph , we intend to
+give each vertex a label,  or
+, to indicate which side of the
+bipartition it is on. Initially, all vertices start unlabeled.</p>
+<ol>
+<li><p>Pick an arbitrary unlabeled vertex and label it with .</p></li>
+<li><p>Go through all vertices newly labeled with , and label all their neighbors with
+.</p></li>
+<li><p>Go through all vertices newly labeled with , and label all their neighbors with
+.</p></li>
+<li><p>Repeat steps 2–3 until a vertex has been labeled with both  and , or until no more unlabeled vertices
+are being labeled.</p></li>
+<li><p>If the graph is not connected, repeat steps 1–4 for each
+connected component.</p></li>
+</ol>
+<p>If the graph we are working with is bipartite, then at the end, we
+get a bipartition ,
+where  is the set of all vertices
+labeled with , and  is the set of all vertices labeled with
+.</p>
+<details class="qa">
+<summary>What happens if the graph is not
+bipartite?</summary>
+<p>We will give a vertex both labels, and
+stop. Such a vertex cannot exist in a bipartite graph, so if we are
+forced to have such a vertex, then the graph cannot be bipartite.</p>
+</details>
+<details class="qa">
+<summary>Why are we free to label a vertex with
+ in step 1: at the beginning, and
+when we consider each new connected component?</summary>
+<p>In each connected component, we can swap
+the roles of  and . So for every solution where this
+vertex is in , there is another
+solution where it is in .</p>
+</details>
+<p>The bipartition algorithm is quite similar to the distance-finding
+algorithm we studied in <a class="booklink" href="../beginning/walks.html">Chapter 3</a>: in
+both algorithms, we visit all the vertices by a breadth-first search.
+The only difference is in what we do when we visit the vertices. In the
+distance-finding algorithm, we gave a vertex labels  at successive stages.
+In this algorithm, we alternate the labels  at successive stages,
+instead.</p>
+<details class="qa">
+<summary>Let 
+be a connected graph, and let  be
+the vertex initially placed in .
+How can we define the sets  and
+ in terms of distances from ?</summary>
+<p>In the end,  will be the set of all vertices at an
+even distance from , and  will be the set of all vertices at an
+odd distance from .</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="odd-cycles">Odd cycles</h2>
+<p>Although the bipartition algorithm is a convenient way to test a
+specific graph for being bipartite, it is not as useful theoretically:
+when proving a general result, we would like some testable criteria. One
+way to prove a graph is bipartite is to find a bipartition  and show that it satisfies the
+definition, but we’d also like to be able to prove that a graph is not
+bipartite. For this, we have the following theorem:</p>
+<div class="theorem" id="thm:odd-cycles">
+<p><strong>Theorem 13.1</strong>. <em>A graph  is bipartite if and only if it contains
+no cycles of odd length (no <em>odd cycles</em>, for short).</em></p>
+</div>
+<p>We can interpret this theorem as saying that the odd cycle graphs
+ are the
+simplest non-bipartite graphs: every other graph that isn’t bipartite
+contains one of them.</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#thm:odd-cycles">Theorem 13.1</a>.</em>
+First, we prove that in a bipartite graph, all cycles must have even
+length. In fact, we will prove that all closed walks have even length!
+The length of a cycle is equal to the length of a walk representing it,
+so this will be sufficient.</p>
+<p>Let  be bipartite with
+bipartition , and let  be a
+closed walk. Without loss of generality, suppose that  . Because edges , , and so on must have one endpoint
+on each side of the bipartition, we must have  ,  , and so on. In general, we can
+prove by induction that  
+whenever  is even, and   whenever  is odd: the base case is , and then induction step simply uses
+the fact that the endpoints of edge  must be on opposite sides.</p>
+<p>Since the endpoints of edge  must be on opposite sides, and
+ , we must have  , which means   is odd. Therefore , the length of the walk, must be even.
+The first half of the proof is complete!</p>
+<p>It is easy at this point in the proof to get confused and prove the
+same thing we just did a second time—for example, this would happen if
+we continued by proving that if 
+contains an odd cycle, it is not bipartite. To continue correctly, we
+will assume that  is not
+bipartite, and prove that it contains an odd cycle.</p>
+<p>The condition “ is not
+bipartite” is very difficult to work with: it says that a bipartition
+ does not exist, or that every
+candidate pair  somehow fails
+to be a bipartition. To make use of this, we define a pair  that ought to be a bipartition in
+any bipartite graph. Inspired by our bipartition algorithm, we begin by
+choosing a vertex from each connected component of , and then define:</p>
+<ul>
+<li><p> to be the set of all
+vertices at an even distance from a chosen vertex;</p></li>
+<li><p> to be the complement of
+: the set of all vertices at an
+odd distance from a chosen vertex.</p></li>
+</ul>
+<p>Since  is not bipartite, this
+is not a bipartition. So there must be some edge  between two vertices both in , or both in . Since  and  are necessarily in the same connected
+component, they must both be at an even distance, or both at an odd
+distance, from the chosen vertex 
+in that component.</p>
+<p>Consider the walk that begins at , follows some shortest   walk, then follows some shortest
+  walk, then takes the edge . The first two segments of this walk
+both have odd length or both have even length, so combined, their length
+is even. The final edge 
+increases the length by . We’ve
+found a closed walk of odd length.</p>
+<p>To complete the proof, let  be a shortest closed walk of odd length:
+we will prove that it represents an odd cycle. Suppose not: then there
+are some positions  and  with   and  .</p>
+<details class="qa">
+<summary>The other way the closed walk can fail to
+represent a cycle is if  . Why
+can we rule this out?</summary>
+<p>Since  is odd, the only such case is  . But a closed walk of length  cannot exist, because a vertex cannot
+be adjacent to itself. (In a multigraph, this would be possible with a
+loop, but in a multigraph, the loop would also be an odd cycle.)</p>
+</details>
+<p>The closed walk  has length  ; the
+closed walk  has length  . Since the sum of these two
+lengths is the odd number , at
+least one of these lengths must be odd; since  , both lengths are smaller
+than . Therefore we’ve found an
+even shorter closed walk of odd length, contradicting our initial choice
+of a walk. We conclude that the pair  cannot exist: the closed walk we
+found does represent an odd cycle! This completes the proof. ◻</p>
+</div>
+<details class="qa">
+<summary>In the second half of the proof, why do we
+need to laboriously define  and
+; can we just skip directly to
+defining  to be a shortest closed walk of odd length?</summary>
+<p>Before we can define a shortest closed
+walk of odd length, we need to know that the graph contains such closed
+walks in the first place: in an empty set of walks, there is no shortest
+walk!</p>
+</details>
+<p>To conclude this section, let’s consider two examples of bipartite
+graphs, and how we prove that they are bipartite. In one case, we will
+use the definition directly; in the other, we will use <a class="booklink" href="#thm:odd-cycles">Theorem 13.1</a>.</p>
+<div class="prop" id="prop:cube-bipartite">
+<p><strong>Proposition 13.2</strong>. <em>For all  , the hypercube graph  is bipartite.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> The vertices of  are bit strings  where each  is either  or . To define a bipartition  of , we place a vertex  in  if   is even, and in  if   is odd.</p>
+<p>Each edge of  joins two
+vertices  and  that differ only in one position;   for some , but   for all  . As a
+result,  every difference   with   cancels. Since the sums differ by
+, one of them is even and one
+is odd: the edge  has one
+endpoint in  and one in . Therefore  is a bipartition of , completing the proof. ◻</p>
+</div>
+<details class="qa">
+<summary>What is the relationship between this
+bipartition and distances in ?</summary>
+<p>This definition places a vertex in  whenever it is at an even distance from
+vertex .</p>
+</details>
+<div class="prop" id="prop:tree-bipartite">
+<p><strong>Proposition 13.3</strong>. <em>All trees are
+bipartite.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We know from <a class="booklink" href="../trees/properties.html#thm:trees">Theorem 10.2</a>
+that trees have no cycles at all—in particular, they have no odd cycles,
+so they are bipartite by <a class="booklink" href="#thm:odd-cycles">Theorem 13.1</a>. ◻</p>
+</div>
+<p>In <a class="booklink" href="../trees/properties.html">Chapter 10</a>, we already
+proved an equivalent statement to <a class="booklink" href="#prop:tree-bipartite">Proposition 13.3</a>: it was <a class="booklink" href="../trees/properties.html#prop:trees-are-2-colorable">Proposition 10.7</a>.
+Our proof back then was much longer, because we did not have <a class="booklink" href="#thm:odd-cycles">Theorem 13.1</a> at our disposal!</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="matching-problems">Matching problems</h2>
+<p>To discuss problems such as the domino puzzle and the rook puzzle, we
+make the following definition.</p>
+<div class="defn">
+<p><strong>Definition 13.3</strong>. <em>A <strong>matching</strong>
+ in a graph  is a spanning subgraph of  in which every vertex has degree  or : no two edges in  share an endpoint.</em></p>
+</div>
+<p>A vertex   with   is <strong>covered</strong>
+by , and
+<strong>uncovered</strong> otherwise (when  ). The vertices covered by
+ are exactly the endpoints of the
+edges in .</p>
+<p>When it comes to a matching, we are almost exclusively interested in
+the edge set : it tells us
+where to place rooks or dominoes. It is common to simply define a
+matching to be a set of edges, no two sharing an endpoint. However, the
+spanning subgraph  is occasionally
+convenient to use; it is easy to go from  to , but not so easy to go from  back to , so I have chosen the subgraph and not
+the set of edges as the fundamental object.</p>
+<p>We can think about matchings in all kinds of graphs. But we will
+start by thinking about matchings in bipartite graphs for two reasons.
+First, many applications will naturally give us a bipartite graph in
+which to look for a matching. Second, the theory turns out to be simpler
+for bipartite graphs.</p>
+<p>The empty subgraph  with no
+edges is also a matching by our definition—it’s just not a very good
+one. It is more difficult, but also more interesting, to select more
+edges. The larger a matching is, the more vertices it covers, and so the
+absolute limit is to cover every vertex of : this is what we’re looking for in both
+examples we’ve seen so far.</p>
+<div class="defn">
+<p><strong>Definition 13.4</strong>. <em>A <strong>perfect
+matching</strong>  in a graph
+ is a matching that covers every
+vertex of .</em></p>
+</div>
+<p>The bipartite matching problem can be considered from two points of
+view. The first is the optimistic point of view, in which we ask whether
+a perfect matching exists. This is very common in theoretical
+applications, including applications to other areas of math.</p>
+<p>There is also what I call the “realistic” point of view. In many
+practical applications, while a perfect matching is still the best
+option, a very big matching is still good if it is not perfect. For
+example, one practical bipartite matching problem occurs in every math
+department when instructors are assigned to courses. It might not be
+possible in a given semester to offer every course, but does the math
+department give up and cancel classes for the semester? No! Instead, the
+department simply tries to schedule as many courses as possible.</p>
+<details class="qa">
+<summary>What bipartite graph can we use to model
+assigning instructors to courses?</summary>
+<p>The vertices of the graph are the course
+sections and the instructors that can teach them; the edges represent
+which courses an instructor is qualified to teach.</p>
+</details>
+<p>(Further complications on top of the matching problem arise when we
+consider giving an instructor multiple sections, which must not be
+scheduled at the same time.)</p>
+<p>In general, instead of asking whether a perfect matching exists, the
+second point of view is to ask how big the largest matchings are. It’s
+this point of view that we will start with in this textbook. Of course,
+a complete answer to this question will also tell us whether a perfect
+matching exists!</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="maximum-and-maximal">Maximum and maximal</h2>
+<p>In combinatorial optimization problems like the matching problem, we
+are trying to find an object 
+that’s as large as possible, subject to some condition. It’s common to
+say that  is:</p>
+<ul>
+<li><p><em>maximum</em> if it really is as large as you can get; there
+are no better solutions than .</p></li>
+<li><p><em>maximal</em> if you cannot add anything to  without violating the restriction;
+there might be better solutions, but you cannot get to them without
+removing something from 
+first.</p></li>
+</ul>
+<p>Every maximum solution is also maximal, but the reverse might not
+hold.</p>
+<p>In the same way, the words <em>minimum</em> and <em>minimal</em> get
+used when we’re trying to pick a set that’s as small as possible,
+subject to some condition.</p>
+<p>In this textbook, I will also use this terminology, but I will avoid
+conveying important information solely by the difference between
+“maximum” and “maximal”. Usually, we are interested in maximum and
+minimum objects, because we want to solve the optimization problems we
+pose, and I will let this situation pass by without further comment. If
+we really need a maximal object that is not necessarily maximum, or a
+minimal object that is not necessarily minimum, I will specifically
+point this out for you.</p>
+<figure class="bookfig" id="fig:clumsy-dominoes">
+
+<figcaption>A clumsy packing of dominoes</figcaption>
+</figure>
+<p>However, no matter which terminology you use, it’s important to
+realize that there is a difference, and in particular there is a
+difference in the matching problem. For example, consider the domino
+placement in <a class="booklink" href="#fig:clumsy-dominoes">Figure 13.3</a>.
+It is not a maximum matching in the   grid graph: with no squares removed, it is easy to get a
+perfect matching by, for example, placing  horizontal dominoes. However, it is a
+maximal matching: there is no empty space to add another domino.</p>
+<p>In fact, in the case of dominoes, a much harder problem is the clumsy
+packing problem: what is the minimum number of edges in a maximal
+matching of the   grid
+graph? The diagram in <a class="booklink" href="#fig:clumsy-dominoes">Figure 13.3</a>
+shows a construction found by Gyárfás, Lehel, and Tuza in 1988 .</p>
+<p>Looking at this example also tells us that the bipartite matching
+problem cannot be solved by a greedy algorithm that selects the first
+edges it sees. We should expect to have to work hard before we find a
+general solution.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="vertex-covers">Vertex covers</h2>
+<p>Here is a new, more abstract example of a bipartite matching problem.
+Let  be the bipartite graph with
+vertices  on
+one side,  on
+the other side, and edges defined by the following rule: vertices  and  are adjacent when they begin with
+different digits and the product   is divisible by . A
+diagram of the multiples-of-six graph is shown in <a class="booklink" href="#fig:multiples-of-six">Figure 13.4</a>, though it is a little
+busy in places. What is the largest matching in this graph?</p>
+<details class="qa">
+<summary>Is there a perfect matching in this
+graph?</summary>
+<p>No: vertices  and  on the top are only adjacent to vertex
+, so they cannot both be covered
+by a matching.</p>
+</details>
+<details class="qa">
+<summary>Look for a matching greedily: for each of
+the vertices ,
+match it to the first unused vertex on the other side, if you can. What
+matching do you get?</summary>
+<p>The matching whose edges are , , , , , and .</p>
+</details>
+<figure class="bookfig" id="fig:multiples-of-six">
+
+<figcaption>The multiples-of-six graph</figcaption>
+</figure>
+<p>We’ve made a good start, but we have a gap: we’ve found a matching
+with  edges, but we can only prove
+that the matching can’t have more than  edges. (That is, we’ve ruled out a
+perfect matching with  edges.) We
+either need to find a better solution, or we need to prove a better
+upper bound. Is there a bottleneck—some kind of limited resource that we
+exhaust if we try to find a larger matching?</p>
+<p>Yes! The limited resource is the vertices divisible by . To get a product divisible by , we need both a multiple of  and a multiple of , but the multiples of  are much harder to come by: they are
+, and . Every edge in a matching needs to use
+one of these vertices, so there can be at most  edges in a matching.</p>
+<p>This argument generalizes.</p>
+<div class="defn">
+<p><strong>Definition 13.5</strong>. <em>A <strong>vertex cover</strong>
+in a graph  is a set of vertices
+  such that every
+edge of  has one or both endpoints
+in .</em></p>
+</div>
+<p>For example, in the multiples-of-six graph, the set  is a vertex
+cover. It is not the only one. For example, the set of all vertices in a
+graph is guaranteed to be a vertex cover. The hard task is not to find a
+vertex cover, but to find a vertex cover that is as small as
+possible.</p>
+<p>Vertex covers are important because, just as in the example of the
+multiples-of-six graph, we can use them to prove upper bounds on the
+size of a matching:</p>
+<div class="prop" id="prop:weak-duality">
+<p><strong>Proposition 13.4</strong>. <em>If  is a matching and  is a vertex cover in the same graph
+, then  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Consider the sum  Each term  of this sum is at most , by the definition of a matching, so
+the value of the sum is at most : the number of vertices in .</p>
+<p>However,  counts the
+number of edges of  incident to
+, so we can also think of the sum
+as counting the number of times any edge of  is incident to any vertex of . Each edge of  must be incident to at least one vertex
+of , by the definition of a vertex
+cover, so each edge of 
+contributes at least  to the sum.
+Therefore the sum is at least  the number of edges in .</p>
+<p>Putting these inequalities together, we conclude that  . ◻</p>
+</div>
+<details class="qa">
+<summary>Does <a class="booklink" href="#prop:weak-duality">Proposition 13.4</a> only apply to bipartite
+graphs?</summary>
+<p>No: it is true for any graph.</p>
+</details>
+<p>In a bipartite graph , however,
+there are two particularly easy examples: if  is a bipartition of , then  and  are both vertex covers. By
+<a class="booklink" href="#prop:weak-duality">Proposition 13.4</a>, there cannot be a matching
+with more than 
+edges; in particular, there can only be a perfect matching if  .</p>
+<details class="qa">
+<summary>What does this tell us about the domino
+problem on an   chessboard
+with two opposite squares removed?</summary>
+<p>A complete   chessboard has  squares of each color, but two
+opposite squares have the same color; if they are removed, only  squares of that color are left. So at
+most  dominoes can be placed: not
+enough to cover the remaining 
+squares.</p>
+</details>
+<details class="qa">
+<summary>Can you use vertex covers to show that the
+  rectangle in <a class="booklink" href="#fig:8-rooks">Figure 13.1(b)</a> cannot be avoided?</summary>
+<p>Take  . These four rows and three columns cover the entire
+chessboard except for the highlighted rectangle, showing that at most
+ rooks can be placed outside the
+rectangle.</p>
+</details>
+<p><a class="booklink" href="#prop:weak-duality">Proposition 13.4</a> can be used with any matching
+ and any vertex cover . However, if we want to get upper
+bounds on the size of a matching, then the smaller  is, the better the bounds we get. To
+get the best upper bound, we should try to find the smallest vertex
+cover possible. However, even for the smallest vertex cover in a graph,
+this bound might not tell us the full truth about matchings.</p>
+<details class="qa">
+<summary>In the complete graph , how many edges are in the
+largest matching?</summary>
+<p>There are , because a -edge matching covers all  vertices: it is perfect.</p>
+</details>
+<details class="qa">
+<summary>In the complete graph , how many vertices are in the
+smallest vertex cover?</summary>
+<p>There are . We can leave out any one vertex from
+the vertex cover, but a set 
+missing two vertices  and  does not contain either endpoint of the
+edge .</p>
+</details>
+<p>It will turn out that in bipartite graphs, the problems of finding
+the largest matching and the smallest vertex cover do “meet in the
+middle”. This is a result known as Kőnig’s theorem (<a class="booklink" href="../matchings/konig.html#thm:konig">Theorem 14.2</a>), which we will prove in the
+next chapter. Kőnig’s theorem is the reason we are studying matchings in
+bipartite graphs first.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>In the graph shown below, find a matching  and a vertex cover  with  .</p>
+
+</li>
+<li>
+<p>Mathematicians that study arrangements of non-attacking rooks on
+chessboards of various shapes often define an object called the rook
+polynomial. This is a polynomial  in which the coefficient of  is the number of ways to place  non-attacking rooks onto the
+chessboard.</p>
+<ol>
+<li><p>Compute , the rook polynomial of a   chessboard.</p></li>
+<li><p>Compute , the rook polynomial of a   chessboard.</p></li>
+<li><p>Prove that the rook polynomial of a   chessboard with one square missing is  .</p></li>
+<li><p>Prove that the rook polynomial of only the white squares of an ordinary   chessboard is .</p></li>
+</ol>
+</li>
+<li>
+<p>The “cop-and-highway-robber game” is
+played on a bipartite graph. One player (the highway robber) chooses an
+edge of the graph and occupies it for highway robbery. Simultaneously
+and without seeing the edge chosen, the other player (the cop) chooses a
+vertex of that edge to guard. If the cop guards an endpoint of the edge
+chosen by the highway robber, the highway robber gets caught and loses;
+otherwise, the highway robber gets away and wins.</p>
+<p>This is a game, like rock-paper-scissors, where both players need to
+choose their strategy at random; if either player plays predictably,
+then the other player can exploit this.</p>
+<ol>
+<li><p>Suppose that the graph has a matching . Find a strategy for the highway robber
+to win with probability  , no matter what the cop does.</p></li>
+<li>
+<p>Suppose that the graph has a vertex cover . Find a strategy for the cop to win
+with probability , no
+matter what the highway robber does.</p>
+<p>(Why is this another proof of <a class="booklink" href="#prop:weak-duality">Proposition 13.4</a>?)</p>
+</li>
+</ol>
+</li>
+<li><ol>
+<li><p>Prove that when  is a
+multiple of , it is possible to
+place  dominoes on an
+  chessboard so that there
+is no more room to place another domino.</p></li>
+<li><p>Prove that whenever dominoes are placed on an   chessboard so that there is no
+more room to place another domino, at least   dominoes must have been
+used.</p></li>
+</ol></li>
+<li><p>Prove that a bipartite graph with minimum degree at least  contains a cycle of length at least
+.</p></li>
+<li><p>Let  be a bipartite graph
+with bipartition . Prove the
+“bipartite handshake lemma”: </p></li>
+<li><p>Coins are placed on several of the squares on an   chessboard (at most one coin
+per square). Every row of the chessboard has the same number of coins on
+it, but every column of the chessboard has a different number of coins
+(possibly ). How many coins are on
+the chessboard?</p></li>
+<li>
+<p>To explore the difference between maximum and maximal matchings,
+consider the following graph (which can be made arbitrarily large):</p>
+
+<ol>
+<li><p>Find a perfect matching in this graph.</p></li>
+<li><p>Find the smallest matching in this graph above which is maximal
+(there is no larger matching that contains all of its edges).</p></li>
+<li><p>Let  be a graph (not
+necessarily bipartite) and let  be
+a maximal matching in . Prove that
+ has a vertex cover  with  .</p></li>
+<li><p>Prove that the graph in this problem is “as bad as it gets”: there is no graph  with a maximal matching  and a second matching with more than  edges.</p></li>
+</ol>
+</li>
+<li>
+<p>(BMO 2005) The equilateral triangle  has sides of integer length . The triangle is completely divided (by
+drawing lines parallel to the sides of the triangle) into equilateral
+triangular cells of side length 1.</p>
+<p>A continuous route is chosen, starting inside the cell with vertex
+ and always crossing from one cell
+to another through an edge shared by the two cells. No cell is visited
+more than once. Find, with proof, the greatest number of cells which can
+be visited.</p>
+</li>
+<li><p>(Putnam 2025) Alice and Bob play a game with a string of  digits, each of which is restricted to be , , or . Initially all the digits are . A legal move is to add or subtract  from one digit to create a new string that has not appeared before. A player with no legal move loses, and the other player wins. Alice goes first, and the players alternate moves. For each  , determine which player has a strategy that guarantees winning.</p></li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>In the same “rank” or “file”, if you’re a chess
+purist.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+<li id="fn2"><p>In graph theory literature, these have no consistent
+name; they can also be called “parts”, or “blocks”, or even “partite
+sets”.<a class="footnote-back" href="#fnref2">↩︎</a></p></li>
+<li id="fn3"><p>Whose name I made up, inspired by the study of
+cops-and-robbers games on graphs, which are something fancier.<a class="footnote-back" href="#fnref3">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 13</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

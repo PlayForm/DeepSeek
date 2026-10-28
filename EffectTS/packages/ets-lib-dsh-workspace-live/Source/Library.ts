@@ -18,6 +18,13 @@
 //   Packet - the orientation-packet renderer: PacketView -> the fixed
 //       eight-line WORKSPACE/SCOPE/MAP/FOCUS/NEIGHBORS/EVIDENCE/OPEN/STALE
 //       grammar.
+import Version from "./Variable/Version.js";
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define). This package has NO loader contract and NO Config - the
+// version sits beside the other named exports; it is not a loader key.
+export { Version };
+
 export type { PacketView, Section, SectionKind } from "./Interface/Section.js";
 export { default as Render } from "./Function/Render.js";
 export { default as Collapse } from "./Function/Collapse.js";

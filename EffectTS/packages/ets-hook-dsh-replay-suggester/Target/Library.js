@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="replay-suggester",e=t,r=["pluginFactory"],n=o;var s={name:p,apply:n,Config:e,inject:r};export{e as Config,n as apply,s as default,r as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import r from"./Variable/Version.js";const p="replay-suggester",e=t,n=["pluginFactory"],i=o;var f={name:p,apply:i,Config:e,inject:n};export{e as Config,r as Version,i as apply,f as default,n as inject,p as name};

@@ -1,0 +1,820 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Regular Graphs</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 5</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>Most chapters in this book are all about giving you tools to deal
+with any graph you encounter. This chapter has a bit of that, but it is
+much more about showing you examples of some particular useful
+graphs.</p>
+<p>In <a class="booklink" href="#thm:regular-graphs">Theorem 5.1</a>, we use circulant graphs
+(which we previously defined in <a class="booklink" href="../beginning/isomorphism.html">Chapter 2</a>) to construct
+examples of regular graphs in every case where it is possible. In the
+next section, I attempt to convey some of the variety of possible
+regular graphs out there (except, of course, in the cases without much
+variety). Next, we meet the Petersen graph, which will appear as an
+example or counterexample many times throughout this book: it will be
+especially useful to have in our back pocket when we get to <a class="booklink" href="../hard/hamilton.html">Chapter 17</a> and <a class="booklink" href="../hard/line.html">Chapter 20</a>.</p>
+<p>The last section discusses the degree/diameter problem; this problem
+is not exclusive to regular graphs, but many of the examples found when
+making progress on it are regular. It is also an example of a research
+problem in graph theory where the main form of progress on it is in fact
+by finding examples.</p>
+<p>There is no general way to find examples; otherwise, problems like
+the degree/diameter problem would already be solved. However, being
+familiar with a wide variety of examples, and knowing what they’re good
+for, is valuable when it comes to writing existence proofs. The proof of
+<a class="booklink" href="#thm:regular-graphs">Theorem 5.1</a> would have been much harder
+if we did not already have circulant graphs at our disposal.</p>
+<p>In this chapter, we take our first serious look at necessary and
+sufficient conditions. This is a theme we will return to throughout the
+book; if you need an introduction to necessary and sufficient
+conditions, you can find it in <a class="booklink" href="../appendix/proof-writing.html">Appendix A</a>.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="degree-sequences">Degree sequences</h2>
+<p>In <a class="booklink" href="../beginning/degrees.html">Chapter 4</a>, we looked at the degrees of
+individual vertices; now, let’s look at all of them together.</p>
+<div class="defn">
+<p><strong>Definition 5.1</strong>. <em>The <strong>degree
+sequence</strong> of a graph  is a
+sequence of numbers that gives all the degrees of all the vertices of
+.</em></p>
+</div>
+<p>Despite the word “sequence”, these don’t come in any particular
+order, because the vertices of a graph don’t have a particular order.
+(There might be a natural order you’re tempted to use based on the way
+we drew a graph, but we don’t want the properties of graphs to depend on
+how we draw them!) It would have been more reasonable to talk about the
+“degree multiset” of a graph: a multiset keeps track of how often its
+elements appear, but not their order, which is exactly what we want
+here.</p>
+<figure class="bookfig" id="fig:degree-example-2">
+
+<figcaption>An -vertex graph
+labeled with the degrees of its vertices</figcaption>
+</figure>
+<p>Instead, the convention is to write the degree sequence of a graph in
+descending order. We do this to avoid the temptation
+of looking for meaning in the order of the numbers, and because it will
+be convenient for working with the degree sequence. For example, we
+would say that <a class="booklink" href="#fig:degree-example-2">Figure 5.1</a>
+shows a graph with degree sequence .</p>
+<p>It is a relatively quick and painless process to examine a graph,
+count the number of lines poking out of each dot, and in doing so
+compute the degree sequence. For this reason, we often look to the
+degree sequence first to try to learn about a graph; even if it does not
+always tell us what we want to know, it is a quick way to start! This
+is, for example, a good way to begin determining whether two graphs are
+isomorphic.</p>
+<details class="qa">
+<summary>If you want to know whether two graphs are
+isomorphic, what do their degree sequences tell you?</summary>
+<p>If  and  have different degree sequences,
+they’re definitely not isomorphic. If they have the same degree
+sequences, they might be isomorphic, but it’s too early to say.</p>
+<p>In other words,  and  having the same degree sequence is a
+necessary condition, but not a sufficient condition for them to be
+isomorphic.</p>
+</details>
+<p>Though it is easy to compute the degree sequence of a given graph, it
+is harder to go in reverse: to take a sequence of nonnegative integers
+in descending order, and determine if it is the degree sequence of some
+graph. If it is, we call it a <strong>graphic sequence</strong>. For
+example,  is
+a graphic sequence, and the graph in <a class="booklink" href="#fig:degree-example-2">Figure 5.1</a> is a proof of this. (There
+are other graphs with the same degree sequence, too.)</p>
+<p>Here are a few quick puzzles about graphic sequences that illustrate
+some things you already know about them, and some things you have yet to
+learn.</p>
+<div class="problem" id="problem:graphic-range">
+<p><strong>Problem 5.1</strong>. <em>Is the sequence  graphic?</em></p>
+</div>
+<div class="proof">
+<p><em>Answer to <a class="booklink" href="#problem:graphic-range">Problem 5.1</a>.</em> No: the terms are
+too big. This sequence would like to be the degree sequence of an -vertex graph, but the largest possible
+degree in an -vertex graph is
+, achieved when a vertex is
+adjacent to all  other
+vertices. ◻</p>
+</div>
+<div class="problem" id="problem:graphic-parity">
+<p><strong>Problem 5.2</strong>. <em>Is the sequence 
+graphic?</em></p>
+</div>
+<div class="proof">
+<p><em>Answer to <a class="booklink" href="#problem:graphic-parity">Problem 5.2</a>.</em> No: this sequence
+violates <a class="booklink" href="../beginning/degrees.html#cor:odd-vertices">Corollary 4.2</a> to the
+handshake lemma, which states that a graph cannot have an odd number of
+vertices with an odd degree. ◻</p>
+</div>
+<div class="problem" id="problem:graphic-trickier">
+<p><strong>Problem 5.3</strong>. <em>Is the sequence  graphic?</em></p>
+</div>
+<div class="proof">
+<p><em>Answer to <a class="booklink" href="#problem:graphic-trickier">Problem 5.3</a>.</em> No: suppose for
+contradiction that  is a graph
+with degree sequence .
+Let  be the vertex with degree
+ and let  be the vertex with degree . Then  is adjacent to all  other vertices, so in particular  ; however,  is adjacent to  other vertices, so in particular  . Therefore it is
+impossible for  to exist. ◻</p>
+</div>
+<details class="qa">
+<summary>How do the solutions to <a class="booklink" href="#problem:graphic-range">Problem 5.1</a> and <a class="booklink" href="#problem:graphic-parity">Problem 5.2</a> generalize?</summary>
+<p>They give us two rules: in an -term graphic sequence, the values must
+be integers between  and  , and an even number of them must be
+odd.</p>
+</details>
+<details class="qa">
+<summary>Are these rules always enough to tell if a
+sequence is graphic?</summary>
+<p>No, and that’s why <a class="booklink" href="#problem:graphic-trickier">Problem 5.3</a> is there. It’s a -term sequence in which the values are
+integers between  and , and  of them are odd; however, the sequence
+is not graphic.</p>
+</details>
+<p>We should think of the rules we deduced from the solutions to
+<a class="booklink" href="#problem:graphic-range">Problem 5.1</a> and <a class="booklink" href="#problem:graphic-parity">Problem 5.2</a> as simple preliminary
+tests we can carry out before thinking about a sequence very hard. They
+are necessary conditions: if a sequence fails one of the two preliminary
+tests, it’s definitely not graphic. This can save us a lot of work when
+faced with a larger problem of this type.</p>
+<p>However, the preliminary tests are not sufficient conditions: if a
+sequence passes both preliminary tests, it still might not be graphic.
+We will eventually develop a comprehensive theory of graphic sequences,
+which will encompass the argument we used to solve <a class="booklink" href="#problem:graphic-trickier">Problem 5.3</a> as a special case.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="regular-graphs">Regular graphs</h2>
+<p>As a special case, we can consider the graphic sequence problem for a
+sequence in which all terms are equal:</p>
+<div class="defn">
+<p><strong>Definition 5.2</strong>. <em>A <strong>regular graph</strong>
+is a graph in which every vertex has the same degree. More specifically,
+an <strong>-regular graph</strong>
+is a graph in which every vertex has degree . The degree sequence of such a graph is
+.</em></p>
+</div>
+<p>Making a definition does not guarantee that any object satisfying the
+definition exists. So when do regular graphs exist?</p>
+<details class="qa">
+<summary>Suppose the sequence  with  terms is graphic. What do our two
+simple preliminary tests tell us about the relationship between  and ?</summary>
+<p>We must have  , and if  is
+odd, then  must be even.</p>
+</details>
+<p>In fact, the existence problem for regular graphs is much easier than
+the general case. There are no further complications, and these are the
+only two conditions.</p>
+<div class="theorem" id="thm:regular-graphs">
+<p><strong>Theorem 5.1</strong>. <em>An -regular graph on  vertices exists whenever   and at least one of  or  is even.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> To prove that an -regular graph on  vertices exists, we need to construct
+one.</p>
+<p>If we were solving the problem for specific values of  and , the proof would be very short: we
+could simply draw a diagram and verify that the graph shown has the
+right number of vertices, all with the correct degree. To solve the
+problem in general, we need to give a family of graphs as the
+solution.</p>
+<p>Not every family of graphs is sufficiently flexible for our purposes.
+For example, in <a class="booklink" href="../beginning/degrees.html">Chapter 4</a>, we defined the family of
+hypercube graphs. These are all regular graphs: for any , if we want an -regular graph, the -dimensional hypercube graph  will do. However, there is only one
+-dimensional hypercube graph, and
+it has  vertices. If we want a
+regular graph with some other number of vertices, we have to do
+something else.</p>
+<p>Fortunately, we do have a very flexible family of regular graphs at
+our fingertips: the circulant graphs introduced in <a class="booklink" href="../beginning/isomorphism.html">Chapter 2</a>. These are actually
+even more flexible than we need: for large , we can pick from many examples of
+circulant graphs for each possible degree. To remind you of the
+definition, the circulant graph 
+has vertex set ,
+which we think of as being arranged around a circle, in that order. Two
+vertices  and  are adjacent if   for some
+; if  and  are  steps apart around the circle.</p>
+<p>Usually, each offset  gives
+each vertex  two neighbors:   and  . As a result, if  is even, we can get an -regular circulant graph by using  offsets. To give a concrete
+example,  will be an -regular graph for all even  between  and  , proving almost half of the theorem
+by itself. (For an example, see <a class="booklink" href="#fig:harary-h96">Figure 5.2(a)</a>: this
+is the graph we use when   and
+ .)</p>
+<figure class="bookfig" id="fig:harary-graphs">
+
+<figcaption>Circulant graphs in the proof of <a class="booklink" href="#thm:regular-graphs">Theorem 5.1</a></figcaption>
+</figure>
+<details class="qa">
+<summary>What if  ?</summary>
+<p>I am reluctant to write , because this looks
+weird, but it’s true that if we don’t give a circulant graph any
+offsets, then there will be no edges: the result is a -regular graph, for any positive integer
+.</p>
+</details>
+<p>It is a bit trickier to get an -regular circulant graph when  is odd. We know that it is impossible
+to find an -regular graph on  vertices if both  and  are odd, so we may assume that  is even. But how does this help us?</p>
+<details class="qa">
+<summary>In what exceptional case does an offset
+ in a circulant graph not
+contribute  to the degree of
+every vertex?</summary>
+<p>When  is even and the offset is equal to
+.</p>
+</details>
+<p>For any ,   and   are the same vertex:
+if we think of the vertices as being arranged around a circle, then this
+is the vertex opposite . So
+including the offset  lets
+us obtain an -regular graph when
+ is odd. Again, we must give a
+concrete example to make the proof precise about it does, so let our
+example be . (For an example, see <a class="booklink" href="#fig:harary-h105">Figure 5.2(b)</a>: this is the graph we use when
+  and  .)</p>
+<details class="qa">
+<summary>Why is this an -regular graph?</summary>
+<p>For each  , a vertex  is adjacent to   and  , giving it   or   neighbors. The last neighbor is  .</p>
+</details>
+<p>Because  , it is always
+true that  , so the initial progression  never risks overlapping the exceptional
+case  . Similarly, in our
+previous case when  was even, the
+offsets  never
+included the “exceptional” offset , because  .</p>
+<p>This completes the proof: for all  and  such that   and at least one of  or  is even, either the circulant graph
+ (for even ) or the
+circulant graph  (for odd ) is an -regular graph on  vertices. ◻</p>
+</div>
+<details class="qa">
+<summary>What graph do we end up constructing when
+ ?</summary>
+<p>For odd , we get ,
+and for even , we get ,
+but in both cases, the result is isomorphic to the complete graph . This is because in both cases, we’ve
+included every possible offset. For an example of this, see <a class="booklink" href="#fig:harary-h87">Figure 5.2(c)</a>.</p>
+</details>
+<p>I chose the circulant graphs I did in the proof of <a class="booklink" href="#thm:regular-graphs">Theorem 5.1</a> not just because they’re the
+simplest possible choice, but for another reason. The -regular circulant graph on  vertices that we used has a special
+name: the <em>Harary graph</em>, denoted . For example, the graphs in
+<a class="booklink" href="#fig:harary-graphs">Figure 5.2</a> are  (<a class="booklink" href="#fig:harary-h96">Figure 5.2(a)</a>),
+ (<a class="booklink" href="#fig:harary-h105">Figure 5.2(b)</a>), and  (<a class="booklink" href="#fig:harary-h87">Figure 5.2(c)</a>).</p>
+<p>We will see these graphs again in <a class="booklink" href="../connectivity/connectivity.html">Chapter 26</a>, where we will
+put them to the same use as their inventor Frank Harary did in
+1962 : as examples
+of graphs of a given connectivity with as few edges as possible.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="how-many-regular-graphs-are-there">How many regular graphs are
+there?</h2>
+<p>Though <a class="booklink" href="#thm:regular-graphs">Theorem 5.1</a>
+proves the existence of -regular,
+-vertex graphs with all compatible
+values of  and , we’ve only found one graph for each
+pair . How many possibilities
+exist in total? Let’s start with some small values of  and see how the story unfolds.</p>
+<p>When  , every vertex is an
+isolated vertex: it has degree .
+There cannot be any edges. For any possible vertex set, there is exactly
+one graph, sometimes called the empty graph.</p>
+<p>When  , whether we believe in
+one possibility or multiple possibilities depends on how we count. You
+see, suppose  is a vertex in a
+-regular graph. Then  has only one neighbor, which we can
+call . Vertex  also has only one neighbor, and we
+already know what it is: . Thus,
+ and  form a -vertex connected component with each
+other and nothing else, and the entire graph is split up into  such components. (A -regular graph, as we already know, is
+only possible when  is even, so
+ is an integer.)</p>
+<p>The counting difficulty comes in when we ask how many ways there are
+to choose these components. In one sense, there are many options:
+<a class="booklink" href="#fig:1-regular-graphs">Figure 5.3</a> shows three different
+possibilities in just the -vertex
+case, and the total number of possibilities grows quickly. However, they
+are all isomorphic to each other. We say that there are  different -regular graphs with vertex set , but that up to isomorphism,
+there is only one -regular graph
+with  vertices. This is a term
+we’ll use often, so let me give it a formal definition:</p>
+<div class="defn">
+<p><strong>Definition 5.3</strong>. <em>A description of a graph  <strong>up to isomorphism</strong> is a
+description which is not necessarily true of , but is true of some graph isomorphic
+to .</em></p>
+</div>
+<p>Here are some of the ways this phrase is used, in other
+circumstances.</p>
+<ul>
+<li><p>We say that the solution to a problem is unique up to isomorphism
+when all solutions to the problem are isomorphic graphs.</p></li>
+<li><p>We say that  is the set of
+all graphs of some type, up to isomorphism, when every graph of that
+type is isomorphic to some graph in , and no two graphs in  are isomorphic. If  , we might also say that there are
+ graphs of that type, up to
+isomorphism.</p></li>
+<li><p>We say that the result of an operation is some particular graph
+, up to isomorphism, if the
+operation results in a graph isomorphic to , but possibly not with the same vertex
+set as .</p></li>
+</ul>
+<p>Statements up to isomorphism are also sometimes phrased in terms of
+<em>unlabeled graphs</em>, which is a perspective I’ll say more about in
+<a class="booklink" href="../trees/cayley.html">Chapter 11</a>, but I prefer to avoid it,
+because it causes more confusion. For any graph , the vertex set  is a set of distinguishable objects,
+whether or not we distinguish them in a diagram of .</p>
+<figure class="bookfig" id="fig:1-regular-graphs">
+
+<figcaption>Three different(?) -regular graphs with vertex set </figcaption>
+</figure>
+<p>Moving on, let’s consider what happens when  . The example we constructed in
+<a class="booklink" href="#thm:regular-graphs">Theorem 5.1</a> is , but this is
+isomorphic to a more common graph: the cycle graph . This is also unique in a sense, but
+a slightly different sense:</p>
+<div class="prop" id="prop:connected-2-regular">
+<p><strong>Proposition 5.2</strong>. <em>Up to isomorphism,  is the unique connected -regular graph with  vertices.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> First of all, we check that  a connected -regular graph. In  (with vertex set ) vertex  is adjacent to   and  , treating   as  and   as , so   for all  .
+For all  , the
+sequence   is an
+  walk if  , and the sequence   is an   walk if  ; this makes  connected.</p>
+<p>Next, let  be an arbitrary
+connected -regular graph. Then in
+particular  has minimum degree
+, so <a class="booklink" href="../beginning/degrees.html#thm:min-degree-cycle">Theorem 4.4</a> applies
+and tells us that  contains a
+cycle . For all  , we know   because  is a cycle, and   because  is -regular, so  has no neighbors in  other than the two it has in . There are no edges with exactly one
+endpoint in , so by <a class="booklink" href="../beginning/walks.html#lemma:disconnected">Lemma 3.2</a>, either
+  or else  wouldn’t be the connected graph we took
+it to be. But   makes  isomorphic to a cycle graph, completing
+our proof. ◻</p>
+</div>
+<figure class="bookfig" id="fig:2-regular-graphs">
+<div class="subfigures">
+
+<figure class="booksubfig" id="fig:2-regular-c4-c4">
+
+<figcaption>Two copies of </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:2-regular-c3-c5">
+
+<figcaption>Copies of  and </figcaption>
+</figure>
+</div>
+<figcaption>Three non-isomorphic -regular graphs with  vertices</figcaption>
+</figure>
+<p>The difference between the -regular and -regular case is that we can obtain more
+examples by taking graphs with multiple connected components. Each
+component, by <a class="booklink" href="#prop:connected-2-regular">Proposition 5.2</a>, is a cycle; we can
+mix and match cycles however we like to reach a total of  vertices. <a class="booklink" href="#fig:2-regular-graphs">Figure 5.4</a> shows three
+non-isomorphic possibilities for an -vertex -regular graph: it could be isomorphic
+to  (<a class="booklink" href="#fig:2-regular-c8">Figure 5.4(a)</a>), or to the union of two
+copies of  (<a class="booklink" href="#fig:2-regular-c4-c4">Figure 5.4(b)</a>), or to the union of copies
+of  and  (<a class="booklink" href="#fig:2-regular-c3-c5">Figure 5.4(c)</a>).</p>
+<p>Once  , any hope of
+classifying the -regular graphs on
+ vertices goes out the window.
+Even when  , there are many
+examples.</p>
+<figure class="bookfig" id="fig:3-regular-graphs">
+<div class="subfigures">
+
+<figure class="booksubfig" id="fig:3-regular-2k4">
+
+<figcaption>Two copies of </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:frucht">
+
+<figcaption>The Frucht graph</figcaption>
+</figure>
+</div>
+<figcaption>Three examples of -regular graphs</figcaption>
+</figure>
+<p><a class="booklink" href="#fig:3-regular-graphs">Figure 5.5</a> shows several -regular graphs. You will recognize the
+graph in <a class="booklink" href="#fig:3-regular-q3">Figure 5.5(a)</a>: it is the cube graph . The graph in <a class="booklink" href="#fig:3-regular-2k4">Figure 5.5(b)</a> should not be too much of a
+surprise either: it is the disjoint union of two copies of , and is the smallest -regular graph that is not
+connected.</p>
+<p>You might be forgiven for thinking, based on the examples you’ve
+seen, that regular graphs are highly symmetric—after all, every vertex
+has the same degree, which makes every vertex like every other, at least
+superficially. To dissuade you from that impression, I’ve included a
+final example in <a class="booklink" href="#fig:frucht">Figure 5.5(c)</a>: the Frucht graph. It is named
+after Robert Frucht, who discovered it in 1949 . The Frucht graph is notable for being
+completely asymmetric; in other words, it has no automorphisms, other
+than the identity automorphism!</p>
+<p>The Frucht graph is just the smallest graph with this property. When
+ is large, it is very rare for a
+-regular graph with  vertices to have a nontrivial
+automorphism. Don’t be misled by graphs like circulant graphs, which
+have a lot of symmetry—they are just the graphs it is easiest to point
+to, precisely for that reason. (Think about how much effort it would be
+to describe the Frucht graph exactly, compared to how easy it is to
+define the circulant graph , which has
+the same number of vertices and edges.)</p>
+<p>The  gives the
+number of connected -regular
+graphs on  vertices, up to
+isomorphism. I cite an online encyclopedia rather than give a formula
+because there is no clean formula for the entries of this sequence.
+However, you can observe that they grow rather quickly from the first
+few entries. Starting from  ,
+the sequence is </p>
+<p>You can probably guess that the story for -regular graphs, -regular graphs, and so on is very
+similar. We only regain any semblance of order once  gets very close to . We discover that semblance of order by
+taking the complement graph: toggling all the edges from present to
+absent and vice versa.</p>
+<details class="qa">
+<summary>If 
+is an -regular graph on  vertices, what can you say about the
+degrees in its complement ?</summary>
+<p>Every vertex   has  neighbors
+in , out of   other vertices, so its neighbors in
+ are the   vertices it was not previously
+adjacent to. Therefore 
+is  -regular.</p>
+</details>
+<figure class="bookfig" id="fig:graph-complement">
+<div class="subfigures">
+
+
+<figure class="booksubfig" id="fig:complements-1-regular">
+
+<figcaption>A -regular
+graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:complements-6-regular">
+
+<figcaption>A -regular
+graph</figcaption>
+</figure>
+</div>
+<figcaption>Regular graphs and their complements</figcaption>
+</figure>
+<p><a class="booklink" href="#fig:graph-complement">Figure 5.6</a> shows some examples of
+regular graphs and their complements. For example, the cycle graph  is an -vertex -regular graph we understand, so we must
+also be able to understand its complement, an -vertex -regular graph. We already understand
+the complete graph  quite well;
+it is the only -vertex  -regular graph, up to isomorphism,
+becuase if every vertex has degree  , then it is adjacent to all   other vertices. In fact, the empty
+graph we previously took as our -regular example is commonly written
+, taking the complete
+graph as a starting point.</p>
+<p>Up to isomorphism, there is only one -regular graph on  vertices, and only when  is even. Taking its complement, we
+learn that up to isomorphism, there is only one  -regular graph on  vertices, and only when  is even. <a class="booklink" href="#fig:complements-1-regular">Figure 5.6(c)</a> and <a class="booklink" href="#fig:complements-6-regular">Figure 5.6(d)</a> show an example of
+this.</p>
+<p>Among -regular graphs, cycles
+are special; they are the only connected graphs. Among  -regular graphs, the complements of
+cycles are not as special, because (for  ) all  -regular
+graphs are connected. Still, by taking the complement of every graph in
+<a class="booklink" href="#fig:2-regular-graphs">Figure 5.4</a>, we could find all the
+-regular -vertex graphs, up to isomorphism; the
+same strategy works for all .</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="the-petersen-graph">The Petersen graph</h2>
+<p>Having seen a bit of the variety of regular graphs out there, we’ll
+now look at another useful family of regular graphs. We’ll begin with a
+specific example, known as the Petersen graph after its discoverer,
+Julius Petersen.</p>
+<p>The Petersen graph is notable in graph theory for many reasons. In
+this textbook, we will see it several times in its role of providing a
+small counterexample to several plausible-sounding conjectures in graph
+theory. There are also several classification theorems (which we will
+not see) in which it plays a central role. Entire books  have been written about
+this graph.</p>
+<figure class="bookfig" id="fig:petersen-graphs">
+
+<figcaption>Three diagrams of the Petersen graph</figcaption>
+</figure>
+<p>Three diagrams of the Petersen graph are shown in <a class="booklink" href="#fig:petersen-graphs">Figure 5.7</a>, showing some of the
+symmetry it has: one with -fold
+rotational symmetry, one with -fold symmetry, and one which nearly has
+-fold symmetry (but not quite). In
+fact, the Petersen graph is much more symmetric than any of these
+diagrams show, which can be seen from its combinatorial definition:</p>
+<div class="defn">
+<p><strong>Definition 5.4</strong>. <em>The <strong>Petersen
+graph</strong> is the graph with vertex set  consisting of all unordered pairs of elements of , and an edge between two
+vertices whenever they have no elements of  in common. (For example,
+vertex  is adjacent to vertices
+, , and .)</em></p>
+</div>
+<p>This definition has a much greater degree of symmetry than either of
+the diagrams! For any permutation of the set , we can relabel the
+vertices of the Petersen graph according to that permutation; this will
+not change which vertices have no elements of  in common, so it is an
+automorphism of the Petersen graph. All   automorphisms of the Petersen graph can be described in
+this way.</p>
+<p>The Petersen graph is part of an infinite family of regular, highly
+symmetric graphs known as the Kneser graphs. For all integers  and  with  , the vertices of the <em>Kneser graph </em> are the -element subsets of the set . As in the definition of
+the Petersen graph, two vertices of  are adjacent if they have no
+elements in common. (The definition is only interesting when  ; otherwise, any two -element subsets of  are guaranteed to
+overlap.)</p>
+<details class="qa">
+<summary>How many vertices does  have, as a function of  and ?</summary>
+<p>There are  vertices: the number of ways to
+choose  unordered elements of
+ without
+repetition.</p>
+</details>
+<details class="qa">
+<summary>What is the degree of an arbitrary vertex
+of ?</summary>
+<p>A vertex  has  neighbors: the -element subsets of the set  .</p>
+</details>
+<p>This explains why the Kneser graphs are always regular. For the same
+reason as the Petersen graph, they have many automorphisms. Though the
+Petersen graph is by far the most widely encountered of the Kneser
+graphs, they all have applications to the combinatorics of set families,
+due to their definition via subsets of .</p>
+<p>For now (in this section), I will prove only one property of the
+Petersen graph, which might look silly on its own. However, it will be a
+starting point for other proofs, and in the next section, we will see
+one example of how it can be useful. This lemma is also a good example
+of how to use symmetry in a proof.</p>
+<div class="lemma" id="lemma:petersen-cycles">
+<p><strong>Lemma 5.3</strong>. <em>The Petersen graph has no cycles of
+length  or .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> To check such a claim with as little effort as
+possible, it helps to make use of the many automorphisms of the Petersen
+graph. Take any two adjacent vertices of the Petersen graph: these are
+unordered pairs  and , where  are four distinct elements of
+. Then there is an
+automorphism of the Petersen graph that relabels  to , 
+to ,  to , and  to  in every vertex, taking our two
+adjacent vertices to  and .</p>
+<p>How do we use this? Well, suppose  is an arbitrary cycle in the Petersen
+graph, and  and  are two vertices adjacent in . By applying the automorphism above to
+, we get a new cycle  in the Petersen graph on which
+ and  are two consecutive vertices. The
+automorphism is a bijection, so 
+and  have the same number of
+vertices: if we prove  has
+length at least , we conclude that
+ has length at least .</p>
+<p>(When writing for an audience familiar with such tricks, it is common
+to simply say: “Let  be a cycle in
+the Petersen graph. By symmetry, we may assume that  and  are two consecutive vertices along
+.” The proof becomes much
+shorter.)</p>
+<p>On a cycle of length , two
+consecutive vertices have a common neighbor: the third vertex. On a
+cycle of length , two consecutive
+vertices each have another neighbor, and those two neighbors must
+themselves be adjacent. To complete the proof, we show that neither of
+these scenarios is possible in the Petersen graph, when  and  are the two consecutive vertices.</p>
+<p>The other neighbors of  are
+ and ; the other neighbors of  are  and . From this we can see that  and  have no common neighbors, so our cycle
+cannot have length ; also, none of
+the neighbors of  and  are adjacent (all of them include the
+number ), so our cycle cannot have
+length . ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="the-degreediameter-problem">The degree/diameter problem</h2>
+<p>In <a class="booklink" href="../beginning/walks.html">Chapter 3</a>, we defined the distance  between two vertices in a graph
+ to be the minimum length of an
+  walk in . A related concept is the
+<em>diameter</em> of : the largest
+distance between any pair of vertices.
+That is, a graph has diameter  if
+we can reach every vertex from every other vertex in at most  steps, but there are some cases in
+which we cannot do it in fewer than  steps.</p>
+<p>It’s worth pointing out that the diameter is defined by a
+maximization problem (it is the largest distance) with a minimization
+problem inside it (the distance is the smallest possible length of a
+walk). This means that proving that the diameter of a graph has a
+certain value takes some getting used to: it is a mix of specific
+examples and universal bounds, in both directions.</p>
+<details class="qa">
+<summary>How might you prove that a graph  has diameter at least ?</summary>
+<p>By proving that   for two particular
+vertices  and : showing that there are no   walks of any length less than .</p>
+</details>
+<details class="qa">
+<summary>How might you prove that a graph  has diameter at most ?</summary>
+<p>By proving that   for all pairs of vertices
+, showing that we can get from
+every vertex to every other in at most  steps.</p>
+</details>
+<p>We can see both kinds of proof in action when we prove the following
+result, which is also the first noteworthy use of the Petersen graph in
+this textbook.</p>
+<div class="prop" id="prop:petersen-maximum">
+<p><strong>Proposition 5.4</strong>. <em>Among all graphs with maximum
+degree  and diameter , the Petersen graph has the most
+vertices.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> First, we should verify that the Petersen graph
+actually does have diameter . The
+lower bound is quick: a diameter of  would mean that all vertices are
+adjacent, and the Petersen graph certainly has pairs of vertices that
+are not adjacent (such as  and
+). Therefore the Petersen graph
+has diameter at least .</p>
+<p>For the upper bound, we must show that no matter which vertex  we choose in the Petersen graph, all
+vertices are within distance  of
+. Since the Petersen graph is
+-regular,  has three neighbors; call them . Each  has two neighbors other than . By <a class="booklink" href="#lemma:petersen-cycles">Lemma 5.3</a>,  cannot be adjacent to another  (or else  would represent a cycle of
+length ), and two neighbors  and  of  cannot have a common neighbor  (or else  would represent a cycle
+of length .) Therefore there are
+six different vertices  all adjacent to a neighbor of .</p>
+<p>Altogether, we’ve named 
+vertices: , , and . All are different, and
+all are within distance  of . But the Petersen graph only has  vertices, so we conclude that all
+vertices are within distance  of
+. Since  was arbitrary, the diameter of the
+Petersen graph is at most .</p>
+<p>The last part of the proof is the interesting part, in my opinion. We
+must prove that a graph  with
+maximum degree  and diameter  can have at most  vertices: the number of vertices in
+the Petersen graph. In such a graph, if we pick an arbitrary vertex
+, we can write  as  , where  is
+the set of vertices at distance 
+from , and  is the set of vertices at distance
+ from .</p>
+<p>The graph  has maximum degree
+, so in particular,  has at most  neighbors; every vertex in  must be a neighbor of , so  . Meanwhile, for every vertex  , there is a path  of length ; here,  , because it is adjacent to . Each vertex has at most  neighbors, but one of them is : it has at most  neighbors in . Together, the vertices in  have at most   neighbors in , but each vertex in  must have a neighbor in : so  .</p>
+<p>Putting this together,  , so  can have at most  vertices. The Petersen graph, with
+ vertices, is optimal. ◻</p>
+</div>
+<p>The degree/diameter problem studies the generalization of
+<a class="booklink" href="#prop:petersen-maximum">Proposition 5.4</a>: for a pair of positive
+integers , what is the
+largest number of vertices in a graph with maximum degree  and diameter ?</p>
+<div class="theorem" id="thm:moore-bound">
+<p><strong>Theorem 5.5</strong>. <em>A graph  with maximum degree   and diameter  can have at most  vertices,
+which is   if   and   if  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> As in the proof of <a class="booklink" href="#prop:petersen-maximum">Proposition 5.4</a>, we pick an arbitrary
+vertex  and write the vertex set
+of  as  where   and
+ is the set of all vertices at
+distance  from .</p>
+<p>Next, by induction on , we show
+that   for  . When  , this
+inequality says that  , which is true because  has at most  neighbors, and every vertex in
+ is a neighbor of . This proves the base case.</p>
+<p>An important property we’ll need before we continue is that for  , a vertex   must have a neighbor in . That’s because there is an   walk of length  in . Let  be the next-to-last vertex on that
+walk: the walk is .
+This  will be the neighbor of
+ in .</p>
+<details class="qa">
+<summary>Why is  a neighbor of ?</summary>
+<p>By the definition of a walk,  must be an edge.</p>
+</details>
+<details class="qa">
+<summary>Why is there an   walk of length  ?</summary>
+<p>Remove the last vertex  from the walk  to get such an   walk.</p>
+</details>
+<details class="qa">
+<summary>Why is there no   walk of length   or less?</summary>
+<p>We could take such a walk and add  to the end, getting an   walk of length   or less; this contradicts  .</p>
+</details>
+<p>Now we’re ready for the induction step. Suppose that for  , we have already shown
+that  , and want to move on to . Each vertex in  has at least one neighbor in , so it has at most   neighbors in . Together, there are at most
+ vertices in
+, so they have at most  neighbors in . But every vertex in  must be such a neighbor, so  ,
+completing the induction step.</p>
+<p>Once the induction is concluded, we have  which is exactly the bound we wanted. When  , the bound on  simplifies to  for every , giving us   for the sum. When  , the formula   comes from the formula for the sum of a finite geometric
+series:  . ◻</p>
+</div>
+<p>The upper bound in <a class="booklink" href="#thm:moore-bound">Theorem 5.5</a> is
+called the Moore bound after Edward Moore (the same Moore that
+discovered the distance-finding algorithm discussed in <a class="booklink" href="../beginning/walks.html">Chapter 3</a>). Moore also posed the problem
+of finding the graphs which achieve the bound exactly, and such graphs
+are known as Moore graphs. For example, <a class="booklink" href="#prop:petersen-maximum">Proposition 5.4</a> tells us that the
+Petersen graph is a Moore graph. In order for the inequalities of
+<a class="booklink" href="#thm:moore-bound">Theorem 5.5</a> to be equations, Moore graphs
+must all be regular graphs: the maximum degree  must actually be the degree of
+every vertex.</p>
+<p>Moore graphs are very rare, apart from a few initial cases: they
+exist for all   when
+ , and for all   when  . I will leave it to you, in the
+practice problems, to understand these two constructions. Moore graphs
+were first studied by Alan Hoffman and Robert Singleton in 1960 , who found the Petersen
+graph for   and a
+graph called the Hoffman–Singleton graph for  . What’s more, they
+proved that when   and  , there are no more Moore
+graphs—with one possible exception. Hoffman and Singleton were unable to
+determine if there is a Moore graph with   and  ; to this day, we do not know the
+answer!</p>
+<p>Since 1960, the degree/diameter problem has advanced considerably; a
+2013 survey by Mirka Miller and Jozef Širáň  summarizes much of the recent progress. We
+now know that, aside from the two graphs found by Hoffman and Singleton,
+and the possible   case, there are no Moore graphs with   and  . In most cases, the best
+constructions we know are very far from the upper bound of <a class="booklink" href="#thm:moore-bound">Theorem 5.5</a>. Many, but not all of them are
+regular graphs.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li><p>What are the possible values of the diameter of an -vertex graph? Give an example for each
+possible value.</p></li>
+<li>
+<p>If  and  are both odd, then an -regular graph on  vertices does not exist, but a Harary
+graph  still does. In this
+case,  is a nearly-regular
+graph: it is a graph on  vertices
+where   of them have degree , and one has degree  .</p>
+<p>It is defined starting from the Harary graph , or .
+To this graph, we add   edges
+that increase the degree of vertex  by , and the degree of vertices   by  each.</p>
+<p>How can we do this? Prove that your method works in general.</p>
+</li>
+<li>
+<p>Here is a fragment of an alternate proof of the   case of <a class="booklink" href="#thm:regular-graphs">Theorem 5.1</a>.</p>
+<p><em>…assume that a -regular
+graph  on   vertices exists. Then, we can create
+a -regular graph  on  vertices, just by adding a new
+connected component to : four new
+vertices adjacent to each other and to no other vertices …</em></p>
+<p>What kind of a proof is this? What else do we need to do to finish
+the proof of <a class="booklink" href="#thm:regular-graphs">Theorem 5.1</a>
+using this idea?</p>
+</li>
+<li><p>For each diagram in <a class="booklink" href="#fig:petersen-graphs">Figure 5.7</a>,
+show how to label the vertices with elements of the set  (the vertex set of
+the Petersen graph) so that two vertices are adjacent in the diagram if
+and only if their labels have no digit in common.</p></li>
+<li><p>Prove that for all  ,
+the complement of the path graph  has diameter .</p></li>
+<li><ol>
+<li><p>Prove that the Kneser graph  is connected when  .</p></li>
+<li><p>Find and prove a similar condition that determines when  has diameter .</p></li>
+<li><p>Find and prove a similar condition that determines when  has no cycles of length  or .</p></li>
+</ol></li>
+<li><ol>
+<li><p>For all  , there
+is a Moore graph with maximum degree  and diameter  (and   vertices). What is it?</p></li>
+<li><p>For all  , there is a
+Moore graph with maximum degree 
+and diameter  (and   vertices). What is it?</p></li>
+</ol></li>
+<li><p>Prove that, just like the Petersen graph, the Hoffman–Singleton
+graph has no cycles of length  or
+. (You do not know very much about
+the Hoffman–Singleton graph, but all you need to know for this problem
+is there in this chapter.)</p></li>
+<li><p>Let  . Prove that
+if a graph  with maximum degree
+  and diameter  is not regular, then it has at most
+ vertices:
+approximately  of the Moore
+bound.</p></li>
+<li>
+<p>(BMO 1972) There are 
+persons present at a meeting. Every two persons are either friends of
+each other or strangers to each other. No two friends have a friend in
+common. Every two strangers have two and only two friends in common.</p>
+<ol>
+<li><p>Prove that each person has the same number of friends at the
+meeting.</p></li>
+<li><p>If that number is , find
+.</p></li>
+</ol>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>I want to make it clear that in this book, sequences in
+“descending order” or “ascending order” can have ties: consecutive terms
+may be equal. Sometimes a sequence in descending order is called
+“non-increasing” to make it clear that ties are allowed, but I think
+this is awkward.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+<li id="fn2"><p>This term in graph theory is inspired by the diameter of
+a circle, since that is the largest distance between any two points in
+or on the circle.<a class="footnote-back" href="#fnref2">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 5</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

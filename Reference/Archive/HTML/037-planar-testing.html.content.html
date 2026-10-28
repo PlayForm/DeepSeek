@@ -1,0 +1,843 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Planarity Testing</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 22</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>This chapter presents three different approaches by which we can
+(sometimes or always) determine whether a graph is planar.</p>
+<p>The first is <a class="booklink" href="#thm:3n-6">Theorem 22.2</a>, which is also very useful as a
+property of planar graphs: in <a class="booklink" href="../planar/coloring-maps.html">Chapter 24</a>, you will see
+how. It is especially important if you are not yet a very experienced
+mathematician to remember that this is very much not an if-and-only-if
+condition; do not use it in the wrong direction!</p>
+<p>The second is Kuratowski’s theorem and Wagner’s theorem, which I
+group together, because they are very similar. As a planarity test,
+looking for minors is more powerful than looking for subdivisions, but
+minors are harder to understand—when teaching this material, I have
+often skipped Wagner’s theorem for that reason. I include it here
+because in <a class="booklink" href="../planar/coloring-maps.html">Chapter 24</a>, it will be
+useful for us to know about edge contractions.</p>
+<p>The third is the method of overlap graphs developed by Tutte. This is
+not as commonly studied, but I don’t know why, because it’s great. Any
+other equally systematic approach to planarity testing is much harder to
+learn.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="counting-edges-in-planar-graphs">Counting edges in planar
+graphs</h2>
+<p>In the previous chapter, we proved two tools that help us count
+vertices, edges, and faces in a plane embedding: the face length formula
+(<a class="booklink" href="../planar/planar.html#lemma:face-length-formula">Lemma 21.3</a>)
+and Euler’s formula (<a class="booklink" href="../planar/planar.html#thm:euler-formula">Theorem 21.4</a>). We will now
+use these to prove a limit on the number of edges that a planar graph
+with  vertices can have.</p>
+<p>For this, we will have to restrict our attention to simple graphs
+only, even though both results above apply to multigraphs as well.
+Otherwise, there is no possible bound we can prove!</p>
+<details class="qa">
+<summary>Why can a planar multigraph with  vertices have arbitrarily many
+edges?</summary>
+<p>Starting from an arbitrary plane
+embedding, we can draw in any number of loops at a vertex without
+crossings—imagine a flower with the loops as the petals, and the vertex
+at the center. If there is more than one vertex, we can also replace an
+edge by any number of parallel copies without affecting planarity.</p>
+</details>
+<p>We can engage in some meta-reasoning and ask: if our argument is to
+work for simple planar graphs, but not for planar multigraphs, what must
+it be doing? What sort of situations can only appear in the plane
+embedding of a multigraph?</p>
+<p>Well, once again, we’re back to the way that we can draw loops and
+parallel edges in a plane embedding. These are not unusual: they are the
+way we draw loops and parallel edges by default in a diagram of a
+multigraph. From the point of view of the counting tools we have,
+though, what makes them special is that they are boundaries of a face of
+length  (in the case of a loop) or
+ (in the case of two parallel
+edges).</p>
+<details class="qa">
+<summary>Do loops and parallel edges have to be
+drawn as faces of length  or ?</summary>
+<p>No: at least in the case of some graphs,
+it’s possible to draw the graph so that some part of it is inside the
+loop, or between the two parallel edges. (An example appears in the
+first practice problem at the end of the previous chapter.)</p>
+</details>
+<details class="qa">
+<summary>Are there any simple graphs with faces of
+those lengths?</summary>
+<p>Just one: a graph with two vertices and a
+single edge between them has a plane embedding in which the outer face
+has length .</p>
+</details>
+<p>The following short lemma is the property we use to distinguish
+simple graphs from multigraphs. (From now on until we conclude our
+discussion of the number of edges in a planar graph, I will assume all
+graphs are simple.)</p>
+<div class="lemma" id="lemma:min-length-3">
+<p><strong>Lemma 22.1</strong>. <em>In a plane embedding of a simple
+graph with at least  edges, every
+face has length at least .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> If the plane embedding has multiple faces, then each
+face needs to be separated from the other faces somehow; its boundary
+must contain a closed curve, which corresponds to a cycle in the graph.
+The graph is simple, so a cycle in it must contain at least  edges.</p>
+<p>If the plane embedding has only one face, then every edge of the
+graph must contribute  to the
+length of that face. There are at least  edges, so the face has length at
+least . ◻</p>
+</div>
+<p>When we feed <a class="booklink" href="#lemma:min-length-3">Lemma 22.1</a>
+into the tools we have from the previous chapter and let it cook, we
+obtain the following theorem.</p>
+<div class="theorem" id="thm:3n-6">
+<p><strong>Theorem 22.2</strong>. <em>For all planar graphs with   vertices and  edges,  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Choose a plane embedding of a graph with   vertices and  edges to work with for the rest of the
+proof. Let  be the number of faces
+it has; by <a class="booklink" href="#lemma:min-length-3">Lemma 22.1</a>, each face has length at
+least , so the sum of the lengths
+of all the faces is at least .</p>
+<details class="qa">
+<summary>What if <a class="booklink" href="#lemma:min-length-3">Lemma 22.1</a> does not apply, because
+ ?</summary>
+<p>Then   automatically, because  .</p>
+</details>
+<p>By the face length formula, the sum of the lengths of all the faces
+is also equal to , giving us the
+inequality  . We would like
+to combine this inequality with Euler’s formula:  . We do not know , the number of connected components,
+but it’s certainly at least , so
+we get a second inequality:  .</p>
+<p>Our goal in this proof is to establish a relationship between  and  (though it can be interesting to look
+at the other two pairs of variables, too), so we should eliminate . We solve for  in the inequality   (getting  ) and in Euler’s formula
+(getting  ). Putting
+them together, we get  which we can rearrange to  , or  . ◻</p>
+</div>
+<details class="qa">
+<summary>What would we learn if we eliminated  instead of eliminating ?</summary>
+<p>From   and  ,
+then  , or
+ . This tells us the
+maximum number of faces in an -vertex planar graph.</p>
+</details>
+<p>This chapter is called “Planarity testing”, and <a class="booklink" href="#thm:3n-6">Theorem 22.2</a> is our first planarity test: it lets
+us immediately conclude that some graphs are not planar! Here is an
+example:</p>
+<div class="prop" id="prop:k5-is-not-planar">
+<p><strong>Proposition 22.3</strong>. <em>The complete graph  is not planar.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We count: 
+has   vertices and   edges. Since  , which is less than , the conclusion of <a class="booklink" href="#thm:3n-6">Theorem 22.2</a> does not hold. Therefore the
+hypotheses do not hold either, so  is not a planar graph. ◻</p>
+</div>
+<details class="qa">
+<summary>If an -vertex graph has   or fewer edges, can we conclude from
+<a class="booklink" href="#thm:3n-6">Theorem 22.2</a> that it is planar?</summary>
+<p>No: the theorem gives a necessary
+condition for planarity, but not a sufficient one. For example, take
+ and add  isolated vertices, and you’ll get a
+-vertex graph with only  edges which is not planar.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="triangulations">Triangulations</h2>
+<p>Whenever we prove an inequality, a natural question to ask is: what
+can we say about the cases where equality holds? What kind of planar
+graphs have  ?</p>
+<p>To draw conclusions about such graphs, we should look back at our
+proof, and look at every place where an inequality appeared. This is an
+extremely useful idea not just in graph theory, but in other areas of
+math!</p>
+<ol>
+<li>
+<p>We wrote Euler’s formula as an inequality:  . If it were the case that
+ , we would conclude
+that  .</p>
+<p>So if a planar graph with  
+vertices satisfies  , then
+  must be equal to , meaning that the graph is
+connected.</p>
+</li>
+<li>
+<p>The inequality  
+combines Euler’s formula with the inequality  . If we had started with the
+strict inequality  , we
+would have arrived at the strict inequality  , instead.</p>
+<p>So if a planar graph with  
+vertices satisfies  , it
+must satisfy  .</p>
+</li>
+<li>
+<p>The inequality  
+itself comes from another inequality, but one we only stated in words:
+<a class="booklink" href="#lemma:min-length-3">Lemma 22.1</a>, which says that every face
+has length at least . (For all
+faces ,  .)</p>
+<p>So if a planar graph with  
+vertices satisfies  , then
+every face must have length exactly , and this must be true in every plane
+embedding of the planar graph.</p>
+</li>
+</ol>
+<p>Now that we’ve understood these extremal examples, we give them a
+name, based on the fact that all of their faces are (in some sense)
+triangles. We call a plane embedding of a connected graph in which all
+faces have length  a
+<strong>triangulation</strong>. For each , there are many -vertex triangulations; see <a class="booklink" href="#fig:triangulations">Figure 22.1</a> for some examples when  . (These are all the -vertex possibilities, up to isomorphism
+of the planar graph. I know this because I first looked up sequence
+A000109  in the  of them,
+then searched the  to find out what they are.)</p>
+<figure class="bookfig" id="fig:triangulations">
+
+<figcaption>Triangulations with 
+vertices</figcaption>
+</figure>
+<p>To be clear, “triangulation” is a term for the plane embedding, not
+for the planar graph. How do we refer to the planar graph, then? The
+corresponding notion is a <em>maximal planar graph</em>: a planar graph
+that stops being planar if any edge (that it does not already have) is
+added to it. But to avoid sneaking in a claim that has not been
+justified, we need the following proposition.</p>
+<div class="prop" id="prop:maximal-planar">
+<p><strong>Proposition 22.4</strong>. <em>For a planar graph  with   vertices, the following are equivalent:</em></p>
+<ol>
+<li><p><em> has   edges.</em></p></li>
+<li><p><em>Every plane embedding of  is a triangulation.</em></p></li>
+<li><p><em> is a maximal planar
+graph.</em></p></li>
+</ol>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We have already proven that  .  has exactly   edges if and only if every
+inequality in the proof of <a class="booklink" href="#thm:3n-6">Theorem 22.2</a> is an
+equality: if and only if every face has length exactly . This has to happen regardless of the
+plane embedding we choose at the beginning of that proof, so it must be
+true for every plane embedding.</p>
+<details class="qa">
+<summary>Which other implication between (i), (ii),
+and (iii) is easiest to show?</summary>
+<p>The implication   also
+follows from <a class="booklink" href="#thm:3n-6">Theorem 22.2</a>. If  has   edges, and we add a new edge to
+, then we get a graph with   edges, so by the contrapositive of
+<a class="booklink" href="#thm:3n-6">Theorem 22.2</a>, the new graph is not planar.</p>
+</details>
+<p>The part of <a class="booklink" href="#prop:maximal-planar">Proposition 22.4</a>
+that we still need to prove is that (iii) also implies (i) and (ii). In
+other words, there are no maximal planar graphs that “get stuck” before
+reaching   edges. We will show
+that (iii) implies (ii), and we will do it by showing the
+contrapositive: if  has an
+embedding that’s not a triangulation, then  is not a maximal planar graph.</p>
+<p>Our strategy has a short description: in a plane embedding of  that isn’t a triangulation, we find a
+face  with  , and then we
+add an edge between two vertices on the boundary of , drawing it inside . The reason this is not the entire
+proof is that we have to make sure the edges do not already exist inside
+.</p>
+<p>In order for that to even be a problem,  must not be the only face, which means
+that there is a cycle on the boundary of  separating it from the other faces.
+This is either a cycle of length 
+or more, or else a cycle of length  with some more vertices of  “inside” the cycle; in either case,
+there are at least  vertices on
+the boundary of .</p>
+<p>If there are  or more vertices
+on the boundary of , then they
+cannot all be adjacent:  would
+then contain a copy of , which
+we know cannot be drawn in the plane. If there are only  vertices, and they are all adjacent,
+then the plane embedding of  would
+contain a plane embedding of  in
+which  is a face. This is
+impossible: by  , every plane embedding of  is a triangulation, and cannot
+contain a face like  of length
+more than .</p>
+<details class="qa">
+<summary>Does anything change if  is the outer face?</summary>
+<p>Not substantially; the outer face is
+outside the cycles on its boundary, rather than inside them, but nothing
+changes aside from that one word.</p>
+</details>
+<p>In all cases, at least two vertices  on the boundary of  are not already adjacent in . If we add edge  to , the result is still planar, because
+drawing a curve from  to  inside  gives a plane embedding of  . This completes the proof: it shows
+that  is not a maximal planar
+graph. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="girth-and-planarity">Girth and planarity</h2>
+<p>Before we go on to necessary and sufficient conditions for planarity,
+let’s try to squeeze a bit more power out of the approach used to prove
+<a class="booklink" href="#thm:3n-6">Theorem 22.2</a>, because counting edges is a simpler
+test than just about anything else we could try.</p>
+<p>The most common scenario is when  is a bipartite planar graph. In this
+case, the boundary of a face cannot be a cycle of length : by <a class="booklink" href="../matchings/bipartite.html#thm:odd-cycles">Theorem 13.1</a>, bipartite graphs
+cannot contain such cycles! This allows us to sharpen our
+inequality.</p>
+<details class="qa">
+<summary>What if the boundary of a face is not a
+cycle?</summary>
+<p>In general, the length of the face is the
+total length of its boundary walks, and in a bipartite graph, all closed
+walks have even length.</p>
+</details>
+<p>If the minimum length of a face is , then we replace the inequality   in the proof of <a class="booklink" href="#thm:3n-6">Theorem 22.2</a> by the inequality  . As before, when we want an
+upper bound on , we may assume
+ is connected, which lets us apply
+Euler’s formula:  .
+Eliminating  and simplifying, we
+conclude:</p>
+<div class="theorem" id="thm:2n-4">
+<p><strong>Theorem 22.5</strong>. <em>For all planar bipartite graphs
+with   vertices and  edges,  .</em></p>
+</div>
+<p>To appreciate the power of this approach, we can go back to
+<a class="booklink" href="../planar/planar.html#prop:k33-is-not-planar">Proposition 21.1</a>
+from the previous chapter. At the time, we need a technical argument
+that looked closely at the geometry of a plane embedding in order to
+prove that  is not planar.
+With <a class="booklink" href="#thm:2n-4">Theorem 22.5</a>, the proof is simple:  is a bipartite graph with   vertices and   edges.  , so  is not planar.</p>
+<p>This argument is just one case of an even more general approach.
+Define the <em>girth</em> of a graph  to be the length of the shortest cycle
+in . (This is always at least
+, and in bipartite graphs it is
+always at least .) In a graph with
+no cycles at all (a forest), the girth is sometimes defined to be , but that will not matter in this
+chapter. In any case, we don’t need a planarity test for forests: they
+are always planar.</p>
+<div class="theorem" id="thm:girth">
+<p><strong>Theorem 22.6</strong>. <em>Let  be a planar graph with at least one
+cycle.</em></p>
+<p><em>If  has   vertices,  edges, and girth , then  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Fix a plane embedding of . It will have at least two faces,
+because a cycle separates the plane into two regions. Conversely, when
+there is more than one face, every face has a cycle in its boundary.
+Therefore the girth  is also a
+lower bound on the length of the faces of the plane embedding.</p>
+<p>Now we can continue as before. Let the plane embedding have  faces; then the sum of the lengths of
+the faces (which is , by the face
+length formula) is at least .
+Combining the inequality  
+with the equation   from
+Euler’s formula, we get  This simplifies to  , the inequality we wanted. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="subdivisions">Subdivisions</h2>
+<p>Thus far, the graphs  and
+ have not been planar because
+they have too many edges. It is easy, but not very exciting, to find
+more graphs that are not planar, simply because they have a copy
+of  or  inside them. <a class="booklink" href="#fig:k5-plus-edges">Figure 22.2(b)</a> shows an example of this.
+We’ve added several vertices and edges to ; the result is even connected.
+However, the extra vertices and edges aren’t really contributing
+anything to the non-planarity; the only reason that the resulting graph
+is not planar is because it contains a copy of  inside it.</p>
+<figure class="bookfig" id="fig:k5-variants">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:k5-not-planar">
+
+<figcaption> is not
+planar</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:k5-plus-edges">
+
+<figcaption>An unsatisfying extension</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:k5-subdivision">
+
+<figcaption>A subdivision of </figcaption>
+</figure>
+</div>
+<figcaption>Non-planar graphs based on </figcaption>
+</figure>
+<p>But we can consider stranger things than just subgraphs. Take a look
+at the graph in <a class="booklink" href="#fig:k5-subdivision">Figure 22.2(c)</a>,
+for example. This graph does not have  as a subgraph: it has  vertices in all the same places as
+<a class="booklink" href="#fig:k5-not-planar">Figure 22.2(a)</a>, but one of the edges is
+missing. In place of that long edge is a path through some entirely new
+vertices.</p>
+<details class="qa">
+<summary>Why is the graph in <a class="booklink" href="#fig:k5-subdivision">Figure 22.2(c)</a> not planar?</summary>
+<p>If we could draw it in the plane, we could
+simply erase the dots on the long path, and get a drawing of .</p>
+</details>
+<p>We can generalize this construction. We say that to
+<strong>subdivide</strong> an edge  in a graph  means to create a new vertex  and replace edge  by edges  and . (In a diagram, this corresponds to
+drawing a dot representing  in the
+middle of edge .)</p>
+<p>A <strong>subdivision</strong> of a graph  is a graph that can be obtained from
+ by subdividing edges zero or more
+times. (We consider  itself to be
+a subdivision of .)</p>
+<details class="qa">
+<summary>Motivated by <a class="booklink" href="#fig:k5-subdivision">Figure 22.2(c)</a> and our argument for it,
+what is the relationship between subdivisions and planarity?</summary>
+<p>If 
+is a subdivision of , then  is planar if and only if  is planar: subdividing edges does not
+change planarity.</p>
+</details>
+<p>There is a reason why we have focused on two specific graphs that are
+not planar: the graphs  and
+. That reason is the
+following theorem, proved in 1930 by Casimir Kuratowski :</p>
+<div class="theorem" id="thm:kuratowski">
+<p><strong>Theorem 22.7</strong> (Kuratowski’s theorem). <em>A graph
+ is planar if and only if it  does not contain a subdivision of  or .</em></p>
+</div>
+<p>Thus, subdivisions of  and
+ are the only reasons why a
+graph might fail to be planar. (Strictly speaking, I should write,
+“ does not contain a copy of a subdivision
+of  or ”, but nobody is that strict about
+it, so I won’t be, either.)</p>
+<p>Kuratowski’s theorem is another example of a theorem that lets us
+concisely identify a reason why a problem in graph theory might have no
+solution. This is not necessarily related to how hard a problem is; it
+might be quite hard to find a plane embedding of a large graph, and it
+might also be hard to find a subdivision of  or  inside it. However, once you have
+a plane embedding, you can show it to anyone else, and instantly (or
+very quickly) convince them that a graph is planar. Working directly
+from the definition, there is not a lot you can show someone to quickly
+convince them that a graph is not planar.</p>
+<p>That’s exactly what Kuratowski’s theorem provides. The subdivisions
+of  and  are obstacles to planarity. But
+Kuratowski’s theorem mostly isn’t about telling us that they’re
+obstacles: we already knew that part. If we believe that  and  are not planar, then we can know
+that their subdivisions are not planar just by an argument like the one
+we used for <a class="booklink" href="#fig:k5-subdivision">Figure 22.2(c)</a>.
+No, Kuratowski’s theorem is about guarantees: it tells us that these
+obstacles are the only ones we need to worry about.</p>
+<p>I will not give you a proof of Kuratowski’s theorem. However, I will
+show you how we can look for a subdivision of  or  in a graph that is not too large.
+(If the graph is very large, then the task should be delegated to a
+computer, but it helps to have some understanding of what the computer
+could be trying to do.)</p>
+<figure class="bookfig" id="fig:kuratowski-example">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:1x2x2">
+
+<figcaption>A non-planar example</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:1x2x2-k33-subdivision">
+
+<figcaption>A 
+subdivision</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:1x2x2-k5-subdivision">
+
+<figcaption>A 
+subdivision</figcaption>
+</figure>
+</div>
+<figcaption>Showing that a graph is not planar using Kuratowski’s
+theorem</figcaption>
+</figure>
+<p>The example I will use is the graph in <a class="booklink" href="#fig:1x2x2">Figure 22.3(a)</a>, which I
+will refer to as  for the rest of
+this section. A subdivision of  inside  is shown in <a class="booklink" href="#fig:1x2x2-k33-subdivision">Figure 22.3(b)</a>, and a subdivision of
+ in <a class="booklink" href="#fig:1x2x2-k5-subdivision">Figure 22.3(c)</a>. But how do we find
+them?</p>
+<details class="qa">
+<summary>Must both kinds of subdivisions exist in
+, if it is not planar?</summary>
+<p>Not necessarily; Kuratowski’s theorem only
+promises one of the two kinds of subdivisions. Even if both exist, we
+don’t need to find both!</p>
+</details>
+<p>A first step might be to decide whether it is a subdivision of  or a subdivision of  that we want. If it exists, the
+subdivision of  might be easier
+to look for, because  has fewer
+vertices. However,  has five
+vertices of degree , and this
+remains true for every subdivision of . If we’re testing a graph  with fewer vertices of degree  or more, we can give up on finding a
+subdivision of , and focus on
+. But  has enough degree- vertices (and even two degree- vertices) to find both.</p>
+<p>In either case, we should begin by deciding which vertices will be
+the “key” vertices of the subdivision: the vertices of degree  or , as opposed to the vertices of degree
+ in the middle of subdivided
+edges. It is a good idea to pick central and high-degree vertices of the
+graph, to make it easier to find the paths later. A natural first choice
+is one of the two “center” vertices of . (Call these vertices  and , for future reference.)</p>
+<p>If we did not know whether  is
+planar, we might also spend some time trying to find a plane embedding
+of . This can also tell us
+something, even if we fail! For example, after trying for a while, you
+might be able to find a plane embedding of almost all of , which is missing the edge  between the two center vertices.</p>
+<details class="qa">
+<summary>What would such an embedding tell us?</summary>
+<p>Since   is planar, it does not contain a
+subdivision of  or . Therefore whatever subdivision we
+hope to find in  must use edge
+ somehow.</p>
+</details>
+<p>It is not, logically speaking, necessary for vertices  and  to be two of the key vertices of the
+subdivision. But it already seemed like a good idea to use these
+vertices before, so we might as well start with that theory.</p>
+<p>It might take some trial and error to place the remaining key
+vertices. It is often a good idea to place as many of them close by as
+possible, so that they can be connected directly by edges; then, only a
+few long paths are necessary to draw the remaining connections.</p>
+<p>It can help to switch between different ways of thinking about the
+graphs we’re subdividing—especially , where we can either imagine the
+bipartition with three vertices on each side, or the hexagon with three
+chords. For a subdivision of ,
+we can break down the process of finding it into stages:</p>
+<ol>
+<li><p>Choose  and  to be our first two vertices.</p></li>
+<li><p>Use edge  as an edge of
+the subdivision, but also find three more longer   paths, sharing no other
+vertices.</p></li>
+<li><p>From each of those  
+paths, choose a vertex to be a key vertex of the subdivision. Now, find
+a cycle through those three vertices, using no other the vertices used
+in previous stages.</p></li>
+</ol>
+<p>A similar breakdown into stages could also work in other
+examples.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="graph-minors">Graph minors</h2>
+<p>Another useful operation that preserves the planarity of a graph is
+edge contraction. If  is an edge
+of graph , the graph   (also sometimes denoted
+) is the graph obtained
+from  by deleting vertices  and  and adding a new vertex  adjacent to every vertex which, in
+, was adjacent to either  or . The operation of going from  to   is called <strong>contracting</strong> edge .</p>
+<p>In some applications, it makes sense to define   as a multigraph. In that
+case, for every edge between a vertex  and either  or  in , there is an edge between  and  in  ; if there are multiple edges between  and , and only one of them is contacted, the
+remaining edges become loops at .
+In our case, loops and parallel edges are not relevant to track, so we
+will keep   a simple
+graph.</p>
+<p>Intuitively, given a plane embedding of , we obtain a plane embedding of   by first erasing everything
+within a small distance of edge 
+(including the endpoints  and
+). Within the erased region, draw
+vertex , and change the trajectory
+of every edge formerly incident to  or , so that instead it heads to  once it enters the erased region.
+<a class="booklink" href="#fig:edge-contraction">Figure 22.4(a)</a> shows an example of this
+intuitive idea, contracting an edge in a   grid graph.</p>
+<figure class="bookfig" id="fig:wagner-example">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:edge-contraction">
+
+<figcaption>Contracting an edge</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:1x2x2-k33-minor">
+
+<figcaption>A 
+minor</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:1x2x2-k5-minor">
+
+<figcaption>A 
+minor</figcaption>
+</figure>
+</div>
+<figcaption>Examples of edge contractions and minors</figcaption>
+</figure>
+<p>Contracting edges is almost, but not quite, the reverse operation of
+subdividing edges. If we subdivide an edge  (creating a new vertex ) and then contract edge  (calling the combined vertex ) then we obtain the original graph
+again. However, contracting edges can do more than just undo edge
+subdivisions, when both endpoints of the contracted edge have degree
+ or more.</p>
+<p>We say that a graph  is a
+<em>minor</em> of another graph 
+if it is a subgraph of a graph obtained from  by contracting edges zero or more
+times. If  is planar, then every
+minor of  is also planar, because
+contracting edges will not affect planarity, and neither will going from
+ to a subgraph.</p>
+<p>Rather than think of a minor 
+as the result of a sequence of operations done to , it can help to trace back where every
+vertex of  comes from.</p>
+<details class="qa">
+<summary>What is the simplest “origin story” of a
+vertex of ?</summary>
+<p>It could have been a vertex of  to begin with.</p>
+</details>
+<details class="qa">
+<summary>What is next simplest?</summary>
+<p>A vertex of  could have started as an edge of .</p>
+</details>
+<details class="qa">
+<summary>What else could have happened?</summary>
+<p>A vertex of  could be the result of contracting an
+edge whose endpoints were themselves the results of edge contraction(s).
+We could have an arbitrarily large set of vertices in  that all collapse down to one vertex in
+.</p>
+</details>
+<p>There is only one restriction on the set of vertices that collapse
+down to one vertex in . Such a set
+only shrinks due to contracting an edge between two of its vertices, so
+if we can get it down to a single vertex, it’s because the set was
+originally a connected subgraph of . So, we can identify the vertices of
+ with disjoint connected subgraphs
+of ; if two vertices of  are adjacent, then the corresponding
+subgraphs of  must have at least
+one edge between them.</p>
+<p><a class="booklink" href="#fig:1x2x2-k33-minor">Figure 22.4(b)</a> and <a class="booklink" href="#fig:1x2x2-k5-minor">Figure 22.4(c)</a> show two examples of this.
+Well, to be precise, they show only the subgraphs which are to be
+contracted to vertices. In <a class="booklink" href="#fig:1x2x2-k33-minor">Figure 22.4(b)</a>,
+the three vertical (blue) subgraphs become one side of , and the three horizontal (red)
+subgraphs become the other side. To verify that we really do get a  minor, we need to check that
+between each red vertex and each blue vertex, there is at least one
+edge. Verifying a  minor takes
+less explanation: in <a class="booklink" href="#fig:1x2x2-k5-minor">Figure 22.4(c)</a>,
+we need to check that there is an edge between every pair of the  circled regions.</p>
+<details class="qa">
+<summary>Why is finding a  minor or a  minor in a graph  interesting?</summary>
+<p>It shows that  is not planar: if  were planar, then all its minors would
+be planar, which is not true of  or .</p>
+</details>
+<p>Klaus Wagner was the first to study graph minors in 1937 . Among other results, he
+proved the analog of Kuratowski’s theorem for graph minors:</p>
+<div class="theorem" id="thm:wagner">
+<p><strong>Theorem 22.8</strong> (Wagner’s theorem). <em>A graph  is planar if and only if it does not
+have a minor isomorphic to 
+or .</em></p>
+</div>
+<p>As a characterization of planar graphs, Wagner’s theorem follows from
+Kuratowski’s theorem: if  contains
+a subdivision of  or , then by contracting all the edges
+along paths in that subdivision, we can obtain a  or  minor. As far as we’re concerned in
+this book, Wagner’s more significant contribution is the concept of
+graph minors. Not all minors arise from subdivisions; in fact, it’s
+possible to find a minor isomorphic to  in a graph which does not contain any
+subdivisions of . So looking for a
+ minor or a  minor is easier than looking for a
+subdivision—once you’re comfortable with the definition of a minor.</p>
+<p>Outside the study of planar graphs, Wagner’s work proved to be a
+greater influence on graph theory, because classifying graphs using
+their minors turned out to be a much more useful approach than
+classifying graphs using their subdivisions.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="overlap-graphs">Overlap graphs</h2>
+<p>A different approach to testing whether a graph is planar was first
+described in 1959 by Tutte . It is less well-known than Kuratowski’s
+theorem, but in my opinion, it is easier to use in small examples, and
+it can be the basis for efficient algorithms for planarity testing, as
+well. What’s more, it is not just a way to prove that a graph is not
+planar; it can help find a plane embedding.</p>
+<p>The idea is similar to the approach we took in the previous chapter
+to prove that  is not
+planar. It begins by choosing a cycle in the graph we want to test for
+planarity. A Hamilton cycle works best, but of course Hamilton cycles
+can be hard to find, and we don’t want to turn an easier problem into a
+harder problem! We can try the test with any cycle; however, the longer
+it is, the better.</p>
+<figure class="bookfig" id="fig:overlap-example">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:1x2x2-labeling">
+
+<figcaption>A vertex labeling</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:1x2x2-hamilton">
+
+<figcaption>A Hamilton cycle</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:1x2x2-overlap">
+
+<figcaption>Its overlap graph</figcaption>
+</figure>
+</div>
+<figcaption>Showing that a graph is not planar using overlap
+graphs</figcaption>
+</figure>
+<p>As an example, I will show you how this approach works on the graph
+ in <a class="booklink" href="#fig:kuratowski-example">Figure 22.3</a>. I have drawn it again
+with the vertices labeled in <a class="booklink" href="#fig:1x2x2-labeling">Figure 22.5(a)</a>
+for two reasons: for ease of use, and also to point out a Hamilton
+cycle. In <a class="booklink" href="#fig:1x2x2-hamilton">Figure 22.5(b)</a>, that Hamilton cycle is
+drawn around a circle, and this picture is good to keep in mind for
+intuition.</p>
+<p>In a hypothetical plane embedding of , this cycle (and any other cycle) must
+appear as a closed loop of some sort. The rest of  must be drawn somewhere either inside
+that closed loop or outside it. In this example, “the rest of ” is just the edges which are not part
+of the cycle.</p>
+<p>In general, given the graph 
+and a cycle , let  be the set of vertices on . We gather the vertices and edges of
+ which are not on  into <em>fragments</em>, defined as
+follows:</p>
+<ul>
+<li><p>Every edge of  whose
+endpoints are both in  is a
+fragment.</p></li>
+<li><p>Each connected component of  , together with the edges it has to
+, is a fragment.</p></li>
+</ul>
+<p>The motivation behind this definition is that a fragment is something
+that must either be drawn entirely inside  in a plane embedding of , or else entirely outside it: it cannot
+cross . For two different
+fragments, on the other hand, we can make different decisions. In our
+example, all fragments are edges, because  is a Hamilton cycle.</p>
+<details class="qa">
+<summary>Why shouldn’t we have defined edges like
+ and , which share an endpoint, to be
+part of the one fragment?</summary>
+<p>Because we don’t have to draw them on the
+same side of the cycle: to draw edge  inside the cycle and edge  outside it, no edges need to
+cross.</p>
+</details>
+<p>The decisions that we make for different fragments are not entirely
+independent. For example, edge  and edge  would intersect if we drew them
+both inside the Hamilton cycle, or both outside. To keep track of this
+information, we define a new graph, called the <em>overlap graph</em> of
+the cycle . Its vertices are
+fragments, and they are adjacent if they “overlap”: if they cannot be
+drawn on the same side of .</p>
+<p>A practical definition of the overlap graph in our case is that it
+has a vertex for each edge not part of ; two vertices are adjacent if, in
+<a class="booklink" href="#fig:1x2x2-hamilton">Figure 22.5(b)</a>, they cross. This remains a
+perfectly good visual rule in general, but we’d like a combinatorial
+rule, because a computer cannot look at a drawing and see if two edges
+cross. The combinatorial rule for when two fragments overlap is
+this:</p>
+<ul>
+<li><p>There are four vertices  appearing in that cyclic order around the cycle .</p></li>
+<li><p>One fragment includes an edge to vertex  and an edge to vertex ; this may be satisfied by the fragment
+being edge .</p></li>
+<li><p>The other fragment includes an edge to vertex  and an edge to vertex ; this may be satisfied by the fragment
+being edge .</p></li>
+</ul>
+<p>The overlap graph in our example is shown in <a class="booklink" href="#fig:1x2x2-overlap">Figure 22.5(c)</a>.</p>
+<p>Guided by the overlap graph, we must choose for each fragment whether
+to draw it inside  or outside
+. The rule is that if two fragment
+are adjacent in the overlap graph, then one of them must be inside , and the other must be outside .</p>
+<details class="qa">
+<summary>In terms of the overlap graph, what are we
+trying to find?</summary>
+<p>A -coloring, or bipartition! The fragments
+we decide to draw inside  are one
+side of the bipartition, and the fragments we decide to draw outside
+ are the other side.</p>
+</details>
+<p>We know from <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a> that we can efficiently
+test if the overlap graph is bipartite, and <a class="booklink" href="../matchings/bipartite.html#thm:odd-cycles">Theorem 13.1</a> tells us that the
+overlap graph is either bipartite, or contains a cycle of odd length.
+That cycle is our proof that the graph cannot be drawn in the plane!</p>
+<details class="qa">
+<summary>Is there a cycle of odd length in the
+overlap graph in <a class="booklink" href="#fig:1x2x2-overlap">Figure 22.5(c)</a>?</summary>
+<p>Yes: for example, the fragments , , and  form such a cycle.</p>
+</details>
+<details class="qa">
+<summary>If the overlap graph were bipartite, would
+that be enough to conclude that 
+is planar?</summary>
+<p>Not in general: it’s also possible that a
+single complicated fragment cannot be drawn together with  without crossing, regardless of what
+other fragments are doing. The overlap graph will not detect this.</p>
+</details>
+<p>However, in an example like this one, where  is a Hamilton cycle, deciding which
+fragments are inside and which fragments are outside  is all that there is to finding a plane
+embedding. A bipartition of the overlap graph tells us exactly how to
+draw .</p>
+<p>If the overlap graph is not bipartite, then it can also guide us to
+finding a subdivision of  or
+. The very simplest case is
+what we found in this example: three edges , , and  which all overlap. In that case,
+the cycle  together with those
+three edges is a subdivision of .</p>
+<p>In more complicated cases, more work needs to be done, but the
+overlap graph can still simplify the search. Take the cycle , and the fragments forming an odd cycle
+in the overlap graph: just this portion of the graph alone is not
+planar, so it is all that is necessary to find a subdivision of  or .</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>The two graphs below were used as an example in the previous
+chapter.</p>
+
+<p>One of these is planar, and the other one is not.</p>
+<ol>
+<li><p>Identify the planar graph, and draw a plane embedding.</p></li>
+<li><p>Using one of the tools in this chapter, prove that the other
+graph is not planar.</p></li>
+</ol>
+</li>
+<li>
+<p>The five connected -regular
+graphs with  vertices are all
+shown below. Determine which of them are planar, and which are not.</p>
+
+</li>
+<li>
+<p>Prove that the Petersen graph is not planar in four different
+ways:</p>
+<ol>
+<li><p>By using <a class="booklink" href="#thm:girth">Theorem 22.6</a>.</p></li>
+<li><p>By finding a subdivision isomorphic to .</p></li>
+<li><p>By finding a minor isomorphic to .</p></li>
+<li><p>By finding a long cycle in the Petersen graph for which the
+overlap graph is not bipartite.</p></li>
+</ol>
+</li>
+<li><p>What is the maximum number of edges in an -vertex planar graph if we know it has a
+plane embedding with two faces of length ?</p></li>
+<li><ol>
+<li><p>Let  be a connected graph
+with  vertices and   edges. Prove that  is planar.</p></li>
+<li>
+<p>Let  be a graph with  vertices and   edges obtained by starting with the
+cycle graph  and adding  more edges.</p>
+<p>When is  planar, and when is
+ not planar?</p>
+</li>
+</ol></li>
+<li>
+<p>The graph in <a class="booklink" href="#fig:1x2x2">Figure 22.3(a)</a> is a   three-dimensional
+grid graph. In general, the   grid graph has vertices which are -dimensional points  with  ,  , and  ; two vertices are
+adjacent if they are at distance 
+from each other. Thinking of <a class="booklink" href="#fig:1x2x2">Figure 22.3(a)</a> as a -dimensional drawing can give you an
+idea of what an  
+grid graph looks like.</p>
+<p>For which , , and  is the   grid graph
+planar?</p>
+</li>
+<li><p>(Putnam 2007) Let a triangulated polygon be a plane embedding in
+which every face except the outer face must have length . Prove that there is a function  such that if the outer face of a
+triangulated polygon has length ,
+and every vertex not on the boundary of the outer face has degree at
+least , then the triangulated
+polygon has at most 
+faces.</p></li>
+</ol>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 22</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

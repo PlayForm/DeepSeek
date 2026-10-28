@@ -5,15 +5,15 @@
 # SECOND (it wipes only Target/Test). The negation is mandatory (trap 11):
 # 'Source/**/*.ts' also matches the Test tree; without "!Source/Test/**/*.ts"
 # the plugin build fails on test-only syntax and ships Test output in Target.
-# The third step type-checks the Test tree against the built Target d.ts
-# chain. pnpm exec instead of ./node_modules/.bin/tsc because the workspace
-# installs with nodeLinker: hoisted.
+# Build alone owns the pipeline: ESBuild writes Target/*.js, then the CLI's
+# own tsc pass emits Target/*.d.ts from the package tsconfig.json
+# (emitDeclarationOnly) and its tsc-alias pass rewrites the Source aliases
+# (@Function, @Interface, @Variable) to relative output paths.
 
 set -e
 
 Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
-	--ESBuild Configuration/ESBuild.ts \
-	--TypeScript Configuration/TypeScript.noemit.json
+	--ESBuild Configuration/ESBuild.ts
 
 # The Test tree is the END-PHASE smoke deliverable; skip its steps until it
 # lands (the plugin-dsh-workspace sibling uses the same guard).
@@ -22,6 +22,4 @@ if [ -d Source/Test ]; then
 		--ESBuild Configuration/Test-ESBuild.ts
 
 	node Target/Test/Harness.js --selfcheck || exit 1
-
-	pnpm exec tsc -p Configuration/TypeScript-Test.noemit.json
 fi

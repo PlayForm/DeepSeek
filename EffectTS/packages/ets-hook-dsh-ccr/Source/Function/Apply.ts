@@ -72,18 +72,12 @@ import type Config from "@Interface/Config.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
 
+import Version from "../Variable/Version.js";
 import Compress, { type Verdict } from "./Compress.js";
 import { Decide, type EngineRecord, type EngineRuntime } from "./Engine.js";
 import Marker from "./Marker.js";
 import Retrieve from "./Retrieve.js";
 import Store, { type Eviction } from "./Store.js";
-
-// The bundle version, mirrored from package.json (the activation proof's
-// first field; a release bumps both together). EffectTS identity: the
-// EffectTS tree's packages are all 0.2.0, so the activation proof says
-// `bundle 0.3.0` (the only identity-driven delta from the Boilerplate
-// reference; asserted byte-identically by the smoke).
-const Version = "0.3.0";
 
 export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context

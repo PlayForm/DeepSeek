@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="graph-suggester",r=t,e=["pluginFactory","workspaceGraph"],n=o;var c={name:p,apply:n,Config:r,inject:e};export{r as Config,n as apply,c as default,e as inject,p as name};
+import o from"./Function/Apply.js";import r from"./Variable/Config.js";import t from"./Variable/Version.js";const p="graph-suggester",e=r,n=["pluginFactory","workspaceGraph"],i=o;var m={name:p,apply:i,Config:e,inject:n};export{e as Config,t as Version,i as apply,m as default,n as inject,p as name};

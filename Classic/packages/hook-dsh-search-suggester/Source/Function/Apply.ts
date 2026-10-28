@@ -71,6 +71,7 @@ import type Config from "../Interface/Config.js";
 import type { CallView, Intent, Verdict } from "../Interface/Execution.js";
 import type Projection from "../Interface/Projection.js";
 import type State from "../Interface/State.js";
+import Version from "../Variable/Version.js";
 import Detect from "./Detect.js";
 import DismissTool from "./Dismiss.js";
 import Filter from "./Filter.js";
@@ -83,10 +84,6 @@ import BuildProjection from "./Projection.js";
 import Ring, { type RingState } from "./Ring.js";
 import Score, { NoteKey } from "./Score.js";
 import Seed from "./Seed.js";
-
-// The bundle version, mirrored from package.json (the activation proof's
-// first field; a release bumps both together).
-const Version = "0.3.0";
 
 /** The learning-only tools: observed for the follow/ignore rules, never noted. */
 const Learning = ["write", "edit", "raw-write"];

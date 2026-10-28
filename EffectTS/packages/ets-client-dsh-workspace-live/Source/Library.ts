@@ -15,10 +15,17 @@
 // at the END of the invisible flow; it never re-renders continuously and
 // never conflates a running OS process with a managed entity.
 import Definition from "@Variable/Config.js";
+import Version from "@Variable/Version.js";
 
 export const name = "client-dsh-workspace-live";
 
 export const Config = Definition;
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define) - NOT a loader key: the contract's four names (name, apply,
+// Config, inject) are unchanged, and the default object below stays exactly
+// { name, apply, Config, inject }.
+export { Version };
 
 export const inject: string[] = [];
 

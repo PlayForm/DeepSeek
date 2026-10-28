@@ -1,12 +1,11 @@
 // Run-Types - the repo-level type gate (the shell-free replacement for
 // trusting `pnpm run build`, which logs TypeScript diagnostics without
-// failing and only tsc-checks Source/Test via prepublishOnly). Enumerates
-// every package directory under `Classic/packages/` and `EffectTS/packages/`
-// that contains `Configuration/TypeScript.noemit.json`, runs
-// `pnpm --config.verify-deps-before-run=false exec tsc -p
-// Configuration/TypeScript.noemit.json --pretty false` in each package
-// directory, and FAILS (exit 1) if any package's tsc exits non-zero - the
-// honest gate: a red tree is a red gate.
+// failing). Enumerates every package directory under `Classic/packages/` and
+// `EffectTS/packages/` that contains `tsconfig.json`, runs
+// `pnpm --config.verify-deps-before-run=false exec tsc -p tsconfig.json
+// --noEmit --pretty false` in each package directory, and FAILS (exit 1) if
+// any package's tsc exits non-zero - the honest gate: a red tree is a red
+// gate. `--noEmit` keeps the gate read-only: `Build` owns the Target emit.
 //
 // The output: one `PASS` / `FAIL <n> diagnostics` line per package, the first
 // 12 diagnostic lines per failing package (bounded so a red run stays

@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="hook-dsh-workspace-merge",e=t,r=["pluginFactory","fs"],n=o;var s={name:p,apply:n,Config:e,inject:r};export{e as Config,n as apply,s as default,r as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import r from"./Variable/Version.js";const p="hook-dsh-workspace-merge",e=t,n=["pluginFactory","fs"],i=o;var f={name:p,apply:i,Config:e,inject:n};export{e as Config,r as Version,i as apply,f as default,n as inject,p as name};

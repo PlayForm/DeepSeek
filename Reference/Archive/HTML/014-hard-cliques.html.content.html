@@ -1,0 +1,1006 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Cliques and Independent Sets</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 18</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>The focus of this chapter betrays my interests: more than half of it
+has ended up related to Ramsey numbers and Ramsey’s theorem. At the same
+time, I am laying the groundwork for several topics in the next chapter:
+interval graphs, greedy algorithms, and even random graphs with no large
+cliques or independent sets will all help us understand vertex
+coloring.</p>
+<p>I briefly considered whether this book has too many chess puzzles in
+it, but the contrast between the queen placement problem in this chapter
+and the rook placement problem in <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a>
+will be very useful for us as an example later on in <a class="booklink" href="../hard/line.html">Chapter 20</a>. (I mention some of the
+connections in this chapter as well, so be sure you remember what the
+matching number  and
+vertex cover number 
+mean.)</p>
+<p>There is some redundancy built into my presentation of several of
+these topics, which explains how long this chapter has gotten.
+<a class="booklink" href="#prop:proto-ramsey">Proposition 18.2</a> and <a class="booklink" href="#thm:ramsey-gg">Theorem 18.4</a> arrive at almost the same
+destination, one using algorithms and the other by induction. Before the
+proof of <a class="booklink" href="#thm:ramsey-random">Theorem 18.5</a>, I present the same argument
+with concrete numbers. I do this so that you (as a reader or as a
+teacher) can choose which of these work best for you.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="two-problems-about-queens">Two problems about queens</h2>
+<p>We have already looked at several puzzles about chess pieces, with
+rooks appearing in <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a>
+and knights appearing in <a class="booklink" href="../hard/hamilton.html">Chapter 17</a>. Now it is time to look
+at the most powerful chess piece of all: the queen. The queen is a chess
+piece that can move any number of squares horizontally, vertically, or
+diagonally.</p>
+<p>The classic  queens puzzle is
+the following: can you place 
+queens on a standard  
+chessboard so that none of the queens attack each other—that is, none of
+them can move to a square occupied by another? This is a strictly harder
+version of the problem posed in <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a>, where we placed rooks
+under the same condition, because a queen has all the movement potential
+of a rook, and more. It is still true that we cannot place two queens in
+the same rank or the same file, and so  queens is the absolute limit. However,
+putting all the queens in different ranks and files is not enough, due
+to the diagonal moves.</p>
+<p>An early summary of the problem was given in <em>Mathematical
+Recreations and Essays</em> by W. W. Rouse Ball in 1892, republished
+many times since . A
+total of  solutions are possible,
+but if we consider two solutions to be the same if they differ only by a
+rotation or reflection, then there are only  different possible solutions to
+consider. One of them is shown in <a class="booklink" href="#fig:8-queens">Figure 18.1(a)</a>; can you
+find a different solution yourself?</p>
+<figure class="bookfig" id="fig:queen-puzzles">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:8-queens">
+
+<figcaption> non-attacking
+queens</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:16-queens">
+
+<figcaption> non-attacking queens,
+twice</figcaption>
+</figure>
+</div>
+<figcaption>Solutions to two puzzles about queen placements</figcaption>
+</figure>
+<p>We can keep going. <a class="booklink" href="#fig:16-queens">Figure 18.1(b)</a> shows
+two simultaneous solutions to the 
+queens puzzle that do not share any squares: one with  white queens, and one with  black queens. An even more impressive
+solution was found by Rob Pratt , who placed six solutions to the  queens puzzle on a chessboard
+simultaneously, and verified that more is impossible.</p>
+<details class="qa">
+<summary>In fact, without seeing either of the
+diagrams in <a class="booklink" href="#fig:queen-puzzles">Figure 18.1</a>,
+you can argue that if a solution to the  queens puzzle exists, then we can solve
+the version with  queens as well.
+How?</summary>
+<p>Combine a solution to the  queens puzzle with its mirror image!
+The mirror image of a queen’s location cannot be occupied by another
+queen, because then those two queens would attack each other.</p>
+</details>
+<p>Both of these problems can be modeled using graph theory. For the
+ queens puzzle itself, we define
+the <em>  queen graph</em>
+to have  vertices, one for each
+square of the chessboard, with an edge for between every two vertices
+that share a rank, file, or diagonal. Then our goal is to select  vertices from this graph with no edges
+between them.</p>
+<p>For the problem of simultaneous solutions in multiple colors, define
+a graph whose  vertices are the
+ different possible solutions to
+the  queens puzzle, Make two
+vertices adjacent if the solutions overlap, so that they cannot be
+placed on the chessboard simultaneously. Then our goal is to select as
+many vertices as possible from this graph with no edges between
+them—another instance of the same problem!</p>
+<p>In general, we make the following definitions:</p>
+<div class="defn">
+<p><strong>Definition 18.1</strong>. <em>An <strong>independent
+set</strong> in a graph  is a set
+of vertices   such
+that no two vertices in  are
+adjacent. The <strong>independence number</strong> of , denoted , is the number of vertices in a
+maximum independent set in .</em></p>
+</div>
+<p>We defined the graphs in our previous problems such that edges
+represent conflicts, and so the set that we want to choose is a set of
+vertices with no edges between them. Instead, we could have defined the
+graphs so that edges represent compatibility. That is, two squares on
+the chessboard would be adjacent if two queens on those squares do not
+attack each other, and two solutions to the  queens puzzle would be adjacent if they
+do not overlap. This graph would be the complement of the   queen graph.</p>
+<p>If we had done this, we would be looking for a different object,
+which has its own definition.</p>
+<div class="defn">
+<p><strong>Definition 18.2</strong>. <em>A <strong>clique</strong> in a
+graph  is a set of vertices   such that every pair of
+vertices in  is adjacent. The
+<strong>clique number</strong> of , denoted , is the number of vertices in a
+maximum clique in .</em></p>
+</div>
+<p>It is hard to say why 
+(alpha) and  (omega) were
+chosen to represent these quantities, but at the very least there is
+some relationship there:  is
+the first letter in the Greek alphabet, and  is the last.</p>
+<p>Previously, we’ve referred to complete graphs as cliques, and this is
+not a coincidence: a set of vertices  is a clique precisely when the induced
+subgraph  is a copy of the
+complete graph . In
+principle, we could have defined cliques to be complete subgraphs of
+, but this is not as useful. The
+edges in the subgraph don’t tell us anything: they are simply all
+present.</p>
+<details class="qa">
+<summary>What kind of subgraph is induced by a
+-vertex independent set?</summary>
+<p>A copy of , also known as the empty
+graph.</p>
+</details>
+<p>The queen graph is a bit asymmetric: the corner and edge vertices
+have fewer neighbors. A more mathematically elegant version of the
+problem makes all vertices equal, by allowing queen moves that wrap
+around the board. For example, the diagonal through the squares <span class="sans-serif">f1</span>, <span class="sans-serif">g2</span>, <span class="sans-serif">h3</span> would continue to <span class="sans-serif">a4</span>, <span class="sans-serif">b5</span>, and so
+on, as though we had glued opposite sides of the board to make a
+cylinder.</p>
+<p>More generally, we define the periodic   queen graph to have vertices
+ where   and  ; here,  and  represent the horizontal and vertical
+coordinates of a square. Two vertices  and  are
+adjacent when   or   or   or
+ .
+The “mod ” is what makes the board
+wrap around. With this modification, the side and corner squares are now
+just like every other square of the board.</p>
+<p>Unfortunately, there is no -vertex independent set in the periodic
+  queen graph: no solution
+to the  queens problem on a board
+that wraps around. George Pólya proved this in 1921 , along with a general
+statement: the periodic  
+queen graph has an -vertex
+independent set exactly when  is
+not divisible by  or .</p>
+<p>Remarkably, in such cases, we can even place  disjoint solutions on the   board, occupying every square!
+This object is known as a Knut Vik design, and has applications in
+minimizing the variability of statistical experiments. A Knut Vik design
+for all   boards where
+ is not divisible by  or  was first constructed by Samad Hedayat
+and Walter Federer in 1975 .</p>
+<p>(In general, a partition of a graph into independent sets is called a
+<em>proper coloring</em>, and will be discussed in the next
+chapter.)</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="redundancies-and-relationships">Redundancies and
+relationships</h2>
+<p>Applications such as the 
+queens puzzle could be modeled either by cliques or by independent sets.
+Why, then, do we define both invariants to begin with? We could simply
+adopt the convention that we always use the “conflict” definition, where
+two vertices are adjacent if they’re incompatible. Then, we’d always be
+looking for independent sets, and we’d never need to know the definition
+of a clique.</p>
+<details class="qa">
+<summary>We can always reduce the problem of
+finding cliques in a graph  to
+finding independent sets, even if it did not arise from such an
+application. How?</summary>
+<p>Take the complement graph , which has exactly the edges
+not present in . Then a clique in
+ is precisely an independent set
+in .</p>
+</details>
+<p>One of the reasons we don’t do this is that we might prefer one
+version of the graph for other reasons. This is true of the   queen graph where two vertices
+are adjacent if a queen on one square attacks the other, for example. In
+this graph, walks correspond to possible sequences of queen moves, which
+could have other applications. So if we want to keep the same definition
+of the graph for multiple puzzles, this forces our hand.</p>
+<p>Sometimes it is even interesting to study both cliques and
+independent sets in the same graph. For example, this occurs in some
+scheduling problems. If we are scheduling a number of events (such as
+presentations at a conference or a convention) then we might want to
+think about which events are happening at the same time: we could make a
+graph where every event is a vertex, and two vertices are adjacent if
+the event times overlap.</p>
+<p>Slightly more generally, suppose we have a set of intervals  in the real line. (In the scheduling problem,  and  are the starting and ending time of
+the <sup>th</sup> event.) Then we
+can define a graph whose vertices are these intervals, with an edge
+whenever two intervals overlap. Such a graph is called an
+<strong>interval graph</strong>.</p>
+<figure class="bookfig" id="fig:interval-construction">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:intervals">
+
+<figcaption> overlapping
+intervals</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:interval-graph">
+
+<figcaption>The corresponding interval graph</figcaption>
+</figure>
+</div>
+<figcaption>Constructing an interval graph</figcaption>
+</figure>
+<p><a class="booklink" href="#fig:interval-construction">Figure 18.2</a> shows a collection of
+intervals, together with the corresponding interval graph.</p>
+<details class="qa">
+<summary>In an interval graph representing a
+schedule of events, what would a clique represent?</summary>
+<p>A clique corresponds to a set of intervals
+that all overlap: a set of events all happening at the same time. (You
+might care, for example, because you want to put them all in different
+rooms.)</p>
+</details>
+<details class="qa">
+<summary>What would an independent set
+represent?</summary>
+<p>An independent set corresponds to a set of
+disjoint intervals: a set of events that don’t conflict. (You might
+care, for example, because you want to attend all of them.)</p>
+</details>
+<p>Returning to the original topic, another reason to study both cliques
+and independent sets is that we might study the relationship between
+these objects and other properties of the graph. For example, we might
+ask: how does the maximum degree of a graph affect the clique number,
+and how does it affect the independence number? Both are valid
+questions, with very different answers.</p>
+<p>In fact, there are already such connections to be explored. The
+independence number  is
+closely related to both invariants introduced in <a class="booklink" href="../matchings/konig.html">Chapter 14</a>: the matching number  and the vertex cover
+number .</p>
+<p>As far as the matching number goes, you might be a bit suspicious due
+to the similar notation. It is not an accident: the  symbol indicates that  is the “edge version” of
+. Where  is the maximum number of
+vertices that do not share any edge,  is the maximum number of
+edges that do not share any vertex. We will explore this connection and
+others like it in more detail in <a class="booklink" href="../hard/line.html">Chapter 20</a>.</p>
+<p>It is the connection to 
+that you might be surprised by.</p>
+<details class="qa">
+<summary>Suppose  is a particularly small vertex cover in
+a graph : a set of vertices
+including at least one endpoint of every edge. How can we use it to find
+a particularly large independent set in ?</summary>
+<p>The set   consisting of all vertices not in  is an independent set! If
+two vertices   were
+adjacent, then  would not contain
+any endpoint of the edge ,
+contradicting its status as a vertex cover.</p>
+</details>
+<p>Numerically:  . Once again, the question arises: why do we have two
+invariants  and  when one of them can easily be
+used to obtain the other?</p>
+<p>A good answer in this particular case is that we might be interested
+in ratios between the number of vertices in two independent sets, or two
+vertex covers. For example, if we have an algorithm that finds a vertex
+cover of at most 
+vertices, or an independent set of at least  vertices, we might say:
+that’s within a factor of  of the
+true answer, so the guarantee is good enough.</p>
+<p>In fact, such an approximation algorithm for vertex covers does
+exist—but such an approximation algorithm for independent sets does not,
+as far as we know! That’s because the relationship   does not play well with
+ratios: doubling the size of the set  is not at all the same thing as halving
+the size of the set .</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="greedy-algorithms">Greedy algorithms</h2>
+<p>In general, algorithms that find maximum cliques or maximum
+independent sets must do so by backtracking: pick a vertex, try
+including it, and if it doesn’t work out, try leaving it out. This is
+better than trying all 
+sets of vertices one by one: if we pick a vertex, then we can make some
+deductions about which other vertices cannot be picked. However, even
+the best backtracking algorithms take an exponentially long time to
+finish.</p>
+<p>If we want an answer quickly, we must give up on insisting that we
+get the right answer. The most basic technique is to use a greedy
+algorithm: to pick vertices to add to our set without considering the
+consequences for future decisions, and to see where that gets us.</p>
+<p>Here is one possible greedy algorithm for finding an independent set
+ in a graph . We begin by setting  ; we also keep track of a
+set  which contains all the
+vertices that are still available for use. Initially,  . A single iteration of the
+greedy algorithm consists of the following steps:</p>
+<ol>
+<li><p>Let  be any vertex in ; add it to the independent set,
+replacing  by  .</p></li>
+<li><p>Replace  by  : remove both
+ and  (the set of vertices adjacent to
+) from .</p></li>
+<li><p>If  ,
+stop.</p></li>
+</ol>
+<p>It is impossible for the set 
+to ever contain two adjacent vertices  and : if we ever add  to , we remove  from , and if we ever add  to , we remove  from . Therefore the output of this algorithm
+is guaranteed to be an independent set.</p>
+<details class="qa">
+<summary>If we want a greedy algorithm for finding
+a clique, how should we modify this algorithm?</summary>
+<p>At each iteration, we should replace  by   instead, so that all vertices we add in future
+iterations are adjacent to .</p>
+</details>
+<p>What’s more, the output  is
+guaranteed to be a <em>maximal</em> independent set (following the
+maximal/maximum distinction introduced in <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a>). The set  is not necessarily the largest
+independent set, but there is no bigger independent set  that contains all of . This is true because every vertex
+  is removed from  in some iteration, for one of two
+reasons:</p>
+<ol>
+<li><p> is equal to , the vertex added to  in that iteration.</p></li>
+<li><p> is adjacent to .</p></li>
+</ol>
+<p>In both cases,   is
+not a bigger independent set. In the first case, that’s because   is the same set as . In the second case, that’s because
+  is not an independent
+set; it contains the edge .</p>
+<p>This proves that  is a maximal
+independent set. However,  is not
+guaranteed to be a maximum independent set: there may well be other
+independent sets which are larger.</p>
+<details class="qa">
+<summary>Can you find a graph in which the set
+ we find is much smaller than
+another independent set?</summary>
+<p>One of many examples is the graph shown in
+<a class="booklink" href="#fig:greedy-star">Figure 18.3(a)</a>: a copy of the star graph . If the algorithm adds vertex
+ to , it will immediately get   and stop; however,   is much smaller than the
+independent set .</p>
+</details>
+<p>We might say: okay, the problem is clear. We chose a vertex with very
+high degree and removed all its neighbors from , causing the algorithm to stop very
+quickly. What if we try to be smarter about step 1 of the algorithm, so
+that at each iteration we choose the vertex  with the fewest neighbors in ?</p>
+<p>This might sometimes be a useful heuristic, but it is not guaranteed
+to work. Consider instead the graph in <a class="booklink" href="#fig:greedy-star-plus">Figure 18.3(b)</a>; here, we’ve added
+vertices  ,
+adjacent to vertices 
+and to each other.</p>
+<figure class="bookfig" id="fig:bad-independent-sets">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:greedy-star">
+
+<figcaption>A star graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:greedy-star-plus">
+
+<figcaption>Extending the star graph</figcaption>
+</figure>
+</div>
+<figcaption>Graphs which confuse the greedy independent set
+algorithm</figcaption>
+</figure>
+<details class="qa">
+<summary>What will the greedy algorithm do, given
+the graph in <a class="booklink" href="#fig:greedy-star-plus">Figure 18.3(b)</a>,
+if it chooses the vertex with the fewest neighbors in  at each step?</summary>
+<p>The first vertex chosen will still be
+vertex , because it has degree
+ and all other vertices have
+degree at least  . Then, vertices
+ will be deleted, and
+the second vertex will be one of  . Then, all remaining vertices will be deleted, and the
+algorithm will find a -vertex
+independent set.</p>
+</details>
+<details class="qa">
+<summary>What is the largest independent set in the
+graph in <a class="booklink" href="#fig:greedy-star-plus">Figure 18.3(b)</a>?</summary>
+<p>The set , which is  times bigger than the set
+found by the greedy algorithm.</p>
+</details>
+<p>There is no rule for choosing vertices in the greedy algorithm that’s
+always guaranteed to do well. However, at the very least, we can use the
+greedy algorithm to prove worst-case bounds.</p>
+<div class="prop" id="prop:greedy-alpha">
+<p><strong>Proposition 18.1</strong>. <em>If  is an -vertex graph with maximum degree , then  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> To prove the lower bound, we find an independent set
+in  using the greedy algorithm,
+taking no special care in choosing the vertex  at each iteration.</p>
+<p>Nevertheless, what we can guarantee is that at each iteration, at
+most   vertices are
+removed from . We remove  and all neighbors of the chosen vertex
+ in . There are at most  such neighbors; there could be
+fewer if  ,
+or if not all neighbors of  are
+still in , but there cannot be
+more.</p>
+<p>The algorithm does not stop until  is empty, but since each iteration
+removes at most   out of
+ vertices from , there must be at least  iterations. At each
+iteration, one vertex is added to ; therefore, the output of the algorithm
+is an independent set  with at
+least 
+vertices. Therefore  is
+also at least . ◻</p>
+</div>
+<details class="qa">
+<summary>What lower bound can we get for the clique
+number ?</summary>
+<p>Since  , we have
+ where  is the minimum degree of .</p>
+</details>
+<p>Here, the identity   holds because a maximum-degree vertex in  is a minimum-degree vertex in
+, and because   for
+any vertex .</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="an-indecisive-algorithm">An indecisive algorithm</h2>
+<p>In preparation for our next topic, consider a variant of the greedy
+algorithm that hasn’t made up its mind yet about whether it wants to
+find a clique or an independent set. It will still keep track of a set
+ of available vertices, initially
+equal to . It will also build
+up a set we’ll simply call ,
+initially equal to ; at
+each iteration, it will move a vertex  from  to , then update .</p>
+<p>The upside to being indecisive is that at each iteration, the
+algorithm has a choice:</p>
+<ul>
+<li><p>It could remove  and all of
+its neighbors from .</p></li>
+<li><p>It could remove  and all
+vertices which are not its neighbors from .</p></li>
+</ul>
+<p>If the algorithm always chooses the option that keeps  as large as possible, then it’s
+guaranteed to keep at least  vertices for the next
+iteration (rounded up). It must always remove , but it can keep at least half of the
+remaining vertices.</p>
+<p>The downside to being indecisive is that the final set  will not be either a clique or an
+independent set. Suppose that after  iterations, we obtain  , where  is the vertex added to  at the <sup>th</sup> iteration.</p>
+<details class="qa">
+<summary>Is there any useful property at all that
+this set  has?</summary>
+<p>We can at least guarantee that a vertex
+ is either adjacent to all of
+the vertices , or to none of them. The first case occurs when we removed
+all the non-neighbors of  from
+ in the <sup>th</sup> iteration; the second case
+occurs when we removed all the neighbors of  from  in the <sup>th</sup> iteration.</p>
+</details>
+<p>This property seems hard to make use of, but let’s try. Suppose we
+call a vertex  a “Q-type” vertex
+(Q for clique) if it is adjacent to all of , and a
+“I-type” vertex (I for independent set) if it is adjacent to none of
+these vertices. We can write  as
+the union  , where  is the set of all Q-type vertices and
+ is the set of all I-type
+vertices.</p>
+<details class="qa">
+<summary>What can we say about  and ?</summary>
+<p> is
+a clique and  is an independent
+set.</p>
+</details>
+<details class="qa">
+<summary>What is the type of vertex ?</summary>
+<p>It is both Q-type and I-type, since there
+are no vertices that come after it, so both conditions are vacuously
+true.</p>
+</details>
+<p>Except for , every vertex is
+only one of Q-type or I-type, so  . Therefore, if the indecisive algorithm only picks at the
+last possible moment whether to return the clique  or the independent set , it is guaranteed to find a set of
+ vertices.</p>
+<p>The indecisive algorithm is not usually useful in practice: for most
+problems, we have already decided whether we are looking for a clique or
+an independent set. However, we can use it to prove a relationship
+between these quantities.</p>
+<div class="prop" id="prop:proto-ramsey">
+<p><strong>Proposition 18.2</strong>. <em>If  is a graph with at least  vertices, then  . In other
+words,  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Apply the indecisive algorithm to . At the beginning,  . After one iteration, we
+replace  by a set with at least
+ elements in it, so
+we can say that  ; rounding up,  . Similarly, after a
+second iteration, we can still guarantee  . This argument can be repeated for as long as our
+lower bound on  is even,
+ensuring that  can
+be rounded up to .</p>
+<p>After the  <sup>th</sup>
+iteration, we can guarantee that  , or  . This is still enough to know that there will be an  <sup>th</sup> iteration. However,
+it’s possible that the  <sup>th</sup> iteration is the last,
+because it removes the only remaining element in .</p>
+<p>At the end, the indecisive algorithm chooses between returning a
+clique  or an independent set
+, which satisfy  . Since  , we conclude that  . This completes the
+proof, since  is at least
+ and  is at least : the largest clique and independent
+set are at least as large as the ones we found. ◻</p>
+</div>
+<p>Intuitively, we can make the independence number  small by giving  lots of edges, and we can make the
+clique number  small by
+giving  few edges. However, these
+strategies directly oppose each other, so it makes sense that we
+wouldn’t be able to keep both  and  from growing. <a class="booklink" href="#prop:proto-ramsey">Proposition 18.2</a> is the first result we will
+prove that quantifies this relationship.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="ramsey-numbers">Ramsey numbers</h2>
+<p>We can improve on <a class="booklink" href="#prop:proto-ramsey">Proposition 18.2</a> by
+noticing a flaw in how the indecisive algorithm chooses which vertices
+to keep in . All it does is pick
+the option that keeps  as large as
+possible, but if you want the final clique or independent set to be as
+large as possible, that’s not always correct.</p>
+<details class="qa">
+<summary>Why would you ever decide to keep a
+smaller set to be set  in the next
+iteration?</summary>
+<p>Suppose that the current set  contains many Q-type vertices and few
+I-type vertices. Then you might keep all the neighbors of  in , making  another Q-type vertex, even if the
+algorithm stops a bit sooner as a result.</p>
+</details>
+<p>To be strategic about it, we need to quantify the exact trade-off:
+how many fewer vertices in  are an
+acceptable price to pay in exchange for guaranteeing a vertex of the
+right type? This depends on our goals, of course. If we’d be happy with
+a clique of size  and we already
+have  Q-type vertices, we should
+make  another Q-type vertex at
+almost any cost—even if  only has
+one or two neighbors in . If we’re
+further from our goal, we should be more conservative.</p>
+<p>That’s still vague; to make it more concrete, we need to know exactly
+how many vertices in  are
+necessary to reach any particular goal we might have. So for integers
+  and  , we define the <em>Ramsey
+number</em>  to be the least
+integer  such that any -vertex graph  satisfies either   or  .</p>
+<details class="qa">
+<summary>Can we be certain that any such integer
+ exists?</summary>
+<p>Yes, by <a class="booklink" href="#prop:proto-ramsey">Proposition 18.2</a>. Take a graph  with   vertices; then  , which cannot be true if both   and  . Therefore  vertices are enough, and  is at most this big.</p>
+</details>
+<p>Ramsey numbers are named after Frank Ramsey, who was the first to
+prove a result analogous to <a class="booklink" href="#prop:proto-ramsey">Proposition 18.2</a> in
+1930 , though he was
+not interested in concrete bounds on the necessary number of
+vertices.</p>
+<p>Let me describe a concrete situation to motivate our need for Ramsey
+numbers. Suppose we are looking for a clique or an independent set of
+size . Currently, we have  vertices in : two Q-type vertices (adjacent to each
+other and all vertices in ) and
+one I-type vertex (with no neighbors in ). We’ve chosen a vertex  in the fourth iteration, and we’re
+considering what to do with the neighbors of  to prepare for the next iteration.</p>
+<ol>
+<li><p>If we keep all the neighbors of  in , then  will be another Q-type vertex. We will
+need to find either two more Q-type vertices or four more I-type
+vertices in the future.</p></li>
+<li><p>If we keep all the non-neighbors of  in , then  will be another I-type vertex. We will
+need to find either three more Q-type vertices or three more I-type
+vertices in the future.</p></li>
+</ol>
+<details class="qa">
+<summary>How should we choose between these two
+options?</summary>
+<p>If 
+has at least  neighbors in
+, then the first option is
+guaranteed to succeed. If  has at
+least  non-neighbors in , then the second option is guaranteed
+to succeed. If neither is true, then both options are risky, and we
+might need to guess.</p>
+</details>
+<p>Some people are very comfortable with algorithms; some people prefer
+more mathematical arguments. In case you are the second type of person,
+you will be happier with the following lemma, whose proof is inspired by
+the indecisive algorithm but doesn’t use it directly.</p>
+<div class="lemma" id="lemma:ramsey-recurrence">
+<p><strong>Lemma 18.3</strong>. <em>For all integers   and  , the Ramsey number  is at most the sum  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  be an
+arbitrary graph with   vertices. Our goal is to prove that this is enough to
+guarantee that either   or  .</p>
+<p>Choose any vertex  ,
+and divide   into two
+sets: , the vertices adjacent to
+, and , the vertices not adjacent to .</p>
+<p>It is impossible that both   and that  . In that case,   would be at most   or
+ : one less
+than the number of vertices we defined  to have.</p>
+<p>If  , then the
+induced subgraph  is big
+enough to either contain a -vertex
+independent set  or an  -vertex clique , by the definition of the Ramsey number
+ . Therefore  contains either a -vertex independent set  or an -vertex clique   (since  is adjacent to all vertices in , and in particular all vertices in
+).</p>
+<p>If instead  ,
+then  is big enough to either
+contain a  -vertex independent
+set  or an -vertex clique . Therefore  contains either a -vertex independent set   or an -vertex clique .</p>
+<p>In all cases, we either find a -vertex independent set or and -vertex clique in . Since  was chosen to be an arbitrary graph
+with   vertices,
+this proves that  . ◻</p>
+</div>
+<p><a class="booklink" href="#lemma:ramsey-recurrence">Lemma 18.3</a> is the foundation of a
+recurrence that can be used to get upper bounds on the Ramsey numbers.
+To use the recurrence, we also need base cases.</p>
+<details class="qa">
+<summary><a class="booklink" href="#lemma:ramsey-recurrence">Lemma 18.3</a> starts at   and  . What is  when   or when  ?</summary>
+<p>In all these cases, it is just ; even something like  is . There is only one possible -vertex graph, and it has both a -vertex clique and a -vertex independent set.</p>
+</details>
+<details class="qa">
+<summary> and  can also be computed exactly; what
+are they?</summary>
+<p>  and  . For the first of these, suppose
+we have a -vertex graph. Either it
+has no edges (and there is a -vertex independent set) or it has an
+edge  (and  is a -vertex clique). The argument for  is similar.</p>
+</details>
+<p>The general upper bound on  using this recurrence is sometimes
+also called Ramsey’s theorem, but actually, it was only proven in 1955
+by Robert Greenwood and Andrew Gleason  (who also proved <a class="booklink" href="#lemma:ramsey-recurrence">Lemma 18.3</a> in the process).</p>
+<div class="theorem" id="thm:ramsey-gg">
+<p><strong>Theorem 18.4</strong>. <em>For all integers   and  ,  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We induct on  . (That is, if  is the statement that the theorem
+holds for all integers   and
+  with  , then we prove  for all   by induction on .)</p>
+<p>As our base case, we can take any of   (where there is nothing to prove),
+or   (where  ), or   (where   and  ), but eventually we
+will have to induct.</p>
+<p>Consider some   and   with  , and assume the following
+induction hypothesis: for all   and   with
+ , we have the
+upper bound  . Actually, we only need it
+for two values of  and : the ones that appear in the
+right-hand side of <a class="booklink" href="#lemma:ramsey-recurrence">Lemma 18.3</a>.</p>
+<details class="qa">
+<summary>If   or  , we cannot apply <a class="booklink" href="#lemma:ramsey-recurrence">Lemma 18.3</a>; what do we do?</summary>
+<p>If   or  , we know that  , and in both cases the upper
+bound  simplifies
+to   or  , so we do not even
+need the induction hypothesis.</p>
+</details>
+<p>Otherwise,   and  . By <a class="booklink" href="#lemma:ramsey-recurrence">Lemma 18.3</a>,  , and both
+of the Ramsey numbers on the right-hand side are suitable for the
+induction hypothesis. We can conclude that  The right-hand side of this inequality
+simplifies directly to . This is called
+Pascal’s identity, and if you haven’t seen it before, there is a short
+combinatorial argument. By its combinatorial definition,  counts the  -element subsets  . These
+come in two types. If  , then  is a subset of
+ , and so there
+are  cases of
+this type. If  , then
+  is a  -element subset of  , and so there are
+ cases of this
+type.</p>
+<p>Altogether, there must be  
+subsets. We already know there are  subsets, so these two
+expressions must be equal. Returning to our upper bound on , we can replace one expression by
+the other and get  . This proves the induction step, completing
+the proof of the theorem. ◻</p>
+</div>
+<p>Both Ramsey and later Greenwood and Gleason also considered a
+generalized problem. Here, we define the Ramsey number  to be the least
+ with the following property:
+whenever we write the complete graph  as the union of -vertex graphs  , there
+will be some  such that  . Sometimes, this is
+phrased as coloring the edges of  using  different colors, but I will avoid this
+so that you don’t confuse it with all the other ways we will color a
+graph.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="lower-bounds">Lower bounds</h2>
+<p>Once we have defined Ramsey numbers, it is tempting to try to figure
+out an exact formula for them, or at least an approximate one. Our first
+upper bound on  was , and our second bound of  has a similar rate of
+growth, at least when  . Is this
+anywhere close to the truth? How would we know?</p>
+<p>In the definition of the Ramsey number , we ask for the least  such that every -vertex graph satisfies a condition. To
+prove that  , it is
+enough to find a single  -vertex graph which does not yet
+satisfy the condition. (Such graphs are sometimes called Ramsey graphs,
+because of their use in proving lower bounds for Ramsey numbers.)</p>
+<figure class="bookfig" id="fig:ramsey-lower-bounds">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:ramsey-c5">
+
+<figcaption>The cycle graph </figcaption>
+</figure>
+
+
+</div>
+<figcaption>Lower bounds for a few small Ramsey numbers</figcaption>
+</figure>
+<p><a class="booklink" href="#fig:ramsey-lower-bounds">Figure 18.4</a> shows a few of the
+graphs we need.</p>
+<ul>
+<li>
+<p>The cycle graph , shown
+in <a class="booklink" href="#fig:ramsey-c5">Figure 18.4(a)</a>, has no -vertex clique or -vertex independent set. This proves
+that  : we need at least
+ vertices to guarantee one of
+these objects, because  are not
+enough.</p>
+<p>In fact, <a class="booklink" href="#thm:ramsey-gg">Theorem 18.4</a> proves an upper bound of   on
+, so we know that  .</p>
+</li>
+<li><p>The circulant graph  shown in
+<a class="booklink" href="#fig:ramsey-wagner">Figure 18.4(b)</a> has no -vertex clique or -vertex independent set, and it has
+ vertices, so it proves that  . <a class="booklink" href="#thm:ramsey-gg">Theorem 18.4</a> only proves that  , but in one of the practice problems, I will ask you to
+improve this upper bound: in fact,  .</p></li>
+</ul>
+<details class="qa">
+<summary>What about ?</summary>
+<p>It is also equal to ; in fact,  and  are always equal. The lower bound
+that proves   is the
+complement of : the circulant
+graph . A
+similar trick of complements can be used to show that every -vertex graph contains a -vertex independent set or an -vertex clique, then it is also true
+that every -vertex graph contains
+an -vertex independent set or a
+-vertex clique.</p>
+</details>
+<ul>
+<li>
+<p>Taking   for
+granted, it follows from <a class="booklink" href="#lemma:ramsey-recurrence">Lemma 18.3</a> that  . In fact,
+ ; to prove this, we need
+a -vertex graph.</p>
+<p>The graph in <a class="booklink" href="#fig:ramsey-17">Figure 18.4(c)</a> is one
+such graph: the circulant graph . This
+graph has no -vertex clique or
+-vertex independent set, so it
+proves the lower bound  .</p>
+</li>
+</ul>
+<p>Of course, we cannot go on forever like this; to give a general lower
+bound, some general scheme for constructing these graphs is needed.
+Unfortunately, it has been very difficult to construct these graphs. We
+run into two kinds of problems. First, most simple rules defining an
+arbitrarily large graph will give it a large clique or a large
+independent set. Second, when we eventually do find a general
+construction that looks promising, we often find out that proving
+something about its cliques or independent sets turns into an unsolved
+problem in number theory.</p>
+<p>(Why number theory? Well, the offsets of the circulant graph  in
+<a class="booklink" href="#fig:ramsey-17">Figure 18.4(c)</a> are not arbitrary: they are the
+quadratic residues modulo . That
+is, every perfect square is congruent modulo  to one of , , , or . Graphs constructed in this way are
+called Paley graphs, and they are often useful for proving lower bounds
+on Ramsey numbers; however, we don’t understand quadratic residues well
+enough to say what the lower bounds are in general.)</p>
+<p>The best we’ve been able to do is to give up and pick a graph at
+random, showing that the result is very unlikely to have a large clique
+or a large independent set. Let me first illustrate this with concrete
+numbers. Suppose we define a graph  on  vertices by flipping a coin for every possible edge to see
+if it’s present or absent. What are the odds that this random graph
+ will have a -vertex clique?</p>
+<p>There are   ways to choose  of the vertices of . Each one of those -vertex sets could in theory be a -vertex clique… but that’s very
+unlikely. There are   edges between those 
+vertices, so we flip  coins to
+decide which edges between the vertices are present. In order for us to
+get a clique, all the coin flips have to go one way, which has a
+probability of  .</p>
+<p>If you bought  tickets for a lottery that chose one winning ticket
+out of , then to find your
+total chances of winning, it would be enough to multiply these two
+numbers together. This would give us   or about  . The clique problem
+is actually even worse, due to overlaps. After we consider the first
+clique, the second doesn’t contribute its whole  probability, because some of
+those cases were already counted: the two cliques appear
+simultaneously!</p>
+<p>Rather than consider what the situation with overlaps is, we can
+simply say that the probability of having a -vertex clique is at most  . We get the same
+probability for a -vertex
+independent set: once again, all the coin flips have to go one way for
+all  edges between vertices of a
+set. Since both probabilities are tiny, we conclude that this random
+-vertex graph is almost
+certain not to have a -vertex
+clique or -vertex independent
+set, proving that  .</p>
+<p>In 1947, Pál Erdős proved  that this gives an exponential lower bound
+on the Ramsey numbers:</p>
+<div class="theorem" id="thm:ramsey-random">
+<p><strong>Theorem 18.5</strong>. <em>For all  ,  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Pick a random graph on   vertices by flipping a coin for every edge. There are
+ possible -vertex sets; each has a  chance of being a clique,
+and another  chance
+of being an independent set, for a total probability of  of doing anything of
+interest.</p>
+<p>As before, we get an upper bound on the probability that any of these
+cliques or independent sets are created by multiplying these quantities
+together:  . It is always true that  , and for  , it is true that  . Applying both inequalities, our upper bound becomes   or , which
+is less than  as soon as  .</p>
+<p>Therefore the probability that the random graph doesn’t do what we
+want is less than : some of the
+-vertex graphs we could get have
+neither -vertex cliques nor -vertex independent sets. This shows
+that  . ◻</p>
+</div>
+<p>The bounds  
+and  
+(which grows roughly as ) are
+fairly far apart, though they are both exponential; for example, they
+tell us that  . It has been at least 70 years since any of the results
+mentioned in this chapter so far; has there been improvement since
+then?</p>
+<p>There has been and there still is a lot of work done on specific
+small Ramsey numbers. A dynamic survey of the best-known bounds is
+maintained by Stanisław Radziszowski . For reference, at the time of
+writing, it gives the bounds  : much better than  and .</p>
+<p>Improvements to general bounds on  have also been made. When I first
+taught graph theory, I had to conclude this topic by saying that the
+bases of the exponents in the bounds ( for the lower bound and  in the upper bound) are still
+untouched, with improvements only in polynomial factors. As of 2023,
+that is no longer true: a paper by Campos, Griffiths, Morris, and
+Sahasrabudhe 
+followed by another from Gupta, Ndiaye, Norin, and Wei  have brought down the
+upper bound to roughly  .</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Consider the graph whose vertices are the ordered pairs  where   and  , and where two vertices  and  are adjacent whenever
+ . (This is a complete
+-partite graph where each part has
+size .)</p>
+<ol>
+<li><p>What is the clique number of this graph? Describe what the
+largest cliques look like.</p></li>
+<li><p>What is the independence number of this graph? Describe what the
+largest independent sets look like.</p></li>
+</ol>
+</li>
+<li>
+<p>Let  be the graph with
+vertex set  in
+which two vertices are adjacent if one is divisible by the other.</p>
+<ol>
+<li><p>What is the independent set in  found by a greedy algorithm which looks
+at all the vertices of  in
+ascending order? (And why is this a uniquely bad order in which to look
+at the vertices?)</p></li>
+<li><p>Find the independence number of .</p></li>
+<li><p>Find the clique number of .</p></li>
+</ol>
+</li>
+<li>
+<p>Take an   grid and
+number the rows and columns 
+through . Then fill the grid as
+follows: in the entry in row  and
+column , write the remainder when
+  is divided by : a number between  and  . (This is the construction found by
+Hedayat and Federer in .)</p>
+<p>Prove that that when  is not
+divisible by  or , these labels form a Knut Vik design:
+if we pick any label between  and
+  and place a queen on all
+entries with that label, then this is a set of  non-attacking queens, even if diagonals
+wrap around.</p>
+</li>
+<li><ol>
+<li><p>Verify that the graphs in <a class="booklink" href="#fig:ramsey-lower-bounds">Figure 18.4</a> really do prove the
+lower bounds  ,  , and  , by checking that they have
+no cliques or independent sets of the relevant sizes.</p></li>
+<li>
+<p>Prove that   by
+contradiction, supposing there is a -vertex graph with no vertex  that has  neighbors or  non-neighbors. What would the
+degree sequence of this graph be?</p>
+<p>If you prefer, prove the generalization: when   and   are both even, then <a class="booklink" href="#lemma:ramsey-recurrence">Lemma 18.3</a> can be improved to
+ .</p>
+</li>
+</ol></li>
+<li><p>In terms of , find the
+minimum and maximum number of edges in a -vertex graph with independence number
+.</p></li>
+<li>
+<p>In this problem, you will see one possible deterministic
+alternative to <a class="booklink" href="#thm:ramsey-random">Theorem 18.5</a>,
+and see how it compares to the random construction.</p>
+<p>Let  be the -cycle . Then, for each  , construct  by starting with , and then replacing</p>
+<ul>
+<li><p>Each vertex  of  by five vertices  with a -cycle through them;</p></li>
+<li><p>Each edge  of  by  edges  for  .</p></li>
+</ul>
+<p>In other words, we replace the vertices of  by copies of .</p>
+<ol>
+<li><p>Prove that  .</p></li>
+<li><p>Prove that  . (Induct on .)</p></li>
+<li>
+<p>We get a lower bound   by finding an -vertex
+graph  with   and  . What lower bound does
+the construction in this problem give for , and how does it compare to the
+lower bound from <a class="booklink" href="#thm:ramsey-random">Theorem 18.5</a>?</p>
+<p>What if we try to bound 
+instead?</p>
+</li>
+</ol>
+</li>
+<li>
+<p>An open problem called Conway’s -graph problem, already mentioned in
+<a class="booklink" href="../beginning/degrees.html">Chapter 4</a>, is to determine whether
+there is a -vertex graph with the
+following properties:</p>
+<ul>
+<li><p>Every two adjacent vertices have exactly one common
+neighbor;</p></li>
+<li><p>Every two non-adjacent vertices have exactly two common
+neighbors.</p></li>
+</ul>
+<p>If such a graph exists, it is known (spoilers for the previous
+practice problem) that it is -regular.</p>
+<p>Suppose  is a -vertex graph satisfying Conway’s
+conditions. What is the best upper bound you can prove on ?</p>
+<p>(When I tried solving this problem, I found three arguments, giving
+upper bounds of , , and . See how well you can do!)</p>
+</li>
+<li>
+<p>(APMO 2003) Given two positive integers  and , find the smallest positive integer
+ such that among any  people, either there are  of them who form  pairs of mutually acquainted people or
+there are  of them forming  pairs of mutually unacquainted
+people.</p>
+<p>In other words, find the smallest  such that for any -vertex graph , either   or  , where
+ is the complement of
+.</p>
+</li>
+<li>
+<p>This question is more of a puzzle than a mathematical problem. If
+ queens are placed on the
+chessboard as in <a class="booklink" href="#fig:8-queens">Figure 18.1(a)</a>, there
+is a closed knight’s tour of just the  unoccupied squares. Can you find
+it?</p>
+<p>(Up to symmetry, this is the only solution to the  queens puzzle for which such a tour
+exists. Can you guess what goes wrong with the other
+solutions?)</p>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>Often, we also say that a graph isomorphic to a graph
+obtained in this way is also an interval graph. This way, being an
+interval graph becomes a true graph invariant, and we can discuss the
+structural question of which graphs can be represented as interval
+graphs.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+<li id="fn2"><p>Together,  and
+ make , just as “you” and “I” make “we”.<a class="footnote-back" href="#fnref2">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 18</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

@@ -26,6 +26,13 @@
 // (Source/Stream/Gate.ts, Source/Function/Update.ts); this package imports
 // nothing from effect and re-exports neither. Its surface is the thirteen
 // names below.
+import Version from "./Variable/Version.js";
+
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define). This package has NO loader contract and NO Config - the
+// version sits beside the other named exports; it is not a loader key.
+export { Version };
+
 export { default as Section } from "./Variable/Section.js";
 export { default as Default } from "./Variable/Default.js";
 export { default as Suppress } from "./Function/Suppress.js";

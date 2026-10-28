@@ -12,7 +12,6 @@
   Configuration/
     ESBuild.ts            the build configuration
     ESBuild.js            the hand-kept twin the build loader swaps to
-    TypeScript.noemit.json
   Target/                 the build output; never hand-edited
   README.md               the package's public description
   SCHEME.md               the design and the method ledger
@@ -23,20 +22,24 @@ output paths by `tsc-alias`.
 
 ## The build chain
 
-`prepublishOnly` runs:
+`prepublishOnly` runs one command:
 
 ```text
-Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts \
-  --TypeScript Configuration/TypeScript.noemit.json
-&& tsc -p tsconfig.json
-&& tsc-alias -f -p tsconfig.json
+Build 'Source/**/*.ts' --ESBuild Configuration/ESBuild.ts
 ```
+
+`Build` owns the whole chain: ESBuild writes `Target/*.js`, its own `tsc -p tsconfig.json` pass
+(emitDeclarationOnly) writes `Target/*.d.ts`, and its own `tsc-alias -f -p tsconfig.json` pass
+rewrites the Source aliases to relative output paths. `tsconfig.json` is the only TypeScript config
+in a package; there is no second config and no separate `tsc` step. The tsc pass reports diagnostics
+without failing the build, so `pnpm run test:types` is the gate that goes red.
 
 Rules:
 
 1. **The red build.**
 
-    A red `tsc` fails the build.
+    A red `tsc` is reported, not enforced by `Build`; `pnpm run test:types` is the gate that fails
+    on it.
 
     No `@ts-ignore`, no skipped check.
 

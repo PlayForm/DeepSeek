@@ -1,0 +1,16 @@
+---
+title: hook-dsh-comment-filter
+line9:
+  theme: boardroom
+---
+flowchart LR
+	ConfigSchema("Config schema") -->|injects| Plugin
+	FactoryService("pluginFactory") -->|injects| Plugin
+	PreStep("agent/pre-step") -->|registers| Plugin
+	PostExecute("tools/post-execute") -->|registers| Plugin
+	Plugin("hook-dsh-comment-filter") -->|emits| Result("comment-free tool result")
+	Plugin -->|emits| Notice("omission notice line")
+	Plugin -->|writes| Ledger[("comment filter ledger")]
+	class ConfigSchema,FactoryService,PreStep,PostExecute seam
+	class Plugin plugin
+	class Result,Notice,Ledger product

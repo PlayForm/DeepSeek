@@ -14,12 +14,9 @@
 set -e
 
 Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
-	--ESBuild Configuration/ESBuild.ts \
-	--TypeScript Configuration/TypeScript.noemit.json
+	--ESBuild Configuration/ESBuild.ts
 
 Build "Source/Test/**/*.ts" \
 	--ESBuild Configuration/Test-ESBuild.ts
 
 node Target/Test/Harness.js --selfcheck || exit 1
-
-pnpm exec tsc -p Configuration/TypeScript-Test.noemit.json

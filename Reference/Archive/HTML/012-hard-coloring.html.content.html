@@ -1,0 +1,936 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Graph Coloring</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 19</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>Graph coloring is one of the iconic problems in graph theory, though
+usually people think of it in the context of coloring maps. This
+application was mentioned in <a class="booklink" href="../beginning/examples.html">Chapter 1</a>, and we will see it in
+detail later, in <a class="booklink" href="../planar/coloring-maps.html">Chapter 24</a>. The
+applications you will see in this chapter are more metaphorical versions
+of coloring—but that’s par for the course in graph theory, which is all
+about representing the world with metaphorical points and metaphorical
+lines.</p>
+<p>I begin this chapter with one upper bound and two lower bounds on
+chromatic number, and I think these are the basics you should know of
+the theory of graph coloring. Meanwhile, <a class="booklink" href="#thm:interval-coloring">Theorem 19.4</a> and <a class="booklink" href="#thm:mycielski">Theorem 19.7</a> demonstrate how these basics can
+be used. The motivation for these specific demonstrations is to show you
+an example where the clique bound of <a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> is very useful, and
+an example where it’s not at all useful; in either case, I hope that it
+gives you a sense of why the clique number does not necessarily tell us
+the chromatic number.</p>
+<p>Brooks’ theorem (which describes the conditions under which  ) is a common result
+to cover in an introductory graph theory class, but I’ve left it out. I
+have done this because I think seeing it for the first time at this
+point is extraordinarily uncompelling—and I say this as someone who has
+both used the theorem in research and taught a week-long class about
+variants of the theorem. When you just start out learning about graph
+coloring, it is unsatisfying to go to great effort to improve
+<a class="booklink" href="#prop:max-degree-coloring">Proposition 19.1</a> by a tiny amount. I
+recommend seeing Brooks’ theorem for the first time as a more
+experienced graph theorist, for example by reading “Brooks’ Theorem and
+Beyond” by Cranston and Rabern , which presents a variety of proofs of
+the theorem and its extensions.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="graph-coloring-and-sudoku">Graph coloring and Sudoku</h2>
+<figure class="bookfig" id="fig:sudoku">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:sudoku-puzzle">
+
+<figcaption>A Sudoku puzzle</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:sudoku-graph">
+
+<figcaption>The   Sudoku
+graph</figcaption>
+</figure>
+</div>
+<figcaption>Sudoku puzzles and graph coloring</figcaption>
+</figure>
+<p>In case you have never encountered a Sudoku puzzle, let me explain
+how they work. <a class="booklink" href="#fig:sudoku-puzzle">Figure 19.1(a)</a>
+shows an example of a Sudoku puzzle. It is a   grid, with its  cells grouped together into  boxes. Some of the cells already have
+numbers in them. The objective of the puzzle is to figure out which
+numbers should go in the empty cells! The rule is that in each row, each
+column, and each   box, the
+nine cells should contain the numbers 1 through 9 in some order.</p>
+<p>For example, the top left corner of <a class="booklink" href="#fig:sudoku-puzzle">Figure 19.1(a)</a> could not contain the numbers
+, because they are
+already present in its  
+box; it could also not contain the numbers  (already present in its row) or
+ (already present in its column).
+The numbers  or  have not been ruled out, though only
+one of them is correct; the other would eventually lead to a
+contradiction if you wrote it in, even though there’s no obvious problem
+yet.</p>
+<p>As usual, we would like to turn this logic puzzle into a problem of
+graph theory. The first task is to choose a graph to model it with.
+Although other options exist, for us it will be most convenient to make
+the  cells in the grid be the
+vertices of the Sudoku graph. Make two cells adjacent in this graph if
+they are in the same row, the same column, or the same   box.</p>
+<details class="qa">
+<summary>How can the rules of Sudoku be expressed
+in terms of the edges of this graph?</summary>
+<p>The goal of Sudoku is now to assign one of
+the numbers 1 through 9 to each vertex of the graph, so that adjacent
+vertices are assigned different numbers.</p>
+</details>
+<p>Since a diagram of this Sudoku graph would look like utter chaos and
+not give you any intuition at all, I have drawn a diagram of the   Sudoku graph in <a class="booklink" href="#fig:sudoku-graph">Figure 19.1(b)</a>. In   Sudoku, the rules are the same,
+except that each row, column, and   box has four numbers in it, and the cells are allowed to
+contain the numbers 1 through 4.</p>
+<details class="qa">
+<summary>In <a class="booklink" href="#fig:sudoku-graph">Figure 19.1(b)</a>, the
+1’s are all entered into the grid (and shown in the graph). In general,
+what can you say about the set of all vertices assigned the number  in a Sudoku puzzle?</summary>
+<p>Two adjacent vertices cannot both be
+assigned the number , so the set
+of vertices with a  must be an
+independent set.</p>
+</details>
+<p>The graph-theoretic rules of Sudoku happen to match a well-studied
+problem in graph theory, which is why I used Sudoku as an example to
+begin this chapter. For historical reasons, rather than assigning every
+vertex a number, we assign every vertex a color. For practical reasons,
+graph theorists are very flexible about what “colors” are. It’s fine to
+say, “We will use the set of colors ,” for example, in which
+case the numbers in a Sudoku grid are our colors.</p>
+<div class="defn">
+<p><strong>Definition 19.1</strong>. <em>A <strong>proper
+coloring</strong> (or just <strong>coloring</strong>) of a graph  is a function   such that for all
+edges  ,  . The elements of  are called colors, but can be any set
+we like.</em></p>
+</div>
+<p>Allow me to justify my terminology. The term “proper coloring” is the
+formal name for a coloring  with
+the condition that  
+for all edges , so that’s what we
+should be using. However, almost every single time we color something in
+this book, we will want a proper coloring. To omit needless words, I
+will simply say “coloring” unless emphasis is needed: for example, when
+we want to check that a coloring 
+really is proper. On the rare occasion where we want a coloring that
+might give the same color to both endpoints of an edge, I will call it
+an <em>improper coloring</em> to emphasize this.</p>
+<p>Back to graph theory! Sometimes it is convenient to think about
+coloring a graph in a different way: not as a function, but as a
+partition. We say that a <strong>color class</strong> of a coloring is a
+set of of all vertices of some color. Every vertex is in exactly one
+color class, so the color classes are a partition of ; a coloring is proper if and only if
+the endpoints of every edge are in different color classes.</p>
+<details class="qa">
+<summary>What are the color classes in the solution
+to a Sudoku puzzle?</summary>
+<p>There are  of them: for each number from  to , the set of all cells containing that
+number is a color class.</p>
+</details>
+<p>The study of graph coloring originated with a very practical coloring
+problem: given a map divided into several regions, how can we color the
+regions so that neighboring regions receive different colors? This is a
+coloring of the <em>graph of adjacencies</em> of the map: its vertices
+are the regions, with an edge between every pair of regions that share a
+border. We will not investigate this problem in detail in this chapter;
+we will return to it in <a class="booklink" href="../planar/coloring-maps.html">Chapter 24</a>, once we know
+more properties of graphs we can obtain from a map.</p>
+<p>One thing is still missing from our definition, however. It is too
+easy to color a graph: just give every vertex its own color! We are not
+very happy with this solution, for the same reason that Sudoku puzzles
+would not be very fun if you could solve them by writing the numbers
+ in the squares in
+any order. We are more interested in a coloring of a graph if it uses
+fewer colors; here are some definitions to express this.</p>
+<div class="defn">
+<p><strong>Definition 19.2</strong>. <em>A -coloring of  is a coloring of  in which the set of colors has size
+. A graph which has a (proper)
+-coloring is called <strong>-colorable</strong>.</em></p>
+<p><em>The <strong>chromatic number</strong>  is the least value of  for which  is -colorable.</em></p>
+</div>
+<details class="qa">
+<summary>The Sudoku graph is -colorable; is it -colorable?</summary>
+<p>No: all  vertices in a row (or column, or box)
+must use different colors, so at least  vertices are necessary. This is because
+the vertices in a row, column, or box form a clique.</p>
+</details>
+<p>Finding the chromatic number  is an optimization problem, like
+many we’ve seen before, and there are several observations we can make
+which are common to all optimization problems. (See <a class="booklink" href="../appendix/proof-writing.html">Appendix A</a> for more
+details.) Determining that   always comes down to two steps:
+we must show that  , and
+that  . These look like
+similar inequalities, but they’re very different in practice.</p>
+<ul>
+<li><p>Every coloring of a graph 
+gives us an upper bound on :
+a -coloring of  tells us that  . A single example is a
+proof; it might be hard to find, but it is short.</p></li>
+<li><p>To prove a lower bound  , we must show that no  -colorings of  are possible. Unless we think of
+something clever, we must resort to an exhaustive search.</p></li>
+</ul>
+<p>We will see arguments for both lower and upper bounds in this
+chapter; however, the graph coloring problem is a hard one in general,
+so we will not always be able to make the bounds meet.</p>
+<details class="qa">
+<summary>For the clique number  and the independence number
+, this is reversed: lower
+bounds are proved by example, and upper bounds need an exhaustive
+argument. Why?</summary>
+<p>Both  and  are maximization problems: we
+are trying to find the largest clique or independent set. When coloring
+a graph, we are trying to use the smallest set of colors:  is a minimization problem.</p>
+</details>
+<p>That being said, the special case of -coloring is much easier than the
+general case, and we have already encountered it in this book.</p>
+<details class="qa">
+<summary>What name do we already have for -colorable graphs?</summary>
+<p>They are precisely the bipartite graphs!
+The two color classes in a -coloring are precisely the two sides of
+a bipartition.</p>
+</details>
+<p>Intuitively, finding a -coloring is easier because, as soon as
+you give a vertex a color, you eliminate that color as an option for its
+neighbors, leaving only one option for them. This breaks down if a third
+color is available: if you give a vertex a color, its neighbors still
+have two options left.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="greedy-coloring">Greedy coloring</h2>
+<p>Just now, I told you that a single example of a -coloring is enough to prove that a
+graph  is -colorable. While that’s true, it’s
+often not good enough from a theoretical point of view, because we want
+to prove general results. To deal with a whole family of graphs and not
+just one graph, we need a strategy for coloring them. From a practical
+point of view, of course, a strategy for coloring graphs is also very
+important.</p>
+<p>The simplest graph coloring algorithm is the greedy coloring
+algorithm. It could be briefly summarized as, “Go through the vertices
+and give each vertex the first color not used on its neighbors.” To make
+the algorithm well-specified, though, so that we know what it does in
+every situation and can use it in proofs, we need to be explicit about
+the choices we’re making.</p>
+<p>First of all, we should give the colors an order, so that the phrase
+“the first color not used” makes sense. It does not matter how we do
+this, because the set of colors does not matter beyond its size. We can
+say that the set of colors is  for some , in which case the first unused color
+is just the least unused number. Often, we don’t know how many colors
+we’ll need when we start color, so we can begin by allowing all the
+positive integers, and then narrow down the set of colors to the ones we
+ended up using.</p>
+<figure class="bookfig" id="fig:tree-coloring">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:tree-bad-ordering">
+
+<figcaption>A bad vertex ordering</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:tree-good-ordering">
+
+<figcaption>A good vertex ordering</figcaption>
+</figure>
+</div>
+<figcaption>Two ways to order the vertices of a tree before coloring it
+greedily</figcaption>
+</figure>
+<p>More importantly, we should give the vertices an order: the order in
+which we color them. This choice is vitally important to the outcome.
+Consider the two diagrams in <a class="booklink" href="#fig:tree-coloring">Figure 19.2</a>,
+which show the same tree (or isomorphic trees). Of course, we know that
+the tree is -colorable, because
+all trees are bipartite—but the greedy algorithm doesn’t know!</p>
+<details class="qa">
+<summary>What happens if you greedily color the
+vertices of the tree by going left to right in <a class="booklink" href="#fig:tree-bad-ordering">Figure 19.2(a)</a>?</summary>
+<p>The colors used will be  in that order; we
+use  colors.</p>
+</details>
+<details class="qa">
+<summary>What happens if you greedily color the
+vertices of the tree by going left to right in <a class="booklink" href="#fig:tree-good-ordering">Figure 19.2(b)</a>?</summary>
+<p>The colors used will be  in that order; we
+use  colors.</p>
+</details>
+<p>In the practice problems at the end of this chapter, I will ask a few
+more questions about these examples. To summarize, if the vertices are
+ordered badly, then the greedy algorithm can color even a tree with
+arbitrarily many colors. However, if you know an optimal way to color a
+graph ahead of time, you can always convince the greedy algorithm to do
+just as well. Finding a good way to order the vertices without knowing
+the answer in advance is the hard part.</p>
+<p>Even if we don’t have a good idea for how to order the vertices,
+though, there are some worst-case guarantees.</p>
+<div class="prop" id="prop:max-degree-coloring">
+<p><strong>Proposition 19.1</strong>. <em>Any graph  with maximum degree  is  -colorable.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Give the vertex set  an arbitrary order , and color  using the greedy algorithm, using the
+positive integers as the set of colors.</p>
+<p>For each , when the greedy
+algorithm gets to vertex , that
+vertex has at most 
+neighbors among . At most 
+different colors can be represented on those neighbors. Therefore, at
+least one of the colors   does not appear on any of ’s neighbors.</p>
+<p>The greedy algorithm will never use a number higher than   if a lower one is available,
+so it will give  some color from
+the set  . This is true for each , so at the end, the greedy algorithm
+has found a coloring using at most   colors. ◻</p>
+</div>
+<p>The bound of <a class="booklink" href="#prop:max-degree-coloring">Proposition 19.1</a> is better than having
+no bound at all, but it’s not very good. However, that does not mean
+that the greedy algorithm is no good! In this chapter and later in the
+book, we will see examples where we can deduce better upper bounds from
+the greedy algorithm for specific families of graphs. To do this, we
+will use the structure of those graphs to come up with a better ordering
+of the vertices.</p>
+<p>(Of course, there are also proofs based on more sophisticated
+algorithms.)</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="two-lower-bounds">Two lower bounds</h2>
+<p>If we want to know the chromatic number of any graph for certain,
+it’s not enough to find a coloring: we must also prove that we used the
+least number of colors possible. To do this, we need lower bounds.</p>
+<p>Unfortunately, a typical answer to why a graph is not -colorable (for example) might be, “We
+tried all possible ways to color the vertices, by making guesses and
+backtracking and trying something else when they were wrong, and never
+arrived at a -coloring of the
+entire graph.” State-of-the-art techniques might combine this with a
+sequence of partial deductions of a standard type, but these are outside
+the scope of this textbook and can still be exponentially long in some
+cases.</p>
+<p>In order to make something resembling progress, we will need to lower
+our standards considerably. First, we will accept lower bounds that are
+often far from the truth, in the hope that sometimes they will still
+help us. Second, we will accept lower bounds that are themselves
+difficult to find, as long as they provide us with a short proof of a
+lower bound. This is more useful in theoretical problems, where we can
+generalize that proof to deal with a family of graphs at once.</p>
+<p>To arrive at the first such lower bound, we begin by asking: what’s
+the most straightforward graph that requires  colors? It is the complete graph : its  vertices are all adjacent, so all of
+them need different colors.</p>
+<p>Moreover, if a large graph 
+contains a copy of  inside it,
+then we know that   as
+well. Even the copy of  inside
+ needs  colors: coloring the other vertices can
+only make things worse. (In general, if  is a subgraph of , then  , because to color
+, we must first color .)</p>
+<p>Copies of  inside  correspond to -vertex cliques. The size of the largest
+clique in  is the clique number
+. We conclude:</p>
+<div class="prop" id="prop:coloring-omega-bound">
+<p><strong>Proposition 19.2</strong>. <em>For any graph ,  .</em></p>
+</div>
+<p>To be honest, I suspect that I don’t need to work hard to prove to
+you that <a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> is true. The
+difficult thing for most people to accept—and we will see later in this
+book that this has been difficult for serious mathematicians as well as
+beginners in graph theory—is that <a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> does not tell us
+everything: that  is not
+always equal to .</p>
+<p>To see why this is true, we can start by understanding when  , because another way to say
+“ ” is “ is not bipartite”, and we already know
+a lot about bipartite graphs.</p>
+<details class="qa">
+<summary>What does <a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> say about when a
+graph is not bipartite?</summary>
+<p>It says that   whenever  : that  is not bipartite whenever  contains a copy of .</p>
+</details>
+<details class="qa">
+<summary>What do we already know about subgraphs
+that mean a graph is not bipartite?</summary>
+<p>By <a class="booklink" href="../matchings/bipartite.html#thm:odd-cycles">Theorem 13.1</a>, such subgraphs are
+copies of : cycles of odd length.</p>
+</details>
+<p>Of these graphs,  is
+isomorphic to : in both cases,
+we have three vertices, and any two are adjacent. So we might say that
+<a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> identifies the
+smallest fundamental non-bipartite graph, but misses all the rest.</p>
+<p>For a higher number of colors, the reality is even more complicated,
+and <a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> is even more of an
+oversimplification. Still, it is a useful lower bound that is often
+correct in practice.</p>
+<p>What else can we use?</p>
+<p>The independence number  is the exact opposite of the
+clique number : it is the
+size of the largest set of vertices with no edges between them. So it
+may seem surprising that the independence number can also help us put
+lower bounds on the chromatic number.</p>
+<figure class="bookfig" id="fig:color-classes">
+
+<figcaption>A -coloring of a graph
+viewed as a partition into color classes</figcaption>
+</figure>
+<p>To see the connection, we switch to thinking of a coloring as a
+partition into color classes; <a class="booklink" href="#fig:color-classes">Figure 19.3</a>
+shows an example of such a partition. We started with the definition
+that a coloring is proper when the endpoints of any edge are in
+different color classes; however, another way to say this is that no two
+vertices in the same color class are adjacent. In other words, a
+coloring is proper if and only if every color class is an independent
+set.</p>
+<p>The independence number  tells us how big such color
+classes can get, and we can use this to deduce another lower bound on
+the chromatic number of .</p>
+<div class="prop" id="prop:coloring-alpha-bound">
+<p><strong>Proposition 19.3</strong>. <em>For any -vertex graph ,  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> The independence number  is the largest number of
+vertices in any independent set, so in particular every color class in a
+-coloring has at most  vertices. Together, the  color classes contain at most   vertices. Every vertex
+must be in one of the color classes, so if there are  vertices, then  . Rearranging, we
+get  . ◻</p>
+</div>
+<p>If <a class="booklink" href="#prop:coloring-alpha-bound">Proposition 19.3</a> and not
+<a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> is the reason why the
+chromatic number of a graph is large, then this could be a very subtle
+reason. We might not notice, when coloring a small portion of the graph,
+that there is a problem; the effect of having no large independent sets
+is only noticeable when we look at the graph as a whole.</p>
+<p>But is this scenario actually possible? Are there graphs  where the independence number, and not
+the clique number, controls ?</p>
+<p>In fact, not only do such graphs exist, but they are very common. In
+<a class="booklink" href="../hard/cliques.html">Chapter 18</a>, we explored what happens
+when a graph on  vertices
+is constructed by flipping coins to for each possible edge to decide if
+we include it. We discovered that it is extremely unlikely for this
+graph to have cliques or independent sets with more than  vertices.</p>
+<details class="qa">
+<summary>What would <a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> tell us about such a
+graph?</summary>
+<p>If there are no cliques with more than
+ vertices, the best we could hope
+is a lower bound of  ,
+and we might not even be able to get that.</p>
+</details>
+<details class="qa">
+<summary>What would <a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.3</a> tell us about such a
+graph?</summary>
+<p>If there are  vertices, but there are no independent sets of more
+than  vertices, then at least
+ 
+colors are needed in a coloring.</p>
+</details>
+<p>By flipping a coin for every edge, we make every -vertex graph equally likely.
+This means that, if something is true with a very high probability for
+this random graph, it is true for almost all -vertex graphs. In other words,
+ is much larger than  for almost all of these
+graphs!</p>
+<p>This does not mean, however, that <a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> is useless. While
+random graphs are a good source of examples, they do not actually
+reflect most graphs we study: if a graph is interesting to us, there is
+a good chance that it is atypical somehow. This example does not tell
+the whole story.</p>
+<p>In the rest of this chapter, we will see some alternative scenarios:
+a class of graphs in which the lower bound of <a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> always gives the
+chromatic number exactly, and class of graphs in which the chromatic
+number is much larger than both of our lower bounds.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="coloring-interval-graphs">Coloring interval graphs</h2>
+<p>In <a class="booklink" href="../hard/cliques.html">Chapter 18</a>, we introduced interval
+graphs: graphs obtained from a collection of intervals, with an edge
+between vertices whenever the intervals overlap. These are a nice
+application of graph coloring for two reasons: first, coloring interval
+graphs has useful practical applications, and second, it is easier than
+the general graph coloring problem.</p>
+<p>First, on the applications. Suppose that the intervals we use to
+build an interval graph are the start and end times of events: this is
+the setting we looked at in <a class="booklink" href="../hard/cliques.html">Chapter 18</a>.
+We previously said that both cliques and independent sets have meaning
+in this setting: cliques are sets of events all happening at the same
+time, and independent sets are sets of events that don’t conflict with
+each other.</p>
+<details class="qa">
+<summary>Actually, there’s a subtlety: by
+definition, a clique is a set of events where every pair has an overlap,
+but does this mean that there’s a single point in time when all events
+in the clique overlap?</summary>
+<p>Yes; to see this, take a clique of events,
+let  be the first of these events
+to end, and let  be the of these
+events to start. Events  and  must overlap, because they’re part of a
+clique together. At any time in that overlap, all events in the clique
+have started (because even  has
+started) but none have ended (because even  hasn’t ended).</p>
+</details>
+<p>The chromatic number of an interval graph is also a useful quantity.
+Suppose we want to pick locations for the events. Two events happening
+at the same time should be in different locations. At the same time, we
+would like to use as few locations as possible: this makes it easier to
+go from one event to another, and we might also have a limited number of
+locations available. Choosing locations for the events is exactly a
+graph coloring problem, where the locations are the colors; <a class="booklink" href="#fig:interval-coloring">Figure 19.4</a> shows a coloring of an
+interval graph, and the corresponding solution to the scheduling problem
+for the intervals.</p>
+<figure class="bookfig" id="fig:interval-coloring">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:interval-graph-coloring">
+
+<figcaption>A coloring of an interval graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:colored-intervals">
+
+<figcaption>Solving the scheduling problem</figcaption>
+</figure>
+</div>
+<figcaption>Coloring an interval graph</figcaption>
+</figure>
+<p>The same model can be useful in situations where the scheduling is
+more metaphorical. For example, graph coloring can be used in the
+register allocation problem in computer science . Here, we want to assign the variables
+used by a program to a limited supply of memory locations called
+registers (if possible); however, two variables cannot be assigned to
+the same register if they are in use at the same time. In simple
+settings, the graph that represent conflicts between the variables
+becomes an interval graph, and the assignment to registers is a coloring
+of that interval graph.</p>
+<p>The interesting thing about coloring interval graphs is that the
+complexity I alluded to in previous sections is almost not present. The
+greedy algorithm is enough to color them optimally, and the lower bound
+of <a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> gives the exact
+chromatic number, with no funny business.</p>
+<div class="theorem" id="thm:interval-coloring">
+<p><strong>Theorem 19.4</strong>. <em>If  is an interval graph, then  . Moreover, if the
+greedy algorithm is given the vertices of  in order of the starting points of the
+intervals, then it will use only  colors.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> The second half of the statement of the theorem is
+actually all we need to prove. If the greedy algorithm uses only  colors, then  ; however, by
+<a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a>,  , so the two must be
+equal.</p>
+<p>Let’s consider an iteration of the greedy algorithm in which it must
+color a vertex  associated to
+interval . To see which colors
+the algorithm cannot use, we look at the neighbors of  that already have a color. What are
+these neighbors? They correspond to intervals that have an overlap
+with , but have starting
+points less than .</p>
+<p>In order to overlap , these
+intervals must contain the point .
+This means that they all overlap each other, too! In fact,  and the neighbors of  already given a color must form a
+clique: call this clique .</p>
+<p>There are   neighbors of
+ that have already been colored,
+because the last element of  is
+ itself. Therefore at most   colors are ruled out for , and the greedy algorithm will be able
+to give  one of the first  colors on its list.</p>
+<p>The clique  can be bigger or
+smaller depending on , but in all
+cases,   by
+definition of the clique number. Therefore the greedy algorithm always
+uses one of the first 
+colors on the list, completing the proof. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="mycielski-graphs">Mycielski graphs</h2>
+<p>We have already seen that in a randomly chosen graph, the chromatic
+number can be much higher than the clique number. But the truth is even
+worse than this: it is possible to increase the chromatic number
+arbitrarily high while the clique number does not grow at all, and find
+graphs where both <a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> and <a class="booklink" href="#prop:coloring-alpha-bound">Proposition 19.3</a> drastically
+underestimate the chromatic number!</p>
+<p>One method for doing this is a construction found in 1955 by Jan
+Mycielski . We
+will first see it as an operation on graphs: a graph that transforms a
+graph  into its Mycielskian , increasing its chromatic number but
+not its clique number. Then, the sequence of Mycielski graphs is
+obtained by applying this operation over and over again.</p>
+<p>The <em>Mycielskian</em>  of
+a graph  is constructed in three
+steps:</p>
+<ol>
+<li><p>Start with a copy of . (I
+will call the vertices in this copy of  the <em>original vertices</em>, for
+ease of reference.)</p></li>
+<li><p>For each original vertex ,
+add a new vertex  adjacent to
+the same original vertices as . (I
+will call  a <em>shadow
+vertex</em>: the shadow of .) No
+edges are added between the shadow vertices.</p></li>
+<li><p>Finally, add one more vertex (which I will call the <em>final
+vertex</em>) adjacent to all the shadow vertices.</p></li>
+</ol>
+<p><a class="booklink" href="#fig:mycielskian">Figure 19.5</a> illustrates this construction
+in an example. I should note that the terms “original vertices”, “shadow
+vertices”, and “final vertex” are made up by me; there’s no standard
+terminology.</p>
+<figure class="bookfig" id="fig:mycielskian">
+
+<figcaption>The Mycielskian of a graph</figcaption>
+</figure>
+<p>The first objective of this definition is to avoid increasing the
+clique number: we want 
+to stay equal to .
+Technically, this is violated when  has no edges: then  , but  will gain some edges when the final
+vertex is added, so  .
+However, it will be true in all other cases.</p>
+<div class="lemma" id="lemma:mycielski-omega">
+<p><strong>Lemma 19.5</strong>. <em>For all graphs  with  ,  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We do not know anything about cliques formed by the
+original vertices: these are cliques that already existed in . In particular, because  contains a copy of ,  is at least : every clique in  can also be found in . It will also be possible that  has new large cliques—but we will
+show that none of these are bigger than cliques  already had.</p>
+<p>To see this, suppose that  is a
+clique in . If  , then we know that   because we assumed
+ , so we may assume
+that  contains at least  vertices.</p>
+<details class="qa">
+<summary>Can 
+contain the final vertex?</summary>
+<p>No, because none of the neighbors of the
+final vertex are adjacent to each other.</p>
+</details>
+<details class="qa">
+<summary>Can 
+contain any shadow vertices?</summary>
+<p>Yes, but at most one: no two shadow
+vertices are adjacent, so  cannot
+contain two or more shadow vertices.</p>
+</details>
+<p>If  contains no shadow vertices
+at all, we are not interested: it’s contained in a copy of , therefore  . So suppose  contains the original vertices  and the shadow
+vertex : the shadow of
+. Since the original vertex
+ is not adjacent to its
+shadow , we know that  .</p>
+<p>By the construction of ,
+among the original vertices, it has only the neighbors that  does: since  is adjacent to , we know  must be adjacent to them, as well.
+Therefore 
+is also a clique, and it has the same number of vertices as .</p>
+<p>However,  consists solely of original vertices, so it can have at
+most  vertices! This means
+that   as well.</p>
+<p>We’ve now established the inequality   for all cliques  in , so we conclude that  . This
+concludes the proof. ◻</p>
+</div>
+<p>The most interesting case of <a class="booklink" href="#lemma:mycielski-omega">Lemma 19.5</a>
+is when  . (Such graphs
+are sometimes called triangle-free graphs.) In this case, the graphs
+, , and so on all have clique number
+ as well: the least clique number
+that a graph with edges can have.</p>
+<p>Meanwhile, the chromatic number of  ticks up!</p>
+<div class="lemma" id="lemma:mycielski-chi">
+<p><strong>Lemma 19.6</strong>. <em>For all graphs ,  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Here, we are expressing the solution to one
+optimization problem (the chromatic number of ) in terms of the solution to another
+optimization problem (the chromatic number of ), so it’s worth thinking carefully
+about what we need to prove.</p>
+<p>To show that  , we need to show that  has a coloring with   colors. But we don’t need to
+come up with the coloring of 
+from scratch: by definition of the chromatic number, we know that  has a -coloring, and we can use such a
+coloring to help us.</p>
+<p>We might imagine that to show that  , we need to show
+that  cannot be colored with
+fewer colors, but proofs of impossibility are tricky: the paradigm of
+turning one coloring into another is much friendlier. So we rewrite this
+inequality as  , and now we’re once again proving an upper bound
+on a chromatic number. We need to show that  has a coloring with   colors, and in the process,
+we may use a -coloring of
+.</p>
+<p>With the strategy talk out of the way, we can go on to the proof.</p>
+<p>For the first step… I don’t like phrases like, “The obvious thing
+will work,” because what’s obvious and what isn’t depends on your
+experience. But the obvious thing will work. It’s okay if it doesn’t
+feel obvious yet; use it to train your intuition so that future
+arguments like it will be be more intuitive.</p>
+<p>We start with a coloring of 
+using  colors. We would like
+to color  using only one more
+color than that. Since  starts
+with a copy of  inside it, the
+natural thing to do is to give every original vertex the same color as
+in the -coloring of . Next, for each original vertex , give its shadow  the same color as : this is guaranteed to work, because
+the vertices adjacent to  are
+all original vertices adjacent to , so none of them can have the same
+color as . For the final vertex,
+use a new color we haven’t used yet.</p>
+<p>The second step is harder. Let  , so that there is a -coloring of . We would like a coloring of  using only   colors. Inside our coloring of , there is a coloring of … but it may well use all  colors. <a class="booklink" href="#fig:m(g)-coloring">Figure 19.6(a)</a> shows an example, using the
+same  as in <a class="booklink" href="#fig:mycielskian">Figure 19.5</a>.</p>
+<figure class="bookfig" id="fig:mycielski-coloring">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:m(g)-coloring">
+
+<figcaption>A proper coloring of </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:m(g)-modified">
+
+<figcaption>An improper coloring of </figcaption>
+</figure>
+</div>
+<figcaption>Going from a -coloring
+of  to a  -coloring of </figcaption>
+</figure>
+<p>We want to modify this coloring so that it only uses   colors on the original vertices.
+Motivated by our first step, we would like the color used on the final
+vertex (let  be this color) to be
+the color we get rid of. It’s a problem if any of the original vertices
+have color ; to “fix” it, whenever
+an original vertex  is assigned
+color , we give  the color of its shadow .</p>
+<details class="qa">
+<summary>What if the shadow  is also assigned color ?</summary>
+<p>That’s impossible:  is adjacent to the final vertex,
+which has color , so  must have some other color.</p>
+</details>
+<p>An example of the modified coloring we get is shown in <a class="booklink" href="#fig:mycielski-coloring">Figure 19.6</a>, and you can see from
+this example that it might be an improper coloring. In <a class="booklink" href="#fig:mycielski-coloring">Figure 19.6</a>, an original vertex
+recolored to is adjacent to two shadow vertices that also have color .
+In general, when we give  the
+color of , there is no
+guarantee that no neighbor of  has
+this color.</p>
+<p>If we’ve gotten an improper coloring, surely our attempt was a
+failure? Not quite: remember, we only want a coloring of , not all of . It turns out that if we only look
+at the original vertices, the coloring we have is a proper coloring!</p>
+<p>To see this, let  and  be two adjacent original vertices. If
+neither  nor  had color , then the colors of  and  are unchanged from the -coloring we started with, so the colors
+of  and  are still different. It’s also not
+possible that both  and  both had color ; because we started with a proper -coloring.</p>
+<p>The last case is that only one of  and  (without loss of generality, ) had color . In this case, the color of  is changed to the color of  in the -coloring. By the construction of ,  and  are also adjacent; therefore the color
+of  is not the same as the
+color of . It follows that  and  still have different colors after the
+change.</p>
+<p>As a result, if we keep only the original vertices, then we do get a
+proper  -coloring of . Therefore  ; since  , this completes the second
+step and concludes the proof of the theorem. ◻</p>
+</div>
+<p><a class="booklink" href="#lemma:mycielski-omega">Lemma 19.5</a> and <a class="booklink" href="#lemma:mycielski-chi">Lemma 19.6</a> are the two properties of
+the Mycielskian we needed to prove the following theorem.</p>
+<div class="theorem" id="thm:mycielski">
+<p><strong>Theorem 19.7</strong>. <em>For all  , there exists a  with   and  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We induct on .
+When   and when  , a complete graph ( and , respectively) will do, so that’s
+what we use for  and .</p>
+<p>For the induction step, assume that we’ve already constructed a graph
+ with   and  . Let  : the Mycielskian of
+. By <a class="booklink" href="#lemma:mycielski-omega">Lemma 19.5</a>,  ; by <a class="booklink" href="#lemma:mycielski-chi">Lemma 19.6</a>,  . These
+are exactly the two facts we needed to complete the induction step.</p>
+<p>By induction,  exists for all
+ . ◻</p>
+</div>
+<p>The graphs in the sequence  are called the <em>Mycielski graphs</em>. (We rarely
+include , because it is not
+truly part of the recurrence: 
+is not the Mycielskian of , but
+a second base case.) <a class="booklink" href="#fig:mycielski-graphs">Figure 19.7</a>
+shows the first few graphs in the sequence.</p>
+<figure class="bookfig" id="fig:mycielski-graphs">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:mycielski-m2">
+
+<figcaption>: the base
+case</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:mycielski-m3">
+
+<figcaption>: the -cycle</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:mycielski-m4">
+
+<figcaption>: the Grötzsch
+graph</figcaption>
+</figure>
+</div>
+<figcaption>The first few graphs in the sequence of Mycielski
+graphs</figcaption>
+</figure>
+<p>The graph  is isomorphic to
+the cycle graph , though it
+takes some “untwisting” to obtain a symmetric diagram from a 3-layer
+diagram in the style of <a class="booklink" href="#fig:mycielskian">Figure 19.5</a>.</p>
+<p>Finally, let help you make sense of how we get from  to the diagram in <a class="booklink" href="#fig:mycielski-m4">Figure 19.7(c)</a>. The original vertices have
+stayed in their place, with their shadows placed halfway to the center
+of the diagram; the final vertex placed at the center. The resulting
+graph, , is known as the
+Grötzsch graph. It is named after Herbert Grötzsch, who used it in 1959
+for the same purpose as Mycielski: as an example of a triangle-free
+graph with chromatic number  .</p>
+<details class="qa">
+<summary>Since the Mycielski graphs have clique
+number , <a class="booklink" href="#prop:coloring-omega-bound">Proposition 19.2</a> does not give a good
+lower bound on their chromatic number. What about <a class="booklink" href="#prop:coloring-alpha-bound">Proposition 19.3</a>?</summary>
+<p>It is almost no better: the shadow
+vertices in  form an independent
+set containing almost half of all the vertices. Therefore <a class="booklink" href="#prop:coloring-alpha-bound">Proposition 19.3</a> only proves that
+ .</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Let  be the -vertex graph shown below:</p>
+
+<ol>
+<li><p>What is the clique number ? What lower bound on  does it give?</p></li>
+<li><p>What is the independence number ? What lower bound on  does it give?</p></li>
+<li><p>What is the maximum degree ? What upper bound on  does it give?</p></li>
+<li><p>What is the actual chromatic number of ?</p></li>
+</ol>
+</li>
+<li><p>Find a greedy coloring of the circulant graph , going through
+its vertices in numerical order. Is there a coloring of  that uses fewer
+colors than the greedy coloring you found?</p></li>
+<li>
+<p>Let  be the graph with
+  in which
+vertices  and  are adjacent if   is odd and not equal to .</p>
+<ol>
+<li><p>If  is colored greedily
+by going through the vertices in numerical order, how many colors are
+used? Find the answer in terms of .</p></li>
+<li><p>What is the chromatic number of , and why?</p></li>
+</ol>
+</li>
+<li>
+<p>Alice and Bob take turns coloring the cube graph , one vertex at a time. They have a
+fixed set of colors  , and neither player is allowed to
+give a vertex a color that has already been used on a neighbor of that
+vertex. However, they have different goals: Alice (who goes first) wants
+to get a coloring of , while Bob
+wants to arrive at a partial coloring which cannot be finished.</p>
+<p>If both players play as well as possible, which player will
+win?</p>
+</li>
+<li>
+<p>Look back at <a class="booklink" href="#fig:tree-bad-ordering">Figure 19.2(a)</a>, then:</p>
+<ol>
+<li><p>Find a tree and a vertex ordering of that tree for which the
+greedy algorithm will use 
+different colors.</p></li>
+<li><p>Prove that for all positive integers , there is a tree and a vertex ordering
+of that tree for which the greedy algorithm will use  different colors.</p></li>
+</ol>
+</li>
+<li>
+<p>The lowest-degree-last vertex ordering of an -vertex graph  is constructed as follows, recursively.
+We choose the last vertex, , to
+be any vertex whose degree is the lowest degree in . To find the ordering  of the other
+vertices, we find the lowest-degree-last ordering of the  -vertex graph  .</p>
+<p>Prove that if  is a tree, then
+the greedy coloring algorithm, using the lowest-degree-last ordering,
+will never use more than 
+colors.</p>
+</li>
+<li>
+<p>Let  be a graph with
+chromatic number , and let   be a
+-coloring of .</p>
+<p>Prove that if we sort the vertices of  by their -values (putting all vertices given
+color  first and all the vertices
+given color  last), then the
+greedy algorithm will also find a -coloring of .</p>
+<p>(Be careful: if your proof shows that the greedy algorithm will find
+the coloring  we started with,
+then it’s wrong, because that claim is false in general.)</p>
+</li>
+<li><ol>
+<li><p>Suppose that the greedy algorithm uses  colors on a graph . Prove that  must have at least  
+edges.</p></li>
+<li><p>Prove that if  has  edges, then  .</p></li>
+</ol></li>
+<li>
+<p>The graph below is called the Moser spindle. It is a
+unit-distance graph: its vertices can be placed in the plane in such a
+way that two vertices are adjacent exactly when they are at distance
+ from each other.</p>
+
+<ol>
+<li><p>Find a unit-distance drawing of the Moser spindle.</p></li>
+<li><p>Prove that the Moser spindle has chromatic number .</p></li>
+</ol>
+<p>The chromatic number of the plane is the least number of colors
+needed to color every point of the plane so that no two points at
+distance  from each other are the same color. Leo and William Moser
+constructed the Moser spindle in 1961 , proving that the chromatic number of the
+plane is at least .</p>
+<p>This was the best known lower bound until 2018, when Aubrey de Grey
+constructed a -vertex unit
+distance graph with chromatic number  .</p>
+</li>
+<li>
+<p>The wheel graph with 
+spokes is the graph obtained from the cycle graph  by adding a new vertex   adjacent to all  vertices of the cycle.</p>
+<ol>
+<li><p>Draw a diagram of a wheel graph with  spokes.</p></li>
+<li><p>Show that this graph has clique number  but chromatic number .</p></li>
+<li><p>Generalize this construction to find a graph  in which   but  , for every  .</p></li>
+</ol>
+</li>
+<li>
+<p>It is interesting to think about coloring the co-bipartite
+graphs: graphs whose complement is bipartite. A graph  is a co-bipartite graph if and only if
+we can write  as the disjoint
+union of two sets  and  which are both cliques in  (and, additionally, there may be some
+edges between  and ).</p>
+<ol>
+<li><p>Show that in any coloring of a co-bipartite graph, each color
+class contains at most 
+vertices.</p></li>
+<li>
+<p>Suppose that a co-bipartite graph  has a coloring where  of the color classes have  vertices.</p>
+<p>How else can you describe those  color classes, and their role in the
+complement graph  (a
+bipartite graph)?</p>
+</li>
+<li><p>What is the connection between a clique in a co-bipartite graph
+ and a vertex cover in its
+complement ?</p></li>
+<li><p>Use parts (a)–(c) to prove that if  is a co-bipartite graph, then  .</p></li>
+</ol>
+</li>
+<li><p>The following inequality is true whenever  are positive
+integers with  :  Use this inequality to
+find the maximum number of edges in an -vertex graph with chromatic
+number .</p></li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>More sophisticated models can produce graphs with fewer
+edges than the interval graph, with a smaller chromatic number that’s
+harder to compute, but I will not get into those details.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 19</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

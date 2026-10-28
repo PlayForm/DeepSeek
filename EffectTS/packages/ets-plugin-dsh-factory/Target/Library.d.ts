@@ -5,6 +5,7 @@ import PolicyFn from "./Function/Policy.js";
 import SchemaFn from "./Function/Schema.js";
 import type Allowlist from "./Interface/Allowlist.js";
 import type Trace from "./Interface/Trace.js";
+import Version from "./Variable/Version.js";
 export type { State } from "@playform/ets-base-dsh";
 export type { Options } from "@playform/ets-base-dsh";
 export type { Gate } from "@playform/ets-base-dsh";
@@ -13,6 +14,7 @@ export type { Output } from "@playform/ets-base-dsh";
 export type { Journal } from "@playform/ets-base-dsh";
 export type { default as Allowlist } from "./Interface/Allowlist.js";
 export type { default as Trace } from "./Interface/Trace.js";
+export { Version };
 export declare function Schema(Shared?: {
     log?: boolean;
     logFile?: string;

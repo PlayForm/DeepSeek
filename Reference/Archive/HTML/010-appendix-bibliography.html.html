@@ -1,0 +1,1266 @@
+<!DOCTYPE html><html lang="en"><head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="../style.css">
+	<link rel="icon" type="image/x-icon" href="../images/volcano.ico">
+	<title>Bibliography - Start Doing Graph Theory</title>
+	<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-svg.js" type="text/javascript"></script>
+<style id="MJX-lb-styles">:root {
+  --mjx-fg-red: 255, 0, 0;
+  --mjx-fg-green: 0, 255, 0;
+  --mjx-fg-blue: 0, 0, 255;
+  --mjx-fg-yellow: 255, 255, 0;
+  --mjx-fg-cyan: 0, 255, 255;
+  --mjx-fg-magenta: 255, 0, 255;
+  --mjx-fg-white: 255, 255, 255;
+  --mjx-fg-black: 0, 0, 0;
+  --mjx-bg-red: 255, 0, 0;
+  --mjx-bg-green: 0, 255, 0;
+  --mjx-bg-blue: 0, 0, 255;
+  --mjx-bg-yellow: 255, 255, 0;
+  --mjx-bg-cyan: 0, 255, 255;
+  --mjx-bg-magenta: 255, 0, 255;
+  --mjx-bg-white: 255, 255, 255;
+  --mjx-bg-black: 0, 0, 0;
+  --mjx-live-bg-color: white;
+  --mjx-live-shadow-color: #888;
+  --mjx-live-border-color: #CCCCCC;
+  --mjx-bg1-color: rgba(var(--mjx-bg-blue), var(--mjx-bg1-alpha));
+  --mjx-fg1-color: rgba(var(--mjx-fg-black), 1);
+  --mjx-bg2-color: rgba(var(--mjx-bg-red), 1);
+  --mjx-fg2-color: rgba(var(--mjx-fg-black), 1);
+  --mjx-bg1-alpha: 0.2;
+  --mjx-fg1-alpha: 1;
+  --mjx-bg2-alpha: 1;
+  --mjx-fg2-alpha: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mjx-bg-blue: 132, 132, 255;
+      --mjx-bg-white: 0, 0, 0;
+      --mjx-bg-black: 255, 255, 255;
+      --mjx-fg-white: 0, 0, 0;
+      --mjx-fg-black: 255, 255, 255;
+      --mjx-live-bg-color: #222025;
+      --mjx-live-shadow-color: black;
+      --mjx-live-border-color: #7C7C7C;
+      --mjx-bg1-alpha: 0.3;
+      --mjx-fg1-alpha: 1;
+      --mjx-bg2-alpha: 1;
+      --mjx-fg2-alpha: 1;
+  }
+}
+
+.MJX_LiveRegion {
+  position: absolute;
+  top: 0;
+  display: none;
+  width: auto;
+  height: auto;
+  padding: 0;
+  opacity: 1;
+  z-index: 202;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: var(--mjx-live-bg-color);
+  box-shadow: 0px 5px 20px var(--mjx-live-shadow-color);
+  border: 2px solid var(--mjx-live-border-color);
+}
+
+.MJX_LiveRegion_Show {
+  display: block;
+}
+
+.MJX_LiveRegion > div {
+  color: var(--mjx-fg1-color);
+  background-color: var(--mjx-bg1-color);
+}
+
+mjx-container [data-sre-highlight-1]:not([data-mjx-collapsed], rect) {
+  color: var(--mjx-fg1-color) ! important;
+  fill: var(--mjx-fg1-color) ! important;
+}
+
+mjx-container:not([data-mjx-clone-container]) [data-sre-highlight-1]:not([data-sre-enclosed], rect) {
+  background-color: var(--mjx-bg1-color) ! important;
+}
+
+mjx-container rect[data-sre-highlight-1]:not([data-sre-enclosed]) {
+  fill: var(--mjx-bg1-color) ! important;
+}
+
+mjx-container [data-sre-highlight-2] {
+  color: var(--mjx-fg2-color) ! important;
+  background-color: var(--mjx-bg2-color) ! important;
+  fill: var(--mjx-fg2-color) ! important;
+}
+
+mjx-container rect[data-sre-highlight-2] {
+  fill: var(--mjx-bg2-color) ! important;
+}</style><style id="MJX-hb-styles">.MJX_HoverRegion {
+  display: block;
+  position: absolute;
+  width: max-content;
+  height: auto;
+  padding: 0;
+  opacity: 1;
+  z-index: 202;
+  margin: 0 auto;
+  background-color: white;
+  line-height: 0;
+  box-shadow: 0px 10px 20px #888;
+  border: 2px solid #CCCCCC;
+}
+
+.MJX_HoverRegion > div {
+  overflow: hidden;
+  color: var(--mjx-fg1-color);
+  background-color: var(--mjx-bg1-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  .MJX_HoverRegion {
+    background-color: #222025;
+      box-shadow: 0px 5px 20px #000;
+      border: 1px solid #7C7C7C;
+  }
+}
+
+mjx-container[data-mjx-clone-container] {
+  padding: 2px ! important;
+}
+
+mjx-math > mjx-mlabeledtr {
+  display: inline-block;
+  margin-right: .5em ! important;
+}
+
+mjx-math > mjx-mtd {
+  float: right;
+}</style><style id="MJX-ab-styles">.MJX_ToolTip {
+  width: auto;
+  height: auto;
+  opacity: 1;
+  text-align: center;
+  border-radius: 4px;
+  padding: 0;
+  border-bottom: 1px dotted black;
+  position: absolute;
+  display: inline-block;
+  background-color: white;
+  z-index: 202;
+}
+
+.MJX_ToolTip > div {
+  border-radius: inherit;
+  padding: 0 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .MJX_ToolTip {
+    background-color: #222025;
+      box-shadow: 0px 5px 20px #000;
+      border: 1px solid #7C7C7C;
+  }
+}</style><style id="MJX-Menu-styles">.CtxtMenu_Menu {
+  position: absolute;
+  background-color: white;
+  color: black;
+  width: auto;
+  padding: 5px 0px;
+  border: 1px solid #CCCCCC;
+  margin: 0;
+  cursor: default;
+  font: menu;
+  text-align: left;
+  text-indent: 0;
+  text-transform: none;
+  line-height: normal;
+  letter-spacing: normal;
+  word-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  float: none;
+  z-index: 1001;
+  border-radius: 5px;
+  box-shadow: 0px 10px 20px #808080;
+}
+.CtxtMenu_MenuItem {
+  padding: 1px 2em;
+  background: transparent;
+}
+.CtxtMenu_MenuArrow {
+  position: absolute;
+  right: 0.5em;
+  padding-top: 0.25em;
+  color: #666666;
+  font-family: null;
+  font-size: 0.75em;
+}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {
+  color: white;
+}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {
+  left: 0.5em;
+  right: auto;
+}
+.CtxtMenu_MenuCheck {
+  position: absolute;
+  left: 0.7em;
+  font-family: null;
+}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL {
+  right: 0.7em;
+  left: auto;
+}
+.CtxtMenu_MenuRadioCheck {
+  position: absolute;
+  left: 0.7em;
+}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {
+  right: 0.7em;
+  left: auto;
+}
+.CtxtMenu_MenuInputBox {
+  padding-left: 1em;
+  right: 0.5em;
+  color: #666666;
+  font-family: null;
+}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {
+  left: 0.1em;
+}
+.CtxtMenu_MenuComboBox {
+  left: 0.1em;
+  padding-bottom: 0.5em;
+}
+.CtxtMenu_MenuSlider {
+  left: 0.1em;
+}
+.CtxtMenu_SliderValue {
+  position: absolute;
+  right: 0.1em;
+  padding-top: 0.25em;
+  color: #333333;
+  font-size: 0.75em;
+}
+.CtxtMenu_MenuActive .CtxtMenu_SliderValue {
+  color: #DDDDDD;
+}
+.CtxtMenu_SliderBar {
+  outline: none;
+  background: #D3D3D3;
+}
+.CtxtMenu_MenuLabel {
+  padding: 1px 2em 3px 1.33em;
+  font-style: italic;
+}
+.CtxtMenu_MenuRule {
+  border-top: 1px solid #DDDDDD;
+  margin: 4px 3px;
+}
+.CtxtMenu_MenuDisabled {
+  color: #999;
+}
+.CtxtMenu_MenuActive {
+  background-color: #606872;
+  color: white;
+}
+.CtxtMenu_MenuDisabled:focus {
+  background-color: #E8E8E8;
+}
+.CtxtMenu_MenuLabel:focus {
+  background-color: #E8E8E8;
+}
+.CtxtMenu_ContextMenu:focus {
+  outline: none;
+}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {
+  outline: none;
+}
+.CtxtMenu_SelectionMenu {
+  position: relative;
+  float: left;
+  border-bottom: none;
+  box-shadow: none ! important;
+  border-radius: 0px !important;
+}
+.CtxtMenu_SelectionItem {
+  padding-right: 1em;
+}
+.CtxtMenu_Selection {
+  right: 40%;
+  width: 50%;
+}
+.CtxtMenu_SelectionBox {
+  padding: 0em;
+  max-height: 20em;
+  max-width: none;
+  background-color: #FFFFFF;
+}
+.CtxtMenu_SelectionDivider {
+  clear: both;
+  border-top: 2px solid #000000;
+}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {
+  top: -10px;
+  left: -10px;
+}
+@media (prefers-color-scheme: dark) /* menu */ {
+  .CtxtMenu_Menu {
+  color: #E0E0E0;
+  background-color: #242436;
+  box-shadow: 0px 10px 20px #000;
+  border: 1px solid #808080;
+}
+  .CtxtMenu_SliderValue {
+  color: #D0D0D0;
+}
+  .CtxtMenu_MenuDisabled:focus {
+  background-color: #383838;
+}
+  .CtxtMenu_MenuLabel:focus {
+  background-color: #585858;
+}
+  .CtxtMenu_MenuRule {
+  border-top: 1px solid #808080;
+}
+  .CtxtMenu_SelectionDivider {
+  border-top: 2px solid #808080;
+};
+}
+.CtxtMenu_MenuClose {
+  position: absolute;
+  cursor: pointer;
+  display: inline-block;
+  border: 2px solid #AAA;
+  border-radius: 18px;
+  font-family:  "Courier New", Courier;
+  font-size: 24px;
+  color: #F0F0F0;
+}
+.CtxtMenu_MenuClose span {
+  display: block;
+  background-color: #AAA;
+  border: 1.5px solid;
+  border-radius: 18px;
+  line-height: 0;
+  padding: 8px 0 6px;
+}
+.CtxtMenu_MenuClose:hover {
+  color: white !important;
+  border: 2px solid #CCC !important;
+}
+.CtxtMenu_MenuClose:hover span {
+  background-color: #CCC !important;
+}
+.CtxtMenu_MenuClose:hover:focus {
+  outline: none;
+}</style><style id="MJX-SVG-styles">
+mjx-container[overflow="scroll"][display] {
+  overflow: auto clip;
+  min-width: initial !important;
+}
+
+mjx-container[overflow="truncate"][display] {
+  overflow: hidden clip;
+  min-width: initial !important;
+}
+
+mjx-container[display] {
+  display: block;
+  text-align: center;
+  justify-content: center;
+  margin: .7em 0;
+  padding: .3em 2px;
+}
+
+mjx-container[display][width="full"] {
+  display: flex;
+}
+
+mjx-container[justify="left"] {
+  text-align: left;
+  justify-content: left;
+}
+
+mjx-container[justify="right"] {
+  text-align: right;
+  justify-content: right;
+}
+
+mjx-container[jax="SVG"] {
+  direction: ltr;
+  white-space: nowrap;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+rect[data-sre-highlighter-added]:has(+ .mjx-selected), rect[data-sre-highlighter-bbox].mjx-selected {
+  stroke: black;
+  stroke-width: 80px;
+}
+
+@media (prefers-color-scheme: dark) {
+  rect[data-sre-highlighter-added]:has(+ .mjx-selected), rect[data-sre-highlighter-bbox].mjx-selected {
+    stroke: #C8C8C8;
+  }
+}
+
+mjx-container[has-speech="true"] {
+  position: relative;
+  cursor: default;
+}
+
+mjx-speech {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
+mjx-speech:focus {
+  outline: none;
+}
+
+mjx-container .mjx-selected {
+  outline: 2px solid black;
+}
+
+mjx-container a[data-mjx-href] {
+  color: LinkText;
+  cursor: pointer;
+}
+
+mjx-container a[data-mjx-href].mjx-visited {
+  color: VisitedText;
+}
+
+mjx-container > mjx-help {
+  display: none;
+  position: absolute;
+  top: -.3em;
+  right: -.5em;
+  width: .6em;
+  height: .6em;
+  cursor: pointer;
+}
+
+mjx-container[display="true"] > mjx-help {
+  position: sticky;
+  inset: -100% 0 100% 0;
+  margin: -.3em -.5em 0 -.1em;
+  right: 0;
+  top: initial;
+}
+
+mjx-help > svg {
+  stroke: black;
+  width: 100%;
+  height: 100%;
+}
+
+mjx-help > svg > circle {
+  stroke-width: 1.5px;
+  cx: 9px;
+  cy: 9px;
+  r: 9px;
+  fill: white;
+}
+
+mjx-help > svg > circle:nth-child(2) {
+  fill: var(--mjx-bg1-color);
+  r: 7px;
+}
+
+mjx-help > svg > line {
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+}
+
+mjx-help:hover > svg > circle:nth-child(2) {
+  fill: white;
+}
+
+mjx-container.mjx-explorer-active > mjx-help {
+  display: inline-flex;
+  align-items: center;
+}
+
+@media (prefers-color-scheme: dark) /* explorer */ {
+  mjx-help > svg {
+    stroke: #E0E0E0;
+  }
+  mjx-help > svg > circle {
+    fill: #404040;
+  }
+  mjx-help > svg > circle:nth-child(2) {
+    fill: rgba(132, 132, 255, .3);
+  }
+  mjx-help:hover > svg > circle:nth-child(2) {
+    stroke: #AAAAAA;
+      fill: #404040;
+  }
+}
+
+mjx-container[jax="SVG"] mjx-break {
+  white-space: normal;
+  line-height: 0;
+  clip-path: rect(0 0 0 0);
+  font-family: MJX-ZERO ! important;
+}
+
+mjx-break[size="0"] {
+  letter-spacing: -0.999em;
+}
+
+mjx-break[size="1"] {
+  letter-spacing: -0.889em;
+}
+
+mjx-break[size="2"] {
+  letter-spacing: -0.833em;
+}
+
+mjx-break[size="3"] {
+  letter-spacing: -0.778em;
+}
+
+mjx-break[size="4"] {
+  letter-spacing: -0.722em;
+}
+
+mjx-break[size="5"] {
+  letter-spacing: -0.667em;
+}
+
+mjx-container[jax="SVG"] mjx-break[newline]::before {
+  white-space: pre;
+  content: "\A";
+}
+
+mjx-break[newline] + svg[width="0.054ex"] {
+  margin-right: -1px;
+}
+
+mjx-break[prebreak] {
+  letter-spacing: -.999em;
+}
+
+@font-face /* zero */ {
+  font-family: MJX-ZERO;
+  src: url(data:application/x-font-woff;charset=utf-8;base64,T1RUTwAJAIAAAwAQQ0ZGIGnFMZkAAARQAAAAlE9TLzJpUWOBAAABAAAAAGBjbWFwAAwAUwAABAQAAAAsaGVhZCFRvpAAAACcAAAANmhoZWEC8AD9AAAA1AAAACRobXR4A+gAAAAABOQAAAAIbWF4cAACUAAAAAD4AAAABm5hbWVNb8+2AAABYAAAAqNwb3N0AAMAAAAABDAAAAAgAAEAAAABAABVWOu4Xw889QADA+gAAAAA3ym+2AAAAADfKb7YAAAAAAPoAAAAAAADAAIAAAAAAAAAAQAAAu79EgAAA+gAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAIAAFAAAAIAAAADA+gB9AAFAAACigK7AAAAjAKKArsAAAHfADEBAgAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABYWFhYAEAAIAAgAu79EgAAAu4C7gAAAAEAAAAAAXcAAAAgACAAAAAAACIBngABAAAAAAAAAAEAQQABAAAAAAABAAsAAAABAAAAAAACAAcAIQABAAAAAAADABUAxgABAAAAAAAEABMANgABAAAAAAAFAAsApQABAAAAAAAGABIAbwABAAAAAAAHAAEAQQABAAAAAAAIAAEAQQABAAAAAAAJAAEAQQABAAAAAAAKAAEAQQABAAAAAAALAAEAQQABAAAAAAAMAAEAQQABAAAAAAANAAEAQQABAAAAAAAOAAEAQQABAAAAAAAQAAsAAAABAAAAAAARAAcAIQADAAEECQAAAAIAXwADAAEECQABABYACwADAAEECQACAA4AKAADAAEECQADACoA2wADAAEECQAEACYASQADAAEECQAFABYAsAADAAEECQAGACQAgQADAAEECQAHAAIAXwADAAEECQAIAAIAXwADAAEECQAJAAIAXwADAAEECQAKAAIAXwADAAEECQALAAIAXwADAAEECQAMAAIAXwADAAEECQANAAIAXwADAAEECQAOAAIAXwADAAEECQAQABYACwADAAEECQARAA4AKG1qeC1sbS16ZXJvAG0AagB4AC0AbABtAC0AegBlAHIAb1JlZ3VsYXIAUgBlAGcAdQBsAGEAcm1qeC1sbS16ZXJvIFJlZ3VsYXIAbQBqAHgALQBsAG0ALQB6AGUAcgBvACAAUgBlAGcAdQBsAGEAcm1qeC1sbS16ZXJvUmVndWxhcgBtAGoAeAAtAGwAbQAtAHoAZQByAG8AUgBlAGcAdQBsAGEAclZlcnNpb24gMC4xAFYAZQByAHMAaQBvAG4AIAAwAC4AMSA6bWp4LWxtLXplcm8gUmVndWxhcgAgADoAbQBqAHgALQBsAG0ALQB6AGUAcgBvACAAUgBlAGcAdQBsAGEAcgAAAAABAAMAAQAAAAwABAAgAAAABAAEAAEAAAAg//8AAAAg////4QABAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAEAQABAQETbWp4LWxtLXplcm9SZWd1bGFyAAEBASf4GwD4HAL4HQP4HgSLi/mC+nwFHQAAAIYPHQAAAIkRix0AAACUEgAFAQEMHyoxNlZlcnNpb24gMC4xbWp4LWxtLXplcm8gUmVndWxhcm1qeC1sbS16ZXJvUmVndWxhcnNwYWNlAAAAAYsAAgEBAwaLDvp8DgAAAAAD6AAA) format("woff");
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  line-height: 0;
+  padding: .2em;
+  border: 1px solid #888;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+g[data-mjx-collapsed] {
+  fill: #55F;
+}
+
+@media (prefers-color-scheme: dark) /* svg maction */ {
+  mjx-tool > mjx-tip {
+    background-color: #303030;
+      color: #E0E0E0;
+      box-shadow: 2px 2px 5px #000;
+  }
+  mjx-status {
+    background-color: #303030;
+      color: #E0E0E0;
+  }
+  g[data-mjx-collapsed] {
+    fill: #88F;
+  }
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+foreignObject[data-mjx-html] {
+  overflow: visible;
+}
+
+mjx-measure-xml {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-block;
+  line-height: normal;
+  white-space: normal;
+}
+
+mjx-html {
+  display: inline-block;
+  line-height: normal;
+  text-align: initial;
+  white-space: initial;
+}
+
+mjx-html-holder {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+  stroke-width: 3;
+}
+</style></head>
+
+<body style="counter-set: chapter 31; margin-right: 0px; padding-right: 0px; overflow: auto;">
+
+<div class="solidbg title">
+
+<h1 class="chapter-title">Bibliography</h1>
+
+<ul class="breadcrumb">
+  <li><a href="../index.html">Home</a></li>
+  <li><a href="../contents.html">Contents</a></li>
+  <li><a href="index.html">Appendix</a></li>
+  <li>Bibliography</li>
+</ul>
+
+<ul class="breadcrumb">
+  <li><a href="induction.html">← Previous</a></li>
+  <li class="missing">Next →</li>
+</ul>
+</div>
+
+<br>
+
+<div class="solidbg text">
+
+<ol class="bibliography">
+<li class="bibitem" id="ref-Albertson98">
+Albertson, Michael. 1998. <span>“You Can’t Paint Yourself into a
+Corner.”</span> <em>Journal of Combinatorial Theory, Series B</em> 73:
+189–94. <a href="https://doi.org/doi.org/10.1006/jctb.1998.1827">https://doi.org/doi.org/10.1006/jctb.1998.1827</a>.
+</li>
+<li class="bibitem" id="ref-Alon03">
+Alon, Noga. 2003. <span>“A Simple Algorithm for Edge-Coloring Bipartite
+Multigraphs.”</span> <em>Information Processing Letters</em> 85 (6):
+301–2. <a href="https://doi.org/10.1016/S0020-0190(02)00446-5">https://doi.org/10.1016/S0020-0190(02)00446-5</a>.
+</li>
+<li class="bibitem" id="ref-Amahashi85">
+Amahashi, Atsushi. 1985. <span>“On Factors with All Degrees Odd.”</span>
+<em>Graphs and Combinatorics</em> 1: 111–14. <a href="https://doi.org/10.1007/BF02582935">https://doi.org/10.1007/BF02582935</a>.
+</li>
+<li class="bibitem" id="ref-AppelHaken1">
+Appel, Kenneth, and Wolfgang Haken. 1977a. <span>“Every Planar Map Is
+Four Colorable. Part <span>I</span>: Discharging.”</span> <em>Illinois
+Journal of Mathematics</em> 21: 429–90. <a href="https://doi.org/10.1215/ijm/1256049011">https://doi.org/10.1215/ijm/1256049011</a>.
+</li>
+<li class="bibitem" id="ref-AppelHaken2">
+———. 1977b. <span>“Every Planar Map Is Four Colorable. Part
+<span>II</span>: Reducibility.”</span> <em>Illinois Journal of
+Mathematics</em> 21: 491–567. <a href="https://doi.org/10.1215/ijm/1256049012">https://doi.org/10.1215/ijm/1256049012</a>.
+</li>
+<li class="bibitem" id="ref-Ball05">
+Ball, W. W. Rouse. 1905. <em>Mathematical Recreations and Essays</em>.
+Fourth edition. New York, NY: Macmillan; Company. <a href="https://www.gutenberg.org/ebooks/26839">https://www.gutenberg.org/ebooks/26839</a>.
+</li>
+<li class="bibitem" id="ref-BAMO2005">
+Berkeley Math Circle. 2005. <span>“<span>7<sup>th</sup></span>
+<span>B</span>ay <span>A</span>rea <span>M</span>athematical
+<span>O</span>lympiad.”</span> <a href="https://www.bamo.org/archives/examfiles/bamo2005examsol.pdf">https://www.bamo.org/archives/examfiles/bamo2005examsol.pdf</a>.
+</li>
+<li class="bibitem" id="ref-Birkhoff13">
+Birkhoff, George D. 1913. <span>“The reducibility of maps.”</span> <em>American Journal of Mathematics</em> 35: 115–128. <a href="https://doi.org/10.2307/2370276">https://doi.org/10.2307/2370276</a>.
+</li>
+<li class="bibitem" id="ref-Bondy76">
+Bondy, John A., and Václav. Chvátal. 1976. <span>“A Method in Graph
+Theory.”</span> <em>Discrete Mathematics</em> 15 (2): 111–35. <a href="https://doi.org/10.1016/0012-365X(76)90078-9">https://doi.org/10.1016/0012-365X(76)90078-9</a>.
+</li>
+<li class="bibitem" id="ref-Borchardt60">
+Borchardt, Carl Wilhelm. 1860. <span>“<span>Ü</span>ber Eine
+<span>I</span>nterpolationsformel f<span>ü</span>r Eine <span>A</span>rt
+Symmetrischer <span>F</span>unctionen Und <span class="nocase">ü</span>ber Deren <span>A</span>nwendung.”</span>
+<em>Mathematische <span>A</span>bhandlungen Der
+<span>K</span><span>ö</span>niglichen <span>A</span>kademie Der
+<span>W</span>issenschaften Zu <span>B</span>erlin</em>, 1–20. <a href="https://archive.org/details/abhandlungenderk1860deut/page/n245">https://archive.org/details/abhandlungenderk1860deut/page/n245</a>.
+</li>
+<li class="bibitem" id="ref-Bottin22">
+Bottin, Matteo, Giovanni Boschetti, and Giulio Rosati. 2022.
+<span>“Optimizing Cycle Time of Industrial Robotic Tasks with Multiple
+Feasible Configurations at the Working Points.”</span> <em>Robotics</em>
+11 (1): 16. <a href="https://doi.org/10.3390/robotics11010016">https://doi.org/10.3390/robotics11010016</a>.
+</li>
+<li class="bibitem" id="ref-deBruijn46">
+de Bruijn, Nicolaas Govert. 1946. <span>“A Combinatorial
+Problem.”</span> <em>Proceedings of the Koninklijke Nederlandse Akademie
+van Wetenschappen</em> 49: 758–64.
+</li>
+<li class="bibitem" id="ref-Campos23">
+Campos, Marcelo, Simon Griffiths, Robert Morris, and Julian
+Sahasrabudhe. 2023. <span>“An Exponential Improvement for Diagonal
+<span>R</span>amsey.”</span> <em>arXiv Preprint</em>. <a href="https://arxiv.org/abs/2303.09521">https://arxiv.org/abs/2303.09521</a>.
+</li>
+<li class="bibitem" id="ref-Cayley57">
+Cayley, Arthur. 1857. <span>“On the Theory of the Analytical Forms
+Called Trees.”</span> <em>Philosophical Magazine</em> 13: 172–76. <a href="https://rcin.org.pl/Content/173708/PDF/WA35_185808_12807-3_art-45.pdf">https://rcin.org.pl/Content/173708/PDF/WA35_185808_12807-3_art-45.pdf</a>.
+</li>
+<li class="bibitem" id="ref-Chaitin81">
+Chaitin, Gregory, Marc Auslander, Ashok Chandra, John Cocke, Martin
+Hopkins, and Peter Markstein. 1981. <span>“Register Allocation via
+Coloring.”</span> <em>Computer Languages</em> 6: 47–57. <a href="https://doi.org/10.1016/0096-0551(81)90048-5">https://doi.org/10.1016/0096-0551(81)90048-5</a>.
+</li>
+<li class="bibitem" id="ref-Chen02">
+Chen, Guantao, and Xingxing Yu. 2002. <span>“A Note on Fragile
+Graphs.”</span> <em>Discrete Mathematics</em> 249: 41–43. <a href="https://doi.org/10.1016/S0012-365X(01)00226-6">https://doi.org/10.1016/S0012-365X(01)00226-6</a>.
+</li>
+<li class="bibitem" id="ref-Chvatal73">
+Chvátal, Václav. 1973. <span>“Tough Graphs and <span>H</span>amiltonian
+Circuits.”</span> <em>Discrete Mathematics</em> 5: 215–28. <a href="https://doi.org/10.1016/0012-365X(73)90138-6">https://doi.org/10.1016/0012-365X(73)90138-6</a>.
+</li>
+<li class="bibitem" id="ref-Chvatal72">
+Chvátal, Václav, and Pál Erdős. 1972. <span>“A Note on
+<span>H</span>amiltonian Circuits.”</span> <em>Discrete Mathematics</em>
+2: 111–13. <a href="https://doi.org/10.1016/0012-365X(72)90079-9">https://doi.org/10.1016/0012-365X(72)90079-9</a>.
+</li>
+<li class="bibitem" id="ref-Chvatal77">
+Chvátal, Václav, and Peter Hammer. 1977. <span>“Aggregation of
+Inequalities in Integer Programming.”</span> <em>Annals of Discrete
+Mathematics</em> 1: 145–62.
+</li>
+<li class="bibitem" id="ref-Conway17">
+Conway, John H. 2017. <span>“Five <span>$1,000</span> Problems (Update
+2017).”</span> 2017. <a href="https://oeis.org/A248380/a248380.pdf">https://oeis.org/A248380/a248380.pdf</a>.
+</li>
+<li class="bibitem" id="ref-HoG">
+Coolsaet, K., S. D’hont, and J. Goedgebeur. 2023. <span>“House of Graphs
+2.0: A Database of Interesting Graphs and More.”</span> Discrete Applied
+Mathematics. 2023. <a href="https://doi.org/10.1016/j.dam.2022.10.013">https://doi.org/10.1016/j.dam.2022.10.013</a>.
+</li>
+<li class="bibitem" id="ref-Cranston15">
+Cranston, Daniel, and Landon Rabern. 2015. <span>“Brooks’ Theorem and
+Beyond.”</span> <em>Journal of Graph Theory</em> 80. <a href="https://doi.org/10.1002/jgt.21847">https://doi.org/10.1002/jgt.21847</a>.
+</li>
+<li class="bibitem" id="ref-Deuerlein08">
+Deuerlein, Jochen W. 2008. <span>“Decomposition Model of a General Water
+Supply Network Graph.”</span> <em>Journal of Hydraulic Engineering</em>
+134. <a href="https://doi.org/10.1061/(ASCE)0733-9429(2008)134:6(822)">https://doi.org/10.1061/(ASCE)0733-9429(2008)134:6(822)</a>.
+</li>
+<li class="bibitem" id="ref-Dirac52">
+Dirac, Gabriel. 1952. <span>“Some Theorems on Abstract Graphs.”</span>
+<em>Proceedings of the London Mathematical Society</em> 3 (1): 69–81. <a href="https://doi.org/10.1112/plms/s3-2.1.69">https://doi.org/10.1112/plms/s3-2.1.69</a>.
+</li>
+<li class="bibitem" id="ref-Dirac66">
+———. 1966. <span>“Short Proof of <span>M</span>enger’s Graph
+Theorem.”</span> <em>Mathematika</em> 13: 42–44. <a href="https://doi.org/10.1112/S0025579300004162">https://doi.org/10.1112/S0025579300004162</a>.
+</li>
+<li class="bibitem" id="ref-EdmondsKarp">
+Edmonds, Jack, and Richard M. Karp. 1972. <span>“Theoretical
+Improvements in Algorithmic Efficiency for Network Flow
+Problems.”</span> <em>Journal of the ACM</em> 19: 248–64. <a href="https://doi.org/10.1145/321694.321699">https://doi.org/10.1145/321694.321699</a>.
+</li>
+<li class="bibitem" id="ref-Ehrenfeucht84">
+Ehrenfeucht, Andrzej, Vance Faber, and Henry Kierstead. 1984. <span>“A
+New Method of Proving Theorems on Chromatic Index.”</span> <em>Discrete
+Mathematics</em> 52. <a href="https://doi.org/10.1016/0012-365X(84)90078-5">https://doi.org/10.1016/0012-365X(84)90078-5</a>.
+</li>
+<li class="bibitem" id="ref-EppsteinEuler">
+Eppstein, David. <span>“Twenty-One Proofs of <span>E</span>uler’s
+Formula: <span><span class="math inline"><mjx-container class="MathJax CtxtMenu_Attached_0" jax="SVG" overflow="overflow" tabindex="0" ctxtmenu_counter="0" data-semantic-locale="en" data-semantic-domain="clearspeak" data-semantic-style="default" data-semantic-domain2style="mathspeak:default,clearspeak:default" data-semantic-collapsible="collapsible" data-semantic-expandable="expandable" data-semantic-level="Level" data-semantic-speech-none="V minus E plus F equals 2" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;V&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;1&quot;/&gt; minus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;2&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;E&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;3&quot;/&gt; plus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;4&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;F&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;5&quot;/&gt; equals &lt;mark name=&quot;6&quot;/&gt; 2" data-speech-attached="true" data-semantic-braille="⠠⠧⠤⠠⠑⠬⠠⠋⠀⠨⠅⠀⠼⠆" data-braille-attached="true" has-speech="true"><svg xmlns="http://www.w3.org/2000/svg" width="1.742ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 770 1000" xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: -0.566ex;" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="V-E+F=2" data-semantic-type="relseq" data-semantic-role="equality" data-semantic-annotation="depth:1" data-semantic-id="9" data-semantic-children="8,6" data-semantic-content="5" data-semantic-attributes="latex:V-E+F=2" data-semantic-owns="8 5 6" data-semantic-level-number="0" data-semantic-structure="(9 (8 (7 0 1 2) 3 4) 5 6)" data-speech-node="true" data-semantic-speech-none="V minus E plus F equals 2" data-semantic-summary-none="equality" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;V&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;1&quot;/&gt; minus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;2&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;E&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;3&quot;/&gt; plus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;4&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;F&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;5&quot;/&gt; equals &lt;mark name=&quot;6&quot;/&gt; 2" data-semantic-summary="&lt;mark name=&quot;9&quot;/&gt; equality" data-semantic-braille="⠠⠧⠤⠠⠑⠬⠠⠋⠀⠨⠅⠀⠼⠆"><g data-mml-node="mrow" data-semantic-added="true" data-semantic-type="infixop" data-semantic-role="addition" data-semantic-annotation="depth:2" data-semantic-id="8" data-semantic-children="7,4" data-semantic-content="3" data-semantic-parent="9" data-semantic-owns="7 3 4" data-semantic-level-number="1" data-speech-node="true" data-semantic-speech-none="V minus E plus F" data-semantic-summary-none="sum with 2 summands" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;V&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;1&quot;/&gt; minus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;2&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;E&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;3&quot;/&gt; plus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;4&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;F&lt;/say-as&gt; &lt;/prosody&gt;" data-semantic-summary="&lt;mark name=&quot;8&quot;/&gt; sum with 2 summands" data-semantic-braille="⠠⠧⠤⠠⠑⠬⠠⠋"><g data-mml-node="mrow" data-semantic-added="true" data-semantic-type="infixop" data-semantic-role="subtraction" data-semantic-annotation="depth:3" data-semantic-id="7" data-semantic-children="0,2" data-semantic-content="1" data-semantic-parent="8" data-semantic-owns="0 1 2" data-semantic-level-number="2" data-speech-node="true" data-semantic-speech-none="V minus E" data-semantic-summary-none="subtraction with 2 elements" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;V&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;1&quot;/&gt; minus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;2&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;E&lt;/say-as&gt; &lt;/prosody&gt;" data-semantic-summary="&lt;mark name=&quot;7&quot;/&gt; subtraction with 2 elements" data-semantic-braille="⠠⠧⠤⠠⠑"><g data-mml-node="mi" data-latex="V" data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple;nemeth:number;depth:4" data-semantic-id="0" data-semantic-parent="7" data-semantic-attributes="latex:V" data-semantic-level-number="3" data-speech-node="true" data-semantic-speech-none="V" data-semantic-summary-none="identifier" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;V&lt;/say-as&gt; &lt;/prosody&gt;" data-semantic-summary="&lt;mark name=&quot;0&quot;/&gt; identifier" data-semantic-braille="⠠⠧"><use data-c="1D449" xlink:href="#MJX-1-NCM-I-1D449"></use></g></g></g></g></g><defs><path id="MJX-1-NCM-I-1D449" d="M671 680C652 680 592 683 573 683C558 683 550 675 550 660C550 650 557 645 570 644C598 643 612 633 612 616C612 607 607 595 598 580L300 107L234 619C234 636 255 644 298 644C318 644 327 651 327 668C327 678 321 683 309 683C287 683 209 680 187 680C167 680 99 683 79 683C64 683 56 675 56 660C56 649 66 644 85 644C102 644 114 642 122 640C138 635 137 633 140 614L218 4C221-13 229-22 242-22C255-22 265-15 273-2L629 564C652 600 674 623 696 632C711 639 730 643 752 644C763 645 768 652 769 667C770 678 764 683 752 683C737 683 686 680 671 680Z"></path><path id="MJX-1-NCM-N-2212" d="M698 270L80 270C64 270 56 263 56 250C56 237 64 230 80 230L698 230C714 230 722 237 722 250C722 262 710 270 698 270Z"></path><path id="MJX-1-NCM-I-1D438" d="M199 656C199 646 210 641 231 641C271 641 291 637 291 628C291 625 289 618 286 605L156 82C151 60 141 47 126 42C119 40 101 39 70 39C48 39 38 37 38 16C38 5 49 0 70 0L583 0C607 0 609 2 617 19L657 109C684 171 703 217 714 248C712 257 709 263 698 263C691 263 685 258 681 249C656 190 632 145 608 113C568 59 509 39 415 39L270 39C260 39 253 39 249 40C243 40 240 42 240 45C240 47 242 54 245 67L311 334L406 334C453 334 478 328 483 315C485 310 486 303 486 293C486 280 484 264 479 245C477 240 476 236 476 233C476 223 482 218 493 218C502 218 508 226 512 241L568 473C568 483 563 488 552 488C544 488 538 481 535 467C525 428 512 403 495 391C478 379 450 373 409 373L321 373L379 606C387 640 387 641 429 641L568 641C619 641 654 636 673 626C701 611 715 581 715 536C715 519 714 501 711 484C711 482 711 479 710 475L710 466C710 455 715 450 725 450C735 450 741 459 743 478L763 649C766 677 759 680 732 680L233 680C210 680 199 679 199 656Z"></path><path id="MJX-1-NCM-N-2B" d="M698 274L413 274L413 559C413 575 405 583 389 583C373 583 365 575 365 559L365 274L80 274C64 274 56 266 56 250C56 234 64 226 80 226L365 226L365-59C365-75 373-83 389-83C405-83 413-75 413-59L413 226L698 226C714 226 722 234 722 250C722 263 711 274 698 274Z"></path><path id="MJX-1-NCM-I-1D439" d="M199 656C199 646 210 641 231 641C271 641 291 637 291 628C291 625 289 618 286 605L156 82C150 60 140 47 126 42C119 40 101 39 70 39C48 39 38 37 38 16C38 5 44 0 57 0L187 3L335 0C351 0 359 8 359 23C359 40 348 39 322 39C278 39 253 41 247 46C244 47 243 51 243 56L307 321L400 321C446 321 478 319 478 281C478 268 476 252 471 233C470 230 469 226 468 222C468 211 473 206 484 206C489 207 496 214 503 229L557 444C559 452 560 458 560 461C557 470 551 475 544 475C536 475 530 467 526 452C516 414 502 390 486 378C470 366 442 360 402 360L317 360L379 606C387 640 387 641 429 641L559 641C656 641 700 626 700 537C700 517 699 499 697 484C696 473 695 467 695 466C695 455 700 450 710 450C720 450 726 459 728 478L748 649C751 677 744 680 717 680L233 680C210 680 199 679 199 656Z"></path><path id="MJX-1-NCM-N-3D" d="M698 367L80 367C64 367 56 359 56 344C56 329 64 321 80 321L698 321C714 321 722 329 722 344C722 356 711 367 698 367M698 179L80 179C64 179 56 171 56 156C56 141 64 133 80 133L698 133C714 133 722 141 722 156C722 169 711 179 698 179Z"></path><path id="MJX-1-NCM-N-32" d="M237 666C186 666 143 648 106 612C69 576 50 534 50 483C50 449 75 424 106 424C136 424 161 450 161 480C161 513 137 536 105 536C102 536 100 536 98 535C117 584 161 627 224 627C306 627 352 556 352 470C352 403 318 331 250 255L62 43C49 28 50 29 50 0L421 0L450 180L417 180C409 129 402 100 396 91C391 86 361 84 306 84L139 84L236 179C304 243 390 312 419 365C439 400 449 435 449 470C449 588 357 666 237 666Z"></path></defs></svg><mjx-break size="3" aria-hidden="true"> </mjx-break><svg xmlns="http://www.w3.org/2000/svg" width="3.996ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1766.2 1000" xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: -0.566ex;" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="V-E+F=2" data-semantic-type="relseq" data-semantic-role="equality" data-semantic-annotation="depth:1" data-semantic-id="9" data-semantic-children="8,6" data-semantic-content="5" data-semantic-attributes="latex:V-E+F=2" data-semantic-owns="8 5 6" data-semantic-level-number="0" data-semantic-structure="(9 (8 (7 0 1 2) 3 4) 5 6)" data-speech-node="true" data-semantic-speech-none="V minus E plus F equals 2" data-semantic-summary-none="equality" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;V&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;1&quot;/&gt; minus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;2&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;E&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;3&quot;/&gt; plus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;4&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;F&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;5&quot;/&gt; equals &lt;mark name=&quot;6&quot;/&gt; 2" data-semantic-summary="&lt;mark name=&quot;9&quot;/&gt; equality" data-semantic-braille="⠠⠧⠤⠠⠑⠬⠠⠋⠀⠨⠅⠀⠼⠆"><g data-mml-node="mrow" data-semantic-added="true" data-semantic-type="infixop" data-semantic-role="addition" data-semantic-annotation="depth:2" data-semantic-id="8" data-semantic-children="7,4" data-semantic-content="3" data-semantic-parent="9" data-semantic-owns="7 3 4" data-semantic-level-number="1" data-speech-node="true" data-semantic-speech-none="V minus E plus F" data-semantic-summary-none="sum with 2 summands" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;V&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;1&quot;/&gt; minus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;2&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;E&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;3&quot;/&gt; plus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;4&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;F&lt;/say-as&gt; &lt;/prosody&gt;" data-semantic-summary="&lt;mark name=&quot;8&quot;/&gt; sum with 2 summands" data-semantic-braille="⠠⠧⠤⠠⠑⠬⠠⠋"><g data-mml-node="mrow" data-semantic-added="true" data-semantic-type="infixop" data-semantic-role="subtraction" data-semantic-annotation="depth:3" data-semantic-id="7" data-semantic-children="0,2" data-semantic-content="1" data-semantic-parent="8" data-semantic-owns="0 1 2" data-semantic-level-number="2" data-speech-node="true" data-semantic-speech-none="V minus E" data-semantic-summary-none="subtraction with 2 elements" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;V&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;1&quot;/&gt; minus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;2&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;E&lt;/say-as&gt; &lt;/prosody&gt;" data-semantic-summary="&lt;mark name=&quot;7&quot;/&gt; subtraction with 2 elements" data-semantic-braille="⠠⠧⠤⠠⠑"><g data-mml-node="mo" data-latex="-" data-semantic-type="operator" data-semantic-role="subtraction" data-semantic-annotation="depth:4" data-semantic-id="1" data-semantic-parent="7" data-semantic-attributes="latex:-" data-semantic-operator="infixop,−" data-semantic-level-number="3" data-speech-node="true" data-semantic-speech-none="minus" data-semantic-summary-none="minus" data-semantic-speech="&lt;mark name=&quot;1&quot;/&gt; minus" data-semantic-summary="&lt;mark name=&quot;1&quot;/&gt; minus" data-semantic-braille="⠤"><use data-c="2212" xlink:href="#MJX-1-NCM-N-2212"></use></g><g data-mml-node="mi" data-latex="E" data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple;depth:4" data-semantic-id="2" data-semantic-parent="7" data-semantic-attributes="latex:E" data-semantic-level-number="3" transform="translate(1000.2,0)" data-speech-node="true" data-semantic-speech-none="E" data-semantic-summary-none="identifier" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;2&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;E&lt;/say-as&gt; &lt;/prosody&gt;" data-semantic-summary="&lt;mark name=&quot;2&quot;/&gt; identifier" data-semantic-braille="⠠⠑"><use data-c="1D438" xlink:href="#MJX-1-NCM-I-1D438"></use></g></g></g></g></g></svg><mjx-break size="3" aria-hidden="true"> </mjx-break><svg xmlns="http://www.w3.org/2000/svg" width="3.962ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1751.2 1000" xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: -0.566ex;" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="V-E+F=2" data-semantic-type="relseq" data-semantic-role="equality" data-semantic-annotation="depth:1" data-semantic-id="9" data-semantic-children="8,6" data-semantic-content="5" data-semantic-attributes="latex:V-E+F=2" data-semantic-owns="8 5 6" data-semantic-level-number="0" data-semantic-structure="(9 (8 (7 0 1 2) 3 4) 5 6)" data-speech-node="true" data-semantic-speech-none="V minus E plus F equals 2" data-semantic-summary-none="equality" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;V&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;1&quot;/&gt; minus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;2&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;E&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;3&quot;/&gt; plus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;4&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;F&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;5&quot;/&gt; equals &lt;mark name=&quot;6&quot;/&gt; 2" data-semantic-summary="&lt;mark name=&quot;9&quot;/&gt; equality" data-semantic-braille="⠠⠧⠤⠠⠑⠬⠠⠋⠀⠨⠅⠀⠼⠆"><g data-mml-node="mrow" data-semantic-added="true" data-semantic-type="infixop" data-semantic-role="addition" data-semantic-annotation="depth:2" data-semantic-id="8" data-semantic-children="7,4" data-semantic-content="3" data-semantic-parent="9" data-semantic-owns="7 3 4" data-semantic-level-number="1" data-speech-node="true" data-semantic-speech-none="V minus E plus F" data-semantic-summary-none="sum with 2 summands" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;V&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;1&quot;/&gt; minus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;2&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;E&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;3&quot;/&gt; plus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;4&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;F&lt;/say-as&gt; &lt;/prosody&gt;" data-semantic-summary="&lt;mark name=&quot;8&quot;/&gt; sum with 2 summands" data-semantic-braille="⠠⠧⠤⠠⠑⠬⠠⠋"><g data-mml-node="mo" data-latex="+" data-semantic-type="operator" data-semantic-role="addition" data-semantic-annotation="depth:3" data-semantic-id="3" data-semantic-parent="8" data-semantic-attributes="latex:+" data-semantic-operator="infixop,+" data-semantic-level-number="2" data-speech-node="true" data-semantic-speech-none="plus" data-semantic-summary-none="plus" data-semantic-speech="&lt;mark name=&quot;3&quot;/&gt; plus" data-semantic-summary="&lt;mark name=&quot;3&quot;/&gt; plus" data-semantic-braille="⠬"><use data-c="2B" xlink:href="#MJX-1-NCM-N-2B"></use></g><g data-mml-node="mi" data-latex="F" data-semantic-type="identifier" data-semantic-role="simple function" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple;depth:3" data-semantic-id="4" data-semantic-parent="8" data-semantic-attributes="latex:F" data-semantic-level-number="2" transform="translate(1000.2,0)" data-speech-node="true" data-semantic-speech-none="F" data-semantic-summary-none="identifier" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;4&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;F&lt;/say-as&gt; &lt;/prosody&gt;" data-semantic-summary="&lt;mark name=&quot;4&quot;/&gt; identifier" data-semantic-braille="⠠⠋"><use data-c="1D439" xlink:href="#MJX-1-NCM-I-1D439"></use></g></g></g></g></svg><mjx-break size="4" aria-hidden="true"> </mjx-break><svg xmlns="http://www.w3.org/2000/svg" width="3.52ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 1555.8 1000" xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: -0.566ex;" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="V-E+F=2" data-semantic-type="relseq" data-semantic-role="equality" data-semantic-annotation="depth:1" data-semantic-id="9" data-semantic-children="8,6" data-semantic-content="5" data-semantic-attributes="latex:V-E+F=2" data-semantic-owns="8 5 6" data-semantic-level-number="0" data-semantic-structure="(9 (8 (7 0 1 2) 3 4) 5 6)" data-speech-node="true" data-semantic-speech-none="V minus E plus F equals 2" data-semantic-summary-none="equality" data-semantic-speech="&lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;V&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;1&quot;/&gt; minus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;2&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;E&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;3&quot;/&gt; plus &lt;prosody pitch=&quot;+30%&quot;&gt; &lt;mark name=&quot;4&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;F&lt;/say-as&gt; &lt;/prosody&gt; &lt;mark name=&quot;5&quot;/&gt; equals &lt;mark name=&quot;6&quot;/&gt; 2" data-semantic-summary="&lt;mark name=&quot;9&quot;/&gt; equality" data-semantic-braille="⠠⠧⠤⠠⠑⠬⠠⠋⠀⠨⠅⠀⠼⠆"><g data-mml-node="mo" data-latex="=" data-semantic-type="relation" data-semantic-role="equality" data-semantic-annotation="nemeth:number;depth:2" data-semantic-id="5" data-semantic-parent="9" data-semantic-attributes="latex:=" data-semantic-operator="relseq,=" data-semantic-level-number="1" data-speech-node="true" data-semantic-speech-none="equals" data-semantic-summary-none="equals" data-semantic-speech="&lt;mark name=&quot;5&quot;/&gt; equals" data-semantic-summary="&lt;mark name=&quot;5&quot;/&gt; equals" data-semantic-braille="⠨⠅"><use data-c="3D" xlink:href="#MJX-1-NCM-N-3D"></use></g><g data-mml-node="mn" data-latex="2" data-semantic-type="number" data-semantic-role="integer" data-semantic-font="normal" data-semantic-annotation="clearspeak:simple;nemeth:number;depth:2" data-semantic-id="6" data-semantic-parent="9" data-semantic-attributes="latex:2" data-semantic-level-number="1" transform="translate(1055.8,0)" data-speech-node="true" data-semantic-speech-none="2" data-semantic-summary-none="number" data-semantic-speech="&lt;mark name=&quot;6&quot;/&gt; 2" data-semantic-summary="&lt;mark name=&quot;6&quot;/&gt; number" data-semantic-braille="⠼⠆"><use data-c="32" xlink:href="#MJX-1-NCM-N-32"></use></g></g></g></svg><mjx-speech aria-label="V minus E plus F equals 2, math" role="img" aria-roledescription="" aria-braillelabel="⠠⠧⠤⠠⠑⠬⠠⠋⠀⠨⠅⠀⠼⠆" aria-brailleroledescription="⠀"></mjx-speech></mjx-container></span></span>.”</span> Accessed December
+21, 2025. <a href="https://ics.uci.edu/~eppstein/junkyard/euler/">https://ics.uci.edu/~eppstein/junkyard/euler/</a>.
+</li>
+<li class="bibitem" id="ref-Erdos47">
+Erdős, Pál. 1947. <span>“Some Remarks on the Theory of Graphs.”</span>
+<em>Bulletin of the American Mathematical Society</em> 53 (4): 292–94.
+<a href="https://doi.org/10.1090/S0002-9904-1947-08785-1">https://doi.org/10.1090/S0002-9904-1947-08785-1</a>.
+</li>
+<li class="bibitem" id="ref-Erdos64">
+———. 1964. <span>“On an Extremal Problem in Graph Theory.”</span>
+<em>Colloquium Mathematicum</em> 13: 251–54. <a href="https://doi.org/10.4064/cm-13-2-251-254">https://doi.org/10.4064/cm-13-2-251-254</a>.
+</li>
+<li class="bibitem" id="ref-Erdos60">
+Erdős, Pál, and Tibor Gallai. 1960. <span>“Gr<span>á</span>fok
+El<span>ő</span><span>í</span>rt Foksz<span>á</span>m<span>ú</span>
+Pontokkal.”</span> <em>Matematikai Lapok</em> 11: 264–74. <a href="https://www.renyi.hu/~p_erdos/1961-05.pdf">https://www.renyi.hu/~p_erdos/1961-05.pdf</a>.
+</li>
+<li class="bibitem" id="ref-Esfahanian84">
+Esfahanian, Abdol, and S. L. Hakimi. 1984. <span>“On Computing the
+Connectivities of Graphs and Digraphs.”</span> <em>Networks</em> 14:
+355–66. <a href="https://doi.org/10.1002/net.3230140211">https://doi.org/10.1002/net.3230140211</a>.
+</li>
+<li class="bibitem" id="ref-Euler1758">
+Euler, Leonhard. 1758. <span>“Elementa Doctrinae Solidorum.”</span>
+<em>Novi Commentarii Academiae Scientiarum Petropolitanae</em> 4:
+109–40. <a href="https://scholarlycommons.pacific.edu/euler-works/230/">https://scholarlycommons.pacific.edu/euler-works/230/</a>.
+</li>
+<li class="bibitem" id="ref-Federico82">
+Federico, P. J. 1982. <em><span>Descartes</span> on Polyhedra: A Study
+of the <span><span>“De Solidorum Elementis”</span></span></em>. Sources
+in the History of Mathematics and Physical Sciences. Springer.
+</li>
+<li class="bibitem" id="ref-FordFulkerson">
+Ford Jr., L. R., and D. R. Fulkerson. 1956. <span>“Maximal Flow Through
+a Network.”</span> <em>Canadian Journal of Mathematics</em> 8: 399–404.
+<a href="https://doi.org/10.4153/CJM-1956-045-5">https://doi.org/10.4153/CJM-1956-045-5</a>.
+</li>
+<li class="bibitem" id="ref-Frucht49">
+Frucht, Robert. 1949. <span>“Graphs of Degree Three with a Given
+Abstract Group.”</span> <em>Canadian Journal of Mathematics</em> 1:
+365–78. <a href="https://doi.org/10.4153/CJM-1949-033-6">https://doi.org/10.4153/CJM-1949-033-6</a>.
+</li>
+<li class="bibitem" id="ref-GardnerMPire">
+Gardner, Martin. 1997. <span>“M-Pire Maps.”</span> In <em>The Last
+Recreations: Hydras, Eggs, and Other Mathematical Mystifications</em>,
+by Martin Gardner, 85–100. New York, NY: Springer New York.
+</li>
+<li class="bibitem" id="ref-GardnerPlatonic">
+———. 2008. <span>“The Five <span>Platonic</span> Solids.”</span> In
+<em>Origami, <span>Eleusis</span>, and the <span>Soma</span> Cube</em>,
+by Martin Gardner, 1–10. New York, NY: Cambridge University Press.
+</li>
+<li class="bibitem" id="ref-Gonthier08">
+Gonthier, Georges. 2008. <span>“Formal Proof—the Four-Color
+Theorem.”</span> <em>Notices of the American Mathematical Society</em>
+55: 1382–93.
+</li>
+<li class="bibitem" id="ref-Graham73">
+Graham, Ronald, and Daniel Kleitman. 1973. <span>“Increasing Paths in
+Edge Ordered Graphs.”</span> <em>Period. Math. Hungar.</em> 3: 141–48.
+<a href="https://doi.org/10.1007/BF02018469">https://doi.org/10.1007/BF02018469</a>.
+</li>
+<li class="bibitem" id="ref-Greenwood55">
+Greenwood, Robert, and Andrew Gleason. 1955. <span>“Combinatorial
+Relations and Chromatic Graphs.”</span> <em>Canadian Journal of
+Mathematics</em> 7: 1–7. <a href="https://doi.org/10.4153/CJM-1955-001-4">https://doi.org/10.4153/CJM-1955-001-4</a>.
+</li>
+<li class="bibitem" id="ref-deGrey18">
+de Grey, Aubrey. 2018. <span>“The Chromatic Number of the Plane Is at
+Least 5.”</span> <em>arXiv Preprint</em>. <a href="https://arxiv.org/abs/1804.02385">https://arxiv.org/abs/1804.02385</a>.
+</li>
+<li class="bibitem" id="ref-Grotzsch59">
+Grötzsch, Herbert. 1959. <span>“Zur <span>T</span>heorie Der Diskreten
+<span>G</span>ebilde, <span>VII</span>: Ein
+<span>D</span>reifarbenansatz f<span>ü</span>r Dreikreisfrei
+<span>N</span>etze Auf Der <span>K</span>ugel.”</span>
+<em>Wissenschaftliche Zeitschrift Der
+Martin-Luther-Universit<span>ä</span>t Halle-Wittenberg:
+Mathematisch-Naturwissenschaftliche Reihe</em> 8: 109–20.
+</li>
+<li class="bibitem" id="ref-Gupta24">
+Gupta, Parth, Ndiame Ndiaye, Sergey Norin, and Louis Wei. 2024.
+<span>“Optimizing the <span>CGMS</span> Upper Bound on
+<span>R</span>amsey Numbers.”</span> <em>arXiv Preprint</em>. <a href="https://arxiv.org/abs/2407.19026">https://arxiv.org/abs/2407.19026</a>.
+</li>
+<li class="bibitem" id="ref-Guy88">
+Guy, Richard. 1988. <span>“The Strong Law of Small Numbers.”</span>
+<em>The American Mathematical Monthly</em> 95: 697–712. <a href="https://doi.org/10.1080/00029890.1988.11972074">https://doi.org/10.1080/00029890.1988.11972074</a>.
+</li>
+<li class="bibitem" id="ref-Gyarfas88">
+Gyárfás, András, Jeno X. Lehel, and Zsolt Czap Tuza. 1988. <span>“Clumsy
+Packing of Dominoes.”</span> <em>Discrete Mathematics</em> 71 (1):
+33–46. <a href="https://doi.org/10.1016/0012-365X(88)90028-3">https://doi.org/10.1016/0012-365X(88)90028-3</a>.
+</li>
+<li class="bibitem" id="ref-Hakimi62">
+Hakimi, S. L. 1962. <span>“On Realizability of a Set of Integers as
+Degrees of the Vertices of a Linear Graph. <span>I</span>.”</span>
+<em>Journal of the Society for Industrial and Applied Mathematics</em>
+10 (3): 496–506. <a href="https://doi.org/10.1137/0110037">https://doi.org/10.1137/0110037</a>.
+</li>
+<li class="bibitem" id="ref-Hall35">
+Hall, Philip. 1931. <span>“On Representatives of Subsets.”</span>
+<em>Journal of the London Mathematical Society</em> 10 (1): 26–30. <a href="https://doi.org/10.1112/jlms/s1-10.37.26">https://doi.org/10.1112/jlms/s1-10.37.26</a>.
+</li>
+<li class="bibitem" id="ref-Hammack18">
+Hammack, Richard. 2018. <em>Book of Proof</em>. <a href="https://richardhammack.github.io/BookOfProof/">https://richardhammack.github.io/BookOfProof/</a>.
+</li>
+<li class="bibitem" id="ref-Harary62">
+Harary, Frank. 1962. <span>“The Maximum Connectivity of a Graph.”</span>
+<em>Proceedings of the National Academy of Sciences of the United States
+of America</em> 48: 1142–46. <a href="https://doi.org/10.1073/pnas.48.7.1142">https://doi.org/10.1073/pnas.48.7.1142</a>.
+</li>
+<li class="bibitem" id="ref-Harary60">
+Harary, Frank, and Robert Norman. 1960. <span>“Some Properties of Line
+Digraphs.”</span> <em>Rendiconti Del Circolo Matematico Di Palermo</em>
+9: 161–68. <a href="https://doi.org/10.1007/BF02854581">https://doi.org/10.1007/BF02854581</a>.
+</li>
+<li class="bibitem" id="ref-Harchol13">
+Harchol-Balter, Mor. 2013. <em>Performance Modeling and Design of
+Computer Systems</em>. Cambridge University Press. <a href="https://www.cs.cmu.edu/~harchol/PerformanceModeling/book.html">https://www.cs.cmu.edu/~harchol/PerformanceModeling/book.html</a>.
+</li>
+<li class="bibitem" id="ref-Havel55">
+Havel, Václav. 1955. <span>“Pozn<span>á</span>mka o Existenci
+Kone<span>č</span>n<span>ý</span>ch Graf<span>ů</span>.”</span>
+<em><span>Č</span>asopis Pro
+p<span>ě</span>stov<span>á</span>n<span>í</span> Matematiky</em> 80 (4):
+477–80. <a href="https://doi.org/10.21136/CPM.1955.108220">https://doi.org/10.21136/CPM.1955.108220</a>.
+</li>
+<li class="bibitem" id="ref-He09">
+He, Yuan, Hao Ren, Yunhao Liu, and Baijian Yang. 2009. <span>“On the
+Reliability of Large-Scale Distributed Systems — a Topological
+View.”</span> <em>Computer Networks</em> 53: 2140–52. <a href="https://doi.org/10.1016/j.comnet.2009.03.012">https://doi.org/10.1016/j.comnet.2009.03.012</a>.
+</li>
+<li class="bibitem" id="ref-Heawood90">
+Heawood, Percy J. 1890. <span>“Map Colour Problem.”</span> <em>Quarterly
+Journal of Pure and Applied Mathematics</em> 24: 332–38.
+</li>
+<li class="bibitem" id="ref-Hedayat75">
+Hedayat, Samad, and Walter T. Federer. 1975. <span>“On the Nonexistence
+of <span>Knut Vik</span> Designs for All Even Orders.”</span> <em>The
+Annals of Statistics</em> 3 (2): 445–47. <a href="https://doi.org/10.1214/aos/1176343068">https://doi.org/10.1214/aos/1176343068</a>.
+</li>
+<li class="bibitem" id="ref-Hoffman60">
+Hoffman, Alan, and Robert Singleton. 1960. <span>“On <span>Moore</span>
+Graphs with Diameters 2 and 3.”</span> <em>IBM Journal of Research and
+Development</em> 4: 497–504. <a href="https://doi.org/10.1147/rd.45.0497">https://doi.org/10.1147/rd.45.0497</a>.
+</li>
+<li class="bibitem" id="ref-Holton93">
+Holton, Derek, and John Sheehan. 1993. <em>The Petersen Graph</em>.
+Australian Mathematical Society Lecture Series. Cambridge University
+Press.
+</li>
+<li class="bibitem" id="ref-Hudson03">
+Hudson, Hud. 2003. <span>“Four Colors Do Not Suffice.”</span> <em>The
+American Mathematical Monthly</em> 110: 417–23. <a href="https://doi.org/10.1080/00029890.2003.11919979">https://doi.org/10.1080/00029890.2003.11919979</a>.
+</li>
+<li class="bibitem" id="ref-Jackson84">
+Jackson, Brad, and Gerhard Ringel. 1984. <span>“Solution of
+<span>H</span>eawood’s Empire Problem in the Plane.”</span> <em>Journal
+f<span>ü</span>r Die Reine Und Angewandte Mathematik</em> 347: 146–53.
+<a href="https://doi.org/10.1515/crll.1984.347.146">https://doi.org/10.1515/crll.1984.347.146</a>.
+</li>
+<li class="bibitem" id="ref-Kainen74">
+Kainen, Paul C. 1974. <span>“A Generalization of the 5-Color
+Theorem.”</span> <em>Proceedings of the American Mathematical
+Society</em> 45: 450–53. <a href="https://doi.org/10.2307/2039977">https://doi.org/10.2307/2039977</a>.
+</li>
+<li class="bibitem" id="ref-Kleber02">
+Kleber, Michael, and Ravi Vakil. 2002. <span>“The Best Card
+Trick.”</span> <em>The Mathematical Intelligencer</em> 24: 9–11. <a href="https://doi.org/10.1007/BF03025305">https://doi.org/10.1007/BF03025305</a>.
+</li>
+<li class="bibitem" id="ref-Konig16">
+Kőnig, Dénes. 1916. <span>“<span>Ü</span>ber <span>G</span>raphen Und
+Ihre <span>A</span>nwendung Auf <span>D</span>eterminantentheorie Und
+<span>M</span>engenlehre.”</span> <em>Mathematische Annalen</em> 77:
+453–65. <a href="https://doi.org/10.1007/BF01456961">https://doi.org/10.1007/BF01456961</a>.
+</li>
+<li class="bibitem" id="ref-Konig31">
+———. 1931. <span>“Gr<span>á</span>fok <span class="nocase">é</span>s
+m<span>á</span>trixok.”</span> <em>Matematikai <span>é</span>s Fizikai
+Lapok</em> 38: 116–19.
+</li>
+<li class="bibitem" id="ref-Konig01">
+———. 2001. <em>Theorie Der Endlichen Und Unendlichen
+<span>G</span>raphen</em>. Vol. 72. American Mathematical Society.
+</li>
+<li class="bibitem" id="ref-Kruskal56">
+Kruskal, Joseph B. 1956. <span>“On the Shortest Spanning Subtree of a
+Graph and the Traveling Salesman Problem.”</span> <em>Proceedings of the
+American Mathematical Society</em> 7 (1): 48–50. <a href="https://doi.org/10.2307/2033241">https://doi.org/10.2307/2033241</a>.
+</li>
+<li class="bibitem" id="ref-Kullman79">
+Kullman, David. 1979. <span>“The Utilities Problem.”</span>
+<em>Mathematics Magazine</em> 52: 299–302. <a href="https://doi.org/10.1080/0025570X.1979.11976807">https://doi.org/10.1080/0025570X.1979.11976807</a>.
+</li>
+<li class="bibitem" id="ref-Kuratowski30">
+Kuratowski, Casimir. 1930. <span>“Sur Le Probl<span>è</span>me Des
+Courbes Gauches En Topologie.”</span> <em>Fundamenta Mathematicae</em>
+15: 271–83. <a href="https://doi.org/10.4064/fm-15-1-271-283">https://doi.org/10.4064/fm-15-1-271-283</a>.
+</li>
+<li class="bibitem" id="ref-Lee50">
+Lee, William Wallace. 1950. <em>Math Miracles</em>. Durham, N.C.: Seeman
+Printery.
+</li>
+<li class="bibitem" id="ref-Li10">
+Li, Ben P. C., and Michel Toulouse. 2010. <span>“Maximum Leaf Spanning
+Tree Problem for Grid Graphs.”</span> <em>Journal of Combinatorial
+Mathematics and Combinatorial Computing</em> 73: 181. <a href="https://combinatorialpress.com/jcmcc-articles/volume-073/maximum-leaf-spanning-tree-problem-for-grid-graphs/">https://combinatorialpress.com/jcmcc-articles/volume-073/maximum-leaf-spanning-tree-problem-for-grid-graphs/</a>.
+</li>
+<li class="bibitem" id="ref-Lovasz86">
+Lovász, László, and Michael D. Plummer. 1986. <em>Matching Theory</em>.
+North Holland.
+</li>
+<li class="bibitem" id="ref-RPS7">
+Lovelace, David C. 2003. <span>“RPS-7.”</span> 2003. <a href="https://umop.com/rps7.htm">https://umop.com/rps7.htm</a>.
+</li>
+<li class="bibitem" id="ref-Menger27">
+Menger, Karl. 1927. <span>“Zur Allgemeinen
+<span>K</span>urventheorie.”</span> <em>Fundamenta Mathematicae</em> 10:
+96–115. <a href="https://doi.org/10.4064/fm-10-1-96-115">https://doi.org/10.4064/fm-10-1-96-115</a>.
+</li>
+<li class="bibitem" id="ref-Miller13">
+Miller, Mirka, and Jozef Širáň. 2013. <span>“<span>Moore</span> Graphs
+and Beyond: A Survey of the Degree/Diameter Problem.”</span>
+<em>Electronic Journal of Combinatorics</em>. <a href="https://doi.org/10.37236/35">https://doi.org/10.37236/35</a>.
+</li>
+<li class="bibitem" id="ref-Moore59">
+Moore, Edward F. 1959. <span>“The Shortest Path Through a Maze.”</span>
+In <em>Proc. <span>I</span>nternat. <span>S</span>ympos.
+<span>S</span>witching <span>T</span>heory 1957, <span>P</span>arts
+<span>I</span>,<span>II</span></em>, 285–92. The Annals of the
+Computation Laboratory of Harvard University, Vols. XXIX, XXX. Harvard
+Univ. Press, Cambridge, MA.
+</li>
+<li class="bibitem" id="ref-Moser61">
+Moser, Leo, and William Moser. 1961. <span>“Problems for Solution
+(P10).”</span> <em>Canadian Mathematical Bulletin</em> 4: 187–89. <a href="https://doi.org/10.1017/S0008439500025753">https://doi.org/10.1017/S0008439500025753</a>.
+</li>
+<li class="bibitem" id="ref-Mycielski55">
+Mycielski, Jan. 1955. <span>“Sur Le Coloriage Des Graphs.”</span>
+<em>Colloquium Mathematicum</em> 3: 161–62. <a href="https://doi.org/10.4064/cm-3-2-161-162">https://doi.org/10.4064/cm-3-2-161-162</a>.
+</li>
+<li class="bibitem" id="ref-Newstead24">
+Newstead, Clive. 2024. <em>An Infinite Descent into Pure
+Mathematics</em>. <a href="https://infinitedescent.xyz/">https://infinitedescent.xyz/</a>.
+</li>
+<li class="bibitem" id="ref-A000055">
+OEIS Foundation Inc. 2026. <span>“Entry <span>A</span>000055 in the
+<span>O</span>n-Line <span>E</span>ncyclopedia of <span>I</span>nteger
+<span>S</span>equences.”</span> <a href="https://oeis.org/A000055">https://oeis.org/A000055</a>.
+</li>
+<li class="bibitem" id="ref-A000109">
+———. 2026. <span>“Entry <span>A</span>000109 in the
+<span>O</span>n-Line <span>E</span>ncyclopedia of <span>I</span>nteger
+<span>S</span>equences.”</span> <a href="https://oeis.org/A000109">https://oeis.org/A000109</a>.
+</li>
+<li class="bibitem" id="ref-A002851">
+———. 2026. <span>“Entry <span>A</span>002851 in the
+<span>O</span>n-Line <span>E</span>ncyclopedia of <span>I</span>nteger
+<span>S</span>equences.”</span> <a href="https://oeis.org/A002851">https://oeis.org/A002851</a>.
+</li>
+<li class="bibitem" id="ref-A380996">
+———. 2026. <span>“Entry <span>A</span>380996 in the
+<span>O</span>n-Line <span>E</span>ncyclopedia of <span>I</span>nteger
+<span>S</span>equences.”</span> <a href="https://oeis.org/A380996">https://oeis.org/A380996</a>.
+</li>
+<li class="bibitem" id="ref-Polya21">
+Pólya, George. 1921. <span>“Uber Die
+<span><span>‘Doppelt-Periodischen’</span></span> l<span>ö</span>sungen
+Des <span><span class="math inline"><mjx-container class="MathJax CtxtMenu_Attached_0" jax="SVG" overflow="overflow" tabindex="0" ctxtmenu_counter="1" data-semantic-locale="en" data-semantic-domain="clearspeak" data-semantic-style="default" data-semantic-domain2style="mathspeak:default,clearspeak:default" data-semantic-collapsible="collapsible" data-semantic-expandable="expandable" data-semantic-level="Level" data-semantic-speech-none="n" data-semantic-speech="&lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;n&lt;/say-as&gt;" data-speech-attached="true" data-semantic-braille="⠝" data-braille-attached="true" has-speech="true"><svg xmlns="http://www.w3.org/2000/svg" width="1.357ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 600 453" xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: -0.025ex;" aria-hidden="true"><defs><path id="MJX-2-NCM-I-1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="n" data-semantic-structure="0"><g data-mml-node="mi" data-latex="n" data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple;nemeth:number;depth:1" data-semantic-id="0" data-semantic-attributes="latex:n" data-semantic-level-number="0" data-speech-node="true" data-semantic-speech-none="n" data-semantic-summary-none="identifier" data-semantic-speech="&lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;n&lt;/say-as&gt;" data-semantic-summary="&lt;mark name=&quot;0&quot;/&gt; identifier" data-semantic-braille="⠝"><use data-c="1D45B" xlink:href="#MJX-2-NCM-I-1D45B"></use></g></g></g></svg><mjx-speech aria-label="n, math" role="img" aria-roledescription="" aria-braillelabel="⠝" aria-brailleroledescription="⠀"></mjx-speech></mjx-container></span></span>-<span>D</span>amen-<span>P</span>roblems.”</span>
+<em>W. Ahrens, Mathematische Unterhaltungen Und Spiele</em> 1: 364–74.
+</li>
+<li class="bibitem" id="ref-Polya37">
+———. 1937. <span>“Kombinatorische <span>A</span>nzalbestimmungen
+f<span>ü</span>r <span>G</span>ruppen, <span>G</span>raphen, Und
+Chemische <span>V</span>erbindungen.”</span> <em>Acta Mathematica</em>
+68 (1): 145–254. <a href="https://doi.org/10.1007/BF02546665">https://doi.org/10.1007/BF02546665</a>.
+</li>
+<li class="bibitem" id="ref-Polya45">
+———. 1945. <em>How to Solve It</em>. Princeton University Press.
+</li>
+<li class="bibitem" id="ref-Pratt23">
+Pratt, Rob. 2023. <span>“16 Queens Puzzle.”</span> 2023. <a href="https://puzzling.stackexchange.com/a/122418/47819">https://puzzling.stackexchange.com/a/122418/47819</a>.
+</li>
+<li class="bibitem" id="ref-PUMaC19">
+Princeton University Math Club. 2019. <span>“2019 Princeton University
+Mathematics Competition.”</span> <a href="https://pumac.princeton.edu/archives/#2019">https://pumac.princeton.edu/archives/#2019</a>.
+</li>
+<li class="bibitem" id="ref-Prufer18">
+Prüfer, Heinz. 1918. <span>“Neuer <span>B</span>eweis Eines
+<span>S</span>atzes <span class="nocase">ü</span>ber
+<span>P</span>ermutationen.”</span> <em>Arch. Math. Phys</em> 27:
+742–44.
+</li>
+<li class="bibitem" id="ref-DynamicSurvey">
+Radziszowski, Stanisław. 2024. <span>“Small <span>R</span>amsey
+Numbers.”</span> <em>Electronic Journal of Combinatorics</em>. <a href="https://doi.org/10.37236/21">https://doi.org/10.37236/21</a>.
+</li>
+<li class="bibitem" id="ref-Ramsey30">
+Ramsey, Frank. 1930. <span>“On a Problem of Formal Logic.”</span>
+<em>Proceedings of the London Mathematical Society</em> 2: 264–86. <a href="https://doi.org/10.1112/plms/s2-30.1.264">https://doi.org/10.1112/plms/s2-30.1.264</a>.
+</li>
+<li class="bibitem" id="ref-RSST97">
+Robertson, Neil, Daniel Sanders, Paul Seymour, and Robin Thomas. 1997.
+<span>“The Four-Colour Theorem.”</span> <em>Journal of Combinatorial
+Theory, Series B</em> 70: 2–44. <a href="https://doi.org/10.1006/jctb.1997.1750">https://doi.org/10.1006/jctb.1997.1750</a>.
+</li>
+<li class="bibitem" id="ref-Shannon49">
+Shannon, Claude. 1949. <span>“A Theorem on Coloring the Lines of a
+Network.”</span> <em>Journal of Mathematics and Physics</em> 28: 148–52.
+<a href="https://doi.org/10.1002/sapm1949281148">https://doi.org/10.1002/sapm1949281148</a>.
+</li>
+<li class="bibitem" id="ref-SwitzerlandGIS">
+SimpleMaps.com. 2010–2025. <span>“Free GIS Maps of Switzerland.”</span>
+<a href="https://simplemaps.com/gis/country/ch">https://simplemaps.com/gis/country/ch</a>.
+</li>
+<li class="bibitem" id="ref-Sperner28">
+Sperner, Emanuel. 1928. <span>“Ein <span>S</span>atz <span class="nocase">ü</span>ber <span>U</span>ntermengen Einer Endlichen
+<span>M</span>enge.”</span> <em>Mathematische Zeitschrift</em> 27 (1):
+544–48. <a href="https://doi.org/10.1007/BF01171114">https://doi.org/10.1007/BF01171114</a>.
+</li>
+<li class="bibitem" id="ref-Steinitz94">
+Steinitz, Ernst. 1894. <em><span>Ü</span>ber Die
+<span>K</span>onstruction Der <span>C</span>onfigurationen <span><span class="math inline"><mjx-container class="MathJax CtxtMenu_Attached_0" jax="SVG" overflow="overflow" tabindex="0" ctxtmenu_counter="2" data-semantic-locale="en" data-semantic-domain="clearspeak" data-semantic-style="default" data-semantic-domain2style="mathspeak:default,clearspeak:default" data-semantic-collapsible="collapsible" data-semantic-expandable="expandable" data-semantic-level="Level" data-semantic-speech-none="n sub 3" data-semantic-speech="&lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;n&lt;/say-as&gt; &lt;mark name=&quot;1&quot;/&gt; sub 3" data-speech-attached="true" data-semantic-braille="⠝⠒" data-braille-attached="true" has-speech="true"><svg xmlns="http://www.w3.org/2000/svg" width="2.345ex" height="1.375ex" role="img" focusable="false" viewBox="0 -442 1036.6 607.6" xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: -0.375ex;" aria-hidden="true"><defs><path id="MJX-3-NCM-I-1D45B" d="M537 137C514 58 481 18 440 18C427 18 420 28 420 47C420 61 426 84 438 115C478 224 498 296 498 333C498 403 451 442 381 442C322 442 271 416 230 363C222 407 187 442 136 442C80 442 58 390 44 345C34 313 29 294 29 287C29 278 34 273 45 273C50 273 53 274 56 276C61 285 64 292 65 299C83 375 106 413 133 413C151 413 160 399 160 371C160 358 155 331 144 290L87 63C84 50 78 24 78 19C78-1 89-11 111-11C130-11 144-1 151 19C153 24 159 49 170 92L191 181L221 295C232 318 249 341 270 365C299 397 335 413 378 413C411 413 427 391 427 348C427 310 406 234 363 120C356 102 353 87 353 74C353 25 390-11 438-11C482-11 517 14 542 64C561 104 571 131 571 144C571 153 566 158 555 158C552 158 537 149 537 137Z"></path><path id="MJX-3-NCM-N-33" d="M303 353C369 378 431 441 431 526C431 569 410 604 369 631C333 654 292 666 246 666C201 666 162 654 127 631C88 605 68 571 68 528C68 495 90 472 122 472C154 472 176 495 176 527C176 560 157 578 119 580C145 615 186 633 242 633C302 633 332 598 332 527C332 485 324 450 309 421C282 373 245 364 183 364C171 362 165 357 165 348C165 333 172 333 192 333L235 333C310 333 348 280 348 173C348 88 317 14 241 14C176 14 128 36 99 80C134 79 160 105 160 139C160 173 135 198 101 198C62 198 42 178 42 137C42 88 64 49 108 18C147-9 193-22 244-22C301-22 350-3 393 34C436 71 457 117 457 173C457 267 383 332 303 353Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="n_3" data-semantic-structure="(2 0 1)"><g data-mml-node="msub" data-latex="n_3" data-semantic-type="subscript" data-semantic-role="latinletter" data-semantic-annotation="depth:1" data-semantic-id="2" data-semantic-children="0,1" data-semantic-attributes="latex:n_3" data-semantic-owns="0 1" data-semantic-level-number="0" data-speech-node="true" data-semantic-speech-none="n sub 3" data-semantic-summary-none="subscript" data-semantic-speech="&lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;n&lt;/say-as&gt; &lt;mark name=&quot;1&quot;/&gt; sub 3" data-semantic-summary="&lt;mark name=&quot;2&quot;/&gt; subscript" data-semantic-braille="⠝⠒"><g data-mml-node="mi" data-latex="n" data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple;nemeth:number;depth:2" data-semantic-id="0" data-semantic-parent="2" data-semantic-attributes="latex:n" data-semantic-level-number="1" data-speech-node="true" data-semantic-speech-none="n" data-semantic-prefix-none="Base" data-semantic-summary-none="identifier" data-semantic-speech="&lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;n&lt;/say-as&gt;" data-semantic-prefix="&lt;mark name=&quot;0&quot;/&gt; Base" data-semantic-summary="&lt;mark name=&quot;0&quot;/&gt; identifier" data-semantic-braille="⠝"><use data-c="1D45B" xlink:href="#MJX-3-NCM-I-1D45B"></use></g><g data-mml-node="mn" transform="translate(633,-150) scale(0.707)" data-latex="3" data-semantic-type="number" data-semantic-role="integer" data-semantic-font="normal" data-semantic-annotation="clearspeak:simple;depth:2" data-semantic-id="1" data-semantic-parent="2" data-semantic-attributes="latex:3" data-semantic-level-number="1" data-speech-node="true" data-semantic-speech-none="3" data-semantic-prefix-none="Subscript" data-semantic-summary-none="number" data-semantic-speech="&lt;mark name=&quot;1&quot;/&gt; 3" data-semantic-prefix="&lt;mark name=&quot;1&quot;/&gt; Subscript" data-semantic-summary="&lt;mark name=&quot;1&quot;/&gt; number" data-semantic-braille="⠒"><use data-c="33" xlink:href="#MJX-3-NCM-N-33"></use></g></g></g></g></svg><mjx-speech aria-label="n sub 3, math" role="img" aria-roledescription="" aria-braillelabel="⠝⠒" aria-brailleroledescription="⠀"></mjx-speech></mjx-container></span></span></em>. Druck v. Dr. R. Galle.
+</li>
+<li class="bibitem" id="ref-Sumner74">
+Sumner, David. 1974. <span>“Graphs with 1-Factors.”</span>
+<em>Proceedings of the American Mathematical Society</em> 42: 8–12. <a href="https://doi.org/10.2307/2039666">https://doi.org/10.2307/2039666</a>.
+</li>
+<li class="bibitem" id="ref-ThomassonKT">
+Thomasson, Dan. 2002. <span>“Knight’s Tour Golden Star.”</span> 2002. <a href="http://danthomasson.com/kt-golden-star.html">http://danthomasson.com/kt-golden-star.html</a>.
+</li>
+<li class="bibitem" id="ref-Trudeau93">
+Trudeau, Richard J. 1993. <em>Introduction to Graph Theory</em>. Dover
+Publications, Inc.
+</li>
+<li class="bibitem" id="ref-Tutte46">
+Tutte, William Thomas. 1946. <span>“On <span>H</span>amiltonian
+Circuits.”</span> <em>Journal of the London Mathematical Society</em>
+21: 98–101. <a href="https://doi.org/10.1112/jlms/s1-21.2.98">https://doi.org/10.1112/jlms/s1-21.2.98</a>.
+</li>
+<li class="bibitem" id="ref-Tutte47">
+———. 1947. <span>“The Factorization of Linear Graphs.”</span>
+<em>Journal of the London Mathematical Society</em> 1 (2): 107–11. <a href="https://doi.org/10.1112/jlms/s1-22.2.107">https://doi.org/10.1112/jlms/s1-22.2.107</a>.
+</li>
+<li class="bibitem" id="ref-Tutte59">
+———. 1959. <span>“Matroids and Graphs.”</span> <em>Transactions of the
+American Mathematical Society</em> 90: 527–52. <a href="https://doi.org/10.2307/1993185">https://doi.org/10.2307/1993185</a>.
+</li>
+<li class="bibitem" id="ref-Veblen12">
+Veblen, Oswald. 1912. <span>“An Application of Modular Equations in
+Analysis Situs.”</span> <em>Annals of Mathematics, Second Series</em> 14
+(1): 86–94. <a href="https://doi.org/10.2307/1967604">https://doi.org/10.2307/1967604</a>.
+</li>
+<li class="bibitem" id="ref-Vizing64">
+Vizing, Vadim. 1964. <span>“On an Estimate of the Chromatic Class of a
+<span><span class="math inline"><mjx-container class="MathJax CtxtMenu_Attached_0" jax="SVG" overflow="overflow" tabindex="0" ctxtmenu_counter="3" data-semantic-locale="en" data-semantic-domain="clearspeak" data-semantic-style="default" data-semantic-domain2style="mathspeak:default,clearspeak:default" data-semantic-collapsible="collapsible" data-semantic-expandable="expandable" data-semantic-level="Level" data-semantic-speech-none="p" data-semantic-speech="&lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;p&lt;/say-as&gt;" data-speech-attached="true" data-semantic-braille="⠏" data-braille-attached="true" has-speech="true"><svg xmlns="http://www.w3.org/2000/svg" width="1.138ex" height="1.439ex" role="img" focusable="false" viewBox="0 -442 503 636" xmlns:xlink="http://www.w3.org/1999/xlink" style="vertical-align: -0.439ex;" aria-hidden="true"><defs><path id="MJX-4-NCM-I-1D45D" d="M355 442C311 442 269 419 228 373C217 419 186 442 137 442C96 442 66 409 45 344C35 311 30 292 30 286C30 277 35 272 46 272C51 272 54 273 57 275C62 284 65 291 66 298C84 374 107 412 134 412C152 412 161 398 161 371C161 356 159 339 154 321L44-118C35-151 34-155-5-155C-23-155-32-163-32-178C-32-189-26-194-15-194C0-194 52-191 67-191C86-191 146-194 165-194C180-194 187-186 187-170C187-160 178-155 159-155C141-155 114-156 114-144C114-131 155 26 159 43C179 6 209-13 249-13C314-13 371 20 421 87C467 148 490 213 490 280C490 367 438 442 355 442M352 412C391 412 411 382 411 323C411 296 405 260 394 215C371 128 342 71 307 42C286 25 267 16 248 16C219 16 199 29 188 56C179 77 174 92 174 100L225 309C230 331 248 354 276 377C304 400 329 412 352 412Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math" data-latex="p" data-semantic-structure="0"><g data-mml-node="mi" data-latex="p" data-semantic-type="identifier" data-semantic-role="latinletter" data-semantic-font="italic" data-semantic-annotation="clearspeak:simple;nemeth:number;depth:1" data-semantic-id="0" data-semantic-attributes="latex:p" data-semantic-level-number="0" data-speech-node="true" data-semantic-speech-none="p" data-semantic-summary-none="identifier" data-semantic-speech="&lt;mark name=&quot;0&quot;/&gt; &lt;say-as interpret-as=&quot;character&quot;&gt;p&lt;/say-as&gt;" data-semantic-summary="&lt;mark name=&quot;0&quot;/&gt; identifier" data-semantic-braille="⠏"><use data-c="1D45D" xlink:href="#MJX-4-NCM-I-1D45D"></use></g></g></g></svg><mjx-speech aria-label="p, math" role="img" aria-roledescription="" aria-braillelabel="⠏" aria-brailleroledescription="⠀"></mjx-speech></mjx-container></span></span>-Graph.”</span>
+<em>Diskretnyi Analiz</em> 3: 25–30.
+</li>
+<li class="bibitem" id="ref-Wagner37">
+Wagner, Klaus. 1937. <span>“<span>Ü</span>ber Eine
+<span>E</span>igenschaft Der Ebenen <span>K</span>omplexe.”</span>
+<em>Mathematische Annalen</em> 114: 570–90. <a href="https://doi.org/10.1007/BF01594196">https://doi.org/10.1007/BF01594196</a>.
+</li>
+<li class="bibitem" id="ref-West96">
+West, Douglas B. 1996. <em>Introduction to Graph Theory</em>. Prentice
+Hall.
+</li>
+<li class="bibitem" id="ref-Whitney32a">
+Whitney, Hassler. 1932a. <span>“Congruent Graphs and the Connectivity of
+Graphs.”</span> <em>American Journal of Mathematics</em> 54: 150–68. <a href="https://doi.org/10.2307/2371086">https://doi.org/10.2307/2371086</a>.
+</li>
+<li class="bibitem" id="ref-Whitney32b">
+———. 1932b. <span>“Non-Separable and Planar Graphs.”</span>
+<em>Transactions of the American Mathematical Society</em> 34: 339–62.
+<a href="https://doi.org/10.1090/S0002-9947-1932-1501641-2">https://doi.org/10.1090/S0002-9947-1932-1501641-2</a>.
+</li>
+<li class="bibitem" id="ref-Wilson02">
+Wilson, Robin J. 2002. <em>Four Colors Suffice: How the Map Problem Was
+Solved</em>. Princeton, NJ: Princeton University Press.
+</li>
+<li class="bibitem" id="ref-Winkler08">
+Winkler, Peter. 2008. <span>“Puzzled: Solutions and Sources.”</span>
+<em>Communications of the <span>ACM</span></em> 51 (9): 103–3. <a href="https://doi.org/10.1145/1378727.1389570">https://doi.org/10.1145/1378727.1389570</a>.
+</li>
+
+
+</ol></div>
+
+<br>
+
+<div class="solidbg title">
+
+<ul class="breadcrumb">
+  <li><a href="../index.html">Home</a></li>
+  <li><a href="../contents.html">Contents</a></li>
+  <li><a href="index.html">Appendix</a></li>
+  <li>Bibliography</li>
+</ul>
+
+<ul class="breadcrumb">
+  <li><a href="induction.html">← Previous</a></li>
+  <li class="missing">Next →</li>
+</ul>
+</div>
+
+<br>
+
+<div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+</p></div>
+
+
+</body></html>

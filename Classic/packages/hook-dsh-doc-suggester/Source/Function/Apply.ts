@@ -59,6 +59,7 @@ import { Families, Locate } from "@playform/lib-dsh-pack";
 import type Config from "../Interface/Config.js";
 import type { DocView, Verdict } from "../Interface/Execution.js";
 import type State from "../Interface/State.js";
+import Version from "../Variable/Version.js";
 import Decide from "./Decide.js";
 import Decided from "./Decided.js";
 import Detect from "./Detect.js";
@@ -71,10 +72,6 @@ import Score, { NoteKey } from "./Score.js";
 import Store from "./Store.js";
 import Weights from "./Weights.js";
 import Would from "./Would.js";
-
-// The bundle version, mirrored from package.json (the activation proof's
-// first field; a release bumps both together).
-const Version = "0.3.0";
 
 /** The doc-task call's view: the doc path the call names. */
 const View = (Exec: ToolExecution): DocView => {

@@ -1377,6 +1377,556 @@
         "table-row-mismatch": 16,
         "raw-html": 106
       }
+    },
+    {
+      "source": "https://vertex.degree/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-degree.md",
+      "status": "converted",
+      "title": "Start Doing Graph Theory"
+    },
+    {
+      "source": "https://vertex.degree/beginning/examples",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-degree-beginning-examples.md",
+      "status": "converted",
+      "title": "Modeling Problems with Graphs",
+      "quality": {
+        "fence-no-language": 1,
+        "raw-html": 8
+      }
+    },
+    {
+      "source": "https://vertex.degree/beginning/isomorphism",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-degree-beginning-isomorphism.md",
+      "status": "converted",
+      "title": "Isomorphisms and Subgraphs",
+      "quality": {
+        "raw-html": 2
+      }
+    },
+    {
+      "source": "https://vertex.degree/beginning/walks",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-degree-beginning-walks.md",
+      "status": "converted",
+      "title": "Walks, Paths, and Cycles",
+      "quality": {
+        "raw-html": 4
+      }
+    },
+    {
+      "source": "https://vertex.degree/beginning/degrees",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-degree-beginning-degrees.md",
+      "status": "converted",
+      "title": "The Degree of a Vertex"
+    },
+    {
+      "source": "https://vertex.degree/appendix-bibliography.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-appendix-bibliography.md",
+      "status": "converted",
+      "title": "Bibliography",
+      "quality": {
+        "raw-html": 2
+      }
+    },
+    {
+      "source": "https://vertex.degree/appendix-index.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-appendix-index.md",
+      "status": "converted",
+      "title": "Appendix"
+    },
+    {
+      "source": "https://vertex.degree/appendix-induction.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-appendix-induction.md",
+      "status": "converted",
+      "title": "Proof by Induction",
+      "quality": {
+        "raw-html": 12
+      }
+    },
+    {
+      "source": "https://vertex.degree/appendix-proof-writing.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-appendix-proof-writing.md",
+      "status": "converted",
+      "title": "Review of Proof-Writing",
+      "quality": {
+        "raw-html": 5
+      }
+    },
+    {
+      "source": "https://vertex.degree/author.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-author.md",
+      "status": "converted",
+      "title": "About the Author"
+    },
+    {
+      "source": "https://vertex.degree/beginning-degrees.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-beginning-degrees.md",
+      "status": "converted",
+      "title": "The Degree of a Vertex"
+    },
+    {
+      "source": "https://vertex.degree/beginning-examples.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-beginning-examples.md",
+      "status": "converted",
+      "title": "Modeling Problems with Graphs",
+      "quality": {
+        "fence-no-language": 1,
+        "raw-html": 8
+      }
+    },
+    {
+      "source": "https://vertex.degree/beginning-index.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-beginning-index.md",
+      "status": "converted",
+      "title": "Part I: The Beginning"
+    },
+    {
+      "source": "https://vertex.degree/beginning-isomorphism.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-beginning-isomorphism.md",
+      "status": "converted",
+      "title": "Isomorphisms and Subgraphs",
+      "quality": {
+        "raw-html": 2
+      }
+    },
+    {
+      "source": "https://vertex.degree/beginning-walks.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-beginning-walks.md",
+      "status": "converted",
+      "title": "Walks, Paths, and Cycles",
+      "quality": {
+        "raw-html": 4
+      }
+    },
+    {
+      "source": "https://vertex.degree/book.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-book.md",
+      "status": "converted",
+      "title": "About the Book"
+    },
+    {
+      "source": "https://vertex.degree/connectivity-connectivity.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-connectivity-connectivity.md",
+      "status": "converted",
+      "title": "Connectivity",
+      "quality": {
+        "raw-html": 10,
+        "long-line": 1
+      }
+    },
+    {
+      "source": "https://vertex.degree/connectivity-cut-vertices.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-connectivity-cut-vertices.md",
+      "status": "converted",
+      "title": "Cut Vertices",
+      "quality": {
+        "raw-html": 4
+      }
+    },
+    {
+      "source": "https://vertex.degree/connectivity-flows.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-connectivity-flows.md",
+      "status": "converted",
+      "title": "Maximum Flows",
+      "quality": {
+        "raw-html": 2,
+        "long-line": 1
+      }
+    },
+    {
+      "source": "https://vertex.degree/connectivity-index.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-connectivity-index.md",
+      "status": "converted",
+      "title": "Part VII: Connectivity"
+    },
+    {
+      "source": "https://vertex.degree/connectivity-menger.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-connectivity-menger.md",
+      "status": "converted",
+      "title": "Menger\u2019s theorem",
+      "quality": {
+        "heading-duplicate": 1,
+        "raw-html": 2
+      }
+    },
+    {
+      "source": "https://vertex.degree/contents.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-contents.md",
+      "status": "converted",
+      "title": "Table of Contents"
+    },
+    {
+      "source": "https://vertex.degree/degrees-euler.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-degrees-euler.md",
+      "status": "converted",
+      "title": "Euler Tours",
+      "quality": {
+        "raw-html": 4
+      }
+    },
+    {
+      "source": "https://vertex.degree/degrees-graphic.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-degrees-graphic.md",
+      "status": "converted",
+      "title": "Graphic Sequences",
+      "quality": {
+        "raw-html": 4
+      }
+    },
+    {
+      "source": "https://vertex.degree/degrees-index.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-degrees-index.md",
+      "status": "converted",
+      "title": "Part II: Vertex Degrees"
+    },
+    {
+      "source": "https://vertex.degree/degrees-multigraphs.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-degrees-multigraphs.md",
+      "status": "converted",
+      "title": "Multigraphs and Digraphs",
+      "quality": {
+        "raw-html": 2,
+        "long-line": 1
+      }
+    },
+    {
+      "source": "https://vertex.degree/degrees-regular.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-degrees-regular.md",
+      "status": "converted",
+      "title": "Regular Graphs",
+      "quality": {
+        "raw-html": 4
+      }
+    },
+    {
+      "source": "https://vertex.degree/hard-cliques.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-hard-cliques.md",
+      "status": "converted",
+      "title": "Cliques and Independent Sets",
+      "quality": {
+        "raw-html": 18
+      }
+    },
+    {
+      "source": "https://vertex.degree/hard-coloring.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-hard-coloring.md",
+      "status": "converted",
+      "title": "Graph Coloring",
+      "quality": {
+        "raw-html": 2
+      }
+    },
+    {
+      "source": "https://vertex.degree/hard-hamilton.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-hard-hamilton.md",
+      "status": "converted",
+      "title": "Hamilton Cycles"
+    },
+    {
+      "source": "https://vertex.degree/hard-index.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-hard-index.md",
+      "status": "converted",
+      "title": "Part V: Hard Problems"
+    },
+    {
+      "source": "https://vertex.degree/hard-line.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-hard-line.md",
+      "status": "converted",
+      "title": "Line Graphs",
+      "quality": {
+        "raw-html": 6
+      }
+    },
+    {
+      "source": "https://vertex.degree/history.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-history.md",
+      "status": "converted",
+      "title": "Version History"
+    },
+    {
+      "source": "https://vertex.degree/matchings-bipartite.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-matchings-bipartite.md",
+      "status": "converted",
+      "title": "Bipartite Matching",
+      "quality": {
+        "raw-html": 6
+      }
+    },
+    {
+      "source": "https://vertex.degree/matchings-general.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-matchings-general.md",
+      "status": "converted",
+      "title": "Matchings in General Graphs",
+      "quality": {
+        "raw-html": 4
+      }
+    },
+    {
+      "source": "https://vertex.degree/matchings-hall.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-matchings-hall.md",
+      "status": "converted",
+      "title": "Hall\u2019s theorem",
+      "quality": {
+        "heading-duplicate": 1,
+        "raw-html": 6
+      }
+    },
+    {
+      "source": "https://vertex.degree/matchings-index.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-matchings-index.md",
+      "status": "converted",
+      "title": "Part IV: Matchings"
+    },
+    {
+      "source": "https://vertex.degree/matchings-konig.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-matchings-konig.md",
+      "status": "converted",
+      "title": "K\u0151nig\u2019s theorem",
+      "quality": {
+        "heading-duplicate": 1,
+        "raw-html": 4
+      }
+    },
+    {
+      "source": "https://vertex.degree/planar-coloring-maps.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-planar-coloring-maps.md",
+      "status": "converted",
+      "title": "Coloring Maps",
+      "quality": {
+        "raw-html": 6,
+        "long-line": 1
+      }
+    },
+    {
+      "source": "https://vertex.degree/planar-index.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-planar-index.md",
+      "status": "converted",
+      "title": "Part VI: Planar Graphs"
+    },
+    {
+      "source": "https://vertex.degree/planar-planar.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-planar-planar.md",
+      "status": "converted",
+      "title": "Planar Graphs",
+      "quality": {
+        "raw-html": 8
+      }
+    },
+    {
+      "source": "https://vertex.degree/planar-polyhedra.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-planar-polyhedra.md",
+      "status": "converted",
+      "title": "Polyhedra"
+    },
+    {
+      "source": "https://vertex.degree/planar-testing.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-planar-testing.md",
+      "status": "converted",
+      "title": "Planarity Testing"
+    },
+    {
+      "source": "https://vertex.degree/trees-cayley.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-trees-cayley.md",
+      "status": "converted",
+      "title": "Cayley\u2019s formula",
+      "quality": {
+        "raw-html": 8,
+        "long-line": 1
+      }
+    },
+    {
+      "source": "https://vertex.degree/trees-dags.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-trees-dags.md",
+      "status": "converted",
+      "title": "Directed Acyclic Graphs"
+    },
+    {
+      "source": "https://vertex.degree/trees-index.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-trees-index.md",
+      "status": "converted",
+      "title": "Part III: Trees"
+    },
+    {
+      "source": "https://vertex.degree/trees-properties.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-trees-properties.md",
+      "status": "converted",
+      "title": "Properties of Trees",
+      "quality": {
+        "raw-html": 6
+      }
+    },
+    {
+      "source": "https://vertex.degree/trees-spanning.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "Raw/vertex-trees-spanning.md",
+      "status": "converted",
+      "title": "Spanning Trees"
+    },
+    {
+      "source": "https://vertex.degree/matching/bipartite.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "vertex-matching-bipartite-dead",
+      "disposition": "unavailable",
+      "exit": 0,
+      "message": "The site's own link is dead: the page serves a 324-byte 'Page Fot Found' stub. The real chapter was captured under its correct URL instead."
+    },
+    {
+      "source": "https://vertex.degree/planar/map-coloring.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "unavailable",
+      "title": "vertex-planar-map-coloring-dead",
+      "disposition": "unavailable",
+      "exit": 0,
+      "message": "The site's own link is dead: the page serves a 324-byte 'Page Fot Found' stub. The real chapter was captured under its correct URL instead."
     }
   ]
 }

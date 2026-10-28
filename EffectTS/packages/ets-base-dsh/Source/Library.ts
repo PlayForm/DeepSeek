@@ -18,6 +18,11 @@
 // contract's `Gate` (the apply decision type) owns the plain name here,
 // exactly as the factory's public API has always used it.
 
+// The compiled package version (Source/Variable/Version, built in by the
+// ESBuild define). This package has NO loader contract and NO Config - the
+// version sits beside the other named exports; it is not a loader key.
+export { default as Version } from "./Variable/Version.js";
+
 // The structural contracts (moved from the factory's Source/Interface -
 // the factory re-exports them unchanged, so its public API is identical):
 export type { default as State } from "./Interface/State.js";

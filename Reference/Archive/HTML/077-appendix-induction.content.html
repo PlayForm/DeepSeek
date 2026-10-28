@@ -1,0 +1,877 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Proof by Induction</h1>
+<ul class="breadcrumb">
+
+
+
+<li>B</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>Induction is a key proof technique for all mathematicians, but it is
+especially powerful—and especially complicated!—in graph theory. So this
+chapter has two reasons to exist.</p>
+<p>First, it is a review of induction; once again, I am imagining that
+some of my readers might be studying graph theory shortly after their
+first introduction to rigorous proofs. If you’ve mostly studied
+induction in the context of proving a closed form for a recurrence
+relation or a summation, then going to more general proofs by induction
+is a big step. I want to help you along by showing you plenty of
+examples, and by doing my best to help make the logic of induction make
+sense.</p>
+<p>Second, this chapter covers some of the weird things induction can do
+in graph theory. I especially want to make sure you do not make the
+mistake in the false <a class="booklink" href="#claim:false-induction">Claim B.6</a>, and that you know to use
+the induction template of <a class="booklink" href="#thm:induction-template">“Theorem” B.7</a> instead, when necessary.
+I also want to help you discover when induction is a good idea, by
+describing the kinds of definitions that lend themselves to
+induction.</p>
+<p>These ideas can be applied in other areas of math as well, but
+because graph theorists study finite objects with not too much
+structure, it is much more common to be able to tackle a problem by
+induction.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="the-logic-of-induction">The logic of induction</h2>
+<figure class="bookfig" id="fig:towers-of-hanoi-induction">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:hanoi-move-1">
+
+<figcaption>A mid-game state</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:hanoi-move-2">
+
+<figcaption>The next move</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:hanoi-move-3">
+
+<figcaption>Another move</figcaption>
+</figure>
+</div>
+<figcaption>Two moves in the Towers of Hanoi puzzle</figcaption>
+</figure>
+<p>For our first example, let’s return to the Towers of Hanoi puzzle,
+discussed in <a class="booklink" href="../beginning/examples.html">Chapter 1</a> and illustrated in
+<a class="booklink" href="#fig:towers-of-hanoi-induction">Figure B.1</a>. There are three
+pegs and some number of disks of different sizes stacked on the pegs. In
+a single move, the top disk on a peg can be moved to the top of a
+different peg.</p>
+<p>The disks stacked on a peg must always form a pyramid, with their
+sizes increasing from top to bottom. This means that the smallest disk
+(the one moved from <a class="booklink" href="#fig:hanoi-move-1">Figure B.1(a)</a> to
+<a class="booklink" href="#fig:hanoi-move-2">Figure B.1(b)</a>) can always be moved anywhere,
+but the larger disks are restricted further. From <a class="booklink" href="#fig:hanoi-move-2">Figure B.1(b)</a> to <a class="booklink" href="#fig:hanoi-move-3">Figure B.1(c)</a>, we move a disk from the
+middle peg to the right peg; it cannot be moved to the lft peg instead,
+because then it would be on top of a smaller disk.</p>
+<p>Initially, the disks are all placed on one peg (forming a pyramid, as
+they always must). The goal of the puzzle is to move all the disks from
+one peg to another. Our first task in this chapter will be to prove that
+this puzzle always has a solution.</p>
+<div class="theorem" id="thm:hanoi">
+<p><strong>Theorem B.1</strong>. <em>No matter how many disks there are,
+it is possible to solve the Towers of Hanoi puzzle, starting with all
+the disks stacked in a pyramid on any peg, and ending with all the disks
+stacked in a pyramid on any other peg.</em></p>
+</div>
+<p>If you try to solve this puzzle by moving disks at random, you will
+not get very far. (I can confirm this experimentally. For the six-disk
+puzzle in <a class="booklink" href="#fig:towers-of-hanoi-induction">Figure B.1</a>, I performed
+ computer-simulated attempts to
+solve the puzzle by randomly chosen valid moves. The median number of
+moves required to move all six disks onto a peg other than the starting
+one was .) The reason for this
+is that it’s very rare to see a state where one of the larger disks can
+be moved.</p>
+<details class="qa">
+<summary>If the largest disk in an -disk Towers of Hanoi puzzle can be
+moved from the starting peg, how must the disks be arranged?</summary>
+<p>First of all, none of them can be on top
+of the largest disk. Second, the destination peg to which we want to
+move the largest disk must also be empty, because the largest disk can’t
+be placed on top of any other. Therefore all   other disks must be stacked onto a
+third peg.</p>
+</details>
+<p>In order to achieve this state, we must move the top   disks from one peg to another. In
+this process, we can ignore the largest disk, which means that we are
+effectively solving a Towers of Hanoi puzzle with one fewer disk. This
+makes the problem a perfect setup for an induction proof!</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#thm:hanoi">Theorem B.1</a>.</em> We induct on , the number of disks. When  , we can move the disk from one peg to
+another in a single step. So the base case holds.</p>
+<p>Assume that there is a way to move   disks from any peg to any other. Then
+there is also a solution to the -disk puzzle, from any starting peg to
+any ending peg.</p>
+<ol>
+<li><p>Using the  -disk
+solution, move the first   disks
+from the starting peg to the third peg (which is neither the starting
+nor the ending peg).</p></li>
+<li><p>Move the largest disk from the starting peg to the ending
+peg.</p></li>
+<li><p>Using the  -disk
+solution again, move the first  
+disks from the third peg to the ending peg.</p></li>
+</ol>
+<p>By induction, there is a solution for all . ◻</p>
+</div>
+<p>This example demonstrates the structure of a proof by induction.
+Although there are more complicated variants that bend or break some of
+the rules, an ordinary proof by induction has the following
+characteristics:</p>
+<ul>
+<li>
+<p>We must be trying to prove a statement with many cases which can
+be numbered, usually starting at 
+or .</p>
+<p>The first sentence, “We induct on , the number of disks,” is a standard
+way to explain what the cases are (they are the different versions of
+the puzzle with different numbers of disks) and how they can be numbered
+(according to the number of disks, which we are now going to refer to as
+).</p>
+</li>
+<li>
+<p>We must begin with a <strong>base case</strong>: a self-contained
+proof of the first case of the statement.</p>
+<p>Here, that’s the   case, so at
+the beginning of the proof, we explain how to solve the -disk problem. As in this example,
+usually the proof of the base case is very short.</p>
+</li>
+<li>
+<p>The other part of the proof is an <strong>induction
+step</strong>: a proof that if any given case of the theorem is true,
+then the next case is also true.</p>
+<p>As usual, a direct proof of an “if , then ” statement begins by assuming , and trying to prove . So we begin the induction step by
+assuming that the theorem holds in some case, and using this assumption
+to prove that the theorem also holds in the next case. We refer to this
+assumption as the <strong>induction hypothesis</strong>.</p>
+<p>The induction step can be written in several slightly different ways.
+We can assume the <sup>th</sup>
+case of the theorem and prove the  <sup>th</sup>, or assume the  <sup>th</sup> case of the theorem
+and prove the <sup>th</sup> case.
+We can introduce a new variable, proving that if the theorem holds when
+ , it also holds when   (or that if the theorem holds when
+ , it also holds when  ). The choice between these is mostly
+a matter of taste.</p>
+</li>
+</ul>
+<p>I suspect that many of my readers have already seen proofs by
+induction, but I am carefully explaining it anyway, because it’s a very
+tricky idea when you first learn it.</p>
+<p>It’s also often taught without explaining how or why it works. To
+give you an intuitive understanding, let’s prove a few cases of
+<a class="booklink" href="#thm:hanoi">Theorem B.1</a> without using induction. (In all of
+these lemmas, by “the puzzle has a solution”, we mean that we can move
+all the disks from any peg to any other peg.)</p>
+<div class="lemma" id="lemma:hanoi1">
+<p><strong>Lemma B.2</strong>. <em>The Towers of Hanoi puzzle with  disk has a solution.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> When no other disks interfere, we can move the disk
+from any peg to any other in a single step. ◻</p>
+</div>
+<div class="lemma" id="lemma:hanoi2">
+<p><strong>Lemma B.3</strong>. <em>The Towers of Hanoi puzzle with  disks has a solution.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> By <a class="booklink" href="#lemma:hanoi1">Lemma B.2</a>, there
+is a way to move the smallest disk to a different peg. Using this
+method, move the smallest disk from the starting peg to a third peg:
+neither the starting nor the ending peg. (In this process, the largest
+disk won’t get in the way, because any other disks can be placed on top
+of it.)</p>
+<p>Now the largest disk is free, and the ending peg is empty, so the
+largest disk can be moved to the ending peg.</p>
+<p>Finally, using the method of <a class="booklink" href="#lemma:hanoi1">Lemma B.2</a> again,
+we can move the smallest disk from the peg it’s on to the ending peg,
+which leads to the arrangement we wanted. ◻</p>
+</div>
+<div class="lemma" id="lemma:hanoi3">
+<p><strong>Lemma B.4</strong>. <em>The Towers of Hanoi puzzle with  disks has a solution.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> By <a class="booklink" href="#lemma:hanoi2">Lemma B.3</a>, there
+is a way to move the  smallest
+disks to a different peg. Using this method, move the  smallest disks from the starting peg to
+a third peg: neither the starting nor the ending peg. (In this process,
+the largest disk won’t get in the way, because any other disks can be
+placed on top of it.)</p>
+<p>Now the largest disk is free, and the ending peg is empty, so the
+largest disk can be moved to the ending peg.</p>
+<p>Finally, using the method of <a class="booklink" href="#lemma:hanoi1">Lemma B.2</a> again,
+we can move the  smallest disks
+from the peg they’re on on to the ending peg, which leads to the
+arrangement we wanted. ◻</p>
+</div>
+<div class="lemma" id="lemma:hanoi4">
+<p><strong>Lemma B.5</strong>. <em>The Towers of Hanoi puzzle with  disks has a solution.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> By <a class="booklink" href="#lemma:hanoi3">Lemma B.4</a>, there
+is a way to move the  smallest
+disks to a different peg. Using this method, move the  smallest disks from the starting peg to
+a third peg: neither the starting nor the ending peg. (In this process,
+the largest disk won’t get in the way, because any other disks can be
+placed on top of it.)</p>
+<p>Now the largest disk is free, and the ending peg is empty, so the
+largest disk can be moved to the ending peg.</p>
+<p>Finally, using the method of <a class="booklink" href="#lemma:hanoi1">Lemma B.2</a> again,
+we can move the  smallest disks
+from the peg they’re on on to the ending peg, which leads to the
+arrangement we wanted. ◻</p>
+</div>
+<details class="qa">
+<summary>When you compare the proofs of <a class="booklink" href="#lemma:hanoi2">Lemma B.3</a>, <a class="booklink" href="#lemma:hanoi3">Lemma B.4</a>, and
+<a class="booklink" href="#lemma:hanoi4">Lemma B.5</a>, what do you observe?</summary>
+<p>They are almost identical: they only
+differ in the number used and in the lemma referenced. (In the case of
+<a class="booklink" href="#lemma:hanoi2">Lemma B.3</a>, some plural nouns become
+singular, but that’s just a quirk of the English language.)</p>
+</details>
+<p>It is clear that if we wanted to write a proof of a lemma for  disks, or  disks, or  disks, we could do it by copying and
+pasting and then changing the numbers. So as soon as we have a template
+which we can copy and paste, we should accept that all those lemmas are
+true: we know how to obtain a proof of any of them.</p>
+<p>This is the logic underlying a proof by induction. The template that
+we would copy and paste is exactly the induction step, with specific
+numbers replaced by   or .</p>
+<details class="qa">
+<summary>In this copying-and-pasting view of
+induction, why do we need to prove the base case?</summary>
+<p>Because the proof of <a class="booklink" href="#lemma:hanoi1">Lemma B.2</a> didn’t follow the template: at
+that point, we didn’t have a previous lemma we could cite. So the proof
+by induction must tell us how to prove the first lemma, as well as how
+to prove every other lemma.</p>
+</details>
+<p>A common modification to the basic induction template is
+<strong>strong induction</strong>, where we allow each case of the
+theorem to rely on multiple smaller cases, and not just the immediately
+preceding case. For example, if the -disk solution involved using a -disk solution <span>and</span> a -disk solution, or if it unpredictably
+went back to a -disk solution for
+some unknown  ,
+then we’d have to use strong induction.</p>
+<details class="qa">
+<summary>Why is this still okay?</summary>
+<p>Because there is no circular reasoning. If
+we take all the cases the <sup>th</sup> case depends on, and then
+all the cases they depend on, and so on, eventually we end up going back
+to the base case.</p>
+</details>
+<p>I want to devote most of this chapter to discussing the way induction
+works in graph theory in particular, but first I want to give one last
+general piece of advice.</p>
+<p>A common tip for getting started solving a problem is to try small
+cases of the problem first. It is easier to solve specific small
+examples than to solve a general problem, and by looking at the
+examples, you can try to make guesses about a general solution. What I
+want to tell you about is a related idea: if you think you might want to
+use induction to solve a problem, don’t look at the small cases on their
+own! Look at consecutive cases together, trying to get an idea of what
+your induction step might be by seeing how one small case can be used to
+get the next.</p>
+<p>So, for example, no matter how you want to solve the Towers of Hanoi
+puzzle, it’s reasonable to look at what happens for  or  disks to start with. If you want to try
+a proof by induction, you should look at the -disk solution and -disk solution side by side, and try to
+draw connections between the two.</p>
+<p>In this case, you might find the -disk solution inside the -disk solution: once, or even twice. You
+might also arrive at a useful insight by comparing the lengths of the
+solutions. Hypothetically, the relationship could have been different:
+the -disk solution could be the
+-disk solution with a short
+sequence added to the end, or inserted in the middle, or with some
+transformation applied to each step.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="induction-on-graphs">Induction on graphs</h2>
+<p>In graph theory, induction is often used in a special way that’s
+slightly different from induction in many other areas of math. Instead
+of proving that a statement is true for all natural numbers , we often try to prove it for all
+graphs, or at least for all graphs with some property relevant to the
+specific problem.</p>
+<p>This tends to work out reasonably well for us, because we have at
+least two good ways of measuring how big a graph is: we can count the
+vertices, or we can count the edges. The most common technique is to
+induct on the number of vertices in a graph. Here, we consider “the
+statement is true for all graphs with  vertices” to be a single case, and
+advance through these cases by induction on . (I will say more later about inducting
+on the number of edges later; it is less common.)</p>
+<p>However, because we’re grouping together many graphs into one case,
+we have to be very careful about how we set up the induction. If we’re
+not, we can make mistakes and prove false statements, or give incorrect
+proofs of true statements. The second possibility is harder to catch,
+because you won’t be able to find any counterexamples. To avoid
+confusing you too much, I will give you an example of the first
+possibility: a claim that is definitely false.</p>
+<div class="claim" id="claim:false-induction">
+<p><strong>Claim B.6</strong> (False claim). <em>For all  , if  is an -vertex graph in which every vertex has
+degree at least , then  must have at least   edges.</em></p>
+</div>
+<p>We know this is false, because the cycle graph  is a counterexample. Every vertex of
+ has degree , but  only has  edges, which is less than   for large .</p>
+<div class="proof">
+<p><em>Incorrect proof.</em> We induct on . When  , the claim holds, because we need all
+ edges in a -vertex graph to exist in order for the
+assumption to hold, and  .</p>
+<p>Assume the claim holds for all  -vertex graphs: if every in an  -vertex graph has degree at least
+, then the number of edges is at
+least   or  . To get an -vertex graph, we add a vertex; to give
+it degree at least , we need to
+add at least two new edges. This results in a graph with at least   or at last   edges.</p>
+<p>By induction, the claim is true for all . ◻</p>
+</div>
+<p>Just knowing that this proof is incorrect is not enough. We need to
+understand <span>why</span> it is incorrect, to make sure that we do not
+do it again.</p>
+<details class="qa">
+<summary>The smallest counterexample to <a class="booklink" href="#claim:false-induction">Claim B.6</a> is . Why does the proof fail to consider
+?</summary>
+<p>When going from -vertex graphs to -vertex graphs, we try to add a vertex
+of degree  to a -vertex graph with minimum degree . But  cannot be obtained in this way: if
+you remove a vertex from it, you’re left with , which is <span>not</span> a graph
+with minimum degree .</p>
+</details>
+<p>To avoid this mistake, I have a general theory to propose, and also a
+practical solution.</p>
+<p>The general theory is this. If the possible cases of our theorem were
+truly the positive integers  ,
+they would form a chain:  If we start at  and follow the arrows, we will
+eventually get to every possibility.</p>
+<p>But in <a class="booklink" href="#claim:false-induction">Claim B.6</a>, the set of possible
+cases is really the set of graphs with minimum degree at least . Instead of a chain, we can imagine
+organizing this set into an infinite diagram, a fragment of which is
+shown in <a class="booklink" href="#fig:false-induction">Figure B.2</a>. Here, the arrows represent
+possible ways to go from a small graph to a bigger one by adding a new
+vertex of degree .</p>
+<figure class="bookfig" id="fig:false-induction">
+
+<figcaption>Organizing the graphs with minimum degree at least  according to the induction step of
+<a class="booklink" href="#claim:false-induction">Claim B.6</a> (not all -vertex graphs are
+included)</figcaption>
+</figure>
+<p>If this is the induction step we intend to use, then a single -vertex base case is not enough: by
+following arrows from that case, we miss many possibilities. We could
+conceivably write an induction in this way, but we would need many base
+cases: <span>all</span> the graphs which are not obtained from a smaller
+graph by following an arrow. At a bare minimum, this includes the cycle
+graphs, but eventually there are other examples like this. I don’t think
+this is a reasonable way to write an induction proof; I’m just saying
+that if we wanted to rescue this idea, that’s what we’d have to do.</p>
+<details class="qa">
+<summary>Is there a -vertex graph with minimum degree at
+least , other than , which is not obtained by adding a
+vertex to a smaller graph of minimum degree at least ?</summary>
+<p>Yes: we can get another such graph by
+taking two copies of  that share
+a vertex of degree .</p>
+</details>
+<p>I did, however, promise a practical solution to the problem. This
+practical solution restricts the way we can write proofs by induction on
+the vertices of , allowing only
+ones that are guaranteed to work. You can think of it as filling in the
+blanks in the following template:</p>
+<div class="theorem" id="thm:induction-template">
+<p><strong>Theorem B.7</strong> (Induction Template). <em>If a graph
+ has property , it also has property .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We induct on the number of vertices in . <strong>(Prove a base case
+here.)</strong></p>
+<p>Now, for some   <strong>(or
+other lower bound, depending on the base case</strong>), assume that all
+ -vertex graphs with property
+ also have property . Let  be an -vertex graph with property . Our goal is to show that  also has property .</p>
+<p>Let  be a vertex of  <strong>(usually chosen by some clever
+rule you’ll have to come up with)</strong>. Then   (the graph obtained from  by deleting  and all edges out of ) also has property  <strong>(by an argument related to the
+way we chose which vertex to delete)</strong>.</p>
+<p>By the induction hypothesis,  
+also has property . When we add
+back the vertex ,  also has property  <strong>(by another argument you’ll
+have to come up with)</strong>.</p>
+<p>By induction, all graphs with property  also have property . ◻</p>
+</div>
+<p>Why does this work, when our previous argument didn’t? The key is the
+step “Let  be an -vertex graph with property .” We didn’t make any assumptions about
+. Rather, we started from an
+arbitrary graph with property ; to
+apply the induction hypothesis, we cooked up a graph   which is an  -vertex graph with property .</p>
+<p>Another way to put it is this: using this induction template prevents
+the induction from having the kind of structure shown in <a class="booklink" href="#fig:false-induction">Figure B.2</a>, by forcing each graph
+ to have a previous case   it is obtained from. Only the graphs
+covered in the base case are exempt from this.</p>
+<p>Using the induction template takes practice to master. (A good
+example of its use early on in this book is in the proof of <a class="booklink" href="../beginning/degrees.html#lemma:avg-degree">Lemma 4.6</a>.) However, it
+is also helpful, because it is a scaffolding for your proofs by
+induction: it means you don’t have to start from scratch.</p>
+<p>Earlier, I mentioned induction on the number of edges of a graph.
+This is only done a few times in this book:</p>
+<ul>
+<li><p>When proving the handshake lemma (<a class="booklink" href="../beginning/degrees.html#handshake-lemma">Lemma 4.1</a>) and later when
+proving its directed version, <a class="booklink" href="../degrees/multigraphs.html#lemma:handshake-dilemma">Lemma 7.1</a>.</p></li>
+<li><p>When proving <a class="booklink" href="../degrees/euler.html#thm:veblen">Theorem 8.3</a>
+on cycle decompositions.</p></li>
+<li><p>When proving <a class="booklink" href="../trees/properties.html#thm:n-m">Theorem 10.1</a> on the number of connected
+components in a graph with 
+edges.</p></li>
+<li><p>When proving Euler’s formula (<a class="booklink" href="../planar/planar.html#thm:euler-formula">Theorem 21.4</a>) for plane
+embeddings.</p></li>
+</ul>
+<p>We can use a variant of the induction template here, deleting an edge
+ rather than a vertex . (The proof of <a class="booklink" href="../degrees/euler.html#thm:veblen">Theorem 8.3</a> uses strong induction: we
+delete multiple edges at once.) Repeatedly deleting edges leaves a graph
+with no edges, but the same number of vertices; all such graphs should
+be our base cases.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="inductive-definitions">Inductive definitions</h2>
+<p>Some structures in graph theory are important because they make it
+particularly easy to write a proof by induction. There are two that I
+can point to in this book:</p>
+<ul>
+<li>
+<p>Trees, which are introduced in <a class="booklink" href="../trees/spanning.html">Chapter 9</a>. <a class="booklink" href="../trees/properties.html#lemma:T-x">Lemma 10.6</a> tells us that if  is a tree and  is a degree- vertex, then   is a tree; moreover, we know from
+<a class="booklink" href="../trees/properties.html#lemma:leaves">Lemma 10.5</a> that every tree with
+multiple vertices has some degree-
+vertices to use <a class="booklink" href="../trees/properties.html#lemma:T-x">Lemma 10.6</a> with.</p>
+<p>Used in reverse, these two lemmas give us an “inductive definition”
+of a tree: a tree is either a graph with  vertex, or a graph obtained from a
+smaller tree by adding a new vertex of degree .</p>
+</li>
+<li><p>-connected graphs, which
+are introduced in <a class="booklink" href="../connectivity/cut-vertices.html">Chapter 25</a>. <a class="booklink" href="../connectivity/cut-vertices.html#thm:ear-decomposition">Theorem 25.4</a> tells
+us that every -connected graph has
+an ear decomposition, which gives us an inductive definition of a -connected graph: it is either a cycle,
+or a graph obtained from a smaller -connected graph by adding an
+ear.</p></li>
+</ul>
+<p>I don’t want to spoil the details of these objects if you haven’t
+read those chapters, even if you’re dying to know what it means to add
+an ear to a graph. But what do I mean by an inductive definition?</p>
+<p>Well, in both cases, we are saying something like, “A (type of graph)
+is either a (base case) or obtained from a smaller (same type of graph)
+by adding a (small modification).” This is what I mean by an
+<strong>inductive definition</strong>. You can see how it resembles the
+structure of a proof by induction—it also makes it easy to write
+one.</p>
+<details class="qa">
+<summary>How can we write a proof by induction
+using an inductive definition?</summary>
+<p>The base case of the induction is to
+check that our theorem is true in the base case of the definition.</p>
+<p>The induction step is to check that if the theorem is true for a
+graph of this type, it remains true after the small
+modification.</p>
+</details>
+<p>I want to show you how inductive definitions work in graph theory
+without getting into either of the advanced examples we learn about
+elsewhere in the book. So I will give you a different example: a family
+of graphs called <em>threshold graphs</em>. These were defined by Václav
+Chvátal and Peter Hammer in 1977 to study when multiple inequalities
+with -valued variables can
+be combined into one .</p>
+<figure class="bookfig" id="fig:threshold-examples">
+
+<figcaption>-vertex threshold
+graphs with three thresholds </figcaption>
+</figure>
+<p>Threshold graphs have two definitions. One is the definition they get
+their name from. A graph  is a
+threshold graph if there is a function   and a value   such that two vertices
+ and  are adjacent if and only if  . In other words,
+adjacency is defined by the sum of vertex labels exceeding a threshold.
+<a class="booklink" href="#fig:threshold-examples">Figure B.3</a> shows three examples of
+-vertex threshold graphs: here,
+the values of  are  in all three diagrams,
+but we require different thresholds  for an edge to exist.</p>
+<p>The other definition is the inductive definition. A graph  is a threshold graph if it has only one
+vertex, or if it can be obtained from a smaller threshold graph in one
+of two ways:</p>
+<ul>
+<li><p>adding a new vertex of degree , or</p></li>
+<li><p>adding a new vertex adjacent to all existing vertices.</p></li>
+</ul>
+<p>Let’s practice induction by proving that we get the same class of
+graphs by either definition!</p>
+<p>After I wrote down the proof below for the first time, I realized
+that I spent half a page just on writing “threshold graph by the …
+definition” many times. So to abbreviate, let’s call  a <em>thres graph</em> if it satisfies
+the inequality definition, and a <em>hold graph</em> if it satisfies the
+inductive definition.</p>
+<div class="prop" id="prop:threshold">
+<p><strong>Proposition B.8</strong>. <em>A graph  is a thres graph if and only if it is a
+hold graph.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We will need two proofs by induction, one for each
+direction of the proof.</p>
+<p>First, let’s show that if graph  is a hold graph, we can define a
+function   to make it a thres graph. For simplicity, we’ll use the
+threshold  .</p>
+<p>Our base case here is the -vertex graph. We can give the single
+vertex any value of  we like, and
+it will be a thres graph, because there isn’t a pair of vertices for
+which to check it.</p>
+<p>Suppose now that for some hold graph , we’ve defined a function  that also makes it a thres graph. We
+now need to show that with either of the modifications we do, we can
+extend .</p>
+<ul>
+<li>
+<p>Suppose we add a vertex  to
+ which is not adjacent to any
+vertex in , getting a bigger
+hold graph .</p>
+<p>Then to extend  to a function
+ , we define
+ For each  , any value of 
+equal to or less than   is
+enough to make sure that  , preventing an edge ;
+we choose  to be the smallest
+of these values.</p>
+</li>
+<li>
+<p>Suppose we add a vertex  to
+ which is adjacent to every vertex
+in , getting a bigger hold
+graph .</p>
+<p>Then to extend  to a function
+ , we
+define  For each  , any value of  at
+least   is enough to make
+sure that  ,
+ensuring an edge : we choose
+ to be the largest of these
+values.</p>
+</li>
+</ul>
+<p>In both cases, the larger hold graph continues to be a thres graph
+with the extended . We conclude
+that as we build bigger and bigger hold graphs from the -vertex graph, they always remain thres
+graphs, and therefore by induction, all hold graphs are thres
+graphs.</p>
+<p>That’s one part done. Now we show that if  is a thres graph, it is also a hold
+graph. Since we’re trying to establish the inductive definition, we
+won’t be able to use it as a model for induction; instead, we’ll use the
+induction template.</p>
+<p>We induct on the number of vertices in . When  is a -vertex thres graph, it is also a hold
+graph by the base case of the inductive definition.</p>
+<p>Now, for some  , assume
+that all  -vertex thres graphs
+are also hold graphs. Let  be a
+thres graph, defined using a function   and a threshold .</p>
+<details class="qa">
+<summary>For which vertices  is   a thres graph?</summary>
+<p>All of them: we can just keep the same
+function  (with fewer inputs) and
+the same threshold .</p>
+</details>
+<p>So we won’t be deleting a vertex carefully to make sure we still have
+a thres graph; we’ll be deleting a vertex carefully to make it’s easy to
+check the definition of a hold graph when we put it back.</p>
+<p>I propose two options for the deletion. Let  be the vertex of  such that  is as small as possible, and let
+ be the vertex of  such that  is as large as possible.</p>
+<details class="qa">
+<summary>If  , what do we know about ?</summary>
+<p>Since not even  is big enough for the sum with  to exceed the threshold, we know
+  for all vertices
+, so  has no neighbors in .</p>
+</details>
+<p>In this case, consider the thres graph  . By the induction hypothesis,   is also a hold graph. But  is obtained from   by adding a new vertex  of degree , which means  is also a hold graph.</p>
+<details class="qa">
+<summary>If  , what can we do instead?</summary>
+<p>Since even   is bigger than , and  is the smallest value of  there is, we know   for all vertices . Therefore  is adjacent to all other vertices of
+.</p>
+</details>
+<p>In this case, consider the thres graph  . By the induction hypothesis,   is also a hold graph. But  is obtained from   by adding a new vertex  adjacent to all existing vertices,
+which means  is also a hold
+graph.</p>
+<p>In both cases, we prove  is a
+hold graph, completing the induction step. By induction, all thres
+graphs are hold graphs. ◻</p>
+</div>
+<figure class="bookfig" id="fig:threshold-graph-tree">
+
+<figcaption>Building all threshold graphs from a -vertex graph</figcaption>
+</figure>
+<p>We can compare the incorrect proof of the false <a class="booklink" href="#claim:false-induction">Claim B.6</a> to the way that we used
+an inductive definition in this proof. Actually, both proofs are written
+in the same style: we start with a base case and then we grow it. The
+difference is that in the case of threshold graphs, the inductive
+definition guarantees that every other threshold graph can be obtained
+from a -vertex graph. (For a
+demonstration of this, see <a class="booklink" href="#fig:threshold-graph-tree">Figure B.4</a>.) In other words, one
+base case is all we need!</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="recursive-constructions">Recursive constructions</h2>
+<p>Let’s say that a sequence of graphs  has a <strong>recursive construction</strong>
+if we have a fixed procedure by which we can build  out of  for all  . For example, the sequence  of hypercube graphs
+defined in <a class="booklink" href="../beginning/degrees.html">Chapter 4</a> has a recursive construction.
+For all , we can build  from  by the following procedure:</p>
+<ol>
+<li>
+<p>Start with two disjoint copies of .</p>
+<p>If we think of the vertices of  as  -bit strings, then we can say that
+the first copy of  has a
+vertex  (, followed by a ) for every vertex  , and the second copy of
+ has a vertex  for every vertex  .</p>
+</li>
+<li><p>In addition to the edges that already exist within each copy of
+, add an edge  for all  : this is an edge between
+the two vertices corresponding to 
+in the two copies of .</p></li>
+</ol>
+<p>This is easier to see in a diagram. <a class="booklink" href="#fig:building-q4-from-q3">Figure B.5</a> shows how we build
+ using this recursive
+construction: the two copies of 
+are shown on the left (with a  at
+the end of every vertex) and on the right (with a  at the end of every vertex), and the
+dashed edges are the edges added between the copies.</p>
+<figure class="bookfig" id="fig:building-q4-from-q3">
+
+<figcaption>Using a recursive construction to build  from two copies of </figcaption>
+</figure>
+<p>Other notable examples of recursive constructions in this book
+include:</p>
+<ul>
+<li><p>The Mycielski graphs defined in <a class="booklink" href="../hard/coloring.html">Chapter 19</a>: each graph is the
+Mycielskian of the previous graph.</p></li>
+<li><p>The de Bruijn digraphs defined in <a class="booklink" href="../hard/line.html">Chapter 20</a>: by
+<a class="booklink" href="../hard/line.html#prop:de-bruijn-line">Proposition 20.3</a>, for all
+ , each digraph in the
+sequence  is the line digraph of the previous graph.</p></li>
+<li>
+<p>The iterated barycentric subdivisions used as an example in
+<a class="booklink" href="../planar/planar.html">Chapter 21</a>: to go from each plane
+embedding to the next, take the barycentric subdivision of every
+triangular face.</p>
+<p>In general, the word “iterated” in a mathematical term often
+indicates a recursive construction.</p>
+</li>
+</ul>
+<p>Why do I mention recursive constructions here? You can probably guess
+why: induction is a good way to prove properties of a sequence of graphs
+with a recursive construction.</p>
+<p>Let’s start with a simple example, where the proof by induction is
+actually much more complicated than what we need.</p>
+<div class="prop" id="prop:qn-edges">
+<p><strong>Proposition B.9</strong>. <em>For all  , the hypercube graph  has  vertices and   edges.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We induct on .
+When  , the hypercube graph  has two vertices ( and ) and one edge between them. Since   and  , both formulas we want to prove are true for
+ .</p>
+<p>Now assume, for some  ,
+that  has  vertices and   edges. When we
+construct  recursively, we take
+two disjoint copies of , so
+we get   or  vertices. There are   edges in each copy of
+, and  edges added between them (one for
+each vertex of ), for a
+total of  edges.</p>
+<p>We confirm that if  has
+the number of vertices and edges we wanted, then so does . By induction, the formulas in the
+proposition hold for all  . ◻</p>
+</div>
+<details class="qa">
+<summary>What’s the much simpler way to prove that
+ has   edges?</summary>
+<p>Use the handshake lemma! There are  vertices, and each vertex has degree
+, so the sum of degrees is  , and to get the number of
+edges, we divide by .</p>
+</details>
+<details class="qa">
+<summary>If we didn’t know the formula   ahead of time, could we
+still use a proof by induction?</summary>
+<p>Yes, but we’d have to solve a recurrence
+relation to figure out the formula, first. If  is the number of edges, then the
+argument in our induction step tells us that  , with
+ .</p>
+</details>
+<p>Here’s a quick algebraic way to solve the recurrence relation: first,
+divide through by  to get  . Now, each occurrence of  for any  shows up divided by , so we can define  . This has the
+initial value   and a much simpler recurrence relation:  . If we start with
+ and add  each time, then we should get
+ , and so  .</p>
+<p>This trick can be used to solve many recurrence relations, but first
+you have to figure out the right thing to multiply or divide by in order
+to simplify the recurrence relation.</p>
+<p>Here is a second example of induction on , for which we’ll have to work
+harder.</p>
+<div class="prop" id="prop:qn-diameter">
+<p><strong>Proposition B.10</strong>. <em>For all  , the diameter of  (the largest distance between any two
+of its vertices) is .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> When  ,  is still the graph with two vertices
+and  edge; this has diameter , because the two vertices are at
+distance  from each other.</p>
+<p>Now assume, for some  ,
+that  has diameter  ; to prove the induction step, we
+would like to prove that  has
+diameter .</p>
+<details class="qa">
+<summary>On the level of walks in a graph, what
+does our induction hypothesis tell us, and what do we need to
+prove?</summary>
+<p>We know that for every pair  of vertices in , there is an   walk of length at most  , and that there is some pair  for which no shorter walk exists.</p>
+<p>We want to show that for every pair  of vertices in , there is an   walk of length at most , and we want to find some pair  for which we prove that no shorter
+walk exists.</p>
+</details>
+<p>First, let’s prove that walks of length at most  exist between every pair of vertices in
+. If we take two vertices in the
+same copy of , then there is
+a walk of length at most  
+between them, by the induction hypothesis. So suppose we take two
+vertices in different copies: without loss of generality, vertices of
+the form  and .</p>
+<p>By the induction hypothesis, there is an   walk in  of length at most  ; equivalently, an   walk in the first copy of  inside . By taking that   walk, and adding the vertex  to the end (which is adjacent to ), we get an   walk whose length is only
+increased by : the length is most
+, as we wanted.</p>
+<p>To find a pair of vertices at distance , we begin with other half of our
+induction hypothesis: that 
+contains two vertices  for which
+all   walks have length at least
+ .</p>
+<details class="qa">
+<summary>Using  and , which vertices in  should we pick that we expect to be
+at distance ?</summary>
+<p>Vertices  and , for example: these are as far away as
+possible and also in different copies of .</p>
+</details>
+<p>We can think of a walk in  is
+a sequence of steps where at each step, we change some coordinate. To
+get from  to , at least once, we need to change the
+last coordinate, going from  to
+ for some . Let’s just skip all steps where we do
+that: we will now get a walk from  to  in the first copy of , and it will be shorter by at
+least one step.</p>
+<details class="qa">
+<summary>What is the motivation for doing
+this?</summary>
+<p>Our induction hypothesis is an assumption
+about all   walks, so in order to
+use it, we first need to obtain an   walk to apply it to!</p>
+</details>
+<p>This new   walk
+corresponds to an   walk in , so it has length at least  , by our induction hypothesis. The
+  walk has at least one step
+we skipped, so it has length at least , completing our lengthy induction
+step.</p>
+<p>We’ve proved that if  has
+diameter  , then  has diameter ; by induction,  has diameter  for all  . ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Let’s take a closer look at <a class="booklink" href="#thm:hanoi">Theorem B.1</a>.</p>
+<ol>
+<li><p>For   disks, write down
+the steps of the solution that the proof gives us.</p></li>
+<li><p>In general, in terms of ,
+how many steps are there in the solution?</p></li>
+<li><p>It turns out that the number in part (b) is the least number of
+steps required to move all the disks from one peg to another. Prove this
+claim by induction.</p></li>
+</ol>
+</li>
+<li>
+<p>The sequence  of Fibonacci numbers is defined by  ,  , and the recurrence relation   for all  .</p>
+<p>A <em>matching</em> is defined in <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a>
+as a spanning subgraph  where
+every vertex has degree  or ; equivalently, the edges  share no endpoints.</p>
+<ol>
+<li><p>Prove that for all  ,
+the path graph  has  matchings.</p></li>
+<li><p>Prove that for all  ,
+the cycle graph  has   matchings.</p></li>
+</ol>
+</li>
+<li><p>Prove by induction on  that
+for all  , there exists a
+graph with  vertices and   edges which has minimum degree  and maximum degree .</p></li>
+<li><p>Prove that the complement of every threshold graph is also a
+threshold graph.</p></li>
+<li>
+<p>Let’s say that a graph  has
+“comparable neighborhoods” if, for all  , either vertex 
+is adjacent to all the neighbors of , or vertex  is adjacent to all the neighbors of
+. (That is, the
+<em>neighborhoods</em>  and
+ are <em>comparable
+sets</em>, following definitions in <a class="booklink" href="../matchings/hall.html">Chapter 15</a>.)</p>
+<ol>
+<li><p>Prove that every threshold graph has comparable
+neighborhoods.</p></li>
+<li><p>In the bottom level of <a class="booklink" href="#fig:threshold-graph-tree">Figure B.4</a>,  of the  possible four-vertex graphs are shown
+(up to isomorphism). The missing 
+graphs are exactly the  graphs
+that do not have comparable neighborhoods. What are they?</p></li>
+<li><p>Let  be a graph with
+comparable neighborhoods. Prove that it either has a vertex adjacent to
+every other vertex, or a vertex with no neighbors.</p></li>
+<li><p>Prove by induction that if 
+has comparable neighborhoods, it is a threshold graph.</p></li>
+</ol>
+</li>
+<li>
+<p>Let a “quadsum graph” be a graph on at least  vertices which is either a -vertex cycle or a union   where  and  are quadsum graphs with  vertices and  edges in common.</p>
+<p>Prove that all -vertex quadsum
+graphs have the same number of edges, and find that number as a function
+of .</p>
+</li>
+<li>
+<p>Let a “Hanoi integer” be an integer in which no two adjacent
+digits are equal (such as 123456, or 271828, but not 144702). We define
+two operations on Hanoi integers:</p>
+<p>A “tweak” changes the last digit to anything else that’s not the same
+as the previous digit: for example, we may change 123456 to 123450.</p>
+<p>A “twiddle” takes the longest suffix of two digits alternating, as
+, and switches the two
+digits: we may change 123456 to 123465, or 271828 to 271282, or 363636
+to 636363. Twiddles are forbidden if they would put a 0 at the beginning
+of the integer.</p>
+<ol>
+<li><p>Prove that you can change any -digit Hanoi integer to any other with a
+combination of   tweaks and
+twiddles.</p></li>
+<li><p>Prove that   operations
+are required to get from a number written only with the digits 0–4 to a
+number written only with the digits 5–9.</p></li>
+</ol>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>It can be tempting to slack off when verifying this
+identity, since we know what we <span>should</span> get when we simplify
+if the proof by induction is going to work. Try to resist this
+temptation and actually do the algebra, or else you risk proving
+something false one day.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>B</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

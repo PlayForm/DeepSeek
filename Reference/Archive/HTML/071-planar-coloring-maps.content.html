@@ -1,0 +1,755 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Coloring Maps</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 24</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>I have to write about map coloring at some point in this textbook;
+there’s no way around it. The map coloring problem is not only the
+reason graph coloring was invented; it’s also a big part of the story
+behind the invention of graph theory as a coherent discipline. That’s
+also why there’s more history in this chapter of the textbook than in
+most other chapters.</p>
+<p>I don’t usually spend a whole lecture on map coloring when teaching a
+course on graph theory, because there’s not enough time. I think going
+up to just <a class="booklink" href="#thm:6-color">Theorem 24.4</a> is a reasonable minimum: it is a
+good way to see how the properties of planar graphs we already know can
+be applied, and it’s a nice application of coloring graphs greedily. The
+proof of <a class="booklink" href="#thm:5-color">Theorem 24.5</a> I’ve included is a bit shorter than
+the usual one, specifically in case you’ve decided to spend a bit more
+time on the topic of map coloring, but not too much time. (As a side
+note, the edge contraction in the proof has a particularly nice
+representation if we are coloring a map, not a graph: then, we just
+erase the borders region  has with
+ and .)</p>
+<p>The last two sections cover two special topics that are less
+frequently seen in graph theory courses, but which I think are very
+interesting. (I think it’s fascinating how—for the second time in our
+study of planar graphs!—finding a Hamilton cycle can help us solve a
+seemingly unrelated problem.) Heawood’s empire coloring problem is a
+good example of how we can arrive at new mathematical questions by
+examining the assumptions in our simplified models.</p>
+<p>In addition to the previous chapters in this book, this chapter
+heavily relies on <a class="booklink" href="../hard/coloring.html">Chapter 19</a>
+(naturally). On the other hand, the section on the use of Hamilton
+cycles in coloring maps will not ask you to know much more from
+<a class="booklink" href="../hard/hamilton.html">Chapter 17</a> than the definition of a
+Hamilton cycle.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="coloring-maps">Coloring maps</h2>
+<p>In <a class="booklink" href="../beginning/examples.html">Chapter 1</a>, we visited Switzerland;
+let us return there.</p>
+<figure class="bookfig" id="fig:switzerland-coloring-maps">
+
+<figcaption>A map of Switzerland (coordinates from )</figcaption>
+</figure>
+<p><a class="booklink" href="#fig:switzerland-coloring-maps">Figure 24.1</a> shows a map of
+the cantons of Switzerland. To make the borders between cantons easy to
+see, we give them different colors. We are willing to reuse colors, but
+we would like two cantons to have different colors when they share a
+border. (It would be fine for two cantons to have the same color if they
+only share a corner; this situation is rarely found in maps.) How many
+different colors do we need to color Switzerland—and is there a number
+of colors that would be enough to color any map, no matter how
+complicated?</p>
+<p>Let the <strong>graph of adjacencies</strong> of a map be the graph
+whose vertices are the regions we must color, with an edge between
+vertices that share a border. Then what we are looking for is a (proper)
+coloring of the graph of adjacencies: we’ve arrived back at the the
+graph coloring problem studied in <a class="booklink" href="../hard/coloring.html">Chapter 19</a>! Historically, in the
+middle of the 19<sup>th</sup> century, this was the first graph coloring
+problem studied. Graph theory had yet to be codified as a discipline at
+the time, though some problems were studied individually which are now
+the domain of graph theory. The book <em>Four Colors Suffice</em> by
+Robin J. Wilson 
+gives a history of the problem, and is also the source for most of my
+historical claims in this chapter.</p>
+<p>Why are we only looking at the map coloring problem now? The reason
+is that for maps with reasonable, well-behaved regions, the graph of
+adjacencies is planar. We can show this by the same argument we used to
+prove <a class="booklink" href="../planar/polyhedra.html#prop:planar-dual">Proposition 23.2</a> that the dual
+graph of a plane embedding is planar. In fact, we can think of the graph
+of adjacencies as the dual of a plane embedding whose edges are exactly
+the borders drawn in the map. (We add vertices to give these edges
+suitable endpoints; aside from a few edge cases, vertices are mostly
+only necessary where three borders meet.)</p>
+<p>I said “maps with reasonable, well-behaved regions” because the real
+world is messy, and not all actual maps translate to planar graphs as
+neatly. In fact, Switzerland already provides an example of this: its
+cantons are not what I would call reasonable and well-behaved!</p>
+<details class="qa">
+<summary>What properties do the Swiss cantons have
+that the faces of a plane embedding shouldn’t?</summary>
+<p>They’re often not connected regions! Four
+cantons have multiple pieces separated by another canton: Obwalden (6),
+Fribourg (10), Solothurn (11), and Vaud (22).</p>
+</details>
+<p>In fact, we can prove that the graph of adjacencies between Swiss
+cantons is not a planar graph. This follows from Kuratowski’s theorem
+(<a class="booklink" href="../planar/testing.html#thm:kuratowski">Theorem 22.7</a>). It’s enough to
+look at the cantons shown in <a class="booklink" href="#fig:switzerland-k5-map">Figure 24.2(a)</a>: because canton 6
+(Obwalden) has two pieces, there are a few more borders between these
+than would be possible in a reasonable map. The graph of adjacencies
+between these  cantons contains a
+subdivision of the complete graph , which is shown in <a class="booklink" href="#fig:switzerland-k5-graph">Figure 24.2(b)</a>:  of the  edges between cantons  are present directly,
+and instead of the edge 
+there are edges  and  through , an extra vertex. (Edge  is also present in the graph, but
+is not shown in <a class="booklink" href="#fig:switzerland-k5-graph">Figure 24.2(b)</a> because it is not part
+of the subdivision.) Since the subgraph in <a class="booklink" href="#fig:switzerland-k5-graph">Figure 24.2(b)</a> is not planar, the
+entire graph of adjacencies between Swiss cantons cannot be planar,
+either.</p>
+<figure class="bookfig" id="fig:switzerland-k5">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:switzerland-k5-map">
+
+<figcaption>A map of a few Swiss cantons</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:switzerland-k5-graph">
+
+<figcaption>A subdivision of  in
+Switzerland</figcaption>
+</figure>
+</div>
+<figcaption>Why Switzerland is not planar</figcaption>
+</figure>
+<p>This is an extremely practical example of a misbehaving map; it is
+also possible to give another example that is extremely theoretical. Hud
+Hudson showed  that
+if we allow fractal regions with a finite area and infinite perimeter
+(considering them to share a border if both regions get arbitrarily
+close to that border), then even connected regions can touch in
+extremely non-planar ways. There is no limit to the number of colors
+that might be necessary to color such a fractal map.</p>
+<p>From now on, we will assume that our maps are reasonable and
+well-behaved: that the borders between regions obey the same
+restrictions as edges in a planar graph (there are no fractal borders)
+and that the objects we are coloring are nothing more than the connected
+regions separated by those borders (there are no regions with multiple
+pieces). With these caveats, the problem of coloring maps is exactly
+equivalent to the problem of coloring planar graphs.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="the-four-color-theorem">The four color theorem</h2>
+<p>What could stop us from coloring a map with  colors, for some integer ? The most straightforward kind of
+obstacle is a set of  regions
+among which any two are adjacent: a -vertex clique in the graph we are
+coloring. It’s possible to draw a map with four regions that all touch;
+this is the simplest possible example of a map which requires four
+colors.</p>
+<details class="qa">
+<summary>Is it possible to draw a map with  regions that all touch?</summary>
+<p>No, because the graph of adjacencies would
+be , which is not a planar
+graph.</p>
+</details>
+<details class="qa">
+<summary>Does this prove that four colors are
+enough to color any map?</summary>
+<p>No! It is possible to have a graph with no
+-vertex clique which is still not
+-colorable.</p>
+</details>
+<p>If you’ve been reading this book carefully and in order, <a class="booklink" href="../hard/coloring.html">Chapter 19</a> should already have
+prepared you for the idea that the chromatic number  and the clique number  are very different. Forgetting
+this is one of the most common mistakes people make when they first
+think about coloring planar graphs.</p>
+<p>From a pedagogical point of view, I can’t help but think that it’s a
+shame that the following theorem really is true:</p>
+<div class="theorem" id="thm:4-color">
+<p><strong>Theorem 24.1</strong> (Four color theorem). <em>If  is a planar graph, then  .</em></p>
+</div>
+<p>The road to proving this theorem has been a long one. The
+mathematical question of whether four colors are enough to color any map
+was first asked by Francis Guthrie in 1852. Later in the 19<sup>th</sup>
+century, it received a great deal of mathematical attention, which came
+with multiple incorrect solutions to the problem.</p>
+<p>Some incorrect solutions were the sort of careless error that
+confuses the chromatic number with the clique number. I assume that even
+at the time, there were also many attempts to disprove the theorem, from
+people who drew a very complicated map and could not find a way to color
+it with four colors; there are still such attempts. (At the same time,
+there was very persuasive experimental evidence for the four color
+theorem: every real-world and imaginary map that was tried could in fact
+be colored with four colors.)</p>
+<p>There were also more notable attempts. Later on in this chapter, I
+will mention two attempts at proving the four color theorem that were
+eventually found to be false, but contributed a lot to graph theory,
+even so. Alfred Kempe’s approach had a subtle error, but it was still
+enough to give a proof of the weaker bound in <a class="booklink" href="#thm:5-color">Theorem 24.5</a>, and the ideas in Kempe’s proof
+have since been used to solve other problems about graph coloring. And I
+suspect that Peter Tait’s use of Hamilton cycles to try to color maps
+was one of the big reasons why 19<sup>th</sup> century mathematicians
+continued to study Hamilton cycles, before practical uses of them were
+found!</p>
+<p>Eventually, a proof of the four color theorem was found, but even
+that was controversial. Kenneth Appel and Wolfgang Haken, in a long
+effort from 1972 to 1976, found a proof that relied on using a computer
+to verify 1936 different configurations . How can any number of
+finite cases be used to prove a theorem about the infinite variety of
+possible maps? The idea, simplified, is that any possible map would be
+guaranteed to contain one of the “reducible configurations” that Appel
+and Haken found. The configurations were not just substructures that
+could be colored: they could be replaced by smaller ones without hurting
+colorability, which allows for a proof by induction on the number of
+regions in the map.</p>
+<p>A proof so long that it needed a computer to verify was
+controversial. Wouldn’t it be invalidated by a single bug in the
+program? This was the fear at first, but by now, it’s been nearly 50
+years, and we can be a bit more confident, for a few reasons:</p>
+<ul>
+<li><p>A 1997 proof by Robertson, Sanders, Seymour, and Thomas, while
+still a computer-based proof, used fewer configurations and a simpler
+approach to reductions .</p></li>
+<li><p>In 2005, Georges Gonthier formalized the entire proof in the Coq
+proof assistant .
+Though the proof is still checked by computer in this case, it does not
+rely on rules specific to map coloring, only on formal logic, so we can
+be more confident in the computer.</p></li>
+<li><p>It’s been nearly 50 years! If there were something incurably
+wrong, surely we’d have discovered it by now.</p></li>
+</ul>
+<p>Even if we believe the computer, there is still a reason why we might
+want a short, human-readable proof (which still has not been found).
+Such a proof would certainly contain new ideas that we can apply to
+solve other, more difficult problems! This is not to say that the
+computer-based proofs have no such insights; the whole approach of
+reducible configurations, refined several times, is mathematically
+interesting. But checking a large number of cases by computer does not
+tell us whether there is some underlying simple reason why all those
+cases would work.</p>
+<p>You might have guessed by now that I will not show you a proof of the
+four color theorem in this chapter. We will, however, look at the
+arguments involved in proving two weaker bounds.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="greedy-coloring">Greedy coloring</h2>
+<p>The greedy coloring algorithm goes through the vertices and gives
+each one a color not already used on its neighbors. This algorithm is
+guaranteed to find a coloring of the graph, but the number of colors
+used depends on the order in which we color the vertices. The best thing
+we can say about the greedy algorithm in general is that if a graph
+ has maximum degree , it will never use more than
+  colors.</p>
+<details class="qa">
+<summary>Does give us any kind of universal upper
+bound for planar graphs?</summary>
+<p>No: the maximum degree of a planar graph
+can be arbitrarily high. For example, the star graph  is a tree with   leaf vertices adjacent to one central
+vertex; it is planar (like all trees) but has maximum degree  .</p>
+</details>
+<p>For planar graphs, it is possible to use some of the theory we’ve
+already developed to order the vertices more intelligently. The
+beginning is a bound on the minimum degree of a planar graph: though
+planar graphs can have vertices of very large degree, this cannot be
+true of every vertex.</p>
+<div class="lemma" id="lemma:planar-min-degree">
+<p><strong>Lemma 24.2</strong>. <em>Every planar graph  has minimum degree  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> This is true for every planar graph with at most
+ vertices because at that point,
+you can’t have any degrees bigger than .</p>
+<p>For planar graphs with  
+vertices and  edges, <a class="booklink" href="../planar/testing.html#thm:3n-6">Theorem 22.2</a> tells us that  . However, if every vertex had
+degree  or more, then we would
+have   by the
+handshake lemma (<a class="booklink" href="../beginning/degrees.html#handshake-lemma">Lemma 4.1</a>), and we cannot
+have  . Therefore not all
+vertices have degree  or more:
+there must be a vertex with degree  or less. ◻</p>
+</div>
+<p>An alternate way to phrase the proof would be to look at the average
+degree of a vertex, rather than the total number of edges.</p>
+<details class="qa">
+<summary>What is the average degree of a graph with
+ vertices and   edges, and how does this help
+us?</summary>
+<p>It is given by  , which
+simplifies to  .
+Since  , the
+average degree is always less than . Not all vertices can be above average,
+so there must be a vertex of degree less than .</p>
+</details>
+<p>It is convenient to have a vertex of small degree, because we can
+leave it to be colored last: even if the worst should happen and all its
+neighbors have different colors, we will still be able to pick a color
+for it. For example, if we have 
+colors available, and we leave a vertex of degree  until the end, it will always be
+possible to give it a color.</p>
+<details class="qa">
+<summary>If  , is that enough to know that  : that  is -colorable?</summary>
+<p>No! For example, we could start with  and add a new vertex of degree
+ (or degree ). That low-degree vertex can be left
+until the end, but we’ll still need  colors to color .</p>
+</details>
+<p>In the case of a planar graph, however, we know more. If we remove a
+vertex of minimum degree, what we’re left with is a smaller planar
+graph, and <a class="booklink" href="#lemma:planar-min-degree">Lemma 24.2</a> also applies to that
+smaller planar graph. That graph, too, has a vertex of degree  or less, which is enough to give us a
+proof by induction.</p>
+<div class="lemma" id="lemma:planar-vertex-ordering">
+<p><strong>Lemma 24.3</strong>. <em>Every -vertex planar graph  has a vertex ordering  in which each vertex
+is adjacent to at most  of the
+vertices that come before it.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We will prove this by induction on . When  , any vertex ordering will do.</p>
+<p>Assume that the lemma is true for all  -vertex planar graphs, and let  be an -vertex planar graph. By <a class="booklink" href="#lemma:planar-min-degree">Lemma 24.2</a>,  ; let  be a vertex with  .</p>
+<p>Apply the induction hypothesis to find a vertex ordering  of  . We can extend it to a vertex
+ordering of  by setting  . For all  ,  has fewer than  neighbors among  by the
+induction hypothesis. Meanwhile,  has fewer than  neighbors among  because it
+has fewer than  neighbors
+total.</p>
+<p>By induction, we can find such a vertex ordering for all . ◻</p>
+</div>
+<p>Using this lemma, we can prove our first bound on the chromatic
+number of arbitrary planar graphs!</p>
+<div class="theorem" id="thm:6-color">
+<p><strong>Theorem 24.4</strong>. <em>If  is a planar graph, then  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  be the vertex ordering given by <a class="booklink" href="#lemma:planar-vertex-ordering">Lemma 24.3</a>, and let  be a set of  colors. For   in that order, give
+ an arbitrary color in  not already used on its neighbors.</p>
+<p>Why is this possible? Because  only has  neighbors in the set , and these
+are the only vertices already given a color when we get to . So at most  of the  colors in  have been used on the neighbors of
+, and there is still a color
+left to choose.</p>
+<p>When we’re done, the coloring we get is proper, because we never give
+a vertex a color used on an adjacent vertex. For every edge , where  , we already knew the color of
+ when we got to , and we made sure that  would be given a different
+color. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="five-colors">Five colors</h2>
+<p>Suppose we want to go one step further, and prove that   for all planar graphs .</p>
+<details class="qa">
+<summary>What would go wrong if we tried the
+methods in the previous section to prove this?</summary>
+<p>We would encounter planar graphs with
+minimum degree . Here, we cannot
+leave any vertex for last and forget about it; its neighbors might end
+up with  different colors, and we
+would have no color left to use on the last vertex.</p>
+</details>
+<details class="qa">
+<summary>Are there, in fact, any planar graphs with
+minimum degree ?</summary>
+<p>Yes, and we’ve seen them already: the
+skeleton graph of the icosahedron is one example.</p>
+</details>
+<p>We can still try to find an recursive algorithm for -coloring planar graphs: given a planar
+graph  and a vertex  of minimum degree, we -color   and then complete the result to a
+coloring of . However, if  , we will need to do one of
+two things:</p>
+<ol>
+<li><p>After we color  , modify
+the coloring somehow to ensure that we’ll be able to put back  and give it a color.</p></li>
+<li><p>Before we color  , modify
+the graph somehow to ensure that we’ll be able to put back  and give it a color.</p></li>
+</ol>
+<p>Historically, the first proofs of <a class="booklink" href="#thm:5-color">Theorem 24.5</a> used the first approach, modifying the coloring using subgraphs called Kempe
+chains; this idea is similar to the recoloring strategy we used in the
+proof of Vizing’s theorem (<a class="booklink" href="../hard/line.html#thm:vizing">Theorem 20.6</a>).
+Kempe chains are named after Alfred Kempe, who used the idea in 1879 in
+a proposed proof of the four color theorem. In 1890, Percy Heawood found
+a subtle error in Kempe’s proof, but the argument via Kempe chains was
+still the first argument showing that five colors are always enough to
+color any map.</p>
+<p>We will instead take the second approach, which is a shorter and more
+direct argument first given by George Birkhoff .</p>
+<div class="theorem" id="thm:5-color">
+<p><strong>Theorem 24.5</strong>. <em>If  is a planar graph, then  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We induct on ,
+the number of vertices of . (This
+will be a strong induction, because sometimes we’ll need to go back from
+ to  , not just  .) If  , then of course 
+has a coloring with at most 
+colors; this gives us our base cases.</p>
+<p>Now assume that all planar graphs with fewer than  vertices have colorings with at most
+ colors, and let  be an -vertex planar graph. By <a class="booklink" href="#lemma:planar-min-degree">Lemma 24.2</a>,  has a vertex  of degree at most .</p>
+<p>If in fact  , then
+we have lucked out. By induction,   has a coloring with at most  colors. In that coloring, the neighbors
+of  use at most  of the colors, because there are at
+most  of them, so we can give
+ a color none of them use. The
+result is a coloring of .</p>
+<p>If  , let  be the neighbors
+of . The first thing we observe is
+that it’s not possible for all of the edges between  to be present in .</p>
+<details class="qa">
+<summary>Why not?</summary>
+<p>Then they’d form a copy of  (a copy of , in fact, when taken together with
+), which we know is not planar;
+but  is a planar graph.</p>
+</details>
+<p>So let  and  be two of ’s neighbors that are not adjacent in
+. (We’ll see why this matters
+soon!) Construct a graph  in the
+following steps:</p>
+<ol>
+<li><p>Delete all edges from 
+except edges  and .</p></li>
+<li><p>Contract edges  and
+, obtaining a new vertex .</p></li>
+</ol>
+<p>Deleting and contracting edges preserves planarity, so  is a planar graph on   vertices. By our induction
+hypothesis,  has a -coloring. Extend this -coloring to   by giving  and  the color of .</p>
+<details class="qa">
+<summary>Why is this a proper coloring?</summary>
+<p>Every neighbor of  or  in   was a neighbor of  in
+, so it had a different color from
+the color used on . Therefore in
+ , it has a different color from
+the color used on  and . This is all that needs to be
+checked; for all other edges, both endpoints have the same color in
+  and in .</p>
+</details>
+<details class="qa">
+<summary>What would have gone wrong if  and  were adjacent?</summary>
+<p>Then both endpoints of the edge  would have the same color, so the
+coloring of   would not be
+proper.</p>
+</details>
+<p>Now we have a -coloring of
+  in which only  different colors are used on the
+neighbors of , because two of them
+( and ) have the same color. Once again,
+this lets us give  a color not
+used on any of its neighbors and obtain a coloring of .</p>
+<p>This proves the induction step, and so the theorem is true for planar
+graphs with any number of vertices. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="hamilton-cycles">Hamilton cycles</h2>
+<p>In 1880, Peter Tait proposed several solutions of his own to the map
+coloring problem. At the time, Kempe’s 1879 proof was generally
+accepted; Tait merely felt that the proof was too complicated, and
+wanted a simpler one. None of Tait’s solutions worked out in the sense
+of giving an alternative proof, but several of them were successful in
+giving alternate avenues of attack on the problem.</p>
+<p>Earlier, I mentioned that the graph of adjacencies of a map is the
+dual of a plane embedding whose edges are exactly the borders drawn in
+the map. However, we did not really consider this plane embedding as an
+object of study in its own right. Tait was the first to do so, and was
+able to get remarkably close to a proof of the four color theorem in
+this way.</p>
+<p>Tait began by finding a Hamilton cycle in this plane embedding; for
+an example, consider the Hamilton cycle in <a class="booklink" href="#fig:tait-cycle">Figure 24.3(a)</a>. The Hamilton cycle divides the
+plane embedding into two parts, an inside and an outside. Tait’s
+strategy was to color those two parts separately (see <a class="booklink" href="#fig:tait-inside">Figure 24.3(b)</a> and <a class="booklink" href="#fig:tait-outside">Figure 24.3(c)</a>) then combine the colorings,
+as shown in <a class="booklink" href="#fig:tait-combined">Figure 24.3(d)</a>.</p>
+<figure class="bookfig" id="fig:tait-hamilton-coloring">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:tait-cycle">
+
+<figcaption>A Hamilton cycle</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:tait-inside">
+
+<figcaption>Color the inside</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:tait-outside">
+
+<figcaption>Color the outside</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:tait-combined">
+
+<figcaption>The final result</figcaption>
+</figure>
+</div>
+<figcaption>Using a Hamilton cycle in the borders of a map to -color it</figcaption>
+</figure>
+<p>Why would this help? Well, Tait noticed that the inside and the
+outside of the cycle can each be colored with just two colors: four
+total! In fact, the graph of adjacencies on either side of the Hamilton
+cycle is a tree, and as we know (<a class="booklink" href="../matchings/bipartite.html#prop:tree-bipartite">Proposition 13.3</a>), all
+trees are bipartite, or in other words -colorable.</p>
+<p>To see this, let  (for “half”)
+be the graph of adjacencies on just one side of the Hamilton cycle. Each
+edge in  exists due to a border in
+the plane embedding where we drew the Hamilton cycle; both endpoints of
+that border lie on the cycle, because it’s a Hamilton cycle. If a border
+is drawn between two points on a closed loop, it cuts that loop in half,
+separating the two parts of the side it’s drawn on. Back in , that makes the edge we were looking at
+a bridge. A connected graph in which every edge is a bridge is a
+tree.</p>
+<details class="qa">
+<summary>Why is this not a proof of the four color
+theorem?</summary>
+<p>The missing detail is that we don’t yet
+have a reason to believe that the Hamilton cycle we are relying on
+exists!</p>
+</details>
+<p>In fact, it’s pretty easy to draw a map in which we can’t draw a
+Hamilton cycle along the borders. (Switzerland is an example: here, the
+borders aren’t even connected!) Tait was aware of this, but still had
+hope to do it in all the worst cases, which would be enough to prove the
+four color theorem.</p>
+<p>What are the worst cases? The phrase “worst case” is one you should
+generally watch out for in your proofs: if you’re not careful, it can
+lead to unjustified assumptions. To properly use it, we should first
+explain how every other case is simpler than some “worst” case.</p>
+<p>That’s exactly what we can do here. Suppose we are trying to color an
+arbitrary planar graph . If there
+is any edge  such that adding
+ to  produces another planar graph  , then we might as well add it! Every
+coloring of   is also a coloring
+of , with the extra restriction
+that  and  cannot be given the same color. And if
+we think we have a rule for coloring all planar graphs, that rule should
+be able to handle   just as well
+as .</p>
+<p>This means that it’s enough to consider only maximal planar graphs,
+which cannot gain any new edge and still be planar. By <a class="booklink" href="../planar/testing.html#prop:maximal-planar">Proposition 22.4</a>, these
+are exactly the graphs whose plane embeddings are always
+triangulations.</p>
+<details class="qa">
+<summary>What do we know about the dual of a
+triangulation?</summary>
+<p>The condition that each face has length
+ turns into a condition that each
+vertex has degree . They are -regular graphs!</p>
+<p>(In fact, not all -regular
+planar graphs are the duals of triangulations; the graph must also be
+<em>-connected</em>, but we won’t
+learn what that means until <a class="booklink" href="../connectivity/connectivity.html">Chapter 26</a>.)</p>
+</details>
+<p>Tait’s conjecture was that the dual graph of every triangulation is
+Hamiltonian. If this were true, it would imply the four color theorem,
+by the strategy we pursued in <a class="booklink" href="#fig:tait-cycle">Figure 24.3(a)</a>. This
+seemed to be a viable strategy for a long time; it was not until 1946
+that Tutte found a counterexample . That counterexample is shown in <a class="booklink" href="#fig:tutte-graph">Figure 24.4</a> and is known as the <em>Tutte
+graph</em>. (Here, the planar graph which cannot be colored using Tait’s
+strategy is the dual of the Tutte graph; that is, we wish to color the
+faces in <a class="booklink" href="#fig:tutte-graph">Figure 24.4</a>. By the four color theorem, of
+course, this is still possible—just not via finding a Hamilton
+cycle.)</p>
+<figure class="bookfig" id="fig:tutte-graph">
+
+<figcaption>The Tutte graph</figcaption>
+</figure>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="coloring-empires">Coloring empires</h2>
+<p>In 1890, along with finding the flaw in Kempe’s attempt at the four
+color theorem, Heawood asked : what about maps like the map of
+Switzerland? That is, what about maps where a single country can have
+multiple disconnected parts, which must be given the same color?</p>
+<p>If we don’t put some kind of restriction on this ability, then there
+is no limit to the number of colors we might need.</p>
+<details class="qa">
+<summary>Why not?</summary>
+<p>For example, give each country a tiny
+exclave in the middle of each other country’s territory. Now this
+prevents those two countries from sharing a color, so every country will
+need a different color.</p>
+</details>
+<p>Heawood’s approach was to express the problem in terms of the maximum
+number of parts a single country can have. Unfortunately, he did not
+come up with a clever name for such divided countries. This omission was
+corrected by Martin Gardner when writing about Heawood’s work much
+later ; Gardner
+proposed the term <em>-pire</em>
+for an empire whose territory consists of at most  disconnected pieces.</p>
+<p>Let’s begin by looking at the case  . (This more or less describes
+Switzerland; though some Swiss cantons have more than  pieces, this does not contribute any
+additional adjacencies.)</p>
+<div class="prop" id="prop:2-pire">
+<p><strong>Proposition 24.6</strong>. <em>A map of -pires can always be colored using at
+most  colors so that two -pires which share a border (in at least
+one of their territories) receive different colors.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We can model a map of -pires in two ways:</p>
+<ol>
+<li><p>With a graph (call it ) in
+which vertices are connected regions, and an edge exists whenever two
+regions share a border. Let there be  regions; then (as we’ve already seen)
+this graph is planar and has at most   edges.</p></li>
+<li><p>With a graph (call it ) in
+which vertices are the empires, and an edge exists between two vertices
+if some territory belonging to one empire borders some territory
+belonging to the other empire. This is the graph we actually want to
+color.</p></li>
+</ol>
+<p>In , there are also at most
+  edges! That’s because every
+edge in  must come from an edge in
+ (a border shared is a border
+shared in either representation) but every edge in  corresponds to at most one edge in
+ (a shared border only belongs to
+two empires).</p>
+<details class="qa">
+<summary>Is it possible for  to have fewer edges than ?</summary>
+<p>Yes: whenever one empire touches two of
+another empire’s regions, that is represented by two edges in , but only one edge in .</p>
+</details>
+<details class="qa">
+<summary>What can we say about the number of
+vertices in ?</summary>
+<p>It could be as high as  (if every -pire is actually an ordinary country),
+but cannot go below : with at
+most  regions per empire, it takes
+at least  empires to reach  regions.</p>
+</details>
+<p>The average degree in  is  by the handshake
+lemma, or at most  . In particular, it is less than , so  .</p>
+<p>What’s more, if we delete a vertex  from , then the remaining graph   is also the graph of adjacencies of
+some map of -pires: just erase
+empire  from the map! This means
+that  , by the
+same argument, and in general, every subgraph of  will have a vertex of degree less than
+.</p>
+<p>We can now color  by the same
+greedy argument as we used to prove <a class="booklink" href="#thm:6-color">Theorem 24.4</a>, using
+ colors instead of . Leaving a low-degree vertex until the
+end guarantees that one of 
+colors will be available for it, since its neighbors have at most  different colors. ◻</p>
+</div>
+<figure class="bookfig" id="fig:heawood-empire">
+
+<figcaption>Heawood’s map of 12 pairwise adjacent empires</figcaption>
+</figure>
+<p><a class="booklink" href="#thm:6-color">Theorem 24.4</a> was considerably more pessimistic
+than the truth: it says that   for all planar graphs ,
+but actually, it is also true that  . Does <a class="booklink" href="#prop:2-pire">Proposition 24.6</a> have a
+similar flaw?</p>
+<p>No: it turns out that it is the best possible bound! <a class="booklink" href="#fig:heawood-empire">Figure 24.5</a> shows a map drawn by
+Heawood. Here, there are  empires
+(labeled  through ), and any two of them share a border!
+For this map, it is impossible to use fewer than  colors, because all empires must have
+different colors; therefore there cannot be a general result better than
+<a class="booklink" href="#prop:2-pire">Proposition 24.6</a>.</p>
+<p>Heawood gave an argument for the general case of -pires, as well.</p>
+<details class="qa">
+<summary>What upper bound does the same argument
+give for a map of -pires?</summary>
+<p>An upper bound of  colors: with  regions, there are still at most   edges (less than ) but the number of -pires is at most , so the average degree is less than
+ .</p>
+</details>
+<p>However, he was unable to find a map to show that this was the best
+upper bound when  , and left
+this as a conjecture. This conjecture was resolved almost a century
+later, when Brad Jackson and Gerhard Ringel showed how to construct such
+maps for all   .</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li><ol>
+<li><p>Find a -coloring of the
+faces of a dodecahedron.</p></li>
+<li><p>Prove that  faces are not
+enough to color the faces of a dodecahedron.</p></li>
+</ol></li>
+<li><p>Even though Switzerland’s graph of adjacencies is not planar, it
+is still -colorable! Find such a
+-coloring. (You may prefer to
+refer to the diagram in <a class="booklink" href="../beginning/examples.html#fig:switzerland-graph">Figure 1.2(b)</a> all
+the way back in the first chapter instead of a map of
+Switzerland.)</p></li>
+<li>
+<p>The mathematician August Ferdinand Möbius is perhaps best known
+for his mathematical study of the Möbius strip: the surface formed by
+taking a strip of paper and joining the two ends with a half-twist, so
+that the two sides of the paper are turned into one side. In regards to
+coloring maps, his contribution was to show that  connected regions on a map cannot all
+share borders with each other; an early form of proving that  is not planar.</p>
+<p>Ironically, when drawing a map on a Möbius strip rather than in the
+plane, it is possible to have 
+regions all border each other. How can this be done?</p>
+<p>As a follow-up, see if you can do it for  regions.</p>
+</li>
+<li>
+<p>The Tutte graph shown in <a class="booklink" href="#fig:tutte-graph">Figure 24.4</a> is
+made up of three subgraphs isomorphic to the one shown below, plus a
+central vertex. The three vertices labeled , , and  in the diagram are used to connect the
+three subgraphs together: each -vertex is joined to a -vertex in a different subgraph to
+connect the three cyclically, and the three -vertices are all joined to the center
+vertex of the Tutte graph.</p>
+
+<ol>
+<li><p>Show (by casework) that the graph above has no   Hamilton path. (It does have   and   Hamilton paths, which you may feel
+free to find, though they won’t be useful for the next step.)</p></li>
+<li><p>Use part (a) to show that the Tutte graph has no Hamilton
+cycle.</p></li>
+</ol>
+</li>
+<li>
+<p>Here are several coloring problems for the union of two graphs.
+The graphs may share vertices and even edges; their union is a graph
+containing every vertex and every edge present in at least one of the
+graphs.</p>
+<ol>
+<li><p>The union of two planar graphs is -colorable. Explain why this is a
+special case of <a class="booklink" href="#prop:2-pire">Proposition 24.6</a>.</p></li>
+<li><p>By imitating the proof of <a class="booklink" href="#prop:2-pire">Proposition 24.6</a>, prove
+that the union of two trees is always -colorable.</p></li>
+<li><p>Prove that the union of two bipartite graphs is always -colorable.</p></li>
+</ol>
+</li>
+<li>
+<p>The faraway and fictional continent of Kvadrat is divided into
+many countries, all in the shape of   squares. The squares are not necessarily aligned to a grid,
+and might have unclaimed land between them (which does not need to be
+given a color). One possible map is shown below:</p>
+
+<p>Can all possible maps of Kvadrat be colored using only three colors,
+or is there an example of such a map which requires four
+colors?</p>
+</li>
+<li>
+<p>The faraway and fictional country of Heibai is divided into
+cantons, just like Switzerland, but its map has a curious property: at
+every point where several borders meet, the total number of borders that
+converge there is even. (The United States has just one point of this
+type: the point where Arizona, Colorado, New Mexico, and Utah come
+together.)</p>
+<p>Prove that it’s possible to color the cantons of Heibai with just two
+colors so that two cantons that share a border are always colored
+differently. (Two cantons that only share a point may have the same
+color.)</p>
+</li>
+<li>
+<p>Let  be a planar graph that
+has been partially -colored: there
+is a set   such that
+every vertex   has already
+been given a color  , which cannot be changed.</p>
+<p>Prove that if the distance between any two vertices in  is at least , then this partial coloring can be
+completed to a -coloring of . (This result was proved by Michael
+Albertson in 1998 .)</p>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 24</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

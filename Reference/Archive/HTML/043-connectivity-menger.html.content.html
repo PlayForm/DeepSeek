@@ -1,0 +1,851 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Menger’s theorem</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 27</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>Menger’s theorem answers the questions posed at the end of the
+previous chapter, and it is the main reason why   connectivity ( and  is studied): even if
+you want to know how hard it is to disconnect  from  for practical purposes, Menger’s
+theorem goes a long way toward assuring you that   connectivity is a useful model.
+Beyond that, it helps us understand  (and ) as well, often through
+Dirac’s fan lemma.</p>
+<p>In an introductory course on graph theory, it might be useful to have
+a plan for covering just one portion of this chapter, rather than the
+whole thing. I can think of two good ways to do this. One option is to
+make the proof of Menger’s theorem the final goal of the semester. It is
+suitably dramatic, since it is a result that generalizes previous ones
+about matchings, answers questions posed in the previous chapter, and is
+one of the most difficult proofs in this book, if covered in detail.</p>
+<p>Another option is to avoid proving Menger’s theorem, and instead
+focus on applications of it. I’ve chosen to include <a class="booklink" href="#thm:chvatal-erdos">Theorem 27.9</a> (the Chvátal–Erdős theorem)
+as an example of this, for several reasons. It connects the vertex
+connectivity  to two
+important topics from earlier chapters: Hamilton cycles and independent
+sets. Also, seeing the technique in the proof (illustrated in <a class="booklink" href="#fig:chvatal-erdos">Figure 27.4</a>) is useful: it shows up over
+and over again in the study of Hamilton cycles. If taking this option,
+it would still be good to prove <a class="booklink" href="#lemma:konig-to-menger">Lemma 27.2</a>
+if there’s time: the connection between Menger’s theorem and matchings
+is also an important application of Menger’s theorem!</p>
+<p>Keep in mind that this chapter relies heavily on many different
+concepts from previous parts of the book: Kőnig’s theorem from
+<a class="booklink" href="../matchings/konig.html">Chapter 14</a>, Hamilton cycles from
+<a class="booklink" href="../hard/hamilton.html">Chapter 17</a>, independent sets from
+<a class="booklink" href="../hard/cliques.html">Chapter 18</a>, and line graphs from
+<a class="booklink" href="../hard/line.html">Chapter 20</a>.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="mengers-theorem">Menger’s theorem</h2>
+<p>We ended the previous chapter with a discussion of optimization
+duality, and two instances of it in particular:</p>
+<ul>
+<li><p>The duality between minimizing the number of vertices in an   cut, and maximizing the size of a set
+of internally disjoint  
+paths.</p></li>
+<li><p>The duality between minimizing the number of edges in an   edge cut, and maximizing the size of
+a set of edge-disjoint  
+paths.</p></li>
+</ul>
+<p>We proved in <a class="booklink" href="../connectivity/connectivity.html#prop:menger-weak">Proposition 26.5</a> and
+<a class="booklink" href="../connectivity/connectivity.html#prop:edge-menger-weak">Proposition 26.6</a> that
+at the very least, <em>weak duality</em> holds in both pairs: the
+largest set of paths is a lower bound on the number of vertices or edges
+in the cut.</p>
+<p>In 1927, Karl Menger proved  that <em>strong duality</em> holds in both
+pairs: the largest set of paths is equal to the number of vertices or
+edges in the cut. We will begin with the vertex
+version of Menger’s theorem. I will state it in the following form,
+letting <a class="booklink" href="../connectivity/connectivity.html#prop:menger-weak">Proposition 26.5</a> (which we’ve
+already proved) provide the converse:</p>
+<div class="theorem" id="thm:menger">
+<p><strong>Theorem 27.1</strong> (Menger’s theorem). <em>If  and  are any two non-adjacent vertices of a
+graph , then  contains a set of  internally disjoint   paths.</em></p>
+</div>
+<p>The main goal of this chapter is to prove Menger’s theorem.</p>
+<p>Many proofs of Menger’s theorem are known, so let me summarize the
+origin of the proof presented here. The argument by minimal
+counterexample in <a class="booklink" href="#lemma:s-x-t-paths">Lemma 27.3</a>, <a class="booklink" href="#lemma:vertex-in-cut">Lemma 27.4</a>, and <a class="booklink" href="#lemma:a-or-b">Lemma 27.5</a> is due to Dirac . The remaining cases can
+be solved using Kőnig’s theorem (<a class="booklink" href="../matchings/konig.html#thm:konig">Theorem 14.2</a>),
+which is also how the proof is finished in West’s <em>Introduction to
+Graph Theory</em> .</p>
+<p>I prefer to do things this way, because <a class="booklink" href="#lemma:konig-to-menger">Lemma 27.2</a> can be used to go in
+either direction: it can also let us deduce Kőnig’s theorem from
+Menger’s theorem. However, we do not really need the full power of
+Kőnig’s theorem; Hall’s theorem would be enough, and in fact Dirac
+finished the proof without using any additional results.</p>
+<p>The relationship between Menger’s theorem and our earlier results
+about matchings extends to algorithms. If we have a complete algorithm
+for computing , which
+finds both an   cut of  vertices and a set of  internally disjoint   paths, then we can turn it into a
+matching algorithm. We do not yet have such an algorithm, and the proof
+of Menger’s theorem in this chapter is not suitable for finding one.
+However, in <a class="booklink" href="../connectivity/flows.html">Chapter 28</a>, we will look at the
+maximum flow problem, which can be used to solve both problems. The
+algorithm this gives is more or less the one in <a class="booklink" href="../matchings/konig.html">Chapter 14</a>, but it’s now a special case of
+a more general method.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="kőnig-type-graphs">Kőnig-type graphs</h2>
+<p>We will begin by understanding   cuts in the special case of what I
+will temporarily call “Kőnig-type” graphs. This is not a standard term,
+just my name for the case of Menger’s theorem we will address using
+Kőnig’s theorem.</p>
+<p>We will say that a graph  with
+two vertices designated  and  is <em>Kőnig-type</em> if the following
+is true:</p>
+<ol>
+<li><p>Vertices  and  are not adjacent. (This is a
+prerequisite for  to
+be an interesting problem in the first place: if  and  are adjacent, then  .)</p></li>
+<li><p>Every other vertex in the graph is adjacent to  or to , but not both.</p></li>
+</ol>
+<p>An example of a Kőnig-type graph is given in <a class="booklink" href="#fig:konig-type-graph">Figure 27.1(a)</a>. Vertices  are adjacent to ; vertices  are adjacent to .</p>
+<figure class="bookfig" id="fig:menger-to-konig">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:konig-type-graph">
+
+<figcaption>A Kőnig-type graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:konig-type-to-bipartite">
+
+<figcaption>The corresponding bipartite graph</figcaption>
+</figure>
+</div>
+<figcaption>The correspondence between Kőnig-type graphs and bipartite
+graphs</figcaption>
+</figure>
+<details class="qa">
+<summary>In <a class="booklink" href="#fig:konig-type-graph">Figure 27.1(a)</a>,
+the sets  and  are both   cuts. Is there a smaller   cut?</summary>
+<p>Yes: the -vertex set  is the unique smallest   cut.</p>
+</details>
+<details class="qa">
+<summary>Is there a set of  internally disjoint   paths to match it?</summary>
+<p>Yes, represented by the walks , , and .</p>
+</details>
+<p>Given a Kőnig-type graph , let
+ be the set of vertices adjacent
+to , and let  be the set of vertices adjacent to
+. We construct a bipartite graph
+ from  by deleting vertices  and , as well as all edges not between  and . <a class="booklink" href="#fig:konig-type-to-bipartite">Figure 27.1(b)</a> shows the result of
+applying this to the Kőnig-type graph in <a class="booklink" href="#fig:konig-type-graph">Figure 27.1(a)</a>. (The deletion of vertices
+ and  is hard to miss, but edges , , and  have also been deleted, which is more
+subtle.)</p>
+<p>Kőnig’s theorem says that , the largest number of
+edges in a matching in , is equal
+to , the smallest number of
+vertices in a vertex cover of .</p>
+<details class="qa">
+<summary>In <a class="booklink" href="#fig:konig-type-to-bipartite">Figure 27.1(b)</a>, can you find a
+matching and a vertex cover of equal size?</summary>
+<p>Edges  form a matching, and vertices  are a vertex cover of the
+same size: every edge is incident to at least one of these three
+vertices.</p>
+</details>
+<p>The vertex cover we found is the same set as the   cut in <a class="booklink" href="#fig:konig-type-graph">Figure 27.1(a)</a>. This is not a
+coincidence! Since  is a
+vertex cover of , deleting these
+three vertices from  also
+eliminates all edges between  and
+, which leaves no way to get from
+ to .</p>
+<p>More precisely and more generally, let’s state an equivalence:</p>
+<div class="lemma" id="lemma:konig-to-menger">
+<p><strong>Lemma 27.2</strong>. <em>Menger’s theorem for a Kőnig-type
+graph  is equivalent to Kőnig’s
+theorem for the associated bipartite graph .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We’ve already seen a glimpse of the relationship
+between   cuts in  and vertex covers in , but it will be easier to prove it
+formally if we first understand the relationship between internally
+disjoint   paths in  and matchings in .</p>
+<p>A matching  in , like the matching with   we found in
+<a class="booklink" href="#fig:konig-type-to-bipartite">Figure 27.1(b)</a>, can always be
+turned into a set of internally disjoint   paths of the same size. For each edge
+ , take the path
+represented by . The
+internal vertices of this path are precisely the endpoints of , and by the definition of a matching,
+two edges in  share no endpoints.
+This means that the paths we get in this way are always internally
+disjoint.</p>
+<p>Not all   paths are like this;
+in <a class="booklink" href="#fig:konig-type-graph">Figure 27.1(a)</a>, there are very long paths
+like the one represented by . However, each   path must contain an edge , where   and  , or else it will never reach . Given a set of internally disjoint
+  paths, let  be the subgraph of  containing the first edge between  and  from each path. Because the paths were
+internally disjoint, these edges share no endpoints, so  is a matching.</p>
+<p>This correspondence shows that the largest number of internally
+disjoint   paths in  is equal to the matching number . For   cuts in  and vertex covers in , the relationship appears to be much
+more simple: they are one and the same! But why is this?</p>
+<p>In both cases, we are looking for a set of vertices not including
+ or ; a subset  . The definition of a vertex cover is simpler to
+check than the definition of an  
+cut:  is a vertex cover in  if and only if it contains an endpoint
+of every edge  with   and  . So let’s check that this also describes when  is an   cut in .</p>
+<details class="qa">
+<summary>If 
+is an   cut in , why must it contain at least one
+endpoint of every edge  with
+  and  ?</summary>
+<p>If not, then the walk  shows that  and  are still in the same connected
+component of  .</p>
+</details>
+<details class="qa">
+<summary>If 
+contains at least one endpoint of every such edge, why is it an   cut in ?</summary>
+<p>In this case,   has no edges between  and  (or what’s left of them) remaining, so
+there is no way to get from  to
+.</p>
+</details>
+<p>This proves that   cuts in
+ are exactly the same as vertex
+covers in ; in particular,  .</p>
+<p>We’re now ready to prove the equivalence claimed in the lemma. We
+have two pairs of equal quantities, one in  and one in :</p>
+<ol>
+<li><p>The largest size of a set of internally disjoint   paths in  is equal to the matching number .</p></li>
+<li><p>The   connectivity  is equal to the vertex
+cover number .</p></li>
+</ol>
+<p>Both Menger’s theorem for  and
+Kőnig’s theorem for  say that the
+first pair is also equal to the second pair, so the claims made by the
+two theorems are equivalent. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="reducing-all-other-cases">Reducing all other cases</h2>
+<p>To obtain a proof of Menger’s theorem in general, we must now deal
+with graphs which are not Kőnig-type.</p>
+<p>We will use a proof by minimal counterexample: a sort of combination
+of a proof by induction and a proof by contradiction. Suppose for sake
+of contradiction that Menger’s theorem is false for some graphs. Then we
+may take  to be a counterexample
+to Menger’s theorem which has as few vertices as possible: a minimal
+counterexample.</p>
+<p>Sometimes a minimal counterexample is also called a “minimal
+criminal”, but I don’t like this terminology, because it’s too much of a
+tongue-twister when I try to say it out loud while teaching class. I
+don’t mind writing it in a book, though.</p>
+<p>What do we do with a minimal counterexample? We try to deduce
+additional properties: for example, right now, in the case of Menger’s
+theorem, we know that a minimal counterexample is not Kőnig-type,
+because then it wouldn’t be a counterexample. The reason minimality is
+so important is that very often, we can say, “A minimal counterexample
+must have property , because
+otherwise, we could modify it in 
+way and obtain a smaller counterexample.”</p>
+<p>Proofs by minimal counterexample can often be turned into proofs by
+induction, but I want to include a proof of this type here, because
+they’re a very important exploration technique. When you don’t yet know
+whether a theorem is true, proving some properties of a minimal
+counterexample is useful in two ways: it is partial progress toward a
+proof of the theorem (if it’s true), but it can also help us find a
+counterexample (if it’s false).</p>
+<p>So let’s see how it works here. The following three lemmas all have
+the common hypothesis that a graph , with designated non-adjacent vertices
+ and , is a minimal counterexample to
+Menger’s theorem. (I will not keep restating these assumptions about
+ each time.) We will prove a few
+properties of , and then put them
+together to prove Menger’s theorem. I should warn you that (as in every
+book in which the hero has to accomplish three tasks) the third lemma is
+the trickiest.</p>
+<div class="lemma" id="lemma:s-x-t-paths">
+<p><strong>Lemma 27.3</strong>. <em> cannot contain a vertex  adjacent to both  and .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Suppose for the sake of contradiction that  has such a vertex. Then  must be part of every   cut: if it is not deleted, there is
+an   path  represented by . So every   cut has the form  , where  is an   cut in  .</p>
+<p>Let  . Because (as we’ve
+just proved) every   cut in  consists of an   cut in , plus one extra vertex, we have  .</p>
+<p>But we know that  is smaller
+than the minimal counterexample to Menger’s theorem! So by Menger’s
+theorem,  contains a set of  internally disjoint   paths.</p>
+<p>All these   paths are also
+  paths in , and we can add one more path to the
+set: the path  defined above.
+Therefore  contains a set of   internally disjoint   paths. But this is exactly the number
+of paths Menger’s theorem promises, so we contradict our assumption that
+ is a counterexample to Menger’s
+theorem. ◻</p>
+</div>
+<div class="lemma" id="lemma:vertex-in-cut">
+<p><strong>Lemma 27.4</strong>. <em>Every vertex in , other than  and , is part of some   cut of size .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  be an
+arbitrary vertex of , and let
+ . As in the previous lemma,
+ is smaller than the minimal
+counterexample to Menger’s theorem, so  contains a set of  internally disjoint   paths.</p>
+<p>Therefore  also contains a set
+of  internally
+disjoint   paths. Since  is a counterexample to Menger’s
+theorem, these paths must not be enough:  must be bigger than . In other words,  .</p>
+<p>Let  be an   cut in  of size . Then   is an   cut in  of size  , because   is exactly the same
+graph as  . This proves that
+ ,
+and since we have the reverse inequality already, we know that  and   are equal.</p>
+<p>Therefore   is the
+  cut containing  we wanted: it has size  . ◻</p>
+</div>
+<p>Let  be the set of all vertices
+adjacent to  in , and let  be the set of all vertices adjacent to
+. From <a class="booklink" href="#lemma:s-x-t-paths">Lemma 27.3</a>, we know that  and  are disjoint, but we do not (yet) know
+if they include every vertex other than  and . Both  and  are   cuts, though they might have more
+than  vertices.</p>
+<div class="lemma" id="lemma:a-or-b">
+<p><strong>Lemma 27.5</strong>. <em> has no   cuts of size  not equal to either  or .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  be an
+  cut in  with  . If 
+contains all of , then  must be equal to , because otherwise  would be a smaller   cut. Similarly, if  contains all of , then  must be equal to . So assume, for the sake of
+contradiction, that  does not
+contain all of either set: there is some   and some  
+such that  does not contain either
+ or .</p>
+<figure class="bookfig" id="fig:nontrivial-cut">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:nontrivial-cut-G">
+
+<figcaption>The original graph </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:subproblem-1">
+
+<figcaption>Subproblem 1 ()</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:subproblem-2">
+
+<figcaption>Subproblem 2 ()</figcaption>
+</figure>
+</div>
+<figcaption>The subproblems in <a class="booklink" href="#lemma:a-or-b">Lemma 27.5</a></figcaption>
+</figure>
+<p>The vertices  and  will be important eventually, but for
+the moment, we simply use  to
+split up the problem of finding internally disjoint   paths in  into two smaller subproblems. This is
+shown by example in <a class="booklink" href="#fig:nontrivial-cut">Figure 27.2</a>,
+which is worth a thousand words. Here are a few words to describe what
+we do in general:</p>
+<p><strong>Subproblem 1.</strong> Take the subgraph of  induced by  and all the vertices in the same
+connected component of   as . This does not include , because in  , vertices  and  are in different components. But now,
+add  back in, with edges from
+every vertex in  directly to . Call the resulting graph  (for “left”, since in our example, it
+retains the left half of <a class="booklink" href="#fig:recombining-cut">Figure 27.3</a>).</p>
+<p><strong>Subproblem 2.</strong> Take the subgraph of  induced by  and all the vertices in a different
+connected component of   from
+. (This includes , but not .) Add  back in, with edges from  directly to every vertex in . Call the resulting graph  (for “right”).</p>
+<p>The vertices  (in , but not in ) and  (in , but not in ) guarantee that the two subproblems are
+strictly smaller than : in , there is no vertex , and in , there is no vertex . As in <a class="booklink" href="#lemma:s-x-t-paths">Lemma 27.3</a>, the natural next step is to
+apply Menger’s theorem to  and
+. To do this, the first thing we
+need to know is  and
+.</p>
+<details class="qa">
+<summary>In <a class="booklink" href="#fig:nontrivial-cut">Figure 27.2</a>,
+how do  and  compare to ?</summary>
+<p>All three   connectivities are equal.</p>
+</details>
+<p>This is true in general. To find an   cut in , we must block all ways to get from
+ to  (since every vertex to  is adjacent to ). This also blocks all ways to get from
+ to  in  (since before we pass through , we cannot reach a place where  and  disagree), so we get an   cut in  as well, proving  .
+Similarly,  , because an   cut in  blocks all ways to get from  to , which makes it an   cut in  as well.</p>
+<p>The reverse inequalities   and   hold because  is a cut of size  in all three graphs: , , and .</p>
+<p>Because  is strictly smaller
+than , Menger’s theorem holds for
+, giving a set of  internally disjoint   paths in . Since   and every   path in  must first pass through , this set of paths uses each vertex in
+ exactly once. By removing the
+last step from each path, we get a set of internally disjoint paths from
+ to every vertex of .</p>
+<p>Because  is strictly smaller
+than , Menger’s theorem holds for
+, giving a set of  internally disjoint   paths in . Since   and every   path in  must first pass through , this set of paths uses each vertex in
+ exactly once. By removing the
+first step from each path, we get a set of internally disjoint paths
+from every vertex of  to .</p>
+<figure class="bookfig" id="fig:recombining-cut">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:subproblem-1-paths">
+
+<figcaption>  paths in </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:subproblem-2-paths">
+
+<figcaption>  paths in </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:recombining-result">
+
+<figcaption>  paths in </figcaption>
+</figure>
+</div>
+<figcaption>Recombining the subproblems in <a class="booklink" href="#lemma:a-or-b">Lemma 27.5</a></figcaption>
+</figure>
+<p>For each vertex  , the
+union of an   path from the first
+set and a   path from the second
+set is an   path in . (This is shown for our example in
+<a class="booklink" href="#fig:recombining-cut">Figure 27.3</a>.) All  paths obtained in this way
+are internally disjoint: they cannot intersect in or before , because that would be an intersection
+in , and they cannot intersect
+after , because that would be an
+intersection in .</p>
+<p>But finding a set of  internally disjoint   paths in  contradicts our choice of : that it was a minimal counterexample
+to Menger’s theorem. Therefore the   cut , which we assumed to exist at the
+beginning of this proof, cannot exist in . ◻</p>
+</div>
+<p>Take a deep breath: <a class="booklink" href="#lemma:s-x-t-paths">Lemma 27.3</a> was
+quick to prove, and <a class="booklink" href="#lemma:vertex-in-cut">Lemma 27.4</a>
+was not bad either, but <a class="booklink" href="#lemma:a-or-b">Lemma 27.5</a> might
+have been more than we bargained for. But now, we are ready to finish
+the proof of Menger’s theorem in just a few more steps!</p>
+<div class="proof">
+<p><em>Proof of Menger’s theorem (<a class="booklink" href="#thm:menger">Theorem 27.1</a>).</em>
+Suppose for the sake of contradiction that a minimal counterexample to
+Menger’s theorem exists: a graph 
+with designated not-adjacent vertices  and  which does not have a set of  internally disjoint   paths.</p>
+<p>By <a class="booklink" href="#lemma:konig-to-menger">Lemma 27.2</a> and Kőnig’s theorem, we
+know that  (a counterexample to
+Menger’s theorem) cannot be a Kőnig-type graph.</p>
+<details class="qa">
+<summary>Looking back at the definition of
+Kőnig-type graphs earlier in this chapter, what does it mean that  is not one?</summary>
+<p>The condition for  to be Kőnig-type is that every vertex
+other than  or  is adjacent to  or , but not both. So if  is not Kőnig-type, it must have a
+vertex (other than  or ) which is either adjacent to both  and , or to neither.</p>
+</details>
+<p>Let  be one such vertex. If
+ is adjacent to both  and , this contradicts <a class="booklink" href="#lemma:s-x-t-paths">Lemma 27.3</a>. If  is adjacent to neither  nor , then we need to work harder. First,
+apply <a class="booklink" href="#lemma:vertex-in-cut">Lemma 27.4</a> to find a vertex cut  of size  with  .</p>
+<details class="qa">
+<summary>Why does this contradict <a class="booklink" href="#lemma:a-or-b">Lemma 27.5</a>?</summary>
+<p><a class="booklink" href="#lemma:a-or-b">Lemma 27.5</a> says
+that in this case,   (the set of
+neighbors of ) or   (the set of neighbors of ). But neither one is possible, because
+  and  is not adjacent to  or .</p>
+</details>
+<p>In all case,  contradicts one
+of the lemmas we proved, so we conclude that a counterexample to
+Menger’s theorem does not exist. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="extensions">Extensions</h2>
+<p>Many variants of Menger’s theorem exist. To begin with, a version of
+the theorem for   edge cuts also
+exists, which is the converse of <a class="booklink" href="../connectivity/connectivity.html#prop:edge-menger-weak">Proposition 26.6</a>.</p>
+<div class="theorem" id="thm:edge-menger">
+<p><strong>Theorem 27.6</strong> (Menger’s theorem, edge version). <em>If
+ and  are any two vertices of a graph , then  contains a set of  edge-disjoint   paths.</em></p>
+</div>
+<p>It is very tempting (and almost works) to try to prove this version
+of Menger’s theorem by applying <a class="booklink" href="#thm:menger">Theorem 27.1</a> to the
+line graph .</p>
+<details class="qa">
+<summary>What is the main problem with trying to
+relate  to ?</summary>
+<p>The line graph  doesn’t have vertices called  and : its vertices are edges of the original
+graph!</p>
+</details>
+<p>To fix the problem, we must modify  a little.</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#thm:edge-menger">Theorem 27.6</a>.</em>
+Define a new graph  in one of the
+following two equivalent ways:</p>
+<ul>
+<li><p>Construct  from  by adding two new vertices: one
+adjacent only to  and one adjacent
+only to . Then, let  .</p></li>
+<li><p>Construct  from  by adding two new vertices  to . For every vertex of  which represents an edge incident to
+, make it adjacent to  in ; for every vertex of  which represents an edge incident to
+, make it adjacent to  in .</p></li>
+</ul>
+<details class="qa">
+<summary>If we construct  in the first way, what are the two
+vertices of  that correspond to
+ and ?</summary>
+<p>They come from the edges of  incident to the two newly-added
+vertices.</p>
+</details>
+<p>We must resolve an issue that will otherwise repeatedly bother us
+throughout this proof: the relationship between   paths in  and   paths in . In one direction, things work out
+nicely. Given a walk  in  where   and  , the sequence  is an   walk
+in , and if the first walk
+represents a path, so does the second. (Check this!)</p>
+<details class="qa">
+<summary>What about the other direction; is it true
+that every   path in  can be turned into an   path in  by reversing this process?</summary>
+<p>No! If it’s been a while since you thought
+about paths in , you should go
+back and re-read <a class="booklink" href="../hard/line.html">Chapter 20</a>, but walks in a line graph can do
+some things that walks in the original graph cannot: they can contain
+segments of the form  with several edges all incident to the same vertex of
+.</p>
+</details>
+<p>However, given an   path
+in , we can look at the subgraph
+of  containing all the edges that
+were internal vertices of the   path, and all their endpoints. This is a connected subgraph
+of  containing  and , so within it we can find an   path.</p>
+<p>By applying Menger’s theorem to , we get a set of  internally disjoint
+  paths. We know how to
+turn each of them into an   path
+in , but we want to know that
+we’ll get a set of edge-disjoint paths when we do so.</p>
+<details class="qa">
+<summary>Suppose  and  are two internally disjoint   paths in . When we use them to find two   paths in , why are those paths
+edge-disjoint?</summary>
+<p>Our first steps with  and  are to go to connected subgraphs of
+ whose edges correspond to
+internal vertices of  and of . So even those connected subgraphs have
+no edges in common! Therefore the paths we find in them are also
+edge-disjoint.</p>
+</details>
+<p>We’ve found a set of  edge-disjoint  
+paths in , but that’s not enough.
+We need 
+edge-disjoint   paths, so we must
+show that we have at least as many as we need: that  . (The two should be equal, but proving that
+is more than we need.)</p>
+<p>In other words, we need to show that every   cut  in  is an   edge cut in . By definition of an   cut, every   path in  passes through some element of . We’ve already seen that every   path in  corresponds to an   path in : so every   path in  uses an edge of . That’s exactly what it means for  to be an   edge cut!</p>
+<p>Therefore applying Menger’s theorem to  and turning the paths we get back into
+paths in , we get a set of at
+least 
+edge-disjoint   paths in , proving the theorem. ◻</p>
+</div>
+<p>Both versions of Menger’s theorem work for multigraphs and for
+directed graphs. In the case of multigraphs, <a class="booklink" href="#thm:menger">Theorem 27.1</a> is not at all interesting: loops and
+parallel edges don’t help us get more internally disjoint paths, and
+don’t affect vertex cuts. However, <a class="booklink" href="#thm:edge-menger">Theorem 27.6</a> can
+be usefully applied to multigraphs: for example, if we have  parallel edges incident to  and , that lets us have  edge-disjoint paths all taking a step
+from  to . The proof we gave of <a class="booklink" href="#thm:edge-menger">Theorem 27.6</a> works just fine in this
+case.</p>
+<details class="qa">
+<summary>In the case of directed graphs, the notion
+of connected components is much less clear, so how should we define
+  cuts?</summary>
+<p>Removing an   cut (either a vertex cut, or an “arc
+cut”) from a directed graph should destroy all directed paths from  to .</p>
+</details>
+<p>Using Menger’s theorem for directed graphs can be useful for both
+vertex and edge cuts, but it takes some work to obtain. In principle,
+the proof strategy we used for Menger’s theorem still works for directed
+graphs. However, some statements need to be more precise: for example, a
+vertex  should be considered
+“adjacent to ” if there is an arc
+from  to , but it should be considered “adjacent
+to ” if there is an arc from  to . The sets  and  are defined accordingly.</p>
+<details class="qa">
+<summary>How should we modify the construction of
+the associated bipartite graph  of
+a Kőnig-type graph  when  is a directed graph?</summary>
+<p>The graph  should remain undirected; however, it
+should only have an edge  with
+  and   if the directed graph  has an arc from  to .</p>
+</details>
+<p>That’s it for the various versions of Menger’s theorem, but there’s a
+bit more to be said about its extensions.</p>
+<p>First of all, you may feel a bit uncomfortable about the way we’ve
+completely forgotten about the global parameters  and , choosing to focus on
+ and . Well, we can now
+return to the global parameters, because for all vertices  , we have   and  .
+For instance, we can immediately get the following corollary:</p>
+<div class="corollary" id="cor:global-menger">
+<p><strong>Corollary 27.7</strong>. <em>If  is a -connected graph and  and  are any two non-adjacent vertices
+in , then  contains a set of  internally disjoint   paths.</em></p>
+</div>
+<p>Given a graph , a vertex  , and a subset   with  , we define an <em>  fan</em> in  to be a set of paths from  to vertices in  that share no vertices except . (In particular, their ends in  must be distinct.) To be clear, the
+size of an   fan is the number of
+paths in the fan.</p>
+<p>The notion of   fans was
+introduced by Dirac .
+I suspect that the idea later helped Dirac arrive at the proof of
+Menger’s theorem in this chapter, because <a class="booklink" href="#lemma:a-or-b">Lemma 27.5</a> is all
+about combining an   fan and a
+  fan to get a set of internally
+disjoint   paths. But even before
+that, Dirac proved the following lemma as a consequence of Menger’s
+theorem.</p>
+<div class="lemma" id="lemma:fan">
+<p><strong>Lemma 27.8</strong> (Dirac’s fan lemma). <em>If  is a -connected graph,  , and  is a vertex not in , then  contains an   fan of size .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> First, let’s deal with the case  , in which case we want to find
+an   fan of size . Define a new graph  from  by adding a new vertex  adjacent to every element of .</p>
+<p>First, we prove that  . Suppose not: suppose that  is an   cut in  with  . Then  , so in  , there must
+be at least some vertices of 
+left, which are in the same connected component as , and therefore in a different connected
+component from . This means that
+in  , those vertices of  are still in a different component from
+, which makes  a vertex cut in . But this contradicts our assumption
+that  is -connected.</p>
+<p>By applying Menger’s theorem to , we obtain a set of at least  internally disjoint   paths in . By removing vertex  from  of these paths, what we get is exactly
+an   fan in  of size .</p>
+<p>If  , then we first
+replace  by a set  containing  of size exactly . (A -connected graph must have at least
+  vertices, so this is always
+possible.) If we find an  
+fan in  of size , then it contains a path from  to every vertex of ; in particular, to every vertex of
+. By taking only the paths that go
+to , we get an   fan of size . ◻</p>
+</div>
+<p>By the way, Dirac’s fan lemma is so commonly used that among graph
+theorists familiar with it, it is often just called the fan lemma. But I
+wanted to disambiguate because I’ve seen this confuse mathematicians
+outside this specific subfield of graph theory: there is also a result
+in combinatorial topology called the Ky Fan lemma. (Here, Fan is a last
+name.)</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="cuts-and-long-cycles">Cuts and long cycles</h2>
+<p>Let’s end this chapter by seeing an application of connectivity and
+of Dirac’s fan lemma to some topics covered earlier in this book. The
+following theorem was proved in 1972 by V<span>á</span>clav
+Chv<span>á</span>tal and Pál Erdős , both of whom we’ve met before:</p>
+<div class="theorem" id="thm:chvatal-erdos">
+<p><strong>Theorem 27.9</strong>. <em>If  is a graph with at least  vertices such that the connectivity
+ is at least the
+independence number , then
+ is Hamiltonian.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> If  ,
+then  can’t be missing even a
+single edge between its vertices, in which case it’s definitely
+Hamiltonian; so we will assume   and  .
+It’s a good sign that  is -connected; this means that at least it
+has some cycles, by any of the results in <a class="booklink" href="../connectivity/cut-vertices.html">Chapter 25</a>. This proof will
+proceed by finding longer and longer cycles, until finally getting a
+Hamilton cycle.</p>
+<p>Let  be the longest cycle we’ve
+found so far. If we’re not done with the proof yet, we assume that it is
+not a Hamilton cycle: there is some vertex  . Our goal will be to find a longer cycle in , and to make sure it’s longer, we will
+find a cycle that passes through every vertex in  and also passes through .</p>
+<figure class="bookfig" id="fig:chvatal-erdos">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:y-C-fan">
+
+<figcaption>A cycle and a fan</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:vertices-after-fan">
+
+<figcaption>Vertices , where
+ </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:fan-to-cycle">
+
+<figcaption>A longer cycle is found</figcaption>
+</figure>
+</div>
+<figcaption>Extending the cycle in <a class="booklink" href="#thm:chvatal-erdos">Theorem 27.9</a></figcaption>
+</figure>
+<p>Take a   fan in  with as many paths in it as possible;
+by Dirac’s fan lemma, it has size at least , but if we’re
+lucky, it might be larger. An example is shown in <a class="booklink" href="#fig:y-C-fan">Figure 27.4(a)</a> (with  in the center). The definition of a fan
+does not guarantee that the paths it contains do not share any internal
+vertices with , though I’ve drawn
+the fan in this way. However, we can assume that this is true anyway, by
+stopping every path in the fan as soon as it reaches a vertex of .</p>
+<p>Let  be a walk representing . Choosing this walk representation also
+gives us a direction to follow along . If all we have is the cycle, all we
+can say is that every vertex on the cycle has two neighbors. With the
+walk, we can say that every vertex   has a vertex 
+that comes after it (taking  ) and a vertex 
+that comes before it (taking  ).</p>
+<p>This is important, because I want to define a set of vertices in an
+usual way. First, let   be the set of positions in the cycle where
+some path in the   fan ends:
+that is, the fan contains a  
+path whenever  , and not
+otherwise. Now, instead of looking at the vertices in the fan, look at
+the vertices immediately following them on the path: the set  . These are marked
+in <a class="booklink" href="#fig:vertices-after-fan">Figure 27.4(b)</a>.</p>
+<p>Looking at this set of vertices appears unmotivated at first, but
+it’s a common trick in results about Hamilton cycles, so I want to
+explain it a bit. We will soon be trying to find a cycle that mostly
+consists of the edges shown in <a class="booklink" href="#fig:y-C-fan">Figure 27.4(a)</a>;
+although  has many other edges not
+shown in the diagram, we don’t know much about those edges. In this
+figure, each vertex  with   has degree , so a cycle through them will use two
+of their neighbors and neglect the third. Sometimes,  or  might be that neglected neighbor,
+and so we look at it more closely to find some other edge it might
+have!</p>
+<p>In fact, to get a cycle through  and every vertex of , it’s enough to find a single edge
+ where  . An example of such a cycle is
+shown in <a class="booklink" href="#fig:fan-to-cycle">Figure 27.4(c)</a>. More formally, the cycle is
+obtained as follows:</p>
+<ol>
+<li><p>By deleting edges  and 
+from , we break it into two
+pieces: an   path  and an   path .
+Together,  .</p></li>
+<li><p>By combining the   and
+  paths in the fan, we get an
+  path  that passes through  and shares none of its internal
+vertices with  or .</p></li>
+<li><p>The union  
+combines an   path, an
+  path, and an   path; these paths share no
+vertices apart from  and . Therefore   is an   path. Adding the edge
+ gives us the cycle
+we wanted!</p></li>
+</ol>
+<details class="qa">
+<summary>One special case of this might be
+confusing: the case where  , so
+that the edge  is
+actually the edge 
+which is part of the cycle we started with. What do we do in this
+case?</summary>
+<p>In this case, the path  we defined is an   path passing through  which is internally disjoint from , so it can be inserted into the middle
+of the cycle between  and  to get a longer cycle. The same
+works if   and  .</p>
+</details>
+<p>We’ve almost finished the proof, except for one detail: how do we
+guarantee that an edge  exists? I have to wonder
+if Chvátal and Erdős came up with the proof up until now, and only then
+asked themselves this question, and that’s how they came up with the
+hypotheses of this theorem. After all, we’ve barely used the assumption
+about the independence number of ,
+so far!</p>
+<p>There are two cases. If  , then Dirac’s fan lemma guarantees a fan of size
+, which includes a path to
+every vertex of . Therefore every
+edge of the cycle is an edge of the type we’re looking for! For example,
+the edge  will work, for
+  and  , because our fan includes an   path and a   path.</p>
+<p>If  , then
+Dirac’s fan lemma only guarantees a fan of size . At this point, we remember
+that  . If
+only we had  , instead! Then we’d know that the set   cannot be
+independent, because it has size : it’s bigger than the largest
+independent set.</p>
+<p>But a theorem with   as a hypothesis would not be the best theorem Chvátal
+and Erdős could prove. We can still finish the proof with the hypothesis
+ . For this,
+consider the set  , which has at least   vertices, and therefore isn’t
+independent. We either get an edge  with  , which is what we wanted, or an
+edge  with  , which… isn’t what we wanted.</p>
+<details class="qa">
+<summary>Can you think of what to do with the edge
+?</summary>
+<p>By combining it with the   path in the fan, we get an   path through , internally disjoint to . This can be inserted into the cycle in
+place of going from  to , obtaining a longer cycle.</p>
+</details>
+<p>To sum it up: we started with an arbitrary cycle which was not a
+Hamilton cycle, and were able to make it longer, by incorporating at
+least one additional vertex. We can repeat this to grow the new cycle,
+too, as many times as necessary. The only way this process can end is by
+finding us a Hamilton cycle, proving that  is Hamiltonian. ◻</p>
+</div>
+<p>You might wonder if the difference between the hypothesis “ ” in <a class="booklink" href="#thm:chvatal-erdos">Theorem 27.9</a>, and the hypothesis “ ” with which we
+could have ended the proof early, is really all that big. Of course, a
+theorem with the hypothesis   is better, because it applies to more graphs, but is
+it a lot better?</p>
+<p>One point in favor of the slightly-better result is that it’s the
+best result possible: the theorem could not be improved even further, to
+work with the hypothesis  . One example showing that this is impossible is the
+Petersen graph: it is -connected
+(by a practice problem in <a class="booklink" href="../connectivity/connectivity.html">Chapter 26</a>) and has
+independence number  (in the usual
+diagram with two -cycles, an
+independent set can contain at most two vertices from each cycle).
+However, the Petersen graph is not Hamiltonian (by <a class="booklink" href="../hard/hamilton.html#prop:petersen-not-ham">Proposition 17.1</a>). So
+the hypothesis   is not always strong enough to guarantee a Hamilton
+cycle!</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>There are  computers in a
+network with the IDs  consisting of -digit numbers with digits  through , not both the same. Two computers whose
+IDs have the same first digit are directly connected. Additionally, two
+computers whose IDs have the same two digits in a different order (such
+as  and ) have two direct connections between
+them, one serving as a backup in case the other fails.</p>
+<p>Computers with no direct connection can still communicate by relaying
+messages through a sequence of directly connected computers.</p>
+<ol>
+<li><p>You are at computer  and
+your friend is at computer . How
+many intermediate computers, at minimum, need to fail (and stop relaying
+messages) before you can no longer communicate with your
+friend?</p></li>
+<li><p>How many connections between computers would need to fail before
+you can no longer communicate with your friend?</p></li>
+</ol>
+<p>Justify both answers by an example, as well as a set of paths
+demonstrating that the example is the minimum possible.</p>
+</li>
+<li>
+<p>Prove that the skeleton graph of the icosahedron (shown below) is -connected by finding a set of  internally disjoint   paths in two cases: (a) when the distance  is , and (b) when the distance  is .</p>
+
+<p>Why is the graph not -connected?</p>
+</li>
+<li><p>Prove that the hypothesis of <a class="booklink" href="#thm:chvatal-erdos">Theorem 27.9</a> is
+the best possible hypothesis for all values of . That is, for all  , find a graph  with   and   which is not
+Hamiltonian.</p></li>
+<li><p>Prove Menger’s theorem using <a class="booklink" href="#lemma:s-x-t-paths">Lemma 27.3</a>,
+<a class="booklink" href="#lemma:vertex-in-cut">Lemma 27.4</a>, and <a class="booklink" href="#lemma:a-or-b">Lemma 27.5</a>, and Hall’s theorem (<a class="booklink" href="../matchings/hall.html#thm:hall">Theorem 15.1</a>), but without using Kőnig’s
+theorem.</p></li>
+<li>
+<p>Many of the results about -connected graphs in <a class="booklink" href="../connectivity/cut-vertices.html">Chapter 25</a> can now be
+obtained much more easily using the results in this chapter.</p>
+<ol>
+<li><p>Prove <a class="booklink" href="../connectivity/cut-vertices.html#thm:common-cycle">Theorem 25.1</a> that any two
+vertices in a -connected graph lie
+on a common cycle, by using <a class="booklink" href="#cor:global-menger">Corollary 27.7</a>.</p></li>
+<li><p>Prove <a class="booklink" href="../connectivity/cut-vertices.html#lemma:path-through-x">Lemma 25.7</a> that
+for any three vertices  in a
+-connected graph, there is a   path that passes through , by using Dirac’s fan lemma.</p></li>
+</ol>
+</li>
+<li>
+<p>Prove that if  is -connected, then for any three vertices,
+ contains a cycle that passes
+through all of them.</p>
+<p>More generally, it is true that if  is -connected, then for any  vertices,  contains a cycle through all  of them (in some order); this was the
+theorem that Dirac invented his fan lemma to prove. If you’re brave, try
+proving this by induction on .</p>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>In the vertex version, we must assume that the vertices
+ and  are not adjacent, or else there is no
+  cut at all. This will be a
+recurring assumption for a large part of this chapter.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 27</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

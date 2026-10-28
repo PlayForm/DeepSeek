@@ -1,0 +1,849 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Connectivity</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 26</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>I’m hoping that the idea behind the definitions in this chapter feels
+intuitive: that to measure the resilience of a graph, it makes sense to
+see how much you have to remove from the graph to disconnect it. There
+is a lot more to these definitions, and they turn out to have
+connections to all parts of graph theory. However, it’s going to take a
+bit of time to get there, and the content of this chapter is mostly
+setup.</p>
+<p>When I’ve taught this material in the past, I’ve sometimes focused
+only on vertex connectivity and not on edge connectivity, for reasons of
+time. If you do have the time, I think it is nice to look at both,
+because the contrast helps you understand the logic of each case. For
+example, if it’s hard at first to see why internally disjoint paths are
+what we need for lower bounds on , then edge-disjoint paths and
+their lower bounds on  provide a second example
+of the same idea for comparison.</p>
+<p>The final section on duality is a topic I could have discussed
+earlier in the book, but now we have lots of examples to look back to. I
+should note that in graph theory, duality is a relationship between
+optimization problems that just sometimes appears; we will occasionally
+prove it appears, but not explain why. Using linear programming, we
+could obtain more of an explanation, and even deduce what the correct
+duals of some optimization problems should be without seeing them
+before. That would take us too far afield, though.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="vertex-and-edge-cuts">Vertex and edge cuts</h2>
+<p>In the previous chapter, we defined cut vertices and -connected graphs; much earlier in the
+book, we defined bridges. In this chapter, we will discuss
+generalizations of all three definitions.</p>
+<p>We begin with the definition of a <strong>vertex cut</strong> in a
+graph . This is subset   such that when all
+vertices in  are deleted, the
+remaining graph   is not
+connected.</p>
+<p>Don’t confuse “vertex cut” and “cut vertex”, though they have the
+same words in a different order! A cut vertex is a vertex, with “cut” as
+the adjective: it is a vertex which cuts. A vertex cut is a cut (as in,
+“I sliced the cake in half with a single cut”), with “vertex” as the
+adjective: it is a cut made up of vertices.</p>
+<p>The two terms are related, though. If  is a connected graph, a vertex  is a cut vertex of  if and only if the set  is a vertex cut of .</p>
+<details class="qa">
+<summary>What if  is not connected?</summary>
+<p>In this case, cut vertices are those that
+increase the number of connected components. Meanwhile,  is almost always a vertex cut; the
+exception is when  is an isolated
+vertex and the rest of the graph is connected.</p>
+</details>
+<p>Usually, this will not matter, because we will be looking for the
+smallest vertex cuts we can. If 
+is not connected, we will simply say that  (the empty set) is a vertex
+cut.</p>
+<p>Making vertex cuts an optimization problem in this way makes sense,
+because it is not surprising when we disconnect a graph by deleting many
+vertices. We ask: what is the least number of vertices whose deletion
+disconnects the graph? Unfortunately, before we make that into a
+definition, we have to tackle an awkward obstacle.</p>
+<details class="qa">
+<summary>Is it always possible to disconnect a
+graph by deleting enough vertices?</summary>
+<p>Almost always, except for complete
+graphs!</p>
+<p>In , any two vertices are
+adjacent, and will remain adjacent no matter how many other vertices we
+remove. This means that (aside from the question of what happens if we
+delete every single vertex) we can’t disconnect  by deleting some of its vertices:
+ has no vertex cuts.</p>
+</details>
+<p>This is related to what happened with -connected graphs in the previous
+chapter: we didn’t want  to be
+-connected, because most of the
+theorems about -connected graphs
+do not apply to it, so we specifically excluded it from the
+definition.</p>
+<p>Accordingly, we define the <strong>connectivity</strong> (or
+<strong>vertex connectivity</strong>)  of a graph  to be the smallest number of vertices
+in a vertex cut of , if such a
+vertex cut exists. If not, then 
+is isomorphic to  for some , and we “artificially” define  .</p>
+<p>We also say that a graph  is
+<strong>-connected</strong> if
+ . This is in line
+with our previous definitions. For graphs with at least  vertices, “-connected” and “connected” are
+synonyms; meanwhile, -connected
+graphs (as defined in <a class="booklink" href="../connectivity/cut-vertices.html">Chapter 25</a>) still have the
+same definition if we set   in
+the definition of -connected
+graph.</p>
+<details class="qa">
+<summary>Why does the definition of -connected graphs have an inequality:
+ , rather than  ?</summary>
+<p>We say “ is -connected” when we want to say that
+ is connected enough for something
+to work. For example, all -connected graphs have ear
+decompositions, even if they are also -connected or -connected.</p>
+<p>This is similar to the way we defined -colorable graphs: they are the graphs
+with  .</p>
+</details>
+<p>We must specify “vertex cut” and we often specify “vertex
+connectivity” because all of these definitions have an equivalent for
+deleting edges, rather than vertices, of a graph. The story is almost
+the same for edges, so I will just present all the definitions at
+once.</p>
+<p>An <strong>edge cut</strong> in a graph  is a subset   such that when all edges
+in  are deleted, the remaining
+graph   is not connected.</p>
+<p>The <strong>edge connectivity</strong> of , denoted , is the smallest number of
+edges in an edge cut of , if  has at least two vertices. If  has only one vertex, then we set  .</p>
+<p>Finally, a graph  is
+<strong>-edge-connected</strong>
+if  .</p>
+<details class="qa">
+<summary>Do we need to take any special care when
+ ?</summary>
+<p>Not unless   (which the definition addresses).
+When  at least  vertices, it is always possible to
+disconnect  by deleting some
+edges: in particular, deleting all edges would be enough.</p>
+</details>
+<p>In <a class="booklink" href="../hard/line.html">Chapter 20</a>, we discussed the correspondence
+between “vertex versions” and “edge versions” of a problem, and used the
+same notation: for example,  and  are the edge versions of
+ and . I will use the same notation
+here. In other sources, 
+is also a common notation for edge connectivity, but I’d rather not make
+you memorize even more Greek letters.</p>
+<details class="qa">
+<summary>Often the edge version of a problem is
+just the vertex version, but applied to the line graph  rather than . Is that true here—is  ?</summary>
+<p>Not quite. I leave the details to practice
+problem, but a relationship exists only in one direction:  .</p>
+</details>
+<p>Let  be an edge cut in , and let  be the set of vertices in one connected
+component of  . Then  must contain all edges of  with one endpoint in  and one endpoint in  . Though  could contain other edges, this is
+wasteful: just deleting all the edges between  and   is enough to disconnect .</p>
+<p>Accordingly, for  , we define the <strong>edge boundary</strong> of  to be the set of all edges of  with exactly one endpoint in . We denote it  or just  when the graph  does not need to be specified.</p>
+<p>Suppose  is a minimum edge cut,
+or even a <em>minimal</em> one (by the distinction described in
+<a class="booklink" href="../matchings/bipartite.html">Chapter 13</a>): we cannot remove any
+edges from  and still have an edge
+cut. In that case,  
+for some . Another way to phrase
+this is the following proposition:</p>
+<div class="prop" id="prop:edge-boundary">
+<p><strong>Proposition 26.1</strong>. <em>Every edge cut  in a connected graph contains an edge
+boundary  for some set
+of vertices  that is neither  nor all of . In particular,  can be computed as the
+minimum size  of all
+such edge boundaries.</em></p>
+</div>
+<p>We do not consider   or  
+because these are the two cases that can never be a connected component
+of  , when  is an edge cut.</p>
+<details class="qa">
+<summary>Is every set of the form  a minimal edge cut?</summary>
+<p>No: it’s possible that  contains a smaller edge cut
+of the form  for a
+different set . For an extreme
+example, consider a bipartite graph with bipartition . Then the edges  we need to separate  from  are all the edges of ; the set  for a single vertex  can be much smaller.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="some-examples">Some examples</h2>
+<p>In <a class="booklink" href="../connectivity/cut-vertices.html">Chapter 25</a>, we saw that the
+cube graph  is -connected. In fact, we can go one step
+further.</p>
+<div class="prop" id="prop:cube-3-connected">
+<p><strong>Proposition 26.2</strong>. <em> .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Ear decompositions are a nice way to prove that
+graphs are -connected, but we
+don’t yet have an equally nice way to show that graphs are -connected. We will find one later in
+this chapter, but for now, let’s resort to trickery.</p>
+<p>We know  has no cut vertex;
+does it have a cut  of size
+? If it did, then in  , vertex  would be a cut vertex: deleting it
+would bring us to  ,
+which by assumption is not connected. So we can check for this
+possibility by checking whether   is -connected.</p>
+<p>Normally, we’d have to do this by checking  possibilities for . In the case of the cube graph, there
+are enough symmetries (automorphisms of the cube graph) that it’s enough
+to check one vertex: all  cases
+will be identical.</p>
+<figure class="bookfig" id="fig:Q3-connectivity">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:Q3-x-ear-decomposition">
+  
+<figcaption>An ear decomposition of  </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:Q3-vertex-cut">
+
+<figcaption>A vertex cut in </figcaption>
+</figure>
+</div>
+<figcaption>Determining the connectivity of the cube graph</figcaption>
+</figure>
+<p><a class="booklink" href="#fig:Q3-x-ear-decomposition">Figure 26.1(a)</a> shows an ear
+decomposition of   for an
+arbitrary vertex . (Well, it’s
+only arbitrary mathematically; I deleted the vertex “in the back” of the
+cube to make the diagram look nicer.) This shows that   is -connected, so  is -connected.</p>
+<p>Can it be -connected? No,
+because  has a -vertex cut, shown in <a class="booklink" href="#fig:Q3-vertex-cut">Figure 26.1(b)</a>. Therefore  is exactly . ◻</p>
+</div>
+<p>The vertex cut we chose in <a class="booklink" href="#fig:Q3-vertex-cut">Figure 26.1(b)</a> is
+rather boring; we’ve disconnected a single vertex from the rest of the
+graph. Such a vertex cut is possible in every graph , except in the unfortunate case of (you
+guessed it) complete graphs. By deleting all edges incident to a vertex
+, we also disconnect  from the rest of , so there is an edge cut of this type
+as well. To make the cuts as small as possible, we want to choose a
+vertex  of degree : the minimum degree of .</p>
+<p>This is not universal; we wouldn’t study connectivity if it always
+turned out to be equal to the minimum degree. However, the following
+relationship (also proved by Whitney, like most of the results in
+<a class="booklink" href="../connectivity/cut-vertices.html">Chapter 25</a>) always
+holds:</p>
+<div class="theorem" id="thm:kappa-delta">
+<p><strong>Theorem 26.3</strong>. <em>For any graph ,  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> The second inequality,  , follows
+from our discussion just before the theorem: if  is a vertex of degree , then deleting all  edges incident to  will disconnect  from the rest of the graph, so it is
+always an edge cut. (As usual with optimization problems, finding a
+particular solution gives us an inequality, because there might be
+better solutions.)</p>
+<p>The more difficult inequality is the first. To prove that  , we need to
+do the following: given an edge cut  of size , find a vertex cut  with  . By <a class="booklink" href="#prop:edge-boundary">Proposition 26.1</a>,
+we can assume that   for some set  such that  .</p>
+<p>I like the proof of this inequality because it is an excellent
+exercise in attempting an argument, identifying the holes in it, and
+then patching the holes. A few rounds of this, and we will have a
+complete proof.</p>
+<p>Let’s begin with the following strategy: to find , go through the edges in , and for each  , add either  or  to . Deleting an endpoint of  also deletes the edge , so after these deletions,  (or what’s left of it) is disconnected
+from the rest of the graph.</p>
+<details class="qa">
+<summary>What could go wrong?</summary>
+<p>It’s possible that in deleting these
+endpoints, we’ve actually deleted every vertex in , or every vertex not in , so the remaining graph is still
+connected.</p>
+</details>
+<p>Okay, so let’s make sure that we avoid this. Begin by picking a
+vertex   and a vertex  . For every edge  , add either  or  to , but with a restriction: if  , add  to , and if  , add  to . Then in  , there is no way to get from  to , because  ,  , and we
+have destroyed all edges leaving .</p>
+<details class="qa">
+<summary>What could go wrong?</summary>
+<p>The restriction we’ve added doesn’t leave
+us an option to choose if one of the edges in  is the edge .</p>
+</details>
+<p>Okay, fair enough; let’s make sure that we pick a vertex   and a vertex   that are not adjacent.</p>
+<details class="qa">
+<summary>What could go wrong?</summary>
+<p>Maybe every vertex in  is adjacent to every vertex not in
+, so that no such  and  can be picked.</p>
+</details>
+<p>This is a surprising situation to be in! Let  have  vertices, and let  . Then  contains all edges between
+the  vertices in  and the   vertices not in : this is a lot:  . We have assumed
+that  , but in fact,   except when   or
+ .</p>
+<p>Since we already know that  , and in every -vertex graph,  , only one possibility
+remains:  .</p>
+<details class="qa">
+<summary>What graph must  be?</summary>
+<p>
+must be isomorphic to ; this is
+the only -vertex graph with
+minimum degree  .</p>
+</details>
+<p>When  is isomorphic to ,  , we’ve
+defined   artificially
+(and this theorem is part of the reason why). So the inequality   is
+satisfied.</p>
+<p>Now we just have to carry out our argument assuming  is not a copy of . This means that  , so  , so  . This means that
+not all   of the possible
+edges with one endpoint in  are
+actually present. Therefore we can choose   and   which
+are not adjacent, and construct 
+by the following rule: for each edge  , add either 
+or  to , taking care not to add either  or . As we’ve already shown, this is a
+vertex cut of size at most , proving that  . ◻</p>
+</div>
+<p>Since this is a section called “Examples”, let me reassure you by
+means of an example that apart from the constraint  , almost all triples 
+are possible. There is only one other constraint on such triples: if
+ , it is because  is not connected, so   as well.</p>
+<p>Let  . To find
+a graph where  ,  , and  , begin with two copies of
+. Let  be a set of  vertices in the first copy and let
+ be a set of  vertices in the second copy; add  edges between  and , making sure to use each vertex in
+ at least once and each vertex in
+ exactly once. Call the result
+. An example of this
+construction with  ,  , and   is shown in <a class="booklink" href="#fig:kappa-delta">Figure 26.2</a>.</p>
+<figure class="bookfig" id="fig:kappa-delta">
+
+<figcaption>A graph with  ,  , and  </figcaption>
+</figure>
+<details class="qa">
+<summary>Why is  ?</summary>
+<p>The vertices in  are an -vertex cut. If we delete fewer
+than  vertices, we can find
+vertices   and   that are adjacent, and have not
+been deleted; since every vertex of  is adjacent to either  or , the graph will still be
+connected.</p>
+</details>
+<details class="qa">
+<summary>Why is  ?</summary>
+<p>The edges between  and  are a -edge cut. If we delete fewer than  edges, then in particular (because
+ , and  ) each copy of
+ is connected; also, at
+least one edge between the two copies of  remains, connecting them
+together.</p>
+</details>
+<details class="qa">
+<summary>Why is  ?</summary>
+<p>We started with two copies of , in which every vertex has
+degree . We added edges to   vertices, which is at most ; therefore at least two vertices still
+have degree .</p>
+</details>
+<details class="qa">
+<summary>Why is there even a  in ?</summary>
+<p>No reason; I’m just messing with you.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="local-connectivity">Local connectivity</h2>
+<p>We often want to solve a problem which is similar to finding a vertex
+cut or edge cut in a graph, but more specialized.</p>
+<p>As I’m writing this chapter, it is November, and in the United
+States, Thanksgiving is coming up. Many people travel long distances to
+celebrate Thanksgiving with their family, but it’s also almost winter,
+so if you take a plane across the US, you might have to deal with
+cancellations due to snow and other winter weather. Some flights might
+be canceled, deleting an edge in the graph of possible airplane trips.
+In extreme circumstances, an entire airport might shut down and divert
+all flights, deleting a vertex.</p>
+<p>How many of these events must happen for you to be entirely unable to
+get to your destination? This is a bit like the question of computing
+edge connectivity (in the case of flight cancellations) or vertex
+connectivity (in the case of closed airports).</p>
+<p>In practice, vertex and edge connectivity of this graph are low. I
+can speak to this from personal experience: I have spent three years
+living in Urbana, Illinois. The local airport has flights to only two
+other airports: Chicago O’Hare and Dallas–Fort Worth. It was not a very
+reliable means of travel, especially in the winter!</p>
+<p>Suppose, however, that you live in New York City and your family
+lives in Los Angeles. You do not care if a few cancellations are enough
+to disconnect you from Urbana, because you’re not going to Urbana. In
+your case, the number of cancellations that would have to occur for all
+routes you could take to be blocked off is truly implausible.</p>
+<p>To model situations like this, we need a more specialized definition.
+Here, let  and  be two vertices in a graph ; we will specifically consider what it
+takes to separate  from .</p>
+<ul>
+<li>
+<p>An <strong>  vertex
+cut</strong> (or just <strong> 
+cut</strong>) in  is a vertex cut
+ that separates  from : vertices  and  are in different connected components
+of  . (In particular,  must not contain either  or .)</p>
+<p>The <strong>  connectivity in
+</strong>, denoted  or just  if there is no need to
+specify the graph, is the smallest number of vertices in an   cut.</p>
+</li>
+<li>
+<p>An <strong>  edge
+cut</strong> in  is an edge cut
+ that separates  from : vertices  and  are in different connected components
+of  .</p>
+<p>The <strong>  edge
+connectivity in </strong>, denoted
+ or just , is the smallest number of
+edges in an   edge cut.</p>
+</li>
+</ul>
+<details class="qa">
+<summary>What happens to  if  and  are adjacent?</summary>
+<p>In this case, there is no vertex cut that
+separates  from ; we either disregard this case entirely
+or set  .
+However, there are no problems with defining ; we just have to make
+sure that  is one of the edges we
+delete.</p>
+</details>
+<p>There are, broadly speaking, two reasons to care about   cuts of the two types. One reason is
+an application such as your hypothetical Thanksgiving travel plans from
+New York City to Los Angeles, where you really only care about whether
+an   path survives. There is
+another: as we will discover in the next few chapters, finding  is sometimes much easier
+than finding . If we
+really want to know , we
+might perform several computations of  instead.</p>
+<details class="qa">
+<summary>If you were given a table of  and  for all pairs of
+vertices  and , could you use it to determine  and ?</summary>
+<p>Yes  is the minimum of  over all pairs , and if  is not a complete graph,  is the minimum of  over all non-adjacent pairs
+.</p>
+</details>
+<p>The quantities  and
+ are the solutions
+to optimization problems: of all   cuts of the appropriate type, we want
+to find the smallest. Finding upper bounds is, in both cases,
+straightforward (if not necessarily easy): if you find an   cut , then you know that  . But how do we prove
+a lower bound?</p>
+<figure class="bookfig" id="fig:s-t-paths">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:internally-disjoint-paths">
+
+<figcaption>Internally disjoint paths</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:edge-disjoint-paths">
+
+<figcaption>Edge-disjoint paths</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:just-three-paths">
+
+<figcaption>Just some paths</figcaption>
+</figure>
+</div>
+<figcaption>Three different sets of three   paths</figcaption>
+</figure>
+<p>Here’s one possible answer. Suppose that the graph contains a
+subgraph such as the one in <a class="booklink" href="#fig:internally-disjoint-paths">Figure 26.3(a)</a>. It is the union
+of three   paths (a blue path, a
+red path, and a yellow path). Moreover, the three paths share no
+internal vertices. Then it’s clear that  : we need to delete at
+least one of the internal vertices from each path if we want to
+disconnect  from .</p>
+<details class="qa">
+<summary>Why is it important that the three paths
+share no internal vertices?</summary>
+<p>Consider the paths in <a class="booklink" href="#fig:edge-disjoint-paths">Figure 26.3(b)</a>, instead. They provide
+three ways to get from  to , but some vertices are repeated. It’s
+possible to destroy multiple paths by deleting just one vertex, and in
+fact all three paths can be destroyed by deleting  vertices.</p>
+</details>
+<p>The paths in <a class="booklink" href="#fig:edge-disjoint-paths">Figure 26.3(b)</a> are still useful,
+though: they share no edges. If we seek to disconnect  from  by deleting edges, the existence of
+such paths proves that at least three edges need to be deleted: one from
+each path. Compare this to the paths in <a class="booklink" href="#fig:just-three-paths">Figure 26.3(c)</a>, which have no special
+properties relative to each other! Here, we can destroy all three paths
+by deleting just two edges.</p>
+<p>To generalize, we say that two paths in a graph are
+<strong>internally disjoint</strong> if they do not share any internal
+vertices; they are <strong>edge-disjoint</strong> if they do not share
+any edges. I want to emphasize that both of these definitions are
+properties a pair of paths can have. It would not make sense to look at
+an   path and ask, “Is this   path internally disjoint or not?”</p>
+<p>For a set of paths, such as what we see in <a class="booklink" href="#fig:s-t-paths">Figure 26.3</a>, the formally correct phrasing
+would be that the paths in a set are “pairwise internally disjoint” if
+no two paths share internal vertices, and “pairwise edge-disjoint” if no
+two paths share edges. The word “pairwise” emphasizes that we consider
+the paths two at a time, rather than all at once; for a set of  paths, it’s not enough to know that
+there’s no vertex that all 
+paths pass through.</p>
+<p>This is a mouthful. To make it a little bit easier, I will talk about
+a “set of internally disjoint paths” or a “set of edge-disjoint paths”
+to mean that any two paths in the set are internally disjoint or
+edge-disjoint, respectively. In case you are confused, always think back
+to this example and the argument we are trying to make with the set of
+paths! We want the paths to be sufficiently separate that to destroy
+them all (by deleting whichever of vertices or edges we’re thinking
+about) we need to handle each path separately.</p>
+<p>We will do a lot more with this idea in the next two chapters. For
+now, I will use it to go one step further beyond <a class="booklink" href="#prop:cube-3-connected">Proposition 26.2</a>.</p>
+<div class="prop" id="prop:q4-4-connected">
+<p><strong>Proposition 26.4</strong>. <em>The hypercube graph  is -connected.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Our strategy will be to compute  by computing  for every  and every . But first, let me begin with a bit of
+review of . This graph has   vertices, which are -bit binary strings . Two vertices are adjacent
+if the binary strings agree in 
+out of  positions, and only
+disagree in  position.</p>
+<p>The hypercube graph  has many
+automorphisms. To review some concepts you may not have thought about
+since <a class="booklink" href="../beginning/isomorphism.html">Chapter 2</a>, I’ll write them
+out in detail. We’ll need two types of automorphisms of  to reduce the casework we have to
+do:</p>
+<ul>
+<li><p>For each position , let
+ 
+be the function that flips the <sup>th</sup> bit; for example,  . This is a
+bijection because it is its own inverse. It is an automorphism because
+when we compare two binary strings  and , if we flip the <sup>th</sup> bit in both of them, it
+doesn’t change which positions they agree in.</p></li>
+<li><p>For every two positions 
+and , let   be
+the function that swaps the <sup>th</sup> and <sup>th</sup> bits: for example,  . This is a
+bijection because it is its own inverse. It is an automorphism because
+when we compare two binary strings  and , applying  to both might move a
+position they disagree in (from 
+to  or from  to ) but won’t change the number of
+disagreements.</p></li>
+</ul>
+<p>Our goal is to compute  for every pair of vertices
+. There are   pairs to test if we do
+it the hard way. However, by applying the automorphisms above, we can
+reduce all  cases to just a few!
+The general logic is this: if  is any automorphism of , then  .</p>
+<details class="qa">
+<summary>How do we know this?</summary>
+<p>If there is a vertex cut  separating  from , then applying  to its vertices gives a vertex
+cut of the same size separating  from . In the other direction,
+applying  to the
+vertices of a  
+cut gives an   cut of the same
+size.</p>
+</details>
+<figure class="bookfig" id="fig:q4-s-t-paths">
+
+<figcaption>Sets of internally disjoint paths in </figcaption>
+</figure>
+<p>Consider any pair  . First, some composition of the automorphisms  maps  to  and  to some vertex . Therefore  . The
+second type of automorphisms (the ’s) leave  unchanged, but some composition of
+them sorts the bits of  in
+ascending order: to one of ,
+, , or . Therefore  Of these four cases,   because  and  are adjacent; we can skip this one.
+For the other three, the vertex cut  consisting of all four neighbors of  separates  from the other vertices, so they are
+all at most . Finally, <a class="booklink" href="#fig:q4-s-t-paths">Figure 26.4</a> shows that in all three of
+these cases, we can find a set of 
+internally disjoint paths. Therefore  is a lower bound as well, and we
+conclude that  . ◻</p>
+</div>
+<details class="qa">
+<summary>What is ?</summary>
+<p>By <a class="booklink" href="#thm:kappa-delta">Theorem 26.3</a>, it
+is sandwiched between 
+and . Both of these are
+, so   as well.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="duality">Duality</h2>
+<p>The technique of internally disjoint paths seems pretty powerful
+based on this example, but there is an unresolved question. If we use
+this technique to prove lower bounds on  or , will we always be able
+to prove a lower bound equal to the true value of these numbers? Or is
+it possible that in some cases,  , but the largest set of internally disjoint paths only
+contains  paths?</p>
+<p>In the next chapter, we will prove that this will never happen: not
+for vertices, and not for edges. In preparation, let me tell you about
+one framework to think about the relationship between   cuts and sets of disjoint paths:
+optimization duality.</p>
+<p>Optimization duality is a relationship that can exist between two
+optimization problems: a maximization problem and a minimization
+problem. We want to be fairly general here, but not so general that we
+get lost in abstraction. Let’s say that:</p>
+<ul>
+<li><p>The maximization problem is, given a set  and a function  , to find
+an element   such
+that  is as large as possible.
+Written concisely, it is the problem of finding  .</p></li>
+<li><p>The minimization problem is, given a set  and a function  , to
+find an element  
+such that  is as small as
+possible. Written concisely, it is the problem of finding  .</p></li>
+</ul>
+<p>Let’s try putting some problems we’ve already studied into this
+language. Don’t worry too much about how the functions  and  are implemented; it’s enough to know
+they exist.</p>
+<details class="qa">
+<summary>In the maximization problem of finding the
+matching number of a graph , what
+is  and what is ?</summary>
+<p>The set  is the set of all matchings in
+. If   is such a matching, then  is the number of edges in it.</p>
+</details>
+<details class="qa">
+<summary>In the minimization problem of finding the
+chromatic number of a graph , what
+is  and what is ?</summary>
+<p>The set  is the set of all proper
+colorings of . If   is such a coloring, then
+ is the number of colors used
+by .</p>
+</details>
+<p>Optimization duality comes in two forms: weak and strong. To begin
+with, we say that a maximization problem   and a
+minimization problem   are in <em>weak duality</em> if   for every   and every  . Equivalently,  is the inequality that characterizes weak
+duality.</p>
+<p>Why is this helpful? Well, consider the example of matchings and
+vertex covers in graphs: in the entire textbook, this is perhaps our
+best example of dual optimization problems. By <a class="booklink" href="../matchings/bipartite.html#prop:weak-duality">Proposition 13.4</a>, whenever
+ is a matching and  is a vertex cover in the same graph
+, we have  : the maximization problem
+is always bounded above by the minimization problem. This means we can
+try to find small vertex covers to get upper bounds on the size of a
+matching: upper bounds that are otherwise hard to come by.</p>
+<p>In general, duality fills a gap in our understanding of an
+optimization problem. By default, if we have an optimization problem to
+maximize  over all  , and we’ve worked on it for a
+while, we might not have anything to show for our progress except some
+element   for which  is the largest found so far. This
+proves a lower bound on the optimal value:   is at
+least .</p>
+<p>To prove an upper bound on  , we could try every element of  to see which is best. Or, we
+could come up with and prove an insightful theorem that gives a general
+upper bound. These both seem very hard. But if we have a dual problem
+ ,
+then we can switch to working on that problem, instead! After a while,
+the element   for
+which  is the smallest found
+so far is probably pretty good. This value  will be an upper bound on our
+original problem: by weak duality,   is at
+most .</p>
+<p>The reason weak duality is “weak” is that the bounds we get this way
+might turn out to be very bad. Even if we’ve found the best  we can, weak duality does not
+guarantee us a way to ever prove that it’s the best. If the two dual
+problems meet in the middle, and  we
+say that they are in <em>strong duality</em>.</p>
+<p>In the worst of all possible worlds, there is no structure to , no meaning to , and no way to find   except by
+exhaustive search. In such a world, even if you find the optimal
+solution  after hundreds of
+hours of computing time, skeptics won’t trust you: they will say that
+maybe your software had a bug in it, and you missed some cases. But with
+strong duality, you can find an optimal solution
+ to the dual problem. Now you
+can silence the skeptics by simply checking that  ; this is a (hopefully)
+quick way of demonstrating that both solutions are optimal.</p>
+<p>Again, matchings and vertex covers are an ideal example, because the
+duality here is sometimes, but not always strong.</p>
+<details class="qa">
+<summary>When is there strong duality between
+finding the largest matching in 
+and finding the smallest vertex cover in ?</summary>
+<p>By Kőnig’s theorem (<a class="booklink" href="../matchings/konig.html#thm:konig">Theorem 14.2</a>), strong duality holds when
+ is bipartite.</p>
+</details>
+<p>(By the way, you should brush up on Kőnig’s theorem in preparation
+for the next chapter; it will come in handy!)</p>
+<p>So how does this apply to vertex and edge connectivity? The version
+of the problem that exhibits duality is the problem with cuts and paths
+between two specific vertices  and
+; the “global” version is not as
+nice.</p>
+<p>Start with the problem of finding . This is a minimization
+problem: we are looking for the smallest   cut in . The corresponding maximization problem
+is the problem of finding the largest set of internally disjoint   paths. So far, we know:</p>
+<div class="prop" id="prop:menger-weak">
+<p><strong>Proposition 26.5</strong>. <em>Let  and  be two vertices in a graph . If there is a set of  internally disjoint   paths in , then  : there is no   cut with fewer than  vertices.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Take any set 
+of fewer than  vertices, with
+ , that we suspect might
+be an   cut. Every vertex   lies on at most one of the   paths in our set, because they are
+internally disjoint. There are 
+paths, and fewer than  vertices in
+, so there is at least one path
+with no vertices of  on it.</p>
+<p>That path still exists in  ,
+proving that  and  are in the same connected component of
+ . So  is not an   cut, after all. ◻</p>
+</div>
+<details class="qa">
+<summary>What kind of duality does <a class="booklink" href="#prop:menger-weak">Proposition 26.5</a> give us?</summary>
+<p>Weak duality! The proposition gives an
+inequality between the largest number of internally disjoint   paths and the smallest number of
+vertices in an   cut, but it does
+not guarantee that they meet in the middle. So far, we know of no reason
+why there can’t be a graph  with
+only  internally disjoint   paths, but no   cut with fewer than  vertices.</p>
+</details>
+<p>Similarly, we can prove weak duality between the minimization problem
+of finding the smallest   edge
+cut, and the maximization problem of finding the largest set of
+edge-disjoint   paths:</p>
+<div class="prop" id="prop:edge-menger-weak">
+<p><strong>Proposition 26.6</strong>. <em>Let  and  be two vertices in a graph . If there is a set of  edge-disjoint   paths in , then  : there is no
+  edge cut with fewer than  edges.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> As before, but replacing vertices by edges. The key
+point is that every edge in  lies
+on at most one path in our set. A set of fewer than  edges cannot be an   edge cut, because one of our   paths will avoid it. ◻</p>
+</div>
+<details class="qa">
+<summary>Is there also weak duality between   edge cuts and internally disjoint
+  paths?</summary>
+<p>Yes! Internally disjoint   paths are, in particular,
+edge-disjoint.</p>
+<p>But whether or not strong duality will hold, we’d like to aim for the
+“least weak” weak duality, so we don’t want to restrict our maximization
+problem unnecessarily. The most general sets of   paths that will work to give a lower
+bound on  are the
+sets of edge-disjoint paths, so we want to use those.</p>
+</details>
+<p>In <a class="booklink" href="../connectivity/menger.html">Chapter 27</a>, we will prove that in both
+cases, strong duality holds: a result known as Menger’s theorem.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Let  be the graph shown
+below.</p>
+
+<ol>
+<li><p>Find the vertex connectivity .</p></li>
+<li><p>Find the   edge
+connectivity .</p></li>
+</ol>
+</li>
+<li><ol>
+<li><p>Prove that  
+directly: by showing that no set of  deleted vertices can disconnect . Using <a class="booklink" href="#prop:cube-3-connected">Proposition 26.2</a> may help.</p></li>
+<li><p>Prove that  
+by induction on , either directly
+or using the idea of internally disjoint paths.</p></li>
+</ol></li>
+<li>
+<p>In <a class="booklink" href="../degrees/regular.html">Chapter 5</a>, the <em>Harary graph</em>
+ was a particular circulant
+graph we used in <a class="booklink" href="../degrees/regular.html#thm:regular-graphs">Theorem 5.1</a> to give an
+example of an -regular graph on
+ vertices.</p>
+<p>In fact, more is true: whenever   and at least one of  and  is even, the Harary graph  provides an example of an -regular graph with  . It achieves the
+minimum possible number of edges in an -connected -vertex graph.</p>
+<ol>
+<li>
+<p>Prove that   for all even  when
+ . The Harary graphs , , and  are shown as examples below:</p>
+
+</li>
+<li>
+<p>Prove that   for all  when  . The Harary graphs , , and  are shown as examples below:</p>
+
+</li>
+<li><p>If you are feeling confident, prove that   for all valid choices
+of  and .</p></li>
+<li><p>Give an example of a connected -regular circulant graph which is not
+-connected. (The smallest example
+has  vertices.)</p></li>
+</ol>
+</li>
+<li>
+<p>The Petersen graph is -connected.</p>
+<ol>
+<li><p>Prove this by picking two vertices of the Petersen graph that are
+not adjacent, and finding a set of three internally disjoint paths
+between them.</p></li>
+<li><p>Prove this by picking a vertex of the Petersen graph, deleting
+it, and finding an ear decomposition of the remaining graph.</p></li>
+<li><p>Explain, using automorphisms of the Petersen graph, why either of
+the strategies above is a fully general proof that the Petersen graph is
+-connected.</p></li>
+</ol>
+</li>
+<li>
+<p>A graph is called fragile if it has a vertex cut which is an
+independent set.</p>
+<ol>
+<li><p>Prove if a graph with at least  vertices has clique number , then it is fragile.</p></li>
+<li><p>For all  , find an
+example of a graph with  vertices
+and   edges which is not
+fragile.</p></li>
+</ol>
+<p>(This exercise is based on some observations in “A note on fragile
+graphs” by Guantao Chen and Xingxing Yu .)</p>
+</li>
+<li>
+<p>Let  be a <em>strongly
+connected digraph</em> with at least  vertices (as defined in <a class="booklink" href="../trees/dags.html">Chapter 12</a>), and let  be its <em>underlying graph</em> (as
+defined in <a class="booklink" href="../degrees/multigraphs.html">Chapter 7</a>). You may either
+assume that  never contains both
+arcs  and , or make  a multigraph with two copies of edge
+ in this case.</p>
+<ol>
+<li><p>Prove that  .</p></li>
+<li><p>Give an example showing that it is not necessarily true that
+ .</p></li>
+</ol>
+</li>
+<li>
+<p>Without making use of symmetry, the strategy used to prove
+<a class="booklink" href="#prop:q4-4-connected">Proposition 26.4</a> would seem hopeless,
+because there are too many pairs  for which  needs to be verified.
+However, it is often enough to check a smaller, but well-chosen set of
+pairs. The following strategy is due to Abdol Esfahanian and
+S. L. Hakimi .</p>
+<p>Let  be an arbitrary vertex of
+a graph  which is not complete,
+and suppose that the following is true:</p>
+<ul>
+<li><p>For every vertex  not
+adjacent to ,  .</p></li>
+<li><p>For every two vertices 
+that are adjacent to  but not to
+each other,  .</p></li>
+</ul>
+<p>Prove that  .</p>
+</li>
+<li>
+<p>It is tempting to guess that the edge connectivity  is equal to : the vertex connectivity of
+the line graph of . However, this
+is false.</p>
+<ol>
+<li><p>Prove that every vertex cut in  corresponds to an edge cut in . Deduce that  .</p></li>
+<li><p>Not every edge cut in  is a
+vertex cut in . Think about how
+this statement might fail, and use it to find an example where  . (A
+relatively small example exists with  vertices and  edges.)</p></li>
+<li><p>Is there a way to compute  using only  and some simple information
+about ?</p></li>
+</ol>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>And possibly hundreds of hours more of computing time.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 26</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

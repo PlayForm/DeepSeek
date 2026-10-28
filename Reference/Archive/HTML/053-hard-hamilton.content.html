@@ -1,0 +1,760 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Hamilton Cycles</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 17</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>This chapter begins with many examples of analyzing concrete graphs
+to find Hamilton cycles, or prove that none exist. The second half of
+this chapter is more theoretical. If you are reading this book on your
+own, you should feel free to skip to the section on tough graphs as soon
+as you feel like you’ve had enough of the discussions that come before
+it. If you are teaching from this book, then you can give more of the
+concrete examples for a gentle introduction, or leave your students to
+read them on your own if your goal is to set a faster pace.</p>
+<p>The problem of identifying Hamiltonian graphs is the first of the
+“hard problems” we will consider in this book. What do I mean by this?
+Well, most precisely put, it is an issue of complexity theory: all the
+“hard problems” covered in this part of the textbook are so-called <span class="sans-serif">NP</span>-complete problems. You may have heard of
+the “<span class="sans-serif">P</span> versus <span class="sans-serif">NP</span> problem”, an open problem in computer
+science whose solution is worth $1 000 000. Finding an efficient
+algorithm to solve an <span class="sans-serif">NP</span>-complete
+problem, or proving that such an algorithm does not exist, would earn
+you that million-dollar prize!</p>
+<p>This is not a textbook on complexity theory, however, so I will not
+go into the details. For us, the consequence of tackling hard problems
+is that we will not be able to solve them efficiently, or prove theorems
+with simple if-and-only-if conditions describing when they have a
+solution. Instead, we will prove partial guarantees, lower and upper
+bounds, and discuss algorithms that only sometimes work.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="knights-tours">Knight’s tours</h2>
+<p>A knight is a chess piece that moves either by taking one step
+vertically and two steps horizontally, or by taking two steps vertically
+and one step horizontally, as shown in <a class="booklink" href="#fig:knight-moves">Figure 17.1(a)</a>. A knight in the middle of the
+board can move to a total of 
+different squares, though this number is reduced if the knight is near
+the edges of the board.</p>
+<figure class="bookfig" id="fig:knight">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:knight-moves">
+
+<figcaption>How a knight moves in chess</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:knight-graph">
+
+<figcaption>The graph of knight moves</figcaption>
+</figure>
+</div>
+<figcaption>Chess, knights, and graph theory</figcaption>
+</figure>
+<p>For the purpose of graph theory, <a class="booklink" href="#fig:knight-graph">Figure 17.1(b)</a> is
+the correct way to represent how a knight moves in chess. This is the
+-vertex graph with a vertex for
+each square of the chessboard, where two vertices are adjacent if a
+knight can move from one square to the other. In this chapter, we will
+just call this graph the <em>  knight graph</em>.</p>
+<p>A knight’s tour is a sequence of knight moves that visits every
+square of the chessboard exactly once. Finding a knight’s tour is a
+famous mathematical chess puzzle. A slightly harder variant is the
+problem of finding a closed knight’s tour: here, after visiting every
+square, the knight must make one final move and end at the square where
+it started. Both problems have been studied extensively long before
+graph theory, both with generic methods and ones specialized to the
+chessboard . For
+example, in 1832, H. C. von Warnsdorff proposed the short rule, “Start
+anywhere, and always move to the space from which the number of moves to
+unvisited squares is smallest.” This is quite likely (though not
+certain) to produce a knight’s tour; it is also a reasonable heuristic
+for the general problem we are about to study.</p>
+<p>Graph-theoretically, the knight’s tour problem is the problem of
+finding a path or cycle in the   knight graph that contains every vertex of the graph. In
+general, we say:</p>
+<div class="defn">
+<p><strong>Definition 17.1</strong>. <em>A <strong>Hamilton path</strong>
+(or spanning path) in a graph is a path that passes through every vertex
+of the graph. A <strong>Hamilton cycle</strong> or (or spanning cycle)
+in a graph is a cycle that passes through every vertex of the
+graph.</em></p>
+</div>
+<p>Usually, Hamilton cycles are considered to be the more fundamental
+object in graph theory, because they have a symmetry that paths lack:
+every vertex plays an identical role. As a result, graphs with Hamilton
+cycles are the ones we give a special name.</p>
+<div class="defn">
+<p><strong>Definition 17.2</strong>. <em>A graph is called
+<strong>Hamiltonian</strong> if it has a Hamilton cycle.</em></p>
+</div>
+<p>(Actually, there is also a term for graphs that have a Hamilton path:
+they are called traceable. This term is much less commonly used.)</p>
+<p><a class="booklink" href="#fig:kt-golden-star">Figure 17.2</a> shows two interesting
+subgraphs in the   knight
+graph. Both of these were found by Dan Thomasson , whose website features an impressive
+collection of knight’s tours.</p>
+<figure class="bookfig" id="fig:kt-golden-star">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:golden-star-1">
+
+<figcaption>Is this a Hamilton cycle?</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:golden-star-2">
+
+<figcaption>Is this a Hamilton cycle?</figcaption>
+</figure>
+</div>
+<figcaption>Two symmetric subgraphs of the   knight graph</figcaption>
+</figure>
+<details class="qa">
+<summary>However, only one of the diagrams in
+<a class="booklink" href="#fig:kt-golden-star">Figure 17.2</a> shows a Hamilton cycle.
+Which one, and what’s wrong with the other one?</summary>
+<p><a class="booklink" href="#fig:golden-star-2">Figure 17.2(b)</a>
+shows the Hamilton cycle. In <a class="booklink" href="#fig:golden-star-1">Figure 17.2(a)</a>,
+every vertex has degree , but the
+edges don’t form a single cycle: there are two connected
+components!</p>
+</details>
+<p>Both diagrams in <a class="booklink" href="#fig:kt-golden-star">Figure 17.2</a> do show a <em>-factor</em> of the   knight graph: a spanning subgraph in which every vertex has degree . Every Hamilton cycle is a -factor, but not vice versa: a Hamilton
+cycle must also be connected!</p>
+<p>In <a class="booklink" href="../matchings/general.html">Chapter 16</a>, we saw the term <em>-factor</em> used as a synonym for a
+perfect matching: a spanning subgraph in which every vertex has degree
+. Algorithmically, a -factor is not much harder to find than
+a perfect matching. On the other hand, a Hamilton cycle is much harder
+to find. There is no known efficient algorithm, and no characterization
+like Tutte’s theorem (<a class="booklink" href="../matchings/general.html#thm:tutte">Theorem 16.1</a>) of
+when a Hamilton cycle exists.</p>
+<details class="qa">
+<summary>Does the   knight graph have a -factor, or perfect matching?</summary>
+<p>Yes; one way to be sure without doing any
+additional work is that we can take every other edge in the knight’s
+tour shown in <a class="booklink" href="#fig:golden-star-2">Figure 17.2(b)</a>,
+and get a perfect matching. You might also be able to find some nicely
+symmetric perfect matchings from scratch.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="two-examples">Two examples</h2>
+<figure class="bookfig" id="fig:ham-examples">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:dodecahedron-graph-ham">
+
+<figcaption>The dodecahedron graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:petersen-graph-ham">
+
+<figcaption>The Petersen graph</figcaption>
+</figure>
+</div>
+<figcaption>Are these graphs Hamiltonian?</figcaption>
+</figure>
+<p>Before we develop any general theory, let’s consider two examples:
+the two graphs in <a class="booklink" href="#fig:ham-examples">Figure 17.3</a>. One
+of these graphs is Hamiltonian; the other is not. (Try them for yourself
+before you read my explanation, and see what you think.)</p>
+<p>The dodecahedron graph in <a class="booklink" href="#fig:dodecahedron-graph-ham">Figure 17.3(a)</a> has a historical
+connection to Hamilton cycles. The mathematician William Rowan Hamilton
+was a big fan of the dodecahedron; in the 1850s, he invented a puzzle
+called the “Icosian Game”, which was effectively to find a Hamilton
+cycle in the dodecahedron graph . Although Hamilton’s interest in the puzzle
+was more related to his study of abstract algebra, the Icosian Game is
+the reason why we refer to spanning cycles as Hamilton cycles.</p>
+<p>There is no obvious starting point to the puzzle, so I will give you
+an “in” with some mathematical trickery.</p>
+<details class="qa">
+<summary>As a -dimensional shape, the dodecahedron has
+ faces, each of which is a
+regular pentagon. A Hamilton cycle in the dodecahedron graph uses
+several edges from each pentagon. What is the average number of edges
+used per pentagon?</summary>
+<p>Since the graph has  vertices, a Hamilton cycle has  edges. Each edge is also an edge
+geometrically: an edge between two faces. So if we add up the number of
+edges of the cycle on each pentagon, we will get : each edge will be counted twice.
+There are  pentagons, so the
+average number of edges per pentagon is  .</p>
+</details>
+<details class="qa">
+<summary>Is it possible that there is no pentagon
+from which we use  edges?</summary>
+<p>No. We can’t use all  edges from a pentagon—then our cycle
+would end early. But we also can’t use only  or fewer edges from all pentagons: then
+every pentagon would be below average, which is impossible.</p>
+</details>
+<p>The pentagons are all alike. (Formally, as in <a class="booklink" href="../beginning/isomorphism.html">Chapter 2</a>, we should say that
+there is an automorphism of the dodecahedron graph that can turn any
+dodecahedron into any other.) So we can arbitrarily decide that the
+“front” pentagon will be the one in which  edges are used. This leads us to the
+partial cycle in <a class="booklink" href="#fig:icosian-step-1">Figure 17.4(a)</a>.</p>
+<figure class="bookfig" id="fig:icosian-solution">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:icosian-step-1">
+
+<figcaption>Step 1</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:icosian-step-2">
+
+<figcaption>Step 2</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:icosian-step-3">
+
+<figcaption>Step 3</figcaption>
+</figure>
+</div>
+<figcaption>Solving the “Icosian Game”</figcaption>
+</figure>
+<p>From here, we can make two other deductions.</p>
+<details class="qa">
+<summary>Our partial cycle is really a path with
+two ends. How should we continue from those ends?</summary>
+<p>We can’t use the edge connecting them,
+because then our cycle would end early. So we have to take the only
+remaining edges: the ones going outward.</p>
+</details>
+<details class="qa">
+<summary>Which edges incident to the topmost vertex
+should be part of the cycle?</summary>
+<p>There is no choice here: the vertex below
+the topmost vertex already has degree , so it can’t accept any more edges. We
+must use the two edges going left and right.</p>
+</details>
+<p>Applying the same logic to several other vertices on the perimeter,
+we arrive at a bigger partial solution: the one shown in <a class="booklink" href="#fig:icosian-step-2">Figure 17.4(b)</a>.</p>
+<p>At this point, one more “symmetry breaking” step is necessary. From
+the bottom vertex in the diagram, we must use either the edge going left
+or the edge going right. Which one? Well, it can’t possibly matter: both
+the diagram, and our partial solution so far, have left-right symmetry!
+So we can arbitrarily pick the edge going right to get one possible
+solution; its mirror image will contain the edge going left,
+instead.</p>
+<p>After this choice, there are several more forced decisions like ones
+we already made: once we use two edges out of a vertex , if  is the third edge, then it cannot be
+part of the Hamilton cycle, which forces our hand at vertex . Repeating these steps is all that’s
+necessary to arrive at <a class="booklink" href="#fig:icosian-step-3">Figure 17.4(c)</a>,
+the complete solution.</p>
+<p>As you see from this example, finding a Hamilton cycle really is more
+like solving a puzzle than solving a math problem. Although deductions
+like these can often handle small graphs with enough low-degree
+vertices, they are not reliable. We might have to make guesses and
+backtrack if we fail, which is a slow and tedious process.</p>
+<p>Rather than attempt such a backtracking solution for the Petersen
+graph, I will show you a different style of argument.</p>
+<div class="prop" id="prop:petersen-not-ham">
+<p><strong>Proposition 17.1</strong>. <em>The Petersen graph is not
+Hamiltonian.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> This proof will rely on just two properties of the
+Petersen graph. First, it is -regular, which can be checked quickly
+by looking at <a class="booklink" href="#fig:petersen-graph-ham">Figure 17.3(b)</a>. Second, as we checked
+in <a class="booklink" href="../degrees/regular.html#lemma:petersen-cycles">Lemma 5.3</a>, it
+contains no cycles of length  or
+.</p>
+<p>Now, we proceed in an unusual way. Rather than starting with the
+Petersen graph and looking for a Hamilton cycle, let’s start with the
+cycle and look for the Petersen graph!</p>
+<p>What do I mean? Well, if there were any Hamilton cycle in the
+Petersen graph, then we would be able to arrange the vertices around a
+regular decagon whose edges are the edges of that cycle. This would look
+like the diagram in <a class="booklink" href="#fig:petersen-step-1">Figure 17.5(a)</a>—with five more edges we
+haven’t placed yet completing the diagram of the -edge Petersen graph. For example, from
+the topmost vertex, exactly one of the three dashed edges must exist, we
+just don’t know which one. (We need a third edge from that vertex to
+give it degree , but any edge
+other than the three dashed edges would create a short cycle.)</p>
+<figure class="bookfig" id="fig:petersen-solution">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:petersen-step-1">
+
+<figcaption>Step 1</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:petersen-step-2">
+
+<figcaption>Step 2</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:petersen-step-3">
+
+<figcaption>Step 3</figcaption>
+</figure>
+</div>
+<figcaption>Diagrams for the proof of <a class="booklink" href="#prop:petersen-not-ham">Proposition 17.1</a></figcaption>
+</figure>
+<p>Suppose we pick the left dashed edge. Then we arrive at <a class="booklink" href="#fig:petersen-step-2">Figure 17.5(b)</a>, and we can ask the same
+question for the bottom-most vertex…</p>
+<details class="qa">
+<summary>Which of the three dashed edges in
+<a class="booklink" href="#fig:petersen-step-2">Figure 17.5(b)</a> can we use, if we want to
+eventually complete the picture to a diagram of the Petersen graph?</summary>
+<p>None of them! They all create a -cycle or -cycle.</p>
+</details>
+<p>So we cannot pick the left dashed edge (or, by the same argument, the
+right one). We must pick the edge going directly across. Since there’s
+nothing special about the top vertex, the same argument applies to every
+vertex: the only way we can hope to obtain the Petersen graph is by
+joining each vertex to the vertex directly opposite. This gives us the
+graph in <a class="booklink" href="#fig:petersen-step-3">Figure 17.5(c)</a>.</p>
+<details class="qa">
+<summary>Why is the graph in <a class="booklink" href="#fig:petersen-step-3">Figure 17.5(c)</a> not the Petersen
+graph?</summary>
+<p>It, too, has cycles of length : starting from any vertex, take a step
+across, a step clockwise, another step across, and a step
+counterclockwise.</p>
+</details>
+<p>Since all possible attempts to expand a -vertex cycle to get a Petersen graph
+fail, we conclude that the Petersen graph has no -vertex cycle as a subgraph: it is not
+Hamiltonian. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="tough-graphs">Tough graphs</h2>
+<p>The proof of <a class="booklink" href="#prop:petersen-not-ham">Proposition 17.1</a>
+is rather long. I can’t honestly tell you that the Petersen graph is an
+unusually bad example; for many graphs, finding a Hamilton cycle or
+proving that one does not exist is even harder. However, there are also
+many graphs for which we can give a quick argument to rule out a
+Hamilton cycle. Four of them are shown in <a class="booklink" href="#fig:not-tough">Figure 17.6</a>.</p>
+<figure class="bookfig" id="fig:not-tough">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:lollipop-graph">
+
+<figcaption>Lollipop graph </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:barbell-graph">
+
+<figcaption>-barbell
+graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:book-graph">
+
+<figcaption>Book graph </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:5x5-knight-graph">
+
+<figcaption>  knight
+graph</figcaption>
+</figure>
+</div>
+<figcaption>Four graphs which are not Hamiltonian</figcaption>
+</figure>
+<details class="qa">
+<summary>Why is the lollipop graph in <a class="booklink" href="#fig:lollipop-graph">Figure 17.6(a)</a> not Hamiltonian?</summary>
+<p>It has a leaf: a Hamilton cycle could not
+possibly enter that vertex and leave it.</p>
+</details>
+<details class="qa">
+<summary>Why is the barbell graph in <a class="booklink" href="#fig:barbell-graph">Figure 17.6(b)</a> not Hamiltonian?</summary>
+<p>The edge joining the two copies of  is a bridge; by <a class="booklink" href="../trees/spanning.html#lemma:bridge">Lemma 9.2</a>, it is not part of any
+cycles. But without using it, a cycle can’t contain vertices from both
+copies of .</p>
+</details>
+<details class="qa">
+<summary>Why is the book graph in <a class="booklink" href="#fig:book-graph">Figure 17.6(c)</a> not Hamiltonian?</summary>
+<p>Between visits to every “page” of the book
+(the vertices of degree ), a cycle
+must pass through at least one vertex of the “spine” (the vertices of
+degree ). But there are only  vertices in the spine, so a cycle
+cannot visit all  pages.</p>
+</details>
+<details class="qa">
+<summary>Why is the   knight graph in <a class="booklink" href="#fig:5x5-knight-graph">Figure 17.6(d)</a> not Hamiltonian?</summary>
+<p>Remember the black-and-white covering of a
+chessboard? On a  
+chessboard, there would be 
+squares of one color, and  on the
+other. A knight always moves to squares of a different color (put
+differently, the knight graph is bipartite), so a cycle will visit an
+equal number of squares of each color: it can’t visit all  vertices.</p>
+</details>
+<p>Surprisingly, all four arguments are special cases of one result!</p>
+<p>We say that a graph  is
+<em>tough</em> if, for any  ,
+deleting  vertices from  results in at most  connected components. You might think,
+from this definition, that proving that a graph is tough is a headache
+involving lots of casework: there are too many ways to delete some
+number of vertices from a graph! In general, you’d be right.</p>
+<p>In some cases, it’s not so bad. Here is a lemma that proves that the
+cycle graph  is tough without
+any casework at all—and, as a bonus, it comes with a mini-review of
+<a class="booklink" href="../trees/properties.html">Chapter 10</a>.</p>
+<div class="lemma" id="lemma:cycles-are-tough">
+<p><strong>Lemma 17.2</strong>. <em>For all  , the cycle graph 
+is tough.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> The cycle graph  has only one cycle: the entire graph.
+So as soon as we delete any vertices from it, we get a graph with no
+cycles, which we know as a forest. Specifically, if we delete  vertices from , we get an  -vertex forest. Each deleted vertex
+has degree  in , so it costs us at most two edges.
+Therefore the forest we are left with has at least   edges.</p>
+<details class="qa">
+<summary>Why do I say “at most” and “at least”;
+shouldn’t every vertex we delete cost us both edges incident to that
+vertex?</summary>
+<p>We might delete both endpoints of an edge,
+in which case we shouldn’t count the edge as removed twice.</p>
+</details>
+<p>By a result from much earlier in this book, <a class="booklink" href="../trees/properties.html#prop:n-m-forests">Proposition 10.3</a>, the number of
+connected components in a forest is the number of vertices minus the
+number of edges. In this case, this is at most  . Therefore deleting
+ vertices results in a graph with
+at most  components, proving the
+lemma. ◻</p>
+</div>
+<p>Starting at  is useful,
+because it gives us a connection to Hamiltonian graphs. This is a result
+of Václav Chvátal, who defined tough graphs in 1973 for this very
+purpose .</p>
+<div class="corollary" id="cor:tough-graphs">
+<p><strong>Corollary 17.3</strong>. <em>All Hamiltonian graphs are
+tough.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Every -vertex
+Hamiltonian graph  contains a copy
+of  as a subgraph: that’s what a
+Hamilton cycle is! We can think of  as this Hamilton cycle, together with
+some extra edges it didn’t use.</p>
+<p>By <a class="booklink" href="#lemma:cycles-are-tough">Lemma 17.2</a>, if we delete  vertices from the Hamilton cycle, the
+result will have at most 
+connected components. What happens if we delete those same vertices from
+? Those same connected components
+will still be connected, but it’s possible that the extra edges will
+join some of them together into larger components. This can only reduce
+the number of connected components, so there are still at most ; therefore  is tough. ◻</p>
+</div>
+<p>The most profitable way to use <a class="booklink" href="#cor:tough-graphs">Corollary 17.3</a> is
+in the form of its contrapositive: if a graph is not tough, then it is
+not Hamiltonian. If a graph is not tough, then there is a short proof of
+that fact: simply say which 
+vertices must be deleted to leave   or more connected components. (It is
+a short proof, not an easy proof, because finding those  vertices may be hard.)</p>
+<p>For example, none of the graphs in <a class="booklink" href="#fig:not-tough">Figure 17.6</a> are
+tough—and the sets of vertices we must delete to prove this are closely
+related to our earlier arguments proving that none of these graphs are
+Hamiltonian. This unifies our previous arguments into a single idea.</p>
+<p><a class="booklink" href="#cor:tough-graphs">Corollary 17.3</a> is a necessary condition: to
+be Hamiltonian, a graph must be tough. However, it is not sufficient, so
+we cannot always rely on it. The Petersen graph—a thorn in the side of
+every graph theorist—is a counterexample.</p>
+<div class="prop" id="prop:petersen-tough">
+<p><strong>Proposition 17.4</strong>. <em>The Petersen graph is
+tough.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> As we saw in <a class="booklink" href="../degrees/regular.html">Chapter 5</a>,
+the Petersen graph has many automorphisms, and in particular, it has an
+automorphism taking any vertex to any other vertex. Due to this
+symmetry, it’s enough to see what happens when the vertices we delete
+from the Petersen graph include the vertex at the center of <a class="booklink" href="#fig:petersen-graph-ham">Figure 17.3(b)</a>, which we will call
+.</p>
+<p>If we delete  alone, the
+remaining graph is connected, so the definition of a tough graph holds
+so far. What’s more, we can see from the diagram in <a class="booklink" href="#fig:petersen-graph-ham">Figure 17.3(b)</a> that the remaining graph
+is Hamiltonian: we get a Hamilton cycle by going around the perimeter of
+the diagram. By <a class="booklink" href="#cor:tough-graphs">Corollary 17.3</a>,
+this graph is tough. So if we delete  and  more vertices from the Petersen graph,
+we’re left with at most  connected
+components. Since we’ve deleted  
+vertices, that’s even slightly stronger than what we need to conclude
+that the Petersen graph is tough. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="sufficient-conditions">Sufficient conditions</h2>
+<p>It is also possible to find conditions for a graph to be Hamiltonian
+that are sufficient, but not necessary. That is, if a graph  satisfies these conditions, we can be
+sure that it has a Hamilton cycle; however, if  does not satisfy these conditions, we
+learn nothing.</p>
+<p>What’s the point, then? Well, we can look for conditions that are
+easy to check. When faced with a concrete problem, we can begin by
+checking a few such conditions, and if we’re lucky, this will tell us
+that  is Hamiltonian right away.
+Otherwise, we may have no choice but to embark on a tedious journey full
+of backtracking.</p>
+<p>A promising place to start looking for such conditions is the degree
+sequence of . Computing the degree
+of every vertex may take some time, if the graph is large, but it is not
+a computationally challenging problem: we can even do it by hand, just
+by looking at a diagram. At the same time, the degrees of the vertices
+of  tell us a lot about the
+structure of , so we can hope to
+learn something about Hamilton cycles in , as well.</p>
+<p>Historically, the first such result was a 1952 theorem by Gabriel
+Dirac  (the son of
+Paul Dirac, the quantum physicist). More results followed, and
+eventually, the essence of the proof was distilled into a rather
+peculiar statement, proven by John Bondy and Václav Chvátal in
+1976 .</p>
+<div class="theorem" id="thm:bondy-chvatal">
+<p><strong>Theorem 17.5</strong>. <em>In a graph  with  vertices, let  and  be two non-adjacent vertices with  . If   is Hamiltonian, then so is .</em></p>
+</div>
+<details class="qa">
+<summary>Is it possible that  is Hamiltonian, but   is not?</summary>
+<p>No: adding an edge can never destroy a
+Hamilton cycle. We could have stated <a class="booklink" href="#thm:bondy-chvatal">Theorem 17.5</a> as an if-and-only-if
+condition:   is Hamiltonian if
+and only if  is Hamiltonian.</p>
+</details>
+<p>What is going on here? Well, there are many works of fiction in which
+the hero is granted special powers by a magic item. Later in the story,
+the magic item is lost, and the hero is distressed—only to discover that
+the item wasn’t necessary to have the special powers. The magic was
+really inside the hero the whole time! The statement of <a class="booklink" href="#thm:bondy-chvatal">Theorem 17.5</a> is similar: the graph  is granted the special power of being
+Hamiltonian by the magic edge .
+However (provided that edge 
+satisfies the degree condition) the graph  didn’t need that edge: the Hamilton
+cycle was really inside  the whole
+time.</p>
+<p><a class="booklink" href="#thm:bondy-chvatal">Theorem 17.5</a> tries to help us by giving us
+a different problem to solve: instead of checking whether  is Hamiltonian, we can check whether
+  is Hamiltonian.</p>
+<details class="qa">
+<summary>How can this possibly help us?</summary>
+<p>Well,   has one more edge, so finding a
+Hamilton cycle in   might be
+easier. A single edge might not make a difference, but if we apply
+<a class="booklink" href="#thm:bondy-chvatal">Theorem 17.5</a> repeatedly, we can hope to
+turn a graph with a well-hidden Hamilton cycle into a graph with many
+blindingly obvious Hamilton cycles.</p>
+</details>
+<p>Let’s prove the theorem first, though.</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#thm:bondy-chvatal">Theorem 17.5</a>.</em> Take a Hamilton cycle
+in  . If edge  is not part of that cycle, we’re done:
+it also exists in . If edge  is part of that cycle, then deleting
+that edge leaves an   Hamilton
+path in . Let this path be
+represented by the walk  where   and
+ .</p>
+<p>Our goal is to find an alternate way to complete the path  to a Hamilton cycle in , without using edge . All we really know about  is that, because  , there must
+be many other edges incident to 
+or . (There might be other edges,
+too, but we cannot count on them.) In short, the subgraph of  we have available to work with might
+look something like the diagram in <a class="booklink" href="#fig:edges-on-st">Figure 17.7(a)</a>.</p>
+<figure class="bookfig" id="fig:bondy-chvatal">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:edges-on-st">
+
+<figcaption> together with all
+edges incident to  or </figcaption>
+</figure>
+</div>
+<div class="subfigures">
+<figure class="booksubfig" id="fig:edges-in-L">
+
+<figcaption>Edges in the set </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:edges-in-R">
+
+<figcaption>Edges in the set </figcaption>
+</figure>
+</div>
+<div class="subfigures">
+<figure class="booksubfig" id="fig:bondy-chvatal-cycle">
+
+<figcaption>The cycle in </figcaption>
+</figure>
+</div>
+<figcaption>Turning the   path in
+the proof of <a class="booklink" href="#thm:bondy-chvatal">Theorem 17.5</a>
+into a cycle</figcaption>
+</figure>
+<p>For every edge incident to either  or , something special happens: we obtain a
+different Hamilton path, which uses that edge, but leaves out one edge
+of . Here are the two ways this
+can happen:</p>
+<ul>
+<li>
+<p>If   for some
+, then add edge  to  and delete edge . The resulting graph is an
+  Hamilton path.</p>
+<p>We define the set  (for “left”)
+to be the set of all edges of 
+that can be left out in this way:  . These are highlighted in
+<a class="booklink" href="#fig:edges-in-L">Figure 17.7(b)</a>.</p>
+</li>
+<li>
+<p>If   for
+some , then add edge  to  and delete edge . The resulting graph is an
+  Hamilton path.</p>
+<p>We define the set  (for
+“right”) to be the set of all edges of  that can be left out in this way:  .
+These are highlighted in <a class="booklink" href="#fig:edges-in-R">Figure 17.7(c)</a>.</p>
+</li>
+</ul>
+<details class="qa">
+<summary>Can we say anything about the sizes of the
+sets  and ?</summary>
+<p>We have   and  , because for every edge incident to , we get an element of , and for every edge incident to , we get an element of .</p>
+</details>
+<p>By themselves, edges in  or in
+ are not anything special, since
+we aren’t looking for more Hamilton paths. The magic happens if we find
+ in both sets!</p>
+<p>Suppose  ,
+so that edges  and  are both present. Let  be the graph obtained from  by deleting edge  and adding both  and , as shown in <a class="booklink" href="#fig:bondy-chvatal-cycle">Figure 17.7(d)</a>. This graph  is a spanning subgraph of . It is connected: deleting edge  separated  into two connected components, but both
+ and  join two vertices in different
+components, reconnecting the graph. It is -regular: compared to , the degrees of  and  go up by , while all other degrees remain the
+same. Therefore  is a Hamilton
+cycle!</p>
+<details class="qa">
+<summary>The situation is a bit unusual if  . What happens?</summary>
+<p>This would imply that   is an edge of . In principle, this makes a cycle in an
+even simpler way: without deleting anything, we just add edge  to . However, <a class="booklink" href="#thm:bondy-chvatal">Theorem 17.5</a> assumes that this case does
+not occur:  and  are not adjacent.</p>
+</details>
+<p>Finding an edge in   is
+why the degree condition on  and
+ is needed. Since   and  , we know that   from the hypotheses of
+<a class="booklink" href="#thm:bondy-chvatal">Theorem 17.5</a>. However,  and  are both subsets of , and an -vertex path has only   edges, so  . Since  , there must be
+some overlap between  and ; as we’ve already seen, a single edge
+in   proves that  is Hamiltonian, which proves the
+theorem. ◻</p>
+</div>
+<p>As an example of applying <a class="booklink" href="#thm:bondy-chvatal">Theorem 17.5</a>, we
+will use it to derive Dirac’s 1952 theorem on Hamilton cycles, with a
+sufficient condition based on the minimum degree .</p>
+<div class="corollary" id="cor:dirac">
+<p><strong>Corollary 17.6</strong>. <em>If  has   vertices and  , then  is
+Hamiltonian.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em>  The minimum degree condition on  guarantees that for every two vertices
+ and  which are not adjacent, we have  so the hypotheses of <a class="booklink" href="#thm:bondy-chvatal">Theorem 17.5</a>
+hold. Therefore we can add any edges we like to  without changing the problem: if we get
+a Hamiltonian graph, then  must
+have been Hamiltonian all along.</p>
+<p>The edges we will choose to add to  are all the edges missing from  (one at a time). Once we’re done, we
+get a graph isomorphic to the complete graph . But  is definitely a Hamiltonian graph:
+you can visit the vertices in any permutation you like, then go back to
+the start, and this will be a Hamilton cycle. Therefore the graph we
+started with, , must also have
+been Hamiltonian. ◻</p>
+</div>
+<p>How good is <a class="booklink" href="#cor:dirac">Corollary 17.6</a>? Well, we can compare it to
+<a class="booklink" href="../beginning/degrees.html#prop:min-degree-connected">Proposition 4.3</a>,
+which gives   as a sufficient condition for  to be connected. As we saw in
+<a class="booklink" href="../beginning/degrees.html">Chapter 4</a>, that condition is the best
+possible: if the minimum degree of  were any lower than , then it would not
+necessarily be connected.</p>
+<p>When  
+exactly, we are in the narrow gap between these two results, where the
+graph is guaranteed to be connected by <a class="booklink" href="../beginning/degrees.html#prop:min-degree-connected">Proposition 4.3</a>,
+but not yet guaranteed to be Hamiltonian by <a class="booklink" href="#cor:dirac">Corollary 17.6</a>.</p>
+<details class="qa">
+<summary>Are there any -vertex graphs  with   which are not
+Hamiltonian?</summary>
+<p>Yes: one example is the slightly
+unbalanced complete bipartite graph . This graph is not
+Hamiltonian for the same reason that the   knight graph in <a class="booklink" href="#fig:5x5-knight-graph">Figure 17.6(d)</a> was not Hamiltonian.</p>
+</details>
+<p>This tells us that the minimum degree condition of <a class="booklink" href="#cor:dirac">Corollary 17.6</a> is also the best possible: we cannot
+reduce it any further and still have a true statement.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>For each of the graphs below, find a Hamilton cycle, or explain
+why a Hamilton cycle cannot exist.</p>
+
+</li>
+<li><ol>
+<li><p>Show that for all  ,
+the graph  (the
+complement of the -vertex cycle
+graph) is Hamiltonian.</p></li>
+<li><p>Find a -vertex graph  such that neither  nor  is Hamiltonian.</p></li>
+</ol></li>
+<li><ol>
+<li><p>Find a Hamilton cycle in the cube graph .</p></li>
+<li><p>Prove that the hypercube graph  has a Hamilton cycle for all  , by induction on .</p></li>
+<li>
+<p>A Gray code is an alternate binary encoding of numbers with a
+useful property: to go from the encoding of  to the encoding of  , only one bit needs to be
+changed.</p>
+<p>Explain how to obtain a Gray code for the numbers   using a Hamilton cycle
+in .</p>
+</li>
+</ol></li>
+<li>
+<p>In Chvátal’s original paper defining tough graphs , the following example
+is given:</p>
+
+<ol>
+<li><p>Prove that this graph is not Hamiltonian.</p></li>
+<li><p>Prove that this graph is tough.</p></li>
+</ol>
+</li>
+<li><p>Let  be a bipartite graph
+with bipartition . Prove that
+if there is a subset  
+with  , then  cannot be Hamiltonian. (This statement
+is also a consequence of the statement of the next problem, but it can
+be proved directly.)</p></li>
+<li><p>Prove that every tough graph with an even number of vertices (not
+necessarily bipartite) has a perfect matching.</p></li>
+<li>
+<p>Let  be an arbitrary graph,
+and let  be the graph obtained by
+adding a new vertex to , adjacent
+to all vertices which already existed in . Prove that  is traceable ( has a Hamilton path) if and only if
+ is Hamiltonian ( has a Hamilton cycle).</p>
+<p>(This argument is the reason why we do not spend much time thinking
+about traceable graphs and Hamilton paths: we can use it to take almost
+any fact about Hamilton cycles and turn it into a fact about Hamilton
+paths, instead.)</p>
+</li>
+<li>
+<p>A complete tripartite graph is formed by taking three groups of
+vertices , , and , then adding an edge between every pair
+of vertices in different groups: this is a generalization of complete
+graphs and complete bipartite graphs. We write  for the complete tripartite
+graph with  ,  , and  . For example, below are diagrams of
+ (left) and  (right).</p>
+
+<ol>
+<li><p>One of these graphs is Hamiltonian. Find a Hamilton cycle in that
+graph.</p></li>
+<li><p>The other graph is not Hamiltonian. Give a reason why it does not
+have a Hamilton cycle.</p></li>
+<li><p>Generalize: find and prove a rule that tells you when  is Hamiltonian. You may assume
+ .</p></li>
+</ol>
+</li>
+<li><ol>
+<li><p>Prove that all graphs with the degree sequence  are
+Hamiltonian.</p></li>
+<li><p>Find a general condition on degree sequences  which guarantees
+that all graphs with that degree sequence are Hamiltonian, and which
+generalizes your argument from part (a).</p></li>
+</ol></li>
+<li><p>(BMO 2011) Consider the numbers . Find, in terms of , the largest integer  such that these numbers can be arranged
+in a row so that all consecutive terms differ by at least .</p></li>
+</ol>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 17</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

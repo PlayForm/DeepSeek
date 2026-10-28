@@ -1,0 +1,817 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Line Graphs</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 20</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>It is a little strange of me to put the chapter on line graphs in the
+part of the textbook devoted to hard problems, because there is not
+really a hard problem associated to line graphs. The opposite is true:
+the hard problems in this section are often easier to solve when we are
+solving them in a line graph. And that’s exactly why I think these
+chapters belong together!</p>
+<p>By looking at line graphs, we will also see many connections between
+problems that seemed very different before. There is an occasionally
+useful relationship between Euler tours (<a class="booklink" href="../degrees/euler.html">Chapter 8</a>) in a
+graph  and Hamilton cycles
+(<a class="booklink" href="../hard/hamilton.html">Chapter 17</a>) in its line graph . Matchings (<a class="booklink" href="../matchings/bipartite.html">Chapter 13</a> through <a class="booklink" href="../matchings/general.html">Chapter 16</a>) are exactly the same thing as
+independent sets (<a class="booklink" href="../hard/cliques.html">Chapter 18</a>)
+in the line graph. And by extending graph coloring to line graphs, we
+will arrive at edge coloring, a new problem with its own
+applications.</p>
+<p>You can see from this list that to understand all the material in
+this chapter, you need to be familiar with many concepts in previous
+parts of the textbook. Apart from the chapters mentioned above, you
+should be familiar with <a class="booklink" href="../degrees/multigraphs.html">Chapter 7</a>, because both
+directed graphs and multigraphs will make an appearance.</p>
+<p>It is not necessarily the case that you want to read the entire
+chapter if you’re learning graph theory for the first time (or to teach
+the entire chapter in an introductory course). The application to de
+Bruijn sequences is interesting, but self-contained. Vizing’s theorem is
+a natural observation to make after observing enough examples, but
+difficult to prove, though I have tried to pick out a less complicated
+proof.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="line-graphs">Line graphs</h2>
+<figure class="bookfig" id="fig:rooks-and-queens">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:queen-independent-set">
+
+<figcaption>Eight queens: an independent set</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:rook-matching">
+
+<figcaption>Eight rooks: a… matching?</figcaption>
+</figure>
+</div>
+<figcaption>Rook and queen placements</figcaption>
+</figure>
+<p>In <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a> and <a class="booklink" href="../hard/cliques.html">Chapter 18</a>, I used two very similar
+problems as an example: the problem of placing eight rooks on a
+chessboard, and the problem of placing eight queens on a chessboard, so
+that they do not attack each other. The solutions are shown once again
+in <a class="booklink" href="#fig:rooks-and-queens">Figure 20.1</a>, for your reference. (Of
+course, the eight queens problem is strictly harder than the eight rooks
+problem, because a queen has all the movement power of a rook and more,
+so instead of <a class="booklink" href="#fig:rook-matching">Figure 20.1(b)</a>, we
+could have just taken <a class="booklink" href="#fig:queen-independent-set">Figure 20.1(a)</a> and changed all the
+queens to rooks.)</p>
+<p>However, there’s something strange about how we modeled these
+problems. The eight queens problem was our first example of finding
+independent sets in a graph: a hard problem we have no good algorithms
+for. It would have been equally natural to try solving the eight rooks
+problem in the same way. Define the <em>  rook graph</em> to be the graph
+whose  vertices are the squares
+of a chessboard, with an edge between two squares which are in the same
+rank or file. Then a solution to the eight rooks problem is an
+independent set in the  
+rook graph.</p>
+<p>We did something different in <a class="booklink" href="../matchings/bipartite.html">Chapter 13</a>—and a good thing, too!
+Instead of finding an independent set, we were able to solve the problem
+by finding a matching, which is much easier. But why is it that the
+eight rooks problem has these two different models, and what is the
+relationship between them?</p>
+<p>The answer is: the  
+rook graph happens to be a line graph, whose special structure makes
+many problems easier.</p>
+<div class="defn">
+<p><strong>Definition 20.1</strong>. <em>The <strong>line graph</strong>
+ of a graph  is the graph whose vertices are the
+edges of ; two vertices  of  are adjacent if and only if edges
+ and  share an endpoint in .</em></p>
+</div>
+<p>Why is this the “line” graph? The name was introduced by Frank Harary
+and Robert Norman in 1960 , who referred to the vertices and edges of
+graphs as “points” and “lines”. As a result, Harary and Norman called
+ the line graph because its
+vertex set (or “point set”) was the set of “lines” of . The name stuck.</p>
+<p>Let’s look at some examples. <a class="booklink" href="#fig:line-graph-G">Figure 20.2(a)</a> and
+<a class="booklink" href="#fig:line-graph-L(G)">Figure 20.2(b)</a> show a graph  with nothing particularly special about
+it, and its line graph . The
+line graph has  vertices, which
+correspond to the  edges of . Observe what happens to the four edges
+, , , and  incident to vertex : they turn into a -vertex clique in .</p>
+<figure class="bookfig" id="fig:line-graphs">
+
+<figcaption>Several examples of line graphs</figcaption>
+</figure>
+<p>Most graphs have line graphs that are bigger than they are in every
+way, but not all. For example, <a class="booklink" href="#fig:cycle-line-graph">Figure 20.2(c)</a>
+shows the line graph of : we see
+that  is isomorphic to  itself, and the same will happen for
+every cycle graph.</p>
+<details class="qa">
+<summary>What is the line graph of a path graph
+ isomorphic to?</summary>
+<p> is isomorphic to : an -vertex path has   edges, each sharing an endpoint with
+the previous edge and the next edge along the path.</p>
+</details>
+<p>Finally, <a class="booklink" href="#fig:k33-line-graph">Figure 20.2(d)</a>
+shows the line graph of the complete bipartite graph  (with vertices  on one side and  on the other side of the
+bipartition). It is also isomorphic to the   rook graph, showing the possible moves a rook could
+make on a   chessboard.
+With a little imagination, this should let you see how the   rook graph is isomorphic to the
+line graph .</p>
+<p>It is also possible to define the line digraph of a directed graph;
+the idea is similar, but two arcs that share an endpoint will only
+correspond to an arc in the line digraph when their orientations are
+compatible.</p>
+<div class="defn">
+<p><strong>Definition 20.2</strong>. <em>The <strong>line
+digraph</strong>  of a directed
+graph  is the directed graph whose
+vertices are the arcs of . For
+every pair of arcs  and  in  such that the first arc ends where the
+second arc starts, there is an arc  in .</em></p>
+</div>
+<p>It often turns out that one problem in graph theory is equivalent to
+another problem in disguise: solving one problem in the graph  is equivalent to solving the other in
+. Even when these are not
+exactly equivalent, the relationship can help us understand both
+problems better.</p>
+<p>For example, as we see in the case of the eight rooks problem,
+finding a matching in a graph  is
+equivalent to finding an independent set in . A matching in  is a set of edges such that no two
+edges share an endpoint. A set of edges in  is precisely a set of vertices in , and sharing an endpoint is
+precisely what defines adjacency in . Therefore a set   is a matching in  if and only if it is an independent set
+in .</p>
+<p>The notation that we’ve used for the two problems is suggestive of
+this relationship: we used  to denote the independence
+number of , and  to denote the matching
+number. We could already have said the vague phrase, “ is the edge version of
+”. Now we can make this
+precise:  .</p>
+<p>Beyond this example, it is often the case that a numerical graph
+invariant  will be given an
+edge version , defined as
+. Unfortunately, sometimes,
+an invariant will also be written  if it gives off vague vibes of
+being the edge version of ,
+even if it is not always equal to . You should be careful and check
+if   holds when
+faced with new notation; don’t just assume it.</p>
+<details class="qa">
+<summary>What do cliques in  correspond to?</summary>
+<p>With one exception, a set of vertices in
+ is a clique when those
+vertices are edges in  that all
+share a common endpoint. If it weren’t for that pesky exception, we
+could think of the maximum degree  as being an “edge clique
+number” …</p>
+</details>
+<details class="qa">
+<summary>What’s the pesky exception?</summary>
+<p>There’s another way for vertices in  to form a clique: if they correspond
+to the three edges of a cycle of length . Thus, if  is a graph with maximum degree , but one connected component of  is a cycle of length , then  will be , not .</p>
+</details>
+<p>The benefit of identifying the matching number  as  is that it makes the problem
+of finding an independent set easier in a line graph. If we identify a
+graph  as being isomorphic to
+ for some , then we can reduce the hard problem of
+finding  to the easier
+problem of finding .</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="euler-tours-and-hamilton-cycles">Euler tours and Hamilton
+cycles</h2>
+<p>An Euler tour in a graph is a closed walk that uses each edge exactly
+once. A Hamilton cycle in a graph is a cycle that uses each vertex
+exactly once. When the descriptions of two problems match so closely,
+but one uses “vertex” where the other uses “edge”, it is natural to
+suspect that line graphs could be involved.</p>
+<p>In fact, half of a relationship is present. We can prove the
+following result:</p>
+<div class="prop" id="prop:hamilton-line-graph">
+<p><strong>Proposition 20.1</strong>. <em>Every Euler tour in a graph
+ corresponds to a Hamilton cycle
+in .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Suppose that the closed walk , with  , is an Euler tour in . Then consider the following sequence
+of edges of  (or vertices of ):  These
+are, in fact, edges of , because
+they are pairs of consecutive vertices of the closed walk. In fact, by
+the definition of an Euler tour, if we leave out the last element of
+this sequence (which is the same as the first element), then every edge
+of  is included exactly once.
+Finally, two consecutive edges in this sequence have the form , and share an endpoint: so they
+are adjacent in . These are
+exactly the conditions needed to be certain that this sequence is a
+closed walk representing a Hamilton cycle in . ◻</p>
+</div>
+<figure class="bookfig" id="fig:euler-to-hamilton">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:G-six-edge-walk">
+
+<figcaption>A walk with no repeated edges</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:L(G)-6-cycle">
+
+<figcaption>The corresponding -cycle</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:L(G)-hamilton">
+
+<figcaption>A Hamilton cycle in </figcaption>
+</figure>
+</div>
+<figcaption>Euler tours in  and
+Hamilton cycles in </figcaption>
+</figure>
+<p><a class="booklink" href="#fig:euler-to-hamilton">Figure 20.3</a> shows a partial
+illustration of this principle, using as an example the graph  from <a class="booklink" href="#fig:line-graph-G">Figure 20.2(a)</a>,
+whose line graph was shown in <a class="booklink" href="#fig:line-graph-L(G)">Figure 20.2(b)</a>.
+The closed walk in <a class="booklink" href="#fig:G-six-edge-walk">Figure 20.3(a)</a>
+is not an Euler tour, but it is a closed walk with no repeated edges, so
+it shares most of the same properties. We can apply the same
+transformation  as we did in the proof of
+<a class="booklink" href="#prop:hamilton-line-graph">Proposition 20.1</a>. (I have adjusted the
+order in which an edge is written, in some cases, so that it matches how
+<a class="booklink" href="#fig:L(G)-6-cycle">Figure 20.3(b)</a> is labeled.)</p>
+<details class="qa">
+<summary>What can the argument of <a class="booklink" href="#prop:hamilton-line-graph">Proposition 20.1</a> tell us if we apply it
+to closed walks like this one, which use each edge at most once?</summary>
+<p>The resulting closed walk in  represents a cycle, but not
+necessarily a Hamilton cycle. Here, the original walk did not use the
+edge , and so vertex  is not part of the cycle.</p>
+</details>
+<p><a class="booklink" href="#fig:L(G)-hamilton">Figure 20.3(c)</a>, on the other hand, shows a
+Hamilton cycle in . We should
+be suspicious of this, because the original graph  is not Eulerian: vertices  and  have odd degree! And, in fact, the
+converse to <a class="booklink" href="#prop:hamilton-line-graph">Proposition 20.1</a> is false: Hamilton
+cycles in  do not always
+correspond to Euler tours in .</p>
+<details class="qa">
+<summary>What went wrong?</summary>
+<p>When visiting vertices  in , though they all share an endpoint,
+they all share the same endpoint. To continue a walk in , it is not enough to know which edge
+was the last edge used; we need to know which of its endpoints was the
+last vertex used, to continue from that vertex.</p>
+</details>
+<p>This problem goes away if we consider directed graphs and their line
+digraphs. If  are two arcs
+in a directed graph , then the
+line digraph  can afford to be
+pickier about when it has an arc . The arc  is not just included when
+ shares an endpoint with , but when they share endpoints
+compatibly: when  ends where  starts. This lets us prove the
+following:</p>
+<div class="prop" id="prop:hamilton-line-digraph">
+<p><strong>Proposition 20.2</strong>. <em>If  is a directed graph, then Euler tours
+in  correspond to Hamilton cycles
+in , and vice versa.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> I will omit the proof that an Euler tour in  corresponds to a Hamilton cycle in
+, because the argument is the
+same as in <a class="booklink" href="#prop:hamilton-line-graph">Proposition 20.1</a>.</p>
+<p>Suppose that in , we have a
+Hamilton cycle represented by the walk  For
+each  , let
+ , and consider the
+sequence  of vertices in .</p>
+<p>For each  ,
+there must be an arc 
+in , meaning that  . Therefore there is an arc
+ in : this is another way to write the arc
+. Similarly, there is an arc
+ in , so  , and therefore  has the arc . This means that  is a walk in .</p>
+<p>The arcs used by  are precisely
+the arcs ,
+in that order. Since we started with a Hamilton cycle in , these arcs include each vertex of
+ exactly once, so they include
+each arc of  exactly once.
+Therefore  is an Euler tour. ◻</p>
+</div>
+<p>We solved the problem of finding Euler tours completely in <a class="booklink" href="../degrees/euler.html">Chapter 8</a>, while the problem of finding
+Hamilton cycles is difficult and remains difficult in directed graphs.
+This means that if we spot that a certain directed graph happens to be a
+line digraph, we can make use of this to turn a difficult problem into
+an easy problem.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="de-bruijn-sequences">De Bruijn sequences</h2>
+<p>This happens, for example, in the study of de Bruijn sequences. To
+introduce these, let me give an example: the sequence 
+which you should think of as being cyclic: when you get to the end, keep
+reading again from the start. A -letter <em>substring</em> of this
+sequence is what you get if you start anywhere and read the next  letters: for example, you could start
+at the beginning, you will get <span class="sans-serif">aab</span>, or
+start at the first <span class="sans-serif">c</span> and get <span class="sans-serif">cab</span>. There are  letters in the sequence, so there are
+ possible substrings; the magical
+property of this sequence is that every possible substring occurs
+exactly once.</p>
+<details class="qa">
+<summary>Where does the substring <span class="sans-serif">aaa</span> occur?</summary>
+<p>You must start at the last character,
+reading an <span class="sans-serif">a</span> and then reading <span class="sans-serif">aa</span> from the beginning.</p>
+</details>
+<p>In general, given an alphabet 
+(any set of symbols) and a positive integer , we can define the <em>de Bruijn
+sequence of order </em> over  to be a cyclic sequence with the same
+property: its length- substrings
+contain every possible substring exactly once. Of course, we can define
+anything we like, but that’s no guarantee that such a thing exists!</p>
+<p>These sequences are named after Nicolaas Govert de Bruijn, who proved
+in 1946  that they
+exist: for all  and all alphabets
+. To do this, de Bruijn used graph
+theory; but what is the right graph model for this problem?</p>
+<p>One extreme option is to use 
+as the set of vertices, putting every possible edge between them, so
+that a de Bruijn sequence is a particular kind of closed walk in the
+graph. Such an approach is almost never the right choice, and it is not
+the right choice here. The problem is that the graph we get doesn’t
+manage to encode the rules of the problem in any way: we don’t benefit
+from looking at the problem with the graph in mind. Ideally, once we
+build the graph that describes the problem, the solution should be some
+very standard object inside that graph.</p>
+<p>Another option is to take our vertices to be the set of all  of the -symbol strings that we want to see
+inside the de Brujin sequence. It is still tempting to have the de
+Bruijn sequence be a closed walk in the graph we define. To make this
+happen, we need the edges to answer the question: if string  is the -symbol string at position  in the sequence, which strings could
+start at position  ?</p>
+<details class="qa">
+<summary>Suppose that reading from position , we see the symbol . What strings could
+we see, reading from position  ?</summary>
+<p>We could see any of the sequences of the
+form , where   could be any symbol.</p>
+</details>
+<p>This is an asymmetric relationship, so we define a directed graph
+with all vertices of the form  and all arcs of the form .</p>
+<p>We call this directed graph the <em>de Brujin digraph</em>; the
+notation  is sometimes used
+for the de Bruijn digraph for strings of order  with a -symbol alphabet. (Up to isomorphism of
+the graph, it does not matter what the alphabet is.) An example is shown
+in <a class="booklink" href="#fig:de-bruijn-graph">Figure 20.4(a)</a>. I have kept  ,
+but to avoid making this graph too large, I have reduced  to .</p>
+<p>Unfortunately, there’s a problem. If we want to find a de Bruijn
+sequence of order  in the graph
+, we must find a Hamilton
+cycle in the graph, because we want to visit every vertex. <a class="booklink" href="#fig:b32-hamilton">Figure 20.4(b)</a> shows such a cycle in . This gives us the de Bruijn
+sequence <span class="sans-serif">aabbccbac</span>… but at what cost?
+Finding Hamilton cycles is very difficult, so we might as well have
+brute-forced the problem.</p>
+<figure class="bookfig" id="fig:de-bruijn">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:de-bruijn-graph">
+
+<figcaption>A diagram of </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:b32-hamilton">
+
+<figcaption>A Hamilton cycle in </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:b31-euler-tour">
+
+<figcaption>An Euler tour in </figcaption>
+</figure>
+</div>
+<figcaption>Approaches to solving the de Bruijn sequence
+problems</figcaption>
+</figure>
+<p>The trick is to realize the following incredibly convenient
+coincidence:</p>
+<div class="prop" id="prop:de-bruijn-line">
+<p><strong>Proposition 20.3</strong>. <em>For all   and  , the de Bruijn digraph  is isomorphic to the line digraph
+of  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> To find an isomorphism between   and , we need a function  from the vertices of   (or the arcs of  ) to the vertices of .</p>
+<p>An arc in   is a pair
+, where  . Since the vertices of  are also defined by  symbols from , the natural thing to try is to define
+ and see if this
+works.</p>
+<details class="qa">
+<summary>What does it mean for  to work: what will make it an
+isomorphism?</summary>
+<p>We need to check if  preserves arcs: we want  to be an arc in   if and only if  is an arc in
+.</p>
+</details>
+<p>Take two vertices in  : let one vertex be the pair
+, and let the other be the pair . There is an arc from the first two the second exactly
+when  , by the definition of a line graph.</p>
+<p>Now apply  to both
+vertices: we get  and . By the definition of , there is an arc from the first to
+the second exactly when  : the same condition!</p>
+<p>Therefore  really is an
+isomorphism, completing the proof. ◻</p>
+</div>
+<details class="qa">
+<summary>How does <a class="booklink" href="#prop:de-bruijn-line">Proposition 20.3</a> help us?</summary>
+<p>Instead of a Hamilton cycle in , we can look for an Euler tour in
+ , which is much
+easier.</p>
+</details>
+<p>For example, <a class="booklink" href="#fig:b31-euler-tour">Figure 20.4(c)</a>
+shows the same de Bruijn sequence <span class="sans-serif">aabbccbac</span>, but this time it is obtained from
+an Euler tour in . (It’s very
+hard to show Euler tours in a diagram; here, different visits to the
+same vertex touch it at different points. To obtain <span class="sans-serif">aabbccbac</span>, start at the northeast corner of
+vertex <span class="sans-serif">a</span> and follow the arrows.)</p>
+<div class="theorem" id="thm:de-bruijn">
+<p><strong>Theorem 20.4</strong>. <em>For any set of symbols  and any integer  , there is a de Bruijn sequence of
+order  over .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> For  , just
+write all the symbols in , one
+after the other.</p>
+<p>For  , we must prove that
+the digraph   is Eulerian,
+where  . By <a class="booklink" href="../degrees/euler.html#cor:eulerian-digraph">Corollary 8.6</a>, we
+must check two properties of  . (Both properties were defined
+in <a class="booklink" href="../degrees/euler.html">Chapter 8</a>.)</p>
+<p>First, we check that   is
+<em>weakly connected</em>. We can prove this by giving an   walk for any two vertices   and  . One possible
+walk passes through all vertices of the form  for  , in that order.</p>
+<p>Second, we check that all vertices of   are <em>balanced</em>, with
+indegree equal to outdegree. In fact, each vertex  has both indegree
+and outdegree : it receives an arc
+from every vertex of the form , where  , and sends an arc to every vertex of the form , where  .</p>
+<details class="qa">
+<summary>Whenever you see that  , you should be worried that   is negative. What happens then?</summary>
+<p>Then, interpret , and for that
+matter , as
+being empty. When  , each vertex
+receives an arc from every vertex of the form , where  ; that is, from every vertex.</p>
+</details>
+<p>By applying <a class="booklink" href="../degrees/euler.html#cor:eulerian-digraph">Corollary 8.6</a>, we
+obtain an Euler tour in  ,
+which corresponds to a Hamilton cycle in , which gives us a de Bruijn
+sequence of order . ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="edge-coloring">Edge coloring</h2>
+<p>So far, we’ve used line graphs to draw connections between ideas
+we’ve already seen; now, let’s use them to define something new: the
+edge chromatic number. This invariant is also sometimes called the
+“chromatic index”; I don’t like this terminology, because there’s
+nothing about the words “number” and “index” suggesting that one is
+about vertices and the other is about edges.</p>
+<p>If  is a graph, we define the
+<em>edge chromatic number </em> to be : the chromatic number of the
+line graph of . We can also avoid
+invoking , and instead define
+ to be the least number
+of colors needed for an <em>edge coloring</em> of . This is a function  , where  is a set of colors, such that each
+vertex is incident to at most one edge of each color.</p>
+<details class="qa">
+<summary>What are the color classes of an edge
+coloring?</summary>
+<p>The color classes of a vertex coloring of
+ are independent sets in , so the color classes of an edge
+coloring of  are independent sets
+in : these correspond to
+matchings in .</p>
+</details>
+<p>The upper and lower bounds from the previous chapter can also be used
+here: we have   for all graphs , so in particular,  .</p>
+<details class="qa">
+<summary>What does   say, when
+translated from  back to ?</summary>
+<p>We’ve already seen that  is , with one exception, and   even then.
+Therefore  .</p>
+</details>
+<details class="qa">
+<summary>What about the upper bound  ?</summary>
+<p>An edge  shares an endpoint with at most   other edges at , and   more at ; therefore  has degree at most   in . We can conclude that  .</p>
+</details>
+<p>The inequalities   are intriguing: the lower and
+upper bound are both in terms of the maximum degree. However, much more
+will turn out to be true!</p>
+<p>Although the definition of  is new, we have already seen
+one very similar problem already. In <a class="booklink" href="../matchings/general.html">Chapter 16</a>, we
+looked at -factorizations, which
+are decompositions of a regular graph into perfect matchings.</p>
+<details class="qa">
+<summary>If a -regular graph  has a -factorization, what does that say about
+?</summary>
+<p>We can use the -factorization to get an edge coloring
+of , by making each perfect
+matchings one of the color classes. There are  perfect matchings in the -factorization, so  : we already
+know this is the minimum possible.</p>
+</details>
+<p>In <a class="booklink" href="../matchings/general.html">Chapter 16</a>, we proved two results about
+-factorizations. <a class="booklink" href="../matchings/general.html#thm:kn-factorization">Theorem 16.3</a> says
+that for all even ,  has a -factorization; this means   when  is even. Also, <a class="booklink" href="../matchings/general.html#thm:bipartite-factorization">Theorem 16.5</a>
+says that every -regular bipartite
+graph  has a -factorization; this means  .</p>
+<p>With just a little bit of trickery, we can make the second result
+more powerful. Let  be any
+bipartite graph with maximum degree . There are many ways to find a
+bipartite graph  which contains
+ as a subgraph, and is -regular. (I will leave it to
+you to discover how to do this, in a practice problem at the end of this
+chapter.) Then  , and so in particular  : inside every
+edge coloring of , there is an
+edge coloring of . We
+conclude:</p>
+<div class="corollary" id="cor:bipartite-edge-coloring">
+<p><strong>Corollary 20.5</strong>. <em>If  is any bipartite graph, then  .</em></p>
+</div>
+<p>(This result, in somewhat different terminology, was proven by Kőnig
+in 1916 together with <a class="booklink" href="../matchings/general.html#thm:bipartite-factorization">Theorem 16.5</a> .)</p>
+<p>Thus far, we’ve seen many instances where  . Is this
+universal? No: for example, this will not happen for  when  is odd. In this case, the largest
+matching has only 
+edges, so it takes at least 
+matchings to cover all  edges of . However, <a class="booklink" href="../matchings/general.html#cor:kn-odd-decomposition">Corollary 16.4</a>
+says that when  is odd,  has a decomposition into  nearly perfect matchings; this means
+  when  is odd.</p>
+<figure class="bookfig" id="fig:edge-coloring">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:petersen-graph-edge-coloring">
+
+<figcaption>An edge -coloring of
+the Petersen graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:shannon-graph">
+
+<figcaption>All edges must have different colors</figcaption>
+</figure>
+</div>
+<figcaption>Two examples of lower bounds on edge coloring</figcaption>
+</figure>
+<p>Another interesting example is the Petersen graph. It is -regular, and has many perfect
+matchings, so you might be tempted to hope that it has edge chromatic
+number . However, this is not
+true. Suppose for contradiction that the Petersen graph has an edge
+coloring with  colors . (It is
+traditional to use Greek letters for the colors of edges; this has
+nothing to do with the graph invariants  or .)</p>
+<p>To color all  edges, each
+color class must contain  edges
+and be a perfect matching. If we take the subgraph formed by the edges
+with colors  and , it is -regular: each connected component is a
+cycle. Moreover, the edges around a cycle must alternate between the
+colors  and , so each component has even
+length.</p>
+<p>There are two ways to have a -vertex graph whose connected
+components are cycles of even length: it can be a copy of , or the disjoint union of copies
+of  and . In the Petersen graph, neither is
+possible: the first case contradicts <a class="booklink" href="../hard/hamilton.html#prop:petersen-not-ham">Proposition 17.1</a>,
+where we proved that the Petersen graph does not have a Hamilton cycle,
+and the second case contradicts <a class="booklink" href="../degrees/regular.html#lemma:petersen-cycles">Lemma 5.3</a>,
+where we proved that it has no cycles of length  or . So the Petersen graph cannot have an
+edge coloring with only 
+colors.</p>
+<p>The Petersen graph does have an edge coloring with  colors, as shown in <a class="booklink" href="#fig:petersen-graph-edge-coloring">Figure 20.5(a)</a>. It is
+another example of a graph  with
+ .</p>
+<p>Is this the limit? Not if we consider multigraphs. <a class="booklink" href="#fig:shannon-graph">Figure 20.5(b)</a> shows an example given by
+Claude Shannon ; in
+this multigraph, any two edges share an endpoint, so they must all be
+given different colors. If there are  copies of each edge of the triangle,
+then the graph has maximum degree , but edge chromatic number  (equal to the number of edges).
+Shannon also proved that this is the worst case:  , even
+if  is a multigraph.</p>
+<p>For simple graphs, however, we have only seen examples where  is either  or  . In 1964, Vadim Vizing proved
+that this is true for all simple graphs  . Since there are only two possible values
+of , sometimes a graph
+ will be referred to as “class
+one” if  
+and “class two” if  .</p>
+<p>I will conclude this chapter with a proof of Vizing’s theorem:</p>
+<div class="theorem" id="thm:vizing">
+<p><strong>Theorem 20.6</strong> (Vizing’s theorem). <em>For all graphs
+,  .</em></p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="vizings-theorem">Vizing’s theorem</h2>
+<p>All proofs of Vizing’s theorem that I am aware of rely on a variant
+of the alternating paths we used in <a class="booklink" href="../matchings/konig.html">Chapter 14</a> or
+<a class="booklink" href="../matchings/general.html">Chapter 16</a> when working with matchings.
+This makes sense, since a color class in an edge coloring of  is an independent set in : a matching in . However, instead of trying to improve
+a single matching, we will be trying to rearrange the existing matchings
+to make room for one more edge.</p>
+<p>Suppose that  and  are two of the colors used in an
+edge coloring of a graph. The subgraph formed by edges of colors  and  is the union of two matchings, so
+its connected components consist of paths and cycles. A path component
+of this subgraph is called an <em>-path</em>.</p>
+<p>The colors of the edges of an -path alternate between  and . If  is the start or end of an -path, then only one of the
+two colors is used on edges incident to , and it is the edge beginning the -path. Conversely, if only
+one of  or  is used on edges incident to some
+vertex , then we can find an -path starting at , by greedily following edges of color
+ or  until we cannot continue.</p>
+<p>The use of an -path
+is that we can swap the colors  and  on every edge of the path and
+obtain a different edge coloring. We can hope to use such a swap to make
+color  or  available for an edge we have not
+yet colored.</p>
+<p>The proof that follows is based on a proof of Ehrenfeucht, Faber, and
+Kierstead ,
+simplified from their more general statement.</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#thm:vizing">Theorem 20.6</a>.</em> For a fixed number of colors
+, we induct on the number of
+vertices in , proving that if
+ , then  has an edge -coloring. We can take a -vertex graph as our base case, in which
+case no edges need to be colored at all. To induct, we take a graph
+ with   and an arbitrary vertex
+, and assume that   has an edge -coloring; we must find a way to turn it
+into an edge -coloring of .</p>
+<p>As we color the edges incident to  one at a time, we keep a partition of
+these edges into three sets  , each with their own meaning:</p>
+<ul>
+<li><p>Edges in  are
+<em>settled</em>, and their color will not change.</p></li>
+<li><p>There is at most one edge in , which is <em>tentatively</em>
+colored.</p></li>
+<li><p>Edges in  are
+<em>uncolored</em>.</p></li>
+</ul>
+<p>Our algorithm will maintain the following invariant at all times: the
+colors on   must
+always be an edge coloring of  .</p>
+<p>When we begin, we put all edges incident to  in . These edges have a valuable
+flexibility: in , they have at
+most  , or  , neighbors that have been given a
+color, so they have at least 
+colors available to them. To preserve this flexibility, we select two
+<em>candidate colors</em> for each edge  , satisfying a second invariant. For as long as edge  remains in , it will have two candidate colors,
+which must not appear on edges incident to , nor on edges in ; we allow them to appear on an edge in
+, since it is colored only
+tentatively.</p>
+<p>Given this setup, there are several cases where we can make quick
+progress:</p>
+<ul>
+<li><p>First, if  ,
+choose an arbitrary edge in ; give
+it one of its candidate colors, and move it to . Otherwise, we will assume   and let  be the color of edge .</p></li>
+<li><p>Second, if  is not a
+candidate color of any edge in ,
+move  from  to . If  is a candidate color of only one
+edge  , we still move  from  to , but also move  from  to , giving  its other candidate color.</p></li>
+<li><p>Third, if some edge  
+has a color  , and
+no other edge in  has  as one of its candidate colors,
+give edge  color  and move it from  to  directly.</p></li>
+</ul>
+<p>If none of these apply, then every color that appears as a candidate
+color in  (which includes ) must appear at least twice. Every
+edge in  only has two candidate
+colors, so at most  colors
+appear as candidate colors at all. At most   colors appear on edges incident
+to  in any fashion: as a color on
+any edge, or as a candidate color. But  , and  , so we can pick a color
+ different from all of these:
+not used on any edge in  ,
+nor as a candidate color of any edge in .</p>
+<p>Let  be the -path starting at  (with  as its first edge), and swap the
+colors  and  along .</p>
+<details class="qa">
+<summary>Can this swap interfere with the colors of
+edges in , or with the candidate
+colors of edges in ?</summary>
+<p>Edges in  cannot have color  or , so they are untouched by the
+swap. An edge   might have
+ as one of its candidate
+colors. If so,  might visit vertex
+, but it will have to stop there,
+because  is not incident to any
+edges of color .</p>
+</details>
+<p>Suppose this last possibility occurs: the path  ends at a vertex  such that  , and  is a candidate color of . (The last edge of  must have had color , swapped to .) Then we make one further
+modification: we replace  by
+ as a candidate color of
+. After all,  is no longer available for , but  is.</p>
+<p>Whether or not this happens,  (the new color of ) appears at most once as a candidate
+color, so we return to one of the cases where we can make quick
+progress. This lets us keep going until all edges are in  and the edge coloring of  is complete.</p>
+<details class="qa">
+<summary>How do we know that we eventually reach
+this point?</summary>
+<p>In each of the cases where we make quick
+progress, we move an edge “earlier in the alphabet”: from  to , or from  to , or from  directly to . This can only stop when all edges are
+in .</p>
+</details>
+<p>This completes the induction step, showing that if  , then   as well. By induction,
+  for all graphs
+ with  , proving Vizing’s
+theorem. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>A graph  is called
+claw-free if it does not have a copy of the star graph  as an induced subgraph. In other
+words, no vertex   can
+have three neighbors 
+with no edges between them.</p>
+<p>Prove that all line graphs are claw-free graphs.</p>
+</li>
+<li><p>Use an Euler tour to find a de Bruijn sequence of order  over the alphabet  .</p></li>
+<li><p>Prove that there is a length 99 cyclic sequence of 0’s, 1’s, and
+2’s such that among the substrings 00, 01, 02, 10, 11, 12, 20, 21, and
+22, there is one that occurs 0 times in the string, one that occurs 1
+time, one that occurs 2 times, one that occurs 10 times, one that occurs
+11 times, one that occurs 12 times, one that occurs 20 times, one that
+occurs 21 times, and one that occurs 22 times.</p></li>
+<li>
+<p>The line graph 
+shown in <a class="booklink" href="#fig:k33-line-graph">Figure 20.2(d)</a> has an unusual property: it
+is isomorphic to its own complement.</p>
+<ol>
+<li><p>Find one such isomorphism.</p></li>
+<li><p>Find an -vertex graph with
+the same property.</p></li>
+<li><p>Prove that there is no -vertex graph with this
+property.</p></li>
+</ol>
+</li>
+<li>
+<p>Find the edge chromatic number of the following graphs:</p>
+
+</li>
+<li>
+<p>To complete the proof of <a class="booklink" href="#cor:bipartite-edge-coloring">Corollary 20.5</a>, we need to show
+that every bipartite graph  is a
+subgraph of a -regular
+graph .</p>
+<ol>
+<li>
+<p>Suppose that  has a
+bipartition  with  . Prove that it is possible to add
+only edges to , and no new
+vertices, to obtain a -regular multigraph .</p>
+<p>(How can you make use of this result if  ?)</p>
+</li>
+<li>
+<p>Prove that if  , then it is possible to add edges between two copies
+of  to obtain a bipartite graph
+ with   but  .</p>
+<p>Conclude that there is a -regular bipartite graph  containing  which has  
+vertices.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>More recent proofs of Vizing’s theorem, like the one in this
+chapter, are usually written so that they can also prove stronger
+claims. Here are two such claims.</p>
+<ol>
+<li><p>Modify the proof to show that if the vertices in  which have degree  form an independent set, then
+ .</p></li>
+<li><p>Modify the proof to show that if the subgraph of  induced by the vertices of degree  is a forest, then  .</p></li>
+</ol>
+</li>
+<li>
+<p>(BMO 1992) The edges of a connected -vertex graph  are colored red, blue, and yellow so
+that each vertex has one incident edge of each color.</p>
+<ol>
+<li><p>Prove that  must be even
+and that for all even  , a
+graph with such an edge coloring exists.</p></li>
+<li><p>Suppose that for some subset  , there are  red,  blue, and  yellow edges with exactly one endpoint
+in . Prove that  are either all even or all
+odd.</p></li>
+</ol>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>Don’t get stuck in an infinite loop, though. Eventually,
+stop reading the sequence and go back to reading about graph theory.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+<li id="fn2"><p>As in <a class="booklink" href="../hard/coloring.html">Chapter 19</a>, this is really the
+definition of a <em>proper edge coloring</em>, but we will not consider
+any other kind.<a class="footnote-back" href="#fnref2">↩︎</a></p></li>
+<li id="fn3"><p>I have paraphrased; the original problem on the British
+Mathematical Olympiad had an elaborate and very long statement about
+dwarfs and orcs.<a class="footnote-back" href="#fnref3">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 20</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

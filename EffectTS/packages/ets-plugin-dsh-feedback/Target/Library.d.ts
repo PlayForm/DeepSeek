@@ -3,6 +3,7 @@ import type FeedbackBlock from "./Interface/Block.js";
 import type Config from "./Interface/Config.js";
 import type Outcome from "./Interface/Outcome.js";
 import type Summary from "./Interface/Summary.js";
+import Version from "./Variable/Version.js";
 declare const BLOCK = "[HONEST FEEDBACK";
 export default class Feedback extends Service {
     static inject: string[];
@@ -84,3 +85,4 @@ export default class Feedback extends Service {
     Render(Block: FeedbackBlock): string;
 }
 export { BLOCK as BlockMarker };
+export { Version };

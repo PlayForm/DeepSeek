@@ -1,3 +1,5 @@
+import Version from "./Variable/Version.js";
+export { Version };
 export { default as Builtin } from "./Variable/Builtin.js";
 export { default as Signature } from "./Variable/Signature.js";
 export { default as Placement } from "./Variable/Placement.js";

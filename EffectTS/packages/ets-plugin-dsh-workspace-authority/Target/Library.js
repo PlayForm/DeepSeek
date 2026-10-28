@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="plugin-dsh-workspace-authority",r=t,n=["pluginFactory"],e=o;var a={name:p,apply:e,Config:r,inject:n};export{r as Config,e as apply,a as default,n as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import p from"./Variable/Version.js";const r="plugin-dsh-workspace-authority",e=t,i=["pluginFactory"],n=o;var a={name:r,apply:n,Config:e,inject:i};export{e as Config,p as Version,n as apply,a as default,i as inject,r as name};

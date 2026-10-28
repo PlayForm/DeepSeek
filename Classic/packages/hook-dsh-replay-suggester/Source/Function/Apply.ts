@@ -56,6 +56,7 @@ import type State from "@Interface/State.js";
 import { Activate } from "@playform/lib-dsh-core";
 import { Families, Locate } from "@playform/lib-dsh-pack";
 import Defaults from "@Variable/Defaults.js";
+import Version from "@Variable/Version.js";
 
 import Detect, { Compile } from "./Detect.js";
 import History, { LIFT, Recall } from "./History.js";
@@ -64,10 +65,6 @@ import RecallHistory from "./RecallHistory.js";
 import Record from "./Record.js";
 import Recover from "./Recover.js";
 import Storage from "./Storage.js";
-
-// The bundle version, mirrored from package.json (the activation proof's
-// first field; a release bumps both together).
-const Version = "0.3.0";
 
 /** Fresh per-agent memory. */
 const FreshMemory = (): AgentMemory => ({

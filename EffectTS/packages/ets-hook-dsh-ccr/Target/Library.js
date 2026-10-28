@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const p="ccr",r=t,n=["pluginFactory","tools"],e=o;var f={name:p,apply:e,Config:r,inject:n};export{r as Config,e as apply,f as default,n as inject,p as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import r from"./Variable/Version.js";const p="ccr",e=t,n=["pluginFactory","tools"],i=o;var s={name:p,apply:i,Config:e,inject:n};export{e as Config,r as Version,i as apply,s as default,n as inject,p as name};

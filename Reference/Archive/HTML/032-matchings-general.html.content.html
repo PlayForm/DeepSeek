@@ -1,0 +1,741 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Matchings in General Graphs</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 16</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>In the previous three chapters, we discussed matchings in bipartite
+graphs; here, we are going to take another chapter to consider matchings
+in general graphs. This division is not because the generalization is
+easy, but because it is hard. We will have to do quite a bit of work
+just to prove Tutte’s theorem (<a class="booklink" href="#thm:tutte">Theorem 16.1</a>): the
+equivalent of Hall’s theorem in cases where the graph is not necessarily
+bipartite.</p>
+<p>There is a lot more that we’re going to leave undone. We proved
+Kőnig’s theorem which deals with the size of a maximum matching; we will
+not prove the Tutte–Berge formula, which generalizes Tutte’s theorem to
+a Kőnig-type result. We used an algorithm to find maximum matchings in
+bipartite graphs. There is a more general algorithm, known as the
+blossom algorithm, which can handle non-bipartite graphs, but we will
+not discuss it; it is considerably more complicated. If you would like
+to learn more about matchings, I recommend Lovász and Plummer’s book
+<em>Matching Theory</em> .</p>
+<p>Compared to the material on Tutte’s theorem, the second half of the
+chapter on -factorizations is less
+intense, and gives some graph-theoretical solutions to problems that
+come up in real life. A more relaxed path through this chapter is to
+learn about Tutte sets and the statement of Tutte’s theorem, then dive
+into -factorizations and the
+geometric proof of <a class="booklink" href="#thm:kn-factorization">Theorem 16.3</a>.</p>
+<p>There are a lot of other problems about factorizations I could have
+included instead of the section on increasing walks. In the end, though,
+I felt that many people could write a chapter about decomposing  into triangles or Hamilton cycles,
+but if I did not mention this beautiful problem in my textbook, it is
+not likely that someone else would write about it in theirs.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="tutte-sets">Tutte sets</h2>
+<p>In the case of bipartite graphs, we have a complete list of all the
+reasons that a perfect matching might fail to exist: the violations of
+Hall’s condition. We can summarize these violations as problems of
+insufficiency: some vertices do not have enough neighbors for us to get
+a perfect matching.</p>
+<p>If our graphs don’t have to be bipartite, a second reason that we
+might not have a perfect matching appears, and that is parity. The
+complete graph , or indeed
+ for any , does not have a perfect matching, even
+though it has all the edges we could wish for, simply because the number
+of vertices is odd. Each edge in a matching covers  vertices, and so the number of vertices
+covered by a matching is always even.</p>
+<details class="qa">
+<summary>Why didn’t we need to worry about parity
+when proving theorems about bipartite graphs?</summary>
+<p>In a graph with bipartition , we already know that a perfect
+matching only exists if  .
+When this happens, the total number of vertices is guaranteed to be
+even.</p>
+</details>
+<p>If we only had to worry about whether the total number of vertices is
+odd or even, that wouldn’t be so bad. But there are examples showing
+that our life can be even worse:</p>
+<figure class="bookfig" id="fig:tutte-obstacles">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:four-houses">
+
+<figcaption>Four houses</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:three-houses">
+
+<figcaption>Three houses and one more vertex</figcaption>
+</figure>
+</div>
+<figcaption>Obstacles to the existence of a perfect
+matching</figcaption>
+</figure>
+<details class="qa">
+<summary>In <a class="booklink" href="#fig:four-houses">Figure 16.1(a)</a>, the
+total number of vertices is even, and yet there’s still a parity issue
+stopping us from having a perfect matching. How?</summary>
+<p>Each house is a connected component with
+an odd number of vertices, so it has no perfect matching, and different
+houses cannot help each other.</p>
+</details>
+<p>We will use this idea throughout this chapter, and so we will say
+that a connected component with an odd number of vertices is an <em>odd
+component</em>, for short. However, odd components all by themselves are
+not the only problem.</p>
+<details class="qa">
+<summary>In <a class="booklink" href="#fig:three-houses">Figure 16.1(b)</a>,
+there is a parity issue even though the graph has no odd components.
+How?</summary>
+<p>Each of the three houses has no perfect
+matching on its own, and the extra vertex can be matched to only one of
+the houses.</p>
+</details>
+<p>We can imagine that the three houses in <a class="booklink" href="#fig:three-houses">Figure 16.1(b)</a> are on fire, and the vertex in
+place of the fourth house is a superhero that can put the fires out.
+However, the superhero can only be in one place, and cannot put out all
+the fires. This problem is a combination of parity and insufficiency: we
+have three parity problems in the graph, but only one vertex that can
+help us fix them.</p>
+<p>We can think of Hall’s theorem (<a class="booklink" href="../matchings/hall.html#thm:hall">Theorem 15.1</a>) as
+saying that if a bipartite graph does not have a perfect matching, then
+we can summarize why, by giving an example where Hall’s condition fails.
+Similarly, we would like to have somewhere to point the finger of blame
+when a general graph does not have a perfect matching.</p>
+<p>In both examples in <a class="booklink" href="#fig:tutte-obstacles">Figure 16.1</a>,
+we were able to tell a story about what went wrong, but can we
+generalize? The generalization was first found in 1947 by William Thomas
+Tutte .</p>
+<p>We say that a set of vertices 
+in a graph  is a <em>Tutte
+set</em> if the graph   has more
+than  odd components.</p>
+<details class="qa">
+<summary>Is there a Tutte set in <a class="booklink" href="#fig:three-houses">Figure 16.1(b)</a>?</summary>
+<p>Yes: the “superhero” vertex in the bottom
+right.</p>
+</details>
+<details class="qa">
+<summary>Is there a Tutte set in <a class="booklink" href="#fig:four-houses">Figure 16.1(a)</a>?</summary>
+<p>Yes, and the simplest is the empty set!
+(This is allowed, and sometimes it is the only option.)</p>
+</details>
+<p>Tutte not only described what we now call Tutte sets, but proved the
+following theorem showing that they are the only kind of obstacle to be
+found.</p>
+<div class="theorem" id="thm:tutte">
+<p><strong>Theorem 16.1</strong> (Tutte’s theorem). <em>Every graph  has a perfect matching if and only if
+it has no Tutte set.</em></p>
+</div>
+<p>As with Hall’s theorem, one direction of Tutte’s theorem is much
+shorter than the other, and the proof of that direction is what
+motivated our definitions: we defined a Tutte set specifically because
+we had an argument in mind for why a graph with a Tutte set could not
+have a perfect matching.</p>
+<div class="proof">
+<p><em>Proof of the “only if” direction of <a class="booklink" href="#thm:tutte">Theorem 16.1</a>.</em>
+Suppose that  is a Tutte set in a
+graph , so that   has   odd components. Let  be a maximum matching in , and let  be the largest subgraph of  that is also a matching in  . Then  must leave at least  vertices of   uncovered: at least one from each odd
+component. However,  cannot do
+much better! An edge of  is
+missing from  only if it has
+an endpoint in , and there are at
+most  such edges; these can
+cover at most  of the vertices
+of   that  left uncovered. Since  , we know that there are still
+some vertices of   that are
+uncovered by ; therefore  is not a perfect matching. ◻</p>
+</div>
+<p>To prove the other direction of Tutte’s theorem, we will not use
+Tutte’s original argument, which relied on linear algebra. Instead, we
+will see an argument from Lovász and Plummer’s <em>Matching Theory</em>.
+We will arrive at it indirectly, by first describing a special class of
+graphs called “saturated graphs” for which the proof will be easier.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="saturated-graphs">Saturated graphs</h2>
+<p>Call a graph 
+<em>saturated</em> if  has no perfect matching, but if  is any edge not already present in
+, then adding  to  would create a perfect matching. (This
+includes the case of odd complete graphs : they are saturated because they
+do not have a perfect matching, and there is no edge  that can be added.)</p>
+<p>Starting from any graph that does not have a perfect matching, we can
+arrive at a saturated graph by adding edges, one at a time, for as long
+as this is possible without creating a perfect matching.</p>
+<details class="qa">
+<summary>How could we do that in <a class="booklink" href="#fig:three-houses">Figure 16.1(b)</a>?</summary>
+<p>We could add edges to each house to make
+it a copy of , and then add
+edges from the extra vertex to every vertex of each house.</p>
+</details>
+<p><a class="booklink" href="#fig:saturated-graphs">Figure 16.2</a> shows several more
+examples of saturated graphs. The idea of Tutte sets helps us come up
+with more: if we have a Tutte set, we can add any edges that don’t
+change its structure.</p>
+<figure class="bookfig" id="fig:saturated-graphs">
+<div class="subfigures">
+
+<figure class="booksubfig" id="fig:saturated-2k5">
+
+<figcaption>Two copies of </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:saturated-3k3+">
+
+<figcaption>A nonempty Tutte set</figcaption>
+</figure>
+</div>
+<figcaption>Several examples of saturated graphs</figcaption>
+</figure>
+<details class="qa">
+<summary>If we start with the four houses in
+<a class="booklink" href="#fig:four-houses">Figure 16.1(a)</a>, and turn each house into a
+copy of , is the result
+saturated?</summary>
+<p>No: if we add an edge between two houses,
+that increases the size of the matching, but it’s still not a perfect
+matching. We can go all the way up to a graph with a copy of  and a copy of  before it’s saturated.</p>
+</details>
+<p>Using Tutte’s theorem, we can describe what saturated graphs look
+like without too much trouble. (<a class="booklink" href="#prop:saturated-graphs">Proposition 16.2</a> does not describe
+saturated graphs completely, but it will be enough for us.)</p>
+<div class="prop" id="prop:saturated-graphs">
+<p><strong>Proposition 16.2</strong>. <em>If a graph  is saturated, then for some set of
+vertices ,  contains every edge with at least one
+endpoint in , and every edge
+between two vertices in the same connected component of  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#prop:saturated-graphs">Proposition 16.2</a>
+using Tutte’s theorem.</em> If a graph  is saturated, then it has no perfect
+matching, so by Tutte’s theorem, it must have a Tutte set . If an edge  can be added to  that would not change ’s status as a Tutte set, then the
+resulting graph   still wouldn’t
+have a perfect matching (again, by Tutte’s theorem), which would violate
+the definition of a saturated graph. Therefore every such edge must
+already exist in . Which edges are
+these?</p>
+<p>Well, every edge with at least one endpoint in  is such an edge, because adding it
+wouldn’t affect  , so  would still be a Tutte set. Also, every
+edge within a connected component of   is such an edge, because adding it
+wouldn’t affect the number of vertices in that component of  .</p>
+<p>Therefore all such edges are already present in , proving the proposition. ◻</p>
+</div>
+<p>I made a point to say that this proof used Tutte’s theorem, because
+it means that the proof is not good enough for our purposes. What are
+those purposes? We are going to reverse the logic, using <a class="booklink" href="#prop:saturated-graphs">Proposition 16.2</a> to prove Tutte’s
+theorem!</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="proof-of-tuttes-theorem">Proof of Tutte’s theorem</h2>
+<p>Let’s begin with a fresh proof of <a class="booklink" href="#prop:saturated-graphs">Proposition 16.2</a>, so that we can use this
+proposition in a proof of Tutte’s theorem without making the argument
+circular.</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#prop:saturated-graphs">Proposition 16.2</a>
+without using Tutte’s theorem.</em> Start by taking  to be the set of all vertices that are
+adjacent to every other vertex.</p>
+<p>Suppose that some connected component  of   does not contain every edge it
+possibly could. Choose  
+such that not every vertex of  is
+adjacent to ; let  be a vertex in  at distance  from , and let  be their common neighbor. Because  , vertex  must not be adjacent to every vertex;
+there must be a fourth vertex 
+(potentially outside ) not
+adjacent to . This is illustrated
+in <a class="booklink" href="#fig:saturated-xyzw">Figure 16.3</a>.</p>
+<figure class="bookfig" id="fig:saturated-xyzw">
+
+<figcaption>Vertices  in the
+proof of <a class="booklink" href="#prop:saturated-graphs">Proposition 16.2</a>; edges  and  are not present</figcaption>
+</figure>
+<p>We have two ways to make 
+bigger: we could add edge , or we
+could add edge . Because  is saturated, each of these bigger
+graphs must have a perfect matching; because  has no perfect matching, those two
+matchings must each use the added edge. So if we remove the added edge,
+we see that  has two matchings
+that are nearly perfect: a matching  that covers all vertices except
+ and , and a matching  that covers all vertices except
+ and .</p>
+<p>In <a class="booklink" href="../matchings/konig.html">Chapter 14</a>, to compare two matchings  and , we looked at their symmetric
+difference  . We will do
+the same here. We know in general that   consists of cycles
+and <em>alternating paths</em>: paths that alternate between edges of
+ and edges of . In this case, we can say even
+more.</p>
+<details class="qa">
+<summary>Where can the alternating paths in   start and end?</summary>
+<p>Only at the vertices , , , and . All other vertices have degree  in both  and , so they have degree  or  in  .</p>
+</details>
+<p>So   contains
+an -alternating path that
+starts at vertex  and ends at one
+of the three vertices , , or . All three options are good for us:</p>
+<ul>
+<li><p>If it ends at , then it’s
+an -augmenting path, since it
+starts and ends at an uncovered vertex.</p></li>
+<li><p>If it ends at  or , then we can follow up with edge  or  to go to ; again, we get an -augmenting path.</p></li>
+</ul>
+<details class="qa">
+<summary>If we follow up a   alternating path by going from  to , why is that path still
+alternating?</summary>
+<p>We must have arrived to  by an edge of , because  leaves  uncovered. Meanwhile,  is not an edge of , because  leaves  uncovered.</p>
+</details>
+<p>By <a class="booklink" href="../matchings/konig.html#lemma:augment">Lemma 14.3</a>, we can use the -augmenting path to improve  to a perfect matching in . But we assumed  was saturated, and didn’t have a
+perfect matching! This is the contradiction that finishes the
+proof. ◻</p>
+</div>
+<p>Let me explain the reasons behind what’s happened so far. It’s common
+that when proving a theorem about graphs that don’t have a property
+(such as a perfect matching), it is enough to prove the theorem about
+graphs that don’t have the property, but have as many edges as possible:
+in our case, about saturated graphs. We’re about to see in a moment that
+this is true here: proving Tutte’s theorem will be much easier for
+saturated graphs than for graphs with no special properties.</p>
+<p>So we want to learn about saturated graphs. Since we suspect that
+Tutte’s theorem is true even before we have a proof, we started by using
+it to understand what saturated graphs ought to look like. Then, we went
+back and proved the same result in legitimate ways, so that it’s no
+longer circular reasoning to use it to prove Tutte’s theorem.</p>
+<p>Now let’s see if our efforts have paid off!</p>
+<div class="proof">
+<p><em>Proof of the “if” direction of <a class="booklink" href="#thm:tutte">Theorem 16.1</a>.</em> Let
+ be a graph that does not have a
+perfect matching.</p>
+<details class="qa">
+<summary>How can we finish the proof if  has an odd number of vertices?</summary>
+<p>In this case,   is a Tutte set in , so Tutte’s theorem holds.</p>
+</details>
+<p>So we assume that  has an even
+number of vertices. Then the reason that  doesn’t have a perfect matching is
+simply because it’s missing some edges.</p>
+<p>Greedily add edges to , one by
+one, for as long as this does not create a perfect matching, until we
+cannot add edges any longer. The result is a saturated graph  that contains  as a spanning subgraph.</p>
+<p>By <a class="booklink" href="#prop:saturated-graphs">Proposition 16.2</a>
+applied to , there is some set of
+vertices  such that  contains every edge with at least one
+endpoint in , and every edge with
+both endpoints in the same connected component of  . We will first prove that  is a Tutte set in , and then that it is a Tutte set in
+.</p>
+<p>Let  be a maximum matching in
+ . In every connected component
+ of  , all edges are present, so the only
+possible reason why  might not
+cover every vertex of  is
+that  is an odd component. What’s
+more, if there are  or fewer odd
+components, then we can extend  to
+a perfect matching of : match
+vertices in  to vertices outside
+ not covered by , and if any vertices in  are left, match them to each other. So
+there must be more than  odd
+components in  , which exactly
+means that  is a Tutte set in
+.</p>
+<details class="qa">
+<summary>Where did we need the assumption that
+ and  have an even number of vertices?</summary>
+<p>Otherwise, “if any vertices in  are left, match them to each other”
+might not work: we might end with one vertex uncovered.</p>
+</details>
+<p>Since  is a subgraph of , every connected component of   breaks down into one or more
+components of  . However, an odd
+number cannot be the sum of many even numbers; therefore every odd
+component of   must contain at
+least one odd component of  . We
+conclude that   has at least
+ odd components, which means
+that  is also a Tutte set in . ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="factorizations">1-factorizations</h2>
+<p>A practical application of matchings in graphs that we have yet to
+consider is tournament design. (We will only explore the basics of the
+overlap between this field and graph theory.)</p>
+<p>Suppose that we would like to organize a round-robin chess
+tournament between  players. A single chess game can take a
+while, so we want to schedule as many games at the same time as
+possible. When  is even, we can
+always begin by dividing  people
+into  arbitrary pairs and
+scheduling a game between each pair. This is a perfect matching in , which is not a very difficult
+matching problem.</p>
+<p>However, this only tells us what to do in the first round; future
+rounds are more difficult, because we don’t want to repeat any games. If
+the first round is a perfect matching  in , then we would like the second round
+to be a perfect matching  in the
+complement , the
+third round to be a perfect matching in , and so on. These
+matching problems can easily become impossible if we schedule rounds of
+the tournament with no foresight.</p>
+<p>For example, with  players, we
+hope to finish in  rounds, because
+each player has  opponents to
+face. However, if our first three matchings are poorly chosen, then they
+might leave us with a graph that has no perfect matching of its own. We
+would have to ask two people to sit out of the fourth round, and then we
+would have to schedule  rounds
+total.</p>
+<details class="qa">
+<summary>Can this problem really occur? How do we
+run a -player tournament
+badly?</summary>
+<p>Taking  to be , we might mistakenly
+begin with three matchings that all match even numbers to odd numbers:
+for example, , then
+, then . Now, the remaining graph
+has two odd components and no perfect matching.</p>
+</details>
+<p>Instead of solving this problem one matching at a time, we will have
+to solve it all at once: we want to find a decomposition of , writing at as a union of perfect
+matchings that share no vertices. There is a special term for this kind
+of decomposition.</p>
+<div class="defn">
+<p><strong>Definition 16.1</strong>. <em>A <strong>-factorization</strong> of a graph  is a decomposition of  into perfect matchings: a
+representation  where each  is
+a perfect matching, and each edge of  appears in exactly one .</em></p>
+</div>
+<p>The term “-factorization” goes
+back to the early days of graph theory, where the idea of a graph was
+more algebraic: an edge  was
+really thought of as the product of two variables  and , and a graph was just the product of
+such edges. For example, a cycle with vertices  would be the expression . Some other modern terms
+have their origin in those days. For example, if you simplify the
+product that we use to represent our cycle, you get ; the degree of each variable
+(in the algebraic sense) is exactly the degree of the corresponding
+vertex (in the graph-theoretic sense)!</p>
+<figure class="bookfig" id="fig:1-factorization">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:factor-12-34">
+
+<figcaption>The -factor </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:factor-13-24">
+
+<figcaption>The -factor </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:factor-14-23">
+
+<figcaption>The -factor </figcaption>
+</figure>
+</div>
+<figcaption>A -factorization of
+: three disjoint -factors whose product is </figcaption>
+</figure>
+<p>Viewed from this point of view, a -factorization really is a factorization
+of the graph: a way to write it as a product of factors in which every
+variable has degree . (For this
+reason, perfect matchings are also sometimes called -factors.) For example, the graph , viewed as the product ,
+has the -factorization  <a class="booklink" href="#fig:1-factorization">Figure 16.4</a> shows this factorization
+in a more modern way.</p>
+<p>Of course, what’s important is finding the -factorization, not representing it.</p>
+<div class="theorem" id="thm:kn-factorization">
+<p><strong>Theorem 16.3</strong>. <em>The complete graph  has a -factorization whenever  is even.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> It is much easier to draw a diagram of the -factorization than it is to give a
+diagram-free proof. Begin with a diagram of  that places   of the vertices at evenly spaced
+points around a circle, and the last vertex in the middle of the circle.
+For the  matching
+, take the edge between the
+middle vertex to the 
+vertex around the circle, as well as all edges perpendicular to this
+edge in the diagram.</p>
+<p>(<a class="booklink" href="#fig:k8-factorization">Figure 16.5</a> shows an example of this
+construction in the case  .)</p>
+<p>In a way, the diagram also leads to a geometric proof. Name the   matchings after the   radial edges. For each edge  between two outer vertices, construct
+the diameter perpendicular to ,
+and one half of that diameter will be an edge from the middle vertex.
+This tells us which matching contains edge ; in particular, it tells us that  is in exactly one matching. To see
+that it’s a matching, we first check that  does not share a vertex with the
+radial edge perpendicular to it (the lines intersect at the midpoint of
+edge , not at a vertex). In all
+other cases, two edges  and  in the same matching are
+parallel: they do not share a vertex because, as lines, they do not
+intersect.</p>
+<p>For a diagram-free proof, we rely on modular arithmetic instead.
+Number the vertices  through  . For each  , define the matching
+ to contain the edge   as well as all the edges   for
+ . Since the
+  values  are distinct modulo  , no vertices are repeated, and
+therefore  really is a
+matching.</p>
+<p>Next, we show that no edge is contained in multiple matchings. This
+is true for edges incident to  ,
+since each matching is defined to contain a different one of these
+edges. Otherwise, take an edge  . Since  , we can write it as  for some , so  . Similarly, since  , then  . But  is even and  , so   can only occur if
+ .</p>
+<details class="qa">
+<summary>What goes wrong at this step if  is odd?</summary>
+<p>Then   really is possible for two values  and . For example, if  , we’d be working modulo , and  .</p>
+</details>
+<p>From the previous paragraph, it also follows that every edge is
+contained in some matching. If there are   matchings, and each contains  edges, then together they contain
+ edges total, and
+we’ve shown that there’s no overlap. But there are only  edges in , so we’ve included them all. ◻</p>
+</div>
+<figure class="bookfig" id="fig:k8-factorization">
+
+
+<figcaption>The   case of
+<a class="booklink" href="#thm:kn-factorization">Theorem 16.3</a></figcaption>
+</figure>
+<p>In my opinion, the geometric proof is the “real” reason that
+<a class="booklink" href="#thm:kn-factorization">Theorem 16.3</a> is true, but I have
+included the number-theoretic proof for completeness. It requires some
+background in number theory to follow, but in reality, working modulo
+  is just a diagram-free way to
+put   evenly spaced points around
+a circle.</p>
+<p>Now we know how to schedule a round-robin tournament between  people in just   rounds, if  is even!</p>
+<details class="qa">
+<summary>What do tournament organizers do if  is odd?</summary>
+<p>In each round, one player gets a “bye” and
+sits out. This is equivalent to scheduling an  -player tournament with one player
+named “bye” who doesn’t really exist.</p>
+</details>
+<p>Since   is even whenever  is odd, adding a fictional player named
+“bye” reduces the problem to a case where <a class="booklink" href="#thm:kn-factorization">Theorem 16.3</a> applies. Of course, with
+  players, we require  rounds, even if one of the players is
+fictional. This proves the following corollary:</p>
+<div class="corollary" id="cor:kn-odd-decomposition">
+<p><strong>Corollary 16.4</strong>. <em>When  is odd, the complete graph  has a decomposition into  matchings which are each nearly perfect
+(covering   of the  vertices).</em></p>
+</div>
+<p>Many other graphs can be shown to have -factorizations. Let’s briefly return to
+bipartite graphs to prove one more result, originally also due to
+Kőnig :</p>
+<div class="theorem" id="thm:bipartite-factorization">
+<p><strong>Theorem 16.5</strong>. <em>Every regular bipartite graph has a
+-factorization.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> By <a class="booklink" href="../matchings/hall.html#thm:regular-matching">Theorem 15.2</a>, every
+regular bipartite graph  has a
+perfect matching . If  is -regular, then   is  -regular: every vertex of  is incident to one edge of , so its degree goes down by  in  .</p>
+<p>Repeat this argument, removing perfect matchings from  until it is -regular, and there are no more edges.
+(Formally, this proof should be rephrased as an induction on ; can you see how?) The perfect
+matchings removed at each step form a -factorization of . ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="increasing-walks">Increasing walks</h2>
+<p>The problem of finding a -factorization of  was historically first studied by
+tournament organizers, not graph theorists. However, that does not mean
+it is not useful in graph theory. I encountered the following problem as
+a graduate student.</p>
+<p>Take the complete graph , and
+make it into a weighted graph by giving each edge  a weight ; in this problem, we will insist
+that all the weights should be different. A walk  is called an
+<em>increasing walk</em> if the weights go up along the walk: if  What is the longest possible increasing walk?
+Well, it depends on the labels. We can have very long increasing walks
+if the weights cooperate. Suppose that before choosing edge weights, we
+pick a walk  that we’d like to be increasing. Provided the walk does
+not repeat any edges, we can make it so! Simply set   for  .</p>
+<details class="qa">
+<summary>What is the longest walk in  that does not repeat any edges?</summary>
+<p>If 
+is odd, then all degrees are even, so  has an Euler tour: a walk of length
+. If  is even, then we can delete any
+matching and be left with an Eulerian graph, with an Euler tour of
+length  .</p>
+</details>
+<p>This is a best-case analysis, and the short solution to it shows us
+why worst-case analyses are much more interesting. Instead, let’s ask
+the question: what is the longest possible length of an increasing walk
+that we can guarantee, no matter what the weights of the edges are?</p>
+<p>This problem was first studied by Ron Graham and Daniel Kleitman, who
+proved in 1973  that
+it was possible to find weighted graphs in which the longest increasing
+walk is much shorter.</p>
+<div class="prop" id="prop:increasing-walk-graph">
+<p><strong>Proposition 16.6</strong>. <em>For all even , there is a weighted complete graph on
+ vertices in which no increasing
+walk has length more than  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Use <a class="booklink" href="#thm:kn-factorization">Theorem 16.3</a>
+to decompose  into   perfect matchings  through . For each , and each  , set  .
+Okay, that doesn’t quite work, because the weights all have to be
+different, but it will have the same effect if  is any number in the interval  : we will never end up
+comparing two edges in a matching anyway.</p>
+<p>An increasing walk in this weighted graph cannot use more than one
+edge from any matching . After
+taking its first edge from that matching, it cannot immediately take a
+second edge, because no two edges in  share an endpoint. So the walk must
+follow up by going to a different matching: since the walk is
+increasing, it must select an edge from , for some  . But this edge has a greater
+weight than any edge of , so the
+increasing walk can never return to  again.</p>
+<p>Since there are only  
+matchings, the increasing walk cannot use more than   edges. ◻</p>
+</div>
+<p>Graham and Kleitman proved more than this. They generalized
+<a class="booklink" href="#prop:increasing-walk-graph">Proposition 16.6</a> to work for odd
+ as well, excluding the special
+case   and  . Moreover, they proved that this
+upper bound is always achievable! I will present their solution in a
+different style, as described by Peter Winkler  and attributed to Ehud Friedman.</p>
+<div class="prop" id="prop:increasing-walker">
+<p><strong>Proposition 16.7</strong>. <em>In every weighted complete
+graph on  vertices, there is an
+increasing walk of length at least  .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Imagine that we put  different people on the  vertices of the complete graph. Then,
+we call out the edges of the graph one by one, in increasing order of
+weight. Whenever we call out an edge , the two people standing on vertices
+ and  trade places, walking along edge  in opposite directions.</p>
+<p>At the end, we will ask each person to describe the walk they took.
+All these walks must be increasing, because all edges were announced in
+increasing order. Let  be the lengths of the  walks.</p>
+<details class="qa">
+<summary>How can we express the sum   in another
+way?</summary>
+<p>The sum counts each edge of the graph
+twice, since two people walk each edge, so it is equal to , which is  .</p>
+</details>
+<p>If the lengths  add up to  , then
+their average is  and it is impossible for all
+ lengths to be below average.
+Therefore at least one walk must have length at least  . ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>In one of the graphs below, find a perfect matching. In the
+other, prove that there is no perfect matching, by finding a Tutte
+set.</p>
+
+</li>
+<li>
+<p><a class="booklink" href="../matchings/hall.html#thm:regular-matching">Theorem 15.2</a> from
+the previous chapter implies that every -regular bipartite graph has a perfect
+matching.</p>
+<p>Prove that the word “bipartite” cannot be left out: give an example
+of a -regular graph which is not
+bipartite, and does not have a perfect matching.</p>
+</li>
+<li><p>(USAMO 1989) The  members
+of a local tennis club have scheduled exactly  two-person games among themselves,
+with each member playing in at least one game. Prove that within this
+schedule there must be a set of 
+games with  distinct
+players.</p></li>
+<li><p>Use Tutte’s theorem to prove Hall’s theorem.</p></li>
+<li><p>Let  denote the number
+of odd components in a graph .
+Prove that if  is a graph and
+ is a subset of , then  (More is true. The Tutte–Berge formula is a
+generalization of Tutte’s theorem saying that the two sides of this
+inequality are equal for some set .)</p></li>
+<li><p>Prove that if  is a graph
+with an even number of vertices and no perfect matching, then it has a
+Tutte set  with  .</p></li>
+<li>
+<p>Suppose that  people from
+two different -person teams
+participate in a tournament. Describe how to schedule  rounds of simultaneous games between
+players on opposing teams, so that each person plays once against
+everyone on the other team.</p>
+<p>(In other words, find a -factorization of the complete bipartite
+graph . <a class="booklink" href="#thm:bipartite-factorization">Theorem 16.5</a> assures us that one
+exists, but doesn’t say what it is.)</p>
+</li>
+<li>
+<p>Let  be a copy of  with vertices  (just like the
+vertices of the cube graph ).</p>
+<ol>
+<li><p>For each nonempty subset  , let  be the
+matching consisting of all edges in  whose endpoints differ in the positions
+numbered by . For example,  Prove that the seven
+matchings  are a
+-factorization of .</p></li>
+<li><p>Prove that this -factorization is not isomorphic to the
+one found in <a class="booklink" href="#thm:kn-factorization">Theorem 16.3</a>.
+That is, prove that it is not possible to replace the labels  by  in any way to turn this
+-factorization into the one shown
+in <a class="booklink" href="#fig:k8-factorization">Figure 16.5</a>.</p></li>
+</ol>
+</li>
+<li>
+<p>Define an increasing path to be a path such that one of the walks
+representing it is an increasing walk.</p>
+<p>We can prove a version of <a class="booklink" href="#prop:increasing-walker">Proposition 16.7</a> for increasing paths by
+changing the rules slightly in that proof. Whenever edge  is called out, if the person on  has already visited , or the person on  has already visited , then both people stay put. This
+ensures that at the end, each person’s walk represents an increasing
+path.</p>
+<ol>
+<li><p>Suppose that each person walks a path of length at most . Prove that each person is responsible
+for “rejecting” at most  edges.</p></li>
+<li><p>At the end, each of the  edges was either walked by two people or rejected by at
+least one person. Use this to prove the inequality  .</p></li>
+<li><p>Prove  .</p></li>
+</ol>
+<p>Graham and Kleitman proved a similar result, but unlike the problem
+of increasing walks, the exact worst-case answer is still not known in
+the case of increasing paths.</p>
+</li>
+<li>
+<p>A graph  is called
+claw-free if it does not have a copy of the star graph  as an induced subgraph. In other
+words, no vertex   can
+have three neighbors 
+with no edges between them.</p>
+<p>Sumner’s theorem 
+states that every connected claw-free graph with an even number of
+vertices has a perfect matching. Prove this using Tutte’s theorem.</p>
+<p>(Here is a hint for one possible solution: choose a careful ordering
+ of the
+vertices in , then prove by
+induction on  that the number of
+connected components of   with a
+neighbor in  cannot exceed  .)</p>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>The word “saturated” is commonly used in graph theory
+for this type of definition, but it usually needs to be qualified with
+some other adjectives to say what kind of problem  is saturated for. In this book, we will
+not need this term outside this chapter, so I will just say “saturated”
+for brevity, even though it’s not as precise.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+<li id="fn2"><p>“Round-robin”, in case you’re unfamiliar with the
+terminology, means that every participant plays a game against every
+other participant.<a class="footnote-back" href="#fnref2">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 16</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

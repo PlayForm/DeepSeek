@@ -14,6 +14,12 @@
 // appendFileSync), so minification cannot touch them, and the loader
 // contract is name/export based (`name`, `apply`, `Config`, `inject`, the
 // default object).
+import { readFileSync } from "node:fs";
+
+const Package = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+
+const Version = Package.version ?? "0.0.0";
+const Name = Package.name ?? "";
 const Remove = {
 	name: "Target",
 	setup({ onStart, initialOptions: { outdir } }) {
@@ -44,5 +50,9 @@ export default {
 	target: "esnext",
 	tsconfig: "tsconfig.json",
 	write: true,
+	define: {
+		"process.env.VERSION_PACKAGE": JSON.stringify(Version),
+		"process.env.NAME_PACKAGE": JSON.stringify(Name),
+	},
 	plugins: [Remove],
 };

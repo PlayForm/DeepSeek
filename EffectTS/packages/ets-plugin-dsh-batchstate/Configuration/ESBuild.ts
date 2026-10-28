@@ -1,4 +1,16 @@
+import { readFileSync } from "node:fs";
+
 import type { BuildOptions, Plugin } from "esbuild";
+
+// The package manifest, read at config-load time: its name and version become
+// the build-time constants the define block below compiles into the Target.
+const Package = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
+	name?: string;
+	version?: string;
+};
+
+const Version = Package.version ?? "0.0.0";
+const Name = Package.name ?? "";
 
 /**
  * @module ESBuild
@@ -19,8 +31,10 @@ import type { BuildOptions, Plugin } from "esbuild";
  * call time and written through Factory.Append -> ctx.logger +
  * appendFileSync), so minification cannot touch them, and the loader
  * contract is name/export based (`name`, `apply`, `Config`, `inject`, the
- * default object). No `define` block - the batch-state plugin needs no
- * build-time constants.
+ * default object). The `define` block makes the build-time constants
+ * explicit: the package's own name and version (read at config-load time)
+ * compile into `process.env.NAME_PACKAGE` and `process.env.VERSION_PACKAGE`
+ * rather than relying on the build tool's default define.
  *
  * The `Target` plugin (wipe `Target/` on start) is kept so stale files can
  * never linger after a rename or removal.
@@ -36,6 +50,10 @@ export default {
 	target: "esnext",
 	tsconfig: "tsconfig.json",
 	write: true,
+	define: {
+		"process.env.VERSION_PACKAGE": JSON.stringify(Version),
+		"process.env.NAME_PACKAGE": JSON.stringify(Name),
+	},
 	plugins: [
 		{
 			name: "Target",

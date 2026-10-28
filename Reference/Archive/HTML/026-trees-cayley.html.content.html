@@ -1,0 +1,765 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Cayley’s formula</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 11</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>I am including a chapter on Cayley’s formula for the number of
+labeled -vertex trees in this
+book, first of all, because it is a beautiful piece of mathematics. It
+comes with an introductory look at counting problems in graph theory,
+which I think is especially important to include because I often tend to
+overlook such problems when I think about what a graph theorist needs to
+know. (The next chapter is also about counting problems in graph theory,
+but from a very different perspective.) In short, even though Cayley’s
+formula is not necessary as a prerequisite for any of the following
+chapters, I think it is a worthwhile topic to study on its own.</p>
+<p>I do not like including sections such as the last section of this
+chapter, which is mainly about results too complicated to prove in this
+book. However, I think that a textbook must say something about counting
+trees up to isomorphism, even if it simply says that not very much is
+known about the problem. When teaching this topic, I would not have
+feelings that are nearly as strong; I think it is perfectly acceptable
+to say that the textbook has a page on this version of the problem, and
+leave it at that.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="how-to-count-graphs">How to count graphs</h2>
+<p>Graph enumeration is a whole discipline of graph theory, but we have
+a lot of ground to cover in this textbook. As a result, this is the
+first and only chapter in which we will seriously look at problems about
+counting graphs satisfying a given property.</p>
+<p>When we count graphs, we must first choose between two options that
+are typically described as “counting labeled graphs” and “counting
+unlabeled graphs”. This is a bit misleading, because all graphs are
+labeled, in the sense that all graphs have a vertex set with
+distinguishable elements. Here is how to describe these options more
+precisely.</p>
+<p>Counting labeled graphs is typically the easier of the two problems.
+To describe it more precisely, suppose that we being by choosing a set
+ of size : it does not matter too much which set
+, as long as we choose it, so
+choosing   is
+a very reasonable and simple choice. Then we ask: how many graphs with
+vertex set  have a certain
+property?</p>
+<p>The other option is to count graphs up to isomorphism, and this is
+the problem typically called “counting unlabeled graphs”. Here, we start
+with the set  of all
+labeled graphs of that type (again, with some fixed vertex set ). In most problems, some of the graphs
+in  will be isomorphic.
+Graph isomorphism is an equivalence relation on , so it can be used to
+split  into equivalence
+classes. When we count graphs up to isomorphism, we ask: how many
+equivalence classes are there?</p>
+<p>In this chapter, we will count -vertex trees. Most of the chapter is
+devoted to the labeled counting problem, for which a clean and beautiful
+formula exists. Much less is known about the unlabeled counting problem,
+but I will summarize what is known about it at the end of the
+chapter.</p>
+<p>For either counting problem, one of the most important tools graph
+theorists use is counting by bijection. If a function   is a bijection, then the
+sets  and  have the same size: to a set theorist,
+this is actually how the size of a set is defined. Our bijections will
+be bijections from a set of graphs to a set of sequences, and so we will
+think of them somewhat differently: we will call them <em>encoding
+schemes</em>.</p>
+<p>An encoding scheme is a rule by which we can take a graph (or
+whatever else) and write down a sequence of numbers to represent it.
+This is a very natural idea in the modern day, when every piece of
+information has an encoding scheme: after all, a computer must represent
+all the data it works with as by sequences of zeroes and ones. That’s
+exactly the way you should think about encoding schemes.</p>
+<p>We will want to know two things about our encoding schemes. These
+correspond to the definition of a bijection, though we won’t invoke that
+definition directly.</p>
+<ul>
+<li><p>We will want to make sure that the encoding scheme is a
+<em>unique encoding scheme</em>: from the sequence it produces as an
+output, we can uniquely determine which graph was the input. It’s nice
+if we have a simple algorithm to find the graph, but all that’s strictly
+necessary is to know that two different graphs never produce the same
+sequence.</p></li>
+<li><p>We will want to know which sequences of numbers are <em>valid
+encodings</em>: which ones</p></li>
+</ul>
+<p>An encoding scheme can be described as a function  from graphs to encodings, and both of
+the properties above can be phrased in terms of .</p>
+<details class="qa">
+<summary>If the encoding scheme is unique, what
+does that say about ?</summary>
+<p>It says that  is an injective (one-to-one)
+function.</p>
+</details>
+<details class="qa">
+<summary>If every element of some set  is a valid encoding, what does that say
+about ?</summary>
+<p>It says that  is a surjective (onto) function, at
+least if it is a function to the set .</p>
+</details>
+<p>So that’s the connection to bijections. For our purposes, the
+consequence is this: once we verify that we have a unique encoding
+scheme of a set of graphs, we can count the graphs in that set by
+counting the valid encodings.</p>
+<p>To avoid getting too abstract about it, here are two examples.</p>
+<div class="problem" id="problem:labeled-graphs">
+<p><strong>Problem 11.1</strong>. <em>How many graphs with vertex set
+ are there?</em></p>
+</div>
+<div class="proof">
+<p><em>Answer to <a class="booklink" href="#problem:labeled-graphs">Problem 11.1</a>.</em> We will encode
+these graphs as binary strings of length . Here,   is the
+number of edges in the complete graph  (which we also consider to have
+vertex set ). To
+encode a graph  with  , we go through the
+edges of  in a fixed order, such
+as the dictionary order  For each edge, we ask: does  also contain that edge? If so, we write
+down a ; if not, we write down a
+.</p>
+<p>From the output of this procedure, we can look through the bits one
+at a time and uniquely determine the edge set , so this is a unique encoding
+scheme. Starting from an arbitrary sequence of  zeroes and ones, we can
+reconstruct a graph that will give that sequence, so every one of these
+sequences is a valid encoding.</p>
+<p>There are 
+sequences of  zeroes and
+ones (because we have  choices for
+each bit in the sequence) and therefore there are  graphs with vertex set
+. ◻</p>
+</div>
+<div class="problem" id="problem:1-regular-graphs">
+<p><strong>Problem 11.2</strong>. <em>How many -regular graphs with vertex set  are there?</em></p>
+</div>
+<div class="proof">
+<p><em>Answer to <a class="booklink" href="#problem:1-regular-graphs">Problem 11.2</a>.</em> As we know from
+<a class="booklink" href="../degrees/regular.html">Chapter 5</a>, such graphs only exist
+when  is even. In the cases of
+even , we could begin by listing
+all  edges in the graph. This is
+done in <a class="booklink" href="#fig:1-regular-graphs-counting">Figure 11.1</a> in the case  .</p>
+<figure class="bookfig" id="fig:1-regular-graphs-counting">
+
+<figcaption>The -regular graphs
+with vertex set </figcaption>
+</figure>
+<details class="qa">
+<summary>Are there multiple ways to list the edges
+in a graph in a sequence?</summary>
+<p>Yes: for each edge , we can also write it as , and we can also write the edges in
+any order.</p>
+</details>
+<p>To make the encoding scheme unique, we should make a rule for how the
+edges should be written, and in which order they should appear. A simple
+option is to write a “sorted sequence of sorted edges”: to sort each
+edge  so that  , and to sort the sequence of edges
+by the first number in each pair. This is already done in <a class="booklink" href="#fig:1-regular-graphs-counting">Figure 11.1</a>.</p>
+<details class="qa">
+<summary>Are all “sorted sequences of  sorted edges” valid encodings?</summary>
+<p>No: some of them encode graphs with  edges that are not -regular, by leaving out some vertices
+and using others too many times. Each vertex must appear exactly
+once.</p>
+</details>
+<p>If not all sequences are valid encodings, this complicates our life,
+but we can still proceed. We just have to describe which encodings are
+valid, and count only the valid ones.</p>
+<details class="qa">
+<summary>Going from left to right, what are the
+constraints on the vertices in the “sorted sequence of sorted
+edges”?</summary>
+<p>The first vertex of each sorted edge is
+uniquely determined: it is simply the smallest element of  that has not yet
+appeared. The second vertex of each sorted edge can be any of the
+vertices that have not yet appeared.</p>
+</details>
+<details class="qa">
+<summary>How many possibilities are there for each
+vertices, given the vertices to its left?</summary>
+<p>There is only  option for the first vertex of each
+sorted edge. For the second vertex in the <sup>th</sup> sorted edge, there are
+  options, because   vertices have already appeared.</p>
+</details>
+<p>In such a case, we can count by the product principle, multiplying
+the numbers of possible vertices in each position. We can do so because
+that number of options is always the same for a given position, no
+matter which vertices came before. (Always make sure that this is true
+before applying the product principle!)</p>
+<p>Multiplying together the numbers of possible vertices in each
+position, we get the product  in answer to the problem.
+We can ignore the factors of  and
+just say that this is the product of the first  odd positive integers. For example,
+we get   when   (as seen in <a class="booklink" href="#fig:1-regular-graphs-counting">Figure 11.1</a>),   when  ,   when  , and so on. This product is often
+written with the double factorial symbol  . ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="trees-and-deletion-sequences">Trees and deletion sequences</h2>
+<p>Having solved a few problems for practice, we can move on to the
+question we’re really interested in: how many trees with vertex set
+ are there?</p>
+<p>The solution to <a class="booklink" href="#problem:1-regular-graphs">Problem 11.2</a> gives us a good
+starting point. An -vertex tree,
+as we know, is in particular an  -vertex graph. So we can begin by
+writing down the edges of that graph, in a convenient order.</p>
+<p>The most convenient order to use here is not the dictionary order we
+used before. We would like to make use of the structure of a tree! In
+particular, we know from <a class="booklink" href="../trees/properties.html#lemma:T-x">Lemma 10.6</a> in
+the previous chapter that if we remove a leaf vertex (and its only edge)
+from a tree, we get a smaller tree. We used this to great effect to
+write inductive proofs of theorems about trees; it can be used to
+equally great effect to write recursive algorithms for problems about
+trees.</p>
+<p>Given a tree  with vertex set
+, here is an
+algorithm to list all its edges in a uniquely defined order:</p>
+<ol>
+<li><p>If  , then there are no
+edges, so the list of edges should be empty as well.</p></li>
+<li><p>Otherwise, for  , the
+tree  will have some leaves. Let
+ be the lowest numbered leaf, and
+let  be its neighbor: write down
+the pair , in that
+order.</p></li>
+<li><p>Delete vertex  and edge
+ from  to get an  -vertex tree  . To write the rest of the sequence,
+go back to step 1, but with tree   in place of .</p></li>
+</ol>
+<p>We will call the result of this algorithm a <em>deletion
+sequence</em> for . As an illustration of the technique,
+<a class="booklink" href="#fig:deletion-sequence">Figure 11.2</a> shows how, starting with
+the tree in <a class="booklink" href="#fig:deletion-sequence-14">Figure 11.2(a)</a>, we determine that its
+deletion sequence is </p>
+<figure class="bookfig" id="fig:deletion-sequence">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:deletion-sequence-14">
+
+<figcaption>Write down </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:deletion-sequence-34">
+
+<figcaption>Write down </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:deletion-sequence-46">
+
+<figcaption>Write down </figcaption>
+</figure>
+</div>
+<div class="subfigures">
+<figure class="booksubfig" id="fig:deletion-sequence-52">
+
+<figcaption>Write down </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:deletion-sequence-62">
+
+<figcaption>Write down </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:deletion-sequence-27">
+
+<figcaption>Write down </figcaption>
+</figure>
+</div>
+<figcaption>Finding the deletion sequence of a tree</figcaption>
+</figure>
+<details class="qa">
+<summary>Is this a unique encoding scheme?</summary>
+<p>Yes, it is. We can recover the tree from
+its deletion sequence, because the deletion sequence is after all a list
+of edges. Moreover, each tree only has one deletion sequence, because
+the deletion sequence is computed by an algorithm with no freedom at any
+step.</p>
+</details>
+<p>There is a great deal of redundancy in the deletion sequence of a
+tree. Before proving a general result about it, let’s explore a few
+examples. In all of these, I will erase some numbers from the deletion
+sequence we just constructed and ask how they can be filled back in to
+get a valid deletion sequence. Of course, one way to fill in the number
+is to put back the number we erased, getting back the deletion sequence
+we started with. However, we want to know if there are any other
+deletion sequences that have a different value in that blank!</p>
+<details class="qa">
+<summary>In the incomplete deletion sequence  how many ways are there to fill in
+the blank?</summary>
+<p>The number in the blank can only be
+.</p>
+<p>The reason is that vertex  will
+never be deleted as the smallest leaf of the tree: there are always at
+least two leaves, one of which is smaller than . Therefore it is the last vertex
+remaining, and will always occupy the last position in the deletion
+sequence.</p>
+</details>
+<details class="qa">
+<summary>In the incomplete deletion sequence  how many ways are there to fill in the
+blank?</summary>
+<p>The number in the blank can only be
+.</p>
+<p>The reason is that vertices  must all be eventually deleted. The five complete ordered
+pairs tell us when we deleted vertices , , , , and , so the incomplete ordered pair must
+tell us when we deleted vertex .</p>
+</details>
+<details class="qa">
+<summary>In the incomplete deletion sequence  how many ways
+are there to fill in the two blanks?</summary>
+<p>Once again, the answer is uniquely
+determined: the blanks must contain  and , in that order.</p>
+<p>By the same reasoning as above, we know that  and  must go in those two blanks in some
+order. Since neither number appears later in the deletion sequence, we
+know that none of their neighbors are deleted later: after the first two
+steps, both vertices  and  are leaves. Since  is a smaller number, it will be the
+leaf deleted first.</p>
+</details>
+<p>But all of these questions are thinking too small: we can take the
+incomplete sequence  and fill in
+all  blanks in a unique way!</p>
+<p>First of all, we know that the first six blanks are the numbers  through , while the last blank is . The order of the numbers  through  is not known yet, but even without
+knowing the order, we know how many times each number appears in the
+deletion sequence, in total: the number of times we see it in the
+incomplete sequence, plus .</p>
+<p>This tells us the degree of every vertex:  Why is this helpful? Because it tells us that at
+the beginning of the algorithm to generate the deletion sequence, the
+leaves were , , , and . Of these,  is the smallest, so it must be the
+first leaf deleted: the first pair is .</p>
+<p>From there, we can deduce that after vertex  is deleted, the degrees of the vertices
+were as follows:  The leaves were , , and , of which  is the smallest. Therefore the second
+pair must be .</p>
+<p>If we keep going in this manner, we can reconstruct the entire
+deletion sequence, because we can determine the degree of each remaining
+vertex at each step of the algorithm. Only  of the  numbers in the deletion sequence were
+necessary!</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="prüfer-codes">Prüfer codes</h2>
+<p>Our strategy in the preceding section generalizes fully. We can
+summarize the properties we use in the following two properties of a
+deletion sequence :</p>
+<ol>
+<li id="eq:deletion-1">For every  from  to  , the number  is the smallest positive number not contained in the set  .</li>
+<li id="eq:deletion-2"> .
+</li>
+</ol>
+<div class="lemma" id="lemma:deletion-sequence">
+<p><strong>Lemma 11.1</strong>. <em>If a sequence  is the deletion sequence of a tree with vertices , then it satisfies
+properties <a class="booklink" href="#eq:deletion-1">(1)</a> and <a class="booklink" href="#eq:deletion-2">(2)</a>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> The tree at every stage of the algorithm that
+generates the deletion sequence has at least two leaves, so the smallest
+leaf will never be vertex .
+Therefore vertex  will never be
+the deleted leaf, so it will be the last vertex remaining:  . This proves <a class="booklink" href="#eq:deletion-2">(2)</a>.</p>
+<p>Meanwhile, 
+are a permutation of  , representing the order in which the other vertices are
+deleted. After the first   stages
+of the algorithm that generates the deletion sequence, the tree that
+remains has edges 
+through .
+Vertices in the set  are not present in this tree; they have already been
+deleted.</p>
+<p>The remaining vertices of the tree appear once in the set . They have degree  if this is their only appearance: if
+they do not appear in the set . Vertex  is the smallest leaf remaining at
+this stage, so it is the smallest positive number not contained in the
+set  . This proves <a class="booklink" href="#eq:deletion-1">(1)</a>. ◻</p>
+</div>
+<p>Since the numbers determined by <a class="booklink" href="#lemma:deletion-sequence">Lemma 11.1</a> can be deduced from the
+others, they are not necessary to recover the tree. Therefore, instead
+of recording the deletion sequence of a tree, it is enough to record the
+sequence . This sequence is called the <strong>Prüfer
+code</strong> of the tree, named after Heinz Prüfer, who proposed Prüfer
+codes as a method of counting labeled trees in 1918 .</p>
+<figure class="bookfig" id="fig:prufer-code">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:prufer-code-stage-1">
+
+<figcaption>Write down </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:prufer-code-stage-2">
+
+<figcaption>Write down </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:prufer-code-stage-3">
+
+<figcaption>Write down </figcaption>
+</figure>
+</div>
+<div class="subfigures">
+<figure class="booksubfig" id="fig:prufer-code-stage-4">
+
+<figcaption>Write down </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:prufer-code-stage-5">
+
+<figcaption>Write down </figcaption>
+</figure>
+
+</div>
+<figcaption>Finding the Prüfer code of a tree</figcaption>
+</figure>
+<p>It is worth mentioning that the Prüfer code of a tree can be directly
+computed using an abbreviated version of the algorithm that computed the
+deletion sequence. The only two differences are that instead of writing
+down the pair , we only write
+down the vertex , and that we stop
+when there are  vertices and  edge left. <a class="booklink" href="#fig:prufer-code">Figure 11.3</a> illustrates this on an
+example.</p>
+<details class="qa">
+<summary>Are Prüfer codes a unique encoding
+scheme?</summary>
+<p>Yes: from the Prüfer code, we can recover
+the deletion sequence using properties <a class="booklink" href="#eq:deletion-1">(1)</a> and <a class="booklink" href="#eq:deletion-2">(2)</a>, and the deletion
+sequence simply tells us the edges of the tree.</p>
+</details>
+<details class="qa">
+<summary>Is this enough to count the with vertex
+set ?</summary>
+<p>No: we need to know whether all possible
+sequences  are valid Prüfer codes, or whether there are some
+constraints on these numbers.</p>
+</details>
+<p>In fact, there are no further constraints: every sequence , where each
+term is an element of , is the Prüfer code of a
+tree with vertex set . To prove this, the most
+important claim we have not yet shown is that <a class="booklink" href="#eq:deletion-1">(1)</a> and <a class="booklink" href="#eq:deletion-2">(2)</a> are not just
+properties every deletion sequence has: they are properties only a
+deletion sequence can have.</p>
+<div class="lemma" id="lemma:deletion-sufficiency">
+<p><strong>Lemma 11.2</strong>. <em>If a sequence  in which every term  is a pair of numbers from  to  satisfies properties <a class="booklink" href="#eq:deletion-1">(1)</a> and <a class="booklink" href="#eq:deletion-2">(2)</a>, then it is the
+deletion sequence of a tree with vertex set .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let’s make some initial observations. First, since
+ , the numbers  are distinct. They are all smaller than , since each is the smallest positive
+number not contained among at most   options; therefore, they are a
+permutation of  .</p>
+<p>Second, consider  for  . Since none of  can equal , but  is an integer from  to , we know that it must be an element of
+.
+From this observation, it follows that we can define a graph  with   and  : each edge in  really does have both endpoints in
+.</p>
+<p>We are now ready to proceed with the proof. The graph  is not just any graph: it is a tree
+in which the leaf with the smallest number is . We will prove this by an induction
+that starts with  and ends
+with .</p>
+<p>In the base case,  is the
+graph with vertices 
+and edge ; since
+ , this is an edge between
+’s two vertices, so  is a tree. Both  and  are leaves, but since   and  ,  must be the smaller leaf.</p>
+<p>Next, for some positive  , suppose  is a tree. The only difference
+between  and  is that we add vertex  and edge . By our first observation,  , so  is a leaf of . Since  is a tree, it has no cycles, so
+ cannot contain any cycles not
+using vertex . It cannot have
+any cycles using , either,
+because  has degree . Therefore  still has no cycles; we know it has
+  vertices and   edges, so it is a tree by condition 5
+of <a class="booklink" href="../trees/properties.html#thm:trees">Theorem 10.2</a>.</p>
+<p>Each  for   is not yet a vertex of , by our first observation. Each  for   appears a second time as  for  , by our second observation; so it
+is the endpoint of at least two edges of , and is not a leaf. Among the
+remaining positive integers,  is
+the smallest; therefore in particular it is the smallest leaf of . This completes the induction.</p>
+<p>From this claim, it follows that the deletion sequence algorithm,
+when encountering tree , will
+write down the pair  and
+delete , then either go on to
+tree  or (if  ) stop. In particular, if we start
+with tree , the deletion
+sequence algorithm will proceed through the trees  and write down
+the sequence  which is exactly what we wanted to
+show. ◻</p>
+</div>
+<p>With this setup complete, we are ready to finish counting. This
+theorem is known as Cayley’s formula after Arthur Cayley, whom we
+already know as the mathematician that came up with the term “tree”.
+(So, you see, Prüfer’s argument was not the first to be found. However,
+as it sometimes happens, Cayley was not the first, either; the formula
+was first proven by Carl Wilhelm Borchardt in 1860 .)</p>
+<div class="theorem" id="thm:cayley">
+<p><strong>Theorem 11.3</strong>. <em>There are  trees with vertex set .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Each tree with vertex set  has a Prüfer code  whose elements
+are integers between  and , uniquely defined by the deletion
+sequence algorithm. Therefore the number of trees with vertex set  is exactly the number of
+possible Prüfer codes.</p>
+<p>Moreover, for every such sequence , we can apply <a class="booklink" href="#eq:deletion-1">(1)</a> to determine , then , and so on through , as long as we go in that order:
+each  will be the smallest
+positive integer not contained in a set we’ve already entirely
+determined. We can also set  . Now, the sequence  is a deletion sequence of
+a tree with vertex set , by <a class="booklink" href="#lemma:deletion-sufficiency">Lemma 11.2</a>, and therefore  is the Prüfer
+code of that tree. This shows that every sequence   integers from  to  is a valid Prüfer code. There are
+exactly  such sequences,
+since there are  options for each
+of the numbers  through , so the number of trees with
+vertex set  is also
+. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="working-with-prüfer-codes">Working with Prüfer codes</h2>
+<p>There are a few more difficult questions to ask about Prüfer codes,
+but let’s first pause to make sure that we can return from the abstract
+results to concrete claims. Take a Prüfer code like . How do we turn it back into
+a tree?</p>
+<p>Let’s write down what we know about the deletion sequence of that
+tree, even if there’s still some blanks to be filled in:  A Prüfer
+code is always a sequence of  
+numbers from  to ; since we started with  numbers, their values will range from
+ to . We fill in the blanks from left to
+right.</p>
+<p>For the first blank, which is , we use <a class="booklink" href="#eq:deletion-1">(1)</a>. There are no -terms before ; however,  needs to be distinct from  . The smallest integer not on this list is , so we set  :  We continue
+to use <a class="booklink" href="#eq:deletion-1">(1)</a> for the next blank,
+which is . Here, the excluded
+values are 
+or . We fill in the
+blank with the first integer not on this list, which is :  We go on in
+this way. Some people prefer to arrange the entries in a   table, where each  entry (in the first, initially empty
+row) must be distinct from everything to its left, as well as everything
+below it and to the right:  Regardless, we fill in   (the smallest value not among
+), then   (the smallest value not among
+), then   (the smallest value not among
+), then   (the smallest value not among
+). All this is done
+using <a class="booklink" href="#eq:deletion-1">(1)</a>; then, the last blank
+is   by <a class="booklink" href="#eq:deletion-2">(2)</a>. The completed
+deletion sequence is  This sequence tells us the edges of the tree, and if we
+like, we can draw a diagram such as the one in <a class="booklink" href="#fig:prufer-reconstruction">Figure 11.4</a>.</p>
+<figure class="bookfig" id="fig:prufer-reconstruction">
+
+<figcaption>The tree with Prüfer code .</figcaption>
+</figure>
+<p>That being said, it is not too often that we find ourselves needing
+to actually convert a Prüfer code back into a tree: it only matters for
+the proof of <a class="booklink" href="#thm:cayley">Theorem 11.3</a> that we can, in principle, do
+it.</p>
+<p>This does not mean that Prüfer codes have no use beyond the proof of
+<a class="booklink" href="#thm:cayley">Theorem 11.3</a>. The Prüfer code of a tree actually
+contains a bit of information about the tree, which we can use to solve
+more complicated counting problems. For example:</p>
+<div class="prop" id="prop:prufer-degree">
+<p><strong>Proposition 11.4</strong>. <em>In the Prüfer code of a tree
+where  , the number  appears   times.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> When we fill in the blanks in the sequence  we use each of the numbers  once. The number  is going to fill in the second blank of
+the last pair, and the numbers in the first blanks are a permutation of
+ .</p>
+<p>Therefore if a number  appears
+  times in the Prüfer code, it
+appears  times in the deletion
+sequence  But the deletion sequence is just a
+particular way to write down the edges of the tree, so if  appears in the deletion sequence  times, then it is the endpoint of  edges, which is just another way of
+saying that  . ◻</p>
+</div>
+<p>For example, even before we turned the Prüfer code  back into the tree shown in
+<a class="booklink" href="#fig:prufer-reconstruction">Figure 11.4</a>, we could have known
+the rough structure of the tree:</p>
+<ul>
+<li><p>Vertices , , and  are leaves, because they do not appear
+in the Prüfer code at all.</p></li>
+<li><p>Vertices  appear
+once, and therefore have degree .</p></li>
+<li><p>Vertex  appears twice, and
+therefore has degree .</p></li>
+</ul>
+<details class="qa">
+<summary>What can we say about the shape of such a
+tree, knowing only the degrees of the vertices?</summary>
+<p>Such a tree must consist of three paths
+starting at vertices , , 
+and converging at vertex .</p>
+</details>
+<p>Here is a quick example of using <a class="booklink" href="#prop:prufer-degree">Proposition 11.4</a> to solve a counting
+problem:</p>
+<div class="corollary" id="cor:trees-with-leaf">
+<p><strong>Corollary 11.5</strong>. <em>There are  trees with vertex set  in which vertex  is a leaf.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> By <a class="booklink" href="#prop:prufer-degree">Proposition 11.4</a>,
+vertex  is a leaf (has degree
+) if and only if the number  never appears in the Prüfer code. There
+are  such codes: the
+code is a sequence with   terms,
+each of which is now restricted to one of the   values in the set . Therefore there are
+ such trees. ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="unlabeled-trees">Unlabeled trees</h2>
+<p>Now that we’ve counted labeled trees on  vertices, we can try to say something
+about unlabeled trees. How many -vertex trees are there, up to
+isomorphism? As I mentioned earlier in this chapter, we can think of
+this as counting equivalence classes of the  trees with vertex set . Each equivalence class
+is a set of trees that are isomorphic (but not equal).</p>
+<p>Sometimes, if we’re very lucky, the equivalence classes all have the
+same size. In that case, to count the equivalence classes, we can
+divided by the number of elements of one equivalence class. Let’s begin
+by destroying all such hopes: when we count trees, the equivalence
+classes are far from equal in size.</p>
+<figure class="bookfig" id="fig:unlabeling-trees">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:labeled-path-tree">
+
+<figcaption>An -vertex path
+graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:labeled-star-tree">
+
+<figcaption>An -vertex star
+graph</figcaption>
+</figure>
+</div>
+<figcaption>Two trees with very different structures</figcaption>
+</figure>
+<details class="qa">
+<summary><a class="booklink" href="#fig:labeled-path-tree">Figure 11.5(a)</a> shows the path graph
+. How many trees with vertex set
+ are isomorphic to
+it?</summary>
+<p>There are  ways to put the vertices in order from
+left to right along the path. However, the graph does not know a “left”
+and a “right”: if you reverse the sequence, you get the same graph,
+drawn in reverse. Therefore there are  paths with vertex set .</p>
+</details>
+<details class="qa">
+<summary><a class="booklink" href="#fig:labeled-star-tree">Figure 11.5(b)</a> shows the star graph
+. How many trees with vertex set
+ are isomorphic to
+it?</summary>
+<p>As soon as we choose which vertex in the
+set  is the vertex
+of degree   at the center of the
+star, the graph is completely determined. Therefore there are  stars with vertex set .</p>
+</details>
+<p>If all -vertex trees were like
+, then every equivalence class
+would have  elements, and
+the number of equivalence classes would be the quotient . If instead all
+-vertex trees were like , then every equivalence class would
+have  elements, and the number of
+equivalence classes would be  or .</p>
+<p>In reality, neither of these extremes is the case. The truth is
+somewhere in the middle; but it is more like the first answer than the
+second. Why? Well, the reason that there are very few different trees
+isomorphic to  is that the star
+graph has a lot of symmetry. Most large trees are not nearly as
+symmetric, so most equivalence classes are pretty large.</p>
+<p>A result known as Stirling’s formula says that, very approximately,
+ grows like , where   is Euler’s number. If we plug this into the quotient
+, we get an
+estimate of  for the number
+of unlabeled trees. This is not the true growth rate, but it is the
+right type of growth: the number of unlabeled trees really does grow
+exponentially. That growth rate was first precisely analyzed in 1937 by
+George Pólya , who
+described it as an exponential 
+with  , divided by a
+polynomial factor.</p>
+<p>No exact formula is known. In the -vertex
+unlabeled trees can be found in one of the very first sequences:
+sequence A000055 .
+The first few terms are  The initial ’s in this sequence correspond to   through  , where only one -vertex tree is possible. (For  , we have two options: the -vertex path, and the -vertex star.)</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Find the trees with the following Prüfer codes:</p>
+
+</li>
+<li>
+<p>Find the Prüfer codes of the following trees:</p>
+
+<p>(One of these Prüfer codes gives you my birth date. Another is the
+first few digits of Euler’s number . Another tells you the phone number to
+call to reach Ghostbusters.)</p>
+</li>
+<li><p>Find all  trees with
+vertices .</p></li>
+<li><p>What is the Prüfer code of the path graph in <a class="booklink" href="#fig:labeled-path-tree">Figure 11.5(a)</a>, and what is the general
+form of a Prüfer code for a tree isomorphic to it?</p></li>
+<li><p>What is the Prüfer code of the star graph in <a class="booklink" href="#fig:labeled-star-tree">Figure 11.5(b)</a>, and what is the general
+form of a Prüfer code for a tree isomorphic to it?</p></li>
+<li>
+<p>Use Prüfer codes and <a class="booklink" href="#prop:prufer-degree">Proposition 11.4</a> to
+count:</p>
+<ol>
+<li><p>The number of trees with vertex set  in which vertex  has degree .</p></li>
+<li><p>The number of trees with vertex set  in which vertex  has degree  .</p></li>
+<li><p>The number of trees with vertex set  in which all vertices
+except vertex  and  have degree .</p></li>
+</ol>
+<p>For parts (b) and (c), think about how you would count them without
+using Prüfer codes.</p>
+</li>
+<li><p>Use <a class="booklink" href="#cor:trees-with-leaf">Corollary 11.5</a>
+to find the average number of leaves in an -vertex tree.</p></li>
+<li>
+<p>Prove that if a tree has maximum degree , then it has at least  leaves:</p>
+<ol>
+<li><p>Using Prüfer codes and <a class="booklink" href="#prop:prufer-degree">Proposition 11.4</a>.</p></li>
+<li><p>Using ideas from <a class="booklink" href="../trees/properties.html">Chapter 10</a>.</p></li>
+</ol>
+</li>
+<li>
+<p>Is it true that if only one number is changed in a Prüfer code,
+then this only changes the tree it corresponds to by one edge?</p>
+<p>If so, prove it. If not, find (in terms of ) the maximum number of edges that can
+change in the tree, if the Prüfer code changes in only one
+position.</p>
+</li>
+<li>
+<p>Let  be the number of
+trees with vertex set  that contain the edge
+.</p>
+<ol>
+<li><p>Prove that  is also the
+number of trees with vertex set  that contain the edge
+, for any other edge  that such a tree could have.</p></li>
+<li><p>Using part (a), find and prove a formula for .</p></li>
+<li><p>Let  be a graph with  vertices and   edges. In terms of , find the number of spanning trees
+ has.</p></li>
+</ol>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>This is not a universally recognized term, but simply
+the term I will use in this chapter to explain our counting strategy.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+<li id="fn2"><p>See the second problem at the end of this chapter if you
+want to know more digits of this constant, but prepare to do some work,
+first.<a class="footnote-back" href="#fnref2">↩︎</a></p></li>
+<li id="fn3"><p>I actually disagree with the OEIS on the initial value;
+I do not believe there is a -vertex tree. Even if we allow -vertex graphs to be exist, they would
+surely have  edges, but an -vertex tree should have   edges. My opinion, which does not
+really affect anything but definitions and initial terms, is that the
+-vertex graph exists but is not
+connected.<a class="footnote-back" href="#fnref3">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 11</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

@@ -34,9 +34,7 @@ import type {} from "../Interface/Factory.js";
 
 import type Config from "../Interface/Config.js";
 import type State from "../Interface/State.js";
-
-/** The bundle version, mirrored from package.json (the activation proof). */
-const Version = "0.3.0";
+import Version from "../Variable/Version.js";
 
 /** The lesson service surface this hook consumes (structural, not imported). */
 interface Lesson {

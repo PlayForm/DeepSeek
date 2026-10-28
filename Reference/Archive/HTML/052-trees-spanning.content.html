@@ -1,0 +1,596 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Spanning Trees</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 9</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>Trees are some of the most fundamental objects in graph theory.
+There’s no single big theorem that makes them useful; instead, there are
+many small facts. Trees appear when analyzing expression trees, or in
+computer science applications; they are useful in more advanced graph
+theory when analyzing connected graphs; they appear surprisingly often
+in recreational math. In this chapter, I want to motivate trees by
+introducing spanning trees, which is only one of many possible
+motivations.</p>
+<p>It is natural to follow up by considering the problem of finding
+minimum-cost spanning trees, so I’ve included a section on that problem
+at the end of this chapter; though it is not crucial for any content in
+future chapters, it is nice to cover, if possible. (Students coming from
+a discrete math class might have already seen Prim’s algorithm or
+Kruskal’s algorithm; at the very least, the algorithm in this chapter is
+different, providing some variety.)</p>
+<p>In this chapter and the next, I’ve also tried to include several
+diagrams of different trees, in particular the six in <a class="booklink" href="#fig:six-spanning-trees">Figure 9.2</a>. Take a few moments to
+just look at these and get a feeling for what trees are like, to
+supplement the mathematical properties that we will be proving.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="spanning-trees">Spanning trees</h2>
+<p>What does it take to connect a graph?</p>
+<p>We have seen many examples of connected graphs. For example, the cube
+graph, shown in <a class="booklink" href="#fig:cube-12-edges">Figure 9.1(a)</a> as
+a reminder, is connected.</p>
+<figure class="bookfig" id="fig:cube-spanning">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:cube-12-edges">
+
+<figcaption>The cube graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:cube-8-edges">
+
+<figcaption>From 12 edges to 8</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:cube-7-edges">
+
+<figcaption>From 8 edges to 7</figcaption>
+</figure>
+</div>
+<figcaption>What does it take to connect the vertices of a cube
+graph?</figcaption>
+</figure>
+<p>But not all the edges of the cube graph are necessary to have a
+connected graph. For example, we can remove all edges between the four
+vertices in the “top half” of the cube, and the result is still
+connected, because those vertices can still get to each other through
+the bottom half. The remaining graph, shown in <a class="booklink" href="#fig:cube-8-edges">Figure 9.1(b)</a>, has only  edges.</p>
+<p>Even that is not the best we can do. Remove any one of the edges in
+the bottom half, and the result is still connected: the bottom half of
+the cube is a path. This results in a -edge graph, shown in <a class="booklink" href="#fig:cube-7-edges">Figure 9.1(c)</a>.</p>
+<p>Finally, in this graph, we can check that none of the  edges remaining could be removed. This
+is certain to be true of whatever graph ends up our final stopping
+point; if it weren’t, we would keep going. If we want to understand
+connected graphs, we would do well to start with graphs that have this
+property. They have a special name:</p>
+<div class="defn">
+<p><strong>Definition 9.1</strong>. <em>A <strong>tree</strong>  is a minimally connected graph:  is connected, but for every edge  , the subgraph   is no longer connected.</em></p>
+</div>
+<p>(Why a “tree”? The term first appears in an 1857 paper of Arthur
+Cayley , whom we
+will meet again later on in our study of trees. Cayley’s trees were
+diagrams used to represent various compositions of differential
+operators: diagrams which started from a root and branched out to
+smaller, similar diagrams, in just the way a tree grows.
+Graph-theoretically, they had the same structure as what we call a tree
+today.)</p>
+<p>The graph in <a class="booklink" href="#fig:cube-7-edges">Figure 9.1(c)</a> is a
+tree. Moreover, it is a spanning subgraph of the cube graph we started
+with in <a class="booklink" href="#fig:cube-12-edges">Figure 9.1(a)</a>: we did not delete any
+vertices, only edges. In general, a spanning subgraph of a graph  which is a tree is a subgraph that
+connects all vertices of  using as
+few edges as possible; we call such an object a <strong>spanning
+tree</strong> of .</p>
+<p>It is natural to wonder whether some spanning trees are better or
+worse than others; after all, we did not arrive at <a class="booklink" href="#fig:cube-7-edges">Figure 9.1(c)</a> with any attempt to make good
+decisions, but only did what is best in the moment. If you were to
+experiment different approaches to the cube graph, you would find that
+up to isomorphism, <a class="booklink" href="#fig:six-spanning-trees">Figure 9.2</a> shows all possible
+spanning trees of the cube graph.</p>
+<details class="qa">
+<summary>Which of these trees has the fewest
+edges?</summary>
+<p>All six of them have  edges: in this case, anything we do
+must be equally good. In the next chapter, we will see that this is not
+a coincidence.</p>
+</details>
+<figure class="bookfig" id="fig:six-spanning-trees">
+
+<figcaption>Spanning trees of the cube graph</figcaption>
+</figure>
+<p>So why should we care about trees and spanning trees? For one, there
+are many practical applications, because spanning trees are exactly what
+you want if your goal is to connect a graph as cheaply as possible.
+Imagine, for example, a transportation company whose network spans an
+entire continent, but which has now fallen on hard times and needs to
+cut back. It would like to offer as few routes as possible, but it does
+not want to separate two parts of the country entirely. Under this
+circumstance, the transportation company’s optimal solution will be a
+spanning tree of its old route network.</p>
+<p>Spanning trees will also be useful for us theoretically, and the
+reason begins with the following theorem:</p>
+<div class="theorem" id="thm:spanning-tree">
+<p><strong>Theorem 9.1</strong>. <em>A graph  is connected if and only if it has a
+spanning tree.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let  be any
+connected graph. To find a spanning tree  of , we will delete edges of  one at a time until we get a tree.</p>
+<p>This can be done essentially any way we like. Suppose we have ended
+up at an intermediate graph  (some
+spanning subgraph of ) and  has an edge  such that   is still connected. Then just delete
+edge  and keep going. (If there
+are many options for , pick any of
+them.)</p>
+<p>Eventually, we stop: we can’t keep deleting edges forever, because
+ only has finitely many edges.
+However, the only way this process can stop is when deleting any edge
+would disconnect the remaining graph. That is exactly what it means to
+be a tree: we have arrived at a spanning tree of .</p>
+<p>In the other direction, suppose  has a spanning tree . Then any two vertices  of  are also vertices of , and  is connected, so there is an   walk in . That walk is also an   walk in , because  is a subgraph of . Therefore  is connected. ◻</p>
+</div>
+<details class="qa">
+<summary>Does anything about this theorem change
+for multigraphs?</summary>
+<p>No, and in fact, if we start with a
+multigraph, our very first step can be to delete loops and extra copies
+of edges to make it a simple graph. These deletions can never disconnect
+the graph.</p>
+</details>
+<p>The importance of <a class="booklink" href="#thm:spanning-tree">Theorem 9.1</a> is
+that it tells us about a single object (a spanning tree) which is enough
+to show that a graph is connected. Without it, working directly from the
+definition, we would have to consider different pairs of vertices  in the graph, and find an   walk between each of them.</p>
+<p>This does not seem like a big deal at the moment, because to verify
+that a subgraph  is a spanning
+tree, we need to check that it is connected, which has all the same
+difficulties. (Finding   walks in
+ might be even harder than it was
+in the original graph .) Later on,
+as we learn more about trees, we will find ways to verify that  is a spanning tree which have nothing
+to do with being connected. Then, <a class="booklink" href="#thm:spanning-tree">Theorem 9.1</a>
+will come into its full power.</p>
+<p>A final use of spanning trees is for proving general results about
+connected graphs. If you have a problem about connected graphs that only
+gets easier to solve when the graphs have more edges, then you can begin
+by solving it in its hardest case: when the graph is a tree. If you do,
+<a class="booklink" href="#thm:spanning-tree">Theorem 9.1</a> will immediately give you a
+general solution, by applying your specific solution to the spanning
+tree of a general connected graph.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="bridges">Bridges</h2>
+<p>Before we attain these promised powers, we need to learn much more
+about trees. Fortunately, there are lots of things to learn.</p>
+<p>To begin with, let’s take another look at the way we found a spanning
+tree in the proof of <a class="booklink" href="#thm:spanning-tree">Theorem 9.1</a>. We
+kept deleting edges if deleting them would not disconnect the graph,
+until there were no more edges left that we could delete. We can give a
+name to the type of edge that is left, as a prelude to studying such
+edges more thoroughly:</p>
+<div class="defn">
+<p><strong>Definition 9.2</strong>. <em>A <strong>bridge</strong>  in a graph  is an edge of  such that   has more connected components than
+. Most commonly,  is a connected graph, in which case
+ is a bridge if and only if   is not connected.</em></p>
+</div>
+<p>As intuition for this name, you should imagine a long chain of
+islands like the Florida Keys, connected to the mainland only by a
+single bridge (the Overseas Highway, in the case of Florida). If
+anything happened to the bridge, then the islands would only be
+accessible by water.</p>
+<details class="qa">
+<summary>If edge  is a bridge of a connected graph , how many connected components does
+  have?</summary>
+<p>Two: each vertex  left in   either has a walk to  or to . (If a   walk in  no longer exists in  , then that’s because it relied on
+edge , which means that it must
+have at least reached .)</p>
+</details>
+<p>Similarly, if  is not
+connected, and we delete an edge , then the number of connected
+components goes up by one: in ,
+there was a component  containing
+, which is replaced by the two
+components of  .</p>
+<figure class="bookfig" id="fig:graph-with-bridges">
+
+<figcaption>Which edges in this graph are bridges?</figcaption>
+</figure>
+<details class="qa">
+<summary>In the graph shown in <a class="booklink" href="#fig:graph-with-bridges">Figure 9.3</a>, which edges are
+bridges?</summary>
+<p>Edges , , , and .</p>
+</details>
+<p>Some graphs do not have any bridges at all. However, if we take a
+connected graph and start deleting edges from it, this might cause some
+of the remaining edges to become bridges. Eventually, if we keep
+deleting edges that are not bridges, we will only have bridges left.
+That’s what it means to be a tree! An equivalent way to phrase the
+definition of a tree would be, “A tree is a connected graph in which all
+edges are bridges.”</p>
+<details class="qa">
+<summary>In <a class="booklink" href="#fig:graph-with-bridges">Figure 9.3</a>, what is the minimum
+effort needed to show that  is not
+a bridge?</summary>
+<p>It’s enough to show that it has a
+substitute: any walk in the graph that uses edge  could instead use the edges . So it’s impossible to find two
+vertices  and  such that all   walks rely on the existence of edge
+.</p>
+</details>
+<p>In other words, edges  make a cycle, and if something happens to one of these edges,
+you can always “go the long way” around the cycle. In fact, this is
+always the reason why an edge is not a bridge!</p>
+<div class="lemma" id="lemma:bridge">
+<p><strong>Lemma 9.2</strong>. <em>An edge  of a graph  is a bridge if and only if it is not on
+any cycles.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We may assume that  is connected. If not, pass to the
+connected component of  containing
+ and ; edge  is still a bridge of that connected
+component.</p>
+<p>For one direction of the proof, we must formalize the idea of “going
+the long way around”. Take a cycle in  containing edge ; we can represent it by a closed walk
+
+where   and  . Then  is an   walk that does not use edge . We will use this walk to show that
+  is still connected, proving
+that  is not a bridge.</p>
+<p>Let  be two vertices of  . Because  is connected,  has an   walk. In it, if we replace every
+instance of  by
+the   walk we found, and every
+instance of  by
+the reverse of this walk, we obtain an   walk which does not use edge : it is still valid in  . Since  and  were arbitrary,   is still connected.</p>
+<p>For the other direction of the proof, suppose edge  is not a bridge. Then   is still connected, and in
+particular,   contains an   walk. By <a class="booklink" href="../beginning/walks.html#thm:walk-to-path">Theorem 3.1</a>,  contains an   path . Adding edge  to  produces a cycle (this is how the cycle
+graph  is defined from the path
+graph ), and that cycle contains
+edge . ◻</p>
+</div>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="properties-of-trees">Properties of trees</h2>
+<p>What does <a class="booklink" href="#lemma:bridge">Lemma 9.2</a> tell us about trees? In a tree
+, every edge is a bridge, so no
+edge is part of any cycles. Therefore a tree  has no cycles at all.</p>
+<details class="qa">
+<summary>When considering multigraphs, can a tree
+have loops or parallel edges?</summary>
+<p>No: a loop is a cycle of length , and a pair of parallel edges is a
+cycle of length . So it is never
+necessary to model a tree as a multigraph rather than a simple
+graph.</p>
+</details>
+<p>Not all graphs without cycles are trees. However, the following is
+true:</p>
+<div class="prop" id="prop:tree-v2">
+<p><strong>Proposition 9.3</strong>. <em>A graph  is a tree if and only if it is
+connected and has no cycles.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Both the condition in the proposition, and the
+definition of a tree, say that  is
+connected. So we must only show that a connected graph has no cycles if
+and only if all its edges are bridges (the second part of the definition
+of a tree).</p>
+<p>If a graph has no cycles, then none of its edges lie on cycles: by
+<a class="booklink" href="#lemma:bridge">Lemma 9.2</a>, they are all bridges. Conversely,
+if all edges of a graph are bridges, then by <a class="booklink" href="#lemma:bridge">Lemma 9.2</a>, none of them lie on cycles—so no
+cycles can exist at all, because a cycle needs to contain some edges.
+This proves the equivalence we wanted. ◻</p>
+</div>
+<p><a class="booklink" href="#prop:tree-v2">Proposition 9.3</a> is the first in a long line of
+results that characterize trees, giving an if-and-only-if condition for
+a graph to be a tree. Every such characterization could have been the
+definition of trees we started with, though some are more suited to it
+than others. Here is one more:</p>
+<div class="prop" id="prop:tree-v3">
+<p><strong>Proposition 9.4</strong>. <em>A graph  is a tree if and only if it has no
+cycles, but adding any edge would create a cycle.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Suppose  is a
+tree; by <a class="booklink" href="#prop:tree-v3">Proposition 9.4</a>, we already know it has no cycles.
+Let  be any edge we could add to
+; we want to show that   (the graph we get if we add edge
+ to ) has a cycle. Well,  cannot be a bridge of  : deleting it would only give us  again, and  is connected because it is a tree. So
+by <a class="booklink" href="#lemma:bridge">Lemma 9.2</a>,  must lie on some cycle in  , and in particular, adding  to  created a cycle.</p>
+<p>For the reverse direction, suppose that  has no cycles, but adding any edge
+would create a cycle. We want to prove that  is connected: then we can use
+<a class="booklink" href="#prop:tree-v2">Proposition 9.3</a> and conclude that  is a tree. To this end, let  be two vertices of ; we will be done if we find an   path in .</p>
+<p>If  is an edge of , then there is such a path: a path of
+length . If not, then we know that
+  has a cycle. That cycle did
+not exist in  (because  has no cycles at all), so it must use
+the new edge . As in the proof of
+<a class="booklink" href="#lemma:bridge">Lemma 9.2</a>, when there is a cycle using edge
+, there is an   walk not using edge  that “goes the long way around” the
+cycle. This is an   walk that
+still exists in , finishing our
+proof that  is connected. ◻</p>
+</div>
+<p>We could rephrase <a class="booklink" href="#prop:tree-v3">Proposition 9.4</a> to say
+that trees are exactly the graphs which are “maximally acyclic”: it has
+no cycles, but no more edges can be added without losing that property.
+In this way, it is a kind of opposite of our definition of trees as
+“minimally connected”: connected with as few edges as possible, so that
+no more edges can be removed without losing that property.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="minimum-cost-spanning-trees">Minimum-cost spanning trees</h2>
+<p>At the beginning of a chapter, I asked you to imagine a
+transportation company which wants to find the cheapest set of routes to
+keep its network connected. Though I said that the transportation
+company wants to find a spanning tree of its network, that’s not the
+whole story. Not all spanning trees are equally cheap, because not all
+of the routes in the transportation network are equally cheap to run or
+to maintain. To keep track of this data, we need to consider more than
+just a graph.</p>
+<div class="defn">
+<p><strong>Definition 9.3</strong>. <em>A <strong>weighted
+graph</strong> is a graph 
+together with a function  . For an edge  , the value  is
+called the <strong>cost</strong> or the weight of .</em></p>
+</div>
+<p><a class="booklink" href="#fig:weighted-example">Figure 9.4(a)</a> shows an example of a
+weighted graph: what the transportation network’s route map might look
+like. (To generate this simplified example, I placed the  vertices at slightly random points,
+and computed the distance between the points to determine the cost of
+the edges.)</p>
+<figure class="bookfig" id="fig:weighed-graph-mcst-example">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:weighted-example">
+
+<figcaption>A weighted graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:mcst-example">
+
+<figcaption>A minimum-cost spanning tree</figcaption>
+</figure>
+</div>
+<figcaption>Finding the minimum-cost spanning tree in a weighted
+graph</figcaption>
+</figure>
+<p>When we measure the cost of a subgraph of a weighted graph, we
+compute the total cost of its edges, adding up their individual costs. A
+spanning tree  is a weighted graph
+is called a <em>minimum-cost spanning tree</em>, or MCST for short, if
+it has the minimum total cost. <a class="booklink" href="#fig:mcst-example">Figure 9.4(b)</a>
+shows a minimum-cost spanning tree of the weighted graph in <a class="booklink" href="#fig:weighted-example">Figure 9.4(a)</a>.</p>
+<details class="qa">
+<summary>Should the MCST just use all the cheapest
+edges in the graph?</summary>
+<p>No: some of the cheap edges might create a
+cycle with even cheaper edges, making them redundant. On the other hand,
+some very expensive edges might be necessary to connect the MCST.</p>
+</details>
+<p>There are many algorithms that can be used for finding the
+minimum-cost spanning tree of a weighted graph. Famous ones include
+Prim’s algorithm and Kruskal’s algorithm. In this chapter, I will show
+you the <em>reverse-delete algorithm</em> (published by Joseph Kruskal
+in the same paper 
+as the algorithm that bears his name), because it bears the most
+resemblance to our proof of <a class="booklink" href="#thm:spanning-tree">Theorem 9.1</a>.</p>
+<p>In that proof, we repeatedly deleted edges, one at a time, until we
+were left with a spanning tree; however, the proof did not specify which
+edge to choose at each step. The only requirement is that we must never
+delete a bridge.</p>
+<p>If we were to modify that strategy to find a minimum-cost spanning
+tree, which edges should we delete? The most natural guess is that of
+all the non-bridges, we should pick the most expensive: the one with the
+highest weight. This is a “greedy” strategy: it makes the best choice it
+sees in the moment, with no regard to how this affects future
+choices.</p>
+<details class="qa">
+<summary>How could a greedy strategy fail—what
+should we be concerned about?</summary>
+<p>It’s conceivable that if we delete a
+cheaper edge and keep a more expensive one early on, then later in the
+process this will let us delete several more expensive edges to make up
+for it. The greedy strategy is not obviously correct: this will take
+some proof.</p>
+</details>
+<p>Let us summarize the reverse-delete algorithm formally. This is a
+slight change from the strategy we used to prove <a class="booklink" href="#thm:spanning-tree">Theorem 9.1</a>, because it only considers
+each edge once—however, there will be no point in returning to a
+previously-considered edge, because it will only be left alone if it is
+a bridge.</p>
+<ol>
+<li><p>Let  be
+a list of the edges of  in
+descending order of cost: from most expensive to cheapest. Also, let
+ ; we will construct a
+sequence  of
+graphs as we go.</p></li>
+<li>
+<p>Starting at  , look at
+edge  and ask: is  a bridge of ?</p>
+<p>If  is a bridge, set  ; if  is not a bridge, set  .</p>
+</li>
+<li><p>Repeat step 2 for  , until all edges have been considered. Return  as the minimum-cost spanning
+tree.</p></li>
+</ol>
+<p>We will assume that there are no ties between the costs of the edges.
+(One of the problems at the end of this chapter will ask you to
+generalize this result to allow for ties.)</p>
+<div class="theorem" id="thm:mcst">
+<p><strong>Theorem 9.5</strong>. <em>Let  be a connected weighted graph in which
+all edges have distinct costs. Then the output of the reverse-delete
+algorithm for  will be a
+minimum-cost spanning tree of .</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> The algorithm always produces a connected graph,
+because it starts with a connected graph and never deletes a bridge.
+Also, the only edges that are kept are bridges. Specifically, if edge
+ survives to the final graph
+, it must first survive to , which means it must have been a
+bridge of . Therefore there
+is no cycle in  containing
+. To obtain  from , we only delete edges; therefore
+ also cannot have a cycle
+containing , making  a bridge of . Since this is true for every edge
+,  must be a tree. Let’s give  another name: call it .</p>
+<p>To prove that the algorithm is optimal, we need to compare  to an alternate spanning tree , and somehow argue that  is better than . Specifically, what we’ll do is
+prove that if  , then
+ cannot be the MCST, because
+we can make a small improvement to it. This will prove the theorem,
+because it leaves  as the only
+possible candidate for the MCST.</p>
+<p>How can we do this? Well, first of all, if  , we can find an edge  which is present in , but not . (If every edge of  were present in , then either  would be equal to , or  would consist of  plus some additional edges. In the
+latter case,  would not be a
+tree, because it would not be minimally connected.)</p>
+<p>By <a class="booklink" href="#prop:tree-v3">Proposition 9.4</a>, the graph   has a cycle. Let  be that cycle, and let  be the most expensive edge of
+.</p>
+<p>By looking at the reverse-delete algorithm, we can prove that  cannot be part of , and in particular  . Here’s why: suppose that
+  in the list of edges
+by cost. In the graph 
+produced by the algorithm,  is
+still present, and so are all the other edges of , because we have not gotten to any of
+them yet. Therefore  is a cycle of
+ containing , meaning (by <a class="booklink" href="#lemma:bridge">Lemma 9.2</a>) that  is not a bridge of . We conclude that  (that is, ) is deleted and does not survive
+to  .</p>
+<p>Therefore we can modify 
+as follows: add , but then delete
+. This produces a cheaper
+connected graph!</p>
+<details class="qa">
+<summary>Why is it cheaper?</summary>
+<p>Because  is the most expensive edge of
+, and  is some other edge of : we deleted a more expensive edge than
+we added.</p>
+</details>
+<details class="qa">
+<summary>Why is it still connected?</summary>
+<p>Because we deleted an edge from a cycle of
+ , which (by <a class="booklink" href="#lemma:bridge">Lemma 9.2</a>) was not a bridge.</p>
+</details>
+<p>Actually, it is true that   is a tree itself, but proving that is inconvenient at
+the moment; it will be much easier once we can use <a class="booklink" href="../trees/properties.html#thm:trees">Theorem 10.2</a> from the next chapter.
+However, we do not need to know that it is a tree. Since   is connected, it
+certainly has a spanning tree by <a class="booklink" href="#thm:spanning-tree">Theorem 9.1</a>.
+The total cost of that spanning tree is at most the total cost of  , which in turn is
+strictly less than the cost of . Therefore  cannot be the minimum-cost
+spanning tree.</p>
+<p>Since this is true of any spanning tree other than , we conclude that  is the unique spanning tree of . ◻</p>
+</div>
+<details class="qa">
+<summary>Will the tree  produced by the reverse-delete
+algorithm ever contain the most expensive edge, ?</summary>
+<p>It might, if  is a bridge of . For example, if  is the only edge incident to a
+vertex, then we are forced to use it no matter how expensive it is.</p>
+</details>
+<details class="qa">
+<summary>Will  always contain the cheapest edge, ?</summary>
+<p>It will, though this is not as
+obvious.</p>
+<p>To delete , it would need to
+be part of a cycle  in . However, that cycle had other
+edges, which we considered before . Those edges were also part of  when we considered them, so we would
+have deleted them, instead.</p>
+</details>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>In the diagram of the cube graph shown below, each diagonal edge
+has length , each vertical edge
+has length , and each horizontal
+edge has length .</p>
+
+<p>Find a minimum-cost spanning tree of the cube graph, where the cost
+of each edge is taken to be its length in this diagram.</p>
+</li>
+<li><p>Generalizing the previous problem, suppose we make the hypercube
+graph  into a weighted graph by
+giving an edge  cost 
+if  . (By definition of
+the hypercube graph, there will be only one position  where  and  disagree.) What will be
+the total cost of the minimum-cost spanning tree of this weighted
+graph?</p></li>
+<li>
+<p>Find all  spanning trees of
+the graph below.</p>
+
+</li>
+<li>
+<p>Let  be the graph shown
+below:</p>
+
+<ol>
+<li><p>Identify all the bridges in . (There should be .)</p></li>
+<li><p>Find all the possible spanning trees of .</p></li>
+</ol>
+</li>
+<li><p>Prove that an -vertex graph
+with the degree sequence   must be a tree. What does such a graph look like?</p></li>
+<li><p>Find a -regular graph  which has a bridge. (You’ll need at
+least  vertices.)</p></li>
+<li>
+<p>Let  be the graph shown
+below:</p>
+
+<ol>
+<li><p>Find a spanning tree  of
+ whose <em>diameter</em> (the
+largest distance between any two vertices, as defined in <a class="booklink" href="../degrees/regular.html">Chapter 5</a>) is as large as
+possible.</p></li>
+<li><p>Is it possible to find two spanning trees of  that have only  edges in common? Give an example or
+explain why it is not possible.</p></li>
+</ol>
+</li>
+<li><ol>
+<li><p>Let  be a -regular graph in which edge  is a bridge. Then   should have a connected component
+containing , and a connected
+component containing . Describe
+the degree sequences of each component.</p></li>
+<li><p>Conclude that a -regular
+graph cannot have a bridge.</p></li>
+</ol></li>
+<li><p>Prove that  is a tree if
+and only if, between any two vertices of , there is exactly one path. (This is
+another of the many characterizations of trees to accompany
+<a class="booklink" href="#prop:tree-v2">Proposition 9.3</a> and <a class="booklink" href="#prop:tree-v3">Proposition 9.4</a>.)</p></li>
+<li>
+<p><a class="booklink" href="#thm:mcst">Theorem 9.5</a> assumes that all edges of the graph
+have distinct costs: there are no ties.</p>
+<ol>
+<li><p>Prove that if there are ties between the costs of some edges,
+then we can still conclude one of two things in the proof: either we
+find a spanning tree cheaper than  (so  cannot be the MCST) or   is a spanning tree
+with the same cost as , but
+“closer” to  in some
+sense.</p></li>
+<li><p>Explain why this is enough to still deduce that  is an MCST (even if it might not be
+unique).</p></li>
+<li><p>Use this to prove that every spanning tree of the cube graph
+ must have  edges. (Do not, of course, use my claim
+that every spanning tree of  is
+isomorphic to one of the six trees in <a class="booklink" href="#fig:six-spanning-trees">Figure 9.2</a>.)</p></li>
+</ol>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 9</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

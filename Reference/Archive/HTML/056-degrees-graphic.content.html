@@ -1,0 +1,725 @@
+<div><div class="solidbg title">
+<h1 class="chapter-title">Graphic Sequences</h1>
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 6</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="unnumbered" id="the-purpose-of-this-chapter">The purpose of
+this chapter</h2>
+<p>Most graph theory textbooks present the graphic sequence algorithm
+differently, by working with numerical sequences rather than directly
+with graphs. In my opinion, that makes the problem harder as well as
+more boring. This leaves much less class time for discussing edge swaps
+and the ideas in the proof of the Havel–Hakimi theorem (<a class="booklink" href="#thm:havel-hakimi">Theorem 6.2</a>).</p>
+<p>I think that <a class="booklink" href="#problem:100-person-party">Problem 6.1</a> and its solution for
+ people is a good way to motivate
+the graphic sequence algorithm. The proof of <a class="booklink" href="#prop:n-person-party">Proposition 6.1</a> could be skipped in a graph
+theory course covering this material, but I felt that I had to include
+it to avoid leaving the problem without a solution.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="an-unusual-party">An unusual party</h2>
+<p>Let me tell you a story. One time, I was at a
+very large party—there were 
+people there! Not everybody knew each other, of course. In fact, each
+person at the party knew a different number of people. In addition,
+I—</p>
+<p>“—That can’t be right!” you interrupt. “You’re saying that the graph
+which represents who knew each other at the party had the degree
+sequence ? But that’s not a graphic sequence!”</p>
+<details class="qa">
+<summary>Why isn’t this sequence graphic?</summary>
+<p>The vertex of degree  is adjacent to every other vertex, but
+the vertex of degree  is adjacent
+to none of the other vertices, and these facts contradict each
+other.</p>
+</details>
+<p>Oh, sorry. My mistake. Let me try again.</p>
+<div class="problem" id="problem:100-person-party">
+<p><strong>Problem 6.1</strong>. <em>One time, I was at a very large
+party—there were  people there!
+Not everybody knew each other, of course. In fact, each person at the
+party knew a different number of people, with one exception: I
+personally knew the same number of people as another guest, named Masha.
+In addition, I can promise you that everyone at this party knew at least
+one other person.</em></p>
+<p><em>Now, given this information, can you tell me how many people I
+knew at the party? Also, can you tell me whether Masha and I knew each
+other?</em></p>
+</div>
+<p>Before we solve this problem, let’s consider a smaller case: an -person party and its graph of who knows
+whom. In this graph, the vertex degrees are , but with one of
+these duplicated. We can’t duplicate an odd number, because then the sum
+of degrees would be odd, in violation of <a class="booklink" href="../beginning/degrees.html#cor:odd-vertices">Corollary 4.2</a> to the
+handshake lemma. So we must duplicate the , the , or the . I can tell you the correct option:
+duplicating the  is the only
+choice that will work.</p>
+<p>If the degree sequence is , can we reconstruct the graph? Let me show you a way to
+think about it with the aid of a diagram. In <a class="booklink" href="#fig:party-start">Figure 6.1(a)</a>, I have drawn vertices  through , each with an extra label: the degree
+that the vertex wants to have. As we work on filling in the graph, we
+will update these labels to show the remaining number of incident edges
+that the vertex wants, but doesn’t have yet.</p>
+<figure class="bookfig" id="fig:party-graph">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:party-start">
+
+<figcaption>The initial problem</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:party-step-1">
+
+<figcaption>Step 1</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:party-step-2">
+
+<figcaption>Step 2</figcaption>
+</figure>
+</div>
+<div class="subfigures">
+<figure class="booksubfig" id="fig:party-step-3">
+
+<figcaption>Step 3</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:party-end">
+
+<figcaption>Step 4</figcaption>
+</figure>
+</div>
+<figcaption>Reconstructing the -person party</figcaption>
+</figure>
+<p>For one of these vertices, we can immediately assign the neighbors.
+Vertex 1 needs to be adjacent to every other vertex, so we can draw all
+of those edges, as shown in <a class="booklink" href="#fig:party-step-1">Figure 6.1(b)</a>.
+This reduces the label on vertex 1 by  (we’ve given it  more incident edges), and the label on
+each other vertex by  (we’ve given
+each of them  incident edge). It’s
+important to point out that vertex  and  now want  more edges, so they will not be used
+again.</p>
+<p>We can continue. Vertex 2 needs  more edges, and there are only  other vertices that can accept edges,
+so it must be adjacent to all of them! We add all of those edges in
+<a class="booklink" href="#fig:party-step-2">Figure 6.1(c)</a>. Updating the label on each
+vertex, we see that vertices 2 and 7 are also satisfied.</p>
+<p>Two more steps solve the problem entirely. When we process vertex
+ in <a class="booklink" href="#fig:party-step-2">Figure 6.1(c)</a>, we arrive at the diagram in
+<a class="booklink" href="#fig:party-step-3">Figure 6.1(d)</a>. At that point, we only have
+two vertices left to deal with: vertices  and . Each one wants  more neighbor, so we make them
+adjacent, arriving at the diagram in <a class="booklink" href="#fig:party-end">Figure 6.1(e)</a>. Now we
+know all the edges of the graph.</p>
+<p>We will return to the ideas in this solution very soon. For now, let
+me make one more observation. In <a class="booklink" href="#fig:party-step-1">Figure 6.1(b)</a>,
+there are  vertices left to deal
+with (vertices  through ), and they demand  additional edges
+respectively. This is a -vertex
+version of the same problem, which suggests a solution to <a class="booklink" href="#problem:100-person-party">Problem 6.1</a> by induction.</p>
+<div class="prop" id="prop:n-person-party">
+<p><strong>Proposition 6.1</strong>. <em>For all  , up to isomorphism, there is a
+unique -vertex graph which
+contains a vertex of every degree  . In that graph, there are two vertices of
+degree , and they are
+adjacent.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We induct on .
+When  , the graph we are looking
+for is a graph with  vertices, at
+least one of which has degree .
+There must be an edge between the 
+vertices, and this already describes the graph uniquely. In this graph,
+there are two vertices of degree ,
+and they are adjacent, completing the base case.</p>
+<p>Next, for some  , assume
+that the previous case of the proposition holds. That is, there is a
+unique  -vertex graph  which contains a vertex of degree  . In , there are two vertices of degree  , and they are adjacent.</p>
+<p>Mimicking the way in which the -person party sits inside the -person party in <a class="booklink" href="#fig:party-step-1">Figure 6.1(b)</a>, we extend  to a -vertex graph  by adding two vertices  and ; we make  adjacent to  and to all vertices of , and we make  adjacent only . Here,   and  ; for all vertices  , we have   (because we
+added the edge ) and so the
+vertices of  fill in the degrees
+ . The two vertices
+of degree   in  become vertices of degree  in , and they are adjacent.</p>
+<p>This proves that the situation in <a class="booklink" href="#prop:n-person-party">Proposition 6.1</a> is possible, but not that
+it is unique. To prove it is unique, let  be any -vertex graph that satisfies the
+conditions. Let  be a vertex of
+degree   in , and let  be a vertex of degree  in . Then  must be adjacent to all other vertices
+(including ), which means  is only adjacent to . Let  ; then in , every degree  between  and   is present, because degree   is present in  on a vertex that’s neither  nor . Since  satisfies the conditions in the
+proposition, it must be isomorphic to the graph  in the previous paragraph, which forces
+ to be isomorphic to the
+graph  in the previous
+paragraph.</p>
+<details class="qa">
+<summary>How do we know every isomorphism between
+ and  extends to an isomorphism between
+ and ?</summary>
+<p>To extend an isomorphism  , just
+define   and  . Since in both  and ,  is adjacent to every vertex and  is adjacent only to , the extended  is guaranteed to preserve the
+edges out of  and .</p>
+</details>
+<p>This proves uniqueness, which completes the induction step; by
+induction, the graph exists and is unique up to isomorphism for all
+. ◻</p>
+</div>
+<p>In particular, the answer to <a class="booklink" href="#problem:100-person-party">Problem 6.1</a> (the   case of <a class="booklink" href="#prop:n-person-party">Proposition 6.1</a>) is that Masha and I both
+knew  people at the party, and we
+did know each other.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="a-graphic-sequence-algorithm">A graphic sequence algorithm</h2>
+<p>The reconstruction in <a class="booklink" href="#fig:party-graph">Figure 6.1</a> is
+only possible for very special degree sequences. Our decision at each
+step was forced, and the reason it was forced is the uniqueness result
+in <a class="booklink" href="#prop:n-person-party">Proposition 6.1</a>. Most degree sequences do
+not have a corresponding uniqueness result, in which case, life is more
+complicated.</p>
+<p>What do we do if we’re faced with a diagram like one of the ones in
+<a class="booklink" href="#fig:party-graph">Figure 6.1</a>, but there are no forced
+deductions to make? It turns out that there’s still something we can do.
+It will feel like making a lucky guess. Later in this chapter, in
+<a class="booklink" href="#thm:havel-hakimi">Theorem 6.2</a>, we will prove that the guess
+is always justified, at least in one sense. Before we do that, though,
+let me explain the guess and why it is at least reasonable.</p>
+<p>My reasoning is this: in <a class="booklink" href="#fig:party-graph">Figure 6.1</a>, we
+were always living life on the edge. The highest-degree vertex always
+just barely had enough edges we could place, and that’s why the result
+was unique. We would like our graphs to be as little like that,
+actually: we want to avoid having vertices which need many edges. We
+also want to avoid creating too many inactive vertices (which don’t need
+any more edges) too quickly.</p>
+<p>Putting these together, which vertex should we deal with next, at
+each step? It should be the vertex which is most in danger: the vertex
+with the highest remaining degree. Which neighbors should we give it, if
+we have the choice? It should be the other vertices with the highest
+remaining degree—this ensures those vertices need fewer edges later, and
+also avoids creating inactive vertices too early.</p>
+<p>Now, let me present an algorithm which makes all these ideas formal
+and precise.</p>
+<p>Given a sequence of nonnegative integers , our goal is to test
+if the sequence is graphic, and if it is, to construct a graph whose
+degree sequence is . We begin our construction with a graph  that has vertex set   and edge set
+ : no edges to
+start with. We will add edges to 
+as we go.</p>
+<p>For all  , we intend
+for vertex  to have degree  at the end. We give vertex  a <em>demand</em> representing how many
+more edges it needs to meet this goal. Initially, we set its demand
+equal to , but we will update
+the demand of  over the course of
+the algorithm. We will call a vertex <em>active</em> if its demand is
+positive, and <em>inactive</em> if its demand is . In diagrams, I will give each vertex
+an extra label showing its demand.</p>
+<p>We repeat the algorithm below for as long as any active vertices
+remain. In each iteration, we perform the following steps:</p>
+<ol>
+<li><p>Pick a vertex  with the
+highest possible demand, breaking ties arbitrarily; let  be the demand of .</p></li>
+<li><p>If there are fewer than 
+active vertices other than , stop
+and declare that the sequence is not graphic: we have failed to
+construct a graph with this sequence.</p></li>
+<li><p>Otherwise, let  be a set of
+ active vertices, other than , whose demand is as high as possible
+(again, breaking ties arbitrarily).</p></li>
+<li><p>Add the  edges  for all   to the graph . Set
+the demand of  to  (making it inactive) and decrease the
+demand of each vertex   by
+.</p></li>
+</ol>
+<p>Once no more active vertices remain, we stop.</p>
+<details class="qa">
+<summary>What is the maximum number of iterations
+we will need?</summary>
+<p>Since at least one vertex becomes inactive
+at each step, we can be be certain to stop after  iterations (in an -vertex graph), though we may stop
+sooner.</p>
+</details>
+<details class="qa">
+<summary>How do we know that when we construct a
+graph at the end, it has the right degree sequence?</summary>
+<p>At each step, the degree of each vertex
+increases by the same amount that its demand decreases. Since the demand
+of vertex  decreases from  to  by the end, its degree must have
+increased from  to : the value we wanted.</p>
+</details>
+<p>Let me show you two examples of this algorithm in action. After those
+examples, it will be more clear what we do and do not need to prove in
+order to be certain that the algorithm works.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="two-examples">Two examples</h2>
+<p>First, let’s use the algorithm in the previous section to find a
+graph with the degree sequence . (If you have a good memory, you can be certain that
+at least one such graph exists, because we saw such a graph in
+<a class="booklink" href="../beginning/degrees.html">Chapter 4</a>.)</p>
+<figure class="bookfig" id="fig:havel-hakimi-example-1">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:hh-example-1-start">
+
+<figcaption>The initial problem</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:hh-example-1-step-1">
+
+<figcaption>Step 1</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:hh-example-1-step-2">
+
+<figcaption>Step 2</figcaption>
+</figure>
+</div>
+<div class="subfigures">
+<figure class="booksubfig" id="fig:hh-example-1-step-3">
+
+<figcaption>Step 3</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:hh-example-1-end">
+
+<figcaption>Step 4</figcaption>
+</figure>
+</div>
+<figcaption>Finding a graph with degree sequence </figcaption>
+</figure>
+<p>We begin with a graph with no edges in which the demand of each
+vertex is equal to the degree we want it to have, as shown in <a class="booklink" href="#fig:hh-example-1-start">Figure 6.2(a)</a>. (Vertex  starts out inactive; it does not affect
+the problem in any way.)</p>
+<p>We begin one of the vertices with demand  (I choose , though it is also possible to choose
+) and add edges to the  other vertices with the highest demands
+(vertices , , , and ). The result is <a class="booklink" href="#fig:hh-example-1-step-1">Figure 6.2(b)</a>, with one fewer active
+vertex.</p>
+<p>Our next choice is unique: vertex , with demand . The vertices that will become its
+remaining neighbors must include vertices  and  (with demand ), as well as one of the vertices with
+demand ; we arbitrarily choose it
+to be vertex . Adding the edges
+between these vertices and decreasing demand accordingly, we obtain
+<a class="booklink" href="#fig:hh-example-1-step-2">Figure 6.2(c)</a>.</p>
+<p>Here, all four remaining vertices are tied for highest demand: their
+demands are all . Our next step
+will be to draw an edge between two of its vertices, and any of the ways
+to do that are fine. In <a class="booklink" href="#fig:hh-example-1-step-3">Figure 6.2(d)</a>, we add edge , leaving only two active vertices, and
+in <a class="booklink" href="#fig:hh-example-1-end">Figure 6.2(e)</a>, we add edge  and finish the problem. We can check
+our answer by checking that the label on each vertex in <a class="booklink" href="#fig:hh-example-1-start">Figure 6.2(a)</a> is equal to the degree
+it has in <a class="booklink" href="#fig:hh-example-1-end">Figure 6.2(e)</a>.</p>
+<p>In this example, the sequence we started with was graphic; let’s
+consider an example where the sequence we start with is not graphic. I
+will use the sequence .</p>
+<figure class="bookfig" id="fig:havel-hakimi-example-2">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:hh-example-2-start">
+
+<figcaption>The initial problem</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:hh-example-2-step-1">
+
+<figcaption>Step 1</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:hh-example-2-step-2">
+
+<figcaption>Step 2</figcaption>
+</figure>
+</div>
+<figcaption>Trying to find a graph with degree sequence </figcaption>
+</figure>
+<p>The first step, going from <a class="booklink" href="#fig:hh-example-2-start">Figure 6.3(a)</a> to <a class="booklink" href="#fig:hh-example-2-step-1">Figure 6.3(b)</a>, is completely normal.
+We pick vertex  (we could also
+have picked vertex  or , since all of them have demand ) and join it to vertices  through  (the  vertices with the highest demands).
+Vertices  and  become inactive at this step.</p>
+<p>Next, we pick one of the vertices with demand : say, vertex . We draw  edges, one of which must go to , and the rest must go to vertices with
+demand . There are several ways to
+draw the edges, but all of them have a similar result to what is shown
+in <a class="booklink" href="#fig:hh-example-2-step-2">Figure 6.3(c)</a>. Almost all of the
+vertices have become inactive.</p>
+<p>We can no longer proceed! In <a class="booklink" href="#fig:hh-example-2-step-2">Figure 6.3(c)</a>, vertex  has demand , but we do not have  other active vertices to connect to. So
+we declare that the sequence  is not graphic, and give up.</p>
+<p>Now, where in this process do we need additional proof?</p>
+<p>Nothing more is needed with the first example. In principle, once we
+have a graph with the right degree sequence, we don’t care if we got it
+by a valid algorithm, or an invalid algorithm, or if it came to us in a
+dream: we have the answer, and we can check it! But we are in even
+better shape than that: we’ve already shown that if the graphic sequence
+algorithm produces a graph, then the graph it produces is guaranteed to
+have the right degree sequence.</p>
+<p>The second example is iffier. A critic might complain that what we’re
+doing is similar to taking a crossword, writing in a few random words
+without looking at the clues, then pointing to one of the crossing
+entries and saying, “There’s no word with the letters Q, X, blank, O. So
+there must be a mistake in the crossword.” Sure, there could be a
+mistake. But maybe we just made the wrong guesses?</p>
+<p>For the specific degree sequence , we could backtrack and see that if we had made
+different choices, we’d be equally stuck. However, we don’t want a
+backtracking algorithm; for a longer degree sequence, that would be too
+tedious. What we want is an argument that justifies the specific choices
+our algorithm makes.</p>
+<p>But what is it that we want? We don’t need to prove that a graph with
+such a degree sequence must have the edges that we guessed. There could
+be multiple solutions, after all! What we need to prove is that whenever
+solutions exist, our guess doesn’t eliminate them all: that at least one
+of the solutions has the structure that the graphic sequence algorithm
+expects.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="the-havelhakimi-theorem">The Havel–Hakimi theorem</h2>
+<p>The result we need to prove is known as the Havel–Hakimi theorem:
+named after Václav Havel, who proved it in 1955 , and S. L. Hakimi, who rediscovered the
+corresponding algorithm for testing if a sequence is graphic
+in 1962 . Before we
+prove it, we will restate it in a different way, closer to how it was
+presented by Havel.</p>
+<div class="theorem" id="thm:havel-hakimi">
+<p><strong>Theorem 6.2</strong> (Havel–Hakimi theorem). <em>Let  be a graph with vertex set   such that  . Let  
+and let  .</em></p>
+<p><em>Then there is a graph  with
+  and with   for all  such that the neighbors of vertex  in  are precisely the vertices of .</em></p>
+</div>
+<details class="qa">
+<summary>How does the Havel–Hakimi theorem justify
+the correctness of our algorithm?</summary>
+<p>In the first step, vertex  (up to tiebreaks) is exactly the vertex
+we will process, and the edges from  to  are exactly the edges we add. The
+Havel–Hakimi theorem tells us that if there are any graphs  with the degree sequence we want, then
+in particular there is a graph  in
+which the choices we made are correct.</p>
+</details>
+<details class="qa">
+<summary>That only applies to the first step—what
+about future steps?</summary>
+<p>In our algorithm, there are never any
+edges between two active vertices. So if we only consider the subgraph
+induced by the active vertices (with the leftover demands), then every
+step is exactly like the first.</p>
+</details>
+<p>The advantage of stating the Havel–Hakimi theorem the way we did is
+that it describes a transformation: we want to take graph  and transform it into another graph
+, without changing the vertices or
+their degrees, so that  has the
+edges we want. We’ll do the transformation step by step, so we need a
+way to make a minor change to a graph without changing its degree
+sequence.</p>
+<p>This minor change is an operation called an <em>edge swap</em>. To
+perform one in a graph , we first
+find four vertices  and  such that  and  are edges of , but  and  are not. Then, we delete the edges
+ and  that did exist, and replace them by
+the edges  and  that previously did not exist.
+<a class="booklink" href="#fig:edge-swap">Figure 6.4</a> shows an example of an edge
+swap. You can see how the affected vertices , , , and  each lose an edge and gain another
+edge; thus, the overall degree sequence does not change.</p>
+<figure class="bookfig" id="fig:edge-swap">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:edge-swap-start">
+
+<figcaption>The initial graph</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:edge-swap-middle">
+
+<figcaption>Swap edges  and
+…</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:edge-swap-end">
+
+<figcaption>…for edges  and .</figcaption>
+</figure>
+</div>
+<figcaption>An example of an edge swap</figcaption>
+</figure>
+<p>We begin by proving a lemma that essentially says, “we can always use
+edge swaps to make progress toward what we want.” (I have sneakily
+reduced the number of hypotheses, eliminating ones we don’t really need.
+vertex  in <a class="booklink" href="#lemma:switch">Lemma 6.3</a> is vertex  in the Havel–Hakimi theorem, which has
+the highest degree in , but we
+will not to assume this.)</p>
+<div class="lemma" id="lemma:switch">
+<p><strong>Lemma 6.3</strong>. <em>Let  be a vertex in a graph  and let  be a set of at most  vertices in  not equal to  with the highest degrees, breaking ties
+arbitrarily.</em></p>
+<p><em>If not all vertices of  are
+adjacent to , then we can perform
+an edge swap in  to increase the
+number of vertices in  adjacent to
+.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let   be a
+vertex not adjacent to . Since
+ , but  is not adjacent to every vertex in
+, it must also have neighbors
+outside ; call one such neighbor
+. To summarize,  is not an edge of , but we wish it were;  is an edge of , but we don’t want it.</p>
+<p>We want to fix this state of affairs with an edge swap, but that
+needs a fourth vertex.</p>
+<details class="qa">
+<summary>What kind of fourth vertex  lets us perform an edge swap that
+delete edge  and add edge ?</summary>
+<p>At the same time, we must also delete edge
+ and add edge . So  must be adjacent to , but not to .</p>
+</details>
+<p>(It does not matter whether   or not, and it does not matter whether  is adjacent to  or not.)</p>
+<p>This is where our choice of 
+becomes important. We chose the vertices of  to have the highest degrees. Even if we
+broke some ties to do it, we know that the degree of every vertex
+in  is greater than or equal to
+the degree of every vertex not in , other than . In particular,  .</p>
+<p>On the other hand, we already have an example of a vertex adjacent to
+, but not : vertex . Before we look at any other vertices,
+ is in the lead. To reach  ,  must counter that lead at some point:
+it must have a neighbor  does not.
+Such a neighbor is exactly the vertex  we wanted.</p>
+<p>By performing the edge swap which deletes edges  and  and adds edges  and , We achieve the result we want:  is adjacent to one more vertex of . ◻</p>
+</div>
+<figure class="bookfig" id="fig:switching-steps">
+<div class="subfigures">
+<figure class="booksubfig" id="fig:1-edge-to-S">
+
+<figcaption> has one edge to </figcaption>
+</figure>
+<figure class="booksubfig" id="fig:lemma-swap-1">
+
+<figcaption>First edge swap</figcaption>
+</figure>
+</div>
+<div class="subfigures">
+<figure class="booksubfig" id="fig:lemma-swap-2">
+
+<figcaption>Second edge swap</figcaption>
+</figure>
+<figure class="booksubfig" id="fig:3-edges-to-S">
+
+<figcaption>Final result</figcaption>
+</figure>
+</div>
+<figcaption>Two iterations of <a class="booklink" href="#lemma:switch">Lemma 6.3</a> in an
+example;   and  </figcaption>
+</figure>
+<p><a class="booklink" href="#fig:switching-steps">Figure 6.5</a> shows two examples of
+using the edge swap given by <a class="booklink" href="#lemma:switch">Lemma 6.3</a>.
+Throughout, we want vertex   to
+become adjacent to all three vertices of  . (In fact,  , which is bigger than . In the proof of the Havel–Hakimi
+theorem, we apply <a class="booklink" href="#lemma:switch">Lemma 6.3</a> to a
+case where  , but only
+the inequality   is
+necessary.)</p>
+<ol>
+<li><p>In <a class="booklink" href="#fig:1-edge-to-S">Figure 6.5(a)</a>,  has only one neighbor in : vertex . We take   (a neighbor  wants to have in , but doesn’t) and   (a neighbor  has, but doesn’t want). We look for a
+third vertex adjacent to , but not
+, and find vertex   (vertex  would also have worked). Then, we swap
+edges  and  for edges  and , as shown in <a class="booklink" href="#fig:lemma-swap-1">Figure 6.5(b)</a>.</p></li>
+<li><p>After we do this,  only has
+two neighbors in : vertices  and . It is still not adjacent to vertex
+, so we take  ; we take   to be the neighbor that  is going to lose. The two vertices
+adjacent to   but not   are  and ; let’s take  . Then, we swap edges  and  for edges  and , as shown in <a class="booklink" href="#fig:lemma-swap-2">Figure 6.5(c)</a>.</p></li>
+<li><p>In the final result, shown in <a class="booklink" href="#fig:3-edges-to-S">Figure 6.5(d)</a>,
+ is adjacent to every vertex of
+.</p></li>
+</ol>
+<p>I put <a class="booklink" href="#lemma:switch">Lemma 6.3</a> first because from here, the proof
+of the Havel–Hakimi theorem is essentially just an application of the
+lemma, together with the extremal principle. It is a good exercise to
+try to do this yourself before reading ahead.</p>
+<div class="proof">
+<p><em>Proof of <a class="booklink" href="#thm:havel-hakimi">Theorem 6.2</a>.</em> Of all graphs with the
+same vertex set and vertex degrees as , let  be chosen to maximize the number of
+neighbors of  in .</p>
+<p>Then actually, all vertices of 
+must be adjacent to . If not, we
+could use <a class="booklink" href="#lemma:switch">Lemma 6.3</a> (taking  ) to increase the number of neighbors
+of  in . But  was chosen to have the largest possible
+number of such neighbors, so this can’t happen.</p>
+<p>Therefore  is exactly the graph
+needed to prove the theorem. ◻</p>
+</div>
+<p>I should say that the graphic sequence algorithm we’ve described is
+also known as the Havel–Hakimi algorithm, but it is commonly described
+in a different way that I consider less intuitive. Instead of putting
+the demands on the vertices and drawing edges, we can think of the
+algorithm as modifying a sequence   of the intended degrees. If  , the highest degree, then the
+algorithm places edges from the first vertex to the  vertices after it. This corresponds to
+an operation on sequences, turning  into  Repeating this operation eventually produces a sequence of
+all ’s (in which case the original
+sequence is graphic) or a sequence which is clearly not graphic (for
+example, because it contains negative numbers).</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="more-on-degree-sequences">More on degree sequences</h2>
+<p>We only used edge swaps in the proof of the Havel–Hakimi theorem, but
+they have other applications. To begin with, we can show the following
+theorem:</p>
+<div class="theorem" id="thm:swaps">
+<p><strong>Theorem 6.4</strong>. <em>If two graphs  and  have the same vertex set , and   for all  , then we can turn  into  by doing edge swaps.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We prove this by induction on the size of  (the common vertex set of  and ).</p>
+<p>When  , there is nothing to
+show: there is only one possible graph on  vertex.</p>
+<p>Assume this is possible for all pairs of  -vertex graphs, and let  and  both have  vertices. Let  be a vertex with the highest degree (in
+both  and ) and let  be the  vertices with the highest degrees
+after .</p>
+<p>By applying <a class="booklink" href="#lemma:switch">Lemma 6.3</a> repeatedly, we can perform edge
+swaps on  to get a graph  in which ’s neighbors are the vertices in . We can do the same to , getting a graph  (and so there is also a sequence
+of edge swaps that turn  into
+, by reversing those edge
+swaps).</p>
+<p>By induction, there is a sequence of edge swaps that turns   into   (both  -vertex graphs on the same vertex
+set). We can perform these edge swaps on  instead, and they will work
+equally well, turning  into
+. Finally, we know that we
+can turn  into .</p>
+<p>This shows that we can turn 
+into , and so by induction, this
+works when  and  have any number of vertices. ◻</p>
+</div>
+<p>Why is this theorem useful? Well, we know how to answer two possible
+questions about potential degree sequences…</p>
+<ol>
+<li><p>Is this sequence graphic? (Is it the degree sequence of a
+graph?)</p></li>
+<li><p>How is this sequence graphic? (Find a graph with this degree
+sequence.)</p></li>
+</ol>
+<p>…but there is a third, harder question we can ask:</p>
+<ol>
+<li><p>What is a typical graph with this degree sequence?</p></li>
+</ol>
+<p>That’s deliberately vague. However, <a class="booklink" href="#thm:swaps">Theorem 6.4</a> is the
+beginning of a possible answer to the last question.</p>
+<p>What we can do is start with an arbitrary graph which has that degree
+sequence, then perform many edge swaps at random, getting a random graph
+with this degree sequence. We can approximately
+answer questions like “are most graphs with this degree sequence
+connected” or “what is the average diameter of a graph with this degree
+sequence” by sampling many random graphs and analyzing the set of
+results.</p>
+<p>We can even approximately answer questions like “how many different
+graphs have this degree sequence?” To do this, just sample lots of
+graphs, then count how many repeats you get. Compare this to how many
+repeats you’d expect, if there were  possible graphs total. This should let
+you estimate the most likely value of .</p>
+<p>There is one difficulty to the procedure I’m outlining to you so
+cheerfully and optimistically, and that is the requirement of performing
+“many” edge swaps. Obviously, just one or two random edge swaps are not
+enough: the result is guaranteed to be very similar to our non-random
+starting graph. As the number of edge swaps grows, the dependence on the
+starting graph slowly decreases. However, it’s still not known in
+general how many edge swaps are necessary to make that dependence
+negligible. Without that knowledge, the random sampling algorithm cannot
+be considered reliable.</p>
+</div></div>
+<div><div class="solidbg text">
+<h2 class="chapter-section" id="practice-problems">Practice problems</h2>
+<ol>
+<li>
+<p>Using the degree sequence algorithm, or in some other way,
+determine which of the sequences below are graphic:</p>
+<ol>
+
+
+
+<li><p> (for any ).</p></li>
+<li><p>  (for any ).</p></li>
+</ol>
+<p>For the sequences that are graphic, construct graphs with those
+degree sequences.</p>
+</li>
+<li>
+<p>Let  be the graph on the
+left in the diagram below, and let  be the graph on the right.
+Corresponding vertices have the same degrees, and the two graphs are
+isomorphic, but they are not the same graph: they have different edges.
+ has all edges between  and , while  has all edges between  and .</p>
+
+<p>Find a sequence of edge swaps to turn  into . (Four edge swaps are enough.)</p>
+</li>
+<li>
+<p>Let me tell you another story.</p>
+<p>The other day, I was at another very large party. Once again, each
+person at the party knew a different number of people, with one
+exception: I personally knew the same number of people as another guest,
+named Pasha. In addition, I can promise you that everyone at this party
+knew at least one other person.</p>
+<p>The surprising thing is this: I did not know Pasha! How could this
+happen, and why does this not contradict <a class="booklink" href="#prop:n-person-party">Proposition 6.1</a>?</p>
+</li>
+<li><p>In <a class="booklink" href="#problem:100-person-party">Problem 6.1</a>, I included the
+condition that everyone at the party knew at least one other person. If
+this condition is dropped, then there is another possible graph: how can
+we find it? (What should its degree sequence be?)</p></li>
+<li><p>There are  possible graphs
+with the vertex set  such that   and  . Find all of them, and demonstrate directly that we can turn
+any one of them into any other via edge swaps.</p></li>
+<li>
+<p>There is another proof of <a class="booklink" href="#thm:swaps">Theorem 6.4</a> that is
+closer to our argument for the Havel–Hakimi theorem.</p>
+<p>Specifically, if  and  have the same vertex set, and every
+vertex has the same degree in  and
+in , then we can measure “how far
+away”  and  are from each other by asking: how many
+edges does  have that are not also
+edges of ? Now we can do the
+following:</p>
+<ol>
+<li><p>Prove that if  and  are not literally the same graph, then
+there is an edge swap we can perform on  to reduce “how far away” it is from
+.</p></li>
+<li><p>Prove <a class="booklink" href="#thm:swaps">Theorem 6.4</a> using part (a).</p></li>
+</ol>
+</li>
+<li><p>Under what conditions on ,
+, and  is a sequence of the form  a graphic sequence?</p></li>
+<li>
+<p>Let  be an -vertex graph whose vertices  have degrees  respectively, sorted
+in descending order:  Then  (the
+maximum degree of ) can be at most
+ ; in fact, it can be at most the
+number of nonzero degrees among .</p>
+<ol>
+<li><p>Explain why this is equivalent to the following inequality: 
+Here,  is simply the
+smaller of the two numbers  and
+.</p></li>
+<li><p>Prove the following inequality, which is a -vertex generalization of the previous
+one:  (Consider the number of edges between vertices
+ and  and the rest of the graph. Why is the
+“ ” there?)</p></li>
+<li><p>In general, we have an inequality of the form  for each  . What is the best possible function  that makes this inequality true? (I
+ask for “best possible” because some incredibly big function like   will also work, but
+will not be as useful as the smallest possible number you could put
+there.)</p></li>
+</ol>
+<p>More is true: a theorem of Pál Erdős and Tibor Gallai  states that if a sequence
+ satisfies the
+inequality in part (c) for every ,
+and the sum  
+is even, then the sequence is graphic. This is an alternative way to
+check whether a sequence is graphic.</p>
+</li>
+</ol>
+</div></div>
+<div><div class="solidbg text">
+<section class="footnotes footnotes-end-of-document" id="footnotes">
+<h2 id="footnotes">Footnotes</h2>
+<ol>
+<li id="fn1"><p>This appears to be a very common story to tell. In
+West’s <em>Introduction to Graph Theory</em> , a version of it appears as “The Handshake
+Problem”, and another version was a problem in the 1985 British
+Mathematical Olympiad.<a class="footnote-back" href="#fnref1">↩︎</a></p></li>
+<li id="fn2"><p>Fine print: this does not sample a graph uniformly at
+random. Essentially, it samples a graph with probability proportional to
+how many edge swaps are possible to do in it. But that’s a known bias we
+can account for.<a class="footnote-back" href="#fnref2">↩︎</a></p></li>
+</ol>
+</section>
+</div></div>
+<div><div class="solidbg title">
+<ul class="breadcrumb">
+
+
+
+<li>Chapter 6</li>
+</ul>
+<ul class="breadcrumb">
+
+
+</ul>
+</div></div>
+<div><div class="solidbg footer">
+<p><a href="../book.html">Start Doing Graph Theory</a> © 2025 by <a href="../author.html">Mikhail Lavrov</a> is licensed under 
+</p>
+</div></div>

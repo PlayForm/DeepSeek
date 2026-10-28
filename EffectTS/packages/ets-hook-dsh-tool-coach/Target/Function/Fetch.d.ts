@@ -1,4 +1,4 @@
-import type { ToolCatalog } from "@Interface/Execution.js";
+import type { ToolCatalog } from "../Interface/Execution.js";
 /** The tools-service surface Fetch needs (structural; the injected `tools`). */
 export interface ToolsService {
     schemas: () => {

@@ -25,10 +25,7 @@ import type { NodeKind } from "@Interface/Graph.js";
 import type State from "@Interface/State.js";
 import type { Log } from "@Interface/State.js";
 import { Activate } from "@playform/lib-dsh-core";
-
-// The bundle version, mirrored from package.json (the activation proof's
-// first field; a release bumps both together).
-const Version = "0.3.0";
+import Version from "@Variable/Version.js";
 
 /** Unwrap one possibly-volatile config cell (`{ get }` reference or value):
  * the loader hands volatile fields as cells, so every validation read goes

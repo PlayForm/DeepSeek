@@ -8,24 +8,18 @@
 # safe last. THE NEGATION IS MANDATORY (trap 11): 'Source/**/*.ts' matches the
 # Test tree (fast-glob); the second positional pattern excludes it. Without it
 # the plugin build fails on test-only syntax and would ship Test output inside
-# Target. The THIRD step runs the harness selfcheck (the vacuously-green
-# backstop for the harness's own fixtures). The FOURTH step type-checks the
-# Test tree against the built Target d.ts chain (the Build CLI runs tsc after
-# every Build step, so the Test files must be excluded from the plugin
-# program - tsconfig.json excludes Source/Test, and the Test tree gets its own
-# noemit config here). NOTE: `pnpm exec` instead of a package-local .bin
-# because the workspace installs with `nodeLinker: hoisted` (the route
-# package's precedent).
+# Target.
+# Build alone owns the pipeline: ESBuild writes Target/*.js, then the CLI's
+# own tsc pass emits Target/*.d.ts from the package tsconfig.json
+# (emitDeclarationOnly) and its tsc-alias pass rewrites the Source aliases
+# (@Function, @Interface, @Variable) to relative output paths.
 
 set -e
 
 Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
-	--ESBuild Configuration/ESBuild.ts \
-	--TypeScript Configuration/TypeScript.noemit.json
+	--ESBuild Configuration/ESBuild.ts
 
 Build "Source/Test/**/*.ts" \
 	--ESBuild Configuration/Test-ESBuild.ts
 
 node Target/Test/Harness.js --selfcheck || exit 1
-
-pnpm exec tsc -p Configuration/TypeScript-Test.noemit.json

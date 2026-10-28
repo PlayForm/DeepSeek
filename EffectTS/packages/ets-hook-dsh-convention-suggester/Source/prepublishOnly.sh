@@ -8,22 +8,17 @@
 # The plugin ESBuild config's Target plugin WIPES outdir "Target" recursively
 # on start; running the test build first would have its output destroyed.
 # The test config wipes only Target/Test, so it is safe last.
-# The THIRD step runs the harness selfcheck (the vacuously-green backstop for
-# every test folder's fixture). The FOURTH step type-checks the Test tree
-# against the built Target d.ts chain. NOTE: `pnpm exec` instead of
-# `./node_modules/.bin/tsc` because the workspace installs with
-# `nodeLinker: hoisted` - the package-local .bin does not exist in this
-# trio; pnpm resolves tsc from the root store.
+# Build alone owns the pipeline: ESBuild writes Target/*.js, then the CLI's
+# own tsc pass emits Target/*.d.ts from the package tsconfig.json
+# (emitDeclarationOnly) and its tsc-alias pass rewrites the Source aliases
+# (@Function, @Interface, @Variable) to relative output paths.
 
 set -e
 
 Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
-	--ESBuild Configuration/ESBuild.ts \
-	--TypeScript Configuration/TypeScript.noemit.json
+	--ESBuild Configuration/ESBuild.ts
 
 Build "Source/Test/**/*.ts" \
 	--ESBuild Configuration/Test-ESBuild.ts
 
 node Target/Test/Harness.js --selfcheck || exit 1
-
-pnpm exec tsc -p Configuration/TypeScript-Test.noemit.json

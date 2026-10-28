@@ -1,6 +1,6 @@
-import type ReferenceNode from "@Interface/ReferenceNode.js";
-import type Span from "@Interface/Span.js";
-import type SymbolNode from "@Interface/SymbolNode.js";
+import type ReferenceNode from "../Interface/ReferenceNode.js";
+import type Span from "../Interface/Span.js";
+import type SymbolNode from "../Interface/SymbolNode.js";
 declare const _default: {
     extensions: never[];
     files: string[];

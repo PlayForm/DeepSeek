@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const e="hook-dsh-edit-suggester",p=t,r=["pluginFactory"],n=o;var c={name:e,apply:n,Config:p,inject:r};export{p as Config,n as apply,c as default,r as inject,e as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import r from"./Variable/Version.js";const e="hook-dsh-edit-suggester",p=t,i=["pluginFactory"],n=o;var f={name:e,apply:n,Config:p,inject:i};export{p as Config,r as Version,n as apply,f as default,i as inject,e as name};

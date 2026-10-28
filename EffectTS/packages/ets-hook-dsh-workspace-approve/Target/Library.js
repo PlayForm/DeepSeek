@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import p from"./Variable/Config.js";const t="hook-dsh-workspace-approve",r=p,e=["pluginFactory"],n=o;var a={name:t,apply:n,Config:r,inject:e};export{r as Config,n as apply,a as default,e as inject,t as name};
+import o from"./Function/Apply.js";import p from"./Variable/Config.js";import t from"./Variable/Version.js";const r="hook-dsh-workspace-approve",e=p,n=["pluginFactory"],i=o;var a={name:r,apply:i,Config:e,inject:n};export{e as Config,t as Version,i as apply,a as default,n as inject,r as name};

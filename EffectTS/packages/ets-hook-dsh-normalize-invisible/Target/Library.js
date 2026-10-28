@@ -1,1 +1,1 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";const i="hook-dsh-normalize-invisible",n=t,p=["pluginFactory"],e=o;var l={name:i,apply:e,Config:n,inject:p};export{n as Config,e as apply,l as default,p as inject,i as name};
+import o from"./Function/Apply.js";import t from"./Variable/Config.js";import r from"./Variable/Version.js";const i="hook-dsh-normalize-invisible",p=t,e=["pluginFactory"],n=o;var f={name:i,apply:n,Config:p,inject:e};export{p as Config,r as Version,n as apply,f as default,e as inject,i as name};
