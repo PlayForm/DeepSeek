@@ -16,8 +16,8 @@ jobs:
         runs-on: ubuntu-latest
 
         if:
-            ${{ github.actor == 'dependabot[bot]' &&
-            github.event.pull_request.user.login == 'dependabot[bot]' }}
+            ${{ github.actor == 'dependabot[bot]' && github.event.pull_request.user.login ==
+            'dependabot[bot]' }}
 
         steps:
             - uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
@@ -34,8 +34,8 @@ jobs:
         needs: Approve
 
         if:
-            ${{ github.actor == 'dependabot[bot]' &&
-            github.event.pull_request.user.login == 'dependabot[bot]' }}
+            ${{ github.actor == 'dependabot[bot]' && github.event.pull_request.user.login ==
+            'dependabot[bot]' }}
 
         steps:
             - uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0

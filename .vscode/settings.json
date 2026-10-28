@@ -1,20 +1,118 @@
 {
-	"prettier.requireConfig": true,
-	"prettier.useEditorConfig": true,
 	"[astro]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[typescript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[json]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"[css]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
+	"[github-actions-workflow]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
 	"[markdown]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
-	"editor.formatOnSave": false
+	"[shellscript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[toml]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[yaml]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.detectIndentation": false,
+	"editor.formatOnPaste": false,
+	"editor.formatOnSave": true,
+	"editor.formatOnType": false,
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	"explorer.excludeGitIgnore": false,
+	"files.eol": "\n",
+	"files.exclude": {
+		"**/.DS_Store": true,
+		"**/.cache": true,
+		"**/.git": true,
+		"**/.hg": true,
+		"**/.svn": true,
+		"**/.turbo": true,
+		"**/CVS": true,
+		"**/Target": false,
+		"**/Thumbs.db": true,
+		"**/dist": true,
+		"**/node_modules": true,
+		"**/target": false
+	},
+	"files.insertFinalNewline": true,
+	"files.trimTrailingWhitespace": true,
+	"files.watcherExclude": {
+		"**/.cache/**": true,
+		"**/.git/**": true,
+		"**/.turbo/**": true,
+		"**/Target/**": true,
+		"**/Temporary/**": true,
+		"**/dist/**": true,
+		"**/node_modules/**": true,
+		"**/target/**": true
+	},
+	"formatFiles.excludePattern": "**/node_modules/**/*,**/.git/**/*,**/.turbo/**/*,**/.cache/**/*,**/Target/**/*,**/target/**/*,**/dist/**/*,**/Temporary/**/*,**/Reference/Archive/**/*,**/Reference/Raw/**/*,**/Documentation/Archive/**/*,**/Test/**/*,**/marketplace.json,**/pnpm-lock.yaml,**/*.mmd,**/*.svg",
+	"formatFiles.excludedFolders": [
+		"node_modules",
+		".git",
+		".turbo",
+		".cache",
+		"Target",
+		"target",
+		"dist",
+		"Temporary",
+		"Archive",
+		"Raw",
+		"Test"
+	],
+	"prettier.documentSelectors": [
+		"**/*.astro",
+		"**/*.html",
+		"**/*.md",
+		"**/*.sh",
+		"**/*.toml",
+		"**/*.yaml",
+		"**/*.yml"
+	],
+	"prettier.enable": true,
+	"prettier.ignorePath": ".prettierignore",
+	"prettier.requireConfig": true,
+	"prettier.useEditorConfig": false,
+	"search.exclude": {
+		"**/*.d.ts": true,
+		"**/*.map": true,
+		"**/.cache": true,
+		"**/.turbo": true,
+		"**/Documentation/Archive": true,
+		"**/Reference/Archive": true,
+		"**/Reference/Raw": true,
+		"**/Target": true,
+		"**/dist": true,
+		"**/marketplace.json": true,
+		"**/node_modules": true,
+		"**/pnpm-lock.yaml": true,
+		"**/target": true
+	}
 }

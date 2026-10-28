@@ -68,3 +68,17 @@ marketplace.json
 # Test fixtures - frozen by design, never reformat
 Test
 Test/**
+
+# File types Prettier has no parser for. The CLI skips unknown extensions
+# silently when it walks a directory, but the editor passes ONE file and would
+# fail with "No parser could be inferred" - listing them here makes Alt+F and
+# format-on-save a no-op instead of an error, so the editor and the CLI agree.
+**/*.mmd
+**/*.svg
+**/*.py
+**/*.rs
+
+# Scratch space: the derived 0.0.0 placeholder scaffold
+# (Maintain/Generate/Placeholders) and one-off probes.
+Temporary
+Temporary/**
