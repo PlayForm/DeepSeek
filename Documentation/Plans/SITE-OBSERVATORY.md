@@ -58,4 +58,24 @@ finished; it moves because the evidence it names exists.
   each world in isolation.
 - The catalogue is a source snapshot, not a runtime composition.
 - The lens switch explains a lens; it does not reconstruct a captured request.
-- No runtime capture is published, so every graph on the site is authored and labelled as such.
+- No runtime capture is published, so every graph on the site is authored and labelled as such. | 19
+  | World roles come from metadata, not array position | in flight | `ScenarioRole` on a world,
+  retained by validation, looked up by role in the client | | 20 | One source descriptor drives
+  badge, status and export | in flight | catalogue, authored walkthrough, imported catalogue and
+  imported recording are distinct kinds | | 21 | Status and error messages are always visible when
+  they say something | in flight | one `SetStatus` helper that clears `hidden`; the pill sits
+  outside the toggled region | | 22 | A source change resets selection, reveal, cache and inspector
+  | in flight | `ResetSourceState` before a new dataset is accepted | | 23 | Search and reveal do
+  not share one visibility class | in flight | `search-muted` and `future-event`, applied
+  independently | | 24 | Inspector labels are honest | in flight | `World` and `Display position`,
+  with "Not applicable" for a catalogue | | 25 | The graph toggle saves the prior status before
+  overwriting it | in flight | ordering fixed in the toggle handler | | 26 | Only the Events lens
+  looks functional | in flight | the other three carry `aria-disabled` and an explanation | | 27 |
+  CI enforces the graph tests and the drift guard | done | `Node.yml` runs `Test`, `Graph:Test`,
+  `Drift` before `prepublishOnly` | | 28 | `lib-dsh-conversation` is in the taxonomy | done | added
+  to Core and Factory in `Groups.mjs`; Unclassified stays for genuinely unmapped packages | | 29 |
+  The deployment can be identified | done | `/site-identity.json` plus a footer revision line | | 30
+  | The bar is organised and the graph fills the viewport | in flight | three dispersed clusters,
+  popover dropdowns, `100dvh` shell, no page hero on the two graph routes | | 31 | Story claims are
+  reviewed against the mechanics | open | governance timing (awaited versus detached), `step` versus
+  phase, and the file-to-next-request admission path |
