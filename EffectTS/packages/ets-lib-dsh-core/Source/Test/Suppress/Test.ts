@@ -2,7 +2,7 @@
 // suppression-line composer - the three shapes (continuation error, listener
 // error with a string cause, empty-message error still composes the line).
 // Runs standalone (`node Target/Test/Suppress/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-lib-dsh-core: the REAL built entry only.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter } from "../Harness.js";

@@ -6,7 +6,7 @@
 // selection resolution, basename routing, per-step containment, in-place
 // re-registration).
 // Runs standalone (`node Target/Test/Schema-Wire-Govern/Test.js`) AND under
-// the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory
 // class, from the Harness.
 import assert from "node:assert/strict";

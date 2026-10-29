@@ -6,7 +6,7 @@
 // transform, the fresh-version basis (the live failure mode), and the string
 // message logged verbatim.
 // Runs standalone (`node Target/Test/Continue/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-plugin-dsh-factory: the fake ctx + the REAL factory
 // class, from the Harness.
 import assert from "node:assert/strict";

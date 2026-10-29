@@ -5,7 +5,7 @@
 // gate, the block-start/usage/finish passthroughs, the block-end
 // text/reasoning/thinking fields, and the second-flavor injection.
 // Runs standalone (`node Target/Test/Chunk/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-lib-dsh-core: the REAL built Target only.
 // NOTE: the harness's Finish guard is aliased to `Guard` here so the source
 // suite's `Finish` chunk fixture keeps its name.

@@ -299,11 +299,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1793279048,
+					"publishTimestamp": 1793280404,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "4d0ffa9d67fe2ca78eca76d93f62ee258af4ad75",
+						"commit": "5f6de87a53dd29d495ff259c37804249d56e1ac1",
 						"path": "EffectTS/packages/ets-client-dsh-panel-family"
 					},
 					"engines": {}
@@ -341,11 +341,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1793279048,
+					"publishTimestamp": 1793280404,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "4d0ffa9d67fe2ca78eca76d93f62ee258af4ad75",
+						"commit": "5f6de87a53dd29d495ff259c37804249d56e1ac1",
 						"path": "EffectTS/packages/ets-client-dsh-panel-family-host"
 					},
 					"engines": {}
@@ -436,11 +436,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1793279048,
+					"publishTimestamp": 1793280404,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "4d0ffa9d67fe2ca78eca76d93f62ee258af4ad75",
+						"commit": "5f6de87a53dd29d495ff259c37804249d56e1ac1",
 						"path": "EffectTS/packages/ets-hook-dsh-batch-decision"
 					},
 					"engines": {}
@@ -592,11 +592,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1793278240,
+					"publishTimestamp": 1793280404,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "512c91aae7b2733a96b2be66f33b4abe1b718ec5",
+						"commit": "5f6de87a53dd29d495ff259c37804249d56e1ac1",
 						"path": "EffectTS/packages/ets-hook-dsh-comment-filter"
 					},
 					"engines": {}
@@ -849,11 +849,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1793279048,
+					"publishTimestamp": 1793280404,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "4d0ffa9d67fe2ca78eca76d93f62ee258af4ad75",
+						"commit": "5f6de87a53dd29d495ff259c37804249d56e1ac1",
 						"path": "EffectTS/packages/ets-hook-dsh-lesson-nudge"
 					},
 					"engines": {}
@@ -2447,11 +2447,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1793276580,
+					"publishTimestamp": 1793280404,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"commit": "5f6de87a53dd29d495ff259c37804249d56e1ac1",
 						"path": "EffectTS/packages/ets-plugin-dsh-cost"
 					},
 					"engines": {}
@@ -2736,11 +2736,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1793279048,
+					"publishTimestamp": 1793280404,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "4d0ffa9d67fe2ca78eca76d93f62ee258af4ad75",
+						"commit": "5f6de87a53dd29d495ff259c37804249d56e1ac1",
 						"path": "EffectTS/packages/ets-plugin-dsh-lesson-review"
 					},
 					"engines": {}
@@ -2871,11 +2871,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1793276580,
+					"publishTimestamp": 1793280404,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"commit": "5f6de87a53dd29d495ff259c37804249d56e1ac1",
 						"path": "EffectTS/packages/ets-plugin-dsh-pattern"
 					},
 					"engines": {}

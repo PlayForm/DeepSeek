@@ -5,7 +5,7 @@
 // activated (pinner, ...) ledger line + logger prefix, the Attach P1/P2/P5
 // effects with the in-flight disposal, and the storage-less journal sink.
 // Runs standalone (`node Target/Test/State-And-Activation/Test.js`) AND under
-// the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-package-pinner.
 import assert from "node:assert/strict";
 import {

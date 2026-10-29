@@ -4,7 +4,7 @@
 // tool-args normalization, including their cumulative pre-bind journal
 // counts.
 // Runs standalone (`node Target/Test/Runs/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Smoke of @playform/ets-hook-dsh-normalize-spaces: the fake ctx + the REAL
 // factory + the REAL spaces apply (the seams live in ../Harness.js).
 import assert from "node:assert/strict";

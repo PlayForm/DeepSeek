@@ -3,7 +3,7 @@
 // sections) and Default (the built-in exclusion segments, anywhere mode,
 // exclusion-first).
 // Runs standalone (`node Target/Test/Data-Lists/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-lib-dsh-core: the REAL built entry only.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter } from "../Harness.js";

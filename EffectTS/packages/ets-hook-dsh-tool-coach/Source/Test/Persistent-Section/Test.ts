@@ -6,7 +6,7 @@
 // maxSectionTools, logs no rebuild line on the first build, and auto-clears
 // after the clean window with its byte-exact line. Runs standalone
 // (`node Target/Test/Persistent-Section/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions are moved
 // verbatim from Classic/smokes/tool-coach-smoke.mjs (R4).
 import assert from "node:assert/strict";

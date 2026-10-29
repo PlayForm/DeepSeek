@@ -4,7 +4,7 @@
 // groups, the count ledger line and the P5 journal routing of the count
 // event (factory pre-bind buffer, not the per-State queue).
 // Runs standalone (`node Target/Test/Stream-Contract/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Smoke of @playform/ets-hook-dsh-normalize-quotes: the fake ctx + the REAL
 // factory + the REAL quotes apply (the seams live in ../Harness.js).
 import assert from "node:assert/strict";

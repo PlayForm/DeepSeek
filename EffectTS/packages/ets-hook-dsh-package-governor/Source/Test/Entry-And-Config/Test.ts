@@ -3,7 +3,7 @@
 // posture (the ONLY factory import is the Config module's standalone Schema),
 // and the Config schema's volatile cells + defaults.
 // Runs standalone (`node Target/Test/Entry-And-Config/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-package-governor.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";

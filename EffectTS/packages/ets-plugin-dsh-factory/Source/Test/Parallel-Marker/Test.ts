@@ -12,7 +12,7 @@
 // changes: every pre-existing assertion in the other folders stays
 // byte-identical, sequential is still the default).
 // Runs standalone (`node Target/Test/Parallel-Marker/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-plugin-dsh-factory: the fake ctx + the REAL
 // factory class, from the Harness.
 import assert from "node:assert/strict";

@@ -5,7 +5,7 @@
 // history), so the folder replays R2's four setup calls before R3's
 // fresh-agent sequence. Runs standalone
 // (`node Target/Test/Notes-And-Cooldown/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-tool-coach. The assertions are moved
 // verbatim from Classic/smokes/tool-coach-smoke.mjs (R2 + R3).
 import assert from "node:assert/strict";

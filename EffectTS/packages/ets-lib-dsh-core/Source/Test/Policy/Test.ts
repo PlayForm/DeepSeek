@@ -2,7 +2,7 @@
 // read -> fallback -> diagnostics mechanics - absent file, readable file,
 // unreadable file, and the Quiet form that skips every diagnostic.
 // Runs standalone (`node Target/Test/Policy/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-lib-dsh-core: the REAL built entry only.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";

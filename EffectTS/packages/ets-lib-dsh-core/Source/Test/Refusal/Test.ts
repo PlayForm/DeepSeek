@@ -2,7 +2,7 @@
 // only the declared dependency sections may differ; a non-dependency section
 // change is refused with the byte-identical refusal line.
 // Runs standalone (`node Target/Test/Refusal/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-lib-dsh-core: the REAL built entry only.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter } from "../Harness.js";
