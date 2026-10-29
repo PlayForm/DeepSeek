@@ -83,6 +83,28 @@ import Twins from "./Variable/Twins.mjs";
  *  duplicates the substitution in a scratch script. */
 const CheckOnly = process.argv.includes("--check");
 
+/** `--only=ets-a,ets-b`: restrict the run to the named twins (the directory
+ *  names, without the `@playform/` scope). Without it, every twin runs. */
+const OnlyArgument = process.argv.find((Argument) => Argument.startsWith("--only="));
+const Only =
+	OnlyArgument === undefined
+		? null
+		: OnlyArgument.slice("--only=".length).split(",").filter(Boolean);
+const Scope =
+	Only === null
+		? Twins
+		: Twins.filter((Entry) => Only.includes(Entry.name.replace("@playform/", "")));
+
+if (Only !== null) {
+	const Unmatched = Only.filter(
+		(Name) => !Twins.some((Entry) => Entry.name.replace("@playform/", "") === Name),
+	);
+	if (Unmatched.length > 0) {
+		console.error(`--only names with no MANIFEST entry: ${Unmatched.join(", ")}`);
+		process.exit(1);
+	}
+}
+
 let Generated = 0;
 let Skipped = 0;
 let Protected = 0;

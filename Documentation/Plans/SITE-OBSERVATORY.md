@@ -67,8 +67,8 @@ finished; it moves because the evidence it names exists.
   outside the toggled region | | 22 | A source change resets selection, reveal, cache and inspector
   | in flight | `ResetSourceState` before a new dataset is accepted | | 23 | Search and reveal do
   not share one visibility class | in flight | `search-muted` and `future-event`, applied
-  independently | | 24 | Inspector labels are honest | done | `World` and `Display position`,
-  with "Not applicable" for a catalogue | | 25 | The graph toggle saves the prior status before
+  independently | | 24 | Inspector labels are honest | done | `World` and `Display position`, with
+  "Not applicable" for a catalogue | | 25 | The graph toggle saves the prior status before
   overwriting it | in flight | ordering fixed in the toggle handler | | 26 | Only the Events lens
   looks functional | in flight | the other three carry `aria-disabled` and an explanation | | 27 |
   CI enforces the graph tests and the drift guard | done | `Node.yml` runs `Test`, `Graph:Test`,
@@ -82,6 +82,13 @@ finished; it moves because the evidence it names exists.
 
 ## The difference lens and the remaining visual work
 
-The lens landed: selecting an artifact lights both counterparts and their evidence path, and the inspector states the baseline value, the PlayForm value and the explanation path. The next slice was: selecting an artifact lights both world counterparts and their evidence path, dims the rest, and fills a three-cell before/after/explanation card. The data is already in the traces (`Values: { Before, After }`), the model validates it, and the client binding is in flight.
+The lens landed: selecting an artifact lights both counterparts and their evidence path, and the
+inspector states the baseline value, the PlayForm value and the explanation path. The next slice
+was: selecting an artifact lights both world counterparts and their evidence path, dims the rest,
+and fills a three-cell before/after/explanation card. The data is already in the traces
+(`Values: { Before, After }`), the model validates it, and the client binding is in flight.
 
-After the lens: the axis projection with shared stage columns, the per-plugin behaviour timeline on every package page, the branch states (collapsed summary, expanded events, focused path), the eight decision outcomes with unavailable distinct from abstained, the plugin drawer with its five actions, and the three follow locks.
+After the lens: the axis projection with shared stage columns, the per-plugin behaviour timeline on
+every package page, the branch states (collapsed summary, expanded events, focused path), the eight
+decision outcomes with unavailable distinct from abstained, the plugin drawer with its five actions,
+and the three follow locks.
