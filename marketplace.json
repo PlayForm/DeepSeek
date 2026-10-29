@@ -592,11 +592,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1793276580,
+					"publishTimestamp": 1793278240,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"commit": "512c91aae7b2733a96b2be66f33b4abe1b718ec5",
 						"path": "EffectTS/packages/ets-hook-dsh-comment-filter"
 					},
 					"engines": {}

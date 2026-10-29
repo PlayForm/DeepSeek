@@ -59,12 +59,12 @@ export const runTest = async (): Promise<number> => {
 		const Run = Make(Validate({ logFile: Ledger, enabled: true }));
 		Check(Count, "L3: the activation line is byte-exact", () => {
 			assert.ok(
-				Run.Lines.includes("graph-suggester: activated (bundle 0.2.1, intents 2, threshold 0.75)"),
+				Run.Lines.includes(`graph-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 2, threshold 0.75)`),
 			);
 		});
 		Check(Count, "L3: the activation line is in the durable ledger exactly once", () => {
 			assert.equal(
-				LedgerWith("activated (bundle 0.2.1, intents 2, threshold 0.75)").length,
+				LedgerWith(`activated (bundle ${process.env.VERSION_PACKAGE}, intents 2, threshold 0.75)`).length,
 				1,
 			);
 		});
@@ -98,7 +98,7 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Filtered.State.Rules.length, 1);
 			assert.equal(Filtered.State.Rules[0].id, "Sibling");
 			assert.ok(
-				Filtered.Lines.includes("graph-suggester: activated (bundle 0.2.1, intents 1, threshold 0.75)"),
+				Filtered.Lines.includes(`graph-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 1, threshold 0.75)`),
 			);
 		});
 	}
