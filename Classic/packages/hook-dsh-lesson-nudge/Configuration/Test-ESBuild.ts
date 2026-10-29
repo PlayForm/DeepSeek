@@ -6,7 +6,18 @@
 //
 // The Target-Test plugin wipes ONLY Target/Test on start - the plugin build
 // owns Target and runs BEFORE this step (prepublishOnly.sh order).
+import { readFileSync } from "node:fs";
+
 import type { BuildOptions, Plugin } from "esbuild";
+
+// The package manifest, read at config-load time: its version becomes the
+// build-time constant the define block below compiles into the test Target
+// (the same define the plugin build applies).
+const Package = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
+	version?: string;
+};
+
+const Version = Package.version ?? "0.0.0";
 
 export default {
 	color: true,
@@ -21,6 +32,9 @@ export default {
 	tsconfig: "tsconfig.json",
 	write: true,
 	sourcemap: true,
+	define: {
+		"process.env.VERSION_PACKAGE": JSON.stringify(Version),
+	},
 	plugins: [
 		{
 			name: "Target-Test",

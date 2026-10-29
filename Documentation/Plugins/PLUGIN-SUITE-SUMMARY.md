@@ -16,9 +16,8 @@ index: Documentation/INDEX.md
 > The live matrix with the evidence is Documentation/Plans/POC-LEDGER.md, and the per-plugin live
 > test plans are in Documentation/Testing/.
 >
-> The release state is 0.2.1 for every package, all
-> UNPUBLISHED (the npm bootstrap tiers: 2-placeholder or 1-missing), and the 15 pre-existing packages
-> were never published either.
+> The release state is 0.2.1 for every package, all UNPUBLISHED (the npm bootstrap tiers:
+> 2-placeholder or 1-missing), and the 15 pre-existing packages were never published either.
 
 ## 1. The 36 NEW plugins (built 2026-10-22)
 

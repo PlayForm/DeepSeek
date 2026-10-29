@@ -3,7 +3,7 @@
 # prepublishOnly.sh, mirroring the live-containers pattern: the plugin build
 # runs once, then the test build WATCHES Source/Test. Run a single test with
 # `node Target/Test/<Name>/Test.js`; run the whole folder tree through
-# `node Maintain/Run-Smokes.mjs` (the aggregate). The negation is mandatory
+# `node Maintain/Run/Smokes/Index.mjs` (the aggregate). The negation is mandatory
 # (trap 11) so the dev twin cannot ship Test output either.
 
 set -e
