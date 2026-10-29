@@ -189,8 +189,8 @@ The plugin ships **disabled**, so enable it by explicit ACTIVATE in the profile.
 The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
 tree excluded), the Test build, the harness selfcheck, and the Test type-check.
 
-Fifteen folders live under `Source/Test/`, each standalone and under `Maintain/Run-Smokes.mjs`, each
-with its own `## Expected count`:
+Fifteen folders live under `Source/Test/`, each standalone and under
+`Maintain/Run/Smokes/Index.mjs`, each with its own `## Expected count`:
 
 - the five original folders (Pack-Driven, Post-Execute-And-Learning, Sticky-Section-And-Ring,
   Wiring-And-Ledger, Workspace-Gate),

@@ -351,7 +351,8 @@ The tests compile to `Target/Test/` in a separate ESBuild step (`Configuration/T
 that runs SECOND in `prepublishOnly.sh`, after the plugin build (which wipes `Target/` recursively).
 
 Each test runs standalone (`node Target/Test/<Name>/Test.js`) and under the aggregate
-(`node Maintain/Run-Smokes.mjs`, which guards each folder's printed PASS count against its README).
+(`node Maintain/Run/Smokes/Index.mjs`, which guards each folder's printed PASS count against its
+README).
 
 Neither tree is ever published: `.npmignore` excludes `Source/Test/` and `Target/Test/`, and the
 package `files` field negates `Target/Test`.

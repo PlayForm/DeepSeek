@@ -6,7 +6,7 @@
 // both writes land at the fresh-stat version), and the update step alone
 // through the Dispatch envelope.
 // Runs standalone (`node Target/Test/Direct-Govern/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-cargo-governor.
 import assert from "node:assert/strict";
 import * as Path from "node:path";

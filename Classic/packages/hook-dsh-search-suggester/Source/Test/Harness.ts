@@ -307,7 +307,7 @@ if (InvokedDirectly) {
 		assert.deepEqual(Run.RootNames, []);
 		assert.equal(Run.Returned, undefined);
 		assert.equal(Run.Fs.reads + Run.Fs.writes, 0);
-		assert.deepEqual(Run.Lines, ["hook-dsh-search-suggester: activated (bundle 0.2.1, intents 10, threshold 0.75)"]);
+		assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 10, threshold 0.75)`]);
 	});
 	if (Count.N === 3 && Count.F === 1) {
 		console.log("Harness selfcheck OK");

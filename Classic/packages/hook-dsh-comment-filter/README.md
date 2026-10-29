@@ -119,4 +119,4 @@ node Target/Test/Intent/Test.js     # 12 PASS - Intent
 
 The per-folder READMEs declare the expected counts, which is the vacuously-green guard.
 
-The aggregate at `node Maintain/Run-Smokes.mjs` discovers the folders automatically.
+The aggregate at `node Maintain/Run/Smokes/Index.mjs` discovers the folders automatically.

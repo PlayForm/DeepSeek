@@ -3,7 +3,7 @@
 // undefined return) and the config schema (every default, the volatile cells
 // vs the plain module fields, the overrides validation).
 // Runs standalone (`node Target/Test/Loader-And-Config/Test.js`) AND
-// under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-cargo-governor.
 import assert from "node:assert/strict";
 import {

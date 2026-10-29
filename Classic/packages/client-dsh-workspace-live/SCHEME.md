@@ -94,8 +94,8 @@ locale string.
 ## 9. Verification
 
 - `prepublishOnly` builds `Target/`, writes `Target/Client.bundle.js` through
-  `Maintain/Build-Client-Bundle.mjs`, builds `Target/Test/`, runs the selfcheck of the harness, and
-  type-checks the Test tree.
+  `Maintain/Build/Client-Bundle/Index.mjs`, builds `Target/Test/`, runs the selfcheck of the
+  harness, and type-checks the Test tree.
 - The three smoke folders hold the counts: `Contract-And-Wiring` 12 PASS, `Store-And-Snapshot` 11
   PASS, and `Child-Slot-And-Trace` 12 PASS.
 

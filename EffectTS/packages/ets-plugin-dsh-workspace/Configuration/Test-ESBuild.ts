@@ -41,6 +41,9 @@ export default {
 	tsconfig: "tsconfig.json",
 	write: true,
 	sourcemap: true,
+	define: {
+		"process.env.VERSION_PACKAGE": JSON.stringify(Version),
+	},
 	plugins: [
 		{
 			name: "Target-Test",

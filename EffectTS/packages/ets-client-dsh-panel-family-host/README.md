@@ -144,7 +144,7 @@ The accepted bridge write's audit line is the config editor's own.
 
 ## The build and the tests
 
-`pnpm prepublishOnly` runs the plugin build (ESM `Target/`), then `Maintain/Build-Client-Bundle.mjs`
+`pnpm prepublishOnly` runs the plugin build (ESM `Target/`), then `Maintain/Build/Client-Bundle/Index.mjs`
 (the harness closure factory `window.__ModuleLoader__.load({ id, factory(require) })` written to
 `Target/Client.bundle.js`), then the Test build and the harness selfcheck.
 

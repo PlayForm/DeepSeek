@@ -1,5 +1,5 @@
 // Counts - the README's declared PASS count, parsed EXACTLY the way the
-// aggregate runner parses it (Maintain/Run-Smokes.mjs): the first
+// aggregate runner parses it (Maintain/Run/Smokes/Index.mjs): the first
 // `(<n> PASS)` occurrence after the `## Expected count` heading. The parse is
 // the runner's own rule on purpose - a count the reconciliation accepts but
 // the runner rejects would make the note lie.

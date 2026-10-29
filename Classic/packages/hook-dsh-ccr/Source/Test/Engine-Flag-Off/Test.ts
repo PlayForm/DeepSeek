@@ -5,7 +5,7 @@
 // six exempt tools, the failing result, the value-carrying accepted decision
 // and the block decision.
 // Runs standalone (`node Target/Test/Engine-Flag-Off/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-ccr: the fake ctx + the REAL factory +
 // the REAL CCR apply, from the Harness.
 import assert from "node:assert/strict";

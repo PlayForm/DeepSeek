@@ -351,8 +351,8 @@ The fourteen folders and their PASS counts give 203 checks in total per tree:
 | `Monitors-Boards`        | 7    | the wave-3 boards: the monitored rows, the [live-report] monitored fold, the skip guard                                |
 
 Every folder runs standalone (`node Target/Test/<Name>/Test.js`) and under the aggregate
-(`node Maintain/Run-Smokes.mjs`), which guards the printed PASS count of each folder against its
-README.
+(`node Maintain/Run/Smokes/Index.mjs`), which guards the printed PASS count of each folder against
+its README.
 
 ## 10. What this plugin does NOT do (phase scoping)
 

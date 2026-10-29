@@ -182,8 +182,8 @@ client-dsh-panel-family: plain-field secret refused for <namespace>
 ## 10. Verification
 
 - `prepublishOnly` builds `Target/`, writes `Target/Client.bundle.js` through
-  `Maintain/Build-Client-Bundle.mjs`, builds `Target/Test/`, runs the selfcheck of the harness, and
-  type-checks the Test tree.
+  `Maintain/Build/Client-Bundle/Index.mjs`, builds `Target/Test/`, runs the selfcheck of the
+  harness, and type-checks the Test tree.
 - The five smoke folders hold the counts: `Contract-And-Wiring` 13 PASS, `Registry-And-Sections` 7
   PASS, `Child-Slot-Model` 10 PASS, `Reference-Adapter` 14 PASS, and `All-Adapters` 9 PASS, which
   covers the thirteen-manifest roster, the forms, the two write routes, and the built bundle

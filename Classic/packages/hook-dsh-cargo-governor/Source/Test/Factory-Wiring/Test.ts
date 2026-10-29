@@ -6,7 +6,7 @@
 // g1 gates through Furnace.Gate's log-nothing contract, and the ledger
 // prefix composed by the factory's Append).
 // Runs standalone (`node Target/Test/Factory-Wiring/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-cargo-governor.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";

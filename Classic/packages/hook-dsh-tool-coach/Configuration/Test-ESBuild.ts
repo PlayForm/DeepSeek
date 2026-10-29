@@ -20,7 +20,7 @@ const Version = Package.version ?? "0.0.0";
  * already applies: each Source file transpiles to its own Target file, imports
  * stay external), so each test folder runs standalone
  * (`node Target/Test/<Name>/Test.js`) AND under the aggregate runner
- * (`Maintain/Run-Smokes.mjs`). The mirrored `outbase` keeps the relative import
+ * (`Maintain/Run/Smokes/Index.mjs`). The mirrored `outbase` keeps the relative import
  * depth valid from BOTH trees (Source/Test/<Name>/ and Target/Test/<Name>/
  * reach the built Target with the same specifier).
  *
