@@ -110,12 +110,17 @@ Site/
     Component/Graph/         Explorer.tsx (the Solid cytoscape island)
     pages/                   index, package, package/<slug>, showcase,
                              behavior, explore, tl, setup, reference,
-                             case-study, marketplace, connect, library,
-                             library/<slug>, 404
+                             case-study, marketplace, connect, 404, and the
+                             development-only _Library.astro and
+                             _Component.astro (mounted by astro.config only
+                             when the dev server runs or SITE_DEV=1)
     Library/                 Package.server.ts (the monorepo reader),
+                             Surface.server.ts (the README surface reader),
+                             Marketplace.server.ts (the generated index),
                              Component.ts (the component roster),
                              Content.ts (the site's words), Links.ts (the
-                             URL registry), Preview.astro (the library demo)
+                             URL registry), Flag.ts (the dev gate),
+                             Preview.astro (the library demo)
     Library/Graph/           Catalogue.server.ts (the serializable graph)
     Content/                 Summary.ts (one authored line per package)
     Stylesheet/              Base.css (Tailwind), Global.css (tokens and
@@ -126,6 +131,18 @@ Site/
   Module/DeepSeek/           the monorepo, a submodule (the build input)
   Target/                    the built site (the deployment artifact)
 ```
+
+## The development surfaces
+
+The component library is a working surface, not published content: it exists so a component can be
+seen beside its own contract.
+
+- Its routes are mounted from `astro.config.ts`, not auto-routed from `pages/`, so a production
+  build publishes no library route at all.
+- The flag is `Source/Library/Flag.ts`: `SITE_DEV=1`, or the dev server, turns it on.
+- Every link to it is gated by the same flag (`Links.ts` sitemap, the home page card).
+- A production build has 131 pages; a development build has 147. A count of 147 in `Target/` means
+  the flag leaked into a release.
 
 ## The content model
 
