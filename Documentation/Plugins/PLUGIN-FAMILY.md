@@ -50,9 +50,8 @@ statuses:
 
 ## 0. The family at a glance
 
-- **Version: 0.2.1 for ALL 119 packages, all UNPUBLISHED.**
-  The names are byte-accurate as below, and the legacy `ets-dsh-hook-*` naming is gone (the
-  namespace split, SPLICE-ETS.md).
+- **Version: 0.2.1 for ALL 119 packages, all UNPUBLISHED.** The names are byte-accurate as below,
+  and the legacy `ets-dsh-hook-*` naming is gone (the namespace split, SPLICE-ETS.md).
 - **Two trees, 59 + 60 packages, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`,
   `@playform/plugin-dsh-*`, `@playform/client-dsh-*`, `@playform/lib-dsh-*` - plain TypeScript with
   zero runtime framework dependencies) and the EFFECT-TS split (`@playform/ets-*` - the same
@@ -188,23 +187,24 @@ listed below and the twins of the 15 pre-existing packages listed above.
 
 The parity batch closed the last gap: every Classic package now has an ETS twin. The twelve pairs:
 
-| #   | Classic package                        | ETS twin                               | Role                                                                    |
-| --- | -------------------------------------- | -------------------------------------- | ----------------------------------------------------------------------- |
-| 1   | `@playform/client-dsh-panel-family`    | `@playform/ets-client-dsh-panel-family`    | the central panel + the family tab (the v4.1 child-slot model)      |
-| 2   | `@playform/client-dsh-panel-family-host` | `@playform/ets-client-dsh-panel-family-host` | the panel host half: the live tail/stats endpoints                |
-| 3   | `@playform/hook-dsh-batch-decision`    | `@playform/ets-hook-dsh-batch-decision`    | the conservative auto-approve policy + the decision tool            |
-| 4   | `@playform/hook-dsh-comment-filter`    | `@playform/ets-hook-dsh-comment-filter`    | the comment-stripping overpass (a new overpass flavor)              |
-| 5   | `@playform/hook-dsh-lesson-nudge`      | `@playform/ets-hook-dsh-lesson-nudge`      | the post-turn idle transition into a self-improvement nudge         |
-| 6   | `@playform/lib-dsh-conversation`       | `@playform/ets-lib-dsh-conversation`       | the conversation vocabulary and the pure fold (no plugin)           |
-| 7   | `@playform/plugin-dsh-cost`            | `@playform/ets-plugin-dsh-cost`            | the per-file inference cost ledger                                  |
-| 8   | `@playform/plugin-dsh-cost-analysis`   | `@playform/ets-plugin-dsh-cost-analysis`   | the read-only analysis of the cost ledger                           |
-| 9   | `@playform/plugin-dsh-ingester`        | `@playform/ets-plugin-dsh-ingester`        | the apply direction of the batch flow (`ctx.ingester`)              |
-| 10  | `@playform/plugin-dsh-lesson-review`   | `@playform/ets-plugin-dsh-lesson-review`   | the post-turn self-improvement review service                       |
-| 11  | `@playform/plugin-dsh-pass-on`         | `@playform/ets-plugin-dsh-pass-on`         | the prepare direction of the batch flow (`ctx.passOn`)              |
-| 12  | `@playform/plugin-dsh-pattern`         | `@playform/ets-plugin-dsh-pattern`         | the pattern registry, matcher and corpus service                    |
+| #   | Classic package                          | ETS twin                                     | Role                                                           |
+| --- | ---------------------------------------- | -------------------------------------------- | -------------------------------------------------------------- |
+| 1   | `@playform/client-dsh-panel-family`      | `@playform/ets-client-dsh-panel-family`      | the central panel + the family tab (the v4.1 child-slot model) |
+| 2   | `@playform/client-dsh-panel-family-host` | `@playform/ets-client-dsh-panel-family-host` | the panel host half: the live tail/stats endpoints             |
+| 3   | `@playform/hook-dsh-batch-decision`      | `@playform/ets-hook-dsh-batch-decision`      | the conservative auto-approve policy + the decision tool       |
+| 4   | `@playform/hook-dsh-comment-filter`      | `@playform/ets-hook-dsh-comment-filter`      | the comment-stripping overpass (a new overpass flavor)         |
+| 5   | `@playform/hook-dsh-lesson-nudge`        | `@playform/ets-hook-dsh-lesson-nudge`        | the post-turn idle transition into a self-improvement nudge    |
+| 6   | `@playform/lib-dsh-conversation`         | `@playform/ets-lib-dsh-conversation`         | the conversation vocabulary and the pure fold (no plugin)      |
+| 7   | `@playform/plugin-dsh-cost`              | `@playform/ets-plugin-dsh-cost`              | the per-file inference cost ledger                             |
+| 8   | `@playform/plugin-dsh-cost-analysis`     | `@playform/ets-plugin-dsh-cost-analysis`     | the read-only analysis of the cost ledger                      |
+| 9   | `@playform/plugin-dsh-ingester`          | `@playform/ets-plugin-dsh-ingester`          | the apply direction of the batch flow (`ctx.ingester`)         |
+| 10  | `@playform/plugin-dsh-lesson-review`     | `@playform/ets-plugin-dsh-lesson-review`     | the post-turn self-improvement review service                  |
+| 11  | `@playform/plugin-dsh-pass-on`           | `@playform/ets-plugin-dsh-pass-on`           | the prepare direction of the batch flow (`ctx.passOn`)         |
+| 12  | `@playform/plugin-dsh-pattern`           | `@playform/ets-plugin-dsh-pattern`           | the pattern registry, matcher and corpus service               |
 
-Six of these Classic packages (comment-filter, lesson-nudge, lib-dsh-conversation, cost, cost-analysis,
-lesson-review) were added after the tables above were written; the pairs table is their registry row.
+Six of these Classic packages (comment-filter, lesson-nudge, lib-dsh-conversation, cost,
+cost-analysis, lesson-review) were added after the tables above were written; the pairs table is
+their registry row.
 
 The absolute-link rule for any repo target in docs, prompts, and skills is
 `https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/<pkg>` or

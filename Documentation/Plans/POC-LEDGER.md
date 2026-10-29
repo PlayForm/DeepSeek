@@ -345,13 +345,13 @@ They are generated or ported after the Classic set lands, with the ledger string
   The full chain (ESBuild plugin build + tsc + tsc-alias + test build + Harness selfcheck + Test
   noemit tsc) is green for the whole Classic tree: the 15 pre-existing packages, the 36 new PoCs,
   including the batch edit tool, the workspace family, the orchestration plugins, the suggesters,
-  and the client family. Next: the aggregate smoke run (Maintain/Run/Smokes/Index.mjs) once the ETS build
-  pass finishes, then the ETS port fixes + the final wiring/ledger pass.
+  and the client family. Next: the aggregate smoke run (Maintain/Run/Smokes/Index.mjs) once the ETS
+  build pass finishes, then the ETS port fixes + the final wiring/ledger pass.
 - 2026-10-22 11:00: E4 THE ETS BUILD PASS: **ALL 46 ETS PACKAGES PASS** - zero failures. The 30
   generated twins build green (the mirror compiles against the ETS factory's State; the Harness
   selfchecks and Test tsc pass), alongside the 16 pre-existing ETS packages. THE TWO TREES ARE BOTH
-  FULLY GREEN. The aggregate smoke run (Maintain/Run/Smokes/Index.mjs) started - the final verification
-  gate across every folder in both trees.
+  FULLY GREEN. The aggregate smoke run (Maintain/Run/Smokes/Index.mjs) started - the final
+  verification gate across every folder in both trees.
 - 2026-10-22 11:05: E5 THE AGGREGATE RUN (attempt 1) - the Classic tree ran CLEAN (thousands of PASS
   lines, every folder count matched); the run stopped fail-fast at the FIRST ETS failure:
   `ets-plugin-dsh-batch-edit / Observers-And-Waterfalls` (2 failed checks: the O4 deadline overflow
@@ -365,10 +365,10 @@ They are generated or ported after the Classic set lands, with the ledger string
   seams sampling the global Date.now (2 reads per call), consuming the test's mocked deadline
   budget; the fix is a clock shield around the machinery seams (Shield.ts/ShieldSync.ts) with the
   plugin's own deadline reads unshielded. The three folders re-run green (8/13/25, counts matching).
-- 2026-10-22 11:12: **THE AGGREGATE PASSES** - `node Maintain/Run/Smokes/Index.mjs` exit 0: "All 359 smoke
-  suites passed" - 359 folders, 5,337 checks across both trees (Classic + EffectTS). THE END-PHASE
-  VERIFICATION IS COMPLETE: Classic build 51/51, ETS build 46/46, Classic smokes 82 new folders /
-  1,132 checks, ETS smokes 172 folders, the aggregate 359/359.
+- 2026-10-22 11:12: **THE AGGREGATE PASSES** - `node Maintain/Run/Smokes/Index.mjs` exit 0: "All 359
+  smoke suites passed" - 359 folders, 5,337 checks across both trees (Classic + EffectTS). THE
+  END-PHASE VERIFICATION IS COMPLETE: Classic build 51/51, ETS build 46/46, Classic smokes 82 new
+  folders / 1,132 checks, ETS smokes 172 folders, the aggregate 359/359.
 - 2026-10-22 11:20: the format pass. `pnpm run format` reformatted the new packages' sources
   (prettier warnings 0 after); the only remaining `format:check` violations are 41 PRE-EXISTING
   `Diagram/*.svg` trailing-whitespace lines (not caused by this delivery - the user's generated
@@ -451,10 +451,10 @@ reverted.
 
 ## 5c. The client-bundle fix and the full-defaults pass (2026-10-22 14:10)
 
-- THE CLIENT-BUNDLE FIX: `Maintain/Build/Client-Bundle/Index.mjs` bundles each client entry to CJS with
-  esbuild (the tsconfig paths + the locale JSON inlined; react external) and wraps it in the harness
-  closure-factory envelope (`window.__ModuleLoader__.load({ id, factory(require) })`). Both client
-  packages now emit `Target/Client.bundle.js`; `exports["./client"]` points at it;
+- THE CLIENT-BUNDLE FIX: `Maintain/Build/Client-Bundle/Index.mjs` bundles each client entry to CJS
+  with esbuild (the tsconfig paths + the locale JSON inlined; react external) and wraps it in the
+  harness closure-factory envelope (`window.__ModuleLoader__.load({ id, factory(require) })`). Both
+  client packages now emit `Target/Client.bundle.js`; `exports["./client"]` points at it;
   `prepublishOnly.sh` and `Run.sh` rebuild it. The ESM `Target/Client.js` stays the dev/test
   surface. Both packages build green; the factory sandbox returns
   `{ inject: ["slots","locale"], apply, default }` for both.
@@ -834,15 +834,15 @@ and (6) verification with records.
   `declare module "@deepseek-ai/cordis"` augmentation, the `Events["llm/stream"]` assertion with its
   reason comment, and the `ValidDecision` predicate.
 - 2026-10-23: THE HONEST GATE AND THE POLICY BLOCK DISPATCHED (the pair). Lane 1: a repo-level
-  `Maintain/Run/Types/Index.mjs` (per-package Source noemit, `TOTAL`/`FAIL` summary, `--tree` scoping, a
-  root `test:types` script) wired into the verification protocol, so "green" means type-green from
-  now on; the ETS side stays red until the parity wave. Lane 2: the D6 policy block - the factory's
-  `Policy` schema builder + `Decide` helper, the block on the 10 orchestration packages, and the
-  three key wirings (queue spawn, batch-decision commit, batch-edit write) with the documented
-  precedence (policy approve > the existing auto knobs).
-- 2026-10-23: THE HONEST TYPE GATE ACCEPTED. `Maintain/Run/Types/Index.mjs` discovers every package with
-  `Configuration/TypeScript.noemit.json` (53 Classic + 46 ETS), runs the per-package Source check,
-  prints `PASS`/`FAIL <pkg> (N diagnostics)` with the first 12 diagnostic lines, a final
+  `Maintain/Run/Types/Index.mjs` (per-package Source noemit, `TOTAL`/`FAIL` summary, `--tree`
+  scoping, a root `test:types` script) wired into the verification protocol, so "green" means
+  type-green from now on; the ETS side stays red until the parity wave. Lane 2: the D6 policy
+  block - the factory's `Policy` schema builder + `Decide` helper, the block on the 10 orchestration
+  packages, and the three key wirings (queue spawn, batch-decision commit, batch-edit write) with
+  the documented precedence (policy approve > the existing auto knobs).
+- 2026-10-23: THE HONEST TYPE GATE ACCEPTED. `Maintain/Run/Types/Index.mjs` discovers every package
+  with `Configuration/TypeScript.noemit.json` (53 Classic + 46 ETS), runs the per-package Source
+  check, prints `PASS`/`FAIL <pkg> (N diagnostics)` with the first 12 diagnostic lines, a final
   `TOTAL=<n> FAIL=<n>`, exits 1 on any failure (2 on bad `--tree` usage), and scopes with
   `--tree classic|effect-ts`. The root `test:types` script and the verification spec's check 3b +
   the Testing README's step 5b document it. Classic-only: 53/53 PASS, exit 0. Both trees:

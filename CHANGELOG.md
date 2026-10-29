@@ -59,12 +59,12 @@ This file records all notable changes to this project.
   `Documentation/Testing/` (the README plus 35 per-plugin live test plans),
   `Documentation/Plans/POC-BRIEF.md`, `POC-LEDGER.md`, `ETS-TWINS-BRIEF.md`, `SMOKE-PASS-BRIEF.md`,
   and `Documentation/Plans/Workspace-Family/WAVE-1-BRIEF.md`.
-- The verification shows 97/97 package builds green, the aggregate `node Maintain/Run-Smokes.mjs` at
+- The verification shows 97/97 package builds green, the aggregate `node Maintain/Run/Smokes/Index.mjs` at
   359 smoke suites / 5,337 checks all green, and 54 bundles enabled in the live desktop profile.
 - The first catch of the live dogfood was a missing `"fs"` entry in the inject list of
   `plugin-dsh-batch-edit` (fixed), and the empty-graph gap (no indexing trigger) stays documented
   and open.
-- The derived publish scaffold comes from `Maintain/Generate-NPM-Placeholders.mjs`, which sorts the
+- The derived publish scaffold comes from `Maintain/Generate/Placeholders/Index.mjs`, which sorts the
   family names into `1-missing` / `2-placeholder` / `3-published` from the registry and writes the
   `0.0.0` empty-first-publish scaffold (the placeholder manifests, `MANIFEST.json`, the `README.md`
   and `Publish.sh`) under `Temporary/npm-bootstrap/`.
@@ -75,7 +75,7 @@ This file records all notable changes to this project.
   bound to `PlayForm/DeepSeek`, `NPM.yml`, and environment `Release`, with
   `@playform/client-dsh-panel-family` as the one name already published at 0.2.0 and every other
   0.2.0 in the tree unpublished at preparation.
-- The publish route now runs `node Maintain/Publish-Packages.mjs` from `.github/workflows/NPM.yml`
+- The publish route now runs `node Maintain/Publish/Packages/Index.mjs` from `.github/workflows/NPM.yml`
   in place of a hard-coded package list, so the workflow derives the layer order from the workspace
   dependency graph (L0 -> L1 -> L2, cycles refused) and publishes each package whose version is not
   yet on the registry, while it skips the ones that are.

@@ -117,7 +117,7 @@ readers in `Live.ts` compute them, `Content.ts` publishes them, and the pages mu
 | `Counts.Twins`                                                 | 47                                                                                   | 48 EffectTS packages minus `ets-base-dsh`; six Classic packages have no twin                                                      |
 | `Counts.Libraries` / `NewLibraries`                            | 4 / 2                                                                                | the Classic `lib-*` packages: core, pack, trace, workspace-live                                                                   |
 | `Methods.Count`                                                | 19                                                                                   | the SCHEME's 18 method sections plus the shared section 2.7; 2.19 is module-level                                                 |
-| `Versions.Release` / `PanelFamily` / `Effect` / `EffectPinned` | 0.1.0 (the mode) / 0.2.0 / 4.0.5 / 12                                                | the 101 manifests; 12 EffectTS packages declare `effect`                                                                          |
+| `Versions.Release` / `PanelFamily` / `Effect` / `EffectPinned` | 0.2.1 (the mode) / 0.2.1 / 4.0.7 / 12                                                | the 119 manifests; 12 EffectTS packages declare `effect`                                                                          |
 | `Trace`                                                        | 3 events / 5 envelope fields / 256 ring / 5 service methods / 3 adapters / 10 checks | `lib-dsh-trace`; the factory's `Interface/Trace.ts`                                                                               |
 | `Pack`                                                         | 31 families / 6 domains / 3 layers / 4 folders / 30 checks                           | `lib-dsh-pack/Source/Variable/Builtin.ts`; the four test folders (6+8+6+10)                                                       |
 | `Learner`                                                      | 10 modules / 9 families / 3 markers                                                  | `hook-dsh-convention-suggester/Source/Function/Learn/`                                                                            |
@@ -128,9 +128,8 @@ readers in `Live.ts` compute them, `Content.ts` publishes them, and the pages mu
 | `Suggesters`                                                   | 7 / 6 / 6 / 2                                                                        | seven packages; six pack-driven; six `Workspace-Gate`; two `Learning-Loop`                                                        |
 | `Profile`                                                      | 49 rows / 48 enabled / 1 factory                                                     | the desktop `cordis.patch.yml`: 49 `name: "@playform/` rows, 48 with `enabled: true`, the factory row `config: {}`                |
 
-The six Classic-only packages (no ETS twin): `client-dsh-panel-family`,
-`client-dsh-panel-family-host`, `hook-dsh-batch-decision`, `plugin-dsh-ingester`,
-`plugin-dsh-pass-on`, `plugin-dsh-pattern`.
+No Classic-only packages remain: the 2026-10-29 parity batch added the twelve remaining ETS twins,
+so all 59 Classic packages have one.
 
 The two ledger identities that differ from the package names (see 5.1): the governor's line prefix
 is `hook-dsh-governor-package`, the pinner's is `hook-dsh-pinner-package`, the cargo governor's is
