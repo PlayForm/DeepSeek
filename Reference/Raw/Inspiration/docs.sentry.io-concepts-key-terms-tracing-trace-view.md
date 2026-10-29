@@ -1,0 +1,53 @@
+  * [Concepts & Reference](https://docs.sentry.io/concepts/)
+
+
+Copy page
+# Trace View
+## Learn more about the Trace View page, where you can drill down into the details of a single trace, allowing you to debug slow services, identify related errors, and find other bottlenecks.
+The Trace View page is designed to be your one-stop-shop when debugging performance or errors. It gives you full context on what was happening when an error or performance issue occurred, all in one place. The waterfall Trace View allows you to see everything that may have occurred during a trace, including errors, performance issues, logs, and any profiles that may have been collected.
+In addition, looking at the Trace View allows you to drill down into a single trace so you can visualize the high-level spans that took place within that trace. This makes debugging slow services, identifying related errors, and rooting out bottlenecks easier and faster, since you no longer have to navigate around multiple pages of the Sentry product.
+## [Product Walkthrough: Trace View Page](https://docs.sentry.io/concepts/key-terms/tracing/trace-view/#product-walkthrough-trace-view-page)
+Sentry's default visualization of a [trace](https://docs.sentry.io/concepts/key-terms/tracing/) is a waterfall-like structure, where the entries in the list are organized chronologically and through ancestry (child spans will fall under their parents). This allows you to follow the order of operations and drill into sub-operations.
+On the left side is a list of operations, and on the right is their duration and any events, such as errors, which may have occurred in that timeframe.
+### [Time compression](https://docs.sentry.io/concepts/key-terms/tracing/trace-view/#time-compression)
+Time compression shrinks empty gaps between spans in the waterfall. This brings spans closer together so you can see more of the trace at once and focus on where work happens.
+### [Pin an attribute](https://docs.sentry.io/concepts/key-terms/tracing/trace-view/#pin-an-attribute)
+Pin an [attribute](https://docs.sentry.io/concepts/key-terms/tracing/#what-are-span-attributes-and-metrics) to compare its values across spans without opening each span individually. Pinned attributes appear as columns in the waterfall and stay visible as you explore the trace.
+To pin an attribute:
+  1. Select a span in the waterfall to open its side panel.
+  2. Find the attribute in the **Attributes** tree.
+  3. Open the attribute's actions menu and select **Pin to waterfall**.
+
+
+For example, pin `sdk.name` to see which SDK recorded each span.
+### [Jump to a Web Vital](https://docs.sentry.io/concepts/key-terms/tracing/trace-view/#jump-to-a-web-vital)
+Click a [Web Vital](https://docs.sentry.io/product/dashboards/sentry-dashboards/frontend/web-vitals/web-vitals-concepts/) pill in the trace summary or on the waterfall to zoom to the point where Sentry recorded that metric. The waterfall brings the surrounding spans into view so you can investigate what happened at that moment.
+### [Previous and Next Traces](https://docs.sentry.io/concepts/key-terms/tracing/trace-view/#previous-and-next-traces)
+As users interact with an application, they generate multiple traces. For example, when a user loads a page in their browser and then navigates to another page, this creates two separate traces: one for the initial pageload and another for the subsequent navigation. By default, Sentry will link the traces together.
+If linked traces are available, you will see "Previous" or "Next" buttons next to the search bar and "Open in Explore" button, near the top of the trace view. These buttons allow you to navigate between traces that occurred before or after the current one.
+### [Helpful Tips](https://docs.sentry.io/concepts/key-terms/tracing/trace-view/#helpful-tips)
+Because debugging often involves multiple people or teams, Sentry makes it easy to draw attention to specific areas of the trace and share a link that shows what you've highlighted with your colleagues. To do this, click on the row you'd like to draw attention to and share the resulting URL. Your colleague will see exactly what you want them to.
+Whatever you highlight will also be saved if you navigate away from the page and will still be there when you use your browser's back and forward buttons.
+If you're doing a comparison and want an easy way to go back and forth between highlighted areas of interest in your trace, you can pin the tabs. When a tab is pinned, the view will be persistent throughout your session.
+## [Troubleshooting](https://docs.sentry.io/concepts/key-terms/tracing/trace-view/#troubleshooting)
+### [Orphan Traces and Broken Subtraces](https://docs.sentry.io/concepts/key-terms/tracing/trace-view/#orphan-traces-and-broken-subtraces)
+In a fully instrumented system, a span in one service will connect to a transaction in a subsequent service. For a variety of reasons, a transaction in a service may not arrive in Sentry. When Sentry encounters these types of transactions within a trace, the transactions are linked with a dashed line since they can no longer be directly connected to the root, creating an orphan trace.
+In addition, broken subtraces can occur when Sentry receives an error for a trace, but the corresponding transaction does not exist. Such errors are linked using dashed lines and clicking on the row takes you to the corresponding **Issue Details** page.
+Also, in these cases you can open [trace explorer](https://sentry.io/orgredirect/organizations/:orgslug/explore/traces/) to see all the events in the trace.
+Broken subtraces may be caused by:
+  * SDK sampling. Setting a sample rate that's too low may prevent the SDK from sending a transaction. We recommend [sending us all of your transaction data](https://docs.sentry.io/organization/dynamic-sampling/#deciding-on-your-sdk-sample-rate).
+  * [Ad blockers](https://docs.sentry.io/platforms/javascript/troubleshooting/#dealing-with-ad-blockers) may prevent transactions in browsers being sent, but HTTP requests to backend projects will still create child transactions
+  * [Rate-limiting](https://docs.sentry.io/pricing/quotas/#limiting-events) on a project may cause only some events to be sent to Sentry
+  * [Project permissions](https://docs.sentry.io/organization/membership/#restricting-access) may mean you do not have access to transactions in another project
+  * [Differences in quota limits](https://docs.sentry.io/pricing/quotas/) between transactions and errors. When a quota limit is reached - for example, for transactions - an error is received, but corresponding transaction is not.
+  * Exceeding the span limit. Transactions are associated via the child spans of the parent transaction, but if the number of spans exceed the limit, the association cannot be made
+
+
+### [Multiple Roots](https://docs.sentry.io/concepts/key-terms/tracing/trace-view/#multiple-roots)
+Each trace ID should have only one root, a transaction without any parents. Automatic instrumentation should prevent multiple roots; however, if the trace ID of your transactions is being set using custom instrumentation, you may encounter multiple roots.
+[ Previous Distributed Tracing ](https://docs.sentry.io/concepts/key-terms/tracing/distributed-tracing/)
+[ Next Agent Tracing - What It Is and How To Use It ](https://docs.sentry.io/concepts/key-terms/agent-tracing/)
+Was this helpful?
+Yes 👍No 👎
+**Help improve this content** Our documentation is open source and available on GitHub. Your contributions are welcome, whether fixing a typo (drat!) or suggesting an update ("yeah, this would be better").
+[How to contribute](https://docs.sentry.io/contributing/) | [Edit this page](https://github.com/getsentry/sentry-docs/edit/master/docs/concepts/key-terms/tracing/trace-view.mdx) | [Create a docs issue](https://github.com/getsentry/sentry-docs/issues/new/choose) | [Get support](https://www.sentry.help/en/)

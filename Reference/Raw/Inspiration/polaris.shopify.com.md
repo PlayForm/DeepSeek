@@ -1,0 +1,24 @@
+Shopify apps can appear across multiple surfaces in the Shopify platform. Each surface has its own set of available APIs and components. For an overview of all surfaces and how to build apps for them, see [Build apps for Shopify](https://shopify.dev/docs/apps/build).
+All app surfaces use [Polaris](https://shopify.dev/docs/api/polaris/using-polaris-web-components), Shopify's unified UI framework built on web components, to deliver a consistent experience across the platform.
+Learn more about [using web components](https://shopify.dev/docs/api/polaris/using-polaris-web-components), including [layouts](https://shopify.dev/docs/api/polaris/using-polaris-web-components#layouts), [icons](https://shopify.dev/docs/api/polaris/using-polaris-web-components#icons), [how to handle events](https://shopify.dev/docs/api/polaris/using-polaris-web-components#handling-events), and more.
+## 
+App Home
+[App Home](https://shopify.dev/docs/apps/build/app-home) is your app's main page in the Shopify admin. There are two ways to build it.
+[ App Home (iframe)Build your app's main page as an iframe in Shopify admin using App Bridge and Polaris. App Home (iframe) Build your app's main page as an iframe in Shopify admin using App Bridge and Polaris. ](https://shopify.dev/docs/api/app-home)
+[App Home (iframe)Build your app's main page as an iframe in Shopify admin using App Bridge and Polaris.](https://shopify.dev/docs/api/app-home)
+[ App Home (UI extension)Build your app's main page as a Preact-based UI extension. App Home (UI extension) Build your app's main page as a Preact-based UI extension. ](https://shopify.dev/docs/api/app-home-ui-extension)
+[App Home (UI extension)Build your app's main page as a Preact-based UI extension.](https://shopify.dev/docs/api/app-home-ui-extension)
+## 
+Extensions in other surfaces
+Extensions put your app's UI inside a surface that Shopify renders: actions and blocks on admin resource pages, defined points in checkout and customer accounts, and the smart grid and cart in Point of Sale. Each surface has its own extension APIs and its own subset of Polaris web components.
+[ Admin UI extensionsAdd custom actions and blocks from your app to resource pages in the Shopify admin, including products, orders, and customers. Admin UI extensions Add custom actions and blocks from your app to resource pages in the Shopify admin, including products, orders, and customers. ](https://shopify.dev/docs/api/admin-extensions)
+[Admin UI extensionsAdd custom actions and blocks from your app to resource pages in the Shopify admin, including products, orders, and customers.](https://shopify.dev/docs/api/admin-extensions)
+[ Checkout UI extensionsBuild custom functionality that merchants can install at defined points in the checkout flow, including product information, shipping, payment, order summary, and Shop Pay. Checkout UI extensions Build custom functionality that merchants can install at defined points in the checkout flow, including product information, shipping, payment, order summary, and Shop Pay. ](https://shopify.dev/docs/api/checkout-ui-extensions)
+[Checkout UI extensionsBuild custom functionality that merchants can install at defined points in the checkout flow, including product information, shipping, payment, order summary, and Shop Pay.](https://shopify.dev/docs/api/checkout-ui-extensions)
+[ Customer account UI extensionsBuild custom functionality that merchants can install at defined points on the order index, order status, and profile pages in customer accounts. Customer account UI extensions Build custom functionality that merchants can install at defined points on the order index, order status, and profile pages in customer accounts. ](https://shopify.dev/docs/api/customer-account-ui-extensions)
+[Customer account UI extensionsBuild custom functionality that merchants can install at defined points on the order index, order status, and profile pages in customer accounts.](https://shopify.dev/docs/api/customer-account-ui-extensions)
+[ POS UI extensionsBuild custom functionality that merchants can install at defined points in the Shopify Point of Sale (POS) app, including the smart grid, cart, and post-purchase screens. POS UI extensions Build custom functionality that merchants can install at defined points in the Shopify Point of Sale (POS) app, including the smart grid, cart, and post-purchase screens. ](https://shopify.dev/docs/api/pos-ui-extensions)
+[POS UI extensionsBuild custom functionality that merchants can install at defined points in the Shopify Point of Sale (POS) app, including the smart grid, cart, and post-purchase screens.](https://shopify.dev/docs/api/pos-ui-extensions)
+Was this page helpful?
+Reject allAccept cookies
+We and our partners use cookies and other technologies to personalize your experience, show you ads, and perform analytics. See Our [Cookie Policy](https://www.shopify.dev/legal/cookies).

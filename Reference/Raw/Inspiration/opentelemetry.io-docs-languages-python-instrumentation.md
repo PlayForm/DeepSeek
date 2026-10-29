@@ -1,0 +1,346 @@
+# Instrumentation
+Manual instrumentation for OpenTelemetry Python
+[Instrumentation](https://opentelemetry.io/docs/concepts/instrumentation/) is the act of adding observability code to an app yourself.
+If you’re instrumenting an app, you need to use the OpenTelemetry SDK for your language. You’ll then use the SDK to initialize OpenTelemetry and the API to instrument your code. This will emit telemetry from your app, and any library you installed that also comes with instrumentation.
+If you’re instrumenting a library, only install the OpenTelemetry API package for your language. Your library will not emit telemetry on its own. It will only emit telemetry when it is part of an app that uses the OpenTelemetry SDK. For more on instrumenting libraries, see [Libraries](https://opentelemetry.io/docs/concepts/instrumentation/libraries/).
+For more information about the OpenTelemetry API and SDK, see the [specification](https://opentelemetry.io/docs/specs/otel/).
+## Setup 
+First, ensure you have the API and SDK packages:
+
+```
+pip install opentelemetry-api
+pip install opentelemetry-sdk
+
+```
+
+## Traces 
+### Acquire Tracer 
+To start tracing, you’ll need to initialize a [`TracerProvider`](https://opentelemetry.io/docs/concepts/signals/traces/#tracer-provider) and optionally set it as the global default.
+
+```
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import (
+    BatchSpanProcessor,
+    ConsoleSpanExporter,
+provider = TracerProvider()
+processor = BatchSpanProcessor(ConsoleSpanExporter())
+provider.add_span_processor(processor)
+# Sets the global default tracer provider
+trace.set_tracer_provider(provider)
+# Creates a tracer from the global tracer provider
+tracer = trace.get_tracer("my.tracer.name")
+
+```
+
+### Creating spans 
+To create a [span](https://opentelemetry.io/docs/concepts/signals/traces/#spans), you’ll typically want it to be started as the current span.
+
+```
+def do_work():
+    with tracer.start_as_current_span("span-name") as span:
+        # do some work that 'span' will track
+        print("doing some work...")
+        # When the 'with' block goes out of scope, 'span' is closed for you
+
+```
+
+You can also use `start_span` to create a span without making it the current span. This is usually done to track concurrent or asynchronous operations.
+### Creating nested spans 
+If you have a distinct sub-operation you’d like to track as a part of another one, you can create [spans](https://opentelemetry.io/docs/concepts/signals/traces/#spans) to represent the relationship:
+
+```
+def do_work():
+    with tracer.start_as_current_span("parent") as parent:
+        # do some work that 'parent' tracks
+        print("doing some work...")
+        # Create a nested span to track nested work
+        with tracer.start_as_current_span("child") as child:
+            # do some work that 'child' tracks
+            print("doing some nested work...")
+            # the nested span is closed when it's out of scope
+        # This span is also closed when it goes out of scope
+
+```
+
+When you view spans in a trace visualization tool, `child` will be tracked as a nested span under `parent`.
+### Creating spans with decorators 
+It’s common to have a single [span](https://opentelemetry.io/docs/concepts/signals/traces/#spans) track the execution of an entire function. In that scenario, there is a decorator you can use to reduce code:
+
+```
+@tracer.start_as_current_span("do_work")
+def do_work():
+    print("doing some work...")
+
+```
+
+Use of the decorator is equivalent to creating the span inside `do_work()` and ending it when `do_work()` is finished.
+To use the decorator, you must have a `tracer` instance available global to your function declaration.
+### Get the current span 
+Sometimes it’s helpful to access whatever the current [span](https://opentelemetry.io/docs/concepts/signals/traces/#spans) is at a point in time so that you can enrich it with more information.
+
+```
+from opentelemetry import trace
+current_span = trace.get_current_span()
+# enrich 'current_span' with some information
+
+```
+
+### Add attributes to a span 
+[Attributes](https://opentelemetry.io/docs/concepts/signals/traces/#attributes) let you attach key/value pairs to a [span](https://opentelemetry.io/docs/concepts/signals/traces/#spans) so it carries more information about the current operation that it’s tracking.
+
+```
+from opentelemetry import trace
+current_span = trace.get_current_span()
+current_span.set_attribute("operation.value", 1)
+current_span.set_attribute("operation.name", "Saying hello!")
+current_span.set_attribute("operation.other-stuff", [1, 2, 3])
+
+```
+
+### Add semantic attributes 
+[Semantic Attributes](https://opentelemetry.io/docs/specs/semconv/general/trace/) are pre-defined [Attributes](https://opentelemetry.io/docs/concepts/signals/traces/#attributes) that are well-known naming conventions for common kinds of data. Using Semantic Attributes lets you normalize this kind of information across your systems.
+To use Semantic Attributes in Python, ensure you have the semantic conventions package:
+
+```
+pip install opentelemetry-semantic-conventions
+
+```
+
+Then you can use it in code:
+
+```
+from opentelemetry import trace
+from opentelemetry.semconv.trace import SpanAttributes
+current_span = trace.get_current_span()
+current_span.set_attribute(SpanAttributes.HTTP_METHOD, "GET")
+current_span.set_attribute(SpanAttributes.HTTP_URL, "https://opentelemetry.io/")
+
+```
+
+### Adding events 
+An [event](https://opentelemetry.io/docs/concepts/signals/traces/#span-events) is a human-readable message on a [span](https://opentelemetry.io/docs/concepts/signals/traces/#spans) that represents “something happening” during its lifetime. You can think of it as a primitive log.
+
+```
+from opentelemetry import trace
+current_span = trace.get_current_span()
+current_span.add_event("Gonna try it!")
+# Do the thing
+current_span.add_event("Did it!")
+
+```
+
+### Adding links 
+A [span](https://opentelemetry.io/docs/concepts/signals/traces/#spans) can be created with zero or more span [links](https://opentelemetry.io/docs/concepts/signals/traces/#span-links) that causally link it to another span. A link needs a span context to be created.
+
+```
+from opentelemetry import trace
+tracer = trace.get_tracer(__name__)
+with tracer.start_as_current_span("span-1"):
+    # Do something that 'span-1' tracks.
+    ctx = trace.get_current_span().get_span_context()
+    link_from_span_1 = trace.Link(ctx)
+with tracer.start_as_current_span("span-2", links=[link_from_span_1]):
+    # Do something that 'span-2' tracks.
+    # The link in 'span-2' is causally associated it with the 'span-1',
+    # but it is not a child span.
+
+```
+
+### Set span status 
+A [Status](https://opentelemetry.io/docs/concepts/signals/traces/#span-status) can be set on a [Span](https://opentelemetry.io/docs/concepts/signals/traces/#spans), typically used to specify that a Span has not completed successfully - `Error`. By default, all spans are `Unset`, which means a span completed without error. The `Ok` status is reserved for when you need to explicitly mark a span as successful rather than stick with the default of `Unset` (i.e., “without error”).
+The status can be set at any time before the span is finished.
+
+```
+from opentelemetry import trace
+from opentelemetry.trace import Status, StatusCode
+current_span = trace.get_current_span()
+    # something that might fail
+except:
+    current_span.set_status(Status(StatusCode.ERROR))
+
+```
+
+### Record exceptions in spans 
+It can be a good idea to record exceptions when they happen. It’s recommended to do this in conjunction with setting [span status](https://opentelemetry.io/docs/languages/python/instrumentation/#set-span-status).
+
+```
+from opentelemetry import trace
+from opentelemetry.trace import Status, StatusCode
+current_span = trace.get_current_span()
+    # something that might fail
+# Consider catching a more specific exception in your code
+except Exception as ex:
+    current_span.set_status(Status(StatusCode.ERROR))
+    current_span.record_exception(ex)
+
+```
+
+### Change the default propagation format 
+By default, OpenTelemetry Python will use the following propagation formats:
+  * W3C Trace Context
+  * W3C Baggage
+
+
+If you have a need to change the defaults, you can do so either via environment variables or in code:
+#### Using Environment Variables 
+You can set the `OTEL_PROPAGATORS` environment variable with a comma-separated list. Accepted values are:
+  * `"tracecontext"`: W3C Trace Context
+  * `"baggage"`: W3C Baggage
+  * `"b3"`: B3 Single
+  * `"b3multi"`: B3 Multi
+  * `"jaeger"`: Jaeger
+  * `"xray"`: AWS X-Ray (third party)
+  * `"ottrace"`: OT Trace (third party)
+  * `"none"`: No automatically configured propagator.
+
+
+The default configuration is equivalent to `OTEL_PROPAGATORS="tracecontext,baggage"`.
+#### Using SDK APIs 
+Alternatively, you can change the format in code.
+For example, if you need to use Zipkin’s B3 propagation format instead, you can install the B3 package:
+
+```
+pip install opentelemetry-propagator-b3
+
+```
+
+And then set the B3 propagator in your tracing initialization code:
+
+```
+from opentelemetry.propagate import set_global_textmap
+from opentelemetry.propagators.b3 import B3Format
+set_global_textmap(B3Format())
+
+```
+
+Note that environment variables will override what’s configured in code.
+### Further Reading 
+  * [Trace Specification](https://opentelemetry.io/docs/specs/otel/overview/#tracing-signal)
+  * [Python Trace API Documentation](https://opentelemetry-python.readthedocs.io/en/latest/api/trace.html)
+  * [Python Trace SDK Documentation](https://opentelemetry-python.readthedocs.io/en/latest/sdk/trace.html)
+
+
+## Metrics 
+To start collecting metrics, you’ll need to initialize a [`MeterProvider`](https://opentelemetry.io/docs/specs/otel/metrics/api/#meterprovider) and optionally set it as the global default.
+
+```
+from opentelemetry import metrics
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import (
+    ConsoleMetricExporter,
+    PeriodicExportingMetricReader,
+metric_reader = PeriodicExportingMetricReader(ConsoleMetricExporter())
+provider = MeterProvider(metric_readers=[metric_reader])
+# Sets the global default meter provider
+metrics.set_meter_provider(provider)
+# Creates a meter from the global meter provider
+meter = metrics.get_meter("my.meter.name")
+
+```
+
+### Creating and using synchronous instruments 
+Instruments are used to make measurements of your application. [Synchronous instruments](https://opentelemetry.io/docs/specs/otel/metrics/api/#synchronous-and-asynchronous-instruments) are used inline with application/business processing logic, like when handling a request or calling another service.
+First, create your instrument. Instruments are generally created once at the module or class level and then used inline with business logic. This example uses a [Counter](https://opentelemetry.io/docs/specs/otel/metrics/api/#counter) instrument to count the number of work items completed:
+
+```
+work_counter = meter.create_counter(
+    "work.counter", unit="1", description="Counts the amount of work done"
+
+```
+
+Using the Counter’s [add operation](https://opentelemetry.io/docs/specs/otel/metrics/api/#add), the code below increments the count by one, using the work item’s type as an attribute.
+
+```
+def do_work(work_item):
+    # count the work being doing
+    work_counter.add(1, {"work.type": work_item.work_type})
+    print("doing some work...")
+
+```
+
+### Creating and using asynchronous instruments 
+[Asynchronous instruments](https://opentelemetry.io/docs/specs/otel/metrics/api/#synchronous-and-asynchronous-instruments) give the user a way to register callback functions, which are invoked on demand to make measurements. This is useful to periodically measure a value that cannot be instrumented directly. Async instruments are created with zero or more callbacks which will be invoked during metric collection. Each callback accepts options from the SDK and returns its observations.
+This example uses an [Asynchronous Gauge](https://opentelemetry.io/docs/specs/otel/metrics/api/#asynchronous-gauge) instrument to report the current config version provided by a configuration server by scraping an HTTP endpoint. First, write a callback to make observations:
+
+```
+from typing import Iterable
+from opentelemetry.metrics import CallbackOptions, Observation
+def scrape_config_versions(options: CallbackOptions) -> Iterable[Observation]:
+    r = requests.get(
+        "http://configserver/version_metadata", timeout=options.timeout_millis / 10**3
+    for metadata in r.json():
+        yield Observation(
+            metadata["version_num"], {"config.name": metadata["version_num"]}
+
+```
+
+Note that OpenTelemetry will pass options to your callback containing a timeout. Callbacks should respect this timeout to avoid blocking indefinitely. Finally, create the instrument with the callback to register it:
+
+```
+meter.create_observable_gauge(
+    "config.version",
+    callbacks=[scrape_config_versions],
+    description="The active config version for each configuration",
+
+```
+
+### Further Reading 
+  * [Metrics Concepts](https://opentelemetry.io/docs/concepts/signals/metrics/)
+  * [Metrics Specification](https://opentelemetry.io/docs/specs/otel/metrics/)
+  * [Python Metrics API Documentation](https://opentelemetry-python.readthedocs.io/en/latest/api/metrics.html)
+  * [Python Metrics SDK Documentation](https://opentelemetry-python.readthedocs.io/en/latest/sdk/metrics.html)
+
+
+## Logs 
+The logs API & SDK are currently under development. To start collecting logs, you need to initialize a [`LoggerProvider`](https://opentelemetry.io/docs/specs/otel/logs/api/#loggerprovider) and optionally set it as the global default. Then use Python’s built-in logging module to create log records that OpenTelemetry can process.
+
+```
+import logging
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor, ConsoleLogRecordExporter # ConsoleLogExporter on versions earlier than 1.39.0
+from opentelemetry._logs import set_logger_provider
+provider = LoggerProvider()
+processor = BatchLogRecordProcessor(ConsoleLogRecordExporter())
+provider.add_log_record_processor(processor)
+# Sets the global default logger provider
+set_logger_provider(provider)
+handler = LoggingHandler(level=logging.INFO, logger_provider=provider)
+logging.basicConfig(handlers=[handler], level=logging.INFO)
+logging.getLogger(__name__).info("This is an OpenTelemetry log record!")
+
+```
+
+### Further Reading 
+  * [Logs Specification](https://opentelemetry.io/docs/specs/otel/logs/)
+  * [Python Logs API Documentation](https://opentelemetry-python.readthedocs.io/en/latest/api/_logs.html)
+  * [Python Logs SDK Documentation](https://opentelemetry-python.readthedocs.io/en/latest/sdk/_logs.html)
+
+
+## Semantic convention stability 
+Python [instrumentation libraries](https://opentelemetry.io/docs/languages/python/libraries/) support the `OTEL_SEMCONV_STABILITY_OPT_IN` environment variable. Use it to control whether instrumentations emit stable semantic conventions, the previous experimental conventions, or both while you migrate.
+HTTP and database support is available as of OpenTelemetry Python 1.44.0 / 0.65b0. The variable accepts a comma-separated list of values:
+  * `http`: emit the new, stable HTTP and networking conventions, and stop emitting the old experimental HTTP and networking conventions that the instrumentation emitted previously.
+  * `http/dup`: emit both the old and the stable HTTP and networking conventions, allowing for a seamless transition.
+  * `database`: emit the new, stable database conventions, and stop emitting the old experimental database conventions that the instrumentation emitted previously.
+  * `database/dup`: emit both the old and the stable database conventions, allowing for a seamless transition.
+  * `gen_ai_latest_experimental`: emit the latest experimental GenAI conventions supported by the instrumentation, instead of the older GenAI conventions.
+
+
+If the variable is unset, instrumentations continue to emit the previous experimental conventions by default. When both a value and its `/dup` variant are present, the `/dup` variant takes precedence.
+For example:
+
+```
+export OTEL_SEMCONV_STABILITY_OPT_IN=http/dup,database
+
+```
+
+For package-specific details, see the documentation for individual instrumentations on [opentelemetry-python-contrib Read the Docs](https://opentelemetry-python-contrib.readthedocs.io/).
+## Next Steps 
+You’ll also want to configure an appropriate exporter to [export your telemetry data](https://opentelemetry.io/docs/languages/python/exporters/) to one or more telemetry backends.
+## Feedback
+Was this page helpful?
+Yes No
+Thank you. Your feedback is appreciated!
+Please let us know [how we can improve this page](https://github.com/open-telemetry/opentelemetry.io/issues/new?template=PAGE_FEEDBACK.yml&title=\[Page+feedback\]%3A+ADD+A+SUMMARY+OF+YOUR+FEEDBACK+HERE). Your feedback is appreciated!
+Last modified September 28, 2026: [docs(python): document OTEL_SEMCONV_STABILITY_OPT_IN (#11435) (849387f5)](https://github.com/open-telemetry/opentelemetry.io/commit/849387f51615f3f2127385cae60454ced8c4560c)
