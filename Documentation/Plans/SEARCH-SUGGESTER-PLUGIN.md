@@ -463,7 +463,7 @@ shape), `cordis.patch.yml` (the row and the config block), `README.md` (the Conf
 fields map).
 
 **Test**: `Source/Test/<Suite>/{Test.ts,README.md}`, `Classic/smokes/Test/**`,
-`EffectTS/smokes/Test/**`, `Maintain/Run-Smokes.mjs`, `Maintain/Run-Wiring.mjs`,
+`EffectTS/smokes/Test/**`, `Maintain/Run/Smokes/Index.mjs`, `Maintain/Run/Wiring/Index.mjs`,
 `Classic/smokes/README.md`, the README badge, the site counts.
 
 **Doc**: `Documentation/INDEX.md`, the document's own frontmatter and body,
@@ -765,7 +765,7 @@ assert each string byte-identically.
 ### 4.10 The smokes
 
 Nine suites under `Source/Test/`, one folder each, `Test.ts` + `README.md`, run standalone and by
-`Maintain/Run-Smokes.mjs`:
+`Maintain/Run/Smokes/Index.mjs`:
 
 1. `Classification` - the rule table: one case per intent, the priority order, the scope override (a
    lockfile grep is Dependency).

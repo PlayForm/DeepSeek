@@ -10,7 +10,7 @@ statuses:
 	- name: the smoke suites for the 36 new Classic packages
 		state: implemented
 		evidence: every new package carries its Source/Test suites; the build pass is green
-	- name: the aggregate run (Maintain/Run-Smokes.mjs)
+	- name: the aggregate run (Maintain/Run/Smokes/Index.mjs)
 		state: implemented
 		evidence: 359 suites / 5,337 checks, all green (the runner's last line)
 ---
@@ -88,8 +88,8 @@ keep the partial as partial. If the lane is blocked, write `ESCALATION: <concret
 
 ## 5. The aggregate (the Lead)
 
-After the lanes report, run `node Maintain/Run-Smokes.mjs`, where the aggregate compares the printed
-count of each folder with its README.
+After the lanes report, run `node Maintain/Run/Smokes/Index.mjs`, where the aggregate compares the
+printed count of each folder with its README.
 
 The per-folder READMEs are the arbiter, and the manifest line of the tree's `smokes/README.md` is a
 summary that can lag, so verify it before you quote a total.

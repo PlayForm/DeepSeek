@@ -63,7 +63,7 @@ statuses:
 
     The tree is CLEAN, with nothing uncommitted.
 
-- THE ARBITER BASELINE RE-VERIFIED at dispatch time: `Maintain/Run-Smokes.mjs` reports "All 42 smoke
+- THE ARBITER BASELINE RE-VERIFIED at dispatch time: `Maintain/Run/Smokes/Index.mjs` reports "All 42 smoke
   suites passed", because the queue's earlier 41 count is now 42 with the tool-coach suite added,
   and the tool-coach suite prints 129 PASS.
 

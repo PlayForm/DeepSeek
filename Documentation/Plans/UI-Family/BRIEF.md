@@ -40,7 +40,7 @@ statuses:
     - The site: Site/ (Astro, 21 pages), with the build command `cd Site && pnpm prepublishOnly`
       (outDir ./Target). The site is verified against the BUILT output only.
     - The smokes: 207 suites across the Classic and ETS twins, run via the aggregate runner
-      (Maintain/Run-Smokes.mjs). Each folder's README records its expected PASS count, and the
+      (Maintain/Run/Smokes/Index.mjs). Each folder's README records its expected PASS count, and the
       runner compares printed against expected (the vacuously-green guard).
     - The harness docs repo: ~/Developer/Documentation/Module/deepseek-harness/, NOT
       ~/Developer/Documentation/deepseek-harness, because that path does not exist.
@@ -79,7 +79,7 @@ Documentation/Skill/worker-strains)
 - **THE BUILD**: the serialized build exit 0 (the family's per-package Source/prepublishOnly.sh
   chain).
 - **THE SMOKES**: "All 207 smoke suites passed" plus the per-folder expected-PASS-count comparison
-  (Maintain/Run-Smokes.mjs; vacuously-green guard).
+  (Maintain/Run/Smokes/Index.mjs; vacuously-green guard).
 - **THE SITE**: the site build, `cd Site && pnpm prepublishOnly`, then grep the BUILT Target/ HTML.
   NEVER use a dev server, and NEVER judge the source alone.
 - **THE DRIFT** (the declare-then-verify discipline): the exact declared acceptance lines of EACH

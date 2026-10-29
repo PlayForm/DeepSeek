@@ -144,7 +144,7 @@ against 62, normalize-file 112 against 71, and factory 35 against 34.
 
 Core, governor, pinner, cargo, ccr, and tool-coach match.
 
-The per-folder READMEs are the arbiter of the runner (`Maintain/Run-Smokes.mjs`).
+The per-folder READMEs are the arbiter of the runner (`Maintain/Run/Smokes/Index.mjs`).
 
 The real Classic total is 1,314 across the manifest suites and 1,594 with the live-containers
 folders.

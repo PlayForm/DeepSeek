@@ -786,7 +786,7 @@ enrollment or `monitors enabled`).
 The family pattern (smoke-writing skill): the suites load the REAL built Target/Library.js against
 the fake ctx (the Harness.ts shape: on capture, get serving the REAL factory, logger capture, the
 root seam, the `ctx.__hookDshLiveContainersState` probe) and run with
-`node Target/Test/ <Folder>/Test.js` standalone AND under Maintain/Run-Smokes.mjs (the
+`node Target/Test/ <Folder>/Test.js` standalone AND under Maintain/Run/Smokes/Index.mjs (the
 vacuously-green guard, where EACH folder's README declares the PASS count). The phase-1 and wave-2
 assertions NEVER weaken, because the monitors default off makes the section byte-identical until
 they are enabled.
@@ -1008,7 +1008,7 @@ declared PASS count), the wave-3 SCHEME/ README sections (section 13), and the E
 SEVERE knobs linkageAlertVersions/dedupWindowMs are ACCEPTED in config, defaulted to 0/off, and
 inert (the same posture that the wave-2 catalog kinds had in phase 1).
 
-ARBITERS: Maintain/Run-Smokes.mjs all green; the phase-1 + wave-2 suites pass with ZERO assertion
+ARBITERS: Maintain/Run/Smokes/Index.mjs all green; the phase-1 + wave-2 suites pass with ZERO assertion
 changes; the ledger strings match the SCHEME byte-exactly; NO other package modified.
 
 DISCIPLINES: NEVER run git commands (checks only; report READY-TO-COMMIT); ASCII only (the glyphs as

@@ -1123,7 +1123,7 @@ EffectTS/packages/ets-lib-dsh-core) and apply these rules:
 
 The restructure is complete: every converted package's `Source/Test/` folders cover its suite, the
 42 `.mjs` fallback files (21 per tree) are REMOVED, the runner's glob counts ONLY the folders, and
-`node Maintain/Run-Smokes.m` is green.
+`node Maintain/Run/Smokes/Index.mjs` is green.
 
 Baseline = the `.mjs` suite's printed count, recorded immediately before removal, with each suite
 green at removal time.

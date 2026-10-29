@@ -1278,8 +1278,8 @@ Run on 2026-10-21. Harness checkout HEAD `687f282e` (0.2.1-rc.2).
 4. `git -C <family repo> status --short` - this turn's only working-tree change is
    `M Documentation/Researches/AGENT-TUNER-RESEARCH.md` (the subtree extension). The earlier rename
    and the INDEX row were committed by the user in `b3cb87b`; the concurrent
-   `Maintain/Generate-NPM-Placeholders.mjs` work was committed separately (`5c5bded`, `602cc0f`) and
-   was not touched.
+   `Maintain/Generate/Placeholders/Index.mjs` work was committed separately (`5c5bded`, `602cc0f`)
+   and was not touched.
 5. `git -C <harness checkout> status --short` - empty (the source checkout was not modified).
 6. ASCII check on this document - only tab and newline outside the ASCII range.
 7. Frontmatter parses; every status uses the seven-value vocabulary; every `registry` and `index`

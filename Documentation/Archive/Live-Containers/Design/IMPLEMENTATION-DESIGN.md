@@ -235,7 +235,7 @@ A red `tsc` fails the build, and the consumers type-check against the built `Tar
 The test folders follow the per-test layout of the family:
 `Source/Test/<Name>/ {Test.ts, README.md}` -> `Target/Test/<Name>/Test.js`.
 
-The tests run standalone and under `Maintain/Run-Smokes.mjs`, which checks the printed PASS count of
+The tests run standalone and under `Maintain/Run/Smokes/Index.mjs`, which checks the printed PASS count of
 each folder against its README (the vacuously-green guard).
 
 `Test-ESBuild.ts` is the `lib-dsh-core` file verbatim (`bundle: false`, `outbase Source/Test`,
@@ -1528,7 +1528,7 @@ tree (the J/B/F/S folders, each `{Test.ts, README.md}` with the declared PASS co
 smoke suite (additive; the phase-1 assertions unchanged) + the wave-2 docs sections + the ETS twin
 mirror (byte-identical ledger strings).
 
-ARBITERS: the family smoke runner (`Maintain/Run-Smokes.mjs`) all green; the phase-1 smoke passes
+ARBITERS: the family smoke runner (`Maintain/Run/Smokes/Index.mjs`) all green; the phase-1 smoke passes
 with zero assertion changes; the ledger strings match the SCHEME byte-exactly; no other package
 changes.
 

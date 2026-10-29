@@ -27,7 +27,7 @@ statuses:
 - The factory returns `{ inject: ["slots", "locale"], apply, default }`.
 - A client package must not import host packages at runtime, and the injected `require` resolves the
   externals.
-- The build is `Maintain/Build-Client-Bundle.mjs`, and the two-step build (`prepublishOnly`)
+- The build is `Maintain/Build/Client-Bundle/Index.mjs`, and the two-step build (`prepublishOnly`)
   includes it.
 
 ## 2. The per-package deltas

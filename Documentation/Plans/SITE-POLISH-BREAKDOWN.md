@@ -183,7 +183,7 @@ The rewrite:
 - The manifest line is stale against the per-folder tests: dash 184 against 132, each small flavor
   104 against 62, normalize-file 112 against 71, and factory 35 against 34. Core, governor, pinner,
   cargo, ccr, and tool-coach match, and the per-folder READMEs are the arbiter of the runner
-  (`Maintain/Run-Smokes.mjs`).
+  (`Maintain/Run/Smokes/Index.mjs`).
 - The real Classic total is 1,314 across the manifest suites and 1,594 with the live-containers
   folders, while the EffectTS total needs the same per-folder sum, so do not assume the additive
   delta alone.

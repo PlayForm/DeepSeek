@@ -12,7 +12,7 @@ statuses:
       evidence: superseded by the dated sections that follow; kept as the record
     - name: the smoke-suite restructure
       state: implemented
-      evidence: all 207 smoke suites passed - node Maintain/Run-Smokes.mjs
+      evidence: all 207 smoke suites passed - node Maintain/Run/Smokes/Index.mjs
     - name: the site update (supports, coachy section, plugin pages)
       state: implemented
       evidence:
@@ -121,7 +121,7 @@ Everything STAGED or MODIFIED. NOTHING COMMITTED. The user holds all commits:
 | **Site/**                    | An Astro fork of PlayForm/Starter (the user merged Fork/Current into Current); the build fixed (the @Stylesheet alias wiring + the CSS-chunk pruning fix); the Reference + Stitch adaptations woven in (9+ pages: index, plugins/products, versions, flavors, models, workbench, matrix, package detail, brand - the brand page being removed per the user); the Cloudflare readiness (wrangler.toml, _headers, 404, the deployment README) - THE CORRECTNESS AGENT IS MID-PASS (the Products→Plugins rename + the real package-docs adoption + the direction updates + the content-voice rule + the /brand/ removal) |
 | **Test/**                    | The family-only fixture archive: `fixtures/manifest/` (the governed-chain, governed-test, cargo-fixture, the sandbox-root manifest), `fixtures/markdown/` (the mdash, raw-marker, raw-write, tool-args, granular-normalize, normalize-file proof fixtures), `probes/raw-write-probe/` + the README index - the unrelated experiments (the coder/locktree/prun trees, the node_modules litter) removed                                                                                                                                                                                                                 |
 | **Documentation/**           | The handoff restructured into `Handoff/` (Overview, Packages/ 01–13, the 16-item Register, the Lessons), the reports (AUDIT/DELIVERY/DIAGNOSIS/FLAVOR-DESIGN in `Reports/`), the plans (this document, the monorepo plan, the CASE-STUDY-PLAN in `Plans/`), the Governor guides (`Guides/`), the BRANDING (`Brand/`), and the skill tree (`Skill/`)                                                                                                                                                                                                                                                                   |
-| **Formatting**               | The monorepo standard: TABS everywhere (the Land + Aphrodite merged config - useTabs/tabWidth 4, printWidth 100; YAML must stay spaces - the spec constraint), the .prettierrc/.prettierignore/.editorconfig/.npmrc/.gitignore + Maintain/Format.sh + the format scripts                                                                                                                                                                                                                                                                                                                                              |
+| **Formatting**               | The monorepo standard: TABS everywhere (the Land + Aphrodite merged config - useTabs/tabWidth 4, printWidth 100; YAML must stay spaces - the spec constraint), the .prettierrc/.prettierignore/.editorconfig/.npmrc/.gitignore + Maintain/Format/Index.sh + the format scripts                                                                                                                                                                                                                                                                                                                                        |
 | **The live `~/.dsh` family** | Untouched and live through every restart - the 12 bundles + the profile                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 **The smoke counts** (the three implementations, all green):
@@ -466,8 +466,8 @@ settles.
       (fba0107), the Target tracking (f10cfbb), the live-testing methodology update (d2efca0). The
       wrap-up report for the tool-coach batch is the commit series + this record; the tree is CLEAN
       (nothing uncommitted).
-- **The arbiter baseline re-verified at dispatch time**: `Maintain/Run-Smokes.mjs` -> "All 42 smoke
-  suites passed" (the queue's earlier 41 count is now 42 with the tool-coach suite added; the
+- **The arbiter baseline re-verified at dispatch time**: `Maintain/Run/Smokes/Index.mjs` -> "All 42
+  smoke suites passed" (the queue's earlier 41 count is now 42 with the tool-coach suite added; the
   tool-coach suite prints 129 PASS). Both queue additions are now ACTIONABLE (the gating condition -
   the in-flight normalization + tool-coach work - has settled).
 - **The dispatch plan (the 2-active law, all routes cloudflare-workers-ai /
@@ -1028,8 +1028,8 @@ fire-and-forget). The SIX CANs are broken into separate requirement files by the
   Persistent-Section 16, Enforce-And-Exempts 15, Dynamic-And-Craft 40), sum = 129 = baseline EXACTLY
   in both trees (all 129 PASS messages byte-identical to the source suite); the parity diffs = the
   tree-identity substitutions only; the runner's folder guard 179/179 OK. TWO FINDINGS (binding):
-  (1) THE RED ARBITER - Maintain/Run-Smokes.mjs stops at governor-smoke.mjs (exit 1): the old .mjs
-  governor suite's Target-walk (deepStrictEqual) trips on the converted governor's gitignored
+  (1) THE RED ARBITER - Maintain/Run/Smokes/Index.mjs stops at governor-smoke.mjs (exit 1): the old
+  .mjs governor suite's Target-walk (deepStrictEqual) trips on the converted governor's gitignored
   compiled Target/Test - PRE-EXISTING (the full runner never ran after the governor conversion;
   reproduced + verified by the orchestrator). (2) THE DECLARATION-HYGIENE RULE - the Build CLI's
   tsc/tsc-alias spawns are fire-and-forget (the raw-tsc emit can land after tsc-alias, leaving

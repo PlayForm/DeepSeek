@@ -200,7 +200,7 @@ The old `0.0.1` release stays immutable.
 | Gate                  | Command                                                                                          | Result                                                           |
 | --------------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------- |
 | Build, both trees     | `pnpm run build`                                                                                 | exit 0, 31 packages                                              |
-| Full aggregate        | `node Maintain/Run-Smokes.mjs`                                                                   | exit 0, `All 207 smoke suites passed`                            |
+| Full aggregate        | `node Maintain/Run/Smokes/Index.mjs`                                                             | exit 0, `All 207 smoke suites passed`                            |
 | Site build            | `pnpm prepublishOnly` (in `Site/`)                                                               | exit 0, 24 pages (25 HTML files including `404.html`)            |
 | Site drift            | `pnpm Drift` (in `Site/`)                                                                        | exit 0, 310 checks, zero content failures                        |
 | Manifest version grep | `grep -rn "0.0.1" Classic/packages EffectTS/packages --include=package.json`                     | 0 matches                                                        |
@@ -226,7 +226,8 @@ aligns the copies.
 - [x] The root `package.json` at 0.1.0; the Site `package.json` at 0.1.0.
 - [x] The six activation `const Version` constants at 0.1.0 (ccr, tool-coach, live-containers, both
       trees), with their byte-identical assertions and READMEs updated in the same change.
-- [x] `node Maintain/Run-Smokes.mjs` exits 0 and every folder's printed count matches its README.
+- [x] `node Maintain/Run/Smokes/Index.mjs` exits 0 and every folder's printed count matches its
+      README.
 - [x] `pnpm prepublishOnly` in `Site/` exits 0 with 24 pages.
 - [x] `pnpm Drift` in `Site/` reports zero content failures (freshness lines are package mtimes).
 - [x] `grep -rn "0.0.1" Classic/packages EffectTS/packages --include=package.json` returns zero.

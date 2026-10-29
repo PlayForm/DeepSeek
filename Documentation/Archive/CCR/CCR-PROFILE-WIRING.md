@@ -32,7 +32,7 @@ statuses:
 1. The bundle is built: `Boilerplate/packages/dsh-hook-ccr` has a populated `Target/` from the
    deterministic three-step build (`pnpm install --ignore-scripts && pnpm run prepublishOnly`).
 2. Phases 1-4 are green: `node Boilerplate/smokes/ccr-smoke.mjs` (146 PASS, 0 FAIL as of this
-   document) and the full suite (`pnpm run test`, `Maintain/Run-Smokes.mjs`) pass.
+   document) and the full suite (`pnpm run test`, `Maintain/Run/Smokes/Index.mjs`) pass.
 3. The plugin is feature-off by default, with `contextEngine: false` in the config below, and the
    context engine (SCHEME.md §9) stays inert until the user flips it deliberately.
 

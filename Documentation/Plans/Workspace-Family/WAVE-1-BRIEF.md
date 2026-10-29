@@ -125,7 +125,7 @@ The build and the arbiters:
 ```sh
 pnpm --dir Classic/packages/ prepublishOnly < pkg > run          # build + tsc + tsc-alias
 node Classic/packages/ < pkg > /Target/Test/ < Folder > /Test.js # one folder
-node Maintain/Run-Smokes.mjs                                     # the aggregate (the Lead runs it)
+node Maintain/Run/Smokes/Index.mjs                               # the aggregate (the Lead runs it)
 ```
 
 Never run `pnpm install`, because the root hoisted toolchain is ready (Build, tsc 7.0.2, tsc-alias,

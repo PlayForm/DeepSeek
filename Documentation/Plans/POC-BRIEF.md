@@ -189,7 +189,7 @@ starts exactly with `ESCALATION: <concrete reason>`.
 2. **The smoke pass.**
 
     Run the smoke suites per package with the fake-context harness and the expected counts in the
-    READMEs, then the aggregate `node Maintain/Run-Smokes.mjs`.
+    READMEs, then the aggregate `node Maintain/Run/Smokes/Index.mjs`.
 
 3. **The ETS twins.**
 

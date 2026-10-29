@@ -38,7 +38,7 @@ A plugin is complete only when all four pass:
 
 3b. **Types.**
 
-    The package passes the honest repo-level type gate, `node Maintain/Run-Types.mjs` (also `pnpm test:types`), which runs `tsc -p Configuration/TypeScript.noemit.json --pretty false` in every package of both trees and fails with exit 1 if any package has diagnostics, and `--tree classic|effect-ts` scopes the run.
+    The package passes the honest repo-level type gate, `node Maintain/Run/Types/Index.mjs` (also `pnpm test:types`), which runs `tsc -p Configuration/TypeScript.noemit.json --pretty false` in every package of both trees and fails with exit 1 if any package has diagnostics, and `--tree classic|effect-ts` scopes the run.
 
     The build alone is NOT a type gate, because the TypeScript step of the Build tool logs diagnostics without failing and `prepublishOnly` checks only `Source/Test/**`.
 

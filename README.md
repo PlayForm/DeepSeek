@@ -1,6 +1,6 @@
 # DeepSeek Harness Plugin Family for PlayForm
 
-[![release](https://img.shields.io/static/v1?label=release&message=v0.1.0&color=blue)](CHANGELOG.md)
+[![release](https://img.shields.io/static/v1?label=release&message=v0.2.1&color=blue)](CHANGELOG.md)
 [![smokes](https://img.shields.io/static/v1?label=smokes&message=511%20suites%20%2F%206%2C612%20checks&color=blue)](Classic/smokes/README.md)
 [![packages](https://img.shields.io/static/v1?label=packages&message=54%20%2B%2048&color=white)](Classic/packages/)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](LICENSE)
