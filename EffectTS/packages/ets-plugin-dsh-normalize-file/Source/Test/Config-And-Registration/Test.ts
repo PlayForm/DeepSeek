@@ -5,7 +5,7 @@
 // activation line, the apply-journals-nothing posture, and the
 // fresh-state-per-apply probe.
 // Runs standalone (`node Target/Test/Config-And-Registration/Test.js`) AND
-// under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL
 // factory + the REAL normalize-file apply, from the Harness.
 import assert from "node:assert/strict";

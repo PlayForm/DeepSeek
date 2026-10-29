@@ -7,7 +7,7 @@
 // byte-verbatim and the counts reproduce the source suite's values when run
 // standalone OR under the aggregate.
 // Runs standalone (`node Target/Test/Error-Paths/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-plugin-dsh-normalize-file: the fake ctx + the REAL
 // factory + the REAL normalize-file apply, from the Harness.
 import assert from "node:assert/strict";
