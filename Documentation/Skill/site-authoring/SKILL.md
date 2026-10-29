@@ -219,6 +219,8 @@ The renderer's limits:
 
 The site has been burned by claims that were true in a document and false in the tree.
 
+A page is named for the mechanism it shows, never for a generic product noun. "Value" is not a page; "Model behavior" is, because it says what the reader will see. The rule covers the route, the page title, the navigation label, the hero, and every section heading: if a label could sit on any product's website, it is the wrong label. The user corrected this on 2026-10-29 after a page shipped titled "Value".
+
 Before shipping a claim:
 
 | Claim                        | Verify with                                         |
