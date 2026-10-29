@@ -18,7 +18,7 @@ statuses:
       evidence: the blueprint's shape, in every package
     - name: the aggregate runner (the vacuously-green guard)
       state: implemented
-      evidence: all 207 smoke suites passed - node Maintain/Run-Smokes.mjs
+      evidence: all 207 smoke suites passed - node Maintain/Run/Smokes/Index.mjs
     - name: the separate ESBuild pre-compile step
       state: implemented
       evidence: per package; the Test build regenerates Target/Test
@@ -66,7 +66,7 @@ it to npm.
 
     Each test file runs standalone (`node <compiled-test>`).
 
-    The **main Smoke file** (the family's aggregate runner, today `Maintain/Run-Smokes.mjs` driving
+    The **main Smoke file** (the family's aggregate runner, today `Maintain/Run/Smokes/Index.mjs` driving
     the `Classic/smokes/*.mjs` + `EffectTS/smokes/*.mjs` suites) imports and runs them together, and
     it preserves the current suite totals as the arbiter baseline.
 
@@ -121,7 +121,7 @@ it to npm.
 
 - Today: one `.mjs` suite per plugin in `Classic/smokes/` + `EffectTS/smokes/` (e.g. `ccr-smoke.mjs`
   146 PASS, `normalize-dash-smoke.mjs` 184 PASS, `factory-smoke.mjs` 35 checks) plus the aggregate
-  `Maintain/Run-Smokes.mjs` ("All 41 smoke suites passed" as of 2026-10-19).
+  `Maintain/Run/Smokes/Index.mjs` ("All 41 smoke suites passed" as of 2026-10-19).
 
     The Boilerplate tree is archived at `/Volumes/CORSAIR/Archive/Application/PlayForm/Boilerplate`;
     do not reference it.

@@ -268,8 +268,8 @@ Current → proposed:
 
 // NEW - the smoke runner (replaces the bash for-loop `for Smoke in ...; do node "$Smoke" ...; done`
 // - the one shell-glue construct in the root scripts; a maintained Node runner, the
-// Maintain/Run-Smokes.mjs pattern already used by Check-Newlines.mjs):
-"test": "node Maintain/Run-Smokes.mjs",
+// Maintain/Run/Smokes/Index.mjs pattern already used by Check-Newlines.mjs):
+"test": "node Maintain/Run/Smokes/Index.mjs",
 
 // REMOVED (the superseded dual-source machinery):
 //   "build:dual-source"  -> deleted
@@ -278,16 +278,16 @@ Current → proposed:
 
 // KEEP (site + tooling, not build triggers):
 "site": "pnpm --dir Site run Run",
-"lychee": "bash Maintain/Lychee.sh",
-"format": "bash Maintain/Format.sh",
-"format:prettier": "bash Maintain/Format.sh prettier",
-"format:newlines": "bash Maintain/Format.sh newlines",
-"format:check": "prettier --check --ignore-path .prettierignore . && node Maintain/Check-Newlines.mjs"
+"lychee": "bash Maintain/Check/Lychee/Index.sh",
+"format": "bash Maintain/Format/Index.sh",
+"format:prettier": "bash Maintain/Format/Index.sh prettier",
+"format:newlines": "bash Maintain/Format/Index.sh newlines",
+"format:check": "prettier --check --ignore-path .prettierignore . && node Maintain/Check/Newlines/Index.mjs"
 ```
 
 Notes:
 
-- `Maintain/Run-Smokes.mjs` (the new file, exec lane) reads `Classic/smokes/*-smoke.mjs` +
+- `Maintain/Run/Smokes/Index.mjs` (the new file, exec lane) reads `Classic/smokes/*-smoke.mjs` +
   `EffectTS/smokes/*-smoke.mjs` (the 24 suites, the Classic twelve first), spawns each with `node`,
   and exits non-zero on the first failing suite.
 
@@ -585,7 +585,7 @@ content.
 | **S0** | The baseline lock: `pnpm test` = 733 + 746 (the CURRENT tree, before any edit); `git status` clean; the working tree's manually-restored links documented. NO install in S0 (any install can re-break the pre-splice tree - §9.1).                                                  | the 733/746 run + the user's commit                        |
 | **S1** | The base extraction: `git mv` the §2.3 plumbing into `EffectTS/packages/ets-base-dsh`; scaffold the manifest/tsconfig/Configuration; rewrite the moved modules' internal imports + the consumers' plumbing imports (rule 3, §4.1); build + run the 12 EffectTS suites.              | **746 green BEFORE any rename**                            |
 | **S2** | The rename pass (one atomic change set): the 24 dir renames + the 24 manifest renames (§2.1/§2.2) + the by-name import rewrites (§4.1) + the manifest deps (§4.2) + the dual-source exports simplification + the classical effect-dep removal + the smoke reference updates (§6.2). | the renamed tree builds; `git status` reviewed by the user |
-| **S3** | The workspace wiring: the root scripts (§3.2); `Maintain/Run-Smokes.mjs`; delete `Maintain/DualSource.sh` + `Maintain/Verify-DualSource.mjs`; the `.prettierignore`/`.gitignore` residue cleanup; `pnpm-workspace.yaml` verified unchanged (§3.1).                                  | `pnpm format:check` green                                  |
+| **S3** | The workspace wiring: the root scripts (§3.2); `Maintain/Run/Smokes/Index.mjs`; delete `Maintain/DualSource.sh` + `Maintain/Verify-DualSource.mjs`; the `.prettierignore`/`.gitignore` residue cleanup; `pnpm-workspace.yaml` verified unchanged (§3.1).                                  | `pnpm format:check` green                                  |
 | **S4** | The fresh-install gate: `pnpm install` -> `pnpm run build` -> `pnpm test`.                                                                                                                                                                                                          | **733 + 746, zero failures** (the splice is proven)        |
 | **S5** | The SITE-DOCS-RENAME lane: the §7 list (parallel with S2..S4 or after; the site build regenerates `Site/Target`).                                                                                                                                                                   | the site build + the lychee gate                           |
 | **S6** | The single-repo publish prep: the NPM.yml arm + the layer order (§5.1) - the npm lane, AFTER the S4 gate.                                                                                                                                                                           | the publish dry-run per layer                              |

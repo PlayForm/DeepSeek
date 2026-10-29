@@ -130,7 +130,7 @@ before splitting.
 
 The 7 wiring suites across 2 trees make 14 folder pairs.
 
-They run under `Maintain/Run-Wiring.mjs` (the live ~/.dsh battery), and they self-skip inside
+They run under `Maintain/Run/Wiring/Index.mjs` (the live ~/.dsh battery), and they self-skip inside
 Run-Smokes.
 
 Their per-folder split stays shallow at 2 folders each: "skip-guard + harness" and "the live
@@ -391,7 +391,7 @@ The ETS tree's Harness.ts is the Classic Harness.ts with the same tree-identity 
 ```ts
 // Source/Test/<TestName>/Test.ts - one singular test: <one-line intent>.
 // Runs standalone (`node Target/Test/<TestName>/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` imports runTest).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` imports runTest).
 import assert from "node:assert/strict";
 
 // The REAL built entry of THIS bundle. This same relative specifier is valid
@@ -657,7 +657,7 @@ Target/Test wipes.
 
 ## 3. THE AGGREGATE-RUNNER INTEGRATION
 
-`Maintain/Run-Smokes.mjs` changes in five places:
+`Maintain/Run/Smokes/Index.mjs` changes in five places:
 
 1. **Keep the current pass during the migration.**
 
@@ -698,7 +698,7 @@ Target/Test wipes.
 
 4. **Update the wiring runner.**
 
-    `Maintain/Run-Wiring.mjs` keeps its own explicit suite list; if the wiring suites are split into
+    `Maintain/Run/Wiring/Index.mjs` keeps its own explicit suite list; if the wiring suites are split into
     folders, update its `WiringSuites` array to the new folder paths in the same lane.
 
     The wiring counts remain its arbiter, never the 733/746 mechanics numbers.
@@ -962,7 +962,7 @@ For each converted package pair (Classic + ETS):
 
 7. **The aggregate runner.**
 
-    `node Maintain/Run-Smokes.mjs` (or the updated runner) is green, and its final total includes
+    `node Maintain/Run/Smokes/Index.mjs` (or the updated runner) is green, and its final total includes
     the new folders.
 
 8. **Formatting.**
@@ -1201,7 +1201,7 @@ The sums are identical in both trees: 136 checks per tree, 272 combined.
 
 The `.mjs` originals are removed too.
 
-The folders run under `Maintain/Run-Wiring.mjs`, which sets the gate, and they self-skip inside the
+The folders run under `Maintain/Run/Wiring/Index.mjs`, which sets the gate, and they self-skip inside the
 aggregate without `DSH_TEST_SCRATCH`.
 
 The `wiring-live.mjs` scaffold stays, because it is not a counted suite.
@@ -1210,7 +1210,7 @@ The `wiring-live.mjs` scaffold stays, because it is not a counted suite.
 
 | Measure                                           | Before (the double-assertion window) | After (the retirement)                                                                                  |
 | ------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------- |
-| Runner units (Maintain/Run-Smokes.mjs final line) | 229 (42 .mjs + 187 folders)          | 187 (folders only)                                                                                      |
+| Runner units (Maintain/Run/Smokes/Index.mjs final line) | 229 (42 .mjs + 187 folders)          | 187 (folders only)                                                                                      |
 | Mechanics PASS, Classic                           | 1312                                 | 1417 (+105 = live-containers new coverage)                                                              |
 | Mechanics PASS, EffectTS                          | 1325                                 | 1430 (+105 = live-containers; core -3 offset by ets-base +3)                                            |
 | Converted-package deltas                          | -                                    | ZERO weakening, ZERO growth (the additive growth happened at conversion, recorded in the lane handoffs) |

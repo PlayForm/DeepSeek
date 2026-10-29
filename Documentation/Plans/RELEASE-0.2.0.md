@@ -25,7 +25,7 @@ statuses:
     - name: the market index
       state: implemented
       evidence:
-          node Maintain/Generate-Marketplace.mjs --check exits 0 (102 plugins, 123 npm versions, 101
+          node Maintain/Generate/Marketplace/Index.mjs --check exits 0 (102 plugins, 123 npm versions, 101
           git versions)
     - name: the verification run (build + smokes + publish dry-run)
       state: implemented
@@ -188,10 +188,10 @@ The publish order is derived and not listed (section 2).
 runs `pnpm run build`, and then runs:
 
 ```bash
-node Maintain/Publish-Packages.mjs
+node Maintain/Publish/Packages/Index.mjs
 ```
 
-`Maintain/Publish-Packages.mjs` derives everything from the workspace:
+`Maintain/Publish/Packages/Index.mjs` derives everything from the workspace:
 
 - it reads every `Classic/packages/*/package.json` and `EffectTS/packages/*/package.json`;
 - it builds the dependency depth from each manifest's `@playform/` dependencies and refuses a cycle;
@@ -208,7 +208,7 @@ The workflow keeps `id-token: write`, the `Release` environment, and the `workfl
 
 ### The placeholder scaffold is derived
 
-`Maintain/Generate-NPM-Placeholders.mjs` classifies the 102 names against the registry into
+`Maintain/Generate/Placeholders/Index.mjs` classifies the 102 names against the registry into
 `1-missing` (absent, which needs the 0.0.0 empty-first-publish), `2-placeholder` (a placeholder
 only), and `3-published` (the repo version is on the registry), and it writes the scaffold under
 `Temporary/npm-bootstrap/` with the placeholder manifests, `MANIFEST.json`, the `README.md`, and
@@ -260,9 +260,9 @@ The 0.0.0 placeholders and the 0.1.0 release stay immutable.
 | Sibling-pin grep       | `grep -rn '"@playform/[^"]*": "0.1.0"' Classic/packages EffectTS/packages --include=package.json` | 0 matches                                                                                                                                                                     |
 | Per-package changelogs | `ls Classic/packages/*/CHANGELOG.md EffectTS/packages/*/CHANGELOG.md \| wc -l`                    | 102                                                                                                                                                                           |
 | Build, both trees      | `pnpm run build`                                                                                  | exit 0 (102 packages, workspace-concurrency 1)                                                                                                                                |
-| Full aggregate         | `node Maintain/Run-Smokes.mjs`                                                                    | exit 0, `All 513 smoke suites passed`                                                                                                                                         |
-| Market index           | `node Maintain/Generate-Marketplace.mjs --check`                                                  | exit 0, `marketplace.json is up to date`                                                                                                                                      |
-| Publish plan           | `node Maintain/Publish-Packages.mjs --dry-run`                                                    | exit 0, 101 `DRY`, 1 `SKIP`, `0 published, 1 skipped, 0 blocked, 0 failed`                                                                                                    |
+| Full aggregate         | `node Maintain/Run/Smokes/Index.mjs`                                                                    | exit 0, `All 513 smoke suites passed`                                                                                                                                         |
+| Market index           | `node Maintain/Generate/Marketplace/Index.mjs --check`                                                  | exit 0, `marketplace.json is up to date`                                                                                                                                      |
+| Publish plan           | `node Maintain/Publish/Packages/Index.mjs --dry-run`                                                    | exit 0, 101 `DRY`, 1 `SKIP`, `0 published, 1 skipped, 0 blocked, 0 failed`                                                                                                    |
 | Activation constants   | the six `Source/Function/Apply.ts`                                                                | `const Version = "0.2.0"`; the rebuilt `Target` carries `bundle 0.2.0`                                                                                                        |
 | Activation assertions  | the six suites                                                                                    | ccr 25 PASS, live-containers 42 PASS, tool-coach 36 PASS, both trees                                                                                                          |
 
@@ -281,9 +281,9 @@ which is `const m="0.2.0"` in `Classic/packages/hook-dsh-ccr/Target/Function/App
 - [x] The root `CHANGELOG.md` carries `## 0.2.0 - 2026-10-25`, with the still-unreleased items moved
       into it.
 - [x] `pnpm run build` exits 0.
-- [x] `node Maintain/Run-Smokes.mjs` exits 0.
-- [x] `node Maintain/Generate-Marketplace.mjs --check` exits 0.
-- [x] `node Maintain/Publish-Packages.mjs --dry-run` prints 101 `DRY` and 1 `SKIP`.
+- [x] `node Maintain/Run/Smokes/Index.mjs` exits 0.
+- [x] `node Maintain/Generate/Marketplace/Index.mjs --check` exits 0.
+- [x] `node Maintain/Publish/Packages/Index.mjs --dry-run` prints 101 `DRY` and 1 `SKIP`.
 - [ ] The git commit, the tag, and the push are the user's commands (section 5).
 - [ ] The npm publish is the user's command; this lane never runs it.
 

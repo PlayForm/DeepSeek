@@ -54,7 +54,7 @@ export const runTest = async (): Promise<number> => {
 			assert.deepEqual(Out.sections.map((Section: any) => Section.name), ["base", "hook-dsh-search-suggester"]);
 			assert.equal(
 				Out.sections[1].text,
-				"[search-suggester] intent=Version confidence=1.00\ntargets (10):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- Classic/packages/*/package.json - the Classic manifests\n- EffectTS/packages/*/package.json - the EffectTS manifests\n- */Source/Function/Apply.ts - the const Version\n- Site/Source/Library/Content.ts - the site release constant\n- CHANGELOG.md - the new section\n- Documentation/Plugins/PLUGIN-FAMILY.md - the roster versions\n- Site/Source/pages/versions.astro - the versions page\n- .github/workflows/NPM.yml - the publish trigger\nnote: open these before more searches; Target/ is generated, never edit it.",
+				"[search-suggester] intent=Version confidence=1.00\ntargets (10):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- Classic/packages/*/package.json - the Classic manifests\n- EffectTS/packages/*/package.json - the EffectTS manifests\n- */Source/Function/Apply.ts - the const Version\n- Site/Source/Library/Content.ts - the site release constant\n- CHANGELOG.md - the new section\n- Documentation/Plugins/PLUGIN-FAMILY.md - the roster versions\n- Site/Source/pages/reference.astro - the versions page\n- .github/workflows/NPM.yml - the publish trigger\nnote: open these before more searches; Target/ is generated, never edit it.",
 			);
 			assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
 			assert.match(

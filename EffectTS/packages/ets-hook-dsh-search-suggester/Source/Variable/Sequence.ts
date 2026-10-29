@@ -67,7 +67,7 @@ export default {
 			name: "grep",
 			arguments: { pattern: "error TS", path: "Classic/smokes/README.md" },
 		},
-		{ agent: "test", name: "read", arguments: { file_path: "Maintain/Run-Smokes.mjs" } },
+		{ agent: "test", name: "read", arguments: { file_path: "Maintain/Run/Smokes/Index.mjs" } },
 		{ agent: "test", name: "glob", arguments: { pattern: "**/Test.ts" } },
 		{
 			agent: "test",
@@ -286,7 +286,7 @@ export default {
 			"Site/Source/Library/Content.ts",
 			"CHANGELOG.md",
 			"Documentation/Plugins/PLUGIN-FAMILY.md",
-			"Site/Source/pages/versions.astro",
+			"Site/Source/pages/reference.astro",
 			".github/workflows/NPM.yml",
 			"**/README.md",
 			"Site/Source/pages/setup.astro",
@@ -295,7 +295,7 @@ export default {
 		Test: [
 			"Source/Test",
 			"Classic/smokes/Test",
-			"Maintain/Run-Smokes.mjs",
+			"Maintain/Run/Smokes/Index.mjs",
 			"Classic/smokes/README.md",
 			"**/Test.ts",
 			"EffectTS/smokes/README.md",

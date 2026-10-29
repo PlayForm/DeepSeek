@@ -221,7 +221,7 @@ const runTest = async () => {
     Check(Count, Sub, () => {
       assert.ok(
         Log1.split("\n").some(
-          (L) => /^\[[^\]]+\] activated \(bundle 0\.3\.0, targets 8, budget 268435456\)$/.test(L)
+          (L) => /^\[[^\]]+\] activated \(bundle 0\.2\.1, targets 8, budget 268435456\)$/.test(L)
         )
       );
     });

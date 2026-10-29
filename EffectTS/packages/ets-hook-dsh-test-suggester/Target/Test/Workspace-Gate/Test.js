@@ -34,7 +34,7 @@ const ForeignTest = Put(Foreign, "Source/Test/Foo/Test.ts");
 const Ours = Tree("test-suggester-ours-");
 Put(Ours, "Documentation/ARCHIVE-STYLE.md");
 const OursTest = Put(Ours, "Source/Test/Foo/Test.ts");
-Put(Ours, "Maintain/Run-Smokes.mjs");
+Put(Ours, "Maintain/Run/Smokes/Index.mjs");
 Put(Ours, "README.md");
 const Empty = Tree("test-suggester-empty-");
 Put(Empty, "Documentation/ARCHIVE-STYLE.md");
@@ -101,7 +101,7 @@ const runTest = async () => {
       const Text = Out.additionalContexts[0].content[0].text;
       assert.equal(
         Text,
-        "[test-suggester] intent=Suite confidence=0.65\ntargets (4):\n- Source/Test/<Suite>/Test.ts - the assertion body - the suite that proves it\n- Source/Test/<Suite>/README.md - the expected count and the coverage notes\n- Maintain/Run-Smokes.mjs - the aggregate runner - how the suites are invoked\n- README.md - the badge count, which must match the suite\nnote: one suite per folder: Test.ts asserts, README.md carries the count; Target/ is never edited."
+        "[test-suggester] intent=Suite confidence=0.65\ntargets (4):\n- Source/Test/<Suite>/Test.ts - the assertion body - the suite that proves it\n- Source/Test/<Suite>/README.md - the expected count and the coverage notes\n- Maintain/Run/Smokes/Index.mjs - the aggregate runner - how the suites are invoked\n- README.md - the badge count, which must match the suite\nnote: one suite per folder: Test.ts asserts, README.md carries the count; Target/ is never edited."
       );
       assert.equal(Text.includes("Source/Test/<Suite>"), true);
     });

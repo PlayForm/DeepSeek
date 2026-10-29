@@ -144,7 +144,7 @@ const runTest = async () => {
       assert.equal(LedgerLines().length, 1);
       assert.match(
         LedgerLines()[0],
-        /^\[.*\] activated \(bundle 0\.3\.0, blocks=2, refresh=request\)$/
+        /^\[.*\] activated \(bundle 0\.2\.1, blocks=2, refresh=request\)$/
       );
     });
     Check(Count, "activation ttl flavor byte-exact (refresh=ttl)", () => {

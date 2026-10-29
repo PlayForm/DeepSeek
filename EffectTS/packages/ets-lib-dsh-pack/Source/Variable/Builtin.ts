@@ -358,7 +358,7 @@ const Builtin: Pack = {
 					reason: "the badge and the counts",
 				},
 				{
-					path: "Maintain/Run-Smokes.mjs",
+					path: "Maintain/Run/Smokes/Index.mjs",
 					kind: "literal",
 					prior: 1.0,
 					reason: "the aggregate roster",
@@ -518,7 +518,7 @@ const Builtin: Pack = {
 					reason: "the roster versions",
 				},
 				{
-					path: "Site/Source/pages/versions.astro",
+					path: "Site/Source/pages/reference.astro",
 					kind: "site",
 					prior: 1.0,
 					reason: "the versions page",
@@ -734,7 +734,7 @@ const Builtin: Pack = {
 					reason: "the aggregate smokes",
 				},
 				{
-					path: "Maintain/Run-Smokes.mjs",
+					path: "Maintain/Run/Smokes/Index.mjs",
 					kind: "literal",
 					prior: 1.0,
 					reason: "the aggregate runner",
@@ -1117,7 +1117,7 @@ const Builtin: Pack = {
 					prior: 1.0,
 				},
 				{
-					path: "Maintain/Run-Smokes.mjs",
+					path: "Maintain/Run/Smokes/Index.mjs",
 					kind: "",
 					reason: "the aggregate runner - how the suites are invoked",
 					prior: 0.6,

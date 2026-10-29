@@ -45,11 +45,11 @@ const Neutral =
 
 /** The byte-exact note the projection emits: the proven paths lead, the unproven globs fall out. */
 const Projected =
-	"[search-suggester] intent=Version confidence=0.92\ntargets (7):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- CHANGELOG.md - the new section\n- Site/Source/Library/Content.ts - the site release constant\n- Documentation/Plugins/PLUGIN-FAMILY.md - the roster versions\n- Site/Source/pages/versions.astro - the versions page\n- .github/workflows/NPM.yml - the publish trigger\nnote: open these before more searches; Target/ is generated, never edit it.";
+	"[search-suggester] intent=Version confidence=0.92\ntargets (7):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- CHANGELOG.md - the new section\n- Site/Source/Library/Content.ts - the site release constant\n- Documentation/Plugins/PLUGIN-FAMILY.md - the roster versions\n- Site/Source/pages/reference.astro - the versions page\n- .github/workflows/NPM.yml - the publish trigger\nnote: open these before more searches; Target/ is generated, never edit it.";
 
 /** The byte-exact note a graph that proves NO candidate emits: the unproven literals keep their tier, the unproven globs fall behind. */
 const UnprovenNote =
-	"[search-suggester] intent=Version confidence=0.92\ntargets (7):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- Site/Source/Library/Content.ts - the site release constant\n- CHANGELOG.md - the new section\n- Documentation/Plugins/PLUGIN-FAMILY.md - the roster versions\n- Site/Source/pages/versions.astro - the versions page\n- .github/workflows/NPM.yml - the publish trigger\nnote: open these before more searches; Target/ is generated, never edit it.";
+	"[search-suggester] intent=Version confidence=0.92\ntargets (7):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- Site/Source/Library/Content.ts - the site release constant\n- CHANGELOG.md - the new section\n- Documentation/Plugins/PLUGIN-FAMILY.md - the roster versions\n- Site/Source/pages/reference.astro - the versions page\n- .github/workflows/NPM.yml - the publish trigger\nnote: open these before more searches; Target/ is generated, never edit it.";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();

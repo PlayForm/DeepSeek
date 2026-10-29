@@ -1,5 +1,5 @@
 ---
-title: The authoritative registry of the 101 packages (53 Classic + 48 EffectTS)
+title: The authoritative registry of the 119 packages (59 Classic + 60 EffectTS)
 category: Plugins
 kind: living-record
 date: 2026-10-22
@@ -8,8 +8,8 @@ registry: Documentation/Plugins/PLUGIN-FAMILY.md
 index: Documentation/INDEX.md
 statuses:
     - name:
-          the 101 packages (53 Classic + 48 EffectTS, one of them the ets-base-dsh plumbing base;
-          client-dsh-panel-family at 0.2.0, the other 100 at 0.1.0, all UNPUBLISHED)
+          the 119 packages (59 Classic + 60 EffectTS, one of them the ets-base-dsh plumbing base;
+          all 119 at 0.2.1, all UNPUBLISHED)
       state: implemented
       evidence:
           the packages exist and are built from source; the package directories under both trees
@@ -21,7 +21,7 @@ statuses:
           orchestration set, the client panels)
       state: implemented (PoC)
       evidence:
-          the packages under Classic/packages/; the family now has 47 ets-* twins (the 48 EffectTS
+          the packages under Classic/packages/; the family now has 59 ets-* twins (the 60 EffectTS
           packages minus the ets-base-dsh base); Documentation/Reports/POC-GAP-ANALYSIS.md
     - name: the former "planned orchestration plugins"
       state: implemented (PoC)
@@ -33,10 +33,10 @@ statuses:
 # PLUGIN-FAMILY - the authoritative registry of the 101 packages
 
 > This document is the "plugins saved as documents" registry, and it covers the full family, where
-> all packages are built from source and UNPUBLISHED (the npm bootstrap tiers: 2-planned or
-> 3-candidates).
+> all packages are built from source and UNPUBLISHED (the npm bootstrap tiers: 2-placeholder or
+> 1-missing).
 >
-> Every package is version **0.1.0** except `client-dsh-panel-family` at **0.2.0**.
+> Every package is version **0.2.1**.
 >
 > EVERY name is byte-accurate, EVERY repo link is absolute, and the document is a DOCUMENT, NOT an
 > implementation.
@@ -50,22 +50,20 @@ statuses:
 
 ## 0. The family at a glance
 
-- **Version: 0.1.0 for ALL 101 packages except `client-dsh-panel-family` (0.2.0), all UNPUBLISHED.**
+- **Version: 0.2.1 for ALL 119 packages, all UNPUBLISHED.**
   The names are byte-accurate as below, and the legacy `ets-dsh-hook-*` naming is gone (the
   namespace split, SPLICE-ETS.md).
-- **Two trees, 53 + 48 packages, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`,
+- **Two trees, 59 + 60 packages, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`,
   `@playform/plugin-dsh-*`, `@playform/client-dsh-*`, `@playform/lib-dsh-*` - plain TypeScript with
   zero runtime framework dependencies) and the EFFECT-TS split (`@playform/ets-*` - the same
-  contracts on Effect v4.0.5 services and layers, with `@playform/ets-base-dsh` as the plumbing
+  contracts on Effect v4.0.7 services and layers, with `@playform/ets-base-dsh` as the plumbing
   base), where you NEVER mix the two splits in ONE dependency graph, the EffectTS `Update` returns
-  Effect envelopes (NOT the classic dispatch envelope), 30 of the 36 packages added 2026-10-22 have
-  ETS twins (all but the two client panels and `plugin-dsh-pass-on`, `plugin-dsh-ingester`,
-  `plugin-dsh-pattern`, `hook-dsh-batch-decision`), and the two libraries of the completion program
-  (`lib-dsh-trace` and `lib-dsh-pack`) now have ETS twins too (`ets-lib-dsh-trace`,
-  `ets-lib-dsh-pack`, added with the ETS parity wave).
-- **The family count is 47 ETS twins:** the EffectTS tree holds 48 packages, and one of them is the
+  Effect envelopes (NOT the classic dispatch envelope), every one of the 59 Classic packages has an
+  ETS twin, including the two libraries of the completion program (`lib-dsh-trace` and
+  `lib-dsh-pack`) and the twelve packages of the 2026-10-29 parity batch (section 1.1).
+- **The family count is 59 ETS twins:** the EffectTS tree holds 60 packages, and one of them is the
   `ets-base-dsh` plumbing base, not a twin.
-- **Verification: the aggregate `node Maintain/Run/Smokes/Index.mjs` = 511 smoke suites / 6,612
+- **Verification: the aggregate `node Maintain/Run/Smokes/Index.mjs` = 595 smoke folders / 7,288
   checks across both trees, all green, and the live desktop profile has 54 bundles enabled.**
 - **ONE ledger-string contract:** EVERY activation line, refusal line, chain-pass line, and journal
   record is asserted byte-identically by the smokes in ALL implementations, with ONE ledger per
@@ -147,8 +145,8 @@ statuses:
 | 45  | `@playform/plugin-dsh-workspace-graph`     | the file/symbol/block index + query                       | yes      |
 | 46  | `@playform/plugin-dsh-workspace-reflect`   | one-call rename/connect/replace                           | yes      |
 | 47  | `@playform/lib-dsh-workspace-live`         | the shared client library (no plugin)                     | yes      |
-| 48  | `@playform/client-dsh-panel-family`        | the panel contract + the family tab                       | no       |
-| 49  | `@playform/client-dsh-panel-family-host`   | the panel host half: the tail/stats endpoints             | no       |
+| 48  | `@playform/client-dsh-panel-family`        | the panel contract + the family tab                       | yes      |
+| 49  | `@playform/client-dsh-panel-family-host`   | the panel host half: the tail/stats endpoints             | yes      |
 | 50  | `@playform/client-dsh-workspace-live`      | the workspace live tab                                    | yes      |
 | 51  | `@playform/hook-dsh-search-suggester`      | companion searches from post-execute signals              | yes      |
 | 52  | `@playform/hook-dsh-edit-suggester`        | convention companions after an edit                       | yes      |
@@ -163,15 +161,18 @@ statuses:
 | 61  | `@playform/plugin-dsh-route`               | resolve/correct the subagent model routes                 | yes      |
 | 62  | `@playform/plugin-dsh-queue`               | the subagent queue: seat/release, capacity, dispatch      | yes      |
 | 63  | `@playform/plugin-dsh-feedback`            | the honest feedback: intake/classify/summary              | yes      |
-| 64  | `@playform/plugin-dsh-pass-on`             | prepare/resolve proposals for the batch flow              | no       |
-| 65  | `@playform/plugin-dsh-ingester`            | validate/apply the approved proposals                     | no       |
-| 66  | `@playform/plugin-dsh-pattern`             | match/record/decay the learned patterns                   | no       |
-| 67  | `@playform/hook-dsh-batch-decision`        | the conservative auto-approve policy + the decision tool  | no       |
+| 64  | `@playform/plugin-dsh-pass-on`             | prepare/resolve proposals for the batch flow              | yes      |
+| 65  | `@playform/plugin-dsh-ingester`            | validate/apply the approved proposals                     | yes      |
+| 66  | `@playform/plugin-dsh-pattern`             | match/record/decay the learned patterns                   | yes      |
+| 67  | `@playform/hook-dsh-batch-decision`        | the conservative auto-approve policy + the decision tool  | yes      |
 
-**EffectTS twins for the delivery (30):** the `@playform/ets-*` counterparts of the 30 packages
-above that are marked "yes", under `EffectTS/packages/`.
+**EffectTS twins for the 2026-10-22 delivery (30):** the `@playform/ets-*` counterparts of the 30
+packages above that are marked "yes", under `EffectTS/packages/`.
 
-The current full count of ETS twins is **47** (the 48 EffectTS packages minus the `ets-base-dsh`
+The 2026-10-29 parity batch added the twelve remaining twins, so no Classic package is without one
+(section 1.1).
+
+The current full count of ETS twins is **59** (the 60 EffectTS packages minus the `ets-base-dsh`
 base), which includes the twins of the two libraries (`ets-lib-dsh-trace`, `ets-lib-dsh-pack`)
 listed below and the twins of the 15 pre-existing packages listed above.
 
@@ -182,6 +183,28 @@ listed below and the twins of the 15 pre-existing packages listed above.
 | --- | ------------------------- | --------- | ---------------------------------------------------------------------------------------------------- | ------------------- |
 | 68  | `@playform/lib-dsh-trace` | Library   | none (library - the trace vocabulary and the detached loop behind the factory's `ctx.trace` service) | `ets-lib-dsh-trace` |
 | 69  | `@playform/lib-dsh-pack`  | Library   | none (library - the workspace-pack schema and resolution behind the pack-driven suggesters)          | `ets-lib-dsh-pack`  |
+
+### 1.1 The 2026-10-29 parity batch (the twelve remaining ETS twins)
+
+The parity batch closed the last gap: every Classic package now has an ETS twin. The twelve pairs:
+
+| #   | Classic package                        | ETS twin                               | Role                                                                    |
+| --- | -------------------------------------- | -------------------------------------- | ----------------------------------------------------------------------- |
+| 1   | `@playform/client-dsh-panel-family`    | `@playform/ets-client-dsh-panel-family`    | the central panel + the family tab (the v4.1 child-slot model)      |
+| 2   | `@playform/client-dsh-panel-family-host` | `@playform/ets-client-dsh-panel-family-host` | the panel host half: the live tail/stats endpoints                |
+| 3   | `@playform/hook-dsh-batch-decision`    | `@playform/ets-hook-dsh-batch-decision`    | the conservative auto-approve policy + the decision tool            |
+| 4   | `@playform/hook-dsh-comment-filter`    | `@playform/ets-hook-dsh-comment-filter`    | the comment-stripping overpass (a new overpass flavor)              |
+| 5   | `@playform/hook-dsh-lesson-nudge`      | `@playform/ets-hook-dsh-lesson-nudge`      | the post-turn idle transition into a self-improvement nudge         |
+| 6   | `@playform/lib-dsh-conversation`       | `@playform/ets-lib-dsh-conversation`       | the conversation vocabulary and the pure fold (no plugin)           |
+| 7   | `@playform/plugin-dsh-cost`            | `@playform/ets-plugin-dsh-cost`            | the per-file inference cost ledger                                  |
+| 8   | `@playform/plugin-dsh-cost-analysis`   | `@playform/ets-plugin-dsh-cost-analysis`   | the read-only analysis of the cost ledger                           |
+| 9   | `@playform/plugin-dsh-ingester`        | `@playform/ets-plugin-dsh-ingester`        | the apply direction of the batch flow (`ctx.ingester`)              |
+| 10  | `@playform/plugin-dsh-lesson-review`   | `@playform/ets-plugin-dsh-lesson-review`   | the post-turn self-improvement review service                       |
+| 11  | `@playform/plugin-dsh-pass-on`         | `@playform/ets-plugin-dsh-pass-on`         | the prepare direction of the batch flow (`ctx.passOn`)              |
+| 12  | `@playform/plugin-dsh-pattern`         | `@playform/ets-plugin-dsh-pattern`         | the pattern registry, matcher and corpus service                    |
+
+Six of these Classic packages (comment-filter, lesson-nudge, lib-dsh-conversation, cost, cost-analysis,
+lesson-review) were added after the tables above were written; the pairs table is their registry row.
 
 The absolute-link rule for any repo target in docs, prompts, and skills is
 `https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/<pkg>` or
