@@ -82,6 +82,6 @@ finished; it moves because the evidence it names exists.
 
 ## The difference lens and the remaining visual work
 
-The lens is the next slice: selecting an artifact lights both world counterparts and their evidence path, dims the rest, and fills a three-cell before/after/explanation card. The data is already in the traces (`Values: { Before, After }`), the model validates it, and the client binding is in flight.
+The lens landed: selecting an artifact lights both counterparts and their evidence path, and the inspector states the baseline value, the PlayForm value and the explanation path. The next slice was: selecting an artifact lights both world counterparts and their evidence path, dims the rest, and fills a three-cell before/after/explanation card. The data is already in the traces (`Values: { Before, After }`), the model validates it, and the client binding is in flight.
 
 After the lens: the axis projection with shared stage columns, the per-plugin behaviour timeline on every package page, the branch states (collapsed summary, expanded events, focused path), the eight decision outcomes with unavailable distinct from abstained, the plugin drawer with its five actions, and the three follow locks.
