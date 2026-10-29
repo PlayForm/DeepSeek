@@ -1,0 +1,13 @@
+# ============================================================
+# Git attributes for the DeepSeek Harness Plugin Family
+# ============================================================
+#
+# The generated artifacts are byte-exact build inputs: the generator writes
+# them and `--check` compares their bytes. Git must not convert their line
+# endings on checkout, or a clone under `core.autocrlf=true` carries CRLF
+# copies, `pnpm icons:check` and `pnpm marketplace:check` fail on that clone,
+# and the site's submodule publishes different bytes than the generator wrote.
+
+Maintain/Icon/Asset/**/*.svg -text
+Maintain/Icon/Ledger.json -text
+marketplace.json -text
