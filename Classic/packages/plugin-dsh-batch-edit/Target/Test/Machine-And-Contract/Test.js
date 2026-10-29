@@ -55,7 +55,7 @@ const runTest = async () => {
     const Run = Setup();
     Check(Count, "M3: the activation line is byte-exact", () => {
       assert.deepEqual(Run.Lines, [
-        "plugin-dsh-batch-edit: activated bundle 0.2.1 (machinesPerAgent 2, opsPerCommit 64, deadlineMs 120000, strictMode false, interceptBash false)"
+        `plugin-dsh-batch-edit: activated bundle ${"0.2.1"} (machinesPerAgent 2, opsPerCommit 64, deadlineMs 120000, strictMode false, interceptBash false)`
       ]);
     });
     Check(Count, "M3: the fs/observed observer sits on the ROOT context only", () => {

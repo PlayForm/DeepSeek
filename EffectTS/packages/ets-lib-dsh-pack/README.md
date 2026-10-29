@@ -137,7 +137,7 @@ The subset and its refusals are listed in [SCHEME.md](./SCHEME.md#the-parser-sub
 | Parser  | 6      | the YAML subset and its refusals, the reader                |
 
 Run one folder with `node Target/Test/<Name>/Test.js`, and run the whole tree with
-`node Maintain/Run-Smokes.mjs` (the aggregate).
+`node Maintain/Run/Smokes/Index.mjs` (the aggregate).
 
 ## License
 

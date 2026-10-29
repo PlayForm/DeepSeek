@@ -4,7 +4,7 @@
 // and the tool-args normalization, including their cumulative pre-bind
 // journal counts.
 // Runs standalone (`node Target/Test/Runs/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Smoke of @playform/hook-dsh-normalize-fullwidth: the fake ctx + the REAL
 // factory + the REAL fullwidth apply (the seams live in ../Harness.js).
 import assert from "node:assert/strict";

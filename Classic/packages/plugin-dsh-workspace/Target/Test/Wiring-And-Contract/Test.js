@@ -83,11 +83,11 @@ const runTest = async () => {
   {
     const Run = Setup();
     Check(Count, "W3: the activation line is byte-exact", () => {
-      assert.deepEqual(Run.Lines, ["plugin-dsh-workspace: activated (bundle 0.2.1, tools=5)"]);
+      assert.deepEqual(Run.Lines, [`plugin-dsh-workspace: activated (bundle ${"0.2.1"}, tools=5)`]);
     });
     Check(Count, "W3: the durable activation line carries the same message after the ISO stamp", () => {
       assert.equal(
-        LedgerLines().filter((Line) => Line.endsWith("activated (bundle 0.2.1, tools=5)")).length,
+        LedgerLines().filter((Line) => Line.endsWith(`activated (bundle ${"0.2.1"}, tools=5)`)).length,
         1
       );
     });

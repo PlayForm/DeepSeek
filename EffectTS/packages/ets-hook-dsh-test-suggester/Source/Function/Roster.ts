@@ -1,5 +1,5 @@
 // Roster - the aggregate runner's roster for one package: the smoke folders it
-// will actually run. Maintain/Run-Smokes.mjs enumerates
+// will actually run. Maintain/Run/Smokes/Index.mjs enumerates
 // `<package>/Target/Test/<Folder>/Test.js` (one folder per suite, the compiled
 // Test.ts plus the README that declares the count), so a Source folder without
 // a built Target folder is NOT in the roster - the runner never sees it and

@@ -161,8 +161,8 @@ Ships **disabled**: enable by explicit ACTIVATE in the profile.
 
 ## The build and the tests
 
-Fifteen folders under `Source/Test/`, each standalone and under `Maintain/Run-Smokes.mjs`, each with
-its own `## Expected count`:
+Fifteen folders under `Source/Test/`, each standalone and under `Maintain/Run/Smokes/Index.mjs`,
+each with its own `## Expected count`:
 
 - the five original folders (Pack-Driven, Post-Execute-And-Learning, Sticky-Section-And-Ring,
   Wiring-And-Ledger, Workspace-Gate);

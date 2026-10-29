@@ -2,7 +2,7 @@
 // loader contract (name/apply/Config/inject + the full default object) and the
 // factory-built Config schema validated with the historical defaults.
 // Runs standalone (`node Target/Test/Loader-And-Config/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-package-pinner.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter } from "../Harness.js";

@@ -3,7 +3,7 @@
 // reasoning, toolInput with the deprecated-field OR), and the S5 volatile
 // scope flip that changes the NEXT stream's gate without remount.
 // Runs standalone (`node Target/Test/Scopes/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the REAL
 // factory + the REAL dash apply, from the Harness.
 import assert from "node:assert/strict";

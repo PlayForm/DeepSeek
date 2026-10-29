@@ -4,7 +4,7 @@
 // byte-format with the file untouched, and the Stash idempotence gate silent
 // and taking precedence over the excluded line.
 // Runs standalone (`node Target/Test/Gates/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-package-pinner.
 import assert from "node:assert/strict";
 import * as Path from "node:path";

@@ -6,7 +6,7 @@
 // ccr_retrieve target, the exemption list, the N=0 no-op, the CCR marker
 // guard, the fail-open on a thrown transform, and the notice-off variant.
 // Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-comment-filter: the fake ctx + the REAL
 // factory + the REAL comment-filter apply, from the Harness.
 import assert from "node:assert/strict";

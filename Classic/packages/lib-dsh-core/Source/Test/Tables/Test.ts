@@ -3,7 +3,7 @@
 // Spaces, Invisible) with the g flag and their pattern sources verbatim, and
 // the two maps (Quotes, Fullwidth) with their exact entries.
 // Runs standalone (`node Target/Test/Tables/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/lib-dsh-core: the REAL built entry only.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter } from "../Harness.js";

@@ -5,7 +5,7 @@
 // replacement up WITHOUT remount: no second activation line, State identity
 // preserved, the normal count line still written.
 // Runs standalone (`node Target/Test/Volatile-Live-Flip/Test.js`) AND under
-// the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
 // factory + the REAL dash apply, from the Harness.
 import assert from "node:assert/strict";

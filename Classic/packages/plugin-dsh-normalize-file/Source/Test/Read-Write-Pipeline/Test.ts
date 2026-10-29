@@ -5,7 +5,7 @@
 // real before/after, the count ledger line, the durable file, the P5 journal
 // record shape and routing, and the volatile replacement knob flowing into
 // the tool. Runs standalone (`node Target/Test/Read-Write-Pipeline/Test.js`)
-// AND under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// AND under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/plugin-dsh-normalize-file: the fake ctx + the REAL
 // factory + the REAL normalize-file apply, from the Harness.
 import { existsSync, readFileSync } from "node:fs";

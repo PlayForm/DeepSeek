@@ -6,7 +6,7 @@
 // order, the presenters' selection-aware view, and the govern call path with
 // the wrapped actor, the sequential fold and the omission rule.
 // Runs standalone (`node Target/Test/Raw-Write-Tool/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
 // factory + the REAL dash apply, from the Harness.
 import assert from "node:assert/strict";

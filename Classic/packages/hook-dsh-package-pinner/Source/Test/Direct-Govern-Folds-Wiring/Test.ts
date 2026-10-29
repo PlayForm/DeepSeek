@@ -8,7 +8,7 @@
 // silence invariant (the broken ledger never throws; the hostile payload is
 // suppressed logger-only).
 // Runs standalone (`node Target/Test/Direct-Govern-Folds-Wiring/Test.js`) AND
-// under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-package-pinner.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";

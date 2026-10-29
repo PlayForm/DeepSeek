@@ -12,7 +12,7 @@
 // D6 default, never a blanket "auto").
 //
 // Runs standalone (`node Target/Test/Policy-And-Decide/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/plugin-dsh-factory: the REAL built Library entry
 // (the helpers are module-level, so no fake ctx is needed).
 import assert from "node:assert/strict";

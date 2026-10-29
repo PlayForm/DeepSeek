@@ -5,7 +5,7 @@
 // preserved, the next tool call picking up the new value), and the
 // scopes.files gate turning the tool off and back on live.
 // Runs standalone (`node Target/Test/Volatile-Live-Flip/Test.js`) AND under
-// the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/plugin-dsh-normalize-file: the fake ctx + the REAL
 // factory + the REAL normalize-file apply, from the Harness.
 import assert from "node:assert/strict";

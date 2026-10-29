@@ -7,7 +7,7 @@
 // through the command, the step-batch arm, the command's other grammars, and
 // the history-safety invariant. Runs standalone (`node
 // Target/Test/Overpass/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/plugin-dsh-normalize-file: the fake ctx + the REAL
 // factory + the REAL normalize-file apply, from the Harness.
 import assert from "node:assert/strict";

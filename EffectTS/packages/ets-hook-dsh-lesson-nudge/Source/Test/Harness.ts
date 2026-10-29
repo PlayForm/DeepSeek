@@ -213,7 +213,7 @@ if (InvokedDirectly) {
 		assert.equal(Run.Listeners[0]?.name, "agent/status", "on the idle edge");
 	});
 	Check(Count, "selfcheck: the activation line is the factory's ledger shape", () => {
-		assert.deepEqual(Run.Lines, ["hook-dsh-lesson-nudge: activated (bundle=0.2.1, cap=3)"]);
+		assert.deepEqual(Run.Lines, [`hook-dsh-lesson-nudge: activated (bundle=${process.env.VERSION_PACKAGE}, cap=3)`]);
 	});
 	Check(Count, "selfcheck: the loader contract exports are all present", () => {
 		assert.equal(name, "hook-dsh-lesson-nudge", "the name");

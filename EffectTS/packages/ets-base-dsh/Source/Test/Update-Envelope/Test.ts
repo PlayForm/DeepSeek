@@ -5,7 +5,7 @@
 // contained bug-level rejection, the settling detached fallback and the
 // forkIn interruption at dispose.
 // Runs standalone (`node Target/Test/Update-Envelope/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // This folder is the ETS-only additive coverage re-homed from the ETS core
 // smoke's sections 9 + 11; there is no Classic twin.
 import assert from "node:assert/strict";

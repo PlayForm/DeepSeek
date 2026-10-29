@@ -4,7 +4,7 @@
 // text in, keep-list ignored, the message composition, the passage marking, the
 // idempotent null), and the P4 confined fence posture.
 // Runs standalone (`node Target/Test/Refusals-And-Transform/Test.js`) AND under
-// the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-package-governor.
 //
 // The SILENT REPLAY (the L2 precedent): the source suite is cumulative - the

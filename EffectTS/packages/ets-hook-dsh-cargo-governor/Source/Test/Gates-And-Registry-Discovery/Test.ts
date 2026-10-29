@@ -3,7 +3,7 @@
 // the Stash idempotence gate) and the registry discovery lines (the
 // no-registry skip and the unreadable-registry skip).
 // Runs standalone (`node Target/Test/Gates-And-Registry-Discovery/Test.js`)
-// AND under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// AND under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-cargo-governor.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";

@@ -5,7 +5,7 @@
 // effects (the P1 jobs controller, the P2 inflight disposal, the P5 storage
 // open/drain/close and its loud failed-open ledger line).
 // Runs standalone (`node Target/Test/Ledger-And-Journal/Test.js`) AND under
-// the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/plugin-dsh-factory: the fake ctx + the REAL factory
 // class, from the Harness.
 import assert from "node:assert/strict";

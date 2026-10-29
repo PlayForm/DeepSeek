@@ -44,7 +44,7 @@ export default [
 		id: "test-update",
 		intent: "test-update",
 		trigger: { keywords: ["test", "smoke", "expect"] },
-		targets: ["**/Source/Test/**", "Maintain/Run-Smokes.mjs"],
+		targets: ["**/Source/Test/**", "Maintain/Run/Smokes/Index.mjs"],
 		transform: ["update the expectations", "keep the counts recorded"],
 		arbiter: "the smoke aggregate",
 		confidence: 0.5,

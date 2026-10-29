@@ -7,7 +7,7 @@
 // the three no-op paths (already pinned, non-JSON, vanished) all
 // silent-writes-none.
 // Runs standalone (`node Target/Test/Pin-Pass-And-No-Ops/Test.js`) AND under
-// the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-package-pinner.
 import assert from "node:assert/strict";
 import * as Path from "node:path";

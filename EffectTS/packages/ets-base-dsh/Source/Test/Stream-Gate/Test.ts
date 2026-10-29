@@ -4,7 +4,7 @@
 // propagation, the completion-only count summary, and fresh state per
 // materialization.
 // Runs standalone (`node Target/Test/Stream-Gate/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // This folder is the ETS-only additive coverage re-homed from the ETS core
 // smoke's section 10; there is no Classic twin.
 import assert from "node:assert/strict";

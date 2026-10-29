@@ -1,4 +1,15 @@
+import { readFileSync } from "node:fs";
+
 import type { BuildOptions, Plugin } from "esbuild";
+
+// The package manifest, read at config-load time: its version becomes the
+// build-time constant the define block below compiles into the test Target
+// (the same define the plugin build applies).
+const Package = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
+	version?: string;
+};
+
+const Version = Package.version ?? "0.0.0";
 
 /**
  * @module Test-ESBuild
@@ -9,7 +20,7 @@ import type { BuildOptions, Plugin } from "esbuild";
  * already applies: each Source file transpiles to its own Target file, imports
  * stay external), so each test folder runs standalone
  * (`node Target/Test/<Name>/Test.js`) AND under the aggregate runner
- * (`Maintain/Run-Smokes.mjs`). The mirrored `outbase` keeps the relative import
+ * (`Maintain/Run/Smokes/Index.mjs`). The mirrored `outbase` keeps the relative import
  * depth valid from BOTH trees (Source/Test/<Name>/ and Target/Test/<Name>/
  * reach the built Target with the same specifier).
  *
@@ -33,6 +44,9 @@ export default {
 	tsconfig: "tsconfig.json",
 	write: true,
 	sourcemap: true,
+	define: {
+		"process.env.VERSION_PACKAGE": JSON.stringify(Version),
+	},
 	plugins: [
 		{
 			name: "Target-Test",

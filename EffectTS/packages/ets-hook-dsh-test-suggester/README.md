@@ -40,10 +40,10 @@ A note never fails a tool call.
 
 ## The pack
 
-| Intent   | Threshold | Trigger shape                                               | Targets                                                                                      |
-| -------- | --------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `Suite`  | 0.75      | `PASS\|FAIL\|error TS\|assert\|suite`, `Source/Test/` paths | `Source/Test/<Suite>/Test.ts`, the suite README, `Maintain/Run-Smokes.mjs`, the README badge |
-| `Counts` | 0.80      | `N PASS`, expected/PASS count, badge                        | README badge, `SCHEME.md`, the site content counts                                           |
+| Intent   | Threshold | Trigger shape                                               | Targets                                                                                            |
+| -------- | --------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `Suite`  | 0.75      | `PASS\|FAIL\|error TS\|assert\|suite`, `Source/Test/` paths | `Source/Test/<Suite>/Test.ts`, the suite README, `Maintain/Run/Smokes/Index.mjs`, the README badge |
+| `Counts` | 0.80      | `N PASS`, expected/PASS count, badge                        | README badge, `SCHEME.md`, the site content counts                                                 |
 
 Confidence is `sigmoid(Σ weights − 0.6)` (the plan §3.5).
 

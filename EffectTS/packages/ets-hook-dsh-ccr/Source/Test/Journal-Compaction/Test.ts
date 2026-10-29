@@ -6,7 +6,7 @@
 // file rewritten empty, and a MISSING file that is not created on boot -
 // memory-only).
 // Runs standalone (`node Target/Test/Journal-Compaction/Test.js`) AND under
-// the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL factory +
 // the REAL CCR apply, from the Harness.
 import assert from "node:assert/strict";

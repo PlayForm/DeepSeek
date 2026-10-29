@@ -5,7 +5,7 @@
 // plus the lifecycle: the idempotent second author write (cooldown), the P2
 // disposal, the P5 close, and the P5-absent retirement.
 // Runs standalone (`node Target/Test/Direct-Govern-And-Lifecycle/Test.js`) AND
-// under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-package-governor.
 //
 // The SILENT REPLAY (the L2 precedent): the idempotence check asserts the

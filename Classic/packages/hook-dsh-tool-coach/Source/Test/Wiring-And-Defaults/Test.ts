@@ -5,7 +5,7 @@
 // the byte-exact activation ledger line, the durable [ISO] proof), and the
 // fail-loud validation refusals. A drift here breaks every later folder, so
 // it is its own folder. Runs standalone (`node Target/Test/Wiring-And-Defaults/Test.js`)
-// AND under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// AND under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-tool-coach. The assertions are moved
 // verbatim from Classic/smokes/tool-coach-smoke.mjs (Run 1 + the fail-loud
 // validation checks).

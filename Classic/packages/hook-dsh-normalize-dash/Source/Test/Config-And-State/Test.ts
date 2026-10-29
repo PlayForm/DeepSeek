@@ -2,7 +2,7 @@
 // wiring - the config defaults and volatile cells, the listener set, the
 // state unwraps, and the fresh-state-per-apply posture (no module-level
 // globals). Runs standalone (`node Target/Test/Config-And-State/Test.js`) AND
-// under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
 // factory + the REAL dash apply, from the Harness.
 import assert from "node:assert/strict";

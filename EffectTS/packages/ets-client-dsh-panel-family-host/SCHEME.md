@@ -121,8 +121,8 @@ this package.
 ## 7. Verification
 
 - `prepublishOnly` builds `Target/`, writes `Target/Client.bundle.js` through
-  `Maintain/Build/Client-Bundle/Index.mjs`, builds `Target/Test/`, runs the selfcheck of the harness, and
-  type-checks the Test tree.
+  `Maintain/Build/Client-Bundle/Index.mjs`, builds `Target/Test/`, runs the selfcheck of the
+  harness, and type-checks the Test tree.
 - `Tail-And-Stats` 10 PASS, `Wiring-And-Endpoints` 8 PASS, `Bridge-And-Trace` 19 PASS.
 
 ## 8. The EffectTS twin

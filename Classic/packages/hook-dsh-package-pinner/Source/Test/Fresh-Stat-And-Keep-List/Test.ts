@@ -6,7 +6,7 @@
 // the unreadable sidecar, the configured-but-absent global, and the P3
 // interlock: chain pins are never stripped, no ping-pong).
 // Runs standalone (`node Target/Test/Fresh-Stat-And-Keep-List/Test.js`) AND
-// under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-package-pinner.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";

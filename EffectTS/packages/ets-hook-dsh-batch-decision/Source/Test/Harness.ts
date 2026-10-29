@@ -280,7 +280,7 @@ if (InvokedDirectly) {
 		assert.equal(Tool(Run).name, "batch_decision");
 		assert.ok(Run.State !== undefined);
 		assert.deepEqual(Run.Lines, [
-			"hook-dsh-batch-decision: activated (bundle 0.2.1, autoApprove=on, allowlist=1)",
+			`hook-dsh-batch-decision: activated (bundle ${process.env.VERSION_PACKAGE}, autoApprove=on, allowlist=1)`,
 		]);
 	});
 	if (Count.N === 3 && Count.F === 1) {

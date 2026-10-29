@@ -4,7 +4,7 @@
 // exemptions (edit, raw-write, normalize-file), the raw-marker strip, and the
 // unknown-block passthrough.
 // Runs standalone (`node Target/Test/Block/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/lib-dsh-core: the REAL built Target only.
 // NOTE: the harness's Finish guard is aliased to `Guard` here so the source
 // suite's fixture naming stays untouched.

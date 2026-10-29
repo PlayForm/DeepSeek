@@ -4,7 +4,7 @@
 // ordering guard and the history-safety invariant, with the volatile flips
 // (O2/O10) and the one-shot batch grammar (O12).
 // Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Smoke of @playform/hook-dsh-normalize-quotes: the fake ctx + the REAL
 // factory + the REAL quotes apply (the seams live in ../Harness.js).
 import assert from "node:assert/strict";

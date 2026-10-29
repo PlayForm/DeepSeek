@@ -277,7 +277,7 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Out, Decision);
 			assert.equal(FileSystem.existsSync(Proposal(Installed)), false);
 			assert.deepEqual(Run.Lines, [
-				"convention-suggester: activated (bundle 0.2.1, intents 4, threshold 0.75)",
+				`convention-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 4, threshold 0.75)`,
 			]);
 		});
 	}

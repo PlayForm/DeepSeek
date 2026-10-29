@@ -2,7 +2,7 @@
 // defaults - the volatile config cells, the schema defaults, the listener
 // registration posture, the State wiring and the byte-exact activation line.
 // Runs standalone (`node Target/Test/Config-And-State/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Smoke of @playform/ets-hook-dsh-normalize-fullwidth: the fake ctx + the REAL
 // factory + the REAL fullwidth apply (the seams live in ../Harness.js).
 import assert from "node:assert/strict";

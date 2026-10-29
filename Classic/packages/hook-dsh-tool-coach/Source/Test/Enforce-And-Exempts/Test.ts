@@ -6,7 +6,7 @@
 // agent; enabled=false is the full passthrough; an emptied pattern table is
 // the N=0 passthrough). Runs standalone
 // (`node Target/Test/Enforce-And-Exempts/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-tool-coach. The assertions are moved
 // verbatim from Classic/smokes/tool-coach-smoke.mjs (R5 + R6).
 import assert from "node:assert/strict";

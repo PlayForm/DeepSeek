@@ -6,7 +6,7 @@
 // the N=0 negative controls. The journal-count siblings live in
 // Journal-And-Custom.
 // Runs standalone (`node Target/Test/Tool-Args-Exemptions/Test.js`) AND under
-// the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the REAL
 // factory + the REAL dash apply, from the Harness.
 import { existsSync, readFileSync } from "node:fs";

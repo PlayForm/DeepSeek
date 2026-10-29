@@ -4,7 +4,7 @@
 // cargo-edit-unavailable paths), verifyCommand (ok, 127 non-fatal, failing),
 // the U2 stat-based refresh, and the jobs envelope.
 // Runs standalone (`node Target/Test/Update-Stage/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-cargo-governor.
 import assert from "node:assert/strict";
 import * as Path from "node:path";

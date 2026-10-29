@@ -4,7 +4,7 @@
 // the ResolvePolicy union keep-list with the P3 chain keys and the
 // unreadable/absent handling.
 // Runs standalone (`node Target/Test/Match-Discover-Policy/Test.js`) AND
-// under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/plugin-dsh-factory: the fake ctx + the REAL factory
 // class, from the Harness.
 import assert from "node:assert/strict";

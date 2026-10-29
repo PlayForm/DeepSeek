@@ -5,7 +5,7 @@
 // activation ledger line (both the logger form and the durable [ISO] file
 // form), and the activation record journaled to the shared storage domain.
 // Runs standalone (`node Target/Test/Config-And-Activation/Test.js`) AND
-// under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-ccr: the fake ctx + the REAL factory +
 // the REAL CCR apply, from the Harness.
 import assert from "node:assert/strict";
@@ -205,10 +205,10 @@ export const runTest = async (): Promise<number> => {
 	const Run1 = Make(Raw1);
 	{
 		const Sub =
-			"activation ledger line byte-exact: 'ccr: activated (bundle 0.2.1, targets 8, budget 268435456)'";
+			`activation ledger line byte-exact: 'ccr: activated (bundle ${process.env.VERSION_PACKAGE}, targets 8, budget 268435456)'`;
 		Check(Count, Sub, () => {
 			assert.ok(
-				Run1.Lines.includes("ccr: activated (bundle 0.2.1, targets 8, budget 268435456)"),
+				Run1.Lines.includes(`ccr: activated (bundle ${process.env.VERSION_PACKAGE}, targets 8, budget 268435456)`),
 			);
 		});
 	}
@@ -219,7 +219,7 @@ export const runTest = async (): Promise<number> => {
 				Furnace.PendingJournal.some(
 					(R: any) =>
 						R.event === "activated" &&
-						R.detail === "activated (bundle 0.2.1, targets 8, budget 268435456)",
+						R.detail === `activated (bundle ${process.env.VERSION_PACKAGE}, targets 8, budget 268435456)`,
 				),
 			);
 		});
@@ -232,7 +232,7 @@ export const runTest = async (): Promise<number> => {
 	Rm();
 	{
 		const Sub =
-			"the durable ledger file: '[ISO] activated (bundle 0.2.1, targets 8, budget 268435456)' (the file form has no module prefix)";
+			`the durable ledger file: '[ISO] activated (bundle ${process.env.VERSION_PACKAGE}, targets 8, budget 268435456)' (the file form has no module prefix)`;
 		const Run8 = Make(Validate({ autoExpand: false, logFile: Ledger }));
 		{
 			const Content = TextBlock(TerminalText("l".repeat(96), 26));
@@ -247,7 +247,7 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, Sub, () => {
 			assert.ok(
 				Log1.split("\n").some((L) =>
-					/^\[[^\]]+\] activated \(bundle 0\.2\.1, targets 8, budget 268435456\)$/.test(L),
+					L.replace(/^\[[^\]]+\]/, "[ISO]") === `[ISO] activated (bundle ${process.env.VERSION_PACKAGE}, targets 8, budget 268435456)`,
 				),
 			);
 		});

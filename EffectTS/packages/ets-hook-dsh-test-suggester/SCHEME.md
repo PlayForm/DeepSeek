@@ -37,7 +37,7 @@ It is READ-ONLY: `node:fs` reads only (never `ctx.fs`), and its only surface is 
 THE EVIDENCE:
 
 - the CLAIMS, meaning each `## Expected count` of `Source/Test/<Folder>/README.md`, parsed exactly
-  as `Maintain/Run-Smokes.mjs` parses it (the first `<n> PASS` after the heading);
+  as `Maintain/Run/Smokes/Index.mjs` parses it (the first `<n> PASS` after the heading);
 - the TREE, meaning the folders that exist, each `Test.ts` of a folder, and the roster of the
   aggregate runner (the runner enumerates `Target/Test/<Folder>/Test.js`, so the built tree IS the
   roster);
@@ -87,10 +87,10 @@ A workspace pack (`<repo>/.dsh/pack.yml` or the user layer `~/.dsh/playform/work
 overrides it per repo, and the Apply compiles the intents of the resolved pack once per workspace
 root, while a repo without a pack keeps this set.
 
-| Intent   | Priority | Threshold | Signals (weight)                                     | Targets                                                                                                |
-| -------- | -------- | --------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `Suite`  | 1        | 0.6       | test-shape (0.5), path-shape (0.4), loop-shape (0.3) | `Source/Test/<Suite>/Test.ts`, `Source/Test/<Suite>/README.md`, `Maintain/Run-Smokes.mjs`, `README.md` |
-| `Counts` | 2        | 0.5       | count-shape (0.5), doc-shape (0.3)                   | `README.md`, `SCHEME.md`, `Site/Source/Library/Content.ts`                                             |
+| Intent   | Priority | Threshold | Signals (weight)                                     | Targets                                                                                                      |
+| -------- | -------- | --------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `Suite`  | 1        | 0.6       | test-shape (0.5), path-shape (0.4), loop-shape (0.3) | `Source/Test/<Suite>/Test.ts`, `Source/Test/<Suite>/README.md`, `Maintain/Run/Smokes/Index.mjs`, `README.md` |
+| `Counts` | 2        | 0.5       | count-shape (0.5), doc-shape (0.3)                   | `README.md`, `SCHEME.md`, `Site/Source/Library/Content.ts`                                                   |
 
 Confidence: `k = sigmoid(Σ weights − 0.6)`.
 

@@ -109,7 +109,7 @@ const runTest = async () => {
     const Run = Make({ maxReviewsPerSession: 5 });
     assert.deepEqual(
       Run.Lines,
-      ["hook-dsh-lesson-nudge: activated (bundle=0.2.1, cap=5)"],
+      [`hook-dsh-lesson-nudge: activated (bundle=${"0.2.1"}, cap=5)`],
       "the ledger answers 'did it activate' on its own"
     );
   });

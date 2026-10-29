@@ -7,7 +7,7 @@
 // library classifies every obfuscated variant correctly, including the
 // catch-all and the exemption rows. Runs standalone
 // (`node Target/Test/Dynamic-And-Craft/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-tool-coach. The assertions are moved
 // verbatim from Classic/smokes/tool-coach-smoke.mjs (D2 + D3 + D4 + D5 + the
 // craft battery).

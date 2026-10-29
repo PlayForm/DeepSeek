@@ -7,7 +7,7 @@
 // the full classifier/multiplier matrix, and the compressed line's durable
 // [ISO] form.
 // Runs standalone (`node Target/Test/Retrieve-And-Marker/Test.js`) AND under
-// the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-ccr: the fake ctx + the REAL factory +
 // the REAL CCR apply, from the Harness.
 import assert from "node:assert/strict";

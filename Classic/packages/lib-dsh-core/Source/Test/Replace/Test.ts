@@ -6,7 +6,7 @@
 // the source suite's sections 6 + 7); each keeps its own Check with the
 // source suite's ok label verbatim.
 // Runs standalone (`node Target/Test/Replace/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/lib-dsh-core: the REAL built entry only.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter } from "../Harness.js";

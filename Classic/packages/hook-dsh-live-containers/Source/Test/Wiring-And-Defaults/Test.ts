@@ -8,7 +8,7 @@
 // it is its own folder.
 // Unit smoke of @playform/hook-dsh-live-containers. Runs standalone
 // (`node Target/Test/Wiring-And-Defaults/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 import assert from "node:assert/strict";
 import {
 	Block,

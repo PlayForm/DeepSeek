@@ -6,7 +6,7 @@
 // pass-throughs, the downstream basis), the step-batch arm (default off, the
 // O10 flip, the one-shot command arm), and the history-safety invariant.
 // Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the REAL
 // factory + the REAL dash apply, from the Harness.
 import assert from "node:assert/strict";

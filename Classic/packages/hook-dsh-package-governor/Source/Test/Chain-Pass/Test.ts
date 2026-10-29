@@ -7,7 +7,7 @@
 // Inflight lifecycle, the jobs envelope with the bin-mode engine run, the
 // settlement cleanup, and the silent re-entrant pass.
 // Runs standalone (`node Target/Test/Chain-Pass/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-package-governor.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";

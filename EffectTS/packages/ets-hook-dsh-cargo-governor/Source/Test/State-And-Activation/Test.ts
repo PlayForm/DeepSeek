@@ -5,7 +5,7 @@
 // builder's P10 volatile-update refresh), and the attach posture (the
 // P1/P2/P5 effect labels + the P1 root jobs controller).
 // Runs standalone (`node Target/Test/State-And-Activation/Test.js`) AND
-// under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-cargo-governor.
 import assert from "node:assert/strict";
 import {

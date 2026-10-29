@@ -4,7 +4,7 @@
 // into a prefixed warning instead of a throw, and the dedicated tools are
 // never judged. Runs standalone
 // (`node Target/Test/Passthrough-And-Guards/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-tool-coach. The assertions are moved
 // verbatim from Classic/smokes/tool-coach-smoke.mjs (R1 + the fail-open
 // envelope checks + the non-judged check).

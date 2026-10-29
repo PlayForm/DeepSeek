@@ -7,7 +7,7 @@
 // `enabled: false` never strips, and a filter switched off still records its
 // ACTIVATION line in the ledger (the switch maps onto `State.Active`, never
 // onto the factory's ledger gate). Runs standalone (`node Target/Test/Intent/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-comment-filter: the fake ctx + the REAL
 // factory + the REAL comment-filter apply, from the Harness.
 import assert from "node:assert/strict";

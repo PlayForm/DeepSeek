@@ -4,7 +4,7 @@
 // the passthrough identities, the rewrite groups with their exact ledger
 // strings, the reasoning-off passthrough, and the count-0 identity.
 // Runs standalone (`node Target/Test/Stream-Contract/Test.js`) AND under the
-// aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
 // factory + the REAL dash apply, from the Harness.
 import { existsSync, readFileSync } from "node:fs";

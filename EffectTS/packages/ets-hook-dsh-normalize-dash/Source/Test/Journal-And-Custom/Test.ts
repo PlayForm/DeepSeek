@@ -9,7 +9,7 @@
 // below is byte-verbatim and the arithmetic reproduces the source suite's
 // values exactly when run standalone OR under the aggregate.
 // Runs standalone (`node Target/Test/Journal-And-Custom/Test.js`) AND under
-// the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-normalize-dash: the fake ctx + the REAL
 // factory + the REAL dash apply, from the Harness.
 import { existsSync, readFileSync } from "node:fs";

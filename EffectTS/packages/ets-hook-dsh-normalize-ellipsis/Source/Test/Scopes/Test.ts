@@ -3,7 +3,7 @@
 // effective-toolInput OR semantics with the deprecated field, and the S5
 // volatile scope flip applied to the NEXT stream without remount.
 // Runs standalone (`node Target/Test/Scopes/Test.js`) AND under the aggregate
-// (`Maintain/Run-Smokes.mjs` spawns it).
+// (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Smoke of @playform/ets-hook-dsh-normalize-ellipsis: the fake ctx + the REAL
 // factory + the REAL ellipsis apply (the seams live in ../Harness.js).
 import assert from "node:assert/strict";

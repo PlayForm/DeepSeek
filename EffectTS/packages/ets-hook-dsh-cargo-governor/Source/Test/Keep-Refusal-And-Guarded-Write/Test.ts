@@ -6,7 +6,7 @@
 // Stash pre-registration, the same-actor re-emit, both sandbox postures, the
 // contained racing write).
 // Runs standalone (`node Target/Test/Keep-Refusal-And-Guarded-Write/Test.js`)
-// AND under the aggregate (`Maintain/Run-Smokes.mjs` spawns it).
+// AND under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/ets-hook-dsh-cargo-governor.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
