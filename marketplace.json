@@ -4,7 +4,7 @@
 		"en": "DSH Family @ PlayForm"
 	},
 	"description": {
-		"en": "The PlayForm DeepSeek Harness plugin family: 102 packages across the Classic TypeScript and Effect-TS trees."
+		"en": "The PlayForm DeepSeek Harness plugin family: 119 packages across the Classic TypeScript and Effect-TS trees."
 	},
 	"metadata": {
 		"categories": {
@@ -89,6 +89,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220692,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -136,6 +144,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220707,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -178,6 +194,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947350,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220697,
 					"source": {
 						"type": "npm"
 					},
@@ -234,6 +258,97 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221196,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-client-dsh-panel-family",
+			"title": {
+				"en": "Panel Family (Effect-TS)"
+			},
+			"description": {
+				"en": "The central panel package of the UI family, on the v4.1 CHILD-SLOT model (Documentation/Plans/Completion-Spec/04-CLIENT.md, Documentation/Plans/UI-FAMILY-V4-1.md). It owns the PANEL CONTRACT - the two child slots (playform.panel.section on..."
+			},
+			"icon": "Icons/Color/ets-client-dsh-panel-family.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-client-dsh-panel-family"
+			},
+			"metadata": {
+				"category": "client",
+				"keywords": [
+					"panel",
+					"family",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793276580,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"path": "EffectTS/packages/ets-client-dsh-panel-family"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-client-dsh-panel-family-host",
+			"title": {
+				"en": "Panel Family Host (Effect-TS)"
+			},
+			"description": {
+				"en": "The host half of the UI family's panel: the companion package that gives the central panel LIVE data and its ONE trusted write surface (Documentation/Plans/UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md, PHASE-7-PLAIN-FIELD-BRIDGE.md)...."
+			},
+			"icon": "Icons/Color/ets-client-dsh-panel-family-host.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-client-dsh-panel-family-host"
+			},
+			"metadata": {
+				"category": "client",
+				"keywords": [
+					"panel",
+					"family",
+					"host",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793276580,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"path": "EffectTS/packages/ets-client-dsh-panel-family-host"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -278,6 +393,55 @@
 					"publishTimestamp": 1792947366,
 					"source": {
 						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221201,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-batch-decision",
+			"title": {
+				"en": "Batch Decision (Effect-TS)"
+			},
+			"description": {
+				"en": "The batch-decision hook: the thin workflow owner between the suggester, the pass-on, the ingester and the live view (Documentation/Plans/PASS-ON-AND-INGESTER.md section 5). It listens for batch/proposed events carrying a BatchProposal,..."
+			},
+			"icon": "Icons/Color/ets-hook-dsh-batch-decision.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-batch-decision"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"batch",
+					"decision",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793276580,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"path": "EffectTS/packages/ets-hook-dsh-batch-decision"
 					},
 					"engines": {}
 				}
@@ -334,6 +498,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221213,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -379,6 +551,55 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221291,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-comment-filter",
+			"title": {
+				"en": "Comment Filter (Effect-TS)"
+			},
+			"description": {
+				"en": "The comment-filter hook: a DeepSeek Harness plugin and a NEW overpass flavor that strips code comments from `read` and `ccr_retrieve` tool results at tools/post-execute, gated per task intent stashed at agent/pre-step. The transform..."
+			},
+			"icon": "Icons/Color/ets-hook-dsh-comment-filter.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-comment-filter"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"comment",
+					"filter",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793276580,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"path": "EffectTS/packages/ets-hook-dsh-comment-filter"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -421,6 +642,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947546,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221225,
 					"source": {
 						"type": "npm"
 					},
@@ -471,6 +700,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221233,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -513,6 +750,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947503,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221238,
 					"source": {
 						"type": "npm"
 					},
@@ -563,6 +808,55 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221245,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-hook-dsh-lesson-nudge",
+			"title": {
+				"en": "Lesson Nudge (Effect-TS)"
+			},
+			"description": {
+				"en": "The lesson-nudge hook: a DeepSeek Harness plugin that turns the post-turn IDLE transition into a self-improvement review. It listens to `agent/status`, asks the lesson-review service whether a review is due, and runs the review inside..."
+			},
+			"icon": "Icons/Color/ets-hook-dsh-lesson-nudge.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-hook-dsh-lesson-nudge"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"lesson",
+					"nudge",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793276580,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"path": "EffectTS/packages/ets-hook-dsh-lesson-nudge"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -605,6 +899,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947493,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221351,
 					"source": {
 						"type": "npm"
 					},
@@ -663,6 +965,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221256,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -713,6 +1023,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947502,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221241,
 					"source": {
 						"type": "npm"
 					},
@@ -771,6 +1089,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221339,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -821,6 +1147,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947512,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221273,
 					"source": {
 						"type": "npm"
 					},
@@ -879,6 +1213,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221278,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -929,6 +1271,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947523,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221303,
 					"source": {
 						"type": "npm"
 					},
@@ -987,6 +1337,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221289,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -1041,6 +1399,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221295,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -1083,6 +1449,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947544,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221303,
 					"source": {
 						"type": "npm"
 					},
@@ -1133,6 +1507,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221308,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -1175,6 +1557,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947554,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221315,
 					"source": {
 						"type": "npm"
 					},
@@ -1225,6 +1615,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221321,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -1267,6 +1665,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947695,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221580,
 					"source": {
 						"type": "npm"
 					},
@@ -1317,6 +1723,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221354,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -1359,6 +1773,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947590,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221411,
 					"source": {
 						"type": "npm"
 					},
@@ -1409,6 +1831,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221346,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -1451,6 +1881,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947579,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221351,
 					"source": {
 						"type": "npm"
 					},
@@ -1501,6 +1939,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221401,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -1543,6 +1989,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947588,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221468,
 					"source": {
 						"type": "npm"
 					},
@@ -1593,6 +2047,54 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221445,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-lib-dsh-conversation",
+			"title": {
+				"en": "Conversation (Effect-TS)"
+			},
+			"description": {
+				"en": "The CONVERSATION: the conversation bus's vocabulary and pure fold - the names (the service name `conversation` and the event names conversation/turn, conversation/step, conversation/call, conversation/tool, conversation/touch,..."
+			},
+			"icon": "Icons/Color/ets-lib-dsh-conversation.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-lib-dsh-conversation"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"conversation",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793276580,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"path": "EffectTS/packages/ets-lib-dsh-conversation"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -1634,6 +2136,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947694,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221401,
 					"source": {
 						"type": "npm"
 					},
@@ -1683,6 +2193,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221405,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -1724,6 +2242,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947426,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221460,
 					"source": {
 						"type": "npm"
 					},
@@ -1774,6 +2300,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221527,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -1816,6 +2350,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947616,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221503,
 					"source": {
 						"type": "npm"
 					},
@@ -1863,6 +2405,95 @@
 					"publishTimestamp": 1792947601,
 					"source": {
 						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221408,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-cost",
+			"title": {
+				"en": "Cost (Effect-TS)"
+			},
+			"description": {
+				"en": "The per-file inference cost ledger: a DeepHarness plugin that reads the session log and prices every model call from the provider's own TokenUsage (uncached input, cache read, cache write, output, reasoning - never the estimator), then..."
+			},
+			"icon": "Icons/Color/ets-plugin-dsh-cost.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-cost"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"cost",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793276580,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"path": "EffectTS/packages/ets-plugin-dsh-cost"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-cost-analysis",
+			"title": {
+				"en": "Cost Analysis (Effect-TS)"
+			},
+			"description": {
+				"en": "The read-only analysis half of the cost family: a DeepHarness plugin that opens the SQLite ledger the @playform/ets-plugin-dsh-cost plugin wrote with { readOnly: true } and answers questions about contribution and efficiency - the read..."
+			},
+			"icon": "Icons/Color/ets-plugin-dsh-cost-analysis.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-cost-analysis"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"cost",
+					"analysis",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793276580,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"path": "EffectTS/packages/ets-plugin-dsh-cost-analysis"
 					},
 					"engines": {}
 				}
@@ -1918,6 +2549,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221435,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -1959,6 +2598,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947797,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221421,
 					"source": {
 						"type": "npm"
 					},
@@ -2008,6 +2655,95 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221450,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-ingester",
+			"title": {
+				"en": "Ingester (Effect-TS)"
+			},
+			"description": {
+				"en": "The INGESTER (ctx.ingester): the apply direction of the batch flow (Documentation/Plans/PASS-ON-AND-INGER.md section 4). A DeepSeek Harness service that turns an approved batch proposal into file operations: per target, in the proposal's..."
+			},
+			"icon": "Icons/Color/ets-plugin-dsh-ingester.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-ingester"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"ingester",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793276580,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"path": "EffectTS/packages/ets-plugin-dsh-ingester"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-lesson-review",
+			"title": {
+				"en": "Lesson Review (Effect-TS)"
+			},
+			"description": {
+				"en": "The lesson-review service: a DeepSeek Harness plugin providing the POST-TURN SELF-IMPROVEMENT REVIEW - the Hermes background-review fork and curator, re-expressed over this harness's surfaces (the family map's review role). It owns the..."
+			},
+			"icon": "Icons/Color/ets-plugin-dsh-lesson-review.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-lesson-review"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"lesson",
+					"review",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793276580,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"path": "EffectTS/packages/ets-plugin-dsh-lesson-review"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -2054,6 +2790,95 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221536,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-pass-on",
+			"title": {
+				"en": "Pass On (Effect-TS)"
+			},
+			"description": {
+				"en": "The PASS-ON (ctx.passOn): the prepare direction of the batch flow (Documentation/Plans/PASS-ON-AND-INGER.md section 3). A DeepSeek Harness service that turns an intent - a suggestion from the search suggester, a user/agent intent, or a..."
+			},
+			"icon": "Icons/Color/ets-plugin-dsh-pass-on.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-pass-on"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"pass",
+					"on",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793276580,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"path": "EffectTS/packages/ets-plugin-dsh-pass-on"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-plugin-dsh-pattern",
+			"title": {
+				"en": "Pattern (Effect-TS)"
+			},
+			"description": {
+				"en": "The pattern-graph service plugin: a DeepSeek Harness plugin that owns the pattern registry, the matcher, the confidence store and the learner behind the suggester family. A pattern is a parameterized behavior graph (PATTERN-GRAPH-PLUGIN.md..."
+			},
+			"icon": "Icons/Color/ets-plugin-dsh-pattern.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-plugin-dsh-pattern"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"pattern",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793276580,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "85ea0af93de65a636e50b88301011b900c00f01a",
+						"path": "EffectTS/packages/ets-plugin-dsh-pattern"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -2095,6 +2920,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947617,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221459,
 					"source": {
 						"type": "npm"
 					},
@@ -2144,6 +2977,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221517,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -2185,6 +3026,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947759,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221800,
 					"source": {
 						"type": "npm"
 					},
@@ -2235,6 +3084,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221524,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -2277,6 +3134,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947636,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221458,
 					"source": {
 						"type": "npm"
 					},
@@ -2327,6 +3192,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221464,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -2369,6 +3242,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947778,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221490,
 					"source": {
 						"type": "npm"
 					},
@@ -2419,6 +3300,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221668,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -2465,6 +3354,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221482,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -2507,6 +3404,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947639,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220776,
 					"source": {
 						"type": "npm"
 					},
@@ -2565,6 +3470,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220813,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -2606,6 +3519,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947770,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220738,
 					"source": {
 						"type": "npm"
 					},
@@ -2656,6 +3577,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220856,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -2698,6 +3627,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947699,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220731,
 					"source": {
 						"type": "npm"
 					},
@@ -2748,6 +3685,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220810,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -2790,6 +3735,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947691,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220746,
 					"source": {
 						"type": "npm"
 					},
@@ -2840,6 +3793,52 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220750,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/hook-dsh-lesson-nudge",
+			"title": {
+				"en": "Lesson Nudge"
+			},
+			"description": {
+				"en": "The lesson-nudge hook: a DeepSeek Harness plugin that turns the post-turn IDLE transition into a self-improvement review. It listens to `agent/status`, asks the lesson-review service whether a review is due, and runs the review inside..."
+			},
+			"icon": "Icons/Color/hook-dsh-lesson-nudge.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/hook-dsh-lesson-nudge"
+			},
+			"metadata": {
+				"category": "hook",
+				"keywords": [
+					"lesson",
+					"nudge",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220951,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -2882,6 +3881,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947702,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220764,
 					"source": {
 						"type": "npm"
 					},
@@ -2940,6 +3947,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220799,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -2990,6 +4005,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947711,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220792,
 					"source": {
 						"type": "npm"
 					},
@@ -3048,6 +4071,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220804,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -3098,6 +4129,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947720,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220923,
 					"source": {
 						"type": "npm"
 					},
@@ -3156,6 +4195,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221019,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -3206,6 +4253,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947733,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220878,
 					"source": {
 						"type": "npm"
 					},
@@ -3264,6 +4319,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220946,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -3318,6 +4381,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220968,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -3360,6 +4431,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947791,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220871,
 					"source": {
 						"type": "npm"
 					},
@@ -3410,6 +4489,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220876,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -3452,6 +4539,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947761,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220883,
 					"source": {
 						"type": "npm"
 					},
@@ -3502,6 +4597,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220960,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -3544,6 +4647,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947751,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220872,
 					"source": {
 						"type": "npm"
 					},
@@ -3594,6 +4705,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220903,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -3636,6 +4755,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947801,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220934,
 					"source": {
 						"type": "npm"
 					},
@@ -3686,6 +4813,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220918,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -3728,6 +4863,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947770,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220924,
 					"source": {
 						"type": "npm"
 					},
@@ -3778,6 +4921,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220932,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -3820,6 +4971,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947778,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220960,
 					"source": {
 						"type": "npm"
 					},
@@ -3870,6 +5029,51 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220949,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/lib-dsh-conversation",
+			"title": {
+				"en": "Conversation"
+			},
+			"description": {
+				"en": "The CONVERSATION: the conversation bus's vocabulary and pure fold - the names (the service name `conversation` and the event names conversation/turn, conversation/step, conversation/call, conversation/tool, conversation/touch,..."
+			},
+			"icon": "Icons/Color/lib-dsh-conversation.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/lib-dsh-conversation"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"conversation",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220957,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -3911,6 +5115,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947419,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793220976,
 					"source": {
 						"type": "npm"
 					},
@@ -3960,6 +5172,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221003,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -4001,6 +5221,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947452,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221034,
 					"source": {
 						"type": "npm"
 					},
@@ -4051,6 +5279,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221002,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -4097,6 +5333,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221114,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -4138,6 +5382,89 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947811,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221095,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-cost",
+			"title": {
+				"en": "Cost"
+			},
+			"description": {
+				"en": "The per-file inference cost ledger: a DeepHarness plugin that reads the session log and prices every model call from the provider's own TokenUsage (uncached input, cache read, cache write, output, reasoning - never the estimator), then..."
+			},
+			"icon": "Icons/Color/plugin-dsh-cost.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-cost"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"cost",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221125,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-cost-analysis",
+			"title": {
+				"en": "Cost Analysis"
+			},
+			"description": {
+				"en": "The read-only analysis half of the cost family: a DeepHarness plugin that opens the SQLite ledger the @playform/plugin-dsh-cost plugin wrote with { readOnly: true } and answers questions about contribution and efficiency - the read credit..."
+			},
+			"icon": "Icons/Color/plugin-dsh-cost-analysis.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-cost-analysis"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"cost",
+					"analysis",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221042,
 					"source": {
 						"type": "npm"
 					},
@@ -4195,6 +5522,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221135,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -4236,6 +5571,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947887,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221097,
 					"source": {
 						"type": "npm"
 					},
@@ -4285,6 +5628,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221104,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -4326,6 +5677,52 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947824,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221195,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-lesson-review",
+			"title": {
+				"en": "Lesson Review"
+			},
+			"description": {
+				"en": "The lesson-review service: a DeepSeek Harness plugin providing the POST-TURN SELF-IMPROVEMENT REVIEW - the Hermes background-review fork and curator, re-expressed over this harness's surfaces (the family map's review role). It owns the..."
+			},
+			"icon": "Icons/Color/plugin-dsh-lesson-review.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-lesson-review"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"lesson",
+					"review",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"npm"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221103,
 					"source": {
 						"type": "npm"
 					},
@@ -4376,6 +5773,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221362,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -4418,6 +5823,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947812,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221118,
 					"source": {
 						"type": "npm"
 					},
@@ -4467,6 +5880,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221168,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -4508,6 +5929,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947881,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221132,
 					"source": {
 						"type": "npm"
 					},
@@ -4557,6 +5986,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221138,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -4598,6 +6035,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947981,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221191,
 					"source": {
 						"type": "npm"
 					},
@@ -4648,6 +6093,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221145,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -4690,6 +6143,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947931,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221223,
 					"source": {
 						"type": "npm"
 					},
@@ -4740,6 +6201,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221157,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -4782,6 +6251,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947866,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221163,
 					"source": {
 						"type": "npm"
 					},
@@ -4832,6 +6309,14 @@
 						"type": "npm"
 					},
 					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221210,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
 				}
 			]
 		},
@@ -4874,6 +6359,14 @@
 				{
 					"version": "0.2.0",
 					"publishTimestamp": 1792947855,
+					"source": {
+						"type": "npm"
+					},
+					"engines": {}
+				},
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793221180,
 					"source": {
 						"type": "npm"
 					},

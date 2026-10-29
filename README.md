@@ -1,12 +1,12 @@
 # DeepSeek Harness Plugin Family for PlayForm
 
 [![release](https://img.shields.io/static/v1?label=release&message=v0.2.1&color=blue)](CHANGELOG.md)
-[![smokes](https://img.shields.io/static/v1?label=smokes&message=511%20suites%20%2F%206%2C612%20checks&color=blue)](Classic/smokes/README.md)
-[![packages](https://img.shields.io/static/v1?label=packages&message=54%20%2B%2048&color=white)](Classic/packages/)
+[![smokes](https://img.shields.io/static/v1?label=smokes&message=595%20suites%20%2F%207%2C288%20checks&color=blue)](Classic/smokes/README.md)
+[![packages](https://img.shields.io/static/v1?label=packages&message=59%20%2B%2060&color=white)](Classic/packages/)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](LICENSE)
 
-Tame the model's output and govern the project's files with one hundred and two TypeScript
-packages - 54 Classic and 48 EffectTS.
+Tame the model's output and govern the project's files with one hundred and nineteen TypeScript
+packages - 59 Classic and 60 EffectTS.
 
 The set holds the original 14 plugins (the factory, the core, the governance trio, the seven-member
 normalize family, the two guardians and the live block) plus the 36 plugins of the 2026-10-22
@@ -15,7 +15,7 @@ ETS twins, plus the completion-program libraries (lib-dsh-trace, lib-dsh-pack) a
 filter.
 
 All of it arrives in two implementations ([the Classic release][classic], [the Effect-TS
-release][ets]) under one ledger-string contract, with 511 smoke suites / 6,612 checks.
+release][ets]) under one ledger-string contract, with 595 smoke folders / 7,288 checks.
 
 > [!NOTE]
 >
@@ -47,9 +47,9 @@ setup binary.
 
 ```sh
 pnpm install --ignore-scripts
-pnpm run build:classic   # the 54 Classic packages, one workspace pass
-pnpm run build:effect-ts # the 48 EffectTS packages
-pnpm run test            # all 511 smoke folders - the arbiter
+pnpm run build:classic   # the 59 Classic packages, one workspace pass
+pnpm run build:effect-ts # the 60 EffectTS packages
+pnpm run test            # all 595 smoke folders - the arbiter
 ```
 
 Per bundle the build keeps the same three steps (`Source/` -> `Target/` via ESBuild + `tsc` +
@@ -163,7 +163,7 @@ returns Effect envelopes and not the classic dispatch envelope:
   `import { Govern } from "@playform/plugin-dsh-factory"`.
 - **EFFECT-TS:**
   `pnpm add @playform/ets-lib-dsh-core @playform/ets-plugin-dsh-factory @playform/ets-hook-dsh-package-governor` -
-  the same contracts on Effect-TS services and layers, with `effect` v4.0.2 as the shared runtime
+  the same contracts on Effect-TS services and layers, with `effect` v4.0.7 as the shared runtime
   dependency and the base `@playform/ets-base-dsh` package carrying the plumbing every ets-* package
   builds on.
 
@@ -181,9 +181,12 @@ By area:
 | The suggesters           | 7              | `hook-dsh-{search,edit,doc,convention,graph,replay,test}-suggester`                                                                                                                                                                  |
 | The orchestration set    | 10             | `plugin-dsh-batch-edit`, `plugin-dsh-batchstate`, `plugin-dsh-gitguard`, `plugin-dsh-route`, `plugin-dsh-queue`, `plugin-dsh-feedback`, `plugin-dsh-pass-on`, `plugin-dsh-ingester`, `plugin-dsh-pattern`, `hook-dsh-batch-decision` |
 | The completion libraries | 2              | `lib-dsh-trace` (the trace bus's library half), `lib-dsh-pack` (the pack layer)                                                                                                                                                      |
+| The cost family          | 2              | `plugin-dsh-cost` (the per-file inference cost ledger), `plugin-dsh-cost-analysis` (the read-only ledger analysis)                                                                                                                   |
+| The learning family      | 2              | `plugin-dsh-lesson-review` (the post-turn self-improvement review), `hook-dsh-lesson-nudge` (the idle-transition nudge)                                                                                                              |
+| The overpass filter      | 1              | `hook-dsh-comment-filter` (the comment-stripping overpass)                                                                                                                                                                           |
+| The conversation spine   | 1 library      | `lib-dsh-conversation` (the conversation vocabulary and the pure fold)                                                                                                                                                               |
 
-30 of the 36 new packages have ETS twins, with only the two client panels and `plugin-dsh-pass-on`,
-`plugin-dsh-ingester`, `plugin-dsh-pattern`, and `hook-dsh-batch-decision` without one.
+Every one of the 59 Classic packages has an ETS twin.
 
 ## Architecture
 
@@ -333,22 +336,20 @@ The original 14 plugins (plus `lib-dsh-core`) each read as an @-sentence:
   `plugin-dsh-queue`, `plugin-dsh-feedback`, `plugin-dsh-pass-on`, `plugin-dsh-ingester`,
   `plugin-dsh-pattern`, and `hook-dsh-batch-decision`.
 
-30 of the 36 have ETS twins, with only the two client panels and `plugin-dsh-pass-on`,
-`plugin-dsh-ingester`, `plugin-dsh-pattern`, and `hook-dsh-batch-decision` without one.
+Every one of the 59 Classic packages has an ETS twin.
 
 ### The two trees and the layout
 
-| Tree        | What it is                                                                                                                               |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 54 packages; 269 smoke suites.    |
-| `EffectTS/` | The Effect v4 port - the same contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.5 pin). 48 packages; 242 suites. |
+| Tree        | What it is                                                                                                                                      |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 59 packages; 299 smoke folders.          |
+| `EffectTS/` | The Effect v4 port - the same contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.7 pin). 60 packages; 296 smoke folders. |
 
-Every package carries an `ets-*` twin unless its manifest declares none, and the two client panels
-plus four orchestration candidates have no twin, which gives 30 twins for the 36 new packages.
+Every package carries an `ets-*` twin, which gives 59 twins for the 59 Classic packages.
 
 ```text
-    Classic/         the plain-TypeScript release: 54 packages + smokes
-    EffectTS/        the Effect v4 port: 48 packages + smokes
+    Classic/         the plain-TypeScript release: 59 packages + smokes
+    EffectTS/        the Effect v4 port: 60 packages + smokes
     Site/            the static site (its own repository)
     Test/            the fixture archive: the governance batteries, the markdown proofs, the probes
     Documentation/   the framework, the guides, the skills, the plans, the reports, the test plans
@@ -458,11 +459,11 @@ The command writes one ledger line per action:
 
 The suites are the speed and coverage story:
 
-- **269 Classic / 242 EffectTS suites, 6,612 checks, all green.** The aggregate runner is
+- **299 Classic / 296 EffectTS folders, 7,288 checks, all green.** The aggregate runner is
   `node Maintain/Run/Smokes/Index.mjs`, and the heaviest single original suite (cargo, 62 checks
   including the real TOML surgery and the subprocess-seam stubs) runs in ~0.6 s.
 - **Zero runtime framework dependencies in Classic** - the release tree runs on plain TypeScript,
-  and EffectTS adds the single `effect` 4.0.2 dependency.
+  and EffectTS adds the single `effect` 4.0.7 dependency.
 - **Deterministic builds** - ESBuild + `tsc` + `tsc-alias`, minified `Target/` with `.d.ts` twins,
   and byte-identical ledger strings on every rebuild.
 
@@ -472,10 +473,10 @@ guard):
 
 | Measure                   | Value                                                                                  |
 | ------------------------- | -------------------------------------------------------------------------------------- |
-| Test folders (Classic)    | 269                                                                                    |
-| Test folders (EffectTS)   | 242                                                                                    |
-| Total suites              | **511**                                                                                |
-| Total checks (both trees) | **6,612**                                                                              |
+| Test folders (Classic)    | 299                                                                                    |
+| Test folders (EffectTS)   | 296                                                                                    |
+| Total suites              | **595**                                                                                |
+| Total checks (both trees) | **7,288**                                                                              |
 | The wiring battery        | `<tree>/smokes/Test/`, run by `Maintain/Run/Wiring/Index.mjs` under `DSH_TEST_SCRATCH` |
 
 The per-suite before/after totals live in the totals ledger of
@@ -511,7 +512,7 @@ The workflow, root-first - every step is a root `package.json` script:
 | `pnpm install`                               | the workspace install (`--ignore-scripts`); the per-bundle standalone workspaces take their own install         |
 | `pnpm run build:classic` / `build:effect-ts` | the packages of one tree, one workspace pass (`prepublishOnly` per package)                                     |
 | `pnpm run build`                             | both trees in order (`build:classic` then `build:effect-ts`) - the whole-build trigger                          |
-| `pnpm test`                                  | all 511 smoke suites via `Maintain/Run/Smokes/Index.mjs` - the behavioral arbiter, exit non-zero on any failure |
+| `pnpm test`                                  | all 595 smoke suites via `Maintain/Run/Smokes/Index.mjs` - the behavioral arbiter, exit non-zero on any failure |
 | `pnpm run test:types`                        | `Maintain/Run/Types/Index.mjs` - the type check across the trees                                                |
 | `pnpm run test:wiring`                       | `Maintain/Run/Wiring/Index.mjs` - the live wiring battery under `DSH_TEST_SCRATCH`                              |
 | `pnpm site`                                  | the static site build (`Site/`)                                                                                 |
@@ -594,7 +595,7 @@ normalization and the governance on top.
 | --------------------- | ------------------------------------------------------------------------------------------------- |
 | Fix a plugin          | the bundle's `README.md` + `SCHEME.md` under `Classic/packages/<bundle>/`                         |
 | Add a flavor          | `lib-dsh-core` (one table) + a new `hook-dsh-normalize-<name>` bundle                             |
-| Change behavior       | the smokes first - the counts (511 suites / 6,612 checks) and the ledger strings are the contract |
+| Change behavior       | the smokes first - the counts (595 suites / 7,288 checks) and the ledger strings are the contract |
 | Understand the design | `Documentation/FRAMEWORK.md` and the skills under `Documentation/Skill/`                          |
 
 The regime: the smokes (and the site build) are the arbiter after every change, the ledger strings

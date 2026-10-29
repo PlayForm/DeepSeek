@@ -30,7 +30,7 @@ statuses:
           Documentation/Reports/POC-GAP-ANALYSIS.md
 ---
 
-# PLUGIN-FAMILY - the authoritative registry of the 101 packages
+# PLUGIN-FAMILY - the authoritative registry of the 119 packages
 
 > This document is the "plugins saved as documents" registry, and it covers the full family, where
 > all packages are built from source and UNPUBLISHED (the npm bootstrap tiers: 2-placeholder or
@@ -378,7 +378,7 @@ The escape hatches are the `exclude` fence, the keep-list sidecars, the raw mark
   queue capped 256), where timestamps are ISO UTC in the ledger lines and epoch milliseconds in the
   storage records.
 - The smokes load the real built `Target/Library.js` of EACH bundle and assert the full behavioral
-  contract on top of the strings, and 511 smoke suites / 6,612 checks across both trees are the
+  contract on top of the strings, and 595 smoke folders / 7,288 checks across both trees are the
   release contract (the original 14 mechanics suites: 1333 Classic / 1324 EffectTS; the rest is the
   suites of the 2026-10-22 delivery).
 
