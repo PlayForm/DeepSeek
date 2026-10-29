@@ -9,8 +9,8 @@ whenToUse:
     When running a multi-agent batch here, deciding lane order or concurrency, when user feedback
     amends a lane's spec, when a lane needs history from earlier sessions, or when resuming a batch
     in a new session.
-version: 3.1.0
-updated: 2026-10-28
+version: 3.2.0
+updated: 2026-10-29
 ---
 
 # Orchestrator Batch
@@ -203,6 +203,22 @@ That is correct behavior, not drift.
   as partial. A reviewer that can only report "done" will report done.
 - **A report without a state transition is an unfinished task.** If a lane reports and its task is
   still open, close it as Lead when the owner is inactive, then dispatch its record lane.
+
+## The visual check
+
+A screenshot of the Site is context the parent must not spend.
+
+- The dev server already runs at `http://localhost:9999`. Point the lane there; never start another
+  server to look at a page.
+- The lane drives Brave over CDP with a throwaway profile (`--remote-debugging-port=9222`,
+  `--user-data-dir=/tmp/brave-cdp-profile`), reads `document.body.innerText` and
+  `getComputedStyle`, and reports the facts.
+- The brief names the route, the viewport, the state to reach (a filter typed, a node selected) and
+  the exact questions, so the answer cannot be "looks good".
+- The parent confirms a claim by reading the built `Site/Target/`, and loads an image only when the
+  user asks to see one.
+- One image per page across a batch exhausts the request's image ceiling (32) and the turn fails.
+  Delegate the looking and keep working.
 
 ## Resume
 
