@@ -1,0 +1,686 @@
+<div><div class="docs">
+<main class="md-content">
+<h1>Track events (Tracing SDK)</h1>
+<p>Track events are part of the <a href="/docs/instrumentation/tracing-sdk">Perfetto Tracing SDK</a>.</p>
+<p><em>Track events</em> are application specific, time bounded events recorded into a
+<em>trace</em> while the application is running. Track events are always associated
+with a <em>track</em>, which is a timeline of monotonically increasing time. A track
+corresponds to an independent sequence of execution, such as a single thread
+in a process.</p>
+
+<p>See the <a href="/docs/instrumentation/tracing-sdk#getting-started">Getting started</a>
+section of the Tracing SDK page for instructions on how to check out and
+build the SDK.</p>
+<p class="callout tip">TIP: The code from these examples is also available <a href="https://github.com/google/perfetto/blob/main/examples/sdk/README.md">in the
+repository</a>.</p>
+<p>There are a few main types of track events:</p>
+<ul>
+<li>
+<p><strong>Slices</strong>, which represent nested, time bounded operations. For example,
+  a slice could cover the time period from when a function begins executing
+  to when it returns, the time spent loading a file from the network or the
+  time to complete a user journey.</p>
+</li>
+<li>
+<p><strong>Counters</strong>, which are snapshots of time-varying numeric values. For
+  example, a track event can record instantaneous the memory usage of a
+  process during its execution.</p>
+</li>
+<li>
+<p><strong>Flows</strong>, which are used to connect related slices that span different
+  tracks together. For example, if an image file is first loaded from
+  the network and then decoded on a thread pool, a flow event can be used to
+  highlight its path through the system.</p>
+</li>
+</ul>
+<p>The <a href="https://ui.perfetto.dev">Perfetto UI</a> has built in support for track
+events, which provides a useful way to quickly visualize the internal
+processing of an app. For example, the <a href="https://www.chromium.org/developers/how-tos/trace-event-profiling-tool">Chrome
+browser</a>
+is deeply instrumented with track events to assist in debugging, development
+and performance analysis.</p>
+<p>To start using track events, first define the set of categories that your events
+will fall into. Each category can be separately enabled or disabled for tracing
+(see <a href="#category-configuration">Category configuration</a>).</p>
+<p>Add the list of categories into a header file (e.g.,
+<code>my_app_tracing_categories.h</code>) like this:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;perfetto.h&gt;</span></span>
+<span class="hljs-built_in">PERFETTO_DEFINE_CATEGORIES</span>(
+    perfetto::<span class="hljs-built_in">Category</span>(<span class="hljs-string">"rendering"</span>)
+        .<span class="hljs-built_in">SetDescription</span>(<span class="hljs-string">"Events from the graphics subsystem"</span>),
+    perfetto::<span class="hljs-built_in">Category</span>(<span class="hljs-string">"network"</span>)
+        .<span class="hljs-built_in">SetDescription</span>(<span class="hljs-string">"Network upload and download statistics"</span>));</code></div>
+<p>Then, declare static storage for the categories in a cc file (e.g.,
+<code>my_app_tracing_categories.cc</code>):</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">"my_app_tracing_categories.h"</span></span>
+<span class="hljs-built_in">PERFETTO_TRACK_EVENT_STATIC_STORAGE</span>();</code></div>
+<p>Finally, initialize track events after the client library is brought up:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span>** argv)</span> </span>{
+  ...
+  perfetto::Tracing::<span class="hljs-built_in">Initialize</span>(args);
+  perfetto::TrackEvent::<span class="hljs-built_in">Register</span>();  <span class="hljs-comment">// Add this.</span>
+}</code></div>
+<p>Now you can add track events to existing functions like this:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">"my_app_tracing_categories.h"</span></span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">DrawPlayer</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"rendering"</span>, <span class="hljs-string">"DrawPlayer"</span>);  <span class="hljs-comment">// Begin "DrawPlayer" slice.</span>
+  ...
+  <span class="hljs-comment">// End "DrawPlayer" slice.</span>
+}</code></div>
+<p>This type of trace event is scoped, under the hood it uses C++ <a href="https://en.cppreference.com/w/cpp/language/raii">RAII</a>. The
+event will cover the time from when the <code>TRACE_EVENT</code> annotation is encountered
+to the end of the block (in the example above, until the function returns).</p>
+<p>For events that don't follow function scoping, use <code>TRACE_EVENT_BEGIN</code> and
+<code>TRACE_EVENT_END</code>:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">LoadGame</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-built_in">DisplayLoadingScreen</span>();
+
+  <span class="hljs-built_in">TRACE_EVENT_BEGIN</span>(<span class="hljs-string">"io"</span>, <span class="hljs-string">"Loading"</span>);  <span class="hljs-comment">// Begin "Loading" slice.</span>
+<span class="hljs-built_in">LoadCollectibles</span>();
+  <span class="hljs-built_in">LoadVehicles</span>();
+  <span class="hljs-built_in">LoadPlayers</span>();
+  <span class="hljs-built_in">TRACE_EVENT_END</span>(<span class="hljs-string">"io"</span>);               <span class="hljs-comment">// End "Loading" slice.</span>
+<span class="hljs-built_in">StartGame</span>();
+}</code></div>
+<p>Note that you don't need to give a name for <code>TRACE_EVENT_END</code>, since it
+automatically closes the most recent event that began on the same thread. In
+other words, all events on a given thread share the same stack. This means
+that it's not recommended to have a matching pair of <code>TRACE_EVENT_BEGIN</code> and
+<code>TRACE_EVENT_END</code> markers in separate functions, since an unrelated event
+might terminate the original event unexpectedly; for events that cross
+function boundaries it's usually best to emit them on a <a href="#tracks">separate
+track</a>.</p>
+<p>You can also supply (up to two) debug annotations together with the event.</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">int</span> player_number = <span class="hljs-number">1</span>;
+<span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"rendering"</span>, <span class="hljs-string">"DrawPlayer"</span>, <span class="hljs-string">"player_number"</span>, player_number);</code></div>
+<p>See <a href="#track-event-arguments">below</a> for the other types of supported track
+event arguments. For more complex arguments, you can define <a href="https://github.com/google/perfetto/blob/main/protos/perfetto/trace/track_event/track_event.proto">your own
+protobuf messages</a> and
+emit them as a parameter for the event.</p>
+<p class="callout note">NOTE: The approach below adds custom protobuf messages directly to the
+      Perfetto repository under <code>protos/perfetto/trace</code>, and Perfetto itself
+      must also be rebuilt. To avoid this, define them as
+      <a href="/docs/instrumentation/extensions">TrackEvent extensions</a> instead.</p>
+<p>As an example of a custom track event argument type, save the following as
+<code>protos/perfetto/trace/track_event/player_info.proto</code>:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-class"><span class="hljs-keyword">message</span> <span class="hljs-title">PlayerInfo</span> </span>{
+  <span class="hljs-keyword">optional</span> <span class="hljs-built_in">string</span> name = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">optional</span> <span class="hljs-built_in">uint64</span> score = <span class="hljs-number">2</span>;
+}</code></div>
+<p>This new file should also be added to
+<code>protos/perfetto/trace/track_event/BUILD.gn</code>:</p>
+<div class="code-block-wrapper"><code class="hljs code-block">sources = [
+  ...
+  "player_info.proto"
+]</code></div>
+<p>Also, a matching argument should be added to the track event message
+definition in
+<code>protos/perfetto/trace/track_event/track_event.proto</code>:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">import</span> <span class="hljs-string">"protos/perfetto/trace/track_event/player_info.proto"</span>;
+
+...
+
+<span class="hljs-class"><span class="hljs-keyword">message</span> <span class="hljs-title">TrackEvent</span> </span>{
+  ...
+  <span class="hljs-comment">// New argument types go here. Use the "Next id" from the comment above</span>
+<span class="hljs-comment">// TrackEvent.</span>
+<span class="hljs-keyword">optional</span> PlayerInfo player_info = <span class="hljs-number">58</span>;
+}</code></div>
+<p>The corresponding trace point could look like this:</p>
+<div class="code-block-wrapper"><code class="hljs code-block">Player my_player;
+<span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"MyEvent"</span>, [&amp;](perfetto::EventContext ctx) {
+  <span class="hljs-keyword">auto</span> player = ctx.<span class="hljs-built_in">event</span>()-&gt;<span class="hljs-built_in">set_player_info</span>();
+  player-&gt;<span class="hljs-built_in">set_name</span>(my_player.<span class="hljs-built_in">name</span>());
+  player-&gt;<span class="hljs-built_in">set_score</span>(my_player.<span class="hljs-built_in">score</span>());
+});</code></div>
+<p>The lambda function passed to the macro is only called if tracing is enabled for
+the given category. It is always called synchronously and possibly multiple
+times if multiple concurrent tracing sessions are active.</p>
+<p>Now that you have instrumented your app with track events, you are ready to
+start <a href="/docs/instrumentation/tracing-sdk#recording">recording traces</a>.</p>
+<h2>
+Category configuration</h2>
+<p>All track events are assigned to one more trace categories. For example:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"rendering"</span>, ...);  <span class="hljs-comment">// Event in the "rendering" category.</span></code></div>
+<p>By default, all non-debug and non-slow track event categories are enabled for
+tracing. <em>Debug</em> and <em>slow</em> categories are categories with special tags:</p>
+<ul>
+<li>
+<code>"debug"</code> categories can give more verbose debugging output for a particular
+subsystem.</li>
+<li>
+<code>"slow"</code> categories record enough data that they can affect the interactive
+performance of your app.</li>
+</ul>
+<p>Category tags can be defined like this:</p>
+<div class="code-block-wrapper"><code class="hljs code-block">perfetto::<span class="hljs-built_in">Category</span>(<span class="hljs-string">"rendering.debug"</span>)
+    .<span class="hljs-built_in">SetDescription</span>(<span class="hljs-string">"Debug events from the graphics subsystem"</span>)
+    .<span class="hljs-built_in">SetTags</span>(<span class="hljs-string">"debug"</span>, <span class="hljs-string">"my_custom_tag"</span>)</code></div>
+<p>A single trace event can also belong to multiple categories:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-comment">// Event in the "rendering" and "benchmark" categories.</span>
+<span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"rendering,benchmark"</span>, ...);</code></div>
+<p>A corresponding category group entry must be added to the category registry:</p>
+<div class="code-block-wrapper"><code class="hljs code-block">perfetto::Category::<span class="hljs-built_in">Group</span>(<span class="hljs-string">"rendering,benchmark"</span>)</code></div>
+<p>It's also possible to efficiently query whether a given category is enabled
+for tracing:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">if</span> (<span class="hljs-built_in">TRACE_EVENT_CATEGORY_ENABLED</span>(<span class="hljs-string">"rendering"</span>)) {
+  <span class="hljs-comment">// ...</span>
+}</code></div>
+<p>The <code>TrackEventConfig</code> field in Perfetto's <code>TraceConfig</code> can be used to
+select which categories are enabled for tracing:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-class"><span class="hljs-keyword">message</span> <span class="hljs-title">TrackEventConfig</span> </span>{
+  <span class="hljs-comment">// Each list item is a glob. Each category is matched against the lists</span>
+<span class="hljs-comment">// as explained below.</span>
+<span class="hljs-keyword">repeated</span> <span class="hljs-built_in">string</span> disabled_categories = <span class="hljs-number">1</span>;  <span class="hljs-comment">// Default: []</span>
+<span class="hljs-keyword">repeated</span> <span class="hljs-built_in">string</span> enabled_categories = <span class="hljs-number">2</span>;   <span class="hljs-comment">// Default: []</span>
+<span class="hljs-keyword">repeated</span> <span class="hljs-built_in">string</span> disabled_tags = <span class="hljs-number">3</span>;        <span class="hljs-comment">// Default: [“slow”, “debug”]</span>
+<span class="hljs-keyword">repeated</span> <span class="hljs-built_in">string</span> enabled_tags = <span class="hljs-number">4</span>;         <span class="hljs-comment">// Default: []</span>
+}</code></div>
+<p>To determine if a category is enabled, it is checked against the filters in the
+following order:</p>
+<ol>
+<li>Exact matches in enabled categories.</li>
+<li>Exact matches in enabled tags.</li>
+<li>Exact matches in disabled categories.</li>
+<li>Exact matches in disabled tags.</li>
+<li>Pattern matches in enabled categories.</li>
+<li>Pattern matches in enabled tags.</li>
+<li>Pattern matches in disabled categories.</li>
+<li>Pattern matches in disabled tags.</li>
+</ol>
+<p>If none of the steps produced a match, the category:</p>
+<ul>
+<li>is enabled by default in the C++ API</li>
+<li>is disabled by default in the C API.</li>
+</ul>
+<p>Specifying an <code>enabled_categories: "*"</code> or <code>disabled_categories: "*"</code> helps
+achieving a consistent behavior explicitly.</p>
+<p>For example:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Needed configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enable just specific categories</td>
+<td><code>enabled_categories = ["foo", "bar", "baz"]</code></td>
+</tr>
+<tr>
+
+<td><code>disabled_categories = ["*"]</code></td>
+</tr>
+<tr>
+<td>Enable all non-slow categories</td>
+<td><code>enabled_categories = ["*"] </code></td>
+</tr>
+<tr>
+<td>Enable specific tags</td>
+<td><code>disabled_tags = ["*"]</code></td>
+</tr>
+<tr>
+
+<td><code>enabled_tags = ["foo", "bar"]</code></td>
+</tr>
+</tbody>
+</table>
+<h2>
+Dynamic and test-only categories</h2>
+<p>Ideally all trace categories should be defined at compile time as shown
+above, as this ensures trace points will have minimal runtime and binary size
+overhead. However, in some cases trace categories can only be determined at
+runtime (e.g., they come from instrumentation in a dynamically loaded JavaScript
+running in a WebView or in a NodeJS engine). These can be used by trace points
+as follows:</p>
+<div class="code-block-wrapper"><code class="hljs code-block">perfetto::DynamicCategory dynamic_category{<span class="hljs-string">"nodejs.something"</span>};
+<span class="hljs-built_in">TRACE_EVENT_BEGIN</span>(dynamic_category, <span class="hljs-string">"SomeEvent"</span>, ...);</code></div>
+<p class="callout tip">TIP: It's also possible to use dynamic event names by passing <code>nullptr</code> as
+    the name and filling in the <code>TrackEvent::name</code> field manually.</p>
+<p>Some trace categories are only useful for testing, and they should not make
+it into a production binary. These types of categories can be defined with a
+list of prefix strings:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-built_in">PERFETTO_DEFINE_TEST_CATEGORY_PREFIXES</span>(
+   <span class="hljs-string">"test"</span>,      <span class="hljs-comment">// Applies to test.*</span>
+<span class="hljs-string">"dontship"</span> <span class="hljs-comment">// Applies to dontship.*.</span>
+);</code></div>
+<h2>
+Dynamic event names</h2>
+<p>Ideally all event name should be compile time string constants. For example:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-built_in">TRACE_EVENT_BEGIN</span>(<span class="hljs-string">"rendering"</span>, <span class="hljs-string">"DrawGame"</span>);</code></div>
+<p>Here <code>"DrawGame"</code> is a compile time string. If we pass a dynamic string here,
+we will get compile time static_assert failure. For example :</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* name = <span class="hljs-string">"DrawGame"</span>;
+<span class="hljs-built_in">TRACE_EVENT_BEGIN</span>(<span class="hljs-string">"rendering"</span>, name);  <span class="hljs-comment">// Error. Event name is not static.</span></code></div>
+<p>There are two ways to use dynamic event name:</p>
+<ol>
+<li>If the event name is actually dynamic (e.g., std::string), write it using
+<code>perfetto::DynamicString</code>:</li>
+</ol>
+<div class="code-block-wrapper"><code class="hljs code-block"> <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, perfetto::DynamicString{dynamic_name});</code></div>
+<p>DANGER: <code>perfetto::DynamicString</code> must be passed as a prvalue (temporary).
+        This is to ensure that the underlying string survives until the event
+        is recorded.</p>
+<p>Note: Below is the old way of using dynamic event names. It's not recommended
+      anymore.</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-literal">nullptr</span>, [&amp;](perfetto::EventContext ctx) {
+  ctx.<span class="hljs-built_in">event</span>()-&gt;<span class="hljs-built_in">set_name</span>(dynamic_name);
+});</code></div>
+<ol>
+<li>If the name is static, but the pointer is computed at runtime, wrap it
+with perfetto::StaticString:</li>
+</ol>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, perfetto::StaticString{name});
+<span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, perfetto::StaticString{i % <span class="hljs-number">2</span> == <span class="hljs-number">0</span> ? <span class="hljs-string">"A"</span> : <span class="hljs-string">"B"</span>});</code></div>
+<p>DANGER: Using perfetto::StaticString with strings whose contents change
+        dynamically can cause silent trace data corruption.</p>
+<h2>
+Advanced topics</h2>
+<h3>
+Track event arguments</h3>
+<p>The following optional arguments can be passed to <code>TRACE_EVENT</code> to add extra
+information to events:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"cat"</span>, <span class="hljs-string">"name"</span>[, track][, timestamp]
+    (, <span class="hljs-string">"debug_name"</span>, debug_value |, TrackEvent::kFieldName, value)*
+    [, lambda]);</code></div>
+<p>Some examples of valid combinations:</p>
+<ol>
+<li>
+<p>A lambda for writing custom TrackEvent fields:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"> <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, [&amp;](perfetto::EventContext ctx) {
+    <span class="hljs-keyword">auto</span>* debug_annotation = ctx.<span class="hljs-built_in">event</span>()-&gt;<span class="hljs-built_in">add_debug_annotations</span>();
+    debug_annotation-&gt;<span class="hljs-built_in">set_name</span>(<span class="hljs-string">"key"</span>);
+    debug_annotation-&gt;<span class="hljs-built_in">set_string_value</span>(<span class="hljs-string">"value"</span>);
+  });</code></div>
+</li>
+<li>
+<p>A timestamp and a lambda:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"> <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, time_in_nanoseconds,
+      [&amp;](perfetto::EventContext ctx) {
+    <span class="hljs-keyword">auto</span>* debug_annotation = ctx.<span class="hljs-built_in">event</span>()-&gt;<span class="hljs-built_in">add_debug_annotations</span>();
+    debug_annotation-&gt;<span class="hljs-built_in">set_name</span>(<span class="hljs-string">"key"</span>);
+    debug_annotation-&gt;<span class="hljs-built_in">set_string_value</span>(<span class="hljs-string">"value"</span>);
+  });</code></div>
+<p><code>time_in_nanoseconds</code> is a <code>uint64_t</code> on the trace clock by default. To pass
+your own timestamp type, or a timestamp on a different clock, see
+<a href="#custom-timestamps-and-clocks">Custom timestamps and clocks</a>.</p>
+</li>
+<li>
+<p>Arbitrary number of debug annotations:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"> <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, <span class="hljs-string">"arg"</span>, value);
+  <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, <span class="hljs-string">"arg"</span>, value, <span class="hljs-string">"arg2"</span>, value2);
+  <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, <span class="hljs-string">"arg"</span>, value, <span class="hljs-string">"arg2"</span>, value2,
+              <span class="hljs-string">"arg3"</span>, value3);</code></div>
+<p>See |TracedValue| for recording custom types as debug annotations.</p>
+</li>
+<li>
+<p>Arbitrary number of TrackEvent fields (including extensions):</p>
+</li>
+</ol>
+<div class="code-block-wrapper"><code class="hljs code-block"> <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>,
+              perfetto::protos::pbzero::TrackEvent::kFieldName, value);</code></div>
+<ol>
+<li>Arbitrary combination of debug annotations and TrackEvent fields:</li>
+</ol>
+<div class="code-block-wrapper"><code class="hljs code-block"> <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>,
+              perfetto::protos::pbzero::TrackEvent::kFieldName, value1,
+              <span class="hljs-string">"arg"</span>, value2);</code></div>
+<ol>
+<li>
+<p>Arbitrary combination of debug annotations / TrackEvent fields and a lambda:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"> <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, <span class="hljs-string">"arg"</span>, value1,
+              pbzero::TrackEvent::kFieldName, value2,
+              [&amp;](perfetto::EventContext ctx) {
+                  <span class="hljs-keyword">auto</span>* debug_annotation = ctx.<span class="hljs-built_in">event</span>()-&gt;<span class="hljs-built_in">add_debug_annotations</span>();
+                  debug_annotation-&gt;<span class="hljs-built_in">set_name</span>(<span class="hljs-string">"key"</span>);
+                  debug_annotation-&gt;<span class="hljs-built_in">set_string_value</span>(<span class="hljs-string">"value"</span>);
+              });</code></div>
+</li>
+<li>
+<p>An overridden track:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"> <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, perfetto::<span class="hljs-built_in">Track</span>(<span class="hljs-number">1234</span>));</code></div>
+<p>See |Track| for other types of tracks which may be used.</p>
+</li>
+<li>
+<p>A track and a lambda:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"> <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, perfetto::<span class="hljs-built_in">Track</span>(<span class="hljs-number">1234</span>),
+              [&amp;](perfetto::EventContext ctx) {
+                  <span class="hljs-keyword">auto</span>* debug_annotation = ctx.<span class="hljs-built_in">event</span>()-&gt;<span class="hljs-built_in">add_debug_annotations</span>();
+                  debug_annotation-&gt;<span class="hljs-built_in">set_name</span>(<span class="hljs-string">"key"</span>);
+                  debug_annotation-&gt;<span class="hljs-built_in">set_string_value</span>(<span class="hljs-string">"value"</span>);
+              });</code></div>
+</li>
+<li>
+<p>A track and a timestamp:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"> <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, perfetto::<span class="hljs-built_in">Track</span>(<span class="hljs-number">1234</span>),
+              time_in_nanoseconds);</code></div>
+</li>
+<li>
+<p>A track, a timestamp and a lambda:</p>
+</li>
+</ol>
+<div class="code-block-wrapper"><code class="hljs code-block"> <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, perfetto::<span class="hljs-built_in">Track</span>(<span class="hljs-number">1234</span>),
+              time_in_nanoseconds, [&amp;](perfetto::EventContext ctx) {
+                  <span class="hljs-keyword">auto</span>* debug_annotation = ctx.<span class="hljs-built_in">event</span>()-&gt;<span class="hljs-built_in">add_debug_annotations</span>();
+                  debug_annotation-&gt;<span class="hljs-built_in">set_name</span>(<span class="hljs-string">"key"</span>);
+                  debug_annotation-&gt;<span class="hljs-built_in">set_string_value</span>(<span class="hljs-string">"value"</span>);
+              });</code></div>
+<ol>
+<li>A track and any combination of debug annotions and TrackEvent fields:</li>
+</ol>
+<div class="code-block-wrapper"><code class="hljs code-block"> <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, perfetto::<span class="hljs-built_in">Track</span>(<span class="hljs-number">1234</span>),
+              <span class="hljs-string">"arg"</span>, value);
+  <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, perfetto::<span class="hljs-built_in">Track</span>(<span class="hljs-number">1234</span>),
+              <span class="hljs-string">"arg"</span>, value, <span class="hljs-string">"arg2"</span>, value2);
+  <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Name"</span>, perfetto::<span class="hljs-built_in">Track</span>(<span class="hljs-number">1234</span>),
+              <span class="hljs-string">"arg"</span>, value, <span class="hljs-string">"arg2"</span>, value2,
+              pbzero::TrackEvent::kFieldName, value3);</code></div>
+<h3>
+Tracks</h3>
+<p>Every track event is associated with a track, which specifies the timeline
+the event belongs to. In most cases, a track corresponds to a visual
+horizontal track in the Perfetto UI like this:</p>
+
+<p>Events that describe parallel sequences (e.g., separate
+threads) should use separate tracks, while sequential events (e.g., nested
+function calls) generally belong on the same track.</p>
+<p>Perfetto supports three kinds of tracks:</p>
+<ul>
+<li>
+<p><code>Track</code> – a basic timeline.</p>
+</li>
+<li>
+<p><code>ProcessTrack</code> – a timeline that represents a single process in the system.</p>
+</li>
+<li>
+<p><code>ThreadTrack</code> – a timeline that represents a single thread in the system.</p>
+</li>
+</ul>
+<p>Tracks can have a parent track, which is used to group related tracks
+together. For example, the parent of a <code>ThreadTrack</code> is the <code>ProcessTrack</code> of
+the process the thread belongs to. By default, tracks are grouped under the
+current process's <code>ProcessTrack</code>.</p>
+<p>A track is identified by a uuid, which must be unique across the entire
+recorded trace. To minimize the chances of accidental collisions, the uuids
+of child tracks are combined with those of their parents, with each
+<code>ProcessTrack</code> having a random, per-process uuid.</p>
+<p>By default, track events (e.g., <code>TRACE_EVENT</code>) use the <code>ThreadTrack</code> for the
+calling thread. This can be overridden, for example, to mark events that
+begin and end on a different thread:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnNewRequest</span><span class="hljs-params">(<span class="hljs-keyword">size_t</span> request_id)</span> </span>{
+  <span class="hljs-comment">// Open a slice when the request came in.</span>
+<span class="hljs-built_in">TRACE_EVENT_BEGIN</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"HandleRequest"</span>, perfetto::<span class="hljs-built_in">Track</span>(request_id));
+
+  <span class="hljs-comment">// Start a thread to handle the request.</span>
+<span class="hljs-function">std::thread <span class="hljs-title">worker_thread</span><span class="hljs-params">([=] {
+    <span class="hljs-comment">// ... produce response ...</span>
+<span class="hljs-comment">// Close the slice for the request now that we finished handling it.</span>
+    TRACE_EVENT_END(<span class="hljs-string">"category"</span>, perfetto::Track(request_id));
+  })</span></span>;</code></div>
+<p>Tracks can also optionally be annotated with metadata:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">auto</span> desc = track.<span class="hljs-built_in">Serialize</span>();
+desc.<span class="hljs-built_in">set_name</span>(<span class="hljs-string">"MyTrack"</span>);
+perfetto::TrackEvent::<span class="hljs-built_in">SetTrackDescriptor</span>(track, desc);</code></div>
+<p>Threads and processes can also be named in a similar way, e.g.:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">auto</span> desc = perfetto::ProcessTrack::<span class="hljs-built_in">Current</span>().<span class="hljs-built_in">Serialize</span>();
+desc.<span class="hljs-built_in">mutable_process</span>()-&gt;<span class="hljs-built_in">set_process_name</span>(<span class="hljs-string">"MyProcess"</span>);
+perfetto::TrackEvent::<span class="hljs-built_in">SetTrackDescriptor</span>(
+    perfetto::ProcessTrack::<span class="hljs-built_in">Current</span>(), desc);</code></div>
+<p>The metadata remains valid between tracing sessions. To free up data for a
+track, call EraseTrackDescriptor:</p>
+<div class="code-block-wrapper"><code class="hljs code-block">perfetto::TrackEvent::<span class="hljs-built_in">EraseTrackDescriptor</span>(track);</code></div>
+<h3>
+Flows</h3>
+<p>Flows can be used to link two (or more) events (slices or instants), to mark
+them as related.</p>
+<p>The link is displayed as an arrow in the UI, when one of the events is selected:</p>
+
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-comment">// The same identifier is used in both the related slices.</span>
+<span class="hljs-keyword">uint64_t</span> request_id = <span class="hljs-built_in">GetRequestId</span>();
+
+{
+  <span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"rendering"</span>, <span class="hljs-string">"HandleRequestPhase1"</span>,
+              perfetto::Flow::<span class="hljs-built_in">ProcessScoped</span>(request_id));
+  <span class="hljs-comment">//...</span>
+}
+
+<span class="hljs-function">std::thread <span class="hljs-title">t1</span><span class="hljs-params">([&amp;] {
+  TRACE_EVENT(<span class="hljs-string">"rendering"</span>, <span class="hljs-string">"HandleRequestPhase2"</span>,
+              perfetto::TerminatingFlow::ProcessScoped(request_id));
+  <span class="hljs-comment">//...</span>
+})</span></span>;</code></div>
+<h3>
+Counters</h3>
+<p>Time-varying numeric data can be recorded with the <code>TRACE_COUNTER</code> macro:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-built_in">TRACE_COUNTER</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"MyCounter"</span>, <span class="hljs-number">1234.5</span>);</code></div>
+<p>This data is displayed as a counter track in the Perfetto UI:</p>
+
+<p>Both integer and floating point counter values are supported. Counters can
+also be annotated with additional information such as units, for example, for
+tracking the rendering framerate in terms of frames per second or "fps":</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-built_in">TRACE_COUNTER</span>(<span class="hljs-string">"category"</span>, perfetto::<span class="hljs-built_in">CounterTrack</span>(<span class="hljs-string">"Framerate"</span>, <span class="hljs-string">"fps"</span>), <span class="hljs-number">120</span>);</code></div>
+<p>As another example, a memory counter that records bytes but accepts samples
+as kilobytes (to reduce trace binary size) can be defined like this:</p>
+<div class="code-block-wrapper"><code class="hljs code-block">perfetto::CounterTrack memory_track = perfetto::<span class="hljs-built_in">CounterTrack</span>(<span class="hljs-string">"Memory"</span>)
+    .<span class="hljs-built_in">set_unit_name</span>(<span class="hljs-string">"bytes"</span>)
+    .<span class="hljs-built_in">set_unit_multiplier</span>(<span class="hljs-number">1024</span>);
+<span class="hljs-built_in">TRACE_COUNTER</span>(<span class="hljs-string">"category"</span>, memory_track, <span class="hljs-number">4</span> <span class="hljs-comment">/* = 4096 bytes */</span>);</code></div>
+<p>See
+<a href="https://github.com/google/perfetto/blob/main/protos/perfetto/trace/track_event/counter_descriptor.proto">counter_descriptor.proto</a> for the full set
+of attributes for a counter track.</p>
+<p>To record a counter value at a specific point in time (instead of the current
+time), you can pass in a custom timestamp:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-comment">// First record the current time and counter value.</span>
+<span class="hljs-keyword">uint64_t</span> timestamp = perfetto::TrackEvent::<span class="hljs-built_in">GetTraceTimeNs</span>();
+<span class="hljs-keyword">int64_t</span> value = <span class="hljs-number">1234</span>;
+
+<span class="hljs-comment">// Later, emit a sample at that point in time.</span>
+<span class="hljs-built_in">TRACE_COUNTER</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"MyCounter"</span>, timestamp, value);</code></div>
+<h3>
+Custom timestamps and clocks</h3>
+<p>By default, any <code>TRACE_EVENT</code>, <code>TRACE_COUNTER</code> or similar macro that accepts a
+timestamp expects a <code>uint64_t</code> number of nanoseconds on Perfetto's default trace
+clock (the same clock as <code>perfetto::TrackEvent::GetTraceTimeNs()</code>). Two
+customizations are possible:</p>
+<ol>
+<li>Passing your own timestamp <em>type</em> (e.g. an opaque wrapper such as Chromium's
+<code>base::TimeTicks</code>) instead of a raw <code>uint64_t</code>.</li>
+<li>Passing a timestamp that lives on a <em>different clock domain</em> than the default
+trace clock.</li>
+</ol>
+<p>Both are driven by the same extension point: the <code>perfetto::TraceTimestampTraits</code>
+template. By specializing it for your type and defining a static
+<code>ConvertTimestampToTraceTimeNs</code> function, you teach the SDK how to turn your type
+into a <code>perfetto::TraceTimestamp</code>:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">namespace</span> perfetto {
+
+<span class="hljs-comment">// Represents a point in time on some clock: a value plus the clock it is</span>
+<span class="hljs-comment">// measured against.</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">TraceTimestamp</span> {</span>
+<span class="hljs-keyword">uint32_t</span> clock_id;  <span class="hljs-comment">// See BuiltinClock in builtin_clock.proto.</span>
+<span class="hljs-keyword">uint64_t</span> value;     <span class="hljs-comment">// Always in nanoseconds.</span>
+};
+
+}  <span class="hljs-comment">// namespace perfetto</span></code></div>
+<p>The <code>value</code> must always be in nanoseconds. The <code>clock_id</code> selects the clock
+domain and follows these ranges (see
+<a href="https://github.com/google/perfetto/blob/main/protos/perfetto/trace/clock_snapshot.proto"><code>clock_snapshot.proto</code></a>):</p>
+<ul>
+<li>
+<code>[1, 63]</code>: builtin clocks, see
+<a href="https://github.com/google/perfetto/blob/main/protos/perfetto/common/builtin_clock.proto"><code>builtin_clock.proto</code></a>.</li>
+<li>
+<code>[64, 127]</code>: user-defined, sequence-scoped clocks. These are only valid for
+packets emitted by the same thread (<code>TraceWriter</code>) that emitted the clock
+snapshot.</li>
+<li>
+<code>[128, MAX]</code>: reserved for future use.</li>
+</ul>
+<h4>Custom timestamp type on the trace clock</h4>
+<p>If your timestamps are already on the default trace clock and you only want to
+pass a custom type, specialize the trait and report
+<code>perfetto::TrackEvent::GetTraceClockId()</code> as the clock:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-comment">// An opaque timestamp type used by your codebase.</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyTimestamp</span> {</span>
+<span class="hljs-keyword">public</span>:
+  <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">MyTimestamp</span><span class="hljs-params">(<span class="hljs-keyword">uint64_t</span> ns)</span> : ns_(ns) {</span>}
+  <span class="hljs-function"><span class="hljs-keyword">uint64_t</span> <span class="hljs-title">ns</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{ <span class="hljs-keyword">return</span> ns_; }
+
+ <span class="hljs-keyword">private</span>:
+  <span class="hljs-keyword">uint64_t</span> ns_;
+};
+
+<span class="hljs-keyword">namespace</span> perfetto {
+
+<span class="hljs-keyword">template</span> &lt;&gt;
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">TraceTimestampTraits</span>&lt;</span>MyTimestamp&gt; {
+  <span class="hljs-function"><span class="hljs-keyword">static</span> TraceTimestamp <span class="hljs-title">ConvertTimestampToTraceTimeNs</span><span class="hljs-params">(<span class="hljs-keyword">const</span> MyTimestamp&amp; ts)</span> </span>{
+    <span class="hljs-keyword">return</span> {<span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-keyword">uint32_t</span>&gt;(TrackEvent::<span class="hljs-built_in">GetTraceClockId</span>()), ts.<span class="hljs-built_in">ns</span>()};
+  }
+};
+
+}  <span class="hljs-comment">// namespace perfetto</span></code></div>
+<p>With the trait in scope, <code>MyTimestamp</code> can be passed anywhere a timestamp is
+expected:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-built_in">TRACE_EVENT_INSTANT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Event"</span>, MyTimestamp{<span class="hljs-number">123456789</span>});
+<span class="hljs-built_in">TRACE_EVENT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Scope"</span>, MyTimestamp{<span class="hljs-number">123456789</span>});</code></div>
+<h4>Timestamps on a custom clock</h4>
+<p>If your timestamps are measured against a clock that is <em>not</em> the trace clock
+(for example a hardware counter, or a clock that runs at a different offset), you
+must tell Trace Processor how that clock relates to trace time. Do this by
+emitting a <code>ClockSnapshot</code> that maps your clock to a reference clock <strong>before</strong>
+emitting any event that references it. The snapshot only needs to be emitted
+once per clock (per <code>TraceWriter</code>).</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-comment">// Pick a clock id in the sequence-scoped range [64, 127], or a builtin clock.</span>
+<span class="hljs-keyword">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-keyword">uint32_t</span> kMyClockId = <span class="hljs-number">64</span>;
+
+<span class="hljs-comment">// Emit the clock snapshot before any event that uses kMyClockId.</span>
+perfetto::TrackEvent::<span class="hljs-built_in">Trace</span>([](perfetto::TrackEvent::TraceContext ctx) {
+  <span class="hljs-keyword">auto</span> packet = ctx.<span class="hljs-built_in">NewTracePacket</span>();
+  packet-&gt;<span class="hljs-built_in">set_timestamp</span>(perfetto::TrackEvent::<span class="hljs-built_in">GetTraceTimeNs</span>());
+  packet-&gt;<span class="hljs-built_in">set_timestamp_clock_id</span>(
+      <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-keyword">uint32_t</span>&gt;(perfetto::TrackEvent::<span class="hljs-built_in">GetTraceClockId</span>()));
+
+  <span class="hljs-keyword">auto</span>* clock_snapshot = packet-&gt;<span class="hljs-built_in">set_clock_snapshot</span>();
+
+  <span class="hljs-comment">// The reference clock: the default trace clock and its current value.</span>
+<span class="hljs-keyword">auto</span>* reference_clock = clock_snapshot-&gt;<span class="hljs-built_in">add_clocks</span>();
+  reference_clock-&gt;<span class="hljs-built_in">set_clock_id</span>(
+      <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-keyword">uint32_t</span>&gt;(perfetto::TrackEvent::<span class="hljs-built_in">GetTraceClockId</span>()));
+  reference_clock-&gt;<span class="hljs-built_in">set_timestamp</span>(perfetto::TrackEvent::<span class="hljs-built_in">GetTraceTimeNs</span>());
+
+  <span class="hljs-comment">// Your clock's value at the same instant. Trace Processor uses the two</span>
+<span class="hljs-comment">// (clock, timestamp) pairs to align your clock onto the trace timeline.</span>
+<span class="hljs-keyword">auto</span>* my_clock = clock_snapshot-&gt;<span class="hljs-built_in">add_clocks</span>();
+  my_clock-&gt;<span class="hljs-built_in">set_clock_id</span>(kMyClockId);
+  my_clock-&gt;<span class="hljs-built_in">set_timestamp</span>(<span class="hljs-built_in">MyClockNow</span>());
+});
+
+<span class="hljs-comment">// From now on, events can use timestamps on kMyClockId.</span>
+<span class="hljs-built_in">TRACE_EVENT_INSTANT</span>(<span class="hljs-string">"category"</span>, <span class="hljs-string">"Event"</span>,
+                    perfetto::TraceTimestamp{kMyClockId, <span class="hljs-built_in">MyClockNow</span>()});</code></div>
+<p>The clock alignment itself is resolved offline by Trace Processor, so the emitted
+events simply carry the raw <code>(clock_id, value)</code> pair. If you wrap the clock in a
+custom type, combine both techniques: return <code>{kMyClockId, value}</code> from your
+<code>TraceTimestampTraits</code> specialization.</p>
+<h3>
+Interning</h3>
+<p>Interning can be used to avoid repeating the same constant data (e.g., event
+names) throughout the trace. Perfetto automatically performs interning for
+most strings passed to <code>TRACE_EVENT</code>, but it's also possible to also define
+your own types of interned data.</p>
+<p>First, define an interning index for your type. It should map to a specific
+field of
+<a href="https://github.com/google/perfetto/blob/main/protos/perfetto/trace/interned_data/interned_data.proto">interned_data.proto</a>
+and specify how the interned data is written into that message when seen for
+the first time.</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">MyInternedData</span>
+    :</span> <span class="hljs-keyword">public</span> perfetto::TrackEventInternedDataIndex&lt;
+        MyInternedData,
+        perfetto::protos::pbzero::InternedData::kMyInternedDataFieldNumber,
+        <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>*&gt; {
+  <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Add</span><span class="hljs-params">(perfetto::protos::pbzero::InternedData* interned_data,
+                   <span class="hljs-keyword">size_t</span> iid,
+                   <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* value)</span> </span>{
+    <span class="hljs-keyword">auto</span> my_data = interned_data-&gt;<span class="hljs-built_in">add_my_interned_data</span>();
+    my_data-&gt;<span class="hljs-built_in">set_iid</span>(iid);
+    my_data-&gt;<span class="hljs-built_in">set_value</span>(value);
+  }
+};</code></div>
+<p>Next, use your interned data in a trace point as shown below. The interned
+string will only be emitted the first time the trace point is hit (unless the
+trace buffer has wrapped around).</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-built_in">TRACE_EVENT</span>(
+   <span class="hljs-string">"category"</span>, <span class="hljs-string">"Event"</span>, [&amp;](perfetto::EventContext ctx) {
+     <span class="hljs-keyword">auto</span> my_message = ctx.<span class="hljs-built_in">event</span>()-&gt;<span class="hljs-built_in">set_my_message</span>();
+     <span class="hljs-keyword">size_t</span> iid = MyInternedData::<span class="hljs-built_in">Get</span>(&amp;ctx, <span class="hljs-string">"Repeated data to be interned"</span>);
+     my_message-&gt;<span class="hljs-built_in">set_iid</span>(iid);
+   });</code></div>
+<p>Note that interned data is strongly typed, i.e., each class of interned data
+uses a separate namespace for identifiers.</p>
+<h3>
+Tracing session observers</h3>
+<p>The session observer interface allows applications to be notified when track
+event tracing starts and stops:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Observer</span> :</span> <span class="hljs-keyword">public</span> perfetto::TrackEventSessionObserver {
+  <span class="hljs-keyword">public</span>:
+  ~<span class="hljs-built_in">Observer</span>() <span class="hljs-keyword">override</span> = <span class="hljs-keyword">default</span>;
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnSetup</span><span class="hljs-params">(<span class="hljs-keyword">const</span> perfetto::DataSourceBase::SetupArgs&amp;)</span> <span class="hljs-keyword">override</span> </span>{
+    <span class="hljs-comment">// Called when tracing session is configured. Note tracing isn't active yet,</span>
+<span class="hljs-comment">// so track events emitted here won't be recorded.</span>
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnStart</span><span class="hljs-params">(<span class="hljs-keyword">const</span> perfetto::DataSourceBase::StartArgs&amp;)</span> <span class="hljs-keyword">override</span> </span>{
+    <span class="hljs-comment">// Called when a tracing session is started. It is possible to emit track</span>
+<span class="hljs-comment">// events from this callback.</span>
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnStop</span><span class="hljs-params">(<span class="hljs-keyword">const</span> perfetto::DataSourceBase::StopArgs&amp;)</span> <span class="hljs-keyword">override</span> </span>{
+    <span class="hljs-comment">// Called when a tracing session is stopped. It is still possible to emit</span>
+<span class="hljs-comment">// track events from this callback.</span>
+  }
+};</code></div>
+<p>Note that all methods of the interface are called on an internal Perfetto
+thread.</p>
+<p>For example, here's how to wait for any tracing session to start:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Observer</span> :</span> <span class="hljs-keyword">public</span> perfetto::TrackEventSessionObserver {
+ <span class="hljs-keyword">public</span>:
+  <span class="hljs-built_in">Observer</span>() { perfetto::TrackEvent::<span class="hljs-built_in">AddSessionObserver</span>(<span class="hljs-keyword">this</span>); }
+  ~<span class="hljs-built_in">Observer</span>() { perfetto::TrackEvent::<span class="hljs-built_in">RemoveSessionObserver</span>(<span class="hljs-keyword">this</span>); }
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnStart</span><span class="hljs-params">(<span class="hljs-keyword">const</span> perfetto::DataSourceBase::StartArgs&amp;)</span> <span class="hljs-keyword">override</span> </span>{
+    <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex)</span></span>;
+    cv.<span class="hljs-built_in">notify_one</span>();
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">WaitForTracingStart</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Waiting for tracing to start...\n"</span>);
+    <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex)</span></span>;
+    cv.<span class="hljs-built_in">wait</span>(lock, [] { <span class="hljs-keyword">return</span> perfetto::TrackEvent::<span class="hljs-built_in">IsEnabled</span>(); });
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Tracing started\n"</span>);
+  }
+
+  std::mutex mutex;
+  std::condition_variable cv;
+};
+
+Observer observer;
+observer.<span class="hljs-built_in">WaitForTracingStart</span>();</code></div>
+</main>
+<section class="toc"><ul>
+<li><a href="https://perfetto.dev/docs/instrumentation/track-events#category-configuration">Category configuration</a></li>
+<li><a href="https://perfetto.dev/docs/instrumentation/track-events#dynamic-and-test-only-categories">Dynamic and test-only categories</a></li>
+
+
+<li><a href="https://perfetto.dev/docs/instrumentation/track-events#track-event-arguments">Track event arguments</a></li>
+
+
+
+<li><a href="https://perfetto.dev/docs/instrumentation/track-events#custom-timestamps-and-clocks">Custom timestamps and clocks</a></li>
+
+<li><a href="https://perfetto.dev/docs/instrumentation/track-events#tracing-session-observers">Tracing session observers</a></li>
+</ul></section>
+
+</div></div>

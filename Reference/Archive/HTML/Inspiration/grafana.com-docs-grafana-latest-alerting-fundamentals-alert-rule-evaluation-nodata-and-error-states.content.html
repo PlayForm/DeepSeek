@@ -1,0 +1,279 @@
+<div><div><div id="top-banner">
+<div class="banner__disabled" id="gcon2026_top_banner_a"><div class="gcon2025-banner gcon2026-banner footer">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">Save the Date!</div>
+<div class="tw:text-[13px] tw:text-white">Sign up to get the latest GrafanaCON 2026 updates, agenda drops, and first access to early-bird tickets when they’re first available.</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Sign up</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="gcon2026_top_banner_b"><div class="gcon2025-banner gcon2026-banner footer alt-grot">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">We have our sightson Barcelona</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Save the Date</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-post-keynote"><div class="tw:bg-[#E86F37] tw:relative tw:h-10 tw:hidden tw:sm:block">
+<div class="wrapper tw:px-0">
+<div class="tw:flex tw:flex-row tw:items-center tw:justify-between tw:px-5 tw:flex-wrap">
+
+<span class="tw:items-center tw:justify-center font-poppins tw:font-medium tw:text-black tw:text-base tw:xl:max-w-none tw:text-center tw:h-10 tw:hidden tw:lg:flex">
+          Watch the keynote again and signup for more on-demand sessions.
+        </span>
+<div class="tw:flex-col tw:xl:flex-row tw:items-center tw:gap-6 tw:h-6 tw:sm:flex">
+
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-top-banner"><div class="obscon2025-banner top-banner tw:relative">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<p class="banner-text">
+<span class="banner-title">📢 Registration + agenda now live </span>
+        Explore the latest Grafana Cloud and AI solutions, learn tips &amp; tricks from demos and hands-on workshops, and get actionable advice to advance your observability strategy. Register now and get 50% off - limited tickets available (while they last!).
+      </p>
+<a class="banner-btn tw:bg-black" href="/events/observabilitycon/?tech=target&amp;plcmt=top-banner&amp;aud=default">Register now</a>
+</div>
+</div>
+</div></div> </div></div></div>
+<div><div class="main section"><div class="main-content">
+<blockquote class="llms-txt-directive">Documentation for automated readersA curated documentation index is available at: https://grafana.com/llms.txtA complete documentation index is available at: https://grafana.com/llms-full.txtThese indexes can help with page discovery before fetching individual documents.</blockquote>
+<p class="agent-directive">This page is also available in Markdown, which may be easier for automated readers
+and AI tools to parse than HTML. The Markdown version is available at
+https://grafana.com/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/nodata-and-error-states.md, or by sending
+Accept: text/markdown to https://grafana.com/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/nodata-and-error-states/. For broader
+documentation discovery, the curated index is available at https://grafana.com/llms.txt
+and the complete index is available at https://grafana.com/llms-full.txt.</p>
+<div class="grid-layout docs">
+<section class="mobile print-hidden" id="mobile"><div class="mobile__wrapper"> <div class="mobile__title">No Data and Error states</div> </div></section><main class="section-docs__main docs__content" id="main"><div class="scrollspy-init">
+<div class="docs-content scrollspy-wrap" id="doc-article-text">
+<div class="docs__breadcrumb">
+<span>No Data and Error states</span>
+</div>
+<div class="docs-labels">
+<span class="badge docs-labels__product-orange docs-labels__item mr-half"><span>Grafana Cloud
+</span> </span><span class="badge docs-labels__product-violet docs-labels__item mr-half"><span>Enterprise
+</span> </span><span class="badge docs-labels__product-purple docs-labels__item mr-half"><span>Open source
+</span></span>
+</div>
+<h1 id="no-data-and-error-states">No Data and Error states
+</h1>
+<p>Grafana Alerting implements the <strong>No Data</strong> and <strong>Error</strong> states to handle common scenarios when evaluating alert rules, and you can modify their behavior.</p>
+<p>An alert instance can transition to these special states:</p>
+<ul>
+<li>
+<a href="#no-data-state">No Data state</a> occurs when the alert rule query runs successfully but returns no data points.</li>
+<li>
+<a href="#error-state">Error state</a> occurs when the alert rule fails to evaluate its query or queries successfully.</li>
+</ul>
+<div class="admonition admonition-note"><blockquote>
+<p class="title text-uppercase">Note</p>
+<p>No Data and Error states are supported only for Grafana-managed alert rules.</p>
+</blockquote></div>
+<div class="admonition admonition-tip"><blockquote>
+<p class="title text-uppercase">Tip</p>
+<p>For common examples and practical guidance on handling <strong>Error</strong>, <strong>No Data</strong>, and <strong>stale</strong> alert scenarios, refer to the
+<a href="/docs/grafana/latest/alerting/best-practices/connectivity-errors/">Handle connectivity errors</a> and
+<a href="/docs/grafana/latest/alerting/best-practices/missing-data/">Handle missing data</a> guides.</p>
+</blockquote></div>
+<h2 id="error-state">
+<code>Error</code> state
+</h2>
+<p>The <strong>Error</strong> state is triggered when the alert rule fails to evaluate its query or queries successfully.</p>
+<p>This can occur due to evaluation timeouts (default: <code>30s</code>) or repeated failures (default: <code>3</code>) when querying the data source. The
+<a href="/docs/grafana/latest/setup-grafana/configure-grafana/#evaluation_timeout"><code>evaluation_timeout</code></a> and
+<a href="/docs/grafana/latest/setup-grafana/configure-grafana/#max_attempts"><code>max_attempts</code></a> options control these settings.</p>
+<p>The <strong>Error</strong> state honors the
+<a href="/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/#pending-period">pending period</a>: the alert instance transitions <code>Normal → Pending → Error</code>. Set the pending period to <code>0</code> to skip the <strong>Pending</strong> state and enter <strong>Error</strong> immediately.</p>
+<p>When an alert instance enters the <strong>Error</strong> state, Grafana, by default, triggers a new <a href="#no-data-and-error-alerts"><code>DatasourceError</code> alert</a>. You can control this behavior based on the desired outcome of your alert rule in <a href="#modify-the-no-data-or-error-state">Modify the <code>No Data</code> or <code>Error</code> state</a>.</p>
+<h2 id="no-data-state">
+<code>No Data</code> state
+</h2>
+<p>The <strong>No Data</strong> state occurs when the alert rule query runs successfully but returns no data points at all.</p>
+<p>The <strong>No Data</strong> state honors the
+<a href="/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/#pending-period">pending period</a>: the alert instance transitions <code>Normal → Pending → No Data</code>. Set the pending period to <code>0</code> to skip the <strong>Pending</strong> state and enter <strong>No Data</strong> immediately.</p>
+<p>When an alert instance enters the <strong>No Data</strong> state, Grafana, by default, triggers a new <a href="#no-data-and-error-alerts"><code>DatasourceNoData</code> alert</a>. You can control this behavior based on the desired outcome of your alert rule in <a href="#modify-the-no-data-or-error-state">Modify the <code>No Data</code> or <code>Error</code> state</a>.</p>
+<h2 id="modify-the-no-data-or-error-state">Modify the <code>No Data</code> or <code>Error</code> state
+</h2>
+<p>In
+<a href="/docs/grafana/latest/alerting/alerting-rules/create-grafana-managed-rule/#configure-no-data-and-error-handling">Configure no data and error handling</a>, you can configure the behavior when the evaluation returns no data or all values are null:</p>
+<div><ul>
+<li>
+<p><strong>Set No Data state</strong> (Default)</p>
+<p>If the pending period is <code>0</code>, the alert instance transitions immediately to <strong>No Data</strong>. Otherwise, it transitions to the <strong>Pending</strong> state, and then to <strong>No Data</strong> after the pending period has elapsed and the last evaluation returns no data.</p>
+<p>When entering the <strong>No Data</strong> state, the alert rule creates a new <code>DatasourceNoData</code> alert instance with labels for the alert rule name, UID, and data source UID.</p>
+</li>
+<li>
+<p><strong>Set Alerting state</strong></p>
+<p>If the pending period is <code>0</code>, the alert instance transitions immediately to <strong>Alerting</strong>. Otherwise, it transitions to the <strong>Pending</strong> state, and then to <strong>Alerting</strong> after the pending period has elapsed and the last evaluation returns no data or a threshold breach.</p>
+</li>
+<li>
+<p><strong>Set Normal state</strong></p>
+<p>The alert instance transitions immediately to the <strong>Normal</strong> state.</p>
+</li>
+<li>
+<p><strong>Keep last state</strong></p>
+<p>The alert instance keeps its current state.</p>
+</li>
+</ul></div>
+<p>You can also configure the behavior when the evaluation returns an error or timeout:</p>
+<div><ul>
+<li>
+<p><strong>Set Error state</strong> (Default)</p>
+<p>If the pending period is <code>0</code>, the alert instance transitions immediately to <strong>Error</strong>. Otherwise, it transitions to the <strong>Pending</strong> state, and then to <strong>Error</strong> after the pending period has elapsed and the last evaluation returns an error.</p>
+<p>When entering the <strong>Error</strong> state, the alert rule creates a new <code>DatasourceError</code> alert instance with labels for the alert rule name, UID, and data source UID.</p>
+</li>
+<li>
+<p><strong>Set Alerting state</strong></p>
+<p>If the pending period is <code>0</code>, the alert instance transitions immediately to <strong>Alerting</strong>. Otherwise, it transitions to the <strong>Pending</strong> state, and then to <strong>Alerting</strong> after the pending period has elapsed and the last evaluation returns an error or a threshold breach.</p>
+</li>
+<li>
+<p><strong>Set Normal state</strong></p>
+<p>The alert instance transitions immediately to the <strong>Normal</strong> state.</p>
+</li>
+<li>
+<p><strong>Keep last state</strong></p>
+<p>The alert instance keeps its current state.</p>
+</li>
+</ul></div>
+<p>Note that when you configure the <strong>No Data</strong> or <strong>Error</strong> behavior to set the <strong>Alerting</strong> or <strong>Normal</strong> state, Grafana attempts to keep a stable set of fields under notification <code>Values</code>. If your query returns no data or an error, Grafana re-uses the latest known set of fields in <code>Values</code>, but will use <code>-1</code> in place of the measured value.</p>
+<h3 id="keep-last-state">Keep last state
+</h3>
+<p>The “Keep Last State” option helps mitigate temporary data source issues, preventing alerts from unintentionally firing, resolving, and re-firing.</p>
+<p>However, in situations where strict monitoring is critical, relying solely on the “Keep Last State” option may not be appropriate. Instead, consider using an alternative or implementing additional alert rules to ensure that issues with prolonged data source disruptions are detected.</p>
+<h3 id="no-data-and-error-alerts">
+<code>No Data</code> and <code>Error</code> alerts
+</h3>
+<p>When an alert rule evaluation results in a <code>No Data</code> or <code>Error</code> state, Grafana Alerting creates a new alert instance with the following additional labels:</p>
+<ul>
+<li>
+<code>alertname</code>: Either <code>DatasourceNoData</code> or <code>DatasourceError</code> depending on the state.</li>
+<li>
+<code>datasource_uid</code>: The UID of the data source that caused the state.</li>
+<li>
+<code>rulename</code>: The name of the alert rule that originated the alert.</li>
+</ul>
+<p>Note that <code>DatasourceNoData</code> and <code>DatasourceError</code> alert instances are independent from the original alert instance. They have different labels, which means existing silences, mute timings, and notification policies applied to the original alert may not apply to them.</p>
+<p>You can manage these alerts like regular ones by using their labels to apply actions such as adding a silence, routing via notification policies, and more.</p>
+<p>If the alert rule is configured to send notifications directly to a selected contact point (instead of using notification policies), the <code>DatasourceNoData</code> and <code>DatasourceError</code> alerts are also sent to that contact point. Any additional notification settings defined in the alert rule, such as muting or grouping, are preserved.</p>
+<h3 id="reduce-no-data-or-error-alerts">Reduce <code>No Data</code> or <code>Error</code> alerts
+</h3>
+<p>To minimize the number of <strong>No Data</strong> or <strong>Error</strong> state alerts received, try the following.</p>
+<ol>
+<li><p>Use the <strong>Keep last state</strong> option. For more information, refer to the section below. This option allows the alert to retain its last known state when there is no data available, rather than switching to a <strong>No Data</strong> state.</p></li>
+<li>
+<p>For <strong>No Data</strong> alerts, you can optimize your alert rule by expanding the time range of the query. However, if the time range is too big, it affects the performance of the query and can lead to errors due to timeout.</p>
+<p>To minimize timeouts resulting in the <strong>Error</strong> state, reduce the time range to request less data every evaluation cycle.</p>
+</li>
+<li><p>Consider increasing the
+<a href="/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/#pending-period">pending period</a>. Since the <strong>No Data</strong> and <strong>Error</strong> states honor the pending period, a longer period can suppress <code>DatasourceNoData</code> and <code>DatasourceError</code> notifications for transient issues.</p></li>
+<li><p>To reduce multiple notifications from <strong>Error</strong> alerts, define a
+<a href="/docs/grafana/latest/alerting/fundamentals/notifications/notification-policies/">notification policy</a> to handle all related alerts with <code>alertname=DatasourceError</code>, and filter and group errors from the same data source using the <code>datasource_uid</code> label.</p></li>
+<li>
+<p>Change the
+<a href="/docs/grafana/latest/setup-grafana/configure-grafana/#evaluation_timeout">evaluation timeout</a> (default: <code>30s</code>) or the
+<a href="/docs/grafana/latest/setup-grafana/configure-grafana/#max_attempts">retry mechanism (<code>max_attempts</code>)</a> settings. This should be a last resort, as it can affect the performance of all alert rules and may cause missed evaluations if the timeout is too long. For Grafana Cloud, open a support ticket from the <a href="/docs/grafana-cloud/account-management/support/#grafana-cloud-support-options">Cloud Portal</a>.</p>
+<div class="admonition admonition-tip"><blockquote>
+<p class="title text-uppercase">Tip</p>
+<p>For common examples and practical guidance on handling <strong>Error</strong>, <strong>No Data</strong>, and <strong>stale</strong> alert scenarios, refer to the
+<a href="/docs/grafana/latest/alerting/best-practices/connectivity-errors/">Handle connectivity errors</a> and
+<a href="/docs/grafana/latest/alerting/best-practices/missing-data/">Handle missing data</a> guides.</p>
+</blockquote></div>
+</li>
+</ol>
+<h2 id="grafana_state_reason-for-troubleshooting">
+<code>grafana_state_reason</code> for troubleshooting
+</h2>
+<p>Occasionally, an alert instance may be in a state that isn’t immediately clear to everyone. For example:</p>
+<ul>
+<li>If “no data” handling is configured to transition to a state other than <code>No Data</code>.</li>
+<li>If “error” handling is configured to transition to a state other than <code>Error</code>.</li>
+<li>If the alert rule is deleted, paused, or updated in some cases, the alert instance also transitions to the <code>Normal</code> state.</li>
+<li>
+<a href="/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/stale-alert-instances/">Stale alert instances</a> in the <code>Alerting</code> state transition to the <code>Normal</code> state when the series disappear.</li>
+</ul>
+<p>In these situations, the evaluation state may differ from the alert state, and it might be necessary to understand the reason for being in that state when receiving the notification.</p>
+<p>The <code>grafana_state_reason</code> annotation is included in these situations, providing the reason that explains why the alert instance transitioned to its current state. For example:</p>
+<ul>
+<li>If “no data” or “error” handling transitions to the <code>Normal</code> state, the <code>grafana_state_reason</code> annotation is included with the value <strong>No Data</strong> or <strong>Error</strong>, respectively.</li>
+<li>If the alert rule is deleted or paused, the <code>grafana_state_reason</code> is set to <strong>Paused</strong> or <strong>RuleDeleted</strong>. For some updates, it is set to <strong>Updated</strong>.</li>
+<li>
+<a href="/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/stale-alert-instances/">Stale alert instances</a> in the <code>Normal</code> state include the <code>grafana_state_reason</code> annotation with the value <strong>MissingSeries</strong>.</li>
+</ul>
+</div>
+<div><div class="docs__feedback print-hidden">
+<div class="docs__feedback--title">
+<h2 class="docs__feedback--heading">Was this page helpful?</h2>
+<div class="docs__feedback--container">
+
+
+</div>
+</div>
+<div class="docs__feedback--links"><div class="d-grid d-grid__columns--3 w-100p gap-1">
+<a class="docs__feedback--link" href="https://github.com/grafana/grafana/edit/release-13.3.1/docs/sources/alerting/fundamentals/alert-rule-evaluation/nodata-and-error-states.md"><span>Suggest an edit in GitHub</span>
+</a><a class="docs__feedback--link" href="https://github.com/grafana/grafana/issues/new?title=Documentation%20feedback:%20/docs/sources/alerting/fundamentals/alert-rule-evaluation/nodata-and-error-states.md"><span>Create a GitHub issue</span>
+</a><a class="docs__feedback--link" href="mailto:docs@grafana.com"><span>Email docs@grafana.com</span>
+</a><a class="docs__feedback--link" href="/help/"><span>Help and support</span>
+</a><a class="docs__feedback--link" href="/community/"><span>Community</span></a>
+</div></div>
+<div class="print-hidden" id="docs-related-wrapper"><div class="docs__related">
+<h2 class="docs__related--heading">Related resources from Grafana Labs</h2>
+<div class="docs__related--subtext">Additional helpful documentation, links, and articles:</div>
+<div class="docs__related--grid">
+<a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-grafana-lgtm-stack/?pg=docs-grafana-latest-alerting-fundamentals-alert-rule-evaluation-nodata-and-error-states&amp;plcmt=related"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with managing your metrics, logs, and traces using Grafana</div>
+<div class="body-xsmall mt-half">In this webinar, we’ll demo how to get started using the LGTM Stack: Loki for logs, Grafana for visualization, Tempo for traces, and Mimir for metrics.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-grafana-dashboard-design/?pg=docs-grafana-latest-alerting-fundamentals-alert-rule-evaluation-nodata-and-error-states&amp;plcmt=related-2"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with Grafana dashboard design</div>
+<div class="body-xsmall mt-half">In this webinar, you'll learn how to design stylish and easily accessible Grafana dashboards that tell a story.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/building-advanced-grafana-dashboards/?pg=docs-grafana-latest-alerting-fundamentals-alert-rule-evaluation-nodata-and-error-states&amp;plcmt=related-3"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Building advanced Grafana dashboards</div>
+<div class="body-xsmall mt-half">In this webinar, we’ll demo how to build and format Grafana dashboards.</div>
+</div>
+</div></div></a>
+</div>
+</div></div>
+</div></div>
+</div></main>
+</div>
+</div></div></div>
+<div><div class="highlight-send__buttons">
+<a class="highlight-send__ask-btn text-hover-white">
+      Ask Grafana Assistant
+      
+    </a> </div></div>

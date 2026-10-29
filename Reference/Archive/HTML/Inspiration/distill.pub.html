@@ -1,0 +1,1869 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-X6DDRMCSF0&amp;cx=c&amp;_slc=1"></script><script async="" src="https://www.google-analytics.com/analytics.js"></script><script type="text/front-matter">
+title: Distill — Latest articles about machine learning
+description: Articles about Machine Learning
+</script>
+
+<style>
+    .description h2,
+    .description p {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .description h2 {
+        font-weight: 700;
+    }
+
+    .posts-list .post-preview .description p.authors {
+        font-size: 0.875rem;
+        font-weight: 400;
+        margin-bottom: 1em;
+        color: rgba(0, 0, 0, 0.67);
+    }
+
+    h2.post-tag {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        padding-bottom: 12px;
+    }
+
+    .posts-list {
+        margin-top: 24px;
+        margin-bottom: 24px;
+    }
+
+    .posts-list .post-preview {
+        text-decoration: none;
+        overflow: hidden;
+        display: block;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 24px 0;
+    }
+
+    .posts-list .post-preview:last-of-type {
+        border-bottom: none;
+    }
+
+    .posts-list .post-preview h2 {
+        margin: 0 0 6px 0;
+        line-height: 1.2em;
+        font-style: normal;
+        font-size: 24px;
+    }
+
+    .posts-list .post-preview p {
+        margin: 0 0 12px 0;
+        line-height: 1.4em;
+        font-size: 16px;
+    }
+
+    .posts-list .post-preview .thumbnail {
+        box-sizing: border-box;
+        margin-bottom: 24px;
+        position: relative;
+        max-width: 500px;
+    }
+
+    .posts-list .post-preview.editorial .thumbnail {
+        display: none;
+    }
+
+    .posts-list .post-preview img {
+        width: 100%;
+        display: block;
+    }
+
+    .posts-list .metadata {
+        font-size: 12px;
+        line-height: 1.4em;
+        margin-bottom: 18px;
+    }
+
+    .metadata>* {
+        display: inline-block;
+    }
+
+    .metadata .publishedDate {
+        margin-right: 1em;
+    }
+
+    .metadata .tags {
+        margin-top: 1em;
+    }
+
+    .tags .tag {
+        display: inline;
+        color: rgba(0, 0, 0, 0.67);
+        padding: 0.3em 0.5em;
+        margin: 0;
+        font-size: 80%;
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        border-radius: 3px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .tag.peer-reviewed {
+        background-color: #0F2E3DE0;
+        color: white;
+        border-color: #0F2E3D;
+    }
+
+    @media(min-width: 768px) {
+        .metadata>* {
+            display: block;
+        }
+
+        .posts-list .post-preview h2 {
+            font-size: 26px;
+        }
+
+        .posts-list {
+            margin-top: 60px;
+        }
+
+        .posts-list .post-preview .thumbnail {
+            float: right;
+            width: 35%;
+            margin-bottom: 0;
+        }
+
+        .posts-list .post-preview .description {
+            float: left;
+            width: 40%;
+        }
+
+        .posts-list .post-preview .metadata {
+            float: left;
+            width: 15%;
+            margin-top: 8px;
+        }
+
+        .posts-list .post-preview p {
+            margin: 0 0 12px 0;
+            line-height: 1.5em;
+            font-size: 16px;
+        }
+
+    }
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1"><style>html {
+  font: 400 16px/1.55em -apple-system, BlinkMacSystemFont, "Roboto", Helvetica, sans-serif;
+  /*background-color: hsl(223, 9%, 25%);*/
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  /*background-color: hsl(223, 9%, 25%);*/
+}
+
+a {
+  color: #004276;
+}
+
+figure {
+  margin: 0;
+}
+
+h1 {
+  font-family: Cochin, Georgia, serif;
+}
+
+/*
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}*/
+/*
+  Column: 60px
+  Gutter: 24px
+
+  Body: 648px
+    - 8 columns
+    - 7 gutters
+  Middle: 816px
+  Page: 984px
+    - 12 columns
+    - 11 gutters
+*/
+
+.l-body,
+.l-body-outset,
+.l-page,
+.l-page-outset,
+.l-middle,
+.l-middle-outset,
+dt-article > div,
+dt-article > p,
+dt-article > h1,
+dt-article > h2,
+dt-article > h3,
+dt-article > h4,
+dt-article > figure,
+dt-article > table,
+dt-article > ol,
+dt-article > ul,
+dt-article > dt-byline,
+dt-article > dt-math,
+dt-article > dt-code,
+dt-article section > div,
+dt-article section > p,
+dt-article section > h1,
+dt-article section > h2,
+dt-article section > h3,
+dt-article section > h4,
+dt-article section > figure,
+dt-article section > table,
+dt-article section > ol,
+dt-article section > ul,
+dt-article section > dt-byline,
+dt-article section > dt-code {
+  width: auto;
+  margin-left: 24px;
+  margin-right: 24px;
+  box-sizing: border-box;
+}
+
+@media(min-width: 768px) {
+  .l-body,
+  .l-body-outset,
+  .l-page,
+  .l-page-outset,
+  .l-middle,
+  .l-middle-outset,
+  dt-article > div,
+  dt-article > p,
+  dt-article > h1,
+  dt-article > h2,
+  dt-article > h3,
+  dt-article > h4,
+  dt-article > figure,
+  dt-article > table,
+  dt-article > ol,
+  dt-article > ul,
+  dt-article > dt-byline,
+  dt-article > dt-math,
+  dt-article > dt-code,
+  dt-article section > div,
+  dt-article section > p,
+  dt-article section > h1,
+  dt-article section > h2,
+  dt-article section > h3,
+  dt-article section > h4,
+  dt-article section > figure,
+  dt-article section > table,
+  dt-article section > ol,
+  dt-article section > ul,
+  dt-article section > dt-byline,
+  dt-article section > dt-code {
+    margin-left: 72px;
+    margin-right: 72px;
+  }
+}
+
+@media(min-width: 1080px) {
+  .l-body,
+  dt-article > div,
+  dt-article > p,
+  dt-article > h2,
+  dt-article > h3,
+  dt-article > h4,
+  dt-article > figure,
+  dt-article > table,
+  dt-article > ol,
+  dt-article > ul,
+  dt-article > dt-byline,
+  dt-article > dt-math,
+  dt-article > dt-code,
+  dt-article section > div,
+  dt-article section > p,
+  dt-article section > h2,
+  dt-article section > h3,
+  dt-article section > h4,
+  dt-article section > figure,
+  dt-article section > table,
+  dt-article section > ol,
+  dt-article section > ul,
+  dt-article section > dt-byline,
+  dt-article section > dt-code {
+    margin-left: calc(50% - 984px / 2);
+    width: 648px;
+  }
+  .l-body-outset,
+  dt-article .l-body-outset {
+    margin-left: calc(50% - 984px / 2 - 96px/2);
+    width: calc(648px + 96px);
+  }
+  .l-middle,
+  dt-article .l-middle {
+    width: 816px;
+    margin-left: calc(50% - 984px / 2);
+    margin-right: auto;
+  }
+  .l-middle-outset,
+  dt-article .l-middle-outset {
+    width: calc(816px + 96px);
+    margin-left: calc(50% - 984px / 2 - 48px);
+    margin-right: auto;
+  }
+  dt-article > h1,
+  dt-article section > h1,
+  .l-page,
+  dt-article .l-page,
+  dt-article.centered .l-page {
+    width: 984px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .l-page-outset,
+  dt-article .l-page-outset,
+  dt-article.centered .l-page-outset {
+    width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .l-screen,
+  dt-article .l-screen,
+  dt-article.centered .l-screen {
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+  }
+  .l-screen-inset,
+  dt-article .l-screen-inset,
+  dt-article.centered .l-screen-inset {
+    margin-left: 24px;
+    margin-right: 24px;
+    width: auto;
+  }
+  .l-gutter,
+  dt-article .l-gutter {
+    clear: both;
+    float: right;
+    margin-top: 0;
+    margin-left: 24px;
+    margin-right: calc((100vw - 984px) / 2 + 168px);
+    width: calc((984px - 648px) / 2 - 24px);
+  }
+
+  /* Side */
+  .side.l-body,
+  dt-article .side.l-body {
+    clear: both;
+    float: right;
+    margin-top: 0;
+    margin-left: 48px;
+    margin-right: calc((100vw - 984px + 648px) / 2);
+    width: calc(648px / 2 - 24px - 84px);
+  }
+  .side.l-body-outset,
+  dt-article .side.l-body-outset {
+    clear: both;
+    float: right;
+    margin-top: 0;
+    margin-left: 48px;
+    margin-right: calc((100vw - 984px + 648px - 48px) / 2);
+    width: calc(648px / 2 - 48px + 24px);
+  }
+  .side.l-middle,
+  dt-article .side.l-middle {
+    clear: both;
+    float: right;
+    width: calc(456px - 84px);
+    margin-left: 48px;
+    margin-right: calc((100vw - 984px) / 2 + 168px);
+  }
+  .side.l-middle-outset,
+  dt-article .side.l-middle-outset {
+    clear: both;
+    float: right;
+    width: 456px;
+    margin-left: 48px;
+    margin-right: calc((100vw - 984px) / 2 + 168px);
+  }
+  .side.l-page,
+  dt-article .side.l-page {
+    clear: both;
+    float: right;
+    margin-left: 48px;
+    width: calc(624px - 84px);
+    margin-right: calc((100vw - 984px) / 2);
+  }
+  .side.l-page-outset,
+  dt-article .side.l-page-outset {
+    clear: both;
+    float: right;
+    width: 624px;
+    margin-right: calc((100vw - 984px) / 2);
+  }
+}
+
+/* Centered */
+
+@media(min-width: 1080px) {
+  .centered .l-body,
+  .centered.l-body,
+  dt-article.centered > div,
+  dt-article.centered > p,
+  dt-article.centered > h2,
+  dt-article.centered > h3,
+  dt-article.centered > h4,
+  dt-article.centered > figure,
+  dt-article.centered > table,
+  dt-article.centered > ol,
+  dt-article.centered > ul,
+  dt-article.centered > dt-byline,
+  dt-article.centered > dt-code,
+  dt-article.centered section > div,
+  dt-article.centered section > p,
+  dt-article.centered section > h2,
+  dt-article.centered section > h3,
+  dt-article.centered section > h4,
+  dt-article.centered section > figure,
+  dt-article.centered section > table,
+  dt-article.cebtered section > ol,
+  dt-article.centered section > ul,
+  dt-article.centered section > dt-byline,
+  dt-article.centered section > dt-code,
+  dt-article section.centered > div,
+  dt-article section.centered > p,
+  dt-article section.centered > h2,
+  dt-article section.centered > h3,
+  dt-article section.centered > h4,
+  dt-article section.centered > figure,
+  dt-article section.centered > table,
+  dt-article section.centered > ol,
+  dt-article section.centered > ul,
+  dt-article section.centered > dt-byline,
+  dt-article section.centered > dt-code {
+    margin-left: auto;
+    margin-right: auto;
+    width: 648px;
+  }
+  .centered .l-body-outset,
+  .centered.l-body-outset,
+  dt-article.centered .l-body-outset {
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(648px + 96px);
+  }
+  dt-article.centered > h1,
+  dt-article.centered section > h1,
+  dt-article section.centered > h1,
+  .centered .l-middle,
+  .centered.l-middle,
+  dt-article.centered .l-middle {
+    width: 816px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .centered .l-middle-outset,
+  .centered.l-middle-outset,
+  dt-article.centered .l-middle-outset {
+    width: calc(816px + 96px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* page and screen are already centered */
+
+  /* Side */
+
+  .centered .side.l-body,
+  .centered dt-article .side.l-body {
+    clear: both;
+    float: right;
+    margin-top: 0;
+    margin-left: 48px;
+    margin-right: calc((100vw - 648px) / 2);
+    width: calc(4 * 60px + 3 * 24px);
+  }
+  .centered .side.l-body-outset,
+  .centered dt-article .side.l-body-outset {
+    clear: both;
+    float: right;
+    margin-top: 0;
+    margin-left: 48px;
+    margin-right: calc((100vw - 648px) / 2);
+    width: calc(4 * 60px + 3 * 24px);
+  }
+  .centered .side.l-middle,
+  .centered dt-article .side.l-middle {
+    clear: both;
+    float: right;
+    width: 396px;
+    margin-left: 48px;
+    margin-right: calc((100vw - 984px) / 2 + 168px / 2);
+  }
+  .centered .side.l-middle-outset,
+  .centered dt-article .side.l-middle-outset {
+    clear: both;
+    float: right;
+    width: 456px;
+    margin-left: 48px;
+    margin-right: calc((100vw - 984px) / 2 + 168px);
+  }
+  .centered .side.l-page,
+  .centered dt-article .side.l-page {
+    clear: both;
+    float: right;
+    width: 480px;
+    margin-right: calc((100vw - 984px) / 2);
+  }
+  .centered .side.l-page-outset,
+  .centered dt-article .side.l-page-outset {
+    clear: both;
+    float: right;
+    width: 480px;
+    margin-right: calc((100vw - 984px) / 2);
+  }
+  .centered .l-gutter,
+  .centered.l-gutter,
+  dt-article.centered .l-gutter {
+    clear: both;
+    float: right;
+    margin-top: 0;
+    margin-left: 24px;
+    margin-right: calc((100vw - 984px) / 2);
+    width: calc((984px - 648px) / 2 - 24px);
+  }
+
+}
+
+/* Rows and Columns */
+
+.row {
+  display: flex;
+}
+.column {
+  flex: 1;
+  box-sizing: border-box;
+  margin-right: 24px;
+  margin-left: 24px;
+}
+.row > .column:first-of-type {
+  margin-left: 0;
+}
+.row > .column:last-of-type {
+  margin-right: 0;
+}
+dt-article {
+  display: block;
+  color: rgba(0, 0, 0, 0.8);
+  font: 17px/1.55em -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+  padding-bottom: 72px;
+  background: white;
+}
+
+@media(min-width: 1024px) {
+  dt-article {
+    font-size: 20px;
+  }
+}
+
+/* H1 */
+
+dt-article h1 {
+  margin-top: 18px;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1em;
+  font-family: HoeflerText-Regular, Cochin, Georgia, serif;
+}
+@media(min-width: 768px) {
+  dt-article h1 {
+    font-size: 46px;
+    margin-top: 48px;
+    margin-bottom: 12px;
+  }
+}
+
+@media(min-width: 1080px) {
+  .centered h1 {
+    text-align: center;
+  }
+
+  dt-article h1 {
+    font-size: 50px;
+    letter-spacing: -0.02em;
+  }
+
+  dt-article > h1:first-of-type,
+  dt-article section > h1:first-of-type {
+    margin-top: 80px;
+  }
+}
+
+
+@media(min-width: 1200px) {
+  dt-article h1 {
+    font-size: 56px;
+  }
+
+  dt-article > h1:first-of-type {
+    margin-top: 100px;
+  }
+}
+
+/* H2 */
+
+dt-article h2 {
+  font-family: HoeflerText-Regular, Cochin, Georgia, serif;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.25em;
+  margin-top: 36px;
+  margin-bottom: 24px;
+}
+
+@media(min-width: 1024px) {
+  dt-article h2 {
+    margin-top: 48px;
+    font-size: 30px;
+  }
+}
+
+dt-article h1 + h2 {
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.4em;
+  margin-top: 8px;
+  font-style: normal;
+}
+
+
+@media(min-width: 1080px) {
+  .centered h1 + h2 {
+    text-align: center;
+  }
+  dt-article h1 + h2 {
+    margin-top: 12px;
+    font-size: 24px;
+  }
+}
+
+/* H3 */
+
+dt-article h3 {
+  font-family: HoeflerText-Regular, Georgia, serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.4em;
+  margin-top: 36px;
+  margin-bottom: 18px;
+  font-style: italic;
+}
+
+dt-article h1 + h3 {
+  margin-top: 48px;
+}
+
+@media(min-width: 1024px) {
+  dt-article h3 {
+    font-size: 26px;
+  }
+}
+
+/* H4 */
+
+dt-article h4 {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+  line-height: 1.4em;
+}
+
+dt-article a {
+  color: inherit;
+}
+
+dt-article p,
+dt-article ul,
+dt-article ol {
+  margin-bottom: 24px;
+  font-family: Georgia, serif;
+}
+
+dt-article p b,
+dt-article ul b,
+dt-article ol b {
+  -webkit-font-smoothing: antialiased;
+}
+
+dt-article a {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  text-decoration: none;
+}
+
+dt-article a:hover {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.8);
+}
+
+dt-article .link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+dt-article ul,
+dt-article ol {
+  padding-left: 24px;
+}
+
+dt-article li {
+  margin-bottom: 24px;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+dt-article pre {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+
+dt-article hr {
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+dt-article section {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+/* Tables */
+
+dt-article table {
+  border-collapse: collapse;
+}
+
+dt-article table th {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+dt-article table td {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+dt-article table th,
+dt-article table td {
+  font-size: 15px;
+  padding: 2px 0;
+}
+
+/* Figure */
+
+dt-article figure {
+  position: relative;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+@media(min-width: 1024px) {
+  dt-article figure {
+    margin-top: 48px;
+    margin-bottom: 48px;
+  }
+}
+
+dt-article figure img {
+  width: 100%;
+}
+
+dt-article figure svg text,
+dt-article figure svg tspan {
+}
+
+dt-article figure figcaption {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  line-height: 1.5em;
+}
+@media(min-width: 1024px) {
+  dt-article figure figcaption {
+    font-size: 13px;
+  }
+}
+
+dt-article figure.external img {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+dt-article figure figcaption a {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+dt-article span.equation-mimic {
+  font-family: georgia;
+  font-size: 115%;
+  font-style: italic;
+}
+
+dt-article figure figcaption b {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 1.0);
+}
+
+dt-article > dt-code,
+dt-article section > dt-code  {
+  display: block;
+}
+
+dt-article .citation {
+  color: #668;
+  cursor: pointer;
+}
+
+dt-include {
+  width: auto;
+  display: block;
+}
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+
+code {
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 2px;
+  padding: 4px 7px;
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+pre code {
+  display: block;
+  background: white;
+  border-left: 3px solid rgba(0, 0, 0, 0.05);
+  padding: 0 0 0 24px;
+}
+
+
+code[class*="language-"],
+pre[class*="language-"] {
+  text-shadow: 0 1px white;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+  text-shadow: none;
+  background: #b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+  text-shadow: none;
+  background: #b3d4fc;
+}
+
+@media print {
+  code[class*="language-"],
+  pre[class*="language-"] {
+  text-shadow: none;
+  }
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: slategray;
+}
+
+.token.punctuation {
+  color: #999;
+}
+
+.namespace {
+  opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #a67f59;
+  background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #07a;
+}
+
+.token.function {
+  color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #e90;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+@media print {
+  @page {
+    size: 8in 11in;
+  }
+  html {
+  }
+  p, code {
+    page-break-inside: avoid;
+  }
+  h2, h3 {
+    page-break-after: avoid;
+  }
+  dt-header {
+    visibility: hidden;
+  }
+  dt-footer {
+    display: none!important;
+  }
+}
+</style>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA99JREFUeNrsG4t1ozDMzQSM4A2ODUonKBucN2hugtIJ6E1AboLcBiQTkJsANiAb9OCd/OpzMWBJBl5TvaeXPiiyJetry0J8wW3D3QpjRh3GjneXDq+fSQA9s2mH9x3KDhN4foJfCb8N/Jrv+2fnDn8vLRQOplWHVYdvHZYdZsBcZP1vBmh/n8DzEmhUQDPaOuP9pFuY+JwJHwHnCLQE2tnWBGEyXozY9xCUgHMhhjE2I4heVWtgIkZ83wL6Qgxj1obfWBxymPwe+b00BCCRNPbwfb60yleAkkBHGT5AEehIYz7eJrFDMF9CvH4wwhcGHiHMneFvLDQwlwvMLQq58trRcYBWfYn0A0OgHWQUSu25mE+BnoYKnnEJoeIWAifzOv7vLWd2ZKRfWAIme3tOiUaQ3UnLkb0xj1FxRIeEGKaGIHOs9nEgLaaA9i0JRYo1Ic67wJW86KSKE/ZAM8KuVMk8ITVhmxUxJ3Cl2xlm9Vtkeju1+mpCQNxaEGNCY8bs9X2YqwNoQeGjBWut/ma0QAWy/TqAsHx9wSya3I5IRxOfTC+leG+kA/4vSeEcGBtNUN6byhu3+keEZCQJUNh8MAO7HL6H8pQLnsW/Hd4T4lv93TPjfM7A46iEEqbB5EDOvwYNW6tGNZzT/o+CZ6sqZ6wUtR/wf7mi/VL8iNciT6rHih48Y55b4nKCHJCCzb4y0nwFmin3ZEMIoLfZF8F7nncFmvnWBaBj7CGAYA/WGJsUwHdYqVDwAmNsUgAx4CGgAA7GOOxADYOFWOaIKifuVYzmOpREqA21Mo7aPsgiY1PhOMAmxtR+AUbYH3Id2wc0SAFIQTsn9IUGWR8k9jx3vtXSiAacFxTAGakBk9UudkNECd6jLe+6HrshshvIuC6IlLMRy7er+JpcKma24SlE4cFZSZJDGVVrsNvitQhQrDhW0jfiOLfFd47C42eHT56D/BK0To+58Ahj+cAT8HT1UWlfLZCCd/uKawzU0Rh2EyIX/Icqth3niG8ybNroezwe6khdCNxRN+l4XGdOLVLlOOt2hTRJlr1ETIuMAltVTMz70mJrkdGAaZLSmnBEqmAE32JCMmuTlCnRgsBENtOUpHhvvsYIL0ibnBkaC6QvKcR7738GKp0AKnim7xgUSNv1bpS8QwhBt8r+EP47v/oyRK/S34yJ9nT+AN0Tkm4OdB9E4BsmXM3SnMlRFUrtp6IDpV2eKzdYvF3etm3KhQksbOLChGkSmcBdmcEwvqkrMy5BzL00NZeu3qPYJOOuCc+5NjcWKXQxFvTa3NoXJ4d8in7fiAUuTt781dkvuHX4K8AA2Usy7yNKLy0AAAAASUVORK5CYII=
+">
+    <link href="/rss.xml" rel="alternate" type="application/rss+xml" title="Articles from Distill">
+    <link rel="canonical" href="http://distill.pub/">
+    <title>Distill — Latest articles about machine learning</title>
+  
+    <!--  https://schema.org/Article -->
+    <meta property="article:published" itemprop="datePublished" content="NaN-NaN-NaN">
+    <meta property="article:created" itemprop="dateCreated" content="Invalid Date">
+    <meta property="article:modified" itemprop="dateModified" content="Invalid Date">
+  
+    <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Distill — Latest articles about machine learning">
+    <meta property="og:description" content="Articles about Machine Learning">
+    <meta property="og:url" content="http://distill.pub/">
+    <meta property="og:image" content="http://distill.pub/preview.jpg">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Distill">
+  
+    <!--  https://dev.twitter.com/cards/types/summary -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Distill — Latest articles about machine learning">
+    <meta name="twitter:description" content="Articles about Machine Learning">
+    <meta name="twitter:url" content="http://distill.pub/">
+    <meta name="twitter:image" content="http://distill.pub/preview.jpg">
+    <meta name="twitter:image:width" content="560">
+    <meta name="twitter:image:height" content="295">
+  </head><body style="margin-right: 0px; padding-right: 0px; overflow: auto;"><dt-header>
+<style>
+dt-header {
+  display: block;
+  position: relative;
+  height: 60px;
+  background-color: hsl(200, 60%, 15%);
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 2;
+  color: rgba(0, 0, 0, 0.8);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+}
+dt-header .content {
+  height: 70px;
+}
+dt-header a {
+  font-size: 16px;
+  height: 60px;
+  line-height: 60px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 22px 0;
+}
+dt-header a:hover {
+  color: rgba(255, 255, 255, 1);
+}
+dt-header svg {
+  width: 24px;
+  position: relative;
+  top: 4px;
+  margin-right: 2px;
+}
+@media(min-width: 1080px) {
+  dt-header {
+    height: 70px;
+  }
+  dt-header a {
+    height: 70px;
+    line-height: 70px;
+    padding: 28px 0;
+  }
+  dt-header .logo {
+  }
+}
+dt-header svg path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 3px;
+}
+dt-header .logo {
+  font-size: 17px;
+  font-weight: 200;
+}
+dt-header .nav {
+  float: right;
+  font-weight: 300;
+}
+dt-header .nav a {
+  font-size: 12px;
+  margin-left: 24px;
+  text-transform: uppercase;
+}
+</style>
+
+<div class="content l-page">
+  <a href="/" class="logo">
+    <svg viewBox="-607 419 64 64">
+  <path d="M-573.4,478.9c-8,0-14.6-6.4-14.6-14.5s14.6-25.9,14.6-40.8c0,14.9,14.6,32.8,14.6,40.8S-565.4,478.9-573.4,478.9z"></path>
+</svg>
+
+    Distill
+  </a>
+  <div class="nav">
+    <a href="/about/">About</a>
+    <a href="/prize/">Prize</a>
+    <a href="/journal/">Submit</a>
+  </div>
+</div>
+</dt-header><dt-article>
+    <div class="posts-list l-page">
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">Sept. 2, 2021</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--understanding-gnns/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2021/understanding-gnns">
+                <div class="thumbnail"><img src="2021/understanding-gnns/thumbnail.jpg" width="2720" height="1044"></div>
+                <div class="description">
+                    <h2 class="title">Understanding Convolutions on Graphs</h2>
+                    <p class="authors">Ameya&nbsp;Daigavane, Balaraman&nbsp;Ravindran, and Gaurav&nbsp;Aggarwal</p>
+                    <p class="abstract">Understanding the building blocks and design choices of graph neural networks.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">Sept. 2, 2021</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--gnn-intro/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2021/gnn-intro">
+                <div class="thumbnail"><img src="2021/gnn-intro/thumbnail.jpg" width="917" height="384"></div>
+                <div class="description">
+                    <h2 class="title">A Gentle Introduction to Graph Neural Networks</h2>
+                    <p class="authors">Benjamin&nbsp;Sanchez-Lengeling, Emily&nbsp;Reif, Adam&nbsp;Pearce, and Alexander&nbsp;B. Wiltschko</p>
+                    <p class="abstract">What components are needed for building learning algorithms that leverage the structure and properties of graphs?</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview editorial">
+            <div class="metadata">
+                <div class="publishedDate">July 2, 2021</div>
+                <div class="tags">
+                    <span class="tag editorial">Editorial</span>
+                </div>
+            </div>
+            <a href="2021/distill-hiatus">
+                <div class="thumbnail"><img src="2021/distill-hiatus/thumbnail.jpg"></div>
+                <div class="description">
+                    <h2 class="title">Distill Hiatus</h2>
+                    <p class="authors">Editorial&nbsp;Team</p>
+                    <p class="abstract">After five years, Distill will be taking a break.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">March 4, 2021</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--multimodal/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2021/multimodal-neurons">
+                <div class="thumbnail"><img src="2021/multimodal-neurons/thumbnail.jpg" width="1048" height="350"></div>
+                <div class="description">
+                    <h2 class="title">Multimodal Neurons in Artificial Neural Networks</h2>
+                    <p class="authors">Gabriel&nbsp;Goh, Nick&nbsp;Cammarata †, Chelsea&nbsp;Voss †, Shan&nbsp;Carter, Michael&nbsp;Petrov, Ludwig&nbsp;Schubert, Alec&nbsp;Radford, and Chris&nbsp;Olah</p>
+                    <p class="abstract">We report the existence of multimodal neurons in artificial neural networks, similar to those found in the human brain.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">Nov. 17, 2020</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--understanding-rl-vision/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2020/understanding-rl-vision">
+                <div class="thumbnail"><img src="2020/understanding-rl-vision/thumbnail.jpg" width="1020" height="420"></div>
+                <div class="description">
+                    <h2 class="title">Understanding RL Vision</h2>
+                    <p class="authors">Jacob&nbsp;Hilton, Nick&nbsp;Cammarata, Shan&nbsp;Carter, Gabriel&nbsp;Goh, and Chris&nbsp;Olah</p>
+                    <p class="abstract">With diverse environments, we can analyze, diagnose and edit deep reinforcement learning models using attribution.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview commentary">
+            <div class="metadata">
+                <div class="publishedDate">Sept. 11, 2020</div>
+                <div class="tags">
+                    <span class="tag commentary">Commentary</span>
+                </div>
+            </div>
+            <a href="2020/communicating-with-interactive-articles">
+                <div class="thumbnail"><img src="2020/communicating-with-interactive-articles/thumbnail.jpg" width="2000" height="1000"></div>
+                <div class="description">
+                    <h2 class="title">Communicating with Interactive Articles</h2>
+                    <p class="authors">Fred&nbsp;Hohman, Matthew&nbsp;Conlen, Jeffrey&nbsp;Heer, and Duen&nbsp;Horng (Polo) Chau</p>
+                    <p class="abstract">Examining the design of interactive articles by synthesizing theory from disciplines such as education, journalism, and visualization.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview thread">
+            <div class="metadata">
+                <div class="publishedDate">Aug. 27, 2020</div>
+                <div class="tags">
+                    <span class="tag thread">Thread</span>
+                </div>
+            </div>
+            <a href="2020/selforg">
+                <div class="thumbnail"><img src="2020/selforg/thumbnail.jpg" width="560" height="295"></div>
+                <div class="description">
+                    <h2 class="title">Thread: Differentiable Self-organizing Systems</h2>
+                    <p class="authors">Alexander&nbsp;Mordvintsev, Ettore&nbsp;Randazzo, Eyvind&nbsp;Niklasson, Michael&nbsp;Levin, and Sam&nbsp;Greydanus</p>
+                    <p class="abstract">A collection of articles and comments with the goal of understanding how to design robust and general purpose self-organizing systems.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">May 5, 2020</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--bayesian-optimization/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2020/bayesian-optimization">
+                <div class="thumbnail"><img src="2020/bayesian-optimization/thumbnail.jpg" width="2042" height="1358"></div>
+                <div class="description">
+                    <h2 class="title">Exploring Bayesian Optimization</h2>
+                    <p class="authors">Apoorv&nbsp;Agnihotri and Nipun&nbsp;Batra</p>
+                    <p class="abstract">How to tune hyperparameters for your machine learning model using Bayesian optimization.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">March 16, 2020</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--grand-tour/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2020/grand-tour">
+                <div class="thumbnail"><img src="2020/grand-tour/thumbnail.jpg" width="1142" height="712"></div>
+                <div class="description">
+                    <h2 class="title">Visualizing Neural Networks with the Grand Tour</h2>
+                    <p class="authors">Mingwei&nbsp;Li, Zhenge&nbsp;Zhao, and Carlos&nbsp;Scheidegger</p>
+                    <p class="abstract">By focusing on linear dimensionality reduction, we show how to visualize many dynamic phenomena in neural networks.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview thread">
+            <div class="metadata">
+                <div class="publishedDate">March 10, 2020</div>
+                <div class="tags">
+                    <span class="tag thread">Thread</span>
+                </div>
+            </div>
+            <a href="2020/circuits">
+                <div class="thumbnail"><img src="2020/circuits/thumbnail.jpg" width="1648" height="964"></div>
+                <div class="description">
+                    <h2 class="title">Thread: Circuits</h2>
+                    <p class="authors">Nick&nbsp;Cammarata, Shan&nbsp;Carter, Gabriel&nbsp;Goh, Chris&nbsp;Olah, Michael&nbsp;Petrov, Ludwig&nbsp;Schubert, Chelsea&nbsp;Voss, Ben&nbsp;Egan, and Swee&nbsp;Kiat Lim</p>
+                    <p class="abstract">What can we learn if we invest heavily in reverse engineering a single neural network?</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">Jan. 10, 2020</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--attribution-baselines/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2020/attribution-baselines">
+                <div class="thumbnail"><img src="2020/attribution-baselines/thumbnail.jpg" width="908" height="446"></div>
+                <div class="description">
+                    <h2 class="title">Visualizing the Impact of Feature Attribution Baselines</h2>
+                    <p class="authors">Pascal&nbsp;Sturmfels, Scott&nbsp;Lundberg, and Su-In&nbsp;Lee</p>
+                    <p class="abstract">Exploring the baseline input hyperparameter, and how it impacts interpretations of neural network behavior.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">Nov. 4, 2019</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--receptive-field/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2019/computing-receptive-fields">
+                <div class="thumbnail"><img src="2019/computing-receptive-fields/thumbnail.jpg" width="720" height="330"></div>
+                <div class="description">
+                    <h2 class="title">Computing Receptive Fields of Convolutional Neural Networks</h2>
+                    <p class="authors">André&nbsp;Araujo, Wade&nbsp;Norris, and Jack&nbsp;Sim</p>
+                    <p class="abstract">Detailed derivations and open-source code to analyze the receptive fields of convnets.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">Sept. 30, 2019</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--td-paths/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2019/paths-perspective-on-value-learning">
+                <div class="thumbnail"><img src="2019/paths-perspective-on-value-learning/thumbnail.jpg" width="1200" height="400"></div>
+                <div class="description">
+                    <h2 class="title">The Paths Perspective on Value Learning</h2>
+                    <p class="authors">Sam&nbsp;Greydanus and Chris&nbsp;Olah</p>
+                    <p class="abstract">A closer look at how Temporal Difference Learning merges paths of experience for greater statistical efficiency</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview commentary">
+            <div class="metadata">
+                <div class="publishedDate">Aug. 6, 2019</div>
+                <div class="tags">
+                    <span class="tag commentary">Commentary</span>
+                </div>
+            </div>
+            <a href="2019/advex-bugs-discussion">
+                <div class="thumbnail"><img src="2019/advex-bugs-discussion/thumbnail.jpg" width="840" height="400"></div>
+                <div class="description">
+                    <h2 class="title">A Discussion of ‘Adversarial Examples Are Not Bugs, They Are Features’</h2>
+                    <p class="authors">Logan&nbsp;Engstrom, Justin&nbsp;Gilmer, Gabriel&nbsp;Goh, Dan&nbsp;Hendrycks, Andrew&nbsp;Ilyas, Aleksander&nbsp;Madry, Reiichiro&nbsp;Nakano, Preetum&nbsp;Nakkiran, Shibani&nbsp;Santurkar, Brandon&nbsp;Tran, Dimitris&nbsp;Tsipras, and Eric&nbsp;Wallace</p>
+                    <p class="abstract">Six comments from the community and responses from the original authors</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview commentary">
+            <div class="metadata">
+                <div class="publishedDate">April 9, 2019</div>
+                <div class="tags">
+                    <span class="tag commentary">Commentary</span>
+                </div>
+            </div>
+            <a href="2019/gan-open-problems">
+                <div class="thumbnail"><img src="2019/gan-open-problems/thumbnail.jpg" width="560" height="300"></div>
+                <div class="description">
+                    <h2 class="title">Open Questions about Generative Adversarial Networks</h2>
+                    <p class="authors">Augustus&nbsp;Odena</p>
+                    <p class="abstract">What we’d like to find out about GANs that we don’t know yet.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">April 2, 2019</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--visual-exploration-gaussian-processes/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2019/visual-exploration-gaussian-processes">
+                <div class="thumbnail"><img src="2019/visual-exploration-gaussian-processes/thumbnail.jpg" width="1000" height="320"></div>
+                <div class="description">
+                    <h2 class="title">A Visual Exploration of Gaussian Processes</h2>
+                    <p class="authors">Jochen&nbsp;Görtler, Rebecca&nbsp;Kehlbeck, and Oliver&nbsp;Deussen</p>
+                    <p class="abstract">How to turn a collection of small building blocks into a versatile tool for solving regression problems.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">March 25, 2019</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--memorization-in-rnns/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2019/memorization-in-rnns">
+                <div class="thumbnail"><img src="2019/memorization-in-rnns/thumbnail.jpg" width="760" height="320"></div>
+                <div class="description">
+                    <h2 class="title">Visualizing memorization in RNNs</h2>
+                    <p class="authors">Andreas&nbsp;Madsen</p>
+                    <p class="abstract">Inspecting gradient magnitudes in context can be a powerful tool to see when recurrent units use short-term or long-term contextual understanding.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">March 6, 2019</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--activation-atlas/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2019/activation-atlas">
+                <div class="thumbnail"><img src="2019/activation-atlas/thumbnail.jpg" width="1000" height="589"></div>
+                <div class="description">
+                    <h2 class="title">Activation Atlas</h2>
+                    <p class="authors">Shan&nbsp;Carter, Zan&nbsp;Armstrong, Ludwig&nbsp;Schubert, Ian&nbsp;Johnson, and Chris&nbsp;Olah</p>
+                    <p class="abstract">By using feature inversion to visualize millions of activations from an image classification network, we create an explorable activation atlas of features the network has learned and what concepts it typically represents.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview commentary">
+            <div class="metadata">
+                <div class="publishedDate">Feb. 19, 2019</div>
+                <div class="tags">
+                    <span class="tag commentary">Commentary</span>
+                </div>
+            </div>
+            <a href="2019/safety-needs-social-scientists">
+                <div class="thumbnail"><img src="2019/safety-needs-social-scientists/thumbnail.jpg" width="960" height="420"></div>
+                <div class="description">
+                    <h2 class="title">AI Safety Needs Social Scientists</h2>
+                    <p class="authors">Geoffrey&nbsp;Irving and Amanda&nbsp;Askell</p>
+                    <p class="abstract">If we want to train AI to do what humans want, we need to study humans.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview editorial">
+            <div class="metadata">
+                <div class="publishedDate">Aug. 14, 2018</div>
+                <div class="tags">
+                    <span class="tag editorial">Editorial</span>
+                </div>
+            </div>
+            <a href="2018/editorial-update">
+                <div class="thumbnail"><img src="2018/editorial-update/thumbnail.jpg"></div>
+                <div class="description">
+                    <h2 class="title">Distill Update 2018</h2>
+                    <p class="authors">Distill&nbsp;Editors</p>
+                    <p class="abstract">An Update from the Editorial Team</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">July 25, 2018</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--differentiable-parameterizations/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2018/differentiable-parameterizations">
+                <div class="thumbnail"><img src="2018/differentiable-parameterizations/thumbnail.jpg" width="688" height="362"></div>
+                <div class="description">
+                    <h2 class="title">Differentiable Image Parameterizations</h2>
+                    <p class="authors">Alexander&nbsp;Mordvintsev, Nicola&nbsp;Pezzotti, Ludwig&nbsp;Schubert, and Chris&nbsp;Olah</p>
+                    <p class="abstract">A powerful, under-explored tool for neural network visualizations and art.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">July 9, 2018</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--feature-wise-transformations/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2018/feature-wise-transformations">
+                <div class="thumbnail"><img src="2018/feature-wise-transformations/thumbnail.jpg"></div>
+                <div class="description">
+                    <h2 class="title">Feature-wise transformations</h2>
+                    <p class="authors">Vincent&nbsp;Dumoulin, Ethan&nbsp;Perez, Nathan&nbsp;Schucher, Florian&nbsp;Strub, Harm&nbsp;de Vries, Aaron&nbsp;Courville, and Yoshua&nbsp;Bengio</p>
+                    <p class="abstract">A simple and surprisingly effective family of conditioning mechanisms.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">March 6, 2018</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--building-blocks/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2018/building-blocks">
+                <div class="thumbnail"><img src="2018/building-blocks/thumbnail.jpg" width="560" height="295"></div>
+                <div class="description">
+                    <h2 class="title">The Building Blocks of Interpretability</h2>
+                    <p class="authors">Chris&nbsp;Olah, Arvind&nbsp;Satyanarayan, Ian&nbsp;Johnson, Shan&nbsp;Carter, Ludwig&nbsp;Schubert, Katherine&nbsp;Ye, and Alexander&nbsp;Mordvintsev</p>
+                    <p class="abstract">Interpretability techniques are normally studied in isolation. We explore the powerful interfaces that arise when you combine them — and the rich structure of this combinatorial space.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview commentary">
+            <div class="metadata">
+                <div class="publishedDate">Dec. 4, 2017</div>
+                <div class="tags">
+                    <span class="tag commentary">Commentary</span>
+                </div>
+            </div>
+            <a href="2017/aia">
+                <div class="thumbnail"><img src="2017/aia/thumbnail.jpg" width="560" height="295"></div>
+                <div class="description">
+                    <h2 class="title">Using Artificial Intelligence to Augment Human Intelligence</h2>
+                    <p class="authors">Shan&nbsp;Carter and Michael&nbsp;Nielsen</p>
+                    <p class="abstract">By creating user interfaces which let us work with the representations inside machine learning models, we can give people new tools for reasoning.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">Nov. 27, 2017</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--ctc/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2017/ctc">
+                <div class="thumbnail"><img src="2017/ctc/thumbnail.jpg" width="1120" height="590"></div>
+                <div class="description">
+                    <h2 class="title">Sequence Modeling with CTC</h2>
+                    <p class="authors">Awni&nbsp;Hannun</p>
+                    <p class="abstract">A visual guide to Connectionist Temporal Classification, an algorithm used to train deep neural networks in speech recognition, handwriting recognition and other sequence problems.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">Nov. 7, 2017</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--feature-visualization/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2017/feature-visualization">
+                <div class="thumbnail"><img src="2017/feature-visualization/thumbnail.jpg" width="1120" height="590"></div>
+                <div class="description">
+                    <h2 class="title">Feature Visualization</h2>
+                    <p class="authors">Chris&nbsp;Olah, Alexander&nbsp;Mordvintsev, and Ludwig&nbsp;Schubert</p>
+                    <p class="abstract">How neural networks build up their understanding of images</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview peer-reviewed">
+            <div class="metadata">
+                <div class="publishedDate">April 4, 2017</div>
+                <div class="tags">
+                    <a class="tag peer-reviewed" title="View this article's reviews as Github issues." href="https://github.com/distillpub/post--momentum/issues?q=is%3Aissue+label%3Apeer-review"><span>Peer-reviewed</span></a>
+                </div>
+            </div>
+            <a href="2017/momentum">
+                <div class="thumbnail"><img src="2017/momentum/thumbnail.jpg" width="1120" height="590"></div>
+                <div class="description">
+                    <h2 class="title">Why Momentum Really Works</h2>
+                    <p class="authors">Gabriel&nbsp;Goh</p>
+                    <p class="abstract">We often think of optimization with momentum as a ball rolling down a hill. This isn’t wrong, but there is much more to the story.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview commentary">
+            <div class="metadata">
+                <div class="publishedDate">March 22, 2017</div>
+                <div class="tags">
+                    <span class="tag commentary">Commentary</span>
+                </div>
+            </div>
+            <a href="2017/research-debt">
+                <div class="thumbnail"><img src="2017/research-debt/thumbnail.jpg" width="560" height="295"></div>
+                <div class="description">
+                    <h2 class="title">Research Debt</h2>
+                    <p class="authors">Chris&nbsp;Olah and Shan&nbsp;Carter</p>
+                    <p class="abstract">Science is a human activity. When we fail to distill and explain research, we accumulate a kind of debt...</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview ">
+            <div class="metadata">
+                <div class="publishedDate">Dec 6, 2016</div>
+                <div class="tags">
+                </div>
+            </div>
+            <a href="2016/handwriting">
+                <div class="thumbnail"><img src="2016/handwriting/thumbnail.jpg"></div>
+                <div class="description">
+                    <h2 class="title">Experiments in Handwriting with a Neural Network</h2>
+                    <p class="authors">Shan&nbsp;Carter, David&nbsp;Ha, Ian&nbsp;Johnson, and Chris&nbsp;Olah</p>
+                    <p class="abstract">Several interactive visualizations of a generative model of handwriting. Some are fun, some are serious.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview ">
+            <div class="metadata">
+                <div class="publishedDate">Oct 17, 2016</div>
+                <div class="tags">
+                </div>
+            </div>
+            <a href="2016/deconv-checkerboard">
+                <div class="thumbnail"><img src="2016/deconv-checkerboard/thumbnail.jpg"></div>
+                <div class="description">
+                    <h2 class="title">Deconvolution and Checkerboard Artifacts</h2>
+                    <p class="authors">Augustus&nbsp;Odena, Vincent&nbsp;Dumoulin, and Chris&nbsp;Olah</p>
+                    <p class="abstract">When we look very closely at images generated by neural networks, we often see a strange checkerboard pattern of artifacts.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview ">
+            <div class="metadata">
+                <div class="publishedDate">Oct 13, 2016</div>
+                <div class="tags">
+                </div>
+            </div>
+            <a href="2016/misread-tsne">
+                <div class="thumbnail"><img src="2016/misread-tsne/thumbnail.jpg"></div>
+                <div class="description">
+                    <h2 class="title">How to Use t-SNE Effectively</h2>
+                    <p class="authors">Martin&nbsp;Wattenberg, Fernanda&nbsp;Viégas, and Ian&nbsp;Johnson</p>
+                    <p class="abstract">Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading.</p>
+                </div>
+            </a>
+        </div>
+        <div class="post-preview ">
+            <div class="metadata">
+                <div class="publishedDate">Sept 8, 2016</div>
+                <div class="tags">
+                </div>
+            </div>
+            <a href="2016/augmented-rnns">
+                <div class="thumbnail"><img src="2016/augmented-rnns/thumbnail.jpg" width="1120" height="590"></div>
+                <div class="description">
+                    <h2 class="title">Attention and Augmented Recurrent Neural Networks</h2>
+                    <p class="authors">Chris&nbsp;Olah and Shan&nbsp;Carter</p>
+                    <p class="abstract">A visual overview of neural attention, and the powerful extensions of neural networks being built on top of it.</p>
+                </div>
+            </a>
+        </div>
+        
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-83741880-1', 'auto');
+  ga('send', 'pageview');
+</script></div></dt-article><style>
+    dt-cite {
+      color: hsla(206, 90%, 20%, 0.7);
+    }
+    dt-cite .citation-number {
+      cursor: default;
+      white-space: nowrap;
+      font-family: -apple-system, BlinkMacSystemFont, "Roboto", Helvetica, sans-serif;
+      font-size: 75%;
+      color: hsla(206, 90%, 20%, 0.7);
+      display: inline-block;
+      line-height: 1.1em;
+      text-align: center;
+      position: relative;
+      top: -2px;
+      margin: 0 2px;
+    }
+    figcaption dt-cite .citation-number {
+      font-size: 11px;
+      font-weight: normal;
+      top: -2px;
+      line-height: 1em;
+    }
+  </style><div id="cite-hover-boxes-container"></div><div id="footnote-hover-boxes-container"></div><script>
+
+function nodeFromString(str) {
+  var div = document.createElement("div");
+  div.innerHTML = str;
+  return div.firstChild;
+}
+
+function make_hover_css(pos) {
+  var pretty = window.innerWidth > 600;
+  var padding = pretty? 18 : 12;
+  var outer_padding = pretty ? 18 : 0;
+  var bbox = document.querySelector("body").getBoundingClientRect();
+  var left = pos[0] - bbox.left, top = pos[1] - bbox.top;
+  var width = Math.min(window.innerWidth-2*outer_padding, 648);
+  left = Math.min(left, window.innerWidth-width-outer_padding);
+  width = width - 2*padding;
+  return (`position: absolute;
+     background-color: #FFF;
+     opacity: 0.95;
+     max-width: ${width}px;
+     top: ${top}px;
+     left: ${left}px;
+     border: 1px solid rgba(0, 0, 0, 0.25);
+     padding: ${padding}px;
+     border-radius: ${pretty? 3 : 0}px;
+     box-shadow: 0px 2px 10px 2px rgba(0, 0, 0, 0.2);
+     z-index: ${1e6};`);
+}
+
+
+function DtHoverBox(div_id) {
+  this.div = document.querySelector("#"+div_id);
+  this.visible = false;
+  this.bindDivEvents();
+  DtHoverBox.box_map[div_id] = this;
+}
+
+DtHoverBox.box_map = {};
+
+DtHoverBox.get_box = function get_box(div_id) {
+  if (div_id in DtHoverBox.box_map) {
+    return DtHoverBox.box_map[div_id];
+  } else {
+    return new DtHoverBox(div_id);
+  }
+}
+
+DtHoverBox.prototype.show = function show(pos){
+  this.visible = true;
+  this.div.setAttribute("style", make_hover_css(pos) );
+  for (var box_id in DtHoverBox.box_map) {
+    var box = DtHoverBox.box_map[box_id];
+    if (box != this) box.hide();
+  }
+}
+
+DtHoverBox.prototype.showAtNode = function showAtNode(node){
+    var bbox = node.getBoundingClientRect();
+    this.show([bbox.right, bbox.bottom]);
+}
+
+DtHoverBox.prototype.hide = function hide(){
+  this.visible = false;
+  if (this.div) this.div.setAttribute("style", "display:none");
+  if (this.timeout) clearTimeout(this.timeout);
+}
+
+DtHoverBox.prototype.stopTimeout = function stopTimeout() {
+  if (this.timeout) clearTimeout(this.timeout);
+}
+
+DtHoverBox.prototype.extendTimeout = function extendTimeout(T) {
+  //console.log("extend", T)
+  var this_ = this;
+  this.stopTimeout();
+  this.timeout = setTimeout(function(){this_.hide();}.bind(this), T);
+}
+
+// Bind events to a link to open this box
+DtHoverBox.prototype.bind = function bind(node) {
+  if (typeof node == "string"){
+    node = document.querySelector(node);
+  }
+
+  node.addEventListener("mouseover", function(){
+    if (!this.visible) this.showAtNode(node);
+    this.stopTimeout();
+  }.bind(this));
+
+  node.addEventListener("mouseout", function(){this.extendTimeout(250);}.bind(this));
+
+  node.addEventListener("touchstart", function(e) {
+    if (this.visible) {
+      this.hide();
+    } else {
+      this.showAtNode(node);
+    }
+    // Don't trigger body touchstart event when touching link
+    e.stopPropagation();
+  }.bind(this));
+}
+
+DtHoverBox.prototype.bindDivEvents = function bindDivEvents(){
+  // For mice, same behavior as hovering on links
+  this.div.addEventListener("mouseover", function(){
+    if (!this.visible) this.showAtNode(node);
+    this.stopTimeout();
+  }.bind(this));
+  this.div.addEventListener("mouseout", function(){this.extendTimeout(250);}.bind(this));
+
+  // Don't trigger body touchstart event when touching within box
+  this.div.addEventListener("touchstart", function(e){e.stopPropagation();});
+  // Close box when touching outside box
+  document.body.addEventListener("touchstart", function(){this.hide();}.bind(this));
+}
+
+var hover_es = document.querySelectorAll("span[data-hover-ref]");
+hover_es = [].slice.apply(hover_es);
+hover_es.forEach(function(e,n){
+  var ref_id = e.getAttribute("data-hover-ref");
+  DtHoverBox.get_box(ref_id).bind(e);
+})
+</script><dt-footer>
+<style>
+dt-footer {
+  display: block;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 300;
+  padding: 40px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: hsl(200, 60%, 15%);
+  text-align: center;
+}
+dt-footer .logo svg {
+  width: 24px;
+  position: relative;
+  top: 4px;
+  margin-right: 2px;
+}
+dt-footer .logo svg path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 3px;
+}
+dt-footer .logo {
+  font-size: 17px;
+  font-weight: 200;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  margin-right: 6px;
+}
+dt-footer .nav {
+  margin-top: 12px;
+}
+dt-footer .nav a {
+  color: rgba(255, 255, 255, 0.8);
+  margin-right: 6px;
+}
+</style>
+
+<div class="l-page">
+  <div class="description">
+  <a href="/" class="logo">
+    <svg viewBox="-607 419 64 64">
+  <path d="M-573.4,478.9c-8,0-14.6-6.4-14.6-14.5s14.6-25.9,14.6-40.8c0,14.9,14.6,32.8,14.6,40.8S-565.4,478.9-573.4,478.9z"></path>
+</svg>
+
+    Distill
+  </a>
+  is dedicated to clear explanations of machine learning
+  </div>
+  <div class="nav">
+    <a href="http://distill.pub/about/">About</a>
+    <a href="http://distill.pub/journal/">Submit</a>
+    <a href="http://distill.pub/prize/">Prize</a>
+    <a href="http://distill.pub/archive/">Archive</a>
+    <a href="http://distill.pub/rss.xml">RSS</a>
+    <a href="https://github.com/distillpub">GitHub</a>
+    <a href="https://twitter.com/distillpub">Twitter</a>
+    &nbsp;&nbsp;&nbsp;&nbsp; ISSN 2476-0757
+  </div>
+</div>
+</dt-footer></body></html>

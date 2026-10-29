@@ -1,0 +1,703 @@
+<div><div class="container-fluid td-outer">
+<div class="td-main"><div class="row flex-xl-nowrap">
+<main class="col-12 col-md-9 col-xl-8 ps-md-5"><div class="td-content">
+<h1>Instrumentation</h1>
+<div class="lead">Manual instrumentation for OpenTelemetry PHP</div>
+<p><a href="/docs/concepts/instrumentation/">Instrumentation</a> is the act of adding
+observability code to an app yourself.</p>
+<p>If you’re instrumenting an app, you need to use the OpenTelemetry SDK for your
+language. You’ll then use the SDK to initialize OpenTelemetry and the API to
+instrument your code. This will emit telemetry from your app, and any library
+you installed that also comes with instrumentation.</p>
+<p>If you’re instrumenting a library, only install the OpenTelemetry API package
+for your language. Your library will not emit telemetry on its own. It will only
+emit telemetry when it is part of an app that uses the OpenTelemetry SDK. For
+more on instrumenting libraries, see
+<a href="/docs/concepts/instrumentation/libraries/">Libraries</a>.</p>
+<p>For more information about the OpenTelemetry API and SDK, see the
+<a href="/docs/specs/otel/">specification</a>.</p>
+<h2 id="example-app">Example app preparation
+</h2>
+<p>These instructions use a modified version of the example app from
+<a href="/docs/languages/php/getting-started/">Getting Started</a> to help you learn how to
+instrument your PHP code.</p>
+<p>If you want to instrument your own app or library, follow the instructions to
+adapt the process to your own code.</p>
+<h3 id="example-app-dependencies">Dependencies
+</h3>
+<p>In an empty directory, initialize a minimal <code>composer.json</code> file with the
+following content:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell"><span class="line"><span class="cl">composer init <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --no-interaction <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --require slim/slim:<span class="s2">"^4"</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --require slim/psr7:<span class="s2">"^1"</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --require monolog/monolog:<span class="s2">"^3"</span>
+</span></span><span class="line"><span class="cl">composer update
+</span></span></code></pre></div>
+<h3 id="create-and-launch-an-http-server">Create and launch an HTTP Server
+</h3>
+<p>To highlight the difference between instrumenting a library and a standalone
+app, split out the dice rolling into a library file, which then will be imported
+as a dependency by the app file.</p>
+<p>Create the library file named <code>dice.php</code> and add the following code to it:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Dice</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="nv">$tracer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">function</span> <span class="nf">roll</span><span class="p">(</span><span class="nv">$rolls</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$result</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span>  <span class="nv">$rolls</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$result</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">rollOnce</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nv">$result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">function</span> <span class="nf">rollOnce</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nv">$result</span> <span class="o">=</span> <span class="nx">random_int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="nv">$result</span><span class="p">;</span>
+</span></span></code></pre></div>
+<p>Create the app file named <code>index.php</code> and add the following code to it:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Psr\Http\Message\ResponseInterface</span> <span class="k">as</span> <span class="nx">Response</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Psr\Http\Message\ServerRequestInterface</span> <span class="k">as</span> <span class="nx">Request</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Psr\Log\LogLevel</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Slim\Factory\AppFactory</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Monolog\Logger</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Monolog\Level</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Monolog\Handler\StreamHandler</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">require</span> <span class="no">__DIR__</span> <span class="o">.</span> <span class="s1">'/vendor/autoload.php'</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">require</span><span class="p">(</span><span class="s1">'dice.php'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Logger</span><span class="p">(</span><span class="s1">'dice-server'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$logger</span><span class="o">-&gt;</span><span class="na">pushHandler</span><span class="p">(</span><span class="k">new</span> <span class="nx">StreamHandler</span><span class="p">(</span><span class="s1">'php://stdout'</span><span class="p">,</span> <span class="nx">Level</span><span class="o">::</span><span class="na">INFO</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$app</span> <span class="o">=</span> <span class="nx">AppFactory</span><span class="o">::</span><span class="na">create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$dice</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Dice</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$app</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'/rolldice'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nx">Request</span> <span class="nv">$request</span><span class="p">,</span> <span class="nx">Response</span> <span class="nv">$response</span><span class="p">)</span> <span class="k">use</span> <span class="p">(</span><span class="nv">$logger</span><span class="p">,</span> <span class="nv">$dice</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$params</span> <span class="o">=</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="na">getQueryParams</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$params</span><span class="p">[</span><span class="s1">'rolls'</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$result</span> <span class="o">=</span> <span class="nv">$dice</span><span class="o">-&gt;</span><span class="na">roll</span><span class="p">(</span><span class="nv">$params</span><span class="p">[</span><span class="s1">'rolls'</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$params</span><span class="p">[</span><span class="s1">'player'</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nv">$logger</span><span class="o">-&gt;</span><span class="na">info</span><span class="p">(</span><span class="s2">"A player is rolling the dice."</span><span class="p">,</span> <span class="p">[</span><span class="s1">'player'</span> <span class="o">=&gt;</span> <span class="nv">$params</span><span class="p">[</span><span class="s1">'player'</span><span class="p">],</span> <span class="s1">'result'</span> <span class="o">=&gt;</span> <span class="nv">$result</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">          <span class="nv">$logger</span><span class="o">-&gt;</span><span class="na">info</span><span class="p">(</span><span class="s2">"Anonymous player is rolling the dice."</span><span class="p">,</span> <span class="p">[</span><span class="s1">'result'</span> <span class="o">=&gt;</span> <span class="nv">$result</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$response</span><span class="o">-&gt;</span><span class="na">getBody</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">(</span><span class="nx">json_encode</span><span class="p">(</span><span class="nv">$result</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$response</span><span class="o">-&gt;</span><span class="na">withStatus</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">getBody</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">(</span><span class="s2">"Please enter a number of rolls"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nv">$response</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$app</span><span class="o">-&gt;</span><span class="na">run</span><span class="p">();</span>
+</span></span></code></pre></div>
+<p>To ensure that it is working, run the application with the following command and
+open <a class="external-link" href="http://localhost:8080/rolldice?rolls=12">http://localhost:8080/rolldice?rolls=12</a> in your web browser.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell"><span class="line"><span class="cl">php -S localhost:8080
+</span></span></code></pre></div>
+<h2 id="instrumentation-setup">Instrumentation setup
+</h2>
+<h3 id="dependencies">Dependencies
+</h3>
+<p>Install OpenTelemetry API packages:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell"><span class="line"><span class="cl">composer require open-telemetry/api open-telemetry/sem-conv
+</span></span></code></pre></div>
+<h3 id="initialize-the-sdk">Initialize the SDK
+</h3>
+<div class="td-alert td-alert--md alert alert-nb"><div class="td-alert-body"><p>If you’re instrumenting a library, <strong>skip this step</strong>.</p></div></div>
+<p>To use the OpenTelemetry SDK for PHP you need packages that satisfy the
+dependencies for <code>psr/http-client-implementation</code> and
+<code>psr/http-factory-implementation</code>. Here we will use Guzzle, which provides both:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh"><span class="line"><span class="cl">composer require guzzlehttp/guzzle
+</span></span></code></pre></div>
+<p>Now you can install the OpenTelemetry SDK, and OTLP exporter:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh"><span class="line"><span class="cl">composer require <span class="se">\
+</span></span></span><span class="line"><span class="cl">  open-telemetry/sdk <span class="se">\
+</span></span></span><span class="line"><span class="cl">  open-telemetry/exporter-otlp
+</span></span></code></pre></div>
+<p>If you are an application developer, you need to configure an instance of the
+<code>OpenTelemetry SDK</code> as early as possible in your application. Here we will use
+the <code>Sdk::builder()</code> method, and we will globally register the providers.</p>
+<p>You can build the providers by using the <code>TracerProvider::builder()</code>,
+<code>LoggerProvider::builder()</code>, and <code>MeterProvider::builder()</code> methods.</p>
+<p>In the case of the <a href="#example-app">example app</a>, create a file named
+<code>instrumentation.php</code> with the following content:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\API\Globals</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\API\Logs\EventLogger</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\API\Logs\LogRecord</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\API\Trace\Propagation\TraceContextPropagator</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\Contrib\Otlp\LogsExporter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\Contrib\Otlp\MetricExporter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\Contrib\Otlp\SpanExporter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Common\Attribute\Attributes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Common\Export\Stream\StreamTransportFactory</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Logs\LoggerProvider</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Logs\Processor\SimpleLogRecordProcessor</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Metrics\MeterProvider</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Metrics\MetricReader\ExportingReader</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Resource\ResourceInfo</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Resource\ResourceInfoFactory</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Sdk</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Trace\Sampler\AlwaysOnSampler</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Trace\Sampler\ParentBased</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Trace\SpanProcessor\SimpleSpanProcessor</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Trace\TracerProvider</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SemConv\Attributes\ServiceAttributes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SemConv\Incubating\Attributes\DeploymentIncubatingAttributes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SemConv\Incubating\Attributes\ServiceIncubatingAttributes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">require</span> <span class="s1">'vendor/autoload.php'</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$resource</span> <span class="o">=</span> <span class="nx">ResourceInfoFactory</span><span class="o">::</span><span class="na">emptyResource</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">merge</span><span class="p">(</span><span class="nx">ResourceInfo</span><span class="o">::</span><span class="na">create</span><span class="p">(</span><span class="nx">Attributes</span><span class="o">::</span><span class="na">create</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">ServiceIncubatingAttributes</span><span class="o">::</span><span class="na">SERVICE_NAMESPACE</span> <span class="o">=&gt;</span> <span class="s1">'demo'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">ServiceAttributes</span><span class="o">::</span><span class="na">SERVICE_NAME</span> <span class="o">=&gt;</span> <span class="s1">'test-application'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">ServiceAttributes</span><span class="o">::</span><span class="na">SERVICE_VERSION</span> <span class="o">=&gt;</span> <span class="s1">'0.1'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">DeploymentIncubatingAttributes</span><span class="o">::</span><span class="na">DEPLOYMENT_ENVIRONMENT_NAME</span> <span class="o">=&gt;</span> <span class="s1">'development'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$spanExporter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SpanExporter</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="k">new</span> <span class="nx">StreamTransportFactory</span><span class="p">())</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="s1">'php://stdout'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$logExporter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">LogsExporter</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="k">new</span> <span class="nx">StreamTransportFactory</span><span class="p">())</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="s1">'php://stdout'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$reader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ExportingReader</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="k">new</span> <span class="nx">MetricExporter</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="k">new</span> <span class="nx">StreamTransportFactory</span><span class="p">())</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="s1">'php://stdout'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$meterProvider</span> <span class="o">=</span> <span class="nx">MeterProvider</span><span class="o">::</span><span class="na">builder</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">setResource</span><span class="p">(</span><span class="nv">$resource</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">addReader</span><span class="p">(</span><span class="nv">$reader</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$tracerProvider</span> <span class="o">=</span> <span class="nx">TracerProvider</span><span class="o">::</span><span class="na">builder</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">addSpanProcessor</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="k">new</span> <span class="nx">SimpleSpanProcessor</span><span class="p">(</span><span class="nv">$spanExporter</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">setResource</span><span class="p">(</span><span class="nv">$resource</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">setSampler</span><span class="p">(</span><span class="k">new</span> <span class="nx">ParentBased</span><span class="p">(</span><span class="k">new</span> <span class="nx">AlwaysOnSampler</span><span class="p">()))</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$loggerProvider</span> <span class="o">=</span> <span class="nx">LoggerProvider</span><span class="o">::</span><span class="na">builder</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">setResource</span><span class="p">(</span><span class="nv">$resource</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">addLogRecordProcessor</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="k">new</span> <span class="nx">SimpleLogRecordProcessor</span><span class="p">(</span><span class="nv">$logExporter</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Sdk</span><span class="o">::</span><span class="na">builder</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">setTracerProvider</span><span class="p">(</span><span class="nv">$tracerProvider</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">setMeterProvider</span><span class="p">(</span><span class="nv">$meterProvider</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">setLoggerProvider</span><span class="p">(</span><span class="nv">$loggerProvider</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">setPropagator</span><span class="p">(</span><span class="nx">TraceContextPropagator</span><span class="o">::</span><span class="na">getInstance</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">setAutoShutdown</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">buildAndRegisterGlobal</span><span class="p">();</span>
+</span></span></code></pre></div>
+<p>Include this code at the top of your application file <code>index.php</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Psr\Http\Message\ResponseInterface</span> <span class="k">as</span> <span class="nx">Response</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Psr\Http\Message\ServerRequestInterface</span> <span class="k">as</span> <span class="nx">Request</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Psr\Log\LogLevel</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Slim\Factory\AppFactory</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Monolog\Logger</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Monolog\Handler\StreamHandler</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">require</span> <span class="no">__DIR__</span> <span class="o">.</span> <span class="s1">'/vendor/autoload.php'</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">require</span><span class="p">(</span><span class="s1">'dice.php'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">require</span><span class="p">(</span><span class="s1">'instrumentation.php'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// ...
+</span></span></span></code></pre></div>
+<p>For debugging and local development purposes, the example exports telemetry to
+the console. After you have finished setting up manual instrumentation, you need
+to configure an appropriate exporter to
+<a href="/docs/languages/php/exporters/">export the app’s telemetry data</a> to one or more
+telemetry backends.</p>
+<p>The example also sets up the mandatory SDK default attribute <code>service.name</code>,
+which holds the logical name of the service, and the optional, but highly
+encouraged, attribute <code>service.version</code>, which holds the version of the service
+API or implementation.</p>
+<p>Alternative methods exist for setting up resource attributes. For more
+information, see <a href="/docs/languages/php/resources/">Resources</a>.</p>
+<h4 id="global-providers">Global Providers
+</h4>
+<p>Throughout the following examples we will usually obtain the globally registered
+providers via <code>OpenTelemetry\API\Globals</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$tracerProvider</span> <span class="o">=</span> <span class="nx">\OpenTelemetry\API\Globals</span><span class="o">::</span><span class="na">tracerProvider</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$meterProvider</span> <span class="o">=</span> <span class="nx">\OpenTelemetry\API\Globals</span><span class="o">::</span><span class="na">meterProvider</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$loggerProvider</span> <span class="o">=</span> <span class="nx">\OpenTelemetry\API\Globals</span><span class="o">::</span><span class="na">loggerProvider</span><span class="p">();</span>
+</span></span></code></pre></div>
+<h4 id="shutdown">Shutdown
+</h4>
+<p>It’s important that each provider’s <code>shutdown()</code> method is run when the PHP
+process ends, to enable flushing of any enqueued telemetry. In the above
+example, this has been taken care of with <code>setAutoShutdown(true)</code>.</p>
+<p>You can also use the <code>ShutdownHandler</code> to register each provider’s shutdown
+function as part of PHP’s shutdown process:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nx">\OpenTelemetry\SDK\Common\Util\ShutdownHandler</span><span class="o">::</span><span class="na">register</span><span class="p">([</span><span class="nv">$tracerProvider</span><span class="p">,</span> <span class="s1">'shutdown'</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">\OpenTelemetry\SDK\Common\Util\ShutdownHandler</span><span class="o">::</span><span class="na">register</span><span class="p">([</span><span class="nv">$meterProvider</span><span class="p">,</span> <span class="s1">'shutdown'</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">\OpenTelemetry\SDK\Common\Util\ShutdownHandler</span><span class="o">::</span><span class="na">register</span><span class="p">([</span><span class="nv">$loggerProvider</span><span class="p">,</span> <span class="s1">'shutdown'</span><span class="p">]);</span>
+</span></span></code></pre></div>
+<h2 id="traces">Traces
+</h2>
+<h3 id="initialize-tracing">Initialize Tracing
+</h3>
+<div class="td-alert td-alert--md alert alert-nb"><div class="td-alert-body"><p>If you’re instrumenting a library, <strong>skip this step</strong>.</p></div></div>
+<p>To enable <a href="/docs/concepts/signals/traces/">tracing</a> in your app, you’ll need to
+have an initialized
+<a href="/docs/concepts/signals/traces/#tracer-provider"><code>TracerProvider</code></a> that will let
+you create a <a href="/docs/concepts/signals/traces/#tracer"><code>Tracer</code></a>.</p>
+<p>If a <code>TracerProvider</code> is not created, the OpenTelemetry APIs for tracing will
+use a no-op implementation and fail to generate data.</p>
+<p>If you followed the instructions to <a href="#initialize-the-sdk">initialize the SDK</a>
+above, you have a <code>TracerProvider</code> setup for you already. You can continue with
+<a href="#acquiring-a-tracer">acquiring a tracer</a>.</p>
+<h3 id="acquiring-a-tracer">Acquiring a Tracer
+</h3>
+<p>Anywhere in your application where you write manual tracing code should call
+<code>getTracer</code> to acquire a tracer. For example:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$tracerProvider</span> <span class="o">=</span> <span class="nx">Globals</span><span class="o">::</span><span class="na">tracerProvider</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$tracer</span> <span class="o">=</span> <span class="nv">$tracerProvider</span><span class="o">-&gt;</span><span class="na">getTracer</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="s1">'instrumentation-scope-name'</span><span class="p">,</span> <span class="c1">//name (required)
+</span></span></span><span class="line"><span class="cl">  <span class="s1">'instrumentation-scope-version'</span><span class="p">,</span> <span class="c1">//version
+</span></span></span><span class="line"><span class="cl">  <span class="s1">'http://example.com/my-schema'</span><span class="p">,</span> <span class="c1">//schema url
+</span></span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="s1">'foo'</span> <span class="o">=&gt;</span> <span class="s1">'bar'</span><span class="p">]</span> <span class="c1">//attributes
+</span></span></span></code></pre></div>
+<p>The values of <code>instrumentation-scope-name</code> and <code>instrumentation-scope-version</code>
+should uniquely identify the
+<a href="/docs/concepts/instrumentation-scope/">Instrumentation Scope</a>, such as the
+package, module or class name. While the name is required, the version is still
+recommended despite being optional.</p>
+<p>It’s generally recommended to call <code>getTracer</code> in your app when you need it
+rather than exporting the <code>tracer</code> instance to the rest of your app. This helps
+avoid trickier application load issues when other required dependencies are
+involved.</p>
+<p>In the case of the <a href="#example-app">example app</a>, there are two places where a
+tracer may be acquired with an appropriate Instrumentation Scope:</p>
+<p>First, in the <em>application file</em> <code>index.php</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Psr\Http\Message\ResponseInterface</span> <span class="k">as</span> <span class="nx">Response</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Psr\Http\Message\ServerRequestInterface</span> <span class="k">as</span> <span class="nx">Request</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Psr\Log\LogLevel</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Slim\Factory\AppFactory</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Monolog\Logger</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Monolog\Handler\StreamHandler</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\API\Globals</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">require</span> <span class="no">__DIR__</span> <span class="o">.</span> <span class="s1">'/vendor/autoload.php'</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">require</span><span class="p">(</span><span class="s1">'dice.php'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">require</span><span class="p">(</span><span class="s1">'instrumentation.php'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$tracerProvider</span> <span class="o">=</span> <span class="nx">Globals</span><span class="o">::</span><span class="na">tracerProvider</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$tracer</span> <span class="o">=</span> <span class="nv">$tracerProvider</span><span class="o">-&gt;</span><span class="na">getTracer</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="s1">'dice-server'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s1">'0.1.0'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s1">'https://opentelemetry.io/schemas/1.24.0'</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Logger</span><span class="p">(</span><span class="s1">'dice-server'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$logger</span><span class="o">-&gt;</span><span class="na">pushHandler</span><span class="p">(</span><span class="k">new</span> <span class="nx">StreamHandler</span><span class="p">(</span><span class="s1">'php://stdout'</span><span class="p">,</span> <span class="nx">Logger</span><span class="o">::</span><span class="na">INFO</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$app</span> <span class="o">=</span> <span class="nx">AppFactory</span><span class="o">::</span><span class="na">create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$dice</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Dice</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$app</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'/rolldice'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nx">Request</span> <span class="nv">$request</span><span class="p">,</span> <span class="nx">Response</span> <span class="nv">$response</span><span class="p">)</span> <span class="k">use</span> <span class="p">(</span><span class="nv">$logger</span><span class="p">,</span> <span class="nv">$dice</span><span class="p">,</span> <span class="nv">$tracer</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// ...
+</span></span></span></code></pre></div>
+<p>And second, in the <em>library file</em> <code>dice.php</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\API\Globals</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SemConv\TraceAttributes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Dice</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="nv">$tracer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$tracerProvider</span> <span class="o">=</span> <span class="nx">Globals</span><span class="o">::</span><span class="na">tracerProvider</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">tracer</span> <span class="o">=</span> <span class="nv">$tracerProvider</span><span class="o">-&gt;</span><span class="na">getTracer</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">          <span class="s1">'dice-lib'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="s1">'0.1.0'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="s1">'https://opentelemetry.io/schemas/1.24.0'</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">function</span> <span class="nf">roll</span><span class="p">(</span><span class="nv">$rolls</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$result</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span>  <span class="nv">$rolls</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$result</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">rollOnce</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nv">$result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">function</span> <span class="nf">rollOnce</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nv">$result</span> <span class="o">=</span> <span class="nx">random_int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="nv">$result</span><span class="p">;</span>
+</span></span></code></pre></div>
+<h3 id="create-spans">Create Spans
+</h3>
+<p>Now that you have <a href="/docs/concepts/signals/traces/#tracer">tracers</a> initialized,
+you can create <a href="/docs/concepts/signals/traces/#spans">spans</a>.</p>
+<p>The code below illustrates how to create a span.</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="k">public</span> <span class="k">function</span> <span class="nf">roll</span><span class="p">(</span><span class="nv">$rolls</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$span</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">tracer</span><span class="o">-&gt;</span><span class="na">spanBuilder</span><span class="p">(</span><span class="s2">"rollTheDice"</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">startSpan</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$result</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span>  <span class="nv">$rolls</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$result</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">rollOnce</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$span</span><span class="o">-&gt;</span><span class="na">end</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nv">$result</span><span class="p">;</span>
+</span></span></code></pre></div>
+<p>Note, that it’s required to <code>end()</code> the span, otherwise it will not be exported.</p>
+<p>If you followed the instructions using the <a href="#example-app">example app</a> up to
+this point, you can copy the code above in your library file <code>dice.php</code>. You
+should now be able to see spans emitted from your app.</p>
+<p>Start your app as follows, and then send it requests by visiting
+<a class="external-link" href="http://localhost:8080/rolldice?rolls=12">http://localhost:8080/rolldice?rolls=12</a> with your browser or <code>curl</code>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh"><span class="line"><span class="cl">php -S localhost:8080
+</span></span></code></pre></div>
+<p>After a while, you should see the spans printed in the console by the
+<code>SpanExporter</code>, something like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-json"><span class="line"><span class="cl">  <span class="nt">"resourceSpans"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"resource"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">"attributes"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"key"</span><span class="p">:</span> <span class="s2">"service.namespace"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"value"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"demo"</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"key"</span><span class="p">:</span> <span class="s2">"service.name"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"value"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"test-application"</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"key"</span><span class="p">:</span> <span class="s2">"service.version"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"value"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"0.1"</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"key"</span><span class="p">:</span> <span class="s2">"deployment.environment"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"value"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"development"</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"scopeSpans"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">"scope"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"dice-lib"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"version"</span><span class="p">:</span> <span class="s2">"0.1.0"</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">"spans"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"traceId"</span><span class="p">:</span> <span class="s2">"007a1e7a89f21f98b600d288b7d65390"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"spanId"</span><span class="p">:</span> <span class="s2">"c32797fc72c252d2"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"flags"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"rollTheDice"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"kind"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"startTimeUnixNano"</span><span class="p">:</span> <span class="s2">"1706111239077485365"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"endTimeUnixNano"</span><span class="p">:</span> <span class="s2">"1706111239077735657"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"status"</span><span class="p">:</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">"schemaUrl"</span><span class="p">:</span> <span class="s2">"https://opentelemetry.io/schemas/1.24.0"</span>
+</span></span></code></pre></div>
+<h3 id="create-nested-spans">Create nested Spans
+</h3>
+<p>Nested <a href="/docs/concepts/signals/traces/#spans">spans</a> let you track work that’s
+nested in nature. For example, the <code>rollOnce()</code> function below represents a
+nested operation. The following sample creates a nested span that tracks
+<code>rollOnce()</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="k">private</span> <span class="k">function</span> <span class="nf">rollOnce</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$parent</span> <span class="o">=</span> <span class="nx">OpenTelemetry\API\Trace\Span</span><span class="o">::</span><span class="na">getCurrent</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$scope</span> <span class="o">=</span> <span class="nv">$parent</span><span class="o">-&gt;</span><span class="na">activate</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$span</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">tracer</span><span class="o">-&gt;</span><span class="na">spanBuilder</span><span class="p">(</span><span class="s2">"rollTheDice"</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">startSpan</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$result</span> <span class="o">=</span> <span class="nx">random_int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$span</span><span class="o">-&gt;</span><span class="na">end</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$scope</span><span class="o">-&gt;</span><span class="na">detach</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nv">$result</span><span class="p">;</span>
+</span></span></code></pre></div>
+<p>You <em>must</em> <code>detach</code> the active scope if you have activated it.</p>
+<h3 id="get-the-current-span">Get the current span
+</h3>
+<p>In the example above, we retrieved the current span, using the following method:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$span</span> <span class="o">=</span> <span class="nx">OpenTelemetry\API\Trace\Span</span><span class="o">::</span><span class="na">getCurrent</span><span class="p">();</span>
+</span></span></code></pre></div>
+<h3 id="get-a-span-from-context">Get a span from context
+</h3>
+<p>It can also be helpful to get the <a href="/docs/concepts/signals/traces/#spans">span</a>
+from a given context that isn’t necessarily the active span.</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$span</span> <span class="o">=</span> <span class="nx">OpenTelemetry\API\Trace\Span</span><span class="o">::</span><span class="na">fromContext</span><span class="p">(</span><span class="nv">$context</span><span class="p">);</span>
+</span></span></code></pre></div>
+<h3 id="span-attributes">Span Attributes
+</h3>
+<p><a href="/docs/concepts/signals/traces/#attributes">Attributes</a> let you attach key/value
+pairs to a <a href="/docs/concepts/signals/traces/#spans"><code>Span</code></a> so it carries more
+information about the current operation that it’s tracking.</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="k">private</span> <span class="k">function</span> <span class="nf">rollOnce</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$parent</span> <span class="o">=</span> <span class="nx">OpenTelemetry\API\Trace\Span</span><span class="o">::</span><span class="na">getCurrent</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$scope</span> <span class="o">=</span> <span class="nv">$parent</span><span class="o">-&gt;</span><span class="na">activate</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$span</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">tracer</span><span class="o">-&gt;</span><span class="na">spanBuilder</span><span class="p">(</span><span class="s2">"rollTheDice"</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">startSpan</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$result</span> <span class="o">=</span> <span class="nx">random_int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$span</span><span class="o">-&gt;</span><span class="na">setAttribute</span><span class="p">(</span><span class="s1">'dicelib.rolled'</span><span class="p">,</span> <span class="nv">$result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$span</span><span class="o">-&gt;</span><span class="na">end</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$scope</span><span class="o">-&gt;</span><span class="na">detach</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nv">$result</span><span class="p">;</span>
+</span></span></code></pre></div>
+<h4 id="semantic-attributes">Semantic Attributes
+</h4>
+<p>There are semantic conventions for spans representing operations in well-known
+protocols like HTTP or database calls. Semantic conventions for these spans are
+defined in the specification at
+<a href="/docs/specs/semconv/general/trace/">Trace Semantic Conventions</a>. In the simple
+example of this guide the source code attributes can be used.</p>
+<p>First add the semantic conventions as a dependency to your application:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell"><span class="line"><span class="cl">composer require open-telemetry/sem-conv
+</span></span></code></pre></div>
+<p>Add the following to the top of your file:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SemConv\Attributes\CodeAttributes</span><span class="p">;</span>
+</span></span></code></pre></div>
+<p>Finally, you can update your file to include semantic attributes:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$span</span><span class="o">-&gt;</span><span class="na">setAttribute</span><span class="p">(</span><span class="nx">CodeAttributes</span><span class="o">::</span><span class="na">CODE_FUNCTION_NAME</span><span class="p">,</span> <span class="s1">'rollOnce'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$span</span><span class="o">-&gt;</span><span class="na">setAttribute</span><span class="p">(</span><span class="nx">CodeAttributes</span><span class="o">::</span><span class="na">CODE_FILE_PATH</span><span class="p">,</span> <span class="no">__FILE__</span><span class="p">);</span>
+</span></span></code></pre></div>
+<h3 id="create-spans-with-events">Create Spans with events
+</h3>
+<p><a href="/docs/concepts/signals/traces/#spans">Spans</a> can be annotated with named events
+(called <a href="/docs/concepts/signals/traces/#span-events">Span Events</a>) that can
+carry zero or more <a href="#span-attributes">Span Attributes</a>, each of which itself is
+a key:value map paired automatically with a timestamp.</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$span</span><span class="o">-&gt;</span><span class="na">addEvent</span><span class="p">(</span><span class="s2">"Init"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$span</span><span class="o">-&gt;</span><span class="na">addEvent</span><span class="p">(</span><span class="s2">"End"</span><span class="p">);</span>
+</span></span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$eventAttributes</span> <span class="o">=</span> <span class="nx">Attributes</span><span class="o">::</span><span class="na">create</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">"operation"</span> <span class="o">=&gt;</span> <span class="s2">"calculate-pi"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">"result"</span> <span class="o">=&gt;</span> <span class="mf">3.14159</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$span</span><span class="o">-&gt;</span><span class="na">addEvent</span><span class="p">(</span><span class="s2">"End Computation"</span><span class="p">,</span> <span class="nv">$eventAttributes</span><span class="p">);</span>
+</span></span></code></pre></div>
+<h3 id="create-spans-with-links">Create Spans with links
+</h3>
+<p>A <a href="/docs/concepts/signals/traces/#spans">Span</a> may be linked to zero or more
+other Spans that are causally related via a
+<a href="/docs/concepts/signals/traces/#span-links">Span Link</a>. Links can be used to
+represent batched operations where a Span was initiated by multiple initiating
+Spans, each representing a single incoming item being processed in the batch.</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$span</span> <span class="o">=</span> <span class="nv">$tracer</span><span class="o">-&gt;</span><span class="na">spanBuilder</span><span class="p">(</span><span class="s2">"span-with-links"</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">addLink</span><span class="p">(</span><span class="nv">$parentSpan1</span><span class="o">-&gt;</span><span class="na">getContext</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">addLink</span><span class="p">(</span><span class="nv">$parentSpan2</span><span class="o">-&gt;</span><span class="na">getContext</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">addLink</span><span class="p">(</span><span class="nv">$parentSpan3</span><span class="o">-&gt;</span><span class="na">getContext</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">addLink</span><span class="p">(</span><span class="nv">$remoteSpanContext</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">startSpan</span><span class="p">();</span>
+</span></span></code></pre></div>
+<p>For more details how to read context from remote processes, see
+<a href="../propagation/">Context Propagation</a>.</p>
+<h3 id="set-span-status-and-record-exceptions">Set span status and record exceptions
+</h3>
+<p>A <a href="/docs/concepts/signals/traces/#span-status">Status</a> can be set on a
+<a href="/docs/concepts/signals/traces/#spans">Span</a>, typically used to specify that a
+Span has not completed successfully - <code>Error</code>. By default, all spans are
+<code>Unset</code>, which means a span completed without error. The <code>Ok</code> status is reserved
+for when you need to explicitly mark a span as successful rather than stick with
+the default of <code>Unset</code> (i.e., “without error”).</p>
+<p>The status can be set at any time before the span is finished.</p>
+<p>It can be a good idea to record exceptions when they happen. It’s recommended to
+do this in conjunction with
+<a href="/docs/specs/otel/trace/api/#set-status">setting span status</a>.</p>
+<p>The status can be set at any time before the span is finished:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$span</span> <span class="o">=</span> <span class="nv">$tracer</span><span class="o">-&gt;</span><span class="na">spanBuilder</span><span class="p">(</span><span class="s2">"my-span"</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">startSpan</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// do something that could fail
+</span></span></span><span class="line"><span class="cl">  <span class="k">throw</span> <span class="k">new</span> <span class="nx">\Exception</span><span class="p">(</span><span class="s1">'uh-oh'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\Throwable</span> <span class="nv">$t</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">$span</span><span class="o">-&gt;</span><span class="na">setStatus</span><span class="p">(</span><span class="nx">\OpenTelemetry\API\Trace\StatusCode</span><span class="o">::</span><span class="na">STATUS_ERROR</span><span class="p">,</span> <span class="s2">"Something bad happened!"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">//This will capture things like the current stack trace in the span.
+</span></span></span><span class="line"><span class="cl">  <span class="nv">$span</span><span class="o">-&gt;</span><span class="na">recordException</span><span class="p">(</span><span class="nv">$t</span><span class="p">,</span> <span class="p">[</span><span class="s1">'exception.escaped'</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">throw</span> <span class="nv">$t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">$span</span><span class="o">-&gt;</span><span class="na">end</span><span class="p">();</span>
+</span></span></code></pre></div>
+<h3 id="span-processor">Span Processor
+</h3>
+<p>Different Span processors are offered by OpenTelemetry. The
+<code>SimpleSpanProcessor</code> immediately forwards ended spans to the exporter, while
+the <code>BatchSpanProcessor</code> batches them and sends them periodically.</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$tracerProvider</span> <span class="o">=</span> <span class="nx">TracerProvider</span><span class="o">::</span><span class="na">builder</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="o">-&gt;</span><span class="na">addSpanProcessor</span><span class="p">(</span><span class="k">new</span> <span class="nx">SimpleSpanProcessor</span><span class="p">(</span><span class="k">new</span> <span class="nx">ConsoleSpanExporterFactory</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">()))</span>
+</span></span><span class="line"><span class="cl">  <span class="o">-&gt;</span><span class="na">build</span><span class="p">();</span>
+</span></span></code></pre></div>
+<h3 id="transports">Transports
+</h3>
+<p>All exporters require a <code>Transport</code>, which is responsible for the sending of
+telemetry data:</p>
+<ul>
+<li>
+<code>PsrTransport</code> - uses a PSR-18 client to send data over HTTP</li>
+<li>
+<code>StreamTransport</code> - uses a stream to send data (eg to file or <code>stdout</code>)</li>
+<li>
+<code>GrpcTransport</code> - uses gRPC to send protobuf-encoded data</li>
+</ul>
+<h3 id="exporter">Exporter
+</h3>
+<p>See <a href="/docs/languages/php/exporters/">Exporters</a></p>
+<h2 id="metrics">Metrics
+</h2>
+<p>OpenTelemetry can be used to measure and record different types of metrics from
+an application, which can then be
+<a href="/docs/specs/otel/metrics/sdk/#push-metric-exporter">pushed</a> to a metrics
+service such as the OpenTelemetry Collector:</p>
+<ul>
+<li>counter</li>
+<li>async counter</li>
+<li>histogram</li>
+<li>async gauge</li>
+<li>up/down counter</li>
+<li>async up/down counter</li>
+</ul>
+<p>Meter types and usage are explained in the
+<a href="/docs/concepts/signals/metrics/">metrics concepts</a> documentation.</p>
+<h3 id="setup">Setup
+</h3>
+<p>First, create a <code>MeterProvider</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Metrics\MetricExporter\ConsoleMetricExporterFactory</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Metrics\MeterProvider</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Metrics\MetricReader\ExportingReader</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">require</span> <span class="s1">'vendor/autoload.php'</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$reader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ExportingReader</span><span class="p">((</span><span class="k">new</span> <span class="nx">ConsoleMetricExporterFactory</span><span class="p">())</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$meterProvider</span> <span class="o">=</span> <span class="nx">MeterProvider</span><span class="o">::</span><span class="na">builder</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">addReader</span><span class="p">(</span><span class="nv">$reader</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">build</span><span class="p">();</span>
+</span></span></code></pre></div>
+<h3 id="synchronous-meters">Synchronous meters
+</h3>
+<p>A synchronous meter must be manually adjusted as data changes:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$up_down</span> <span class="o">=</span> <span class="nv">$meterProvider</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">getMeter</span><span class="p">(</span><span class="s1">'demo_meter'</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">createUpDownCounter</span><span class="p">(</span><span class="s1">'queued'</span><span class="p">,</span> <span class="s1">'jobs'</span><span class="p">,</span> <span class="s1">'The number of jobs enqueued'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//jobs come in
+</span></span></span><span class="line"><span class="cl"><span class="nv">$up_down</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//job completed
+</span></span></span><span class="line"><span class="cl"><span class="nv">$up_down</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//more jobs come in
+</span></span></span><span class="line"><span class="cl"><span class="nv">$up_down</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$meterProvider</span><span class="o">-&gt;</span><span class="na">forceFlush</span><span class="p">();</span>
+</span></span></code></pre></div>
+<p>Synchronous metrics are exported when <code>forceFlush()</code> or <code>shutdown()</code> are called
+on the meter provider.</p>
+<details><summary>View output</summary><div class="highlight"><pre class="chroma"><code class="language-json"><span class="line"><span class="cl">  <span class="nt">"resourceMetrics"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"resource"</span><span class="p">:</span> <span class="p">{},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"scopeMetrics"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">"scope"</span><span class="p">:</span> <span class="p">{</span> <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"demo_meter"</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">"metrics"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"queued"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"description"</span><span class="p">:</span> <span class="s2">"The number of jobs enqueued"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"unit"</span><span class="p">:</span> <span class="s2">"jobs"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"sum"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">"dataPoints"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">"startTimeUnixNano"</span><span class="p">:</span> <span class="s2">"1687332126443709851"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">"timeUnixNano"</span><span class="p">:</span> <span class="s2">"1687332126445544432"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">"asInt"</span><span class="p">:</span> <span class="s2">"6"</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">"aggregationTemporality"</span><span class="p">:</span> <span class="s2">"AGGREGATION_TEMPORALITY_DELTA"</span>
+</span></span></code></pre></div></details><h3 id="asynchronous-meters">Asynchronous meters
+</h3>
+<p>Async meters are <code>observable</code>, eg <code>ObservableGauge</code>. When registering an
+observable/async meter, you provide one or more callback functions. The callback
+functions will be called by a
+<a href="/docs/specs/otel/metrics/sdk/#periodic-exporting-metricreader">periodic exporting metric reader</a>
+whenever its <code>collect()</code> method is called, for example based on an event-loop
+timer. The callback(s) are responsible for returning the current data for the
+meter.</p>
+<p>In this example, the callbacks are executed every time that <code>$reader-&gt;collect()</code>
+is executed:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$queue</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">'job1'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">'job2'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">'job3'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$meterProvider</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">getMeter</span><span class="p">(</span><span class="s1">'demo_meter'</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">createObservableGauge</span><span class="p">(</span><span class="s1">'queued'</span><span class="p">,</span> <span class="s1">'jobs'</span><span class="p">,</span> <span class="s1">'The number of jobs enqueued'</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">observe</span><span class="p">(</span><span class="k">static</span> <span class="k">function</span> <span class="p">(</span><span class="nx">ObserverInterface</span> <span class="nv">$observer</span><span class="p">)</span> <span class="k">use</span> <span class="p">(</span><span class="nv">$queue</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$observer</span><span class="o">-&gt;</span><span class="na">observe</span><span class="p">(</span><span class="nx">count</span><span class="p">(</span><span class="nv">$queue</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$reader</span><span class="o">-&gt;</span><span class="na">collect</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nx">array_pop</span><span class="p">(</span><span class="nv">$queue</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$reader</span><span class="o">-&gt;</span><span class="na">collect</span><span class="p">();</span>
+</span></span></code></pre></div>
+<details><summary>View output</summary><div class="highlight"><pre class="chroma"><code class="language-json"><span class="line"><span class="cl"><span class="p">{</span><span class="nt">"resourceMetrics"</span><span class="p">:[{</span><span class="nt">"resource"</span><span class="p">:{},</span><span class="nt">"scopeMetrics"</span><span class="p">:[{</span><span class="nt">"scope"</span><span class="p">:{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"demo_meter"</span><span class="p">},</span><span class="nt">"metrics"</span><span class="p">:[{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"queued"</span><span class="p">,</span><span class="nt">"description"</span><span class="p">:</span><span class="s2">"The number of jobs enqueued"</span><span class="p">,</span><span class="nt">"unit"</span><span class="p">:</span><span class="s2">"jobs"</span><span class="p">,</span><span class="nt">"gauge"</span><span class="p">:{</span><span class="nt">"dataPoints"</span><span class="p">:[{</span><span class="nt">"startTimeUnixNano"</span><span class="p">:</span><span class="s2">"1687331630161510994"</span><span class="p">,</span><span class="nt">"timeUnixNano"</span><span class="p">:</span><span class="s2">"1687331630162989144"</span><span class="p">,</span><span class="nt">"asInt"</span><span class="p">:</span><span class="s2">"3"</span><span class="p">}]}}]}]}]}</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="nt">"resourceMetrics"</span><span class="p">:[{</span><span class="nt">"resource"</span><span class="p">:{},</span><span class="nt">"scopeMetrics"</span><span class="p">:[{</span><span class="nt">"scope"</span><span class="p">:{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"demo_meter"</span><span class="p">},</span><span class="nt">"metrics"</span><span class="p">:[{</span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"queued"</span><span class="p">,</span><span class="nt">"description"</span><span class="p">:</span><span class="s2">"The number of jobs enqueued"</span><span class="p">,</span><span class="nt">"unit"</span><span class="p">:</span><span class="s2">"jobs"</span><span class="p">,</span><span class="nt">"gauge"</span><span class="p">:{</span><span class="nt">"dataPoints"</span><span class="p">:[{</span><span class="nt">"startTimeUnixNano"</span><span class="p">:</span><span class="s2">"1687331630161510994"</span><span class="p">,</span><span class="nt">"timeUnixNano"</span><span class="p">:</span><span class="s2">"1687331631164759171"</span><span class="p">,</span><span class="nt">"asInt"</span><span class="p">:</span><span class="s2">"2"</span><span class="p">}]}}]}]}]}</span>
+</span></span></code></pre></div></details><h2 id="logs">Logs
+</h2>
+<p>As logging is a mature and well-established function, the
+<a href="/docs/concepts/signals/logs/">OpenTelemetry approach</a> is a little different for
+this signal.</p>
+<p>The OpenTelemetry logger is not designed to be used directly, but rather to be
+integrated into existing logging libraries. In this way, you can choose to have
+some or all of your application logs sent to an OpenTelemetry-compatible service
+such as the <a href="/docs/collector/">collector</a>.</p>
+<h3 id="setup-1">Setup
+</h3>
+<p>First, we create a <code>LoggerProvider</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\API\Logs\EventLogger</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\API\Logs\LogRecord</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\Contrib\Otlp\LogsExporter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Common\Export\Stream\StreamTransportFactory</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Logs\LoggerProvider</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Logs\Processor\SimpleLogRecordProcessor</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">OpenTelemetry\SDK\Resource\ResourceInfoFactory</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">require</span> <span class="s1">'vendor/autoload.php'</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$exporter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">LogsExporter</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="k">new</span> <span class="nx">StreamTransportFactory</span><span class="p">())</span><span class="o">-&gt;</span><span class="na">create</span><span class="p">(</span><span class="s1">'php://stdout'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$loggerProvider</span> <span class="o">=</span> <span class="nx">LoggerProvider</span><span class="o">::</span><span class="na">builder</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">addLogRecordProcessor</span><span class="p">(</span><span class="k">new</span> <span class="nx">SimpleLogRecordProcessor</span><span class="p">(</span><span class="nv">$exporter</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">setResource</span><span class="p">(</span><span class="nx">ResourceInfoFactory</span><span class="o">::</span><span class="na">emptyResource</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">build</span><span class="p">();</span>
+</span></span></code></pre></div>
+<h3 id="logging-events">Logging events
+</h3>
+<p>An <code>EventLogger</code> can use a <code>Logger</code> to emit log events:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$logger</span> <span class="o">=</span> <span class="nv">$loggerProvider</span><span class="o">-&gt;</span><span class="na">getLogger</span><span class="p">(</span><span class="s1">'demo'</span><span class="p">,</span> <span class="s1">'1.0'</span><span class="p">,</span> <span class="s1">'http://schema.url'</span><span class="p">,</span> <span class="p">[</span><span class="cm">/*attributes*/</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$eventLogger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventLogger</span><span class="p">(</span><span class="nv">$logger</span><span class="p">,</span> <span class="s1">'my-domain'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$record</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nx">LogRecord</span><span class="p">(</span><span class="s1">'hello world'</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">setSeverityText</span><span class="p">(</span><span class="s1">'INFO'</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-&gt;</span><span class="na">setAttributes</span><span class="p">([</span><span class="cm">/*attributes*/</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$eventLogger</span><span class="o">-&gt;</span><span class="na">logEvent</span><span class="p">(</span><span class="s1">'foo'</span><span class="p">,</span> <span class="nv">$record</span><span class="p">);</span>
+</span></span></code></pre></div>
+<details><summary>View sample output</summary><div class="highlight"><pre class="chroma"><code class="language-json"><span class="line"><span class="cl">  <span class="nt">"resourceLogs"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"resource"</span><span class="p">:</span> <span class="p">{},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"scopeLogs"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">"scope"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"demo"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"version"</span><span class="p">:</span> <span class="s2">"1.0"</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">"logRecords"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"observedTimeUnixNano"</span><span class="p">:</span> <span class="s2">"1687496730010009088"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"severityText"</span><span class="p">:</span> <span class="s2">"INFO"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"body"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"hello world"</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"attributes"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                  <span class="nt">"key"</span><span class="p">:</span> <span class="s2">"event.name"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                  <span class="nt">"value"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"foo"</span>
+</span></span><span class="line"><span class="cl">                  <span class="nt">"key"</span><span class="p">:</span> <span class="s2">"event.domain"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                  <span class="nt">"value"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"my-domain"</span>
+</span></span></code></pre></div></details><h3 id="integrations-for-third-party-logging-libraries">Integrations for third-party logging libraries
+</h3>
+<h4 id="monolog">Monolog
+</h4>
+<p>You can use the
+<a class="external-link" href="https://packagist.org/packages/open-telemetry/opentelemetry-logger-monolog">monolog handler</a>
+to send monolog logs to an OpenTelemetry-capable receiver. First, install the
+monolog library and a handler:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell"><span class="line"><span class="cl">composer require <span class="se">\
+</span></span></span><span class="line"><span class="cl">  monolog/monolog <span class="se">\
+</span></span></span><span class="line"><span class="cl">  open-telemetry/opentelemetry-logger-monolog
+</span></span></code></pre></div>
+<p>Following on from the logging example above:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\OpenTelemetry\Contrib\Logs\Monolog\Handler</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$loggerProvider</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">\Psr\Log\LogLevel</span><span class="o">::</span><span class="na">ERROR</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$monolog</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Monolog\Logger</span><span class="p">(</span><span class="s1">'example'</span><span class="p">,</span> <span class="p">[</span><span class="nv">$handler</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$monolog</span><span class="o">-&gt;</span><span class="na">info</span><span class="p">(</span><span class="s1">'hello, world'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$monolog</span><span class="o">-&gt;</span><span class="na">error</span><span class="p">(</span><span class="s1">'oh no'</span><span class="p">,</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">'foo'</span> <span class="o">=&gt;</span> <span class="s1">'bar'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">'exception'</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nx">\Exception</span><span class="p">(</span><span class="s1">'something went wrong'</span><span class="p">),</span>
+</span></span></code></pre></div>
+<details><summary>View sample output</summary><div class="highlight"><pre class="chroma"><code class="language-json"><span class="line"><span class="cl">  <span class="nt">"resourceLogs"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"resource"</span><span class="p">:</span> <span class="p">{},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"scopeLogs"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">"scope"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"monolog"</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">"logRecords"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"timeUnixNano"</span><span class="p">:</span> <span class="s2">"1687496945597429000"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"observedTimeUnixNano"</span><span class="p">:</span> <span class="s2">"1687496945598242048"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"severityNumber"</span><span class="p">:</span> <span class="s2">"SEVERITY_NUMBER_ERROR"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"severityText"</span><span class="p">:</span> <span class="s2">"ERROR"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"body"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"oh no"</span>
+</span></span><span class="line"><span class="cl">              <span class="nt">"attributes"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                  <span class="nt">"key"</span><span class="p">:</span> <span class="s2">"channel"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                  <span class="nt">"value"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"example"</span>
+</span></span><span class="line"><span class="cl">                  <span class="nt">"key"</span><span class="p">:</span> <span class="s2">"context"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                  <span class="nt">"value"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">"arrayValue"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                      <span class="nt">"values"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                          <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"bar"</span>
+</span></span><span class="line"><span class="cl">                          <span class="nt">"arrayValue"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                            <span class="nt">"values"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                                <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"Exception"</span>
+</span></span><span class="line"><span class="cl">                                <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"something went wrong"</span>
+</span></span><span class="line"><span class="cl">                                <span class="nt">"intValue"</span><span class="p">:</span> <span class="s2">"0"</span>
+</span></span><span class="line"><span class="cl">                                <span class="nt">"stringValue"</span><span class="p">:</span> <span class="s2">"/usr/src/myapp/logging.php:31"</span>
+</span></span></code></pre></div></details><h2 id="error-handling">Error Handling
+</h2>
+<p>By default, OpenTelemetry will log errors and warnings via PHP’s
+<a class="external-link" href="https://www.php.net/manual/en/function.error-log.php"><code>error_log</code></a> function.
+The verbosity can be controlled or disabled via the <code>OTEL_LOG_LEVEL</code> setting.</p>
+<p>The <code>OTEL_PHP_LOG_DESTINATION</code> variable can be used to control log destination
+or disable error logging completely. Valid values are <code>default</code>, <code>error_log</code>,
+<code>stderr</code>, <code>stdout</code>, <code>psr3</code>, or <code>none</code>. <code>default</code> (or if the variable is not
+set), will use <code>error_log</code> unless a PSR-3 logger is configured:</p>
+<div class="highlight"><pre class="chroma"><code class="language-php"><span class="line"><span class="cl"><span class="nv">$logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Example\Psr3Logger</span><span class="p">(</span><span class="nx">LogLevel</span><span class="o">::</span><span class="na">INFO</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">\OpenTelemetry\API\LoggerHolder</span><span class="o">::</span><span class="na">set</span><span class="p">(</span><span class="nv">$logger</span><span class="p">);</span>
+</span></span></code></pre></div>
+<p>For more fine-grained control and special case handling, custom handlers and
+filters can be applied to the PSR-3 logger (if the logger offers this ability).</p>
+<h2 id="next-steps">Next steps
+</h2>
+<p>You’ll also want to configure an appropriate exporter to
+<a href="/docs/languages/php/exporters/">export your telemetry data</a> to one or more
+telemetry backends.</p>
+<div class="d-print-none">
+<h2 class="feedback--title">Feedback</h2>
+<p class="feedback--question">Was this page helpful?</p>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-yes">Yes</button>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-no">No</button><p class="feedback--response feedback--response-yes">Thank you. Your feedback is appreciated!</p>
+<p class="feedback--response feedback--response-no">Please let us know <a class="external-link" href="https://github.com/open-telemetry/opentelemetry.io/issues/new?template=PAGE_FEEDBACK.yml&amp;title=[Page+feedback]%3A+ADD+A+SUMMARY+OF+YOUR+FEEDBACK+HERE">how we can improve this page</a>. Your feedback is appreciated!</p>
+</div>
+<div class="td-page-meta__lastmod">Last modified September 10, 2026: <a href="https://github.com/open-telemetry/opentelemetry.io/commit/86b0bf27288675614c8ab4052b2d564117fc42d4">fix: correct php -S command syntax in English doc `content/en/docs/languages/php/instrumentation.md` (#11647) (86b0bf27)</a>
+</div>
+</div></main>
+</div></div>
+
+</div></div>

@@ -1,0 +1,170 @@
+<div><div class="radix-themes"><div>
+<div class="tw-app has-toc"><section class="px-0 flex relative"><main class="main-content flex mt-[var(--header-height)] flex-1"><div class="pt-6 px-6 prose dark:prose-invert max-w-full text-[var(--gray-12)] prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-code:font-mono marker:text-[var(--darkPurple)] marker:font-medium prose-li:my-1 prose-headings:mt-0 prose-headings:font-medium prose-headings:relative prose-headings:text-[var(--gray-12)] prose-blockquote:font-normal prose-blockquote:border-l-[3px] prose-em:font-normal prose-blockquote:text-[var(--gray-12)] prose-img:my-2 prose-strong:text-[var(--gray-12)] w-full min-w-0" id="doc-content">
+<div class="flex items-center">
+<ul class="not-prose list-none flex flex-wrap">
+
+<li class="style_breadcrumb-item__bDEaT"><a href="/product/">Product Walkthroughs</a></li>
+
+</ul> <div class="ml-auto hidden sm:block"><div class="relative inline-block"><div class="inline-flex items-center h-9 border border-gray-200 dark:border-[var(--gray-6)] rounded-full overflow-hidden bg-white dark:bg-[var(--gray-2)]"><button class="inline-flex items-center text-nowrap h-full text-gray-700 dark:text-[var(--foreground)] bg-transparent border-none cursor-pointer transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-[var(--gray-a4)] active:bg-gray-100 dark:active:bg-[var(--gray-5)] focus:bg-gray-50 dark:focus:bg-[var(--gray-a4)] outline-none gap-2 px-3.5 text-sm font-medium disabled:opacity-50"><span>Copy page</span></button></div></div></div>
+</div>
+<div>
+<hgroup><h1>Logs</h1>
+<h2>Structured logs allow you to send, view and query logs and parameters sent from your applications within Sentry.</h2></hgroup><div id="main">
+<h2 id="overview"><a class="autolink-heading" href="#overview">Overview</a></h2>
+<p>With Structured Logs, you can send text-based log information from your applications, whether frontend or backend, to Sentry. Learn more about how to <a class="" href="/product/explore/">Explore</a> and <a class="" href="/product/logs/#viewing-and-searching-logs">Query</a> logs in Sentry.</p>
+<p>Sentry's structured logs are searchable, <strong>trace-connected</strong>, and viewable alongside your errors.</p>
+<p><strong>What does trace-connected mean?</strong> Every log entry is automatically linked to the active trace when it was recorded. This means you can click directly from any log entry to see the full trace waterfall, including all related spans, errors, and other logs from the same request. This connection makes it easy to understand the complete context of what happened—not just what was logged, but the entire execution path that led to that log entry.</p>
+<p>When investigating an issue, you can search your logs by message content or attributes, then click into any log entry to see the exact trace, spans, and errors that occurred at that moment. Learn more about <a class="" href="/concepts/key-terms/tracing/trace-view/">Trace View</a> to understand how to navigate from logs to traces.</p>
+<p>Not everything in your application generates an error or requires full tracing. Logs are perfect for tracking:</p>
+<ul>
+<li>
+<strong>Debugging information</strong>: Cache misses, database connections, query results, and performance metrics</li>
+<li>
+<strong>User behavior</strong>: Login events, checkout flows, feature usage, and preference changes</li>
+<li>
+<strong>Application state</strong>: Configuration loading, service initialization, and connection status</li>
+<li>
+<strong>Business events</strong>: Order placements, payment processing, and notification delivery</li>
+</ul>
+<p>Learn how to <a class="" href="/product/logs/getting-started/">send structured logs</a> with custom attributes that you can search and filter in Sentry.</p>
+<div class="callout callout-info"><div class="callout-content"><div class="callout-body content-flush-bottom"><p>Your plan type determines your query window: Developer: 7 days | Team: 14 days | Business: 30 days.</p></div></div></div>
+<h2 id="set-up-logs"><a class="autolink-heading" href="#set-up-logs">Set up Logs</a></h2>
+<p>To get started with Logs, navigate to the <a class="" href="/product/logs/getting-started/">Getting Started</a> page and select your SDK from the list.</p>
+<p>If you're using a platform where you can't install the Sentry SDK directly, or if you want to forward logs from platform-native logging systems, you can use <a class="" href="/product/drains/">log drains</a> to send logs to Sentry.</p>
+<h2 id="viewing-and-searching-logs"><a class="autolink-heading" href="#viewing-and-searching-logs">Viewing and Searching Logs</a></h2>
+<p><strong>Raw Text Search</strong>Raw text search is case sensitive and allows you to search for specific strings within the <em>message</em> attribute of the Log. <strong>Raw text search over the entire log's JSON is not supported.</strong> Learn more about <a class="" href="/concepts/search/">search syntax</a>.</p>
+
+<p><strong>Default Properties Search</strong>You can also search using the default properties (like <code>severity</code>) or <a class="" href="/concepts/search/searchable-properties/logs/">additional custom properties</a> that you've added to your log entries.</p>
+
+<p><strong>Search Examples</strong>Here are some practical examples of log searches you can use:</p>
+<ul>
+<li>
+<code>severity:error</code> - Find all error-level logs</li>
+<li>
+<code>severity:error payment.failed</code> - Find error logs containing "payment.failed" in the message</li>
+<li>
+<code>user.id:12345</code> - Find all logs for a specific user</li>
+<li>
+<code>trace_id:abc123def456</code> - Find all logs associated with a specific trace</li>
+<li>
+<code>severity:error environment:production</code> - Find production errors</li>
+<li>
+<code>order.id:order_123</code> - Find logs related to a specific order</li>
+<li>
+<code>severity:warn OR severity:error</code> - Find warnings or errors</li>
+<li>
+<code>database:"users" query.duration_ms:&gt;1000</code> - Find slow database queries on the users database</li>
+<li>
+<code>message://^Timeout after \d+ms//</code> - Find logs whose message matches a <a class="" href="/concepts/search/#regular-expressions-logs-only">regular expression</a>
+</li>
+</ul>
+<p>Learn more about <a class="" href="/concepts/search/">search syntax</a> for advanced querying.</p>
+<p><strong>Expand Logs</strong>Log entries can be expanded to view all properties of a log entry. Individual properties can be added as columns to the results view, allowing you to quickly view properties that matter specifically to you alongside your search results.</p>
+
+<p><strong>Auto-Refresh</strong>You can also enable auto refreshing of the logs view to see your latest logs as they come in.</p>
+
+<p>Conditions in which auto-refresh is disabled:</p>
+<ul>
+<li>Auto-refresh is only supported when sorting by time in descending order.</li>
+<li>Auto-refresh is only supported when using a relative time period, like "Last 15 minutes" or "Last 7 days", not absolute dates like "2025-07-23".</li>
+<li>Auto-refresh is disabled due to high data volume (100 logs per second). Try adding a <a class="" href="/concepts/data-management/filtering/#logs-filtering">filter</a> to reduce the number of logs.</li>
+<li>Auto-refresh will be disabled due to reaching a max auto-refresh time of 10 minutes.</li>
+<li>Auto-refresh will be disabled if there is an error fetching logs.</li>
+<li>Auto-refresh is not available in the <a class="" href="#aggregates-view">aggregates view</a>.</li>
+</ul>
+<p><strong>Export Data</strong>You can export up to 10,000 log lines in CSV or <a class="" href="https://jsonlines.org/">JSON Lines (JSONL)</a> format.</p>
+<ul>
+<li>Click <strong>Export Data</strong> to select your format, pick whether to export only the currently displayed columns or all columns, and choose the number of rows.<ul><li>
+<strong>Note:</strong> Use either format to export the currently displayed columns, or use JSONL to export All Columns.</li></ul>
+</li>
+<li>Depending on the size, the file will either download directly or be sent to you via email.</li>
+</ul>
+<h3 id="pinning-logs"><a class="autolink-heading" href="#pinning-logs">Pinning Logs</a></h3>
+<p>Logs can be pinned to the top of the logs view to keep them visible as you scroll through large datasets. This helps you to keep critical log lines (such as session start markers or specific state changes) visible as a "sticky header".</p>
+<p>To pin or un-pin a log, click the push pin icon that appears when you hover over a log row:</p>
+
+<h2 id="visualizing-log-data"><a class="autolink-heading" href="#visualizing-log-data">Visualizing Log Data</a></h2>
+<p>The <strong>Visualize</strong> panel under <strong>Advanced</strong> controls the charts above the log table.</p>
+<h3 id="configuring-charts"><a class="autolink-heading" href="#configuring-charts">Configuring Charts</a></h3>
+<ul>
+<li>The first chart defaults to <code>count(logs)</code> as a fixed time-series bar chart representing log volume over the selected time range. Change the function (like <code>sum</code>, <code>avg</code>, <code>count</code>) to visualize a different metric.</li>
+<li>Click <strong>+ Add Chart</strong> to add additional charts. Each additional chart lets you choose a function (like <code>sum</code>, <code>avg</code>, <code>count</code>) and an attribute (like <code>payload_size</code>) to visualize.</li>
+<li>Additional charts also support <strong>Area</strong>, <strong>Line</strong>, and <strong>Bar</strong> chart types.</li>
+</ul>
+
+<p>Use the <strong>Group By</strong> section under Visualize to break down charts by an attribute (for example, <code>device.name</code> or <code>severity</code>). You can ad multiple Group Bys to the same chart.</p>
+<h2 id="aggregates-view"><a class="autolink-heading" href="#aggregates-view">Aggregates View</a></h2>
+<p>Switch to the <strong>Aggregates</strong> tab to see the grouped by log data. The table shows one row per group with columns for each function you've configured in Visualize (for example, <code>count(logs)</code> and <code>sum(payload_size)</code> grouped by <code>device.name</code>).</p>
+<p>Use the aggregates view to identify high-volume log sources, compare payload sizes across functions, or spot patterns without scrolling through individual log lines.</p>
+<div class="callout callout-info"><div class="callout-content"><div class="callout-body content-flush-bottom"><p>Auto-refresh is not available in the aggregates view.</p></div></div></div>
+<h2 id="query-volumes"><a class="autolink-heading" href="#query-volumes">Query Volumes</a></h2>
+<p>When a query returns too many logs, a few behaviors change in Explore. To reduce the volume, <a class="" href="/concepts/data-management/filtering/#logs-filtering">filter logs</a> or narrow the <a class="" href="/concepts/search/">search query</a>.</p>
+<ul>
+<li>Auto-refresh will be disabled.</li>
+<li>Data shown in the chart will be extrapolated from a sampled amount of the complete dataset.</li>
+</ul>
+
+<p>When doing very specific queries, like looking for a particular line of code that is causing an issue, you may see a message that says "No logs found yet". This happens when the dataset is very large, and Sentry needs to batch the results. You can continue scanning to see the next batch of logs by clicking "Continue Scanning".</p>
+
+<h2 id="trace-connected-debugging-flow"><a class="autolink-heading" href="#trace-connected-debugging-flow">Trace-Connected Debugging Flow</a></h2>
+<p>Sentry's trace-connected logs enable a seamless debugging workflow that connects logs, traces, and errors:</p>
+<ol>
+<li><p><strong>Search your logs</strong>: Start by searching for logs related to the issue you're investigating. Use message content, attributes, or filters to narrow down relevant log entries.</p></li>
+<li><p><strong>Click into a log</strong>: When you find a log entry that looks suspicious or relevant, click on it to open the log details.</p></li>
+<li><p><strong>Navigate to the trace</strong>: From the log details, click the trace link to open the full <a class="" href="/concepts/key-terms/tracing/trace-view/">Trace View</a>. This shows you the complete execution path, including all spans, operations, and timing information.</p></li>
+<li>
+<p><strong>Examine related data</strong>: In the trace view, you can see:</p>
+<ul>
+<li>
+<strong>Related errors</strong>: Any errors that occurred during the same trace</li>
+<li>
+<strong>Other logs</strong>: Additional log entries from the same request</li>
+<li>
+<strong>Performance data</strong>: Slow spans, database queries, and API calls</li>
+<li>
+<strong>User context</strong>: User information and session data</li>
+</ul>
+</li>
+<li><p><strong>Find the root cause</strong>: With full context in hand—logs, traces, spans, and errors all connected—you can quickly identify and resolve the root cause.</p></li>
+</ol>
+<p>Instead of jumping between different tools and trying to correlate timestamps, trace-connected logs give you a <strong>single flow</strong>: Log search → log entry → trace → root cause.</p>
+<h2 id="save-log-queries"><a class="autolink-heading" href="#save-log-queries">Save Log Queries</a></h2>
+<p><strong>Save as</strong> stores the log query, adds a <a class="" href="/product/dashboards/widget-builder/">dashboard widget</a>, or creates a <a class="" href="/product/monitors-and-alerts/monitors/">monitor</a>. Saved and starred queries are shared across Explore. See <a class="" href="/product/explore/#save-a-query">Save a Query</a>.</p>
+
+<h2 id="ai-powered-log-analysis"><a class="autolink-heading" href="#ai-powered-log-analysis">AI-Powered Log Analysis</a></h2>
+<p>Your Sentry logs can be leveraged with agents and tooling for debugging, summarizing, and automated analysis.</p>
+<ul>
+<li>
+: Provides command-line access to your logs, making it easy to feed log data directly into AI tools and scripts for analysis.</li>
+<li>
+<strong><a class="" href="https://mcp.sentry.dev">Sentry MCP Server</a></strong>: Provides secure connectivity between your Sentry data and LLM clients using the Model Context Protocol. This enables natural language queries and deep integration with AI tools like Claude, Cursor, and VS Code.</li>
+<li>
+: Sentry's AI debugging agent automatically uses logs alongside other telemetry data to provide intelligent issue analysis and automated fixes.</li>
+</ul>
+</div>
+<div class="grid grid-cols-2 gap-4 not-prose mt-16">
+<div class="col-span-1"><a class="no-underline" href="/product/errors/"><div class="py-3 px-4 border-2 dark:[border-color:var(--gray-4)] rounded-md transition-colors hover:[border-color:var(--accent)] text-left">
+<div class="text-sm [color:var(--foreground)]">Previous</div>
+<div class="flex items-center gap-1 font-[500] justify-start">Errors</div>
+</div></a></div>
+<div class="col-span-1"><a class="no-underline" href="/product/logs/getting-started/"><div class="py-3 px-4 border-2 dark:[border-color:var(--gray-4)] rounded-md transition-colors hover:[border-color:var(--accent)] text-right">
+<div class="text-sm [color:var(--foreground)]">Next</div>
+<div class="flex items-center gap-1 font-[500] justify-end">Set Up Logs</div>
+</div></a></div>
+</div>
+<div class="space-y-4 py-4 border-[var(--gray-6)]">
+<div class="flex items-center gap-4 text-sm mt-8">
+<span class="font-medium">Was this helpful?</span><div class="flex">
+<button class="py-1 px-2 gap-4 hover:bg-[var(--gray-3)] rounded flex items-center justify-center">Yes 👍</button><button class="py-1 px-2 gap-4 hover:bg-[var(--gray-3)] rounded flex items-center justify-center">No 👎</button>
+</div>
+</div>
+
+</div>
+<div class="styles_cta__uq_BB">
+<small><strong>Help improve this content</strong></small><small>Our documentation is open source and available on GitHub. Your contributions are welcome, whether fixing a typo (drat!) or suggesting an update ("yeah, this would be better").<div>
+<a href="https://docs.sentry.io/contributing/">How to contribute</a>   |  <a href="https://github.com/getsentry/sentry-docs/edit/master/docs/product/logs/index.mdx">Edit this page</a>   |  <a href="https://github.com/getsentry/sentry-docs/issues/new/choose">Create a docs issue</a>   |  <a href="https://www.sentry.help/en/">Get support</a> </div></small>
+</div>
+</div>
+</div></main></section></div>
+
+</div></div></div>

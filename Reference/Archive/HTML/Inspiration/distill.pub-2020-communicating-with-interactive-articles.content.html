@@ -1,0 +1,983 @@
+<div><d-title>
+<h1>Communicating with Interactive Articles</h1>
+<p>Examining the design of interactive articles by synthesizing theory from disciplines such as education, journalism, and visualization.</p>
+<div class="subgrid" id="mosaic"><figure class="subgrid svelte-hpopa"> <figcaption class="svelte-hpopa"><a class="figure-number svelte-hpopa" href="#mosaic">1</a>: <span class="svelte-hpopa" id="hover-title">Exemplary interactive articles from around the web.</span> <span id="hover-author">Select an article for more information.</span> </figcaption></figure></div>
+</d-title></div>
+<div><d-byline>
+<div class="byline grid">
+<div class="authors-affiliations grid">
+<h3>Authors</h3>
+<h3>Affiliations</h3>
+<p class="author">
+<a class="name" href="https://fredhohman.com">Fred Hohman</a>
+</p>
+<p class="affiliation">
+<a class="affiliation" href="https://www.gatech.edu/">Georgia Tech</a>
+</p>
+<p class="author">
+<a class="name" href="https://mathisonian.com/">Matthew Conlen</a>
+</p>
+<p class="affiliation">
+<a class="affiliation" href="http://www.washington.edu/">University of Washington</a>
+</p>
+<p class="author">
+<a class="name" href="https://homes.cs.washington.edu/~jheer/">Jeffrey Heer</a>
+</p>
+<p class="affiliation">
+<a class="affiliation" href="http://www.washington.edu/">University of Washington</a>
+</p>
+<p class="author">
+<a class="name" href="https://poloclub.github.io/polochau/">Duen Horng (Polo) Chau</a>
+</p>
+<p class="affiliation">
+<a class="affiliation" href="https://www.gatech.edu/">Georgia Tech</a>
+</p>
+</div>
+<div>
+<h3>Published</h3>
+<p>Sept. 11, 2020</p>
+</div>
+<div>
+<h3>DOI</h3>
+<p><a href="https://doi.org/10.23915/distill.00028">10.23915/distill.00028</a></p>
+</div>
+</div>
+</d-byline></div>
+<div><d-article>
+
+
+<div>
+<p id="introduction">
+        Computing has changed how people communicate. The transmission of news, messages, and ideas is instant. Anyone’s voice can be heard. In fact, access to digital communication technologies such as the Internet is so fundamental to daily life that their disruption by government is condemned by the United Nations Human Rights Council . But while the technology to distribute our ideas has grown in leaps and bounds, the interfaces have remained largely the same.
+      </p>
+<p>
+        Parallel to the development of the internet, researchers like Alan Kay and Douglas Engelbart worked to build technology that would empower individuals and enhance cognition. Kay imagined the Dynabook  in the hands of children across the world. Engelbart, while best remembered for his “mother of all demos,” was more interested in the ability of computation to augment human intellect . Neal Stephenson wrote speculative fiction that imagined interactive paper that could display videos and interfaces, and books that could teach and respond to their readers .
+      </p>
+</div>
+<p class="l-body-side">
+      More recent designs (though still historical by personal computing standards) point to a future where computers are connected and assist people in decision-making and communicating using rich graphics and interactive user interfaces . While some technologies have seen mainstream adoption, such as Hypertext , unfortunately, many others have not. The most popular publishing platforms, for example WordPress and Medium, choose to prioritize social features and ease-of-use while limiting the ability for authors to communicate using the dynamic features of the web.
+    </p>
+<p>
+      In the spirit of previous computer-assisted cognition technologies, a new type of computational communication medium has emerged that leverages active reading techniques to make ideas more accessible to a broad range of people. These interactive articles build on a long history, from Plato  to PHeT  to explorable explanations . They have been shown to be more engaging, can help improve recall and learning, and attract broad readership and acclaim,<d-footnote id="d-footnote-1">For example, some of <i>The New York Times</i>  and <i>The Washington Post’s</i>  most read articles are interactive stories.</d-footnote> yet we do not know that much about them.
+    </p>
+<p>
+      In this work, for the the first time, we connect the dots between interactive articles such as those featured in this journal and publications like <i>The New York Times</i> and the techniques, theories, and empirical evaluations put forth by academic researchers across the fields of education, human-computer interaction, information visualization, and digital journalism. We show how digital designers are operationalizing these ideas to create interactive articles that help boost learning and engagement for their readers compared to static alternatives.
+    </p>
+<div class="subgrid" id="applications-tab">
+<figure class="subgrid svelte-5iea2g"><div class="tabs interactive-container svelte-5iea2g">
+<div class="tab-list svelte-1s3nj47">
+<button class="svelte-1sssmne selected">Research Dissemination </button><button class="svelte-1sssmne">Journalism </button><button class="svelte-1sssmne">Education </button><button class="svelte-1sssmne">Policy and Decision Making </button>
+</div> <div class="application svelte-1e74uka">
+<div class="left svelte-1e74uka">
+<h3 class="application-title svelte-1e74uka">Research Dissemination</h3> <div class="application-description">Conducting novel research requires deep understanding and expertise in a specific area. Once achieved, researchers continue contributing new knowledge for future researchers to use and build upon. Over time, this consistent addition of new knowledge can build up, contributing to what some have called research debt. Not everyone is an expert in every field, and it can be easy to lose perspective and forget the bigger picture. Yet research should be understood by many. Interactive articles can be used to distill the latest progress in various research fields and make their methods and results accessible and understandable to a broader audience.</div>
+</div> <div class="right svelte-1e74uka">
+<div class="application-opportunities svelte-1e74uka">
+<h4 class="opportunities-title svelte-1e74uka">Opportunities</h4> <ul class="svelte-1e74uka">
+<li class="svelte-1e74uka">Engage and excite broader audience with latest research progress </li>
+<li class="svelte-1e74uka">Remove research debt, onboard new researchers </li>
+<li class="svelte-1e74uka">Make faster and clearer research progress </li>
+</ul>
+</div> <div class="application-challenges svelte-1e74uka">
+<h4 class="challenges-title svelte-1e74uka">Challenges</h4> <ul class="svelte-1e74uka">
+<li class="svelte-1e74uka">No clear incentive structure for researchers </li>
+<li class="svelte-1e74uka">Little funding for bespoke research dissemination and communication </li>
+<li class="svelte-1e74uka">Not seen as a legitimate research contribution (e.g., to the field, or one's career) </li>
+</ul>
+</div>
+</div> <div class="bottom svelte-1e74uka">
+<div class="example svelte-1e74uka">
+ <div class="example-text svelte-1e74uka">
+<div class="example-title svelte-1e74uka">
+<a href="https://research.google.com/bigpicture/attacking-discrimination-in-ml/">Attacking Discrimination with Smarter Machine Learning</a> </div> <div class="example-description svelte-1e74uka">A companion piece to a traditional research paper that uses interactive visualizations to let readers adjust a machine learning model’s behavior and explore alternative fair strategies for a loan granting scenario.</div>
+</div> </div>
+<div class="example svelte-1e74uka">
+ <div class="example-text svelte-1e74uka">
+<div class="example-title svelte-1e74uka">
+<a href="http://tomasp.net/coeffects/">Coeffects: Context-aware Programming Languages</a> </div> <div class="example-description svelte-1e74uka">A PhD thesis that contributes a programming language abstraction for understanding how programs access the context or environment in which they execute, and walks readers through the work using two simple context-aware languages with live in-browser demos.</div>
+</div> </div>
+<div class="example svelte-1e74uka">
+ <div class="example-text svelte-1e74uka">
+<div class="example-title svelte-1e74uka">
+<a href="https://complexityexplained.github.io/">What is Complexity Science?</a> </div> <div class="example-description svelte-1e74uka">A crash course in complex systems science, created by leading experts, practitioners, and students in the field, with accompanying interactive sandboxes to simulate, control, and visualize different complex systems.</div>
+</div> </div>
+</div>
+</div> </div> <figcaption><a class="figure-number" href="#applications-tab">2</a>: Interactive articles are applicable to variety of domains, such as research dissemination, journalism, education, and policy and decision making.</figcaption></figure> 
+</div>
+<p>
+      Today there is a growing excitement around the use of interactive articles for communication since they offer unique capabilities to help people learn and engage with complex ideas that traditional media lacks. After describing the affordances of interactive articles, we provide critical reflections from our own experience with open-source, interactive publishing at scale. We conclude with discussing practical challenges and open research directions for authoring, designing, and publishing interactive articles.
+    </p>
+<p>
+      This style of communication — and the platforms which support it — are still in their infancy. When choosing where to publish this work, we wanted the medium to reflect the message. Journals like <i>Distill</i> are not only pushing the boundaries of machine learning research but also offer a space to put forth new interfaces for dissemination. This work ties together the theory and practice of authoring and publishing interactive articles. It demonstrates the power that the medium has for providing new representations and interactions to make systems and ideas more accessible to broad audiences.
+    </p>
+
+<h2 id="interactive-articles">Interactive Articles: Theory &amp; Practice</h2>
+<p>
+      Interactive articles draw from and connect many types of media, from static text and images to movies and animations. But in contrast to these existing forms, they also leverage interaction techniques such as details-on demand, belief elicitation, play, and models and simulations to enhance communication.
+    </p>
+<p>
+      While the space of possible designs is far too broad to be solved with one-size-fits-all guidelines, by connecting the techniques used in these articles back to underlying theories presented across disparate fields of research we provide a missing foundation for designers to use when considering the broad space of interactions that could be added to a born-digital article.
+    </p>
+<p>
+      We draw from a corpus of over sixty interactive articles to highlight the breadth of techniques available and analyze how their authors took advantage of a digital medium to improve the reading experience along one or more dimensions, for example, by reducing the overall cognitive load, instilling positive affect, or improving information recall.
+    </p>
+<div class="subgrid" id="example-table"><figure class="subgrid svelte-1jq6e6f"><div class="svelte-1jq6e6f" id="example-table-wrapper"><table class="svelte-1jq6e6f" id="example-table">
+<thead><tr class="svelte-1jq6e6f">
+<th class="svelte-1jq6e6f" id="title-col">Title <i class="material-icons svelte-1jq6e6f">arrow_downward</i>
+</th> <th class="svelte-1jq6e6f">Publication or Author </th> <th class="hide-column svelte-1jq6e6f">Tags </th> <th class="svelte-1jq6e6f">Year </th>
+</tr></thead> <tbody class="svelte-1jq6e6f">
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="http://www.r2d3.us/visual-intro-to-machine-learning-part-1/">A visual introduction to machine learning</a></td> <td class="svelte-1jq6e6f">R2D3</td> <td class="hide-column svelte-1jq6e6f">Personalizing Reading</td> <td class="svelte-1jq6e6f">2015</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.nytimes.com/interactive/2019/08/01/upshot/are-you-rich.html">Are you rich? This income-rank quiz might change how you see yourself</a></td> <td class="svelte-1jq6e6f">The New York Times</td> <td class="hide-column svelte-1jq6e6f">Personalizing Reading</td> <td class="svelte-1jq6e6f">2019</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://research.google.com/bigpicture/attacking-discrimination-in-ml/">Attacking discrimination with smarter machine learning</a></td> <td class="svelte-1jq6e6f">Google Research</td> <td class="hide-column svelte-1jq6e6f">Research Dissemination</td> <td class="svelte-1jq6e6f">2016</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.bbc.com/news/health-30500372">Booze calculator: What's your drinking nationality</a></td> <td class="svelte-1jq6e6f">BBC</td> <td class="hide-column svelte-1jq6e6f">Personalizing Reading</td> <td class="svelte-1jq6e6f">2017</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://parametric.press/issue-01/call-for-proposals/">Call for proposals winter/spring 2019</a></td> <td class="svelte-1jq6e6f">The Parametric Press</td> <td class="hide-column svelte-1jq6e6f">Reducing Cognitive Load</td> <td class="svelte-1jq6e6f">2019</td> </tr>
+<tr class="svelte-1jq6e6f">
+ <td class="svelte-1jq6e6f">Climate Lab Book</td> <td class="hide-column svelte-1jq6e6f">Connecting People and Data</td> <td class="svelte-1jq6e6f">2016</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="http://tomasp.net/coeffects/">Coeffects: Context-aware programming languages</a></td> <td class="svelte-1jq6e6f">Tomas Petricek</td> <td class="hide-column svelte-1jq6e6f">Research Dissemination</td> <td class="svelte-1jq6e6f">2017</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://betterexplained.com/articles/colorized-math-equations/">Colorized math equations</a></td> <td class="svelte-1jq6e6f">Better Explained</td> <td class="hide-column svelte-1jq6e6f">Reducing Cognitive Load</td> <td class="svelte-1jq6e6f">2017</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://complexityexplained.github.io/">Complexity explained</a></td> <td class="svelte-1jq6e6f">Manlio De Domenico, Hiroki Sayama</td> <td class="hide-column svelte-1jq6e6f">Research Dissemination</td> <td class="svelte-1jq6e6f">2019</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.wired.com/2009/07/cutthroat-capitalism-the-game/">Cutthroat Capitalism: The Game</a></td> <td class="svelte-1jq6e6f">Wired</td> <td class="hide-column svelte-1jq6e6f">Connecting People and Data</td> <td class="svelte-1jq6e6f">2009</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://design.google/library/designing-and-learning-teachable-machine/">Designing (and learning from) a teachable machine</a></td> <td class="svelte-1jq6e6f">Google Design</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2018</td> </tr>
+<tr class="svelte-1jq6e6f">
+ <td class="svelte-1jq6e6f">Chaim Gingold</td> <td class="hide-column svelte-1jq6e6f">Reducing Cognitive Load</td> <td class="svelte-1jq6e6f">2015</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.bloomberg.com/graphics/hottest-year-on-record/">Earth's relentless warming sets a brutal new record in 2017</a></td> <td class="svelte-1jq6e6f">Bloomberg</td> <td class="hide-column svelte-1jq6e6f">Connecting People and Data</td> <td class="svelte-1jq6e6f">2018</td> </tr>
+<tr class="svelte-1jq6e6f">
+ <td class="svelte-1jq6e6f">Christopher Makler</td> <td class="hide-column svelte-1jq6e6f">Education</td> <td class="svelte-1jq6e6f">2017</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="http://distill.pub/2016/handwriting">Experiments in handwriting with a neural network</a></td> <td class="svelte-1jq6e6f">Distill</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2016</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="http://worrydream.com/ExplorableExplanations/">Explorable explanations</a></td> <td class="svelte-1jq6e6f">Bret Victor</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2011</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.nytimes.com/interactive/2018/03/19/upshot/race-class-white-and-black-men.html">Extensive data shows punishing reach of racism for black boys</a></td> <td class="svelte-1jq6e6f">The New York Times</td> <td class="hide-column svelte-1jq6e6f">Connecting People and Data</td> <td class="svelte-1jq6e6f">2018</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.bloomberg.com/graphics/2017-job-risk/">Find Out If Your Job Will Be Automated</a></td> <td class="svelte-1jq6e6f">Bloomberg</td> <td class="hide-column svelte-1jq6e6f">Personalizing Reading</td> <td class="svelte-1jq6e6f">2017</td> </tr>
+<tr class="svelte-1jq6e6f">
+ <td class="svelte-1jq6e6f">NASA Global Climate Change</td> <td class="hide-column svelte-1jq6e6f">Connecting People and Data</td> <td class="svelte-1jq6e6f">2020</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://fivethirtyeight.com/features/gun-deaths/">Gun deaths in america</a></td> <td class="svelte-1jq6e6f">FiveThirtyEight</td> <td class="hide-column svelte-1jq6e6f">Connecting People and Data</td> <td class="svelte-1jq6e6f">2016</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://qz.com/994486/the-way-you-draw-circles-says-a-lot-about-you/">How do you draw a circle? We analyzed 100,000 drawings to show how culture shapes our instincts</a></td> <td class="svelte-1jq6e6f">Quartz</td> <td class="hide-column svelte-1jq6e6f">Prompting Self-Reflection</td> <td class="svelte-1jq6e6f">2017</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://idyll.pub/post/the-eye-5b169094cce3bece5d95e964/">How does the eye work</a></td> <td class="svelte-1jq6e6f">Explorable Explanations Game Jam</td> <td class="hide-column svelte-1jq6e6f">Reducing Cognitive Load</td> <td class="svelte-1jq6e6f">2018</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.nytimes.com/interactive/2018/08/30/climate/how-much-hotter-is-your-hometown.html">How much hotter is your hometown than when you were born</a></td> <td class="svelte-1jq6e6f">The New York Times</td> <td class="hide-column svelte-1jq6e6f">Personalizing Reading</td> <td class="svelte-1jq6e6f">2018</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.nytimes.com/interactive/2014/06/05/upshot/how-the-recession-reshaped-the-economy-in-255-charts.html">How the recession shaped the economy, in 255 charts</a></td> <td class="svelte-1jq6e6f">The New York Times</td> <td class="hide-column svelte-1jq6e6f">Reducing Cognitive Load</td> <td class="svelte-1jq6e6f">2014</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://ncase.me/remember/">How to remember anything for forever-ish</a></td> <td class="svelte-1jq6e6f">Nicky Case</td> <td class="hide-column svelte-1jq6e6f">Prompting Self-Refelction</td> <td class="svelte-1jq6e6f">2018</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://distill.pub/2016/misread-tsne/">How to use t-SNE effectively</a></td> <td class="svelte-1jq6e6f">Distill</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2016</td> </tr>
+<tr class="svelte-1jq6e6f">
+ <td class="svelte-1jq6e6f">Flowing Data</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2016</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.nytimes.com/interactive/2014/upshot/dialect-quiz-map.html">How y’all, youse and you guys talk</a></td> <td class="svelte-1jq6e6f">The New York Times</td> <td class="hide-column svelte-1jq6e6f">Introduction</td> <td class="svelte-1jq6e6f">2013</td> </tr>
+<tr class="svelte-1jq6e6f">
+ <td class="svelte-1jq6e6f">The Pudding</td> <td class="hide-column svelte-1jq6e6f">Personalizing Reading</td> <td class="svelte-1jq6e6f">2018</td> </tr>
+<tr class="svelte-1jq6e6f">
+ <td class="svelte-1jq6e6f">Setosa</td> <td class="hide-column svelte-1jq6e6f">Reducing Cognitive Load</td> <td class="svelte-1jq6e6f">2015</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.nytimes.com/interactive/2014/upshot/buy-rent-calculator.html">Is it better to rent or buy</a></td> <td class="svelte-1jq6e6f">The New York Times</td> <td class="hide-column svelte-1jq6e6f">Policy Making</td> <td class="svelte-1jq6e6f">2014</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://parametric.press">Issue 01: Science &amp; Society</a></td> <td class="svelte-1jq6e6f">The Parametric Press</td> <td class="hide-column svelte-1jq6e6f">Critical Reflections</td> <td class="svelte-1jq6e6f">2018</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.nytimes.com/interactive/2017/07/28/climate/more-frequent-extreme-summer-heat.html">It's not your imagination. Summers are getting hotter.</a></td> <td class="svelte-1jq6e6f">The New York Times</td> <td class="hide-column svelte-1jq6e6f">Connecting People and Data</td> <td class="svelte-1jq6e6f">2017</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://pudding.cool/2018/02/waveforms/">Let's learn about waveforms</a></td> <td class="svelte-1jq6e6f">The Pudding</td> <td class="hide-column svelte-1jq6e6f">Education</td> <td class="svelte-1jq6e6f">2018</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.washingtonpost.com/2016-election-results/us-presidential-race/?itid=sf_2016-election-results-washington">Live results: Presidential election</a></td> <td class="svelte-1jq6e6f">The Washington Post</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2016</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://parametric.press/issue-01/on-particle-physics/">On Particle Physics</a></td> <td class="svelte-1jq6e6f">The Parametric Press</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2019</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="http://symbolflux.com/lodessay/">On variable level-of-detail documents</a></td> <td class="svelte-1jq6e6f">Weston Beecroft</td> <td class="hide-column svelte-1jq6e6f">Reducing Cognitive Load</td> <td class="svelte-1jq6e6f">2016</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="http://ncase.me/polygons">Parable of the polygons</a></td> <td class="svelte-1jq6e6f">Vi Hart, Nicky Case</td> <td class="hide-column svelte-1jq6e6f">Connecting People and Data</td> <td class="svelte-1jq6e6f">2016</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://quantum.country/">Quantum country</a></td> <td class="svelte-1jq6e6f">Andy Matuschak, Michael A Nielsen</td> <td class="hide-column svelte-1jq6e6f">Prompting Self-Reflection</td> <td class="svelte-1jq6e6f">2019</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="http://worrydream.com/ScientificCommunicationAsSequentialArt">Scientific communication as sequential art</a></td> <td class="svelte-1jq6e6f">Bret Victor</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2011</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://fivethirtyeight.com/features/prison-reform-risk-assessment/">Should prison sentences be based on crimes that haven’t been committed yet</a></td> <td class="svelte-1jq6e6f">FiveThirtyEight</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2015</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="http://www.nytimes.com/projects/2012/snow-fall/index.html">Snow fall: The avalanche at tunnel creek</a></td> <td class="svelte-1jq6e6f">The New York Times</td> <td class="hide-column svelte-1jq6e6f">Connecting People and Data</td> <td class="svelte-1jq6e6f">2014</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://pudding.cool/2019/02/gyllenhaal/">The Gyllenhaal experiment</a></td> <td class="svelte-1jq6e6f">The Pudding</td> <td class="hide-column svelte-1jq6e6f">Prompting Self-Reflection</td> <td class="svelte-1jq6e6f">2019</td> </tr>
+<tr class="svelte-1jq6e6f">
+ <td class="svelte-1jq6e6f">Financial Times</td> <td class="hide-column svelte-1jq6e6f">Journalism</td> <td class="svelte-1jq6e6f">2017</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://projects.fivethirtyeight.com/redistricting-maps/">The atlas of redistricting</a></td> <td class="svelte-1jq6e6f">FiveThirtyEight</td> <td class="hide-column svelte-1jq6e6f">Policy Making</td> <td class="svelte-1jq6e6f">2018</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://idyll.pub/post/dimensionality-reduction-293e465c2a3443e8941b016d/">The beginner's guide to dimensionality reduction</a></td> <td class="svelte-1jq6e6f">VISxAI at IEEE VIS</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2018</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://thebookofshaders.com">The book of shaders</a></td> <td class="svelte-1jq6e6f">Patricio Gonzalez Vivo, Jen Lowe</td> <td class="hide-column svelte-1jq6e6f">Education</td> <td class="svelte-1jq6e6f">2015</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="http://www.fallen.io/ww2/">The fallen of World War II</a></td> <td class="svelte-1jq6e6f">Neil Halloran</td> <td class="hide-column svelte-1jq6e6f">Connecting People and Data</td> <td class="svelte-1jq6e6f">2015</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://parametric.press/issue-01/the-myth-of-the-impartial-machine/">The myth of the impartial machine</a></td> <td class="svelte-1jq6e6f">The Parametric Press</td> <td class="hide-column svelte-1jq6e6f">Critical Reflections</td> <td class="svelte-1jq6e6f">2019</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://ncase.me/ballot/">To build a better ballot</a></td> <td class="svelte-1jq6e6f">Nicky Case</td> <td class="hide-column svelte-1jq6e6f">Policy Making</td> <td class="svelte-1jq6e6f">2016</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://pair-code.github.io/understanding-umap/">Understanding UMAP</a></td> <td class="svelte-1jq6e6f">Google PAIR</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2019</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://eater.net/quaternions">Visualizing quaternions: An explorable video series</a></td> <td class="svelte-1jq6e6f">Grant Sanderson, Ben Eater</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2018</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.bloomberg.com/graphics/2015-whats-warming-the-world/">What's really warming the world</a></td> <td class="svelte-1jq6e6f">Bloomberg</td> <td class="hide-column svelte-1jq6e6f">Journalism</td> <td class="svelte-1jq6e6f">2015</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.nytimes.com/interactive/2016/upshot/presidential-polls-forecast.html">Who will be president</a></td> <td class="svelte-1jq6e6f">The New York Times</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2016</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://projects.fivethirtyeight.com/2016-election-forecast">Who will win the presidency</a></td> <td class="svelte-1jq6e6f">FiveThirtyEight</td> <td class="hide-column svelte-1jq6e6f">Making Systems Playful</td> <td class="svelte-1jq6e6f">2016</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="http://distill.pub/2017/momentum">Why momentum really works</a></td> <td class="svelte-1jq6e6f">Distill</td> <td class="hide-column svelte-1jq6e6f">Reducing Cognitive Load</td> <td class="svelte-1jq6e6f">2017</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/">Why outbreaks like coronavirus spread exponentially, and how to 'flatten the curve'</a></td> <td class="svelte-1jq6e6f">The Washington Post</td> <td class="hide-column svelte-1jq6e6f">Introduction</td> <td class="svelte-1jq6e6f">2020</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html">You draw it: How family income predicts children’s college chances</a></td> <td class="svelte-1jq6e6f">The New York Times</td> <td class="hide-column svelte-1jq6e6f">Journalism</td> <td class="svelte-1jq6e6f">2015</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.nytimes.com/interactive/2017/04/14/upshot/drug-overdose-epidemic-you-draw-it.html">You draw it: Just how bad is the drug overdose epidemic</a></td> <td class="svelte-1jq6e6f">The New York Times</td> <td class="hide-column svelte-1jq6e6f">Prompting Self-Reflection</td> <td class="svelte-1jq6e6f">2017</td> </tr>
+<tr class="svelte-1jq6e6f">
+<td class="svelte-1jq6e6f"><a href="https://www.nytimes.com/interactive/2017/01/15/us/politics/you-draw-obama-legacy.html">You draw it: What got better or worse during Obama's presidency</a></td> <td class="svelte-1jq6e6f">The New York Times</td> <td class="hide-column svelte-1jq6e6f">Prompting Self-Reflection</td> <td class="svelte-1jq6e6f">2017</td> </tr>
+</tbody>
+</table></div> <figcaption><a class="table-number" href="#example-table">1</a>: A sortable list of the interactive articles we discuss in this work.</figcaption></figure></div>
+<p>
+      Because diverse communities create interactive content, this medium goes by many different names and has not yet settled on a standardized format nor definition.<d-footnote id="d-footnote-2">However, one is taking shape.</d-footnote> Researchers have proposed artifacts such as explorable multiverse analyses , explainables , and exploranations  to more effectively disseminate their work, communicate their results to the public, and remove research debt . In newsrooms, data journalists, developers, and designers work together to make complex news and investigative reporting clear and engaging using interactive stories . Educators use interactive textbooks as an alternative learning format to give students hands-on experience with learning material .
+    </p>
+<p>
+      Besides these groups, others such as academics, game developers, web developers, and designers blend editorial, design, and programming skills to create and publish explorable explanations , interactive fiction , interactive non-fiction , active essays , and interactive games . While these all slightly differ in their technical approach and target audience, they all largely leverage the interactivity of the modern web.
+    </p>
+<p>
+      We focus on five unique affordances of interactive articles, listed below. In-line videos and example interactive graphics are presented alongside this discussion to demonstrate specific techniques.
+    </p>
+<d-figure class="subgrid" id="affordances"><div class="svelte-j3x3n" id="wrapper">
+<div class="one svelte-j3x3n"><div class="item blue-green svelte-j3x3n"><div class="inner svelte-j3x3n">Connecting People and Data. <div class="caption svelte-j3x3n">Make data pleasant to work with. Happy readers are engaged readers.</div>
+</div></div></div>
+<div class="two svelte-j3x3n"><div class="item red-orange svelte-j3x3n"><div class="inner svelte-j3x3n">Making Systems Playful. <div class="caption svelte-j3x3n">Run interactive simulations directly in the browser. No setup required.</div>
+</div></div></div>
+<div class="three svelte-j3x3n"><div class="item soft-blue svelte-j3x3n"><div class="inner svelte-j3x3n">Prompting Self-Reflection. <div class="caption svelte-j3x3n">Help readers learn by asking them to reflect in a low pressure environment.</div>
+</div></div></div>
+<div class="four svelte-j3x3n"><div class="item argon svelte-j3x3n"><div class="inner svelte-j3x3n">Personalizing Reading. <div class="caption svelte-j3x3n">Let readers choose the content that is relevant to their own experience.</div>
+</div></div></div>
+<div class="five svelte-j3x3n"><div class="item sun svelte-j3x3n"><div class="inner svelte-j3x3n">Reducing Cognitive Load. <div class="caption svelte-j3x3n">Use effective representations to make complex topics more intuitive.</div>
+</div></div></div>
+</div></d-figure>
+
+
+<h3 class="blue-green affordance" id="connecting-people-and-data">Connecting People and Data</h3>
+<p>
+      As visual designers are well aware, and as journalism researchers have confirmed empirically , an audience which finds content to be aesthetically pleasing is more likely to have a positive attitude towards it. This in turn means people will spend more time engaging with content and ultimately lead to improved learning outcomes. While engagement itself may not be an end goal of most research communications, the ability to influence both audience attitude and the amount of time that is spent is a useful lever to improve learning: we know from education research that both time spent  and emotion  are predictive of learning outcomes.
+    </p>
+<p>
+      Animations can also be used to improve engagement . While there is debate amongst researchers if animations in general are able to more effectively convey the same information compared to a well designed static graphic , animation has been shown to be effective specifically for communicating state transitions , uncertainty , causality , and constructing narratives . A classic example of this is Muybridge’s motion study  that can be seen in <a class="figure-number-text" href="#horse">3</a>: while the series of still images may be more effective for answering specific questions like, “Does a horse lift all four of its feet off the ground when it runs?” watching the animation in slow motion gives the viewer a much more visceral sense of how it runs. A more modern example can be found in OpenAI’s reporting on their hide-and-seek agents . The animations here instantly give the viewer a sense of how the agents are operating in their environment.
+    </p>
+<d-figure class="subgrid" id="horse"><figure class="subgrid svelte-57t30x"><div class="interactive-container svelte-57t30x" id="wrapper">
+<div class="svelte-57t30x" id="horse-wrapper">
+ <div class="svelte-57t30x" id="horse-controls">
+<div>
+<div class="svelte-vryxo2" id="title">Multiple representations give multiple perspectives.</div> <div class="svelte-vryxo2" id="subtitle">Complementing views, like user-controled animation and small multiples, help engage and connect readers.</div>
+</div> <div class="caption svelte-57t30x">In 1878, Eadweard Muybridge settled Leland Stanford's hotly debated question of whether all four feet of a horse lifted off the ground during a trot using multiple cameras to capture motion in stop-motion photographs.</div> <div class="svelte-57t30x" id="button-wrapper">
+<button class="svelte-57t30x"><i class="material-icons">play_circle_outline</i></button> 
+</div>
+</div>
+</div> 
+</div> <figcaption><a class="figure-number" href="#horse">3</a>: Click the play button or scrub over the video frames to watch and control the animation.</figcaption></figure></d-figure>
+<p>
+      Passively, animation can be used to add drama to a graphic displaying important information, but which readers may otherwise find dry. Scientific data which is inherently time varying may be shown using an animation to connect viewers more closely with the original data, as compared to seeing an abstracted static view. For example, Ed Hawkins designed “Climate Spirals,” which shows the average global temperature change over time . This presentation of the data resonated with a large public audience, so much so that it was displayed at the opening ceremony at the 2016 Rio Olympics. In fact, many other climate change visualizations of this same dataset use animation to build suspense and highlight the recent spike in global temperatures .
+    </p>
+<p>
+<d-figure class="video-d-figure" id="badger2018extensive"><figure class="svelte-1kn9xof" id="badger2018extensive"> <figcaption><a class="video-number" href="#badger2018extensive">1</a>: In "<a href="https://www.nytimes.com/interactive/2018/03/19/upshot/race-class-white-and-black-men.html">Extensive Data Shows Punishing Reach of Racism for Black Boys</a>" , the use of unit animation carries the main visualization of the story to highlight real people’s lives changing over time. <div class="svelte-1kn9xof" id="video-lengths"><span class="svelte-1kn9xof">Playing
+                    <button class="video-selected svelte-1kn9xof">Preview</button>,
+                    click to play
+                    <button class="svelte-1kn9xof">Full Video</button>.</span></div></figcaption></figure></d-figure>
+      By adding variation over time, authors have access to a new dimension to encode information and an even wider design space to work in. Consider the animated graphic in <i>The New York Times</i> story “Extensive Data Shows Punishing Reach of Racism for Black Boys,” which shows economic outcomes for 10,000 men who grew up in rich families . While there are many ways in which the same data could have been communicated more succinctly using a static visualization , by utilizing animation, it became possible for the authors to design a unit visualization in which each data point shown represented an individual, reminding readers that the data in this story was about real peoples’ lives.
+    </p>
+<p>
+      Unit visualizations have also been used to evoke empathy in readers in other works covering grim topics such as gun deaths  and soldier deaths in war . Using person-shaped glyphs (as opposed to abstract symbols like circles or squares) has been shown not to produce additional empathic responses , but including actual photographs of people helps readers gain interest in, remember , and communicate complex phenomena  using visualizations. Correll argues that much of the power of visualization comes from abstraction, but quantization stymies empathy . He instead suggests anthropomorphizing data, borrowing journalistic and rhetoric techniques to create novel designs or interventions to foster empathy in readers when viewing visualizations .
+    </p>
+<p>
+      Regarding the format of interactive articles, an ongoing debate within the data journalism community has been whether articles which utilize scroll-based graphics (scrollytelling) are more effective than those which use step-based graphics (slideshows). McKenna et al.  found that their study participants largely preferred content to be displayed with a step- or scroll-based navigation as opposed to traditional static articles, but did not find a significant difference in engagement between the two layouts. In related work, Zhi et al. found that performance on comprehension tasks was better in slideshow layouts than in vertical scroll-based layouts . Both studies focused on people using desktop (rather than mobile) devices. More work is needed to evaluate the effectiveness of various layouts on mobile devices, however the interviews conducted by MckEnna et al. suggest that additional features, such as supporting navigation through swipe gestures, may be necessary to facilitate the mobile reading experience.
+    </p>
+<div>
+<p>
+<d-figure class="video-d-figure" id="webworks2009cutthroat"><figure class="svelte-1kn9xof" id="webworks2009cutthroat"> <figcaption><a class="video-number" href="#webworks2009cutthroat">2</a>: In "<a href="https://www.wired.com/2009/07/cutthroat-capitalism-the-game/">Cutthroat Capitalism: The Game</a>" , readers play the role of a pirate commander, giving them a unique look at the economics that led to rise in piracy off the coast of Somalia. <div class="svelte-1kn9xof" id="video-lengths"><span class="svelte-1kn9xof">Playing
+                    <button class="video-selected svelte-1kn9xof">Preview</button>,
+                    click to play
+                    <button class="svelte-1kn9xof">Full Video</button>.</span></div></figcaption></figure></d-figure>
+        The use of games to convey information has been explored in the domains of journalism  and education . Designers of newsgames use them to help readers build empathy with their subject, for example in <i>The Financial Times’s</i> “Uber Game” , and explain complex systems consisting of multiple parts, for example in <i>Wired’s</i> “Cutthroat Capitalism: The Game” . In educational settings the use of games has been shown to motivate students while maintaining or improving learning outcomes .
+      </p>
+<p>
+        As text moves away from author-guided narratives towards more reader-driven ones , the reading experience becomes closer to that of playing a game. For example, the critically acclaimed explorable explanation “Parable of the Polygons” puts play at the center of the story, letting a reader manually run an algorithm that is later simulated in the article to demonstrate how a population of people with slight personal biases against diversity leads to social segregation .
+      </p>
+</div>
+<h3 class="affordance red-orange" id="making-systems-playful">Making Systems Playful</h3>
+<p>
+      Interactive articles utilize an underlying computational infrastructure, allowing authors editorial control over the computational processes happening on a page. This access to computation allows interactive articles to engage readers in an experience they could not have with traditional media. For example, in “Drawing Dynamic Visualizations”, Victor demonstrates how an interactive visualization can allow readers to build an intuition about the behavior of a system, leading to a fundamentally different understanding of an underlying system compared to looking at a set of static equations . These articles leverage active learning and reading, combined with critical thinking  to help diverse sets of people learn and explore using sandboxed models and simulations .
+    </p>
+<p>
+      Complex systems often require extensive setup to allow for proper study: conducting scientific experiments, training machine learning models, modeling social phenomenon, digesting advanced mathematics, and researching recent political events, all require the configuration of sophisticated software packages before a user can interact with a system at all, even just to tweak a single parameter. This barrier to entry can deter people from engaging with complex topics, or explicitly prevent people who do not have the necessary resources, for example, computer hardware for intense machine learning tasks. Interactive articles drastically lower these barriers.
+    </p>
+<p>
+      Science that utilizes physical and computational experiments requires systematically controlling and changing parameters to observe their effect on the modeled system. In research, dissemination is typically done through static documents, where various figures show and compare the effect of varying particular parameters. However, efforts have been made to leverage interactivity in academic publishing, summarized in . Reimagining the research paper with interactive graphics , as exploranations , or as explorable multiverse analyses , gives readers control over the reporting of the research findings and shows great promise in helping readers both digest new ideas and learn about existing fields that are built upon piles of research debt .
+    </p>
+<p>
+      Beyond reporting statistics, interactive articles are extremely powerful when the studied systems can be modeled or simulated in real-time with interactive parameters without setup, e.g., in-browser sandboxes. Consider the example in <a class="figure-number-text" href="#simulation-vis">4</a> of a Boids simulation that models how birds flock together. Complex systems such as these have many different parameters that change the resulting simulation. These sandbox simulations allow readers to play with parameters to see their effect without worrying about technical overhead or other experimental consequences.
+    </p>
+<d-figure class="subgrid" id="simulation-vis"><figure class="subgrid"><div class="interactive-container svelte-kj873b" id="wrapper"><div>
+<div>
+<div class="svelte-vryxo2" id="title">Interact with live simulations—no setup required.</div> <div class="svelte-vryxo2" id="subtitle">This Boids visualization models the movement of a flock of birds, and exposes parameters that a reader can manipulate to change the behavior of the simulation.</div>
+</div> <div class="controls svelte-kj873b"><div class="control svelte-kj873b">Boid Count 
+</div></div> <div class="controls-bottom svelte-kj873b">
+<div class="control svelte-kj873b">
+<div class="control-label svelte-kj873b">Separation Distance</div> 
+</div> <div class="control svelte-kj873b">
+<div class="control-label svelte-kj873b">Alignment Distance</div> 
+</div> <div class="control svelte-kj873b">
+<div class="control-label svelte-kj873b">Cohesion Distance</div> 
+</div>
+</div> <div class="controls-bottom svelte-kj873b">
+<div class="control svelte-kj873b">
+<div class="control-label svelte-kj873b">Separation Force</div> 
+</div> <div class="control svelte-kj873b">
+<div class="control-label svelte-kj873b">Alignment Force</div> 
+</div> <div class="control svelte-kj873b">
+<div class="control-label svelte-kj873b">Cohesion Force</div> 
+</div>
+</div>
+</div></div> <figcaption><a class="figure-number" href="#simulation-vis">4</a>: At the top, drag the slider to change the number of boids in the simulation. Underneath, adjust the different parameters to find interesting configurations.</figcaption></figure></d-figure>
+<p>
+      This is a standout design pattern within interactive articles, and many examples exist ranging in complexity. “How You Will Die” visually simulates the average life expectancy of different groups of people, where a reader can choose the gender, race, and age of a person . “On Particle Physics” allows readers to experiment with accelerating different particles through electric and magnetic fields to build intuition behind electromagnetism foundations such as the Lorentz force and Maxwell’s equations — the experiments backing these simulations cannot be done without multi-million dollar machinery . “Should Prison Sentences Be Based On Crimes That Haven’t Been Committed Yet?” shows the outcome of calculating risk assessments for recidivism where readers adjust the thresholds for determining who gets parole .
+    </p>
+<p>
+<d-figure class="video-d-figure" id="barron2018designing"><figure class="svelte-1kn9xof" id="barron2018designing"> <figcaption><a class="video-number" href="#barron2018designing">3</a>: In "<a href="https://design.google/library/designing-and-learning-teachable-machine/">Teachable Machines</a>" , a reader uses their own live video camera to train a machine learning image classifier in-browser without any extra computational resources. <div class="svelte-1kn9xof" id="video-lengths"><span class="svelte-1kn9xof">Playing
+                    <button class="video-selected svelte-1kn9xof">Preview</button>,
+                    click to play
+                    <button class="svelte-1kn9xof">Full Video</button>.</span></div></figcaption></figure></d-figure>
+      The dissemination of modern machine learning techniques has been bolstered by interactive models and simulations. Three articles, “How to Use t-SNE Effectively” , “The Beginner’s Guide to Dimensionality Reduction” , and “Understanding UMAP”  show the effect that hyperparameters and different dimensionality reduction techniques have on creating low dimensional embeddings of high-dimensional data. A popular approach is to demonstrate how machine learning models work with in-browser models , for example, letting readers use their own video camera as input to an image classification model  or handwriting as input to a stroke prediction model . Other examples are aimed at technical readers who wish to learn about specific concepts within deep learning. Here, interfaces allow readers to choose model hyperparameters, datasets, and training procedures that, once selected, visualize the training process and model internals to inspect the effect of varying the model configuration .
+    </p>
+<p>
+      Interactive articles commonly communicate a single idea or concept using multiple representations. The same information represented in different forms can have different impact. For example, in mathematics often a single object has both an algebraic and a geometric representation. A clear example of this is the definition of a circle . Both are useful, inform one another, and lead to different ways of thinking. Examples of interactive articles that demonstrate this include various media publications’ political election coverage that break down the same outcome in multiple ways, for example, by voter demographics, geographical location, and historical perspective .
+    </p>
+<p>
+      The Multimedia Principle states that people learn better from words and pictures rather than words or pictures alone , as people can process information through both a visual channel and auditory channel simultaneously. Popular video creators such as 3Blue1Brown  and Primer  exemplify these principles by using rich animation and simultaneous narration to break down complex topics. These videos additionally take advantage of the Redundancy Principle by including complementary information in the narration and in the graphics rather than repeating the same information in both channels .
+    </p>
+<div>
+<p>
+<d-figure class="video-d-figure" id="sanderson2018visualizing"><figure class="svelte-1kn9xof" id="sanderson2018visualizing"> <figcaption><a class="video-number" href="#sanderson2018visualizing">4</a>: In "<a href="https://eater.net/quaternions">Visualizing Quaternions</a>" , a viewer can take control of an interactive video while narration continues in the background. <div class="svelte-1kn9xof" id="video-lengths"><span class="svelte-1kn9xof">Playing
+                    <button class="video-selected svelte-1kn9xof">Preview</button>,
+                    click to play
+                    <button class="svelte-1kn9xof">Full Video</button>.</span></div></figcaption></figure></d-figure>
+        While these videos are praised for their approachability and rich exposition, they are not interactive. One radical extension from traditional video content is also incorporating user input into the video while narration plays. A series of these interactive videos on “Visualizing Quaternions” lets a reader listen to narration of a live animation on screen, but at any time the viewer can take control of the video and manipulate the animation and graphics while simultaneously listening to the narration .
+      </p>
+<p>
+        Utilizing multiple representations allows a reader to see different abstractions of a single idea. Once these are familiar and known, an author can build interfaces from multiple representations and let readers interact with them simultaneously, ultimately leading to interactive experiences that demonstrate the power of computational communication mediums. Next, we discuss such experiences where interactive articles have transformed communication and learning by making live models and simulations of complex systems and phenomena accessible.
+      </p>
+</div>
+<h3 class="affordance soft-blue" id="prompting-self-reflection">Prompting Self-Reflection</h3>
+<p>
+      Asking a student to reflect on material that they are studying and explain it back to themselves — a learning technique called self-explanation — is known to have a positive impact on learning outcomes . By generating explanations and refining them as new information is obtained, it is hypothesized that a student will be more engaged with the processes which they are studying . When writing for an interactive environment, components can be included which prompt readers to make a prediction or reflection about the material and cause them to engage in self-explanation .
+    </p>
+<p>
+      While these prompts may take the form of text entry or other standard input widgets, one of the most prominent examples of this technique used in practice comes from <i>The New York Times</i> “You Draw It” visualizations . In these visualizations, readers are prompted to complete a trendline on a chart, causing them to generate an explanation based on their current beliefs for why they think the trend may move in a certain direction. Only after readers make their prediction are they shown the actual data. Kim et al. showed that using visualizations as a prompt is an effective way to encourage readers to engage in self explanation and improve their recall of the information . <a class="figure-number-text" href="#you-draw-it">5</a> shows one these visualizations for CO₂ emissions from burning fossil fuels. After clicking and dragging to guess the trend, your guess will be compared against the actual data.
+    </p>
+<d-figure class="subgrid" id="you-draw-it"><figure class="subgrid"><div class="interactive-container svelte-1w1wx4x" id="wrapper">
+<div>
+<div class="svelte-vryxo2" id="title">Complete the trend of CO₂ emissions from burning fossil fuels.</div> <div class="svelte-vryxo2" id="subtitle">Letting a reader first guess about data and only showing the ground truth afterwards challenges a reader's prior beliefs and has been shown to improve their recall of information.</div>
+</div> <div class="chartwrap svelte-1w1wx4x">
+<svg class="svelte-1w1wx4x"><g class="x axis"><g class="tick"><text>1950</text></g><g class="tick"><text>1960</text></g><g class="tick"><text>1970</text></g><g class="tick"><text>1980</text></g><g class="tick"><text>1990</text></g><g class="tick"><text>2000</text></g><g class="tick"><text>2010</text></g></g><g class="y axis"><g class="tick"><text>1,000</text></g><g class="tick"><text>2,000</text></g><g class="tick"><text>3,000</text></g><g class="tick"><text>4,000</text></g><g class="tick"><text>5,000</text></g><g class="tick"><text>6,000</text></g><g class="tick"><text>7,000</text></g><g class="tick"><text>8,000</text></g><g class="tick"><text>9,000</text></g><g class="tick"><text>10,000</text></g></g></svg> </div> <div class="caption-text svelte-1w1wx4x"><div class="figcaption">Measured in metric tons of CO₂.</div></div>
+</div> <figcaption><a class="figure-number" href="#you-draw-it">5</a>: Click and drag to make your guess of the data's trend over time. Afterward, the real data will be revealed.</figcaption></figure></d-figure>
+<div>
+<p>
+<d-figure class="video-d-figure" id="goldenberg2019you"><figure class="svelte-1kn9xof" id="goldenberg2019you"> <figcaption><a class="video-number" href="#goldenberg2019you">5</a>: In "<a href="https://pudding.cool/2019/02/gyllenhaal/">The Gyllenhaal Experiment</a>" , readers are tasked to type the names of celebrities with challenging spellings. After submitting a guess, a visualization shows the reader’s entry against everyone else’s, scaled by the frequency of different spellings. <div class="svelte-1kn9xof" id="video-lengths"><span class="svelte-1kn9xof">Playing
+                    <button class="video-selected svelte-1kn9xof">Preview</button>,
+                    click to play
+                    <button class="svelte-1kn9xof">Full Video</button>.</span></div></figcaption></figure></d-figure>
+        In the case of “You Draw It,” readers were also shown the predictions that others made, adding a social comparison element to the experience. This additional social information was not shown to necessarily be effective for improving recall . However, one might hypothesize that this social aspect may have other benefits such as improving reader engagement, due to the popularity of recent visual stories using this technique, for example in <i>The Pudding’s</i> “Gyllenhaal Experiment”  and <i>Quartz’s</i> “How do you draw a circle?” .
+      </p>
+<p>
+        Prompting readers to remember previously presented material, for example through the use of quizzes, can be an effective way to improve their ability to recall it in the future . This result from cognitive psychology, known as the testing effect , can be utilized by authors writing for an interactive medium . While testing may call to mind stressful educational experiences for many, quizzes included in web articles can be low stakes: there is no need to record the results or grade readers. The effect is enhanced if feedback is given to the quiz-takers, for example by providing the correct answer after the user has recorded their response .
+      </p>
+<p>
+<d-figure class="video-d-figure" id="case2014how"><figure class="svelte-1kn9xof" id="case2014how"> <figcaption><a class="video-number" href="#case2014how">6</a>: In "<a href="https://ncase.me/remember/">How To Remember Anything Forever-ish</a>" , readers use spaced repetition to learn about spaced repetition. <div class="svelte-1kn9xof" id="video-lengths"><span class="svelte-1kn9xof">Playing
+                    <button class="video-selected svelte-1kn9xof">Preview</button>,
+                    click to play
+                    <button class="svelte-1kn9xof">Full Video</button>.</span></div></figcaption></figure></d-figure>
+        The benefits of the testing effect can be further enhanced if the testing is repeated over a period of time , assuming readers are willing to participate in the process. The idea of spaced repetition has been a popular foundation for memory building applications, for example in the Anki flash card system. More recently, authors have experimented with building spaced repetition directly into their web-based writing , giving motivated readers the opportunity to easily opt-in to a repeated testing program over the relevant material.
+      </p>
+</div>
+<h3 class="affordance argon" id="personalizing-reading">Personalizing Reading</h3>
+<p>
+      Content personalization — automatically modifying text and multimedia based on a reader’s individual features or input (e.g., demographics or location) — is a technique that has been shown to increase engagement and learning within readers  and support behavioral change . The PersaLog system gives developers tools to build personalized content and presents guidelines for personalization based on user research from practicing journalists . Other work has shown that “personalized spatial analogies,” presenting distance measurements in regions where readers are geographically familiar with, help people more concretely understand new distance measurements within news stories .
+    </p>
+<p>
+<d-figure class="video-d-figure" id="popovich2018how"><figure class="svelte-1kn9xof" id="popovich2018how"> <figcaption><a class="video-number" href="#popovich2018how">7</a>: In "<a href="https://www.nytimes.com/interactive/2018/08/30/climate/how-much-hotter-is-your-hometown.html">How Much Hotter Is Your Hometown Than When You Were Born?</a>" , a reader enters their birthplace and birth year and is shown multiple visualizations describing the impact of climate on their hometown. <div class="svelte-1kn9xof" id="video-lengths"><span class="svelte-1kn9xof">Playing
+                    <button class="video-selected svelte-1kn9xof">Preview</button>,
+                    click to play
+                    <button class="svelte-1kn9xof">Full Video</button>.</span></div></figcaption></figure></d-figure>
+      Personalization alone has also been used as the standout feature of multiple interactive articles. Both “How Much Hotter Is Your Hometown Than When You Were Born?”  and “Human Terrain”  use a reader’s location to drive stories relating to climate change and population densities respectively. Other examples ask for explicit reader input, such as a story that visualizes a reader’s net worth to challenge a reader’s assumptions if they are wealthy or not (relative to the greater population) , or predicting a reader’s political party affiliation . Another example is the interactive scatterplot featured in “Find Out If Your Job Will Be Automated” . In this visualization, professions are plotted to determine their likelihood of being automated against their average annual wage. The article encourages readers to use the search bar to type in their own profession to highlight it against the others.
+    </p>
+<p>
+      An interactive medium has the potential to offer readers an experience other than static, linear text. Non-linear stories, where a reader can choose their own path through the content, have the potential to provide a more personalized experience and focus on areas of user interest . For example, the <i>BBC</i> has used this technique in both online articles  and in a recent episode of “Click” , a technology focused news television program. Non-linear stories present challenges for authors, as they must consider the myriad possible paths through the content, and consider the different possible experiences that the audience would have when pursuing different branches.
+    </p>
+<p>
+<d-figure class="video-d-figure" id="matuschak2019quantum"><figure class="svelte-1kn9xof" id="matuschak2019quantum"> <figcaption><a class="video-number" href="#matuschak2019quantum">8</a>: In "<a href="https://quantum.country/">Quantum Country</a>" , the interactive textbook uses spaced repetition and allows a reader to opt-in and save their progress while reading through dense material and mathematical notion over time. <div class="svelte-1kn9xof" id="video-lengths"><span class="svelte-1kn9xof">Playing
+                    <button class="video-selected svelte-1kn9xof">Preview</button>,
+                    click to play
+                    <button class="svelte-1kn9xof">Full Video</button>.</span></div></figcaption></figure></d-figure>
+      Another technique interactive articles often use is segmenting content into small pieces to be read in-between or alongside other graphics. While we have already discussed cognitive load theory, the Segmenting Theory, the idea that complex lessons are broken into smaller, bit-sized parts , also supports personalization within interactive articles. Providing a reader the ability to play, pause, and scrub content allows the reader to move at their own speed, comprehending the information at a speed that works best for them. Segmenting also engages a reader’s essential processing without overloading their cognitive system .
+    </p>
+<p>
+      Multiple studies have been conducted showing that learners perform better when information is segmented, whether it be only within an animation  or within an interface with textual descriptions . One excellent example of using segmentation and animation to personalize content delivery is “A Visual Introduction to Machine Learning,” which introduces fundamental concepts within machine learning in bite-sized pieces, while transforming a single dataset into a trained machine learning model . Extending this idea, in “Quantum Country,” an interactive textbook covering quantum computing, the authors implemented a user account system, allowing readers to save their position in the text and consume the content at their own pace . This book further utilizes the interactive medium by utilizing spaced repetition that helps improve recall.
+    </p>
+<h3 class="affordance sun" id="reducing-cognitive-load">Reducing Cognitive Load</h3>
+<p>
+      Authors must calibrate the detail at which to discuss ideas and content to their readers expertise and interest to not overload them. When topics become multifaceted and complex, a balance must be struck between a high-level overview of a topic and its lower-level details. One interaction technique used to prevent a cognitive overload within a reader is “details-on-demand.”
+    </p>
+<p>
+      Details-on-demand has become an ubiquitous design pattern. For example, modern operating systems offer to fetch dictionary definitions when a word is highlighted. When applied to visualization, this technique allows users to select parts of a dataset to be shown in more detail while maintaining a broad overview. This is particularly useful when a change of view is not required, so that users can inspect elements of interest on a point-by-point basis in the context of the whole . Below we highlight areas where details-on-demand has been successfully applied to reduce the amount of information present within an interface at once.
+    </p>
+<h4>Data Visualization</h4>
+<p>
+      Details-on-demand is core to information visualization, and concludes the seminal Visual Information-Seeking Mantra: <i>“Overview first, zoom and filter, then details-on-demand”</i> . Successful visualizations not only provide the base representations and techniques for these three steps, but also bridge the gaps between them . In practice, the solidified standard for details-on-demand in data visualization manifests as a tooltip, typically summoned on a cursor mouseover, that presents extra information in an overlay. Given that datasets often contain multiple attributes, tooltips can show the other attributes that are not currently encoded visually , for example, the map in <a class="figure-number-text" href="#details-vis">6</a> that shows where different types of birdsongs where recorded and what they sound like.
+    </p>
+<d-figure class="subgrid" id="details-vis"><figure class="subgrid"><div class="interactive-container svelte-hlkkni" id="wrapper">
+<div>
+<div class="svelte-vryxo2" id="title">Multimodal details-on-demand.</div> <div class="svelte-vryxo2" id="subtitle">Select a circle below to call up a field recording of a birdsong.</div>
+</div> </div> <figcaption><a class="figure-number" href="#details-vis">6</a>: Click any point to listen to a different bird's chirp.</figcaption></figure></d-figure>
+<h4>Illustration</h4>
+<p>
+      Details-on-demand is also used in illustrations, interactive textbooks, and museum exhibits, where highlighted segments of a figure can be selected to display additional information about the particular segment. For example, in “How does the eye work?” readers can select segments of an anatomical diagram of the human eye to learn more about specific regions, e.g., rods and cones . Another example is “Earth Primer,” an interactive textbook on tablets that allows readers to inspect the Earth’s interior, surface, and biomes . Each illustration contains segments the reader can tap to learn and explore in depth. <a class="figure-number-text" href="#details-illustration">7</a> demonstrates this by pointing out specific regions in machine-generated imagery  to help people spot fake images.
+    </p>
+<h4>Mathematical Notation</h4>
+<p>
+      Formal mathematics, a historically static medium, can benefit from details-on-demand, for example, to elucidate a reader with intuition about a particular algebraic term, present a geometric interpretation of an equation, or to help a reader retain high-level context while digesting technical details.<d-footnote id="d-footnote-3">See this <a href="https://github.com/fredhohman/awesome-mathematical-notation-design">list of examples</a> that experiment with applying new design techniques to various mathematical notation.</d-footnote> For example, in “Why Momentum Really Works,” equation layout is done using Gestalt principles plus annotation to help a reader easily identify specific terms. In “Colorized Math Equations,” the Fourier transform equation is presented in both mathematical notation and plain text, but the two are linked through a mouseover that highlights which term in the equation corresponds to which word in the text . Another example that visualizes mathematics and computation is the “Image Kernels” tutorial where a reader can mouseover a real image and observe the effect and exact computation for applying a filter over the image .
+      
+      Instead of writing down long arithmetic sums, the interface allows readers to quickly see the summation operation’s terms and output. In <a class="figure-number-text" href="#details-math">8</a>, one of Maxwell’s equations is shown. Click the two buttons to reveal, or remind yourself, what each notation mark and variable represent.
+    </p>
+<d-figure class="subgrid" id="details-math"><figure class="subgrid"><div class="interactive-container svelte-1v7bmjo" id="wrapper">
+<div>
+<div class="svelte-vryxo2" id="title">Enhancing mathematics design with annotation and interactivity.</div> <div class="svelte-vryxo2" id="subtitle">Working with equations requires a sharp working memory. Optional interactivity can help people remember specific notation and variable defintions, only when needed.</div>
+</div> <div class="svelte-1v7bmjo" id="button-wrapper">
+<button class="svelte-1v7bmjo" id="notation-button">Toggle Notation</button> <button class="svelte-1v7bmjo" id="variable-button">Toggle Variables</button>
+</div>
+</div> <figcaption><a class="figure-number" href="#details-math">8</a>: Click to reveal, or remind yourself, what each mark of notation or variable represents in the equation.</figcaption></figure></d-figure>
+<h4>Text</h4>
+<p>
+      While not as pervasive, text documents and other long-form textual mediums have also experimented with letting readers choose a variable level of detail to read. This idea was explored as early as the 1960s in StretchText, a hypertext feature that allows a reader to reveal a more descriptive or exhaustive explanation of something by expanding or contracting the content in place . The idea has resurfaced in more recent examples, including “On Variable Level-of-detail Documents” , a PhD thesis turned interactive article , and the call for proposals of <i>The Parametric Press</i> . One challenge that has limited this technique’s adoption is the burden it places on authors to write multiple versions of their content. For example, drag the slider in <a class="figure-number-text" href="#details-text">9</a> to read descriptions of the Universal Approximation Theorem in increasing levels of detail. For other examples of details-on-demand for text, such as application in code documentation, see this small collection of examples .
+    </p>
+<d-figure class="subgrid" id="details-text"><figure class="subgrid"><div class="interactive-container svelte-1th5z44" id="wrapper">
+<div>
+<div class="svelte-vryxo2" id="title">The Universal Approximation Theorem in 3 levels of detail.</div> <div class="svelte-vryxo2" id="subtitle">Readers come with different backgrounds. What if our content could be tailored to their level of knowledge about certain topics?</div>
+</div> <div>
+<div class="slider-label svelte-1th5z44">Illustrative</div>  <div class="slider-label svelte-1th5z44">Precise</div>
+</div> <p>Neural networks can approximate any function that exists. However, we do not have a guaranteed way to obtain such a neural network for every function.</p>
+</div> <figcaption><a class="figure-number" href="#details-text">9</a>: Drag the slider to display the theorem's statement in increasing levels of detail.</figcaption></figure></d-figure>
+<h4>Previewing Content</h4>
+<p>
+      Details-on-demand can also be used as a method for previewing content without committing to another interaction or change of view. For example, when hovering over a hyperlink on Wikipedia, a preview card is shown that can contain an image and brief description; this gives readers a quick preview of the topic without clicking through and loading a new page . This idea is also not new: work from human-computer interaction explored fluid links  within hypertext that present information about a particular topic in a location that does not obscure the source material. Both older and modern preview techniques use perceptually-based animation and simple tooltips to ensure their interactions are natural and lightweight feeling to readers .
+    </p>
+<h2 id="challenges">Challenges for Authoring Interactives</h2>
+<p>
+<i>If interactive articles provide clear benefits over other mediums for communicating complex ideas, then why aren’t they more prevalent? </i>
+</p>
+<p>
+      Unfortunately, creating interactive articles today is difficult. Domain-specific diagrams, the main attraction of many interactive articles, must be individually designed and implemented, often from scratch. Interactions need to be intuitive and performant to achieve a nice reading experience. Needless to say, the text must also be well-written, and, ideally, seamlessly integrated with the graphics.
+    </p>
+<p>
+      The act of creating a successful interactive article is closer to building a website than writing a blog post, often taking significantly more time and effort than a static article, or even an academic publication.<d-footnote id="d-footnote-4">As a proxy, see the number of commits on an <a href="https://github.com/distillpub/post--building-blocks">example <i>Distill</i> article</a>.</d-footnote> Most interactive articles are created using general purpose web-development frameworks which, while expressive, can be difficult to work with for authors who are not also web developers. Even for expert web developers, current tools offer lower levels of abstraction than may be desired to prototype and iterate on designs.
+    </p>
+<p>
+      While there are some tools that help with alleviating this problem , they are relatively immature and mainly help with reducing the necessary programming tedium. Tools like Idyll  can help authors start writing quickly and even enable rapid iteration through various designs (for example, letting an author quickly compare between sequencing content using a “scroller” or “stepper” based layout). However, Idyll does not offer any design guidance, help authors think through where interactivity would be most effectively applied, nor highlight how their content could be improved to increase its readability and memorability. For example, Idyll encodes no knowledge of the positive impact of self-explanation, instead it requires authors to be familiar with this research and how to operationalize it.
+    </p>
+<p>
+      To design an interactive article successfully requires a diverse set of editorial, design, and programming skills. While some individuals are able to author these articles on their own, many interactive articles are created by a collective team consisting of multiple members with specialized skills, for example, data analysts, scripters, editors, journalists, graphic designers, and typesetters, as outlined in . The current generation of authoring tools do not acknowledge this collaboration. For example, to edit only the text of <i>this article</i> requires one to clone its source code using git, install project-specific dependencies using a terminal, and be comfortable editing HTML files. All of this complexity is incidental to task of editing text.
+    </p>
+<p>
+      Publishing to the web brings its own challenges: while interactive articles are available to anyone with a browser, they are burdened by rapidly changing web technologies that could break interactive content after just a few years. For this reason, easy and accessible interactive article archival is important for authors to know their work can be confidently preserved indefinitely to support continued readership.<d-footnote id="d-footnote-5">This challenge has been <a href="https://twitter.com/redblobgames/status/1168520452634865665">pointed out</a> by the community.</d-footnote> Authoring interactive articles also requires designing for a diverse set of devices, for example, ensuring bespoke content can be adapted for desktop and mobile screen sizes with varying connection speeds, since accessing interactive content demands more bandwidth.
+    </p>
+<p>
+      There are other non-technical limitations for publishing interactive articles. For example, in non-journalism domains, there is a mis-aligned incentive structure for authoring and publishing interactive content: why should a researcher spend time on an “extra” interactive exposition of their work when they could instead publish more papers, a metric by which their career depends on? While different groups of people seek to maximize their work’s impact, legitimizing interactive artifacts requires buy-in from a collective of communities.
+    </p>
+<p>
+      Making interactive articles accessible to people with disabilities is an open challenge. The dynamic medium exacerbates this problem compared to traditional static writing, especially when articles combine multiple formats like audio, video, and text. Therefore, ensuring interactive articles are accessible to everyone will require alternative modes of presenting content (e.g. text-to-speech, video captioning, data physicalization, data sonification) and careful interaction design.
+    </p>
+<p>
+      It is also important to remember that not everything needs to be interactive. Authors should consider the audience and context of their work when deciding if use of interactivity would be valuable. In the worst case, interactivity may be distracting to readers or the functionality may go unused, the author having wasted their time implementing it. However, even in a domain where the potential communication improvement is incremental,<d-footnote id="d-footnote-6">In reality, multimedia studies show large effect sizes for improvement of transfer learning in many cases, see Chapter 12 of.</d-footnote> at scale (e.g., delivering via the web), interactive articles can still <a href="https://twitter.com/michael_nielsen/status/1031256363458916352?lang=en">have impact</a> .
+    </p>
+<h2 id="critical-reflections">Critical Reflections</h2>
+<p>
+      We write this article not as media theorists, but as practitioners, researchers, and tool builders. While it has never been easier for writers to share their ideas online, current publishing tools largely support only static authoring and do not take full advantage of the fact that the web is a dynamic medium. We want that to change, and we are not alone. Others from the explorable explanations community have identified design patterns that help share complex ideas through play .
+    </p>
+<p>
+      To explore these ideas further, two of this work’s authors created <i>The Parametric Press:</i> an annually published digital magazine that showcases the expository power that interactive dynamic media can have when effectively combined . In late 2018, we invited writers to respond to a call for proposals for our first issue focusing on exploring scientific and technological phenomena that stand to shape society at large. We sought to cover topics that would benefit from using the interactive or otherwise dynamic capabilities of the web. Given the challenges of authoring interactive articles, we did not ask authors to submit fully developed pieces. Instead, we accepted idea submissions, and collaborated with the authors over the course of four months to develop the issue, offering technical, design, and editorial assistance collectively to the authors that lacked experience in one of these areas. For example, we helped a writer implement visualizations, a student frame a cohesive narrative, and a scientist recap history and disseminate to the public. Multiple views from one article are shown in <a class="figure-number-text" href="#parametric">10</a>.
+    </p>
+<d-figure class="subgrid" id="parametric"><figure class="subgrid"> <figcaption><a class="figure-number" href="#parametric">10</a>: The "<a href="https://parametric.press/issue-01/the-myth-of-the-impartial-machine/">Myth of the Impartial Machine</a>"  was one of five articles published in <i>The Parametric Press</i>. The article used techniques like animation, data visualizations, explanatory diagrams, margin notes, and interactive simulations to explain how biases occur in machine learning systems.</figcaption></figure></d-figure>
+<p>
+      We see <i>The Parametric Press</i> as a crucial connection between the often distinct worlds of research and practice. The project serves as a platform through which to operationalize the theories put forth by education, journalism, and HCI researchers. Tools like Idyll which are designed in a research setting need to be validated and tested to ensure that they are of practical use; <i>The Parametric Press</i> facilitates this by allowing us to study its use in a real-world setting, by authors who are personally motivated to complete their task of constructing a high-quality interactive article, and only have secondary concerns and care about the tooling being used, if at all.
+    </p>
+<p>
+      Through <i>The Parametric Press</i>, we saw the many challenges of authoring, designing, and publishing first hand, dually as researchers and practitioners. <a class="table-number-text" href="#research-x-practice-table">2</a> summarizes interactive communication opportunities from both research and practice.
+    </p>
+<d-figure class="subgrid" id="research-x-practice"><figure class="subgrid"><table class="svelte-1ekagqb" id="research-x-practice-table">
+<thead><tr>
+
+<th class="svelte-1ekagqb">Research</th>
+<th class="svelte-1ekagqb">Practice</th>
+</tr></thead>
+<tbody>
+<tr>
+<th class="svelte-1ekagqb">Authoring</th>
+<td class="svelte-1ekagqb">Next generation tooling</td>
+<td class="svelte-1ekagqb">Evaluate in production setting, identify bugs</td>
+</tr>
+<tr>
+<th class="svelte-1ekagqb">Designing</th>
+<td class="svelte-1ekagqb">Developing theory, conducting laboratory studies</td>
+<td class="svelte-1ekagqb">Evaluate specific design decisions in the wild, understand constraints</td>
+</tr>
+<tr>
+<th class="svelte-1ekagqb">Publishing</th>
+<td class="svelte-1ekagqb">Tools, guidelines, and best practices</td>
+<td class="svelte-1ekagqb">Concrete examples for others to follow, available source code, accessible archives, DOI, branding</td>
+</tr>
+</tbody>
+</table>
+<figcaption><a class="table-number" href="#research-x-practice">2</a>: Interactive communication opportunities from both research and practice.</figcaption></figure></d-figure>
+<p>
+      As researchers we can treat the project as a series of case studies, where we were observers of the motivation and workflows which were used to craft the stories, from their initial conception to their publication. Motivation to contribute to the project varied by author. Where some authors had personal investment in an issue or dataset they wanted to highlight and raise awareness to broadly, others were drawn towards the medium, recognizing its potential but not having the expertise or support to communicate interactively. We also observed how research software packages like Apparatus , Idyll , and D3  fit into the production of interactive articles, and how authors must combine these disparate tools to create an engaging experience for readers. In one article, “On Particle Physics,” an author combined two tools in a way that allowed him to create and embed dynamic graphics directly into his article without writing any code beyond basic markup. One of the creators of Apparatus had not considered this type of integration before, and upon seeing the finished article <a href="https://twitter.com/qualmist/status/1128157840672051200?s=20">commented</a>, <i>“That’s fantastic! Reading that article, I had no idea that Apparatus was used. This is a very exciting proof-of-concept for unconventional explorable-explanation workflows.”</i>
+</p>
+<p>
+      We were able to provide editorial guidance to the authors drawing on our knowledge of empirical studies done in the multimedia learning and information visualization communities to recommend graphical structures and page layouts, helping each article’s message be communicated most effectively. One of the most exciting outcomes of the project is that we saw authors develop interactive communication skills like any other skill: through continued practice, feedback, and iteration. We also observed the challenges that are inherent in publishing dynamic content on the web and identified the need for improved tooling in this area, specifically around the archiving of interactive articles. Will an article’s code still run a year from now? Ten years from now? To address interactive content archival, we set up a system to publish a digital archive of all of our articles at the time that they are first published to the site. At the top of each article on <i>The Parametric Press</i> is an archive link that allows readers to download a WARC (Web ARChive) file that can “played back” without requiring any web infrastructure. While our first iteration of the project relied on ad-hoc solutions to these problems, we hope to show how digital works such as ours can be published confidently knowing that they will be preserved indefinitely.
+    </p>
+<p>
+      As practitioners we pushed the boundaries of the current generation of tools designed to support the creation of interactive articles on the web. We found bugs and limitations in Idyll, a tool which was originally designed to support the creation of one-off articles that we used as a content management system to power an entire magazine issue. We were forced to write patches and plugins to work around the limitations and achieve our desired publication.<d-footnote id="d-footnote-7">Many of these patches have since been merged to Idyll itself. This is the power of modular open-source tooling in action.</d-footnote> We were also forced to craft designs under a more realistic set of constraints than academics usually deal with: when creating a visualization it is not enough to choose the most effective visual encodings, the graphics also had to be aesthetically appealing, adhere to a house style, have minimal impact on page load time and runtime performance, be legible on both mobile and desktop devices, and not be overly burdensome to implement. Any extra hour spent implementing one graphic was an hour that was not spent improving some other part of the issue, such as the clarity of the text, or the overall site design.
+    </p>
+<p>
+      There are relatively few outlets that have the skills, technology, and desire to publish interactive articles. From its inception, one of the objectives of <i>The Parametric Press</i> is to showcase the new forms of media and publishing that are possible with tools available today, and inspire others to create their own dynamic writings. For example, Omar Shehata, the authors of <i>The Parametric Press</i> article <a href="https://parametric.press/issue-01/unraveling-the-jpeg/">“Unraveling the JPEG,”</a> told us he had wanted to write this interactive article for years yet never had the opportunity, support, or incentive to create it. His article drew wide interest and critical acclaim.
+    </p>
+<p>
+      We also wanted to take the opportunity as an independent publication to serve as a concrete example for others to follow, to represent a set of best practices for publishing interactive content. To that end, we made available all of the software that runs the site, including reusable components, custom data visualizations, and the publishing engine itself.
+    </p>
+<h2 id="looking-forward">Looking Forward</h2>
+<p>
+      A diverse community has emerged to meet these challenges, exploring and experimenting with what interactive articles could be. The <a href="https://explorabl.es/">Explorable Explanations community</a> is a “disorganized ‘movement’ of artists, coders &amp; educators who want to reunite play and learning.” Their online hub contains 170+ interactive articles on topics ranging from art, natural sciences, social sciences, journalism, and civics. The curious can also find tools, tutorials, and meta-discussion around learning, play, and representations. Explorables also hosted a mixed in-person and <a href="https://explorabl.es/jam/">online Jam</a>: a community-based sprint focused on creating new explorable explanations. <a class="figure-number-text" href="#jam">11</a> highlights a subset of the interactive articles created during the Jam.
+    </p>
+<d-figure class="subgrid" id="jam"><figure class="subgrid svelte-25t3hm"><div class="svelte-25t3hm" id="jam-wrapper">
+<figure class="explorable svelte-25t3hm"> <figcaption class="svelte-25t3hm"><a href="https://spaciecat.github.io/cells/">From Cells to Systems</a></figcaption> </figure><figure class="explorable svelte-25t3hm"> <figcaption class="svelte-25t3hm"><a href="http://galgreen.com/TaxiCabProblem/">The Taxi-cab Problem</a></figcaption> </figure><figure class="explorable svelte-25t3hm"> <figcaption class="svelte-25t3hm"><a href="https://lyrasolomon.github.io/terrain/">Rendering Terrain</a></figcaption> </figure><figure class="explorable svelte-25t3hm"> <figcaption class="svelte-25t3hm"><a href="https://samarthgulati.com/block-stack/">Addition Math using Blocks</a></figcaption> </figure><figure class="explorable svelte-25t3hm"> <figcaption class="svelte-25t3hm"><a href="https://samarthgulati.com/solr-scale/">Scales of the Solar System</a></figcaption> </figure><figure class="explorable svelte-25t3hm">  </figure><figure class="explorable svelte-25t3hm">  </figure><figure class="explorable svelte-25t3hm"> <figcaption class="svelte-25t3hm"><a href="https://varun.ca/reuleaux-polygons/">Reuleaux Polygons</a></figcaption> </figure>
+</div> <figcaption class="svelte-25t3hm"><a class="figure-number" href="#jam">11</a>: Example explorable explanations made in three weeks during the <a href="https://explorabl.es/jam/">Explorables Jam</a> covering topics from math, astronomy, computer graphics, and music.</figcaption></figure></d-figure>
+<p>
+      Many interactive articles are self-published due to a lack of platforms that support interactive publishing. Creating more outlets that allow authors to publish interactive content will help promote their development and legitimization. The few existing examples, including newer journals such as <i>Distill</i>, academic workshops like VISxAI , open-source publications like <i>The Parametric Press</i> , and live programming notebooks like Observable  help, but currently target a narrow group of authors, namely those who have programming skills. Such platforms should also provide clear paths to submission, quality and editorial standards, and authoring guidelines. For example, news outlets have clear instructions for pitching written pieces, yet this is under-developed for interactive articles. Lastly, there is little funding available to support the development of interactive articles and the tools that support them. Researchers do not receive grants to communicate their work, and practitioners outside of the largest news outlets are not able to afford the time and implementation investment. Providing more funding for enabling interactive articles incentivizes their creation and can contribute to a culture where readers expect digital communications to better utilize the dynamic medium.
+    </p>
+<p>
+      We have already discussed the breadth of skills required to author an interactive article. Can we help lower the barrier to entry? While there have been great, practical strides in this direction , there is still opportunity for creating tools to design, develop, and evaluate interactive articles in the wild. Specific features should include supporting mobile-friendly adaptations of interactive graphics (for example ), creating content for different platforms besides just the web, and tools that allow people to create interactive content without code.
+    </p>
+<p>
+      The usefulness of interactive articles is predicated on the assumption that these interactive articles actually facilitate communication and learning. There is limited empirical evaluation of the effectiveness of interactive articles. The problem is exacerbated by the fact that large publishers are unwilling to share internal metrics, and laboratory studies may not generalize to real world reading trends. <i>The New York Times</i> provided one of the few available data points, stating that only a fraction of readers interact with non-static content, and suggested that designers should move away from interactivity . However, other research found that many readers, even those on mobile devices, are interested in utilizing interactivity when it is a core part of the article’s message . This statement from <i>The New York Times</i> has solidified as a rule-of-thumb for designers and many choose not to utilize interactivity because of it, despite follow-up discussion that contextualizes the original point and highlights scenarios where interactivity can be beneficial . This means designers are potentially choosing a suboptimal presentation of their story due to this anecdote. More research is needed in order to identify the cases in which interactivity is worth the cost of creation.
+    </p>
+<p>
+      We believe in the power and untapped potential of interactive articles for sparking reader’s desire to learn and making complex ideas accessible and understandable to all.
+    </p>
+</d-article></div>
+<div><d-appendix>
+<h3>Acknowledgments</h3>
+<p>
+
+      We are grateful to Arvind Satyanarayan for his early encouragement for pursuing this work, and Ludwig Schubert for his prompt help in fixing templating issues.
+      We also thank <i>The Parametric Press</i> editors and authors for their continued support of the project, and to the Explorables community for their creativity and inspiration.
+    </p>
+<p>
+      This work was supported in part by a NASA Space Technology Fellowship.
+    </p>
+<p>
+      The birdsongs were provided by the users of <a href="https://www.xeno-canto.org/">https://www.xeno-canto.org/</a>.
+    </p>
+<h3>Author Contributions</h3>
+<p>
+<b>Research:</b> After initial conversations over two years ago, Fred and Matthew jointly conducted the research bootstrapping early ideas from Matthew, including distilling literature, pulling published examples, and formulating the structure of the work.
+    </p>
+<p>
+<b>Writing &amp; Graphics:</b> Fred and Matthew also jointly wrote the text and collaborated on the design and implementation of the interactive graphics.
+    </p>
+<d-footnote-list>
+<h3>Footnotes</h3>
+<ol>
+<li id="d-footnote-1-listing">For example, some of <i>The New York Times</i>  and <i>The Washington Post’s</i>  most read articles are interactive stories.<a class="footnote-backlink" href="#d-footnote-1">[↩]</a>
+</li>
+<li id="d-footnote-2-listing">However, one is taking shape.<a class="footnote-backlink" href="#d-footnote-2">[↩]</a>
+</li>
+<li id="d-footnote-3-listing">See this <a href="https://github.com/fredhohman/awesome-mathematical-notation-design">list of examples</a> that experiment with applying new design techniques to various mathematical notation.<a class="footnote-backlink" href="#d-footnote-3">[↩]</a>
+</li>
+<li id="d-footnote-4-listing">As a proxy, see the number of commits on an <a href="https://github.com/distillpub/post--building-blocks">example <i>Distill</i> article</a>.<a class="footnote-backlink" href="#d-footnote-4">[↩]</a>
+</li>
+<li id="d-footnote-5-listing">This challenge has been <a href="https://twitter.com/redblobgames/status/1168520452634865665">pointed out</a> by the community.<a class="footnote-backlink" href="#d-footnote-5">[↩]</a>
+</li>
+<li id="d-footnote-6-listing">In reality, multimedia studies show large effect sizes for improvement of transfer learning in many cases, see Chapter 12 of.<a class="footnote-backlink" href="#d-footnote-6">[↩]</a>
+</li>
+<li id="d-footnote-7-listing">Many of these patches have since been merged to Idyll itself. This is the power of modular open-source tooling in action.<a class="footnote-backlink" href="#d-footnote-7">[↩]</a>
+</li>
+</ol>
+</d-footnote-list>
+<d-citation-list><h3 id="references">References</h3>
+<ol class="references" id="references-list">
+<li id="un2017special">
+<span class="title">Report on the role of digital access providers</span>   <a href="https://www.ohchr.org/EN/Issues/FreedomOpinion/Pages/SR2017ReporttoHRC.aspx">[link]</a>OHCHR,, 2017. United Nations Human Rights Office of the High Commissioner. </li>
+<li id="kay2011personal">
+<span class="title">A personal computer for children of all ages</span>   <a href="https://dl.acm.org/doi/abs/10.1145/800193.1971922">[link]</a>Kay, A.C., 1972. Proceedings of the ACM Annual Conference. </li>
+<li id="engelbart1962augmenting">
+<span class="title">Augmenting human intellect: A conceptual framework</span>   <a href="https://www.dougengelbart.org/content/view/138">[link]</a>Engelbart, D.C., 1962. Menlo Park, CA. </li>
+<li id="stephenson1998diamond">
+<span class="title">The diamond age</span> Stephenson, N., 1998. Penguin UK.</li>
+<li id="apple1987knowledge">
+<span class="title">The knowledge navigator</span>   <a href="https://en.wikipedia.org/wiki/Knowledge_Navigator">[link]</a>Dubberly, H. and Mitch, D., 1987. Apple Computer, Inc. </li>
+<li id="nelson1967getting">
+<span class="title">Getting it out of our system</span> Nelson, T.H., 1967. Information Retrieval: A Critical Review, pp. 191--210. Thompson Books.</li>
+<li id="ui1987plato">
+<span class="title">PLATO</span>   <a href="https://en.wikipedia.org/wiki/PLATO_(computer_system)">[link]</a>UI,, 1960. University of Illinois. </li>
+<li id="uc2002phet">
+<span class="title">PhET interactive simulations</span>   <a href="https://phet.colorado.edu/">[link]</a>CU,, 2002. University of Colorado Boulder. </li>
+<li id="victor2011explorable">
+<span class="title">Explorable explanations</span>   <a href="http://worrydream.com/ExplorableExplanations/">[link]</a>Victor, B., 2011. </li>
+<li id="katz2013all">
+<span class="title">How y’all, youse and you guys talk</span>   <a href="https://www.nytimes.com/interactive/2014/upshot/dialect-quiz-map.html">[HTML]</a>Katz, J. and Andrews, W., 2013. The New York Times. </li>
+<li id="branch2014snow">
+<span class="title">Snow fall: The avalanche at tunnel creek</span>   <a href="http://www.nytimes.com/projects/2012/snow-fall/index.html">[HTML]</a>Branch, J., 2014. The New York Times. </li>
+<li id="stevens2020why">
+<span class="title">Why outbreaks like coronavirus spread exponentially, and how to 'flatten the curve'</span>   <a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/">[link]</a>Stevens, H., 2020. The Washington Post. </li>
+<li id="wattenberg2016attacking">
+<span class="title">Attacking discrimination with smarter machine learning</span>   <a href="https://research.google.com/bigpicture/attacking-discrimination-in-ml/">[link]</a>Wattenberg, M., Viégas, F. and Hardt, M., 2016. Google Research. </li>
+<li id="petricek2017coeffects">
+<span class="title">Coeffects: Context-aware programming languages</span>   <a href="http://tomasp.net/coeffects/">[link]</a>Petricek, T., 2017. </li>
+<li id="dedomenico2019complexity">
+<span class="title">Complexity explained</span>   <a href="https://complexityexplained.github.io/">[link]</a>De Domenico, M. and Sayama, H., 2019. </li>
+<li id="roston2015whats">
+<span class="title">What's really warming the world</span>   <a href="https://www.bloomberg.com/graphics/2015-whats-warming-the-world/">[link]</a>Roston, E. and Migliozzi, B., 2015. Bloomberg. </li>
+<li id="aisch2015you">
+<span class="title">You draw it: How family income predicts children’s college chances</span>   <a href="https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html">[HTML]</a>Aisch, G., Cox, A. and Quealy, K., 2015. The New York Times. </li>
+<li id="blood2017uber">
+<span class="title">The Uber Game</span>   <a href="https://ig.ft.com/uber-game/">[link]</a>Blood, D., Kao, J.S., Knoll, N., Kwong, R., Locke, C. and Rininsland, Æ., 2017. Financial Times. </li>
+<li id="comeau2018lets">
+<span class="title">Let's learn about waveforms</span>   <a href="https://pudding.cool/2018/02/waveforms/">[link]</a>Comeau, J., 2018. The Pudding. </li>
+<li id="vivo2015book">
+<span class="title">The book of shaders</span>   <a href="https://thebookofshaders.com">[link]</a>Vivo, P.G. and Lowe, J., 2015. </li>
+<li id="makler2017econgraphs">
+<span class="title">EconGraphs</span>   <a href="http://www.econgraphs.org/">[link]</a>Makler, C., 2017. </li>
+<li id="case2016build">
+<span class="title">To build a better ballot</span>   <a href="https://ncase.me/ballot/">[link]</a>Case, N., 2016. </li>
+<li id="atlas2018bycoffe">
+<span class="title">The atlas of redistricting</span>   <a href="https://projects.fivethirtyeight.com/redistricting-maps/">[link]</a>Bycoffe, A., Koeze, E., Wasserman, D. and Wolfe, J., 2018. FiveThirtyEight. </li>
+<li id="bostock2014better">
+<span class="title">Is it better to rent or buy</span>   <a href="https://www.nytimes.com/interactive/2014/upshot/buy-rent-calculator.html">[HTML]</a>Bostock, M., Carter, S. and Tse, A., 2014. The New York Times. </li>
+<li id="wiki2019explorable">
+<span class="title">Explorable explanation</span>   <a href="https://en.wikipedia.org/wiki/Explorable_explanation">[link]</a>2019. Wikipedia. </li>
+<li id="dragicevic2019increasing">
+<span class="title">Increasing the transparency of research papers with explorable multiverse analyses</span>   <a href="https://explorablemultiverse.github.io">[link]</a>Dragicevic, P., Jansen, Y., Sarma, A., Kay, M. and Chevalier, F., 2019. Proceedings of the 2019 CHI Conference on Human Factors in Computing Systems, pp. 65. </li>
+<li id="visxai">
+<span class="title">Workshop on Visualization for AI Explainability</span>   <a href="https://visxai.io/">[link]</a>VISxAI,, 2018. IEEE Visualization. </li>
+<li id="ynnerman2018exploranation">
+<span class="title">Exploranation: A new science communication paradigm</span>   <a href="https://ieeexplore.ieee.org/abstract/document/8370186?casa_token=rvOSVHyPfCcAAAAA:hpGZrF1ytQIJ4x0jS8J99ok7v16vM-OC_keXvKCbQIuHsACTLXxLr-cutvgZ9PyC3MiAEbNb5Q">[link]</a>Ynnerman, A., Löwgren, J. and Tibell, L., 2018. IEEE computer graphics and applications, Vol 38(3), pp. 13--20. IEEE.</li>
+<li id="olah2017research">
+<span class="title">Research debt</span>   <a href="https://distill.pub/2017/research-debt">[link]</a>Olah, C. and Carter, S., 2017. Distill. </li>
+<li id="lee2015more">
+<span class="title">More than telling a story: Transforming data into visually shared stories</span>   <a href="https://ieeexplore.ieee.org/abstract/document/7274435">[link]</a>Lee, B., Riche, N.H., Isenberg, P. and Carpendale, S., 2015. IEEE Computer Graphics and Applications, Vol 35(5), pp. 84--90. IEEE.</li>
+<li id="sarama2009concrete">
+<span class="title">"Concrete" computer manipulatives in mathematics education</span>   <a href="https://srcd.onlinelibrary.wiley.com/doi/full/10.1111/j.1750-8606.2009.00095.x">[link]</a>Sarama, J. and Clements, D.H., 2009. Child Development Perspectives, Vol 3(3), pp. 145--150. Wiley Online Library.</li>
+<li id="aarseth1997cybertext">
+<span class="title">Cybertext: Perspectives on ergodic literature</span> Aarseth, E.J., 1997. JHU Press.</li>
+<li id="sizemore2011interactive">
+<span class="title">Interactive non-fiction: Towards a new approach for storytelling in digital journalism</span>   <a href="https://link.springer.com/chapter/10.1007/978-3-642-25289-1_37">[link]</a>Sizemore, J.H. and Zhu, J., 2011. International Conference on Interactive Digital Storytelling, pp. 313--316. </li>
+<li id="yamamiya2009active">
+<span class="title">Active essays on the web</span>   <a href="https://ieeexplore.ieee.org/abstract/document/5350160">[link]</a>Yamamiya, T., Warth, A. and Kaehler, T., 2009. 2009 Seventh International Conference on Creating, Connecting and Collaborating through Computing, pp. 3--10. </li>
+<li id="bogost2012newsgames">
+<span class="title">Newsgames: Journalism at play</span> Bogost, I., Ferrari, S. and Schweizer, B., 2012. Mit Press.</li>
+<li id="greussing2019simply">
+<span class="title">Simply bells and whistles? Cognitive effects of visual aesthetics in digital longforms</span>   <a href="https://www.tandfonline.com/doi/full/10.1080/21670811.2018.1488598">[link]</a>Greussing, E. and Boomgaarden, H.G., 2019. Digital Journalism, Vol 7(2), pp. 273--293. Taylor &amp; Francis.</li>
+<li id="fredrick1980learning">
+<span class="title">Learning as a function of time</span>   <a href="https://www.tandfonline.com/doi/abs/10.1080/00220671.1980.10885233">[link]</a>Fredrick, W.C. and Walberg, H.J., 1980. The Journal of Educational Research, Vol 73(4), pp. 183--194. Taylor &amp; Francis.</li>
+<li id="um2012emotional">
+<span class="title">Emotional design in multimedia learning</span>   <a href="https://psycnet.apa.org/doiLanding?doi=10.1037%2Fa0026609">[link]</a>Um, E., Plass, J.L., Hayward, E.O. and Homer, B.D., 2012. Journal of Educational Psychology, Vol 104(2), pp. 485. American Psychological Association.</li>
+<li id="amini2018hooked">
+<span class="title">Hooked on data videos: assessing the effect of animation and pictographs on viewer engagement</span>   <a href="https://dl.acm.org/doi/abs/10.1145/3206505.3206552">[link]</a>Amini, F., Riche, N.H., Lee, B., Leboe-McGowan, J. and Irani, P., 2018. Proceedings of the 2018 International Conference on Advanced Visual Interfaces, pp. 1--9. </li>
+<li id="tversky2002animation">
+<span class="title">Animation: Can it facilitate?</span>   <a href="https://www.sciencedirect.com/science/article/abs/pii/S1071581902910177">[link]</a>Tversky, B., Morrison, J.B. and Betrancourt, M., 2002. International Journal of Human-computer Studies, Vol 57(4), pp. 247--262. Elsevier.</li>
+<li id="heer2007animated">
+<span class="title">Animated transitions in statistical data graphics</span>   <a href="https://ieeexplore.ieee.org/abstract/document/4376146">[link]</a>Heer, J. and Robertson, G., 2007. IEEE Transactions on Visualization and Computer Graphics, Vol 13(6), pp. 1240--1247. IEEE.</li>
+<li id="hullman2015hypothetical">
+<span class="title">Hypothetical outcome plots outperform error bars and violin plots for inferences about reliability of variable ordering</span>   <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0142444">[link]</a>Hullman, J., Resnick, P. and Adar, E., 2015. PlOS One, Vol 10(11), pp. e0142444. Public Library of Science.</li>
+<li id="michotte1946perception">
+<span class="title">La perception de la causalité.(Etudes Psychol.), Vol. VI</span> Michotte, A., 1946. Inst. Sup. De Philosophie.</li>
+<li id="thomas1995illusion">
+<span class="title">The illusion of life: Disney animation</span> Thomas, F., Johnston, O. and Thomas, F., 1995. Hyperion New York.</li>
+<li id="muybridge1882horse">
+<span class="title">The horse in motion</span>   <a href="https://www.nature.com/articles/025605b0">[link]</a>Muybridge, J., 1882. Nature, Vol 25(652), pp. 605. Nature Publishing Group.</li>
+<li id="baker2019emergent">
+<span class="title">Emergent tool use from multi-agent autocurricula</span>   <a href="http://arxiv.org/pdf/1909.07528.pdf">[PDF]</a>Baker, B., Kanitscheider, I., Markov, T., Wu, Y., Powell, G., McGrew, B. and Mordatch, I., 2019. arXiv preprint arXiv:1909.07528. </li>
+<li id="hawkins2016climate">
+<span class="title">Climate spirals</span>   <a href="https://www.climate-lab-book.ac.uk/spirals/">[link]</a>Hawkins, E., 2016. Climate Lab Book. </li>
+<li id="randall2018earths">
+<span class="title">Earth's relentless warming sets a brutal new record in 2017</span>   <a href="https://www.bloomberg.com/graphics/hottest-year-on-record/">[link]</a>Randall, T. and Migliozzi, B., 2018. Bloomberg. </li>
+<li id="nasa2020global">
+<span class="title">Global temperature</span>   <a href="https://climate.nasa.gov/vital-signs/global-temperature/">[link]</a>NASA,, 2020. NASA Global Climate Change. </li>
+<li id="popovich2017its">
+<span class="title">It's not your imagination. Summers are getting hotter.</span>   <a href="https://www.nytimes.com/interactive/2017/07/28/climate/more-frequent-extreme-summer-heat.html">[HTML]</a>Popovich, N. and Pearce, A., 2017. The New York Times. </li>
+<li id="badger2018extensive">
+<span class="title">Extensive data shows punishing reach of racism for black boys</span>   <a href="https://www.nytimes.com/interactive/2018/03/19/upshot/race-class-white-and-black-men.html">[HTML]</a>Badger, E., Miller, C.C., Pearce, A. and Quealy, K., 2018. The New York Times. </li>
+<li id="cox2018disagreements">
+<span class="title">Disagreements</span>   <a href="https://youtu.be/Kx6VNVLBgFI">[link]</a>Cox, A. and Quealy, K., 2018. OpenVisConf. </li>
+<li id="casselman2016gun">
+<span class="title">Gun deaths in america</span>   <a href="https://fivethirtyeight.com/features/gun-deaths/">[link]</a>Casselman, B., Conlen, M. and Fischer-Baum, R., 2016. FiveThirtyEight. </li>
+<li id="halloran2015fallen">
+<span class="title">The fallen of World War II</span>   <a href="http://www.fallen.io/ww2/">[link]</a>Halloran, N., 2015. </li>
+<li id="boy2017showing">
+<span class="title">Showing people behind data: Does anthropomorphizing visualizations elicit more empathy for human rights data?</span>   <a href="https://dl.acm.org/doi/abs/10.1145/3025453.3025512">[link]</a>Boy, J., Pandey, A.V., Emerson, J., Satterthwaite, M., Nov, O. and Bertini, E., 2017. Proceedings of the 2017 CHI Conference on Human Factors in Computing Systems, pp. 5462--5474. </li>
+<li id="borkin2015beyond">
+<span class="title">Beyond memorability: Visualization recognition and recall</span>   <a href="https://ieeexplore.ieee.org/abstract/document/7192646">[link]</a>Borkin, M.A., Bylinskii, Z., Kim, N.W., Bainbridge, C.M., Yeh, C.S., Borkin, D., Pfister, H. and Oliva, A., 2015. IEEE Transactions on Visualization and Computer Graphics, Vol 22(1), pp. 519--528. IEEE.</li>
+<li id="borkin2013makes">
+<span class="title">What makes a visualization memorable?</span>   <a href="https://ieeexplore.ieee.org/abstract/document/6634103">[link]</a>Borkin, M.A., Vo, A.A., Bylinskii, Z., Isola, P., Sunkavalli, S., Oliva, A. and Pfister, H., 2013. IEEE Transactions on Visualization and Computer Graphics, Vol 19(12), pp. 2306--2315. IEEE.</li>
+<li id="slobin2014what">
+<span class="title">What if the data visualization is actually people</span>   <a href="https://source.opennews.org/articles/what-if-data-visualization-actually-people/">[link]</a>Slobin, S., 2014. Source. </li>
+<li id="correll2019ethical">
+<span class="title">Ethical dimensions of visualization research</span>   <a href="https://arxiv.org/pdf/1811.07271.pdf">[PDF]</a>Correll, M., 2019. Proceedings of the 2019 CHI Conference on Human Factors in Computing Systems, pp. 1--13. </li>
+<li id="ivanov2019walk">
+<span class="title">A walk among the data</span>   <a href="https://ieeexplore.ieee.org/abstract/document/8640251">[link]</a>Ivanov, A., Danyluk, K., Jacob, C. and Willett, W., 2019. IEEE Computer Graphics and Applications, Vol 39(3), pp. 19--28. IEEE.</li>
+<li id="mckenna2017visual">
+<span class="title">Visual narrative flow: Exploring factors shaping data visualization story reading experiences</span>   <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/cgf.13195">[link]</a>McKenna, S., Henry Riche, N., Lee, B., Boy, J. and Meyer, M., 2017. Computer Graphics Forum, Vol 36(3), pp. 377--387. </li>
+<li id="zhi2019linking">
+<span class="title">Linking and layout: Exploring the integration of text and visualization in storytelling</span>   <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/cgf.13719">[link]</a>Zhi, Q., Ottley, A. and Metoyer, R., 2019. Computer Graphics Forum, Vol 38(3), pp. 675--685. </li>
+<li id="squire2011video">
+<span class="title">Video games and learning</span> Squire, K., 2011. Teaching and Participatory Culture in the Digital Age. Teachers College Print.</li>
+<li id="webworks2009cutthroat">
+<span class="title">Cutthroat Capitalism: The Game</span>   <a href="https://www.wired.com/2009/07/cutthroat-capitalism-the-game/">[link]</a>Webworks, S. and Crothers, D., 2009. Wired. </li>
+<li id="virvou2005combining">
+<span class="title">Combining software games with education: Evaluation of its educational effectiveness</span>   <a href="https://www.jstor.org/stable/pdf/jeductechsoci.8.2.54.pdf">[PDF]</a>Virvou, M., Katsionis, G. and Manos, K., 2005. Journal of Educational Technology &amp; Society, Vol 8(2), pp. 54--65. JSTOR.</li>
+<li id="segel2010narrative">
+<span class="title">Narrative visualization: Telling stories with data</span>   <a href="https://ieeexplore.ieee.org/abstract/document/5613452">[link]</a>Segel, E. and Heer, J., 2010. IEEE Transactions on Visualization and Computer Graphics, Vol 16(6), pp. 1139--1148. IEEE.</li>
+<li id="hart2016parable">
+<span class="title">Parable of the polygons</span>   <a href="http://ncase.me/polygons">[link]</a>Hart, V. and Case, N., 2016. </li>
+<li id="victor2013drawing">
+<span class="title">Drawing dynamic visualizations</span>   <a href="https://vimeo.com/66085662">[link]</a>Victor, B., 2013. </li>
+<li id="adler2014read">
+<span class="title">How to read a book: The classic guide to intelligent reading</span> Adler, M.J. and Van Doren, C., 2014. Simon and Schuster.</li>
+<li id="victor2011scientific">
+<span class="title">Scientific communication as sequential art</span>   <a href="http://worrydream.com/ScientificCommunicationAsSequentialArt">[link]</a>Victor, B., 2011. </li>
+<li id="yau2016how">
+<span class="title">How you will die</span>   <a href="https://flowingdata.com/2016/01/19/how-you-will-die/">[link]</a>Yau, N., 2016. Flowing Data. </li>
+<li id="bianchi2019on">
+<span class="title">On Particle Physics</span>   <a href="https://parametric.press/issue-01/on-particle-physics/">[link]</a>Bianchi, R.M., Hohman, F. and Conlen, M., 2019. The Parametric Press. </li>
+<li id="barry2015should">
+<span class="title">Should prison sentences be based on crimes that haven’t been committed yet</span>   <a href="https://fivethirtyeight.com/features/prison-reform-risk-assessment/">[link]</a>Barry-Jester, A.M., Casselman, B. and Goldstein, D., 2015. FiveThirtyEight. </li>
+<li id="wattenberg2016use">
+<span class="title">How to use t-SNE effectively</span>   <a href="https://distill.pub/2016/misread-tsne/">[link]</a>Wattenberg, M., Viégas, F. and Johnson, I., 2016. Distill, Vol 1(10), pp. e2. </li>
+<li id="conlen2018dr">
+<span class="title">The beginner's guide to dimensionality reduction</span>   <a href="https://idyll.pub/post/dimensionality-reduction-293e465c2a3443e8941b016d/">[link]</a>Conlen, M. and Hohman, F., 2018. VISxAI at IEEE VIS. </li>
+<li id="coenen2019understanding">
+<span class="title">Understanding UMAP</span>   <a href="https://pair-code.github.io/understanding-umap/">[link]</a>Coenen, A. and Pearce, A., 2019. Google PAIR. </li>
+<li id="smilkov2019tensorflow">
+<span class="title">Tensorflow.js: Machine learning for the web and beyond</span>   <a href="http://arxiv.org/pdf/1901.05350.pdf">[PDF]</a>Smilkov, D., Thorat, N., Assogba, Y., Yuan, A., Kreeger, N., Yu, P., Zhang, K., Cai, S., Nielsen, E., Soergel, D. and others,, 2019. arXiv preprint arXiv:1901.05350. </li>
+<li id="barron2018designing">
+<span class="title">Designing (and learning from) a teachable machine</span>   <a href="https://design.google/library/designing-and-learning-teachable-machine/">[link]</a>Webster, B., 2018. Google Design. </li>
+<li id="carter2016experiments">
+<span class="title">Experiments in handwriting with a neural network</span>   <a href="http://distill.pub/2016/handwriting">[link]</a>Carter, S., Ha, D., Johnson, I. and Olah, C., 2016. Distill. </li>
+<li id="smilkov2017direct">
+<span class="title">Direct-manipulation visualization of deep networks</span> Smilkov, D., Carter, S., Sculley, D., Viégas, F.B. and Wattenberg, M., 2017. arXiv preprint arXiv:1708.03788. </li>
+<li id="kahng2018ganlab">
+<span class="title">Gan lab: Understanding complex deep generative models using interactive visual experimentation</span>   <a href="https://poloclub.github.io/ganlab/">[link]</a>Kahng, M., Thorat, N., Chau, D.H.P., Viégas, F.B. and Wattenberg, M., 2018. IEEE Transactions on Visualization and Computer Graphics, Vol 25(1), pp. 1--11. IEEE.</li>
+<li id="carter2017using">
+<span class="title">Using artificial intelligence to augment human intelligence</span>   <a href="https://distill.pub/2017/aia/">[link]</a>Carter, S. and Nielsen, M., 2017. Distill, Vol 2(12), pp. e9. </li>
+<li id="fivethirtyeight2016who">
+<span class="title">Who will win the presidency</span>   <a href="https://projects.fivethirtyeight.com/2016-election-forecast">[link]</a>2016. FiveThirtyEight. </li>
+<li id="katz2016will">
+<span class="title">Who will be president</span>   <a href="https://www.nytimes.com/interactive/2016/upshot/presidential-polls-forecast.html">[HTML]</a>Katz, J., 2016. The New York Times. </li>
+<li id="wapo2016live">
+<span class="title">Live results: Presidential election</span>   <a href="https://www.washingtonpost.com/2016-election-results/us-presidential-race/?itid=sf_2016-election-results-washington">[link]</a>2016. The Washington Post. </li>
+<li id="mayer2002multimedia">
+<span class="title">Multimedia learning</span>   <a href="https://www.sciencedirect.com/science/article/pii/S0079742102800056">[link]</a>Mayer, R.E., 2002. Psychology of Learning and Motivation, Vol 41, pp. 85--139. Elsevier.</li>
+<li id="3blue1brown">
+<span class="title">3Blue1Brown</span>   <a href="https://www.3blue1brown.com/">[link]</a>Sanderson, G.. Youtube. </li>
+<li id="primer">
+<span class="title">Primer</span>   <a href="https://www.youtube.com/primerlearning">[link]</a>Helps, J.. Youtube. </li>
+<li id="mayer2008revising">
+<span class="title">Revising the redundancy principle in multimedia learning</span>   <a href="https://psycnet.apa.org/record/2008-05694-008">[link]</a>Mayer, R.E. and Johnson, C.I., 2008. Journal of Educational Psychology, Vol 100(2), pp. 380. American Psychological Association.</li>
+<li id="sanderson2018visualizing">
+<span class="title">Visualizing quaternions: An explorable video series</span>   <a href="https://eater.net/quaternions">[link]</a>Sanderson, G. and Eater, B., 2018. </li>
+<li id="chi1989self">
+<span class="title">Self-explanations: How students study and use examples in learning to solve problems</span> Chi, M.T., Bassok, M., Lewis, M.W., Reimann, P. and Glaser, R., 1989. Cognitive Science, Vol 13(2), pp. 145--182. Elsevier.</li>
+<li id="chi2000self">
+<span class="title">Self-explaining expository texts: The dual processes of generating inferences and repairing mental models</span> Chi, M.T., 2000. Advances in Instructional Psychology, Vol 5, pp. 161--238. </li>
+<li id="kim2017explaining">
+<span class="title">Explaining the gap: Visualizing one's predictions improves recall and comprehension of data</span> Kim, Y., Reinecke, K. and Hullman, J., 2017. Proceedings of the 2017 CHI Conference on Human Factors in Computing Systems, pp. 1375--1386. </li>
+<li id="katz2017you">
+<span class="title">You draw it: Just how bad is the drug overdose epidemic</span>   <a href="https://www.nytimes.com/interactive/2017/04/14/upshot/drug-overdose-epidemic-you-draw-it.html">[HTML]</a>Katz, J., 2017. The New York Times. </li>
+<li id="buchanan2017you">
+<span class="title">You draw it: What got better or worse during Obama's presidency</span>   <a href="https://www.nytimes.com/interactive/2017/01/15/us/politics/you-draw-obama-legacy.html">[HTML]</a>Buchanan, L., Park, H. and Pearce, A., 2017. The New York Times. </li>
+<li id="nguyen2019they">
+<span class="title">They draw it!</span>   <a href="http://mucollective.co/theydrawit/">[link]</a>Nguyen, F., Kim, Y., Germuska, J. and Hullman, J., 2019. Midwest Uncertainty Collective and The Knight Lab.. </li>
+<li id="kim2017data">
+<span class="title">Data through others' eyes: The impact of visualizing others' expectations on visualization interpretation</span>   <a href="https://ieeexplore.ieee.org/abstract/document/8019830">[link]</a>Kim, Y., Reinecke, K. and Hullman, J., 2017. IEEE Transactions on Visualization and Computer Graphics, Vol 24(1), pp. 760--769. IEEE.</li>
+<li id="goldenberg2019you">
+<span class="title">The Gyllenhaal experiment</span>   <a href="https://pudding.cool/2019/02/gyllenhaal/">[link]</a>Goldenberg, R. and Daniels, M., 2019. The Pudding. </li>
+<li id="ha2017you">
+<span class="title">How do you draw a circle? We analyzed 100,000 drawings to show how culture shapes our instincts</span>   <a href="https://qz.com/994486/the-way-you-draw-circles-says-a-lot-about-you/">[link]</a>Ha, T. and Sonnad, N., 2017. Quartz. </li>
+<li id="gates1922recitation">
+<span class="title">Recitation as a factor in memorizing</span> Gates, A.I., 1922. Science Press.</li>
+<li id="roediger2006power">
+<span class="title">The power of testing memory: Basic research and implications for educational practice</span>   <a href="https://journals.sagepub.com/doi/full/10.1111/j.1745-6916.2006.00012.x">[link]</a>Roediger III, H.L. and Karpicke, J.D., 2006. Perspectives on Psychological Science, Vol 1(3), pp. 181--210. SAGE Publications Sage CA: Los Angeles, CA.</li>
+<li id="khanacademy">
+<span class="title">Khan Academy</span>   <a href="https://www.khanacademy.org/">[link]</a>2008. </li>
+<li id="bangert1991instructional">
+<span class="title">The instructional effect of feedback in test-like events</span> Bangert-Drowns, R.L., Kulik, C.C., Kulik, J.A. and Morgan, M., 1991. Review of Educational Research, Vol 61(2), pp. 213--238. Sage Publications Sage CA: Thousand Oaks, CA.</li>
+<li id="karpicke2008critical">
+<span class="title">The critical importance of retrieval for learning</span>   <a href="https://science.sciencemag.org/content/319/5865/966.abstract">[link]</a>Karpicke, J.D. and Roediger, H.L., 2008. Science, Vol 319(5865), pp. 966--968. American Association for the Advancement of Science.</li>
+<li id="case2014how">
+<span class="title">How to remember anything for forever-ish</span>   <a href="https://ncase.me/remember/">[link]</a>Case, N., 2018. </li>
+<li id="matuschak2019quantum">
+<span class="title">Quantum country</span>   <a href="https://quantum.country/">[link]</a>Matuschak, A. and Nielsen, M.A., 2019. </li>
+<li id="cordova1996intrinsic">
+<span class="title">Intrinsic motivation and the process of learning: Beneficial effects of contextualization, personalization, and choice.</span>   <a href="https://psycnet.apa.org/doiLanding?doi=10.1037%2F0022-0663.88.4.715">[link]</a>Cordova, D.I. and Lepper, M.R., 1996. Journal of Educational Psychology, Vol 88(4), pp. 715. American Psychological Association.</li>
+<li id="di2006authoring">
+<span class="title">Authoring and generation of individualized patient education materials</span>   <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1839536/">[link]</a>Di Marco, C., Bray, P., Covvey, H.D., Cowan, D.D., Di Ciccio, V., Hovy, E., Lipa, J. and Yang, C., 2006. AMIA Annual Symposium Proceedings, Vol 2006, pp. 195. </li>
+<li id="adar2017persalog">
+<span class="title">PersaLog: Personalization of news article content</span>   <a href="http://www.cond.org/persalog.html">[HTML]</a>Adar, E., Gearig, C., Balasubramanian, A. and Hullman, J., 2017. Proceedings of the 2017 CHI Conference on Human Factors in Computing Systems, pp. 3188--3200. </li>
+<li id="kim2016generating">
+<span class="title">Generating personalized spatial analogies for distances and areas</span>   <a href="https://dl.acm.org/doi/abs/10.1145/2858036.2858440">[link]</a>Kim, Y., Hullman, J. and Agrawala, M., 2016. Proceedings of the 2016 CHI Conference on Human Factors in Computing Systems, pp. 38--48. </li>
+<li id="popovich2018how">
+<span class="title">How much hotter is your hometown than when you were born</span>   <a href="https://www.nytimes.com/interactive/2018/08/30/climate/how-much-hotter-is-your-hometown.html">[HTML]</a>Popvich, N., Migliozzi, B., Taylor, R., Williams, J. and Watkins, D., 2018. The New York Times. </li>
+<li id="daniels2018human">
+<span class="title">Human terrain</span>   <a href="https://pudding.cool/2018/10/city_3d/">[link]</a>Daniels, M., 2018. The Pudding. </li>
+<li id="quealy2019are">
+<span class="title">Are you rich? This income-rank quiz might change how you see yourself</span>   <a href="https://www.nytimes.com/interactive/2019/08/01/upshot/are-you-rich.html">[HTML]</a>Quealy, K., Gebeloff, R. and Taylor, R., 2019. The New York Times. </li>
+<li id="chinoy2010quiz">
+<span class="title">Quiz: Let us predict whether you’re a democrat or a republican</span>   <a href="https://www.nytimes.com/interactive/2019/08/08/opinion/sunday/party-polarization-quiz.html">[HTML]</a>Chinoy, S., 2019. The New York Times. </li>
+<li id="whitehouse2017find">
+<span class="title">Find Out If Your Job Will Be Automated</span>   <a href="https://www.bloomberg.com/graphics/2017-job-risk/">[link]</a>Whitehouse, M. and Rojanasakul, M., 2017. Bloomberg. </li>
+<li id="lowther2017booze">
+<span class="title">Booze calculator: What's your drinking nationality</span>   <a href="https://www.bbc.com/news/health-30500372">[link]</a>Lowther, E., Huynh, L., Bryson, M. and Connor, S., 2017. BBC. </li>
+<li id="beckett2019click">
+<span class="title">Click 1,000: How the pick-your-own-path episode was made</span>   <a href="https://www.bbc.com/news/technology-48867302">[link]</a>Beckett, S., 2019. BBC. </li>
+<li id="clark2016learning">
+<span class="title">E-learning and the science of instruction: Proven guidelines for consumers and designers of multimedia learning</span> Clark, R.C. and Mayer, R.E., 2016. John Wiley &amp; Sons.</li>
+<li id="mayer2003multimedia">
+<span class="title">Multimedia learning in an interactive self-explaining environment: What works in the design of agent-based microworlds?</span>   <a href="https://psycnet.apa.org/record/2003-09576-012">[link]</a>Mayer, R.E., Dow, G.T. and Mayer, S., 2003. Journal of Educational Psychology, Vol 95(4), pp. 806. American Psychological Association.</li>
+<li id="mayer2002pictorial">
+<span class="title">Pictorial aids for learning by doing in a multimedia geology simulation game.</span>   <a href="https://psycnet.apa.org/record/2002-02073-016">[link]</a>Mayer, R.E., Mautone, P. and Prothero, W., 2002. Journal of Educational Psychology, Vol 94(1), pp. 171. American Psychological Association.</li>
+<li id="yee2015visual">
+<span class="title">A visual introduction to machine learning</span>   <a href="http://www.r2d3.us/visual-intro-to-machine-learning-part-1/">[link]</a>Yee, S. and Chu, T., 2015. R2D3. </li>
+<li id="craft2005beyond">
+<span class="title">Beyond guidelines: What can we learn from the visual information seeking mantra?</span>   <a href="https://ieeexplore.ieee.org/abstract/document/1509067">[link]</a>Craft, B. and Cairns, P., 2005. Ninth International Conference on Information Visualisation (IV'05), pp. 110--118. </li>
+<li id="shneiderman1996eyes">
+<span class="title">The eyes have it: A task by data type taxonomy for information visualizations</span>   <a href="https://ieeexplore.ieee.org/abstract/document/545307">[link]</a>Shneiderman, B., 1996. Proceedings 1996 IEEE Symposium on Visual Languages, pp. 336--343. </li>
+<li id="keim2002information">
+<span class="title">Information visualization and visual data mining</span>   <a href="https://ieeexplore.ieee.org/abstract/document/981847">[link]</a>Keim, D.A., 2002. IEEE Transactions on Visualization and Computer Graphics, Vol 8(1), pp. 1--8. IEEE.</li>
+<li id="ashkenas2014how">
+<span class="title">How the recession shaped the economy, in 255 charts</span>   <a href="https://www.nytimes.com/interactive/2014/06/05/upshot/how-the-recession-reshaped-the-economy-in-255-charts.html">[HTML]</a>Ashkenas, J. and Parlapiano, A., 2014. The New York Times. </li>
+<li id="ala2018how">
+<span class="title">How does the eye work</span>   <a href="https://idyll.pub/post/the-eye-5b169094cce3bece5d95e964/">[link]</a>2018. Explorable Explanations Game Jam. </li>
+<li id="gingold2015earth">
+<span class="title">Earth primer</span>   <a href="https://www.earthprimer.com/">[link]</a>Gingold, C., 2015. </li>
+<li id="karras2018progressive">
+<span class="title">Progressive growing of gans for improved quality, stability, and variation</span>   <a href="http://arxiv.org/pdf/1710.10196.pdf">[PDF]</a>Karras, T., Aila, T., Laine, S. and Lehtinen, J., 2018. International Conference on Learning Representations. </li>
+<li id="karras2019style">
+<span class="title">A style-based generator architecture for generative adversarial networks</span>   <a href="https://openaccess.thecvf.com/content_CVPR_2019/html/Karras_A_Style-Based_Generator_Architecture_for_Generative_Adversarial_Networks_CVPR_2019_paper.html">[HTML]</a>Karras, T., Laine, S. and Aila, T., 2019. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 4401--4410. </li>
+<li id="goh2017why">
+<span class="title">Why momentum really works</span>   <a href="http://distill.pub/2017/momentum">[link]</a>Goh, G., 2017. Distill. </li>
+<li id="azad2017colorized">
+<span class="title">Colorized math equations</span>   <a href="https://betterexplained.com/articles/colorized-math-equations/">[link]</a>Azad, K., 2017. Better Explained. </li>
+<li id="powell2015image">
+<span class="title">Image kernels</span>   <a href="http://setosa.io/ev/image-kernels/">[link]</a>Powell, V., 2015. Setosa. </li>
+<li id="nelson1967stretchtext">
+<span class="title">Stretchtext – hypertext note #8</span> Nelson, T., 1967. Project Xanadu. </li>
+<li id="beecroft2016on">
+<span class="title">On variable level-of-detail documents</span>   <a href="http://symbolflux.com/lodessay/">[link]</a>Beecroft, W., 2016. </li>
+<li id="cfp2018parametric">
+<span class="title">Call for proposals winter/spring 2019</span>   <a href="https://parametric.press/issue-01/call-for-proposals/">[link]</a>2019. The Parametric Press. </li>
+<li id="basques2018ui">
+<span class="title">A UI that lets readers control how much information they see</span>   <a href="https://kayce.basqu.es/blog/information-control?curator=theedge">[link]</a>Basques, K., 2018. </li>
+<li id="wikipedia2018preview">
+<span class="title">Wikipedia Preview Card</span>   <a href="https://www.mediawiki.org/wiki/Page_Previews">[link]</a>Vasileva, O., 2018. Wikipedia. </li>
+<li id="zellweger1998fluid">
+<span class="title">Fluid links for informed and incremental link transitions</span>   <a href="https://dl.acm.org/doi/10.1145/276627.276633">[link]</a>Zellweger, P., Chang, B. and Mackinlay, J.D., 1998. Proceedings of Hypertext. </li>
+<li id="zellweger2002reading">
+<span class="title">Reading and writing fluid hypertext narratives</span>   <a href="https://dl.acm.org/doi/abs/10.1145/513338.513353">[link]</a>Zellweger, P.T., Mangen, A. and Newman, P., 2002. Proceedings of the Thirteenth ACM Conference on Hypertext and Hypermedia, pp. 45--54. </li>
+<li id="conlen2018idyll">
+<span class="title">Idyll: A markup language for authoring and publishing interactive articles on the web</span>   <a href="https://idyll-lang.org/">[link]</a>Conlen, M. and Heer, J., 2018. Proceedings of the 31st Annual ACM Symposium on User Interface Software and Technology, pp. 977--989. </li>
+<li id="apparatus">
+<span class="title">Apparatus: A hybrid graphics editor and programming environment for creating interactive diagrams</span>   <a href="http://aprt.us/">[link]</a>Schachman, T., 2015. Apparatus. </li>
+<li id="observable">
+<span class="title">Observable</span>   <a href="https://observablehq.com/">[link]</a>2019. </li>
+<li id="case2017loopy">
+<span class="title">LOOPY: a tool for thinking in systems</span>   <a href="https://ncase.me/loopy/">[link]</a>Case, N., 2017. </li>
+<li id="klokmose2015webstrates">
+<span class="title">Webstrates: shareable dynamic media</span>   <a href="https://webstrates.net/">[link]</a>Klokmose, C.N., Eagan, J.R., Baader, S., Mackay, W. and Beaudouin-Lafon, M., 2015. Proceedings of the 28th Annual ACM Symposium on User Interface Software &amp; Technology, pp. 280--290. </li>
+<li id="nielsen2015neural">
+<span class="title">Neural networks and deep learning</span>   <a href="http://neuralnetworksanddeeplearning.com/">[link]</a>Nielsen, M.A., 2015. Determination Press.</li>
+<li id="case2017how">
+<span class="title">How I make explorable explanations</span>   <a href="https://blog.ncase.me/how-i-make-an-explorable-explanation/">[link]</a>Case, N., 2017. </li>
+<li id="case2018explorable">
+<span class="title">Explorable explanations: 4 more design patterns</span>   <a href="https://blog.ncase.me/explorable-explanations-4-more-design-patterns/">[link]</a>Case, N., 2018. </li>
+<li id="stolper2016emerging">
+<span class="title">Emerging and recurring data-driven storytelling techniques: Analysis of a curated collection of recent stories</span>   <a href="https://www.microsoft.com/en-us/research/publication/emerging-and-recurring-data-driven-storytelling-techniques-analysis-of-a-curated-collection-of-recent-stories/">[link]</a>Stolper, C.D., Lee, B., Riche, N.H. and Stasko, J., 2016. Microsoft Research. </li>
+<li id="parametric">
+<span class="title">Issue 01: Science &amp; Society</span>   <a href="https://parametric.press">[link]</a>Conlen, M., Hohman, F., Uren, V., Stalla, S. and Sass, A., 2018. The Parametric Press. </li>
+<li id="feng2019myth">
+<span class="title">The myth of the impartial machine</span>   <a href="https://parametric.press/issue-01/the-myth-of-the-impartial-machine/">[link]</a>Feng, A., Wu, S., Hohman, F., Conlen, M. and Stalla, S., 2019. The Parametric Press. </li>
+<li id="bostock2011d3">
+<span class="title">D3 data-driven documents</span>   <a href="https://d3js.org/">[link]</a>Bostock, M., Ogievetsky, V. and Heer, J., 2011. IEEE Transactions on Visualization and ccomputer Graphics, Vol 17(12), pp. 2301--2309. IEEE.</li>
+<li id="conlen2019launching">
+<span class="title">Launching the Parametric Press</span>   <a href="https://parametric.press">[link]</a>Conlen, M. and Hohman, F., 2019. Visualization for Communication (VisComm) at IEEE VIS. </li>
+<li id="hoffswell2020techniques">
+<span class="title">Techniques for flexible responsive visualization design</span>   <a href="https://dl.acm.org/doi/abs/10.1145/3313831.3376777">[link]</a>Hoffswell, J., Li, W. and Liu, Z., 2020. Proceedings of the 2020 CHI Conference on Human Factors in Computing Systems. </li>
+<li id="brehmer2019comparative">
+<span class="title">A Comparative Evaluation of Animation and Small Multiples for Trend Visualization on Mobile Phones</span>   <a href="https://ieeexplore.ieee.org/abstract/document/8805428">[link]</a>Brehmer, M., Lee, B., Isenberg, P. and Choe, E.K., 2019. IEEE Transactions on Visualization and Computer Graphics, Vol 26(1), pp. 364--374. IEEE.</li>
+<li id="brehmer2018visualizing">
+<span class="title">Visualizing ranges over time on mobile phones: a task-based crowdsourced evaluation</span>   <a href="https://ieeexplore.ieee.org/abstract/document/8440812">[link]</a>Brehmer, M., Lee, B., Isenberg, P. and Choe, E.K., 2018. IEEE Transactions on Visualization and Computer Graphics, Vol 25(1), pp. 619--629. IEEE.</li>
+<li id="tse2016why">
+<span class="title">Why we are doing fewer interactives</span>   <a href="https://github.com/archietse/malofiej-2016/blob/master/tse-malofiej-2016-slides.pdf">[PDF]</a>Tse, A., 2016. Malofiej Infographics World Summit. </li>
+<li id="conlen2019capture">
+<span class="title">Capture &amp; analysis of active reading behaviors for interactive articles on the web</span>   <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/cgf.13720">[link]</a>Conlen, M., Kale, A. and Heer, J., 2019. Computer Graphics Forum, Vol 38(3), pp. 687--698. </li>
+<li id="aisch2017defense">
+<span class="title">In defense of interactive graphics</span>   <a href="https://vis4.net/blog/2017/03/in-defense-of-interactive-graphics/">[link]</a>Aisch, G., 2017. </li>
+</ol></d-citation-list>
+<distill-appendix>
+<h3 id="updates-and-corrections">Updates and Corrections</h3>
+<p>
+    If you see mistakes or want to suggest changes, please <a href="https://github.com/distillpub/post--communicating-with-interactive-articles/issues/new">create an issue on GitHub</a>. </p>
+<h3 id="reuse">Reuse</h3>
+<p>Diagrams and text are licensed under Creative Commons Attribution <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a> with the <a class="github" href="https://github.com/distillpub/post--communicating-with-interactive-articles">source available on GitHub</a>, unless noted otherwise. The figures that have been reused from other sources don’t fall under this license and can be recognized by a note in their caption: “Figure from …”.</p>
+<h3 id="citation">Citation</h3>
+<p>For attribution in academic contexts, please cite this work as</p>
+<pre class="citation short">Hohman, et al., "Communicating with Interactive Articles", Distill, 2020.</pre>
+<p>BibTeX citation</p>
+<pre class="citation long">@article{hohman2020communicating,
+  author = {Hohman, Fred and Conlen, Matthew and Heer, Jeffrey and Chau, Duen Horng (Polo)},
+  title = {Communicating with Interactive Articles},
+  journal = {Distill},
+  year = {2020},
+  note = {https://distill.pub/2020/communicating-with-interactive-articles},
+  doi = {10.23915/distill.00028}
+}</pre>
+</distill-appendix></d-appendix></div>
+<div><distill-footer>
+<div class="footer-container">
+<a class="logo" href="/">
+     
+
+    Distill
+  </a> is dedicated to clear explanations of machine learning
+
+  <div class="nav">
+<a href="https://distill.pub/about/">About</a>
+<a href="https://distill.pub/journal/">Submit</a>
+<a href="https://distill.pub/prize/">Prize</a>
+<a href="https://distill.pub/archive/">Archive</a>
+<a href="https://distill.pub/rss.xml">RSS</a>
+<a href="https://github.com/distillpub">GitHub</a>
+<a href="https://twitter.com/distillpub">Twitter</a>
+         ISSN 2476-0757
+  </div>
+</div>
+</distill-footer></div>

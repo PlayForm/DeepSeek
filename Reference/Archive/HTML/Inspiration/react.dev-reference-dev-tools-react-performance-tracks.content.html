@@ -1,0 +1,139 @@
+<div><div id="__next"><div class="grid grid-cols-only-content lg:grid-cols-sidebar-content 2xl:grid-cols-sidebar-content-toc">
+<main class="min-w-0 isolate"><article class="font-normal break-words text-primary dark:text-primary-dark"><div class="ps-0">
+<div class=""><div class="px-5 sm:px-12 pt-3.5"><div class="max-w-4xl ms-0 2xl:mx-auto">
+<div class="flex justify-between items-start">
+<div class="flex-1"><div class="flex flex-wrap"></div></div>
+<button class="text-sm py-1 px-3 text-base leading-tight font-bold rounded-full py-2 px-4 focus:outline focus:outline-offset-2 focus:outline-link dark:focus:outline-link-dark inline-flex items-center my-1 bg-transparent text-primary dark:text-primary-dark active:text-primary shadow-secondary-button-stroke dark:shadow-secondary-button-stroke-dark hover:bg-gray-40/5 active:bg-gray-40/10 hover:dark:bg-gray-60/5 active:dark:bg-gray-60/10"> <span class="hidden sm:inline">Copy page</span><span class="sm:hidden">Copy</span></button>
+</div>
+<h1 class="mdx-heading mt-0 text-primary dark:text-primary-dark -mx-.5 break-words text-5xl font-display font-bold leading-tight">React Performance tracks
+</h1>
+</div></div></div>
+<div class="px-5 sm:px-12">
+<div class="max-w-7xl mx-auto"><div class="max-w-4xl ms-0 2xl:mx-auto">
+<div class="font-display text-xl text-primary dark:text-primary-dark leading-relaxed"><p class="whitespace-pre-wrap my-4">React Performance tracks are specialized custom entries that appear on the Performance panel’s timeline in your browser developer tools.</p></div>
+<p class="whitespace-pre-wrap my-4">These tracks are designed to provide developers with comprehensive insights into their React application’s performance by visualizing React-specific events and metrics alongside other critical data sources such as network requests, JavaScript execution, and event loop activity, all synchronized on a unified timeline within the Performance panel for a complete understanding of application behavior.</p>
+
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">
+<a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="#usage">Usage </a><ul class="ms-6 my-3 list-disc"></ul>
+</li>
+<li class="leading-relaxed mb-1">
+<a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="#tracks">Tracks </a><ul class="ms-6 my-3 list-disc">
+
+
+
+</ul>
+</li>
+</ul>
+
+<h2 class="mdx-heading text-3xl font-display leading-10 text-primary dark:text-primary-dark font-bold my-6" id="usage">Usage 
+</h2>
+<p class="whitespace-pre-wrap my-4">React Performance tracks are only available in development and profiling builds of React:</p>
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Development</strong>: enabled by default.</li>
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Profiling</strong>: Only Scheduler tracks are enabled by default. The Components track only lists Components that are in subtrees wrapped with <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/reference/react/Profiler"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code></a>. If you have <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/learn/react-developer-tools">React Developer Tools extension</a> enabled, all Components are included in the Components track even if they’re not wrapped in <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code>. Server tracks are not available in profiling builds.</li>
+</ul>
+<p class="whitespace-pre-wrap my-4">If enabled, tracks should appear automatically in the traces you record with the Performance panel of browsers that provide <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="https://developer.chrome.com/docs/devtools/performance/extension">extensibility APIs</a>.</p>
+<div class="expandable-callout pt-8 pb-4 px-5 sm:px-8 my-8 relative rounded-none shadow-inner-border -mx-5 sm:mx-auto sm:rounded-2xl bg-yellow-5 dark:bg-yellow-60 dark:bg-opacity-20">
+<h3 class="text-2xl font-display font-bold text-yellow-50 dark:text-yellow-40">Pitfall</h3>
+<div class="relative"><div class="py-2"><p class="whitespace-pre-wrap my-4">The profiling instrumentation that powers React Performance tracks adds some additional overhead, so it is disabled in production builds by default.
+Server Components and Server Requests tracks are only available in development builds.</p></div></div>
+</div>
+<h3 class="mdx-heading text-2xl font-display leading-9 text-primary dark:text-primary-dark font-bold my-6" id="using-profiling-builds">Using profiling builds 
+</h3>
+<p class="whitespace-pre-wrap my-4">In addition to production and development builds, React also includes a special profiling build.
+To use profiling builds, you have to use <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-dom/profiling</code> instead of <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-dom/client</code>.
+We recommend that you alias <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-dom/client</code> to <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-dom/profiling</code> at build time via bundler aliases instead of manually updating each <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-dom/client</code> import.
+Your framework might have built-in support for enabling React’s profiling build.</p>
+
+<h2 class="mdx-heading text-3xl font-display leading-10 text-primary dark:text-primary-dark font-bold my-6" id="tracks">Tracks 
+</h2>
+<h3 class="mdx-heading text-2xl font-display leading-9 text-primary dark:text-primary-dark font-bold my-6" id="scheduler">Scheduler 
+</h3>
+<p class="whitespace-pre-wrap my-4">The Scheduler is an internal React concept used for managing tasks with different priorities. This track consists of 4 subtracks, each representing work of a specific priority:</p>
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Blocking</strong> - The synchronous updates, which could’ve been initiated by user interactions.</li>
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Transition</strong> - Non-blocking work that happens in the background, usually initiated via <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/reference/react/startTransition"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">startTransition</code></a>.</li>
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Suspense</strong> - Work related to Suspense boundaries, such as displaying fallbacks or revealing content.</li>
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Idle</strong> - The lowest priority work that is done when there are no other tasks with higher priority.</li>
+</ul>
+
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="renders">Renders 
+</h4>
+<p class="whitespace-pre-wrap my-4">Every render pass consists of multiple phases that you can see on a timeline:</p>
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Update</strong> - this is what caused a new render pass.</li>
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Render</strong> - React renders the updated subtree by calling render functions of components. You can see the rendered components subtree on <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="#components">Components track</a>, which follows the same color scheme.</li>
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Commit</strong> - After rendering components, React will submit the changes to the DOM and run layout effects, like <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/reference/react/useLayoutEffect"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">useLayoutEffect</code></a>.</li>
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Remaining Effects</strong> - React runs passive effects of a rendered subtree. This usually happens after the paint, and this is when React runs hooks like <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/reference/react/useEffect"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">useEffect</code></a>. One known exception is user interactions, like clicks, or other discrete events. In this scenario, this phase could run before the paint.</li>
+</ul>
+
+<p class="whitespace-pre-wrap my-4"><a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/learn/render-and-commit">Learn more about renders and commits</a>.</p>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="cascading-updates">Cascading updates 
+</h4>
+<p class="whitespace-pre-wrap my-4">Cascading updates is one of the patterns for performance regressions. If an update was scheduled during a render pass, React could discard completed work and start a new pass.</p>
+<p class="whitespace-pre-wrap my-4">In development builds, React can show you which Component scheduled a new update. This includes both general updates and cascading ones. You can see the enhanced stack trace by clicking on the “Cascading update” entry, which should also display the name of the method that scheduled an update.</p>
+
+<p class="whitespace-pre-wrap my-4"><a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/learn/you-might-not-need-an-effect">Learn more about Effects</a>.</p>
+<h3 class="mdx-heading text-2xl font-display leading-9 text-primary dark:text-primary-dark font-bold my-6" id="components">Components 
+</h3>
+<p class="whitespace-pre-wrap my-4">The Components track visualizes the durations of React components. They are displayed as a flamegraph, where each entry represents the duration of the corresponding component render and all its descendant children components.</p>
+
+<p class="whitespace-pre-wrap my-4">Similar to render durations, effect durations are also represented as a flamegraph, but with a different color scheme that aligns with the corresponding phase on the Scheduler track.</p>
+
+<div class="expandable-callout pt-8 pb-4 px-5 sm:px-8 my-8 relative rounded-none shadow-inner-border -mx-5 sm:mx-auto sm:rounded-2xl bg-green-5 dark:bg-green-60 dark:bg-opacity-20 text-primary dark:text-primary-dark text-lg">
+<h3 class="text-2xl font-display font-bold text-green-60 dark:text-green-40">Note</h3>
+<div class="relative"><div class="py-2">
+<p class="whitespace-pre-wrap my-4">Unlike renders, not all effects are shown on the Components track by default.</p>
+<p class="whitespace-pre-wrap my-4">To maintain performance and prevent UI clutter, React will only display those effects, which had a duration of 0.05ms or longer, or triggered an update.</p>
+</div></div>
+</div>
+<p class="whitespace-pre-wrap my-4">Additional events may be displayed during the render and effects phases:</p>
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">
+<span>Mount</span> - A corresponding subtree of component renders or effects was mounted.</li>
+<li class="leading-relaxed mb-1">
+<span>Unmount</span> - A corresponding subtree of component renders or effects was unmounted.</li>
+<li class="leading-relaxed mb-1">
+<span>Reconnect</span> - Similar to Mount, but limited to cases when <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/reference/react/Activity"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Activity&gt;</code></a> is used.</li>
+<li class="leading-relaxed mb-1">
+<span>Disconnect</span> - Similar to Unmount, but limited to cases when <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/reference/react/Activity"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Activity&gt;</code></a> is used.</li>
+</ul>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="changed-props">Changed props 
+</h4>
+<p class="whitespace-pre-wrap my-4">In development builds, when you click on a component render entry, you can inspect potential changes in props. You can use this information to identify unnecessary renders.</p>
+
+<h3 class="mdx-heading text-2xl font-display leading-9 text-primary dark:text-primary-dark font-bold my-6" id="server">Server 
+</h3>
+
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="server-requests">Server Requests 
+</h4>
+<p class="whitespace-pre-wrap my-4">The Server Requests track visualized all Promises that eventually end up in a React Server Component. This includes any <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">async</code> operations like calling <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">fetch</code> or async Node.js file operations.</p>
+<p class="whitespace-pre-wrap my-4">React will try to combine Promises that are started from inside third-party code into a single span representing the the duration of the entire operation blocking 1st party code.
+For example, a third party library method called <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">getUser</code> that calls <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">fetch</code> internally multiple times will be represented as a single span called <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">getUser</code>, instead of showing multiple <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">fetch</code> spans.</p>
+<p class="whitespace-pre-wrap my-4">Clicking on spans will show you a stack trace of where the Promise was created as well as a view of the value that the Promise resolved to, if available.</p>
+<p class="whitespace-pre-wrap my-4">Rejected Promises are displayed as red with their rejected value.</p>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="server-components">Server Components 
+</h4>
+<p class="whitespace-pre-wrap my-4">The Server Components tracks visualize the durations of React Server Components Promises they awaited. Timings are displayed as a flamegraph, where each entry represents the duration of the corresponding component render and all its descendant children components.</p>
+<p class="whitespace-pre-wrap my-4">If you await a Promise, React will display duration of that Promise. To see all I/O operations, use the Server Requests track.</p>
+<p class="whitespace-pre-wrap my-4">Different colors are used to indicate the duration of the component render. The darker the color, the longer the duration.</p>
+<p class="whitespace-pre-wrap my-4">The Server Components track group will always contain a “Primary” track. If React is able to render Server Components concurrently, it will display addititional “Parallel” tracks.
+If more than 8 Server Components are rendered concurrently, React will associate them with the last “Parallel” track instead of adding more tracks.</p>
+</div></div>
+<div class="grid grid-cols-1 gap-4 py-4 mx-auto max-w-7xl md:grid-cols-2 md:py-12"><a class="flex gap-x-4 md:gap-x-6 items-center w-full md:min-w-80 md:w-fit md:max-w-md px-4 md:px-5 py-6 border-2 border-transparent text-base leading-base text-link dark:text-link-dark rounded-lg group focus:text-link dark:focus:text-link-dark focus:bg-highlight focus:border-link dark:focus:bg-highlight-dark dark:focus:border-link-dark focus:border-opacity-100 focus:border-2 focus:ring-1 focus:ring-offset-4 focus:ring-blue-40 active:ring-0 active:ring-offset-0 hover:bg-gray-5 dark:hover:bg-gray-80 flex-row-reverse justify-self-end text-end" href="/reference/dev-tools/react-devtools-cdt-mcp"><div class="flex flex-col overflow-hidden">
+<span class="text-sm font-bold tracking-wide no-underline uppercase text-secondary dark:text-secondary-dark group-focus:text-link dark:group-focus:text-link-dark group-focus:text-opacity-100">Next</span><span class="text-lg break-words group-hover:underline">React DevTools for agents</span>
+</div></a></div>
+</div>
+</div></article></main>
+</div></div></div>

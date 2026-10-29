@@ -1,0 +1,108 @@
+<div><div class="container-fluid td-outer">
+<div class="td-main"><div class="row flex-xl-nowrap">
+<main class="col-12 col-md-9 col-xl-8 ps-md-5"><div class="td-content">
+<h1>Client-side Apps</h1>
+<div class="lead">Use OpenTelemetry on end-user controlled apps running on devices like mobile phones, desktop computers, and retail kiosks.</div>
+<p>Client-side applications present unique challenges for observability compared to
+server-side workloads. These apps run on devices you don’t control, with varying
+network conditions, hardware capabilities, and user behaviors.</p>
+<h2 id="why-client-side-observability-matters">Why client-side observability matters
+</h2>
+<p>Traditional server-side monitoring gives you visibility into your backend
+systems, but misses the complete picture of user experience. Client-side
+observability helps you:</p>
+<ul>
+<li>
+<strong>Understand real user experience</strong>: See actual load times, frame rates, and
+responsiveness as users experience them.</li>
+<li>
+<strong>Debug issues in context</strong>: Correlate errors with device characteristics,
+network conditions, and user actions.</li>
+<li>
+<strong>Track end-to-end transactions</strong>: Connect client-side operations with backend
+traces for complete distributed tracing.</li>
+<li>
+<strong>Monitor app health at scale</strong>: Aggregate telemetry across your user base to
+identify patterns and trends.</li>
+</ul>
+<h2 id="key-differences-from-server-side-instrumentation">Key differences from server-side instrumentation
+</h2>
+<p>When instrumenting client apps, consider these factors:</p>
+<ul>
+<li>
+<strong>Resource constraints</strong>: Mobile devices and browsers have limited CPU,
+memory, and battery. Telemetry collection must be efficient and avoid
+impacting app performance.</li>
+<li>
+<strong>Network variability</strong>: Users may have slow, intermittent, or no
+connectivity. Implement offline buffering and batch exports to handle network
+unreliability.</li>
+<li>
+<strong>Session management</strong>: Track user sessions to group related telemetry and
+understand user journeys across multiple app launches.</li>
+<li>
+<strong>Privacy and consent</strong>: Client apps often collect data subject to privacy
+regulations. Plan for data minimization, consent management, and attribute
+redaction.</li>
+<li>
+<strong>Data volume</strong>: With potentially millions of users, sampling strategies
+become essential to manage costs while maintaining representative telemetry.</li>
+</ul>
+<h2 id="real-user-monitoring-rum">Real User Monitoring (RUM)
+</h2>
+<p>OpenTelemetry supports Real User Monitoring (RUM) patterns that capture how real
+users experience your application:</p>
+<ul>
+<li>
+<strong>Page/screen load performance</strong>: Time to first byte, first contentful paint,
+and full load completion.</li>
+<li>
+<strong>User interactions</strong>: Click events, navigation patterns, and form
+submissions.</li>
+<li>
+<strong>Errors and crashes</strong>: Unhandled exceptions, ANR events, and error rates.</li>
+<li>
+<strong>Resource loading</strong>: Network request timing, cache hit rates, and resource
+sizes.</li>
+</ul>
+<h2 id="connecting-to-your-backend">Connecting to your backend
+</h2>
+<p>Client telemetry becomes most valuable when connected to your backend traces.
+Propagate trace context through your HTTP requests to maintain end-to-end
+visibility:</p>
+<div class="highlight"><pre class="chroma"><code class="language-text"><span class="line"><span class="cl">Client App → API Gateway → Backend Services → Database
+</span></span><span class="line"><span class="cl">    │              │              │              │
+</span></span><span class="line"><span class="cl">    └──────────────┴──────────────┴──────────────┘
+</span></span><span class="line"><span class="cl">                 Correlated Traces
+</span></span></code></pre></div>
+<p>Configure your client SDK to inject trace headers (<code>traceparent</code>, <code>tracestate</code>)
+and ensure your backend services propagate this context through their
+operations.</p>
+<div class="section-index">
+
+<div class="entry">
+
+<p>Use OpenTelemetry in apps running on Android platforms</p>
+</div>
+<div class="entry">
+
+<p>Use OpenTelemetry in apps running on iOS and iPadOS</p>
+</div>
+<div class="entry">
+
+<p>Use OpenTelemetry in apps running on web browsers</p>
+</div>
+</div>
+<div class="d-print-none">
+<h2 class="feedback--title">Feedback</h2>
+<p class="feedback--question">Was this page helpful?</p>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-yes">Yes</button>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-no">No</button><p class="feedback--response feedback--response-yes">Thank you. Your feedback is appreciated!</p>
+<p class="feedback--response feedback--response-no">Please let us know <a class="external-link" href="https://github.com/open-telemetry/opentelemetry.io/issues/new?template=PAGE_FEEDBACK.yml&amp;title=[Page+feedback]%3A+ADD+A+SUMMARY+OF+YOUR+FEEDBACK+HERE">how we can improve this page</a>. Your feedback is appreciated!</p>
+</div>
+<div class="td-page-meta__lastmod">Last modified January 29, 2026: <a href="https://github.com/open-telemetry/opentelemetry.io/commit/6cebc46de450dd44481a8a6f17c9b3d6f04aa0f2">chore(aliases): normalize aliases, tweak redirects partial (#9065) (6cebc46d)</a>
+</div>
+</div></main>
+</div></div>
+
+</div></div>

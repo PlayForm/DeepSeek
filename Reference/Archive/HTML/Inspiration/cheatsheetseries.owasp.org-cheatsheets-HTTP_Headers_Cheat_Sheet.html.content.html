@@ -1,0 +1,381 @@
+<div><div class="md-container">
+<main class="md-main">
+<div class="md-main__inner md-grid">
+<div class="md-content">
+<article class="md-content__inner md-typeset">
+<h1 id="http-security-response-headers-cheat-sheet">HTTP Security Response Headers Cheat Sheet<a class="headerlink" href="#http-security-response-headers-cheat-sheet" title="Permanent link">¶</a>
+</h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">¶</a>
+</h2>
+<p>HTTP Headers are a great booster for web security with easy implementation. Proper HTTP response headers can help prevent security vulnerabilities like Cross-Site Scripting, Clickjacking, Information disclosure and more.</p>
+<p>In this cheat sheet, we will review all security-related HTTP headers, recommended configurations, and reference other sources for complicated headers.</p>
+<h2 id="security-headers">Security Headers<a class="headerlink" href="#security-headers" title="Permanent link">¶</a>
+</h2>
+<h3 id="x-frame-options">X-Frame-Options<a class="headerlink" href="#x-frame-options" title="Permanent link">¶</a>
+</h3>
+<p>The <code>X-Frame-Options</code> HTTP response header can be used to indicate whether or not a browser should be allowed to render a page in a <code>&lt;frame&gt;</code>, <code>&lt;iframe&gt;</code>, <code>&lt;embed&gt;</code> or <code>&lt;object&gt;</code>. Sites can use this to avoid <a href="https://owasp.org/www-community/attacks/Clickjacking">clickjacking</a> attacks, by ensuring that their content is not embedded into other sites.</p>
+<p>Content Security Policy (CSP) frame-ancestors directive obsoletes X-Frame-Options for supporting browsers (<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options">source</a>).</p>
+<p>X-Frame-Options header is only useful when the HTTP response where it is included has something to interact with (e.g. links, buttons). If the HTTP response is a redirect or an API returning JSON data, X-Frame-Options does not provide any security.</p>
+<h4 id="recommendation">Recommendation<a class="headerlink" href="#recommendation" title="Permanent link">¶</a>
+</h4>
+<p>Use Content Security Policy (CSP) frame-ancestors directive if possible.</p>
+<p>Do not allow displaying of the page in a frame.</p>
+<blockquote>
+<p><code>X-Frame-Options: DENY</code></p>
+</blockquote>
+<h3 id="x-xss-protection">X-XSS-Protection<a class="headerlink" href="#x-xss-protection" title="Permanent link">¶</a>
+</h3>
+<p>The HTTP <code>X-XSS-Protection</code> response header is a feature of Internet Explorer, Chrome, and Safari that stops pages from loading when they detect reflected cross-site scripting (XSS) attacks.</p>
+<p>WARNING: Even though this header can protect users of older web browsers that don't yet support CSP, in some cases, this header can create XSS vulnerabilities in otherwise safe websites <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection">source</a>.</p>
+<h4 id="recommendation_1">Recommendation<a class="headerlink" href="#recommendation_1" title="Permanent link">¶</a>
+</h4>
+<p>Use a Content Security Policy (CSP) that disables the use of inline JavaScript.</p>
+<p>Do not set this header or explicitly turn it off.</p>
+<blockquote>
+<p><code>X-XSS-Protection: 0</code></p>
+</blockquote>
+<p>Please see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection">Mozilla X-XSS-Protection</a> for details.</p>
+<h3 id="x-content-type-options">X-Content-Type-Options<a class="headerlink" href="#x-content-type-options" title="Permanent link">¶</a>
+</h3>
+<p>The <code>X-Content-Type-Options</code> response HTTP header is used by the server to indicate to the browsers that the MIME types advertised in the Content-Type headers should be followed and not guessed.</p>
+<p>This header is used to block browsers' <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#mime_sniffing">MIME type sniffing</a>, which can transform non-executable MIME types into executable MIME types (<a href="https://blog.mozilla.org/security/2016/08/26/mitigating-mime-confusion-attacks-in-firefox/">MIME Confusion Attacks</a>).</p>
+<h4 id="recommendation_2">Recommendation<a class="headerlink" href="#recommendation_2" title="Permanent link">¶</a>
+</h4>
+<p>Set the Content-Type header correctly throughout the site.</p>
+<blockquote>
+<p><code>X-Content-Type-Options: nosniff</code></p>
+</blockquote>
+<h3 id="referrer-policy">Referrer-Policy<a class="headerlink" href="#referrer-policy" title="Permanent link">¶</a>
+</h3>
+<p>The <code>Referrer-Policy</code> HTTP header controls how much referrer information (sent via the Referer header) should be included with requests.</p>
+<h4 id="recommendation_3">Recommendation<a class="headerlink" href="#recommendation_3" title="Permanent link">¶</a>
+</h4>
+<p>Modern browsers default to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Referrer-Policy#strict-origin-when-cross-origin"><code>strict-origin-when-cross-origin</code></a>: same-origin requests include the origin, path, and query string in the <code>Referer</code> header; cross-origin requests include only the origin, except HTTPS-to-HTTP requests, which omit the header. Set the header explicitly rather than relying on browser defaults.</p>
+<blockquote>
+<p><code>Referrer-Policy: strict-origin-when-cross-origin</code></p>
+</blockquote>
+<ul>
+<li>
+<em>NOTE:</em> For more information on configuring this header please see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy">Mozilla Referrer-Policy</a>.</li>
+</ul>
+<h3 id="content-type">Content-Type<a class="headerlink" href="#content-type" title="Permanent link">¶</a>
+</h3>
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type"><code>Content-Type</code></a> representation header is used to indicate the original media type of the resource (before any content encoding is applied for sending). If not set correctly, the resource (e.g. an image) may be interpreted as HTML, making XSS vulnerabilities possible.</p>
+<p>Although it is recommended to always set the <code>Content-Type</code> header correctly, it would constitute a vulnerability only if the content is intended to be rendered by the client and the resource is untrusted (provided or modified by a user).</p>
+<h4 id="recommendation_4">Recommendation<a class="headerlink" href="#recommendation_4" title="Permanent link">¶</a>
+</h4>
+<blockquote>
+<p><code>Content-Type: text/html; charset=UTF-8</code></p>
+</blockquote>
+<ul>
+<li>
+<em>NOTE:</em> the <code>charset</code> attribute is necessary to prevent XSS in <strong>HTML</strong> pages</li>
+<li>
+<em>NOTE</em>: the <code>Content-Type</code> can be any of the possible <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">MIME types</a>
+</li>
+</ul>
+<h3 id="cache-control">Cache-Control<a class="headerlink" href="#cache-control" title="Permanent link">¶</a>
+</h3>
+<p>The <code>Cache-Control</code> header defines how responses are cached by browsers and intermediate caches.</p>
+<h4 id="recommendation_5">Recommendation<a class="headerlink" href="#recommendation_5" title="Permanent link">¶</a>
+</h4>
+<ul>
+<li>Use <a href="https://www.rfc-editor.org/rfc/rfc9111.html#section-5.2.2.5"><code>no-store</code></a> for sensitive responses to prohibit storage in compliant HTTP caches.</li>
+<li>Use <code>private</code> to allow caching only in non-shared (user-specific) caches and to prevent storage in shared caches (note that private caches may still persist the response).</li>
+<li>Avoid relying on default caching behavior for sensitive or protected content.</li>
+<li>Be aware that <code>no-cache</code> does not prevent caching; it allows caches to store responses. It requires revalidation with the origin server before reuse.</li>
+</ul>
+<p><code>no-store</code> does not control every storage mechanism: the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache">Cache API does not honor HTTP caching headers</a>. Explicitly exclude sensitive responses from application-managed caches and remove existing sensitive entries; see <a href="HTML5_Security_Cheat_Sheet.html#offline-applications">Offline Applications</a>.</p>
+<h4 id="references">References<a class="headerlink" href="#references" title="Permanent link">¶</a>
+</h4>
+<ul>
+
+</ul>
+<h3 id="set-cookie">Set-Cookie<a class="headerlink" href="#set-cookie" title="Permanent link">¶</a>
+</h3>
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie"><code>Set-Cookie</code></a> HTTP response header is used to send a cookie from the server to the user agent, so the user agent can send it back to the server later. To send multiple cookies, multiple Set-Cookie headers should be sent in the same response.</p>
+<p>This is not a security header per se, but its security attributes are crucial.</p>
+<h4 id="recommendation_6">Recommendation<a class="headerlink" href="#recommendation_6" title="Permanent link">¶</a>
+</h4>
+<ul>
+<li>Please read <a href="https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#cookies">Session Management Cheat Sheet</a> for a detailed explanation on cookie configuration options.</li>
+</ul>
+<h3 id="strict-transport-security-hsts">Strict-Transport-Security (HSTS)<a class="headerlink" href="#strict-transport-security-hsts" title="Permanent link">¶</a>
+</h3>
+<p>The HTTP <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security"><code>Strict-Transport-Security</code></a> response header (often abbreviated as HSTS) instructs browsers to only access the website using HTTPS, even if a user attempts to connect over HTTP.</p>
+<h4 id="recommendation_7">Recommendation<a class="headerlink" href="#recommendation_7" title="Permanent link">¶</a>
+</h4>
+<blockquote>
+<p><code>Strict-Transport-Security: max-age=63072000; includeSubDomains; preload</code></p>
+</blockquote>
+<ul>
+<li>
+<em>NOTE</em>: Read carefully how this header works before using it. If the HSTS header is misconfigured or if there is a problem with the SSL/TLS certificate being used, legitimate users might be unable to access the website. For example, if the HSTS header is set to a very long duration and the SSL/TLS certificate expires or is revoked, legitimate users might be unable to access the website until the HSTS header duration has expired.</li>
+</ul>
+<p>See the <a href="https://hstspreload.org/">HSTS preload requirements</a> before requesting preload inclusion.</p>
+<p>Please check out <a href="HTTP_Strict_Transport_Security_Cheat_Sheet.html">HTTP Strict Transport Security Cheat Sheet</a> for more information.</p>
+<h3 id="expect-ct">Expect-CT ❌<a class="headerlink" href="#expect-ct" title="Permanent link">¶</a>
+</h3>
+<p>The <code>Expect-CT</code> header lets sites opt-in to reporting of Certificate Transparency (CT) requirements. Given that mainstream clients now require CT qualification, the only remaining value is reporting such occurrences to the nominated report-uri value in the header. The header is now less about enforcement and more about detection/reporting.</p>
+<h4 id="recommendation_8">Recommendation<a class="headerlink" href="#recommendation_8" title="Permanent link">¶</a>
+</h4>
+<p>Do not use it. Mozilla <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT">recommends</a> avoiding it, and removing it from existing code if possible.</p>
+<h3 id="content-security-policy-csp">Content-Security-Policy (CSP)<a class="headerlink" href="#content-security-policy-csp" title="Permanent link">¶</a>
+</h3>
+<p>Content Security Policy (CSP) is a security feature that is used to specify the origin of content that is allowed to be loaded on a website or in a web application. It is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross-Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement to distribution of malware.</p>
+<ul>
+<li>
+<em>NOTE</em>: This header is relevant to be applied in pages which can load and interpret scripts and code, but might be meaningless in the response of a REST API that returns content that is not going to be rendered.</li>
+</ul>
+<h4 id="recommendation_9">Recommendation<a class="headerlink" href="#recommendation_9" title="Permanent link">¶</a>
+</h4>
+<p>Content Security Policy is complex to configure and maintain. For an explanation on customization options, please read <a href="Content_Security_Policy_Cheat_Sheet.html">Content Security Policy Cheat Sheet</a></p>
+<h3 id="access-control-allow-origin">Access-Control-Allow-Origin<a class="headerlink" href="#access-control-allow-origin" title="Permanent link">¶</a>
+</h3>
+<p>If you don't use this header, your site is protected by default by the Same Origin Policy (SOP). What this header does is relax this control in specified circumstances.</p>
+<p>The <code>Access-Control-Allow-Origin</code> is a CORS (cross-origin resource sharing) header. This header indicates whether the response it is related to can be shared with requesting code from the given origin. In other words, if siteA requests a resource from siteB, siteB should indicate in its <code>Access-Control-Allow-Origin</code> header that siteA is allowed to fetch that resource, if not, the access is blocked due to Same Origin Policy (SOP).</p>
+<h4 id="recommendation_10">Recommendation<a class="headerlink" href="#recommendation_10" title="Permanent link">¶</a>
+</h4>
+<p>If you use it, set specific <a href="https://developer.mozilla.org/en-US/docs/Glossary/Origin">origins</a> instead of <code>*</code>. Check out <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin">Access-Control-Allow-Origin</a> for details.</p>
+<blockquote>
+<p><code>Access-Control-Allow-Origin: https://yoursite.com</code></p>
+</blockquote>
+<ul>
+<li>
+<em>NOTE</em>: The use of '*' might be necessary depending on your needs. For example, for a public API that should be accessible from any origin, it might be necessary to allow '*'.</li>
+</ul>
+<h3 id="cross-origin-opener-policy-coop">Cross-Origin-Opener-Policy (COOP)<a class="headerlink" href="#cross-origin-opener-policy-coop" title="Permanent link">¶</a>
+</h3>
+<p>The HTTP <code>Cross-Origin-Opener-Policy</code> (COOP) response header allows you to ensure a top-level document does not share a browsing context group with cross-origin documents.</p>
+<p>This header works together with Cross-Origin-Embedder-Policy (COEP) and Cross-Origin-Resource-Policy (CORP) explained below.</p>
+<p>This mechanism protects against attacks like Spectre which can cross the security boundary established by Same Origin Policy (SOP) for resources in the same browsing context group.</p>
+<p>As these headers are very related to browsers, it may not make sense to be applied to REST APIs or clients that are not browsers.</p>
+<h4 id="recommendation_11">Recommendation<a class="headerlink" href="#recommendation_11" title="Permanent link">¶</a>
+</h4>
+<p>Isolates the browsing context exclusively to same-origin documents.</p>
+<blockquote>
+<p><code>Cross-Origin-Opener-Policy: same-origin</code></p>
+</blockquote>
+<h3 id="cross-origin-embedder-policy-coep">Cross-Origin-Embedder-Policy (COEP)<a class="headerlink" href="#cross-origin-embedder-policy-coep" title="Permanent link">¶</a>
+</h3>
+<p>The HTTP <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Embedder-Policy"><code>Cross-Origin-Embedder-Policy</code></a> (COEP) response header prevents a document from loading any cross-origin resources that don't explicitly grant the document permission (using <a href="#cross-origin-resource-policy-corp">CORP</a> or CORS).</p>
+<ul>
+<li>
+<em>NOTE</em>: Enabling this will block cross-origin resources not configured correctly from loading.</li>
+</ul>
+<h4 id="recommendation_12">Recommendation<a class="headerlink" href="#recommendation_12" title="Permanent link">¶</a>
+</h4>
+<p>A document can only load resources from the same origin, or resources explicitly marked as loadable from another origin.</p>
+<blockquote>
+<p><code>Cross-Origin-Embedder-Policy: require-corp</code></p>
+</blockquote>
+<ul>
+<li>
+<em>NOTE</em>: The <code>crossorigin</code> attribute requests the resource in CORS mode. The resource server must <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cross-Origin-Embedder-Policy#require-corp">permit the request through CORS</a>; the attribute alone does not grant permission:</li>
+<li><code>&lt;img src="https://thirdparty.com/img.png" crossorigin&gt;</code></li>
+</ul>
+<h3 id="cross-origin-resource-policy-corp">Cross-Origin-Resource-Policy (CORP)<a class="headerlink" href="#cross-origin-resource-policy-corp" title="Permanent link">¶</a>
+</h3>
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Resource-Policy"><code>Cross-Origin-Resource-Policy</code></a> (CORP) header allows you to control the set of origins that are empowered to include a resource. It is a robust defense against attacks like <a href="https://meltdownattack.com/">Spectre</a>, as it allows browsers to block a given response before it enters an attacker's process.</p>
+<h4 id="recommendation_13">Recommendation<a class="headerlink" href="#recommendation_13" title="Permanent link">¶</a>
+</h4>
+<p>Limit current resource loading to the site and sub-domains only.</p>
+<blockquote>
+<p><code>Cross-Origin-Resource-Policy: same-site</code></p>
+</blockquote>
+<h3 id="permissions-policy-formerly-feature-policy">Permissions-Policy (formerly Feature-Policy)<a class="headerlink" href="#permissions-policy-formerly-feature-policy" title="Permanent link">¶</a>
+</h3>
+<p>Permissions-Policy allows you to control which origins can use which browser features, both in the top-level page and in embedded frames. For every feature controlled by Feature Policy, the feature is only enabled in the current document or frame if its origin matches the allowed list of origins. This means that you can configure your site to never allow the camera or microphone to be activated. This prevents that an injection, for example an XSS, enables the camera, the microphone, or other browser feature.</p>
+<p>More information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy">Permissions-Policy</a></p>
+<h4 id="recommendation_14">Recommendation<a class="headerlink" href="#recommendation_14" title="Permanent link">¶</a>
+</h4>
+<p>Set it and disable all the features that your site does not need or allow them only to the authorized domains:</p>
+<blockquote>
+<p><code>Permissions-Policy: geolocation=(), camera=(), microphone=()</code></p>
+</blockquote>
+<ul>
+<li>
+<em>NOTE</em>: This example is disabling geolocation, camera, and microphone for all domains.</li>
+</ul>
+<h3 id="server">Server<a class="headerlink" href="#server" title="Permanent link">¶</a>
+</h3>
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server"><code>Server</code></a> header describes the software used by the origin server that handled the request — that is, the server that generated the response.</p>
+<p>This is not a security header, but how it is used is relevant for security.</p>
+<h4 id="recommendation_15">Recommendation<a class="headerlink" href="#recommendation_15" title="Permanent link">¶</a>
+</h4>
+<p>Remove this header or set non-informative values.</p>
+<blockquote>
+<p><code>Server: webserver</code></p>
+</blockquote>
+<ul>
+<li>
+<em>NOTE</em>: Remember that attackers have other means of fingerprinting the server technology.</li>
+</ul>
+<h3 id="x-powered-by">X-Powered-By<a class="headerlink" href="#x-powered-by" title="Permanent link">¶</a>
+</h3>
+<p>The <code>X-Powered-By</code> header describes the technologies used by the webserver. This information exposes the server to attackers. Using the information in this header, attackers can find vulnerabilities easier.</p>
+<h4 id="recommendation_16">Recommendation<a class="headerlink" href="#recommendation_16" title="Permanent link">¶</a>
+</h4>
+<p>Remove all <code>X-Powered-By</code> headers.</p>
+<ul>
+<li>
+<em>NOTE</em>: Remember that attackers have other means of fingerprinting your tech stack.</li>
+</ul>
+<h3 id="x-aspnet-version">X-AspNet-Version<a class="headerlink" href="#x-aspnet-version" title="Permanent link">¶</a>
+</h3>
+<p>Provides information about the .NET version.</p>
+<h4 id="recommendation_17">Recommendation<a class="headerlink" href="#recommendation_17" title="Permanent link">¶</a>
+</h4>
+<p>Disable sending this header. Add the following line in your <code>web.config</code> in the <code>&lt;system.web&gt;</code> section to remove it.</p>
+<div class="highlight"><pre id="__code_0"><code><span class="nt">&lt;httpRuntime</span><span class="na">enableVersionHeader=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
+</code></pre></div>
+<ul>
+<li>
+<em>NOTE</em>: Remember that attackers have other means of fingerprinting your tech stack.</li>
+</ul>
+<h3 id="x-aspnetmvc-version">X-AspNetMvc-Version<a class="headerlink" href="#x-aspnetmvc-version" title="Permanent link">¶</a>
+</h3>
+<p>Provides information about the .NET version.</p>
+<h4 id="recommendation_18">Recommendation<a class="headerlink" href="#recommendation_18" title="Permanent link">¶</a>
+</h4>
+<p>Disable sending this header. To remove the <code>X-AspNetMvc-Version</code> header, add the below line in <code>Global.asax</code> file.</p>
+<div class="highlight"><pre id="__code_1"><code>MvcHandler.DisableMvcResponseHeader = true;
+</code></pre></div>
+<ul>
+<li>
+<em>NOTE</em>: Remember that attackers have other means of fingerprinting your tech stack.</li>
+</ul>
+<h3 id="x-robots-tag">X-Robots-Tag<a class="headerlink" href="#x-robots-tag" title="Permanent link">¶</a>
+</h3>
+<p>The HTTP <code>X-Robots-Tag</code> response header controls how search engines and other automated crawlers index and display resources such as PDFs, images, and other non-HTML content.
+It functions similarly to the <code>&lt;meta name="robots"&gt;</code> tag, but is applied via the HTTP response header, allowing greater flexibility (e.g., for non-HTML files or server-wide rules).</p>
+<div class="highlight"><pre id="__code_2"><code>X-Robots-Tag: noindex, nofollow
+</code></pre></div>
+<ul>
+<li>
+<strong>Note:</strong> Only compliant crawlers respect these directives, and they must still make an HTTP request to read the headers before deciding how to handle the content.</li>
+</ul>
+<h4 id="recommendation_19">Recommendation<a class="headerlink" href="#recommendation_19" title="Permanent link">¶</a>
+</h4>
+<p>Use the <code>X-Robots-Tag</code> header to control crawler behavior:</p>
+<ul>
+<li>For <strong>private or sensitive content</strong> you don’t want indexed:</li>
+</ul>
+<blockquote>
+<p><code>X-Robots-Tag: noindex, nofollow</code>
+This prevents compliant search engines from indexing the resource or following links on it.</p>
+</blockquote>
+<ul>
+<li>For <strong>public content</strong> you want indexed and discoverable (e.g., documentation, datasets):</li>
+</ul>
+<blockquote>
+<p><code>X-Robots-Tag: index, follow</code>
+This allows search engines to index the resource and follow its links.</p>
+</blockquote>
+<p>You can also use other directives such as <code>noarchive</code>, <code>nosnippet</code>, or <code>noimageindex</code> depending on your needs.
+Server configuration can apply this header selectively — for example, only on specific file types (like PDFs or images).</p>
+<h3 id="x-dns-prefetch-control">X-DNS-Prefetch-Control<a class="headerlink" href="#x-dns-prefetch-control" title="Permanent link">¶</a>
+</h3>
+<p>The <code>X-DNS-Prefetch-Control</code> HTTP response header controls DNS prefetching, a feature by which browsers proactively perform domain name resolution on both links that the user may choose to follow as well as URLs for items referenced by the document, including images, CSS, JavaScript, and so forth.</p>
+<h4 id="recommendation_20">Recommendation<a class="headerlink" href="#recommendation_20" title="Permanent link">¶</a>
+</h4>
+<p>The default behavior of browsers is to perform DNS caching which is good for most websites.
+If you do not control links on your website, you might want to set <code>off</code> as a value to disable DNS prefetch to avoid leaking information to those domains.</p>
+<blockquote>
+<p><code>X-DNS-Prefetch-Control: off</code></p>
+</blockquote>
+<ul>
+<li>
+<em>NOTE</em>: Do not rely on this functionality for anything production sensitive: it is not standard or fully supported and implementation may vary among browsers.</li>
+</ul>
+<h3 id="public-key-pins-hpkp">Public-Key-Pins (HPKP) ❌<a class="headerlink" href="#public-key-pins-hpkp" title="Permanent link">¶</a>
+</h3>
+<p>The HTTP <code>Public-Key-Pins</code> response header was used to associate a specific cryptographic public key with a web server to mitigate MITM attacks with forged certificates. It was removed from Chromium in 2018 and is unsupported by all modern browsers.</p>
+<h4 id="recommendation_21">Recommendation<a class="headerlink" href="#recommendation_21" title="Permanent link">¶</a>
+</h4>
+<p>Do not use. Remove any <code>Public-Key-Pins</code> or <code>Public-Key-Pins-Report-Only</code> headers from production. Rely on Certificate Transparency (CT) and CAA DNS records, which provide superior compromise detection without the operational brittleness of pinning.</p>
+<h3 id="secure-file-download-headers">Secure File Download Headers<a class="headerlink" href="#secure-file-download-headers" title="Permanent link">¶</a>
+</h3>
+<p>When serving user-provided files, proper HTTP headers should be used to prevent unintended execution in the browser.</p>
+<ul>
+<li>Use <code>Content-Disposition: attachment</code> to force download instead of inline rendering.</li>
+<li>Use <code>Content-Type: application/octet-stream</code> for unknown or binary files.</li>
+<li>Ensure <code>X-Content-Type-Options: nosniff</code> is set to prevent MIME type sniffing.</li>
+</ul>
+<p>These headers help reduce risks such as Cross-Site Scripting (XSS) and unintended file execution.</p>
+<h2 id="adding-http-headers-in-different-technologies">Adding HTTP Headers in Different Technologies<a class="headerlink" href="#adding-http-headers-in-different-technologies" title="Permanent link">¶</a>
+</h2>
+<h3 id="php">PHP<a class="headerlink" href="#php" title="Permanent link">¶</a>
+</h3>
+<p>The sample code below sets the <code>X-Frame-Options</code> header in PHP.</p>
+<div class="highlight"><pre id="__code_3"><code><span class="x">header("X-Frame-Options: DENY");</span>
+</code></pre></div>
+<h3 id="apache">Apache<a class="headerlink" href="#apache" title="Permanent link">¶</a>
+</h3>
+<p>Below is an <code>.htaccess</code> sample configuration which sets the <code>X-Frame-Options</code> header in Apache.</p>
+<p>As described in the <a href="https://httpd.apache.org/docs/2.4/mod/mod_headers.html#header">Apache documentation</a>, <code>Header set</code> (default <code>onsuccess</code>) and <code>Header always set</code> operate on separate internal header tables.</p>
+<p>In some cases, both header tables may be used, which can result in duplicate headers if the same header is configured in both contexts.</p>
+<p>If a header needs to be removed entirely, it should be unset in both contexts (<code>onsuccess</code> and <code>always</code>).</p>
+<p>To avoid duplication and ensure the header is sent on all responses, unset it first and then use <code>always set</code>:</p>
+<div class="highlight"><pre id="__code_4"><code>&lt;IfModule mod_headers.c&gt;
+  Header unset X-Frame-Options
+  Header always set X-Frame-Options "DENY"
+&lt;/IfModule&gt;
+</code></pre></div>
+<h3 id="iis">IIS<a class="headerlink" href="#iis" title="Permanent link">¶</a>
+</h3>
+<p>Add configurations below to your <code>Web.config</code> in IIS to send the <code>X-Frame-Options</code> header.</p>
+<div class="highlight"><pre id="__code_5"><code><span class="nt">&lt;system.webServer&gt;</span>
+...
+<span class="nt">&lt;httpProtocol&gt;</span>
+<span class="nt">&lt;customHeaders&gt;</span>
+<span class="nt">&lt;add</span><span class="na">name=</span><span class="s">"X-Frame-Options"</span><span class="na">value=</span><span class="s">"DENY"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/customHeaders&gt;</span>
+<span class="nt">&lt;/httpProtocol&gt;</span>
+...
+<span class="nt">&lt;/system.webServer&gt;</span>
+</code></pre></div>
+<h3 id="haproxy">HAProxy<a class="headerlink" href="#haproxy" title="Permanent link">¶</a>
+</h3>
+<p>Add the line below to your front-end, listen, or backend configurations to send the <code>X-Frame-Options</code> header.</p>
+<div class="highlight"><pre id="__code_6"><code>http-response set-header X-Frame-Options DENY
+</code></pre></div>
+<h3 id="nginx">Nginx<a class="headerlink" href="#nginx" title="Permanent link">¶</a>
+</h3>
+<p>Below is a sample configuration, it sets the <code>X-Frame-Options</code> header in Nginx. Note that without the <code>always</code> option, the header will only be sent for certain status codes, as described in <a href="https://nginx.org/en/docs/http/ngx_http_headers_module.html#add_header">the nginx documentation</a>.</p>
+<div class="highlight"><pre id="__code_7"><code>add_header "X-Frame-Options" "DENY" always;
+</code></pre></div>
+<h3 id="express">Express<a class="headerlink" href="#express" title="Permanent link">¶</a>
+</h3>
+<p>You can use <a href="https://www.npmjs.com/package/helmet">helmet</a> to setup HTTP headers in Express. The code below is a sample for adding the <code>X-Frame-Options</code> header.</p>
+<div class="highlight"><pre id="__code_8"><code><span class="kd">const</span><span class="nx">helmet</span><span class="o">=</span><span class="nx">require</span><span class="p">(</span><span class="s1">'helmet'</span><span class="p">);</span>
+<span class="kd">const</span><span class="nx">app</span><span class="o">=</span><span class="nx">express</span><span class="p">();</span>
+<span class="c1">// Sets "X-Frame-Options: SAMEORIGIN"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+<span class="nx">helmet</span><span class="p">.</span><span class="nx">frameguard</span><span class="p">({</span>
+<span class="nx">action</span><span class="o">:</span><span class="s2">"sameorigin"</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div>
+<h2 id="testing-proper-implementation-of-security-headers">Testing Proper Implementation of Security Headers<a class="headerlink" href="#testing-proper-implementation-of-security-headers" title="Permanent link">¶</a>
+</h2>
+<h3 id="mozilla-observatory">Mozilla Observatory<a class="headerlink" href="#mozilla-observatory" title="Permanent link">¶</a>
+</h3>
+<p>The <a href="https://observatory.mozilla.org/">Mozilla Observatory</a> is an online tool which helps you to check your website's header status.</p>
+<h3 id="smartscanner">SmartScanner<a class="headerlink" href="#smartscanner" title="Permanent link">¶</a>
+</h3>
+<p><a href="https://www.thesmartscanner.com/">SmartScanner</a> has a dedicated <a href="https://www.thesmartscanner.com/docs/configuring-security-tests">test profile</a> for testing security of HTTP headers.
+Online tools usually test the homepage of the given address. But SmartScanner scans the whole website. So, you can make sure all of your web pages have the right HTTP Headers in place.</p>
+<h2 id="references_1">References<a class="headerlink" href="#references_1" title="Permanent link">¶</a>
+</h2>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options">MDN Web Docs: X-Content-Type-Options</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy">MDN Web Docs: Cross-Origin-Opener-Policy</a></li>
+<li><a href="https://owasp.github.io/www-project-secure-headers/response-headers/">OWASP Secure Headers Project: Response Headers</a></li>
+</ul>
+</article>
+</div>
+</div>
+</main>
+
+</div></div>

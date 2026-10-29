@@ -1,0 +1,306 @@
+<div><div class="container-fluid td-outer">
+<div class="td-main"><div class="row flex-xl-nowrap">
+<main class="col-12 col-md-9 col-xl-8 ps-md-5"><div class="td-content">
+<h1>Libraries</h1>
+<div class="lead">Learn how to add native instrumentation to your library.</div>
+<p>OpenTelemetry provides <a href="/docs/specs/otel/overview/#instrumentation-libraries">instrumentation libraries</a> for many libraries, which
+is typically done through library hooks or monkey-patching library code.</p>
+<p>Native library instrumentation with OpenTelemetry provides better observability
+and developer experience for users, removing the need for libraries to expose
+and document hooks. Other advantages provided by native instrumentation include:</p>
+<ul>
+<li>Custom logging hooks can be replaced by common and easy to use OpenTelemetry
+APIs, users will only interact with OpenTelemetry.</li>
+<li>Traces, logs, metrics from library and application code are correlated and
+coherent.</li>
+<li>Common conventions allow users to get similar and consistent telemetry within
+same technology and across libraries and languages.</li>
+<li>Telemetry signals can be fine tuned (filtered, processed, aggregated) for
+various consumption scenarios using a wide variety of well-documented
+OpenTelemetry extensibility points.</li>
+</ul>
+<h2 id="semantic-conventions">Semantic conventions
+</h2>
+<p><a href="/docs/specs/semconv/general/trace/">Semantic conventions</a> are the main source
+of truth about what information is included on spans produced by web frameworks,
+RPC clients, databases, messaging clients, infrastructure, and more. Conventions
+make instrumentation consistent: users who work with telemetry don’t have to
+learn library specifics and observability vendors can build experiences for a
+wide variety of technologies, for example databases or messaging systems. When
+libraries follow conventions, many scenarios can be enabled without the user’s
+input or configuration.</p>
+<p>Semantic conventions are always evolving and new conventions are constantly
+added. If some don’t exist for your library, consider
+<a class="external-link" href="https://github.com/open-telemetry/semantic-conventions/issues">adding them</a>.
+Pay special attention to span names: strive to use meaningful names and consider
+cardinality when defining them. Also set the
+<a href="/docs/specs/otel/schemas/#schema-url"><code>schema_url</code></a> attribute that you can use
+to record what version of the semantic conventions you’re using.</p>
+<p>If you have any feedback or want to add a new convention, contribute by joining
+the <a class="external-link" href="https://cloud-native.slack.com/archives/C01QZFGMLQ7">Instrumentation Slack</a>
+or by opening an issue or pull request in the
+<a class="external-link" href="https://github.com/open-telemetry/opentelemetry-specification">Specification repository</a>.</p>
+<h3 id="defining-spans">Defining spans
+</h3>
+<p>Think of your library from the perspective of a library user and what the user
+might be interested in knowing about the behavior and activity of the library.
+As the library maintainer, you know the internals, but the user will most likely
+be less interested in the inner workings of the library and more interested in
+the functionality of their application. Think about what information can be
+helpful in analyzing the usage of your library, then think about an appropriate
+way to model that data. Some aspects to consider include:</p>
+<ul>
+<li>Spans and span hierarchies</li>
+<li>Numerical attributes on spans, as an alternative to aggregated metrics</li>
+<li>Span events</li>
+<li>Aggregated Metrics</li>
+</ul>
+<p>For example, if your library is making requests to a database, create spans only
+for the logical request to the database. The physical requests over the network
+should be instrumented within the libraries implementing that functionality. You
+should also favor capturing other activities, like object/data serialization as
+span events, rather than as additional spans.</p>
+<p>Follow the semantic conventions when setting span attributes.</p>
+<h2 id="when-not-to-instrument">When not to instrument
+</h2>
+<p>Some libraries are thin clients wrapping network calls. Chances are that
+OpenTelemetry has an instrumentation library for the underlying RPC client.
+Check out the <a href="/ecosystem/registry/">registry</a> to find existing libraries. If a
+library exists, instrumenting the wrapper library might not be necessary.</p>
+<p>As a general guideline, only instrument your library at its own level. Don’t
+instrument if all the following cases apply:</p>
+<ul>
+<li>Your library is a thin proxy on top of documented or self-explanatory APIs.</li>
+<li>OpenTelemetry has instrumentation for underlying network calls.</li>
+<li>There are no conventions your library should follow to enrich telemetry.</li>
+</ul>
+<p>When in doubt, don’t instrument. If you choose not to instrument, it might still
+be useful to provide a way to configure OpenTelemetry handlers for your internal
+RPC client instance. It’s essential in languages that don’t support fully
+automatic instrumentation and still useful in others.</p>
+<p>The rest of this document provides guidance on what and how to instrument your
+application.</p>
+<h2 id="opentelemetry-api">OpenTelemetry API
+</h2>
+<p>The first step when instrumenting an application is to include the OpenTelemetry
+API package as a dependency.</p>
+<p>OpenTelemetry has <a href="/docs/specs/otel/overview/">two main modules</a>: API and SDK.
+OpenTelemetry API is a set of abstractions and non-operational implementations.
+Unless your application imports the OpenTelemetry SDK, your instrumentation does
+nothing and does not impact application performance.</p>
+<h3 id="libraries-should-only-use-the-opentelemetry-api">Libraries should only use the OpenTelemetry API
+</h3>
+<p>If you’re concerned about adding new dependencies, here are some considerations
+to help you decide how to minimize dependency conflicts:</p>
+<ul>
+<li><p>OpenTelemetry Trace API reached stability in early 2021. It follows
+<a href="/docs/specs/otel/versioning-and-stability/">Semantic Versioning 2.0</a>.</p></li>
+<li><p>Use the earliest stable OpenTelemetry API (1.0.*) and avoid updating it
+unless you have to use new features.</p></li>
+<li><p>While your instrumentation stabilizes, consider shipping it as a separate
+package, so that it never causes issues for users who don’t use it. You can
+keep it in your repository, or
+<a class="external-link" href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/oteps/0155-external-modules.md#contrib-components">add it to OpenTelemetry</a>,
+so it ships with other instrumentation libraries.</p></li>
+<li><p>Semantic conventions are <a href="/docs/specs/otel/versioning-and-stability/#semantic-conventions-stability">stable, but subject to evolution</a>: while this does
+not cause any functional issues, you might need to update your instrumentation
+every once in a while. Having it in a preview plugin or in OpenTelemetry
+contrib repository may help keeping conventions up-to-date without breaking
+changes for your users.</p></li>
+</ul>
+<h3 id="getting-a-tracer">Getting a tracer
+</h3>
+<p>All application configuration is hidden from your library through the Tracer
+API. Libraries might allow applications to pass instances of <code>TracerProvider</code> to
+facilitate dependency injection and ease of testing, or obtain it from
+<a href="/docs/specs/otel/trace/api/#get-a-tracer">global <code>TracerProvider</code></a>.
+OpenTelemetry language implementations might have different preferences for
+passing instances or accessing the global based on what’s idiomatic in each
+programming language.</p>
+<p>When obtaining the tracer, provide your library (or tracing plugin) name and
+version: they show up on the telemetry and help users process and filter
+telemetry, understand where it came from, and debug or report instrumentation
+issues.</p>
+<h2 id="what-to-instrument">What to instrument
+</h2>
+<h3 id="public-apis">Public APIs
+</h3>
+<p>Public APIs are good candidates for tracing: spans created for public API calls
+allow users to map telemetry to application code, understand the duration and
+outcome of library calls. Which calls to trace include:</p>
+<ul>
+<li>Public methods that make network calls internally or local operations that
+take significant time and may fail, for example I/O.</li>
+<li>Handlers that process requests or messages.</li>
+</ul>
+<h4 id="instrumentation-example">Instrumentation example
+</h4>
+<p>The following example shows how to instrument a Java application:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java"><span class="line"><span class="cl"><span class="kd">private</span><span class="kd">static</span><span class="n">Tracer</span><span class="n">tracer</span><span class="o">=</span><span class="n">getTracer</span><span class="p">(</span><span class="n">TracerProvider</span><span class="p">.</span><span class="na">noop</span><span class="p">());</span></span></span><span class="line"><span class="cl"><span class="kd">public</span><span class="kd">static</span><span class="kt">void</span><span class="nf">setTracerProvider</span><span class="p">(</span><span class="n">TracerProvider</span><span class="n">tracerProvider</span><span class="p">)</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="n">tracer</span><span class="o">=</span><span class="n">getTracer</span><span class="p">(</span><span class="n">tracerProvider</span><span class="p">);</span></span></span><span class="line"><span class="cl"><span class="kd">private</span><span class="kd">static</span><span class="n">Tracer</span><span class="nf">getTracer</span><span class="p">(</span><span class="n">TracerProvider</span><span class="n">tracerProvider</span><span class="p">)</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="k">return</span><span class="n">tracerProvider</span><span class="p">.</span><span class="na">getTracer</span><span class="p">(</span><span class="s">"demo-db-client"</span><span class="p">,</span><span class="s">"0.1.0-beta1"</span><span class="p">);</span></span></span><span class="line"><span class="cl"><span class="kd">private</span><span class="n">Response</span><span class="nf">selectWithTracing</span><span class="p">(</span><span class="n">Query</span><span class="n">query</span><span class="p">)</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="c1">// check out conventions for guidance on span names and attributes</span></span></span><span class="line"><span class="cl"><span class="n">Span</span><span class="n">span</span><span class="o">=</span><span class="n">tracer</span><span class="p">.</span><span class="na">spanBuilder</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="na">format</span><span class="p">(</span><span class="s">"SELECT %s.%s"</span><span class="p">,</span><span class="n">dbName</span><span class="p">,</span><span class="n">collectionName</span><span class="p">))</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">setSpanKind</span><span class="p">(</span><span class="n">SpanKind</span><span class="p">.</span><span class="na">CLIENT</span><span class="p">)</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">setAttribute</span><span class="p">(</span><span class="s">"db.name"</span><span class="p">,</span><span class="n">dbName</span><span class="p">)</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">startSpan</span><span class="p">();</span></span></span><span class="line"><span class="cl"><span class="c1">// makes span active and allows correlating logs and nest spans</span></span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">(</span><span class="n">Scope</span><span class="n">unused</span><span class="o">=</span><span class="n">span</span><span class="p">.</span><span class="na">makeCurrent</span><span class="p">())</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="n">Response</span><span class="n">response</span><span class="o">=</span><span class="n">query</span><span class="p">.</span><span class="na">runWithRetries</span><span class="p">();</span></span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="na">isSuccessful</span><span class="p">())</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="n">span</span><span class="p">.</span><span class="na">setStatus</span><span class="p">(</span><span class="n">StatusCode</span><span class="p">.</span><span class="na">OK</span><span class="p">);</span></span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="n">span</span><span class="p">.</span><span class="na">isRecording</span><span class="p">())</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="c1">// populate response attributes for response codes and other information</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="n">Exception</span><span class="n">e</span><span class="p">)</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="n">span</span><span class="p">.</span><span class="na">recordException</span><span class="p">(</span><span class="n">e</span><span class="p">);</span></span></span><span class="line"><span class="cl"><span class="n">span</span><span class="p">.</span><span class="na">setStatus</span><span class="p">(</span><span class="n">StatusCode</span><span class="p">.</span><span class="na">ERROR</span><span class="p">,</span><span class="n">e</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getSimpleName</span><span class="p">());</span></span></span><span class="line"><span class="cl"><span class="k">throw</span><span class="n">e</span><span class="p">;</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="k">finally</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="n">span</span><span class="p">.</span><span class="na">end</span><span class="p">();</span></span></span></code></pre></div>
+<p>Follow conventions to populate attributes. If there is no applicable one, see
+<a href="/docs/specs/semconv/general/attributes/">general conventions</a>.</p>
+<h3 id="nested-network-and-other-spans">Nested network and other spans
+</h3>
+<p>Network calls are usually traced with OpenTelemetry auto-instrumentations
+through corresponding client implementation.</p>
+<p>If OpenTelemetry does not support tracing your network client, here are some
+considerations to help you decide the best course of action:</p>
+<ul>
+<li>Would tracing network calls improve observability for users or your ability to
+support them?</li>
+<li>Is your library a wrapper on top of public, documented RPC API? Would users
+need to get support from the underlying service in case of issues?<ul><li>Instrument the library and make sure to trace individual network tries.</li></ul>
+</li>
+<li>Would tracing those calls with spans be very verbose? or would it noticeably
+impact performance?<ul>
+<li>Use logs with verbosity or span events: logs can be correlated to parent
+(public API calls), while span events should be set on public API span.</li>
+<li>If they have to be spans (to carry and propagate unique trace context), put
+them behind a configuration option and disable them by default.</li>
+</ul>
+</li>
+</ul>
+<p>If OpenTelemetry already supports tracing your network calls, you probably don’t
+want to duplicate it. There might be some exceptions:</p>
+<ul>
+<li>To support users without auto-instrumentation, which might not work in certain
+environments or when users have concerns with monkey-patching.</li>
+<li>To enable custom or legacy correlation and context propagation protocols with
+underlying service.</li>
+<li>Enrich RPC spans with essential library or service-specific information not
+covered by auto-instrumentation.</li>
+</ul>
+<p>A generic solution to avoid duplication is under construction.</p>
+<h3 id="events">Events
+</h3>
+<p>Traces are a kind of signal that your apps can emit. Events (or logs) and traces
+complement, not duplicate, each other. Whenever you have something that should
+have a certain level of verbosity, logs are a better choice than traces.</p>
+<p>If your app uses logging or some similar module, the logging module might
+already have OpenTelemetry integration. To find out, see the
+<a href="/ecosystem/registry/">registry</a>. Integrations usually stamp active trace
+context on all logs, so users can correlate them.</p>
+<p>If your language and ecosystem don’t have common logging support, use <a href="/docs/specs/otel/trace/api/#add-events">span
+events</a> to share additional app details. Events maybe more convenient if you
+want to add attributes as well.</p>
+<p>As a rule of thumb, use events or logs for verbose data instead of spans. Always
+attach events to the span instance that your instrumentation created. Avoid
+using the active span if you can, since you don’t control what it refers to.</p>
+<h2 id="context-propagation">Context propagation
+</h2>
+<h3 id="extracting-context">Extracting context
+</h3>
+<p>If you work on a library or a service that receives upstream calls, such as a
+web framework or a messaging consumer,extract context from the incoming request
+or message. OpenTelemetry provides the <code>Propagator</code> API, which hides specific
+propagation standards and reads the trace <code>Context</code> from the wire. In case of a
+single response, there is just one context on the wire, which becomes the parent
+of the new span the library creates.</p>
+<p>After you create a span, pass new trace context to the application code
+(callback or handler), by making the span active; if possible, do this
+explicitly. The following Java example shows how to add trace context and
+activate a span. See the
+<a href="/docs/languages/java/api/#contextpropagators">Context extraction in Java</a>, for
+more examples.</p>
+<div class="highlight"><pre class="chroma"><code class="language-java"><span class="line"><span class="cl"><span class="c1">// extract the context</span></span></span><span class="line"><span class="cl"><span class="n">Context</span><span class="n">extractedContext</span><span class="o">=</span><span class="n">propagator</span><span class="p">.</span><span class="na">extract</span><span class="p">(</span><span class="n">Context</span><span class="p">.</span><span class="na">current</span><span class="p">(),</span><span class="n">httpExchange</span><span class="p">,</span><span class="n">getter</span><span class="p">);</span></span></span><span class="line"><span class="cl"><span class="n">Span</span><span class="n">span</span><span class="o">=</span><span class="n">tracer</span><span class="p">.</span><span class="na">spanBuilder</span><span class="p">(</span><span class="s">"receive"</span><span class="p">)</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">setSpanKind</span><span class="p">(</span><span class="n">SpanKind</span><span class="p">.</span><span class="na">SERVER</span><span class="p">)</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">setParent</span><span class="p">(</span><span class="n">extractedContext</span><span class="p">)</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">startSpan</span><span class="p">();</span></span></span><span class="line"><span class="cl"><span class="c1">// make span active so any nested telemetry is correlated</span></span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">(</span><span class="n">Scope</span><span class="n">unused</span><span class="o">=</span><span class="n">span</span><span class="p">.</span><span class="na">makeCurrent</span><span class="p">())</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="n">userCode</span><span class="p">();</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="n">Exception</span><span class="n">e</span><span class="p">)</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="n">span</span><span class="p">.</span><span class="na">recordException</span><span class="p">(</span><span class="n">e</span><span class="p">);</span></span></span><span class="line"><span class="cl"><span class="n">span</span><span class="p">.</span><span class="na">setStatus</span><span class="p">(</span><span class="n">StatusCode</span><span class="p">.</span><span class="na">ERROR</span><span class="p">);</span></span></span><span class="line"><span class="cl"><span class="k">throw</span><span class="n">e</span><span class="p">;</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="k">finally</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="n">span</span><span class="p">.</span><span class="na">end</span><span class="p">();</span></span></span></code></pre></div>
+<p>In the case of a messaging system, you might receive more than one message at
+once. Received messages become links on the span you create. Refer to
+<a href="/docs/specs/semconv/messaging/messaging-spans/">messaging conventions</a> for
+details.</p>
+<h3 id="injecting-context">Injecting context
+</h3>
+<p>When you make an outbound call, you usually want to propagate context to the
+downstream service. In this case, create a new span to trace the outgoing call
+and use <code>Propagator</code> API to inject context into the message. There might be
+other cases where you might want to inject context, for example when creating
+messages for async processing. The following Java example shows how to propagate
+context. See
+<a href="/docs/languages/java/instrumentation/#context-propagation">Context injection in Java</a>
+for more examples.</p>
+<div class="highlight"><pre class="chroma"><code class="language-java"><span class="line"><span class="cl"><span class="n">Span</span><span class="n">span</span><span class="o">=</span><span class="n">tracer</span><span class="p">.</span><span class="na">spanBuilder</span><span class="p">(</span><span class="s">"send"</span><span class="p">)</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">setSpanKind</span><span class="p">(</span><span class="n">SpanKind</span><span class="p">.</span><span class="na">CLIENT</span><span class="p">)</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">startSpan</span><span class="p">();</span></span></span><span class="line"><span class="cl"><span class="c1">// make span active so any nested telemetry is correlated</span></span></span><span class="line"><span class="cl"><span class="c1">// even network calls might have nested layers of spans, logs or events</span></span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">(</span><span class="n">Scope</span><span class="n">unused</span><span class="o">=</span><span class="n">span</span><span class="p">.</span><span class="na">makeCurrent</span><span class="p">())</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="c1">// inject the context</span></span></span><span class="line"><span class="cl"><span class="n">propagator</span><span class="p">.</span><span class="na">inject</span><span class="p">(</span><span class="n">Context</span><span class="p">.</span><span class="na">current</span><span class="p">(),</span><span class="n">transportLayer</span><span class="p">,</span><span class="n">setter</span><span class="p">);</span></span></span><span class="line"><span class="cl"><span class="n">send</span><span class="p">();</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="n">Exception</span><span class="n">e</span><span class="p">)</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="n">span</span><span class="p">.</span><span class="na">recordException</span><span class="p">(</span><span class="n">e</span><span class="p">);</span></span></span><span class="line"><span class="cl"><span class="n">span</span><span class="p">.</span><span class="na">setStatus</span><span class="p">(</span><span class="n">StatusCode</span><span class="p">.</span><span class="na">ERROR</span><span class="p">);</span></span></span><span class="line"><span class="cl"><span class="k">throw</span><span class="n">e</span><span class="p">;</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="k">finally</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="n">span</span><span class="p">.</span><span class="na">end</span><span class="p">();</span></span></span></code></pre></div>
+<p>There might be some exceptions where you don’t need to propagate context:</p>
+<ul>
+<li>Downstream service does not support metadata or prohibits unknown fields.</li>
+<li>Downstream service does not define correlation protocols. Consider adding
+support for context propagation in a future version.</li>
+<li>Downstream service supports custom correlation protocol.<ul><li>Best effort with custom propagator: use OpenTelemetry trace context if
+compatible or generate and stamp custom correlation IDs on the span.</li></ul>
+</li>
+</ul>
+<h3 id="in-process">In-process
+</h3>
+<ul>
+<li>Make your spans active or current, as this enables correlating spans with logs
+and any nested auto-instrumentations.</li>
+<li>If the library has a notion of context, support optional explicit trace
+context propagation in addition to active spans.<ul>
+<li>Put spans (trace context) created by library in the context explicitly,
+document how to access it.</li>
+<li>Allow users to pass trace context in your context.</li>
+</ul>
+</li>
+<li>Within the library, propagate trace context explicitly. Active spans might
+change during callbacks.<ul>
+<li>Capture active context from users on the public API surface as soon as you
+can, use it as a parent context for your spans.</li>
+<li>Pass context around and stamp attributes, exceptions, events on explicitly
+propagated instances.</li>
+<li>This is essential if you start threads explicitly, do background processing
+or other things that can break due to async context flow limitations in your
+language.</li>
+</ul>
+</li>
+</ul>
+<h2 id="additional-considerations">Additional considerations
+</h2>
+<h3 id="instrumentation-registry">Instrumentation registry
+</h3>
+<p>Add your instrumentation library to the
+<a href="/ecosystem/registry/">OpenTelemetry registry</a> so users can find it.</p>
+<h3 id="performance">Performance
+</h3>
+<p>OpenTelemetry API is no-op and very performant when there is no SDK in the
+application. When OpenTelemetry SDK is configured, it
+<a href="/docs/specs/otel/performance/">consumes bound resources</a>.</p>
+<p>Real-life applications, especially on the high scale, would frequently have
+head-based sampling configured. Sampled-out spans are affordable and you can
+check if the span is recording to avoid extra allocations and potentially
+expensive calculations while populating attributes. The following Java example
+shows to provide attributes for sampling and check span recording.</p>
+<div class="highlight"><pre class="chroma"><code class="language-java"><span class="line"><span class="cl"><span class="c1">// some attributes are important for sampling, they should be provided at creation time</span></span></span><span class="line"><span class="cl"><span class="n">Span</span><span class="n">span</span><span class="o">=</span><span class="n">tracer</span><span class="p">.</span><span class="na">spanBuilder</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="na">format</span><span class="p">(</span><span class="s">"SELECT %s.%s"</span><span class="p">,</span><span class="n">dbName</span><span class="p">,</span><span class="n">collectionName</span><span class="p">))</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">setSpanKind</span><span class="p">(</span><span class="n">SpanKind</span><span class="p">.</span><span class="na">CLIENT</span><span class="p">)</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">setAttribute</span><span class="p">(</span><span class="s">"db.name"</span><span class="p">,</span><span class="n">dbName</span><span class="p">)</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">startSpan</span><span class="p">();</span></span></span><span class="line"><span class="cl"><span class="c1">// other attributes, especially those that are expensive to calculate</span></span></span><span class="line"><span class="cl"><span class="c1">// should be added if span is recording</span></span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="n">span</span><span class="p">.</span><span class="na">isRecording</span><span class="p">())</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="n">span</span><span class="p">.</span><span class="na">setAttribute</span><span class="p">(</span><span class="s">"db.statement"</span><span class="p">,</span><span class="n">sanitize</span><span class="p">(</span><span class="n">query</span><span class="p">.</span><span class="na">statement</span><span class="p">()))</span></span></span></code></pre></div>
+<h3 id="error-handling">Error handling
+</h3>
+<p>OpenTelemetry API does not fail on invalid arguments, never throws, and swallows
+exceptions, which means it’s
+<a href="/docs/specs/otel/error-handling/#basic-error-handling-principles">forgiving at runtime</a>.
+This way instrumentation issues do not affect application logic. Test the
+instrumentation to notice issues OpenTelemetry hides at runtime.</p>
+<h3 id="testing">Testing
+</h3>
+<p>Since OpenTelemetry has a variety of auto-instrumentations, try how your
+instrumentation interacts with other telemetry: incoming requests, outgoing
+requests, logs, and so on. Use a typical application, with popular frameworks
+and libraries and all tracing enabled when trying out your instrumentation.
+Check out how libraries similar to yours show up.</p>
+<p>For unit testing, prefer an in-memory exporter or equivalent testing utility
+provided by your language’s OpenTelemetry SDK. In-memory exporters collect
+telemetry in-process, allowing tests to inspect emitted spans, metrics, or logs
+without running an external backend. If your SDK does not provide one, use a
+mock or fake exporter or processor.</p>
+<p>The following Java example uses
+<a class="external-link" href="https://www.javadoc.io/doc/io.opentelemetry/opentelemetry-sdk-testing/latest/io/opentelemetry/sdk/testing/exporter/InMemorySpanExporter.html"><code>InMemorySpanExporter</code></a> from the
+<code>opentelemetry-sdk-testing</code> artifact:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java"><span class="line"><span class="cl"><span class="kd">public</span><span class="kt">void</span><span class="nf">checkInstrumentation</span><span class="p">()</span><span class="p">{</span></span></span><span class="line"><span class="cl"><span class="n">InMemorySpanExporter</span><span class="n">exporter</span><span class="o">=</span><span class="n">InMemorySpanExporter</span><span class="p">.</span><span class="na">create</span><span class="p">();</span></span></span><span class="line"><span class="cl"><span class="n">Tracer</span><span class="n">tracer</span><span class="o">=</span><span class="n">OpenTelemetrySdk</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">setTracerProvider</span><span class="p">(</span><span class="n">SdkTracerProvider</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">addSpanProcessor</span><span class="p">(</span><span class="n">SimpleSpanProcessor</span><span class="p">.</span><span class="na">create</span><span class="p">(</span><span class="n">exporter</span><span class="p">)).</span><span class="na">build</span><span class="p">()).</span><span class="na">build</span><span class="p">()</span></span></span><span class="line"><span class="cl"><span class="p">.</span><span class="na">getTracer</span><span class="p">(</span><span class="s">"test"</span><span class="p">);</span></span></span><span class="line"><span class="cl"><span class="c1">// run test ...</span></span></span><span class="line"><span class="cl"><span class="n">validateSpans</span><span class="p">(</span><span class="n">exporter</span><span class="p">.</span><span class="na">getFinishedSpanItems</span><span class="p">());</span></span></span></code></pre></div>
+<div class="d-print-none">
+<h2 class="feedback--title">Feedback</h2>
+<p class="feedback--question">Was this page helpful?</p>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-yes">Yes</button>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-no">No</button><p class="feedback--response feedback--response-yes">Thank you. Your feedback is appreciated!</p>
+<p class="feedback--response feedback--response-no">Please let us know <a class="external-link" href="https://github.com/open-telemetry/opentelemetry.io/issues/new?template=PAGE_FEEDBACK.yml&amp;title=[Page+feedback]%3A+ADD+A+SUMMARY+OF+YOUR+FEEDBACK+HERE">how we can improve this page</a>. Your feedback is appreciated!</p>
+</div>
+<div class="td-page-meta__lastmod">Last modified September 25, 2026: <a href="https://github.com/open-telemetry/opentelemetry.io/commit/4a40969b57665689ae6cbd00f4b4c23872c571c8">docs: recommend in-memory exporters for testing (#11835) (4a40969b)</a>
+</div>
+</div></main>
+</div></div>
+
+</div></div>

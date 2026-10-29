@@ -1,0 +1,75 @@
+<div><div class="radix-themes"><div>
+<div class="tw-app has-toc"><section class="px-0 flex relative"><main class="main-content flex mt-[var(--header-height)] flex-1"><div class="pt-6 px-6 prose dark:prose-invert max-w-full text-[var(--gray-12)] prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-code:font-mono marker:text-[var(--darkPurple)] marker:font-medium prose-li:my-1 prose-headings:mt-0 prose-headings:font-medium prose-headings:relative prose-headings:text-[var(--gray-12)] prose-blockquote:font-normal prose-blockquote:border-l-[3px] prose-em:font-normal prose-blockquote:text-[var(--gray-12)] prose-img:my-2 prose-strong:text-[var(--gray-12)] w-full min-w-0" id="doc-content">
+<div class="flex items-center">
+<ul class="not-prose list-none flex flex-wrap">
+
+<li class="style_breadcrumb-item__bDEaT"><a href="/product/">Product Walkthroughs</a></li>
+
+
+<li class="style_breadcrumb-item__bDEaT"><a href="/product/issues/issue-details/performance-issues/">Performance Issues</a></li>
+
+</ul> <div class="ml-auto hidden sm:block"><div class="relative inline-block"><div class="inline-flex items-center h-9 border border-gray-200 dark:border-[var(--gray-6)] rounded-full overflow-hidden bg-white dark:bg-[var(--gray-2)]"><button class="inline-flex items-center text-nowrap h-full text-gray-700 dark:text-[var(--foreground)] bg-transparent border-none cursor-pointer transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-[var(--gray-a4)] active:bg-gray-100 dark:active:bg-[var(--gray-5)] focus:bg-gray-50 dark:focus:bg-[var(--gray-a4)] outline-none gap-2 px-3.5 text-sm font-medium disabled:opacity-50"><span>Copy page</span></button></div></div></div>
+</div>
+<div>
+<hgroup><h1>Slow DB Queries</h1>
+<h2>Learn more about Slow DB Query issues and how to diagnose and fix them.</h2></hgroup><div id="main">
+<p>Slow DB Query issues are created when a particular <code>SELECT</code> SQL query in your application consistently takes longer than <code>500ms</code> to resolve.</p>
+<p>Filter database query performance issues with <code>issue.category:db_query</code> in <strong>Issues</strong> and <strong>Dashboards</strong>.</p>
+<h2 id="detection-criteria"><a class="autolink-heading" href="#detection-criteria">Detection Criteria</a></h2>
+<p>The detector for this performance issue looks at singular database spans with the following criteria:</p>
+<ul>
+<li>The span operation starts with <code>db</code> and the query is stored within the span description</li>
+<li>The query is specifically a <code>SELECT</code> query</li>
+<li>The span duration is at least <code>500ms</code>
+</li>
+</ul>
+<p>Keep in mind, an issue won't be created unless the query in question is <em>consistently</em> taking longer than <code>500ms</code>. More specifically, the issue will be created only if the same query is detected as a slow query 100 times. The counter resets after 24 hours without detecting the slow query.</p>
+<p>You can configure detector thresholds for Slow DB Query issues in <a class="" href="https://sentry.io/orgredirect/organizations/:orgslug/settings/projects/:projectId/performance/"><strong>Project Settings &gt; Performance</strong></a>.</p>
+
+<div class="callout callout-info"><div class="callout-content"><div class="callout-body content-flush-bottom"><p>These settings can only be edited by users with owner, manager, or team-level admin roles.</p></div></div></div>
+<h2 id="span-evidence"><a class="autolink-heading" href="#span-evidence">Span Evidence</a></h2>
+<p>You can get additional information about your Slow DB Query by looking at the following fields in the "Span Evidence":</p>
+<ul>
+<li>Transaction name</li>
+<li>Duration Impact - The duration of the query as compared to the entire transaction, to put into perspective how much of the transaction is being taken up by the query</li>
+<li>Slow DB Query</li>
+<li>Waterfall Trace View - Shows the parent span in which the slow DB query occurred</li>
+</ul>
+
+<p>View it by going to the <strong>Issues</strong> page in Sentry, selecting your project, clicking on the Slow DB Query issue you want to examine, then scrolling down to the "Span Evidence" section.</p>
+<h2 id="fixing-slow-db-queries"><a class="autolink-heading" href="#fixing-slow-db-queries">Fixing Slow DB Queries</a></h2>
+<p>Slow queries often happen when un-indexed tables are queried. To avoid this, make sure that your table is properly indexed. While there aren’t any other obvious fixes, there are steps you can take to narrow down the causes of your query being slow.</p>
+<p>If it's supported by your version of SQL, you can run an <code>EXPLAIN</code> command on your query. This will present you with a query plan. The plan will lay out individual steps that your database will perform in order to execute the query, along with additional information, such as its cost.</p>
+<p>The cost is an arbitrary value, but it will fluctuate based on how “expensive” that portion of the query is. You can compare the cost of each step to determine which ones are the most expensive. Additionally, you can run <code>EXPLAIN ANALYZE</code>, which will execute the query and report back with the same information as a regular <code>EXPLAIN</code>, plus the actual time taken by each step of your query (be careful not to run this on any destructive queries, as they <em>will</em> be fully executed!).</p>
+<p>You can learn more about <code>EXPLAIN</code> from the following resources:</p>
+<ul>
+<li><a class="" href="https://www.postgresql.org/docs/current/sql-explain.html">PostgreSQL Documentation: EXPLAIN</a></li>
+<li><a class="" href="https://dev.mysql.com/doc/refman/8.0/en/using-explain.html">MySQL Documentation: Optimizing Queries with EXPLAIN</a></li>
+</ul>
+</div>
+<div class="grid grid-cols-2 gap-4 not-prose mt-16">
+<div class="col-span-1"><a class="no-underline" href="/product/issues/issue-details/performance-issues/regex-main-thread/"><div class="py-3 px-4 border-2 dark:[border-color:var(--gray-4)] rounded-md transition-colors hover:[border-color:var(--accent)] text-left">
+<div class="text-sm [color:var(--foreground)]">Previous</div>
+<div class="flex items-center gap-1 font-[500] justify-start">Regex on Main Thread</div>
+</div></a></div>
+<div class="col-span-1"><a class="no-underline" href="/product/issues/issue-details/performance-issues/uncompressed-asset/"><div class="py-3 px-4 border-2 dark:[border-color:var(--gray-4)] rounded-md transition-colors hover:[border-color:var(--accent)] text-right">
+<div class="text-sm [color:var(--foreground)]">Next</div>
+<div class="flex items-center gap-1 font-[500] justify-end">Uncompressed Asset</div>
+</div></a></div>
+</div>
+<div class="space-y-4 py-4 border-[var(--gray-6)]">
+<div class="flex items-center gap-4 text-sm mt-8">
+<span class="font-medium">Was this helpful?</span><div class="flex">
+<button class="py-1 px-2 gap-4 hover:bg-[var(--gray-3)] rounded flex items-center justify-center">Yes 👍</button><button class="py-1 px-2 gap-4 hover:bg-[var(--gray-3)] rounded flex items-center justify-center">No 👎</button>
+</div>
+</div>
+
+</div>
+<div class="styles_cta__uq_BB">
+<small><strong>Help improve this content</strong></small><small>Our documentation is open source and available on GitHub. Your contributions are welcome, whether fixing a typo (drat!) or suggesting an update ("yeah, this would be better").<div>
+<a href="https://docs.sentry.io/contributing/">How to contribute</a>   |  <a href="https://github.com/getsentry/sentry-docs/edit/master/docs/product/issues/issue-details/performance-issues/slow-db-queries/index.mdx">Edit this page</a>   |  <a href="https://github.com/getsentry/sentry-docs/issues/new/choose">Create a docs issue</a>   |  <a href="https://www.sentry.help/en/">Get support</a> </div></small>
+</div>
+</div>
+</div></main></section></div>
+
+</div></div></div>

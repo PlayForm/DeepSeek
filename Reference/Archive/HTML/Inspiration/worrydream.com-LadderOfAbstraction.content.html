@@ -1,0 +1,786 @@
+<div><div class="header">
+<h1>Up and Down the Ladder of Abstraction</h1>
+<h2>A Systematic Approach to Interactive Visualization</h2>
+<h3>
+<a class="selflink" href="https://worrydream.com/">Bret Victor</a> / October, 2011</h3>
+</div></div>
+<div><div class="intro">
+<div class="columnLeft">
+<p><i>"In science, if you know what you are doing, you should not be doing it.  In engineering, if you do not know what you are doing, you should not be doing it.  Of course, you seldom, if ever, see either pure state."</i></p>
+<div class="quoteCitation">—Richard Hamming, <a href="https://www.amazon.com/dp/1732265178">The Art of Doing Science and Engineering</a>
+</div>
+<p>How can we design systems when we don't know what we're doing?</p>
+<p>The most exciting engineering challenges lie on the <b>boundary of theory and the unknown</b>.  Not so unknown that they're hopeless, but without enough theory to predict the results of our decisions.  Systems at this boundary often rely on <i>emergent behavior</i> — high-level effects that arise indirectly from low-level interactions.</p>
+<p>When designing at this boundary, the challenge lies not in constructing the system, but in understanding it.   In the absence of theory, we must develop an <i>intuition</i> to guide our decisions.  The design process is thus one of exploration and discovery.</p>
+</div>
+<div class="columnRight">
+<p>How do we explore?  If you move to a new city, you might learn the territory by walking around.  Or you might peruse a map.  But far more effective than either is <i>both together</i> — a street-level experience with higher-level guidance.</p>
+<p>Likewise, the most powerful way to gain insight into a system is by <i>moving between levels of abstraction</i>.  Many designers do this instinctively.  But it's easy to get stuck on the ground, experiencing concrete systems with no higher-level view.  It's also easy to get stuck in the clouds, working entirely with abstract equations or aggregate statistics.</p>
+<p>This interactive essay presents the <b>ladder of abstraction</b>, a technique for thinking <i>explicitly</i> about these levels, so a designer can move among them consciously and confidently.</p>
+<p>I believe that an essential skill of the modern system designer will be using the <i>interactive medium</i> to move fluidly around the ladder of abstraction.</p>
+</div>
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>We'll start with an in-depth example — designing the control system for a <b>simple car simulation</b>. Our goal is to write a set of rules that allows the car to navigate roads, such as the one to the right.</p>
+</div>
+<div class="columnLeft">
+<p>What inputs does our system have?  Let's say that our car has a very simple sensor which can only detect three states:  the car is on the road, left of the road, or right of the road.</p>
+<p>How do we design the rules for the car to follow?  We don't understand this system well enough to predict its behavior, so we need to <i>prototype</i>.  We start with the <i>simplest possible design</i>, and thoroughly explore it.  As we develop a feel for how it works, we'll get ideas for improvements.  We try an idea, explore again, and keep iterating.  Our design and our intuition should grow side-by-side.</p>
+</div>
+<div class="columnLeft">
+<p>The simplest possible rule here might be to turn right when off-road to the left, and turn left when off-road to the right.</p>
+</div>
+<div class="columnRight">
+<div class="tangle">
+<div class="LadderSensors"><div>
+<div><div class="LadderSensorsLabel">go straight</div></div>
+<div><div class="LadderSensorsLabel">veer right</div></div>
+<div><div class="LadderSensorsLabel">veer left</div></div>
+</div></div>
+</div>
+</div>
+<div class="columnLeft">
+<p>To the right is an algorithm which encodes this strategy.</p>
+</div>
+<div class="columnRight">
+<div class="tangle">
+<div class="algorithm">
+<div class="algorithmHeader">At each step:</div>
+<div class="algorithmLine">Move forward 1 pixel.</div>
+<div class="algorithmLine">If left of the road, turn right by .</div>
+<div class="algorithmLine">If right of the road, turn left by .</div>
+</div>
+</div>
+</div>
+<div class="columnLeft">
+<p><strong><span class="ifMouse">Click</span> <span class="ifTouch">Tap</span> to the right</strong> to find out how this algorithm behaves.</p>
+<p>I suspect we all know someone whose driving is accurately modeled by this algorithm.</p>
+</div>
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>Above, we watched the system evolve in real time.  A realtime view is useful for getting a direct, visceral sense of a system's behavior, especially for systems that are meant to be experienced by humans, such as visual effects.</p>
+<p>However, real time is also quite limiting.  Imagine a film editor who has to watch the entire film from the beginning with every edit, and cannot even pause or rewind.  That would be absurd.  Yet, most of our interactive systems are designed in this fashion.</p>
+<p>To understand a system, we must be able to explore it.  To explore, we must be able to move freely, under our own control.</p>
+</div>
+<div class="columnLeft">
+<p><strong><span class="ifMouse">Mouse over</span> <span class="ifTouch">Drag</span> the slider at the right</strong> to control time explicitly.  Notice that we can easily simulate realtime playback simply by <span class="ifMouse">moving the mouse over</span> <span class="ifTouch">dragging</span> the slider at a steady rate.  But we also have the ability to quickly skim over it, or stop at interesting events and examine them carefully, or quickly jump between interesting events and compare them.</p>
+<p>A designer needs direct, interactive control over the independent variables of the system.  We must not be slaves to real time.</p>
+</div>
+<div class="columnRight">
+<div class="tangle">
+<div class="algorithm">
+<div class="algorithmHeader">At each step:
+                    <div class="Slider"><div><div><div><div class="SliderLabel">step 0</div></div></div></div></div>
+</div>
+<div class="algorithmLine">Move forward 1 pixel.</div>
+<div class="algorithmLine">If left of the road, turn right by .</div>
+<div class="algorithmLine">If right of the road, turn left by .</div>
+</div>
+</div>
+</div>
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>In this algorithm, the car turns at a rate of 2° per step.  Why 2°?  Because we needed to choose <i>some</i> value, and with no understanding of the system's behavior yet, we made a wild guess.</p>
+<p>Wild guesses are okay!  We need to start somewhere.  But we also need a way to easily and fluidly <i>adjust</i> our guesses, see the consequences, and develop a sense for how they affect the behavior.</p>
+<p>The turning rate should be a <i>parameter</i> of our algorithm.  And like time, we must be able to interactively control our parameters.</p>
+</div>
+<div class="tangle">
+<div class="columnLeft">
+<p>Here we have two sliders, one controlling time, and one controlling turning rate.
+            <span class="ifMouse"><strong>Click on a slider to "lock" it</strong> at some particular value, so you can skim over the other.</span>
+<span class="ifTouch"><strong>Drag both sliders.</strong></span>
+</p>
+<p>Try looking at the system's behavior for various turning rates.  Notice how important it is that we've controlled time, so we can quickly skim over each possibility instead of tediously watching it play out in real time.</p>
+<p>Try setting the turning rate to
+           <span class="LadderActionLink">zero</span>.
+           I think we all know someone who drives like this as well.</p>
+</div>
+<div class="columnRight">
+<div class="algorithm">
+<div class="algorithmHeader">At each step:
+                   <div class="Slider"><div><div><div><div class="SliderLabel">step 0</div></div></div></div></div>
+</div>
+<div class="algorithmLine">Move forward 1 pixel.</div>
+<div class="algorithmLine">If left of the road, turn right by <span><span>2.0</span>°</span>.
+                   
+            </div>
+<div class="algorithmLine">If right of the road, turn left by <span><span>2.0</span>°</span>.</div>
+</div>
+</div>
+</div>
+
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>We've put our variables under interactive control, but it's difficult to get a clear sense of how the parameter affects the car's motion.  We need a broader view.</p>
+<p>Imagine looking for parking in a busy city, winding up and down the streets, hoping you'll chance upon an empty spot.  Now imagine looking from a helicopter above the city.  You'd instantly see every spot available!  On the ground, you are limited to seeing a single street at any moment.  From the air, you can see <i>every street at once</i>.</p>
+</div>
+<div class="columnLeft">
+<p>Likewise, our representation above, at any given moment, only depicts the system at <i>one particular time</i>.  But we can go higher, and concoct a representation that statically depicts the system <i>across all time</i>.</p>
+<p>Here, instead of showing the car, we show the car's entire <i>trajectory</i>.  <strong><span class="ifMouse">Mouse over</span> <span class="ifTouch">Drag</span> the slider</strong>, and notice how much easier it is to see patterns. For instance, the system exhibits severe oscillation for turning rates between 1° and 2°, and that oscillation appears to "tighten" around the road as the parameter approaches 2°.  This pattern is difficult to notice from the ground.</p>
+<p>There is no longer a time control — the function of the slider (to vary time) has been absorbed into the static visual representation.  This picture represents the system for <i>all time</i>, not <i>one particular time</i>. We say that we have <b>abstracted over time</b>.</p>
+<p>The representation in the previous section was fully <b>concrete</b> — the picture was drawn with every variable having a single, specific value.  The representation here is <b>abstract</b> — it depicts the system for <i>any</i> value of the time variable.</p>
+<p>By abstracting over a variable, we've taken our first step up the ladder of abstraction.  Enjoy the view.</p>
+</div>
+<div class="columnRight">
+<div class="tangle">
+<div class="algorithm">
+<div class="algorithmHeader">At each step:</div>
+<div class="algorithmLine">Move forward 1 pixel.</div>
+<div class="algorithmLine">If left of the road, turn right by <span><span>2.0</span>°</span>.
+                    
+                </div>
+<div class="algorithmLine">If right of the road, turn left by <span><span>2.0</span>°</span>.</div>
+</div>
+</div>
+</div>
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>Standing on the first rung of the ladder, we get a much broader view of the behavior.  But this benefit comes at a cost.  We can no longer see the car!  We can no longer viscerally experience the car's motion, and apply our common sense toward analyzing the system.</p>
+</div>
+<div class="tangle">
+<div class="columnLeft">
+<p>In real life, you would never use a ladder that only let you go up.  Likewise, when creating abstractions, stepping <i>down</i> is as important as stepping <i>up</i>.</p>
+<p>Here, we take the abstraction from the previous section, and overlay a concrete representation on top of it.  That is, we draw the trajectory that represents <i>all time</i>, but we also draw the car at <i>some particular time</i>.</p>
+<p>How do we select which particular time to show?  We could use the slider, which has reappeared.  But we can also <strong><span class="ifMouse">mouse over</span> <span class="ifTouch">touch</span> the trajectory</strong> to see the car at that point.</p>
+<p>This is a general and powerful technique.  Every point on a visual abstraction typically corresponds to a particular concrete state. Pointing at the abstraction to step down to a concrete representation lets us quickly explore regions of interest.</p>
+<p>Try cranking up the turning rate to
+        <span class="LadderActionLink">8°</span>
+        or so, and then inspecting the car's behavior as it makes its first two turns.  It almost pivots in place!  This unphysical behavior is not obvious from the trajectory.  It's possible to <i>infer</i> it from the trajectory, if we know what we're looking for.  But in the concrete representation it jumps out at us, because it violates our common sense.</p>
+<p>In this case, it's fairly easy to look at the trajectory and <i>imagine</i> the car moving along.  That is, it's possible to step down from the abstraction just in our heads. But we're not far off the ground yet!  As we climb higher on the ladder of abstraction, it will become harder to imagine the concrete steps beneath, and more critical that our abstractions provide a way to interactively step down to a more concrete representation.</p>
+</div>
+<div class="columnRight">
+<div class="algorithm">
+<div class="algorithmHeader">At each step:
+                    <div class="Slider"><div><div><div><div class="SliderLabel">step 0</div></div></div></div></div>
+</div>
+<div class="algorithmLine">Move forward 1 pixel.</div>
+<div class="algorithmLine">If left of the road, turn right by <span><span>2.0</span>°</span>.
+                    
+                </div>
+<div class="algorithmLine">If right of the road, turn left by <span><span>2.0</span>°</span>.</div>
+</div>
+</div>
+</div>
+
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>In previous sections, we first <i>controlled time</i>.  This allowed us to interactively explore times of interest.  We then <i>abstracted over time</i>, with a representation that depicted the system for all time instead of any particular time.  This gave us a broader view with which to understand the system's behavior.</p>
+<p>We now need to do the same for the algorithm.  We've already <i>controlled the algorithm</i>, in that we can interactively adjust the turning rate and see the results.  The next step is to <i>abstract the algorithm</i>, with a representation that depicts the system for all possible algorithms instead of any particular one.</p>
+</div>
+<div class="tangle">
+<div class="columnLeft">
+<p>"All possible algorithms" sounds rather daunting!  But our simple algorithm has only one degree of freedom.  We're stepping up to the second rung of the ladder, looking for a representation that abstracts over both <i>time</i> and <i>turning rate</i>.</p>
+<p>There are several ways to perform this abstraction.  In this one here, we simply overlay the trajectories for a range of turning rates.</p>
+<p>The purpose of abstraction is to bring out <b>high-level patterns</b>.  Try to defocus, and tune out the low-level clutter of individual trajectories.  We'll step down and explore those details soon enough.</p>
+<p>What patterns can we notice?  Look at the first
+            <span class="LadderActionLink">turn</span>,
+            where the car first hits the edge of the road.  As the parameter increases, the trajectory's angle ramps up accordingly...  but then hits a limit.  There's a thick bundle of trajectories that seem to take off at around the same angle, regardless of the parameter.  (In fact, that angle looks suspiciously like it follows the <i>law of reflection</i> — we'll explore this hypothesis later.)  This bundle appears to remain
+           <span class="LadderActionLink">tight</span>
+            around the bend, but then 
+           <span class="LadderActionLink">spreads apart</span>
+            on the straightaway.</p>
+</div>
+<div class="columnRight">
+<div class="algorithm">
+<div class="algorithmHeader">At each step:</div>
+<div class="algorithmLine">Move forward 1 pixel.</div>
+<div class="algorithmLine">If left of the road, turn right by <b>angle</b>.</div>
+<div class="algorithmLine">If right of the road, turn left by <b>angle</b>.</div>
+</div>
+</div>
+</div>
+
+<div class="columnLeft">
+<p>Here's a different representation at this rung of the ladder.  This plots the <i>time to completion</i> (number of steps the car takes to reach the end of the road) versus the turning rate.  Here, we have chosen a <b>metric</b> — a number that summarizes the behavior of the system in some interesting way.</p>
+<p>In general, there are often multiple ways of abstracting over a given set of variables, and each one will bring out different patterns.  The more ways we have of looking at the system, the most insights we can gather.</p>
+</div>
+<div class="columnRight">
+<div class="tangle">
+<div class="LadderTimePlot"><div>
+<div><div class="LadderTimePlotLabel">steps to the finish line</div></div>
+<div><div class="LadderTimePlotLabel">turning rate</div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></div>
+</div>
+</div>
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>The examples in the previous section are both second-level abstractions — they are both representations of the system for <i>all time, instead of some particular time</i>, and <i>all algorithms, instead of some particular algorithm</i>.</p>
+<p>These representations reveal interesting high-level patterns.  But they are too abstract to <i>explain</i> those patterns.  For example, we observed that most of the trajectories remain in a tight bundle around the bend, but then spread apart on the straightaway.  Why?  In order to discover these causal relationships, we need to climb down a step on the ladder, and compare individual concrete instances.</p>
+</div>
+<div class="tangle">
+<div class="columnLeft">
+<p>Here are the same abstractions as before, although now we can <strong><span class="ifMouse">mouse over</span> <span class="ifTouch">touch</span> the lower plot</strong> to highlight the corresponding trajectory.</p>
+<p>Let's investigate why the bundles fall apart.  Compare the trajectory for
+           <span class="LadderActionLink">6.5°</span> to the trajectory for 
+           <span class="LadderActionLink">6.6°</span>.
+           The trajectories are only slightly apart when coming
+           <span class="LadderActionLink">down</span> from the peak.
+           However, they happen to impact the edge at very different angles.  At
+           <span class="LadderActionLink">6.5°</span>, 
+           the trajectory hits at a glancing angle, and continues to skate along the edge.  At
+           <span class="LadderActionLink">6.6°</span>, 
+           the trajectory hits at a sharper angle, and bounces off.  In both cases, it appears like the trajectories follow the law of reflection — they bounce off at the angle that they come in.</p>
+<p>Scanning across the other trajectories, it appears that they spread apart because at the end of the bend, the trajectories are aimed almost tangent to a region of high curvature, so small differences in position are magnified into large differences in impact angle, and thus they scatter differently.</p>
+<p>Notice what we did here.  We stepped up a level of abstraction to <i>see a high-level pattern</i>, and then stepped down to <i>discover the explanation</i> for that pattern.  I believe that this dance is where the deepest insights are born — not at any one level of abstraction, but in the <b>transitions between them</b>.  This is why it is crucial that our representations provide both a <i>step up</i> and a <i>step back down</i>.</p>
+</div>
+<div class="columnRight">
+<div class="algorithm">
+<div class="algorithmHeader">At each step:</div>
+<div class="algorithmLine">Move forward 1 pixel.</div>
+<div class="algorithmLine">If left of the road, turn right by <span><span>2.0</span>°</span>.
+                
+            </div>
+<div class="algorithmLine">If right of the road, turn left by <span><span>2.0</span>°</span>.</div>
+</div>
+<div class="LadderTimePlot"><div>
+<div><div class="LadderTimePlotLabel">turning rate</div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></div>
+</div>
+</div>
+
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>Algorithms run on data.  For many systems, that input data comes from some sort of <b>environment</b>.  A video game character responds to the actions of its opponent.  A building's smart lighting system responds to the presence and movement of people through the rooms.  In our example here, the data consists of the shape of the road.</p>
+<p>So far, we've been examining the algorithm's behavior on one particular road.  But our goal is an algorithm that handles any road it encounters.</p>
+</div>
+<div class="columnLeft">
+<p>One approach is to randomly generate various roads, and see how the algorithm performs on them.  With good high-level metrics, we can learn something about the overall performance of the algorithm, and where it's strong and weak.  When done somewhat systematically, this approach is called "Monte-Carlo analysis".</p>
+</div>
+<div class="columnLeft">
+<p>However, it's difficult to deliberately explore a random space that doesn't offer <b>well-defined dimensions</b> to move in.  In designing this algorithm, we want to understand <i>why</i> it behaves as it does for various data.*
+
+            
+        
+        It's thus very helpful for our data to have parameters that we can <i>control</i>, and thereby <i>explain</i>.</p>
+<p>An arbitrary road could look like almost anything.  In order to tame this data space, we choose some aspect of the road which we suspect is <i>significant</i> — an aspect that reflects some <i>challenge</i> that our algorithm will face.  Our algorithm is currently built around a fixed turning rate which determines how sharply the car turns.  We might therefore suspect that the sharpness of the bend in the road will play an important role.</p>
+</div>
+<div class="tangle">
+<div class="columnLeft">
+<p>Here, we have called out the bend angle as an explicit parameter of the data.  <strong><span class="ifMouse">Mouse over</span> <span class="ifTouch">Drag</span> the lower slider</strong> to bend the road.</p>
+<p>Note that we're down on the first rung of the ladder now — we've only abstracted over time at this point.  We've controlled the data (the bend angle) and controlled the algorithm (the turning rate), but at any given moment, the static representation only depicts one particular bend and one particular turning rate.</p>
+<p>Play with these parameters for a bit, and see what you notice.  Can you find situations where the car gets so confused that it starts going the wrong way?</p>
+<p>Crank up the bend to
+        <span class="LadderActionLink">75°</span>
+        or so, and notice that there really is no turning rate that yields reasonable behavior.  Any turning rate sharp enough to make it around the bend leads to large oscillations on the straightaway.  Clearly our algorithm will have to be adaptive in some way.  Our insights here will inform our design decisions later on.</p>
+</div>
+<div class="columnRight">
+<div class="algorithm">
+<div class="algorithmHeader">At each step:</div>
+<div class="algorithmLine">Move forward 1 pixel.</div>
+<div class="algorithmLine">If left of the road, turn right by <span><span>2.0</span>°</span>.
+                    
+                </div>
+<div class="algorithmLine">If right of the road, turn left by <span><span>2.0</span>°</span>.</div>
+<div class="arcLine">Road bends at .
+                    
+                </div>
+</div>
+</div>
+</div>
+
+<div class="columnLeft">
+<p>Now that we are able to adjust the road, we can dig into our hypothesis that the trajectories "reflect" off the edge of the road at the same angle that they hit it.  Is this exactly true, or an approximation?  By examining many examples, can you understand why a fixed turning rate leads to this behavior?    </p>
+</div>
+<div class="columnRight">
+<div class="tangle">
+<div class="LadderReflection"><div>
+<div><div class="LadderReflectionLabel">angle in</div></div>
+<div><div class="LadderReflectionLabel">angle out</div></div>
+</div></div>
+</div>
+</div>
+</div></div>
+<div><div class="chapter">
+<div class="tangle">
+<div class="columnLeft">
+<p>Now that we've controlled the data, we're ready to climb up a step for a broader view.  We'd like a representation of the algorithm's behavior over <i>all time</i> and <i>all bend angles</i>.  As with our previous second-level abstraction, we have a choice of representations.</p>
+</div>
+<div class="columnRight">
+<div class="algorithm atTopOfChapter">
+<div class="algorithmHeader">At each step:</div>
+<div class="algorithmLine">Move forward 1 pixel.</div>
+<div class="algorithmLine">If left of the road, turn right by <span><span>2.0</span>°</span>.
+                  
+            </div>
+<div class="algorithmLine">If right of the road, turn left by <span><span>2.0</span>°</span>.</div>
+</div>
+</div>
+<div class="columnLeft">
+<p>We can try <b>overlapping trajectories</b>, as we did previously.  Unfortunately, each of these trajectories is responding to a different underlying road shape, which cannot be seen.  We're attempting to overlay trajectories from different environments in the same space. This representation, though visually attractive, is difficult to make sense of.</p>
+</div>
+<div class="columnLeft">
+<p>Another approach is an array of <b>small multiples</b>.  This depicts the range of behavior across different roads, and is in general a very handy visualization.  However, because each trajectory is separate and isolated, it's difficult to make <i>visual comparisons</i> between them.</p>
+</div>
+<div class="columnLeft">
+<p>Instead, let's embrace the spirit of abstraction, and omit some details in the interest of exposing patterns.  We'll use a <b>coordinate transformation</b> to warp the trajectories into the same space, so we can compare them.</p>
+<p>This representation essentially "unbends" each road into a straight line, squishing it so all roads line up precisely. The trajectories plot the car's deviation from the center line versus the car's progress down this squished road.</p>
+<p>Perhaps you didn't understand that.  That's okay!  There may be valuable information here, but this representation <i>on its own</i> is too abstract to make sense of.  In the next section, we'll see another benefit of stepping down to a more concrete representation — it helps us get our heads around powerful but confusing abstractions such as this one.</p>
+</div>
+<div class="columnRight">
+<div class="LadderRoad"><div>
+<div><div class="LadderSweptArcUnbendedLabel">|bendbegins</div></div>
+<div><div class="LadderSweptArcUnbendedLabel">|bendpeaks</div></div>
+<div><div class="LadderSweptArcUnbendedLabel">|bendends</div></div>
+</div></div>
+</div>
+<div class="columnLeft">
+<p><strong>Adjust the turning rate</strong> and watch all the representations update.</p>
+</div>
+</div>
+
+</div></div>
+<div><div class="chapter">
+<div class="tangle">
+<div class="columnLeft">
+<p>Here is a stack of visualizations that takes us up from ground level to the second rung of the ladder.</p>
+</div>
+<div class="columnRight">
+<div class="algorithm atTopOfChapter">
+<div class="algorithmHeader">At each step:
+                <div class="Slider"><div><div><div><div class="SliderLabel">step 0</div></div></div></div></div>
+</div>
+<div class="algorithmLine">Move forward 1 pixel.</div>
+<div class="algorithmLine">If left of the road, turn right by <span><span>2.0</span>°</span>.
+                  
+            </div>
+<div class="algorithmLine">If right of the road, turn left by <span><span>2.0</span>°</span>.</div>
+<div class="arcLine">Road bends at .
+                
+            </div>
+</div>
+</div>
+<div class="columnLeft">
+<p>Here we get a trajectory over time (one level up), plus the car at a particular time (concrete).</p>
+</div>
+<div class="columnLeft">
+<p>Here are our warped trajectories from earlier, abstracting over time and bend angle (two levels up).  The trajectory of <i>one particular bend angle</i> is highlighted (stepping down a level).  A marker is shown on that trajectory, corresponding to the car at <i>one particular time</i> (stepping down again).</p>
+</div>
+<div class="columnRight">
+<div class="LadderRoad"><div>
+<div><div class="LadderSweptArcUnbendedLabel">|bendbegins</div></div>
+<div><div class="LadderSweptArcUnbendedLabel">|bendpeaks</div></div>
+<div><div class="LadderSweptArcUnbendedLabel">|bendends</div></div>
+</div></div>
+</div>
+<div class="columnLeft">
+<p>And for another perspective, we've also plotted time to completion versus bend angle.</p>
+<p><strong><span class="ifMouse">Mouse over</span> <span class="ifTouch">Touch</span> everything</strong>.  See if you can understand the meaning of the warped trajectories on the "unbent" road, by driving the car along the bent road above it, and comparing how the marker moves.</p>
+<p>Notice how the interaction <i>ties together</i> the abstract representations, as well as <i>provides steps down</i> to the more concrete representations.</p>
+</div>
+<div class="columnRight">
+<div class="LadderTimePlot"><div>
+<div><div class="LadderTimePlotLabel">bend angle</div></div>
+
+
+
+<div><div class="LadderTimePlotLabel">1000</div></div>
+
+
+
+
+
+
+
+
+
+
+</div></div>
+</div>
+</div>
+
+</div></div>
+<div><div class="chapter">
+<div class="tangle">
+<div class="columnLeft">
+<p>The higher we climb, the broader our view of the system, and the more high-level patterns we can notice.  Here is a third-level abstraction — a representation of the system for <i>all time</i>, <i>all turning rates</i>, and <i>all bend angles</i>.  The color represents the time to completion, from red (fast) to black (mid-range) to white (slow).</p>
+<p>We're pretty far up in the clouds now — this representation bears no resemblance to the motion of a car, and omits most lower-level details.  But as you should expect, those details are available by interactively stepping down.</p>
+<p><strong><span class="ifMouse">Mouse over</span> <span class="ifTouch">Touch</span> the chart</strong> to step down two levels, and see the trajectory for that particular turning rate and bend angle.  
+        Look for pixels whose color is conspicuously different from their neighbors, and try to figure out why they stand out.</p>
+<p><strong><span class="ifMouse">Mouse over</span> <span class="ifTouch">Touch</span> the y-axis</strong> to step down just one level, and see trajectories for that particular turning rate.
+           <strong><span class="ifMouse">Mouse over</span> <span class="ifTouch">Touch</span> the x-axis</strong> to step down one level, and see trajectories for that particular bend angle.</p>
+<p>Each abstraction from earlier can be seen as a <b>slice</b> of this third-level abstraction.</p>
+</div>
+<div class="columnRight">
+<div class="LadderTimeGrid"><div>
+<div><div class="LadderTimeGridLabel">turningrate</div></div>
+<div><div class="LadderTimeGridLabel">bendangle</div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></div>
+<div class="LadderRoad"><div>
+<div><div class="LadderSweptArcUnbendedLabel">|bendbegins</div></div>
+<div><div class="LadderSweptArcUnbendedLabel">|bendpeaks</div></div>
+<div><div class="LadderSweptArcUnbendedLabel">|bendends</div></div>
+</div></div>
+</div>
+</div>
+
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>We've abstracted over time, the algorithm, and the data.  Are we done?</p>
+<p>Of course not.  Our goal is to design a good algorithm, and this algorithm is clearly <i>terrible</i>.</p>
+<p>But that's okay!  We intentionally started with the absolutely simplest possible algorithm.  By thoroughly exploring it, we now understand  <i>why</i> and <i>how</i> it's terrible. The exploration has given us three things:</p>
+<ul>
+<li>We have an <b>understanding</b> of the system.  Now, this isn't necessarily a logical, conscious understanding!  We learn a lot by studying and playing with these representations, even if we <i>can't put our insights into words</i>.  What we are doing here is feeding the pattern-recognizer in our brains, and building up an intuition for how the system behaves.  As the system gets more complex, we'll make subtle connections to patterns that we've seen before, and we can follow our instincts through the space of possibilities.</li>
+<li>We have <b>ideas</b> for improving the algorithm.  If we had any ideas at the outset, they would have been mere guesses.  The ideas we get as we explore are responses to real behavior and real failures of the real system.  They are much more likely to be fruitful.</li>
+<li>We have a set of interactive visual <b>tools</b> that will continue to serve us throughout the design process.  
+            When we change the algorithm, we can immediately see the effects of that change.
+            To design quickly and confidently, we need to be able to try out ideas and verify hypotheses <i>as fast as we think of them</i>.</li>
+</ul>
+</div>
+<div class="columnRight">
+<p>So what now?  Now we iterate.</p>
+<p>We choose one small specific idea for improving the algorithm.  For example, when our car re-enters the road, maybe it should try to correct its course instead of blindly driving forward.  We make this change, again in the absolutely simplest manner we can think of.  And then we explore again, up and down the ladder of abstraction.  We look at concrete instances, climb up to see high-level patterns, and climb down to explain those patterns.  If our change introduces a parameter, such as the correction factor in this case, we first control it, and then we abstract over it.  If possible, we can even try to control and abstract over the changes themselves, so we can compare algorithms across various changes.</p>
+<p>We can improve our model of the road as well.  If we want to understand a specific aspect of the behavior, such as what happens when the car hits the edge at various angles, we can make a simplified environment that focuses on just that.  If we see the algorithm struggling with some feature of the environment, we can have our environment offer more variations on that challenge, so we can figure out what the problem is.</p>
+<p>After each change, we thoroughly explore the system, building our understanding and sparking new ideas.  We choose one of those ideas, implement it, and explore again.  Step by step, we grow the algorithm and the environment model, following our growing intuition.  We can use high-level performance metrics to judge our progress.  But we must never lose touch with what the behavior looks like on the ground, and everywhere in between.</p>
+</div>
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>So far, we've been looking at a toy example.  Real-world systems may be more complex, but they all share the same general anatomy:  an independent variable (such as time), a structure (such as an algorithm), and a dataset (such as an environment).</p>
+<ul>
+<li>
+<p>The <b>independent variable</b> is usually time.  This is our way of thinking about <i>causality</i> — a system's state depends on its previous states in time.  Even for systems that are normally expressed with multiple independent variables, such as heat diffusion or wave propagation, we typically <i>think</i> of the system as evolving over time.</p>
+<p>"Time" needn't be real time.  Time might be discrete unitless steps, as with our car example above, or the stages of an industrial process, or a sequence of messages in a communications system. Backtracking and divide-and-conquer algorithms have their own peculiar notions of branching time, which may be useful to visualize.</p>
+</li>
+<li>
+<p>The <b>structure</b> is the set of rules that the system obeys.  In a board game or legal system, the rules are in prose.  In software, they form an algorithm.  In a physical system, they are typically equations implied by coupled components, according to the laws of the governing theory such as Kirchhoff's laws or Maxwell's equations.  If the system evolves over time, these are often differential or difference equations.  If the system varies over space, they may be partial differential equations or cellular automaton rules.</p>
+</li>
+</ul>
+</div>
+<div class="columnRight">
+<ul>
+<li>
+<p>The structure is what we control. Typically, there are two levels of control.  We can <i>rearrange</i> the structure — add a line of code, or connect two transistors.  We can also <i>adjust values</i> within the structure, such as our car's turning rate, or the value of a resistor.  Value changes lend themselves more readily to interactive control and abstraction.  But structural changes usually have more impact, and it's important to consider how they can be explored and abstracted over.</p>
+</li>
+<li>
+<p>The <b>data</b> gets fed to the rules.  Sometimes this data is a one-time delivery — a sorting algorithm is given an array to sort; the differential equations of a closed system only need an initial state.  But many systems aren't closed, and respond continuously to an environment (such as our car example, or a thermostat) or a stream of input data (such as a speech recognizer).  In systems that interact with people, that input data can be notoriously unpredictable.</p>
+<p>Designing a system requires designing a model for the input data.  This can be as much art, and as much challenge, as designing the structure itself.  Sometimes we can use real-life data — a stock market predictor has plenty of historical data to scoop up.  But if we want to <i>understand</i> how the data influences the behavior, we need to be able to <i>control</i> it.  We need dimensions, like our road's bend angle, where we can try "more of this" and "less of that".  Sometimes we can get these dimensions by organizing real-life data in some way.  Sometimes it's easier to synthesize our data, so we can control its characteristics precisely.</p>
+</li>
+</ul>
+</div>
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>To understand a system, we must explore it.  The three features above — time, structure, and data — define the territory.  We explore this territory by controlling parameters, abstracting over them, and stepping down from these abstractions.</p>
+<ul>
+<li>
+<p>We start by taking <b>control</b>.  This forces us to clarify what our parameters are in the first place, and lets us develop a concrete sense for how the parameters affect the system.</p>
+<p>We want direct, interactive control of each parameter, so we can go forward and backward, stop, and jump to arbitrary positions.  This allows us to travel freely around the territory, investigate areas of interest, and pose and verify hypotheses as quickly we think of them.</p>
+</li>
+<li>
+<p>We <b>step up</b> to an abstraction by devising a representation that depicts the system across all values of a parameter.  This gives us a broad view of the system's behavior, and allows us to discover high-level patterns.</p>
+<p>The appropriate visualization varies, and often there are multiple good visualizations, each offering a useful perspective.  We can look for metrics that summarize some aspect of the behavior.  We can also consider transformations that make it easier to visually compare multiple states of the system.</p>
+</li>
+</ul>
+</div>
+<div class="columnRight">
+<ul>
+<li>
+<p>We <b>step down</b> from the abstraction to a more concrete representation, by interactively selecting one particular value for the abstracted parameter.  Ideally, we can point directly to a location on the abstraction itself.  Stepping down allows us to investigate the causes of the patterns we've found, as well as make sense of powerful but confusing abstractions.</p>
+<p>If possible, we should be able to go all the way down, and experience a fully concrete system.  The world is concrete, and at some point, one of these concrete systems will actually exist.  We must be able to check one out occasionally to stay grounded.  Does it make sense?  Does it behave like we expect?  Does anything seem surprising?  Breakthroughs have been made by noticing details that have fallen through the cracks of an abstraction.</p>
+</li>
+</ul>
+<p>This is a dynamic process.  We're always <i>moving</i> — examining all angles, following hunches, testing hypotheses, gradually piecing together an understanding to guide our decisions.  Our visualizations are not plots on paper. They are worlds that we move within, live within, learn from the inside out.</p>
+
+</div>
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>Unfortunately, development environments generally don't support this process.  Most are actively hostile to it.  We live in primitive times.</p>
+</div>
+<div class="columnLeft">
+<p>If a language requires a "compile" or "refresh" to show the results of a change, it even denies us interactive control.
+            <a class="hiddenLink" href="https://processing.org">Some languages</a> are marketed as "sketchbooks", but a real sketching environment would, <i>at the very least</i>, offer basic interactive adjustment like to the <strong>right</strong>.</p>
+<p>Perhaps someday this will change.  Perhaps IDE makers will focus on dynamic exploration instead of static analysis, rich visualization instead of line debugging.  Perhaps language theorists will stop messing around with arrows and dependent types, and start inventing languages suitable for interactive development and discovery.</p>
+<p>Until that glorious day, it is our sad but unavoidable responsibility as system designers to <i>build our own tools</i>.
+        </p>
+<p>The good news is that the sorts of visualization and control presented here are not especially difficult to implement.  They can be crude, ugly, and fragile.  They can crash twice a day.  They simply need to serve as scaffolding for our understanding.</p>
+</div>
+<div class="columnRight">
+<div class="tangle">
+<pre>void draw() {
+   fill(<span class="TKAdjustableNumber"><span>192</span><div class="TKAdjustableNumberHelp">drag</div></span>, <span class="TKAdjustableNumber"><span>192</span><div class="TKAdjustableNumberHelp">drag</div></span>, <span class="TKAdjustableNumber"><span>192</span><div class="TKAdjustableNumberHelp">drag</div></span>);
+   for (int i = ; i &lt; ; i++) {
+      ellipse(<span class="TKAdjustableNumber"><span>130</span><div class="TKAdjustableNumberHelp">drag</div></span> + i * <span class="TKAdjustableNumber"><span>70</span><div class="TKAdjustableNumberHelp">drag</div></span>, <span class="TKAdjustableNumber"><span>100</span><div class="TKAdjustableNumberHelp">drag</div></span>, <span class="TKAdjustableNumber"><span>25</span><div class="TKAdjustableNumberHelp">drag</div></span>, <span class="TKAdjustableNumber"><span>25</span><div class="TKAdjustableNumberHelp">drag</div></span>);
+   }
+}
+</pre>
+</div>
+</div>
+<div class="columnLeft">
+<p>Video games are perhaps our culture's deepest interactive systems, so it shouldn't be surprising that game developers have been building these tools into their games for a long time.  On-screen metrics and diagnostics are the norm, and live adjustment of parameters is not uncommon.</p>
+<p>At the other end of the scale are the sciences.  Despite the fascinating models and high stakes, interactive control and dynamic visualization are shockingly rare.  It's an appalling fact that "scientific computing" is a synonym for "high-performance number crunching" — despite Richard Hamming's vehement warning when founding the field: <i>The purpose of computing is insight, not numbers.</i></p>
+<p>It's unacceptable that our tools for understanding game worlds outperform those for understanding the real world. Until civilized scientific tools become available,*
+        
+            
+        
+        scientific investigators must take responsibility for creating their own explorable visual environments.</p>
+</div>
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>An "abstraction", as used in this essay, represents a system for all values of a variable, instead of any particular value.
+        However, we've only considered one particular form of abstraction so far — <i>visual</i> abstraction — instead of the more common form of <i>symbolic</i> abstraction.</p>
+</div>
+<div class="tangle">
+<div class="columnLeft">
+<p>Here is a concrete representation of a pendulum, where we've controlled time.</p>
+</div>
+<div class="columnRight">
+<div>
+            
+            Time: 
+            <div class="Slider"><div><div><div><div class="SliderLabel">0.0 s</div></div></div></div></div>
+</div>
+</div>
+<div class="columnLeft">
+<p>Here is a visual abstraction — a picture that represents the system over all time.</p>
+</div>
+<div class="columnRight">
+<div class="LadderSwingPlot"><div>
+
+
+
+
+
+
+
+
+
+
+<div><div class="LadderTimePlotLabel">-45°</div></div>
+
+
+</div></div>
+</div>
+</div>
+
+<div class="columnLeft">
+<p>Here is a <i>symbolic</i> abstraction — a mathematical expression that represents the system over all time.</p>
+</div>
+
+<div class="columnLeft">
+<p>Both are perfectly valid abstractions.  Symbolic abstraction is the traditional form, because it runs well on the pencil-and-paper operating system that was dominant for hundreds of years.* 
+            
+        Visual abstractions were difficult to generate until recently, and are still difficult to make interactive.</p>
+<p>As a result of its long and deep history, symbolic abstraction offers certain benefits.  Symbolic expressions can be reasoned about, composed, and decomposed in powerful ways.  This allows us to logically prove properties about our systems, such that an invariant always holds or a failure state is impossible.  We can also generalize our solutions to apply to many types of systems, as well as implement them efficiently.</p>
+<p>However, it is often impractical or impossible to derive a symbolic expression that represents the behavior of most systems.  We thus tend to focus on the tiny and contrived subset of systems that happen to yield to symbolic analysis.  Even within that subset, symbolic analysis often involves struggling through a deluge of symbols, only to arrive at a solution that is difficult to interpret and offers little insight.</p>
+</div>
+<div class="columnLeft">
+<p>The most important issue is whether our abstractions are <i>useful</i>.  Can we discover and explain high-level patterns?  Do they generate insights that guide our design?  Do they spark ideas?  Do they lead to great systems?</p>
+<p>Both symbolic and visual abstractions can do so.
+        But the human brain is fundamentally a <b>pattern-matching machine</b>, easily outperforming any machine we can build — <i>for certain kinds of patterns</i>.  With visual patterns, we win hands-down.  With logical inferences, we're slow and clumsy.</p>
+<p><i>We are human beings</i>, and our tools should play to our strengths.</p>
+</div>
+<div class="columnRight">
+<p class="sidenote">It's worth noting that both abstract representations above are actually approximations.  The symbolic expression represents a "linearized" system, which only resembles the actual system for small swings.  The visual representation was numerically integrated with a finite time step.</p>
+<p class="sidenote">In both cases, it's possible to obtain a better approximation.  Symbolic solutions can be improved with perturbation methods, for instance, and numerical solutions can use better integrators.</p>
+<p class="sidenote">However, in the symbolic case, this greatly increases the complexity for the designer — the expression explodes into a mass of symbols that is difficult to make sense of.  In the visual case, there is no added complexity — the plot just quietly becomes more accurate.</p>
+</div>
+</div></div>
+<div><div class="chapter">
+<div class="columnLeft">
+<p>A ladder is a simple and useful metaphor, but it has only one dimension — step up, step down.  Here are some richer ways of thinking about the abstraction process, which correspond to other concepts you may be familiar with.</p>
+</div>
+
+
+<div class="tangle">
+<div class="columnLeft">
+<p><b>Wildcards.</b></p>
+</div>
+<div class="columnLeft3">
+<p>A fully-concrete representation has a specific value for every variable.</p>
+</div>
+<div class="columnMiddle3">
+<div class="wildcards">
+<div class="wildcard">
+<span>time:</span> 100</div>
+<div class="wildcard">
+<span>turning rate:</span> 2°</div>
+<div class="wildcard">
+<span>bend angle:</span> 40°</div>
+</div>
+</div>
+<div class="columnLeft3">
+<p>Abstracting over a variable can be thought of as assigning a "wildcard" to that variable.</p>
+</div>
+<div class="columnMiddle3">
+<div class="wildcards">
+<div class="wildcard">
+<span>time:</span> <b>*</b>
+</div>
+<div class="wildcard">
+<span>turning rate:</span> 2°</div>
+<div class="wildcard">
+<span>bend angle:</span> 40°</div>
+</div>
+</div>
+<div class="columnLeft3">
+<p>Each wildcard takes us one step up the ladder.</p>
+</div>
+<div class="columnMiddle3">
+<div class="wildcards">
+<div class="wildcard">
+<span>time:</span> <b>*</b>
+</div>
+<div class="wildcard">
+<span>turning rate:</span> <b>*</b>
+</div>
+<div class="wildcard">
+<span>bend angle:</span> 40°</div>
+</div>
+</div>
+</div>
+
+
+
+<div class="tangle">
+<div class="columnLeft">
+<p><b>High-dimensional space.</b></p>
+</div>
+<div class="columnLeft3">
+<p>If we think of the variables in the system as forming a space, then a concrete representation corresponds to a point in this space.  (If we have interactive control over the variables, we can steer this point around.)</p>
+</div>
+
+<div class="columnLeft3">
+<p>An abstraction over a variable can be thought of as a line in this space.  (Specifically, our trajectory here is the <i>image</i> of this line.)</p>
+</div>
+
+<div class="columnLeft3">
+<p>An abstraction over two variables spans a plane, and so on.</p>
+</div>
+
+<div class="columnLeft3">
+<p>"Stepping down" from this abstraction corresponds to choosing a line within this plane.</p>
+</div>
+
+</div>
+
+
+
+<div class="tangle">
+<div class="columnLeft">
+<p><b>Functions.</b></p>
+</div>
+<div class="columnLeft">
+<p>I adopted the notion of "abstracting over a variable" from computer science.  In particular, lambda abstraction corresponds directly to the sort of visual abstraction we're doing here.</p>
+</div>
+<div class="columnLeft3">
+<p>A concrete representation corresponds to a function that takes no arguments.</p>
+<p>This function represents the system at one particular time (t = 100).  It can only return a single point [x,y] — the position of the car.</p>
+</div>
+<div class="columnMiddle3">
+<pre class="perspectiveCode">function <b>f0 ()</b> {
+    var t = 100;
+    // calculate x and y
+    return [x,y];
+}
+</pre>
+</div>
+<div class="columnLeft3">
+<p>We abstract over time by turning the time variable into an argument.  This function will return a point for any given time — this defines a trajectory.</p>
+</div>
+<div class="columnMiddle3">
+<pre class="perspectiveCode">function <b>f1 (t)</b> {
+    // calculate x and y
+    return [x,y];
+}
+</pre>
+</div>
+<div class="columnLeft3">
+<p>Each argument we add corresponds to stepping up a level on the ladder of abstraction.  Here we abstract over turning rate as well.</p>
+</div>
+<div class="columnMiddle3">
+<pre class="perspectiveCode">function <b>f2 (t,r)</b> {
+    // calculate x and y
+    return [x,y];
+}
+</pre>
+</div>
+<div class="columnLeft3">
+<p>"Stepping down" from an abstraction corresponds to <i>partial application</i>.  By specializing the previous function to a particular turning angle (2°), it is now just a function of time — a trajectory.</p>
+</div>
+<div class="columnMiddle3">
+<pre class="perspectiveCode">function <b>f2_at_2_deg (t)</b> {
+    return f2(t, 2.0);
+}
+</pre>
+</div>
+</div>
+
+</div></div>
+<div><div class="backMatter">
+<div class="chapter">
+<div class="columnLeft">
+<p>This work is part of the <a href="/KillMath/">Kill Math</a> project, which is dedicated to enabling people to work with quantitative systems using concrete representations and intuition-guided exploration.  For another example of interactive control and visual abstraction, see
+        <a href="https://vimeo.com/23839605/">Interactive Exploration of a Dynamical System</a>.</p>
+<p>The keep-the-car-on-the-road algorithm is a favorite example of <a href="http://www.vpri.org/">Alan Kay</a> when demonstrating <a href="http://www.squeakland.org/">Etoys</a>.  I got the idea to use it after watching Alan's recent talk on <a href="https://www.youtube.com/watch?v=YyIQKBzIuBY">Programming and Scaling</a>.</p>
+</div>
+<div class="columnRight">
+<p>Huge thanks to
+            <a href="http://osteele.com/">Oliver Steele</a>,
+            <a href="http://levitylab.com/cog/">Chaim Gingold</a>,
+            <a href="http://craigmod.com/">Craig Mod</a>, and 
+            <a href="http://www.davidhellman.net/">David Hellman</a>
+            for their painfully-valuable suggestions and discussions about this essay.</p>
+<p>Extra thanks to Oliver Steele for his comments on an <a href="/SimulationAsAPracticalTool/">earlier essay</a> of mine, where I was just starting to think about these things. His thoughts on abstraction and multiple representations have been poking at my brain for the last two years, and were a primary inspiration for the work here.</p>
+</div>
+</div>
+</div></div>

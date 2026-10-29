@@ -1,0 +1,199 @@
+<div><div id="__next"><div class="grid grid-cols-only-content lg:grid-cols-sidebar-content 2xl:grid-cols-sidebar-content-toc">
+<main class="min-w-0 isolate"><article class="font-normal break-words text-primary dark:text-primary-dark"><div class="ps-0">
+<div class=""><div class="px-5 sm:px-12 pt-3.5"><div class="max-w-4xl ms-0 2xl:mx-auto">
+<div class="flex justify-between items-start">
+<div class="flex-1"><div class="flex flex-wrap">
+
+
+</div></div>
+<button class="text-sm py-1 px-3 text-base leading-tight font-bold rounded-full py-2 px-4 focus:outline focus:outline-offset-2 focus:outline-link dark:focus:outline-link-dark inline-flex items-center my-1 bg-transparent text-primary dark:text-primary-dark active:text-primary shadow-secondary-button-stroke dark:shadow-secondary-button-stroke-dark hover:bg-gray-40/5 active:bg-gray-40/10 hover:dark:bg-gray-60/5 active:dark:bg-gray-60/10"> <span class="hidden sm:inline">Copy page</span><span class="sm:hidden">Copy</span></button>
+</div>
+<h1 class="mdx-heading mt-0 text-primary dark:text-primary-dark -mx-.5 break-words text-5xl font-display font-bold leading-tight">&lt;Profiler&gt;
+</h1>
+</div></div></div>
+<div class="px-5 sm:px-12">
+<div class="max-w-7xl mx-auto"><div class="max-w-4xl ms-0 2xl:mx-auto">
+<div class="font-display text-xl text-primary dark:text-primary-dark leading-relaxed">
+<p class="whitespace-pre-wrap my-4"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> lets you measure rendering performance of a React tree programmatically.</p>
+<div class="sandpack sandpack--codeblock rounded-2xl h-full w-full overflow-x-auto flex items-center bg-wash dark:bg-gray-95 shadow-lg my-8"><div class="sp-wrapper"><div class="sp-stack"><div class="sp-code-editor"><pre class="sp-cm sp-pristine sp-javascript flex align-start"><code class="sp-pre-placeholder grow-[2]"><div class="cm-line">
+<span class="sp-syntax-definition">Profiler</span> <span class="sp-syntax-property">id</span>=<span class="sp-syntax-string">"App"</span> <span class="sp-syntax-property">onRender</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">onRender</span><span class="sp-syntax-punctuation">}</span>
+</div>
+<div class="cm-line">  <span class="sp-syntax-definition">App</span> <span class="sp-syntax-punctuation">/&gt;</span>
+</div>
+<div class="cm-line">
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">Profiler</span>
+</div></code></pre></div></div></div></div>
+
+</div>
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">
+<a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="#reference">Reference </a><ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1"><a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="#profiler"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> </a></li>
+<li class="leading-relaxed mb-1"><a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="#onrender-callback"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">onRender</code> callback </a></li>
+</ul>
+</li>
+<li class="leading-relaxed mb-1">
+<a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="#usage">Usage </a><ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1"><a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="#measuring-rendering-performance-programmatically">Measuring rendering performance programmatically </a></li>
+<li class="leading-relaxed mb-1"><a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="#measuring-different-parts-of-the-application">Measuring different parts of the application </a></li>
+</ul>
+</li>
+</ul>
+
+<h2 class="mdx-heading text-3xl font-display leading-10 text-primary dark:text-primary-dark font-bold my-6" id="reference">Reference 
+</h2>
+<h3 class="mdx-heading text-2xl font-display leading-9 text-primary dark:text-primary-dark font-bold my-6" id="profiler">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> 
+</h3>
+<p class="whitespace-pre-wrap my-4">Wrap a component tree in a <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> to measure its rendering performance.</p>
+<div class="sandpack sandpack--codeblock rounded-2xl h-full w-full overflow-x-auto flex items-center bg-wash dark:bg-gray-95 shadow-lg my-8"><div class="sp-wrapper"><div class="sp-stack"><div class="sp-code-editor"><pre class="sp-cm sp-pristine sp-javascript flex align-start"><code class="sp-pre-placeholder grow-[2]"><div class="cm-line">
+<span class="sp-syntax-definition">Profiler</span> <span class="sp-syntax-property">id</span>=<span class="sp-syntax-string">"App"</span> <span class="sp-syntax-property">onRender</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">onRender</span><span class="sp-syntax-punctuation">}</span>
+</div>
+<div class="cm-line">  <span class="sp-syntax-definition">App</span> <span class="sp-syntax-punctuation">/&gt;</span>
+</div>
+<div class="cm-line">
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">Profiler</span>
+</div></code></pre></div></div></div></div>
+
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="props">Props 
+</h4>
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">id</code>: A string identifying the part of the UI you are measuring.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">onRender</code>: An <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="#onrender-callback"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">onRender</code> callback</a> that React calls every time components within the profiled tree update. It receives information about what was rendered and how much time it took.</li>
+</ul>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="caveats">Caveats 
+</h4>
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">Profiling adds some additional overhead, so <strong class="font-bold">it is disabled in the production build by default.</strong> To opt into production profiling, you need to enable a <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/reference/dev-tools/react-performance-tracks#using-profiling-builds">special production build with profiling enabled.</a>
+</li>
+</ul>
+
+<h3 class="mdx-heading text-2xl font-display leading-9 text-primary dark:text-primary-dark font-bold my-6" id="onrender-callback">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">onRender</code> callback 
+</h3>
+<p class="whitespace-pre-wrap my-4">React will call your <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">onRender</code> callback with information about what was rendered.</p>
+<div class="sandpack sandpack--codeblock rounded-2xl h-full w-full overflow-x-auto flex items-center bg-wash dark:bg-gray-95 shadow-lg my-8"><div class="sp-wrapper"><div class="sp-stack"><div class="sp-code-editor"><pre class="sp-cm sp-pristine sp-javascript flex align-start"><code class="sp-pre-placeholder grow-[2]"><div class="cm-line">
+<span class="sp-syntax-keyword">function</span> <span class="sp-syntax-definition">onRender</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-plain">id</span><span class="sp-syntax-punctuation">,</span> <span class="sp-syntax-plain">phase</span><span class="sp-syntax-punctuation">,</span> <span class="sp-syntax-plain">actualDuration</span><span class="sp-syntax-punctuation">,</span> <span class="sp-syntax-plain">baseDuration</span><span class="sp-syntax-punctuation">,</span> <span class="sp-syntax-plain">startTime</span><span class="sp-syntax-punctuation">,</span> <span class="sp-syntax-plain">commitTime</span><span class="sp-syntax-punctuation">)</span> <span class="sp-syntax-punctuation">{</span>
+</div>
+<div class="cm-line">  <span class="sp-syntax-comment">// Aggregate or log render timings...</span>
+</div>
+</code></pre></div></div></div></div>
+
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="onrender-parameters">Parameters 
+</h4>
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">id</code>: The string <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">id</code> prop of the <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> tree that has just committed. This lets you identify which part of the tree was committed if you are using multiple profilers.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">phase</code>: <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">"mount"</code>, <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">"update"</code> or <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">"nested-update"</code>. This lets you know whether the tree has just been mounted for the first time or re-rendered due to a change in props, state, or Hooks.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">actualDuration</code>: The number of milliseconds spent rendering the <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> and its descendants for the current update. This indicates how well the subtree makes use of memoization (e.g.  and <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/reference/react/useMemo"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">useMemo</code></a>). Ideally this value should decrease significantly after the initial mount as many of the descendants will only need to re-render if their specific props change.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">baseDuration</code>: The number of milliseconds estimating how much time it would take to re-render the entire <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> subtree without any optimizations. It is calculated by summing up the most recent render durations of each component in the tree. This value estimates a worst-case cost of rendering (e.g. the initial mount or a tree with no memoization). Compare <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">actualDuration</code> against it to see if memoization is working.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">startTime</code>: A numeric timestamp for when React began rendering the current update.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">commitTime</code>: A numeric timestamp for when React committed the current update. This value is shared between all profilers in a commit, enabling them to be grouped if desirable.</li>
+</ul>
+
+<h2 class="mdx-heading text-3xl font-display leading-10 text-primary dark:text-primary-dark font-bold my-6" id="usage">Usage 
+</h2>
+<h3 class="mdx-heading text-2xl font-display leading-9 text-primary dark:text-primary-dark font-bold my-6" id="measuring-rendering-performance-programmatically">Measuring rendering performance programmatically 
+</h3>
+<p class="whitespace-pre-wrap my-4">Wrap the <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> component around a React tree to measure its rendering performance.</p>
+<div class="sandpack sandpack--codeblock rounded-2xl h-full w-full overflow-x-auto flex items-center bg-wash dark:bg-gray-95 shadow-lg my-8"><div class="sp-wrapper"><div class="sp-stack"><div class="sp-code-editor"><pre class="sp-cm sp-pristine sp-javascript flex align-start"><code class="sp-pre-placeholder grow-[2]"><div class="cm-line">
+<span class="sp-syntax-definition">App</span>
+</div>
+<div class="cm-line bg-github-highlight dark:bg-opacity-10">  <span class="sp-syntax-definition">Profiler</span> <span class="sp-syntax-property">id</span>=<span class="sp-syntax-string">"Sidebar"</span> <span class="sp-syntax-property">onRender</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">onRender</span><span class="sp-syntax-punctuation">}</span>
+</div>
+<div class="cm-line">    <span class="sp-syntax-definition">Sidebar</span> <span class="sp-syntax-punctuation">/&gt;</span>
+</div>
+<div class="cm-line bg-github-highlight dark:bg-opacity-10">  <span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">Profiler</span>
+</div>
+<div class="cm-line">  <span class="sp-syntax-definition">PageContent</span> <span class="sp-syntax-punctuation">/&gt;</span>
+</div>
+<div class="cm-line">
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">App</span>
+</div></code></pre></div></div></div></div>
+
+<p class="whitespace-pre-wrap my-4">It requires two props: an <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">id</code> (string) and an <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">onRender</code> callback (function) which React calls any time a component within the tree “commits” an update.</p>
+<div class="expandable-callout pt-8 pb-4 px-5 sm:px-8 my-8 relative rounded-none shadow-inner-border -mx-5 sm:mx-auto sm:rounded-2xl bg-yellow-5 dark:bg-yellow-60 dark:bg-opacity-20">
+<h3 class="text-2xl font-display font-bold text-yellow-50 dark:text-yellow-40">Pitfall</h3>
+<div class="relative"><div class="py-2"><p class="whitespace-pre-wrap my-4">Profiling adds some additional overhead, so <strong class="font-bold">it is disabled in the production build by default.</strong> To opt into production profiling, you need to enable a <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/reference/dev-tools/react-performance-tracks#using-profiling-builds">special production build with profiling enabled.</a></p></div></div>
+</div>
+<div class="expandable-callout pt-8 pb-4 px-5 sm:px-8 my-8 relative rounded-none shadow-inner-border -mx-5 sm:mx-auto sm:rounded-2xl bg-green-5 dark:bg-green-60 dark:bg-opacity-20 text-primary dark:text-primary-dark text-lg">
+<h3 class="text-2xl font-display font-bold text-green-60 dark:text-green-40">Note</h3>
+<div class="relative"><div class="py-2">
+<p class="whitespace-pre-wrap my-4"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> lets you gather measurements programmatically. If you’re looking for an interactive profiler, try the Profiler tab in <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/learn/react-developer-tools">React Developer Tools</a>. It exposes similar functionality as a browser extension.</p>
+<p class="whitespace-pre-wrap my-4">Components wrapped in <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> will also be marked in the <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="/reference/dev-tools/react-performance-tracks#components">Component tracks</a> of React Performance tracks even in profiling builds.
+In development builds, all components are marked in the Components track regardless of whether they’re wrapped in <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code>.</p>
+</div></div>
+</div>
+
+<h3 class="mdx-heading text-2xl font-display leading-9 text-primary dark:text-primary-dark font-bold my-6" id="measuring-different-parts-of-the-application">Measuring different parts of the application 
+</h3>
+<p class="whitespace-pre-wrap my-4">You can use multiple <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> components to measure different parts of your application:</p>
+<div class="sandpack sandpack--codeblock rounded-2xl h-full w-full overflow-x-auto flex items-center bg-wash dark:bg-gray-95 shadow-lg my-8"><div class="sp-wrapper"><div class="sp-stack"><div class="sp-code-editor"><pre class="sp-cm sp-pristine sp-javascript flex align-start"><code class="sp-pre-placeholder grow-[2]"><div class="cm-line">
+<span class="sp-syntax-definition">App</span>
+</div>
+<div class="cm-line">  <span class="sp-syntax-definition">Profiler</span> <span class="sp-syntax-property">id</span>=<span class="sp-syntax-string">"Sidebar"</span> <span class="sp-syntax-property">onRender</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">onRender</span><span class="sp-syntax-punctuation">}</span>
+</div>
+<div class="cm-line">    <span class="sp-syntax-definition">Sidebar</span> <span class="sp-syntax-punctuation">/&gt;</span>
+</div>
+<div class="cm-line">  <span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">Profiler</span>
+</div>
+<div class="cm-line bg-github-highlight dark:bg-opacity-10">  <span class="sp-syntax-definition">Profiler</span> <span class="sp-syntax-property">id</span>=<span class="sp-syntax-string">"Content"</span> <span class="sp-syntax-property">onRender</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">onRender</span><span class="sp-syntax-punctuation">}</span>
+</div>
+<div class="cm-line">    <span class="sp-syntax-definition">Content</span> <span class="sp-syntax-punctuation">/&gt;</span>
+</div>
+<div class="cm-line bg-github-highlight dark:bg-opacity-10">  <span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">Profiler</span>
+</div>
+<div class="cm-line">
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">App</span>
+</div></code></pre></div></div></div></div>
+
+<p class="whitespace-pre-wrap my-4">You can also nest <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> components:</p>
+<div class="sandpack sandpack--codeblock rounded-2xl h-full w-full overflow-x-auto flex items-center bg-wash dark:bg-gray-95 shadow-lg my-8"><div class="sp-wrapper"><div class="sp-stack"><div class="sp-code-editor"><pre class="sp-cm sp-pristine sp-javascript flex align-start"><code class="sp-pre-placeholder grow-[2]"><div class="cm-line">
+<span class="sp-syntax-definition">App</span>
+</div>
+<div class="cm-line">  <span class="sp-syntax-definition">Profiler</span> <span class="sp-syntax-property">id</span>=<span class="sp-syntax-string">"Sidebar"</span> <span class="sp-syntax-property">onRender</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">onRender</span><span class="sp-syntax-punctuation">}</span>
+</div>
+<div class="cm-line">    <span class="sp-syntax-definition">Sidebar</span> <span class="sp-syntax-punctuation">/&gt;</span>
+</div>
+<div class="cm-line">  <span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">Profiler</span>
+</div>
+<div class="cm-line bg-github-highlight dark:bg-opacity-10">  <span class="sp-syntax-definition">Profiler</span> <span class="sp-syntax-property">id</span>=<span class="sp-syntax-string">"Content"</span> <span class="sp-syntax-property">onRender</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">onRender</span><span class="sp-syntax-punctuation">}</span>
+</div>
+<div class="cm-line">    <span class="sp-syntax-definition">Content</span>
+</div>
+<div class="cm-line bg-github-highlight dark:bg-opacity-10">      <span class="sp-syntax-definition">Profiler</span> <span class="sp-syntax-property">id</span>=<span class="sp-syntax-string">"Editor"</span> <span class="sp-syntax-property">onRender</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">onRender</span><span class="sp-syntax-punctuation">}</span>
+</div>
+<div class="cm-line">        <span class="sp-syntax-definition">Editor</span> <span class="sp-syntax-punctuation">/&gt;</span>
+</div>
+<div class="cm-line bg-github-highlight dark:bg-opacity-10">      <span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">Profiler</span>
+</div>
+<div class="cm-line">      <span class="sp-syntax-definition">Preview</span> <span class="sp-syntax-punctuation">/&gt;</span>
+</div>
+<div class="cm-line">    <span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">Content</span>
+</div>
+<div class="cm-line bg-github-highlight dark:bg-opacity-10">  <span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">Profiler</span>
+</div>
+<div class="cm-line">
+<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-definition">App</span>
+</div></code></pre></div></div></div></div>
+
+<p class="whitespace-pre-wrap my-4">Although <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">&lt;Profiler&gt;</code> is a lightweight component, it should be used only when necessary. Each use adds some CPU and memory overhead to an application.</p>
+
+</div></div>
+<div class="grid grid-cols-1 gap-4 py-4 mx-auto max-w-7xl md:grid-cols-2 md:py-12">
+<a class="flex gap-x-4 md:gap-x-6 items-center w-full md:min-w-80 md:w-fit md:max-w-md px-4 md:px-5 py-6 border-2 border-transparent text-base leading-base text-link dark:text-link-dark rounded-lg group focus:text-link dark:focus:text-link-dark focus:bg-highlight focus:border-link dark:focus:bg-highlight-dark dark:focus:border-link-dark focus:border-opacity-100 focus:border-2 focus:ring-1 focus:ring-offset-4 focus:ring-blue-40 active:ring-0 active:ring-offset-0 hover:bg-gray-5 dark:hover:bg-gray-80" href="/reference/react/Fragment"><div class="flex flex-col overflow-hidden">
+<span class="text-sm font-bold tracking-wide no-underline uppercase text-secondary dark:text-secondary-dark group-focus:text-link dark:group-focus:text-link-dark group-focus:text-opacity-100">Previous</span><span class="text-lg break-words group-hover:underline">&lt;Fragment&gt; (&lt;&gt;)</span>
+</div></a><a class="flex gap-x-4 md:gap-x-6 items-center w-full md:min-w-80 md:w-fit md:max-w-md px-4 md:px-5 py-6 border-2 border-transparent text-base leading-base text-link dark:text-link-dark rounded-lg group focus:text-link dark:focus:text-link-dark focus:bg-highlight focus:border-link dark:focus:bg-highlight-dark dark:focus:border-link-dark focus:border-opacity-100 focus:border-2 focus:ring-1 focus:ring-offset-4 focus:ring-blue-40 active:ring-0 active:ring-offset-0 hover:bg-gray-5 dark:hover:bg-gray-80 flex-row-reverse justify-self-end text-end" href="/reference/react/StrictMode"><div class="flex flex-col overflow-hidden">
+<span class="text-sm font-bold tracking-wide no-underline uppercase text-secondary dark:text-secondary-dark group-focus:text-link dark:group-focus:text-link-dark group-focus:text-opacity-100">Next</span><span class="text-lg break-words group-hover:underline">&lt;StrictMode&gt;</span>
+</div></a>
+</div>
+</div>
+</div></article></main>
+</div></div></div>

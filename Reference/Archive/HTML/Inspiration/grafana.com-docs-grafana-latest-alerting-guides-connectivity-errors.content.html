@@ -1,0 +1,315 @@
+<div><div><div id="top-banner">
+<div class="banner__disabled" id="gcon2026_top_banner_a"><div class="gcon2025-banner gcon2026-banner footer">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">Save the Date!</div>
+<div class="tw:text-[13px] tw:text-white">Sign up to get the latest GrafanaCON 2026 updates, agenda drops, and first access to early-bird tickets when they’re first available.</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Sign up</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="gcon2026_top_banner_b"><div class="gcon2025-banner gcon2026-banner footer alt-grot">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">We have our sightson Barcelona</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Save the Date</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-post-keynote"><div class="tw:bg-[#E86F37] tw:relative tw:h-10 tw:hidden tw:sm:block">
+<div class="wrapper tw:px-0">
+<div class="tw:flex tw:flex-row tw:items-center tw:justify-between tw:px-5 tw:flex-wrap">
+
+<span class="tw:items-center tw:justify-center font-poppins tw:font-medium tw:text-black tw:text-base tw:xl:max-w-none tw:text-center tw:h-10 tw:hidden tw:lg:flex">
+          Watch the keynote again and signup for more on-demand sessions.
+        </span>
+<div class="tw:flex-col tw:xl:flex-row tw:items-center tw:gap-6 tw:h-6 tw:sm:flex">
+
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-top-banner"><div class="obscon2025-banner top-banner tw:relative">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<p class="banner-text">
+<span class="banner-title">📢 Registration + agenda now live </span>
+        Explore the latest Grafana Cloud and AI solutions, learn tips &amp; tricks from demos and hands-on workshops, and get actionable advice to advance your observability strategy. Register now and get 50% off - limited tickets available (while they last!).
+      </p>
+<a class="banner-btn tw:bg-black" href="/events/observabilitycon/?tech=target&amp;plcmt=top-banner&amp;aud=default">Register now</a>
+</div>
+</div>
+</div></div> </div></div></div>
+<div><div class="main section"><div class="main-content">
+<blockquote class="llms-txt-directive">Documentation for automated readersA curated documentation index is available at: https://grafana.com/llms.txtA complete documentation index is available at: https://grafana.com/llms-full.txtThese indexes can help with page discovery before fetching individual documents.</blockquote>
+<p class="agent-directive">This page is also available in Markdown, which may be easier for automated readers
+and AI tools to parse than HTML. The Markdown version is available at
+https://grafana.com/docs/grafana/latest/alerting/guides/connectivity-errors.md, or by sending
+Accept: text/markdown to https://grafana.com/docs/grafana/latest/alerting/guides/connectivity-errors/. For broader
+documentation discovery, the curated index is available at https://grafana.com/llms.txt
+and the complete index is available at https://grafana.com/llms-full.txt.</p>
+<div class="grid-layout docs">
+<section class="mobile print-hidden" id="mobile"><div class="mobile__wrapper"> <div class="mobile__title">Handle connectivity errors in alerts</div> </div></section><main class="section-docs__main docs__content" id="main"><div class="scrollspy-init">
+<div class="docs-content scrollspy-wrap" id="doc-article-text">
+<div class="docs__breadcrumb">
+<span>Handle connectivity errors</span>
+</div>
+<div class="docs-labels">
+<span class="badge docs-labels__product-orange docs-labels__item mr-half"><span>Grafana Cloud
+</span> </span><span class="badge docs-labels__product-violet docs-labels__item mr-half"><span>Enterprise
+</span> </span><span class="badge docs-labels__product-purple docs-labels__item mr-half"><span>Open source
+</span></span>
+</div>
+<h1 id="handle-connectivity-errors-in-alerts">Handle connectivity errors in alerts
+</h1>
+<p>Connectivity issues are a common cause of misleading alerts or unnoticed failures.</p>
+<p>There could be a number of reasons for these errors. Maybe your target went offline, or Prometheus couldn’t scrape it. Or maybe your alert query failed because its target timed out or the network went down. These situations might look similar, but require different considerations in your alerting setup.</p>
+<p>This guide walks through how to detect and handle these types of failures, whether you’re writing alert rules in Prometheus, using Grafana Alerting, or combining both. It covers both availability monitoring and alert query failures, and outlines strategies to improve the reliability of your alerts.</p>
+<h2 id="understand-connectivity-issues-in-alerts">Understand connectivity issues in alerts
+</h2>
+<p>Typically, connectivity issues fall into a few common scenarios:</p>
+<ul>
+<li>Servers or containers crashed or were shut down.</li>
+<li>Service overload or timeout.</li>
+<li>Misconfigured authentication or incorrect permissions.</li>
+<li>Network issues like DNS problems or ISP outages.</li>
+</ul>
+<p>When we talk about connectivity errors in alerting, we’re usually referring to one of two use cases:</p>
+<ol>
+<li><p><strong>Your target is down or unreachable.</strong>The service crashed, the host was down, or a firewall or DNS issue blocked the connection. These are <strong>availability problems</strong>.</p></li>
+<li><p><strong>Your alert query failed.</strong>The alert couldn’t evaluate its query—maybe because the data source timed out or an invalid query. These are <strong>execution errors</strong>.</p></li>
+</ol>
+<p>It helps to separate these cases early, because they behave differently and require different strategies.</p>
+<p>Keep in mind that most alert rules don’t hit the target directly. They query metrics from a monitoring system like Prometheus, which scrapes data from your actual infrastructure or application. That gives us two typical alerting setups where connectivity issues can show up:</p>
+<ol>
+<li><p><strong>Alert rule → Target</strong>For example, an alert rule querying an external data source like a database.</p></li>
+<li>
+<p><strong>Alert rule → Prometheus ← Target</strong>More common in observability stacks. For instance, Prometheus scrapes a node or container, and the alert rule queries the metrics later.</p>
+<p>In this second setup, you can run into connectivity issues on either side. If Prometheus fails to scrape the target, your alert rule might not fire, even though something is likely wrong.</p>
+</li>
+</ol>
+<h2 id="detect-target-availability-with-the-prometheus-up-metric">Detect target availability with the Prometheus <code>up</code> metric
+</h2>
+<p>Prometheus scrapes metrics from its targets regularly, following the <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config"><code>scrape_interval</code></a> period. The default scrape interval is 60 seconds, which is generally considered common practice.</p>
+<p>Prometheus provides a built-in metric called <code>up</code> for every scrape target, a simple method to indicate whether scraping is successful:</p>
+<ul>
+<li><p><code>up == 1</code>: Your target is reachable; Prometheus collected the target metrics as expected.</p></li>
+<li><p><code>up == 0</code>: Prometheus couldn’t reach your target—indicating possible downtime or network errors.</p></li>
+</ul>
+<p>A typical PromQL expression for an alert rule to detect when a target becomes unreachable is:</p>
+<p><code>up == 0</code></p>
+<p>But this alert rule might result in noisy alerts as one single scrape failure will fire the alert. To reduce noise, you should add a delay:</p>
+<p><code>up == 0 for: 5m</code></p>
+<p>The <code>for</code> option in Prometheus (or
+<a href="/docs/grafana/latest/alerting/fundamentals/notifications/">pending period</a> in Grafana) delays the alert until the condition has been true for the full duration.</p>
+<p>In this example, waiting for 5 minutes means the single scrape error won’t result in a fired alert. Since Prometheus scrapes metrics every minute by default, the alert only fires after five consecutive failures.</p>
+<p>However, this kind of <code>up</code> alert has a few potential downfalls:</p>
+<ul>
+<li>
+<strong>Failures can slip between scrape intervals</strong>: An outage that starts and ends between two evaluations go undetected. You could shorten the <code>for</code> duration, but this might lead to scrape failures that trigger false alarms.</li>
+<li>
+<strong>Intermittent recoveries reset the <code>for</code> timer</strong>: A single successful scrape resets the alert timer, which masks intermittent outages.</li>
+</ul>
+<p>Brief connectivity drops are common in real-world environments, so expect some flakiness in <code>up</code> alerts. For example:</p>
+<section class="expand-table-wrapper"><div class="button-div"><button class="expand-table-btn">Expand table</button></div>
+<div class="responsive-table-wrapper"><table>
+<thead><tr>
+<th>Scrape result (<code>up</code>)</th>
+<th>Alert rule evaluation</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>00:00 <code>up == 0</code>
+</td>
+<td>Timer starts</td>
+</tr>
+<tr>
+<td>01:00 <code>up == 0</code>
+</td>
+<td>Timer continues</td>
+</tr>
+<tr>
+<td>02:00 <code>up == 0</code>
+</td>
+<td>Timer continues</td>
+</tr>
+<tr>
+<td>03:00 <code>up == 1</code>
+</td>
+<td>Successful scrape resets timer</td>
+</tr>
+<tr>
+<td>04:00 <code>up == 0</code>
+</td>
+<td>Timer starts again</td>
+</tr>
+<tr>
+<td>05:00 <code>up == 0</code>
+</td>
+<td>No alert yet; timer hasn’t reached the <code>for</code> duration</td>
+</tr>
+</tbody>
+</table></div></section><p>The longer the period, the more likely this is to happen.</p>
+<p>A single recovery resets the alert, that’s why <code>up == 0 for: 5m</code> can sometimes be unreliable. Even if the target is down most of the time, the alert didn’t fire, leaving you unaware of a potential persistent issue.</p>
+<h3 id="use-avg_over_time-to-smooth-signal">Use <code>avg_over_time</code> to smooth signal
+</h3>
+<p>One way to work around these issues is to smooth the signal by averaging the <code>up</code> metric over a similar or longer period:</p>
+<p><code>avg_over_time(up[10m]) &lt; 0.8</code></p>
+<p>This alert rule fires when the target is unreachable for more than 20% of the last 10 minutes, rather than looking for consecutive scrape failures. With a one minute scrape interval, three or more failed scrapes within the last 10 minutes now triggers the alert.</p>
+<p>Since this query uses a threshold and time window to control accuracy, you can now lower the <code>for</code> duration (or
+<a href="/docs/grafana/latest/alerting/fundamentals/notifications/">pending period</a> in Grafana) to something shorter—<code>0m</code> or <code>1m</code>—so the alert fires faster.</p>
+<p>This approach gives you more flexibility in detecting real crashes or network issues. As always, adjust the threshold and period based on your noise tolerance and how critical the target is.</p>
+<h3 id="use-synthetic-checks-to-monitor-external-availability">Use synthetic checks to monitor external availability
+</h3>
+<p>Prometheus often runs inside the same network as the target it monitors. That means Prometheus might be able to reach the target, but doesn’t ensure it’s reachable to users on the outside.</p>
+<p>Firewalls, DNS misconfigurations, or other network issues might block public traffic while Prometheus scrapes <code>up</code> successfully.</p>
+<p>This is where synthetic monitoring helps. Tools like the <a href="https://github.com/prometheus/blackbox_exporter">Blackbox Exporter</a> let you continuously verify whether a service is available and reachable from outside your network—not just internally.</p>
+<p>The Blackbox Exporter exposes the results of these checks as metrics, which Prometheus can scrape like any other target. For example, the <code>probe_success</code> metric reports whether the probe was able to reach the service. The setup looks like this:</p>
+<p><strong>Alert rules → Prometheus ← Blackbox Exporter (external probe) → Target</strong></p>
+<p>To detect when a service isn’t reachable externally, you can define an alert using the <code>probe_success</code> metric:</p>
+<p><code>probe_success == 0 for: 5m</code></p>
+<p>This alert fires when the probe has failed continuously for 5 minutes—indicating that the service couldn’t be reached from the outside.</p>
+<p>You can then combine internal and external checks to make the detection of connectivity errors more reliable. This alert catches when the internal scrape fails or the service is externally unreachable.</p>
+<p><code>up == 0 or probe_success == 0</code></p>
+<p>As with the <code>up</code> metric, you might want to smooth this out using <code>avg_over_time()</code> for more robust detection. The smooth version might look like:</p>
+<p><code>avg_over_time(up[10m]) &lt; 0.8 or avg_over_time(probe_success[10m]) &lt; 0.8</code></p>
+<p>This alert fires when Prometheus couldn’t scrape the target successfully for more than 20% of the past 10 minutes, or when the external probes have been failing more than 20% of the time. This smoothing technique can be applied to any binary availability signal.</p>
+<h2 id="manage-offline-hosts">Manage offline hosts
+</h2>
+<p>In many setups, Prometheus scrapes multiple hosts under the same target, such as a fleet of servers or containers behind a common job label. It’s common for one host to go offline while the others continue to report metrics normally.</p>
+<p>If your alert only checks the general <code>up</code> metric without breaking it down by labels (like <code>instance</code>, <code>host</code>, or <code>pod</code>), you might miss when a host stops reporting. For example, an alert that looks only at the aggregated status of all instances will likely fail to catch when individual instances go missing.</p>
+<p>This isn’t a connectivity error in this context — it’s not that the alert or Prometheus can’t reach anything, it’s that one or more specific targets have gone silent. These kinds of problems aren’t caught by <code>up == 0</code> alerts.</p>
+<p>For these cases, see the complementary
+<a href="/docs/grafana/latest/alerting/best-practices/missing-data/">guide on handling missing data</a> — it covers common scenarios where the alert queries return no data at all, or where only some targets stop reporting. These aren’t full availability failures or execution errors, but they can still lead to blind spots in alert detection.</p>
+<h2 id="handle-query-errors-in-grafana-alerting">Handle query errors in Grafana Alerting
+</h2>
+<p>Not all connectivity issues come from targets going offline. Sometimes, the alert rule fails when querying its target. These aren’t availability problems—they’re query execution errors: maybe the data source timed out, the network dropped, or the query was invalid.</p>
+<p>These errors lead to broken alerts. But they come from a different part of the stack: between the alert rule and the data source, not between the data source (for example, Prometheus) and its target.</p>
+<p>This difference matters. Availability issues are typically handled using metrics like <code>up</code> or <code>probe_success</code> but execution errors require a different setup.</p>
+<p>Grafana Alerting has built-in handling for execution errors, regardless of the data source. That includes Prometheus, and others like Graphite, InfluxDB, PostgreSQL, etc. By default, Grafana Alerting automatically handles query errors so you don’t miss critical failures. When an alert rule fails to execute, Grafana fires a special <code>DatasourceError</code> alert.</p>
+<p>You can configure this behavior depending on how critical the alert is and on whether you already have other alerts detecting the issue. In
+<a href="/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/nodata-and-error-states/#modify-the-no-data-or-error-state"><strong>Configure no data and error handling</strong></a>, click <strong>Alert state if execution error or timeout</strong>, and choose the desired option for the alert:</p>
+<ul>
+<li><p><strong>Error (default)</strong>: Triggers a separate <code>DatasourceError</code> alert. This default ensures alert rules always inform about query errors but can create noise.</p></li>
+<li><p><strong>Alerting</strong>: Treats the error as if the alert condition is firing. Grafana transitions all existing instances for that rule to the <code>Alerting</code> state.</p></li>
+<li><p><strong>Normal</strong>: Ignores the query error and transitions all alert instances to the <code>Normal</code> state. This is useful if the error isn’t critical or if you already have other alerts detecting connectivity issues.</p></li>
+<li>
+<p><strong>Keep Last State</strong>: Keeps the previous state until the query succeeds again. Suitable for unstable environments to avoid flapping alerts.</p>
+
+</li>
+</ul>
+<p>This applies even when alert rules query Prometheus itself—not just external data sources.</p>
+<h3 id="design-alerts-for-connectivity-errors">Design alerts for connectivity errors
+</h3>
+<p>In practice, start by deciding if you want to create explicit alert rules — for example, using <code>up</code> or <code>probe_success</code> — to detect when a target is down or has connectivity issues.</p>
+<p>Then, for each alert rule, choose the error-handling behavior based on whether you already have dedicated connectivity alerts, the stability of the target, and how critical the alert is. Prioritize alerts based on symptom severity rather than just infrastructure signals that might not impact users.</p>
+<h3 id="build-a-dedicated-data-source-health-alert">Build a dedicated data source health alert
+</h3>
+<p>Any alert rule query can fail to reach its data source, including one built specifically to check reachability. Prometheus-style data sources expose metrics such as <code>up</code> and <code>probe_success</code> for target-level availability, but those are still queries, and they fail the same way if the data source itself becomes unreachable. In any case, detecting that the data source itself is unreachable uses a different mechanism: the execution-error handling built into Grafana Alerting.</p>
+<p>Create a separate alert rule dedicated to detecting when the data source itself is unreachable, distinct from any application-specific rules that happen to query it:</p>
+<ol>
+<li>Reuse a query you already know returns data reliably when the data source is healthy. Any small, cheap query works, since the result doesn’t matter—only whether the query executes.</li>
+<li>In
+<a href="/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/nodata-and-error-states/#modify-the-no-data-or-error-state">Configure no data and error handling</a>, set <strong>Alert state if execution error or timeout</strong> to <strong>Alerting</strong>.</li>
+<li>Add a
+<a href="/docs/grafana/latest/alerting/fundamentals/notifications/">pending period</a>, for example <code>5m</code>, so the rule fires only once the data source has stayed unreachable for a sustained period, not for a single blip.</li>
+</ol>
+<p>Set the same option to <strong>Normal</strong> or <strong>Keep Last State</strong> on your application-specific rules instead, so a transient error from the data source doesn’t also fire a <code>DatasourceError</code> alert alongside the condition you’re actually trying to detect. Which value to use isn’t a one-time default—decide it per rule, based on whether that rule already has a dedicated connectivity alert covering it.</p>
+<h3 id="reduce-redundant-error-notifications">Reduce redundant error notifications
+</h3>
+<p>A single data source error can lead to multiple alerts firing simultaneously, sometimes bombarding you with many alerts and generating too much noise.</p>
+<p>As described previously, you can control the error-handling behavior for Grafana alerts. The <strong>Keep Last State</strong> or <strong>Normal</strong> option prevents alerts from firing and helps avoid redundant alerts, especially for services already covered by <code>up</code> or <code>probe_success</code> alerts.</p>
+<p>When using the default behavior, a single connectivity error will likely trigger multiple <code>DatasourceError</code> alerts.</p>
+<p>Consider not treating these alerts in the same way as the original alerts, and implement dedicated strategies for their notifications:</p>
+<ul>
+<li><p>Reduce duplicate notifications by grouping <code>DatasourceError</code> alerts. Use the <code>datasource_uid</code> label to group errors from the same data source.</p></li>
+<li><p>Route <code>DatasourceError</code> alerts separately, sending them to different teams or channels depending on their impact and urgency.</p></li>
+</ul>
+<p>For details on how to configure grouping and routing, refer to
+<a href="/docs/grafana/latest/alerting/fundamentals/notifications/">handling notifications</a> and
+<a href="/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/nodata-and-error-states/#no-data-and-error-alerts"><code>No Data</code> and <code>Error</code> alerts</a> documentation.</p>
+<h2 id="conclusion">Conclusion
+</h2>
+<p>Connectivity issues are one of the common causes of noisy or misleading alerts. This guide covered two distinct types:</p>
+<ul>
+<li><p><strong>Availability issues</strong>, where the target itself is down or unreachable (e.g., due to a crash or network failure).</p></li>
+<li><p><strong>Query execution errors</strong>, where the alert rule can’t reach its data source (e.g., due to timeouts, invalid queries, or data source outages).</p></li>
+</ul>
+<p>These problems come from different parts of your stack, and require their own techniques. Prometheus and Grafana allow you to detect them, and combining distinct techniques can make your alerts more resilient.</p>
+<p>With Prometheus, avoid relying solely on <code>up == 0</code>. Smooth queries to account for intermittent failures, and use synthetic monitoring to detect reachability issues from outside your network.</p>
+<p>In Grafana Alerting, configure error handling explicitly. Not all alerts are equal or have the same urgency. Tune the error-handling behavior based on the reliability and severity of the alerts and whether you already have alerts dedicated to connectivity problems.</p>
+<p>And don’t forget the third case: <strong>missing data</strong>. If only one host from a fleet silently disappears, you might not get alerted. If you’re dealing with individual instances that stopped reporting data, see the
+<a href="/docs/grafana/latest/alerting/best-practices/missing-data/">Guide on handling missing data</a> to continue exploring this topic.</p>
+</div>
+<div><div class="docs__feedback print-hidden">
+<div class="docs__feedback--title">
+<h2 class="docs__feedback--heading">Was this page helpful?</h2>
+<div class="docs__feedback--container">
+
+
+</div>
+</div>
+<div class="docs__feedback--links"><div class="d-grid d-grid__columns--3 w-100p gap-1">
+<a class="docs__feedback--link" href="https://github.com/grafana/grafana/edit/release-13.3.1/docs/sources/alerting/guides/connectivity-errors.md"><span>Suggest an edit in GitHub</span>
+</a><a class="docs__feedback--link" href="https://github.com/grafana/grafana/issues/new?title=Documentation%20feedback:%20/docs/sources/alerting/guides/connectivity-errors.md"><span>Create a GitHub issue</span>
+</a><a class="docs__feedback--link" href="mailto:docs@grafana.com"><span>Email docs@grafana.com</span>
+</a><a class="docs__feedback--link" href="/help/"><span>Help and support</span>
+</a><a class="docs__feedback--link" href="/community/"><span>Community</span></a>
+</div></div>
+<div class="print-hidden" id="docs-related-wrapper"><div class="docs__related">
+<h2 class="docs__related--heading">Related resources from Grafana Labs</h2>
+<div class="docs__related--subtext">Additional helpful documentation, links, and articles:</div>
+<div class="docs__related--grid">
+<a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-grafana-lgtm-stack/?pg=docs-grafana-latest-alerting-guides-connectivity-errors&amp;plcmt=related"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with managing your metrics, logs, and traces using Grafana</div>
+<div class="body-xsmall mt-half">In this webinar, we’ll demo how to get started using the LGTM Stack: Loki for logs, Grafana for visualization, Tempo for traces, and Mimir for metrics.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-grafana-dashboard-design/?pg=docs-grafana-latest-alerting-guides-connectivity-errors&amp;plcmt=related-2"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with Grafana dashboard design</div>
+<div class="body-xsmall mt-half">In this webinar, you'll learn how to design stylish and easily accessible Grafana dashboards that tell a story.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/building-advanced-grafana-dashboards/?pg=docs-grafana-latest-alerting-guides-connectivity-errors&amp;plcmt=related-3"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Building advanced Grafana dashboards</div>
+<div class="body-xsmall mt-half">In this webinar, we’ll demo how to build and format Grafana dashboards.</div>
+</div>
+</div></div></a>
+</div>
+</div></div>
+</div></div>
+</div></main>
+</div>
+</div></div></div>
+<div><div class="highlight-send__buttons">
+<a class="highlight-send__ask-btn text-hover-white">
+      Ask Grafana Assistant
+      
+    </a> </div></div>

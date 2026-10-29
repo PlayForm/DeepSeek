@@ -1,0 +1,325 @@
+<div><div id="__docusaurus">
+<div class="theme-layout-main main-wrapper mainWrapper_z2l0" id="__docusaurus_skipToContent_fallback"><div class="docsWrapper_hBAB"><div class="docRoot_UBD9"><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp">
+<article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div>
+<div class="theme-doc-markdown markdown">
+<p>The Temporal Web UI provides users with Workflow Execution state and metadata for debugging purposes. It ships with
+every <a class="" href="/cli">Temporal CLI</a> release and is available with <a class="" href="/cloud">Temporal Cloud</a>.</p>
+<p>You can configure the Temporal Web UI to work in your own environment. See the
+<a class="" href="/references/web-ui-configuration">UI configuration reference</a>.</p>
+<p>Web UI open source repos:</p>
+<ul>
+
+<li class=""><a class="" href="https://github.com/temporalio/ui-server">temporalio/ui-server</a></li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="namespaces">Namespaces<a class="hash-link" href="#namespaces" title="Direct link to Namespaces">​</a>
+</h2>
+<p>All Namespaces in your self-hosted Temporal Service or Temporal Cloud account are listed under <strong>Namespaces</strong> in the
+left section of the window. You can also switch Namespaces from the Workflows view by selecting from the Namespace
+switcher at the top right corner of the window. After you select a Namespace, the Web UI shows the Recent Workflows page
+for that Namespace. In Temporal Cloud, users can access only the Namespaces that they have been granted access to. For
+details, see <a class="" href="/cloud/manage-access/roles-and-permissions#namespace-level-permissions">Namespace-level permissions</a>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="workflows">Workflows<a class="hash-link" href="#workflows" title="Direct link to Workflows">​</a>
+</h2>
+<p>The main Workflows page displays a table of all Workflow Executions within the retention period.</p>
+<p>Users can list Workflow Executions by any of the following:</p>
+<ul>
+
+
+
+<li class="">Start time</li>
+<li class="">End time</li>
+<li class="">Any other Default or Custom <a class="" href="/search-attribute">Search Attribute</a> that uses <a class="" href="/list-filter">List Filter</a>
+</li>
+</ul>
+<p>For start time and end time, users can set their preferred date and time format as one of the following:</p>
+<ul>
+<li class="">UTC</li>
+<li class="">Local</li>
+<li class="">Relative</li>
+</ul>
+<p>Select a Workflow Execution to view the Workflow Execution's History, Workers, Relationships, pending Activities and
+Nexus Operations, Queries, and Metadata.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="saved-views">Saved Views<a class="hash-link" href="#saved-views" title="Direct link to Saved Views">​</a>
+</h3>
+<p>Saved Views let you save and reuse your frequently used visibility queries in the Temporal Web UI. Instead of recreating
+complex filters every time, you can save them once and apply them with a single click.</p>
+<p>Saved Views are stored locally in your browser and are available to you whenever you use the Temporal Web UI in this
+browser. Each user will have their own private collection.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="apply-a-saved-view">Apply a Saved View<a class="hash-link" href="#apply-a-saved-view" title="Direct link to Apply a Saved View">​</a>
+</h4>
+<p>By default, The Workflows page has several default Saved Views. You can also create your own Saved Views.</p>
+<p>Click the name of a Saved View in the list to display the corresponding Workflows that match the query.</p>
+<p>The Workflow List page will refresh with the results of the Saved View.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="create-a-saved-view">Create a Saved View<a class="hash-link" href="#create-a-saved-view" title="Direct link to Create a Saved View">​</a>
+</h4>
+<p>You can create a new Saved View from the Workflows page.</p>
+<ol>
+<li class="">Create a Saved View by using the filter UI to build your criteria, or you can use the raw query editor to write
+custom query strings.</li>
+<li class="">Your new view will appear in the Custom Views list as New View. Click the Save as New button to bring up the Save as
+View window. Name your Saved View. Names must be unique to each user and can contain a max of 255 characters.</li>
+<li class="">Click Save. Your new view will appear in the Custom Views list</li>
+</ol>
+<p>You can create up to 20 Saved Views. When you reach this limit, you'll need to delete some Saved Views before you can
+save new ones.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="make-temporary-changes-to-a-saved-view-query">Make temporary changes to a Saved View query<a class="hash-link" href="#make-temporary-changes-to-a-saved-view-query" title="Direct link to Make temporary changes to a Saved View query">​</a>
+</h4>
+<p>You can modify a Saved View temporarily without changing the saved criteria.</p>
+<ol>
+<li class="">Select the Saved View you want to change.</li>
+<li class="">Adjust the UI filters as needed.</li>
+<li class="">The Workflows page will refresh with the results of the new query, without changing the Saved View.</li>
+<li class="">If you want to keep your temporary changes, you can:
+<ul>
+<li class="">Click Save, which will replace the original Saved View with your modifications.</li>
+<li class="">Click Edit, modify the name, and click Save, which will replace the original Saved View with your modifications and
+change the name.</li>
+<li class="">Click Edit, modify the name, and click Create New, which will create a new Saved View with your new settings and a
+new name.</li>
+</ul>
+</li>
+</ol>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="rename-a-saved-view-query">Rename a Saved View Query<a class="hash-link" href="#rename-a-saved-view-query" title="Direct link to Rename a Saved View Query">​</a>
+</h4>
+<p>You can rename an existing Saved View from the Workflows page.</p>
+<ol>
+<li class="">Select the Saved View you want to change.</li>
+<li class="">Click Edit.</li>
+<li class="">In the Edit View dialog box, enter a new name for the Saved View.</li>
+<li class="">Click Save to apply your changes and rename the existing Saved View, or click Create Copy to create a new Saved View
+with the new name.</li>
+</ol>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="deleting-saved-views">Deleting Saved Views<a class="hash-link" href="#deleting-saved-views" title="Direct link to Deleting Saved Views">​</a>
+</h4>
+<p>You can delete a Saved View from the Workflows page, because it is no longer useful, or to create room for new Saved
+Views.</p>
+<ol>
+<li class="">Select the Saved View you want to delete. You can only delete queries you’ve created; you cannot delete the system
+defaults.</li>
+<li class="">Click “Edit” and then "Delete this Saved View".</li>
+</ol>
+<div class="theme-admonition theme-admonition-note alert alert--info admonition_WoCw">
+<div class="admonitionHeading_TMsN">Deleting Saved Views is permanent</div>
+<div class="admonitionContent_vXIg"><p>Deleted queries cannot be recovered, so make sure you won't need them again. If you accidentally delete a Saved List,
+you will need to recreate it.</p></div>
+</div>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="share-a-saved-view">Share a Saved View<a class="hash-link" href="#share-a-saved-view" title="Direct link to Share a Saved View">​</a>
+</h4>
+<p>You can share a Saved View as a URL.</p>
+<ol>
+<li class="">Select the Saved View you want to share.</li>
+<li class="">Click the “Share” button to copy the URL for this Saved View to the clipboard. You can also copy the URL directly
+from the browser.</li>
+</ol>
+<div class="theme-admonition theme-admonition-note alert alert--info admonition_WoCw">
+<div class="admonitionHeading_TMsN">Saved Views and time</div>
+<div class="admonitionContent_vXIg"><p>Saved Views that use relative times will be shared with absolute time.</p></div>
+</div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-failures-view">Task Failures view<a class="hash-link" href="#task-failures-view" title="Direct link to Task Failures view">​</a>
+</h2>
+<p>The Task Failures view is a pre-defined Saved View that displays Workflows that have a Workflow Task failure.
+These Workflows are still running, but one of their Tasks has failed or timed out.</p>
+<p>The details of the Task Failures view displays the Workflow's ID, the Run ID, and the Workflow type.
+Clicking on any of the links in the details opens the Workflow page for that Workflow.
+On this page, you will find more information about the Task that failed and remaining pending tasks.
+You can also cancel the Workflow by clicking the Request Cancellation button on this page.</p>
+<p>Our system monitors Workflow task execution patterns in real-time. When a Workflow experiences five consecutive task failures or timeouts, it gets automatically flagged. The moment the Workflow recovers with a successful task, the flag clears. This smart threshold filters out minor glitches while surfacing Workflows with genuine problems.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="activate-task-failures-view">Activating Task Failures view<a class="hash-link" href="#activate-task-failures-view" title="Direct link to Activating Task Failures view">​</a>
+</h3>
+<p>This is enabled by default for Temporal Cloud users. If you're self-hosting Temporal, you'll need to update the <code>system.numConsecutiveWorkflowTaskProblemsToTriggerSearchAttribute</code> <a class="" href="/references/dynamic-configuration">dynamic config</a>.</p>
+<p>Here's an example of how to make the config update for the dev server:</p>
+<div class="language-command codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-command codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><div class="token-line">
+<span class="token plain">temporal server start-dev \</span>
+</div>
+<div class="token-line">
+<span class="token plain"> --dynamic-config-value system.numConsecutiveWorkflowTaskProblemsToTriggerSearchAttribute=5</span>
+</div></code></pre></div></div>
+<p><code>numConsecutiveWorkflowTaskProblemsToTriggerSearchAttribute</code> is the number of consecutive Workflow Task Failures required to trigger the <code>TemporalReportedProblems</code> search attribute. The default value is 5. If adding this search attribute causes strain on the visibility system, consider increasing this number.</p>
+<p>To turn off the feature for a Namespace, set <code>numConsecutiveWorkflowTaskProblemsToTriggerSearchAttribute</code> to 0.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="history">History<a class="hash-link" href="#history" title="Direct link to History">​</a>
+</h2>
+<p>A Workflow Execution History is a view of the <a class="" href="/workflow-execution/event#event">Events</a> and Event fields within the
+Workflow Execution. Approximately <a class="" href="/references/events">40 different Events</a> can appear in a Workflow Execution's Event
+History.</p>
+<p>The top of the page lists the following execution metadata:</p>
+<ul>
+<li class="">Start Time, Close Time and Duration</li>
+
+
+
+<li class="">Parent and Parent ID</li>
+<li class="">SDK</li>
+
+<li class="">
+<a class="" href="/cloud/actions-usage#actions-in-workflows">Billable Actions Count</a> (Temporal Cloud only)</li>
+</ul>
+<p>The Input and Results section displays the function arguments and return values for debugging purposes. Results are not
+available until the Workflow finishes.</p>
+<p>The History tab has the following views:</p>
+<ul>
+<li class="">Timeline: A chronological or reverse-chronological order of events with a summary. Clicking into an Event displays all
+details for that Event.</li>
+<li class="">All: View all History Events.</li>
+<li class="">Compact: A logical grouping of Activities, Signals and Timers.</li>
+<li class="">JSON: The full JSON code for the workflow.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="download-event-history">Download Event History<a class="hash-link" href="#download-event-history" title="Direct link to Download Event History">​</a>
+</h3>
+<p>The entire Workflow Execution Event History, in JSON format, can be downloaded from this section.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="workflow-actions">Workflow Actions<a class="hash-link" href="#workflow-actions" title="Direct link to Workflow Actions">​</a>
+</h3>
+<p>Workflow Executions can request a Cancellation, send a Signal or Update, or Reset and Terminate directly from the UI.
+Start a new Workflow Execution with pre-filled values with the Start Workflow Like This One button.
+Signal and Update input, and the pre-filled Workflow input, are each a single argument. See
+<a class="" href="#input">Pass input from the Web UI</a>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="relationships">Relationships<a class="hash-link" href="#relationships" title="Direct link to Relationships">​</a>
+</h3>
+<p>Displays the full hierarchy of a Workflow Execution with all parent and child nodes displayed in a tree.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="workers">Workers<a class="hash-link" href="#workers" title="Direct link to Workers">​</a>
+</h3>
+<p>Displays the Workers currently polling on the Workflow Task Queue with a count. If no Workers are polling, an error
+displays.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="pending-activities">Pending Activities<a class="hash-link" href="#pending-activities" title="Direct link to Pending Activities">​</a>
+</h3>
+<p>Displays a summary of recently active and/or pending Activity Executions. Clicking a pending Activity directs the user
+to the Pending Activities tab to view details.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="call-stack">Call stack<a class="hash-link" href="#call-stack" title="Direct link to Call stack">​</a>
+</h3>
+<p>The screen shows the captured result from the <a class="" href="/sending-messages#stack-trace-query">__stack_trace</a> Query. The Query is
+performed when the tab is selected. It works only if a Worker is running and available to return the call stack. The
+call stack shows each location where Workflow code is waiting.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="queries">Queries<a class="hash-link" href="#queries" title="Direct link to Queries">​</a>
+</h3>
+<p>Lists all Queries sent to the Workflow Execution. A Query you send from this tab takes a single argument. See
+<a class="" href="#input">Pass input from the Web UI</a>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="metadata">Metadata<a class="hash-link" href="#metadata" title="Direct link to Metadata">​</a>
+</h3>
+<p>Displays User Metadata including static Workflow Summary and Details and dynamic Current Details. Lists all Events with
+User Metadata data to give you a human-readable log of what's happening in your Workflow.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="input">Pass input from the Web UI<a class="hash-link" href="#input" title="Direct link to Pass input from the Web UI">​</a>
+</h2>
+<p>The <strong>Data</strong> box on the Start Workflow form, the Signal and Update dialogs, the Queries tab, and the Schedule form takes
+a single JSON value. The Web UI sends that value to your code as one argument.</p>
+<ul>
+<li class="">For a Workflow, Signal, Update, or Query that takes one argument, enter the argument as a JSON value, such as
+<code>"order-123"</code> or <code>{"orderId": "order-123", "quantity": 2}</code>.</li>
+<li class="">You can't pass more than one argument from the Web UI. A JSON array such as <code>["order-123", 2]</code> arrives as one argument
+whose value is the array.</li>
+</ul>
+<p>To pass more than one argument, use the <a class="" href="/cli/command-reference/workflow">Temporal CLI</a> and repeat <code>--input</code> once for each
+argument, in order:</p>
+<div class="language-command codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-command codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><div class="token-line">
+<span class="token plain">temporal workflow start \</span>
+</div>
+<div class="token-line">
+<span class="token plain">    --type YourWorkflowType \</span>
+</div>
+<div class="token-line">
+<span class="token plain">    --task-queue YourTaskQueue \</span>
+</div>
+<div class="token-line">
+<span class="token plain">    --workflow-id YourWorkflowId \</span>
+</div>
+<div class="token-line">
+<span class="token plain">    --input '"order-123"' \</span>
+</div>
+<div class="token-line">
+<span class="token plain">    --input 2</span>
+</div></code></pre></div></div>
+<p><code>temporal workflow signal</code>, <code>temporal workflow update execute</code>, and <code>temporal workflow query</code> accept <code>--input</code> the same
+way. To start a Workflow from the Web UI, give its Workflow Definition a single object parameter instead of several
+parameters. This is also the general <a class="" href="/workflow-definition#workflow-parameters">recommendation for Workflow parameters</a>.</p>
+<p>If the Web UI sends fewer arguments than a Workflow Definition or Signal handler declares, the result depends on the SDK.
+For example:</p>
+<ul>
+<li class="">In the Python SDK, the Workflow Task fails with a <code>TypeError</code> and retries. The Workflow Execution stays Running without
+making progress and can appear in the <a class="" href="#task-failures-view">Task Failures view</a>.</li>
+<li class="">In the Go SDK, a Workflow Execution runs with the zero value for each missing argument. If the input can't be decoded
+into the first parameter, the Workflow Execution fails.</li>
+</ul>
+<p><strong>Start Workflow Like This One</strong> copies only the first argument of the original Workflow Execution. If the original
+Workflow Execution took more than one argument, start the new one with the CLI.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="schedules">Schedules<a class="hash-link" href="#schedules" title="Direct link to Schedules">​</a>
+</h2>
+<p>On Temporal Cloud and self-hosted Temporal Service Web UI, the Schedules page lists all the <a class="" href="/schedule">Schedules</a>
+created on the selected Namespace.</p>
+<p>Click a Schedule to see details, such as configured frequency, start and end times, and recent and upcoming runs.
+The Workflow input you set when you create a Schedule in the Web UI is a single argument. See
+<a class="" href="#input">Pass input from the Web UI</a>.</p>
+<div class="theme-admonition theme-admonition-tip alert alert--success admonition_WoCw">
+<div class="admonitionHeading_TMsN">Setting Schedules with Strings</div>
+<div class="admonitionContent_vXIg">
+<p>Temporal Workflow Schedule Cron strings follow this format:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-text codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><div class="token-line">
+<span class="token plain">┌───────────── minute (0 - 59)</span>
+</div>
+<div class="token-line">
+<span class="token plain">│ ┌───────────── hour (0 - 23)</span>
+</div>
+<div class="token-line">
+<span class="token plain">│ │ ┌───────────── day of the month (1 - 31)</span>
+</div>
+<div class="token-line">
+<span class="token plain">│ │ │ ┌───────────── month (1 - 12)</span>
+</div>
+<div class="token-line">
+<span class="token plain">│ │ │ │ ┌───────────── day of the week (0 - 6) (Sunday to Saturday)</span>
+</div>
+<div class="token-line">
+<span class="token plain">│ │ │ │ │</span>
+</div>
+<div class="token-line">
+<span class="token plain">* * * * *</span>
+</div></code></pre></div></div>
+</div>
+</div>
+<p>To read more about Schedules, explore these links:</p>
+<div class="relatedReadDiv_Gsje">
+<span class="relatedReadLabel_C9Zi">Related 📚</span><ul class="relatedReadList_FzII">
+<li><div>
+<a class="relatedReadLink_ardv" href="/develop/go/workflows/schedules">Schedules using the Go SDK</a><span class="archetypeTag_YhtE">feature-guide</span>
+</div></li>
+<li><div>
+<a class="relatedReadLink_ardv" href="/develop/java/workflows/schedules">Schedules using the Java SDK</a><span class="archetypeTag_YhtE">feature-guide</span>
+</div></li>
+<li><div>
+<a class="relatedReadLink_ardv" href="/develop/php/workflows/schedules">Schedules using the PHP SDK</a><span class="archetypeTag_YhtE">feature-guide</span>
+</div></li>
+<li><div>
+<a class="relatedReadLink_ardv" href="/develop/python/workflows/schedules">Schedules using the Python SDK</a><span class="archetypeTag_YhtE">feature-guide</span>
+</div></li>
+<li><div>
+<a class="relatedReadLink_ardv" href="/develop/typescript/workflows/schedules">Schedules using the TypeScript SDK</a><span class="archetypeTag_YhtE">feature-guide</span>
+</div></li>
+<li><div>
+<a class="relatedReadLink_ardv" href="/develop/dotnet/workflows/schedules">Schedules using the .NET SDK</a><span class="archetypeTag_YhtE">feature-guide</span>
+</div></li>
+</ul>
+</div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="settings">Settings<a class="hash-link" href="#settings" title="Direct link to Settings">​</a>
+</h3>
+<p>On Temporal Cloud, <strong>Settings</strong> is visible only to Account Owner and Global Admin
+<a class="" href="/cloud/manage-access/roles-and-permissions#account-level-roles">roles</a>.</p>
+<p>Click <strong>Settings</strong> to see and manage the list of users in your account and to set up integrations such as
+<a class="" href="/cloud/monitor">Observability</a> and <a class="" href="/cloud/audit-logs">Audit logging</a>.</p>
+<p>On a self-hosted Temporal Service, manage your users, metrics, and logging in your
+<a class="" href="/references/service-configuration">server configuration</a>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="archive">Archive<a class="hash-link" href="#archive" title="Direct link to Archive">​</a>
+</h3>
+<p>On a self-hosted Temporal Service, Archive shows <a class="" href="/temporal-service/archival">Archived</a> data of your Workflow Executions
+on the Namespace.</p>
+<p>To see data in your self-hosted Temporal Service, you must have
+<a class="" href="/self-hosted-guide/archival">Archival set up and configured</a>.</p>
+<p>For information and details on the Archive feature in Temporal Cloud, contact your Temporal representative.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="codec-server">Codec Server<a class="hash-link" href="#codec-server" title="Direct link to Codec Server">​</a>
+</h3>
+<p>The Web UI can use a <a class="" href="/codec-server">Codec Server</a> with a custom Data Converter to decode inputs and return values. For
+details, see <a class="" href="/production-deployment/data-encryption">Securing your data</a>.</p>
+<p>The UI supports a <a class="" href="/production-deployment/data-encryption#web-ui">Codec Server endpoint</a>. For details on setting the
+Codec Server endpoint, see <a class="" href="/production-deployment/data-encryption#codec-server-setup">Codec Server setup</a>.</p>
+</div>
+</article>
+</div></div></div></div></main></div></div></div>
+
+</div></div>
+<div><feedback-button class="hydrated" id="default">Feedback</feedback-button></div>

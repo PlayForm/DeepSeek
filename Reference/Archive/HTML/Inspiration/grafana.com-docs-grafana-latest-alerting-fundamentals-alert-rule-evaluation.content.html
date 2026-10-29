@@ -1,0 +1,300 @@
+<div><div><div id="top-banner">
+<div class="banner__disabled" id="gcon2026_top_banner_a"><div class="gcon2025-banner gcon2026-banner footer">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">Save the Date!</div>
+<div class="tw:text-[13px] tw:text-white">Sign up to get the latest GrafanaCON 2026 updates, agenda drops, and first access to early-bird tickets when they’re first available.</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Sign up</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="gcon2026_top_banner_b"><div class="gcon2025-banner gcon2026-banner footer alt-grot">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">We have our sightson Barcelona</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Save the Date</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-post-keynote"><div class="tw:bg-[#E86F37] tw:relative tw:h-10 tw:hidden tw:sm:block">
+<div class="wrapper tw:px-0">
+<div class="tw:flex tw:flex-row tw:items-center tw:justify-between tw:px-5 tw:flex-wrap">
+
+<span class="tw:items-center tw:justify-center font-poppins tw:font-medium tw:text-black tw:text-base tw:xl:max-w-none tw:text-center tw:h-10 tw:hidden tw:lg:flex">
+          Watch the keynote again and signup for more on-demand sessions.
+        </span>
+<div class="tw:flex-col tw:xl:flex-row tw:items-center tw:gap-6 tw:h-6 tw:sm:flex">
+
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-top-banner"><div class="obscon2025-banner top-banner tw:relative">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<p class="banner-text">
+<span class="banner-title">📢 Registration + agenda now live </span>
+        Explore the latest Grafana Cloud and AI solutions, learn tips &amp; tricks from demos and hands-on workshops, and get actionable advice to advance your observability strategy. Register now and get 50% off - limited tickets available (while they last!).
+      </p>
+<a class="banner-btn tw:bg-black" href="/events/observabilitycon/?tech=target&amp;plcmt=top-banner&amp;aud=default">Register now</a>
+</div>
+</div>
+</div></div> </div></div></div>
+<div><div class="main section"><div class="main-content">
+<blockquote class="llms-txt-directive">Documentation for automated readersA curated documentation index is available at: https://grafana.com/llms.txtA complete documentation index is available at: https://grafana.com/llms-full.txtThese indexes can help with page discovery before fetching individual documents.</blockquote>
+<p class="agent-directive">This page is also available in Markdown, which may be easier for automated readers
+and AI tools to parse than HTML. The Markdown version is available at
+https://grafana.com/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation.md, or by sending
+Accept: text/markdown to https://grafana.com/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/. For broader
+documentation discovery, the curated index is available at https://grafana.com/llms.txt
+and the complete index is available at https://grafana.com/llms-full.txt.</p>
+<div class="grid-layout docs">
+<section class="mobile print-hidden" id="mobile"><div class="mobile__wrapper"> <div class="mobile__title">Alert rule evaluation</div> </div></section><main class="section-docs__main docs__content" id="main"><div class="scrollspy-init">
+<div class="docs-content scrollspy-wrap" id="doc-article-text">
+<div class="docs__breadcrumb">
+<span>Alert rule evaluation</span>
+</div>
+<div class="docs-labels">
+<span class="badge docs-labels__product-orange docs-labels__item mr-half"><span>Grafana Cloud
+</span> </span><span class="badge docs-labels__product-violet docs-labels__item mr-half"><span>Enterprise
+</span> </span><span class="badge docs-labels__product-purple docs-labels__item mr-half"><span>Open source
+</span></span>
+</div>
+<h1 id="alert-rule-evaluation">Alert rule evaluation
+</h1>
+<p>The criteria determining when an alert rule fires are based on three settings:</p>
+<ul>
+<li><p><a href="#evaluation-group">Evaluation group</a>: how frequently the alert rule is evaluated.</p></li>
+<li><p><a href="#pending-period">Pending period</a>: how long the condition must be met to start firing.</p></li>
+<li>
+<p><a href="#pending-period">Keep firing for</a>: how long the alert continues to fire after the condition is no longer met.</p>
+<figure class="figure-wrapper figure-wrapper__lightbox w-100p"><a class="lightbox-link captioned glightbox" href="/media/docs/alerting/alert-rule-evaluation-2.png">
+<figcaption class="w-100p caption text-gray-13">Set alert rule evaluation</figcaption></a></figure>
+</li>
+</ul>
+<p>These settings affect how alert instances progress through their lifecycle.</p>
+<h2 id="alerting-lifecycle">Alerting lifecycle
+</h2>
+<p>Each alert rule can generate one or more alert instances.</p>
+<p>An alert instance can be in any of the following states, depending on the outcome of the alert rule evaluation:</p>
+<section class="expand-table-wrapper"><div class="button-div"><button class="expand-table-btn">Expand table</button></div>
+<div class="responsive-table-wrapper"><table>
+<thead><tr>
+<th>State</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Normal</strong></td>
+<td>The state of an alert when no alerting conditions (threshold breach, no data, or error) are met.</td>
+</tr>
+<tr>
+<td><strong>Pending</strong></td>
+<td>The state of an alert when a condition (threshold breach, no data, or error) has been met, but the <a href="#pending-period">pending period</a> has not yet elapsed.</td>
+</tr>
+<tr>
+<td><strong>Alerting</strong></td>
+<td>The state of an alert when the threshold has been breached after the <a href="#pending-period">pending period</a> has elapsed.</td>
+</tr>
+<tr>
+<td><strong>Recovering</strong></td>
+<td>The state of a firing alert when the threshold is no longer breached, but the <a href="#keep-firing-for">keep firing for</a> period has not yet elapsed.</td>
+</tr>
+<tr>
+<td><strong>No Data<sup>*</sup></strong></td>
+<td>The state of an alert when the query returns no data or all values are null after the pending period has elapsed. You can customize the behavior of the
+<a href="/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/nodata-and-error-states/">No Data state</a>, which by default triggers a different alert.</td>
+</tr>
+<tr>
+<td><strong>Error<sup>*</sup></strong></td>
+<td>The state of an alert when an error or timeout occurs while evaluating the alert rule after the pending period has elapsed. You can customize the behavior of the
+<a href="/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/nodata-and-error-states/">Error state</a>, which by default triggers a different alert.</td>
+</tr>
+</tbody>
+</table></div></section><figure class="figure-wrapper figure-wrapper__lightbox w-100p"><a class="lightbox-link captioned glightbox" href="/media/docs/alerting/alert-rule-evaluation-full-statediagram_v3.svg">
+<figcaption class="w-100p caption text-gray-13">The lifecycle diagram of alert instances</figcaption></a></figure><p>If an alert rule changes (except for updates to annotations, the evaluation interval, or other internal fields), its alert instances reset to the <strong>Normal</strong> state, and update accordingly during the next evaluation.</p>
+<div class="admonition admonition-note"><blockquote>
+<p class="title text-uppercase">Note</p>
+<p>The <strong>No Data</strong> and <strong>Error</strong> states are supported only for Grafana-managed alert rules. Refer to
+<a href="/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/nodata-and-error-states/">No Data and Error states</a> to customize their default behavior for triggering a dedicated alert.</p>
+</blockquote></div>
+<h2 id="notification-routing">Notification routing
+</h2>
+<p>Alert instances are routed for
+<a href="/docs/grafana/latest/alerting/fundamentals/notifications/">notifications</a> in two scenarios:</p>
+<ol>
+<li>When they transition to the <strong>Alerting</strong> state.</li>
+<li>When they transition to <strong>Normal</strong> state and marked as <code>Resolved</code>, either from the <strong>Alerting</strong> or <strong>Recovering</strong> state.</li>
+</ol>
+<h2 id="evaluation-group">Evaluation group
+</h2>
+<p>Every alert rule and recording rule is assigned to an evaluation group. Each evaluation group contains an <strong>evaluation interval</strong> that determines how frequently the rule is checked. For instance, the evaluation may occur every <code>10s</code>, <code>30s</code>, <code>1m</code>, <code>10m</code>, etc.</p>
+<p>Rules can be evaluated concurrently or sequentially. For details, see
+<a href="/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/evaluation-within-a-group/">How rules are evaluated within a group</a>.</p>
+<h2 id="pending-period">Pending period
+</h2>
+<p>You can set a <strong>Pending period</strong> to prevent unnecessary notifications caused by temporary issues.</p>
+<p>When an alerting condition is met, the alert instance enters the <strong>Pending</strong> state. It remains in this state while any alerting condition is met during the configured pending period. After the pending period has elapsed, the alert transitions to the state corresponding to the last evaluation.</p>
+<p>This ensures the condition breach is stable before the alert transitions to the <strong>Alerting</strong> state and routed for notification.</p>
+<ul><li>
+<strong>Normal</strong> -&gt; <strong>Pending</strong> -&gt; <strong>Alerting</strong><sup>*</sup>
+</li></ul>
+<p>You can also set the <strong>Pending period</strong> to zero to skip the <strong>Pending</strong> state entirely and transition immediately to the <strong>Alerting</strong>, <strong>No Data</strong>, or <strong>Error</strong> state.</p>
+<h2 id="keep-firing-for">Keep firing for
+</h2>
+<p>You can set a <strong>Keep firing for</strong> period to avoid repeated firing-resolving-firing notifications caused by flapping conditions.</p>
+<p>When the alert condition is no longer met during the <strong>Alerting</strong> state, the alert instance enters the <strong>Recovering</strong> state.</p>
+<ul>
+<li>
+<strong>Alerting</strong> → <strong>Recovering</strong> → <strong>Normal (Resolved)</strong><sup>*</sup>
+</li>
+<li>After the <strong>Keep firing for</strong> period elapses, the alert transitions to the <strong>Normal</strong> state and is marked as <strong>Resolved</strong>.</li>
+<li>If the alert condition is met again, the alert transitions back to the <strong>Alerting</strong> state, and no new notifications are sent.</li>
+</ul>
+<p>You can also set the <strong>Keep firing for</strong> period to zero to skip the <strong>Recovering</strong> state entirely.</p>
+<h2 id="evaluation-example">Evaluation example
+</h2>
+<p>Keep in mind:</p>
+<ul>
+<li>One alert rule can generate multiple alert instances—one for each series or dimension produced by the rule’s query. Alert instances from the same alert rule may be in different states.</li>
+<li>Only alert instances in the <strong>Alerting</strong> and <strong>Normal (Resolved)</strong> state are routed for
+<a href="/docs/grafana/latest/alerting/fundamentals/notifications/">notifications</a>.</li>
+</ul>
+<p>Consider an alert rule with an <strong>evaluation interval</strong> set at every 30 seconds and a <strong>pending period</strong> of 90 seconds. The evaluation occurs as follows:</p>
+<section class="expand-table-wrapper"><div class="button-div"><button class="expand-table-btn">Expand table</button></div>
+<div class="responsive-table-wrapper"><table>
+<thead><tr>
+<th>Time</th>
+<th>Condition</th>
+<th>Alert instance state</th>
+<th>Pending counter</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>00:30 (first evaluation)</td>
+<td>Not met</td>
+<td>Normal</td>
+<td>-</td>
+</tr>
+<tr>
+<td>01:00 (second evaluation)</td>
+<td>Breached</td>
+<td>Pending</td>
+<td>0s</td>
+</tr>
+<tr>
+<td>01:30 (third evaluation)</td>
+<td>Breached</td>
+<td>Pending</td>
+<td>30s</td>
+</tr>
+<tr>
+<td>02:00 (fourth evaluation)</td>
+<td>Breached</td>
+<td>Pending</td>
+<td>60s</td>
+</tr>
+<tr>
+<td>02:30 (fifth evaluation)</td>
+<td>Breached</td>
+<td>Alerting 📩</td>
+<td>90s</td>
+</tr>
+</tbody>
+</table></div></section><p>With a <strong>keep firing for</strong> period of 0 seconds, the alert instance transitions immediately from <strong>Alerting</strong> to <strong>Normal</strong>, and marked as <code>Resolved</code>:</p>
+<section class="expand-table-wrapper"><div class="button-div"><button class="expand-table-btn">Expand table</button></div>
+<div class="responsive-table-wrapper"><table>
+<thead><tr>
+<th>Time</th>
+<th>Condition</th>
+<th>Alert instance state</th>
+<th>Pending counter</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>03:00 (sixth evaluation)</td>
+<td>Not met</td>
+<td>Normal <sup>Resolved</sup> 📩</td>
+<td>120s</td>
+</tr>
+<tr>
+<td>03:30 (seventh evaluation)</td>
+<td>Not met</td>
+<td>Normal</td>
+<td>150s</td>
+</tr>
+</tbody>
+</table></div></section>
+</div>
+<div><div class="docs__feedback print-hidden">
+<div class="docs__feedback--title">
+<h2 class="docs__feedback--heading">Was this page helpful?</h2>
+<div class="docs__feedback--container">
+
+
+</div>
+</div>
+<div class="docs__feedback--links"><div class="d-grid d-grid__columns--3 w-100p gap-1">
+<a class="docs__feedback--link" href="https://github.com/grafana/grafana/edit/release-13.3.1/docs/sources/alerting/fundamentals/alert-rule-evaluation/_index.md"><span>Suggest an edit in GitHub</span>
+</a><a class="docs__feedback--link" href="https://github.com/grafana/grafana/issues/new?title=Documentation%20feedback:%20/docs/sources/alerting/fundamentals/alert-rule-evaluation/_index.md"><span>Create a GitHub issue</span>
+</a><a class="docs__feedback--link" href="mailto:docs@grafana.com"><span>Email docs@grafana.com</span>
+</a><a class="docs__feedback--link" href="/help/"><span>Help and support</span>
+</a><a class="docs__feedback--link" href="/community/"><span>Community</span></a>
+</div></div>
+<div class="print-hidden" id="docs-related-wrapper"><div class="docs__related">
+<h2 class="docs__related--heading">Related resources from Grafana Labs</h2>
+<div class="docs__related--subtext">Additional helpful documentation, links, and articles:</div>
+<div class="docs__related--grid">
+<a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-grafana-lgtm-stack/?pg=docs-grafana-latest-alerting-fundamentals-alert-rule-evaluation&amp;plcmt=related"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with managing your metrics, logs, and traces using Grafana</div>
+<div class="body-xsmall mt-half">In this webinar, we’ll demo how to get started using the LGTM Stack: Loki for logs, Grafana for visualization, Tempo for traces, and Mimir for metrics.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-grafana-dashboard-design/?pg=docs-grafana-latest-alerting-fundamentals-alert-rule-evaluation&amp;plcmt=related-2"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with Grafana dashboard design</div>
+<div class="body-xsmall mt-half">In this webinar, you'll learn how to design stylish and easily accessible Grafana dashboards that tell a story.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/building-advanced-grafana-dashboards/?pg=docs-grafana-latest-alerting-fundamentals-alert-rule-evaluation&amp;plcmt=related-3"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Building advanced Grafana dashboards</div>
+<div class="body-xsmall mt-half">In this webinar, we’ll demo how to build and format Grafana dashboards.</div>
+</div>
+</div></div></a>
+</div>
+</div></div>
+</div></div>
+</div></main>
+</div>
+</div></div></div>
+<div><div class="highlight-send__buttons">
+<a class="highlight-send__ask-btn text-hover-white">
+      Ask Grafana Assistant
+      
+    </a> </div></div>

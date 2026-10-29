@@ -1,0 +1,221 @@
+<div><section class="devsite-wrapper">
+
+
+<section id="gc-wrapper">
+<main class="devsite-main-content" id="main-content">
+<devsite-content>
+<article class="devsite-article">
+<div class="devsite-article-meta nocontent">
+<ul class="devsite-breadcrumb-list">
+
+
+</ul>
+<devsite-thumb-rating><div class="devsite-thumb-rating"><div class="devsite-thumb-label" id="devsite-thumb-label-header">Was this helpful?</div></div></devsite-thumb-rating>
+</div>
+<h1 class="devsite-page-title">
+      New permission prompt for Local Network Access<devsite-actions><devsite-feature-tooltip class="devsite-page-bookmark-tooltip nocontent inline-block" id="devsite-collections-dropdown">
+<span>
+      
+      Stay organized with collections
+    </span>
+<span>
+      
+      Save and categorize content based on your preferences.</span>
+</devsite-feature-tooltip>
+</devsite-actions>
+</h1>
+
+<devsite-toc class="devsite-nav devsite-toc-embedded"><ul class="devsite-nav-list">
+<li class="devsite-nav-item devsite-nav-heading devsite-toc-toggle"><span class="devsite-nav-title"><span class="devsite-nav-text">On this page</span></span></li>
+<li class="devsite-nav-item"><a class="devsite-nav-title gc-analytics-event" href="#what_is_local_network_access"><span class="devsite-nav-text">What is Local Network Access?</span></a></li>
+<li class="devsite-nav-item"><a class="devsite-nav-title gc-analytics-event" href="#what_kinds_of_requests_are_affected"><span class="devsite-nav-text">What kinds of requests are affected?</span></a></li>
+<li class="devsite-nav-item">
+<a class="devsite-nav-title gc-analytics-event" href="#whats_changing_in_chrome"><span class="devsite-nav-text">What's changing in Chrome</span></a><ul class="devsite-nav-list">
+
+
+</ul>
+</li>
+
+</ul></devsite-toc>
+<div class="devsite-article-body clearfix">
+<div class="dcc-authors">
+<div class="dcc-author">
+
+<div>
+<span> 
+            Chris Thompson
+          </span>
+</div>
+</div>
+</div>
+<p class="wd-pubdates">
+  Published: June 9, 2025
+</p>
+
+<p>Chrome is adding a new permission prompt for sites that make connections to a
+user's local network as part of the
+<a href="https://wicg.github.io/local-network-access/">Local Network Access specification</a>.
+The aim is to protect users from cross-site request forgery (CSRF) attacks
+targeting routers and other devices on private networks, and to reduce the
+ability of sites to use these requests to fingerprint the user's local network.</p>
+<p>To understand how this change impacts the web ecosystem, the Chrome team is
+looking for feedback from developers who build web applications that rely on
+making connections to a user's local network or to software running locally on
+the user's machine. From Chrome 138, you can opt-in to these new restrictions by
+going to <code>chrome://flags/#local-network-access-check</code> and setting the flag to
+"Enabled (Blocking)".</p>
+
+<h2 id="what_is_local_network_access">What is Local Network Access?</h2>
+<p><a href="https://github.com/WICG/local-network-access">Local Network Access</a>
+restricts the ability of websites to send requests to servers on a user's local
+network (including servers running locally on the user's machine), requiring the
+user grant the site permission before such requests can be made. The ability to
+request this permission is restricted to secure contexts.</p>
+<figure>
+
+<figcaption>Example of Chrome's Local Network Access permission prompt.</figcaption>
+</figure>
+<p>Many other platforms, such as
+<a href="https://developer.android.com/privacy-and-security/local-network-permission">Android</a>,
+<a href="https://support.apple.com/en-us/102229">iOS</a>, and
+<a href="https://support.apple.com/guide/mac-help/control-access-to-your-local-network-on-mac-mchla4f49138/mac">MacOS</a>
+have a local network access permission. For example, you may have granted this
+permission to access the local network to the Google Home app when setting up
+new Google TV and Chromecast devices.</p>
+<h2 id="what_kinds_of_requests_are_affected">What kinds of requests are affected?</h2>
+<p>For the first milestone of Local Network Access, we consider a "local network
+request" to be any request <em>from</em> the public network <em>to</em> a local network or
+loopback destination.</p>
+<p>A <em>local network</em> is any destination that resolves to addresses reserved for
+local use. For example, private IPv4 addresses specified in Section 3 of
+<a href="https://tools.ietf.org/html/rfc1918">RFC1918</a> (e.g., <code>192.168.0.0/16</code>),
+the IPv4 "link-local" prefix (<code>169.254.0.0/16</code>) defined in
+<a href="https://tools.ietf.org/html/rfc3927">RFC3927</a>, the IPv6 "Unique Local Address"
+prefix (<code>fc00::/7</code>) defined in Section 3 of
+<a href="https://tools.ietf.org/html/rfc4193">RFC4193</a>, the IPv6 "link-local"
+prefix (<code>fe80::/10</code>) defined in section 2.5.6 of
+<a href="https://tools.ietf.org/html/rfc4291">RFC4291</a>, or an IPv4-mapped IPv6 address
+(<code>::ffff:0:0/96</code>) where the mapped IPv4 address is itself local.</p>
+<p><em>Loopback</em> is any destination that resolves to the local machine
+(i.e., "loopback" interface), such as the IPv4 loopback prefix (<code>127.0.0.0/8</code>)
+defined in section 3.2.1.3 of <a href="https://tools.ietf.org/html/rfc1122">RFC1122</a>, or
+the IPv6 loopback (<code>::1/128</code>) defined in section 2.5.3 of
+<a href="https://tools.ietf.org/html/rfc4291">RFC4291</a>.</p>
+<p>For a full mapping of IP addresses to address spaces, see the
+<a href="https://wicg.github.io/local-network-access/#non-public-ip-address-blocks">table in the Local Network Access specification</a>.</p>
+<p>A <em>public network</em> is any other destination.</p>
+
+<p>Because the local network access permission is restricted to secure contexts,
+and it can be difficult to migrate local network devices to HTTPS, the
+permission-gated local network requests will now be exempted from mixed content
+checks <em>if</em> Chrome knows that the requests will be going to the local network
+before resolving the destination. Chrome knows a request is going to the local
+network if:</p>
+<ul>
+<li>The request hostname is a private IP literal (e.g., <code>192.168.0.1</code>).</li>
+<li>The request hostname is a <code>.local</code> domain.</li>
+<li>The <code>fetch()</code> call is annotated with the option <code>targetAddressSpace:
+"local".</code>
+</li>
+</ul>
+<devsite-code><pre class=""><code><span class="devsite-syntax-c1">// Example 1: Private IP literal is exempt from mixed content.</span>
+<span class="devsite-syntax-nx">fetch</span><span class="devsite-syntax-p">(</span><span class="devsite-syntax-s2">"http://192.168.0.1/ping"</span><span class="devsite-syntax-p">);</span>
+
+<span class="devsite-syntax-c1">// Example 2: `.local` domain is exempt from mixed content.</span>
+<span class="devsite-syntax-nx">fetch</span><span class="devsite-syntax-p">(</span><span class="devsite-syntax-s2">"http://router.local/ping"</span><span class="devsite-syntax-p">);</span>
+
+<span class="devsite-syntax-c1">// Example 3: Public domain is not exempt from mixed content,</span>
+<span class="devsite-syntax-c1">// even if it resolves to a local network address.</span>
+<span class="devsite-syntax-nx">fetch</span><span class="devsite-syntax-p">(</span><span class="devsite-syntax-s2">"http://example.com/ping"</span><span class="devsite-syntax-p">);</span>
+
+<span class="devsite-syntax-c1">// Example 4: Adding the `targetAddressSpace` option flags that</span>
+<span class="devsite-syntax-c1">// the request will go to the local network, and is thus exempt</span>
+<span class="devsite-syntax-c1">// from mixed content.</span>
+<span class="devsite-syntax-nx">fetch</span><span class="devsite-syntax-p">(</span><span class="devsite-syntax-s2">"http://example.com/ping"</span><span class="devsite-syntax-p">,</span><span class="devsite-syntax-p">{</span>
+<span class="devsite-syntax-nx">targetAddressSpace</span><span class="devsite-syntax-o">:</span><span class="devsite-syntax-s2">"local"</span><span class="devsite-syntax-p">,</span>
+<span class="devsite-syntax-p">});</span>
+</code></pre></devsite-code>
+<h2 id="whats_changing_in_chrome">What's changing in Chrome</h2>
+<h3 id="chrome_138">Chrome 138</h3>
+<p>Our initial version of Local Network Access is ready for opt-in testing in
+Chrome 138. Users can enable the new permission prompt by setting
+<code>chrome://flags#local-network-access-check</code> to "Enabled (Blocking)". This
+supports triggering the Local Network Access permission prompt for requests
+initiated using the JavaScript <code>fetch()</code> API, subresource loading, and subframe
+navigation.</p>
+<p>A demo site is available at
+<a href="https://lna-testing.notyetsecure.com/">https://lna-testing.notyetsecure.com/</a>
+for triggering different forms of local network requests.</p>
+<h4 id="known_issues_and_limitations">Known issues and limitations</h4>
+<ul>
+<li>WebSockets (<a href="https://crbug.com/421156866">crbug.com/421156866</a>),
+WebTransport (<a href="https://crbug.com/421216834">crbug.com/421216834</a>), and
+WebRTC (<a href="https://crbug.com/421223919">crbug.com/421223919</a>) connections to
+the local network are not yet gated on the LNA permission.</li>
+<li>Local network requests from Service Workers and Shared Workers
+require that the worker's origin has previously been granted the Local
+Network Access permission.
+<ul>
+<li>If your application makes local network requests from a service worker,
+you will need to separately trigger a local network request
+from your application in order to trigger the permission prompt. (We are
+working on a way for workers to trigger the permission prompt if there
+is an active document available — see
+<a href="https://crbug.com/404887282">crbug.com/404887282</a>.)</li>
+</ul>
+</li>
+</ul>
+<h3 id="chrome_139_and_beyond">Chrome 139 and beyond</h3>
+<p>Our intent is to ship Local Network Access as soon as possible. Recognizing that
+some sites may need additional time to be updated with Local Network Access
+annotations, we will add an Origin Trial to let sites temporarily opt-out of the
+secure contexts requirement before we ship Local Network Access by default. This
+should provide a clearer migration path for developers, especially if you rely
+on accessing local network resources over HTTP (as these requests would be
+blocked as mixed content if requested from an HTTPS page in browsers that don't
+yet support the Local Network Access mixed content exemption).</p>
+<p>We will also be adding a Chrome enterprise policy for controlling which sites
+can and cannot make local network requests (pre-granting or pre-denying the
+permission to those sites). This will allow managed Chrome installations, such
+as those in corporate settings, to avoid showing the warning for known intended
+use cases, or to further lock down and prevent sites from being able to request
+the permission at all.</p>
+<p>We plan to continue integrating the Local Network Access permission with
+different features that can send requests to the local network. For example, we
+plan to ship Local Network Access for WebSockets, WebTransport, and WebRTC
+connections soon.</p>
+<p>We will share more information as we get closer to being able to fully launch
+Local Network Access in Chrome.</p>
+<h2 id="feedback_wanted">Feedback wanted</h2>
+<p>Previous feedback on Private Network Access development was incredibly valuable
+in guiding us to our new Local Network Access permission approach. We would like
+to once again thank everyone who has been involved over years.</p>
+<p>If you develop or are a user of a website that relies on making connections to
+the user's local network or software running locally on the user's machine, the
+Chrome team is interested in your feedback and use cases. There are two things
+you can do to help:</p>
+<ul>
+<li>Go to <code>chrome://flags#local-network-access-check</code>, set the flag to "Enabled
+(Blocking)", and see if your website correctly triggers the new permission
+prompt (and works as expected after you grant the permission).</li>
+<li>If you encounter any issues or have feedback, <a href="https://issues.chromium.org/u/1/issues/new?component=1456234&amp;template=0">file an issue at the Chromium
+Issue
+Tracker</a>
+or on our <a href="https://github.com/WICG/local-network-access/issues/new">LNA specification GitHub
+repository</a>.
+Chrome would love to hear from you.</li>
+</ul>
+</div>
+<devsite-thumb-rating><div class="devsite-thumb-rating"><div class="devsite-thumb-label" id="devsite-thumb-label-footer">Was this helpful?</div></div></devsite-thumb-rating>
+</article>
+<devsite-content-footer class="nocontent">
+<p>Except as otherwise noted, the content of this page is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 License</a>, and code samples are licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a>. For details, see the <a href="https://developers.google.com/site-policies">Google Developers Site Policies</a>. Java is a registered trademark of Oracle and/or its affiliates.</p>
+<p>Last updated 2025-06-09 UTC.</p>
+</devsite-content-footer>
+
+</devsite-content>
+</main>
+
+
+</section>
+</section></div>

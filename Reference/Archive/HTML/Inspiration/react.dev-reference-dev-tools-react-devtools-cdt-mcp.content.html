@@ -1,0 +1,276 @@
+<div><div id="__next"><div class="grid grid-cols-only-content lg:grid-cols-sidebar-content 2xl:grid-cols-sidebar-content-toc">
+<main class="min-w-0 isolate"><article class="font-normal break-words text-primary dark:text-primary-dark"><div class="ps-0">
+<div class=""><div class="px-5 sm:px-12 pt-3.5"><div class="max-w-4xl ms-0 2xl:mx-auto">
+<div class="flex justify-between items-start">
+<div class="flex-1"><div class="flex flex-wrap"></div></div>
+<button class="text-sm py-1 px-3 text-base leading-tight font-bold rounded-full py-2 px-4 focus:outline focus:outline-offset-2 focus:outline-link dark:focus:outline-link-dark inline-flex items-center my-1 bg-transparent text-primary dark:text-primary-dark active:text-primary shadow-secondary-button-stroke dark:shadow-secondary-button-stroke-dark hover:bg-gray-40/5 active:bg-gray-40/10 hover:dark:bg-gray-60/5 active:dark:bg-gray-60/10"> <span class="hidden sm:inline">Copy page</span><span class="sm:hidden">Copy</span></button>
+</div>
+<h1 class="mdx-heading mt-0 text-primary dark:text-primary-dark -mx-.5 break-words text-5xl font-display font-bold leading-tight">React DevTools for agents<svg class="ms-4 mt-1 text-gray-50 dark:text-gray-40 inline-block w-6 h-6 align-[-1px]" height="20px" width="20px"><title> - This feature is available in the latest Experimental version of React</title></svg>
+</h1>
+</div></div></div>
+<div class="px-5 sm:px-12">
+<div class="max-w-7xl mx-auto">
+<div class="max-w-4xl ms-0 2xl:mx-auto">
+<div class="expandable-callout pt-8 pb-4 px-5 sm:px-8 my-8 relative rounded-none shadow-inner-border -mx-5 sm:mx-auto sm:rounded-2xl bg-green-5 dark:bg-green-60 dark:bg-opacity-20 text-primary dark:text-primary-dark text-lg">
+<h3 class="text-2xl font-display font-bold text-green-60 dark:text-green-40">Experimental Feature</h3>
+<div class="relative"><div class="py-2"><p class="whitespace-pre-wrap my-4"><strong class="font-bold"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp</code> is experimental.</strong> It is built on the <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="https://developer.chrome.com/blog/devtools-for-agents-3p-tools">experimental third-party developer tools API</a> in <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="https://github.com/ChromeDevTools/chrome-devtools-mcp">Chrome DevTools MCP</a>, and both its tools and their output may change between releases.</p></div></div>
+</div>
+<div class="font-display text-xl text-primary dark:text-primary-dark leading-relaxed">
+<p class="whitespace-pre-wrap my-4"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp</code> gives AI coding agents the same view of your app that React DevTools gives you: the component tree, props, hooks, owners, source locations, and render timing.</p>
+<div class="sandpack sandpack--codeblock rounded-2xl h-full w-full overflow-x-auto flex items-center bg-wash dark:bg-gray-95 shadow-lg my-8"><div class="sp-wrapper"><div class="sp-stack"><div class="sp-code-editor"><pre class="sp-cm sp-pristine sp-javascript flex align-start"><code class="sp-pre-placeholder grow-[2]"><div class="cm-line">
+<span class="sp-syntax-keyword">import</span> <span class="sp-syntax-string">'react-devtools-cdt-mcp/register'</span><span class="sp-syntax-punctuation">;</span>
+</div></code></pre></div></div></div></div>
+
+</div>
+<ul class="ms-6 my-3 list-disc">
+
+
+
+<li class="leading-relaxed mb-1">
+<a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="#reference">Reference </a><ul class="ms-6 my-3 list-disc">
+
+<li class="leading-relaxed mb-1"><a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="#register"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">register(target?)</code> </a></li>
+</ul>
+</li>
+
+</ul>
+
+<h2 class="mdx-heading text-3xl font-display leading-10 text-primary dark:text-primary-dark font-bold my-6" id="overview">Overview 
+</h2>
+<p class="whitespace-pre-wrap my-4">Coding agents that drive a browser through <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="https://github.com/ChromeDevTools/chrome-devtools-mcp">Chrome DevTools MCP</a> can click, take snapshots, and read the DOM, but the DOM doesn’t tell them which component rendered a button, what state it holds, or why an interaction was slow.</p>
+<p class="whitespace-pre-wrap my-4"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp</code> is a small browser library that you import into the page you’re debugging. It registers a group of React tools with the page. When Chrome DevTools MCP connects to that page, it discovers the tools automatically, and your agent can call them like any other MCP tool.</p>
+<div class="expandable-callout pt-8 pb-4 px-5 sm:px-8 my-8 relative rounded-none shadow-inner-border -mx-5 sm:mx-auto sm:rounded-2xl bg-green-5 dark:bg-green-60 dark:bg-opacity-20 text-primary dark:text-primary-dark text-lg">
+<h3 class="text-2xl font-display font-bold text-green-60 dark:text-green-40">Note</h3>
+<div class="relative"><div class="py-2"><p class="whitespace-pre-wrap my-4"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp</code> is <strong class="font-bold">not</strong> an MCP server, and it doesn’t go in your MCP client config. It runs inside your page. The only MCP server you configure is Chrome DevTools MCP.</p></div></div>
+</div>
+
+<h2 class="mdx-heading text-3xl font-display leading-10 text-primary dark:text-primary-dark font-bold my-6" id="setup">Setup 
+</h2>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="install-the-package">Install the package 
+</h4>
+<div class="rounded-lg bg-secondary dark:bg-gray-50 h-full">
+<div class="bg-gray-90 dark:bg-gray-60 w-full rounded-t-lg"><div class="text-primary-dark dark:text-primary-dark flex text-sm px-4 py-0.5 relative justify-between">
+<div> Terminal</div>
+
+</div></div>
+<pre class="px-8 pt-4 pb-6 text-primary-dark dark:text-primary-dark font-mono text-code whitespace-pre overflow-x-auto"><code>npm install --save-dev react-devtools-cdt-mcp</code></pre>
+</div>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="import-it-before-react">Import it before React 
+</h4>
+<p class="whitespace-pre-wrap my-4">Import the <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">register</code> entry point at the very top of your app’s entry file, <strong class="font-bold">before</strong> anything imports <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-dom</code>:</p>
+<div class="sandpack sandpack--codeblock rounded-2xl h-full w-full overflow-x-auto flex items-center bg-wash dark:bg-gray-95 shadow-lg my-8"><div class="sp-wrapper"><div class="sp-stack"><div class="sp-code-editor"><pre class="sp-cm sp-pristine sp-javascript flex align-start"><code class="sp-pre-placeholder grow-[2]"><div class="cm-line bg-github-highlight dark:bg-opacity-10">
+<span class="sp-syntax-keyword">import</span> <span class="sp-syntax-string">'react-devtools-cdt-mcp/register'</span><span class="sp-syntax-punctuation">;</span>
+</div>
+
+<div class="cm-line">
+<span class="sp-syntax-keyword">import</span> <span class="sp-syntax-punctuation">{</span> <span class="sp-syntax-plain">createRoot</span> <span class="sp-syntax-punctuation">}</span> <span class="sp-syntax-keyword">from</span> <span class="sp-syntax-string">'react-dom/client'</span><span class="sp-syntax-punctuation">;</span>
+</div>
+<div class="cm-line">
+<span class="sp-syntax-keyword">import</span> <span class="sp-syntax-plain">App</span> <span class="sp-syntax-keyword">from</span> <span class="sp-syntax-string">'./App'</span><span class="sp-syntax-punctuation">;</span>
+</div>
+
+<div class="cm-line">
+<span class="sp-syntax-definition">createRoot</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-plain">document</span>.<span class="sp-syntax-property">getElementById</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-string">'root'</span><span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">)</span>.<span class="sp-syntax-property">render</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-definition">App</span> <span class="sp-syntax-punctuation">/&gt;</span><span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">;</span>
+</div></code></pre></div></div></div></div>
+
+<p class="whitespace-pre-wrap my-4"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp</code> has to load before React does. If you import it after React, the tools won’t see your components.</p>
+<div class="expandable-callout pt-8 pb-4 px-5 sm:px-8 my-8 relative rounded-none shadow-inner-border -mx-5 sm:mx-auto sm:rounded-2xl bg-yellow-5 dark:bg-yellow-60 dark:bg-opacity-20">
+<h3 class="text-2xl font-display font-bold text-yellow-50 dark:text-yellow-40">Pitfall</h3>
+<div class="relative"><div class="py-2"><p class="whitespace-pre-wrap my-4"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp</code> connects to React the same way the React DevTools extension does, and makes React report every commit to it. This slows down your app, so only include it in development builds.</p></div></div>
+</div>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="set-up-chrome-devtools-mcp">Set up Chrome DevTools MCP 
+</h4>
+<p class="whitespace-pre-wrap my-4">Your agent needs <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="https://github.com/ChromeDevTools/chrome-devtools-mcp">Chrome DevTools MCP</a> with <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="https://developer.chrome.com/blog/devtools-for-agents-3p-tools">third-party developer tools</a> enabled. Follow the <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="https://github.com/ChromeDevTools/chrome-devtools-mcp#getting-started">Chrome DevTools MCP docs</a> to set it up. Once your agent opens a page that imports <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp/register</code>, it can list and call the React tools.</p>
+
+<h2 class="mdx-heading text-3xl font-display leading-10 text-primary dark:text-primary-dark font-bold my-6" id="try-it">Try it 
+</h2>
+<p class="whitespace-pre-wrap my-4">You don’t need an agent to see what the tools return. The sandbox below imports <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp/register</code> exactly as you would in your app, and adds a small <strong class="font-bold">tool console</strong> under the app. The console discovers the React tools the same way Chrome DevTools MCP does, by dispatching the <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">devtoolstooldiscovery</code> event, and lets you call them by hand.</p>
+<p class="whitespace-pre-wrap my-4">Pick a tool, edit the JSON parameters, and press <strong class="font-bold">Run tool</strong>. Here’s a debugging session to follow, playing the agent’s part:</p>
+<ol class="ms-6 my-3 list-decimal">
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Find a component.</strong> Run <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_find_components</code> with <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">{"name": "Row"}</code>. Each result has a <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">uid</code>, like <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">"r12"</code>, that the other tools accept.</li>
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Inspect it.</strong> Run <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_component_by_uid</code> with one of those uids and <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">"includeHooks": true</code> to see its props and hooks.</li>
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Start from the screen.</strong> Choose <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_component_by_dom_element</code>, press <strong class="font-bold">Pick element</strong>, and click a product in the list to get the host component that rendered it.</li>
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">Profile an interaction.</strong> Run <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_start_profiling</code>, click <strong class="font-bold">Add to cart</strong> in the app, then run <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_stop_profiling</code>.</li>
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">See what rendered.</strong> Run <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_trace_overview</code>, then <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_commit_report</code> for commit <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">0</code> to see which components rendered in that commit and how long each one took.</li>
+</ol>
+</div>
+<div class="sandpack sandpack--playground w-full my-8"><div class="sp-wrapper"><div class="shadow-lg dark:shadow-lg-dark rounded-lg">
+<div class="bg-wash dark:bg-card-dark flex justify-between items-center relative z-10 border-b border-border dark:border-border-dark rounded-t-lg text-lg">
+<div class="flex-1 grow min-w-0 px-4 lg:px-6"><div><div class="relative overflow-hidden">
+<div class="w-[fit-content]"><div class="sp-tabs"><div class="sp-tabs-scrollable-container">
+<button class="sp-tab-button" title="/src/index.js">index.js</button><button class="sp-tab-button" title="/src/App.js">App.js</button>
+</div></div></div>
+<button class="absolute top-0 start-[2px] invisible" id="headlessui-listbox-button-:R2cmcq6:"><span class="h-full py-2 px-1 mt-px -mb-px flex border-b text-link dark:text-link-dark border-link dark:border-link-dark items-center text-md leading-tight truncate">App.js</span></button>
+</div></div></div>
+<div class="px-3 flex items-center justify-end text-start">
+<button class="text-sm text-primary dark:text-primary-dark inline-flex items-center hover:text-link duration-100 ease-in transition mx-1" title="Keep your edits and reload sandbox"><span class="hidden md:block">Reload</span></button><button class="text-sm text-primary dark:text-primary-dark inline-flex items-center hover:text-link duration-100 ease-in transition mx-1" title="Clear all edits and reload sandbox"><span class="hidden md:block">Clear</span></button><button class="text-sm text-primary dark:text-primary-dark inline-flex items-center hover:text-link duration-100 ease-in transition mx-1 ms-2 md:ms-1" title="Open in CodeSandbox">
+<span class="hidden md:block">Fork</span></button>
+</div>
+</div>
+<div class="sp-layout">
+<div class="sp-editor sp-stack"><div class="sp-code-editor"><div class="sp-pristine sp-javascript sp-cm"><pre class="sp-pre-placeholder"><span class="sp-syntax-keyword">import</span> <span class="sp-syntax-punctuation">{</span> <span class="sp-syntax-plain">useState</span> <span class="sp-syntax-punctuation">}</span> <span class="sp-syntax-keyword">from</span> <span class="sp-syntax-string">'react'</span><span class="sp-syntax-punctuation">;</span>
+
+<span class="sp-syntax-keyword">const</span> <span class="sp-syntax-plain">PRODUCTS</span> = <span class="sp-syntax-plain">Array</span>.<span class="sp-syntax-property">from</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">{</span> <span class="sp-syntax-property">length</span><span class="sp-syntax-punctuation">:</span> <span class="sp-syntax-static">20</span> <span class="sp-syntax-punctuation">}</span><span class="sp-syntax-punctuation">,</span> <span class="sp-syntax-punctuation">(</span><span class="sp-syntax-plain">_</span><span class="sp-syntax-punctuation">,</span> <span class="sp-syntax-plain">i</span><span class="sp-syntax-punctuation">)</span> <span class="sp-syntax-punctuation">=&gt;</span> <span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">{</span>
+  <span class="sp-syntax-property">id</span><span class="sp-syntax-punctuation">:</span> <span class="sp-syntax-plain">i</span><span class="sp-syntax-punctuation">,</span>
+  <span class="sp-syntax-property">name</span><span class="sp-syntax-punctuation">:</span> <span class="sp-syntax-string">'Product '</span> + <span class="sp-syntax-punctuation">(</span><span class="sp-syntax-plain">i</span> + <span class="sp-syntax-static">1</span><span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">,</span>
+  <span class="sp-syntax-property">price</span><span class="sp-syntax-punctuation">:</span> <span class="sp-syntax-static">10</span> + <span class="sp-syntax-plain">i</span><span class="sp-syntax-punctuation">,</span>
+<span class="sp-syntax-punctuation">}</span><span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">;</span>
+
+<span class="sp-syntax-keyword">export</span> <span class="sp-syntax-keyword">default</span> <span class="sp-syntax-keyword">function</span> <span class="sp-syntax-definition">App</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">)</span> <span class="sp-syntax-punctuation">{</span>
+  <span class="sp-syntax-keyword">const</span> <span class="sp-syntax-punctuation">[</span><span class="sp-syntax-plain">query</span><span class="sp-syntax-punctuation">,</span> <span class="sp-syntax-plain">setQuery</span><span class="sp-syntax-punctuation">]</span> = <span class="sp-syntax-definition">useState</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-string">''</span><span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">;</span>
+  <span class="sp-syntax-keyword">const</span> <span class="sp-syntax-plain">visibleProducts</span> = <span class="sp-syntax-plain">PRODUCTS</span>.<span class="sp-syntax-property">filter</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-plain">product</span><span class="sp-syntax-punctuation">)</span> <span class="sp-syntax-punctuation">=&gt;</span>
+    <span class="sp-syntax-plain">product</span>.<span class="sp-syntax-property">name</span>.<span class="sp-syntax-property">toLowerCase</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">)</span>.<span class="sp-syntax-property">includes</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-plain">query</span>.<span class="sp-syntax-property">toLowerCase</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">)</span>
+  <span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">;</span>
+  <span class="sp-syntax-keyword">return</span> <span class="sp-syntax-punctuation">(</span>
+    <span class="sp-syntax-tag">main</span>
+      <span class="sp-syntax-definition">Cart</span> <span class="sp-syntax-punctuation">/&gt;</span>
+      <span class="sp-syntax-tag">input</span>
+        <span class="sp-syntax-property">value</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">query</span><span class="sp-syntax-punctuation">}</span>
+        <span class="sp-syntax-property">onChange</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-plain">e</span><span class="sp-syntax-punctuation">)</span> <span class="sp-syntax-punctuation">=&gt;</span> <span class="sp-syntax-definition">setQuery</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-plain">e</span>.<span class="sp-syntax-property">target</span>.<span class="sp-syntax-property">value</span><span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">}</span>
+        <span class="sp-syntax-property">placeholder</span>=<span class="sp-syntax-string">"Filter products"</span>
+      <span class="sp-syntax-punctuation">/&gt;</span>
+      <span class="sp-syntax-definition">ProductList</span> <span class="sp-syntax-property">products</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">visibleProducts</span><span class="sp-syntax-punctuation">}</span> <span class="sp-syntax-punctuation">/&gt;</span>
+    <span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-tag">main</span>
+  <span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">;</span>
+<span class="sp-syntax-punctuation">}</span>
+
+<span class="sp-syntax-keyword">function</span> <span class="sp-syntax-definition">Cart</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">)</span> <span class="sp-syntax-punctuation">{</span>
+  <span class="sp-syntax-keyword">const</span> <span class="sp-syntax-punctuation">[</span><span class="sp-syntax-plain">count</span><span class="sp-syntax-punctuation">,</span> <span class="sp-syntax-plain">setCount</span><span class="sp-syntax-punctuation">]</span> = <span class="sp-syntax-definition">useState</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-static">0</span><span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">;</span>
+  <span class="sp-syntax-keyword">return</span> <span class="sp-syntax-punctuation">(</span>
+    <span class="sp-syntax-tag">header</span>
+      <span class="sp-syntax-definition">CartBadge</span> <span class="sp-syntax-property">count</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">count</span><span class="sp-syntax-punctuation">}</span> <span class="sp-syntax-punctuation">/&gt;</span>
+      <span class="sp-syntax-tag">button</span> <span class="sp-syntax-property">onClick</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">)</span> <span class="sp-syntax-punctuation">=&gt;</span> <span class="sp-syntax-definition">setCount</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-plain">c</span><span class="sp-syntax-punctuation">)</span> <span class="sp-syntax-punctuation">=&gt;</span> <span class="sp-syntax-plain">c</span> + <span class="sp-syntax-static">1</span><span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">}</span>Add to cart<span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-tag">button</span>
+    <span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-tag">header</span>
+  <span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">;</span>
+<span class="sp-syntax-punctuation">}</span>
+
+<span class="sp-syntax-keyword">function</span> <span class="sp-syntax-definition">CartBadge</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">{</span> <span class="sp-syntax-property">count</span> <span class="sp-syntax-punctuation">}</span><span class="sp-syntax-punctuation">)</span> <span class="sp-syntax-punctuation">{</span>
+  <span class="sp-syntax-keyword">return</span> <span class="sp-syntax-tag">span</span> <span class="sp-syntax-property">className</span>=<span class="sp-syntax-string">"badge"</span>Cart: <span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">count</span><span class="sp-syntax-punctuation">}</span><span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-tag">span</span><span class="sp-syntax-punctuation">;</span>
+<span class="sp-syntax-punctuation">}</span>
+
+<span class="sp-syntax-keyword">function</span> <span class="sp-syntax-definition">ProductList</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">{</span> <span class="sp-syntax-property">products</span> <span class="sp-syntax-punctuation">}</span><span class="sp-syntax-punctuation">)</span> <span class="sp-syntax-punctuation">{</span>
+  <span class="sp-syntax-keyword">return</span> <span class="sp-syntax-punctuation">(</span>
+    <span class="sp-syntax-tag">ul</span>
+      <span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">products</span>.<span class="sp-syntax-property">map</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-plain">product</span><span class="sp-syntax-punctuation">)</span> <span class="sp-syntax-punctuation">=&gt;</span> <span class="sp-syntax-punctuation">(</span>
+        <span class="sp-syntax-definition">ProductRow</span> <span class="sp-syntax-property">key</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">product</span>.<span class="sp-syntax-property">id</span><span class="sp-syntax-punctuation">}</span> <span class="sp-syntax-property">product</span>=<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">product</span><span class="sp-syntax-punctuation">}</span> <span class="sp-syntax-punctuation">/&gt;</span>
+      <span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">}</span>
+    <span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-tag">ul</span>
+  <span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">;</span>
+<span class="sp-syntax-punctuation">}</span>
+
+<span class="sp-syntax-keyword">function</span> <span class="sp-syntax-definition">ProductRow</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">{</span> <span class="sp-syntax-property">product</span> <span class="sp-syntax-punctuation">}</span><span class="sp-syntax-punctuation">)</span> <span class="sp-syntax-punctuation">{</span>
+  <span class="sp-syntax-keyword">return</span> <span class="sp-syntax-punctuation">(</span>
+    <span class="sp-syntax-tag">li</span>
+      <span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">product</span>.<span class="sp-syntax-property">name</span><span class="sp-syntax-punctuation">}</span> <span class="sp-syntax-tag">b</span>$<span class="sp-syntax-punctuation">{</span><span class="sp-syntax-plain">product</span>.<span class="sp-syntax-property">price</span><span class="sp-syntax-punctuation">}</span><span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-tag">b</span>
+    <span class="sp-syntax-punctuation">&lt;/</span><span class="sp-syntax-tag">li</span>
+  <span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">;</span>
+<span class="sp-syntax-punctuation">}</span>
+
+</pre></div></div></div>
+<button class="sandpack-expand flex text-base justify-between dark:border-card-dark bg-wash dark:bg-card-dark items-center z-10 p-1 w-full order-2 xl:order-last border-b-1 relative top-0"><span class="flex p-2 focus:outline-none text-primary dark:text-primary-dark leading-[20px]">Show more</span></button>
+</div>
+</div></div></div>
+<div class="max-w-4xl ms-0 2xl:mx-auto">
+<div class="expandable-callout pt-8 pb-4 px-5 sm:px-8 my-8 relative rounded-none shadow-inner-border -mx-5 sm:mx-auto sm:rounded-2xl bg-green-5 dark:bg-green-60 dark:bg-opacity-20 text-primary dark:text-primary-dark text-lg">
+<h3 class="text-2xl font-display font-bold text-green-60 dark:text-green-40">Note</h3>
+<div class="relative"><div class="py-2"><p class="whitespace-pre-wrap my-4">The tool console in this sandbox stands in for Chrome DevTools MCP so you can try the tools on this page. In your own app, you don’t write any of this code: Chrome DevTools MCP discovers the tools and your agent decides which ones to call.</p></div></div>
+</div>
+
+<h2 class="mdx-heading text-3xl font-display leading-10 text-primary dark:text-primary-dark font-bold my-6" id="reference">Reference 
+</h2>
+<h3 class="mdx-heading text-2xl font-display leading-9 text-primary dark:text-primary-dark font-bold my-6" id="tools">Tools 
+</h3>
+<p class="whitespace-pre-wrap my-4"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp</code> registers a tool group called <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react</code>. Your agent calls these tools through Chrome DevTools MCP.</p>
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_component_tree</code>: Returns a snapshot of the component tree.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_find_components</code>: Finds components by name.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_component_by_uid</code>: Returns a component’s props and Hooks.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_component_by_dom_element</code>: Returns the React host component for a DOM element.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_parent_stack</code>: Returns where a component is mounted in the tree.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_owner_stack</code>: Returns the components that created a component in their JSX.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_owner_stack_trace</code>: Returns the owner stack of a component as a stack trace.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_component_source</code>: Returns where a component is defined.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_start_profiling</code>: Starts recording render timing.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_stop_profiling</code>: Stops recording render timing.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_trace_overview</code>: Returns a summary of every commit in a recording.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_commit_report</code>: Returns which components rendered in a commit and how long each took.</li>
+</ul>
+<p class="whitespace-pre-wrap my-4">Components are identified by short, stable uids like <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">"r5"</code>. A uid stays the same across every tool and across re-renders, but not across page reloads.</p>
+<p class="whitespace-pre-wrap my-4">Every tool returns a plain, serializable object. If a tool fails, it returns an object with an <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">error</code> message instead.</p>
+
+<h3 class="mdx-heading text-2xl font-display leading-9 text-primary dark:text-primary-dark font-bold my-6" id="register">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">register(target?)</code> 
+</h3>
+<p class="whitespace-pre-wrap my-4">Call <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">register</code> to install the React DevTools hook and register the React tools with Chrome DevTools MCP yourself, instead of importing <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp/register</code>.</p>
+<div class="sandpack sandpack--codeblock rounded-2xl h-full w-full overflow-x-auto flex items-center bg-wash dark:bg-gray-95 shadow-lg my-8"><div class="sp-wrapper"><div class="sp-stack"><div class="sp-code-editor"><pre class="sp-cm sp-pristine sp-javascript flex align-start"><code class="sp-pre-placeholder grow-[2]"><div class="cm-line">
+<span class="sp-syntax-keyword">import</span> <span class="sp-syntax-punctuation">{</span> <span class="sp-syntax-plain">register</span> <span class="sp-syntax-punctuation">}</span> <span class="sp-syntax-keyword">from</span> <span class="sp-syntax-string">'react-devtools-cdt-mcp'</span><span class="sp-syntax-punctuation">;</span>
+</div>
+
+<div class="cm-line">
+<span class="sp-syntax-definition">register</span><span class="sp-syntax-punctuation">(</span><span class="sp-syntax-punctuation">)</span><span class="sp-syntax-punctuation">;</span>
+</div></code></pre></div></div></div></div>
+
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="register-parameters">Parameters 
+</h4>
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">
+<strong class="font-bold">optional</strong> <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">target</code>: The global object to install the hook on. Defaults to <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">globalThis</code>.</li>
+</ul>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="register-returns">Returns 
+</h4>
+<p class="whitespace-pre-wrap my-4"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">register</code> returns an object with two properties:</p>
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">facade</code>: The installed React DevTools hook and the state the tools read from.</li>
+<li class="leading-relaxed mb-1">
+<code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">unregister</code>: A function that stops registering the React tools with Chrome DevTools MCP.</li>
+</ul>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="register-caveats">Caveats 
+</h4>
+<ul class="ms-6 my-3 list-disc">
+<li class="leading-relaxed mb-1">Call <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">register</code> before React initializes, or React won’t connect to the hook.</li>
+<li class="leading-relaxed mb-1">Calling <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">register</code> again for the same <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">target</code> returns the existing registration.</li>
+</ul>
+
+<h2 class="mdx-heading text-3xl font-display leading-10 text-primary dark:text-primary-dark font-bold my-6" id="troubleshooting">Troubleshooting 
+</h2>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="my-agent-doesnt-see-any-react-tools">My agent doesn’t see any React tools 
+</h4>
+<p class="whitespace-pre-wrap my-4">Check that <a class="inline text-link dark:text-link-dark border-b border-link border-opacity-0 hover:border-opacity-100 duration-100 ease-in transition leading-normal" href="https://developer.chrome.com/blog/devtools-for-agents-3p-tools">third-party developer tools</a> are enabled in your Chrome DevTools MCP setup. Then check that the page selected in Chrome DevTools MCP imports <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp/register</code>. The tools are discovered per page, when the page loads or is selected.</p>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="the-component-tree-is-empty">The component tree is empty 
+</h4>
+<p class="whitespace-pre-wrap my-4"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp/register</code> was imported after React initialized. Move the import to the very first line of your entry file, before any import that loads <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-dom</code>.</p>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="im-getting-an-error-about-a-browser-like-environment">I’m getting an error about a browser-like environment 
+</h4>
+<p class="whitespace-pre-wrap my-4"><code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react-devtools-cdt-mcp/register</code> throws if it’s imported outside a browser, for example during server rendering or in tests. Import it only from client-side code, or call <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">register()</code> from the package root yourself where it’s safe.</p>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="source-locations-and-owner-stacks-are-empty">Source locations and owner stacks are empty 
+</h4>
+<p class="whitespace-pre-wrap my-4">This data only exists in development builds of React. Make sure you’re running your app’s development server rather than a production build.</p>
+<h4 class="mdx-heading text-xl font-display font-bold leading-9 my-4" id="a-uid-stopped-working">A uid stopped working 
+</h4>
+<p class="whitespace-pre-wrap my-4">Uids don’t survive page reloads. After a reload, get fresh uids with <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_get_component_tree</code> or <code class="inline text-code text-secondary dark:text-secondary-dark px-1 rounded-md no-underline bg-gray-30 bg-opacity-10 py-px">react_find_components</code>.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-4 py-4 mx-auto max-w-7xl md:grid-cols-2 md:py-12"><a class="flex gap-x-4 md:gap-x-6 items-center w-full md:min-w-80 md:w-fit md:max-w-md px-4 md:px-5 py-6 border-2 border-transparent text-base leading-base text-link dark:text-link-dark rounded-lg group focus:text-link dark:focus:text-link-dark focus:bg-highlight focus:border-link dark:focus:bg-highlight-dark dark:focus:border-link-dark focus:border-opacity-100 focus:border-2 focus:ring-1 focus:ring-offset-4 focus:ring-blue-40 active:ring-0 active:ring-offset-0 hover:bg-gray-5 dark:hover:bg-gray-80" href="/reference/dev-tools/react-performance-tracks"><div class="flex flex-col overflow-hidden">
+<span class="text-sm font-bold tracking-wide no-underline uppercase text-secondary dark:text-secondary-dark group-focus:text-link dark:group-focus:text-link-dark group-focus:text-opacity-100">Previous</span><span class="text-lg break-words group-hover:underline">React Performance tracks</span>
+</div></a></div>
+</div>
+</div></article></main>
+</div></div></div>

@@ -1,0 +1,304 @@
+<div><div id="__nuxt"><div class="page">
+<a class="btn gl-button btn-confirm btn-md skip-link" href="#skipTarget"><span class="gl-button-text"> Skip to main content </span></a><main class="main"><div class="gl-mx-auto gl-my-0 gl-w-full gl-max-w-6xl gl-px-5 sm:gl-px-7 gl-py-7">
+<div class="gl-flex gl-flex-col gl-gap-7 lg:gl-flex-row lg:gl-items-start">
+<div class="gl-shrink gl-grow lg:gl-order-1 lg:gl-min-w-0">
+<div class="gl-mb-7">
+<h1 class="gl-heading-display" id="skipTarget">Color</h1>
+
+</div>
+<div>
+<div class="md"><div class="nuxt-content">
+<h2 id="data-visualization-palette"><a href="#data-visualization-palette">Data visualization palette</a></h2>
+<span class="gl-border gl-mb-5 gl-block gl-rounded-feedback gl-border-feedback-info gl-bg-feedback-info gl-p-3 gl-text-base gl-leading-20 gl-text-feedback-info"><span class="gl-font-bold">NOTE: </span>
+View the 
+<a class="" href="/product-foundations/color">Foundations &gt; Color</a>
+ section for details about the UI color palettes.
+</span><p>Data visualization is critical content within GitLab. The presentation and interpretation of this content relies on visual nuance that is separate from the rest of the UI.</p>
+<p>The data visualization palette is designed specifically for conveying different types of data. The meaning is derived from the data itself, not by color as a first measure. The palette is versatile enough to be applied in a number of <a href="#data-types">data types</a> in both light and dark UI.</p>
+<h3 id="hues-steps-and-variables"><a href="#hues-steps-and-variables">Hues, steps, and variables</a></h3>
+<p>There are 5 hues, each with 11 steps for a total of 55 variables. The palette is designed for both light and dark UI where:</p>
+<ul>
+<li>Steps <code>50</code>—<code>500</code> meet or exceed a 3:1 contrast ratio on a dark <code>color.neutral.950</code> (<code>#18171d</code>) surface.</li>
+<li>Steps <code>500</code>—<code>950</code> meet or exceed a 3:1 contrast ratio on a light <code>color.neutral.0</code> (<code>#ffffff</code>) surface.</li>
+</ul>
+<p>Because the <code>500</code> step has at least a 3:1 contrast ratio on both light and dark surfaces, there are 30 total variables that can be used for each surface.</p>
+
+<ul class="background-checkered-pattern !gl-m-0 gl-list-none !gl-p-0">
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-blue.50</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#e9ebff</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 15.1</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.2</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-blue.100</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#d2dcff</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 13.1</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.4</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-blue.200</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#b7c6ff</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 10.6</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.7</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-blue.300</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#97acff</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 8.2</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 2.2</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-blue.400</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#7992f5</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA 6.1</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 2.9</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-blue.500</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#617ae2</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA 4.6</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA+ 3.9</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-blue.600</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#4e65cd</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA+ 3.4</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA 5.2</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-blue.700</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#3f51ae</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 2.5</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 7.0</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-blue.800</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#374291</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 2.0</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 8.9</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-blue.900</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#303470</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 1.6</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 11.3</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-blue.950</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#2a2b59</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 1.3</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 13.2</code></span>
+</li>
+</ul>
+<h3 id="orange"><a href="#orange">Orange</a></h3>
+<ul class="background-checkered-pattern !gl-m-0 gl-list-none !gl-p-0">
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-orange.50</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#fae8d1</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 14.9</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.2</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-orange.100</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#f5d6b3</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 12.9</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.4</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-orange.200</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#eebd8c</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 10.4</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.7</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-orange.300</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#e99b60</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 7.9</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 2.3</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-orange.400</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#e07e41</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA 6.1</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 2.9</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-orange.500</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#c95d2e</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA+ 4.3</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA+ 4.1</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-orange.600</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#b14f18</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA+ 3.4</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA 5.2</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-orange.700</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#92430a</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 2.6</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA 6.9</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-orange.800</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#6f3500</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 1.9</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 9.6</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-orange.900</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#5e2f05</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 1.6</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 11.1</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-orange.950</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#4b2707</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 1.4</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 13.2</code></span>
+</li>
+</ul>
+
+<ul class="background-checkered-pattern !gl-m-0 gl-list-none !gl-p-0">
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-aqua.50</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#b5fefd</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 15.7</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.1</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-aqua.100</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#93f2ef</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 13.7</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.3</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-aqua.200</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#5edee3</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 11.1</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.6</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-aqua.300</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#32c5d2</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 8.5</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 2.1</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-aqua.400</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#00acc4</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA 6.5</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 2.7</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-aqua.500</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#0090b1</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA 4.8</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA+ 3.7</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-aqua.600</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#007b9b</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA+ 3.7</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA 4.9</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-aqua.700</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#006381</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 2.6</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA 6.8</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-aqua.800</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#00516c</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 2.0</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 8.8</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-aqua.900</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#004059</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 1.6</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 11.2</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-aqua.950</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#00344b</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 1.4</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 13.2</code></span>
+</li>
+</ul>
+
+<ul class="background-checkered-pattern !gl-m-0 gl-list-none !gl-p-0">
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-green.50</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#ddfab7</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 15.6</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.1</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-green.100</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#c6ed94</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 13.5</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.3</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-green.200</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#b0d97b</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 11.1</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.6</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-green.300</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#94c25e</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 8.6</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 2.1</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-green.400</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#81ac41</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA 6.7</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 2.7</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-green.500</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#619025</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA 4.7</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA+ 3.8</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-green.600</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#4e7f0e</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA+ 3.7</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA 4.8</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-green.700</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#366800</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 2.7</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA 6.7</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-green.800</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#275600</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 2.1</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 8.7</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-green.900</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#1a4500</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 1.6</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 11.1</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-green.950</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#133a03</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 1.4</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 12.9</code></span>
+</li>
+</ul>
+<h3 id="magenta"><a href="#magenta">Magenta</a></h3>
+<ul class="background-checkered-pattern !gl-m-0 gl-list-none !gl-p-0">
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-magenta.50</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#ffe3eb</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 14.8</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.2</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-magenta.100</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#ffccdb</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 12.6</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.4</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-magenta.200</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#fcacc5</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 10.0</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 1.8</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-magenta.300</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#f88aaf</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AAA 7.8</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 2.3</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-magenta.400</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#e86e9a</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA 6.0</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-500 gl-text-red-500">F 2.9</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-950">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-magenta.500</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#cf4d81</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA+ 4.3</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA+ 4.2</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-magenta.600</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#b93d71</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-0">AA+ 3.4</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AA 5.3</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-magenta.700</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#9a2e5d</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 2.5</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 7.2</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-magenta.800</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#7c214f</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 1.9</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 9.6</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-magenta.900</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#661e3a</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 1.5</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 11.6</code></span>
+</li>
+<li class="gl-flex gl-flex-wrap gl-items-center gl-justify-between gl-gap-3 gl-p-3 gl-leading-normal gl-text-neutral-0">
+<code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">color.data-magenta.950</code><span class="gl-flex gl-items-center gl-gap-3"><code class="gl-bg-transparent gl-p-0 gl-text-base gl-text-inherit">#541d31</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-light-scope gl-shadow-inner-1-red-300 gl-text-red-300">F 1.4</code><code class="gl-w-10 gl-rounded-default gl-p-2 gl-text-center gl-text-xs gl-text-neutral-950">AAA 13.1</code></span>
+</li>
+</ul>
+
+<div class="gl-border gl-mb-5 gl-block gl-rounded-feedback gl-border-feedback-neutral gl-bg-feedback-neutral gl-p-3 gl-text-base gl-italic gl-leading-20 gl-text-feedback-neutral">Data visualization color usage is part of the <a class="" href="/contribute/contributing">design system extended layer</a> 🤝 <span> owned by <span class="gl-label gl-label-scoped gl-label-text-dark pointer-events-none gl-not-italic"><span class="gl-label-link"><span class="gl-label-text">group</span><span class="gl-label-text-scoped">optimize</span></span></span>. </span><span><span>Questions or feedback? Reach out to </span><a class="gl-link" href="https://gitlab.enterprise.slack.com/archives/C08MY2Z9BPV">#data-exploration-dashboards on Slack</a>. </span>
+</div>
+<h3 id="color-sequence"><a href="#color-sequence">Color sequence</a></h3>
+<p>We categorize data into three general types: <a href="#sequential-data">sequential</a>, <a href="#categorical-data">categorical</a>, and <a href="#divergent-data">divergent</a>. Each type uses color differently to best present the data.</p>
+<p>A color sequence helps colorblind users distinguish data visualization content. With 5 hues in the palette, we can alternate both the hue and steps to create sequences with color and contrast differences.</p>
+<p>Data types are covered in more detail below, but here’s a general summary of how each uses color sequences:</p>
+<ul>
+<li>
+<strong>Sequential data</strong> uses steps within a single hue to present a single data range.</li>
+<li>
+<strong>Categorical data</strong> uses hues to differentiate categories, and like sequential data, steps within each hue to present a data range.</li>
+<li>
+<strong>Divergent data</strong> uses hue transitions to present data ranges on either side of a common central point.</li>
+</ul>
+<h3 id="surfaces-visual-separators-and-patterns"><a href="#surfaces-visual-separators-and-patterns">Surfaces, visual separators, and patterns</a></h3>
+<p>Per <a href="https://www.w3.org/WAI/WCAG21/Understanding/non-text-contrast.html">WCAG 2.1 Success Criterion 1.4.11: Non-text Contrast</a>, UI components and graphical objects must have a contrast ratio of at least 3:1 against adjacent colors. This means sufficient contrast against the surface (background), and each other.</p>
+<h4 id="surfaces"><a href="#surfaces">Surfaces</a></h4>
+<ul><li>All data visualization should be on a <code>background.color.default</code> surface.</li></ul>
+<h4 id="visual-separators"><a href="#visual-separators">Visual separators</a></h4>
+<p>Colors meet or exceed a 3:1 contrast ratio against either a light or dark surface, but not necessarily each other. There are a few solutions, but the easiest is space between each element. This means at least a <code>1px</code> gap between elements, where the gap is the color of the surface. Alternately, a border of at least <code>1px</code> can be used on elements, where the border matches the surface color. Whether this is an actual gap, or border, the effect is the same.</p>
+<h4 id="patterns"><a href="#patterns">Patterns</a></h4>
+<p>Pattern fills can create accessibility issues of their own, namely cognitive, and we currently do not support this as an option.</p>
+<h2 id="data-types"><a href="#data-types">Data types</a></h2>
+<div class="gl-border gl-mb-5 gl-block gl-rounded-feedback gl-border-feedback-neutral gl-bg-feedback-neutral gl-p-3 gl-text-base gl-italic gl-leading-20 gl-text-feedback-neutral">Data visualization data types is part of the <a class="" href="/contribute/contributing">design system extended layer</a> 🤝 <span> owned by <span class="gl-label gl-label-scoped gl-label-text-dark pointer-events-none gl-not-italic"><span class="gl-label-link"><span class="gl-label-text">group</span><span class="gl-label-text-scoped">optimize</span></span></span>. </span><span><span>Questions or feedback? Reach out to </span><a class="gl-link" href="https://gitlab.enterprise.slack.com/archives/C08MY2Z9BPV">#data-exploration-dashboards on Slack</a>. </span>
+</div>
+<h3 id="sequential-data"><a href="#sequential-data">Sequential data</a></h3>
+<p>Sequential data uses steps within a single hue, and color lightness to indicate a range from low to high.</p>
+<p>Blue is the default hue for charts with a single data range, and <code>color.data-blue.500</code> is the base step for both light and dark UI. Others hues can be used instead by following a similar pattern.</p>
+<ul>
+<li>Steps in a light UI go from <code>500</code> (low) to <code>950</code> (high) so that the higher the value, the darker it is and the more contrast it has against the light surface.</li>
+<li>Steps in a dark UI go from <code>500</code> (low) to <code>50</code> (high) so that the higher the value, the lighter is is and the more contrast it has against the dark surface.</li>
+</ul>
+<figure class="gl-mx-auto gl-my-7 gl-block gl-rounded-default gl-text-center gl-px-5 gl-py-6 gl-bg-neutral-0 gl-text-neutral-800"><figcaption class="gl-mt-3 gl-text-base gl-leading-20">Default color sequence in a light UI</figcaption></figure><figure class="gl-mx-auto gl-my-7 gl-block gl-rounded-default gl-text-center gl-px-5 gl-py-6 gl-bg-neutral-950 gl-text-neutral-0"><figcaption class="gl-mt-3 gl-text-base gl-leading-20">Default color sequence in a dark UI</figcaption></figure><span class="gl-border gl-mb-5 gl-flex gl-flex-wrap gl-gap-2 gl-rounded-feedback gl-border-feedback-neutral gl-bg-feedback-neutral gl-p-3 gl-text-base gl-leading-20 gl-text-feedback-neutral"><div class="gl-flex gl-items-center gl-gap-3"><span class="gl-font-bold">TODO: </span></div>
+<span class="gl-mr-auto">
+Include example of chart with sequential data
+</span><a class="gl-link" href="https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com/-/issues/new?issue[title]=%0AInclude%20example%20of%20chart%20with%20sequential%20data%0A%20(for%20color)&amp;issue[description]=%2Flabel%20~%22component%3Acolor%22">Create an issue</a></span><p><strong>Potential applications:</strong> stacked bar charts, heat maps, choropleth maps, funnels, cycle diagrams, clusters, pyramids, etc.</p>
+<h3 id="categorical-data"><a href="#categorical-data">Categorical data</a></h3>
+<p>Categorical data (also known as qualitative or thematic) uses hue to differentiate categories (qualitative), and lightness to differentiate a data range (quantitative).</p>
+<p>A chevron-skipping sequence is used to alternate both hue and lightness to increase contrast between sibling elements.</p>
+<p>The default sequence loops through different steps of each hue in the following order:</p>
+<ol>
+<li>Blue</li>
+<li>Orange</li>
+<li>Aqua</li>
+<li>Green</li>
+<li>Magenta</li>
+</ol>
+<p>Blue is always the default starting point, and <code>color.data-blue.500</code> is the base step for both light and dark UI.</p>
+<figure class="gl-mx-auto gl-my-7 gl-block gl-rounded-default gl-text-center gl-px-5 gl-py-6 gl-bg-neutral-0 gl-text-neutral-800">
+
+<figcaption class="gl-mt-3 gl-text-base gl-leading-20">Chevron-skipping pattern in a light UI</figcaption></figure><figure class="gl-mx-auto gl-my-7 gl-block gl-rounded-default gl-text-center gl-px-5 gl-py-6 gl-bg-neutral-950 gl-text-neutral-0">
+
+<figcaption class="gl-mt-3 gl-text-base gl-leading-20">Chevron-skipping pattern in a dark UI</figcaption></figure><span class="gl-border gl-mb-5 gl-flex gl-flex-wrap gl-gap-2 gl-rounded-feedback gl-border-feedback-neutral gl-bg-feedback-neutral gl-p-3 gl-text-base gl-leading-20 gl-text-feedback-neutral"><div class="gl-flex gl-items-center gl-gap-3"><span class="gl-font-bold">TODO: </span></div>
+<span class="gl-mr-auto">
+Include example of chart with categorical data
+</span><a class="gl-link" href="https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com/-/issues/new?issue[title]=%0AInclude%20example%20of%20chart%20with%20categorical%20data%0A%20(for%20color)&amp;issue[description]=%2Flabel%20~%22component%3Acolor%22">Create an issue</a></span><span class="gl-border gl-mb-5 gl-flex gl-flex-wrap gl-gap-2 gl-rounded-feedback gl-border-feedback-neutral gl-bg-feedback-neutral gl-p-3 gl-text-base gl-leading-20 gl-text-feedback-neutral"><div class="gl-flex gl-items-center gl-gap-3"><span class="gl-font-bold">TODO: </span></div>
+<span class="gl-mr-auto">
+Add a sequence generator
+</span><a class="gl-link" href="https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com/-/issues/new?issue[title]=%0AAdd%20a%20sequence%20generator%0A%20(for%20color)&amp;issue[description]=%2Flabel%20~%22component%3Acolor%22">Create an issue</a></span><p><strong>Potential applications:</strong> bar charts, pie charts, line graphs, stacked area charts, etc.</p>
+<h3 id="divergent-data"><a href="#divergent-data">Divergent data</a></h3>
+<p>Divergent data moves in opposite directions from a central point. Color is used to indicate distance from the center by stepping darker in a light UI to each end, while stepping lighter in a dark UI to each end.</p>
+<p>The pattern for selecting values skips every other step by default, and has a range of 11 steps including the central point. For data with a smaller range, the pattern could be a subset that starts at the same central point, but does not extend as far to each end. For data with a larger range, add skipped values into the sequence, starting from the center out.</p>
+<p>The number of steps required to make a useful progression would not meet 3:1 contrast ratios by using fill alone (each hue has 6 steps with enough contrast for each surface), so a border that uses the <code>500</code> value from the relative hue surrounds low-contrast fills.</p>
+<p>There are two divergent options, choose the one that works best with the type of data being shown.</p>
+<ul>
+<li>A cool to warm hue transition is helpful for showing a decrease vs. increase from a central point, where the warm steps show the increase.</li>
+<li>A cool to cool hue transition could be useful for showing data based on a central point, where either end of the range does not necessarily have positive or negative connotation.</li>
+</ul>
+<figure class="gl-mx-auto gl-my-7 gl-block gl-rounded-default gl-text-center gl-px-5 gl-py-6 gl-bg-neutral-0 gl-text-neutral-800"><figcaption class="gl-mt-3 gl-text-base gl-leading-20">Cool to warm, and cool divergent sequences in a light UI</figcaption></figure><figure class="gl-mx-auto gl-my-7 gl-block gl-rounded-default gl-text-center gl-px-5 gl-py-6 gl-bg-neutral-950 gl-text-neutral-0"><figcaption class="gl-mt-3 gl-text-base gl-leading-20">Cool to warm, and cool divergent sequences in a dark UI</figcaption></figure><span class="gl-border gl-mb-5 gl-flex gl-flex-wrap gl-gap-2 gl-rounded-feedback gl-border-feedback-neutral gl-bg-feedback-neutral gl-p-3 gl-text-base gl-leading-20 gl-text-feedback-neutral"><div class="gl-flex gl-items-center gl-gap-3"><span class="gl-font-bold">TODO: </span></div>
+<span class="gl-mr-auto">
+Include example of chart with divergent data
+</span><a class="gl-link" href="https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com/-/issues/new?issue[title]=%0AInclude%20example%20of%20chart%20with%20divergent%20data%0A%20(for%20color)&amp;issue[description]=%2Flabel%20~%22component%3Acolor%22">Create an issue</a></span><p><strong>Potential applications:</strong> butterfly charts, choropleth maps, sparklines, etc.</p>
+<h3 id="data-associated-with-system-status"><a href="#data-associated-with-system-status">Data associated with system status</a></h3>
+<p>Colors are often associated with system status in data visualizations (for example, green for success and red for failure). However, because using green and red together can be problematic for some color blindness conditions, try to utilize the recommended palette as a first pass.</p>
+<p>When representing a success status alone against the generic data, use <code>color.data-blue.500</code> for all and <code>color.data-green.700</code> for success.</p>
+<p>If it's necessary to show success and failure states together in the same graph, <code>color.data-green.500</code> and <code>color.data-magenta.600</code> is the recommended combination (<code>color.data-green.500</code> and <code>color.data-magenta.400</code> in a dark UI). To avoid indicating status by color alone, use text and additional visual indicators when possible to clarify the status. To ensure sufficient contrast ratio, follow the <a href="#usage">color guidelines</a> for specific data types.</p>
+<span class="gl-border gl-mb-5 gl-flex gl-flex-wrap gl-gap-2 gl-rounded-feedback gl-border-feedback-neutral gl-bg-feedback-neutral gl-p-3 gl-text-base gl-leading-20 gl-text-feedback-neutral"><div class="gl-flex gl-items-center gl-gap-3"><span class="gl-font-bold">TODO: </span></div>
+<span class="gl-mr-auto">
+Include example of recommended color combinations
+</span><a class="gl-link" href="https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com/-/issues/new?issue[title]=%0AInclude%20example%20of%20recommended%20color%20combinations%0A%20(for%20color)&amp;issue[description]=%2Flabel%20~%22component%3Acolor%22">Create an issue</a></span><h2 id="accessibility"><a href="#accessibility">Accessibility</a></h2>
+<p>At GitLab, we are dedicated to continually improving the accessibility of the application. Color is no exception. Every step of every hue in the data visualization palette has been evaluated to satisfy a 3:1 contrast ratio against a background surface.</p>
+<ul><li>That is a contrast ratio of at least 3:1 on <code>background.color.default</code>.</li></ul>
+<h2 id="resources"><a href="#resources">Resources</a></h2>
+<ul>
+<li>
+<a href="https://medium.com/design-ibm/inclusive-color-sequences-for-data-viz-in-6-steps-712869b910c2">Inclusive Color Sequences for Data Viz in 6 Steps</a> - Design at IBM</li>
+<li>
+<a href="https://design.lyft.com/re-approaching-color-9e604ba22c88">Re-approaching Color</a> - Lyft Design</li>
+<li>
+<a href="https://www.colorbox.io/">ColorBox</a> - Lyft Design</li>
+</ul>
+</div></div>
+
+</div>
+<p class="gl-mb-0 gl-mt-5 gl-text-center"> Last updated at: <time>Wednesday, July 15, 2026 at 12:21 PM</time></p>
+</div>
+</div>
+</div></main>
+</div></div></div>

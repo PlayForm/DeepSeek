@@ -1,0 +1,153 @@
+<div><div id="__nuxt"><div class="page">
+<a class="btn gl-button btn-confirm btn-md skip-link" href="#skipTarget"><span class="gl-button-text"> Skip to main content </span></a><main class="main"><div class="gl-mx-auto gl-my-0 gl-w-full gl-max-w-6xl gl-px-5 sm:gl-px-7 gl-py-7">
+<div class="gl-flex gl-flex-col gl-gap-7 lg:gl-flex-row lg:gl-items-start">
+<div class="gl-shrink gl-grow lg:gl-order-1 lg:gl-min-w-0">
+<div class="gl-mb-7">
+<h1 class="gl-heading-display" id="skipTarget">Graph canvas</h1>
+
+</div>
+<div class="gl-border gl-mb-5 gl-block gl-rounded-feedback gl-border-feedback-neutral gl-bg-feedback-neutral gl-p-3 gl-text-base gl-italic gl-leading-20 gl-text-feedback-neutral">Graph canvas is part of the <a class="" href="/contribute/contributing">design system extended layer</a> 🤝 <span><span>Questions or feedback? Reach out to </span><a class="gl-link" href="https://gitlab.slack.com/channels/ux_coworking">#ux_coworking on Slack</a> or <a class="gl-link" href="https://gitlab.com/groups/gitlab-com/gitlab-ux/designers/-/group_members?with_inherited_permissions=exclude">@gitlab-com/gitlab-ux/designers on GitLab</a>. </span>
+</div>
+<div>
+<div class="md"><div class="nuxt-content">
+<h2 id="layout"><a href="#layout">Layout</a></h2>
+<p>A graph canvas is a zoomable, pannable surface that renders nodes and their relationships. A graph reads in the direction of its layout. A left-to-right graph starts at the top-left of the canvas container and a top-to-bottom graph starts at the top-center. Keep the start of the graph clear so a user can orient themselves before anything else competes for attention.</p>
+<p>The canvas container is divided into zones, and each kind of content has one home:</p>
+<figure class="gl-mx-auto gl-my-7 gl-block gl-rounded-default gl-text-center"><figcaption class="gl-mt-3 gl-text-base gl-leading-20">Graph canvas composition</figcaption></figure><ol>
+<li>
+<strong>Canvas container:</strong> The region a user can pan and zoom.</li>
+<li>
+<strong>Search, filter:</strong> Search and/or filter options</li>
+<li>
+<strong>Graph inset:</strong> The padding between the outermost nodes and the edge of the canvas.</li>
+<li>
+<strong>View controls:</strong> Zoom and fit actions for the whole canvas.</li>
+<li>
+<strong>Minimap:</strong> A scaled-down rendering of the whole graph with an indicator for the visible viewport.</li>
+<li>
+<strong>Legend slot:</strong> Nothing by default. Use it for a legend when the canvas needs one.</li>
+</ol>
+<p>Canvas-level actions that aren't navigation, for example a layout switch or an expand-to-full-screen action, belong in the page toolbar above the canvas rather than on the canvas container.</p>
+<p>Content that describes a single node, such as its details or actions, doesn't belong in the canvas container. Open it in a <a class="" href="/components/drawer">drawer</a> or a <a class="" href="/product-foundations/layout#panel-based-layout">dynamic panel</a> so the canvas keeps its full extent.</p>
+<h3 id="canvas-container"><a href="#canvas-container">Canvas container</a></h3>
+<p>The interactive region where a user pans and zooms the content is a <a class="" href="/product-foundations/layout#section">section container</a> with a dot grid background, which sets it apart from the page and gives a sense of motion when panning. It contains everything else in this section.</p>
+<h3 id="search-and-filter"><a href="#search-and-filter">Search and filter</a></h3>
+<p><a class="" href="/components/search">Search</a> and <a class="" href="/components/filter">filter</a> controls are anchored to the top-left corner, <code>16px</code> (<code>spacing-scale.5</code>) from the nearest edges, so they sit at the start of the graph's reading direction. They act on the graph's content rather than its view: search locates a node, filter reduces which nodes are shown. Each is an <a class="" href="/product-foundations/layout#overlap">overlap container</a> that floats above the canvas container, and the graph inset is measured from their inner edge.</p>
+<h3 id="graph-inset"><a href="#graph-inset">Graph inset</a></h3>
+<p>The graph inset is the minimum distance between any node and the canvas boundary. It gives the outermost nodes room to breathe and stops a node from sitting flush against an edge, where it reads as clipped.</p>
+<ul>
+<li>The inset is <code>32px</code> (<code>spacing-scale.7</code>) on every side, the same value used to separate sections of content.</li>
+<li>Where the view controls or the minimap sit, measure the inset from their inner edge rather than from the canvas edge. A node never renders beneath either of them when the graph is fit to view.</li>
+<li>The inset applies when the graph is fit to view and on initial render. Once a user pans or zooms, nodes can move to the edge and beyond, which is expected.</li>
+<li>When the graph is smaller than the available space, center it inside the inset rather than anchoring it to a corner.</li>
+</ul>
+<p>Within the graph, spacing between nodes follows the <a class="" href="/product-foundations/spacing">spacing scale</a>. Use <code>48px</code> (<code>spacing-scale.9</code>) between columns or rows of nodes in the flow direction, and <code>24px</code> (<code>spacing-scale.6</code>) between sibling nodes that share a column or row. The node itself is specified under <a href="#node">Node</a>.</p>
+<h3 id="view-controls"><a href="#view-controls">View controls</a></h3>
+<p>The view controls are anchored to the top-right corner, <code>16px</code> (<code>spacing-scale.5</code>) from the nearest edges, and stacked vertically, so they stay clear of the graph's reading direction and of the minimap. They're an <a class="" href="/product-foundations/layout#overlap">overlap container</a> that floats above the canvas container.</p>
+<p>Use one vertical <a class="" href="/components/button-group">button group</a> of icon-only default buttons in this order, top to bottom:</p>
+<ol>
+<li>
+<strong>Zoom in</strong>: <code>search-plus</code> icon.</li>
+<li>
+<strong>Zoom out</strong>: <code>search-minus</code> icon.</li>
+<li>
+<strong>Fit to view</strong>: <code>maximize</code> icon. Centers the whole graph and zooms so it fits inside the graph inset. Fit to view never zooms above <code>100%</code>.</li>
+<li>
+<strong>Reset zoom</strong>: Shows the current zoom level as text, for example <code>100%</code>. Selecting it returns the canvas to <code>100%</code> without changing the pan position.</li>
+</ol>
+<p>Zoom in and out step through <code>10%</code> increments between <code>10%</code> and <code>200%</code>. Every control has a tooltip that names the action and its keyboard shortcut, and is disabled at the end of its range.</p>
+<h3 id="minimap"><a href="#minimap">Minimap</a></h3>
+<p>The minimap is anchored to the bottom-right corner, <code>16px</code> (<code>spacing-scale.5</code>) from the nearest edges. It renders every node at reduced scale and draws the current viewport as an outlined rectangle. Dragging the rectangle pans the canvas.</p>
+<ul>
+<li>Default size is <code>160×96px</code>. Don't exceed a quarter of the canvas width.</li>
+<li>Style it as an overlap container: <code>background.color.overlap</code>, <code>border.color.default</code>, and <code>gl-shadow-sm</code>.</li>
+<li>Show it only when the whole graph doesn't fit in the viewport at the current zoom. A graph that fits doesn't need an overview.</li>
+<li>Hide it when the canvas container is narrower than <code>480px</code>. Use a container query rather than a media query, so the minimap responds to the canvas, not the viewport.</li>
+</ul>
+<h3 id="canvas-behaviors"><a href="#canvas-behaviors">Canvas behaviors</a></h3>
+<h4 id="initial-view"><a href="#initial-view">Initial view</a></h4>
+<p>On first render, fit the graph to view if that results in a zoom of <code>50%</code> or more. Otherwise render at <code>50%</code> anchored to the start of the graph, so the first nodes are legible and the minimap shows the rest.</p>
+<h4 id="responsive-adaptation"><a href="#responsive-adaptation">Responsive adaptation</a></h4>
+<p>The canvas container keeps a minimum height of <code>320px</code>. Below <code>480px</code> container width, hide the minimap and reduce the view controls to zoom in, zoom out, and fit to view. The graph inset doesn't shrink; a smaller canvas shows less of the graph rather than crowding its edges.</p>
+<h4 id="empty-and-loading-states"><a href="#empty-and-loading-states">Empty and loading states</a></h4>
+<p>When there are no nodes to show, hide the view controls and the minimap and show the <a class="" href="/patterns/empty-states">empty state</a> in the center of the canvas container. Don't show anything that invites navigation when there's nothing to navigate. While the graph loads, keep the canvas container at its final size so the navigation aids don't jump into place.</p>
+<h4 id="focus-and-stacking"><a href="#focus-and-stacking">Focus and stacking</a></h4>
+<p>The canvas container is a positioned element that establishes its own stacking context. The view controls and minimap use <code>gl-z-1</code> inside that context and are never raised above the application chrome. Keyboard focus moves through the canvas container, then the view controls, then the minimap, matching their position in the DOM.</p>
+<h2 id="guidelines"><a href="#guidelines">Guidelines</a></h2>
+<h3 id="when-to-use"><a href="#when-to-use">When to use</a></h3>
+<ul>
+<li>Communicating relationships between entities as the primary information (for example, pipeline stages and jobs, or workflow steps).</li>
+<li>Providing a more visual representation when the number and complexity of items make a linear list insufficient.</li>
+<li>Helping a user understand structure through spatial reasoning (for example, logical branching compared to sequential execution).</li>
+</ul>
+<h3 id="when-not-to-use"><a href="#when-not-to-use">When not to use</a></h3>
+<ul><li>Monitoring the status of things rather than helping a user understand how things relate. A graph is usually the wrong call even when the underlying data has a graph shape. A list with a status column is always faster to scan, filter, and make accessible than a canvas.</li></ul>
+<h2 id="visualization"><a href="#visualization">Visualization</a></h2>
+<h3 id="sequence"><a href="#sequence">Sequence</a></h3>
+<p>A graph reads in one direction. Choose the direction that matches the data and keep it consistent across the whole canvas.</p>
+<h4 id="horizontal"><a href="#horizontal">Horizontal</a></h4>
+<p>Use for sequential flows such as CI/CD pipelines and workflow builders, where execution order reads naturally horizontally from start to end (default being left to right).</p>
+<div class="gl-my-7 gl-flex">
+<div>
+<figure class="gl-mx-auto gl-my-7 gl-block gl-rounded-default gl-text-center !gl-my-0 !gl-text-left"><figcaption class="gl-mt-3 gl-text-base gl-leading-20">Left-to-right</figcaption></figure>
+</div>
+</div>
+<h4 id="vertical"><a href="#vertical">Vertical</a></h4>
+<p>Use when hierarchy is the primary relationship (for example, dependency trees).</p>
+<p>Default reading direction is from top to bottom.</p>
+<div class="gl-my-7 gl-flex">
+<div>
+<figure class="gl-mx-auto gl-my-7 gl-block gl-rounded-default gl-text-center !gl-my-0 !gl-text-left"><figcaption class="gl-mt-3 gl-text-base gl-leading-20">Top-to-bottom</figcaption></figure>
+</div>
+</div>
+<p>Refer to the <a href="#layout">Layout</a> section above to understand where the graph sits on the canvas, how far it stays from the boundary, and where the minimap and view controls live.</p>
+
+<p>A node is the unit a user reads, compares, and acts on. Every node kind shares the same structure so the graph reads as one system:</p>
+<ul>
+<li>
+<strong>Tile</strong>: A rounded square that carries the node's state through a status color. Keep the tile the same size for every node kind so the graph reads as a grid.</li>
+<li>
+<strong>Status icon</strong>: Sits centered inside the tile and pairs with the status color, so state is never communicated by color alone.</li>
+<li>
+<strong>Caption</strong>: A single line directly under the tile that names the node. Truncate a long name with an ellipsis and expose the full name in a <a class="" href="/components/tooltip">tooltip</a>.</li>
+<li>
+<strong>Secondary line</strong>: An optional single line under the caption for one supporting detail. For example, an environment name or a change request number. Use only one per node kind so nodes stay scannable.</li>
+</ul>
+<h3 id="connectors"><a href="#connectors">Connectors</a></h3>
+<p>A connector is a direct line between two nodes. Route a connector orthogonally, not as a free curve. Connectors that fan out from one node or fan in to one node share a single run between the two columns, so a busy graph reads as a set of lanes rather than a tangle.</p>
+<h3 id="grouping-box"><a href="#grouping-box">Grouping box</a></h3>
+<div class="gl-my-7 gl-flex gl-flex-wrap gl-items-end gl-gap-7">
+<div>
+<figure class="gl-mx-auto gl-my-7 gl-block gl-rounded-default gl-text-center !gl-my-0 !gl-text-left"><figcaption class="gl-mt-3 gl-text-base gl-leading-20">Expanded</figcaption></figure>
+</div>
+<div class="gl-pl-7">
+<figure class="gl-mx-auto gl-my-7 gl-block gl-rounded-default gl-text-center !gl-my-0 !gl-text-left"><figcaption class="gl-mt-3 gl-text-base gl-leading-20">Collapsed</figcaption></figure>
+</div>
+</div>
+<p>Use a grouping box when nodes belong to a distinct phase or tier within a larger flow and a user needs to reason about that phase as a unit, not just as individual nodes.</p>
+<ul>
+<li>
+<strong>Boundary</strong>: A subtle enclosure that sets the group apart from the canvas without competing with the nodes inside it.</li>
+<li>
+<strong>Label</strong>: Names the phase along the top edge of the boundary.</li>
+<li>
+<strong>Expand and collapse control</strong>: Lets a user reduce the group to a single node and restore it. Use the <a class="" href="/components/collapse">collapse</a> component.</li>
+<li>
+<strong>Collapsed summary node</strong>: Represents the whole group as one node. Its state reflects the worst status among its members, so a problem inside a collapsed group stays visible.</li>
+</ul>
+<p>This section describes what each element communicates and how it behaves. Dimensions and design tokens for these elements are layout concerns, and belong with <a class="" href="/product-foundations/layout#position-canvas-overlays">positioning canvas overlays</a> in the layout foundations rather than in this pattern.</p>
+</div></div>
+<div class="gl-mt-6"><div class="md">
+<h2 id="related-patterns">Related</h2>
+<ul>
+
+
+<li><a class="" href="/patterns/duo-agents-and-flows">Duo agents and flows</a></li>
+</ul>
+</div></div>
+</div>
+<p class="gl-mb-0 gl-mt-5 gl-text-center"> Last updated at: <time>Wednesday, October 28, 2026 at 4:19 PM</time></p>
+</div>
+</div>
+</div></main>
+</div></div></div>

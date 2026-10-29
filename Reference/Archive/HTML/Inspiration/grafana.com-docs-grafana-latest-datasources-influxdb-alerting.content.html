@@ -1,0 +1,292 @@
+<div><div><div id="top-banner">
+<div class="banner__disabled" id="gcon2026_top_banner_a"><div class="gcon2025-banner gcon2026-banner footer">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">Save the Date!</div>
+<div class="tw:text-[13px] tw:text-white">Sign up to get the latest GrafanaCON 2026 updates, agenda drops, and first access to early-bird tickets when they’re first available.</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Sign up</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="gcon2026_top_banner_b"><div class="gcon2025-banner gcon2026-banner footer alt-grot">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">We have our sightson Barcelona</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Save the Date</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-post-keynote"><div class="tw:bg-[#E86F37] tw:relative tw:h-10 tw:hidden tw:sm:block">
+<div class="wrapper tw:px-0">
+<div class="tw:flex tw:flex-row tw:items-center tw:justify-between tw:px-5 tw:flex-wrap">
+
+<span class="tw:items-center tw:justify-center font-poppins tw:font-medium tw:text-black tw:text-base tw:xl:max-w-none tw:text-center tw:h-10 tw:hidden tw:lg:flex">
+          Watch the keynote again and signup for more on-demand sessions.
+        </span>
+<div class="tw:flex-col tw:xl:flex-row tw:items-center tw:gap-6 tw:h-6 tw:sm:flex">
+
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-top-banner"><div class="obscon2025-banner top-banner tw:relative">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<p class="banner-text">
+<span class="banner-title">📢 Registration + agenda now live </span>
+        Explore the latest Grafana Cloud and AI solutions, learn tips &amp; tricks from demos and hands-on workshops, and get actionable advice to advance your observability strategy. Register now and get 50% off - limited tickets available (while they last!).
+      </p>
+<a class="banner-btn tw:bg-black" href="/events/observabilitycon/?tech=target&amp;plcmt=top-banner&amp;aud=default">Register now</a>
+</div>
+</div>
+</div></div> </div></div></div>
+<div><div class="main section"><div class="main-content">
+<blockquote class="llms-txt-directive">Documentation for automated readersA curated documentation index is available at: https://grafana.com/llms.txtA complete documentation index is available at: https://grafana.com/llms-full.txtThese indexes can help with page discovery before fetching individual documents.</blockquote>
+<p class="agent-directive">This page is also available in Markdown, which may be easier for automated readers
+and AI tools to parse than HTML. The Markdown version is available at
+https://grafana.com/docs/grafana/latest/datasources/influxdb/alerting.md, or by sending
+Accept: text/markdown to https://grafana.com/docs/grafana/latest/datasources/influxdb/alerting/. For broader
+documentation discovery, the curated index is available at https://grafana.com/llms.txt
+and the complete index is available at https://grafana.com/llms-full.txt.</p>
+<div class="grid-layout docs">
+<section class="mobile print-hidden" id="mobile"><div class="mobile__wrapper"> <div class="mobile__title">InfluxDB alerting</div> </div></section><main class="section-docs__main docs__content" id="main"><div class="scrollspy-init">
+<div class="docs-content scrollspy-wrap" id="doc-article-text">
+<div class="docs__breadcrumb">
+<span>Alerting</span>
+</div>
+<div class="docs-labels">
+<span class="badge docs-labels__product-orange docs-labels__item mr-half"><span>Grafana Cloud
+</span> </span><span class="badge docs-labels__product-violet docs-labels__item mr-half"><span>Enterprise
+</span> </span><span class="badge docs-labels__product-purple docs-labels__item mr-half"><span>Open source
+</span></span>
+</div>
+<span class="body-xsmall">Last reviewed: August 4, 2026</span><h1 id="influxdb-alerting">InfluxDB alerting
+</h1>
+<blockquote><p>You can use Grafana Cloud to avoid installing, maintaining, and scaling your own instance of Grafana. <a href="/auth/sign-up/create-user?pg=docs-grafana-latest-datasources-influxdb-alerting">Create a free account</a> to get started, which includes free forever access to 10k metrics, 50GB logs, 50GB traces, 500VUh k6 testing &amp; more.</p></blockquote>
+<p>You can use Grafana Alerting with InfluxDB to create alerts based on your time-series data. This allows you to monitor metrics, detect anomalies, and receive notifications when specific conditions are met.</p>
+<p>For general information about Grafana Alerting, refer to
+<a href="/docs/grafana/latest/alerting/">Grafana Alerting</a>.</p>
+<h2 id="before-you-begin">Before you begin
+</h2>
+<p>Before creating alerts with InfluxDB, ensure you have:</p>
+<ul>
+<li>An InfluxDB data source configured in Grafana</li>
+<li>Appropriate permissions to create alert rules</li>
+<li>Understanding of the metrics you want to monitor</li>
+</ul>
+<h2 id="supported-query-types">Supported query types
+</h2>
+<p>InfluxDB alerting supports all three query languages: InfluxQL, SQL, and Flux. Queries must return time-series data for Grafana to evaluate values over time and trigger alerts when thresholds are crossed.</p>
+<h3 id="query-language-compatibility">Query language compatibility
+</h3>
+<section class="expand-table-wrapper"><div class="button-div"><button class="expand-table-btn">Expand table</button></div>
+<div class="responsive-table-wrapper"><table>
+<thead><tr>
+<th>Query language</th>
+<th>Alerting support</th>
+<th>Notes</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>InfluxQL</td>
+<td>Yes</td>
+<td>Use aggregation functions with GROUP BY time.</td>
+</tr>
+<tr>
+<td>Flux</td>
+<td>Yes</td>
+<td>Use <code>aggregateWindow()</code> for time-based aggregation.</td>
+</tr>
+<tr>
+<td>SQL</td>
+<td>Yes</td>
+<td>Use <code>$__timeFilter</code> and <code>$__dateBin</code> macros for time filtering.</td>
+</tr>
+</tbody>
+</table></div></section><h2 id="create-an-alert-rule">Create an alert rule
+</h2>
+<p>To create an alert rule using InfluxDB:</p>
+<ol>
+<li>Navigate to <strong>Alerting</strong> &gt; <strong>Alert rules</strong>.</li>
+<li>Click <strong>New alert rule</strong>.</li>
+<li>Enter a name for the alert rule.</li>
+<li>Select your <strong>InfluxDB</strong> data source.</li>
+<li>Build your query using the query editor.</li>
+<li>Configure the alert condition (for example, when the average is above a threshold).</li>
+<li>Set the evaluation interval and pending period.</li>
+<li>Configure notifications and labels.</li>
+<li>Click <strong>Save rule</strong>.</li>
+</ol>
+<p>For detailed instructions, refer to
+<a href="/docs/grafana/latest/alerting/alerting-rules/create-grafana-managed-rule/">Create a Grafana-managed alert rule</a>.</p>
+<h2 id="example-alert-queries">Example alert queries
+</h2>
+<p>The following examples show common alerting scenarios with InfluxDB.</p>
+<h3 id="influxql-alert-on-high-cpu-usage">InfluxQL: Alert on high CPU usage
+</h3>
+<p>Monitor CPU usage and alert when it exceeds a threshold:</p>
+<ol>
+<li>
+<strong>Query:</strong> Select the <code>cpu</code> measurement with <code>mean("usage_system")</code> as the aggregation.</li>
+<li>
+<strong>GROUP BY:</strong> <code>time($__interval)</code>
+</li>
+<li>
+<strong>Condition:</strong> When mean is above 90.</li>
+</ol>
+<p>In raw query mode:</p>
+<div class="code-snippet">
+<div class="lang-toolbar">
+<span class="lang-toolbar__item lang-toolbar__item-active">SQL</span>
+
+</div>
+<div class="code-snippet"><pre class="language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> mean<span class="token punctuation">(</span><span class="token string">"usage_system"</span><span class="token punctuation">)</span> <span class="token keyword">FROM</span> <span class="token string">"cpu"</span> <span class="token keyword">WHERE</span> $timeFilter <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> <span class="token keyword">time</span><span class="token punctuation">(</span>$__interval<span class="token punctuation">)</span> fill<span class="token punctuation">(</span><span class="token boolean">null</span><span class="token punctuation">)</span></code></pre></div>
+</div>
+<h3 id="flux-alert-on-memory-pressure">Flux: Alert on memory pressure
+</h3>
+<p>Monitor memory usage with a Flux query:</p>
+<div class="code-snippet">
+<div class="lang-toolbar">
+<span class="lang-toolbar__item lang-toolbar__item-active">flux</span>
+
+</div>
+<div class="code-snippet"><pre class="language-flux"><code class="language-flux">from(bucket: "telegraf")
+  |&gt; range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |&gt; filter(fn: (r) =&gt; r["_measurement"] == "mem")
+  |&gt; filter(fn: (r) =&gt; r["_field"] == "used_percent")
+  |&gt; aggregateWindow(every: v.windowPeriod, fn: mean)
+  |&gt; yield(name: "mean")</code></pre></div>
+</div>
+<p>Set the condition to alert when the mean value exceeds 85.</p>
+<h3 id="sql-alert-on-disk-usage">SQL: Alert on disk usage
+</h3>
+<p>Monitor disk usage with an SQL query:</p>
+<div class="code-snippet">
+<div class="lang-toolbar">
+<span class="lang-toolbar__item lang-toolbar__item-active">SQL</span>
+
+</div>
+<div class="code-snippet"><pre class="language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> $__dateBin<span class="token punctuation">(</span><span class="token keyword">time</span><span class="token punctuation">)</span><span class="token punctuation">,</span> mean<span class="token punctuation">(</span>used_percent<span class="token punctuation">)</span>
+<span class="token keyword">FROM</span> <span class="token keyword">disk</span>
+<span class="token keyword">WHERE</span> $__timeFilter<span class="token punctuation">(</span><span class="token keyword">time</span><span class="token punctuation">)</span>
+<span class="token keyword">GROUP</span> <span class="token keyword">BY</span> $__dateBin<span class="token punctuation">(</span><span class="token keyword">time</span><span class="token punctuation">)</span></code></pre></div>
+</div>
+<p>Set the condition to alert when the mean value exceeds 80.</p>
+<h2 id="limitations">Limitations
+</h2>
+<p>When using InfluxDB with Grafana Alerting, be aware of the following limitations:</p>
+<h3 id="template-variables-not-supported">Template variables not supported
+</h3>
+<p>Alert queries can’t contain template variables. Grafana evaluates alert rules on the backend without dashboard context, so variables like <code>$hostname</code> or <code>$region</code> aren’t resolved.</p>
+<p>If your dashboard query uses template variables, create a separate query for alerting with hard-coded values.</p>
+<h3 id="query-complexity">Query complexity
+</h3>
+<p>Complex queries with many nested functions or large result sets may timeout or fail to evaluate. Simplify queries for alerting by:</p>
+<ul>
+<li>Reducing the time range</li>
+<li>Using appropriate aggregation intervals</li>
+<li>Adding filters to limit the data scanned</li>
+</ul>
+<h2 id="handle-transient-errors-and-timeouts">Handle transient errors and timeouts
+</h2>
+<p>Brief InfluxDB latency spikes or network interruptions can cause alert rule evaluations to fail. By default, a failed evaluation moves the rule into an error state, which can trigger a large number of spurious notifications at once even though your data is healthy.</p>
+<p>To make alert rules resilient to transient errors:</p>
+<ol>
+<li>In the alert rule settings, expand <strong>Configure no data and error handling</strong> and set <strong>Alert state if execution error or timeout</strong> to <strong>Keep Last State</strong>. The rule keeps its previous state through brief evaluation failures instead of firing an error alert.</li>
+<li>Set a <strong>Pending period</strong> so the alert condition must be met for a sustained period across multiple evaluations before the alert fires.</li>
+<li>If evaluations fail because queries run out of time, increase the data source timeout. Refer to
+<a href="/docs/grafana/latest/datasources/influxdb/configure/#advanced-http-settings">Advanced HTTP settings</a> for details.</li>
+<li>Simplify or narrow alert queries so they complete well within the timeout. Refer to <a href="#query-complexity">Query complexity</a> for guidance.</li>
+</ol>
+<p>For more information about error state handling, refer to
+<a href="/docs/grafana/latest/alerting/alerting-rules/create-grafana-managed-rule/#configure-no-data-and-error-handling">No data and error handling</a>.</p>
+<h2 id="best-practices">Best practices
+</h2>
+<p>Follow these best practices when creating InfluxDB alerts:</p>
+<ul>
+<li>
+<strong>Use specific filters:</strong> Add WHERE clauses or Flux filters to focus on relevant data and improve query performance.</li>
+<li>
+<strong>Choose appropriate intervals:</strong> Match the GROUP BY time interval to your evaluation frequency.</li>
+<li>
+<strong>Test queries first:</strong> Verify your query returns expected results in Explore before creating an alert.</li>
+<li>
+<strong>Set realistic thresholds:</strong> Base alert thresholds on historical data patterns.</li>
+<li>
+<strong>Use meaningful names:</strong> Give alert rules descriptive names that indicate what they monitor.</li>
+</ul>
+<p>If you encounter errors when creating or evaluating alert rules, refer to
+<a href="/docs/grafana/latest/datasources/influxdb/troubleshooting/#alerting-errors">Troubleshoot InfluxDB data source issues</a>.</p>
+</div>
+<div><div class="docs__feedback print-hidden">
+<div class="docs__feedback--title">
+<h2 class="docs__feedback--heading">Was this page helpful?</h2>
+<div class="docs__feedback--container">
+
+
+</div>
+</div>
+<div class="docs__feedback--links"><div class="d-grid d-grid__columns--3 w-100p gap-1">
+<a class="docs__feedback--link" href="https://github.com/grafana/grafana/edit/release-13.3.1/docs/sources/datasources/influxdb/alerting/index.md"><span>Suggest an edit in GitHub</span>
+</a><a class="docs__feedback--link" href="https://github.com/grafana/grafana/issues/new?title=Documentation%20feedback:%20/docs/sources/datasources/influxdb/alerting/index.md"><span>Create a GitHub issue</span>
+</a><a class="docs__feedback--link" href="mailto:docs@grafana.com"><span>Email docs@grafana.com</span>
+</a><a class="docs__feedback--link" href="/help/"><span>Help and support</span>
+</a><a class="docs__feedback--link" href="/community/"><span>Community</span></a>
+</div></div>
+<div class="print-hidden" id="docs-related-wrapper"><div class="docs__related">
+<h2 class="docs__related--heading">Related resources from Grafana Labs</h2>
+<div class="docs__related--subtext">Additional helpful documentation, links, and articles:</div>
+<div class="docs__related--grid">
+<a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-grafana-lgtm-stack/?pg=docs-grafana-latest-datasources-influxdb-alerting&amp;plcmt=related"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with managing your metrics, logs, and traces using Grafana</div>
+<div class="body-xsmall mt-half">In this webinar, we’ll demo how to get started using the LGTM Stack: Loki for logs, Grafana for visualization, Tempo for traces, and Mimir for metrics.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-grafana-dashboard-design/?pg=docs-grafana-latest-datasources-influxdb-alerting&amp;plcmt=related-2"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with Grafana dashboard design</div>
+<div class="body-xsmall mt-half">In this webinar, you'll learn how to design stylish and easily accessible Grafana dashboards that tell a story.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/building-advanced-grafana-dashboards/?pg=docs-grafana-latest-datasources-influxdb-alerting&amp;plcmt=related-3"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Building advanced Grafana dashboards</div>
+<div class="body-xsmall mt-half">In this webinar, we’ll demo how to build and format Grafana dashboards.</div>
+</div>
+</div></div></a>
+</div>
+</div></div>
+</div></div>
+</div></main>
+</div>
+</div></div></div>
+<div><div class="highlight-send__buttons">
+<a class="highlight-send__ask-btn text-hover-white">
+      Ask Grafana Assistant
+      
+    </a> </div></div>

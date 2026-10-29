@@ -1,0 +1,143 @@
+<div><div class="radix-themes"><div>
+<div class="tw-app has-toc"><section class="px-0 flex relative"><main class="main-content flex mt-[var(--header-height)] flex-1"><div class="pt-6 px-6 prose dark:prose-invert max-w-full text-[var(--gray-12)] prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-code:font-mono marker:text-[var(--darkPurple)] marker:font-medium prose-li:my-1 prose-headings:mt-0 prose-headings:font-medium prose-headings:relative prose-headings:text-[var(--gray-12)] prose-blockquote:font-normal prose-blockquote:border-l-[3px] prose-em:font-normal prose-blockquote:text-[var(--gray-12)] prose-img:my-2 prose-strong:text-[var(--gray-12)] w-full min-w-0" id="doc-content">
+<div class="flex items-center">
+<ul class="not-prose list-none flex flex-wrap">
+
+<li class="style_breadcrumb-item__bDEaT"><a href="/product/">Product Walkthroughs</a></li>
+
+
+<li class="style_breadcrumb-item__bDEaT"><a href="/product/issues/issue-details/performance-issues/">Performance Issues</a></li>
+
+</ul> <div class="ml-auto hidden sm:block"><div class="relative inline-block"><div class="inline-flex items-center h-9 border border-gray-200 dark:border-[var(--gray-6)] rounded-full overflow-hidden bg-white dark:bg-[var(--gray-2)]"><button class="inline-flex items-center text-nowrap h-full text-gray-700 dark:text-[var(--foreground)] bg-transparent border-none cursor-pointer transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-[var(--gray-a4)] active:bg-gray-100 dark:active:bg-[var(--gray-5)] focus:bg-gray-50 dark:focus:bg-[var(--gray-a4)] outline-none gap-2 px-3.5 text-sm font-medium disabled:opacity-50"><span>Copy page</span></button></div></div></div>
+</div>
+<div>
+<hgroup><h1>N+1 Queries</h1>
+<h2>Learn more about N+1 Queries and how to diagnose and fix them.</h2></hgroup><div id="main">
+<p><em>N+1 Queries</em> are a performance problem in which the application makes database queries in a loop, instead of making a single query that returns or modifies all the information at once. Each database connection takes some amount of time, so querying the database in a loop can be many times slower than doing it just once. This problem often occurs when you use an object-relational mapping (ORM) tool in web frameworks like Django or Ruby on Rails.</p>
+<p>Filter database query performance issues with <code>issue.category:db_query</code> in <strong>Issues</strong> and <strong>Dashboards</strong>.</p>
+<h2 id="detection-criteria"><a class="autolink-heading" href="#detection-criteria">Detection Criteria</a></h2>
+<p>The N+1 Query detector looks for a set of sequential, non-overlapping database spans with similar descriptions. It also uses the following criteria:</p>
+<ul>
+<li>Total duration of involved spans must exceed <code>50ms</code>
+</li>
+<li>Total count of involved spans must exceed a threshold (usually five spans)</li>
+<li>Involved spans must have full queries as their descriptions (some SDKs truncate queries and add an ellipsis to the end)</li>
+<li>There must be at least one database span that precedes the repeating spans (this is called the "source" span, and is used for fingerprinting)</li>
+</ul>
+<p>If Sentry is not detecting an N+1 issue where you expect one, it's probably because the transaction didn't meet one of the above criteria.</p>
+<p>You can configure detector thresholds for N+1 Queries issues in <a class="" href="https://sentry.io/orgredirect/organizations/:orgslug/settings/projects/:projectId/performance/"><strong>Project Settings &gt; Performance</strong></a>:</p>
+
+<h2 id="span-evidence"><a class="autolink-heading" href="#span-evidence">Span Evidence</a></h2>
+<p>The evidence for an N+1 Queries problem has four main aspects:</p>
+<ul>
+<li>Transaction name</li>
+<li>Parent span - This can be a view, a serializer, or another span that logically groups the queries.</li>
+<li>Preceding span - The last span recorded before the N+1 query spans.</li>
+<li>Repeating span - This is the "N" of N+1 queries. This is the looped query that should have been part of a bulk query.</li>
+<li>Waterfall trace view - Shows the relevant sequential, non-overlapping database spans.</li>
+</ul>
+
+<h2 id="fingerprinting"><a class="autolink-heading" href="#fingerprinting">Fingerprinting</a></h2>
+<p>Sentry computes the issue fingerprint based on the parent span, the source span, and the repeating spans. If you're finding that Sentry is failing to correctly group N+1 query issues, make sure that the database spans in your transactions have parameterized queries as the span description. For example, the span description <code>SELECT * FROM books WHERE books.id = 1</code> is not parameterized correctly because it includes the book ID. The book ID parameter should vary for each query. This would create different fingerprints and separate issues. A correct span description should look something like this: <code>SELECT * FROM books WHERE books.id = %s</code>. While Sentry attempts to parameterize queries while fingerprinting, it may miss some cases.</p>
+
+<p>Consider a book review website. It has two ORM models, <code>Book</code> and <code>Author</code>, each with a corresponding database table. The website shows a list of the ten oldest books and their respective authors. The code might look like this:</p>
+<div class="code-tabs-wrapper">
+<div class="css-137mmwy">
+<div class="css-1dm74on"><button class="css-1mo6ki6">Python</button></div>
+<div class="css-1ks9pst"><div class="code-blocks_code-block__cTPUP">
+<div class="code-blocks_copied__PBcgM">Copied</div>
+<div><pre class="language-python"><code class="language-python code-highlight"><span class="code-line"><span class="token keyword">from</span> django<span class="token punctuation">.</span>http <span class="token keyword">import</span> HttpResponse
+</span><span class="code-line"><span class="token keyword">def</span> <span class="token function">books</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">:</span>
+</span><span class="code-line">    books <span class="token operator">=</span> Book<span class="token punctuation">.</span>objects<span class="token punctuation">.</span><span class="token builtin">all</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">10</span><span class="token punctuation">]</span>
+</span><span class="code-line">    book_list <span class="token operator">=</span> <span class="token punctuation">[</span>book<span class="token punctuation">.</span>title <span class="token operator">+</span> <span class="token string">" by "</span> <span class="token operator">+</span> book<span class="token punctuation">.</span>author<span class="token punctuation">.</span>name <span class="token keyword">for</span> book <span class="token keyword">in</span> books<span class="token punctuation">]</span>
+</span><span class="code-line">    <span class="token keyword">return</span> HttpResponse<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token string">", "</span><span class="token punctuation">)</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>book_list<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</span></code></pre></div>
+</div></div>
+</div>
+<div><pre class="language-python"><code class="language-python code-highlight"><span class="code-line"><span class="token keyword">from</span> django<span class="token punctuation">.</span>http <span class="token keyword">import</span> HttpResponse
+</span><span class="code-line"><span class="token keyword">def</span> <span class="token function">books</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">:</span>
+</span><span class="code-line">    books <span class="token operator">=</span> Book<span class="token punctuation">.</span>objects<span class="token punctuation">.</span><span class="token builtin">all</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">10</span><span class="token punctuation">]</span>
+</span><span class="code-line">    book_list <span class="token operator">=</span> <span class="token punctuation">[</span>book<span class="token punctuation">.</span>title <span class="token operator">+</span> <span class="token string">" by "</span> <span class="token operator">+</span> book<span class="token punctuation">.</span>author<span class="token punctuation">.</span>name <span class="token keyword">for</span> book <span class="token keyword">in</span> books<span class="token punctuation">]</span>
+</span><span class="code-line">    <span class="token keyword">return</span> HttpResponse<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token string">", "</span><span class="token punctuation">)</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>book_list<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</span></code></pre></div>
+</div>
+<p>This code has a subtle performance problem. Each call to <code>book.author.name</code> makes a query to fetch the book's author. In total, this code makes 11 queries: one query to fetch the list of books, and 10 more queries to fetch the author of each book. This results in a characteristic query span waterfall.</p>
+<p>In order to fix this performance issue, you could use the <code>select_related</code> method in Django, like so:</p>
+<div class="code-tabs-wrapper">
+<div class="css-137mmwy">
+<div class="css-1dm74on"><button class="css-1mo6ki6">Python</button></div>
+<div class="css-1ks9pst"><div class="code-blocks_code-block__cTPUP">
+<div class="code-blocks_copied__PBcgM">Copied</div>
+<div><pre class="language-python"><code class="language-python code-highlight"><span class="code-line"><span class="token keyword">from</span> django<span class="token punctuation">.</span>http <span class="token keyword">import</span> HttpResponse
+</span><span class="code-line"><span class="token keyword">def</span> <span class="token function">books</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">:</span>
+</span><span class="code-line">    books <span class="token operator">=</span> Book<span class="token punctuation">.</span>objects<span class="token punctuation">.</span>select_related<span class="token punctuation">(</span><span class="token string">"author"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">all</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">10</span><span class="token punctuation">]</span>
+</span><span class="code-line">    book_list <span class="token operator">=</span> <span class="token punctuation">[</span>book<span class="token punctuation">.</span>title <span class="token operator">+</span> <span class="token string">" by "</span> <span class="token operator">+</span> book<span class="token punctuation">.</span>author<span class="token punctuation">.</span>name <span class="token keyword">for</span> book <span class="token keyword">in</span> books<span class="token punctuation">]</span>
+</span><span class="code-line">    <span class="token keyword">return</span> HttpResponse<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token string">", "</span><span class="token punctuation">)</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>book_list<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</span></code></pre></div>
+</div></div>
+</div>
+<div><pre class="language-python"><code class="language-python code-highlight"><span class="code-line"><span class="token keyword">from</span> django<span class="token punctuation">.</span>http <span class="token keyword">import</span> HttpResponse
+</span><span class="code-line"><span class="token keyword">def</span> <span class="token function">books</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">:</span>
+</span><span class="code-line">    books <span class="token operator">=</span> Book<span class="token punctuation">.</span>objects<span class="token punctuation">.</span>select_related<span class="token punctuation">(</span><span class="token string">"author"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">all</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">10</span><span class="token punctuation">]</span>
+</span><span class="code-line">    book_list <span class="token operator">=</span> <span class="token punctuation">[</span>book<span class="token punctuation">.</span>title <span class="token operator">+</span> <span class="token string">" by "</span> <span class="token operator">+</span> book<span class="token punctuation">.</span>author<span class="token punctuation">.</span>name <span class="token keyword">for</span> book <span class="token keyword">in</span> books<span class="token punctuation">]</span>
+</span><span class="code-line">    <span class="token keyword">return</span> HttpResponse<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token string">", "</span><span class="token punctuation">)</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>book_list<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</span></code></pre></div>
+</div>
+<p>Django will <code>JOIN</code> the tables ahead of time, and preload the author information. That way, calling <code>book.author.name</code> does not need to make an extra query. Instead of a long span waterfall, there is a single <code>SELECT</code> query.</p>
+<p>N+1s can also happen when modifying data. For example, instead of creating objects in a loop:</p>
+<div class="code-tabs-wrapper">
+<div class="css-137mmwy">
+<div class="css-1dm74on"><button class="css-1mo6ki6">Python</button></div>
+<div class="css-1ks9pst"><div class="code-blocks_code-block__cTPUP">
+<div class="code-blocks_copied__PBcgM">Copied</div>
+<div><pre class="language-python"><code class="language-python code-highlight"><span class="code-line"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+</span><span class="code-line">    Book<span class="token punctuation">.</span>objects<span class="token punctuation">.</span>create<span class="token punctuation">(</span>title<span class="token punctuation">:</span> <span class="token string-interpolation"><span class="token string">f"Book </span><span class="token string">"</span></span><span class="token punctuation">)</span>
+</span></code></pre></div>
+</div></div>
+</div>
+<div><pre class="language-python"><code class="language-python code-highlight"><span class="code-line"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+</span><span class="code-line">    Book<span class="token punctuation">.</span>objects<span class="token punctuation">.</span>create<span class="token punctuation">(</span>title<span class="token punctuation">:</span> <span class="token string-interpolation"><span class="token string">f"Book </span><span class="token string">"</span></span><span class="token punctuation">)</span>
+</span></code></pre></div>
+</div>
+<p>You can instead create the objects in a single query:</p>
+<div class="code-tabs-wrapper">
+<div class="css-137mmwy">
+<div class="css-1dm74on"><button class="css-1mo6ki6">Python</button></div>
+<div class="css-1ks9pst"><div class="code-blocks_code-block__cTPUP">
+<div class="code-blocks_copied__PBcgM">Copied</div>
+<div><pre class="language-python"><code class="language-python code-highlight"><span class="code-line">Book<span class="token punctuation">.</span>objects<span class="token punctuation">.</span>bulk_create<span class="token punctuation">(</span>
+</span><span class="code-line">    <span class="token punctuation">[</span>Book<span class="token punctuation">(</span>title<span class="token punctuation">:</span> <span class="token string-interpolation"><span class="token string">f"Book </span><span class="token string">"</span></span><span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+</span></code></pre></div>
+</div></div>
+</div>
+<div><pre class="language-python"><code class="language-python code-highlight"><span class="code-line">Book<span class="token punctuation">.</span>objects<span class="token punctuation">.</span>bulk_create<span class="token punctuation">(</span>
+</span><span class="code-line">    <span class="token punctuation">[</span>Book<span class="token punctuation">(</span>title<span class="token punctuation">:</span> <span class="token string-interpolation"><span class="token string">f"Book </span><span class="token string">"</span></span><span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 not-prose mt-16">
+<div class="col-span-1"><a class="no-underline" href="/product/issues/issue-details/performance-issues/"><div class="py-3 px-4 border-2 dark:[border-color:var(--gray-4)] rounded-md transition-colors hover:[border-color:var(--accent)] text-left">
+<div class="text-sm [color:var(--foreground)]">Previous</div>
+<div class="flex items-center gap-1 font-[500] justify-start">Performance Issues</div>
+</div></a></div>
+<div class="col-span-1"><a class="no-underline" href="/product/issues/issue-details/performance-issues/n-one-api-calls/"><div class="py-3 px-4 border-2 dark:[border-color:var(--gray-4)] rounded-md transition-colors hover:[border-color:var(--accent)] text-right">
+<div class="text-sm [color:var(--foreground)]">Next</div>
+<div class="flex items-center gap-1 font-[500] justify-end">N+1 API Calls</div>
+</div></a></div>
+</div>
+<div class="space-y-4 py-4 border-[var(--gray-6)]">
+<div class="flex items-center gap-4 text-sm mt-8">
+<span class="font-medium">Was this helpful?</span><div class="flex">
+<button class="py-1 px-2 gap-4 hover:bg-[var(--gray-3)] rounded flex items-center justify-center">Yes 👍</button><button class="py-1 px-2 gap-4 hover:bg-[var(--gray-3)] rounded flex items-center justify-center">No 👎</button>
+</div>
+</div>
+
+</div>
+<div class="styles_cta__uq_BB">
+<small><strong>Help improve this content</strong></small><small>Our documentation is open source and available on GitHub. Your contributions are welcome, whether fixing a typo (drat!) or suggesting an update ("yeah, this would be better").<div>
+<a href="https://docs.sentry.io/contributing/">How to contribute</a>   |  <a href="https://github.com/getsentry/sentry-docs/edit/master/docs/product/issues/issue-details/performance-issues/n-one-queries.mdx">Edit this page</a>   |  <a href="https://github.com/getsentry/sentry-docs/issues/new/choose">Create a docs issue</a>   |  <a href="https://www.sentry.help/en/">Get support</a> </div></small>
+</div>
+</div>
+</div></main></section></div>
+
+</div></div></div>

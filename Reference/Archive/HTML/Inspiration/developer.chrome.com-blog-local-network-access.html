@@ -1,0 +1,1711 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head>
+    <meta name="google-signin-client-id" content="157101835696-ooapojlodmuabs2do2vuhhnf90bccmoi.apps.googleusercontent.com"><meta name="google-signin-scope" content="profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty"><meta property="og:site_name" content="Chrome for Developers">
+    <meta property="og:type" content="website"><meta name="theme-color" content="#1a73e8"><meta charset="utf-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
+    <link rel="manifest" href="/_pwa/chrome/manifest.json" crossorigin="use-credentials">
+    <link rel="preconnect" href="//www.gstatic.com" crossorigin="">
+    <link rel="preconnect" href="//fonts.googleapis.com" crossorigin="">
+    <link rel="preconnect" href="//www.google-analytics.com" crossorigin=""><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Google+Sans:400,500|Roboto:400,400italic,500,500italic,700,700italic|Roboto+Mono:400,500,700&amp;display=swap">
+      <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Material+Icons&amp;family=Material+Symbols+Outlined&amp;display=block"><link rel="stylesheet" href="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/chrome/css/app.css">
+      
+        <link rel="stylesheet" href="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/chrome/css/dark-theme.css" disabled="">
+      <link rel="shortcut icon" href="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/chrome/images/favicon.png">
+    <link rel="apple-touch-icon" href="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/chrome/images/touchicon-180.png"><link rel="canonical" href="https://developer.chrome.com/blog/local-network-access"><link rel="search" type="application/opensearchdescription+xml" title="Chrome for Developers" href="https://developer.chrome.com/s/opensearch.xml">
+      <link rel="alternate" hreflang="en" href="https://developer.chrome.com/blog/local-network-access"><link rel="alternate" hreflang="x-default" href="https://developer.chrome.com/blog/local-network-access"><link rel="alternate" hreflang="ar" href="https://developer.chrome.com/blog/local-network-access?hl=ar"><link rel="alternate" hreflang="bn" href="https://developer.chrome.com/blog/local-network-access?hl=bn"><link rel="alternate" hreflang="zh-Hans" href="https://developer.chrome.com/blog/local-network-access?hl=zh-cn"><link rel="alternate" hreflang="zh-Hant" href="https://developer.chrome.com/blog/local-network-access?hl=zh-tw"><link rel="alternate" hreflang="nl" href="https://developer.chrome.com/blog/local-network-access?hl=nl"><link rel="alternate" hreflang="fa" href="https://developer.chrome.com/blog/local-network-access?hl=fa"><link rel="alternate" hreflang="fr" href="https://developer.chrome.com/blog/local-network-access?hl=fr"><link rel="alternate" hreflang="de" href="https://developer.chrome.com/blog/local-network-access?hl=de"><link rel="alternate" hreflang="he" href="https://developer.chrome.com/blog/local-network-access?hl=he"><link rel="alternate" hreflang="hi" href="https://developer.chrome.com/blog/local-network-access?hl=hi"><link rel="alternate" hreflang="id" href="https://developer.chrome.com/blog/local-network-access?hl=id"><link rel="alternate" hreflang="it" href="https://developer.chrome.com/blog/local-network-access?hl=it"><link rel="alternate" hreflang="ja" href="https://developer.chrome.com/blog/local-network-access?hl=ja"><link rel="alternate" hreflang="ko" href="https://developer.chrome.com/blog/local-network-access?hl=ko"><link rel="alternate" hreflang="pl" href="https://developer.chrome.com/blog/local-network-access?hl=pl"><link rel="alternate" hreflang="pt-BR" href="https://developer.chrome.com/blog/local-network-access?hl=pt-br"><link rel="alternate" hreflang="ru" href="https://developer.chrome.com/blog/local-network-access?hl=ru"><link rel="alternate" hreflang="es-419" href="https://developer.chrome.com/blog/local-network-access?hl=es-419"><link rel="alternate" hreflang="th" href="https://developer.chrome.com/blog/local-network-access?hl=th"><link rel="alternate" hreflang="tr" href="https://developer.chrome.com/blog/local-network-access?hl=tr"><link rel="alternate" hreflang="vi" href="https://developer.chrome.com/blog/local-network-access?hl=vi"><link rel="alternate" hreflang="en-cn" href="https://developer.chrome.google.cn/blog/local-network-access"><link rel="alternate" hreflang="x-default" href="https://developer.chrome.google.cn/blog/local-network-access"><link rel="alternate" hreflang="ar-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=ar"><link rel="alternate" hreflang="bn-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=bn"><link rel="alternate" hreflang="zh-Hans-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=zh-cn"><link rel="alternate" hreflang="zh-Hant-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=zh-tw"><link rel="alternate" hreflang="nl-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=nl"><link rel="alternate" hreflang="fa-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=fa"><link rel="alternate" hreflang="fr-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=fr"><link rel="alternate" hreflang="de-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=de"><link rel="alternate" hreflang="he-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=he"><link rel="alternate" hreflang="hi-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=hi"><link rel="alternate" hreflang="id-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=id"><link rel="alternate" hreflang="it-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=it"><link rel="alternate" hreflang="ja-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=ja"><link rel="alternate" hreflang="ko-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=ko"><link rel="alternate" hreflang="pl-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=pl"><link rel="alternate" hreflang="pt-BR-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=pt-br"><link rel="alternate" hreflang="ru-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=ru"><link rel="alternate" hreflang="es-419-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=es-419"><link rel="alternate" hreflang="th-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=th"><link rel="alternate" hreflang="tr-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=tr"><link rel="alternate" hreflang="vi-cn" href="https://developer.chrome.google.cn/blog/local-network-access?hl=vi"><title>New permission prompt for Local Network Access &nbsp;|&nbsp; Blog &nbsp;|&nbsp; Chrome for Developers</title>
+
+<meta property="og:title" content="New permission prompt for Local Network Access &nbsp;|&nbsp; Blog &nbsp;|&nbsp; Chrome for Developers"><meta name="description" content="Learn about the new permission prompt for sites that connect to local networks.">
+  <meta property="og:description" content="Learn about the new permission prompt for sites that connect to local networks."><meta property="og:url" content="https://developer.chrome.com/blog/local-network-access"><meta property="og:image" content="https://developer.chrome.com/static/blog/local-network-access/image/hero.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="675"><meta property="og:locale" content="en"><meta name="twitter:card" content="summary_large_image"><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-64EQFFKSHW&amp;l=atDataLayer&amp;cx=c&amp;gtm=4e6ar1" nonce=""></script><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=AW-761131518&amp;cx=c&amp;gtm=4e6ar1" nonce=""></script><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-H1Y3PXZW9Q&amp;cx=c&amp;gtm=4e6ar1" nonce=""></script><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/destination?id=G-H1Y3PXZW9Q&amp;cx=c&amp;gtm=4e6ar1" nonce=""></script><script class="all-tenants" async="" src="//www.googletagmanager.com/gtm.js?id=GTM-NDV7K7V5&amp;l=atDataLayer" nonce=""></script><script async="" src="//www.googletagmanager.com/gtm.js?id=GTM-5QF3RT2" nonce=""></script><script async="" src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/chrome/js/app_loader.js"></script><script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Blog",
+      "item": "https://developer.chrome.com/blog"
+    },{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "New permission prompt for Local Network Access",
+      "item": "https://developer.chrome.com/blog/local-network-access"
+    }]
+  }
+  </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+    <script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_app_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_app_custom_elements_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_header_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_actions_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_analytics_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_badger_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_book_nav_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_bookmark_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_code_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_content_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_cookie_notification_bar_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_feature_tooltip_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_footer_linkboxes_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_footer_promos_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_footer_utility_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_heading_link_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_language_selector_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_llm_tools_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_notification_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_sitemask_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_thumb_rating_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_toc_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_tooltip_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_view_release_notes_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_badge_awarded_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_snackbar_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_dialog_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_fast_track_profile_creator_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_feedback_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_dropdown_list_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_view_release_notes_dialog_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_spinner_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_checkbox_module.js" nonce=""></script><script src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/js/devsite_devsite_mwc_module.js" nonce=""></script><script src="https://unpkg.com/web-vitals/dist/web-vitals.attribution.iife.js"></script></head>
+  <body class="color-scheme--light viewport--desktop tenant--chrome" template="page" theme="chrome-theme" type="blog" appearance="" layout="docs" display-toc="" ready="" style="--devsite-panel-height: 0px; margin-right: 0px; padding-right: 0px; overflow: auto;">
+  
+    
+  
+  
+    
+    <section class="devsite-wrapper">
+      <devsite-cookie-notification-bar><!----></devsite-cookie-notification-bar>
+        
+        <div class="devsite-book-nav-bg" hidden="" fixed=""></div><devsite-book-nav scrollbars="" hidden="" fixed="" top-level-nav="" style="--devsite-book-nav-max-height: 600px; top: 0px;">
+          
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="devsite-book-nav-filter" hidden="">
+  <span class="filter-list-icon material-icons" aria-hidden="true"></span>
+  <input type="text" placeholder="Filter" aria-label="Type to filter" role="searchbox">
+  
+  <span class="filter-clear-button hidden" data-title="Clear filter" aria-label="Clear filter" role="button" tabindex="0"></span>
+</div>
+
+<nav class="devsite-book-nav devsite-nav nocontent" data-nosnippet="" aria-label="Side menu">
+  <div class="devsite-mobile-header">
+    
+    <div class="devsite-product-name-wrapper">
+
+  <a href="/" class="devsite-site-logo-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Site logo" track-type="globalNav" track-name="chromeForDevelopers" track-metadata-position="nav" track-metadata-eventdetail="nav">
+  
+  <picture>
+    
+    <source srcset="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/chrome/images/lockup-dark-theme.svg" media="(prefers-color-scheme: dark)" class="devsite-dark-theme">
+    
+    <img src="https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/chrome/images/lockup.svg" class="devsite-site-logo" alt="Chrome for Developers">
+  </picture>
+  
+</a>
+
+
+</div>
+  </div>
+
+  <div class="devsite-book-nav-wrapper">
+    <div class="devsite-mobile-nav-top">
+      
+        <ul class="devsite-nav-list">
+          
+            <li class="devsite-nav-item">
+              
+  
+  <a href="/docs" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Tab: Docs" track-name="docs" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Docs
+   </span>
+    
+  
+  </a>
+  
+
+  
+    <ul class="devsite-nav-responsive-tabs devsite-nav-has-menu
+               ">
+      
+<li class="devsite-nav-item">
+
+  
+  <span class="devsite-nav-title" tooltip="" data-category="Site-Wide Custom Events" data-label="Tab: Docs" track-name="docs">
+  
+    <span class="devsite-nav-text" tooltip="" menu="Docs">
+      More
+   </span>
+    
+    <span class="devsite-nav-icon material-icons" data-icon="forward" menu="Docs">
+    </span>
+    
+  
+  </span>
+  
+
+</li>
+
+    </ul>
+  
+              
+            </li>
+          
+            <li class="devsite-nav-item">
+              
+  
+  <a href="/case-studies" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Tab: Case studies" track-name="case studies" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Case studies
+   </span>
+    
+  
+  </a>
+  
+
+  
+              
+            </li>
+          
+            <li class="devsite-nav-item">
+              
+  
+  <a href="/blog" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Tab: Blog" track-name="blog" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Blog
+   </span>
+    
+  
+  </a>
+  
+
+  
+              
+            </li>
+          
+            <li class="devsite-nav-item">
+              
+  
+  <a href="/new" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Tab: New in Chrome" track-name="new in chrome" track-type="globalNav" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      New in Chrome
+   </span>
+    
+  
+  </a>
+  
+
+  
+              
+            </li>
+          
+          
+          
+        </ul>
+      
+    </div>
+    
+      <div class="devsite-mobile-nav-bottom">
+        
+        
+          
+    
+      
+      <ul class="devsite-nav-list" menu="Docs" aria-label="Side menu" hidden="">
+        
+          
+            
+              
+<li class="devsite-nav-item devsite-nav-heading">
+
+  
+  <span class="devsite-nav-title" tooltip="">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Build with Chrome
+   </span>
+    
+  
+  </span>
+  
+
+</li>
+
+            
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/web-platform" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Web Platform" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Web Platform
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/iwa" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Isolated Web Apps (IWA)" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Isolated Web Apps (IWA)
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/capabilities" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Capabilities" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Capabilities
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/automation-and-testing" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Automation and testing" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Automation and testing
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/chromedriver" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: ChromeDriver" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      ChromeDriver
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/extensions" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Extensions" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Extensions
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/webstore" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Chrome Web Store" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Chrome Web Store
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/chromium" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Chromium" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Chromium
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/android" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Web on Android" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Web on Android
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://developer.chrome.com/origintrials/" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Origin trials" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Origin trials
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/release-notes" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Release notes" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Release notes
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+          
+        
+          
+            
+              
+<li class="devsite-nav-item devsite-nav-heading">
+
+  
+  <span class="devsite-nav-title" tooltip="">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Productivity
+   </span>
+    
+  
+  </span>
+  
+
+</li>
+
+            
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/devtools" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: DevTools" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      DevTools
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/lighthouse" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Lighthouse" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Lighthouse
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/crux" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Chrome UX Report" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Chrome UX Report
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/accessibility" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Accessibility" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Accessibility
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/modern-web-guidance" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Modern Web Guidance" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Modern Web Guidance
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+          
+            
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/workbox" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Workbox" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Workbox
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/puppeteer" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Puppeteer" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Puppeteer
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+          
+        
+          
+            
+              
+<li class="devsite-nav-item devsite-nav-heading">
+
+  
+  <span class="devsite-nav-title" tooltip="">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Experience
+   </span>
+    
+  
+  </span>
+  
+
+</li>
+
+            
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/ai" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: AI" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      AI
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/performance" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Performance" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Performance
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/css-ui" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: CSS and UI" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      CSS and UI
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/identity" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Identity" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Identity
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/payments" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Payments" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Payments
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/privacy-security" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Privacy and security" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Privacy and security
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs/ads" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Ads" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Ads
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+          
+        
+          
+            
+              
+<li class="devsite-nav-item devsite-nav-heading">
+
+  
+  <span class="devsite-nav-title" tooltip="">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Resources
+   </span>
+    
+  
+  </span>
+  
+
+</li>
+
+            
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="/docs" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: All documentation" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      All documentation
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://web.dev/baseline" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: Baseline &lt;span class=&quot;material-icons&quot; style=&quot;font-size: 12px;&quot; aria-hidden=&quot;true&quot; translate=&quot;no&quot;&gt;open_in_new&lt;/span&gt;" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      Baseline &lt;span class="material-icons" style="font-size: 12px;" aria-hidden="true" translate="no"&gt;open_in_new&lt;/span&gt;
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://web.dev" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: web.dev &lt;span class=&quot;material-icons&quot; style=&quot;font-size: 12px;&quot; aria-hidden=&quot;true&quot; translate=&quot;no&quot;&gt;open_in_new&lt;/span&gt;" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      web.dev &lt;span class="material-icons" style="font-size: 12px;" aria-hidden="true" translate="no"&gt;open_in_new&lt;/span&gt;
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+              
+<li class="devsite-nav-item">
+
+  
+  <a href="https://pagespeed.web.dev" class="devsite-nav-title gc-analytics-event
+              
+              " data-category="Site-Wide Custom Events" data-label="Responsive Tab: PageSpeed Insights audit &lt;span class=&quot;material-icons&quot; style=&quot;font-size: 12px;&quot; aria-hidden=&quot;true&quot; translate=&quot;no&quot;&gt;open_in_new&lt;/span&gt;" track-type="navMenu" track-metadata-eventdetail="globalMenu" track-metadata-position="nav">
+  
+    <span class="devsite-nav-text" tooltip="">
+      PageSpeed Insights audit &lt;span class="material-icons" style="font-size: 12px;" aria-hidden="true" translate="no"&gt;open_in_new&lt;/span&gt;
+   </span>
+    
+  
+  </a>
+  
+
+</li>
+
+            
+          
+        
+      </ul>
+    
+  
+    
+  
+    
+  
+    
+  
+        
+        
+      </div>
+    
+  </div>
+</nav>
+          
+        </devsite-book-nav><div class="devsite-book-nav-blur" hidden="" fixed="" style="--devsite-js-book-nav-scrollbar-width: 0px;"></div><button class="devsite-book-nav-toggle" aria-haspopup="menu" hidden="" fixed="" aria-label="Hide side navigation" data-title="Hide side navigation" aria-expanded="true"><span class="material-icons devsite-book-nav-toggle-icon"></span></button>
+      
+      <section id="gc-wrapper">
+        <main role="main" id="main-content" class="devsite-main-content" has-sidebar="">
+          <div class="devsite-sidebar" fixed="" style="--devsite-js-sidebar-max-height: 552px; --devsite-js-sidebar-offset: 0;">
+            
+          </div>
+          <devsite-content>
+            
+              
+
+
+
+
+
+
+
+
+
+
+<article class="devsite-article">
+  
+  
+  
+  
+  
+
+  <div class="devsite-article-meta nocontent" role="navigation" data-nosnippet="">
+    
+    
+    <ul class="devsite-breadcrumb-list" aria-label="Breadcrumb">
+  
+  <li class="devsite-breadcrumb-item
+             ">
+    
+    
+    
+      
+        
+  <a href="https://developer.chrome.com/" class="devsite-breadcrumb-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Breadcrumbs" data-value="1" track-type="globalNav" track-name="breadcrumb" track-metadata-position="1" track-metadata-eventdetail="Chrome for Developers">
+    
+          Chrome for Developers
+        
+  </a>
+  
+      
+    
+  </li>
+  
+  <li class="devsite-breadcrumb-item
+             ">
+    
+      
+      <div class="devsite-breadcrumb-guillemet material-icons" aria-hidden="true"></div>
+    
+    
+    
+      
+        
+  <a href="https://developer.chrome.com/blog" class="devsite-breadcrumb-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Breadcrumbs" data-value="2" track-type="globalNav" track-name="breadcrumb" track-metadata-position="2" track-metadata-eventdetail="Blog">
+    
+          Blog
+        
+  </a>
+  
+      
+    
+  </li>
+  
+</ul>
+    
+      
+    <devsite-thumb-rating position="header"><div class="devsite-thumb-rating" role="form" aria-labelledby="devsite-thumb-label-header"><div class="devsite-thumb-label" id="devsite-thumb-label-header">Was this helpful?</div><div class="devsite-thumbs"><button class="devsite-thumb devsite-thumb-up" data-title="Helpful" aria-label="Helpful"><svg class="devsite-thumb-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21,7h-6.31l0.95-4.57l0.03-0.32c0-0.41-0.17-0.79-0.44-1.06L14.17,0c0,0-7.09,6.85-7.17,7H2v13h16 c0.83,0,1.54-0.5,1.84-1.22l3.02-7.05C22.95,11.5,23,11.26,23,11V9C23,7.9,22.1,7,21,7z M7,18H4V9h3V18z M21,11l-3,7H9V8l4.34-4.34 L12,9h9V11z"></path></svg></button><button class="devsite-thumb devsite-thumb-down" data-title="Not helpful" aria-label="Not helpful"><svg class="devsite-thumb-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3,17h6.31l-0.95,4.57l-0.03,0.32c0,0.41,0.17,0.79,0.44,1.06L9.83,24c0,0,7.09-6.85,7.17-7h5V4H6 C5.17,4,4.46,4.5,4.16,5.22l-3.02,7.05C1.05,12.5,1,12.74,1,13v2C1,16.1,1.9,17,3,17z M17,6h3v9h-3V6z M3,13l3-7h9v10l-4.34,4.34 L12,15H3V13z"></path></svg></button></div></div></devsite-thumb-rating>
+  
+    
+  </div>
+  
+    <h1 class="devsite-page-title" tabindex="-1">
+      New permission prompt for Local Network Access<devsite-actions data-nosnippet=""><devsite-feature-tooltip ack-key="AckCollectionsBookmarkTooltipDismiss" analytics-category="Site-Wide Custom Events" analytics-action-show="Callout Profile displayed" analytics-action-close="Callout Profile dismissed" analytics-label="Create Collection Callout" class="devsite-page-bookmark-tooltip nocontent inline-block" data-nosnippet="" dismiss-button="true" id="devsite-collections-dropdown" dismiss-button-text="Dismiss" close-button-text="Got it" rendered="" current-step="0" style="--devsite-popout-offset-x: 32px;">
+
+    
+    
+      <devsite-bookmark class="show"><devsite-dropdown-list aria-label="Bookmark collections drop down" role="listbox" ellipsis="" checkboxes="" fetchingitems="true" writable="" additemtext="New Collection" rendered=""><span data-label="devsite-bookmark-direct-action" data-title="Save page" class="material-icons bookmark-icon bookmark-action" slot="toggle"></span><span data-label="devsite-bookmark-direct-action" data-title="Unsave page" hidden="" class="material-icons bookmark-icon unbookmark-action toggled" slot="toggle"></span></devsite-dropdown-list></devsite-bookmark>
+    
+
+    <span slot="popout-heading">
+      
+      Stay organized with collections
+    </span>
+    <span slot="popout-contents">
+      
+      Save and categorize content based on your preferences.<wbr>
+    </span>
+  </devsite-feature-tooltip>
+    <devsite-llm-tools><!---->
+      <div class="devsite-llm-tools-container" role="group" aria-label="LLM Tools">
+        <div class="devsite-llm-tools-button-container">
+          <button type="button" class="button button-white devsite-llm-tools-button" aria-label="Copy page as markdown" data-title="Copy page as markdown">
+            <span class="material-icons icon-copy" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="devsite-llm-tools-dropdown-container">
+          <devsite-dropdown-list open-dropdown-aria-label="More LLM Tools options" close-dropdown-aria-label="Close LLM Tools options menu" rendered="">
+          </devsite-dropdown-list>
+        </div>
+      </div>
+    </devsite-llm-tools><!----></devsite-actions>
+  
+      
+    </h1>
+  <div class="devsite-page-title-meta"><devsite-view-release-notes><!----><!--?--></devsite-view-release-notes></div>
+  
+
+  <devsite-toc class="devsite-nav devsite-toc-embedded" depth="2" devsite-toc-embedded="" visible=""><ul class="devsite-nav-list"><li class="devsite-nav-item devsite-nav-heading devsite-toc-toggle"><span class="devsite-nav-title" role="heading" aria-level="2"><span class="devsite-nav-text">On this page</span></span><button type="button" title="Expand/collapse contents" class="devsite-nav-show-all button-transparent material-icons"></button></li><li class="devsite-nav-item" visible=""><a href="#what_is_local_network_access" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="0" track-type="navigation" track-name="embeddedNav" track-metadata-position="0" track-metadata-link-destination="#what_is_local_network_access"><span class="devsite-nav-text" tooltip="">What is Local Network Access?</span></a></li><li class="devsite-nav-item" visible=""><a href="#what_kinds_of_requests_are_affected" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="1" track-type="navigation" track-name="embeddedNav" track-metadata-position="1" track-metadata-link-destination="#what_kinds_of_requests_are_affected"><span class="devsite-nav-text" tooltip="">What kinds of requests are affected?</span></a></li><li class="devsite-nav-item" visible=""><a href="#whats_changing_in_chrome" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="2" track-type="navigation" track-name="embeddedNav" track-metadata-position="2" track-metadata-link-destination="#whats_changing_in_chrome"><span class="devsite-nav-text" tooltip="">What's changing in Chrome</span></a><ul class="devsite-nav-list"><li class="devsite-nav-item" visible=""><a href="#chrome_138" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="2.0" track-type="navigation" track-name="embeddedNav" track-metadata-position="2.0" track-metadata-link-destination="#chrome_138"><span class="devsite-nav-text" tooltip="">Chrome 138</span></a></li><li class="devsite-nav-item" visible=""><a href="#chrome_139_and_beyond" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="2.1" track-type="navigation" track-name="embeddedNav" track-metadata-position="2.1" track-metadata-link-destination="#chrome_139_and_beyond"><span class="devsite-nav-text" tooltip="">Chrome 139 and beyond</span></a></li></ul></li><li class="devsite-nav-item" visible=""><a href="#feedback_wanted" class="devsite-nav-title gc-analytics-event" data-category="Site-Wide Custom Events" data-action="click" data-label="Embedded nav" data-value="3" track-type="navigation" track-name="embeddedNav" track-metadata-position="3" track-metadata-link-destination="#feedback_wanted"><span class="devsite-nav-text" tooltip="">Feedback wanted</span></a></li><li class="devsite-toc-toggle"><button type="button" class="button-flat devsite-nav-more-items material-icons" track-type="navigation" track-name="embeddedNavExpand" title="Expand/collapse contents"></button></li></ul></devsite-toc>
+  
+    
+  <div class="devsite-article-body clearfix
+  ">
+
+  
+    
+    
+
+
+
+
+<p><style>
+.wd-authors {
+  --avatar-size: 65px;
+  display: flex;
+  gap: 2em;
+}
+
+.wd-author {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  line-height: calc(var(--avatar-size) / 2);
+}
+
+.wd-author img {
+  border-radius: 50%;
+  height: var(--avatar-size, 65px);
+  width: var(--avatar-size, 65px);
+}
+
+.dcc-authors {
+  --avatar-size: 65px;
+  display: flex;
+  gap: 2em;
+}
+
+.dcc-author {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  line-height: calc(var(--avatar-size) / 2);
+}
+
+.dcc-author img {
+  border-radius: 50%;
+  height: var(--avatar-size, 65px);
+  width: var(--avatar-size, 65px);
+}
+  
+.dcc-author__links {
+  display: flex;
+}
+
+.dcc-author__links a {
+  margin-inline-end: 6px;
+}
+
+.dcc-author__links a:last-of-type {
+  margin-inline-end: 0;
+}
+
+/* Name, title and links stacked in a column centred against the avatar. */
+.dcc-author--with-title > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.3;
+}
+
+.dcc-author__title {
+  color: var(--devsite-secondary-text-color);
+  font-size: 0.875em;
+}
+
+.dcc-author--with-title .dcc-author__links {
+  margin-block-start: 4px;
+}
+</style>
+
+</p><div class="dcc-authors" translate="no">
+  
+    
+    
+      <div class="dcc-author">
+        
+          <img class="devsite-landing-row-item-icon" alt="Chris Thompson" src="https://web.dev/images/authors/cthomp.jpg" decoding="async" height="64" loading="lazy" width="64"> 
+        
+        <div>
+          <span> 
+            Chris Thompson
+          </span>
+          
+          <div class="dcc-author__links">
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+      </div>
+    
+  
+</div><p></p>
+
+<p>
+</p><p class="wd-pubdates" style="font-size: 90%; border-bottom: 1px solid var(--devsite-ref-palette--grey200);color: var(--devsite-ref-palette--blue-grey700)">
+  Published: June 9, 2025
+</p>
+<p></p>
+
+<aside class="note">
+<strong>Update (2025-09-29):</strong>
+The Local Network Access permission prompt is launching in Chrome 142.
+We've written an
+<a href="https://docs.google.com/document/d/1QQkqehw8umtAgz5z0um7THx-aoU251p705FbIQjDuGs/edit?usp=sharing">LNA adoption guide</a>
+to answer frequently asked questions.
+</aside>
+
+<p>Chrome is adding a new permission prompt for sites that make connections to a
+user's local network as part of the
+<a href="https://wicg.github.io/local-network-access/">Local Network Access specification</a>.
+The aim is to protect users from cross-site request forgery (CSRF) attacks
+targeting routers and other devices on private networks, and to reduce the
+ability of sites to use these requests to fingerprint the user's local network.</p>
+
+<p>To understand how this change impacts the web ecosystem, the Chrome team is
+looking for feedback from developers who build web applications that rely on
+making connections to a user's local network or to software running locally on
+the user's machine. From Chrome 138, you can opt-in to these new restrictions by
+going to <code translate="no" dir="ltr">chrome://flags/#local-network-access-check</code> and setting the flag to
+"Enabled (Blocking)".</p>
+<aside class="note"><strong>Note:</strong><span> Chrome previously experimented with restricting access to local
+network devices with Private Network Access, which required CORS preflights
+where the target device opted in to being connected to, instead of gating all
+local network accesses behind a permission prompt. Local Network Access
+replaces that effort, after PNA was
+<a href="/blog/pna-on-hold">put on hold</a>. Thank you to everyone
+who helped test PNA and provide feedback to us—it has been incredibly valuable
+and helped guide us to our new Local Network Access permission approach.</span></aside>
+<h2 id="what_is_local_network_access" data-text="What is Local Network Access?" tabindex="-1">What is Local Network Access?</h2>
+
+<p><a href="https://github.com/WICG/local-network-access">Local Network Access</a>
+restricts the ability of websites to send requests to servers on a user's local
+network (including servers running locally on the user's machine), requiring the
+user grant the site permission before such requests can be made. The ability to
+request this permission is restricted to secure contexts.</p>
+
+<figure>
+  <img src="/static/blog/local-network-access/image/example.png" alt="A prompt with the text 'Look for and connect to any device on your local network.'" srcset="https://developer.chrome.com/static/blog/local-network-access/image/example_36.png 36w,https://developer.chrome.com/static/blog/local-network-access/image/example_48.png 48w,https://developer.chrome.com/static/blog/local-network-access/image/example_72.png 72w,https://developer.chrome.com/static/blog/local-network-access/image/example_96.png 96w,https://developer.chrome.com/static/blog/local-network-access/image/example_480.png 480w,https://developer.chrome.com/static/blog/local-network-access/image/example_720.png 720w,https://developer.chrome.com/static/blog/local-network-access/image/example_856.png 856w,https://developer.chrome.com/static/blog/local-network-access/image/example_960.png 960w,https://developer.chrome.com/static/blog/local-network-access/image/example_1440.png 1440w,https://developer.chrome.com/static/blog/local-network-access/image/example_1920.png 1920w,https://developer.chrome.com/static/blog/local-network-access/image/example_2880.png 2880w" sizes="(max-width: 840px) 100vw, 856px" width="856" height="568">
+  <figcaption>Example of Chrome's Local Network Access permission prompt.</figcaption>
+</figure>
+
+<p>Many other platforms, such as
+<a href="https://developer.android.com/privacy-and-security/local-network-permission">Android</a>,
+<a href="https://support.apple.com/en-us/102229">iOS</a>, and
+<a href="https://support.apple.com/guide/mac-help/control-access-to-your-local-network-on-mac-mchla4f49138/mac">MacOS</a>
+have a local network access permission. For example, you may have granted this
+permission to access the local network to the Google Home app when setting up
+new Google TV and Chromecast devices.</p>
+
+<h2 id="what_kinds_of_requests_are_affected" data-text="What kinds of requests are affected?" tabindex="-1">What kinds of requests are affected?</h2>
+
+<p>For the first milestone of Local Network Access, we consider a "local network
+request" to be any request <em>from</em> the public network <em>to</em> a local network or
+loopback destination.</p>
+
+<p>A <em>local network</em> is any destination that resolves to addresses reserved for
+local use. For example, private IPv4 addresses specified in Section 3 of
+<a href="https://tools.ietf.org/html/rfc1918">RFC1918</a> (e.g., <code translate="no" dir="ltr">192.168.0.0/16</code>),
+the IPv4 "link-local" prefix (<code translate="no" dir="ltr">169.254.0.0/16</code>) defined in
+<a href="https://tools.ietf.org/html/rfc3927">RFC3927</a>, the IPv6 "Unique Local Address"
+prefix (<code translate="no" dir="ltr">fc00::/7</code>) defined in Section 3 of
+<a href="https://tools.ietf.org/html/rfc4193">RFC4193</a>, the IPv6 "link-local"
+prefix (<code translate="no" dir="ltr">fe80::/10</code>) defined in section 2.5.6 of
+<a href="https://tools.ietf.org/html/rfc4291">RFC4291</a>, or an IPv4-mapped IPv6 address
+(<code translate="no" dir="ltr">::ffff:0:0/96</code>) where the mapped IPv4 address is itself local.</p>
+
+<p><em>Loopback</em> is any destination that resolves to the local machine
+(i.e., "loopback" interface), such as the IPv4 loopback prefix (<code translate="no" dir="ltr">127.0.0.0/8</code>)
+defined in section 3.2.1.3 of <a href="https://tools.ietf.org/html/rfc1122">RFC1122</a>, or
+the IPv6 loopback (<code translate="no" dir="ltr">::1/128</code>) defined in section 2.5.3 of
+<a href="https://tools.ietf.org/html/rfc4291">RFC4291</a>.</p>
+
+<p>For a full mapping of IP addresses to address spaces, see the
+<a href="https://wicg.github.io/local-network-access/#non-public-ip-address-blocks">table in the Local Network Access specification</a>.</p>
+
+<p>A <em>public network</em> is any other destination.</p>
+<aside class="note"><strong>Note:</strong><span> In the future, we plan to extend these protections to cover all
+cross-origins requests going to destinations on the local network. This would
+include requests from a local server (for example, <code translate="no" dir="ltr">https://router.local</code>) to
+other servers on the local network, or from a local server to localhost.</span></aside>
+<p>Because the local network access permission is restricted to secure contexts,
+and it can be difficult to migrate local network devices to HTTPS, the
+permission-gated local network requests will now be exempted from mixed content
+checks <em>if</em> Chrome knows that the requests will be going to the local network
+before resolving the destination. Chrome knows a request is going to the local
+network if:</p>
+
+<ul>
+<li>The request hostname is a private IP literal (e.g., <code translate="no" dir="ltr">192.168.0.1</code>).</li>
+<li>The request hostname is a <code translate="no" dir="ltr">.local</code> domain.</li>
+<li>The <code translate="no" dir="ltr">fetch()</code> call is annotated with the option <code translate="no" dir="ltr">targetAddressSpace:
+"local".</code></li>
+</ul>
+<div></div><devsite-code data-copy-event-label=""><pre class="" translate="no" dir="ltr" is-upgraded="" syntax="JavaScript"><code translate="no" dir="ltr"><span class="devsite-syntax-c1">// Example 1: Private IP literal is exempt from mixed content.</span>
+<span class="devsite-syntax-nx">fetch</span><span class="devsite-syntax-p">(</span><span class="devsite-syntax-s2">"http://192.168.0.1/ping"</span><span class="devsite-syntax-p">);</span>
+
+<span class="devsite-syntax-c1">// Example 2: `.local` domain is exempt from mixed content.</span>
+<span class="devsite-syntax-nx">fetch</span><span class="devsite-syntax-p">(</span><span class="devsite-syntax-s2">"http://router.local/ping"</span><span class="devsite-syntax-p">);</span>
+
+<span class="devsite-syntax-c1">// Example 3: Public domain is not exempt from mixed content,</span>
+<span class="devsite-syntax-c1">// even if it resolves to a local network address.</span>
+<span class="devsite-syntax-nx">fetch</span><span class="devsite-syntax-p">(</span><span class="devsite-syntax-s2">"http://example.com/ping"</span><span class="devsite-syntax-p">);</span>
+
+<span class="devsite-syntax-c1">// Example 4: Adding the `targetAddressSpace` option flags that</span>
+<span class="devsite-syntax-c1">// the request will go to the local network, and is thus exempt</span>
+<span class="devsite-syntax-c1">// from mixed content.</span>
+<span class="devsite-syntax-nx">fetch</span><span class="devsite-syntax-p">(</span><span class="devsite-syntax-s2">"http://example.com/ping"</span><span class="devsite-syntax-p">,</span><span class="devsite-syntax-w"> </span><span class="devsite-syntax-p">{</span>
+<span class="devsite-syntax-w">  </span><span class="devsite-syntax-nx">targetAddressSpace</span><span class="devsite-syntax-o">:</span><span class="devsite-syntax-w"> </span><span class="devsite-syntax-s2">"local"</span><span class="devsite-syntax-p">,</span>
+<span class="devsite-syntax-p">});</span>
+</code></pre></devsite-code>
+<h2 id="whats_changing_in_chrome" data-text="What's changing in Chrome" tabindex="-1">What's changing in Chrome</h2>
+
+<h3 id="chrome_138" data-text="Chrome 138" tabindex="-1">Chrome 138</h3>
+
+<p>Our initial version of Local Network Access is ready for opt-in testing in
+Chrome 138. Users can enable the new permission prompt by setting
+<code translate="no" dir="ltr">chrome://flags#local-network-access-check</code> to "Enabled (Blocking)". This
+supports triggering the Local Network Access permission prompt for requests
+initiated using the JavaScript <code translate="no" dir="ltr">fetch()</code> API, subresource loading, and subframe
+navigation.</p>
+
+<p>A demo site is available at
+<a href="https://lna-testing.notyetsecure.com/">https://lna-testing.notyetsecure.com/</a>
+for triggering different forms of local network requests.</p>
+
+<h4 id="known_issues_and_limitations" data-text="Known issues and limitations" tabindex="-1">Known issues and limitations</h4>
+
+<ul>
+<li>WebSockets (<a href="https://crbug.com/421156866">crbug.com/421156866</a>),
+WebTransport (<a href="https://crbug.com/421216834">crbug.com/421216834</a>), and
+WebRTC (<a href="https://crbug.com/421223919">crbug.com/421223919</a>) connections to
+the local network are not yet gated on the LNA permission.</li>
+<li>Local network requests from Service Workers and Shared Workers
+require that the worker's origin has previously been granted the Local
+Network Access permission.
+<ul>
+<li>If your application makes local network requests from a service worker,
+you will need to separately trigger a local network request
+from your application in order to trigger the permission prompt. (We are
+working on a way for workers to trigger the permission prompt if there
+is an active document available — see
+<a href="https://crbug.com/404887282">crbug.com/404887282</a>.)</li>
+</ul></li>
+</ul>
+
+<h3 id="chrome_139_and_beyond" data-text="Chrome 139 and beyond" tabindex="-1">Chrome 139 and beyond</h3>
+
+<p>Our intent is to ship Local Network Access as soon as possible. Recognizing that
+some sites may need additional time to be updated with Local Network Access
+annotations, we will add an Origin Trial to let sites temporarily opt-out of the
+secure contexts requirement before we ship Local Network Access by default. This
+should provide a clearer migration path for developers, especially if you rely
+on accessing local network resources over HTTP (as these requests would be
+blocked as mixed content if requested from an HTTPS page in browsers that don't
+yet support the Local Network Access mixed content exemption).</p>
+
+<p>We will also be adding a Chrome enterprise policy for controlling which sites
+can and cannot make local network requests (pre-granting or pre-denying the
+permission to those sites). This will allow managed Chrome installations, such
+as those in corporate settings, to avoid showing the warning for known intended
+use cases, or to further lock down and prevent sites from being able to request
+the permission at all.</p>
+
+<p>We plan to continue integrating the Local Network Access permission with
+different features that can send requests to the local network. For example, we
+plan to ship Local Network Access for WebSockets, WebTransport, and WebRTC
+connections soon.</p>
+
+<p>We will share more information as we get closer to being able to fully launch
+Local Network Access in Chrome.</p>
+
+<h2 id="feedback_wanted" data-text="Feedback wanted" tabindex="-1">Feedback wanted</h2>
+
+<p>Previous feedback on Private Network Access development was incredibly valuable
+in guiding us to our new Local Network Access permission approach. We would like
+to once again thank everyone who has been involved over years.</p>
+
+<p>If you develop or are a user of a website that relies on making connections to
+the user's local network or software running locally on the user's machine, the
+Chrome team is interested in your feedback and use cases. There are two things
+you can do to help:</p>
+
+<ul>
+<li>Go to <code translate="no" dir="ltr">chrome://flags#local-network-access-check</code>, set the flag to "Enabled
+(Blocking)", and see if your website correctly triggers the new permission
+prompt (and works as expected after you grant the permission).</li>
+<li>If you encounter any issues or have feedback, <a href="https://issues.chromium.org/u/1/issues/new?component=1456234&amp;template=0">file an issue at the Chromium
+Issue
+Tracker</a>
+or on our <a href="https://github.com/WICG/local-network-access/issues/new">LNA specification GitHub
+repository</a>.
+Chrome would love to hear from you.</li>
+</ul>
+
+  
+
+  
+</div>
+
+  
+    
+    
+      
+    <devsite-thumb-rating position="footer"><div class="devsite-thumb-rating" role="form" aria-labelledby="devsite-thumb-label-footer"><div class="devsite-thumb-label" id="devsite-thumb-label-footer">Was this helpful?</div><div class="devsite-thumbs"><button class="devsite-thumb devsite-thumb-up" data-title="Helpful" aria-label="Helpful"><svg class="devsite-thumb-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21,7h-6.31l0.95-4.57l0.03-0.32c0-0.41-0.17-0.79-0.44-1.06L14.17,0c0,0-7.09,6.85-7.17,7H2v13h16 c0.83,0,1.54-0.5,1.84-1.22l3.02-7.05C22.95,11.5,23,11.26,23,11V9C23,7.9,22.1,7,21,7z M7,18H4V9h3V18z M21,11l-3,7H9V8l4.34-4.34 L12,9h9V11z"></path></svg></button><button class="devsite-thumb devsite-thumb-down" data-title="Not helpful" aria-label="Not helpful"><svg class="devsite-thumb-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3,17h6.31l-0.95,4.57l-0.03,0.32c0,0.41,0.17,0.79,0.44,1.06L9.83,24c0,0,7.09-6.85,7.17-7h5V4H6 C5.17,4,4.46,4.5,4.16,5.22l-3.02,7.05C1.05,12.5,1,12.74,1,13v2C1,16.1,1.9,17,3,17z M17,6h3v9h-3V6z M3,13l3-7h9v10l-4.34,4.34 L12,15H3V13z"></path></svg></button></div></div></devsite-thumb-rating>
+  
+       
+    
+    
+  
+
+  </article>
+
+
+<devsite-content-footer class="nocontent" data-nosnippet="">
+  <p>Except as otherwise noted, the content of this page is licensed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 License</a>, and code samples are licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a>. For details, see the <a href="https://developers.google.com/site-policies">Google Developers Site Policies</a>. Java is a registered trademark of Oracle and/or its affiliates.</p>
+  <p>Last updated 2025-06-09 UTC.</p>
+</devsite-content-footer>
+
+
+<devsite-notification>
+</devsite-notification>
+
+
+  
+<div class="devsite-content-data">
+  
+  
+    <template class="devsite-content-data-template">
+      [[["Easy to understand","easyToUnderstand","thumb-up"],["Solved my problem","solvedMyProblem","thumb-up"],["Other","otherUp","thumb-up"]],[["Missing the information I need","missingTheInformationINeed","thumb-down"],["Too complicated / too many steps","tooComplicatedTooManySteps","thumb-down"],["Out of date","outOfDate","thumb-down"],["Samples / code issue","samplesCodeIssue","thumb-down"],["Other","otherDown","thumb-down"]],["Last updated 2025-06-09 UTC."],[],[]]
+    </template>
+  
+</div>
+            
+          </devsite-content>
+        </main>
+        <devsite-footer-promos class="devsite-footer">
+          
+            
+          
+        </devsite-footer-promos>
+        <devsite-footer-linkboxes class="devsite-footer">
+          
+            
+<nav class="devsite-footer-linkboxes nocontent" aria-label="Footer links" data-nosnippet="">
+  
+  <ul class="devsite-footer-linkboxes-list">
+    
+    <li class="devsite-footer-linkbox ">
+    <h3 class="devsite-footer-linkbox-heading no-link">Contribute</h3>
+      <ul class="devsite-footer-linkbox-list">
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://issuetracker.google.com/issues/new?component=1400036&amp;template=1897236" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 1)">
+            
+          
+            File a bug
+          
+          </a>
+          
+          
+        </li>
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://issuetracker.google.com/issues?q=status:open%20componentid:1400036&amp;s=created_time:desc" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 2)">
+            
+              
+              
+            
+          
+            See open issues
+          
+          </a>
+          
+          
+        </li>
+        
+      </ul>
+    </li>
+    
+    <li class="devsite-footer-linkbox ">
+    <h3 class="devsite-footer-linkbox-heading no-link">Related content</h3>
+      <ul class="devsite-footer-linkbox-list">
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://blog.chromium.org/" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 1)">
+            
+          
+            Chromium updates
+          
+          </a>
+          
+          
+        </li>
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="/case-studies" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 2)">
+            
+          
+            Case studies
+          
+          </a>
+          
+          
+        </li>
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="/deprecated" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 3)">
+            
+          
+            Archive
+          
+          </a>
+          
+          
+        </li>
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://web.dev/shows" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 4)">
+            
+              
+              
+            
+          
+            Podcasts &amp; shows
+          
+          </a>
+          
+          
+        </li>
+        
+      </ul>
+    </li>
+    
+    <li class="devsite-footer-linkbox ">
+    <h3 class="devsite-footer-linkbox-heading no-link">Follow</h3>
+      <ul class="devsite-footer-linkbox-list">
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://twitter.com/ChromiumDev" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 1)">
+            
+          
+            @ChromiumDev on X
+          
+          </a>
+          
+          
+        </li>
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://www.youtube.com/user/ChromeDevelopers" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 2)">
+            
+          
+            YouTube
+          
+          </a>
+          
+          
+        </li>
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="https://www.linkedin.com/showcase/chrome-for-developers" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 3)">
+            
+          
+            Chrome for Developers on LinkedIn
+          
+          </a>
+          
+          
+        </li>
+        
+        <li class="devsite-footer-linkbox-item">
+          
+          <a href="/static/blog/feed.xml" class="devsite-footer-linkbox-link gc-analytics-event" data-category="Site-Wide Custom Events" data-label="Footer Link (index 4)">
+            
+              
+              
+            
+          
+            RSS
+          
+          </a>
+          
+          
+        </li>
+        
+      </ul>
+    </li>
+    
+  </ul>
+  
+</nav>
+          
+        </devsite-footer-linkboxes>
+        <devsite-footer-utility class="devsite-footer">
+          
+            
+
+<div class="devsite-footer-utility nocontent" data-nosnippet="">
+  
+
+  
+  <nav class="devsite-footer-utility-links" aria-label="Utility links">
+    
+    <ul class="devsite-footer-utility-list">
+      
+      <li class="devsite-footer-utility-item
+                 ">
+        
+        
+        <a class="devsite-footer-utility-link gc-analytics-event" href="//policies.google.com/terms" data-category="Site-Wide Custom Events" data-label="Footer Terms link">
+          Terms
+        </a>
+        
+      </li>
+      
+      <li class="devsite-footer-utility-item
+                 ">
+        
+        
+        <a class="devsite-footer-utility-link gc-analytics-event" href="//policies.google.com/privacy" data-category="Site-Wide Custom Events" data-label="Footer Privacy link">
+          Privacy
+        </a>
+        
+      </li>
+      
+      <li class="devsite-footer-utility-item
+                 glue-cookie-notification-bar-control">
+        
+        
+        <a class="devsite-footer-utility-link gc-analytics-event" href="#" data-category="Site-Wide Custom Events" data-label="Footer Manage cookies link" aria-hidden="true">
+          Manage cookies
+        </a>
+        
+      </li>
+      
+    </ul>
+    
+    
+<devsite-language-selector aria-label="Select your language preference.">
+  <ul role="presentation">
+    
+    
+    <li role="presentation">
+      <a role="menuitem" lang="en" href="https://developer.chrome.com/blog/local-network-access" aria-current="true">English</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="de" href="https://developer.chrome.com/blog/local-network-access?hl=de">Deutsch</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="es-419" href="https://developer.chrome.com/blog/local-network-access?hl=es-419">Español – América Latina</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="fr" href="https://developer.chrome.com/blog/local-network-access?hl=fr">Français</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="id" href="https://developer.chrome.com/blog/local-network-access?hl=id">Indonesia</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="it" href="https://developer.chrome.com/blog/local-network-access?hl=it">Italiano</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="nl" href="https://developer.chrome.com/blog/local-network-access?hl=nl">Nederlands</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="pl" href="https://developer.chrome.com/blog/local-network-access?hl=pl">Polski</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="pt-br" href="https://developer.chrome.com/blog/local-network-access?hl=pt-br">Português – Brasil</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="vi" href="https://developer.chrome.com/blog/local-network-access?hl=vi">Tiếng Việt</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="tr" href="https://developer.chrome.com/blog/local-network-access?hl=tr">Türkçe</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="ru" href="https://developer.chrome.com/blog/local-network-access?hl=ru">Русский</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="he" href="https://developer.chrome.com/blog/local-network-access?hl=he">עברית</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="ar" href="https://developer.chrome.com/blog/local-network-access?hl=ar">العربيّة</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="fa" href="https://developer.chrome.com/blog/local-network-access?hl=fa">فارسی</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="hi" href="https://developer.chrome.com/blog/local-network-access?hl=hi">हिंदी</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="bn" href="https://developer.chrome.com/blog/local-network-access?hl=bn">বাংলা</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="th" href="https://developer.chrome.com/blog/local-network-access?hl=th">ภาษาไทย</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="zh-cn" href="https://developer.chrome.com/blog/local-network-access?hl=zh-cn">中文 – 简体</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="zh-tw" href="https://developer.chrome.com/blog/local-network-access?hl=zh-tw">中文 – 繁體</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="ja" href="https://developer.chrome.com/blog/local-network-access?hl=ja">日本語</a>
+    </li>
+    
+    <li role="presentation">
+      <a role="menuitem" lang="ko" href="https://developer.chrome.com/blog/local-network-access?hl=ko">한국어</a>
+    </li>
+    
+  </ul>
+</devsite-language-selector>
+
+  </nav>
+</div>
+          
+        </devsite-footer-utility>
+        
+        
+      </section>
+      </section>
+    <devsite-sitemask></devsite-sitemask>
+    
+    <devsite-tooltip></devsite-tooltip>
+    <devsite-heading-link></devsite-heading-link>
+    <devsite-analytics>
+      
+        <script type="application/json" analytics="">[]</script>
+<script type="application/json" tag-management="">{&#34;at&#34;: &#34;True&#34;, &#34;ga4&#34;: [], &#34;ga4p&#34;: [], &#34;gtm&#34;: [{&#34;id&#34;: &#34;GTM-5QF3RT2&#34;, &#34;purpose&#34;: 0}], &#34;parameters&#34;: {&#34;internalUser&#34;: &#34;False&#34;, &#34;language&#34;: {&#34;machineTranslated&#34;: &#34;False&#34;, &#34;requested&#34;: &#34;en&#34;, &#34;served&#34;: &#34;en&#34;}, &#34;pageType&#34;: &#34;blog&#34;, &#34;projectName&#34;: &#34;Blog&#34;, &#34;signedIn&#34;: &#34;False&#34;, &#34;tenant&#34;: &#34;chrome&#34;, &#34;recommendations&#34;: {&#34;sourcePage&#34;: &#34;&#34;, &#34;sourceType&#34;: 0, &#34;sourceRank&#34;: 0, &#34;sourceIdenticalDescriptions&#34;: 0, &#34;sourceTitleWords&#34;: 0, &#34;sourceDescriptionWords&#34;: 0, &#34;experiment&#34;: &#34;&#34;}, &#34;experiment&#34;: {&#34;ids&#34;: &#34;&#34;}}}</script>
+      
+    </devsite-analytics>
+    
+      <devsite-badger></devsite-badger>
+    
+    
+    
+    
+    
+<script nonce="">
+  
+  (function(d,e,v,s,i,t,E){d['GoogleDevelopersObject']=i;
+    t=e.createElement(v);t.async=1;t.src=s;E=e.getElementsByTagName(v)[0];
+    E.parentNode.insertBefore(t,E);})(window, document, 'script',
+    'https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/chrome/js/app_loader.js', '[53,"en",null,"/js/devsite_app_module.js","https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870","https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/chrome","https://chrome-dot-devsite-v2-prod-3p.appspot.com",1,null,["/_pwa/chrome/manifest.json","https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/images/video-placeholder.svg","https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/chrome/images/favicon.png","https://www.gstatic.com/devrel-devsite/prod/vc1b996b07630b7fba08b3b2fd258fb35e39e5d8dfeab71af65465d9a2fbe5870/chrome/images/lockup.svg","https://fonts.googleapis.com/css?family=Google+Sans:400,500|Roboto:400,400italic,500,500italic,700,700italic|Roboto+Mono:400,500,700&display=swap"],1,null,[1,6,8,12,14,17,21,25,50,52,63,70,75,76,80,87,91,92,93,97,98,100,101,102,103,104,105,107,108,109,110,112,113,116,117,118,120,122,124,125,126,127,129,130,131,132,133,134,135,136,138,140,141,147,148,149,151,152,156,157,158,159,161,163,164,168,169,170,179,180,182,183,186,191,193,196],"AIzaSyCNm9YxQumEXwGJgTDjxoxXK6m1F-9720Q","AIzaSyCc76DZePGtoyUjqKrLdsMGk_ry7sljLbY","developer.chrome.com","AIzaSyB9bqgQ2t11WJsOX8qNsCQ6U-w91mmqF-I","AIzaSyAdYnStPdzjcJJtQ0mvIaeaMKj7_t6J_Fg",null,null,null,["MiscFeatureFlags__enable_framebox_badge_methods","Search__enable_ai_search_summaries_for_all","Profiles__enable_purchase_prompts","DevPro__enable_google_one_card","Profiles__enable_callout_notifications","Cloud__enable_cloud_shell_fte_user_flow","Profiles__enable_dashboard_curated_recommendations","DevPro__enable_devpro_offers","Analytics__enable_clearcut_logging","Cloud__enable_cloudx_experiment_ids","Cloud__enable_cloud_shell","MiscFeatureFlags__enable_variable_operator_index_yaml","DevPro__enable_devsite_captcha","MiscFeatureFlags__enable_firebase_utm","Concierge__enable_devsite_llm_tools","Profiles__enable_playlist_community_acl","Concierge__enable_remove_info_panel_tags","Cloud__enable_legacy_calculator_redirect","MiscFeatureFlags__enable_variable_operator","DevPro__enable_g1_integration","DevPro__enable_enterprise","Profiles__enable_user_type","MiscFeatureFlags__developers_footer_dark_image","MiscFeatureFlags__gdp_dashboard_reskin_enabled","Analytics__enable_devpro_interaction_logging","Profiles__enable_profile_collections","MiscFeatureFlags__enable_explicit_template_dependencies","Profiles__enable_public_developer_profiles","Cloud__enable_cloud_dlp_service","DevPro__enable_nvidia_credits_card","Profiles__enable_developer_profiles_callout","Profiles__enable_auto_apply_credits","CloudShell__cloud_code_overflow_menu","Profiles__enable_targeted_hero","CloudShell__cloud_shell_button","Cloud__enable_free_trial_server_call","MiscFeatureFlags__developers_footer_image","Profiles__enable_completecodelab_endpoint","DevPro__enable_cloud_innovators_plus","Search__enable_dynamic_content_confidential_banner","MiscFeatureFlags__enable_project_variables","Profiles__enable_release_notes_notifications","DevPro__enable_firebase_workspaces_card","MiscFeatureFlags__fix_lower_breadcrumbs","BookNav__enable_tenant_cache_key","Concierge__enable_actions_menu","DevPro__enable_g1_ineligible_redirect","Profiles__enable_developer_profile_benefits_ui_redesign","TpcFeatures__enable_unmirrored_page_left_nav","MiscFeatureFlags__remove_cross_domain_tracking_params","DevPro__enable_credits_banner","Profiles__enable_stripe_subscription_management","Profiles__require_profile_eligibility_for_signin","MiscFeatureFlags__enable_llms_txt","DevPro__enable_vertex_credit_card","AIStudioInteractionsToggle__interactions_are_default","Search__enable_suggestions_from_borg","DevPro__enable_developer_subscriptions","Search__enable_ai_eligibility_checks","DevPro__enable_embed_profile_creation","Cloud__cache_serialized_dynamic_content","Profiles__enable_awarding_url","Profiles__enable_developer_profile_pages_as_content","OnSwitch__enable","Experiments__reqs_query_experiments","SignIn__enable_l1_signup_flow","Profiles__enable_page_saving","DevPro__enable_google_payments_buyflow","DevPro__enable_code_assist","DevPro__remove_eu_tax_intake_form","TpcFeatures__proxy_prod_host","Profiles__enable_recognition_badges","EngEduTelemetry__enable_engedu_telemetry","DevPro__enable_free_benefits","Profiles__enable_join_program_group_endpoint","MiscFeatureFlags__enable_view_transitions","Cloud__fast_free_trial","MiscFeatureFlags__enable_appearance_cookies","Search__enable_page_map","Profiles__enable_completequiz_endpoint","Concierge__enable_pushui","Profiles__enable_complete_playlist_endpoint"],null,null,"AIzaSyA58TaKli1DculwmAmbpzLVGuWc8eCQgQc","https://developerscontentserving-pa.googleapis.com","AIzaSyDWBU60w0P9hEkr29kkksYs8Z7gvZ8u_wc","https://developerscontentsearch-pa.googleapis.com",2,4,null,"https://developerprofiles-pa.googleapis.com",[53,"chrome","Chrome for Developers","developer.chrome.com",null,"chrome-dot-devsite-v2-prod-3p.appspot.com",null,null,[null,null,null,null,null,null,null,null,null,null,null,[1],null,null,null,null,null,null,[1],null,null,null,null,[1,null,1],[1,1,null,1,1],null,null,null,null,null,[1]],null,[69,null,null,null,null,null,"/images/lockup.svg","/images/touchicon-180.png",null,null,null,1,1,null,null,null,null,null,null,null,null,2,null,null,null,"/images/lockup-dark-theme.svg",[]],[],null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,[[],[1,1]],[[null,null,null,null,null,["GTM-5QF3RT2"],null,null,null,null,null,[["GTM-5QF3RT2",1]],1]],null,4],null,null,1,null,"https://developerscontentinsights-pa.googleapis.com","AIzaSyC11xEGtFhkmSh_iF6l_itbxnFz2GrIBOg","AIzaSyAXJ10nRF73mmdSDINgkCNX5bbd2KPcWm8","https://developers.googleapis.com",null,null,"AIzaSyCjP0KOnHfv8mwe38sfzZJMOnqE3HvrD4A",null,null,"https://developers.googleapis.com"]')
+  
+</script>
+
+    
+  
+<script type="text/javascript" id="" charset="">var cookieAcceptance=localStorage.getItem("devsite-eu-cookie");window.dataLayer=window.dataLayer||[];window.dataLayer.push({cookiePreference:cookieAcceptance});dataLayer.push({event:"dcc_analytics_configed"});</script><script type="text/javascript" id="" charset="">(function(){function w(c,a){var f=c.name,d=c.delta,e=c.id,n=c.navigationType,h=c.value;c=c.entries[0];f==="CLS"&&(h*=1E3,d*=1E3);var l;"deviceMemory"in navigator&&(l=navigator.deviceMemory.toString());a={event:f,eventCategory:"Web Vitals",eventLabel:e,eventModel:z(Object.assign(a,{metric_value:h,metric_delta:d,metric_id:e,metric_start_time:c&&c.startTime,navigation_type:n,device_memory:l}))};window.dataLayer=window.dataLayer||[];console.log("Web Vitals",f,a.eventModel.metric_value,a);window.dataLayer.push(a)}
+function A(c){var a=c.attribution,f=a.lcpEntry&&a.lcpEntry.element,d=null,e=a.navigationEntry;if(e){var n=e.activationStart||0,h=e.redirectEnd-e.redirectStart,l=e.workerStart||e.fetchStart,r=e.domainLookupStart-l,t=e.connectStart-e.dnsStart||0,u=e.connectEnd-e.connectStart,m=a.timeToFirstByte-e.connectEnd;e.notRestoredReasons&&e.notRestoredReasons.reasons&&(d=d.reasons.map(function(v){return v.reason}).join(","))}a={debug_time_to_first_byte:a.timeToFirstByte,debug_resource_load_delay:a.resourceLoadDelay,
+debug_resource_load_duration:a.resourceLoadDuration,debug_element_render_delay:a.elementRenderDelay,debug_url:a.url,debug_target:a.element||"(not set)",debug_target_node_name:f&&f.nodeName,debug_target_loading_attr:f&&f.getAttribute("loading"),debug_nav_activation_start:n,debug_nav_redirect_duration:h,debug_nav_waiting_duration:l,debug_nav_cache_duration:r,debug_nav_dns_duration:t,debug_nav_connect_duration:u,debug_nav_server_response_duration:m,debug_not_restored_reasons:d};w(c,a)}function B(c){var a=
+c.attribution;a={debug_time:a.largestShiftTime,debug_load_state:a.loadState,debug_target:a.largestShiftTarget||"(not set)"};w(c,a)}function C(c){var a=c.attribution,f=D(a);a=Object.assign({debug_event:a.interactionType,debug_time:a.interactionTime,debug_load_state:a.loadState,debug_target:a.interactionTarget||"(not set)",debug_input_delay:a.inputDelay,debug_processing_duration:a.processingDuration,debug_presentation_delay:a.presentationDelay,debug_processed_event_entries_length:a.processedEventEntries.length},
+f);w(c,a)}function D(c){var a=c&&c.longAnimationFrameEntries,f=a&&a.length||0;if(f===0)return{debug_loaf_meta_length:0};var d=a[f-1],e=d.startTime+d.duration,n={debug_loaf_entry_start_time:d.startTime,debug_loaf_entry_end_time:e,debug_loaf_entry_work_duration:d.renderStart?d.renderStart-d.startTime:d.duration,debug_loaf_entry_render_duration:d.renderStart?e-d.renderStart:0,debug_loaf_entry_pre_layout_duration:d.styleAndLayoutStart?d.styleAndLayoutStart-d.renderStart:0,debug_loaf_entry_style_and_layout_duration:d.styleAndLayoutStart?
+e-d.styleAndLayoutStart:0,debug_loaf_meta_length:f,debug_loaf_meta_script_length:d.scripts.length},h=c.interactionTime,l=c.inputDelay,r=c.processingDuration,t=null,u=null,m={};a.forEach(function(b){t+=b.startTime+b.duration-b.styleAndLayoutStart;b.scripts.forEach(function(g){var k=g.startTime+g.duration;if(!(k<h)){u+=g.forcedStyleAndLayoutDuration;k-=Math.max(h,g.startTime);var q=g.invokerType.replace("-","_"),p="phase2";g.startTime<h+l?p="phase1":g.startTime>=h+l+r&&(p="phase3");p in m||(m[p]={});
+q in m[p]||(m[p][q]=0);m[p][q]+=k}})});Object.entries(m).forEach(function(b){var g=b[0];b=b[1];Object.entries(b).forEach(function(k){var q=k[0];k=k[1];n["debug_loaf_"+g+"_"+q]=k})});n.debug_loaf_total_style_layout_duration=t;n.debug_loaf_entry_total_forced_style_and_layout_duration=u;var v={},y=0;d.scripts.forEach(function(b){var g=b.startTime+b.duration,k=g-Math.max(h,b.startTime);g<h||k<=y||(y=k,g="processing",b.startTime<h+l?g="input delay":b.startTime>=h+l+r&&(g="presentation"),v={debug_loaf_script_phase:g,
+debug_loaf_script_blocking_duration:k,debug_loaf_script_total_duration:b.duration,debug_loaf_script_compile_duration:b.executionStart-b.startTime,debug_loaf_script_exec_duration:b.startTime+b.duration-b.executionStart,debug_loaf_script_forced_style_and_layout_duration:b.forcedStyleAndLayoutDuration,debug_loaf_script_pause_duration:b.pauseDuration,debug_loaf_script_type:b.invokerType,debug_loaf_script_invoker:b.invoker,debug_loaf_script_source_url:b.sourceURL,debug_loaf_script_source_function_name:b.sourceFunctionName,
+debug_loaf_script_source_char_position:b.sourceCharPosition})});return Object.assign(n,v)}function z(c){return Object.fromEntries(Object.entries(c).map(function(a){var f=a[0];a=a[1];return[f,typeof a=="number"?Math.round(a):a]}))}var x=document.createElement("script");x.src="https://unpkg.com/web-vitals/dist/web-vitals.attribution.iife.js";x.onload=function(){webVitals.onLCP(A);webVitals.onCLS(B);webVitals.onINP(C)};document.head.appendChild(x)})();</script></body></html>

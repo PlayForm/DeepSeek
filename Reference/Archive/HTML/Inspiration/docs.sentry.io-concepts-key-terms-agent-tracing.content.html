@@ -1,0 +1,284 @@
+<div><div class="radix-themes"><div>
+<div class="tw-app has-toc"><section class="px-0 flex relative"><main class="main-content flex mt-[var(--header-height)] flex-1"><div class="pt-6 px-6 prose dark:prose-invert max-w-full text-[var(--gray-12)] prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-code:font-mono marker:text-[var(--darkPurple)] marker:font-medium prose-li:my-1 prose-headings:mt-0 prose-headings:font-medium prose-headings:relative prose-headings:text-[var(--gray-12)] prose-blockquote:font-normal prose-blockquote:border-l-[3px] prose-em:font-normal prose-blockquote:text-[var(--gray-12)] prose-img:my-2 prose-strong:text-[var(--gray-12)] w-full min-w-0" id="doc-content">
+<div class="flex items-center">
+<ul class="not-prose list-none flex flex-wrap">
+
+<li class="style_breadcrumb-item__bDEaT"><a href="/concepts/">Concepts &amp; Reference</a></li>
+
+
+</ul> <div class="ml-auto hidden sm:block"><div class="relative inline-block"><div class="inline-flex items-center h-9 border border-gray-200 dark:border-[var(--gray-6)] rounded-full overflow-hidden bg-white dark:bg-[var(--gray-2)]"><button class="inline-flex items-center text-nowrap h-full text-gray-700 dark:text-[var(--foreground)] bg-transparent border-none cursor-pointer transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-[var(--gray-a4)] active:bg-gray-100 dark:active:bg-[var(--gray-5)] focus:bg-gray-50 dark:focus:bg-[var(--gray-a4)] outline-none gap-2 px-3.5 text-sm font-medium disabled:opacity-50"><span>Copy page</span></button></div></div></div>
+</div>
+<div>
+<hgroup><h1>Agent Tracing - What It Is and How To Use It</h1>
+<h2>Learn about how Sentry's agent tracing features help you track and understand how your agents behave across agent runs, tool calls, and handoffs.  </h2></hgroup><div id="main">
+<h2 id="what-is-agent-tracing"><a class="autolink-heading" href="#what-is-agent-tracing">What Is Agent Tracing?</a></h2>
+<p><a class="" href="/product/agents/"><strong>Agent tracing</strong></a> follows an agent throughout an entire run. It captures every model call, tool call, and handoff as a sequence of <a class="" href="/concepts/key-terms/tracing/#whats-a-span">spans</a> within a single <a class="" href="/concepts/key-terms/tracing/#whats-a-trace">trace</a>. It shows you input, output, latency, and cost at each step of its workflow. Instead of looking at a single isolated LLM request, agent tracing gives you the entire chain of events from first input to final response.</p>
+<p>Agent tracing uses the standard distributed tracing model from modern observability. Agent spans show up beside HTTP, database, and queue spans in the same trace. This combined view is what makes agent observability most valuable: understanding whether the agent was successfully deployed, and what happened along the way.</p>
+<p>If you want to jump to how Sentry brings this data together to help you fix or improve your agents, skip to <a class="" href="#how-agent-tracing-can-help-you-debug">How Agent Tracing Can Help You Debug</a>.</p>
+<h3 id="how-agent-tracing-differs-from-llm-monitoring"><a class="autolink-heading" href="#how-agent-tracing-differs-from-llm-monitoring">How Agent Tracing Differs From LLM Monitoring</a></h3>
+<p>Both LLM monitoring and agent tracing are part of AI observability. They are used to track your AI-powered systems in production. While LLM monitoring often tracks one call to a model, and converts that into monitoring tools like dashboards, agent tracing tracks a full agent run, including LLM monitoring data, to provide everything you need to not only monitor, but debug and improve your agents.</p>
+<ol>
+<li>
+<p>Data you see in AI Observability.</p>
+<ul>
+<li>
+<strong>LLM monitoring</strong>: prompt, completion, tokens, latency, cost, model version.</li>
+<li>
+<strong>Agent tracing</strong>: the full decision path. Which tools the agent called, in which order, with which inputs and outputs, and where each LLM call fits in that path.</li>
+</ul>
+</li>
+<li>
+<p>Failure diagnosis.</p>
+<ul>
+<li>
+<strong>LLM monitoring</strong> helps you find problems in one call (a bad prompt, a slow response, a high cost).</li>
+<li>
+<strong>Agent tracing</strong> helps you find problems in the flow (the agent called the wrong tool, the agent looped, or one step passed bad data to the next step).</li>
+</ul>
+</li>
+<li>
+<p>Data structure.</p>
+<ul>
+<li>
+<strong>LLM monitoring</strong> data is a flat list of calls.</li>
+<li>
+<strong>Agent tracing</strong> data is a span hierarchy or tree, as a part of <a class="" href="/concepts/key-terms/tracing/distributed-tracing/">distributed tracing</a>, with agent-specific spans (for example: "tool call", "planning step", "LLM call").</li>
+</ul>
+</li>
+</ol>
+<h3 id="whats-an-agent-run"><a class="autolink-heading" href="#whats-an-agent-run">What's an Agent Run?</a></h3>
+<p>An <strong>agent run</strong> is the lifespan of an agent: from user input to its final response. A single run can include many model calls, tool calls, and handoffs. Agent tracing captures every step of the agent run, so you can see whether anything went wrong along the way. For example, when asked to fix a failing test:</p>
+<ol>
+<li>
+<strong>User inputs</strong> "<em>Fix the failing test in test_auth.py</em>".</li>
+<li>
+<strong>Model call</strong>: The agent figures out what to check first.</li>
+<li>
+<strong>Tool call</strong>: The agent reads the test file to understand what's failing.</li>
+<li>
+<strong>Model call</strong>: The agent reasons about the cause of the failure.</li>
+<li>
+<strong>Tool call</strong>: The agent edits the file to apply the fix.</li>
+<li>
+<strong>Tool call</strong>: The agent runs the test suite to confirm the fix.</li>
+<li>
+<strong>Final response to user</strong>: "<em>The failing test has been fixed. Tests now pass.</em>".</li>
+</ol>
+<p>This whole sequence is one agent run, from user input to final confirmation response. All of this gets captured as one agent trace: several model call spans, tool call spans, connected end to end.</p>
+<h3 id="whats-a-model-call-span"><a class="autolink-heading" href="#whats-a-model-call-span">What's a Model Call Span?</a></h3>
+<p>A <strong>model call span</strong> is a type of span that records a single request to an LLM. This is the same data used in LLM monitoring. It tells you what model was called, the input and output, token usage, cost, and duration. For instance, in the previous agent run example where the agent tries to figure out what to check first:</p>
+<table>
+
+<tbody>
+<tr>
+<td><strong>Model</strong></td>
+<td>sonnet-5</td>
+</tr>
+<tr>
+<td><strong>Input</strong></td>
+<td><em>User request and system prompt</em></td>
+</tr>
+<tr>
+<td><strong>Output</strong></td>
+<td><em>The model's reasoning about what to check</em></td>
+</tr>
+<tr>
+<td><strong>Tokens</strong></td>
+<td>340</td>
+</tr>
+<tr>
+<td><strong>Cost</strong></td>
+<td>$0.002</td>
+</tr>
+<tr>
+<td><strong>Duration</strong></td>
+<td>800ms</td>
+</tr>
+</tbody>
+</table>
+<p>If something went wrong, like it is the wrong model, there's a missing piece of context in the prompt, or an answer is offered that didn't match the prompt, a model call span like this would show you exactly what was sent to the model and what it returned.</p>
+<h3 id="whats-a-tool-call-span"><a class="autolink-heading" href="#whats-a-tool-call-span">What's a Tool Call Span?</a></h3>
+<p>A <strong>tool call span</strong> is a type of <a class="" href="/concepts/key-terms/tracing/#whats-a-span">span</a> that's part of the agent run. It records a single function or tool call made by an agent. The span tells you which tool was called, its input, output, and how long it took. It's often one of the first things to look at when a run goes wrong. For example, when an agent reads a file, like <code>test_auth.py</code>, the tool call span for that would look something like this:</p>
+<table>
+
+<tbody>
+<tr>
+<td><strong>Tool</strong></td>
+<td><code>read_file</code></td>
+</tr>
+<tr>
+<td><strong>Input</strong></td>
+<td><code>{ "path": "test_auth.py" }</code></td>
+</tr>
+<tr>
+<td><strong>Output</strong></td>
+<td><em>The file contents</em></td>
+</tr>
+<tr>
+<td><strong>Duration</strong></td>
+<td>42ms</td>
+</tr>
+</tbody>
+</table>
+<p>If something went wrong, like the tool received the wrong file path, a bad argument got passed, or there is a silent tool failure, a tool call span like this would tell you what was requested and what was returned at that one step. Having this span within a trace will give visibility into not only the agent's actions, but what else was happening in your application for this session.</p>
+<h3 id="whats-an-agent-handoff"><a class="autolink-heading" href="#whats-an-agent-handoff">What's an Agent Handoff?</a></h3>
+<p>An <strong>agent handoff</strong> is the process where an agent delegates tasks to other agents, enabling multi-agent systems where more than one agent works on a single request. Some agents are better suited for certain tasks than others, so depending on the context or user request, a different sub-agent specialized in handling one part of the task, can take over and complete the task on its own. For example, customer support triage can look like this:</p>
+<ol>
+<li>User messages a support bot: "<em>Can I get a refund for my last order?</em>".</li>
+<li>A generic triage agent receives the message. Its only job is to figure out the type of request.</li>
+<li>It recognizes that it's a billing query, and hands it off to the specialized billing agent.</li>
+<li>The billing agent has the tools available to look up the order and process the refund.</li>
+</ol>
+<p>To the user, this happens seamlessly. But behind the scenes, control and context are passed around from one agent to another.</p>
+<h3 id="whats-an-agent-conversation"><a class="autolink-heading" href="#whats-an-agent-conversation">What's an Agent Conversation?</a></h3>
+<p>An agent <a class="" href="/product/agents/conversations/"><strong>conversation</strong></a> is a collection of spans that share the same <code>gen_ai.conversation.id</code>, providing a single, chat-like view into a user's full session. While an agent run covers a single exchange, a conversation can contain multiple runs. Sending messages in a chat can trigger multiple agent runs, each producing their own set of spans. <code>gen_ai.conversation.id</code> stitches those separate spans into a single connected view. A conversation can exist across multiple traces, and multiple conversations can exist inside one trace.</p>
+<h2 id="how-to-use-agent-tracing-in-sentry"><a class="autolink-heading" href="#how-to-use-agent-tracing-in-sentry">How to Use Agent Tracing in Sentry</a></h2>
+<h3 id="agent-runs---trace-view"><a class="autolink-heading" href="#agent-runs---trace-view">Agent Runs - Trace View</a></h3>
+<p>Every agent run shows up in Sentry as spans in a distributed trace, the same connected view used for any request in your app. Reviewing an agent run's trace shows you the full waterfall of spans that made it up, in the order they happened:</p>
+<ul>
+<li>
+<strong>Model calls</strong>: which model was used, plus its tokens, cost, and duration.</li>
+<li>
+<strong>Tool calls</strong>: which tool was called, its input and output, and how long it took.</li>
+<li>
+<strong>Handoffs</strong>: where one agent passed the work to another.</li>
+</ul>
+<p>Because these spans sit inside the same trace as your regular application, you can see the entire request end to end.</p>
+
+<h3 id="explore-agent-conversations"><a class="autolink-heading" href="#explore-agent-conversations">Explore Agent Conversations</a></h3>
+<p><a class="" href="/product/agents/conversations/"><strong>Conversations</strong></a> let you review past conversations with your agents. You can see a list of conversations, filtering by project, agent, environments, time range, and attributes. At a high level, the list will show:</p>
+<ul>
+<li>
+<strong>Conversation</strong>: Title, project, conversation ID, and user. The title comes from the first user message, uses that message text until a generated title is available, or shows <strong>Untitled conversation</strong> when there are no user messages.</li>
+<li>
+<strong>Duration</strong>: Total time spent in model-generation spans.</li>
+<li>
+<strong>Messages</strong>: Number of recorded model interactions.</li>
+<li>
+<strong>Errors</strong>: Number of spans that ended with an error.</li>
+<li>
+<strong>Cost</strong>: Estimated cost of the conversation.</li>
+<li>
+<strong>Tools</strong>: Names of tools used during the conversation.</li>
+<li>
+<strong>Age</strong>: How long ago the conversation was last active.</li>
+</ul>
+
+<p>Digging into a specific conversation gives you a full chat-like view with the full transcript, including:</p>
+<ul>
+<li><strong>User inputs</strong></li>
+<li><strong>Model calls</strong></li>
+<li><strong>Tool calls</strong></li>
+<li><strong>Handoffs</strong></li>
+<li><strong>Agent responses</strong></li>
+<li><strong>Side by side view of the calls and their span data</strong></li>
+</ul>
+<p>For each agent step, you can see things like which model was used, token usage, context utilization, and cost.</p>
+
+<h3 id="agents-dashboard"><a class="autolink-heading" href="#agents-dashboard">Agents Dashboard</a></h3>
+<p>The <a class="" href="/product/agents/dashboards/"><strong>agents dashboard</strong></a> gives you a high-level overview of most of your agents' activities:</p>
+<ul>
+<li>
+<strong>Agent Runs</strong>: Shows agent runs over time and releases to track overall activity.</li>
+<li>
+<strong>Duration</strong>: Displays average and P95 response times for your agent executions.</li>
+<li>
+<strong>LLM Calls by Model</strong>: Breakdown of LLM calls per model.</li>
+<li>
+<strong>Tokens Used</strong>: Token usage by top models.</li>
+<li>
+<strong>Tool Calls</strong>: Tool call volume and trends.</li>
+<li>
+<strong>Estimated Cost</strong>: Estimated cost of the agent runs.</li>
+</ul>
+
+<p>Click into a specific model for a detailed dashboard view, or scroll through the list of traces to investigate specific agent runs.</p>
+<h3 id="protecting-sensitive-data"><a class="autolink-heading" href="#protecting-sensitive-data">Protecting Sensitive Data</a></h3>
+<p>Depending on the data your agents handle, some of it may be sensitive and shouldn't be recorded in a span. Prompts and agent output aren't recorded by default in Sentry. This is an opt-in feature you can enable by setting <code>recordInputs</code>, <code>recordOutputs</code>, or both, to true in your Sentry SDK integration options.</p>
+<p><a class="" href="/platforms/javascript/guides/cloudflare/configuration/integrations/vercelai/#options">Here is an example from our JavaScript SDK using the Vercel AI SDK →</a></p>
+<p>You can explore <a class="" href="/platform-redirect/?next=%2Fagent-tracing%2F">agent tracing for your SDK here</a>.</p>
+<h2 id="how-agent-tracing-can-help-you-debug"><a class="autolink-heading" href="#how-agent-tracing-can-help-you-debug">How Agent Tracing Can Help You Debug</a></h2>
+<p>Agents tend to fail differently than most applications. These quiet failures are usually several steps removed from the user and don't throw an error at all. Here are a few scenarios where agent tracing helps you find out what <em>really</em> happened behind the scenes.</p>
+<h3 id="debug-silent-tool-failures"><a class="autolink-heading" href="#debug-silent-tool-failures">Debug Silent Tool Failures</a></h3>
+<p>Tool calls don't have to fail loudly to fail. Most of the time they happen silently without you (or the user) noticing. For example:</p>
+<ol>
+<li><p>An agent calls a search tool to look up a customer's order status.</p></li>
+<li><p>The search tool requires a customer ID, but the agent passes an invalid one.</p></li>
+<li><p>The tool call doesn't error. It just returns nothing.</p></li>
+<li>
+<p>The agent has two choices:</p>
+<ol>
+<li>Hallucinate an answer that sounds plausible.</li>
+<li>Claim that no orders could be found.</li>
+</ol>
+</li>
+</ol>
+<p>Nothing in your error monitoring would ever catch that.</p>
+<p>The tool call span for that step shows you exactly what was requested and what came back, so you can see the actual cause instead of guessing from the final response alone. Since agents are non-deterministic, re-creating a silent tool failure can be nearly impossible. The next time it runs, it might pass the correct customer ID, and find the order without any issues.</p>
+<h3 id="find-the-slow-step-in-a-multi-step-workflow"><a class="autolink-heading" href="#find-the-slow-step-in-a-multi-step-workflow">Find the Slow Step in a Multi-Step Workflow</a></h3>
+<p>An agent run taking several seconds doesn't tell you where that time was spent. For example:</p>
+<ol>
+<li>A support agent needs to answer a few billing questions.</li>
+<li>It looks up the customer's account.</li>
+<li>It checks their subscription status.</li>
+<li>It pulls their most recent invoices before responding.</li>
+<li>The whole run feels slow, but it isn't clear which step caused the delay.</li>
+</ol>
+<p>It could be any of the three tool calls, or any of the model calls, or something else within the trace.</p>
+<p>An agent trace breaks the run into its individual spans, showing you the duration of each. That's how you'd find out that the subscription check alone accounts for 75% of the time spent, while every other step finishes almost instantly.</p>
+<p>Agents work within a distributed ecosystem. The issue doesn't have to be inside the tool's or the agent's logic. If that tool queries a database, the query shows up as its own span nested inside that tool call. Everything is within the same distributed trace, so you can tell whether the real bottleneck is the agent, the tool, or a slow database query underneath it.</p>
+<h3 id="track-token-cost-per-run"><a class="autolink-heading" href="#track-token-cost-per-run">Track Token Cost Per Run</a></h3>
+<p>It's easy to estimate costs for a single expensive model call. A multi-step agent run is a more complicated story. Every model call in a multi-step run has its own tokens and costs, so when the agent produces its final response, you'll end up with a combined bill rather than one line item. For example:</p>
+<ol>
+<li>An agent run usually makes two model calls that cost a few cents.</li>
+<li>One day, that same run costs 10 times more.</li>
+<li>Without insight, all you'd see is a larger bill at the end of the month.</li>
+</ol>
+<p>With agent tracing, each model call span shows you an estimate of how much it costs and how many tokens it consumed. You'd be able to see that one step called an expensive model several times in a row instead of just once, or that a tool returned a block of text big enough that the agent was forced to reprocess it.</p>
+<p><strong>Note:</strong> Cost is an estimate to help guide your understanding of agent performance, not an exact representation.</p>
+<p><a class="" href="https://sentry.io/cookbook/monitor-ai-agent-spend-with-dashboards-and-alerts/">Learn how to build an agent spend dashboard with alerts →</a></p>
+<h3 id="debug-multi-agent-handoffs"><a class="autolink-heading" href="#debug-multi-agent-handoffs">Debug Multi-Agent Handoffs</a></h3>
+<p>Agent handoffs can sometimes go wrong despite getting routed to the right agent. For example:</p>
+<ol>
+<li><p>A user in need of a refund tells the triage agent their order number.</p></li>
+<li><p>The triage agent sees that it's a billing question and hands it off to the billing agent.</p></li>
+<li><p>The billing agent receives the handoff, but the order number is missing.</p></li>
+<li>
+<p>The billing agent has two choices:</p>
+<ol>
+<li>Ask for the order number again.</li>
+<li>Guess which order number the user meant.</li>
+</ol>
+</li>
+</ol>
+<p>Because a handoff gets captured as its own span within the run, marking the exact point where one agent passes its work to another, you can see exactly what context got passed on, and compare it to what the billing agent <em>actually</em> used. If the order number was in the initial message from the user, but then ended up missing by the time the billing agent took over, you've found the culprit.</p>
+<p>Once your checks are defined, you never have to run them by hand. By creating a scheduled routine that reviews every agent conversation daily and flags tool errors, latency spikes, and cost anomalies in advance, you can have agent issues triaged directly to your team, with all the context you're capturing with agent tracing.</p>
+<p><a class="" href="https://sentry.io/cookbook/automate-ai-agent-triage-claude-routines/">See how to automate agent triage →</a></p>
+<p><strong>Get started with agent tracing today by</strong> <a class="" href="/platform-redirect/?next=%2Fagent-tracing%2F"><strong>setting it up in your SDK</strong></a>.</p>
+</div>
+<div class="grid grid-cols-2 gap-4 not-prose mt-16">
+<div class="col-span-1"><a class="no-underline" href="/concepts/key-terms/tracing/"><div class="py-3 px-4 border-2 dark:[border-color:var(--gray-4)] rounded-md transition-colors hover:[border-color:var(--accent)] text-left">
+<div class="text-sm [color:var(--foreground)]">Previous</div>
+<div class="flex items-center gap-1 font-[500] justify-start">Tracing</div>
+</div></a></div>
+<div class="col-span-1"><a class="no-underline" href="/concepts/key-terms/extrapolation/"><div class="py-3 px-4 border-2 dark:[border-color:var(--gray-4)] rounded-md transition-colors hover:[border-color:var(--accent)] text-right">
+<div class="text-sm [color:var(--foreground)]">Next</div>
+<div class="flex items-center gap-1 font-[500] justify-end">Extrapolation</div>
+</div></a></div>
+</div>
+<div class="space-y-4 py-4 border-[var(--gray-6)]">
+<div class="flex items-center gap-4 text-sm mt-8">
+<span class="font-medium">Was this helpful?</span><div class="flex">
+<button class="py-1 px-2 gap-4 hover:bg-[var(--gray-3)] rounded flex items-center justify-center">Yes 👍</button><button class="py-1 px-2 gap-4 hover:bg-[var(--gray-3)] rounded flex items-center justify-center">No 👎</button>
+</div>
+</div>
+
+</div>
+<div class="styles_cta__uq_BB">
+<small><strong>Help improve this content</strong></small><small>Our documentation is open source and available on GitHub. Your contributions are welcome, whether fixing a typo (drat!) or suggesting an update ("yeah, this would be better").<div>
+<a href="https://docs.sentry.io/contributing/">How to contribute</a>   |  <a href="https://github.com/getsentry/sentry-docs/edit/master/docs/concepts/key-terms/agent-tracing/index.mdx">Edit this page</a>   |  <a href="https://github.com/getsentry/sentry-docs/issues/new/choose">Create a docs issue</a>   |  <a href="https://www.sentry.help/en/">Get support</a> </div></small>
+</div>
+</div>
+</div></main></section></div>
+
+</div></div></div>

@@ -1,0 +1,311 @@
+<div><div class="container-fluid td-outer">
+<div class="td-main"><div class="row flex-xl-nowrap">
+<main class="col-12 col-md-9 col-xl-8 ps-md-5"><div class="td-content">
+<h1>Traces</h1>
+<div class="lead">The path of a request through your application.</div>
+<p><strong>Traces</strong> give us the big picture of what happens when a request is made to an
+application. Whether your application is a monolith with a single database or a
+sophisticated mesh of services, traces are essential to understanding the full
+“path” a request takes in your application.</p>
+<p>Let’s explore this with three units of work, represented as <a href="#spans">Spans</a>:</p>
+<div class="td-alert td-alert--md alert alert-note">
+<div class="td-alert-heading alert-heading">Note</div>
+<div class="td-alert-body"><p>The following JSON examples do not represent a specific format, and especially
+not <a href="/docs/specs/otlp/#json-protobuf-encoding">OTLP/JSON</a>, which is more
+verbose.</p></div>
+</div>
+<p><code>hello</code> span:</p>
+<div class="highlight"><pre class="chroma"><code class="language-json"><span class="line"><span class="cl">  <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"hello"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"context"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"trace_id"</span><span class="p">:</span> <span class="s2">"5b8aa5a2d2c872e8321cf37308d69df2"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"span_id"</span><span class="p">:</span> <span class="s2">"051581bf3cb55c13"</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"parent_id"</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"start_time"</span><span class="p">:</span> <span class="s2">"2022-04-29T18:52:58.114201Z"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"end_time"</span><span class="p">:</span> <span class="s2">"2022-04-29T18:52:58.114687Z"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"attributes"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"http.route"</span><span class="p">:</span> <span class="s2">"some_route1"</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"events"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"Guten Tag!"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"timestamp"</span><span class="p">:</span> <span class="s2">"2022-04-29T18:52:58.114561Z"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"attributes"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">"event_attributes"</span><span class="p">:</span> <span class="mi">1</span>
+</span></span></code></pre></div>
+<p>This is the root span, denoting the beginning and end of the entire operation.
+Note that it has a <code>trace_id</code> field indicating the trace, but has no
+<code>parent_id</code>. That’s how you know it’s the root span.</p>
+<p><code>hello-greetings</code> span:</p>
+<div class="highlight"><pre class="chroma"><code class="language-json"><span class="line"><span class="cl">  <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"hello-greetings"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"context"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"trace_id"</span><span class="p">:</span> <span class="s2">"5b8aa5a2d2c872e8321cf37308d69df2"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"span_id"</span><span class="p">:</span> <span class="s2">"5fb397be34d26b51"</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"parent_id"</span><span class="p">:</span> <span class="s2">"051581bf3cb55c13"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"start_time"</span><span class="p">:</span> <span class="s2">"2022-04-29T18:52:58.114304Z"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"end_time"</span><span class="p">:</span> <span class="s2">"2022-04-29T22:52:58.114561Z"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"attributes"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"http.route"</span><span class="p">:</span> <span class="s2">"some_route2"</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"events"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"hey there!"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"timestamp"</span><span class="p">:</span> <span class="s2">"2022-04-29T18:52:58.114561Z"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"attributes"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">"event_attributes"</span><span class="p">:</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"bye now!"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"timestamp"</span><span class="p">:</span> <span class="s2">"2022-04-29T18:52:58.114585Z"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"attributes"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">"event_attributes"</span><span class="p">:</span> <span class="mi">1</span>
+</span></span></code></pre></div>
+<p>This span encapsulates specific tasks, like saying greetings, and its parent is
+the <code>hello</code> span. Note that it shares the same <code>trace_id</code> as the root span,
+indicating it’s a part of the same trace. Additionally, it has a <code>parent_id</code>
+that matches the <code>span_id</code> of the <code>hello</code> span.</p>
+<p><code>hello-salutations</code> span:</p>
+<div class="highlight"><pre class="chroma"><code class="language-json"><span class="line"><span class="cl">  <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"hello-salutations"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"context"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"trace_id"</span><span class="p">:</span> <span class="s2">"5b8aa5a2d2c872e8321cf37308d69df2"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"span_id"</span><span class="p">:</span> <span class="s2">"93564f51e1abe1c2"</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"parent_id"</span><span class="p">:</span> <span class="s2">"051581bf3cb55c13"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"start_time"</span><span class="p">:</span> <span class="s2">"2022-04-29T18:52:58.114492Z"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"end_time"</span><span class="p">:</span> <span class="s2">"2022-04-29T18:52:58.114631Z"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"attributes"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"http.route"</span><span class="p">:</span> <span class="s2">"some_route3"</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"events"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"hey there!"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"timestamp"</span><span class="p">:</span> <span class="s2">"2022-04-29T18:52:58.114561Z"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"attributes"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">"event_attributes"</span><span class="p">:</span> <span class="mi">1</span>
+</span></span></code></pre></div>
+<p>This span represents the third operation in this trace and, like the previous
+one, it’s a child of the <code>hello</code> span. That also makes it a sibling of the
+<code>hello-greetings</code> span.</p>
+<p>These three blocks of JSON all share the same <code>trace_id</code>, and the <code>parent_id</code>
+field represents a hierarchy. That makes it a Trace!</p>
+<p>Another thing you’ll note is that each Span looks like a structured log. That’s
+because it kind of is! One way to think of Traces is that they’re a collection
+of structured logs with context, correlation, hierarchy, and more baked in.
+However, these “structured logs” can come from different processes, services,
+VMs, data centers, and so on. This is what allows tracing to represent an
+end-to-end view of any system.</p>
+<p>To understand how tracing in OpenTelemetry works, let’s look at a list of
+components that will play a part in instrumenting our code.</p>
+<h2 id="tracer-provider">Tracer Provider
+</h2>
+<p>A Tracer Provider (sometimes called <code>TracerProvider</code>) is a factory for
+<code>Tracer</code>s. In most applications, a Tracer Provider is initialized once and its
+lifecycle matches the application’s lifecycle. Tracer Provider initialization
+also includes Resource and Exporter initialization. It is typically the first
+step in tracing with OpenTelemetry. In some language SDKs, a global Tracer
+Provider is already initialized for you.</p>
+<h2 id="tracer">Tracer
+</h2>
+<p>A Tracer creates spans containing more information about what is happening for a
+given operation, such as a request in a service. Tracers are created from Tracer
+Providers.</p>
+<h2 id="trace-exporters">Trace Exporters
+</h2>
+<p>Trace Exporters send traces to a consumer. This consumer can be standard output
+for debugging and development-time, the OpenTelemetry Collector, or any open
+source or vendor backend of your choice.</p>
+<h2 id="context-propagation">Context Propagation
+</h2>
+<p>Context Propagation is the core concept that enables Distributed Tracing. With
+Context Propagation, Spans can be correlated with each other and assembled into
+a trace, regardless of where Spans are generated. To learn more about this
+topic, see the concept page on <a href="../../context-propagation">Context Propagation</a>.</p>
+<h2 id="spans">Spans
+</h2>
+<p>A <strong>span</strong> represents a unit of work or operation. Spans are the building blocks
+of Traces. In OpenTelemetry, they include the following information:</p>
+<ul>
+<li>Name</li>
+<li>Parent span ID (empty for root spans)</li>
+<li>Start and End Timestamps</li>
+
+
+
+
+
+</ul>
+<p>Sample span:</p>
+<div class="highlight"><pre class="chroma"><code class="language-json"><span class="line"><span class="cl">  <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"/v1/sys/health"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"context"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"trace_id"</span><span class="p">:</span> <span class="s2">"7bba9f33312b3dbb8b2c2c62bb7abe2d"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"span_id"</span><span class="p">:</span> <span class="s2">"086e83747d0e381e"</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"parent_id"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"start_time"</span><span class="p">:</span> <span class="s2">"2021-10-22 16:04:01.209458162 +0000 UTC"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"end_time"</span><span class="p">:</span> <span class="s2">"2021-10-22 16:04:01.209514132 +0000 UTC"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"status_code"</span><span class="p">:</span> <span class="s2">"STATUS_CODE_OK"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"status_message"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"attributes"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"net.transport"</span><span class="p">:</span> <span class="s2">"IP.TCP"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"net.peer.ip"</span><span class="p">:</span> <span class="s2">"172.17.0.1"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"net.peer.port"</span><span class="p">:</span> <span class="s2">"51820"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"net.host.ip"</span><span class="p">:</span> <span class="s2">"10.177.2.152"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"net.host.port"</span><span class="p">:</span> <span class="s2">"26040"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"http.method"</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"http.target"</span><span class="p">:</span> <span class="s2">"/v1/sys/health"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"http.server_name"</span><span class="p">:</span> <span class="s2">"mortar-gateway"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"http.route"</span><span class="p">:</span> <span class="s2">"/v1/sys/health"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"http.user_agent"</span><span class="p">:</span> <span class="s2">"Consul Health Check"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"http.scheme"</span><span class="p">:</span> <span class="s2">"http"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"http.host"</span><span class="p">:</span> <span class="s2">"10.177.2.152:26040"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"http.flavor"</span><span class="p">:</span> <span class="s2">"1.1"</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"events"</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"name"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"message"</span><span class="p">:</span> <span class="s2">"OK"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"timestamp"</span><span class="p">:</span> <span class="s2">"2021-10-22 16:04:01.209512872 +0000 UTC"</span>
+</span></span></code></pre></div>
+<p>Spans can be nested, as is implied by the presence of a parent span ID: child
+spans represent sub-operations. This allows spans to more accurately capture the
+work done in an application.</p>
+<h3 id="span-context">Span Context
+</h3>
+<p>Span context is an immutable object on every span that contains the following:</p>
+<ul>
+<li>The Trace ID representing the trace that the span is a part of</li>
+<li>The span’s Span ID</li>
+<li>Trace Flags, a binary encoding containing information about the trace</li>
+<li>Trace State, a list of key-value pairs that can carry vendor-specific trace
+information</li>
+</ul>
+<p>Span context is the part of a span that is serialized and propagated alongside
+<a href="#context-propagation">Distributed Context</a> and <a href="../baggage">Baggage</a>.</p>
+<p>Because Span Context contains the Trace ID, it is used when creating
+<a href="#span-links">Span Links</a>.</p>
+<h3 id="attributes">Attributes
+</h3>
+<p>Attributes are key-value pairs that contain metadata that you can use to
+annotate a Span to carry information about the operation it is tracking.</p>
+<p>For example, if a span tracks an operation that adds an item to a user’s
+shopping cart in an eCommerce system, you can capture the user’s ID, the ID of
+the item to add to the cart, and the cart ID.</p>
+<p>You can add attributes to spans during or after span creation. Prefer adding
+attributes at span creation to make the attributes available to SDK sampling. If
+you have to add a value after span creation, update the span with the value.</p>
+<p>Attributes have the following rules that each language SDK implements:</p>
+<ul>
+<li>Keys must be non-null string values</li>
+<li>Values must be a non-null string, boolean, floating point value, integer, or
+an array of these values</li>
+</ul>
+<p>Additionally, there are
+<a href="/docs/specs/semconv/general/trace/">Semantic Attributes</a>, which are known
+naming conventions for metadata that is typically present in common operations.
+It’s helpful to use semantic attribute naming wherever possible so that common
+kinds of metadata are standardized across systems.</p>
+<h3 id="span-events">Span Events
+</h3>
+<p>A Span Event can be thought of as a structured log message (or annotation) on a
+Span, typically used to denote a meaningful, singular point in time during the
+Span’s duration.</p>
+<p>For example, consider two scenarios in a web browser:</p>
+<ol>
+<li>Tracking a page load</li>
+<li>Denoting when a page becomes interactive</li>
+</ol>
+<p>A Span is best used to track the first scenario because it’s an operation with a
+start and an end.</p>
+<p>A Span Event is best used to track the second scenario because it represents a
+meaningful, singular point in time.</p>
+<h4 id="when-to-use-span-events-versus-span-attributes">When to use span events versus span attributes
+</h4>
+<p>Since span events also contain attributes, the question of when to use events
+instead of attributes might not always have an obvious answer. To inform your
+decision, consider whether a specific timestamp is meaningful.</p>
+<p>For example, when you’re tracking an operation with a span and the operation
+completes, you might want to add data from the operation to your telemetry.</p>
+<ul>
+<li>If the timestamp in which the operation completes is meaningful or relevant,
+attach the data to a span event.</li>
+<li>If the timestamp isn’t meaningful, attach the data as span attributes.</li>
+</ul>
+<h3 id="span-links">Span Links
+</h3>
+<p>Links exist so that you can associate one span with one or more spans, implying
+a causal relationship. For example, let’s say we have a distributed system where
+some operations are tracked by a trace.</p>
+<p>In response to some of these operations, an additional operation is queued to be
+executed, but its execution is asynchronous. We can track this subsequent
+operation with a trace as well.</p>
+<p>We would like to associate the trace for the subsequent operations with the
+first trace, but we cannot predict when the subsequent operations will start. We
+need to associate these two traces, so we will use a span link.</p>
+<p>You can link the last span from the first trace to the first span in the second
+trace. Now, they are causally associated with one another.</p>
+<p>Links are optional but serve as a good way to associate trace spans with one
+another.</p>
+<p>For more information see <a href="/docs/specs/otel/trace/api/#link">Span Links</a>.</p>
+<h3 id="span-status">Span Status
+</h3>
+<p>Each span has a status. The three possible values are:</p>
+<ul>
+<li><code>Unset</code></li>
+<li><code>Error</code></li>
+
+</ul>
+<p>The default value is <code>Unset</code>. A span status that is <code>Unset</code> means that the
+operation it tracked successfully completed without an error.</p>
+<p>When a span status is <code>Error</code>, then that means some error occurred in the
+operation it tracks. For example, this could be due to an HTTP 500 error on a
+server handling a request.</p>
+<p>When a span status is <code>Ok</code>, then that means the span was explicitly marked as
+error-free by the developer of an application. Although this is unintuitive,
+it’s not required to set a span status as <code>Ok</code> when a span is known to have
+completed without error, as this is covered by <code>Unset</code>. What <code>Ok</code> does is
+represent an unambiguous “final call” on the status of a span that has been
+explicitly set by a user. This is helpful in any situation where a developer
+wishes for there to be no other interpretation of a span other than
+“successful”.</p>
+<p>To reiterate: <code>Unset</code> represents a span that completed without an error. <code>Ok</code>
+represents when a developer explicitly marks a span as successful. In most
+cases, it is not necessary to explicitly mark a span as <code>Ok</code>.</p>
+<h3 id="span-kind">Span Kind
+</h3>
+<p>When a span is created, it is one of <code>Client</code>, <code>Server</code>, <code>Internal</code>, <code>Producer</code>,
+or <code>Consumer</code>. This span kind provides a hint to the tracing backend as to how
+the trace should be assembled. According to the OpenTelemetry specification, the
+parent of a server span is often a remote client span, and the child of a client
+span is usually a server span. Similarly, the parent of a consumer span is
+always a producer and the child of a producer span is always a consumer. If not
+provided, the span kind is assumed to be internal.</p>
+<p>For more information regarding SpanKind, see
+<a href="/docs/specs/otel/trace/api/#spankind">SpanKind</a>.</p>
+<h4 id="client">Client
+</h4>
+<p>A client span represents a synchronous outgoing remote call such as an outgoing
+HTTP request or database call. Note that in this context, “synchronous” does not
+refer to <code>async/await</code>, but to the fact that it is not queued for later
+processing.</p>
+<h4 id="server">Server
+</h4>
+<p>A server span represents a synchronous incoming remote call such as an incoming
+HTTP request or remote procedure call.</p>
+<h4 id="internal">Internal
+</h4>
+<p>Internal spans represent operations which do not cross a process boundary.
+Things like instrumenting a function call or an Express middleware may use
+internal spans.</p>
+<h4 id="producer">Producer
+</h4>
+<p>Producer spans represent the creation of a job which may be asynchronously
+processed later. It may be a remote job such as one inserted into a job queue or
+a local job handled by an event listener.</p>
+<h4 id="consumer">Consumer
+</h4>
+<p>Consumer spans represent the processing of a job created by a producer and may
+start long after the producer span has already ended.</p>
+<h2 id="specification">Specification
+</h2>
+<p>For more information, see the
+<a href="/docs/specs/otel/overview/#tracing-signal">traces specification</a>.</p>
+<div class="d-print-none">
+<h2 class="feedback--title">Feedback</h2>
+<p class="feedback--question">Was this page helpful?</p>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-yes">Yes</button>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-no">No</button><p class="feedback--response feedback--response-yes">Thank you. Your feedback is appreciated!</p>
+<p class="feedback--response feedback--response-no">Please let us know <a class="external-link" href="https://github.com/open-telemetry/opentelemetry.io/issues/new?template=PAGE_FEEDBACK.yml&amp;title=[Page+feedback]%3A+ADD+A+SUMMARY+OF+YOUR+FEEDBACK+HERE">how we can improve this page</a>. Your feedback is appreciated!</p>
+</div>
+<div class="td-page-meta__lastmod">Last modified January 14, 2026: <a href="https://github.com/open-telemetry/opentelemetry.io/commit/6bf06ddb9fc057dd6e8092f26d988ffe7b1af5ed">Convert all `en` page Note alerts to markdown syntax (#8894) (6bf06ddb)</a>
+</div>
+</div></main>
+</div></div>
+
+</div></div>

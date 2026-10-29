@@ -1,0 +1,55 @@
+<div><div id="__next"><div><div>
+<a class="visually-hidden skip-button DefaultLayout_skipButton__3BaOi" href="#main-content">Skip to main content</a><div><div class="d-lg-flex"><div class="flex-column flex-1 min-width-0 DefaultLayout_stickyStack__mf76f DefaultLayout_stickyStackWithSubBar__Yfp2u DefaultLayout_stickyStackYieldsAtXxl__y36ZX">
+<main class="DefaultLayout_mainContent__UI2BH" id="main-content"><div class="px-3 px-md-6 mt-4 mb-4"><div class="ArticleGridLayout_containerBox__lLLio ArticleGridLayout_containerBoxXxl__SphGC">
+<div class="ArticleGridLayout_heroTopper__bCpVj"><div class="d-flex flex-items-baseline flex-justify-between"><h1 class="border-bottom-0 ArticleTitle_title__wOdiS" id="title-h1">Pull requests</h1></div></div>
+<div class="f4 pb-4 ArticleGridLayout_heroIntro__IvIoX" id="article-intro">
+<div class="mb-3 Lead_container__m3L5f _page-intro"><p>Propose, review, and merge code changes using pull requests to collaborate effectively and maintain code quality.</p></div>
+<div class="ViewMarkdownButton_belowIntroPlacement__MKGvm"><div class="ViewMarkdownButton_controls__jbwAh"><button class="Primer_Brand__Button-module__Button___lDruK Primer_Brand__Button-module__Button--secondary___akMC2 Primer_Brand__Button-module__Button--size-medium___EyCyw text-decoration-none ViewMarkdownButton_button__chhfE ViewMarkdownButton_copyButton__haGNh"><span class="Primer_Brand__Button-module__Button__text___Z3ocU"><span class="Primer_Brand__Text-module__Text___pecHN Primer_Brand__Text-module__Text-font--mona-sans___GpzSG Primer_Brand__Text-module__Text--default___DChoE Primer_Brand__Text-module__Text--200___XAIGT Primer_Brand__Text-module__Text--antialiased___fYDxq Primer_Brand__Text-module__Text--weight-medium___E0iQL Primer_Brand__Button-module__Button--label___lUBc0 Primer_Brand__Button-module__Button--label-medium___DW2TM Primer_Brand__Button-module__Button--label-secondary___DRJoJ">Copy markdown</span></span></button></div></div>
+</div>
+<div><div id="article-contents"><div class="MarkdownContent_markdownBody__v5MYy markdown-body">
+<p>Pull requests are proposals to merge code changes into a project. A pull request is GitHub's key <strong>collaboration feature</strong>, letting you discuss and review changes before merging them. This helps teams work together, catch issues early, and maintain code quality.</p>
+<p><a class="btn btn-primary mt-3 mr-3 no-underline" href="https://github.com/pulls?ref_product=github&amp;ref_type=engagement&amp;ref_style=button"><span>View your pull requests</span> </a></p>
+<h2 id="working-with-pull-requests"><a class="heading-link" href="#working-with-pull-requests">Working with pull requests</a></h2>
+<p>A pull request brings together the context reviewers need to understand a change. This context is organized into tabs:</p>
+<ul>
+<li>The <strong>Conversation</strong> tab shows the description, timeline, comments, and reviews.</li>
+<li>The <strong>Commits</strong> tab shows how the pull request branch changed over time.</li>
+<li>The <strong>Checks</strong> tab shows automated tests, builds, and other validations.</li>
+<li>The <strong>Files changed</strong> tab shows the diff that reviewers use to understand the proposed changes.</li>
+<li>The <strong>Findings</strong> tab shows automated code review results, such as code scanning alerts, for the proposed changes.</li>
+</ul>
+<p>Separately from the tabs, the <strong>merge status</strong> highlights blockers, missing approvals, and other requirements before merging. It appears in the pull request header and in the merge box.</p>
+<p>Together, these views help authors and reviewers discuss the change, track feedback, and decide when the pull request is ready to merge.</p>
+<h2 id="draft-pull-requests"><a class="heading-link" href="#draft-pull-requests">Draft pull requests</a></h2>
+<p>When you create a pull request, you can choose to make it a draft pull request. Draft pull requests cannot be merged, and code owners are not automatically requested to review them. Drafts are useful when you want to share work-in-progress without formally requesting reviews.</p>
+<p>When you're ready to get feedback on your pull request, you can mark your draft pull request as ready for review. Marking a pull request as ready for review will request reviews from any code owners. You can convert a pull request to a draft at any time. See <a href="/en/pull-requests/how-tos/create-pull-requests/changing-the-stage-of-a-pull-request">Changing the stage of a pull request</a>.</p>
+<h2 id="pull-request-refs-and-merge-branches"><a class="heading-link" href="#pull-request-refs-and-merge-branches">Pull request refs and merge branches</a></h2>
+<p>When you open a pull request, GitHub creates temporary Git references that point to the pull request's head branch and, when possible, to a simulated merge result. These refs help GitHub and integrations evaluate the pull request without changing the base branch.</p>
+<p>For most contributors, these refs stay in the background. They are most relevant when you are building automation, debugging CI behavior, or fetching pull request state locally. For information about how GitHub Actions uses the merge branch, see <a href="/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#how-the-merge-branch-affects-your-workflow">Events that trigger workflows</a>.</p>
+<h2 id="differences-between-commits-on-compare-and-pull-request-pages"><a class="heading-link" href="#differences-between-commits-on-compare-and-pull-request-pages">Differences between commits on compare and pull request pages</a></h2>
+<p>Compare pages and pull request pages can calculate changed files from different merge bases. As a result, the same branches can sometimes show different diffs in each place.</p>
+<p>This usually matters when the base branch has changed since the pull request was created. Pull request pages focus on what the pull request introduced, while compare pages reflect the current comparison between two refs.</p>
+<h2 id="collaborative-development-models"><a class="heading-link" href="#collaborative-development-models">Collaborative development models</a></h2>
+<p>The way you use pull requests depends on the type of development model you use in your project. You can use the fork and pull model or the shared repository model.</p>
+<h3 id="fork-and-pull-model"><a class="heading-link" href="#fork-and-pull-model">Fork and pull model</a></h3>
+<p>In the fork and pull model, anyone can fork an existing ("upstream") repository if they have read access and the owner of the upstream repository allows it. Be aware that a fork and its upstream share the same Git data. This means that all content uploaded to a fork is accessible from the upstream and all other forks of that upstream.</p>
+<p>You do not need permission from the upstream repository to push to a fork you created. You can optionally allow anyone with push access to the upstream repository to make changes to your pull request branch. This model is popular with open-source projects because it reduces friction for new contributors and lets people work independently without upfront coordination.</p>
+<div class="ghd-alert ghd-alert-success">
+<p class="ghd-alert-title">Tip</p>
+<p>
+For more information on open source, specifically how to create and grow an open source project, we've created <a href="https://opensource.guide/">Open Source Guides</a> that will help you foster a healthy open source community. You can also take a free <a href="https://skills.github.com/">GitHub Skills</a> course on maintaining open source communities.</p>
+</div>
+<h3 id="shared-repository-model"><a class="heading-link" href="#shared-repository-model">Shared repository model</a></h3>
+<p>In the shared repository model, collaborators have push access to a single shared repository and create topic branches when they need to make changes. Pull requests are useful in this model because they start code review and general discussion about a set of changes before the changes are merged into the main development branch. This model is more common with small teams and organizations collaborating on private projects.</p>
+<h2 id="further-reading"><a class="heading-link" href="#further-reading">Further reading</a></h2>
+<ul>
+<li><a href="/en/pull-requests/how-tos/create-pull-requests/creating-a-pull-request">Creating a pull request</a></li>
+
+<li><a href="/en/pull-requests/how-tos/review-pull-requests/commenting-on-a-pull-request">Commenting on a pull request</a></li>
+<li><a href="/en/pull-requests/how-tos/create-pull-requests/creating-a-pull-request-from-a-fork">Creating a pull request from a fork</a></li>
+<li><a href="/en/pull-requests/how-tos/work-with-forks/allowing-changes-to-a-pull-request-branch-created-from-a-fork">Allowing changes to a pull request branch created from a fork</a></li>
+</ul>
+</div></div></div>
+</div></div></main>
+</div></div></div>
+</div></div></div></div>

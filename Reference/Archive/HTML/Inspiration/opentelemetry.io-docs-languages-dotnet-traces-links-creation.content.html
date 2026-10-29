@@ -1,0 +1,168 @@
+<div><div class="container-fluid td-outer">
+<div class="td-main"><div class="row flex-xl-nowrap">
+<main class="col-12 col-md-9 col-xl-8 ps-md-5"><div class="td-content">
+<h1>Creating links between traces</h1>
+<div class="lead">Learn how to create links between traces with OpenTelemetry .NET</div>
+<p>This guide explains how to create links between traces in OpenTelemetry .NET,
+which can be useful for fan-out operations, batched processing, or correlating
+related activities across different traces.</p>
+<h2 id="what-are-trace-links">What are trace links?
+</h2>
+<p>In OpenTelemetry, links allow you to establish connections between spans (or
+activities in .NET) that are related but may not have a direct parent-child
+relationship. This is particularly useful in distributed systems where you need
+to correlate multiple operations that might be part of different traces.</p>
+<p>Common scenarios for using links include:</p>
+<ul>
+<li>
+<strong>Fan-out operations</strong>: When a single request triggers multiple parallel
+operations</li>
+<li>
+<strong>Batch processing</strong>: When multiple incoming requests are processed in a
+single batch</li>
+<li>
+<strong>Asynchronous processing</strong>: When operations are handled asynchronously across
+different traces</li>
+<li>
+<strong>Cross-service correlation</strong>: When connecting related operations across
+different services</li>
+</ul>
+<h2 id="creating-links-to-existing-activities">Creating links to existing activities
+</h2>
+<p>The following example demonstrates how to create new root activities that link
+to an existing activity:</p>
+<div class="highlight"><pre class="chroma"><code class="language-csharp"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">System.Diagnostics</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">OpenTelemetry</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">OpenTelemetry.Trace</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Create an activity source</span>
+</span></span><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">activitySource</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ActivitySource</span><span class="p">(</span><span class="s">"MyCompany.MyApplication"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Configure OpenTelemetry</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">var</span> <span class="n">tracerProvider</span> <span class="p">=</span> <span class="n">Sdk</span><span class="p">.</span><span class="n">CreateTracerProviderBuilder</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">AddSource</span><span class="p">(</span><span class="s">"MyCompany.MyApplication"</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">AddConsoleExporter</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">Build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Start a parent activity</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">orchestratingActivity</span> <span class="p">=</span> <span class="n">activitySource</span><span class="p">.</span><span class="n">StartActivity</span><span class="p">(</span><span class="s">"OrchestratingActivity"</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">orchestratingActivity</span><span class="p">?.</span><span class="n">SetTag</span><span class="p">(</span><span class="s">"operation"</span><span class="p">,</span> <span class="s">"main-process"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Fan out to multiple operations with linked activities</span>
+</span></span><span class="line"><span class="cl">    <span class="k">await</span> <span class="n">DoFanoutAsync</span><span class="p">(</span><span class="n">activitySource</span><span class="p">,</span> <span class="m">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Continue with the original activity</span>
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">nestedActivity</span> <span class="p">=</span> <span class="n">activitySource</span><span class="p">.</span><span class="n">StartActivity</span><span class="p">(</span><span class="s">"WrapUp"</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">nestedActivity</span><span class="p">?.</span><span class="n">SetTag</span><span class="p">(</span><span class="s">"status"</span><span class="p">,</span> <span class="s">"completed"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Method that creates new root activities with links</span>
+</span></span><span class="line"><span class="cl"><span class="kd">async</span> <span class="n">Task</span> <span class="n">DoFanoutAsync</span><span class="p">(</span><span class="n">ActivitySource</span> <span class="n">source</span><span class="p">,</span> <span class="kt">int</span> <span class="n">operationCount</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Store the current activity to restore it later</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">var</span> <span class="n">previous</span> <span class="p">=</span> <span class="n">Activity</span><span class="p">.</span><span class="n">Current</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Get the context of the current activity for linking</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">var</span> <span class="n">activityContext</span> <span class="p">=</span> <span class="n">Activity</span><span class="p">.</span><span class="n">Current</span><span class="p">!.</span><span class="n">Context</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">var</span> <span class="n">links</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="n">ActivityLink</span>
+</span></span><span class="line"><span class="cl">        <span class="k">new</span> <span class="n">ActivityLink</span><span class="p">(</span><span class="n">activityContext</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">var</span> <span class="n">tasks</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="n">Task</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Create multiple new root activities that link to the original activity</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span>  <span class="n">operationCount</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">operationIndex</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">var</span> <span class="n">task</span> <span class="p">=</span> <span class="n">Task</span><span class="p">.</span><span class="n">Run</span><span class="p">(()</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// Set the current activity to null to create a new root activity</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Activity</span><span class="p">.</span><span class="n">Current</span> <span class="p">=</span> <span class="kc">null</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// Create a new root activity with a link to the original activity</span>
+</span></span><span class="line"><span class="cl">            <span class="k">using</span> <span class="nn">var</span> <span class="n">newRootActivity</span> <span class="p">=</span> <span class="n">source</span><span class="p">.</span><span class="n">StartActivity</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ActivityKind</span><span class="p">.</span><span class="n">Internal</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">name</span><span class="p">:</span> <span class="s">$"FannedOutActivity {operationIndex + 1}"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">links</span><span class="p">:</span> <span class="n">links</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// Perform work for this operation...</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tasks</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">task</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Wait for all fanned-out operations to complete</span>
+</span></span><span class="line"><span class="cl">    <span class="k">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">WhenAll</span><span class="p">(</span><span class="n">tasks</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Restore the original activity context</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Activity</span><span class="p">.</span><span class="n">Current</span> <span class="p">=</span> <span class="n">previous</span><span class="p">;</span>
+</span></span></code></pre></div>
+<h2 id="understanding-the-output">Understanding the output
+</h2>
+<p>When you run this code, you’ll see multiple activities in the output:</p>
+<ol>
+<li>One trace for the <code>OrchestratingActivity</code> (the original activity)</li>
+<li>Multiple independent traces, one for each <code>FannedOutActivity</code>
+</li>
+<li>Each <code>FannedOutActivity</code> has a link to the <code>OrchestratingActivity</code>
+</li>
+</ol>
+<p>The output will look similar to:</p>
+<div class="highlight"><pre class="chroma"><code class="language-text"><span class="line"><span class="cl">Activity.TraceId:            5ce4d8ad4926ecdd0084681f46fa38d9
+</span></span><span class="line"><span class="cl">Activity.SpanId:             8f9e9441f0789f6e
+</span></span><span class="line"><span class="cl">Activity.TraceFlags:         Recorded
+</span></span><span class="line"><span class="cl">Activity.ActivitySourceName: MyCompany.MyApplication
+</span></span><span class="line"><span class="cl">Activity.DisplayName:        FannedOutActivity 1
+</span></span><span class="line"><span class="cl">Activity.Kind:               Internal
+</span></span><span class="line"><span class="cl">Activity.StartTime:          2023-10-17T01:24:40.4957326Z
+</span></span><span class="line"><span class="cl">Activity.Duration:           00:00:00.0008656
+</span></span><span class="line"><span class="cl">Activity.Links:
+</span></span><span class="line"><span class="cl">    2890476acefb53b93af64a0d91939051 16b83c1517629363
+</span></span></code></pre></div>
+<p>Notice that this activity has:</p>
+<ul>
+<li>A new trace ID (<code>5ce4d8ad4926ecdd0084681f46fa38d9</code>)</li>
+<li>A link to the original activity’s trace and span IDs
+(<code>2890476acefb53b93af64a0d91939051 16b83c1517629363</code>)</li>
+</ul>
+<h2 id="when-to-use-links">When to use links
+</h2>
+<p>Consider using links in the following scenarios:</p>
+<ol>
+<li><p><strong>High-cardinality operations</strong>: When a single operation would generate
+thousands of spans, creating separate traces with links can make
+visualization and analysis more manageable.</p></li>
+<li><p><strong>Parallel processing</strong>: When processing items in parallel and you want to
+track each item’s processing independently while maintaining the connection
+to the original request.</p></li>
+<li><p><strong>Asynchronous workflows</strong>: When operations happen asynchronously and may not
+complete in the same trace lifetime.</p></li>
+</ol>
+<h2 id="tradeoffs-of-using-links">Tradeoffs of using links
+</h2>
+<p>While links provide flexibility, there are some considerations:</p>
+<ul>
+<li>
+<strong>Multiple traces</strong>: Instead of a single cohesive trace, you’ll have multiple
+related traces.</li>
+<li>
+<strong>Visualization complexity</strong>: Some observability tools may have limited
+support for visualizing linked traces.</li>
+<li>
+<strong>Analysis complexity</strong>: Analyzing data across linked traces requires more
+complex queries.</li>
+</ul>
+<h2 id="best-practices">Best practices
+</h2>
+<ol>
+<li>
+<strong>Use meaningful activity names</strong>: Choose clear names that indicate the
+purpose of each linked activity.</li>
+<li>
+<strong>Add contextual tags</strong>: Include tags that help identify why activities are
+linked.</li>
+<li>
+<strong>Restore the original context</strong>: Always restore the original
+Activity.Current after creating linked activities.</li>
+<li>
+<strong>Use sparingly</strong>: Only create new root activities when necessary to avoid
+fragmenting your tracing data.</li>
+</ol>
+<h2 id="learn-more">Learn more
+</h2>
+<ul>
+<li><a href="/docs/specs/otel/overview/#links-between-spans">OpenTelemetry Specification: Links between spans</a></li>
+<li><a class="external-link" href="https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/src/OpenTelemetry.Api#activity-creation-options">Activity Creation Options</a></li>
+</ul>
+<div class="d-print-none">
+<h2 class="feedback--title">Feedback</h2>
+<p class="feedback--question">Was this page helpful?</p>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-yes">Yes</button>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-no">No</button><p class="feedback--response feedback--response-yes">Thank you. Your feedback is appreciated!</p>
+<p class="feedback--response feedback--response-no">Please let us know <a class="external-link" href="https://github.com/open-telemetry/opentelemetry.io/issues/new?template=PAGE_FEEDBACK.yml&amp;title=[Page+feedback]%3A+ADD+A+SUMMARY+OF+YOUR+FEEDBACK+HERE">how we can improve this page</a>. Your feedback is appreciated!</p>
+</div>
+<div class="td-page-meta__lastmod">Last modified August 12, 2025: <a href="https://github.com/open-telemetry/opentelemetry.io/commit/bb9274966fe63396fc2e1787489f999aa124cf43">Add dotnet docs from /docs folder of opentelemetry-dotnet (#7474) (bb927496)</a>
+</div>
+</div></main>
+</div></div>
+
+</div></div>

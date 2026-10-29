@@ -1,0 +1,270 @@
+<div><div id="__nuxt"><div class="page">
+<a class="btn gl-button btn-confirm btn-md skip-link" href="#skipTarget"><span class="gl-button-text"> Skip to main content </span></a><main class="main"><div class="gl-mx-auto gl-my-0 gl-w-full gl-max-w-6xl gl-px-5 sm:gl-px-7 gl-py-7">
+<div class="gl-flex gl-flex-col gl-gap-7 lg:gl-flex-row lg:gl-items-start">
+<div class="gl-shrink gl-grow lg:gl-order-1 lg:gl-min-w-0">
+<div class="gl-mb-7">
+<h1 class="gl-heading-display" id="skipTarget">Single stat</h1>
+
+</div>
+<div class="gl-border gl-mb-5 gl-block gl-rounded-feedback gl-border-feedback-neutral gl-bg-feedback-neutral gl-p-3 gl-text-base gl-italic gl-leading-20 gl-text-feedback-neutral">Single stat is part of the <a class="" href="/contribute/contributing">design system extended layer</a> 🤝 <span> owned by <span class="gl-label gl-label-scoped gl-label-text-dark pointer-events-none gl-not-italic"><span class="gl-label-link"><span class="gl-label-text">group</span><span class="gl-label-text-scoped">optimize</span></span></span>. </span><span><span>Questions or feedback? Reach out to </span><a class="gl-link" href="https://gitlab.enterprise.slack.com/archives/C08MY2Z9BPV">#data-exploration-dashboards on Slack</a>. </span>
+</div>
+<div>
+<div class="md"><div class="nuxt-content">
+<p>The single stat component displays the title and value of a metric.</p>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
+<div class="language-html language-html"><div class="gl-card gl-mb-5" id="example-single-stat">
+<div class="gl-card-header !gl-pt-1 !gl-pb-2 !gl-pr-0"><div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<div class="gl-heading-scale-300">Single stat</div>
+
+</div></div>
+<div class="gl-card-body background-example-pattern"><div class="live-example-preview gl-@container" id="example-single-stat-preview">
+<div class="gl-relative">Loading live example...</div>
+
+</div></div>
+<div class="gl-card-footer !gl-p-0 !gl-pt-2 !gl-pb-1">
+<div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<button class="btn gl-button btn-confirm btn-sm btn-confirm-tertiary"><span class="gl-button-text">Edit source</span></button>
+</div>
+<div class="live-example-source gl-mt-3" id="example-single-stat-source"><pre class="language-html"><code class="language-html">&lt;gl-single-stat title="Single stat" value="100" variant="neutral" /&gt;</code></pre></div>
+</div>
+</div></div>
+
+<p>A single stat can be used by itself or side-by-side with other single stats to display a topical set of metrics. There are a number of variations to allow for additional context or representation of the metric.</p>
+<h3 id="when-to-use-a-single-stat"><a href="#when-to-use-a-single-stat">When to use a single stat</a></h3>
+<ul>
+<li>To show an overview of how a metric is performing.</li>
+<li>To show multiple metrics around a similar topic side-by-side.</li>
+</ul>
+<h3 id="when-not-to-use-single-stat"><a href="#when-not-to-use-single-stat">When not to use single stat</a></h3>
+<ul>
+<li>To display standard text or labels.</li>
+<li>To display the same metric over a period of time (use a <a class="" href="/data-visualization/charts">chart</a> instead).</li>
+</ul>
+
+<h3 id="simple"><a href="#simple">Simple</a></h3>
+<p>The default pattern for displaying a metric.</p>
+<div class="language-html language-html"><div class="gl-card gl-mb-5" id="example-simple">
+<div class="gl-card-header !gl-pt-1 !gl-pb-2 !gl-pr-0"><div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<div class="gl-heading-scale-300">Simple</div>
+
+</div></div>
+<div class="gl-card-body background-example-pattern"><div class="live-example-preview gl-@container" id="example-simple-preview">
+<div class="gl-relative">Loading live example...</div>
+
+</div></div>
+<div class="gl-card-footer !gl-p-0 !gl-pt-2 !gl-pb-1">
+<div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<button class="btn gl-button btn-confirm btn-sm btn-confirm-tertiary"><span class="gl-button-text">Edit source</span></button>
+</div>
+<div class="live-example-source gl-mt-3" id="example-simple-source"><pre class="language-html"><code class="language-html">&lt;gl-single-stat title="Single stat" value="100000" variant="neutral" /&gt;</code></pre></div>
+</div>
+</div></div>
+<h3 id="title-icon"><a href="#title-icon">Title icon</a></h3>
+<p>A single stat with a title icon to convey extra meaning to the metric.</p>
+<div class="language-html language-html"><div class="gl-card gl-mb-5" id="example-title-icon">
+<div class="gl-card-header !gl-pt-1 !gl-pb-2 !gl-pr-0"><div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<div class="gl-heading-scale-300">Title icon</div>
+
+</div></div>
+<div class="gl-card-body background-example-pattern"><div class="live-example-preview gl-@container" id="example-title-icon-preview">
+<div class="gl-relative">Loading live example...</div>
+
+</div></div>
+<div class="gl-card-footer !gl-p-0 !gl-pt-2 !gl-pb-1">
+<div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<button class="btn gl-button btn-confirm btn-sm btn-confirm-tertiary"><span class="gl-button-text">Edit source</span></button>
+</div>
+<div class="live-example-source gl-mt-3" id="example-title-icon-source"><pre class="language-html"><code class="language-html">&lt;gl-single-stat
+  title="Single stat"
+  value="100"
+  variant="neutral"
+  title-icon="hourglass"
+/&gt;</code></pre></div>
+</div>
+</div></div>
+<h3 id="meta-icon"><a href="#meta-icon">Meta icon</a></h3>
+<p>A single stat with an icon which can be used to convey status or trend.</p>
+<div class="language-html language-html"><div class="gl-card gl-mb-5" id="example-meta-icon">
+<div class="gl-card-header !gl-pt-1 !gl-pb-2 !gl-pr-0"><div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<div class="gl-heading-scale-300">Meta icon</div>
+
+</div></div>
+<div class="gl-card-body background-example-pattern"><div class="live-example-preview gl-@container" id="example-meta-icon-preview">
+<div class="gl-relative">Loading live example...</div>
+
+</div></div>
+<div class="gl-card-footer !gl-p-0 !gl-pt-2 !gl-pb-1">
+<div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<button class="btn gl-button btn-confirm btn-sm btn-confirm-tertiary"><span class="gl-button-text">Edit source</span></button>
+</div>
+<div class="live-example-source gl-mt-3" id="example-meta-icon-source"><pre class="language-html"><code class="language-html">&lt;gl-single-stat
+  title="Single stat"
+  value="100"
+  variant="neutral"
+  meta-icon="check-circle"
+/&gt;</code></pre></div>
+</div>
+</div></div>
+
+<p>A single stat with a badge which can be used to convey status or trend in more detail.</p>
+<div class="language-html language-html"><div class="gl-card gl-mb-5" id="example-badge">
+<div class="gl-card-header !gl-pt-1 !gl-pb-2 !gl-pr-0"><div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<div class="gl-heading-scale-300">Badge</div>
+
+</div></div>
+<div class="gl-card-body background-example-pattern"><div class="live-example-preview gl-@container" id="example-badge-preview">
+<div class="gl-relative">Loading live example...</div>
+
+</div></div>
+<div class="gl-card-footer !gl-p-0 !gl-pt-2 !gl-pb-1">
+<div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<button class="btn gl-button btn-confirm btn-sm btn-confirm-tertiary"><span class="gl-button-text">Edit source</span></button>
+</div>
+<div class="live-example-source gl-mt-3" id="example-badge-source"><pre class="language-html"><code class="language-html">&lt;gl-single-stat
+  title="Single stat"
+  value="100"
+  variant="info"
+  meta-text="through the roof"
+  meta-icon="rocket"
+/&gt;</code></pre></div>
+</div>
+</div></div>
+<p>The <code>meta-tooltip</code> prop adds a <a class="" href="/components/tooltip">tooltip</a> to the badge for additional context that doesn't fit in the badge text. When it's set, the badge is wrapped in a focusable button so the tooltip is reachable by keyboard and pointer. See the <a class="" href="/components/tooltip#guidelines">tooltip guidelines</a> for what belongs in a tooltip.</p>
+<div class="language-html language-html"><div class="gl-card gl-mb-5" id="example-badge-with-a-tooltip">
+<div class="gl-card-header !gl-pt-1 !gl-pb-2 !gl-pr-0"><div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<div class="gl-heading-scale-300">Badge with a tooltip</div>
+
+</div></div>
+<div class="gl-card-body background-example-pattern"><div class="live-example-preview gl-@container" id="example-badge-with-a-tooltip-preview">
+<div class="gl-relative">Loading live example...</div>
+
+</div></div>
+<div class="gl-card-footer !gl-p-0 !gl-pt-2 !gl-pb-1">
+<div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<button class="btn gl-button btn-confirm btn-sm btn-confirm-tertiary"><span class="gl-button-text">Edit source</span></button>
+</div>
+<div class="live-example-source gl-mt-3" id="example-badge-with-a-tooltip-source"><pre class="language-html"><code class="language-html">&lt;gl-single-stat
+  title="Single stat"
+  value="100"
+  variant="success"
+  meta-text="20%"
+  meta-icon="trend-up"
+  meta-tooltip="Percentage change compared to the previous time period"
+/&gt;</code></pre></div>
+</div>
+</div></div>
+<h3 id="description"><a href="#description">Description</a></h3>
+<p>A single stat with a description to add context to the metric.</p>
+<div class="language-html language-html"><div class="gl-card gl-mb-5" id="example-description">
+<div class="gl-card-header !gl-pt-1 !gl-pb-2 !gl-pr-0"><div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<div class="gl-heading-scale-300">Description</div>
+
+</div></div>
+<div class="gl-card-body background-example-pattern"><div class="live-example-preview gl-@container" id="example-description-preview">
+<div class="gl-relative">Loading live example...</div>
+
+</div></div>
+<div class="gl-card-footer !gl-p-0 !gl-pt-2 !gl-pb-1">
+<div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<button class="btn gl-button btn-confirm btn-sm btn-confirm-tertiary"><span class="gl-button-text">Edit source</span></button>
+</div>
+<div class="live-example-source gl-mt-3" id="example-description-source"><pre class="language-html"><code class="language-html">&lt;gl-single-stat
+  title="Single stat"
+  value="100"
+  variant="neutral"
+  description="Additional text"
+/&gt;</code></pre></div>
+</div>
+</div></div>
+<p>The description renders on one line. When the text exceeds the available width, it's truncated and the full text is shown in a <a class="" href="/components/tooltip">tooltip</a>. See <a class="" href="/product-foundations/layout#content-truncation-and-overflow">content truncation and overflow</a>.</p>
+<p>Drag the example below wider to see the truncation and tooltip resolve once the text fits.</p>
+<div class="language-html language-html"><div class="gl-card gl-mb-5" id="example-truncated-description">
+<div class="gl-card-header !gl-pt-1 !gl-pb-2 !gl-pr-0"><div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<div class="gl-heading-scale-300">Truncated description</div>
+
+</div></div>
+<div class="gl-card-body background-example-pattern"><div class="live-example-preview gl-@container" id="example-truncated-description-preview"><div class="gl-relative">Loading live example...</div></div></div>
+<div class="gl-card-footer !gl-p-0 !gl-pt-2 !gl-pb-1">
+<div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<button class="btn gl-button btn-confirm btn-sm btn-confirm-tertiary"><span class="gl-button-text">Edit source</span></button>
+</div>
+<div class="live-example-source gl-mt-3" id="example-truncated-description-source"><pre class="language-html"><code class="language-html">&lt;gl-single-stat
+  title="Single stat"
+  value="100"
+  variant="neutral"
+  description="This is a very long description that will be truncated when it exceeds the available width"
+/&gt;</code></pre></div>
+</div>
+</div></div>
+<h3 id="supplementary-content"><a href="#supplementary-content">Supplementary content</a></h3>
+<p>A single stat with supplementary content, which renders below the value and above the description. The default slot accepts content such as a <a class="" href="/components/progress-bar">progress bar</a> or a trend indicator.</p>
+<div class="language-html language-html"><div class="gl-card gl-mb-5" id="example-supplementary-content">
+<div class="gl-card-header !gl-pt-1 !gl-pb-2 !gl-pr-0"><div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<div class="gl-heading-scale-300">Supplementary content</div>
+
+</div></div>
+<div class="gl-card-body background-example-pattern"><div class="live-example-preview gl-@container" id="example-supplementary-content-preview"><div class="gl-relative">Loading live example...</div></div></div>
+<div class="gl-card-footer !gl-p-0 !gl-pt-2 !gl-pb-1">
+<div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<button class="btn gl-button btn-confirm btn-sm btn-confirm-tertiary"><span class="gl-button-text">Edit source</span></button>
+</div>
+<div class="live-example-source gl-mt-3" id="example-supplementary-content-source"><pre class="language-html"><code class="language-html">&lt;gl-single-stat title="Single stat" value="25" variant="neutral"&gt;
+  &lt;gl-progress-bar :value="25" height="8px" /&gt;
+&lt;/gl-single-stat&gt;</code></pre></div>
+</div>
+</div></div>
+<p>Supplementary content can be combined with a description.</p>
+<div class="language-html language-html"><div class="gl-card gl-mb-5" id="example-supplementary-content-with-a-description">
+<div class="gl-card-header !gl-pt-1 !gl-pb-2 !gl-pr-0"><div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<div class="gl-heading-scale-300">Supplementary content with a description</div>
+
+</div></div>
+<div class="gl-card-body background-example-pattern"><div class="live-example-preview gl-@container" id="example-supplementary-content-with-a-description-preview"><div class="gl-relative">Loading live example...</div></div></div>
+<div class="gl-card-footer !gl-p-0 !gl-pt-2 !gl-pb-1">
+<div class="gl-flex gl-items-center gl-justify-between gl-gap-3">
+<button class="btn gl-button btn-confirm btn-sm btn-confirm-tertiary"><span class="gl-button-text">Edit source</span></button>
+</div>
+<div class="live-example-source gl-mt-3" id="example-supplementary-content-with-a-description-source"><pre class="language-html"><code class="language-html">&lt;gl-single-stat
+  title="Single stat"
+  value="25"
+  variant="neutral"
+  description="Out of 100 items"
+&gt;
+  &lt;gl-progress-bar :value="25" height="8px" /&gt;
+&lt;/gl-single-stat&gt;</code></pre></div>
+</div>
+</div></div>
+
+<p>A single stat that navigates to detailed information about a metric.</p>
+<span class="gl-border gl-mb-5 gl-flex gl-flex-wrap gl-gap-2 gl-rounded-feedback gl-border-feedback-neutral gl-bg-feedback-neutral gl-p-3 gl-text-base gl-leading-20 gl-text-feedback-neutral"><div class="gl-flex gl-items-center gl-gap-3"><span class="gl-font-bold">TODO: </span></div>
+<span class="gl-mr-auto">
+Complete design spec and add "linked" single stat example.
+</span><a class="gl-link" href="https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com/-/issues/1555">View issue</a></span><h2 id="design-specifications"><a href="#design-specifications">Design specifications</a></h2>
+<p>Color, spacing, dimension, and layout information can be viewed in the <a href="https://www.figma.com/file/17NxNEMa7i28Is8sMetO2H/Data-Visualization?node-id=275%3A731">Pajamas UI Kit →</a></p>
+<h2 id="code-reference"><a href="#code-reference">Code reference</a></h2>
+<p>The single stat component is used to show a single value. The color of the meta icon / badge is
+determined by the <code>variant</code> prop, which can be one of <code>success</code>, <code>warning</code>, <code>danger</code>, <code>info</code>,
+or <code>neutral</code> (default).</p>
+<p>The <code>description</code> prop renders through <a class="" href="/components/utility-truncate"><code>GlTruncate</code></a> using the <code>with-tooltip</code> prop, so the full text is shown
+in a tooltip only when the text is actually truncated.</p>
+<p>Content passed to the default slot renders between the value and the description.</p>
+<p>The <code>meta-tooltip</code> prop wraps the badge in a <code>button</code> element, which is what makes the tooltip keyboard accessible.</p>
+<h3 id="hover-state"><a href="#hover-state">Hover state</a></h3>
+<p>You can make the component focusable by adding a <code>tabindex=0</code> attribute to it. This will also apply
+a hover state to the component.</p>
+<h3 id="glsinglestat"><a href="#glsinglestat">GlSingleStat</a></h3>
+<div class="gl-mb-5"><div class="gl-relative -gl-mr-5"><div class="gl-absolute gl-bottom-0 gl-left-0 gl-right-0 gl-top-0 gl-flex gl-flex-col gl-items-center gl-justify-center"> Loading story... </div></div></div>
+</div></div>
+<div class="gl-mt-6"><div class="md">
+<h2 id="related-patterns">Related</h2>
+<ul>
+
+
+</ul>
+</div></div>
+</div>
+<p class="gl-mb-0 gl-mt-5 gl-text-center"> Last updated at: <time>Friday, August 14, 2026 at 6:30 PM</time></p>
+</div>
+</div>
+</div></main>
+</div></div></div>

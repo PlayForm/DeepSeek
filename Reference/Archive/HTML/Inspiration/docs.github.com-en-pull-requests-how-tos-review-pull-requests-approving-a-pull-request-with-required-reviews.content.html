@@ -1,0 +1,70 @@
+<div><div id="__next"><div><div>
+<a class="visually-hidden skip-button DefaultLayout_skipButton__3BaOi" href="#main-content">Skip to main content</a><div><div class="d-lg-flex"><div class="flex-column flex-1 min-width-0 DefaultLayout_stickyStack__mf76f">
+<main class="DefaultLayout_mainContent__UI2BH" id="main-content"><div class="px-3 px-md-6 mt-4 mb-4"><div class="ArticleGridLayout_containerBox__lLLio ArticleGridLayout_containerBoxXxl__SphGC">
+<div class="ArticleGridLayout_heroTopper__bCpVj"><div class="d-flex flex-items-baseline flex-justify-between"><h1 class="border-bottom-0 ArticleTitle_title__wOdiS" id="title-h1">Approving a pull request with required reviews</h1></div></div>
+<div class="f4 pb-4 ArticleGridLayout_heroIntro__IvIoX" id="article-intro">
+<div class="mb-3 Lead_container__m3L5f _page-intro"><p>Approve pull requests with required reviews, including setting approval rules, reviewing changes, and submitting feedback before merging.</p></div>
+<div class="ViewMarkdownButton_belowIntroPlacement__MKGvm"><div class="ViewMarkdownButton_controls__jbwAh"><button class="Primer_Brand__Button-module__Button___lDruK Primer_Brand__Button-module__Button--secondary___akMC2 Primer_Brand__Button-module__Button--size-medium___EyCyw text-decoration-none ViewMarkdownButton_button__chhfE ViewMarkdownButton_copyButton__haGNh"><span class="Primer_Brand__Button-module__Button__text___Z3ocU"><span class="Primer_Brand__Text-module__Text___pecHN Primer_Brand__Text-module__Text-font--mona-sans___GpzSG Primer_Brand__Text-module__Text--default___DChoE Primer_Brand__Text-module__Text--200___XAIGT Primer_Brand__Text-module__Text--antialiased___fYDxq Primer_Brand__Text-module__Text--weight-medium___E0iQL Primer_Brand__Button-module__Button--label___lUBc0 Primer_Brand__Button-module__Button--label-medium___DW2TM Primer_Brand__Button-module__Button--label-secondary___DRJoJ">Copy markdown</span></span></button></div></div>
+</div>
+<div><div id="article-contents"><div class="MarkdownContent_markdownBody__v5MYy markdown-body">
+<p>You can comment on a pull request, approve the changes, or request improvements before approving. See <a href="/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request">Reviewing proposed changes in a pull request</a>.</p>
+<p>You can find a pull request where you or a team you're a member of is requested for review with the search qualifier <code>review-requested:[USERNAME]</code> or <code>team-review-requested:[TEAMNAME]</code>. For more information, see <a href="/en/search-github/searching-on-github/searching-issues-and-pull-requests">Searching issues and pull requests</a>.</p>
+<div class="ghd-alert ghd-alert-success">
+<p class="ghd-alert-title">Tip</p>
+<p>
+If a pull request you approved has changed significantly, you can dismiss your review. The pull request will need a new review before it can be merged. See <a href="/en/pull-requests/how-tos/review-pull-requests/dismissing-a-pull-request-review">Dismissing a pull request review</a>.</p>
+</div>
+<ol>
+<li>
+<p>Under your repository name, click <strong> Pull requests</strong>.</p>
+</li>
+<li>
+<p>In the list of pull requests, click the pull request you'd like to review.</p>
+</li>
+<li>
+<p>On the pull request, click <strong> Files changed</strong>.</p>
+
+</li>
+<li>
+<p>Review the changes in the pull request. Optionally, comment on specific lines or files. See <a href="/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request#starting-a-review">Reviewing proposed changes in a pull request</a>.</p>
+</li>
+<li>
+<p>Above the changed code, click <strong>Review changes</strong>.</p>
+
+</li>
+<li>
+<p>Type a comment summarizing your feedback on the proposed changes.</p>
+</li>
+<li>
+<p>Select <strong>Approve</strong> to approve merging the proposed changes.</p>
+</li>
+<li>
+<p>Click <strong>Submit review</strong>.</p>
+</li>
+</ol>
+<div class="ghd-alert ghd-alert-success">
+<p class="ghd-alert-title">Tip</p>
+<ul>
+<li>The <strong>Request changes</strong> option is purely informational and will not prevent merging unless a ruleset or classic branch protection rule is configured with the "require a pull request" option. If configured and a collaborator with <code>admin</code>, <code>owner</code>, or <code>write</code> access to the repository submits a review requesting changes, the pull request cannot be merged until the same collaborator submits another review approving the changes in the pull request.</li>
+<li>Repository owners and administrators can merge a pull request even if it hasn't received an approving review, or if a reviewer who requested changes has left the organization or is unavailable.</li>
+<li>If both required reviews and stale review dismissal are enabled and a code-modifying commit is pushed to the branch of an approved pull request, the approval is dismissed. The pull request must be reviewed and approved again before it can be merged.</li>
+<li>When several open pull requests each have a head branch pointing to the same commit, you won’t be able to merge them if one or both have a pending or rejected review.</li>
+<li>If your repository requires approving reviews from people with write or admin permissions, the reviewers sidebar groups approvals by permission level. Approvals can appear in two sections:
+<ul>
+<li>The <strong>top section</strong> mostly contains approvals from people with write or admin permissions that count toward merge requirements. Approvals by GitHub Copilot also appear in this section even though GitHub Copilot reviews do not count toward those requirements.</li>
+<li>The <strong>collapsible section (if present)</strong> shows approvals from reviewers whose reviews do not affect whether the pull request can be merged.</li>
+</ul>
+</li>
+<li>Pull request authors cannot approve their own pull requests. You will also not be able to approve a pull request that was raised by GitHub Copilot if it was you who assigned Copilot to the issue to which the pull request relates.</li>
+</ul>
+</div>
+<h2 id="further-reading"><a class="heading-link" href="#further-reading">Further reading</a></h2>
+<ul>
+
+<li><a href="/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request">Reviewing proposed changes in a pull request</a></li>
+<li><a href="/en/pull-requests/how-tos/review-pull-requests/commenting-on-a-pull-request">Commenting on a pull request</a></li>
+</ul>
+</div></div></div>
+</div></div></main>
+</div></div></div>
+</div></div></div></div>

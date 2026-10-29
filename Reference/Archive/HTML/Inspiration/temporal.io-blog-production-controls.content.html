@@ -1,0 +1,144 @@
+<div><a class="skip-to-main-content" href="#main-content">
+      Skip to main content
+    </a></div>
+<div><div>
+<div>
+<div class="layout-wrapper">
+<div class="h-11 announcement-banner z-10 bg-ultraviolet bg-center px-10 text-sm py-3 text-white max-md:hidden svelte-tkkmnz"><div class="flex items-center justify-between"><div class="w-full flex items-center justify-between gap-6">
+<a class="max-w-xs text-left sm:max-w-sm md:max-w-full" href="/pages/aws-reinvent-2026"><p>We’re heading to Vegas for AWS re:Invent | Booth #738 |  <span class="pulsar-link">Book a meeting ›</span> </p></a> 
+</div></div></div>
+   <main class="main-content" id="main-content"> <div class="bg-deep-blue">
+<div class="grid grid-flow-col-dense sm:grid-cols-page sm:gap-x-4 max-sm:grid-cols-1 max-sm:px-5 max-sm:gap-y-4 bg-none bg-transparent bg-deep-blue py-8 lg:py-24 columns temporal-grid svelte-iff7rv">
+<div class="max-sm:col-span-1 sm:col-span-10 max-sm:col-start-1 sm:col-start-3 col-span-10 col-start-3 lg:col-span-10 lg:col-start-3 bg-deep-blue">
+<div class="blog-header border-bottom deep-blue svelte-1uxl4gb">
+<div class="breadcrumbs svelte-1uxl4gb"><ul class="svelte-1uxl4gb">
+ 
+
+</ul></div>
+ <h1 class="title svelte-1uxl4gb">See what’s happening. Control what happens next.</h1>
+  
+</div>
+
+</div>
+ <div class="max-sm:col-span-1 sm:col-span-10 max-sm:col-start-1 sm:col-start-3 col-span-10 col-start-3 lg:col-span-2 lg:col-start-3 bg-deep-blue">
+<div class="info-container svelte-18jd5ta">
+<div class="info-block authors svelte-18jd5ta">
+<div class="property svelte-18jd5ta">AUTHORS</div> <div class="value svelte-18jd5ta">Hien Phan</div>
+
+</div> <div class="info-block date svelte-18jd5ta">
+<div class="property svelte-18jd5ta">PUBLISHED</div> <div class="value svelte-18jd5ta">Oct 29, 2026</div>
+</div>
+ <div class="info-block category svelte-18jd5ta">
+<div class="property svelte-18jd5ta">CATEGORY</div> <div class="value svelte-18jd5ta"></div>
+</div>
+ <div class="info-block duration svelte-18jd5ta">
+<div class="property svelte-18jd5ta">DURATION</div> <div class="value svelte-18jd5ta">6 MIN</div>
+</div>
+ <div class="info-block tags svelte-18jd5ta"><ul class="tags-list svelte-18jd5ta">
+<li class="tag svelte-18jd5ta">Debugging</li>
+<li class="tag svelte-18jd5ta">Observability</li>
+<li class="tag svelte-18jd5ta">Retries</li>
+<li class="tag svelte-18jd5ta">Cloud</li>
+<li class="tag svelte-18jd5ta">Timeouts</li>
+
+</ul></div>
+  
+</div>
+
+</div>
+ <div class="max-sm:col-span-1 sm:col-span-10 max-sm:col-start-1 sm:col-start-3 col-span-10 col-start-3 lg:col-span-6 lg:col-start-5 bg-deep-blue">
+<article class="blog-body"><div class="prose max-w-none prose-dark default paragraph-margin-bottom-8 code-bg-color">
+<p>A customer asks why their order hasn’t finished. Payment succeeded, but fulfillment hasn’t started. Before you can help, you’re checking logs, querying a database, and asking another team whether its service received the request. Once you find the problem, you still need a way to get the order moving again.</p>
+<p>Temporal records the progress of application processes, called Workflows, and coordinates their execution through failures and long waits. Each Workflow has an <a href="https://docs.temporal.io/encyclopedia/event-history">Event History</a> that records its execution, including completed steps and the events it’s waiting to process. You can inspect that context while the work is still running.</p>
+<p>For this October Product Edition, we’re looking at Temporal’s production controls: how to find work that needs attention, hold its progress during an investigation, and change how it proceeds. These capabilities build on Temporal’s existing visibility and recovery tools, giving you more ways to intervene without writing a custom administration tool for each application.</p>
+<h2 id="find-the-work-that-needs-your-attention">Find the work that needs your attention
+</h2>
+<p>After a deployment, some orders stop advancing. They haven’t completed or failed outright, but the code coordinating them keeps encountering an error.</p>
+<p><a href="https://temporal.io/changelog/task-issues">Task Issues Detection</a> surfaces these executions in the Web UI’s <a href="https://docs.temporal.io/web-ui#task-failures-view">Task Failures view</a>. A Workflow Task runs the logic that determines what a Workflow should do next. Repeated failures or timeouts can leave the Workflow running without making progress, so Temporal flags those executions for investigation.</p>
+<p>Open an affected order to inspect the failure details and pending work. You can use that information to investigate the deployment and determine what needs fixing. When a Workflow Task succeeds, Temporal clears the flag.</p>
+<p>Task Issues Detection is already Generally Available. It gives you a starting point for troubleshooting; the controls below help you act on what you find.</p>
+<h2 id="hold-progress-while-you-investigate">Hold progress while you investigate
+</h2>
+<p>Suppose a fulfillment dependency is unhealthy, and you want to hold an order while you investigate. You need to continue the same execution once the dependency recovers.</p>
+<p><a href="https://docs.temporal.io/encyclopedia/workflow/workflow-pause">Workflow Pause</a> lets you stop an individual Workflow from making further progress while preserving its state. Temporal stops dispatching new Workflow Tasks and Activity Tasks, including retries. An Activity is a step that performs application work, such as calling the fulfillment API.</p>
+<p>Activity attempts already running can still finish, fail, or time out. Timeouts and timers also keep advancing while the Workflow is paused. When you unpause it, Workflow code can process the events that arrived during the pause and continue.</p>
+<p>Workflow Pause is in Pre-release. For Temporal Cloud access, contact your account team or support. If you self-host Temporal, review the documentation for the required Server, CLI, and UI versions and configuration.</p>
+<h2 id="adjust-how-a-step-runs">Adjust how a step runs
+</h2>
+<p>The fulfillment API starts responding more slowly. Requests that used to finish comfortably within your timeout now need more time, and frequent retries are adding pressure to the service.</p>
+<p>With <a href="https://docs.temporal.io/activity-operations/update-options">Update Activity Options</a>, you can change supported timeouts and Retry Policy settings on a pending Activity. For example, you could increase its timeout from 30 seconds to two minutes or lengthen the interval between retries. You can also change its Task Queue to route work to a different set of Workers, the processes that execute your application code.</p>
+<p>If an attempt is already running, the new settings apply to its next execution. The current attempt continues with its existing settings. After fixing an underlying problem, <a href="https://docs.temporal.io/activity-operations/reset">Activity Reset</a> also lets you clear the step’s retry state and schedule a fresh attempt without resetting the whole Workflow.</p>
+<p>These <a href="https://docs.temporal.io/activity-operations">Activity Operations</a> are in Public Preview and are available through the CLI, UI, or gRPC API. <a href="https://docs.temporal.io/evaluate/product-release-stages">Public Preview supports production use</a>. Activity Operations aren’t recorded in the Workflow’s Event History; use the UI or CLI to check the Activity’s current state.</p>
+<h2 id="choose-how-work-continues-after-a-code-change">Choose how work continues after a code change
+</h2>
+<p>Sometimes the fix is in your application code. Temporal provides controls for choosing which code handles an execution and, when necessary, returning to an earlier point in its progress.</p>
+<p>If you need an order to continue on a compatible Worker Deployment Version, <a href="https://docs.temporal.io/cli/command-reference/workflow#update-options">Workflow Update Options</a> lets you override that execution’s Worker Versioning settings. You can change the routing for work already in progress, subject to compatibility with its existing Event History. The routing change itself doesn’t make incompatible code safe. This operation is separate from sending a Workflow Update, which is a message handled by your Workflow code.</p>
+<p>For recovery that requires returning to an earlier point, the existing <a href="https://docs.temporal.io/cli/command-reference/workflow#reset">Workflow Reset</a> capability starts a new Run from a selected point in Event History. Progress recorded before that point is retained, while later steps may execute again. For an order-processing application, choose the reset point with care: repeating a step that charges a payment or requests shipment has consequences outside Temporal.</p>
+<h2 id="manage-executions-and-cloud-resources-from-the-same-cli">Manage executions and Cloud resources from the same CLI
+</h2>
+<p>An investigation can involve both an application’s running work and the Temporal Cloud resources supporting it.</p>
+<p>The Temporal CLI already provides Workflow and Activity operations. The <a href="https://docs.temporal.io/cli/cloud">Temporal Cloud CLI Extension</a> adds <code>temporal cloud</code> commands for administering Namespaces, users, API keys, and Nexus Endpoints. You can inspect an execution and manage Cloud resources from the same tool, using the permissions assigned to your account.</p>
+<p>The extension is in Public Preview. Follow the <a href="https://docs.temporal.io/cli/cloud#connect-to-temporal-cloud">installation and connection guide</a>, then explore the <a href="https://docs.temporal.io/cli/command-reference/cloud">Cloud command reference</a> for the resources you manage.</p>
+<h2 id="already-self-hosting-move-existing-work-to-temporal-cloud">Already self-hosting? Move existing work to Temporal Cloud
+</h2>
+<p>There’s another operational decision these controls don’t address: <strong>who runs the Temporal Service itself.</strong></p>
+<p>You can operate Temporal yourself or use Temporal Cloud as the managed service. If you’re self-hosting and want to reduce that infrastructure responsibility, long-running Workflows can complicate the move. Some business processes may continue for days or months, making it difficult to wait for everything to finish before switching environments.</p>
+<p><a href="https://docs.temporal.io/cloud/migrate/automated">Self-hosted to Cloud Migration</a> provides a path for moving supported existing workloads to Temporal Cloud while preserving Workflow History and metadata. The process supports running and closed Workflows, subject to eligibility and migration requirements. It includes preparation, testing, and a coordinated handover so you can validate the transition before finalizing it.</p>
+<p>Migration is in Pre-release. Contact your Temporal account executive before planning a project, and review the automated migration guide together to assess your environment and requirements.</p>
+<h2 id="start-with-a-process-you-need-to-understand">Start with a process you need to understand
+</h2>
+<p>Take an order that isn’t advancing and inspect its execution in the Web UI. From there, you can investigate repeated failures, review the controls available for that execution, and choose how it should proceed. The documentation linked above covers each operation’s behavior and access requirements.</p>
+<p>If your next step is moving the Temporal Service to Cloud, start a separate conversation with your account team about <a href="https://docs.temporal.io/cloud/migrate/automated">migration eligibility</a>.</p>
+
+</div> </article>
+</div>
+ <div class="max-sm:col-span-1 sm:col-span-10 max-sm:col-start-1 sm:col-start-3 col-span-10 col-start-3 lg:col-span-2 lg:col-start-11">
+<div class="promo-share-container svelte-18jd5ta">
+<div class="share-container svelte-111im6b">
+<div class="share svelte-111im6b">SHARE</div> 
+</div>
+ </div>
+
+</div>
+
+</div>
+
+</div> <div class="grid grid-flow-col-dense sm:grid-cols-page sm:gap-x-4 max-sm:grid-cols-1 max-sm:px-5 max-sm:gap-y-4 bg-deep-darker-blue blog-footer lg:gap-x-4 py-10 lg:py-18 columns temporal-grid svelte-iff7rv">
+<div class="max-sm:col-span-1 sm:col-span-10 max-sm:col-start-1 sm:col-start-3 col-span-10 col-start-3 lg:col-span-8 lg:col-start-5">
+<div class="blog-footer svelte-18jd5ta">
+<h2 class="svelte-18jd5ta">More Posts</h2> <ul>
+<li class="related-post svelte-18jd5ta">
+<div class="related-post-info svelte-18jd5ta">
+<span class="date svelte-18jd5ta">Oct 08, 2026</span> <a class="category svelte-18jd5ta" href="/blog/categories/temporal-concepts">Temporal Concepts</a> <span class="duration svelte-18jd5ta">10 MIN READ</span>
+</div> <p class="related-post-title svelte-18jd5ta"><a class="svelte-18jd5ta" href="/blog/the-immortal-life-of-pi-running-the-pi-coding-agent-on-temporal">The immortal life of Pi (Running the Pi coding agent on Temporal)</a></p>
+
+</li>
+<li class="related-post svelte-18jd5ta">
+<div class="related-post-info svelte-18jd5ta">
+<span class="date svelte-18jd5ta">Jun 30, 2026</span> <a class="category svelte-18jd5ta" href="/blog/categories/temporal-concepts">Temporal Concepts</a> <span class="duration svelte-18jd5ta">16 MIN READ</span>
+</div> <p class="related-post-title svelte-18jd5ta"><a class="svelte-18jd5ta" href="/blog/timers-timeouts-and-the-art-of-waiting-in-temporal">Timers, Timeouts, and the Art of Waiting in Temporal</a></p>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+ <div class="grid grid-flow-col-dense sm:grid-cols-page sm:gap-x-4 max-sm:grid-cols-1 max-sm:px-5 max-sm:gap-y-4 bg-customer-hype-rainbow no-padding gap-y-0! py-12 md:py-32 xl:py-48 columns temporal-grid svelte-iff7rv">
+<div class="max-sm:col-span-1 sm:col-span-10 max-sm:col-start-1 sm:col-start-3 flex flex-col flex-wrap justify-center items-center text-center gap-8">
+ <p class="text s128 customer-hype-rainbow display text-off-white svelte-1i5vmsf">Build invincible applications</p>
+ <p class="text s24 customer-hype-rainbow body text-off-white svelte-1i5vmsf">It sounds like magic, we promise it's not.</p>
+ <div class="flex max-xl:flex-col xl:flex-row items-center justify-center gap-4 mt-4">
+<a class="button group w-fit secondary center regular ultraviolet svelte-103wh5p" href="https://docs.temporal.io"> Documentation </a><a class="button group w-fit secondary center regular ultraviolet svelte-103wh5p" href="https://github.com/temporalio"> Code Base </a><a class="button group w-fit secondary center regular ultraviolet svelte-103wh5p" href="https://learn.temporal.io/examples"> Samples </a>
+</div>
+
+</div>
+ 
+</div>
+</main> 
+</div> 
+</div>    
+</div></div>

@@ -1,0 +1,1213 @@
+<!DOCTYPE html><html lang="en" class="site-header-ready hf-ft-agree" data-theme="light" style="color-scheme: light; --docs-sticky-top: 75px;"><head>
+	<meta charset="UTF-8">
+	<script>document.documentElement.classList.add('site-header-loading');</script>
+	<script id="theme-init">
+		(() => {
+			const root = document.documentElement;
+			const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+			function applyTheme() {
+				const theme = systemTheme.matches ? 'dark' : 'light';
+				root.setAttribute('data-theme', theme);
+				root.removeAttribute('data-theme-preference');
+				root.style.colorScheme = theme;
+			}
+			applyTheme();
+			systemTheme.addEventListener('change', applyTheme);
+		})();
+	</script>	<meta name="awa-expId" content="tv-downloadv2:1469049;68097614:1474476;tv-homepage-design:1476252;">
+	<meta name="awa-env" content="prod">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="google-site-verification" content="hNs7DXrTySP_X-0P_AC0WulAXvUwgSXEmgfcO2r79dw">
+
+	<!-- Twitter and Facebook OpenGraph Metadata-->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@code">
+
+	<meta name="description" content="Manage enterprise AI controls that affect VS Code and Copilot.">
+<meta name="keywords" content="">
+<meta name="ms.prod" content="vs-code">
+<meta name="ms.TOCTitle" content="">
+<meta name="ms.ContentId" content="f8a9c3d2-4e7b-5f1a-b6c8-9d0e2f3a7b4c">
+<meta name="ms.date" content="10/28/2026">
+<meta name="ms.topic" content="conceptual">
+<!-- Twitter and Facebook OpenGraph Metadata-->
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="https://code.visualstudio.com/docs/enterprise/manage-ai-settings">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Manage AI settings in enterprise environments">
+<meta property="og:description" content="Manage enterprise AI controls that affect VS Code and Copilot.">
+
+<meta property="og:image" content="https://code.visualstudio.com/opengraphimg/generated/docs/enterprise/manage-ai-settings.webp">
+
+
+
+	<link rel="shortcut icon" href="/assets/favicon.ico" sizes="128x128">
+	<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+	<title>Manage AI settings in enterprise environments</title>
+
+	<link rel="stylesheet" href="/dist/style.css?v=308e4a688561d778">
+
+	<script src="https://consentdeliveryfd.azurefd.net/mscc/lib/v2/wcp-consent.js"></script>
+	<script type="text/javascript" src="https://js.monitor.azure.com/scripts/c/ms.analytics-web-4.min.js"></script>
+	
+	<script type="text/javascript">
+	// Leave as var; siteConsent is initialized and referenced elsewhere.
+	var siteConsent = null;
+	
+	const GPC_DataSharingOptIn = false;
+	WcpConsent.onInitCallback(function () {
+		window.appInsights = new oneDS.ApplicationInsights();
+		window.appInsights.initialize({
+			instrumentationKey: "1a3eb3104447440391ad5f2a6ee06a0a-62879566-bc58-4741-9650-302bf2af703f-7103",
+			propertyConfiguration: {
+				userConsented: false,
+				gpcDataSharingOptIn: false,
+				callback: {
+					// Stable closure: the SDK calls this per-event, so it picks up the
+					// real consent state once WcpConsent.init() resolves (siteConsent
+					// is still null when this callback is registered).
+					userConsentDetails: function () {
+						return siteConsent ? siteConsent.getConsent() : undefined;
+					}
+				},
+			},
+			cookieCfg: {
+				ignoreCookies: ["MSCC"]
+			},
+			webAnalyticsConfiguration:{ // Web Analytics Plugin configuration
+				urlCollectQuery: true,
+				urlCollectHash: true,
+				autoCapture: {
+					scroll: true,
+					pageView: true,
+					onLoad: true,
+					onUnload: true,
+					click: true,
+					resize: true,
+					jsError: true
+				}
+			}
+		}, []);
+	
+		window.appInsights.getPropertyManager().getPropertiesContext().web.gpcDataSharingOptIn = GPC_DataSharingOptIn;
+	});
+	</script>
+	<link rel="alternate" type="application/atom+xml" title="RSS Feed for code.visualstudio.com" href="/feed.xml">
+<style id="ms-consent-banner-main-styles">.w8hcgFksdo30C8w-bygqu{color:#000}.ydkKdaztSS0AeHWIeIHsQ a{color:#0067b8}.erL690_8JwUW-R4bJRcfl{background-color:#ebebeb;border:none;color:#000}.erL690_8JwUW-R4bJRcfl:enabled:hover{color:#000;background-color:#dbdbdb;box-shadow:0px 4px 10px rgba(0,0,0,.25);border:none}.erL690_8JwUW-R4bJRcfl:enabled:focus{background-color:#dbdbdb;box-shadow:0px 4px 10px rgba(0,0,0,.25);border:2px solid #000}.erL690_8JwUW-R4bJRcfl:disabled{opacity:1;color:rgba(0,0,0,.2);background-color:rgba(0,0,0,.2);border:none}._1zNQOqxpBFSokeCLGi_hGr{border:none;background-color:#0067b8;color:#fff}._1zNQOqxpBFSokeCLGi_hGr:enabled:hover{color:#fff;background-color:#0067b8;box-shadow:0px 4px 10px rgba(0,0,0,.25);border:none}._1zNQOqxpBFSokeCLGi_hGr:enabled:focus{background-color:#0067b8;box-shadow:0px 4px 10px rgba(0,0,0,.25);border:2px solid #000}._1zNQOqxpBFSokeCLGi_hGr:disabled{opacity:1;color:rgba(0,0,0,.2);background-color:rgba(0,120,215,.2);border:none}._23tra1HsiiP6cT-Cka-ycB{position:relative;display:flex;z-index:9999;width:100%;background-color:#f2f2f2;justify-content:space-between;text-align:left}div[dir=rtl]._23tra1HsiiP6cT-Cka-ycB{text-align:right}._1Upc2NjY8AlDn177YoVj0y{margin:0;padding-left:5%;padding-top:8px;padding-bottom:8px}div[dir=rtl] ._1Upc2NjY8AlDn177YoVj0y{margin:0;padding:8px 5% 8px 0;float:none}._23tra1HsiiP6cT-Cka-ycB svg{fill:none;max-width:none;max-height:none}._1V_hlU-7jdtPiooHMu89BB{display:table-cell;padding:12px;width:24px;height:24px;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:normal;font-size:24px;line-height:0}.f6QKJD7fhSbnJLarTL-W-{display:table-cell;vertical-align:middle;padding:0;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:normal;font-size:13px;line-height:16px}.f6QKJD7fhSbnJLarTL-W- a{text-decoration:underline}._2j0fmugLb1FgYz6KPuB91w{display:inline-block;margin-left:5%;margin-right:5%;min-width:40%;min-width:calc((150px + 3 * 4px) * 2 + 150px);min-width:-moz-fit-content;min-width:fit-content;align-self:center;position:relative}._1XuCi2WhiqeWRUVp3pnFG3{margin:4px;padding:5px;min-width:150px;min-height:36px;vertical-align:top;cursor:pointer;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px;text-align:center}._1XuCi2WhiqeWRUVp3pnFG3:focus{box-sizing:border-box}._1XuCi2WhiqeWRUVp3pnFG3:disabled{cursor:not-allowed}._2bvsb3ubApyZ0UGoQA9O9T{display:block;position:fixed;z-index:10000;top:0;left:0;width:100%;height:100%;background-color:rgba(255,255,255,.6);overflow:auto;text-align:left}div[dir=rtl]._2bvsb3ubApyZ0UGoQA9O9T{text-align:right}div[dir=rtl] ._2bvsb3ubApyZ0UGoQA9O9T{left:auto;right:0}.AFsJE948muYyzCMktdzuk{position:relative;top:8%;margin-bottom:40px;margin-left:auto;margin-right:auto;box-sizing:border-box;width:640px;background-color:#fff;border:1px solid #0067b8}._3kWyBRbW_dgnMiEyx06Fu4{float:right;z-index:1;margin:2px;padding:12px;border:none;cursor:pointer;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:normal;font-size:13px;line-height:13px;display:flex;align-items:center;text-align:center;color:#666;background-color:#fff}div[dir=rtl] ._3kWyBRbW_dgnMiEyx06Fu4{margin:2px;padding:12px;float:left}.uCYvKvHXrhjNgflv1VqdD{position:static;margin-top:36px;margin-left:36px;margin-right:36px}._17pX1m9O_W--iZbDt3Ta5r{margin-top:0;margin-bottom:12px;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:600;font-size:20px;line-height:24px;text-transform:none}._1kBkHQ1V1wu3kl-YcLgUr6{height:446px;overflow:auto}._20_nXDf6uFs9Q6wxRXG-I-{margin-top:0;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px}._20_nXDf6uFs9Q6wxRXG-I- a{text-decoration:underline}dl._2a0NH_GDQEQe5Ynfo7suVH{margin-top:36px;margin-bottom:0;padding:0;list-style:none;text-transform:none}dt._3j_LCPv7fyXv3A8FIXVwZ4{margin-top:20px;float:none;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:600;font-size:18px;line-height:24px;list-style:none}.k-vxTGFbdq1aOZB2HHpjh{margin:0;padding:0;border:none}._2Bucyy75c_ogoU1g-liB5R{margin:0;padding:0;border-bottom:none;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:600;font-size:18px;line-height:24px;text-transform:none}._63gwfzV8dclrsl2cfd90r{display:inline-block;margin-top:0;margin-bottom:13px;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px}._1l8wM_4mRYGz3Iu7l3BZR7{display:block}._2UE03QS02aZGkslegN_F-i{display:inline-block;position:relative;left:5px;margin-bottom:13px;margin-right:34px;padding:3px}div[dir=rtl] ._2UE03QS02aZGkslegN_F-i{margin:0 0 13px 34px;padding:3px;float:none}div[dir=rtl] ._2UE03QS02aZGkslegN_F-i{left:auto;right:5px}._23tra1HsiiP6cT-Cka-ycB *::before,._2bvsb3ubApyZ0UGoQA9O9T *::before,._23tra1HsiiP6cT-Cka-ycB *::after,._2bvsb3ubApyZ0UGoQA9O9T *::after{box-sizing:inherit}._1HSFn0HzGo6w4ADApV8-c4{outline:2px solid rgba(0,0,0,.8)}input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2{display:inline-block;position:relative;margin-top:0;margin-left:0;margin-right:0;height:0;width:0;border-radius:0;cursor:pointer;outline:none;box-sizing:border-box;appearance:none}input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2+label::before{display:block;position:absolute;top:5px;left:3px;height:19px;width:19px;content:"";border-radius:50%;border:1px solid #000;background-color:#fff}div[dir=rtl] input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2+label::before{left:auto;right:3px}input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2:not(:disabled)+label:hover::before{border:1px solid #0067b8}input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2:not(:disabled)+label:hover::after{display:block;position:absolute;top:10px;left:8px;height:9px;width:9px;content:"";border-radius:50%;background-color:rgba(0,0,0,.8)}div[dir=rtl] input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2:not(:disabled)+label:hover::after{left:auto;right:8px}input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2:not(:disabled)+label:focus::before{border:1px solid #0067b8}input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2:not(:disabled)+label:focus::after{display:block;position:absolute;top:10px;left:8px;height:9px;width:9px;content:"";border-radius:50%;background-color:#000}div[dir=rtl] input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2:not(:disabled)+label:focus::after{left:auto;right:8px}input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2:checked+label::after{display:block;position:absolute;top:10px;left:8px;height:9px;width:9px;content:"";border-radius:50%;background-color:#000}div[dir=rtl] input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2:checked+label::after{left:auto;right:8px}input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2:disabled+label{cursor:not-allowed}input[type=radio]._1dp8Vp5m3HwAqGx8qBmFV2:disabled+label::before{border:1px solid rgba(0,0,0,.2);background-color:rgba(0,0,0,.2)}._3RJzeL3l9Rl_lAQEm6VwdX{display:block;position:static;float:right;margin-top:0;margin-bottom:0;margin-left:19px;margin-right:0;padding-top:0;padding-bottom:0;padding-left:8px;padding-right:0;width:80%;width:calc(100% - 19px);font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px;text-transform:none;cursor:pointer;box-sizing:border-box}div[dir=rtl] ._3RJzeL3l9Rl_lAQEm6VwdX{margin:0 19px 0 0;padding:0 8px 0 0;float:left}.nohp3sIG12ZBhzcMnPala{margin-top:20px;margin-bottom:48px}._2uhaEsmeotZ3P-M0AXo2kF{padding:0;width:278px;height:36px;cursor:pointer;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px;text-align:center}._2uhaEsmeotZ3P-M0AXo2kF:focus{box-sizing:border-box}._2uhaEsmeotZ3P-M0AXo2kF:disabled{cursor:not-allowed}._3tOu1FJ59c_xz_PmI1lKV5{float:right;padding:0;width:278px;height:36px;cursor:pointer;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px;text-align:center}._3tOu1FJ59c_xz_PmI1lKV5:focus{box-sizing:border-box}._3tOu1FJ59c_xz_PmI1lKV5:disabled{cursor:not-allowed}div[dir=rtl] ._3tOu1FJ59c_xz_PmI1lKV5{margin:0;padding:0;float:left}@media only screen and (max-width: 768px){._2j0fmugLb1FgYz6KPuB91w,._1Upc2NjY8AlDn177YoVj0y{padding-top:8px;padding-bottom:12px;padding-left:3.75%;padding-right:3.75%;margin:0;width:92.5%}._23tra1HsiiP6cT-Cka-ycB{display:block}._1XuCi2WhiqeWRUVp3pnFG3{margin-bottom:8px;margin-left:0;margin-right:0;width:100%}._2bvsb3ubApyZ0UGoQA9O9T{overflow:hidden}.AFsJE948muYyzCMktdzuk{top:1.8%;width:93.33%;height:96.4%;overflow:hidden}.uCYvKvHXrhjNgflv1VqdD{margin-top:24px;margin-left:24px;margin-right:24px;height:100%}._1kBkHQ1V1wu3kl-YcLgUr6{height:62%;height:calc(100% - 188px);min-height:50%}._2uhaEsmeotZ3P-M0AXo2kF{width:100%}._3tOu1FJ59c_xz_PmI1lKV5{margin-bottom:12px;margin-left:0;width:100%}div[dir=rtl] ._3tOu1FJ59c_xz_PmI1lKV5{margin:0 0 12px 0;padding:0;float:none}}@media only screen and (max-width: 768px)and (orientation: landscape),only screen and (max-height: 260px),only screen and (max-width: 340px){.AFsJE948muYyzCMktdzuk{overflow:auto}}@media only screen and (max-height: 260px),only screen and (max-width: 340px){._1XuCi2WhiqeWRUVp3pnFG3{min-width:0}._3kWyBRbW_dgnMiEyx06Fu4{padding:3%}.uCYvKvHXrhjNgflv1VqdD{margin-top:3%;margin-left:3%;margin-right:3%}._17pX1m9O_W--iZbDt3Ta5r{margin-bottom:3%}._1kBkHQ1V1wu3kl-YcLgUr6{height:calc(79% - 64px)}.nohp3sIG12ZBhzcMnPala{margin-top:5%;margin-bottom:10%}._3tOu1FJ59c_xz_PmI1lKV5{margin-bottom:3%}div[dir=rtl] ._3tOu1FJ59c_xz_PmI1lKV5{margin:0 0 3% 0;padding:0;float:none}}</style><style type="text/css" id="ms-consent-banner-theme-styles">._23tra1HsiiP6cT-Cka-ycB {
+            background-color: #F2F2F2 !important;
+        }.w8hcgFksdo30C8w-bygqu {
+            color: #000000 !important;
+        }.ydkKdaztSS0AeHWIeIHsQ a {
+            color: #0067B8 !important;
+        }._2bvsb3ubApyZ0UGoQA9O9T {
+            background-color: rgba(255, 255, 255, 0.6) !important;
+        }.AFsJE948muYyzCMktdzuk {
+            background-color: #FFFFFF !important;
+            border: 1px solid #0067B8 !important;
+        }._3kWyBRbW_dgnMiEyx06Fu4 {
+            color: #666666 !important;
+            background-color: #FFFFFF !important;
+        }._1zNQOqxpBFSokeCLGi_hGr {
+            border: none !important;
+            background-color: #0067B8 !important;
+            color: #FFFFFF !important;
+        }._1zNQOqxpBFSokeCLGi_hGr:enabled:hover {
+            color: #FFFFFF !important;
+            background-color: #0067B8 !important;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25) !important;
+            border: none !important;
+        }._1zNQOqxpBFSokeCLGi_hGr:enabled:focus {
+            background-color: #0067B8 !important;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25) !important;
+            border: 2px solid #000000 !important;
+        }._1zNQOqxpBFSokeCLGi_hGr:disabled {
+            opacity: 1 !important;
+            color: rgba(0, 0, 0, 0.2) !important;
+            background-color: rgba(0, 120, 215, 0.2) !important;
+            border: none !important;
+        }.erL690_8JwUW-R4bJRcfl {
+            border: none !important;
+            background-color: #EBEBEB !important;
+            color: #000000 !important;
+        }.erL690_8JwUW-R4bJRcfl:enabled:hover {
+            color: #000000 !important;
+            background-color: #DBDBDB !important;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25) !important;
+            border: none !important;
+        }.erL690_8JwUW-R4bJRcfl:enabled:focus {
+            background-color: #DBDBDB !important;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25) !important;
+            border: 2px solid #000000 !important;
+        }.erL690_8JwUW-R4bJRcfl:disabled {
+            opacity: 1 !important;
+            color: rgba(0, 0, 0, 0.2) !important;
+            background-color: rgba(0, 0, 0, 0.2) !important;
+            border: none !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2 + label::before {
+            border: 1px solid #000000 !important;
+            background-color: #FFFFFF !important;
+        }._1HSFn0HzGo6w4ADApV8-c4 {
+            outline: 2px solid rgba(0, 0, 0, 0.8) !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:checked + label::after {
+            background-color: #000000 !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2 + label:hover::before {
+            border: 1px solid #0067B8 !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2 + label:hover::after {
+            background-color: rgba(0, 0, 0, 0.8) !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2 + label:focus::before {
+            border: 1px solid #0067B8 !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2 + label:focus::after {
+            background-color: #000000 !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:disabled + label::before {
+            border: 1px solid rgba(0, 0, 0, 0.2) !important;
+            background-color: rgba(0, 0, 0, 0.2) !important;
+        }</style></head>
+
+<body class="linux x64" style="margin-right: 0px; padding-right: 0px; overflow: auto;">
+	
+	<div id="main">
+		<header class="hf-site-header">
+		
+		<div class="hf-chrome"><div class="hf-chrome-body v2">
+		
+		
+		</div></div>
+		
+			</header>		<div data-announcement-version="2026-10-21-gh-universe" data-rotation-interval-seconds="8" class="updates-banner js-hidden">
+			<div class="container banner-messages">
+				<p class="message active" data-banner-message="" aria-hidden="false"><a href="https://githubuniverse.com/?utm_source=website&amp;utm_medium=Social&amp;utm_campaign=code_livestream&amp;source=vsc-website-banner" target="_blank" rel="noopener">Join VS Code at GitHub Universe!</a></p>
+			</div>
+			
+		</div>
+		<script>
+			// Restore dismissal and the session's random starting message before first paint.
+			(function () {
+				var banner = document.currentScript.previousElementSibling;
+				if (!banner) {
+					return;
+				}
+		
+				var version = banner.getAttribute('data-announcement-version');
+				try {
+					if (localStorage.getItem('dismissedAnnouncementVersion') === version) {
+						banner.classList.add('js-hidden');
+					}
+				} catch (error) {
+					console.warn('Unable to restore banner dismissal state.', error);
+				}
+		
+				var messages = banner.querySelectorAll('[data-banner-message]');
+				if (messages.length < 2) {
+					return;
+				}
+		
+				var storageKey = 'initialAnnouncementMessage:' + version;
+				var activeIndex;
+				try {
+					var storedIndex = sessionStorage.getItem(storageKey);
+					if (storedIndex !== null) {
+						activeIndex = Number(storedIndex);
+					}
+				} catch (error) {
+					console.warn('Unable to restore the initial banner message.', error);
+				}
+				if (!Number.isInteger(activeIndex) || activeIndex < 0 || activeIndex >= messages.length) {
+					activeIndex = Math.floor(Math.random() * messages.length);
+					try {
+						sessionStorage.setItem(storageKey, String(activeIndex));
+					} catch (error) {
+						console.warn('Unable to remember the initial banner message.', error);
+					}
+				}
+		
+				for (var index = 0; index < messages.length; index++) {
+					var isActive = index === activeIndex;
+					messages[index].classList.toggle('active', isActive);
+					messages[index].setAttribute('aria-hidden', String(!isActive));
+					messages[index].toggleAttribute('inert', !isActive);
+				}
+				banner.setAttribute('data-active-message-index', String(activeIndex));
+			})();
+		</script>
+		<!-- This div wraps around the entire site -->
+		<!-- The body itself should already have a main tag -->
+		<main id="main-content" tabindex="-1">
+			<div class="body-content docs docs-github-layout" data-reading-article="" data-reading-progress-initialized="true" style="--reading-progress-top: 0px; --reading-entry-clearance: 0px;">
+    
+    <div class="docs-layout-wrapper">
+        <!-- Left sidebar - Table of Contents -->
+        
+        
+        <!-- Content wrapper contains main content + right sidebar -->
+        <div class="docs-content-wrapper">
+            <!-- Right sidebar - On This Page -->
+            <aside class="docs-right-sidebar hidden-xs">
+                <nav id="docs-subnavbar" aria-label="On Page">
+                    
+                    <h4><span aria-hidden="true">On this page</span></h4>
+                    <ul class="nav">
+                        
+                        <li><a href="#_understand-the-three-management-solutions">Understand the three management solutions</a></li>
+                        
+                        <li><a href="#_choose-a-management-solution">Choose a management solution</a></li>
+                        
+                        <li><a href="#_understand-precedence">Understand precedence</a></li>
+                        
+                        <li><a href="#_use-copilot-enterprise-managed-settings">Use Copilot enterprise-managed settings</a></li>
+                        
+                        <li><a href="#_use-vs-code-device-policies">Use VS Code device policies</a></li>
+                        
+                        <li><a href="#_use-github-organization-and-enterprise-settings">Use GitHub organization and enterprise settings</a></li>
+                        
+                        <li><a href="#_security-considerations">Security considerations</a></li>
+                        
+                        <li><a href="#_related-resources">Related resources</a></li>
+                        
+                    </ul>
+                    
+                </nav>
+                
+            </aside>
+            
+            <!-- Main article content -->
+            <main class="docs-main-content body" data-reading-content="">
+                
+                <h1>Manage AI settings in enterprise environments</h1>
+                
+                
+
+
+
+
+<div class="docs-markdown-actions vscode-installation-info-host" data-vscode-installation-info="both">
+	<div class="docs-markdown-dropdown" data-markdown-url="/docs/enterprise/manage-ai-settings.md">
+		<button type="button" class="docs-markdown-btn-main" data-action="copy-markdown" aria-label="Copy as Markdown">
+			<span class="codicon codicon-copy" aria-hidden="true"></span>
+			<span>Copy as Markdown</span>
+		</button>
+		<button type="button" class="docs-markdown-btn-trigger" aria-haspopup="menu" aria-expanded="false" aria-label="More page actions">
+			<span class="codicon codicon-chevron-down docs-markdown-chevron" aria-hidden="true"></span>
+		</button>
+		<ul class="docs-markdown-menu" role="menu" aria-label="Page actions">
+			<li role="none">
+				<button type="button" role="menuitem" data-action="copy-markdown">
+					<span class="codicon codicon-copy" aria-hidden="true"></span>
+					<span>Copy as Markdown</span>
+				</button>
+			</li>
+			<li role="none">
+				<a role="menuitem" data-action="view-markdown" href="/docs/enterprise/manage-ai-settings.md" target="_blank" rel="noopener noreferrer">
+					<span class="codicon codicon-file" aria-hidden="true"></span>
+					<span>View as Markdown</span>
+					<span class="codicon codicon-link-external" aria-hidden="true"></span>
+				</a>
+			</li>
+			<li class="docs-markdown-menu-separator" role="separator"></li>
+			<li role="none">
+				<a role="menuitem" data-action="ask-vscode" data-version="stable" href="vscode://GitHub.Copilot-Chat/chat?prompt=Read%20https%3A%2F%2Fcode.visualstudio.com%2Fdocs%2Fenterprise%2Fmanage-ai-settings%20and%20answer%20questions%20about%20the%20content.&amp;windowId=_blank" aria-describedby="vscode-installation-tooltip-1">
+					<span class="codicon codicon-chat-sparkle" aria-hidden="true"></span>
+					<span>Ask in VS Code</span>
+				<span class="codicon codicon-info vscode-installation-info-icon" aria-hidden="true"></span></a>
+			</li>
+			<li role="none">
+				<a role="menuitem" data-action="ask-vscode" data-version="insiders" href="vscode-insiders://GitHub.Copilot-Chat/chat?prompt=Read%20https%3A%2F%2Fcode.visualstudio.com%2Fdocs%2Fenterprise%2Fmanage-ai-settings%20and%20answer%20questions%20about%20the%20content.&amp;windowId=_blank" aria-describedby="vscode-installation-tooltip-1">
+					<span class="codicon codicon-chat-sparkle" aria-hidden="true"></span>
+					<span>Ask in VS Code Insiders</span>
+				<span class="codicon codicon-info vscode-installation-info-icon" aria-hidden="true"></span></a>
+			</li>
+		</ul>
+	</div>
+	<noscript>
+		<a class="docs-page-actions-noscript" href="vscode://GitHub.Copilot-Chat/chat?prompt=Read%20https%3A%2F%2Fcode.visualstudio.com%2Fdocs%2Fenterprise%2Fmanage-ai-settings%20and%20answer%20questions%20about%20the%20content.&amp;windowId=_blank">
+			<span class="codicon codicon-chat-sparkle" aria-hidden="true"></span>
+			<span>Ask in VS Code</span>
+		</a>
+	</noscript>
+</div>
+
+                <hr class="docs-article-header-divider" aria-hidden="true">
+                
+                
+<p>Organizations can govern AI features in VS Code through three management solutions: Copilot enterprise-managed settings, VS Code device policies, and GitHub organization or enterprise settings.</p>
+<p>These solutions control different layers of the AI experience. An organization might use all three, but should configure an overlapping control in only one system.</p>
+<div class="markdown-alert note" dir="auto">
+      <span>
+        <svg class="markdown-alert-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+          <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z">
+          </path>
+        </svg>
+        Note
+      </span><p>If you're a developer and an agent, model, or tool is unavailable, first check the <a href="/docs/agents/agent-troubleshooting/troubleshooting#_start-with-basic-checks">AI troubleshooting guidance</a>. For an organization-managed restriction, ask your administrator which capabilities are approved.</p>
+</div><h2 id="_understand-the-three-management-solutions" data-needslink="_understand-the-three-management-solutions"><a class="hash-link" href="#_understand-the-three-management-solutions">Understand the three management solutions</a></h2>
+<p>Before you choose a solution, understand where each one is configured and what it controls.</p>
+<h3 id="_copilot-enterprise-managed-settings" data-needslink="_copilot-enterprise-managed-settings"><a class="hash-link" href="#_copilot-enterprise-managed-settings">Copilot enterprise-managed settings</a></h3>
+<p>Use enterprise-managed settings for Copilot guardrails that should apply across supported clients, such as VS Code and Copilot CLI.</p>
+<p>Administrators define these settings with the GitHub-supported server-managed, MDM-managed, or file-based delivery methods. Even when you use an MDM solution, enterprise-managed settings use the Copilot configuration format and delivery path, not the VS Code device-policy namespace.</p>
+<p>For server-managed deployments, administrators can override supported settings for specific enterprise teams. GitHub applies the matching values based on each person's enterprise team membership. See <a href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/override-settings-for-teams" class="external-link" target="_blank">Override enterprise-managed settings for teams<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a>.</p>
+<p>Refer to the <a href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started" class="external-link" target="_blank">enterprise-managed settings setup guide<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a> and <a href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings" class="external-link" target="_blank">settings reference<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a> for supported keys, client coverage, configuration schemas, and precedence.</p>
+<h3 id="_vs-code-device-policies" data-needslink="_vs-code-device-policies"><a class="hash-link" href="#_vs-code-device-policies">VS Code device policies</a></h3>
+<p>Use device policies for editor-specific controls on managed VS Code installations.</p>
+<p>Administrators deploy these policies through platform management tools, such as Group Policy, Microsoft Intune, or macOS configuration profiles. The policies apply to the managed device and override the corresponding user settings in VS Code.</p>
+<p>Refer to the <a href="/docs/enterprise/policies">VS Code enterprise policy reference</a> for policy names, accepted values, supported platforms, and minimum versions.</p>
+<h3 id="_github-organization-and-enterprise-settings" data-needslink="_github-organization-and-enterprise-settings"><a class="hash-link" href="#_github-organization-and-enterprise-settings">GitHub organization and enterprise settings</a></h3>
+<p>Use GitHub organization and enterprise settings for account-level and service-side controls, such as Copilot access, model availability, content exclusions, and organization-provided customizations.</p>
+<p>Administrators configure these controls on GitHub. They follow the signed-in GitHub account and its organization or enterprise membership rather than the VS Code device-policy channel.</p>
+<p>Refer to <a href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise" class="external-link" target="_blank">Manage Copilot for your enterprise<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a> for configuration and reference information about these controls.</p>
+<h2 id="_choose-a-management-solution" data-needslink="_choose-a-management-solution"><a class="hash-link" href="#_choose-a-management-solution">Choose a management solution</a></h2>
+<p>The solutions are not mutually exclusive. Choose the solution for each control based on the scope you need.</p>
+<div class="table-expand-container"><button class="table-expand-button">
+          Expand table
+        </button><div class="table-wrapper"><table class="table table-striped">
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Management solution</th>
+<th>Configuration location</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apply consistent Copilot guardrails across supported clients.</td>
+<td>Copilot enterprise-managed settings</td>
+<td>GitHub-supported server, MDM, or file delivery</td>
+<td>Supported Copilot clients and keys</td>
+</tr>
+<tr>
+<td>Control a VS Code-specific editor feature on managed devices.</td>
+<td>VS Code device policies</td>
+<td>Operating system or device management</td>
+<td>Managed VS Code installations</td>
+</tr>
+<tr>
+<td>Control Copilot access or GitHub-hosted organization and enterprise behavior.</td>
+<td>GitHub organization or enterprise settings</td>
+<td>GitHub organization or enterprise administration</td>
+<td>Signed-in accounts and GitHub-hosted services</td>
+</tr>
+</tbody>
+</table></div></div>
+<p>Some controls are available through more than one solution. Review the <a href="#_understand-precedence">order of precedence</a> before you combine them.</p>
+<p>Before a broad rollout, test the proposed configuration with a representative project, device, and account. Confirm that developers can complete approved tasks while the intended restrictions remain in place.</p>
+<h2 id="_understand-precedence" data-needslink="_understand-precedence"><a class="hash-link" href="#_understand-precedence">Understand precedence</a></h2>
+<h3 id="_across-managed-settings-delivery-methods" data-needslink="_across-managed-settings-delivery-methods"><a class="hash-link" href="#_across-managed-settings-delivery-methods">Across managed-settings delivery methods</a></h3>
+<p>When the same managed setting is available from multiple sources, VS Code applies them in this order:</p>
+<ol>
+<li>MDM-managed settings.</li>
+<li>Server-managed settings.</li>
+<li>File-based settings.</li>
+<li>User settings.</li>
+</ol>
+<p>For most keys, the value from the highest-precedence source wins. Some keys, including <code>permissions.deny</code>, <code>permissions.ask</code>, and <code>permissions.allow</code>, combine restrictions from multiple sources in the most restrictive direction. See <a href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/deploy-managed-settings#precedence-of-deployment-methods" class="external-link" target="_blank">Precedence of deployment methods<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a> for the complete and current rules.</p>
+<h3 id="_with-vs-code-device-policies" data-needslink="_with-vs-code-device-policies"><a class="hash-link" href="#_with-vs-code-device-policies">With VS Code device policies</a></h3>
+<p>Some enterprise-managed settings map to a VS Code device policy. When an administrator configures both systems:</p>
+<ul>
+<li>If the systems configure different controls, both controls apply.</li>
+<li>If both systems configure the same control, the enterprise-managed setting takes precedence. The values are not merged.</li>
+<li>If enterprise-managed settings do not provide that control, the VS Code device policy remains in effect.</li>
+</ul>
+<p>Configure an overlapping control through one management solution when possible. Run <strong>Developer: Policy Diagnostics</strong> to inspect the effective value and its source.</p>
+<h2 id="_use-copilot-enterprise-managed-settings" data-needslink="_use-copilot-enterprise-managed-settings"><a class="hash-link" href="#_use-copilot-enterprise-managed-settings">Use Copilot enterprise-managed settings</a></h2>
+<p>Configure and administer enterprise-managed settings by following the GitHub documentation:</p>
+<ul>
+<li><a href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started" class="external-link" target="_blank">Get started with enterprise-managed settings<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a> explains delivery, configuration files, team overrides, validation, and troubleshooting.</li>
+<li><a href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings" class="external-link" target="_blank">Enterprise-managed settings reference<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a> lists supported keys, values, combination behavior, and client coverage.</li>
+</ul>
+<p>Not every enterprise-managed setting applies to every client. Before you configure a setting for VS Code, check the <strong>Supported clients</strong> column in the <a href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings#supported-keys" class="external-link" target="_blank">enterprise-managed settings reference<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a>.</p>
+<h3 id="_set-managed-model-defaults" data-needslink="_set-managed-model-defaults"><a class="hash-link" href="#_set-managed-model-defaults">Set managed model defaults</a></h3>
+<p>Give developers a consistent starting model without preventing them from choosing another model for an individual task. Set the top-level <code>model</code> managed setting to <code>auto</code> or an available model ID.</p>
+<p>For Copilot harness sessions, use <code>fusionTier</code> to set the starting Auto or Fusion tier:</p>
+<div class="table-expand-container"><button class="table-expand-button">
+          Expand table
+        </button><div class="table-wrapper"><table class="table table-striped">
+<thead>
+<tr>
+<th>Value</th>
+<th>Starting tier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"standard"</code></td>
+<td>Fusion <strong>Standard</strong>, or Auto <strong>Balance</strong> when Fusion is unavailable.</td>
+</tr>
+<tr>
+<td><code>"high"</code></td>
+<td>Fusion <strong>High</strong> when available, otherwise Auto <strong>Intelligence</strong>.</td>
+</tr>
+<tr>
+<td><code>"max"</code></td>
+<td>Fusion <strong>Max</strong> when available. If it isn't available, the runtime default remains in effect.</td>
+</tr>
+<tr>
+<td><code>"unmanaged"</code></td>
+<td>No managed tier selection. The legacy <code>autoTier</code> setting is also ignored.</td>
+</tr>
+</tbody>
+</table></div></div>
+<p>For example, add the following values to your enterprise-managed settings:</p>
+<div class="code-block-wrapper"><div class="code-block-actions" role="group" aria-label="Code block actions"><button class="code-block-copy-btn" title="Copy code to clipboard" aria-label="Copy code to clipboard" type="button" tabindex="0"><span class="codicon codicon-copy"></span></button></div><pre class="shiki" data-lang="json" shiki-themes="" dark-plus="" light-plus"="" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0" aria-label="Code block in JSON"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">  "model"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"auto"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">  "fusionTier"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"high"</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span>
+<span class="line"></span></code></pre></div>
+<p>This example starts new conversations on Fusion <strong>High</strong> when <a href="/docs/agent-customization/language-models#_use-copilot-fusion-research-preview">Copilot Fusion (Research preview)</a> is available to the account. Otherwise, it uses Auto <strong>Intelligence</strong>. A managed <code>model</code> value of <code>"fusion"</code> is also accepted as <code>"auto"</code>; it doesn't enable Fusion or grant access to an unavailable tier.</p>
+<p><code>fusionTier</code> takes precedence over the legacy <code>autoTier</code> setting. It applies to the Copilot harness, not Local sessions.</p>
+<p>Managed model defaults take precedence over saved personal preferences for new conversations in both the editor and the Agents window. Developers can still change the model or tier within a conversation, and existing conversations keep their selections. Removing a managed default lets new conversations use saved personal preferences again.</p>
+<p>To verify the model default, check <strong>Org default</strong> in the model picker and the briefcase indicator for <span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="chat.defaultModel" data-vscode-installation-info="both" data-vscode-installation-info-policy="This setting can be configured by an organization policy.">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      chat.defaultModel
+      <span class="setting-policy-info codicon codicon-info vscode-installation-info-trigger" data-vscode-installation-info-trigger="" role="button" tabindex="0" aria-label="Setting information" aria-controls="vscode-installation-tooltip-2" aria-expanded="false" aria-describedby="vscode-installation-tooltip-2"></span>
+    </span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-2">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-2">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-2">Open in VS Code Insiders</span>
+    </span>
+  </span></span> in Settings. See <a href="/docs/agent-customization/language-models#_organization-managed-model-defaults">Organization-managed model defaults</a>.</p>
+<h3 id="_claude-and-codex-availability" data-needslink="_claude-and-codex-availability"><a class="hash-link" href="#_claude-and-codex-availability">Claude and Codex availability</a></h3>
+<p>The Claude and Codex harness integrations in VS Code are disabled while Copilot enterprise-managed settings apply. This includes settings delivered through server-managed, MDM-managed, or file-based deployments.</p>
+<p>The Copilot runtime enforces these settings, but the Claude and Codex harnesses cannot enforce them. VS Code disables those harnesses so a session cannot bypass your organization's controls.</p>
+<p>This restriction does not delete existing Claude or Codex sessions.</p>
+<p>The restriction depends on the presence of managed settings, not only on whether a particular restriction is enabled. For example:</p>
+<ul>
+<li>Managed permission settings, such as <code>permissions.disableBypassPermissionsMode</code>, <code>permissions.allow</code>, <code>permissions.ask</code>, or <code>permissions.deny</code>, disable the harnesses. An empty rule list still counts as a managed setting.</li>
+<li>Managed <code>sandbox.enabled</code> disables the harnesses even when its value is <code>false</code>.</li>
+<li>Other enterprise-managed controls, such as plugin or telemetry settings, can also disable the harnesses.</li>
+</ul>
+<p>Setting <span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="chat.agentHost.claudeAgent.enabled" data-vscode-installation-info="both" data-vscode-installation-info-policy="This setting can be configured by an organization policy.">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      chat.agentHost.claudeAgent.enabled
+      <span class="setting-policy-info codicon codicon-info vscode-installation-info-trigger" data-vscode-installation-info-trigger="" role="button" tabindex="0" aria-label="Setting information" aria-controls="vscode-installation-tooltip-3" aria-expanded="false" aria-describedby="vscode-installation-tooltip-3"></span>
+    </span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-3">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-3">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-3">Open in VS Code Insiders</span>
+    </span>
+  </span></span> or <span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="chat.agentHost.codexAgent.enabled" data-vscode-installation-info="both" data-vscode-installation-info-policy="This setting can be configured by an organization policy.">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      chat.agentHost.codexAgent.enabled
+      <span class="setting-policy-info codicon codicon-info vscode-installation-info-trigger" data-vscode-installation-info-trigger="" role="button" tabindex="0" aria-label="Setting information" aria-controls="vscode-installation-tooltip-4" aria-expanded="false" aria-describedby="vscode-installation-tooltip-4"></span>
+    </span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-4">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-4">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-4">Open in VS Code Insiders</span>
+    </span>
+  </span></span> to <code>true</code> does not override this restriction. Setting the <code>Claude3PIntegration</code> or <code>Codex3PIntegration</code> device policy to <code>true</code> does not override it either. The restriction also applies when you use a Claude API key or a ChatGPT account.</p>
+<p>This restriction applies to harness availability, not to Claude or OpenAI models selected in a Copilot harness session. Model availability is governed separately.</p>
+<h4 id="_if-claude-or-codex-is-missing" data-needslink="_if-claude-or-codex-is-missing"><a class="hash-link" href="#_if-claude-or-codex-is-missing">If Claude or Codex is missing</a></h4>
+<p>If you need access to one of these harnesses:</p>
+<ol>
+<li>Run <strong>Developer: Policy Diagnostics</strong> from the Command Palette to inspect the effective <code>Claude3PIntegration</code> and <code>Codex3PIntegration</code> policies and their sources.</li>
+<li>Contact the IT team that deployed the managed settings. Share which harness is unavailable and the relevant policy values and sources.</li>
+<li>If you don't know who owns the settings, ask your IT help desk to route the request to the administrator responsible for Copilot enterprise-managed settings or device management.</li>
+</ol>
+<p>Ask the administrator which harnesses are approved for your work and whether the deployed configuration needs review. You cannot restore access by changing your user or workspace settings.</p>
+<h4 id="_runtime-policies-and-harness-selection" data-needslink="_runtime-policies-and-harness-selection"><a class="hash-link" href="#_runtime-policies-and-harness-selection">Runtime policies and harness selection</a></h4>
+<p>The restriction on Claude and Codex is separate from automatic routing to the Copilot harness. The following managed settings require the Copilot harness unless the administrator enables the <a href="#_keep-local-harness-as-default">temporary Local default</a>:</p>
+<ul>
+<li><code>sandbox.enabled</code> set to <code>true</code>.</li>
+<li>A <code>permissions</code> object with at least one key.</li>
+</ul>
+<p>An empty <code>permissions</code> object does not trigger that routing.</p>
+<p>The temporary Local default does not re-enable Claude or Codex while enterprise-managed settings apply.</p>
+<h3 id="_keep-local-harness-as-default" data-needslink="_keep-local-harness-as-default"><a class="hash-link" href="#_keep-local-harness-as-default">Keep Local harness as default</a></h3>
+<p>Starting with VS Code 1.142, organizations can keep the Local harness as the default for new agent sessions and prevent automatic selection of the Copilot harness.</p>
+<p>Set <code>vscode.temporaryDefaultToLocalHarness</code> to <code>true</code> in your enterprise-managed settings:</p>
+<div class="code-block-wrapper"><div class="code-block-actions" role="group" aria-label="Code block actions"><button class="code-block-copy-btn" title="Copy code to clipboard" aria-label="Copy code to clipboard" type="button" tabindex="0"><span class="codicon codicon-copy"></span></button></div><pre class="shiki" data-lang="json" shiki-themes="" dark-plus="" light-plus"="" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0" aria-label="Code block in JSON"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">  "vscode"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">    "temporaryDefaultToLocalHarness"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">true</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span>
+<span class="line"></span></code></pre></div>
+<p>This control suppresses <a href="#_enforce-runtime-policies-with-copilot-agent-host">automatic routing to the Copilot harness</a>, including routing triggered by managed <code>sandbox.enabled</code> or <code>permissions</code> values. It does not change explicit, remembered, or current harness choices. Set <code>vscode.temporaryDefaultToLocalHarness</code> to <code>false</code> or remove the key to restore normal harness routing.</p>
+<div class="markdown-alert warning" dir="auto">
+      <span>
+        <svg class="markdown-alert-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+          <path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z">
+          </path>
+        </svg>
+        Warning
+      </span><p>Local does not enforce runtime-only sandbox and permission rules. Those managed rules continue to be enforced in Copilot harness sessions. Review the security impact before you use this temporary control.</p>
+</div><h3 id="_verify-applied-managed-settings" data-needslink="_verify-applied-managed-settings"><a class="hash-link" href="#_verify-applied-managed-settings">Verify applied managed settings</a></h3>
+<p>Run <strong>Developer: Policy Diagnostics</strong> in VS Code to inspect effective policy values and their sources. For more information, see <a href="/docs/enterprise/policies#_verify-policy-enforcement">Verify policy enforcement</a>.</p>
+<p>If the diagnostics show a server-managed source with an unexpected value, check <code>copilot/managed-settings.json</code>, <code>copilot/team-mappings.json</code>, the mapped file under <code>copilot/teams/</code>, and the user's enterprise team memberships. GitHub resolves team overrides before it delivers the server-managed settings to VS Code.</p>
+<p>For GitHub-side validation errors or delivery troubleshooting, follow <a href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started#validate-server-managed-settings" class="external-link" target="_blank">Validate server-managed settings<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a>.</p>
+<h3 id="_meet-minimum-version-requirements" data-needslink="_meet-minimum-version-requirements"><a class="hash-link" href="#_meet-minimum-version-requirements">Meet minimum version requirements</a></h3>
+<p>The managed-settings service can require a minimum VS Code version before AI features are available. When the installed version does not meet the requirement:</p>
+<ul>
+<li>Chat shows the required and installed versions and provides the appropriate update action.</li>
+<li>The editor window shows a banner even when Chat is closed. Other editor features remain available.</li>
+<li>The Agents window shows a blocking notice with an <strong>Open Editor Window</strong> action.</li>
+</ul>
+<p>If built-in updates are disabled by policy, the notice directs the developer to contact an administrator. AI features become available after the installed version meets the requirement.</p>
+<h3 id="_apply-managed-telemetry-in-vs-code" data-needslink="_apply-managed-telemetry-in-vs-code"><a class="hash-link" href="#_apply-managed-telemetry-in-vs-code">Apply managed telemetry in VS Code</a></h3>
+<p>Managed OpenTelemetry configuration applies to the Copilot Chat extension and the <a href="/docs/agents/concepts/agent-host">Agent Host</a>, the process that runs agent sessions. The extension might offer <strong>Reload Window</strong> after a configuration change. VS Code restarts the local Agent Host automatically after it resolves a managed telemetry change.</p>
+<p>Starting with VS Code 1.143, use <code>telemetry.filePath</code> to save Copilot Agent Host telemetry to a JSONL file without a collector or personal OTel opt-in. The managed file destination takes precedence over collector configuration, unless managed <code>telemetry.enabled</code> is <code>false</code>, which turns off export. See <a href="/docs/agents/guides/monitoring-agents#_export-managed-telemetry-to-a-file">Export managed telemetry to a file</a> for configuration, path requirements, and removal behavior.</p>
+<p>Starting with VS Code 1.143, use <code>telemetry.headersProvider</code> to generate and refresh HTTP headers for OTLP export from Copilot Agent Host sessions. Headers can supply collector-specific metadata, route telemetry, or authenticate with the collector. Managed export does not require developers to opt in through personal OTel settings. For a configuration example and helper requirements, see <a href="/docs/agents/guides/monitoring-agents#_configure-dynamic-headers">Configure dynamic headers</a>.</p>
+<p>The <a href="#_across-managed-settings-delivery-methods">highest-precedence delivery source</a> that supplies <code>telemetry</code> owns the entire block. Fields omitted from that source do not inherit values from lower-precedence sources.</p>
+<p>Identity capture is off by default and independent of content capture. Review both controls before deployment, and remove conflicting OpenTelemetry environment variables from managed devices. For the configuration schema and supported clients, see <a href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings#telemetry" class="external-link" target="_blank"><code>telemetry</code> in the enterprise-managed settings reference<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a>.</p>
+<h2 id="_use-vs-code-device-policies" data-needslink="_use-vs-code-device-policies"><a class="hash-link" href="#_use-vs-code-device-policies">Use VS Code device policies</a></h2>
+<p>The following sections describe VS Code device policies. Deploy them by following <a href="/docs/enterprise/policies">Enterprise policies</a>, and use the <a href="/docs/enterprise/policies#_vs-code-enterprise-policy-reference">policy reference</a> for accepted values and minimum versions.</p>
+<div class="markdown-alert important" dir="auto">
+      <span>
+        <svg class="markdown-alert-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+          <path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z">
+          </path>
+        </svg>
+        Important
+      </span><p>Copilot harness sessions don't enforce every device policy the same way as Local harness sessions. The following sections note known differences. Test a policy in the harness that your developers use before you rely on it.</p>
+</div><p>Jump to:</p>
+<ul>
+<li><a href="#_control-access-and-feature-availability">Control access and feature availability</a></li>
+<li><a href="#_configure-models-and-data-handling">Configure models and data handling</a></li>
+<li><a href="#_govern-agents-and-tools">Govern agents and tools</a></li>
+<li><a href="#_configure-security-and-observability">Configure security and observability</a></li>
+</ul>
+<h3 id="_control-access-and-feature-availability" data-needslink="_control-access-and-feature-availability"><a class="hash-link" href="#_control-access-and-feature-availability">Control access and feature availability</a></h3>
+<h4 id="_restrict-ai-features-to-approved-github-organizations" data-needslink="_restrict-ai-features-to-approved-github-organizations"><a class="hash-link" href="#_restrict-ai-features-to-approved-github-organizations">Restrict AI features to approved GitHub organizations</a></h4>
+<p>Set the <code>ChatApprovedAccountOrganizations</code> policy to require developers to sign in with a GitHub account that belongs to an approved organization before AI features are activated.</p>
+<p>Provide a JSON array of GitHub organization logins, such as <code>["contoso", "contoso-research"]</code>. Use <code>["*"]</code> to allow any signed-in GitHub account.</p>
+<p>The policy is fail-closed. AI features remain disabled until account policy data resolves and the signed-in account belongs to an approved organization. Run <strong>Developer: Policy Diagnostics</strong> to inspect the <strong>Account Policy Gate</strong> state.</p>
+<h4 id="_enable-or-disable-the-use-of-agents" data-needslink="_enable-or-disable-the-use-of-agents"><a class="hash-link" href="#_enable-or-disable-the-use-of-agents">Enable or disable the use of agents</a></h4>
+<p>Set the <code>ChatAgentMode</code> policy to <code>false</code> to disable <a href="/docs/agents/overview">agents</a>. This policy controls <span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="chat.agent.enabled" data-vscode-installation-info="both" data-vscode-installation-info-policy="This setting can be configured by an organization policy.">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      chat.agent.enabled
+      <span class="setting-policy-info codicon codicon-info vscode-installation-info-trigger" data-vscode-installation-info-trigger="" role="button" tabindex="0" aria-label="Setting information" aria-controls="vscode-installation-tooltip-5" aria-expanded="false" aria-describedby="vscode-installation-tooltip-5"></span>
+    </span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-5">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-5">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-5">Open in VS Code Insiders</span>
+    </span>
+  </span></span>.</p>
+<p>When the policy is disabled, the <strong>Agent</strong> option is not available in the agents dropdown, and the Agents window is unavailable. Developers can still use <a href="/docs/chat/chat-overview">ask or edit</a> for code explanations and file edits.</p>
+<p>The policy does not remove Agent Host session targets, such as <strong>Copilot</strong>, from the <a href="/docs/agents/run/agent-harnesses#_select-a-harness"><strong>Session Target</strong> UI control</a> in the editor. Developers can still start agent sessions from those targets.</p>
+<h4 id="_enable-or-disable-extension-language-tools" data-needslink="_enable-or-disable-extension-language-tools"><a class="hash-link" href="#_enable-or-disable-extension-language-tools">Enable or disable extension language tools</a></h4>
+<p>Use the following policies to control extension, browser, and plugin tools:</p>
+<ul>
+<li>Set <code>ChatAgentExtensionTools</code> to <code>false</code> to disable tools contributed by extensions.</li>
+<li>Set <code>BrowserChatTools</code> to <code>false</code> to disable browser tools.</li>
+<li>Set <code>ChatPluginsEnabled</code> to <code>false</code> to disable agent plugin integration.</li>
+</ul>
+<h4 id="_configure-copilot-code-review" data-needslink="_configure-copilot-code-review"><a class="hash-link" href="#_configure-copilot-code-review">Configure Copilot code review</a></h4>
+<p>Use <code>CopilotReviewSelection</code> to control code review for selected code. Use <code>CopilotReviewAgent</code> to control access to the code review agent for pull requests and changed files.</p>
+<h4 id="_configure-next-edit-suggestions" data-needslink="_configure-next-edit-suggestions"><a class="hash-link" href="#_configure-next-edit-suggestions">Configure next edit suggestions</a></h4>
+<p>Set <code>CopilotNextEditSuggestions</code> to <code>false</code> to disable next edit suggestions.</p>
+<h4 id="_enable-or-disable-claude-agent" data-needslink="_enable-or-disable-claude-agent"><a class="hash-link" href="#_enable-or-disable-claude-agent">Enable or disable Claude Agent</a></h4>
+<p>Set <code>Claude3PIntegration</code> to <code>false</code> to disable Claude Agent sessions in VS Code.</p>
+<p>Setting this policy to <code>true</code> does not override the <a href="#_claude-and-codex-availability">Claude and Codex restriction under enterprise-managed settings</a>.</p>
+<h4 id="_enable-or-disable-the-copilot-command" data-needslink="_enable-or-disable-the-copilot-command"><a class="hash-link" href="#_enable-or-disable-the-copilot-command">Enable or disable the copilot command</a></h4>
+<p>VS Code includes a <code>copilot</code> command that runs GitHub Copilot CLI. When Copilot CLI isn't installed, the command offers to install it from GitHub. On Windows, setup can also <a href="/docs/setup/windows#_set-up-the-copilot-command">add the command to <code>PATH</code> and install Copilot CLI</a>.</p>
+<p>Set the <code>CopilotCliCommand</code> policy to <code>false</code> to turn off the command. This policy controls <span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="chat.copilotCliCommand.enabled" data-vscode-installation-info="both" data-vscode-installation-info-policy="This setting can be configured by an organization policy.">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      chat.copilotCliCommand.enabled
+      <span class="setting-policy-info codicon codicon-info vscode-installation-info-trigger" data-vscode-installation-info-trigger="" role="button" tabindex="0" aria-label="Setting information" aria-controls="vscode-installation-tooltip-6" aria-expanded="false" aria-describedby="vscode-installation-tooltip-6"></span>
+    </span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-6">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-6">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-6">Open in VS Code Insiders</span>
+    </span>
+  </span></span>. When the policy is disabled:</p>
+<ul>
+<li>New integrated terminals don't include the <code>copilot</code> command.</li>
+<li>On Windows, setup doesn't show its <strong>GitHub Copilot CLI</strong> page or install Copilot CLI. The next time setup runs, for example during an update, it removes the <code>copilot</code> command from <code>PATH</code>. Until then, the command doesn't install Copilot CLI.</li>
+</ul>
+<p>The policy doesn't affect a Copilot CLI installation that you deploy separately. To control which Copilot CLI version developers use and where it comes from, disable the policy and deploy Copilot CLI with your own software distribution tools. Learn more about <a href="https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli" class="external-link" target="_blank">installing GitHub Copilot CLI<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a>.</p>
+<p>Whether developers can use Copilot CLI is controlled by your <a href="#_use-github-organization-and-enterprise-settings">GitHub organization and enterprise settings</a>, which Copilot CLI applies after sign-in.</p>
+<h3 id="_configure-models-and-data-handling" data-needslink="_configure-models-and-data-handling"><a class="hash-link" href="#_configure-models-and-data-handling">Configure models and data handling</a></h3>
+<h4 id="_set-a-default-chat-model" data-needslink="_set-a-default-chat-model"><a class="hash-link" href="#_set-a-default-chat-model">Set a default chat model</a></h4>
+<p>Set the <code>ChatDefaultModel</code> policy to choose the default model for new conversations. This policy controls <span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="chat.defaultModel" data-vscode-installation-info="both" data-vscode-installation-info-policy="This setting can be configured by an organization policy.">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      chat.defaultModel
+      <span class="setting-policy-info codicon codicon-info vscode-installation-info-trigger" data-vscode-installation-info-trigger="" role="button" tabindex="0" aria-label="Setting information" aria-controls="vscode-installation-tooltip-7" aria-expanded="false" aria-describedby="vscode-installation-tooltip-7"></span>
+    </span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-7">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-7">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-7">Open in VS Code Insiders</span>
+    </span>
+  </span></span> and accepts <code>auto</code>, a model family name, or a full model ID.</p>
+<p>Developers can select another model for an individual conversation. Reopened conversations keep their saved model.</p>
+<p>For defaults delivered through Copilot enterprise-managed settings, see <a href="#_set-managed-model-defaults">Set managed model defaults</a>.</p>
+<h4 id="_control-dictation-data" data-needslink="_control-dictation-data"><a class="hash-link" href="#_control-dictation-data">Control dictation data</a></h4>
+<p>Use the following policies to control whether <a href="/docs/configure/accessibility/voice#_use-built-in-dictation">dictation</a> audio and transcripts leave the developer's device.</p>
+<div class="table-expand-container"><button class="table-expand-button">
+          Expand table
+        </button><div class="table-wrapper"><table class="table table-striped">
+<thead>
+<tr>
+<th>Policy</th>
+<th>Setting</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DictationEnabled</code></td>
+<td><span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="dictation.enabled" data-vscode-installation-info="both" data-vscode-installation-info-policy="This setting can be configured by an organization policy.">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      dictation.enabled
+      <span class="setting-policy-info codicon codicon-info vscode-installation-info-trigger" data-vscode-installation-info-trigger="" role="button" tabindex="0" aria-label="Setting information" aria-controls="vscode-installation-tooltip-8" aria-expanded="false" aria-describedby="vscode-installation-tooltip-8"></span>
+    </span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-8">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-8">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-8">Open in VS Code Insiders</span>
+    </span>
+  </span></span></td>
+<td>Controls whether built-in dictation is available.</td>
+</tr>
+<tr>
+<td><code>DictationModel</code></td>
+<td><span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="dictation.model" data-vscode-installation-info="both" data-vscode-installation-info-policy="This setting can be configured by an organization policy.">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      dictation.model
+      <span class="setting-policy-info codicon codicon-info vscode-installation-info-trigger" data-vscode-installation-info-trigger="" role="button" tabindex="0" aria-label="Setting information" aria-controls="vscode-installation-tooltip-9" aria-expanded="false" aria-describedby="vscode-installation-tooltip-9"></span>
+    </span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-9">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-9">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-9">Open in VS Code Insiders</span>
+    </span>
+  </span></span></td>
+<td>Selects an on-device model or the <code>mai</code> cloud transcription service.</td>
+</tr>
+<tr>
+<td><code>DictationLLMCleanup</code></td>
+<td><span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="dictation.experimental.llmCleanup" data-vscode-installation-info="both" data-vscode-installation-info-policy="This setting can be configured by an organization policy.">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      dictation.experimental.llmCleanup
+      <span class="setting-policy-info codicon codicon-info vscode-installation-info-trigger" data-vscode-installation-info-trigger="" role="button" tabindex="0" aria-label="Setting information" aria-controls="vscode-installation-tooltip-10" aria-expanded="false" aria-describedby="vscode-installation-tooltip-10"></span>
+    </span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-10">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-10">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-10">Open in VS Code Insiders</span>
+    </span>
+  </span></span></td>
+<td>Controls whether final transcripts are sent to a language model for cleanup.</td>
+</tr>
+</tbody>
+</table></div></div>
+<p>To keep dictation audio on the device, set <code>DictationModel</code> to <code>nemotron-3.5-asr-streaming-0.6b</code>. In VS Code for the Web, where on-device transcription is not supported, this policy makes dictation unavailable.</p>
+<p>To prevent transcript text from being sent to a language model, set <code>DictationLLMCleanup</code> to <code>false</code>. For more information, see <a href="/docs/configure/accessibility/voice#_understand-dictation-privacy">Dictation privacy</a>.</p>
+<h3 id="_govern-agents-and-tools" data-needslink="_govern-agents-and-tools"><a class="hash-link" href="#_govern-agents-and-tools">Govern agents and tools</a></h3>
+<h4 id="_enable-or-disable-hooks" data-needslink="_enable-or-disable-hooks"><a class="hash-link" href="#_enable-or-disable-hooks">Enable or disable hooks</a></h4>
+<p>Hook controls depend on the selected harness. For Copilot harness sessions, use <a href="#_verify-policy-hook-coverage">Policy Hooks</a> and the <a href="#_restrict-hook-sources">managed hook-source controls</a> below.</p>
+<div class="markdown-alert note" dir="auto">
+      <span>
+        <svg class="markdown-alert-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+          <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z">
+          </path>
+        </svg>
+        Note
+      </span><p><strong>For Local harness sessions:</strong> Set the <code>ChatHooks</code> policy to <code>false</code> to disable hooks. This policy controls <span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="chat.useHooks" data-vscode-installation-info="both" data-vscode-installation-info-policy="This setting can be configured by an organization policy.">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      chat.useHooks
+      <span class="setting-policy-info codicon codicon-info vscode-installation-info-trigger" data-vscode-installation-info-trigger="" role="button" tabindex="0" aria-label="Setting information" aria-controls="vscode-installation-tooltip-11" aria-expanded="false" aria-describedby="vscode-installation-tooltip-11"></span>
+    </span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-11">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-11">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-11">Open in VS Code Insiders</span>
+    </span>
+  </span></span> and does not apply to Copilot harness sessions.</p>
+</div><p><a name="use-the-sdk-harness-for-policy-hooks"></a></p>
+<h5>Verify Policy Hook coverage</h5>
+<p>Copilot Policy Hooks apply to Copilot harness sessions, which use the Copilot SDK hook implementation. Confirm that developers select <strong>Copilot</strong> from the <a href="/docs/agents/run/agent-harnesses#_select-a-harness"><strong>Session Target</strong> UI control</a> before relying on these hooks for enforcement. Test the required hook behavior in the session that will perform the work.</p>
+<p>Local harness sessions do not load SDK Policy Hooks. Configuring hooks for one harness does not enforce them in another harness. See <a href="/docs/agent-customization/hooks#_choose-the-hook-implementation-for-your-session">hook compatibility</a>.</p>
+<p>When moving to Copilot, inventory policy hooks, managed plugins, and any permitted user or repository hooks. Convert and test their scripts as well as their configuration. See <a href="/docs/agent-customization/migrate-customizations#_migrate-hooks">Migrate hooks</a>.</p>
+<div class="markdown-alert warning" dir="auto">
+      <span>
+        <svg class="markdown-alert-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+          <path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z">
+          </path>
+        </svg>
+        Warning
+      </span><p>Copilot policy hooks run on the host, outside the session sandbox. Keep their scripts in administrator-controlled locations. Do not promote a repository hook to a policy hook while retaining a workspace-controlled script path; that would run editable workspace code outside the sandbox. See <a href="https://docs.github.com/en/copilot/reference/hooks-reference#sandboxed-sessions" class="external-link" target="_blank">policy hooks and sandboxed sessions<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a>.</p>
+</div><p>Test failures and timeouts separately. The <a href="https://docs.github.com/en/copilot/reference/hooks-reference#exit-codes-for-command-hooks" class="external-link" target="_blank">Copilot command-hook reference<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a> documents timeouts as fail-open even for policy hooks. A requirement for complete audit coverage or fail-closed enforcement therefore needs more than the presence of a hook file.</p>
+<p><a id="deploy-hooks-through-managed-plugins"></a></p>
+<h5>Restrict hook sources</h5>
+<p>Set <code>ChatAllowManagedHooksOnly</code> to allow hooks only from enterprise-managed sources and plugins that policy force-enables. Set <code>ChatStrictPluginOnlyCustomization</code> when you also need to block standalone user and workspace skills, agents, instructions, and MCP servers.</p>
+<p>Plugin distribution is a separate decision. To force-enable plugins or govern marketplaces across supported Copilot clients, use the plugin controls in the <a href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings#enabledplugins" class="external-link" target="_blank">enterprise-managed settings reference<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a>.</p>
+<h4 id="_manage-agent-plugins-and-marketplaces" data-needslink="_manage-agent-plugins-and-marketplaces"><a class="hash-link" href="#_manage-agent-plugins-and-marketplaces">Manage agent plugins and marketplaces</a></h4>
+<p>Use the following policies to govern <a href="/docs/agent-customization/agent-plugins">agent plugins</a> and customization discovery in VS Code:</p>
+<ul>
+<li><code>ChatEnabledPlugins</code> force-enables or force-disables named plugins.</li>
+<li><code>ChatExtraMarketplaces</code> adds plugin marketplaces.</li>
+<li><code>ChatStrictMarketplaces</code> restricts plugin installation to approved marketplace sources. An empty list blocks installation from all marketplaces.</li>
+<li><code>ChatCustomizationMarketplace</code> controls the unified <strong>Browse</strong> discovery surface. When disabled, marketplace discovery remains available in the existing customization management pages.</li>
+<li><code>ChatCopilotConnectors</code> controls connector discovery and whether connected connector MCP servers are available to Copilot sessions.</li>
+</ul>
+<p>Plugins blocked by policy remain visible but appear disabled. In <strong>Customize</strong> &gt; <strong>Plugins</strong>, policy-managed plugins are identified as managed by policy, and their toggles are locked. Marketplaces managed by policy are identified in the marketplace picker.</p>
+<p>For cross-client plugin governance instead of VS Code-only policy, follow <a href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/manage-plugin-marketplaces-and-plugins" class="external-link" target="_blank">Manage plugin marketplaces and plugins<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a> to configure Copilot enterprise-managed settings.</p>
+<p>Enterprise-managed plugin settings only require or block plugins. They don't set optional defaults.</p>
+<p>For optional project-specific plugins, use <a href="/docs/agent-customization/agent-plugins#_workspace-plugin-recommendations">repository defaults</a>. Members can turn off these defaults unless managed policy requires the plugin.</p>
+<p>The enterprise-managed <code>strictKnownMarketplaces</code> setting also disables built-in marketplaces. Configure the permitted sources explicitly.</p>
+<!--
+#### Configure MCP server access
+
+Use the following policies to govern [MCP servers](/docs/agent-customization/mcp-servers) in VS Code:
+
+* `ChatMCP` controls whether developers can run servers from any source, only from the configured registry, or not at all.
+* `McpGalleryServiceUrl` configures a private MCP server registry.
+* `ChatAllowedMcpServers` defines servers that developers can install or run.
+* `ChatDeniedMcpServers` defines servers that developers cannot install or run. Deny entries take precedence over allow entries.
+
+`ChatAllowManagedMcpServersOnly` bridges the two management solutions. It tells VS Code to accept grants only from the allowlist delivered through Copilot enterprise-managed settings. Configure that allowlist by following the [GitHub MCP allowlist guidance](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-mcp-usage/configure-enterprise-allowlist).
+-->
+<h4 id="_configure-agent-tool-approvals" data-needslink="_configure-agent-tool-approvals"><a class="hash-link" href="#_configure-agent-tool-approvals">Configure agent tool approvals</a></h4>
+<p>Use Copilot enterprise-managed settings to control session permission levels. Use VS Code device policies for other approval behavior.</p>
+<h5>Manage permission levels</h5>
+<p>For Copilot harness sessions, use enterprise-managed settings to control which permission levels developers can select and the initial level for new sessions.</p>
+<div class="table-expand-container"><button class="table-expand-button">
+          Expand table
+        </button><div class="table-wrapper"><table class="table table-striped">
+<thead>
+<tr>
+<th>Managed setting</th>
+<th>Effect in VS Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>permissions.disableBypassPermissionsMode</code></td>
+<td>Set to <code>"disable"</code> to disable <strong>Allow all</strong> in the permissions picker.</td>
+</tr>
+<tr>
+<td><code>permissions.disableAssistedPermissionsMode</code></td>
+<td>Set to <code>true</code> to disable <strong>Assisted permissions</strong> in the permissions picker.</td>
+</tr>
+<tr>
+<td><code>permissions.defaultMode</code></td>
+<td>Sets the initial permission level. Supported values are <code>"manual"</code>, <code>"assisted"</code>, and <code>"allow-all"</code>.</td>
+</tr>
+</tbody>
+</table></div></div>
+<p>For example, start sessions with <strong>Assisted permissions</strong> when available, while preventing <strong>Allow all</strong>:</p>
+<div class="code-block-wrapper"><div class="code-block-actions" role="group" aria-label="Code block actions"><button class="code-block-copy-btn" title="Copy code to clipboard" aria-label="Copy code to clipboard" type="button" tabindex="0"><span class="codicon codicon-copy"></span></button></div><pre class="shiki" data-lang="json" shiki-themes="" dark-plus="" light-plus"="" style="--shiki-dark:#D4D4D4;--shiki-light:#000000;--shiki-dark-bg:#1E1E1E;--shiki-light-bg:#FFFFFF" tabindex="0" aria-label="Code block in JSON"><code><span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">{</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">  "permissions"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: {</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">    "disableBypassPermissionsMode"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"disable"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">    "disableAssistedPermissionsMode"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#569CD6;--shiki-light:#0000FF">false</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">,</span></span>
+<span class="line"><span style="--shiki-dark:#9CDCFE;--shiki-light:#0451A5">    "defaultMode"</span><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">: </span><span style="--shiki-dark:#CE9178;--shiki-light:#A31515">"assisted"</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">  }</span></span>
+<span class="line"><span style="--shiki-dark:#D4D4D4;--shiki-light:#000000">}</span></span>
+<span class="line"></span></code></pre></div>
+<p>If the configured default is unavailable, new sessions use <strong>Manual permissions</strong>. Setting a default doesn't prevent developers from switching to another permission level that the organization allows.</p>
+<p>In both the editor and the Agents window, supported permission levels restricted by policy remain visible but disabled. The picker shows <strong>Disabled by policy</strong> with a briefcase icon and an explanation. Unsupported permission levels aren't shown.</p>
+<p>These managed settings control <a href="/docs/agents/run/approvals#_permission-levels">session permission levels</a>. The <code>ChatToolsAutoApprove</code> device policy controls global auto-approval separately. Refer to the <a href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings" class="external-link" target="_blank">enterprise-managed settings reference<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a> for configuration and deployment details.</p>
+<h5>Disable global auto-approval</h5>
+<p>Set <code>ChatToolsAutoApprove</code> to <code>false</code> to prevent developers from enabling global auto-approval. While this policy is set, tool confirmations offer only one-time approval, and tool approvals that developers saved earlier aren't applied.</p>
+<div class="markdown-alert caution" dir="auto">
+      <span>
+        <svg class="markdown-alert-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+          <path d="M4.47.22A.749.749 0 0 1 5 0h6c.199 0 .389.079.53.22l4.25 4.25c.141.14.22.331.22.53v6a.749.749 0 0 1-.22.53l-4.25 4.25A.749.749 0 0 1 11 16H5a.749.749 0 0 1-.53-.22L.22 11.53A.749.749 0 0 1 0 11V5c0-.199.079-.389.22-.53Zm.84 1.28L1.5 5.31v5.38l3.81 3.81h5.38l3.81-3.81V5.31L10.69 1.5ZM8 4a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z">
+          </path>
+        </svg>
+        Caution
+      </span><p>Global auto-approval bypasses security prompts for tool invocations. Disable it unless your threat model explicitly supports this behavior.</p>
+</div><h5>Require manual approval for specific tools</h5>
+<p>Use <code>ChatToolsEligibleForAutoApproval</code> to require manual approval for specific tools.</p>
+<p>For Copilot harness sessions, a tool marked <code>false</code> removes <strong>Allow all</strong> from the permissions picker for the whole session. It does not require confirmation for each call to that tool, so <strong>Assisted permissions</strong> and saved session approvals can still approve it.</p>
+<h5>Configure terminal auto-approval</h5>
+<p>Set <code>ChatToolsTerminalEnableAutoApprove</code> to <code>false</code> to turn off rule-based terminal auto-approval. For Local harness sessions, this policy does not prevent automatic approval of sandboxed commands or approval through session-level permissions.</p>
+<p>For Copilot harness sessions, the policy requires approval for commands that run through the built-in shell tool. Set <code>ChatAgentHostCustomTerminalTool</code> to <code>false</code> to keep these sessions on that tool.</p>
+<p>Learn more about <a href="/docs/agents/run/approvals#_tool-approval">tool approval</a>.</p>
+<h4 id="_control-github-environments-preview" data-needslink="_control-github-environments-preview"><a class="hash-link" href="#_control-github-environments-preview">Control GitHub Environments (Preview)</a></h4>
+<p><a href="/docs/agents/run/remote-agent-sessions#_github-environments-preview">GitHub Environments</a> provides continuity across supported Copilot clients by registering an existing development machine for remote access. Administrators can control this registration and connection path to meet remote-access and data-handling requirements while allowing approved cross-device work.</p>
+<p>Set the <code>ChatAgentHostGitHubEnvironments</code> device policy to <code>false</code> to prevent sharing a machine as a GitHub Environment and discovering or connecting to other registered machines through this feature. The policy controls <span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="chat.agentHost.githubEnvironments.enabled" data-vscode-installation-info="both" data-vscode-installation-info-policy="This setting can be configured by an organization policy.">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      chat.agentHost.githubEnvironments.enabled
+      <span class="setting-policy-info codicon codicon-info vscode-installation-info-trigger" data-vscode-installation-info-trigger="" role="button" tabindex="0" aria-label="Setting information" aria-controls="vscode-installation-tooltip-12" aria-expanded="false" aria-describedby="vscode-installation-tooltip-12"></span>
+    </span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-12">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-12">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-12">Open in VS Code Insiders</span>
+    </span>
+  </span></span> and requires VS Code 1.144 or later. Turning off Copilot preview features through organization policy also forces this setting off.</p>
+<p>This control doesn't govern all remote connectivity. It isn't a blanket restriction on SSH or dev tunnels, and it doesn't configure other clients' policies. Review those access paths separately before treating it as an organization-wide remote-access boundary.</p>
+<h3 id="_configure-security-and-observability" data-needslink="_configure-security-and-observability"><a class="hash-link" href="#_configure-security-and-observability">Configure security and observability</a></h3>
+<h4 id="_configure-agent-sandboxing" data-needslink="_configure-agent-sandboxing"><a class="hash-link" href="#_configure-agent-sandboxing">Configure agent sandboxing</a></h4>
+<p>For Copilot harness sessions, use the <a href="/docs/agents/run/agent-sandboxing#_control-sandboxing-for-the-current-session">session sandbox controls</a> and verify the <a href="/docs/agents/run/agent-sandboxing#_inspect-the-effective-sandbox-policy">effective sandbox policy</a> on the machine where commands run.</p>
+<p><a id="deploy-copilot-managed-sandbox-settings"></a></p>
+<p>The current <a href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings#supported-keys" class="external-link" target="_blank">enterprise-managed settings reference<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a> does not list the shared <code>sandbox</code> key as supported for VS Code. For Agent Host sessions, use the <a href="/docs/agents/run/agent-sandboxing#_control-sandboxing-for-the-current-session">session sandbox controls</a> and verify the <a href="/docs/agents/run/agent-sandboxing#_inspect-the-effective-sandbox-policy">effective sandbox policy</a>.</p>
+<details>
+<summary>Sandbox device policies for Local harness sessions</summary>
+<p>The following VS Code device policies are deprecated and apply to Local harness sessions. They do not enforce sandboxing for Copilot harness sessions.</p>
+<div class="table-expand-container"><button class="table-expand-button">
+          Expand table
+        </button><div class="table-wrapper"><table class="table table-striped">
+<thead>
+<tr>
+<th>Policy</th>
+<th>Local-session behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ChatAgentSandboxEnabled</code></td>
+<td>Requires or disables sandboxing for supported terminal commands.</td>
+</tr>
+<tr>
+<td><code>ChatAgentSandboxAllowNetwork</code></td>
+<td>Controls outbound network access for sandboxed terminal commands.</td>
+</tr>
+<tr>
+<td><code>ChatAgentSandboxAllowUnsandboxedCommands</code></td>
+<td>Controls whether a command can run outside the sandbox after user confirmation.</td>
+</tr>
+</tbody>
+</table></div></div>
+<p>Local harness sessions approve sandboxed terminal commands automatically. The <a href="#_configure-terminal-auto-approval">terminal auto-approval policy</a> controls rule-based approval, not sandbox auto-approval.</p>
+</details>
+<h4 id="_configure-agent-network-filtering" data-needslink="_configure-agent-network-filtering"><a class="hash-link" href="#_configure-agent-network-filtering">Configure agent network filtering</a></h4>
+<p>Set <code>ChatAgentNetworkFilter</code> to <code>true</code> to restrict network access according to the allowed and denied domain policies.</p>
+<p>Use <code>ChatAgentAllowedNetworkDomains</code> for permitted domain patterns and <code>ChatAgentDeniedNetworkDomains</code> for blocked patterns. Denied domains take precedence.</p>
+<p>In Local harness sessions, network filtering applies to the fetch tool and Integrated Browser. In Copilot harness sessions, these policies also apply to the Integrated Browser.</p>
+<p>When the <code>ChatAgentNetworkFilter</code> policy is <code>true</code> and the <code>ChatAgentAllowedNetworkDomains</code> policy contains permitted domains, Copilot harness sessions block the runtime's web fetch tool from accessing domains outside that list, even with <strong>Allow all</strong> selected. This restriction does not require sandboxing.</p>
+<p>Terminal coverage depends on the selected harness, platform, and sandbox configuration. See <a href="/docs/agents/run/agent-sandboxing#_configure-network-access">Configure sandbox network access</a>.</p>
+<p>Restart VS Code after you change network filtering settings so new Integrated Browser sessions use the updated policy.</p>
+<h4 id="_configure-telemetry-export-with-opentelemetry" data-needslink="_configure-telemetry-export-with-opentelemetry"><a class="hash-link" href="#_configure-telemetry-export-with-opentelemetry">Configure telemetry export with OpenTelemetry</a></h4>
+<p>Use the <code>CopilotOtel*</code> policies to control <a href="https://opentelemetry.io/" class="external-link" target="_blank">OpenTelemetry<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a> export for Copilot in VS Code. These policies cover export enablement, the collector endpoint and protocol, content and identity capture, the service name, resource attributes, and exporter headers.</p>
+<p>For the complete list of policies and the settings they control, see the <a href="/docs/enterprise/policies#_vs-code-enterprise-policy-reference">enterprise policy reference</a>.</p>
+<h2 id="_use-github-organization-and-enterprise-settings" data-needslink="_use-github-organization-and-enterprise-settings"><a class="hash-link" href="#_use-github-organization-and-enterprise-settings">Use GitHub organization and enterprise settings</a></h2>
+<p>GitHub-hosted controls apply through the signed-in account and GitHub services. They are not VS Code device policies.</p>
+<p>Use GitHub organization and enterprise settings to manage Copilot access, available models and features, content exclusions, and other service-side policies. See <a href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise" class="external-link" target="_blank">Manage Copilot for your enterprise<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a>.</p>
+<p>To restrict the unified marketplace and Copilot connectors, turn off <strong>Editor preview features</strong>. This forces <span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="chat.customizations.marketplace.enabled" data-vscode-installation-info="both">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      chat.customizations.marketplace.enabled
+      
+    <span class="codicon codicon-info vscode-installation-info-icon" aria-hidden="true"></span></span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-13">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-13">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-13">Open in VS Code Insiders</span>
+    </span>
+  </span></span> and <span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="chat.customizations.copilotConnectors.enabled" data-vscode-installation-info="both">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      chat.customizations.copilotConnectors.enabled
+      
+    <span class="codicon codicon-info vscode-installation-info-icon" aria-hidden="true"></span></span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-14">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-14">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-14">Open in VS Code Insiders</span>
+    </span>
+  </span></span> off, even though both default to <code>true</code>. Developers can't override this restriction in Settings. Other eligibility requirements and managed restrictions still apply when preview features are permitted.</p>
+<h3 id="_configure-organization-level-custom-instructions" data-needslink="_configure-organization-level-custom-instructions"><a class="hash-link" href="#_configure-organization-level-custom-instructions">Configure organization-level custom instructions</a></h3>
+<p>Organization administrators create custom instructions on GitHub. When <span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="github.copilot.chat.organizationInstructions.enabled" data-vscode-installation-info="both">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      github.copilot.chat.organizationInstructions.enabled
+      
+    <span class="codicon codicon-info vscode-installation-info-icon" aria-hidden="true"></span></span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-15">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-15">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-15">Open in VS Code Insiders</span>
+    </span>
+  </span></span> is <code>true</code>, supported Copilot sessions in VS Code include organization instructions that the signed-in account can access.</p>
+<p>Learn how to <a href="https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-organization-instructions" class="external-link" target="_blank">add custom instructions for your organization<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a>.</p>
+<h3 id="_configure-organization-level-custom-agents" data-needslink="_configure-organization-level-custom-agents"><a class="hash-link" href="#_configure-organization-level-custom-agents">Configure organization-level custom agents</a></h3>
+<p>Organization administrators create custom agents on GitHub. When <span class="setting"><span class="setting-dropdown vscode-installation-info-host" data-setting-id="github.copilot.chat.organizationCustomAgents.enabled" data-vscode-installation-info="both">
+    <span class="setting-link-main">
+      <span class="codicon codicon-settings-gear dynamic-setting-icon"></span>
+      github.copilot.chat.organizationCustomAgents.enabled
+      
+    <span class="codicon codicon-info vscode-installation-info-icon" aria-hidden="true"></span></span>
+    <button type="button" class="setting-dropdown-trigger" data-vscode-installation-info-action="" aria-haspopup="menu" aria-expanded="false" aria-label="Open setting in VS Code" aria-describedby="vscode-installation-tooltip-16">
+        <svg class="setting-dropdown-chevron" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M7.976 10.072l4.357-4.357.62.618L8.284 11h-.618L3 6.333l.619-.618 4.357 4.357z"></path>
+        </svg>
+    </button>
+    <span class="setting-dropdown-menu" role="menu" aria-label="Open setting">
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="stable" tabindex="0" aria-describedby="vscode-installation-tooltip-16">Open in VS Code</span>
+      <span role="menuitem" class="setting-action-item" data-vscode-installation-info-action="" data-version="insiders" tabindex="-1" aria-describedby="vscode-installation-tooltip-16">Open in VS Code Insiders</span>
+    </span>
+  </span></span> is <code>true</code>, organization and enterprise agents that the signed-in account can access appear in the agents dropdown.</p>
+<p>Learn how to <a href="https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents" class="external-link" target="_blank">create custom agents for your organization<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a>.</p>
+<h2 id="_security-considerations" data-needslink="_security-considerations"><a class="hash-link" href="#_security-considerations">Security considerations</a></h2>
+<p>AI-powered development features can perform actions with user-level permissions. Review <a href="/docs/agents/run/security">AI security considerations</a> before enabling agents or auto-approval.</p>
+<p>For Copilot security, privacy, compliance, and transparency information, see the <a href="https://copilot.github.trust.page/faq" class="external-link" target="_blank">Copilot Trust Center FAQ<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a>.</p>
+<h2 id="_related-resources" data-needslink="_related-resources"><a class="hash-link" href="#_related-resources">Related resources</a></h2>
+<ul>
+<li><a href="/docs/enterprise/policies">VS Code enterprise policy reference</a></li>
+<li><a href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started" class="external-link" target="_blank">Get started with Copilot enterprise-managed settings<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a></li>
+<li><a href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings" class="external-link" target="_blank">Copilot enterprise-managed settings reference<span class="codicon codicon-link-external external-link-icon" aria-hidden="true"></span></a></li>
+</ul>
+
+                <div class="feedback" data-edit-url="https://vscode.dev/github/microsoft/vscode-docs/blob/main/docs/enterprise/manage-ai-settings.md"><section class="feedback-section" aria-labelledby="feedback-heading"><div class="feedback-container"><div class="feedback-left"><div class="widget"><form aria-label="Feedback"><div class="buttons"><h3 class="feedback-header">Was this page helpful?</h3><br><button value="1">Yes</button><button value="0">No</button></div></form></div></div><div class="feedback-middle"><h3>Still need help?</h3><ul class="support-links"><li><a href="https://stackoverflow.com/questions/tagged/vscode" target="_blank" rel="noopener noreferrer"><img alt="" src="/assets/community/sidebar/stackoverflow.svg" aria-hidden="true">Ask the community</a></li><li><a href="https://github.com/microsoft/vscode/issues/new/choose" target="_blank" rel="noopener noreferrer"><img alt="" src="/assets/community/sidebar/github.svg" aria-hidden="true">Request features</a></li><li><a href="https://www.github.com/Microsoft/vscode/issues" target="_blank" rel="noopener noreferrer"><img alt="" src="/assets/community/sidebar/issue.svg" aria-hidden="true">Report issues</a></li></ul></div><div class="feedback-right"><h3>Help us improve</h3><div class="buttons"><button type="button">Edit this page</button></div></div></div></section></div>
+                
+                <div class="body-footer">10/28/2026</div>
+                
+            </main>
+        </div>
+        
+        <!-- Mobile connect widget -->
+        <div class="docs-mobile-widgets visible-xs">
+            <div class="connect-widget"><ul class="connect-links"><li><a href="/feed.xml" target="_blank"><img alt="RSS" src="/assets/community/sidebar/rss.svg">RSS Feed</a></li><li><a href="https://stackoverflow.com/questions/tagged/vscode" target="_blank" rel="noopener noreferrer"><img alt="Stackoverflow" src="/assets/community/sidebar/stackoverflow.svg">Ask questions</a></li><li><a href="https://go.microsoft.com/fwlink/?LinkID=533687" target="_blank" rel="noopener noreferrer"><img alt="Twitter" src="/assets/community/sidebar/twitter.svg">Follow @code</a></li><li id="connect-uservoice"><a href="https://github.com/microsoft/vscode/issues/new/choose" target="_blank" rel="noopener noreferrer"><img alt="GitHub" src="/assets/community/sidebar/github.svg">Request features</a></li><li id="connect-github"><a href="https://www.github.com/microsoft/vscode/issues" target="_blank" rel="noopener noreferrer"><img alt="Issues" src="/assets/community/sidebar/issue.svg">Report issues</a></li><li id="connect-youtube"><a href="https://www.youtube.com/channel/UCs5Y5_7XK8HLDX0SLNwkd3w" target="_blank" rel="noopener noreferrer"><img alt="YouTube" src="/assets/community/sidebar/youtube.svg">Watch videos</a></li></ul></div>
+        </div>
+    </div>
+</div>
+		</main>
+	</div>
+
+	<div id="search-popup-overlay" class="search-popup-overlay" role="dialog" aria-modal="true" aria-label="Search">
+		<div class="search-popup-container">
+			<div class="search-popup-header">
+				<form class="search-popup-form">
+					<div class="input-group">
+						<input type="text" name="q" class="search-box form-control" placeholder="Search the website" aria-label="Search text" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="search-results-listbox" aria-activedescendant="">
+						<span class="input-group-btn">
+							<button tabindex="0" class="btn" type="submit" aria-label="Search">
+								<img class="search-icon-dark" src="/assets/icons/search-dark.svg" alt="Search">
+								<img class="search-icon-light" src="/assets/icons/search.svg" alt="Search">
+							</button>
+						</span>
+					</div>
+				</form>
+				<button class="search-popup-close" type="button" aria-label="Close search"><i class="codicon codicon-close" aria-hidden="true"></i></button>
+			</div>
+			<div class="search-popup-results">
+				<ul class="search-popup-results-list" id="search-results-listbox" role="listbox" aria-label="Search results"></ul>
+			</div>
+			<div class="sr-only" role="status" aria-live="polite" aria-atomic="true" id="search-popup-status"></div>
+		</div>
+	</div>
+	<div class="hf-page-footer">
+		<footer class="ft" data-a11y-beat="footer" data-a11y-canonical="">
+			<div class="ft-in">
+				<div class="ft-top">
+					<a class="ft-ms" href="https://www.microsoft.com" aria-label="Microsoft homepage" rel="noopener noreferrer">
+						<svg class="ft-mark" viewBox="0 0 23 23" aria-hidden="true" focusable="false"><rect width="11" height="11"></rect><rect x="12" width="11" height="11"></rect><rect y="12" width="11" height="11"></rect><rect x="12" y="12" width="11" height="11"></rect></svg>
+						<span class="ft-word">Microsoft</span>
+					</a>
+					<div class="ft-desk">
+						<section class="ft-col">
+							<h2 class="ft-h">Community</h2>
+							<ul class="ft-links" role="list" aria-label="Community">
+								<li><a href="https://github.com/microsoft/vscode" rel="noopener noreferrer">GitHub</a></li>
+								<li><a href="https://www.reddit.com/r/vscode/" rel="noopener noreferrer">Reddit</a></li>
+								<li><a href="https://go.microsoft.com/fwlink/?LinkID=533687" rel="noopener noreferrer">X</a></li>
+								<li><a href="https://bsky.app/profile/vscode.dev" rel="noopener noreferrer">Bluesky</a></li>
+								<li><a href="https://www.linkedin.com/showcase/vs-code" rel="noopener noreferrer">LinkedIn</a></li>
+							</ul>
+						</section>
+						<section class="ft-col">
+							<h2 class="ft-h">Watch &amp; listen</h2>
+							<ul class="ft-links" role="list" aria-label="Watch and listen">
+								<li><a href="https://www.youtube.com/@code" rel="noopener noreferrer">YouTube</a></li>
+								<li><a href="https://www.vscodepodcast.com" rel="noopener noreferrer">Podcast</a></li>
+								<li><a href="https://www.tiktok.com/@vscode" rel="noopener noreferrer">TikTok</a></li>
+								<li><a href="https://www.instagram.com/vscode" rel="noopener noreferrer">Instagram</a></li>
+							</ul>
+						</section>
+						<section class="ft-col">
+							<h2 class="ft-h">Legal</h2>
+							<ul class="ft-links" role="list" aria-label="Legal">
+								<li><a href="https://go.microsoft.com/fwlink/?LinkId=521839" rel="noopener noreferrer">Privacy</a></li>
+								<li><a href="https://www.microsoft.com/legal/terms-of-use" rel="noopener noreferrer">Terms of Use</a></li>
+							</ul>
+						</section>
+						<section class="ft-col">
+							<h2 class="ft-h">Help</h2>
+							<ul class="ft-links" role="list" aria-label="Help">
+								<li><a href="/docs/supporting/faq" rel="noopener noreferrer">Support</a></li>
+								<li><a href="/license" rel="noopener noreferrer">License</a></li>
+							</ul>
+						</section>
+					</div>
+					<div class="ft-mob">
+						<details>
+							<summary>Community</summary>
+							<ul class="ft-links" role="list" aria-label="Community">
+								<li><a href="https://github.com/microsoft/vscode" rel="noopener noreferrer">GitHub</a></li>
+								<li><a href="https://www.reddit.com/r/vscode/" rel="noopener noreferrer">Reddit</a></li>
+								<li><a href="https://go.microsoft.com/fwlink/?LinkID=533687" rel="noopener noreferrer">X</a></li>
+								<li><a href="https://bsky.app/profile/vscode.dev" rel="noopener noreferrer">Bluesky</a></li>
+								<li><a href="https://www.linkedin.com/showcase/vs-code" rel="noopener noreferrer">LinkedIn</a></li>
+							</ul>
+						</details>
+						<details>
+							<summary>Watch &amp; listen</summary>
+							<ul class="ft-links" role="list" aria-label="Watch and listen">
+								<li><a href="https://www.youtube.com/@code" rel="noopener noreferrer">YouTube</a></li>
+								<li><a href="https://www.vscodepodcast.com" rel="noopener noreferrer">Podcast</a></li>
+								<li><a href="https://www.tiktok.com/@vscode" rel="noopener noreferrer">TikTok</a></li>
+								<li><a href="https://www.instagram.com/vscode" rel="noopener noreferrer">Instagram</a></li>
+							</ul>
+						</details>
+						<details>
+							<summary>Legal</summary>
+							<ul class="ft-links" role="list" aria-label="Legal">
+								<li><a href="https://go.microsoft.com/fwlink/?LinkId=521839" rel="noopener noreferrer">Privacy</a></li>
+								<li><a href="https://www.microsoft.com/legal/terms-of-use" rel="noopener noreferrer">Terms of Use</a></li>
+							</ul>
+						</details>
+						<details>
+							<summary>Help</summary>
+							<ul class="ft-links" role="list" aria-label="Help">
+								<li><a href="/docs/supporting/faq" rel="noopener noreferrer">Support</a></li>
+								<li><a href="/license" rel="noopener noreferrer">License</a></li>
+							</ul>
+						</details>
+					</div>
+				</div>
+				<div class="ft-base">
+					<a class="ft-health" href="https://go.microsoft.com/fwlink/?linkid=2259814" rel="noopener noreferrer">Consumer Health Privacy</a>
+					<span class="ft-cookies" style=""><button id="footer-cookie-link" type="button">Manage Cookies</button></span>
+					<p class="ft-agree">By using VS Code, you agree to its <a href="/license">license</a> and <a href="https://go.microsoft.com/fwlink/?LinkId=521839" rel="noopener noreferrer">privacy statement</a>.</p>
+					<a class="ft-choices" href="https://aka.ms/YourCaliforniaPrivacyChoices" rel="noopener noreferrer">
+						<svg class="ft-pc" viewBox="0 0 30 14" aria-hidden="true" focusable="false"><path fill="var(--pc-light)" d="M7.4 12.8h6.8l3.1-11.6H7.4C4.2 1.2 1.6 3.8 1.6 7s2.6 5.8 5.8 5.8z"></path><path fill="var(--pc-blue)" d="M22.6 0H7.4c-3.9 0-7 3.1-7 7s3.1 7 7 7h15.2c3.9 0 7-3.1 7-7s-3.2-7-7-7zm-21 7c0-3.2 2.6-5.8 5.8-5.8h9.9l-3.1 11.6H7.4c-3.2 0-5.8-2.6-5.8-5.8z"></path><path fill="var(--pc-light)" d="M24.6 4c.2.2.2.6 0 .8L22.5 7l2.2 2.2c.2.2.2.6 0 .8s-.6.2-.8 0l-2.2-2.2-2.2 2.2c-.2.2-.6.2-.8 0s-.2-.6 0-.8L20.8 7l-2.2-2.2c-.2-.2-.2-.6 0-.8s.6-.2.8 0l2.2 2.2L23.8 4c.2-.2.6-.2.8 0z"></path><path fill="var(--pc-blue)" d="M12.7 4.1c.2.2.3.6.1.8L8.6 9.8c-.1.1-.2.2-.3.2-.2.1-.5.1-.7-.1L5.4 7.7c-.2-.2-.2-.6 0-.8s.6-.2.8 0L8 8.6l3.8-4.5c.2-.2.6-.2.9 0z"></path></svg>
+						<span>Your Privacy Choices</span>
+					</a>
+				</div>
+			</div>
+		</footer>
+	</div>
+	<script type="module">
+		document.addEventListener('DOMContentLoaded', () => {
+			const copilotDeepLinks = document.querySelectorAll('.copilot-deep-link');
+			if (copilotDeepLinks.length === 0) {
+				return;
+			}
+			if (window.innerWidth < 992) {
+				for (const link of copilotDeepLinks) {
+					link.href = 'https://aka.ms/vscode-activatecopilotfree';
+				}
+			}
+		});
+	</script>
+
+	<script src="/dist/index.js?v=a0ff12b5a842f168" onload="document.documentElement.classList.remove('site-header-loading')" onerror="document.documentElement.classList.remove('site-header-loading')"></script>
+
+	
+
+	<script type="application/ld+json">
+		{
+			"@context" : "http://schema.org",
+			"@type" : "SoftwareApplication",
+			"name" : "Visual Studio Code",
+			"softwareVersion": "1.144",
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "USD"
+			},
+			"applicationCategory": "DeveloperApplication",
+			"applicationSubCategory": "AI Code Editor",
+			"description": "Visual Studio Code is a free, open source AI code editor for agent-first development. Build with AI agents, manage multi-agent workflows, and code across any environment.",
+			"alternateName": "VS Code",
+			"datePublished": "2021-11-03",
+			"operatingSystem": "Mac, Linux, Windows",
+			"logo": "https://code.visualstudio.com/assets/apple-touch-icon.png",
+			"screenshot": "https://code.visualstudio.com/assets/images/product-screenshot.png",
+			"releaseNotes": "https://code.visualstudio.com/updates",
+			"downloadUrl": "https://code.visualstudio.com/download",
+			"license": "https://code.visualstudio.com/license",
+			"softwareRequirements": "https://code.visualstudio.com/docs/supporting/requirements",
+			"url" : "https://code.visualstudio.com",
+			"author": {
+				"@type": "Organization",
+				"name": "Microsoft"
+			},
+			"publisher": {
+				"@type": "Organization",
+				"name": "Microsoft"
+			},
+			"maintainer": {
+				"@type": "Organization",
+				"name": "Microsoft"
+			},
+			"potentialAction": {
+				"@type": "SearchAction",
+				"target": "https://code.visualstudio.com/Search?q={search_term_string}",
+				"query-input": "required name=search_term_string"
+			},
+			"sameAs" : [
+				"https://en.wikipedia.org/wiki/Visual_Studio_Code",
+				"https://twitter.com/code",
+				"https://www.youtube.com/code",
+				"https://www.tiktok.com/@vscode",
+				"https://github.com/microsoft/vscode"
+			]
+		}
+	</script>
+
+
+</body></html>

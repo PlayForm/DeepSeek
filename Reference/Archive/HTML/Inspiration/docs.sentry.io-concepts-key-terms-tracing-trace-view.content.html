@@ -1,0 +1,91 @@
+<div><div class="radix-themes"><div>
+<div class="tw-app has-toc"><section class="px-0 flex relative"><main class="main-content flex mt-[var(--header-height)] flex-1"><div class="pt-6 px-6 prose dark:prose-invert max-w-full text-[var(--gray-12)] prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-code:font-mono marker:text-[var(--darkPurple)] marker:font-medium prose-li:my-1 prose-headings:mt-0 prose-headings:font-medium prose-headings:relative prose-headings:text-[var(--gray-12)] prose-blockquote:font-normal prose-blockquote:border-l-[3px] prose-em:font-normal prose-blockquote:text-[var(--gray-12)] prose-img:my-2 prose-strong:text-[var(--gray-12)] w-full min-w-0" id="doc-content">
+<div class="flex items-center">
+<ul class="not-prose list-none flex flex-wrap">
+
+<li class="style_breadcrumb-item__bDEaT"><a href="/concepts/">Concepts &amp; Reference</a></li>
+
+
+
+</ul> <div class="ml-auto hidden sm:block"><div class="relative inline-block"><div class="inline-flex items-center h-9 border border-gray-200 dark:border-[var(--gray-6)] rounded-full overflow-hidden bg-white dark:bg-[var(--gray-2)]"><button class="inline-flex items-center text-nowrap h-full text-gray-700 dark:text-[var(--foreground)] bg-transparent border-none cursor-pointer transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-[var(--gray-a4)] active:bg-gray-100 dark:active:bg-[var(--gray-5)] focus:bg-gray-50 dark:focus:bg-[var(--gray-a4)] outline-none gap-2 px-3.5 text-sm font-medium disabled:opacity-50"><span>Copy page</span></button></div></div></div>
+</div>
+<div>
+<hgroup><h1>Trace View</h1>
+<h2>Learn more about the Trace View page, where you can drill down into the details of a single trace, allowing you to debug slow services, identify related errors, and find other bottlenecks.</h2></hgroup><div id="main">
+<p>The Trace View page is designed to be your one-stop-shop when debugging performance or errors. It gives you full context on what was happening when an error or performance issue occurred, all in one place. The waterfall Trace View allows you to see everything that may have occurred during a trace, including errors, performance issues, logs, and any profiles that may have been collected.</p>
+<p>In addition, looking at the Trace View allows you to drill down into a single trace so you can visualize the high-level spans that took place within that trace. This makes debugging slow services, identifying related errors, and rooting out bottlenecks easier and faster, since you no longer have to navigate around multiple pages of the Sentry product.</p>
+
+<h2 id="product-walkthrough-trace-view-page"><a class="autolink-heading" href="#product-walkthrough-trace-view-page">Product Walkthrough: Trace View Page</a></h2>
+<p>Sentry's default visualization of a <a class="" href="/concepts/key-terms/tracing/">trace</a> is a waterfall-like structure, where the entries in the list are organized chronologically and through ancestry (child spans will fall under their parents). This allows you to follow the order of operations and drill into sub-operations.</p>
+<p>On the left side is a list of operations, and on the right is their duration and any events, such as errors, which may have occurred in that timeframe.</p>
+<h3 id="time-compression"><a class="autolink-heading" href="#time-compression">Time compression</a></h3>
+<p>Time compression shrinks empty gaps between spans in the waterfall. This brings spans closer together so you can see more of the trace at once and focus on where work happens.</p>
+
+<h3 id="pin-an-attribute"><a class="autolink-heading" href="#pin-an-attribute">Pin an attribute</a></h3>
+<p>Pin an <a class="" href="/concepts/key-terms/tracing/#what-are-span-attributes-and-metrics">attribute</a> to compare its values across spans without opening each span individually. Pinned attributes appear as columns in the waterfall and stay visible as you explore the trace.</p>
+<p>To pin an attribute:</p>
+<ol>
+<li>Select a span in the waterfall to open its side panel.</li>
+<li>Find the attribute in the <strong>Attributes</strong> tree.</li>
+<li>Open the attribute's actions menu and select <strong>Pin to waterfall</strong>.</li>
+</ol>
+
+<p>For example, pin <code>sdk.name</code> to see which SDK recorded each span.</p>
+
+<h3 id="jump-to-a-web-vital"><a class="autolink-heading" href="#jump-to-a-web-vital">Jump to a Web Vital</a></h3>
+<p>Click a <a class="" href="/product/dashboards/sentry-dashboards/frontend/web-vitals/web-vitals-concepts/">Web Vital</a> pill in the trace summary or on the waterfall to zoom to the point where Sentry recorded that metric. The waterfall brings the surrounding spans into view so you can investigate what happened at that moment.</p>
+
+<h3 id="previous-and-next-traces"><a class="autolink-heading" href="#previous-and-next-traces">Previous and Next Traces</a></h3>
+<p>As users interact with an application, they generate multiple traces. For example, when a user loads a page in their browser and then navigates to another page, this creates two separate traces: one for the initial pageload and another for the subsequent navigation. By default, Sentry will link the traces together.</p>
+<p>If linked traces are available, you will see "Previous" or "Next" buttons next to the search bar and "Open in Explore" button, near the top of the trace view. These buttons allow you to navigate between traces that occurred before or after the current one.</p>
+<h3 id="helpful-tips"><a class="autolink-heading" href="#helpful-tips">Helpful Tips</a></h3>
+<p>Because debugging often involves multiple people or teams, Sentry makes it easy to draw attention to specific areas of the trace and share a link that shows what you've highlighted with your colleagues. To do this, click on the row you'd like to draw attention to and share the resulting URL. Your colleague will see exactly what you want them to.</p>
+<p>Whatever you highlight will also be saved if you navigate away from the page and will still be there when you use your browser's back and forward buttons.</p>
+<p>If you're doing a comparison and want an easy way to go back and forth between highlighted areas of interest in your trace, you can pin the tabs. When a tab is pinned, the view will be persistent throughout your session.</p>
+<h2 id="troubleshooting"><a class="autolink-heading" href="#troubleshooting">Troubleshooting</a></h2>
+<h3 id="orphan-traces-and-broken-subtraces"><a class="autolink-heading" href="#orphan-traces-and-broken-subtraces">Orphan Traces and Broken Subtraces</a></h3>
+<p>In a fully instrumented system, a span in one service will connect to a transaction in a subsequent service. For a variety of reasons, a transaction in a service may not arrive in Sentry. When Sentry encounters these types of transactions within a trace, the transactions are linked with a dashed line since they can no longer be directly connected to the root, creating an orphan trace.</p>
+<p>In addition, broken subtraces can occur when Sentry receives an error for a trace, but the corresponding transaction does not exist. Such errors are linked using dashed lines and clicking on the row takes you to the corresponding <strong>Issue Details</strong> page.</p>
+<p>Also, in these cases you can open <a class="" href="https://sentry.io/orgredirect/organizations/:orgslug/explore/traces/">trace explorer</a> to see all the events in the trace.</p>
+<p>Broken subtraces may be caused by:</p>
+<ul>
+<li>SDK sampling. Setting a sample rate that's too low may prevent the SDK from sending a transaction. We recommend <a class="" href="/organization/dynamic-sampling/#deciding-on-your-sdk-sample-rate">sending us all of your transaction data</a>.</li>
+<li>
+<a class="" href="/platforms/javascript/troubleshooting/#dealing-with-ad-blockers">Ad blockers</a> may prevent transactions in browsers being sent, but HTTP requests to backend projects will still create child transactions</li>
+<li>
+<a class="" href="/pricing/quotas/#limiting-events">Rate-limiting</a> on a project may cause only some events to be sent to Sentry</li>
+<li>
+<a class="" href="/organization/membership/#restricting-access">Project permissions</a> may mean you do not have access to transactions in another project</li>
+<li>
+<a class="" href="/pricing/quotas/">Differences in quota limits</a> between transactions and errors. When a quota limit is reached - for example, for transactions - an error is received, but corresponding transaction is not.</li>
+<li>Exceeding the span limit. Transactions are associated via the child spans of the parent transaction, but if the number of spans exceed the limit, the association cannot be made</li>
+</ul>
+<h3 id="multiple-roots"><a class="autolink-heading" href="#multiple-roots">Multiple Roots</a></h3>
+<p>Each trace ID should have only one root, a transaction without any parents. Automatic instrumentation should prevent multiple roots; however, if the trace ID of your transactions is being set using custom instrumentation, you may encounter multiple roots.</p>
+</div>
+<div class="grid grid-cols-2 gap-4 not-prose mt-16">
+<div class="col-span-1"><a class="no-underline" href="/concepts/key-terms/tracing/distributed-tracing/"><div class="py-3 px-4 border-2 dark:[border-color:var(--gray-4)] rounded-md transition-colors hover:[border-color:var(--accent)] text-left">
+<div class="text-sm [color:var(--foreground)]">Previous</div>
+<div class="flex items-center gap-1 font-[500] justify-start">Distributed Tracing</div>
+</div></a></div>
+<div class="col-span-1"><a class="no-underline" href="/concepts/key-terms/agent-tracing/"><div class="py-3 px-4 border-2 dark:[border-color:var(--gray-4)] rounded-md transition-colors hover:[border-color:var(--accent)] text-right">
+<div class="text-sm [color:var(--foreground)]">Next</div>
+<div class="flex items-center gap-1 font-[500] justify-end">Agent Tracing - What It Is and How To Use It</div>
+</div></a></div>
+</div>
+<div class="space-y-4 py-4 border-[var(--gray-6)]">
+<div class="flex items-center gap-4 text-sm mt-8">
+<span class="font-medium">Was this helpful?</span><div class="flex">
+<button class="py-1 px-2 gap-4 hover:bg-[var(--gray-3)] rounded flex items-center justify-center">Yes 👍</button><button class="py-1 px-2 gap-4 hover:bg-[var(--gray-3)] rounded flex items-center justify-center">No 👎</button>
+</div>
+</div>
+
+</div>
+<div class="styles_cta__uq_BB">
+<small><strong>Help improve this content</strong></small><small>Our documentation is open source and available on GitHub. Your contributions are welcome, whether fixing a typo (drat!) or suggesting an update ("yeah, this would be better").<div>
+<a href="https://docs.sentry.io/contributing/">How to contribute</a>   |  <a href="https://github.com/getsentry/sentry-docs/edit/master/docs/concepts/key-terms/tracing/trace-view.mdx">Edit this page</a>   |  <a href="https://github.com/getsentry/sentry-docs/issues/new/choose">Create a docs issue</a>   |  <a href="https://www.sentry.help/en/">Get support</a> </div></small>
+</div>
+</div>
+</div></main></section></div>
+
+</div></div></div>

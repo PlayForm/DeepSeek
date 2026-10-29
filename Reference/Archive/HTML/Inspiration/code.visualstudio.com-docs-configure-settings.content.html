@@ -1,0 +1,484 @@
+<div><div id="main">
+<div class="updates-banner js-hidden">
+<div class="container banner-messages">
+<p class="message active"><a href="https://githubuniverse.com/?utm_source=website&amp;utm_medium=Social&amp;utm_campaign=code_livestream&amp;source=vsc-website-banner">Join VS Code at GitHub Universe!</a></p>
+</div>
+</div>
+
+
+<main id="main-content">
+<div class="body-content docs docs-github-layout">
+<div class="docs-layout-wrapper">
+
+
+<div class="docs-content-wrapper">
+
+
+
+<main class="docs-main-content body">
+<h1>User and workspace settings</h1>
+<div class="docs-markdown-actions vscode-installation-info-host">
+<div class="docs-markdown-dropdown">
+<button class="docs-markdown-btn-main">
+<span>Copy as Markdown</span>
+</button>
+<ul class="docs-markdown-menu">
+<li>
+<button>
+<span>Copy as Markdown</span>
+</button>
+</li>
+<li>
+<a href="/docs/configure/settings.md">
+<span>View as Markdown</span>
+</a>
+</li>
+<li>
+<a href="vscode://GitHub.Copilot-Chat/chat?prompt=Read%20https%3A%2F%2Fcode.visualstudio.com%2Fdocs%2Fconfigure%2Fsettings%20and%20answer%20questions%20about%20the%20content.&amp;windowId=_blank">
+<span>Ask in VS Code</span>
+</a>
+</li>
+<li>
+<a href="vscode-insiders://GitHub.Copilot-Chat/chat?prompt=Read%20https%3A%2F%2Fcode.visualstudio.com%2Fdocs%2Fconfigure%2Fsettings%20and%20answer%20questions%20about%20the%20content.&amp;windowId=_blank">
+<span>Ask in VS Code Insiders</span>
+</a>
+</li>
+</ul>
+</div>
+</div>
+
+<p>You can configure Visual Studio Code to your liking through its various settings. Nearly every part of VS Code's editor, user interface, and functional behavior has options you can modify.</p>
+<p>VS Code provides different scopes for settings:</p>
+<ul>
+<li>
+<strong>User settings</strong> - Settings that apply globally to any instance of VS Code you open.</li>
+<li>
+<strong>Workspace settings</strong> - Settings stored inside your workspace and only apply when the workspace is opened.</li>
+</ul>
+<p>VS Code stores setting values in a settings JSON file. You can change settings values either by editing the settings JSON file or by using the <a href="#_settings-editor">Settings editor</a>, which provides a graphical interface to manage settings.</p>
+<h2 id="_user-settings"><a class="hash-link" href="#_user-settings">User settings</a></h2>
+<p>User settings are your personal settings for customizing VS Code. These settings apply globally to any instance of VS Code you open. For example, if you set the editor font size to 14 in your user settings, it will be 14 in all instances of VS Code on your computer.</p>
+<p>You can access your user settings in a few ways:</p>
+<ul>
+<li>Select the <strong>Preferences: Open User Settings</strong> command in the Command Palette (<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧⌘P, Windows: Ctrl+Shift+P">Ctrl+Shift+P</span>)</li>
+<li>Select the <strong>User</strong> tab in the <a href="#_settings-editor">Settings editor</a> (<span class="dynamic-keybinding keybinding linux" title="macOS: ⌘,, Windows: Ctrl+,">Ctrl+,</span>)</li>
+<li>Select the <strong>Preferences: Open User Settings (JSON)</strong> command in the Command Palette (<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧⌘P, Windows: Ctrl+Shift+P">Ctrl+Shift+P</span>)</li>
+</ul>
+
+<h2 id="_workspace-settings"><a class="hash-link" href="#_workspace-settings">Workspace settings</a></h2>
+<p>Workspace settings are specific to a project and override user settings. If you have specific settings that you want to apply to a specific project, you can use workspace settings. For example, for a backend server project, you might want to set the <code>files.exclude</code> setting to exclude the <code>node_modules</code> folder from the File Explorer.</p>
+<div class="markdown-alert note">
+<p>A VS Code "workspace" is usually just your project root folder. You can also have more than one root folder in a VS Code workspace through a feature called <a href="/docs/editing/workspaces/multi-root-workspaces">Multi-root workspaces</a>. Get more info about <a href="/docs/editing/workspaces/workspaces">VS Code workspaces</a>.</p>
+</div>
+<p>VS Code stores workspace settings at the root of the project in a <code>.vscode</code> folder. This makes it easy to share settings with others in a version-controlled (for example, Git) project.</p>
+<p>You can access the workspace settings in a few ways:</p>
+<ul>
+<li>Select the <strong>Preferences: Open Workspace Settings</strong> command in the Command Palette (<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧⌘P, Windows: Ctrl+Shift+P">Ctrl+Shift+P</span>)</li>
+<li>Select the <strong>Workspace</strong> tab in the <a href="#_settings-editor">Settings editor</a> (<span class="dynamic-keybinding keybinding linux" title="macOS: ⌘,, Windows: Ctrl+,">Ctrl+,</span>)</li>
+<li>Select the <strong>Preferences: Open Workspace Settings (JSON)</strong> command in the Command Palette (<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧⌘P, Windows: Ctrl+Shift+P">Ctrl+Shift+P</span>)</li>
+</ul>
+
+<p>Not all user settings are available as workspace settings. For example, application-wide settings related to updates and security can not be overridden by Workspace settings.</p>
+<h2 id="_settings-editor"><a class="hash-link" href="#_settings-editor">Settings editor</a></h2>
+<p>The Settings editor provides a graphical interface to manage both user and workspace settings. To open the Settings editor, navigate to <span class="filePreferencesPath"><strong>File</strong> &gt; <strong>Preferences</strong></span> &gt; <strong>Settings</strong>. Alternately, open the Settings editor from the <strong>Command Palette</strong> (<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧⌘P, Windows: Ctrl+Shift+P">Ctrl+Shift+P</span>) with <strong>Preferences: Open Settings</strong> or use the keyboard shortcut (<span class="dynamic-keybinding keybinding linux" title="macOS: ⌘,, Windows: Ctrl+,">Ctrl+,</span>).</p>
+<p>By default, the Settings editor opens in a <a href="/docs/editing/getting-started/userinterface#_modal-editors">modal overlay</a> on top of the editor area. You can change this behavior with the <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      workbench.editor.useModal
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> setting. When you open the Settings JSON file, it opens as a regular editor tab in the main window.</p>
+<p>When you open the Settings editor, you can search and discover the settings you are looking for. When you search using the search bar, the Settings editor filters the settings to only show those that match your criteria. This makes finding settings quick and easy.</p>
+
+<p>VS Code applies changes to settings directly as you change them. You can identify settings that you modified by the colored bar on the left of the setting, similar to modified lines in the editor.</p>
+<p>In the example below, the Side Bar location and File Icon Theme were changed.</p>
+
+<p>The gear icon alongside the setting (<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧F9, Windows: Shift+F9">Shift+F9</span>) opens a context menu with options to reset a setting to its default value, and to copy the setting ID, copy a JSON name-value pair, or copy the settings URL.</p>
+
+<div class="markdown-alert tip">
+<p>A settings URL enables you to navigate directly to a specific setting in the Settings editor from the browser. The URL is in the format <code>vscode://settings/&lt;settingName&gt;</code>, where <code>&lt;settingName&gt;</code> is the ID of the setting you want to navigate to. For example, to navigate to the <code>workbench.colorTheme</code> setting, use the URL <code>vscode://settings/workbench.colorTheme</code>.</p>
+</div>
+<h3 id="_settings-groups"><a class="hash-link" href="#_settings-groups">Settings groups</a></h3>
+<p>Settings are represented in groups, so that you can navigate to related settings quickly. There is a <strong>Commonly Used</strong> group at the top, which shows popular customization settings.</p>
+<p>In the following example, the source control settings are focused by selecting <strong>Source Control</strong> in the tree view.</p>
+
+<div class="markdown-alert note">
+<p>VS Code extensions can also add their own custom settings, and those settings are visible under an <strong>Extensions</strong> section.</p>
+</div>
+<h3 id="_settings-editor-filters"><a class="hash-link" href="#_settings-editor-filters">Settings editor filters</a></h3>
+<p>The Settings editor search bar has several filters to make it easier to manage your settings. To the right of the search bar is a filter button with a funnel icon that provides options to easily add a filter to the search bar.</p>
+<h4 id="_modified-settings"><a class="hash-link" href="#_modified-settings">Modified settings</a></h4>
+<p>To check which settings you have configured, there is a <code>@modified</code> filter in the search bar. A setting shows up under this filter if its value differs from the default value, or if its value is explicitly set in the respective settings JSON file.</p>
+<p>This filter can be useful if you have forgotten whether you configured a setting, or if the editor is not behaving as you expect because you accidentally configured a setting.</p>
+
+<h4 id="_other-filters"><a class="hash-link" href="#_other-filters">Other filters</a></h4>
+<p>There are several other handy filters to help with searching through settings. Type the <code>@</code> symbol in the search bar to discover the different filters.</p>
+
+<p>Here are some of the filters available:</p>
+<ul>
+<li>
+<code>@ext</code>: settings specific to an extension. You provide the extension ID such as <code>@ext:ms-python.python</code>.</li>
+<li>
+<code>@feature</code>: settings specific to a <strong>Features</strong> subgroup. For example, <code>@feature:explorer</code> shows settings of the File Explorer.</li>
+<li>
+<code>@haspolicy</code>: settings that are controlled by your <a href="/docs/enterprise/policies">organization</a>.</li>
+<li>
+<code>@id</code>: find a setting based on the setting ID. For example, <code>@id:workbench.activityBar.visible</code>.</li>
+<li>
+<code>@lang</code>: apply a language filter based on a language ID. For example, <code>@lang:typescript</code>. See <a href="#_language-specific-editor-settings">Language-specific editor settings</a> for more details.</li>
+<li>
+<code>@tag</code>: settings specific to a system of VS Code. For example, <code>@tag:workspaceTrust</code> for settings related to <a href="/docs/editing/workspaces/workspace-trust">Workspace Trust</a>, <code>@tag:accessibility</code> for settings related to accessibility, or <code>@tag:advanced</code> for advanced VS Code settings. Advanced settings are intended for specialized scenarios. By default, advanced settings are hidden from search results unless you use the <code>@tag:advanced</code> filter. To always show advanced settings in the Settings editor, enable <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      workbench.settings.alwaysShowAdvancedSettings
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span>.</li>
+</ul>
+<p>The search bar remembers your settings search queries and supports undo or redo (<span class="dynamic-keybinding keybinding linux" title="macOS: ⌘Z, Windows: Ctrl+Z">Ctrl+Z</span>/<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧⌘Z, Windows: Ctrl+Y">Ctrl+Y</span>). You can quickly clear a search term or filter with the <strong>Clear Settings Search Input</strong> button at the right of the search bar.</p>
+
+<h2 id="_extension-settings"><a class="hash-link" href="#_extension-settings">Extension settings</a></h2>
+<p>Installed VS Code extensions can also contribute their own settings, which you can review under the <strong>Extensions</strong> section of the Settings editor.</p>
+
+<p>You can also review an extension's settings from the Extensions view (<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧⌘X, Windows: Ctrl+Shift+X">Ctrl+Shift+X</span>) by selecting the extension and reviewing the <strong>Feature Contributions</strong> tab.</p>
+
+<p>Extension authors can learn more about adding custom settings in the <a href="/api/references/contribution-points#contributes.configuration">configuration contribution point documentation</a>.</p>
+<h2 id="_settings-json-file"><a class="hash-link" href="#_settings-json-file">Settings JSON file</a></h2>
+<p>VS Code stores setting values in a <code>settings.json</code> file. The Settings editor is the user interface that enables you to review and modify setting values that are stored in a <code>settings.json</code> file.</p>
+<p>You can also review and edit the <code>settings.json</code> file directly by opening it in the editor with the <strong>Preferences: Open User Settings (JSON)</strong> or <strong>Preferences: Open Workspace Settings (JSON)</strong> command in the Command Palette (<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧⌘P, Windows: Ctrl+Shift+P">Ctrl+Shift+P</span>).</p>
+<p>Settings are written as JSON by specifying the setting ID and value. You can quickly copy the corresponding JSON name-value pair for a setting by selecting the setting's gear icon in the Settings editor, and then selecting the <strong>Copy Setting as JSON</strong> action.</p>
+
+<p>The <code>settings.json</code> file has full IntelliSense with smart completions for settings and values and description hovers. Errors due to incorrect setting names or JSON formatting are also highlighted.</p>
+
+<p>Some settings can only be edited in <code>settings.json</code> such as <strong>Workbench: Color Customizations</strong> and show an <strong>Edit in settings.json</strong> link in the Settings editor.</p>
+
+<div class="markdown-alert tip">
+<p>If you prefer to always work directly with <code>settings.json</code>, you can set <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      workbench.settings.editor
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> to <code>json</code>. Then, <span class="filePreferencesPath"><strong>File</strong> &gt; <strong>Preferences</strong></span> &gt; <strong>Settings</strong> and the keybinding <span class="dynamic-keybinding keybinding linux" title="macOS: ⌘,, Windows: Ctrl+,">Ctrl+,</span> always open the <code>settings.json</code> file and not the Setting editor UI.</p>
+</div>
+<h3 id="_settings-file-locations"><a class="hash-link" href="#_settings-file-locations">Settings file locations</a></h3>
+<h4 id="_user-settingsjson-location"><a class="hash-link" href="#_user-settingsjson-location">User settings.json location</a></h4>
+<p>Depending on your platform, the user settings file is located here:</p>
+<ul>
+<li>
+<strong>Windows</strong> <code>%APPDATA%\Code\User\settings.json</code>
+</li>
+<li>
+<strong>macOS</strong> <code>$HOME/Library/Application\ Support/Code/User/settings.json</code>
+</li>
+<li>
+<strong>Linux</strong> <code>$HOME/.config/Code/User/settings.json</code>
+</li>
+</ul>
+<h4 id="_workspace-settingsjson-location"><a class="hash-link" href="#_workspace-settingsjson-location">Workspace settings.json location</a></h4>
+<p>The workspace settings file is located under the <code>.vscode</code> folder in your root folder. When you add a Workspace Settings <code>settings.json</code> file to your project or source control, the settings for the project will be shared by all users of that project.</p>
+
+<div class="markdown-alert note">
+<p>For a <a href="/docs/editing/workspaces/multi-root-workspaces#_settings">Multi-root Workspace</a>, workspace settings are located inside the workspace configuration file.</p>
+</div>
+<h2 id="_reset-settings"><a class="hash-link" href="#_reset-settings">Reset settings</a></h2>
+<p>You can always reset a setting to the default value by hovering over a setting to show the gear icon, clicking on the gear icon, and then selecting the <strong>Reset Setting</strong> action.</p>
+<p>While you can reset settings individually via the Settings editor, you can reset all changed settings by opening <code>settings.json</code> and deleting the entries between the braces <code>{}</code>. Be careful since there is no way to recover your previous setting values.</p>
+<h2 id="_language-specific-editor-settings"><a class="hash-link" href="#_language-specific-editor-settings">Language specific editor settings</a></h2>
+<p>One way to customize language-specific settings is by opening the Settings editor, pressing on the filter button, and selecting the language option to add a language filter. Alternatively, one can directly type a language filter of the form <code>@lang:languageId</code> into the search widget. The settings that show up will be configurable for that specific language, and will show the setting value specific to that language, if applicable.</p>
+<p>When you modify a setting while there is a language filter in place, the setting is configured in the given scope for that language.
+For example, when modifying the user-scope <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      diffEditor.codeLens
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> setting while there is a <code>@lang:css</code> filter in the search widget, the Settings editor saves the new value to the CSS-specific section of the user settings file.</p>
+
+<div class="markdown-alert note">
+<p>If you enter more than one language filter in the search widget, the current behavior is that only the first language filter will be used.</p>
+</div>
+<p>Another way to customize your editor by language is by running the global command <strong>Preferences: Configure Language Specific Settings</strong> (command ID: <code>workbench.action.configureLanguageBasedSettings</code>) from the <strong>Command Palette</strong> (<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧⌘P, Windows: Ctrl+Shift+P">Ctrl+Shift+P</span>) which opens the language picker. Select the language you want. Then, the Settings editor opens with a language filter for the selected language, which allows you to modify language-specific settings for that language. Though, if you have the <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      workbench.settings.editor
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> setting set to <code>json</code>, then the <code>settings.json</code> file opens with a new language entry where you can add applicable settings.</p>
+
+<p>Select the language via the dropdown:</p>
+
+<p>Now you can start editing settings specifically for that language:</p>
+
+<p>Or, if <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      workbench.settings.editor
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> is set to <code>json</code>, now you can start adding language-specific settings to your user settings:</p>
+
+<p>If you have a file open and you want to customize the editor for this file type, select the Language Mode in the Status Bar to the bottom-right of the VS Code window. This opens the Language Mode picker with an option <strong>Configure 'language_name' language based settings</strong>. Selecting this opens your user <code>settings.json</code> with the language entry where you can add applicable settings.</p>
+<p>Language-specific editor settings always override non-language-specific editor settings, even if the non-language-specific setting
+has a narrower scope. For example, language-specific user settings override non-language-specific workspace settings.</p>
+<p>You can scope language-specific settings to the workspace by placing them in the workspace settings just like other settings. If you have settings defined for the same language in both user and workspace scopes, then they are merged by giving precedence to the ones defined in the workspace.</p>
+<p>The following example can be pasted into a settings JSON file to customize editor settings for the <code>typescript</code> and <code>markdown</code> language modes.</p>
+<div class="code-block-wrapper"><pre class="shiki"><code>
+<span class="line"><span>  "[typescript]"</span><span>: {</span></span>
+<span class="line"><span>    "editor.formatOnSave"</span><span>: </span><span>true</span><span>,</span></span>
+<span class="line"><span>    "editor.formatOnPaste"</span><span>: </span><span>true</span></span>
+
+<span class="line"><span>  "[markdown]"</span><span>: {</span></span>
+<span class="line"><span>    "editor.formatOnSave"</span><span>: </span><span>true</span><span>,</span></span>
+<span class="line"><span>    "editor.wordWrap"</span><span>: </span><span>"on"</span><span>,</span></span>
+<span class="line"><span>    "editor.renderWhitespace"</span><span>: </span><span>"all"</span><span>,</span></span>
+<span class="line"><span>    "editor.acceptSuggestionOnEnter"</span><span>: </span><span>"off"</span></span>
+
+
+</code></pre></div>
+<p>You can use IntelliSense in <code>settings.json</code> to help you find language-specific settings. All editor settings and some non-editor settings are supported. Some languages have default language-specific settings already set, which you can review in <code>defaultSettings.json</code> by running the <strong>Preferences: Open Default Settings</strong> command.</p>
+<h3 id="_multiple-language-specific-editor-settings"><a class="hash-link" href="#_multiple-language-specific-editor-settings">Multiple language-specific editor settings</a></h3>
+<p>You can configure language specific editor settings for multiple languages at once. The following example shows how you can customize settings for <code>javascript</code> and <code>typescript</code> languages together in your <code>settings.json</code> file:</p>
+<div class="code-block-wrapper"><pre class="shiki"><code><span class="line"><span>"[javascript][typescript]"</span><span>: {</span></span>
+<span class="line"><span>  "editor.maxTokenizationLineLength"</span><span>: </span><span>2500</span></span>
+
+</code></pre></div>
+<p>If a setting is configured in both a single-language block and a multiple-language block, the single-language value takes precedence. This precedence is applied before the normal setting scope precedence rules.</p>
+<h2 id="_profile-settings"><a class="hash-link" href="#_profile-settings">Profile settings</a></h2>
+<p>You can use <a href="/docs/configure/profiles">profiles in VS Code</a> to create sets of customizations and quickly switch between them. For example, they are a great way to customize VS Code for a specific programming language.</p>
+<p>When you switch to a profile, the user settings are scoped to only that profile. When you switch to another profile, the user settings of that other profile are applied. This way, you can have different settings for different profiles.</p>
+<p>The user settings JSON file for a profile is located in the following directory:</p>
+<ul>
+<li>
+<strong>Windows</strong> <code>%APPDATA%\Code\User\profiles\&lt;profile ID&gt;\settings.json</code>
+</li>
+<li>
+<strong>macOS</strong> <code>$HOME/Library/Application\ Support/Code/User/profiles/&lt;profile ID&gt;/settings.json</code>
+</li>
+<li>
+<strong>Linux</strong> <code>$HOME/.config/Code/User/profiles/&lt;profile ID&gt;/settings.json</code>
+</li>
+</ul>
+<p>The <code>&lt;profile ID&gt;</code> is the unique identifier of the profile. For each profile that overrides settings, there will be a corresponding profile settings file.</p>
+<div class="markdown-alert note">
+<p>The <code>settings.json</code> file for a profile is only created when you modify a setting for that profile.</p>
+</div>
+<p>When you're using a non-default profile, you can access the <code>settings.json</code> file that is associated with the default profile by using the <strong>Preferences: Open Application Settings (JSON)</strong> command in the Command Palette (<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧⌘P, Windows: Ctrl+Shift+P">Ctrl+Shift+P</span>).</p>
+<h2 id="_settings-precedence"><a class="hash-link" href="#_settings-precedence">Settings precedence</a></h2>
+<p>Configurations can be overridden at multiple levels by the different setting scopes. In the following list, <strong>later scopes override earlier scopes</strong>:</p>
+<ul>
+<li>Default settings - This scope represents the default unconfigured setting values.</li>
+<li>User settings - Apply globally to all VS Code instances.</li>
+<li>Remote settings - Apply to a remote machine opened by a user.</li>
+<li>Workspace settings - Apply to the open folder or workspace.</li>
+<li>Workspace Folder settings - Apply to a specific folder of a <a href="/docs/editing/workspaces/multi-root-workspaces">multi-root workspace</a>.</li>
+<li>Language-specific default settings - These are language-specific default values that can be contributed by extensions.</li>
+<li>Language-specific user settings - Same as User settings, but specific to a language.</li>
+<li>Language-specific remote settings - Same as Remote settings, but specific to a language.</li>
+<li>Language-specific workspace settings - Same as Workspace settings, but specific to a language.</li>
+<li>Language-specific workspace folder settings - Same as Workspace Folder settings, but specific to a language.</li>
+<li>Policy settings - Set by the system administrator, these values always override other setting values.</li>
+</ul>
+<p>Setting values can be of various types:</p>
+<ul>
+<li>String - <code>"files.autoSave": "afterDelay"</code>
+</li>
+<li>Boolean - <code>"editor.minimap.enabled": true</code>
+</li>
+<li>Number - <code>"files.autoSaveDelay": 1000</code>
+</li>
+<li>Array - <code>"editor.rulers": []</code>
+</li>
+<li>Object - <code>"search.exclude": { "**/node_modules": true, "**/bower_components": true }</code>
+</li>
+</ul>
+<div class="markdown-alert note">
+<p>Settings like <code>files.exclude</code> and <code>search.exclude</code> use <a href="/docs/editor/glob-patterns">glob patterns</a> that follow your operating system's file system case sensitivity (case-insensitive on Windows/macOS, case-sensitive on Linux). Similarly, <code>.gitignore</code> file patterns (used with the <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      explorer.excludeGitIgnore
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> setting) also follow platform-specific case sensitivity rules.</p>
+</div>
+<p>Values with primitive types and Array types are overridden, meaning a configured value in a scope that takes precedence over another scope is used instead of the value in the other scope. But, values with Object types are merged.</p>
+<p>For example, <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      workbench.colorCustomizations
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> takes an Object that specifies a group of UI elements and their desired colors. If your user settings set the editor backgrounds to blue and green:</p>
+<div class="code-block-wrapper"><pre class="shiki"><code><span class="line"><span>  "workbench.colorCustomizations"</span><span>: {</span></span>
+<span class="line"><span>    "editor.background"</span><span>: </span><span>"#000088"</span><span>,</span></span>
+<span class="line"><span>    "editor.selectionBackground"</span><span>: </span><span>"#008800"</span></span>
+
+</code></pre></div>
+<p>And your open workspace settings set the editor foreground to red:</p>
+<div class="code-block-wrapper"><pre class="shiki"><code><span class="line"><span>  "workbench.colorCustomizations"</span><span>: {</span></span>
+<span class="line"><span>    "editor.foreground"</span><span>: </span><span>"#880000"</span><span>,</span></span>
+<span class="line"><span>    "editor.selectionBackground"</span><span>: </span><span>"#00FF00"</span></span>
+
+</code></pre></div>
+<p>The result, when that workspace is open, is the combination of those two color customizations, as if you had specified:</p>
+<div class="code-block-wrapper"><pre class="shiki"><code><span class="line"><span>  "workbench.colorCustomizations"</span><span>: {</span></span>
+<span class="line"><span>    "editor.background"</span><span>: </span><span>"#000088"</span><span>,</span></span>
+<span class="line"><span>    "editor.selectionBackground"</span><span>: </span><span>"#00FF00"</span><span>,</span></span>
+<span class="line"><span>    "editor.foreground"</span><span>: </span><span>"#880000"</span></span>
+
+</code></pre></div>
+<p>If there are conflicting values, such as <code>editor.selectionBackground</code> in the example above, the usual override behavior occurs, with workspace values taking precedence over user values, and language-specific values taking precedence over non-language-specific values.</p>
+<h3 id="_note-about-multiple-language-specific-settings"><a class="hash-link" href="#_note-about-multiple-language-specific-settings">Note about multiple language specific settings</a></h3>
+<p>If you are using <a href="#_multiple-language-specific-editor-settings">multiple language-specific settings</a>, be aware that language-specific settings are merged and precedence is set based on the full language string (for example <code>"[typescript][javascript]"</code>) and not the individual language IDs (<code>typescript</code> and <code>javascript</code>). This means that for example, a <code>"[typescript][javascript]"</code> workspace setting will not override a <code>"[javascript]"</code> user setting.</p>
+<h2 id="_settings-and-security"><a class="hash-link" href="#_settings-and-security">Settings and security</a></h2>
+<p>Some settings allow you to specify an executable that VS Code will run to perform certain operations. For example, you can choose which shell the Integrated Terminal should use. For enhanced security, such settings can only be defined in user settings and not at workspace scope.</p>
+<p>Here is the list of settings not supported in workspace settings:</p>
+<ul>
+<li><span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      git.path
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span></li>
+<li><span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      terminal.external.windowsExec
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span></li>
+<li><span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      terminal.external.osxExec
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span></li>
+<li><span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      terminal.external.linuxExec
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span></li>
+</ul>
+<p>The first time you open a workspace that defines any of these settings, VS Code will warn you and then always ignore the values after that.</p>
+<h2 id="_settings-sync"><a class="hash-link" href="#_settings-sync">Settings Sync</a></h2>
+<p>You can share your user settings across your VS Code instances with the <a href="/docs/configure/settings-sync">Settings Sync</a> feature. This feature lets you share settings, keyboard shortcuts, and installed extensions across your VS Code installs on various machines. You can enable Settings Sync via the <strong>Backup and Sync Settings</strong> command on the right of the Settings editor or on the <strong>Accounts</strong> Activity Bar context menu.</p>
+
+<p>You can learn more about turning on and configuring Settings Sync in the <a href="/docs/configure/settings-sync">Settings Sync</a> user guide.</p>
+<div class="markdown-alert note">
+<p>VS Code does not synchronize your extensions to or from a <a href="/docs/remote/remote-overview">remote</a> window, such as when you're connected to SSH, a development container (devcontainer), or WSL.</p>
+</div>
+<h2 id="_feature-lifecycle"><a class="hash-link" href="#_feature-lifecycle">Feature lifecycle</a></h2>
+<p>Features and their corresponding settings can be in one of the following states. Depending on the state, you might be cautious about using the feature or setting in your workflow.</p>
+<ul>
+<li>
+<p><strong>Experimental</strong> - Exploratory features available for early adopters. These features might change or be removed in the future. In the Settings editor, these settings have an <code>Experimental</code> label. You can also search experimental settings by entering <code>@tag:experimental</code> in the search box.</p>
+
+</li>
+<li>
+<p><strong>Preview</strong> - Preview features and settings have the final functionality but might still be iterated on for stability and polishing. Usually, preview features are disabled by default. In the Settings editor, these settings have an <code>Preview</code> label. You can also search preview settings by entering <code>@tag:preview</code> in the search box.</p>
+
+</li>
+<li>
+<p><strong>Stable</strong> - The feature is stable and fully supported in VS Code.</p>
+</li>
+</ul>
+<p>Experimental and preview features enable you to try out new features and provide feedback. Share your feedback in <a class="external-link" href="https://github.com/microsoft/vscode/issues">our VS Code issues</a>.</p>
+<h2 id="_related-resources"><a class="hash-link" href="#_related-resources">Related resources</a></h2>
+<ul>
+<li><a href="/docs/reference/default-settings">VS Code default settings reference</a></li>
+<li><a href="/docs/configure/settings-sync">Synchronize settings across machines</a></li>
+</ul>
+<h2 id="_common-questions"><a class="hash-link" href="#_common-questions">Common questions</a></h2>
+<h3 id="_vs-code-says-unable-to-write-settings"><a class="hash-link" href="#_vs-code-says-unable-to-write-settings">VS Code says "Unable to write settings."</a></h3>
+<p>If you try to change a setting (for example turning on Auto Save or selecting a new Color Theme) and you see "Unable to write into user settings. Please open user settings to correct errors/warnings in it and try again.", it means your <code>settings.json</code> file is ill-formed or has errors. The error can be as simple as a missing comma or incorrect setting value. Open the <code>settings.json</code> file with the <strong>Preferences: Open User Settings (JSON)</strong> command in the Command Palette (<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧⌘P, Windows: Ctrl+Shift+P">Ctrl+Shift+P</span>) and you should see the error highlighted with red squiggles.</p>
+<h3 id="_how-can-i-reset-my-user-settings"><a class="hash-link" href="#_how-can-i-reset-my-user-settings">How can I reset my user settings?</a></h3>
+<p>The easiest way to reset VS Code back to the default settings is to clear your user <code>settings.json</code> file. You can open the <code>settings.json</code> file with the <strong>Preferences: Open User Settings (JSON)</strong> command in the Command Palette (<span class="dynamic-keybinding keybinding linux" title="macOS: ⇧⌘P, Windows: Ctrl+Shift+P">Ctrl+Shift+P</span>). Once the file is open in an editor, delete everything between the two curly braces <code>{}</code>, save the file, and VS Code will go back to using the default values.</p>
+<h3 id="_when-does-it-make-sense-to-use-workspace-settings"><a class="hash-link" href="#_when-does-it-make-sense-to-use-workspace-settings">When does it make sense to use workspace settings?</a></h3>
+<p>If you're using a workspace that needs custom settings but you don't want to apply them to your other VS Code projects. A good example is language-specific linting rules.</p>
+<h3 id="_where-can-i-find-extension-settings"><a class="hash-link" href="#_where-can-i-find-extension-settings">Where can I find extension settings?</a></h3>
+<p>In general, VS Code extensions store their settings in your user or workspaces settings files and they are available through the Settings editor UI (<strong>Preferences: Open Settings (UI)</strong> command) or via IntelliSense in your <code>settings.json</code> file (<strong>Preferences: Open User Settings (JSON)</strong> command). Searching by the extension name (for example <code>gitlens</code> or <code>python</code>) can help filter down settings to just those contributed by an extension.</p>
+<div class="feedback"><section class="feedback-section"><div class="feedback-container">
+
+<div class="feedback-middle">
+<h3>Still need help?</h3>
+<ul class="support-links">
+<li><a href="https://stackoverflow.com/questions/tagged/vscode">Ask the community</a></li>
+<li><a href="https://github.com/microsoft/vscode/issues/new/choose">Request features</a></li>
+<li><a href="https://www.github.com/Microsoft/vscode/issues">Report issues</a></li>
+</ul>
+</div>
+<div class="feedback-right">
+<h3>Help us improve</h3>
+<div class="buttons"><button>Edit this page</button></div>
+</div>
+</div></section></div>
+<div class="body-footer">10/28/2026</div>
+</main>
+</div>
+
+<div class="docs-mobile-widgets visible-xs">
+<div class="connect-widget"><ul class="connect-links">
+<li><a href="/feed.xml">RSS Feed</a></li>
+<li><a href="https://stackoverflow.com/questions/tagged/vscode">Ask questions</a></li>
+<li><a href="https://go.microsoft.com/fwlink/?LinkID=533687">Follow @code</a></li>
+<li id="connect-uservoice"><a href="https://github.com/microsoft/vscode/issues/new/choose">Request features</a></li>
+<li id="connect-github"><a href="https://www.github.com/microsoft/vscode/issues">Report issues</a></li>
+<li id="connect-youtube"><a href="https://www.youtube.com/channel/UCs5Y5_7XK8HLDX0SLNwkd3w">Watch videos</a></li>
+</ul></div>
+</div>
+</div>
+</div>
+</main>
+</div></div>

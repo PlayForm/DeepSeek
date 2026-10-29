@@ -1,0 +1,35 @@
+<div><div id="__next"><div><div>
+<a class="visually-hidden skip-button DefaultLayout_skipButton__3BaOi" href="#main-content">Skip to main content</a><div><div class="d-lg-flex"><div class="flex-column flex-1 min-width-0 DefaultLayout_stickyStack__mf76f DefaultLayout_stickyStackWithSubBar__Yfp2u DefaultLayout_stickyStackYieldsAtXxl__y36ZX">
+<main class="DefaultLayout_mainContent__UI2BH" id="main-content"><div class="px-3 px-md-6 mt-4 mb-4"><div class="ArticleGridLayout_containerBox__lLLio ArticleGridLayout_containerBoxXxl__SphGC">
+<div class="ArticleGridLayout_heroTopper__bCpVj"><div class="d-flex flex-items-baseline flex-justify-between"><h1 class="border-bottom-0 ArticleTitle_title__wOdiS" id="title-h1">Merge conflicts</h1></div></div>
+<div class="f4 pb-4 ArticleGridLayout_heroIntro__IvIoX" id="article-intro">
+<div class="mb-3 Lead_container__m3L5f _page-intro"><p>Identify and resolve merge conflicts in Git to ensure smooth branch integration and successful pull request merges.</p></div>
+<div class="ViewMarkdownButton_belowIntroPlacement__MKGvm"><div class="ViewMarkdownButton_controls__jbwAh"><button class="Primer_Brand__Button-module__Button___lDruK Primer_Brand__Button-module__Button--secondary___akMC2 Primer_Brand__Button-module__Button--size-medium___EyCyw text-decoration-none ViewMarkdownButton_button__chhfE ViewMarkdownButton_copyButton__haGNh"><span class="Primer_Brand__Button-module__Button__text___Z3ocU"><span class="Primer_Brand__Text-module__Text___pecHN Primer_Brand__Text-module__Text-font--mona-sans___GpzSG Primer_Brand__Text-module__Text--default___DChoE Primer_Brand__Text-module__Text--200___XAIGT Primer_Brand__Text-module__Text--antialiased___fYDxq Primer_Brand__Text-module__Text--weight-medium___E0iQL Primer_Brand__Button-module__Button--label___lUBc0 Primer_Brand__Button-module__Button--label-medium___DW2TM Primer_Brand__Button-module__Button--label-secondary___DRJoJ">Copy markdown</span></span></button></div></div>
+</div>
+<div><div id="article-contents"><div class="MarkdownContent_markdownBody__v5MYy markdown-body">
+<p>Git can often resolve differences between branches and merge them automatically. Usually, changes are on different lines or in different files, so Git can merge them without help. Sometimes, competing changes need your help. Merge conflicts often happen when people make different changes to the same line of the same file, or when one person edits a file and another person deletes the same file.</p>
+<p>Merge conflicts block merging because Git cannot safely choose which version of the conflicting content to keep. You must resolve all merge conflicts before you can merge a pull request on GitHub. If your pull request has a merge conflict between the compare branch and base branch, the <strong>Merge pull request</strong> button is deactivated until the conflicts are resolved.</p>
+<h2 id="resolving-merge-conflicts"><a class="heading-link" href="#resolving-merge-conflicts">Resolving merge conflicts</a></h2>
+<p>Resolving a merge conflict means choosing the final content that should appear after the branches are merged. The right tool depends on the type of conflict.</p>
+<ul>
+<li>Simple line conflicts can often be resolved on GitHub. See <a href="/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-on-github">Resolving a merge conflict on GitHub</a>.</li>
+<li>More complex conflicts must be resolved in a local clone and pushed back to the pull request branch. See <a href="/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-using-the-command-line">Resolving a merge conflict using the command line</a>.</li>
+<li>If you have access to Copilot cloud agent and it is enabled for the repository, Copilot can help resolve conflicts from the merge box. See <a href="/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github#resolving-merge-conflicts">Using Copilot in the cloud on GitHub</a>.</li>
+</ul>
+<p>On the command line, Git tells you when a merge cannot finish automatically. You cannot push the merged result until you resolve the conflict and commit the resolution.</p>
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="bash">git merge BRANCH-NAME</span>
+<span class="bash">Auto-merging styleguide.md</span>
+<span class="bash">CONFLICT (content): Merge conflict <span class="hljs-keyword">in</span> styleguide.md</span>
+<span class="bash">Automatic merge failed; fix conflicts and <span class="hljs-keyword">then</span> commit the result</span>
+</code></pre>
+<h2 id="further-reading"><a class="heading-link" href="#further-reading">Further reading</a></h2>
+<ul>
+<li><a href="/en/pull-requests/reference/pull-request-merges">Pull request merges</a></li>
+
+<li><a href="/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-using-the-command-line">Resolving a merge conflict using the command line</a></li>
+<li><a href="/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-on-github">Resolving a merge conflict on GitHub</a></li>
+</ul>
+</div></div></div>
+</div></div></main>
+</div></div></div>
+</div></div></div></div>

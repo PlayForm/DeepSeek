@@ -1,0 +1,543 @@
+<div><div class="docs">
+<main class="md-content">
+<h1>Getting Started with PerfettoSQL</h1>
+<p>PerfettoSQL is the foundation of trace analysis in Perfetto. It is a dialect of
+SQL that allows you to query the contents of your traces as if they were a
+database. This page introduces the core concepts of trace querying with PerfettoSQL
+and provides guidance on how to write queries.</p>
+<h2>
+Overview of Trace Querying</h2>
+<p>The Perfetto UI is a powerful tool for visual analysis, offering call stacks, timeline views, thread tracks, and slices. However, it also includes a robust SQL query language (PerfettoSQL) which is interpreted by a query engine (<a href="/docs/analysis/trace-processor">TraceProcessor</a>) which allows you to extract data programmatically.</p>
+<p>While the UI is powerful for myriad of analyses, users are able to write and execute queries within the Perfetto UI for multiple purposes such as:</p>
+<ul>
+<li>Extracting performance data from traces.</li>
+<li>Create custom visualizations (Debug tracks) to perform more complex analyses.</li>
+<li>Creating derived metrics.</li>
+<li>Identify performance bottlenecks using data-driven logic.</li>
+</ul>
+<p>Beyond the Perfetto UI, you can query traces programmatically using the <a href="/docs/analysis/trace-processor-python">Python Trace Processor API</a> or the <a href="/docs/analysis/trace-processor">C++ Trace Processor</a>.</p>
+<p>Perfetto also supports bulk trace analysis through the <a href="/docs/analysis/batch-trace-processor">Batch Trace Processor</a>. A key advantage of this system is query reusability: the same PerfettoSQL queries used for individual traces can be applied to large datasets without modification.</p>
+<h2>
+Core Concepts</h2>
+<p>Before writing queries, it's important to understand the foundational concepts
+of how Perfetto structures trace data.</p>
+<h3>
+Events</h3>
+<p>In the most general sense, a trace is simply a collection of timestamped
+"events". Events can have associated metadata and context which allows them to
+be interpreted and analyzed. Timestamps are in nanoseconds; the values
+themselves depend on the
+<a href="https://cs.android.com/android/platform/superproject/main/+/main:external/perfetto/protos/perfetto/config/trace_config.proto;l=114;drc=c74c8cf69e20d7b3261fb8c5ab4d057e8badce3e">clock</a>
+selected in TraceConfig.</p>
+<p>Events form the foundation of trace processor and are one of two types: slices
+and counters.</p>
+<h4>Slices</h4>
+
+<p>A slice refers to an interval of time with some data describing what was
+happening in that interval. Some example of slices include:</p>
+<ul>
+<li>Atrace slices on Android</li>
+<li>Userspace slices from Chrome</li>
+</ul>
+<h4>Counters</h4>
+
+<p>A counter is a continuous value which varies over time. Some examples of
+counters include:</p>
+<ul>
+<li>CPU frequency for each CPU core</li>
+<li>RSS memory events - both from the kernel and polled from /proc/stats</li>
+<li>atrace counter events from Android</li>
+<li>Chrome counter events</li>
+</ul>
+<h3>
+Tracks</h3>
+<p>A track is a named partition of events of the same type and the same associated
+context. A track associates events with a particular context such as a thread
+(<code>utid</code>), process (<code>upid</code>), or CPU. For example:</p>
+<ul>
+<li>Sync userspace slices have one track for each thread which emitted an event</li>
+<li>Async userspace slices have one track for each "cookie" linking a set of async
+events</li>
+</ul>
+<p>Tracks can be split into various types based on the type of event they contain
+and the context they are associated with. Examples include:</p>
+<ul>
+<li>Global tracks are not associated to any context and contain slices</li>
+<li>Thread tracks are associated to a single thread and contain slices</li>
+<li>Counter tracks are not associated to any context and contain counters</li>
+<li>CPU counter tracks are associated to a single CPU and contain counters</li>
+</ul>
+<p>Note that the Perfetto UI also uses the term "tracks" to refer to the visual
+rows on the timeline. These are a UI-level concept for organizing the display
+and do not map 1:1 to trace processor tracks.</p>
+<h3>
+Scheduling</h3>
+<p>CPU scheduling data has its own dedicated tables and is not accessed through
+tracks. The <code>sched</code> table contains one row for each time interval where a thread
+was running on a CPU. Key columns include <code>ts</code>, <code>dur</code>, <code>cpu</code>, <code>utid</code>,
+<code>end_state</code>, and <code>priority</code>.</p>
+<p>For example, to see which threads were running on CPU 0:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span> ts, dur, utid
+<span class="hljs-keyword">FROM</span> sched
+<span class="hljs-keyword">WHERE</span> cpu <span class="hljs-operator">=</span> <span class="hljs-number">0</span>
+LIMIT <span class="hljs-number">10</span>;</code></div>
+<p>The complementary <code>thread_state</code> table shows what a thread was doing when it was
+<em>not</em> running — whether it was sleeping, blocked in an uninterruptible sleep,
+runnable and waiting for a CPU, and so on.</p>
+<p>To query scheduling data with thread and process names, use the
+<code>sched.with_context</code> stdlib module which provides the <code>sched_with_thread_process</code>
+view:</p>
+<div class="code-block-wrapper"><code class="hljs code-block">INCLUDE PERFETTO <span class="hljs-keyword">MODULE</span> sched.with_context;
+
+<span class="hljs-keyword">SELECT</span> ts, dur, cpu, thread_name, process_name
+<span class="hljs-keyword">FROM</span> sched_with_thread_process
+<span class="hljs-keyword">WHERE</span> thread_name <span class="hljs-operator">=</span> <span class="hljs-string">'RenderThread'</span>
+LIMIT <span class="hljs-number">10</span>;</code></div>
+<h3>
+Stack sampling (CPU profiling)</h3>
+<p>Stack sampling periodically captures where code is executing, providing a
+statistical picture of CPU usage over time. Perfetto supports multiple data
+sources for this, including Linux perf, simpleperf, macOS Instruments, and
+Chrome CPU profiling.</p>
+<p>The raw data lives in source-specific tables (<code>perf_sample</code>,
+<code>cpu_profile_stack_sample</code>). Each sample has a <code>callsite_id</code> which points into
+the <code>stack_profile_callsite</code> table — a linked list of frames forming the
+callstack. Each callsite row has a <code>frame_id</code> pointing to <code>stack_profile_frame</code>
+(the function name and mapping/binary) and a <code>parent_id</code> pointing to the next
+frame up the stack.</p>
+<p>To resolve a sample to its leaf (most recent) frame, join through callsite to
+frame:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span>
+  s.ts,
+  s.utid,
+  f.name <span class="hljs-keyword">AS</span> function_name,
+  m.name <span class="hljs-keyword">AS</span> binary_name
+<span class="hljs-keyword">FROM</span> perf_sample <span class="hljs-keyword">AS</span> s
+<span class="hljs-keyword">JOIN</span> stack_profile_callsite <span class="hljs-keyword">AS</span> c <span class="hljs-keyword">ON</span> s.callsite_id <span class="hljs-operator">=</span> c.id
+<span class="hljs-keyword">JOIN</span> stack_profile_frame <span class="hljs-keyword">AS</span> f <span class="hljs-keyword">ON</span> c.frame_id <span class="hljs-operator">=</span> f.id
+<span class="hljs-keyword">JOIN</span> stack_profile_mapping <span class="hljs-keyword">AS</span> m <span class="hljs-keyword">ON</span> f.mapping <span class="hljs-operator">=</span> m.id
+LIMIT <span class="hljs-number">10</span>;</code></div>
+<p>For aggregation and summary across full callstacks, use the
+<code>stacks.cpu_profiling</code> stdlib module. It provides a unified
+<code>cpu_profiling_samples</code> table across all data sources and a
+<code>cpu_profiling_summary_tree</code> table that computes self counts (samples where the
+function was the leaf frame) and cumulative counts (samples where the function
+appeared anywhere in the callstack):</p>
+<div class="code-block-wrapper"><code class="hljs code-block">INCLUDE PERFETTO <span class="hljs-keyword">MODULE</span> stacks.cpu_profiling;
+
+<span class="hljs-comment">-- Unified samples across all CPU profiling data sources:</span>
+<span class="hljs-keyword">SELECT</span> ts, thread_name, callsite_id
+<span class="hljs-keyword">FROM</span> cpu_profiling_samples
+LIMIT <span class="hljs-number">10</span>;
+
+<span class="hljs-comment">-- Aggregated callstack tree with self and cumulative counts:</span>
+<span class="hljs-keyword">SELECT</span> name, mapping_name, self_count, cumulative_count
+<span class="hljs-keyword">FROM</span> cpu_profiling_summary_tree
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> cumulative_count <span class="hljs-keyword">DESC</span>
+LIMIT <span class="hljs-number">20</span>;</code></div>
+<h3>
+Heap profiling</h3>
+<p>Heap profiling captures memory allocations along with their callstacks, showing
+where memory is being allocated (and freed) over time. This is useful for finding
+memory leaks and understanding allocation patterns.</p>
+<p>The <code>heap_profile_allocation</code> table contains one row per allocation or free
+event. Key columns include <code>ts</code>, <code>upid</code>, <code>callsite_id</code>, <code>count</code>, and <code>size</code>.
+The <code>upid</code> column can be joined to the <code>process</code> table to get the full process
+command line (<code>cmdline</code>) and real pid.</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span> ts, upid, size, count
+<span class="hljs-keyword">FROM</span> heap_profile_allocation
+<span class="hljs-keyword">WHERE</span> size  <span class="hljs-number">0</span>
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> size <span class="hljs-keyword">DESC</span>
+LIMIT <span class="hljs-number">10</span>;</code></div>
+<p>Like CPU profiling, each allocation has a <code>callsite_id</code> pointing into the
+callstack tables. To resolve an allocation to its leaf frame:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span>
+  a.ts,
+  a.size,
+  f.name <span class="hljs-keyword">AS</span> function_name,
+  m.name <span class="hljs-keyword">AS</span> binary_name
+<span class="hljs-keyword">FROM</span> heap_profile_allocation <span class="hljs-keyword">AS</span> a
+<span class="hljs-keyword">JOIN</span> stack_profile_callsite <span class="hljs-keyword">AS</span> c <span class="hljs-keyword">ON</span> a.callsite_id <span class="hljs-operator">=</span> c.id
+<span class="hljs-keyword">JOIN</span> stack_profile_frame <span class="hljs-keyword">AS</span> f <span class="hljs-keyword">ON</span> c.frame_id <span class="hljs-operator">=</span> f.id
+<span class="hljs-keyword">JOIN</span> stack_profile_mapping <span class="hljs-keyword">AS</span> m <span class="hljs-keyword">ON</span> f.mapping <span class="hljs-operator">=</span> m.id
+<span class="hljs-keyword">WHERE</span> a.size  <span class="hljs-number">0</span>
+LIMIT <span class="hljs-number">10</span>;</code></div>
+<p>For full callstack aggregation with self and cumulative sizes, use the
+<code>android.memory.heap_profile.summary_tree</code> stdlib module:</p>
+<div class="code-block-wrapper"><code class="hljs code-block">INCLUDE PERFETTO <span class="hljs-keyword">MODULE</span> android.memory.heap_profile.summary_tree;
+
+<span class="hljs-keyword">SELECT</span> name, mapping_name, self_size, cumulative_size
+<span class="hljs-keyword">FROM</span> android_heap_profile_summary_tree
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> cumulative_size <span class="hljs-keyword">DESC</span>
+LIMIT <span class="hljs-number">20</span>;</code></div>
+<h3>
+Heap graph (heap dumps)</h3>
+<p>Heap graph data captures a snapshot of the managed heap (e.g., Java/ART on
+Android), recording the full object reference graph at a point in time. This is
+useful for understanding memory retention and finding leaks in managed runtimes.</p>
+<p>Key tables include:</p>
+<ul>
+<li>
+<code>heap_graph_object</code>: objects on the heap, with their type, size, and
+reachability information.</li>
+<li>
+<code>heap_graph_reference</code>: references between objects (which object points to
+which).</li>
+<li>
+<code>heap_graph_class</code>: class metadata (name, superclass, classloader).</li>
+</ul>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span>
+  c.name <span class="hljs-keyword">AS</span> class_name,
+  <span class="hljs-built_in">SUM</span>(o.self_size) <span class="hljs-keyword">AS</span> total_size,
+  <span class="hljs-built_in">COUNT</span>() <span class="hljs-keyword">AS</span> object_count
+<span class="hljs-keyword">FROM</span> heap_graph_object <span class="hljs-keyword">AS</span> o
+<span class="hljs-keyword">JOIN</span> heap_graph_class <span class="hljs-keyword">AS</span> c <span class="hljs-keyword">ON</span> o.type_id <span class="hljs-operator">=</span> c.id
+<span class="hljs-keyword">WHERE</span> o.reachable
+<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> c.name
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> total_size <span class="hljs-keyword">DESC</span>
+LIMIT <span class="hljs-number">10</span>;</code></div>
+<h3>
+Thread and process identifiers</h3>
+<p>The handling of threads and processes needs special care when considered in the
+context of tracing; identifiers for threads and processes (e.g. <code>pid</code>/<code>tgid</code> and
+<code>tid</code> in Android/macOS/Linux) can be reused by the operating system over the
+course of a trace. This means they cannot be relied upon as a unique identifier
+when querying tables in trace processor.</p>
+<p>To solve this problem, the trace processor uses <code>utid</code> (<em>unique</em> tid) for
+threads and <code>upid</code> (<em>unique</em> pid) for processes. All references to threads and
+processes (e.g. in CPU scheduling data, thread tracks) uses <code>utid</code> and <code>upid</code>
+instead of the system identifiers.</p>
+<h3>
+Querying traces in the Perfetto UI</h3>
+<p>Now that you understand the core concepts, you can start writing queries.</p>
+<p>Perfetto provides two ways to explore trace data directly in the UI:</p>
+<ul>
+<li>The <strong>Data Explorer</strong> page lets you browse available tables interactively
+without writing SQL. This is useful for discovering what data is in your trace
+and understanding table schemas.</li>
+<li>The <strong>Query (SQL)</strong> tab provides a free-form SQL editor for writing and
+executing PerfettoSQL queries.</li>
+</ul>
+<p>To use the Query tab:</p>
+<ol>
+<li>
+<p>Open a trace in the <a href="https://ui.perfetto.dev/">Perfetto UI</a>.</p>
+</li>
+<li>
+<p>Click the <strong>Query (SQL)</strong> tab in the navigation bar (see image below).</p>
+</li>
+</ol>
+
+<p>Upon selecting this tab, the querying UI will show up and you will be able to free-form write your PerfettoSQL queries, it will let you write queries, show query results and query history as shown in the image below.</p>
+
+<ol>
+<li>Enter your query in the Query UI area and press Ctrl + Enter (or Cmd + Enter) to execute.</li>
+</ol>
+<p>Once executed query results will be shown within the same window.</p>
+<p>This method of querying is useful when you have some degree of knowledge about how and what to query.</p>
+<p>In order to find out how to write queries refer to the <a href="/docs/analysis/perfetto-sql-syntax">Syntax guide</a>, then in order to find available tables, modules, functions, etc. refer to the <a href="/docs/analysis/stdlib-docs">Standard Library</a>.</p>
+<p>A lot of times, it will be useful to transform query results into tracks to perform complex analyses within the UI, we encourage readers to take a look at <a href="/docs/analysis/debug-tracks">Debug Tracks</a> for more information on how to achieve this.</p>
+<h3>
+Example: Executing a basic query</h3>
+<p>The simplest way to explore a trace is to select from the raw tables. For
+example, to see the first 10 slices in a trace, you can run:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span> ts, dur, name <span class="hljs-keyword">FROM</span> slice LIMIT <span class="hljs-number">10</span>;</code></div>
+<p>Which you can write and execute by clicking on <strong>Run Query</strong> within the PerfettoSQL  querying UI, below is an example from a trace.</p>
+
+<h3>
+Adding Context to Slices</h3>
+<p>A common question when querying slices is: "how do I get the thread or process
+that emitted this slice?" The easiest way is to use the <code>slices.with_context</code>
+standard library module, which provides pre-joined views that include thread and
+process information directly.</p>
+<div class="code-block-wrapper"><code class="hljs code-block">INCLUDE PERFETTO <span class="hljs-keyword">MODULE</span> slices.with_context;</code></div>
+<p>Once imported, you have access to three views:</p>
+<p><strong><code>thread_slice</code></strong> — slices from thread tracks, with thread and process context:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span> ts, dur, name, thread_name, process_name, tid, pid
+<span class="hljs-keyword">FROM</span> thread_slice
+<span class="hljs-keyword">WHERE</span> name <span class="hljs-operator">=</span> <span class="hljs-string">'measure'</span>;</code></div>
+<p><strong><code>process_slice</code></strong> — slices from process tracks, with process context:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span> ts, dur, name, process_name, pid
+<span class="hljs-keyword">FROM</span> process_slice
+<span class="hljs-keyword">WHERE</span> name <span class="hljs-keyword">LIKE</span> <span class="hljs-string">'MyEvent%'</span>;</code></div>
+<p><strong><code>thread_or_process_slice</code></strong> — a combined view of both thread and process
+slices, useful when you want to search across all slices regardless of track
+type:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span> ts, dur, name, thread_name, process_name
+<span class="hljs-keyword">FROM</span> thread_or_process_slice
+<span class="hljs-keyword">WHERE</span> dur  <span class="hljs-number">1000000</span>;</code></div>
+<p>These views are the recommended approach for most slice queries. They handle
+the joins for you and expose commonly needed columns like <code>thread_name</code>,
+<code>process_name</code>, <code>tid</code>, <code>pid</code>, <code>utid</code>, and <code>upid</code>.</p>
+<h4>Manual JOINs for more control</h4>
+<p>Under the hood, <code>thread_slice</code> joins <code>slice</code> with <code>thread_track</code>, <code>thread</code>, and
+<code>process</code>. If you need columns not exposed by the stdlib views, or if you're
+working with tables that don't have a stdlib convenience view (e.g., counter
+tracks), you can write the joins yourself.</p>
+<p>The <code>thread</code> and <code>process</code> tables map <code>utid</code>s and <code>upid</code>s to the system-level
+<code>tid</code>, <code>pid</code>, and names:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span> tid, name
+<span class="hljs-keyword">FROM</span> thread
+<span class="hljs-keyword">WHERE</span> utid <span class="hljs-operator">=</span> <span class="hljs-number">10</span>;</code></div>
+<p>For example, to get <code>upid</code>s of processes with a <code>mem.swap</code> counter greater
+than 1000:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span> upid
+<span class="hljs-keyword">FROM</span> counter
+<span class="hljs-keyword">JOIN</span> process_counter_track <span class="hljs-keyword">ON</span> process_counter_track.id <span class="hljs-operator">=</span> counter.track_id
+<span class="hljs-keyword">WHERE</span> process_counter_track.name <span class="hljs-operator">=</span> <span class="hljs-string">'mem.swap'</span> <span class="hljs-keyword">AND</span> <span class="hljs-keyword">value</span>  <span class="hljs-number">1000</span>;</code></div>
+<p>Or to manually join slices with thread info:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span> thread.name <span class="hljs-keyword">AS</span> thread_name
+<span class="hljs-keyword">FROM</span> slice
+<span class="hljs-keyword">JOIN</span> thread_track <span class="hljs-keyword">ON</span> slice.track_id <span class="hljs-operator">=</span> thread_track.id
+<span class="hljs-keyword">JOIN</span> thread <span class="hljs-keyword">USING</span>(utid)
+<span class="hljs-keyword">WHERE</span> slice.name <span class="hljs-operator">=</span> <span class="hljs-string">'measure'</span>
+<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> thread_name;</code></div>
+<h2>
+Best Practices</h2>
+<h3>
+Prefer stdlib views over manual JOINs</h3>
+<p>The standard library provides pre-joined views for the most common queries.
+Using <code>thread_slice</code>, <code>process_slice</code>, <code>thread_or_process_slice</code>, and
+<code>sched_with_thread_process</code> saves boilerplate and avoids mistakes in join
+conditions.</p>
+<h3>
+Filter early</h3>
+<p>Always place <code>WHERE</code> clauses — especially filters on <code>name</code> — as early as
+possible. This lets trace processor skip scanning rows that won't contribute
+to the result.</p>
+<h3>
+Use LIMIT when exploring</h3>
+<p>When you're unfamiliar with a table, start with a small query to understand its
+shape before writing anything complex:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> slice LIMIT <span class="hljs-number">10</span>;</code></div>
+<h3>
+Timestamps are in nanoseconds</h3>
+<p>All <code>ts</code> and <code>dur</code> values are in nanoseconds. For human-readable output, use the
+<code>time.conversion</code> stdlib module:</p>
+<div class="code-block-wrapper"><code class="hljs code-block">INCLUDE PERFETTO <span class="hljs-keyword">MODULE</span> time.conversion;
+
+<span class="hljs-keyword">SELECT</span> name, time_to_ms(dur) <span class="hljs-keyword">AS</span> dur_ms
+<span class="hljs-keyword">FROM</span> slice
+<span class="hljs-keyword">WHERE</span> dur  time_from_ms(<span class="hljs-number">10</span>);</code></div>
+<h2>
+Advanced Querying</h2>
+<p>For users who need to go beyond the standard library or build their own
+abstractions, PerfettoSQL provides several advanced features.</p>
+<h3>
+Helper functions</h3>
+<p>Helper functions are functions built into C++ which reduce the amount of
+boilerplate which needs to be written in SQL.</p>
+<h4>Extract args</h4>
+<p><code>EXTRACT_ARG</code> is a helper function which retrieves a property of an event (e.g.
+slice or counter) from the <code>args</code> table.</p>
+<p>It takes an <code>arg_set_id</code> and <code>key</code> as input and returns the value looked up in
+the <code>args</code> table.</p>
+<p>For example, to retrieve the <code>prev_comm</code> field for <code>sched_switch</code> events in the
+<code>ftrace_event</code> table.</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span> EXTRACT_ARG(arg_set_id, <span class="hljs-string">'prev_comm'</span>)
+<span class="hljs-keyword">FROM</span> ftrace_event
+<span class="hljs-keyword">WHERE</span> name <span class="hljs-operator">=</span> <span class="hljs-string">'sched_switch'</span></code></div>
+<p>Behind the scenes, the above query would desugar to the following:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">SELECT</span>
+  (
+    <span class="hljs-keyword">SELECT</span> string_value
+    <span class="hljs-keyword">FROM</span> args
+    <span class="hljs-keyword">WHERE</span> key <span class="hljs-operator">=</span> <span class="hljs-string">'prev_comm'</span> <span class="hljs-keyword">AND</span> args.arg_set_id <span class="hljs-operator">=</span> ftrace_event.arg_set_id
+  )
+<span class="hljs-keyword">FROM</span> ftrace_event
+<span class="hljs-keyword">WHERE</span> name <span class="hljs-operator">=</span> <span class="hljs-string">'sched_switch'</span></code></div>
+<h3>
+Operator tables</h3>
+<p>SQL queries are usually sufficient to retrieve data from trace processor.
+Sometimes though, certain constructs can be difficult to express pure SQL.</p>
+<p>In these situations, trace processor has special "operator tables" which solve a
+particular problem in C++ but expose an SQL interface for queries to take
+advantage of.</p>
+<h4>Span join</h4>
+<p>Span join is a custom operator table which computes the intersection of spans of
+time from two tables or views. A span in this concept is a row in a table/view
+which contains a "ts" (timestamp) and "dur" (duration) columns.</p>
+<p>A column (called the <em>partition</em>) can optionally be specified which divides the
+rows from each table into partitions before computing the intersection.</p>
+
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-comment">-- Get all the scheduling slices</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">VIEW</span> sp_sched <span class="hljs-keyword">AS</span>
+<span class="hljs-keyword">SELECT</span> ts, dur, cpu, utid
+<span class="hljs-keyword">FROM</span> sched;
+
+<span class="hljs-comment">-- Get all the cpu frequency slices</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">VIEW</span> sp_frequency <span class="hljs-keyword">AS</span>
+<span class="hljs-keyword">SELECT</span>
+  ts,
+  <span class="hljs-built_in">lead</span>(ts) <span class="hljs-keyword">OVER</span> (<span class="hljs-keyword">PARTITION</span> <span class="hljs-keyword">BY</span> track_id <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> ts) <span class="hljs-operator">-</span> ts <span class="hljs-keyword">as</span> dur,
+  cpu,
+  <span class="hljs-keyword">value</span> <span class="hljs-keyword">as</span> freq
+<span class="hljs-keyword">FROM</span> counter
+<span class="hljs-keyword">JOIN</span> cpu_counter_track <span class="hljs-keyword">ON</span> counter.track_id <span class="hljs-operator">=</span> cpu_counter_track.id
+<span class="hljs-keyword">WHERE</span> cpu_counter_track.name <span class="hljs-operator">=</span> <span class="hljs-string">'cpufreq'</span>;
+
+<span class="hljs-comment">-- Create the span joined table which combines cpu frequency with</span>
+<span class="hljs-comment">-- scheduling slices.</span>
+<span class="hljs-keyword">CREATE</span> VIRTUAL <span class="hljs-keyword">TABLE</span> sched_with_frequency
+<span class="hljs-keyword">USING</span> SPAN_JOIN(sp_sched PARTITIONED cpu, sp_frequency PARTITIONED cpu);
+
+<span class="hljs-comment">-- This span joined table can be queried as normal and has the columns from both</span>
+<span class="hljs-comment">-- tables.</span>
+<span class="hljs-keyword">SELECT</span> ts, dur, cpu, utid, freq
+<span class="hljs-keyword">FROM</span> sched_with_frequency;</code></div>
+<p class="callout note">NOTE: A partition can be specified on neither, either or both tables. If
+specified on both, the same column name has to be specified on each table.</p>
+<p class="callout warning">WARNING: An important restriction on span joined tables is that spans from the
+same table in the same partition <em>cannot</em> overlap. For performance reasons, span
+join does not attempt to detect and error out in this situation; instead,
+incorrect rows will silently be produced.</p>
+<p class="callout warning">WARNING: Partitions mush be integers. Importantly, string partitions are <em>not</em>
+supported; note that strings <em>can</em> be converted to integers by applying the
+<code>HASH</code> function to the string column.</p>
+<p>Left and outer span joins are also supported; both function analogously to the
+left and outer joins from SQL.</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-comment">-- Left table partitioned + right table unpartitioned.</span>
+<span class="hljs-keyword">CREATE</span> VIRTUAL <span class="hljs-keyword">TABLE</span> left_join
+<span class="hljs-keyword">USING</span> SPAN_LEFT_JOIN(table_a PARTITIONED a, table_b);
+
+<span class="hljs-comment">-- Both tables unpartitioned.</span>
+<span class="hljs-keyword">CREATE</span> VIRTUAL <span class="hljs-keyword">TABLE</span> outer_join
+<span class="hljs-keyword">USING</span> SPAN_OUTER_JOIN(table_x, table_y);</code></div>
+<p class="callout note">NOTE: there is a subtlety if the partitioned table is empty and is either a)
+part of an outer join b) on the right side of a left join. In this case, <em>no</em>
+slices will be emitted even if the other table is non-empty. This approach was
+decided as being the most natural after considering how span joins are used in
+practice.</p>
+<h4>Ancestor slice</h4>
+<p>Given a slice, <code>ancestor_slice</code> returns all slices on the same track that are
+direct parents above it (i.e. all slices found by following the <code>parent_id</code>
+chain up to the root at depth 0).</p>
+<div class="code-block-wrapper"><code class="hljs code-block">+----------------------------+  depth 0  \
+|<span class="hljs-string"> A (id=1)                   </span>||
+|<span class="hljs-string"> +------------+ +--------+  </span>||<span class="hljs-string"> ancestor_slice(4)
+</span>||<span class="hljs-string"> B (id=2)   </span>||||<span class="hljs-string">  depth 1   &gt; returns A, B
+</span>||<span class="hljs-string"> +--------+ </span>|||||
+|||<span class="hljs-string">C (id=4)</span>|||||<span class="hljs-string">  depth 2  /
+</span>||<span class="hljs-string"> +--------+ </span>||||
+|<span class="hljs-string"> +------------+ +--------+  </span>|
++----------------------------+</code></div>
+<p>The returned format is the same as the
+<a href="/docs/analysis/sql-tables#slice">slice table</a>.</p>
+<p>For example, the following finds the top-level slice for each slice of interest:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">VIEW</span> interesting_slices <span class="hljs-keyword">AS</span>
+<span class="hljs-keyword">SELECT</span> id, ts, dur, track_id
+<span class="hljs-keyword">FROM</span> slice <span class="hljs-keyword">WHERE</span> name <span class="hljs-keyword">LIKE</span> "%interesting slice name%";
+
+<span class="hljs-keyword">SELECT</span>
+<span class="hljs-operator">*</span>
+<span class="hljs-keyword">FROM</span>
+  interesting_slices <span class="hljs-keyword">LEFT</span> <span class="hljs-keyword">JOIN</span>
+  ancestor_slice(interesting_slices.id) <span class="hljs-keyword">AS</span> ancestor <span class="hljs-keyword">ON</span> ancestor.depth <span class="hljs-operator">=</span> <span class="hljs-number">0</span></code></div>
+<p class="callout tip">TIP: To check if one slice is an ancestor of another without fetching all
+ancestors, use the <code>slice_is_ancestor(ancestor_id, descendant_id)</code> function
+which is available without any imports.</p>
+<h4>Descendant slice</h4>
+<p>Given a slice, <code>descendant_slice</code> returns all slices on the same track that are
+nested under it (i.e. all slices at a greater depth within the same time range).</p>
+<div class="code-block-wrapper"><code class="hljs code-block">+----------------------------+  depth 0
+|<span class="hljs-string"> A (id=1)                   </span>|
+|<span class="hljs-string"> +------------+ +--------+  </span>|||<span class="hljs-string"> B (id=2)   </span>||||<span class="hljs-string">  depth 1   </span>|
+||<span class="hljs-string"> +--------+ </span>||<span class="hljs-string"> +----+ </span>|||<span class="hljs-string"> descendant_slice(1)
+</span>|||<span class="hljs-string">C (id=4)</span>|||||||<span class="hljs-string">  depth 2   &gt; returns B, C, D, E
+</span>||<span class="hljs-string"> +--------+ </span>||<span class="hljs-string"> +----+ </span>|||
+|<span class="hljs-string"> +------------+ +--------+  </span>|<span class="hljs-string">           /
++----------------------------+</span></code></div>
+<p>The returned format is the same as the
+<a href="/docs/analysis/sql-tables#slice">slice table</a>.</p>
+<p>For example, the following finds the number of slices under each slice of
+interest:</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">VIEW</span> interesting_slices <span class="hljs-keyword">AS</span>
+<span class="hljs-keyword">SELECT</span> id, ts, dur, track_id
+<span class="hljs-keyword">FROM</span> slice <span class="hljs-keyword">WHERE</span> name <span class="hljs-keyword">LIKE</span> "%interesting slice name%";
+
+<span class="hljs-keyword">SELECT</span>
+  interesting_slices.<span class="hljs-operator">*</span>,
+  (
+    <span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>)
+    <span class="hljs-keyword">FROM</span> descendant_slice(interesting_slices.id)
+  ) <span class="hljs-keyword">AS</span> total_descendants
+<span class="hljs-keyword">FROM</span> interesting_slices</code></div>
+<h4>Connected/Following/Preceding flows</h4>
+<p>DIRECTLY_CONNECTED_FLOW, FOLLOWING_FLOW and PRECEDING_FLOW are custom operator
+tables that take a
+<a href="/docs/analysis/sql-tables#slice">slice table's id column</a> and collect
+all entries of <a href="/docs/analysis/sql-tables#flow">flow table</a>, that are
+directly or indirectly connected to the given starting slice.</p>
+<p><code>DIRECTLY_CONNECTED_FLOW(start_slice_id)</code> - contains all entries of
+<a href="/docs/analysis/sql-tables#flow">flow table</a> that are present in any
+chain of kind: <code>flow[0] -&gt; flow[1] -&gt; ... -&gt; flow[n]</code>, where
+<code>flow[i].slice_out = flow[i+1].slice_in</code> and
+<code>flow[0].slice_out = start_slice_id OR start_slice_id = flow[n].slice_in</code>.</p>
+<p class="callout note">NOTE: Unlike the following/preceding flow functions, this function will not
+include flows connected to ancestors or descendants while searching for flows
+from a slice. It only includes the slices in the directly connected chain.</p>
+<p><code>FOLLOWING_FLOW(start_slice_id)</code> - contains all flows which can be reached from
+a given slice via recursively following from flow's outgoing slice to its
+incoming one and from a reached slice to its child. The return table contains
+all entries of <a href="/docs/analysis/sql-tables#flow">flow table</a> that are
+present in any chain of kind: <code>flow[0] -&gt; flow[1] -&gt; ... -&gt; flow[n]</code>, where
+<code>flow[i+1].slice_out IN DESCENDANT_SLICE(flow[i].slice_in) OR flow[i+1].slice_out = flow[i].slice_in</code>
+and
+<code>flow[0].slice_out IN DESCENDANT_SLICE(start_slice_id) OR flow[0].slice_out = start_slice_id</code>.</p>
+<p><code>PRECEDING_FLOW(start_slice_id)</code> - contains all flows which can be reached from
+a given slice via recursively following from flow's incoming slice to its
+outgoing one and from a reached slice to its parent. The return table contains
+all entries of <a href="/docs/analysis/sql-tables#flow">flow table</a> that are
+present in any chain of kind: <code>flow[n] -&gt; flow[n-1] -&gt; ... -&gt; flow[0]</code>, where
+<code>flow[i].slice_in IN ANCESTOR_SLICE(flow[i+1].slice_out) OR flow[i].slice_in = flow[i+1].slice_out</code>
+and
+<code>flow[0].slice_in IN ANCESTOR_SLICE(start_slice_id) OR flow[0].slice_in = start_slice_id</code>.</p>
+<div class="code-block-wrapper"><code class="hljs code-block"><span class="hljs-comment">--number of following flows for each slice</span>
+<span class="hljs-keyword">SELECT</span> (<span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">FROM</span> FOLLOWING_FLOW(slice_id)) <span class="hljs-keyword">as</span> following <span class="hljs-keyword">FROM</span> slice;</code></div>
+<h2>
+Next Steps</h2>
+<p>Now that you have a foundational understanding of PerfettoSQL, you can explore
+the following topics to deepen your knowledge:</p>
+<ul>
+<li>
+<strong><a href="/docs/analysis/perfetto-sql-syntax">PerfettoSQL Syntax</a></strong>: Learn about the SQL syntax
+supported by Perfetto, including special features for creating functions,
+tables, and views.</li>
+<li>
+<strong><a href="/docs/analysis/stdlib-docs">Standard Library</a></strong>: Explore the rich set of modules
+available in the standard library for analyzing common scenarios like CPU
+usage, memory, and power.</li>
+<li>
+<strong><a href="/docs/analysis/trace-processor">Trace Processor (C++)</a></strong>: Learn how to use the
+interactive shell and the underlying C++ library.</li>
+<li>
+<strong><a href="/docs/analysis/trace-processor-python">Trace Processor (Python)</a></strong>: Leverage the Python
+API to combine trace analysis with the rich data science and visualization
+ecosystem.</li>
+</ul>
+</main>
+<section class="toc"><ul>
+<li><a href="https://perfetto.dev/docs/analysis/perfetto-sql-getting-started#overview-of-trace-querying">Overview of Trace Querying</a></li>
+
+
+
+
+<li><a href="https://perfetto.dev/docs/analysis/perfetto-sql-getting-started#stack-sampling-cpu-profiling-">Stack sampling (CPU profiling)</a></li>
+
+<li><a href="https://perfetto.dev/docs/analysis/perfetto-sql-getting-started#heap-graph-heap-dumps-">Heap graph (heap dumps)</a></li>
+<li><a href="https://perfetto.dev/docs/analysis/perfetto-sql-getting-started#thread-and-process-identifiers">Thread and process identifiers</a></li>
+<li><a href="https://perfetto.dev/docs/analysis/perfetto-sql-getting-started#querying-traces-in-the-perfetto-ui">Querying traces in the Perfetto UI</a></li>
+<li><a href="https://perfetto.dev/docs/analysis/perfetto-sql-getting-started#example-executing-a-basic-query">Example: Executing a basic query</a></li>
+<li><a href="https://perfetto.dev/docs/analysis/perfetto-sql-getting-started#adding-context-to-slices">Adding Context to Slices</a></li>
+
+<li><a href="https://perfetto.dev/docs/analysis/perfetto-sql-getting-started#prefer-stdlib-views-over-manual-joins">Prefer stdlib views over manual JOINs</a></li>
+
+<li><a href="https://perfetto.dev/docs/analysis/perfetto-sql-getting-started#use-limit-when-exploring">Use LIMIT when exploring</a></li>
+<li><a href="https://perfetto.dev/docs/analysis/perfetto-sql-getting-started#timestamps-are-in-nanoseconds">Timestamps are in nanoseconds</a></li>
+
+
+
+
+</ul></section>
+
+</div></div>

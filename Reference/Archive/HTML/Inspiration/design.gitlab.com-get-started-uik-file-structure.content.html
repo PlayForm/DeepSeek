@@ -1,0 +1,48 @@
+<div><div id="__nuxt"><div class="page">
+<a class="btn gl-button btn-confirm btn-md skip-link" href="#skipTarget"><span class="gl-button-text"> Skip to main content </span></a><main class="main"><div class="gl-mx-auto gl-my-0 gl-w-full gl-max-w-6xl gl-px-5 sm:gl-px-7 gl-py-7">
+<div class="gl-flex gl-flex-col gl-gap-7 lg:gl-flex-row lg:gl-items-start">
+<div class="gl-shrink gl-grow lg:gl-order-1 lg:gl-min-w-0">
+<div class="gl-mb-7">
+<h1 class="gl-heading-display" id="skipTarget">File structure</h1>
+
+</div>
+<div>
+<div class="md"><div class="nuxt-content">
+<p>The Pajamas UI Kit is comprised of multiple Figma files that organize separate, but related concepts. Each publishes a library that can be enabled in your design files (some are enabled by default). Dependencies are only the libraries used directly in creating assets and don't include those used for organization or documentation.</p>
+<ul>
+<li>
+<a href="https://www.figma.com/design/tiAetVi1j5MGP8WA5FswcD/Design-tokens"><strong>Design tokens</strong></a>: Design token implementation as variables in Figma along with chromatic and brand color styles. Published as the "Design tokens" library and enabled for all team design files. <a class="" href="/product-foundations/design-tokens-using#in-design">How can I use design tokens in Figma?</a>
+</li>
+<li>
+<a href="https://www.figma.com/design/qEddyqCrI7kPSBjGmwkZzQ/%F0%9F%93%99-Component-library"><strong>📙 Component library</strong></a>: The main file for design components that are used in Pajamas and in all other files. The library is published as "📙 Component library" and enabled for all team design files.</li>
+<li>
+<a href="https://www.figma.com/design/h4YjjttHL5YI0mXZfQ4uuU/GitLab-Product-Icons"><strong>GitLab Product Icons</strong></a>: The main file for product iconography. The library is published as "GitLab Product Icons" and enabled for all team files.</li>
+<li>
+<a href="https://www.figma.com/design/1ui9w228X0S5WxaD0SRdIA/GitLab-Product-Illustrations"><strong>GitLab Product Illustrations</strong></a>: The main file for product illustration. Published as the "GitLab Product Illustrations" library.</li>
+<li>
+<a href="https://www.figma.com/design/Amn6vBN9edRtuaTgy6ygkl/%F0%9F%9A%A7-DRAFT-Patterns-and-Page-Templates"><strong>Patterns and Page Templates</strong></a>: Shared global resources that includes components and design assets owned by feature teams, maintained in a shared space due to their wide usage. The file also contains globally useful abstractions and combinations that promote a more consistent UI. Published as the "Patterns and Page Templates" library, although many assets are only available as "sticker sheets" to copy/paste.</li>
+<li>
+<a href="https://www.figma.com/design/17NxNEMa7i28Is8sMetO2H/Data-Visualization"><strong>Data Visualization</strong></a>: Components, styles, and charts used within GitLab. Published as the "Data Visualization" library.</li>
+<li>
+<a href="https://www.figma.com/design/dWP1ldkBU4jeUqx5rO3jrn/Annotations-and-utilities"><strong>Annotations and utilities</strong></a>: Shared resources to annotate and present Figma artifacts. Published as the "Annotations and utilities" library.</li>
+</ul>
+<p>In addition to the links above, some files are available from the <a href="https://www.figma.com/@GitLabDesign">GitLab Product Design</a> community page and the <a href="https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com/-/tree/main/ui-kit">project repository</a>.</p>
+<h2 id="dependencies"><a href="#dependencies">Dependencies</a></h2>
+<ul>
+<li>📙 Component library uses Design tokens, GitLab Product Icons, and GitLab Product Illustrations.</li>
+<li>GitLab Product Illustrations uses Design tokens.</li>
+<li>Patterns and Page Templates uses Design tokens, 📙 Component library, GitLab Product Icons, and GitLab Product Illustrations.</li>
+<li>Data Visualization uses Design tokens, 📙 Component Library, and GitLab Product Icons.</li>
+</ul>
+
+<p>The UI kit files make use of GitLab Sans, and GitLab Mono. Refer to the <a class="" href="/product-foundations/type-fundamentals">type fundamentals</a> for more information. The fonts are enabled in Figma automatically for GitLab team members, and are available to download in <a href="https://www.npmjs.com/package/@gitlab/fonts">this package</a>.</p>
+<h2 id="plugins"><a href="#plugins">Plugins</a></h2>
+<p>We use the <a href="https://www.figma.com/community/plugin/1432845550222168453/pajamas-figma-plugin">Pajamas Figma Plugin</a> (internal) to read documentation, inspect variables, and find deprecated items. Otherwise, we don’t use plugins for critical actions or capabilities to avoid making any part of the design process reliant on plugin updates or functionality.</p>
+</div></div>
+
+</div>
+<p class="gl-mb-0 gl-mt-5 gl-text-center"> Last updated at: <time>Thursday, August 20, 2026 at 7:26 PM</time></p>
+</div>
+</div>
+</div></main>
+</div></div></div>

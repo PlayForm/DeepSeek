@@ -1,0 +1,863 @@
+<div><div id="twTopBar">
+<table width="100%">
+<tbody>
+<tr>
+
+<td width="95%">
+<div class="twTopMenuTab">
+<ul>
+<li> <a class="twikiCurrentWebHomeLink twikiLink" href="https://twiki.cern.ch/twiki/bin/view/AtlasPublic/WebHome"> AtlasPublic Web </a>
+<ul>
+<li> <a href="https://atlas.ch">Official ATLAS Homepage</a> </li>
+<li> <a class="twikiLink" href="https://twiki.cern.ch/twiki/bin/view/Atlas/WebHome"> Internal TWiki</a>
+</li>
+</ul>
+</li>
+<li> <a class="twikiCurrentWebHomeLink twikiLink" href="https://twiki.cern.ch/twiki/bin/view/AtlasPublic/WebHome"> Physics Groups </a>
+<ul>
+<li> <a class="twikiLink" href="https://twiki.cern.ch/twiki/bin/view/AtlasPublic/BPhysPublicResults">B Physics and Light States</a>
+</li>
+<li> <a class="twikiLink" href="https://twiki.cern.ch/twiki/bin/view/AtlasPublic/StandardModelPublicResults">Standard Model physiscs</a>
+</li>
+
+
+<li> <a class="twikiLink" href="https://twiki.cern.ch/twiki/bin/view/AtlasPublic/HDBSPublicResults">Higgs and Diboson searches</a>
+</li>
+<li> <a class="twikiLink" href="https://twiki.cern.ch/twiki/bin/view/AtlasPublic/SupersymmetryPublicResults">Supersymmetry searches</a>
+</li>
+
+
+
+<li> <a class="twikiLink" href="https://twiki.cern.ch/twiki/bin/view/AtlasPublic/UpgradePhysicsStudies">Upgrade Physics Studies</a>
+</li>
+</ul>
+</li>
+<li> <a class="twikiCurrentWebHomeLink twikiLink" href="https://twiki.cern.ch/twiki/bin/view/AtlasPublic/WebHome"> Other Groups </a>
+<ul>
+<li> <a class="twikiCurrentWebHomeLink twikiAnchorLink" href="https://twiki.cern.ch/twiki/bin/view/AtlasPublic/WebHome#Combined_Performance_Groups_Simu">Combined Performance Groups, Simulation, Statistics</a>
+</li>
+<li> <a class="twikiCurrentWebHomeLink twikiAnchorLink" href="https://twiki.cern.ch/twiki/bin/view/AtlasPublic/WebHome#Detector_Systems_Luminosity_and">Detector Systems, Luminosity, Data Taking</a>
+</li>
+
+</ul>
+</li>
+</ul>
+</div>
+</td>
+
+</tr>
+</tbody>
+</table>
+
+</div></div>
+<div><div class="container header">
+<a>
+<div>
+<h1>ATLAS Event Displays Repository</h1>
+</div>
+</a>
+</div></div>
+<div><div id="contact_informations">Contact: <a href="mailto:atlas-publications@cern.ch">ATLAS Publications</a> and <a href="mailto:atlas-dp-event-display-coordinators@cern.ch">Event Displays Coordinator</a>
+</div></div>
+<div><table class="filters_table" id="table_filters">
+<tbody>
+<tr class="filters_table_row" id="row_main">
+<td width="15%">Global Selections</td>
+<td width="85%">
+<button class="button button_noSelection" id="deselectAll_button"> Deselect All </button>
+</td>
+</tr>
+<tr class="filters_table_row" id="row_general">
+<td width="15%">Filters</td>
+<td width="85%">
+<button class="button button_noSelection" id="paper_filter"> Papers </button>
+<button class="button button_noSelection" id="confnote_filter"> Confnotes </button>
+<button class="button button_noSelection" id="pubnote_filter"> Pubnotes </button>
+<button class="button button_noSelection" id="unassigned_filter"> Unassigned </button>
+</td>
+</tr>
+<tr class="filters_table_row" id="row_group">
+<td width="15%">Groups</td>
+<td width="85%">
+<button class="button button_noSelection" id="BPHY_filter"> BPHY - B physics WG</button>
+<button class="button button_noSelection" id="DAPR_filter"> DAPR - Data Preparation</button>
+
+<button class="button button_noSelection" id="FTAG_filter"> FTAG - Flavour tag</button>
+
+<button class="button button_noSelection" id="HIGG_filter"> HIGG - Higgs</button>
+
+<button class="button button_noSelection" id="BSMSearches_filter"> BSM Searches</button>
+
+<button class="button button_noSelection" id="HION_filter"> HION - Heavy Ions</button>
+<button class="button button_noSelection" id="IDET_filter"> IDET - Inner Detector System</button>
+<button class="button button_noSelection" id="JETM_filter"> JETM - Jet/Etmiss</button>
+<button class="button button_noSelection" id="PERF_filter"> PERF - Overall Detector and Performance</button>
+<button class="button button_noSelection" id="SOFT_filter"> SOFT - Software and Computing</button>
+<button class="button button_noSelection" id="STDM_filter"> STDM - Standard Model</button>
+
+<button class="button button_noSelection" id="TOPQ_filter"> TOPQ - Top</button>
+<button class="button button_noSelection" id="TRIG_filter"> TRIG - Trigger</button>
+<button class="button button_noSelection" id="UPGR_filter"> UPGR - Upgrade</button>
+<button class="button button_noSelection" id="TAUP_filter"> TAUP - Tau</button>
+<button class="button button_noSelection" id="IDTR_filter"> IDTR - Inner Detector Tracking</button>
+<button class="button button_noSelection" id="EGAM_filter"> EGAM - e/gamma</button>
+<button class="button button_noSelection" id="MUON_filter"> MUON - Muon</button>
+<button class="button button_noSelection" id="PMGR_filter"> PMGR - Physics Modeling Group</button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_BPHY">
+
+<td width="85%">
+<button class="button button_noSelection" id="BPHY-onia"> Production and b cross section </button>
+<button class="button button_noSelection" id="BPHY-jpsi"> Physics with B -&gt; J/Psi  </button>
+<button class="button button_noSelection" id="BPHY-rare"> Rare and semi-leptonic rare b-decays </button>
+<button class="button button_noSelection" id="BPHY-weak"> Weak Decays </button>
+<button class="button button_noSelection" id="BPHY-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_DAPR">
+<td width="15%">DAPR</td>
+<td width="85%">
+<button class="button button_noSelection" id="DAPR-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_IDTR">
+
+<td width="85%">
+<button class="button button_noSelection" id="IDTR-Alignment"> InnerDetector Alignment </button>
+<button class="button button_noSelection" id="IDTR-CTIDE"> Clustering and tracking in dense environment </button>
+<button class="button button_noSelection" id="IDTR-Upgrade"> Tracking for Upgrade </button>
+<button class="button button_noSelection" id="IDTR-Vertexing"> Vertexing </button>
+<button class="button button_noSelection" id="IDTR-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_EGAM">
+
+<td width="85%">
+<button class="button button_noSelection" id="EGAM-Calibration"> Calibration </button>
+<button class="button button_noSelection" id="EGAM-ElectronID"> Electron Identification and Efficiencies </button>
+<button class="button button_noSelection" id="EGAM-IsolationFakeForum"> Isolation and Fake Forum </button>
+<button class="button button_noSelection" id="EGAM-PhotonID"> Photon Identification and Efficiencies </button>
+<button class="button button_noSelection" id="EGAM-Reconstruction"> Reconstruction and Software </button>
+<button class="button button_noSelection" id="EGAM-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_MUON">
+
+<td width="85%">
+<button class="button button_noSelection" id="MUON-Efficiency"> Efficiency </button>
+<button class="button button_noSelection" id="MUON-IsolationFakeForum"> Isolation and Fake Forum </button>
+<button class="button button_noSelection" id="MUON-Momentum"> Momentum Scale/Resolution </button>
+<button class="button button_noSelection" id="MUON-WorkingPoints"> Working Points </button>
+<button class="button button_noSelection" id="MUON-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_PMGR">
+
+<td width="85%">
+<button class="button button_noSelection" id="PMGR-git"> Generator Infrastructure and Tools </button>
+<button class="button button_noSelection" id="PMGR-jetphoton"> PMGR-jetphoton </button>
+<button class="button button_noSelection" id="PMGR-top"> Top Processes </button>
+<button class="button button_noSelection" id="PMGR-weakboson"> Weak Boson Processes </button>
+<button class="button button_noSelection" id="PMGR-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_TAUP">
+
+<td width="85%">
+<button class="button button_noSelection" id="TAUP-FTTF"> Fake Tau Task Force </button>
+<button class="button button_noSelection" id="TAUP-MeasAndCalib"> Tau Measurements and Calibration </button>
+<button class="button button_noSelection" id="TAUP-RecoAndID"> Reconstruction and Identification </button>
+<button class="button button_noSelection" id="TAUP-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_FTAG">
+
+<td width="85%">
+<button class="button button_noSelection" id="FTAG-Algorithms"> FTAG Algorithms </button>
+<button class="button button_noSelection" id="FTAG-Calibrations"> FTAG Calibrations </button>
+<button class="button button_noSelection" id="FTAG-Software"> FTAG Software </button>
+<button class="button button_noSelection" id="FTAG-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_HIGG">
+
+<td width="85%">
+<button class="button button_noSelection" id="HIGG-HSG1"> Higgs to Gamma Gamma </button>
+<button class="button button_noSelection" id="HIGG-HSG2"> Higgs to ZZ </button>
+<button class="button button_noSelection" id="HIGG-HSG3"> Higgs to WW </button>
+<button class="button button_noSelection" id="HIGG-HSG4"> Higgs to Tau Tau </button>
+<button class="button button_noSelection" id="HIGG-HSG5"> Higgs to bb </button>
+<button class="button button_noSelection" id="HIGG-HSG7"> Higgs combination and Properties </button>
+<button class="button button_noSelection" id="HIGG-HSG8"> ttbar plus Higgs </button>
+<button class="button button_noSelection" id="HIGG-PROSPECT"> Higgs prospects and upgrade </button>
+<button class="button button_noSelection" id="HIGG-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_HION">
+
+<td width="85%">
+<button class="button button_noSelection" id="HION-Corr-Fluct"> Correlations and Fluctuations </button>
+<button class="button button_noSelection" id="HION-Ew-Quarkonia"> Electro-Weak and Quarkonium </button>
+<button class="button button_noSelection" id="HION-Jets"> jets, dijet, gamma-jet open heavy flavor </button>
+<button class="button button_noSelection" id="HION-UPFP"> Ultra-Peripheral Collisions and Forward Physics </button>
+<button class="button button_noSelection" id="HION-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_IDET">
+<td width="15%">DAPR</td>
+<td width="85%">
+<button class="button button_noSelection" id="IDET-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_JETM">
+
+<td width="85%">
+<button class="button button_noSelection" id="JETM-etmiss"> Missing ET reconstruction and Calibration </button>
+<button class="button button_noSelection" id="JETM-jsv"> Jet Software and Validation </button>
+<button class="button button_noSelection" id="JETM-tagging"> Jet tagging </button>
+<button class="button button_noSelection" id="JETM-definitions"> Jet definitions and MC calibration </button>
+<button class="button button_noSelection" id="JETM-insitu"> Jet in situ calibration and resolution </button>
+<button class="button button_noSelection" id="JETM-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_PERF">
+<td width="15%">PERF</td>
+<td width="85%">
+<button class="button button_noSelection" id="PERF-etmiss"> Missing ET reconstruction and Calibration </button>
+<button class="button button_noSelection" id="PERF-jesjer"> Jet Calibration and Resolution </button>
+<button class="button button_noSelection" id="PERF-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_SOFT">
+<td width="15%">SOFT</td>
+<td width="85%">
+<button class="button button_noSelection" id="SOFT-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_STDM">
+
+<td width="85%">
+<button class="button button_noSelection" id="STDM-ewk"> EW </button>
+<button class="button button_noSelection" id="STDM-wz"> W,Z Physics </button>
+<button class="button button_noSelection" id="STDM-jetphoton"> Jet and Photon Physics </button>
+<button class="button button_noSelection" id="STDM-softqcd"> Soft QCD </button>
+<button class="button button_noSelection" id="STDM-pdf"> PDF Forum </button>
+<button class="button button_noSelection" id="STDM-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_TOPQ">
+
+<td width="85%">
+<button class="button button_noSelection" id="TOPQ-PROPERTIESANDMASS"> Top Properties and Mass </button>
+<button class="button button_noSelection" id="TOPQ-TOPPLUSX"> Top Quarks + X </button>
+<button class="button button_noSelection" id="TOPQ-XSECTION"> Top cross-section </button>
+<button class="button button_noSelection" id="TOPQ-TOPRECO"> Top reconstruction </button>
+<button class="button button_noSelection" id="TOPQ-SINGLETOP"> Single Top </button>
+<button class="button button_noSelection" id="TOPQ-PROPERTIES"> Top Properties </button>
+<button class="button button_noSelection" id="TOPQ-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_TRIG">
+<td width="15%">TRIG</td>
+<td width="85%">
+<button class="button button_noSelection" id="TRIG-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+<tr class="row_subgroup filters_table_row" id="row_UPGR">
+<td width="15%">UPGR</td>
+<td width="85%">
+<button class="button button_noSelection" id="UPGR-uncategorized"> Uncategorized </button>
+</td>
+</tr>
+</tbody>
+</table></div>
+<div><div class="container" id="switch_and_or">
+<table>
+<tbody>
+<tr>
+<td>
+                    Switch AND/OR as logical connectors between the three main sections (types, groups, keywords). By default, connections within a section are OR, while connections between sections are AND (which can be changed).
+                </td>
+</tr>
+<tr>
+<td>
+                    ANDOR
+                </td>
+</tr>
+</tbody>
+</table>
+</div></div>
+<div><div class="container">
+<div class="dataTables_wrapper no-footer" id="event_display_dt_wrapper">
+<div class="top"><div class="dataTables_info" id="event_display_dt_info">Got a total of 494 publications to show with <span id="event_display_counter">1156</span> event display (1 to 25)</div></div>
+<div class="top">
+<div class="dataTables_filter" id="event_display_dt_filter"><label>Search:</label></div>
+<div class="dataTables_length" id="event_display_dt_length"><label>Show <select class=""><option>10</option>
+<option>25</option>
+<option>50</option>
+<option>100</option>
+<option>All</option></select> entries</label></div>
+</div>
+<table class="table dataTable no-footer" id="event_display_dt" width="100%">
+<thead>
+<tr>
+<td class="left_td sorting" colspan="1" rowspan="1">Document title</td>
+<td class="center_td sorting" colspan="1" rowspan="1">Reference</td>
+<td class="dt-body-center center_td sorting_desc" colspan="1" rowspan="1">Date</td>
+<td class="center_td sorting_disabled" colspan="1" rowspan="1">Caption</td>
+<td class="dt-body-center light_bg_td right_td sorting_disabled" colspan="1" rowspan="1">Image</td>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td class="left_td">Observation of s-channel single top-quark production</td>
+
+<td class="dt-body-center center_td">2026-10-08</td>
+<td class="center_td"><div class="table_div_caption">Display of event 1542146288 in run 279169 recorded by ATLAS in proton–proton collisions with LHC stable beams at a center-of-mass energy of 13 TeV on September 12th, 2015. This candidate event corresponds to s-channel single top-quark production in a muon with jets topology. The reconstructed muon is represented by the red line through the detector. The green and yellow bars indicate energy deposits in the liquid argon and scintillating-tile calorimeters; from these deposits two jets are identified and represented by yellow cones. Both jets are identified as having originated from a b-quark. The missing transverse momentum is represented by the dotted white line. (<i>figaux_01</i>)</div></td>
+<td class="dt-body-center light_bg_td right_td"><div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2025-15/.thumb_figaux_01.png</span>
+</div></td>
+</tr>
+<tr class="even">
+<td class="left_td">H-&gt;yy* measurement partial Run3</td>
+
+<td class="dt-body-center center_td">2026-08-04</td>
+<td class="center_td">
+<div class="table_div_caption">Event display of a candidate Higgs boson decay to a photon and a lepton pair, from proton--proton collisions recorded with the ATLAS detector in 2022 at √s = 13.6 TeV (Run 440613, Event 3869122974). The event features a photon, shown in green on the left side of the 3D view in the bottom panel and without an associated track, with |η| = 1.13 and p<sub>T</sub> = 45 GeV, together with a merged dielectron object, shown by the right green objects with associated tracks also in green, with |η| = 0.07 and p<sub>T</sub> = 59 GeV. The event is consistent with the H→ γ<sup>*</sup>γ → ℓℓγ decay with an invariant mass m<sub>ℓℓγ</sub> = 132 GeV. (<i>figaux_09</i>)</div>
+<div class="table_div_caption">Event display of a candidate Higgs boson decay to a photon and a lepton pair, from proton--proton collisions recorded with the ATLAS detector in 2023 at √s = 13.6 TeV (Run 456714, Event 2117848276). The event features a photon (shown in green, with |η| = 1.06 and p<sub>T</sub> = 52 GeV), together with a muon--antimuon pair (shown in red, with |η| = 0.54 and 1.25, p<sub>T</sub> = 55 GeV and 22 GeV, respectively). The event is consistent with the H→ γ<sup>*</sup>γ → ℓℓγ decay with an invariant mass m<sub>ℓℓγ</sub> = 122 GeV. (<i>figaux_10</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-16/.thumb_figaux_09.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-16/.thumb_figaux_10.png</span>
+</div>
+</td>
+</tr>
+<tr class="odd">
+<td class="left_td">Search for high mass dilepton resonances</td>
+
+<td class="dt-body-center center_td">2026-07-30</td>
+<td class="center_td">
+<div class="table_div_caption">Event display for the highest invariant mass dimuon event, which has an invariant mass of 3.96 TeV. The leading muon in this event has p<sub>T</sub> = 3769 GeV, η = −0.19 and φ = −0.18 and the sub-leading muon has p<sub>T</sub> = 937 GeV, η = 0.17 and φ = 2.97. 
+The axial view of the ATLAS detector is shown on the left of the figure, and the side view in the lower image.
+The hits and reconstructed tracks of the charged particles, in the centre of the ATLAS detector, in the Inner Detector are shown as dots and coloured lines, respectively.
+The energy deposits in the electromagnetic (the green layer) and hadronic (the red layer) calorimeters are shown as yellow boxes.
+The hits in the Muon Spectrometer (the outer blue layer) are shown as red dots and light blue highlighted segments.
+The reconstructed tracks in the Muon Spectrometer are shown as cyan lines. The direction of missing transverse energy is indicated by the dashed red line.
+The figure on the right shows the energy deposits in the cells of the ATLAS calorimeter.
+ (<i>figaux_06</i>)</div>
+<div class="table_div_caption">Event display for the highest invariant mass dielectron event, which has an invariant mass of 3.13 TeV. The leading electron in this event has p<sub>T</sub> = 883 GeV, η = 1.15 and φ = -1.55 and the sub-leading electron has p<sub>T</sub> = 534 GeV, η = -1.87 and φ = 0.17.
+The axial view of the ATLAS detector is shown on the left of the figure, and the side view in the lower image.
+The hits and reconstructed tracks of the charged particles, in the centre of the ATLAS detector, in the Inner Detector are shown as dots and coloured lines, respectively.
+The energy deposits in the electromagnetic (the green layer) and hadronic (the red layer) calorimeters are shown as yellow boxes.
+The hits in the Muon Spectrometer (the outer blue layer) are shown as red dots and light blue highlighted segments.
+The position and and energy of the electrons is shown by the position and length of the green lines, which show the energy deposits in the electromagnetic (the green layer).
+The reconstructed tracks in the Muon Spectrometer are shown as cyan lines. The direction of missing transverse energy is indicated by the dashed red line.
+The figure on the right shows the energy deposits in the cells of the ATLAS calorimeter.  (<i>figaux_07</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/EXOT-2025-09/.thumb_figaux_06.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/EXOT-2025-09/.thumb_figaux_07.png</span>
+</div>
+</td>
+</tr>
+<tr class="even">
+<td class="left_td">ttH and tH, H-&gt;yy CP </td>
+
+<td class="dt-body-center center_td">2026-06-03</td>
+<td class="center_td">
+<div class="table_div_caption">Event display of a candidate Higgs boson event in the Hadronic tt̄H CP-even Very High category, in which the Higgs boson decays to two photons (H→γγ) and the top-quark pair decays into jets, from proton-proton collisions recorded by ATLAS in 2023 at √s = 13.6 TeV (Run 453733, Event 616783525). The 3D cut-away view shows the ATLAS detector with several internal sectors removed for clarity. The event features two isolated photons reconstructed from large energy deposits in the electromagnetic calorimeter (green towers) and eight jets (represented by cones) clustered from charged-particle tracks (orange lines) and energy deposits in the electromagnetic and hadronic calorimeters (yellow towers). Two of the jets are tagged as originating from a bottom quark (cyan cones), characteristic of top-quark pair production. Orange lines depict charged-particle tracks with transverse momentum larger than 1.5 GeV. The left inset shows the same event projected onto the transverse plane, highlighting the large energy deposits of the isolated photons recoiling against the multi-jet system.
+ (<i>figaux_41</i>)</div>
+<div class="table_div_caption">Event display of a candidate Higgs boson event in the Leptonic tHjb CP-even category, in which the Higgs boson decays to two photons (H→γγ) and the top quark decays into a bottom-quark jet, a muon, and a neutrino, from proton–proton collisions recorded by ATLAS in 2022 at √s = 13.6 TeV (Run 431906, Event 1150488972). The 3D cut-away view shows the ATLAS detector with several internal sectors removed for clarity. The event features two isolated photons reconstructed from large energy deposits in the electromagnetic calorimeter (green towers) and three jets (represented by cones) clustered from charged-particle tracks (orange lines) and energy deposits in the electromagnetic and hadronic calorimeters (yellow towers). One of the jets is tagged as originating from a bottom quark (cyan cone), characteristic of top-quark production. A muon (red line) is shown passing through an innermost muon detector station. A forward jet with p<sub>T</sub> = 67.05 GeV and η = −4.20, reconstructed from energy deposits in the forward calorimeter (green towers), is shown near the beampipe, typical of t-channel tHjb production. Orange lines depict charged-particle tracks with transverse momentum larger than 1.5 GeV. The left insets show the same event projected onto the transverse plane, with and without charged-particle tracks displayed, to depict the full collision environment and to show the transverse view of the forward jet.
+
+ (<i>figaux_42</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-24/.thumb_figaux_41.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-24/.thumb_figaux_42.png</span>
+</div>
+</td>
+</tr>
+<tr class="odd">
+<td class="left_td">Search for soft unclustered energy patterns</td>
+
+<td class="dt-body-center center_td">2026-05-19</td>
+<td class="center_td"><div class="table_div_caption">Event data visualization of an event produced in proton–proton collisions
+at a centre-of-mass energy of 13 TeV and recorded by the ATLAS detector
+on 29 Oct 2017 (Run 339435, Event 2640860223).
+This event, from the signal region of a search for Soft Unclustered Energy Patterns,
+contains 6 muons (five passing quality selections) and 174 tracks compatible
+with originating from the primary vertex. The muons are indicated by red lines;
+the transverse momentum of the muons passing quality selections are
+10.5 GeV, 8.5 GeV, 6.7 GeV, 6.1 GeV and 4.5 GeV.
+Reconstructed tracks with transverse momentum above 500 MeV are shown in yellow.
+Different views of the ATLAS detector are shown: a r-z view (top-left),
+a x-y view (bottom-left), and a 3D visualization (right).
+ (<i>figaux_04</i>)</div></td>
+<td class="dt-body-center light_bg_td right_td"><div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/EXOT-2018-56/.thumb_figaux_04.png</span>
+</div></td>
+</tr>
+<tr class="even">
+<td class="left_td">RPV chargino -&gt; higgs lepton</td>
+
+<td class="dt-body-center center_td">2026-05-13</td>
+<td class="center_td">
+<div class="table_div_caption">An event display of a candidate χ̃<sup>±</sup><sub>1</sub>χ̃<sup>∓</sup><sub>1</sub>→hℓ<sup>±</sup>hℓ<sup>∓</sup>→bb̄ℓ<sup>±</sup>bb̄ℓ<sup>∓</sup> event in the Run 3 SR2ℓ channel, recorded by the ATLAS detector in 2022 at a center-of-mass energy of 13.6 TeV. The cyan cones are b-tagged jets, while the yellow cones are the remaining jets used in Higgs boson and electroweakino reconstruction. These jets are used to reconstruct two Higgs boson candidates with reconstructed invariant masses of 112 GeV and 128 GeV. The solid green line is an electron and the solid red line is a muon. This event has a reconstructed leading chargino candidate mass of 530 GeV and a reconstructed subleading chargino candidate mass of 418 GeV. Green and cyan boxes indicate energy deposits in the electromagnetic calorimeter while yellow and orange boxes indicate energy deposits in the hadronic calorimeter. Charged particle tracks with p<sub>T</sub>&gt;2 GeV are shown as orange lines. (<i>figaux_05</i>)</div>
+<div class="table_div_caption">An event display of a candidate χ̃<sup>±</sup><sub>1</sub>χ̃<sup>0</sup><sub>1</sub>→hℓhν→bb̄ℓbb̄ν event in the Run 2 SR1ℓ channel, recorded by the ATLAS detector in 2017 at a center-of-mass energy of 13 TeV. The cyan cones are b-tagged jets, while the yellow cones are the remaining jets used in Higgs boson and electroweakino reconstruction. These jets are used to reconstruct two Higgs boson candidates with reconstructed invariant masses of 131 GeV and 128 GeV. The dashed white line is E<sub>T</sub><sup>miss</sup> and the solid red line is a muon. This event has E<sub>T</sub><sup>miss</sup>=398 GeV and a reconstructed chargino candidate mass of 516 GeV. Green and cyan boxes indicate energy deposits in the electromagnetic calorimeter while yellow and orange boxes indicate energy deposits in the hadronic calorimeter. Charged particle tracks with p<sub>T</sub>&gt;2 GeV are shown as orange lines. (<i>figaux_06</i>)</div>
+<div class="table_div_caption">An event display of a candidate χ̃<sup>±</sup><sub>1</sub>χ̃<sup>0</sup><sub>1</sub>→hℓhν→bb̄ℓbb̄ν event in the Run 3 SR1ℓ channel, recorded by the ATLAS detector in 2023 at a center-of-mass energy of 13.6 TeV. The cyan cones are b-tagged jets, while the yellow cones are the remaining jets used in Higgs boson and electroweakino reconstruction. These jets are used to reconstruct two Higgs boson candidates with reconstructed invariant masses of 144 GeV and 130 GeV. The dashed white line is E<sub>T</sub><sup>miss</sup> and the solid green line is an electron. This event has E<sub>T</sub><sup>miss</sup>=268 GeV and a reconstructed chargino candidate mass of 718 GeV. Green and cyan boxes indicate energy deposits in the electromagnetic calorimeter while yellow and orange boxes indicate energy deposits in the hadronic calorimeter. Charged particle tracks with p<sub>T</sub>&gt;2 GeV are shown as orange lines. (<i>figaux_07</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HMBS-2024-09/.thumb_figaux_05.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HMBS-2024-09/.thumb_figaux_06.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HMBS-2024-09/.thumb_figaux_07.png</span>
+</div>
+</td>
+</tr>
+<tr class="odd">
+<td class="left_td">Quantum Black Hole search (l+jets)</td>
+
+<td class="dt-body-center center_td">2026-04-21</td>
+<td class="center_td">
+<div class="table_div_caption">Event data visualisation of an event produced in proton–proton collisions at a centre-of-mass energy of 13.6 TeV and recorded by the ATLAS detector on 17 September 2024 (Run 484754, Event 968132624). In this event, a high-p<sub>T</sub> electron is produced against a hard, small-R jet. The image displays two views of the same event, as recorded by the ATLAS detector. The main figure shows a cut-out 3D view of the ATLAS detector where different sectors and sub-detectors have been removed for visualisation purposes. Starting from the centre of the ATLAS detector, tracks of charged particles with transverse momentum greater than 1.20 GeV as reconstructed in the Inner Detector are shown as orange lines. The energy deposits greater than 200 MeV in the LAr and Tile calorimeters are shown as green/cyan and yellow/orange boxes, respectively. The reconstructed particle jet is visualised as a semi-transparent yellow cone. The image also shows the reconstructed track of the electron (green line) and the associated energy deposit in the electromagnetic calorimeter (green/teal boxes). The inlay on the left shows the same event and objects projected on the transversal plane; starting from the centre, the view shows the hits in the Pixel (white dots), SCT (yellow), and TRT (white/red) detectors, as well as the energy deposits greater than 200 MeV in the barrel LAr and Tile, as well as in a sector of the LAr EMEC calorimeter in the endcap region (green/cyan and yellow/orange boxes, respectively) and the reconstructed particle jet (yellow cone); the image also shows the reconstructed track of the electron (green line). This event is the highest-mass candidate in the electron+jet channel, with m<sub>ej</sub> = 5.3 TeV. The electron has (p<sub>T</sub>, η, φ) = (1.2 TeV, 1.55, -1.31) and the jet has (p<sub>T</sub>, η, φ) = (1.2 TeV, -1.29, 1.92), with Δφ(e, j) = 3.05 and Δη(e, j) = 2.84. (<i>figaux_04</i>)</div>
+<div class="table_div_caption">Event data visualisation of an event produced in proton–proton collisions at a centre-of-mass energy of 13.6 TeV and recorded by the ATLAS detector on 4 August 2024 (Run 481638, Event 696395260). In this event, a high-p<sub>T</sub> muon is produced against a hard, small-R jet. The image displays two views of the same event, as recorded by the ATLAS detector. The main figure shows a cut-out 3D view of the ATLAS detector where different sectors and sub-detectors have been removed for visualisation purposes. Starting from the centre of the ATLAS detector, tracks of charged particles with transverse momentum greater than 1.20 GeV as reconstructed in the Inner Detector are shown as orange lines. The energy deposits greater than 200 MeV in the LAr and Tile calorimeters are shown as green/cyan and yellow/orange boxes, respectively. The reconstructed particle jet is visualised as a semi-transparent yellow cone. The image also shows the tracks of a reconstructed muon (red line), the muon chambers associated with it in the New Small Wheel (grey) and TGC and MDT chambers in the endcap region (purple and green boxes) and the related measurements (green lines within the blue boxes). The inlay on the right shows the same event and objects projected on the transversal plane; starting from the centre, the view shows the hits in the Pixel (white dots), SCT (yellow), and TRT (white/red) detectors, as well as the energy deposits greater than 200 MeV in the barrel LAr and Tile calorimeters (green/cyan and yellow/orange boxes, respectively) and the reconstructed particle jet (yellow cone); the image also shows the track of charged particles with transverse momentum greater than 1.20 GeV as reconstructed by the Inner Detector (orange lines) and the reconstructed tracks of a muon (red line). This event is the highest-mass candidate in the muon+jet channel, with m<sub>μj</sub> = 5.5 TeV. The muon has (p<sub>T</sub>, η, φ) = (5.2 TeV, 1.33, 0.23) and the jet has (p<sub>T</sub>, η, φ) = (1.2 TeV, 0.39, -2.94), with Δφ(μ, j) = 3.11 and Δη(μ, j) = 0.94. (<i>figaux_05</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/EXOT-2024-32/.thumb_figaux_04.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/EXOT-2024-32/.thumb_figaux_05.png</span>
+</div>
+</td>
+</tr>
+<tr class="even">
+<td class="left_td">Minbias measurement in pO collision</td>
+
+<td class="dt-body-center center_td">2026-04-07</td>
+<td class="center_td"><div class="table_div_caption">Event display of a proton-oxygen collision recorded in Run 501640 on 1st July 2025 at 23:23:29 CEST. The event contains 19 reconstructed tracks (yellow lines) satisfying p<sub>T</sub> &gt; 500 MeV with at least one Pixel hit and at least six SCT hits. The leading (subleading) track has p<sub>T</sub> of 8.9 GeV (2 GeV), while the remaining tracks have p<sub>T</sub> ranging from 501 MeV to 949 MeV. All calorimeter cells are displayed satisfying the following E<sub>T</sub> thresholds: E<sub>T</sub> &gt; 250 MeV for EMB, EMEC and Tile, E<sub>T</sub> &gt; 800 MeV for HEC, and E<sub>T</sub> &gt; 1000 MeV for FCal. The oxygen beam travels in the +z direction going into the page. (<i>figaux_12</i>)</div></td>
+<td class="dt-body-center light_bg_td right_td"><div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/STDM-2025-08/.thumb_figaux_12.png</span>
+</div></td>
+</tr>
+<tr class="odd">
+<td class="left_td">ttHH Run 2 + partial Run 3</td>
+
+<td class="dt-body-center center_td">2026-03-13</td>
+<td class="center_td">
+<div class="table_div_caption">Event display of a candidate tt̄HH event in the 6b category of the 1L channel from proton–proton collisions recorded with the ATLAS detector at a centre-of-mass energy of 13.6 TeV. The cones represent reconstructed jets. Four cyan cones represent the b-tagged jets associated with the candidate Higgs bosons, with an invariant masses m<sub>bb</sub> of 127.1 GeV and 97.7 GeV, respectively. Two yellow cones represent b-tagged jets originating from the candidate top quarks, while two white cones denote non-b-tagged jets. Green rectangles show energy deposits in the electromagnetic calorimeter, and yellow cells indicate energy deposits in the hadronic calorimeter. The green line pointing toward the bottom left represents the electron and illustrates its energy deposition in the electromagnetic calorimeter. Orange lines depict tracks in the inner detector with p<sub>T</sub> &gt; 2.5 GeV. (<i>figaux_01</i>)</div>
+<div class="table_div_caption">Event display of a candidate tt̄HH event in the SR category of the SSML channel, recorded in proton–proton collisions with the ATLAS detector at a centre-of-mass collision energy of 13.6 TeV. The cones represent reconstructed jets. Three cyan cones correspond to the b-tagged jets, while the white cones denote non-b-tagged jets. Green rectangles indicate energy deposits in the electromagnetic calorimeter, and yellow cells show energy deposits in the hadronic calorimeter. Orange lines represent tracks in the inner detector with p<sub>T</sub> &gt; 2.5 GeV. The two red lines represent the muon tracks, shown together with their measurements in the Muon Spectrometer. The direction of the missing transverse momentum is indicated by a white dotted line. (<i>figaux_02</i>)</div>
+<div class="table_div_caption">Event display of a candidate tt̄HH event in the SR2 category of the bb̄γγ channel, recorded in proton–proton collisions recorded with the ATLAS detector at a centre-of-mass collision energy of 13.6 TeV. The cones represent reconstructed jets. Two cyan cones correspond to the b-tagged jets associated with one candidate Higgs boson, which has an invariant mass m<sub>bb</sub> of 173.9 GeV. Two yellow cones represent b-tagged jets originating from the candidate top quarks, while two white cones denote non-b-tagged jets. Green rectangles indicate energy deposits in the electromagnetic calorimeter. Two yellow towers represent the photons originating from the other candidate Higgs boson, with an invariant mass m<sub>γγ</sub>=121.8 GeV.
+ (<i>figaux_03</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-33/.thumb_figaux_01.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-33/.thumb_figaux_02.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-33/.thumb_figaux_03.png</span>
+</div>
+</td>
+</tr>
+<tr class="even">
+<td class="left_td">DV + MET</td>
+
+<td class="dt-body-center center_td">2026-03-12</td>
+<td class="center_td">
+<div class="table_div_caption">An event display of the single event observed in SDV SR. The display shows CVs (blue spheres), SDVs (pink spheres), tracks associated with the SDV that pass the vertex selections (green lines), other tracks with p<sub>T</sub> &gt; 1 GeV, jets with p<sub>T</sub> &gt; 20 GeV (yellow cones with R = 0.4), and the beam pipe (light gray tube). The event information and the properties of the E<sub>T</sub><sup>miss</sup> and SDV are shown. (<i>figaux_02</i>)</div>
+<div class="table_div_caption">Event displays of three events observed in 1FDV SR. The display shows CVs (blue spheres), FDVs (pink spheres), tracks associated with the FDV that pass the vertex selections for 1FDV SR (green lines), other tracks with p<sub>T</sub> &gt; 1 GeV, jets with p<sub>T</sub> &gt; 20 GeV (yellow cones with R = 0.4), and the beam pipe (light gray tube). The event information and the properties of the E<sub>T</sub><sup>miss</sup> and FDV are shown. Multiple FDVs are shown in an event, but the FDVs without any associated tracks highlighted in green do not satisfy the vertex selections for either 1FDV SR nor 2FDV SR. (<i>figaux_03a</i>)</div>
+<div class="table_div_caption">Event displays of three events observed in 1FDV SR. The display shows CVs (blue spheres), FDVs (pink spheres), tracks associated with the FDV that pass the vertex selections for 1FDV SR (green lines), other tracks with p<sub>T</sub> &gt; 1 GeV, jets with p<sub>T</sub> &gt; 20 GeV (yellow cones with R = 0.4), and the beam pipe (light gray tube). The event information and the properties of the E<sub>T</sub><sup>miss</sup> and FDV are shown. Multiple FDVs are shown in an event, but the FDVs without any associated tracks highlighted in green do not satisfy the vertex selections for either 1FDV SR nor 2FDV SR. (<i>figaux_03b</i>)</div>
+<div class="table_div_caption">Event displays of three events observed in 1FDV SR. The display shows CVs (blue spheres), FDVs (pink spheres), tracks associated with the FDV that pass the vertex selections for 1FDV SR (green lines), other tracks with p<sub>T</sub> &gt; 1 GeV, jets with p<sub>T</sub> &gt; 20 GeV (yellow cones with R = 0.4), and the beam pipe (light gray tube). The event information and the properties of the E<sub>T</sub><sup>miss</sup> and FDV are shown. Multiple FDVs are shown in an event, but the FDVs without any associated tracks highlighted in green do not satisfy the vertex selections for either 1FDV SR nor 2FDV SR. (<i>figaux_03c</i>)</div>
+<div class="table_div_caption">Event displays of two events observed in 2FDV SR. The display shows CVs (blue spheres), FDVs (pink spheres), tracks associated with the FDVs that pass the vertex selections for 2FDV SR (green lines), other tracks with p<sub>T</sub> &gt; 1 GeV, jets with p<sub>T</sub> &gt; 20 GeV (yellow cones with R = 0.4), the beam pipe (light gray tube), and the Pixel Detector (light blue tube). The event information and the properties of the E<sub>T</sub><sup>miss</sup> and FDVs are shown.  (<i>figaux_04a</i>)</div>
+<div class="table_div_caption">Event displays of two events observed in 2FDV SR. The display shows CVs (blue spheres), FDVs (pink spheres), tracks associated with the FDVs that pass the vertex selections for 2FDV SR (green lines), other tracks with p<sub>T</sub> &gt; 1 GeV, jets with p<sub>T</sub> &gt; 20 GeV (yellow cones with R = 0.4), the beam pipe (light gray tube), and the Pixel Detector (light blue tube). The event information and the properties of the E<sub>T</sub><sup>miss</sup> and FDVs are shown.  (<i>figaux_04b</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/SUSY-2022-15/.thumb_figaux_02.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/SUSY-2022-15/.thumb_figaux_03a.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/SUSY-2022-15/.thumb_figaux_03b.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/SUSY-2022-15/.thumb_figaux_03c.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/SUSY-2022-15/.thumb_figaux_04a.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/SUSY-2022-15/.thumb_figaux_04b.png</span>
+</div>
+</td>
+</tr>
+<tr class="odd">
+<td class="left_td">Displaced vertex + muon</td>
+
+<td class="dt-body-center center_td">2026-03-02</td>
+<td class="center_td">
+<div class="table_div_caption">
+Event display for a candidate signal event in SR<sub>far</sub>, recorded on 5 June 2023 at 01:39:07 CEST. The event features a displaced vertex (indicated in blue in the transverse plane view) reconstructed from four tracks, located at a transverse distance of about 47 mm from the primary vertex (pink), and with an invariant mass of about 32 GeV. The event has an additional muon (red) candidate, which has a transverse impact parameter of about 3 mm, and that is matched to the displaced vertex. Only primary (yellow) and large-impact-parameter (cyan) tracks with a p<sub>T</sub> of at least 2 GeV are shown.
+ (<i>figaux_17</i>)</div>
+<div class="table_div_caption">
+Event display for a candidate signal event in SR<sub>far</sub>, recorded on 21 July 2024 at 12:25:39 CEST. The event features a displaced vertex (indicated in blue in the transverse plane view) reconstructed from seven tracks, located at a transverse distance of about 5 mm from the primary vertex (pink), and with an invariant mass of about 26 GeV. The event has an additional muon (red) candidate, which has a transverse impact parameter of about 2.5 mm. Only primary (yellow) tracks with a p<sub>T</sub> of at least 2 GeV are shown.
+ (<i>figaux_18</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/EXOT-2024-21/.thumb_figaux_17.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/EXOT-2024-21/.thumb_figaux_18.png</span>
+</div>
+</td>
+</tr>
+<tr class="even">
+<td class="left_td">Evidence of ZZy production at 13 TeV</td>
+
+<td class="dt-body-center center_td">2026-02-19</td>
+<td class="center_td"><div class="table_div_caption">Event display of a ZZγ→eeμμγ candidate event from proton-proton collisions with stable LHC beams at a centre-of-mass energy of 13 TeV, recorded by the ATLAS detector. The 3D cut-away view shows the ATLAS detector. Green and orange/yellow boxes indicate energy deposits in the LAr and Tile calorimeters, respectively. The two electrons (green lines) have a transverse momentum of 47 GeV and 46 GeV; their dilepton invariant mass is 90 GeV. The two muons (red lines) have a transverse momentum of 65 GeV and 47 GeV with a dilepton invariant mass of 101 GeV. The photon is indicated by the energy deposits in the LAr calorimeter and its transverse momentum is 30 GeV. The bottom-right inset shows a transverse-plane projection of the same event, including the charged-particle trajectories reconstructed in the inner detector (orange lines). (<i>figaux_10</i>)</div></td>
+<td class="dt-body-center light_bg_td right_td"><div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/STDM-2023-14/.thumb_figaux_10.png</span>
+</div></td>
+</tr>
+<tr class="odd">
+<td class="left_td">Measurements of cross-sections close to the ttbar threshold</td>
+
+<td class="dt-body-center center_td">2026-01-16</td>
+<td class="center_td">
+<div class="table_div_caption">
+Event display of a candidate event consistent with the formation of a tt̄ quasi-bound-state. The event (Run number 338183 Event number 3295623881, recorded on October 14, 2017) is selected based on properties of the tt̄ pair. The signature of the targeted final state consists of two charged leptons, two b-jets and missing transverse momentum from the two neutrinos. One can see an electron (green line) and a muon (red line). The missing transverse momentum is shown as the dashed white line. The event contains two jets identified as likely originating from b-quarks, shown as turquoise cones. Tracks of charged particles reconstructed in the inner detector, and with transverse momentum greater than 1 GeV, are visualised as orange lines. Green/teal rectangles correspond to energy deposits in cells of the electromagnetic calorimeter, while yellow/orange rectangles correspond to energy deposits in cells of the hadron calorimeter. Muon chambers in the barrel region are shown as semi-transparent blue boxes; inside them, the measurements associated with the muon are shown as green lines. These objects are then used to reconstruct the top-quark candidates. In particular, the invariant mass of the tt̄ pair in the event is 342 GeV, and the values of the spin-sensitive observables c<sub>hel</sub> and c<sub>han</sub> are 0.97 and 0.94, respectively. The mass of the top (antitop) candidate in the event is 167 GeV (172 GeV), and the magnitude of the top momentum in the top-quark pair rest frame, p<sup>*</sup>, is 25 GeV. In this 3D cut-away view of the ATLAS detector, several radial sectors were removed to expose the interior.
+The top-right inlay presents a transverse-plane projection of the same event, showing the electron (green line) and muon (red line) tracks and the direction of the b-tagged jets (turquoise cones) and missing transverse momentum (dashed white line). Starting from the centre, the radial view shows the hits in the Pixel (white dots), SCT (yellow), and TRT (white/red) detectors.
+ (<i>figaux_08</i>)</div>
+<div class="table_div_caption">
+Event display of a candidate event consistent with the formation of a tt̄ quasi-bound-state (Run number 338183 Event number 3295623881, recorded on October 14, 2017). The invariant mass of the tt̄ pair in the event is 342.2 GeV. The values of the spin-sensitive observables c<sub>hel</sub> and c<sub>han</sub> are 0.965 and 0.944, respectively. The candidate event is reconstructed in the bbμe final state. The image features two views of the same event: a transversal view of the ATLAS detector on the top and a longitudinal view on the bottom. The red line shows the path of the muon, including the hits in the muon spectrometer. The green line shows the path of the electron together with its energy deposits in the electromagnetic calorimeter. The turquoise cones are the two b-tagged jets. As shown in the "lego plot" on the right, the muon and electron candidates have transverse momenta of 45 GeV and 37 GeV, respectively. The two jets have transverse momenta of 49 GeV and 43 GeV. The event misses a transverse momentum of about 99 GeV.
+ (<i>figaux_09</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2025-11/.thumb_figaux_08.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2025-11/.thumb_figaux_09.png</span>
+</div>
+</td>
+</tr>
+<tr class="even">
+<td class="left_td">VBF H(bb, cc) Run 2 + partial Run 3</td>
+
+<td class="dt-body-center center_td">2025-11-26</td>
+<td class="center_td">
+<div class="table_div_caption">A sample event from the Run-3 H →bb̄ channel. The two b-tagged Higgs boson candidate jets, b<sub>1</sub> and b<sub>2</sub>, are show in purple. The two VBF candidate jets, j<sub>1</sub> and j<sub>2</sub>, are shown in yellow. The value of m<sub>jj</sub> for this event is 4.1 TeV and the value of m<sub>bb </sub> is 125.8 GeV. (<i>figaux_01</i>)</div>
+<div class="table_div_caption">A sample event from the Run-3 H →cc̄ channel. The two c-tagged Higgs boson candidate signal jets, c<sub>1</sub> and c<sub>2</sub>, are show in purple. The two VBF candidate jets, j<sub>1</sub> and j<sub>2</sub>, are shown in yellow. The value of m<sub>jj</sub> for this event is 4.0 TeV and the value of m<sub>cc </sub> is 124.9 GeV. (<i>figaux_02</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-21/.thumb_figaux_01.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-21/.thumb_figaux_02.png</span>
+</div>
+</td>
+</tr>
+<tr class="odd">
+<td class="left_td">Search for chargino-neutralino pair production with small mass splittings</td>
+
+<td class="dt-body-center center_td">2025-11-25</td>
+<td class="center_td">
+<div class="table_div_caption">Visualisations of a data event recorded in 2018 that enters into SR-1e1T-dM3. The display on the right shows the events within the detector volume along with the LHC beam pipe. Energy deposits in the electromagnetic and hadronic calorimeters are displayed as green and yellow bars, respectively, while a subset of reconstructed inner-detector tracks with p<sub>T</sub> &gt; 2.5 GeV are shown in orange. An identified jet with p<sub>T</sub> = 227 GeV is indicated by the yellow cone, while the E<sub>T</sub><sup>miss</sup>, measured to be 226 GeV, is indicated by the dashed white line. An electron with p<sub>T</sub> = 8 GeV satisfying the standard ATLAS reconstruction and identification algorithms is shown in blue. The low-p<sub>T</sub> electron-track candidate with p<sub>T</sub> = 2.5 GeV is shown in purple. A pNN score of 0.97 was assigned to the event. The display on the left shows the same event in the x-y plane. (<i>figaux_07</i>)</div>
+<div class="table_div_caption">Visualisations of a data event recorded in 2016 that enters into SR-1μ1T-dM3. The display on the left shows the events within the detector volume along with the LHC beam pipe. Energy deposits in the electromagnetic and hadronic calorimeters are displayed as green and yellow bars, respectively, while a subset of reconstructed inner-detector tracks with p<sub>T</sub> &gt; 1.5 GeV are shown in orange. An identified jet with p<sub>T</sub> = 219 GeV is indicated by the yellow cone, while the E<sub>T</sub><sup>miss</sup>, measured to be 256 GeV, is indicated by the dashed white line. A muon with p<sub>T</sub> = 6.7 GeV satisfying the standard ATLAS reconstruction and identification algorithms is shown in red. The low-p<sub>T</sub> muon-track candidate with p<sub>T</sub> = 3.2 GeV is shown in purple. A pNN score of 0.99 was assigned to the event. The display on the right shows the same event in the x-y plane. (<i>figaux_08</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HMBS-2024-65/.thumb_figaux_07.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HMBS-2024-65/.thumb_figaux_08.png</span>
+</div>
+</td>
+</tr>
+<tr class="even">
+<td class="left_td">Heavy Ion collisions November 2025 --- Hard Probes</td>
+<td class="center_td"><a href=""><nobr>UNSG-2026-114</nobr></a></td>
+<td class="dt-body-center center_td">2025-11-14</td>
+<td class="center_td">
+<div class="table_div_caption">Run number 510493, Event number 30867432
+
+Event display of a heavy ion collision event (Run number 510493, Event number 30867432) recorded in ATLAS on the 14th of November 2025, when stable beams of lead ions colliding at a centre-of-mass energy per nucleon pair of 5.36 TeV were delivered to ATLAS by the LHC. The figure shows three views of the event.
+
+The image on the left is a cut-out 3D view of the ATLAS detector, where a set of radial sectors has been disabled for visualization purposes. Starting from the center, the image displays the tracks of charged particles created in the lead-lead collision, as reconstructed by the inner detectors (orange lines), and the track of the reconstructed muon (red line), as well as the muon detectors from which the muon was reconstructed (blue, green, and purple boxes) and the associated hits (green lines inside the blue, green, and purple boxes); the image also displays the energy deposits in the electromagnetic (green/teal boxes) and hadronic (yellow/orange boxes) calorimeters.
+
+The image on the middle right shows a transversal, zoomed-in view of the calorimeters' region projected onto the x-y plane; starting from the center, the image shows the reconstructed tracks of the charged particles (orange lines) and the track of the reconstructed muon (red line), as well as the energy deposits in the barrel sectors of the LAr (green/teal boxes) and Tile (yellow/orange boxes) calorimeters.
+
+The inset on the top right is a zoomed-in view of the inner detector; starting from the center, the view shows the reconstructed tracks of the charged particles (orange lines) and the track of the reconstructed muon (red line), as well as the hits in the Pixel (white dots), SCT (yellow dots), and TRT (white/red dots) tracking detectors; the image also shows the energy deposits in the barrel sectors of the LAr calorimeter (green/teal boxes). (<i>Heavy Ion collisions 2025 --- Hard Probes</i>)</div>
+<div class="table_div_caption">Run number 510493, Event number 30867432
+
+Event display of a heavy ion collision event (Run number 510493, Event number 30867432) recorded in ATLAS on the 14th of November 2025, when stable beams of lead ions colliding at a centre-of-mass energy per nucleon pair of 5.36 TeV were delivered to ATLAS by the LHC.
+
+The figure on the top left shows a transverse view of the ATLAS detector. The figure on the middle right shows the energy deposits in the cells of the ATLAS calorimeter. The figure at the bottom shows a side view of the ATLAS detector. Starting from the centre of the ATLAS detector, the reconstructed tracks of the charged particles in the inner detector are shown as coloured lines. The energy deposits in the electromagnetic (the green layer) and hadronic (the red layer) calorimeters are shown as yellow boxes. The hits in the muon spectrometer (the outer blue layer) are shown as red and grey blocks. The reconstructed track in the Muon Spectrometer is shown as a cyan line. (<i>Heavy Ion collisions 2025 --- Hard Probes</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://twiki.cern.ch/twiki/pub/AtlasPublic/EventDisplayRun3Collisions/HI2025_hardProbes_r510493_ev30867432_2025-11-14T16-19-41CET_v2.png</span>
+</div>
+<div class="table_div_img">
+<span>https://twiki.cern.ch/twiki/pub/AtlasPublic/EventDisplayRun3Collisions/JiveXML_510493_30867432-YX-RZ-LegoPlot-EventInfo-2025-11-14-19-08-14.png</span>
+</div>
+</td>
+</tr>
+<tr class="odd">
+<td class="left_td">Run 2 Legacy VBF H(bb) + photon</td>
+
+<td class="dt-body-center center_td">2025-09-17</td>
+<td class="center_td">
+<div class="table_div_caption">Event display of a candidate Higgs boson production event in the VBF H(→bb̄) γ signature (Run 355861, Event 811344636). The two b-jets from a Higgs boson candidate with an invariant mass of 120 GeV and a pseudorapidity of η=-2.2 are colored cyan. The two VBF jets with an invariant mass of 1006 GeV are colored purple. The photon with a transverse momentum of 81 GeV is represented as a yellow energy histogram. Two muons are shown as red tracks. This event received a high score of 0.988 from the NN, landing it in the highest bin of the signal region. (<i>figaux_01a</i>)</div>
+<div class="table_div_caption">Event display of a candidate Higgs boson production event in the VBF H(→bb̄) γ signature (Run 355861, Event 811344636). The two b-jets from a Higgs boson candidate with an invariant mass of 120 GeV and a pseudorapidity of η=-2.2 are colored cyan. The two VBF jets with an invariant mass of 1006 GeV are colored purple. The photon with a transverse momentum of 81 GeV is represented as a yellow energy histogram. Two muons are shown as red tracks. This event received a high score of 0.988 from the NN, landing it in the highest bin of the signal region. (<i>figaux_01b</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-04/.thumb_figaux_01a.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-04/.thumb_figaux_01b.png</span>
+</div>
+</td>
+</tr>
+<tr class="even">
+<td class="left_td">H- &gt; Zgamma</td>
+
+<td class="dt-body-center center_td">2025-07-15</td>
+<td class="center_td">
+<div class="table_div_caption">Event display of a Higgs boson event in the VBFT category, featuring a decay to a photon and a Z boson, with the Z subsequently decaying to an electron–positron (H→Zγ→eeγ) from proton–proton collisions recorded by ATLAS in 2022 at √s = 13.6 TeV (Run 438323, Event 303184169). In the 3D cutaway rendering of the ATLAS detector, certain radial segments are removed to uncover the inner layers of the detector. The event features a photon (the transverse purple cone, with η=1.78, p<sub>T</sub> =19.23 GeV) and an electron–positron (green lines, p<sub>T</sub> =80.03 GeV and 31.16 GeV, with the energy deposit in the electromagnetic calorimeter) with invariant mass m<sub>ee</sub> =92.12 GeV and m<sub>eeγ</sub> = 124.07 GeV, consistent with H→Zγ, and two forward jets (the yellow cones along the beam-pipe, with η=-2.99 and 3.50, and p<sub>T</sub> =112.29 GeV and 57.26 GeV) with invariant mass m<sub>jj</sub> = 2057.72 GeV. The density of the tracks of the charged particles reflects the pileup (42) in 2022. Charged-particle trajectories in the inner detector with a transverse momentum greater than 1.3 GeV are depicted as orange lines. The yellow/orange and green/cyan boxes represent the energy deposited in the hadronic and electromagnetic calorimeters, respectively. The left inset shows the same event projected onto the transverse plane, highlighting the directions of the electrons (green lines), the photon (purple cone) and forward jets (yellow cones), as well as the energy deposits in the barrel region of the calorimeters (yellow/orange and green/cyan boxes) and the reconstructed tracks of charged particles (orange lines).  (<i>figaux_06</i>)</div>
+<div class="table_div_caption">Event display of a Higgs boson event in the VBFT analysis category, featuring a decay to a photon and a Z boson, with the Z subsequently decaying to two muons (H →Zγ→μμγ) from proton–-proton collisions recorded by ATLAS in 2024 at √s = 13.6 TeV (Run 486179, Event 3284045424). In the 3D cutaway rendering of the ATLAS detector, certain radial segments are removed to uncover the inner layers of the detector. The event features a photon (the transverse purple cone, with η=-0.02 and p<sub>T</sub> =48.39 GeV) and two muons (red tracks, p<sub>T</sub> =121.56 GeV and 22.74 GeV, with their associated muon chambers shown as blue boxes with green measurement bars) with invariant mass m<sub>μμ</sub> =94.58 GeV and m<sub>μμγ</sub> = 125.76 GeV, consistent with H→Zγ, and two forward jets (the yellow cones along the beam-pipe, with η=2.62 and -2.92, p<sub>T</sub> =170.41 GeV and 118.30 GeV) with invariant mass m<sub>jj</sub> = 2276.54 GeV. The trajectories of charged particles with a transverse momentum greater than 1.3 GeV, reconstructed by the inner detector, are shown as orange lines. The yellow/orange and green/cyan boxes represent the energy deposited in the hadronic and electromagnetic calorimeters, respectively. The bottom right inset shows the same event projected on the transversal plane; starting from the centre, the view shows the hits in the Pixel (white dots), SCT (yellow lines), and TRT (white/red dots) detectors, as well as the energy deposits in the electromagnetic and hadronic calorimeters (green/cyan and yellow/orange boxes), and the muon track (red line). (<i>figaux_07</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-19/.thumb_figaux_06.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-19/.thumb_figaux_07.png</span>
+</div>
+</td>
+</tr>
+<tr class="odd">
+<td class="left_td">Non-resonant HH -&gt; yybb</td>
+
+<td class="dt-body-center center_td">2025-07-04</td>
+<td class="center_td">
+<div class="table_div_caption">Candidate HH → bb̄γγ event of the High Mass 3 category from Run 3. Tracks (in orange) with p<sub>T</sub> &gt; 2 GeV are shown along with two b-jets (turquoise cones) with p<sub>T</sub> of 133 GeV and 42 GeV and a m<sub>bb̄</sub> invariant mass of 111 GeV. Two photons (yellow towers) with a transverse energy E<sub>T</sub> of 96 GeV and 53 GeV and a m<sub>γγ</sub> invariant mass of 123 GeV, are also shown. The m<sub>bb̄γγ</sub> invariant mass is 357 GeV.
+ (<i>figaux_10</i>)</div>
+<div class="table_div_caption">Candidate HH → bb̄γγ event of the High Mass 3 category from Run 3. Tracks (in orange) with p<sub>T</sub> &gt; 2 GeV are shown along with two b-jets (turquoise cones) with p<sub>T</sub> of 150 GeV and 106 GeV and a m<sub>bb̄</sub> invariant mass of 134 GeV. Two photons (yellow towers) with a transverse energy E<sub>T</sub> of 123 GeV and 115 GeV and a m<sub>γγ</sub> invariant mass of 124 GeV, are also shown. The m<sub>bb̄γγ</sub> invariant mass is 955 GeV.
+ (<i>figaux_11</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2025-10/.thumb_figaux_10.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2025-10/.thumb_figaux_11.png</span>
+</div>
+</td>
+</tr>
+<tr class="even">
+<td class="left_td">H -&gt; mumu</td>
+
+<td class="dt-body-center center_td">2025-07-04</td>
+<td class="center_td"><div class="table_div_caption">
+Event display of a candidate Higgs-boson event decaying to two muons (H →μμ) from proton–-proton collisions recorded by ATLAS in 2024 at √s=13.6 TeV (Run 484466, Event 3913031636).
+In this 3D cut-away view of the ATLAS detector, several radial sectors have been removed to expose the interior. The event features two muons (red tracks with their associated muon chambers shown as blue boxes with green measurement bars) with invariant mass m<sub>μμ</sub> = 125.3GeV, consistent with H →μμ, and two forward jets (yellow cones) with invariant mass m<sub>jj</sub> = 2692.8 GeV.
+Charged-particle trajectories in the inner detector are shown as orange lines, and the yellow/orange and green/cyan boxes represent the energy deposited in the hadronic and electromagnetic calorimeters, respectively. The top-right inset presents a transverse-plane projection of the same event, highlighting the muon tracks, jet directions, and calorimeter deposits in the barrel region.
+ (<i>figaux_77</i>)</div></td>
+<td class="dt-body-center light_bg_td right_td"><div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-11/.thumb_figaux_77.png</span>
+</div></td>
+</tr>
+<tr class="odd">
+<td class="left_td">Multi-b dark Higgs</td>
+
+<td class="dt-body-center center_td">2025-07-03</td>
+<td class="center_td">
+<div class="table_div_caption">Display of a candidate event, projected onto the x–y plane (upper left) and as a three-dimensional view of the ATLAS detector (right). The event contains six reconstructed jets, four of which satisfy the 77% DL1r b-tagging working point (shown in cyan), with two further jets (shown in yellow).
+A significant p<sub>T</sub><sup>miss</sup> of 825 GeV is present, indicated by the white dashed line, and is nearly back-to-back with a four b-tagged jet system whose combined transverse momentum ( p<sub>T</sub><sup>4b</sup>) is 715 GeV.
+A single muon candidate, originating from a decay within a b-tagged jet, is shown in red, with hits in the relevant muon spectrometer chambers illustrated in green.  (<i>figaux_08</i>)</div>
+<div class="table_div_caption">Display of a candidate event, projected onto the x–y plane (lower right) and as a three-dimensional view of the ATLAS detector (left). The event contains four reconstructed jets, all of which satisfy the 77% DL1r b-tagging working point (shown in cyan).
+A missing transverse momentum (p<sub>T</sub><sup>miss</sup>) of 242 GeV is present, indicated by the white dashed line, and is nearly back-to-back with a four b-tagged jet system whose combined transverse momentum ( p<sub>T</sub><sup>4b</sup>) is 241 GeV.  (<i>figaux_09</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HMBS-2024-13/.thumb_figaux_08.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HMBS-2024-13/.thumb_figaux_09.png</span>
+</div>
+</td>
+</tr>
+<tr class="even">
+<td class="left_td">First 13.6 TeV Collisions 2025 — May 5, 2025</td>
+<td class="center_td"><a href=""><nobr>UNSG-2025-113</nobr></a></td>
+<td class="dt-body-center center_td">2025-05-05</td>
+<td class="center_td">
+<div class="table_div_caption">Run 496908, Event 13885876
+
+(C-Side of the ATLAS experiment is on the right of the picture)
+
+Event display of a collision event recorded by the ATLAS experiment on 5 May 2025, when the first stable beams of protons of 2025 at the energy of 6.8 TeV per beam were delivered to ATLAS by the LHC. The figure shows a cut-out view of the ATLAS detector. Starting from the center of the ATLAS detector, the reconstructed tracks of the charged particles in the Inner Detector are shown as orange lines, while the red line shows the reconstructed muon track. The energy deposits in the electromagnetic and hadronic calorimeters are shown as green/cyan and yellow/orange boxes, respectively. The orange and green lines show the hits in the NSW muon detector. The left inlay shows the same event projected on the transversal plane; starting from the center, the view shows the hits in the Pixel (white dots), SCT (yellow), and TRT (white/red) detectors, as well as the energy deposits in the electromagnetic and hadronic calorimeters (green/cyan and yellow/orange boxes), and the muon track (red line).  (<i>First 13.6 TeV collisions of 2025 — Event with a reconstructed muon</i>)<b>Note:</b> Event display is associated with no paper</div>
+<div class="table_div_caption">Run 496908, Event 13885876
+
+Event display of a collision event recorded by the ATLAS experiment on the 5th of May 2025, when the first stable beams of protons of 2025 at the energy of 6.8 TeV per beam were delivered to ATLAS by the LHC. The figure on the left shows an axial view of the ATLAS detector. The figure at the bottom shows a side view of the ATLAS detector. Starting from the centre of the ATLAS detector, the hits and reconstructed tracks of the charged particles in the Inner Detector are shown as dots and coloured lines, respectively. The energy deposits in the electromagnetic (the green layer) and hadronic (the red layer) calorimeters are shown as yellow/green/red boxes. The hits in the Muon Spectrometer (the outer blue layer) are shown as red and grey blocks. The reconstructed track in the Muon Spectrometer is shown as a cyan line. The figure on the right shows the energy deposits in the cells of the ATLAS calorimeter. (<i>First 13.6 TeV collisions of 2025 — Event with a reconstructed muon</i>)<b>Note:</b> Event display is associated with no paper</div>
+<div class="table_div_caption">Run 496908, Event 13885876
+
+(C-Side of the ATLAS experiment is on the right of the picture)
+
+Event display of a collision event recorded by the ATLAS experiment on 5 May 2025, when the first stable beams of protons of 2025 at the energy of 6.8 TeV per beam were delivered to ATLAS by the LHC. The figure shows a cut-out view of the ATLAS detector. Starting from the center of the ATLAS detector, the reconstructed tracks of the charged particles in the Inner Detector are shown as orange lines. The energy deposits in the electromagnetic and hadronic calorimeters are shown as green/cyan and yellow/orange boxes, respectively. The top right inlay shows the same event projected on the transversal plane; starting from the center, the view shows the hits in the Pixel (white dots), SCT (yellow), and TRT (white/red) detectors.  (<i>First 13.6 TeV collisions of 2025</i>)<b>Note:</b> Event display is associated with no paper</div>
+<div class="table_div_caption">Run 496908, Event 13885876
+
+Event display of a collision event recorded by the ATLAS experiment on the 5th of May 2025, when the first stable beams of protons of 2025 at the energy of 6.8 TeV per beam were delivered to ATLAS by the LHC. The figure on the left shows an axial view of the ATLAS detector. The figure at the bottom shows a side view of the ATLAS detector. Starting from the centre of the ATLAS detector, the hits and reconstructed tracks of the charged particles in the Inner Detector are shown as dots and coloured lines, respectively. The energy deposits in the electromagnetic (the green layer) and hadronic (the red layer) calorimeters are shown as yellow/green/red boxes. The hits in the Muon Spectrometer (the outer blue layer) are shown as red and grey blocks. The figure on the right shows the energy deposits in the cells of the ATLAS calorimeter.  (<i>First 13.6 TeV collisions of 2025</i>)<b>Note:</b> Event display is associated with no paper</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://cds.cern.ch/record/2931344/files/ATLAS_VP1_First13p6TeVSBCollisions2025_run496908_evt13885876_2025-05-05T14-14-56.png?subformat=icon-640</span>
+</div>
+<div class="table_div_img">
+<span>https://cds.cern.ch/record/2931344/files/JiveXML_496908_13885876-YX-RZ-LegoPlot-EventInfo-2025-05-05-17-17-03.png?subformat=icon-640</span>
+</div>
+<div class="table_div_img">
+<span>https://cds.cern.ch/record/2931344/files/ATLAS_VP1_First13p6TeVStableBeams2025_run496908_evt17131827_2025-05-05T14-22-14_v3.png?subformat=icon-640</span>
+</div>
+<div class="table_div_img">
+<span>https://cds.cern.ch/record/2931344/files/JiveXML_496908_17131827-YX-RZ-LegoPlot-EventInfo-2025-05-05-17-23-52.png?subformat=icon-640</span>
+</div>
+</td>
+</tr>
+<tr class="odd">
+<td class="left_td">Beam Splashes 2025</td>
+<td class="center_td"><a href=""><nobr>UNSG-2025-112</nobr></a></td>
+<td class="dt-body-center center_td">2025-04-14</td>
+<td class="center_td">
+<div class="table_div_caption">Run 495200, Event 127465
+Event display of a splash event recorded by ATLAS during the LHC beam-splash test on Monday, the 14th of April 2025, as the LHC restarts in preparation for the fourth year of Run-3 data taking. In the beam splash test, a single bunch of protons from the LHC hits a collimator upstream of the ATLAS detector, thereby generating a large number of particles, which are then used to probe the correct operation of the ATLAS detector as a whole. In this event display, the spray of particles in the LHC Beam 1 enters ATLAS from the right-hand side of the picture (the “A-Side" of the detector), traveling to the left (the “C-Side"). The figure on the left shows an axial view of the ATLAS detector. The figure at the bottom shows a side view of the ATLAS detector. The figure on the right shows the energy deposits in the cells of the ATLAS calorimeter. From the centre of the detector progressing outwards, the image shows particle interactions in the TRT tracking detector, in the electromagnetic and hadronic calorimeters, and in the muon detectors, respectively. The data visualized in the picture have been recorded using a threshold-based data filter (the “trigger”) based on energy deposits in the electromagnetic calorimeter on the “C-Side” of the detector. This digital trigger digitizes and reconstructs these energies at the beam-collision frequency. In this test run, the toroid magnet was OFF, and some detectors were disabled; in particular, some modules of the TRT tracking detector, as well as some MDT and all RPC muon detectors. (<i>Beam splashes 2025</i>)</div>
+<div class="table_div_caption">Run 495200, Event 127465
+(C-Side is on the right of the picture)
+
+Event display of a splash event recorded by ATLAS during the LHC beam-splash test on Monday, the 14th of April 2025, as the LHC restarted in preparation for the fourth year of Run-3 data taking. In the "beam splash" test, a single bunch of protons from the LHC hits a collimator upstream of the ATLAS detector, thereby generating a large number of particles, which are then used to probe the correct operation of the ATLAS detector as a whole. In this event display, the spray of particles in the LHC Beam 1 enters ATLAS from the left-hand side of the picture (the "A-Side" of the detector), traveling to the right (the "C-Side"). In the figure, the 3D view shows a cut-out view of the ATLAS detector, where different radial sectors of the detector have been switched off for visualization purposes. From the center of the detector progressing outwards, the image shows particle interactions in the TRT tracking detector (red/white stripes), in the electromagnetic (squares of different hues of green) and hadronic (yellow/orange boxes) calorimeters, and in the muon detectors (orange/green lines), respectively. The data visualized in the picture have been recorded using a threshold-based data filter (the “trigger”) based on energy deposits in the electromagnetic calorimeter on the “C-Side” of the detector. This digital trigger digitizes and reconstructs these energies at the beam-collision frequency. In this test run, the toroid magnet was OFF, and some detectors were disabled; in particular, some modules of the TRT tracking detector, as well as some MDT and all RPC muon detectors. TRT was operating with nominal gas and voltage in specific regions only (e.g. in the barrel region, where the ionisation of particles is visible). (<i>Beam splashes 2025</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://twiki.cern.ch/twiki/pub/AtlasPublic/EventDisplayRun3Collisions/JiveXML_495200_127465-YX-RZ-LegoPlot-EventInfo-2025-04-14-12-44-17.png</span>
+</div>
+<div class="table_div_img">
+<span>https://twiki.cern.ch/twiki/pub/AtlasPublic/EventDisplayRun3Collisions/ATLAS_VP1_BeamSplashes2025_run495200_evt127465_2025-04-14T12-29-57_v4b.png</span>
+</div>
+</td>
+</tr>
+<tr class="even">
+<td class="left_td">ggF+VBF H -&gt; WW* STXS, couplings, CP, and EFT  Run 2</td>
+
+<td class="dt-body-center center_td">2025-04-10</td>
+<td class="center_td">
+<div class="table_div_caption">Display of the event candidate for ggF Higgs boson production that has the highest DNN score within the 0-jet event class. The purple line indicates the electron candidate, the red line indicates the muon candidate, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. Hits in the silicon pixel and microstrip detectors are shown in red and yellow, respectively. Energy deposits in the calorimeters are indicated by the coloured blocks. A view in the transverse plane is given on the right, where components of the muon system that detected the muon candidate are highlighted. The Higgs boson candidate's p<sub>T</sub> is 14 GeV. The electron and muon candidate's p<sub>T</sub> are 43 and 15 GeV, respectively. The magnitude of the missing transverse momentum is 45 GeV. (<i>figaux_22</i>)</div>
+<div class="table_div_caption">Display of the event candidate for Higgs boson production that has the highest DNN score within the ggF 1-jet event class. The purple line indicates the electron candidate, the red line indicates the muon candidate, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. The green cone indicates the reconstructed jet. Hits in the microstrip detector are shown in yellow, and the orange lines correspond to reconstructed tracks. Energy deposits in the calorimeters are indicated by the coloured blocks. A component of the muon system that detected the muon candidate is visible on the left. The Higgs boson candidate's p<sub>T</sub> is 61 GeV. The reconstructed p<sub>T</sub> of the electron, muon, and jet are 17, 70, and 40 GeV, respectively. The magnitude of the missing transverse momentum is 27 GeV. (<i>figaux_23</i>)</div>
+<div class="table_div_caption">Display of the event candidate for Higgs boson production that has the second highest DNN score within the ggF 1-jet event class. The purple line indicates the electron candidate, the red line indicates the muon candidate, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. The green cone indicates the reconstructed jet. The orange lines correspond to reconstructed tracks. Energy deposits in the calorimeters are indicated by the coloured blocks. Two components of the muon system that detected the muon candidate are shown in the foreground. The Higgs boson candidate's p<sub>T</sub> is 69 GeV. The reconstructed p<sub>T</sub> of the electron, muon, and jet are 57, 22, and 38 GeV, respectively. The magnitude of the missing transverse momentum is 38 GeV. (<i>figaux_24</i>)</div>
+<div class="table_div_caption">Display of the event candidate for Higgs boson production that has the highest DNN score within the VBF 1-jet event class. The purple line indicates the electron candidate, the red line indicates the muon candidate, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. The green cone indicates the reconstructed jet. The orange lines correspond to reconstructed tracks. Energy deposits in the calorimeters are indicated by the coloured blocks. Components of the muon system that detected the muon candidate are shown. The Higgs boson candidate's p<sub>T</sub> is 379 GeV. The reconstructed p<sub>T</sub> of the electron, muon, and jet are 119, 190, and 379 GeV, respectively. The magnitude of the missing transverse momentum is 95 GeV. (<i>figaux_25</i>)</div>
+<div class="table_div_caption">Display of an event candidate for Higgs boson production in the DF channel of the ggF ≥2-jets event class. Among the 20 event candidates with the highest DNN score of that channel, it features the most reconstructed jets and the Higgs boson candidate with the largest reconstructed transverse momentum, 372 GeV. The purple line indicates the electron candidate, the red line indicates the muon candidate, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. The five jets are indicated by green cones whose length is proportional to the reconstructed p<sub>T</sub>. The blue lines correspond to reconstructed tracks. Energy deposits in the calorimeters are indicated by the coloured blocks. Components of the muon system that detected the muon candidate are displayed on the right. The reconstructed p<sub>T</sub> of the electron and muon are 198 and 49 GeV, respectively. The leading three jets have p<sub>T</sub> values of 145, 100 and 45 GeV. The magnitude of the missing transverse momentum is 128 GeV. (<i>figaux_26</i>)</div>
+<div class="table_div_caption">Display of an event candidate for Higgs boson production in the DF channel of the ggF ≥2-jets event class. It has the third highest DNN score of all events within that channel and event class. The purple line indicates the electron candidate, the red line indicates the muon candidate, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. The two reconstructed jets are indicated by green cones whose length is proportional to the reconstructed p<sub>T</sub>. Hits in the microstrip detector are shown in yellow. Energy deposits in the calorimeters are indicated by the coloured blocks. Components of the muon system that detected the muon candidate are visible near the top. A side view of the event is shown on the bottom left, where the blue lines correspond to reconstructed tracks. The Higgs boson candidate's p<sub>T</sub> is 66 GeV. The reconstructed p<sub>T</sub> of the electron and muon are 29 and 34 GeV, respectively. The jets have p<sub>T</sub> values of 43 and 35 GeV. The magnitude of the missing transverse momentum is 15 GeV. (<i>figaux_27</i>)</div>
+<div class="table_div_caption">Display of an event candidate for Higgs boson production in the DF channel of the VBF ≥2-jets event class. The candidate has the highest DNN score of all events with m<sub>jj</sub> &lt; 700 GeV within that channel and event class. The Higgs boson candidate's p<sub>T</sub> is 193 GeV and m<sub>jj</sub> is 659 GeV. The purple line indicates the electron candidate, the red line indicates the muon candidate, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. The two reconstructed jets are indicated by green cones whose length is proportional to the reconstructed p<sub>T</sub>. The blue lines correspond to reconstructed tracks. Energy deposits in the calorimeters are indicated by the coloured blocks and a component of the muon system that detected the muon candidate is highlighted. The reconstructed p<sub>T</sub> of the electron and muon are 112 and 16 GeV, respectively. The jets have p<sub>T</sub> values of 188 and 84 GeV. The magnitude of the missing transverse momentum is 78 GeV. (<i>figaux_28</i>)</div>
+<div class="table_div_caption">Display of the event candidate for Higgs boson production that has the highest DNN score within the DF channel of the VBF ≥2-jets event class. The purple line indicates the electron candidate, the red line indicates the muon candidate, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. The two reconstructed jets are indicated by green cones whose length is proportional to the reconstructed p<sub>T</sub>. Hits in the silicon pixel and microstrip detectors are shown in red and yellow, respectively. Energy deposits in the calorimeters are indicated by the coloured blocks. A component of the muon system that detected the muon candidate is displayed on the right. The Higgs boson candidate's p<sub>T</sub> is 246 GeV and m<sub>jj</sub> is 2.4 TeV. The reconstructed p<sub>T</sub> of the electron and muon are 72 and 111 GeV, respectively. The jets have p<sub>T</sub> values of 149 and 98 GeV. The magnitude of the missing transverse momentum is 64 GeV. (<i>figaux_29</i>)</div>
+<div class="table_div_caption">Display of an event candidate for Higgs boson production in the SF channel of the ggF ≥2-jets event class. The candidate has the highest DNN score of all events with p<sub>T</sub><sup>ℓℓ,miss</sup> &gt; 300 GeV within that channel and event class. The two muon candidates are indicated by red lines, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. The two reconstructed jets are indicated by green cones whose length is proportional to the reconstructed p<sub>T</sub>. The orange lines correspond to reconstructed tracks. Components of the muon system that detected the muon candidates are highlighted. The Higgs boson candidate's p<sub>T</sub> is 331 GeV. The reconstructed muons have p<sub>T</sub> of 96 and 79 GeV. The jets have p<sub>T</sub> of 297 and 41 GeV. The magnitude of the missing transverse momentum is 160 GeV. (<i>figaux_30</i>)</div>
+<div class="table_div_caption">Display of the event candidate for Higgs boson production that has the highest DNN score within the SF channel of the ggF ≥2-jets event class. The purple lines indicate the two electron candidates, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. The two reconstructed jets are indicated by green cones whose length is proportional to the reconstructed p<sub>T</sub>. Hits in the silicon pixel, microstrip, and TRT detectors are shown in red, yellow, and white, respectively. Energy deposits in the calorimeters are indicated by the coloured blocks. The Higgs boson candidate's p<sub>T</sub> is 99 GeV.The reconstructed electrons have p<sub>T</sub> of 45 and 27 GeV. The jets have p<sub>T</sub> of 50 and 48 GeV. The magnitude of the missing transverse momentum is 63 GeV. (<i>figaux_31</i>)</div>
+<div class="table_div_caption">Display of the event candidate for Higgs boson production that has the highest DNN score among dimuon candidates within the SF channel of the VBF ≥2-jets event class. Red lines indicate the muon candidates, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. The two reconstructed jets are indicated by green cones whose length is proportional to the reconstructed p<sub>T</sub>. The orange lines correspond to reconstructed tracks. Energy deposits in the calorimeters are indicated by the coloured blocks. Components of the muon system that detected the muon candidates are shown. The Higgs boson candidate's p<sub>T</sub> is 232 GeV and m<sub>jj</sub> is 3.0 TeV. The reconstructed muons have p<sub>T</sub> of 31 and 27 GeV. The jets have p<sub>T</sub> of 173 and 57 GeV. The magnitude of the missing transverse momentum is 176 GeV. (<i>figaux_32</i>)</div>
+<div class="table_div_caption">Display of the event candidate for Higgs boson production that has the highest DNN score among dielectron candidates within the SF channel of the VBF ≥2-jets event class. The purple lines indicate the electron candidates, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. The two reconstructed jets are indicated by green cones whose length is proportional to the reconstructed p<sub>T</sub>. The orange lines correspond to reconstructed tracks. Energy deposits in the calorimeters are indicated by the coloured blocks. The Higgs boson candidate's p<sub>T</sub> is 312 GeV and m<sub>jj</sub> is 3.2 TeV. The reconstructed electrons have p<sub>T</sub> of 114 and 56 GeV. The jets have p<sub>T</sub> of 311 and 122 GeV. The magnitude of the missing transverse momentum is 145 GeV. (<i>figaux_33</i>)</div>
+<div class="table_div_caption">Display of an event candidate for Higgs boson production in the SF channel of the VBF ≥2-jets event class. The candidate has the highest DNN score of all events with p<sub>T</sub><sup>ℓℓ,miss</sup> &lt; 200 GeV within that channel and event class. The purple lines indicate the two electron candidates, and the white dashed line indicates the direction of the reconstructed missing transverse momentum. The two reconstructed jets are indicated by green cones whose length is proportional to the reconstructed p<sub>T</sub>. Hits in the silicon pixel, microstrip, and TRT detectors are shown in red, yellow, and white, respectively. Energy deposits in the calorimeters are indicated by the coloured blocks. The Higgs boson candidate's p<sub>T</sub> is 122 GeV and m<sub>jj</sub> is 1.8 TeV. The reconstructed electrons have p<sub>T</sub> of 44 and 28 GeV. The jets have p<sub>T</sub> of 180 and 72 GeV. The magnitude of the missing transverse momentum is 77 GeV. (<i>figaux_34</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_22.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_23.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_24.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_25.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_26.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_27.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_28.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_29.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_30.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_31.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_32.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_33.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-07/.thumb_figaux_34.png</span>
+</div>
+</td>
+</tr>
+<tr class="odd">
+<td class="left_td">H* -&gt; WW off-shell Run 2</td>
+
+<td class="dt-body-center center_td">2025-04-10</td>
+<td class="center_td">
+<div class="table_div_caption">Event display for an event with a high DNN score (0.96) in the 0-jet DF signal region. A reconstructed electron (purple line) with p<sub>T</sub> = 390 GeV can be seen leaving a significant energy deposit in the calorimeter, and a muon (red line) with p<sub>T</sub> = 236 GeV can be seen propagating through the muon spectrometer. The reconstructed missing energy vector is illustrated as a white dotted line, with an associated p<sub>T</sub><sup>miss</sup> of 156 GeV. In the inner detector SCT hits are shown to highlight the large multiplicity of particles in the inner detector. (<i>figaux_07</i>)</div>
+<div class="table_div_caption">Event display for an event with a high DNN score (0.94) in the 1-jet DF signal region. A reconstructed muon (red line) with p<sub>T</sub> = 679 GeV can be seen propagating through the muon spectrometer, and an electron (purple line) with p<sub>T</sub> = 74 GeV propagates in the other direction. The reconstructed missing energy vector is illustrated as a white dotted line, with an associated p<sub>T</sub><sup>miss</sup> of 85 GeV. A jet cone is shown in green representing a jet that left a significant energy deposit in the calorimeter system, with a total reconstructed p<sub>T</sub> of 542 GeV. A few reconstructed tracks in the inner detector are shown as well. (<i>figaux_08</i>)</div>
+<div class="table_div_caption">Event display for an event with a high DNN score (1.00) in the 2-jet SF signal region. This event includes two reconstructed electrons (purple lines) with respectively p<sub>T</sub> of 261 and 204 GeV. Two forward jets, represented by green cones, are included with p<sub>T</sub> of 176 and 132 GeV, respectively. The reconstructed missing energy vector is illustrated as a white dotted line, with an associated p<sub>T</sub><sup>miss</sup> of 93 GeV. In the inner detector SCT hits are shown to highlight the large multiplicity of particles in the inner detector. (<i>figaux_09</i>)</div>
+</td>
+<td class="dt-body-center light_bg_td right_td">
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-05/.thumb_figaux_07.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-05/.thumb_figaux_08.png</span>
+</div>
+<div class="table_div_img">
+<span>https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/HIGP-2024-05/.thumb_figaux_09.png</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="bottom"><div class="dataTables_paginate paging_simple_numbers" id="event_display_dt_paginate">
+<a class="paginate_button previous disabled" id="event_display_dt_previous">Previous</a><a class="paginate_button next" id="event_display_dt_next">Next</a>
+</div></div>
+</div>
+</div></div>
+<div><div>
+        © <span id="current_year">2026</span> CERN for the benefit of the ATLAS Collaboration.
+        Reproduction of the material on this web page, or parts of it, is allowed as specified in the <a href="https://creativecommons.org/licenses/by/4.0/legalcode">CC-BY-4.0</a> license.
+    </div></div>

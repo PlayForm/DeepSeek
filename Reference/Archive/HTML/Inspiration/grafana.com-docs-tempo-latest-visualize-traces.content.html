@@ -1,0 +1,273 @@
+<div><div><div id="top-banner">
+<div class="banner__disabled" id="gcon2026_top_banner_a"><div class="gcon2025-banner gcon2026-banner footer">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">Save the Date!</div>
+<div class="tw:text-[13px] tw:text-white">Sign up to get the latest GrafanaCON 2026 updates, agenda drops, and first access to early-bird tickets when they’re first available.</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Sign up</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="gcon2026_top_banner_b"><div class="gcon2025-banner gcon2026-banner footer alt-grot">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">We have our sightson Barcelona</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Save the Date</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-post-keynote"><div class="tw:bg-[#E86F37] tw:relative tw:h-10 tw:hidden tw:sm:block">
+<div class="wrapper tw:px-0">
+<div class="tw:flex tw:flex-row tw:items-center tw:justify-between tw:px-5 tw:flex-wrap">
+
+<span class="tw:items-center tw:justify-center font-poppins tw:font-medium tw:text-black tw:text-base tw:xl:max-w-none tw:text-center tw:h-10 tw:hidden tw:lg:flex">
+          Watch the keynote again and signup for more on-demand sessions.
+        </span>
+<div class="tw:flex-col tw:xl:flex-row tw:items-center tw:gap-6 tw:h-6 tw:sm:flex">
+
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-top-banner"><div class="obscon2025-banner top-banner tw:relative">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<p class="banner-text">
+<span class="banner-title">📢 Registration + agenda now live </span>
+        Explore the latest Grafana Cloud and AI solutions, learn tips &amp; tricks from demos and hands-on workshops, and get actionable advice to advance your observability strategy. Register now and get 50% off - limited tickets available (while they last!).
+      </p>
+<a class="banner-btn tw:bg-black" href="/events/observabilitycon/?tech=target&amp;plcmt=top-banner&amp;aud=default">Register now</a>
+</div>
+</div>
+</div></div> </div></div></div>
+<div><div class="main section"><div class="main-content">
+<blockquote class="llms-txt-directive">Documentation for automated readersA curated documentation index is available at: https://grafana.com/llms.txtA complete documentation index is available at: https://grafana.com/llms-full.txtThese indexes can help with page discovery before fetching individual documents.</blockquote>
+<p class="agent-directive">This page is also available in Markdown, which may be easier for automated readers
+and AI tools to parse than HTML. The Markdown version is available at
+https://grafana.com/docs/tempo/latest/visualize-traces.md, or by sending
+Accept: text/markdown to https://grafana.com/docs/tempo/latest/visualize-traces/. For broader
+documentation discovery, the curated index is available at https://grafana.com/llms.txt
+and the complete index is available at https://grafana.com/llms-full.txt.</p>
+<div class="grid-layout docs">
+<section class="mobile print-hidden" id="mobile"><div class="mobile__wrapper"> <div class="mobile__title">Visualize tracing data in Grafana</div> </div></section><main class="section-docs__main docs__content" id="main"><div class="scrollspy-init">
+<div class="docs-content scrollspy-wrap" id="doc-article-text">
+<div class="docs__breadcrumb">
+<span>Visualize data</span>
+</div>
+<div class="docs-labels"><span class="badge docs-labels__product-purple docs-labels__item mr-half"><span>Open source
+</span></span></div>
+<h1 id="visualize-tracing-data-in-grafana">Visualize tracing data in Grafana
+</h1>
+<p>Grafana has a built-in Tempo data source that can be used to query Tempo and visualize traces.
+This page describes the high-level features and their availability.
+Use the latest versions for best compatibility and stability.</p>
+<div>
+<h2 id="query-your-data">Query your data
+</h2>
+<p>Using tracing data in Grafana and Grafana Cloud Traces, you can search for traces, generate metrics from spans, and link your tracing data with logs, metrics, and profiles.</p>
+<div class="admonition admonition-note"><blockquote>
+<p class="title text-uppercase">Note</p>
+<p>Trace results for matching spans are returned on a first-match basis. These results may not be the latest traces stored by Tempo.</p>
+</blockquote></div>
+<h3 id="use-traces-drilldown-to-investigate-tracing-data">Use Traces Drilldown to investigate tracing data
+</h3>
+<p><a href="/docs/grafana-cloud/visualizations/simplified-exploration/traces/">Grafana Traces Drilldown</a> helps you visualize insights from your Tempo traces data.
+Using the app, you can:</p>
+<ul>
+<li>Use <em>Rate</em>, <em>Errors</em>, and <em>Duration</em> (RED) metrics derived from traces to investigate issues</li>
+<li>Uncover related issues and monitor changes over time</li>
+<li>Browse automatic visualizations of your data based on its characteristics</li>
+<li>Do all of this without writing TraceQL queries</li>
+</ul>
+<p>Expand your observability journey and learn about <a href="/docs/grafana-cloud/visualizations/simplified-exploration/">the Drilldown apps suite</a>.</p>
+<h3 id="search-for-traces">Search for traces
+</h3>
+<p>Search for traces using common dimensions such as time range, duration, span tags, service names, etc.
+Use the Explore trace view to quickly diagnose errors and high latency events in your system.</p>
+
+<h3 id="search-is-non-deterministic">Search is non-deterministic
+</h3>
+<p>Most search functions are deterministic.
+When given the same criteria, a deterministic algorithm returns consistent results.
+For example, let’s say that you query a search engine for the definition of “traces.”
+The results list the same top matches for each query for “traces” in that search engine.</p>
+<p>However, Tempo search is non-deterministic.
+If you perform the same search twice, you’ll get different lists, assuming the possible number of results for your search is greater than the number of results you have your search set to return.</p>
+<p>When performing a search, Tempo does a massively parallel search over the given time range, and takes the first <code>N</code> results.
+Even identical searches differ due to things like machine load and network latency.
+This approach values speed over predictability and is quite simple; enforcing that the search results are consistent would introduce additional complexity (and increase the time the user spends waiting for results).
+TraceQL follows the same behavior.</p>
+<p>By adding <code>most_recent=true</code> to your TraceQL queries, the search results become deterministic.
+For more information, refer to
+<a href="/docs/tempo/latest/traceql/construct-traceql-queries/#retrieve-most-recent-results-experimental">Retrieve most recent results</a>.</p>
+<h4 id="use-trace-search-results-as-panels-in-dashboards">Use trace search results as panels in dashboards
+</h4>
+<p>You can embed tracing panels and visualizations in dashboards.
+You can also save queries as panels.
+For more information, refer to the <a href="/docs/grafana-cloud/visualizations/panels-visualizations/visualizations/traces/#add-traceql-with-table-visualizations">Traces Visualization</a> documentation.</p>
+<p>For example dashboards, visit <a href="https://play.grafana.org"><code>play.grafana.org</code></a>.</p>
+<ul>
+<li><a href="https://play.grafana.org/d/fab5705a-e213-4527-8c23-92cb7452e746/traces-and-basic-operations-on-them?orgId=1">Traces and basic operations</a></li>
+<li><a href="https://play.grafana.org/explore?schemaVersion=1&amp;panes=%7B%22cf2%22:%7B%22datasource%22:%22grafanacloud-traces%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22datasource%22:%7B%22type%22:%22tempo%22,%22uid%22:%22grafanacloud-traces%22%7D,%22queryType%22:%22traceqlSearch%22,%22limit%22:20,%22tableType%22:%22traces%22,%22filters%22:%5B%7B%22id%22:%22ab3bc4be%22,%22operator%22:%22%3D%22,%22scope%22:%22span%22%7D%5D%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D%7D&amp;orgId=1">Grafana Explore with a Tempo data source</a></li>
+</ul>
+<h3 id="use-traceql-to-query-data-and-generate-metrics">Use TraceQL to query data and generate metrics
+</h3>
+<p>Inspired by PromQL and LogQL, TraceQL is a query language designed for selecting traces.</p>
+<p>Using Grafana <strong>Explore</strong>, you can search traces.
+The default traces search reviews the whole trace.
+TraceQL provides a method for formulating precise queries so you can zoom in to the data you need.
+Query results return faster because the queries limit what is searched.</p>
+<p>You can construct queries using the
+<a href="/docs/grafana/next/datasources/tempo/query-editor/traceql-editor/">TraceQL query editor</a> or use the
+<a href="/docs/grafana/next/datasources/tempo/query-editor/traceql-search/">Search query type</a>.</p>
+<p>For details about constructing queries, refer to the
+<a href="/docs/tempo/latest/traceql/">TraceQL documentation</a>.</p>
+<h4 id="traceql-metrics-queries">TraceQL metrics queries
+</h4>
+<p>TraceQL language provides metrics queries.
+Metric queries extend trace queries by applying an aggregate function to trace query results. For example: <code>{ span:name = "foo" } | rate() by (span:status)</code>
+This powerful feature creates metrics from traces, much in the same way that LogQL metric queries create metrics from logs.</p>
+<p><a href="/docs/grafana-cloud/visualizations/simplified-exploration/traces/">Grafana Traces Drilldown</a> is powered by metrics queries.</p>
+<p>For more information about available queries, refer to
+<a href="/docs/tempo/latest/traceql/metrics-queries/">TraceQL metrics queries</a>.</p>
+<h3 id="generate-metrics-from-spans">Generate metrics from spans
+</h3>
+<p>RED metrics can drive service graphs and other ready-to-go visualizations of your span data.
+RED metrics represent:</p>
+<ul>
+<li>
+<em>Rate</em>, the number of requests per second</li>
+<li>
+<em>Errors</em>, the number of those requests that are failing</li>
+<li>
+<em>Duration</em>, the amount of time those requests take</li>
+</ul>
+<p>For more information about RED method, refer to <a href="/blog/2018/08/02/the-red-method-how-to-instrument-your-services/">The RED Method: how to instrument your services</a>.</p>
+<p>To enable metrics-generator in Grafana Cloud, refer to <a href="/docs/grafana-cloud/send-data/traces/metrics-generator/">Enable metrics-generator</a>.</p>
+<p>To enable metrics-generator for Tempo, refer to
+<a href="/docs/tempo/latest/configuration/#metrics-generator">Configure metrics-generator</a>.</p>
+
+<p>These metrics exist in your Hosted Metrics instance and can also be easily used to generate powerful custom dashboards.</p>
+
+<p>Metrics automatically generate exemplars as well which allows easy metrics to trace linking.</p>
+
+<h4 id="service-graph-view">Service graph view
+</h4>
+<p>Service graph view displays a table of request rate, error rate, and duration metrics (RED) calculated from your incoming spans.
+It also includes a node graph view built from your spans.</p>
+<p>To use the service graph view, you need to enable
+<a href="/docs/tempo/latest/metrics-generator/service_graphs/">service graphs</a> and
+<a href="/docs/tempo/latest/metrics-generator/span_metrics/">span metrics</a>.
+After it’s enabled, this pre-configured view is immediately available in <strong>Explore &gt; Service Graphs</strong>.</p>
+<p>Refer to the
+<a href="https://docs/tempo/latest/metrics-generator/service-graph-view">service graph view documentation</a> for further information.</p>
+
+<h2 id="integrate-other-telemetry-signals">Integrate other telemetry signals
+</h2>
+<h3 id="link-traces-and-logs">Link traces and logs
+</h3>
+<p>If you’re already doing request/response logging with trace IDs, they can be easily extracted from logs to jump directly to your traces.</p>
+
+<p>In the other direction, you can configure Grafana and Grafana Cloud to create a link from an individual span to your Loki logs.
+If you see a long-running span or a span with errors, you
+can immediately jump to the logs of the process causing the error.</p>
+
+<div class="admonition admonition-note"><blockquote>
+<p class="title text-uppercase">Note</p>
+<p>Cloud Traces only supports custom tags added by Grafana Support.
+Cloud Traces supports these default tags: <code>cluster</code>, <code>hostname</code>, <code>namespace</code>, and <code>pod</code>.
+Contact Support to add a custom tag.</p>
+</blockquote></div>
+<h3 id="link-traces-and-metrics">Link traces and metrics
+</h3>
+<p>Grafana can correlate different signals by adding the functionality to link between traces and metrics. <a href="/blog/2022/08/18/new-in-grafana-9.1-trace-to-metrics-allows-users-to-navigate-from-a-trace-span-to-a-selected-data-source/">Trace to metrics</a> lets you navigate from a trace span to a selected data source.
+Using trace to metrics, you can quickly see trends or aggregated data related to each span.</p>
+<p>For example, you can use span attributes to metric labels by using the <code>$__tags</code> keyword to convert span attributes to metrics labels.</p>
+<p>To set up Trace to metrics for your data source, refer to <a href="/docs/grafana-cloud/connect-externally-hosted/data-sources/tempo/configure-tempo-data-source/#trace-to-metrics">Trace to metric configuration</a>.</p>
+
+<h3 id="link-traces-and-profiles">Link traces and profiles
+</h3>
+<p>Using Trace to profiles, you can correlate different signals by adding the functionality to link between traces and profiles.</p>
+<p>Trace to profiles lets you link your
+<a href="/docs/pyroscope/latest/">Grafana Pyroscope</a> data source to tracing data in Grafana or Grafana Cloud.
+When configured, this connection lets you run queries from a trace span into the profile data.</p>
+
+<p>For more information, refer to the
+<a href="/docs/grafana/next/datasources/tempo/configure-tempo-data-source/#trace-to-profiles">Traces to profiles documentation</a> and the
+<a href="https://docs/grafana/next/datasources/grafana-pyroscope/">Grafana Pyroscope data source documentation</a>.</p>
+<p>For Cloud Traces, Refer to the <a href="/docs/grafana-cloud/connect-externally-hosted/data-sources/tempo/configure-tempo-data-source/#trace-to-profiles">Traces to profiles documentation</a> for configuration instructions.</p>
+
+</div>
+</div>
+<div><div class="docs__feedback print-hidden">
+<div class="docs__feedback--title">
+<h2 class="docs__feedback--heading">Was this page helpful?</h2>
+<div class="docs__feedback--container">
+
+
+</div>
+</div>
+<div class="docs__feedback--links"><div class="d-grid d-grid__columns--3 w-100p gap-1">
+<a class="docs__feedback--link" href="https://github.com/grafana/tempo/edit/release-v3.1/docs/sources/tempo/visualize-traces/_index.md"><span>Suggest an edit in GitHub</span>
+</a><a class="docs__feedback--link" href="https://github.com/grafana/tempo/issues/new?title=Documentation%20feedback:%20/docs/sources/tempo/visualize-traces/_index.md"><span>Create a GitHub issue</span>
+</a><a class="docs__feedback--link" href="mailto:docs@grafana.com"><span>Email docs@grafana.com</span>
+</a><a class="docs__feedback--link" href="/help/"><span>Help and support</span>
+</a><a class="docs__feedback--link" href="/community/"><span>Community</span></a>
+</div></div>
+<div class="print-hidden" id="docs-related-wrapper"><div class="docs__related">
+<h2 class="docs__related--heading">Related resources from Grafana Labs</h2>
+<div class="docs__related--subtext">Additional helpful documentation, links, and articles:</div>
+<div class="docs__related--grid">
+<a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-tracing-and-grafana-tempo/?pg=docs-tempo-latest-visualize-traces&amp;plcmt=related"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with tracing and Grafana Tempo</div>
+<div class="body-xsmall mt-half">In this webinar, we'll show you how to get started setting up Grafana Tempo, our open source, easy-to-use and high-volume distributed tracing backend.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/grafana-tempo-for-distributed-tracing/?pg=docs-tempo-latest-visualize-traces&amp;plcmt=related-2"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Scaling your distributed tracing with Grafana Tempo</div>
+<div class="body-xsmall mt-half">In this demo, we’ll show how Grafana Tempo allows you to scale tracing as far as possible with less operational cost and complexity than ever before.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/events/grafanacon/2023/oss-distributed-tracing-with-traceql/?pg=docs-tempo-latest-visualize-traces&amp;plcmt=related-3"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">How Grafana and Tempo 2.0 make it easier to explore distributed traces</div>
+<div class="body-xsmall mt-half">Learn best practices for operating Grafana Tempo and tips and tricks to find and visualize "needle in the haystack" traces with TraceQL.</div>
+</div>
+</div></div></a>
+</div>
+</div></div>
+</div></div>
+</div></main>
+</div>
+</div></div></div>
+<div><div class="highlight-send__buttons">
+<a class="highlight-send__ask-btn text-hover-white">
+      Ask Grafana Assistant
+      
+    </a> </div></div>

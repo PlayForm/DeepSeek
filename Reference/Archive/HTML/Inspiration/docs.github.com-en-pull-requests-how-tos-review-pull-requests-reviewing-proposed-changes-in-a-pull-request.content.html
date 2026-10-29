@@ -1,0 +1,248 @@
+<div><div id="__next"><div><div>
+<a class="visually-hidden skip-button DefaultLayout_skipButton__3BaOi" href="#main-content">Skip to main content</a><div><div class="d-lg-flex"><div class="flex-column flex-1 min-width-0 DefaultLayout_stickyStack__mf76f DefaultLayout_stickyStackWithSubBar__Yfp2u DefaultLayout_stickyStackYieldsAtXxl__y36ZX">
+<main class="DefaultLayout_mainContent__UI2BH" id="main-content"><div class="px-3 px-md-6 mt-4 mb-4"><div class="ArticleGridLayout_containerBox__lLLio ArticleGridLayout_containerBoxXxl__SphGC">
+<div class="ArticleGridLayout_heroTopper__bCpVj"><div class="d-flex flex-items-baseline flex-justify-between"><h1 class="border-bottom-0 ArticleTitle_title__wOdiS" id="title-h1">Reviewing proposed changes in a pull request</h1></div></div>
+<div class="f4 pb-4 ArticleGridLayout_heroIntro__IvIoX" id="article-intro">
+<div class="mb-3 Lead_container__m3L5f _page-intro"><p>Review commits, file changes, and diffs in pull requests to provide feedback, approve changes, or request updates before merging.</p></div>
+<div class="ViewMarkdownButton_belowIntroPlacement__MKGvm"><div class="ViewMarkdownButton_controls__jbwAh"><button class="Primer_Brand__Button-module__Button___lDruK Primer_Brand__Button-module__Button--secondary___akMC2 Primer_Brand__Button-module__Button--size-medium___EyCyw text-decoration-none ViewMarkdownButton_button__chhfE ViewMarkdownButton_copyButton__haGNh"><span class="Primer_Brand__Button-module__Button__text___Z3ocU"><span class="Primer_Brand__Text-module__Text___pecHN Primer_Brand__Text-module__Text-font--mona-sans___GpzSG Primer_Brand__Text-module__Text--default___DChoE Primer_Brand__Text-module__Text--200___XAIGT Primer_Brand__Text-module__Text--antialiased___fYDxq Primer_Brand__Text-module__Text--weight-medium___E0iQL Primer_Brand__Button-module__Button--label___lUBc0 Primer_Brand__Button-module__Button--label-medium___DW2TM Primer_Brand__Button-module__Button--label-secondary___DRJoJ">Copy markdown</span></span></button></div></div>
+
+</div>
+<div><div id="article-contents"><div class="MarkdownContent_markdownBody__v5MYy markdown-body">
+<h2 id="about-reviewing-pull-requests"><a class="heading-link" href="#about-reviewing-pull-requests">About reviewing pull requests</a></h2>
+<p>It's best to review changes in a pull request one file at a time:</p>
+<ul>
+<li>
+<strong>Examine</strong> each individual file changed in the pull request.</li>
+<li>
+<strong>Leave comments</strong> on specific changes.</li>
+<li>After reviewing a file, mark it as <strong>Viewed</strong> to collapse it and track your progress.</li>
+<li>The <strong>progress bar</strong> in the pull request header shows how many files you've viewed.</li>
+<li>When you've finished, you can <strong>approve</strong> the pull request or <strong>request changes</strong> by submitting your review with a summary comment.</li>
+</ul>
+<p>If the pull request was raised by GitHub Copilot, then Copilot will respond to your comments when you submit them. Copilot will push a new commit to the pull request with further changes. See <a href="/en/copilot/concepts/agents/cloud-agent/about-cloud-agent">GitHub Copilot on GitHub.com and GitHub Mobile</a>.</p>
+<div class="ghd-tool webui">
+<h2 id="understanding-the-purpose-of-the-pull-request"><a class="heading-link" href="#understanding-the-purpose-of-the-pull-request">Understanding the purpose of the pull request</a></h2>
+<p>Understanding the motivation behind a pull request helps you keep your review targeted and meaningful. It also helps you provide feedback that aligns with the pull request author’s intent and the project's goals.</p>
+<p>You have several options to better understand the context and rationale for proposed changes.</p>
+<h3 id="using-the-pull-request-sidebar-for-context"><a class="heading-link" href="#using-the-pull-request-sidebar-for-context">Using the pull request sidebar for context</a></h3>
+<p>In the pull request sidebar, you can find valuable context, including:</p>
+<ul>
+<li>Linked <strong>issues</strong> or <strong>discussions</strong>: Review these to understand the problems or goals that the pull request aims to address. You can also gather information about background, design decisions, or current debates.</li>
+<li>Linked <strong>projects</strong> or <strong>milestones</strong>: Review how this pull request fits within larger projects or upcoming releases.</li>
+</ul>
+<p>Use this information to frame your review and check if the goals of the pull request align with the original intent.</p>
+<h3 id="using-copilot-chat-to-understand-the-rationale"><a class="heading-link" href="#using-copilot-chat-to-understand-the-rationale">Using Copilot Chat to understand the rationale</a></h3>
+<p>You can ask Copilot Chat for help understanding the pull request’s intent or clarifying any part of the change.</p>
+<ol>
+<li>
+<p>At the top right of the pull request page, click the  button next to the search bar.</p>
+<p>Copilot Chat is displayed, with the pull request attached as context to the prompt window.</p>
+</li>
+<li>
+<p>In the prompt box, type a question and press <kbd>Enter</kbd>. For example, you could enter:</p>
+<ul>
+<li><code>What problem does this pull request solve?</code></li>
+<li><code>Why were these changes needed?</code></li>
+<li><code>Summarize the goals of this PR based on the linked issue.</code></li>
+<li><code>How does this PR relate to issue ISSUE-URL?</code></li>
+</ul>
+</li>
+</ol>
+<p>Copilot Chat can help you clarify the bigger picture before you start line-level review.</p>
+<h2 id="starting-a-review"><a class="heading-link" href="#starting-a-review">Starting a review</a></h2>
+<ol>
+<li>
+<p>Under your repository name, click <strong> Pull requests</strong>.</p>
+</li>
+<li>
+<p>In the list of pull requests, click the pull request you'd like to review.</p>
+</li>
+<li>
+<p>On the pull request, click <strong> Files changed</strong>.</p>
+<p>
+To change the format of the diff view in this tab, click  and choose the unified or split view. The choice you make will apply when you view the diff for other pull requests.</p>
+
+<p>You can also hide whitespace differences. The choice you make only applies to this pull request and will be remembered the next time you visit this page.</p>
+</li>
+<li>
+<p>Optionally, filter the files to show only the files you want to review or use the file tree to navigate to a specific file.</p>
+</li>
+<li>
+<p>Hover over the line of code where you'd like to add a comment, and click the blue comment icon.</p>
+
+</li>
+<li>
+<p>Optionally, you can add a comment on multiple lines. To select a range of lines, click the line number of the first line you want to comment on, then either drag down to the final line, or hold down <kbd>Shift</kbd> and click on the last line number. You can then click the blue comment icon on the last line you want to comment on. Alternatively, you can click the blue comment icon next to the first line you want to comment on, then drag down to the last line you want to comment on.</p>
+</li>
+<li>
+<p>In the comment field, type your comment.</p>
+</li>
+<li>
+<p>Optionally, to suggest a specific change to the line or lines, click , then edit the text within the suggestion block.</p>
+
+</li>
+<li>
+<p>To comment directly on a file, to the right of the file, click  and type your comment.</p>
+
+</li>
+<li>
+<p>When you're done, click <strong>Start a review</strong>. If you have already started a review, you can click <strong>Add review comment</strong>.</p>
+</li>
+</ol>
+<p>Before you submit your review, your line comments are <em>pending</em> and only visible to you. You can edit pending comments anytime before you submit your review. To cancel a pending review, including all of its pending comments, click <strong>Submit review</strong>, then click <strong>Discard review</strong>.</p>
+
+</div>
+<div class="ghd-tool codespaces">
+<h2 id="reviewing-a-pull-request"><a class="heading-link" href="#reviewing-a-pull-request">Reviewing a pull request</a></h2>
+<p>You can use <a href="/en/codespaces/quickstart">GitHub Codespaces</a> to test, run, and review pull requests.</p>
+<ol>
+<li>
+<p>Open the pull request in a codespace, as described in <a href="/en/codespaces/developing-in-a-codespace/using-github-codespaces-for-pull-requests#opening-a-pull-request-in-codespaces">Using GitHub Codespaces for pull requests</a>.</p>
+</li>
+<li>
+<p>In the Activity Bar, click the <strong>GitHub Pull Request</strong> view. This view only appears when you open a pull request in a codespace.</p>
+
+</li>
+<li>
+<p>To review a specific file, click the <strong>Open File</strong> icon in the Side Bar.</p>
+
+</li>
+<li>
+<p>To add review comments, click the <strong>+</strong> icon next to the line number. Type your review comment and then click <strong>Start Review</strong>.</p>
+
+</li>
+<li>
+<p>Optionally, you can suggest a change that the author of the pull request can click to commit if they agree with your suggestion. To do this, click and hold the <strong>+</strong> sign next to the first line you want to suggest changing, then drag the <strong>+</strong> sign to the last line you want to suggest changing. Then click <strong>Make a Suggestion</strong> in the comment box that's displayed.</p>
+<p>The lines you selected are copied into the comment box, where you can edit them to suggest a change. You can add a comment above the line containing <code>```suggestion</code> to explain your suggested change.</p>
+<p>Click <strong>Add Comment</strong> to add your suggestion to the pull request.</p>
+
+</li>
+<li>
+<p>When you are finished adding review comments, from the Side Bar you can choose to either submit the comments, approve the changes, or request changes.</p>
+
+</li>
+</ol>
+<p>For more information on reviewing pull requests in GitHub Codespaces, see <a href="/en/codespaces/developing-in-a-codespace/using-github-codespaces-for-pull-requests">Using GitHub Codespaces for pull requests</a>.</p>
+</div>
+<div class="ghd-tool webui">
+<h2 id="understanding-changes-in-a-pull-request"><a class="heading-link" href="#understanding-changes-in-a-pull-request">Understanding changes in a pull request</a></h2>
+<div class="ghd-alert ghd-alert-accent">
+<p class="ghd-alert-title">Note</p>
+<p> You'll need access to GitHub Copilot. For more information, see <a href="/en/copilot/get-started/about-github-copilot#get-access">About GitHub Copilot</a>.</p>
+</div>
+<p>GitHub Copilot can help you quickly understand changes in a pull request by providing context and explanations for specific commits. If you’re unsure about the purpose of a particular change or need more details about how it fits into the broader codebase, you can ask Copilot questions about individual commits.</p>
+<ol>
+<li>
+<p>Navigate to a commit on GitHub.</p>
+</li>
+<li>
+<p>In the top right of any page on GitHub, click the  icon next to the search bar.</p>
+<p>The GitHub Copilot Chat panel is displayed. To resize the panel, click and drag the top or left edge.</p>
+</li>
+<li>
+<p>If the panel contains a previous conversation you had with Copilot, click the  plus sign icon at the top right of the Copilot panel to start a new conversation.</p>
+</li>
+<li>
+<p>At the bottom of the Copilot chat panel, in the "Ask Copilot" box, type a question and press <kbd>Enter</kbd>. For example, you could enter:</p>
+<ul>
+<li>
+<p><code>Summarize the changes in this commit</code></p>
+</li>
+<li>
+<p><code>Who committed these changes?</code></p>
+</li>
+<li>
+<p><code>When was this commit made?</code></p>
+</li>
+</ul>
+<div class="ghd-alert ghd-alert-success">
+<p class="ghd-alert-title">Tip</p>
+<p>
+If you know the SHA for a commit, instead of navigating to the commit, you can ask Copilot about the commit from any page in the repository on GitHub by including the SHA in your message. For example, <code>What changed in commit a778e0eab?</code></p>
+</div>
+</li>
+<li>
+<p>Optionally, after submitting a question, you can click  in the text box to stop the response.</p>
+</li>
+</ol>
+<h2 id="reviewing-dependency-changes"><a class="heading-link" href="#reviewing-dependency-changes">Reviewing dependency changes</a></h2>
+<p>If the pull request contains changes to dependencies, you can use the dependency review for a manifest or lock file to see what has changed. You can also check whether the changes introduce security vulnerabilities. See <a href="/en/pull-requests/how-tos/review-pull-requests/reviewing-dependency-changes-in-a-pull-request">Reviewing dependency changes in a pull request</a>.</p>
+<ol>
+<li>
+<p>On the pull request, click <strong> Files changed</strong>.</p>
+
+</li>
+<li>
+<p>On the right of the header for a manifest or lock file, display the dependency review by clicking the  rich diff button.</p>
+
+</li>
+<li>
+<p>You may also want to review the source diff, because there could be changes to the manifest or lock file that don't change dependencies, or there could be dependencies that GitHub can't parse and which, as a result, don't appear in the dependency review.</p>
+<p>To return to the source diff view, click the  button.</p>
+
+</li>
+</ol>
+<h2 id="marking-a-file-as-viewed"><a class="heading-link" href="#marking-a-file-as-viewed">Marking a file as viewed</a></h2>
+<p>After you finish reviewing a file, you can mark the file as viewed. The file will collapse. If the file changes after you view the file, it will be unmarked as viewed.</p>
+<ol>
+<li>
+<p>On the pull request, click <strong> Files changed</strong>.</p>
+
+</li>
+<li>
+<p>On the right of the header of the file you've finished reviewing, select <strong>Viewed</strong>.</p>
+
+</li>
+</ol>
+<h2 id="submitting-your-review"><a class="heading-link" href="#submitting-your-review">Submitting your review</a></h2>
+<p>After you've finished reviewing all the files you want in the pull request, submit your review.</p>
+<ol>
+<li>
+<p>On the pull request, click <strong> Files changed</strong>.</p>
+
+</li>
+<li>
+<p>Above the changed code, click <strong>Review changes</strong>.</p>
+
+</li>
+<li>
+<p>Type a comment summarizing your feedback on the proposed changes.</p>
+</li>
+<li>
+<p>Select the type of review you'd like to leave:</p>
+<ul>
+<li>Select <strong>Comment</strong> to leave general feedback without explicitly approving the changes or requesting additional changes.</li>
+<li>Select <strong>Approve</strong> to submit your feedback and approve merging the changes proposed in the pull request.</li>
+<li>Select <strong>Request changes</strong> to submit feedback that must be addressed before the pull request can be merged.</li>
+</ul>
+</li>
+<li>
+<p>Click <strong>Submit review</strong>.</p>
+</li>
+</ol>
+<div class="ghd-alert ghd-alert-success">
+<p class="ghd-alert-title">Tip</p>
+<ul>
+<li>The <strong>Request changes</strong> option is purely informational and will not prevent merging unless a ruleset or classic branch protection rule is configured with the "require a pull request" option. If configured and a collaborator with <code>admin</code>, <code>owner</code>, or <code>write</code> access to the repository submits a review requesting changes, the pull request cannot be merged until the same collaborator submits another review approving the changes in the pull request.</li>
+<li>Repository owners and administrators can merge a pull request even if it hasn't received an approving review, or if a reviewer who requested changes has left the organization or is unavailable.</li>
+<li>If both required reviews and stale review dismissal are enabled and a code-modifying commit is pushed to the branch of an approved pull request, the approval is dismissed. The pull request must be reviewed and approved again before it can be merged.</li>
+<li>When several open pull requests each have a head branch pointing to the same commit, you won’t be able to merge them if one or both have a pending or rejected review.</li>
+<li>If your repository requires approving reviews from people with write or admin permissions, the reviewers sidebar groups approvals by permission level. Approvals can appear in two sections:
+<ul>
+<li>The <strong>top section</strong> mostly contains approvals from people with write or admin permissions that count toward merge requirements. Approvals by GitHub Copilot also appear in this section even though GitHub Copilot reviews do not count toward those requirements.</li>
+<li>The <strong>collapsible section (if present)</strong> shows approvals from reviewers whose reviews do not affect whether the pull request can be merged.</li>
+</ul>
+</li>
+<li>Pull request authors cannot approve their own pull requests. You will also not be able to approve a pull request that was raised by GitHub Copilot if it was you who assigned Copilot to the issue to which the pull request relates.</li>
+</ul>
+</div>
+</div>
+<h2 id="further-reading"><a class="heading-link" href="#further-reading">Further reading</a></h2>
+<ul>
+
+<li><a href="/en/issues/tracking-your-work-with-issues/using-issues/filtering-and-searching-issues-and-pull-requests">Filtering and searching issues and pull requests</a></li>
+</ul>
+</div></div></div>
+</div></div></main>
+</div></div></div>
+</div></div></div></div>

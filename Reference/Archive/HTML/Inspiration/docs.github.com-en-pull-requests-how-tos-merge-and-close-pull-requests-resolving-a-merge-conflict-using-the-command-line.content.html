@@ -1,0 +1,130 @@
+<div><div id="__next"><div><div>
+<a class="visually-hidden skip-button DefaultLayout_skipButton__3BaOi" href="#main-content">Skip to main content</a><div><div class="d-lg-flex"><div class="flex-column flex-1 min-width-0 DefaultLayout_stickyStack__mf76f DefaultLayout_stickyStackWithSubBar__Yfp2u DefaultLayout_stickyStackYieldsAtXxl__y36ZX">
+<main class="DefaultLayout_mainContent__UI2BH" id="main-content"><div class="px-3 px-md-6 mt-4 mb-4"><div class="ArticleGridLayout_containerBox__lLLio ArticleGridLayout_containerBoxXxl__SphGC">
+<div class="ArticleGridLayout_heroTopper__bCpVj"><div class="d-flex flex-items-baseline flex-justify-between"><h1 class="border-bottom-0 ArticleTitle_title__wOdiS" id="title-h1">Resolving a merge conflict using the command line</h1></div></div>
+<div class="f4 pb-4 ArticleGridLayout_heroIntro__IvIoX" id="article-intro">
+<div class="mb-3 Lead_container__m3L5f _page-intro"><p>Resolve merge conflicts using the command line by identifying conflicting changes, editing files, and committing resolutions.</p></div>
+<div class="ViewMarkdownButton_belowIntroPlacement__MKGvm"><div class="ViewMarkdownButton_controls__jbwAh"><button class="Primer_Brand__Button-module__Button___lDruK Primer_Brand__Button-module__Button--secondary___akMC2 Primer_Brand__Button-module__Button--size-medium___EyCyw text-decoration-none ViewMarkdownButton_button__chhfE ViewMarkdownButton_copyButton__haGNh"><span class="Primer_Brand__Button-module__Button__text___Z3ocU"><span class="Primer_Brand__Text-module__Text___pecHN Primer_Brand__Text-module__Text-font--mona-sans___GpzSG Primer_Brand__Text-module__Text--default___DChoE Primer_Brand__Text-module__Text--200___XAIGT Primer_Brand__Text-module__Text--antialiased___fYDxq Primer_Brand__Text-module__Text--weight-medium___E0iQL Primer_Brand__Button-module__Button--label___lUBc0 Primer_Brand__Button-module__Button--label-medium___DW2TM Primer_Brand__Button-module__Button--label-secondary___DRJoJ">Copy markdown</span></span></button></div></div>
+</div>
+<div><div id="article-contents"><div class="MarkdownContent_markdownBody__v5MYy markdown-body">
+<p>Merge conflicts happen when competing changes are made to the same line of a file, or when one person edits a file and another person deletes the same file. See <a href="/en/pull-requests/reference/merge-conflicts">Merge conflicts</a>.</p>
+<div class="ghd-alert ghd-alert-success">
+<p class="ghd-alert-title">Tip</p>
+<p>
+You can use the conflict editor on GitHub to resolve competing line change merge conflicts between branches that are part of a pull request. See <a href="/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-on-github">Resolving a merge conflict on GitHub</a>.</p>
+</div>
+<h2 id="competing-line-change-merge-conflicts"><a class="heading-link" href="#competing-line-change-merge-conflicts">Competing line change merge conflicts</a></h2>
+<p>When competing changes affect the same lines, choose which changes to keep, then commit the resolution.</p>
+<ol>
+<li>
+<p>Open your terminal or Git Bash.</p>
+</li>
+<li>
+<p>Navigate into the local Git repository that has the merge conflict.</p>
+<pre><code class="hljs language-shell">cd REPOSITORY-NAME
+</code></pre>
+</li>
+<li>
+<p>List the files affected by the merge conflict. In this example, the file <em>styleguide.md</em> has a merge conflict.</p>
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="bash">git status</span>
+<span class="bash"><span class="hljs-comment"># On branch branch-b</span></span>
+<span class="bash"><span class="hljs-comment"># You have unmerged paths.</span></span>
+<span class="bash"><span class="hljs-comment">#   (fix conflicts and run "git commit")</span></span>
+
+<span class="bash"><span class="hljs-comment"># Unmerged paths:</span></span>
+<span class="bash"><span class="hljs-comment">#   (use "git add &lt;file&gt;..." to mark resolution)</span></span>
+
+<span class="bash"><span class="hljs-comment"># both modified:      styleguide.md</span></span>
+
+<span class="bash">no changes added to commit (use <span class="hljs-string">"git add"</span> and/or <span class="hljs-string">"git commit -a"</span>)</span>
+</code></pre>
+</li>
+<li>
+<p>Open your preferred text editor, such as <a href="https://code.visualstudio.com/">Visual Studio Code</a>, and navigate to the file that has merge conflicts.</p>
+</li>
+<li>
+<p>Search the file for the conflict marker <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>. The changes from the HEAD or base branch appear after <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code>, followed by <code>=======</code>, then the changes from the other branch and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; BRANCH-NAME</code>.</p>
+<pre><code class="hljs language-text">If you have questions, please
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+open an issue
+=======
+ask your question in IRC.
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; branch-a
+</code></pre>
+</li>
+<li>
+<p>Decide if you want to keep only your branch's changes, keep only the other branch's changes, or make a brand new change, which may incorporate changes from both branches. Delete the conflict markers <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> and make the changes you want in the final merge. For example, you can keep both changes:</p>
+<pre><code class="hljs language-shell">If you have questions, please open an issue or ask in our IRC channel if it's more urgent.
+</code></pre>
+</li>
+<li>
+<p>Stage your changes.</p>
+<pre><code class="hljs language-shell">git add .
+</code></pre>
+</li>
+<li>
+<p>Commit your changes with a comment.</p>
+<pre><code class="hljs language-shell">git commit -m "Resolve merge conflict by incorporating both suggestions"
+</code></pre>
+</li>
+</ol>
+<p>You can now merge the branches on the command line or <a href="/en/get-started/using-git/pushing-commits-to-a-remote-repository">push your changes to your remote repository</a> on GitHub and <a href="/en/pull-requests/how-tos/merge-and-close-pull-requests/merging-a-pull-request">merge your changes</a> in a pull request.</p>
+<h2 id="removed-file-merge-conflicts"><a class="heading-link" href="#removed-file-merge-conflicts">Removed file merge conflicts</a></h2>
+<p>When one branch deletes a file and another branch edits the same file, choose whether to keep or delete the file, then commit the resolution.</p>
+<ol>
+<li>
+<p>Open your terminal or Git Bash.</p>
+</li>
+<li>
+<p>Navigate into the local Git repository that has the merge conflict.</p>
+<pre><code class="hljs language-shell">cd REPOSITORY-NAME
+</code></pre>
+</li>
+<li>
+<p>List the files affected by the merge conflict. In this example, the file <code>README.md</code> has a merge conflict.</p>
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="bash">git status</span>
+<span class="bash"><span class="hljs-comment"># On branch main</span></span>
+<span class="bash"><span class="hljs-comment"># Your branch and 'origin/main' have diverged,</span></span>
+<span class="bash"><span class="hljs-comment"># and have 1 and 2 different commits each, respectively.</span></span>
+<span class="bash"><span class="hljs-comment">#  (use "git pull" to merge the remote branch into yours)</span></span>
+<span class="bash"><span class="hljs-comment"># You have unmerged paths.</span></span>
+<span class="bash"><span class="hljs-comment">#  (fix conflicts and run "git commit")</span></span>
+
+<span class="bash"><span class="hljs-comment"># Unmerged paths:</span></span>
+<span class="bash"><span class="hljs-comment">#  (use "git add/rm &lt;file&gt;..." as appropriate to mark resolution)</span></span>
+
+<span class="bash"><span class="hljs-comment">#	deleted by us:   README.md</span></span>
+
+<span class="bash"><span class="hljs-comment"># no changes added to commit (use "git add" and/or "git commit -a")</span></span>
+</code></pre>
+</li>
+<li>
+<p>Open your preferred text editor, such as <a href="https://code.visualstudio.com/">Visual Studio Code</a>, and navigate to the file that has merge conflicts.</p>
+</li>
+<li>
+<p>Decide whether to keep the removed file. To add it back to your repository:</p>
+<pre><code class="hljs language-shell">git add README.md
+</code></pre>
+<p>To remove this file from your repository:</p>
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="bash">git <span class="hljs-built_in">rm</span> README.md</span>
+<span class="bash">README.md: needs merge</span>
+<span class="bash"><span class="hljs-built_in">rm</span> <span class="hljs-string">'README.md'</span></span>
+</code></pre>
+</li>
+<li>
+<p>Commit your changes with a comment.</p>
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="bash">git commit -m <span class="hljs-string">"Resolve merge conflict by keeping README.md file"</span></span>
+<span class="bash">[branch-d 6f89e49] Merge branch <span class="hljs-string">'branch-c'</span> into branch-d</span>
+</code></pre>
+</li>
+</ol>
+<p>With merge conflicts resolved, you can now push your changes to your remote repository on GitHub or merge your pull request into its base branch.</p>
+<h2 id="further-reading"><a class="heading-link" href="#further-reading">Further reading</a></h2>
+<ul>
+
+<li><a href="/en/pull-requests/how-tos/review-pull-requests/checking-out-pull-requests-locally">Checking out pull requests locally</a></li>
+</ul>
+</div></div></div>
+</div></div></main>
+</div></div></div>
+</div></div></div></div>

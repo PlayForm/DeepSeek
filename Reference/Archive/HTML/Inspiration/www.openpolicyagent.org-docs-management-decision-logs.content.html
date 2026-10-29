@@ -1,0 +1,521 @@
+<div><div id="__docusaurus">
+<div><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div>
+<div class="theme-announcement-bar announcementBar_mb4j"><div class="content_knG7 announcementBarContent_xLdY"><strong>The 2026 OPA Community Survey is open - <a href="https://opa-survey.cncf.io/">We need your input</a></strong></div></div>
+<div class="theme-layout-main main-wrapper mainWrapper_z2l0" id="__docusaurus_skipToContent_fallback"><div class="docsWrapper_hBAB"><div class="docRoot_UBD9">
+<main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row">
+<div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp">
+<article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div>
+<div class="theme-doc-markdown markdown">
+<div><div class="wrapper_EiNE"><button class="button button--secondary button--sm" title="Copy Content for Chatbot or LLM">Copy Content for Chatbot or LLM</button></div></div>
+<p>OPA can periodically report decision logs to remote HTTP servers, using custom
+plugins, or to the console output; or any combination thereof.
+The decision logs contain events that describe policy queries. Each event includes
+the policy that was queried, the input to the query, bundle metadata, and other
+information that enables auditing and offline debugging of policy decisions.</p>
+<p>When decision logging is enabled the OPA server will include a <code>decision_id</code>
+field in API calls that return policy decisions.</p>
+<p>See the <a class="" href="/docs/configuration">Configuration Reference</a> for configuration details.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="decision-log-service-api">Decision Log Service API<a class="hash-link" href="#decision-log-service-api" title="Direct link to Decision Log Service API">​</a>
+</h2>
+<p>OPA expects the service to expose an API endpoint that will receive decision logs.</p>
+<div class="language-http codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-http codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><div class="token-line">
+<span class="token request-line method property">POST</span><span class="token request-line request-target url">/[&lt;decision_logs.resource&gt;]</span><span class="token request-line http-version property">HTTP/1.1</span>
+</div>
+<div class="token-line">
+<span class="token header header-name keyword">Content-Encoding</span><span class="token header punctuation">:</span><span class="token header header-value">gzip</span>
+</div>
+<div class="token-line">
+<span class="token header header-name keyword">Content-Type</span><span class="token header punctuation">:</span><span class="token header header-value">application/json</span>
+</div></code></pre></div></div>
+<p>The resource field is an optional configuration that can be used to route logs
+to a specific endpoint in the service by defining the full path. If the resource path is not configured on the agent,
+updates will be sent to <code>/logs</code>.</p>
+<p>The message body contains a gzip compressed JSON array. Each array element (event)
+represents a policy decision returned by OPA.</p>
+<div><div class="language-json codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-json codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv">
+
+<div class="token-line">
+<span class="token property">"labels"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+</div>
+<div class="token-line">
+<span class="token property">"app"</span><span class="token operator">:</span><span class="token string">"my-example-app"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"id"</span><span class="token operator">:</span><span class="token string">"1780d507-aea2-45cc-ae50-fa153c8e4a5a"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"version"</span><span class="token operator">:</span><span class="token string">"v1.22.0"</span>
+</div>
+
+<div class="token-line">
+<span class="token property">"decision_id"</span><span class="token operator">:</span><span class="token string">"4ca636c1-55e4-417a-b1d8-4aceb67960d1"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"bundles"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+</div>
+<div class="token-line">
+<span class="token property">"authz"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+</div>
+<div class="token-line">
+<span class="token property">"revision"</span><span class="token operator">:</span><span class="token string">"W3sibCI6InN5cy9jYXRhbG9nIiwicyI6NDA3MX1d"</span>
+</div>
+
+
+<div class="token-line">
+<span class="token property">"path"</span><span class="token operator">:</span><span class="token string">"http/example/authz/allow"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"input"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+</div>
+<div class="token-line">
+<span class="token property">"method"</span><span class="token operator">:</span><span class="token string">"GET"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"path"</span><span class="token operator">:</span><span class="token string">"/salary/bob"</span>
+</div>
+
+<div class="token-line">
+<span class="token property">"result"</span><span class="token operator">:</span><span class="token string">"true"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"requested_by"</span><span class="token operator">:</span><span class="token string">"[::1]:59943"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"timestamp"</span><span class="token operator">:</span><span class="token string">"2018-01-01T00:00:00.000000Z"</span>
+</div>
+
+</code></pre></div></div></div>
+<p>Decision log updates contain the following fields:</p>
+<table>
+<thead><tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>[_].labels</code></td>
+<td><code>object</code></td>
+<td>Set of key-value pairs that uniquely identify the OPA instance.</td>
+</tr>
+<tr>
+<td><code>[_].decision_id</code></td>
+<td><code>string</code></td>
+<td>Unique identifier generated for each decision for traceability.</td>
+</tr>
+<tr>
+<td><code>[_].trace_id</code></td>
+<td><code>string</code></td>
+<td>Unique identifier of a trace generated for each incoming request for traceability. This is a hex string representation compliant with the W3C trace-context specification. See more at the <a class="" href="https://www.w3.org/TR/trace-context/#trace-id">W3C trace-context specification</a>.</td>
+</tr>
+<tr>
+<td><code>[_].span_id</code></td>
+<td><code>string</code></td>
+<td>Unique identifier of a span in a trace to assist traceability. This is a hex string representation compliant with the W3C trace-context specification. See more at the <a class="" href="https://www.w3.org/TR/trace-context/#parent-id">W3C trace-context specification</a>.</td>
+</tr>
+<tr>
+<td><code>[_].bundles</code></td>
+<td><code>object</code></td>
+<td>Set of key-value pairs describing the bundles which contained policy used to produce the decision.</td>
+</tr>
+<tr>
+<td><code>[_].bundles[_].revision</code></td>
+<td><code>string</code></td>
+<td>Revision of the bundle at the time of evaluation.</td>
+</tr>
+<tr>
+<td><code>[_].path</code></td>
+<td><code>string</code></td>
+<td>Hierarchical policy decision path, e.g., <code>/http/example/authz/allow</code>. Receivers should tolerate slash-prefixed paths.</td>
+</tr>
+<tr>
+<td><code>[_].query</code></td>
+<td><code>string</code></td>
+<td>Ad-hoc Rego query received by Query API.</td>
+</tr>
+<tr>
+<td><code>[_].input</code></td>
+<td><code>any</code></td>
+<td>Input data provided in the policy query.</td>
+</tr>
+<tr>
+<td><code>[_].result</code></td>
+<td><code>any</code></td>
+<td>Policy decision returned to the client, e.g., <code>true</code> or <code>false</code>.</td>
+</tr>
+<tr>
+<td><code>[_].requested_by</code></td>
+<td><code>string</code></td>
+<td>Identifier for client that executed policy query, e.g., the client address.</td>
+</tr>
+<tr>
+<td><code>[_].request_context.http.headers</code></td>
+<td><code>object</code></td>
+<td>Set of key-value pairs describing HTTP headers and their corresponding values. The header keys in this object are specified by the user as part of the decision log configuration. The values in this object represent a list of values associated with the given header key.</td>
+</tr>
+<tr>
+<td><code>[_].timestamp</code></td>
+<td><code>string</code></td>
+<td>RFC3999 timestamp of policy decision.</td>
+</tr>
+<tr>
+<td><code>[_].metrics</code></td>
+<td><code>object</code></td>
+<td>Key-value pairs of <a class="" href="/docs/rest-api#performance-metrics">performance metrics</a>.</td>
+</tr>
+<tr>
+<td><code>[_].erased</code></td>
+<td><code>array[string]</code></td>
+<td>Set of JSON Pointers specifying fields in the event that were erased.</td>
+</tr>
+<tr>
+<td><code>[_].masked</code></td>
+<td><code>array[string]</code></td>
+<td>Set of JSON Pointers specifying fields in the event that were masked.</td>
+</tr>
+<tr>
+<td><code>[_].nd_builtin_cache</code></td>
+<td><code>object</code></td>
+<td>Key-value pairs of non-deterministic builtin names, paired with objects specifying the input/output mappings for each unique invocation of that builtin during policy evaluation. Intended for use in debugging and decision replay. Receivers will need to decode the JSON using Rego's JSON decoders.</td>
+</tr>
+<tr>
+<td><code>[_].req_id</code></td>
+<td><code>number</code></td>
+<td>Incremental request identifier, and unique only to the OPA instance, for the request that started the policy query. The attribute value is the same as the value present in others logs (request, response, and print) and could be used to correlate them all. This attribute will be included just when OPA runtime is initialized in server mode and the log level is equal to or greater than info.</td>
+</tr>
+<tr>
+<td><code>[_].ids</code></td>
+<td><code>array[string]</code></td>
+<td>List of annotation <code>id</code> values for rules that were successfully evaluated. Present automatically when any loaded policy contains rules with <code>id</code> annotations, or when external rule sources are registered. Duplicate IDs are suppressed.</td>
+</tr>
+<tr>
+<td><code>[_].rule_labels</code></td>
+<td><code>array[object]</code></td>
+<td>List of merged <code>labels</code> maps for rules that were successfully evaluated. For each rule, labels are folded across its annotation chain with inner-scope-wins precedence (<code>subpackages</code> &lt; <code>package</code> &lt; <code>document</code> &lt; <code>rule</code>). Identical merged maps across rules are deduplicated. Present only when at least one evaluated rule contributes labels.</td>
+</tr>
+</tbody>
+</table>
+<p>If the decision log was successfully uploaded to the remote service, it should respond with an HTTP 2xx status. If the
+service responds with a non-2xx status, OPA will requeue the last chunk containing decision log events and upload it
+during the next upload event. OPA also performs an exponential backoff to calculate the delay in uploading the next chunk
+when the remote service responds with a non-2xx status.</p>
+<p>OPA periodically uploads decision logs to the remote service. In order to conserve network and memory resources, OPA
+attempts to fill up each message body with as many events as possible while respecting the user-specified
+<code>upload_size_limit_bytes</code> config option. Each message body is a gzip compressed JSON array and the <code>upload_size_limit_bytes</code>
+config option represents the gzip compressed size, it can be referred to as the compressed limit. To avoid compressing
+each incoming event to get its compressed size to see if the compressed limit is reached, OPA tries to make an educated
+guess what the uncompressed limit could be. It does so by using an adaptive limit, referred to as the uncompressed limit,
+that gets adjusted by measuring incoming events. This does mean that initially the chunk sizes will most likely be smaller
+than the compressed limit, but as OPA consumes more decision events it will adjust the adaptive uncompressed limit to
+optimize the messages. The algorithm to adjust the uncompressed limit uses the following criteria:</p>
+<p><code>Scale Up</code>: If the current chunk size is below 90% of the user-configured compressed limit, exponentially increase the
+uncompressed limit. The exponential function is 2^x where x has a minimum value of 1</p>
+<p><code>Scale Down</code>: If the current chunk size exceeds the compressed limit, decrease the uncompressed limit and re-encode the
+decisions in the last chunk.</p>
+<p><code>Equilibrium</code>: If the chunk size is between 90% and 100% of the user-configured limit, maintain uncompressed limit value.</p>
+<p>When an event containing <code>nd_builtin_cache</code> cannot fit into a chunk smaller than <code>upload_size_limit_bytes</code>, OPA will
+drop the <code>nd_builtin_cache</code> key from the event, and will retry encoding the chunk without the non-deterministic
+builtins cache information. This best-effort approach ensures that OPA reports decision log events as much as possible,
+and bounds how large decision log events can get. This size-bounding is necessary, because some non-deterministic builtins
+(such as <code>http.send</code>) can increase the decision log event size by a potentially unbounded amount.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="local-decision-logs">Local Decision Logs<a class="hash-link" href="#local-decision-logs" title="Direct link to Local Decision Logs">​</a>
+</h2>
+<p>Local console logging of decisions can be enabled via the <code>console</code> config option.
+This does not require any remote server. Example of minimal config to enable:</p>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-yaml codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><div class="token-line">
+<span class="token key atrule">decision_logs</span><span class="token punctuation">:</span>
+</div>
+<div class="token-line">
+<span class="token key atrule">console</span><span class="token punctuation">:</span><span class="token boolean important">true</span>
+</div></code></pre></div></div>
+<p>This will dump all decisions to the console. See
+<a class="" href="/docs/configuration">Configuration Reference</a> for more details.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="masking-sensitive-data">Masking Sensitive Data<a class="hash-link" href="#masking-sensitive-data" title="Direct link to Masking Sensitive Data">​</a>
+</h2>
+<p>Policy queries may contain sensitive information in the <code>input</code> document that
+must be removed or modified before decision logs are uploaded to the remote API
+(e.g., usernames, passwords, etc.) Similarly, parts of the policy decision itself may
+be considered sensitive.</p>
+<p>By default, OPA queries the <code>data.system.log.mask</code> path prior to encoding and
+uploading decision logs or calling custom decision log plugins.</p>
+<p>OPA provides the decision log event as input to the policy query and expects
+the query to return a set of JSON Pointers that refer to fields in the decision
+log event to either <strong>erase</strong> or <strong>modify</strong>.</p>
+<p>For example, assume OPA is queried with the following <code>input</code> document:</p>
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-json codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv">
+<div class="token-line">
+<span class="token property">"resource"</span><span class="token operator">:</span><span class="token string">"user"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"bob"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"password"</span><span class="token operator">:</span><span class="token string">"passw0rd"</span>
+</div>
+</code></pre></div></div>
+<p>To <strong>remove</strong> the <code>password</code> field from decision log events related to "user"
+resources, supply the following policy to OPA:</p>
+<div class="language-ruby codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-ruby codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><div class="token-line">
+<span class="token plain">package system.log</span>
+</div>
+
+<div class="token-line">
+<span class="token plain">mask contains "/input/password" if {</span>
+</div>
+<div class="token-line">
+<span class="token plain">    # OPA provides the entire decision log event as input to the masking policy.</span>
+</div>
+<div class="token-line">
+<span class="token plain">    # Refer to the original input document under input.input.</span>
+</div>
+<div class="token-line">
+<span class="token plain">    input.input.resource == "user"</span>
+</div>
+
+
+<div class="token-line">
+<span class="token plain"># To mask certain fields unconditionally, omit the rule body.</span>
+</div>
+<div class="token-line">
+<span class="token plain">mask contains "/input/ssn"</span>
+</div></code></pre></div></div>
+<p>When the masking policy generates one or more JSON Pointers, they will be erased
+from the decision log event. The erased paths are recorded on the event itself:</p>
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-json codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv">
+<div class="token-line">
+<span class="token property">"decision_id"</span><span class="token operator">:</span><span class="token string">"b4638167-7fcb-4bc7-9e80-31f5f87cb738"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"erased"</span><span class="token operator">:</span><span class="token punctuation">[</span>
+</div>
+<div class="token-line">
+<span class="token string">"/input/password"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token string">"/input/ssn"</span>
+</div>
+
+<div class="token-line">
+<span class="token property">"input"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+</div>
+<div class="token-line">
+<span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"bob"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"resource"</span><span class="token operator">:</span><span class="token string">"user"</span>
+</div>
+
+<div class="token-line">
+<span class="token plain">------------------------- </span><span class="token number">8</span><span class="token plain">&lt; -------------------------</span>
+</div>
+<div class="token-line">
+<span class="token property">"path"</span><span class="token operator">:</span><span class="token string">"system/main"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"requested_by"</span><span class="token operator">:</span><span class="token string">"127.0.0.1:36412"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"result"</span><span class="token operator">:</span><span class="token boolean">true</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"timestamp"</span><span class="token operator">:</span><span class="token string">"2019-06-03T20:07:16.939402185Z"</span>
+</div>
+</code></pre></div></div>
+<p>There are a few restrictions on the JSON Pointers that OPA will erase:</p>
+<ul>
+<li class="">Pointers must be prefixed with <code>/input</code>, <code>/result</code>, or <code>/nd_builtin_cache</code>.</li>
+<li class="">Pointers may point to undefined data. For example <code>/input/name/first</code> in the
+example above would be undefined. Masking operations on undefined pointers are
+ignored.</li>
+<li class="">Pointers can also refer to arrays both as part of the path and as the last
+element in the path. For example, both <code>/input/users/0/name</code> and
+<code>/input/users/0</code> would be valid.</li>
+</ul>
+<p>In order to <strong>modify</strong> the contents of an input field, the <strong>mask</strong> rule may utilize the following format.</p>
+<ul>
+<li class="">
+<code>"op"</code> -- The operation to apply when masking. All operations are done at the
+path specified. Valid options include:</li>
+</ul>
+<table>
+<thead><tr>
+<th>op</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>"remove"</code></td>
+<td>The <code>"path"</code> specified will be removed from the resulting log message. The <code>"value"</code> mask field is ignored for <code>"remove"</code> operations.</td>
+</tr>
+<tr>
+<td><code>"upsert"</code></td>
+<td>The <code>"value"</code> will be set at the specified <code>"path"</code>. If the field exists it is overwritten, if it does not exist it will be added to the resulting log message.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="">
+<code>"path"</code> -- A JSON pointer path to the field to perform the operation on.</li>
+</ul>
+<p>Optional Fields:</p>
+<ul>
+<li class="">
+<code>"value"</code> -- Only required for <code>"upsert"</code> operations.</li>
+</ul>
+<blockquote>
+<p>This is processed for every decision being logged, so be mindful of
+performance when performing complex operations in the mask body, e.g. crypto
+operations</p>
+</blockquote>
+<div class="language-ruby codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-ruby codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><div class="token-line">
+<span class="token plain">package system.log</span>
+</div>
+
+<div class="token-line">
+<span class="token plain">mask contains {"op": "upsert", "path": "/input/password", "value": "**REDACTED**"} if {</span>
+</div>
+<div class="token-line">
+<span class="token plain">    # conditionally upsert password if it existed in the original event</span>
+</div>
+<div class="token-line">
+<span class="token plain">    input.input.password</span>
+</div>
+</code></pre></div></div>
+<p>To always <strong>upsert</strong> a value, even if it didn't exist in the original event,
+the following rule format can be used.</p>
+<div class="language-ruby codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-ruby codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><div class="token-line">
+<span class="token plain">package system.log</span>
+</div>
+
+<div class="token-line">
+<span class="token plain"># always upsert, no conditions in rule body</span>
+</div>
+<div class="token-line">
+<span class="token plain">mask contains {"op": "upsert", "path": "/input/password", "value": "**REDACTED**"}</span>
+</div></code></pre></div></div>
+<p>The result of this mask operation on the decision log event produces
+the following output. Notice that the <strong>mask</strong> event field exists
+to track <strong>remove</strong> vs <strong>upsert</strong> mask operations.</p>
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-json codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv">
+<div class="token-line">
+<span class="token property">"decision_id"</span><span class="token operator">:</span><span class="token string">"b4638167-7fcb-4bc7-9e80-31f5f87cb738"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"erased"</span><span class="token operator">:</span><span class="token punctuation">[</span>
+</div>
+<div class="token-line">
+<span class="token string">"/input/ssn"</span>
+</div>
+
+<div class="token-line">
+<span class="token property">"masked"</span><span class="token operator">:</span><span class="token punctuation">[</span>
+</div>
+<div class="token-line">
+<span class="token string">"/input/password"</span>
+</div>
+
+<div class="token-line">
+<span class="token property">"input"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+</div>
+<div class="token-line">
+<span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"bob"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"resource"</span><span class="token operator">:</span><span class="token string">"user"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"password"</span><span class="token operator">:</span><span class="token string">"**REDACTED**"</span>
+</div>
+
+<div class="token-line">
+<span class="token plain">------------------------- </span><span class="token number">8</span><span class="token plain">&lt; -------------------------</span>
+</div>
+<div class="token-line">
+<span class="token property">"path"</span><span class="token operator">:</span><span class="token string">"system/main"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"requested_by"</span><span class="token operator">:</span><span class="token string">"127.0.0.1:36412"</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"result"</span><span class="token operator">:</span><span class="token boolean">true</span><span class="token punctuation">,</span>
+</div>
+<div class="token-line">
+<span class="token property">"timestamp"</span><span class="token operator">:</span><span class="token string">"2019-06-03T20:07:16.939402185Z"</span>
+</div>
+</code></pre></div></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="drop-decision-logs">Drop Decision Logs<a class="hash-link" href="#drop-decision-logs" title="Direct link to Drop Decision Logs">​</a>
+</h2>
+<p>Drop rules filters all decisions from logging where the rule evaluates to <code>true</code>.</p>
+<p>This rule will drop all requests to the <em>allow</em> rule in the <em>kafka</em> package, that returned <em>true</em>:</p>
+<div class="language-rego codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-rego codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><div class="token-line">
+<span class="token keyword">package</span><span class="token variable">system</span><span class="token punctuation">.</span><span class="token variable">log</span>
+</div>
+
+<div class="token-line">
+<span class="token variable">drop</span><span class="token keyword">if</span><span class="token punctuation">{</span>
+</div>
+<div class="token-line">
+<span class="token variable">input</span><span class="token punctuation">.</span><span class="token variable">path</span><span class="token operator">==</span><span class="token string">"kafka/allow"</span>
+</div>
+<div class="token-line">
+<span class="token variable">input</span><span class="token punctuation">.</span><span class="token variable">result</span><span class="token operator">==</span><span class="token boolean">true</span>
+</div>
+</code></pre></div></div>
+<p>Log only requests for <em>delete</em> and <em>alter</em> operations
+(Kafka with the <a class="" href="https://github.com/StyraOSS/opa-kafka-plugin">opa-kafka-plugin</a>):</p>
+<div class="language-rego codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-rego codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><div class="token-line">
+<span class="token keyword">package</span><span class="token variable">system</span><span class="token punctuation">.</span><span class="token variable">log</span>
+</div>
+
+<div class="token-line">
+<span class="token variable">drop</span><span class="token keyword">if</span><span class="token punctuation">{</span>
+</div>
+<div class="token-line">
+<span class="token variable">input</span><span class="token punctuation">.</span><span class="token variable">path</span><span class="token operator">==</span><span class="token string">"kafka/allow"</span>
+</div>
+<div class="token-line">
+<span class="token keyword">not</span><span class="token variable">input</span><span class="token punctuation">.</span><span class="token variable">input</span><span class="token punctuation">.</span><span class="token variable">action</span><span class="token punctuation">.</span><span class="token variable">operation</span><span class="token keyword">in</span><span class="token punctuation">{</span><span class="token string">"DELETE"</span><span class="token punctuation">,</span><span class="token string">"ALTER"</span><span class="token punctuation">}</span>
+</div>
+</code></pre></div></div>
+<p>The name of the drop rules by default is <code>drop</code> in the package <code>system.log</code>. It can be changed with the configuration
+property <code>decision_logs.drop_decision</code>.</p>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre class="prism-code language-yaml codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><div class="token-line">
+<span class="token key atrule">decision_logs</span><span class="token punctuation">:</span>
+</div>
+<div class="token-line">
+<span class="token key atrule">drop_decision</span><span class="token punctuation">:</span><span class="token plain"> /system/log/drop</span>
+</div></code></pre></div></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="rate-limiting-decision-logs">Rate Limiting Decision Logs<a class="hash-link" href="#rate-limiting-decision-logs" title="Direct link to Rate Limiting Decision Logs">​</a>
+</h2>
+<p>There are scenarios where OPA may be uploading decisions faster than what the remote service is able to consume. Although
+OPA provides a user-specified buffer size limit in bytes, it may be difficult to determine the ideal buffer size that will
+allow the service to consume logs without being overwhelmed. The <code>max_decisions_per_second</code> config option allows users
+to set the maximum number of decision log events to buffer per second. OPA will drop events if the rate limit is exceeded.
+This option provides users more control over how OPA buffers log events and is an effective mechanism to make sure the
+service can successfully process incoming log events.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="ecosystem-projects">Ecosystem Projects<a class="hash-link" href="#ecosystem-projects" title="Direct link to Ecosystem Projects">​</a>
+</h2>
+<p>Decision Logging is an important feature of OPA which supports, in particular, auditing and debugging. The following OPA
+ecosystem projects implement functionality related to Decision Logging:</p>
+<div><p>These projects implement decision logging functionality.</p></div>
+</div>
+<div class="feedback-form-wrapper"><div><div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary wrapper_zzHr">
+<div class="admonitionHeading_Gvgb">Feedback</div>
+<div class="admonitionContent_BuS1">
+<p>We are always trying to make our documentation the best it can be and welcome your comments.</p>
+
+</div>
+</div></div></div></article>
+</div></div>
+<div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border">
+<li><a class="table-of-contents__link toc-highlight" href="#decision-log-service-api">Decision Log Service API</a></li>
+
+<li><a class="table-of-contents__link toc-highlight" href="#masking-sensitive-data">Masking Sensitive Data</a></li>
+
+<li><a class="table-of-contents__link toc-highlight" href="#rate-limiting-decision-logs">Rate Limiting Decision Logs</a></li>
+
+</ul></div></div>
+</div></div></main>
+</div></div></div>
+
+</div></div>

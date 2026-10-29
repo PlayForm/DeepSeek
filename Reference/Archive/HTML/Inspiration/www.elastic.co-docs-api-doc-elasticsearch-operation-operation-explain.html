@@ -1,0 +1,1688 @@
+<!DOCTYPE html><html lang="en"><head data-controller="favicon-mode"><style type="text/css">.turbo-progress-bar {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: #0076ff;
+  z-index: 2147483647;
+  transition:
+    width 300ms ease-out,
+    opacity 150ms 150ms ease-in;
+  transform: translate3d(0, 0, 0);
+}
+</style>
+    <meta charset="utf-8">
+    <meta name="robots" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Explain a document match result | Elasticsearch API documentation</title>  <meta name="product_name" content="Elasticsearch">
+
+<meta name="description" content="All methods and paths for this operation:
+                  GET
+                  /{index}/_explain/{id}
+
+
+                  POST
+                  /{index}/_explain/{id}
+Get in...">
+
+<!-- Icons and colors -->
+<meta name="theme-color" content="#ffffff">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://bump.sh/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsiZGF0YSI6ImE3ZGYxOWUyLTAxZGEtNGJmOC04NzYwLTlhNzA4Yzg0N2M2YiIsInB1ciI6ImJsb2JfaWQifX0=--a8eb91be447c89331dbbdd50bc6e1ea2e4251659/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJwbmciLCJyZXNpemVfYW5kX3BhZCI6WzMyLDMyXX0sInB1ciI6InZhcmlhdGlvbiJ9fQ==--b2fdaecd54ba2bf1c5c5394a346db59fd0af679f/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://bump.sh/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsiZGF0YSI6ImE3ZGYxOWUyLTAxZGEtNGJmOC04NzYwLTlhNzA4Yzg0N2M2YiIsInB1ciI6ImJsb2JfaWQifX0=--a8eb91be447c89331dbbdd50bc6e1ea2e4251659/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJwbmciLCJyZXNpemVfYW5kX3BhZCI6WzE2LDE2XX0sInB1ciI6InZhcmlhdGlvbiJ9fQ==--de3d5885f1e9627b6a553e20d94fd2b806ed72e6/favicon-96x96.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/favicon.svg" color="#131415">
+
+<!-- Schema.org markup for Google+ -->
+<meta itemprop="name" content="Explain a document match result
+ | Elasticsearch API documentation">
+<meta itemprop="description" content="All methods and paths for this operation:
+                  GET
+                  /{index}/_explain/{id}
+
+
+                  POST
+                  /{index}/_explain/{id}
+Get in...">
+
+<!-- Twitter Card data -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Explain a document match result
+ | Elasticsearch API documentation">
+<meta name="twitter:description" content="All methods and paths for this operation:
+                  GET
+                  /{index}/_explain/{id}
+
+
+                  POST
+                  /{index}/_explain/{id}
+Get in...">
+<meta name="twitter:creator" content="@bump_hq">
+<meta name="twitter:image" content="https://bump.sh/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsiZGF0YSI6ImVlNWU2ZDY4LWYxYzctNDMxYi1iMzRiLTc0YzUyMmU2YmY5MSIsInB1ciI6ImJsb2JfaWQifX0=--1de330ebc7094d4f4a2f89529b8672465128aa03/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJwbmciLCJyZXNpemVfdG9fZml0IjpbMTIwMCxudWxsXX0sInB1ciI6InZhcmlhdGlvbiJ9fQ==--a28ca264dc0355574c5bd3e5943d70e3f404140a/Elasticsearch%20API-social.png">
+
+<!-- Open Graph data -->
+<meta property="og:title" content="Explain a document match result
+ | Elasticsearch API documentation">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-explain">
+<meta property="og:description" content="All methods and paths for this operation:
+                  GET
+                  /{index}/_explain/{id}
+
+
+                  POST
+                  /{index}/_explain/{id}
+Get in...">
+<meta property="og:image" content="https://bump.sh/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsiZGF0YSI6ImVlNWU2ZDY4LWYxYzctNDMxYi1iMzRiLTc0YzUyMmU2YmY5MSIsInB1ciI6ImJsb2JfaWQifX0=--1de330ebc7094d4f4a2f89529b8672465128aa03/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJwbmciLCJyZXNpemVfdG9fZml0IjpbMTIwMCxudWxsXX0sInB1ciI6InZhcmlhdGlvbiJ9fQ==--a28ca264dc0355574c5bd3e5943d70e3f404140a/Elasticsearch%20API-social.png">
+
+
+      <link rel="preload" as="font" type="font/woff2" crossorigin="" href="https://bump.sh/packs/static/InterVariable-c504db5c06caaf7cdfba.woff2">
+    <link rel="stylesheet" href="https://bump.sh/packs/css/portal_next-ed3b893c.css" media="all">
+    <!-- prevents page to flash on load when user uses dark theme -->
+<script async="" src="https://cs.iubenda.com/cookie-solution/confs/js/67332803.js"></script><script src="https://cdn.iubenda.com/cookie_solution/iubenda_cs/1.109.0/core-en.js" charset="UTF-8"></script><script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-KNJMG2M&amp;gtm_auth=wnl5u5U6qvAyqtuHJpAZUA&amp;gtm_preview=env-1&amp;gtm_cookies_win=x"></script><script>
+  if (localStorage.theme && localStorage.theme !== "light") {
+    if (localStorage.theme === "dark" || window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      document.querySelector("html").setAttribute("class", "dark-theme")
+    }
+  }
+</script>
+
+    <link rel="canonical" href="https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-explain">
+
+    <script src="https://bump.sh/packs/js/runtime-ad8c3edf4013459e990e.js" defer="defer"></script>
+<script src="https://bump.sh/packs/js/4324-57eaf90f285437eedbaa.js" defer="defer"></script>
+<script src="https://bump.sh/packs/js/190-634539ff75d7d73a8f28.js" defer="defer"></script>
+<script src="https://bump.sh/packs/js/8090-ffbf7ea6915ea48b088d.js" defer="defer"></script>
+<script src="https://bump.sh/packs/js/8588-6f05fab626cf6b99c250.js" defer="defer"></script>
+<script src="https://bump.sh/packs/js/917-455b270a1b343f757cf7.js" defer="defer"></script>
+<script src="https://bump.sh/packs/js/portal-5ea5ec79c276eeb72386.js" defer="defer"></script>
+    <script src="https://cdn.usefathom.com/script.js" data-site="RMASNIPQ" data-auto="false" defer=""></script>
+
+      <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl+ '&gtm_auth=wnl5u5U6qvAyqtuHJpAZUA&gtm_preview=env-1&gtm_cookies_win=x';f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KNJMG2M');</script>
+<!-- End Google Tag Manager -->
+
+  </head>
+
+  <body data-bump="" data-internal-url="/elastic/hub/public-apis/doc/elasticsearch" data-controller-name="public_docs" class="layout-public public_docs public_docs-show os-other" data-controller-action-name="show" data-doc-root-url="https://www.elastic.co/docs/api/doc/elasticsearch" data-controller="dark-theme mobile-nav dialog os-detector " data-action="click@window-&gt;mobile-nav#toggleMenu" style="margin-right: 0px; padding-right: 0px; overflow: auto;">
+
+    <div class="page-portal-container">
+        <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KNJMG2M&gtm_auth=wnl5u5U6qvAyqtuHJpAZUA&gtm_preview=env-1&gtm_cookies_win=x"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+      <portal>
+        
+<style>
+
+  .doc-theme-default {
+    --doc-base-color: #2e4fa3;
+  }
+
+</style>
+
+
+
+
+<div class="doc-container doc-theme-default no-single-page-xp" data-controller="doc-navigation details mermaid go-to doc-frame highlight doc-init" data-doc-hub-target="body" data-doc-navigation-disabled-value="true" data-doc-init-disabled-single-page-value="true" data-doc-navigation-branch-title-value="Elasticsearch API documentation" data-action="goTo@document-&gt;go-to#go navigateToFrame@document-&gt;doc-frame#saveNavigationParams highlight@document-&gt;highlight#setHighlight click@window-&gt;highlight#dismiss popstate@window-&gt;doc-navigation#back turbo:before-fetch-request-&gt;doc-frame#beforeRequest turbo:before-frame-render-&gt;doc-frame#beforeRender turbo:frame-render-&gt;doc-frame#afterRender turbo:frame-load-&gt;doc-frame#afterLoad turbo:frame-missing-&gt;doc-frame#frameMissing" data-active-container="operation-explain">
+    <dialog id="search-dialog" class="doc-search_v2__dialog" aria-label="Search the documentation" data-controller="hotkeys doc-search-v2 dialog" data-doc-search-v2-offset-value="0" data-doc-search-v2-limit-value="20" data-hotkeys-bindings-value="{&quot;ctrl+k, command+k&quot;: &quot;.doc-search_v2__dialog-&gt;dialog#showFromHotkeys(search-dialog):prevent&quot;}" data-action="click-&gt;dialog#backdropClose:stop dialog:show@window-&gt;doc-search-v2#onFocus keydown.down-&gt;doc-search-v2#nextElement keydown.up-&gt;doc-search-v2#previousElement keydown.esc-&gt;dialog#closeOnEscape" data-doc-search-v2-configuration-url-value="https://www.elastic.co/docs/api/doc/elasticsearch/get_search_config?hub_default_search_scope_multiple=false" data-doc-search-v2-track-url-value="https://www.elastic.co/docs/api/doc/elasticsearch/track_search">
+  <!-- Form --->
+  
+
+  <!-- Results -->
+  
+
+  <!-- More results -->
+  <div class="doc-search_v2__more-results hidden" data-doc-search-v2-target="moreResults">
+    <a href="#" class="doc-search_v2__more-results-link show-more-button" data-action="click-&gt;doc-search-v2#loadMoreResults">
+      Show more
+    </a>
+  </div>
+
+  
+
+  <!-- API result template -->
+  <template data-doc-search-v2-target="resultApiTemplate">
+    <li class="search_v2__results-list-item">
+      <a class="result-link" data-action="dialog#close">
+        <div class="search-flex-row">
+          <span class="result-title"></span>
+          <span class="result-api-type">API</span>
+        </div>
+        <p class="result-description"></p>
+        <span class="result-label"></span>
+      </a>
+    </li>
+  </template>
+
+  <!-- Node result template -->
+  <template data-doc-search-v2-target="resultNodeTemplate">
+    <li class="search_v2__results-list-item">
+      <a class="result-link" data-action="dialog#close doc-navigation#click" data-doc-navigation-highlight-param="true">
+        <div class="result-api-name"></div>
+        <span class="result-title"></span>
+        <div class="search-flex-row">
+          <span class="result-breadcrumbs"></span>
+        </div>
+        <p class="result-description"></p>
+        <div class="result-path-label">
+          <span class="result-label operation-verb"></span>
+          <span class="result-path"></span>
+        </div>
+      </a>
+    </li>
+  </template>
+
+
+  <!-- Caret template -->
+  <template data-doc-search-v2-target="caretTemplate">
+    <svg width="6" height="10" fill="none" xmlns="http://www.w3.org/2000/svg" class="caret"><path d="m1 9 4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+  </template>
+
+  <!-- No results template -->
+  <template data-doc-search-v2-target="noResultsTemplate">
+    <div class="no-results-container">
+      <p>No results found for query: <span class="result-query"></span>
+        <a href="#" id="hub-default-search-scope-multiple-checkbox-link" data-doc-search-v2-target="searchScopeMultipleLabel" data-action="click-&gt;doc-search-v2#toggleScopeMultiple:prevent click-&gt;doc-search-v2#reconfigAndSearch">Search in all APIs</a>
+      </p>
+    </div>
+  </template>
+
+  <!-- Error template -->
+  <template data-doc-search-v2-target="errorTemplate">
+    <div class="no-results-container">
+      <p>An error occured while performing your search, please contact Bump.sh support if it persists.</p>
+      <p class="error-message"></p>
+    </div>
+  </template>
+
+  <!-- Results list template -->
+  <template data-doc-search-v2-target="resultsListTemplate">
+    <ul class="doc-search_v2__results-list"></ul>
+  </template>
+</dialog>
+
+
+  <!-- Mobile menu toggle and drawer that integrate the nav for both desktop and mobile-->
+  
+
+  <div class="main-content">
+    <!-- Sticky header visible in desktop / hidden when drawer is open -->
+    
+
+    <div class="mobile-menu-toggle" data-doc-navigation-target="header">
+  <portal-resource-title class="">
+    <a class="resource-logo" href="/docs/api/doc/elasticsearch">
+      <img alt="Elasticsearch API logo" class="logo-light" src="https://bump.sh/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6IjcyZGQ1YjgyLThhYTAtNDhkNi1hYjBkLTIxZmFmMzgwNmU2MiIsInB1ciI6ImJsb2JfaWQifX0=--6d6c43af5ca11371350c4654da0b8e84cd6d4fd3/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJwbmciLCJyZXNpemUiOiIzMDBYMTAwIiwicXVhbGl0eSI6MTAwfSwicHVyIjoidmFyaWF0aW9uIn19--f9d9e138da9f9eb374b80fed1b905dcb50184a5d/elastic-light.png">
+      <img alt="Elasticsearch API logo dark" class="logo-dark" src="https://bump.sh/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6IjZmMjFjOTk5LWVhNWItNGYyNS04YmJiLTJjNjQ3YmZjNTA4ZSIsInB1ciI6ImJsb2JfaWQifX0=--6350b81f58ceaa7a21160a1a213dc1c629d917ce/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJwbmciLCJyZXNpemUiOiIzMDBYMTAwIiwicXVhbGl0eSI6MTAwfSwicHVyIjoidmFyaWF0aW9uIn19--f9d9e138da9f9eb374b80fed1b905dcb50184a5d/elastic-dark.png">
+</a></portal-resource-title>
+  <button class="menu-toggle" data-mobile-nav-target="button">
+  </button>
+</div>
+
+
+    <div class="doc-content">
+
+      <template data-highlight-target="dismiss">
+        <button class="dismiss-highlight" aria-label="Dismiss highlight">Dismiss highlight</button>
+      </template>
+
+      <template data-show-more-target="button">
+        <button class="show-more-button" aria-label="Show more" data-action="show-more#showMore">Show more</button>
+      </template>
+
+      <template data-doc-frame-target="operationSkeleton">
+  <div class="doc-section-copy doc-section--column">
+    <span class="skeleton-line" data-length="m"></span>
+    <span class="skeleton-line" data-length="l"></span>
+    <span class="skeleton-line" data-length="m"></span>
+    <hr>
+    <span class="skeleton-line" data-length="s"></span>
+    <span class="skeleton-line" data-length="l"></span>
+    <hr>
+    <span class="skeleton-line" data-length="m"></span>
+    <hr>
+    <div class="skeleton-block">
+      <div class="skeleton-row">
+        <span class="skeleton-line" data-length="l"></span>
+      </div>
+      <div class="skeleton-row">
+        <span class="skeleton-line" data-length="xs"></span>
+        <span class="skeleton-line" data-length="m"></span>
+      </div>
+    </div>
+    <hr>
+    <span class="skeleton-line" data-length="l"></span>
+    <span class="skeleton-line" data-length="xl"></span>
+    <div class="skeleton-block">
+      <div class="skeleton-row">
+        <span class="skeleton-line" data-length="l"></span>
+      </div>
+      <div class="skeleton-row">
+        <span class="skeleton-line" data-length="xs"></span>
+        <span class="skeleton-line" data-length="m"></span>
+      </div>
+      <div class="skeleton-row">
+        <span class="skeleton-line" data-length="s"></span>
+        <span class="skeleton-line" data-length="l"></span>
+      </div>
+      <div class="skeleton-row">
+        <span class="skeleton-line" data-length="m"></span>
+        <span class="skeleton-line" data-length="xl"></span>
+        <span class="skeleton-line" data-length="l"></span>
+      </div>
+    </div>
+  </div>
+  <div class="doc-section-examples doc-section--column">
+    <portal-example data-example-theme="custom">
+      <header>
+        <span class="title-content skeleton-line" data-length="s"></span>
+      </header>
+      <div class="example-body skeleton-row">
+        <span class="skeleton-line" data-length="m"></span>
+      </div>
+    </portal-example>
+    <portal-example data-controller="doc-example">
+      <header>
+        <span class="title-content skeleton-line" data-length="l"></span>
+      </header>
+      <div class="example-body skeleton-row">
+        <span class="skeleton-line" data-length="s"></span>
+        <span class="skeleton-line" data-length="l"></span>
+        <span class="skeleton-line" data-length="m"></span>
+      </div>
+    </portal-example>
+  </div>
+</template>
+
+<template data-doc-frame-target="textSkeleton">
+  <div class="doc-section__header doc-section--grid">
+    <div class="doc-section--column">
+      <span class="skeleton-line" data-length="heading"></span>
+      <span class="skeleton-line" data-length="s"></span>
+      <span class="skeleton-line" data-length="l"></span>
+      <hr>
+      <span class="skeleton-line" data-length="m"></span>
+    </div>
+  </div>
+</template>
+
+
+          
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <section class="doc-section" aria-current="true">
+    <turbo-frame id="endpoint-search" class="" data-doc-navigation-target="entry" src="/docs/api/doc/elasticsearch/group/endpoint-search?cache_key=f57ed29640fdbacf193849d4636e866e043c6111&amp;partial=true" loading="lazy"></turbo-frame>
+
+      
+      
+      
+      
+      
+      
+      
+      
+      <section id="operation-explain" class="operation doc-section-content doc-section--grid" data-doc-navigation-target="entry" data-skeleton-target-name="operationSkeletonTarget" aria-current="false">
+    <div class="doc-section-copy doc-section--column">
+      <div class="operation-header highlight-container">
+        <div>
+          <h2 class="operation-title">
+            <span class="anchor-link">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+              Explain a document match result
+
+
+</span>
+            <title-badges class="title-badges">
+    <span class="badge custom-state" style="">Generally available</span>
+</title-badges>
+
+          </h2>
+          <ask-ai>
+  <div class="dropdown " data-controller="dropdown" data-action="click-&gt;dropdown#toggle click@window-&gt;dropdown#hide touchend@window-&gt;dropdown#hide" data-dropdown-target="button" data-scrollable="false" data-headings="false" aria-expanded="false" aria-haspopup="true" role="menu" tabindex="0">
+  <div class="dropdown-title">
+      <div data-dropdown-target="current">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.75112 0.501098V2.33443M9.66779 1.41776H7.83445M4.63389 0.874181C4.65353 0.769041 4.70932 0.674079 4.7916 0.605743C4.87388 0.537407 4.97747 0.5 5.08443 0.5C5.19139 0.5 5.29498 0.537407 5.37726 0.605743C5.45954 0.674079 5.51533 0.769041 5.53497 0.874181L6.01668 3.4216C6.05089 3.60271 6.13891 3.7693 6.26924 3.89963C6.39956 4.02995 6.56615 4.11797 6.74726 4.15218L9.29468 4.63389C9.39982 4.65353 9.49478 4.70932 9.56312 4.7916C9.63145 4.87388 9.66886 4.97747 9.66886 5.08443C9.66886 5.19139 9.63145 5.29498 9.56312 5.37726C9.49478 5.45954 9.39982 5.51533 9.29468 5.53497L6.74726 6.01668C6.56615 6.05089 6.39956 6.13891 6.26924 6.26924C6.13891 6.39956 6.05089 6.56615 6.01668 6.74726L5.53497 9.29468C5.51533 9.39982 5.45954 9.49478 5.37726 9.56312C5.29498 9.63145 5.19139 9.66886 5.08443 9.66886C4.97747 9.66886 4.87388 9.63145 4.7916 9.56312C4.70932 9.49478 4.65353 9.39982 4.63389 9.29468L4.15218 6.74726C4.11797 6.56615 4.02995 6.39956 3.89963 6.26924C3.7693 6.13891 3.60271 6.05089 3.4216 6.01668L0.874181 5.53497C0.769041 5.51533 0.674079 5.45954 0.605743 5.37726C0.537407 5.29498 0.5 5.19139 0.5 5.08443C0.5 4.97747 0.537407 4.87388 0.605743 4.7916C0.674079 4.70932 0.769041 4.65353 0.874181 4.63389L3.4216 4.15218C3.60271 4.11797 3.7693 4.02995 3.89963 3.89963C4.02995 3.7693 4.11797 3.60271 4.15218 3.4216L4.63389 0.874181ZM2.33445 8.7511C2.33445 9.25736 1.92405 9.66776 1.41779 9.66776C0.911525 9.66776 0.501119 9.25736 0.501119 8.7511C0.501119 8.24484 0.911525 7.83443 1.41779 7.83443C1.92405 7.83443 2.33445 8.24484 2.33445 8.7511Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+
+      Ask AI
+
+      </div>
+        <svg class="caret-down" width="10" height="7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="m.8 2 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+  </div>
+  <div class="menu-dropdown " role="menu">
+          <ul>
+        <li>
+          <a id="ask-ai-markdown" href="https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-explain.md">
+            View as Markdown
+</a>        </li>
+        <li>
+          <a id="ask-ai-copy" data-controller="copy" data-copy-url-value="https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-explain.md" data-action="click-&gt;copy#copyFromUrl" href="#">
+            Copy as Markdown
+</a>        </li>
+      </ul>
+
+  </div>
+</div>
+</ask-ai>
+
+        </div>
+
+        
+
+        <operation-summary data-summary-size="">
+  <span class="operation-verb post">
+    POST
+  </span>
+  <span class="operation-path">
+    /{index}/_explain/{id}
+  </span>
+</operation-summary>
+
+
+        <div class="security-badges">
+    <span class="badge badge-security anchor" id="874b7803">
+      <a data-action="click-&gt;doc-navigation#click" data-section-id="doc-authentication" href="/docs/api/doc/elasticsearch/authentication#doc-authentication-api-key-auth">
+        Api key auth
+</a>    </span>
+    <span class="badge badge-security anchor" id="57696ad6">
+      <a data-action="click-&gt;doc-navigation#click" data-section-id="doc-authentication" href="/docs/api/doc/elasticsearch/authentication#doc-authentication-basic-auth">
+        Basic auth
+</a>    </span>
+    <span class="badge badge-security anchor" id="fb883245">
+      <a data-action="click-&gt;doc-navigation#click" data-section-id="doc-authentication" href="/docs/api/doc/elasticsearch/authentication#doc-authentication-bearer-auth">
+        Bearer auth
+</a>    </span>
+</div>
+
+
+        
+
+        <div class="markdown-content flow"><p><strong>All methods and paths for this operation:</strong></p>
+
+<div>
+                      <span class="operation-verb get">GET</span>
+                      <span class="operation-path">/{index}/_explain/{id}</span>
+                      </div>
+
+<p></p><div>
+                      <span class="operation-verb post">POST</span>
+                      <span class="operation-path">/{index}/_explain/{id}</span>
+                      </div><p></p>
+
+<p>Get information about why a specific document matches, or doesn't match, a query.
+It computes a score explanation for a query and a specific document.</p>
+<h3 id="topic-required-authorization" class="highlight-container"><span class="anchor-link">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="#topic-required-authorization">
+    <svg width="16" height="16" viewBox="0 0 16 16"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  Required authorization
+</span>
+</h3>
+<ul>
+<li>Index privileges: <code class="code-inline">read</code></li>
+</ul>
+</div>
+
+
+        
+      </div>
+
+      
+
+      <div id="operation-explain-path" class="properties-list highlight-container">
+    <h4 class="properties-list-title">
+      <span class="anchor-link">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-path">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+        Path parameters
+
+</span>
+      
+    </h4>
+
+
+  
+
+  <ul>
+        <li id="operation-explain-index" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-index">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      index
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string</span>
+    <span class="badge required">Required</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>Index names that are used to limit the request.
+Only a single index name can be provided to this parameter.</p>
+</div>
+
+
+
+
+</li>
+        <li id="operation-explain-id" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-id">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      id
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string</span>
+    <span class="badge required">Required</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>The document identifier.</p>
+</div>
+
+
+
+
+</li>
+  </ul>
+</div>
+
+
+      <div id="operation-explain-query" class="properties-list highlight-container">
+    <h4 class="properties-list-title">
+      <span class="anchor-link">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-query">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+        Query parameters
+
+</span>
+      
+    </h4>
+
+
+  
+
+  <ul>
+        <li id="operation-explain-analyzer" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-analyzer">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      analyzer
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>The analyzer to use for the query string.
+This parameter can be used only when the <code class="code-inline">q</code> query string parameter is specified.</p>
+</div>
+
+
+
+
+</li>
+        <li id="operation-explain-analyze_wildcard" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-analyze_wildcard">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      analyze_wildcard
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">boolean</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>If <code class="code-inline">true</code>, wildcard and prefix queries are analyzed.
+This parameter can be used only when the <code class="code-inline">q</code> query string parameter is specified.</p>
+</div>
+  <div data-controller="show-more" data-show-more-target="container" data-show-more-max-height-value="108" style="max-height: none;">
+    <div class="markdown-content flow"><p>Default value is <code class="code-inline">false</code>.</p>
+</div>
+  </div>
+
+
+
+
+</li>
+        <li id="operation-explain-default_operator" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-default_operator">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      default_operator
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>The default operator for query string query: <code class="code-inline">and</code> or <code class="code-inline">or</code>.
+This parameter can be used only when the <code class="code-inline">q</code> query string parameter is specified.</p>
+</div>
+  <div data-controller="show-more" data-show-more-target="container" data-show-more-max-height-value="108" style="max-height: none;">
+    <div class="markdown-content flow"><p>Default value is <code class="code-inline">or</code>.</p>
+</div>
+  </div>
+
+
+
+
+</li>
+        <li id="operation-explain-df" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-df">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      df
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>The field to use as default where no field prefix is given in the query string.
+This parameter can be used only when the <code class="code-inline">q</code> query string parameter is specified.</p>
+</div>
+
+
+
+
+</li>
+        <li id="operation-explain-lenient" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-lenient">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      lenient
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">boolean</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>If <code class="code-inline">true</code>, format-based query failures (such as providing text to a numeric field) in the query string will be ignored.
+This parameter can be used only when the <code class="code-inline">q</code> query string parameter is specified.</p>
+</div>
+  <div data-controller="show-more" data-show-more-target="container" data-show-more-max-height-value="108" style="max-height: none;">
+    <div class="markdown-content flow"><p>Default value is <code class="code-inline">false</code>.</p>
+</div>
+  </div>
+
+
+
+
+</li>
+        <li id="operation-explain-preference" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-preference">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      preference
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>The node or shard the operation should be performed on.
+It is random by default.</p>
+</div>
+
+
+
+
+</li>
+        <li id="operation-explain-routing" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-routing">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      routing
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string | array[string]</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>A custom value used to route operations to a specific shard.
+Not allowed when <code class="code-inline">index.slice.enabled</code> is <code class="code-inline">true</code> for the target index; use <code class="code-inline">_slice</code> instead.</p>
+</div>
+
+
+
+
+</li>
+        <li id="operation-explain-_source" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-_source">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      _source
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">boolean | string | array[string]</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p><code class="code-inline">True</code> or <code class="code-inline">false</code> to return the <code class="code-inline">_source</code> field or not or a list of fields to return.</p>
+</div>
+
+
+
+
+</li>
+        <li id="operation-explain-_source_excludes" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-_source_excludes">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      _source_excludes
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string | array[string]</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>A comma-separated list of source fields to exclude from the response.
+You can also use this parameter to exclude fields from the subset specified in <code class="code-inline">_source_includes</code> query parameter.
+If the <code class="code-inline">_source</code> parameter is <code class="code-inline">false</code>, this parameter is ignored.</p>
+</div>
+
+
+
+
+</li>
+        <li id="operation-explain-_source_includes" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-_source_includes">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      _source_includes
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string | array[string]</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>A comma-separated list of source fields to include in the response.
+If this parameter is specified, only these source fields are returned.
+You can exclude fields from this subset using the <code class="code-inline">_source_excludes</code> query parameter.
+If the <code class="code-inline">_source</code> parameter is <code class="code-inline">false</code>, this parameter is ignored.</p>
+</div>
+
+
+
+
+</li>
+        <li id="operation-explain-stored_fields" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-stored_fields">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      stored_fields
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string | array[string]</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>A comma-separated list of stored fields to return in the response.</p>
+</div>
+
+
+
+
+</li>
+        <li id="operation-explain-q" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-q">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      q
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>The query in the Lucene query string syntax.</p>
+</div>
+
+
+
+
+</li>
+  </ul>
+</div>
+
+
+      <request-bodies class="multiple-content" data-controller="multiple-content">
+    
+
+    <div id="operation-explain-body-application-json" class="properties-list highlight-container">
+    <h4 class="properties-list-title">
+      <span class="anchor-link">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-body-application-json">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+        Body
+
+</span>
+      
+    </h4>
+
+
+  
+
+  <ul>
+            <li id="operation-explain-body-application-json-query" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-body-application-json-query">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      query
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type" data-type-content="A QueryContainer object">object</span>
+</title-badges>
+
+  </div>
+
+  <div class="markdown-content flow"><p>Defines the search definition using the Query DSL.</p>
+</div>
+<external-link id="operation-explain-body-application-json-query-external-link">
+  <a class="button" data-button-style="naked" target="_blank" rel="noopener noreferrer" title="External documentation" href="https://www.elastic.co/docs/explore-analyze/query-filter/languages/querydsl">
+    External documentation
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+
+</a></external-link>
+
+
+
+
+</li>
+
+  </ul>
+</div>
+
+
+</request-bodies>
+
+
+      <div id="operation-explain-responses" class="properties-list highlight-container">
+  <h3 class="properties-list-title">
+    <span class="anchor-link">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-responses">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      Responses
+
+</span>
+  </h3>
+
+  <ul>
+    <li id="operation-explain-200" class="highlight-container property multiple-content has-children" data-controller="multiple-content">
+      <div class="attributes">
+        <span class="property-name dot-success">
+          <span class="anchor-link">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+            200
+
+</span>
+        </span>
+          <span class="content-type">application/json</span>
+
+      </div>
+      
+
+      
+
+      <response-bodies>
+    <details open="" class="expandable-properties-list active" id="operation-explain-200-body-application-json">
+  <summary data-action="click-&gt;details#setActive">
+    <span class="hide">Hide response attributes</span>
+    <span class="show">Show response attributes</span>
+      <span class="property-type">object</span>
+      
+  </summary>
+  <div id="operation-explain-200-body-application-json-child-attributes" class="properties-list highlight-container">
+
+
+  
+
+  <ul>
+            <li id="operation-explain-200-body-application-json-_index" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-_index">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      _index
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string</span>
+    <span class="badge required">Required</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+</li>
+
+            <li id="operation-explain-200-body-application-json-_id" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-_id">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      _id
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string</span>
+    <span class="badge required">Required</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+</li>
+
+        <li id="operation-explain-200-body-application-json-matched" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-matched">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      matched
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">boolean</span>
+    <span class="badge required">Required</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+</li>
+            <li id="operation-explain-200-body-application-json-explanation" class="highlight-container property has-children">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-explanation">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      explanation
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type" data-type-content="An ExplanationDetail object">object</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+      <details class="expandable-properties-list " id="operation-explain-200-body-application-json-explanation">
+  <summary data-action="click-&gt;details#setActive">
+    <span class="hide">Hide explanation attributes</span>
+    <span class="show">Show explanation attributes</span>
+      <span class="property-type">object</span>
+      
+  </summary>
+  <div id="operation-explain-200-body-application-json-explanation-child-attributes" class="properties-list highlight-container">
+
+
+  
+
+  <ul>
+        <li id="operation-explain-200-body-application-json-explanation-description" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-explanation-description">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      description
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">string</span>
+    <span class="badge required">Required</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+</li>
+        <li id="operation-explain-200-body-application-json-explanation-details" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-explanation-details">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      details
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type" data-type-content="A list of ExplanationDetail objects">array[object]</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+          <div id="" class="properties-list highlight-container single-schema" data-custom-event-id="">
+        <div id="operation-explain-200-body-application-json-explanation-details-details-object" class="highlight-container property"></div>
+    </div>
+
+</li>
+        <li id="operation-explain-200-body-application-json-explanation-value" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-explanation-value">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      value
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">number</span>
+    <span class="badge required">Required</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+</li>
+  </ul>
+</div>
+
+</details>
+
+</li>
+
+            <li id="operation-explain-200-body-application-json-get" class="highlight-container property has-children">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-get">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      get
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type" data-type-content="An InlineGet object">object</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+      <details class="expandable-properties-list " id="operation-explain-200-body-application-json-get">
+  <summary data-action="click-&gt;details#setActive">
+    <span class="hide">Hide get attributes</span>
+    <span class="show">Show get attributes</span>
+      <span class="property-type">object</span>
+      
+  </summary>
+  <div id="operation-explain-200-body-application-json-get-child-attributes" class="properties-list highlight-container">
+
+
+  
+
+  <ul>
+        <li id="operation-explain-200-body-application-json-get-fields" class="highlight-container property has-children">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-get-fields">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      fields
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">object</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+      <details class="expandable-properties-list " id="operation-explain-200-body-application-json-get-fields">
+  <summary data-action="click-&gt;details#setActive">
+    <span class="hide">Hide fields attribute</span>
+    <span class="show">Show fields attribute</span>
+      <span class="property-type">object</span>
+      
+  </summary>
+  <div id="operation-explain-200-body-application-json-get-fields-child-attributes" class="properties-list highlight-container">
+
+
+  
+
+  <ul>
+        <li id="operation-explain-200-body-application-json-get-fields" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-get-fields">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      *
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">object</span>
+    <span class="badge pill additional-property">Additional properties</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+</li>
+  </ul>
+</div>
+
+</details>
+
+</li>
+        <li id="operation-explain-200-body-application-json-get-found" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-get-found">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      found
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">boolean</span>
+    <span class="badge required">Required</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+</li>
+        <li id="operation-explain-200-body-application-json-get-_seq_no" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-get-_seq_no">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      _seq_no
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">number</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+</li>
+        <li id="operation-explain-200-body-application-json-get-_primary_term" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-get-_primary_term">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      _primary_term
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">number</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+</li>
+          <li id="operation-explain-200-body-application-json-get-_routing" class="highlight-container property"><div class="attributes">
+        <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-get-_routing">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+          _routing
+
+</span>
+        <title-badges class="">
+    <span class="badge property-type">string | array[string]</span>
+</title-badges>
+
+      
+    
+    <div class="combinator highlight-container" data-controller="tabs alternative" data-tabs-index="0" data-action="tabs:change:operation-explain-200-body-application-json-get-_routing-&gt;alternative#change alternative:form-&gt;explorer-send-request#updateRequest" data-tabs-scroll="true">
+  <header class="combinator__header">
+      <span class="anchor-link combinator__type">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" data-alternative-target="anchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-get-_routing">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+        One of:
+
+</span>
+    <div class="tabs">
+        <a class="tab attributes" name="operation-explain-200-body-application-json-get-_routing" data-action="click-&gt;tabs#change click-&gt;alternative#change " data-tabs-target="tab" href="#operation-explain-200-body-application-json-get-_routing" role="tab" aria-controls="operation-explain-200-body-application-json-get-_routing" tabindex="0" aria-selected="true">
+          string-1
+          <title-badges class="">
+    <span class="badge property-type">string</span>
+</title-badges>
+
+        </a>
+        <a class="tab attributes" name="operation-explain-200-body-application-json-get-array-2-_routing-array-string" data-action="click-&gt;tabs#change click-&gt;alternative#change " data-tabs-target="tab" href="#operation-explain-200-body-application-json-get-array-2-_routing-array-string" role="tab" aria-controls="operation-explain-200-body-application-json-get-array-2-_routing-array-string" tabindex="0" aria-selected="false">
+          array-2
+          <title-badges class="">
+    <span class="badge property-type">array[string]</span>
+</title-badges>
+
+        </a>
+    </div>
+  </header>
+    
+      <div id="operation-explain-200-body-application-json-get-_routing" class="highlight-container property" data-tabs-target="panel" aria-hidden="false"></div>
+    
+      <div id="operation-explain-200-body-application-json-get-array-2-_routing-array-string" class="highlight-container property" data-tabs-target="panel" aria-hidden="true"></div>
+</div>
+
+</div></li>
+        <li id="operation-explain-200-body-application-json-get-_source" class="highlight-container property">
+    <div class="attributes">
+    <span class="anchor-link property-name">
+  <a data-after="URL Copied" data-action="click-&gt;highlight#highlightFromAnchor" href="/docs/api/doc/elasticsearch/operation/operation-explain#operation-explain-200-body-application-json-get-_source">
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="#8792a2" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>
+
+</a>  
+      _source
+
+</span>
+    <title-badges class="">
+    <span class="badge property-type">object</span>
+</title-badges>
+
+  </div>
+
+
+
+
+
+</li>
+  </ul>
+</div>
+
+</details>
+
+</li>
+
+  </ul>
+</div>
+
+</details>
+
+
+</response-bodies>
+
+    </li>
+  </ul>
+</div>
+
+    </div>
+
+    
+
+</section>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+  </section>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+    </div>
+  </div>
+</div>
+
+      </portal>
+    </div>
+
+    
+    
+
+<noscript>
+  <style>
+    body {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</noscript>
+
+    
+<style type="text/css">
+  .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .c, .highlight .ch, .highlight .cd, .highlight .cpf {
+  color: #5e5d83;
+  font-style: italic;
+}
+.highlight .cm {
+  color: #5e5d83;
+  font-style: italic;
+}
+.highlight .c1 {
+  color: #5e5d83;
+  font-style: italic;
+}
+.highlight .cp {
+  color: #465457;
+  font-weight: bold;
+}
+.highlight .cs {
+  color: #465457;
+  font-weight: bold;
+  font-style: italic;
+}
+.highlight .err {
+  color: #f8f8f2;
+  background-color: #403d3d;
+}
+.highlight .gi {
+  color: #a6e22e;
+}
+.highlight .gd {
+  color: #f92672;
+}
+.highlight .ge {
+  font-style: italic;
+}
+.highlight .ges {
+  font-weight: bold;
+  font-style: italic;
+}
+.highlight .gr {
+  color: #f92672;
+}
+.highlight .gt {
+  color: #f92672;
+}
+.highlight .gh {
+  color: #403d3d;
+}
+.highlight .go {
+  color: #403d3d;
+}
+.highlight .gp {
+  color: #66d9ef;
+}
+.highlight .gs {
+  font-weight: bold;
+}
+.highlight .gu {
+  color: #465457;
+}
+.highlight .k, .highlight .kv {
+  color: #66d9ef;
+  font-weight: bold;
+}
+.highlight .kc {
+  color: #66d9ef;
+  font-weight: bold;
+}
+.highlight .kd {
+  color: #66d9ef;
+  font-weight: bold;
+}
+.highlight .kp {
+  color: #66d9ef;
+  font-weight: bold;
+}
+.highlight .kr {
+  color: #66d9ef;
+  font-weight: bold;
+}
+.highlight .kt {
+  color: #66d9ef;
+  font-weight: bold;
+}
+.highlight .kn {
+  color: #f92672;
+  font-weight: bold;
+}
+.highlight .ow {
+  color: #f92672;
+  font-weight: bold;
+}
+.highlight .o {
+  color: #f92672;
+  font-weight: bold;
+}
+.highlight .mf {
+  color: #af87ff;
+}
+.highlight .mh {
+  color: #af87ff;
+}
+.highlight .il {
+  color: #af87ff;
+}
+.highlight .mi {
+  color: #af87ff;
+}
+.highlight .mo {
+  color: #af87ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #af87ff;
+}
+.highlight .se {
+  color: #af87ff;
+}
+.highlight .sb {
+  color: #d7d787;
+}
+.highlight .sc {
+  color: #d7d787;
+}
+.highlight .sd {
+  color: #d7d787;
+}
+.highlight .s2 {
+  color: #d7d787;
+}
+.highlight .sh {
+  color: #d7d787;
+}
+.highlight .si {
+  color: #d7d787;
+}
+.highlight .sx {
+  color: #d7d787;
+}
+.highlight .sr {
+  color: #d7d787;
+}
+.highlight .s1 {
+  color: #d7d787;
+}
+.highlight .ss {
+  color: #d7d787;
+}
+.highlight .s, .highlight .sa, .highlight .dl {
+  color: #d7d787;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+  font-weight: bold;
+}
+.highlight .nd {
+  color: #a6e22e;
+  font-weight: bold;
+}
+.highlight .ne {
+  color: #a6e22e;
+  font-weight: bold;
+}
+.highlight .nf, .highlight .fm {
+  color: #a6e22e;
+  font-weight: bold;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .bp {
+  color: #f8f8f2;
+}
+.highlight .nb {
+  color: #f8f8f2;
+}
+.highlight .ni {
+  color: #f8f8f2;
+}
+.highlight .nn {
+  color: #f8f8f2;
+}
+.highlight .vc {
+  color: #f8f8f2;
+}
+.highlight .vg {
+  color: #f8f8f2;
+}
+.highlight .vi {
+  color: #f8f8f2;
+}
+.highlight .nv, .highlight .vm {
+  color: #f8f8f2;
+}
+.highlight .w {
+  color: #f8f8f2;
+}
+.highlight .nl {
+  color: #f8f8f2;
+  font-weight: bold;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight {
+  color: #f8f8f2;
+  background-color: #1b1d1e;
+}
+  div.highlight {
+    border-radius: 4px;
+    padding: 8px 16px;
+    padding-bottom: 0px;
+    margin: 12px 0;
+  }
+  pre.highlight {
+    padding-bottom: var(--spacing-4);
+    margin-top: 8px !important;
+    width: 100%;
+  }
+</style>
+
+  
+
+<script type="text/javascript" id="" charset="">(function(){function d(b,a,c){var f=new Date;f.setTime(f.getTime()+c*24*60*60*1E3);c=";domain\x3d.elastic.co;path\x3d/;expires\x3d"+f.toGMTString();document.cookie=b+"\x3d"+a+c}function g(b){d(b,"",-1)}function h(b){try{var a=RegExp("[?\x26]"+b+"\x3d([^\x26]*)").exec(window.location.search);return a&&decodeURIComponent(a[1].replace(/\+/g," "))}catch(c){return null}}function n(b){b=new RegExp(b+"\x3d([^;]+)");b=b.exec(document.cookie);return b!=null?unescape(b[1]):null}function p(){var b={utm_campaign:"utm_campaign_1pc",
+ultron:"utm_campaign_1pc",utm_source:"utm_source_1pc",blade:"utm_source_1pc",utm_medium:"utm_medium_1pc",hulk:"utm_medium_1pc",utm_term:"utm_term_1pc",thor:"utm_term_1pc",utm_content:"utm_content_1pc",gambit:"utm_content_1pc",utm_id:"utm_id_1pc"},a=!1,c;for(c in b)if(h(c)){a=!0;break}if(a){for(a=0;a<l.length;a++)g(l[a]);for(var f in b)(a=h(f))&&d(b[f],a,90);b=/^(chatgpt\.com|perplexity\.ai|gemini\.google\.com|poe\.com|claude\.ai|copilot\.microsoft\.com)$/i;f=h("utm_source");a=h("utm_medium");f&&!a&&
+b.test(f)&&(d("utm_medium_1pc","organic-ai",90),d("utm_campaign_1pc","organic-ai",90));return!0}return!1}function q(b){for(var a=[{name:"google",regex:/^(?:https?:\/\/)?(?:www\.)?google\.[a-z]{2,}(?:\.[a-z]{2,})?$/i},{name:"bing",regex:/^(?:https?:\/\/)?(?:www\.)?bing\.[a-z]{2,}(?:\.[a-z]{2,})?$/i},{name:"yahoo",regex:/^(?:https?:\/\/)?(?:www\.)?yahoo\.[a-z]{2,}(?:\.[a-z]{2,})?$/i},{name:"duckduckgo",regex:/^(?:https?:\/\/)?(?:www\.)?duckduckgo\.[a-z]{2,}(?:\.[a-z]{2,})?$/i},{name:"baidu",regex:/^(?:https?:\/\/)?(?:www\.)?baidu\.[a-z]{2,}(?:\.[a-z]{2,})?$/i},
+{name:"yandex",regex:/^(?:https?:\/\/)?(?:www\.)?yandex\.[a-z]{2,}(?:\.[a-z]{2,})?$/i},{name:"ecosia",regex:/^(?:https?:\/\/)?(?:www\.)?ecosia\.org$/i},{name:"naver",regex:/^(?:https?:\/\/)?(?:www\.)?naver\.com$/i},{name:"seznam",regex:/^(?:https?:\/\/)?(?:www\.)?seznam\.cz$/i},{name:"sogou",regex:/^(?:https?:\/\/)?(?:www\.)?sogou\.com$/i},{name:"qwant",regex:/^(?:https?:\/\/)?(?:www\.)?qwant\.com$/i}],c=0;c<a.length;c++)if(a[c].regex.test(b)){d("utm_campaign_1pc","organic",90);d("utm_source_1pc",
+a[c].name,90);d("utm_medium_1pc","organic",90);g("utm_content_1pc");g("utm_term_1pc");g("utm_id_1pc");return}a=[{name:"gemini.google.com",regex:/^(?:https?:\/\/)?gemini\.google\.com$/i},{name:"perplexity.ai",regex:/^(?:https?:\/\/)?(?:www\.)?perplexity\.ai$/i},{name:"chat.openai.com",regex:/^(?:https?:\/\/)?(?:www\.)?chat\.openai\.com$/i},{name:"claude.ai",regex:/^(?:https?:\/\/)?(?:www\.)?claude\.ai$/i},{name:"copilot.microsoft.com",regex:/^(?:https?:\/\/)?(?:www\.)?copilot\.microsoft\.com$/i},{name:"poe.com",
+regex:/^(?:https?:\/\/)?(?:www\.)?poe\.com$/i},{name:"chatgpt.com",regex:/^(?:https?:\/\/)?(?:www\.)?chatgpt\.com$/i},{name:"blackbox.ai",regex:/^(?:https?:\/\/)?(?:www\.)?blackbox\.ai$/i},{name:"chat.qwenlm.ai",regex:/^(?:https?:\/\/)?(?:www\.)?chat\.qwenlm\.ai$/i},{name:"doubao.com",regex:/^(?:https?:\/\/)?(?:www\.)?doubao\.com$/i},{name:"coze.com",regex:/^(?:https?:\/\/)?(?:www\.)?coze\.com$/i},{name:"wrtn.ai",regex:/^(?:https?:\/\/)?(?:www\.)?wrtn\.ai$/i},{name:"kimi.moonshot.cn",regex:/^(?:https?:\/\/)?(?:www\.)?kimi\.moonshot\.cn$/i},
+{name:"you.com",regex:/^(?:https?:\/\/)?(?:www\.)?you\.com$/i},{name:"iask.ai",regex:/^(?:https?:\/\/)?(?:www\.)?iask\.ai$/i},{name:"tongyi.aliyun.com",regex:/^(?:https?:\/\/)?(?:www\.)?tongyi\.aliyun\.com$/i},{name:"prpt.ai",regex:/^(?:https?:\/\/)?(?:www\.)?prpt\.ai$/i},{name:"penfriend.ai",regex:/^(?:https?:\/\/)?(?:www\.)?penfriend\.ai$/i},{name:"chat.baidu.com",regex:/^(?:https?:\/\/)?(?:www\.)?chat\.baidu\.com$/i}];for(c=0;c<a.length;c++)if(a[c].regex.test(b)){d("utm_campaign_1pc","organic-ai",
+90);d("utm_source_1pc",a[c].name,90);d("utm_medium_1pc","organic-ai",90);g("utm_content_1pc");g("utm_term_1pc");g("utm_id_1pc");return}d("utm_campaign_1pc","referral",90);d("utm_source_1pc",b,90);d("utm_medium_1pc","referral",90);g("utm_content_1pc");g("utm_term_1pc");g("utm_id_1pc")}function r(){var b={tech:"mktg_tech",baymax:"mktg_tech",utm_technology:"mktg_tech",plcmt:"mktg_plcmt",storm:"mktg_plcmt",utm_placement:"mktg_plcmt",cta:"mktg_cta",rogue:"mktg_cta",utm_cta:"mktg_cta",pg:"mktg_pg",elektra:"mktg_pg",
+utm_page:"mktg_pg"},a=["mktg_tech","mktg_plcmt","mktg_cta","mktg_pg"],c=!1,f;for(f in b)if(h(f)){c=!0;break}if(c){for(c=0;c<a.length;c++)g(a[c]);for(var m in b)(a=h(m))&&d(b[m],a,90)}}var l="utm_campaign_1pc utm_source_1pc utm_medium_1pc utm_term_1pc utm_content_1pc utm_id_1pc".split(" "),e=h("gclid");if(e){var k=h("gclsrc");k&&k.indexOf("aw")===-1||d("mktg_gclid",e,90)}e=p();r();if(!e){e="";(e=e.trim().toLowerCase())&&e!=="(not set)"&&e.indexOf("elastic.co")===-1&&e!=="tagassistant.google.com"&&
+e!=="localhost"&&e!=="127.0.0.1"&&q(e);e=!0;for(k=0;k<l.length;k++)if(n(l[k])){e=!1;break}e&&(d("utm_source_1pc","direct",90),d("utm_medium_1pc","(none)",90))}})();</script><script type="text/javascript" id="" charset="">window.dataLayer=window.dataLayer||[];window.dataLayer.push({screenResolution:window.screen.width+"x"+window.screen.height,viewportSize:Math.max(document.documentElement.clientWidth,window.innerWidth||0)+"x"+Math.max(document.documentElement.clientHeight,window.innerHeight||0)});</script><script type="text/javascript" id="" charset="">window.dataLayer=window.dataLayer||[];window.dataLayer.push({gtmbotAudit:function(){var a=navigator.webdriver?"true":"false",b=/HeadlessChrome/.test(navigator.userAgent)?"true":"false",c=document.documentElement.getAttribute("webdriver")||window.callPhantom||window._phantom?"true":"false",d=navigator.hardwareConcurrency<1||navigator.deviceMemory&&navigator.deviceMemory<1?"true":"false";return"wd:"+a+"|hd:"+b+"|auto:"+c+"|hw:"+d}()});</script><script type="text/javascript" id="" charset="">var _iub=_iub||[],_iubLastStateKey=null;
+_iub.csConfiguration={perPurposeConsent:!0,lang:"en",siteId:1157787,countryDetection:!0,gdprAppliesGlobally:!1,floatingPreferencesButtonDisplay:!1,cookiePolicyInOtherWindow:!0,usPreferencesWidgetDisplay:!1,googleConsentMode:!1,enableUspr:!0,emitGtmEvents:!0,usprPurposes:"s,sh,adv",privacyPolicyUrl:"https://www.elastic.co/legal/privacy-statement",privacyPolicyNoticeAtCollectionUrl:"https://www.elastic.co/legal/privacy-statement",preferenceCookie:{expireAfter:180},consentOnContinuedBrowsing:!1,cookiePolicyId:67332803,
+cookiePolicyUrl:"https://www.elastic.co/legal/cookie-statement/all-cookies",banner:{textColor:"black",backgroundColor:"white",fontSizeBody:"inter",fontSizeCloseButton:"inter",acceptButtonDisplay:!0,acceptButtonColor:"#0073CE",acceptButtonCaptionColor:"white",customizeButtonDisplay:!0,customizeButtonColor:"#212121",customizeButtonCaptionColor:"white",rejectButtonDisplay:!0,rejectButtonColor:"#0073CE",rejectButtonCaptionColor:"white",closeButtonRejects:!0,showPurposesToggles:!0},callback:{onPreferenceExpressedOrNotNeeded:function(c){window.dataLayer=
+window.dataLayer||[];if(!c)a:{try{if(window._iub&&window._iub.cs&&window._iub.cs.api&&typeof window._iub.cs.api.getPreferences==="function"){c=window._iub.cs.api.getPreferences();break a}}catch(m){}c=null}var a=c;if(a&&a.uspr){var g=!!a.uspr.s;var d=!!a.uspr.sh;var e=!!a.uspr.adv;var h=c=!0;var f=d;a=e;var b="uspr";var l=!0}else if(a&&a.purposes)c=!!a.purposes["2"],h=!!a.purposes["3"],f=!!a.purposes["4"],a=!!a.purposes["5"],e=d=g=!0,b="gdpr",l=!0;else if(a&&a.consent===!0)g=d=e=c=h=f=a=!0,b="gdpr",
+l=!0;else if(a&&a.consent===!1)c=h=f=a=!1,g=d=e=!0,b="gdpr",l=!0;else{g=d=e=c=h=f=a=!0;a:{try{b=window._iub&&window._iub.cs&&window._iub.cs.gdprApplies===!1&&window._iub.csConfiguration&&window._iub.csConfiguration.enableUspr===!0;break a}catch(m){}b=!1}b=b?"uspr":"non_gdpr";l=!1}var k=b+"|"+c+"|"+h+"|"+f+"|"+a+"|"+g+"|"+d+"|"+e;k!==_iubLastStateKey&&(_iubLastStateKey=k,window.measurement_consent_allowed=b==="gdpr"?f:b==="uspr"?d:!0,window.marketing_consent_allowed=b==="gdpr"?a:b==="uspr"?e:!0,k=
+new Date,k.setTime(k.getTime()+15552E6),document.cookie="conspref\x3d"+encodeURIComponent("meas\x3d"+window.measurement_consent_allowed+";mrk\x3d"+window.marketing_consent_allowed+";")+";expires\x3d"+k.toUTCString()+";path\x3d/;domain\x3d.elastic.co;SameSite\x3dLax;Secure",window.dataLayer.push({event:"iubenda_state_ready",iub_region_mode:b,iub_has_stored_signal:l,iub_consent_2:c,iub_consent_3:h,iub_consent_4:f,iub_consent_5:a,iub_uspr_sale:g,iub_uspr_sharing:d,iub_uspr_adv:e}))}}};</script>
+<script id="" text="" charset="" type="text/javascript" src="//cdn.iubenda.com/cs/gpp/stub.js"></script><script type="text/javascript" id="" charset="">(function(){var b=document.querySelectorAll('a[href*\x3d"azuremarketplace.microsoft.com"]'),c="\x26euid\x3dba0e2903-216e-4618-baad-cc3f76e6abe9";b.forEach(function(a){var d=a.getAttribute("href");a.setAttribute("href",d+c)})})();</script><iframe aria-hidden="true" title="GPP Locator" name="__gppLocator" style="display: none;"></iframe>
+<script id="" text="" charset="UTF-8" type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js"></script></body></html>

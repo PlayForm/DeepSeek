@@ -1,0 +1,300 @@
+<div><div class="container-fluid td-outer">
+<div class="td-main"><div class="row flex-xl-nowrap">
+<main class="col-12 col-md-9 col-xl-8 ps-md-5"><div class="td-content">
+<h1>Instrumentation</h1>
+<div class="lead">Instrumentation for OpenTelemetry Ruby</div>
+<p><a href="/docs/concepts/instrumentation/">Instrumentation</a> is the act of adding
+observability code to an app yourself.</p>
+<p>If you’re instrumenting an app, you need to use the OpenTelemetry SDK for your
+language. You’ll then use the SDK to initialize OpenTelemetry and the API to
+instrument your code. This will emit telemetry from your app, and any library
+you installed that also comes with instrumentation.</p>
+<p>If you’re instrumenting a library, only install the OpenTelemetry API package
+for your language. Your library will not emit telemetry on its own. It will only
+emit telemetry when it is part of an app that uses the OpenTelemetry SDK. For
+more on instrumenting libraries, see
+<a href="/docs/concepts/instrumentation/libraries/">Libraries</a>.</p>
+<p>For more information about the OpenTelemetry API and SDK, see the
+<a href="/docs/specs/otel/">specification</a>.</p>
+<h2 id="setup">Setup
+</h2>
+<p>First, ensure you have the SDK package installed:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh"><span class="line"><span class="cl">gem install opentelemetry-sdk
+</span></span></code></pre></div>
+<p>Then include configuration code that runs when your program initializes. Make
+sure that <code>service.name</code> is set by configuring a service name (for example via
+the <code>OTEL_SERVICE_NAME</code> environment variable).</p>
+<p>To instrument many common libraries without enabling each instrumentation
+individually, use <code>opentelemetry-instrumentation-all</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh"><span class="line"><span class="cl">gem install opentelemetry-instrumentation-all
+</span></span></code></pre></div>
+<p>Then configure the SDK to enable available instrumentations:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s1">'opentelemetry/sdk'</span>
+</span></span><span class="line"><span class="cl"><span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">SDK</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="o">|</span>
+</span></span><span class="line"><span class="cl">  <span class="n">c</span><span class="o">.</span><span class="n">use_all</span>
+</span></span></code></pre></div>
+<div class="td-alert td-alert--md alert alert-tip">
+<div class="td-alert-heading alert-heading">Tip</div>
+<div class="td-alert-body"><p>In a Ruby on Rails app, you can place this configuration in
+<code>config/initializers/opentelemetry.rb</code>.</p></div>
+</div>
+<p>This approach automatically enables supported library instrumentations (so you
+typically don’t need to follow the per-instrumentation steps in the
+<a href="#traces">Traces</a> section below). You may still need to configure an exporter
+and environment variables appropriate for your deployment.</p>
+<h2 id="traces">Traces
+</h2>
+<h3 id="acquiring-a-tracer">Acquiring a Tracer
+</h3>
+<p>To begin <a href="/docs/concepts/signals/traces/">tracing</a>, you will need to ensure you
+have an initialized <a href="/docs/concepts/signals/traces/#tracer"><code>Tracer</code></a> that comes
+from a <a href="/docs/concepts/signals/traces/#tracer-provider"><code>TracerProvider</code></a>.</p>
+<p>The easiest and most common way to do this is to use the globally-registered
+TracerProvider. If you are using
+<a href="/docs/languages/ruby/libraries/">instrumentation libraries</a>, such as in a Rails
+app, then one will be registered for you.</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="c1"># If in a Rails app, this lives in config/initializers/opentelemetry.rb</span>
+</span></span><span class="line"><span class="cl"><span class="nb">require</span> <span class="s2">"opentelemetry/sdk"</span>
+</span></span><span class="line"><span class="cl"><span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">SDK</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="o">|</span>
+</span></span><span class="line"><span class="cl">  <span class="n">c</span><span class="o">.</span><span class="n">service_name</span> <span class="o">=</span> <span class="s1">'&lt;YOUR_SERVICE_NAME&gt;'</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 'Tracer' can be used throughout your code now</span>
+</span></span><span class="line"><span class="cl"><span class="no">MyAppTracer</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">.</span><span class="n">tracer_provider</span><span class="o">.</span><span class="n">tracer</span><span class="p">(</span><span class="s1">'&lt;YOUR_TRACER_NAME&gt;'</span><span class="p">)</span>
+</span></span></code></pre></div>
+<p>With a <code>Tracer</code> acquired, you can manually trace code.</p>
+<h3 id="get-the-current-span">Get the current span
+</h3>
+<p>It’s very common to add information to the current
+<a href="/docs/concepts/signals/traces/#spans">span</a> somewhere within your program. To do
+so, you can get the current span and add
+<a href="/docs/concepts/signals/traces/#attributes">attributes</a> to it.</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s2">"opentelemetry/sdk"</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">track_extended_warranty</span><span class="p">(</span><span class="n">extended_warranty</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># Get the current span</span>
+</span></span><span class="line"><span class="cl">  <span class="n">current_span</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">.</span><span class="n">current_span</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># And add useful stuff to it!</span>
+</span></span><span class="line"><span class="cl">  <span class="n">current_span</span><span class="o">.</span><span class="n">add_attributes</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">"com.extended_warranty.id"</span> <span class="o">=&gt;</span> <span class="n">extended_warranty</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">"com.extended_warranty.timestamp"</span> <span class="o">=&gt;</span> <span class="n">extended_warranty</span><span class="o">.</span><span class="n">timestamp</span>
+</span></span></code></pre></div>
+<h3 id="creating-new-spans">Creating New Spans
+</h3>
+<p>To create a <a href="/docs/concepts/signals/traces/#spans">span</a>, you’ll need a
+<a href="#acquiring-a-tracer">configured <code>Tracer</code></a>.</p>
+<p>Typically when you create a new span, you’ll want it to be the active/current
+span. To do that, use <code>in_span</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s2">"opentelemetry/sdk"</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">do_work</span>
+</span></span><span class="line"><span class="cl">  <span class="no">MyAppTracer</span><span class="o">.</span><span class="n">in_span</span><span class="p">(</span><span class="s2">"do_work"</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">span</span><span class="o">|</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># do some work that the 'do_work' span tracks!</span>
+</span></span></code></pre></div>
+<p>If an exception escapes the <code>in_span</code> block, the tracer records the exception on
+the span by default, sets the span status to <code>Error</code>, and re-raises the
+exception. You can disable automatic exception recording by passing
+<code>record_exception: false</code> as an argument to the <code>in_span</code> method.</p>
+<p>If you rescue an exception inside the block and don’t re-raise it, set the span
+status and record the exception manually when appropriate:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="no">MyAppTracer</span><span class="o">.</span><span class="n">in_span</span><span class="p">(</span><span class="s2">"do_work"</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">span</span><span class="o">|</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># do work that may raise an exception</span>
+</span></span><span class="line"><span class="cl">  <span class="k">rescue</span> <span class="no">StandardError</span> <span class="o">=&gt;</span> <span class="n">e</span>
+</span></span><span class="line"><span class="cl">    <span class="n">span</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">::</span><span class="no">Status</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">span</span><span class="o">.</span><span class="n">record_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Handle the exception without re-raising it, such as returning a fallback.</span>
+</span></span></code></pre></div>
+<h3 id="creating-nested-spans">Creating nested spans
+</h3>
+<p>If you have a distinct sub-operation you’d like to track as a part of another
+one, you can create nested <a href="/docs/concepts/signals/traces/#spans">spans</a> to
+represent the relationship:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s2">"opentelemetry/sdk"</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">parent_work</span>
+</span></span><span class="line"><span class="cl">  <span class="no">MyAppTracer</span><span class="o">.</span><span class="n">in_span</span><span class="p">(</span><span class="s2">"parent"</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">span</span><span class="o">|</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># do some work that the 'parent' span tracks!</span>
+</span></span><span class="line"><span class="cl">    <span class="n">child_work</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># do some more work afterwards</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">child_work</span>
+</span></span><span class="line"><span class="cl">  <span class="no">MyAppTracer</span><span class="o">.</span><span class="n">in_span</span><span class="p">(</span><span class="s2">"child"</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">span</span><span class="o">|</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># do some work that the 'child' span tracks!</span>
+</span></span></code></pre></div>
+<p>In the preceding example, two spans are created - named <code>parent</code> and <code>child</code> -
+with <code>child</code> nested under <code>parent</code>. If you view a trace with these spans in a
+trace visualization tool, <code>child</code> will be nested under <code>parent</code>.</p>
+<h3 id="add-attributes-to-a-span">Add attributes to a span
+</h3>
+<p><a href="/docs/concepts/signals/traces/#attributes">Attributes</a> let you attach key/value
+pairs to a <a href="/docs/concepts/signals/traces/#spans">span</a> so it carries more
+information about the current operation that it’s tracking.</p>
+<p>You can use <code>set_attribute</code> to add a single attribute to a span:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s2">"opentelemetry/sdk"</span>
+</span></span><span class="line"><span class="cl"><span class="n">current_span</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">.</span><span class="n">current_span</span>
+</span></span><span class="line"><span class="cl"><span class="n">current_span</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s2">"animals"</span><span class="p">,</span> <span class="o">[</span><span class="s2">"elephant"</span><span class="p">,</span> <span class="s2">"tiger"</span><span class="o">]</span><span class="p">)</span>
+</span></span></code></pre></div>
+<p>You can use <code>add_attributes</code> to add a map of attributes:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s2">"opentelemetry/sdk"</span>
+</span></span><span class="line"><span class="cl"><span class="n">current_span</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">.</span><span class="n">current_span</span>
+</span></span><span class="line"><span class="cl"><span class="n">current_span</span><span class="o">.</span><span class="n">add_attributes</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">"my.cool.attribute"</span> <span class="o">=&gt;</span> <span class="s2">"a value"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">"my.first.name"</span> <span class="o">=&gt;</span> <span class="s2">"Oscar"</span>
+</span></span></code></pre></div>
+<p>You can also add attributes to a span as
+<a href="#creating-new-spans">it’s being created</a>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s2">"opentelemetry/sdk"</span>
+</span></span><span class="line"><span class="cl"><span class="no">MyAppTracer</span><span class="o">.</span><span class="n">in_span</span><span class="p">(</span><span class="s1">'foo'</span><span class="p">,</span> <span class="ss">attributes</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"hello"</span> <span class="o">=&gt;</span> <span class="s2">"world"</span><span class="p">,</span> <span class="s2">"some.number"</span> <span class="o">=&gt;</span> <span class="mi">1024</span> <span class="p">})</span> <span class="k">do</span> <span class="o">|</span><span class="n">span</span><span class="o">|</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">#  do stuff with the span</span>
+</span></span></code></pre></div>
+<blockquote>
+<p>⚠ Spans are thread safe data structures that require locks when they are
+mutated. You should therefore avoid calling <code>set_attribute</code> multiple times and
+instead assign attributes in bulk with a Hash, either during span creation or
+with <code>add_attributes</code> on an existing span.</p>
+<p>⚠ Sampling decisions happen at the moment of span creation. If your
+sampler considers span attributes when deciding to sample a span, then you
+<em>must</em> pass those attributes as part of span creation. Any attributes added
+after creation will not be seen by the sampler, because the sampling decision
+has already been made.</p>
+</blockquote>
+<h3 id="add-semantic-attributes">Add semantic attributes
+</h3>
+<p><a href="/docs/specs/semconv/general/trace/">Semantic Attributes</a> are pre-defined
+<a href="/docs/concepts/signals/traces/#attributes">Attributes</a> that are well-known
+naming conventions for common kinds of data. Using Semantic Attributes lets you
+normalize this kind of information across your systems.</p>
+<p>To use Semantic Attributes in Ruby, add the appropriate gem:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh"><span class="line"><span class="cl">gem install opentelemetry-semantic_conventions
+</span></span></code></pre></div>
+<p>Then you can use it in code:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s1">'opentelemetry/sdk'</span>
+</span></span><span class="line"><span class="cl"><span class="nb">require</span> <span class="s1">'opentelemetry/semantic_conventions'</span>
+</span></span><span class="line"><span class="cl"><span class="n">current_span</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">.</span><span class="n">current_span</span>
+</span></span><span class="line"><span class="cl"><span class="n">current_span</span><span class="o">.</span><span class="n">add_attributes</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">SemanticConventions</span><span class="o">::</span><span class="no">Trace</span><span class="o">::</span><span class="no">HTTP_METHOD</span> <span class="o">=&gt;</span> <span class="s2">"GET"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">SemanticConventions</span><span class="o">::</span><span class="no">Trace</span><span class="o">::</span><span class="no">HTTP_URL</span> <span class="o">=&gt;</span> <span class="s2">"https://opentelemetry.io/"</span><span class="p">,</span>
+</span></span></code></pre></div>
+<h3 id="add-span-events">Add Span Events
+</h3>
+<p>A <a href="/docs/concepts/signals/traces/#span-events">span event</a> is a human-readable
+message on a span that represents “something happening” during it’s lifetime.
+For example, imagine a function that requires exclusive access to a resource
+that is under a mutex. An event could be created at two points - once, when we
+try to gain access to the resource, and another when we acquire the mutex.</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s2">"opentelemetry/sdk"</span>
+</span></span><span class="line"><span class="cl"><span class="n">span</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">.</span><span class="n">current_span</span>
+</span></span><span class="line"><span class="cl"><span class="n">span</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="s2">"Acquiring lock"</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">mutex</span><span class="o">.</span><span class="n">try_lock</span>
+</span></span><span class="line"><span class="cl">  <span class="n">span</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="s2">"Got lock, doing work..."</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># some code here</span>
+</span></span><span class="line"><span class="cl">  <span class="n">span</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="s2">"Releasing lock"</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">span</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="s2">"Lock already in use"</span><span class="p">)</span>
+</span></span></code></pre></div>
+<p>A useful characteristic of events is that their timestamps are displayed as
+offsets from the beginning of the span, allowing you to easily see how much time
+elapsed between them.</p>
+<p>Events can also have attributes of their own e.g.</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s2">"opentelemetry/sdk"</span>
+</span></span><span class="line"><span class="cl"><span class="n">span</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="s2">"Cancelled wait due to external signal"</span><span class="p">,</span> <span class="ss">attributes</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">"pid"</span> <span class="o">=&gt;</span> <span class="mi">4328</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">"signal"</span> <span class="o">=&gt;</span> <span class="s2">"SIGHUP"</span>
+</span></span></code></pre></div>
+<h3 id="add-span-links">Add Span Links
+</h3>
+<p>A <a href="/docs/concepts/signals/traces/#spans">span</a> can be created with zero or more
+<a href="/docs/concepts/signals/traces/#span-links">span links</a> that causally link it to
+another span. A link needs a
+<a href="/docs/concepts/signals/traces/#span-context">span context</a> to be created.</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s2">"opentelemetry/sdk"</span>
+</span></span><span class="line"><span class="cl"><span class="n">span_to_link_from</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">.</span><span class="n">current_span</span>
+</span></span><span class="line"><span class="cl"><span class="n">link</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">::</span><span class="no">Link</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">span_to_link_from</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="no">MyAppTracer</span><span class="o">.</span><span class="n">in_span</span><span class="p">(</span><span class="s2">"new-span"</span><span class="p">,</span> <span class="ss">links</span><span class="p">:</span> <span class="o">[</span><span class="n">link</span><span class="o">]</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># do something that 'new_span' tracks</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># The link in 'new_span' casually associated it with the span it's linked from,</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># but it is not necessarily a child span.</span>
+</span></span></code></pre></div>
+<p>Span Links are often used to link together different traces that are related in
+some way, such as a long-running task that calls into sub-tasks asynchronously.</p>
+<p>Links can also be created with additional attributes:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="n">link</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">::</span><span class="no">Link</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">span_to_link_from</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="ss">attributes</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"some.attribute"</span> <span class="o">=&gt;</span> <span class="mi">12</span> <span class="p">})</span>
+</span></span></code></pre></div>
+<h3 id="set-span-status">Set span status
+</h3>
+<p>A <a href="/docs/concepts/signals/traces/#span-status">Status</a> can be set on a
+<a href="/docs/concepts/signals/traces/#spans">Span</a>, typically used to specify that a
+Span has not completed successfully - <code>Error</code>. By default, all spans are
+<code>Unset</code>, which means a span completed without error. The <code>Ok</code> status is reserved
+for when you need to explicitly mark a span as successful rather than stick with
+the default of <code>Unset</code> (i.e., “without error”).</p>
+<p>The status can be set at any time before the span is finished.</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s2">"opentelemetry/sdk"</span>
+</span></span><span class="line"><span class="cl"><span class="n">current_span</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">.</span><span class="n">current_span</span>
+</span></span><span class="line"><span class="cl">  <span class="mi">1</span><span class="o">/</span><span class="mi">0</span> <span class="c1"># something that obviously fails</span>
+</span></span><span class="line"><span class="cl"><span class="k">rescue</span>
+</span></span><span class="line"><span class="cl">  <span class="n">current_span</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">::</span><span class="no">Status</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"error message here!"</span><span class="p">)</span>
+</span></span></code></pre></div>
+<h3 id="record-exceptions-in-spans">Record exceptions in spans
+</h3>
+<p>It can be a good idea to record exceptions when they happen. It’s recommended to
+do this in conjunction with <a href="#set-span-status">setting span status</a>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="nb">require</span> <span class="s2">"opentelemetry/sdk"</span>
+</span></span><span class="line"><span class="cl"><span class="n">current_span</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">.</span><span class="n">current_span</span>
+</span></span><span class="line"><span class="cl">  <span class="mi">1</span><span class="o">/</span><span class="mi">0</span> <span class="c1"># something that obviously fails</span>
+</span></span><span class="line"><span class="cl"><span class="k">rescue</span> <span class="no">Exception</span> <span class="o">=&gt;</span> <span class="n">e</span>
+</span></span><span class="line"><span class="cl">  <span class="n">current_span</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="no">OpenTelemetry</span><span class="o">::</span><span class="no">Trace</span><span class="o">::</span><span class="no">Status</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"error message here!"</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">current_span</span><span class="o">.</span><span class="n">record_exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span></span></code></pre></div>
+<p>Recording an exception creates a
+<a href="/docs/concepts/signals/traces/#span-events">Span Event</a> on the current span with
+a stack trace as an attribute on the span event.</p>
+<p>Exceptions can also be recorded with additional attributes:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="n">current_span</span><span class="o">.</span><span class="n">record_exception</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span> <span class="ss">attributes</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"some.attribute"</span> <span class="o">=&gt;</span> <span class="mi">12</span> <span class="p">})</span>
+</span></span></code></pre></div>
+<h3 id="context-propagation">Context Propagation
+</h3>
+<blockquote><p>Distributed Tracing tracks the progression of a single Request, called a
+Trace, as it is handled by Services that make up an Application. A Distributed
+Trace transverses process, network and security boundaries. <a href="/docs/concepts/glossary/">Glossary</a></p></blockquote>
+<p>This requires <em>context propagation</em>, a mechanism where identifiers for a trace
+are sent to remote processes.</p>
+<blockquote><p>ℹ The OpenTelemetry Ruby SDK will take care of context propagation as
+long as your service is leveraging auto-instrumented libraries. Please refer
+to the <a class="external-link" href="https://github.com/open-telemetry/opentelemetry-ruby-contrib/tree/main/instrumentation">README</a> for more details.</p></blockquote>
+<p>In order to propagate trace context over the wire, a propagator must be
+registered with the OpenTelemetry SDK. The W3 TraceContext and Baggage
+propagators are configured by default. Operators may override this value by
+setting <code>OTEL_PROPAGATORS</code> environment variable to a comma separated list of
+<a class="external-link" href="https://github.com/open-telemetry/opentelemetry-ruby/tree/main/propagator">propagators</a>. For example, to add B3 propagation, set
+<code>OTEL_PROPAGATORS</code> to the complete list of propagation formats you wish to
+support:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">OTEL_PROPAGATORS</span><span class="o">=</span>tracecontext,baggage,b3
+</span></span></code></pre></div>
+<p>Propagators other than <code>tracecontext</code> and <code>baggage</code> must be added as gem
+dependencies to your Gemfile, e.g.:</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby"><span class="line"><span class="cl"><span class="n">gem</span> <span class="s1">'opentelemetry-propagator-b3'</span>
+</span></span></code></pre></div>
+<h2 id="metrics">Metrics
+</h2>
+<p>The metrics API &amp; SDK are currently under development.</p>
+<h2 id="logs">Logs
+</h2>
+<p>The logs API &amp; SDK are currently under development.</p>
+<p>To capture application logs emitted via Ruby’s standard <code>Logger</code>, install the
+logger instrumentation package:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh"><span class="line"><span class="cl">gem install opentelemetry-instrumentation-logger
+</span></span></code></pre></div>
+<p>After installing, ensure you have configured an exporter/endpoint that supports
+logs for example, via the exporter configuration referenced in the next section.</p>
+<h2 id="next-steps">Next Steps
+</h2>
+<p>You’ll also want to configure an appropriate exporter to
+<a href="/docs/languages/ruby/exporters/">export your telemetry data</a> to one or more
+telemetry backends.</p>
+<div class="d-print-none">
+<h2 class="feedback--title">Feedback</h2>
+<p class="feedback--question">Was this page helpful?</p>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-yes">Yes</button>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-no">No</button><p class="feedback--response feedback--response-yes">Thank you. Your feedback is appreciated!</p>
+<p class="feedback--response feedback--response-no">Please let us know <a class="external-link" href="https://github.com/open-telemetry/opentelemetry.io/issues/new?template=PAGE_FEEDBACK.yml&amp;title=[Page+feedback]%3A+ADD+A+SUMMARY+OF+YOUR+FEEDBACK+HERE">how we can improve this page</a>. Your feedback is appreciated!</p>
+</div>
+<div class="td-page-meta__lastmod">Last modified July 9, 2026: <a href="https://github.com/open-telemetry/opentelemetry.io/commit/9b901b70804517d7b2fdbfebabb408d89ef4ed42">docs: clarify Ruby in_span exception handling (#10623) (9b901b70)</a>
+</div>
+</div></main>
+</div></div>
+
+</div></div>

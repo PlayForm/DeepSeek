@@ -289,3 +289,177 @@ Statuses: `converted`, `stub` (under 1 KiB, with its explanation), `bot-walled`,
 ## Counts (2026-10-29)
 
 275 sources: bot-walled 6, converted 234, stub 17, timeout 1, unavailable 17.
+
+## Design inspiration
+
+The 147 remote sources behind the site's design research, fetched 2026-10-28 by the
+parent crawl into `Raw/Inspiration/` and recorded per URL in `fetch-run.jsonl`.
+Of the 147, 141 fetched (139 new, 2 served from cache), 4 failed. A failed source is
+not evidence: nothing downstream may cite a source marked `failed` until it is refetched
+and recorded `fetched`. A title marked `pending` was not recoverable from the fetched
+Markdown and has not been guessed; it must come from a refetch.
+
+### Design systems
+
+- [Up and Down the Ladder of Abstraction](https://worrydream.com/LadderOfAbstraction/) — `Raw/Inspiration/worrydream.com-LadderOfAbstraction.md` — fetched (38577 chars)
+- [Stripe Documentation](https://docs.stripe.com/) — `Raw/Inspiration/docs.stripe.com.md` — fetched (6261 chars)
+- [Quickstart guides](https://docs.stripe.com/quickstarts) — `Raw/Inspiration/docs.stripe.com-quickstarts.md` — fetched (4547 chars)
+- [UI components](https://docs.stripe.com/stripe-apps/components) — `Raw/Inspiration/docs.stripe.com-stripe-apps-components.md` — fetched (7775 chars)
+- [Full-page](https://docs.stripe.com/stripe-apps/patterns/full-page-apps) — `Raw/Inspiration/docs.stripe.com-stripe-apps-patterns-full-page-apps.md` — fetched (10906 chars)
+- [Title pending](https://docs.stripe.com/stripe-apps/routing) — `Raw/Inspiration/docs.stripe.com-stripe-apps-routing.md` — fetched (29379 chars)
+- [Title pending](https://docs.stripe.com/api/expanding_objects) — `Raw/Inspiration/docs.stripe.com-api-expanding_objects.md` — fetched (25137 chars)
+- [Expanding responses](https://docs.stripe.com/expand) — `Raw/Inspiration/docs.stripe.com-expand.md` — fetched (10901 chars)
+- [Title pending](https://docs.stripe.com/api) — `Raw/Inspiration/docs.stripe.com-api.md` — fetched (25117 chars)
+- [Title pending](https://www.carbondesignsystem.com/building-blocks/core/patterns/filtering) — `Raw/Inspiration/www.carbondesignsystem.com-building-blocks-core-patterns-filtering.md` — fetched (5579 chars)
+- [Title pending](https://www.carbondesignsystem.com/building-blocks/core/patterns/empty-states) — `Raw/Inspiration/www.carbondesignsystem.com-building-blocks-core-patterns-empty-states.md` — fetched (21317 chars)
+- [Title pending](https://www.carbondesignsystem.com/building-blocks/core/patterns/overview) — `Raw/Inspiration/www.carbondesignsystem.com-building-blocks-core-patterns-overview.md` — fetched (2608 chars)
+- [Accordions on Desktop: When and How to Use](https://www.nngroup.com/articles/accordions-on-desktop/) — `Raw/Inspiration/www.nngroup.com-articles-accordions-on-desktop.md` — fetched (29252 chars)
+- [F-Shaped Pattern of Reading on the Web: Misunderstood, But Still Relevant (Even on Mobile)](https://www.nngroup.com/articles/f-shaped-pattern-reading-web-content/) — `Raw/Inspiration/www.nngroup.com-articles-f-shaped-pattern-reading-web-content.md` — fetched (24708 chars)
+- [Hypertext'87 Trip Report](https://www.nngroup.com/articles/trip-report-hypertext-87/) — `Raw/Inspiration/www.nngroup.com-articles-trip-report-hypertext-87.md` — fetched (51452 chars)
+- [Task list](https://design-system.service.gov.uk/components/task-list/) — `Raw/Inspiration/design-system.service.gov.uk-components-task-list.md` — fetched (14579 chars)
+- [Help users to Check answers](https://design-system.service.gov.uk/patterns/check-answers/) — `Raw/Inspiration/design-system.service.gov.uk-patterns-check-answers.md` — fetched (15054 chars)
+- [Title pending](https://polaris.shopify.com/components/tables/data-table) — `Raw/Inspiration/polaris.shopify.com-components-tables-data-table.md` — fetched (4908 chars)
+- [Title pending](https://polaris.shopify.com/) — `Raw/Inspiration/polaris.shopify.com.md` — fetched (4908 chars)
+- [Title pending](https://polaris.shopify.com/components/layout-and-structure/page) — `Raw/Inspiration/polaris.shopify.com-components-layout-and-structure-page.md` — fetched (4908 chars)
+- [Mini pipeline graph](https://design.gitlab.com/data-visualization/mini-pipeline-graph) — `Raw/Inspiration/design.gitlab.com-data-visualization-mini-pipeline-graph.md` — fetched (2338 chars)
+- [Color](https://design.gitlab.com/data-visualization/color) — `Raw/Inspiration/design.gitlab.com-data-visualization-color.md` — fetched (14332 chars)
+- [Single stat](https://design.gitlab.com/data-visualization/single-stat) — `Raw/Inspiration/design.gitlab.com-data-visualization-single-stat.md` — fetched (6648 chars)
+- [Graph canvas](https://design.gitlab.com/patterns/graph-canvas) — `Raw/Inspiration/design.gitlab.com-patterns-graph-canvas.md` — fetched (12306 chars)
+- [Release notes](https://design.gitlab.com/get-started/uik-release-notes) — `Raw/Inspiration/design.gitlab.com-get-started-uik-release-notes.md` — fetched (156120 chars)
+- [File structure](https://design.gitlab.com/get-started/uik-file-structure) — `Raw/Inspiration/design.gitlab.com-get-started-uik-file-structure.md` — fetched (4082 chars)
+- [React Developer Tools](https://react.dev/learn/react-developer-tools) — `Raw/Inspiration/react.dev-learn-react-developer-tools.md` — fetched (2419 chars)
+- [<Profiler>](https://react.dev/reference/react/Profiler) — `Raw/Inspiration/react.dev-reference-react-Profiler.md` — fetched (5712 chars)
+- [React DevTools for agents](https://react.dev/reference/dev-tools/react-devtools-cdt-mcp) — `Raw/Inspiration/react.dev-reference-dev-tools-react-devtools-cdt-mcp.md` — fetched (9310 chars)
+- [React Performance tracks](https://react.dev/reference/dev-tools/react-performance-tracks) — `Raw/Inspiration/react.dev-reference-dev-tools-react-performance-tracks.md` — fetched (7752 chars)
+- [Code Navigation](https://code.visualstudio.com/docs/editing/editingevolved) — `Raw/Inspiration/code.visualstudio.com-docs-editing-editingevolved.md` — fetched (16843 chars)
+- [February 2020 (version 1.43)](https://code.visualstudio.com/updates/v1_43) — `Raw/Inspiration/code.visualstudio.com-updates-v1_43.md` — fetched (65214 chars)
+- [User and workspace settings](https://code.visualstudio.com/docs/configure/settings) — `Raw/Inspiration/code.visualstudio.com-docs-configure-settings.md` — fetched (28582 chars)
+- [Manage AI settings in enterprise environments](https://code.visualstudio.com/docs/enterprise/manage-ai-settings) — `Raw/Inspiration/code.visualstudio.com-docs-enterprise-manage-ai-settings.md` — fetched (45088 chars)
+
+### Observability and tracing
+
+- [Trace View](https://docs.sentry.io/concepts/key-terms/tracing/trace-view/) — `Raw/Inspiration/docs.sentry.io-concepts-key-terms-tracing-trace-view.md` — fetched (7913 chars)
+- [Traces and Spans](https://docs.sentry.io/product/trace-explorer/) — `Raw/Inspiration/docs.sentry.io-product-trace-explorer.md` — fetched (19892 chars)
+- [Tracing](https://docs.sentry.io/concepts/key-terms/tracing/) — `Raw/Inspiration/docs.sentry.io-concepts-key-terms-tracing.md` — fetched (11023 chars)
+- [Agent Tracing - What It Is and How To Use It](https://docs.sentry.io/concepts/key-terms/agent-tracing/) — `Raw/Inspiration/docs.sentry.io-concepts-key-terms-agent-tracing.md` — fetched (17747 chars)
+- [Logs](https://docs.sentry.io/product/logs/) — `Raw/Inspiration/docs.sentry.io-product-logs.md` — fetched (11696 chars)
+- [Slow DB Queries](https://docs.sentry.io/product/issues/issue-details/performance-issues/slow-db-queries/) — `Raw/Inspiration/docs.sentry.io-product-issues-issue-details-performance-issues-slow-db-queries.md` — fetched (4499 chars)
+- [N+1 Queries](https://docs.sentry.io/product/issues/issue-details/performance-issues/n-one-queries/) — `Raw/Inspiration/docs.sentry.io-product-issues-issue-details-performance-issues-n-one-queries.md` — fetched (6412 chars)
+- [Trace Waterfall View Improvements](https://sentry.io/changelog/trace-waterfall-view-improvements/) — `Raw/Inspiration/sentry.io-changelog-trace-waterfall-view-improvements.md` — fetched (962 chars)
+- [Traces](https://opentelemetry.io/docs/concepts/signals/traces/) — `Raw/Inspiration/opentelemetry.io-docs-concepts-signals-traces.md` — fetched (13606 chars)
+- [Overview](https://opentelemetry.io/docs/specs/otel/overview/) — `Raw/Inspiration/opentelemetry.io-docs-specs-otel-overview.md` — fetched (21132 chars)
+- [Moved: Generative AI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/) — `Raw/Inspiration/opentelemetry.io-docs-specs-semconv-gen-ai-gen-ai-spans.md` — fetched (601 chars)
+- [Creating links between traces](https://opentelemetry.io/docs/languages/dotnet/traces/links-creation/) — `Raw/Inspiration/opentelemetry.io-docs-languages-dotnet-traces-links-creation.md` — fetched (6524 chars)
+- [Browser](https://opentelemetry.io/docs/languages/js/getting-started/browser/) — `Raw/Inspiration/opentelemetry.io-docs-languages-js-getting-started-browser.md` — fetched (8518 chars)
+- [Instrumentation](https://opentelemetry.io/docs/languages/js/instrumentation/) — `Raw/Inspiration/opentelemetry.io-docs-languages-js-instrumentation.md` — fetched (48417 chars)
+- [Browser](https://opentelemetry.io/docs/specs/semconv/resource/browser/) — `Raw/Inspiration/opentelemetry.io-docs-specs-semconv-resource-browser.md` — fetched (4093 chars)
+- [Instrumentation](https://opentelemetry.io/docs/concepts/instrumentation/) — `Raw/Inspiration/opentelemetry.io-docs-concepts-instrumentation.md` — fetched (3834 chars)
+- [Libraries](https://opentelemetry.io/docs/concepts/instrumentation/libraries/) — `Raw/Inspiration/opentelemetry.io-docs-concepts-instrumentation-libraries.md` — fetched (18899 chars)
+- [Client-side Apps](https://opentelemetry.io/docs/platforms/client-apps/) — `Raw/Inspiration/opentelemetry.io-docs-platforms-client-apps.md` — fetched (3832 chars)
+- [Instrumentation](https://opentelemetry.io/docs/languages/ruby/instrumentation/) — `Raw/Inspiration/opentelemetry.io-docs-languages-ruby-instrumentation.md` — fetched (14485 chars)
+- [Instrumentation](https://opentelemetry.io/docs/languages/python/instrumentation/) — `Raw/Inspiration/opentelemetry.io-docs-languages-python-instrumentation.md` — fetched (17310 chars)
+- [Instrumentation](https://opentelemetry.io/docs/languages/php/instrumentation/) — `Raw/Inspiration/opentelemetry.io-docs-languages-php-instrumentation.md` — fetched (30529 chars)
+- [Front-end Overhaul of the OpenTelemetry Demo (Go to Next.js)](https://opentelemetry.io/blog/2022/frontend-overhaul/) — `Raw/Inspiration/opentelemetry.io-blog-2022-frontend-overhaul.md` — fetched (9136 chars)
+- [Tracing](https://langfuse.com/academy/tracing) — `Raw/Inspiration/langfuse.com-academy-tracing.md` — fetched (14440 chars)
+- [What does a good trace look like?](https://langfuse.com/docs/observability/best-practices) — `Raw/Inspiration/langfuse.com-docs-observability-best-practices.md` — fetched (20449 chars)
+- [Observability & Application Tracing](https://langfuse.com/docs/observability/overview) — `Raw/Inspiration/langfuse.com-docs-observability-overview.md` — fetched (5686 chars)
+- [Aggregated and Color-coded Latency and Costs on Traces](https://langfuse.com/changelog/2024-10-10-text-color-for-latency-and-costs) — `Raw/Inspiration/langfuse.com-changelog-2024-10-10-text-color-for-latency-and-costs.md` — fetched (1624 chars)
+- [AI Agent Observability, Tracing & Evaluation with Langfuse](https://langfuse.com/blog/2024-07-ai-agent-observability-with-langfuse) — `Raw/Inspiration/langfuse.com-blog-2024-07-ai-agent-observability-with-langfuse.md` — fetched (31478 chars)
+- [Langfuse Overview](https://langfuse.com/docs) — `Raw/Inspiration/langfuse.com-docs.md` — fetched (10886 chars)
+- [Langfuse](https://github.com/orgs/langfuse/discussions/8309) — `Raw/Inspiration/github.com-orgs-langfuse-discussions-8309.md` — fetched (1223 chars)
+- [Title pending](https://docs.temporal.io/web-ui) — `Raw/Inspiration/docs.temporal.io-web-ui.md` — fetched (17284 chars)
+- [Improving the Workflow experience: A look at Temporal's new UI](https://temporal.io/blog/the-dark-magic-of-workflow-exploration) — `Raw/Inspiration/temporal.io-blog-the-dark-magic-of-workflow-exploration.md` — fetched (10654 chars)
+- [Title pending](https://docs.temporal.io/encyclopedia/event-history) — `Raw/Inspiration/docs.temporal.io-encyclopedia-event-history.md` — fetched (1303 chars)
+- [Title pending](https://go.temporal.io/platform-hub/prompt-library/learning/explain-workflow-history) — `Raw/Inspiration/go.temporal.io-platform-hub-prompt-library-learning-explain-workflow-history.md` — fetched (2158 chars)
+- [Event History Components](https://deepwiki.com/temporalio/ui/6.4-event-history-components) — `Raw/Inspiration/deepwiki.com-temporalio-ui-6.4-event-history-components.md` — fetched (23785 chars)
+- [See what's happening. Control what happens next.](https://temporal.io/blog/production-controls) — `Raw/Inspiration/temporal.io-blog-production-controls.md` — fetched (9309 chars)
+- [No Data and Error states](https://grafana.com/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/nodata-and-error-states/) — `Raw/Inspiration/grafana.com-docs-grafana-latest-alerting-fundamentals-alert-rule-evaluation-nodata-and-err.md` — fetched (14914 chars)
+- [Alert rule evaluation](https://grafana.com/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/) — `Raw/Inspiration/grafana.com-docs-grafana-latest-alerting-fundamentals-alert-rule-evaluation.md` — fetched (10210 chars)
+- [Configure Grafana-managed alert rules](https://grafana.com/docs/grafana/latest/alerting/alerting-rules/create-grafana-managed-rule/) — `Raw/Inspiration/grafana.com-docs-grafana-latest-alerting-alerting-rules-create-grafana-managed-rule.md` — fetched (19944 chars)
+- [Handle connectivity errors in alerts](https://grafana.com/docs/grafana/latest/alerting/guides/connectivity-errors/) — `Raw/Inspiration/grafana.com-docs-grafana-latest-alerting-guides-connectivity-errors.md` — fetched (19507 chars)
+- [InfluxDB alerting](https://grafana.com/docs/grafana/latest/datasources/influxdb/alerting/) — `Raw/Inspiration/grafana.com-docs-grafana-latest-datasources-influxdb-alerting.md` — fetched (9389 chars)
+- [Pending period added to alert states](https://grafana.com/whats-new/2026-02-12-pending-period-added-to-alert-states/) — `Raw/Inspiration/grafana.com-whats-new-2026-02-12-pending-period-added-to-alert-states.md` — fetched (1938 chars)
+- [Traces in Explore](https://grafana.com/docs/grafana/latest/visualizations/explore/trace-integration/) — `Raw/Inspiration/grafana.com-docs-grafana-latest-visualizations-explore-trace-integration.md` — fetched (13535 chars)
+- [Analyze tracing data](https://grafana.com/docs/grafana/latest/explore/simplified-exploration/traces/investigate/analyze-tracing-data/) — `Raw/Inspiration/grafana.com-docs-grafana-latest-explore-simplified-exploration-traces-investigate-analyze-.md` — fetched (13709 chars)
+- [Visualize tracing data in Grafana](https://grafana.com/docs/tempo/latest/visualize-traces/) — `Raw/Inspiration/grafana.com-docs-tempo-latest-visualize-traces.md` — fetched (12624 chars)
+- [Traces](https://grafana.com/docs/grafana/latest/visualizations/panels-visualizations/visualizations/traces/) — `Raw/Inspiration/grafana.com-docs-grafana-latest-visualizations-panels-visualizations-visualizations-traces.md` — fetched (14200 chars)
+- [Traces and telemetry](https://grafana.com/docs/grafana/latest/visualizations/simplified-exploration/traces/concepts/telemetry/) — `Raw/Inspiration/grafana.com-docs-grafana-latest-visualizations-simplified-exploration-traces-concepts-tele.md` — fetched (6631 chars)
+- [Trace structure](https://grafana.com/docs/grafana/latest/visualizations/simplified-exploration/traces/concepts/trace-structure/) — `Raw/Inspiration/grafana.com-docs-grafana-latest-visualizations-simplified-exploration-traces-concepts-trac.md` — fetched (6627 chars)
+- [Explore Traces](https://grafana.com/whats-new/2024-09-24-explore-traces/) — `Raw/Inspiration/grafana.com-whats-new-2024-09-24-explore-traces.md` — fetched (2449 chars)
+- [InfluxDB data source](https://grafana.com/docs/grafana/latest/datasources/influxdb/) — `Raw/Inspiration/grafana.com-docs-grafana-latest-datasources-influxdb.md` — fetched (10169 chars)
+- [Firing alerts get resolved with no data](https://community.grafana.com/t/firing-alerts-get-resolved-with-no-data/146947) — `Raw/Inspiration/community.grafana.com-t-firing-alerts-get-resolved-with-no-data-146947.md` — fetched (4857 chars)
+- [Track events (Tracing SDK)](https://perfetto.dev/docs/instrumentation/track-events) — `Raw/Inspiration/perfetto.dev-docs-instrumentation-track-events.md` — fetched (27970 chars)
+- [Advanced Guide to Programmatic Trace Generation](https://perfetto.dev/docs/reference/synthetic-track-event) — `Raw/Inspiration/perfetto.dev-docs-reference-synthetic-track-event.md` — fetched (69664 chars)
+- [Visualizing external trace formats with Perfetto](https://perfetto.dev/docs/getting-started/other-formats) — `Raw/Inspiration/perfetto.dev-docs-getting-started-other-formats.md` — fetched (66174 chars)
+- [Converting arbitrary timestamped data to Perfetto](https://perfetto.dev/docs/getting-started/converting) — `Raw/Inspiration/perfetto.dev-docs-getting-started-converting.md` — fetched (60198 chars)
+- [Perfetto UI](https://perfetto.dev/docs/visualization/perfetto-ui) — `Raw/Inspiration/perfetto.dev-docs-visualization-perfetto-ui.md` — fetched (4839 chars)
+- [What is Perfetto?](https://perfetto.dev/docs/) — `Raw/Inspiration/perfetto.dev-docs.md` — fetched (13091 chars)
+- [Getting Started with PerfettoSQL](https://perfetto.dev/docs/analysis/perfetto-sql-getting-started) — `Raw/Inspiration/perfetto.dev-docs-analysis-perfetto-sql-getting-started.md` — fetched (24755 chars)
+- [TracePacket](https://perfetto.dev/docs/reference/trace-packet-proto) — `Raw/Inspiration/perfetto.dev-docs-reference-trace-packet-proto.md` — fetched (745417 chars)
+- [Title pending](https://openlineage.io/docs/spec/object-model) — `Raw/Inspiration/openlineage.io-docs-spec-object-model.md` — fetched (10022 chars)
+- [Title pending](https://openlineage.io/docs/1.48.0/client/python/development/api-reference/openlineage.client) — `Raw/Inspiration/openlineage.io-docs-1.48.0-client-python-development-api-reference-openlineage.client.md` — fetched (131573 chars)
+- [Title pending](https://openlineage.io/apidocs/javadoc/io/openlineage/client/OpenLineage.html) — no file — failed
+- [Title pending](https://openlineage.io/docs/client/java/configuration/) — `Raw/Inspiration/openlineage.io-docs-client-java-configuration.md` — fetched (92865 chars)
+
+### Decision and policy records
+
+- [Title pending](https://www.openpolicyagent.org/docs/management-decision-logs) — `Raw/Inspiration/www.openpolicyagent.org-docs-management-decision-logs.md` — fetched (15454 chars)
+- [Explain a document match result](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-explain) — `Raw/Inspiration/www.elastic.co-docs-api-doc-elasticsearch-operation-operation-explain.md` — fetched (3644 chars)
+- [Explain a document match result](https://www.elastic.co/docs/api/doc/elasticsearch/v8/operation/operation-explain) — `Raw/Inspiration/www.elastic.co-docs-api-doc-elasticsearch-v8-operation-operation-explain.md` — fetched (4006 chars)
+- [Explain a document match result](https://www.elastic.co/docs/api/doc/elasticsearch-serverless/operation/operation-explain) — `Raw/Inspiration/www.elastic.co-docs-api-doc-elasticsearch-serverless-operation-operation-explain.md` — fetched (3655 chars)
+- [Explain API](https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/java-rest-high-explain.html) — `Raw/Inspiration/www.elastic.co-guide-en-elasticsearch-client-java-rest-current-java-rest-high-explain.html.md` — fetched (5225 chars)
+- [Search API](https://www.elastic.co/guide/en/elasticsearch/reference/8.19/search-search.html) — `Raw/Inspiration/www.elastic.co-guide-en-elasticsearch-reference-8.19-search-search.html.md` — fetched (39892 chars)
+- [Run a search](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-search) — `Raw/Inspiration/www.elastic.co-docs-api-doc-elasticsearch-operation-operation-search.md` — fetched (57779 chars)
+- [Reviewing proposed changes in a pull request](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request) — `Raw/Inspiration/docs.github.com-en-pull-requests-how-tos-review-pull-requests-reviewing-proposed-changes-i.md` — fetched (13821 chars)
+- [Pull request reviews](https://docs.github.com/pull-requests/reference/pull-request-reviews) — `Raw/Inspiration/docs.github.com-pull-requests-reference-pull-request-reviews.md` — fetched (3777 chars)
+- [Merge conflicts](https://docs.github.com/pull-requests/reference/merge-conflicts) — `Raw/Inspiration/docs.github.com-pull-requests-reference-merge-conflicts.md` — fetched (3022 chars)
+- [Resolving a merge conflict using the command line](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-using-the-command-line) — `Raw/Inspiration/docs.github.com-en-pull-requests-how-tos-merge-and-close-pull-requests-resolving-a-merge-c.md` — fetched (5252 chars)
+- [Resolving a merge conflict using the command line](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-on-github) — `Raw/Inspiration/docs.github.com-en-pull-requests-how-tos-merge-and-close-pull-requests-resolving-a-merge-c.md` — fetched (cached)
+- [Merge and close pull requests](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests) — `Raw/Inspiration/docs.github.com-en-pull-requests-how-tos-merge-and-close-pull-requests.md` — fetched (3324 chars)
+- [Approving a pull request with required reviews](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/approving-a-pull-request-with-required-reviews) — `Raw/Inspiration/docs.github.com-en-pull-requests-how-tos-review-pull-requests-approving-a-pull-request-wit.md` — fetched (4340 chars)
+- [Quickstart for reviewing pull requests](https://docs.github.com/en/pull-requests/get-started/reviewing-pull-requests-quickstart) — `Raw/Inspiration/docs.github.com-en-pull-requests-get-started-reviewing-pull-requests-quickstart.md` — fetched (2585 chars)
+- [Dismissing a pull request review](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/dismissing-a-pull-request-review) — `Raw/Inspiration/docs.github.com-en-pull-requests-how-tos-review-pull-requests-dismissing-a-pull-request-re.md` — fetched (1871 chars)
+- [Pull requests](https://docs.github.com/articles/using-pull-requests) — `Raw/Inspiration/docs.github.com-articles-using-pull-requests.md` — fetched (6574 chars)
+- [Reviewing dependency changes in a pull request](https://docs.github.com/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-dependency-changes-in-a-pull-request) — `Raw/Inspiration/docs.github.com-pull-requests-collaborating-with-pull-requests-reviewing-changes-in-pull-r.md` — fetched (5421 chars)
+- [Reviewing dependency changes in a pull request](https://docs.github.com/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/commenting-on-a-pull-request) — `Raw/Inspiration/docs.github.com-pull-requests-collaborating-with-pull-requests-reviewing-changes-in-pull-r.md` — fetched (cached)
+- [GitHub glossary](https://docs.github.com/articles/github-glossary) — `Raw/Inspiration/docs.github.com-articles-github-glossary.md` — fetched (52017 chars)
+- [Resolving merge conflicts after a Git rebase](https://docs.github.com/en/get-started/using-git/resolving-merge-conflicts-after-a-git-rebase) — `Raw/Inspiration/docs.github.com-en-get-started-using-git-resolving-merge-conflicts-after-a-git-rebase.md` — fetched (1881 chars)
+
+### Scientific event displays
+
+- [Title pending](https://opendata.cern.ch/visualise/events/cms) — `Raw/Inspiration/opendata.cern.ch-visualise-events-cms.md` — fetched (1818 chars)
+- [Title pending](https://cds.cern.ch/record/1756858/export/hm) — no file — failed
+- [Title pending](https://geant4.web.cern.ch/documentation/dev/bfad_html/ForApplicationDevelopers/GettingStarted/visualization.html) — no file — failed
+- [Tracer Framework](https://tracer.web.cern.ch/) — `Raw/Inspiration/tracer.web.cern.ch.md` — fetched (839 chars)
+- [Event Display Gallery](https://clicdp.web.cern.ch/event-display/) — `Raw/Inspiration/clicdp.web.cern.ch-event-display.md` — fetched (39 chars)
+- [Title pending](https://atlaspo.cern.ch/public/event_display/) — `Raw/Inspiration/atlaspo.cern.ch-public-event_display.md` — fetched (70530 chars)
+
+### Interactive explanation
+
+- [Up and Down the Ladder of Abstraction](https://worrydream.com/LadderOfAbstraction/) — listed above under Design systems
+- [Communicating with Interactive Articles](https://distill.pub/2020/communicating-with-interactive-articles) — `Raw/Inspiration/distill.pub-2020-communicating-with-interactive-articles.md` — fetched (103590 chars)
+- [A Visual Exploration of Gaussian Processes](https://distill.pub/2019/visual-exploration-gaussian-processes) — `Raw/Inspiration/distill.pub-2019-visual-exploration-gaussian-processes.md` — fetched (38646 chars)
+- [Exploring Neural Networks with Activation Atlases](https://distill.pub/2019/activation-atlas/) — `Raw/Inspiration/distill.pub-2019-activation-atlas.md` — fetched (63918 chars)
+- [Feature Visualization](https://distill.pub/2017/feature-visualization) — `Raw/Inspiration/distill.pub-2017-feature-visualization.md` — fetched (43396 chars)
+- [Understanding RL Vision](https://distill.pub/2020/understanding-rl-vision) — `Raw/Inspiration/distill.pub-2020-understanding-rl-vision.md` — fetched (84660 chars)
+- [The Building Blocks of Interpretability](https://distill.pub/2018/building-blocks) — `Raw/Inspiration/distill.pub-2018-building-blocks.md` — fetched (58234 chars)
+- [Zoom In: An Introduction to Circuits](https://distill.pub/2020/circuits/zoom-in) — `Raw/Inspiration/distill.pub-2020-circuits-zoom-in.md` — fetched (66774 chars)
+- [Title pending](https://distill.pub/) — `Raw/Inspiration/distill.pub.md` — fetched (9144 chars)
+
+### The project's own sources
+
+- [Title pending](https://www.shopify.com/editions/fall2026) — `Raw/Inspiration/www.shopify.com-editions-fall2026.md` — fetched (78183 chars)
+- [Title pending](https://memory-bound.vercel.app/blog/muse-spark-open-architecture/) — `Raw/Inspiration/memory-bound.vercel.app-blog-muse-spark-open-architecture.md` — fetched (48354 chars)
+- [Tool Execution Pipeline](https://deepseek-harness.github.io/deepseek-harness/en/reference/tool-execution-pipeline) — `Raw/Inspiration/deepseek-harness.github.io-deepseek-harness-en-reference-tool-execution-pipeline.md` — fetched (3110 chars)
+- [DeepSeek HarnessReady to use. Right now.](https://www.deepseek.com/en/harness/) — `Raw/Inspiration/www.deepseek.com-en-harness.md` — fetched (4895 chars)
+- [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) — `Raw/Inspiration/github.com-deepseek-ai-deepseek-harness.md` — fetched (963320 chars)
+- [DeepSeek Harness Plugin Family for PlayForm](https://github.com/PlayForm/DeepSeek) — `Raw/Inspiration/github.com-PlayForm-DeepSeek.md` — fetched (76802 chars)
+- [The site](https://github.com/PlayForm/Site-DeepSeek) — `Raw/Inspiration/github.com-PlayForm-Site-DeepSeek.md` — fetched (53705 chars)
+- [See where the harness changes.](https://deepseek.playform.cloud) — `Raw/Inspiration/deepseek.playform.cloud.md` — fetched (25312 chars)
+- [Title pending](https://flywheel.paradigma.inc/) — `Raw/Inspiration/flywheel.paradigma.inc.md` — fetched (9 chars)
+- [Title pending](https://dkeenan.com/) — no file — failed
+
+Failed sources (recorded in `fetch-errors.log`): the CERN Yellow Report export
+(`cds.cern.ch`, HTTP 403 anti-bot), the Geant4 visualization chapter (anti-bot),
+the OpenLineage Javadoc (structural, no content elements), and dkeenan.com
+(Cloudflare JS challenge). Each of these is not evidence until refetched.

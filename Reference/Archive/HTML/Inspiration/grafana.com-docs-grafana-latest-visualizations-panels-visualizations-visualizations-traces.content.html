@@ -1,0 +1,329 @@
+<div><div><div id="top-banner">
+<div class="banner__disabled" id="gcon2026_top_banner_a"><div class="gcon2025-banner gcon2026-banner footer">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">Save the Date!</div>
+<div class="tw:text-[13px] tw:text-white">Sign up to get the latest GrafanaCON 2026 updates, agenda drops, and first access to early-bird tickets when they’re first available.</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Sign up</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="gcon2026_top_banner_b"><div class="gcon2025-banner gcon2026-banner footer alt-grot">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">We have our sightson Barcelona</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Save the Date</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-post-keynote"><div class="tw:bg-[#E86F37] tw:relative tw:h-10 tw:hidden tw:sm:block">
+<div class="wrapper tw:px-0">
+<div class="tw:flex tw:flex-row tw:items-center tw:justify-between tw:px-5 tw:flex-wrap">
+
+<span class="tw:items-center tw:justify-center font-poppins tw:font-medium tw:text-black tw:text-base tw:xl:max-w-none tw:text-center tw:h-10 tw:hidden tw:lg:flex">
+          Watch the keynote again and signup for more on-demand sessions.
+        </span>
+<div class="tw:flex-col tw:xl:flex-row tw:items-center tw:gap-6 tw:h-6 tw:sm:flex">
+
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-top-banner"><div class="obscon2025-banner top-banner tw:relative">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<p class="banner-text">
+<span class="banner-title">📢 Registration + agenda now live </span>
+        Explore the latest Grafana Cloud and AI solutions, learn tips &amp; tricks from demos and hands-on workshops, and get actionable advice to advance your observability strategy. Register now and get 50% off - limited tickets available (while they last!).
+      </p>
+<a class="banner-btn tw:bg-black" href="/events/observabilitycon/?tech=target&amp;plcmt=top-banner&amp;aud=default">Register now</a>
+</div>
+</div>
+</div></div> </div></div></div>
+<div><div class="main section"><div class="main-content">
+<blockquote class="llms-txt-directive">Documentation for automated readersA curated documentation index is available at: https://grafana.com/llms.txtA complete documentation index is available at: https://grafana.com/llms-full.txtThese indexes can help with page discovery before fetching individual documents.</blockquote>
+<p class="agent-directive">This page is also available in Markdown, which may be easier for automated readers
+and AI tools to parse than HTML. The Markdown version is available at
+https://grafana.com/docs/grafana/latest/visualizations/panels-visualizations/visualizations/traces.md, or by sending
+Accept: text/markdown to https://grafana.com/docs/grafana/latest/visualizations/panels-visualizations/visualizations/traces/. For broader
+documentation discovery, the curated index is available at https://grafana.com/llms.txt
+and the complete index is available at https://grafana.com/llms-full.txt.</p>
+<div class="grid-layout docs">
+<section class="mobile print-hidden" id="mobile"><div class="mobile__wrapper"> <div class="mobile__title">Traces</div> </div></section><main class="section-docs__main docs__content" id="main"><div class="scrollspy-init">
+<div class="docs-content scrollspy-wrap" id="doc-article-text">
+<div class="docs__breadcrumb">
+<span>Traces</span>
+</div>
+<div class="docs-labels">
+<span class="badge docs-labels__product-orange docs-labels__item mr-half"><span>Grafana Cloud
+</span> </span><span class="badge docs-labels__product-violet docs-labels__item mr-half"><span>Enterprise
+</span> </span><span class="badge docs-labels__product-purple docs-labels__item mr-half"><span>Open source
+</span></span>
+</div>
+<h1 id="traces">Traces
+</h1>
+<p>Traces visualizations let you follow a request as it traverses the services in your infrastructure.
+The traces visualization displays traces data in a diagram that allows you to easily interpret it. Traces visualizations currently render one trace traversal based on the traceID used in TraceQL or using a variable.</p>
+<p>For more information about traces and how to use them, refer to the following documentation:</p>
+<ul>
+<li><a href="/docs/grafana/latest/explore/trace-integration/">Tracing in Explore</a></li>
+<li><a href="/docs/grafana/latest/datasources/tempo/">Tempo data source</a></li>
+<li><a href="/docs/tempo/latest/getting-started/">Getting started with Tempo</a></li>
+</ul>
+<div class="d-sm-flex flex-direction-row-reverse bg-gray-1 br-12 p-2 my-1">
+<div>
+<div class="h4 pt-0 pb-half fw-500">Give it a try using Grafana Play</div>
+<p class="pr-1 pb-half">With Grafana Play, you can explore and see how it works, learning from practical examples to accelerate your development.
+This feature can be seen on <a href="https://play.grafana.org/d/edodkfmj0tce8f/">Traces Panel</a>.</p>
+
+</div>
+</div>
+<h2 id="add-a-panel-with-tracing-visualizations">Add a panel with tracing visualizations
+</h2>
+<p>After you have tracing data available in your Grafana instance, you can add tracing panels to your Grafana dashboards.</p>
+<p>Using a dashboard variable, <code>traceID</code>, lets you create a query to show specific traces for a given trace ID.
+For more information about dashboard variables, refer to the
+<a href="/docs/grafana/latest/dashboards/variables/">Variables documentation</a>.</p>
+<h3 id="before-you-begin">Before you begin
+</h3>
+<p>To use this procedure, you need:</p>
+<ul>
+<li>A Grafana instance</li>
+<li>A
+<a href="/docs/grafana/latest/datasources/tempo/">Tempo data source</a> connected to your Grafana instance</li>
+</ul>
+<h3 id="add-the-traces-panel-query">Steps
+</h3>
+<p>To view and analyze traces data in a dashboard, you need to add the traces visualization to your dashboard and define a query using the panel editor.
+The query determines the data that is displayed in the visualization.
+For more information on the panel editor, refer to the
+<a href="/docs/grafana/latest/panels-visualizations/panel-editor-overview/">Panel editor documentation</a>.</p>
+<p>This procedure uses dashboard variables and templates to allow you to enter trace IDs which can then be visualized. You’ll use a variable called <code>traceId</code> and add it as a template query.</p>
+<ol>
+<li>
+<p>From your Grafana instance, do one of the following:</p>
+<ul>
+<li>On a new dashboard: Click or drag a panel onto the dashboard.</li>
+<li>On an existing dashboard: Click <strong>Edit</strong> in the top-right corner, click the <strong>Add new element</strong> icon, and then click or drag a panel onto the dashboard.</li>
+</ul>
+</li>
+<li><p>Click <strong>Configure visualization</strong> to open panel edit mode.</p></li>
+<li><p>In the query editor, click the data source list and select the appropriate tracing data source.</p></li>
+<li><p>In the top-right corner of the panel editor, select the <strong>All visualizations</strong> tab, search for, and select <strong>Traces</strong>.</p></li>
+<li>
+<p>Under the <strong>Panel options</strong>, enter a <strong>Title</strong> for your trace panel or have Grafana create one using
+<a href="/docs/grafana/latest/dashboards/manage-dashboards/#set-up-generative-ai-features-for-dashboards">generative AI features</a>.</p>
+<p>For more information on the panel editor, refer to the
+<a href="/docs/grafana/latest/panels-visualizations/configure-panel-options/">Configure panel options documentation</a>.</p>
+</li>
+<li><p>In the query editor, click the <strong>TraceQL</strong> query type tab.</p></li>
+<li>
+<p>Enter <code>${traceId}</code> in the TraceQL query field to create a dashboard variable. This variable is used as the template query.</p>
+
+</li>
+<li><p>Click <strong>Back</strong>.</p></li>
+<li><p>Click the <strong>Add new element</strong> icon and click <strong>Variable</strong>.</p></li>
+<li>
+<p>Add a new variable called <code>traceId</code>, of variable type <strong>Custom</strong>, giving it a label if required.</p>
+
+</li>
+<li><p>Click <strong>Save</strong>.</p></li>
+<li><p>Enter an optional description of your changes, and click <strong>Save</strong>.</p></li>
+<li><p>Click <strong>Exit edit</strong>.</p></li>
+<li>
+<p>Verify that the panel works by using a valid trace ID for the data source used for the trace panel and editing the ID in the dashboard variable.</p>
+
+</li>
+</ol>
+<h2 id="add-traceql-with-table-visualizations">Add TraceQL with table visualizations
+</h2>
+<p>While you can add a trace visualization to a dashboard, having to manually add trace IDs as a dashboard variable is cumbersome.
+It’s more useful to instead be able to use TraceQL queries to search for specific types of traces and then select appropriate traces from matching results.</p>
+<ol>
+<li><p>In the same dashboard where you added the trace visualization, click <strong>Edit</strong> in the top-right corner.</p></li>
+<li><p>Click the <strong>Add new element</strong> icon, and then click or drag a panel onto the dashboard.</p></li>
+<li><p>Click <strong>Configure visualization</strong>.</p></li>
+<li><p>Select the same trace data source you used in the previous task.</p></li>
+<li><p>In the top-right corner of the panel editor, select the <strong>All visualizations</strong> tab, search for, and select <strong>Table</strong>.</p></li>
+<li><p>In the query editor, select the <strong>TraceQL</strong> tab.</p></li>
+<li><p>Under the <strong>Panel options</strong>, enter a <strong>Title</strong> for your trace panel or have Grafana create one using
+<a href="/docs/grafana/latest/dashboards/manage-dashboards/#set-up-generative-ai-features-for-dashboards">generative AI features</a>.</p></li>
+<li>
+<p>Add an appropriate TraceQL query to search for traces that you would like to visualize in the dashboard. This example uses a simple, static query. You can write the TraceQL query as a template query to take advantage of other dashboard variables, if they exist. This lets you create dynamic queries based on these variables.</p>
+
+</li>
+<li><p>Click <strong>Save</strong>.</p></li>
+<li><p>Enter an optional description of your changes, and click <strong>Save</strong>.</p></li>
+<li><p>Click <strong>Back</strong> and <strong>Exit edit</strong>.</p></li>
+</ol>
+<p>When results are returned from a query, the results are rendered in the panel’s table.</p>
+<h3 id="use-a-variable-to-add-other-links-to-traces">Use a variable to add other links to traces
+</h3>
+<p>The results in the traces visualization include links to the <strong>Explore</strong> page that renders the trace. You can add other links to traces in the table that fill in the <code>traceId</code> dashboard variable when selected, so that the trace is visualized in the same dashboard.</p>
+<p>To create a set of data links in the panel, use the following steps:</p>
+<ol>
+<li><p>In the panel editor menu, under <strong>Data links</strong>, click <strong>Add link</strong>.</p></li>
+<li><p>Add a <strong>Title</strong> for the data link.</p></li>
+<li>
+<p>Find the UUID of the dashboard by looking in your browser’s address bar when the full dashboard is being rendered. Because this is a link to a dashboard in the same Grafana instance, only the path of the dashboard is required.</p>
+
+</li>
+<li>
+<p>In the <strong>URL</strong> field, make a self-reference to the dashboard that contains both of the panels. This self-reference uses the value of the selected trace in the table to fill in the dashboard variable. Use the path for the dashboard from the previous step and then fill in the value of <code>traceId</code> using the selected results from the TraceQL table.
+The trace ID is exposed using the <code>traceID</code> data field in the returned results, so use that as the value for the dashboard variable.</p>
+
+</li>
+<li><p>Select <strong>Save</strong> to save the data link.</p></li>
+<li><p>Enter an optional description of your changes, and click <strong>Save</strong>.</p></li>
+<li><p>Click <strong>Back</strong> and <strong>Exit edit</strong>.</p></li>
+</ol>
+<p>You should now see a list of matching traces in the table visualization. While selecting the <strong>TraceID</strong> or <strong>SpanID</strong> fields will give you the option to either open the <strong>Explore</strong> page to visualize the trace or following the data link, selecting any other field (such as <strong>Start time</strong>, <strong>Name</strong> or <strong>Duration</strong>) automatically follows the data link, filling in the <code>traceId</code> dashboard variable, and then shows the relevant trace in the trace panel.</p>
+<figure class="figure-wrapper figure-wrapper__lightbox w-100p"><a class="lightbox-link captioned glightbox" href="/static/img/docs/panels/traces/screenshot-traces-trace-link-follow.png">
+<figcaption class="w-100p caption text-gray-13">Follow the trace link populates the trace ID and displays the traces view</figcaption></a></figure><h2 id="configuration-options">Configuration options
+</h2>
+<div><p>The following section describes the configuration options available in the panel editor pane for this visualization. These options are, as much as possible, ordered as they appear in Grafana.</p></div>
+<h3 id="panel-options">Panel options
+</h3>
+<div>
+<p>In the <strong>Panel options</strong> section of the panel editor pane, set options like the panel title, description, and show/hide rules.
+To learn more, refer to
+<a href="/docs/grafana/latest/visualizations/panels-visualizations/configure-panel-options/">Configure panel options</a>.</p>
+<section class="expand-table-wrapper"><div class="button-div"><button class="expand-table-btn">Expand table</button></div>
+<div class="responsive-table-wrapper"><table>
+<thead><tr>
+<th>Option</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Title</td>
+<td>Text entered in this field appears at the top of your panel in the panel editor and in the dashboard. You can use
+<a href="/docs/grafana/latest/visualizations/dashboards/variables/">variables you have defined</a> or
+<a href="/docs/grafana/latest/visualizations/dashboards/variables/built-in-variables/">built-in variables</a>.</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>Add a description to a panel to share with users any important information about it, such as its purpose. Text entered in this field appears in a tooltip in the upper-left corner of the panel. Conversely, toggle on the <strong>Use as subtitle</strong> switch to display the description just below the panel title instead. You can use
+<a href="/docs/grafana/latest/visualizations/dashboards/variables/">variables you have defined</a> or dashboard-scoped
+<a href="/docs/grafana/latest/visualizations/dashboards/variables/built-in-variables/">built-in variables</a> (such as <code>$__from</code>, <code>$__to</code>, <code>$__dashboard</code>, <code>$__org</code>, and <code>$__user</code>). Query-scoped global variables (such as <code>$__interval</code> and <code>$__interval_ms</code>) are not available in this field.</td>
+</tr>
+<tr>
+<td>Transparent background</td>
+<td>Toggle this switch on and off to control whether or not the panel has the same background color as the dashboard.</td>
+</tr>
+<tr>
+<td>Panel links</td>
+<td>Add
+<a href="/docs/grafana/latest/visualizations/dashboards/build-dashboards/manage-dashboard-links/#panel-links">links to the panel</a> to create shortcuts to other dashboards, panels, and external websites. Access panel links by clicking the icon next to the panel title.</td>
+</tr>
+<tr>
+<td>Repeat options</td>
+<td>Set whether to repeat the panel for each value in the selected variable.</td>
+</tr>
+<tr>
+<td>Show/hide rules</td>
+<td>Set whether to show or hide panels based on various rules.</td>
+</tr>
+</tbody>
+</table></div></section>
+</div>
+<h3 id="span-filters-options">Span filters options
+</h3>
+<p>The <strong>Span filters</strong> options control the initial state of the span filters when the visualization loads, allowing you to customize your trace analysis view.</p>
+<section class="expand-table-wrapper"><div class="button-div"><button class="expand-table-btn">Expand table</button></div>
+<div class="responsive-table-wrapper"><table>
+<thead><tr>
+<th>Option</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Filters</td>
+<td>
+<p>Add free-form filters that set the initial span filter state. Use <strong>Text search</strong> for text queries, <code>duration</code> for duration filters, or span attributes such as <code>service.name</code> and <code>span.name</code>.</p>
+<p>Supports variable interpolation. For example, you can set a filter value to <code>$var</code>, and the visualization replaces it with the value for the dashboard variable named <code>$var</code>.</p>
+</td>
+</tr>
+<tr>
+<td>Show matches only</td>
+<td>Toggle the switch on to display only spans that match the defined filter criteria. This helps simplify trace interpretation.</td>
+</tr>
+<tr>
+<td>Select critical path</td>
+<td>Toggle the switch on to highlight spans in the critical path, which helps identify performance bottlenecks and their impact on overall latency.</td>
+</tr>
+</tbody>
+</table></div></section><p>Duration filters use the <code>duration</code> key with operators such as <code>=</code>, <code>&gt;=</code>, <code>&lt;=</code>, , and . In the visualization, users can toggle <strong>Show all spans</strong> to switch from the filtered view back to all spans.</p>
+</div>
+<div><div class="docs__feedback print-hidden">
+<div class="docs__feedback--title">
+<h2 class="docs__feedback--heading">Was this page helpful?</h2>
+<div class="docs__feedback--container">
+
+
+</div>
+</div>
+<div class="docs__feedback--links"><div class="d-grid d-grid__columns--3 w-100p gap-1">
+<a class="docs__feedback--link" href="https://github.com/grafana/grafana/edit/release-13.3.1/docs/sources/visualizations/panels-visualizations/visualizations/traces/index.md"><span>Suggest an edit in GitHub</span>
+</a><a class="docs__feedback--link" href="https://github.com/grafana/grafana/issues/new?title=Documentation%20feedback:%20/docs/sources/visualizations/panels-visualizations/visualizations/traces/index.md"><span>Create a GitHub issue</span>
+</a><a class="docs__feedback--link" href="mailto:docs@grafana.com"><span>Email docs@grafana.com</span>
+</a><a class="docs__feedback--link" href="/help/"><span>Help and support</span>
+</a><a class="docs__feedback--link" href="/community/"><span>Community</span></a>
+</div></div>
+<div class="print-hidden" id="docs-related-wrapper"><div class="docs__related">
+<h2 class="docs__related--heading">Related resources from Grafana Labs</h2>
+<div class="docs__related--subtext">Additional helpful documentation, links, and articles:</div>
+<div class="docs__related--grid">
+<a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-grafana-lgtm-stack/?pg=docs-grafana-latest-visualizations-panels-visualizations-visualizations-traces&amp;plcmt=related"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with managing your metrics, logs, and traces using Grafana</div>
+<div class="body-xsmall mt-half">In this webinar, we’ll demo how to get started using the LGTM Stack: Loki for logs, Grafana for visualization, Tempo for traces, and Mimir for metrics.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-grafana-dashboard-design/?pg=docs-grafana-latest-visualizations-panels-visualizations-visualizations-traces&amp;plcmt=related-2"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with Grafana dashboard design</div>
+<div class="body-xsmall mt-half">In this webinar, you'll learn how to design stylish and easily accessible Grafana dashboards that tell a story.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/building-advanced-grafana-dashboards/?pg=docs-grafana-latest-visualizations-panels-visualizations-visualizations-traces&amp;plcmt=related-3"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Building advanced Grafana dashboards</div>
+<div class="body-xsmall mt-half">In this webinar, we’ll demo how to build and format Grafana dashboards.</div>
+</div>
+</div></div></a>
+</div>
+</div></div>
+</div></div>
+</div></main>
+</div>
+</div></div></div>
+<div><div class="highlight-send__buttons">
+<a class="highlight-send__ask-btn text-hover-white">
+      Ask Grafana Assistant
+      
+    </a> </div></div>

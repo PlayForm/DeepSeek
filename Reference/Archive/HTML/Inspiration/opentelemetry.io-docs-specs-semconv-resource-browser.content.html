@@ -1,0 +1,119 @@
+<div><div class="container-fluid td-outer">
+<div class="td-main"><div class="row flex-xl-nowrap">
+<main class="col-12 col-md-9 col-xl-8 ps-md-5"><div class="td-content">
+<h1>Browser</h1>
+<p><strong>Status:</strong> </p>
+<p><strong>type:</strong> <code>browser</code></p>
+<p><strong>Description:</strong> The web browser in which the application represented by the resource is running. The <code>browser.*</code> attributes MUST be used only for resources that represent applications running in a web browser (regardless of whether running on a mobile or desktop device).</p>
+<div class="td-alert td-alert--md alert alert-warning">
+<div class="td-alert-heading alert-heading">Warning</div>
+<div class="td-alert-body"><p>This entity definition contains attributes without a role.
+Stable Entities MUST NOT have attributes without a defined role.</p></div>
+</div>
+<p><strong>Attributes:</strong></p>
+<table>
+<thead><tr>
+<th>Role</th>
+<th>Key</th>
+<th>Stability</th>
+
+<th>Value Type</th>
+<th>Description</th>
+<th>Example Values</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Other</td>
+
+
+<td><code>Recommended</code></td>
+<td>string[]</td>
+<td>Array of brand name and version separated by a space [1]</td>
+<td><code>[" Not A;Brand 99", "Chromium 99", "Chrome 99"]</code></td>
+</tr>
+<tr>
+<td>Other</td>
+
+
+<td><code>Recommended</code></td>
+<td>string</td>
+<td>Preferred language of the user using the browser [2]</td>
+<td>
+<code>en</code>; <code>en-US</code>; <code>fr</code>; <code>fr-FR</code>
+</td>
+</tr>
+<tr>
+<td>Other</td>
+
+
+<td><code>Recommended</code></td>
+<td>boolean</td>
+<td>A boolean that is true if the browser is running on a mobile device [3]</td>
+
+</tr>
+<tr>
+<td>Other</td>
+
+
+<td><code>Recommended</code></td>
+<td>string</td>
+<td>The platform on which the browser is running [4]</td>
+<td>
+<code>Windows</code>; <code>macOS</code>; <code>Android</code>
+</td>
+</tr>
+<tr>
+<td>Other</td>
+
+
+<td><code>Recommended</code></td>
+<td>string</td>
+<td>Full user-agent string provided by the browser [5]</td>
+<td><code>Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>[1] <code>browser.brands</code>:</strong> This value is intended to be taken from the <a class="external-link" href="https://wicg.github.io/ua-client-hints/#interface">UA client hints API</a> (<code>navigator.userAgentData.brands</code>).</p>
+<p><strong>[2] <code>browser.language</code>:</strong> This value is intended to be taken from the Navigator API <code>navigator.language</code>.</p>
+<p><strong>[3] <code>browser.mobile</code>:</strong> This value is intended to be taken from the <a class="external-link" href="https://wicg.github.io/ua-client-hints/#interface">UA client hints API</a> (<code>navigator.userAgentData.mobile</code>). If unavailable, this attribute SHOULD be left unset.</p>
+<p><strong>[4] <code>browser.platform</code>:</strong> This value is intended to be taken from the <a class="external-link" href="https://wicg.github.io/ua-client-hints/#interface">UA client hints API</a> (<code>navigator.userAgentData.platform</code>). If unavailable, the legacy <code>navigator.platform</code> API SHOULD NOT be used instead and this attribute SHOULD be left unset in order for the values to be consistent.
+The list of possible values is defined in the <a class="external-link" href="https://wicg.github.io/ua-client-hints/#sec-ch-ua-platform">W3C User-Agent Client Hints specification</a>. Note that some (but not all) of these values can overlap with values in the <a href="/docs/specs/semconv/resource/os/"><code>os.type</code> and <code>os.name</code> attributes</a>. However, for consistency, the values in the <code>browser.platform</code> attribute should capture the exact value that the user agent provides.</p>
+<p><strong>[5] <code>user_agent.original</code>:</strong> To retrieve the value, the legacy <code>navigator.userAgent</code> API can be used.</p>
+<p>All of these attributes can be provided by the user agent itself in the form of an HTTP header (e.g. Sec-CH-UA, Sec-CH-Platform, User-Agent). However, the headers could be removed by proxy servers, and are tied to calls from individual clients. In order to support batching through services like the Collector and to prevent loss of data (e.g. due to proxy servers removing headers), these attributes should be used when possible.</p>
+<p><strong>type:</strong> <code>browser.document</code></p>
+<p><strong>Status:</strong> </p>
+<p><strong>type:</strong> <code>browser.document</code></p>
+<p><strong>Description:</strong> The web page document loaded in the browser.</p>
+<p><strong>Attributes:</strong></p>
+<table>
+<thead><tr>
+<th>Role</th>
+<th>Key</th>
+<th>Stability</th>
+
+<th>Value Type</th>
+<th>Description</th>
+<th>Example Values</th>
+</tr></thead>
+<tbody><tr>
+<td>Identity</td>
+<td><a href="/docs/specs/semconv/registry/attributes/browser/"><code>browser.document.url.full</code></a></td>
+
+<td><code>Recommended</code></td>
+<td>string</td>
+<td>Absolute URL of the current browser document according to <a class="external-link" href="https://www.rfc-editor.org/rfc/rfc3986">RFC3986</a>.</td>
+<td><code>https://www.example.com/search?q=OpenTelemetry#SemConv</code></td>
+</tr></tbody>
+</table>
+<div class="d-print-none">
+<h2 class="feedback--title">Feedback</h2>
+<p class="feedback--question">Was this page helpful?</p>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-yes">Yes</button>
+<button class="btn btn-primary mb-4 feedback--answer feedback--answer-no">No</button><p class="feedback--response feedback--response-yes">Thank you. Your feedback is appreciated!</p>
+<p class="feedback--response feedback--response-no">Please let us know <a class="external-link" href="https://github.com/open-telemetry/opentelemetry.io/issues/new?template=PAGE_FEEDBACK.yml&amp;title=[Page+feedback]%3A+ADD+A+SUMMARY+OF+YOUR+FEEDBACK+HERE">how we can improve this page</a>. Your feedback is appreciated!</p>
+</div>
+
+</div></main>
+</div></div>
+
+</div></div>

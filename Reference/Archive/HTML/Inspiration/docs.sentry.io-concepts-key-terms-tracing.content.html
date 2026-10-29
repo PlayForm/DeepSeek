@@ -1,0 +1,82 @@
+<div><div class="radix-themes"><div>
+<div class="tw-app has-toc"><section class="px-0 flex relative"><main class="main-content flex mt-[var(--header-height)] flex-1"><div class="pt-6 px-6 prose dark:prose-invert max-w-full text-[var(--gray-12)] prose-a:no-underline hover:prose-a:underline prose-code:font-normal prose-code:font-mono marker:text-[var(--darkPurple)] marker:font-medium prose-li:my-1 prose-headings:mt-0 prose-headings:font-medium prose-headings:relative prose-headings:text-[var(--gray-12)] prose-blockquote:font-normal prose-blockquote:border-l-[3px] prose-em:font-normal prose-blockquote:text-[var(--gray-12)] prose-img:my-2 prose-strong:text-[var(--gray-12)] w-full min-w-0" id="doc-content">
+<div class="flex items-center">
+<ul class="not-prose list-none flex flex-wrap">
+
+<li class="style_breadcrumb-item__bDEaT"><a href="/concepts/">Concepts &amp; Reference</a></li>
+
+
+</ul> <div class="ml-auto hidden sm:block"><div class="relative inline-block"><div class="inline-flex items-center h-9 border border-gray-200 dark:border-[var(--gray-6)] rounded-full overflow-hidden bg-white dark:bg-[var(--gray-2)]"><button class="inline-flex items-center text-nowrap h-full text-gray-700 dark:text-[var(--foreground)] bg-transparent border-none cursor-pointer transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-[var(--gray-a4)] active:bg-gray-100 dark:active:bg-[var(--gray-5)] focus:bg-gray-50 dark:focus:bg-[var(--gray-a4)] outline-none gap-2 px-3.5 text-sm font-medium disabled:opacity-50"><span>Copy page</span></button></div></div></div>
+</div>
+<div>
+<hgroup><h1>Tracing</h1>
+<h2>Learn more about the tracing features Sentry offers to help you track your software performance across multiple systems.</h2></hgroup><div id="main">
+<h2 id="whats-tracing"><a class="autolink-heading" href="#whats-tracing">What's Tracing?</a></h2>
+<p>Tracing involves capturing the timing and flow of requests and operations as they happen in your application. This powerful debugging tool helps you identify which link in a sequence of events may be causing a problem, such as slow performance.</p>
+
+<h3 id="whats-distributed-tracing"><a class="autolink-heading" href="#whats-distributed-tracing">What's Distributed Tracing?</a></h3>
+<p>Distributed tracing provides a unified view of how a single request moves from the frontend to the backend and beyond. This is particularly useful in modern applications, which are often composed of multiple separate services working together. To get a distributed view of your application, instrument Sentry in both your frontend and your backend.</p>
+<p>With <a class="" href="/concepts/key-terms/tracing/distributed-tracing/">distributed tracing</a>, you can identify performance bottlenecks that are affecting your application across different services and platforms. You can then use Sentry tools such as the <a class="" href="/product/trace-explorer/">Trace Explorer</a> or <a class="" href="/concepts/key-terms/tracing/trace-view/">Trace View</a> page to dig deeper and find the root cause of the problem. Distributed tracing is particularly helpful for identifying problems that take place between multiple services that you can't debug using console logs, such as race conditions, <a class="" href="/product/issues/issue-details/performance-issues/n-one-queries/">N+1 queries</a>, and <a class="" href="/product/dashboards/sentry-dashboards/backend/caches/">caching issues</a>.</p>
+<h3 id="whats-a-trace"><a class="autolink-heading" href="#whats-a-trace">What's a Trace?</a></h3>
+<p>A trace is a record of a series of connected events and operations coming from your application. Each trace has a string of globally unique characters called a trace ID that's passed between frontend and backend services. The trace ID connects all the actions that take place, starting from the moment a user performs an action on the frontend, all the way through to the actions this triggers across your application and services. Each trace is composed of multiple spans.</p>
+<h3 id="whats-a-span"><a class="autolink-heading" href="#whats-a-span">What's a Span?</a></h3>
+<p>A span is a named, timed operation that represents a part of the application workflow. The data captured for each span provides granular insights into specific tasks, like API requests or database queries. Multiple spans are pieced together to create a trace, providing a comprehensive overview of how your application works. This makes it easier to troubleshoot and analyze performance issues.</p>
+<h3 id="what-are-span-attributes-and-metrics"><a class="autolink-heading" href="#what-are-span-attributes-and-metrics">What are Span Attributes and Metrics?</a></h3>
+<p>Span attributes and metrics are key pieces of information that are captured for each span. Attributes are key-value pairs that provide additional context about the span, such as the name of the operation or the user ID. Metrics are numerical values that measure the performance of the span, such as the duration of the operation or the number of database queries.</p>
+<h3 id="whats-a-transaction"><a class="autolink-heading" href="#whats-a-transaction">What's a Transaction?</a></h3>
+<div class="callout callout-info"><div class="callout-content"><div class="callout-body content-flush-bottom"><p>Transactions are a legacy concept replaced by service spans, which are entry-point spans that mark a service boundary within a trace. New SDKs and features use spans exclusively. See <a class="" href="/product/trace-explorer/">Trace Explorer</a> for the recommended way to query performance data.</p></div></div></div>
+<p>In Sentry, a "transaction" is a specific unit that represents any event that your application sends to Sentry, like loading a web page or processing an API call. Each transaction is made up of one or more spans. Transactions have a unique transaction ID and include the associated child spans that capture the operation’s entire process from start to finish.</p>
+<h3 id="whats-a-service-span"><a class="autolink-heading" href="#whats-a-service-span">What's a Service Span?</a></h3>
+<p>A service span is the entry point of a service within a trace — the span-based replacement for a transaction. Like a transaction, a service span has a name, a status, and child spans that capture the operation's full lifecycle from start to finish.</p>
+<p>A trace can contain multiple service spans, typically one for each service involved. The first service span in a trace (the one with no parent) is also the trace's root span.</p>
+<h2 id="how-to-use-tracing-in-sentry"><a class="autolink-heading" href="#how-to-use-tracing-in-sentry">How to Use Tracing in Sentry</a></h2>
+<p>If you instrument Sentry for a single part of your app (just the frontend for example), looking at a trace will provide useful context for debugging issues within that app or service. But to get the most out of tracing in Sentry, you'll need to instrument the frontend, the backend, and any services in-between with Sentry's SDK. Once this is done, there are several places where you can view and interact with tracing data:</p>
+<h3 id="traces-to-trace-view"><a class="autolink-heading" href="#traces-to-trace-view">Traces to Trace View</a></h3>
+<p>You can view all the traces in your organization by going to the <a class="" href="https://sentry.io/orgredirect/organizations/:orgslug/traces/">Traces</a> page in Sentry. You'll see a chart and a list of traces letting you know how long each trace took to complete and the number of spans it contains.</p>
+
+<p>If you want more information, click on any trace ID. This will take you to the <a class="" href="/concepts/key-terms/tracing/trace-view/">Trace View</a> page, which provides a more detailed view of the trace and its spans. Here, you'll see a waterfall view of the spans in the trace, which will show you how much time each service and operation took to complete, and may give you an indicator of where a problem may originate.</p>
+
+<p>Alternatively, you can use the search bar to look for spans by name, project, or other criteria. You can also use the tags section to filter spans by specific tags. Learn more about the Sentry <a class="" href="/product/trace-explorer/">Trace Explorer</a>.</p>
+
+<h3 id="performance-to-trace-view"><a class="autolink-heading" href="#performance-to-trace-view">Performance to Trace View</a></h3>
+<p>Depending on the size and volume of your app, you may have a lot of traces to sort through. The <a class="" href="https://sentry.io/orgredirect/organizations/:orgslug/dashboards/">Sentry Dashboards</a> page in Sentry is a good place to get a high-level, aggregated view of your application's performance and focus in on the traces you care about. You'll see a list of transactions for specific pages, endpoints and parts of your application. Clicking on the transaction ID will take you to the Trace View page for that transaction. Learn more about using <a class="" href="/product/dashboards/sentry-dashboards/">Sentry Dashboards</a>.</p>
+
+<h2 id="how-tracing-can-help-you-debug"><a class="autolink-heading" href="#how-tracing-can-help-you-debug">How Tracing Can Help You Debug</a></h2>
+<p>Sentry’s tracing lets you follow each request across various services, databases, and functions. This makes it easier to find exactly when and where an error occurred or a performance bottleneck started. Below, you'll find some real-world scenarios where tracing saved the day.</p>
+<h3 id="debug-slowdowns-across-your-integrations"><a class="autolink-heading" href="#debug-slowdowns-across-your-integrations">Debug Slowdowns Across Your Integrations</a></h3>
+<p>When debugging integrations or a microservice architecture, you'll likely run into issues where the root cause is tricky to discover, especially when it's a performance issue. At Sentry, we make sure to add spans whenever we’re working with external services, like Slack. Because of this, when our users started experiencing a 4-second delay in receiving Sentry alerts via Slack, we were able to go to the <a class="" href="/concepts/key-terms/tracing/trace-view/">Trace View</a> and quickly narrow down which task was causing the slowdown and deploy a fix quickly. Read more about the details of <a class="" href="https://blog.sentry.io/debugging-a-slack-integration-with-sentrys-trace-view/">debugging Sentry’s Slack Integration</a>.</p>
+<h3 id="improve-core-web-vitals"><a class="autolink-heading" href="#improve-core-web-vitals">Improve Core Web Vitals</a></h3>
+<p>While everyone is sharing Lighthouse scores, we all know that the true determination of healthy web vitals is when your actual users are using your application in their authentic environments. Sentry offers real insights and analysis of your application in the real world, and while tracing can be leveraged to reactively solve issues, you can also use it to proactively discover opportunities to improve your application performance. In fact, this blog post describes <a class="" href="https://blog.sentry.io/how-to-make-your-web-page-faster-before-it-even-loads/">how you can improve performance before your web page even loads</a>.</p>
+<h3 id="debug-new-code-bases-faster"><a class="autolink-heading" href="#debug-new-code-bases-faster">Debug New Code Bases Faster</a></h3>
+<p>Tracing can even give you the power to debug unfamiliar codebases. Although this benefit is not often discussed, a lot of time can be saved when debugging applications instrumented with Tracing, even if the codebase is completely new to you. Being able to trace actual user journeys throughout your application and see what happens across your entire stack contextualizes issues without even needing to recreate the issue locally. Read about other ways <a class="" href="https://blog.sentry.io/everyone-needs-to-know-how-to-trace/">tracing helps developers debug various issues</a>.</p>
+<h3 id="trace-agent-workflows"><a class="autolink-heading" href="#trace-agent-workflows">Trace Agent Workflows</a></h3>
+<p>If you're building with agents, LLMs, or MCP servers, Sentry's <a class="" href="/product/agents/">Agent Tracing</a> extends your existing tracing setup to capture the full picture — model calls, tool executions, token usage, and agent handoffs — all connected to the same traces as your HTTP requests, database queries, and application errors. Learn more about <a class="" href="/product/agents/getting-started/">setting up Agent Tracing</a>.</p>
+<h2 id="learn-more"><a class="autolink-heading" href="#learn-more">Learn More</a></h2>
+
+</div>
+<div class="grid grid-cols-2 gap-4 not-prose mt-16">
+<div class="col-span-1"><a class="no-underline" href="/concepts/key-terms/enrich-data/"><div class="py-3 px-4 border-2 dark:[border-color:var(--gray-4)] rounded-md transition-colors hover:[border-color:var(--accent)] text-left">
+<div class="text-sm [color:var(--foreground)]">Previous</div>
+<div class="flex items-center gap-1 font-[500] justify-start">Event Data</div>
+</div></a></div>
+<div class="col-span-1"><a class="no-underline" href="/concepts/key-terms/tracing/distributed-tracing/"><div class="py-3 px-4 border-2 dark:[border-color:var(--gray-4)] rounded-md transition-colors hover:[border-color:var(--accent)] text-right">
+<div class="text-sm [color:var(--foreground)]">Next</div>
+<div class="flex items-center gap-1 font-[500] justify-end">Distributed Tracing</div>
+</div></a></div>
+</div>
+<div class="space-y-4 py-4 border-[var(--gray-6)]">
+<div class="flex items-center gap-4 text-sm mt-8">
+<span class="font-medium">Was this helpful?</span><div class="flex">
+<button class="py-1 px-2 gap-4 hover:bg-[var(--gray-3)] rounded flex items-center justify-center">Yes 👍</button><button class="py-1 px-2 gap-4 hover:bg-[var(--gray-3)] rounded flex items-center justify-center">No 👎</button>
+</div>
+</div>
+
+</div>
+<div class="styles_cta__uq_BB">
+<small><strong>Help improve this content</strong></small><small>Our documentation is open source and available on GitHub. Your contributions are welcome, whether fixing a typo (drat!) or suggesting an update ("yeah, this would be better").<div>
+<a href="https://docs.sentry.io/contributing/">How to contribute</a>   |  <a href="https://github.com/getsentry/sentry-docs/edit/master/docs/concepts/key-terms/tracing/index.mdx">Edit this page</a>   |  <a href="https://github.com/getsentry/sentry-docs/issues/new/choose">Create a docs issue</a>   |  <a href="https://www.sentry.help/en/">Get support</a> </div></small>
+</div>
+</div>
+</div></main></section></div>
+
+</div></div></div>

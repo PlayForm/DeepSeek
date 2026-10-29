@@ -1,0 +1,28 @@
+<div><div id="__next"><div><div>
+<a class="visually-hidden skip-button DefaultLayout_skipButton__3BaOi" href="#main-content">Skip to main content</a><div><div class="d-lg-flex"><div class="flex-column flex-1 min-width-0 DefaultLayout_stickyStack__mf76f">
+<main class="DefaultLayout_mainContent__UI2BH" id="main-content"><div class="px-3 px-md-6 mt-4 mb-4"><div class="ArticleGridLayout_containerBox__lLLio ArticleGridLayout_containerBoxXxl__SphGC">
+<div class="ArticleGridLayout_heroTopper__bCpVj"><div class="d-flex flex-items-baseline flex-justify-between"><h1 class="border-bottom-0 ArticleTitle_title__wOdiS" id="title-h1">Resolving merge conflicts after a Git rebase</h1></div></div>
+<div class="f4 pb-4 ArticleGridLayout_heroIntro__IvIoX" id="article-intro">
+<div class="mb-3 Lead_container__m3L5f _page-intro"><p>When you perform a <code>git rebase</code> operation, you're typically moving commits around. Because of this, you might get into a situation where a merge conflict is introduced. That means that two of your commits modified the same line in the same file, and Git doesn't know which change to apply.</p></div>
+<div class="ViewMarkdownButton_belowIntroPlacement__MKGvm"><div class="ViewMarkdownButton_controls__jbwAh"><button class="Primer_Brand__Button-module__Button___lDruK Primer_Brand__Button-module__Button--secondary___akMC2 Primer_Brand__Button-module__Button--size-medium___EyCyw text-decoration-none ViewMarkdownButton_button__chhfE ViewMarkdownButton_copyButton__haGNh"><span class="Primer_Brand__Button-module__Button__text___Z3ocU"><span class="Primer_Brand__Text-module__Text___pecHN Primer_Brand__Text-module__Text-font--mona-sans___GpzSG Primer_Brand__Text-module__Text--default___DChoE Primer_Brand__Text-module__Text--200___XAIGT Primer_Brand__Text-module__Text--antialiased___fYDxq Primer_Brand__Text-module__Text--weight-medium___E0iQL Primer_Brand__Button-module__Button--label___lUBc0 Primer_Brand__Button-module__Button--label-medium___DW2TM Primer_Brand__Button-module__Button--label-secondary___DRJoJ">Copy markdown</span></span></button></div></div>
+</div>
+<div><div id="article-contents"><div class="MarkdownContent_markdownBody__v5MYy markdown-body">
+<p>After you reorder and manipulate commits using <code>git rebase</code>, should a merge conflict occur, Git will tell you so with the following message printed to the terminal:</p>
+<pre><code class="hljs language-shell">error: could not apply fa39187... something to add to patch A
+
+When you have resolved this problem, run "git rebase --continue".
+If you prefer to skip this patch, run "git rebase --skip" instead.
+To check out the original branch and stop rebasing, run "git rebase --abort".
+Could not apply fa39187f3c3dfd2ab5faa38ac01cf3de7ce2e841... Change fake file
+</code></pre>
+<p>Here, Git is telling you which commit is causing the conflict (<code>fa39187</code>). You're given three choices:</p>
+<ul>
+<li>You can run <code>git rebase --abort</code> to completely undo the rebase. Git will return you to your branch's state as it was before <code>git rebase</code> was called.</li>
+<li>You can run <code>git rebase --skip</code> to completely skip the commit. That means that none of the changes introduced by the problematic commit will be included. It is very rare that you would choose this option.</li>
+<li>You can fix the conflict.</li>
+</ul>
+<p>To fix the conflict, you can follow <a href="/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-using-the-command-line">the standard procedures for resolving merge conflicts from the command line</a>. When you're finished, you'll need to call <code>git rebase --continue</code> in order for Git to continue processing the rest of the rebase.</p>
+</div></div></div>
+</div></div></main>
+</div></div></div>
+</div></div></div></div>

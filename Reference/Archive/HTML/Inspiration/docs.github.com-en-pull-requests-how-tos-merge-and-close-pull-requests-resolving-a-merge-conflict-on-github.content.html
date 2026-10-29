@@ -1,0 +1,65 @@
+<div><div id="__next"><div><div>
+<a class="visually-hidden skip-button DefaultLayout_skipButton__3BaOi" href="#main-content">Skip to main content</a><div><div class="d-lg-flex"><div class="flex-column flex-1 min-width-0 DefaultLayout_stickyStack__mf76f">
+<main class="DefaultLayout_mainContent__UI2BH" id="main-content"><div class="px-3 px-md-6 mt-4 mb-4"><div class="ArticleGridLayout_containerBox__lLLio ArticleGridLayout_containerBoxXxl__SphGC">
+<div class="ArticleGridLayout_heroTopper__bCpVj"><div class="d-flex flex-items-baseline flex-justify-between"><h1 class="border-bottom-0 ArticleTitle_title__wOdiS" id="title-h1">Resolving a merge conflict on GitHub</h1></div></div>
+<div class="f4 pb-4 ArticleGridLayout_heroIntro__IvIoX" id="article-intro">
+<div class="mb-3 Lead_container__m3L5f _page-intro"><p>Resolve simple merge conflicts directly on GitHub using the conflict editor or handle complex cases via the command line.</p></div>
+<div class="ViewMarkdownButton_belowIntroPlacement__MKGvm"><div class="ViewMarkdownButton_controls__jbwAh"><button class="Primer_Brand__Button-module__Button___lDruK Primer_Brand__Button-module__Button--secondary___akMC2 Primer_Brand__Button-module__Button--size-medium___EyCyw text-decoration-none ViewMarkdownButton_button__chhfE ViewMarkdownButton_copyButton__haGNh"><span class="Primer_Brand__Button-module__Button__text___Z3ocU"><span class="Primer_Brand__Text-module__Text___pecHN Primer_Brand__Text-module__Text-font--mona-sans___GpzSG Primer_Brand__Text-module__Text--default___DChoE Primer_Brand__Text-module__Text--200___XAIGT Primer_Brand__Text-module__Text--antialiased___fYDxq Primer_Brand__Text-module__Text--weight-medium___E0iQL Primer_Brand__Button-module__Button--label___lUBc0 Primer_Brand__Button-module__Button--label-medium___DW2TM Primer_Brand__Button-module__Button--label-secondary___DRJoJ">Copy markdown</span></span></button></div></div>
+</div>
+<div><div id="article-contents"><div class="MarkdownContent_markdownBody__v5MYy markdown-body">
+<p>You can resolve simple competing line change conflicts on GitHub. For other conflicts, use the command line. See <a href="/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-using-the-command-line">Resolving a merge conflict using the command line</a>.</p>
+<p>If Copilot cloud agent is enabled for the repository, you can click <strong>Fix with Copilot</strong> in the merge box to have Copilot resolve conflicts automatically. See <a href="/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github#resolving-merge-conflicts">Using Copilot in the cloud on GitHub</a>.</p>
+<div class="ghd-alert ghd-alert-attention">
+<p class="ghd-alert-title">Warning</p>
+<p>
+Resolving conflicts on GitHub merges the entire <a href="/en/get-started/learning-about-github/github-glossary#base-branch">base branch</a> into the <a href="/en/get-started/learning-about-github/github-glossary#head-branch">head branch</a>. If the head branch is the default or protected branch, you may be prompted to create a new head branch. See <a href="/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches">About protected branches</a>.</p>
+</div>
+<ol>
+<li>
+<p>Under your repository name, click <strong> Pull requests</strong>.</p>
+</li>
+<li>
+<p>In the "Pull Requests" list, click the pull request with a merge conflict that you want to resolve.</p>
+</li>
+<li>
+<p>Near the bottom of your pull request, click <strong>Resolve conflicts</strong>.</p>
+
+<div class="ghd-alert ghd-alert-accent">
+<p class="ghd-alert-title">Note</p>
+<p>
+If <strong>Resolve conflicts</strong> is deactivated, resolve the conflict using another Git client or the command line. See <a href="/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-using-the-command-line">Resolving a merge conflict using the command line</a>.</p>
+</div>
+</li>
+<li>
+<p>Decide if you want to keep only your branch's changes, keep only the other branch's changes, or make a brand new change, which may incorporate changes from both branches. Delete the conflict markers <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> and make the changes you want in the final merge.</p>
+</li>
+<li>
+<p>If your file has more than one merge conflict, scroll down to the next set of conflict markers and repeat steps four and five to resolve the conflict.</p>
+</li>
+<li>
+<p>After you've resolved all the conflicts in the file, click <strong>Mark as resolved</strong>.</p>
+
+</li>
+<li>
+<p>If more than one file has a conflict, select the next file you want to edit on the left side of the page under "conflicting files" and repeat steps four through seven until you've resolved all merge conflicts in your pull request.</p>
+</li>
+<li>
+<p>After you've resolved all your merge conflicts, click <strong>Commit merge</strong>. This merges the entire base branch into your head branch.</p>
+
+</li>
+<li>
+<p>If prompted, review the branch that you are committing to. You can update the head branch or, if available, create a new branch for the pull request. If the head branch is protected, you must create a new branch.</p>
+<p>Click <strong>Create branch and update my pull request</strong> or <strong>I understand, continue updating BRANCH</strong>.</p>
+</li>
+<li>
+<p>To merge your pull request, click <strong>Merge pull request</strong>. See <a href="/en/pull-requests/how-tos/merge-and-close-pull-requests/merging-a-pull-request">Merging a pull request</a>.</p>
+</li>
+</ol>
+<h2 id="further-reading"><a class="heading-link" href="#further-reading">Further reading</a></h2>
+<ul>
+<li><a href="/en/pull-requests/reference/pull-request-merges">Pull request merges</a></li>
+</ul>
+</div></div></div>
+</div></div></main>
+</div></div></div>
+</div></div></div></div>

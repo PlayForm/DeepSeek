@@ -1,0 +1,677 @@
+<div><div id="main">
+<div class="updates-banner js-hidden">
+<div class="container banner-messages">
+<p class="message active"><a href="https://githubuniverse.com/?utm_source=website&amp;utm_medium=Social&amp;utm_campaign=code_livestream&amp;source=vsc-website-banner">Join VS Code at GitHub Universe!</a></p>
+</div>
+</div>
+
+
+<main id="main-content">
+<div class="body-content docs docs-github-layout">
+<div class="docs-layout-wrapper">
+
+
+<div class="docs-content-wrapper">
+
+
+
+<main class="docs-main-content body">
+<h1>Manage AI settings in enterprise environments</h1>
+<div class="docs-markdown-actions vscode-installation-info-host">
+<div class="docs-markdown-dropdown">
+<button class="docs-markdown-btn-main">
+<span>Copy as Markdown</span>
+</button>
+<ul class="docs-markdown-menu">
+<li>
+<button>
+<span>Copy as Markdown</span>
+</button>
+</li>
+<li>
+<a href="/docs/enterprise/manage-ai-settings.md">
+<span>View as Markdown</span>
+</a>
+</li>
+<li>
+<a href="vscode://GitHub.Copilot-Chat/chat?prompt=Read%20https%3A%2F%2Fcode.visualstudio.com%2Fdocs%2Fenterprise%2Fmanage-ai-settings%20and%20answer%20questions%20about%20the%20content.&amp;windowId=_blank">
+<span>Ask in VS Code</span>
+</a>
+</li>
+<li>
+<a href="vscode-insiders://GitHub.Copilot-Chat/chat?prompt=Read%20https%3A%2F%2Fcode.visualstudio.com%2Fdocs%2Fenterprise%2Fmanage-ai-settings%20and%20answer%20questions%20about%20the%20content.&amp;windowId=_blank">
+<span>Ask in VS Code Insiders</span>
+</a>
+</li>
+</ul>
+</div>
+</div>
+
+<p>Organizations can govern AI features in VS Code through three management solutions: Copilot enterprise-managed settings, VS Code device policies, and GitHub organization or enterprise settings.</p>
+<p>These solutions control different layers of the AI experience. An organization might use all three, but should configure an overlapping control in only one system.</p>
+<div class="markdown-alert note">
+<p>If you're a developer and an agent, model, or tool is unavailable, first check the <a href="/docs/agents/agent-troubleshooting/troubleshooting#_start-with-basic-checks">AI troubleshooting guidance</a>. For an organization-managed restriction, ask your administrator which capabilities are approved.</p>
+</div>
+<h2 id="_understand-the-three-management-solutions"><a class="hash-link" href="#_understand-the-three-management-solutions">Understand the three management solutions</a></h2>
+<p>Before you choose a solution, understand where each one is configured and what it controls.</p>
+<h3 id="_copilot-enterprise-managed-settings"><a class="hash-link" href="#_copilot-enterprise-managed-settings">Copilot enterprise-managed settings</a></h3>
+<p>Use enterprise-managed settings for Copilot guardrails that should apply across supported clients, such as VS Code and Copilot CLI.</p>
+<p>Administrators define these settings with the GitHub-supported server-managed, MDM-managed, or file-based delivery methods. Even when you use an MDM solution, enterprise-managed settings use the Copilot configuration format and delivery path, not the VS Code device-policy namespace.</p>
+<p>For server-managed deployments, administrators can override supported settings for specific enterprise teams. GitHub applies the matching values based on each person's enterprise team membership. See <a class="external-link" href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/override-settings-for-teams">Override enterprise-managed settings for teams</a>.</p>
+<p>Refer to the <a class="external-link" href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started">enterprise-managed settings setup guide</a> and <a class="external-link" href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings">settings reference</a> for supported keys, client coverage, configuration schemas, and precedence.</p>
+<h3 id="_vs-code-device-policies"><a class="hash-link" href="#_vs-code-device-policies">VS Code device policies</a></h3>
+<p>Use device policies for editor-specific controls on managed VS Code installations.</p>
+<p>Administrators deploy these policies through platform management tools, such as Group Policy, Microsoft Intune, or macOS configuration profiles. The policies apply to the managed device and override the corresponding user settings in VS Code.</p>
+<p>Refer to the <a href="/docs/enterprise/policies">VS Code enterprise policy reference</a> for policy names, accepted values, supported platforms, and minimum versions.</p>
+<h3 id="_github-organization-and-enterprise-settings"><a class="hash-link" href="#_github-organization-and-enterprise-settings">GitHub organization and enterprise settings</a></h3>
+<p>Use GitHub organization and enterprise settings for account-level and service-side controls, such as Copilot access, model availability, content exclusions, and organization-provided customizations.</p>
+<p>Administrators configure these controls on GitHub. They follow the signed-in GitHub account and its organization or enterprise membership rather than the VS Code device-policy channel.</p>
+<p>Refer to <a class="external-link" href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise">Manage Copilot for your enterprise</a> for configuration and reference information about these controls.</p>
+<h2 id="_choose-a-management-solution"><a class="hash-link" href="#_choose-a-management-solution">Choose a management solution</a></h2>
+<p>The solutions are not mutually exclusive. Choose the solution for each control based on the scope you need.</p>
+<div class="table-expand-container">
+<button class="table-expand-button">
+          Expand table
+        </button><div class="table-wrapper"><table class="table table-striped">
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Management solution</th>
+<th>Configuration location</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apply consistent Copilot guardrails across supported clients.</td>
+<td>Copilot enterprise-managed settings</td>
+<td>GitHub-supported server, MDM, or file delivery</td>
+<td>Supported Copilot clients and keys</td>
+</tr>
+<tr>
+<td>Control a VS Code-specific editor feature on managed devices.</td>
+<td>VS Code device policies</td>
+<td>Operating system or device management</td>
+<td>Managed VS Code installations</td>
+</tr>
+<tr>
+<td>Control Copilot access or GitHub-hosted organization and enterprise behavior.</td>
+<td>GitHub organization or enterprise settings</td>
+<td>GitHub organization or enterprise administration</td>
+<td>Signed-in accounts and GitHub-hosted services</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p>Some controls are available through more than one solution. Review the <a href="#_understand-precedence">order of precedence</a> before you combine them.</p>
+<p>Before a broad rollout, test the proposed configuration with a representative project, device, and account. Confirm that developers can complete approved tasks while the intended restrictions remain in place.</p>
+<h2 id="_understand-precedence"><a class="hash-link" href="#_understand-precedence">Understand precedence</a></h2>
+<h3 id="_across-managed-settings-delivery-methods"><a class="hash-link" href="#_across-managed-settings-delivery-methods">Across managed-settings delivery methods</a></h3>
+<p>When the same managed setting is available from multiple sources, VS Code applies them in this order:</p>
+<ol>
+<li>MDM-managed settings.</li>
+<li>Server-managed settings.</li>
+<li>File-based settings.</li>
+<li>User settings.</li>
+</ol>
+<p>For most keys, the value from the highest-precedence source wins. Some keys, including <code>permissions.deny</code>, <code>permissions.ask</code>, and <code>permissions.allow</code>, combine restrictions from multiple sources in the most restrictive direction. See <a class="external-link" href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/deploy-managed-settings#precedence-of-deployment-methods">Precedence of deployment methods</a> for the complete and current rules.</p>
+<h3 id="_with-vs-code-device-policies"><a class="hash-link" href="#_with-vs-code-device-policies">With VS Code device policies</a></h3>
+<p>Some enterprise-managed settings map to a VS Code device policy. When an administrator configures both systems:</p>
+<ul>
+<li>If the systems configure different controls, both controls apply.</li>
+<li>If both systems configure the same control, the enterprise-managed setting takes precedence. The values are not merged.</li>
+<li>If enterprise-managed settings do not provide that control, the VS Code device policy remains in effect.</li>
+</ul>
+<p>Configure an overlapping control through one management solution when possible. Run <strong>Developer: Policy Diagnostics</strong> to inspect the effective value and its source.</p>
+<h2 id="_use-copilot-enterprise-managed-settings"><a class="hash-link" href="#_use-copilot-enterprise-managed-settings">Use Copilot enterprise-managed settings</a></h2>
+<p>Configure and administer enterprise-managed settings by following the GitHub documentation:</p>
+<ul>
+<li>
+<a class="external-link" href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started">Get started with enterprise-managed settings</a> explains delivery, configuration files, team overrides, validation, and troubleshooting.</li>
+<li>
+<a class="external-link" href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings">Enterprise-managed settings reference</a> lists supported keys, values, combination behavior, and client coverage.</li>
+</ul>
+<p>Not every enterprise-managed setting applies to every client. Before you configure a setting for VS Code, check the <strong>Supported clients</strong> column in the <a class="external-link" href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings#supported-keys">enterprise-managed settings reference</a>.</p>
+<h3 id="_set-managed-model-defaults"><a class="hash-link" href="#_set-managed-model-defaults">Set managed model defaults</a></h3>
+<p>Give developers a consistent starting model without preventing them from choosing another model for an individual task. Set the top-level <code>model</code> managed setting to <code>auto</code> or an available model ID.</p>
+<p>For Copilot harness sessions, use <code>fusionTier</code> to set the starting Auto or Fusion tier:</p>
+<div class="table-expand-container">
+<button class="table-expand-button">
+          Expand table
+        </button><div class="table-wrapper"><table class="table table-striped">
+<thead>
+<tr>
+<th>Value</th>
+<th>Starting tier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"standard"</code></td>
+<td>Fusion <strong>Standard</strong>, or Auto <strong>Balance</strong> when Fusion is unavailable.</td>
+</tr>
+<tr>
+<td><code>"high"</code></td>
+<td>Fusion <strong>High</strong> when available, otherwise Auto <strong>Intelligence</strong>.</td>
+</tr>
+<tr>
+<td><code>"max"</code></td>
+<td>Fusion <strong>Max</strong> when available. If it isn't available, the runtime default remains in effect.</td>
+</tr>
+<tr>
+<td><code>"unmanaged"</code></td>
+<td>No managed tier selection. The legacy <code>autoTier</code> setting is also ignored.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p>For example, add the following values to your enterprise-managed settings:</p>
+<div class="code-block-wrapper"><pre class="shiki"><code>
+<span class="line"><span>  "model"</span><span>: </span><span>"auto"</span><span>,</span></span>
+<span class="line"><span>  "fusionTier"</span><span>: </span><span>"high"</span></span>
+
+</code></pre></div>
+<p>This example starts new conversations on Fusion <strong>High</strong> when <a href="/docs/agent-customization/language-models#_use-copilot-fusion-research-preview">Copilot Fusion (Research preview)</a> is available to the account. Otherwise, it uses Auto <strong>Intelligence</strong>. A managed <code>model</code> value of <code>"fusion"</code> is also accepted as <code>"auto"</code>; it doesn't enable Fusion or grant access to an unavailable tier.</p>
+<p><code>fusionTier</code> takes precedence over the legacy <code>autoTier</code> setting. It applies to the Copilot harness, not Local sessions.</p>
+<p>Managed model defaults take precedence over saved personal preferences for new conversations in both the editor and the Agents window. Developers can still change the model or tier within a conversation, and existing conversations keep their selections. Removing a managed default lets new conversations use saved personal preferences again.</p>
+<p>To verify the model default, check <strong>Org default</strong> in the model picker and the briefcase indicator for <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      chat.defaultModel
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> in Settings. See <a href="/docs/agent-customization/language-models#_organization-managed-model-defaults">Organization-managed model defaults</a>.</p>
+<h3 id="_claude-and-codex-availability"><a class="hash-link" href="#_claude-and-codex-availability">Claude and Codex availability</a></h3>
+<p>The Claude and Codex harness integrations in VS Code are disabled while Copilot enterprise-managed settings apply. This includes settings delivered through server-managed, MDM-managed, or file-based deployments.</p>
+<p>The Copilot runtime enforces these settings, but the Claude and Codex harnesses cannot enforce them. VS Code disables those harnesses so a session cannot bypass your organization's controls.</p>
+<p>This restriction does not delete existing Claude or Codex sessions.</p>
+<p>The restriction depends on the presence of managed settings, not only on whether a particular restriction is enabled. For example:</p>
+<ul>
+<li>Managed permission settings, such as <code>permissions.disableBypassPermissionsMode</code>, <code>permissions.allow</code>, <code>permissions.ask</code>, or <code>permissions.deny</code>, disable the harnesses. An empty rule list still counts as a managed setting.</li>
+<li>Managed <code>sandbox.enabled</code> disables the harnesses even when its value is <code>false</code>.</li>
+<li>Other enterprise-managed controls, such as plugin or telemetry settings, can also disable the harnesses.</li>
+</ul>
+<p>Setting <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      chat.agentHost.claudeAgent.enabled
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> or <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      chat.agentHost.codexAgent.enabled
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> to <code>true</code> does not override this restriction. Setting the <code>Claude3PIntegration</code> or <code>Codex3PIntegration</code> device policy to <code>true</code> does not override it either. The restriction also applies when you use a Claude API key or a ChatGPT account.</p>
+<p>This restriction applies to harness availability, not to Claude or OpenAI models selected in a Copilot harness session. Model availability is governed separately.</p>
+<h4 id="_if-claude-or-codex-is-missing"><a class="hash-link" href="#_if-claude-or-codex-is-missing">If Claude or Codex is missing</a></h4>
+<p>If you need access to one of these harnesses:</p>
+<ol>
+<li>Run <strong>Developer: Policy Diagnostics</strong> from the Command Palette to inspect the effective <code>Claude3PIntegration</code> and <code>Codex3PIntegration</code> policies and their sources.</li>
+<li>Contact the IT team that deployed the managed settings. Share which harness is unavailable and the relevant policy values and sources.</li>
+<li>If you don't know who owns the settings, ask your IT help desk to route the request to the administrator responsible for Copilot enterprise-managed settings or device management.</li>
+</ol>
+<p>Ask the administrator which harnesses are approved for your work and whether the deployed configuration needs review. You cannot restore access by changing your user or workspace settings.</p>
+<h4 id="_runtime-policies-and-harness-selection"><a class="hash-link" href="#_runtime-policies-and-harness-selection">Runtime policies and harness selection</a></h4>
+<p>The restriction on Claude and Codex is separate from automatic routing to the Copilot harness. The following managed settings require the Copilot harness unless the administrator enables the <a href="#_keep-local-harness-as-default">temporary Local default</a>:</p>
+<ul>
+<li>
+<code>sandbox.enabled</code> set to <code>true</code>.</li>
+<li>A <code>permissions</code> object with at least one key.</li>
+</ul>
+<p>An empty <code>permissions</code> object does not trigger that routing.</p>
+<p>The temporary Local default does not re-enable Claude or Codex while enterprise-managed settings apply.</p>
+<h3 id="_keep-local-harness-as-default"><a class="hash-link" href="#_keep-local-harness-as-default">Keep Local harness as default</a></h3>
+<p>Starting with VS Code 1.142, organizations can keep the Local harness as the default for new agent sessions and prevent automatic selection of the Copilot harness.</p>
+<p>Set <code>vscode.temporaryDefaultToLocalHarness</code> to <code>true</code> in your enterprise-managed settings:</p>
+<div class="code-block-wrapper"><pre class="shiki"><code>
+<span class="line"><span>  "vscode"</span><span>: {</span></span>
+<span class="line"><span>    "temporaryDefaultToLocalHarness"</span><span>: </span><span>true</span></span>
+
+
+</code></pre></div>
+<p>This control suppresses <a href="#_enforce-runtime-policies-with-copilot-agent-host">automatic routing to the Copilot harness</a>, including routing triggered by managed <code>sandbox.enabled</code> or <code>permissions</code> values. It does not change explicit, remembered, or current harness choices. Set <code>vscode.temporaryDefaultToLocalHarness</code> to <code>false</code> or remove the key to restore normal harness routing.</p>
+<div class="markdown-alert warning">
+<span>
+         
+        Warning
+      </span><p>Local does not enforce runtime-only sandbox and permission rules. Those managed rules continue to be enforced in Copilot harness sessions. Review the security impact before you use this temporary control.</p>
+</div>
+<h3 id="_verify-applied-managed-settings"><a class="hash-link" href="#_verify-applied-managed-settings">Verify applied managed settings</a></h3>
+<p>Run <strong>Developer: Policy Diagnostics</strong> in VS Code to inspect effective policy values and their sources. For more information, see <a href="/docs/enterprise/policies#_verify-policy-enforcement">Verify policy enforcement</a>.</p>
+<p>If the diagnostics show a server-managed source with an unexpected value, check <code>copilot/managed-settings.json</code>, <code>copilot/team-mappings.json</code>, the mapped file under <code>copilot/teams/</code>, and the user's enterprise team memberships. GitHub resolves team overrides before it delivers the server-managed settings to VS Code.</p>
+<p>For GitHub-side validation errors or delivery troubleshooting, follow <a class="external-link" href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started#validate-server-managed-settings">Validate server-managed settings</a>.</p>
+<h3 id="_meet-minimum-version-requirements"><a class="hash-link" href="#_meet-minimum-version-requirements">Meet minimum version requirements</a></h3>
+<p>The managed-settings service can require a minimum VS Code version before AI features are available. When the installed version does not meet the requirement:</p>
+<ul>
+<li>Chat shows the required and installed versions and provides the appropriate update action.</li>
+<li>The editor window shows a banner even when Chat is closed. Other editor features remain available.</li>
+<li>The Agents window shows a blocking notice with an <strong>Open Editor Window</strong> action.</li>
+</ul>
+<p>If built-in updates are disabled by policy, the notice directs the developer to contact an administrator. AI features become available after the installed version meets the requirement.</p>
+<h3 id="_apply-managed-telemetry-in-vs-code"><a class="hash-link" href="#_apply-managed-telemetry-in-vs-code">Apply managed telemetry in VS Code</a></h3>
+<p>Managed OpenTelemetry configuration applies to the Copilot Chat extension and the <a href="/docs/agents/concepts/agent-host">Agent Host</a>, the process that runs agent sessions. The extension might offer <strong>Reload Window</strong> after a configuration change. VS Code restarts the local Agent Host automatically after it resolves a managed telemetry change.</p>
+<p>Starting with VS Code 1.143, use <code>telemetry.filePath</code> to save Copilot Agent Host telemetry to a JSONL file without a collector or personal OTel opt-in. The managed file destination takes precedence over collector configuration, unless managed <code>telemetry.enabled</code> is <code>false</code>, which turns off export. See <a href="/docs/agents/guides/monitoring-agents#_export-managed-telemetry-to-a-file">Export managed telemetry to a file</a> for configuration, path requirements, and removal behavior.</p>
+<p>Starting with VS Code 1.143, use <code>telemetry.headersProvider</code> to generate and refresh HTTP headers for OTLP export from Copilot Agent Host sessions. Headers can supply collector-specific metadata, route telemetry, or authenticate with the collector. Managed export does not require developers to opt in through personal OTel settings. For a configuration example and helper requirements, see <a href="/docs/agents/guides/monitoring-agents#_configure-dynamic-headers">Configure dynamic headers</a>.</p>
+<p>The <a href="#_across-managed-settings-delivery-methods">highest-precedence delivery source</a> that supplies <code>telemetry</code> owns the entire block. Fields omitted from that source do not inherit values from lower-precedence sources.</p>
+<p>Identity capture is off by default and independent of content capture. Review both controls before deployment, and remove conflicting OpenTelemetry environment variables from managed devices. For the configuration schema and supported clients, see <a class="external-link" href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings#telemetry"><code>telemetry</code> in the enterprise-managed settings reference</a>.</p>
+<h2 id="_use-vs-code-device-policies"><a class="hash-link" href="#_use-vs-code-device-policies">Use VS Code device policies</a></h2>
+<p>The following sections describe VS Code device policies. Deploy them by following <a href="/docs/enterprise/policies">Enterprise policies</a>, and use the <a href="/docs/enterprise/policies#_vs-code-enterprise-policy-reference">policy reference</a> for accepted values and minimum versions.</p>
+<div class="markdown-alert important">
+<span>
+         
+        Important
+      </span><p>Copilot harness sessions don't enforce every device policy the same way as Local harness sessions. The following sections note known differences. Test a policy in the harness that your developers use before you rely on it.</p>
+</div>
+<p>Jump to:</p>
+<ul>
+<li><a href="#_control-access-and-feature-availability">Control access and feature availability</a></li>
+<li><a href="#_configure-models-and-data-handling">Configure models and data handling</a></li>
+<li><a href="#_govern-agents-and-tools">Govern agents and tools</a></li>
+<li><a href="#_configure-security-and-observability">Configure security and observability</a></li>
+</ul>
+<h3 id="_control-access-and-feature-availability"><a class="hash-link" href="#_control-access-and-feature-availability">Control access and feature availability</a></h3>
+<h4 id="_restrict-ai-features-to-approved-github-organizations"><a class="hash-link" href="#_restrict-ai-features-to-approved-github-organizations">Restrict AI features to approved GitHub organizations</a></h4>
+<p>Set the <code>ChatApprovedAccountOrganizations</code> policy to require developers to sign in with a GitHub account that belongs to an approved organization before AI features are activated.</p>
+<p>Provide a JSON array of GitHub organization logins, such as <code>["contoso", "contoso-research"]</code>. Use <code>["*"]</code> to allow any signed-in GitHub account.</p>
+<p>The policy is fail-closed. AI features remain disabled until account policy data resolves and the signed-in account belongs to an approved organization. Run <strong>Developer: Policy Diagnostics</strong> to inspect the <strong>Account Policy Gate</strong> state.</p>
+<h4 id="_enable-or-disable-the-use-of-agents"><a class="hash-link" href="#_enable-or-disable-the-use-of-agents">Enable or disable the use of agents</a></h4>
+<p>Set the <code>ChatAgentMode</code> policy to <code>false</code> to disable <a href="/docs/agents/overview">agents</a>. This policy controls <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      chat.agent.enabled
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span>.</p>
+<p>When the policy is disabled, the <strong>Agent</strong> option is not available in the agents dropdown, and the Agents window is unavailable. Developers can still use <a href="/docs/chat/chat-overview">ask or edit</a> for code explanations and file edits.</p>
+<p>The policy does not remove Agent Host session targets, such as <strong>Copilot</strong>, from the <a href="/docs/agents/run/agent-harnesses#_select-a-harness"><strong>Session Target</strong> UI control</a> in the editor. Developers can still start agent sessions from those targets.</p>
+<h4 id="_enable-or-disable-extension-language-tools"><a class="hash-link" href="#_enable-or-disable-extension-language-tools">Enable or disable extension language tools</a></h4>
+<p>Use the following policies to control extension, browser, and plugin tools:</p>
+<ul>
+<li>Set <code>ChatAgentExtensionTools</code> to <code>false</code> to disable tools contributed by extensions.</li>
+<li>Set <code>BrowserChatTools</code> to <code>false</code> to disable browser tools.</li>
+<li>Set <code>ChatPluginsEnabled</code> to <code>false</code> to disable agent plugin integration.</li>
+</ul>
+<h4 id="_configure-copilot-code-review"><a class="hash-link" href="#_configure-copilot-code-review">Configure Copilot code review</a></h4>
+<p>Use <code>CopilotReviewSelection</code> to control code review for selected code. Use <code>CopilotReviewAgent</code> to control access to the code review agent for pull requests and changed files.</p>
+<h4 id="_configure-next-edit-suggestions"><a class="hash-link" href="#_configure-next-edit-suggestions">Configure next edit suggestions</a></h4>
+<p>Set <code>CopilotNextEditSuggestions</code> to <code>false</code> to disable next edit suggestions.</p>
+<h4 id="_enable-or-disable-claude-agent"><a class="hash-link" href="#_enable-or-disable-claude-agent">Enable or disable Claude Agent</a></h4>
+<p>Set <code>Claude3PIntegration</code> to <code>false</code> to disable Claude Agent sessions in VS Code.</p>
+<p>Setting this policy to <code>true</code> does not override the <a href="#_claude-and-codex-availability">Claude and Codex restriction under enterprise-managed settings</a>.</p>
+<h4 id="_enable-or-disable-the-copilot-command"><a class="hash-link" href="#_enable-or-disable-the-copilot-command">Enable or disable the copilot command</a></h4>
+<p>VS Code includes a <code>copilot</code> command that runs GitHub Copilot CLI. When Copilot CLI isn't installed, the command offers to install it from GitHub. On Windows, setup can also <a href="/docs/setup/windows#_set-up-the-copilot-command">add the command to <code>PATH</code> and install Copilot CLI</a>.</p>
+<p>Set the <code>CopilotCliCommand</code> policy to <code>false</code> to turn off the command. This policy controls <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      chat.copilotCliCommand.enabled
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span>. When the policy is disabled:</p>
+<ul>
+<li>New integrated terminals don't include the <code>copilot</code> command.</li>
+<li>On Windows, setup doesn't show its <strong>GitHub Copilot CLI</strong> page or install Copilot CLI. The next time setup runs, for example during an update, it removes the <code>copilot</code> command from <code>PATH</code>. Until then, the command doesn't install Copilot CLI.</li>
+</ul>
+<p>The policy doesn't affect a Copilot CLI installation that you deploy separately. To control which Copilot CLI version developers use and where it comes from, disable the policy and deploy Copilot CLI with your own software distribution tools. Learn more about <a class="external-link" href="https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli">installing GitHub Copilot CLI</a>.</p>
+<p>Whether developers can use Copilot CLI is controlled by your <a href="#_use-github-organization-and-enterprise-settings">GitHub organization and enterprise settings</a>, which Copilot CLI applies after sign-in.</p>
+<h3 id="_configure-models-and-data-handling"><a class="hash-link" href="#_configure-models-and-data-handling">Configure models and data handling</a></h3>
+<h4 id="_set-a-default-chat-model"><a class="hash-link" href="#_set-a-default-chat-model">Set a default chat model</a></h4>
+<p>Set the <code>ChatDefaultModel</code> policy to choose the default model for new conversations. This policy controls <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      chat.defaultModel
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> and accepts <code>auto</code>, a model family name, or a full model ID.</p>
+<p>Developers can select another model for an individual conversation. Reopened conversations keep their saved model.</p>
+<p>For defaults delivered through Copilot enterprise-managed settings, see <a href="#_set-managed-model-defaults">Set managed model defaults</a>.</p>
+<h4 id="_control-dictation-data"><a class="hash-link" href="#_control-dictation-data">Control dictation data</a></h4>
+<p>Use the following policies to control whether <a href="/docs/configure/accessibility/voice#_use-built-in-dictation">dictation</a> audio and transcripts leave the developer's device.</p>
+<div class="table-expand-container">
+<button class="table-expand-button">
+          Expand table
+        </button><div class="table-wrapper"><table class="table table-striped">
+<thead>
+<tr>
+<th>Policy</th>
+<th>Setting</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DictationEnabled</code></td>
+<td><span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      dictation.enabled
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span></td>
+<td>Controls whether built-in dictation is available.</td>
+</tr>
+<tr>
+<td><code>DictationModel</code></td>
+<td><span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      dictation.model
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span></td>
+<td>Selects an on-device model or the <code>mai</code> cloud transcription service.</td>
+</tr>
+<tr>
+<td><code>DictationLLMCleanup</code></td>
+<td><span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      dictation.experimental.llmCleanup
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span></td>
+<td>Controls whether final transcripts are sent to a language model for cleanup.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p>To keep dictation audio on the device, set <code>DictationModel</code> to <code>nemotron-3.5-asr-streaming-0.6b</code>. In VS Code for the Web, where on-device transcription is not supported, this policy makes dictation unavailable.</p>
+<p>To prevent transcript text from being sent to a language model, set <code>DictationLLMCleanup</code> to <code>false</code>. For more information, see <a href="/docs/configure/accessibility/voice#_understand-dictation-privacy">Dictation privacy</a>.</p>
+<h3 id="_govern-agents-and-tools"><a class="hash-link" href="#_govern-agents-and-tools">Govern agents and tools</a></h3>
+<h4 id="_enable-or-disable-hooks"><a class="hash-link" href="#_enable-or-disable-hooks">Enable or disable hooks</a></h4>
+<p>Hook controls depend on the selected harness. For Copilot harness sessions, use <a href="#_verify-policy-hook-coverage">Policy Hooks</a> and the <a href="#_restrict-hook-sources">managed hook-source controls</a> below.</p>
+<div class="markdown-alert note">
+<p><strong>For Local harness sessions:</strong> Set the <code>ChatHooks</code> policy to <code>false</code> to disable hooks. This policy controls <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      chat.useHooks
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> and does not apply to Copilot harness sessions.</p>
+</div>
+
+<h5>Verify Policy Hook coverage</h5>
+<p>Copilot Policy Hooks apply to Copilot harness sessions, which use the Copilot SDK hook implementation. Confirm that developers select <strong>Copilot</strong> from the <a href="/docs/agents/run/agent-harnesses#_select-a-harness"><strong>Session Target</strong> UI control</a> before relying on these hooks for enforcement. Test the required hook behavior in the session that will perform the work.</p>
+<p>Local harness sessions do not load SDK Policy Hooks. Configuring hooks for one harness does not enforce them in another harness. See <a href="/docs/agent-customization/hooks#_choose-the-hook-implementation-for-your-session">hook compatibility</a>.</p>
+<p>When moving to Copilot, inventory policy hooks, managed plugins, and any permitted user or repository hooks. Convert and test their scripts as well as their configuration. See <a href="/docs/agent-customization/migrate-customizations#_migrate-hooks">Migrate hooks</a>.</p>
+<div class="markdown-alert warning">
+<span>
+         
+        Warning
+      </span><p>Copilot policy hooks run on the host, outside the session sandbox. Keep their scripts in administrator-controlled locations. Do not promote a repository hook to a policy hook while retaining a workspace-controlled script path; that would run editable workspace code outside the sandbox. See <a class="external-link" href="https://docs.github.com/en/copilot/reference/hooks-reference#sandboxed-sessions">policy hooks and sandboxed sessions</a>.</p>
+</div>
+<p>Test failures and timeouts separately. The <a class="external-link" href="https://docs.github.com/en/copilot/reference/hooks-reference#exit-codes-for-command-hooks">Copilot command-hook reference</a> documents timeouts as fail-open even for policy hooks. A requirement for complete audit coverage or fail-closed enforcement therefore needs more than the presence of a hook file.</p>
+
+<h5>Restrict hook sources</h5>
+<p>Set <code>ChatAllowManagedHooksOnly</code> to allow hooks only from enterprise-managed sources and plugins that policy force-enables. Set <code>ChatStrictPluginOnlyCustomization</code> when you also need to block standalone user and workspace skills, agents, instructions, and MCP servers.</p>
+<p>Plugin distribution is a separate decision. To force-enable plugins or govern marketplaces across supported Copilot clients, use the plugin controls in the <a class="external-link" href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings#enabledplugins">enterprise-managed settings reference</a>.</p>
+<h4 id="_manage-agent-plugins-and-marketplaces"><a class="hash-link" href="#_manage-agent-plugins-and-marketplaces">Manage agent plugins and marketplaces</a></h4>
+<p>Use the following policies to govern <a href="/docs/agent-customization/agent-plugins">agent plugins</a> and customization discovery in VS Code:</p>
+<ul>
+<li>
+<code>ChatEnabledPlugins</code> force-enables or force-disables named plugins.</li>
+<li>
+<code>ChatExtraMarketplaces</code> adds plugin marketplaces.</li>
+<li>
+<code>ChatStrictMarketplaces</code> restricts plugin installation to approved marketplace sources. An empty list blocks installation from all marketplaces.</li>
+<li>
+<code>ChatCustomizationMarketplace</code> controls the unified <strong>Browse</strong> discovery surface. When disabled, marketplace discovery remains available in the existing customization management pages.</li>
+<li>
+<code>ChatCopilotConnectors</code> controls connector discovery and whether connected connector MCP servers are available to Copilot sessions.</li>
+</ul>
+<p>Plugins blocked by policy remain visible but appear disabled. In <strong>Customize</strong> &gt; <strong>Plugins</strong>, policy-managed plugins are identified as managed by policy, and their toggles are locked. Marketplaces managed by policy are identified in the marketplace picker.</p>
+<p>For cross-client plugin governance instead of VS Code-only policy, follow <a class="external-link" href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/manage-plugin-marketplaces-and-plugins">Manage plugin marketplaces and plugins</a> to configure Copilot enterprise-managed settings.</p>
+<p>Enterprise-managed plugin settings only require or block plugins. They don't set optional defaults.</p>
+<p>For optional project-specific plugins, use <a href="/docs/agent-customization/agent-plugins#_workspace-plugin-recommendations">repository defaults</a>. Members can turn off these defaults unless managed policy requires the plugin.</p>
+<p>The enterprise-managed <code>strictKnownMarketplaces</code> setting also disables built-in marketplaces. Configure the permitted sources explicitly.</p>
+
+<h4 id="_configure-agent-tool-approvals"><a class="hash-link" href="#_configure-agent-tool-approvals">Configure agent tool approvals</a></h4>
+<p>Use Copilot enterprise-managed settings to control session permission levels. Use VS Code device policies for other approval behavior.</p>
+<h5>Manage permission levels</h5>
+<p>For Copilot harness sessions, use enterprise-managed settings to control which permission levels developers can select and the initial level for new sessions.</p>
+<div class="table-expand-container">
+<button class="table-expand-button">
+          Expand table
+        </button><div class="table-wrapper"><table class="table table-striped">
+<thead>
+<tr>
+<th>Managed setting</th>
+<th>Effect in VS Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>permissions.disableBypassPermissionsMode</code></td>
+<td>Set to <code>"disable"</code> to disable <strong>Allow all</strong> in the permissions picker.</td>
+</tr>
+<tr>
+<td><code>permissions.disableAssistedPermissionsMode</code></td>
+<td>Set to <code>true</code> to disable <strong>Assisted permissions</strong> in the permissions picker.</td>
+</tr>
+<tr>
+<td><code>permissions.defaultMode</code></td>
+<td>Sets the initial permission level. Supported values are <code>"manual"</code>, <code>"assisted"</code>, and <code>"allow-all"</code>.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p>For example, start sessions with <strong>Assisted permissions</strong> when available, while preventing <strong>Allow all</strong>:</p>
+<div class="code-block-wrapper"><pre class="shiki"><code>
+<span class="line"><span>  "permissions"</span><span>: {</span></span>
+<span class="line"><span>    "disableBypassPermissionsMode"</span><span>: </span><span>"disable"</span><span>,</span></span>
+<span class="line"><span>    "disableAssistedPermissionsMode"</span><span>: </span><span>false</span><span>,</span></span>
+<span class="line"><span>    "defaultMode"</span><span>: </span><span>"assisted"</span></span>
+
+
+</code></pre></div>
+<p>If the configured default is unavailable, new sessions use <strong>Manual permissions</strong>. Setting a default doesn't prevent developers from switching to another permission level that the organization allows.</p>
+<p>In both the editor and the Agents window, supported permission levels restricted by policy remain visible but disabled. The picker shows <strong>Disabled by policy</strong> with a briefcase icon and an explanation. Unsupported permission levels aren't shown.</p>
+<p>These managed settings control <a href="/docs/agents/run/approvals#_permission-levels">session permission levels</a>. The <code>ChatToolsAutoApprove</code> device policy controls global auto-approval separately. Refer to the <a class="external-link" href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings">enterprise-managed settings reference</a> for configuration and deployment details.</p>
+<h5>Disable global auto-approval</h5>
+<p>Set <code>ChatToolsAutoApprove</code> to <code>false</code> to prevent developers from enabling global auto-approval. While this policy is set, tool confirmations offer only one-time approval, and tool approvals that developers saved earlier aren't applied.</p>
+<div class="markdown-alert caution">
+<span>
+         
+        Caution
+      </span><p>Global auto-approval bypasses security prompts for tool invocations. Disable it unless your threat model explicitly supports this behavior.</p>
+</div>
+<h5>Require manual approval for specific tools</h5>
+<p>Use <code>ChatToolsEligibleForAutoApproval</code> to require manual approval for specific tools.</p>
+<p>For Copilot harness sessions, a tool marked <code>false</code> removes <strong>Allow all</strong> from the permissions picker for the whole session. It does not require confirmation for each call to that tool, so <strong>Assisted permissions</strong> and saved session approvals can still approve it.</p>
+<h5>Configure terminal auto-approval</h5>
+<p>Set <code>ChatToolsTerminalEnableAutoApprove</code> to <code>false</code> to turn off rule-based terminal auto-approval. For Local harness sessions, this policy does not prevent automatic approval of sandboxed commands or approval through session-level permissions.</p>
+<p>For Copilot harness sessions, the policy requires approval for commands that run through the built-in shell tool. Set <code>ChatAgentHostCustomTerminalTool</code> to <code>false</code> to keep these sessions on that tool.</p>
+<p>Learn more about <a href="/docs/agents/run/approvals#_tool-approval">tool approval</a>.</p>
+<h4 id="_control-github-environments-preview"><a class="hash-link" href="#_control-github-environments-preview">Control GitHub Environments (Preview)</a></h4>
+<p><a href="/docs/agents/run/remote-agent-sessions#_github-environments-preview">GitHub Environments</a> provides continuity across supported Copilot clients by registering an existing development machine for remote access. Administrators can control this registration and connection path to meet remote-access and data-handling requirements while allowing approved cross-device work.</p>
+<p>Set the <code>ChatAgentHostGitHubEnvironments</code> device policy to <code>false</code> to prevent sharing a machine as a GitHub Environment and discovering or connecting to other registered machines through this feature. The policy controls <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      chat.agentHost.githubEnvironments.enabled
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> and requires VS Code 1.144 or later. Turning off Copilot preview features through organization policy also forces this setting off.</p>
+<p>This control doesn't govern all remote connectivity. It isn't a blanket restriction on SSH or dev tunnels, and it doesn't configure other clients' policies. Review those access paths separately before treating it as an organization-wide remote-access boundary.</p>
+<h3 id="_configure-security-and-observability"><a class="hash-link" href="#_configure-security-and-observability">Configure security and observability</a></h3>
+<h4 id="_configure-agent-sandboxing"><a class="hash-link" href="#_configure-agent-sandboxing">Configure agent sandboxing</a></h4>
+<p>For Copilot harness sessions, use the <a href="/docs/agents/run/agent-sandboxing#_control-sandboxing-for-the-current-session">session sandbox controls</a> and verify the <a href="/docs/agents/run/agent-sandboxing#_inspect-the-effective-sandbox-policy">effective sandbox policy</a> on the machine where commands run.</p>
+
+<p>The current <a class="external-link" href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings#supported-keys">enterprise-managed settings reference</a> does not list the shared <code>sandbox</code> key as supported for VS Code. For Agent Host sessions, use the <a href="/docs/agents/run/agent-sandboxing#_control-sandboxing-for-the-current-session">session sandbox controls</a> and verify the <a href="/docs/agents/run/agent-sandboxing#_inspect-the-effective-sandbox-policy">effective sandbox policy</a>.</p>
+<details>
+<summary>Sandbox device policies for Local harness sessions</summary>
+<p>The following VS Code device policies are deprecated and apply to Local harness sessions. They do not enforce sandboxing for Copilot harness sessions.</p>
+<div class="table-expand-container">
+<button class="table-expand-button">
+          Expand table
+        </button><div class="table-wrapper"><table class="table table-striped">
+<thead>
+<tr>
+<th>Policy</th>
+<th>Local-session behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ChatAgentSandboxEnabled</code></td>
+<td>Requires or disables sandboxing for supported terminal commands.</td>
+</tr>
+<tr>
+<td><code>ChatAgentSandboxAllowNetwork</code></td>
+<td>Controls outbound network access for sandboxed terminal commands.</td>
+</tr>
+<tr>
+<td><code>ChatAgentSandboxAllowUnsandboxedCommands</code></td>
+<td>Controls whether a command can run outside the sandbox after user confirmation.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p>Local harness sessions approve sandboxed terminal commands automatically. The <a href="#_configure-terminal-auto-approval">terminal auto-approval policy</a> controls rule-based approval, not sandbox auto-approval.</p>
+</details>
+<h4 id="_configure-agent-network-filtering"><a class="hash-link" href="#_configure-agent-network-filtering">Configure agent network filtering</a></h4>
+<p>Set <code>ChatAgentNetworkFilter</code> to <code>true</code> to restrict network access according to the allowed and denied domain policies.</p>
+<p>Use <code>ChatAgentAllowedNetworkDomains</code> for permitted domain patterns and <code>ChatAgentDeniedNetworkDomains</code> for blocked patterns. Denied domains take precedence.</p>
+<p>In Local harness sessions, network filtering applies to the fetch tool and Integrated Browser. In Copilot harness sessions, these policies also apply to the Integrated Browser.</p>
+<p>When the <code>ChatAgentNetworkFilter</code> policy is <code>true</code> and the <code>ChatAgentAllowedNetworkDomains</code> policy contains permitted domains, Copilot harness sessions block the runtime's web fetch tool from accessing domains outside that list, even with <strong>Allow all</strong> selected. This restriction does not require sandboxing.</p>
+<p>Terminal coverage depends on the selected harness, platform, and sandbox configuration. See <a href="/docs/agents/run/agent-sandboxing#_configure-network-access">Configure sandbox network access</a>.</p>
+<p>Restart VS Code after you change network filtering settings so new Integrated Browser sessions use the updated policy.</p>
+<h4 id="_configure-telemetry-export-with-opentelemetry"><a class="hash-link" href="#_configure-telemetry-export-with-opentelemetry">Configure telemetry export with OpenTelemetry</a></h4>
+<p>Use the <code>CopilotOtel*</code> policies to control <a class="external-link" href="https://opentelemetry.io/">OpenTelemetry</a> export for Copilot in VS Code. These policies cover export enablement, the collector endpoint and protocol, content and identity capture, the service name, resource attributes, and exporter headers.</p>
+<p>For the complete list of policies and the settings they control, see the <a href="/docs/enterprise/policies#_vs-code-enterprise-policy-reference">enterprise policy reference</a>.</p>
+<h2 id="_use-github-organization-and-enterprise-settings"><a class="hash-link" href="#_use-github-organization-and-enterprise-settings">Use GitHub organization and enterprise settings</a></h2>
+<p>GitHub-hosted controls apply through the signed-in account and GitHub services. They are not VS Code device policies.</p>
+<p>Use GitHub organization and enterprise settings to manage Copilot access, available models and features, content exclusions, and other service-side policies. See <a class="external-link" href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise">Manage Copilot for your enterprise</a>.</p>
+<p>To restrict the unified marketplace and Copilot connectors, turn off <strong>Editor preview features</strong>. This forces <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      chat.customizations.marketplace.enabled
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> and <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      chat.customizations.copilotConnectors.enabled
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> off, even though both default to <code>true</code>. Developers can't override this restriction in Settings. Other eligibility requirements and managed restrictions still apply when preview features are permitted.</p>
+<h3 id="_configure-organization-level-custom-instructions"><a class="hash-link" href="#_configure-organization-level-custom-instructions">Configure organization-level custom instructions</a></h3>
+<p>Organization administrators create custom instructions on GitHub. When <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      github.copilot.chat.organizationInstructions.enabled
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> is <code>true</code>, supported Copilot sessions in VS Code include organization instructions that the signed-in account can access.</p>
+<p>Learn how to <a class="external-link" href="https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-organization-instructions">add custom instructions for your organization</a>.</p>
+<h3 id="_configure-organization-level-custom-agents"><a class="hash-link" href="#_configure-organization-level-custom-agents">Configure organization-level custom agents</a></h3>
+<p>Organization administrators create custom agents on GitHub. When <span class="setting"><span class="setting-dropdown vscode-installation-info-host">
+<span class="setting-link-main">
+      
+      github.copilot.chat.organizationCustomAgents.enabled
+      
+    </span>
+<span class="setting-dropdown-menu">
+<span class="setting-action-item">Open in VS Code</span>
+<span class="setting-action-item">Open in VS Code Insiders</span>
+</span>
+</span></span> is <code>true</code>, organization and enterprise agents that the signed-in account can access appear in the agents dropdown.</p>
+<p>Learn how to <a class="external-link" href="https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents">create custom agents for your organization</a>.</p>
+<h2 id="_security-considerations"><a class="hash-link" href="#_security-considerations">Security considerations</a></h2>
+<p>AI-powered development features can perform actions with user-level permissions. Review <a href="/docs/agents/run/security">AI security considerations</a> before enabling agents or auto-approval.</p>
+<p>For Copilot security, privacy, compliance, and transparency information, see the <a class="external-link" href="https://copilot.github.trust.page/faq">Copilot Trust Center FAQ</a>.</p>
+<h2 id="_related-resources"><a class="hash-link" href="#_related-resources">Related resources</a></h2>
+<ul>
+<li><a href="/docs/enterprise/policies">VS Code enterprise policy reference</a></li>
+<li><a class="external-link" href="https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started">Get started with Copilot enterprise-managed settings</a></li>
+<li><a class="external-link" href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings">Copilot enterprise-managed settings reference</a></li>
+</ul>
+<div class="feedback"><section class="feedback-section"><div class="feedback-container">
+
+<div class="feedback-middle">
+<h3>Still need help?</h3>
+<ul class="support-links">
+<li><a href="https://stackoverflow.com/questions/tagged/vscode">Ask the community</a></li>
+<li><a href="https://github.com/microsoft/vscode/issues/new/choose">Request features</a></li>
+<li><a href="https://www.github.com/Microsoft/vscode/issues">Report issues</a></li>
+</ul>
+</div>
+<div class="feedback-right">
+<h3>Help us improve</h3>
+<div class="buttons"><button>Edit this page</button></div>
+</div>
+</div></section></div>
+<div class="body-footer">10/28/2026</div>
+</main>
+</div>
+
+<div class="docs-mobile-widgets visible-xs">
+<div class="connect-widget"><ul class="connect-links">
+<li><a href="/feed.xml">RSS Feed</a></li>
+<li><a href="https://stackoverflow.com/questions/tagged/vscode">Ask questions</a></li>
+<li><a href="https://go.microsoft.com/fwlink/?LinkID=533687">Follow @code</a></li>
+<li id="connect-uservoice"><a href="https://github.com/microsoft/vscode/issues/new/choose">Request features</a></li>
+<li id="connect-github"><a href="https://www.github.com/microsoft/vscode/issues">Report issues</a></li>
+<li id="connect-youtube"><a href="https://www.youtube.com/channel/UCs5Y5_7XK8HLDX0SLNwkd3w">Watch videos</a></li>
+</ul></div>
+</div>
+</div>
+</div>
+</main>
+</div></div>

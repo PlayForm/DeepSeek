@@ -1,0 +1,283 @@
+<div><div><div id="top-banner">
+<div class="banner__disabled" id="gcon2026_top_banner_a"><div class="gcon2025-banner gcon2026-banner footer">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">Save the Date!</div>
+<div class="tw:text-[13px] tw:text-white">Sign up to get the latest GrafanaCON 2026 updates, agenda drops, and first access to early-bird tickets when they’re first available.</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Sign up</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="gcon2026_top_banner_b"><div class="gcon2025-banner gcon2026-banner footer alt-grot">
+<div class="wrapper px-0">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<div class="banner-text">
+<div class="font-poppins tw:text-[21px] tw:font-semibold tw:text-white">We have our sightson Barcelona</div>
+</div>
+<a class="banner-btn" href="/events/grafanacon/">Save the Date</a>
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-post-keynote"><div class="tw:bg-[#E86F37] tw:relative tw:h-10 tw:hidden tw:sm:block">
+<div class="wrapper tw:px-0">
+<div class="tw:flex tw:flex-row tw:items-center tw:justify-between tw:px-5 tw:flex-wrap">
+
+<span class="tw:items-center tw:justify-center font-poppins tw:font-medium tw:text-black tw:text-base tw:xl:max-w-none tw:text-center tw:h-10 tw:hidden tw:lg:flex">
+          Watch the keynote again and signup for more on-demand sessions.
+        </span>
+<div class="tw:flex-col tw:xl:flex-row tw:items-center tw:gap-6 tw:h-6 tw:sm:flex">
+
+</div>
+</div>
+</div>
+</div></div>
+<div class="banner__disabled" id="obscon2025-top-banner"><div class="obscon2025-banner top-banner tw:relative">
+<div class="banner-wrapper">
+
+<div class="banner-content">
+<p class="banner-text">
+<span class="banner-title">📢 Registration + agenda now live </span>
+        Explore the latest Grafana Cloud and AI solutions, learn tips &amp; tricks from demos and hands-on workshops, and get actionable advice to advance your observability strategy. Register now and get 50% off - limited tickets available (while they last!).
+      </p>
+<a class="banner-btn tw:bg-black" href="/events/observabilitycon/?tech=target&amp;plcmt=top-banner&amp;aud=default">Register now</a>
+</div>
+</div>
+</div></div> </div></div></div>
+<div><div class="main section"><div class="main-content">
+<blockquote class="llms-txt-directive">Documentation for automated readersA curated documentation index is available at: https://grafana.com/llms.txtA complete documentation index is available at: https://grafana.com/llms-full.txtThese indexes can help with page discovery before fetching individual documents.</blockquote>
+<p class="agent-directive">This page is also available in Markdown, which may be easier for automated readers
+and AI tools to parse than HTML. The Markdown version is available at
+https://grafana.com/docs/grafana/latest/visualizations/simplified-exploration/traces/investigate/analyze-tracing-data.md, or by sending
+Accept: text/markdown to https://grafana.com/docs/grafana/latest/visualizations/simplified-exploration/traces/investigate/analyze-tracing-data/. For broader
+documentation discovery, the curated index is available at https://grafana.com/llms.txt
+and the complete index is available at https://grafana.com/llms-full.txt.</p>
+<div class="grid-layout docs">
+<section class="mobile print-hidden" id="mobile"><div class="mobile__wrapper"> <div class="mobile__title">Analyze tracing data</div> </div></section><main class="section-docs__main docs__content" id="main"><div class="scrollspy-init">
+<div class="docs-content scrollspy-wrap" id="doc-article-text">
+<div class="docs__breadcrumb">
+<span>Analyze tracing data</span>
+</div>
+<div class="docs-labels">
+<span class="badge docs-labels__product-violet docs-labels__item mr-half"><span>Enterprise
+</span> </span><span class="badge docs-labels__product-purple docs-labels__item mr-half"><span>Open source
+</span></span>
+</div>
+<h1 id="analyze-tracing-data">Analyze tracing data
+</h1>
+<p>To further analyze filtered spans, use tabs that change with the selected metric, such as <strong>Breakdown</strong>, <strong>Comparison</strong>, <strong>Service structure</strong>, <strong>Root cause errors</strong>, <strong>Root cause latency</strong>, <strong>Exceptions</strong>, and the trace list tab (<strong>Traces</strong>, <strong>Errored traces</strong>, or <strong>Slow traces</strong>).</p>
+<p>When you select a RED metric, the tabs change to match the context.</p>
+<p>Each tab provides a brief explanation about the information provided.</p>
+<h2 id="use-the-breakdown-tab">Use the Breakdown tab
+</h2>
+<p>The <strong>Breakdown</strong> tab splits the selected metric by the values of a chosen resource or span attribute.
+When you’re using <strong>Duration</strong> metrics, <strong>Breakdown</strong> shows the 90th percentile duration for every value of the selected attribute and orders values by average duration.
+When you select <strong>Rate</strong>, <strong>Breakdown</strong> orders the sequence of attributes by their rate of requests per second.</p>
+<p>You can change the <strong>Scope</strong> to show <strong>Resource</strong> or <strong>Span</strong>.</p>
+<p>Using the <strong>Attributes</strong> sidebar, you can group the selected metric by different attributes.
+For example, if you have selected <strong>Errors</strong> as a metric type and then choose the <code>resource.service.name</code> attribute, the displayed results show the number of errors sorted by the <code>resource.service.name</code> with the most matches.</p>
+<p>Use the <strong>Attributes</strong> sidebar to select the attribute for <strong>Group by</strong>.
+You can search, scope by <strong>Resource</strong> or <strong>Span</strong>, and use <strong>Favorites</strong> for quick access.
+Attributes already in your <strong>Filters</strong> are listed at the top of the <strong>Attributes</strong> sidebar.</p>
+
+<p>By default, the selected attribute is your first <strong>Favorite</strong> or <code>resource.service.name</code>.
+You can reorder <strong>Favorites</strong> to change this default.
+The <strong>Attributes</strong> sidebar displays other commonly used resource level attributes such as <code>cluster</code>, <code>environment</code>, and <code>namespace</code>.</p>
+<h3 id="choose-percentiles-duration-only">Choose percentiles (Duration only)
+</h3>
+<p>When you select the <strong>Duration</strong> metric, use the <strong>Percentiles</strong> selector to choose which duration percentiles to plot and aggregate against.
+The default is 90th percentile (<code>p90</code>). You can select one or more of: <code>p50</code>, <code>p75</code>, <code>p90</code>, <code>p95</code>, <code>p99</code>.
+If you deselect all values, Traces Drilldown applies <code>p90</code> by default.</p>
+<p>The percentile choice drives what Duration values are summarized and shown in the <strong>Breakdown</strong> tab.
+The selector appears only when <strong>Duration</strong> is selected.</p>
+<h3 id="create-an-alert-from-a-panel">Create an alert from a panel
+</h3>
+<p>You can create an alert rule directly from a <strong>Breakdown</strong> panel when Tempo alerting is available.
+Open the panel menu and select <strong>Create alert</strong> to open Grafana Alerting pre-populated with the panel’s query, so you can be notified when the metric crosses a threshold.</p>
+<h2 id="use-the-comparison-tab">Use the Comparison tab
+</h2>
+<p>The <strong>Comparison</strong> tab helps you surface and rank which span attributes are most correlated with the selected metric so you can spot what’s driving your trace-level issues.</p>
+
+<p>Upon selecting a metric, the tab computes, for each resource or span attribute, how strongly that attribute value differs between the selected subset (<strong>selection</strong>) and all other spans (<strong>baseline</strong>).
+It lists attribute‑value pairs in descending order of that difference, so the top entries are those most uniquely associated with your signal of interest.</p>
+<ul>
+<li><p>If you’re viewing the <strong>Rate</strong> or <strong>Errors</strong> metrics, the <strong>selection</strong> contains all spans with errors, while the <strong>baseline</strong> contains all spans without errors.</p></li>
+<li><p>If you’re viewing the <strong>Duration</strong> metric, by default the <strong>selection</strong> contains the slowest spans above the 90th percentile, while the <strong>baseline</strong> contains all other spans. You can manually adjust the selection on the duration heat map by clicking and dragging, or select <strong>Select slowest traces</strong> to reset the selection to the slowest spans.</p></li>
+</ul>
+<p>The behavior of the comparison also differs depending upon the RED metric you’ve chosen.
+For example, if you’re viewing <strong>Errors</strong> metrics, the comparison shows the attribute values that correlate with errors.
+However, if you’re viewing <strong>Duration</strong> metrics, the comparison shows the attributes that correlate with high latency.</p>
+<p>Use the <strong>Attributes</strong> sidebar to switch between <strong>All</strong> (overall differences) and a specific attribute (per‑value differences). Favorites, search, and scope controls work the same as in <strong>Breakdown</strong>.</p>
+<p>Select <strong>Hide baseline-only</strong> to hide attribute values that appear only in the baseline, so you can focus on the values present in your selection.</p>
+<h3 id="focus-on-individual-attributes-with-inspect">Focus on individual attributes with <strong>Inspect</strong>
+</h3>
+<p><strong>Inspect</strong> lets you break down and view individual attribute values from a comparison.
+The overview shows each attribute with its single highest-difference value and an <strong>Inspect</strong> button, but you can’t see all values for that attribute at once.</p>
+
+<p>When you select <strong>Inspect</strong>, the app focuses on that one attribute and shows a visualization for every value it contains.
+For example, selecting <strong>Inspect</strong> on <code>resource.service.name</code> shows every service with its baseline and selection bars, so you can immediately see which services are most correlated with the selected metric.</p>
+
+<h2 id="use-the-structure-tab">Use the Structure tab
+</h2>
+<p>The <strong>Structure</strong> tab lets you extract and view aggregate data from your traces.
+The tab name differs depending on the metric you’re viewing:</p>
+<ul>
+<li>
+<strong>Rate</strong> provides <strong>Service structure</strong>
+</li>
+<li>
+<strong>Errors</strong> provides <strong>Root cause errors</strong>
+</li>
+<li>
+<strong>Duration</strong> provides <strong>Root cause latency</strong>
+</li>
+</ul>
+<p>For <strong>Rate</strong>, the <strong>Service structure</strong> tab shows you how your applications talk to each other to fulfill requests.
+Use this tab to analyze the service structure of the traces that match the current filters.</p>
+
+<p>For <strong>Errors</strong>, the <strong>Root cause errors</strong> tab shows the structure of errors beneath your selected filters. Use this tab to immediately see the chain of errors that are causing issues higher up in traces.</p>
+
+<p>When you select <strong>Duration</strong> metrics, the <strong>Root cause latency</strong> tab shows the structure of the longest running spans so you can analyze the structure of slow spans.</p>
+<p>The pictured spans are an aggregated view compiled using spans from multiple traces.</p>
+
+<h2 id="use-the-exceptions-tab-errors-metric-only">Use the Exceptions tab (Errors metric only)
+</h2>
+<p>Use the <strong>Exceptions</strong> tab to see which exception messages are occurring within your current filters and time range. Exceptions are grouped by message so you can identify the most frequent failures and access the affected traces.</p>
+<p>Examples:</p>
+<ul>
+<li>Inspect individual exceptions by clicking a message to open the <strong>Errored traces</strong> tab pre-filtered for that message, so you can inspect individual traces immediately.</li>
+<li>Narrow exceptions by service, environment, namespace, or any span/resource attribute by combining with the <strong>Filters</strong> bar.</li>
+</ul>
+
+<p>The Exceptions tab has a table with the following columns:</p>
+<ul>
+<li>
+<strong>Exception Details</strong>: Exception type, message text, emitting service, and last seen time grouped by unique exception</li>
+<li>
+<strong>Occurrences</strong>: Count of matching exceptions for the selected range</li>
+<li>
+<strong>Frequency</strong>: Sparkline of occurrences over time</li>
+</ul>
+<p>Each row includes <strong>Include</strong> and <strong>Exclude</strong> buttons so you can filter the current investigation to focus on or eliminate a specific exception.</p>
+<p>The <strong>Exceptions</strong> tab is available when the <strong>Errors</strong> metric is selected and exceptions are present.
+The tab respects the current time range and filters.
+For example, when Errors are selected, <strong>Exceptions</strong> works with both <strong>Root spans</strong> and <strong>All spans</strong> selections. The results reflect the data in scope.</p>
+<p>If you notice a rise in the Errors metric, you can use the <strong>Exceptions</strong> tab to investigate the issue.</p>
+<ol>
+<li>Select <strong>Errors</strong> as the metric.</li>
+<li>Open the <strong>Exceptions</strong> tab.</li>
+<li>The top row shows <code>Payment request failed. Too many requests (error code 429)</code> with rising occurrences and a spiky sparkline.</li>
+<li>Click the message to jump to the <strong>Errored traces</strong> tab pre-filtered by that exception.</li>
+<li>Sort by Duration to find the most impacted requests, then open a trace to inspect retries and upstream dependencies.</li>
+</ol>
+<h2 id="use-the-adaptive-traces-tab">Use the Adaptive Traces tab
+</h2>
+<p>The <strong>Adaptive Traces</strong> tab appears when both of the following conditions are met:</p>
+<ul>
+<li>
+<a href="/docs/grafana-cloud/adaptive-telemetry/adaptive-traces/">Adaptive Traces</a> is enabled and configured on your Grafana Cloud stack.</li>
+<li>You’ve applied an <code>instrumentation.tailsampling.policy</code> filter in the <strong>Filters</strong> bar.</li>
+</ul>
+<p>When these conditions are met, the tab displays span latency data for the selected tail-sampling policy, helping you understand how the policy affects trace collection and latency distribution within the current time range.</p>
+<p>If Adaptive Traces isn’t enabled or no tail-sampling policy filter is applied, the tab doesn’t appear.</p>
+<h2 id="use-the-trace-list-tab">Use the trace list tab
+</h2>
+<p>Each RED metric has its own trace list tab:</p>
+<ul>
+<li>
+<strong>Rate</strong> provides the <strong>Traces</strong> tab.</li>
+<li>
+<strong>Errors</strong> provides the <strong>Errored traces</strong> tab.</li>
+<li>
+<strong>Duration</strong> provides the <strong>Slow traces</strong> tab.</li>
+</ul>
+<p>Use the <strong>Attributes</strong> sidebar to add attributes as extra table columns. Select multiple attributes to include them as columns, and use <strong>Search attributes</strong> and <strong>Favorites</strong> to find attributes.
+Attributes already in your <strong>Filters</strong> are listed at the top of the <strong>Attributes</strong> sidebar.</p>
+<h2 id="change-the-selected-time-range">Change the selected time range
+</h2>
+<p>Use the time picker at the top right to modify the data shown in Traces Drilldown.</p>
+<p>The time range you can query depends on your Tempo data source configuration, including your trace retention period and the range allowed for TraceQL metrics.
+Longer time ranges scan more data and can take longer to return results.</p>
+<p>For more information about the time range picker, refer to
+<a href="/docs/grafana/latest/dashboards/use-dashboards/#set-dashboard-time-range">Use dashboards</a>.</p>
+<h2 id="open-a-trace-by-id">Open a trace by ID
+</h2>
+<p>Use the header’s Trace ID input to open a specific trace:</p>
+<ol>
+<li>Paste a trace ID into the Trace ID input in the header.</li>
+<li>Press Enter to open the trace in the drawer.</li>
+</ol>
+<p>When you open a trace from the results list, the Trace ID input clears to avoid stale values.</p>
+<p>If a time range is selected, Traces Drilldown searches within the currently selected time range. Otherwise, it searches across all time.
+If a trace isn’t found, an error message appears—verify the ID and widen the time range if necessary.</p>
+<p>This behavior depends on the Tempo data source configuration. Refer to
+<a href="/docs/grafana/latest/datasources/tempo/configure-tempo-data-source/">Tempo data source configuration</a> for more information.</p>
+</div>
+<div><div class="docs__feedback print-hidden">
+<div class="docs__feedback--title">
+<h2 class="docs__feedback--heading">Was this page helpful?</h2>
+<div class="docs__feedback--container">
+
+
+</div>
+</div>
+<div class="docs__feedback--links"><div class="d-grid d-grid__columns--3 w-100p gap-1">
+<a class="docs__feedback--link" href="https://github.com/grafana/traces-drilldown/edit/main/docs/sources/investigate/analyze-tracing-data.md"><span>Suggest an edit in GitHub</span>
+</a><a class="docs__feedback--link" href="https://github.com/grafana/grafana/issues/new?title=Documentation%20feedback:%20/docs/sources/visualizations/simplified-exploration/traces/investigate/analyze-tracing-data.md"><span>Create a GitHub issue</span>
+</a><a class="docs__feedback--link" href="mailto:docs@grafana.com"><span>Email docs@grafana.com</span>
+</a><a class="docs__feedback--link" href="/help/"><span>Help and support</span>
+</a><a class="docs__feedback--link" href="/community/"><span>Community</span></a>
+</div></div>
+<div class="print-hidden" id="docs-related-wrapper"><div class="docs__related">
+<h2 class="docs__related--heading">Related resources from Grafana Labs</h2>
+<div class="docs__related--subtext">Additional helpful documentation, links, and articles:</div>
+<div class="docs__related--grid">
+<a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-grafana-lgtm-stack/?pg=docs-grafana-latest-visualizations-simplified-exploration-traces-investigate-analyze-tracing-data&amp;plcmt=related"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with managing your metrics, logs, and traces using Grafana</div>
+<div class="body-xsmall mt-half">In this webinar, we’ll demo how to get started using the LGTM Stack: Loki for logs, Grafana for visualization, Tempo for traces, and Mimir for metrics.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/getting-started-with-grafana-dashboard-design/?pg=docs-grafana-latest-visualizations-simplified-exploration-traces-investigate-analyze-tracing-data&amp;plcmt=related-2"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Getting started with Grafana dashboard design</div>
+<div class="body-xsmall mt-half">In this webinar, you'll learn how to design stylish and easily accessible Grafana dashboards that tell a story.</div>
+</div>
+</div></div></a><a class="card card__small" href="https://grafana.com/go/webinar/building-advanced-grafana-dashboards/?pg=docs-grafana-latest-visualizations-simplified-exploration-traces-investigate-analyze-tracing-data&amp;plcmt=related-3"><div class="card__small--content"><div class="card__small--text">
+<div class="tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:mb-2 tw:text-sm tw:font-semibold"><div class="tw:inline-flex tw:flex-row tw:justify-between tw:items-center tw:gap-2 tw:flex-nowrap tw:font-small">
+
+<div class="column"><div class="text">Video</div></div>
+</div></div>
+
+<div class="card__small--title">
+<div class="body-small">Building advanced Grafana dashboards</div>
+<div class="body-xsmall mt-half">In this webinar, we’ll demo how to build and format Grafana dashboards.</div>
+</div>
+</div></div></a>
+</div>
+</div></div>
+</div></div>
+</div></main>
+</div>
+</div></div></div>
+<div><div class="highlight-send__buttons">
+<a class="highlight-send__ask-btn text-hover-white">
+      Ask Grafana Assistant
+      
+    </a> </div></div>

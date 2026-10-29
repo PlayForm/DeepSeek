@@ -1,0 +1,55 @@
+<div><div id="app"><div class="Layout">
+<a class="VPSkipLink visually-hidden" href="#VPContent">Skip to content</a><div class="VPLocalNav has-sidebar empty"><div class="container">
+<button class="menu"><span class="menu-text">Menu</span></button><div class="VPLocalNavOutlineDropdown">
+<button>Return to top</button>
+</div>
+</div></div>
+<div class="VPContent has-sidebar" id="VPContent"><div class="VPDoc has-sidebar has-aside">
+<div class="container"><div class="content"><div class="content-container">
+<div class="page-markdown-actions"><div class="page-markdown-actions-dropdown">
+<div class="page-markdown-actions-controls"><button class="page-markdown-copy">Copy page</button></div>
+
+</div></div>
+<main class="main"><div class="vp-doc _deepseek-harness_en_reference_tool-execution-pipeline"><div>
+<h1 id="tool-execution-pipeline">Tool Execution Pipeline <a class="header-anchor" href="#tool-execution-pipeline">​</a>
+</h1>
+<p>This graph shows where policy, hooks, sandboxing, filesystem guards, result rewriting, final-outcome observation, and UI rendering run without changing the loop. The <code>tools/pre-execute</code> waterfall runs first, monotonic guards run next, and the <code>tools/execute</code> and <code>tools/post-execute</code> waterfalls follow; the three waterfalls may transform a call. Definition-owned <code>projectContent</code> installs prepared content before post-execute; <code>finalizeContent</code> and <code>tools/result</code> run afterward.</p>
+<div class="mermaid">
+<pre><code class="language-mermaid">%% flowchart-v2 diagram
+allow
+deny
+throw
+ask
+allowed-once
+rejected, cancelled, unavailable
+wrapper throws
+Assistant message contains tool-call block
+Session event: tool/calllogged before execution
+UI pending cardpresentCall(args)
+tools/pre-execute waterfallhooks, permission, sandbox
+Registered monotonic guardsdeny or abstain; identity protected
+denied or approval refusedtool body skipped
+ctx.approval one-shot promptabsent or unanswerable: deny
+tools/execute waterfalltimeout, retry, metrics (around dispatch)
+Registered tool execute() body
+fs/write-intent or fs/edit-intenttool-fs mutations only
+Tool-owned session eventstodo/write, fs/observed, hook/invoked, hook/result, tool/ptc-dispatch
+ToolDefinition.projectContentexecution-prepared text and images
+tools/post-execute waterfallaccept, block, replace, add context
+Registry outer normalizationpipeline/result snapshot throws become isError
+ToolDefinition.finalizeContentlast content-only invariant
+tools/result synchronous notificationfrozen authoritative outcome
+Active-batch additionalContexts FIFOinjected user/message after recorded tool results
+Session event: tool/resultsingle model-facing outcome
+Tool batch settledrecorded tool/result events complete
+UI completed cardpresentResult(args, result)</code></pre>
+<span>f3i3z</span>
+</div>
+<p>Filesystem read-before-edit checks stay below <code>tool-fs</code> on <code>fs/*</code> events. Generic pre/post waterfalls host hooks and approval policy; <code>ctx.approval</code> resolves asks before monotonic guards, and owner policy that must not be reordered remains a registered guard. Around-dispatch concerns such as timeouts wrap <code>tools/execute</code>. The registry losslessly snapshots the candidate result and normalizes a snapshot failure before the visible definition's snapshotted <code>finalizeContent</code> callback enforces its synchronous content-only invariant. <code>tools/result</code> then observes the immutable, lossless-JSON outcome. This lets hooks span tool families without coupling the tools to one policy service. PTC mode sends both the reserved <code>run_code</code> transport and its serialized sub-calls through the pipeline; sub-calls carry the parent token, log <code>tool/ptc-dispatch</code>, return denials as binding rejections, and omit <code>additionalContexts</code> to preserve call/result adjacency.</p>
+<p>Maintenance mode: curated Mermaid flow; exact tool schemas and event signatures live in generated catalogs.</p>
+</div></div></main>
+</div></div></div>
+
+</div></div>
+
+</div></div></div>

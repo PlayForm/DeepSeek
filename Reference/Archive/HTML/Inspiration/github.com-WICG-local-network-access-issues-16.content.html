@@ -1,0 +1,842 @@
+<div><div class="logged-out env-production page-responsive">
+
+
+<div class="application-main">
+<div class="">
+<main id="js-repo-pjax-container">
+
+<turbo-frame class="" id="repo-content-turbo-frame">
+<div class="repository-content" id="repo-content-pjax-container">
+<turbo-frame class="" id="repo-content-turbo-frame"><react-app class="loaded">
+<div>
+<div class="issueViewerContainer__i-3HrC mainContainer__O3kakG"><div class="Layout__I4d2xw"><div class="prc-PageLayout-PageLayoutRoot--KH-d"><div class="prc-PageLayout-PageLayoutWrapper-2BhU2"><div class="prc-PageLayout-PageLayoutContent-BneH9"><div class="prc-PageLayout-ContentWrapper-gR9eG Content__YMK67W"><div class="prc-PageLayout-Content-xWL-A"><div class="IssueContent__7Jatit">
+<div class="contentContainer__6-VbUZ"><div class="headerRegion__itTtan"><div class="prc-PageHeader-PageHeader-YLwBQ headerContainer__MoQpha">
+<div class="prc-PageHeader-TitleArea-2n2J0 PageHeader_TitleArea__bZM3Nm"><h1 class="prc-PageHeader-Title-p0Mgh PageHeader_Title__h1a4sE PageHeader_Title_viewport__Hk8eok PageHeader_Title_marginRight__RB_Qdt prc-Heading-Heading-MtWFE">
+<bdi class="markdown-title issueTitle__zprx8E">Use case for WebSocket communications</bdi>
+</h1></div>
+<div class="prc-PageHeader-ContextArea-ueeWv"><div class="prc-PageHeader-ContextAreaActions-DLQP5 PageHeader_ContextAreaActions__SeBV-R"><div class="menuActionsContainer__S_GMw3">
+
+<span class="tooltip__XwO6MO prc-TooltipV2-Tooltip-tLeuB" id="_R_158mtkp85_">Copy link</span>
+</div></div></div>
+<div class="prc-PageHeader-Actions-wawWm PageHeader_Actions__zkcrVC PageHeader_Actions_viewport__Z5e1u6"><div class="menuActionsContainer__S_GMw3">
+
+<span class="tooltip__XwO6MO prc-TooltipV2-Tooltip-tLeuB" id="_R_198mtkp85_">Copy link</span>
+</div></div>
+</div></div></div>
+
+<div class="stickyContainer__Chi3ru stickyContainerVisible__cmunfB" id="issue-viewer-sticky-header"><div class="contentContainer__6-VbUZ"><div class="stickyContent__JSxAHz">
+<div><span class="prc-StateLabel-StateLabel-Iawzp stateLabel__opcfNS">Open</span></div>
+<div class="titleAndMetadata__rhT5IK">
+<div class="stickyTitleContainer__et53UM">
+<a class="stickyTitleLink__ymVVre prc-Link-Link-9ZwDx" href="/WICG/local-network-access/issues/16#top"><bdi class="markdown-title">Use case for WebSocket communications</bdi></a><span class="issueNumberText__rckGJl">#16</span>
+</div>
+
+</div>
+<div><div class="menuActionsContainer__S_GMw3"><span class="tooltip__XwO6MO prc-TooltipV2-Tooltip-tLeuB" id="_R_3p6tkp85_">Copy link</span></div></div>
+</div></div></div>
+<div class="contentContainer__6-VbUZ"><div class="contentAndSidebarWrapper__RbrYO4 contentAndSidebarWrapper_viewport__0Npf5F">
+<div class="contentArea__-5lt60 contentArea_viewport__l6BoO2">
+<div><div class="outerContainer__iY934Y"><div class="react-issue-body innerContainer__mxK8FR"><div class="headerRow__U6n1NK"><div class="commentBorder__V4zML9">
+<div class="IssueBodyHeaderContainer__FFEvZk IssueBodyHeaderContainer_inlineAvatars__jtIrNF viewerDidNotAuthor__ZuIsgG"><div class="activityHeader__V45NcJ activityHeaderWrapper__lI1Kau">
+
+<div class="narrowViewportWrapper__C5cNkS narrowViewportWrapper__Uis-SQ">
+
+<div class="footer__7ecx1m footerSection__kzv2bq">
+<span>opened </span><a class="dateLink__IC75fj prc-Link-Link-9ZwDx" href="https://github.com/WICG/local-network-access/issues/16#issue-3121953394"><relative-time class="RelativeTime__isT-DQ" title="Jun 5, 2025, 5:02 PM UTC">on Jun 5, 2025</relative-time></a>
+</div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS actionsWrapper__rTb725">
+<div class="edits__KjKzVq editsSection__3L_O_u"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_r_1f_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="badgesSection__IjiaLx"><div class="actionsSection__QKxX29"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_3uldl4utkp85_">Issue body actions</span></div></div>
+</div>
+</div></div>
+<div class="IssueBody__1iGjHw" id="issue-body-viewer">
+<div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<p>Per lengthy discussion <a class="issue-link js-issue-link" href="https://github.com/WICG/local-network-access/issues/4">#4</a>, I wanted to open a dedicated thread about WebSocket communications.</p>
+<p>Some technologies directly impacted by this proposal (to name a few)</p>
+<ul>
+<li>QZ Tray (I'm the author of this)</li>
+<li>PrintNode</li>
+<li>Cricut Design Space</li>
+<li>JSPrintManager</li>
+<li>obs-websocket</li>
+
+</ul>
+<h3>Just click "OK"</h3>
+<p>Understanding that this change may effectively be as simple as <a href="https://github.com/explainers-by-googlers/local-network-access/issues/4#issuecomment-2945162871">clicking "OK" to a pop-up</a>, I am asking for a mechanism (such as the PNA server-side opt-in) that allows some form of suppression to this pop-up that doesn't involve side-loading an <a href="https://chromeenterprise.google/policies/">enterprise policy</a> for any and all browsers enforcing this requirement.</p>
+<p>In regards to the QZ Tray example above, <a href="https://www.reddit.com/r/qztray/comments/wrfzlo/remember_this_decision_checkbox_disables_yes/">we already make our users click OK</a> so this is a pop-up to see a pop-up. 😅</p>
+<p><strong>Edit:</strong> Maybe this is more of a gentle ask to provide end-user policies?  This isn't the first browser policy we've battled, but a mechanism to pre-allow on the client-end would be a welcome-change.</p>
+<ul>
+<li><span class="reference"><a class="issue-link js-issue-link" href="https://github.com/WICG/local-network-access/issues/38">Provide a mechanism for whitelisting<span class="issue-shorthand"> #38</span></a></span></li>
+</ul>
+<h3>How to supply "targetAddressSpace" to WebSocket connection?</h3>
+<p>For any of the WebSocket services running on <code class="notranslate">localhost</code>, <a href="https://github.com/explainers-by-googlers/local-network-access/issues/4#issuecomment-2937728361">no changes are needed</a>, however for public DNS addresses that point to local addresses, this will be a new requirement.  The <a href="https://github.com/explainers-by-googlers/local-network-access?tab=readme-ov-file#local-network-requests">specification explains how this is provided to <code class="notranslate">fetch()</code></a>, but how will it be provided to <code class="notranslate">WebSocket</code>?</p>
+<p>Thanks for reading as well as providing a place to discuss this.</p>
+</div></div>
+
+</div>
+</div></div></div></div></div>
+<div class="react-comments-container"><div class="commentsContainer__BJKxiK">
+<div><ol class="prc-Timeline-Timeline-awSoC" id="issue-timeline">
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-2945547580"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Collaborator</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl387tgutkp85_">More actions</span></div>
+</div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p>Understanding that this change may effectively be as simple as <a class="issue-link js-issue-link" href="https://github.com/WICG/local-network-access/issues/4#issuecomment-2945162871">#4 (comment)</a>, I am asking for a mechanism (such as the PNA server-side opt-in) that allows some form of suppression to this pop-up that doesn't involve side-loading an <a href="https://chromeenterprise.google/policies/">enterprise policy</a> for any and all browsers enforcing this requirement.</p>
+<p>In regards to the QZ Tray example above, <a href="https://www.reddit.com/r/qztray/comments/wrfzlo/remember_this_decision_checkbox_disables_yes/">we already make our users click OK</a> so this is a pop-up to see a pop-up. 😅</p>
+</blockquote>
+<p>It sounds like you are already doing the right thing by explaining to your users what is happening to give them context, which should help them have context to understand the new permission prompt when it pops up.</p>
+<p>Unfortunately we ultimately cannot distinguish abuse from legitimate, which is why we will show a permission prompt to the user.</p>
+<blockquote>
+<p>Edit: Maybe this is more of a gentle ask to provide end-user policies? This isn't the first browser policy we've battled, but a mechanism to pre-allow on the client-end would be a welcome-change.</p>
+</blockquote>
+<p>I'm not sure exactly what you mean by "end-user policies" -- could you elaborate?</p>
+<blockquote>
+<p>How to supply "targetAddressSpace" to WebSocket connection?
+For any of the WebSocket services running on localhost, <a class="issue-link js-issue-link" href="https://github.com/WICG/local-network-access/issues/4#issuecomment-2937728361">#4 (comment)</a>, however for public DNS addresses that point to local addresses, this will be a new requirement. The <a href="https://github.com/explainers-by-googlers/local-network-access?tab=readme-ov-file#local-network-requests">specification explains how this is provided to fetch()</a>, but how will it be provided to WebSocket?</p>
+</blockquote>
+<p>I think this is a reasonable feature request (since WebSocket set-up should really be Fetch under the hood, at least from the spec), and we can investigate whether something similar could be added to WebSocket creation to flag connections to otherwise public DNS names as being destined to the local network. In Chromium, we haven't yet started implementing the WebSocket integration so the LNA permission is not yet applied to it even with the feature flag enabled.</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-2945734939"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b38btgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl38btgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U">
+<div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p>Unfortunately we ultimately cannot distinguish abuse from legitimate, which is why we will show a permission prompt to the user.</p>
+</blockquote>
+<p>Perhaps I still do not fully understand the scope of the abuse and how we got here, so please accept my apologies if I'm minimizing anything here, but....</p>
+<p>What abuse?</p>
+<ul>
+<li>Use-case: Someone's trying to hack my router/printer/localhost app/etc: PNA fixes this by requiring the server to explicitly allow this.</li>
+<li>Use-case: Facebook is doing shady stuff with preflight headers.  I'm still trying to digest this one, but what confused me the most about the article is how they're able to obtain this to a secure server?  I personally feel that "trusted is trusted" but I don't think I understand how this is technically feasible through a secure server.  For insecure servers, this feels like a backpedal after allowing the insecure comms to begin with -- but (the popup) is what I'd consider a "reasonable trade-off".  For secure servers, I don't understand how they're doing it at all to local reasources, perhaps someone can elaborate?</li>
+</ul>
+<blockquote>
+<p>I'm not sure exactly what you mean by "end-user policies" -- could you elaborate?</p>
+</blockquote>
+<p>Hmm... I hope I'm not getting too off-topic, but the idea of browsers embracing policies for non-enterprise users.  macOS offers a good start for this on the OS-level where they raise "Hey can app ABC do this?" or more specifically "Hey can QZ Tray modify other apps on this computer" but macOS will fail the entire install if "No" is clicked, so it's compulsory.  Worse, in Windows, apps can go hog wild on 3rd party applications without any prompt or warning.  If these 3rd party changes were sanctioned in some form of "app friendly" gatekeeper process, it could be a solution to influence a browser's behavior by explicit permission.  Some examples:</p>
+<ul>
+<li>
+<p>URI whitelisting in Chromium:<code class="notranslate">qz:launch</code> will start our app:</p>
+<ul>
+<li>Chromium won't launch the app until a pop-up is clicked.  They must click a checkbox to remember this.  Chrome offers the suppression the pop-up through <code class="notranslate">chrome://policy</code>, <code class="notranslate">URLAllowlist: ["qz://*"]</code>.  Setting this programmatically is only possible through the "misuse" of enterprise policies during installation to achieve this level of integration.  (This specific policy <a href="https://github.com/qzind/tray/issues/1277">has been broken on Windows for some time</a> and I've been too lazy to file a bug report so if I get attacked for admitting this, I'll probably just remove it)</li>
+</ul>
+</li>
+<li>
+<p>Cert whitelisting in Firefox: we want it to use system-installed certificates:</p>
+<ul>
+<li>Firefox by default ships with it's own certificate store but this breaks any "non-CA-Trusted" HTTPS certificates that were installed system-wide.  Firefox allows changing this behavior through <code class="notranslate">security.enterprise_roots.enabled</code>, but users can't easily remove this once it's been set and an app has to misuse enterprise policies to achieve this level of integration.   (From my understanding many WebSocket apps use this technique for side-loading SSL support... but it's still frowned upon)</li>
+</ul>
+</li>
+<li>
+<p>[Insert example here for LNA popup suppression once policy is established]</p>
+</li>
+</ul>
+<p>(I'd even go as far to say ISVs could be vetted/signing before using this process -- much like how the OSs require vetting/signing to establish a trust to even install the app to begin with.  I'm not sure what the design would look like, but it's something that would embrace responsibility and cooperation with the ISVs).</p>
+<p>These are three examples, but as browsers try to be more responsible over default settings, I feel the need for non-enterprise policies will only grow with time.  Hopefully I'm not ostracised much for tossing these out into a public space. 😅</p>
+</div></div>
+
+</div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-2945856873"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b38ftgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">g-ortuno</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Contributor</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl38ftgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U">
+<div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<p><a href="https://localmess.github.io/">This article</a> from the researchers has a lot of information. The relevant part (edited for conciseness):</p>
+<ol>
+<li>The user opens the native Facebook or Instagram app, which eventually is sent to the background and creates a background service to listen for incoming traffic on a TCP port (12387 or 12388) and a UDP port (the first unoccupied port in 12580-12585).</li>
+<li>The user opens their browser and visits a website integrating the Meta Pixel.</li>
+<li>The Meta Pixel script sends [data] to the native Instagram or Facebook app via WebRTC (STUN) SDP Munging [to the ports from 1.].</li>
+</ol>
+</div></div>
+
+</div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-2949286388"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b38jtgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl38jtgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U">
+<div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p><a href="https://localmess.github.io/">This article</a> from the researchers has a lot of information. The relevant part (edited for conciseness):</p>
+<ol>
+<li>The user opens the native Facebook or Instagram app, which eventually is sent to the background and creates a background service to listen for incoming traffic on a TCP port (12387 or 12388) and a UDP port (the first unoccupied port in 12580-12585).</li>
+<li>The user opens their browser and visits a website integrating the Meta Pixel.</li>
+<li>The Meta Pixel script sends [data] to the native Instagram or Facebook app via WebRTC (STUN) SDP Munging [to the ports from 1.].</li>
+</ol>
+</blockquote>
+<p>Yeah that's the article I tried to understand but nothing about your reply really answers the "How are they using HTTPS?" question... Here's a snippet...</p>
+<blockquote>
+<p>[...] the Yandex Metrica script transmits data via HTTPS to local ports 29010 and 30103. This design choice obfuscates the data exfiltration process, thereby complicating conventional detection mechanisms.</p>
+</blockquote>
+<p>I'm still unsure how an app can communicate using HTTPS without some certificate trickery... and in that case, I still say the issue isn't the local-traffic, it's the fact that CAs are issuing certs to spyware (or if it's not CA-issued, that this app is using a MITM), which I'm trying to understand why LNA believe it has onus over....</p>
+<p>So... if instead LNA DOESN'T show the pop-up for trusted, local, secure connections, the pop-up would only show for those using HTTP, which would (IMO) significantly reduce the impact to end-users when this popup is rolled out.</p>
+</div></div>
+
+</div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-2949716113"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Collaborator</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl38ntgutkp85_">More actions</span></div>
+</div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U">
+<div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<p>I think it might help clarify things to split this into two pieces.</p>
+<p>First, <em>any</em> request from a public site that connects to a local or loopback IP address will trigger the LNA permission prompt. This is based on the <em>resolved</em> IP address after trying to make the connection. Being able to get the LNA permission is additionally gated on the site being a secure context (i.e., served over HTTPS).</p>
+<p>Second, because sites that need the LNA permission <em>must</em> be HTTPS, but local network requests are often to devices where it is currently difficult to get working HTTPS and if accessed over HTTP they would ordinarily be blocked as mixed content, the LNA permission <em>additionally</em> relaxes the mixed content blocking logic to allow certain local network requests through.</p>
+<p>So for your WebSocket use case there are four examples I can work through:</p>
+<ol>
+<li>If the public website connecting to the local QZTray software does it using the URL <code class="notranslate">ws://127.0.0.1:8080/...</code>, this would <em>not</em> count as mixed content (as <code class="notranslate">localhost</code> is considered a secure context) but <em>would</em> trigger the LNA permission prompt.</li>
+<li>If the public website connecting to the local QZTray software does it using the URL <code class="notranslate">ws://192.168.0.10:8080/...</code> (where <code class="notranslate">192.168.0.10</code> is the internal IP address of the machine running the software), this would be automatically exempted from mixed content checks (because the hostname is an internal IP address), and would trigger the LNA permission prompt.</li>
+<li>If the public website connecting to the local QZTray software does it using the URL <code class="notranslate">ws://internal.example.com:8080/...</code> (where <code class="notranslate">internal.example.com</code> resolves to either <code class="notranslate">127.0.0.1</code> or <code class="notranslate">192.168.0.10</code>), this would be blocked as mixed content (because the mixed content checker triggers <em>before</em> hostname resolution)</li>
+<li>If the public website connecting to the QZTray software does it using the URL <code class="notranslate">wss://internal.example.com:8080/...</code> (where <code class="notranslate">internal.example.com</code> resolves to either <code class="notranslate">127.0.0.1</code> or <code class="notranslate">192.168.0.10</code> <strong>and</strong> that machine has a trusted HTTPS certificate), this would not count as mixed content but <em>would</em> trigger the LNA permission prompt.</li>
+</ol>
+<p>If we were able to add something akin to the <code class="notranslate">targetAddressSpace</code> fetch() option but for WebSockets, that would be useful for Example 3 above -- it would allow the public website to "pre-declare" that the hostname would resolve to a local address, allowing the mixed content checker to exempt the request. It would have no effect in the other three cases.</p>
+</div></div>
+
+</div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-2949759510"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b38rtgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl38rtgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p>It would have no effect in the other three cases.</p>
+</blockquote>
+<p>Oh... That certainly simplifies it, then.   I was under the impression 4 would require it too. However, I still feel that in the use-case of 3, it's not something a web developer can predict though.  I suppose MOST use-cases it can be assumed, but for on-prem, local-local I still see ambiguity in implementation (same for public-public) since there's really no way for a connection library to know the infrastructure in advance, meaning the (hypothetical WebSocket) <code class="notranslate">targetAddressSpace</code> flag must be available as a toggle to implementing libraries... However I think library maintainers will prefer the pop-up to a failed connection which means most "usually local" connections will likely provided this flag blindly, all the time.</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-2951270405"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX"><div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl38vtgutkp85_">More actions</span></div></div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<p>What is make use of is</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code class="notranslate">--unsafely-treat-insecure-origin-as-secure=http://0.0.0.0:44818,ws://0.0.0.0:44818,http://0.0.0.0:8080,ws://0.0.0.0:8080
+</code></pre></div>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-2951277900"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX"><div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl393tgutkp85_">More actions</span></div></div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al"><p>Of course, this can be gotten around altogether by using an extension.</p></div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-2951339771"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX"><div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl397tgutkp85_">More actions</span></div></div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<p>Let's say you have control over both localhost networking and the code in an arbitrary Web page.</p>
+<p>Create a WebRTC Data Channel connection in each cross-origin script. Exchange SDP by any means (there are several ways to do this - without any prompting), then you have peer-to-peer communications on the same machine, across any Web origins, and across Web/OS, with <code class="notranslate">ArrayBuffer</code>s to and fro. That's without using any extensions.</p>
+<p>There's other ways to get around this entirely, too.</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-3258560837"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Collaborator</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl39btgutkp85_">More actions</span></div>
+</div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<p>FYI we have LNA integrated with websockets behind a flag now, if people want to start playing with it.</p>
+<p>Min version in chrome: 142.0.7395.0</p>
+<p>And you'll need to go to chrome://flags and enable both #local-network-access-check (to the Blocking setting) and #local-network-access-check-websockets</p>
+<p>No schedule for release yet.</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-3258607174"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b39ftgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl39ftgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U">
+<div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<p>Tested on Canary; works as described.</p>
+
+<p>I still find this to be terribly sad, especially considering this is a <code class="notranslate">localhost</code> --&gt; <code class="notranslate">localhost</code> connection  a <code class="notranslate">wss://</code> (trusted) connection where the SSL cert is ONLY bound to <code class="notranslate">localhost</code> (so the "any device on your local network" portion is not accurate), but all requests to offer a way to suppress this seem to take a back seat, forcing apps to abuse the enterprise policies to circumvent this unnecessary pop-up, quoting the original report:</p>
+<blockquote>
+<p>Understanding that this change may effectively be as simple as <a class="issue-link js-issue-link" href="https://github.com/WICG/local-network-access/issues/4#issuecomment-2945162871">#4 (comment)</a>, I am asking for a mechanism (such as the PNA server-side opt-in) that allows some form of suppression to this pop-up that doesn't involve side-loading an <a href="https://chromeenterprise.google/policies/">enterprise policy</a> for any and all browsers enforcing this requirement.</p>
+</blockquote>
+</div></div>
+
+</div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-3258621066"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b39jtgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl39jtgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p>[...] forcing apps to abuse the enterprise policies to circumvent this unnecessary pop-up [...]</p>
+</blockquote>
+<p><a class="user-mention notranslate" href="https://github.com/hubertchao">@hubertchao</a> can you offer up any details on what the enterprise policy will look like for this? I don't yet see any specific mention of WebSockets at <a href="https://chromeenterprise.google/policies/">https://chromeenterprise.google/policies/</a>.</p>
+<p><strong>Edit:</strong> or is the policy the same and simply protocol agnostic?</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-3258632229"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b39ntgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl39ntgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<blockquote>
+<p>[...] forcing apps to abuse the enterprise policies to circumvent this unnecessary pop-up [...]</p>
+</blockquote>
+<p><a href="https://github.com/hubertchao">@hubertchao</a> can you offer up any details on what the enterprise policy will look like for this? I don't yet see any specific mention of WebSockets at <a href="https://chromeenterprise.google/policies/">https://chromeenterprise.google/policies/</a>.</p>
+<p><strong>Edit:</strong> or is the policy the same and simply protocol agnostic?</p>
+</blockquote>
+<p>Oh wait, this doesn't help at all because every site on the internet needs to be in that listing... Can there be a new policy to whitelist the destination address?</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-3258633847"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Collaborator</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl39rtgutkp85_">More actions</span></div>
+</div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<blockquote>
+<p>[...] forcing apps to abuse the enterprise policies to circumvent this unnecessary pop-up [...]</p>
+</blockquote>
+<p><a href="https://github.com/hubertchao">@hubertchao</a> can you offer up any details on what the enterprise policy will look like for this? I don't yet see any mention of it in <a href="https://chromeenterprise.google/policies/">https://chromeenterprise.google/policies/</a>.</p>
+</blockquote>
+<p>Haven't thought about it yet.</p>
+<p>I was hoping that <a href="https://chromeenterprise.google/policies/#LocalNetworkAccessAllowedForUrls">https://chromeenterprise.google/policies/#LocalNetworkAccessAllowedForUrls</a> would work for ws/wss urls, but I just looked and this</p>
+<p><a href="https://chromeenterprise.google/policies/url-patterns/">https://chromeenterprise.google/policies/url-patterns/</a></p>
+<p>makes me think it might not work.</p>
+<p>(maybe the documentation is out of date?)</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-3258651751"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b39vtgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl39vtgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p>makes me think it might not work.
+(maybe the documentation is out of date?)</p>
+</blockquote>
+<p>No, we're just thinking about it backwards.  It's a URL (e.g. website) we're whitelisting, so this policy is only helpful for organizations that would use a plugin on a known pre-defined domain(s).</p>
+<p>It appears there's no way to specify the destination address in a white-list, meaning this popup will occur for every website, everywhere unless the setting is completely disabled (which is what some apps will do, sadly).  Granularity around the destination address would be nice, so I could specify that <code class="notranslate">wss://localhost:MY_PORT</code> is expected, e.g. something like <code class="notranslate">LocalNetworkAccessAllowedForDestination="wss://localhost:MY_PORT"</code>, etc)</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="loadMoreWrapper__XvOhNc"><div class="LoadMoreContainer__SA0BWG"><div class="loadMoreContentContainer__Qg1Clv"><div class="innerContentWrapper__0lTRlX"><div class="centeredContent__GXvLUU">
+<div class="headingWrapper__Vj7xPN"><h3 class="remainingItemsHeading__DW2RIn" id="_R_a3tgutkp85_">
+<span>27</span><span> remaining <span>items</span></span>
+</h3></div>
+<div class="buttonWrapper__BcMgD5"><button class="prc-Button-ButtonBase-9n-Xk"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><div class="buttonChildrenWrapper__R817fz">Load more</div></span></span></button></div>
+</div></div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-3856038186"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Collaborator</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3a7tgutkp85_">More actions</span></div>
+</div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U">
+<div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p><a href="https://github.com/hubertchao">@hubertchao</a>. Interestingly, it <a href="https://github.com/user-attachments/assets/c0f8a7c4-b1f9-4360-ac03-677cbb547ffa">now changes the address bar to say <code class="notranslate">insecure</code></a>. Is this intended? This does NOT occur for localhost.</p>
+</blockquote>
+<p>Yes, that is intended. It doesn't occur for localhost because localhost is considered to be "potentially trustworthy" (see <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Secure_Contexts#potentially_trustworthy_origins">https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Secure_Contexts#potentially_trustworthy_origins</a>) and therefore doesn't  trigger the <code class="notranslate">insecure</code> chip on the address bar</p>
+<p>(of note, previously anything connecting to <code class="notranslate">ws://</code> would've been served from an http origin to not run afowl of mixed content checks, and would have also displayed the <code class="notranslate">insecure</code> chip)</p>
+</div></div>
+
+</div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-3856426311"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b3abtgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3abtgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p>(of note, previously anything connecting to ws:// would've been served from an http origin to not run afowl of mixed content checks, and would have also displayed the insecure chip)</p>
+</blockquote>
+<p>Yeah, just some odd context there because most users associate that with the origin.</p>
+<blockquote>
+<p>see <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Secure_Contexts#potentially_trustworthy_origins">https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Secure_Contexts#potentially_trustworthy_origins</a></p>
+</blockquote>
+<p>Thanks for the link.  Does this mean that APIs requiring a secure context break when this connection occurs?  If so, ouch.</p>
+<blockquote>
+<p>[...] additionally relaxes the mixed content blocking logic to allow certain local network requests through.</p>
+</blockquote>
+<p>Quoting this again because I don't think "relax" is a word I'd use when this "insecure" notice appears in the URL.  This will likely kill any adoption of this tech outside of localhost or SSL.  Related <a class="issue-link js-issue-link" href="https://github.com/WICG/local-network-access/issues/83">#83</a></p>
+<p><strong>Edit:</strong> Note the current workaround to this is to visit every workstation and enable "Treat insecure origins as secure" and add the IP Address.   Most organizations will likely prefer the old "manual" procedure over this new "insecure" indicator.  ... and if website features start to break, they'll have no choice in the matter.</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-3857094045"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Collaborator</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3aftgutkp85_">More actions</span></div>
+</div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<p>Mixed content has been completely blocked by default in browsers for a while now, so allowing this to go through at all is a relaxation of that security restriction.</p>
+<p>This should be a no-op for you, right? If you are using insecure websocket connections today you already have to be on an http:// page, which will be marked as Insecure.</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-3862260772"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b3ajtgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3ajtgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p>Mixed content has been completely blocked by default in browsers for a while now, so allowing this to go through at all is a relaxation of that security restriction.</p>
+</blockquote>
+<p>Agreed.</p>
+<blockquote>
+<p>This should be a no-op for you, right? If you are using insecure websocket connections today you already have to be on an http:// page, which will be marked as Insecure.</p>
+</blockquote>
+<p>Sorta... HTTPS is usable with a workaround requoting:</p>
+<blockquote>
+<p>the current workaround to this is to visit every workstation and enable "Treat insecure origins as secure" and add the IP Address. Most organizations will likely prefer the old "manual" procedure over this new "insecure" indicator. ... and if website features start to break, they'll have no choice in the matter.</p>
+</blockquote>
+<p>.. this does NOT trigger the red "insecure" origin warning and also does NOT downgrade any components from working due to breaking the "secure" context.</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-4201884740"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3antgutkp85_">More actions</span></div>
+</div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al"><p>Today's the day that <a href="https://chromiumdash.appspot.com/schedule">Chrome 147 is expected</a> to be released with WebSockets being blocked by default.    Firefox is targeting <a href="https://github.com/mozilla/policy-templates/issues/1259#issuecomment-4194607529">151</a>.</p></div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-4201900161"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3artgutkp85_">More actions</span></div>
+</div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al"><p>.. wait, or is it?  <a href="https://chromereleases.googleblog.com/">https://chromereleases.googleblog.com/</a> says only Chrome Beta on Android receives 147 today.  Can I get some clarification from the Chrome team on this?</p></div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-4202028816"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b3avtgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">hubertchao</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Collaborator</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3avtgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<p>147 is already rolling out slowly in early stable on Android (and other platforms).</p>
+<p><a href="https://chromereleases.googleblog.com/2026/04/chrome-for-android-update.html">https://chromereleases.googleblog.com/2026/04/chrome-for-android-update.html</a>
+<a href="https://chromereleases.googleblog.com/2026/04/early-stable-update-for-desktop.html">https://chromereleases.googleblog.com/2026/04/early-stable-update-for-desktop.html</a></p>
+<p>I don't know why they also chose to update beta channel with another 147 release on android.</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-4202672225"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b3b3tgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3b3tgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p>147 is already rolling out slowly in early stable on Android (and other platforms).</p>
+</blockquote>
+<p>Thanks!  I think the "early stable" terminology here is slightly confusing, since the <a href="https://github.com/user-attachments/assets/26f60ab3-b1b3-4f91-832b-74f665628bdb">chart linked</a> uses this same exact term for the March 25 release.</p>
+<p>Anyway... I checked again and the update came through.  I can confirm WebSockets to LAN/localhost are now <del>blocked</del> prompt by default.</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-4202836495"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Collaborator</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3b7tgutkp85_">More actions</span></div>
+</div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<blockquote>
+<p>147 is already rolling out slowly in early stable on Android (and other platforms).</p>
+</blockquote>
+<p>Thanks! I think the "early stable" terminology here is slightly confusing, since the <a href="https://github.com/user-attachments/assets/26f60ab3-b1b3-4f91-832b-74f665628bdb">chart linked</a> uses this same exact term for the March 25 release.</p>
+</blockquote>
+<p>That's because there's more than one release for each channel. e.g the March 25th desktop early stable release.</p>
+<p><a href="https://chromereleases.googleblog.com/2026/03/early-stable-update-for-desktop_25.html">https://chromereleases.googleblog.com/2026/03/early-stable-update-for-desktop_25.html</a></p>
+<p>Early stable is a bit different in that its just a stable channel release that is only pushed out to a small percentage of users.</p>
+<p><a href="https://chromiumdash.appspot.com/releases?platform=Android">This</a> has a lot more detail (and you can select different platforms).</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-4459071272"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX"><div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3bbtgutkp85_">More actions</span></div></div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al"><p>Adding my voice to those requesting targetAddressSpace support for websockets. I run an OBS remote control (using the obs-websocket), and it is intended to be able to be used from a phone/tablet/laptop on the LAN. As a workaround, users need to identify the streaming host by IP address (and strictly a LAN IP, not a globally-addressible one) rather than hostname, due solely to the inability of the site to identify the request as a LAN one.</p></div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-4626530804"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Collaborator</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3bftgutkp85_">More actions</span></div>
+</div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p>Adding my voice to those requesting targetAddressSpace support for websockets. I run an OBS remote control (using the obs-websocket), and it is intended to be able to be used from a phone/tablet/laptop on the LAN. As a workaround, users need to identify the streaming host by IP address (and strictly a LAN IP, not a globally-addressible one) rather than hostname, due solely to the inability of the site to identify the request as a LAN one.</p>
+</blockquote>
+<p>Currently are you able to use the secure context exemption origin trial? <a href="https://developer.chrome.com/origintrials/#/view_trial/3826370833404657665">https://developer.chrome.com/origintrials/#/view_trial/3826370833404657665</a></p>
+<p>We are scoping out how we might be able to add this to WebSockets. For Chromium, I've filed a tracking bug at crbug.com/517413738.</p>
+</div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-4627858851"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX"><div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3bjtgutkp85_">More actions</span></div></div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U">
+<div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p>Currently are you able to use the secure context exemption origin trial? <a href="https://developer.chrome.com/origintrials/#/view_trial/3826370833404657665">https://developer.chrome.com/origintrials/#/view_trial/3826370833404657665</a></p>
+</blockquote>
+<p>I did consider signing up for the trial, but since it's explicitly for a very limited time, it didn't seem like a good use of time and effort; it only kicks the can down the road a few months. For the time being, I have told my users that they need to use IP addresses, which is an annoying limitation but no worse than requiring them to participate in the trial.</p>
+</div></div>
+
+</div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-4634265800"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b3bntgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3bntgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U">
+<div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p>I did consider signing up for the trial, but since it's explicitly for a very limited time, it didn't seem like a good use of time and effort;</p>
+</blockquote>
+<p>Same.  I've told zero users to use this origin trial method for the same timebomb reasons.  Fortunately for our users, they have the luxury of switching to HTTPS (which was previously blocked by mixed content restrictions).  I did not expect it, but I think about 25% of our support issues have been websites that were running from insecure origins, it was a complete oversight on our part.  We were so worried about the people clicking "block" on the pop-ups, we completely failed to serve and explain to the users using insecure contexts.  Our API actually is still hard-coded to use <code class="notranslate">insecure &lt;--&gt; insecure</code> but now the script is flipped and <code class="notranslate">secure &lt;---&gt; insecure</code> and <code class="notranslate">insecure &lt;--&gt; secure</code> are the norm now since Chrome 147, but we're hesitant to change it internally until the rest of the browsers catch up (or we add a bunch of browser detection logic to do the same)</p>
+</div></div>
+
+</div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-4634363647"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII"><div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Collaborator</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3brtgutkp85_">More actions</span></div>
+</div></div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al"><p>Yeah that makes sense with use cases like yours where your users are individually deploying an instance (and thus would have to set up the OT themselves). Hopefully we can get the targetAddressSpace option added to WebSockets.</p></div></div></div>
+</div></div></div></div></div></li>
+<li><div class="timelineElement__l_1Q03 nonLeadingElement_inlineAvatars__g_btmU"><div class="Box__9aTioE"><div class="shared__KSUE2D major__A5_AyP"><div class="react-issue-comment IssueCommentLayout__fNsTnn"><div class="IssueCommentContent__ViXx9n">
+<div class="ActivityHeaderContainer__sf0_ID containerBase__VGAID6 containerForceInlineAvatarPadding__S4YfhL" id="issuecomment-4634474906"><div class="activityHeader__V45NcJ ActivityHeaderGridLayout__Ip6-X-">
+
+<div class="narrowViewportWrapper__C5cNkS CommentHeaderContentContainer__qvr9Sa">
+
+<div class="footer__7ecx1m FooterContainer__CesLbt"></div>
+</div>
+<div class="narrowViewportWrapper__C5cNkS ActionsContainer__acCGII">
+<div class="EditsContainer__yFuvcF"><div class="editHistoryContainer__0eLRCM"><button class="prc-Button-ButtonBase-9n-Xk editHistoryMenuButton__twBHON" id="_R_b3bvtgutkp85_"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3"><span class="lastEditInfoContainer__6mCcpP">Last edited by <span class="editorLogin__g5cPQJ">tresf</span></span></span></span></button></div></div>
+<div class="BadgesContainer__muaZQX">
+<div class="BadgesGroupContainer__W96yO7"><span class="prc-Label-Label-qG-Zu">Author</span></div>
+<div class="ActionsButtonsContainer__ZaEPJ0"><span class="prc-TooltipV2-Tooltip-tLeuB" id="_R_7pl3bvtgutkp85_">More actions</span></div>
+</div>
+</div>
+</div></div>
+<div class="IssueCommentBody__DGWd7U"><div class="markdown-body"><div class="markdown-body safe-html-box__Uwc6Al">
+<blockquote>
+<p>Yeah that makes sense with use cases like yours where your users are individually deploying an instance (and thus would have to set up the OT themselves). Hopefully we can get the targetAddressSpace option added to WebSockets.</p>
+</blockquote>
+<p>Yeah we have a mixed bag of enterprise and non-enterprise.  For example, Amazon Seller -- despite its name -- is our widest single-vendor user base and they're predominantly SMB/home users, so having them reset the permissions was usually sufficient... but there was a surprisingly large amount of users that had side-stepped the old mixed-origin restrictions that got bit by this change that we just failed to recognize and our API is still plagued by this assumption as well.</p>
+<p>The enterprise customers tend to have control over both the policies as well as the Chrome version.  They also read their emails closely to understand the change since they're the first-party customer.</p>
+</div></div></div>
+</div></div></div></div></div></li>
+</ol></div>
+<div class="prc-Flash-Flash-q6HW0 signedOutBanner__k-kNxi">
+<a class="prc-Button-ButtonBase-9n-Xk" href="/signup?return_to=https://github.com/WICG/local-network-access/issues/16" id="signed-out-banner-sign-up"><span class="prc-Button-ButtonContent-Iohp5"><span class="prc-Button-Label-FWkx3">Sign up for free</span></span></a><span><strong> to join this conversation on GitHub.</strong> Already have an account? </span><a class="prc-Link-Link-9ZwDx" href="/login?return_to=https://github.com/WICG/local-network-access/issues/16">Sign in to comment</a>
+</div>
+</div></div>
+
+</div>
+<div class="metadataSidebar__R9M5UE metadataSidebar_viewport__j6pDmg"><div class="issueViewerMetadataPane__0TiAmC">
+<h2 class="metadataHeader__8bGnK5 prc-Heading-Heading-MtWFE">Metadata</h2>
+<div><div class="sidebarContent__xBd6hp">
+<div class="SectionContainer__66uuDW"><div class="headerContentWrapper__3ftOms">
+<div class="containerReadonly__MQ17xb"><h3 class="SectionHeaderTitle__dackeX headingReadonly__Oqs48- prc-Heading-Heading-MtWFE">Assignees</h3></div>
+<span class="emptyText__CeftUV">No one assigned</span>
+</div></div>
+<div class="SectionContainer__66uuDW"><div class="headerContentWrapper__3ftOms">
+<div class="containerReadonly__MQ17xb"><h3 class="SectionHeaderTitle__dackeX headingReadonly__Oqs48- prc-Heading-Heading-MtWFE">Labels</h3></div>
+<span class="emptyText__CeftUV">No labels</span><div class="hiddenChildrenContainer__Bg8Kaa"><div class="labelsListContainer__hYL2FQ">No labels</div></div>
+</div></div>
+<div class="SectionContainer__66uuDW"><div class="headerContentWrapper__3ftOms">
+
+<span class="emptyText__CeftUV">No type</span>
+</div></div>
+<div class="SectionContainer__66uuDW"><div class="headerContentWrapper__3ftOms">
+<div class="containerReadonly__MQ17xb"><h3 class="SectionHeaderTitle__dackeX headingReadonly__Oqs48- prc-Heading-Heading-MtWFE">Projects</h3></div>
+<span class="emptyText__CeftUV">No projects</span>
+</div></div>
+<div class="SectionContainer__66uuDW"><div class="headerContentWrapper__3ftOms">
+<div class="containerReadonly__MQ17xb"><h3 class="SectionHeaderTitle__dackeX headingReadonly__Oqs48- prc-Heading-Heading-MtWFE">Milestone</h3></div>
+<span class="emptyText__CeftUV">No milestone</span>
+</div></div>
+<div class="SectionContainer__66uuDW"><div class="headerContentWrapper__3ftOms">
+<div class="containerReadonly__MQ17xb"><h3 class="SectionHeaderTitle__dackeX headingReadonly__Oqs48- prc-Heading-Heading-MtWFE">Relationships</h3></div>
+<span class="emptyText__CeftUV">None yet</span>
+</div></div>
+<div class="SectionContainer__66uuDW">
+<div class="headerContentWrapper__3ftOms"><div class="containerReadonly__MQ17xb"><h3 class="SectionHeaderTitle__dackeX headingReadonly__Oqs48- prc-Heading-Heading-MtWFE">Development</h3></div></div>
+<div class="childrenContainer__XqVWxs"><span class="developmentHelpText__988LHi"><span>No branches or pull requests</span></span></div>
+</div>
+<div class="SectionContainer__66uuDW">
+<div class="headerContentWrapper__3ftOms"><div class="containerReadonly__MQ17xb"><h3 class="SectionHeaderTitle__dackeX headingReadonly__Oqs48- prc-Heading-Heading-MtWFE">Participants</h3></div></div>
+
+</div>
+<ul class="prc-ActionList-ActionList-rPFF2 ActionListOverrides__MrKKOf"><li class="prc-ActionList-ActionListItem-So4vC"><button class="prc-ActionList-ActionListContent-KBb8-" id="_R_da5etkp85_"><span class="prc-ActionList-ActionListSubContent-gKsFp"><span class="prc-ActionList-ItemLabel-81ohH" id="_R_da5etkp85_--label"><span class="LabelTransition__vifgU2">Open in GitHub Copilot app</span></span></span></button></li></ul>
+</div></div>
+</div></div>
+</div></div>
+</div></div></div></div></div></div></div></div>
+
+</div>
+</react-app>
+</turbo-frame>
+</div>
+</turbo-frame>
+</main>
+</div>
+</div>
+
+<div class="ajax-error-message flash flash-error" id="ajax-error-message">
+     
+    
+    You can’t perform that action at this time.
+  </div>
+</div></div>

@@ -1,0 +1,447 @@
+<div><section class="ember-application" id="main">
+
+<div class="discourse-root ember-view" id="ember4">
+
+
+
+
+
+
+
+
+<div class="wrap" id="main-outlet-wrapper">
+
+
+
+<div id="main-outlet">
+
+
+
+
+
+
+<div class="regular ember-view" id="ember6">
+
+
+
+
+
+
+<div class="container" id="topic-title">
+<div class="title-wrapper">
+<h1>
+
+
+<a class="fancy-title" href="/t/firing-alerts-get-resolved-with-no-data/146947">
+                    Firing alerts get resolved with no data </a>
+
+</h1>
+
+</div>
+
+</div>
+
+<div class="container posts">
+<div class="selected-posts hidden">
+<div>
+<p>
+<span>You have selected <b>0</b> posts.</span>
+</p>
+<p>
+<a class="select-all" href="">
+        select all
+      </a>
+</p>
+
+
+
+
+
+<p class="cancel">
+<a href="">
+      cancel selecting
+    </a>
+</p>
+</div>
+</div>
+<div class="topic-map --bottom">
+<section class="topic-map__contents">
+<div class="topic-map__stats">
+<button class="btn no-text fk-d-menu__trigger topic-map__views-trigger" id="ember18">
+
+<span class="number">842</span>
+<span class="topic-map__stat-label">
+        views
+      </span>
+</button>
+
+
+
+<button class="btn no-text fk-d-menu__trigger topic-map__links-trigger" id="ember19">
+
+<span class="number">3</span>
+<span class="topic-map__stat-label">
+          links
+        </span>
+</button>
+
+
+
+
+
+</div>
+</section>
+
+
+</div>
+
+<div class="row">
+<section class="topic-area" id="topic">
+<div class="posts-wrapper">
+
+
+<div class="post-stream">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="topic-post clearfix post--sticky-avatar sticky-avatar post--group-grafana-labs-team group-grafana-labs-team post--regular regular">
+
+<article class="boxed onscreen-post" id="post_4">
+ <div class="post__row row">
+
+<div class="post__body topic-body clearfix">
+<div class="topic-meta-data">
+<div class="names trigger-user-card">
+
+ <span class="first username group--grafana-labs-team">
+<a href="/u/yuriy.tseretyan">
+  
+            yuriy.tseretyan
+
+</a>
+</span>
+
+
+
+ 
+
+</div>
+<div class="post-infos">
+<div class="post-info post-date">
+<a class="post-date" href="/t/firing-alerts-get-resolved-with-no-data/146947/4" title="Post date">
+<span>
+<span class="relative-date" title="Mar 26, 2025 5:20 pm">Mar 2025</span>
+</span>
+</a>
+</div>
+</div>
+</div>
+<div class="post__regular regular post__contents contents">
+
+<div class="cooked">
+<p>This is expected. NoData and options to execute it as X is related to a situation when query does not return any points. Only in this case it is classified as no data.
+A situation when a series is missing is not considered as NoData. In this case, the alerting keeps the last state of the alert instance for 2 rule evaluation cycles and if it’s still missing, it evicts it from the state with transition Normal (MissingSeries).
+In Grafana 12 we will let users configure that number of evaluations.</p>
+
+</div>
+
+
+
+
+
+
+ </div>
+
+
+</div>
+</div>
+
+</article>
+ 
+
+</div>
+
+
+
+<div class="topic-post clearfix post--sticky-avatar sticky-avatar post--topic-owner topic-owner post--regular regular">
+
+<article class="boxed onscreen-post" id="post_5">
+ <div class="post__row row">
+
+<div class="post__body topic-body clearfix">
+<div class="topic-meta-data">
+<div class="names trigger-user-card">
+
+ <span class="first username">
+<a href="/u/alespour">
+  
+            alespour
+
+</a>
+</span>
+
+
+
+ 
+
+</div>
+<div class="post-infos">
+
+<div class="post-info post-date">
+<a class="post-date" href="/t/firing-alerts-get-resolved-with-no-data/146947/5" title="Post date">
+<span>
+<span class="relative-date" title="Mar 27, 2025 6:13 am">Mar 2025</span>
+</span>
+</a>
+</div>
+</div>
+</div>
+<div class="post__regular regular post__contents contents">
+
+<div class="cooked">
+<p>Thank you, Yuriy. I misunderstood what NoData means.</p>
+<p>May I hope that the new option in Grafana 12 will allow users to set really large number (or even infinite) so it would effectively allow keep the last state forever?</p>
+<p>Thanks.</p>
+
+</div>
+
+
+
+
+
+
+ </div>
+
+
+</div>
+</div>
+
+</article>
+ 
+
+</div>
+
+
+
+
+</div>
+ </div>
+
+
+</section>
+</div>
+</div>
+<div id="topic-footer-buttons">
+<div class="topic-footer-main-buttons">
+ <button class="btn btn-icon-text btn-primary">
+<span class="d-button-label">Reply</span>
+</button>
+</div>
+</div>
+
+
+<div class="more-topics__container">
+<div class="more-topics__lists single-list">
+<div class="more-topics__list" id="related-topics">
+<h3 class="more-topics__list-title" id="related-topics-title">
+    Related topics
+  </h3>
+<div class="topics">
+<div class="ember-view" id="ember22">
+<div class="loading-container">
+<table class="topic-list">
+<thead class="topic-list-header --has-tabs">
+<tr>
+<th class="topic-list-data default">
+
+<span>
+        Topic
+      </span>
+
+</th>
+<th class="topic-list-data posts num">
+
+<span>
+        Replies
+      </span>
+
+</th>
+<th class="topic-list-data views num">
+
+<span>
+        Views
+      </span>
+
+</th>
+<th class="topic-list-data activity num">
+
+<span>
+        Activity
+      </span>
+
+</th>
+</tr>
+</thead>
+ 
+
+<tbody class="topic-list-body">
+<tr class="topic-list-item category-support tag-alerting">
+
+<td class="main-link topic-list-data" colspan="1">
+
+<span class="link-top-line"><a class="title raw-link raw-topic-link" href="/t/alerts-getting-closed-stating-normal-missingseries/118213">Alerts getting closed stating Normal (Missingseries)</a>
+</span>
+<div class="link-bottom-line">
+
+<a class="badge-category__wrapper" href="/c/support/33"><span class="badge-category --style-square"><span class="badge-category__name">Grafana</span></span></a>
+
+<ul class="discourse-tags"></ul>
+
+
+</div>
+
+
+</td>
+
+<td class="num views topic-list-data heatmap-high">
+
+<span class="number" title="this topic has been viewed 4073 times">4.1k</span>
+</td>
+
+</tr>
+
+
+<tr class="topic-list-item category-support-alerting tag-alerting">
+
+<td class="main-link topic-list-data" colspan="1">
+
+<span class="link-top-line"><a class="title raw-link raw-topic-link" href="/t/datasource-nodata-alerts-stick-around-forever/160058">(Datasource)NoData alerts stick around forever</a>
+</span>
+<div class="link-bottom-line">
+
+<a class="badge-category__wrapper" href="/c/support/alerting/60"><span class="badge-category --has-parent --style-square"><span class="badge-category__name">Alerting</span></span></a>
+
+<ul class="discourse-tags"></ul>
+
+
+</div>
+
+
+</td>
+
+
+
+</tr>
+
+
+<tr class="topic-list-item category-support-alerting status-solved">
+
+<td class="main-link topic-list-data" colspan="1">
+
+
+
+
+
+</td>
+
+<td class="num views topic-list-data heatmap-high">
+
+<span class="number" title="this topic has been viewed 14616 times">14.6k</span>
+</td>
+
+</tr>
+
+
+<tr class="topic-list-item category-support-alerting tag-alerting status-solved">
+
+<td class="main-link topic-list-data" colspan="1">
+
+
+<div class="link-bottom-line">
+
+<a class="badge-category__wrapper" href="/c/support/alerting/60"><span class="badge-category --has-parent --style-square"><span class="badge-category__name">Alerting</span></span></a>
+
+<ul class="discourse-tags"></ul>
+
+
+</div>
+
+
+</td>
+
+<td class="num views topic-list-data heatmap-high">
+
+<span class="number" title="this topic has been viewed 30280 times">30.3k</span>
+</td>
+
+</tr>
+
+
+<tr class="topic-list-item category-support-alerting tag-alerting status-solved">
+
+<td class="main-link topic-list-data" colspan="1">
+
+<span class="link-top-line"><a class="title raw-link raw-topic-link" href="/t/disable-normal-missingseries-alerts/136912">Disable Normal [Missingseries] alerts</a>
+</span>
+<div class="link-bottom-line">
+
+<a class="badge-category__wrapper" href="/c/support/alerting/60"><span class="badge-category --has-parent --style-square"><span class="badge-category__name">Alerting</span></span></a>
+
+<ul class="discourse-tags"></ul>
+
+
+</div>
+
+
+</td>
+
+
+
+</tr>
+
+
+</tbody>
+
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+ </div>
+
+
+
+
+
+
+
+</div>
+
+
+</section></div>

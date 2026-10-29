@@ -1,0 +1,372 @@
+<!DOCTYPE html><html lang="en" class="js-focus-visible js" data-js-focus-visible=""><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Website with the collection of all the cheat sheets of the project.">
+      
+      
+      
+        <link rel="canonical" href="https://cheatsheetseries.owasp.org/cheatsheets/WebSocket_Security_Cheat_Sheet.html">
+      
+      
+        <link rel="prev" href="Vulnerable_Dependency_Management_Cheat_Sheet.html">
+      
+      
+        <link rel="next" href="Web_Cache_Security_Cheat_Sheet.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/WebSite_Favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>WebSocket Security - OWASP Cheat Sheet Series</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <meta name="theme-color" content="#4051b5"><meta name="color-scheme" content="light"></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" style="margin-right: 0px; padding-right: 0px; overflow: auto;">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#websocket-security-cheat-sheet" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              
+            
+            
+              
+              
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="websocket-security-cheat-sheet">WebSocket Security Cheat Sheet<a class="headerlink" href="#websocket-security-cheat-sheet" title="Permanent link">¶</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">¶</a></h2>
+<p>WebSockets enable real-time, bidirectional communication between clients and servers, powering applications like chat systems, live trading platforms, and collaborative tools. Unlike traditional HTTP requests, WebSocket connections remain open and allow continuous data exchange.</p>
+<p>However, WebSockets introduce security challenges that differ from standard web application security:</p>
+<ul>
+<li><strong>Cross-Site WebSocket Hijacking (CSWSH)</strong>: Attackers hijack authenticated connections from malicious websites</li>
+<li><strong>Authentication bypass</strong>: No built-in authentication makes access control easy to forget</li>
+<li><strong>Injection attacks</strong>: WebSocket messages can carry XSS, SQL injection, and other malicious payloads</li>
+<li><strong>Denial-of-service</strong>: Persistent connections enable new DoS attack vectors like connection exhaustion</li>
+<li><strong>Monitoring gaps</strong>: Traditional HTTP logs only capture the initial upgrade request, missing all message traffic</li>
+</ul>
+<p><strong>Real-world vulnerabilities:</strong></p>
+<ul>
+<li><strong>Gitpod CSWSH (2023)</strong>: <a href="https://github.com/advisories/GHSA-f53g-frr2-jhpf">Insufficient origin validation</a> allowed full account takeover via hijacked WebSocket connections</li>
+<li><strong>Spring RCE vulnerability</strong>: <a href="https://spring.io/security/cve-2018-1270">CVE-2018-1270</a> let attackers execute code through crafted STOMP messages</li>
+</ul>
+<h2 id="primary-defenses">Primary Defenses<a class="headerlink" href="#primary-defenses" title="Permanent link">¶</a></h2>
+<h3 id="transport-security">Transport Security<a class="headerlink" href="#transport-security" title="Permanent link">¶</a></h3>
+<h4 id="always-use-wss-websocket-secure">Always Use WSS (WebSocket Secure)<a class="headerlink" href="#always-use-wss-websocket-secure" title="Permanent link">¶</a></h4>
+<p>Never use unencrypted <code>ws://</code> connections in production. Unencrypted <code>ws://</code> connections allow eavesdropping and tampering.</p>
+<div class="highlight"><pre id="__code_0"><span></span><code><span class="c1">// Secure - always use this</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">(</span><span class="s1">'wss://app.example.com/socket'</span><span class="p">);</span>
+
+<span class="c1">// Insecure - never use in production</span>
+<span class="c1">// const socket = new WebSocket('ws://app.example.com/socket');</span>
+</code></pre></div>
+<p>See the <a href="Transport_Layer_Security_Cheat_Sheet.html">Transport Layer Security Cheat Sheet</a> for more details.</p>
+<h4 id="websocket-protocol-configuration">WebSocket Protocol Configuration<a class="headerlink" href="#websocket-protocol-configuration" title="Permanent link">¶</a></h4>
+<p><strong>Use modern protocol versions:</strong></p>
+<p>Only support <a href="https://datatracker.ietf.org/doc/html/rfc6455">RFC 6455</a> (the current WebSocket standard). Drop backward compatibility for outdated versions like <a href="https://datatracker.ietf.org/doc/html/draft-hixie-thewebsocketprotocol-76">Hixie-76</a> and <a href="https://datatracker.ietf.org/doc/html/draft-ietf-hybi-thewebsocketprotocol-00">hybi-00</a> which have known security vulnerabilities.</p>
+<p><strong>Compression security:</strong></p>
+<p>Disable <code>permessage-deflate</code> compression unless specifically needed. Compression can introduce security vulnerabilities similar to CRIME/BREACH attacks where compression combined with secret data can leak information.</p>
+<div class="highlight"><pre id="__code_1"><span></span><code><span class="c1">// Node.js - disable compression for security</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">wss</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">.</span><span class="nx">Server</span><span class="p">({</span>
+<span class="w">  </span><span class="nx">perMessageDeflate</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">});</span>
+</code></pre></div>
+<h4 id="infrastructure-configuration">Infrastructure Configuration<a class="headerlink" href="#infrastructure-configuration" title="Permanent link">¶</a></h4>
+<p><strong>Proxy and load balancer support:</strong></p>
+<p>Ensure reverse proxies, load balancers, and CDNs are configured to handle WebSocket upgrades:</p>
+<ul>
+<li>Configure proxy to support HTTP/1.1 upgrade mechanism  </li>
+<li>Pass <code>Upgrade</code> and <code>Connection: upgrade</code> headers correctly</li>
+<li>Set proper read timeouts for long-lived connections</li>
+<li>Ensure WebSocket traffic isn't blocked by security policies</li>
+</ul>
+<p><strong>WAF support:</strong></p>
+<p>Check that your WAF supports WebSocket traffic inspection beyond the initial handshake. If not, rely on server-side validation and application logging.</p>
+<h3 id="authentication-and-authorization">Authentication and Authorization<a class="headerlink" href="#authentication-and-authorization" title="Permanent link">¶</a></h3>
+<p>For general identity and session controls, see the <a href="Authentication_Cheat_Sheet.html">Authentication Cheat Sheet</a> and <a href="Session_Management_Cheat_Sheet.html">Session Management Cheat Sheet</a>.</p>
+<p>WebSockets don't have built-in authentication. Browsers include cookies in WebSocket handshake requests, making WebSocket applications vulnerable to Cross-Site WebSocket Hijacking (CSWSH).</p>
+<p>CSWSH allows attackers to hijack authenticated WebSocket connections from malicious websites:</p>
+<ol>
+<li>User logs into your application (session cookie established)</li>
+<li>User later visits a malicious website</li>
+<li>Malicious site opens WebSocket to your application, browser sends cookies automatically</li>
+<li>Server accepts the connection → attacker gets live, authenticated WebSocket access</li>
+</ol>
+<h4 id="origin-header-validation">Origin Header Validation<a class="headerlink" href="#origin-header-validation" title="Permanent link">¶</a></h4>
+<p>Validate the <code>Origin</code> header on every handshake. Always use an explicit allowlist of trusted origins. Browsers include this header and malicious JavaScript cannot override it.</p>
+<p>For Node.js <code>ws</code>, validate the <code>Origin</code> header in the HTTP server's <code>upgrade</code> event before calling <code>handleUpgrade</code>; the library discourages <code>verifyClient</code> (<a href="https://github.com/websockets/ws/blob/master/doc/ws.md#new-websocketserveroptions-callback"><code>ws</code> documentation</a>).</p>
+<p><strong>Important:</strong> Use an allowlist, not a denylist. Avoid wildcards or substring matching which are error-prone.</p>
+<h4 id="additional-cswsh-protections">Additional CSWSH Protections<a class="headerlink" href="#additional-cswsh-protections" title="Permanent link">¶</a></h4>
+<p>For applications already using CSRF protection, include <strong>CSRF tokens</strong> in WebSocket handshakes.</p>
+<h4 id="session-management">Session Management<a class="headerlink" href="#session-management" title="Permanent link">¶</a></h4>
+<p>WebSocket connections often outlive normal sessions, requiring special handling.</p>
+<p><strong>Use SameSite cookies</strong> (<code>SameSite=Lax</code> or <code>Strict</code>) to prevent cross-site cookie transmission and strengthen CSWSH defenses.</p>
+<p><strong>Handle session expiration</strong> by implementing server-side validation for long-running connections. Close WebSocket connections when sessions expire. Re-validate user sessions periodically (every 30 minutes is common) to ensure they remain valid.</p>
+<div class="highlight"><pre id="__code_2"><span></span><code><span class="c1">// Example: Close WebSocket on session expiry</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">validateSession</span><span class="p">(</span><span class="nx">ws</span><span class="p">,</span><span class="w"> </span><span class="nx">sessionId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">isSessionValid</span><span class="p">(</span><span class="nx">sessionId</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ws</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span><span class="mf">1008</span><span class="p">,</span><span class="w"> </span><span class="s1">'Session expired'</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>When users log out</strong>, close all their WebSocket connections immediately. Maintain a mapping of sessions to active connections so you can invalidate WebSocket access the moment logout occurs.</p>
+<p><strong>Token-based authentication:</strong></p>
+<p>For browser clients using tokens, prefer sending the token in the first message over WSS. Avoid tokens in URL query strings because they can leak into access logs; see the <a href="https://websockets.readthedocs.io/en/stable/topics/authentication.html#sending-credentials"><code>websockets</code> authentication guidance</a>.</p>
+<p>Until token validation succeeds, accept only the authentication message and do not send protected data. Close the connection on authentication failure or timeout, and <a href="#denial-of-service-protection">limit unauthenticated connections</a>. Message-based authentication keeps tokens out of the handshake URL, but tokens must also be excluded from message logs.</p>
+<p><strong>Token refresh:</strong></p>
+<p>Rotate tokens in long-lived connections to prevent hijacked sessions from persisting.</p>
+<h4 id="message-level-authorization">Message-Level Authorization<a class="headerlink" href="#message-level-authorization" title="Permanent link">¶</a></h4>
+<p>Don't assume WebSocket connection equals unlimited access. Check authorization for each action:</p>
+<div class="highlight"><pre id="__code_3"><span></span><code><span class="nx">ws</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'message'</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Check authorization for each action</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">action</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">'delete_user'</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="nx">user</span><span class="p">.</span><span class="nx">hasRole</span><span class="p">(</span><span class="s1">'admin'</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">'error'</span><span class="p">,</span><span class="w"> </span><span class="nx">message</span><span class="o">:</span><span class="w"> </span><span class="s1">'Access denied'</span><span class="p">}));</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">handleAuthorizedMessage</span><span class="p">(</span><span class="nx">ws</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">message</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<h3 id="input-validation">Input Validation<a class="headerlink" href="#input-validation" title="Permanent link">¶</a></h3>
+<p>Treat all WebSocket messages as untrusted input. WebSocket messages can carry injection payloads such as SQLi, XSS, and command injection.</p>
+<p><strong>Validate message structure and content</strong> using JSON schemas and allow-lists. Set reasonable size limits (typically 64KB or less) and implement rate limiting to prevent message flooding.</p>
+<p><strong>For binary data</strong>, verify file types using magic numbers rather than trusting content-type headers. Scan uploads for malware when appropriate, and use safe deserialization for protocols like protobuf or MessagePack.</p>
+<div class="highlight"><pre id="__code_4"><span></span><code><span class="nx">ws</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'message'</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="nx">isBinary</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">isBinary</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Validate binary data</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nx">MAX_BINARY_SIZE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">ws</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span><span class="mf">1009</span><span class="p">,</span><span class="w"> </span><span class="s1">'Message too large'</span><span class="p">);</span>
+<span class="w">      </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Check file type by magic numbers</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">isValidFileType</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">ws</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span><span class="mf">1008</span><span class="p">,</span><span class="w"> </span><span class="s1">'Invalid file type'</span><span class="p">);</span>
+<span class="w">      </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">processBinaryData</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<p><strong>To prevent message replay attacks</strong> include timestamps or nonces in messages and reject duplicates to ensure old messages cannot be maliciously resent.</p>
+<div class="highlight"><pre id="__code_5"><span></span><code><span class="nx">ws</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'message'</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Check timestamp or nonce to prevent replay</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">isValidNonce</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">nonce</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ws</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span><span class="mf">1008</span><span class="p">,</span><span class="w"> </span><span class="s1">'Replay detected'</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">processMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<p><strong>Always use <code>JSON.parse()</code> instead of <code>eval()</code></strong> for JSON processing - <code>eval()</code> enables code execution from untrusted input.</p>
+<div class="highlight"><pre id="__code_6"><span></span><code><span class="c1">// Safe</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+
+<span class="c1">// Dangerous - enables code execution</span>
+<span class="c1">// const message = eval('(' + data + ')');</span>
+</code></pre></div>
+<p>See the <a href="Input_Validation_Cheat_Sheet.html">Input Validation Cheat Sheet</a>, <a href="Cross_Site_Scripting_Prevention_Cheat_Sheet.html">Cross Site Scripting Prevention Cheat Sheet</a>, and <a href="SQL_Injection_Prevention_Cheat_Sheet.html">SQL Injection Prevention Cheat Sheet</a> for more details.</p>
+<h3 id="service-tunneling-risks">Service Tunneling Risks<a class="headerlink" href="#service-tunneling-risks" title="Permanent link">¶</a></h3>
+<p>While WebSockets can tunnel TCP services (VNC, FTP, SSH), this creates security risks. If your application has XSS vulnerabilities, attackers could access these services directly from victims' browsers. If tunneling is necessary, implement additional authentication and access controls beyond the WebSocket layer.</p>
+<h3 id="denial-of-service-protection">Denial-of-Service Protection<a class="headerlink" href="#denial-of-service-protection" title="Permanent link">¶</a></h3>
+<p>Persistent WebSocket connections increase DoS risk.</p>
+<p><strong>Limit connections and resources</strong> by restricting total connections and implementing per-user limits (preferred) or per-IP limits where user identification isn't available. Set <strong>message size limits</strong> (typically 64KB or less) and implement <strong>rate limiting</strong> to prevent message flooding - 100 messages per minute is a common starting point.</p>
+<p><strong>Handle idle and dead connections</strong> by implementing idle timeouts to close inactive connections. Use <strong>heartbeat monitoring</strong> with ping/pong frames to detect and clean up dead connections.</p>
+<p><strong>Implement backpressure controls</strong> to prevent memory exhaustion from fast message producers. Many WebSocket implementations lack proper flow control, allowing attackers to overwhelm server memory by sending messages faster than they can be processed.</p>
+<div class="highlight"><pre id="__code_7"><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">wss</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">WebSocket</span><span class="p">.</span><span class="nx">Server</span><span class="p">({</span>
+<span class="w">  </span><span class="nx">maxPayload</span><span class="o">:</span><span class="w"> </span><span class="mf">64</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1024</span>
+<span class="p">});</span>
+</code></pre></div>
+<h3 id="security-monitoring-and-logging">Security Monitoring and Logging<a class="headerlink" href="#security-monitoring-and-logging" title="Permanent link">¶</a></h3>
+<p>Traditional HTTP access logs only capture the initial WebSocket upgrade request, not subsequent message traffic. You'll miss auth failures, injection attempts, rate-limit violations, and abuse.</p>
+<p><strong>Log WebSocket events</strong> including connection establishment and termination (with user identity, IP, and origin), authentication and authorization events during handshake and message processing, security violations like rate limiting triggers and message validation failures, and abnormal disconnections and protocol errors.</p>
+<p><strong>Avoid logging sensitive data</strong> - never log complete message contents, authentication tokens, session IDs, or personal information that could violate privacy regulations.</p>
+<p>See the <a href="Logging_Cheat_Sheet.html">Logging Cheat Sheet</a> for more details.</p>
+<h3 id="testing-websocket-security">Testing WebSocket Security<a class="headerlink" href="#testing-websocket-security" title="Permanent link">¶</a></h3>
+<p><strong>Key security tests:</strong></p>
+<ul>
+<li><strong>Origin validation</strong>: Connect from unauthorized domains</li>
+<li><strong>Authentication bypass</strong>: Attempt connections without proper credentials</li>
+<li><strong>Message injection</strong>: Send XSS, SQL injection, and command injection payloads</li>
+<li><strong>DoS resistance</strong>: Test connection limits, message flooding, and oversized messages</li>
+<li><strong>Session management</strong>: Test session expiration and logout handling</li>
+</ul>
+<p><strong>Testing tools:</strong></p>
+<ul>
+<li>Browser developer tools for manual testing</li>
+<li><a href="https://github.com/websockets/wscat">wscat</a> for command-line WebSocket connections</li>
+<li>Custom scripts for automated vulnerability testing</li>
+<li>OWASP ZAP (includes WebSocket security testing features)</li>
+</ul>
+<h3 id="framework-specific-best-practices">Framework-Specific Best Practices<a class="headerlink" href="#framework-specific-best-practices" title="Permanent link">¶</a></h3>
+<p><strong>Node.js:</strong> With <code>ws</code>, perform origin and authentication checks in the HTTP server's <code>upgrade</code> event; set <code>maxPayload</code> limits and disable <code>perMessageDeflate</code> compression unless needed.</p>
+<p><strong>Python:</strong> With Django Channels, implement authentication middleware and origin validation. Use async exception handling to prevent application crashes from malformed WebSocket messages.</p>
+<p><strong>Java Spring:</strong> Configure allowed origins explicitly and integrate Spring Security for authorization. Set message size limits in your WebSocket container configuration to prevent resource exhaustion.</p>
+<p><strong>Go:</strong> When using Gorilla WebSocket, implement validation in your <code>CheckOrigin</code> function - don't just return <code>true</code>. Set read limits, implement timeouts, and use context cancellation for graceful connection cleanup.</p>
+<h4 id="keep-dependencies-updated">Keep Dependencies Updated<a class="headerlink" href="#keep-dependencies-updated" title="Permanent link">¶</a></h4>
+<p>Regularly update WebSocket libraries and monitor security advisories. Past versions of popular libraries (<code>ws</code>, Spring STOMP, Python <code>websockets</code>) have had critical security vulnerabilities including DoS and RCE issues.</p>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc6455">RFC 6455: The WebSocket Protocol</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/1385.html">CWE-1385: Missing Origin Validation in WebSockets</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      ©Copyright <script>document.write(new Date().getFullYear())</script>2026 - Cheat Sheets Series Team - This work is licensed under <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International</a>.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  
+</body></html>
