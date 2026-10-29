@@ -211,8 +211,8 @@ A screenshot of the Site is context the parent must not spend.
 - The dev server already runs at `http://localhost:9999`. Point the lane there; never start another
   server to look at a page.
 - The lane drives Brave over CDP with a throwaway profile (`--remote-debugging-port=9222`,
-  `--user-data-dir=/tmp/brave-cdp-profile`), reads `document.body.innerText` and
-  `getComputedStyle`, and reports the facts.
+  `--user-data-dir=/tmp/brave-cdp-profile`), reads `document.body.innerText` and `getComputedStyle`,
+  and reports the facts.
 - The brief names the route, the viewport, the state to reach (a filter typed, a node selected) and
   the exact questions, so the answer cannot be "looks good".
 - The parent confirms a claim by reading the built `Site/Target/`, and loads an image only when the

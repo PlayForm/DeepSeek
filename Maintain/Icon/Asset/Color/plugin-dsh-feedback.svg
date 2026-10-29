@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/plugin-dsh-feedback - interlace-tile">
+	<title>@playform/plugin-dsh-feedback - interlace-tile</title>
+	<style>
+		@media (prefers-reduced-motion: no-preference) {
+			.plugin-dsh-feedback-scene * { transform-box: view-box; transform-origin: 50% 50%; }
+		.plugin-dsh-feedback-counter { animation: plugin-dsh-feedback-counter 21s linear -6s infinite; }
+		@keyframes plugin-dsh-feedback-counter { to { transform: rotate(-360deg); } }
+		.plugin-dsh-feedback-breathe { animation: plugin-dsh-feedback-breathe 5s ease-in-out -6s infinite; }
+		@keyframes plugin-dsh-feedback-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
+		.plugin-dsh-feedback-fire { animation: plugin-dsh-feedback-fire 2.8s ease-in-out infinite; }
+		@keyframes plugin-dsh-feedback-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+		.plugin-dsh-feedback-twinkle { animation: plugin-dsh-feedback-twinkle 11s ease-in-out -6s infinite; }
+		@keyframes plugin-dsh-feedback-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+		}
+	</style>
+	<defs>
+		<path id="plugin-dsh-feedback-0" d="M94,50 L72,88 L28,88 L6,50 L28,12 L72,12 Z"/>
+		<path id="plugin-dsh-feedback-1" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
+		<path id="plugin-dsh-feedback-2" d="M92,48 L86,50 L92,52 Z"/>
+		<path id="plugin-dsh-feedback-3" d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z"/>
+		<path id="plugin-dsh-feedback-4" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
+		<path id="plugin-dsh-feedback-5" d="M33,66 L33,67 L32,67 L32,66 L32,66 L33,66 Z"/>
+		<path id="plugin-dsh-feedback-6" d="M45,27 L45,27 L44,27 L44,27 L44,26 L45,26 Z"/>
+		<path id="plugin-dsh-feedback-7" d="M76,65 L26,78 L42,32 Z M54,55 L77,87 L76,88 L53,55 Z M72,48 L71,50 L71,51 L69,52 L68,52 L66,52 L65,51 L64,50 L64,48 L64,47 L65,46 L66,45 L68,45 L69,45 L71,46 L71,47 Z M50,56 L54,96 L52,96 L50,56 Z M45,53 L10,73 L9,71 L45,53 Z M30,52 L30,54 L29,55 L28,56 L26,56 L25,56 L23,55 L23,54 L22,52 L23,51 L23,50 L25,49 L26,48 L28,49 L29,50 L30,51 Z M44,48 L6,35 L7,33 L44,48 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="plugin-dsh-feedback-8" d="M89,69 L90,71 L88,71 Z"/>
+		<path id="plugin-dsh-feedback-9" d="M84,64 L86,67 L83,67 Z"/>
+		<path id="plugin-dsh-feedback-10" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+	</defs>
+	<g class="plugin-dsh-feedback-scene">
+	<g fill="#ECCA9F" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-feedback-breathe" href="#plugin-dsh-feedback-0"/>
+	</g>
+	<g fill="#F09A6B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-feedback-breathe" href="#plugin-dsh-feedback-1"/>
+	</g>
+	<g fill="#B04523" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-feedback-fire" style="animation-delay:-6.00s" href="#plugin-dsh-feedback-2"/>
+	</g>
+	<g fill="#F09A6B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-feedback-breathe" href="#plugin-dsh-feedback-3"/>
+		<use class="plugin-dsh-feedback-counter" href="#plugin-dsh-feedback-4"/>
+		<use class="plugin-dsh-feedback-counter" href="#plugin-dsh-feedback-5"/>
+		<use class="plugin-dsh-feedback-counter" href="#plugin-dsh-feedback-6"/>
+	</g>
+	<g fill="#2A1823" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use href="#plugin-dsh-feedback-7"/>
+	</g>
+	<g fill="#F09A6B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-feedback-twinkle" href="#plugin-dsh-feedback-8"/>
+	</g>
+	<g fill="#B04523" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-feedback-twinkle" href="#plugin-dsh-feedback-9"/>
+		<use class="plugin-dsh-feedback-breathe" href="#plugin-dsh-feedback-10"/>
+	</g>
+	</g>
+</svg>

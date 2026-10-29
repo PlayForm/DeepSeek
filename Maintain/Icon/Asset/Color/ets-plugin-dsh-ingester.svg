@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/ets-plugin-dsh-ingester - interlace-tile">
+	<title>@playform/ets-plugin-dsh-ingester - interlace-tile</title>
+	<style>
+		@media (prefers-reduced-motion: no-preference) {
+			.ets-plugin-dsh-ingester-scene * { transform-box: view-box; transform-origin: 50% 50%; }
+		.ets-plugin-dsh-ingester-counter { animation: ets-plugin-dsh-ingester-counter 22s linear -6s infinite; }
+		@keyframes ets-plugin-dsh-ingester-counter { to { transform: rotate(-360deg); } }
+		.ets-plugin-dsh-ingester-breathe { animation: ets-plugin-dsh-ingester-breathe 6s ease-in-out -6s infinite; }
+		@keyframes ets-plugin-dsh-ingester-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
+		.ets-plugin-dsh-ingester-fire { animation: ets-plugin-dsh-ingester-fire 2.7s ease-in-out infinite; }
+		@keyframes ets-plugin-dsh-ingester-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+		.ets-plugin-dsh-ingester-twinkle { animation: ets-plugin-dsh-ingester-twinkle 7s ease-in-out -6s infinite; }
+		@keyframes ets-plugin-dsh-ingester-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+		.ets-plugin-dsh-ingester-trace { animation: ets-plugin-dsh-ingester-trace 6s ease-in-out -6s infinite; }
+		@keyframes ets-plugin-dsh-ingester-trace { 0%, 100% { transform: translate(0, 0); opacity: 1; } 50% { transform: translate(1.4px, -1.4px); opacity: 0.35; } }
+		}
+	</style>
+	<defs>
+		<path id="ets-plugin-dsh-ingester-0" d="M94,50 L72,88 L28,88 L6,50 L28,12 L72,12 Z"/>
+		<path id="ets-plugin-dsh-ingester-1" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
+		<path id="ets-plugin-dsh-ingester-2" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
+		<path id="ets-plugin-dsh-ingester-3" d="M75,53 L74,54 L73,54 L73,53 L73,52 L74,52 Z"/>
+		<path id="ets-plugin-dsh-ingester-4" d="M92,48 L86,50 L92,52 Z"/>
+		<path id="ets-plugin-dsh-ingester-5" d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z"/>
+		<path id="ets-plugin-dsh-ingester-6" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
+		<path id="ets-plugin-dsh-ingester-7" d="M84,51 L26,69 L42,10 Z M55,54 L87,78 L86,79 L55,54 Z M59,33 L58,34 L58,35 L57,36 L56,36 L54,36 L53,35 L53,34 L52,33 L53,32 L53,31 L54,30 L56,30 L57,30 L58,31 L58,32 Z M51,56 L58,95 L56,96 L51,56 Z M45,53 L10,73 L9,71 L45,53 Z M34,37 L34,38 L33,40 L32,41 L30,41 L28,41 L27,40 L26,38 L26,37 L26,35 L27,34 L28,33 L30,32 L32,33 L33,34 L34,35 Z M46,46 L18,17 L20,15 L46,45 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="ets-plugin-dsh-ingester-8" d="M33,66 L33,67 L32,67 L32,66 L32,66 L33,66 Z"/>
+		<path id="ets-plugin-dsh-ingester-9" d="M45,27 L45,27 L44,27 L44,27 L44,26 L45,26 Z"/>
+		<path id="ets-plugin-dsh-ingester-10" d="M22,15 L22,10 L26,11 Z"/>
+		<path id="ets-plugin-dsh-ingester-11" d="M38,89 L35,91 L34,87 Z"/>
+		<path id="ets-plugin-dsh-ingester-12" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+	</defs>
+	<g class="ets-plugin-dsh-ingester-scene">
+	<g fill="#F8D3A7" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="ets-plugin-dsh-ingester-breathe" href="#ets-plugin-dsh-ingester-0"/>
+	</g>
+	<g fill="#E97E3B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="ets-plugin-dsh-ingester-breathe" href="#ets-plugin-dsh-ingester-1"/>
+		<use class="ets-plugin-dsh-ingester-breathe" href="#ets-plugin-dsh-ingester-2"/>
+		<use class="ets-plugin-dsh-ingester-counter" href="#ets-plugin-dsh-ingester-3"/>
+	</g>
+	<g fill="#F67D55" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="ets-plugin-dsh-ingester-fire" style="animation-delay:-6.00s" href="#ets-plugin-dsh-ingester-4"/>
+	</g>
+	<g fill="#E97E3B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="ets-plugin-dsh-ingester-breathe" href="#ets-plugin-dsh-ingester-5"/>
+		<use class="ets-plugin-dsh-ingester-counter" href="#ets-plugin-dsh-ingester-6"/>
+	</g>
+	<g fill="#3A2018" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use href="#ets-plugin-dsh-ingester-7"/>
+	</g>
+	<g fill="#E97E3B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="ets-plugin-dsh-ingester-counter" href="#ets-plugin-dsh-ingester-8"/>
+		<use class="ets-plugin-dsh-ingester-counter" href="#ets-plugin-dsh-ingester-9"/>
+		<use class="ets-plugin-dsh-ingester-twinkle" href="#ets-plugin-dsh-ingester-10"/>
+	</g>
+	<g fill="#F67D55" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="ets-plugin-dsh-ingester-twinkle" href="#ets-plugin-dsh-ingester-11"/>
+		<use class="ets-plugin-dsh-ingester-breathe" href="#ets-plugin-dsh-ingester-12"/>
+	</g>
+	<g class="ets-plugin-dsh-ingester-trace" fill="#3A2018" fill-opacity="0.18" fill-rule="evenodd" stroke="none">
+		<g transform="translate(1.2,-1.2)">
+			<use href="#ets-plugin-dsh-ingester-7"/>
+		</g>
+	</g>
+	</g>
+</svg>

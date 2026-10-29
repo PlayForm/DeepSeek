@@ -69,6 +69,13 @@ marketplace.json
 Test
 Test/**
 
+# The site's submodule checkout - a second, full copy of THIS repository
+# (13,781 files) that the site builds from. It is another repository's working
+# tree: formatting it would dirty that checkout, make the site's
+# Module/DeepSeek show as modified content, and block `git submodule update`.
+Site/Module/DeepSeek
+Site/Module/DeepSeek/**
+
 # File types Prettier has no parser for. The CLI skips unknown extensions
 # silently when it walks a directory, but the editor passes ONE file and would
 # fail with "No parser could be inferred" - listing them here makes Alt+F and

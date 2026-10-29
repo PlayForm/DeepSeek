@@ -35,7 +35,8 @@ exclude = [
 
 # Exclude file paths from the scan (the dependencies, the build output,
 # the VCS internals, the local smoke fixtures, the lockfiles, the
-# generated report itself)
+# generated report itself, and the site's submodule checkout - a second full
+# copy of this repository whose links belong to its own run)
 exclude_path = [
 	"node_modules",
 	"Target",
@@ -45,6 +46,7 @@ exclude_path = [
 	"Test/fixtures",
 	"pnpm-lock.yaml",
 	"lychee-report.md",
+	"Site/Module/DeepSeek",
 ]
 
 # The request schemes to check. "file" is required: without it lychee skips

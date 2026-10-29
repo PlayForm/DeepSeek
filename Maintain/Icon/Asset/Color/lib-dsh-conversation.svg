@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/lib-dsh-conversation - crescent-ring">
+	<title>@playform/lib-dsh-conversation - crescent-ring</title>
+	<style>
+		@media (prefers-reduced-motion: no-preference) {
+			.lib-dsh-conversation-scene * { transform-box: view-box; transform-origin: 50% 50%; }
+		.lib-dsh-conversation-breathe { animation: lib-dsh-conversation-breathe 5s ease-in-out -6s infinite; }
+		@keyframes lib-dsh-conversation-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
+		.lib-dsh-conversation-twinkle { animation: lib-dsh-conversation-twinkle 9s ease-in-out -6s infinite; }
+		@keyframes lib-dsh-conversation-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+		}
+	</style>
+	<defs>
+		<path id="lib-dsh-conversation-0" d="M91,67 L88,73 L83,79 L79,83 L73,88 L67,91 L60,93 L53,94 L47,94 L40,93 L33,91 L27,88 L21,83 L17,79 L12,73 L9,67 L7,60 L6,53 L6,47 L7,40 L9,33 L12,27 L17,21 L21,17 L27,12 L33,9 L40,7 L47,6 L53,6 L60,7 L67,9 L73,12 L79,17 L83,21 L88,27 L91,33 L93,40 L94,47 L94,53 L93,60 Z"/>
+		<path id="lib-dsh-conversation-1" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
+		<path id="lib-dsh-conversation-2" d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z"/>
+		<path id="lib-dsh-conversation-3" d="M77,66 L47,68 L21,66 L32,41 L51,19 L65,39 Z M54,55 L79,86 L78,87 L54,55 Z M70,46 L70,47 L69,48 L69,48 L67,49 L66,48 L65,48 L65,47 L65,46 L65,45 L65,44 L66,43 L67,43 L69,43 L69,44 L70,45 Z M47,55 L25,89 L24,88 L47,55 Z M45,53 L10,72 L9,70 L45,53 Z M30,47 L29,48 L29,49 L28,50 L26,50 L25,50 L24,49 L23,48 L23,47 L23,45 L24,44 L25,43 L26,43 L28,43 L29,44 L29,45 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="lib-dsh-conversation-4" d="M67,84 L67,87 L64,85 Z"/>
+		<path id="lib-dsh-conversation-5" d="M40,85 L37,88 L36,84 Z"/>
+		<path id="lib-dsh-conversation-6" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+	</defs>
+	<g class="lib-dsh-conversation-scene">
+	<g fill="#ECD3B9" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="lib-dsh-conversation-breathe" href="#lib-dsh-conversation-0"/>
+	</g>
+	<g fill="#A66BB8" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="lib-dsh-conversation-breathe" href="#lib-dsh-conversation-1"/>
+		<use class="lib-dsh-conversation-breathe" href="#lib-dsh-conversation-2"/>
+	</g>
+	<g fill="#33204A" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use href="#lib-dsh-conversation-3"/>
+	</g>
+	<g fill="#A66BB8" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="lib-dsh-conversation-twinkle" href="#lib-dsh-conversation-4"/>
+	</g>
+	<g fill="#B07CC6" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="lib-dsh-conversation-twinkle" href="#lib-dsh-conversation-5"/>
+		<use class="lib-dsh-conversation-breathe" href="#lib-dsh-conversation-6"/>
+	</g>
+	</g>
+</svg>

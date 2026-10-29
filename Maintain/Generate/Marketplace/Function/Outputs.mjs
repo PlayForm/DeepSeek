@@ -1,16 +1,9 @@
-import { existsSync } from "node:fs";
 import { join } from "node:path";
 
 import Root from "../../../Common/Function/Root.mjs";
 
-export default () => {
-	const Outputs = [join(Root, "marketplace.json")];
-	if (existsSync(join(Root, "Site", "Public"))) {
-		Outputs.push(join(Root, "Site", "Public", "marketplace.json"));
-		return Outputs;
-	}
-	console.log(
-		"Site/Public is absent - writing the root index only (the site tree is a separate repository).",
-	);
-	return Outputs;
-};
+// The index is written into this repository only. The site is its own
+// repository: it reads this file through its Module/DeepSeek submodule and
+// publishes its own copy at build time, so a write into Site/ here would be a
+// write into another repository's working tree.
+export default () => [join(Root, "marketplace.json")];

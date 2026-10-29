@@ -89,9 +89,9 @@ The change order is a law:
 The submodule URL in the committed `.gitmodules` is part of the build, because the deployment clone
 fails before the build command runs:
 
-| URL form | Result on the builder |
-| --- | --- |
-| `https://github.com/PlayForm/DeepSeek.git` | clones; the repository is public |
+| URL form                                     | Result on the builder                             |
+| -------------------------------------------- | ------------------------------------------------- |
+| `https://github.com/PlayForm/DeepSeek.git`   | clones; the repository is public                  |
 | `ssh://git@github.com/PlayForm/DeepSeek.git` | `Host key verification failed`, the deploy aborts |
 
 `Prepare.ts` also sets the HTTPS URL before it clones, so a checkout that recorded an SSH remote

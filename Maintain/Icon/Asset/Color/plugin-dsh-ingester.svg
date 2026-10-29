@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/plugin-dsh-ingester - interlace-tile">
+	<title>@playform/plugin-dsh-ingester - interlace-tile</title>
+	<style>
+		@media (prefers-reduced-motion: no-preference) {
+			.plugin-dsh-ingester-scene * { transform-box: view-box; transform-origin: 50% 50%; }
+		.plugin-dsh-ingester-counter { animation: plugin-dsh-ingester-counter 24s linear -4s infinite; }
+		@keyframes plugin-dsh-ingester-counter { to { transform: rotate(-360deg); } }
+		.plugin-dsh-ingester-breathe { animation: plugin-dsh-ingester-breathe 5s ease-in-out -4s infinite; }
+		@keyframes plugin-dsh-ingester-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
+		.plugin-dsh-ingester-fire { animation: plugin-dsh-ingester-fire 2.7s ease-in-out infinite; }
+		@keyframes plugin-dsh-ingester-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+		.plugin-dsh-ingester-twinkle { animation: plugin-dsh-ingester-twinkle 12s ease-in-out -4s infinite; }
+		@keyframes plugin-dsh-ingester-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+		}
+	</style>
+	<defs>
+		<path id="plugin-dsh-ingester-0" d="M94,50 L72,88 L28,88 L6,50 L28,12 L72,12 Z"/>
+		<path id="plugin-dsh-ingester-1" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
+		<path id="plugin-dsh-ingester-2" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
+		<path id="plugin-dsh-ingester-3" d="M75,53 L74,54 L73,54 L73,53 L73,52 L74,52 Z"/>
+		<path id="plugin-dsh-ingester-4" d="M92,48 L86,50 L92,52 Z"/>
+		<path id="plugin-dsh-ingester-5" d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z"/>
+		<path id="plugin-dsh-ingester-6" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
+		<path id="plugin-dsh-ingester-7" d="M81,44 L33,70 L31,11 Z M55,53 L92,69 L91,70 L55,53 Z M57,68 L56,69 L56,71 L54,72 L52,72 L51,72 L49,71 L49,69 L48,68 L49,66 L49,65 L51,64 L52,64 L54,64 L56,65 L56,66 Z M52,56 L66,93 L65,94 L52,56 Z M46,54 L18,83 L16,82 L46,54 Z M41,70 L40,71 L39,73 L38,74 L37,74 L35,74 L34,73 L33,71 L33,70 L33,69 L34,67 L35,66 L37,66 L38,66 L39,67 L40,69 Z M44,48 L7,35 L8,32 L44,48 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="plugin-dsh-ingester-8" d="M33,66 L33,67 L32,67 L32,66 L32,66 L33,66 Z"/>
+		<path id="plugin-dsh-ingester-9" d="M45,27 L45,27 L44,27 L44,27 L44,26 L45,26 Z"/>
+		<path id="plugin-dsh-ingester-10" d="M18,23 L17,19 L21,19 Z"/>
+		<path id="plugin-dsh-ingester-11" d="M64,90 L63,92 L62,90 Z"/>
+		<path id="plugin-dsh-ingester-12" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+	</defs>
+	<g class="plugin-dsh-ingester-scene">
+	<g fill="#F6D3A3" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-ingester-breathe" href="#plugin-dsh-ingester-0"/>
+	</g>
+	<g fill="#FBBA5B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-ingester-breathe" href="#plugin-dsh-ingester-1"/>
+		<use class="plugin-dsh-ingester-breathe" href="#plugin-dsh-ingester-2"/>
+		<use class="plugin-dsh-ingester-counter" href="#plugin-dsh-ingester-3"/>
+	</g>
+	<g fill="#E97E3B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-ingester-fire" style="animation-delay:-4.00s" href="#plugin-dsh-ingester-4"/>
+	</g>
+	<g fill="#FBBA5B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-ingester-breathe" href="#plugin-dsh-ingester-5"/>
+		<use class="plugin-dsh-ingester-counter" href="#plugin-dsh-ingester-6"/>
+	</g>
+	<g fill="#2A1823" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use href="#plugin-dsh-ingester-7"/>
+	</g>
+	<g fill="#FBBA5B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-ingester-counter" href="#plugin-dsh-ingester-8"/>
+		<use class="plugin-dsh-ingester-counter" href="#plugin-dsh-ingester-9"/>
+		<use class="plugin-dsh-ingester-twinkle" href="#plugin-dsh-ingester-10"/>
+	</g>
+	<g fill="#E97E3B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-ingester-twinkle" href="#plugin-dsh-ingester-11"/>
+		<use class="plugin-dsh-ingester-breathe" href="#plugin-dsh-ingester-12"/>
+	</g>
+	</g>
+</svg>

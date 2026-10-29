@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/plugin-dsh-queue - interlace-tile">
+	<title>@playform/plugin-dsh-queue - interlace-tile</title>
+	<style>
+		@media (prefers-reduced-motion: no-preference) {
+			.plugin-dsh-queue-scene * { transform-box: view-box; transform-origin: 50% 50%; }
+		.plugin-dsh-queue-counter { animation: plugin-dsh-queue-counter 23s linear -6s infinite; }
+		@keyframes plugin-dsh-queue-counter { to { transform: rotate(-360deg); } }
+		.plugin-dsh-queue-breathe { animation: plugin-dsh-queue-breathe 6s ease-in-out -6s infinite; }
+		@keyframes plugin-dsh-queue-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
+		.plugin-dsh-queue-fire { animation: plugin-dsh-queue-fire 2.7s ease-in-out infinite; }
+		@keyframes plugin-dsh-queue-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+		.plugin-dsh-queue-twinkle { animation: plugin-dsh-queue-twinkle 9s ease-in-out -6s infinite; }
+		@keyframes plugin-dsh-queue-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+		}
+	</style>
+	<defs>
+		<path id="plugin-dsh-queue-0" d="M94,50 L72,88 L28,88 L6,50 L28,12 L72,12 Z"/>
+		<path id="plugin-dsh-queue-1" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
+		<path id="plugin-dsh-queue-2" d="M67,50 L66,54 L65,59 L62,62 L59,65 L54,66 L50,67 L46,66 L42,65 L38,62 L35,59 L34,54 L33,50 L34,46 L35,42 L38,38 L41,35 L46,34 L50,33 L54,34 L59,35 L62,38 L65,41 L66,46 Z M65,50 L64,54 L63,57 L60,60 L57,63 L54,64 L50,65 L46,64 L43,63 L40,60 L37,57 L36,54 L35,50 L36,46 L37,43 L40,40 L43,37 L46,36 L50,35 L54,36 L57,37 L60,40 L63,43 L64,46 Z"/>
+		<path id="plugin-dsh-queue-3" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
+		<path id="plugin-dsh-queue-4" d="M92,48 L86,50 L92,52 Z"/>
+		<path id="plugin-dsh-queue-5" d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z"/>
+		<path id="plugin-dsh-queue-6" d="M73,50 L72,55 L71,60 L68,64 L64,68 L60,71 L55,72 L50,73 L45,72 L40,71 L36,68 L32,64 L29,60 L28,55 L27,50 L28,45 L29,40 L32,36 L36,32 L40,29 L45,28 L50,27 L55,28 L60,29 L64,32 L68,36 L71,40 L72,45 Z M72,50 L71,55 L69,59 L67,63 L63,67 L59,69 L55,71 L50,72 L45,71 L41,69 L37,67 L33,63 L31,59 L29,55 L28,50 L29,45 L31,41 L33,37 L37,33 L41,31 L45,29 L50,28 L55,29 L59,31 L63,33 L67,37 L69,41 L71,45 Z"/>
+		<path id="plugin-dsh-queue-7" d="M96,37 L35,71 L33,4 Z M55,53 L90,73 L89,74 L55,53 Z M47,67 L47,68 L46,69 L45,70 L44,70 L43,70 L42,69 L41,68 L41,67 L41,66 L42,65 L43,64 L44,64 L45,64 L46,65 L47,66 Z M52,55 L68,92 L67,93 L52,56 Z M44,52 L7,67 L7,65 L44,52 Z M75,63 L74,64 L73,66 L72,66 L70,67 L69,66 L67,66 L67,64 L66,63 L67,61 L67,60 L69,59 L70,58 L72,59 L73,60 L74,61 Z M44,49 L4,46 L5,43 L44,49 Z M49,44 L40,5 L43,5 L49,44 Z M26,63 L26,65 L25,66 L24,66 L23,67 L22,66 L21,66 L20,65 L20,63 L20,62 L21,61 L22,60 L23,60 L24,60 L25,61 L26,62 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="plugin-dsh-queue-8" d="M76,50 L75,56 L73,61 L70,66 L66,70 L61,73 L56,75 L50,76 L44,75 L39,73 L34,70 L30,66 L27,61 L25,56 L24,50 L25,44 L27,39 L30,34 L34,30 L39,27 L44,25 L50,24 L56,25 L61,27 L66,30 L70,34 L73,39 L75,44 Z M75,50 L74,55 L72,61 L69,65 L65,69 L61,72 L55,74 L50,75 L45,74 L39,72 L35,69 L31,65 L28,61 L26,55 L25,50 L26,45 L28,39 L31,35 L35,31 L39,28 L45,26 L50,25 L55,26 L61,28 L65,31 L69,35 L72,39 L74,45 Z"/>
+		<path id="plugin-dsh-queue-9" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
+		<path id="plugin-dsh-queue-10" d="M33,66 L33,67 L32,67 L32,66 L32,66 L33,66 Z"/>
+		<path id="plugin-dsh-queue-11" d="M45,27 L45,27 L44,27 L44,27 L44,26 L45,26 Z"/>
+		<path id="plugin-dsh-queue-12" d="M49,97 L46,97 L45,97 Z"/>
+		<path id="plugin-dsh-queue-13" d="M75,95 L74,97 L70,97 Z"/>
+		<path id="plugin-dsh-queue-14" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+	</defs>
+	<g class="plugin-dsh-queue-scene">
+	<g fill="#ECCA9F" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-queue-breathe" href="#plugin-dsh-queue-0"/>
+	</g>
+	<g fill="#F09A6B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-queue-breathe" href="#plugin-dsh-queue-1"/>
+		<use class="plugin-dsh-queue-breathe" href="#plugin-dsh-queue-2"/>
+		<use class="plugin-dsh-queue-breathe" href="#plugin-dsh-queue-3"/>
+	</g>
+	<g fill="#B04523" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-queue-fire" style="animation-delay:-6.00s" href="#plugin-dsh-queue-4"/>
+	</g>
+	<g fill="#F09A6B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-queue-breathe" href="#plugin-dsh-queue-5"/>
+		<use class="plugin-dsh-queue-breathe" href="#plugin-dsh-queue-6"/>
+	</g>
+	<g fill="#33202E" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use href="#plugin-dsh-queue-7"/>
+	</g>
+	<g fill="#F09A6B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-queue-breathe" href="#plugin-dsh-queue-8"/>
+		<use class="plugin-dsh-queue-counter" href="#plugin-dsh-queue-9"/>
+		<use class="plugin-dsh-queue-counter" href="#plugin-dsh-queue-10"/>
+		<use class="plugin-dsh-queue-counter" href="#plugin-dsh-queue-11"/>
+		<use class="plugin-dsh-queue-twinkle" href="#plugin-dsh-queue-12"/>
+	</g>
+	<g fill="#B04523" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-queue-twinkle" href="#plugin-dsh-queue-13"/>
+		<use class="plugin-dsh-queue-breathe" href="#plugin-dsh-queue-14"/>
+	</g>
+	</g>
+</svg>

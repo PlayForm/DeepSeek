@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/plugin-dsh-factory - interlace-tile">
+	<title>@playform/plugin-dsh-factory - interlace-tile</title>
+	<style>
+		@media (prefers-reduced-motion: no-preference) {
+			.plugin-dsh-factory-scene * { transform-box: view-box; transform-origin: 50% 50%; }
+		.plugin-dsh-factory-counter { animation: plugin-dsh-factory-counter 28s linear -7s infinite; }
+		@keyframes plugin-dsh-factory-counter { to { transform: rotate(-360deg); } }
+		.plugin-dsh-factory-breathe { animation: plugin-dsh-factory-breathe 7s ease-in-out -7s infinite; }
+		@keyframes plugin-dsh-factory-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
+		.plugin-dsh-factory-fire { animation: plugin-dsh-factory-fire 2.7s ease-in-out infinite; }
+		@keyframes plugin-dsh-factory-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+		.plugin-dsh-factory-twinkle { animation: plugin-dsh-factory-twinkle 7s ease-in-out -7s infinite; }
+		@keyframes plugin-dsh-factory-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+		}
+	</style>
+	<defs>
+		<path id="plugin-dsh-factory-0" d="M81,81 L19,81 L19,19 L81,19 Z"/>
+		<path id="plugin-dsh-factory-1" d="M83,36 L83,37 L81,38 L79,37 L78,36 L79,34 L81,33 L83,34 Z"/>
+		<path id="plugin-dsh-factory-2" d="M65,18 L64,20 L62,21 L60,20 L60,18 L60,17 L62,16 L64,17 Z"/>
+		<path id="plugin-dsh-factory-3" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
+		<path id="plugin-dsh-factory-4" d="M97,51 L75,97 L22,96 L3,55 L21,3 L79,6 Z M56,52 L92,68 L92,69 L55,52 Z M45,34 L44,36 L43,37 L42,38 L41,38 L40,38 L38,37 L38,36 L37,34 L38,33 L38,32 L40,31 L41,31 L42,31 L43,32 L44,33 Z M50,56 L50,96 L48,96 L50,56 Z M45,53 L9,70 L8,68 L44,52 Z M30,49 L30,50 L29,52 L28,53 L26,53 L24,53 L23,52 L22,50 L22,49 L22,47 L23,46 L24,45 L26,44 L28,45 L29,46 L30,47 Z M44,49 L5,41 L6,38 L44,48 Z M49,44 L40,5 L43,5 L49,44 Z M72,26 L72,28 L71,29 L70,30 L68,30 L66,30 L65,29 L64,28 L64,26 L64,24 L65,23 L66,22 L68,22 L70,22 L71,23 L72,24 Z M54,46 L82,17 L84,19 L54,46 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="plugin-dsh-factory-5" d="M59,50 L59,52 L58,55 L56,56 L55,58 L52,59 L50,59 L48,59 L46,58 L44,56 L42,55 L41,52 L41,50 L41,48 L42,46 L44,44 L46,42 L48,41 L50,41 L52,41 L55,42 L56,44 L58,46 L59,48 Z"/>
+		<path id="plugin-dsh-factory-6" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
+		<path id="plugin-dsh-factory-7" d="M92,48 L86,50 L92,52 Z"/>
+		<path id="plugin-dsh-factory-8" d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z"/>
+		<path id="plugin-dsh-factory-9" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
+		<path id="plugin-dsh-factory-10" d="M51,74 L51,75 L50,75 L50,74 L50,73 L51,73 Z"/>
+		<path id="plugin-dsh-factory-11" d="M28,58 L28,59 L27,59 L27,58 L27,57 L28,57 Z"/>
+		<path id="plugin-dsh-factory-12" d="M36,31 L36,32 L35,32 L35,31 L35,30 L36,30 Z"/>
+		<path id="plugin-dsh-factory-13" d="M65,30 L64,31 L63,31 L63,30 L63,30 L64,30 Z"/>
+		<path id="plugin-dsh-factory-14" d="M3,58 L3,56 L3,52 Z"/>
+		<path id="plugin-dsh-factory-15" d="M18,17 L18,14 L21,15 Z"/>
+		<path id="plugin-dsh-factory-16" d="M67,91 L65,95 L61,93 Z"/>
+		<path id="plugin-dsh-factory-17" d="M58,97 L55,97 L52,97 Z"/>
+		<path id="plugin-dsh-factory-18" d="M37,95 L35,97 L33,93 Z"/>
+		<path id="plugin-dsh-factory-19" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+	</defs>
+	<g class="plugin-dsh-factory-scene">
+	<g fill="currentColor" fill-opacity="0.3" fill-rule="evenodd">
+		<use class="plugin-dsh-factory-breathe" href="#plugin-dsh-factory-0"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+		<use class="plugin-dsh-factory-fire" style="animation-delay:-7.00s" href="#plugin-dsh-factory-1"/>
+		<use class="plugin-dsh-factory-fire" style="animation-delay:-7.18s" href="#plugin-dsh-factory-2"/>
+		<use class="plugin-dsh-factory-breathe" href="#plugin-dsh-factory-3"/>
+	</g>
+	<g fill="currentColor" fill-opacity="1" fill-rule="evenodd">
+		<use href="#plugin-dsh-factory-4"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+		<use class="plugin-dsh-factory-breathe" href="#plugin-dsh-factory-5"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+		<use class="plugin-dsh-factory-breathe" href="#plugin-dsh-factory-6"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+		<use class="plugin-dsh-factory-fire" style="animation-delay:-7.36s" href="#plugin-dsh-factory-7"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+		<use class="plugin-dsh-factory-breathe" href="#plugin-dsh-factory-8"/>
+		<use class="plugin-dsh-factory-counter" href="#plugin-dsh-factory-9"/>
+		<use class="plugin-dsh-factory-counter" href="#plugin-dsh-factory-10"/>
+		<use class="plugin-dsh-factory-counter" href="#plugin-dsh-factory-11"/>
+		<use class="plugin-dsh-factory-counter" href="#plugin-dsh-factory-12"/>
+		<use class="plugin-dsh-factory-counter" href="#plugin-dsh-factory-13"/>
+		<use class="plugin-dsh-factory-twinkle" href="#plugin-dsh-factory-14"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+		<use class="plugin-dsh-factory-twinkle" href="#plugin-dsh-factory-15"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+		<use class="plugin-dsh-factory-twinkle" href="#plugin-dsh-factory-16"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+		<use class="plugin-dsh-factory-twinkle" href="#plugin-dsh-factory-17"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+		<use class="plugin-dsh-factory-twinkle" href="#plugin-dsh-factory-18"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+		<use class="plugin-dsh-factory-breathe" href="#plugin-dsh-factory-19"/>
+	</g>
+	</g>
+</svg>

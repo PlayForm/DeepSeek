@@ -2,6 +2,9 @@ packages:
     - "Classic/packages/*"
     - "EffectTS/packages/*"
 
+    - "!Site/Module/DeepSeek"
+    - "!Site/Module/DeepSeek/**"
+
 preferWorkspacePackages: true
 
 linkWorkspacePackages: deep

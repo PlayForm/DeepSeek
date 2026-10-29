@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/lib-dsh-workspace-live - crescent-ring">
+	<title>@playform/lib-dsh-workspace-live - crescent-ring</title>
+	<style>
+		@media (prefers-reduced-motion: no-preference) {
+			.lib-dsh-workspace-live-scene * { transform-box: view-box; transform-origin: 50% 50%; }
+		.lib-dsh-workspace-live-breathe { animation: lib-dsh-workspace-live-breathe 5s ease-in-out -4s infinite; }
+		@keyframes lib-dsh-workspace-live-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
+		.lib-dsh-workspace-live-twinkle { animation: lib-dsh-workspace-live-twinkle 7s ease-in-out -4s infinite; }
+		@keyframes lib-dsh-workspace-live-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+		}
+	</style>
+	<defs>
+		<path id="lib-dsh-workspace-live-0" d="M91,67 L88,73 L83,79 L79,83 L73,88 L67,91 L60,93 L53,94 L47,94 L40,93 L33,91 L27,88 L21,83 L17,79 L12,73 L9,67 L7,60 L6,53 L6,47 L7,40 L9,33 L12,27 L17,21 L21,17 L27,12 L33,9 L40,7 L47,6 L53,6 L60,7 L67,9 L73,12 L79,17 L83,21 L88,27 L91,33 L93,40 L94,47 L94,53 L93,60 Z"/>
+		<path id="lib-dsh-workspace-live-1" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
+		<path id="lib-dsh-workspace-live-2" d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z"/>
+		<path id="lib-dsh-workspace-live-3" d="M81,50 L61,66 L34,78 L32,50 L36,22 L59,32 Z M55,54 L86,79 L85,80 L55,54 Z M37,41 L37,43 L36,44 L35,44 L34,44 L33,44 L32,44 L31,43 L31,41 L31,40 L32,39 L33,39 L34,39 L35,39 L36,39 L37,40 Z M51,56 L57,95 L56,96 L51,56 Z M46,55 L23,87 L21,86 L46,55 Z M49,26 L49,28 L48,29 L47,30 L45,31 L44,30 L42,29 L42,28 L41,26 L42,25 L42,24 L44,23 L45,22 L47,23 L48,24 L49,25 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="lib-dsh-workspace-live-4" d="M79,29 L84,28 L82,33 Z"/>
+		<path id="lib-dsh-workspace-live-5" d="M84,33 L87,34 L86,36 Z"/>
+		<path id="lib-dsh-workspace-live-6" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+	</defs>
+	<g class="lib-dsh-workspace-live-scene">
+	<g fill="#EFD5BB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="lib-dsh-workspace-live-breathe" href="#lib-dsh-workspace-live-0"/>
+	</g>
+	<g fill="#8A5A9E" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="lib-dsh-workspace-live-breathe" href="#lib-dsh-workspace-live-1"/>
+		<use class="lib-dsh-workspace-live-breathe" href="#lib-dsh-workspace-live-2"/>
+	</g>
+	<g fill="#33204A" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use href="#lib-dsh-workspace-live-3"/>
+	</g>
+	<g fill="#8A5A9E" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="lib-dsh-workspace-live-twinkle" href="#lib-dsh-workspace-live-4"/>
+	</g>
+	<g fill="#C08AD0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="lib-dsh-workspace-live-twinkle" href="#lib-dsh-workspace-live-5"/>
+		<use class="lib-dsh-workspace-live-breathe" href="#lib-dsh-workspace-live-6"/>
+	</g>
+	</g>
+</svg>

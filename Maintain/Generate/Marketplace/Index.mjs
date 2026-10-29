@@ -5,12 +5,13 @@
 //
 // Builds the format-1 plugin market index from the two release trees
 // (Classic/packages and EffectTS/packages) plus the npm registry, validates it
-// with @deepseek-ai/dsh-plugin-market-index, and writes the SAME bytes to
-// <root>/marketplace.json and <root>/Site/Public/marketplace.json.
+// with @deepseek-ai/dsh-plugin-market-index, and writes <root>/marketplace.json.
+// The site is a separate repository: it reads this file through its
+// Module/DeepSeek submodule and publishes its own copy at build time.
 //
 // Usage:
 //   node Maintain/Generate/Marketplace/Index.mjs           # generate and write
-//   node Maintain/Generate/Marketplace/Index.mjs --check   # verify both files; never writes
+//   node Maintain/Generate/Marketplace/Index.mjs --check   # verify the file; never writes
 //===============================================================================
 import Packages from "../../Common/Function/Packages.mjs";
 import Probe from "../../Common/Function/Probe.mjs";

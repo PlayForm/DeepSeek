@@ -1,6 +1,7 @@
 # Explain Workflow History
 
-note: Replace the placeholder prompt below with the version your team has validated. Add example output, tips, and any org-specific context.
+note: Replace the placeholder prompt below with the version your team has validated. Add example
+output, tips, and any org-specific context.
 
 ## Prompt
 
@@ -25,10 +26,13 @@ Use a concrete example workflow (e.g., an order processing workflow) to illustra
 
 ## Tips
 
-* Ask for a "what would go wrong" example for each determinism violation - it makes the constraint much more intuitive.
-* Follow up with the [Replay from History](https://go.temporal.io/platform-hub/prompt-library/testing/replay-from-history) prompt to see how to test for non-determinism in practice.
+- Ask for a "what would go wrong" example for each determinism violation - it makes the constraint
+  much more intuitive.
+- Follow up with the
+  [Replay from History](https://go.temporal.io/platform-hub/prompt-library/testing/replay-from-history)
+  prompt to see how to test for non-determinism in practice.
 
 ## Related prompts
 
-* [Explain Temporal Concepts](https://go.temporal.io/platform-hub/prompt-library/learning/explain-temporal-concepts)
-* [Visualize a Workflow](https://go.temporal.io/platform-hub/prompt-library/learning/visualize-workflow)
+- [Explain Temporal Concepts](https://go.temporal.io/platform-hub/prompt-library/learning/explain-temporal-concepts)
+- [Visualize a Workflow](https://go.temporal.io/platform-hub/prompt-library/learning/visualize-workflow)

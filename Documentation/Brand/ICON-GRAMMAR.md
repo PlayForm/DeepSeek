@@ -15,10 +15,10 @@ statuses:
       evidence: sections 3 and 4 of this file
     - name: the generator contract (feature -> gate -> geometry -> seed)
       state: implemented
-      evidence: Maintain/Icon/ + Maintain/Generate/Icons/Index.mjs
+      evidence: Maintain/Icon/ + Maintain/Generate/Icon/Index.mjs
     - name: the 107 generated icons (mono + colour) and the ledger
       state: implemented
-      evidence: Site/Public/Icons/**, Maintain/Icon/Ledger.json, Test/Icons/Check.mjs (18 checks)
+      evidence: Maintain/Icon/Asset/**, Maintain/Icon/Ledger.json, Test/Icons/Check.mjs (18 checks)
     - name: the marketplace icon field and the site rendering
       state: implemented
       evidence: marketplace.json (102 icons), PluginIcon.astro, the built site (134 pages)
@@ -329,17 +329,17 @@ The icon is append-only in history and live in behavior:
   the body without erasing the rings.
 
 Because the seed includes the changelog digest, the seed alone reconstructs the icon:
-`node Maintain/Generate/Icons/Index.mjs` after a changelog edit produces the next icon, and
-`--check` fails until the asset is regenerated.
+`node Maintain/Generate/Icon/Index.mjs` after a changelog edit produces the next icon, and `--check`
+fails until the asset is regenerated.
 
 That is the whole update loop.
 
 ## 9. The rendering contract
 
-| Render   | Path                                | Rules                                                                      |
-| -------- | ----------------------------------- | -------------------------------------------------------------------------- |
-| `mono`   | `Site/Public/Icons/<dir>.svg`       | `fill="currentColor"`, per-layer opacity, no stroke                        |
-| `colour` | `Site/Public/Icons/Color/<dir>.svg` | per-layer palette tone (frame accent2, body ink, detail tint, core accent) |
+| Render   | Path                                  | Rules                                                                      |
+| -------- | ------------------------------------- | -------------------------------------------------------------------------- |
+| `mono`   | `Maintain/Icon/Asset/Mono/<dir>.svg`  | `fill="currentColor"`, per-layer opacity, no stroke                        |
+| `colour` | `Maintain/Icon/Asset/Color/<dir>.svg` | per-layer palette tone (frame accent2, body ink, detail tint, core accent) |
 
 - `viewBox="0 0 100 100"`, with coordinates quantized to whole units (the canvas is 100 wide, so one
   unit is 0.4 px at the 40 px site size).
@@ -358,13 +358,16 @@ That is the whole update loop.
   scoped to the scene wrapper, and wrapped in a `prefers-reduced-motion` query, so it cannot leak
   into the page and it does not move for a reader who asked it not to.
 - `<title>` carries the package name and the grammar, and `role="img"` and `aria-label` are set.
-- The marketplace index carries the colour render as a relative reference, `Icons/Color/<dir>.svg`,
-  which resolves against the index URL to the same origin that the site serves.
-- The site inlines both renders. The colour file identifies a package on the plugin index and on the
-  detail hero, because a package's palette is the most distinctive thing it owns. The mono file
-  stays for the chrome that must inherit the page ink - the file-type sprite, the brand glyphs, and
-  any icon drawn inside a coloured plate. The colour file's fills are the asset's own, so it does
-  not flip with the dark theme; its palette is designed against the light paper.
+- The marketplace index carries the colour render as a relative reference, `Icon/<dir>.svg`, which
+  resolves against the index URL to the same origin that serves the site's published icon.
+- The site publishes the colour render as a file at `/Icon/<dir>.svg` and references it from an
+  `<img>`. The build copies the colour set out of its `Module/DeepSeek` submodule into
+  `Public/Icon/`, so a Cloudflare build that cannot see the monorepo still serves the same bytes,
+  one document carries a short reference instead of the asset's whole geometry, and two placements
+  of one icon on a page cannot collide in their `<defs>` ids. The colour file's fills are the
+  asset's own, so it does not flip with the dark theme; its palette is designed against the light
+  paper. The mono render stays for the chrome that must inherit the page ink - the file-type sprite,
+  the brand glyphs, and any icon drawn inside a coloured plate.
 
 ## 10. Code contract
 
@@ -386,7 +389,9 @@ Maintain/Icon/
   Feature.mjs       featuresOf(root, dir) -> the package facts
   Mutation.mjs      mutationsOf(changelogText), evolutionOf(mutations)
   Index.mjs         packages(root), genomeOf(root, entry), build(root), write(root), check(root)
-Maintain/Generate/Icons/Index.mjs   the CLI: no flag writes, --check verifies, --report prints the table
+Asset/Mono/<dir>.svg          the generated mono render (committed)
+Asset/Color/<dir>.svg         the generated colour render (committed)
+Maintain/Generate/Icon/Index.mjs   the CLI: no flag writes, --check verifies, --report prints the table
 Maintain/Icon/Ledger.json     the generated genome ledger (committed)
 Test/Icons/Check.mjs          determinism, coverage, size, uniqueness, twins, ledger, tree
 Test/Icons/Topology.mjs       per-family topology contracts
@@ -399,12 +404,11 @@ Test/Icons/Composition.mjs    the composition matrix and its rules
 The ledger records, for each package: package, dir, kind, tree, version, seed, grammar, family,
 order, arms, `rings`, orbit, rim, mode, the two hashes, and the two paths.
 
-Acceptance: `node Maintain/Generate/Icons/Index.mjs --check` exits 0 on a clean tree, two
-consecutive writes are byte-identical, all 107 icons are distinct, `node Test/Icons/Check.mjs`
-reports 18 of 18, `node Test/Icons/Topology.mjs`, `Interventions.mjs`, `Diversity.mjs`,
-`Profiles.mjs` and `Composition.mjs` all pass,
-`node Maintain/Generate/Marketplace/Index.mjs --check` passes with the icons wired, and the site
-builds.
+Acceptance: `node Maintain/Generate/Icon/Index.mjs --check` exits 0 on a clean tree, two consecutive
+writes are byte-identical, all 107 icons are distinct, `node Test/Icons/Check.mjs` reports 18 of 18,
+`node Test/Icons/Topology.mjs`, `Interventions.mjs`, `Diversity.mjs`, `Profiles.mjs` and
+`Composition.mjs` all pass, `node Maintain/Generate/Marketplace/Index.mjs --check` passes with the
+icons wired, and the site builds.
 
 ## 11. Palette (per package, from the dusk banner)
 

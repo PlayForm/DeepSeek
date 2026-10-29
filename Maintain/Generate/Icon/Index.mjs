@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// Maintain/Generate/Icons/Index.mjs - the icon CLI. With no flag it writes both SVG
+// Maintain/Generate/Icon/Index.mjs - the icon CLI. With no flag it writes both SVG
 // sets and the ledger; --check verifies the generated files against the tree
 // and exits 1 on any drift; --report prints the genome table without writing.
 // See Documentation/Brand/ICON-GRAMMAR.md section 10.
@@ -10,9 +10,9 @@ import Report from "./Function/Report.mjs";
 import Write from "./Function/Write.mjs";
 
 const Usage = [
-	"Usage: node Maintain/Generate/Icons/Index.mjs [--check | --report]",
+	"Usage: node Maintain/Generate/Icon/Index.mjs [--check | --report]",
 	"",
-	"\t(no flag)\tWrite Site/Public/Icons/<dir>.svg, Site/Public/Icons/Color/<dir>.svg and Maintain/Icon/Ledger.json.",
+	"\t(no flag)\tWrite Maintain/Icon/Asset/Mono/<dir>.svg, Maintain/Icon/Asset/Color/<dir>.svg and Maintain/Icon/Ledger.json.",
 	"\t--check\tBuild in memory and report every missing or differing file; exit 1 on any drift.",
 	"\t--report\tPrint the genome table (package, kind, tree, order, arms, rings, seed); no writes.",
 ].join("\n");

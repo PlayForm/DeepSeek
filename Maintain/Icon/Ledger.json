@@ -31,8 +31,8 @@
 				"colour": "ea4fc6261211471699fb759e8bc5742786776b8e40ae454755bb19784cfe651b"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/client-dsh-panel-family.svg",
-				"colour": "Site/Public/Icons/Color/client-dsh-panel-family.svg"
+				"mono": "Maintain/Icon/Asset/Mono/client-dsh-panel-family.svg",
+				"colour": "Maintain/Icon/Asset/Color/client-dsh-panel-family.svg"
 			}
 		},
 		{
@@ -54,8 +54,8 @@
 				"colour": "fb2967c9b92e33c1652e31f1cc0df4cbf4d1889ef7b2368a5faca95b7cf54924"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/client-dsh-panel-family-host.svg",
-				"colour": "Site/Public/Icons/Color/client-dsh-panel-family-host.svg"
+				"mono": "Maintain/Icon/Asset/Mono/client-dsh-panel-family-host.svg",
+				"colour": "Maintain/Icon/Asset/Color/client-dsh-panel-family-host.svg"
 			}
 		},
 		{
@@ -77,8 +77,8 @@
 				"colour": "2d0ba7d2a034aa276944725555e47655c2ec0153a1f65d8dc87ba829ff4900c5"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/client-dsh-workspace-live.svg",
-				"colour": "Site/Public/Icons/Color/client-dsh-workspace-live.svg"
+				"mono": "Maintain/Icon/Asset/Mono/client-dsh-workspace-live.svg",
+				"colour": "Maintain/Icon/Asset/Color/client-dsh-workspace-live.svg"
 			}
 		},
 		{
@@ -100,8 +100,8 @@
 				"colour": "ac8abeec371ebe742d190602bffac542184551f98f18cb7289d5221b89832912"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-base-dsh.svg",
-				"colour": "Site/Public/Icons/Color/ets-base-dsh.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-base-dsh.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-base-dsh.svg"
 			}
 		},
 		{
@@ -123,8 +123,8 @@
 				"colour": "1f6925ade1fb810e1d4c1376867a1e363588e46e21b608cc9ab942d924e6254f"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-client-dsh-panel-family.svg",
-				"colour": "Site/Public/Icons/Color/ets-client-dsh-panel-family.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-client-dsh-panel-family.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-client-dsh-panel-family.svg"
 			}
 		},
 		{
@@ -146,8 +146,8 @@
 				"colour": "5270c5f219cbd9e2d3dc42151445e19821c44951331c9908ad70b47a3fef864d"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-client-dsh-panel-family-host.svg",
-				"colour": "Site/Public/Icons/Color/ets-client-dsh-panel-family-host.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-client-dsh-panel-family-host.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-client-dsh-panel-family-host.svg"
 			}
 		},
 		{
@@ -169,8 +169,8 @@
 				"colour": "2ddedb2c6ed1e17737c792a42251204fe31c2ff2142c0319f1eec1d15602d2c5"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-client-dsh-workspace-live.svg",
-				"colour": "Site/Public/Icons/Color/ets-client-dsh-workspace-live.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-client-dsh-workspace-live.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-client-dsh-workspace-live.svg"
 			}
 		},
 		{
@@ -192,8 +192,8 @@
 				"colour": "6a65ec52f828003517b0e5c5f1aa2b70e4ae3a0324cec6bcbef749b67b6b0741"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-batch-decision.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-batch-decision.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-batch-decision.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-batch-decision.svg"
 			}
 		},
 		{
@@ -215,8 +215,8 @@
 				"colour": "ec59e69273ca336fef5245da0f8fb0764a3e4403b67ea3dc590b3f19734890ad"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-cargo-governor.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-cargo-governor.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-cargo-governor.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-cargo-governor.svg"
 			}
 		},
 		{
@@ -238,8 +238,8 @@
 				"colour": "93814bfa73b12d6fc799870ebb34ac2b818e686a27bc7cca05d50d08331b54b3"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-ccr.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-ccr.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-ccr.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-ccr.svg"
 			}
 		},
 		{
@@ -261,8 +261,8 @@
 				"colour": "563e39a20cf8dcff7717b5afa9fc55a44b614087716b362e70b69805aa725405"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-comment-filter.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-comment-filter.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-comment-filter.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-comment-filter.svg"
 			}
 		},
 		{
@@ -284,8 +284,8 @@
 				"colour": "c8ff445876ff3658040dd49cd43a4b59a441995cfd4a9df0b3bd39e959b7b211"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-convention-suggester.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-convention-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-convention-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-convention-suggester.svg"
 			}
 		},
 		{
@@ -307,8 +307,8 @@
 				"colour": "e9e304c07405b591fbf4d6c52a7bc4c9e899e93d54dc351459f887ac748c33df"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-doc-suggester.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-doc-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-doc-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-doc-suggester.svg"
 			}
 		},
 		{
@@ -330,8 +330,8 @@
 				"colour": "6be6aaabd53784c6d8db0678e69326d2457ec6df8c87f496174b20e52056aae4"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-edit-suggester.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-edit-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-edit-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-edit-suggester.svg"
 			}
 		},
 		{
@@ -353,8 +353,8 @@
 				"colour": "d3473716b8f4070c653d161f76ed9d04b3929424da9efd1f76ebb994836d0cb5"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-graph-suggester.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-graph-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-graph-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-graph-suggester.svg"
 			}
 		},
 		{
@@ -376,8 +376,8 @@
 				"colour": "0d45d25fecf5a93426928c068a9e873fe25f27ba0a426e60f7291e11cffc4a43"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-lesson-nudge.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-lesson-nudge.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-lesson-nudge.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-lesson-nudge.svg"
 			}
 		},
 		{
@@ -399,8 +399,8 @@
 				"colour": "b5790e38ec1d4f3981cab5ad6b9eceb1b3121cc1bbe284fd2114c929ab5ac40b"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-live-containers.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-live-containers.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-live-containers.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-live-containers.svg"
 			}
 		},
 		{
@@ -422,8 +422,8 @@
 				"colour": "2ddf7648b84187fd4c8f34e86b4f99bec2e797bed9da4282176c91b3cbac059c"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-dash.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-normalize-dash.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-normalize-dash.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-normalize-dash.svg"
 			}
 		},
 		{
@@ -445,8 +445,8 @@
 				"colour": "a970b307d6f3584e7bc6fa9f2be110890bd8be8152cd3adc7d72300668d30767"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-ellipsis.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-normalize-ellipsis.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-normalize-ellipsis.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-normalize-ellipsis.svg"
 			}
 		},
 		{
@@ -468,8 +468,8 @@
 				"colour": "4caf528fdba64c8c420fc05b71c38933ebe4bc22985b9b0b12dfe07ade205066"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-fullwidth.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-normalize-fullwidth.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-normalize-fullwidth.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-normalize-fullwidth.svg"
 			}
 		},
 		{
@@ -491,8 +491,8 @@
 				"colour": "0b52ff952c0d83924504311e4f35534413524548ecc3c7448d28c5f64c7df2a2"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-invisible.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-normalize-invisible.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-normalize-invisible.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-normalize-invisible.svg"
 			}
 		},
 		{
@@ -514,8 +514,8 @@
 				"colour": "ed00d232dc09c6a875f04cc365ca50b396e629496013be8284ab02f7f4c7e637"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-quotes.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-normalize-quotes.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-normalize-quotes.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-normalize-quotes.svg"
 			}
 		},
 		{
@@ -537,8 +537,8 @@
 				"colour": "3d1bb654ff2bf6c4812080792aea01097b46ed456ddc626005cae99e78695afc"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-normalize-spaces.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-normalize-spaces.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-normalize-spaces.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-normalize-spaces.svg"
 			}
 		},
 		{
@@ -560,8 +560,8 @@
 				"colour": "230f3f665cd6cf68b7bbd98685f8ac62cfe69267e1744b0a7efc5ed50fda3d8d"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-package-governor.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-package-governor.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-package-governor.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-package-governor.svg"
 			}
 		},
 		{
@@ -583,8 +583,8 @@
 				"colour": "b38b055c640285956687f019ac54af57d85b8043c29cb4afd93ff2c717e254cd"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-package-pinner.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-package-pinner.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-package-pinner.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-package-pinner.svg"
 			}
 		},
 		{
@@ -606,8 +606,8 @@
 				"colour": "544b8e2f6a26c81af6e71449c504135fb35c39a5ca0ad9a19214a5772fbb7824"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-replay-suggester.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-replay-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-replay-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-replay-suggester.svg"
 			}
 		},
 		{
@@ -629,8 +629,8 @@
 				"colour": "066bec34d4a1667f54438440a74f01a3a7ce325e7dbed5586cb62e5e736dc7cc"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-search-suggester.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-search-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-search-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-search-suggester.svg"
 			}
 		},
 		{
@@ -652,8 +652,8 @@
 				"colour": "01ad081e435ad0efaa1b293ec49731e8231e2bbee089403645100d0e4888bde5"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-test-suggester.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-test-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-test-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-test-suggester.svg"
 			}
 		},
 		{
@@ -675,8 +675,8 @@
 				"colour": "d1a25ae224871b97b23e2eae4384e7eece08eb7632e375c8d4f7f29e901a4606"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-tool-coach.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-tool-coach.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-tool-coach.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-tool-coach.svg"
 			}
 		},
 		{
@@ -698,8 +698,8 @@
 				"colour": "257cc64ceae5e300a0903e1e6646b86dc105783acd0384f90ef8337dc87333e6"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-approve.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-approve.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-workspace-approve.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-workspace-approve.svg"
 			}
 		},
 		{
@@ -721,8 +721,8 @@
 				"colour": "74e47f401f489384949d45c27af12d6b0e96af2ef8551e299ea0062584c33b6b"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-audit.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-audit.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-workspace-audit.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-workspace-audit.svg"
 			}
 		},
 		{
@@ -744,8 +744,8 @@
 				"colour": "bc5cb76d299446b8c5d60d9833fadf7959d5939b191c0af237065d4c60596e89"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-govern.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-govern.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-workspace-govern.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-workspace-govern.svg"
 			}
 		},
 		{
@@ -767,8 +767,8 @@
 				"colour": "7ca4887a78723f13c0b4523fec2ae85c91317139858b484c1933f7a22778c916"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-journal.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-journal.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-workspace-journal.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-workspace-journal.svg"
 			}
 		},
 		{
@@ -790,8 +790,8 @@
 				"colour": "b05772450d2aeb6b38a2e3e16aa057eab2ae4e91f612efcfba529ac5336dd12d"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-merge.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-merge.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-workspace-merge.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-workspace-merge.svg"
 			}
 		},
 		{
@@ -813,8 +813,8 @@
 				"colour": "ba0f9ca7076b1ec708b53368f23129a7a71c21366472717407ed87c2e22e8ea0"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-monitor.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-monitor.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-workspace-monitor.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-workspace-monitor.svg"
 			}
 		},
 		{
@@ -836,8 +836,8 @@
 				"colour": "dbabfed343f6a57e69518b079f18c71d2b09eeb1d424a92d4fccb70b27f7664f"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-observe.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-observe.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-workspace-observe.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-workspace-observe.svg"
 			}
 		},
 		{
@@ -859,8 +859,8 @@
 				"colour": "fab30b5f0e9ada7edd6f4972b94aa36f24b38891bdae4a05a71fcfa76e9cab1a"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-hook-dsh-workspace-operate.svg",
-				"colour": "Site/Public/Icons/Color/ets-hook-dsh-workspace-operate.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-workspace-operate.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-hook-dsh-workspace-operate.svg"
 			}
 		},
 		{
@@ -882,8 +882,8 @@
 				"colour": "666033db7482e64400b84c4c9cfd25560db03547e1b7c7036ba15701ba716c9c"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-lib-dsh-conversation.svg",
-				"colour": "Site/Public/Icons/Color/ets-lib-dsh-conversation.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-lib-dsh-conversation.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-lib-dsh-conversation.svg"
 			}
 		},
 		{
@@ -905,8 +905,8 @@
 				"colour": "e6c48ffa18ceca74fb1b2d3fa8606b82465857dce836d2cba1d3a4093df13b56"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-lib-dsh-core.svg",
-				"colour": "Site/Public/Icons/Color/ets-lib-dsh-core.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-lib-dsh-core.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-lib-dsh-core.svg"
 			}
 		},
 		{
@@ -928,8 +928,8 @@
 				"colour": "2b9fa9f9ec7c9bbaf7c6dfd6b2af2995cda7ad8b120806d4442d0ac0396bf816"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-lib-dsh-pack.svg",
-				"colour": "Site/Public/Icons/Color/ets-lib-dsh-pack.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-lib-dsh-pack.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-lib-dsh-pack.svg"
 			}
 		},
 		{
@@ -951,8 +951,8 @@
 				"colour": "2fa89e5873823c25857abddde27d182603cea87dab24c1c28da89f40edc2d6dc"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-lib-dsh-trace.svg",
-				"colour": "Site/Public/Icons/Color/ets-lib-dsh-trace.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-lib-dsh-trace.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-lib-dsh-trace.svg"
 			}
 		},
 		{
@@ -974,8 +974,8 @@
 				"colour": "827d0fe880529f79cbee0b74fe928924ccbc0a235eabd386297ab3ff7c81424f"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-lib-dsh-workspace-live.svg",
-				"colour": "Site/Public/Icons/Color/ets-lib-dsh-workspace-live.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-lib-dsh-workspace-live.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-lib-dsh-workspace-live.svg"
 			}
 		},
 		{
@@ -997,8 +997,8 @@
 				"colour": "5502ac81592d702f3e3eea8a3158768c989751643ea1646b7bd2f65d2571c415"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-batch-edit.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-batch-edit.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-batch-edit.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-batch-edit.svg"
 			}
 		},
 		{
@@ -1020,8 +1020,8 @@
 				"colour": "64a056899490c9652bbd288215faf6a45a0e4691c87a628928c1f8a079eb45dd"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-batchstate.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-batchstate.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-batchstate.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-batchstate.svg"
 			}
 		},
 		{
@@ -1043,8 +1043,8 @@
 				"colour": "2cbd2fe0b76abac4445a2ff6110dcd57da5b656f30d197fcae19896eb9f16e5c"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-cost.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-cost.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-cost.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-cost.svg"
 			}
 		},
 		{
@@ -1066,8 +1066,8 @@
 				"colour": "dc532756751a4fd3630c1b33924bddbbe8327c17bb6f9ba6e4bd50b38558e41e"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-cost-analysis.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-cost-analysis.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-cost-analysis.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-cost-analysis.svg"
 			}
 		},
 		{
@@ -1089,8 +1089,8 @@
 				"colour": "ce5e1c45c94236e01249fe61b1ade043485aac4b5f04f9b5866c0de02f0e44b6"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-factory.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-factory.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-factory.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-factory.svg"
 			}
 		},
 		{
@@ -1112,8 +1112,8 @@
 				"colour": "647b8f98dccce487e4e3fc32cdab61de2ac14c465627dda3714c34397020c1f3"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-feedback.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-feedback.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-feedback.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-feedback.svg"
 			}
 		},
 		{
@@ -1135,8 +1135,8 @@
 				"colour": "bd4be4df3c8330321a00826d6366238bd97c1b65dd63f832414f775e37b663da"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-gitguard.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-gitguard.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-gitguard.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-gitguard.svg"
 			}
 		},
 		{
@@ -1158,8 +1158,8 @@
 				"colour": "841a5c0ee6cc0f8714939edb6c84bc92f9fe703cbd135935daac7aac330c48ad"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-ingester.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-ingester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-ingester.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-ingester.svg"
 			}
 		},
 		{
@@ -1181,8 +1181,8 @@
 				"colour": "67c331d07bed29785e26bbbf8b10c93403828288200d7c6cbc158b0f22243854"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-lesson-review.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-lesson-review.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-lesson-review.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-lesson-review.svg"
 			}
 		},
 		{
@@ -1204,8 +1204,8 @@
 				"colour": "81d70ba419d5d6a6bd2b88005ccb2fd2e2c0beff4033ae7f997bc190640490f6"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-normalize-file.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-normalize-file.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-normalize-file.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-normalize-file.svg"
 			}
 		},
 		{
@@ -1227,8 +1227,8 @@
 				"colour": "4020725513a900d45734deae67786f9f4166632868e216c0d239e0a20e0a3ea5"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-pass-on.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-pass-on.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-pass-on.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-pass-on.svg"
 			}
 		},
 		{
@@ -1250,8 +1250,8 @@
 				"colour": "c7bf793975bd1daf9745ce9da2ced15d0128d868a811e9918c33abf3b72e1d88"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-pattern.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-pattern.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-pattern.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-pattern.svg"
 			}
 		},
 		{
@@ -1273,8 +1273,8 @@
 				"colour": "449ab1c45ce7ce4529034f66fb2ed2f8fb1fea74a99caa6072cf529816c250e8"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-queue.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-queue.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-queue.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-queue.svg"
 			}
 		},
 		{
@@ -1296,8 +1296,8 @@
 				"colour": "f4d1760ec5268737454c06730be69103f00ba15bf3c4b55fdf2f7a1ffbb3d1c5"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-route.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-route.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-route.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-route.svg"
 			}
 		},
 		{
@@ -1319,8 +1319,8 @@
 				"colour": "559286449a209823a6d033e8be24405f6141285ef217033aec2e624544d9ff8f"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-workspace.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-workspace.svg"
 			}
 		},
 		{
@@ -1342,8 +1342,8 @@
 				"colour": "2084c9c9685a91c76ecce3ac14e2c1c818a3abf800e76725ca0d11728bd13e9c"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-authority.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace-authority.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-workspace-authority.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-workspace-authority.svg"
 			}
 		},
 		{
@@ -1365,8 +1365,8 @@
 				"colour": "d0b31b648b6a1a476b8ee49ddc700ddb3c3d27d976d2e94ddb636d325f4498ad"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-context.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace-context.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-workspace-context.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-workspace-context.svg"
 			}
 		},
 		{
@@ -1388,8 +1388,8 @@
 				"colour": "b14b3da46b46804804957acee63d57e70770537b2733ea83389ad1ed86ebc556"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-evidence.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace-evidence.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-workspace-evidence.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-workspace-evidence.svg"
 			}
 		},
 		{
@@ -1411,8 +1411,8 @@
 				"colour": "5b5c7644e18dfc58015101d14fd222514baec8e4a690d0c57ffd70866c968bb6"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-graph.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace-graph.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-workspace-graph.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-workspace-graph.svg"
 			}
 		},
 		{
@@ -1434,8 +1434,8 @@
 				"colour": "09d0d77cd51fd1bcd643a036298db84a581774ceee3959a463e9df5868e30d4c"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-reflect.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace-reflect.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-workspace-reflect.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-workspace-reflect.svg"
 			}
 		},
 		{
@@ -1457,8 +1457,8 @@
 				"colour": "759e4f44c995cd80f5d9dd6c0e5fed3ef8885edf982ba711f11ac248b662e5e5"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/ets-plugin-dsh-workspace-semantics.svg",
-				"colour": "Site/Public/Icons/Color/ets-plugin-dsh-workspace-semantics.svg"
+				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-workspace-semantics.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-plugin-dsh-workspace-semantics.svg"
 			}
 		},
 		{
@@ -1480,8 +1480,8 @@
 				"colour": "4b1fc09bf236f01ecc45653a3995c7ae4139d8c54d8f2ac3a0c9b77424c6c778"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-batch-decision.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-batch-decision.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-batch-decision.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-batch-decision.svg"
 			}
 		},
 		{
@@ -1503,8 +1503,8 @@
 				"colour": "41a143930ae9bbe7e01dd56f8af61a07e5900b682113106f7fd57424aa5ce040"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-cargo-governor.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-cargo-governor.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-cargo-governor.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-cargo-governor.svg"
 			}
 		},
 		{
@@ -1526,8 +1526,8 @@
 				"colour": "a1b24122740d537e044b8462b77351ebc21df9656364b6e26ea326a12269cebb"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-ccr.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-ccr.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-ccr.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-ccr.svg"
 			}
 		},
 		{
@@ -1549,8 +1549,8 @@
 				"colour": "29ddca345ae63806f49d37802a9952462179c7f49991d0c36467177896ae7fc9"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-comment-filter.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-comment-filter.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-comment-filter.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-comment-filter.svg"
 			}
 		},
 		{
@@ -1572,8 +1572,8 @@
 				"colour": "c3a0d2e7682ee617095b846c3f8579acf65cc652b0f5a5e1a125f6d6f185781f"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-convention-suggester.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-convention-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-convention-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-convention-suggester.svg"
 			}
 		},
 		{
@@ -1595,8 +1595,8 @@
 				"colour": "22ec3c38c20a0967d8c862719b14789b644066e789f26c35963f091ab8072931"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-doc-suggester.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-doc-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-doc-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-doc-suggester.svg"
 			}
 		},
 		{
@@ -1618,8 +1618,8 @@
 				"colour": "71bfebfd9300f7fd5d0a46526f634796edf6d7244eca4bd6502e1f1ef7467c02"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-edit-suggester.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-edit-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-edit-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-edit-suggester.svg"
 			}
 		},
 		{
@@ -1641,8 +1641,8 @@
 				"colour": "34c14fcfffc12c3127f46ee6532c6b1730f0b47c15fe6adcd81bbcf0d873f274"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-graph-suggester.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-graph-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-graph-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-graph-suggester.svg"
 			}
 		},
 		{
@@ -1664,8 +1664,8 @@
 				"colour": "f1f1f7597452625391e75d4308446885499b7a50f49a60f92ab81b89e03d341c"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-lesson-nudge.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-lesson-nudge.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-lesson-nudge.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-lesson-nudge.svg"
 			}
 		},
 		{
@@ -1687,8 +1687,8 @@
 				"colour": "72b489e737df22bc49282af442080fe2023babcaa9371add9d362b18d394e599"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-live-containers.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-live-containers.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-live-containers.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-live-containers.svg"
 			}
 		},
 		{
@@ -1710,8 +1710,8 @@
 				"colour": "553f2900ec9598cda67b7dcbfcc0392345d59dafdff7d98c1c81ca6f93206214"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-normalize-dash.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-normalize-dash.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-normalize-dash.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-normalize-dash.svg"
 			}
 		},
 		{
@@ -1733,8 +1733,8 @@
 				"colour": "f55b0f8ffa791aec4dd28007172580f078090dfce102d8102ddd268106045abb"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-normalize-ellipsis.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-normalize-ellipsis.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-normalize-ellipsis.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-normalize-ellipsis.svg"
 			}
 		},
 		{
@@ -1756,8 +1756,8 @@
 				"colour": "622cdb1bb29edf1206a36b2bc6daaba9e36f456df66693b12d8c9f9f1c1b0d01"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-normalize-fullwidth.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-normalize-fullwidth.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-normalize-fullwidth.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-normalize-fullwidth.svg"
 			}
 		},
 		{
@@ -1779,8 +1779,8 @@
 				"colour": "1243c4b8be8ddc3d903a2ad7685ff872621aeac8fc8d2a5d96418483c7cc57c5"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-normalize-invisible.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-normalize-invisible.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-normalize-invisible.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-normalize-invisible.svg"
 			}
 		},
 		{
@@ -1802,8 +1802,8 @@
 				"colour": "03a00ca7fe30ab2d7cb80821c38f28b649f09dacb125a2733cde2e671e66510e"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-normalize-quotes.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-normalize-quotes.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-normalize-quotes.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-normalize-quotes.svg"
 			}
 		},
 		{
@@ -1825,8 +1825,8 @@
 				"colour": "7ee8f73a48518e60bb665d00352d986128b5afef15f8109913688d31f7e4f639"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-normalize-spaces.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-normalize-spaces.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-normalize-spaces.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-normalize-spaces.svg"
 			}
 		},
 		{
@@ -1848,8 +1848,8 @@
 				"colour": "b3065ad9c93bb5f59117daa1d1d0b1bef1aac61d6402f37e02751c3d8d6171da"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-package-governor.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-package-governor.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-package-governor.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-package-governor.svg"
 			}
 		},
 		{
@@ -1871,8 +1871,8 @@
 				"colour": "ab1ce85b42d317d852a9aecae486ac17aed33620f563fd18990e42f3f5f47da7"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-package-pinner.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-package-pinner.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-package-pinner.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-package-pinner.svg"
 			}
 		},
 		{
@@ -1894,8 +1894,8 @@
 				"colour": "b300f763a3b1fabe669a9893934679f12ef4daf9fa1a1858fa42cce26cbe119a"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-replay-suggester.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-replay-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-replay-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-replay-suggester.svg"
 			}
 		},
 		{
@@ -1917,8 +1917,8 @@
 				"colour": "ac57c81d5e728d0701ca37b9d26c452f437e3315431068d5e70da099d0fe0894"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-search-suggester.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-search-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-search-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-search-suggester.svg"
 			}
 		},
 		{
@@ -1940,8 +1940,8 @@
 				"colour": "5275566e31db1fd4341c0fc005fe0c7d29d8a2d2d6e66c3deeaec11238c59e9a"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-test-suggester.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-test-suggester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-test-suggester.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-test-suggester.svg"
 			}
 		},
 		{
@@ -1963,8 +1963,8 @@
 				"colour": "efaa0bac72161786d4ba3581d758e524d9c5a5cfc33594d4144fb0a34d2baf01"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-tool-coach.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-tool-coach.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-tool-coach.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-tool-coach.svg"
 			}
 		},
 		{
@@ -1986,8 +1986,8 @@
 				"colour": "ba5523000ecb19a85c8a803bc9069505d4a8714bad9de9debde66b38ccaff91c"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-workspace-approve.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-approve.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-workspace-approve.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-workspace-approve.svg"
 			}
 		},
 		{
@@ -2009,8 +2009,8 @@
 				"colour": "4b387581baa584bb46cb4a80c366293f448d19606c9e166cc54222acb19cb1e2"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-workspace-audit.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-audit.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-workspace-audit.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-workspace-audit.svg"
 			}
 		},
 		{
@@ -2032,8 +2032,8 @@
 				"colour": "925bbade6d2370067cfd17a1f681187789f78dece6c062a7322dcb5931ad1c07"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-workspace-govern.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-govern.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-workspace-govern.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-workspace-govern.svg"
 			}
 		},
 		{
@@ -2055,8 +2055,8 @@
 				"colour": "bd8ec9b0e32e54217ad1f0dd93b0362516dda11c1899cc218306e8682124de20"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-workspace-journal.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-journal.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-workspace-journal.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-workspace-journal.svg"
 			}
 		},
 		{
@@ -2078,8 +2078,8 @@
 				"colour": "22d7dc99b1650de75e07bdbe7fa07c61559fc3bc04d9143320ec9d36774e00ba"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-workspace-merge.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-merge.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-workspace-merge.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-workspace-merge.svg"
 			}
 		},
 		{
@@ -2101,8 +2101,8 @@
 				"colour": "ba99c318e3b3652780ae1ffccc0ab3808747fa945d7c968f466b83aa6ebe5191"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-workspace-monitor.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-monitor.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-workspace-monitor.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-workspace-monitor.svg"
 			}
 		},
 		{
@@ -2124,8 +2124,8 @@
 				"colour": "716817c927bbeac7d70b07d653a83b2733842758c908e4d0dcd7066902eff79d"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-workspace-observe.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-observe.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-workspace-observe.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-workspace-observe.svg"
 			}
 		},
 		{
@@ -2147,8 +2147,8 @@
 				"colour": "cefebffbde30947c7f002ed575775d76e24567ab449e2415f7cc0b9a3ed65101"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/hook-dsh-workspace-operate.svg",
-				"colour": "Site/Public/Icons/Color/hook-dsh-workspace-operate.svg"
+				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-workspace-operate.svg",
+				"colour": "Maintain/Icon/Asset/Color/hook-dsh-workspace-operate.svg"
 			}
 		},
 		{
@@ -2170,8 +2170,8 @@
 				"colour": "368fcecf43038592ef0b2497e87c36b36a0a78a77678615ddf1057afb9ae3b89"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/lib-dsh-conversation.svg",
-				"colour": "Site/Public/Icons/Color/lib-dsh-conversation.svg"
+				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-conversation.svg",
+				"colour": "Maintain/Icon/Asset/Color/lib-dsh-conversation.svg"
 			}
 		},
 		{
@@ -2193,8 +2193,8 @@
 				"colour": "e8fd5f022da710cdf548f9640b23e8be0db94e4acbff769a65848172bd870c88"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/lib-dsh-core.svg",
-				"colour": "Site/Public/Icons/Color/lib-dsh-core.svg"
+				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-core.svg",
+				"colour": "Maintain/Icon/Asset/Color/lib-dsh-core.svg"
 			}
 		},
 		{
@@ -2216,8 +2216,8 @@
 				"colour": "6e36bfaa46368f8f735ea63cd1a8d987ad7e4d683814a627d316065b64d91b42"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/lib-dsh-pack.svg",
-				"colour": "Site/Public/Icons/Color/lib-dsh-pack.svg"
+				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-pack.svg",
+				"colour": "Maintain/Icon/Asset/Color/lib-dsh-pack.svg"
 			}
 		},
 		{
@@ -2239,8 +2239,8 @@
 				"colour": "3d739894b73bbd0281a703f9f1f64e6f86cafb43988bc9a5690824b542153c8c"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/lib-dsh-trace.svg",
-				"colour": "Site/Public/Icons/Color/lib-dsh-trace.svg"
+				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-trace.svg",
+				"colour": "Maintain/Icon/Asset/Color/lib-dsh-trace.svg"
 			}
 		},
 		{
@@ -2262,8 +2262,8 @@
 				"colour": "1a7d5f1b3814d4d5ad035f5c4e6e1a18bc023b0fe93283a365364cc46db00553"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/lib-dsh-workspace-live.svg",
-				"colour": "Site/Public/Icons/Color/lib-dsh-workspace-live.svg"
+				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-workspace-live.svg",
+				"colour": "Maintain/Icon/Asset/Color/lib-dsh-workspace-live.svg"
 			}
 		},
 		{
@@ -2285,8 +2285,8 @@
 				"colour": "232facf042e9bd107d383d69fbfa334b62b7570263cdfb6a1dadea5e17c3bcaa"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-batch-edit.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-batch-edit.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-batch-edit.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-batch-edit.svg"
 			}
 		},
 		{
@@ -2308,8 +2308,8 @@
 				"colour": "be435c62ea3299113822a97794c46d723b11f5038848fb7ab6e6893de2c16682"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-batchstate.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-batchstate.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-batchstate.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-batchstate.svg"
 			}
 		},
 		{
@@ -2331,8 +2331,8 @@
 				"colour": "a79ada8210c004e7adec06d3b78a1fd17115e6af3bad3b26c3809a3a46c7b461"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-cost.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-cost.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-cost.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-cost.svg"
 			}
 		},
 		{
@@ -2354,8 +2354,8 @@
 				"colour": "4b98f2c9f1a6d7a02f67be5bbc18b869234a5c1f4c2032388e2770d58920714b"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-cost-analysis.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-cost-analysis.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-cost-analysis.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-cost-analysis.svg"
 			}
 		},
 		{
@@ -2377,8 +2377,8 @@
 				"colour": "abaf06ee8993fcc44eb6b3ba69081f87230835df63be1346e96074ee61a09a90"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-factory.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-factory.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-factory.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-factory.svg"
 			}
 		},
 		{
@@ -2400,8 +2400,8 @@
 				"colour": "705d4aa024d8ea7d61a2d6f86da5c0ac07034ed6110da60597de42b17cf3a939"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-feedback.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-feedback.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-feedback.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-feedback.svg"
 			}
 		},
 		{
@@ -2423,8 +2423,8 @@
 				"colour": "7dbb7481b7984a22a159d028d9c6820a482a3e78519d64fece7c5e1d1f6f590b"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-gitguard.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-gitguard.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-gitguard.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-gitguard.svg"
 			}
 		},
 		{
@@ -2446,8 +2446,8 @@
 				"colour": "92418ec4dbcf4cba099e984ef76b1383a3f5bd5b18b873f8c91034bb7997396d"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-ingester.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-ingester.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-ingester.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-ingester.svg"
 			}
 		},
 		{
@@ -2469,8 +2469,8 @@
 				"colour": "b1d98ea1189f4348d99a1f584b287760d25a6741580a348e9f67cacbaf1a9f28"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-lesson-review.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-lesson-review.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-lesson-review.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-lesson-review.svg"
 			}
 		},
 		{
@@ -2492,8 +2492,8 @@
 				"colour": "bcebf3c337f76e6378ce32e5c519cd9c79df5d6f8ef9c3398ab1db8bf8bc9920"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-normalize-file.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-normalize-file.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-normalize-file.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-normalize-file.svg"
 			}
 		},
 		{
@@ -2515,8 +2515,8 @@
 				"colour": "f3d346e0950a39fd7f4f20084099d9aec028d4a6f60e78cd95eb4afaba44296b"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-pass-on.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-pass-on.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-pass-on.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-pass-on.svg"
 			}
 		},
 		{
@@ -2538,8 +2538,8 @@
 				"colour": "97f591a2fc09770642208edc9e23223fc0d753d2eae14fdd64a493ad53e84040"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-pattern.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-pattern.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-pattern.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-pattern.svg"
 			}
 		},
 		{
@@ -2561,8 +2561,8 @@
 				"colour": "879d826175770064e06ee09ac68c7d1e04a4bedf37f7b7e7f83a0ed6782dcf85"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-queue.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-queue.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-queue.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-queue.svg"
 			}
 		},
 		{
@@ -2584,8 +2584,8 @@
 				"colour": "6cfb8a15fc51139d03ae3afd1061a689f7db07a574404580c0c681e3298900a5"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-route.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-route.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-route.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-route.svg"
 			}
 		},
 		{
@@ -2607,8 +2607,8 @@
 				"colour": "4b09e0f26f8a59cc10875dd050aa3fcf10ca4793f351c3b094333df42e92c23b"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-workspace.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-workspace.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-workspace.svg"
 			}
 		},
 		{
@@ -2630,8 +2630,8 @@
 				"colour": "aeb80a928beda5e1e6cc9ab102aa9c76d0bf7260cbc25706a235c7a5a8920d17"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-workspace-authority.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace-authority.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-workspace-authority.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-workspace-authority.svg"
 			}
 		},
 		{
@@ -2653,8 +2653,8 @@
 				"colour": "efd39bb08f04f06d1784219c830bbc80b212a97fb857d74655b54f803bb5473e"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-workspace-context.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace-context.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-workspace-context.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-workspace-context.svg"
 			}
 		},
 		{
@@ -2676,8 +2676,8 @@
 				"colour": "23dd6a7fbd2ed6fa8300aee547a2af8396708d64f9505756e050c96ec3275f69"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-workspace-evidence.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace-evidence.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-workspace-evidence.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-workspace-evidence.svg"
 			}
 		},
 		{
@@ -2699,8 +2699,8 @@
 				"colour": "c0a8adbe1eb1bb09cc571a3e18951597f12b29cd035a3e991df8fd80f033027f"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-workspace-graph.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace-graph.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-workspace-graph.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-workspace-graph.svg"
 			}
 		},
 		{
@@ -2722,8 +2722,8 @@
 				"colour": "3cda859235a07127c36edd5b8a746dd97a23441260e9e8c0f114e16808796c59"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-workspace-reflect.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace-reflect.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-workspace-reflect.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-workspace-reflect.svg"
 			}
 		},
 		{
@@ -2745,8 +2745,8 @@
 				"colour": "bcc90d7c9ee7eb65a5490edc31b8694993a8eea7eb0ecf0dddb1caf2ad5f08bf"
 			},
 			"path": {
-				"mono": "Site/Public/Icons/plugin-dsh-workspace-semantics.svg",
-				"colour": "Site/Public/Icons/Color/plugin-dsh-workspace-semantics.svg"
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-workspace-semantics.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-workspace-semantics.svg"
 			}
 		}
 	]

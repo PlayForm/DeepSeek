@@ -73,7 +73,7 @@
 		"**/node_modules/**": true,
 		"**/target/**": true
 	},
-	"formatFiles.excludePattern": "**/node_modules/**/*,**/.git/**/*,**/.turbo/**/*,**/.cache/**/*,**/Target/**/*,**/target/**/*,**/dist/**/*,**/Temporary/**/*,**/Reference/Archive/**/*,**/Reference/Raw/**/*,**/Documentation/Archive/**/*,**/Test/**/*,**/marketplace.json,**/pnpm-lock.yaml,**/*.mmd,**/*.svg",
+	"formatFiles.excludePattern": "**/node_modules/**/*,**/.git/**/*,**/.turbo/**/*,**/.cache/**/*,**/Target/**/*,**/target/**/*,**/dist/**/*,**/Temporary/**/*,**/Reference/Archive/**/*,**/Reference/Raw/**/*,**/Documentation/Archive/**/*,**/Test/**/*,**/marketplace.json,**/pnpm-lock.yaml,**/*.mmd,**/*.svg,**/Site/Module/DeepSeek/**/*",
 	"formatFiles.excludedFolders": [
 		"node_modules",
 		".git",

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/plugin-dsh-gitguard - interlace-tile">
+	<title>@playform/plugin-dsh-gitguard - interlace-tile</title>
+	<style>
+		@media (prefers-reduced-motion: no-preference) {
+			.plugin-dsh-gitguard-scene * { transform-box: view-box; transform-origin: 50% 50%; }
+		.plugin-dsh-gitguard-breathe { animation: plugin-dsh-gitguard-breathe 7s ease-in-out -3s infinite; }
+		@keyframes plugin-dsh-gitguard-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
+		.plugin-dsh-gitguard-fire { animation: plugin-dsh-gitguard-fire 2.8s ease-in-out infinite; }
+		@keyframes plugin-dsh-gitguard-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+		.plugin-dsh-gitguard-twinkle { animation: plugin-dsh-gitguard-twinkle 8s ease-in-out -3s infinite; }
+		@keyframes plugin-dsh-gitguard-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+		}
+	</style>
+	<defs>
+		<path id="plugin-dsh-gitguard-0" d="M81,81 L19,81 L19,19 L81,19 Z"/>
+		<path id="plugin-dsh-gitguard-1" d="M86,56 L85,58 L83,59 L82,58 L81,56 L82,55 L83,54 L85,55 Z"/>
+		<path id="plugin-dsh-gitguard-2" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
+		<path id="plugin-dsh-gitguard-3" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
+		<path id="plugin-dsh-gitguard-4" d="M92,48 L86,50 L92,52 Z"/>
+		<path id="plugin-dsh-gitguard-5" d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z"/>
+		<path id="plugin-dsh-gitguard-6" d="M87,59 L40,90 L12,38 L61,11 Z M54,55 L80,85 L79,86 L54,55 Z M70,42 L70,44 L69,45 L68,46 L66,46 L65,46 L63,45 L62,44 L62,42 L62,40 L63,39 L65,38 L66,38 L68,38 L69,39 L70,40 Z M51,56 L55,96 L54,96 L50,56 Z M45,52 L8,68 L7,66 L44,52 Z M43,28 L43,30 L42,31 L41,32 L40,32 L38,32 L37,31 L36,30 L36,28 L36,27 L37,26 L38,25 L40,25 L41,25 L42,26 L43,27 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="plugin-dsh-gitguard-7" d="M31,10 L33,6 L36,8 Z"/>
+		<path id="plugin-dsh-gitguard-8" d="M25,87 L21,88 L21,84 Z"/>
+		<path id="plugin-dsh-gitguard-9" d="M82,20 L86,19 L85,23 Z"/>
+		<path id="plugin-dsh-gitguard-10" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+	</defs>
+	<g class="plugin-dsh-gitguard-scene">
+	<g fill="#F8DCA8" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-gitguard-breathe" href="#plugin-dsh-gitguard-0"/>
+	</g>
+	<g fill="#B04523" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-gitguard-fire" style="animation-delay:-3.00s" href="#plugin-dsh-gitguard-1"/>
+		<use class="plugin-dsh-gitguard-breathe" href="#plugin-dsh-gitguard-2"/>
+		<use class="plugin-dsh-gitguard-breathe" href="#plugin-dsh-gitguard-3"/>
+	</g>
+	<g fill="#FBBA5B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-gitguard-fire" style="animation-delay:-3.18s" href="#plugin-dsh-gitguard-4"/>
+	</g>
+	<g fill="#B04523" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-gitguard-breathe" href="#plugin-dsh-gitguard-5"/>
+	</g>
+	<g fill="#2A1823" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use href="#plugin-dsh-gitguard-6"/>
+	</g>
+	<g fill="#B04523" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-gitguard-twinkle" href="#plugin-dsh-gitguard-7"/>
+	</g>
+	<g fill="#FBBA5B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-gitguard-twinkle" href="#plugin-dsh-gitguard-8"/>
+	</g>
+	<g fill="#B04523" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-gitguard-twinkle" href="#plugin-dsh-gitguard-9"/>
+	</g>
+	<g fill="#FBBA5B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="plugin-dsh-gitguard-breathe" href="#plugin-dsh-gitguard-10"/>
+	</g>
+	</g>
+</svg>

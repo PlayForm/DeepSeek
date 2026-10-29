@@ -81,9 +81,12 @@ export const genomeOf = (root, entry) => {
 	// The plan streams from the seed, so it is computed on the genome without
 	// plan; both renders receive the final genome with plan already set.
 	const plan = Grammar.planOf(genome);
+	// The two renders live in the monorepo, not in a site tree: the site is its
+	// own repository, it reads these assets through its Module/DeepSeek
+	// submodule, and a path inside Site/ would never reach a Cloudflare build.
 	const svg = {
-		mono: `Site/Public/Icons/${entry.dir}.svg`,
-		colour: `Site/Public/Icons/Color/${entry.dir}.svg`,
+		mono: `Maintain/Icon/Asset/Mono/${entry.dir}.svg`,
+		colour: `Maintain/Icon/Asset/Color/${entry.dir}.svg`,
 	};
 	const rendered = { ...genome, plan, svg };
 	return {

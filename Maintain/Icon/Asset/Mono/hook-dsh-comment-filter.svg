@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/hook-dsh-comment-filter - spike-star">
+	<title>@playform/hook-dsh-comment-filter - spike-star</title>
+	<style>
+		@media (prefers-reduced-motion: no-preference) {
+			.hook-dsh-comment-filter-scene * { transform-box: view-box; transform-origin: 50% 50%; }
+		.hook-dsh-comment-filter-counter { animation: hook-dsh-comment-filter-counter 28s linear -7s infinite; }
+		@keyframes hook-dsh-comment-filter-counter { to { transform: rotate(-360deg); } }
+		.hook-dsh-comment-filter-breathe { animation: hook-dsh-comment-filter-breathe 5s ease-in-out -7s infinite; }
+		@keyframes hook-dsh-comment-filter-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
+		.hook-dsh-comment-filter-fire { animation: hook-dsh-comment-filter-fire 3.2s ease-in-out infinite; }
+		@keyframes hook-dsh-comment-filter-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+		.hook-dsh-comment-filter-twinkle { animation: hook-dsh-comment-filter-twinkle 6s ease-in-out -7s infinite; }
+		@keyframes hook-dsh-comment-filter-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+		}
+	</style>
+	<defs>
+		<path id="hook-dsh-comment-filter-0" d="M91,67 L88,73 L83,79 L79,83 L73,88 L67,91 L60,93 L53,94 L47,94 L40,93 L33,91 L27,88 L21,83 L17,79 L12,73 L9,67 L7,60 L6,53 L6,47 L7,40 L9,33 L12,27 L17,21 L21,17 L27,12 L33,9 L40,7 L47,6 L53,6 L60,7 L67,9 L73,12 L79,17 L83,21 L88,27 L91,33 L93,40 L94,47 L94,53 L93,60 Z"/>
+		<path id="hook-dsh-comment-filter-1" d="M65,82 L64,83 L62,84 L60,83 L60,82 L60,80 L62,79 L64,80 Z"/>
+		<path id="hook-dsh-comment-filter-2" d="M27,28 L26,29 L24,30 L23,29 L22,28 L23,26 L24,25 L26,26 Z"/>
+		<path id="hook-dsh-comment-filter-3" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
+		<path id="hook-dsh-comment-filter-4" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
+		<path id="hook-dsh-comment-filter-5" d="M87,72 L60,75 L43,89 L28,67 L7,57 L26,35 L33,14 L59,23 L81,19 L76,48 Z M53,55 L77,87 L76,88 L53,55 Z M59,67 L59,69 L58,70 L56,71 L55,72 L53,71 L52,70 L51,69 L50,67 L51,66 L52,64 L53,63 L55,63 L56,63 L58,64 L59,66 Z M49,56 L43,96 L42,95 L49,56 Z M45,53 L10,73 L9,71 L45,53 Z M70,67 L70,68 L69,69 L68,69 L67,70 L66,69 L65,69 L64,68 L64,67 L64,66 L65,65 L66,64 L67,64 L68,64 L69,65 L70,66 Z M48,45 L31,8 L33,7 L48,44 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="hook-dsh-comment-filter-6" d="M92,48 L86,50 L92,52 Z"/>
+		<path id="hook-dsh-comment-filter-7" d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z"/>
+		<path id="hook-dsh-comment-filter-8" d="M73,50 L72,55 L71,60 L68,64 L64,68 L60,71 L55,72 L50,73 L45,72 L40,71 L36,68 L32,64 L29,60 L28,55 L27,50 L28,45 L29,40 L32,36 L36,32 L40,29 L45,28 L50,27 L55,28 L60,29 L64,32 L68,36 L71,40 L72,45 Z M72,50 L71,55 L69,59 L67,63 L63,67 L59,69 L55,71 L50,72 L45,71 L41,69 L37,67 L33,63 L31,59 L29,55 L28,50 L29,45 L31,41 L33,37 L37,33 L41,31 L45,29 L50,28 L55,29 L59,31 L63,33 L67,37 L69,41 L71,45 Z"/>
+		<path id="hook-dsh-comment-filter-9" d="M76,50 L75,56 L73,61 L70,66 L66,70 L61,73 L56,75 L50,76 L44,75 L39,73 L34,70 L30,66 L27,61 L25,56 L24,50 L25,44 L27,39 L30,34 L34,30 L39,27 L44,25 L50,24 L56,25 L61,27 L66,30 L70,34 L73,39 L75,44 Z M75,50 L74,55 L72,61 L69,65 L65,69 L61,72 L55,74 L50,75 L45,74 L39,72 L35,69 L31,65 L28,61 L26,55 L25,50 L26,45 L28,39 L31,35 L35,31 L39,28 L45,26 L50,25 L55,26 L61,28 L65,31 L69,35 L72,39 L74,45 Z"/>
+		<path id="hook-dsh-comment-filter-10" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
+		<path id="hook-dsh-comment-filter-11" d="M33,66 L33,67 L32,67 L32,66 L32,66 L33,66 Z"/>
+		<path id="hook-dsh-comment-filter-12" d="M45,27 L45,27 L44,27 L44,27 L44,26 L45,26 Z"/>
+		<path id="hook-dsh-comment-filter-13" d="M88,78 L88,80 L86,81 Z"/>
+		<path id="hook-dsh-comment-filter-14" d="M96,55 L97,57 L96,59 Z"/>
+		<path id="hook-dsh-comment-filter-15" d="M66,5 L71,3 L72,8 Z"/>
+		<path id="hook-dsh-comment-filter-16" d="M81,82 L82,85 L79,85 Z"/>
+		<path id="hook-dsh-comment-filter-17" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+	</defs>
+	<g class="hook-dsh-comment-filter-scene">
+	<g fill="currentColor" fill-opacity="0.3" fill-rule="evenodd">
+		<use class="hook-dsh-comment-filter-breathe" href="#hook-dsh-comment-filter-0"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+		<use class="hook-dsh-comment-filter-fire" style="animation-delay:-7.00s" href="#hook-dsh-comment-filter-1"/>
+		<use class="hook-dsh-comment-filter-fire" style="animation-delay:-7.18s" href="#hook-dsh-comment-filter-2"/>
+		<use class="hook-dsh-comment-filter-breathe" href="#hook-dsh-comment-filter-3"/>
+		<use class="hook-dsh-comment-filter-breathe" href="#hook-dsh-comment-filter-4"/>
+	</g>
+	<g fill="currentColor" fill-opacity="1" fill-rule="evenodd">
+		<use href="#hook-dsh-comment-filter-5"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+		<use class="hook-dsh-comment-filter-fire" style="animation-delay:-7.36s" href="#hook-dsh-comment-filter-6"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+		<use class="hook-dsh-comment-filter-breathe" href="#hook-dsh-comment-filter-7"/>
+		<use class="hook-dsh-comment-filter-breathe" href="#hook-dsh-comment-filter-8"/>
+		<use class="hook-dsh-comment-filter-breathe" href="#hook-dsh-comment-filter-9"/>
+		<use class="hook-dsh-comment-filter-counter" href="#hook-dsh-comment-filter-10"/>
+		<use class="hook-dsh-comment-filter-counter" href="#hook-dsh-comment-filter-11"/>
+		<use class="hook-dsh-comment-filter-counter" href="#hook-dsh-comment-filter-12"/>
+		<use class="hook-dsh-comment-filter-twinkle" href="#hook-dsh-comment-filter-13"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+		<use class="hook-dsh-comment-filter-twinkle" href="#hook-dsh-comment-filter-14"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+		<use class="hook-dsh-comment-filter-twinkle" href="#hook-dsh-comment-filter-15"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+		<use class="hook-dsh-comment-filter-twinkle" href="#hook-dsh-comment-filter-16"/>
+		<use class="hook-dsh-comment-filter-breathe" href="#hook-dsh-comment-filter-17"/>
+	</g>
+	</g>
+</svg>

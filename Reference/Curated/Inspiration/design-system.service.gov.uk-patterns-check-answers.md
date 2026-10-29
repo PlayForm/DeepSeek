@@ -335,66 +335,97 @@ Nunjucks
 
 ## When to use this pattern
 
-Show a single check answers page immediately before the confirmation screen for small to medium-sized transactions.
+Show a single check answers page immediately before the confirmation screen for small to
+medium-sized transactions.
 
-When designing a very large transaction with multiple sections, it may help to include a check answers pages at the end of each section.
+When designing a very large transaction with multiple sections, it may help to include a check
+answers pages at the end of each section.
 
-This can be valuable for services where different users might be completing each section. You should test this approach with your users to find out if it's helpful.
+This can be valuable for services where different users might be completing each section. You should
+test this approach with your users to find out if it's helpful.
 
-Use the [Summary card component](https://design-system.service.gov.uk/components/summary-list/#summary-cards) when users need to check multiple things of the same type. For example to review a series of interview appointments or application choices.
+Use the
+[Summary card component](https://design-system.service.gov.uk/components/summary-list/#summary-cards)
+when users need to check multiple things of the same type. For example to review a series of
+interview appointments or application choices.
 
 ## How it works
 
 Check answers pages help to:
 
-* increase users' confidence as they can clearly see that they have completed all the sections and that their data has been captured
-* reduce error rates as users are given a second chance to notice and correct errors before submitting data
+- increase users' confidence as they can clearly see that they have completed all the sections and
+  that their data has been captured
+- reduce error rates as users are given a second chance to notice and correct errors before
+  submitting data
 
 ### Choose the right layout for the page
 
-Many services ask users for short answers, which are suitable for a layout that takes up two-thirds of the screen on desktop devices. For example, the 'Check your answers before submitting your application' page included in this guidance.
+Many services ask users for short answers, which are suitable for a layout that takes up two-thirds
+of the screen on desktop devices. For example, the 'Check your answers before submitting your
+application' page included in this guidance.
 
-Using a two-thirds layout stops lines of text getting so long that the page becomes difficult to read. To learn more about line length, see ['Layout'](https://design-system.service.gov.uk/styles/layout/). It also means the action links are closer to the other content on the page. Users with screen magnifiers are less likely to miss them.
+Using a two-thirds layout stops lines of text getting so long that the page becomes difficult to
+read. To learn more about line length, see
+['Layout'](https://design-system.service.gov.uk/styles/layout/). It also means the action links are
+closer to the other content on the page. Users with screen magnifiers are less likely to miss them.
 
-However, if your service asks users for longer or more detailed answers, a full width layout may be more suitable.
+However, if your service asks users for longer or more detailed answers, a full width layout may be
+more suitable.
 
 ### Make the page easy to understand
 
-Use the page title to tell the user what they need to do - otherwise, they might miss the 'submit' button at the end of the page.
+Use the page title to tell the user what they need to do - otherwise, they might miss the 'submit'
+button at the end of the page.
 
 On the page, you should also:
 
-* make it clear the transaction will not be complete until a user confirms their information is correct
-* break the content up into sections when you can
-* only show sections that are relevant to users - for example, if they've said they're from the UK, do not show sections for questions they have not answered about locations outside of the UK
-* rephrase questions if you need to - for example, you do not need to label every individual line of an address, and you can rewrite long questions as shorter statements
-* make sure the 'submit' button clearly shows the action it performs - for example, 'Change your tax details' or 'Send your claim form'
+- make it clear the transaction will not be complete until a user confirms their information is
+  correct
+- break the content up into sections when you can
+- only show sections that are relevant to users - for example, if they've said they're from the UK,
+  do not show sections for questions they have not answered about locations outside of the UK
+- rephrase questions if you need to - for example, you do not need to label every individual line of
+  an address, and you can rewrite long questions as shorter statements
+- make sure the 'submit' button clearly shows the action it performs - for example, 'Change your tax
+  details' or 'Send your claim form'
 
 ### Let users go back and change their answers
 
-You should provide a 'Change' link next to each section on your check answers page so that users can add or change the information. 'Change' links contain hidden text to make them accessible to screen reader users. Update the hidden text to describe what each 'change' link is for.
+You should provide a 'Change' link next to each section on your check answers page so that users can
+add or change the information. 'Change' links contain hidden text to make them accessible to screen
+reader users. Update the hidden text to describe what each 'change' link is for.
 
-If a user decides to go back to a previous answer, make sure information they've already entered is pre-populated.
+If a user decides to go back to a previous answer, make sure information they've already entered is
+pre-populated.
 
 The answers pages should look the same way they did when the user last used them.
 
-When they've finished, the 'Continue' button should return them to the check answers page. They should not need to go through the rest of the transaction again.
+When they've finished, the 'Continue' button should return them to the check answers page. They
+should not need to go through the rest of the transaction again.
 
-If a user changes their response in a way that means you need to ask them more questions, do this before returning them to the check answers page.
+If a user changes their response in a way that means you need to ask them more questions, do this
+before returning them to the check answers page.
 
-If you have questions that are optional, let users know that they've skipped it without giving an answer by showing their response as 'Not provided'.
+If you have questions that are optional, let users know that they've skipped it without giving an
+answer by showing their response as 'Not provided'.
 
 ## Research on this pattern
 
-Read a blog about [how the Carer's Allowance Service used check answers to improve its users' experience](https://dwpdigital.blog.gov.uk/2016/07/08/a-live-service-is-not-the-end-of-the-story/).
+Read a blog about
+[how the Carer's Allowance Service used check answers to improve its users' experience](https://dwpdigital.blog.gov.uk/2016/07/08/a-live-service-is-not-the-end-of-the-story/).
 
 ## Help improve this pattern
 
 To help make sure that this page is useful, relevant and up to date, you can:
 
-* take part in the ['Check answers' discussion on GitHub](https://github.com/alphagov/govuk-design-system/discussions/6105/) and share your research
-* [propose a change on GitHub](https://github.com/alphagov/govuk-design-system/edit/main/src/patterns/check-answers/index.md) - read more about [how to propose changes in GitHub](https://design-system.service.gov.uk/community/propose-a-content-change-using-github/)
+- take part in the
+  ['Check answers' discussion on GitHub](https://github.com/alphagov/govuk-design-system/discussions/6105/)
+  and share your research
+- [propose a change on GitHub](https://github.com/alphagov/govuk-design-system/edit/main/src/patterns/check-answers/index.md) -
+  read more about
+  [how to propose changes in GitHub](https://design-system.service.gov.uk/community/propose-a-content-change-using-github/)
 
 ## Need help?
 
-If you've got a question about the GOV.UK Design System, [contact the team](https://design-system.service.gov.uk/contact/).
+If you've got a question about the GOV.UK Design System,
+[contact the team](https://design-system.service.gov.uk/contact/).

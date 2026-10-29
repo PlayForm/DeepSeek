@@ -64,6 +64,7 @@ FormatLineEndings() {
 		-not -path "*/dist/*" \
 		-not -path "*/.turbo/*" \
 		-not -path "*/.cache/*" \
+		-not -path "*/Site/Module/DeepSeek/*" \
 		| xargs dos2unix -q
 
 	\echo ""

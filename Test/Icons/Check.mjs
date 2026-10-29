@@ -50,10 +50,10 @@ const record = (Name, Ok, Detail) => {
 }
 
 // 2. coverage and size
-const Mono = readdirSync(join(Root, "Site", "Public", "Icons")).filter((Name) => Name.endsWith(".svg"));
-const Colour = readdirSync(join(Root, "Site", "Public", "Icons", "Color")).filter((Name) => Name.endsWith(".svg"));
-const MonoText = Mono.map((Name) => readFileSync(join(Root, "Site", "Public", "Icons", Name), "utf8"));
-const ColourText = Colour.map((Name) => readFileSync(join(Root, "Site", "Public", "Icons", "Color", Name), "utf8"));
+const Mono = readdirSync(join(Root, "Maintain", "Icon", "Asset", "Mono")).filter((Name) => Name.endsWith(".svg"));
+const Colour = readdirSync(join(Root, "Maintain", "Icon", "Asset", "Color")).filter((Name) => Name.endsWith(".svg"));
+const MonoText = Mono.map((Name) => readFileSync(join(Root, "Maintain", "Icon", "Asset", "Mono", Name), "utf8"));
+const ColourText = Colour.map((Name) => readFileSync(join(Root, "Maintain", "Icon", "Asset", "Color", Name), "utf8"));
 {
 	const Oversize = [...MonoText, ...ColourText].filter((Text) => Text.length >= 16384);
 	record(`coverage: ${Expected} mono and ${Expected} colour documents`, Mono.length === Expected && Colour.length === Expected, `${Mono.length} mono, ${Colour.length} colour`);
@@ -71,8 +71,8 @@ const ColourText = Colour.map((Name) => readFileSync(join(Root, "Site", "Public"
 // 4. twins
 {
 	const Pair = ["hook-dsh-ccr", "ets-hook-dsh-ccr"];
-	const MonoA = readFileSync(join(Root, "Site", "Public", "Icons", `${Pair[0]}.svg`), "utf8");
-	const MonoB = readFileSync(join(Root, "Site", "Public", "Icons", `${Pair[1]}.svg`), "utf8");
+	const MonoA = readFileSync(join(Root, "Maintain", "Icon", "Asset", "Mono", `${Pair[0]}.svg`), "utf8");
+	const MonoB = readFileSync(join(Root, "Maintain", "Icon", "Asset", "Mono", `${Pair[1]}.svg`), "utf8");
 	const GrammarA = MonoA.match(/aria-label="[^"]* - ([a-z-]+)"/)?.[1];
 	const GrammarB = MonoB.match(/aria-label="[^"]* - ([a-z-]+)"/)?.[1];
 	record("twins: same grammar, different bytes", GrammarA === GrammarB && MonoA !== MonoB, `${GrammarA} / ${GrammarB}`);
