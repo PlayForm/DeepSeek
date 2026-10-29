@@ -1,0 +1,56 @@
+{
+	"name": "@playform/ets-plugin-dsh-lesson-review",
+	"version": "0.2.1",
+	"private": false,
+	"description": "The lesson-review service: a DeepSeek Harness plugin providing the POST-TURN SELF-IMPROVEMENT REVIEW - the Hermes background-review fork and curator, re-expressed over this harness's surfaces (the family map's review role). It owns the nudge counter, the bounded digest, the byte-stable review prompt, the strict proposal parse, the deterministic acceptance judge, the guarded corpus write, the usage store and the staleness/archive transitions. The model call is ONE hand-built `ctx.llm.stream` request - it carries no agent-loop marker, so it never touches the live turn, and the fork runs from the true idle phase (`agent.runMaintenance`). The review PROPOSES by default: `policy.write` is the shipped `approve`, so nothing lands in the skill corpus until it is accepted; an accepted write goes through the exact-file fence (create refuses an existing path, patch refuses a missing one). Every proposal, acceptance, rejection and transition is a byte-stable ledger line, and every run writes `run.json` + `REPORT.md` under `~/.dsh/lesson/reports/`. The plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/LESSON-REVIEW-PLUGIN.md.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/ets-base-dsh": "0.2.1",
+		"@playform/ets-plugin-dsh-factory": "0.2.1"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-fs": "0.2.1-rc.4",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.5",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.9",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}

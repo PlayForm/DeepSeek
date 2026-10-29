@@ -1,0 +1,19 @@
+# Bundle patch for @playform/ets-plugin-dsh-cost-analysis.
+# The analysis plugin is a READ-ONLY reader of the ledger the cost plugin
+# wrote (Documentation/Plans/COST-TRACK-PLUGIN.md section 13): it opens the
+# same SQLite file with { readOnly: true } and answers questions about
+# contribution and efficiency. It never writes a row, never creates a table,
+# and never registers a tool or a prompt section - its only surface is the
+# one /cost analysis command.
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+- insert:
+      - id: plugin-dsh-cost-analysis
+        name: "@playform/ets-plugin-dsh-cost-analysis"
+        config:
+            enabled: true

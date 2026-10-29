@@ -102,7 +102,7 @@ record(
 	Thin.length === 0 ? `${Roles.length} roles populated` : `under two: ${Thin.join(", ")}`,
 );
 
-record("coverage: 102 packages profiled", Rows.length === 102, `${Rows.length} packages`);
+record("coverage: every package profiled", Rows.length === packages(Root).length, `${Rows.length} packages`);
 
 const Failed = Results.filter((Result) => !Result.Ok);
 console.log(`\n${Results.length - Failed.length} of ${Results.length} profile checks pass`);

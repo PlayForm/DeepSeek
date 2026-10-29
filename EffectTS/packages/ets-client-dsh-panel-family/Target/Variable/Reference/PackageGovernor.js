@@ -1,0 +1,1 @@
+import e from"../Trace.js";var a={id:"adapter-hook-dsh-package-governor",bundle:"@playform/ets-hook-dsh-package-governor",namespace:"hook-dsh-package-governor",title:"package-governor",order:50,slot:"playform.panel.section",activation:"enabled",traceKinds:e.kinds};export{a as default};

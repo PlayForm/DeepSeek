@@ -112,7 +112,7 @@ let Patched = 0;
 const Missing = [];
 const Stale = [];
 
-for (const Entry of Twins) {
+for (const Entry of Scope) {
 	const Result = Twin(Entry, CheckOnly);
 	Generated += Result.Generated;
 	Skipped += Result.Skipped;
@@ -123,7 +123,7 @@ for (const Entry of Twins) {
 }
 
 if (CheckOnly) {
-	console.log(`checked ${Twins.length} twins: ${Stale.length} stale`);
+	console.log(`checked ${Scope.length} twins: ${Stale.length} stale`);
 	for (const Line of Stale) {
 		console.log(`  ${Line}`);
 	}
@@ -137,7 +137,7 @@ if (CheckOnly) {
 }
 
 console.log(
-	`generated ${Generated} files across ${Twins.length} twins; ` +
+	`generated ${Generated} files across ${Scope.length} twins; ` +
 		`${Protected} hand-ported files protected (excluded from the walk); ` +
 		`${Patched} patches applied`,
 );

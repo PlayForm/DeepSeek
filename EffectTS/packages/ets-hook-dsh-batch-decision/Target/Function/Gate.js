@@ -1,0 +1,1 @@
+import{Decide as c,ExpiredDecision as d,Now as p}from"./Proposals.js";var f=(e,i,n,r)=>{const o=e.Pending.get(i.id);if(o===void 0)return;const t=d(e,o)??{proposal:i.id,outcome:n,by:r,at:p(e)};return c(e,t),t};export{f as default};

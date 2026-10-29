@@ -49,6 +49,8 @@ package source
   -> sceneOf()          motif parts + semantic layers               Transliterate.mjs
   -> buildComponent()   stroke envelope per part                    Component.mjs
   -> renderMono/Colour  one path per layer, painted bottom to top   RenderScene.mjs
+  -> motionOf/styleOf   the prefixed motion block, reduced-motion
+                        guarded, written into every asset            Motion.mjs
 ```
 
 ## 2. The 14 motif families

@@ -1,0 +1,1 @@
+import o from"../Trace.js";var r={id:"adapter-hook-dsh-cargo-governor",bundle:"@playform/ets-hook-dsh-cargo-governor",namespace:"hook-dsh-cargo-governor",title:"cargo-governor",order:60,slot:"playform.panel.section",activation:"enabled",traceKinds:o.kinds};export{r as default};

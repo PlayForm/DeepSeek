@@ -1,0 +1,1 @@
+import e from"@deepseek-ai/schemastery";import{Schema as l,Policy as o}from"@playform/ets-plugin-dsh-factory";var t=l(!1,{enabled:e.boolean().default(!1).volatile(),logFile:e.string().default("~/.dsh/playform/ets-hook-dsh-lesson-nudge.log").volatile(),maxReviewsPerSession:e.number().default(3).volatile(),policy:o()});export{t as default};

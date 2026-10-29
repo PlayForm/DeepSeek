@@ -1,0 +1,25 @@
+# Bundle patch for @playform/ets-plugin-dsh-cost.
+# The cost tracker is a reader of the session log: it prices every model call
+# from the provider's own usage, splits the price across the files the
+# conversation touched (the direct half weighted by changed bytes, the
+# amortized half weighted by per-file context mass) and keeps the whole ledger
+# in one SQLite database (Documentation/Plans/COST-TRACK-PLUGIN.md sections
+# 1-3). It never adds a tool, a prompt section, or a model-visible message.
+#
+# New entries are declared with `insert:` (docs/user/develop/basic/
+# publish.md) - a bare `id:` row PATCHES an existing entry and the loader
+# rejects unknown ids with 'entry "..." not found'. Activated when the
+# profile's package.json lists the package in dsh.profile.bundles AND the
+# app is restarted (bundle layers compose at host boot). A file: dependency
+# alone is NOT activation.
+#
+# The annotation writer ships OFF: the plugin measures silently until an
+# explicit /cost annotate asks it to write into the user's files (the one
+# toggle the user asked for, section 5).
+- insert:
+      - id: plugin-dsh-cost
+        name: "@playform/ets-plugin-dsh-cost"
+        config:
+            enabled: true
+            annotate:
+                enabled: false

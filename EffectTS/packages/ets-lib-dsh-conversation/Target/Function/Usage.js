@@ -1,0 +1,1 @@
+const r=n=>typeof n=="string"?n:"",o=n=>typeof n=="number"?n:null;var u=n=>{const e=n.usage??{},s=(n.message??{}).source??{};return{Provider:r(s.provider),Model:r(s.model),InputTokens:o(e.inputTokens)??0,OutputTokens:o(e.outputTokens)??0,CacheReadTokens:o(e.cacheReadTokens)}};export{u as default};

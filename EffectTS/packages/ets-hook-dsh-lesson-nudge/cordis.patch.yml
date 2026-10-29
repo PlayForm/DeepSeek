@@ -1,0 +1,36 @@
+# Bundle patch for @playform/ets-hook-dsh-lesson-nudge.
+# The post-turn nudge of the lesson-review family: it listens to `agent/status`
+# and runs the review service's review from the true idle phase
+# (`agent.runMaintenance`). The service itself is
+# `@playform/ets-plugin-dsh-lesson-review` (ctx.lesson) and MUST also be in the
+# profile's bundle list - the hook probes it per transition and warns once if it
+# is absent, so a missing service is inert, never fatal.
+#
+# New entries are declared with `insert:` (a bare `id:` row PATCHES an existing
+# entry). Activated when the profile's package.json lists the package in
+# dsh.profile.bundles AND the app is restarted; a file: dependency alone is NOT
+# activation.
+#
+# SHIPS DISABLED (the idle-forever posture): enabled: false is the schema
+# default and the patch row; a cold mount logs `disabled (enabled=false)` and
+# the listener stays registered but inert (the volatile-cell hot-flip pattern -
+# flipping enabled: true lands on the next status transition without a remount).
+#
+# maxReviewsPerSession is the RUN-away guard, not the cadence: the cadence is
+# the service's `intervalTurns`. A profile that sets the service's interval to 1
+# still gets at most this many reviews per session.
+- insert:
+      - id: hook-dsh-lesson-nudge
+        name: "@playform/ets-hook-dsh-lesson-nudge"
+        config:
+            enabled: false
+            maxReviewsPerSession: 3
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: approve
+                commit: approve
+                spawn: approve
+                message: auto

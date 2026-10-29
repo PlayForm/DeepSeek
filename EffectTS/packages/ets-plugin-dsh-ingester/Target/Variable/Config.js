@@ -1,0 +1,1 @@
+import e from"@deepseek-ai/schemastery";import{Policy as o}from"@playform/ets-plugin-dsh-factory";var a=e.object({enabled:e.boolean().default(!0),logFile:e.string().default("~/.dsh/playform/ets-plugin-dsh-ingester.log"),maxTargets:e.number().default(20),stopOnConflict:e.boolean().default(!0),maxProposals:e.number().default(16),policy:o()});export{a as default};

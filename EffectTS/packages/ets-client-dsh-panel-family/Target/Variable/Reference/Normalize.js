@@ -1,0 +1,1 @@
+import e from"../Trace.js";var o={id:"adapter-hook-dsh-normalize-dash",bundle:"@playform/ets-hook-dsh-normalize-dash",namespace:"hook-dsh-normalize-dash",title:"normalize",order:10,slot:"playform.panel.section",activation:"enabled",traceKinds:e.kinds};export{o as default};

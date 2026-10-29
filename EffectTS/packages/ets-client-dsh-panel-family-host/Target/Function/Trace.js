@@ -1,0 +1,1 @@
+const r=e=>typeof e=="object"&&e!==null&&typeof e.on=="function";function i(e){const n=e.get("trace");if(!0!==!r(n))return{on:(t,o)=>n.on(t,o),ring:t=>typeof n.ring=="function"?n.ring(t):[]}}export{i as default};

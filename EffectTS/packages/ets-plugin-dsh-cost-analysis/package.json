@@ -1,0 +1,53 @@
+{
+	"name": "@playform/ets-plugin-dsh-cost-analysis",
+	"version": "0.2.1",
+	"private": false,
+	"description": "The read-only analysis half of the cost family: a DeepHarness plugin that opens the SQLite ledger the @playform/ets-plugin-dsh-cost plugin wrote with { readOnly: true } and answers questions about contribution and efficiency - the read credit a file earned by warming the prompt cache, the read-before-edit effectiveness of its edits, the cost per surviving line, the exploration overhead no file paid for, and the per-file cache efficiency. It never writes a row, never creates a table, and never registers a tool or a prompt section: its only surface is one slash command rendered outside model history. Plan: Documentation/Plans/COST-TRACK-PLUGIN.md sections 11-13 and 16.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"cordis.patch.yml",
+		"README.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/ets-base-dsh": "0.2.1",
+		"@playform/ets-plugin-dsh-factory": "0.2.1"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-tools": "0.2.1-rc.4",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.5",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.9",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}

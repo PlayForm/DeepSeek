@@ -1,0 +1,47 @@
+# Nudge-Cadence
+
+This folder covers the moment when a review becomes due: the counter, the interval, the disabled
+service, and the per-agent reset.
+
+## Intent
+
+The cadence is what makes an unattended review invisible.
+
+It must fire often enough to learn from a session and rarely enough to cost nothing, and it must be
+answerable without a clock, so the service counts the TICKS that the caller supplies, one per idle
+transition, instead of reading wall time.
+
+This folder pins the four states of that counter.
+
+## Scenario
+
+- Check: "N1: a disabled service never comes due" - `enabled: false` with
+  `intervalTurns: 1` answers three ticks with `due: false` and a zero count.
+- Check: "N2: the interval fires exactly on its turn and resets" - with
+  `intervalTurns: 3` the third tick is due (`count: 3`), the next tick is early
+  again, and the counter restarts from one.
+- Check: "N3: intervalTurns 0 disables the nudge without disabling the service"
+  - no interval means no review, and `Status()` still answers.
+- Check: "N4: Reset clears one agent's counter and leaves the other alone" - a
+  reset agent restarts at one, and its next tick reaches the interval.
+- Check: "N5: each agent counts independently" - two agents on one service do
+  not share a counter.
+
+## Fixtures
+
+The fixtures are the shared Harness with the real built `Target/Library.js` class, the fake ctx, and
+the `Make` constructor mount.
+
+The agents are bare object identities, because the counter is keyed by the agent and an object is
+all that it needs.
+
+## Expected ledger strings (byte-exact)
+
+The firing tick logs `lesson: due after 3 turns` in the message-only form, and the service appends
+` (logFile <logFile>)`.
+
+The folder asserts the behavior and not the line, because `Apply-And-Pending` pins the line.
+
+## Expected count
+
+5 PASS.

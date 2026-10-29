@@ -5,13 +5,17 @@
 //
 // Deterministic, dependency-free checks over the generated icon tree:
 //   1. determinism: two in-memory builds produce identical bytes
-//   2. coverage: 102 mono + 102 colour documents, every one under 8 KiB
-//   3. uniqueness: all 102 mono hashes distinct, all 102 colour hashes distinct
+//   2. coverage: one mono and one colour document per package, both under 16 KiB
+//   3. uniqueness: every mono and every colour document is distinct
 //   4. twins: a Classic/EffectTS pair differs (the traced mode) but shares the grammar
 //   5. gating: the tools and events features change the plan; a changelog version
 //      adds an evolution ring
-//   6. ledger: one entry per package, the recorded hashes match the files
-//   7. the committed tree matches a fresh build (the --check contract)
+//   6. ledger: one entry per package, the recorded paths exist, the recorded dirs
+//      match the two trees
+//   7. motion: every document carries the prefixed, reduced-motion-guarded style
+//      block, every keyframe is prefixed, nothing is scripted or external, and
+//      every icon moves at least one element
+//   8. the committed tree matches a fresh build (the --check contract)
 //
 // Usage: node Test/Icons/Check.mjs
 //===============================================================================
@@ -24,6 +28,7 @@ import { planOf } from "../../Maintain/Icon/Grammar.mjs";
 import { build, check, packages } from "../../Maintain/Icon/Index.mjs";
 
 const Root = fileURLToPath(new URL("../../", import.meta.url));
+const Expected = packages(Root).length;
 const Results = [];
 const record = (Name, Ok, Detail) => {
 	Results.push({ Name, Ok, Detail });
@@ -47,25 +52,20 @@ const record = (Name, Ok, Detail) => {
 // 2. coverage and size
 const Mono = readdirSync(join(Root, "Site", "Public", "Icons")).filter((Name) => Name.endsWith(".svg"));
 const Colour = readdirSync(join(Root, "Site", "Public", "Icons", "Color")).filter((Name) => Name.endsWith(".svg"));
+const MonoText = Mono.map((Name) => readFileSync(join(Root, "Site", "Public", "Icons", Name), "utf8"));
+const ColourText = Colour.map((Name) => readFileSync(join(Root, "Site", "Public", "Icons", "Color", Name), "utf8"));
 {
-	const Oversize = Mono.filter((Name) => readFileSync(join(Root, "Site", "Public", "Icons", Name)).length >= 16384);
-	record("coverage: 102 mono and 102 colour documents", Mono.length === 102 && Colour.length === 102, `${Mono.length} mono, ${Colour.length} colour`);
-	record("size: every mono document under 16 KiB", Oversize.length === 0, Oversize.join(", "));
-	const Malformed = Mono.filter((Name) => {
-		const Text = readFileSync(join(Root, "Site", "Public", "Icons", Name), "utf8");
-		return !Text.startsWith("<?xml") || !Text.trimEnd().endsWith("</svg>") || /NaN|undefined|Infinity/.test(Text);
-	});
-	record("well-formedness: no malformed or non-finite document", Malformed.length === 0, Malformed.slice(0, 3).join(", "));
+	const Oversize = [...MonoText, ...ColourText].filter((Text) => Text.length >= 16384);
+	record(`coverage: ${Expected} mono and ${Expected} colour documents`, Mono.length === Expected && Colour.length === Expected, `${Mono.length} mono, ${Colour.length} colour`);
+	record("size: every document under 16 KiB", Oversize.length === 0, `${Oversize.length} oversize`);
+	const Malformed = MonoText.filter((Text) => !Text.startsWith("<?xml") || !Text.trimEnd().endsWith("</svg>") || /NaN|undefined|Infinity/.test(Text));
+	record("well-formedness: no malformed or non-finite document", Malformed.length === 0, `${Malformed.length} malformed`);
 }
 
 // 3. uniqueness
 {
-	const Hashes = new Map();
-	for (const Name of Mono) {
-		const Hash = readFileSync(join(Root, "Site", "Public", "Icons", Name), "utf8");
-		Hashes.set(Hash, (Hashes.get(Hash) ?? 0) + 1);
-	}
-	record("uniqueness: 102 distinct mono documents", Hashes.size === 102, `${Hashes.size} distinct`);
+	const Hashes = new Set([...MonoText, ...ColourText]);
+	record(`uniqueness: ${Expected * 2} distinct documents`, Hashes.size === Expected * 2, `${Hashes.size} distinct`);
 }
 
 // 4. twins
@@ -106,16 +106,34 @@ const Colour = readdirSync(join(Root, "Site", "Public", "Icons", "Color")).filte
 {
 	const Ledger = JSON.parse(readFileSync(join(Root, "Maintain", "Icon", "Ledger.json"), "utf8"));
 	const Entries = Ledger.icons ?? [];
-	const Mismatched = Entries.filter((Entry) => {
-		const MonoPath = join(Root, Entry.path.mono);
-		return !existsSync(MonoPath);
-	});
-	record("ledger: one entry per package", Entries.length === 102, `${Entries.length} entries`);
-	record("ledger: every recorded path exists", Mismatched.length === 0, Mismatched.slice(0, 3).map((Entry) => Entry.path.mono).join(", "));
-	record("ledger: the package list matches the two trees", packages(Root).length === 102, `${packages(Root).length} packages`);
+	const Missing = Entries.filter((Entry) => !existsSync(join(Root, Entry.path.mono)));
+	const Recorded = Entries.map((Entry) => Entry.dir).sort().join(",");
+	const Trees = packages(Root).map((Entry) => Entry.dir).sort().join(",");
+	record("ledger: one entry per package", Entries.length === Expected, `${Entries.length} entries`);
+	record("ledger: every recorded path exists", Missing.length === 0, Missing.slice(0, 3).map((Entry) => Entry.path.mono).join(", "));
+	record("ledger: the recorded dirs match the two trees", Recorded === Trees, `${Entries.length} recorded, ${Expected} in the trees`);
 }
 
-// 7. the committed tree
+// 7. motion
+{
+	const Files = [
+		...Mono.map((Name) => ({ Prefix: Name.replace(/\.svg$/, ""), Text: MonoText[Mono.indexOf(Name)] })),
+		...Colour.map((Name) => ({ Prefix: Name.replace(/\.svg$/, ""), Text: ColourText[Colour.indexOf(Name)] })),
+	];
+	const Unstyled = Files.filter((File) => !File.Text.includes("<style>") || !File.Text.includes("prefers-reduced-motion: no-preference") || !File.Text.includes("-scene * {"));
+	const Unprefixed = Files.filter((File) => {
+		const Names = [...File.Text.matchAll(/@keyframes ([a-z0-9-]+)/g)].map((Match) => Match[1]);
+		return Names.length === 0 || Names.some((Name) => Name.startsWith(`${File.Prefix}-`) === false);
+	});
+	const Scripted = Files.filter((File) => /<script|href="http|url\(/.test(File.Text));
+	const Still = Files.filter((File) => /class="[a-z0-9-]+-(?:orbit|counter|breathe|fire|twinkle|trace)"/.test(File.Text) === false);
+	record("motion: every document carries the prefixed, reduced-motion-guarded style block", Unstyled.length === 0, `${Unstyled.length} unstyled`);
+	record("motion: every keyframe carries the package directory", Unprefixed.length === 0, `${Unprefixed.length} unprefixed`);
+	record("motion: no script and no external reference", Scripted.length === 0, `${Scripted.length} scripted or external`);
+	record("motion: every icon moves at least one element", Still.length === 0, `${Still.length} still`);
+}
+
+// 8. the committed tree
 {
 	const Result = check(Root);
 	record("tree: the committed assets match a fresh build", Result.ok, `${Result.missing.length} missing, ${Result.stale.length} stale`);

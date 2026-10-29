@@ -1,0 +1,1 @@
+const o=n=>typeof n=="object"&&n!==null&&!Array.isArray(n),e=(n,r)=>{switch(!0){case r>8:return!1;case Array.isArray(n):return n.some(t=>e(t,r+1));case!o(n):return!1;default:{const t=n.meta;return!0===(o(t)&&t.role==="secret")?!0:Object.values(n).some(s=>e(s,r+1))}}};function u(n){const r=typeof n?.toJSON=="function"?n.toJSON():n;return e(r,0)}export{u as default};

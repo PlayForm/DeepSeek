@@ -16,12 +16,17 @@ statuses:
     - name: the generator contract (feature -> gate -> geometry -> seed)
       state: implemented
       evidence: Maintain/Icon/ + Maintain/Generate/Icons/Index.mjs
-    - name: the 102 generated icons (mono + colour) and the ledger
+    - name: the 107 generated icons (mono + colour) and the ledger
       state: implemented
-      evidence: Site/Public/Icons/**, Maintain/Icon/Ledger.json, Test/Icons/Check.mjs (14 checks)
+      evidence: Site/Public/Icons/**, Maintain/Icon/Ledger.json, Test/Icons/Check.mjs (18 checks)
     - name: the marketplace icon field and the site rendering
       state: implemented
-      evidence: marketplace.json (102 icons), PluginIcon.astro, the built site (104 pages)
+      evidence: marketplace.json (102 icons), PluginIcon.astro, the built site (134 pages)
+    - name: the motion vocabulary - every element moves with the feature it encodes
+      state: implemented
+      evidence:
+          Maintain/Icon/Motion.mjs, the style block in every asset, Test/Icons/Check.mjs (4 motion
+          checks)
 ---
 
 # ICON-GRAMMAR.md - the family's generated icon language
@@ -71,6 +76,12 @@ The generator runs four stages now, and each stage has its own owner file:
 
     A frame or body plane is projected as a 3D solid seen from above (silhouette, ribs, top face,
     and an optional age face), and the SVG is the top view of that stack.
+
+5. **The motion.**
+
+    `Motion.mjs` gives each scene component the motion of the feature it encodes, seeds the clock
+    from the package, and `RenderScene.mjs` writes one prefixed style block into the asset, guarded
+    by `prefers-reduced-motion`.
 
 `ICON-METHODS.md` carries the family table, the matrix, the rules, and the arbiters.
 
@@ -341,9 +352,11 @@ That is the whole update loop.
 - **One path per run.** Each run is written once into `<defs>` as `<path id="<dir>-<n>">` and
   painted with `<use>`, and the Effect-TS echo reuses the body run. The ids carry the package
   directory, so several inlined icons on one page never collide.
-- No `<style>`, no script, and no external reference, because each file is self-contained and under
-  16 KiB (the inline limit of the market index is 32 KiB decoded, so there is room; the cap is the
-  family's own).
+- No script and no external reference, because each file is self-contained and under 16 KiB (the
+  inline limit of the market index is 32 KiB decoded, so there is room; the cap is the family's
+  own). The one `<style>` is the motion block of section 12: prefixed with the package directory,
+  scoped to the scene wrapper, and wrapped in a `prefers-reduced-motion` query, so it cannot leak
+  into the page and it does not move for a reader who asked it not to.
 - `<title>` carries the package name and the grammar, and `role="img"` and `aria-label` are set.
 - The marketplace index carries the colour render as a relative reference, `Icons/Color/<dir>.svg`,
   which resolves against the index URL to the same origin that the site serves.
@@ -367,6 +380,7 @@ Maintain/Icon/
   Component.mjs     buildComponent(), clearanceReport()
   Envelope.mjs      envelopeOf(), offsetPolyline(), clearanceOf()
   RenderScene.mjs   renderMono(), renderColour() - the slab stack
+  Motion.mjs        motionOf(), clockOf(), offsetOf(), styleOf() - the motion block
   Grammar.mjs       planOf(genome) -> { family, form, role, phase, density, void,
                     accent, rules, order, fill, mode, mutations, ... }
   Feature.mjs       featuresOf(root, dir) -> the package facts
@@ -386,8 +400,8 @@ The ledger records, for each package: package, dir, kind, tree, version, seed, g
 order, arms, `rings`, orbit, rim, mode, the two hashes, and the two paths.
 
 Acceptance: `node Maintain/Generate/Icons/Index.mjs --check` exits 0 on a clean tree, two
-consecutive writes are byte-identical, all 102 icons are distinct, `node Test/Icons/Check.mjs`
-reports 14 of 14, `node Test/Icons/Topology.mjs`, `Interventions.mjs`, `Diversity.mjs`,
+consecutive writes are byte-identical, all 107 icons are distinct, `node Test/Icons/Check.mjs`
+reports 18 of 18, `node Test/Icons/Topology.mjs`, `Interventions.mjs`, `Diversity.mjs`,
 `Profiles.mjs` and `Composition.mjs` all pass,
 `node Maintain/Generate/Marketplace/Index.mjs --check` passes with the icons wired, and the site
 builds.
@@ -421,7 +435,7 @@ accent, and second accent inside the zone:
 Tints mix the accent toward the banner cream (`#F8E3B7`) and not toward white, so a filled icon sits
 on the same paper as the reference sheet.
 
-The result is 16 distinct inks, 19 accents, and 28 fills across the 102 packages, which is the 29/29
+The result is 16 distinct inks, 19 accents, and 28 fills across the 107 packages, which is the 29/29
 spread of the reference sheet reached from one source palette.
 
 The mono render carries no hue at all and inherits the page ink. The colour render carries the
@@ -429,6 +443,53 @@ palette's own tones, and it is the asset the marketplace index and the plugin pa
 
 The site's chrome stays blue and white. Colour enters only through the package icons, which are the
 one place a package's identity is allowed to outrank the page's ink.
+
+## 12. The motion (2026-10-29)
+
+An icon moves on the site, and it moves the way the feature it draws behaves.
+
+The motion is part of the asset, not of the page: the generator writes one `<style>` block into each
+SVG, so the marketplace's `<img>` render moves as well as the inlined one, and no page CSS has to
+know which element is which.
+
+`Motion.mjs` maps a scene component to one of six motions by the feature its id or its method names:
+
+| Element                          | Encodes               | Motion    | What the reader sees                            |
+| -------------------------------- | --------------------- | --------- | ----------------------------------------------- |
+| `tool-*` (`tool-bead`)           | a registered tool     | `orbit`   | the tools revolve around the service they drive |
+| `inject-*` (`injection-ring`)    | an injected service   | `orbit`   | the dependencies revolve with it                |
+| `evolution-*` (`evolution-ring`) | a changelog version   | `orbit`   | the history turns, slowly                       |
+| `ledger-*` (`ledger-bead`)       | a ledger entry        | `counter` | the ledger turns the other way                  |
+| `detail-*` (`detail-bead`)       | a source function     | `counter` | the function field turns the other way          |
+| `gate-*` (`gate-loop`)           | an event gate         | `fire`    | the interception taps fire in sequence          |
+| `seam-*` (`seam-tick`)           | an order marker       | `fire`    | the seams fire in their recorded order          |
+| `transform-*` (`transform-cusp`) | a transform           | `fire`    | the transform fires                             |
+| `medallion` (`medallion`)        | a provided service    | `breathe` | the service pulses                              |
+| `state` (`state-nest`)           | state                 | `breathe` | the state heartbeat                             |
+| `core`                           | the core glyph        | `breathe` | the core pulses                                 |
+| `plate`                          | the containment frame | `breathe` | the frame holds and barely breathes             |
+| `residue` (streaming only)       | the flow              | `breathe` | a streaming package breathes at the body        |
+| `debris-*`                       | the branching decay   | `twinkle` | the fragments twinkle outward                   |
+| the Effect-TS echo               | the effect trace      | `trace`   | the trace drifts off the body and back          |
+
+The clock is seeded from the package (`clockOf`), so the orbit runs for 16-23 seconds, the counter
+rotation for 20-28, the breathe for 5-8, and the fire for 2.6-3.2, and two packages never move in
+lockstep. A firing element carries its own staggered delay, so a ring of seams fires in sequence
+rather than together.
+
+The block is scoped: every class and every keyframe is prefixed with the package directory, the
+rules hang off the scene wrapper, and the whole block sits inside
+`@media (prefers-reduced-motion: no-preference)`. A page that inlines a hundred icons therefore
+defines a hundred disjoint rule sets, and a reader who prefers reduced motion sees the still
+drawing, because the static geometry is the base state and nothing has to be undone.
+
+The rules:
+
+- No script, no external reference, and no `url()`: the block is CSS text inside the file.
+- The prefix is the package directory, so no two icons can share a class or a keyframe.
+- Only `transform` and `opacity` animate, so no geometry is recomputed.
+- The animated element is a `<use>`; the painted group keeps the palette tone, the paint order stays
+  the depth order, and the file stays under the 16 KiB cap.
 
 ---
 

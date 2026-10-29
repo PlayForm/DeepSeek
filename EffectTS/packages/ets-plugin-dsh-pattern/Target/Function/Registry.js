@@ -1,0 +1,1 @@
+class r{Patterns=new Map;Put(t){this.Patterns.set(t.id,t)}Get(t){return this.Patterns.get(t)}List(){return[...this.Patterns.values()].sort((t,e)=>t.id.localeCompare(e.id))}Size(){return this.Patterns.size}Reset(t){this.Patterns=new Map(t.map(e=>[e.id,e]))}}export{r as default};

@@ -1,0 +1,59 @@
+{
+	"name": "@playform/ets-client-dsh-panel-family-host",
+	"version": "0.2.1",
+	"private": false,
+	"description": "The host half of the UI family's panel: the companion package that gives the central panel LIVE data and its ONE trusted write surface (Documentation/Plans/UI-Family/PHASE-5-ADAPTERS-AND-LEDGER-TAILS.md, PHASE-7-PLAIN-FIELD-BRIDGE.md). Three services. READ-ONLY: tail(namespace, lines) returns the last N lines of the owning module's ~/.dsh log (the family ledger tails) and stats() returns the CCR store summary; the fiberPhases come from the already-remote remote.pluginManager (PHASE-5 step 1: prefer the existing remote). WRITE, least privilege: panelFamilyBridge.editFull(namespace, patch) applies the namespace's WHOLE resolved config through ctx.configEditor.edit() - the plain-field bridge - and REFUSES a namespace declaring a role(\"secret\") field (the patch would restate a redacted value over the stored secret); the audit line comes from the editor. TRACE: panelFamilyTrace forwards the D5 bus (ctx.trace) as on(kind, listener)/ring(limit); the ./client half re-publishes it as the panel's trace service through the harness's generated playformFamilyPanel Remote namespace. The Typert generation pipeline (TypertRemoteService + @Remote + generated descriptors + the client lib/typert.remote-client artifacts) is documented as not reproducible from an external package (PHASE-5 caveat), so the services ship as plain cordis services and the browser forwarding waits on the generated namespace (the documented residual); the panel keeps its static fallback until then.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./client": "./Target/Client.bundle.js",
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.5",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.9",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		},
+		"client": {
+			"platform": "web",
+			"immediately": true,
+			"inject": [
+				"@deepseek-ai/dsh-api-remotes"
+			]
+		}
+	}
+}

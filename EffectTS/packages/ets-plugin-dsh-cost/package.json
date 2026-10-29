@@ -1,0 +1,53 @@
+{
+	"name": "@playform/ets-plugin-dsh-cost",
+	"version": "0.2.1",
+	"private": false,
+	"description": "The per-file inference cost ledger: a DeepHarness plugin that reads the session log and prices every model call from the provider's own TokenUsage (uncached input, cache read, cache write, output, reasoning - never the estimator), then splits each call's price across the files the conversation touched: a direct half for the model's output, weighted by the changed bytes of the files the step wrote, and an amortized half for the input context, weighted by each file's token mass in the surface. The whole ledger lives in one SQLite database (effective-dated prices, one ledger for many projects and clients), the accumulated cost exports as a client-facing CSV/JSON/markdown bundle, and it can be written back into a file as a marker-delimited comment (off by default). The plugin is a reader only: no tool, no prompt section, no model-visible message. Plan: Documentation/Plans/COST-TRACK-PLUGIN.md.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"cordis.patch.yml",
+		"README.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/ets-base-dsh": "0.2.1",
+		"@playform/ets-plugin-dsh-factory": "0.2.1"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-tools": "0.2.1-rc.4",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.5",
+		"@types/node": "26.6.5",
+		"tsc-alias": "1.9.9",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}

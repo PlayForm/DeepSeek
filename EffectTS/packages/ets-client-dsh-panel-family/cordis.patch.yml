@@ -1,0 +1,25 @@
+# Bundle patch for @playform/ets-client-dsh-panel-family.
+#
+# The central panel package of the UI family, on the v4.1 child-slot model
+# (Documentation/Plans/Completion-Spec/04-CLIENT.md): it owns the PANEL
+# CONTRACT (the two child slots playform.panel.section and
+# playform.panel.overlay, the slot-aware playformFamilyPanel registry, the
+# adapter contract, the status/trace and config-form contracts, the locale)
+# plus the three reference adapters. The host half of the entry is an empty
+# apply(): the row exists so the client module system serves the package's
+# ./client bundle (a pure browser module - installing it needs no host
+# restart, R-UI-1).
+#
+# New entries are declared with `insert:`; activated when the profile's
+# package.json lists the package in dsh.profile.bundles AND the app restarts
+# (bundle layers compose at host boot). The PoC ships the row DISABLED
+# (the PoC brief's mandatory anatomy: `enabled: false`); the end-phase wiring
+# pass flips the row per the plan (which wants the panel live by default).
+- insert:
+      - id: client-dsh-panel-family
+        name: "@playform/ets-client-dsh-panel-family"
+        config:
+            enabled: false
+            tabOrder: 20
+            overlayMaxWidth: 720
+            locale: en

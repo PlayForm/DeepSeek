@@ -1,0 +1,65 @@
+{
+	"name": "@playform/ets-client-dsh-panel-family",
+	"version": "0.2.1",
+	"private": false,
+	"description": "The central panel package of the UI family, on the v4.1 CHILD-SLOT model (Documentation/Plans/Completion-Spec/04-CLIENT.md, Documentation/Plans/UI-FAMILY-V4-1.md). It owns the PANEL CONTRACT - the two child slots (playform.panel.section on the conversation.view family tab, playform.panel.overlay on the shell.overlay panel), the slot-aware playformFamilyPanel registry (one adapter per bundle per slot; a duplicate is refused with the documented line), the adapter contract, the status/trace contract, the config-form contract and the locale - plus the THREE REFERENCE ADAPTERS (normalize, tool-coach, suggester) that prove the pattern for the ten residual per-bundle adapters. Each adapter renders its plugin's status (the static activation, the ledger tail through the D5 trace when the host exposes ctx.trace) and its options generated from the plugin's serialized Schemastery schema through ctx.configForms, with the PHASE-7 plain-field bridge for non-volatile fields and the secret-namespace refusal. The host half of the entry is an empty apply() - the row exists so the client module system serves the ./client bundle. Locale strings route through the client locale service; visible strings live in Source/Variable/Locale-*.json.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./client": "./Target/Client.bundle.js",
+		"./locale/*.json": "./Source/Variable/*.json",
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.5",
+		"@types/node": "26.6.5",
+		"@types/react": "19.3.0",
+		"react": "19.3.1",
+		"tsc-alias": "1.9.9",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		},
+		"client": {
+			"platform": "web",
+			"immediately": true,
+			"inject": [
+				"@deepseek-ai/dsh-client-locale",
+				"@deepseek-ai/dsh-client-ui-layout",
+				"@deepseek-ai/dsh-client-ui-settings",
+				"@deepseek-ai/dsh-api-remotes"
+			]
+		}
+	}
+}

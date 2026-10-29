@@ -1,0 +1,1 @@
+var a=(r,t,n,e)=>{const o=r.Context?.get?.("feedback");if(!0===(typeof o?.Outcome!="function"))return;const c=e.applied>0&&e.conflicts===0&&e.recovery===0?"applied":"rejected";try{o.Outcome(t.origin??"",t.origin??"",n.proposal,c,`applied ${e.applied}, conflicts ${e.conflicts}, recovery ${e.recovery}`)}catch{}};export{a as default};
