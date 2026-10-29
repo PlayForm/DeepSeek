@@ -457,8 +457,8 @@ know which element is which.
 | Element                          | Encodes               | Motion    | What the reader sees                            |
 | -------------------------------- | --------------------- | --------- | ----------------------------------------------- |
 | `tool-*` (`tool-bead`)           | a registered tool     | `orbit`   | the tools revolve around the service they drive |
-| `inject-*` (`injection-ring`)    | an injected service   | `orbit`   | the dependencies revolve with it                |
-| `evolution-*` (`evolution-ring`) | a changelog version   | `orbit`   | the history turns, slowly                       |
+| `inject-*` (`injection-ring`)    | an injected service   | `breathe` | the dependencies pulse with the service         |
+| `evolution-*` (`evolution-ring`) | a changelog version   | `breathe` | the history ripples outward                     |
 | `ledger-*` (`ledger-bead`)       | a ledger entry        | `counter` | the ledger turns the other way                  |
 | `detail-*` (`detail-bead`)       | a source function     | `counter` | the function field turns the other way          |
 | `gate-*` (`gate-loop`)           | an event gate         | `fire`    | the interception taps fire in sequence          |
@@ -471,6 +471,9 @@ know which element is which.
 | `residue` (streaming only)       | the flow              | `breathe` | a streaming package breathes at the body        |
 | `debris-*`                       | the branching decay   | `twinkle` | the fragments twinkle outward                   |
 | the Effect-TS echo               | the effect trace      | `trace`   | the trace drifts off the body and back          |
+
+A ring is rotationally symmetric, so a ring breathes and only an off-centre bead turns: the motion
+has to be visible to carry its meaning.
 
 The clock is seeded from the package (`clockOf`), so the orbit runs for 16-23 seconds, the counter
 rotation for 20-28, the breathe for 5-8, and the fire for 2.6-3.2, and two packages never move in

@@ -36,9 +36,10 @@ export const motionOf = (Component, Profile) => {
 		case Method === "transform-cusp":
 			return "fire";
 		case Method === "tool-bead":
+			return "orbit";
 		case Method === "injection-ring":
 		case Method === "evolution-ring":
-			return "orbit";
+			return "breathe";
 		case Method === "ledger-bead":
 		case Method === "detail-bead":
 			return "counter";
