@@ -8,7 +8,7 @@ whenToUse:
     Before editing any file under Site/ (pages, components, layout, library, styles, public assets,
     diagrams), adding a page or nav entry, changing the 404 or deploy config, or verifying a site
     claim about the family.
-version: 2.1.0
+version: 2.2.0
 updated: 2026-10-29
 ---
 
@@ -64,45 +64,66 @@ site has been burned by.
     The normalize hooks are active while authoring; a deliberate glyph goes through `raw-write`
     (`instructional-writing`).
 
+## The build-time source
+
+The site prints facts that live in the monorepo, and `Site/` deploys on its own, so the monorepo
+arrives as a submodule at `Site/Module/DeepSeek`.
+
+Three anchors resolve the package trees, in this order, inside `Source/Library/Package.server.ts`:
+
+1. `DSH_SOURCE_ROOT`, when it is set.
+2. The monorepo above the site, found by walking up from the working directory (local development).
+3. `Site/Module/DeepSeek` (the deployment, where the site is checked out alone).
+
+`Scripts/Prepare.ts` runs before `astro build` and checks the submodule out when the trees are
+missing, so a clean clone builds with no manual command.
+
+The change order is a law:
+
+- Every package fact originates in the monorepo, not in the site.
+- A change lands there first, is committed, and is pushed.
+- The site then pulls it into `Site/Module/DeepSeek` with `git -C Module/DeepSeek pull --ff-only`.
+- Never edit inside `Module/DeepSeek`. It is a checkout of the monorepo; the edit belongs to no
+  commit the site can publish, and the next update discards it.
+
+The submodule URL in the committed `.gitmodules` is part of the build, because the deployment clone
+fails before the build command runs:
+
+| URL form | Result on the builder |
+| --- | --- |
+| `https://github.com/PlayForm/DeepSeek.git` | clones; the repository is public |
+| `ssh://git@github.com/PlayForm/DeepSeek.git` | `Host key verification failed`, the deploy aborts |
+
+`Prepare.ts` also sets the HTTPS URL before it clones, so a checkout that recorded an SSH remote
+still fetches.
+
 ## The source map
 
 ```text
 Site/
   Source/
-    Layout/Base.astro        the shell: head, SEO, fonts, nav, footer
-    Component/               Badge, Card, PageHero, SectionHeader,
-                             Terminal, CodeBlock, Compare, Concept,
-                             Configurator, FlavorBadge, InstallDemo,
-                             Seams, Showcase, StatsBand, SupportsButton,
-                             TerminalTray, BrandIcon, ArrowIcon,
-                             GraphPreview, EvidenceStrip, ScenarioCard
-    Component/Graph/         Explorer, Toolbar, SwitchGroup, SourceBadge,
-                             GraphCanvas, Inspector, AccessibleList,
-                             ControlBar, GraphLegend
-    Component/Reference/     Models, Flavors, Matrix, Versions, Workbench
-    pages/                   index, plugins, setup, reference, case-study,
-                             marketplace, connect, showcase, explore, tl,
-                             showcase/<slug> (one per story),
-                             plugins/<one detail page per package>
-    Library/                 Content.ts (the facts), Live.ts (build-time
-                             readers), Links.ts (the URL registry),
-                             FileIcon.ts, DiagramNav.ts, Screens.ts
-    Library/Graph/           Groups.mjs (the ten-group roster), Model.mjs
-                             (validation and projection), Catalogue.server.mjs
-                             (the snapshot loader), Stories.mjs (the sixteen
-                             story records), Traces.mjs (the validated traces),
-                             World.browser.mjs, Timeline.browser.mjs,
-                             TimelineController.mjs, ElkModel.mjs, Client.mjs
-    Content/Graph/           Catalogue.snapshot.json (the committed
-                             inventory), Showcase/<slug>.json (the traces)
-    Content/Mermaid/         Render.mjs (the diagram pipeline)
-    Script/                  client scripts
-    Stylesheet/              Base.css (Tailwind), Global.css (tokens),
-                             Observatory.css (the graph surface)
-  Public/                    static assets: 404.html, _headers,
-                             Manifest.json, robots.txt, assets/
-  Scripts/                   Drift-Guard.mjs, Export-Graph-Catalogue.mjs
-  Tests/Observatory/         Model, Catalogue and Timeline suites
+    Layout/Base.astro        the shell: head, SEO, nav, footer, skip link
+    Component/               Badge, VersionPill, Breadcrumb, Definitions,
+                             Table, Card, PackageCard, PageHero,
+                             SectionHeader, StatsBand, Callout, CodeBlock,
+                             Terminal, EmptyState, Pager, CopyButton.tsx
+    Component/Graph/         Explorer.tsx (the Solid cytoscape island)
+    pages/                   index, package, package/<slug>, showcase,
+                             behavior, explore, tl, setup, reference,
+                             case-study, marketplace, connect, library,
+                             library/<slug>, 404
+    Library/                 Package.server.ts (the monorepo reader),
+                             Component.ts (the component roster),
+                             Content.ts (the site's words), Links.ts (the
+                             URL registry), Preview.astro (the library demo)
+    Library/Graph/           Catalogue.server.ts (the serializable graph)
+    Content/                 Summary.ts (one authored line per package)
+    Stylesheet/              Base.css (Tailwind), Global.css (tokens and
+                             primitives), Material.scss (the cabinet
+                             mixins), Component/*.scss, Layout/Shell.scss
+  Public/                    Manifest.json, robots.txt
+  Scripts/                   Prepare.ts (checks out the submodule)
+  Module/DeepSeek/           the monorepo, a submodule (the build input)
   Target/                    the built site (the deployment artifact)
 ```
 
@@ -267,6 +288,11 @@ implicit fourth row that steals the canvas row's height. The Explorer's legend t
 inside the `ControlBar` as a collapsed disclosure rather than standing beside it in the grid.
 
 ## The workflow
+
+0. **The source.**
+
+    A package fact is changed in the monorepo first, committed, and pushed; the site then pulls it
+    into `Site/Module/DeepSeek`. A change made inside the submodule is not a change.
 
 1. **The read.**
 

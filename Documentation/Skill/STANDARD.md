@@ -42,7 +42,7 @@ A skill that restates another skill's rules fails the single-owner rule (section
 | `reference-intake`      | The Reference shelf: fetch, convert, index, status, failures                                 | Reading a page to answer a question (crawl4ai), on-disk conversion (anydoc-documents) |
 | `request-pack`          | The request classes and the skill each one loads                                             | The skills themselves                                                                 |
 | `source-pipeline`       | Raw source plus converted Markdown as two artifacts: archive, convert, index                 | URL reading (crawl4ai), document conversion (anydoc-documents)                        |
-| `site-authoring`        | The Site/ lane: build, structure, design system, content, deploy                             | Plugin code and smokes                                                                |
+| `site-authoring`        | The Site/ lane: build, structure, design system, content, deploy, the build-time source      | Plugin code and smokes                                                                |
 
 ## 3. The SKILL.md specification
 
