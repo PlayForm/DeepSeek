@@ -36,11 +36,10 @@ const Pending = new Map<string, string[]>();
 let Chain: Promise<void> | undefined;
 
 const Drain = (): Promise<void> => {
-	switch (Chain !== undefined) {
-		case true:
-			return Chain;
+	if (Chain !== undefined) {
+		return Chain; // narrowed: the running chain IS the work
 	}
-	Chain = (async () => {
+	const Chained = (async () => {
 		// Yield once: an empty drain runs to completion synchronously, and its
 		// `finally` would clear `Chain` BEFORE the assignment below lands,
 		// leaving a resolved promise in place that every later drain reuses.
@@ -69,7 +68,8 @@ const Drain = (): Promise<void> => {
 			}
 		}
 	})();
-	return Chain;
+	Chain = Chained;
+	return Chained;
 };
 
 /** Flush every queued line now and resolve once the drain chain is empty. */
