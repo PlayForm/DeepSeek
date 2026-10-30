@@ -406,10 +406,19 @@ inside the `ControlBar` as a collapsed disclosure rather than standing beside it
 ## Verification
 
 - `pnpm prepublishOnly` exits zero.
+- `pnpm Check` exits zero: it reads the built output and fails on a broken link, a page without
+  exactly one h1 or a title or a description, a skipped heading level, a duplicate id, a digit glued
+  to a word, a space before punctuation, or a plural count. It also reports how many pages carry an
+  island, because an island that hydrated but never drew is invisible to the other checks.
 - `find Site/Target -name "*.html" | wc -l` equals the expected page count.
 - The changed strings appear in the built HTML.
 - `pnpm Drift` passes.
 - The nav, the 404, and the sitemap agree on the page set.
+- Every island opened in a real browser, not inferred from markup.
+
+`Check.ts` reads verbatim content (tables and preformatted blocks) out of the text before it judges
+spacing or plurals, because the site's voice does not govern a README's sentence, and it reads a
+block-level tag as a space and an inline tag as nothing, because `</a>.` is not "README . Install".
 
 One log line is known noise: `@playform/compress` intermittently prints
 `SyntaxError: Unexpected end of input` or `Invalid empty selector` after inlining the pages. It is a
