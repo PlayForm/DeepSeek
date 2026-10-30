@@ -44,6 +44,28 @@ The long-term direction is an operational dashboard: the same model of the turn,
 trace instead of a static example. A page built for the dashboard is built so that a live source
 can replace the sample without changing the layout.
 
+## The second goal: mechanistic inter-operability
+
+Interpretability asks what one plugin does. Inter-operability asks what the family does together,
+and it is a separate claim that needs its own evidence.
+
+Three questions organize a page about composition:
+
+1. **Who fires first at this seam?** A seam is a list of listeners, not a single hook. The order is
+   the bundle's order plus each package's `prepend` or `append`, so a page that shows two plugins
+   at one seam must show which of them sees the other's output.
+2. **What does one plugin's output do to the next plugin's input?** The family is designed around
+   this: the CCR gate compresses the bytes the normalizers already rewrote, because the bundle
+   order puts CCR outside the normalize arms. A page that claims composition shows that chain, not
+   a list of packages.
+3. **Does the same behavior hold in both release trees?** Classic and Effect-TS are one behavior in
+   two trees, so a claim about composition is a claim about both, and a page that shows one tree
+   silently is a page that will drift.
+
+The composition facts are data, not prose: the order of the arms, the prepend discipline, and the
+seams that run independently belong in an authored map, the same way the behavior map holds the
+seams.
+
 ## When to use
 
 - Any edit under `Site/Source/`, `Site/Public/`, `Site/astro.config.ts`, `Site/package.json`, or
