@@ -26,14 +26,14 @@ The subagents' usage is computable from their files.
 
 ## Skills
 
-Two homes, byte-identical:
+Two homes, two jobs:
 
-| Home                   | Role                         |
-| ---------------------- | ---------------------------- |
-| `Documentation/Skill/` | The repo's specialized truth |
-| `${DSH_HOME}/skills/`  | The global fallback          |
+| Home                   | Role                                        |
+| ---------------------- | ------------------------------------------- |
+| `Documentation/Skill/` | This repository's anonymised specialization |
+| `${DSH_HOME}/skills/`  | The private, project-agnostic fallback      |
 
-Where the two disagree, the repo copy wins, and the fix is synced to both.
+The project copy wins inside this repository, and the profile copy is the fallback for a project that has no skill tree of its own.
 
 ## Profiles
 

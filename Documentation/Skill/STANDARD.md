@@ -1,9 +1,12 @@
-# The Skill Corpus Standard (v2.2, 2026-10-28)
+# The Skill Corpus Standard (v3.0, 2026-10-30)
 
 This document is the specification every skill in this repository follows.
 
 It replaces the v1 template (SKILL.md as a pointer index) with a rule: the SKILL.md is the operating
 manual, and the references are the depth.
+
+v3 adds the two-copy rule: this repository's copy is anonymised and project-specific, and the profile
+copy is private and project-agnostic.
 
 ## 1. What a skill is for
 
@@ -142,6 +145,9 @@ printed arbiter output, and the commit or `READY-TO-COMMIT`.
   corpus.
 - Do not put a spoken reply, a report shape, a sentence count, or a verbatim line in a skill. State
   the artifact and its acceptance check.
+- A path that leaves the workspace is written with a token: `<home>` for the user's home directory,
+  `<workspace>` for the working directory, and `<profile>` for the profile root. A personal name, a
+  home path, and a machine path never appear in this repository's copy.
 
 ## 6. The single-owner rule
 
@@ -197,22 +203,27 @@ Point to the owner or the source file (a manifest, a smoke README,
 
 6. **The install.**
 
-    The same content is written to the repo copy (`Documentation/Skill/<name>/`) and the global copy
-    (`${DSH_HOME}/skills/<name>/`).
+    This repository's copy is written to `Documentation/Skill/<name>/`, anonymised and
+    project-specific: it names the project's real directories, commands, tokens, and laws, and it
+    carries no personal name, home path, machine path, or absolute host path.
 
-    The two are byte-identical, and the repo copy wins by policy, not by a marker.
+    The profile copy is written to `<profile>/skills/<name>/`, private and project-agnostic: it
+    states the rule, the pattern, and the workflow, and it names no project, no project directory,
+    and no project count.
 
-7. **The adaptation.**
+    This repository's copy wins inside this repository, and the profile copy is the fallback for a
+    project that has no skill tree of its own.
 
-    A project repository may adapt a skill instead of copying it, when the project's tooling or laws
-    genuinely differ.
+7. **The specialization.**
 
-    An adaptation is a file with its own name that states at the top which global skill it adapts
-    and what it changed.
+    This repository's copy is a specialization, not a byte-identical copy: it keeps the rule, states
+    the instance, and drops the parts of the pattern that this repository does not use.
 
-    The byte-identity rule applies to copies, not to adaptations.
+    A rule that this repository's copy changes is changed in the profile copy first and then
+    specialized downward, so that the two never disagree about the rule.
 
-    A diverged copy is the one state never allowed, because it is indistinguishable from drift.
+    A profile copy that carries one project's paths is the one state never allowed, because it is
+    false in every other project.
 
 ## 9. The verification checklist (run before reporting done)
 
@@ -227,7 +238,9 @@ Point to the owner or the source file (a manifest, a smoke README,
 - [ ] The body is continuous prose with paragraphs separated by blank lines; no telegraphic fragment
       lists.
 - [ ] The content is ASCII (no curly quotes, dashes, ellipsis glyphs).
-- [ ] The repo copy and the global copy are byte-identical.
+- [ ] This repository's copy carries no personal name, home path, machine path, or absolute host
+      path.
+- [ ] The profile copy names no project, no project path, and no project count.
 
 ## 10. Provenance
 
@@ -236,4 +249,8 @@ v1 (the pointer-index template) was written 2026-10-20 and is preserved in git h
 v2 replaces it because a pointer index forces a reference read for every decision, and because the
 same rules had drifted into three or four skills.
 
-The recreation is dated 2026-10-20.
+v3 replaces the byte-identity rule with the two-copy rule, because a byte-identical copy cannot be
+anonymised and cannot be project-specific, and a profile that carries one project's paths is false in
+every other project.
+
+The recreation is dated 2026-10-20, and the two-copy rule is dated 2026-10-30.

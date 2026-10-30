@@ -21,6 +21,29 @@ It is its own git repository, and its built output in `Site/Target/` is what use
 This skill states the lane's laws, the source map, the content model, and the accuracy rules the
 site has been burned by.
 
+## The goal: mechanistic interpretability
+
+The site's purpose, in the owner's words, is mechanistic interpretability: to show what a plugin
+does to the harness, what it does to the conversation, and how the harness works without it.
+
+Three questions organize every page that makes a claim about behavior:
+
+1. **What does the harness do here without the family?** The default turn, stage by stage, is the
+   baseline every page compares against, and a page that claims an improvement must show the
+   default beside it.
+2. **What does this plugin change at this seam?** The payload it reads, the payload it writes, and
+   what the model, the conversation, and the disk each see differently afterwards.
+3. **Why is that better, and more secure, than the default?** The claim is marketing in tone and
+   evidence in substance: it names the property (deterministic output, bounded context, a write
+   guard, cost visibility) and shows the mechanism that produces it.
+
+The site is a showcase, so the register is confident and short; it is not a spec sheet, so every
+number and every mechanism still comes from the tree or from the authored maps.
+
+The long-term direction is an operational dashboard: the same model of the turn, driven by a real
+trace instead of a static example. A page built for the dashboard is built so that a live source
+can replace the sample without changing the layout.
+
 ## When to use
 
 - Any edit under `Site/Source/`, `Site/Public/`, `Site/astro.config.ts`, `Site/package.json`, or
@@ -353,6 +376,51 @@ inside the `ControlBar` as a collapsed disclosure rather than standing beside it
 | An unverified npm claim                | A broken install path     | Check the registry per package |
 | A new page missing from the nav or 404 | A page nobody can find    | Update Base and the 404        |
 | A diagram label over the viewBox       | A cropped diagram ships   | Fix the source, re-render      |
+
+## The component families and the unification decision
+
+The site now carries seven component families under `Source/Component/`:
+
+| Family | Role | Count |
+| --- | --- | --- |
+| `Layout/` | the six global shells plus nine simple section modules | 15 |
+| `Anatomy/` | the advanced M01-M20 implementations | 19 |
+| `Mechanism/` | the X01-X12 readers and the `MechanismFor` dispatcher | 14 |
+| `Workspace/` | the O15-O23 and W01-W04 readers | 49 |
+| `Observatory/` | the data-path strip, B01-B06 and O24-O32 | 52 |
+| `Suggesters/` | C01-C06 and O33-O42 | 56 |
+| `Ui/` | the shared primitives | 4 |
+
+The dispatcher (`MechanismFor.astro`) resolves four families by stem: a static import map for
+the mechanisms and an eager `import.meta.glob` for the other three. Effect-TS twins are
+never mapped onto a Classic reader; they keep their own state with a link to the Classic
+readers.
+
+**One tree, one slot vocabulary.** A starter library (`Source/UI/{Primitive,Module,Layout}`
+with its own typed records and per-family slots) describes the same 30 contracts as this
+build's `Ui/` + `Layout/` + `Anatomy/` with five generic slots (`intro`, `primary`,
+`secondary`, `evidence`, `closing`). Pick one before touching a route; the route adoptions
+already use the five-slot vocabulary, and two live systems are worse than one imperfect one.
+
+**The anatomy mount map** (not yet mounted; the Layout module of the same id is mounted):
+
+| Route | Anatomy components |
+| --- | --- |
+| `/explore/`, `/tl/` | M02 SourceIntegrityRail, M08 EvidenceReader, M20 OutcomeRecord |
+| `/`, `/case-study/`, `/showcase/[slug]/` | M05 ArtifactDifference |
+| package pages | M06 DecisionEvidence, M17 TypedRelationship |
+| `/reference/` | M09 OriginInspector |
+| `/connect/` | M18 DeliveryReceipt |
+
+A page mounts one implementation per contract id, never both; the collision is not the
+`data-module` value but duplicate instance state, document-wide selectors and `id`s.
+
+**The four known defects** (from the integration review, with their locations): the
+selection strip compares `Package.Name` against the scoped name (`SelectionStrip.astro:87`);
+the attachment derivation filters on kind `"seam"` and misses listener-only contributions;
+O29, O31 and O32 are absent from the Observatory table; `ObjectCollection.astro:206` renders
+regardless of `Body === "not-captured"`; and `ArtifactDifference.astro:224` sets "unchanged"
+from the native outcome without comparing the values.
 
 ## References
 

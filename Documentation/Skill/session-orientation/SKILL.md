@@ -41,7 +41,8 @@ section without opening another file.
     `Documentation/Skill/` is the specialized truth for this monorepo; `${DSH_HOME}/skills/` is the
     fallback for sessions outside it.
 
-    Where the two disagree, the repo copy wins, and the fix is synced to both.
+    Where the two disagree, the repo copy wins, because it is the anonymised specialization that
+    names this repository's real paths and laws.
 
     `Documentation/Skill/STANDARD.md` is read once per session.
 
