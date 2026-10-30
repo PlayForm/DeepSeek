@@ -1,0 +1,24 @@
+# Bundle patch for @playform/plugin-dsh-boot.
+#
+# The DETACHED MOUNT RAIL. This bundle inserts exactly ONE row - itself - and
+# that row's `apply` returns immediately: every plugin named under `mount:` is
+# imported and mounted from a LATER turn (setImmediate), so the harness's own
+# composition is never held open waiting for them. The family's plugins
+# therefore stop being boot-rail work: they load concurrently, after the rail.
+#
+# `mount:` is the whole detached set. Moving a plugin onto this rail means
+# (a) deleting its line from the profile's `dsh.profile.bundles` and (b) adding
+# its specifier here - no rebuild, the list is config. The package must still be
+# a dependency of the profile so the specifier resolves from the profile's
+# node_modules.
+#
+# Each mount is CONTAINED: an import that throws, or a plugin whose apply
+# throws, is logged as a warning and skipped - it can never abort the rail or
+# the harness. A failed specifier is dropped from the mounted set so a later
+# boot retries it.
+- insert:
+      - id: plugin-dsh-boot
+        name: "@playform/plugin-dsh-boot"
+        config:
+            mount:
+                - "@playform/plugin-dsh-cost-analysis"
