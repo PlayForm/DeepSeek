@@ -1,15 +1,15 @@
 {
 	"format": 1,
 	"counts": {
-		"packages": 119,
-		"classic": 59,
+		"packages": 120,
+		"classic": 60,
 		"effectTS": 60,
 		"hook": 60,
-		"plugin": 42,
+		"plugin": 43,
 		"client": 6,
 		"lib": 11,
-		"mono": 119,
-		"colour": 119
+		"mono": 120,
+		"colour": 120
 	},
 	"icons": [
 		{
@@ -2310,6 +2310,29 @@
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-batchstate.svg",
 				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-batchstate.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-boot",
+			"dir": "plugin-dsh-boot",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.1",
+			"seed": "bcf4fcc1a4fe3cdd93ac13e1f2581ba3c74096c0f26c206aba889aab8b88db24",
+			"grammar": "interlace-tile",
+			"order": 6,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "54df559014031c6af861b59442066da7d4928c0552477ebe87419638059cf803",
+				"colour": "95c48de2246bb7b8d8c125eef969177bff330f5cf6798eeb9e312349809fc7b2"
+			},
+			"path": {
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-boot.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-boot.svg"
 			}
 		},
 		{

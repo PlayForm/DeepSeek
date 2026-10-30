@@ -4,7 +4,7 @@
 		"en": "DSH Family @ PlayForm"
 	},
 	"description": {
-		"en": "The PlayForm DeepSeek Harness plugin family: 119 packages across the Classic TypeScript and Effect-TS trees."
+		"en": "The PlayForm DeepSeek Harness plugin family: 120 packages across the Classic TypeScript and Effect-TS trees."
 	},
 	"metadata": {
 		"categories": {
@@ -5392,6 +5392,46 @@
 					"publishTimestamp": 1793221095,
 					"source": {
 						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-boot",
+			"title": {
+				"en": "Boot"
+			},
+			"description": {
+				"en": "The detached mount rail for the PlayForm plugin family: one tiny bundle whose apply returns immediately and then mounts the family's plugins from a later turn, so the harness reaches ready without waiting on them. Each mount is contained -..."
+			},
+			"icon": "Icon/plugin-dsh-boot.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-boot"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"boot",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793362644,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "071cb40f01bc98d3321c40338623a27524dfc958",
+						"path": "Classic/packages/plugin-dsh-boot"
 					},
 					"engines": {}
 				}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/plugin-dsh-boot - interlace-tile">
+	<title>@playform/plugin-dsh-boot - interlace-tile</title>
+	<style>
+		@media (prefers-reduced-motion: no-preference) {
+			.plugin-dsh-boot-scene * { transform-box: view-box; transform-origin: 50% 50%; }
+		.plugin-dsh-boot-breathe { animation: plugin-dsh-boot-breathe 8s ease-in-out -1s infinite; }
+		@keyframes plugin-dsh-boot-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
+		.plugin-dsh-boot-twinkle { animation: plugin-dsh-boot-twinkle 11s ease-in-out -1s infinite; }
+		@keyframes plugin-dsh-boot-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+		}
+	</style>
+	<defs>
+		<path id="plugin-dsh-boot-0" d="M94,50 L72,88 L28,88 L6,50 L28,12 L72,12 Z"/>
+		<path id="plugin-dsh-boot-1" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
+		<path id="plugin-dsh-boot-2" d="M82,50 L36,74 L38,22 Z M55,53 L89,74 L88,76 L55,53 Z M38,59 L38,60 L37,61 L36,62 L34,62 L33,62 L32,61 L31,60 L31,59 L31,57 L32,56 L33,55 L34,55 L36,55 L37,56 L38,57 Z M50,56 L50,96 L48,96 L50,56 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="plugin-dsh-boot-3" d="M29,14 L30,11 L33,12 Z"/>
+		<path id="plugin-dsh-boot-4" d="M83,67 L84,69 L82,69 Z"/>
+		<path id="plugin-dsh-boot-5" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+	</defs>
+	<g class="plugin-dsh-boot-scene">
+	<g fill="currentColor" fill-opacity="0.3" fill-rule="evenodd">
+		<use class="plugin-dsh-boot-breathe" href="#plugin-dsh-boot-0"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+		<use class="plugin-dsh-boot-breathe" href="#plugin-dsh-boot-1"/>
+	</g>
+	<g fill="currentColor" fill-opacity="1" fill-rule="evenodd">
+		<use href="#plugin-dsh-boot-2"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
+		<use class="plugin-dsh-boot-twinkle" href="#plugin-dsh-boot-3"/>
+	</g>
+	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
+		<use class="plugin-dsh-boot-twinkle" href="#plugin-dsh-boot-4"/>
+		<use class="plugin-dsh-boot-breathe" href="#plugin-dsh-boot-5"/>
+	</g>
+	</g>
+</svg>
