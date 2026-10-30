@@ -39,14 +39,14 @@ export default class PluginFactory extends Service {
     Match(Path: string, List: string[] | null | undefined): boolean;
     /** The auxiliary registry walk-up (plain-fs, the exemption). */
     Discover(Dir: string): string | null;
-    /** The auxiliary JSON read — null on any failure (the exemption). */
+    /** The auxiliary JSON read - null on any failure (the exemption). */
     Parse(Path: string): unknown;
     /** The union keep-list discovery (P3 chain-keys union included). */
     ResolvePolicy(State: Shape, Dir: string, Found: string | null, Chain: string[], Options?: {
         policyFileField?: string;
         policyFileName?: string;
     }): string[];
-    /** The g1 gate set — returns the pass decision, logs nothing. */
+    /** The g1 gate set - returns the pass decision, logs nothing. */
     Gate(State: Shape, Target: FsTarget, Observation: FsObservation, Actor: object | undefined, Options: {
         basename: string;
         mutationToolsField?: string;
@@ -60,10 +60,10 @@ export default class PluginFactory extends Service {
      *  pre-registration and the caller's content transform. Logs nothing -
      *  the caller composes its own ledger line from the outcome. */
     Write(State: Shape, Target: FsTarget, Content: string, Over?: WriteOver): Promise<FsWriteOutcome>;
-    /** The guarded write — the GUARDED ALIAS of Write (SCHEME.md §2.7): the
+    /** The guarded write - the GUARDED ALIAS of Write (SCHEME.md §2.7): the
      *  explicit replaceIfVersion intent (waterfall skipped), the P4 sandbox
      *  fence, the Stash pre-registration; the re-emit stays delegated to
-     *  Refresh (observe: false — the same-actor U₂ semantics). */
+     *  Refresh (observe: false - the same-actor U₂ semantics). */
     GuardedWrite(State: Shape, Target: FsTarget, Content: string, Version: FsVersion, Signal?: AbortSignal): Promise<FsWriteOutcome>;
     /** The P₃/U₂ refresh: register the version, re-emit with the same actor. */
     Refresh(State: Shape, Target: FsTarget, Actor: object | undefined, Version: FsVersion): void;
@@ -79,13 +79,13 @@ export default class PluginFactory extends Service {
         name: string;
     }): void;
     /** The P5 storage-domain writer (best-effort, never throws). Routes
-     *  through the SHARED journal sink when one is bound (Function/Open —
+     *  through the SHARED journal sink when one is bound (Function/Open -
      *  the live single-open-domain finding: the harness's storageDomain
      *  enforces ONE open per domain name, so the first module whose Open
      *  succeeds binds the first Open's put here (the journalDomain option
      *  names each module's domain; the shared default is package_governance),
      *  and every
-     *  module's records — all consumers hold this same service instance —
+     *  module's records - all consumers hold this same service instance -
      *  land in the one shared table; without it, the later modules' Opens
      *  fail `already-open` and their records silently never land. A module
      *  may pass its own `journalDomain` (the Function/State setup option) so
@@ -93,11 +93,11 @@ export default class PluginFactory extends Service {
      *  one. */
     Journal(State: Shape, Event: string, Path: string, Detail: string, At?: number): void;
     /** The SHARED P5 journal sink (see Journal): bound by the first
-     *  successful Function/Open (per service instance — each test context
+     *  successful Function/Open (per service instance - each test context
      *  gets a fresh factory, so the smokes stay per-scenario). The PRE-BIND
      *  stage is `PendingJournal` (below): records journaled before the first
      *  successful open buffer there, and the successful Open drains them
-     *  through the sink it just bound — closing the boot-window race. */
+     *  through the sink it just bound - closing the boot-window race. */
     SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
     /** The SHARED P5 journal sinks, keyed by domain (see Journal): every
      *  successful Function/Open registers its Sink under the State's
@@ -108,7 +108,7 @@ export default class PluginFactory extends Service {
     /** The PRE-BIND journal buffer (P5, the boot-window race): the factory-
      *  level queue holding records journaled before ANY open has succeeded
      *  (each module's apply journals its `activated` record before its own
-     *  Attach's Open completes — only the FIRST module's open wins; the other
+     *  Attach's Open completes - only the FIRST module's open wins; the other
      *  modules' per-State queues never drain, so their records must live
      *  here). Capped at 256 like the per-State pre-open queue (Function/
      *  State); `undefined` once the first successful Function/Open has
@@ -158,7 +158,7 @@ export default class PluginFactory extends Service {
         exclude: import("@deepseek-ai/schemastery").default<string[], string[], "defined">;
     }>>, "plain">;
     /** The namespaced State.Inflight key for UPDATE-STAGE controllers
-     *  (v0.1.1, P2 — the cargo collision lesson, factory-side): the chain
+     *  (v0.1.1, P2 - the cargo collision lesson, factory-side): the chain
      *  pass (Continue) registers under the PLAIN `String(targetKey)`; an
      *  update stage MUST register its run controller under this namespaced
      *  key (`update:<targetKey>`), or the chain pass's settlement could
@@ -171,12 +171,12 @@ export default class PluginFactory extends Service {
      *  registered at apply (Function/Govern). The run closures capture their
      *  own State, so the chain pass, the update stage and every ledger string
      *  stay the MODULE'S own, byte-identical. Empty until the first module
-     *  registers — a raw-write `govern` call against an empty registry is a
+     *  registers - a raw-write `govern` call against an empty registry is a
      *  contained no-op. */
     GovernSteps: GovernRegistry;
     /** Register a direct-govern step for one basename (the modules call this
      *  at apply). Re-registering the same name for the same basename replaces
-     *  the step in place (keeping its registered position — an HMR reload
+     *  the step in place (keeping its registered position - an HMR reload
      *  rebinds the closure without duplicating the step); a new name appends
      *  after the registered ones. */
     RegisterGovern(Basename: string, Name: string, Run: (Target: FsTarget, Actor: object | undefined, Version: FsVersion) => Promise<void> | void): void;
@@ -184,11 +184,11 @@ export default class PluginFactory extends Service {
      *  resolve the registered steps for the target's basename, filter by the
      *  selection (`true`/"all" = every registered step; an array or a single
      *  name = only the named steps; unknown names ignored; false/absent =
-     *  none), and run each in REGISTERED order — contained, one try/catch per
+     *  none), and run each in REGISTERED order - contained, one try/catch per
      *  step (the family's silence invariant: never throws, never affects the
      *  caller). The SEQUENTIAL FOLD (v0.2.1): the method is async and AWAITS
      *  each step, so every step's chain (its guarded write + its ledger line)
-     *  completes before the next step reads the file — the version-guarded
+     *  completes before the next step reads the file - the version-guarded
      *  `replaceIfVersion` writes can never race, and a multi-step selection
      *  (e.g. canonicalize + update) is deterministic. The raw-write exec
      *  awaits this call: the tool's result returns after the fold completes.

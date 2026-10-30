@@ -1,42 +1,42 @@
-// Library — the entry module of the FACTORY (@playform/plugin-dsh-factory),
+// Library - the entry module of the FACTORY (@playform/plugin-dsh-factory),
 // the FIRST class/service plugin in the governance family
-// (docs/user/develop/framework/service.md). Loader contract: the class form —
+// (docs/user/develop/framework/service.md). Loader contract: the class form -
 // `export default class PluginFactory extends Service` with
 // `super(Context, "pluginFactory")`, registered immediately on construction
 // and removed with its owning fiber; `static inject = ["fs"]` because the
 // factory's primitives call ctx.fs (the governed-file read and the
 // version-guarded write). The ONLY named exports are the five TYPE re-exports
-// (State/Options/Gate/Transform/Output — the consumer contract, P0-1): every
+// (State/Options/Gate/Transform/Output - the consumer contract, P0-1): every
 // other module is a nameless default export composed Rust-style, and each
 // service method is a thin delegate to one Function module.
 //
-// THE SERVICE SURFACE (ctx.pluginFactory — every signature documented in
+// THE SERVICE SURFACE (ctx.pluginFactory - every signature documented in
 // README.md / SCHEME.md):
 //
-//   Append(state, message)                 — the ledger (logger + appendFileSync, never throws)
-//   Match(path, list)                      — the exclusion segment match
-//   Discover(dir) / Parse(path)            — the auxiliary plain-fs discovery (the exemption)
-//   ResolvePolicy(state, dir, found, chain, opts?) — the union keep-list discovery (P3 chain-keys included)
-//   Gate(state, target, observation, actor, opts)  — the g1 gate set (logs nothing)
-//   Write(state, target, content, over?)   — the ONE shared write executor (intent/policy/observe/stash/transform)
-//   GuardedWrite(state, target, content, version, signal?) — the GUARDED ALIAS of Write (P4 fence + Stash)
-//   Refresh(state, target, actor, version) — the P₃/U₂ re-emit (same actor)
-//   Continue(state, target, actor, dir, found, version, transform) — the detached contained continuation
-//   State(ctx, config, {module, fields, policyFileName?}) — the State builder
-//   Wire(ctx, state, observe)              — the fs/observed registration
-//   Attach(ctx, {state, name})             — the P1 jobs + P2 inflight + P5 storage effects
-//   Journal(state, event, path, detail)    — the P5 storage writer (best-effort)
-//   Schema(shared?, module?)               — the Schemastery schema factory
-//   UpdateKey(target)                      — the namespaced Inflight key for update stages
-//   Seam(state, name)                      — the probe-once optional-service accessor
-//   RegisterGovern(basename, name, run)    — the direct-govern step registration (the modules call it at apply)
-//   Govern(target, selection, actor, version): Promise<void> — the direct-govern entry (the raw-write tool's post-write call; the SEQUENTIAL FOLD, v0.2.1)
+//   Append(state, message)                 - the ledger (logger + appendFileSync, never throws)
+//   Match(path, list)                      - the exclusion segment match
+//   Discover(dir) / Parse(path)            - the auxiliary plain-fs discovery (the exemption)
+//   ResolvePolicy(state, dir, found, chain, opts?) - the union keep-list discovery (P3 chain-keys included)
+//   Gate(state, target, observation, actor, opts)  - the g1 gate set (logs nothing)
+//   Write(state, target, content, over?)   - the ONE shared write executor (intent/policy/observe/stash/transform)
+//   GuardedWrite(state, target, content, version, signal?) - the GUARDED ALIAS of Write (P4 fence + Stash)
+//   Refresh(state, target, actor, version) - the P₃/U₂ re-emit (same actor)
+//   Continue(state, target, actor, dir, found, version, transform) - the detached contained continuation
+//   State(ctx, config, {module, fields, policyFileName?}) - the State builder
+//   Wire(ctx, state, observe)              - the fs/observed registration
+//   Attach(ctx, {state, name})             - the P1 jobs + P2 inflight + P5 storage effects
+//   Journal(state, event, path, detail)    - the P5 storage writer (best-effort)
+//   Schema(shared?, module?)               - the Schemastery schema factory
+//   UpdateKey(target)                      - the namespaced Inflight key for update stages
+//   Seam(state, name)                      - the probe-once optional-service accessor
+//   RegisterGovern(basename, name, run)    - the direct-govern step registration (the modules call it at apply)
+//   Govern(target, selection, actor, version): Promise<void> - the direct-govern entry (the raw-write tool's post-write call; the SEQUENTIAL FOLD, v0.2.1)
 //
 // THE POLICY BLOCK (D6) - the two MODULE-LEVEL named helpers (not service
 // methods, so the class surface stays at the documented nineteen):
 //
-//   Policy()                               — the shared policy-block builder (one key per action class)
-//   Decide(policy, action)                 — the verdict lookup: "auto" | "approve"
+//   Policy()                               - the shared policy-block builder (one key per action class)
+//   Decide(policy, action)                 - the verdict lookup: "auto" | "approve"
 //
 // The `Allowlist` type re-export names the block's shape. Every orchestration
 // package composes `policy: Policy()` into its own schema, maps the block to
@@ -53,7 +53,7 @@
 // unknown names ignored; false/absent = none), and runs each contained. The
 // SEQUENTIAL FOLD (v0.2.1): the steps are AWAITED one at a time, so each
 // step's chain (its guarded write + its ledger line) completes before the
-// next step reads the file — the version-guarded writes can never race.
+// next step reads the file - the version-guarded writes can never race.
 //
 // The MODULE LEDGER STRINGS stay in the modules (the factory never owns
 // them): the transform's messages, the activation proof, the observe-path
@@ -99,7 +99,7 @@ import Version from "./Variable/Version.js";
 // The NAMED TYPE exports (P0-1): the four structural contracts + the output
 // shape, re-exported from the entry so consumers can `import type { State,
 // Options, Gate, Transform, Output } from "@playform/plugin-dsh-factory"`
-// instead of deriving them through `Parameters<Factory["…"]>[0]` — and
+// instead of deriving them through `Parameters<Factory["…"]>[0]` - and
 // instead of mirroring the shapes locally (the pre-fix structural mirrors).
 // The declarations ship RELATIVE specifiers (the deterministic build emits
 // ./Interface/*.js), so a consumer's tsconfig paths never re-map them.
@@ -123,11 +123,11 @@ export type { default as Allowlist } from "./Interface/Allowlist.js";
 export { Version };
 
 // The standalone SCHEMA helper (v0.1.1, P1): the module-level composition of
-// the shared block + the module's own fields — `Schema(shared?, module?)`,
+// the shared block + the module's own fields - `Schema(shared?, module?)`,
 // exactly the instance method's delegate (Function/Schema never reads
 // `this`). The loader needs `Config` at MODULE-EVALUATION time, before any
 // context (and therefore any service instance) exists, so a consumer cannot
-// literally `export const Config = factory.Schema(...)` — this named export
+// literally `export const Config = factory.Schema(...)` - this named export
 // is the module-load use. `shared: false` emits the MINIMAL block (only the
 // universal log/logFile volatile cells) for non-manifest modules.
 export function Schema(
@@ -172,12 +172,12 @@ export default class PluginFactory extends Service {
 	constructor(Context: Context) {
 		super(Context, "pluginFactory");
 		// The pre-bind journal buffer (P5, the boot-window race): starts as the
-		// live buffer — records land here between construction and the first
+		// live buffer - records land here between construction and the first
 		// successful Function/Open; Function/Open drains it and retires it
 		// (sets it to `undefined`) when the shared sink binds.
 		this.PendingJournal = [];
 		// The direct-govern registry: empty until the modules register their
-		// steps at apply (RegisterGovern). Per factory instance — each test
+		// steps at apply (RegisterGovern). Per factory instance - each test
 		// context gets a fresh factory, so the smokes stay per-scenario.
 		this.GovernSteps = {};
 		// THE TRACE BUS (D5): the family's ONE bus, provided here because the
@@ -215,7 +215,7 @@ export default class PluginFactory extends Service {
 		return Discover(Dir);
 	}
 
-	/** The auxiliary JSON read — null on any failure (the exemption). */
+	/** The auxiliary JSON read - null on any failure (the exemption). */
 	Parse(Path: string): unknown {
 		return Parse(Path);
 	}
@@ -231,7 +231,7 @@ export default class PluginFactory extends Service {
 		return Resolve(State, Dir, Found, Chain, Options);
 	}
 
-	/** The g1 gate set — returns the pass decision, logs nothing. */
+	/** The g1 gate set - returns the pass decision, logs nothing. */
 	Gate(
 		State: Shape,
 		Target: FsTarget,
@@ -259,10 +259,10 @@ export default class PluginFactory extends Service {
 		return WriteFn(State, Target, Content, Over);
 	}
 
-	/** The guarded write — the GUARDED ALIAS of Write (SCHEME.md §2.7): the
+	/** The guarded write - the GUARDED ALIAS of Write (SCHEME.md §2.7): the
 	 *  explicit replaceIfVersion intent (waterfall skipped), the P4 sandbox
 	 *  fence, the Stash pre-registration; the re-emit stays delegated to
-	 *  Refresh (observe: false — the same-actor U₂ semantics). */
+	 *  Refresh (observe: false - the same-actor U₂ semantics). */
 	GuardedWrite(
 		State: Shape,
 		Target: FsTarget,
@@ -320,13 +320,13 @@ export default class PluginFactory extends Service {
 	}
 
 	/** The P5 storage-domain writer (best-effort, never throws). Routes
-	 *  through the SHARED journal sink when one is bound (Function/Open —
+	 *  through the SHARED journal sink when one is bound (Function/Open -
 	 *  the live single-open-domain finding: the harness's storageDomain
 	 *  enforces ONE open per domain name, so the first module whose Open
 	 *  succeeds binds the first Open's put here (the journalDomain option
 	 *  names each module's domain; the shared default is package_governance),
 	 *  and every
-	 *  module's records — all consumers hold this same service instance —
+	 *  module's records - all consumers hold this same service instance -
 	 *  land in the one shared table; without it, the later modules' Opens
 	 *  fail `already-open` and their records silently never land. A module
 	 *  may pass its own `journalDomain` (the Function/State setup option) so
@@ -337,11 +337,11 @@ export default class PluginFactory extends Service {
 	}
 
 	/** The SHARED P5 journal sink (see Journal): bound by the first
-	 *  successful Function/Open (per service instance — each test context
+	 *  successful Function/Open (per service instance - each test context
 	 *  gets a fresh factory, so the smokes stay per-scenario). The PRE-BIND
 	 *  stage is `PendingJournal` (below): records journaled before the first
 	 *  successful open buffer there, and the successful Open drains them
-	 *  through the sink it just bound — closing the boot-window race. */
+	 *  through the sink it just bound - closing the boot-window race. */
 	SharedJournal?: (Event: string, Path: string, Detail: string, At?: number) => void;
 
 	/** The SHARED P5 journal sinks, keyed by domain (see Journal): every
@@ -357,7 +357,7 @@ export default class PluginFactory extends Service {
 	/** The PRE-BIND journal buffer (P5, the boot-window race): the factory-
 	 *  level queue holding records journaled before ANY open has succeeded
 	 *  (each module's apply journals its `activated` record before its own
-	 *  Attach's Open completes — only the FIRST module's open wins; the other
+	 *  Attach's Open completes - only the FIRST module's open wins; the other
 	 *  modules' per-State queues never drain, so their records must live
 	 *  here). Capped at 256 like the per-State pre-open queue (Function/
 	 *  State); `undefined` once the first successful Function/Open has
@@ -390,7 +390,7 @@ export default class PluginFactory extends Service {
 	}
 
 	/** The namespaced State.Inflight key for UPDATE-STAGE controllers
-	 *  (v0.1.1, P2 — the cargo collision lesson, factory-side): the chain
+	 *  (v0.1.1, P2 - the cargo collision lesson, factory-side): the chain
 	 *  pass (Continue) registers under the PLAIN `String(targetKey)`; an
 	 *  update stage MUST register its run controller under this namespaced
 	 *  key (`update:<targetKey>`), or the chain pass's settlement could
@@ -409,13 +409,13 @@ export default class PluginFactory extends Service {
 	 *  registered at apply (Function/Govern). The run closures capture their
 	 *  own State, so the chain pass, the update stage and every ledger string
 	 *  stay the MODULE'S own, byte-identical. Empty until the first module
-	 *  registers — a raw-write `govern` call against an empty registry is a
+	 *  registers - a raw-write `govern` call against an empty registry is a
 	 *  contained no-op. */
 	GovernSteps: GovernRegistry;
 
 	/** Register a direct-govern step for one basename (the modules call this
 	 *  at apply). Re-registering the same name for the same basename replaces
-	 *  the step in place (keeping its registered position — an HMR reload
+	 *  the step in place (keeping its registered position - an HMR reload
 	 *  rebinds the closure without duplicating the step); a new name appends
 	 *  after the registered ones. */
 	RegisterGovern(
@@ -432,7 +432,7 @@ export default class PluginFactory extends Service {
 		const Step = { name: Name, run: Run };
 		switch (true) {
 			case At >= 0:
-				List[At] = Step; // HMR reload — replace in place, position preserved
+				List[At] = Step; // HMR reload - replace in place, position preserved
 				break;
 			default:
 				List.push(Step);
@@ -443,11 +443,11 @@ export default class PluginFactory extends Service {
 	 *  resolve the registered steps for the target's basename, filter by the
 	 *  selection (`true`/"all" = every registered step; an array or a single
 	 *  name = only the named steps; unknown names ignored; false/absent =
-	 *  none), and run each in REGISTERED order — contained, one try/catch per
+	 *  none), and run each in REGISTERED order - contained, one try/catch per
 	 *  step (the family's silence invariant: never throws, never affects the
 	 *  caller). The SEQUENTIAL FOLD (v0.2.1): the method is async and AWAITS
 	 *  each step, so every step's chain (its guarded write + its ledger line)
-	 *  completes before the next step reads the file — the version-guarded
+	 *  completes before the next step reads the file - the version-guarded
 	 *  `replaceIfVersion` writes can never race, and a multi-step selection
 	 *  (e.g. canonicalize + update) is deterministic. The raw-write exec
 	 *  awaits this call: the tool's result returns after the fold completes.
