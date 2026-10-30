@@ -62,6 +62,28 @@ Three questions organize a page about composition:
    two trees, so a claim about composition is a claim about both, and a page that shows one tree
    silently is a page that will drift.
 
+## The iteration
+
+The site grows one mechanism at a time, and each cycle runs the same six steps. A cycle that skips a
+step produces a page that looks finished and is not.
+
+1. **Research.** Read the harness documentation for the stage and the plugin source for the arm that
+   acts there. Never write a mechanism page from memory of a README.
+2. **Data.** Author the mechanism into `Source/Content/<Name>.ts`, with a header comment naming the
+   document or source each field came from. The page never carries a fact the data file does not.
+3. **Module.** Build the component that renders the data, with variants, so the next page reuses it
+   instead of writing a second shape.
+4. **Device.** Choose the visual by the question: a rail for order, a matrix for coverage, a graph
+   for topology, a trace for a timeline, a chart for a quantity, a split for a comparison. A page
+   that picks the device first picks the wrong one.
+5. **Library.** Cytoscape with fCoSe for topology, the Instrument visual language of the UI module
+   (`~/Developer/Documentation/Module/ui`) for quantities, and plain CSS for rails and matrices. A
+   library is justified when the device needs interaction or layout the CSS cannot do; a list that
+   becomes a chart because charts look advanced is a regression.
+6. **Verify.** Build, then the link scan, the structural audit, the spacing scan, the plural scan,
+   and a browser check of every island, because a hydrated-looking island that never drew is the
+   failure mode the scans cannot see.
+
 The composition facts are data, not prose: the order of the arms, the prepend discipline, and the
 seams that run independently belong in an authored map, the same way the behavior map holds the
 seams.
