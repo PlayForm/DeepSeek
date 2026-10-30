@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run.sh for @playform/plugin-dsh-cost - the dev twin of prepublishOnly.sh,
+# Run.sh for @playform/plugin-dsh-boot - the dev twin of prepublishOnly.sh,
 # mirroring the plugin-dsh-factory pattern: the plugin build runs once, then
 # the test build WATCHES Source/Test. Run a single test with
 # `node Target/Test/<Name>/Test.js`. The plugin-build step carries the same

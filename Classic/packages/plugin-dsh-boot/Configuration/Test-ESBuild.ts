@@ -3,7 +3,7 @@ import type { BuildOptions, Plugin } from "esbuild";
 /**
  * @module Test-ESBuild
  *
- * Test ESBuild configuration for the cost tracker (@playform/plugin-dsh-cost):
+ * Test ESBuild configuration for the boot plugin (@playform/plugin-dsh-boot):
  * compiles the Source/Test TypeScript tree to Target/Test, one output file per
  * source file (bundle: false), so each test folder runs standalone under its
  * own `node Target/Test/<Name>/Test.js` entry. The mirrored `outbase` keeps
