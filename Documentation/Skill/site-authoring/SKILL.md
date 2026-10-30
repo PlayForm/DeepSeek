@@ -29,8 +29,8 @@ does to the harness, what it does to the conversation, and how the harness works
 Three questions organize every page that makes a claim about behavior:
 
 1. **What does the harness do here without the family?** The default turn, stage by stage, is the
-   baseline every page compares against, and a page that claims an improvement must show the
-   default beside it.
+   baseline every page compares against, and a page that claims an improvement must show the default
+   beside it.
 2. **What does this plugin change at this seam?** The payload it reads, the payload it writes, and
    what the model, the conversation, and the disk each see differently afterwards.
 3. **Why is that better, and more secure, than the default?** The claim is marketing in tone and
@@ -41,8 +41,8 @@ The site is a showcase, so the register is confident and short; it is not a spec
 number and every mechanism still comes from the tree or from the authored maps.
 
 The long-term direction is an operational dashboard: the same model of the turn, driven by a real
-trace instead of a static example. A page built for the dashboard is built so that a live source
-can replace the sample without changing the layout.
+trace instead of a static example. A page built for the dashboard is built so that a live source can
+replace the sample without changing the layout.
 
 ## The second goal: mechanistic inter-operability
 
@@ -52,12 +52,12 @@ and it is a separate claim that needs its own evidence.
 Three questions organize a page about composition:
 
 1. **Who fires first at this seam?** A seam is a list of listeners, not a single hook. The order is
-   the bundle's order plus each package's `prepend` or `append`, so a page that shows two plugins
-   at one seam must show which of them sees the other's output.
+   the bundle's order plus each package's `prepend` or `append`, so a page that shows two plugins at
+   one seam must show which of them sees the other's output.
 2. **What does one plugin's output do to the next plugin's input?** The family is designed around
-   this: the CCR gate compresses the bytes the normalizers already rewrote, because the bundle
-   order puts CCR outside the normalize arms. A page that claims composition shows that chain, not
-   a list of packages.
+   this: the CCR gate compresses the bytes the normalizers already rewrote, because the bundle order
+   puts CCR outside the normalize arms. A page that claims composition shows that chain, not a list
+   of packages.
 3. **Does the same behavior hold in both release trees?** Classic and Effect-TS are one behavior in
    two trees, so a claim about composition is a claim about both, and a page that shows one tree
    silently is a page that will drift.
@@ -411,6 +411,12 @@ inside the `ControlBar` as a collapsed disclosure rather than standing beside it
 - `pnpm Drift` passes.
 - The nav, the 404, and the sitemap agree on the page set.
 
+One log line is known noise: `@playform/compress` intermittently prints
+`SyntaxError: Unexpected end of input` or `Invalid empty selector` after inlining the pages. It is a
+race in the compressor's parallel CSS buffer, not a defect in the site: two consecutive builds of
+the same tree produce it in one and not the other, and every page stays well formed. Confirm the
+pages and the scans, and do not chase the line; chase it only if a page fails to render.
+
 ## Anti-patterns
 
 | Mistake                                | Cost                      | Do instead                     |
@@ -425,46 +431,45 @@ inside the `ControlBar` as a collapsed disclosure rather than standing beside it
 
 The site now carries seven component families under `Source/Component/`:
 
-| Family | Role | Count |
-| --- | --- | --- |
-| `Layout/` | the six global shells plus nine simple section modules | 15 |
-| `Anatomy/` | the advanced M01-M20 implementations | 19 |
-| `Mechanism/` | the X01-X12 readers and the `MechanismFor` dispatcher | 14 |
-| `Workspace/` | the O15-O23 and W01-W04 readers | 49 |
-| `Observatory/` | the data-path strip, B01-B06 and O24-O32 | 52 |
-| `Suggesters/` | C01-C06 and O33-O42 | 56 |
-| `Ui/` | the shared primitives | 4 |
+| Family         | Role                                                   | Count |
+| -------------- | ------------------------------------------------------ | ----- |
+| `Layout/`      | the six global shells plus nine simple section modules | 15    |
+| `Anatomy/`     | the advanced M01-M20 implementations                   | 19    |
+| `Mechanism/`   | the X01-X12 readers and the `MechanismFor` dispatcher  | 14    |
+| `Workspace/`   | the O15-O23 and W01-W04 readers                        | 49    |
+| `Observatory/` | the data-path strip, B01-B06 and O24-O32               | 52    |
+| `Suggesters/`  | C01-C06 and O33-O42                                    | 56    |
+| `Ui/`          | the shared primitives                                  | 4     |
 
-The dispatcher (`MechanismFor.astro`) resolves four families by stem: a static import map for
-the mechanisms and an eager `import.meta.glob` for the other three. Effect-TS twins are
-never mapped onto a Classic reader; they keep their own state with a link to the Classic
-readers.
+The dispatcher (`MechanismFor.astro`) resolves four families by stem: a static import map for the
+mechanisms and an eager `import.meta.glob` for the other three. Effect-TS twins are never mapped
+onto a Classic reader; they keep their own state with a link to the Classic readers.
 
-**One tree, one slot vocabulary.** A starter library (`Source/UI/{Primitive,Module,Layout}`
-with its own typed records and per-family slots) describes the same 30 contracts as this
-build's `Ui/` + `Layout/` + `Anatomy/` with five generic slots (`intro`, `primary`,
-`secondary`, `evidence`, `closing`). Pick one before touching a route; the route adoptions
-already use the five-slot vocabulary, and two live systems are worse than one imperfect one.
+**One tree, one slot vocabulary.** A starter library (`Source/UI/{Primitive,Module,Layout}` with its
+own typed records and per-family slots) describes the same 30 contracts as this build's `Ui/` +
+`Layout/` + `Anatomy/` with five generic slots (`intro`, `primary`, `secondary`, `evidence`,
+`closing`). Pick one before touching a route; the route adoptions already use the five-slot
+vocabulary, and two live systems are worse than one imperfect one.
 
 **The anatomy mount map** (not yet mounted; the Layout module of the same id is mounted):
 
-| Route | Anatomy components |
-| --- | --- |
-| `/explore/`, `/tl/` | M02 SourceIntegrityRail, M08 EvidenceReader, M20 OutcomeRecord |
-| `/`, `/case-study/`, `/showcase/[slug]/` | M05 ArtifactDifference |
-| package pages | M06 DecisionEvidence, M17 TypedRelationship |
-| `/reference/` | M09 OriginInspector |
-| `/connect/` | M18 DeliveryReceipt |
+| Route                                    | Anatomy components                                             |
+| ---------------------------------------- | -------------------------------------------------------------- |
+| `/explore/`, `/tl/`                      | M02 SourceIntegrityRail, M08 EvidenceReader, M20 OutcomeRecord |
+| `/`, `/case-study/`, `/showcase/[slug]/` | M05 ArtifactDifference                                         |
+| package pages                            | M06 DecisionEvidence, M17 TypedRelationship                    |
+| `/reference/`                            | M09 OriginInspector                                            |
+| `/connect/`                              | M18 DeliveryReceipt                                            |
 
-A page mounts one implementation per contract id, never both; the collision is not the
-`data-module` value but duplicate instance state, document-wide selectors and `id`s.
+A page mounts one implementation per contract id, never both; the collision is not the `data-module`
+value but duplicate instance state, document-wide selectors and `id`s.
 
-**The four known defects** (from the integration review, with their locations): the
-selection strip compares `Package.Name` against the scoped name (`SelectionStrip.astro:87`);
-the attachment derivation filters on kind `"seam"` and misses listener-only contributions;
-O29, O31 and O32 are absent from the Observatory table; `ObjectCollection.astro:206` renders
-regardless of `Body === "not-captured"`; and `ArtifactDifference.astro:224` sets "unchanged"
-from the native outcome without comparing the values.
+**The four known defects** (from the integration review, with their locations): the selection strip
+compares `Package.Name` against the scoped name (`SelectionStrip.astro:87`); the attachment
+derivation filters on kind `"seam"` and misses listener-only contributions; O29, O31 and O32 are
+absent from the Observatory table; `ObjectCollection.astro:206` renders regardless of
+`Body === "not-captured"`; and `ArtifactDifference.astro:224` sets "unchanged" from the native
+outcome without comparing the values.
 
 ## References
 
