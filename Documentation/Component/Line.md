@@ -7,26 +7,26 @@ Source: `Site/Source/Component/Line.astro`, `Site/Source/Stylesheet/Component/Li
 
 ## The matrix
 
-| Dimension | spec | prototype | build | state | compose | verify | document |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Structure | done | done | done | - | done | done | this file |
-| State | partial | done | done | partial | done | done | partial |
-| Data | done | - | done | - | done | - | partial |
-| Time | - | - | - | - | - | - | - |
-| Interaction | partial | - | done | - | done | - | partial |
-| Composition | done | done | done | - | done | done | partial |
-| Rendering | done | - | done | - | done | done | done |
-| Access | partial | - | partial | - | - | - | partial |
-| Style | done | done | done | - | done | done | done |
-| Failure | - | - | - | - | - | - | - |
-| Evidence | - | - | - | - | done | done | partial |
-| Evolution | - | - | - | - | - | - | - |
+| Dimension   | spec    | prototype | build   | state   | compose | verify | document  |
+| ----------- | ------- | --------- | ------- | ------- | ------- | ------ | --------- |
+| Structure   | done    | done      | done    | -       | done    | done   | this file |
+| State       | partial | done      | done    | partial | done    | done   | partial   |
+| Data        | done    | -         | done    | -       | done    | -      | partial   |
+| Time        | -       | -         | -       | -       | -       | -      | -         |
+| Interaction | partial | -         | done    | -       | done    | -      | partial   |
+| Composition | done    | done      | done    | -       | done    | done   | partial   |
+| Rendering   | done    | -         | done    | -       | done    | done   | done      |
+| Access      | partial | -         | partial | -       | -       | -      | partial   |
+| Style       | done    | done      | done    | -       | done    | done   | done      |
+| Failure     | -       | -         | -       | -       | -       | -      | -         |
+| Evidence    | -       | -         | -       | -       | done    | done   | partial   |
+| Evolution   | -       | -         | -       | -       | -       | -      | -         |
 
 ## 1. Structure
 
 `line` is a grid: `line__gutter` (fixed width, the measure's outside) and `line__body`. The body is
-three parts in one flow: `line__kind` (a mono label, uppercase, the record's kind), `line__name` (the
-event name as the harness writes it), and `line__slot` (whatever the caller passes, usually the
+three parts in one flow: `line__kind` (a mono label, uppercase, the record's kind), `line__name`
+(the event name as the harness writes it), and `line__slot` (whatever the caller passes, usually the
 record's own content). The kind and the name sit on one line; the slot flows beneath when it holds a
 block and beside when it holds a phrase.
 
@@ -36,9 +36,9 @@ Drawn today: default, `data-current="true"` (the selected line), and `Foldable` 
 gutter, hover only). Not drawn: hover on the line itself, focus-visible for a keyboard reader, a
 disabled line, a stale line (a record whose source is gone), a line in a folded parent.
 
-The state machine the component implies: `default -> hover -> current`, and `foldable -> folded ->
-expanded`, with `current` reachable from any of them. The library draws the first three and not the
-last three, which is why this cell is `partial`.
+The state machine the component implies: `default -> hover -> current`, and
+`foldable -> folded -> expanded`, with `current` reachable from any of them. The library draws the
+first three and not the last three, which is why this cell is `partial`.
 
 ## 3. Data
 
@@ -49,8 +49,8 @@ Shapes in use: a one-line record (the trace document), a record with a result sp
 pages), a record with a nested child list (the session view, in progress), a record whose slot is a
 full machine (the flow rows).
 
-Not yet handled: a line with no `Seq` (a continuation row), a line whose `Name` is a path long enough
-to overflow, a line with two slots.
+Not yet handled: a line with no `Seq` (a continuation row), a line whose `Name` is a path long
+enough to overflow, a line with two slots.
 
 ## 4. Time
 
@@ -87,8 +87,8 @@ a line.
 ## 8. Access
 
 `role="listitem"` on the row, so a list of lines needs a `role="list"` parent - the trace page and
-the plugin pages both provide one. The kind is a visual label, not a heading; the name is text, not a
-link.
+the plugin pages both provide one. The kind is a visual label, not a heading; the name is text, not
+a link.
 
 Missing: `aria-current` for the selected line, an accessible name for the fold chevron,
 `aria-expanded` on the foldable row, and a print rule (a line should not break across pages).
@@ -109,10 +109,9 @@ as a blank row. The session view is the first caller that will stress this.
 
 ## 11. Evidence
 
-`/trace/` - the document, with the inspector island beside it.
-`/package/[slug]/` - the mock conversation on the dissected packages.
-`/harness/` - the turn's stages, one line each.
-`/plugin/` - no longer uses it (the section was removed when the invented plugins went).
+`/trace/` - the document, with the inspector island beside it. `/package/[slug]/` - the mock
+conversation on the dissected packages. `/harness/` - the turn's stages, one line each. `/plugin/` -
+no longer uses it (the section was removed when the invented plugins went).
 
 ## 12. Evolution
 

@@ -1,118 +1,310 @@
 # One Turn Inside DeepSeek Harness With No Plugins
 
-Source base: the eight English documents in `<home>/Developer/Documentation/Module/deepseek-harness/docs/`. Citations use the form `(docs/<file>.md, "<heading>", L<line>)`. No code citation appears in this document because the documentation checkout available here contains `docs/` but no `packages/` tree, so a `path:line` reference into source cannot be read or verified.
+Source base: the eight English documents in
+`<home>/Developer/Documentation/Module/deepseek-harness/docs/`. Citations use the form
+`(docs/<file>.md, "<heading>", L<line>)`. No code citation appears in this document because the
+documentation checkout available here contains `docs/` but no `packages/` tree, so a `path:line`
+reference into source cannot be read or verified.
 
 ## 1. The claim of the page
 
-A reader should leave knowing that one turn is a fixed sequence of twelve stages in which the harness opens a durable record, claims input, assembles a prompt, binds a model call, streams it, settles it into the log, runs any tools through a four-event pipeline, and closes the record, and that this sequence is threaded by named extension events (`agent/*`, `system-prompt/assemble`, `llm/stream`, `tools/*`, `fs/*`, `approval/request`, `session/*`) that the default turn passes through untouched (docs/architecture.md, "Turn flow", L84-L106; docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L19-L82). It matters that the default turn has seams at all because the docs define every seam as a swappable capability with a Service Definition, a Service Provider, and a Consumer, so the unmodified turn is the reference shape against which any added plugin is a measurable difference rather than a rewrite (docs/glossary.md, "capability-seam", L9; docs/architecture.md, "Capability seams", L136).
+A reader should leave knowing that one turn is a fixed sequence of twelve stages in which the
+harness opens a durable record, claims input, assembles a prompt, binds a model call, streams it,
+settles it into the log, runs any tools through a four-event pipeline, and closes the record, and
+that this sequence is threaded by named extension events (`agent/*`, `system-prompt/assemble`,
+`llm/stream`, `tools/*`, `fs/*`, `approval/request`, `session/*`) that the default turn passes
+through untouched (docs/architecture.md, "Turn flow", L84-L106; docs/agent-lifecycle.md, "Agent Turn
+And Step Lifecycle", L19-L82). It matters that the default turn has seams at all because the docs
+define every seam as a swappable capability with a Service Definition, a Service Provider, and a
+Consumer, so the unmodified turn is the reference shape against which any added plugin is a
+measurable difference rather than a rewrite (docs/glossary.md, "capability-seam", L9;
+docs/architecture.md, "Capability seams", L136).
 
 ## 2. The stages, in order
 
-The docs define a step as one model request plus the tools it calls, and a turn as zero or more steps that opens before its first input is claimed and closes once nothing is owed (docs/architecture.md, "Turn flow", L81; docs/glossary.md, "loop hierarchy", L37-L38). The stage order below follows the turn-flow block and the lifecycle sequence.
+The docs define a step as one model request plus the tools it calls, and a turn as zero or more
+steps that opens before its first input is claimed and closes once nothing is owed
+(docs/architecture.md, "Turn flow", L81; docs/glossary.md, "loop hierarchy", L37-L38). The stage
+order below follows the turn-flow block and the lifecycle sequence.
 
-1. **Queueing the message.** Enters: `followup(content)` from the user. Leaves: an inbox entry announced live. Seam: `agent/inbox/inserted` with `{ message }` (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L19-L21; docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L21). This is a live extension point, not a durable session event (docs/architecture.md, "Turn flow", L106).
+1. **Queueing the message.** Enters: `followup(content)` from the user. Leaves: an inbox entry
+   announced live. Seam: `agent/inbox/inserted` with `{ message }` (docs/agent-lifecycle.md, "Agent
+   Turn And Step Lifecycle", L19-L21; docs/event-producer-consumer.md, "Event Producer And Consumer
+   Matrix", L21). This is a live extension point, not a durable session event (docs/architecture.md,
+   "Turn flow", L106).
 
-2. **Turn open and claim.** Enters: pending next-step input plus one queued message (docs/architecture.md, "Turn flow", L85). Leaves: a durable `turn/start`, a claimed batch, and one `agent/inbox/claimed { message, turn }` per message (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L24-L28). Seams: `agent/inbox/claimed`, and the pure deletion `agent/inbox/spliced` that the sequence diagram shows at L26 but the generated event matrix does not list (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L20 and L26; docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L19-L21).
+2. **Turn open and claim.** Enters: pending next-step input plus one queued message
+   (docs/architecture.md, "Turn flow", L85). Leaves: a durable `turn/start`, a claimed batch, and
+   one `agent/inbox/claimed { message, turn }` per message (docs/agent-lifecycle.md, "Agent Turn And
+   Step Lifecycle", L24-L28). Seams: `agent/inbox/claimed`, and the pure deletion
+   `agent/inbox/spliced` that the sequence diagram shows at L26 but the generated event matrix does
+   not list (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L20 and L26;
+   docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L19-L21).
 
-3. **Tool set resolution and prompt assembly.** Enters: `{ agent, modelSelection, signal }`, resolved once per proposed step (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L28). Leaves: the step tool set and the assembled prompt sections plus step-admitted tool schemas (docs/architecture.md, "Turn flow", L86). Seam: `system-prompt/assemble` waterfall, dispatched with the step tool set (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L29; docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L81). The model-selection snapshot is taken before assembly into `AssembleContext.modelSelection` and `agent/pre-step.modelSelection`, with no event name of its own (docs/architecture.md, "Turn flow", L112).
+3. **Tool set resolution and prompt assembly.** Enters: `{ agent, modelSelection, signal }`,
+   resolved once per proposed step (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L28).
+   Leaves: the step tool set and the assembled prompt sections plus step-admitted tool schemas
+   (docs/architecture.md, "Turn flow", L86). Seam: `system-prompt/assemble` waterfall, dispatched
+   with the step tool set (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L29;
+   docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L81). The model-selection
+   snapshot is taken before assembly into `AssembleContext.modelSelection` and
+   `agent/pre-step.modelSelection`, with no event name of its own (docs/architecture.md, "Turn
+   flow", L112).
 
-4. **Pre-step gate.** Enters: the claimed messages and the model selection. Leaves: an authoritative decision, either reject or `enter(messages, startsRequestSeries?)` (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L30-L31; docs/architecture.md, "Turn flow", L87-L88). Seam: `agent/pre-step` waterfall. A reject, or a first `enter` rewritten empty, closes the durable turn with no step (docs/architecture.md, "Turn flow", L89).
+4. **Pre-step gate.** Enters: the claimed messages and the model selection. Leaves: an authoritative
+   decision, either reject or `enter(messages, startsRequestSeries?)` (docs/agent-lifecycle.md,
+   "Agent Turn And Step Lifecycle", L30-L31; docs/architecture.md, "Turn flow", L87-L88). Seam:
+   `agent/pre-step` waterfall. A reject, or a first `enter` rewritten empty, closes the durable turn
+   with no step (docs/architecture.md, "Turn flow", L89).
 
-5. **Step start and request adjustment.** Enters: the accepted messages. Leaves: a durable `step/start` and adjusted request controls (docs/architecture.md, "Turn flow", L90-L91). Seam: `agent/request` waterfall, which "adjusts controls without changing the provider, model, or effort selection" (docs/architecture.md, "Turn flow", L112; docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L36).
+5. **Step start and request adjustment.** Enters: the accepted messages. Leaves: a durable
+   `step/start` and adjusted request controls (docs/architecture.md, "Turn flow", L90-L91). Seam:
+   `agent/request` waterfall, which "adjusts controls without changing the provider, model, or
+   effort selection" (docs/architecture.md, "Turn flow", L112; docs/agent-lifecycle.md, "Agent Turn
+   And Step Lifecycle", L36).
 
-6. **Call binding.** Enters: the call configuration and a cancellation signal. Leaves: a prepared call capability that governs prompt admission. Seam: none. The docs name `prepareCall()` on the LLM service here, and state that cancellation during either async phase commits neither system nor users (docs/architecture.md, "Turn flow", L112; docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L37-L39).
+6. **Call binding.** Enters: the call configuration and a cancellation signal. Leaves: a prepared
+   call capability that governs prompt admission. Seam: none. The docs name `prepareCall()` on the
+   LLM service here, and state that cancellation during either async phase commits neither system
+   nor users (docs/architecture.md, "Turn flow", L112; docs/agent-lifecycle.md, "Agent Turn And Step
+   Lifecycle", L37-L39).
 
-7. **Admission and request derivation.** Enters: the prepared call capability. Leaves: durable `system/message` per-node reconciliation, `user/message` per entered message, and `request/header` plus `request/context` as needed, after which the request is derived and frozen from the log (docs/architecture.md, "Turn flow", L92-L95; docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L40-L43). Seam: none named. Every item this stage writes is a durable session event, not an extension point (docs/architecture.md, "Turn flow", L106).
+7. **Admission and request derivation.** Enters: the prepared call capability. Leaves: durable
+   `system/message` per-node reconciliation, `user/message` per entered message, and
+   `request/header` plus `request/context` as needed, after which the request is derived and frozen
+   from the log (docs/architecture.md, "Turn flow", L92-L95; docs/agent-lifecycle.md, "Agent Turn
+   And Step Lifecycle", L40-L43). Seam: none named. Every item this stage writes is a durable
+   session event, not an extension point (docs/architecture.md, "Turn flow", L106).
 
-8. **Streaming.** Enters: the bound prepared call. Leaves: `StreamChunk*` from the adapter, republished as `agent/assistant-stream` start, transient chunks, and end (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L44-L46; docs/architecture.md, "Turn flow", L96-L98). Seams: `llm/stream` waterfall and `agent/assistant-stream` emit (docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L15 and L60).
+8. **Streaming.** Enters: the bound prepared call. Leaves: `StreamChunk*` from the adapter,
+   republished as `agent/assistant-stream` start, transient chunks, and end
+   (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L44-L46; docs/architecture.md, "Turn
+   flow", L96-L98). Seams: `llm/stream` waterfall and `agent/assistant-stream` emit
+   (docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L15 and L60).
 
-9. **Settlement.** Enters: the stream outcome. Leaves: durable `assistant/message` on success, or `assistant/attempt` for a failed, retried, canceled, or stream-error attempt, plus a committed end frame (docs/architecture.md, "Turn flow", L97-L98; docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L47-L55). Seam: `agent/request-error` waterfall on the failure branch only; the success branch appends a durable event and fires no seam (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L50-L52).
+9. **Settlement.** Enters: the stream outcome. Leaves: durable `assistant/message` on success, or
+   `assistant/attempt` for a failed, retried, canceled, or stream-error attempt, plus a committed
+   end frame (docs/architecture.md, "Turn flow", L97-L98; docs/agent-lifecycle.md, "Agent Turn And
+   Step Lifecycle", L47-L55). Seam: `agent/request-error` waterfall on the failure branch only; the
+   success branch appends a durable event and fires no seam (docs/agent-lifecycle.md, "Agent Turn
+   And Step Lifecycle", L50-L52).
 
-10. **Tool execution.** Enters: pending calls classified by `executionMode`, under barriers and a bounded rolling pool (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L56-L58). Leaves: durable `tool/call`, tool-owned session events where applicable, durable `tool/result` per settled call, and active-batch additional contexts injected as `user/message` after the recorded results (docs/tool-execution-pipeline.md, "Tool Execution Pipeline", L11-L30). Seams: `tools/pre-execute`, `tools/execute`, and `tools/post-execute` waterfalls, `tools/result` emit, plus `fs/write-intent` or `fs/edit-intent` and `approval/request` when a tool reaches them (docs/tool-execution-pipeline.md, "Tool Execution Pipeline", L6 and L13-L30; docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L32, L51, L53, L84-L86).
+10. **Tool execution.** Enters: pending calls classified by `executionMode`, under barriers and a
+    bounded rolling pool (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L56-L58).
+    Leaves: durable `tool/call`, tool-owned session events where applicable, durable `tool/result`
+    per settled call, and active-batch additional contexts injected as `user/message` after the
+    recorded results (docs/tool-execution-pipeline.md, "Tool Execution Pipeline", L11-L30). Seams:
+    `tools/pre-execute`, `tools/execute`, and `tools/post-execute` waterfalls, `tools/result` emit,
+    plus `fs/write-intent` or `fs/edit-intent` and `approval/request` when a tool reaches them
+    (docs/tool-execution-pipeline.md, "Tool Execution Pipeline", L6 and L13-L30;
+    docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L32, L51, L53, L84-L86).
 
-11. **Step close and next-step decision.** Enters: the settled tool batch. Leaves: a durable `step/end` and disposal of the step tool set; then either a fresh claim that re-enters stage 4, or the stopping checkpoint (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L68-L78). Seam: none at `step/end`; `agent/turn-stopping` fires only on a natural stop with an empty next-step inbox (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L70-L72).
+11. **Step close and next-step decision.** Enters: the settled tool batch. Leaves: a durable
+    `step/end` and disposal of the step tool set; then either a fresh claim that re-enters stage 4,
+    or the stopping checkpoint (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L68-L78).
+    Seam: none at `step/end`; `agent/turn-stopping` fires only on a natural stop with an empty
+    next-step inbox (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L70-L72).
 
-12. **Turn close and storage.** Enters: the stopping condition. Leaves: a durable `turn/end`, `agent/status` idle, broadcast of each committed event on `session/event`, a parallel `session/flush`, and a persisted JSONL generation. Seams: `agent/turn-stopping` (serial), `agent/status`, `session/event`, and `session/flush` (emit, emit, emit, parallel) (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L81-L82; docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L24, L25, L73-L74). The stored record is `session.vN.jsonl[.zstd]` for v1 and later, and `SESSION_FORMAT_VERSION` in the core Session types is the only hand-maintained writer number, with the verified release record at 4 (docs/architecture.md, "Session log", L126; docs/session-format-status.md, "Sources of truth", L20; docs/session-format-status.md, "Release record", L44-L46).
+12. **Turn close and storage.** Enters: the stopping condition. Leaves: a durable `turn/end`,
+    `agent/status` idle, broadcast of each committed event on `session/event`, a parallel
+    `session/flush`, and a persisted JSONL generation. Seams: `agent/turn-stopping` (serial),
+    `agent/status`, `session/event`, and `session/flush` (emit, emit, emit, parallel)
+    (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L81-L82;
+    docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L24, L25, L73-L74). The
+    stored record is `session.vN.jsonl[.zstd]` for v1 and later, and `SESSION_FORMAT_VERSION` in the
+    core Session types is the only hand-maintained writer number, with the verified release record
+    at 4 (docs/architecture.md, "Session log", L126; docs/session-format-status.md, "Sources of
+    truth", L20; docs/session-format-status.md, "Release record", L44-L46).
 
 ## 3. The seams, one table
 
-Scope: this table lists the events the docs place on the turn path, including the conditional ones inside tool execution. The docs also name registry, lifecycle, and product events that a turn does not pass through, and they are excluded here: `agent/created` and `agent/disposed` (docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L16-L17; docs/architecture.md, "Turn flow", L108), `tools/change` and `system-prompt/change` (docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L82-L83), `llm/adapters-updated` and `llm/models-updated` (L58-L59), `session/created` and `session/disposed` (L71-L72), and the `goal/*`, `subagent/*`, `workflow/*`, `schedule/*`, and `plugin-manager/*` families (L37-L68, L77-L80, L91-L98).
+Scope: this table lists the events the docs place on the turn path, including the conditional ones
+inside tool execution. The docs also name registry, lifecycle, and product events that a turn does
+not pass through, and they are excluded here: `agent/created` and `agent/disposed`
+(docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L16-L17;
+docs/architecture.md, "Turn flow", L108), `tools/change` and `system-prompt/change`
+(docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L82-L83),
+`llm/adapters-updated` and `llm/models-updated` (L58-L59), `session/created` and `session/disposed`
+(L71-L72), and the `goal/*`, `subagent/*`, `workflow/*`, `schedule/*`, and `plugin-manager/*`
+families (L37-L68, L77-L80, L91-L98).
 
-The "power" column reads the dispatch mode as the docs define it: a waterfall listener must call `next()` to delegate, so it may replace what it passes on, and `agent/turn-stopping` is serial and has no `next()` (docs/architecture.md, "Turn flow", L106; docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L11-L12). The docs name delegation only for the waterfall mode, so an `emit` or `parallel` row is recorded here as observe-only.
+The "power" column reads the dispatch mode as the docs define it: a waterfall listener must call
+`next()` to delegate, so it may replace what it passes on, and `agent/turn-stopping` is serial and
+has no `next()` (docs/architecture.md, "Turn flow", L106; docs/event-producer-consumer.md, "Event
+Producer And Consumer Matrix", L11-L12). The docs name delegation only for the waterfall mode, so an
+`emit` or `parallel` row is recorded here as observe-only.
 
-| Event | Producer | Consumers the docs list | Data shape passed | Listener power |
-| --- | --- | --- | --- | --- |
-| `agent/inbox/inserted` | `agent-loop` (docs/event-producer-consumer.md, L21) | `client-ui-forge`, `goal-round-driver`, `subagent`, `tool-jobs` | `{ message }` (docs/agent-lifecycle.md, L21) | Observe only, `emit` |
-| `agent/inbox/claimed` | `agent-loop` (docs/event-producer-consumer.md, L19) | `acp`, `goal-round-driver`, `subagent`, `tool-jobs`, `user-questions` | `{ message, turn }` per message (docs/agent-lifecycle.md, L27) | Observe only, `emit` |
-| `agent/inbox/discarded` | `agent-loop` (docs/event-producer-consumer.md, L20) | `goal-round-driver`, `subagent`, `user-questions` | Not stated in the docs | Observe only, `emit` |
-| `agent/status` | `agent-loop` (docs/event-producer-consumer.md, L24) | `acp`, `agent-team`, `compaction-basic`, `goal-round-driver`, `server`, `session-controller` | `running` and `idle` are the states the sequence shows (docs/agent-lifecycle.md, L23, L82) | Observe only, `emit` |
-| `system-prompt/assemble` | `system-prompt` (docs/event-producer-consumer.md, L81) | `browser-use-runtime`, `working-directory` | In: the step tool set; out: prompt sections plus step-admitted tool schemas (docs/agent-lifecycle.md, L29; docs/architecture.md, L86) | Change, `waterfall` |
-| `agent/pre-step` | `agent-loop` (docs/event-producer-consumer.md, L22) | `action-cards`, `agent`, `agent-instructions`, `claude-code-mods`, `client-ui-forge`, `compaction-basic`, `goal-round-driver`, `hooks-claude-code`, `hooks-codex`, `liveshare`, `plan-mode`, `repeat-tool-reminder`, `session-checkpoint-policy`, `session-controller`, `session-reference`, `time-context`, `tmux-context`, `tool-skill` | In: claimed messages plus `modelSelection`; out: reject or `enter(messages, startsRequestSeries?)` (docs/architecture.md, L112; docs/agent-lifecycle.md, L31) | Change, `waterfall` |
-| `agent/request` | `agent-loop` (docs/event-producer-consumer.md, L106) | `compaction-basic` | In and out: request controls; the provider, model, and effort selection are out of scope (docs/architecture.md, L112) | Change, `waterfall`, but not the selection |
-| `llm/stream` | `llm` (docs/event-producer-consumer.md, L60) | `llm-replay`, `session-checkpoint-policy`, `session-title` | In: the bound prepared call; out: `StreamChunk*` (docs/agent-lifecycle.md, L44-L45) | Change, `waterfall` |
-| `agent/assistant-stream` | `agent-loop` (docs/event-producer-consumer.md, L15) | `headless`, `session-controller` | Process-local start, transient chunk, and committed end frames (docs/architecture.md, L106) | Observe only, `emit` |
-| `agent/request-error` | `agent-loop` (docs/event-producer-consumer.md, L23) | `compaction-basic`, `compaction-image-offload`, `llm-retry` | In: the error; out: a retry action or the preserved original error (docs/agent-lifecycle.md, L50-L51) | Change, `waterfall` |
-| `tools/pre-execute` | `tools` (docs/event-producer-consumer.md, L86) | `auto-review`, `hooks-claude-code`, `hooks-codex`, `liveshare`, `tool-jobs`, `workspace-changes` | In and out: the call; decision vocabulary allow, deny, or ask (docs/tool-execution-pipeline.md, L13-L16, L34-L42) | Change, `waterfall` |
-| `tools/execute` | `tools` (docs/event-producer-consumer.md, L84) | `browser-use-runtime`, `browser-use-stagehand-native`, `claude-code-mods`, `computer-use-cua-driver-native`, `session-checkpoint-policy`, `timeout-policy` | The around dispatch wrapping the registered tool body, carrying timeout, retry, and metrics (docs/tool-execution-pipeline.md, L17, L64) | Change, `waterfall` |
-| `tools/post-execute` | `tools` (docs/event-producer-consumer.md, L85) | `claude-code-mods`, `hooks-claude-code`, `hooks-codex`, `repeat-tool-reminder`, `spill-policy`, `tool-fs-search` | In and out: the result, with the documented moves accept, block, replace, and add context (docs/tool-execution-pipeline.md, L22) | Change, `waterfall` |
-| `tools/result` | `tools` (docs/event-producer-consumer.md, L88) | `action-cards`, `agent-instructions`, `claude-code-mods`, `forge-session`, `liveshare`, `subagent`, `tool-present`, `ui-trajectory` | The immutable, lossless-JSON, frozen authoritative outcome (docs/tool-execution-pipeline.md, L25, L64) | Observe only, `emit` |
-| `fs/write-intent` | `liveshare`, `tool-fs`, `tool-str-replace-editor` (docs/event-producer-consumer.md, L53) | `fs-observation-policy`, `workspace-changes` | The write intent of a `tool-fs` mutation; the docs do not state its fields (docs/tool-execution-pipeline.md, L19) | Change, `waterfall` |
-| `fs/edit-intent` | `liveshare`, `tool-fs`, `tool-str-replace-editor` (docs/event-producer-consumer.md, L51) | `fs-observation-policy`, `workspace-changes` | The edit intent of a `tool-fs` mutation; the docs do not state its fields (docs/tool-execution-pipeline.md, L19) | Change, `waterfall` |
-| `approval/request` | `user-approval` (docs/event-producer-consumer.md, L32) | `acp`, `remotes`, `server` | A one-shot prompt whose outcomes are allowed-once, rejected, canceled, or unavailable (docs/tool-execution-pipeline.md, L16, L42) | Change, `waterfall` |
-| `agent/turn-stopping` | `agent-loop` (docs/event-producer-consumer.md, L25) | `hooks-claude-code`, `hooks-codex`, `workspace-changes` | A serial terminal checkpoint; the docs state no payload fields (docs/architecture.md, L106) | Act without rewriting: it can stop a turn (docs/architecture.md, "Where new behavior goes", L158) |
-| `session/event` | `session` (docs/event-producer-consumer.md, L73) | `acp`, `agent-instructions`, `agent-loop`, `agent-preset-registry`, `agent-team`, `claude-code-mods`, `client-ui-forge`, `compaction-basic`, `file-reference-local`, `file-upload`, `forge-session`, `goal`, `goal-round-driver`, `headless`, `loader-smoke`, `product-analytics`, `ptc-runtime-node`, `server`, `session-controller`, `session-persistence-jsonl`, `session-projection`, `session-projection-cache`, `session-telemetry`, `session-telemetry-otel`, `session-title`, `subagent`, `token-meter`, `tool-executor-ptc`, `tool-jobs`, `ui-trajectory`, `user-questions`, `workspace-changes` | The committed SessionEvent being broadcast (docs/architecture.md, L71, L124) | Observe only, `emit` |
-| `session/flush` | `session` (docs/event-producer-consumer.md, L74) | `session-persistence-jsonl`, `session-telemetry` | Not stated in the docs | Observe only, `parallel` |
+| Event                    | Producer                                                                                 | Consumers the docs list                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | Data shape passed                                                                                                                                             | Listener power                                                                                    |
+| ------------------------ | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `agent/inbox/inserted`   | `agent-loop` (docs/event-producer-consumer.md, L21)                                      | `client-ui-forge`, `goal-round-driver`, `subagent`, `tool-jobs`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | `{ message }` (docs/agent-lifecycle.md, L21)                                                                                                                  | Observe only, `emit`                                                                              |
+| `agent/inbox/claimed`    | `agent-loop` (docs/event-producer-consumer.md, L19)                                      | `acp`, `goal-round-driver`, `subagent`, `tool-jobs`, `user-questions`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | `{ message, turn }` per message (docs/agent-lifecycle.md, L27)                                                                                                | Observe only, `emit`                                                                              |
+| `agent/inbox/discarded`  | `agent-loop` (docs/event-producer-consumer.md, L20)                                      | `goal-round-driver`, `subagent`, `user-questions`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Not stated in the docs                                                                                                                                        | Observe only, `emit`                                                                              |
+| `agent/status`           | `agent-loop` (docs/event-producer-consumer.md, L24)                                      | `acp`, `agent-team`, `compaction-basic`, `goal-round-driver`, `server`, `session-controller`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | `running` and `idle` are the states the sequence shows (docs/agent-lifecycle.md, L23, L82)                                                                    | Observe only, `emit`                                                                              |
+| `system-prompt/assemble` | `system-prompt` (docs/event-producer-consumer.md, L81)                                   | `browser-use-runtime`, `working-directory`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | In: the step tool set; out: prompt sections plus step-admitted tool schemas (docs/agent-lifecycle.md, L29; docs/architecture.md, L86)                         | Change, `waterfall`                                                                               |
+| `agent/pre-step`         | `agent-loop` (docs/event-producer-consumer.md, L22)                                      | `action-cards`, `agent`, `agent-instructions`, `claude-code-mods`, `client-ui-forge`, `compaction-basic`, `goal-round-driver`, `hooks-claude-code`, `hooks-codex`, `liveshare`, `plan-mode`, `repeat-tool-reminder`, `session-checkpoint-policy`, `session-controller`, `session-reference`, `time-context`, `tmux-context`, `tool-skill`                                                                                                                                                                                                                                                                 | In: claimed messages plus `modelSelection`; out: reject or `enter(messages, startsRequestSeries?)` (docs/architecture.md, L112; docs/agent-lifecycle.md, L31) | Change, `waterfall`                                                                               |
+| `agent/request`          | `agent-loop` (docs/event-producer-consumer.md, L106)                                     | `compaction-basic`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | In and out: request controls; the provider, model, and effort selection are out of scope (docs/architecture.md, L112)                                         | Change, `waterfall`, but not the selection                                                        |
+| `llm/stream`             | `llm` (docs/event-producer-consumer.md, L60)                                             | `llm-replay`, `session-checkpoint-policy`, `session-title`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | In: the bound prepared call; out: `StreamChunk*` (docs/agent-lifecycle.md, L44-L45)                                                                           | Change, `waterfall`                                                                               |
+| `agent/assistant-stream` | `agent-loop` (docs/event-producer-consumer.md, L15)                                      | `headless`, `session-controller`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Process-local start, transient chunk, and committed end frames (docs/architecture.md, L106)                                                                   | Observe only, `emit`                                                                              |
+| `agent/request-error`    | `agent-loop` (docs/event-producer-consumer.md, L23)                                      | `compaction-basic`, `compaction-image-offload`, `llm-retry`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | In: the error; out: a retry action or the preserved original error (docs/agent-lifecycle.md, L50-L51)                                                         | Change, `waterfall`                                                                               |
+| `tools/pre-execute`      | `tools` (docs/event-producer-consumer.md, L86)                                           | `auto-review`, `hooks-claude-code`, `hooks-codex`, `liveshare`, `tool-jobs`, `workspace-changes`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | In and out: the call; decision vocabulary allow, deny, or ask (docs/tool-execution-pipeline.md, L13-L16, L34-L42)                                             | Change, `waterfall`                                                                               |
+| `tools/execute`          | `tools` (docs/event-producer-consumer.md, L84)                                           | `browser-use-runtime`, `browser-use-stagehand-native`, `claude-code-mods`, `computer-use-cua-driver-native`, `session-checkpoint-policy`, `timeout-policy`                                                                                                                                                                                                                                                                                                                                                                                                                                                | The around dispatch wrapping the registered tool body, carrying timeout, retry, and metrics (docs/tool-execution-pipeline.md, L17, L64)                       | Change, `waterfall`                                                                               |
+| `tools/post-execute`     | `tools` (docs/event-producer-consumer.md, L85)                                           | `claude-code-mods`, `hooks-claude-code`, `hooks-codex`, `repeat-tool-reminder`, `spill-policy`, `tool-fs-search`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | In and out: the result, with the documented moves accept, block, replace, and add context (docs/tool-execution-pipeline.md, L22)                              | Change, `waterfall`                                                                               |
+| `tools/result`           | `tools` (docs/event-producer-consumer.md, L88)                                           | `action-cards`, `agent-instructions`, `claude-code-mods`, `forge-session`, `liveshare`, `subagent`, `tool-present`, `ui-trajectory`                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | The immutable, lossless-JSON, frozen authoritative outcome (docs/tool-execution-pipeline.md, L25, L64)                                                        | Observe only, `emit`                                                                              |
+| `fs/write-intent`        | `liveshare`, `tool-fs`, `tool-str-replace-editor` (docs/event-producer-consumer.md, L53) | `fs-observation-policy`, `workspace-changes`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | The write intent of a `tool-fs` mutation; the docs do not state its fields (docs/tool-execution-pipeline.md, L19)                                             | Change, `waterfall`                                                                               |
+| `fs/edit-intent`         | `liveshare`, `tool-fs`, `tool-str-replace-editor` (docs/event-producer-consumer.md, L51) | `fs-observation-policy`, `workspace-changes`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | The edit intent of a `tool-fs` mutation; the docs do not state its fields (docs/tool-execution-pipeline.md, L19)                                              | Change, `waterfall`                                                                               |
+| `approval/request`       | `user-approval` (docs/event-producer-consumer.md, L32)                                   | `acp`, `remotes`, `server`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | A one-shot prompt whose outcomes are allowed-once, rejected, canceled, or unavailable (docs/tool-execution-pipeline.md, L16, L42)                             | Change, `waterfall`                                                                               |
+| `agent/turn-stopping`    | `agent-loop` (docs/event-producer-consumer.md, L25)                                      | `hooks-claude-code`, `hooks-codex`, `workspace-changes`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | A serial terminal checkpoint; the docs state no payload fields (docs/architecture.md, L106)                                                                   | Act without rewriting: it can stop a turn (docs/architecture.md, "Where new behavior goes", L158) |
+| `session/event`          | `session` (docs/event-producer-consumer.md, L73)                                         | `acp`, `agent-instructions`, `agent-loop`, `agent-preset-registry`, `agent-team`, `claude-code-mods`, `client-ui-forge`, `compaction-basic`, `file-reference-local`, `file-upload`, `forge-session`, `goal`, `goal-round-driver`, `headless`, `loader-smoke`, `product-analytics`, `ptc-runtime-node`, `server`, `session-controller`, `session-persistence-jsonl`, `session-projection`, `session-projection-cache`, `session-telemetry`, `session-telemetry-otel`, `session-title`, `subagent`, `token-meter`, `tool-executor-ptc`, `tool-jobs`, `ui-trajectory`, `user-questions`, `workspace-changes` | The committed SessionEvent being broadcast (docs/architecture.md, L71, L124)                                                                                  | Observe only, `emit`                                                                              |
+| `session/flush`          | `session` (docs/event-producer-consumer.md, L74)                                         | `session-persistence-jsonl`, `session-telemetry`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Not stated in the docs                                                                                                                                        | Observe only, `parallel`                                                                          |
 
 ## 4. What the default experience looks like
 
-"No plugins installed" can only mean no plugins beyond the profile's own bundles, because the docs state that every part of the product is a plugin, including the model adapter, the tool registry, the session log, and the agent loop itself (docs/architecture.md, "Cordis", L9). A running harness is a plugin tree composed at boot from ordered layers, where `dsh-base` is the shared first layer of the `web`, `headless`, `sdk`, and `acp` profiles and is described as model adapters, tools, persistence, sandbox and approval policy, settings, credentials, and telemetry (docs/architecture.md, "Profiles and bundles", L15, L23).
+"No plugins installed" can only mean no plugins beyond the profile's own bundles, because the docs
+state that every part of the product is a plugin, including the model adapter, the tool registry,
+the session log, and the agent loop itself (docs/architecture.md, "Cordis", L9). A running harness
+is a plugin tree composed at boot from ordered layers, where `dsh-base` is the shared first layer of
+the `web`, `headless`, `sdk`, and `acp` profiles and is described as model adapters, tools,
+persistence, sandbox and approval policy, settings, credentials, and telemetry
+(docs/architecture.md, "Profiles and bundles", L15, L23).
 
-The model sees only what the log can reconstruct: the session log is the source of the context the model sees, and `deriveMessages()` projects model history from it (docs/architecture.md, "Session log", L124). The prompt it receives is the assembled prompt sections plus the step-admitted tool schemas (docs/architecture.md, "Turn flow", L86), refreshed and reconciled per attempt (docs/architecture.md, "Turn flow", L112).
+The model sees only what the log can reconstruct: the session log is the source of the context the
+model sees, and `deriveMessages()` projects model history from it (docs/architecture.md, "Session
+log", L124). The prompt it receives is the assembled prompt sections plus the step-admitted tool
+schemas (docs/architecture.md, "Turn flow", L86), refreshed and reconciled per attempt
+(docs/architecture.md, "Turn flow", L112).
 
-The transformations at the seams are absent in the sense that no listener supplies one: the docs define a waterfall listener's only means of acting as calling `next()` with a replacement, and the returned `agent/pre-step` decision is authoritative (docs/architecture.md, "Turn flow", L106; docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L89). The docs place each transformation in a separate listening package, for example `compaction-basic` using `agent/pre-step` for pressure and `agent/request-error` only for canonical context overflow, so pressure handling exists only when that package is mounted (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L87).
+The transformations at the seams are absent in the sense that no listener supplies one: the docs
+define a waterfall listener's only means of acting as calling `next()` with a replacement, and the
+returned `agent/pre-step` decision is authoritative (docs/architecture.md, "Turn flow", L106;
+docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L89). The docs place each transformation
+in a separate listening package, for example `compaction-basic` using `agent/pre-step` for pressure
+and `agent/request-error` only for canonical context overflow, so pressure handling exists only when
+that package is mounted (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L87).
 
-The guardrails the docs describe are registrations rather than fixed stages: monotonic guards are "registered" and deny or abstain, and approval is a seam whose absent or unanswerable prompt denies (docs/tool-execution-pipeline.md, "Tool Execution Pipeline", L14, L16). The docs do not state which guard packages a given profile mounts, so which guardrails a particular default profile lacks cannot be settled from these documents.
+The guardrails the docs describe are registrations rather than fixed stages: monotonic guards are
+"registered" and deny or abstain, and approval is a seam whose absent or unanswerable prompt denies
+(docs/tool-execution-pipeline.md, "Tool Execution Pipeline", L14, L16). The docs do not state which
+guard packages a given profile mounts, so which guardrails a particular default profile lacks cannot
+be settled from these documents.
 
-The records that are absent are all the live ones: `turn/*`, `step/*`, `system/message`, `user/message`, `assistant/message`, `assistant/attempt`, and `tool/*` are the durable session events, and the rest are live extension points (docs/architecture.md, "Turn flow", L106). Because model-visible means logged, a seam event that changes nothing leaves no model-visible trace, and a hard process loss before settlement leaves no durable attempt stream (docs/architecture.md, "Session log", L124, L128).
+The records that are absent are all the live ones: `turn/*`, `step/*`, `system/message`,
+`user/message`, `assistant/message`, `assistant/attempt`, and `tool/*` are the durable session
+events, and the rest are live extension points (docs/architecture.md, "Turn flow", L106). Because
+model-visible means logged, a seam event that changes nothing leaves no model-visible trace, and a
+hard process loss before settlement leaves no durable attempt stream (docs/architecture.md, "Session
+log", L124, L128).
 
-The user sees the turn through `session/event` rendering plus live `agent/assistant-stream` frames: the docs route UI integration through driving `ctx.agents` and rendering from `session/event`, and state that live UI incrementality comes from `agent/assistant-stream` (docs/architecture.md, "Where new behavior goes", L160; docs/architecture.md, "Session log", L124). With no plugin adding a view, the durable settlements are the only things that survive a reload (docs/architecture.md, "Session log", L124).
+The user sees the turn through `session/event` rendering plus live `agent/assistant-stream` frames:
+the docs route UI integration through driving `ctx.agents` and rendering from `session/event`, and
+state that live UI incrementality comes from `agent/assistant-stream` (docs/architecture.md, "Where
+new behavior goes", L160; docs/architecture.md, "Session log", L124). With no plugin adding a view,
+the durable settlements are the only things that survive a reload (docs/architecture.md, "Session
+log", L124).
 
 ## 5. Where a plugin can intervene
 
-- `agent/inbox/inserted`: record or react to queued input, because the turn flow places this live event before the claim, and the docs give `agent.inject()` as the way added model-facing context lands in the next admitted request (docs/architecture.md, "Turn flow", L85, L106; docs/architecture.md, "Where new behavior goes", L159).
-- `agent/inbox/claimed`: observe the claim and its `turn`, as the sequence shows listeners receiving `{ message, turn }` (docs/agent-lifecycle.md, L27).
-- `agent/inbox/discarded`: observe that a queued message was dropped (docs/event-producer-consumer.md, L20).
-- `agent/status`: observe running and idle transitions for status display (docs/agent-lifecycle.md, L23, L82).
-- `system-prompt/assemble`: add or rewrite prompt sections, because the waterfall is dispatched with the step tool set and returns the assembled sections (docs/agent-lifecycle.md, L29).
-- `agent/pre-step`: accept, rewrite, or reject claimed messages, and declare a new request series with `startsRequestSeries` (docs/architecture.md, "Turn flow", L112).
-- `agent/request`: adjust request controls, but not the provider, model, or effort selection (docs/architecture.md, "Turn flow", L112).
-- `llm/stream`: wrap or replace the stream, because the bound prepared call passes through the waterfall and returns `StreamChunk*` (docs/agent-lifecycle.md, L44-L45).
-- `agent/assistant-stream`: render live start, chunk, and end frames without altering the settlement (docs/architecture.md, "Turn flow", L106).
-- `agent/request-error`: return a retry action or preserve the original error (docs/agent-lifecycle.md, L50-L51).
-- `tools/pre-execute`: allow, deny, or ask, which is how hooks, permission, and sandbox policy attach (docs/tool-execution-pipeline.md, L13-L16).
-- `tools/execute`: wrap the tool body for timeout, retry, and metrics (docs/tool-execution-pipeline.md, L17).
-- `tools/post-execute`: accept, block, replace, or add context to a result (docs/tool-execution-pipeline.md, L22).
-- `tools/result`: observe the frozen authoritative outcome, for example to record or render it (docs/tool-execution-pipeline.md, L25).
-- `fs/write-intent` and `fs/edit-intent`: gate or record a filesystem mutation before it lands, which is the documented way to add filesystem policy (docs/architecture.md, "Where new behavior goes", L156; docs/tool-execution-pipeline.md, L19).
-- `approval/request`: answer a one-shot approval prompt, or let it go unanswered so the pipeline denies (docs/tool-execution-pipeline.md, L16).
-- `agent/turn-stopping`: stop a turn at the serial terminal checkpoint, since the docs say `agent/turn-stopping` stops a turn and it has no `next()` (docs/architecture.md, "Where new behavior goes", L158; docs/architecture.md, "Turn flow", L106).
-- `session/event`: record or render every committed fact, because durable replay facts travel on `session/event` (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L6).
-- `session/flush`: observe the flush that persistence and telemetry consume (docs/event-producer-consumer.md, L74).
+- `agent/inbox/inserted`: record or react to queued input, because the turn flow places this live
+  event before the claim, and the docs give `agent.inject()` as the way added model-facing context
+  lands in the next admitted request (docs/architecture.md, "Turn flow", L85, L106;
+  docs/architecture.md, "Where new behavior goes", L159).
+- `agent/inbox/claimed`: observe the claim and its `turn`, as the sequence shows listeners receiving
+  `{ message, turn }` (docs/agent-lifecycle.md, L27).
+- `agent/inbox/discarded`: observe that a queued message was dropped
+  (docs/event-producer-consumer.md, L20).
+- `agent/status`: observe running and idle transitions for status display (docs/agent-lifecycle.md,
+  L23, L82).
+- `system-prompt/assemble`: add or rewrite prompt sections, because the waterfall is dispatched with
+  the step tool set and returns the assembled sections (docs/agent-lifecycle.md, L29).
+- `agent/pre-step`: accept, rewrite, or reject claimed messages, and declare a new request series
+  with `startsRequestSeries` (docs/architecture.md, "Turn flow", L112).
+- `agent/request`: adjust request controls, but not the provider, model, or effort selection
+  (docs/architecture.md, "Turn flow", L112).
+- `llm/stream`: wrap or replace the stream, because the bound prepared call passes through the
+  waterfall and returns `StreamChunk*` (docs/agent-lifecycle.md, L44-L45).
+- `agent/assistant-stream`: render live start, chunk, and end frames without altering the settlement
+  (docs/architecture.md, "Turn flow", L106).
+- `agent/request-error`: return a retry action or preserve the original error
+  (docs/agent-lifecycle.md, L50-L51).
+- `tools/pre-execute`: allow, deny, or ask, which is how hooks, permission, and sandbox policy
+  attach (docs/tool-execution-pipeline.md, L13-L16).
+- `tools/execute`: wrap the tool body for timeout, retry, and metrics
+  (docs/tool-execution-pipeline.md, L17).
+- `tools/post-execute`: accept, block, replace, or add context to a result
+  (docs/tool-execution-pipeline.md, L22).
+- `tools/result`: observe the frozen authoritative outcome, for example to record or render it
+  (docs/tool-execution-pipeline.md, L25).
+- `fs/write-intent` and `fs/edit-intent`: gate or record a filesystem mutation before it lands,
+  which is the documented way to add filesystem policy (docs/architecture.md, "Where new behavior
+  goes", L156; docs/tool-execution-pipeline.md, L19).
+- `approval/request`: answer a one-shot approval prompt, or let it go unanswered so the pipeline
+  denies (docs/tool-execution-pipeline.md, L16).
+- `agent/turn-stopping`: stop a turn at the serial terminal checkpoint, since the docs say
+  `agent/turn-stopping` stops a turn and it has no `next()` (docs/architecture.md, "Where new
+  behavior goes", L158; docs/architecture.md, "Turn flow", L106).
+- `session/event`: record or render every committed fact, because durable replay facts travel on
+  `session/event` (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L6).
+- `session/flush`: observe the flush that persistence and telemetry consume
+  (docs/event-producer-consumer.md, L74).
 
 ## 6. The honest limits
 
-- No live run is available, so this document cannot establish wall-clock timing, token counts, chunk counts, the number of steps a turn actually takes, the order in which listeners execute, the assembled prompt text, event sequence numbers, or the size and generation number of the file a given session writes.
-- Which listeners actually run in a profile is not established by these docs: the event matrix is generated from the repository TypeScript Program and lists packages, not profile membership (docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L117), and the documented way to see the tree a machine boots is `dsh --profile web --dump-config` (docs/architecture.md, "Profiles and bundles", L31-L35).
-- No code citation could be produced: the documentation checkout available here contains `docs/` but no `packages/` tree, so the `path:line` references the docs themselves use, for example into `packages/core/agent/src/runtime-types.ts`, could not be read or verified (docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L13-L98).
-- The docs disagree about `agent/inbox/spliced`: the lifecycle sequence shows it twice, as a notification from the Agent and as a pure deletion from the Driver, while the generated event matrix lists only `agent/inbox/inserted`, `agent/inbox/claimed`, and `agent/inbox/discarded` (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L20, L26; docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L19-L21).
-- The docs disagree about the status of `agent/request`: the turn flow calls it a waterfall that listeners delegate through, and the lifecycle sequence dispatches it, while the event matrix files it under non-harness or undeclared event strings with mode `waterfall` (docs/architecture.md, "Turn flow", L106; docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L36; docs/event-producer-consumer.md, "Non-harness or undeclared event strings seen in package source", L101-L106).
-- The payload of `agent/inbox/discarded`, `session/flush`, `agent/turn-stopping`, `fs/write-intent`, and `fs/edit-intent` is not described by these docs, so the table records the gap rather than a shape.
-- The version numbers in this document are release records, not measurements of any turn: the writer constant is the only hand-maintained writer number, and the release record is 4 with evidence tag `dsh-v0.2.0-rc.2` (docs/session-format-status.md, "Sources of truth", L20; docs/session-format-status.md, "Release record", L44-L46).
+- No live run is available, so this document cannot establish wall-clock timing, token counts, chunk
+  counts, the number of steps a turn actually takes, the order in which listeners execute, the
+  assembled prompt text, event sequence numbers, or the size and generation number of the file a
+  given session writes.
+- Which listeners actually run in a profile is not established by these docs: the event matrix is
+  generated from the repository TypeScript Program and lists packages, not profile membership
+  (docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L117), and the documented
+  way to see the tree a machine boots is `dsh --profile web --dump-config` (docs/architecture.md,
+  "Profiles and bundles", L31-L35).
+- No code citation could be produced: the documentation checkout available here contains `docs/` but
+  no `packages/` tree, so the `path:line` references the docs themselves use, for example into
+  `packages/core/agent/src/runtime-types.ts`, could not be read or verified
+  (docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L13-L98).
+- The docs disagree about `agent/inbox/spliced`: the lifecycle sequence shows it twice, as a
+  notification from the Agent and as a pure deletion from the Driver, while the generated event
+  matrix lists only `agent/inbox/inserted`, `agent/inbox/claimed`, and `agent/inbox/discarded`
+  (docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L20, L26;
+  docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L19-L21).
+- The docs disagree about the status of `agent/request`: the turn flow calls it a waterfall that
+  listeners delegate through, and the lifecycle sequence dispatches it, while the event matrix files
+  it under non-harness or undeclared event strings with mode `waterfall` (docs/architecture.md,
+  "Turn flow", L106; docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L36;
+  docs/event-producer-consumer.md, "Non-harness or undeclared event strings seen in package source",
+  L101-L106).
+- The payload of `agent/inbox/discarded`, `session/flush`, `agent/turn-stopping`, `fs/write-intent`,
+  and `fs/edit-intent` is not described by these docs, so the table records the gap rather than a
+  shape.
+- The version numbers in this document are release records, not measurements of any turn: the writer
+  constant is the only hand-maintained writer number, and the release record is 4 with evidence tag
+  `dsh-v0.2.0-rc.2` (docs/session-format-status.md, "Sources of truth", L20;
+  docs/session-format-status.md, "Release record", L44-L46).
 
 ## 7. Three visual concepts
 
-**Concept 1: the seam rail.** A vertical rail of the twelve stages, each stage a station with a solid tick for its durable event and a hollow tick for each seam; the hollow ticks are drawn open and unlit, with an empty listener slot beside each one, so the default state is a rail of empty slots rather than an annotated diagram. Data needed: the twelve stage names and their durable events, the seam list with dispatch mode, and the documented consumer count per seam from the event matrix (docs/architecture.md, "Turn flow", L84-L106; docs/event-producer-consumer.md, "Event Producer And Consumer Matrix", L11-L98). The reader should leave with: the default turn already has every slot, and only the slots are empty.
+**Concept 1: the seam rail.** A vertical rail of the twelve stages, each stage a station with a
+solid tick for its durable event and a hollow tick for each seam; the hollow ticks are drawn open
+and unlit, with an empty listener slot beside each one, so the default state is a rail of empty
+slots rather than an annotated diagram. Data needed: the twelve stage names and their durable
+events, the seam list with dispatch mode, and the documented consumer count per seam from the event
+matrix (docs/architecture.md, "Turn flow", L84-L106; docs/event-producer-consumer.md, "Event
+Producer And Consumer Matrix", L11-L98). The reader should leave with: the default turn already has
+every slot, and only the slots are empty.
 
-**Concept 2: the pass-through split.** A split view of one chosen stage, `agent/pre-step` or `tools/post-execute`, with the payload entering on the left, the payload leaving on the right, and a single highlighted pass-through path between them; the decision vocabulary the docs give (reject or enter, or accept, block, replace, add context) is drawn as grayed branches that nothing takes. Data needed: the documented input and output shape of that seam and its decision vocabulary (docs/architecture.md, "Turn flow", L112; docs/tool-execution-pipeline.md, "Tool Execution Pipeline", L22). The reader should leave with: a waterfall seam is a decision point where the default decision is to change nothing.
+**Concept 2: the pass-through split.** A split view of one chosen stage, `agent/pre-step` or
+`tools/post-execute`, with the payload entering on the left, the payload leaving on the right, and a
+single highlighted pass-through path between them; the decision vocabulary the docs give (reject or
+enter, or accept, block, replace, add context) is drawn as grayed branches that nothing takes. Data
+needed: the documented input and output shape of that seam and its decision vocabulary
+(docs/architecture.md, "Turn flow", L112; docs/tool-execution-pipeline.md, "Tool Execution
+Pipeline", L22). The reader should leave with: a waterfall seam is a decision point where the
+default decision is to change nothing.
 
-**Concept 3: the two-tone timeline.** A horizontal timeline of one turn where durable events are solid bars and live seams are hollow marks, with the `agent/assistant-stream` chunk band drawn as a transient texture that does not persist past its settlement; the log view underneath shows only the solid bars. Data needed: the durable versus live classification, the lifecycle order, and the rule that a hard process loss before settlement leaves no durable attempt stream (docs/architecture.md, "Turn flow", L106; docs/architecture.md, "Session log", L124; docs/agent-lifecycle.md, "Agent Turn And Step Lifecycle", L19-L82). The reader should leave with: what a reload can show is exactly the solid bars, and the seams are where a plugin could have changed them.
+**Concept 3: the two-tone timeline.** A horizontal timeline of one turn where durable events are
+solid bars and live seams are hollow marks, with the `agent/assistant-stream` chunk band drawn as a
+transient texture that does not persist past its settlement; the log view underneath shows only the
+solid bars. Data needed: the durable versus live classification, the lifecycle order, and the rule
+that a hard process loss before settlement leaves no durable attempt stream (docs/architecture.md,
+"Turn flow", L106; docs/architecture.md, "Session log", L124; docs/agent-lifecycle.md, "Agent Turn
+And Step Lifecycle", L19-L82). The reader should leave with: what a reload can show is exactly the
+solid bars, and the seams are where a plugin could have changed them.

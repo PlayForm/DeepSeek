@@ -96,13 +96,13 @@ The site's work divides at the same line the content divides at, and the route f
 
 - **Mechanical lanes** - a rename, a sweep, a data file filled from a table, a component built to a
   fixed prop list - go to the cheap route. The spec is complete enough that judgement adds nothing.
-- **Judgement lanes** - a page's composition, which machines a plugin's page carries, the order of its
-  sections, the sentence a reader leaves with, a rewrite of a page that has become five shallow
+- **Judgement lanes** - a page's composition, which machines a plugin's page carries, the order of
+  its sections, the sentence a reader leaves with, a rewrite of a page that has become five shallow
   sections - go to the judgement route at max effort. A cheap lane asked to design will produce a
   template, and a template is the failure the owner names when they say a page is "empty".
 
-The tell is in the spec: a spec that says *what the page must show* is judgement work, and a spec
-that says *which string goes where* is mechanical. Route by the spec, not by the file count.
+The tell is in the spec: a spec that says _what the page must show_ is judgement work, and a spec
+that says _which string goes where_ is mechanical. Route by the spec, not by the file count.
 
 ## What a presentation lane reads
 
@@ -113,33 +113,35 @@ names every path:
    `EffectTS/packages/ets-<slug>/Source/`. A claim about behavior is a claim about both trees, and a
    twin that differs is a fact the page carries.
 2. **The plugin's aim.** Its `README.md`, the plans under `Documentation/Plans/`, and the family
-   documents: the root `README.md`, `Documentation/PLUGINS/PLUGIN-FAMILY.md`, `Documentation/FRAMEWORK.md`.
-   The aim is what the diagram is about; without it the page draws the mechanism and misses the point.
-3. **The harness's side.** `~/Developer/Documentation/Module/deepseek-harness/docs/`: the architecture,
-   the capability seams, the event matrix, the tool pipeline, the agent lifecycle, the session format.
+   documents: the root `README.md`, `Documentation/PLUGINS/PLUGIN-FAMILY.md`,
+   `Documentation/FRAMEWORK.md`. The aim is what the diagram is about; without it the page draws the
+   mechanism and misses the point.
+3. **The harness's side.** `~/Developer/Documentation/Module/deepseek-harness/docs/`: the
+   architecture, the capability seams, the event matrix, the tool pipeline, the agent lifecycle, the
+   session format.
 4. **The visual research.** `Temporary/Corca/` is the visual authority and every lane that builds or
    composes UI is given it by path. The specimens are the mechanics, not the skin:
-   `Specimens/Components.html` (the line and gutter, the pending block, the chip, the tab, the table,
-   the paint-order trap), `Specimens/Flow.html` (lane, sequence, state), `Specimens/Observatory.html`
-   (radial and graph forms), `Specimens/Plugin.html` (the triptych and the per-plugin composition),
-   `Specimens/Session.html` and `Specimens/Trace-Prototype.html` (the document and inspector),
-   `Curated/Components.md`, `Design-Tokens.md`, `Interaction-Model.md`, `Representations.md`, and
-   `Compositions.md` (the operator table and the three anti-combinations). `Temporary/` also holds
-   the design contracts and the page recipes. Borrow the mechanic and the composition; never the
-   colour, radius, font, or shadow.
+   `Specimens/Components.html` (the line and gutter, the pending block, the chip, the tab, the
+   table, the paint-order trap), `Specimens/Flow.html` (lane, sequence, state),
+   `Specimens/Observatory.html` (radial and graph forms), `Specimens/Plugin.html` (the triptych and
+   the per-plugin composition), `Specimens/Session.html` and `Specimens/Trace-Prototype.html` (the
+   document and inspector), `Curated/Components.md`, `Design-Tokens.md`, `Interaction-Model.md`,
+   `Representations.md`, and `Compositions.md` (the operator table and the three anti-combinations).
+   `Temporary/` also holds the design contracts and the page recipes. Borrow the mechanic and the
+   composition; never the colour, radius, font, or shadow.
 5. **The diagram corpus.** `Diagram/` at the repository root: one Mermaid flowchart per package,
    grouped into six capability families, plus the root architecture and the four integration paths.
    It is the reference for what a machine on a page should express - a real branch, a real
    pass-through, a real ledger write - not artwork to paste.
-6. **The advanced UI corpus.** `~/Developer/Documentation/Module/ui/`: 113 registry compositions under
-   `src/registry/overtrue/` and 45 page-level components under `src/components/overtrue/`, each a
-   complete React + Tailwind + SVG composition. The ones a page usually needs are `trace-waterfall`,
-   `radial-gauge`, `activity-rings`, `event-timeline`, `bullet-chart`, `distribution-bar`,
-   `service-map`, `deploy-pipeline`, `steps`, `log-stream`, `json-viewer`, `detail-list`,
-   `tree-view`, `ribbon-card`, and `activity-heatmap`. Borrow the geometry, the state model, and the
-   labelling rule; never the component, the Tailwind class, or the dependency.
-7. **The component inventory.** Every component under `Source/Component/`, with its props, because the
-   composition is limited by what the lane knows exists.
+6. **The advanced UI corpus.** `~/Developer/Documentation/Module/ui/`: 113 registry compositions
+   under `src/registry/overtrue/` and 45 page-level components under `src/components/overtrue/`,
+   each a complete React + Tailwind + SVG composition. The ones a page usually needs are
+   `trace-waterfall`, `radial-gauge`, `activity-rings`, `event-timeline`, `bullet-chart`,
+   `distribution-bar`, `service-map`, `deploy-pipeline`, `steps`, `log-stream`, `json-viewer`,
+   `detail-list`, `tree-view`, `ribbon-card`, and `activity-heatmap`. Borrow the geometry, the state
+   model, and the labelling rule; never the component, the Tailwind class, or the dependency.
+7. **The component inventory.** Every component under `Source/Component/`, with its props, because
+   the composition is limited by what the lane knows exists.
 
 The output is not the safest diagram. It is the densest true one: the machines that together express
 the plugin's function, its side effects on the conversation, the disk, and the log, and the harness
@@ -291,7 +293,7 @@ The site has two kinds of content and they are produced two different ways.
 **Facts are read.** A version, a count, a knob's default, a dependency edge, a changelog line: the
 build reads them from the tree, and a page never types one by hand.
 
-**Presentations are authored.** What a plugin *is*, what its page should show first, which picture
+**Presentations are authored.** What a plugin _is_, what its page should show first, which picture
 carries its dimension, and which sentence a reader leaves with: none of that is in a manifest, and a
 page that derives it from a README's prose is a page that reads like a README. A presentation is
 written by hand from the research, in the site's voice, and it lives in a `Source/Content/*.ts` map

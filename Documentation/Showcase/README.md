@@ -5,15 +5,15 @@ machines it uses, the data each machine reads, and the history of every iteratio
 from the dossier, not from a conversation, so the design survives a context that has been compacted,
 lost, or handed to a different agent.
 
-A dossier is append-only. A new iteration adds a dated section and leaves the old one standing, so the
-history of the design is readable and a later agent can see what was tried, what was replaced, and
-why. The current layout is always the last section; the earlier sections are the record.
+A dossier is append-only. A new iteration adds a dated section and leaves the old one standing, so
+the history of the design is readable and a later agent can see what was tried, what was replaced,
+and why. The current layout is always the last section; the earlier sections are the record.
 
 ## The files
 
-| File | What it holds |
-| --- | --- |
-| `README.md` | this method |
+| File        | What it holds                                      |
+| ----------- | -------------------------------------------------- |
+| `README.md` | this method                                        |
 | `<slug>.md` | one plugin's page: layout, machines, data, history |
 
 ## The dossier schema
@@ -21,13 +21,13 @@ why. The current layout is always the last section; the earlier sections are the
 Every dossier has the same five parts, in this order:
 
 1. **The claim** - one sentence the page must leave with, and the question it answers.
-2. **The layout** - the page drawn in ASCII, top to bottom, with each machine named at the position it
-   occupies. This is the part that makes the dossier worth keeping: an agent can implement a drawing,
-   and a reader can disagree with it before anything is built.
+2. **The layout** - the page drawn in ASCII, top to bottom, with each machine named at the position
+   it occupies. This is the part that makes the dossier worth keeping: an agent can implement a
+   drawing, and a reader can disagree with it before anything is built.
 3. **The machines** - a table of the machines on the page, what each adds, and the component that
    draws it.
-4. **The data** - where each machine's facts come from: the source file, the `SCHEME.md` section, the
-   README table, the test string.
+4. **The data** - where each machine's facts come from: the source file, the `SCHEME.md` section,
+   the README table, the test string.
 5. **The history** - one section per version, newest last, and each section repeats the **whole
    layout**, not a diff. A repetition is the point: `V1` at the top is the page as first drawn, and
    `V2` at the bottom is the same page drawn again with the change already in it. A reader scrolls

@@ -10,14 +10,14 @@ The machine answers: **what does this plugin deliberately not handle, and why?**
 
 ## The sources
 
-| Source | What was taken |
-| --- | --- |
-| `Site/Source/Component/Absent.astro` | The shape: an `aside`, a label paragraph, and a definition list of one name and one reason per item. The label defaults to `Deliberately absent` and is a prop, because the same shape states two different decisions on two pages. |
-| `Site/Source/Stylesheet/Component/Absent.scss` | The geometry: the tray face, a `64px` name track and a flexible reason, one hairline between items, `max-width: var(--measure)`, and no accent token anywhere in the file. |
-| `Site/Source/Content/Detail.ts` | Both lists: the four extensions of the `Syntax` record and the six tools of the `Compress` record's `Exempt`, each with the source's own sentence. |
-| `Site/Source/pages/package/[slug].astro` | The two mounts: `Absent` under the family matrix with the default label, and `Absent` with `Label="Never compressed"` under the compressor's detail. |
-| `Temporary/Corca/Curated/Components.md` | The object row and the rule that hairlines separate while only a surface encloses. The panel is a tray with hairlines between items, not a bordered card. |
-| `Temporary/component-page-composition-recipes.json` | M13.R05, unsupported capability: state what the source does not include, and what it does include, without a recovery affordance the source cannot back. |
+| Source                                              | What was taken                                                                                                                                                                                                                      |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Site/Source/Component/Absent.astro`                | The shape: an `aside`, a label paragraph, and a definition list of one name and one reason per item. The label defaults to `Deliberately absent` and is a prop, because the same shape states two different decisions on two pages. |
+| `Site/Source/Stylesheet/Component/Absent.scss`      | The geometry: the tray face, a `64px` name track and a flexible reason, one hairline between items, `max-width: var(--measure)`, and no accent token anywhere in the file.                                                          |
+| `Site/Source/Content/Detail.ts`                     | Both lists: the four extensions of the `Syntax` record and the six tools of the `Compress` record's `Exempt`, each with the source's own sentence.                                                                                  |
+| `Site/Source/pages/package/[slug].astro`            | The two mounts: `Absent` under the family matrix with the default label, and `Absent` with `Label="Never compressed"` under the compressor's detail.                                                                                |
+| `Temporary/Corca/Curated/Components.md`             | The object row and the rule that hairlines separate while only a surface encloses. The panel is a tray with hairlines between items, not a bordered card.                                                                           |
+| `Temporary/component-page-composition-recipes.json` | M13.R05, unsupported capability: state what the source does not include, and what it does include, without a recovery affordance the source cannot back.                                                                            |
 
 The borrow is a mechanic (a deliberate absence is stated, not apologized for), a geometry (a fixed
 name track and a prose reason), and a state model (a name is either handled or exempt, and the list
@@ -25,8 +25,8 @@ holds only the exempt ones).
 
 ## The copy
 
-The section that mounts it prints `Detail` and, on the syntax page, `The comment syntax the scanner
-knows, and the extensions it leaves alone.`
+The section that mounts it prints `Detail` and, on the syntax page,
+`The comment syntax the scanner knows, and the extensions it leaves alone.`
 
 The first mount prints, in order:
 
@@ -92,29 +92,29 @@ Absent adds the negative half of a package's scope. Every other machine on the p
 what the package does; this one states what it will not do, and it is the only machine on the site
 whose face carries no accent.
 
-| Neighbour on the same page | What it already says | What Absent must not say |
-| --- | --- | --- |
-| Family | the seven syntaxes and their extensions | the four extensions as chips in a row |
-| Flow | the order the filter works in | the exemption as a branch with a fail badge |
-| Configuration | the knobs a reader can set | an implied knob that would add a name back |
-| Surface | the listeners the package registers | the exemption list as a surface row |
+| Neighbour on the same page | What it already says                    | What Absent must not say                    |
+| -------------------------- | --------------------------------------- | ------------------------------------------- |
+| Family                     | the seven syntaxes and their extensions | the four extensions as chips in a row       |
+| Flow                       | the order the filter works in           | the exemption as a branch with a fail badge |
+| Configuration              | the knobs a reader can set              | an implied knob that would add a name back  |
+| Surface                    | the listeners the package registers     | the exemption list as a surface row         |
 
 The two mounts are the same machine. When the record is absent the panel is not rendered, so a
 package with no exemption list shows no panel and no empty tray.
 
 ## The decisions
 
-| Decision | The alternative rejected | Why |
-| --- | --- | --- |
-| A quiet tray with no accent | The warn face, as `Bundle` uses for a contained failure | Warn is the site's word for something that went wrong. These names are a decision, and painting them as a failure would be the exact misreading the machine exists to prevent. |
-| One component with a `Label` prop | Two components, one per decision | The shape is identical and only the sentence above the list differs. Two components would drift in geometry while claiming to be the same panel. |
-| The name is a 64px mono cell | A chip per name | A chip reads as a token to select or to copy. These names are values to compare against a file extension or a tool call, so they are set as a column, not as objects. |
-| The reason is the source's own sentence | A rewrite in the site's voice | The machine's claim is that the plugin's decision is documented. A rewrite would make the site the authority on the exemption and hide the fact that the sentence comes from the package. |
-| No figure is printed | A count of exemptions | The two mounts have different denominators, four extensions and six tools, and a count would invite a comparison between them that means nothing. |
-| No recovery affordance | A link that would add the name back anyway | The plugin's decision is not the reader's to override from a static page, and the site cannot invoke the plugin. An affordance would promise an action the page cannot take. |
-| No per-name link | Linking `md` to a format specification | The panel is about the plugin's scope, not about the format. A link would send a reader away from the decision they are reading. |
-| The panel is capped at the measure | Full width, like the matrix above it | The matrix is a comparison and needs width; this is prose and needs the measure. Capping it also keeps the panel from reading as a second table. |
-| The label is small caps, not a heading | An `h3` per panel | The panel sits inside a section that already has a heading, and two of these panels can appear on one page. A heading level would invent a document outline the page does not have. |
+| Decision                                | The alternative rejected                                | Why                                                                                                                                                                                       |
+| --------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A quiet tray with no accent             | The warn face, as `Bundle` uses for a contained failure | Warn is the site's word for something that went wrong. These names are a decision, and painting them as a failure would be the exact misreading the machine exists to prevent.            |
+| One component with a `Label` prop       | Two components, one per decision                        | The shape is identical and only the sentence above the list differs. Two components would drift in geometry while claiming to be the same panel.                                          |
+| The name is a 64px mono cell            | A chip per name                                         | A chip reads as a token to select or to copy. These names are values to compare against a file extension or a tool call, so they are set as a column, not as objects.                     |
+| The reason is the source's own sentence | A rewrite in the site's voice                           | The machine's claim is that the plugin's decision is documented. A rewrite would make the site the authority on the exemption and hide the fact that the sentence comes from the package. |
+| No figure is printed                    | A count of exemptions                                   | The two mounts have different denominators, four extensions and six tools, and a count would invite a comparison between them that means nothing.                                         |
+| No recovery affordance                  | A link that would add the name back anyway              | The plugin's decision is not the reader's to override from a static page, and the site cannot invoke the plugin. An affordance would promise an action the page cannot take.              |
+| No per-name link                        | Linking `md` to a format specification                  | The panel is about the plugin's scope, not about the format. A link would send a reader away from the decision they are reading.                                                          |
+| The panel is capped at the measure      | Full width, like the matrix above it                    | The matrix is a comparison and needs width; this is prose and needs the measure. Capping it also keeps the panel from reading as a second table.                                          |
+| The label is small caps, not a heading  | An `h3` per panel                                       | The panel sits inside a section that already has a heading, and two of these panels can appear on one page. A heading level would invent a document outline the page does not have.       |
 
 ## The history
 

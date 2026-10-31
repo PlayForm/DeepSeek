@@ -11,16 +11,16 @@ fails?**
 
 ## The sources
 
-| Source | What was taken |
-| --- | --- |
-| `Site/Source/Component/Bundle.astro` | The band with the rail and the part count, the rule, the ordered part list with a two-digit index and a body, and the containment block. The one record is the component's own table. |
-| `Site/Source/Stylesheet/Component/Bundle.scss` | The geometry: `--step` as a per-part custom property, `padding-left: calc(var(--space-2) * var(--step))` for the staircase, the body's own left rule, and the warn face for the containment. |
-| `Site/Source/pages/package/[slug].astro` | The mount: `Bundle` inside the portrait section, gated on `Portrait.Shape === "bundle"`. |
-| `Site/Source/Content/Portrait.ts` | The one package whose shape is a bundle: `plugin-dsh-boot`. |
-| `Classic/packages/plugin-dsh-boot/Source/Library.ts` | The five mount steps in the order the code runs them: the list read at apply, the detach, the guard, the import, and the record. |
-| `Temporary/Corca/Curated/Components.md` | The card and the inset: a body with its own left rule, a hairline between objects, and no outer border around content. |
-| `Temporary/component-page-composition-recipes.json` | M04.R02, vertical explanation: a stage, a connector, a stage, with the labels fully available on a narrow screen. The part list is that orientation with the connector replaced by a step. |
-| `~/Developer/Documentation/Module/ui/src/registry/overtrue/steps.tsx` | The ordered track with equal room per step. The bundle borrows the equal room and refuses the complete, current, upcoming vocabulary, because a mount step has no state of its own. |
+| Source                                                                | What was taken                                                                                                                                                                               |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Site/Source/Component/Bundle.astro`                                  | The band with the rail and the part count, the rule, the ordered part list with a two-digit index and a body, and the containment block. The one record is the component's own table.        |
+| `Site/Source/Stylesheet/Component/Bundle.scss`                        | The geometry: `--step` as a per-part custom property, `padding-left: calc(var(--space-2) * var(--step))` for the staircase, the body's own left rule, and the warn face for the containment. |
+| `Site/Source/pages/package/[slug].astro`                              | The mount: `Bundle` inside the portrait section, gated on `Portrait.Shape === "bundle"`.                                                                                                     |
+| `Site/Source/Content/Portrait.ts`                                     | The one package whose shape is a bundle: `plugin-dsh-boot`.                                                                                                                                  |
+| `Classic/packages/plugin-dsh-boot/Source/Library.ts`                  | The five mount steps in the order the code runs them: the list read at apply, the detach, the guard, the import, and the record.                                                             |
+| `Temporary/Corca/Curated/Components.md`                               | The card and the inset: a body with its own left rule, a hairline between objects, and no outer border around content.                                                                       |
+| `Temporary/component-page-composition-recipes.json`                   | M04.R02, vertical explanation: a stage, a connector, a stage, with the labels fully available on a narrow screen. The part list is that orientation with the connector replaced by a step.   |
+| `~/Developer/Documentation/Module/ui/src/registry/overtrue/steps.tsx` | The ordered track with equal room per step. The bundle borrows the equal room and refuses the complete, current, upcoming vocabulary, because a mount step has no state of its own.          |
 
 The borrow is a mechanic (a sequence drawn as a cascade), a geometry (a fixed index track and a
 stepping body), and a state model (a part runs, is skipped, or is contained, and the containment is
@@ -83,20 +83,20 @@ The machine prints, in order:
 
 The sketch is 72 columns. The part list is a single column with a fixed index track and a body that
 steps one space to the right per part, so the left edge is a staircase rather than a straight line;
-the containment is the only warn face on the shape, at the bottom, because it is the failure rule and
-the last thing a reader needs before trusting the order above it.
+the containment is the only warn face on the shape, at the bottom, because it is the failure rule
+and the last thing a reader needs before trusting the order above it.
 
 ## The machines
 
 Bundle adds the mount. Flow says what a package does to a fact that passes; this says what a package
 does before anything passes at all, which is to bring other plugins onto the rail.
 
-| Neighbour on the same page | What it already says | What Bundle must not say |
-| --- | --- | --- |
-| Flow | the package's control flow | the mount steps as a flow with a branch |
-| Scheme | the laws that decide when the plugin acts | the rail as a seam |
-| Service | the contract the package provides | the mounted plugins as consumers |
-| Activation | the line the plugin writes on load | the mount as a stage of activation |
+| Neighbour on the same page | What it already says                      | What Bundle must not say                |
+| -------------------------- | ----------------------------------------- | --------------------------------------- |
+| Flow                       | the package's control flow                | the mount steps as a flow with a branch |
+| Scheme                     | the laws that decide when the plugin acts | the rail as a seam                      |
+| Service                    | the contract the package provides         | the mounted plugins as consumers        |
+| Activation                 | the line the plugin writes on load        | the mount as a stage of activation      |
 
 The parts are the mount steps, not the configured plugins. A bundle whose parts were a fixed set of
 plugins would draw the config rather than the bundle, and the config is a profile's business; what
@@ -106,16 +106,16 @@ When the record is absent the machine renders nothing.
 
 ## The decisions
 
-| Decision | The alternative rejected | Why |
-| --- | --- | --- |
-| The staircase | A flat numbered list | The mount order is a cascade, and the step-in says so without the reader counting. A flat list would need the two-digit index to carry the whole claim. |
-| Five parts, not the plugin list | Drawing the plugins the config names | The config is a profile's business and the page is static. The package owns the sequence, and a plugin list would change with every profile while the shape stayed the same. |
-| The rule sits above the parts | The rule below the parts | The rule explains why the order exists: apply must return, so the detach is second and the import is fourth. Above the parts, it is the premise; below, it would read as a conclusion about them. |
-| The containment takes the warn face | A quiet note under the list | A part that fails is the fact a reader must be able to find at a glance. The warn token is the site's vocabulary for exactly that, and this is the only warn face on the shape. |
-| The record step is drawn | Dropping it, because the set is in memory only | The guard depends on the record. Without it the guard reads as a check of something the page never says exists. |
-| The index is two digits | A bullet or a dot | The parts are ordered and the order is the claim. Two digits also match the numbering every other machine in the library uses. |
-| No figure for the mounted count | Printing how many plugins the bundle mounted | The page cannot read a profile's config, and the figure would be a claim about a run the site never made. |
-| The rail is a field | The constant `the loader's apply` | The seam is a fact the source names, and the same shape serves a bundle that mounts on another rail. A constant would bake one package's rail into the component. |
+| Decision                            | The alternative rejected                       | Why                                                                                                                                                                                               |
+| ----------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The staircase                       | A flat numbered list                           | The mount order is a cascade, and the step-in says so without the reader counting. A flat list would need the two-digit index to carry the whole claim.                                           |
+| Five parts, not the plugin list     | Drawing the plugins the config names           | The config is a profile's business and the page is static. The package owns the sequence, and a plugin list would change with every profile while the shape stayed the same.                      |
+| The rule sits above the parts       | The rule below the parts                       | The rule explains why the order exists: apply must return, so the detach is second and the import is fourth. Above the parts, it is the premise; below, it would read as a conclusion about them. |
+| The containment takes the warn face | A quiet note under the list                    | A part that fails is the fact a reader must be able to find at a glance. The warn token is the site's vocabulary for exactly that, and this is the only warn face on the shape.                   |
+| The record step is drawn            | Dropping it, because the set is in memory only | The guard depends on the record. Without it the guard reads as a check of something the page never says exists.                                                                                   |
+| The index is two digits             | A bullet or a dot                              | The parts are ordered and the order is the claim. Two digits also match the numbering every other machine in the library uses.                                                                    |
+| No figure for the mounted count     | Printing how many plugins the bundle mounted   | The page cannot read a profile's config, and the figure would be a claim about a run the site never made.                                                                                         |
+| The rail is a field                 | The constant `the loader's apply`              | The seam is a fact the source names, and the same shape serves a bundle that mounts on another rail. A constant would bake one package's rail into the component.                                 |
 
 ## The history
 

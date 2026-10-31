@@ -2,8 +2,8 @@
 
 ## The claim
 
-A `package.json` an agent writes is canonicalized and pinned before anyone reads it, and the author is
-never told. The page answers: **what did the governor change, and why can the author not tell?**
+A `package.json` an agent writes is canonicalized and pinned before anyone reads it, and the author
+is never told. The page answers: **what did the governor change, and why can the author not tell?**
 
 ## The layout
 
@@ -61,36 +61,36 @@ never told. The page answers: **what did the governor change, and why can the au
 
 ## The machines
 
-| Machine | What it adds | Component |
-| --- | --- | --- |
-| Portrait | what the package is, in one authored line, and its shape | `Rewrite` |
-| Flow | the order of its work, with the branch inline | `Flow` |
-| Activation | the exact line it writes on load, and the rules that build it | `Activation` |
-| Scheme | the laws it states in its own document | `Scheme` |
-| Change | the one line that differs with it installed | `Difference` |
-| Default | the harness's own listeners at the same seam | prose plus links |
-| Surface | the seams it registers on | `Table` |
+| Machine    | What it adds                                                  | Component        |
+| ---------- | ------------------------------------------------------------- | ---------------- |
+| Portrait   | what the package is, in one authored line, and its shape      | `Rewrite`        |
+| Flow       | the order of its work, with the branch inline                 | `Flow`           |
+| Activation | the exact line it writes on load, and the rules that build it | `Activation`     |
+| Scheme     | the laws it states in its own document                        | `Scheme`         |
+| Change     | the one line that differs with it installed                   | `Difference`     |
+| Default    | the harness's own listeners at the same seam                  | prose plus links |
+| Surface    | the seams it registers on                                     | `Table`          |
 
 ## The data
 
-| Fact | Source |
-| --- | --- |
-| the claim, the role | `README.md`, `SCHEME.md` sections 2 and 3 |
-| the flow stages | `SCHEME.md` section 2, and `Source/Function/` |
-| the activation line | `Source/Function/Apply.ts`, `Activate([...])` |
-| the laws | `SCHEME.md` sections 3, 4, and 5 |
+| Fact                 | Source                                              |
+| -------------------- | --------------------------------------------------- |
+| the claim, the role  | `README.md`, `SCHEME.md` sections 2 and 3           |
+| the flow stages      | `SCHEME.md` section 2, and `Source/Function/`       |
+| the activation line  | `Source/Function/Apply.ts`, `Activate([...])`       |
+| the laws             | `SCHEME.md` sections 3, 4, and 5                    |
 | the before and after | `Documentation/Interpretability/Delta-Workspace.md` |
-| the knobs | `README.md` configuration table, `Config.ts` |
-| the seams | `Source/Index.ts` registration |
+| the knobs            | `README.md` configuration table, `Config.ts`        |
+| the seams            | `Source/Index.ts` registration                      |
 
 ## The history
 
 ### v1 - 2026-10-31
 
-The page exists as fifteen sections: facts, what it does, the portrait, the flow, the activation, the
-scheme, install, default, change, surface, dependencies, configuration, release, source, origin. The
-governor is the first package with a `Scheme` machine, and the machine is the model for the other
-forty-seven packages that ship a `SCHEME.md`.
+The page exists as fifteen sections: facts, what it does, the portrait, the flow, the activation,
+the scheme, install, default, change, surface, dependencies, configuration, release, source, origin.
+The governor is the first package with a `Scheme` machine, and the machine is the model for the
+other forty-seven packages that ship a `SCHEME.md`.
 
 The layout as built:
 

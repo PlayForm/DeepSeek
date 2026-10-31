@@ -5,8 +5,8 @@ This document is the specification every skill in this repository follows.
 It replaces the v1 template (SKILL.md as a pointer index) with a rule: the SKILL.md is the operating
 manual, and the references are the depth.
 
-v3 adds the two-copy rule: this repository's copy is anonymised and project-specific, and the profile
-copy is private and project-agnostic.
+v3 adds the two-copy rule: this repository's copy is anonymised and project-specific, and the
+profile copy is private and project-agnostic.
 
 ## 1. What a skill is for
 
@@ -250,7 +250,7 @@ v2 replaces it because a pointer index forces a reference read for every decisio
 same rules had drifted into three or four skills.
 
 v3 replaces the byte-identity rule with the two-copy rule, because a byte-identical copy cannot be
-anonymised and cannot be project-specific, and a profile that carries one project's paths is false in
-every other project.
+anonymised and cannot be project-specific, and a profile that carries one project's paths is false
+in every other project.
 
 The recreation is dated 2026-10-20, and the two-copy rule is dated 2026-10-30.

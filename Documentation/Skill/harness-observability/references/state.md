@@ -33,7 +33,8 @@ Two homes, two jobs:
 | `Documentation/Skill/` | This repository's anonymised specialization |
 | `${DSH_HOME}/skills/`  | The private, project-agnostic fallback      |
 
-The project copy wins inside this repository, and the profile copy is the fallback for a project that has no skill tree of its own.
+The project copy wins inside this repository, and the profile copy is the fallback for a project
+that has no skill tree of its own.
 
 ## Profiles
 
