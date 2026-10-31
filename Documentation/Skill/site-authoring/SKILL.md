@@ -88,6 +88,43 @@ The composition facts are data, not prose: the order of the arms, the prepend di
 seams that run independently belong in an authored map, the same way the behavior map holds the
 seams.
 
+## The route a lane takes
+
+The site's work divides at the same line the content divides at, and the route follows the work.
+
+- **Mechanical lanes** - a rename, a sweep, a data file filled from a table, a component built to a
+  fixed prop list - go to the cheap route. The spec is complete enough that judgement adds nothing.
+- **Judgement lanes** - a page's composition, which machines a plugin's page carries, the order of its
+  sections, the sentence a reader leaves with, a rewrite of a page that has become five shallow
+  sections - go to the judgement route at max effort. A cheap lane asked to design will produce a
+  template, and a template is the failure the owner names when they say a page is "empty".
+
+The tell is in the spec: a spec that says *what the page must show* is judgement work, and a spec
+that says *which string goes where* is mechanical. Route by the spec, not by the file count.
+
+## What a presentation lane reads
+
+A lane that authors a plugin's presentation reads all of this before it writes a line, and the spec
+names every path:
+
+1. **The plugin's source, in both trees.** `Classic/packages/<slug>/Source/` and the EffectTS twin
+   `EffectTS/packages/ets-<slug>/Source/`. A claim about behavior is a claim about both trees, and a
+   twin that differs is a fact the page carries.
+2. **The plugin's aim.** Its `README.md`, the plans under `Documentation/Plans/`, and the family
+   documents: the root `README.md`, `Documentation/PLUGINS/PLUGIN-FAMILY.md`, `Documentation/FRAMEWORK.md`.
+   The aim is what the diagram is about; without it the page draws the mechanism and misses the point.
+3. **The harness's side.** `~/Developer/Documentation/Module/deepseek-harness/docs/`: the architecture,
+   the capability seams, the event matrix, the tool pipeline, the agent lifecycle, the session format.
+4. **The visual research.** `Temporary/Corca/` - the specimens, the curated notes, the composition
+   catalogue - and `Temporary/` for the design contracts and the page recipes.
+5. **The component inventory.** Every component under `Source/Component/`, with its props, because the
+   composition is limited by what the lane knows exists.
+
+The output is not the safest diagram. It is the densest true one: the machines that together express
+the plugin's function, its side effects on the conversation, the disk, and the log, and the harness
+rule that makes it possible. Two plugins whose kinds differ get compositions organised differently,
+and the spec says so.
+
 ## When to use
 
 - Any edit under `Site/Source/`, `Site/Public/`, `Site/astro.config.ts`, `Site/package.json`, or
@@ -225,6 +262,24 @@ Rules:
 - A new figure gets a live reader in `Live.ts` and a fallback in `Content.ts`, or it is documented
   as a fallback-only value.
 - `pnpm Drift` checks the fallbacks against the repo; run it after a figure changes.
+
+## Facts are read, presentations are authored
+
+The site has two kinds of content and they are produced two different ways.
+
+**Facts are read.** A version, a count, a knob's default, a dependency edge, a changelog line: the
+build reads them from the tree, and a page never types one by hand.
+
+**Presentations are authored.** What a plugin *is*, what its page should show first, which picture
+carries its dimension, and which sentence a reader leaves with: none of that is in a manifest, and a
+page that derives it from a README's prose is a page that reads like a README. A presentation is
+written by hand from the research, in the site's voice, and it lives in a `Source/Content/*.ts` map
+next to the facts it frames.
+
+The rule this replaces is worth naming, because it was tried and rejected: rendering a package's
+README sections on its page. It fills space and says nothing a reader came for, and it turns the
+site into a renderer rather than a presentation. The page that needs more content gets an authored
+portrait, not a pasted document.
 
 ## The page anatomy
 
