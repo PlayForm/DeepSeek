@@ -3972,5 +3972,18 @@
 		"chars": null,
 		"fetchedAt": null,
 		"error": "read_url: crawl failed for https://dkeenan.com/: Blocked by anti-bot protection: Cloudflare JS challenge"
+	},
+	{
+		"source": "https://textures.dev/s/pinch",
+		"slug": "textures-dev-s-pinch",
+		"role": "sources",
+		"status": "stub",
+		"note": "React demo shell (474-byte body); the spec and geometry live in the archived module /art/pinch.e5a78485.js, decoded in Temporary/Punch/Curated/Pinch.md"
+	},
+	{
+		"source": "https://bem.ai/",
+		"slug": "bem-ai",
+		"role": "sources",
+		"status": "converted"
 	}
 ]

@@ -3776,6 +3776,1353 @@
       "disposition": "converted",
       "exit": 0,
       "message": "Fetched as visual inspiration for graph and ontology exploration: entity counts, key columns, match ratios, and the in/out relationship panel."
+    },
+    {
+      "source": "https://worrydream.com/LadderOfAbstraction/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Up and Down the Ladder of Abstraction"
+    },
+    {
+      "source": "https://distill.pub/2020/communicating-with-interactive-articles",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Communicating with Interactive Articles"
+    },
+    {
+      "source": "https://distill.pub/2019/visual-exploration-gaussian-processes",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "A Visual Exploration of Gaussian Processes"
+    },
+    {
+      "source": "https://distill.pub/2019/activation-atlas/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Exploring Neural Networks with Activation Atlases"
+    },
+    {
+      "source": "https://distill.pub/2017/feature-visualization",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Feature Visualization"
+    },
+    {
+      "source": "https://distill.pub/2020/understanding-rl-vision",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Understanding RL Vision"
+    },
+    {
+      "source": "https://distill.pub/2018/building-blocks",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "The Building Blocks of Interpretability"
+    },
+    {
+      "source": "https://distill.pub/2020/circuits/zoom-in",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Zoom In: An Introduction to Circuits"
+    },
+    {
+      "source": "https://distill.pub/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://docs.stripe.com/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Documentation"
+    },
+    {
+      "source": "https://docs.stripe.com/quickstarts",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Quickstart guides"
+    },
+    {
+      "source": "https://docs.stripe.com/stripe-apps/components",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "UI components"
+    },
+    {
+      "source": "https://docs.stripe.com/stripe-apps/patterns/full-page-apps",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Full-page"
+    },
+    {
+      "source": "https://docs.stripe.com/stripe-apps/routing",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://docs.stripe.com/api/expanding_objects",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://docs.stripe.com/expand",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Expanding responses"
+    },
+    {
+      "source": "https://docs.stripe.com/api",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://www.carbondesignsystem.com/building-blocks/core/patterns/filtering",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://www.carbondesignsystem.com/building-blocks/core/patterns/empty-states",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://www.carbondesignsystem.com/building-blocks/core/patterns/overview",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://www.nngroup.com/articles/accordions-on-desktop/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Accordions on Desktop: When and How to Use"
+    },
+    {
+      "source": "https://www.nngroup.com/articles/f-shaped-pattern-reading-web-content/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "F-Shaped Pattern of Reading on the Web: Misunderstood, But Still ..."
+    },
+    {
+      "source": "https://www.nngroup.com/articles/trip-report-hypertext-87/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Hypertext'87 Trip Report"
+    },
+    {
+      "source": "https://design-system.service.gov.uk/components/task-list/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Task list"
+    },
+    {
+      "source": "https://design-system.service.gov.uk/patterns/check-answers/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Help users to Check answers"
+    },
+    {
+      "source": "https://polaris.shopify.com/components/tables/data-table",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://polaris.shopify.com/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://polaris.shopify.com/components/layout-and-structure/page",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://design.gitlab.com/data-visualization/mini-pipeline-graph",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Mini pipeline graph"
+    },
+    {
+      "source": "https://design.gitlab.com/data-visualization/color",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Color"
+    },
+    {
+      "source": "https://design.gitlab.com/data-visualization/single-stat",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Single stat"
+    },
+    {
+      "source": "https://design.gitlab.com/patterns/graph-canvas",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Graph canvas"
+    },
+    {
+      "source": "https://design.gitlab.com/get-started/uik-release-notes",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Release notes"
+    },
+    {
+      "source": "https://design.gitlab.com/get-started/uik-file-structure",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "File structure"
+    },
+    {
+      "source": "https://docs.sentry.io/concepts/key-terms/tracing/trace-view/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Trace View"
+    },
+    {
+      "source": "https://docs.sentry.io/product/trace-explorer/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Traces and Spans"
+    },
+    {
+      "source": "https://docs.sentry.io/concepts/key-terms/tracing/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Tracing"
+    },
+    {
+      "source": "https://docs.sentry.io/concepts/key-terms/agent-tracing/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Agent Tracing - What It Is and How To Use It"
+    },
+    {
+      "source": "https://docs.sentry.io/product/logs/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Logs"
+    },
+    {
+      "source": "https://docs.sentry.io/product/issues/issue-details/performance-issues/slow-db-queries/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Slow DB Queries"
+    },
+    {
+      "source": "https://docs.sentry.io/product/issues/issue-details/performance-issues/n-one-queries/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "N+1 Queries"
+    },
+    {
+      "source": "https://sentry.io/changelog/trace-waterfall-view-improvements/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Trace Waterfall View Improvements"
+    },
+    {
+      "source": "https://opendata.cern.ch/visualise/events/cms",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://cds.cern.ch/record/1756858/export/hm",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://geant4.web.cern.ch/documentation/dev/bfad_html/ForApplicationDevelopers/GettingStarted/visualization.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://tracer.web.cern.ch/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Tracer Framework"
+    },
+    {
+      "source": "https://clicdp.web.cern.ch/event-display/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Event Display Gallery"
+    },
+    {
+      "source": "https://atlaspo.cern.ch/public/event_display/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://opentelemetry.io/docs/concepts/signals/traces/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Traces"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/specs/otel/overview/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Overview"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Moved: Generative AI semantic conventions"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/languages/dotnet/traces/links-creation/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Creating links between traces"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/languages/js/getting-started/browser/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Browser"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/languages/js/instrumentation/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Instrumentation"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/specs/semconv/resource/browser/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Browser"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/concepts/instrumentation/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Instrumentation"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/concepts/instrumentation/libraries/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Libraries"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/platforms/client-apps/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Client-side Apps"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/languages/ruby/instrumentation/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Instrumentation"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/languages/python/instrumentation/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Instrumentation"
+    },
+    {
+      "source": "https://opentelemetry.io/docs/languages/php/instrumentation/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Instrumentation"
+    },
+    {
+      "source": "https://opentelemetry.io/blog/2022/frontend-overhaul/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Front-end Overhaul of the OpenTelemetry Demo (Go to Next.js)"
+    },
+    {
+      "source": "https://langfuse.com/academy/tracing",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Tracing"
+    },
+    {
+      "source": "https://langfuse.com/docs/observability/best-practices",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "What does a good trace look like?"
+    },
+    {
+      "source": "https://langfuse.com/docs/observability/overview",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Observability & Application Tracing"
+    },
+    {
+      "source": "https://langfuse.com/changelog/2024-10-10-text-color-for-latency-and-costs",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Aggregated and Color-coded Latency and Costs on Traces"
+    },
+    {
+      "source": "https://langfuse.com/blog/2024-07-ai-agent-observability-with-langfuse",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "AI Agent Observability, Tracing & Evaluation with Langfuse"
+    },
+    {
+      "source": "https://langfuse.com/docs",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Langfuse Overview"
+    },
+    {
+      "source": "https://github.com/orgs/langfuse/discussions/8309",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Langfuse"
+    },
+    {
+      "source": "https://docs.temporal.io/web-ui",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://temporal.io/blog/the-dark-magic-of-workflow-exploration",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Improving the Workflow experience: A look at Temporal's new UI"
+    },
+    {
+      "source": "https://docs.temporal.io/encyclopedia/event-history",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://go.temporal.io/platform-hub/prompt-library/learning/explain-workflow-history",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://deepwiki.com/temporalio/ui/6.4-event-history-components",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Event History Components"
+    },
+    {
+      "source": "https://temporal.io/blog/production-controls",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "See what's happening. Control what happens next."
+    },
+    {
+      "source": "https://www.openpolicyagent.org/docs/management-decision-logs",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-explain",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Explain a document match result"
+    },
+    {
+      "source": "https://www.elastic.co/docs/api/doc/elasticsearch/v8/operation/operation-explain",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Explain a document match result"
+    },
+    {
+      "source": "https://www.elastic.co/docs/api/doc/elasticsearch-serverless/operation/operation-explain",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Explain a document match result"
+    },
+    {
+      "source": "https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/java-rest-high-explain.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Explain API"
+    },
+    {
+      "source": "https://www.elastic.co/guide/en/elasticsearch/reference/8.19/search-search.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Search API"
+    },
+    {
+      "source": "https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-search",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Run a search"
+    },
+    {
+      "source": "https://grafana.com/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/nodata-and-error-states/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "No Data and Error states"
+    },
+    {
+      "source": "https://grafana.com/docs/grafana/latest/alerting/fundamentals/alert-rule-evaluation/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Alert rule evaluation"
+    },
+    {
+      "source": "https://grafana.com/docs/grafana/latest/alerting/alerting-rules/create-grafana-managed-rule/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Configure Grafana-managed alert rules"
+    },
+    {
+      "source": "https://grafana.com/docs/grafana/latest/alerting/guides/connectivity-errors/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Handle connectivity errors in alerts"
+    },
+    {
+      "source": "https://grafana.com/docs/grafana/latest/datasources/influxdb/alerting/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "InfluxDB alerting"
+    },
+    {
+      "source": "https://grafana.com/whats-new/2026-02-12-pending-period-added-to-alert-states/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Pending period added to alert states"
+    },
+    {
+      "source": "https://grafana.com/docs/grafana/latest/visualizations/explore/trace-integration/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Traces in Explore"
+    },
+    {
+      "source": "https://grafana.com/docs/grafana/latest/explore/simplified-exploration/traces/investigate/analyze-tracing-data/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Analyze tracing data"
+    },
+    {
+      "source": "https://grafana.com/docs/tempo/latest/visualize-traces/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Visualize tracing data in Grafana"
+    },
+    {
+      "source": "https://grafana.com/docs/grafana/latest/visualizations/panels-visualizations/visualizations/traces/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Traces"
+    },
+    {
+      "source": "https://grafana.com/docs/grafana/latest/visualizations/simplified-exploration/traces/concepts/telemetry/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Traces and telemetry"
+    },
+    {
+      "source": "https://grafana.com/docs/grafana/latest/visualizations/simplified-exploration/traces/concepts/trace-structure/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Trace structure"
+    },
+    {
+      "source": "https://grafana.com/whats-new/2024-09-24-explore-traces/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Explore Traces"
+    },
+    {
+      "source": "https://grafana.com/docs/grafana/latest/datasources/influxdb/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "InfluxDB data source"
+    },
+    {
+      "source": "https://community.grafana.com/t/firing-alerts-get-resolved-with-no-data/146947",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Firing alerts get resolved with no data"
+    },
+    {
+      "source": "https://perfetto.dev/docs/instrumentation/track-events",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Track events (Tracing SDK)"
+    },
+    {
+      "source": "https://perfetto.dev/docs/reference/synthetic-track-event",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Advanced Guide to Programmatic Trace Generation"
+    },
+    {
+      "source": "https://perfetto.dev/docs/getting-started/other-formats",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Visualizing external trace formats with Perfetto"
+    },
+    {
+      "source": "https://perfetto.dev/docs/getting-started/converting",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Converting arbitrary timestamped data to Perfetto"
+    },
+    {
+      "source": "https://perfetto.dev/docs/visualization/perfetto-ui",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Perfetto UI"
+    },
+    {
+      "source": "https://perfetto.dev/docs/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "What is Perfetto?"
+    },
+    {
+      "source": "https://perfetto.dev/docs/analysis/perfetto-sql-getting-started",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Getting Started with PerfettoSQL"
+    },
+    {
+      "source": "https://perfetto.dev/docs/reference/trace-packet-proto",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "TracePacket"
+    },
+    {
+      "source": "https://developer.chrome.com/blog/local-network-access",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "New permission prompt for Local Network Access"
+    },
+    {
+      "source": "https://cheatsheetseries.owasp.org/cheatsheets/WebSocket_Security_Cheat_Sheet.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "WebSocket Security Cheat Sheet"
+    },
+    {
+      "source": "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "HTTP Security Response Headers Cheat Sheet"
+    },
+    {
+      "source": "https://github.com/WICG/local-network-access/issues/16",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Use case for WebSocket communications"
+    },
+    {
+      "source": "https://developer.mozilla.org/en-US/docs/Web/API/EventSource",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "EventSource"
+    },
+    {
+      "source": "https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Using server-sent events"
+    },
+    {
+      "source": "https://react.dev/learn/react-developer-tools",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "React Developer Tools"
+    },
+    {
+      "source": "https://react.dev/reference/react/Profiler",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "<Profiler>"
+    },
+    {
+      "source": "https://react.dev/reference/dev-tools/react-devtools-cdt-mcp",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "React DevTools for agents"
+    },
+    {
+      "source": "https://react.dev/reference/dev-tools/react-performance-tracks",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "React Performance tracks"
+    },
+    {
+      "source": "https://code.visualstudio.com/docs/editing/editingevolved",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Code Navigation"
+    },
+    {
+      "source": "https://code.visualstudio.com/updates/v1_43",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "February 2020 (version 1.43)"
+    },
+    {
+      "source": "https://code.visualstudio.com/docs/configure/settings",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "User and workspace settings"
+    },
+    {
+      "source": "https://code.visualstudio.com/docs/enterprise/manage-ai-settings",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Manage AI settings in enterprise environments"
+    },
+    {
+      "source": "https://openlineage.io/docs/spec/object-model",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://openlineage.io/docs/1.48.0/client/python/development/api-reference/openlineage.client",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://openlineage.io/apidocs/javadoc/io/openlineage/client/OpenLineage.html",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://openlineage.io/docs/client/java/configuration/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Reviewing proposed changes in a pull request"
+    },
+    {
+      "source": "https://docs.github.com/pull-requests/reference/pull-request-reviews",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Pull request reviews"
+    },
+    {
+      "source": "https://docs.github.com/pull-requests/reference/merge-conflicts",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Merge conflicts"
+    },
+    {
+      "source": "https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-using-the-command-line",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Resolving a merge conflict using the command line"
+    },
+    {
+      "source": "https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-on-github",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Resolving a merge conflict using the command line",
+      "note": "cached by the fetcher; no chars recorded in the manifest"
+    },
+    {
+      "source": "https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Merge and close pull requests"
+    },
+    {
+      "source": "https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/approving-a-pull-request-with-required-reviews",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Approving a pull request with required reviews"
+    },
+    {
+      "source": "https://docs.github.com/en/pull-requests/get-started/reviewing-pull-requests-quickstart",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Quickstart for reviewing pull requests"
+    },
+    {
+      "source": "https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/dismissing-a-pull-request-review",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Dismissing a pull request review"
+    },
+    {
+      "source": "https://docs.github.com/articles/using-pull-requests",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Pull requests"
+    },
+    {
+      "source": "https://docs.github.com/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-dependency-changes-in-a-pull-request",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Reviewing dependency changes in a pull request"
+    },
+    {
+      "source": "https://docs.github.com/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/commenting-on-a-pull-request",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Reviewing dependency changes in a pull request",
+      "note": "cached by the fetcher; no chars recorded in the manifest"
+    },
+    {
+      "source": "https://docs.github.com/articles/github-glossary",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "GitHub glossary"
+    },
+    {
+      "source": "https://docs.github.com/en/get-started/using-git/resolving-merge-conflicts-after-a-git-rebase",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Resolving merge conflicts after a Git rebase"
+    },
+    {
+      "source": "https://www.shopify.com/editions/fall2026",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://memory-bound.vercel.app/blog/muse-spark-open-architecture/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://deepseek-harness.github.io/deepseek-harness/en/reference/tool-execution-pipeline",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "Tool Execution Pipeline"
+    },
+    {
+      "source": "https://www.deepseek.com/en/harness/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "DeepSeek HarnessReady to use. Right now."
+    },
+    {
+      "source": "https://github.com/deepseek-ai/deepseek-harness",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "DeepSeek Harness"
+    },
+    {
+      "source": "https://github.com/PlayForm/DeepSeek",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "DeepSeek Harness Plugin Family for PlayForm"
+    },
+    {
+      "source": "https://github.com/PlayForm/Site-DeepSeek",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "The site"
+    },
+    {
+      "source": "https://deepseek.playform.cloud",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": "See where the harness changes."
+    },
+    {
+      "source": "https://flywheel.paradigma.inc/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://dkeenan.com/",
+      "kind": "HTML",
+      "archive": "",
+      "content": "",
+      "converted": "",
+      "status": "missing",
+      "title": ""
+    },
+    {
+      "source": "https://textures.dev/s/pinch",
+      "kind": "HTML",
+      "archive": "Archive/HTML/textures-dev-s-pinch.html",
+      "content": "",
+      "converted": "Raw/textures-dev-s-pinch.md",
+      "status": "stub",
+      "title": "Pinch: animated grid texture for React \u00b7 Textures",
+      "note": "React demo shell (474-byte body); the spec and geometry live in the archived module /art/pinch.e5a78485.js, decoded in Temporary/Punch/Curated/Pinch.md"
+    },
+    {
+      "source": "https://bem.ai/",
+      "kind": "HTML",
+      "archive": "Archive/HTML/bem-ai.html",
+      "content": "",
+      "converted": "Raw/bem-ai.md",
+      "status": "converted",
+      "title": "bem | Structured work automation for critical industries",
+      "quality": {
+        "fence-no-language": 1
+      }
     }
   ]
 }
