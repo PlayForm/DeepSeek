@@ -96,3 +96,23 @@ and a stale board is worse than no board because it is confident.
 
 The smallest honest proof is three boards on the spine, one signal schema, and one run ledger. The
 other twelve boards are converted in the order the spine runs, not in the order they were written.
+
+## The failure this process exists to prevent
+
+On 2026-10-31 the Architecture view of `hook-dsh-normalize-ellipsis` shipped as prose: a lede, a
+"Plugs into" line, three "Does" bullets, and a caption reading "The family's own character table" -
+with the table itself further down. A reader asked for the visual representation of what the plugin
+does and got a description of it.
+
+That is the exact failure the fabric is for, and it happened because the board's `Gives` was a
+paragraph instead of a machine. Three rules follow, and they are not advisory:
+
+1. **A view body is machines.** A paragraph inside a view is a defect. The view's one-line caption is
+   the only prose it may carry.
+2. **The machine is the explanation.** If a fact needs a sentence, the sentence is the machine's
+   caption; if it needs three bullets, the three bullets are a machine's rows.
+3. **A board's `Gives` names a machine, not a description of one.** A board that gives prose has not
+   been designed; it has been written down.
+
+The test, applied before a page is called done: hide the prose. The page must still say everything.
+If it does not, the machines are decoration and the page is a document.
