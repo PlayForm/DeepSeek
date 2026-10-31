@@ -12,26 +12,26 @@ never start one; and say what you could not verify.
 
 ## The detail
 
-The compile is `cd Site && ./node_modules/.bin/sass --no-source-map
-Source/Stylesheet/Manual.scss > /tmp/manual.css`, and it must exit 0.
+The compile is
+`cd Site && ./node_modules/.bin/sass --no-source-map Source/Stylesheet/Manual.scss > /tmp/manual.css`,
+and it must exit 0.
 
 The balance is an HTML parser over the page with the frontmatter stripped and the void elements
 skipped. The `</base>` report is a known false positive, because the parser lowercases the `<Base>`
 component to the void `base`.
 
-The fact diff uses `git show :Source/pages/_Manual.astro` as the original when the file is
-staged and not committed, then a word-level `difflib.SequenceMatcher` over the visible text, then a
-grep for every deletion. The manual sheet went from 957 words to 1180, with five condition strings
-moved into the disclosure and three alignment artifacts around them.
+The fact diff uses `git show :Source/pages/_Manual.astro` as the original when the file is staged
+and not committed, then a word-level `difflib.SequenceMatcher` over the visible text, then a grep
+for every deletion. The manual sheet went from 957 words to 1180, with five condition strings moved
+into the disclosure and three alignment artifacts around them.
 
 `pnpm Check` runs `Site/Scripts/Check.ts` against `Site/Target/`, and it is the seven-check scan the
 site-authoring skill owns: links, structure, spacing, plural, islands, library, and design. Read the
 site-authoring skill, Verification, for the build and the known compressor noise.
 
-`dum prepublishOnly` runs the `prepublishOnly` script (`node Scripts/Prepare.ts && astro
-build`). The `/manual` route is injected by the `DevRoute` integration in `Site/astro.config.ts`
-only when `SITE_DEV=1` or `NODE_ENV=development`, so a production build has no manual page to
-check.
+`dum prepublishOnly` runs the `prepublishOnly` script (`node Scripts/Prepare.ts && astro build`).
+The `/manual` route is injected by the `DevRoute` integration in `Site/astro.config.ts` only when
+`SITE_DEV=1` or `NODE_ENV=development`, so a production build has no manual page to check.
 
 The ASCII scan is `LC_ALL=C grep -n '[^ -~]'` on every file written; the page's entities carry the
 typography.

@@ -107,8 +107,8 @@ does and got a description of it.
 That is the exact failure the fabric is for, and it happened because the board's `Gives` was a
 paragraph instead of a machine. Three rules follow, and they are not advisory:
 
-1. **A view body is machines.** A paragraph inside a view is a defect. The view's one-line caption is
-   the only prose it may carry.
+1. **A view body is machines.** A paragraph inside a view is a defect. The view's one-line caption
+   is the only prose it may carry.
 2. **The machine is the explanation.** If a fact needs a sentence, the sentence is the machine's
    caption; if it needs three bullets, the three bullets are a machine's rows.
 3. **A board's `Gives` names a machine, not a description of one.** A board that gives prose has not
@@ -119,29 +119,29 @@ If it does not, the machines are decoration and the page is a document.
 
 ## The process, stated in full
 
-**The goal.** The site is an executable explanation, not a catalogue. It makes a plugin's operational
-capability visible by showing what changes in the same harness, the same conversation, and the same
-person when that plugin participates - and what stays identical because of it.
+**The goal.** The site is an executable explanation, not a catalogue. It makes a plugin's
+operational capability visible by showing what changes in the same harness, the same conversation,
+and the same person when that plugin participates - and what stays identical because of it.
 
 **Two systems, one of which serves the other.**
 
-- The *explanatory system* is the site: the views, the machines, the scenarios.
-- The *production fabric* is the process: boards, signals, storyboards, history - so successive
+- The _explanatory system_ is the site: the views, the machines, the scenarios.
+- The _production fabric_ is the process: boards, signals, storyboards, history - so successive
   sessions build without losing evidence or intent.
 
 **The reader's frame: five views.** Four are shared, because the harness, the conversation, the
 family, and the person are the same system whichever plugin is installed: Conversation, Harness,
-Family, Person. One is bespoke, because every plugin encodes its behaviour differently: Architecture.
-A reader who moves between plugins stays in the same view; only the plugin's marks change. Within a
-view, relevance is computed, never deleted: the parts that are not this plugin's function are muted in
-place and restored on hover.
+Family, Person. One is bespoke, because every plugin encodes its behaviour differently:
+Architecture. A reader who moves between plugins stays in the same view; only the plugin's marks
+change. Within a view, relevance is computed, never deleted: the parts that are not this plugin's
+function are muted in place and restored on hover.
 
 **The process's frame: boards and signals.** A board is one stage with a frozen port block - Stage,
-Takes (typed slots), Gives (named signals), Pre-warm (paths and line ranges), Gate (one deterministic
-check), Next (allowed successors). A signal is a wire - Claim, Basis (path, section, hash), Shape,
-From, To, Stale. The spine is three boards: **read**, **board**, **build**. Everything else is a tap on
-that spine: the Detail pass, the compound pages, the library. No back-edges; typed slots; the routing
-table is human-owned; prove three boards before converting twelve.
+Takes (typed slots), Gives (named signals), Pre-warm (paths and line ranges), Gate (one
+deterministic check), Next (allowed successors). A signal is a wire - Claim, Basis (path, section,
+hash), Shape, From, To, Stale. The spine is three boards: **read**, **board**, **build**. Everything
+else is a tap on that spine: the Detail pass, the compound pages, the library. No back-edges; typed
+slots; the routing table is human-owned; prove three boards before converting twelve.
 
 **The per-plugin pipeline, end to end.**
 
@@ -149,21 +149,21 @@ table is human-owned; prove three boards before converting twelve.
    functions it calls, `Source/Variable/Config.ts`, the tests (the only trustworthy source for
    strings), `Source/Library.ts`, the Effect-TS twin, and the harness docs for the seam's order and
    dispatch semantics. Never design from a description of the source.
-2. **Extract and classify.** Every structured fact becomes a table, a rule, a template, a sequence, a
-   boundary, a record, or a tree - and the class decides the machine.
+2. **Extract and classify.** Every structured fact becomes a table, a rule, a template, a sequence,
+   a boundary, a record, or a tree - and the class decides the machine.
 3. **Write the storyboard.** Seven sections: the claim, the sources, the copy (every string, decided
    before markup), the layout in ASCII, the machines, the decisions (what was rejected and why), the
    history.
 4. **Translate by hand.** A `SCHEME.md` is prose with mathematics in it; the lane decides what each
-   part *is* - a pipeline, a law, an invariant, a square, a race - and composes the machine that shows
-   it. The build never parses it.
+   part _is_ - a pipeline, a law, an invariant, a square, a race - and composes the machine that
+   shows it. The build never parses it.
 5. **Build the machine.** Tokens only; the geometry borrowed from `Temporary/Corca/` and
    `~/Developer/Documentation/Module/ui/`, never their skin.
 6. **Mount it in a view.** Primary or muted by relevance; one machine per fact.
-7. **Gate it.** The build and the seven checks; a browser read through CDP when the DOM cannot explain
-   a defect.
-8. **Append the history.** Dated, with the whole layout repeated rather than diffed, and the screenshot
-   beside it for the reader - never read by the agent unless a defect demands it.
+7. **Gate it.** The build and the seven checks; a browser read through CDP when the DOM cannot
+   explain a defect.
+8. **Append the history.** Dated, with the whole layout repeated rather than diffed, and the
+   screenshot beside it for the reader - never read by the agent unless a defect demands it.
 
 **The design laws.**
 
@@ -178,10 +178,11 @@ table is human-owned; prove three boards before converting twelve.
 **The test.** Hide the prose: the page must still say everything. Hide the machines: the page must
 still read as a page. A page that fails the first is a document with illustrations.
 
-**The memory.** `Temporary/Lane/` holds the requirements and the lane history; `Documentation/Design/`
-the storyboards and this process; `Documentation/Showcase/` the page dossiers with their screenshots;
-`Documentation/Component/` the component matrix; `~/.dsh/skills/` the reusable half. Every decision
-lives in a file, because the conversation is not durable and the file is.
+**The memory.** `Temporary/Lane/` holds the requirements and the lane history;
+`Documentation/Design/` the storyboards and this process; `Documentation/Showcase/` the page
+dossiers with their screenshots; `Documentation/Component/` the component matrix; `~/.dsh/skills/`
+the reusable half. Every decision lives in a file, because the conversation is not durable and the
+file is.
 
 **The loop in one sentence.** Read the source, decide what it is, draw it as a board, build the
 machine, prove it with the build, append the history - and let the next session start from the file

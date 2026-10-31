@@ -30,16 +30,16 @@ a control that cannot express it, or when a fact is lost to a rewrite.
 
 ## When to use
 
-| Scenario | Action |
-| --- | --- |
-| Every band of a study sheet carries the same padding and the same 1px top rule. | Run the pass. |
-| Every control has one hover and no focus, selected, current, or disabled state. | Run the pass. |
-| One accent color appears in eleven places and names nothing. | Run the pass. |
-| A reviewer says the page shows the mechanics but is lacking in design. | Run the pass. |
-| A band is missing, duplicated, or out of order. | Stop; the content pass owns the bands. |
-| A fact is wrong, ungrounded, or paraphrased. | Stop; the content pass owns the facts. |
-| The page needs a data contract or a reusable component set. | Stop; component-pass or scenario-pass owns it. |
-| The page is a published package page under `Site/Source/pages/package/`. | Stop; the site-authoring skill owns the lane. |
+| Scenario                                                                        | Action                                         |
+| ------------------------------------------------------------------------------- | ---------------------------------------------- |
+| Every band of a study sheet carries the same padding and the same 1px top rule. | Run the pass.                                  |
+| Every control has one hover and no focus, selected, current, or disabled state. | Run the pass.                                  |
+| One accent color appears in eleven places and names nothing.                    | Run the pass.                                  |
+| A reviewer says the page shows the mechanics but is lacking in design.          | Run the pass.                                  |
+| A band is missing, duplicated, or out of order.                                 | Stop; the content pass owns the bands.         |
+| A fact is wrong, ungrounded, or paraphrased.                                    | Stop; the content pass owns the facts.         |
+| The page needs a data contract or a reusable component set.                     | Stop; component-pass or scenario-pass owns it. |
+| The page is a published package page under `Site/Source/pages/package/`.        | Stop; the site-authoring skill owns the lane.  |
 
 ## The rules
 
@@ -122,18 +122,18 @@ strings, `pnpm Check` exits 0, and the built page count is unchanged.
 
 ## Decision table
 
-| Situation | Action |
-| --- | --- |
-| A band has the same top rule as its neighbor. | Assign a rung of the weight ladder; 2px ink for the opener. |
-| A control has one hover. | Add the states the control has; use the native element first. |
-| A band can be empty. | Give the inspector a default subject. |
-| A shared island shows another page's data. | Add a `Data` prop with the module's own run as the default. |
-| A nested rule compiles to the wrong selector. | Grep the compiled CSS and fix the nesting. |
-| The formatter changed the file under the edit. | Re-read the slice, then edit. |
-| The target is staged and not committed. | `git show :path` is the original for the word diff. |
-| The build is forbidden. | The `sass` compile, the word diff, and the ASCII scan are the arbiters; say what you could not verify. |
-| A dev server is already running. | `curl http://localhost:9999/manual/` and read the rendered text; do not start one. |
-| The page needs less content. | The content pass owns the content; parameterize the run, do not cut the bands. |
+| Situation                                      | Action                                                                                                 |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| A band has the same top rule as its neighbor.  | Assign a rung of the weight ladder; 2px ink for the opener.                                            |
+| A control has one hover.                       | Add the states the control has; use the native element first.                                          |
+| A band can be empty.                           | Give the inspector a default subject.                                                                  |
+| A shared island shows another page's data.     | Add a `Data` prop with the module's own run as the default.                                            |
+| A nested rule compiles to the wrong selector.  | Grep the compiled CSS and fix the nesting.                                                             |
+| The formatter changed the file under the edit. | Re-read the slice, then edit.                                                                          |
+| The target is staged and not committed.        | `git show :path` is the original for the word diff.                                                    |
+| The build is forbidden.                        | The `sass` compile, the word diff, and the ASCII scan are the arbiters; say what you could not verify. |
+| A dev server is already running.               | `curl http://localhost:9999/manual/` and read the rendered text; do not start one.                     |
+| The page needs less content.                   | The content pass owns the content; parameterize the run, do not cut the bands.                         |
 
 ## Verification
 
@@ -148,29 +148,29 @@ strings, `pnpm Check` exits 0, and the built page count is unchanged.
 - The ASCII scan is empty, the page has one `h1`, and the `.astro` has no `{" "}`.
 - The counts of bands, nodes, leaves, decisions, and modes match the log.
 
-A compile failure is a syntax error; a Check failure is a built-page defect; a word-diff
-deletion is a lost fact or a moved string; an ASCII hit is a glyph; a missing
-`Target/manual/index.html` means the `DevRoute` gate was closed.
+A compile failure is a syntax error; a Check failure is a built-page defect; a word-diff deletion is
+a lost fact or a moved string; an ASCII hit is a glyph; a missing `Target/manual/index.html` means
+the `DevRoute` gate was closed.
 
 ## Anti-patterns
 
-| Mistake | Cost | Do instead |
-| --- | --- | --- |
-| Write the whole page and stylesheet in two calls. | 94 KB of formatted source and a 75-call correction tail. | Write one band, compile, then extend. |
-| Add a hover to every row. | Nothing reads as clickable or read-only. | A band for selectable rows, a plate for informational ones. |
-| Spend the accent on every state. | No accent means anything. | Budget five meanings. |
-| Copy a shared island for a different subject. | Two machines drift. | A `Data` prop with the default. |
-| Skip the emitted-selector grep. | A nested rule compiles wrong. | Grep the compiled CSS. |
-| Trust a sentence-substring fact check. | 15 false misses. | Word diff against the index original. |
-| Start `astro dev`. | Dev output is not evidence. | Read a running server, or build. |
+| Mistake                                           | Cost                                                     | Do instead                                                  |
+| ------------------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------- |
+| Write the whole page and stylesheet in two calls. | 94 KB of formatted source and a 75-call correction tail. | Write one band, compile, then extend.                       |
+| Add a hover to every row.                         | Nothing reads as clickable or read-only.                 | A band for selectable rows, a plate for informational ones. |
+| Spend the accent on every state.                  | No accent means anything.                                | Budget five meanings.                                       |
+| Copy a shared island for a different subject.     | Two machines drift.                                      | A `Data` prop with the default.                             |
+| Skip the emitted-selector grep.                   | A nested rule compiles wrong.                            | Grep the compiled CSS.                                      |
+| Trust a sentence-substring fact check.            | 15 false misses.                                         | Word diff against the index original.                       |
+| Start `astro dev`.                                | Dev output is not evidence.                              | Read a running server, or build.                            |
 
 ## References
 
-| File | Covers | Read when |
-| --- | --- | --- |
-| `references/audit.md` | The accent budget, the weight ladder, the state inventory, the acceptance list. | Before the first edit. |
-| `references/corpus.md` | The corpus map with this repository's paths and what to take from each. | Before the band pass. |
-| `references/bands.md` | The seven geometries, the state set, the native elements, the trap and the ring. | Per band. |
-| `references/loop.md` | The slice loop, the formatter rule, the band-group counts, the stale-read recovery. | After the first band compiles. |
-| `references/verify.md` | The arbiters, the word diff, the checks, the dev-server read. | Before the report. |
-| `references/log.md` | The Pass-Log schema, the evidence pointers, the learned rules. | From the first read. |
+| File                   | Covers                                                                              | Read when                      |
+| ---------------------- | ----------------------------------------------------------------------------------- | ------------------------------ |
+| `references/audit.md`  | The accent budget, the weight ladder, the state inventory, the acceptance list.     | Before the first edit.         |
+| `references/corpus.md` | The corpus map with this repository's paths and what to take from each.             | Before the band pass.          |
+| `references/bands.md`  | The seven geometries, the state set, the native elements, the trap and the ring.    | Per band.                      |
+| `references/loop.md`   | The slice loop, the formatter rule, the band-group counts, the stale-read recovery. | After the first band compiles. |
+| `references/verify.md` | The arbiters, the word diff, the checks, the dev-server read.                       | Before the report.             |
+| `references/log.md`    | The Pass-Log schema, the evidence pointers, the learned rules.                      | From the first read.           |

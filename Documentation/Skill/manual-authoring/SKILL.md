@@ -30,15 +30,15 @@ The worked example is the ellipsis sheet at `/manual/`; its dossier is
 
 ## When to use
 
-| Scenario | Action |
-| --- | --- |
-| A plugin has no study sheet. | Run the pass. |
-| A band of a sheet cannot name the file it came from. | Run the pass on that band. |
-| A string in the sheet is a paraphrase of a README. | Run the pass; quote the test or `Config.ts`. |
-| The Classic and EffectTS trees differ and the sheet is silent. | Run the pass; carry the difference. |
-| The sheet is flat and needs states and interactions. | Stop; the design pass owns it. |
-| The sheet needs a data contract or a reusable component set. | Stop; component-pass or scenario-pass owns it. |
-| The page is a published package page. | Stop; the site-authoring skill owns the lane. |
+| Scenario                                                       | Action                                         |
+| -------------------------------------------------------------- | ---------------------------------------------- |
+| A plugin has no study sheet.                                   | Run the pass.                                  |
+| A band of a sheet cannot name the file it came from.           | Run the pass on that band.                     |
+| A string in the sheet is a paraphrase of a README.             | Run the pass; quote the test or `Config.ts`.   |
+| The Classic and EffectTS trees differ and the sheet is silent. | Run the pass; carry the difference.            |
+| The sheet is flat and needs states and interactions.           | Stop; the design pass owns it.                 |
+| The sheet needs a data contract or a reusable component set.   | Stop; component-pass or scenario-pass owns it. |
+| The page is a published package page.                          | Stop; the site-authoring skill owns the lane.  |
 
 ## The rules
 
@@ -107,17 +107,17 @@ exits 0, and the built page exists when the gate is open.
 
 ## Decision table
 
-| Situation | Action |
-| --- | --- |
-| A band cannot name its source. | Cut the band. |
-| The source and the README disagree. | The source wins; the README is not evidence. |
-| The twin differs from the Classic tree. | Carry the difference as a fact. |
-| A fact lives only in a test. | Quote the test string. |
-| The dossier's layout is stale. | Append a dated section with the whole new layout. |
-| The sheet is flat. | Stop; the design pass owns the states. |
-| The page needs a data contract. | component-pass or scenario-pass owns it. |
-| The page is published. | site-authoring owns the lane. |
-| A write is rejected as stale. | Re-read the file, then retry. |
+| Situation                               | Action                                            |
+| --------------------------------------- | ------------------------------------------------- |
+| A band cannot name its source.          | Cut the band.                                     |
+| The source and the README disagree.     | The source wins; the README is not evidence.      |
+| The twin differs from the Classic tree. | Carry the difference as a fact.                   |
+| A fact lives only in a test.            | Quote the test string.                            |
+| The dossier's layout is stale.          | Append a dated section with the whole new layout. |
+| The sheet is flat.                      | Stop; the design pass owns the states.            |
+| The page needs a data contract.         | component-pass or scenario-pass owns it.          |
+| The page is published.                  | site-authoring owns the lane.                     |
+| A write is rejected as stale.           | Re-read the file, then retry.                     |
 
 ## Verification
 
@@ -136,20 +136,20 @@ lost fact; an ungrounded band is a cut band; and a stale write is a lost draft.
 
 ## Anti-patterns
 
-| Mistake | Cost | Do instead |
-| --- | --- | --- |
-| Read the README instead of the source. | A plausible false fact. | Read the package and the core. |
-| Paraphrase a ledger line. | A string the page cannot prove. | Quote the test. |
-| Load the skill after the build. | A third full rewrite. | Load it before the first write. |
-| Write the page in one 30,000-character call. | A stale write loses the draft. | Harvest, then write, then compile. |
-| Draw the frame from the picture. | A borrowed look. | Read the specimen CSS. |
-| Cut a band to make the page fit. | A fact disappears. | Cut only an ungrounded band, and say so. |
+| Mistake                                      | Cost                            | Do instead                               |
+| -------------------------------------------- | ------------------------------- | ---------------------------------------- |
+| Read the README instead of the source.       | A plausible false fact.         | Read the package and the core.           |
+| Paraphrase a ledger line.                    | A string the page cannot prove. | Quote the test.                          |
+| Load the skill after the build.              | A third full rewrite.           | Load it before the first write.          |
+| Write the page in one 30,000-character call. | A stale write loses the draft.  | Harvest, then write, then compile.       |
+| Draw the frame from the picture.             | A borrowed look.                | Read the specimen CSS.                   |
+| Cut a band to make the page fit.             | A fact disappears.              | Cut only an ungrounded band, and say so. |
 
 ## References
 
-| File | Covers | Read when |
-| --- | --- | --- |
+| File                    | Covers                                                                       | Read when               |
+| ----------------------- | ---------------------------------------------------------------------------- | ----------------------- |
 | `references/harvest.md` | The package, the core, the tests, the harness docs, the twin, the questions. | Before the first write. |
-| `references/sheet.md` | The band inventory, the dossier schema, the copy list. | Laying out the sheet. |
-| `references/build.md` | The write loop, the compile checkpoints, the stale-write rule. | Building. |
-| `references/verify.md` | The arbiters, the quoted-string grep, the counts. | Before the report. |
+| `references/sheet.md`   | The band inventory, the dossier schema, the copy list.                       | Laying out the sheet.   |
+| `references/build.md`   | The write loop, the compile checkpoints, the stale-write rule.               | Building.               |
+| `references/verify.md`  | The arbiters, the quoted-string grep, the counts.                            | Before the report.      |

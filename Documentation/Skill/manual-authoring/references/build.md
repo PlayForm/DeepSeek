@@ -5,8 +5,8 @@ rejected write.
 
 ## The rule
 
-Write the page and the stylesheet with the `write` and `edit` tools, compile the stylesheet,
-grep the quoted strings, and verify the counts.
+Write the page and the stylesheet with the `write` and `edit` tools, compile the stylesheet, grep
+the quoted strings, and verify the counts.
 
 Re-read the file immediately before a retry; a write rejected as stale has lost its draft.
 

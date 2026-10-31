@@ -32,8 +32,8 @@ The work order is fixed: geometry first, states second, interactions third, moti
 state added to a flat box is still a flat box.
 
 The audit entry belongs in the log before the code. The design agent assembled the audit in
-reasoning and wrote it into the log after the page existed, so its audit entry is a
-reconstruction; write yours first.
+reasoning and wrote it into the log after the page existed, so its audit entry is a reconstruction;
+write yours first.
 
 The evidence is `Documentation/Design/Dissection-Design.md`, section 2, phase A, and
 `Documentation/Design/Pass-Log.md`, Step 14.

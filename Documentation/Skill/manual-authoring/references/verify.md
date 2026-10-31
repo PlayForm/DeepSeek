@@ -11,16 +11,17 @@ Say what you could not verify; a page that was never rendered is unverified, and
 
 ## The detail
 
-The compile is `cd Site && ./node_modules/.bin/sass --no-source-map
-Source/Stylesheet/Manual.scss > /tmp/manual.css`, and it must exit 0.
+The compile is
+`cd Site && ./node_modules/.bin/sass --no-source-map Source/Stylesheet/Manual.scss > /tmp/manual.css`,
+and it must exit 0.
 
 `pnpm Check` runs `Site/Scripts/Check.ts` against `Site/Target/`, and it is the seven-check scan the
 site-authoring skill owns; read that skill's Verification section for the checks and the known
 compressor noise.
 
-`dum prepublishOnly` runs the `prepublishOnly` script (`node Scripts/Prepare.ts && astro
-build`). The `/manual` route exists only when the `DevRoute` integration in
-`Site/astro.config.ts` is on (`SITE_DEV=1` or `NODE_ENV=development`).
+`dum prepublishOnly` runs the `prepublishOnly` script (`node Scripts/Prepare.ts && astro build`).
+The `/manual` route exists only when the `DevRoute` integration in `Site/astro.config.ts` is on
+(`SITE_DEV=1` or `NODE_ENV=development`).
 
 The quoted-string grep is the content pass's fact check: for every string in the copy list, grep the
 source file named in the dossier, and a string that does not grep is a lost fact.

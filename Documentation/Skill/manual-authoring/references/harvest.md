@@ -12,18 +12,18 @@ A source that is opened but not read is not a source; read the file, not its hea
 
 ## The detail
 
-| Read | For |
-| --- | --- |
-| `Classic/packages/<slug>/Source/Function/Apply.ts` | The seam, the flags, the dispatch, the ledger line. |
-| `Classic/packages/<slug>/Source/Function/Normalize.ts` | The table and the replace law. |
-| `Classic/packages/<slug>/Source/Function/Chunk.ts` | The chunk classifier. |
-| `Classic/packages/<slug>/Source/Variable/Config.ts` | Every knob and its default. |
-| `Classic/packages/lib-dsh-core/Source/` | The real dispatch the package delegates to. |
-| `Classic/packages/<slug>/Source/Test/Stream-Contract/Test.ts` | The exact ledger line and the assertions. |
-| `EffectTS/packages/ets-<slug>/Source/` | The twin, and every difference. |
-| `~/Developer/Documentation/Module/deepseek-harness/docs/` | The seam's contract and the waterfall order. |
-| `Diagram/` | The flow the sheet draws. |
-| the sibling packages | The ledger strings and the bundle order. |
+| Read                                                          | For                                                 |
+| ------------------------------------------------------------- | --------------------------------------------------- |
+| `Classic/packages/<slug>/Source/Function/Apply.ts`            | The seam, the flags, the dispatch, the ledger line. |
+| `Classic/packages/<slug>/Source/Function/Normalize.ts`        | The table and the replace law.                      |
+| `Classic/packages/<slug>/Source/Function/Chunk.ts`            | The chunk classifier.                               |
+| `Classic/packages/<slug>/Source/Variable/Config.ts`           | Every knob and its default.                         |
+| `Classic/packages/lib-dsh-core/Source/`                       | The real dispatch the package delegates to.         |
+| `Classic/packages/<slug>/Source/Test/Stream-Contract/Test.ts` | The exact ledger line and the assertions.           |
+| `EffectTS/packages/ets-<slug>/Source/`                        | The twin, and every difference.                     |
+| `~/Developer/Documentation/Module/deepseek-harness/docs/`     | The seam's contract and the waterfall order.        |
+| `Diagram/`                                                    | The flow the sheet draws.                           |
+| the sibling packages                                          | The ledger strings and the bundle order.            |
 
 The questions: which seam, which dispatch, which chunk kind, which replace law, which flags, which
 exemptions, which default, what an empty string does, the exact ledger line, the exact activation

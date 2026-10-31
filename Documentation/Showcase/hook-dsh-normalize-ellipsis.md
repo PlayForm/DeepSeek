@@ -7,23 +7,24 @@ code point, replaced with what, and where in the stream does it happen?**
 
 ## The sources
 
-| Read | Taken |
-| --- | --- |
-| `Classic/packages/hook-dsh-normalize-ellipsis/Source/Function/Apply.ts` | the seam, the chunk dispatch, the flags, the ledger line |
-| the same package's `Config.ts` | `replacement`, its default, and the empty-string rule |
-| `lib-dsh-core/Source/Function/Normalize.ts` | the table shape: one code point, one replacement, no context rule |
-| `Diagram/03-normalize/Classic/ellipsis.mmd` | the flow: seam, dispatch, kind, replace, count, yield, ledger |
-| `Temporary/Corca/Specimens/Plugin.html` | the triptych frame, which the page does not repeat |
-| `~/Developer/Documentation/Module/ui/src/registry/overtrue/` | the glyph pair geometry from `detail-list` and `bullet-chart` |
+| Read                                                                    | Taken                                                             |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `Classic/packages/hook-dsh-normalize-ellipsis/Source/Function/Apply.ts` | the seam, the chunk dispatch, the flags, the ledger line          |
+| the same package's `Config.ts`                                          | `replacement`, its default, and the empty-string rule             |
+| `lib-dsh-core/Source/Function/Normalize.ts`                             | the table shape: one code point, one replacement, no context rule |
+| `Diagram/03-normalize/Classic/ellipsis.mmd`                             | the flow: seam, dispatch, kind, replace, count, yield, ledger     |
+| `Temporary/Corca/Specimens/Plugin.html`                                 | the triptych frame, which the page does not repeat                |
+| `~/Developer/Documentation/Module/ui/src/registry/overtrue/`            | the glyph pair geometry from `detail-list` and `bullet-chart`     |
 
 ## The copy
 
-The page prints, in this order: the package name, the version line, one sentence, the five view names,
-and then - inside Architecture - exactly these strings and no others:
+The page prints, in this order: the package name, the version line, one sentence, the five view
+names, and then - inside Architecture - exactly these strings and no others:
 
 - the glyph pair's two labels: `U+2026` and `...`
 - the table's four column heads: `Code point`, `Becomes`, `Name`, `Rule`
-- the rule, one line: `A single-character replace is boundary-safe, so this family has no context rule.`
+- the rule, one line:
+  `A single-character replace is boundary-safe, so this family has no context rule.`
 - the reach row: `text`, `reasoning`, `tool args`, each with its flag
 - the knob: `replacement`, its default, and `an empty string removes the code point instead`
 - the no-op branch: `when the stream held nothing to rewrite, no count line is written`
@@ -65,22 +66,22 @@ the knob, and the no-op. Each answers a question the prose used to answer badly.
 
 ## The machines
 
-| Machine | What it adds | Component |
-| --- | --- | --- |
-| Glyph pair | the code point and its replacement at display size, side by side | `Normalizer` in its pair form |
-| The table | every code point the family maps, with its name and rule | `Normalizer` |
-| Reach | which chunk kinds the rewrite touches, and which flags gate them | a new `Reach` machine |
-| The knob | the configurable replacement, its default, and the empty-string rule | `Schema` or a `Value` atom |
-| The no-op | what happens when there is nothing to rewrite | `Absence` |
+| Machine    | What it adds                                                         | Component                     |
+| ---------- | -------------------------------------------------------------------- | ----------------------------- |
+| Glyph pair | the code point and its replacement at display size, side by side     | `Normalizer` in its pair form |
+| The table  | every code point the family maps, with its name and rule             | `Normalizer`                  |
+| Reach      | which chunk kinds the rewrite touches, and which flags gate them     | a new `Reach` machine         |
+| The knob   | the configurable replacement, its default, and the empty-string rule | `Schema` or a `Value` atom    |
+| The no-op  | what happens when there is nothing to rewrite                        | `Absence`                     |
 
 ## The decisions
 
-- **The glyph pair is not a Difference.** A `Difference` marks one changed span inside a longer string;
-  here the whole string is one character, so a diff would draw a one-character line and a sea of white.
-  The pair, at display size, is the honest form.
-- **The reach row is a machine, not a sentence.** "Reaches text and reasoning, and the block ends the
-  stream assembles" is three facts and a condition; drawn as a row of channels with lamps it is read in
-  one glance, and as a sentence it is read twice and still doubted.
+- **The glyph pair is not a Difference.** A `Difference` marks one changed span inside a longer
+  string; here the whole string is one character, so a diff would draw a one-character line and a
+  sea of white. The pair, at display size, is the honest form.
+- **The reach row is a machine, not a sentence.** "Reaches text and reasoning, and the block ends
+  the stream assembles" is three facts and a condition; drawn as a row of channels with lamps it is
+  read in one glance, and as a sentence it is read twice and still doubted.
 - **The table keeps one row.** A one-row table is not a table; the family has one code point. The
   machine renders the row large rather than padding it, and the caption says why there is one.
 - **No flow in Architecture.** The flow is Conversation's machine; repeating it here would be the
@@ -90,15 +91,16 @@ the knob, and the no-op. Each answers a question the prose used to answer badly.
 
 ### v1 - 2026-10-31
 
-Built. The page carries five views; Architecture holds the portrait, the shape machine, the table, the
-Transform sample, and the flow's rule - and between them, four paragraphs of prose. This v1 is the
-record of what shipped, including that failure.
+Built. The page carries five views; Architecture holds the portrait, the shape machine, the table,
+the Transform sample, and the flow's rule - and between them, four paragraphs of prose. This v1 is
+the record of what shipped, including that failure.
 
 ### v2 - the rewrite, not yet built
 
 Architecture becomes five machines and no paragraphs: the glyph pair, the table at display size, the
-reach row, the knob, and the no-op. The portrait's `Does` bullets become the reach row and the no-op;
-the "Plugs into" line becomes the seam chip on the glyph pair; the table's caption loses its sentence.
+reach row, the knob, and the no-op. The portrait's `Does` bullets become the reach row and the
+no-op; the "Plugs into" line becomes the seam chip on the glyph pair; the table's caption loses its
+sentence.
 
 The test this version must pass: hide the prose, and the page still says which code point, what it
 becomes, where it reaches, what the knob does, and what happens when there is nothing to do.
@@ -111,8 +113,8 @@ carry, and the file it comes from.
 
 **The registration (Apply.ts).**
 
-- It registers **three listeners**, not one: `llm/stream` (always), `tools/post-execute` **prepended**
-  (the overpass arm), and `agent/pre-step` (the step-batch arm).
+- It registers **three listeners**, not one: `llm/stream` (always), `tools/post-execute`
+  **prepended** (the overpass arm), and `agent/pre-step` (the step-batch arm).
 - The two arms are gated at **runtime** on volatile scope cells, so their listeners exist even while
   the scopes are off - a scope flipped on later lands without re-registration.
 - The registration is the plain `ctx.on` pattern, **fiber-owned**, removed on unload - not the
@@ -126,8 +128,8 @@ carry, and the file it comes from.
 
 - `next()` is **always called first**, unconditionally; omitting it short-circuits the waterfall and
   the model call never happens.
-- `options` is a loop-built deep-frozen request; the plugin **never touches it** - listeners read, never
-  rewrite.
+- `options` is a loop-built deep-frozen request; the plugin **never touches it** - listeners read,
+  never rewrite.
 - **Chunk order is preserved**: one in, one out, strictly sequential.
 - The stream is **never buffered**: each chunk is yielded before the next `next()`, so consumers see
   deltas live.
@@ -139,8 +141,9 @@ carry, and the file it comes from.
 
 **The per-call state (Normalize.ts).**
 
-- `CurrentCall` and the raw-marker state are **local to the generator invocation**, never module-level:
-  two concurrent streams must not share them, and an HMR reload must not inherit stale state.
+- `CurrentCall` and the raw-marker state are **local to the generator invocation**, never
+  module-level: two concurrent streams must not share them, and an HMR reload must not inherit stale
+  state.
 - The tool-call id on every delta is the per-call boundary.
 
 **The config (Config.ts).**
@@ -171,9 +174,9 @@ carry, and the file it comes from.
   `files <path...> | batch | results on|off | scopes`.
 - The command is registered through a **probe-once seam**: a missing commands service skips the
   registration, because the command is a convenience, not a requirement.
-- The **fail-open duplicate gate**: seven flavours share one global command name, so the second mount
-  throws "already registered"; the plugin logs one ledger line and continues the mount, because the
-  stream listeners and the tool registration must still attach.
+- The **fail-open duplicate gate**: seven flavours share one global command name, so the second
+  mount throws "already registered"; the plugin logs one ledger line and continues the mount,
+  because the stream listeners and the tool registration must still attach.
 
 **The journal (Normalize.ts).**
 
@@ -188,10 +191,10 @@ carry, and the file it comes from.
 - The waterfall discipline as the spine the hook sits on, with `next()` first and the frozen options
   labelled.
 - The count law as a card: `N` counts code points, not characters.
-- The volatile scopes as a distinct card from the mount-time activation line, because the line cannot
-  report them.
-- The prepend interplay with CCR as an explicit band, since that is the one place where this plugin's
-  behaviour depends on another plugin's position.
+- The volatile scopes as a distinct card from the mount-time activation line, because the line
+  cannot report them.
+- The prepend interplay with CCR as an explicit band, since that is the one place where this
+  plugin's behaviour depends on another plugin's position.
 - The command grammar as a small register, and the duplicate gate as a one-line note on it.
 
 **The dispatch (Chunk.ts).**
@@ -199,9 +202,10 @@ carry, and the file it comes from.
 - The per-chunk dispatch lives in the **core** (`Stream/Chunk`); this package supplies only the
   flavour: a closure that applies the `Ellipsis` class and the configured replacement to one text
   segment.
-- The dispatch is **three-way**, not two: the edit exemption (a delta whose `name` is `"edit"` passes
-  by identity) and the per-call raw marker (a call whose arguments open with `{"__normalize":false`
-  passes unnormalized **with the marker stripped**) sit beside the reasoning and tool-args gates.
+- The dispatch is **three-way**, not two: the edit exemption (a delta whose `name` is `"edit"`
+  passes by identity) and the per-call raw marker (a call whose arguments open with
+  `{"__normalize":false` passes unnormalized **with the marker stripped**) sit beside the reasoning
+  and tool-args gates.
 - A sixth gate exists that the page never showed: **`conversation`**, default on, which passes
   text-delta text and text/reasoning blocks by identity while off.
 - The behaviour is **byte-identical** to a hand-rolled in-file implementation; the ellipsis smoke is
@@ -212,29 +216,29 @@ carry, and the file it comes from.
 `conversation` on, `reasoning` on, `toolInput` off, `toolResults` off, `files` on, `batch` off - and
 the scope **object** carries the volatile marker while its leaves stay plain, because schemastery
 rejects volatile leaves under an enclosing volatile field. One leaf change commits one update whose
-whole object the refresh listener re-reads. `files` is inert in the stream flavours so that one patch
-override drives the whole family.
+whole object the refresh listener re-reads. `files` is inert in the stream flavours so that one
+patch override drives the whole family.
 
 **The exemption list (Config.ts).**
 
-The default is seven names, and each has a reason: `read` and `edit` are byte-contracted, `raw-write`
-and `normalize-file` own their normalization, `ccr_retrieve`'s bytes are the retrieval contract, and
-`subagent` and `ask_user_question` carry prompt material matched verbatim. A listed result passes by
-identity.
+The default is seven names, and each has a reason: `read` and `edit` are byte-contracted,
+`raw-write` and `normalize-file` own their normalization, `ccr_retrieve`'s bytes are the retrieval
+contract, and `subagent` and `ask_user_question` carry prompt material matched verbatim. A listed
+result passes by identity.
 
 **The overpass arm (Overpass.ts).**
 
 - It is a **thin delegate** over the core's `ToolResults` factory: the generic machinery - next()
   first, the scope gate, the exemption list, the accepted/non-value rules, the content basis, the
-  text-only block rewrite, the CCR marker guard, the fail-open, the identity-preserving no-op - lives
-  in the core; the package supplies the transform, the ledger line, the ledger sink, the module
-  identity, and the default exemption list.
+  text-only block rewrite, the CCR marker guard, the fail-open, the identity-preserving no-op -
+  lives in the core; the package supplies the transform, the ledger line, the ledger sink, the
+  module identity, and the default exemption list.
 - Its ledger line is its own string, byte-identical to the pre-delegate arm:
   `overpass: normalized N char(s) in tool result <name> <callId>`.
 - The module identity is `State.Module`, which the factory's `Append` prefixes - the delegate never
   hardcodes it.
-- The registration with `{ prepend: true }` is what makes the arm **outermost** in the family's bundle
-  order; the core's marker guard makes any load order safe.
+- The registration with `{ prepend: true }` is what makes the arm **outermost** in the family's
+  bundle order; the core's marker guard makes any load order safe.
 - `DefaultScopes` is exported because the `normalize-overpass scopes` command reports it - the
   fallback for a hand-built config.
 
@@ -242,11 +246,11 @@ identity.
 
 - The dispatch is **six gates**, and the sheet must draw all six, with `conversation` and the two
   edit/raw markers as diamonds the page did not have.
-- The **scope matrix** is its own machine: six leaves, their defaults, and the note that the object is
-  volatile while the leaves are plain.
+- The **scope matrix** is its own machine: six leaves, their defaults, and the note that the object
+  is volatile while the leaves are plain.
 - The **exemption list** is seven names with a reason each - a register, not a sentence.
-- The **overpass ledger line** is a second, different string from the stream line; the sheet must show
-  both, because a reader who sees one will misread the other.
+- The **overpass ledger line** is a second, different string from the stream line; the sheet must
+  show both, because a reader who sees one will misread the other.
 - The **thin-delegate split** is itself a fact: what lives in the core and what lives here is the
   package's architecture, and it explains why the file is small.
 
@@ -271,11 +275,11 @@ identity.
 
 **The three ledger strings, side by side.**
 
-| Arm | The line |
-| --- | --- |
-| the stream | `hook-dsh-normalize-ellipsis: normalized N ellipsis char(s) in one stream` |
-| the tool results | `overpass: normalized N char(s) in tool result <name> <callId>` |
-| the step batch | `overpass: normalized N char(s) in step batch (turn T step S)` |
+| Arm              | The line                                                                   |
+| ---------------- | -------------------------------------------------------------------------- |
+| the stream       | `hook-dsh-normalize-ellipsis: normalized N ellipsis char(s) in one stream` |
+| the tool results | `overpass: normalized N char(s) in tool result <name> <callId>`            |
+| the step batch   | `overpass: normalized N char(s) in step batch (turn T step S)`             |
 
 Each is asserted byte-identically by the smoke suites, and the count is always of **replaced code
 points**, never of emitted characters.
@@ -291,7 +295,7 @@ stays byte-identical to the pre-scope version.
 
 - Three ledger lines, not one, in a register with their arms beside them.
 - The one-shot flag as a consumed token, drawn as a token that leaves the board after use.
-- The class-and-closure split as a small diagram: the core's machinery on one side, this package's two
-  arguments on the other, with the six siblings sharing the same left half.
+- The class-and-closure split as a small diagram: the core's machinery on one side, this package's
+  two arguments on the other, with the six siblings sharing the same left half.
 - The mount-time line versus the volatile scopes as two cards, because a reader who assumes the line
   reports the live config will misread every profile.
