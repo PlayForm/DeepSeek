@@ -28,7 +28,11 @@ Every dossier has the same five parts, in this order:
    draws it.
 4. **The data** - where each machine's facts come from: the source file, the `SCHEME.md` section, the
    README table, the test string.
-5. **The history** - dated sections, newest last, each saying what changed and why.
+5. **The history** - one section per version, newest last, and each section repeats the **whole
+   layout**, not a diff. A repetition is the point: `V1` at the top is the page as first drawn, and
+   `V2` at the bottom is the same page drawn again with the change already in it. A reader scrolls
+   from one complete drawing to the next and sees the design evolve, and an agent implementing the
+   latest version never has to apply a diff to a drawing it cannot see.
 
 ## The layout convention
 

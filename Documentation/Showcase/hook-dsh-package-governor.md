@@ -92,6 +92,37 @@ scheme, install, default, change, surface, dependencies, configuration, release,
 governor is the first package with a `Scheme` machine, and the machine is the model for the other
 forty-seven packages that ship a `SCHEME.md`.
 
-What is not there yet: the registry walk-up is named in the portrait but not drawn, and the update
-stage's dual mode (a harness job or a detached continuation) is one sentence in the flow rather than a
-fork. Both are candidates for v2.
+The layout as built:
+
+```
++--------------------------------------------------------------------------+
+| hook-dsh-package-governor                              [hook] [Classic]  |
+| The silent governor of every written package.json                        |
+| version 0.2.1   licence CC0-1.0   directory Classic/packages/...         |
++--------------------------------------------------------------------------+
+| FACTS        package / version / kind / release / licence / directory    |
++--------------------------------------------------------------------------+
+| WHAT IT DOES one sentence, and the README link                           |
++--------------------------------------------------------------------------+
+| PORTRAIT     [Rewrite]                                                   |
+|              Plugs into fs/observed, the registry walk-up, the fence.     |
++--------------------------------------------------------------------------+
+| FLOW         01 seam -> 02 gate -> 03 registry -> 04 chain -> 05 refusal  |
+|              -> 06 fenced write -> 07 update -> 08 breaker -> 09 ledger   |
++--------------------------------------------------------------------------+
+| ACTIVATION   activated (anywhere mode, logFile=..., updateMode=chain,    |
+|              ncuBin=ncu, exclude=[], policyFile=(discovery))              |
++--------------------------------------------------------------------------+
+| SCHEME       P the chain pass -> U the update stage                       |
+|              TRIGGER / EXCLUSION / NON-TRIGGER                            |
+|              IDENTICAL: result, transcript, events                        |
+|              DIFFERENT: the bytes on disk, the ledger line                |
++--------------------------------------------------------------------------+
+| INSTALL / DEFAULT / CHANGE / SURFACE / DEPENDENCIES / CONFIGURATION /     |
+| RELEASE / SOURCE / ORIGIN                                                 |
++--------------------------------------------------------------------------+
+```
+
+What v1 does not draw: the registry walk-up (named in the portrait, not drawn), and the update
+stage's dual mode (a harness job or a detached continuation) is one sentence in the flow rather than
+a fork. Both are the v2 candidates.
