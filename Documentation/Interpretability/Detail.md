@@ -5,12 +5,18 @@ The family's source is not merely well written: it is *structured knowledge*. A 
 string templates, and the reason each exception exists. The site's job is to turn that knowledge
 into machines, one plugin at a time, until a package page shows what the code knows.
 
-## The eight steps, per plugin
+## The nine steps, per plugin
 
-1. **Harvest.** Read both trees: `Classic/packages/<slug>/Source/` and
-   `EffectTS/packages/ets-<slug>/Source/`. Start with the header comments in `Source/Function/`,
-   then the module that names the tables, then `Config.ts`, then the tests, which carry the exact
-   strings.
+1. **Harvest.** Read, in this order:
+   1. **`SCHEME.md`** - 48 of the 60 packages ship one, and it is the deepest document in the tree:
+      the domain, the pipeline, the trigger and non-trigger laws, the commutativity argument, the
+      silence invariant, the registration, the config table, the test plan, and the interplay with
+      its siblings. The governor's is 382 lines. A page that ignores the scheme draws the mechanism
+      and misses the law the mechanism exists to satisfy.
+   2. `Source/Function/` - the header comments, which carry the tables.
+   3. `Config.ts` - the knobs and their defaults.
+   4. `Source/Test/` - the exact strings.
+   5. The twin tree, `EffectTS/packages/ets-<slug>/`, for the same files where they differ.
 2. **Extract.** Pull out every *structured* fact and write it as a list: a table (extensions to
    families), a rule (a `#` opens a comment only at a boundary), a template (`activated (k=v, ...)`),
    a set of variants (six field lists, one shape), an edge case (`undefined` skips the pair; an empty
@@ -27,14 +33,21 @@ into machines, one plugin at a time, until a package page shows what the code kn
    - a **tree or a graph** -> `Constellation`, `Explorer`, `Fanout`
 4. **Choose.** If two machines fit, take the one that adds the dimension the page lacks. If none
    fits, the machine is missing: build it in step 6 rather than flattening the fact into prose.
-5. **Author.** The facts go in `Source/Content/Detail/<Slug>.ts`, typed, with a header comment naming
-   the source file and line each table came from. No fact is typed into a page.
-6. **Build.** A new atom or machine, tokens only, drawn from the specimens in `Temporary/Corca/` and
+5. **Author.** The facts go in a `Source/Content/<Name>.ts` map, typed, with a header comment naming
+   the source file and section each fact came from. No fact is typed into a page.
+6. **Translate.** The scheme is read by the lane and written by hand, never parsed by the build.
+   `SCHEME.md` is prose with mathematics in it: a pipeline written as a composition, a law written as
+   a sentence with three conditions, an invariant written as "identical except". A build-time reader
+   would flatten all three into text. The lane reads the section, decides what it *is* - a pipeline, a
+   law, an invariant, a commutativity square, a race that was accepted - and composes the machine
+   that shows it. The translation is the work, and it is the reason the pages read as arguments
+   rather than as documentation.
+7. **Build.** A new atom or machine, tokens only, drawn from the specimens in `Temporary/Corca/` and
    the geometry in `~/Developer/Documentation/Module/ui`.
-7. **Mount.** The package page gains a **Detail** section: the machines for this plugin's structured
+8. **Mount.** The package page gains a **Detail** section: the machines for this plugin's structured
    facts, in the order the facts matter. The page keeps its portrait, its flow, and its change; the
    detail is the deepest layer.
-8. **Verify.** Build, the checks, and a browser read of the mounted page.
+9. **Verify.** Build, the checks, and a browser read of the mounted page.
 
 ## What the two examples become
 
