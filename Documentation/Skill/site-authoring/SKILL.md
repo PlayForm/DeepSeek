@@ -78,8 +78,10 @@ step produces a page that looks finished and is not.
    that picks the device first picks the wrong one.
 5. **Library.** Cytoscape with fCoSe for topology, the Instrument visual language of the UI module
    (`~/Developer/Documentation/Module/ui`) for quantities, and plain CSS for rails and matrices. A
-   library is justified when the device needs interaction or layout the CSS cannot do; a list that
-   becomes a chart because charts look advanced is a regression.
+   library is justified when the device needs interaction or layout the CSS cannot do. The question
+   is never "does a chart look advanced" but "does this device answer the page's question better
+   than a sentence"; a chart that answers a question nobody asked is a regression, and a page that
+   avoids a chart because charts feel decorative is the opposite mistake.
 6. **Verify.** Build, then the link scan, the structural audit, the spacing scan, the plural scan,
    and a browser check of every island, because a hydrated-looking island that never drew is the
    failure mode the scans cannot see.
@@ -115,9 +117,28 @@ names every path:
    The aim is what the diagram is about; without it the page draws the mechanism and misses the point.
 3. **The harness's side.** `~/Developer/Documentation/Module/deepseek-harness/docs/`: the architecture,
    the capability seams, the event matrix, the tool pipeline, the agent lifecycle, the session format.
-4. **The visual research.** `Temporary/Corca/` - the specimens, the curated notes, the composition
-   catalogue - and `Temporary/` for the design contracts and the page recipes.
-5. **The component inventory.** Every component under `Source/Component/`, with its props, because the
+4. **The visual research.** `Temporary/Corca/` is the visual authority and every lane that builds or
+   composes UI is given it by path. The specimens are the mechanics, not the skin:
+   `Specimens/Components.html` (the line and gutter, the pending block, the chip, the tab, the table,
+   the paint-order trap), `Specimens/Flow.html` (lane, sequence, state), `Specimens/Observatory.html`
+   (radial and graph forms), `Specimens/Plugin.html` (the triptych and the per-plugin composition),
+   `Specimens/Session.html` and `Specimens/Trace-Prototype.html` (the document and inspector),
+   `Curated/Components.md`, `Design-Tokens.md`, `Interaction-Model.md`, `Representations.md`, and
+   `Compositions.md` (the operator table and the three anti-combinations). `Temporary/` also holds
+   the design contracts and the page recipes. Borrow the mechanic and the composition; never the
+   colour, radius, font, or shadow.
+5. **The diagram corpus.** `Diagram/` at the repository root: one Mermaid flowchart per package,
+   grouped into six capability families, plus the root architecture and the four integration paths.
+   It is the reference for what a machine on a page should express - a real branch, a real
+   pass-through, a real ledger write - not artwork to paste.
+6. **The advanced UI corpus.** `~/Developer/Documentation/Module/ui/`: 113 registry compositions under
+   `src/registry/overtrue/` and 45 page-level components under `src/components/overtrue/`, each a
+   complete React + Tailwind + SVG composition. The ones a page usually needs are `trace-waterfall`,
+   `radial-gauge`, `activity-rings`, `event-timeline`, `bullet-chart`, `distribution-bar`,
+   `service-map`, `deploy-pipeline`, `steps`, `log-stream`, `json-viewer`, `detail-list`,
+   `tree-view`, `ribbon-card`, and `activity-heatmap`. Borrow the geometry, the state model, and the
+   labelling rule; never the component, the Tailwind class, or the dependency.
+7. **The component inventory.** Every component under `Source/Component/`, with its props, because the
    composition is limited by what the lane knows exists.
 
 The output is not the safest diagram. It is the densest true one: the machines that together express
@@ -281,6 +302,21 @@ README sections on its page. It fills space and says nothing a reader came for, 
 site into a renderer rather than a presentation. The page that needs more content gets an authored
 portrait, not a pasted document.
 
+## A rich visual explanation beats a paragraph
+
+A section leads with a machine and the prose is its caption. The machine carries the structure; the
+sentence says what the reader is looking at, never what it means.
+
+- A list is rows with a mark, not a sentence with commas.
+- A rule is the two sides of the rule drawn, not a paragraph that describes both.
+- A sequence, a branch, a size, a lifetime: each has a machine, and the paragraph that used to
+  describe it is deleted rather than shortened.
+- A caption is one line. Two lines means the machine is not doing its job yet.
+
+The test is a pair of reads. With the machines hidden, the page must still read as a page and not as
+a list of captions. With the prose hidden, the page must still say everything it came to say. A page
+that fails the second read is a page of text with illustrations.
+
 ## The page anatomy
 
 A page is `Base` plus a sequence of sections:
@@ -351,12 +387,28 @@ Voice rules:
 
 ## The design system
 
+The restraint is in the skin, never in the structure. The tokens keep every page in one visual
+language; they do not license a thin page.
+
 - Blue and white only; `--color-primary` and `--color-primary-container` from `Global.css`.
 - Inter for prose, IBM Plex Mono for code and labels.
-- 1px hairlines for every surface boundary; zero elevation (no shadows, no gradients).
+- 1px hairlines for every surface boundary; zero elevation (no shadows, no gradients). Depth comes
+  from layering, density, and rules, not from blur.
 - The 8pt spacing rhythm; the `--radius-*` scale.
 - The type scale's floor is 13px; body copy stays readable.
-- `prefers-reduced-motion` guards for every animation.
+
+What that leaves open, and what a page should use:
+
+- **Density.** A page may carry six or seven machines. A section is not a paragraph with a picture
+  beside it; it is a machine with a caption.
+- **Geometry.** Arcs, rings, cascades, ribbons, radial fans, grids of marks, stacked decks: any
+  arrangement CSS and inline SVG can draw, as long as every value is a token.
+- **Motion.** Transitions and reveals that explain a change are wanted; they are guarded by
+  `prefers-reduced-motion`, not avoided.
+- **Contrast.** Accent fills, accent washes, warn fills, and inverted panels are the vocabulary for
+  emphasis. A page that uses one accent fill per screen is underusing the language.
+- **Scale.** A display line, a hero number, a full-bleed band: the type scale exists to be used at
+  its top end, not only at its floor.
 
 ## The Mermaid pipeline
 
