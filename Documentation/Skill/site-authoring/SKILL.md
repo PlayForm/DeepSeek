@@ -90,6 +90,26 @@ The composition facts are data, not prose: the order of the arms, the prepend di
 seams that run independently belong in an authored map, the same way the behavior map holds the
 seams.
 
+## Every content edit goes through the edit tool
+
+A file is changed by reading it and then editing it, never by a shell command that rewrites it. No
+`sed`, no `perl -pi`, no `python - <<PY` heredoc, no `node -e` that writes, no `cat >` that replaces a
+file. The shell is for the build, the checks, and reading the tree; it is not a text editor.
+
+The reason is not style. A scripted rewrite:
+
+- skips the read, so the edit is made against a memory of the file rather than the file;
+- cannot see the surrounding context that decides whether the change is right;
+- fails silently on a pattern that matched twice, and writes the wrong line;
+- leaves no diff-shaped record of intent, only a new file.
+
+This project has the scars: a `perl -pi` that doubled every `&__` in a stylesheet, a `node -e` splice
+that inserted a second `Data:` line into a record, a `python` patch that replaced a binding with a
+block whose closing brace it guessed. Each cost a build cycle and a repair.
+
+The rule for a lane is the same as for the parent: `read`, then `edit` or `write`. A lane that cannot
+express the change with those tools has not understood the file yet.
+
 ## The route a lane takes
 
 The site's work divides at the same line the content divides at, and the route follows the work.
