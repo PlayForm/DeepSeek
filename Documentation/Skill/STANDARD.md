@@ -46,6 +46,8 @@ A skill that restates another skill's rules fails the single-owner rule (section
 | `request-pack`          | The request classes and the skill each one loads                                             | The skills themselves                                                                 |
 | `source-pipeline`       | Raw source plus converted Markdown as two artifacts: archive, convert, index                 | URL reading (crawl4ai), document conversion (anydoc-documents)                        |
 | `site-authoring`        | The Site/ lane: build, structure, design system, content, deploy, the build-time source      | Plugin code and smokes                                                                |
+| `manual-authoring`      | The content pass: facts from both trees, the exact strings, the bands, the copy, the dossier | The design pass (manual-design), the package pages (site-authoring)                    |
+| `manual-design`         | The design pass: the accent budget, geometry and weight, states, the slice loop, the log     | The facts and bands (manual-authoring), the lane laws (site-authoring)                 |
 
 ## 3. The SKILL.md specification
 

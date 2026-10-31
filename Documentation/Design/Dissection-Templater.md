@@ -122,7 +122,7 @@ step's reasoning, and the result.
 | 79 | bash | re-check ASCII, literals, braces, h1, views, imports | verify the edits and the imports |
 | 80 | bash | find the `sass` binary; check the icon asset | confirm the compile tool and the mark asset |
 | 81 | bash | `sass --no-source-map ... /dev/null` | compile the stylesheet as a syntax check |
-| 82 | skill | `plugin-realisation` | load the matching skill, late, after the first build |
+| 82 | skill | `content-pass` | load the matching skill (then named `plugin-realisation`), late, after the first build |
 | 83 | bash | core imports in Overpass and StepBatch; core exports | resolve the core-versus-package split |
 | 84 | write | `Site/Source/pages/_Manual.astro`, 32,003-character argument | third full rewrite, restructured to the skill's bands and four modes |
 | 85 | bash | `grep` the old view selectors in the scss | find the selectors to rename |
@@ -197,7 +197,7 @@ was written.
 
 ### Phase F: the skill load and the restructure (calls 82-90, steps 51-57)
 
-Call 82 loaded `plugin-realisation` after the build was already done. The skill's band list and its
+Call 82 loaded `content-pass` after the build was already done. The skill's band list and its
 four readings changed the page: call 84 is the third full write, replacing the three view names with
 four modes, and calls 85-90 renamed the stylesheet selectors and fixed the two-card grid. This phase
 is rework caused by a late read, not by a new instruction.
@@ -264,7 +264,7 @@ from the parallel lane and correct its facts rather than start again.
 
 **Changed course.** At step 37, when the first write was rejected because the file had changed under
 it: the agent re-read, adopted the parallel design, and rebuilt on it. At step 51, when the
-`plugin-realisation` skill appeared in the catalog: loading it changed the mode row from three views
+`content-pass` skill appeared in the catalog: loading it changed the mode row from three views
 to four readings, which forced a third full write (call 84) and a selector rename in the stylesheet
 (calls 85-86). The agent disclosed the deviation in its report and offered to relabel the panels.
 
@@ -364,3 +364,7 @@ was unverified when the lane finished.
 - No unused-token or dead-selector audit. The token check only asked whether every `var()` is
   defined.
 - No use of the second HTML concept beyond its head, and no read of the fourth authority reference.
+
+The skill is `content-pass` now: the profile copy was renamed from `plugin-realisation` after this
+session (commit d8068d8), and the project copy under `Documentation/Skill/content-pass/` is new,
+not a rename, so there is no deleted project folder to look for.
