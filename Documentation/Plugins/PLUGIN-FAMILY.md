@@ -1,5 +1,5 @@
 ---
-title: The authoritative registry of the 119 packages (59 Classic + 60 EffectTS)
+title: The authoritative registry of the 121 packages (61 Classic + 60 EffectTS)
 category: Plugins
 kind: living-record
 date: 2026-10-22
@@ -8,8 +8,8 @@ registry: Documentation/Plugins/PLUGIN-FAMILY.md
 index: Documentation/INDEX.md
 statuses:
     - name:
-          the 119 packages (59 Classic + 60 EffectTS, one of them the ets-base-dsh plumbing base;
-          all 119 at 0.2.1, all UNPUBLISHED)
+          the 121 packages (61 Classic + 60 EffectTS, one of them the ets-base-dsh plumbing base;
+          all 121 at 0.2.1, all UNPUBLISHED)
       state: implemented
       evidence:
           the packages exist and are built from source; the package directories under both trees
@@ -30,7 +30,7 @@ statuses:
           Documentation/Reports/POC-GAP-ANALYSIS.md
 ---
 
-# PLUGIN-FAMILY - the authoritative registry of the 119 packages
+# PLUGIN-FAMILY - the authoritative registry of the 121 packages
 
 > This document is the "plugins saved as documents" registry, and it covers the full family, where
 > all packages are built from source and UNPUBLISHED (the npm bootstrap tiers: 2-placeholder or
@@ -50,15 +50,17 @@ statuses:
 
 ## 0. The family at a glance
 
-- **Version: 0.2.1 for ALL 119 packages, all UNPUBLISHED.** The names are byte-accurate as below,
+- **Version: 0.2.1 for ALL 121 packages, all UNPUBLISHED.** The names are byte-accurate as below,
   and the legacy `ets-dsh-hook-*` naming is gone (the namespace split, SPLICE-ETS.md).
-- **Two trees, 59 + 60 packages, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`,
+- **Two trees, 61 + 60 packages, ONE contract:** the CLASSIC split (`@playform/hook-dsh-*`,
   `@playform/plugin-dsh-*`, `@playform/client-dsh-*`, `@playform/lib-dsh-*` - plain TypeScript with
   zero runtime framework dependencies) and the EFFECT-TS split (`@playform/ets-*` - the same
   contracts on Effect v4.0.7 services and layers, with `@playform/ets-base-dsh` as the plumbing
   base), where you NEVER mix the two splits in ONE dependency graph, the EffectTS `Update` returns
-  Effect envelopes (NOT the classic dispatch envelope), every one of the 59 Classic packages has an
-  ETS twin, including the two libraries of the completion program (`lib-dsh-trace` and
+  Effect envelopes (NOT the classic dispatch envelope), 59 of the 61 Classic packages have an ETS
+  twin, with `plugin-dsh-boot` (which has none) and `plugin-dsh-skill-learn` (whose twin is deferred
+  rather than refused, a non-goal of its plan, section 13 of SKILL-LEARN-PLUGIN.md) as the two
+  exceptions, and the twins include the two libraries of the completion program (`lib-dsh-trace` and
   `lib-dsh-pack`) and the twelve packages of the 2026-10-29 parity batch (section 1.1).
 - **The family count is 59 ETS twins:** the EffectTS tree holds 60 packages, and one of them is the
   `ets-base-dsh` plumbing base, not a twin.
@@ -123,7 +125,7 @@ statuses:
 | 30  | `@playform/ets-hook-dsh-tool-coach`          | Hook (guardian)   | `tools/post-`/`tools/pre-execute`, `agent/pre-step`, `system-prompt/assemble` |
 | 31  | `@playform/ets-hook-dsh-live-containers`     | Hook (live block) | `system-prompt/assemble`, `agent/pre-step`, `tools/post-execute`              |
 
-**The 2026-10-22 delivery - Classic (36), roles only (full detail in
+**The 2026-10-22 delivery - Classic (37), roles only (full detail in
 [PLUGIN-SUITE-SUMMARY.md](PLUGIN-SUITE-SUMMARY.md)):**
 
 | #   | Package                                    | Role                                                      | ETS twin |
@@ -164,12 +166,14 @@ statuses:
 | 65  | `@playform/plugin-dsh-ingester`            | validate/apply the approved proposals                     | yes      |
 | 66  | `@playform/plugin-dsh-pattern`             | match/record/decay the learned patterns                   | yes      |
 | 67  | `@playform/hook-dsh-batch-decision`        | the conservative auto-approve policy + the decision tool  | yes      |
+| 68  | `@playform/plugin-dsh-skill-learn`         | the Hermes skill-learning loop as one fenced package      | no (yet) |
 
 **EffectTS twins for the 2026-10-22 delivery (30):** the `@playform/ets-*` counterparts of the 30
 packages above that are marked "yes", under `EffectTS/packages/`.
 
-The 2026-10-29 parity batch added the twelve remaining twins, so no Classic package is without one
-(section 1.1).
+The 2026-10-29 parity batch added the twelve remaining twins, so 59 of the 61 Classic packages have
+an ETS twin (section 1.1); `plugin-dsh-boot` has none, and `plugin-dsh-skill-learn`'s twin is
+deferred rather than refused (a non-goal of its plan, section 13).
 
 The current full count of ETS twins is **59** (the 60 EffectTS packages minus the `ets-base-dsh`
 base), which includes the twins of the two libraries (`ets-lib-dsh-trace`, `ets-lib-dsh-pack`)
@@ -180,12 +184,14 @@ listed below and the twins of the 15 pre-existing packages listed above.
 
 | #   | Package                   | Archetype | Event surface                                                                                        | ETS twin            |
 | --- | ------------------------- | --------- | ---------------------------------------------------------------------------------------------------- | ------------------- |
-| 68  | `@playform/lib-dsh-trace` | Library   | none (library - the trace vocabulary and the detached loop behind the factory's `ctx.trace` service) | `ets-lib-dsh-trace` |
-| 69  | `@playform/lib-dsh-pack`  | Library   | none (library - the workspace-pack schema and resolution behind the pack-driven suggesters)          | `ets-lib-dsh-pack`  |
+| 69  | `@playform/lib-dsh-trace` | Library   | none (library - the trace vocabulary and the detached loop behind the factory's `ctx.trace` service) | `ets-lib-dsh-trace` |
+| 70  | `@playform/lib-dsh-pack`  | Library   | none (library - the workspace-pack schema and resolution behind the pack-driven suggesters)          | `ets-lib-dsh-pack`  |
 
 ### 1.1 The 2026-10-29 parity batch (the twelve remaining ETS twins)
 
-The parity batch closed the last gap: every Classic package now has an ETS twin. The twelve pairs:
+The parity batch added the last twelve twins: 59 of the 61 Classic packages now have an ETS twin,
+and two do not, `plugin-dsh-boot` and `plugin-dsh-skill-learn`, the latter's twin deferred rather
+than refused (a non-goal of its plan, section 13). The twelve pairs:
 
 | #   | Classic package                          | ETS twin                                     | Role                                                           |
 | --- | ---------------------------------------- | -------------------------------------------- | -------------------------------------------------------------- |
@@ -210,7 +216,7 @@ The absolute-link rule for any repo target in docs, prompts, and skills is
 `https://github.com/PlayForm/DeepSeek/tree/Current/Classic/packages/<pkg>` or
 `https://github.com/PlayForm/DeepSeek/tree/Current/EffectTS/packages/<pkg>`.
 
-## 2. The packages, one paragraph each (Classic truth; each has its ets- twin)
+## 2. The packages, one paragraph each (Classic truth; 59 of the 61 have their ets- twin, the exceptions `plugin-dsh-boot` and `plugin-dsh-skill-learn`, the latter's twin deferred rather than refused, a non-goal of its plan, section 13)
 
 ### The base and the machinery
 
@@ -241,6 +247,15 @@ The absolute-link rule for any repo target in docs, prompts, and skills is
   (`RegisterGovern`/`Govern`); `RegisterGovern`/`Govern` is the sequential fold where ONE step's
   chain completes before the next step reads the file, and the loader contract is
   `name`/`apply`/`Config`/`inject` on the default export.
+- **`@playform/plugin-dsh-skill-learn`** (Plugin @ DSH @ Skill @ Learn) - the Hermes skill-learning
+  loop as one fenced package, which exposes `ctx.skillLearn` and carries both halves of the loop as
+  one service: the post-turn review (the bounded digest, the two-call protocol, the sixteen judge
+  rules, the fence) and the curator that ages the corpus, ships DISABLED (`enabled` false, the
+  idle-forever posture of the family, so a cold mount logs `disabled (enabled=false)`), writes
+  autonomously behind the fence once enabled (`policy.write` is `auto`, so a judged operation
+  publishes instead of queueing for approval, and the reply schema cannot express a delete or an
+  archive), and has NO ETS twin yet, because the parity work is deferred rather than refused (a
+  non-goal of its plan, section 13 of SKILL-LEARN-PLUGIN.md).
 
 ### The governance trio
 

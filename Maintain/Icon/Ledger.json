@@ -1,15 +1,15 @@
 {
 	"format": 1,
 	"counts": {
-		"packages": 120,
-		"classic": 60,
+		"packages": 121,
+		"classic": 61,
 		"effectTS": 60,
 		"hook": 60,
-		"plugin": 43,
+		"plugin": 44,
 		"client": 6,
 		"lib": 11,
-		"mono": 120,
-		"colour": 120
+		"mono": 121,
+		"colour": 121
 	},
 	"icons": [
 		{
@@ -2609,6 +2609,29 @@
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-route.svg",
 				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-route.svg"
+			}
+		},
+		{
+			"package": "@playform/plugin-dsh-skill-learn",
+			"dir": "plugin-dsh-skill-learn",
+			"kind": "plugin",
+			"tree": "Classic",
+			"version": "0.2.1",
+			"seed": "58b39f81432b4778ebcab93e436a1b6ea1a0d6c67a4db8065cb4f1dc36e2245d",
+			"grammar": "interlace-tile",
+			"order": 12,
+			"arms": 8,
+			"rings": 0,
+			"orbit": 8,
+			"rim": "square",
+			"mode": "single",
+			"hash": {
+				"mono": "91665c9fe42f49edc2acb30985357e94b0c62de89c81500ecee2d922f8fdf3ba",
+				"colour": "6d477d63c60ef34f8ffc364b0e48e8c77895843f4e2da1257177b820ed9c049d"
+			},
+			"path": {
+				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-skill-learn.svg",
+				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-skill-learn.svg"
 			}
 		},
 		{

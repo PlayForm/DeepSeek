@@ -4,7 +4,7 @@
 		"en": "DSH Family @ PlayForm"
 	},
 	"description": {
-		"en": "The PlayForm DeepSeek Harness plugin family: 120 packages across the Classic TypeScript and Effect-TS trees."
+		"en": "The PlayForm DeepSeek Harness plugin family: 121 packages across the Classic TypeScript and Effect-TS trees."
 	},
 	"metadata": {
 		"categories": {
@@ -5426,11 +5426,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1793362644,
+					"publishTimestamp": 1793596978,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "071cb40f01bc98d3321c40338623a27524dfc958",
+						"commit": "7003090f79e3e6776a53841d47b398978539fc99",
 						"path": "Classic/packages/plugin-dsh-boot"
 					},
 					"engines": {}
@@ -6032,6 +6032,47 @@
 					"publishTimestamp": 1793221138,
 					"source": {
 						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/plugin-dsh-skill-learn",
+			"title": {
+				"en": "Skill Learn"
+			},
+			"description": {
+				"en": "The skill-learn service: a DeepSeek Harness plugin that carries BOTH HALVES OF THE HERMES LEARNING LOOP as one service - the post-turn review that turns a finished session into skill edits, and the curator that ages the corpus. The review..."
+			},
+			"icon": "Icon/plugin-dsh-skill-learn.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/plugin-dsh-skill-learn"
+			},
+			"metadata": {
+				"category": "plugin",
+				"keywords": [
+					"skill",
+					"learn",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1793596978,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "7003090f79e3e6776a53841d47b398978539fc99",
+						"path": "Classic/packages/plugin-dsh-skill-learn"
 					},
 					"engines": {}
 				}

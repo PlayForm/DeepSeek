@@ -50,7 +50,7 @@ statuses:
       Brand/ICON-GRAMMAR.md        the generated icon language (sheet -> genome -> SVG)
       Brand/ICON-REFERENCE.md      the 29 reference motifs, cut out and read one by one
       Brand/ICON-METHODS.md        the construction methods (open strokes, cusps, tapers) and their dispersal
-      Plans/                       the living + queued plans (31) + 5 granular families (80)
+      Plans/                       the living + queued plans (32) + 5 granular families (80)
         Batch-Edit-Tool/           the batch edit tool's granular topics (19)
         Representation-First/      the representation-first research's topics (14)
         UI-Family/                 the UI family plan's phases (14)
@@ -85,7 +85,7 @@ statuses:
 | [Brand/ICON-METHODS.md](Brand/ICON-METHODS.md)     | active | living-record |
 | [Brand/ICON-REFERENCE.md](Brand/ICON-REFERENCE.md) | active | living-record |
 
-### Plans - the living + queued hubs (31)
+### Plans - the living + queued hubs (32)
 
 | Document (Documentation/Plans/)                                                                | Status            | Kind                                                   |
 | ---------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------ |
@@ -127,6 +127,7 @@ statuses:
 | [SMOKE-PASS-BRIEF.md](Plans/SMOKE-PASS-BRIEF.md)                                               | complete          | living-plan (the smoke pass brief)                     |
 | [SITE-UPDATE-SPEC.md](Plans/SITE-UPDATE-SPEC.md)                                               | active            | living-plan (the site's per-file content delta)        |
 | [SITE-OBSERVATORY.md](Plans/SITE-OBSERVATORY.md)                                               | active            | working-plan (the site overhaul's requirement ledger)  |
+| [SKILL-LEARN-PLUGIN.md](Plans/SKILL-LEARN-PLUGIN.md)                                           | active            | living-plan                                            |
 
 ### Plans/Batch-Edit-Tool - the batch edit tool's granular topics (19)
 
