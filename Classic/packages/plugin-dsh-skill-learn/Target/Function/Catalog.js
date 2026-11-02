@@ -1,0 +1,1 @@
+var a=async(o,s)=>{const r=await o.list(s),t=[];for(const e of r){switch(!0){case typeof e?.name!="string":continue;case e.name.trim()==="":continue;case e.modelInvocable===!1:continue;default:break}const n=e.name.trim(),i=typeof e.description=="string"?e.description.replace(/\s+/g," ").trim():"";t.push(i===""?`- ${n}`:`- ${n}: ${i}`)}return t};export{a as default};

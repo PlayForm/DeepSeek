@@ -49,7 +49,7 @@ Review(input)
   ├─ gate: enabled                      → outcome "unavailable" (detail: disabled)
   ├─ probe: ctx.get("llm")              → "unavailable" (no llm service)
   ├─ route: knobs, then agent.options   → "unavailable" (no model route)
-  ├─ gate: input.Messages non-empty     → "unavailable" (empty snapshot)
+  ├─ gate: input.Messages non-empty     → "unavailable" (empty snapshot, or its cause)
   ├─ Digest(messages)                   → the bounded digest
   ├─ Prompt(focus)                      → the constant instruction
   ├─ ctx.llm.stream({provider, model, messages:[one user message], maxTokens, signal})
@@ -130,11 +130,19 @@ A refusal is returned and never thrown, so one bad operation cannot discard the 
 
 1. **The session projection (`Function/Snapshot`).**
 
-    The surface accessors of the harness, such as `agent.session.surface.messages` and its peers,
-    have NOT been verified against a live host in this checkout.
+    The history accessor is `Session.deriveMessages()`, which is verified against the installed
+    `dsh-session` declarations (`lib/types/index.d.ts:347`) and is the accessor the agent loop
+    itself calls (`dsh-agent-loop/lib/index.js:1274`). It returns the derived model-visible history:
+    `role` plus content blocks, including `tool-call` blocks on assistant messages and
+    `role: "tool"` results.
 
-    The module probes four candidate shapes, guards every read, and returns `[]` when none answers,
-    and the review then reports `unavailable (empty snapshot)`.
+    `deriveMessages` is the PRIMARY arm. The four surface shapes (`agent.session.surface.messages`
+    and its peers) are kept behind it, in their original order, as fallbacks for an older host that
+    lacks the accessor; every read is guarded, and an empty result is not an error.
+
+    A host that HAS the accessor and throws is reported, never a crash: `Snapshot` names the cause
+    through its failure sink, and the review then reports `unavailable` with the detail
+    `empty snapshot (deriveMessages failed: <cause>)`.
 
     This is the ONE place where a harness upgrade can change behavior, and it is confined to one
     file.

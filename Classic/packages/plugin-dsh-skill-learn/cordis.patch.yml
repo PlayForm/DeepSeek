@@ -1,0 +1,76 @@
+# Bundle patch for @playform/plugin-dsh-skill-learn.
+# The skill-learn service: it owns BOTH HALVES OF THE LEARNING LOOP - the
+# post-turn review that turns a finished session into skill edits, and the
+# curator that ages the corpus - behind one fenced write path
+# (Documentation/Plans/SKILL-LEARN-PLUGIN.md). The review is two hand-built
+# `ctx.llm.stream` requests from the idle edge, the fence is three operation
+# kinds with no delete and no archive in the reply schema, and the worst
+# outcome any pass can produce is a move into `~/.dsh/skills/.archive/`.
+# Consumers resolve `ctx.skillLearn`.
+#
+# New entries are declared with `insert:` (a bare `id:` row PATCHES an existing
+# entry). Activated when the profile's package.json lists the package in
+# dsh.profile.bundles AND the app is restarted; a file: dependency alone is NOT
+# activation.
+#
+# SHIPS DISABLED (the idle-forever posture): enabled: false is the schema
+# default and the patch row; a cold mount logs `disabled (enabled=false)` and the
+# service stays resolvable (the trigger keeps answering `disabled`), so no
+# listener hard-fails on a missing service.
+#
+# EVERY KNOB IS SPELLED OUT, because the defaults here are the shipped posture
+# and the schema is the truth: the three write caps (8 parsed, 4 per run, 6 per
+# session), the digest bounds, the 14 and 30 day thresholds, the weekly curator
+# interval, and `consolidate: false` - the second half of the curator is opt-in.
+#
+# THE POLICY BLOCK (D6, spelled out in full): the per-action allowlist, the
+# shared factory block. The service READS the corpus, RECORDS usage and
+# SUGGESTS lessons (read/index/record/suggest automatic) and never commits or
+# spawns - those verdicts are declared for family uniformity and stay the
+# shipped `approve`. `write: auto` is the one that matters and the one verdict
+# that differs from the lesson-review sibling: this plugin publishes its own
+# judged operations behind the fence rather than queueing them for acceptance,
+# which is the Hermes parity decision. A resolved pack's `policy` section
+# overrides these defaults per action.
+- insert:
+      - id: plugin-dsh-skill-learn
+        name: "@playform/plugin-dsh-skill-learn"
+        config:
+            enabled: false
+            logFile: ~/.dsh/playform/plugin-dsh-skill-learn.log
+            domain: skillLearn
+            storagePath: ~/.dsh/skill-learn/usage.json
+            statePath: ~/.dsh/skill-learn/state.json
+            ledgerPath: ~/.dsh/skill-learn/ledger.jsonl
+            blobRoot: ~/.dsh/skill-learn/blobs
+            snapshotRoot: ~/.dsh/skill-learn/snapshots
+            reportsRoot: ~/.dsh/skill-learn/reports
+            snapshotKeep: 5
+            skillsRoot: ~/.dsh/skills
+            archiveRoot: ~/.dsh/skills/.archive
+            agreementPath: ~/.dsh/AGENTS.md
+            intervalIterations: 15
+            maxOperations: 8
+            maxOperationsPerRun: 4
+            maxWritesPerSession: 6
+            digestTail: 24
+            digestUserChars: 300
+            digestAssistantChars: 200
+            maxInputChars: 120000
+            maxTokens: 4000
+            maxSkillChars: 100000
+            staleAfterDays: 14
+            archiveAfterDays: 30
+            curateIntervalHours: 168
+            consolidate: false
+            provider: ""
+            model: ""
+            policy:
+                read: auto
+                index: auto
+                record: auto
+                suggest: auto
+                write: auto
+                commit: approve
+                spawn: approve
+                message: auto
