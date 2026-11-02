@@ -5426,11 +5426,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1793362644,
+					"publishTimestamp": 1793596978,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "071cb40f01bc98d3321c40338623a27524dfc958",
+						"commit": "7003090f79e3e6776a53841d47b398978539fc99",
 						"path": "Classic/packages/plugin-dsh-boot"
 					},
 					"engines": {}
@@ -6067,11 +6067,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1793588708,
+					"publishTimestamp": 1793596978,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "34a4af91329a137d5a6fdf9f52aef79743024662",
+						"commit": "7003090f79e3e6776a53841d47b398978539fc99",
 						"path": "Classic/packages/plugin-dsh-skill-learn"
 					},
 					"engines": {}
