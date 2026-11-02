@@ -1,0 +1,58 @@
+{
+	"name": "@playform/plugin-dsh-skill-learn",
+	"version": "0.2.1",
+	"private": false,
+	"description": "The skill-learn service: a DeepSeek Harness plugin that carries BOTH HALVES OF THE HERMES LEARNING LOOP as one service - the post-turn review that turns a finished session into skill edits, and the curator that ages the corpus. The review runs from the harness idle edge (`agent/status` with `status === \"idle\"`), claims the true idle phase through `agent.runMaintenance`, reads the transcript from `Agent.session.deriveMessages()`, reads the catalog through `ctx.skills.list` and `ctx.skills.get`, and makes exactly TWO hand-built `ctx.llm.stream` requests with a strict JSON reply: a plan call carrying the bounded digest and the skill index, and a confirm call carrying the exact bodies the plan asked to see, so a patch can only target text the model was handed. The write path is a FENCE: three operation kinds (create, patch, support), no delete and no archive in the reply schema at all, `createIfAbsent` refusing an existing path, `editText` behind a version guard refusing a missing or moved one, and sixteen deterministic judge rules running before any of it. The posture is AUTONOMOUS writes behind that fence (`policy.write: auto`, the Hermes parity decision), the curator's worst outcome is a move into `~/.dsh/skills/.archive/`, every mutation appends one ledger row with its before and after blobs so a revert restores exact bytes, and the plugin ships DISABLED - the IDLE-forever posture. Plan: Documentation/Plans/SKILL-LEARN-PLUGIN.md.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"@playform/lib-dsh-core": "0.2.1",
+		"@playform/plugin-dsh-factory": "0.2.1"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.0.5",
+		"@deepseek-ai/dsh-agent": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-fs": "0.2.1-rc.4",
+		"@deepseek-ai/dsh-tools": "0.2.1-rc.4",
+		"@deepseek-ai/schemastery": "3.18.5",
+		"@playform/build": "0.3.5",
+		"@types/node": "26.6.6",
+		"tsc-alias": "1.9.10",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	}
+}
