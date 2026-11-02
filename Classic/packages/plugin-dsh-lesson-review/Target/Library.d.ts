@@ -63,6 +63,8 @@ export default class LessonService extends Service {
     private Counters;
     /** The store chain: the load and every write, in order. */
     private Chain;
+    /** The last projection failure (Function/Snapshot names the cause). */
+    private Projection;
     /** The harness context (the optional `llm` probe). */
     private Context;
     constructor(Context_: Context, Raw?: unknown);

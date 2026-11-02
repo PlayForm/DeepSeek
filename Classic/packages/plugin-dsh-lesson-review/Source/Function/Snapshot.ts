@@ -11,12 +11,16 @@
 //   * the harness-specific read is confined to one guarded function, so a
 //     projection shape that changes upstream cannot take the review down.
 //
-// THE SURFACE READ IS PROBED, NOT ASSUMED (SCHEME §6): the harness exposes the
-// ordered surface over a session's event log, and this package has not
-// verified the accessor names against a live host. Each candidate is tried in
-// order and every read is guarded; an empty result is NOT an error - the
-// caller reports `unavailable` and the ledger says why, which is strictly
-// better than reviewing a transcript the reviewer invented.
+// THE HISTORY READ IS `Session.deriveMessages()` (SCHEME §6): it is the
+// accessor the agent loop itself calls to build the model-visible history, and
+// it is verified against the installed `dsh-session` declarations, so it is the
+// PRIMARY arm. The four surface shapes this module used to probe are kept
+// behind it, in their original order, so an older host that lacks the accessor
+// degrades to them instead of throwing. Every read is guarded; a host that HAS
+// the accessor and throws is reported through `OnFailure` and the caller turns
+// that into `unavailable` with the cause, which is strictly better than
+// reviewing a transcript the reviewer invented. An empty result is NOT an
+// error: the caller reports `unavailable` and the ledger says why.
 //
 // A message's text is read from its content blocks: `text` blocks join, and
 // every other block type is named rather than stringified (a tool-call block
@@ -85,19 +89,68 @@ const Probe = (Read_: () => unknown): unknown => {
 	}
 };
 
-export default (Agent: unknown): ReviewMessage[] => {
-	const Session = (Agent as { session?: Record<string, unknown> } | undefined)?.session;
-	const Surface = Session?.["surface"] as Record<string, unknown> | undefined;
+/** One guarded member read: a non-object, an absent key, or a throwing getter is `undefined`. */
+const Member = (Value: unknown, Key: string): unknown =>
+	Probe(() => {
+		switch (true) {
+			case Value === null || typeof Value !== "object":
+				return undefined;
+			default:
+				return Reflect.get(Value, Key);
+		}
+	});
+
+/** One clause naming a thrown value, read through the same guard (no cast). */
+const Reason = (Thrown: unknown): string => {
+	const Detail = Member(Thrown, "message");
+	switch (true) {
+		case typeof Detail === "string" && Detail.trim() !== "":
+			return Detail;
+		default:
+			return String(Thrown);
+	}
+};
+
+export default (Agent: unknown, OnFailure?: (Detail: string) => void): ReviewMessage[] => {
+	const Session = Member(Agent, "session");
+	const Surface = Member(Session, "surface");
+	// THE PRIMARY ARM: the derived history the agent loop itself reads. The
+	// member read is guarded, so an older host without the accessor falls
+	// through to the legacy probes; the call is guarded too, and a throw is
+	// REPORTED rather than swallowed, because a broken history read is not an
+	// empty session.
+	const Derive = Member(Session, "deriveMessages");
+	switch (true) {
+		case typeof Derive === "function":
+			try {
+				const Messages = Read(Reflect.apply(Derive, Session, []));
+				switch (true) {
+					case Messages.length > 0:
+						return Messages;
+					default:
+						break;
+				}
+			} catch (Cause) {
+				OnFailure?.(`deriveMessages failed: ${Reason(Cause)}`);
+				return [];
+			}
+			break;
+		default:
+			break;
+	}
 	const Candidates: unknown[] = [
-		Probe(() => Surface?.["messages"]),
-		Probe(() => (Surface?.["projection"] as Record<string, unknown> | undefined)?.["messages"]),
-		Probe(() => (Surface as { snapshot?: () => unknown } | undefined)?.snapshot?.()),
-		Probe(() => Session?.["messages"]),
+		Member(Surface, "messages"),
+		Member(Member(Surface, "projection"), "messages"),
+		Probe(() => {
+			const Snapshot_ = Member(Surface, "snapshot");
+			return typeof Snapshot_ === "function"
+				? Reflect.apply(Snapshot_, Surface, [])
+				: undefined;
+		}),
+		Member(Session, "messages"),
 	];
 	for (const Candidate of Candidates) {
-		const Messages = Read(
-			(Candidate as { messages?: unknown } | undefined)?.messages ?? Candidate,
-		);
+		const Messages = Read(Member(Candidate, "messages") ?? Candidate);
 		switch (true) {
 			case Messages.length > 0:
 				return Messages;

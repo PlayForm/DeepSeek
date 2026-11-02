@@ -18,7 +18,10 @@ One review is one bounded round trip:
 1. **The digest.**
 
     The review digests the conversation snapshot, with a verbatim tail, older turns collapsed, and a
-    hard character cap applied from the front.
+    hard character cap applied from the front. The snapshot is `Session.deriveMessages()`, the
+    derived history the agent loop itself reads, with the older surface probes kept as fallbacks for
+    an older host; a session whose history read throws reports `unavailable` with the cause instead
+    of crashing.
 
 2. **The ask.**
 
@@ -96,6 +99,7 @@ The service stays resolvable while it is disabled, so the nudge hook never hard-
 ## Contract
 
 - [SCHEME.md](./SCHEME.md) covers the surface, the pipeline, the config, the rule ids of the judge,
-  the ledger strings, and the seams in `§6` that must be confirmed against a live harness.
+  the ledger strings, and the seams in `§6`; the snapshot accessor is confirmed against the
+  installed harness, and the remaining seams are still open.
 - The plan is `Documentation/Plans/LESSON-REVIEW-PLUGIN.md`.
 - The corpus standard that this review writes to is `~/.dsh/skills/STANDARD.md`.

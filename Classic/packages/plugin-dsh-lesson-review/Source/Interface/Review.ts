@@ -8,7 +8,7 @@
 //   2. the service is testable without a session (the smokes pass a literal
 //      snapshot), while the ONE place that knows how to project a live
 //      session into messages is the caller's (`Function/Snapshot`, whose
-//      surface read is the integration seam named in SCHEME §6).
+//      history read is the integration seam named in SCHEME §6).
 export interface ReviewMessage {
 	/** The message role (`user`, `assistant`, `tool`, `system`). */
 	role: string;
