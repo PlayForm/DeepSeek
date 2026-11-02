@@ -130,6 +130,9 @@ export default class LessonService extends Service {
 	/** The store chain: the load and every write, in order. */
 	private Chain: Promise<void> = Promise.resolve();
 
+	/** The last projection failure (Function/Snapshot names the cause). */
+	private Projection: string | undefined;
+
 	/** The harness context (the optional `llm` probe). */
 	private Context: Context;
 
@@ -242,7 +245,10 @@ export default class LessonService extends Service {
 
 	/** The live-session projection (the integration seam; never throws). */
 	Snapshot(Agent: unknown): ReviewMessage[] {
-		return Snapshot(Agent);
+		this.Projection = undefined;
+		return Snapshot(Agent, (Detail: string): void => {
+			this.Projection = Detail;
+		});
 	}
 
 	/** One review. Never throws; every degradation is an outcome class. */
@@ -276,10 +282,20 @@ export default class LessonService extends Service {
 			default:
 				break;
 		}
+		// The projection's own failure (a throwing `deriveMessages`) is reported
+		// here rather than lost: the empty-snapshot detail names the cause.
 		const Messages = Array.isArray(Input.Messages) ? Input.Messages : [];
+		const Projection = this.Projection;
+		this.Projection = undefined;
 		switch (true) {
 			case Messages.length === 0:
-				return this.Settle(Input, Result, "unavailable", "empty snapshot", Started);
+				return this.Settle(
+					Input,
+					Result,
+					"unavailable",
+					Projection === undefined ? "empty snapshot" : `empty snapshot (${Projection})`,
+					Started,
+				);
 			default:
 				break;
 		}

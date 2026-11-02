@@ -67,7 +67,7 @@ index: Documentation/INDEX.md
 | hook-dsh-replay-suggester     | Suggests replays from the recalled history record         | yes      | (the replay suggester; SEARCH-SUGGESTER §9)     |
 | hook-dsh-test-suggester       | Suggests the test suites/coverage companions              | yes      | (the test suggester; SEARCH-SUGGESTER §9)       |
 
-### The orchestration plugins (10)
+### The orchestration plugins (11)
 
 | Package                 | What it is                                                                              | ETS twin | Context                                            |
 | ----------------------- | --------------------------------------------------------------------------------------- | -------- | -------------------------------------------------- |
@@ -81,6 +81,7 @@ index: Documentation/INDEX.md
 | plugin-dsh-ingester     | The ingester: validate/apply the approved proposals                                     | no       | (the ingester; PASS-ON-AND-INGESTER)               |
 | plugin-dsh-pattern      | The pattern graph service: match/record/decay the learned patterns                      | no       | (the pattern graph; PATTERN-GRAPH-PLUGIN)          |
 | hook-dsh-batch-decision | The batch decision: the conservative auto-approve policy + the decision tool            | no       | (the batch decision flow; PASS-ON-AND-INGESTER §5) |
+| plugin-dsh-skill-learn  | The Hermes skill-learning loop: the post-turn review + the curator, one fenced package  | no (yet) | (the skill learning loop; SKILL-LEARN-PLUGIN.md)   |
 
 ## 2. The 14 pre-existing plugins (the family before this delivery)
 
@@ -114,21 +115,24 @@ index: Documentation/INDEX.md
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | NEW plugins (built 2026-10-22) | 36 Classic + 30 ETS twins                                                                                                                                                                                                                                                                                                                                                                                                        |
 | Pre-existing plugins           | 14 Classic + 14 ETS twins                                                                                                                                                                                                                                                                                                                                                                                                        |
-| The 2026-10-29 parity batch    | 12 ETS twins (the last twelve; no Classic package is without one now)                                                                                                                                                                                                                                                                                                                                                            |
+| The 2026-10-29 parity batch    | 12 ETS twins (59 of 61 have one; plugin-dsh-boot has none and plugin-dsh-skill-learn's twin is deferred rather than refused, section 13)                                                                                                                                                                                                                                                                                         |
 | Completion program libraries   | 2 Classic (lib-dsh-trace, lib-dsh-pack) + their 2 ETS twins (ets-lib-dsh-trace, ets-lib-dsh-pack)                                                                                                                                                                                                                                                                                                                                |
-| Total Classic packages         | 59 (incl. the factory, the three libraries, the cost family and the learning family)                                                                                                                                                                                                                                                                                                                                             |
+| Total Classic packages         | 61 (incl. the factory, the three libraries, the cost family and the learning family)                                                                                                                                                                                                                                                                                                                                             |
 | Total EffectTS packages        | 60 (incl. the three library twins and the ets-base-dsh base)                                                                                                                                                                                                                                                                                                                                                                     |
 | Release state                  | ALL 0.2.1, UNPUBLISHED (npm bootstrap: 2-placeholder / 1-missing)                                                                                                                                                                                                                                                                                                                                                                |
-| Verified                       | 119 packages; 595 smoke folders / 7,288 checks; the aggregate green                                                                                                                                                                                                                                                                                                                                                              |
+| Verified                       | 121 packages; 595 smoke folders / 7,288 checks; the aggregate green                                                                                                                                                                                                                                                                                                                                                              |
 | Live                           | fully activated in the desktop profile (50 @playform rows: 49 enabled + the factory); the batch-edit inject defect is fixed and the empty-graph gap is CLOSED (the graph trigger + the live index: `map @ 220: 220 files, 20 modules`); the activation sweep verified the suggesters, the foundation and the orchestration live; hook-dsh-comment-filter is wired (link + bundle + full-default row) and awaits the next restart |
 
-Every Classic package now has an ETS twin. The 2026-10-29 parity batch added the twelve that were
-missing: the two client panels, plugin-dsh-pass-on, plugin-dsh-ingester, plugin-dsh-pattern,
-hook-dsh-batch-decision, hook-dsh-comment-filter, hook-dsh-lesson-nudge, lib-dsh-conversation,
-plugin-dsh-cost, plugin-dsh-cost-analysis and plugin-dsh-lesson-review.
+59 of the 61 Classic packages now have an ETS twin; the two exceptions are plugin-dsh-boot, which
+has none, and plugin-dsh-skill-learn, whose twin is deferred rather than refused (the parity work is
+a non-goal of its plan, section 13 of SKILL-LEARN-PLUGIN.md). The 2026-10-29 parity batch added the
+twelve that were missing: the two client panels, plugin-dsh-pass-on, plugin-dsh-ingester,
+plugin-dsh-pattern, hook-dsh-batch-decision, hook-dsh-comment-filter, hook-dsh-lesson-nudge,
+lib-dsh-conversation, plugin-dsh-cost, plugin-dsh-cost-analysis and plugin-dsh-lesson-review.
 
 The two libraries of the completion program now HAVE ETS twins (ets-lib-dsh-trace,
 ets-lib-dsh-pack), so they are no longer in that set.
 
-The option-B Learning-Loop exclusion remains the only Classic-only test surface; no package is
-Classic-only any more.
+The option-B Learning-Loop exclusion remains the only Classic-only test surface; the two
+Classic-only packages are plugin-dsh-boot and plugin-dsh-skill-learn, the latter's ETS twin deferred
+rather than refused.
