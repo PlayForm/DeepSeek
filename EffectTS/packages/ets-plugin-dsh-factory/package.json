@@ -34,7 +34,7 @@
 	"dependencies": {
 		"@playform/ets-base-dsh": "0.2.1",
 		"@playform/ets-lib-dsh-trace": "0.2.1",
-		"effect": "4.0.7"
+		"effect": "4.1.0"
 	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.0.5",
