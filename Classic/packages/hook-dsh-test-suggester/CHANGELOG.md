@@ -20,8 +20,8 @@ All notable changes to this package will be documented in this file.
   and a call with no such root abstains `abstained foreign-workspace  0.00`. The pack's declared
   signature no longer gates a call.
 - The activation line's second segment is `history` (was `intents <n>`), because the boot pack
-  projection is gone (`State.Rules` starts empty and `Variable/Defaults` is retired from the hot
-  path).
+  projection is gone (`State.Rules` starts empty and `Variable/Defaults` was removed from the
+  package).
 - The five smoke folders are rewritten onto the history candidates: the loader suite asserts the new
   activation line, the three listeners and the session/event fold; the pack suite keeps the explicit
   `.dsh/pack.yml` case with a rooted fixture; the pipeline suite seeds two touches for its emit case

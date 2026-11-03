@@ -135,10 +135,12 @@ A pack is an EXPLICIT user/repo override, never a fallback:
 - the user layer `~/.dsh/playform/workspaces/<slug>.yml`.
 
 The listener resolves it with `Resolve(root, { home, builtin: false })`, so a workspace with no pack
-layer resolves to `undefined` and its `doc/` families contribute nothing. When a layer exists, its
-`doc/` families (`Families(pack, "doc")`) join the synthetic History family, which is placed FIRST,
-and drive the same classifier, existence filter, gate and notice - so a repo that ships a
-hand-written pack still gets its own families and companions.
+layer resolves to `undefined` and its `doc/` families contribute nothing. The built-in projection
+(`Function/Pack.ts`) was removed from this package, so the built-in pack no longer exists here and an
+explicit pack is the only pack source. When a layer exists, its `doc/` families
+(`Families(pack, "doc")`) join the synthetic History family, which is placed FIRST, and drive the
+same classifier, existence filter, gate and notice - so a repo that ships a hand-written pack still
+gets its own families and companions.
 
 A workspace with no pack layer and no session history has no candidate source at all and abstains
 `abstained no-history  0.00` (the double space is the empty-family shape).
@@ -262,10 +264,6 @@ Source/
     Apply.ts            the wiring: the State build, the activation, the 3 listeners
                         (the session/event history fold, the post-execute note,
                         the per-turn reset)
-    Pack.ts             RETIRED from the hot path: the doc projection of the built-in
-                        pack (@playform/lib-dsh-pack), kept as the domain's
-                        reference table - the built-in pack is never a candidate
-                        source any more
     Exists.ts           the BASE-AWARE companion existence filter (repo root,
                         package root, package parent; `<...>` targets exempt)
     Filter.ts           the base-aware existence filter over the detections (before score/gate)

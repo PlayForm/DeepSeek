@@ -26,7 +26,7 @@
 // (`abstained no-history`).
 //
 // THE LEARNING BOOTSTRAP IS RETIRED: the literal learner is no longer called
-// (the Learn source files stay for the next step) and the config's
+// (the learner and its source files were removed) and the config's
 // `learning` field is kept only for compatibility.
 //
 // THE WATERFALL DISCIPLINE (the ccr/tool-coach precedent, live-verified):

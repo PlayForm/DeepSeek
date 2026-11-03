@@ -20,7 +20,7 @@ This file documents all notable changes to this package.
   and a call with no such root abstains `abstained foreign-workspace  0.00`. The pack's declared
   signature no longer gates a call.
 - The activation line's second segment is `history` (was `families <n>`), because the boot pack
-  projection is gone (`State.Pack` starts empty and `Function/Pack` is retired from the hot path).
+  projection is gone (`State.Pack` starts empty and `Function/Pack` was removed from the package).
 - The five smoke folders are rewritten onto the history candidates: the wiring asserts the new
   activation line and the three listeners, the pack suite keeps the explicit `.dsh/pack.yml` case
   with a rooted fixture, the workspace gate asserts the `History` note and the `no-history`

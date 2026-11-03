@@ -267,10 +267,6 @@ Source/
     Apply.ts            the wiring: the State build, the activation, the 3 listeners
                         (the session/event history fold, the post-execute note,
                         the per-turn reset)
-    Pack.ts             RETIRED from the hot path: the edit projection of the built-in
-                        pack (@playform/ets-lib-dsh-pack), kept as the domain's
-                        reference table - the built-in pack is never a candidate
-                        source any more
     Exists.ts           the BASE-AWARE companion existence filter (repo root,
                         package root, package parent; `<...>` targets exempt)
     Filter.ts           the base-aware existence filter over the detections (before score/gate)

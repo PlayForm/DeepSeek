@@ -57,8 +57,9 @@ the note text still says "callers", and the own SCHEME of the graph documents th
 
 There is no boot pack: `State.Rules` is empty at apply, and the two intents are built per judged
 call from the graph query's own answer and prepended as data, so the classifier, the gate and the
-note judge them exactly like a compiled pack. The retired literal pack
-(`Source/Variable/Defaults.ts`) is unimported and is never a candidate source.
+note judge them exactly like a compiled pack. The literal pack (`Source/Variable/Defaults.ts`) was
+removed from this package, so the built-in projection no longer exists here and nothing names a
+literal target set.
 
 | Intent         | Priority | Threshold | Signal                     | Targets                                                                              |
 | -------------- | -------- | --------- | -------------------------- | ------------------------------------------------------------------------------------ |

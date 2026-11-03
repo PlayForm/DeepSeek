@@ -12,7 +12,7 @@ prepends ONE labeled `additionalContexts` note on the `tools/post-execute` water
 before the model finishes searching.
 
 The candidates come from the agent's OWN previous tool calls in this workspace. The literal built-in
-pack is retired; a pack survives only as an explicit user/repo override.
+pack was removed from this package; a pack survives only as an explicit user/repo override.
 
 It is deterministic (no LLM in the hot path), gated hard, fail-open, and silent by default (it ships
 `enabled: false`).
@@ -120,7 +120,8 @@ any candidate work. A call outside any workspace abstains `foreign-workspace  0.
 THE EXPLICIT PACK. `Resolve(root, { home: Home(), builtin: false })` reads `<repo>/.dsh/pack.yml`
 (or the user layer); `Families(pack, "search")` then projects its families, filtered by the
 `intents` config. With no pack and no adjacency the listener abstains `no-history  0.00`. The
-literal built-in pack is never a candidate source.
+literal built-in pack was removed from this package (`Function/Pack.ts` is gone), so the built-in
+projection no longer exists here and an explicit repo/user pack is the only pack source.
 
 THE EXISTENCE FILTER. With the root known, a candidate is kept when it exists under ANY of the three
 bases of the call: the repo root, the package root (the nearest ancestor of the resolved call path
@@ -145,8 +146,6 @@ Source/
   Function/
     Apply.ts            the wiring: the State build, the history fold, the seed, the
                         projection cache, the activation, the 5 listeners, the tool
-    Pack.ts             RETIRED: the search projection of the built-in pack, kept for
-                        reference only; nothing imports it (never a candidate source)
     Detect.ts           the deterministic classifier (R1-R13), pure, no LLM
     Score.ts            k = sigmoid(sum - 0.6); the candidate scoring; the gate
                         (the projection's scope/literal, the dismissal filter)

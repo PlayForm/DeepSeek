@@ -145,8 +145,6 @@ Source/
   Function/
     Apply.ts            the wiring: the State build, the history fold, the seed, the
                         projection cache, the activation, the 5 listeners, the tool
-    Pack.ts             RETIRED: the search projection of the built-in pack, kept for
-                        reference only; nothing imports it (never a candidate source)
     Detect.ts           the deterministic classifier (R1-R13), pure, no LLM
     Score.ts            k = sigmoid(sum - 0.6); the candidate scoring; the gate
                         (the projection's scope/literal, the dismissal filter)

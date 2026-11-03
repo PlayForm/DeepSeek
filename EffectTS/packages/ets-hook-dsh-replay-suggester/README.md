@@ -80,9 +80,9 @@ The `recorded` line, the recovery lines (`store recovered <n> entries (replay_hi
 ## The pack (an explicit override only)
 
 The built-in pack (the default of this monorepo) lives in
-[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack), but this package no longer projects it into the
-hot path: `Source/Variable/Defaults.ts` is RETIRED and unimported, so a literal pack is never a
-candidate source.
+[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack), but this package no longer projects it: its
+`Source/Variable/Defaults.ts` projection was removed, so a literal pack is never a candidate source
+and the only pack source is an explicit repo/user pack.
 
 A repository that ships `.dsh/pack.yml` (or a user-layer pack at
 `~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `replay/` family, resolved with

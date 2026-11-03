@@ -35,11 +35,12 @@ The hook is READ-ONLY by design: it never edits, never rewrites arguments, and n
 
 Its only surface is the labeled `additionalContexts` notice.
 
-## The retired learner
+## The learner was removed
 
-The literal pack learner (D4) is **retired**: it is no longer called, writes no proposal, and emits
-no `learned proposal` ledger line. The `learning` config field stays only for compatibility until
-the history-driven proposal lands.
+The literal pack learner (D4) was **removed**: its `Source/Function/Learn/` source and its three
+Learn-* smoke folders are gone, it writes no proposal, and it emits no `learned proposal` ledger
+line. The `learning` config field stays in the schema as a retired compatibility field until the
+history-driven proposal lands.
 
 ## How it works
 
@@ -67,6 +68,9 @@ the history-driven proposal lands.
 
 PoC phase: the package and Source are complete, and the smoke suites, the build pass, and the wiring
 are the end-phase (POC-BRIEF.md §8).
+
+The four smoke folders are `Pack-Driven` (5), `Post-Execute-And-Gate` (16), `Wiring-And-Ledger` (14)
+and `Workspace-Gate` (6), for 41 PASS in total.
 
 Ships `enabled: false` in the bundle patch.
 

@@ -52,19 +52,22 @@ A pack is an EXPLICIT user/repo override, never a fallback:
 - `<repo>/.dsh/pack.yml` (or `.yaml`/`.json`), or
 - the user layer `~/.dsh/playform/workspaces/<slug>.yml`.
 
-The listener resolves it with `Resolve(root, { builtin: false })`, so a workspace with no pack layer
-resolves to `undefined` and abstains `no-history`. When a layer exists, its `convention/` families
-drive the existing deterministic classifier (`Detect`), the existence filter, the gate and the
-notice - so a repo that ships a hand-written pack still gets its own intents and caveats.
+The listener resolves it with `Resolve(root, { home, builtin: false })`, so a workspace with no pack
+layer resolves to `undefined` and abstains `no-history`. The package's own built-in projection
+(`Source/Variable/Defaults.ts`) was removed, so the built-in pack no longer exists here and an
+explicit pack is the only pack source. When a layer exists, its `convention/` families drive the
+existing deterministic classifier (`Detect`), the existence filter, the gate and the notice - so a
+repo that ships a hand-written pack still gets its own intents and caveats.
 
 The pack's own `signature` gates it (`Locate`): a pack whose declared marker is absent under the
 workspace root abstains `foreign-workspace`.
 
-## The retired learner
+## The learner was removed
 
-The literal pack learner (D4) is NO LONGER CALLED. The `learning` config field is kept for
-compatibility only, until the history-driven proposal lands. No proposal file is written, and no
-`learned proposal` ledger line exists any more.
+The literal pack learner (D4) was removed: its `Source/Function/Learn/` source and its three Learn-*
+smoke folders are gone, so no proposal file is written and no `learned proposal` ledger line exists
+any more. The `learning` config field remains in the schema as a retired compatibility field, until
+the history-driven proposal lands.
 
 ## Config (Schemastery, validated at load)
 
@@ -81,7 +84,7 @@ compatibility only, until the history-driven proposal lands. No proposal file is
 | `intents`         | string[] | `[]` (all pack intents enabled)                     | yes      | The enabled intent ids for an explicit pack; unknown ids are ignored.                                                         |
 | `emitOn`          | string[] | `["edit","raw-write","write"]`                      | yes      | The judged tool names (the modification family).                                                                              |
 | `exclude`         | string[] | `["node_modules","Target",".git","dist"]`           | yes      | Substrings; a candidate whose path matches one is never suggested.                                                            |
-| `learning`        | boolean  | `false`                                             | yes      | Retired: the literal pack learner is no longer called; kept for config compatibility until the history-driven proposal lands. |
+| `learning`        | boolean  | `false`                                             | yes      | Retired: the literal pack learner was removed; kept for config compatibility until the history-driven proposal lands.          |
 
 ## Surfaces
 

@@ -124,7 +124,8 @@ Two layers, both deterministic and LLM-free.
   candidates of an EXPLICIT pack (prior 1.0) plus the graph projection (a proven candidate is seeded
   twice).
 
-    The built-in pack is retired, so a repo without an explicit pack seeds nothing.
+    The built-in pack was removed from this package, so a repo without an explicit pack seeds
+    nothing.
 
     It never overwrites an existing row, does not save (the next real write persists it), and is
     switched off by `learn: false` or `seed: false`.

@@ -12,8 +12,8 @@ All notable changes to this package will be documented in this file.
   synthesized per judged call and prepended as data (priority 1 and 2, threshold 0.75, one `graph`
   signal of weight 2.5, targets with prior 1.0 and the entries' own reasons). Their confidence is
   `k = sigmoid(2.5 - 0.6) = 0.87`.
-- The private literal pack is RETIRED from the hot path: `Source/Variable/Defaults.ts` keeps the
-  domain's reference table but nothing imports it, and `State.Rules` starts empty at apply.
+- The private literal pack was removed from the hot path: `Source/Variable/Defaults.ts` was deleted
+  from the package, and `State.Rules` starts empty at apply.
 - The static fallback is gone: an empty component abstains with the new byte-exact line
   `abstained no-companions <Intent> <k>` instead of naming a literal path, while an absent or
   throwing service still logs `graph unavailable` once per apply and abstains

@@ -24,7 +24,7 @@ All notable changes to this package will be documented in this file.
   root abstains `abstained foreign-workspace  0.00`. The pack's declared signature no longer gates a
   call.
 - The activation line's second segment is `history` (was `intents <n>`), because the boot pack
-  projection is gone (`State.Pack` starts empty and `Function/Pack` is retired from the hot path).
+  projection is gone (`State.Pack` starts empty and `Function/Pack` was removed from the package).
 - The offline seed's source is an explicit pack only, so a repo without one seeds nothing and the
   knowledge file keeps `seed: false` (no `seededAt` stamp) until a pack seed runs.
 - The `suggestion_dismiss` tool knows the `History` family (plus an explicit pack's families) and

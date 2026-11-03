@@ -85,19 +85,13 @@ The configured `intents` filter applies to the explicit pack's families only (em
 config `threshold` is a FLOOR (a family may raise it, never lower it). The families are compiled
 once per workspace root and tuple.
 
-The built-in pack of this monorepo is NOT a candidate source. The retired projection
-(`Source/Variable/Defaults.ts`) is kept as the domain's reference table and is no longer imported by
-the hot path.
+The built-in pack of this monorepo is NOT a candidate source: its projection
+(`Source/Variable/Defaults.ts`) was removed from this package, so the built-in projection no longer
+exists here and an explicit repo/user pack is the only pack source, resolved with
+`Resolve(root, { home, builtin: false })`.
 
 A workspace with no pack layer and no session history has no candidate source at all and abstains
 `abstained no-history  0.00` (the double space is the empty-family shape).
-
-The families of the built-in pack, for reference only:
-
-| Intent   | Priority | Threshold | Signals (weight)                                     | Targets                                                                                                      |
-| -------- | -------- | --------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `Suite`  | 1        | 0.6       | test-shape (0.5), path-shape (0.4), loop-shape (0.3) | `Source/Test/<Suite>/Test.ts`, `Source/Test/<Suite>/README.md`, `Maintain/Run/Smokes/Index.mjs`, `README.md` |
-| `Counts` | 2        | 0.5       | count-shape (0.5), doc-shape (0.3)                   | `README.md`, `SCHEME.md`, `Site/Source/Library/Content.ts`                                                   |
 
 Confidence: `k = sigmoid(Σ weights − 0.6)`.
 

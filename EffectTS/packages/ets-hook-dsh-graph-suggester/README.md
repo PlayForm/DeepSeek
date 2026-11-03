@@ -22,8 +22,8 @@ their only candidate source:
   speaks when the config's `intents` list selects it alone, because the Neighborhood intent outranks
   it on the tie.
 
-The private literal pack and its static fallback targets are retired: `Source/Variable/Defaults.ts`
-is unimported, and nothing names a path of its own.
+The private literal pack and its static fallback targets were removed: `Source/Variable/Defaults.ts`
+was deleted from the package, and nothing names a path of its own.
 
 When the service is absent or throws, the intent **abstains** with a `graph unavailable` ledger line
 (once per apply) and an `abstained graph-unavailable` line per call, because the graph intent never

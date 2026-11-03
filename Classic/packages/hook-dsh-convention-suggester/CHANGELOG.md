@@ -17,7 +17,7 @@ This file documents all notable changes to this package.
   and a call with no such root abstains `abstained foreign-workspace  0.00`.
 - The activation line's second segment is `history` (was `intents <n>`), because the boot compile is
   empty.
-- The literal pack learner (D4) is retired: no proposal file and no `learned proposal` ledger line.
+- The literal pack learner (D4) was removed: no proposal file and no `learned proposal` ledger line.
   The `learning` config field is kept for compatibility until the history-driven proposal lands.
 
 ## 0.2.1

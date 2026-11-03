@@ -35,11 +35,11 @@ The hook is READ-ONLY by design: it never edits, never rewrites arguments, and n
 
 Its only surface is the labeled `additionalContexts` notice.
 
-## The retired learner
+## The removed learner
 
-The literal pack learner (D4) is **retired**: it is no longer called, writes no proposal, and emits
-no `learned proposal` ledger line. The `learning` config field stays only for compatibility until
-the history-driven proposal lands.
+The literal pack learner (D4) was **removed**: it is no longer called, writes no proposal, and emits
+no `learned proposal` ledger line. The `learning` config field remains in the schema as a retired
+compatibility field.
 
 ## How it works
 

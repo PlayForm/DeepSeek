@@ -60,11 +60,11 @@ notice - so a repo that ships a hand-written pack still gets its own intents and
 The pack's own `signature` gates it (`Locate`): a pack whose declared marker is absent under the
 workspace root abstains `foreign-workspace`.
 
-## The retired learner
+## The removed learner
 
-The literal pack learner (D4) is NO LONGER CALLED. The `learning` config field is kept for
-compatibility only, until the history-driven proposal lands. No proposal file is written, and no
-`learned proposal` ledger line exists any more.
+The literal pack learner (D4) was removed: no proposal file is written, and no `learned proposal`
+ledger line exists. The `learning` config field remains in the schema as a retired compatibility
+field.
 
 ## Config (Schemastery, validated at load)
 

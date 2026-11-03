@@ -151,11 +151,11 @@ The hook never writes THIS store: the producer writes its own store (`recordPath
 A missing or corrupt store degrades to silence (`history missing (starting empty)` or
 `history corrupt (starting empty)`), and the live history still speaks.
 
-## The explicit pack (the built-in projection is RETIRED)
+## The explicit pack (the built-in projection was removed)
 
 The built-in pack (`@playform/ets-lib-dsh-pack`, the `replay/` domain) is NO LONGER a candidate
-source: `Source/Variable/Defaults.ts` keeps the projection as the domain's reference table, carries
-a RETIRED header, and nothing imports it.
+source: its projection (`Source/Variable/Defaults.ts`) was removed from this package, so the only
+pack source is an explicit repo/user pack.
 
 The listener compiles the rules from two sources per call:
 

@@ -12,10 +12,10 @@ All notable changes to this package will be documented in this file.
   it is placed FIRST in the rules the classifier consumes, so the note reads
   `intent=Repeat confidence=0.87` and the `suggest Repeat 0.87 <n> candidates call <tool>` line is
   unchanged in shape.
-- The literal built-in pack is RETIRED from the hot path: `State.Rules` starts empty at apply, and
-  `Variable/Defaults` (the `Families(Builtin, "replay")` projection) carries a RETIRED header and is
-  unimported. The history lift is gone with it: the history evidence is the synthesized family's
-  signal, so `Function/Detect` takes no lift and `Function/History` exports no `LIFT`.
+- The literal built-in pack was removed from the hot path: `State.Rules` starts empty at apply, and
+  `Variable/Defaults` (the `Families(Builtin, "replay")` projection) was removed from the package.
+  The history lift is gone with it: the history evidence is the synthesized family's signal, so
+  `Function/Detect` takes no lift and `Function/History` exports no `LIFT`.
 - A repo/user pack is now an EXPLICIT override: the listener resolves it with `builtin: false`
   (`Resolve(root, { home: Home(), builtin: false })`), so a hand-written `replay/` family still
   speaks (its id and caveat may outrank the synthesized family) and a literal pack never does. A
