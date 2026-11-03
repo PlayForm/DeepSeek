@@ -10,9 +10,9 @@
   files touched last time and the command that verified. The store is loaded once at apply, and a
   missing or corrupt store degrades to silence, never to a guess.
 - RECALL-FIRST: the existing producer + recall is the candidate source. On every judged call that
-  names a path, the call is appended to the recall history BEFORE the recall runs (the sequence fence
-  keeps the call out of its own recall), and an entry carries `seq`, `path`, `intent` (the `replay`
-  family until the classifier matches), `outcome`, `at` and `probe` (the tool name plus the
+  names a path, the call is appended to the recall history BEFORE the recall runs (the sequence
+  fence keeps the call out of its own recall), and an entry carries `seq`, `path`, `intent` (the
+  `replay` family until the classifier matches), `outcome`, `at` and `probe` (the tool name plus the
   arguments JSON). It stores repo-relative paths only, with no file contents and no user text. Two
   tiers exist: the in-memory ring (per agent + the durable mirror, newest first, bounded by
   `historyDepth`) and the durable tier - the storage-domain KV domain `replay_history` (probed via
@@ -25,8 +25,8 @@
   `<repo>/.dsh/pack.yml` (or the user layer `~/.dsh/playform/workspaces/<slug>.yml`) resolved with
   `Resolve(root, { home, builtin: false })`. A pack family supplies the gate and the caveat, never
   the candidates; a pack family that matches with no record abstains
-  `replay-suggester: abstained no-memory <Intent> <k>`. Without a record and without a pack layer the
-  hook abstains `replay-suggester: abstained no-history  0.00`. The seeded history store
+  `replay-suggester: abstained no-memory <Intent> <k>`. Without a record and without a pack layer
+  the hook abstains `replay-suggester: abstained no-history  0.00`. The seeded history store
   (`historyPath`, read-only fixtures) keeps precedence when it matches, and recalled files are
   history records that stay exempt from the existence filter.
 - The workspace root is pack-independent: the nearest ancestor of the call path carrying `.git` or

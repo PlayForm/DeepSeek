@@ -49,8 +49,8 @@ the `indexWorkspace` of the real graph fills.
     The `tools/post-execute` listener (waterfall, plain registration - after the `{prepend: true}`
     listener of ccr) calls `next()` first.
 
-    Then the hook probes the anchor, queries the graph, builds the synthetic intents, runs
-    detect -> gate -> resolve, and prepends ONE notice.
+    Then the hook probes the anchor, queries the graph, builds the synthetic intents, runs detect ->
+    gate -> resolve, and prepends ONE notice.
 
     Content is never replaced.
 
