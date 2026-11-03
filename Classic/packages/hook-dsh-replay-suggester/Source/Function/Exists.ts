@@ -87,7 +87,9 @@ const Bases = (Root: string, PackageRoot: string | undefined): string[] =>
 
 /** Whether a literal path exists under any base. */
 const Literal = (Companion: string, Paths: string[]): boolean =>
-	Paths.some((Base) => existsSync(join(Base, Companion)));
+	isAbsolute(Companion)
+		? existsSync(Companion)
+		: Paths.some((Base) => existsSync(join(Base, Companion)));
 
 /** Whether an immediate subdirectory of a root contains the rest. */
 const Sibling = (Rest: string, Roots: string[]): boolean =>
