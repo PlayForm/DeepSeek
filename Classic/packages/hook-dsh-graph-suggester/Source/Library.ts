@@ -16,12 +16,15 @@
 // §9.2): when the model reads or greps a source file, the hook asks the
 // workspace v4.1 graph service for the code-block neighborhood (the
 // definition, the callers, the tests, the doc block) and prepends ONE
-// labeled additionalContexts notice naming it; a package-name grep falls
-// back to the static Sibling intent. When the graph service is absent or
-// fails, the Neighborhood intent abstains with a `graph unavailable` ledger
-// line - the graph intent never guesses. Deterministic classifier (no LLM
-// in the hot path), high threshold, a cooldown, a per-turn cap, and an
-// abstention path.
+// labeled additionalContexts notice naming it. The intents are synthesized
+// from that query and from nothing else - the `Neighborhood` component and
+// the `Sibling` same-directory projection of the same component; the
+// private literal pack is retired and there is NO static fallback. When the
+// graph service is absent or fails, the intent abstains with a `graph
+// unavailable` ledger line; when the component is empty, it abstains
+// `no-companions` instead of naming a literal path - the graph intent never
+// guesses. Deterministic classifier (no LLM in the hot path), high
+// threshold, a cooldown, a per-turn cap, and an abstention path.
 //
 // READ-ONLY by design: the hook never edits, never rewrites arguments, and
 // never denies - its only surface is the additionalContexts notice.

@@ -1,7 +1,8 @@
 // Source/Test/Loader-And-Activation/Test.ts - the loader contract (the
 // default object carries name/apply/Config/inject), the cold disabled mount,
-// the enabled activation proof (byte-exact), the apply-time wiring (the two
-// ctx listeners in registration order), the pack filter, the schema
+// the enabled activation proof (byte-exact, the `graph` segment), the
+// apply-time wiring (the two ctx listeners in registration order), the empty
+// boot rule set (the graph intents are synthesized per call), the schema
 // fail-loud, and the fs purity of the mount.
 import assert from "node:assert/strict";
 import {
@@ -59,12 +60,12 @@ export const runTest = async (): Promise<number> => {
 		const Run = Make(Validate({ logFile: Ledger, enabled: true }));
 		Check(Count, "L3: the activation line is byte-exact", () => {
 			assert.ok(
-				Run.Lines.includes(`graph-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 2, threshold 0.75)`),
+				Run.Lines.includes(`graph-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, graph, threshold 0.75)`),
 			);
 		});
 		Check(Count, "L3: the activation line is in the durable ledger exactly once", () => {
 			assert.equal(
-				LedgerWith(`activated (bundle ${process.env.VERSION_PACKAGE}, intents 2, threshold 0.75)`).length,
+				LedgerWith(`activated (bundle ${process.env.VERSION_PACKAGE}, graph, threshold 0.75)`).length,
 				1,
 			);
 		});
@@ -80,7 +81,7 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group L4: the pass-through discipline and the pack filter.
+	// Group L4: the pass-through discipline and the empty boot rule set.
 	{
 		const Run = Make(Validate({ logFile: Ledger, enabled: true }));
 		const Decision = { kind: "allow" };
@@ -93,12 +94,12 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Result, Decision);
 			assert.deepEqual(Run.Lines.filter((L: string) => L.includes("candidates call")), []);
 		});
-		Check(Count, "L4: an intents filter removes the pack intent from the compiled rules", () => {
+		Check(Count, "L4: the boot rule set is empty and the intents filter survives for the query", () => {
 			const Filtered = Make(Validate({ logFile: Ledger, enabled: true, intents: ["Sibling"] }));
-			assert.equal(Filtered.State.Rules.length, 1);
-			assert.equal(Filtered.State.Rules[0].id, "Sibling");
+			assert.equal(Filtered.State.Rules.length, 0);
+			assert.deepEqual(Filtered.State.Intents, ["Sibling"]);
 			assert.ok(
-				Filtered.Lines.includes(`graph-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 1, threshold 0.75)`),
+				Filtered.Lines.includes(`graph-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, graph, threshold 0.75)`),
 			);
 		});
 	}
@@ -125,7 +126,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		Check(Count, "L6: the state probe carries the factory's module identity", () => {
 			assert.equal(Run.State.Module, "graph-suggester");
-			assert.equal(Run.State.Rules.length, 2);
+			assert.equal(Run.State.Rules.length, 0);
 			assert.equal(Run.State.Threshold, 0.75);
 		});
 	}

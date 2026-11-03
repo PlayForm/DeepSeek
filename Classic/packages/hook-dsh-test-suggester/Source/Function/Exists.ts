@@ -2,7 +2,7 @@
 // exist under any of the call's three path bases? The embedded packs are this
 // repo's conventions as DATA, and they mix three bases:
 //
-//   * repo-relative    (`Documentation/...`, `Site/...`, `CHANGELOG.md`);
+//   * repo-relative    (`CHANGELOG.md` and any other repo-relative path);
 //   * package-relative (`SCHEME.md`, `README.md`, `cordis.patch.yml`,
 //     `Source/Test/...`, `Source/Function/Apply.ts`);
 //   * sibling-relative (`*/package.json`, `*/Source/Function/Apply.ts`).
@@ -11,8 +11,9 @@
 // package's own SCHEME.md and patch row), so the filter computes three bases
 // from the RESOLVED call path:
 //
-//   * RepoRoot - the ancestor carrying Documentation/ARCHIVE-STYLE.md (the
-//     workspace gate's root);
+//   * RepoRoot - the workspace root resolved by the pack library's `Root`
+//     (the nearest ancestor carrying `.git` or `package.json`), never a
+//     pack signature;
 //   * PackageRoot - the nearest ancestor of the call path that contains
 //     package.json, at or below RepoRoot;
 //   * PackageParent - PackageRoot's parent directory.

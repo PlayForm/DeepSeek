@@ -1,10 +1,13 @@
-// Pack - the embedded pattern-pack types (SEARCH-SUGGESTER-PLUGIN.md §8.2,
-// the pack-as-data contract; the graph consumer's projection per §9.2).
-// This hook is a suggester-family CONSUMER that carries its own private pack
-// (the two-consumer extraction rule: no shared core service until the family
-// proves two consumers; Variable/Defaults.ts is the data). The types here
-// are the contract both the classifier (Function/Detect) and the note
-// builder consume.
+// Pack - the intent types the classifier and the note builder consume
+// (SEARCH-SUGGESTER-PLUGIN.md §8.2, the pack-as-data contract; the graph
+// consumer's projection per §9.2).
+//
+// THE INTENTS ARE SYNTHESIZED PER CALL: Function/Apply builds the
+// `Neighborhood` and `Sibling` intents from the workspace graph query's own
+// answer and prepends them as data. The private literal pack
+// (Variable/Defaults.ts) is RETIRED from the hot path and nothing imports
+// it; its `Pack` shape below survives only as the retired reference table's
+// type.
 export interface Signal {
 	/** The rule name, for the ledger and the smokes. */
 	rule: string;
@@ -17,11 +20,11 @@ export interface Signal {
 }
 
 export interface Candidate {
-	/** The target path or glob (repo-relative; never absolute). */
+	/** The target path, as the graph answered it (repo-relative or its display path; never invented). */
 	path: string;
 	/** The one phrase the model reads; a candidate without a reason is not emitted. */
 	reason: string;
-	/** The static prior in [0,1]: 1.0 canonical, 0.6 family, 0.3 fallback. */
+	/** The static prior in [0,1]: 1.0 canonical (a graph entry), 0.6 family, 0.3 illustrative. */
 	prior: number;
 }
 
@@ -45,7 +48,7 @@ export default interface Pack {
 	pack: string;
 	/** The pack schema version. */
 	version: number;
-	/** The intents, priority-ordered. */
+	/** The intents, priority-ordered (the retired reference table's shape). */
 	intents: Intent[];
 }
 

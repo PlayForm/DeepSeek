@@ -1,39 +1,41 @@
 # Loader-And-Activation - the loader contract and the activation tests
 
-The suite covers the loader wiring of the graph-suggester: the default object, the cold mount, the
-activation proof, the apply-time wiring, the pass-through discipline, the schema fail-loud, and the
-mount purity.
+The loader wiring of the graph-suggester: the default object, the cold mount, the activation proof,
+the apply-time wiring, the pass-through discipline, the schema fail-loud, and the mount purity.
 
 ## Scenarios
 
-- L1: the loader contract - the default object carries name/apply/Config/inject, and `inject` is
-  `["pluginFactory", "workspaceGraph"]`.
-- L2: the cold disabled mount - apply returns NOTHING, the state probe exists with `On: false`, the
-  `disabled (enabled=false)` line is byte-exact in the logger and the durable ledger, and both
-  listeners are still wired on the plugin ctx.
-- L3: the enabled mount - the activation line
-  `activated (bundle 0.2.1, intents 2, threshold 0.75)` is byte-exact in the logger and the ledger, the
-  listener registration order on the plugin ctx is `loader/volatile-update`, then
-  `tools/post-execute`, then `agent/pre-step`, and the root object is distinct.
-- L4: the pass-through discipline - a non-judged tool returns the downstream decision UNCHANGED, and
-  the `intents` config filter removes the pack intent from the compiled rules, which the activation
-  line also states.
-- L5: the fail-loud validation - a non-numeric `threshold` and a non-boolean `enabled` throw at load
-  through the schema.
-- L6: the mount purity - ZERO fs operations run, and the state probe carries the module identity of the
-  factory and the compiled pack.
+- L1: the loader contract - the default object carries
+  name/apply/Config/inject; `inject` is `["pluginFactory", "workspaceGraph"]`.
+- L2: the cold disabled mount - apply returns NOTHING, the state probe
+  exists with `On: false`, the byte-exact `disabled (enabled=false)` line
+  (logger and durable ledger), and both listeners are still wired on the
+  plugin ctx.
+- L3: the enabled mount - the byte-exact activation line
+  `activated (bundle 0.2.1, graph, threshold 0.75)` (logger and ledger),
+  the listener registration order on the plugin ctx
+  (`loader/volatile-update`, `tools/post-execute`, `agent/pre-step`), and a
+  distinct root object. The second segment is `graph`, not an intent count:
+  there is no boot pack.
+- L4: the pass-through discipline - a non-judged tool returns the
+  downstream decision UNCHANGED; the boot rule set is EMPTY (the graph
+  intents are synthesized per call) and the `intents` config list survives
+  on the state for that synthesis.
+- L5: the fail-loud validation - a non-numeric `threshold` and a
+  non-boolean `enabled` throw at load through the schema.
+- L6: the mount purity - ZERO fs operations; the state probe carries the
+  factory's module identity, the empty boot rule set and the gate.
 
 ## Fixtures
 
-The shared Harness supplies the fake ctx, the real factory, and the real built Target.
+The shared Harness (fake ctx, real factory, real built Target).
 
-No fake clock runs, because the plugin has no clock dependency.
+No fake clock is needed, because the plugin has no clock dependency.
 
 ## Expected ledger strings (byte-exact, `graph-suggester: ` prefix)
 
 `disabled (enabled=false)`,
-`activated (bundle 0.2.1, intents 2, threshold 0.75)`,
-`activated (bundle 0.2.1, intents 1, threshold 0.75)`.
+`activated (bundle 0.2.1, graph, threshold 0.75)`.
 
 ## Expected count
 

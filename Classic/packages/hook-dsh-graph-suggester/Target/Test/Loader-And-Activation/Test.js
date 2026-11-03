@@ -47,12 +47,12 @@ const runTest = async () => {
     const Run = Make(Validate({ logFile: Ledger, enabled: true }));
     Check(Count, "L3: the activation line is byte-exact", () => {
       assert.ok(
-        Run.Lines.includes(`graph-suggester: activated (bundle ${"0.2.1"}, intents 2, threshold 0.75)`)
+        Run.Lines.includes(`graph-suggester: activated (bundle ${"0.2.1"}, graph, threshold 0.75)`)
       );
     });
     Check(Count, "L3: the activation line is in the durable ledger exactly once", () => {
       assert.equal(
-        LedgerWith(`activated (bundle ${"0.2.1"}, intents 2, threshold 0.75)`).length,
+        LedgerWith(`activated (bundle ${"0.2.1"}, graph, threshold 0.75)`).length,
         1
       );
     });
@@ -79,12 +79,12 @@ const runTest = async () => {
       assert.equal(Result, Decision);
       assert.deepEqual(Run.Lines.filter((L) => L.includes("candidates call")), []);
     });
-    Check(Count, "L4: an intents filter removes the pack intent from the compiled rules", () => {
+    Check(Count, "L4: the boot rule set is empty and the intents filter survives for the query", () => {
       const Filtered = Make(Validate({ logFile: Ledger, enabled: true, intents: ["Sibling"] }));
-      assert.equal(Filtered.State.Rules.length, 1);
-      assert.equal(Filtered.State.Rules[0].id, "Sibling");
+      assert.equal(Filtered.State.Rules.length, 0);
+      assert.deepEqual(Filtered.State.Intents, ["Sibling"]);
       assert.ok(
-        Filtered.Lines.includes(`graph-suggester: activated (bundle ${"0.2.1"}, intents 1, threshold 0.75)`)
+        Filtered.Lines.includes(`graph-suggester: activated (bundle ${"0.2.1"}, graph, threshold 0.75)`)
       );
     });
   }
@@ -107,7 +107,7 @@ const runTest = async () => {
     });
     Check(Count, "L6: the state probe carries the factory's module identity", () => {
       assert.equal(Run.State.Module, "graph-suggester");
-      assert.equal(Run.State.Rules.length, 2);
+      assert.equal(Run.State.Rules.length, 0);
       assert.equal(Run.State.Threshold, 0.75);
     });
   }

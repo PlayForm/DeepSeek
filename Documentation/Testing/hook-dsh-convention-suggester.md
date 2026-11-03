@@ -7,20 +7,22 @@
 - Profile row id: `convention-suggester` (bundled in the desktop profile).
 - Exposes no tools or services: it hooks `tools/post-execute` for the modification family (`emitOn`:
   edit, raw-write, write) and prepends ONE labeled `additionalContexts` notice naming the companions
-  that the convention requires. The classifier over the pack's intents is deterministic, no LLM sits
-  in the hot path, and the hook is read-only by design (never edits, never rewrites arguments, never
-  denies).
-- PACK-DRIVEN: the table of intents is the `convention/` projection of the BUILT-IN pack
-  (`@playform/lib-dsh-pack`; `Source/Variable/Defaults.ts` selects it with
-  `Families(Builtin, "convention")`): Layout, Naming, Docs (threshold 0.75) and Ledger (0.85). A
-  workspace pack (`<repo>/.dsh/pack.yml` or the user layer `~/.dsh/playform/workspaces/<slug>.yml`)
-  overrides it per repo, and the Apply compiles the resolved pack's intents once per workspace root,
-  so a repo pack overrides the built-in intents without a restart. The workspace root is the nearest
-  ancestor whose PACK SIGNATURE matches (defaulting to `Documentation/ARCHIVE-STYLE.md`), and a
-  foreign workspace logs `convention-suggester: abstained foreign-workspace  0.00`.
-- The pack learner (D4): with learning ON, the hook derives a repo's pack from the repo itself and
-  writes it as a PROPOSAL (`<home>/.dsh/playform/proposals/<slug>.yml`, never the live pack), once
-  per workspace per process, on the first judged call when the resolved pack has no families.
+  the agent itself touched. The history adjacency is deterministic, no LLM sits in the hot path, and
+  the hook is read-only by design (never edits, never rewrites arguments, never denies).
+- HISTORY-DRIVEN: the candidates come from the `session/event` fold + `Adjacent` over the agent's
+  OWN PREVIOUS TOOL CALLS in this workspace (the synthetic `History` family): the fold keeps one
+  `Touch` per `tool/call` (capped at 512), and the adjacency scores the paths that followed the
+  anchor within a window of 8 calls, so a repeated co-touch outranks a single one and a near
+  neighbour outranks a far one. The built-in pack is retired and unimported.
+- A pack is an EXPLICIT override only: `<repo>/.dsh/pack.yml` (or the user layer
+  `~/.dsh/playform/workspaces/<slug>.yml`) resolved with `Resolve(root, { home, builtin: false })`.
+  When a layer exists, its `convention/` families drive the deterministic classifier (`Detect`), the
+  existence filter, the gate and the notice; the pack's own `signature` gates it (`Locate`), so an
+  absent marker abstains `foreign-workspace`. Without a pack and without history the hook abstains
+  `convention-suggester: abstained no-history  0.00`.
+- The workspace root is pack-independent: the nearest ancestor of the call path carrying `.git` or
+  `package.json`, and a call path with no such ancestor and no session cwd logs
+  `convention-suggester: abstained foreign-workspace  0.00` before any candidate work.
 - Ledger prefix: `convention-suggester:`; logFile
   `~/.dsh/playform/hook-dsh-convention-suggester.log`.
 
@@ -31,8 +33,8 @@
     Inspect the Config with `cordis_inspect_query` host/Config/listConfigs
     `{"name": "@playform/hook-dsh-convention-suggester"}` for one entry with status schema
     (defaults: threshold 0.75, maxCandidates 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn
-    3, intents `[]` (all pack intents enabled), emitOn edit/raw-write/write, exclude
-    node_modules/Target/.git/dist, learning false).
+    3, intents `[]` (all explicit-pack intents enabled), emitOn edit/raw-write/write, exclude
+    node_modules/Target/.git/dist, learning false - retired and kept for compatibility only).
 
 2. **The tool check.**
 
@@ -40,46 +42,45 @@
 
 3. **The ledger line.**
 
-    The `activated (...)` line appears in `~/.dsh/playform/hook-dsh-convention-suggester.log`
-    (module-owned, byte-stable), and a cold mount logs the byte-exact
-    `convention-suggester: disabled (enabled=false)`.
+    The byte-exact `convention-suggester: activated (bundle 0.2.1, history, threshold 0.75)` line
+    appears in `~/.dsh/playform/hook-dsh-convention-suggester.log` (module-owned, byte-stable; the
+    boot compile is EMPTY, because no literal pack is a candidate source), and a cold mount logs the
+    byte-exact `convention-suggester: disabled (enabled=false)`.
 
 ## Test cases
 
-| #   | Trigger                                                                                            | Expected                                                                                                                       | Pass criteria                                                                                                                                                                              |
-| --- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| T1  | listConfigs query above                                                                            | one entry, `status: "schema"`                                                                                                  | the defaults match, including `learning: false`                                                                                                                                            |
-| T3  | `write` a file under a Layout-family path (e.g. a new `Source/Function/X.ts`)                      | ONE labeled notice naming the layout companions (Library wiring, README, SCHEME)                                               | exactly one note; no argument rewrite; `<...>` placeholder targets are illustrative and never existence-checked                                                                            |
-| T3  | A second write of the same intent within cooldownCalls                                             | silence + `convention-suggester: suppressed cooldown <Intent>`                                                                 | the cooldown suppresses the repeat                                                                                                                                                         |
-| T1  | `grep`/`read` calls                                                                                | no notice                                                                                                                      | emitOn is the modification family only                                                                                                                                                     |
-| T5  | A foreign workspace (no pack layer)                                                                | `convention-suggester: abstained foreign-workspace  0.00`                                                                      | the gate runs before the intent is known - the intent segment is empty and the kappa is the no-signal 0.00                                                                                 |
-| T6  | learning true (or a pack with `learning.propose: true`) in a packless workspace, first judged call | ONE note (`learned pack proposal for <slug>`) and `convention-suggester: learned proposal <slug> <n> families <proposal path>` | the proposal is written to `~/.dsh/playform/proposals/<slug>.yml` (never the live workspaces layer), only derived families whose companions actually exist, once per workspace per process |
-| T6  | The same workspace after the proposal (or an installed pack with families)                         | no second proposal; the convention note uses the pack's intents                                                                | a layer that carries families is never proposed over                                                                                                                                       |
+| #   | Trigger                                                                                      | Expected                                                                                          | Pass criteria                                                                                                                          |
+| --- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| T1  | listConfigs query above                                                                      | one entry, `status: "schema"`                                                                     | the defaults match, including `learning: false` (retired)                                                                              |
+| T2  | seed the session history with two companions, then `write` the anchor file                   | ONE labeled notice (`History 0.70`) naming the companions touched right after this file           | exactly one note; no argument rewrite; the note text is byte-exact with the `touched 1 time(s) after this file` reasons                 |
+| T3  | A second write of the same intent within cooldownCalls                                       | silence + `convention-suggester: suppressed cooldown History`                                     | the cooldown suppresses the repeat; with `cooldownCalls: 0` the per-turn cap suppresses instead                                         |
+| T1  | `grep`/`read` calls                                                                          | no notice                                                                                         | emitOn is the modification family only                                                                                                |
+| T4  | A call path with no `.git`/`package.json` root and no session cwd                            | `convention-suggester: abstained foreign-workspace  0.00`                                         | the gate runs before any candidate work, and the foreign call never creates per-agent memory                                          |
+| T5  | A rooted workspace with no history and no pack layer                                         | `convention-suggester: abstained no-history  0.00`                                                | the built-in pack is not a fallback; the honest silence is the new behavior                                                            |
+| T6  | A temporary repo with `.dsh/pack.yml` whose signature marker is present, no history          | ONE note naming ONLY the pack's own targets and caveats                                           | the explicit pack drives the deterministic classifier; a pack whose marker is absent abstains `foreign-workspace`                       |
 
 ## Known live gaps
 
-- Not dogfooded yet, so watch for notes firing on excluded paths (Target, node_modules), the
-  per-turn cap (maxNotesPerTurn 3) not being enforced, and the learner running before the gate's
-  silence, which gives a proposed workspace the learning note instead of the convention note on that
-  call.
+- Not dogfooded yet, so watch for notes firing on excluded paths (Target, node_modules) and the
+  per-turn cap (maxNotesPerTurn 3) not being enforced.
 - The refine-from-edits layer (an accepted suggestion moving a companion's weight) is the later D8
   lane and is not implemented.
 
 ## Fix loop
 
-- Fix files: `Source/Function/` (the classifier, the note builder), `Source/Variable/Defaults.ts`
-  (the pack selection), `Source/Library.ts`.
+- Fix files: `Source/Function/` (the history fold, the adjacency, the note builder),
+  `Source/Library.ts`.
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-convention-suggester run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-convention-suggester/Target/Test/<Folder>/Test.js` per
-  folder under `Source/Test/` (`Post-Execute-And-Gate`, `Wiring-And-Ledger`, `Workspace-Gate`,
-  `Pack-Driven`, `Learn-Note`, `Learn-Proposal`, `Learn-Install`), then restart the app.
+  folder under `Source/Test/` (`Pack-Driven`, `Post-Execute-And-Gate`, `Wiring-And-Ledger`,
+  `Workspace-Gate`), then restart the app.
 
 ## Report stub
 
 - Plugin: `@playform/hook-dsh-convention-suggester`
-- Tests run: T1 config - / T3 note - / T3 cooldown - / T1 silence - / T5 foreign workspace - / T6
-  learning proposal -
+- Tests run: T1 config - / T2 history note - / T3 cooldown - / T1 silence - / T4 foreign workspace -
+  / T5 no-history - / T6 explicit pack -
 - Defects: file:line - cause - fix
 - Rebuild/smoke: -
 - Residuals: -

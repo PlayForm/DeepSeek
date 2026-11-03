@@ -1,9 +1,10 @@
 // Source/Test/Pipeline-And-Graph/Test.ts - the pipeline against the fake
 // graph service: the Neighborhood resolution through the graph (the anchor,
-// the limit, the empty-reason fallback), the static fallback on an empty
-// component, the graph-unavailable/abstain paths (absent, throwing,
-// graph:false), the Sibling static intent, the gate (cooldown, per-turn cap
-// + the pre-step reset), the block-decision preservation, the exclusion, the
+// the limit, the empty-reason fallback), the graph-only candidate source
+// (an empty component abstains `no-companions`, never a literal target set),
+// the graph-unavailable/abstain paths (absent, throwing, graph:false), the
+// Sibling same-directory projection, the gate (cooldown, per-turn cap + the
+// pre-step reset), the block-decision preservation, the exclusion, the
 // volatile flip, the note truncation, and the fs purity across a full
 // scenario.
 import assert from "node:assert/strict";
@@ -22,7 +23,7 @@ import {
 	Volatile,
 } from "../Harness.js";
 
-/** The full-evidence Neighborhood probe: path + symbol + glob shapes. */
+/** The full-evidence Neighborhood probe: the anchor the graph is asked about. */
 const NEIGHBORHOOD_ARGS = {
 	file_path: "src/Source/Core.ts",
 	pattern: "export function",
@@ -43,9 +44,9 @@ export const runTest = async (): Promise<number> => {
 		const Result = await Call(Run, "read", NEIGHBORHOOD_ARGS);
 		Check(Count, "P1: the suggest line is byte-exact (logger and durable ledger)", () => {
 			assert.deepEqual(LinesWith(Run, "candidates call"), [
-				"graph-suggester: suggest Neighborhood 0.65 2 candidates call read",
+				"graph-suggester: suggest Neighborhood 0.87 2 candidates call read",
 			]);
-			assert.equal(LedgerWith("suggest Neighborhood 0.65 2 candidates call read").length, 1);
+			assert.equal(LedgerWith("suggest Neighborhood 0.87 2 candidates call read").length, 1);
 		});
 		await CheckAsync(Count, "P1: the note is one labeled notice prepended to the decision", async () => {
 			assert.ok(Array.isArray(Result.additionalContexts));
@@ -55,11 +56,11 @@ export const runTest = async (): Promise<number> => {
 			assert.deepEqual(Note.source, {
 				kind: "graph-suggester",
 				form: "notice",
-				summary: "Neighborhood 0.65",
+				summary: "Neighborhood 0.87",
 			});
 			assert.equal(
 				Note.content[0].text,
-				"[graph-suggester] intent=Neighborhood confidence=0.65\ntargets (2):\n- src/Source/Core.ts - the definition\n- src/Source/Use.ts - the callers\nnote: the neighborhood is the connected component: definition, callers, tests, doc block.",
+				"[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (2):\n- src/Source/Core.ts - the definition\n- src/Source/Use.ts - the callers\nnote: the neighborhood is the connected component: definition, callers, tests, doc block.",
 			);
 			assert.equal(Object.isFrozen(Note), true);
 			assert.equal(Result.kind, "allow");
@@ -77,18 +78,19 @@ export const runTest = async (): Promise<number> => {
 		await Call(Run, "read", NEIGHBORHOOD_ARGS);
 		Check(Count, "P2: a graph entry without a reason falls back to its role", () => {
 			assert.deepEqual(LinesWith(Run, "candidates call"), [
-				"graph-suggester: suggest Neighborhood 0.65 1 candidates call read",
+				"graph-suggester: suggest Neighborhood 0.87 1 candidates call read",
 			]);
 		});
 		const Empty = Setup({}, (Context: any) => {
 			Context.workspaceGraph = FakeGraph([]);
 		});
 		await Call(Empty, "read", NEIGHBORHOOD_ARGS);
-		Check(Count, "P2: an empty component falls back to the static target set", () => {
-			assert.deepEqual(LinesWith(Empty, "candidates call"), [
-				"graph-suggester: suggest Neighborhood 0.65 3 candidates call read",
+		Check(Count, "P2: an empty component abstains as no-companions, never a literal target set", () => {
+			assert.deepEqual(LinesWith(Empty, "candidates call"), []);
+			assert.deepEqual(LinesWith(Empty, "abstained"), [
+				"graph-suggester: abstained no-companions Neighborhood 0.87",
 			]);
-			assert.equal(LinesWith(Empty, "abstained").length, 0);
+			assert.equal(LinesWith(Empty, "graph unavailable").length, 0);
 		});
 	}
 
@@ -107,7 +109,7 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(LinesWith(Run, "abstained graph-unavailable").length, 2);
 			assert.ok(
 				LinesWith(Run, "abstained graph-unavailable").every((L) =>
-					L.endsWith("abstained graph-unavailable Neighborhood 0.65"),
+					L.endsWith("abstained graph-unavailable Neighborhood 0.87"),
 				),
 			);
 		});
@@ -120,27 +122,33 @@ export const runTest = async (): Promise<number> => {
 				"graph-suggester: graph unavailable Error: boom",
 			]);
 			assert.deepEqual(LinesWith(Boom, "abstained graph-unavailable"), [
-				"graph-suggester: abstained graph-unavailable Neighborhood 0.65",
+				"graph-suggester: abstained graph-unavailable Neighborhood 0.87",
 			]);
 		});
 		const Disabled = Setup({ graph: false });
 		await Call(Disabled, "read", NEIGHBORHOOD_ARGS);
 		Check(Count, "P3: graph:false abstains without logging graph unavailable", () => {
 			assert.deepEqual(LinesWith(Disabled, "abstained graph-unavailable"), [
-				"graph-suggester: abstained graph-unavailable Neighborhood 0.65",
+				"graph-suggester: abstained graph-unavailable Neighborhood 0.87",
 			]);
 			assert.equal(LinesWith(Disabled, "graph unavailable").length, 0);
 		});
 	}
 
-	// Group P4: the Sibling intent (static resolution).
+	// Group P4: the Sibling intent (the same-directory projection).
 	{
-		const Run = Setup();
-		await Call(Run, "grep", { pattern: "hook-dsh-", query: "PLUGIN-FAMILY inventory" });
-		Check(Count, "P4: the Sibling intent resolves statically and suggests", () => {
-			assert.deepEqual(LinesWith(Run, "candidates call"), [
-				"graph-suggester: suggest Sibling 0.55 3 candidates call grep",
+		const Run = Setup({ intents: ["Sibling"] }, (Context: any) => {
+			Context.workspaceGraph = FakeGraph([
+				{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+				{ path: "src/Source/Core.test.ts", role: "test", reason: "the tests" },
 			]);
+		});
+		await Call(Run, "grep", { pattern: "hook-dsh-", file_path: "src/Source/Core.ts" });
+		Check(Count, "P4: the Sibling intent names the same-directory peers, the anchor excluded", () => {
+			assert.deepEqual(LinesWith(Run, "candidates call"), [
+				"graph-suggester: suggest Sibling 0.87 1 candidates call grep",
+			]);
+			assert.equal(LinesWith(Run, "abstained").length, 0);
 		});
 	}
 
@@ -158,15 +166,20 @@ export const runTest = async (): Promise<number> => {
 			]);
 			assert.equal(LinesWith(Run, "candidates call").length, 1);
 		});
-		const Capped = Setup({ cooldownCalls: 0, maxNotesPerTurn: 1 });
-		await Call(Capped, "grep", { pattern: "hook-dsh-", query: "PLUGIN-FAMILY inventory" }, Agent);
-		await Call(Capped, "grep", { pattern: "hook-dsh-", query: "PLUGIN-FAMILY inventory" }, Agent);
+		const Capped = Setup({ cooldownCalls: 0, maxNotesPerTurn: 1 }, (Context: any) => {
+			Context.workspaceGraph = FakeGraph([
+				{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+				{ path: "src/Source/Core.test.ts", role: "test", reason: "the tests" },
+			]);
+		});
+		await Call(Capped, "read", NEIGHBORHOOD_ARGS, Agent);
+		await Call(Capped, "read", NEIGHBORHOOD_ARGS, Agent);
 		Check(Count, "P5: a note beyond the per-turn cap is suppressed", () => {
-			assert.deepEqual(LinesWith(Capped, "suppressed"), ["graph-suggester: suppressed cap Sibling"]);
+			assert.deepEqual(LinesWith(Capped, "suppressed"), ["graph-suggester: suppressed cap Neighborhood"]);
 			assert.equal(LinesWith(Capped, "candidates call").length, 1);
 		});
 		await PreStep(Capped, Agent);
-		await Call(Capped, "grep", { pattern: "hook-dsh-", query: "PLUGIN-FAMILY inventory" }, Agent);
+		await Call(Capped, "read", NEIGHBORHOOD_ARGS, Agent);
 		Check(Count, "P5: a user turn resets the per-turn counter and the note emits again", () => {
 			assert.equal(LinesWith(Capped, "candidates call").length, 2);
 		});
@@ -182,7 +195,7 @@ export const runTest = async (): Promise<number> => {
 		await Call(Run, "read", NEIGHBORHOOD_ARGS);
 		Check(Count, "P6: an excluded candidate set abstains as ambiguous", () => {
 			assert.deepEqual(LinesWith(Run, "abstained"), [
-				"graph-suggester: abstained ambiguous Neighborhood 0.65",
+				"graph-suggester: abstained ambiguous Neighborhood 0.87",
 			]);
 		});
 		const Partial = Setup({}, (Context: any) => {
@@ -194,7 +207,7 @@ export const runTest = async (): Promise<number> => {
 		await Call(Partial, "read", NEIGHBORHOOD_ARGS);
 		Check(Count, "P6: excluded paths are filtered, the rest still suggest", () => {
 			assert.deepEqual(LinesWith(Partial, "candidates call"), [
-				"graph-suggester: suggest Neighborhood 0.65 1 candidates call read",
+				"graph-suggester: suggest Neighborhood 0.87 1 candidates call read",
 			]);
 		});
 		const Block = Setup({}, (Context: any) => {
@@ -238,10 +251,13 @@ export const runTest = async (): Promise<number> => {
 	// Group P8: the fs purity across the full scenario.
 	{
 		const Pure = Setup({}, (Context: any) => {
-			Context.workspaceGraph = FakeGraph([{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" }]);
+			Context.workspaceGraph = FakeGraph([
+				{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+				{ path: "src/Source/Core.test.ts", role: "test", reason: "the tests" },
+			]);
 		});
 		await Call(Pure, "read", NEIGHBORHOOD_ARGS);
-		await Call(Pure, "grep", { pattern: "hook-dsh-", query: "PLUGIN-FAMILY inventory" });
+		await Call(Pure, "grep", { pattern: "hook-dsh-", file_path: "src/Source/Core.ts" });
 		Check(Count, "P8: the full scenario performs ZERO fs operations", () => {
 			assert.equal(Pure.Fs.reads.length, 0);
 			assert.equal(Pure.Fs.writes.length, 0);

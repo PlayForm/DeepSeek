@@ -7,20 +7,25 @@
 - Exposes the `suggestion_dismiss` tool through the loader's tool API (guarded: a bare mount without
   `ctx.tools` still applies), and no other tools or services. It hooks `tools/post-execute` (plain
   registration, after the `{prepend:true}` listener of the ccr and the normalize family) and, when a
-  search-class call (grep, glob, read, search-shaped bash) matches one of the ten intent kinds
-  (Version, Path, Ledger, Config, Dependency, Test, Symbol, Doc, Usage, Owner), prepends ONE labeled
-  `additionalContexts` note naming the likely target set. The confidence gate is 0.75 (the pack's
-  0.85 for the destructive intents), with ≤7 candidates each with a stated reason, cooldown, dedupe,
-  a per-turn cap, and an explicit abstention path.
-- PACK-DRIVEN: the `search/` intents of the resolved workspace pack (`Families(pack, "search")` from
-  `@playform/lib-dsh-pack`) drive Detect, so a repo pack (`.dsh/pack.yml` -> the user layer
-  `~/.dsh/playform/workspaces/<slug>.yml` -> the built-in pack) overrides the built-in intents
-  without a restart. The workspace root is the nearest ancestor whose PACK SIGNATURE matches (the
-  `signature` list of the resolved pack, defaulting to `Documentation/ARCHIVE-STYLE.md`), and a
-  foreign workspace has no pack and logs `search-suggester: abstained foreign-workspace  0.00`. The
-  graph projection (P2) replaces the neutral literal with the `ctx.workspaceGraph` neighborhood, and
-  the P3 seed fills the knowledge at load from the canonical candidates of the built-in pack + the
-  projection.
+  search-class call (grep, glob, read, search-shaped bash) matches a family, prepends ONE labeled
+  `additionalContexts` note naming the likely target set. The confidence gate is 0.75 (an explicit
+  pack's own gate, 0.85 for the destructive intents, may raise it), with ≤7 candidates each with a
+  stated reason, cooldown, dedupe, a per-turn cap, and an explicit abstention path.
+- HISTORY-DRIVEN: the candidates come from the `session/event` fold + `Adjacent` over the agent's
+  OWN PREVIOUS TOOL CALLS in this workspace (the synthetic `History` family): the fold keeps one
+  touch per `tool/call` (capped at 512, fail-open), and the adjacency scores the co-touch paths
+  (confidence `sigmoid(2.5 - 0.6) = 0.87`, 0.89 on the R13 loop bonus). The built-in pack is retired
+  and unimported (`State.Pack` is empty at apply).
+- A pack is an EXPLICIT override only: `<repo>/.dsh/pack.yml` (or the user layer
+  `~/.dsh/playform/workspaces/<slug>.yml`) resolved with `Resolve(root, { home, builtin: false })`;
+  its `search/` families are projected (`Families(pack, "search")`) and filtered by the `intents`
+  config, and the P3 seed fills the knowledge at load ONLY from an explicit pack + the projection. A
+  repo without a pack and without history the hook abstains
+  `search-suggester: abstained no-history  0.00`.
+- The workspace root is pack-independent: the nearest ancestor of the call path carrying `.git` or
+  `package.json`, and a call path with no such ancestor and no session cwd logs
+  `search-suggester: abstained foreign-workspace  0.00` before any candidate work.
+- The graph projection (P2) replaces the neutral literal with the `ctx.workspaceGraph` neighborhood.
 - Ledger prefix: `search-suggester:`; logFile `~/.dsh/playform/hook-dsh-search-suggester.log`.
 
 ## Activation checks
@@ -41,22 +46,24 @@
 
 3. **The ledger line.**
 
-    The activated line appears in `~/.dsh/playform/hook-dsh-search-suggester.log` as
-    `search-suggester: activated (bundle 0.1.0, intents 10, threshold 0.75)`, and a cold mount logs
-    the byte-exact `search-suggester: disabled (enabled=false)`.
+    The activated line appears in `~/.dsh/playform/hook-dsh-search-suggester.log` as the byte-exact
+    `search-suggester: activated (bundle 0.2.1, history, threshold 0.75)` (the second segment is
+    `history`, not an intent count: there is no boot pack), and a cold mount logs the byte-exact
+    `search-suggester: disabled (enabled=false)`.
 
 ## Test cases
 
 | #   | Trigger                                                               | Expected                                                              | Pass criteria                                                                                                              |
 | --- | --------------------------------------------------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | T1  | listConfigs query above                                               | one entry, `status: "schema"`                                         | the SCHEME §2 defaults match                                                                                               |
-| T3  | `grep` a version-like pattern (e.g. `"version"`)                      | ONE Version-intent note naming the manifests/package.json             | ≤7 candidates, each with a stated reason                                                                                   |
-| T3  | A destructive intent call (Ledger, e.g. grep for an activated string) | the note passes the 0.85 gate                                         | the pack's destructive threshold overrides the default                                                                     |
-| T3  | A second same-intent search within cooldownCalls                      | silence + `search-suggester: suppressed cooldown <Intent>`            | cooldown and dedupe hold                                                                                                   |
-| T4  | `suggestion_dismiss` with an intent + a candidate path                | the dismissal is durable; `search-suggester: dismissed <Intent> <path | *>`                                                                                                                        | the next matched note is held with `search-suggester: suppressed dismissed <Intent>` until the entry expires (dismissTtl 86400 s) |
-| T4  | `suggestion_dismiss` for the whole family (no path)                   | the `*` path form of the dismissed line                               | the family dismissal holds every note for that intent until expiry                                                         |
-| T5  | A foreign workspace (no pack layer)                                   | `search-suggester: abstained foreign-workspace  0.00`                 | the gate runs before the intent is known - the intent segment is empty and the kappa is the no-signal 0.00                 |
-| T5  | sectionMode `"sticky"`                                                | the sticky section renders the projected index                        | `search-suggester: section rebuilt (ttl 20)`; a `tools/change` logs `search-suggester: section invalidated (tools/change)` |
+| T2  | Seed the session history with co-touch paths, then `grep` a similar pattern           | ONE `History` note naming the paths touched right after similar calls | ≤7 candidates, each with a stated reason; the note text is byte-exact                                                      |
+| T3  | A destructive explicit-pack intent call (Ledger, e.g. grep for an activated string)   | the note passes the 0.85 gate                                         | the explicit pack's destructive threshold overrides the default                                                            |
+| T3  | A second same-intent search within cooldownCalls                                      | silence + `search-suggester: suppressed cooldown <Family>`            | cooldown and dedupe hold                                                                                                   |
+| T4  | `suggestion_dismiss` with an intent + a candidate path                                | the dismissal is durable; `search-suggester: dismissed <Family> <path | *>`                                                                                                                        | the next matched note is held with `search-suggester: suppressed dismissed <Family>` until the entry expires (dismissTtl 86400 s) |
+| T4  | `suggestion_dismiss` for the whole family (no path)                                   | the `*` path form of the dismissed line                               | the family dismissal holds every note for that family until expiry                                                         |
+| T5  | A judged search in a workspace with no history and no pack layer                      | `search-suggester: abstained no-history  0.00`                        | the built-in pack is not a fallback; the honest silence is the new behavior, and the seed writes nothing without an explicit pack |
+| T6  | A call path with no `.git`/`package.json` root and no session cwd                     | `search-suggester: abstained foreign-workspace  0.00`                 | the gate runs before any candidate work - the family segment is empty and the kappa is the no-signal 0.00                   |
+| T5  | sectionMode `"sticky"`                                                                | the sticky section renders the projected index                        | `search-suggester: section rebuilt (ttl 20)`; a `tools/change` logs `search-suggester: section invalidated (tools/change)` |
 
 ## Known live gaps
 
@@ -72,19 +79,21 @@
 
 ## Fix loop
 
-- Fix files: `Source/Function/` (the pack projection, the detector, the scorer, the seed, the
-  dismiss tool), `Source/Library.ts`, `Source/Variable/Config.ts`.
+- Fix files: `Source/Function/` (the history fold, the adjacency, the detector, the scorer, the
+  projection, the seed, the dismiss tool), `Source/Library.ts`, `Source/Variable/Config.ts`.
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-search-suggester run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-search-suggester/Target/Test/<Folder>/Test.js` per folder
-  under `Source/Test/` (fifteen folders, 126 PASS per the SCHEME, including the `Pack-Driven`,
-  `Dismiss`, `Seed`, `Projection` and `Benchmark` capability folders), then restart the app.
+  under `Source/Test/` (fifteen folders, 126 PASS per the folder READMEs: `Abstention`, `Benchmark`,
+  `Classification`, `Dismiss`, `Index-Refresh`, `Noise`, `Pack-Driven`, `Persistence`,
+  `Post-Execute-And-Learning`, `Projection`, `Seed`, `Sticky-Section-And-Ring`,
+  `Threshold-And-Cooldown`, `Wiring-And-Ledger`, `Workspace-Gate`), then restart the app.
 
 ## Report stub
 
 - Plugin: `@playform/hook-dsh-search-suggester`
-- Tests run: T1 config - / T3 Version note - / T3 destructive gate - / T3 cooldown - / T4 dismiss -
-  / T5 foreign workspace -
+- Tests run: T1 config - / T2 history note - / T3 destructive gate - / T3 cooldown - / T4 dismiss -
+  / T5 no-history - / T6 foreign workspace -
 - Defects: file:line - cause - fix
 - Rebuild/smoke: -
 - Residuals: -

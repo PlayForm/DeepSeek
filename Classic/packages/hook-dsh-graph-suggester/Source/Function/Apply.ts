@@ -1,20 +1,36 @@
 // Apply - the plugin entry function, a THIN MODULE WIRE-UP in the factory
 // family's shape: build the State through `Factory.State`, emit the durable
-// activation proof, compile the pack ONCE, and register the hook's OWN
-// listeners. The graph-suggester's special step: for the Neighborhood
-// intent, the candidate list comes from the WORKSPACE GRAPH SERVICE
-// (ctx.workspaceGraph.neighborhood(anchor)) - the instantiated connected
-// component (definition, callers, tests, doc block), with the pack's static
-// fallback set appended only when the graph answers with an empty
-// component. When the service is absent or throws, the Neighborhood intent
-// ABSTAINS and one `graph unavailable` ledger line is logged per apply
-// (never once per call): the graph intent never guesses.
+// activation proof, and register the hook's OWN listeners. The
+// graph-suggester's special step: the candidate list comes from the WORKSPACE
+// GRAPH SERVICE (`ctx.workspaceGraph.neighborhood(anchor, limit)`) - the
+// instantiated connected component (the definition, the importers, the tests,
+// the doc block) - and from NOWHERE else. The private literal pack and its
+// static fallback targets are RETIRED (`Variable/Defaults.ts` is unimported):
+// when the graph answers with an empty component the hook abstains
+// `abstained no-companions <id> <k>` instead of naming a literal path, and
+// when the service is absent or throws it abstains
+// `abstained graph-unavailable <id> <k>` after ONE `graph unavailable` line
+// per apply. The graph intent never guesses.
 //
-//   1. tools/post-execute (waterfall, plain ctx.on): next() first, detect,
-//      gate, resolve (graph query for Neighborhood), and prepend ONE
-//      additionalContexts notice. Never replaces content.
+//   1. tools/post-execute (waterfall, plain ctx.on): next() first, the anchor
+//      probe, the graph query, the synthetic intents of this call, detect,
+//      gate, resolve, and ONE additionalContexts notice. Never replaces
+//      content.
 //   2. agent/pre-step (waterfall, plain): the per-turn reset of the
 //      per-turn note counter when a user message enters.
+//
+// THE INTENTS ARE SYNTHESIZED FROM THE QUERY, NOT FROM A TABLE: one graph
+// answer yields at most two intents, prepended as data so the existing
+// Detect/gate/note pipeline judges them exactly like a compiled pack:
+//
+//   Neighborhood - priority 1: the whole connected component;
+//   Sibling      - priority 2: its same-directory projection (the anchor
+//                  excluded), the directory peers the same component names.
+//
+// Both carry ONE signal (`rule: "graph"`, the literal `.` pattern, weight
+// 2.5) and the 0.75 floor, so `k = sigmoid(2.5 - 0.6) = 0.87` for either.
+// The Neighborhood intent outranks Sibling on the tie, so Sibling speaks when
+// the config's `intents` list selects it alone.
 //
 // THE WATERFALL DISCIPLINE (the ccr/tool-coach precedent, live-verified):
 //   * `next()` is ALWAYS awaited FIRST, before any decision;
@@ -30,16 +46,26 @@
 import type { Context } from "@deepseek-ai/cordis";
 import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
 import type Config from "@Interface/Config.js";
+import type { GraphEntry } from "@Interface/Graph.js";
 import type WorkspaceGraph from "@Interface/Graph.js";
-import type { Candidate } from "@Interface/Pack.js";
+import type { Candidate, Intent } from "@Interface/Pack.js";
 import type { AgentMemory } from "@Interface/State.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/lib-dsh-core";
-import Defaults from "@Variable/Defaults.js";
 import Version from "@Variable/Version.js";
 
 import Detect, { Compile } from "./Detect.js";
 import BuildNote, { Prepend } from "./Note.js";
+
+/** The graph intents' confidence floor (the retired pack's floor, kept as the gate). */
+const GraphThreshold = 0.75;
+
+/** The Neighborhood intent's caveat line (byte-exact; carried into the per-call intent). */
+const NeighborhoodNote =
+	"the neighborhood is the connected component: definition, callers, tests, doc block.";
+
+/** The Sibling intent's caveat line (byte-exact; carried into the per-call intent). */
+const SiblingNote = "check the family roster before assuming a package exists or is wired.";
 
 /** Fresh per-agent memory. */
 const FreshMemory = (): AgentMemory => ({
@@ -73,23 +99,16 @@ export default (Context: Context, Options: Config): void => {
 	State.Factory = Factory;
 	State.Agents = new WeakMap();
 	State.Unavailable = false;
+	// NO BOOT PACK: the intents are synthesized per call from the graph query,
+	// so the compiled rule set starts empty and the retired literal pack
+	// (Variable/Defaults) is never imported.
+	State.Rules = [];
 
 	// The graph service: read through the injector at USE time (the
 	// tool-jobs precedent for registries read late) - the inject declaration
 	// orders it, and the runtime absence is handled by the abstention path.
 	const Graph = (): WorkspaceGraph | undefined =>
 		(Context as { workspaceGraph?: WorkspaceGraph }).workspaceGraph;
-
-	// The compiled pack, built ONCE at apply (boot path, not hot path).
-	const Enabled = State.Intents.length > 0 ? new Set(State.Intents) : undefined;
-	State.Rules = Compile(
-		Defaults.intents
-			.filter((Intent) => Enabled === undefined || Enabled.has(Intent.id))
-			.map((Intent) => ({
-				...Intent,
-				threshold: Math.max(Intent.threshold, State.Threshold),
-			})),
-	);
 
 	// The per-agent state (WeakMap keyed on the Agent object, the tool-coach
 	// precedent). A call without an agent shares the module's default key.
@@ -105,7 +124,9 @@ export default (Context: Context, Options: Config): void => {
 	};
 
 	// Durable activation proof - "did it activate" must be answerable from the
-	// ledger alone.
+	// ledger alone. The second segment is `graph` (not an intent count):
+	// there is no boot pack, because every candidate comes from the graph
+	// query and the retired literal pack is never a source.
 	if (!State.On) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {
@@ -113,7 +134,7 @@ export default (Context: Context, Options: Config): void => {
 			State,
 			Activate([
 				["", `bundle ${Version}`],
-				["", `intents ${State.Rules.length}`],
+				["", "graph"],
 				["", `threshold ${State.Threshold}`],
 			]),
 		);
@@ -123,13 +144,19 @@ export default (Context: Context, Options: Config): void => {
 	const Judged = (Name: string): boolean =>
 		Array.isArray(State.EmitOn) && State.EmitOn.includes(Name);
 
+	// Whether an intent is enabled: an empty `intents` list enables every
+	// graph intent; a non-empty list enables exactly the ids it names.
+	const Enabled = (Id: string): boolean =>
+		State.Intents.length === 0 || State.Intents.includes(Id);
+
 	// A candidate is dropped when its path sits under one of the exclude
 	// prefixes (Target/, node_modules, ...).
 	const Excluded = (Path: string): boolean =>
 		(State.Exclude ?? []).some((Prefix) => Prefix.length > 0 && Path.includes(Prefix));
 
 	// The note text: the intent header, the capped candidate list with one
-	// reason per candidate, and the pack's caveat line - bound to maxNoteChars.
+	// reason per candidate, and the intent's caveat line - bound to
+	// maxNoteChars.
 	const Text = (
 		Intent: { id: string; note: string },
 		Targets: Candidate[],
@@ -164,26 +191,24 @@ export default (Context: Context, Options: Config): void => {
 		return Found?.[1];
 	};
 
-	// The Neighborhood candidate set: the graph's connected component first,
-	// then the pack's static fallback set only when the component is EMPTY.
-	// A missing/failing service abstains (returns undefined) and logs the
-	// `graph unavailable` line once per apply.
-	const Neighborhood = (Probe: string): Candidate[] | undefined => {
+	// THE GRAPH QUERY: the connected component around the anchor, or
+	// undefined when no answer exists - the config switch is off, the service
+	// is absent, or it throws. `graph unavailable` is logged ONCE per apply
+	// (never once per call); a throw carries its reason, bounded to 80 chars.
+	const Component = (Path: string): GraphEntry[] | undefined => {
 		if (!State.Graph) {
 			return undefined;
 		}
 		const Service = Graph();
-		const Path = Anchor(Probe);
-		if (!Service || Path === undefined) {
+		if (!Service) {
 			if (!State.Unavailable) {
 				State.Unavailable = true;
 				Factory.Append(State, "graph unavailable");
 			}
 			return undefined;
 		}
-		let Entries;
 		try {
-			Entries = Service.neighborhood(Path, State.MaxCandidates);
+			return Service.neighborhood(Path, State.MaxCandidates) ?? [];
 		} catch (Error) {
 			if (!State.Unavailable) {
 				State.Unavailable = true;
@@ -191,19 +216,61 @@ export default (Context: Context, Options: Config): void => {
 			}
 			return undefined;
 		}
-		const FromGraph: Candidate[] = (Entries ?? [])
-			.filter((Entry) => Entry.path.length > 0)
-			.map((Entry) => ({
-				path: Entry.path,
-				reason: Entry.reason.length > 0 ? Entry.reason : Entry.role,
-				prior: 1.0,
-			}));
-		if (FromGraph.length > 0) {
-			return FromGraph;
+	};
+
+	// The graph entries as candidates: prior 1.0 (the graph answered), the
+	// entry's own reason, its role when the reason is empty, and no path-less
+	// entry.
+	const Targets = (Entries: readonly GraphEntry[]): Candidate[] =>
+		Entries.filter((Entry) => Entry.path.length > 0).map((Entry) => ({
+			path: Entry.path,
+			reason: Entry.reason.length > 0 ? Entry.reason : Entry.role,
+			prior: 1.0,
+		}));
+
+	// THE SYNTHETIC INTENTS OF ONE CALL, prepended as data. Neighborhood is
+	// the whole component; Sibling is its SAME-DIRECTORY projection (the
+	// anchor excluded) and is synthesized only when that projection is
+	// non-empty. An intent the config does not enable is not synthesized.
+	// The config `threshold` is a FLOOR: it may raise the 0.75 gate, never
+	// lower it.
+	const Rows = (Path: string, Entries: GraphEntry[] | undefined): Intent[] => {
+		const All = Targets(Entries ?? []);
+		// The entry that IS the anchor (exact path, else path suffix - the
+		// graph's own anchor match), so a repo-relative probe and an absolute
+		// display path still agree on the directory.
+		const Folder = (Value: string): string => {
+			const Cut = Value.lastIndexOf("/");
+			return Cut < 0 ? "" : Value.slice(0, Cut + 1);
+		};
+		const AnchorEntry = All.find(
+			(Target) => Target.path === Path || Target.path.endsWith(`/${Path}`),
+		);
+		const Directory = Folder(AnchorEntry?.path ?? Path);
+		const Same = All.filter(
+			(Target) => Target !== AnchorEntry && Folder(Target.path) === Directory,
+		);
+		const Build = (
+			Id: string,
+			Priority: number,
+			Candidates: Candidate[],
+			Note: string,
+		): Intent => ({
+			id: Id,
+			priority: Priority,
+			threshold: Math.max(GraphThreshold, State.Threshold),
+			signals: [{ rule: "graph", pattern: ".", weight: 2.5 }],
+			targets: Candidates,
+			note: Note,
+		});
+		const Built: Intent[] = [];
+		if (Enabled("Neighborhood")) {
+			Built.push(Build("Neighborhood", 1, All, NeighborhoodNote));
 		}
-		// Empty component: the static fallback set, marked as fallback prior.
-		const Fallback = Defaults.intents.find((Intent) => Intent.id === "Neighborhood");
-		return Fallback === undefined ? undefined : Fallback.targets;
+		if (Enabled("Sibling") && Same.length > 0) {
+			Built.push(Build("Sibling", 2, Same, SiblingNote));
+		}
+		return Built;
 	};
 
 	// Listener 1: tools/post-execute - the note. Plain registration: runs
@@ -224,7 +291,19 @@ export default (Context: Context, Options: Config): void => {
 				const Probe = `${Exec.name} ${JSON.stringify(Exec.arguments ?? {})}`;
 				Memory.Ring.unshift(Probe);
 				Memory.Ring.length = Math.min(Memory.Ring.length, 8);
-				const Match = Detect(State.Rules, Exec.name, Probe);
+				// THE ANCHOR: without one there is nothing to ask the graph, so
+				// the graph intent stays silent (silence is the honest answer -
+				// no line, because no intent applies).
+				const Path = Anchor(Probe);
+				if (Path === undefined) {
+					return Decision;
+				}
+				// THE GRAPH ANSWER (the only candidate source): the connected
+				// component around the anchor. Undefined = no answer.
+				const Entries = Component(Path);
+				// The synthetic intents of this call, prepended as data, so the
+				// classifier, the gate and the note judge them like a pack.
+				const Match = Detect(Compile(Rows(Path, Entries)), Exec.name, Probe);
 				if (Match === null) {
 					return Decision;
 				}
@@ -233,22 +312,29 @@ export default (Context: Context, Options: Config): void => {
 					Factory.Append(State, `suppressed ${Verdict} ${Match.intent.id}`);
 					return Decision;
 				}
-				// Resolve: the Neighborhood intent resolves through the graph;
-				// every other intent resolves statically from the pack.
-				const Resolved =
-					Match.intent.id === "Neighborhood" ? Neighborhood(Probe) : Match.intent.targets;
-				if (Resolved === undefined) {
+				// No answer at all (switch off, service absent, or a throw): the
+				// graph intent ABSTAINS and names the intent and its k.
+				if (Entries === undefined) {
 					Factory.Append(
 						State,
 						`abstained graph-unavailable ${Match.intent.id} ${Match.k.toFixed(2)}`,
 					);
 					return Decision;
 				}
-				const Targets = Resolved.filter((Target) => !Excluded(Target.path)).slice(
-					0,
-					State.MaxCandidates,
-				);
-				if (Targets.length === 0) {
+				// The component is EMPTY: the anchor is not in the graph, so
+				// there is no companion to name. The literal fallback is gone,
+				// and the honest answer is silence.
+				if (Entries.length === 0) {
+					Factory.Append(
+						State,
+						`abstained no-companions ${Match.intent.id} ${Match.k.toFixed(2)}`,
+					);
+					return Decision;
+				}
+				const Candidates = Match.intent.targets
+					.filter((Target) => !Excluded(Target.path))
+					.slice(0, State.MaxCandidates);
+				if (Candidates.length === 0) {
 					Factory.Append(
 						State,
 						`abstained ambiguous ${Match.intent.id} ${Match.k.toFixed(2)}`,
@@ -259,10 +345,10 @@ export default (Context: Context, Options: Config): void => {
 				Memory.TurnNotes += 1;
 				Factory.Append(
 					State,
-					`suggest ${Match.intent.id} ${Match.k.toFixed(2)} ${Targets.length} candidates call ${Exec.name}`,
+					`suggest ${Match.intent.id} ${Match.k.toFixed(2)} ${Candidates.length} candidates call ${Exec.name}`,
 				);
 				const Note = BuildNote(
-					Text(Match.intent, Targets, Match.k),
+					Text(Match.intent, Candidates, Match.k),
 					`${Match.intent.id} ${Match.k.toFixed(2)}`,
 				);
 				if (Decision.kind === "block") {
