@@ -1,10 +1,11 @@
 // Pack - the embedded pattern-pack types (SEARCH-SUGGESTER-PLUGIN.md §8.2,
 // the pack-as-data contract; the replay consumer's projection per §9.3).
-// This hook is a suggester-family CONSUMER that carries its own private pack
-// (the two-consumer extraction rule: no shared core service until the family
-// proves two consumers; Variable/Defaults.ts is the data). The types here
-// are the contract both the classifier (Function/Detect) and the note
-// builder consume.
+// This hook is a suggester-family CONSUMER whose rows arrive per call: the
+// synthesized `Repeat` family from the recall (Function/Apply) and, when one
+// exists, an EXPLICIT repo/user pack (`Resolve(root, { builtin: false })`).
+// The built-in projection (Variable/Defaults) is RETIRED from the hot path.
+// The types here are the contract both the classifier (Function/Detect) and
+// the note builder consume.
 export interface Signal {
 	/** The rule name, for the ledger and the smokes. */
 	rule: string;
@@ -69,9 +70,9 @@ export interface CompiledIntent {
 
 // The match a successful detection returns: the winning intent and its
 // confidence. The empty suggestion (silence) is `null` - the algebra's
-// identity element (plan §2.3). The Lift is the history signal's weight
-// (the plan §3.5 "history" row), added by Function/Apply when a record was
-// recalled for this probe.
+// identity element (plan §2.3). The confidence is the sigmoid of the
+// matching signals' weights alone: the history evidence IS the synthesized
+// family's `history` signal, never a separate lift.
 export interface Match {
 	intent: CompiledIntent;
 	k: number;

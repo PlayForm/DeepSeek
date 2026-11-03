@@ -1,27 +1,27 @@
-Workspace-Gate - the workspace gate and the existence filter
+# Workspace-Gate - the workspace root and the history note
 
-The `tools/post-execute` pipeline runs against the fake ctx and REAL temp workspaces: a foreign workspace abstains before detect, our workspace emits only the companions that exist, an emptied intent abstains `no-companions`, and a foreign call never poisons the next in-workspace call.
+The `tools/post-execute` pipeline against the fake ctx and REAL temp workspaces: a foreign workspace abstains before any candidate work, our workspace emits the `History` note naming the companions the session touched right after the anchor, a workspace with no history abstains `no-history`, a history whose companions are gone abstains `no-companions`, and a foreign call never poisons the next in-workspace call.
 
 ## Scenarios
 
-- G1: the FOREIGN workspace (a temp tree with `Source/Test/Foo/Test.ts` but no `Documentation/ARCHIVE-STYLE.md`), with cwd through the optional `workingDirectory` service, returns the downstream decision UNCHANGED with no note, the byte-exact `abstained foreign-workspace  0.00` line appears in the logger and the durable ledger, no `suggest` line appears, and the foreign call never creates per-agent memory; a service getter that THROWS still abstains with no logger warning.
-- G2: with NO `workingDirectory` service at all, the absolute foreign path still resolves to no root and abstains with the same line.
-- G3: OUR workspace (a temp tree WITH `Documentation/ARCHIVE-STYLE.md`, the Test.ts, `Maintain/Run/Smokes/Index.mjs` and `README.md`) produces a byte-exact Suite note that names the two real companions plus the two illustrative `Source/Test/<Suite>` targets (placeholders are exempt from the existence filter), and the `suggest Suite 0.65 4 candidates` line counts all four.
-- G4: an intent whose whole target set is absent (Counts in the minimal tree) abstains `abstained no-companions Counts 0.55` in both forms with no note.
-- G5: a foreign abstention followed by an in-workspace read still emits the Suite note, because the gate is per call and not sticky.
+- G1: the FOREIGN workspace (a temp tree with `Source/Test/Foo/Test.ts` but no `.git` and no `package.json`), with no session cwd: the downstream decision comes back UNCHANGED with no note, the byte-exact `abstained foreign-workspace  0.00` line appears in the logger and the durable ledger, no `suggest` line appears, and the foreign call never creates per-agent memory; a service getter that THROWS still abstains with no logger warning.
+- G2: the call path's own root wins over the session cwd: the cwd service points at the foreign tree, while the call path sits inside the rooted one, so the upward walk finds the call path's `package.json` before the cwd fallback and the History note still emits.
+- G3: OUR workspace (a temp tree WITH `package.json`, the anchor, `README.md` and `SCHEME.md`), where the seeded history makes `Adjacent` name the two companions: the `History 0.87` note is byte-exact and the `suggest History 0.87 2 candidates` line appears in both forms; another agent in the same tree, with no history, abstains `abstained no-history  0.00`.
+- G4: a history whose whole companion set is gone (`GONE.md`, `ALSO-GONE.md`) abstains `abstained no-companions History 0.87`, both forms, with no note.
+- G5: a foreign abstention followed by an in-workspace read still emits the History note, because the gate is per call and not sticky.
 
 ## Fixtures
 
-The fixtures use the shared Harness (fake ctx, real factory, real built Target) plus `node:fs` temp trees under the OS temp dir.
+The shared Harness (fake ctx, real factory, real built Target) plus `node:fs` temp trees under the OS temp dir.
 
 The optional service is injected as `Run.Context.workingDirectory = { get }`.
 
+The session history is seeded through the state probe (`Run.State.History.set(agent, { Seq, Touches })`), the same shape the `session/event` fold produces.
+
 ## Expected ledger strings (byte-exact, `test-suggester: ` prefix)
 
-`abstained foreign-workspace  0.00` (empty intent, the no-signal shape),
-`abstained no-companions Counts 0.55`,
-`suggest Suite 0.65 4 candidates call read`.
+`abstained foreign-workspace  0.00` (empty family, the no-signal shape), `abstained no-history  0.00`, `abstained no-companions History 0.87`, `suggest History 0.87 2 candidates call read`.
 
 ## Expected count
 
-8 PASS.
+9 PASS.

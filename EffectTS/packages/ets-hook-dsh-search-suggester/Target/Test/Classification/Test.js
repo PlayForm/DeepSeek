@@ -73,7 +73,7 @@ const Packed = Tree("search-suggester-classification-");
 Put(Packed, "package.json", "{}");
 Put(Packed, ".dsh/pack.yml", Pack);
 const PackedRead = Put(Packed, "README.md");
-Put(Packed, "Source/Library.ts");
+const PackedSource = Put(Packed, "Source/Library.ts");
 const Bare = Tree("search-suggester-classification-bare-");
 Put(Bare, "package.json", "{}");
 const BareRead = Put(Bare, "README.md");
@@ -95,7 +95,7 @@ const runTest = async () => {
     );
   });
   await CheckAsync(Count, "C: the Usage family wins its own literal", async () => {
-    await Grep(Run, "c3", "hook-dsh-caller", PackedRead);
+    await Grep(Run, "c3", "hook-dsh-caller", PackedSource);
     assert.ok(
       Run.Lines.includes("hook-dsh-search-suggester: abstained low-confidence Usage 0.80")
     );
@@ -126,7 +126,7 @@ const runTest = async () => {
     assert.equal(After - Before, 2);
   });
   await CheckAsync(Count, "C: a call the pack does not match abstains no-signal", async () => {
-    await Grep(Run, "c8", "unrelated query", PackedRead);
+    await Grep(Run, "c8", "unrelated query", PackedSource);
     assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained no-signal  0.00"));
   });
   await CheckAsync(Count, "C: a workspace with no pack and no history abstains no-history", async () => {

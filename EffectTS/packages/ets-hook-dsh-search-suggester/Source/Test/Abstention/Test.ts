@@ -50,12 +50,12 @@ const Branch = (Name: string): string => {
 	return Full;
 };
 
-/** The temp pack: one search/Version family whose gate is the raised 0.9. */
+/** The temp pack: one search/Version family, its own gate at the 0.5 floor. */
 const Pack = `families:
   "search/Version":
     id: Version
     priority: 1
-    threshold: 0.9
+    threshold: 0.5
     signals:
       - rule: R1 literal-shape
         pattern: '\\bversion\\b'
@@ -115,9 +115,10 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group A2: low-confidence (the pack's own 0.9 gate holds 0.87).
+	// Group A2: low-confidence (the raised config floor holds 0.87).
 	{
-		const Run = Setup();
+		rm();
+		const Run = Make(Validate({ logFile: Ledger, enabled: true, threshold: 0.9 }));
 		Run.Context.workingDirectory = Service(Packed);
 		await CheckAsync(Count, "A2: a weak match abstains low-confidence", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };

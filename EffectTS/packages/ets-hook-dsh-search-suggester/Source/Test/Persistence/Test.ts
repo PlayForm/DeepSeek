@@ -23,20 +23,25 @@ import {
 	Post,
 	rm,
 	SeedHistory,
+	Service,
 	Setup,
 	Validate,
+	Workspace,
 } from "../Harness.js";
 
-/** The judged call's anchor path. */
+/** The judged call's anchor path (relative to the temp workspace). */
 const Anchor = "README.md";
 
 /** The two companions touched right after the anchor. */
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
 
+/** The temp workspace the scenarios judge. */
+const Space = Workspace([Anchor, ...Companions]);
+
 /** One judged read of the anchor. */
 const Read = (Id: string): any => ({
 	name: "read",
-	arguments: { file_path: Anchor },
+	arguments: { file_path: Space.At(Anchor) },
 	agent: AgentOf(Id),
 });
 
@@ -46,7 +51,8 @@ export const runTest = async (): Promise<number> => {
 	// Group P1: the atomic write.
 	{
 		const Run = Setup();
-		SeedHistory(Run, "a", Anchor, Companions);
+		Run.Context.workingDirectory = Service(Space.Root);
+		SeedHistory(Run, "a", Space.At(Anchor), Companions);
 		await CheckAsync(Count, "P1: an emit writes the knowledge file atomically", async () => {
 			await Post(Run, Read("a"));
 			assert.equal(FileSystem.existsSync(Knowledge), true);
@@ -113,7 +119,8 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run.Warns.length, 0);
 		});
 		await CheckAsync(Count, "P3: the cold start still emits from the session history", async () => {
-			SeedHistory(Run, "a", Anchor, Companions);
+			Run.Context.workingDirectory = Service(Space.Root);
+			SeedHistory(Run, "a", Space.At(Anchor), Companions);
 			const Out = await Post(Run, Read("a"));
 			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
 		});

@@ -26,18 +26,22 @@ import {
 	SeedHistory,
 	Setup,
 	Validate,
+	Workspace,
 } from "../Harness.js";
 
-/** The judged call's anchor path. */
+/** The judged call's anchor path (relative to the temp workspace). */
 const Anchor = "README.md";
 
 /** The two companions touched right after the anchor. */
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
 
+/** The temp workspace the scenarios judge. */
+const Space = Workspace([Anchor, ...Companions]);
+
 /** One judged read of the anchor. */
 const Read = (Id: string | undefined): any => ({
 	name: "read",
-	arguments: { file_path: Anchor },
+	arguments: { file_path: Space.At(Anchor) },
 	agent: Id === undefined ? undefined : AgentOf(Id),
 });
 
@@ -51,7 +55,7 @@ export const runTest = async (): Promise<number> => {
 	// Group S1: the second surface is off by default.
 	{
 		const Run = Setup();
-		SeedHistory(Run, "a", Anchor, Companions);
+		SeedHistory(Run, "a", Space.At(Anchor), Companions);
 		await CheckAsync(Count, "S1: with sectionMode off the assemble passes through untouched", async () => {
 			await Post(Run, Read("a"));
 			const Out = await Assemble(Run, AgentOf("a"));
@@ -64,7 +68,7 @@ export const runTest = async (): Promise<number> => {
 	{
 		rm();
 		const Sticky = Make(Validate({ logFile: Ledger, enabled: true, sectionMode: "sticky" }));
-		SeedHistory(Sticky, "a", Anchor, Companions);
+		SeedHistory(Sticky, "a", Space.At(Anchor), Companions);
 		await CheckAsync(Count, "S2: after an emit the sticky section is appended", async () => {
 			await Post(Sticky, Read("a"));
 			const Out = await Assemble(Sticky, AgentOf("a"));
@@ -97,7 +101,7 @@ export const runTest = async (): Promise<number> => {
 			Sticky.CtxListeners["session/event"](undefined, {
 				type: "tool/call",
 				name: "read",
-				arguments: { file_path: Anchor },
+				arguments: { file_path: Space.At(Anchor) },
 			});
 			Sticky.CtxListeners["session/event"](undefined, {
 				type: "tool/call",

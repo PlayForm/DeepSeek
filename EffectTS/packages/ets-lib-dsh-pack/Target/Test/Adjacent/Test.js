@@ -90,13 +90,14 @@ const runTest = async () => {
     assert.equal(Library.Root(Nested), Root);
     assert.equal(Library.Root(`${Root}/package.json`), Root);
   });
-  Check(Count, "A8: Root falls back to the cwd and returns undefined without one", () => {
+  Check(Count, "A8: an empty path starts at the cwd and a markerless walk returns undefined", () => {
+    const Repo = Tree("pack-adjacent-cwd-repo-");
+    Put(Repo, "package.json", "{}");
+    assert.equal(Library.Root("", Repo), Repo);
     const Home = Tree("pack-adjacent-cwd-");
     Put(Home, "Documentation/INDEX.md");
+    assert.equal(Library.Root("", Home), void 0);
     assert.equal(Library.Root(`${Home}/Documentation/INDEX.md`), void 0);
-    assert.equal(Library.Root(`${Home}/Documentation/INDEX.md`, Home), Home);
-    assert.equal(Library.Root("", Home), Home);
-    assert.equal(Library.Root(""), void 0);
   });
   Check(Count, "A9: Resolve with builtin false returns undefined for a layer-less workspace", () => {
     const Home = Tree("pack-adjacent-home-");

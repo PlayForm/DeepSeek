@@ -4,24 +4,24 @@
 	<style>
 		@media (prefers-reduced-motion: no-preference) {
 			.ets-hook-dsh-convention-suggester-scene * { transform-box: view-box; transform-origin: 50% 50%; }
-		.ets-hook-dsh-convention-suggester-counter { animation: ets-hook-dsh-convention-suggester-counter 27s linear -3s infinite; }
+		.ets-hook-dsh-convention-suggester-counter { animation: ets-hook-dsh-convention-suggester-counter 27s linear -1s infinite; }
 		@keyframes ets-hook-dsh-convention-suggester-counter { to { transform: rotate(-360deg); } }
-		.ets-hook-dsh-convention-suggester-breathe { animation: ets-hook-dsh-convention-suggester-breathe 8s ease-in-out -3s infinite; }
+		.ets-hook-dsh-convention-suggester-breathe { animation: ets-hook-dsh-convention-suggester-breathe 7s ease-in-out -1s infinite; }
 		@keyframes ets-hook-dsh-convention-suggester-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
-		.ets-hook-dsh-convention-suggester-fire { animation: ets-hook-dsh-convention-suggester-fire 3.1s ease-in-out infinite; }
+		.ets-hook-dsh-convention-suggester-fire { animation: ets-hook-dsh-convention-suggester-fire 2.7s ease-in-out infinite; }
 		@keyframes ets-hook-dsh-convention-suggester-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
-		.ets-hook-dsh-convention-suggester-twinkle { animation: ets-hook-dsh-convention-suggester-twinkle 6s ease-in-out -3s infinite; }
+		.ets-hook-dsh-convention-suggester-twinkle { animation: ets-hook-dsh-convention-suggester-twinkle 7s ease-in-out -1s infinite; }
 		@keyframes ets-hook-dsh-convention-suggester-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
-		.ets-hook-dsh-convention-suggester-trace { animation: ets-hook-dsh-convention-suggester-trace 6s ease-in-out -3s infinite; }
+		.ets-hook-dsh-convention-suggester-trace { animation: ets-hook-dsh-convention-suggester-trace 4s ease-in-out -1s infinite; }
 		@keyframes ets-hook-dsh-convention-suggester-trace { 0%, 100% { transform: translate(0, 0); opacity: 1; } 50% { transform: translate(1.4px, -1.4px); opacity: 0.35; } }
 		}
 	</style>
 	<defs>
 		<path id="ets-hook-dsh-convention-suggester-0" d="M91,67 L88,73 L83,79 L79,83 L73,88 L67,91 L60,93 L53,94 L47,94 L40,93 L33,91 L27,88 L21,83 L17,79 L12,73 L9,67 L7,60 L6,53 L6,47 L7,40 L9,33 L12,27 L17,21 L21,17 L27,12 L33,9 L40,7 L47,6 L53,6 L60,7 L67,9 L73,12 L79,17 L83,21 L88,27 L91,33 L93,40 L94,47 L94,53 L93,60 Z"/>
-		<path id="ets-hook-dsh-convention-suggester-1" d="M74,24 L74,26 L72,26 L70,26 L69,24 L70,22 L72,22 L74,22 Z"/>
-		<path id="ets-hook-dsh-convention-suggester-2" d="M79,71 L78,73 L76,74 L75,73 L74,71 L75,70 L76,69 L78,70 Z"/>
-		<path id="ets-hook-dsh-convention-suggester-3" d="M25,70 L25,72 L23,73 L21,72 L20,70 L21,69 L23,68 L25,69 Z"/>
-		<path id="ets-hook-dsh-convention-suggester-4" d="M88,59 L58,89 L23,78 L13,39 L40,11 L77,20 Z M54,54 L84,80 L84,81 L54,54 Z M68,60 L67,61 L67,62 L66,63 L65,63 L64,63 L63,62 L62,61 L62,60 L62,59 L63,58 L64,58 L65,57 L66,58 L67,58 L67,59 Z M48,56 L34,93 L33,93 L48,56 Z M44,51 L5,61 L5,59 L44,51 Z M75,57 L75,58 L75,59 L74,59 L73,59 L72,59 L71,59 L71,58 L71,57 L71,56 L71,55 L72,55 L73,54 L74,55 L75,55 L75,56 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="ets-hook-dsh-convention-suggester-1" d="M82,32 L81,34 L79,35 L77,34 L77,32 L77,31 L79,30 L81,31 Z"/>
+		<path id="ets-hook-dsh-convention-suggester-2" d="M43,83 L42,84 L41,85 L39,84 L38,83 L39,81 L41,80 L42,81 Z"/>
+		<path id="ets-hook-dsh-convention-suggester-3" d="M85,58 L85,60 L83,61 L81,60 L81,58 L81,57 L83,56 L85,57 Z"/>
+		<path id="ets-hook-dsh-convention-suggester-4" d="M89,61 L61,87 L22,77 L10,41 L39,13 L77,21 Z M55,52 L92,68 L92,70 L55,53 Z M56,32 L56,33 L56,34 L55,35 L54,35 L53,35 L52,34 L51,33 L51,32 L51,31 L52,30 L53,30 L54,30 L55,30 L56,30 L56,31 Z M48,56 L32,92 L30,92 L47,55 Z M46,54 L16,81 L14,79 L45,54 Z M30,45 L30,46 L29,47 L28,48 L27,48 L25,48 L24,47 L24,46 L23,45 L24,43 L24,42 L25,42 L27,41 L28,42 L29,42 L30,43 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
 		<path id="ets-hook-dsh-convention-suggester-5" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
 		<path id="ets-hook-dsh-convention-suggester-6" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
 		<path id="ets-hook-dsh-convention-suggester-7" d="M92,48 L86,50 L92,52 Z"/>
@@ -31,33 +31,33 @@
 		<path id="ets-hook-dsh-convention-suggester-11" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
 		<path id="ets-hook-dsh-convention-suggester-12" d="M33,66 L33,67 L32,67 L32,66 L32,66 L33,66 Z"/>
 		<path id="ets-hook-dsh-convention-suggester-13" d="M45,27 L45,27 L44,27 L44,27 L44,26 L45,26 Z"/>
-		<path id="ets-hook-dsh-convention-suggester-14" d="M12,29 L10,25 L15,25 Z"/>
-		<path id="ets-hook-dsh-convention-suggester-15" d="M35,13 L36,9 L40,11 Z"/>
-		<path id="ets-hook-dsh-convention-suggester-16" d="M88,31 L91,32 L90,35 Z"/>
-		<path id="ets-hook-dsh-convention-suggester-17" d="M27,15 L27,12 L30,13 Z"/>
-		<path id="ets-hook-dsh-convention-suggester-18" d="M55,91 L53,93 L52,91 Z"/>
+		<path id="ets-hook-dsh-convention-suggester-14" d="M74,86 L74,89 L71,88 Z"/>
+		<path id="ets-hook-dsh-convention-suggester-15" d="M17,77 L14,77 L15,74 Z"/>
+		<path id="ets-hook-dsh-convention-suggester-16" d="M11,39 L10,38 L12,37 Z"/>
+		<path id="ets-hook-dsh-convention-suggester-17" d="M11,61 L7,59 L10,56 Z"/>
+		<path id="ets-hook-dsh-convention-suggester-18" d="M54,9 L57,7 L58,10 Z"/>
 		<path id="ets-hook-dsh-convention-suggester-19" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
 	</defs>
 	<g class="ets-hook-dsh-convention-suggester-scene">
-	<g fill="#DFD0B8" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#E2D3B8" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-convention-suggester-breathe" href="#ets-hook-dsh-convention-suggester-0"/>
 	</g>
-	<g fill="#9499CB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
-		<use class="ets-hook-dsh-convention-suggester-fire" style="animation-delay:-3.00s" href="#ets-hook-dsh-convention-suggester-1"/>
-		<use class="ets-hook-dsh-convention-suggester-fire" style="animation-delay:-3.18s" href="#ets-hook-dsh-convention-suggester-2"/>
-		<use class="ets-hook-dsh-convention-suggester-fire" style="animation-delay:-3.36s" href="#ets-hook-dsh-convention-suggester-3"/>
+	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="ets-hook-dsh-convention-suggester-fire" style="animation-delay:-1.00s" href="#ets-hook-dsh-convention-suggester-1"/>
+		<use class="ets-hook-dsh-convention-suggester-fire" style="animation-delay:-1.18s" href="#ets-hook-dsh-convention-suggester-2"/>
+		<use class="ets-hook-dsh-convention-suggester-fire" style="animation-delay:-1.36s" href="#ets-hook-dsh-convention-suggester-3"/>
 	</g>
-	<g fill="#26305E" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#1B2F5C" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use href="#ets-hook-dsh-convention-suggester-4"/>
 	</g>
-	<g fill="#9499CB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-convention-suggester-breathe" href="#ets-hook-dsh-convention-suggester-5"/>
 		<use class="ets-hook-dsh-convention-suggester-breathe" href="#ets-hook-dsh-convention-suggester-6"/>
 	</g>
-	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
-		<use class="ets-hook-dsh-convention-suggester-fire" style="animation-delay:-3.54s" href="#ets-hook-dsh-convention-suggester-7"/>
+	<g fill="#6F7FC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="ets-hook-dsh-convention-suggester-fire" style="animation-delay:-1.54s" href="#ets-hook-dsh-convention-suggester-7"/>
 	</g>
-	<g fill="#9499CB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-convention-suggester-breathe" href="#ets-hook-dsh-convention-suggester-8"/>
 		<use class="ets-hook-dsh-convention-suggester-breathe" href="#ets-hook-dsh-convention-suggester-9"/>
 		<use class="ets-hook-dsh-convention-suggester-breathe" href="#ets-hook-dsh-convention-suggester-10"/>
@@ -66,22 +66,22 @@
 		<use class="ets-hook-dsh-convention-suggester-counter" href="#ets-hook-dsh-convention-suggester-13"/>
 		<use class="ets-hook-dsh-convention-suggester-twinkle" href="#ets-hook-dsh-convention-suggester-14"/>
 	</g>
-	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#6F7FC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-convention-suggester-twinkle" href="#ets-hook-dsh-convention-suggester-15"/>
 	</g>
-	<g fill="#9499CB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-convention-suggester-twinkle" href="#ets-hook-dsh-convention-suggester-16"/>
 	</g>
-	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#6F7FC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-convention-suggester-twinkle" href="#ets-hook-dsh-convention-suggester-17"/>
 	</g>
-	<g fill="#9499CB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-convention-suggester-twinkle" href="#ets-hook-dsh-convention-suggester-18"/>
 	</g>
-	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#6F7FC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-convention-suggester-breathe" href="#ets-hook-dsh-convention-suggester-19"/>
 	</g>
-	<g class="ets-hook-dsh-convention-suggester-trace" fill="#26305E" fill-opacity="0.18" fill-rule="evenodd" stroke="none">
+	<g class="ets-hook-dsh-convention-suggester-trace" fill="#1B2F5C" fill-opacity="0.18" fill-rule="evenodd" stroke="none">
 		<g transform="translate(1.2,-1.2)">
 			<use href="#ets-hook-dsh-convention-suggester-4"/>
 		</g>

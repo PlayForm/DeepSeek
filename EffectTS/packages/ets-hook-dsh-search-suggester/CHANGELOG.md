@@ -2,6 +2,41 @@
 
 All notable changes to this package will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- The candidates come from the agent's OWN previous tool calls in this workspace: the new
+  `session/event` listener folds every `tool/call` into the session's touch history (a WeakMap keyed
+  on the session object, capped at 512 touches, fail-open), and the post-execute listener derives
+  the candidates with `Adjacent`, so the note names the files that were touched right after the
+  anchor.
+- The co-touch rows are judged as ONE synthetic `History` family (priority 0, threshold 0.75, one
+  signal of weight 2.5, companions with prior 0.6 and the reason
+  `touched <n> time(s) after a similar call`), prepended as data to the compiled family list, so the
+  existing Detect/Filter/Score pipeline, the knowledge store and the follow-through machinery are
+  unchanged.
+- A repo/user pack is now an EXPLICIT override: the listener resolves it with `builtin: false`, so
+  the literal built-in pack is never a candidate source. A workspace with no pack and no history
+  abstains with the new byte-exact line `abstained no-history  0.00`.
+- The workspace root is pack-independent (the nearest ancestor carrying `.git` or `package.json`,
+  resolved with `Root` of `@playform/ets-lib-dsh-pack` instead of `Locate`), and a call with no such
+  root abstains `abstained foreign-workspace  0.00`. The pack's declared signature no longer gates a
+  call.
+- The activation line's second segment is `history` (was `intents <n>`), because the boot pack
+  projection is gone (`State.Pack` starts empty and `Function/Pack` is retired from the hot path).
+- The offline seed's source is an explicit pack only, so a repo without one seeds nothing and the
+  knowledge file keeps `seed: false` (no `seededAt` stamp) until a pack seed runs.
+- The `suggestion_dismiss` tool knows the `History` family (plus an explicit pack's families) and
+  refuses a former built-in family id.
+- `Variable/Kinds` gives the synthetic `History` family the plain-file kinds, so the projection's
+  kind test is meaningful for it.
+- The fifteen smoke folders are rewritten onto the history candidates: every candidate scenario
+  seeds the session history (or writes an explicit `.dsh/pack.yml`) in a temp workspace, and every
+  silence asserts the `no-history` line. The benchmark measures the history path against a seeded
+  history (`calls=50 notes=5 precision=1.00 recall=1.00 first-note=1`), and no suite names a
+  built-in pack literal.
+
 ## 0.2.1
 
 ### Changed

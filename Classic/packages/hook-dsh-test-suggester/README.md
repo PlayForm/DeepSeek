@@ -8,36 +8,36 @@
 The test-suggester hook is a DeepSeek Harness plugin that answers the **test task intent** with a
 target set.
 
-When the model searches for proof (a grep for `PASS`/`FAIL`/`error TS`, a read of a `Test.ts`, or a
-bash error sweep), the hook classifies the call deterministically and names the likely targets
-**before** the model finishes searching.
+When the model searches for proof (a grep for `PASS`/`FAIL`/`error TS`, a read of a `Test.ts`, a
+bash error sweep), the hook names the files the session touched right after this one in this
+workspace, **before** the model finishes searching.
+
+The candidates come from the agent's **own previous tool calls**, never from a literal built-in
+pack. A pack is an explicit user/repo override only (see below).
 
 It is the test consumer of the suggester family
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md), sections 3, 4,
-8): a hook with no public API, an embedded pattern pack (the two-consumer extraction rule, with no
-shared core service until the family proves two consumers), and one delivery surface.
-
-## The surfaces
-
-- The `tools/post-execute` waterfall listener (plain registration, after the ccr's `{prepend: true}`
-  listener) adds one `additionalContexts` notice and never a content replacement.
-- The `agent/pre-step` listener resets the note counter for each turn.
-- There is no tool and no provided service, and the reconciliation is read-only (`node:fs` reads,
-  never a write).
+8): a hook with no public API, one delivery surface, and a deterministic classifier in the hot path.
 
 ## How it works
 
-1. **The post-execute listener.**
+1. **The history fold.**
 
-    The `tools/post-execute` listener (waterfall, plain registration, runs **after** the CCR's
+    The `session/event` listener folds every `tool/call` event into the session's history: one touch
+    per call (the sequence number, the normalized path and the tool), capped at 512, oldest first.
+
+2. **The post-execute listener.**
+
+    The `tools/post-execute` listener (waterfall, plain registration, running **after** the CCR's
     `{ prepend: true }` listener) calls `next()` first.
 
-    Then the deterministic classifier runs over the call probe (tool name + arguments JSON), the
-    gate applies, and **one** `additionalContexts` notice is prepended to the downstream decision.
+    Then the reconciliation runs, the history candidates are folded into one synthetic family, the
+    deterministic classifier and the gate apply, and **one** `additionalContexts` notice is
+    prepended to the downstream decision.
 
     Content is never replaced, so a ccr-compressed result is unaffected.
 
-2. **The pre-step listener.**
+3. **The pre-step listener.**
 
     The `agent/pre-step` listener resets the note counter each turn when a user message enters.
 
@@ -46,70 +46,89 @@ returned unchanged.
 
 A note never fails a tool call.
 
-## The pack
+## The candidates (the session history)
 
-| Intent   | Threshold | Trigger shape                                               | Targets                                                                                            |
-| -------- | --------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `Suite`  | 0.75      | `PASS\|FAIL\|error TS\|assert\|suite`, `Source/Test/` paths | `Source/Test/<Suite>/Test.ts`, the suite README, `Maintain/Run/Smokes/Index.mjs`, the README badge |
-| `Counts` | 0.80      | `N PASS`, expected/PASS count, badge                        | README badge, `SCHEME.md`, the site content counts                                                 |
+On a judged call, `Adjacent(touches, callPath, { limit: maxCandidates })` scores the paths that
+followed the anchor within a window of 8 calls: `1 / (1 + distance)` per occurrence, one count per
+occurrence.
 
-Confidence is `sigmoid(Σ weights − 0.6)` (the plan §3.5).
+A repeatedly co-touched path outranks a single one, and a near neighbour outranks a far one.
 
-Every candidate carries a one-phrase reason, and a candidate without a reason is never emitted.
+Those rows become ONE synthetic `History` family (priority 0, threshold 0.75, one signal of weight
+2.5, companions with prior 0.6 and the reason `touched <count> time(s) after this file`), so the
+existing deterministic classifier, existence filter, gate and note judge it exactly like a pack row.
 
-The intents are **pack-driven**: the built-in pack (this monorepo's default) lives in
-[`@playform/lib-dsh-pack`](../lib-dsh-pack) and is projected here as the `test/` domain.
+Its confidence is `k = sigmoid(2.5 - 0.6) = 0.87`.
 
-A repository that ships `.dsh/pack.yml` (or a user-layer pack at
-`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `test/` intents, and a repository without a
-pack stays silent.
+## The pack override
+
+The families are **pack-driven only when a pack is explicit**: `<repo>/.dsh/pack.yml` (or
+`.yaml`/`.json`) or the user-layer pack at `~/.dsh/playform/workspaces/<slug>.yml`.
+
+The listener resolves it with `Resolve(root, { home, builtin: false })`, so the literal built-in
+pack is never a candidate source.
+
+A repository that ships a pack gets its OWN `test/` families, placed after the synthetic `History`
+family, and they drive the same classifier and note.
+
+A repository that ships no pack and has no session history abstains with the byte-exact line
+`abstained no-history  0.00`.
 
 ## The reconciliation
 
-On a judged call in a package, the package's **smoke claims** are reconciled with the tree it
-actually has (the completion spec's wave 2c re-spec,
-[03-SUGGESTERS.md](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md)): each
-`Source/Test/<Folder>/README.md`'s `## Expected count`, the folders that exist, each folder's
-`Test.ts`, the aggregate runner's roster (`Target/Test/<Folder>/Test.js`), and, when the workspace
-graph service is present, its `Test` nodes for the package.
+On a judged call in a package, the **smoke claims** of the package are reconciled with the tree it
+actually has (the wave 2c re-spec of the completion spec,
+[03-SUGGESTERS.md](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md)).
+
+The evidence is each `## Expected count` of `Source/Test/<Folder>/README.md`, the folders that
+exist, each `Test.ts` of a folder, the roster of the aggregate runner
+(`Target/Test/<Folder>/Test.js`), and, when the workspace graph service is present, its `Test` nodes
+for the package.
 
 A drift (a folder without a README count, a README count whose `Test.ts` is gone, a suite the runner
-never runs, or a graph node whose file is gone) emits ONE note naming the drifted files and the
+never runs, a graph node whose file is gone) emits ONE note naming the drifted files and the
 expected/actual counts.
 
 It is **read-only**: `node:fs` reads, never a write.
 
 A consistent tree logs one clear line per package root and stays silent, and the note is gated
-exactly like the intent notes (workspace pack, `enabled`, cooldown, dedupe, per-turn cap).
+exactly like the candidate notes (`enabled`, cooldown, dedupe, per-turn cap).
+
+The reconciliation runs before the candidates: a drift takes the call, and the candidate note yields
+to the next call.
 
 ## The noise controls
 
-- Confidence gate: `k ≥ max(threshold, intent threshold)` (default 0.75).
-- Cooldown: no second note for the same intent within `cooldownCalls` (6) judged calls, per agent.
-- Per-turn cap: at most `maxNotesPerTurn` (3) notes between user turns.
-- Exclusion: candidates under `Target/`, `node_modules`, `.git`, `dist` are never suggested (the
-  build mirror is generated, never edited).
-- Fail-open and abstention: an empty surviving candidate set logs
-  `<name>: abstained ambiguous <Intent> <k>` and emits nothing.
-- Workspace gate: a call that belongs to another workspace (no pack whose signature matches, and the
-  built-in default is `Documentation/ARCHIVE-STYLE.md`) logs `abstained foreign-workspace` and emits
-  nothing, while a target absent from the workspace is dropped before the gate
-  (`abstained no-companions` when the intent's whole target set is gone).
+- **Confidence gate.** `k ≥ max(threshold, family threshold)` for an explicit pack (default 0.75);
+  the synthetic `History` family carries its own 0.75.
+- **Cooldown.** No second note for the same family within `cooldownCalls` (6) judged calls, per
+  agent.
+- **Per-turn cap.** At most `maxNotesPerTurn` (3) notes between user turns.
+- **Exclusion.** Candidates under `Target/`, `node_modules`, `.git`, `dist` are never suggested,
+  because the build mirror is generated and never edited.
+- **Fail-open and abstention.** An empty surviving candidate set logs
+  `<name>: abstained ambiguous <Family> <k>` and emits nothing.
+- **Workspace gate.** The root is PACK-INDEPENDENT: the nearest ancestor of the call path carrying
+  `.git` or `package.json`, from the call path plus the session cwd. A call that belongs to another
+  workspace logs `abstained foreign-workspace  0.00` and emits nothing, and a target absent from the
+  workspace is dropped before the gate (`abstained no-companions` when the whole target set of the
+  family is gone).
 
-Every activation, refusal, and suggestion is a ledger line in the hook's own ledger (one log per
-module), asserted byte-exactly by the end-phase smokes.
+Every activation, refusal, and suggestion is a ledger line in the own ledger of the hook (one log
+per module), asserted byte-exactly by the end-phase smokes.
 
 ## The ledger
 
 ```
-test-suggester: activated (bundle 0.2.1, intents 2, threshold 0.75)
+test-suggester: activated (bundle 0.2.1, history, threshold 0.75)
 test-suggester: disabled (enabled=false)
-test-suggester: suggest Suite 0.84 4 candidates call grep
-test-suggester: abstained ambiguous Suite 0.62
-test-suggester: abstained no-companions Suite 0.62
-test-suggester: abstained foreign-workspace Suite 0.62
-test-suggester: suppressed cooldown Suite
-test-suggester: suppressed cap Suite
+test-suggester: suggest History 0.87 2 candidates call read
+test-suggester: abstained ambiguous History 0.87
+test-suggester: abstained no-companions History 0.87
+test-suggester: abstained foreign-workspace  0.00
+test-suggester: abstained no-history  0.00
+test-suggester: suppressed cooldown History
+test-suggester: suppressed cap History
 test-suggester: reconciliation clear <package> (<e> expected, <a> actual)
 test-suggester: reconciliation drift <n> drifts <package> (<e> expected, <a> actual) call <tool>
 test-suggester: reconciliation skipped deduped <package>
@@ -124,26 +143,19 @@ See [SCHEME.md](./SCHEME.md) for the full table.
 Every knob is volatile (hot-editable without remounting).
 
 The hook ships **disabled** (`enabled: false` in `cordis.patch.yml`), because the acceptance rate
-must be measured (the plan §10.3 kill criterion) before it is trusted.
-
-## The build and the tests
-
-The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build (ESM `Target/`, Test
-tree excluded), the Test build, the harness selfcheck, and the Test type-check.
-
-The smoke folders are `Loader-And-Activation`, `Pack-Driven`, `Pipeline-And-Gates`,
-`Reconciliation`, and `Workspace-Gate`.
+must be measured (the §10.3 kill criterion of the plan) before it is trusted.
 
 ## The plan
 
+The package, the Source, the smoke suites (five folders), and the build pass are complete, the
+reconciliation landed (the wave 2c re-spec of the completion spec), and the candidates now come from
+the session history with the pack as an explicit override only.
+
+The ETS twin and the live activation (the profile row flip and the restart) are the remaining
+end-phase steps (Documentation/Plans/POC-BRIEF.md section 8).
+
 - [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - sections 3, 4,
   8, the test consumer.
-- [Completion-Spec/03-SUGGESTERS](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md) - the
-  wave 2c re-spec (the reconciliation).
-- The package, the Source, the smoke suites (five folders), and the build pass are complete, and the
-  reconciliation landed.
-- The ETS twin and the live activation (the profile row flip and the restart) are the remaining
-  end-phase steps (Documentation/Plans/POC-BRIEF.md section 8).
 
 ## License
 

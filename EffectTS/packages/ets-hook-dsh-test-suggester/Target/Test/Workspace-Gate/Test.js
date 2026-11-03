@@ -26,11 +26,6 @@ const RootedTest = Put(Rooted, "Source/Library.ts");
 Put(Rooted, "README.md");
 Put(Rooted, "SCHEME.md");
 const Service = (Cwd) => ({ get: () => Cwd });
-const Read = (Path_, Agent) => ({
-  name: "read",
-  arguments: { file_path: Path_ },
-  agent: Agent
-});
 const Seed = (Run, Agent, Followers) => {
   Run.State.History.set(Agent, {
     Seq: Followers.length + 1,
@@ -83,13 +78,11 @@ const runTest = async () => {
   {
     const Agent = { agent: { id: "gate-b" } };
     const Run = Setup();
-    delete Run.Context.workingDirectory;
-    await CheckAsync(Count, "G2: without the service the absolute foreign path still abstains", async () => {
-      const Decision = { kind: "allow" };
-      const Out = await Call(Run, "read", { file_path: ForeignTest }, Agent, Decision);
-      assert.equal(Out, Decision);
-      assert.ok(Run.Lines.includes("test-suggester: abstained foreign-workspace  0.00"));
-      assert.deepEqual(Run.Warns, []);
+    Run.Context.workingDirectory = Service(Foreign);
+    Seed(Run, Agent, ["README.md", "SCHEME.md"]);
+    await CheckAsync(Count, "G2: the call path's own root wins over the session cwd", async () => {
+      const Out = await Call(Run, "read", { file_path: RootedTest }, Agent);
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
     });
   }
   {
@@ -139,10 +132,12 @@ const runTest = async () => {
   {
     const Agent = { agent: { id: "gate-f" } };
     const Run = Setup();
-    Run.Context.workingDirectory = Service(Foreign);
+    delete Run.Context.workingDirectory;
     Seed(Run, Agent, ["README.md", "SCHEME.md"]);
     await CheckAsync(Count, "G5: a foreign call never poisons the next in-workspace call", async () => {
-      await Call(Run, "read", { file_path: ForeignTest }, Agent);
+      const Foreign_ = await Call(Run, "read", { file_path: ForeignTest }, Agent);
+      assert.equal(Foreign_.kind, "allow");
+      assert.equal(Run.Lines.includes("test-suggester: abstained foreign-workspace  0.00"), true);
       Run.Context.workingDirectory = Service(Rooted);
       const Out = await Call(Run, "read", { file_path: RootedTest }, Agent);
       assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");

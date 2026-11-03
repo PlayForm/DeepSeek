@@ -9,26 +9,30 @@ import {
   Post,
   rm,
   SeedHistory,
+  Service,
   Setup,
-  Validate
+  Validate,
+  Workspace
 } from "../Harness.js";
 const Anchor = "README.md";
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
+const Space = Workspace([Anchor, ...Companions]);
 const Read = (Id) => ({
   name: "read",
-  arguments: { file_path: Anchor },
+  arguments: { file_path: Space.At(Anchor) },
   agent: AgentOf(Id)
 });
 const Elsewhere = (Id, N) => ({
   name: "grep",
-  arguments: { pattern: `unrelated query ${N}`, path: "package.json" },
+  arguments: { pattern: `unrelated query ${N}`, path: Space.At("package.json") },
   agent: AgentOf(Id)
 });
 const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Setup();
-    SeedHistory(Run, "b", Anchor, Companions);
+    Run.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Run, "b", Space.At(Anchor), Companions);
     await CheckAsync(Count, "T1: the default gate crosses and emits", async () => {
       const Out = await Post(Run, Read("b"));
       assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
@@ -36,7 +40,8 @@ const runTest = async () => {
     });
     rm();
     const Raised = Make(Validate({ logFile: Ledger, enabled: true, threshold: 0.9 }));
-    SeedHistory(Raised, "b", Anchor, Companions);
+    Raised.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Raised, "b", Space.At(Anchor), Companions);
     await CheckAsync(Count, "T1: a raised config threshold abstains low-confidence", async () => {
       const Out = await Post(Raised, Read("b"), { kind: "allow", additionalContexts: [] });
       assert.deepEqual(Out.additionalContexts, []);
@@ -48,7 +53,8 @@ const runTest = async () => {
   {
     rm();
     const Run = Setup();
-    SeedHistory(Run, "a", Anchor, Companions);
+    Run.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "T2: a second note within the cooldown is suppressed", async () => {
       await Post(Run, Read("a"));
       const Out = await Post(Run, Read("a"), { kind: "allow", additionalContexts: [] });
@@ -74,7 +80,8 @@ const runTest = async () => {
   {
     rm();
     const Run = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0 }));
-    SeedHistory(Run, "a", Anchor, Companions);
+    Run.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "T3: a zero cooldown window reaches the dedupe suppress", async () => {
       await Post(Run, Read("a"));
       const Out = await Post(Run, Read("a"), { kind: "allow", additionalContexts: [] });
@@ -85,12 +92,13 @@ const runTest = async () => {
   {
     rm();
     const Run = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0, maxNotesPerTurn: 1 }));
+    Run.Context.workingDirectory = Service(Space.Root);
     Run.State.History.set(AgentOf("a"), {
       Seq: 4,
       Touches: [
-        { seq: 0, path: Anchor, tool: "read" },
+        { seq: 0, path: Space.At(Anchor), tool: "read" },
         { seq: 1, path: "CHANGELOG.md", tool: "read" },
-        { seq: 2, path: "package.json", tool: "read" },
+        { seq: 2, path: Space.At("package.json"), tool: "read" },
         { seq: 3, path: "SCHEME.md", tool: "read" }
       ]
     });
@@ -98,7 +106,7 @@ const runTest = async () => {
       await Post(Run, Read("a"));
       const Out = await Post(
         Run,
-        { name: "read", arguments: { file_path: "package.json" }, agent: AgentOf("a") },
+        { name: "read", arguments: { file_path: Space.At("package.json") }, agent: AgentOf("a") },
         { kind: "allow", additionalContexts: [] }
       );
       assert.deepEqual(Out.additionalContexts, []);
@@ -108,7 +116,8 @@ const runTest = async () => {
   {
     rm();
     const Run = Make(Validate({ logFile: Ledger, enabled: true, threshold: 0.88 }));
-    SeedHistory(Run, "a", Anchor, Companions);
+    Run.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "T5: the R13 loop bonus lifts the third call over the floor", async () => {
       for (let Index = 0; Index < 2; Index += 1) {
         await Post(Run, Read("a"), { kind: "allow", additionalContexts: [] });

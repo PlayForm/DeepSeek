@@ -15,7 +15,7 @@ export default interface Config {
     cooldownCalls: number;
     /** Maximum notes per turn, per agent (volatile). */
     maxNotesPerTurn: number;
-    /** The enabled intent kinds, in priority order (volatile). */
+    /** The enabled intent kinds of an explicit pack, in priority order (volatile). */
     intents: string[];
     /** The tools whose calls are judged (volatile; write/edit/raw-write are learning-only, never noted). */
     emitOn: string[];
@@ -35,7 +35,7 @@ export default interface Config {
     refreshOnBoot: boolean;
     /** The dismissal TTL in seconds - `until = now + dismissTtl` (volatile). */
     dismissTtl: number;
-    /** The offline seed switch - seed the knowledge at load (volatile). */
+    /** The offline seed switch - seed the knowledge from an explicit pack at load (volatile). */
     seed: boolean;
     /** The second surface: "off" (the default) or "sticky" (volatile). */
     sectionMode: string;

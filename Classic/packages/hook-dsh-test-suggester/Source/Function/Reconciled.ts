@@ -1,6 +1,7 @@
 // Reconciled - the reconciliation NOTE text (the delivery surface, the same
-// `additionalContexts` notice the intents use; the message itself is built by
-// Function/Note, so the source label and the freeze contract are shared).
+// `additionalContexts` notice the candidate families use; the message itself
+// is built by Function/Note, so the source label and the freeze contract are
+// shared).
 //
 // THE SHAPE (byte-exact, asserted by Source/Test/Reconciliation):
 //

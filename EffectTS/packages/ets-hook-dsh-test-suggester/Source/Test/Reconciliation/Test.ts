@@ -276,7 +276,13 @@ export const runTest = async (): Promise<number> => {
 		const Gated = Setup();
 		Gated.Context.workingDirectory = Service(Foreign);
 		const Decision = { kind: "allow" };
-		const Out = await Call(Gated, "grep", PROBE, { agent: { id: "foreign-a" } }, Decision);
+		const Out = await Call(
+			Gated,
+			"grep",
+			{ ...PROBE, file_path: Path.join(Foreign, "Source/Test/Alpha/Test.ts") },
+			{ agent: { id: "foreign-a" } },
+			Decision,
+		);
 		Check(Count, "C5: a foreign workspace is gated before the reconciliation runs", () => {
 			assert.equal(Out, Decision);
 			assert.ok(Gated.Lines.includes("test-suggester: abstained foreign-workspace  0.00"));

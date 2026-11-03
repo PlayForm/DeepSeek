@@ -6,9 +6,10 @@
 // works before the first seeding. A corrupt store degrades the same way
 // (`history corrupt (starting empty)`) - never a throw into apply.
 //
-// The store schema is Interface/History.ts; the records arrive seeded by
-// the offline learner / the search-suggester journal (the end-phase wiring
-// - this package never writes the store in v1).
+// The store schema is Interface/History.ts; the records arrive from the
+// offline learner / the search-suggester journal, and the store is the
+// OPTIONAL user seed - the live history (Function/Record) is the default
+// source and this package never writes this store.
 //
 // PRIVACY POSTURE (the plan §5.4): repo-relative paths only; the recall
 // compares literals only.
@@ -91,6 +92,3 @@ export const Recall = (Records: ReplayRecord[], Probe: string): ReplayRecord | u
 	}
 	return Best;
 };
-
-/** The history signal's weight (the plan §3.5 "history" row, lifted to 0.6 so a recalled record crosses the gate together with the search/literal/context signals). */
-export const LIFT = 0.6;

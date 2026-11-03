@@ -177,11 +177,12 @@ if (InvokedDirectly) {
   const Run = Make(Validate({ logFile: Ledger, enabled: true }));
   Check(Count, "selfcheck: the fake ctx registers the plugin's apply-time wiring", () => {
     assert.equal(Run.Returned, void 0);
+    assert.ok(Run.CtxListeners["session/event"] instanceof Function);
     assert.ok(Run.CtxListeners["tools/post-execute"] instanceof Function);
     assert.ok(Run.CtxListeners["agent/pre-step"] instanceof Function);
     assert.ok(Run.State !== void 0);
     assert.ok(
-      Run.Lines.includes(`test-suggester: activated (bundle ${"0.2.1"}, intents 2, threshold 0.75)`)
+      Run.Lines.includes(`test-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`)
     );
   });
   if (Count.N === 3 && Count.F === 1) {

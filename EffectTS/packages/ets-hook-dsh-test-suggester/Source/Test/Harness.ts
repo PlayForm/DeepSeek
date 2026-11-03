@@ -243,7 +243,9 @@ export const Validate = (Raw: Record<string, unknown>): any =>
 	(Plugin.Config as unknown as (Raw: Record<string, unknown>) => any)({ ...Raw });
 
 /**
- * The standard enabled mount with a tuned gate (the pack floor governs).
+ * The standard enabled mount with a tuned gate (the synthetic `History`
+ * family's own 0.75 threshold governs; the config threshold floors an
+ * explicit pack).
  */
 export const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();

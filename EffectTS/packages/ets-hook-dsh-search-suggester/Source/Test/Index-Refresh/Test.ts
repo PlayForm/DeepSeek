@@ -22,18 +22,22 @@ import {
 	SeedHistory,
 	Setup,
 	Validate,
+	Workspace,
 } from "../Harness.js";
 
-/** The judged call's anchor path. */
+/** The judged call's anchor path (relative to the temp workspace). */
 const Anchor = "README.md";
 
 /** The two companions touched right after the anchor. */
 const Companions = ["CHANGELOG.md", "package.json"];
 
+/** The temp workspace the scenarios judge. */
+const Space = Workspace([Anchor, ...Companions]);
+
 /** One judged read of the anchor. */
 const Read = (Id: string): any => ({
 	name: "read",
-	arguments: { file_path: Anchor },
+	arguments: { file_path: Space.At(Anchor) },
 	agent: AgentOf(Id),
 });
 
@@ -51,8 +55,8 @@ export const runTest = async (): Promise<number> => {
 		const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context: any) => {
 			Context.workspaceGraph = Graph;
 		});
-		SeedHistory(Run, "a", Anchor, Companions);
-		SeedHistory(Run, "b", Anchor, Companions);
+		SeedHistory(Run, "a", Space.At(Anchor), Companions);
+		SeedHistory(Run, "b", Space.At(Anchor), Companions);
 		await CheckAsync(Count, "R1: the projection is built once and reused", async () => {
 			assert.equal(Graph.Calls.snapshots, 1);
 			await Post(Run, Read("a"));
@@ -69,8 +73,8 @@ export const runTest = async (): Promise<number> => {
 		const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context: any) => {
 			Context.workspaceGraph = Graph;
 		});
-		SeedHistory(Run, "a", Anchor, Companions);
-		SeedHistory(Run, "b", Anchor, Companions);
+		SeedHistory(Run, "a", Space.At(Anchor), Companions);
+		SeedHistory(Run, "b", Space.At(Anchor), Companions);
 		const Before = await Post(Run, Read("a"));
 		await CheckAsync(Count, "R2: the first projection leads with the only proven path", async () => {
 			const Text = Before.additionalContexts[0].content[0].text;
@@ -112,8 +116,8 @@ export const runTest = async (): Promise<number> => {
 				Context.workspaceGraph = Graph;
 			},
 		);
-		SeedHistory(Run, "a", Anchor, Companions);
-		SeedHistory(Run, "b", Anchor, Companions);
+		SeedHistory(Run, "a", Space.At(Anchor), Companions);
+		SeedHistory(Run, "b", Space.At(Anchor), Companions);
 		await Post(Run, Read("a"));
 		await CheckAsync(Count, "R3: a frozen projection is not rebuilt on tools/change", async () => {
 			Nodes.push({ path: "CHANGELOG.md", kind: "File", version: "2" });
@@ -136,7 +140,7 @@ export const runTest = async (): Promise<number> => {
 		const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context: any) => {
 			Context.workspaceGraph = Graph;
 		});
-		SeedHistory(Run, "a", Anchor, Companions);
+		SeedHistory(Run, "a", Space.At(Anchor), Companions);
 		await CheckAsync(Count, "R4: an empty graph is re-probed on every read", async () => {
 			assert.equal(Graph.Calls.snapshots, 1);
 			await Post(Run, Read("a"));
@@ -149,7 +153,7 @@ export const runTest = async (): Promise<number> => {
 	// Group R5: no graph at all.
 	{
 		const Run = Setup();
-		SeedHistory(Run, "a", Anchor, Companions);
+		SeedHistory(Run, "a", Space.At(Anchor), Companions);
 		await CheckAsync(Count, "R5: without a service the note is the neutral one", async () => {
 			const Out = await Post(Run, Read("a"));
 			assert.equal(Out.additionalContexts[0].content[0].text, Neutral);

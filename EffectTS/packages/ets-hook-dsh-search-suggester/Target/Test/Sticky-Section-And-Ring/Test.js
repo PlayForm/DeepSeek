@@ -14,13 +14,15 @@ import {
   rm,
   SeedHistory,
   Setup,
-  Validate
+  Validate,
+  Workspace
 } from "../Harness.js";
 const Anchor = "README.md";
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
+const Space = Workspace([Anchor, ...Companions]);
 const Read = (Id) => ({
   name: "read",
-  arguments: { file_path: Anchor },
+  arguments: { file_path: Space.At(Anchor) },
   agent: Id === void 0 ? void 0 : AgentOf(Id)
 });
 const Section = "[search-suggester] intent=History confidence=1.00\ntargets (2):\n- CHANGELOG.md - touched after a similar call\n- SCHEME.md - touched after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
@@ -28,7 +30,7 @@ const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Setup();
-    SeedHistory(Run, "a", Anchor, Companions);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "S1: with sectionMode off the assemble passes through untouched", async () => {
       await Post(Run, Read("a"));
       const Out = await Assemble(Run, AgentOf("a"));
@@ -39,7 +41,7 @@ const runTest = async () => {
   {
     rm();
     const Sticky = Make(Validate({ logFile: Ledger, enabled: true, sectionMode: "sticky" }));
-    SeedHistory(Sticky, "a", Anchor, Companions);
+    SeedHistory(Sticky, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "S2: after an emit the sticky section is appended", async () => {
       await Post(Sticky, Read("a"));
       const Out = await Assemble(Sticky, AgentOf("a"));
@@ -68,7 +70,7 @@ const runTest = async () => {
       Sticky.CtxListeners["session/event"](void 0, {
         type: "tool/call",
         name: "read",
-        arguments: { file_path: Anchor }
+        arguments: { file_path: Space.At(Anchor) }
       });
       Sticky.CtxListeners["session/event"](void 0, {
         type: "tool/call",

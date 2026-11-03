@@ -38,11 +38,6 @@ const Bare = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "test-suggester-no-hi
 Put(Bare, "package.json", "{}");
 const BareAnchor = Put(Bare, "Notes.md");
 const Service = (Cwd) => ({ get: () => Cwd });
-const Read = (Path_, Agent) => ({
-  name: "read",
-  arguments: { file_path: Path_ },
-  agent: Agent
-});
 const Seed = (Run, Agent) => {
   Run.State.History.set(Agent, {
     Seq: 3,

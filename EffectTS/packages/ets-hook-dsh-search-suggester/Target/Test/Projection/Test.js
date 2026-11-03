@@ -15,13 +15,20 @@ import {
   rm,
   SeedHistory,
   Setup,
-  Validate
+  Validate,
+  Workspace
 } from "../Harness.js";
 const Anchor = "README.md";
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
+const Space = Workspace([
+  Anchor,
+  ...Companions,
+  "package.json",
+  "Source/Function/Apply.ts"
+]);
 const Read = (Id) => ({
   name: "read",
-  arguments: { file_path: Anchor },
+  arguments: { file_path: Space.At(Anchor) },
   agent: AgentOf(Id)
 });
 const Neutral = "[search-suggester] intent=History confidence=0.87\ntargets (2):\n- CHANGELOG.md - touched 1 time(s) after a similar call\n- SCHEME.md - touched 1 time(s) after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
@@ -39,7 +46,7 @@ const runTest = async () => {
         ]);
       }
     );
-    SeedHistory(Run, "a", Anchor, Companions);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "J1: the projected note leads with the newer proven path", async () => {
       const Out = await Post(Run, Read("a"));
       assert.equal(Out.additionalContexts.length, 1);
@@ -61,7 +68,7 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    SeedHistory(Run, "a", Anchor, Companions);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "J2: without a graph the note is the neutral one", async () => {
       const Out = await Post(Run, Read("a"));
       assert.equal(Out.additionalContexts[0].content[0].text, Neutral);
@@ -78,7 +85,7 @@ const runTest = async () => {
         ]);
       }
     );
-    SeedHistory(Sticky, "a", Anchor, Companions);
+    SeedHistory(Sticky, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "J3: the sticky section renders the projected index", async () => {
       await Post(Sticky, Read("a"));
       const Out = await Assemble(Sticky, AgentOf("a"));
@@ -111,7 +118,7 @@ const runTest = async () => {
     const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
       Context.workspaceGraph = FakeGraph([{ path: "unrelated/README.md", kind: "File" }]);
     });
-    SeedHistory(Run, "a", Anchor, Companions);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "J4: a graph that proves no candidate keeps the unproven tiers", async () => {
       const Out = await Post(Run, Read("a"));
       assert.equal(Out.additionalContexts[0].content[0].text, Neutral);
@@ -125,7 +132,7 @@ const runTest = async () => {
         { path: "CHANGELOG.md", kind: "File", version: "1" }
       ]);
     });
-    SeedHistory(Run, "a", Anchor, ["CHANGELOG.md", "package.json"]);
+    SeedHistory(Run, "a", Space.At(Anchor), ["CHANGELOG.md", "package.json"]);
     await CheckAsync(Count, "J5: an unexpected node kind scores below an expected one", async () => {
       const Out = await Post(Run, Read("a"));
       const Text = Out.additionalContexts[0].content[0].text;
@@ -141,7 +148,7 @@ const runTest = async () => {
         { path: "Source/Function/Apply.ts", kind: "File", version: "1" }
       ]);
     });
-    SeedHistory(Run, "a", Anchor, ["Source/Function/Apply.ts", "package.json"]);
+    SeedHistory(Run, "a", Space.At(Anchor), ["Source/Function/Apply.ts", "package.json"]);
     await CheckAsync(Count, "J6: the shallower proven path leads the deeper one", async () => {
       const Out = await Post(Run, Read("a"));
       const Text = Out.additionalContexts[0].content[0].text;

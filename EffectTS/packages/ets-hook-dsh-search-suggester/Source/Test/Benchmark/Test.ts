@@ -10,6 +10,12 @@
 // THE EXPECTED SET IS THE SEED: the built-in target lists are retired, so the
 // recall measures whether the history path names the companions the session
 // actually touched - never a literal pack row.
+//
+// THE FIXTURE IS HERMETIC: one temp workspace holds a salted `History/<lane>/`
+// tree (an anchor and four companions per lane), so a companion path can
+// never collide with another call's path, and the lane's FIRST call is
+// re-pointed at the absolute anchor. Every later call keeps its Sequence
+// path and therefore abstains.
 import assert from "node:assert/strict";
 import Benchmark from "../../Function/Benchmark.js";
 import type { Note } from "../../Interface/Benchmark.js";
@@ -27,6 +33,7 @@ import {
 	SeedHistory,
 	Setup,
 	Validate,
+	Workspace,
 } from "../Harness.js";
 
 /** The benchmark's config: the default surface with the documented threshold floor. */
@@ -35,69 +42,25 @@ const Bench = (): any => {
 	return Make(Validate({ logFile: Ledger, enabled: true, threshold: 0.6 }));
 };
 
-/**
- * The seeded session history per lane: the anchor the lane's first call
- * names, then the companions the session touched right after it. Every
- * companion is a real file of this package, so the existence filter keeps the
- * whole set.
- */
-const Lanes: { id: string; anchor: string; companions: string[] }[] = [
-	{
-		id: "version",
-		anchor: "package.json",
-		companions: ["README.md", "CHANGELOG.md", "cordis.patch.yml", "tsconfig.json"],
-	},
-	{
-		id: "test",
-		anchor: "Classic/smokes/README.md",
-		companions: [
-			"Source/Test/Harness.ts",
-			"Source/Library.ts",
-			"Source/Run.sh",
-			"Source/prepublishOnly.sh",
-		],
-	},
-	{
-		id: "doc",
-		anchor: "Documentation/INDEX.md",
-		companions: [
-			"SCHEME.md",
-			"Source/Interface/Execution.ts",
-			"Source/Interface/State.ts",
-			"Source/Interface/Benchmark.ts",
-		],
-	},
-	{
-		id: "config",
-		anchor: "Classic/packages/hook-dsh-search-suggester/Source/Variable/Config.ts",
-		companions: [
-			"Source/Variable/Config.ts",
-			"Source/Interface/Config.ts",
-			"Source/Function/Persist.ts",
-			"Source/Function/Ring.ts",
-		],
-	},
-	{
-		id: "symbol",
-		anchor: "Classic/packages/hook-dsh-search-suggester/Source/Function/Apply.ts",
-		companions: [
-			"Source/Function/Apply.ts",
-			"Source/Function/Detect.ts",
-			"Source/Function/Score.ts",
-			"Source/Function/Note.ts",
-		],
-	},
-];
+/** One lane: the agent id, its salted anchor and its four companions. */
+const Lanes = ["version", "test", "doc", "config", "symbol"].map((Id) => ({
+	Id,
+	Anchor: `History/${Id}/anchor.ts`,
+	Companions: [0, 1, 2, 3].map((Index) => `History/${Id}/c${Index}.ts`),
+}));
+
+/** The temp workspace holding every lane's salted tree. */
+const Space = Workspace(Lanes.flatMap((Lane) => [Lane.Anchor, ...Lane.Companions]));
 
 /** The hand-labelled eventual target set: the seed itself, under the family. */
 const Expected = {
-	History: [...new Set(Lanes.flatMap((Lane) => Lane.companions))],
+	History: Lanes.flatMap((Lane) => Lane.Companions),
 };
 
 /** Seed every lane's history. */
 const Seed = (Run: any): void => {
 	for (const Lane of Lanes) {
-		SeedHistory(Run, Lane.id, Lane.anchor, Lane.companions);
+		SeedHistory(Run, Lane.Id, Space.At(Lane.Anchor), Lane.Companions);
 	}
 };
 
@@ -115,6 +78,7 @@ const Candidates = (Text: string): string[] =>
 /** Replay the fixed sequence and collect the emitted notes. */
 const Replay = async (Run: any): Promise<Note[]> => {
 	const Notes: Note[] = [];
+	const Seen = new Set<string>();
 	for (const [Index, Call] of Sequence.calls.entries()) {
 		if (Call.context !== undefined) {
 			await Pre(Run, {
@@ -122,9 +86,16 @@ const Replay = async (Run: any): Promise<Note[]> => {
 				messages: [{ role: "user", content: Call.context }],
 			});
 		}
+		const First = !Seen.has(Call.agent);
+		Seen.add(Call.agent);
+		const Lane = Lanes.find((Entry) => Entry.Id === Call.agent);
+		const Arguments =
+			First && Lane !== undefined
+				? { ...Call.arguments, path: Space.At(Lane.Anchor) }
+				: Call.arguments;
 		const Out = await Post(Run, {
 			name: Call.name,
-			arguments: Call.arguments,
+			arguments: Arguments,
 			agent: AgentOf(Call.agent),
 		});
 		const Contexts = Out.additionalContexts ?? [];

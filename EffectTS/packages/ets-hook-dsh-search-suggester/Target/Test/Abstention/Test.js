@@ -34,7 +34,7 @@ const Pack = `families:
   "search/Version":
     id: Version
     priority: 1
-    threshold: 0.9
+    threshold: 0.5
     signals:
       - rule: R1 literal-shape
         pattern: '\\bversion\\b'
@@ -81,7 +81,8 @@ const runTest = async () => {
     });
   }
   {
-    const Run = Setup();
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: true, threshold: 0.9 }));
     Run.Context.workingDirectory = Service(Packed);
     await CheckAsync(Count, "A2: a weak match abstains low-confidence", async () => {
       const Decision = { kind: "allow", additionalContexts: [] };

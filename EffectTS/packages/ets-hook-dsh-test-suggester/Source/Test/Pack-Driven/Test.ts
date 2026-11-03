@@ -81,6 +81,11 @@ const Unsigned = Tree("test-suggester-unsigned-");
 Manifest(Unsigned);
 Put(Unsigned, ".dsh/pack.yml", Pack);
 
+/** The MONOREPO-shaped tree: a manifest and a doc path, no pack and no smoke tree. */
+const Monorepo = Tree("test-suggester-monorepo-");
+Manifest(Monorepo);
+Put(Monorepo, "Documentation/Plans/POC-LEDGER.md");
+
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
@@ -145,12 +150,13 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Agent = { agent: { id: "pack-d" } };
 		const Run = Setup();
+		Run.Context.workingDirectory = Service(Monorepo);
 		await CheckAsync(Count, "P4: a monorepo test read with no history abstains no-history", async () => {
 			const Decision = { kind: "allow" };
 			const Out = await Call(
 				Run,
 				"read",
-				{ file_path: "Source/Test/Foo/Test.ts", hint: "Run-Smokes says PASS" },
+				{ file_path: "Documentation/Plans/POC-LEDGER.md", hint: "Run-Smokes says PASS" },
 				Agent,
 				Decision,
 			);

@@ -69,16 +69,16 @@ const runTest = async () => {
       assert.deepEqual(Result.additionalContexts[0].source, {
         kind: "replay-suggester",
         form: "notice",
-        summary: "Repeat 0.77"
+        summary: "Repeat 0.87"
       });
       assert.equal(
         Result.additionalContexts[0].content[0].text,
-        "[replay-suggester] intent=Repeat confidence=0.77\ntargets (3):\n- src/D.ts - touched last time (Repeat)\n- src/C.ts - touched last time (Repeat)\n- src/B.ts - touched last time (Repeat)\nnote: the recall is the answer; without a record the hook abstains."
+        "[replay-suggester] intent=Repeat confidence=0.87\ntargets (3):\n- src/D.ts - touched last time (Repeat)\n- src/C.ts - touched last time (Repeat)\n- src/B.ts - touched last time (Repeat)\nnote: the last time this call was made, these files were touched"
       );
     });
     Check(Count, "H2: the suggest line counts the recalled companions", () => {
       assert.deepEqual(LinesWith(Run, "candidates call").slice(-1), [
-        "replay-suggester: suggest Repeat 0.77 3 candidates call read"
+        "replay-suggester: suggest Repeat 0.87 3 candidates call read"
       ]);
     });
   }
@@ -88,10 +88,12 @@ const runTest = async () => {
     await Run.State.Flush();
     const Decision = { kind: "allow" };
     const Result = await Call(Run, "read", Probe("src/A.ts"), Agent, Decision);
-    Check(Count, "H3: an empty store emits NO note and makes NO claim", () => {
+    Check(Count, "H3: an empty store emits NO note and abstains no-history", () => {
       assert.equal(Result, Decision);
       assert.equal(LinesWith(Run, "candidates call").length, 0);
-      assert.equal(LinesWith(Run, "abstained").length, 0);
+      assert.deepEqual(LinesWith(Run, "abstained"), [
+        "replay-suggester: abstained no-history  0.00"
+      ]);
       assert.equal(LinesWith(Run, "store empty (starting fresh)").length, 1);
     });
   }

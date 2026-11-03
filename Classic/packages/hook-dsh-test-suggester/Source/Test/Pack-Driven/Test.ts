@@ -1,10 +1,12 @@
-// Source/Test/Pack-Driven/Test.ts - the PACK-DRIVEN behaviour: a temporary
-// repo with its own `.dsh/pack.yml` (its own signature and its own
-// `test/Suite` intent) overrides the built-in intent, so the note names the
-// pack's target and carries the pack's caveat; the same workspace WITHOUT
-// the pack stays silent (`abstained foreign-workspace`); a pack whose
-// signature marker is absent stays silent too; and the built-in pack still
-// drives the monorepo path (parity).
+// Source/Test/Pack-Driven/Test.ts - the EXPLICIT pack override: a temporary
+// repo with its own `.dsh/pack.yml` (its own `test/Suite` family) still
+// speaks when the session history is empty, so the note names the pack's
+// companion and never the built-in one; the same workspace WITHOUT the pack
+// abstains `no-history` (the built-in pack is never a candidate source); a
+// pack in a rooted tree still governs even when its declared signature
+// marker is absent (the root gates, not the signature); and the monorepo
+// path with no history abstains `no-history` instead of naming the built-in
+// pack's companions.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -26,6 +28,11 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
 	FileSystem.writeFileSync(Full, Body, "utf8");
 	return Full;
+};
+
+/** Mark the tree as a workspace root (the pack-independent `package.json` marker). */
+const Manifest = (Root: string): void => {
+	FileSystem.writeFileSync(Path.join(Root, "package.json"), "{}", "utf8");
 };
 
 /** The temp pack: a custom signature and one test/Suite intent. */
@@ -51,33 +58,44 @@ families:
 /** The optional harness service the probe reads (the real shape: get(session)). */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** The PACKED workspace: the pack, its marker and the target. */
+/** The judged read inside one tree (the absolute path anchors the root there). */
+const Probe = (Root: string): Record<string, unknown> => ({
+	file_path: Path.join(Root, "Source/Test/Foo/Test.ts"),
+	hint: "PASS",
+});
+
+/** The PACKED workspace: the manifest, the pack, its marker and the target. */
 const Packed = Tree("test-suggester-packed-");
+Manifest(Packed);
 Put(Packed, ".dsh/pack.yml", Pack);
 Put(Packed, "docs/STYLE.md");
 Put(Packed, "SUITE.md");
 
-/** The SAME workspace without the pack. */
+/** The SAME workspace without the pack: the manifest and the target only. */
 const Bare = Tree("test-suggester-bare-");
+Manifest(Bare);
 Put(Bare, "SUITE.md");
 
 /** The UNSIGNED workspace: a pack whose signature marker is absent. */
 const Unsigned = Tree("test-suggester-unsigned-");
+Manifest(Unsigned);
 Put(Unsigned, ".dsh/pack.yml", Pack);
 
-/** The judged read arguments (the hint carries the PASS shape into the probe JSON). */
-const Probe = { file_path: "Source/Test/Foo/Test.ts", hint: "PASS" };
+/** The MONOREPO-shaped tree: a manifest and a doc path, no pack and no smoke tree. */
+const Monorepo = Tree("test-suggester-monorepo-");
+Manifest(Monorepo);
+Put(Monorepo, "Documentation/Plans/POC-LEDGER.md");
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
-	// P1: the temp pack's intent overrides the built-in test/Suite intent.
+	// P1: the explicit temp pack's family drives the note (empty history).
 	{
 		const Agent = { agent: { id: "pack-a" } };
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Packed);
-		await CheckAsync(Count, "P1: the temp pack's intent drives the note", async () => {
-			const Out = await Call(Run, "read", Probe, Agent);
+		await CheckAsync(Count, "P1: the temp pack's family drives the note", async () => {
+			const Out = await Call(Run, "read", Probe(Packed), Agent);
 			assert.equal(Out.additionalContexts.length, 1);
 			assert.deepEqual(Out.additionalContexts[0].source, {
 				kind: "test-suggester",
@@ -98,48 +116,53 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// P2: the same workspace without the pack stays silent.
+	// P2: the same workspace without the pack abstains no-history.
 	{
 		const Agent = { agent: { id: "pack-b" } };
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Bare);
-		await CheckAsync(Count, "P2: the same workspace without the pack stays silent", async () => {
+		await CheckAsync(Count, "P2: the same workspace without the pack abstains no-history", async () => {
 			const Decision = { kind: "allow" };
-			const Out = await Call(Run, "read", Probe, Agent, Decision);
+			const Out = await Call(Run, "read", Probe(Bare), Agent, Decision);
 			assert.equal(Out, Decision);
-			assert.ok(Run.Lines.includes("test-suggester: abstained foreign-workspace  0.00"));
+			assert.ok(Run.Lines.includes("test-suggester: abstained no-history  0.00"));
 			assert.equal(Run.Lines.filter((Line: string) => Line.includes("candidates call")).length, 0);
 		});
 	}
 
-	// P3: the pack's signature gates the workspace.
+	// P3: the root gates the pack, not its declared signature marker.
 	{
 		const Agent = { agent: { id: "pack-c" } };
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Unsigned);
-		await CheckAsync(Count, "P3: a pack whose signature marker is absent stays silent", async () => {
+		await CheckAsync(Count, "P3: a pack with an absent signature marker still governs the tree", async () => {
 			const Decision = { kind: "allow" };
-			const Out = await Call(Run, "read", Probe, Agent, Decision);
+			const Out = await Call(Run, "read", Probe(Unsigned), Agent, Decision);
 			assert.equal(Out, Decision);
-			assert.ok(Run.Lines.includes("test-suggester: abstained foreign-workspace  0.00"));
+			// The pack's family matched, and its one companion does not exist
+			// in the tree: the existence filter empties the set.
+			assert.ok(Run.Lines.includes("test-suggester: abstained no-companions Suite 0.87"));
+			assert.equal(Run.Lines.filter((Line: string) => Line.includes("candidates call")).length, 0);
 		});
 	}
 
-	// P4: the built-in pack still drives the monorepo path (parity).
+	// P4: the built-in pack is NEVER a candidate source.
 	{
 		const Agent = { agent: { id: "pack-d" } };
 		const Run = Setup();
-		await CheckAsync(Count, "P4: the built-in pack still drives the monorepo path", async () => {
-			const Out = await Call(Run, "read", {
-				file_path: "Source/Test/Foo/Test.ts",
-				hint: "Run-Smokes says PASS",
-			}, Agent);
-			assert.equal(Out.additionalContexts[0].source.summary, "Suite 0.65");
-			const Text = Out.additionalContexts[0].content[0].text;
-			assert.equal(
-				Text.includes("- Source/Test/<Suite>/Test.ts - the assertion body - the suite that proves it"),
-				true,
+		Run.Context.workingDirectory = Service(Monorepo);
+		await CheckAsync(Count, "P4: a monorepo test read with no history abstains no-history", async () => {
+			const Decision = { kind: "allow" };
+			const Out = await Call(
+				Run,
+				"read",
+				{ file_path: "Documentation/Plans/POC-LEDGER.md", hint: "Run-Smokes says PASS" },
+				Agent,
+				Decision,
 			);
+			assert.equal(Out, Decision);
+			assert.ok(Run.Lines.includes("test-suggester: abstained no-history  0.00"));
+			assert.equal(Run.Lines.filter((Line: string) => Line.includes("candidates call")).length, 0);
 		});
 	}
 

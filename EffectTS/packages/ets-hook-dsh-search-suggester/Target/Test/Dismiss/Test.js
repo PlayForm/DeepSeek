@@ -15,13 +15,15 @@ import {
   rm,
   SeedHistory,
   Setup,
-  Validate
+  Validate,
+  Workspace
 } from "../Harness.js";
 const Anchor = "README.md";
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
+const Space = Workspace([Anchor, ...Companions]);
 const Read = (Id) => ({
   name: "read",
-  arguments: { file_path: Anchor },
+  arguments: { file_path: Space.At(Anchor) },
   agent: AgentOf(Id)
 });
 const Persist = (Dismissals) => {
@@ -62,7 +64,7 @@ const runTest = async () => {
   {
     rm();
     const Run = Setup();
-    SeedHistory(Run, "a", Anchor, Companions);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "D2: a family dismissal is recorded and ledgered", async () => {
       const Before = Math.floor(Date.now() / 1e3);
       const Out = await Run.Tools[0].execute({ intent: "History" }, {});
@@ -98,7 +100,7 @@ const runTest = async () => {
   {
     rm();
     const Run = Setup();
-    SeedHistory(Run, "b", Anchor, Companions);
+    SeedHistory(Run, "b", Space.At(Anchor), Companions);
     await CheckAsync(Count, "D3: a path dismissal is recorded with its path", async () => {
       const Out = await Run.Tools[0].execute({ intent: "History", path: "CHANGELOG.md" }, {});
       assert.equal(Out.dismissed, true);
@@ -121,7 +123,7 @@ const runTest = async () => {
     rm();
     Persist([{ intent: "History", until: Math.floor(Date.now() / 1e3) + 3600 }]);
     const Live = Make(Validate({ logFile: Ledger, enabled: true }));
-    SeedHistory(Live, "a", Anchor, Companions);
+    SeedHistory(Live, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "D4: a live dismissal survives a reload", async () => {
       assert.equal(Live.State.Knowledge.dismissals.length, 1);
       const Out = await Post(Live, Read("a"), { kind: "allow", additionalContexts: [] });
@@ -131,7 +133,7 @@ const runTest = async () => {
     rm();
     Persist([{ intent: "History", until: 1 }]);
     const Expired = Make(Validate({ logFile: Ledger, enabled: true }));
-    SeedHistory(Expired, "a", Anchor, Companions);
+    SeedHistory(Expired, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "D4: an expired dismissal is pruned and the note returns", async () => {
       assert.equal(Expired.State.Knowledge.dismissals.length, 1);
       const Out = await Post(Expired, Read("a"));

@@ -271,7 +271,7 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "64847acc093051a3976efea09daf7c651abca9368f210f0458ec77112a138ad1",
+			"seed": "46866f9be921ad57123adeb56494bceccce5b68fa341c0a005c56aaa7a3c11c4",
 			"grammar": "spike-star",
 			"order": 12,
 			"arms": 4,
@@ -280,8 +280,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "37e8fe7cb66b04d0a9a3b4f96df3df46ea9f0219b1004d3472259840b6f3c5bc",
-				"colour": "fc7ac9b17fd249faf35c16af7b1b65fc74bd4b451fd3076d28c0f10a105c6689"
+				"mono": "5aeebd834ff37f9bdc41e60d0ac5d1a8c1254c3a865932da716b7a1c36389dde",
+				"colour": "e9c0d8858e1bd9f1a8a1c5b80c4a7e46967d4c235e6df439071e6351296d902b"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-convention-suggester.svg",
@@ -616,7 +616,7 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "31e2b36a50971f9815457386225410d7e0e94ba1f8653b1ea6e59c35665eba0a",
+			"seed": "dd471c17d0c2c7e46ee2e93239fcbde9ead75bd9dc449187d34d769f6cd7f0e3",
 			"grammar": "spike-star",
 			"order": 12,
 			"arms": 8,
@@ -625,8 +625,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "ea32971ab12c3dc0f5b035c1f4c7957fce0668c06c6d181e667525ee35bd637e",
-				"colour": "9e14c6372ab845ff3f13706ced4f756e891e8b23824df11bd865f34a7391e05c"
+				"mono": "e2551b46f12927203c896fc7b8b1c4626aeca0907a49936d72d587abd1c3a8b5",
+				"colour": "c641708c3341fb572bbc22b82a714b5f63be2fe418fc2ef75a1d15d45dcdf8f3"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-search-suggester.svg",
@@ -1559,17 +1559,17 @@
 			"kind": "hook",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "95f8247f1e7165c3412698f559a6ed90d1e69a61c749279aabca205b7e6a39cc",
+			"seed": "7b67f8b8525c38231dbb4f5c1512eeb9b8fe141100bbb4a2a970b168121a9b41",
 			"grammar": "spike-star",
 			"order": 12,
 			"arms": 4,
 			"rings": 1,
 			"orbit": 8,
-			"rim": "none",
+			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "3c2f191e2719de4dd80280efa52d75dd6d7f843be3befc886af3beea38152bcf",
-				"colour": "ecb71de51dcb91e90fd2fd03ab3ac6eeb9e4d3159ba0e3927b39e3eefde3781c"
+				"mono": "5552850dcc22f70f800d49f718be4e3124682e552e5d031ef4194a0feaa2dfa9",
+				"colour": "bdb766c24d409b1d6408cf775681c336fbe1dd0bed2c559de4831f4a94c164b0"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-convention-suggester.svg",
@@ -1904,17 +1904,17 @@
 			"kind": "hook",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "d9be9b1f4bb92057f3261e92b63b7274c1ecb9b7de830f665290af08ce44e64e",
+			"seed": "540a9167af9c9f4ef8df2779f1873bcf9f81b6027fcd3fb4c052a1e5ef5f4af5",
 			"grammar": "spike-star",
 			"order": 12,
-			"arms": 6,
+			"arms": 8,
 			"rings": 1,
 			"orbit": 12,
-			"rim": "diamond",
+			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "cfa544eb9a55690cff3d96872a849c2e22c599f791b816d8c69338f171801093",
-				"colour": "ac57c81d5e728d0701ca37b9d26c452f437e3315431068d5e70da099d0fe0894"
+				"mono": "70b649d028dc711629d08527a20ab0d4d8f64f86a9b2b27551c2da50e0412da4",
+				"colour": "264aaaa12ad952ea72f7a250bfb3529a23ce109e758a75cf5d2e37d2e0930a65"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-search-suggester.svg",
@@ -1927,17 +1927,17 @@
 			"kind": "hook",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "d8cc0f4317b6f91557af8f73bd6eb86c104e8ee0f305fbc0a9abb3733d2d996b",
+			"seed": "4717bc06b550cdac7792ab0ddcde7b8dfa686b380919187cf4d3490814ef2e27",
 			"grammar": "spike-star",
 			"order": 12,
-			"arms": 8,
+			"arms": 4,
 			"rings": 1,
 			"orbit": 8,
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "fa80ac632d299ef02546597080f5e9ed10c1d64b44b31a769cc8bc615d7a4f17",
-				"colour": "5275566e31db1fd4341c0fc005fe0c7d29d8a2d2d6e66c3deeaec11238c59e9a"
+				"mono": "9067ce924408a0a16319b12a9d965fd47a8b602a6e6711928dabc70f995adafd",
+				"colour": "7c19d71bb836584d5227dd9a54582f6b346cd8281ca25d1b006df4cd3e623dbd"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-test-suggester.svg",

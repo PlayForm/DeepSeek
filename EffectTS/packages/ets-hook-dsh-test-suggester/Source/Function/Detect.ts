@@ -1,5 +1,6 @@
 // Detect - the DETERMINISTIC CLASSIFIER (the plan §4.3: pure function, no
-// LLM, no I/O, O(intents x rules) + a map lookup). Given the compiled pack
+// LLM, no I/O, O(intents x rules) + a map lookup). Given the compiled rules
+// (the synthetic `History` family first, then an explicit pack's families)
 // and a call probe (the tool name + the JSON of its arguments), it returns
 // the winning Match or null - the algebra's identity element is silence.
 //

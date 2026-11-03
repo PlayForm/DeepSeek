@@ -18,6 +18,11 @@
 //   * a package with no Source/Test tree is silent; a foreign workspace is
 //     silent (the gate runs first);
 //   * the reconciliation is READ-ONLY: ZERO ctx.fs operations.
+//
+// The suite tests the DRIFT ROWS and the GRAPH PROBE only. The candidate
+// source is the session history (Function/Apply), and these fixtures seed
+// none and ship no pack, so a consistent tree falls through to the
+// `abstained no-history  0.00` line - never to a pack candidate.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -41,7 +46,7 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** A temp workspace root carrying the pack signature and package.json. */
+/** A temp workspace root carrying the repo marker and a `package.json`. */
 const Workspace = (Prefix: string): string => {
 	const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 	Put(Root, "Documentation/ARCHIVE-STYLE.md");
@@ -52,7 +57,7 @@ const Workspace = (Prefix: string): string => {
 /** The optional harness service the probe reads (the real shape: get(session)). */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** The neutral judged probe: it matches NO pack intent, so only the reconciliation can note. */
+/** The neutral judged probe: no history and no pack, so only the reconciliation can note. */
 const PROBE = { pattern: "zzz" };
 
 /** A README with one declared count. */
@@ -271,7 +276,13 @@ export const runTest = async (): Promise<number> => {
 		const Gated = Setup();
 		Gated.Context.workingDirectory = Service(Foreign);
 		const Decision = { kind: "allow" };
-		const Out = await Call(Gated, "grep", PROBE, { agent: { id: "foreign-a" } }, Decision);
+		const Out = await Call(
+			Gated,
+			"grep",
+			{ ...PROBE, file_path: Path.join(Foreign, "Source/Test/Alpha/Test.ts") },
+			{ agent: { id: "foreign-a" } },
+			Decision,
+		);
 		Check(Count, "C5: a foreign workspace is gated before the reconciliation runs", () => {
 			assert.equal(Out, Decision);
 			assert.ok(Gated.Lines.includes("test-suggester: abstained foreign-workspace  0.00"));

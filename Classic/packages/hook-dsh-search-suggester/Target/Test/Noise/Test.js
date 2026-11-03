@@ -1,11 +1,27 @@
 import assert from "node:assert/strict";
-import { AgentOf, CheckAsync, Finish, MakeCounter, Post, Pre, Setup } from "../Harness.js";
-const Grep = (Run, Agent, Pattern) => Post(Run, { name: "grep", arguments: { pattern: Pattern, path: "" }, agent: AgentOf(Agent) });
+import {
+  AgentOf,
+  CheckAsync,
+  Finish,
+  MakeCounter,
+  Post,
+  Pre,
+  Service,
+  Setup,
+  Workspace
+} from "../Harness.js";
+const Space = Workspace(["package.json"]);
+const Grep = (Run, Agent, Pattern) => Post(Run, {
+  name: "grep",
+  arguments: { pattern: Pattern, path: Space.At("package.json") },
+  agent: AgentOf(Agent)
+});
 const Other = (Run, Name, Args) => Post(Run, { name: Name, arguments: Args, agent: AgentOf("noise") });
 const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Setup();
+    Run.Context.workingDirectory = Service(Space.Root);
     let Notes = 0;
     const Record = (Out) => {
       Notes += (Out.additionalContexts ?? []).length;
@@ -33,15 +49,15 @@ const runTest = async () => {
       }
       assert.equal(Notes, 0);
     });
-    await CheckAsync(Count, "N1: the silence is measured (ten abstention lines)", async () => {
+    await CheckAsync(Count, "N1: the silence is measured (fifteen no-history lines)", async () => {
       assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 0);
       assert.equal(
-        Run.Lines.filter((Line) => Line.includes("abstained no-signal")).length,
-        10
+        Run.Lines.filter((Line) => Line.includes("abstained no-history")).length,
+        15
       );
       assert.equal(
         Run.Lines.filter((Line) => Line.includes("abstained low-confidence")).length,
-        5
+        0
       );
     });
     await CheckAsync(Count, "N1: no warning fired during the silent run", async () => {
@@ -50,6 +66,7 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
+    Run.Context.workingDirectory = Service(Space.Root);
     await CheckAsync(Count, "N2: a fresh turn stays silent after a silent turn", async () => {
       await Grep(Run, "a", "unrelated query one");
       await Pre(Run, { agent: AgentOf("a"), messages: [{ source: { kind: "user" } }] });

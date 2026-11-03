@@ -1,37 +1,48 @@
 // Apply - the plugin entry function: the State build (the factory's cell
 // unwrap + the volatile refresh), the durable activation proof, the knowledge
-// load, and the FOUR listeners of the suggester's surfaces (plan section
+// load, and the FIVE listeners of the suggester's surfaces (plan section
 // 4.2):
 //
-//   1. tools/post-execute (waterfall, plain registration - AFTER the ccr's
+//   1. session/event (plain): the HISTORY FOLD. Every `tool/call` event
+//      becomes one Touch in the SESSION's history (the pack library's fold
+//      unit, capped at 512 touches). This is the candidate source;
+//   2. tools/post-execute (waterfall, plain registration - AFTER the ccr's
 //      {prepend:true} listener and the normalize family, since plain
-//      registration order guarantees it): next() first, then the call view,
-//      Detect, Score's gate, and ONE additionalContexts note prepended to the
-//      downstream decision - never a content replacement;
-//   2. agent/pre-step (plain): the per-turn reset (the ring, the cooldown
+//      registration order guarantees it): next() first, then the workspace
+//      root, the HISTORY candidates (the files touched right after this one in
+//      this workspace) as ONE synthetic family, the EXPLICIT pack when one
+//      exists, Detect, Score's gate, and ONE additionalContexts note prepended
+//      to the downstream decision - never a content replacement;
+//   3. agent/pre-step (plain): the per-turn reset (the ring, the cooldown
 //      counters, the dedupe set) when a user message enters, plus the user
 //      text capture for the R12 context bonus;
-//   3. system-prompt/assemble (waterfall, after next()): the optional sticky
+//   4. system-prompt/assemble (waterfall, after next()): the optional sticky
 //      section (config sectionMode "sticky"), TTL-rebuilt;
-//   4. tools/change (emit): the sticky section-cache invalidation only.
+//   5. tools/change (emit): the sticky section-cache invalidation only.
+//
+// THE CANDIDATES COME FROM THE AGENT'S OWN PREVIOUS TOOL CALLS: the listener
+// folds the session history through `Adjacent(touches, anchor)`, where the
+// anchor is the call's own path argument (or the directory of its path-shaped
+// target, or the session cwd), and names the files that were touched right
+// after a similar call in this workspace. The literal built-in pack is NOT a
+// candidate source; the pack survives only as an EXPLICIT override
+// (`<repo>/.dsh/pack.yml` or the user layer), resolved with `builtin: false`.
+// A workspace with no history and no pack abstains (`abstained no-history`).
 //
 // THE WATERFALL DISCIPLINE: `next()` is ALWAYS awaited first; pass-through
 // returns the downstream decision unchanged; FAIL-OPEN: every listener body
-// is one try/catch - on any error a logger.warn records it and the
-// downstream decision is returned UNCHANGED. A note never fails a waterfall.
+// is one try/catch - on any error a logger.warn records it and the downstream
+// decision is returned UNCHANGED. A note never fails a waterfall.
 //
-// THE WORKSPACE GATE + THE EXISTENCE FILTER: the pack is the repo's own
-// convention graph (the built-in pack when the repo has no pack file), so the
-// post-execute listener resolves the workspace root first (the nearest
-// ancestor whose pack signature matches; the built-in default is
-// Documentation/ARCHIVE-STYLE.md, from the call path plus the session cwd).
-// A foreign workspace has no pack and abstains (`abstained foreign-workspace`);
-// a candidate absent from all three bases is dropped BEFORE the score
-// (`abstained no-companions` when the winning intent's whole candidate set is
-// gone). The intents come from the RESOLVED pack per call
-// (Families(pack, "search")), so a repo pack overrides the built-in intents
-// without a restart; the sticky section resolves the same way from the
-// process's workspace.
+// THE WORKSPACE GATE + THE EXISTENCE FILTER: the root is the PACK-INDEPENDENT
+// repo root (the nearest ancestor carrying `.git` or `package.json`, from the
+// call path plus the session cwd). A call outside any workspace has no
+// history to mine here and abstains (`abstained foreign-workspace`); a
+// candidate absent from all three bases is dropped BEFORE the score
+// (`abstained no-companions` when the winner's whole candidate set is gone).
+// The pack's families come from the RESOLVED pack per call
+// (Families(pack, "search")), so an explicit repo pack overrides the search
+// families without a restart; the sticky section resolves the same way.
 //
 // THE NOTE NEVER TOUCHES CONTENT: it is a separate message, so it survives
 // the ccr and cannot be mistaken for file content (plan section 4.6). The
@@ -50,22 +61,25 @@
 // kind expected, depth, recency), an absent or empty graph falls back to the
 // documented neutral literal 0.5. The projection is cached and rebuilt on
 // `tools/change` while `refreshOnBoot` holds; the sticky section renders the
-// projected index (Function/Projected) instead of the static pack list when
-// the graph proves any candidate. No ledger string is added by the
+// projected index (Function/Projected) instead of the plain candidate list
+// when the graph proves any candidate. No ledger string is added by the
 // projection: the note and the section are the evidence.
 //
 // THE P3 OFFLINE SEED and THE P4 DISMISS TOOL: at load the knowledge is
-// seeded from the built-in pack's canonical candidates plus the projection
-// (Function/Seed; no LLM, no session history) unless `learn`/`seed` are off;
-// the `suggestion_dismiss` tool (Function/Dismiss) is registered through the
-// loader's tool API when the host exposes `ctx.tools` - the batch-decision
-// precedent, a guarded registration so a bare mount still applies.
+// seeded from the EXPLICIT pack's canonical candidates plus the projection
+// (Function/Seed; no LLM, no session history) unless `learn`/`seed` are off -
+// a repo without an explicit pack seeds nothing; the `suggestion_dismiss`
+// tool (Function/Dismiss) is registered through the loader's tool API when
+// the host exposes `ctx.tools` - the batch-decision precedent, a guarded
+// registration so a bare mount still applies.
+import { dirname } from "node:path";
+
 import type { Context } from "@deepseek-ai/cordis";
 import type { UserMessage } from "@deepseek-ai/dsh-llm";
 import type { AssembleContext, PromptAssembly } from "@deepseek-ai/dsh-system-prompt";
 import type { PostToolDecision, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
 import { Activate } from "@playform/lib-dsh-core";
-import { Families, Locate } from "@playform/lib-dsh-pack";
+import { Adjacent, Families, Fold, Home, Resolve, Root as RootOf } from "@playform/lib-dsh-pack";
 
 import type Config from "../Interface/Config.js";
 import type { CallView, Intent, Verdict } from "../Interface/Execution.js";
@@ -77,7 +91,6 @@ import DismissTool from "./Dismiss.js";
 import Filter from "./Filter.js";
 import { Match } from "./Measure.js";
 import BuildNote, { Prepend, Text } from "./Note.js";
-import Pack from "./Pack.js";
 import Load, { Dismissed, Emitted, Followed, Ignored, Row, Save } from "./Persist.js";
 import Projected from "./Projected.js";
 import BuildProjection from "./Projection.js";
@@ -87,6 +100,9 @@ import Seed from "./Seed.js";
 
 /** The learning-only tools: observed for the follow/ignore rules, never noted. */
 const Learning = ["write", "edit", "raw-write"];
+
+/** The synthetic family's id (the history source's ledger name). */
+const History = "History";
 
 /** The call view of one judged call (plan section 3.3): the classified text. */
 const View = (Exec: ToolExecution): CallView => {
@@ -110,6 +126,50 @@ const View = (Exec: ToolExecution): CallView => {
 			return { name: Exec.name, text: JSON.stringify(Args ?? {}), path: "" };
 	}
 };
+
+/**
+ * The anchor path of a judged call, the path the history is folded against:
+ * the call's own `path`/`file_path` argument when it carries one, otherwise
+ * the directory of the call's target argument when that target is a path
+ * (`Args.target` first, then the classified text), otherwise the session cwd.
+ * The fold normalizes the touches the same way (backslashes to slashes, no
+ * leading `./`), so an absolute and a relative spelling of one file meet.
+ */
+const AnchorOf = (Call: CallView, Exec: ToolExecution, Cwd: string | undefined): string => {
+	if (Call.path.length > 0) {
+		return Call.path;
+	}
+	const Args = (Exec.arguments ?? {}) as Record<string, unknown>;
+	const Target = typeof Args["target"] === "string" ? Args["target"] : Call.text;
+	if (Target.length > 0 && Target.includes("/")) {
+		return dirname(Target);
+	}
+	return Cwd ?? "";
+};
+
+/**
+ * The SYNTHETIC family: the co-touch candidates as ONE pack row, so the
+ * existing Detect/Filter/Score pipeline judges them exactly like a resolved
+ * pack's family (the `History` note header, the `suggest History` line, the
+ * follow-through). `undefined` when the adjacency yields nothing.
+ */
+const Synthetic = (Rows: readonly { path: string; count: number }[]): Intent | undefined =>
+	Rows.length === 0
+		? undefined
+		: {
+				id: History,
+				priority: 0,
+				threshold: 0.75,
+				note: "these files were touched right after similar calls in this workspace",
+				familyGlobs: [],
+				signals: [{ rule: "history", pattern: ".", weight: 2.5 }],
+				targets: Rows.map((Entry) => ({
+					path: Entry.path,
+					kind: "",
+					prior: 0.6,
+					reason: `touched ${Entry.count} time(s) after a similar call`,
+				})),
+			};
 
 /**
  * The session cwd, probed from the OPTIONAL harness service - never a hard
@@ -230,9 +290,19 @@ export default (Context: Context, Options: Config): void => {
 		},
 	});
 	State.Factory = Factory;
-	State.Pack = Pack;
+	// No boot projection of the built-in pack: the candidates come from the
+	// session history, and only an EXPLICIT repo/user pack compiles (per
+	// call, below).
+	State.Pack = [];
 	State.Knowledge = Load(State.PersistPath);
 	State.Rings = Ring();
+	// The per-session touch history (WeakMap keyed on the session object,
+	// created lazily by the session/event fold).
+	State.History = new WeakMap();
+	// The history key for a call that carries neither a session nor an agent
+	// (the ring's precedent): one shared entry, so an agent-less mount still
+	// learns from its own calls.
+	const DefaultKey: object = {};
 
 	// ------------------------------------------------------------------
 	// The graph projection cache (the P2 re-spec). The graph service is
@@ -252,18 +322,29 @@ export default (Context: Context, Options: Config): void => {
 	};
 
 	// ------------------------------------------------------------------
-	// The P3 offline seed: the built-in pack's canonical candidates, proven
-	// twice when the graph already sees them. It mutates the in-memory
-	// knowledge only; the next real save (an emit, a follow, a dismissal)
-	// persists it, so a cold start leaves no file behind.
+	// The P3 offline seed: the EXPLICIT pack's canonical candidates (the
+	// built-in pack is retired), proven twice when the graph already sees
+	// them. A repo without an explicit pack seeds nothing and leaves the
+	// knowledge's seed marker alone. It mutates the in-memory knowledge only;
+	// the next real save (an emit, a follow, a dismissal) persists it, so a
+	// cold start leaves no file behind.
 	// ------------------------------------------------------------------
 	if (State.On && State.Learn && State.Seed) {
-		Seed(State.Knowledge, Enabled(State, State.Pack), Project(), Math.floor(Date.now() / 1000));
+		const Graph = Project();
+		const Boot = RootOf(".", undefined);
+		const Pack =
+			Boot === undefined ? undefined : Resolve(Boot, { home: Home(), builtin: false });
+		const Rows = Pack === undefined ? [] : Enabled(State, Families(Pack, "search"));
+		if (Rows.length > 0) {
+			Seed(State.Knowledge, Rows, Graph, Math.floor(Date.now() / 1000));
+		}
 	}
 
 	// Durable activation proof - "did it activate" must be answerable from the
-	// ledger alone. Format (plan section 4.9):
-	//   search-suggester: activated (bundle 0.2.1, intents 10, threshold 0.75)
+	// ledger alone. The second segment is `history` (not a family count):
+	// there is no boot pack, because the candidates come from the session's
+	// own tool calls and only an explicit pack may still speak. Format:
+	//   search-suggester: activated (bundle 0.2.1, history, threshold 0.75)
 	if (!State.On) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {
@@ -271,14 +352,47 @@ export default (Context: Context, Options: Config): void => {
 			State,
 			Activate([
 				["", `bundle ${Version}`],
-				["", `intents ${Enabled(State, State.Pack).length}`],
+				["", "history"],
 				["", `threshold ${State.Threshold}`],
 			]),
 		);
 	}
 
 	// ------------------------------------------------------------------
-	// Listener 1: tools/post-execute - the note (and the learning signals).
+	// Listener 1: session/event - the history fold. Every `tool/call` event
+	// becomes one Touch (the pack library's fold unit) in the SESSION's
+	// history, so the candidates come from the agent's OWN previous calls in
+	// this workspace. One entry per session object, created lazily; the touch
+	// array is capped at 512 (the oldest touch is shifted out). Fail-open: a
+	// malformed event is skipped, never thrown.
+	// ------------------------------------------------------------------
+	Context.on("session/event", (Session_: unknown, Event: unknown): void => {
+		try {
+			const Key = (Session_ as object | undefined) ?? DefaultKey;
+			let History_ = State.History.get(Key);
+			if (History_ === undefined) {
+				History_ = { Seq: 0, Touches: [] };
+				State.History.set(Key, History_);
+			}
+			const Touch = Fold(
+				Event as { type?: string; name?: string; arguments?: unknown },
+				History_.Seq,
+			);
+			if (Touch === undefined) {
+				return;
+			}
+			History_.Seq += 1;
+			History_.Touches.push(Touch);
+			if (History_.Touches.length > 512) {
+				History_.Touches.shift();
+			}
+		} catch {
+			/* the fold never breaks the event bus */
+		}
+	});
+
+	// ------------------------------------------------------------------
+	// Listener 2: tools/post-execute - the note (and the learning signals).
 	// ------------------------------------------------------------------
 	Context.on(
 		"tools/post-execute",
@@ -302,8 +416,8 @@ export default (Context: Context, Options: Config): void => {
 					if (State.Learn && Rings.pending !== undefined) {
 						const Intent = Rings.pending.intent;
 						// The follow signal reads the note's OWN candidate set
-						// (never the seeded knowledge rows): a candidate the
-						// model touched within the window is a follow.
+						// (never the learned rows): a candidate the model
+						// touched within the window is a follow.
 						const Hit = Rings.emitted.find((Path) => Match(Path, EditPath));
 						if (Hit !== undefined) {
 							Followed(State.Knowledge, Intent, Hit, Math.floor(Date.now() / 1000));
@@ -325,14 +439,14 @@ export default (Context: Context, Options: Config): void => {
 					return Downstream;
 				}
 				const Call = View(Exec);
-				// The workspace gate, BEFORE detect/score: the pack is the
-				// repo's convention graph (the built-in pack when the repo has
-				// no pack file), so a call that belongs to another workspace
-				// has nothing to name here. The signature comes from the pack
-				// (default: Documentation/ARCHIVE-STYLE.md).
+				// The workspace gate, BEFORE any candidate work: the
+				// PACK-INDEPENDENT repo root (the nearest ancestor carrying
+				// `.git` or `package.json`) from the call path plus the
+				// session cwd. A call outside any workspace has no history to
+				// mine here and abstains.
 				const Cwd = Session(Context, Exec);
-				const Located = Locate(Call.path, Cwd);
-				if (Located === undefined) {
+				const Root = RootOf(Call.path, Cwd);
+				if (Root === undefined) {
 					FactoryAppend(Context, State, "abstained foreign-workspace  0.00");
 					return Downstream;
 				}
@@ -342,17 +456,34 @@ export default (Context: Context, Options: Config): void => {
 				if (Rings.pending !== undefined) {
 					Rings.pending.since += 1;
 				}
+				// THE HISTORY (the candidate source): the agent's OWN previous
+				// tool calls in this workspace, folded per session and read
+				// through the pack library's Adjacent. A repeatedly co-touched
+				// path outranks a single one, and a near neighbour outranks a
+				// far one. The literal built-in pack is never consulted.
+				const Key =
+					(Exec.agent as { session?: object } | undefined)?.session ??
+					Exec.agent ??
+					DefaultKey;
+				const Touches = State.History.get(Key)?.Touches ?? [];
+				const Anchor = AnchorOf(Call, Exec, Cwd);
+				const Nearby = Adjacent(Touches, Anchor, { limit: State.MaxCandidates });
+				const Row_ = Synthetic(Nearby);
+				// The EXPLICIT pack: `<repo>/.dsh/pack.yml` or the user layer,
+				// never the built-in fallback (`builtin: false`).
+				const Pack = Resolve(Root, { home: Home(), builtin: false });
+				const Rows = Pack === undefined ? [] : Enabled(State, Families(Pack, "search"));
+				const Rules = Row_ === undefined ? Rows : [Row_, ...Rows];
+				if (Rules.length === 0) {
+					FactoryAppend(Context, State, "abstained no-history  0.00");
+					return Downstream;
+				}
 				// The base-aware existence filter: a candidate absent from all
 				// three bases is dropped before the score/gate step.
 				const Detections = Filter(
-					Detect(
-						Enabled(State, Families(Located.pack, "search")),
-						Call,
-						State.Rings.Intents(Rings),
-						Rings.userText,
-					),
+					Detect(Rules, Call, State.Rings.Intents(Rings), Rings.userText),
 					Call.path,
-					Located.root,
+					Root,
 					Cwd,
 				);
 				const Verdict: Verdict =
@@ -434,7 +565,7 @@ export default (Context: Context, Options: Config): void => {
 	);
 
 	// ------------------------------------------------------------------
-	// Listener 2: agent/pre-step - the per-turn reset and the user text.
+	// Listener 3: agent/pre-step - the per-turn reset and the user text.
 	// ------------------------------------------------------------------
 	Context.on("agent/pre-step", async (Payload, Next) => {
 		// next() FIRST.
@@ -468,9 +599,11 @@ export default (Context: Context, Options: Config): void => {
 	});
 
 	// ------------------------------------------------------------------
-	// Listener 3: system-prompt/assemble - the sticky section (opt-in,
-	// sectionMode "sticky"): the most recent intent's target list, rebuilt on
-	// a TTL (plan 4.6, second surface). Off by default.
+	// Listener 4: system-prompt/assemble - the sticky section (opt-in,
+	// sectionMode "sticky"): the most recent family's target list, rebuilt on
+	// a TTL (plan 4.6, second surface). Off by default. The section is
+	// source-aware: the synthetic History row renders the ring's own emitted
+	// paths, and an EXPLICIT pack renders its family (never the built-in one).
 	// ------------------------------------------------------------------
 	Context.on(
 		"system-prompt/assemble",
@@ -487,16 +620,40 @@ export default (Context: Context, Options: Config): void => {
 				}
 				const Rings = State.Rings.State(AssembleContext?.agent);
 				const Recent = [...Rings.cooled.keys()];
-				// The sticky section is pack-driven too: resolve the pack of
-				// the process's workspace (the harness runs in it) and read
-				// the intent from THAT pack. No workspace -> no section.
-				const Located = Locate(".", undefined);
-				const Intent =
-					Recent.length === 0 || Located === undefined
+				if (Recent.length === 0) {
+					return Downstream;
+				}
+				const Last = Recent[Recent.length - 1] ?? "";
+				// The synthetic row: the paths the last note named, with the
+				// one generic history reason (the note's own reasons are not
+				// cached, and the section is a reminder, not a record).
+				const HistoryRow: Intent | undefined =
+					Last !== History || Rings.emitted.length === 0
 						? undefined
-						: Families(Located.pack, "search").find(
-								(Row2) => Row2.id === Recent[Recent.length - 1],
-							);
+						: {
+								id: History,
+								priority: 0,
+								threshold: 0.75,
+								note: "these files were touched right after similar calls in this workspace",
+								familyGlobs: [],
+								signals: [],
+								targets: Rings.emitted.map((Path) => ({
+									path: Path,
+									kind: "",
+									prior: 0.6,
+									reason: "touched after a similar call",
+								})),
+							};
+				const Boot = HistoryRow === undefined ? RootOf(".", undefined) : undefined;
+				const Pack =
+					Boot === undefined
+						? undefined
+						: Resolve(Boot, { home: Home(), builtin: false });
+				const Intent =
+					HistoryRow ??
+					(Pack === undefined
+						? undefined
+						: Families(Pack, "search").find((Row_) => Row_.id === Last));
 				if (Intent === undefined) {
 					return Downstream;
 				}
@@ -505,9 +662,9 @@ export default (Context: Context, Options: Config): void => {
 					Rings.calls - Rings.sectionBuilt >= State.SectionTtl;
 				if (Stale) {
 					// The P2 re-spec: the section renders the PROJECTED INDEX
-					// (the top graph paths for the intent) when the graph
-					// proves a candidate, and the static pack list otherwise
-					// (the neutral fallback, byte-identical to the PoC).
+					// (the top graph paths for the family) when the graph
+					// proves a candidate, and the plain candidate list
+					// otherwise (the neutral fallback).
 					const Graph = Project();
 					const ProjectedRows =
 						Graph === undefined
@@ -547,7 +704,7 @@ export default (Context: Context, Options: Config): void => {
 	);
 
 	// ------------------------------------------------------------------
-	// Listener 4: tools/change - the projection refresh (refreshOnBoot) and
+	// Listener 5: tools/change - the projection refresh (refreshOnBoot) and
 	// the sticky section-cache invalidation (the section cache lives on the
 	// per-agent rings; the default ring's cache is cleared here, every other
 	// ring expires through the TTL).

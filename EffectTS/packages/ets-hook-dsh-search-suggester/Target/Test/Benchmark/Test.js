@@ -13,65 +13,25 @@ import {
   rm,
   SeedHistory,
   Setup,
-  Validate
+  Validate,
+  Workspace
 } from "../Harness.js";
 const Bench = () => {
   rm();
   return Make(Validate({ logFile: Ledger, enabled: true, threshold: 0.6 }));
 };
-const Lanes = [
-  {
-    id: "version",
-    anchor: "package.json",
-    companions: ["README.md", "CHANGELOG.md", "cordis.patch.yml", "tsconfig.json"]
-  },
-  {
-    id: "test",
-    anchor: "Classic/smokes/README.md",
-    companions: [
-      "Source/Test/Harness.ts",
-      "Source/Library.ts",
-      "Source/Run.sh",
-      "Source/prepublishOnly.sh"
-    ]
-  },
-  {
-    id: "doc",
-    anchor: "Documentation/INDEX.md",
-    companions: [
-      "SCHEME.md",
-      "Source/Interface/Execution.ts",
-      "Source/Interface/State.ts",
-      "Source/Interface/Benchmark.ts"
-    ]
-  },
-  {
-    id: "config",
-    anchor: "Classic/packages/hook-dsh-search-suggester/Source/Variable/Config.ts",
-    companions: [
-      "Source/Variable/Config.ts",
-      "Source/Interface/Config.ts",
-      "Source/Function/Persist.ts",
-      "Source/Function/Ring.ts"
-    ]
-  },
-  {
-    id: "symbol",
-    anchor: "Classic/packages/hook-dsh-search-suggester/Source/Function/Apply.ts",
-    companions: [
-      "Source/Function/Apply.ts",
-      "Source/Function/Detect.ts",
-      "Source/Function/Score.ts",
-      "Source/Function/Note.ts"
-    ]
-  }
-];
+const Lanes = ["version", "test", "doc", "config", "symbol"].map((Id) => ({
+  Id,
+  Anchor: `History/${Id}/anchor.ts`,
+  Companions: [0, 1, 2, 3].map((Index) => `History/${Id}/c${Index}.ts`)
+}));
+const Space = Workspace(Lanes.flatMap((Lane) => [Lane.Anchor, ...Lane.Companions]));
 const Expected = {
-  History: [...new Set(Lanes.flatMap((Lane) => Lane.companions))]
+  History: Lanes.flatMap((Lane) => Lane.Companions)
 };
 const Seed = (Run) => {
   for (const Lane of Lanes) {
-    SeedHistory(Run, Lane.id, Lane.anchor, Lane.companions);
+    SeedHistory(Run, Lane.Id, Space.At(Lane.Anchor), Lane.Companions);
   }
 };
 const Candidates = (Text) => Text.split("\n").filter((Line) => Line.startsWith("- ")).map((Line) => {
@@ -82,6 +42,7 @@ const Candidates = (Text) => Text.split("\n").filter((Line) => Line.startsWith("
 });
 const Replay = async (Run) => {
   const Notes = [];
+  const Seen = /* @__PURE__ */ new Set();
   for (const [Index, Call] of Sequence.calls.entries()) {
     if (Call.context !== void 0) {
       await Pre(Run, {
@@ -89,9 +50,13 @@ const Replay = async (Run) => {
         messages: [{ role: "user", content: Call.context }]
       });
     }
+    const First = !Seen.has(Call.agent);
+    Seen.add(Call.agent);
+    const Lane = Lanes.find((Entry) => Entry.Id === Call.agent);
+    const Arguments = First && Lane !== void 0 ? { ...Call.arguments, path: Space.At(Lane.Anchor) } : Call.arguments;
     const Out = await Post(Run, {
       name: Call.name,
-      arguments: Call.arguments,
+      arguments: Arguments,
       agent: AgentOf(Call.agent)
     });
     const Contexts = Out.additionalContexts ?? [];

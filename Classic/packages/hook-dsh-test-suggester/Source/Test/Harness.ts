@@ -25,10 +25,11 @@ import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
 export { Plugin };
 
 /**
- * The REAL package cwd the judged relative paths resolve against: the pack
- * mixes package-relative targets (`README.md`, `SCHEME.md`), so the fixture
- * cwd is a package that actually carries them (hook-dsh-ccr) instead of the
- * repo root.
+ * The REAL package cwd the judged relative paths resolve against: the history
+ * candidates are workspace-relative (`README.md`, `SCHEME.md`), so the
+ * fixture cwd is a package that actually carries them (hook-dsh-ccr) instead
+ * of the repo root. The workspace gate is pack-independent, so this cwd is
+ * also the fallback root of a relative call path.
  */
 const Package = fileURLToPath(new URL("../../../hook-dsh-ccr/", import.meta.url));
 
@@ -242,7 +243,9 @@ export const Validate = (Raw: Record<string, unknown>): any =>
 	(Plugin.Config as unknown as (Raw: Record<string, unknown>) => any)({ ...Raw });
 
 /**
- * The standard enabled mount with a tuned gate (the pack floor governs).
+ * The standard enabled mount with a tuned gate (the synthetic `History`
+ * family's own 0.75 threshold governs; the config threshold floors an
+ * explicit pack).
  */
 export const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
@@ -332,11 +335,12 @@ if (InvokedDirectly) {
 	const Run = Make(Validate({ logFile: Ledger, enabled: true }));
 	Check(Count, "selfcheck: the fake ctx registers the plugin's apply-time wiring", () => {
 		assert.equal(Run.Returned, undefined);
+		assert.ok(Run.CtxListeners["session/event"] instanceof Function);
 		assert.ok(Run.CtxListeners["tools/post-execute"] instanceof Function);
 		assert.ok(Run.CtxListeners["agent/pre-step"] instanceof Function);
 		assert.ok(Run.State !== undefined);
 		assert.ok(
-			Run.Lines.includes(`test-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 2, threshold 0.75)`),
+			Run.Lines.includes(`test-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`),
 		);
 	});
 	if (Count.N === 3 && Count.F === 1) {

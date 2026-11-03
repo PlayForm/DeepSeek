@@ -2,12 +2,13 @@
 // note against the fake ctx and REAL temp trees: (a) a call path with NO
 // `.git`/`package.json` root and no session cwd abstains `foreign-workspace`
 // before any candidate work, whether the cwd arrives through the optional
-// harness service, is absent, or its getter throws; (b) a call inside a temp
-// root carrying a `package.json` emits the HISTORY note naming the two
-// companions the session touched right after the anchor; (c) the same rooted
-// tree with an agent that has no history abstains `no-history`; (d) a history
-// whose whole companion set is gone abstains `no-companions`; (e) a foreign
-// call never poisons the next in-workspace call.
+// harness service or is absent, or its getter throws; (b) the call path's own
+// root wins over the session cwd; (c) a call inside a temp root carrying a
+// `package.json` emits the HISTORY note naming the two companions the session
+// touched right after the anchor; (d) the same rooted tree with an agent that
+// has no history abstains `no-history`; (e) a history whose whole companion
+// set is gone abstains `no-companions`; (f) a foreign call never poisons the
+// next in-workspace call.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -47,16 +48,9 @@ Put(Rooted, "SCHEME.md");
 /** The optional harness service the probe reads (the real shape: get(session)). */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** One judged read of the anchor. */
-const Read = (Path_: string, Agent: unknown): any => ({
-	name: "read",
-	arguments: { file_path: Path_ },
-	agent: Agent,
-});
-
 /**
  * Seed one agent's session history through the state probe: the absolute
- * anchor the call names, then the two followers.
+ * anchor the call names, then the followers.
  */
 const Seed = (Run: any, Agent: unknown, Followers: string[]): void => {
 	Run.State.History.set(Agent, {
@@ -115,17 +109,18 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group G2: the foreign workspace with NO service at all (the bare mount).
+	// Group G2: the call path's own root wins over the session cwd.
 	{
 		const Agent = { agent: { id: "gate-b" } };
 		const Run = Setup();
-		delete Run.Context.workingDirectory;
-		await CheckAsync(Count, "G2: without the service the absolute foreign path still abstains", async () => {
-			const Decision = { kind: "allow" };
-			const Out = await Call(Run, "read", { file_path: ForeignTest }, Agent, Decision);
-			assert.equal(Out, Decision);
-			assert.ok(Run.Lines.includes("test-suggester: abstained foreign-workspace  0.00"));
-			assert.deepEqual(Run.Warns, []);
+		// The cwd service points at the FOREIGN tree (no marker), while the
+		// call path sits inside the ROOTED one: the upward walk finds the
+		// call path's own `package.json` before the cwd fallback.
+		Run.Context.workingDirectory = Service(Foreign);
+		Seed(Run, Agent, ["README.md", "SCHEME.md"]);
+		await CheckAsync(Count, "G2: the call path's own root wins over the session cwd", async () => {
+			const Out = await Call(Run, "read", { file_path: RootedTest }, Agent);
+			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
 		});
 	}
 
@@ -181,10 +176,14 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Agent = { agent: { id: "gate-f" } };
 		const Run = Setup();
-		Run.Context.workingDirectory = Service(Foreign);
+		// The first call is the bare mount (no root at all); the second
+		// arrives with the rooted tree's cwd and the seeded history.
+		delete Run.Context.workingDirectory;
 		Seed(Run, Agent, ["README.md", "SCHEME.md"]);
 		await CheckAsync(Count, "G5: a foreign call never poisons the next in-workspace call", async () => {
-			await Call(Run, "read", { file_path: ForeignTest }, Agent);
+			const Foreign_ = await Call(Run, "read", { file_path: ForeignTest }, Agent);
+			assert.equal(Foreign_.kind, "allow");
+			assert.equal(Run.Lines.includes("test-suggester: abstained foreign-workspace  0.00"), true);
 			Run.Context.workingDirectory = Service(Rooted);
 			const Out = await Call(Run, "read", { file_path: RootedTest }, Agent);
 			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");

@@ -17,7 +17,6 @@ import type { Intent } from "../../Interface/Execution.js";
 import type Projection from "../../Interface/Projection.js";
 import {
 	Check,
-	CheckAsync,
 	Finish,
 	Knowledge,
 	Ledger,

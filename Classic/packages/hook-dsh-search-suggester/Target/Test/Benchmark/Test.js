@@ -11,12 +11,28 @@ import {
   Post,
   Pre,
   rm,
+  SeedHistory,
   Setup,
-  Validate
+  Validate,
+  Workspace
 } from "../Harness.js";
 const Bench = () => {
   rm();
   return Make(Validate({ logFile: Ledger, enabled: true, threshold: 0.6 }));
+};
+const Lanes = ["version", "test", "doc", "config", "symbol"].map((Id) => ({
+  Id,
+  Anchor: `History/${Id}/anchor.ts`,
+  Companions: [0, 1, 2, 3].map((Index) => `History/${Id}/c${Index}.ts`)
+}));
+const Space = Workspace(Lanes.flatMap((Lane) => [Lane.Anchor, ...Lane.Companions]));
+const Expected = {
+  History: Lanes.flatMap((Lane) => Lane.Companions)
+};
+const Seed = (Run) => {
+  for (const Lane of Lanes) {
+    SeedHistory(Run, Lane.Id, Space.At(Lane.Anchor), Lane.Companions);
+  }
 };
 const Candidates = (Text) => Text.split("\n").filter((Line) => Line.startsWith("- ")).map((Line) => {
   const Body = Line.slice(2);
@@ -26,6 +42,7 @@ const Candidates = (Text) => Text.split("\n").filter((Line) => Line.startsWith("
 });
 const Replay = async (Run) => {
   const Notes = [];
+  const Seen = /* @__PURE__ */ new Set();
   for (const [Index, Call] of Sequence.calls.entries()) {
     if (Call.context !== void 0) {
       await Pre(Run, {
@@ -33,9 +50,13 @@ const Replay = async (Run) => {
         messages: [{ role: "user", content: Call.context }]
       });
     }
+    const First = !Seen.has(Call.agent);
+    Seen.add(Call.agent);
+    const Lane = Lanes.find((Entry) => Entry.Id === Call.agent);
+    const Arguments = First && Lane !== void 0 ? { ...Call.arguments, path: Space.At(Lane.Anchor) } : Call.arguments;
     const Out = await Post(Run, {
       name: Call.name,
-      arguments: Call.arguments,
+      arguments: Arguments,
       agent: AgentOf(Call.agent)
     });
     const Contexts = Out.additionalContexts ?? [];
@@ -56,47 +77,49 @@ const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Bench();
+    Seed(Run);
     const Notes = await Replay(Run);
     await CheckAsync(Count, "B1: the sequence emits one note per lane", async () => {
       assert.deepEqual(
         Notes.map((Note) => Note.intent),
-        ["Version", "Test", "Doc", "Config", "Symbol"]
+        ["History", "History", "History", "History", "History"]
       );
       assert.deepEqual(
         Notes.map((Note) => Note.candidates.length),
-        [7, 4, 5, 6, 4]
+        [4, 4, 4, 4, 4]
       );
     });
-    const Metrics = Benchmark(Notes, Sequence.expected);
+    const Metrics = Benchmark(Notes, Expected);
     await CheckAsync(Count, "B1: the benchmark numbers are the recorded baseline", async () => {
       assert.equal(Metrics.Notes, 5);
-      assert.equal(Metrics.Suggested, 26);
-      assert.equal(Metrics.Hits, 26);
-      assert.equal(Metrics.Expected, 37);
-      assert.equal(Metrics.Matched, 26);
+      assert.equal(Metrics.Suggested, 20);
+      assert.equal(Metrics.Hits, 20);
+      assert.equal(Metrics.Expected, 20);
+      assert.equal(Metrics.Matched, 20);
       assert.equal(Metrics.First, 1);
       assert.equal(Metrics.Precision.toFixed(2), "1.00");
-      assert.equal(Metrics.Recall.toFixed(2), "0.70");
+      assert.equal(Metrics.Recall.toFixed(2), "1.00");
     });
     await CheckAsync(Count, "B1: the benchmark line prints the numbers", async () => {
       const Line = `benchmark: calls=${Sequence.calls.length} notes=${Metrics.Notes} precision=${Metrics.Precision.toFixed(2)} recall=${Metrics.Recall.toFixed(2)} first-note=${Metrics.First}`;
       console.log(Line);
       assert.equal(
         Line,
-        "benchmark: calls=50 notes=5 precision=1.00 recall=0.70 first-note=1"
+        "benchmark: calls=50 notes=5 precision=1.00 recall=1.00 first-note=1"
       );
     });
   }
   {
     const Run = Bench();
-    const Metrics = Benchmark(await Replay(Run), Sequence.expected);
+    Seed(Run);
+    const Metrics = Benchmark(await Replay(Run), Expected);
     await CheckAsync(Count, "B2: the replay is deterministic", async () => {
       assert.equal(Metrics.Notes, 5);
-      assert.equal(Metrics.Suggested, 26);
-      assert.equal(Metrics.Expected, 37);
-      assert.equal(Metrics.Matched, 26);
+      assert.equal(Metrics.Suggested, 20);
+      assert.equal(Metrics.Expected, 20);
+      assert.equal(Metrics.Matched, 20);
       assert.equal(Metrics.Precision.toFixed(2), "1.00");
-      assert.equal(Metrics.Recall.toFixed(2), "0.70");
+      assert.equal(Metrics.Recall.toFixed(2), "1.00");
       assert.equal(Metrics.First, 1);
     });
     await CheckAsync(Count, "B2: the replay leaves the deterministic ledger trail", async () => {
@@ -106,12 +129,13 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    const Metrics = Benchmark(await Replay(Run), Sequence.expected);
-    await CheckAsync(Count, "B3: the config cannot lower the pack's gates", async () => {
+    Seed(Run);
+    const Metrics = Benchmark(await Replay(Run), Expected);
+    await CheckAsync(Count, "B3: the config cannot lower the family's gate", async () => {
       assert.equal(Metrics.Notes, 5);
-      assert.equal(Metrics.Suggested, 26);
+      assert.equal(Metrics.Suggested, 20);
       assert.equal(Metrics.Precision.toFixed(2), "1.00");
-      assert.equal(Metrics.Recall.toFixed(2), "0.70");
+      assert.equal(Metrics.Recall.toFixed(2), "1.00");
     });
   }
   return Finish(Count, "Benchmark");

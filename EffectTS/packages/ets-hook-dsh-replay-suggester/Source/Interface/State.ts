@@ -31,7 +31,10 @@
 //   Handle         - the open storage domain (undefined in the JSON fallback);
 //   Pending        - the store chain (the open/recovery and every write, in order);
 //   Flush          - await the store chain (the smoke seam: no sleep needed);
-//   Rules          - the compiled pack, built ONCE at apply (hot path: no regex compilation);
+//   Rules          - the boot pack projection, EMPTY at apply: the candidates
+//                    come from the recall (one synthesized family per call) and
+//                    only an EXPLICIT repo/user pack compiles (per call, in
+//                    Function/Apply), so the built-in pack is never a source;
 //   Agents         - the per-agent ring/cooldown state (WeakMap keyed on the Agent object,
 //                    the tool-coach precedent), built once in Function/Apply;
 //   Factory        - the injected factory service itself, consumed for the
@@ -82,7 +85,7 @@ export default interface State extends Shared {
 	Pending: Promise<void>;
 	/** Await the store chain (the smoke seam: every write is deterministic). */
 	Flush: () => Promise<void>;
-	/** The compiled pack, built once at apply. */
+	/** The boot pack projection: EMPTY at apply (the recall is the candidate source). */
 	Rules: CompiledIntent[];
 	/** The per-agent state, keyed on the Agent object. */
 	Agents: WeakMap<object, AgentMemory>;

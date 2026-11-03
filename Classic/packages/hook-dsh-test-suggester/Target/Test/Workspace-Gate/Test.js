@@ -18,36 +18,40 @@ const Put = (Root, Relative, Body = "x") => {
   FileSystem.writeFileSync(Full, Body, "utf8");
   return Full;
 };
-const Service = (Cwd) => ({ get: () => Cwd });
-const Suite = (Path_, Agent) => [
-  "read",
-  { file_path: Path_, hint: "Run-Smokes says PASS" },
-  Agent
-];
-const Counts = (Agent) => [
-  "grep",
-  { pattern: "expected count", query: "badge" },
-  Agent
-];
 const Foreign = Tree("test-suggester-foreign-");
 const ForeignTest = Put(Foreign, "Source/Test/Foo/Test.ts");
-const Ours = Tree("test-suggester-ours-");
-Put(Ours, "Documentation/ARCHIVE-STYLE.md");
-const OursTest = Put(Ours, "Source/Test/Foo/Test.ts");
-Put(Ours, "Maintain/Run/Smokes/Index.mjs");
-Put(Ours, "README.md");
-const Empty = Tree("test-suggester-empty-");
-Put(Empty, "Documentation/ARCHIVE-STYLE.md");
+const Rooted = Tree("test-suggester-rooted-");
+Put(Rooted, "package.json", "{}");
+const RootedTest = Put(Rooted, "Source/Library.ts");
+Put(Rooted, "README.md");
+Put(Rooted, "SCHEME.md");
+const Service = (Cwd) => ({ get: () => Cwd });
+const Seed = (Run, Agent, Followers) => {
+  Run.State.History.set(Agent, {
+    Seq: Followers.length + 1,
+    Touches: [RootedTest, ...Followers].map((Path_, Seq) => ({
+      seq: Seq,
+      path: Path_,
+      tool: "read"
+    }))
+  });
+};
+const HistoryText = [
+  "[test-suggester] intent=History confidence=0.87",
+  "targets (2):",
+  "- README.md - touched 1 time(s) after this file",
+  "- SCHEME.md - touched 1 time(s) after this file",
+  "note: these files were touched right after this one in this workspace"
+].join("\n");
 const runTest = async () => {
   const Count = MakeCounter();
   {
-    const Agent = { agent: { id: "agent-a" } };
+    const Agent = { agent: { id: "gate-a" } };
     const Run = Setup();
-    Run.Context.workingDirectory = Service(Foreign);
-    await CheckAsync(Count, "G1: a foreign workspace produces NO note and the foreign-workspace line", async () => {
+    delete Run.Context.workingDirectory;
+    await CheckAsync(Count, "G1: a call with no root abstains foreign-workspace", async () => {
       const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
-      const [Name, Args] = Suite(ForeignTest, Agent);
-      const Out = await Call(Run, Name, Args, Agent, Decision);
+      const Out = await Call(Run, "read", { file_path: ForeignTest }, Agent, Decision);
       assert.equal(Out, Decision);
       assert.deepEqual(Out.additionalContexts, [{ id: "downstream" }]);
       assert.ok(Run.Lines.includes("test-suggester: abstained foreign-workspace  0.00"));
@@ -65,78 +69,78 @@ const runTest = async () => {
         }
       };
       const Decision = { kind: "allow" };
-      const [Name, Args] = Suite(ForeignTest, Agent);
-      const Out = await Call(Throwing, Name, Args, Agent, Decision);
+      const Out = await Call(Throwing, "read", { file_path: ForeignTest }, Agent, Decision);
       assert.equal(Out, Decision);
       assert.ok(Throwing.Lines.includes("test-suggester: abstained foreign-workspace  0.00"));
       assert.deepEqual(Throwing.Warns, []);
     });
   }
   {
-    const Agent = { agent: { id: "agent-a" } };
+    const Agent = { agent: { id: "gate-b" } };
     const Run = Setup();
-    delete Run.Context.workingDirectory;
-    await CheckAsync(Count, "G2: without the service the absolute foreign path still abstains", async () => {
-      const Decision = { kind: "allow" };
-      const [Name, Args] = Suite(ForeignTest, Agent);
-      const Out = await Call(Run, Name, Args, Agent, Decision);
-      assert.equal(Out, Decision);
-      assert.ok(Run.Lines.includes("test-suggester: abstained foreign-workspace  0.00"));
-      assert.deepEqual(Run.Warns, []);
+    Run.Context.workingDirectory = Service(Foreign);
+    Seed(Run, Agent, ["README.md", "SCHEME.md"]);
+    await CheckAsync(Count, "G2: the call path's own root wins over the session cwd", async () => {
+      const Out = await Call(Run, "read", { file_path: RootedTest }, Agent);
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
     });
   }
   {
-    const Agent = { agent: { id: "agent-a" } };
+    const Agent = { agent: { id: "gate-c" } };
     const Run = Setup();
-    Run.Context.workingDirectory = Service(Ours);
-    await CheckAsync(Count, "G3: the note names only the companions that exist", async () => {
-      const [Name, Args] = Suite(OursTest, Agent);
-      const Out = await Call(Run, Name, Args, Agent);
+    Run.Context.workingDirectory = Service(Rooted);
+    Seed(Run, Agent, ["README.md", "SCHEME.md"]);
+    await CheckAsync(Count, "G3: the History note names the companions of the temp root", async () => {
+      const Out = await Call(Run, "read", { file_path: RootedTest }, Agent);
       assert.equal(Out.additionalContexts.length, 1);
       assert.deepEqual(Out.additionalContexts[0].source, {
         kind: "test-suggester",
         form: "notice",
-        summary: "Suite 0.65"
+        summary: "History 0.87"
       });
-      const Text = Out.additionalContexts[0].content[0].text;
-      assert.equal(
-        Text,
-        "[test-suggester] intent=Suite confidence=0.65\ntargets (4):\n- Source/Test/<Suite>/Test.ts - the assertion body - the suite that proves it\n- Source/Test/<Suite>/README.md - the expected count and the coverage notes\n- Maintain/Run/Smokes/Index.mjs - the aggregate runner - how the suites are invoked\n- README.md - the badge count, which must match the suite\nnote: one suite per folder: Test.ts asserts, README.md carries the count; Target/ is never edited."
-      );
-      assert.equal(Text.includes("Source/Test/<Suite>"), true);
+      assert.equal(Out.additionalContexts[0].content[0].text, HistoryText);
     });
-    await CheckAsync(Count, "G3: the suggest line counts the existing companions and the placeholders", async () => {
+    await CheckAsync(Count, "G3: the suggest line counts the two companions", async () => {
       assert.deepEqual(LinesWith(Run, "candidates call"), [
-        "test-suggester: suggest Suite 0.65 4 candidates call read"
+        "test-suggester: suggest History 0.87 2 candidates call read"
       ]);
-      assert.equal(LedgerWith("suggest Suite 0.65 4 candidates call read").length, 1);
+      assert.equal(LedgerWith("suggest History 0.87 2 candidates call read").length, 1);
+    });
+    await CheckAsync(Count, "G3: the rooted workspace with no history abstains no-history", async () => {
+      const Decision = { kind: "allow" };
+      const Out = await Call(Run, "read", { file_path: RootedTest }, { agent: { id: "gate-d" } }, Decision);
+      assert.equal(Out, Decision);
+      assert.deepEqual(Out.additionalContexts, void 0);
+      assert.ok(Run.Lines.includes("test-suggester: abstained no-history  0.00"));
+      assert.equal(LedgerWith("abstained no-history  0.00").length, 1);
     });
   }
   {
-    const Agent = { agent: { id: "agent-a" } };
+    const Agent = { agent: { id: "gate-e" } };
     const Run = Setup();
-    Run.Context.workingDirectory = Service(Empty);
-    await CheckAsync(Count, "G4: an emptied intent abstains no-companions with the intent and kappa", async () => {
+    Run.Context.workingDirectory = Service(Rooted);
+    Seed(Run, Agent, ["GONE.md", "ALSO-GONE.md"]);
+    await CheckAsync(Count, "G4: an emptied history abstains no-companions with the family and kappa", async () => {
       const Decision = { kind: "allow" };
-      const [Name, Args] = Counts(Agent);
-      const Out = await Call(Run, Name, Args, Agent, Decision);
+      const Out = await Call(Run, "read", { file_path: RootedTest }, Agent, Decision);
       assert.equal(Out, Decision);
-      assert.ok(Run.Lines.includes("test-suggester: abstained no-companions Counts 0.55"));
-      assert.equal(LedgerWith("abstained no-companions Counts 0.55").length, 1);
+      assert.ok(Run.Lines.includes("test-suggester: abstained no-companions History 0.87"));
+      assert.equal(LedgerWith("abstained no-companions History 0.87").length, 1);
       assert.equal(LinesWith(Run, "candidates call").length, 0);
     });
   }
   {
-    const Agent = { agent: { id: "agent-a" } };
+    const Agent = { agent: { id: "gate-f" } };
     const Run = Setup();
-    Run.Context.workingDirectory = Service(Foreign);
+    delete Run.Context.workingDirectory;
+    Seed(Run, Agent, ["README.md", "SCHEME.md"]);
     await CheckAsync(Count, "G5: a foreign call never poisons the next in-workspace call", async () => {
-      const [ForeignName, ForeignArgs] = Suite(ForeignTest, Agent);
-      await Call(Run, ForeignName, ForeignArgs, Agent);
-      Run.Context.workingDirectory = Service(Ours);
-      const [Name, Args] = Suite(OursTest, Agent);
-      const Out = await Call(Run, Name, Args, Agent);
-      assert.equal(Out.additionalContexts[0].source.summary, "Suite 0.65");
+      const Foreign_ = await Call(Run, "read", { file_path: ForeignTest }, Agent);
+      assert.equal(Foreign_.kind, "allow");
+      assert.equal(Run.Lines.includes("test-suggester: abstained foreign-workspace  0.00"), true);
+      Run.Context.workingDirectory = Service(Rooted);
+      const Out = await Call(Run, "read", { file_path: RootedTest }, Agent);
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
     });
   }
   return Finish(Count, "Workspace-Gate");

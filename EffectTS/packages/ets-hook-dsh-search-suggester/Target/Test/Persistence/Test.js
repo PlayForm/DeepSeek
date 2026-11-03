@@ -12,21 +12,25 @@ import {
   Post,
   rm,
   SeedHistory,
+  Service,
   Setup,
-  Validate
+  Validate,
+  Workspace
 } from "../Harness.js";
 const Anchor = "README.md";
 const Companions = ["CHANGELOG.md", "SCHEME.md"];
+const Space = Workspace([Anchor, ...Companions]);
 const Read = (Id) => ({
   name: "read",
-  arguments: { file_path: Anchor },
+  arguments: { file_path: Space.At(Anchor) },
   agent: AgentOf(Id)
 });
 const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Setup();
-    SeedHistory(Run, "a", Anchor, Companions);
+    Run.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "P1: an emit writes the knowledge file atomically", async () => {
       await Post(Run, Read("a"));
       assert.equal(FileSystem.existsSync(Knowledge), true);
@@ -89,7 +93,8 @@ const runTest = async () => {
       assert.equal(Run.Warns.length, 0);
     });
     await CheckAsync(Count, "P3: the cold start still emits from the session history", async () => {
-      SeedHistory(Run, "a", Anchor, Companions);
+      Run.Context.workingDirectory = Service(Space.Root);
+      SeedHistory(Run, "a", Space.At(Anchor), Companions);
       const Out = await Post(Run, Read("a"));
       assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
     });

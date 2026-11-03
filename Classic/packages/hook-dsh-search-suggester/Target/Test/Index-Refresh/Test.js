@@ -9,28 +9,34 @@ import {
   MakeCounter,
   Post,
   rm,
+  SeedHistory,
   Setup,
-  Validate
+  Validate,
+  Workspace
 } from "../Harness.js";
-const StrongVersion = (Id) => ({
-  name: "grep",
-  arguments: { pattern: "1.2.3 version", path: "package.json" },
+const Anchor = "README.md";
+const Companions = ["CHANGELOG.md", "package.json"];
+const Space = Workspace([Anchor, ...Companions]);
+const Read = (Id) => ({
+  name: "read",
+  arguments: { file_path: Space.At(Anchor) },
   agent: AgentOf(Id)
 });
-const Neutral = "[search-suggester] intent=Version confidence=0.92\ntargets (7):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- Classic/packages/*/package.json - the Classic manifests\n- EffectTS/packages/*/package.json - the EffectTS manifests\n- Site/Source/Library/Content.ts - the site release constant\n- CHANGELOG.md - the new section\n- Documentation/Plugins/PLUGIN-FAMILY.md - the roster versions\nnote: open these before more searches; Target/ is generated, never edit it.";
+const Neutral = "[search-suggester] intent=History confidence=0.87\ntargets (2):\n- CHANGELOG.md - touched 1 time(s) after a similar call\n- package.json - touched 1 time(s) after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
 const runTest = async () => {
   const Count = MakeCounter();
   {
     rm();
-    const Nodes = [{ path: "package.json", kind: "File", version: "1" }];
-    const Graph = FakeGraph(Nodes);
+    const Graph = FakeGraph([{ path: "package.json", kind: "File", version: "1" }]);
     const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
       Context.workspaceGraph = Graph;
     });
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    SeedHistory(Run, "b", Space.At(Anchor), Companions);
     await CheckAsync(Count, "R1: the projection is built once and reused", async () => {
       assert.equal(Graph.Calls.snapshots, 1);
-      await Post(Run, StrongVersion("a"));
-      await Post(Run, StrongVersion("b"));
+      await Post(Run, Read("a"));
+      await Post(Run, Read("b"));
       assert.equal(Graph.Calls.snapshots, 1);
     });
   }
@@ -41,12 +47,14 @@ const runTest = async () => {
     const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
       Context.workspaceGraph = Graph;
     });
-    const Before = await Post(Run, StrongVersion("a"));
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    SeedHistory(Run, "b", Space.At(Anchor), Companions);
+    const Before = await Post(Run, Read("a"));
     await CheckAsync(Count, "R2: the first projection leads with the only proven path", async () => {
       const Text = Before.additionalContexts[0].content[0].text;
       assert.equal(
         Text.startsWith(
-          "[search-suggester] intent=Version confidence=0.92\ntargets (7):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest"
+          "[search-suggester] intent=History confidence=0.87\ntargets (2):\n- package.json - touched 1 time(s) after a similar call"
         ),
         true
       );
@@ -57,12 +65,12 @@ const runTest = async () => {
       assert.equal(Graph.Calls.snapshots, 1);
     });
     await CheckAsync(Count, "R2: the rebuilt projection reflects the re-indexed graph", async () => {
-      const Out = await Post(Run, StrongVersion("b"));
+      const Out = await Post(Run, Read("b"));
       assert.equal(Graph.Calls.snapshots, 2);
       const Text = Out.additionalContexts[0].content[0].text;
       assert.equal(
         Text.startsWith(
-          "[search-suggester] intent=Version confidence=0.92\ntargets (7):\n- CHANGELOG.md - the new section\n- package.json - the monorepo manifest"
+          "[search-suggester] intent=History confidence=0.87\ntargets (2):\n- CHANGELOG.md - touched 1 time(s) after a similar call"
         ),
         true
       );
@@ -78,15 +86,17 @@ const runTest = async () => {
         Context.workspaceGraph = Graph;
       }
     );
-    await Post(Run, StrongVersion("a"));
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    SeedHistory(Run, "b", Space.At(Anchor), Companions);
+    await Post(Run, Read("a"));
     await CheckAsync(Count, "R3: a frozen projection is not rebuilt on tools/change", async () => {
       Nodes.push({ path: "CHANGELOG.md", kind: "File", version: "2" });
       Run.CtxListeners["tools/change"]();
       assert.equal(Graph.Calls.snapshots, 1);
-      const Out = await Post(Run, StrongVersion("b"));
+      const Out = await Post(Run, Read("b"));
       assert.equal(
         Out.additionalContexts[0].content[0].text.startsWith(
-          "[search-suggester] intent=Version confidence=0.92\ntargets (7):\n- package.json - the monorepo manifest"
+          "[search-suggester] intent=History confidence=0.87\ntargets (2):\n- package.json - touched 1 time(s) after a similar call"
         ),
         true
       );
@@ -98,18 +108,20 @@ const runTest = async () => {
     const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
       Context.workspaceGraph = Graph;
     });
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "R4: an empty graph is re-probed on every read", async () => {
       assert.equal(Graph.Calls.snapshots, 1);
-      await Post(Run, StrongVersion("a"));
-      await Post(Run, StrongVersion("a"));
+      await Post(Run, Read("a"));
+      await Post(Run, Read("a"));
       assert.equal(Graph.Calls.snapshots, 3);
       assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 1);
     });
   }
   {
     const Run = Setup();
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "R5: without a service the note is the neutral one", async () => {
-      const Out = await Post(Run, StrongVersion("a"));
+      const Out = await Post(Run, Read("a"));
       assert.equal(Out.additionalContexts[0].content[0].text, Neutral);
       assert.deepEqual(Run.Warns, []);
     });

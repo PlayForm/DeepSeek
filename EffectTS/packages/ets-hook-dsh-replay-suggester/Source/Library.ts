@@ -14,15 +14,19 @@
 // answers the question "the last time this was done, what did the model
 // actually touch and how did it verify?" (SEARCH-SUGGESTER-PLUGIN.md §9.3):
 // when the model searches with an intent it has pursued before, the hook
-// recalls the matching record from its history store
+// recalls the matching record from the agent's OWN previous tool calls (the
+// session history the hook itself produces) and prepends ONE labeled
+// additionalContexts notice: the files touched last time and the
+// verification command. The SEEDED store
 // (~/.dsh/replay-suggester/history.json, the seed of the search-suggester's
-// journal) and prepends ONE labeled additionalContexts notice: the files
-// touched last time and the verification command. The store is loaded once
-// at apply (a JSON read on the boot path, not the hot path); a missing or
-// corrupt store degrades to silence, never to a guess - without a record
-// the hook abstains (`replay no-memory`). Deterministic classifier (no LLM
-// in the hot path), high threshold, a cooldown, a per-turn cap, and an
-// abstention path.
+// journal) is an OPTIONAL user seed, read once at apply (a JSON read on the
+// boot path, not the hot path); a missing or corrupt store degrades to
+// silence, never to a guess. The literal built-in pack is RETIRED from the
+// hot path: without a record and without an explicit pack the hook abstains
+// (`replay no-history`), and a record whose recall carries no companions
+// abstains `no-companions`. Deterministic classifier (no LLM in the hot
+// path), high threshold, a cooldown, a per-turn cap, and the abstention
+// paths.
 //
 // READ-ONLY by design for the WORKSPACE: the hook never edits, never rewrites
 // arguments, and never denies. It does own a local memory - the recall
@@ -30,7 +34,8 @@
 // is appended to the call history (the per-agent ring plus the durable tier -
 // the `replay_history` storage domain, or the JSON fallback at `recordPath`)
 // and a later call recalls the paths that accompanied a similar prior call.
-// The SEEDED store (`historyPath`) stays read-only and keeps precedence.
+// The SEEDED store (`historyPath`) stays read-only: it is the optional user
+// seed, and it keeps precedence when it matches.
 // Privacy posture (plan §5.4): repo-relative paths only, local only.
 //
 // FULLY CONTRACT-AWARE: every listener awaits next() FIRST and is fail-open

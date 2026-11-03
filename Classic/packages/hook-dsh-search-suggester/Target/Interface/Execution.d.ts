@@ -35,6 +35,8 @@ export interface Intent {
     targets: Target[];
     /** The long-tail family globs. */
     familyGlobs: string[];
+    /** The pack row's one-phrase caveat (the pack library's row carries it; the search note prints its own standing caution). */
+    note?: string;
 }
 /** One judged call, reduced to what the classifier reads. */
 export interface CallView {

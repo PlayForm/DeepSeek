@@ -116,14 +116,15 @@ export const runTest = async (): Promise<number> => {
 		assert.equal(Library.Root(`${Root}/package.json`), Root);
 	});
 
-	// A8: the cwd fallback when no directory carries a marker.
-	Check(Count, "A8: Root falls back to the cwd and returns undefined without one", () => {
+	// A8: the cwd is the starting point for an empty path, never a fallback.
+	Check(Count, "A8: an empty path starts at the cwd and a markerless walk returns undefined", () => {
+		const Repo = Tree("pack-adjacent-cwd-repo-");
+		Put(Repo, "package.json", "{}");
+		assert.equal(Library.Root("", Repo), Repo);
 		const Home = Tree("pack-adjacent-cwd-");
 		Put(Home, "Documentation/INDEX.md");
+		assert.equal(Library.Root("", Home), undefined);
 		assert.equal(Library.Root(`${Home}/Documentation/INDEX.md`), undefined);
-		assert.equal(Library.Root(`${Home}/Documentation/INDEX.md`, Home), Home);
-		assert.equal(Library.Root("", Home), Home);
-		assert.equal(Library.Root(""), undefined);
 	});
 
 	// A9: the opt-out: builtin false turns a layer-less workspace undefined.

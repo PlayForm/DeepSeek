@@ -1,12 +1,11 @@
 // Source/Test/Workspace-Gate/Test.ts - the workspace gate and the existence
 // filter against the fake ctx and REAL temp workspaces: (a) a FOREIGN
-// workspace (a temp tree with the recalled path but no
-// Documentation/ARCHIVE-STYLE.md) produces NO note and the
-// `abstained foreign-workspace` ledger line; (b) OUR workspace (a temp tree
-// WITH the signature and README.md, the recalled file) emits a note naming
-// only the recalled file that exists; (c) a record whose whole file set is
-// absent abstains `no-companions`; (d) a foreign call never poisons the next
-// in-workspace call.
+// workspace (a temp tree with the recalled path but no `.git`/`package.json`
+// root) produces NO note and the `abstained foreign-workspace` ledger line;
+// (b) OUR workspace (a temp tree WITH the root marker and README.md, the
+// recalled file) emits a note naming only the recalled file that exists;
+// (c) a record whose whole file set is absent abstains `no-companions`;
+// (d) a foreign call never poisons the next in-workspace call.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -34,6 +33,11 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
+/** Mark the tree as a workspace root (the pack-independent `package.json` marker). */
+const Manifest = (Root: string): void => {
+	FileSystem.writeFileSync(Path.join(Root, "package.json"), "{}", "utf8");
+};
+
 /** The optional harness service the probe reads (the real shape: get(session)). */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
@@ -46,18 +50,18 @@ const Rec = (Probe: string, Files: string[], Verify = "pnpm test"): unknown => (
 	at: 1700000000,
 });
 
-/** The FOREIGN workspace: the recalled path, no signature file. */
+/** The FOREIGN workspace: the recalled path, no root marker. */
 const Foreign = Tree("replay-suggester-foreign-");
 const ForeignFile = Put(Foreign, "src/Core.ts");
 
-/** OUR workspace: the signature and the recalled file. */
+/** OUR workspace: the root marker and the recalled file. */
 const Ours = Tree("replay-suggester-ours-");
-Put(Ours, "Documentation/ARCHIVE-STYLE.md");
+Manifest(Ours);
 const OursFile = Put(Ours, "README.md");
 
-/** The EMPTY workspace: the signature and the call path, not the recalled file. */
+/** The EMPTY workspace: the root marker and the call path, not the recalled file. */
 const Empty = Tree("replay-suggester-empty-");
-Put(Empty, "Documentation/ARCHIVE-STYLE.md");
+Manifest(Empty);
 const EmptyFile = Put(Empty, "README.md");
 
 export const runTest = async (): Promise<number> => {
@@ -123,18 +127,18 @@ export const runTest = async (): Promise<number> => {
 			assert.deepEqual(Out.additionalContexts[0].source, {
 				kind: "replay-suggester",
 				form: "notice",
-				summary: "Repeat 0.77",
+				summary: "Repeat 0.87",
 			});
 			assert.equal(
 				Out.additionalContexts[0].content[0].text,
-				"[replay-suggester] intent=Repeat confidence=0.77\ntargets (1):\n- README.md - touched last time (Repeat)\nnote: last time verified with pnpm test",
+				"[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- README.md - touched last time (Repeat)\nnote: last time verified with pnpm test",
 			);
 		});
 		await CheckAsync(Count, "G3: the suggest line counts only the existing file", async () => {
 			assert.deepEqual(LinesWith(Run, "candidates call"), [
-				"replay-suggester: suggest Repeat 0.77 1 candidates call read",
+				"replay-suggester: suggest Repeat 0.87 1 candidates call read",
 			]);
-			assert.equal(LedgerWith("suggest Repeat 0.77 1 candidates call read").length, 1);
+			assert.equal(LedgerWith("suggest Repeat 0.87 1 candidates call read").length, 1);
 		});
 	}
 
@@ -149,10 +153,10 @@ export const runTest = async (): Promise<number> => {
 			const Out = await Call(Run, "read", { file_path: EmptyFile }, Agent);
 			assert.equal(
 				Out.additionalContexts[0].content[0].text,
-				"[replay-suggester] intent=Repeat confidence=0.77\ntargets (1):\n- src/Gone.ts - touched last time (Repeat)\nnote: last time verified with pnpm test",
+				"[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- src/Gone.ts - touched last time (Repeat)\nnote: last time verified with pnpm test",
 			);
 			assert.deepEqual(LinesWith(Run, "candidates call"), [
-				"replay-suggester: suggest Repeat 0.77 1 candidates call read",
+				"replay-suggester: suggest Repeat 0.87 1 candidates call read",
 			]);
 		});
 		rmStore();
@@ -163,8 +167,8 @@ export const runTest = async (): Promise<number> => {
 			const Decision = { kind: "allow" };
 			const Out = await Call(Emptied, "read", { file_path: EmptyFile }, Agent, Decision);
 			assert.equal(Out, Decision);
-			assert.ok(Emptied.Lines.includes("replay-suggester: abstained no-companions Repeat 0.77"));
-			assert.equal(LedgerWith("abstained no-companions Repeat 0.77").length, 1);
+			assert.ok(Emptied.Lines.includes("replay-suggester: abstained no-companions Repeat 0.87"));
+			assert.equal(LedgerWith("abstained no-companions Repeat 0.87").length, 1);
 			assert.equal(LinesWith(Emptied, "candidates call").length, 0);
 		});
 	}
@@ -180,7 +184,7 @@ export const runTest = async (): Promise<number> => {
 			await Call(Run, "read", { file_path: ForeignFile }, Agent);
 			Run.Context.workingDirectory = Service(Ours);
 			const Out = await Call(Run, "read", { file_path: OursFile }, Agent);
-			assert.equal(Out.additionalContexts[0].source.summary, "Repeat 0.77");
+			assert.equal(Out.additionalContexts[0].source.summary, "Repeat 0.87");
 		});
 	}
 

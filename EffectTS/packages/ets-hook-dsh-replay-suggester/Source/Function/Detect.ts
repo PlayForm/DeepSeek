@@ -1,14 +1,14 @@
 // Detect - the DETERMINISTIC CLASSIFIER (the plan §4.3: pure function, no
-// LLM, no I/O, O(intents x rules) + a map lookup). Given the compiled pack,
-// a call probe (the tool name + the JSON of its arguments) and the history
-// signal's lift (0 when no record was recalled), it returns the winning
-// Match or null - the algebra's identity element is silence.
+// LLM, no I/O, O(intents x rules) + a map lookup). Given the compiled rules
+// (the synthesized `Repeat` family first, then an explicit pack's families)
+// and a call probe (the tool name + the JSON of its arguments), it returns
+// the winning Match or null - the algebra's identity element is silence.
 //
-// The math is the plan's §3.5: k = sigmoid(sum(weights of matching signals,
-// plus the history lift) + bias), bias -0.6. The lift is the plan's
-// "history" evidence row: without a recalled record the Repeat intent's
-// sum stays at 1.2 (k 0.62) and abstains - the replay answer requires the
-// memory, never a guess.
+// The math is the plan's §3.5: k = sigmoid(sum(weights of matching signals)
+// + bias), bias -0.6. The history evidence is no longer a separate lift: it
+// is the synthesized family's `history` signal (weight 2.5), so a recalled
+// record crosses the gate at k = sigmoid(2.5 - 0.6) = 0.87, while an
+// explicit pack family still has to earn its own weight.
 //
 // The regexes arrive precompiled (Function/Apply compiles once at apply) -
 // the hot path never compiles a regex.
@@ -20,10 +20,10 @@ const Bias = -0.6;
 /** The sigmoid squashes the weighted evidence sum into [0,1]. */
 const Sigmoid = (X: number): number => 1 / (1 + Math.exp(-X));
 
-export default (Rules: CompiledIntent[], Tool: string, Probe: string, Lift = 0): Match | null => {
+export default (Rules: CompiledIntent[], Tool: string, Probe: string): Match | null => {
 	let Winner: Match | null = null;
 	for (const Intent of Rules) {
-		let Sum = Lift;
+		let Sum = 0;
 		for (const Signal of Intent.signals) {
 			switch (true) {
 				case Signal.tools !== undefined &&

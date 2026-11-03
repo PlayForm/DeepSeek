@@ -41,7 +41,7 @@ export default Compose(false, {
 	cooldownCalls: Schema.number().default(6).volatile(),
 	// Maximum notes per agent turn (volatile).
 	maxNotesPerTurn: Schema.number().default(3).volatile(),
-	// The enabled intent ids (volatile). Empty = all pack intents enabled.
+	// The enabled intent ids of an EXPLICIT pack (volatile). Empty = all.
 	intents: Schema.array(String).default([]).volatile(),
 	// The judged tool names - the search-class family plus the edit family
 	// (the plan's emitOn, §4.8). Structural semantics, volatile anyway.

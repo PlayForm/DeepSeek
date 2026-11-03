@@ -6,15 +6,19 @@ Every refusal is a byte-exact ledger line, and the counters are judged calls, ne
 
 ## Scenarios
 
-- T1: the weak Version call (0.84) abstains under the 0.85 gate of the pack, while the strong call (0.92) emits.
-- T2: a second note within the six-call cooldown is suppressed (`suppressed cooldown Version`), and after the cooldown expires the same candidate set is held by the dedupe (`suppressed dedupe Version`).
+- T1: the default gate crosses and the history note emits (`History 0.87`), while a raised config threshold (0.9) abstains `low-confidence History 0.87`.
+- T2: a second note within the six-call cooldown is suppressed (`suppressed cooldown History`), and after the cooldown expires the same candidate set is held by the dedupe (`suppressed dedupe History`).
 - T3: a zero cooldown window reaches the dedupe directly.
-- T4: the per-turn cap (`maxNotesPerTurn: 1`) suppresses the note of the second intent (`suppressed cap Test`), with the Test lane reaching 0.76 through the context + loop credits.
-- T5: the destructive intent keeps its 0.85 pack gate even when the config floor is 0.6 (`Math.max`, so the config can only raise).
+- T4: the per-turn cap (`maxNotesPerTurn: 1`) suppresses the second note when its candidate set differs (`suppressed cap History`).
+- T5: the R13 loop bonus lifts the third same-anchor call over a raised 0.88 floor (`History 0.89`), after two `low-confidence History 0.87` abstentions.
+
+## The gate
+
+The synthetic family's own threshold is 0.75 and the config floor can only raise it (`Math.max`), so the History note's confidence is `sigmoid(2.5 - 0.6) = 0.87`, plus the 0.2 loop bonus on a repeated detection.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-search-suggester: ` prefix)
 
-`abstained low-confidence Version 0.84`, `suggest Version 0.92 7 candidates`, `suppressed cooldown Version`, `suppressed dedupe Version`, `suppressed cap Test`.
+`abstained low-confidence History 0.87`, `suggest History 0.87 2 candidates`, `suppressed cooldown History`, `suppressed dedupe History`, `suppressed cap History`, `suggest History 0.89 2 candidates`.
 
 ## Expected count
 

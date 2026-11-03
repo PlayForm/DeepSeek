@@ -1,13 +1,14 @@
-// Pack - the search domain's projection of the BUILT-IN pack
-// (@playform/lib-dsh-pack): the ten search intents, extracted from this
-// package so the family has ONE source of truth. The data lives in the
-// library's Variable/Builtin; this leaf only selects the `search/` domain
-// (the map key prefix) and keeps the package's State.Pack shape.
+// Pack - RETIRED (the history model). Nothing imports this module, and
+// nothing may: the candidates come from the agent's OWN previous tool calls
+// (the session/event fold in Function/Apply), never from a literal built-in
+// pack. The pack survives ONLY as an explicit user/repo override, resolved per
+// call in Function/Apply with `Resolve(root, { home, builtin: false })`.
 //
-// A resolved workspace pack overrides this projection per call: the Apply
-// listener projects the SAME domain out of the pack the workspace gate
-// loaded, so a repo with a `.dsh/pack.yml` (or a user-layer pack) gets its
-// own intents and a repo without one gets this built-in set.
+// The file stays (with this header) so the package tree keeps its former
+// module, the way `indexPath` stays in the schema: the projection below is the
+// search domain of @playform/lib-dsh-pack, kept for reference and for a
+// diff against a repo pack. It is NOT a candidate source and must not be
+// re-imported by Apply, Dismiss, Seed, or any other module.
 import { Builtin, Families } from "@playform/lib-dsh-pack";
 
 export default Families(Builtin, "search");

@@ -1,6 +1,33 @@
 # Changelog
 
-This file records all notable changes to this package.
+All notable changes to this package will be documented in this file.
+
+## Unreleased
+
+### Changed
+
+- The suggestions come from the agent's OWN previous tool calls in this workspace: the new
+  `session/event` listener folds every `tool/call` into the session's touch history (capped at 512),
+  and the post-execute listener derives the candidates with `Adjacent`, so the note names the files
+  that were touched right after the anchor.
+- The co-touch rows are judged as ONE synthetic `History` family (priority 0, threshold 0.75, one
+  signal of weight 2.5, companions with prior 0.6), so the existing Detect/gate/note pipeline and
+  the `suggest History` ledger line are unchanged.
+- A repo/user pack is now an EXPLICIT override: the listener resolves it with `builtin: false`, so
+  the literal built-in pack is never a candidate source. A workspace with no pack and no history
+  abstains with the new byte-exact line `abstained no-history  0.00`.
+- The workspace root is pack-independent (the nearest ancestor carrying `.git` or `package.json`),
+  and a call with no such root abstains `abstained foreign-workspace  0.00`. The pack's declared
+  signature no longer gates a call.
+- The activation line's second segment is `history` (was `intents <n>`), because the boot pack
+  projection is gone (`State.Rules` starts empty and `Variable/Defaults` is retired from the hot
+  path).
+- The five smoke folders are rewritten onto the history candidates: the loader suite asserts the new
+  activation line, the three listeners and the session/event fold; the pack suite keeps the explicit
+  `.dsh/pack.yml` case with a rooted fixture; the pipeline suite seeds two touches for its emit case
+  and covers the `no-history` abstention; the workspace gate asserts the `History` note, the
+  `no-history` abstention and the emptied-history `no-companions`; the reconciliation suite keeps
+  the drift rows and the graph probe only.
 
 ## 0.2.1
 
@@ -14,28 +41,28 @@ This file records all notable changes to this package.
 
 ### Changed
 
-- The 0.3.0 release line moves the manifest version, the `@playform/` sibling pins, and the host
-  devDependencies together to the `0.2.1-rc.4` host line and zod 4.6.7.
-- The activation version constant moves to 0.3.0.
+- The 0.3.0 release line: the manifest version, the `@playform/` sibling pins and the host
+  devDependencies move together - the host line to `0.2.1-rc.4` and zod to 4.6.7.
+- The activation version constant moves to 0.3.0, with the byte-identical ledger assertions moved in
+  the same change.
 
 ## 0.2.0
 
 ### Added
 
-- The test suggester adds the test-coverage suggestion surface with its build, its tests, and its
-  documentation.
+- The test suggester hook: the test-coverage suggestion surface, with its full build, its
+  documentation and its tests.
 
 ### Changed
 
 - The D4-D8 release pass (the pack and trace libraries ship across both trees) refines the hook's
-  source, its scheme, and its bundle patch.
-- The documentation passes include the repository-wide markdown clean-up, the README restructure
-  onto the role / surfaces / ledger template, the README paragraph split, and the README formatting
-  and clarity pass.
+  source, its scheme and its bundle patch.
+- The documentation passes: the repository-wide markdown clean-up, the prettier reflow, the README
+  restructured onto the role / surfaces / ledger template, and the README formatting pass.
 
 ## 0.1.0
 
 ### Changed
 
-- No package-local history exists, because the package does not exist in the 0.1.0 release and lands
-  afterwards with the 2026-10-22 PoC delivery.
+- No package-local history: the package does not exist in the 0.1.0 release and lands afterwards
+  with the 2026-10-22 PoC delivery.

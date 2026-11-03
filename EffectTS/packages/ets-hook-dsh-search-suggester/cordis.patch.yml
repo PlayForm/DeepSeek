@@ -1,12 +1,26 @@
 # Bundle patch for @playform/hook-dsh-search-suggester.
-# The search-intent TARGET SUGGESTER: it hooks the tools/post-execute
+# The search-intent COMPANION SUGGESTER: it hooks the tools/post-execute
 # waterfall (plain registration - AFTER the ccr's {prepend:true} listener and
-# the normalize family) and, when a search-class call matches one of the ten
-# intent kinds, prepends ONE labeled additionalContexts note naming the
-# likely target set - the standard locations where that intent lives in this
-# repo - BEFORE the model burns the searches. Deterministic: no LLM in the
-# hot path; the note never replaces content, so a ccr-compressed result is
-# unaffected (Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md).
+# the normalize family) and, when a search-class call lands on a path whose
+# session history knows the next files, prepends ONE labeled
+# additionalContexts note naming them - BEFORE the model burns the searches.
+#
+# THE CANDIDATES COME FROM THE AGENT'S OWN PREVIOUS TOOL CALLS: the
+# session/event listener folds every tool/call into the session's touch
+# history (capped at 512), and the post-execute listener reads it through the
+# pack library's Adjacent. The co-touch rows are judged as ONE synthetic
+# `History` family, so the deterministic classifier, the existence filter and
+# the score are unchanged. Deterministic: no LLM in the hot path; the note
+# never replaces content, so a ccr-compressed result is unaffected
+# (Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md).
+#
+# THE PACK IS AN EXPLICIT OVERRIDE ONLY: a repo pack (<repo>/.dsh/pack.yml) or
+# the user-layer pack is resolved with `builtin: false`, so the literal
+# built-in pack is never a candidate source. A workspace with neither a pack
+# nor a history abstains with the byte-exact line
+# `search-suggester: abstained no-history  0.00` (two spaces), and the
+# activation line reads `activated (bundle <version>, history, threshold
+# 0.75)` - the second segment is `history`, not a family count.
 #
 # New entries are declared with `insert:` (docs/user/develop/basic/
 # publish.md) - a bare `id:` row PATCHES an existing entry and the loader
@@ -24,13 +38,13 @@
 # `search-suggester: disabled (enabled=false)` and every listener no-ops to
 # a passthrough (each checks State.On first). The schema defaults are the
 # truth; the full default surface (threshold 0.75, maxCandidates 7,
-# maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, the ten intent
-# kinds, the four judged tools, sectionMode off, dismissTtl 86400, seed on)
-# lives in Variable/Config.ts. EVERY tuning knob is volatile (hot-editable
-# without remounting); the structural knobs (persistPath, refreshOnBoot)
-# remount on edit, and indexPath is retired by the P2 re-spec (the graph
-# projection supersedes the generated index; the field is kept so an
-# existing profile loads unchanged).
+# maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, the intents filter,
+# the four judged tools, sectionMode off, dismissTtl 86400, seed on) lives in
+# Variable/Config.ts. EVERY tuning knob is volatile (hot-editable without
+# remounting); the structural knobs (persistPath, refreshOnBoot) remount on
+# edit, and indexPath is retired by the P2 re-spec (the graph projection
+# supersedes the generated index; the field is kept so an existing profile
+# loads unchanged).
 - insert:
       - id: hook-dsh-search-suggester
         name: "@playform/ets-hook-dsh-search-suggester"

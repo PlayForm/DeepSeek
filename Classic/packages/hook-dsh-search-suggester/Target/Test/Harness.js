@@ -33,6 +33,8 @@ const Finish = (Count, Name) => {
   }
   return Count.N;
 };
+const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "search-suggester-home-"));
+process.env["HOME"] = Home;
 const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "search-suggester-smoke-"));
 const Ledger = Path.join(Root, "search-suggester.log");
 const Knowledge = Path.join(Root, "knowledge.json");
@@ -168,6 +170,17 @@ const Setup = () => {
   rm();
   return Make(Validate({ logFile: Ledger, enabled: true }));
 };
+const Workspace = (Files) => {
+  const Space = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "search-suggester-workspace-"));
+  FileSystem.writeFileSync(Path.join(Space, "package.json"), "{}", "utf8");
+  for (const Relative of Files) {
+    const Full = Path.join(Space, Relative);
+    FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
+    FileSystem.writeFileSync(Full, "x", "utf8");
+  }
+  return { Root: Space, At: (Relative) => Path.join(Space, Relative) };
+};
+const Service = (Cwd) => ({ get: () => Cwd });
 const Post = (Run, Exec, Decision = { kind: "allow", additionalContexts: [] }) => Run.CtxListeners["tools/post-execute"](Exec, {}, () => Promise.resolve(Decision));
 const Pre = (Run, Payload) => Run.CtxListeners["agent/pre-step"](Payload, () => Promise.resolve("down"));
 const Assemble = (Run, Agent) => Run.CtxListeners["system-prompt/assemble"](
@@ -182,6 +195,16 @@ const AgentOf = (Id) => {
   }
   return Agents.get(Id);
 };
+const SeedHistory = (Run, Id, Anchor, Companions) => {
+  Run.State.History.set(AgentOf(Id), {
+    Seq: Companions.length + 1,
+    Touches: [Anchor, ...Companions].map((Path2, Seq) => ({
+      seq: Seq,
+      path: Path2,
+      tool: "read"
+    }))
+  });
+};
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
 if (InvokedDirectly) {
   const Count = MakeCounter();
@@ -193,9 +216,10 @@ if (InvokedDirectly) {
   });
   rm();
   const Run = Setup();
-  Check(Count, "selfcheck: the fake ctx registers the plugin's four listeners", () => {
+  Check(Count, "selfcheck: the fake ctx registers the plugin's five listeners", () => {
     assert.deepEqual(Object.keys(Run.CtxListeners), [
       "loader/volatile-update",
+      "session/event",
       "tools/post-execute",
       "agent/pre-step",
       "system-prompt/assemble",
@@ -204,7 +228,7 @@ if (InvokedDirectly) {
     assert.deepEqual(Run.RootNames, []);
     assert.equal(Run.Returned, void 0);
     assert.equal(Run.Fs.reads + Run.Fs.writes, 0);
-    assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, intents 10, threshold 0.75)`]);
+    assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`]);
   });
   if (Count.N === 3 && Count.F === 1) {
     console.log("Harness selfcheck OK");
@@ -225,6 +249,7 @@ export {
   Finish,
   FirstLine,
   Furnace,
+  Home,
   Knowledge,
   Ledger,
   LedgerLines,
@@ -235,8 +260,11 @@ export {
   Post,
   Pre,
   Root,
+  SeedHistory,
+  Service,
   Setup,
   Validate,
+  Workspace,
   rm
 };
 //# sourceMappingURL=Harness.js.map

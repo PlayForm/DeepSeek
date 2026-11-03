@@ -165,8 +165,11 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Library.Root(join(Outer, "packages/inner/src/File.ts")), Outer);
 		});
 		const Home = Tree("pack-adjacent-home-");
-		Check(Count, "A3: an empty path starts at the cwd and falls back to it", () => {
-			assert.equal(Library.Root("", Home), Home);
+		const CwdRepo = Tree("pack-adjacent-cwd-repo-");
+		Put(CwdRepo, "package.json");
+		Check(Count, "A3: an empty path starts at the cwd and a markerless walk returns undefined", () => {
+			assert.equal(Library.Root("", CwdRepo), CwdRepo);
+			assert.equal(Library.Root("", Home), undefined);
 		});
 	}
 

@@ -2,7 +2,8 @@
 // (or at the explicit cwd when the path is empty) and walk upward until a
 // directory carries `.git` or `package.json` - the workspace is the repo, not
 // the signature. The walk stops at the filesystem root; the explicit cwd is
-// the fallback so a caller outside any repo still gets a usable base.
+// only the starting point for the walk (when the path is empty), so a walk
+// that finds no marker returns no root.
 import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 
@@ -17,7 +18,7 @@ export default (Path: string, Cwd?: string): string | undefined => {
 				: undefined
 			: dirname(Clean(Path));
 	if (Directory === undefined) {
-		return typeof Cwd === "string" && Cwd.length > 0 ? Cwd : undefined;
+		return undefined;
 	}
 	for (let Current = Directory; ; Current = dirname(Current)) {
 		if (existsSync(join(Current, ".git")) || existsSync(join(Current, "package.json"))) {
@@ -27,5 +28,5 @@ export default (Path: string, Cwd?: string): string | undefined => {
 			break;
 		}
 	}
-	return typeof Cwd === "string" && Cwd.length > 0 ? Cwd : undefined;
+	return undefined;
 };
