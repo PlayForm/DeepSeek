@@ -5,6 +5,8 @@
 // answers from the real `contains`/`imports` edges. Today every other folder
 // proves the intent against FakeGraph; this one proves the consumer chain the
 // POC gap analysis named ("the live graph is empty; only FakeGraph-proven").
+// The graph is the ONLY candidate source: an anchor the graph does not know
+// abstains `no-companions` rather than naming a literal path.
 import assert from "node:assert/strict";
 import {
 	Call,
@@ -28,7 +30,7 @@ const FILES = {
 	"/ws/README.md": MARKDOWN,
 };
 
-/** The full-evidence Neighborhood probe: path + symbol + glob shapes. */
+/** The full-evidence Neighborhood probe: the anchor the graph is asked about. */
 const ARGS = {
 	file_path: "/ws/Source/Core.ts",
 	pattern: "export function",
@@ -62,7 +64,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		Check(Count, "G1: the suggest line is byte-exact and the graph answered", () => {
 			assert.deepEqual(LinesWith(Run, "candidates call"), [
-				"graph-suggester: suggest Neighborhood 0.65 3 candidates call read",
+				"graph-suggester: suggest Neighborhood 0.87 3 candidates call read",
 			]);
 			assert.equal(LinesWith(Run, "graph unavailable").length, 0);
 			assert.equal(LinesWith(Run, "abstained").length, 0);
@@ -72,19 +74,19 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Result.additionalContexts.length, 1);
 			assert.equal(
 				Result.additionalContexts[0].content[0].text,
-				"[graph-suggester] intent=Neighborhood confidence=0.65\ntargets (3):\n- /ws/Source/Core.ts - the definition\n- /ws/Source/Core.test.ts - the tests\n- /ws/Source/Use.ts - the importers\nnote: the neighborhood is the connected component: definition, callers, tests, doc block.",
+				"[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (3):\n- /ws/Source/Core.ts - the definition\n- /ws/Source/Core.test.ts - the tests\n- /ws/Source/Use.ts - the importers\nnote: the neighborhood is the connected component: definition, callers, tests, doc block.",
 			);
 			assert.equal(Result.kind, "allow");
 		});
-		Check(Count, "G1: the candidates are the real graph's, never the static fallback set", () => {
-			const Text = Result.additionalContexts[0].content[0].text;
-			for (const Fallback of [
-				"Source/Interface/*.ts",
-				"Source/Function/*.ts",
-				"Source/Test/<Suite>/Test.ts",
-			]) {
-				assert.equal(Text.includes(Fallback), false, `no fallback target ${Fallback}`);
-			}
+		Check(Count, "G1: the candidates are exactly the graph's own entries", () => {
+			const Paths = Result.additionalContexts[0].content[0].text
+				.split("\n")
+				.filter((Line: string) => Line.startsWith("- "))
+				.map((Line: string) => Line.slice(2).split(" - ")[0]);
+			assert.deepEqual(
+				Paths,
+				Graph.neighborhood("/ws/Source/Core.ts").map((Entry: any) => Entry.path),
+			);
 		});
 	}
 
@@ -94,12 +96,13 @@ export const runTest = async (): Promise<number> => {
 			Context.workspaceGraph = Graph;
 		});
 		await Call(Unknown, "read", { ...ARGS, file_path: "/ws/Source/Missing.ts" });
-		Check(Count, "G2: an unknown anchor is an empty component, so the static set answers", () => {
-			assert.deepEqual(LinesWith(Unknown, "candidates call"), [
-				"graph-suggester: suggest Neighborhood 0.65 3 candidates call read",
+		Check(Count, "G2: an unknown anchor is an empty component, so the hook abstains honestly", () => {
+			assert.deepEqual(Graph.neighborhood("/ws/Source/Missing.ts"), []);
+			assert.deepEqual(LinesWith(Unknown, "candidates call"), []);
+			assert.deepEqual(LinesWith(Unknown, "abstained"), [
+				"graph-suggester: abstained no-companions Neighborhood 0.87",
 			]);
 			assert.equal(LinesWith(Unknown, "graph unavailable").length, 0);
-			assert.deepEqual(Graph.neighborhood("/ws/Source/Missing.ts"), []);
 		});
 	}
 

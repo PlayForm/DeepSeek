@@ -27,13 +27,13 @@ export default interface Config {
 	cooldownCalls: number;
 	/** Maximum notes per agent turn (volatile). */
 	maxNotesPerTurn: number;
-	/** The enabled intent ids - a pack intent not listed here never fires (volatile). */
+	/** The enabled intent ids of an EXPLICIT pack - a pack intent not listed here never fires (volatile; the synthesized Repeat family is always on). */
 	intents: string[];
 	/** The tool names the hook judges (volatile; other tools pass through silently). */
 	emitOn: string[];
 	/** Path prefixes a candidate is never drawn from (volatile). */
 	exclude: string[];
-	/** The history store path (structural: loaded once at apply; changing it remounts). */
+	/** The OPTIONAL seeded history store path (structural: loaded once at apply; changing it remounts). */
 	historyPath: string;
 	/** How many calls after a note the follow/ignore observation window spans (volatile; also the recall's episode radius). */
 	learnWindow: number;

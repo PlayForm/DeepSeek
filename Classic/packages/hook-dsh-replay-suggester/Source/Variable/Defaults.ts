@@ -1,14 +1,14 @@
 // Defaults - the replay domain's projection of the BUILT-IN pack
-// (@playform/lib-dsh-pack): the one Repeat intent, extracted from this
-// package so the family has ONE source of truth. The data lives in the
-// library's Variable/Builtin; this leaf only selects the `replay/` domain
-// (the map key prefix).
+// (@playform/lib-dsh-pack): the one Repeat intent, kept as the domain's
+// reference table.
 //
-// A resolved workspace pack overrides this projection per call: the Apply
-// listener compiles the SAME domain out of the pack the workspace gate
-// loaded (memoized per root), so a repo with a `.dsh/pack.yml` (or a
-// user-layer pack) gets its own intent and caveat, and a repo without one
-// gets this built-in set.
+// RETIRED FROM THE HOT PATH: nothing imports this module any more. The
+// candidates come from the recall - the agent's own previous tool calls,
+// synthesized into the `Repeat` family per call - and a pack is only an
+// EXPLICIT user/repo override (Function/Apply resolves it with
+// `builtin: false`), so the built-in projection is never a candidate source.
+// The file stays because the built-in pack is still the library's documented
+// default; this package no longer projects it into the hot path.
 import { Builtin, Families } from "@playform/lib-dsh-pack";
 
 export default Families(Builtin, "replay");

@@ -30,8 +30,9 @@ export default Compose(false, {
 	logFile: Schema.string().default("~/.dsh/playform/ets-hook-dsh-graph-suggester.log").volatile(),
 	// Master switch (volatile: the kill-criterion flip is a hot edit).
 	enabled: Schema.boolean().default(true).volatile(),
-	// The default confidence gate (volatile). The pack's per-intent thresholds
-	// may raise it; they may never lower it (the gate is max of the two).
+	// The default confidence gate (volatile). The graph intents' 0.75 floor
+	// may raise it; a lower config value never lowers the floor (the gate is
+	// the max of the two).
 	threshold: Schema.number().default(0.75).volatile(),
 	// Maximum candidates in one note (volatile).
 	maxCandidates: Schema.number().default(7).volatile(),
@@ -41,15 +42,15 @@ export default Compose(false, {
 	cooldownCalls: Schema.number().default(6).volatile(),
 	// Maximum notes per agent turn (volatile).
 	maxNotesPerTurn: Schema.number().default(3).volatile(),
-	// The enabled intent ids (volatile). Empty = all pack intents enabled.
+	// The enabled intent ids (volatile). Empty = both graph intents enabled.
 	intents: Schema.array(String).default([]).volatile(),
 	// The judged tool names - the read/search family (the graph pack's
 	// trigger is the discovery call, SEARCH-SUGGESTER-PLUGIN.md §9.2).
 	emitOn: Schema.array(String).default(["glob", "grep", "read"]).volatile(),
 	// Path prefixes a candidate is never drawn from (volatile).
 	exclude: Schema.array(String).default(["node_modules", "Target", ".git", "dist"]).volatile(),
-	// Whether the graph-based Neighborhood intent may fire (volatile).
-	// False = static intents only; the Neighborhood intent never guesses
-	// from a fallback when the graph is off.
+	// Whether the graph intents may fire (volatile). False = they abstain
+	// through the unavailable path; nothing is guessed from a literal
+	// fallback, because the hook no longer carries one.
 	graph: Schema.boolean().default(true).volatile(),
 });

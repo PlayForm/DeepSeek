@@ -13,16 +13,24 @@ When the model reads or greps a source file, the hook asks the workspace v4.1 gr
 code-block neighborhood (the definition, the callers, the tests, the doc block) and prepends ONE
 labeled `additionalContexts` notice that names it.
 
-Two intents live in the embedded pack (`Source/Variable/Defaults.ts`):
+Two intents are synthesized per call from that query (`Source/Function/Apply.ts`), and the graph is
+their only candidate source:
 
-- **Neighborhood** - resolved through the graph service, and a static fallback set is appended only
-  when the graph answers with an _empty_ component.
+- **Neighborhood** - the whole connected component of the anchor.
 
-    When the service is absent or throws, the intent **abstains** with a `graph unavailable` ledger
-    line (once per apply), because the graph intent never guesses.
+- **Sibling** - the same-directory projection of the same component, with the anchor excluded. It
+  speaks when the config's `intents` list selects it alone, because the Neighborhood intent outranks
+  it on the tie.
 
-- **Sibling** - a package-name grep resolves statically (the family roster, the inventory, the
-  sibling README).
+The private literal pack and its static fallback targets are retired: `Source/Variable/Defaults.ts`
+is unimported, and nothing names a path of its own.
+
+When the service is absent or throws, the intent **abstains** with a `graph unavailable` ledger line
+(once per apply) and an `abstained graph-unavailable` line per call, because the graph intent never
+guesses.
+
+When the component is **empty**, the intent abstains `abstained no-companions` instead of falling
+back to literal targets.
 
 The graph service shape is declared in the own `Source/Interface/Graph.ts` of this package (the
 self-contained PoC rule): no import from sibling workspace packages.
@@ -41,8 +49,8 @@ the `indexWorkspace` of the real graph fills.
     The `tools/post-execute` listener (waterfall, plain registration - after the `{prepend: true}`
     listener of ccr) calls `next()` first.
 
-    Then the hook runs detect -> gate -> resolve (graph query for Neighborhood) -> prepend ONE
-    notice.
+    Then the hook probes the anchor, queries the graph, builds the synthetic intents, runs detect ->
+    gate -> resolve, and prepends ONE notice.
 
     Content is never replaced.
 

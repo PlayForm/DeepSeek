@@ -41,7 +41,9 @@ export default Compose(false, {
 	cooldownCalls: Schema.number().default(6).volatile(),
 	// Maximum notes per agent turn (volatile).
 	maxNotesPerTurn: Schema.number().default(3).volatile(),
-	// The enabled intent ids (volatile). Empty = all pack intents enabled.
+	// The enabled intent ids of an EXPLICIT pack (volatile). Empty = all pack
+	// intents enabled. The synthesized Repeat family of the recall is always
+	// on, because it IS the candidate source.
 	intents: Schema.array(String).default([]).volatile(),
 	// The judged tool names - the search family plus the edit family (a
 	// replay answer is useful at either end of the pipeline, plan §1.4).
@@ -50,9 +52,10 @@ export default Compose(false, {
 		.volatile(),
 	// Path prefixes a candidate is never drawn from (volatile).
 	exclude: Schema.array(String).default(["node_modules", "Target", ".git", "dist"]).volatile(),
-	// The history store path (structural: loaded once at apply; a change
-	// remounts the plugin). The store lives under ~/.dsh, never the repo
-	// (the plan §5 privacy posture).
+	// The OPTIONAL seeded history store path (structural: loaded once at
+	// apply; a change remounts the plugin). It is the user seed of the recall,
+	// read-only, and it lives under ~/.dsh, never the repo (the plan §5
+	// privacy posture).
 	historyPath: Schema.string().default("~/.dsh/replay-suggester/history.json"),
 	// How many calls after a note the follow/ignore observation window spans
 	// (volatile; also the recall's episode radius - the paths recorded within

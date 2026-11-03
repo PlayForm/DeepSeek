@@ -280,7 +280,8 @@ export const Validate = (Raw: Record<string, unknown>): any =>
 	});
 
 /**
- * The standard enabled mount with an absolute history store path.
+ * The standard enabled mount with an absolute path to the OPTIONAL seeded
+ * history store.
  */
 export const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();
@@ -453,7 +454,7 @@ if (InvokedDirectly) {
 		assert.ok(Run.State !== undefined);
 		assert.ok(
 			Run.Lines.includes(
-				`replay-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 1, threshold 0.75, history 0)`,
+				`replay-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75, history 0)`,
 			),
 		);
 		assert.ok(Run.Lines.includes("replay-suggester: history missing (starting empty)"));

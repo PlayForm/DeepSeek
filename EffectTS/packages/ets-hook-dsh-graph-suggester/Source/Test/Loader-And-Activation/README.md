@@ -12,17 +12,19 @@ the apply-time wiring, the pass-through discipline, the schema fail-loud, and th
   (logger and durable ledger), and both listeners are still wired on the
   plugin ctx.
 - L3: the enabled mount - the byte-exact activation line
-  `activated (bundle 0.2.1, intents 2, threshold 0.75)` (logger and ledger),
+  `activated (bundle 0.2.1, graph, threshold 0.75)` (logger and ledger),
   the listener registration order on the plugin ctx
   (`loader/volatile-update`, `tools/post-execute`, `agent/pre-step`), and a
-  distinct root object.
+  distinct root object. The second segment is `graph`, not an intent count:
+  there is no boot pack.
 - L4: the pass-through discipline - a non-judged tool returns the
-  downstream decision UNCHANGED; the `intents` config filter removes the
-  pack intent from the compiled rules (and the activation line says so).
+  downstream decision UNCHANGED; the boot rule set is EMPTY (the graph
+  intents are synthesized per call) and the `intents` config list survives
+  on the state for that synthesis.
 - L5: the fail-loud validation - a non-numeric `threshold` and a
   non-boolean `enabled` throw at load through the schema.
 - L6: the mount purity - ZERO fs operations; the state probe carries the
-  factory's module identity and the compiled pack.
+  factory's module identity, the empty boot rule set and the gate.
 
 ## Fixtures
 
@@ -33,8 +35,7 @@ No fake clock is needed, because the plugin has no clock dependency.
 ## Expected ledger strings (byte-exact, `graph-suggester: ` prefix)
 
 `disabled (enabled=false)`,
-`activated (bundle 0.2.1, intents 2, threshold 0.75)`,
-`activated (bundle 0.2.1, intents 1, threshold 0.75)`.
+`activated (bundle 0.2.1, graph, threshold 0.75)`.
 
 ## Expected count
 

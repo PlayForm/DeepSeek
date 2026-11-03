@@ -21,7 +21,10 @@
 //   EmitOn         - the judged tool names (config `emitOn`, volatile);
 //   Exclude        - candidate path prefixes never suggested (config `exclude`, volatile);
 //   Graph          - whether the Neighborhood intent may fire (config `graph`, volatile);
-//   Rules          - the compiled pack, built ONCE at apply (hot path: no regex compilation);
+//   Rules          - the compiled rules; EMPTY at apply, because the intents
+//                    are synthesized per call from the graph query (the
+//                    retired literal pack, Variable/Defaults, is never
+//                    imported);
 //   Agents         - the per-agent ring/cooldown state (WeakMap keyed on the Agent object,
 //                    the tool-coach precedent), built once in Function/Apply;
 //   Unavailable    - whether `graph unavailable` has been logged this apply
@@ -53,7 +56,7 @@ export default interface State extends Shared {
 	Exclude: string[];
 	/** Whether the graph-based Neighborhood intent may fire (config `graph`, volatile). */
 	Graph: boolean;
-	/** The compiled pack, built once at apply. */
+	/** The compiled rules; empty at apply (the graph intents are compiled per call). */
 	Rules: CompiledIntent[];
 	/** The per-agent state, keyed on the Agent object. */
 	Agents: WeakMap<object, AgentMemory>;

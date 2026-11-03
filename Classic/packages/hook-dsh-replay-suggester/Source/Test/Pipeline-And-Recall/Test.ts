@@ -1,9 +1,10 @@
 // Source/Test/Pipeline-And-Recall/Test.ts - the pipeline against the seeded
 // history store: the Repeat intent fires ONLY through the recalled record
-// (the lift crosses the gate), the recalled candidates and the verification
-// caveat, the longest-probe rule, the candidate cap, the exclusion, the
-// gate (cooldown, cap + the pre-step reset), the silence without a record,
-// the block decision, the volatile flip, and the fs purity.
+// (the synthesized family crosses the gate), the recalled candidates and the
+// verification caveat, the longest-probe rule, the candidate cap, the
+// exclusion, the gate (cooldown, cap + the pre-step reset), the `no-history`
+// abstention without a record, the block decision, the volatile flip, and
+// the fs purity.
 import assert from "node:assert/strict";
 import {
 	Call,
@@ -45,20 +46,20 @@ export const runTest = async (): Promise<number> => {
 		const Result = await Call(Run, "read", REPEAT_ARGS);
 		Check(Count, "R1: the suggest line is byte-exact (logger and durable ledger)", () => {
 			assert.deepEqual(LinesWith(Run, "candidates call"), [
-				"replay-suggester: suggest Repeat 0.77 2 candidates call read",
+				"replay-suggester: suggest Repeat 0.87 2 candidates call read",
 			]);
-			assert.equal(LedgerWith("suggest Repeat 0.77 2 candidates call read").length, 1);
+			assert.equal(LedgerWith("suggest Repeat 0.87 2 candidates call read").length, 1);
 		});
 		await CheckAsync(Count, "R1: the note carries the recalled files and the verification", async () => {
 			const Note = Result.additionalContexts[0];
 			assert.deepEqual(Note.source, {
 				kind: "replay-suggester",
 				form: "notice",
-				summary: "Repeat 0.77",
+				summary: "Repeat 0.87",
 			});
 			assert.equal(
 				Note.content[0].text,
-				"[replay-suggester] intent=Repeat confidence=0.77\ntargets (2):\n- src/Core.ts - touched last time (Repeat)\n- src/Use.ts - touched last time (Repeat)\nnote: last time verified with pnpm test",
+				"[replay-suggester] intent=Repeat confidence=0.87\ntargets (2):\n- src/Core.ts - touched last time (Repeat)\n- src/Use.ts - touched last time (Repeat)\nnote: last time verified with pnpm test",
 			);
 		});
 	}
@@ -74,7 +75,7 @@ export const runTest = async (): Promise<number> => {
 		const Result = await Call(Run, "read", { ...REPEAT_ARGS, flag: true });
 		Check(Count, "R2: the longest matching probe supplies the candidates", () => {
 			assert.deepEqual(LinesWith(Run, "candidates call"), [
-				"replay-suggester: suggest Repeat 0.77 2 candidates call read",
+				"replay-suggester: suggest Repeat 0.87 2 candidates call read",
 			]);
 			assert.ok(Result.additionalContexts[0].content[0].text.includes("- src/Deep1.ts"));
 		});
@@ -86,7 +87,7 @@ export const runTest = async (): Promise<number> => {
 		const CappedResult = await Call(Capped, "read", REPEAT_ARGS);
 		Check(Count, "R2: the recalled files are capped at maxCandidates", () => {
 			assert.deepEqual(LinesWith(Capped, "candidates call"), [
-				"replay-suggester: suggest Repeat 0.77 1 candidates call read",
+				"replay-suggester: suggest Repeat 0.87 1 candidates call read",
 			]);
 			assert.ok(CappedResult.additionalContexts[0].content[0].text.includes("- src/A.ts"));
 		});
@@ -96,7 +97,7 @@ export const runTest = async (): Promise<number> => {
 		await Call(Excluded, "read", REPEAT_ARGS);
 		Check(Count, "R2: a fully excluded recall abstains as ambiguous", () => {
 			assert.deepEqual(LinesWith(Excluded, "abstained"), [
-				"replay-suggester: abstained ambiguous Repeat 0.77",
+				"replay-suggester: abstained ambiguous Repeat 0.87",
 			]);
 		});
 	}
@@ -139,10 +140,12 @@ export const runTest = async (): Promise<number> => {
 		const Run = Setup();
 		const Decision = { kind: "allow" };
 		const Result = await Call(Run, "read", REPEAT_ARGS, undefined, Decision);
-		Check(Count, "R4: without a recalled record the hook stays silent", () => {
+		Check(Count, "R4: without a recalled record the hook abstains no-history", () => {
 			assert.equal(Result, Decision);
 			assert.equal(LinesWith(Run, "candidates call").length, 0);
-			assert.equal(LinesWith(Run, "abstained").length, 0);
+			assert.deepEqual(LinesWith(Run, "abstained"), [
+				"replay-suggester: abstained no-history  0.00",
+			]);
 			assert.equal(LinesWith(Run, "suppressed").length, 0);
 		});
 	}
@@ -161,10 +164,10 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Result.additionalContexts[0].source.kind, "replay-suggester");
 			assert.equal(Result.additionalContexts[1], Downstream.additionalContexts[0]);
 		});
-		Check(Count, "R5: an empty verification falls back to the pack caveat", () => {
+		Check(Count, "R5: an empty verification falls back to the synthesized caveat", () => {
 			assert.ok(
 				Result.additionalContexts[0].content[0].text.endsWith(
-					"note: the recall is the answer; without a record the hook abstains.",
+					"note: the last time this call was made, these files were touched",
 				),
 			);
 		});

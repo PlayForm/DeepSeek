@@ -2,6 +2,31 @@
 
 All notable changes to this package will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- The suggestions come from the workspace graph and from nothing else: the `Neighborhood` intent is
+  the connected component of the anchor (`ctx.workspaceGraph.neighborhood(path, limit)`) and the
+  `Sibling` intent is that component's same-directory projection (the anchor excluded), both
+  synthesized per judged call and prepended as data (priority 1 and 2, threshold 0.75, one `graph`
+  signal of weight 2.5, targets with prior 1.0 and the entries' own reasons). Their confidence is
+  `k = sigmoid(2.5 - 0.6) = 0.87`.
+- The private literal pack is RETIRED from the hot path: `Source/Variable/Defaults.ts` keeps the
+  domain's reference table but nothing imports it, and `State.Rules` starts empty at apply.
+- The static fallback is gone: an empty component abstains with the new byte-exact line
+  `abstained no-companions <Intent> <k>` instead of naming a literal path, while an absent or
+  throwing service still logs `graph unavailable` once per apply and abstains
+  `abstained graph-unavailable <Intent> <k>`.
+- A judged call whose arguments carry no anchor path stays silent: there is nothing to ask the
+  graph, so no intent applies and no line is written.
+- The activation line's second segment is `graph` (was `intents <n>`), because the boot pack
+  projection is gone.
+- The three smoke folders are rewritten onto the graph-only model: no assertion names a literal pack
+  path, the empty-component case asserts `no-companions`, and the Sibling case drives the
+  same-directory projection through the `intents` filter (19, 6 and 15 checks).
+- SCHEME.md, README.md and the bundle patch header document the graph-only model.
+
 ## 0.2.1
 
 ### Changed

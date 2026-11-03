@@ -1,7 +1,7 @@
 // Apply - the plugin entry function, a THIN MODULE WIRE-UP in the factory
 // family's shape: build the State through `Factory.State`, emit the durable
-// activation proof, load the SEEDED history store ONCE (boot path), probe the
-// storage facility for the PRODUCER's durable tier, compile the pack ONCE, and
+// activation proof, load the SEEDED history store ONCE (the optional boot
+// seed), probe the storage facility for the PRODUCER's durable tier, and
 // register the hook's OWN listeners. The replay-suggester's special steps:
 //
 //   * THE PRODUCER (the wave 2c re-spec): every judged call that names a path
@@ -10,17 +10,23 @@
 //     domain or the JSON fallback, Function/Storage/Recover/Persist). The
 //     append happens BEFORE the recall, and the sequence fence keeps the call
 //     out of its own recall.
-//   * THE RECALL: the seeded store first (the fixtures' contract), then the
-//     live history (the agent ring, then the durable mirror). The Repeat
-//     intent RESOLVES through the recalled record - the candidates are the
-//     files touched last time, and the note's caveat line names the command
-//     that verified. Without a record the hook ABSTAINS (`replay no-memory`):
-//     a replay answer without a record is a guess, and the plan forbids the
+//   * THE RECALL IS THE ONLY DEFAULT SOURCE: the seeded store first (the
+//     optional user seed), then the live history (the agent ring, then the
+//     durable mirror). When a recall exists it is SYNTHESIZED into ONE pack
+//     family (`Repeat`) whose targets are the files touched last time, so the
+//     note's candidates are the agent's OWN previous tool calls and never a
+//     literal pack. The synthesized family's note keeps the caveat line, and
+//     a record with no verification still falls back to it. Without a record
+//     and without an explicit pack the hook ABSTAINS (`replay no-history`): a
+//     replay answer without a record is a guess, and the plan forbids the
 //     guess (§2.4).
+//   * THE EXPLICIT PACK IS THE ONLY OVERRIDE: `Resolve(root, { builtin:
+//     false })`, so a hand-written `replay/` family still speaks (it may
+//     outrank the synthesized one) and the built-in pack is never consulted.
 //
 //   1. tools/post-execute (waterfall, plain ctx.on): next() first, record,
-//      detect, gate, recall, and prepend ONE additionalContexts notice. Never
-//      replaces content.
+//      recall, the synthesized family, the explicit pack, detect, gate, and
+//      prepend ONE additionalContexts notice. Never replaces content.
 //   2. agent/pre-step (waterfall, plain): the per-turn reset of the
 //      per-turn note counter when a user message enters.
 //
@@ -31,17 +37,15 @@
 //     logger.warn records it and the downstream decision is returned
 //     UNCHANGED. A note never fails a tool call.
 //
-// THE WORKSPACE GATE + THE EXISTENCE FILTER: the history store and the pack
-// belong to the repo's graph (the built-in pack when the repo has no pack
-// file), so the listener resolves the workspace root first (the nearest
-// ancestor whose pack signature matches; the built-in default is
-// Documentation/ARCHIVE-STYLE.md, from the call path plus the session cwd).
-// A foreign workspace has no pack and abstains (`abstained foreign-workspace`).
-// The recalled files are HISTORY RECORDS, not workspace paths: they are
-// EXEMPT from the existence filter, while a record with an empty file set
-// still logs `abstained no-companions`. The intents and the caveat come from
-// the RESOLVED pack per call (Families(pack, "replay")), compiled once per
-// root, so a repo pack overrides the built-in intent without a restart.
+// THE WORKSPACE GATE: the root is PACK-INDEPENDENT (the nearest ancestor of
+// the call path carrying `.git` or `package.json`, from the call path plus the
+// session cwd). A call outside any workspace has no history to mine here and
+// abstains (`abstained foreign-workspace`). The recalled files are HISTORY
+// RECORDS, not workspace paths: they are EXEMPT from the existence filter,
+// while a record with an empty file set still logs `abstained no-companions`.
+// The explicit pack's families come from the RESOLVED pack per call
+// (Families(pack, "replay")), compiled once per root, so a repo pack's own
+// replay family joins the synthesized one without a restart.
 //
 // `inject: ["pluginFactory"]` (Library.ts) - the factory is a REQUIRED
 // service (the State builder + the ledger); the loader's PENDING state
@@ -50,16 +54,15 @@ import type { Context } from "@deepseek-ai/cordis";
 import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
 import type Config from "@Interface/Config.js";
 import type { ReplayRecord } from "@Interface/History.js";
-import type { Candidate } from "@Interface/Pack.js";
+import type { Candidate, Intent } from "@Interface/Pack.js";
 import type { AgentMemory } from "@Interface/State.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/lib-dsh-core";
-import { Families, Locate } from "@playform/lib-dsh-pack";
-import Defaults from "@Variable/Defaults.js";
+import { Families, Home, Resolve, Root as RootOf } from "@playform/lib-dsh-pack";
 import Version from "@Variable/Version.js";
 
 import Detect, { Compile } from "./Detect.js";
-import History, { LIFT, Recall } from "./History.js";
+import History, { Recall } from "./History.js";
 import BuildNote, { Prepend } from "./Note.js";
 import RecallHistory from "./RecallHistory.js";
 import Record from "./Record.js";
@@ -180,10 +183,10 @@ export default (Context: Context, Options: Config): void => {
 			Recover(State);
 	}
 
-	// The compile rule, shared by the built-in boot compile and the per-root
-	// workspace compile: the configured intent list filters the pack (empty =
-	// all), and the config threshold is a FLOOR (the pack may raise it).
-	const Build = (Rows: typeof Defaults) => {
+	// The compile rule for an EXPLICIT pack: the configured intent list
+	// filters the families (empty = all), and the config threshold is a FLOOR
+	// (the family may raise it, never lower it).
+	const Build = (Rows: ReturnType<typeof Families>) => {
 		const Enabled = State.Intents.length > 0 ? new Set(State.Intents) : undefined;
 		return Compile(
 			Rows.filter((Intent) => Enabled === undefined || Enabled.has(Intent.id)).map(
@@ -194,12 +197,14 @@ export default (Context: Context, Options: Config): void => {
 			),
 		);
 	};
-	// The built-in compile: the activation proof's count and the no-pack path.
-	State.Rules = Build(Defaults);
-	// The per-root compile memo: a resolved workspace pack's intents are
-	// compiled once per (root, threshold, intents) tuple, never on every call.
-	const Compiled = new Map<string, typeof State.Rules>();
-	const Rules = (Root: string, Rows: typeof Defaults): typeof State.Rules => {
+	// No boot projection: the candidates come from the recall, and only an
+	// EXPLICIT repo/user pack compiles (per call, below). The retired
+	// projection (Variable/Defaults) is no longer imported.
+	State.Rules = [];
+	// The per-root compile memo: an explicit pack's families are compiled once
+	// per (root, threshold, intents) tuple, never on every call.
+	const Compiled = new Map<string, ReturnType<typeof Build>>();
+	const Rules = (Root: string, Rows: ReturnType<typeof Families>): ReturnType<typeof Build> => {
 		const Key = `${Root}\u0000${State.Threshold}\u0000${State.Intents.join(",")}`;
 		const Hit = Compiled.get(Key);
 		if (Hit !== undefined) {
@@ -224,7 +229,10 @@ export default (Context: Context, Options: Config): void => {
 	};
 
 	// Durable activation proof - "did it activate" must be answerable from the
-	// ledger alone.
+	// ledger alone. The second segment is `history` (not an intent count):
+	// there is no boot pack, because the candidates come from the recall and
+	// only an explicit pack may still speak. The fourth segment stays the
+	// seeded store's record count.
 	if (!State.On) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {
@@ -232,7 +240,7 @@ export default (Context: Context, Options: Config): void => {
 			State,
 			Activate([
 				["", `bundle ${Version}`],
-				["", `intents ${State.Rules.length}`],
+				["", "history"],
 				["", `threshold ${State.Threshold}`],
 				["", `history ${State.Records.length}`],
 			]),
@@ -295,21 +303,18 @@ export default (Context: Context, Options: Config): void => {
 				if (!State.On || !Judged(Exec.name)) {
 					return Decision;
 				}
-				// The workspace gate, BEFORE detect/score: the history store
-				// and the pack belong to the repo's graph (the built-in pack
-				// when the repo has no pack file), so a call that belongs to
-				// another workspace has nothing to name here. The signature
-				// comes from the pack (default: Documentation/ARCHIVE-STYLE.md).
+				// The workspace gate, BEFORE the record/recall: the
+				// PACK-INDEPENDENT repo root (the nearest ancestor carrying
+				// `.git` or `package.json`) from the call path plus the session
+				// cwd. A call outside any workspace has no history to mine
+				// here and abstains.
 				const Cwd = Session(Context, Exec);
 				const CallPath = Path(Exec);
-				const Located = Locate(CallPath, Cwd);
-				if (Located === undefined) {
+				const Root = RootOf(CallPath, Cwd);
+				if (Root === undefined) {
 					Factory.Append(State, "abstained foreign-workspace  0.00");
 					return Decision;
 				}
-				// The resolved pack's intents, compiled once per root (the
-				// built-in compile covers the no-pack path).
-				const Intents = Rules(Located.root, Families(Located.pack, "replay"));
 				const Memory = Agent(Exec.agent);
 				Memory.Calls += 1;
 				// The probe: the tool name plus the arguments JSON.
@@ -331,7 +336,7 @@ export default (Context: Context, Options: Config): void => {
 								at: Date.now(),
 								probe: Probe,
 							});
-				// The recall: the SEEDED store first (the fixtures' contract),
+				// The recall: the SEEDED store first (the optional user seed),
 				// then the LIVE history - the agent's own ring, then the durable
 				// mirror (a reopened store's entries). The recalled files are
 				// HISTORY RECORDS, exempt from the existence filter.
@@ -340,7 +345,41 @@ export default (Context: Context, Options: Config): void => {
 					Recall(State.Records, Probe) ??
 					RecallHistory(Memory.History, Probe, CallPath, State.LearnWindow, Fence) ??
 					RecallHistory(State.History, Probe, CallPath, State.LearnWindow, Fence);
-				const Match = Detect(Intents, Exec.name, Probe, Recalled === undefined ? 0 : LIFT);
+				// THE SYNTHETIC FAMILY (the candidate source): the recalled
+				// record as ONE pack family, so the classifier, the gate and the
+				// note judge it exactly like a resolved pack's family. Its
+				// targets are the files touched last time - the agent's OWN
+				// previous tool calls, never a literal pack.
+				const Synthetic: Intent | undefined =
+					Recalled === undefined
+						? undefined
+						: {
+								id: "Repeat",
+								priority: 0,
+								threshold: 0.75,
+								note: "the last time this call was made, these files were touched",
+								signals: [{ rule: "history", pattern: ".", weight: 2.5 }],
+								targets: Recalled.files.map((File) => ({
+									path: File,
+									prior: 1.0,
+									reason: `touched last time (${Recalled.intent})`,
+								})),
+							};
+				// The EXPLICIT pack: `<repo>/.dsh/pack.yml` or the user layer,
+				// never the built-in fallback (`builtin: false`). A repo that
+				// ships a hand-written `replay/` family still speaks, and the
+				// synthesized Repeat family is placed FIRST.
+				const Pack = Resolve(Root, { home: Home(), builtin: false });
+				const Rows = Pack === undefined ? [] : Families(Pack, "replay");
+				const Ordered =
+					Synthetic === undefined
+						? Rules(Root, Rows)
+						: [...Compile([Synthetic]), ...Rules(Root, Rows)];
+				if (Ordered.length === 0) {
+					Factory.Append(State, "abstained no-history  0.00");
+					return Decision;
+				}
+				const Match = Detect(Ordered, Exec.name, Probe);
 				if (Match === null) {
 					return Decision;
 				}
@@ -351,8 +390,7 @@ export default (Context: Context, Options: Config): void => {
 					Recorded.intent = Match.intent.id;
 				}
 				// A record with an empty file set still abstains `no-companions`.
-				const Existing = Recalled === undefined ? [] : Recalled.files;
-				if (Recalled !== undefined && Existing.length === 0) {
+				if (Recalled !== undefined && Recalled.files.length === 0) {
 					Factory.Append(
 						State,
 						`abstained no-companions ${Match.intent.id} ${Match.k.toFixed(2)}`,
@@ -364,7 +402,9 @@ export default (Context: Context, Options: Config): void => {
 					Factory.Append(State, `suppressed ${Verdict} ${Match.intent.id}`);
 					return Decision;
 				}
-				// Resolve: the Repeat intent resolves ONLY through the record.
+				// Resolve: the candidates resolve ONLY through the record. An
+				// explicit pack supplies the gate and the caveat, never the
+				// files.
 				if (Recalled === undefined) {
 					Factory.Append(
 						State,
@@ -372,13 +412,9 @@ export default (Context: Context, Options: Config): void => {
 					);
 					return Decision;
 				}
-				const Targets: Candidate[] = Existing.filter((File) => !Excluded(File))
-					.slice(0, State.MaxCandidates)
-					.map((File) => ({
-						path: File,
-						reason: `touched last time (${Recalled.intent})`,
-						prior: 1.0,
-					}));
+				const Targets: Candidate[] = (Synthetic?.targets ?? [])
+					.filter((Target) => !Excluded(Target.path))
+					.slice(0, State.MaxCandidates);
 				if (Targets.length === 0) {
 					Factory.Append(
 						State,

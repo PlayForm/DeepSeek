@@ -4,10 +4,14 @@
 # the model reads or greps a source file, the hook asks the workspace v4.1
 # graph service for the code-block neighborhood (the definition, the
 # callers, the tests, the doc block) and prepends ONE labeled
-# additionalContexts notice naming it. When the graph service is absent or
-# fails, the hook abstains with a `graph unavailable` ledger line - the
-# Neighborhood intent never guesses (Documentation/Plans/
-# SEARCH-SUGGESTER-PLUGIN.md sections 8, 9.2). READ-ONLY by design.
+# additionalContexts notice naming it. The `Neighborhood` and `Sibling`
+# intents are synthesized per call from that query - the private literal
+# pack is retired and there is NO static fallback, so an empty component
+# abstains `abstained no-companions` and an absent or failing service
+# abstains `abstained graph-unavailable` after ONE `graph unavailable` line:
+# the graph intent never guesses. The activation line's second segment is
+# `graph` (there is no boot pack). READ-ONLY by design
+# (Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md sections 8, 9.2).
 #
 # New entries are declared with `insert:` - a bare `id:` row PATCHES an
 # existing entry and the loader rejects unknown ids with 'entry "..." not

@@ -9,11 +9,11 @@ export interface Signal {
     tools?: string[];
 }
 export interface Candidate {
-    /** The target path or glob (repo-relative; never absolute). */
+    /** The target path, as the graph answered it (repo-relative or its display path; never invented). */
     path: string;
     /** The one phrase the model reads; a candidate without a reason is not emitted. */
     reason: string;
-    /** The static prior in [0,1]: 1.0 canonical, 0.6 family, 0.3 fallback. */
+    /** The static prior in [0,1]: 1.0 canonical (a graph entry), 0.6 family, 0.3 illustrative. */
     prior: number;
 }
 export interface Intent {
@@ -35,7 +35,7 @@ export default interface Pack {
     pack: string;
     /** The pack schema version. */
     version: number;
-    /** The intents, priority-ordered. */
+    /** The intents, priority-ordered (the retired reference table's shape). */
     intents: Intent[];
 }
 export interface CompiledSignal {

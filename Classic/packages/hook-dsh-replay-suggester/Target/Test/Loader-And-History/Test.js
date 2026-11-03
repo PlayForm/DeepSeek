@@ -55,7 +55,7 @@ const runTest = async () => {
     Check(Count, "L3: the activation line is byte-exact", () => {
       assert.ok(
         Run.Lines.includes(
-          `replay-suggester: activated (bundle ${"0.2.1"}, intents 1, threshold 0.75, history 0)`
+          `replay-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75, history 0)`
         )
       );
     });
@@ -89,7 +89,7 @@ const runTest = async () => {
       assert.equal(Run.State.Records.length, 2);
       assert.deepEqual(Run.State.Records[0].files, ["src/A.ts"]);
     });
-    await CheckAsync(Count, "L4: a record with an empty verification falls back to the pack note", async () => {
+    await CheckAsync(Count, "L4: a record with an empty verification falls back to the synthesized caveat", async () => {
       const Decision = { kind: "allow" };
       await Run.CtxListeners["tools/post-execute"](
         {
@@ -101,7 +101,7 @@ const runTest = async () => {
         async () => Decision
       );
       assert.ok(
-        Run.Lines.some((L) => L.includes("suggest Repeat 0.77 1 candidates call read"))
+        Run.Lines.some((L) => L.includes("suggest Repeat 0.87 1 candidates call read"))
       );
     });
   }

@@ -1,6 +1,39 @@
 # Changelog
 
-This file records all notable changes to this package.
+All notable changes to this package will be documented in this file.
+
+## Unreleased
+
+### Changed
+
+- The candidates come from the agent's OWN previous tool calls: a recalled record is synthesized
+  into ONE `Repeat` family (priority 0, threshold 0.75, one `history` signal of weight 2.5, the
+  recalled files as its targets with prior 1.0 and the `touched last time (<intent>)` reason), and
+  it is placed FIRST in the rules the classifier consumes, so the note reads
+  `intent=Repeat confidence=0.87` and the `suggest Repeat 0.87 <n> candidates call <tool>` line is
+  unchanged in shape.
+- The literal built-in pack is RETIRED from the hot path: `State.Rules` starts empty at apply, and
+  `Variable/Defaults` (the `Families(Builtin, "replay")` projection) carries a RETIRED header and is
+  unimported. The history lift is gone with it: the history evidence is the synthesized family's
+  signal, so `Function/Detect` takes no lift and `Function/History` exports no `LIFT`.
+- A repo/user pack is now an EXPLICIT override: the listener resolves it with `builtin: false`
+  (`Resolve(root, { home: Home(), builtin: false })`), so a hand-written `replay/` family still
+  speaks (its id and caveat may outrank the synthesized family) and a literal pack never does. A
+  workspace with no pack and no record abstains with the new byte-exact line
+  `abstained no-history  0.00`.
+- The workspace gate is pack-independent (the nearest ancestor carrying `.git` or `package.json`,
+  `Root(CallPath, Cwd)`), so a pack's declared `signature` no longer gates a call; a call with no
+  such root abstains `abstained foreign-workspace  0.00`.
+- The activation line's second segment is `history` (was `intents <n>`), because the boot pack
+  projection is gone. The fourth segment stays the seeded store's record count.
+- The seeded store (`historyPath`) is now an OPTIONAL user seed: still read-only, still loaded once
+  at apply, still the first recall source, but no longer required for the hook to speak.
+- The five smoke folders are rewritten onto the recall-first model: the loader suite asserts the new
+  activation line and the synthesized note; the producer suite asserts the `no-history` abstention
+  and the synthesized caveat; the pipeline suite keeps the recall cases at `0.87` and the
+  `no-history` abstention; the workspace gate uses a `package.json` root marker instead of the pack
+  signature; the pack suite covers the explicit pack, the pack-less recall, the `no-memory` pack
+  case, and the `no-history` case. No assertion names a built-in pack literal.
 
 ## 0.2.1
 
@@ -14,10 +47,11 @@ This file records all notable changes to this package.
 
 ### Changed
 
-- The 0.3.0 release line moves the manifest version, the `@playform/` sibling pins, and the host
-  devDependencies together to the `0.2.1-rc.4` host line and zod 4.6.7.
-- The activation version constant moves to 0.3.0.
-- The storage-domain table cast casts the zod 4.6.7 schemas to the host library's `domainTable`
+- The 0.3.0 release line: the manifest version, the `@playform/` sibling pins and the host
+  devDependencies move together - the host line to `0.2.1-rc.4` and zod to 4.6.7.
+- The activation version constant moves to 0.3.0, with the byte-identical ledger assertions moved in
+  the same change.
+- The storage-domain table cast: the zod 4.6.7 schemas are cast to the host library's `domainTable`
   parameter type, because `@deepseek-ai/dsh-storage-domain` types its tables against its own zod
   4.4.3 and the inference otherwise fails with TS2589.
 
@@ -25,20 +59,19 @@ This file records all notable changes to this package.
 
 ### Added
 
-- The replay suggester adds the session-replay suggestion surface with its configuration, its build,
-  its tests, and its documentation.
+- The replay suggester hook: the session-replay suggestion surface, with its build, its tests and
+  its bundle patch.
 
 ### Changed
 
-- The internal imports migrate to the `@Interface` alias.
 - The D4-D8 release pass (the pack and trace libraries ship across both trees) refines the hook's
-  source, its scheme, and its bundle patch.
-- The documentation passes include the repository-wide markdown clean-up, the README restructure
-  onto the role / surfaces / ledger template, and the README paragraph split to the house wrapping.
+  source, its scheme and its bundle patch.
+- The documentation passes: the repository-wide markdown clean-up, the prettier reflow, the README
+  restructured onto the role / surfaces / ledger template, and the README formatting pass.
 
 ## 0.1.0
 
 ### Changed
 
-- No package-local history exists, because the package does not exist in the 0.1.0 release and lands
-  afterwards with the 2026-10-22 PoC delivery.
+- No package-local history: the package does not exist in the 0.1.0 release and lands afterwards
+  with the 2026-10-22 PoC delivery.

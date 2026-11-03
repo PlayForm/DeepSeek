@@ -1,19 +1,23 @@
-// Defaults - the hook's EMBEDDED PATTERN PACK (a Variable: one constant).
-// The plan's pack-as-data contract (SEARCH-SUGGESTER-PLUGIN.md §8.2), the
-// graph consumer's projection (§9.2): the target subgraph becomes a graph
-// query, and the suggestion is the instantiated neighborhood rather than a
-// flat list. The regexes are sources here and compiled once at apply
-// (Function/Apply) - the hot path never compiles one.
+// Defaults - the hook's former EMBEDDED PATTERN PACK (a Variable: one
+// constant), kept as the domain's RETIRED reference table.
 //
-// The intents, priority-ordered (lower wins):
+// RETIRED FROM THE HOT PATH: nothing imports this module any more. The
+// candidates come from the workspace graph query
+// (`ctx.workspaceGraph.neighborhood(anchor, limit)`), synthesized into the
+// `Neighborhood` and `Sibling` intents per call by Function/Apply, and the
+// literal target sets below are NEVER a fallback source: an empty component
+// abstains `abstained no-companions` instead of naming a path, and an absent
+// or throwing service abstains `abstained graph-unavailable`. The file stays
+// because the pack is still the documented shape of a suggester domain
+// (SEARCH-SUGGESTER-PLUGIN.md §8.2); this package no longer projects it into
+// the hot path.
+//
+// The intents, priority-ordered (lower wins) as they were:
 //
 //   Neighborhood - "what is connected to this file": a read of a TS source
 //                  or a symbol-shaped grep -> the graph query's connected
 //                  component (the definition, the callers, the tests, the
-//                  doc block). Requires the workspace graph service; a
-//                  static fallback set is used only when the graph returns
-//                  an empty component (never when it is absent - see
-//                  Function/Apply).
+//                  doc block).
 //   Sibling      - "which package owns/siblings this": a package-name grep
 //                  -> the family roster and the sibling packages' docs.
 import type Pack from "@Interface/Pack.js";
@@ -43,9 +47,7 @@ export default {
 					weight: 0.3,
 				},
 			],
-			// The STATIC fallback set, used only when the graph service answers
-			// with an empty component. The graph's entries are prepended ahead
-			// of these in the note.
+			// The retired literal target set: never consulted, never a fallback.
 			targets: [
 				{
 					path: "Source/Interface/*.ts",
@@ -81,6 +83,7 @@ export default {
 					weight: 0.3,
 				},
 			],
+			// The retired literal target set: never consulted, never a fallback.
 			targets: [
 				{
 					path: "Documentation/Plugins/PLUGIN-FAMILY.md",

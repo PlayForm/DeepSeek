@@ -20,6 +20,9 @@ const Put = (Root, Relative, Body = "x") => {
   FileSystem.writeFileSync(Full, Body, "utf8");
   return Full;
 };
+const Manifest = (Root) => {
+  FileSystem.writeFileSync(Path.join(Root, "package.json"), "{}", "utf8");
+};
 const Service = (Cwd) => ({ get: () => Cwd });
 const Rec = (Probe, Files, Verify = "pnpm test") => ({
   intent: "Repeat",
@@ -31,10 +34,10 @@ const Rec = (Probe, Files, Verify = "pnpm test") => ({
 const Foreign = Tree("replay-suggester-foreign-");
 const ForeignFile = Put(Foreign, "src/Core.ts");
 const Ours = Tree("replay-suggester-ours-");
-Put(Ours, "Documentation/ARCHIVE-STYLE.md");
+Manifest(Ours);
 const OursFile = Put(Ours, "README.md");
 const Empty = Tree("replay-suggester-empty-");
-Put(Empty, "Documentation/ARCHIVE-STYLE.md");
+Manifest(Empty);
 const EmptyFile = Put(Empty, "README.md");
 const runTest = async () => {
   const Count = MakeCounter();
@@ -93,18 +96,18 @@ const runTest = async () => {
       assert.deepEqual(Out.additionalContexts[0].source, {
         kind: "replay-suggester",
         form: "notice",
-        summary: "Repeat 0.77"
+        summary: "Repeat 0.87"
       });
       assert.equal(
         Out.additionalContexts[0].content[0].text,
-        "[replay-suggester] intent=Repeat confidence=0.77\ntargets (1):\n- README.md - touched last time (Repeat)\nnote: last time verified with pnpm test"
+        "[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- README.md - touched last time (Repeat)\nnote: last time verified with pnpm test"
       );
     });
     await CheckAsync(Count, "G3: the suggest line counts only the existing file", async () => {
       assert.deepEqual(LinesWith(Run, "candidates call"), [
-        "replay-suggester: suggest Repeat 0.77 1 candidates call read"
+        "replay-suggester: suggest Repeat 0.87 1 candidates call read"
       ]);
-      assert.equal(LedgerWith("suggest Repeat 0.77 1 candidates call read").length, 1);
+      assert.equal(LedgerWith("suggest Repeat 0.87 1 candidates call read").length, 1);
     });
   }
   {
@@ -117,10 +120,10 @@ const runTest = async () => {
       const Out = await Call(Run, "read", { file_path: EmptyFile }, Agent);
       assert.equal(
         Out.additionalContexts[0].content[0].text,
-        "[replay-suggester] intent=Repeat confidence=0.77\ntargets (1):\n- src/Gone.ts - touched last time (Repeat)\nnote: last time verified with pnpm test"
+        "[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- src/Gone.ts - touched last time (Repeat)\nnote: last time verified with pnpm test"
       );
       assert.deepEqual(LinesWith(Run, "candidates call"), [
-        "replay-suggester: suggest Repeat 0.77 1 candidates call read"
+        "replay-suggester: suggest Repeat 0.87 1 candidates call read"
       ]);
     });
     rmStore();
@@ -131,8 +134,8 @@ const runTest = async () => {
       const Decision = { kind: "allow" };
       const Out = await Call(Emptied, "read", { file_path: EmptyFile }, Agent, Decision);
       assert.equal(Out, Decision);
-      assert.ok(Emptied.Lines.includes("replay-suggester: abstained no-companions Repeat 0.77"));
-      assert.equal(LedgerWith("abstained no-companions Repeat 0.77").length, 1);
+      assert.ok(Emptied.Lines.includes("replay-suggester: abstained no-companions Repeat 0.87"));
+      assert.equal(LedgerWith("abstained no-companions Repeat 0.87").length, 1);
       assert.equal(LinesWith(Emptied, "candidates call").length, 0);
     });
   }
@@ -146,7 +149,7 @@ const runTest = async () => {
       await Call(Run, "read", { file_path: ForeignFile }, Agent);
       Run.Context.workingDirectory = Service(Ours);
       const Out = await Call(Run, "read", { file_path: OursFile }, Agent);
-      assert.equal(Out.additionalContexts[0].source.summary, "Repeat 0.77");
+      assert.equal(Out.additionalContexts[0].source.summary, "Repeat 0.87");
     });
   }
   return Finish(Count, "Workspace-Gate");

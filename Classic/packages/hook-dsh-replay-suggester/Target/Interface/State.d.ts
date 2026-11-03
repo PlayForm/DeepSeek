@@ -43,7 +43,7 @@ export default interface State extends Shared {
     Pending: Promise<void>;
     /** Await the store chain (the smoke seam: every write is deterministic). */
     Flush: () => Promise<void>;
-    /** The compiled pack, built once at apply. */
+    /** The boot pack projection: EMPTY at apply (the recall is the candidate source). */
     Rules: CompiledIntent[];
     /** The per-agent state, keyed on the Agent object. */
     Agents: WeakMap<object, AgentMemory>;
