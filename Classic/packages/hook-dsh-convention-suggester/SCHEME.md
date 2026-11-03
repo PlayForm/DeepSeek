@@ -79,6 +79,7 @@ the history-driven proposal lands.
 | `threshold`       | number   | `0.75`                                              | yes      | The default confidence gate for an EXPLICIT pack; per-intent thresholds may raise it, never lower it.                 |
 | `maxCandidates`   | number   | `7`                                                 | yes      | The note's candidate cap (the plan §3.7), and the `Adjacent` limit.                                                   |
 | `maxNoteChars`    | number   | `1200`                                              | yes      | Hard character cap on the note text.                                                                                  |
+| `noiseFloor`      | number   | `0.5`                                               | yes      | Minimum confidence a candidate must have to be considered at all.                                                     |
 | `cooldownCalls`   | number   | `6`                                                 | yes      | No second note for the same intent within this many judged calls, per agent.                                          |
 | `maxNotesPerTurn` | number   | `3`                                                 | yes      | Reset per user turn (`agent/pre-step`).                                                                               |
 | `intents`         | string[] | `[]` (all pack intents enabled)                     | yes      | The enabled intent ids for an explicit pack; unknown ids are ignored.                                                 |

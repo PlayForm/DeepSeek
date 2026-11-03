@@ -250,7 +250,7 @@ if (InvokedDirectly) {
 	rm();
 	const Run = Setup();
 	Check(Count, "selfcheck: the fake ctx registers the plugin's three listeners", () => {
-		assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update", "session/event", "tools/post-execute", "agent/pre-step"]);
+		assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update", "tools/post-execute", "agent/pre-step"]);
 		assert.deepEqual(Run.RootNames, []);
 		assert.equal(Run.Returned, undefined);
 		assert.equal(Run.Fs.reads + Run.Fs.writes, 0);

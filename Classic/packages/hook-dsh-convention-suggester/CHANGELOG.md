@@ -20,6 +20,11 @@ This file documents all notable changes to this package.
 - The literal pack learner (D4) was removed: no proposal file and no `learned proposal` ledger line.
   The `learning` config field is kept for compatibility until the history-driven proposal lands.
 
+### Added
+
+- The new `noiseFloor` config field (default `0.5`) sets the minimum confidence a candidate must
+  have to be considered at all.
+
 ## 0.2.1
 
 ### Changed

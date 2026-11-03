@@ -28,7 +28,8 @@
 //   Agents         - the per-agent ring/cooldown state (WeakMap keyed on the Agent object,
 //                    the tool-coach precedent), built once in Function/Apply;
 //   History        - the per-session touch history (WeakMap keyed on the session object,
-//                    created lazily by the session/event fold in Function/Apply);
+//                    created lazily by the tools/post-execute fold in Function/Apply - every
+//                    tool call the hook sees feeds it, reads included);
 //   Factory        - the injected factory service itself, consumed for the
 //                    ledger (Factory.Append) - assigned once in Function/Apply.
 import type { Touch } from "@playform/ets-lib-dsh-pack";
@@ -86,11 +87,15 @@ export interface AgentMemory {
 
 // The per-session history: the fold's running sequence number and the touches
 // (the previous tool calls that named a path), oldest first and capped at 512
-// by the session/event fold. The candidates come from these touches, never
-// from a literal pack.
+// by the tools/post-execute fold - every call the hook sees feeds it, reads
+// included. The candidates come from these touches, never from a literal
+// pack.
 export interface SessionHistory {
 	/** The next touch's sequence number. */
 	Seq: number;
 	/** The folded touches, oldest first. */
 	Touches: Touch[];
 }
+
+// live-test B
+// live-test B2

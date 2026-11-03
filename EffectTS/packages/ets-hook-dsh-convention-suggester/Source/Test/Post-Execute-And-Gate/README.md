@@ -1,8 +1,9 @@
 Post-Execute-And-Gate - the listener behavior tests
 
 The tools/post-execute and agent/pre-step listeners against the fake ctx: the history emit path, the
-silence path (including the new `no-history` abstention), the abstention path, the gate paths, the
-block-decision shape, the per-agent memory isolation, and the per-turn reset.
+real fold (three judged calls feed the history through the listener itself), the silence path
+(including the new `no-history` abstention), the abstention path, the gate paths, the block-decision
+shape, the per-agent memory isolation, and the per-turn reset.
 
 ## Scenarios
 
@@ -32,6 +33,11 @@ block-decision shape, the per-agent memory isolation, and the per-turn reset.
   another agent's memory is independent; the probe ring caps at eight entries
   while the call counter keeps advancing; the reset listener is fail-open and
   returns the downstream decision.
+- E6: the REAL fold - NO seeded state: three judged calls through the listener
+  (anchor A, companion B, anchor A again) feed the session history
+  themselves, so the first two abstain `no-history` and the third emits the
+  `History 0.65` note naming B (`suggest History 0.65 1 candidates call
+  write`), which proves the feed is the `tools/post-execute` stream itself.
 
 ## Fixtures
 
@@ -47,10 +53,11 @@ package base.
 ## Expected ledger strings (byte-exact, `convention-suggester: ` prefix)
 
 `suggest History 0.70 2 candidates call write`,
+`suggest History 0.65 1 candidates call write`,
 `abstained no-history  0.00`,
 `abstained ambiguous History 0.70`,
 `suppressed cooldown History`, `suppressed cap History`.
 
 ## Expected count
 
-16 PASS.
+17 PASS.

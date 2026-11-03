@@ -11,6 +11,8 @@ export default interface Config {
     maxCandidates: number;
     /** Hard character cap on the note text (volatile). */
     maxNoteChars: number;
+    /** Minimum confidence a candidate must have to be considered at all (volatile). */
+    noiseFloor: number;
     /** No second note for the same intent within this many judged calls (volatile). */
     cooldownCalls: number;
     /** Maximum notes per agent turn (volatile). */

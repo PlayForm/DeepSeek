@@ -11,11 +11,10 @@ the fs purity.
   and inject (`["pluginFactory"]`) with the values equal to the named
   exports, and apply returns NOTHING (a returned value silently kills event
   delivery).
-- W2: the enabled mount - the three listeners (`session/event`,
-  `tools/post-execute`, `agent/pre-step`) plus the factory's
-  `loader/volatile-update` register on the plugin context only (never on the
-  root; the fake root is a distinct object), the root identity is not the
-  plugin ctx, and the activation line
+- W2: the enabled mount - the two hook listeners (`tools/post-execute`,
+  `agent/pre-step`) plus the factory's `loader/volatile-update` register on
+  the plugin context only (never on the root; the fake root is a distinct
+  object), the root identity is not the plugin ctx, and the activation line
   `activated (bundle 0.2.1, history, threshold 0.75)` is byte-exact in the
   logger form and in the durable `[ISO]` form (exactly one line).
 - W3: the disabled mount - `disabled (enabled=false)` is byte-exact in both

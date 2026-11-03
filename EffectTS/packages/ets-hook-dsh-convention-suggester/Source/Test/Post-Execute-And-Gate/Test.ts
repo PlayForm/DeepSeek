@@ -1,8 +1,10 @@
 // Source/Test/Post-Execute-And-Gate/Test.ts - the listener behavior against
 // the fake ctx: the HISTORY emit path (the note built from the session's own
 // previous tool calls, with the byte-exact text, summary and `suggest` ledger
-// lines in both forms), the silence path (a non-judged call and a no-history
-// call, which abstains `no-history`), the abstention path (a fully excluded
+// lines in both forms), the REAL fold (three judged calls through the
+// listener feed the history themselves, so the third call names the
+// companion), the silence path (a non-judged call and a no-history call,
+// which abstains `no-history`), the abstention path (a fully excluded
 // candidate set), the gate paths (cooldown, per-turn cap), the block-decision
 // shape, the per-agent memory isolation, and the agent/pre-step per-turn
 // reset.
@@ -44,7 +46,8 @@ const Suggest = "suggest History 0.70 2 candidates call write";
 
 /**
  * Seed one agent's session history directly through the state probe: the
- * anchor, then the two companions, exactly as the session/event fold would.
+ * anchor, then the two companions, exactly as the tools/post-execute fold
+ * would.
  */
 const Seed = (Run: any, Id: string): void => {
 	Run.State.History.set(AgentOf(Id), {
@@ -226,6 +229,39 @@ export const runTest = async (): Promise<number> => {
 			const Out = await Pre(Run, { agent: AgentOf("h"), messages: [{ role: "user" }] });
 			assert.equal(Out, "down");
 			assert.deepEqual(Run.Warns, []);
+		});
+	}
+	// Group E6: the REAL fold - no seeded state. Three judged calls through
+	// the listener (anchor A, companion B, anchor A again) feed the history
+	// themselves, so the third call sees A -> B and emits.
+	{
+		const Run = Setup();
+		const FoldAnchor = "Source/Function/Apply.ts";
+		const FoldCompanion = "Source/Library.ts";
+		const Call = (Path_: string): any => ({
+			name: "write",
+			arguments: { file_path: Path_ },
+			agent: AgentOf("real-fold"),
+		});
+		await CheckAsync(Count, "E6: three judged calls fold a real history and the third names the companion", async () => {
+			const First = await Post(Run, Call(FoldAnchor), { kind: "allow", additionalContexts: [] });
+			const Second = await Post(Run, Call(FoldCompanion), { kind: "allow", additionalContexts: [] });
+			assert.deepEqual(First.additionalContexts, []);
+			assert.deepEqual(Second.additionalContexts, []);
+			assert.equal(
+				Run.Lines.filter((Line: string) => Line.includes("abstained no-history")).length,
+				2,
+			);
+			const Out = await Post(Run, Call(FoldAnchor), { kind: "allow", additionalContexts: [] });
+			assert.equal(Out.additionalContexts.length, 1);
+			assert.equal(Out.additionalContexts[0].source.summary, "History 0.65");
+			const NoteText = Out.additionalContexts[0].content[0].text;
+			assert.ok(NoteText.startsWith("[convention-suggester] intent=History confidence=0.65"));
+			assert.ok(NoteText.includes(`- ${FoldCompanion} - touched 1 time(s) after this file`));
+			assert.ok(
+				Run.Lines.includes("convention-suggester: suggest History 0.65 1 candidates call write"),
+			);
+			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 1);
 		});
 	}
 	return Finish(Count, "Post-Execute-And-Gate");

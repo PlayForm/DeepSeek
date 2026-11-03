@@ -9,10 +9,16 @@ literal built-in pack.
 
 - **The fold.**
 
-    The `session/event` listener folds every `tool/call` event into one `Touch` (the sequence
-    number, the normalized path and the tool) in the SESSION's history, through the pack library's
-    `Touch` fold unit (`Fold` here). One entry per session object, created lazily; the touch array
-    is capped at 512, oldest first.
+    The `tools/post-execute` listener folds every tool call it sees - reads included, because the
+    stream carries every call the hook receives - into one `Touch` (the sequence number, the
+    normalized path and the tool) in the SESSION's history, through the pack library's `Touch` fold
+    unit (`Fold` here). The fold runs BEFORE the judged-tool guard, so a read feeds the history that
+    a later write consults. One entry per session object, created lazily; the touch array is capped
+    at 512, oldest first.
+
+    The feed is the hook's OWN `tools/post-execute` stream, never a `session/event` listener: the
+    live harness does not deliver that event to the hook, so the fold stayed empty and every judged
+    call logged `abstained no-history  0.00`.
 
     The path comes from the first path-shaped argument (`file_path`, `path`, `filePath`), with
     backslashes normalized to slashes and a leading `./` stripped.
@@ -85,11 +91,10 @@ field.
 
 ## Surfaces
 
-| Surface              | Mode                          | What it does                                                                                                                                                           |
-| -------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `session/event`      | plain                         | Folds every `tool/call` event into the session's history (one `Touch` per call, capped at 512). Fail-open: a malformed event is skipped.                               |
-| `tools/post-execute` | waterfall, plain registration | `next()` first; the history candidates (or, with an empty history, an explicit pack) → gate → prepend ONE labeled `additionalContexts` notice; never replaces content. |
-| `agent/pre-step`     | waterfall, plain              | Pure observer: resets the per-turn note counter when the step ends with a user message.                                                                                |
+| Surface              | Mode                          | What it does                                                                                                                                                                                                                                                                |
+| -------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tools/post-execute` | waterfall, plain registration | `next()` first; folds the current call into the session history (every call that names a path, reads included), then the history candidates (or, with an empty history, an explicit pack) → gate → prepend ONE labeled `additionalContexts` notice; never replaces content. |
+| `agent/pre-step`     | waterfall, plain              | Pure observer: resets the per-turn note counter when the step ends with a user message.                                                                                                                                                                                     |
 
 ## The workspace root
 

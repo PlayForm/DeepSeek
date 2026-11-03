@@ -39,6 +39,9 @@ export default Compose(false, {
 	maxCandidates: Schema.number().default(7).volatile(),
 	// Hard character cap on the note text (volatile).
 	maxNoteChars: Schema.number().default(1200).volatile(),
+	// Minimum confidence a candidate must have to be considered at all - candidates
+	// scoring below this are background noise and are dropped (volatile).
+	noiseFloor: Schema.number().default(0.5).volatile(),
 	// No second note for the same intent within this many judged calls (volatile).
 	cooldownCalls: Schema.number().default(6).volatile(),
 	// Maximum notes per agent turn (volatile).

@@ -60,3 +60,6 @@ export const inject = ["pluginFactory"];
 export const apply = Apply;
 
 export default { name, apply, Config, inject };
+
+// live-test A
+// live-test A2
