@@ -130,10 +130,10 @@ or the call's own anchor. Before the record becomes a target set, `Function/Appl
    resolved anchor, ONLY those paths are named - precision first, because a recall from the same
    directory is the strong signal (the anchor itself need not exist: a brand-new file still has a
    folder);
-4. otherwise falls back to the SAME RELEASE TREE: a call under `<...>/Classic/...` keeps the recalled
-   paths under the same `<...>/Classic/...` prefix ahead of the others (the same for
-   `.../EffectTS/...`), with a STABLE partition that never drops a valid file only because it sits in
-   the other tree.
+4. otherwise falls back to the SAME RELEASE TREE: a call under `<...>/Classic/...` keeps the
+   recalled paths under the same `<...>/Classic/...` prefix ahead of the others (the same for
+   `.../EffectTS/...`), with a STABLE partition that never drops a valid file only because it sits
+   in the other tree.
 
 A record whose file set is EMPTY, or whose files ALL vanish, logs
 `abstained no-companions <Intent> <k>`, which is distinct from `no-memory`, the case where the

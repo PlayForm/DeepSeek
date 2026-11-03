@@ -44,9 +44,15 @@ Put(Empty, "src/Core.ts");
 Put(Empty, "src/Nested/File.ts");
 const Release = Tree("replay-suggester-release-");
 Manifest(Release);
-const Peer = Put(Release, "Classic/src/Peer.ts");
+const Peer = Put(Release, "Classic/lib/Peer.ts");
 const Other = Put(Release, "EffectTS/src/Other.ts");
 const Anchor = Path.join(Release, "Classic/src/Anchor.ts");
+const Beside = Tree("replay-suggester-beside-");
+Manifest(Beside);
+const Neighbor = Put(Beside, "packages/one/Source/Function/Exists.ts");
+const Subtree = Put(Beside, "packages/two/Source/Function/Exists.ts");
+const Cousin = Put(Beside, "packages/one/Source/Interface/Exists.ts");
+const BesideAnchor = Path.join(Beside, "packages/one/Source/Function/Apply.ts");
 const runTest = async () => {
   const Count = MakeCounter();
   {
@@ -203,6 +209,32 @@ note: last time verified with pnpm test`
         "replay-suggester: suggest Repeat 0.87 2 candidates call read"
       ]);
     });
+  }
+  {
+    const Agent = { agent: { id: "agent-a" } };
+    rmStore();
+    WriteStore([Rec("Apply.ts", [Subtree, Cousin, Neighbor])]);
+    const Run = Setup();
+    await CheckAsync(
+      Count,
+      "G7: a same-directory recalled path wins and the unrelated subtrees are dropped",
+      async () => {
+        const Out = await Call(Run, "read", { file_path: BesideAnchor }, Agent);
+        const Text = Out.additionalContexts[0].content[0].text;
+        assert.equal(
+          Text,
+          `[replay-suggester] intent=Repeat confidence=0.87
+targets (1):
+- ${Neighbor} - touched last time (Repeat)
+note: last time verified with pnpm test`
+        );
+        assert.equal(Text.includes(Subtree), false);
+        assert.equal(Text.includes(Cousin), false);
+        assert.deepEqual(LinesWith(Run, "candidates call"), [
+          "replay-suggester: suggest Repeat 0.87 1 candidates call read"
+        ]);
+      }
+    );
   }
   return Finish(Count, "Workspace-Gate");
 };
