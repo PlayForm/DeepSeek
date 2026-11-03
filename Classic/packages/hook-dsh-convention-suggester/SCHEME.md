@@ -71,20 +71,20 @@ the history-driven proposal lands.
 
 ## Config (Schemastery, validated at load)
 
-| Field             | Type     | Default                                             | Volatile | Notes                                                                                                                         |
-| ----------------- | -------- | --------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `log`             | boolean  | `true`                                              | yes      | The shared universal cell (the factory's minimal block).                                                                      |
-| `logFile`         | string   | `~/.dsh/playform/hook-dsh-convention-suggester.log` | yes      | The hook's OWN ledger, one log per module.                                                                                    |
-| `enabled`         | boolean  | `true`                                              | yes      | `false` logs `disabled (enabled=false)` and every listener passes through. The patch row ships `false`.                       |
-| `threshold`       | number   | `0.75`                                              | yes      | The default confidence gate for an EXPLICIT pack; per-intent thresholds may raise it, never lower it.                         |
-| `maxCandidates`   | number   | `7`                                                 | yes      | The note's candidate cap (the plan §3.7), and the `Adjacent` limit.                                                           |
-| `maxNoteChars`    | number   | `1200`                                              | yes      | Hard character cap on the note text.                                                                                          |
-| `cooldownCalls`   | number   | `6`                                                 | yes      | No second note for the same intent within this many judged calls, per agent.                                                  |
-| `maxNotesPerTurn` | number   | `3`                                                 | yes      | Reset per user turn (`agent/pre-step`).                                                                                       |
-| `intents`         | string[] | `[]` (all pack intents enabled)                     | yes      | The enabled intent ids for an explicit pack; unknown ids are ignored.                                                         |
-| `emitOn`          | string[] | `["edit","raw-write","write"]`                      | yes      | The judged tool names (the modification family).                                                                              |
-| `exclude`         | string[] | `["node_modules","Target",".git","dist"]`           | yes      | Substrings; a candidate whose path matches one is never suggested.                                                            |
-| `learning`        | boolean  | `false`                                             | yes      | Retired: the literal pack learner was removed; kept for config compatibility until the history-driven proposal lands.          |
+| Field             | Type     | Default                                             | Volatile | Notes                                                                                                                 |
+| ----------------- | -------- | --------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
+| `log`             | boolean  | `true`                                              | yes      | The shared universal cell (the factory's minimal block).                                                              |
+| `logFile`         | string   | `~/.dsh/playform/hook-dsh-convention-suggester.log` | yes      | The hook's OWN ledger, one log per module.                                                                            |
+| `enabled`         | boolean  | `true`                                              | yes      | `false` logs `disabled (enabled=false)` and every listener passes through. The patch row ships `false`.               |
+| `threshold`       | number   | `0.75`                                              | yes      | The default confidence gate for an EXPLICIT pack; per-intent thresholds may raise it, never lower it.                 |
+| `maxCandidates`   | number   | `7`                                                 | yes      | The note's candidate cap (the plan §3.7), and the `Adjacent` limit.                                                   |
+| `maxNoteChars`    | number   | `1200`                                              | yes      | Hard character cap on the note text.                                                                                  |
+| `cooldownCalls`   | number   | `6`                                                 | yes      | No second note for the same intent within this many judged calls, per agent.                                          |
+| `maxNotesPerTurn` | number   | `3`                                                 | yes      | Reset per user turn (`agent/pre-step`).                                                                               |
+| `intents`         | string[] | `[]` (all pack intents enabled)                     | yes      | The enabled intent ids for an explicit pack; unknown ids are ignored.                                                 |
+| `emitOn`          | string[] | `["edit","raw-write","write"]`                      | yes      | The judged tool names (the modification family).                                                                      |
+| `exclude`         | string[] | `["node_modules","Target",".git","dist"]`           | yes      | Substrings; a candidate whose path matches one is never suggested.                                                    |
+| `learning`        | boolean  | `false`                                             | yes      | Retired: the literal pack learner was removed; kept for config compatibility until the history-driven proposal lands. |
 
 ## Surfaces
 

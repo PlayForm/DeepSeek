@@ -136,8 +136,8 @@ A pack is an EXPLICIT user/repo override, never a fallback:
 
 The listener resolves it with `Resolve(root, { home, builtin: false })`, so a workspace with no pack
 layer resolves to `undefined` and its `doc/` families contribute nothing. The built-in projection
-(`Function/Pack.ts`) was removed from this package, so the built-in pack no longer exists here and an
-explicit pack is the only pack source. When a layer exists, its `doc/` families
+(`Function/Pack.ts`) was removed from this package, so the built-in pack no longer exists here and
+an explicit pack is the only pack source. When a layer exists, its `doc/` families
 (`Families(pack, "doc")`) join the synthetic History family, which is placed FIRST, and drive the
 same classifier, existence filter, gate and notice - so a repo that ships a hand-written pack still
 gets its own families and companions.
