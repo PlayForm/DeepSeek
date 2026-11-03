@@ -11,20 +11,28 @@ import {
   MakeCounter,
   Post,
   rm,
+  SeedHistory,
+  Service,
   Setup,
-  Validate
+  Validate,
+  Workspace
 } from "../Harness.js";
-const StrongVersion = (Id) => ({
-  name: "grep",
-  arguments: { pattern: "1.2.3 version", path: "package.json" },
+const Anchor = "README.md";
+const Companions = ["CHANGELOG.md", "SCHEME.md"];
+const Space = Workspace([Anchor, ...Companions]);
+const Read = (Id) => ({
+  name: "read",
+  arguments: { file_path: Space.At(Anchor) },
   agent: AgentOf(Id)
 });
 const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Setup();
+    Run.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "P1: an emit writes the knowledge file atomically", async () => {
-      await Post(Run, StrongVersion("a"));
+      await Post(Run, Read("a"));
       assert.equal(FileSystem.existsSync(Knowledge), true);
       const Temp = Path.join(Path.dirname(Knowledge), `.${Path.basename(Knowledge)}.tmp`);
       assert.equal(FileSystem.existsSync(Temp), false);
@@ -40,19 +48,19 @@ const runTest = async () => {
         "journal",
         "schema",
         "seed",
-        "seededAt",
         "stats"
       ]);
       assert.equal(Stored.schema, 1);
-      assert.equal(Stored.seed, true);
+      assert.equal(Stored.seed, false);
       assert.deepEqual(Stored.dismissals, []);
       assert.deepEqual(Stored.stats, { emitted: 1, followed: 0, ignored: 0, dismissed: 0 });
-      assert.equal(Stored.intents.Version["package.json"].seed, true);
+      assert.equal(Stored.intents.History["CHANGELOG.md"].count, 1);
+      assert.equal(Stored.intents.History["SCHEME.md"].count, 1);
       assert.equal(Stored.journal.length, 1);
-      assert.equal(Stored.journal[0].intent, "Version");
+      assert.equal(Stored.journal[0].intent, "History");
       assert.equal(Stored.journal[0].outcome, "ignored");
-      assert.equal(Stored.journal[0].kappa.toFixed(2), "0.92");
-      assert.equal(Stored.journal[0].candidates.length, 7);
+      assert.equal(Stored.journal[0].kappa.toFixed(2), "0.87");
+      assert.equal(Stored.journal[0].candidates.length, 2);
     });
   }
   {
@@ -64,8 +72,8 @@ const runTest = async () => {
         ignored: 0,
         dismissed: 0
       });
-      assert.equal(Reload.State.Knowledge.seed, true);
-      assert.equal(Reload.State.Knowledge.intents.Version["package.json"].seed, true);
+      assert.equal(Reload.State.Knowledge.seed, false);
+      assert.equal(Reload.State.Knowledge.intents.History["CHANGELOG.md"].count, 1);
       assert.equal(Reload.State.Knowledge.journal.length, 1);
     });
   }
@@ -84,9 +92,11 @@ const runTest = async () => {
       assert.deepEqual(Run.State.Knowledge.dismissals, []);
       assert.equal(Run.Warns.length, 0);
     });
-    await CheckAsync(Count, "P3: the cold start still emits from the static pack", async () => {
-      const Out = await Post(Run, StrongVersion("a"));
-      assert.equal(Out.additionalContexts[0].source.summary, "Version 0.92");
+    await CheckAsync(Count, "P3: the cold start still emits from the session history", async () => {
+      Run.Context.workingDirectory = Service(Space.Root);
+      SeedHistory(Run, "a", Space.At(Anchor), Companions);
+      const Out = await Post(Run, Read("a"));
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
     });
     await CheckAsync(Count, "P3: the corrupt file is overwritten by the next save", async () => {
       const Stored = JSON.parse(FileSystem.readFileSync(Knowledge, "utf8"));
@@ -98,7 +108,7 @@ const runTest = async () => {
     rm();
     FileSystem.writeFileSync(
       Knowledge,
-      JSON.stringify({ schema: 2, intents: { Version: {} }, journal: [] }),
+      JSON.stringify({ schema: 2, intents: { History: {} }, journal: [] }),
       "utf8"
     );
     const Run = Make(Validate({ logFile: Ledger, enabled: true, seed: false }));

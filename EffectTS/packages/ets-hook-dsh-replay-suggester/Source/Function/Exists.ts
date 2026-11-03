@@ -11,8 +11,8 @@
 // package's own SCHEME.md and patch row), so the filter computes three bases
 // from the RESOLVED call path:
 //
-//   * RepoRoot - the ancestor carrying Documentation/ARCHIVE-STYLE.md (the
-//     workspace gate's root);
+//   * RepoRoot - the PACK-INDEPENDENT root (the nearest ancestor carrying
+//     `.git` or `package.json`, the workspace gate's root);
 //   * PackageRoot - the nearest ancestor of the call path that contains
 //     package.json, at or below RepoRoot;
 //   * PackageParent - PackageRoot's parent directory.
@@ -30,7 +30,7 @@
 // targets come from a history RECORD, not from the workspace - they are
 // history records, so Function/Apply never runs them through this filter. The
 // workspace gate still runs on the call path. This module stays base-aware
-// for any future static target the pack may carry.
+// for any future static target an explicit pack may carry.
 import { existsSync, readdirSync, statSync } from "node:fs";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 

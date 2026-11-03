@@ -280,7 +280,8 @@ export const Validate = (Raw: Record<string, unknown>): any =>
 	});
 
 /**
- * The standard enabled mount with an absolute history store path.
+ * The standard enabled mount with an absolute path to the OPTIONAL seeded
+ * history store.
  */
 export const Setup = (Config: Record<string, unknown> = {}): any => {
 	rm();

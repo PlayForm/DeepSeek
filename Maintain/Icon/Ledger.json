@@ -593,7 +593,7 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "e57855490557d2596a1dd9792715ad1746bdc9d02eafccce6a12c508b407ab03",
+			"seed": "9b64a82f3699b7237b1ec8fe44e7b4e948cb1f781e6d4d1091c882bd45db7c73",
 			"grammar": "spike-star",
 			"order": 12,
 			"arms": 8,
@@ -602,8 +602,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "e367109519861399127b3f7637e3d4b95b4b5199cb4cb6a67b4918abeff3ab3e",
-				"colour": "544b8e2f6a26c81af6e71449c504135fb35c39a5ca0ad9a19214a5772fbb7824"
+				"mono": "ce5d801a6343ec42181eb0f66d6123cb00654e21c657f39e68531607cc52ea64",
+				"colour": "2f7b288cb6eab575bcf407a5f99b9b03fb52187ea98d0ad06a4845e7b6a359f5"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-replay-suggester.svg",
@@ -616,7 +616,7 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "dd471c17d0c2c7e46ee2e93239fcbde9ead75bd9dc449187d34d769f6cd7f0e3",
+			"seed": "814eccf6261dac0d52112f8b101bd7ee4bae73317518a0cb950c47141f53c1ca",
 			"grammar": "spike-star",
 			"order": 12,
 			"arms": 8,
@@ -625,8 +625,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "e2551b46f12927203c896fc7b8b1c4626aeca0907a49936d72d587abd1c3a8b5",
-				"colour": "c641708c3341fb572bbc22b82a714b5f63be2fe418fc2ef75a1d15d45dcdf8f3"
+				"mono": "e2dcc1553d7210cd2890809bc90d614f711096e59868415bab0d5e68887e5f18",
+				"colour": "71ec8dc752c2a0e13d01990fb310a23d496bed1c240cf4ca9af713cb72770d64"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-search-suggester.svg",
@@ -1904,7 +1904,7 @@
 			"kind": "hook",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "540a9167af9c9f4ef8df2779f1873bcf9f81b6027fcd3fb4c052a1e5ef5f4af5",
+			"seed": "ed3dcf265e50403bcaeacb590a2f46d2b2dcbb89ae39d90e990385c593b8d379",
 			"grammar": "spike-star",
 			"order": 12,
 			"arms": 8,
@@ -1913,8 +1913,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "70b649d028dc711629d08527a20ab0d4d8f64f86a9b2b27551c2da50e0412da4",
-				"colour": "264aaaa12ad952ea72f7a250bfb3529a23ce109e758a75cf5d2e37d2e0930a65"
+				"mono": "772e850afd7d3e6a4758b38feea4eda26ef6aef8a6f16ed457bae6d4865927f2",
+				"colour": "5b864ea724cb1061bfbfc65664011ee2bdbc954068aad186c22a936a5bb175e6"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-search-suggester.svg",

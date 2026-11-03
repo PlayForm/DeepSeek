@@ -1,134 +1,133 @@
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
+import Seed from "../../Function/Seed.js";
+import { Empty } from "../../Function/Persist.js";
 import {
-  AgentOf,
-  CheckAsync,
-  FakeGraph,
+  Check,
   Finish,
   Knowledge,
   Ledger,
   Make,
   MakeCounter,
-  Post,
   rm,
   Setup,
   Validate
 } from "../Harness.js";
-const StrongVersion = (Id) => ({
-  name: "grep",
-  arguments: { pattern: "1.2.3 version", path: "package.json" },
-  agent: AgentOf(Id)
-});
+const Family = [
+  {
+    id: "Version",
+    priority: 1,
+    threshold: 0.75,
+    signals: [],
+    familyGlobs: ["**/README.md"],
+    targets: [
+      { path: "package.json", kind: "manifest", prior: 1, reason: "the manifest" },
+      { path: "CHANGELOG.md", kind: "doc", prior: 1, reason: "the changelog" },
+      { path: "Source/Test/<Suite>/Test.ts", kind: "test", prior: 1, reason: "the placeholder" },
+      { path: "README.md", kind: "doc", prior: 0.6, reason: "the fallback" },
+      { path: "Target", kind: "family", prior: 1, reason: "the tail", family: true }
+    ]
+  }
+];
+const Graph = {
+  revision: "r1",
+  nodes: 1,
+  root: 0,
+  facts: /* @__PURE__ */ new Map([["package.json", { kinds: ["File"], depth: 1, recency: 1 }]])
+};
+const At = 17e8;
 const runTest = async () => {
   const Count = MakeCounter();
   {
-    const Run = Setup();
-    await CheckAsync(Count, "S1: the canonical rows are seeded at load", async () => {
-      const Row = Run.State.Knowledge.intents.Version["package.json"];
-      assert.equal(Row.count, 1);
-      assert.equal(Row.followed, 1);
-      assert.equal(Row.seed, true);
-      assert.equal(typeof Row.lastSeen, "number");
-      assert.equal(Run.State.Knowledge.seed, true);
-      assert.equal(typeof Run.State.Knowledge.seededAt, "number");
-    });
-    await CheckAsync(Count, "S1: the seed moves no stat and writes no file", async () => {
-      assert.deepEqual(Run.State.Knowledge.stats, {
-        emitted: 0,
-        followed: 0,
-        ignored: 0,
-        dismissed: 0
+    const Store = Empty();
+    const Seeded = Seed(Store, Family, void 0, At);
+    Check(Count, "S1: the canonical rows are seeded with their markers", () => {
+      assert.equal(Seeded, 2);
+      assert.deepEqual(Store.intents.Version["package.json"], {
+        count: 1,
+        followed: 1,
+        lastSeen: At,
+        seed: true
       });
-      assert.equal(FileSystem.existsSync(Knowledge), false);
+      assert.equal(Store.intents.Version["CHANGELOG.md"].seed, true);
+      assert.equal(Store.seed, true);
+      assert.equal(Store.seededAt, At);
     });
-    await CheckAsync(Count, "S1: exactly the canonical tiers are seeded", async () => {
-      const Sizes = Object.fromEntries(
-        Object.entries(Run.State.Knowledge.intents).map(([Intent, Bucket]) => [
-          Intent,
-          Object.keys(Bucket ?? {}).length
-        ])
-      );
-      assert.deepEqual(Sizes, {
-        Version: 10,
-        Path: 2,
-        Ledger: 3,
-        Config: 3,
-        Dependency: 3,
-        Test: 3,
-        Symbol: 3,
-        Doc: 2,
-        Usage: 2,
-        Owner: 3
-      });
-      assert.equal(Run.State.Knowledge.intents.Version["**/README.md"], void 0);
-      assert.equal(Run.State.Knowledge.intents.Path["README.md"], void 0);
-      assert.equal(Run.State.Knowledge.intents.Symbol["Target"], void 0);
+    Check(Count, "S1: the placeholder, the aggregate and the fallback stay cold", () => {
+      assert.equal(Store.intents.Version["Source/Test/<Suite>/Test.ts"], void 0);
+      assert.equal(Store.intents.Version["Target"], void 0);
+      assert.equal(Store.intents.Version["README.md"], void 0);
+      assert.equal(Store.intents.Version["**/README.md"], void 0);
+      assert.deepEqual(Object.keys(Store.intents.Version).sort(), [
+        "CHANGELOG.md",
+        "package.json"
+      ]);
+    });
+    Check(Count, "S1: the seed moves no stat", () => {
+      assert.deepEqual(Store.stats, { emitted: 0, followed: 0, ignored: 0, dismissed: 0 });
     });
   }
   {
-    rm();
-    const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
-      Context.workspaceGraph = FakeGraph([{ path: "package.json", kind: "File", version: "1" }]);
-    });
-    await CheckAsync(Count, "S2: a graph-proven row is seeded twice", async () => {
-      const Row = Run.State.Knowledge.intents.Version["package.json"];
-      assert.equal(Row?.count, 2);
-      assert.equal(Row?.followed, 2);
-      assert.equal(Row?.seed, true);
-      assert.equal(Run.State.Knowledge.intents.Version["CHANGELOG.md"]?.count, 1);
+    const Store = Empty();
+    Seed(Store, Family, Graph, At);
+    Check(Count, "S2: a graph-proven row is seeded twice", () => {
+      assert.equal(Store.intents.Version["package.json"].count, 2);
+      assert.equal(Store.intents.Version["package.json"].followed, 2);
+      assert.equal(Store.intents.Version["package.json"].seed, true);
+      assert.equal(Store.intents.Version["CHANGELOG.md"].count, 1);
     });
   }
   {
-    rm();
-    FileSystem.writeFileSync(
-      Knowledge,
-      JSON.stringify({
-        schema: 1,
-        intents: { Version: { "package.json": { count: 9, followed: 9, lastSeen: 5 } } },
-        journal: [],
-        dismissals: [],
-        stats: { emitted: 0, followed: 0, ignored: 0, dismissed: 0 }
-      }),
-      "utf8"
-    );
-    const Run = Make(Validate({ logFile: Ledger, enabled: true }));
-    await CheckAsync(Count, "S3: an existing row wins over the seed", async () => {
-      assert.deepEqual(Run.State.Knowledge.intents.Version["package.json"], {
+    const Store = Empty();
+    Store.intents.Version = {
+      "package.json": { count: 9, followed: 9, lastSeen: 5 }
+    };
+    Seed(Store, Family, void 0, At);
+    Check(Count, "S3: an existing row wins over the seed", () => {
+      assert.deepEqual(Store.intents.Version["package.json"], {
         count: 9,
         followed: 9,
         lastSeen: 5
       });
-      assert.equal(Run.State.Knowledge.intents.Version["CHANGELOG.md"].seed, true);
+      assert.equal(Store.intents.Version["CHANGELOG.md"].seed, true);
+    });
+    Check(Count, "S3: a second seed run moves no count", () => {
+      const Before = JSON.stringify(Store.intents);
+      Seed(Store, Family, void 0, At + 1);
+      assert.equal(JSON.stringify(Store.intents), Before);
     });
   }
   {
     rm();
+    Seed(Empty(), Family, void 0, At);
+    Check(Count, "S4: the seed writes no knowledge file", () => {
+      assert.equal(FileSystem.existsSync(Knowledge), false);
+    });
+  }
+  {
     const Run = Setup();
-    await CheckAsync(Count, "S4: the first real save persists the seeded knowledge", async () => {
-      await Post(Run, StrongVersion("a"));
-      const Stored = JSON.parse(FileSystem.readFileSync(Knowledge, "utf8"));
-      assert.equal(Stored.seed, true);
-      assert.equal(Stored.intents.Version["package.json"].seed, true);
-      assert.equal(Stored.intents.Version["package.json"].count, 1);
-      assert.equal(Stored.stats.emitted, 1);
+    Check(Count, "S5: a workspace with no explicit pack seeds nothing", () => {
+      assert.deepEqual(Run.State.Knowledge.intents, {});
+      assert.equal(Run.State.Knowledge.seed, false);
+      assert.equal(Run.State.Knowledge.seededAt, void 0);
     });
   }
   {
     rm();
     const NoLearn = Make(Validate({ logFile: Ledger, enabled: true, learn: false }));
-    await CheckAsync(Count, "S5: learn=false keeps the deterministic cold start", async () => {
+    Check(Count, "S6: learn=false keeps the deterministic cold start", () => {
       assert.deepEqual(NoLearn.State.Knowledge.intents, {});
       assert.equal(NoLearn.State.Knowledge.seed, false);
     });
     rm();
     const NoSeed = Make(Validate({ logFile: Ledger, enabled: true, seed: false }));
-    await CheckAsync(Count, "S5: seed=false keeps the deterministic cold start", async () => {
+    Check(Count, "S6: seed=false keeps the deterministic cold start", () => {
       assert.deepEqual(NoSeed.State.Knowledge.intents, {});
       assert.equal(NoSeed.State.Knowledge.seed, false);
     });
     rm();
     const Off = Make(Validate({ logFile: Ledger, enabled: false }));
-    await CheckAsync(Count, "S5: a disabled mount does not seed", async () => {
+    Check(Count, "S6: a disabled mount does not seed", () => {
       assert.deepEqual(Off.State.Knowledge.intents, {});
       assert.equal(Off.State.Knowledge.seed, false);
     });

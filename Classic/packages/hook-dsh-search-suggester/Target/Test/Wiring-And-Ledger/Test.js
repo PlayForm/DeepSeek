@@ -17,8 +17,11 @@ import {
   Plugin,
   Post,
   rm,
+  SeedHistory,
+  Service,
   Setup,
-  Validate
+  Validate,
+  Workspace
 } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
@@ -40,9 +43,10 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    Check(Count, "W2: the four listeners register on the plugin context only", () => {
+    Check(Count, "W2: the five listeners register on the plugin context only", () => {
       assert.deepEqual(Object.keys(Run.CtxListeners), [
         "loader/volatile-update",
+        "session/event",
         "tools/post-execute",
         "agent/pre-step",
         "system-prompt/assemble",
@@ -53,13 +57,13 @@ const runTest = async () => {
       assert.equal(Object.getPrototypeOf(Run.Root), Object.prototype);
     });
     Check(Count, "W2: the activation line is byte-exact in the logger form", () => {
-      assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, intents 10, threshold 0.75)`]);
+      assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`]);
       assert.deepEqual(Run.Effects, []);
     });
     Check(Count, "W2: the activation line is byte-exact in the durable form", () => {
       assert.equal(LedgerLines().length, 1);
-      assert.match(FirstLine(), Durable(`activated (bundle ${"0.2.1"}, intents 10, threshold 0.75)`));
-      assert.deepEqual(LedgerWith(`activated (bundle ${"0.2.1"}, intents 10, threshold 0.75)`).length, 1);
+      assert.match(FirstLine(), Durable(`activated (bundle ${"0.2.1"}, history, threshold 0.75)`));
+      assert.deepEqual(LedgerWith(`activated (bundle ${"0.2.1"}, history, threshold 0.75)`).length, 1);
     });
   }
   {
@@ -72,7 +76,7 @@ const runTest = async () => {
     });
     await CheckAsync(Count, "W3: a disabled mount passes every call through with zero new lines", async () => {
       const Decision = { kind: "allow", additionalContexts: [] };
-      const Out = await Post(Run, { name: "grep", arguments: { pattern: "1.2.3 version", path: "package.json" }, agent: AgentOf("a") }, Decision);
+      const Out = await Post(Run, { name: "read", arguments: { file_path: "README.md" }, agent: AgentOf("a") }, Decision);
       assert.equal(Out, Decision);
       assert.deepEqual(Run.Lines, ["hook-dsh-search-suggester: disabled (enabled=false)"]);
       assert.equal(LedgerLines().length, 1);
@@ -111,18 +115,22 @@ const runTest = async () => {
         "Owner"
       ]);
       assert.deepEqual(Run.State.Exclude, ["node_modules", "Target", ".git", "Site/Target", "dist"]);
-      assert.equal(Run.State.Pack.length, 10);
+      assert.equal(Run.State.Pack.length, 0);
+      assert.ok(Run.State.History instanceof WeakMap);
       assert.equal(Run.State.Factory, Run.Context.pluginFactory);
     });
-    Check(Count, "W4: the knowledge loads cold from a missing file and after a save it reloads", () => {
+    Check(Count, "W4: the knowledge loads cold from a missing file", () => {
       assert.deepEqual(Run.State.Knowledge.stats, { emitted: 0, followed: 0, ignored: 0, dismissed: 0 });
       assert.equal(FileSystem.existsSync(Knowledge), false);
     });
   }
   {
+    const Space = Workspace(["README.md", "CHANGELOG.md", "SCHEME.md"]);
     const Run = Setup();
-    await Post(Run, { name: "grep", arguments: { pattern: "1.2.3 version", path: "package.json" }, agent: AgentOf("a") });
-    await Post(Run, { name: "grep", arguments: { pattern: "unrelated query", path: "" }, agent: AgentOf("a") });
+    Run.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Run, "a", Space.At("README.md"), ["CHANGELOG.md", "SCHEME.md"]);
+    await Post(Run, { name: "read", arguments: { file_path: Space.At("README.md") }, agent: AgentOf("a") });
+    await Post(Run, { name: "grep", arguments: { pattern: "unrelated query", path: Space.At("package.json") }, agent: AgentOf("a") });
     Check(Count, "W5: zero ctx.fs calls across emit and abstain", () => {
       assert.equal(Run.Fs.reads, 0);
       assert.equal(Run.Fs.writes, 0);

@@ -10,8 +10,9 @@
 // record crosses the gate at k = sigmoid(2.5 - 0.6) = 0.87, while an
 // explicit pack family still has to earn its own weight.
 //
-// The regexes arrive precompiled (Function/Apply compiles once at apply) -
-// the hot path never compiles a regex.
+// The regexes arrive precompiled (Function/Apply compiles the explicit pack
+// once per root and the synthesized family once per call) - this leaf never
+// compiles a regex itself.
 import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
 
 /** The plan's bias constant (§3.5): keeps a single weak signal below the gate. */
@@ -44,9 +45,11 @@ export default (Rules: CompiledIntent[], Tool: string, Probe: string): Match | n
 };
 
 /**
- * Compile the raw pack once at apply: the regex sources become RegExp
- * objects (with the case-insensitive flag - the probes are prose-ish) and
- * invalid patterns are dropped rather than thrown (fail-open posture).
+ * Compile the raw rows: the regex sources become RegExp objects (with the
+ * case-insensitive flag - the probes are prose-ish). Function/Apply calls it
+ * for the explicit pack (once per root) and for the synthesized family (once
+ * per call); a malformed pattern throws, and the listener's try/catch is the
+ * fail-open posture (the call passes through unnoted).
  */
 export const Compile = (Raw: Intent[]): CompiledIntent[] =>
 	Raw.map((Intent) => ({

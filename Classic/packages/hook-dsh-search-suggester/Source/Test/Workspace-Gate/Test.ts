@@ -1,13 +1,12 @@
 // Source/Test/Workspace-Gate/Test.ts - the workspace gate and the existence
-// filter against the fake ctx and REAL temp workspaces: (a) a FOREIGN
-// workspace (a temp tree with the pack's triggering path but no
-// Documentation/ARCHIVE-STYLE.md) produces NO note and the
-// `abstained foreign-workspace` ledger line; (b) OUR workspace (a temp tree
-// WITH the signature, package.json, CHANGELOG.md and the three family globs,
-// WITHOUT the other targets) emits a note naming ONLY the candidates that
-// exist; (c) a family whose whole candidate set is absent abstains
-// `no-companions`; (d) a foreign call never poisons the next in-workspace
-// call.
+// filter against the fake ctx and REAL temp trees: (a) a call path with NO
+// `.git`/`package.json` root and no session cwd abstains `foreign-workspace`
+// before any candidate work, whether the cwd service is absent or its getter
+// throws; (b) a rooted tree with no history abstains `no-history`; (c) a
+// rooted tree with a seeded session history emits the HISTORY note naming
+// ONLY the companions that exist; (d) a history whose whole companion set is
+// absent abstains `no-companions`; (e) a foreign call never poisons the next
+// in-workspace call.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -20,6 +19,7 @@ import {
 	Finish,
 	MakeCounter,
 	Post,
+	SeedHistory,
 	Setup,
 } from "../Harness.js";
 
@@ -34,23 +34,7 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** The optional harness service the probe reads (the real shape: get(session)). */
-const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
-
-/** The strong Version call: the pattern and the path both match. */
-const Version = (Path_: string, Id: string): any => ({
-	name: "grep",
-	arguments: { pattern: "1.2.3 version", path: Path_ },
-	agent: AgentOf(Id),
-});
-
-/**
- * A dedicated parent for the fixture trees: the base-aware sibling glob
- * (an asterisk followed by `/<rest>`) checks the package parent's immediate
- * subdirectories, so the parent must contain only this fixture's branches
- * (the OS temp dir holds unrelated temp trees that would otherwise satisfy a
- * sibling glob).
- */
+/** A dedicated parent for the fixture trees. */
 const Parent = Tree("search-suggester-workspaces-");
 const Branch = (Name: string): string => {
 	const Full = Path.join(Parent, Name);
@@ -58,33 +42,44 @@ const Branch = (Name: string): string => {
 	return Full;
 };
 
-/** The FOREIGN workspace: a package.json, no signature file. */
+/** The FOREIGN tree: no `.git`, no `package.json`, and no session cwd. */
 const Foreign = Branch("foreign");
-const ForeignManifest = Put(Foreign, "package.json");
+const ForeignIndex = Put(Foreign, "Documentation/INDEX.md");
 
-/** OUR workspace: the signature, the manifest, the changelog and the globs. */
-const Ours = Branch("ours");
-Put(Ours, "Documentation/ARCHIVE-STYLE.md");
-const OursManifest = Put(Ours, "package.json");
-Put(Ours, "CHANGELOG.md");
-Put(Ours, "README.md");
-Put(Ours, "CONTRIBUTING.md");
-Put(Ours, "SCHEME.md");
+/** The ROOTED tree: the `package.json` marker and the anchor's companions. */
+const Rooted = Branch("rooted");
+Put(Rooted, "package.json", "{}");
+const RootedAnchor = Put(Rooted, "README.md");
+Put(Rooted, "CHANGELOG.md");
+Put(Rooted, "SCHEME.md");
 
-/** The EMPTY workspace: the signature only, none of the Owner set. */
-const Empty = Branch("empty");
-Put(Empty, "Documentation/ARCHIVE-STYLE.md");
+/** The optional harness service the probe reads (the real shape: get(session)). */
+const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
+
+/** A judged read call. */
+const Read = (Path_: string, Id: string): any => ({
+	name: "read",
+	arguments: { file_path: Path_ },
+	agent: AgentOf(Id),
+});
+
+/** The history note's byte-exact text (k = sigmoid(2.5 - 0.6) = 0.87). */
+const HistoryText = [
+	"[search-suggester] intent=History confidence=0.87",
+	"targets (1):",
+	"- CHANGELOG.md - touched 1 time(s) after a similar call",
+	"note: open these before more searches; Target/ is generated, never edit it.",
+].join("\n");
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
-	// Group G1: the foreign workspace, cwd through the service.
+	// Group G1: no workspace root, no session cwd.
 	{
 		const Run = Setup();
-		Run.Context.workingDirectory = Service(Foreign);
-		await CheckAsync(Count, "G1: a foreign workspace produces NO note and the foreign-workspace line", async () => {
+		await CheckAsync(Count, "G1: a call with no root abstains foreign-workspace", async () => {
 			const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
-			const Out = await Post(Run, Version(ForeignManifest, "a"), Decision);
+			const Out = await Post(Run, Read(ForeignIndex, "a"), Decision);
 			assert.equal(Out, Decision);
 			assert.deepEqual(Out.additionalContexts, [{ id: "downstream" }]);
 			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained foreign-workspace  0.00"));
@@ -108,76 +103,67 @@ export const runTest = async (): Promise<number> => {
 				},
 			};
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(Throwing, Version(ForeignManifest, "a"), Decision);
+			const Out = await Post(Throwing, Read(ForeignIndex, "a"), Decision);
 			assert.equal(Out, Decision);
 			assert.ok(Throwing.Lines.includes("hook-dsh-search-suggester: abstained foreign-workspace  0.00"));
 			assert.deepEqual(Throwing.Warns, []);
 		});
 	}
 
-	// Group G2: the foreign workspace with NO service at all (the bare mount).
+	// Group G2: a rooted tree with no history.
 	{
 		const Run = Setup();
-		await CheckAsync(Count, "G2: without the service the absolute foreign path still abstains", async () => {
+		await CheckAsync(Count, "G2: a rooted tree with no history abstains no-history", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(Run, Version(ForeignManifest, "a"), Decision);
+			const Out = await Post(Run, Read(RootedAnchor, "b"), Decision);
 			assert.equal(Out, Decision);
-			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained foreign-workspace  0.00"));
-			assert.deepEqual(Run.Warns, []);
+			assert.deepEqual(Out.additionalContexts, []);
+			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained no-history  0.00"));
+			assert.match(DurableLine("abstained no-history"), Durable("abstained no-history  0.00"));
+			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
 		});
 	}
 
-	// Group G3: OUR workspace - the existence filter keeps only real candidates.
+	// Group G3: the existence filter keeps only the real companions.
 	{
 		const Run = Setup();
-		Run.Context.workingDirectory = Service(Ours);
-		await CheckAsync(Count, "G3: the note names only the candidates that exist", async () => {
-			const Out = await Post(Run, Version(OursManifest, "a"));
+		SeedHistory(Run, "c", RootedAnchor, ["CHANGELOG.md", "MISSING.md"]);
+		await CheckAsync(Count, "G3: the note names only the companions that exist", async () => {
+			const Out = await Post(Run, Read(RootedAnchor, "c"));
 			assert.equal(Out.additionalContexts.length, 1);
 			assert.deepEqual(Out.additionalContexts[0].source, {
 				kind: "search-suggester",
 				form: "notice",
-				summary: "Version 0.92",
+				summary: "History 0.87",
 			});
-			const Text = Out.additionalContexts[0].content[0].text;
-			assert.equal(
-				Text,
-				"[search-suggester] intent=Version confidence=0.92\ntargets (5):\n- package.json - the monorepo manifest\n- CHANGELOG.md - the new section\n- **/README.md - the long tail\n- **/CONTRIBUTING.md - the long tail\n- **/SCHEME.md - the long tail\nnote: open these before more searches; Target/ is generated, never edit it.",
-			);
-			assert.equal(Text.includes("Site/Source/Library/Content.ts"), false);
-			assert.equal(Text.includes("Documentation/Plugins/PLUGIN-FAMILY.md"), false);
+			assert.equal(Out.additionalContexts[0].content[0].text, HistoryText);
+			assert.equal(Out.additionalContexts[0].content[0].text.includes("MISSING.md"), false);
 		});
-		await CheckAsync(Count, "G3: the suggest line counts only the existing candidates", async () => {
-			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest Version 0.92 5 candidates"));
+		await CheckAsync(Count, "G3: the suggest line counts only the existing companion", async () => {
+			assert.ok(
+				Run.Lines.includes(`hook-dsh-search-suggester: suggest History 0.87 1 candidates`),
+			);
 			assert.match(
-				DurableLine("suggest Version 0.92 5 candidates"),
-				Durable("suggest Version 0.92 5 candidates"),
+				DurableLine("suggest History 0.87 1 candidates"),
+				Durable("suggest History 0.87 1 candidates"),
 			);
 		});
 	}
 
-	// Group G4: a family whose whole candidate set is absent.
+	// Group G4: a history whose whole companion set is absent.
 	{
 		const Run = Setup();
-		Run.Context.workingDirectory = Service(Empty);
-		await CheckAsync(Count, "G4: an emptied family abstains no-companions with the family and kappa", async () => {
+		SeedHistory(Run, "d", RootedAnchor, ["MISSING.md", "GONE.md"]);
+		await CheckAsync(Count, "G4: an emptied history abstains no-companions", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(
-				Run,
-				{
-					name: "grep",
-					arguments: { pattern: "CONTRIBUTING", path: "" },
-					agent: AgentOf("a"),
-				},
-				Decision,
-			);
+			const Out = await Post(Run, Read(RootedAnchor, "d"), Decision);
 			assert.equal(Out, Decision);
 			assert.ok(
-				Run.Lines.includes("hook-dsh-search-suggester: abstained no-companions Owner 0.66"),
+				Run.Lines.includes("hook-dsh-search-suggester: abstained no-companions History 0.87"),
 			);
 			assert.match(
 				DurableLine("abstained no-companions"),
-				Durable("abstained no-companions Owner 0.66"),
+				Durable("abstained no-companions History 0.87"),
 			);
 			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
 		});
@@ -186,12 +172,12 @@ export const runTest = async (): Promise<number> => {
 	// Group G5: the foreign abstention does not poison the next in-workspace call.
 	{
 		const Run = Setup();
-		Run.Context.workingDirectory = Service(Foreign);
+		SeedHistory(Run, "e", RootedAnchor, ["CHANGELOG.md"]);
 		await CheckAsync(Count, "G5: a foreign call never poisons the next in-workspace call", async () => {
-			await Post(Run, Version(ForeignManifest, "a"));
-			Run.Context.workingDirectory = Service(Ours);
-			const Out = await Post(Run, Version(OursManifest, "a"));
-			assert.equal(Out.additionalContexts[0].source.summary, "Version 0.92");
+			await Post(Run, Read(ForeignIndex, "e"));
+			const Out = await Post(Run, Read(RootedAnchor, "e"));
+			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+			assert.equal(Out.additionalContexts[0].content[0].text.includes("- CHANGELOG.md"), true);
 		});
 	}
 

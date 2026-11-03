@@ -2,6 +2,39 @@
 
 All notable changes to this package will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- The candidates come from the agent's OWN previous tool calls: a recalled record is synthesized
+  into ONE `Repeat` family (priority 0, threshold 0.75, one `history` signal of weight 2.5, the
+  recalled files as its targets with prior 1.0 and the `touched last time (<intent>)` reason), and
+  it is placed FIRST in the rules the classifier consumes, so the note reads
+  `intent=Repeat confidence=0.87` and the `suggest Repeat 0.87 <n> candidates call <tool>` line is
+  unchanged in shape.
+- The literal built-in pack is RETIRED from the hot path: `State.Rules` starts empty at apply, and
+  `Variable/Defaults` (the `Families(Builtin, "replay")` projection) carries a RETIRED header and is
+  unimported. The history lift is gone with it: the history evidence is the synthesized family's
+  signal, so `Function/Detect` takes no lift and `Function/History` exports no `LIFT`.
+- A repo/user pack is now an EXPLICIT override: the listener resolves it with `builtin: false`
+  (`Resolve(root, { home: Home(), builtin: false })`), so a hand-written `replay/` family still
+  speaks (its id and caveat may outrank the synthesized family) and a literal pack never does. A
+  workspace with no pack and no record abstains with the new byte-exact line
+  `abstained no-history  0.00`.
+- The workspace gate is pack-independent (the nearest ancestor carrying `.git` or `package.json`,
+  `Root(CallPath, Cwd)`), so a pack's declared `signature` no longer gates a call; a call with no
+  such root abstains `abstained foreign-workspace  0.00`.
+- The activation line's second segment is `history` (was `intents <n>`), because the boot pack
+  projection is gone. The fourth segment stays the seeded store's record count.
+- The seeded store (`historyPath`) is now an OPTIONAL user seed: still read-only, still loaded once
+  at apply, still the first recall source, but no longer required for the hook to speak.
+- The five smoke folders are rewritten onto the recall-first model: the loader suite asserts the new
+  activation line and the synthesized note; the producer suite asserts the `no-history` abstention
+  and the synthesized caveat; the pipeline suite keeps the recall cases at `0.87` and the
+  `no-history` abstention; the workspace gate uses a `package.json` root marker instead of the pack
+  signature; the pack suite covers the explicit pack, the pack-less recall, the `no-memory` pack
+  case, and the `no-history` case. No assertion names a built-in pack literal.
+
 ## 0.2.1
 
 ### Changed

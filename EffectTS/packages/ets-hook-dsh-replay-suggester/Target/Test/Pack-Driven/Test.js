@@ -8,7 +8,8 @@ import {
   Finish,
   MakeCounter,
   Setup,
-  WriteStore
+  WriteStore,
+  rmStore
 } from "../Harness.js";
 const Tree = (Prefix) => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
 const Put = (Root, Relative, Body = "x") => {
@@ -17,24 +18,21 @@ const Put = (Root, Relative, Body = "x") => {
   FileSystem.writeFileSync(Full, Body, "utf8");
   return Full;
 };
+const Manifest = (Root) => {
+  FileSystem.writeFileSync(Path.join(Root, "package.json"), "{}", "utf8");
+};
 const Pack = `signature:
   - docs/STYLE.md
 families:
-  "replay/Repeat":
-    id: Repeat
+  "replay/Rerun":
+    id: Rerun
     priority: 1
     threshold: 0.75
     note: the temp recall is the answer
     signals:
-      - rule: search-shape
+      - rule: temp-shape
         pattern: 'grep'
-        weight: 0.5
-      - rule: literal-shape
-        pattern: '"version"'
-        weight: 0.4
-      - rule: context-shape
-        pattern: 'pattern'
-        weight: 0.3
+        weight: 3.0
     targets: []
 `;
 const Record = {
@@ -45,11 +43,11 @@ const Record = {
 };
 const Service = (Cwd) => ({ get: () => Cwd });
 const Packed = Tree("replay-suggester-packed-");
+Manifest(Packed);
 Put(Packed, ".dsh/pack.yml", Pack);
-Put(Packed, "docs/STYLE.md");
+Put(Packed, "Source/Version.ts");
 const Bare = Tree("replay-suggester-bare-");
-const Unsigned = Tree("replay-suggester-unsigned-");
-Put(Unsigned, ".dsh/pack.yml", Pack);
+Manifest(Bare);
 const runTest = async () => {
   const Count = MakeCounter();
   {
@@ -62,17 +60,18 @@ const runTest = async () => {
       assert.deepEqual(Out.additionalContexts[0].source, {
         kind: "replay-suggester",
         form: "notice",
-        summary: "Repeat 0.77"
+        summary: "Rerun 0.92"
       });
       const Text = Out.additionalContexts[0].content[0].text;
       assert.equal(
         Text,
-        "[replay-suggester] intent=Repeat confidence=0.77\ntargets (1):\n- Source/Version.ts - touched last time (Repeat)\nnote: the temp recall is the answer"
+        "[replay-suggester] intent=Rerun confidence=0.92\ntargets (1):\n- Source/Version.ts - touched last time (Repeat)\nnote: the temp recall is the answer"
       );
+      assert.equal(Text.includes("docs/STYLE.md"), false);
     });
     await CheckAsync(Count, "P1: the ledger counts the recalled companion", async () => {
       assert.ok(
-        Run.Lines.includes("replay-suggester: suggest Repeat 0.77 1 candidates call grep")
+        Run.Lines.includes("replay-suggester: suggest Rerun 0.92 1 candidates call grep")
       );
     });
   }
@@ -80,40 +79,46 @@ const runTest = async () => {
     WriteStore([Record]);
     const Run = Setup();
     Run.Context.workingDirectory = Service(Bare);
-    await CheckAsync(Count, "P2: the same workspace without the pack stays silent", async () => {
+    await CheckAsync(Count, "P2: without a pack the recall still produces the note", async () => {
+      const Out = await Call(Run, "grep", { pattern: "version" });
+      assert.equal(Out.additionalContexts.length, 1);
+      assert.deepEqual(Out.additionalContexts[0].source, {
+        kind: "replay-suggester",
+        form: "notice",
+        summary: "Repeat 0.87"
+      });
+      const Text = Out.additionalContexts[0].content[0].text;
+      assert.equal(
+        Text,
+        "[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- Source/Version.ts - touched last time (Repeat)\nnote: the last time this call was made, these files were touched"
+      );
+      assert.ok(
+        Run.Lines.includes("replay-suggester: suggest Repeat 0.87 1 candidates call grep")
+      );
+    });
+  }
+  {
+    rmStore();
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Packed);
+    await CheckAsync(Count, "P3: a pack family with no record abstains no-memory", async () => {
       const Decision = { kind: "allow" };
       const Out = await Call(Run, "grep", { pattern: "version" }, void 0, Decision);
       assert.equal(Out, Decision);
-      assert.ok(Run.Lines.includes("replay-suggester: abstained foreign-workspace  0.00"));
+      assert.ok(Run.Lines.includes("replay-suggester: abstained no-memory Rerun 0.92"));
       assert.equal(Run.Lines.filter((Line) => Line.includes("candidates call")).length, 0);
     });
   }
   {
-    WriteStore([Record]);
+    rmStore();
     const Run = Setup();
-    Run.Context.workingDirectory = Service(Unsigned);
-    await CheckAsync(Count, "P3: a pack whose signature marker is absent stays silent", async () => {
+    Run.Context.workingDirectory = Service(Bare);
+    await CheckAsync(Count, "P4: a workspace with no pack and no record abstains no-history", async () => {
       const Decision = { kind: "allow" };
       const Out = await Call(Run, "grep", { pattern: "version" }, void 0, Decision);
       assert.equal(Out, Decision);
-      assert.ok(Run.Lines.includes("replay-suggester: abstained foreign-workspace  0.00"));
-    });
-  }
-  {
-    WriteStore([{ ...Record, probe: "grep" }]);
-    const Run = Setup();
-    await CheckAsync(Count, "P4: the built-in pack still drives the monorepo path", async () => {
-      const Out = await Call(Run, "grep", {
-        pattern: "version",
-        path: "Source/Version.ts"
-      });
-      assert.equal(Out.additionalContexts[0].source.summary, "Repeat 0.77");
-      const Text = Out.additionalContexts[0].content[0].text;
-      assert.equal(Text.includes("- Source/Version.ts - touched last time (Repeat)"), true);
-      assert.equal(
-        Text.includes("note: the recall is the answer; without a record the hook abstains."),
-        true
-      );
+      assert.ok(Run.Lines.includes("replay-suggester: abstained no-history  0.00"));
+      assert.equal(Run.Lines.filter((Line) => Line.includes("candidates call")).length, 0);
     });
   }
   return Finish(Count, "Pack-Driven");

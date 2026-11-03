@@ -2,14 +2,31 @@
 # The replay-suggester hook answers "the last time this was done, the model
 # touched these N files and verified with this command" (Documentation/
 # Plans/SEARCH-SUGGESTER-PLUGIN.md §9.3): when the model searches with an
-# intent it has pursued before, the hook recalls the matching record and
-# prepends ONE labeled additionalContexts notice. The recall store's
-# PRODUCER (the completion spec's wave 2c re-spec): every judged call is
-# appended to the call history - the per-agent ring plus the durable tier
-# (the `replay_history` storage domain when the harness provides storage,
-# the JSON fallback at `recordPath` otherwise) - so the reader finally has
-# data. The seeded store (`historyPath`) stays read-only: the hook never
-# writes it, and it keeps precedence when it matches.
+# intent it has pursued before, the hook recalls the matching record from
+# the agent's OWN previous tool calls and prepends ONE labeled
+# additionalContexts notice.
+#
+# THE CANDIDATES COME FROM THE RECALL, NEVER FROM A LITERAL PACK: the recall
+# store's PRODUCER (the completion spec's wave 2c re-spec) appends every
+# judged call to the call history - the per-agent ring plus the durable tier
+# (the `replay_history` storage domain when the harness provides storage, the
+# JSON fallback at `recordPath` otherwise) - and a recalled record is
+# synthesized into ONE `Repeat` family (one `history` signal of weight 2.5,
+# the files touched last time as its targets) that the classifier, the gate
+# and the note judge exactly like a pack family. The activation line's second
+# segment is `history`, because the literal built-in pack is RETIRED from the
+# hot path (`Variable/Defaults` is unimported).
+#
+# THE PACK IS AN EXPLICIT OVERRIDE ONLY: `<repo>/.dsh/pack.yml` or the user
+# layer, resolved with `builtin: false`, so a hand-written `replay/` family
+# still speaks and a literal pack never does. A workspace with no history and
+# no pack abstains with the byte-exact line `abstained no-history  0.00`; a
+# call outside any workspace (no `.git`/`package.json` root) abstains
+# `abstained foreign-workspace  0.00`.
+#
+# THE SEEDED STORE (`historyPath`) IS AN OPTIONAL USER SEED: read-only, read
+# once at apply, and the first recall source - the hook never writes it, and
+# it keeps precedence when it matches.
 #
 # New entries are declared with `insert:` - a bare `id:` row PATCHES an
 # existing entry and the loader rejects unknown ids with 'entry "..." not

@@ -1,10 +1,14 @@
 // Source/Test/Sticky-Section-And-Ring/Test.ts - the second surface and the
-// ring lifecycle against the fake ctx: the sticky section off by default
-// (the assemble waterfall passes through untouched), the sticky section
-// built after an emit (the byte-exact section name and text, the
-// `section rebuilt (ttl N)` ledger line in both forms), the TTL rebuild, the
-// tools/change invalidation for the default ring, and the assemble
-// fail-open pass-through.
+// ring lifecycle against the fake ctx: the sticky section off by default (the
+// assemble waterfall passes through untouched), the sticky section built
+// after an emit (the byte-exact section name and text, the `section rebuilt
+// (ttl N)` ledger line in both forms), the TTL rebuild, the tools/change
+// invalidation for the default ring, and the assemble fail-open pass-through.
+//
+// THE SECTION'S SOURCE: the last family the ring noted. For the synthetic
+// History row the section renders the paths the note named, so the scenario
+// seeds the session history (and, for the default ring, folds real
+// `tool/call` events through the session/event listener).
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -19,16 +23,31 @@ import {
 	MakeCounter,
 	Post,
 	rm,
+	SeedHistory,
 	Setup,
 	Validate,
+	Workspace,
 } from "../Harness.js";
 
-/** The strong Version emit call: a grep whose pattern and path both match. */
-const StrongVersion = (Id: string): any => ({
-	name: "grep",
-	arguments: { pattern: "1.2.3 version", path: "package.json" },
-	agent: AgentOf(Id),
+/** The judged call's anchor path (relative to the temp workspace). */
+const Anchor = "README.md";
+
+/** The two companions touched right after the anchor. */
+const Companions = ["CHANGELOG.md", "SCHEME.md"];
+
+/** The temp workspace the scenarios judge. */
+const Space = Workspace([Anchor, ...Companions]);
+
+/** One judged read of the anchor. */
+const Read = (Id: string | undefined): any => ({
+	name: "read",
+	arguments: { file_path: Space.At(Anchor) },
+	agent: Id === undefined ? undefined : AgentOf(Id),
 });
+
+/** The byte-exact sticky section text (the note's paths, the generic reason). */
+const Section =
+	"[search-suggester] intent=History confidence=1.00\ntargets (2):\n- CHANGELOG.md - touched after a similar call\n- SCHEME.md - touched after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -36,8 +55,9 @@ export const runTest = async (): Promise<number> => {
 	// Group S1: the second surface is off by default.
 	{
 		const Run = Setup();
+		SeedHistory(Run, "a", Space.At(Anchor), Companions);
 		await CheckAsync(Count, "S1: with sectionMode off the assemble passes through untouched", async () => {
-			await Post(Run, StrongVersion("a"));
+			await Post(Run, Read("a"));
 			const Out = await Assemble(Run, AgentOf("a"));
 			assert.deepEqual(Out.sections, [{ name: "base", text: "b" }]);
 			assert.ok(!Run.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
@@ -48,14 +68,12 @@ export const runTest = async (): Promise<number> => {
 	{
 		rm();
 		const Sticky = Make(Validate({ logFile: Ledger, enabled: true, sectionMode: "sticky" }));
+		SeedHistory(Sticky, "a", Space.At(Anchor), Companions);
 		await CheckAsync(Count, "S2: after an emit the sticky section is appended", async () => {
-			await Post(Sticky, StrongVersion("a"));
+			await Post(Sticky, Read("a"));
 			const Out = await Assemble(Sticky, AgentOf("a"));
-			assert.deepEqual(Out.sections.map((Section: any) => Section.name), ["base", "hook-dsh-search-suggester"]);
-			assert.equal(
-				Out.sections[1].text,
-				"[search-suggester] intent=Version confidence=1.00\ntargets (10):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- Classic/packages/*/package.json - the Classic manifests\n- EffectTS/packages/*/package.json - the EffectTS manifests\n- */Source/Function/Apply.ts - the const Version\n- Site/Source/Library/Content.ts - the site release constant\n- CHANGELOG.md - the new section\n- Documentation/Plugins/PLUGIN-FAMILY.md - the roster versions\n- Site/Source/pages/reference.astro - the versions page\n- .github/workflows/NPM.yml - the publish trigger\nnote: open these before more searches; Target/ is generated, never edit it.",
-			);
+			assert.deepEqual(Out.sections.map((Section_: any) => Section_.name), ["base", "hook-dsh-search-suggester"]);
+			assert.equal(Out.sections[1].text, Section);
 			assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
 			assert.match(
 				DurableLine("section rebuilt (ttl 20)"),
@@ -67,7 +85,7 @@ export const runTest = async (): Promise<number> => {
 			const Rings = Sticky.State.Rings.State(AgentOf("a"));
 			const Built = Rings.sectionBuilt;
 			const Out = await Assemble(Sticky, AgentOf("a"));
-			assert.deepEqual(Out.sections.map((Section: any) => Section.name), ["base", "hook-dsh-search-suggester"]);
+			assert.deepEqual(Out.sections.map((Section_: any) => Section_.name), ["base", "hook-dsh-search-suggester"]);
 			assert.equal(Sticky.State.Rings.State(AgentOf("a")).sectionBuilt, Built);
 			assert.equal(LedgerWith("section rebuilt (ttl 20)").length, 1);
 		});
@@ -77,10 +95,22 @@ export const runTest = async (): Promise<number> => {
 	{
 		rm();
 		const Sticky = Make(Validate({ logFile: Ledger, enabled: true, sectionMode: "sticky" }));
-		await CheckAsync(Count, "S3: the default ring builds its section on the no-agent emit and assemble", async () => {
-			await Post(Sticky, { name: "grep", arguments: { pattern: "1.2.3 version", path: "package.json" }, agent: undefined });
+		await CheckAsync(Count, "S3: the default ring folds the no-session events and builds its section", async () => {
+			// The session/event fold with no session object lands on the
+			// shared default key, which the agent-less call reads back.
+			Sticky.CtxListeners["session/event"](undefined, {
+				type: "tool/call",
+				name: "read",
+				arguments: { file_path: Space.At(Anchor) },
+			});
+			Sticky.CtxListeners["session/event"](undefined, {
+				type: "tool/call",
+				name: "read",
+				arguments: { file_path: "CHANGELOG.md" },
+			});
+			await Post(Sticky, Read(undefined));
 			const Out = await Assemble(Sticky, undefined);
-			assert.deepEqual(Out.sections.map((Section: any) => Section.name), ["base", "hook-dsh-search-suggester"]);
+			assert.deepEqual(Out.sections.map((Section_: any) => Section_.name), ["base", "hook-dsh-search-suggester"]);
 			assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
 		});
 		await CheckAsync(Count, "S3: tools/change invalidates the default ring's cache with its ledger line", async () => {
@@ -92,7 +122,7 @@ export const runTest = async (): Promise<number> => {
 				Durable("section invalidated (tools/change)"),
 			);
 			const Out = await Assemble(Sticky, undefined);
-			assert.deepEqual(Out.sections.map((Section: any) => Section.name), ["base", "hook-dsh-search-suggester"]);
+			assert.deepEqual(Out.sections.map((Section_: any) => Section_.name), ["base", "hook-dsh-search-suggester"]);
 			assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
 		});
 		await CheckAsync(Count, "S3: tools/change on an empty cache is silent", async () => {
@@ -107,10 +137,10 @@ export const runTest = async (): Promise<number> => {
 	// Group S4: the assemble guard.
 	{
 		const Run = Setup();
-		await CheckAsync(Count, "S4: an assemble with no cooled intent passes through with no section", async () => {
+		await CheckAsync(Count, "S4: an assemble with no cooled family passes through with no section", async () => {
 			const Out = await Assemble(Run, undefined);
 			assert.deepEqual(Out.sections, [{ name: "base", text: "b" }]);
-			assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 10, threshold 0.75)`]);
+			assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`]);
 			assert.deepEqual(Run.Warns, []);
 		});
 	}

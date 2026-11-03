@@ -10,16 +10,12 @@ this was done, what did the model actually touch and how did it verify?"**
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) §9.3).
 
 When the model searches with an intent it has pursued before, the hook recalls the matching record
-from its history store and prepends ONE labeled `additionalContexts` notice: the files touched last
-time and the verification command.
+from the agent's OWN previous tool calls and prepends ONE labeled `additionalContexts` notice: the
+files touched last time and the verification command.
 
-- **The history store.** `~/.dsh/replay-suggester/history.json` is the seed of the journal of the
-  search-suggester per §9.3, and the offline learner and the journal adapter are the end-phase
-  wiring.
-
-    It is loaded once at apply, and a missing or corrupt store degrades to silence with a ledger
-    line, never to a guess.
-
+- **The candidates come from the recall, never from a literal pack.** The recall names the files
+  that accompanied a similar prior call, and the hook synthesizes that record into one `Repeat`
+  family per call, so the classifier, the gate and the note treat it exactly like a pack family.
 - **The recall store has a producer** (the wave 2c re-spec,
   [03-SUGGESTERS.md](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md)).
 
@@ -27,10 +23,17 @@ time and the verification command.
     prior call.
 
     The producer's store is its own (the `replay_history` storage domain, or the JSON fallback
-    beside the seeded store), and the seeded store still wins when it matches.
+    beside the seeded store).
 
-- **Without a recalled record the hook abstains** (`replay no-memory`), because a replay answer
-  without a record is a guess and the plan forbids the guess (§2.4).
+- **The seeded store is an OPTIONAL user seed.** `~/.dsh/replay-suggester/history.json` is the seed
+  of the journal of the search-suggester per §9.3, it is read-only, it is loaded once at apply, and
+  it keeps precedence when it matches.
+
+    A missing or corrupt store degrades to silence with a ledger line, never to a guess, and the
+    live history still speaks.
+
+- **Without a record and without an explicit pack the hook abstains** (`replay no-history`), because
+  a replay answer without a record is a guess and the plan forbids the guess (§2.4).
 - **Privacy posture (plan §5.4).** Repo-relative paths only, no file contents, no user text, local
   only.
 
@@ -42,7 +45,7 @@ time and the verification command.
     `{prepend: true}` listener) calls `next()` first.
 
     Then the hook runs record (the producer) -> recall (the seeded store, then the live history) ->
-    detect -> gate -> prepend ONE notice.
+    the synthesized `Repeat` family -> the explicit pack -> detect -> gate -> prepend ONE notice.
 
     Content is never replaced.
 
@@ -66,20 +69,31 @@ The recall matches the most recent prior entry with the same tool and either a c
 literal or the same path directory, then names the paths recorded within `learnWindow` calls of it
 (the episode): "the last time this area was touched, these files were touched".
 
+The record is then synthesized into the `Repeat` family (`priority` 0, `threshold` 0.75, one
+`history` signal of weight 2.5, the recalled files as its targets), so the note reads
+`intent=Repeat confidence=0.87` and the ledger keeps its
+`suggest Repeat 0.87 <n> candidates call <tool>` line.
+
 The `recorded` line, the recovery lines (`store recovered <n> entries (replay_history|file)` and
 `store empty (starting fresh)`), and the failure lines are byte-exact in [SCHEME.md](./SCHEME.md).
 
-## The pack
+## The pack (an explicit override only)
 
-The `Repeat` intent is **pack-driven**: the built-in pack (the default of this monorepo) lives in
-[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `replay/` domain.
+The built-in pack (the default of this monorepo) lives in
+[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack), but this package no longer projects it into the
+hot path: `Source/Variable/Defaults.ts` is RETIRED and unimported, so a literal pack is never a
+candidate source.
 
 A repository that ships `.dsh/pack.yml` (or a user-layer pack at
-`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `replay/` intent and caveat, and a repository
-without a pack stays silent.
+`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `replay/` family, resolved with
+`builtin: false`; its id, threshold and caveat join the synthesized family, and it may outrank it.
 
-The recalled companion still comes from the history store, because the pack supplies the gate and
-the caveat, never the companion.
+The recalled companion still comes from the record, because the pack supplies the gate and the
+caveat, never the companion.
+
+A workspace with no pack layer and no record abstains with the byte-exact
+`abstained no-history  0.00`, and a call outside any workspace (no `.git`/`package.json` root)
+abstains `abstained foreign-workspace  0.00`.
 
 ## The plan
 

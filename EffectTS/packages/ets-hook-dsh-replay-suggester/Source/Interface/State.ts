@@ -17,10 +17,10 @@
 //   MaxNoteChars   - the note's character cap (config `maxNoteChars`, volatile);
 //   Cooldown       - the per-intent cooldown in judged calls (config `cooldownCalls`, volatile);
 //   MaxNotesPerTurn- the per-turn note cap (config `maxNotesPerTurn`, volatile);
-//   Intents        - the enabled intent ids (config `intents`, volatile);
+//   Intents        - the enabled intent ids of an explicit pack (config `intents`, volatile);
 //   EmitOn         - the judged tool names (config `emitOn`, volatile);
 //   Exclude        - candidate path prefixes never suggested (config `exclude`, volatile);
-//   HistoryPath    - the seeded history store path (config `historyPath`, structural);
+//   HistoryPath    - the OPTIONAL seeded history store path (config `historyPath`, structural);
 //   LearnWindow    - the follow/ignore observation window (config `learnWindow`, volatile;
 //                    also the recall's episode radius);
 //   RecordPath     - the JSON fallback store path (config `recordPath`, structural);

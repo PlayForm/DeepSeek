@@ -1,28 +1,34 @@
 # Seed
 
-The P3 OFFLINE SEED gives the learned knowledge a deterministic warm start at load, with no LLM and no session history.
+The P3 OFFLINE SEED: the deterministic warm start of the learned knowledge, with no LLM and no session history.
 
 ## The seed source
 
-- the BUILT-IN pack's canonical candidates, meaning every target of the ten search intents whose prior is 1.0 (the "canonical location" tier), including a glob target such as the package families, while the illustrative `<...>` placeholders, the rows marked `family: true`, and the fallback tiers (prior 0.6 / 0.3) stay cold;
-- the REPO'S OWN INDEX, meaning the graph projection: a canonical candidate the graph proves is seeded twice (count 2 / followed 2) instead of once.
+- **An EXPLICIT pack's canonical candidates.** Every target of the pack's `search/` families whose prior is 1.0 (the "canonical location" tier) is seeded, including a glob target such as the package families.
+
+    The illustrative `<...>` placeholders, the rows marked `family: true`, and the fallback tiers (prior 0.6 / 0.3) stay cold.
+
+- **The REPO'S OWN INDEX (the graph projection).** A canonical candidate the graph proves is seeded twice (count 2 / followed 2) instead of once.
 
 The row is the ordinary `KnowledgeRow` with the `seed` marker set.
 
 The seed never overwrites an existing row, runs only with `learn` and `seed` on and the plugin enabled, and does not save: the next real write (an emit, a follow, a dismissal) persists it, so a cold start leaves no file behind.
 
+The literal built-in pack is retired, so a workspace without `.dsh/pack.yml` seeds nothing at all.
+
 ## Scenarios
 
-- S1: the canonical rows are seeded (34 rows across the ten intents: 10 Version, 2 Path, 3 Ledger, 3 Config, 3 Dependency, 3 Test, 3 Symbol, 2 Doc, 2 Usage, 3 Owner), no stat moves, no file is written, and the family globs and fallback tiers are not rows.
+- S1: the canonical rows of an explicit family fixture are seeded with their markers and the `seededAt` stamp, the placeholder / the aggregate / the fallback stay cold, and no stat moves.
 - S2: a graph-proven row is seeded twice.
-- S3: an existing row wins over the seed.
-- S4: the first real save persists the seeded knowledge (`seed: true`, the seeded row markers, the emitted stat).
-- S5: `learn: false`, `seed: false`, and a disabled mount keep the deterministic cold start.
+- S3: an existing row wins over the seed, and a second seed run moves no count.
+- S4: the seed writes no knowledge file.
+- S5: the apply-time seed reads only an explicit pack, so a workspace with none keeps `seed: false` and no rows.
+- S6: `learn: false`, `seed: false`, and a disabled mount keep the deterministic cold start.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-search-suggester: ` prefix)
 
-`activated (bundle 0.2.1, intents 10, threshold 0.75)` only, because the seed adds no line.
+`activated (bundle 0.2.1, history, threshold 0.75)` only, because the seed adds no line.
 
 ## Expected count
 
-9 PASS.
+11 PASS.
