@@ -12,6 +12,7 @@ import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 import {
+	AgentOf,
 	Call,
 	CheckAsync,
 	Finish,
@@ -91,7 +92,7 @@ export const runTest = async (): Promise<number> => {
 
 	// P1: the explicit temp pack's family drives the note (empty history).
 	{
-		const Agent = { agent: { id: "pack-a" } };
+		const Agent = AgentOf("pack-a");
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Packed);
 		await CheckAsync(Count, "P1: the temp pack's family drives the note", async () => {
@@ -118,7 +119,7 @@ export const runTest = async (): Promise<number> => {
 
 	// P2: the same workspace without the pack abstains no-history.
 	{
-		const Agent = { agent: { id: "pack-b" } };
+		const Agent = AgentOf("pack-b");
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Bare);
 		await CheckAsync(Count, "P2: the same workspace without the pack abstains no-history", async () => {
@@ -132,7 +133,7 @@ export const runTest = async (): Promise<number> => {
 
 	// P3: the root gates the pack, not its declared signature marker.
 	{
-		const Agent = { agent: { id: "pack-c" } };
+		const Agent = AgentOf("pack-c");
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Unsigned);
 		await CheckAsync(Count, "P3: a pack with an absent signature marker still governs the tree", async () => {
@@ -148,7 +149,7 @@ export const runTest = async (): Promise<number> => {
 
 	// P4: the built-in pack is NEVER a candidate source.
 	{
-		const Agent = { agent: { id: "pack-d" } };
+		const Agent = AgentOf("pack-d");
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Monorepo);
 		await CheckAsync(Count, "P4: a monorepo test read with no history abstains no-history", async () => {

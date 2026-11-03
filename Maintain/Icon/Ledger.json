@@ -317,7 +317,7 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "4b07f00d505e5e7391bd93d455b0a3f4772b074d644ba0d709864a9da2593f20",
+			"seed": "90438f4e4bd0b16e313a0a36d84975ddf635206e9cec8d3607ce245bba9423d5",
 			"grammar": "spike-star",
 			"order": 8,
 			"arms": 8,
@@ -326,8 +326,8 @@
 			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "0b1833e42f031ce93e5f2d9e6d34adcf6a1e4559cd830b1051f0dc2e2ec95f08",
-				"colour": "aa73446009f0480a7be754b987fecef10a7571cf0602c19a8f5a693260d6bb4a"
+				"mono": "238befbe65bbb8eef86cf9e7c5e3a53ebf60d3ee550c8d3c0293afcd0b2fe618",
+				"colour": "4294a7c6e36d89fa74e0ac14f68e9f587e74e5a244e10558b0ee67f6ce4568fd"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-edit-suggester.svg",
@@ -616,17 +616,17 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "a9c2bc78b74732216d1ddb37a1338de55ba170f4e8bb85760d2a2b7f7cc14e99",
+			"seed": "10454e2481646730362abecb5fb2f62a0bdeb3df8c5128f5ec1045271adf2ca9",
 			"grammar": "spike-star",
 			"order": 12,
-			"arms": 8,
+			"arms": 6,
 			"rings": 1,
 			"orbit": 12,
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "e3537a9f6fe137714af342a9c25f91c716c258f14f11fa6fae76d70a1a5b04d0",
-				"colour": "0caaf39379359a5d1b220703a4365d236bd5c28f7ef751dc68385ddfe8a6e5fa"
+				"mono": "a29dde2a845df3ae7e30ae5432a4465b4c63bd3b00fc7153ec1011bbdcb550ca",
+				"colour": "22991d1509d26ea29333b0bc7e1d8a61f978a187fe7bf2556bc35ba820e6d8d3"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-search-suggester.svg",
@@ -639,17 +639,17 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "db59977b48ed458d88cb3279fe650de4038acba6308a3ee954fac255593ba308",
+			"seed": "180c4ddb87ce14722fbee12664ed2544f2cc67cbd7f6139c0f5b78d152a576ca",
 			"grammar": "spike-star",
 			"order": 12,
-			"arms": 4,
+			"arms": 8,
 			"rings": 1,
 			"orbit": 8,
-			"rim": "none",
+			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "18d464324dafd2a026766283838e37010368929c711569ffefd4868511dd617b",
-				"colour": "25764b81551f6378ff05616d87195c69f47d91af523dc1b864805672ab22eff3"
+				"mono": "298a20a681446e92aa9cc3487004c0aabcb436fce3cb450a38cac7c8e7551301",
+				"colour": "1b13c8069a46fbe920291bf329a594f9140bda24a08c0df453205f455968bac0"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-test-suggester.svg",
@@ -1605,17 +1605,17 @@
 			"kind": "hook",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "ad18eb3be98c142255e81b2c7efacc05ef1bb21ddafe0af3cda50f34b2a86abb",
+			"seed": "ad000fe0356ac116e31c4c55b3214ad982be0defa46d7198fcafe535f25093c7",
 			"grammar": "spike-star",
 			"order": 8,
 			"arms": 8,
 			"rings": 1,
 			"orbit": 8,
-			"rim": "none",
+			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "a0329da46d3c47e63ca7b9e0f392eb1debe83faea514f4072f83b6569b1c6be2",
-				"colour": "f5a1fb341ee3b90099ae8cc56f7d7790b65e207555f931d90fce092643278026"
+				"mono": "c8fc1c2025cf97894b65f07f5116db7234b09877e2a43d34cc53bb94eed1dc9f",
+				"colour": "1d7829af1607d263db7644c81cfecfe40a33082f3785273b1d89cceccac5d00c"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-edit-suggester.svg",

@@ -3,6 +3,7 @@ import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 import {
+  AgentOf,
   Call,
   Check,
   CheckAsync,
@@ -58,7 +59,7 @@ const runTest = async () => {
     const Root = Workspace("test-suggester-clear-");
     Consistent(Root);
     const Package_ = Path.basename(Root);
-    const Agent = { agent: { id: "clear-a" } };
+    const Agent = AgentOf("clear-a");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Root);
     const First = await Call(Run, "grep", PROBE, Agent);
@@ -80,7 +81,7 @@ const runTest = async () => {
     const Root = Workspace("test-suggester-drift-");
     Drifting(Root);
     const Package_ = Path.basename(Root);
-    const Agent = { agent: { id: "drift-a" } };
+    const Agent = AgentOf("drift-a");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Root);
     const Result = await Call(Run, "grep", PROBE, Agent);
@@ -137,7 +138,7 @@ note: the smoke claims drifted from the tree; fix the README count, the suite fi
     const Root = Workspace("test-suggester-graph-");
     Consistent(Root);
     const Package_ = Path.basename(Root);
-    const Agent = { agent: { id: "graph-a" } };
+    const Agent = AgentOf("graph-a");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Root);
     Run.Context.workspaceGraph = Graph([
@@ -164,7 +165,7 @@ note: the smoke claims drifted from the tree; fix the README count, the suite fi
     Consistent(Bare);
     const NoGraph = Setup();
     NoGraph.Context.workingDirectory = Service(Bare);
-    await Call(NoGraph, "grep", PROBE, { agent: { id: "graph-b" } });
+    await Call(NoGraph, "grep", PROBE, AgentOf("graph-b"));
     Check(Count, "C3: without the graph the same tree stays clear (the graph is optional)", () => {
       assert.deepEqual(LinesWith(NoGraph, "reconciliation"), [
         `test-suggester: reconciliation clear ${Path.basename(Bare)} (9 expected, 9 actual)`
@@ -174,7 +175,7 @@ note: the smoke claims drifted from the tree; fix the README count, the suite fi
     const EmptyGraph = Setup();
     EmptyGraph.Context.workingDirectory = Service(Bare);
     EmptyGraph.Context.workspaceGraph = Graph([]);
-    await Call(EmptyGraph, "grep", PROBE, { agent: { id: "graph-c" } });
+    await Call(EmptyGraph, "grep", PROBE, AgentOf("graph-c"));
     Check(Count, "C3: an unpopulated graph contributes no drift", () => {
       assert.deepEqual(LinesWith(EmptyGraph, "reconciliation"), [
         `test-suggester: reconciliation clear ${Path.basename(Bare)} (9 expected, 9 actual)`
@@ -185,7 +186,7 @@ note: the smoke claims drifted from the tree; fix the README count, the suite fi
     const Root = Workspace("test-suggester-gate-");
     Drifting(Root);
     const Package_ = Path.basename(Root);
-    const Agent = { agent: { id: "gate-a" } };
+    const Agent = AgentOf("gate-a");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Root);
     await Call(Run, "grep", PROBE, Agent);
@@ -219,7 +220,7 @@ note: the smoke claims drifted from the tree; fix the README count, the suite fi
     const Bare = Workspace("test-suggester-notree-");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Bare);
-    await Call(Run, "grep", PROBE, { agent: { id: "notree-a" } });
+    await Call(Run, "grep", PROBE, AgentOf("notree-a"));
     Check(Count, "C5: a package without a Source/Test tree is silent", () => {
       assert.equal(LinesWith(Run, "reconciliation").length, 0);
       assert.equal(LinesWith(Run, "candidates call").length, 0);
@@ -233,7 +234,7 @@ note: the smoke claims drifted from the tree; fix the README count, the suite fi
       Gated,
       "grep",
       { ...PROBE, file_path: Path.join(Foreign, "Source/Test/Alpha/Test.ts") },
-      { agent: { id: "foreign-a" } },
+      AgentOf("foreign-a"),
       Decision
     );
     Check(Count, "C5: a foreign workspace is gated before the reconciliation runs", () => {
@@ -248,7 +249,7 @@ note: the smoke claims drifted from the tree; fix the README count, the suite fi
     const Run = Setup();
     Run.Context.workingDirectory = Service(Root);
     await CheckAsync(Count, "C6: the reconciliation performs ZERO ctx.fs operations", async () => {
-      await Call(Run, "grep", PROBE, { agent: { id: "pure-a" } });
+      await Call(Run, "grep", PROBE, AgentOf("pure-a"));
       assert.equal(Run.Fs.reads.length, 0);
       assert.equal(Run.Fs.writes.length, 0);
       assert.equal(Run.Fs.resolved.length, 0);

@@ -6,11 +6,21 @@ All notable changes to this package will be documented in this file.
 
 ### Changed
 
-- The candidates come from the agent's OWN previous tool calls in this workspace: the new
-  `session/event` listener folds every `tool/call` into the session's touch history (a WeakMap keyed
-  on the session object, capped at 512 touches, fail-open), and the post-execute listener derives
-  the candidates with `Adjacent`, so the note names the files that were touched right after the
-  anchor.
+- The candidates come from the agent's OWN previous tool calls in this workspace: the session
+  history is a `ctx.sessionProjections` unit (key `searchHistory`, cap 512, state version 1), not a
+  listener fold and not a `State` WeakMap. The registry subscribes to `session/event` ONCE and
+  drives every committed event through the unit's pure `apply`, the per-session cell is built lazily
+  from `init` and rebuilt from the log on first touch, and the post-execute listener reads it
+  through `stateOf(session, key)` and derives the candidates with `Adjacent`, so the note names the
+  files that were touched right after the anchor. There is no post-execute append: the harness
+  commits `tool/call` as the call's STARTED record before dispatch.
+- The unit is registered through the optional `ctx.inject(['sessionProjections'], ...)` form, so a
+  mount without the registry still loads and simply has no history to mine; the read is probed with
+  `ctx.get` because the registry is not in the plugin's `inject` array. The `session/event`
+  listener, the `State.History` WeakMap, `Interface/State`'s `SessionHistory`, and the in-listener
+  fold are gone; the structural seam lives in `Interface/Session.ts` (this package's
+  `Interface/Projection.ts` is the unrelated P2 graph projection) and the key, cap and version in
+  `Variable/Projection.ts`.
 - The co-touch rows are judged as ONE synthetic `History` family (priority 0, threshold 0.75, one
   signal of weight 2.5, companions with prior 0.6 and the reason
   `touched <n> time(s) after a similar call`), prepended as data to the compiled family list, so the
@@ -31,11 +41,15 @@ All notable changes to this package will be documented in this file.
   refuses a former built-in family id.
 - `Variable/Kinds` gives the synthetic `History` family the plain-file kinds, so the projection's
   kind test is meaningful for it.
-- The fifteen smoke folders are rewritten onto the history candidates: every candidate scenario
-  seeds the session history (or writes an explicit `.dsh/pack.yml`) in a temp workspace, and every
-  silence asserts the `no-history` line. The benchmark measures the history path against a seeded
-  history (`calls=50 notes=5 precision=1.00 recall=1.00 first-note=1`), and no suite names a
-  built-in pack literal.
+- The fifteen smoke folders are rewritten onto the history candidates: the harness carries a fake
+  `sessionProjections` registry (`register` -> Promise handle, `stateOf`, the eager `Commit` drive)
+  and the `inject` capture, every candidate scenario commits the session's `tool/call` events
+  through it (or writes an explicit `.dsh/pack.yml`) in a temp workspace, and every silence asserts
+  the `no-history` line. `Post-Execute-And-Learning` adds the projection case (the committed events
+  are the cell, the judged call reads it, nothing is appended), and the benchmark measures the
+  history path against a committed history
+  (`calls=50 notes=5 precision=1.00 recall=1.00 first-note=1`). No suite names a built-in pack
+  literal.
 
 ## 0.2.1
 

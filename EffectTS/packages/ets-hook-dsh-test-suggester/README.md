@@ -23,17 +23,29 @@ It is the test consumer of the suggester family
 
 1. **The history fold.**
 
-    The `session/event` listener folds every `tool/call` event into the session's history: one touch
-    per call (the sequence number, the normalized path and the tool), capped at 512, oldest first.
+    The fold is a `ctx.sessionProjections` unit (key `testHistory`): the registry subscribes to
+    `session/event` once and passes every committed event through the unit's `apply`, which turns
+    each `tool/call` that names a path into one `Touch` (the sequence number, the normalized path
+    and the tool) in that session's cell, capped at 512 touches. Reads count, because every
+    committed call is folded.
+
+    The history is keyed per session and rebuilt from the log on first touch. The hook holds no
+    subscription of its own: a raw `ctx.on("session/event", ...)` listener received nothing in the
+    live harness, and the projection registry is the supported plugin-facing form of that seam. The
+    unit is registered through the optional `ctx.inject(['sessionProjections'], ...)` form, so a
+    mount without the registry still loads and simply has no history.
 
 2. **The post-execute listener.**
 
     The `tools/post-execute` listener (waterfall, plain registration, running **after** the CCR's
     `{ prepend: true }` listener) calls `next()` first.
 
-    Then the reconciliation runs, the history candidates are folded into one synthetic family, the
-    deterministic classifier and the gate apply, and **one** `additionalContexts` notice is
-    prepended to the downstream decision.
+    Then the reconciliation runs, the session history is read through `stateOf(session, key)` and
+    folded into one synthetic family, the deterministic classifier and the gate apply, and **one**
+    `additionalContexts` notice is prepended to the downstream decision.
+
+    It appends nothing to the history: the current call's `tool/call` is committed before dispatch,
+    so the state it reads already carries the anchor's prior touches.
 
     Content is never replaced, so a ccr-compressed result is unaffected.
 
@@ -43,6 +55,9 @@ It is the test consumer of the suggester family
 
 Every listener is fail-open: on any error a warning is logged and the downstream decision is
 returned unchanged.
+
+The registered listener list is exactly `loader/volatile-update`, `tools/post-execute` and
+`agent/pre-step`; the projection unit registers separately, on `ctx.sessionProjections`.
 
 A note never fails a tool call.
 

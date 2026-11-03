@@ -41,14 +41,18 @@ NOTIFY side of it: it names the companions, never the change.
 
 ## The candidates (the session history)
 
-The `session/event` listener folds every `tool/call` event into the session's history: one touch per
-call (the sequence number, the normalized path and the tool), capped at 512, oldest first.
+The history is a `ctx.sessionProjections` unit (key `editHistory`): the registry subscribes to
+`session/event` once and folds every committed `tool/call` through the unit's `apply` - one touch
+per call (the sequence number, the normalized path and the tool), capped at 512, oldest first, one
+cell per session, rebuilt from the log on first touch. The suggester holds no subscription of its
+own, and it appends nothing after a call: the current call's `tool/call` is committed before
+dispatch, so the state already carries the anchor's prior touches.
 
-On a judged call, `Adjacent(touches, callPath, { limit: maxCompanions })` scores the paths that
-followed the anchor within a window of 8 calls: `1 / (1 + distance)` per occurrence, one count per
-occurrence.
+On a judged call the listener reads the session's cell through `stateOf(session, key)` and runs
+`Adjacent(touches, callPath, { limit: maxCompanions })`, which scores the paths that followed the
+anchor within a window of 8 calls: `1 / (1 + distance)` per occurrence, one count per occurrence.
 
-A repeatedly co-touched path outranks a single one, and a near neighbour outranks a far one.
+A repeatedly co-touched path outranks a single one, and a near neighbor outranks a far one.
 
 Those rows become ONE synthetic `History` family (priority 0, threshold 0.75, one signal of weight
 2.5, companions with prior 0.6 and the reason `touched <count> time(s) after this file`), so the

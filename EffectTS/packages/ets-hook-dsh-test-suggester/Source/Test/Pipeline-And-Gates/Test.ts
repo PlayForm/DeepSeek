@@ -1,18 +1,22 @@
 // Source/Test/Pipeline-And-Gates/Test.ts - the pipeline: the HISTORY emit
-// path (the seeded session history's co-touch candidates, the byte-exact
+// path (the committed session events' co-touch candidates, the byte-exact
 // note text, the summary and the `suggest History` ledger line in both
-// forms), the consistent smoke tree's clear line (the reconciliation runs
-// first and never preempts a clean call), the no-history abstention, the gate
-// (cooldown, cap + the pre-step reset), the exclusion, the note truncation,
-// the block decision, the volatile flip, and the fs purity.
+// forms), the REAL projection path (the committed events ARE the cell, the
+// judged call reads it, and no append follows), the consistent smoke tree's
+// clear line (the reconciliation runs first and never preempts a clean call),
+// the no-history abstention, the gate (cooldown, cap + the pre-step reset),
+// the exclusion, the note truncation, the block decision, the volatile flip,
+// and the fs purity.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 import {
+	AgentOf,
 	Call,
 	Check,
 	CheckAsync,
+	Commit,
 	Finish,
 	LedgerWith,
 	LinesWith,
@@ -56,18 +60,16 @@ const BareAnchor = Put(Bare, "Notes.md");
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
 /**
- * Seed one agent's session history through the state probe: the anchor, then
- * the two followers (the session/event fold's shape).
+ * Seed one agent's session history through the PROJECTION drive: the anchor,
+ * then the two followers, committed as `tool/call` events and folded by the
+ * registered unit into that session's cell. There is no State fold to write
+ * to any more, so the seed travels the same init -> apply -> stateOf path the
+ * live harness drives.
  */
-const Seed = (Run: any, Agent: unknown): void => {
-	Run.State.History.set(Agent, {
-		Seq: 3,
-		Touches: [Anchor, "README.md", "SCHEME.md"].map((Path_: string, Seq: number) => ({
-			seq: Seq,
-			path: Path_,
-			tool: "read",
-		})),
-	});
+const Seed = (Run: any, Id: string): void => {
+	Commit(Run, Id, Anchor);
+	Commit(Run, Id, "README.md");
+	Commit(Run, Id, "SCHEME.md");
 };
 
 /** The byte-exact History note text (k = sigmoid(2.5 - 0.6) = 0.87). */
@@ -84,10 +86,11 @@ export const runTest = async (): Promise<number> => {
 
 	// Group P1: the history emit path.
 	{
-		const Agent = { agent: { id: "pipeline-a" } };
+		const Agent = AgentOf("pipeline-a");
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Rooted);
-		Seed(Run, Agent);
+		await Run.Ready;
+		Seed(Run, "pipeline-a");
 		const Result = await Call(Run, "read", { file_path: Anchor }, Agent);
 		Check(Count, "P1: the suggest line is byte-exact (logger and durable ledger)", () => {
 			assert.deepEqual(LinesWith(Run, "candidates call"), [
@@ -116,7 +119,7 @@ export const runTest = async (): Promise<number> => {
 
 	// Group P2: the no-history abstention (the built-in pack is retired).
 	{
-		const Agent = { agent: { id: "pipeline-b" } };
+		const Agent = AgentOf("pipeline-b");
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Bare);
 		await CheckAsync(Count, "P2: a rooted tree with no history and no pack abstains no-history", async () => {
@@ -131,10 +134,11 @@ export const runTest = async (): Promise<number> => {
 
 	// Group P3: the gate and the reset (one shared agent).
 	{
-		const Agent = { agent: { id: "pipeline-c" } };
+		const Agent = AgentOf("pipeline-c");
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Rooted);
-		Seed(Run, Agent);
+		await Run.Ready;
+		Seed(Run, "pipeline-c");
 		await Call(Run, "read", { file_path: Anchor }, Agent);
 		await Call(Run, "read", { file_path: Anchor }, Agent);
 		Check(Count, "P3: a repeat within the cooldown is suppressed with the byte-exact line", () => {
@@ -145,7 +149,8 @@ export const runTest = async (): Promise<number> => {
 		});
 		const Capped = Setup({ cooldownCalls: 0, maxNotesPerTurn: 1 });
 		Capped.Context.workingDirectory = Service(Rooted);
-		Seed(Capped, Agent);
+		await Capped.Ready;
+		Seed(Capped, "pipeline-c");
 		await Call(Capped, "read", { file_path: Anchor }, Agent);
 		await Call(Capped, "read", { file_path: Anchor }, Agent);
 		Check(Count, "P3: a note beyond the per-turn cap is suppressed", () => {
@@ -162,10 +167,11 @@ export const runTest = async (): Promise<number> => {
 
 	// Group P4: the exclusion.
 	{
-		const Agent = { agent: { id: "pipeline-d" } };
+		const Agent = AgentOf("pipeline-d");
 		const Run = Setup({ exclude: ["README.md"] });
 		Run.Context.workingDirectory = Service(Rooted);
-		Seed(Run, Agent);
+		await Run.Ready;
+		Seed(Run, "pipeline-d");
 		await Call(Run, "read", { file_path: Anchor }, Agent);
 		Check(Count, "P4: an excluded companion is filtered, the rest suggest", () => {
 			assert.deepEqual(LinesWith(Run, "candidates call"), [
@@ -174,7 +180,8 @@ export const runTest = async (): Promise<number> => {
 		});
 		const All = Setup({ exclude: ["README.md", "SCHEME.md"] });
 		All.Context.workingDirectory = Service(Rooted);
-		Seed(All, Agent);
+		await All.Ready;
+		Seed(All, "pipeline-d");
 		await Call(All, "read", { file_path: Anchor }, Agent);
 		Check(Count, "P4: a fully excluded candidate set abstains as ambiguous", () => {
 			assert.deepEqual(LinesWith(All, "abstained"), [
@@ -185,10 +192,11 @@ export const runTest = async (): Promise<number> => {
 
 	// Group P5: the note truncation.
 	{
-		const Agent = { agent: { id: "pipeline-e" } };
+		const Agent = AgentOf("pipeline-e");
 		const Run = Setup({ maxNoteChars: 60 });
 		Run.Context.workingDirectory = Service(Rooted);
-		Seed(Run, Agent);
+		await Run.Ready;
+		Seed(Run, "pipeline-e");
 		const Result = await Call(Run, "read", { file_path: Anchor }, Agent);
 		Check(Count, "P5: a note longer than maxNoteChars is truncated with an ellipsis", () => {
 			const Text = Result.additionalContexts[0].content[0].text;
@@ -199,10 +207,11 @@ export const runTest = async (): Promise<number> => {
 
 	// Group P6: the block decision.
 	{
-		const Agent = { agent: { id: "pipeline-f" } };
+		const Agent = AgentOf("pipeline-f");
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Rooted);
-		Seed(Run, Agent);
+		await Run.Ready;
+		Seed(Run, "pipeline-f");
 		const Downstream = { kind: "block", feedback: "no", additionalContexts: [{ marker: "x" }] };
 		const Result = await Call(Run, "read", { file_path: Anchor }, Agent, Downstream);
 		Check(Count, "P6: a block decision keeps its feedback and prepends the note", () => {
@@ -216,10 +225,11 @@ export const runTest = async (): Promise<number> => {
 
 	// Group P7: the volatile flip.
 	{
-		const Agent = { agent: { id: "pipeline-g" } };
+		const Agent = AgentOf("pipeline-g");
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Rooted);
-		Seed(Run, Agent);
+		await Run.Ready;
+		Seed(Run, "pipeline-g");
 		Flip(Volatile(Run, "enabled"), false);
 		Run.CtxListeners["loader/volatile-update"]([["enabled"]]);
 		const Result = await Call(Run, "read", { file_path: Anchor }, Agent);
@@ -232,10 +242,11 @@ export const runTest = async (): Promise<number> => {
 
 	// Group P8: the fs purity across the full scenario.
 	{
-		const Agent = { agent: { id: "pipeline-h" } };
+		const Agent = AgentOf("pipeline-h");
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Rooted);
-		Seed(Run, Agent);
+		await Run.Ready;
+		Seed(Run, "pipeline-h");
 		await Call(Run, "read", { file_path: Anchor }, Agent);
 		await Call(Run, "grep", { pattern: "expected count", query: "badge" }, Agent);
 		Check(Count, "P8: the full scenario performs ZERO fs operations", () => {
@@ -243,6 +254,34 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run.Fs.writes.length, 0);
 			assert.equal(Run.Fs.resolved.length, 0);
 			assert.equal(Run.Fs.stats.length, 0);
+		});
+	}
+
+	// Group P9: the REAL projection path - the committed events ARE the cell,
+	// the judged call reads it through `stateOf`, and nothing is appended
+	// after the call (the current call's own `tool/call` is committed before
+	// dispatch, the way the harness commits it).
+	{
+		const Id = "pipeline-i";
+		const Run = Setup();
+		Run.Context.workingDirectory = Service(Rooted);
+		await Run.Ready;
+		await CheckAsync(Count, "P9: the committed tool/call events ARE the session cell (no State fold)", async () => {
+			assert.equal(Run.State.History, undefined);
+			Commit(Run, Id, Anchor);
+			Commit(Run, Id, "README.md");
+			const Folded = Run.Projections.StateOf(AgentOf(Id).session, "testHistory");
+			assert.equal(Folded.Seq, 2);
+			assert.deepEqual(
+				Folded.Touches.map((Touch: any) => Touch.path),
+				[Anchor, "README.md"],
+			);
+		});
+		await CheckAsync(Count, "P9: the judged call reads the cell and leaves it unappended", async () => {
+			Commit(Run, Id, Anchor);
+			const Out = await Call(Run, "read", { file_path: Anchor }, AgentOf(Id));
+			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+			assert.equal(Run.Projections.StateOf(AgentOf(Id).session, "testHistory").Seq, 3);
 		});
 	}
 	return Finish(Count, "Pipeline-And-Gates");

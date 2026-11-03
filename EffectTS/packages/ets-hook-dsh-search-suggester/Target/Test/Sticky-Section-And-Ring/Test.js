@@ -23,7 +23,7 @@ const Space = Workspace([Anchor, ...Companions]);
 const Read = (Id) => ({
   name: "read",
   arguments: { file_path: Space.At(Anchor) },
-  agent: Id === void 0 ? void 0 : AgentOf(Id)
+  agent: AgentOf(Id)
 });
 const Section = "[search-suggester] intent=History confidence=1.00\ntargets (2):\n- CHANGELOG.md - touched after a similar call\n- SCHEME.md - touched after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
 const runTest = async () => {
@@ -66,20 +66,15 @@ const runTest = async () => {
   {
     rm();
     const Sticky = Make(Validate({ logFile: Ledger, enabled: true, sectionMode: "sticky" }));
-    await CheckAsync(Count, "S3: the default ring folds the no-session events and builds its section", async () => {
-      Sticky.CtxListeners["session/event"](void 0, {
-        type: "tool/call",
-        name: "read",
-        arguments: { file_path: Space.At(Anchor) }
-      });
-      Sticky.CtxListeners["session/event"](void 0, {
-        type: "tool/call",
-        name: "read",
-        arguments: { file_path: "CHANGELOG.md" }
-      });
-      await Post(Sticky, Read(void 0));
+    await CheckAsync(Count, "S3: the default ring builds its section from the last noted family", async () => {
+      const Rings = Sticky.State.Rings.State(void 0);
+      Sticky.State.Rings.Mark(Rings, "History", ["CHANGELOG.md"], "History CHANGELOG.md");
       const Out = await Assemble(Sticky, void 0);
       assert.deepEqual(Out.sections.map((Section_) => Section_.name), ["base", "hook-dsh-search-suggester"]);
+      assert.equal(
+        Out.sections[1].text,
+        "[search-suggester] intent=History confidence=1.00\ntargets (1):\n- CHANGELOG.md - touched after a similar call\nnote: open these before more searches; Target/ is generated, never edit it."
+      );
       assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
     });
     await CheckAsync(Count, "S3: tools/change invalidates the default ring's cache with its ledger line", async () => {

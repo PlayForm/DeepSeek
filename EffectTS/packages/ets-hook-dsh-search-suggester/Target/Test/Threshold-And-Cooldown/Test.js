@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
   AgentOf,
   CheckAsync,
+  Commit,
   Finish,
   Ledger,
   Make,
@@ -93,15 +94,10 @@ const runTest = async () => {
     rm();
     const Run = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0, maxNotesPerTurn: 1 }));
     Run.Context.workingDirectory = Service(Space.Root);
-    Run.State.History.set(AgentOf("a"), {
-      Seq: 4,
-      Touches: [
-        { seq: 0, path: Space.At(Anchor), tool: "read" },
-        { seq: 1, path: "CHANGELOG.md", tool: "read" },
-        { seq: 2, path: Space.At("package.json"), tool: "read" },
-        { seq: 3, path: "SCHEME.md", tool: "read" }
-      ]
-    });
+    Commit(Run, "a", Space.At(Anchor));
+    Commit(Run, "a", "CHANGELOG.md");
+    Commit(Run, "a", Space.At("package.json"));
+    Commit(Run, "a", "SCHEME.md");
     await CheckAsync(Count, "T4: the second note is capped", async () => {
       await Post(Run, Read("a"));
       const Out = await Post(

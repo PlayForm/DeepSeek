@@ -6,12 +6,12 @@ The system-prompt/assemble and tools/change listeners against the fake ctx: the 
 
 - S1: with `sectionMode` off (the default) the assemble waterfall passes through untouched, with no section appended and no ledger line.
 - S2: with `sectionMode: "sticky"` and after a `History` emit, the assemble appends one section named `hook-dsh-search-suggester` carrying the paths the note named with the generic history reason; the `section rebuilt (ttl 20)` ledger line is byte-exact in the logger and durable forms; and a second assemble inside the TTL serves the cached section without a second rebuild line.
-- S3: the default (no-agent) ring folds real `tool/call` events through the session/event listener (the shared default key), builds and caches its own section, `tools/change` invalidates exactly that cache with the byte-exact `section invalidated (tools/change)` line, after which the next assemble rebuilds it, and `tools/change` on an empty cache is silent.
+- S3: the default (agent-less) ring builds its section from the last noted family (the ring is armed through the plugin's own `Ring.Mark` API, because an agent-less call carries no session and therefore no projection history), `tools/change` invalidates exactly that cache with the byte-exact `section invalidated (tools/change)` line, after which the next assemble rebuilds it, and `tools/change` on an empty cache is silent.
 - S4: an assemble with no cooled family passes through with no section and no warnings.
 
 ## Fixtures
 
-The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target, a temp knowledge file) plus one temp workspace whose absolute anchor the judged calls name.
+The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target, a temp knowledge file, and the fake `sessionProjections` registry the history is committed through) plus one temp workspace whose absolute anchor the judged calls name.
 
 There is no fake clock, because the TTL is asserted on the call counter of the ring (`sectionBuilt`), not on wall time.
 

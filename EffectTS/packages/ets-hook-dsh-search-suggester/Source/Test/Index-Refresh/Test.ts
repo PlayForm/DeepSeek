@@ -6,8 +6,8 @@
 // note's order before and after a re-index.
 //
 // THE CANDIDATES COME FROM THE SESSION HISTORY: the anchor and its two
-// companions are seeded per agent, and the graph proves (or fails to prove)
-// the companions.
+// companions are committed per agent's session through the projection drive,
+// and the graph proves (or fails to prove) the companions.
 import assert from "node:assert/strict";
 import {
 	AgentOf,

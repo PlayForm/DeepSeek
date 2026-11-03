@@ -1,14 +1,14 @@
 // Source/Test/Benchmark/Test.ts - the P4 REPLAY BENCHMARK, measured on the
 // HISTORY path: the fixed fifty-call sequence (Variable/Sequence) is replayed
-// through the REAL built listener with a SEEDED session history per lane, the
-// emitted notes are scored by Function/Benchmark against the companions the
-// seed says the lane really touched, and the precision/recall/first-note
-// numbers are printed. The determinism is proven by a second identical
-// replay, and the threshold floor is shown not to lower the synthetic
-// family's own 0.75 gate.
+// through the REAL built listener with a session history COMMITTED through the
+// projection drive per lane, the emitted notes are scored by Function/Benchmark
+// against the companions the fixture says the lane really touched, and the
+// precision/recall/first-note numbers are printed. The determinism is proven by
+// a second identical replay, and the threshold floor is shown not to lower the
+// synthetic family's own 0.75 gate.
 //
-// THE EXPECTED SET IS THE SEED: the built-in target lists are retired, so the
-// recall measures whether the history path names the companions the session
+// THE EXPECTED SET IS THE FIXTURE: the built-in target lists are retired, so
+// the recall measures whether the history path names the companions the session
 // actually touched - never a literal pack row.
 //
 // THE FIXTURE IS HERMETIC: one temp workspace holds a salted `History/<lane>/`

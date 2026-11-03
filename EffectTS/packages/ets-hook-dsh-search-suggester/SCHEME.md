@@ -1,8 +1,9 @@
 # SCHEME.md - @playform/hook-dsh-search-suggester (v0.2.1, TypeScript, function plugin)
 
-Status: **IMPLEMENTED (the history model)** - the session-history fold, the synthetic `History`
-family, the explicit-only pack, the P2 graph projection, the P3 offline seed, the P4 dismiss tool
-and replay benchmark, and the fifteen smoke folders (126 PASS) are in the Source and the build.
+Status: **IMPLEMENTED (the history model)** - the session-projection history unit, the synthetic
+`History` family, the explicit-only pack, the P2 graph projection, the P3 offline seed, the P4
+dismiss tool and replay benchmark, and the fifteen smoke folders (128 PASS) are in the Source and
+the build.
 
 ## 0. What this plugin is
 
@@ -21,15 +22,15 @@ Source of truth: `Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md`.
 
 ## 1. The surfaces
 
-| Surface                  | Mode                          | What it does                                                                             |
-| ------------------------ | ----------------------------- | ---------------------------------------------------------------------------------------- |
-| `session/event`          | plain                         | the history fold: every `tool/call` becomes one touch in the session's history (cap 512) |
-| `tools/post-execute`     | waterfall, plain registration | the note: `next()` first, then the gate, the history, the explicit pack, and the score   |
-| `agent/pre-step`         | plain                         | the per-turn reset (ring, cooldowns, dedupe, counters) + the user-text capture (R12)     |
-| `system-prompt/assemble` | waterfall, after `next()`     | the optional sticky section (`sectionMode: "sticky"`, off by default), TTL-rebuilt       |
-| `tools/change`           | emit                          | the sticky section-cache invalidation                                                    |
-| `tools/pre-execute`      | NOT used                      | a suggestion cannot rewrite arguments; a deny would be a coach, not a suggester          |
-| `tools` (register)       | the loader's tool API         | the `suggestion_dismiss` tool (guarded: a bare mount without `ctx.tools` still applies)  |
+| Surface                                | Mode                          | What it does                                                                                                                                                                                                                                                                  |
+| -------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sessionProjections` (projection unit) | pure fold, host-only          | `apply(state, event)` folds every committed `tool/call` that names a path into the session's `{ Seq, Touches }` (cap 512); registered through `ctx.inject(['sessionProjections'], ...)`, read at detection through `stateOf(session, key)`. No `wire` block: no client value. |
+| `tools/post-execute`                   | waterfall, plain registration | the note: `next()` first, then the gate, the history, the explicit pack, and the score                                                                                                                                                                                        |
+| `agent/pre-step`                       | plain                         | the per-turn reset (ring, cooldowns, dedupe, counters) + the user-text capture (R12)                                                                                                                                                                                          |
+| `system-prompt/assemble`               | waterfall, after `next()`     | the optional sticky section (`sectionMode: "sticky"`, off by default), TTL-rebuilt                                                                                                                                                                                            |
+| `tools/change`                         | emit                          | the sticky section-cache invalidation                                                                                                                                                                                                                                         |
+| `tools/pre-execute`                    | NOT used                      | a suggestion cannot rewrite arguments; a deny would be a coach, not a suggester                                                                                                                                                                                               |
+| `tools` (register)                     | the loader's tool API         | the `suggestion_dismiss` tool (guarded: a bare mount without `ctx.tools` still applies)                                                                                                                                                                                       |
 
 ## 2. The config schema (Variable/Config.ts)
 
@@ -90,9 +91,23 @@ THE THREE EMPTY-FAMILY LINES carry a double space: `abstained no-signal  0.00`,
 `abstained foreign-workspace  0.00`, `abstained no-history  0.00`. The gate runs before the family
 is known, so the family segment is empty and the kappa is the no-signal 0.00.
 
-THE HISTORY SOURCE. The `session/event` listener folds every `tool/call` event through the pack
-library's `Fold` into the session's history (`{ Seq, Touches }`, a WeakMap keyed on the session
-object, capped at 512 touches, oldest first, fail-open).
+THE HISTORY SOURCE. The history is a session-projection unit (`Function/Unit`, key `searchHistory`),
+not a listener fold and not a `State` WeakMap: `ctx.sessionProjections` subscribes to
+`session/event` ONCE and passes every committed event through the unit's `apply`, so the hook holds
+no subscription of its own. Every `tool/call` that names a path becomes one `Touch` (the sequence
+number, the normalized path and the tool) in THAT SESSION's cell, through the pack library's `Fold`.
+The unit is registered through the optional `ctx.inject(['sessionProjections'], ...)` form
+(`Function/Register`), so a mount without the registry still loads and simply has no history to
+mine; the detection-time read is the registry's own face, `stateOf(session, key)`
+(`Function/History`), probed with `ctx.get` because the registry is an optional service.
+
+The state is one cell per session, built lazily from `init` (`{ Seq: 0, Touches: [] }`) and rebuilt
+from the log on first touch; the touch array is capped at 512, oldest first. `apply` returns the
+SAME state reference for an event it ignores (the registry's zero-work signal) and a NEW plain-JSON
+state for a folded call. The persisted-state validator (`stateSchema`, version 1) sanitizes a cached
+row instead of throwing, so a damaged row degrades to a shorter history rather than a failed read.
+There is NO post-execute append: the harness commits `tool/call` as the call's STARTED record before
+dispatch, so the anchor is already folded when the listener runs.
 
 On a judged call the anchor is the call's own `path`/`file_path` argument when it carries one,
 otherwise the directory of the call's path-shaped target argument, otherwise the session cwd; and
@@ -143,8 +158,12 @@ row renders the paths the note named, and an explicit pack renders its own famil
 Source/
   Library.ts            the entry: name, apply, Config, inject (pluginFactory)
   Function/
-    Apply.ts            the wiring: the State build, the history fold, the seed, the
-                        projection cache, the activation, the 5 listeners, the tool
+    Apply.ts            the wiring: the State build, the projection registration, the
+                        seed, the projection cache, the activation, the 4 listeners,
+                        the tool
+    Unit.ts             the session-projection unit: the pure `tool/call` fold
+    Register.ts         the optional `ctx.inject(['sessionProjections'], ...)`
+    History.ts          the detection-time read: `stateOf(session, key)`
     Detect.ts           the deterministic classifier (R1-R13), pure, no LLM
     Score.ts            k = sigmoid(sum - 0.6); the candidate scoring; the gate
                         (the projection's scope/literal, the dismissal filter)
@@ -160,13 +179,15 @@ Source/
   Interface/
     Config.ts           the validated config shape
     Execution.ts        the family/detection/verdict/knowledge types
-    Projection.ts       the projection + fact shapes
+    Session.ts          the session-projection seam (the unit contract + the registry faces)
+    Projection.ts       the P2 graph projection + fact shapes
     Measurement.ts      one candidate's measured scores
     Benchmark.ts        one replayed note
     Factory.ts          the factory service's structural view + the Context augmentation
-    State.ts            the per-apply state (Pack empty, History WeakMap)
+    State.ts            the per-apply state (Pack empty, no History field)
   Variable/
     Config.ts           the Schemastery schema (plan section 4.8 + this wave's fields)
+    Projection.ts       the projection key (`searchHistory`), the cap (512), the version (1)
     Kinds.ts            the expected graph node kinds per family (History included)
     Sequence.ts         the fixed fifty-call replay corpus + the lane targets
 ```
@@ -175,9 +196,11 @@ Source/
 
 The history model replaced the built-in pack as the candidate source.
 
-- **THE HISTORY FOLD.** `session/event` folds every `tool/call` into the session's history; the
-  post-execute listener reads it through `Adjacent` and judges the result as the synthetic `History`
-  family.
+- **THE HISTORY PROJECTION.** The history is a `ctx.sessionProjections` unit (key `searchHistory`),
+  not a `session/event` listener and not a `State` WeakMap: the registry drives every committed
+  event through the unit's pure `apply`, the cell is built lazily and rebuilt from the log on first
+  touch, and the post-execute listener reads it through `stateOf(session, key)` before `Adjacent`
+  scores it as the synthetic `History` family. There is no post-execute append.
 
 - **THE EXPLICIT-ONLY PACK.** `State.Pack` is empty at apply; only a repo/user pack is compiled, per
   call, with `builtin: false`. A workspace with neither a pack nor a history abstains
@@ -196,12 +219,12 @@ The history model replaced the built-in pack as the candidate source.
   dismissal is durable with the `dismissTtl` expiry, and two ledger strings are documented.
 
 - **THE REPLAY BENCHMARK (P4).** `Variable/Sequence` + `Function/Benchmark`, measured against a
-  seeded session history, with the recorded baseline
+  session history committed through the projection drive, with the recorded baseline
   `calls=50 notes=5 precision=1.00 recall=1.00 first-note=1`.
 
 The fifteen folders: `Abstention`, `Benchmark`, `Classification`, `Dismiss`, `Index-Refresh`,
 `Noise`, `Pack-Driven`, `Persistence`, `Post-Execute-And-Learning`, `Projection`, `Seed`,
-`Sticky-Section-And-Ring`, `Threshold-And-Cooldown`, `Wiring-And-Ledger`, `Workspace-Gate` - 126
+`Sticky-Section-And-Ring`, `Threshold-And-Cooldown`, `Wiring-And-Ledger`, `Workspace-Gate` - 128
 PASS.
 
 Residuals (not silently dropped):

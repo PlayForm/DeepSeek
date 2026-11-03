@@ -5,6 +5,7 @@ import * as Path from "node:path";
 import {
   AgentOf,
   CheckAsync,
+  Commit,
   FakeStorage,
   Finish,
   Ledger,
@@ -39,15 +40,11 @@ companions (2):
 - ${Head} - touched 1 time(s) after this file
 - ${Head === "docs/STYLE.md" ? "docs/CHANGELOG.md" : "docs/STYLE.md"} - touched 1 time(s) after this file
 note: this file rarely stands alone; check whether these need the same change.`;
-const Seed = (Run, Id) => {
-  Run.State.History.set(AgentOf(Id), {
-    Seq: 3,
-    Touches: [Anchor, "docs/STYLE.md", "docs/CHANGELOG.md"].map((Path_, Seq) => ({
-      seq: Seq,
-      path: Path_,
-      tool: "edit"
-    }))
-  });
+const Seed = async (Run, Id) => {
+  await Run.Ready;
+  Commit(Run, Id, Anchor);
+  Commit(Run, Id, "docs/STYLE.md");
+  Commit(Run, Id, "docs/CHANGELOG.md");
 };
 const Emit = (Id) => ({
   name: "edit",
@@ -69,7 +66,7 @@ const runTest = async () => {
   {
     const Run = Setup();
     Run.Context.workingDirectory = Service(Workspace);
-    Seed(Run, "learn-a");
+    await Seed(Run, "learn-a");
     await CheckAsync(Count, "L1: the note is byte-exact and records a pending decision", async () => {
       const Out = await Post(Run, Emit("learn-a"));
       assert.equal(
@@ -130,7 +127,7 @@ const runTest = async () => {
   {
     const Run = Setup();
     Run.Context.workingDirectory = Service(Workspace);
-    Seed(Run, "learn-b");
+    await Seed(Run, "learn-b");
     await CheckAsync(Count, "L2: a window that closes untouched records the soft reject", async () => {
       await Post(Run, Emit("learn-b"));
       const First = Run.State.Last.companions[0].score;
@@ -172,7 +169,7 @@ const runTest = async () => {
       })
     );
     Disabled.Context.workingDirectory = Service(Workspace);
-    Seed(Disabled, "learn-c");
+    await Seed(Disabled, "learn-c");
     await CheckAsync(Count, "L3: disabling a heuristic drops it from the enabled list and the score", async () => {
       await Post(Disabled, Emit("learn-c"));
       const Last = Disabled.State.Last;
@@ -194,7 +191,7 @@ const runTest = async () => {
       })
     );
     Raised.Context.workingDirectory = Service(Workspace);
-    Seed(Raised, "learn-d");
+    await Seed(Raised, "learn-d");
     await CheckAsync(Count, "L3: a raised weight raises the score and the ledger carries the table", async () => {
       await Post(Raised, Emit("learn-d"));
       const Last = Raised.State.Last;
@@ -210,7 +207,7 @@ const runTest = async () => {
   {
     const Run = Setup();
     Run.Context.workingDirectory = Service(Workspace);
-    Seed(Run, "learn-e");
+    await Seed(Run, "learn-e");
     await CheckAsync(Count, "L4: without a store the memory fallback answers the neutral 1/3", async () => {
       assert.equal(Run.State.Learning.Store(), "memory");
       await Post(Run, Emit("learn-e"));
@@ -242,7 +239,7 @@ const runTest = async () => {
     );
     Run.Context.pattern = First;
     Run.Context.workingDirectory = Service(Workspace);
-    Seed(Run, "learn-f");
+    await Seed(Run, "learn-f");
     await CheckAsync(Count, "L5: the decision record is stored with the weights and the pending outcome", async () => {
       await Post(Run, Emit("learn-f"));
       assert.equal(Run.State.Learning.Store(), "pattern");
@@ -306,7 +303,7 @@ const runTest = async () => {
       );
       Reopen.Context.pattern = Second;
       Reopen.Context.workingDirectory = Service(Workspace);
-      Seed(Reopen, "learn-g");
+      await Seed(Reopen, "learn-g");
       const Out = await Post(Reopen, Emit("learn-g"));
       assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
       assert.equal(Reopen.State.Last.companions[0].path, "docs/CHANGELOG.md");

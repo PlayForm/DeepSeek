@@ -8,7 +8,7 @@ The search suggester as an EXPLICIT-PACK consumer: the pack of a temporary repo 
 - P2: the SAME workspace without the pack has no history and abstains `no-history  0.00`, with no `suggest` line.
 - P3: a pack whose companion is absent still resolves (the root gates, not the signature), and the existence filter empties its candidate set: `abstained no-companions Version 0.87`.
 - P4: a monorepo read with no history abstains `no-history`, because the built-in pack is never a candidate source.
-- P5: with a seeded history the synthetic `History` row is prepended and wins the tie against the pack's family (`suggest History 0.87 1 candidates`).
+- P5: with a history committed through the projection drive the synthetic `History` row is prepended and wins the tie against the pack's family (`suggest History 0.87 1 candidates`).
 
 ## Fixtures
 
