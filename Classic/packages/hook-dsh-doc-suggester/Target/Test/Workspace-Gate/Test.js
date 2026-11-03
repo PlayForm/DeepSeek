@@ -21,23 +21,42 @@ const Put = (Root, Relative, Body = "x") => {
 };
 const Foreign = Tree("doc-suggester-foreign-");
 const ForeignIndex = Put(Foreign, "Documentation/INDEX.md");
-const Ours = Tree("doc-suggester-ours-");
-Put(Ours, "Documentation/ARCHIVE-STYLE.md");
-const OursIndex = Put(Ours, "Documentation/INDEX.md");
-const OursReadme = Put(Ours, "README.md");
+const Rooted = Tree("doc-suggester-rooted-");
+Put(Rooted, "package.json", "{}");
+const RootedIndex = Put(Rooted, "Documentation/INDEX.md");
+Put(Rooted, "README.md");
+Put(Rooted, "SCHEME.md");
 const Service = (Cwd) => ({ get: () => Cwd });
+const Read = (Path_, Id) => ({
+  name: "read",
+  arguments: { file_path: Path_ },
+  agent: AgentOf(Id)
+});
+const HistoryText = [
+  "[doc-suggester] family=History confidence=0.87",
+  "companions (2):",
+  "- README.md - touched 1 time(s) after this file",
+  "- SCHEME.md - touched 1 time(s) after this file",
+  "note: a documentation task rarely touches one file; keep the doc graph coherent."
+].join("\n");
+const Seed = (Run, Id) => {
+  Run.State.History.set(AgentOf(Id), {
+    Seq: 3,
+    Touches: [RootedIndex, "README.md", "SCHEME.md"].map((Path_, Seq) => ({
+      seq: Seq,
+      path: Path_,
+      tool: "read"
+    }))
+  });
+};
 const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Setup();
-    Run.Context.workingDirectory = Service(Foreign);
-    await CheckAsync(Count, "G1: a foreign workspace produces NO note and the foreign-workspace line", async () => {
+    delete Run.Context.workingDirectory;
+    await CheckAsync(Count, "G1: a call with no root abstains foreign-workspace", async () => {
       const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
-      const Out = await Post(
-        Run,
-        { name: "read", arguments: { file_path: ForeignIndex }, agent: AgentOf("a") },
-        Decision
-      );
+      const Out = await Post(Run, Read(ForeignIndex, "a"), Decision);
       assert.equal(Out, Decision);
       assert.deepEqual(Out.additionalContexts, [{ id: "downstream" }]);
       assert.ok(Run.Lines.includes("hook-dsh-doc-suggester: abstained foreign-workspace  0.00"));
@@ -61,11 +80,7 @@ const runTest = async () => {
         }
       };
       const Decision = { kind: "allow", additionalContexts: [] };
-      const Out = await Post(
-        Throwing,
-        { name: "read", arguments: { file_path: ForeignIndex }, agent: AgentOf("a") },
-        Decision
-      );
+      const Out = await Post(Throwing, Read(ForeignIndex, "a"), Decision);
       assert.equal(Out, Decision);
       assert.ok(Throwing.Lines.includes("hook-dsh-doc-suggester: abstained foreign-workspace  0.00"));
       assert.deepEqual(Throwing.Warns, []);
@@ -73,86 +88,39 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    await CheckAsync(Count, "G2: without the service the absolute foreign path still abstains", async () => {
-      const Decision = { kind: "allow", additionalContexts: [] };
-      const Out = await Post(
-        Run,
-        { name: "read", arguments: { file_path: ForeignIndex }, agent: AgentOf("a") },
-        Decision
-      );
-      assert.equal(Out, Decision);
-      assert.ok(Run.Lines.includes("hook-dsh-doc-suggester: abstained foreign-workspace  0.00"));
-      assert.deepEqual(Run.Warns, []);
-    });
-  }
-  {
-    const Run = Setup();
-    Run.Context.workingDirectory = Service(Ours);
-    await CheckAsync(Count, "G3: the note names only the companions that exist", async () => {
-      const Out = await Post(Run, {
-        name: "read",
-        arguments: { file_path: OursIndex },
-        agent: AgentOf("a")
-      });
+    Run.Context.workingDirectory = Service(Rooted);
+    Seed(Run, "b");
+    await CheckAsync(Count, "G2: the History note names the companions of the temp root", async () => {
+      const Out = await Post(Run, Read(RootedIndex, "b"));
       assert.equal(Out.additionalContexts.length, 1);
       assert.deepEqual(Out.additionalContexts[0].source, {
         kind: "doc-suggester",
         form: "notice",
-        summary: "Index 0.87"
+        summary: "History 0.87"
       });
-      const Text = Out.additionalContexts[0].content[0].text;
-      assert.equal(
-        Text,
-        "[doc-suggester] family=Index confidence=0.87\ncompanions (1):\n- Documentation/ARCHIVE-STYLE.md - the row format\nnote: a documentation task rarely touches one file; keep the doc graph coherent."
-      );
-      assert.equal(Text.includes("Documentation/Handoff"), false);
+      assert.equal(Out.additionalContexts[0].content[0].text, HistoryText);
     });
-    await CheckAsync(Count, "G3: the suggest line counts only the existing companions", async () => {
+    await CheckAsync(Count, "G2: the suggest line counts the two companions", async () => {
       assert.ok(
         Run.Lines.includes(
-          `hook-dsh-doc-suggester: suggest Index 0.87 1 companions ${OursIndex}`
+          `hook-dsh-doc-suggester: suggest History 0.87 2 companions ${RootedIndex}`
         )
       );
       assert.match(
-        DurableLine(`suggest Index 0.87 1 companions ${OursIndex}`),
-        Durable(`suggest Index 0.87 1 companions ${OursIndex}`)
+        DurableLine(`suggest History 0.87 2 companions ${RootedIndex}`),
+        Durable(`suggest History 0.87 2 companions ${RootedIndex}`)
       );
-      assert.equal(Run.Lines.filter((Line) => Line.includes("Documentation/Handoff")).length, 0);
     });
-  }
-  {
-    const Run = Setup();
-    Run.Context.workingDirectory = Service(Ours);
-    await CheckAsync(Count, "G4: an emptied family abstains no-companions with the family and kappa", async () => {
+    await CheckAsync(Count, "G2: the rooted workspace with no history abstains no-history", async () => {
       const Decision = { kind: "allow", additionalContexts: [] };
-      const Out = await Post(
-        Run,
-        { name: "read", arguments: { file_path: OursReadme }, agent: AgentOf("a") },
-        Decision
-      );
+      const Out = await Post(Run, Read(RootedIndex, "c"), Decision);
       assert.equal(Out, Decision);
-      assert.ok(
-        Run.Lines.includes("hook-dsh-doc-suggester: abstained no-companions PackageProse 0.87")
-      );
+      assert.deepEqual(Out.additionalContexts, []);
+      assert.ok(Run.Lines.includes("hook-dsh-doc-suggester: abstained no-history  0.00"));
       assert.match(
-        DurableLine("abstained no-companions"),
-        Durable("abstained no-companions PackageProse 0.87")
+        DurableLine("abstained no-history"),
+        Durable("abstained no-history  0.00")
       );
-      assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 0);
-    });
-  }
-  {
-    const Run = Setup();
-    Run.Context.workingDirectory = Service(Foreign);
-    await CheckAsync(Count, "G5: a foreign call never poisons the next in-workspace call", async () => {
-      await Post(Run, { name: "read", arguments: { file_path: ForeignIndex }, agent: AgentOf("a") });
-      Run.Context.workingDirectory = Service(Ours);
-      const Out = await Post(Run, {
-        name: "read",
-        arguments: { file_path: OursIndex },
-        agent: AgentOf("a")
-      });
-      assert.equal(Out.additionalContexts[0].source.summary, "Index 0.87");
     });
   }
   return Finish(Count, "Workspace-Gate");

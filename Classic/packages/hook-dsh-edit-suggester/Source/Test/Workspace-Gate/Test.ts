@@ -1,14 +1,11 @@
-// Source/Test/Workspace-Gate/Test.ts - the workspace gate and the existence
-// filter against the fake ctx and REAL temp workspaces: (a) a FOREIGN
-// workspace (a temp tree with the pack's triggering path but no
-// Documentation/ARCHIVE-STYLE.md) produces NO note and the
-// `abstained foreign-workspace` ledger line, whether the cwd arrives through
-// the optional harness service, is absent, or its getter throws; (b) OUR
-// workspace (a temp tree WITH the signature, a Config.ts, README.md and the
-// site surface, WITHOUT SCHEME.md/cordis.patch.yml) emits a note naming ONLY
-// the companions that exist; (c) a family whose whole companion set is absent
-// abstains `no-companions`; (d) a foreign call never poisons the next
-// in-workspace call.
+// Source/Test/Workspace-Gate/Test.ts - the workspace root and the history
+// note against the fake ctx and REAL temp trees: (a) a call path with NO
+// `.git`/`package.json` root and no session cwd abstains `foreign-workspace`
+// before any candidate work, whether the cwd arrives through the optional
+// harness service, is absent, or its getter throws; (b) a call inside a temp
+// root carrying a `package.json` emits the HISTORY note naming the two
+// companions the session touched right after the anchor; (c) the same rooted
+// tree with an agent that has no history abstains `no-history`.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -35,39 +32,63 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
+/** The FOREIGN tree: no `.git`, no `package.json`, and no session cwd. */
+const Foreign = Tree("edit-suggester-foreign-");
+const ForeignConfig = Put(Foreign, "Source/Variable/Config.ts");
+
+/** The ROOTED tree: a `package.json` marker, the anchor and the two companions. */
+const Rooted = Tree("edit-suggester-rooted-");
+Put(Rooted, "package.json", "{}");
+const RootedConfig = Put(Rooted, "Source/Variable/Config.ts");
+Put(Rooted, "README.md");
+Put(Rooted, "SCHEME.md");
+
 /** The optional harness service the probe reads (the real shape: get(session)). */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** The FOREIGN workspace: the pack's triggering path, no signature file. */
-const Foreign = Tree("edit-suggester-foreign-");
-const ForeignIndex = Put(Foreign, "Documentation/INDEX.md");
+/** A judged edit call. */
+const Edit = (Path_: string, Id: string): any => ({
+	name: "edit",
+	arguments: { file_path: Path_ },
+	agent: AgentOf(Id),
+});
 
-/** OUR workspace: the signature, a Config.ts, README.md and the site surface. */
-const Ours = Tree("edit-suggester-ours-");
-Put(Ours, "Documentation/ARCHIVE-STYLE.md");
-const OursConfig = Put(Ours, "Source/Variable/Config.ts");
-Put(Ours, "README.md");
-Put(Ours, "Site/Source/pages/setup.astro");
+/** The history note's byte-exact text (k = sigmoid(2.5 - 0.6) = 0.87). */
+const HistoryText = [
+	"[edit-suggester] family=History confidence=0.87",
+	"companions (2):",
+	"- README.md - touched 1 time(s) after this file",
+	"- SCHEME.md - touched 1 time(s) after this file",
+	"note: this file rarely stands alone; check whether these need the same change.",
+].join("\n");
 
-/** The EMPTY workspace: the signature, a workflow, none of its companions. */
-const Empty = Tree("edit-suggester-empty-");
-Put(Empty, "Documentation/ARCHIVE-STYLE.md");
-const EmptyWorkflow = Put(Empty, ".github/workflows/NPM.yml");
+/**
+ * Seed one agent's session history through the state probe: the absolute
+ * anchor the call names, then the two relative companions.
+ */
+const Seed = (Run: any, Id: string): void => {
+	Run.State.History.set(AgentOf(Id), {
+		Seq: 3,
+		Touches: [RootedConfig, "README.md", "SCHEME.md"].map((Path_: string, Seq: number) => ({
+			seq: Seq,
+			path: Path_,
+			tool: "edit",
+		})),
+	});
+};
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
-	// Group G1: the foreign workspace, cwd through the service.
+	// Group G1: no workspace root, no session cwd.
 	{
 		const Run = Setup();
-		Run.Context.workingDirectory = Service(Foreign);
-		await CheckAsync(Count, "G1: a foreign workspace produces NO note and the foreign-workspace line", async () => {
+		// The bare mount: without the service the absolute foreign path has
+		// no `.git`/`package.json` ancestor and no cwd fallback.
+		delete Run.Context.workingDirectory;
+		await CheckAsync(Count, "G1: a call with no root abstains foreign-workspace", async () => {
 			const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
-			const Out = await Post(
-				Run,
-				{ name: "edit", arguments: { file_path: ForeignIndex }, agent: AgentOf("a") },
-				Decision,
-			);
+			const Out = await Post(Run, Edit(ForeignConfig, "a"), Decision);
 			assert.equal(Out, Decision);
 			assert.deepEqual(Out.additionalContexts, [{ id: "downstream" }]);
 			assert.ok(Run.Lines.includes("hook-dsh-edit-suggester: abstained foreign-workspace  0.00"));
@@ -91,109 +112,49 @@ export const runTest = async (): Promise<number> => {
 				},
 			};
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(
-				Throwing,
-				{ name: "edit", arguments: { file_path: ForeignIndex }, agent: AgentOf("a") },
-				Decision,
-			);
+			const Out = await Post(Throwing, Edit(ForeignConfig, "a"), Decision);
 			assert.equal(Out, Decision);
 			assert.ok(Throwing.Lines.includes("hook-dsh-edit-suggester: abstained foreign-workspace  0.00"));
 			assert.deepEqual(Throwing.Warns, []);
 		});
 	}
 
-	// Group G2: the foreign workspace with NO service at all (the bare mount).
+	// Group G2: the history note inside a rooted temp tree.
 	{
 		const Run = Setup();
-		// The shared harness supplies a package cwd for the judged fixtures;
-		// this group proves the bare-mount fallback, so drop it.
-		delete Run.Context.workingDirectory;
-		await CheckAsync(Count, "G2: without the service the absolute foreign path still abstains", async () => {
-			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(
-				Run,
-				{ name: "edit", arguments: { file_path: ForeignIndex }, agent: AgentOf("a") },
-				Decision,
-			);
-			assert.equal(Out, Decision);
-			assert.ok(Run.Lines.includes("hook-dsh-edit-suggester: abstained foreign-workspace  0.00"));
-			assert.deepEqual(Run.Warns, []);
-		});
-	}
-
-	// Group G3: OUR workspace - the existence filter keeps only real companions.
-	{
-		const Run = Setup();
-		Run.Context.workingDirectory = Service(Ours);
-		await CheckAsync(Count, "G3: the note names only the companions that exist", async () => {
-			const Out = await Post(Run, {
-				name: "edit",
-				arguments: { file_path: OursConfig },
-				agent: AgentOf("a"),
-			});
+		Run.Context.workingDirectory = Service(Rooted);
+		Seed(Run, "b");
+		await CheckAsync(Count, "G2: the History note names the companions of the temp root", async () => {
+			const Out = await Post(Run, Edit(RootedConfig, "b"));
 			assert.equal(Out.additionalContexts.length, 1);
 			assert.deepEqual(Out.additionalContexts[0].source, {
 				kind: "edit-suggester",
 				form: "notice",
-				summary: "Config 0.87",
+				summary: "History 0.87",
 			});
-			const Text = Out.additionalContexts[0].content[0].text;
-			assert.equal(
-				Text,
-				"[edit-suggester] family=Config confidence=0.87\ncompanions (2):\n- README.md - the Config section\n- Site/Source/pages/setup.astro - the site surface\nnote: this file rarely stands alone; check whether these need the same change.",
-			);
-			assert.equal(Text.includes("SCHEME.md"), false);
-			assert.equal(Text.includes("cordis.patch.yml"), false);
+			assert.equal(Out.additionalContexts[0].content[0].text, HistoryText);
 		});
-		await CheckAsync(Count, "G3: the suggest line counts only the existing companions", async () => {
+		await CheckAsync(Count, "G2: the suggest line counts the two companions", async () => {
 			assert.ok(
 				Run.Lines.includes(
-					`hook-dsh-edit-suggester: suggest Config 0.87 2 companions ${OursConfig}`,
+					`hook-dsh-edit-suggester: suggest History 0.87 2 companions ${RootedConfig}`,
 				),
 			);
 			assert.match(
-				DurableLine(`suggest Config 0.87 2 companions ${OursConfig}`),
-				Durable(`suggest Config 0.87 2 companions ${OursConfig}`),
+				DurableLine(`suggest History 0.87 2 companions ${RootedConfig}`),
+				Durable(`suggest History 0.87 2 companions ${RootedConfig}`),
 			);
 		});
-	}
-
-	// Group G4: a family whose whole companion set is absent.
-	{
-		const Run = Setup();
-		Run.Context.workingDirectory = Service(Empty);
-		await CheckAsync(Count, "G4: an emptied family abstains no-companions with the family and kappa", async () => {
+		await CheckAsync(Count, "G2: the rooted workspace with no history abstains no-history", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(
-				Run,
-				{ name: "edit", arguments: { file_path: EmptyWorkflow }, agent: AgentOf("a") },
-				Decision,
-			);
+			const Out = await Post(Run, Edit(RootedConfig, "c"), Decision);
 			assert.equal(Out, Decision);
-			assert.ok(
-				Run.Lines.includes("hook-dsh-edit-suggester: abstained no-companions Workflow 0.87"),
-			);
+			assert.deepEqual(Out.additionalContexts, []);
+			assert.ok(Run.Lines.includes("hook-dsh-edit-suggester: abstained no-history  0.00"));
 			assert.match(
-				DurableLine("abstained no-companions"),
-				Durable("abstained no-companions Workflow 0.87"),
+				DurableLine("abstained no-history"),
+				Durable("abstained no-history  0.00"),
 			);
-			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
-		});
-	}
-
-	// Group G5: the foreign abstention does not poison the next in-workspace call.
-	{
-		const Run = Setup();
-		Run.Context.workingDirectory = Service(Foreign);
-		await CheckAsync(Count, "G5: a foreign call never poisons the next in-workspace call", async () => {
-			await Post(Run, { name: "edit", arguments: { file_path: ForeignIndex }, agent: AgentOf("a") });
-			Run.Context.workingDirectory = Service(Ours);
-			const Out = await Post(Run, {
-				name: "edit",
-				arguments: { file_path: OursConfig },
-				agent: AgentOf("a"),
-			});
-			assert.equal(Out.additionalContexts[0].source.summary, "Config 0.87");
 		});
 	}
 

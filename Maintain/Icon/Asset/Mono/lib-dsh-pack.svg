@@ -4,13 +4,13 @@
 	<style>
 		@media (prefers-reduced-motion: no-preference) {
 			.lib-dsh-pack-scene * { transform-box: view-box; transform-origin: 50% 50%; }
-		.lib-dsh-pack-counter { animation: lib-dsh-pack-counter 22s linear -3s infinite; }
+		.lib-dsh-pack-counter { animation: lib-dsh-pack-counter 23s linear -6s infinite; }
 		@keyframes lib-dsh-pack-counter { to { transform: rotate(-360deg); } }
-		.lib-dsh-pack-breathe { animation: lib-dsh-pack-breathe 8s ease-in-out -3s infinite; }
+		.lib-dsh-pack-breathe { animation: lib-dsh-pack-breathe 7s ease-in-out -6s infinite; }
 		@keyframes lib-dsh-pack-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
-		.lib-dsh-pack-fire { animation: lib-dsh-pack-fire 3.0s ease-in-out infinite; }
+		.lib-dsh-pack-fire { animation: lib-dsh-pack-fire 2.6s ease-in-out infinite; }
 		@keyframes lib-dsh-pack-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
-		.lib-dsh-pack-twinkle { animation: lib-dsh-pack-twinkle 10s ease-in-out -3s infinite; }
+		.lib-dsh-pack-twinkle { animation: lib-dsh-pack-twinkle 9s ease-in-out -6s infinite; }
 		@keyframes lib-dsh-pack-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
 		}
 	</style>
@@ -22,9 +22,9 @@
 		<path id="lib-dsh-pack-4" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
 		<path id="lib-dsh-pack-5" d="M33,66 L33,67 L32,67 L32,66 L32,66 L33,66 Z"/>
 		<path id="lib-dsh-pack-6" d="M45,27 L45,27 L44,27 L44,27 L44,26 L45,26 Z"/>
-		<path id="lib-dsh-pack-7" d="M72,79 L25,66 L56,36 Z M53,55 L77,88 L76,88 L53,55 Z M70,55 L70,56 L69,57 L68,57 L67,57 L66,57 L65,57 L65,56 L65,55 L65,54 L65,53 L66,52 L67,52 L68,52 L69,53 L70,54 Z M47,55 L25,89 L24,88 L47,55 Z M44,48 L7,34 L8,32 L44,48 Z M59,27 L59,28 L58,29 L57,29 L56,30 L55,29 L54,29 L53,28 L53,27 L53,26 L54,25 L55,24 L56,24 L57,24 L58,25 L59,26 Z M47,45 L28,10 L31,8 L47,45 Z M53,45 L71,9 L74,10 L53,45 Z M60,79 L60,81 L59,82 L58,83 L56,83 L55,83 L53,82 L52,81 L52,79 L52,78 L53,77 L55,76 L56,75 L58,76 L59,77 L60,78 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
-		<path id="lib-dsh-pack-8" d="M55,18 L57,15 L58,18 Z"/>
-		<path id="lib-dsh-pack-9" d="M21,64 L19,64 L20,62 Z"/>
+		<path id="lib-dsh-pack-7" d="M68,58 L21,64 L46,21 Z M53,55 L71,91 L70,92 L53,55 Z M63,65 L63,66 L63,67 L62,67 L60,68 L59,67 L58,67 L58,66 L58,65 L58,63 L58,63 L59,62 L60,62 L62,62 L63,63 L63,63 Z M48,56 L35,94 L34,93 L48,56 Z M44,50 L4,52 L4,50 L44,50 Z M56,26 L56,28 L55,29 L54,30 L52,30 L51,30 L50,29 L49,28 L48,26 L49,25 L50,23 L51,22 L52,22 L54,22 L55,23 L56,25 Z M46,46 L18,17 L20,15 L46,45 Z M54,45 L78,13 L80,15 L54,45 Z M79,34 L79,36 L78,37 L77,38 L75,38 L74,38 L73,37 L72,36 L71,34 L72,32 L73,31 L74,30 L75,30 L77,30 L78,31 L79,32 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="lib-dsh-pack-8" d="M90,49 L92,50 L90,52 Z"/>
+		<path id="lib-dsh-pack-9" d="M88,62 L90,66 L86,66 Z"/>
 		<path id="lib-dsh-pack-10" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
 	</defs>
 	<g class="lib-dsh-pack-scene">
@@ -35,7 +35,7 @@
 		<use class="lib-dsh-pack-breathe" href="#lib-dsh-pack-1"/>
 	</g>
 	<g fill="currentColor" fill-opacity="0.75" fill-rule="evenodd">
-		<use class="lib-dsh-pack-fire" style="animation-delay:-3.00s" href="#lib-dsh-pack-2"/>
+		<use class="lib-dsh-pack-fire" style="animation-delay:-6.00s" href="#lib-dsh-pack-2"/>
 	</g>
 	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
 		<use class="lib-dsh-pack-breathe" href="#lib-dsh-pack-3"/>

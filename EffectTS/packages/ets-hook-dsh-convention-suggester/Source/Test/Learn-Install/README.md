@@ -1,51 +1,30 @@
 # Learn-Install
 
-The D4 money shot: propose, install, and the doc suggester speaks.
+The RETIRED learner: the install phase of the D4 bootstrap no longer runs.
 
-One end-to-end pass across three real built Targets.
-
-The learner of the convention-suggester derives a pack for a temporary repo, the proposal is COPIED
-into the user layer (`<home>/.dsh/playform/workspaces/<slug>.yml`), and the doc-suggester, mounted
-in the same repo, now emits a note that names the companions of the PROPOSAL.
+The literal pack learner is not called any more (the history-driven proposal is the next step), so
+this suite keeps only the Apply-level consequence of a judged call in a packless workspace with
+`learning: true`.
 
 ## Scenarios
 
-- I1: the learner proposes (`learned pack 6 families`) and writes
-  `<home>/.dsh/playform/proposals/<slug>.yml`; the live pack does not exist
-  yet.
-- I2: the user copies the proposal to the user layer; the installed file is
-  byte-identical to the proposal.
-- I3: the doc suggester, resolving the installed user layer, emits
-  `family=Site confidence=0.87` with the five DERIVED companions
-  (`Documentation`, `Site/Source/Content`, `Site/Source/pages`,
-  `Site/Source/Component`, `Site/Source/Library`) and the byte-exact
-  `suggest Site 0.87 5 companions Site/Source/pages/index.astro` ledger line.
-
-  The repo deliberately lacks `Site/Source/Library/Content.ts` (the built-in
-  pack's target), so naming `Site/Source/Component` proves the installed
-  proposal is the pack in force - not the built-in fallback.
+- I1: the call returns the downstream decision UNCHANGED with no note, and no
+  proposal, no live user-layer pack and no repo pack file is written.
+- I2: the ledger carries `abstained no-history  0.00` in both forms, with no
+  `learned proposal` line and no `suggest` line.
 
 ## Fixtures
 
-The shared Harness (fake ctx, the real factory, the real built Target) for the learner, a local fake
-ctx in the same family shape for the REAL built doc-suggester, `node:fs` temporary trees, and a
-temporary `HOME` (`process.env.HOME`) so that the real `~/.dsh` is never read or written.
+The shared Harness (fake ctx, the real factory, the real built Target), a `node:fs` temporary repo
+with the doc index, the site and the package layout, and a temporary `HOME` (`process.env.HOME`) so
+that the real `~/.dsh` is never read or written.
 
 No sleeps, because the whole sequence is synchronous state.
 
-The repo carries `Documentation/INDEX.md` but NO `Documentation/ARCHIVE-STYLE.md`, so the workspace
-gate never resolves (and never populates the per-root pack memo of the library) before the install,
-and the doc suggester reads the installed user layer fresh in the same process.
+## Expected ledger strings (byte-exact, `convention-suggester: ` prefix)
 
-In production the memo contract applies, so an installed pack lands on the next process.
-
-## Expected ledger strings (byte-exact)
-
-`convention-suggester: learned proposal <slug> 6 families <absolute proposal
-path>`,
-`hook-dsh-doc-suggester: suggest Site 0.87 5 companions
-Site/Source/pages/index.astro`.
+`abstained no-history  0.00`.
 
 ## Expected count
 
-4 PASS.
+2 PASS.

@@ -1,10 +1,11 @@
-// Source/Test/Pack-Driven/Test.ts - the PACK-DRIVEN behaviour: a temporary
-// repo with its own `.dsh/pack.yml` (its own signature and its own
-// `doc/Index` family) overrides the built-in family, so the note names the
-// pack's companion, never the built-in one; the same workspace WITHOUT the
-// pack stays silent (`abstained foreign-workspace`); a pack whose signature
-// marker is absent stays silent too; and the built-in pack still drives the
-// monorepo path (parity).
+// Source/Test/Pack-Driven/Test.ts - the EXPLICIT pack override: a temporary
+// repo with its own `.dsh/pack.yml` (its own `doc/Index` family) still speaks
+// when the session history is empty, so the note names the pack's companion
+// and never the built-in one; the same workspace WITHOUT the pack abstains
+// `no-history` (the built-in pack is never a candidate source); a pack in a
+// rooted tree still governs even when its declared signature marker is absent
+// (the root gates, not the signature); and the monorepo path with no history
+// abstains `no-history` instead of naming the built-in pack's companions.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -29,6 +30,11 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
+/** Mark the tree as a workspace root (the pack-independent `package.json` marker). */
+const Manifest = (Root: string): void => {
+	FileSystem.writeFileSync(Path.join(Root, "package.json"), "{}", "utf8");
+};
+
 /** The temp pack: a custom signature and one doc/Index family. */
 const Pack = `signature:
   - docs/STYLE.md
@@ -51,25 +57,28 @@ families:
 /** The optional harness service the probe reads (the real shape: get(session)). */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** The PACKED workspace: the pack, its marker and the triggering path. */
+/** The PACKED workspace: the manifest, the pack, its marker and the triggering path. */
 const Packed = Tree("doc-suggester-packed-");
+Manifest(Packed);
 Put(Packed, ".dsh/pack.yml", Pack);
 Put(Packed, "docs/STYLE.md");
 const PackedIndex = Put(Packed, "Documentation/INDEX.md");
 
-/** The SAME workspace without the pack: the triggering path only. */
+/** The SAME workspace without the pack: the manifest and the triggering path only. */
 const Bare = Tree("doc-suggester-bare-");
+Manifest(Bare);
 const BareIndex = Put(Bare, "Documentation/INDEX.md");
 
 /** The UNSIGNED workspace: a pack whose signature marker is absent. */
 const Unsigned = Tree("doc-suggester-unsigned-");
+Manifest(Unsigned);
 Put(Unsigned, ".dsh/pack.yml", Pack);
 const UnsignedIndex = Put(Unsigned, "Documentation/INDEX.md");
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
-	// P1: the temp pack's family overrides the built-in doc/Index family.
+	// P1: the explicit temp pack's family drives the note (empty history).
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Packed);
@@ -101,11 +110,11 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// P2: the same workspace without the pack stays silent.
+	// P2: the same workspace without the pack abstains no-history.
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Bare);
-		await CheckAsync(Count, "P2: the same workspace without the pack stays silent", async () => {
+		await CheckAsync(Count, "P2: the same workspace without the pack abstains no-history", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
 			const Out = await Post(
 				Run,
@@ -114,17 +123,17 @@ export const runTest = async (): Promise<number> => {
 			);
 			assert.equal(Out, Decision);
 			assert.ok(
-				Run.Lines.includes("hook-dsh-doc-suggester: abstained foreign-workspace  0.00"),
+				Run.Lines.includes("hook-dsh-doc-suggester: abstained no-history  0.00"),
 			);
 			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
 		});
 	}
 
-	// P3: the pack's signature gates the workspace.
+	// P3: the root gates the pack, not its declared signature marker.
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Unsigned);
-		await CheckAsync(Count, "P3: a pack whose signature marker is absent stays silent", async () => {
+		await CheckAsync(Count, "P3: a pack with an absent signature marker still governs the tree", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
 			const Out = await Post(
 				Run,
@@ -132,24 +141,34 @@ export const runTest = async (): Promise<number> => {
 				Decision,
 			);
 			assert.equal(Out, Decision);
+			// The pack's family matched, and its one companion does not exist
+			// in the tree: the existence filter empties the set.
 			assert.ok(
-				Run.Lines.includes("hook-dsh-doc-suggester: abstained foreign-workspace  0.00"),
+				Run.Lines.includes("hook-dsh-doc-suggester: abstained no-companions Index 0.87"),
 			);
+			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
 		});
 	}
 
-	// P4: the built-in pack still drives the monorepo path (parity).
+	// P4: the built-in pack is NEVER a candidate source.
 	{
 		const Run = Setup();
-		await CheckAsync(Count, "P4: the built-in pack still drives the monorepo path", async () => {
-			const Out = await Post(Run, {
-				name: "read",
-				arguments: { file_path: "Documentation/Plans/POC-LEDGER.md" },
-				agent: AgentOf("pack-d"),
-			});
-			assert.equal(Out.additionalContexts[0].source.summary, "Plan 0.87");
-			const Text = Out.additionalContexts[0].content[0].text;
-			assert.equal(Text.includes("- Documentation/INDEX.md - the index row"), true);
+		await CheckAsync(Count, "P4: a monorepo doc read with no history abstains no-history", async () => {
+			const Decision = { kind: "allow", additionalContexts: [] };
+			const Out = await Post(
+				Run,
+				{
+					name: "read",
+					arguments: { file_path: "Documentation/Plans/POC-LEDGER.md" },
+					agent: AgentOf("pack-d"),
+				},
+				Decision,
+			);
+			assert.equal(Out, Decision);
+			assert.ok(
+				Run.Lines.includes("hook-dsh-doc-suggester: abstained no-history  0.00"),
+			);
+			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
 		});
 	}
 

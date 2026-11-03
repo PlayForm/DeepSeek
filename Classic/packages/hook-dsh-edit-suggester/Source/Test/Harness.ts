@@ -8,6 +8,11 @@
 // fresh set, so every folder is standalone-green and the aggregate replays
 // the same seams per folder.
 //
+// THE HISTORY SEAM: the candidates come from the session's own previous tool
+// calls, so a suite that wants an emit seeds `State.History` through the
+// `__hookDshEditSuggesterState` probe (the same shape the `session/event`
+// fold writes) instead of depending on a session bus.
+//
 // THE LEARNING SEAMS (the D8 layer): `Home` is a fresh OS temp directory
 // assigned to $HOME BEFORE any construction, so the optional pattern
 // service's JSON fallback path (`~/.dsh/pattern/registry.json`) can never
@@ -16,9 +21,9 @@
 // (`FakeStorage`, the authority/evidence fake-storage pattern: the open
 // capture, the map-backed tables, the version fence), so the learning smokes
 // exercise the service's real Record/Get/Put/Save semantics over a real KV
-// domain, and a "reopen" is a second service over the same tables. A folder
-// that never attaches a service gets the plugin's in-memory fallback - the
-// neutral path every pre-learning folder runs on.
+// domain, and a "reopen" is a second service over the same tables. The
+// Learning-Loop folder attaches it; every other folder runs the plugin's
+// in-memory fallback - the neutral path.
 //
 // Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
 // fake ctx actually wires the plugin (the vacuously-green backstop for every
@@ -47,10 +52,10 @@ export const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "edit-suggeste
 process.env["HOME"] = Home;
 
 /**
- * The REAL package cwd the judged relative paths resolve against: the pack
- * mixes package-relative companions (`SCHEME.md`, `cordis.patch.yml`,
- * `Source/Test/Config-And-Activation/Test.ts`), so the fixture cwd is a
- * package that actually carries them (hook-dsh-ccr) instead of the repo root.
+ * The REAL package cwd the judged relative paths resolve against: the
+ * companions a suite seeds (`README.md`, `SCHEME.md`, `CHANGELOG.md`) exist in
+ * this package, so the base-aware existence filter keeps them without a temp
+ * tree.
  */
 const Package = fileURLToPath(new URL("../../../hook-dsh-ccr/", import.meta.url));
 
@@ -158,10 +163,12 @@ export const Furnace: any = new FactoryClass({
 } as any);
 
 /**
- * The fake ctx: the ROOT object is DISTINCT from the ctx; ctx.on() captures
- * into CtxListeners; effect runs its setup immediately; fs records every
- * access and must stay untouched (the edit suggester is a NON-MANIFEST
- * module: zero ctx.fs calls).
+ * The fake ctx: the ROOT object is DISTINCT from the ctx (a registration
+ * made on the plugin ctx instead of the root cannot pass a root assertion);
+ * ctx.on() captures into CtxListeners (the plugin's three listeners and the
+ * factory's loader/volatile-update listener land there); effect runs its
+ * setup immediately; fs records every access and must stay untouched (the
+ * edit suggester is a NON-MANIFEST module: zero fs calls).
  */
 export const Make = (Raw: any): any => {
 	const CtxListeners: any = {};
@@ -342,12 +349,17 @@ if (InvokedDirectly) {
 	});
 	rm();
 	const Run = Setup();
-	Check(Count, "selfcheck: the fake ctx registers the plugin's two listeners", () => {
-		assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update", "tools/post-execute", "agent/pre-step"]);
+	Check(Count, "selfcheck: the fake ctx registers the plugin's three listeners", () => {
+		assert.deepEqual(Object.keys(Run.CtxListeners), [
+			"loader/volatile-update",
+			"session/event",
+			"tools/post-execute",
+			"agent/pre-step",
+		]);
 		assert.deepEqual(Run.RootNames, []);
 		assert.equal(Run.Returned, undefined);
 		assert.equal(Run.Fs.reads + Run.Fs.writes, 0);
-		assert.deepEqual(Run.Lines, [`hook-dsh-edit-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, families 7, threshold 0.75)`]);
+		assert.deepEqual(Run.Lines, [`hook-dsh-edit-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`]);
 	});
 	if (Count.N === 3 && Count.F === 1) {
 		console.log("Harness selfcheck OK");

@@ -1,5 +1,6 @@
 import type Config from "./Config.js";
 import type { CompiledIntent } from "./Pack.js";
+import type { Touch } from "@playform/ets-lib-dsh-pack";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 export default interface State extends Shared {
@@ -15,16 +16,18 @@ export default interface State extends Shared {
     Cooldown: number;
     /** The per-turn note cap (config `maxNotesPerTurn`, volatile). */
     MaxNotesPerTurn: number;
-    /** The enabled intent ids (config `intents`, volatile). */
+    /** The enabled intent ids of an explicit pack (config `intents`, volatile). */
     Intents: string[];
     /** The judged tool names (config `emitOn`, volatile). */
     EmitOn: string[];
     /** The candidate path prefixes never suggested (config `exclude`, volatile). */
     Exclude: string[];
-    /** The compiled pack, built once at apply. */
+    /** The compiled explicit pack; empty at apply (the boot projection is retired). */
     Rules: CompiledIntent[];
     /** The per-agent state, keyed on the Agent object. */
     Agents: WeakMap<object, AgentMemory>;
+    /** The per-session touch history, keyed on the session object. */
+    History: WeakMap<object, SessionHistory>;
     /** The package roots whose reconciliation logged its consistent-tree line. */
     Cleared: Set<string>;
     /** The injected @playform/ets-plugin-dsh-factory service - the ledger
@@ -42,5 +45,11 @@ export interface AgentMemory {
     Ring: string[];
     /** Package root -> the drift signature of the last reconciliation note. */
     Reconciled: Map<string, string>;
+}
+export interface SessionHistory {
+    /** The next touch's sequence number. */
+    Seq: number;
+    /** The folded touches, oldest first. */
+    Touches: Touch[];
 }
 export type { Config };

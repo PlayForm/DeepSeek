@@ -1,1 +1,1 @@
-import c from"./Home.js";import i from"./Resolve.js";const s=new Map;var f=(t,e)=>{const r=`${c(e)}\0${t}`,o=s.get(r);if(o!==void 0)return o;const n=i(t,e);return s.set(r,n),n};export{f as default};
+import f from"../Variable/Builtin.js";import s from"./Home.js";import c from"./Resolve.js";const i=new Map;var u=(e,r)=>{const n=`${s(r)}\0${e}`,o=i.get(n);if(o!==void 0)return o;const t=c(e,r);return t===void 0?f:(i.set(n,t),t)};export{u as default};

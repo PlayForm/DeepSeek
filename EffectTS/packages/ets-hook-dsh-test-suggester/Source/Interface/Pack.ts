@@ -1,9 +1,10 @@
-// Pack - the embedded pattern-pack types (SEARCH-SUGGESTER-PLUGIN.md §8.2,
-// the pack-as-data contract). This hook is a suggester-family CONSUMER that
-// carries its own private pack (the two-consumer extraction rule: no shared
-// core service until the family proves two consumers; Variable/Defaults.ts
-// is the data). The types here are the contract both the classifier
-// (Function/Detect) and the note builder consume.
+// Pack - the pattern-pack types (SEARCH-SUGGESTER-PLUGIN.md §8.2, the
+// pack-as-data contract). This hook is a suggester-family CONSUMER: the types
+// here are the contract both the classifier (Function/Detect) and the note
+// builder consume. The rows are no longer a built-in projection
+// (Variable/Defaults is RETIRED from the hot path): they arrive per call from
+// the session history (the synthetic `History` family, Function/Apply) and
+// from an EXPLICIT repo/user pack (`Resolve(root, { builtin: false })`).
 //
 // A pack intent is: an id, a priority (lower wins when two fire on one
 // call), a per-intent threshold (destructive intents raise it), a signal

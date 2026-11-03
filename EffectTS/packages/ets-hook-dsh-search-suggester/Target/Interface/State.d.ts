@@ -1,3 +1,4 @@
+import type { Touch } from "@playform/ets-lib-dsh-pack";
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 import type Ring from "../Function/Ring.js";
@@ -15,7 +16,7 @@ export default interface State extends Shared {
     CooldownCalls: number;
     /** The per-turn note cap (config `maxNotesPerTurn`, volatile). */
     MaxNotesPerTurn: number;
-    /** The enabled intent kinds (config `intents`, volatile). */
+    /** The enabled intent kinds of an explicit pack (config `intents`, volatile). */
     Intents: string[];
     /** The judged tools (config `emitOn`, volatile). */
     EmitOn: string[];
@@ -35,18 +36,26 @@ export default interface State extends Shared {
     RefreshOnBoot: boolean;
     /** The dismissal TTL in seconds (config `dismissTtl`, volatile). */
     DismissTtl: number;
-    /** The offline seed switch (config `seed`, volatile). */
+    /** The offline seed switch (config `seed`, volatile; the source is the explicit pack). */
     Seed: boolean;
     /** The second surface mode (config `sectionMode`, volatile). */
     SectionMode: string;
     /** The sticky section TTL (config `sectionTtl`, volatile). */
     SectionTtl: number;
-    /** The embedded pack (Function/Pack) - the reference search pack. */
+    /** The explicit pack's families; EMPTY at apply (the built-in pack is retired). */
     Pack: Intent[];
     /** The learned knowledge, loaded once at apply, saved best-effort. */
     Knowledge: Knowledge;
     /** The per-agent ring tracker (Function/Ring). */
     Rings: ReturnType<typeof Ring>;
+    /** The per-session touch history, keyed on the session object. */
+    History: WeakMap<object, SessionHistory>;
     /** The injected @playform/ets-plugin-dsh-factory service. */
     Factory: Factory;
+}
+export interface SessionHistory {
+    /** The next touch's sequence number. */
+    Seq: number;
+    /** The folded touches, oldest first. */
+    Touches: Touch[];
 }

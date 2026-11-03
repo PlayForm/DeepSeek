@@ -1,15 +1,26 @@
-// Execution - the edit suggester's domain types: the CONVENTION pack (the
-// modification families and their standard companion sets), the detection,
-// the scored companions, and the gate's verdict.
+// Execution - the edit suggester's domain types: the pack row (a family and
+// its companion set), the detection, the scored companions, and the gate's
+// verdict. Same algebra, same shapes as the doc suggester (the family's
+// shared pattern), different pack - and the synthetic History family is a
+// pack row like any other.
 //
 // One family = one pack row:
-//   id        - the modification family;
-//   priority  - lower wins when two families match one edit;
-//   threshold - the family's own gate (destructive: 0.85, the rest 0.75);
-//   signals   - the path rules: a compiled regex on the edited path and the
-//               evidence weight each match contributes;
-//   targets   - the standard companion set: a path or glob, a prior, and the
-//               one reason phrase the model reads.
+//   id           - the modification family;
+//   priority     - lower wins when two families match one edit;
+//   threshold    - the family's own gate (destructive: 0.85, the rest 0.75);
+//   signals      - the path rules: a compiled regex on the edited path and the
+//                  evidence weight each match contributes;
+//   targets      - the standard companion set: a path or glob, a prior, and
+//                  the one reason phrase the model reads;
+//   note         - the pack row's one-phrase caveat ("" when the domain has
+//                  none; the note builder prints the standing caution);
+//   familyGlobs  - the pack row's long-tail globs ([] when the domain has
+//                  none).
+//
+// The synthetic `History` family the listener builds from the session's own
+// tool calls is a FULL pack row of the same shape, so the existing
+// Detect/Measure/Score/Decide pipeline judges it exactly like a resolved
+// pack's family.
 //
 // The scored companion (Candidate) is the decision model's row: the score
 // plus the six pickable heuristic values (Interface/Decision), so the note,
@@ -43,6 +54,10 @@ export interface Family {
 	priority: number;
 	/** The family's own gate (destructive: 0.85). */
 	threshold: number;
+	/** The one-phrase caveat the pack row carries ("" when the domain has none). */
+	note: string;
+	/** The long-tail family globs ([] when the domain has none). */
+	familyGlobs: string[];
 	/** The path rules. */
 	signals: Signal[];
 	/** The standard companion set. */

@@ -42,7 +42,7 @@ export default (
 	if (Root === undefined) {
 		return undefined;
 	}
-	const Resolved: Workspace = Gate?.pack ?? Resolve(Root, { home: Home });
+	const Resolved: Workspace = Gate?.pack ?? Resolve(Root, { home: Home }) ?? Builtin;
 	switch (true) {
 		case !Enabled && Resolved.learning?.propose !== true:
 			return undefined;

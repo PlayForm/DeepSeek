@@ -38,9 +38,10 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    Check(Count, "W2: the two listeners register on the plugin context only", () => {
+    Check(Count, "W2: the three listeners register on the plugin context only", () => {
       assert.deepEqual(Object.keys(Run.CtxListeners), [
         "loader/volatile-update",
+        "session/event",
         "tools/post-execute",
         "agent/pre-step"
       ]);
@@ -49,13 +50,13 @@ const runTest = async () => {
       assert.equal(Object.getPrototypeOf(Run.Root), Object.prototype);
     });
     Check(Count, "W2: the activation line is byte-exact in the logger form", () => {
-      assert.deepEqual(Run.Lines, [`convention-suggester: activated (bundle ${"0.2.1"}, intents 4, threshold 0.75)`]);
+      assert.deepEqual(Run.Lines, [`convention-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`]);
       assert.deepEqual(Run.Effects, []);
     });
     Check(Count, "W2: the activation line is byte-exact in the durable form", () => {
       assert.equal(LedgerLines().length, 1);
-      assert.match(FirstLine(), Durable(`activated (bundle ${"0.2.1"}, intents 4, threshold 0.75)`));
-      assert.deepEqual(LedgerWith(`activated (bundle ${"0.2.1"}, intents 4, threshold 0.75)`).length, 1);
+      assert.match(FirstLine(), Durable(`activated (bundle ${"0.2.1"}, history, threshold 0.75)`));
+      assert.deepEqual(LedgerWith(`activated (bundle ${"0.2.1"}, history, threshold 0.75)`).length, 1);
     });
   }
   {
@@ -94,20 +95,16 @@ const runTest = async () => {
       assert.deepEqual(Run.State.Exclude, ["node_modules", "Target", ".git", "dist"]);
       assert.equal(Run.State.Factory, Run.Context.pluginFactory);
     });
-    Check(Count, "W4: the pack is compiled once at apply (all four intents, thresholds raised to max)", () => {
-      assert.deepEqual(Run.State.Rules.map((Rule) => Rule.id), ["Layout", "Naming", "Docs", "Ledger"]);
-      assert.deepEqual(Run.State.Rules.map((Rule) => Rule.threshold), [0.75, 0.75, 0.75, 0.85]);
-      for (const Rule of Run.State.Rules) {
-        for (const Signal of Rule.signals) {
-          assert.equal(Signal.pattern instanceof RegExp, true);
-        }
-      }
-      assert.equal(Run.State.Rules[0].signals[0].pattern.source, "Source\\/(Function|Interface|Variable)\\/");
+    Check(Count, "W4: the boot compile is EMPTY (the history is the candidate source)", () => {
+      assert.deepEqual(Run.State.Rules, []);
+      assert.equal(Run.State.History instanceof WeakMap, true);
+      assert.equal(Run.State.Agents instanceof WeakMap, true);
     });
-    Check(Count, "W4: a configured intent list filters the pack", () => {
+    Check(Count, "W4: a configured intent list lands on the State (the boot line stays history)", () => {
       const Filtered = Make(Validate({ logFile: Ledger, enabled: true, intents: ["Ledger"] }));
-      assert.deepEqual(Filtered.State.Rules.map((Rule) => Rule.id), ["Ledger"]);
-      assert.ok(Filtered.Lines.includes(`convention-suggester: activated (bundle ${"0.2.1"}, intents 1, threshold 0.75)`));
+      assert.deepEqual(Filtered.State.Intents, ["Ledger"]);
+      assert.deepEqual(Filtered.State.Rules, []);
+      assert.ok(Filtered.Lines.includes(`convention-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`));
     });
   }
   {

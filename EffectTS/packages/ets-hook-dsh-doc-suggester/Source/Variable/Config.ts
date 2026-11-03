@@ -13,7 +13,8 @@
 //
 // VOLATILE CELLS: every tuning knob is `.volatile()` - hot-editable without a
 // remount, matching the tool-coach's posture. There is no structural knob:
-// the pack is embedded data, not a file path.
+// the pack is an explicit repo/user file resolved per call, never a config
+// path.
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/ets-plugin-dsh-factory";
 

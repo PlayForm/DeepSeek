@@ -1,10 +1,14 @@
 // Source/Test/Wiring-And-Ledger/Test.ts - the wiring and the ledger: the
 // loader contract (the default object carries name/apply/Config/inject,
-// apply returns nothing), the four-listener registration with the distinct
+// apply returns nothing), the five-listener registration with the distinct
 // root identity, the byte-exact activation and disabled lines (logger form
 // and durable `[ISO]` form), the config fail-loud, the schema defaults and
 // the knowledge load on the built State, and the fs purity (the suggester
 // writes its knowledge through its own node:fs channel, never ctx.fs).
+//
+// THE HISTORY MODEL: the activation's second segment is `history` (there is no
+// boot pack), `State.Pack` is empty at apply, and the candidates come from
+// the seeded session history.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {
@@ -24,8 +28,11 @@ import {
 	Plugin,
 	Post,
 	rm,
+	SeedHistory,
+	Service,
 	Setup,
 	Validate,
+	Workspace,
 } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
@@ -52,9 +59,10 @@ export const runTest = async (): Promise<number> => {
 	// Group W2: the listener wiring.
 	{
 		const Run = Setup();
-		Check(Count, "W2: the four listeners register on the plugin context only", () => {
+		Check(Count, "W2: the five listeners register on the plugin context only", () => {
 			assert.deepEqual(Object.keys(Run.CtxListeners), [
 				"loader/volatile-update",
+				"session/event",
 				"tools/post-execute",
 				"agent/pre-step",
 				"system-prompt/assemble",
@@ -65,13 +73,13 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Object.getPrototypeOf(Run.Root), Object.prototype);
 		});
 		Check(Count, "W2: the activation line is byte-exact in the logger form", () => {
-			assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 10, threshold 0.75)`]);
+			assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`]);
 			assert.deepEqual(Run.Effects, []);
 		});
 		Check(Count, "W2: the activation line is byte-exact in the durable form", () => {
 			assert.equal(LedgerLines().length, 1);
-			assert.match(FirstLine(), Durable(`activated (bundle ${process.env.VERSION_PACKAGE}, intents 10, threshold 0.75)`));
-			assert.deepEqual(LedgerWith(`activated (bundle ${process.env.VERSION_PACKAGE}, intents 10, threshold 0.75)`).length, 1);
+			assert.match(FirstLine(), Durable(`activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`));
+			assert.deepEqual(LedgerWith(`activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`).length, 1);
 		});
 	}
 
@@ -86,7 +94,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		await CheckAsync(Count, "W3: a disabled mount passes every call through with zero new lines", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(Run, { name: "grep", arguments: { pattern: "1.2.3 version", path: "package.json" }, agent: AgentOf("a") }, Decision);
+			const Out = await Post(Run, { name: "read", arguments: { file_path: "README.md" }, agent: AgentOf("a") }, Decision);
 			assert.equal(Out, Decision);
 			assert.deepEqual(Run.Lines, ["hook-dsh-search-suggester: disabled (enabled=false)"]);
 			assert.equal(LedgerLines().length, 1);
@@ -127,10 +135,12 @@ export const runTest = async (): Promise<number> => {
 				"Owner",
 			]);
 			assert.deepEqual(Run.State.Exclude, ["node_modules", "Target", ".git", "Site/Target", "dist"]);
-			assert.equal(Run.State.Pack.length, 10);
+			// THE HISTORY MODEL: no boot pack, and a per-session history.
+			assert.equal(Run.State.Pack.length, 0);
+			assert.ok(Run.State.History instanceof WeakMap);
 			assert.equal(Run.State.Factory, Run.Context.pluginFactory);
 		});
-		Check(Count, "W4: the knowledge loads cold from a missing file and after a save it reloads", () => {
+		Check(Count, "W4: the knowledge loads cold from a missing file", () => {
 			assert.deepEqual(Run.State.Knowledge.stats, { emitted: 0, followed: 0, ignored: 0, dismissed: 0 });
 			assert.equal(FileSystem.existsSync(Knowledge), false);
 		});
@@ -138,9 +148,12 @@ export const runTest = async (): Promise<number> => {
 
 	// Group W5: the fs purity (the own-channel posture).
 	{
+		const Space = Workspace(["README.md", "CHANGELOG.md", "SCHEME.md"]);
 		const Run = Setup();
-		await Post(Run, { name: "grep", arguments: { pattern: "1.2.3 version", path: "package.json" }, agent: AgentOf("a") });
-		await Post(Run, { name: "grep", arguments: { pattern: "unrelated query", path: "" }, agent: AgentOf("a") });
+		Run.Context.workingDirectory = Service(Space.Root);
+		SeedHistory(Run, "a", Space.At("README.md"), ["CHANGELOG.md", "SCHEME.md"]);
+		await Post(Run, { name: "read", arguments: { file_path: Space.At("README.md") }, agent: AgentOf("a") });
+		await Post(Run, { name: "grep", arguments: { pattern: "unrelated query", path: Space.At("package.json") }, agent: AgentOf("a") });
 		Check(Count, "W5: zero ctx.fs calls across emit and abstain", () => {
 			assert.equal(Run.Fs.reads, 0);
 			assert.equal(Run.Fs.writes, 0);

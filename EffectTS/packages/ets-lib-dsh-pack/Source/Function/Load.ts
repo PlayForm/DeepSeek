@@ -4,6 +4,7 @@
 // lands on the next process by contract (a boot-time memo, not a watcher).
 import type Options from "../Interface/Options.js";
 import type Pack from "../Interface/Pack.js";
+import Builtin from "../Variable/Builtin.js";
 import Home from "./Home.js";
 import Resolve from "./Resolve.js";
 
@@ -16,6 +17,9 @@ export default (Root: string, Options?: Options): Pack => {
 		return Hit;
 	}
 	const Loaded = Resolve(Root, Options);
+	if (Loaded === undefined) {
+		return Builtin;
+	}
 	Cache.set(Key, Loaded);
 	return Loaded;
 };

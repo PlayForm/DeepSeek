@@ -7,60 +7,64 @@ import {
   Make,
   MakeCounter,
   Post,
-  Pre,
   rm,
+  SeedHistory,
   Setup,
   Validate
 } from "../Harness.js";
-const StrongVersion = (Id) => ({
-  name: "grep",
-  arguments: { pattern: "1.2.3 version", path: "package.json" },
+const Anchor = "README.md";
+const Companions = ["CHANGELOG.md", "SCHEME.md"];
+const Read = (Id) => ({
+  name: "read",
+  arguments: { file_path: Anchor },
   agent: AgentOf(Id)
 });
-const WeakVersion = (Id) => ({
+const Elsewhere = (Id, N) => ({
   name: "grep",
-  arguments: { pattern: "1.2.3", path: "package.json" },
-  agent: AgentOf(Id)
-});
-const Unrelated = (Id, N) => ({
-  name: "grep",
-  arguments: { pattern: `unrelated query ${N}`, path: "" },
+  arguments: { pattern: `unrelated query ${N}`, path: "package.json" },
   agent: AgentOf(Id)
 });
 const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Setup();
-    await CheckAsync(Count, "T1: the weak call abstains under the pack's 0.85 gate", async () => {
-      const Out = await Post(Run, WeakVersion("a"), { kind: "allow", additionalContexts: [] });
-      assert.deepEqual(Out.additionalContexts, []);
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained low-confidence Version 0.84"));
+    SeedHistory(Run, "b", Anchor, Companions);
+    await CheckAsync(Count, "T1: the default gate crosses and emits", async () => {
+      const Out = await Post(Run, Read("b"));
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest History 0.87 2 candidates"));
     });
-    await CheckAsync(Count, "T1: the strong call crosses the gate and emits", async () => {
-      const Out = await Post(Run, StrongVersion("b"));
-      assert.equal(Out.additionalContexts[0].source.summary, "Version 0.92");
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest Version 0.92 7 candidates"));
+    rm();
+    const Raised = Make(Validate({ logFile: Ledger, enabled: true, threshold: 0.9 }));
+    SeedHistory(Raised, "b", Anchor, Companions);
+    await CheckAsync(Count, "T1: a raised config threshold abstains low-confidence", async () => {
+      const Out = await Post(Raised, Read("b"), { kind: "allow", additionalContexts: [] });
+      assert.deepEqual(Out.additionalContexts, []);
+      assert.ok(
+        Raised.Lines.includes("hook-dsh-search-suggester: abstained low-confidence History 0.87")
+      );
     });
   }
   {
     rm();
     const Run = Setup();
+    SeedHistory(Run, "a", Anchor, Companions);
     await CheckAsync(Count, "T2: a second note within the cooldown is suppressed", async () => {
-      await Post(Run, StrongVersion("a"));
-      const Out = await Post(Run, StrongVersion("a"), { kind: "allow", additionalContexts: [] });
+      await Post(Run, Read("a"));
+      const Out = await Post(Run, Read("a"), { kind: "allow", additionalContexts: [] });
       assert.deepEqual(Out.additionalContexts, []);
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suppressed cooldown Version"));
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suppressed cooldown History"));
     });
     await CheckAsync(Count, "T2: after the cooldown expires the dedupe holds the same note", async () => {
       for (let Index = 0; Index < 6; Index += 1) {
-        await Post(Run, Unrelated("a", String(Index)), {
+        await Post(Run, Elsewhere("a", String(Index)), {
           kind: "allow",
           additionalContexts: []
         });
       }
-      const Out = await Post(Run, StrongVersion("a"), { kind: "allow", additionalContexts: [] });
+      const Out = await Post(Run, Read("a"), { kind: "allow", additionalContexts: [] });
       assert.deepEqual(Out.additionalContexts, []);
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suppressed dedupe Version"));
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suppressed dedupe History"));
       assert.equal(
         Run.Lines.filter((Line) => Line.includes(": suggest ")).length,
         1
@@ -70,45 +74,52 @@ const runTest = async () => {
   {
     rm();
     const Run = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0 }));
+    SeedHistory(Run, "a", Anchor, Companions);
     await CheckAsync(Count, "T3: a zero cooldown window reaches the dedupe suppress", async () => {
-      await Post(Run, StrongVersion("a"));
-      const Out = await Post(Run, StrongVersion("a"), { kind: "allow", additionalContexts: [] });
+      await Post(Run, Read("a"));
+      const Out = await Post(Run, Read("a"), { kind: "allow", additionalContexts: [] });
       assert.deepEqual(Out.additionalContexts, []);
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suppressed dedupe Version"));
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suppressed dedupe History"));
     });
   }
   {
     rm();
-    const Run = Make(Validate({ logFile: Ledger, enabled: true, maxNotesPerTurn: 1 }));
-    await CheckAsync(Count, "T4: the second intent's note is capped", async () => {
-      await Post(Run, StrongVersion("a"));
-      await Pre(Run, {
-        agent: AgentOf("a"),
-        messages: [{ role: "user", content: "run the failing test suite" }]
-      });
-      for (let Index = 0; Index < 2; Index += 1) {
-        await Post(
-          Run,
-          { name: "grep", arguments: { pattern: "assert suite", path: "" }, agent: AgentOf("a") },
-          { kind: "allow", additionalContexts: [] }
-        );
-      }
+    const Run = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0, maxNotesPerTurn: 1 }));
+    Run.State.History.set(AgentOf("a"), {
+      Seq: 4,
+      Touches: [
+        { seq: 0, path: Anchor, tool: "read" },
+        { seq: 1, path: "CHANGELOG.md", tool: "read" },
+        { seq: 2, path: "package.json", tool: "read" },
+        { seq: 3, path: "SCHEME.md", tool: "read" }
+      ]
+    });
+    await CheckAsync(Count, "T4: the second note is capped", async () => {
+      await Post(Run, Read("a"));
       const Out = await Post(
         Run,
-        { name: "grep", arguments: { pattern: "assert suite", path: "" }, agent: AgentOf("a") },
+        { name: "read", arguments: { file_path: "package.json" }, agent: AgentOf("a") },
         { kind: "allow", additionalContexts: [] }
       );
       assert.deepEqual(Out.additionalContexts, []);
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suppressed cap Test"));
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suppressed cap History"));
     });
   }
   {
     rm();
-    const Run = Make(Validate({ logFile: Ledger, enabled: true, threshold: 0.6 }));
-    await CheckAsync(Count, "T5: the destructive intent keeps its 0.85 gate over the config", async () => {
-      const Out = await Post(Run, WeakVersion("a"), { kind: "allow", additionalContexts: [] });
-      assert.deepEqual(Out.additionalContexts, []);
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained low-confidence Version 0.84"));
+    const Run = Make(Validate({ logFile: Ledger, enabled: true, threshold: 0.88 }));
+    SeedHistory(Run, "a", Anchor, Companions);
+    await CheckAsync(Count, "T5: the R13 loop bonus lifts the third call over the floor", async () => {
+      for (let Index = 0; Index < 2; Index += 1) {
+        await Post(Run, Read("a"), { kind: "allow", additionalContexts: [] });
+      }
+      assert.equal(
+        Run.Lines.filter((Line) => Line.includes("abstained low-confidence History 0.87")).length,
+        2
+      );
+      const Out = await Post(Run, Read("a"));
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.89");
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest History 0.89 2 candidates"));
     });
   }
   return Finish(Count, "Threshold-And-Cooldown");

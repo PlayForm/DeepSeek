@@ -6,6 +6,8 @@ The evidence is the `## Expected count` of the folder READMEs, the folders, the 
 
 The reconciliation is READ-ONLY: it reads with `node:fs` (never `ctx.fs`), and its only surface is ONE `additionalContexts` notice.
 
+The suite tests the DRIFT ROWS and the GRAPH PROBE only. The candidate source is the session history (the synthetic `History` family), and these fixtures seed none and ship no pack, so a consistent tree falls through to `abstained no-history  0.00` - never to a pack candidate.
+
 ## Scenarios
 
 - C1: a CONSISTENT tree (two counted, suite-bearing, rostered folders) logs the byte-exact clear line exactly once per root and emits NO note, which is the documented abstention.
@@ -17,7 +19,7 @@ The reconciliation is READ-ONLY: it reads with `node:fs` (never `ctx.fs`), and i
 
 ## Fixtures
 
-Real temp package trees (the pack signature, `package.json`, `Source/Test/...`, `Target/Test/...`) plus the shared Harness (fake ctx, real factory, real built Target).
+Real temp package trees (the repo marker, `package.json`, `Source/Test/...`, `Target/Test/...`) plus the shared Harness (fake ctx, real factory, real built Target).
 
 The graph fake supplies only the `find` facet the probe uses.
 

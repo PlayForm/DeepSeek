@@ -50,9 +50,10 @@ export const runTest = async (): Promise<number> => {
 	// Group W2: the listener wiring.
 	{
 		const Run = Setup();
-		Check(Count, "W2: the two listeners register on the plugin context only", () => {
+		Check(Count, "W2: the three listeners register on the plugin context only", () => {
 			assert.deepEqual(Object.keys(Run.CtxListeners), [
 				"loader/volatile-update",
+				"session/event",
 				"tools/post-execute",
 				"agent/pre-step",
 			]);
@@ -61,13 +62,13 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Object.getPrototypeOf(Run.Root), Object.prototype);
 		});
 		Check(Count, "W2: the activation line is byte-exact in the logger form", () => {
-			assert.deepEqual(Run.Lines, [`hook-dsh-doc-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, families 7, threshold 0.75)`]);
+			assert.deepEqual(Run.Lines, [`hook-dsh-doc-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`]);
 			assert.deepEqual(Run.Effects, []);
 		});
 		Check(Count, "W2: the activation line is byte-exact in the durable form", () => {
 			assert.equal(LedgerLines().length, 1);
-			assert.match(FirstLine(), Durable(`activated (bundle ${process.env.VERSION_PACKAGE}, families 7, threshold 0.75)`));
-			assert.deepEqual(LedgerWith(`activated (bundle ${process.env.VERSION_PACKAGE}, families 7, threshold 0.75)`).length, 1);
+			assert.match(FirstLine(), Durable(`activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`));
+			assert.deepEqual(LedgerWith(`activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`).length, 1);
 		});
 	}
 
@@ -107,7 +108,8 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run.State.CooldownCalls, 6);
 			assert.equal(Run.State.MaxNotesPerTurn, 3);
 			assert.deepEqual(Run.State.Exclude, ["node_modules", "Target", ".git", "dist"]);
-			assert.equal(Run.State.Pack.length, 7);
+			assert.equal(Run.State.Pack.length, 0);
+			assert.ok(Run.State.History instanceof WeakMap);
 			assert.equal(Run.State.Factory, Run.Context.pluginFactory);
 		});
 	}
@@ -115,6 +117,16 @@ export const runTest = async (): Promise<number> => {
 	// Group W5: the fs purity (the NON-MANIFEST posture).
 	{
 		const Run = Setup();
+		// The session history seeds the emit path: the anchor and the two
+		// followers both exist in the cwd the suite runs from.
+		Run.State.History.set(AgentOf("a"), {
+			Seq: 3,
+			Touches: [
+				{ seq: 0, path: "Documentation/Plans/POC-LEDGER.md", tool: "read" },
+				{ seq: 1, path: "README.md", tool: "read" },
+				{ seq: 2, path: "package.json", tool: "read" },
+			],
+		});
 		await Post(Run, { name: "read", arguments: { file_path: "Documentation/Plans/POC-LEDGER.md" }, agent: AgentOf("a") });
 		await Post(Run, { name: "read", arguments: { file_path: "/repo/src/a.ts" }, agent: AgentOf("a") });
 		Check(Count, "W5: zero ctx.fs calls across emit and abstain", () => {

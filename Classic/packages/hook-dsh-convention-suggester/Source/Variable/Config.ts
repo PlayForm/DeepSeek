@@ -50,11 +50,6 @@ export default Compose(false, {
 	emitOn: Schema.array(String).default(["edit", "raw-write", "write"]).volatile(),
 	// Path prefixes a candidate is never drawn from (volatile).
 	exclude: Schema.array(String).default(["node_modules", "Target", ".git", "dist"]).volatile(),
-	// The learning bootstrap switch (D4, volatile): OFF by default - the
-	// user's "learning is optional". When true, the first judged call in a
-	// packless workspace writes ONE proposal under
-	// `<home>/.dsh/playform/proposals/` and notes it; the config wins over the
-	// resolved pack's `learning.propose` when true, and a false config defers
-	// to that section (a repo may opt itself in with a minimal `.dsh/pack.yml`).
+	/** Retired: the literal pack learner is no longer called; kept for config compatibility until the history-driven proposal lands. */
 	learning: Schema.boolean().default(false).volatile(),
 });

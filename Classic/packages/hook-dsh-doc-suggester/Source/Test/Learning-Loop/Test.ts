@@ -1,5 +1,7 @@
 // Source/Test/Learning-Loop/Test.ts - the D8 learning loop against the fake
-// ctx, REAL temp workspaces and the REAL pattern service:
+// ctx, REAL temp workspaces and the REAL pattern service, with the
+// candidates coming from the SESSION HISTORY (the synthetic `History`
+// family), never from a built-in pack literal:
 //
 //   L1: a note -> touching a named companion records the ACCEPT for that
 //       companion and its family -> the next call's rank and score rise;
@@ -14,6 +16,10 @@
 //       list, pending outcome) and the learned rates; the accept fills the
 //       outcome, and a reopen through the KV store reads the rate back and
 //       reproduces the same weights.
+//
+// The two companions carry the SAME prior (0.6, the History family's prior)
+// and the SAME reason, so the learned history is the only thing that can
+// order them (the rank proof).
 //
 // NO SLEEPS: the window is counted in judged calls, and the pattern service's
 // Flush/Save are awaited (its documented seams) before the reopen.
@@ -43,7 +49,7 @@ const Neutral = 1 / 3;
 /** The pattern service's documented accept move. */
 const AcceptBonus = 0.1;
 
-/** The pattern service's documented reject move. */
+/** The pattern service's documented reject penalty. */
 const RejectPenalty = 0.2;
 
 /** A temp tree under the OS temp dir (fresh per folder process). */
@@ -58,44 +64,42 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 };
 
 /**
- * The learning workspace: a pack with TWO companions of EQUAL prior, so the
- * learned history is the only thing that can order them (the rank proof).
+ * The learning workspace: a rooted tree with TWO equal-prior companions
+ * (both 0.6, the History family's prior), so the learned history is the only
+ * thing that can order them (the rank proof).
  */
-const Pack = `signature:
-  - docs/STYLE.md
-families:
-  "doc/Index":
-    id: Index
-    priority: 1
-    threshold: 0.75
-    signals:
-      - rule: index
-        pattern: '(^|/)Documentation/INDEX\\.md$'
-        weight: 2.5
-    targets:
-      - path: docs/STYLE.md
-        kind: style
-        prior: 0.6
-        reason: the style
-      - path: docs/REFERENCE.md
-        kind: doc
-        prior: 0.6
-        reason: the reference
-`;
-
-/** The workspace: the pack, its signature (a companion too) and the trigger. */
 const Workspace = Tree("doc-suggester-learning-");
-Put(Workspace, ".dsh/pack.yml", Pack);
+Put(Workspace, "package.json", "{}");
 Put(Workspace, "docs/STYLE.md");
 const Reference = Put(Workspace, "docs/REFERENCE.md");
 const Index = Put(Workspace, "Documentation/INDEX.md");
 
+/** A third path that only ages the follow-through window. */
+const Other = Put(Workspace, "docs/OTHER.md");
+
 /** The optional harness service the probe reads (the real shape: get(session)). */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** The note text of the two equal-prior companions, in pack order. */
+/** The note text of the two equal-prior companions, in history order. */
 const NoteOrder = (Head: string): string =>
-	`[doc-suggester] family=Index confidence=0.87\ncompanions (2):\n- ${Head} - ${Head === "docs/STYLE.md" ? "the style" : "the reference"}\n- ${Head === "docs/STYLE.md" ? "docs/REFERENCE.md - the reference" : "docs/STYLE.md - the style"}\nnote: a documentation task rarely touches one file; keep the doc graph coherent.`;
+	`[doc-suggester] family=History confidence=0.87\ncompanions (2):\n- ${Head} - touched 1 time(s) after this file\n- ${Head === "docs/STYLE.md" ? "docs/REFERENCE.md" : "docs/STYLE.md"} - touched 1 time(s) after this file\nnote: a documentation task rarely touches one file; keep the doc graph coherent.`;
+
+/**
+ * Seed one agent's session history through the state probe: the absolute
+ * anchor, then the two followers (the session/event fold's shape). The
+ * followers are one and two calls away, so Adjacent ranks `docs/STYLE.md`
+ * first.
+ */
+const Seed = (Run: any, Id: string): void => {
+	Run.State.History.set(AgentOf(Id), {
+		Seq: 3,
+		Touches: [Index, "docs/STYLE.md", "docs/REFERENCE.md"].map((Path_: string, Seq: number) => ({
+			seq: Seq,
+			path: Path_,
+			tool: "read",
+		})),
+	});
+};
 
 /** The judged index read (the note trigger). */
 const Emit = (Id: string): any => ({
@@ -114,7 +118,7 @@ const Touch = (Id: string): any => ({
 /** The judged non-family call (it only ages the window). */
 const Age = (Id: string): any => ({
 	name: "read",
-	arguments: { file_path: "unrelated/deep/file.go" },
+	arguments: { file_path: Other },
 	agent: AgentOf(Id),
 });
 
@@ -125,6 +129,7 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Workspace);
+		Seed(Run, "learn-a");
 		await CheckAsync(Count, "L1: the note is byte-exact and records a pending decision", async () => {
 			const Out = await Post(Run, Emit("learn-a"));
 			assert.equal(
@@ -132,7 +137,7 @@ export const runTest = async (): Promise<number> => {
 				NoteOrder("docs/STYLE.md"),
 			);
 			const Last = Run.State.Last;
-			assert.equal(Last.family, "Index");
+			assert.equal(Last.family, "History");
 			assert.equal(Last.outcome, "pending");
 			assert.equal(Last.store, "memory");
 			assert.equal(Last.companions.length, 2);
@@ -149,23 +154,23 @@ export const runTest = async (): Promise<number> => {
 			]);
 			assert.ok(
 				Run.Lines.includes(
-					"hook-dsh-doc-suggester: decided Index 0.87 2 companions docs/STYLE.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.25,literal=0.25,history=0.15,accept=0.00 store=memory",
+					"hook-dsh-doc-suggester: decided History 0.87 2 companions docs/STYLE.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.25,literal=0.25,history=0.15,accept=0.00 store=memory",
 				),
 			);
 		});
 		await CheckAsync(Count, "L1: touching a companion records the accept for it and its family", async () => {
 			await Post(Run, Touch("learn-a"));
 			assert.ok(
-				Run.Lines.includes("hook-dsh-doc-suggester: accepted Index docs/REFERENCE.md"),
+				Run.Lines.includes("hook-dsh-doc-suggester: accepted History docs/REFERENCE.md"),
 			);
 			assert.ok(
 				Math.abs(
-					Run.State.Learning.Rate("Index", "docs/REFERENCE.md").Companion -
+					Run.State.Learning.Rate("History", "docs/REFERENCE.md").Companion -
 						(Neutral + AcceptBonus),
 				) < 1e-9,
 			);
 			assert.ok(
-				Math.abs(Run.State.Learning.Rate("Index", "").Family - (Neutral + AcceptBonus)) <
+				Math.abs(Run.State.Learning.Rate("History", "").Family - (Neutral + AcceptBonus)) <
 					1e-9,
 			);
 			assert.equal(Run.State.Last.outcome, "accepted");
@@ -190,22 +195,23 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Workspace);
+		Seed(Run, "learn-b");
 		await CheckAsync(Count, "L2: a window that closes untouched records the soft reject", async () => {
 			await Post(Run, Emit("learn-b"));
 			const First = Run.State.Last.companions[0].score;
 			await Post(Run, Age("learn-b"));
 			await Post(Run, Age("learn-b"));
 			assert.equal(
-				Run.Lines.includes("hook-dsh-doc-suggester: rejected Index 2 companions"),
+				Run.Lines.includes("hook-dsh-doc-suggester: rejected History 2 companions"),
 				false,
 			);
 			await Post(Run, Age("learn-b"));
 			assert.ok(
-				Run.Lines.includes("hook-dsh-doc-suggester: rejected Index 2 companions"),
+				Run.Lines.includes("hook-dsh-doc-suggester: rejected History 2 companions"),
 			);
 			assert.ok(
 				Math.abs(
-					Run.State.Learning.Rate("Index", "docs/STYLE.md").Companion -
+					Run.State.Learning.Rate("History", "docs/STYLE.md").Companion -
 						(Neutral - RejectPenalty),
 				) < 1e-9,
 			);
@@ -235,6 +241,7 @@ export const runTest = async (): Promise<number> => {
 			}),
 		);
 		Disabled.Context.workingDirectory = Service(Workspace);
+		Seed(Disabled, "learn-c");
 		await CheckAsync(Count, "L3: disabling a heuristic drops it from the enabled list and the score", async () => {
 			await Post(Disabled, Emit("learn-c"));
 			const Last = Disabled.State.Last;
@@ -243,7 +250,7 @@ export const runTest = async (): Promise<number> => {
 			assert.ok(Math.abs(Last.companions[0].score - 0.55) < 1e-9);
 			assert.ok(
 				Disabled.Lines.includes(
-					"hook-dsh-doc-suggester: decided Index 0.87 2 companions docs/STYLE.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.25,literal=0.00,history=0.15,accept=0.00 store=memory",
+					"hook-dsh-doc-suggester: decided History 0.87 2 companions docs/STYLE.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.25,literal=0.00,history=0.15,accept=0.00 store=memory",
 				),
 			);
 		});
@@ -256,6 +263,7 @@ export const runTest = async (): Promise<number> => {
 			}),
 		);
 		Raised.Context.workingDirectory = Service(Workspace);
+		Seed(Raised, "learn-d");
 		await CheckAsync(Count, "L3: a raised weight raises the score and the ledger carries the table", async () => {
 			await Post(Raised, Emit("learn-d"));
 			const Last = Raised.State.Last;
@@ -263,7 +271,7 @@ export const runTest = async (): Promise<number> => {
 			assert.ok(Math.abs(Last.companions[0].score - 0.825) < 1e-9);
 			assert.ok(
 				Raised.Lines.includes(
-					"hook-dsh-doc-suggester: decided Index 0.87 2 companions docs/STYLE.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.50,literal=0.25,history=0.15,accept=0.00 store=memory",
+					"hook-dsh-doc-suggester: decided History 0.87 2 companions docs/STYLE.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.50,literal=0.25,history=0.15,accept=0.00 store=memory",
 				),
 			);
 		});
@@ -273,6 +281,7 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Workspace);
+		Seed(Run, "learn-e");
 		await CheckAsync(Count, "L4: without a store the memory fallback answers the neutral 1/3", async () => {
 			assert.equal(Run.State.Learning.Store(), "memory");
 			await Post(Run, Emit("learn-e"));
@@ -283,7 +292,7 @@ export const runTest = async (): Promise<number> => {
 		await CheckAsync(Count, "L4: the memory fallback keeps the decision record in its ring", async () => {
 			assert.equal(Run.State.Learning.Recent().length, 1);
 			const Record = Run.State.Learning.Recent()[0];
-			assert.equal(Record.family, "Index");
+			assert.equal(Record.family, "History");
 			assert.deepEqual(
 				Record.companions.map((Companion: any) => Companion.path),
 				["docs/STYLE.md", "docs/REFERENCE.md"],
@@ -306,6 +315,7 @@ export const runTest = async (): Promise<number> => {
 		);
 		Run.Context.pattern = First;
 		Run.Context.workingDirectory = Service(Workspace);
+		Seed(Run, "learn-f");
 		await CheckAsync(Count, "L5: the decision record is stored with the weights and the pending outcome", async () => {
 			await Post(Run, Emit("learn-f"));
 			assert.equal(Run.State.Learning.Store(), "pattern");
@@ -316,7 +326,7 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Stored.length, 1);
 			assert.deepEqual(Stored[0].targets, ["docs/STYLE.md", "docs/REFERENCE.md"]);
 			assert.equal(Stored[0].arbiter, "pending");
-			assert.equal(Stored[0].intent, "Index");
+			assert.equal(Stored[0].intent, "History");
 			assert.equal(
 				Stored[0].transform[0],
 				"weights scope=0.35,graph=0.00,prior=0.40,literal=0.25,history=0.15,accept=0.00",
@@ -371,8 +381,9 @@ export const runTest = async (): Promise<number> => {
 			);
 			Reopen.Context.pattern = Second;
 			Reopen.Context.workingDirectory = Service(Workspace);
+			Seed(Reopen, "learn-g");
 			const Out = await Post(Reopen, Emit("learn-g"));
-			assert.equal(Out.additionalContexts[0].source.summary, "Index 0.87");
+			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
 			assert.equal(Reopen.State.Last.companions[0].path, "docs/REFERENCE.md");
 			assert.equal(Reopen.State.Last.weights.prior, 0.4);
 			assert.ok(

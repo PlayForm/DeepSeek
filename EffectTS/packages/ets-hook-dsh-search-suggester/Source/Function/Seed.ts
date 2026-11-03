@@ -2,12 +2,14 @@
 // knowledge, applied at load with NO LLM and NO session history.
 //
 // The seed source (the only source):
-//   * the BUILT-IN pack's canonical candidates - every target of the ten
-//     search intents whose prior is 1.0 (the "canonical location" tier of
-//     the plan's section 3.6), including a glob target such as the package
-//     families; the illustrative `<...>` placeholders, the rows marked
+//   * an EXPLICIT repo/user pack's canonical candidates - every target of the
+//     pack's `search/` families whose prior is 1.0 (the "canonical location"
+//     tier of the plan's section 3.6), including a glob target such as the
+//     package families; the illustrative `<...>` placeholders, the rows marked
 //     `family: true` and the fallback tiers (prior 0.6/0.3) stay cold, so
-//     the seed never promotes a fallback over a canonical row;
+//     the seed never promotes a fallback over a canonical row. The literal
+//     built-in pack is retired (the candidates come from the session history),
+//     so a repo without an explicit pack seeds nothing;
 //   * the REPO'S OWN INDEX - the graph projection (Function/Projection): a
 //     canonical candidate the graph proves is seeded twice, so a repo the
 //     graph has indexed starts warmer than one it has not.
@@ -30,7 +32,7 @@ import Measure from "./Measure.js";
 export default (
 	/** The loaded (or cold) knowledge, mutated in place. */
 	Knowledge: Knowledge,
-	/** The built-in pack's intents (the seed source). */
+	/** The explicit pack's search intents (the seed source; empty = no seed). */
 	Pack: Intent[],
 	/** The graph projection when one was available at load. */
 	Projection: Projection | undefined,

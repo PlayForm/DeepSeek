@@ -3,6 +3,10 @@
 // ledger line, the family suppression, the path-level candidate drop, the
 // durable reload, the TTL expiry, and the two refusals (unknown family,
 // disabled plugin).
+//
+// THE FAMILY VOCABULARY: the built-in pack is retired, so the note's family is
+// the synthetic `History` row; the refusal cases prove that a former built-in
+// family id is no longer known.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {
@@ -18,14 +22,21 @@ import {
 	MakeCounter,
 	Post,
 	rm,
+	SeedHistory,
 	Setup,
 	Validate,
 } from "../Harness.js";
 
-/** The strong Version emit call: a grep whose pattern and path both match. */
-const StrongVersion = (Id: string): any => ({
-	name: "grep",
-	arguments: { pattern: "1.2.3 version", path: "package.json" },
+/** The judged call's anchor path. */
+const Anchor = "README.md";
+
+/** The two companions touched right after the anchor. */
+const Companions = ["CHANGELOG.md", "SCHEME.md"];
+
+/** One judged read of the anchor. */
+const Read = (Id: string): any => ({
+	name: "read",
+	arguments: { file_path: Anchor },
 	agent: AgentOf(Id),
 });
 
@@ -73,34 +84,35 @@ export const runTest = async (): Promise<number> => {
 	{
 		rm();
 		const Run = Setup();
+		SeedHistory(Run, "a", Anchor, Companions);
 		await CheckAsync(Count, "D2: a family dismissal is recorded and ledgered", async () => {
 			const Before = Math.floor(Date.now() / 1000);
-			const Out = await Run.Tools[0].execute({ intent: "Version" }, {});
+			const Out = await Run.Tools[0].execute({ intent: "History" }, {});
 			const After = Math.floor(Date.now() / 1000);
 			assert.equal(Out.dismissed, true);
-			assert.equal(Out.intent, "Version");
+			assert.equal(Out.intent, "History");
 			assert.equal(Object.hasOwn(Out, "path"), false);
 			assert.ok(Out.until >= Before + 86400 && Out.until <= After + 86400);
-			assert.equal(Out.detail, `dismissed Version until ${Out.until}`);
-			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: dismissed Version *"));
-			assert.match(DurableLine("dismissed Version *"), Durable("dismissed Version *"));
-			assert.equal(LedgerWith("dismissed Version *").length, 1);
+			assert.equal(Out.detail, `dismissed History until ${Out.until}`);
+			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: dismissed History *"));
+			assert.match(DurableLine("dismissed History *"), Durable("dismissed History *"));
+			assert.equal(LedgerWith("dismissed History *").length, 1);
 		});
 		await CheckAsync(Count, "D2: the dismissal lands in the knowledge file", async () => {
 			const Stored = JSON.parse(FileSystem.readFileSync(Knowledge, "utf8"));
 			assert.equal(Stored.dismissals.length, 1);
-			assert.equal(Stored.dismissals[0].intent, "Version");
+			assert.equal(Stored.dismissals[0].intent, "History");
 			assert.equal(Object.hasOwn(Stored.dismissals[0], "path"), false);
 			assert.equal(Stored.stats.dismissed, 1);
-			assert.equal(Stored.seed, true);
+			assert.equal(Stored.seed, false);
 		});
 		await CheckAsync(Count, "D2: the family dismissal suppresses the note", async () => {
-			const Out = await Post(Run, StrongVersion("a"), { kind: "allow", additionalContexts: [] });
+			const Out = await Post(Run, Read("a"), { kind: "allow", additionalContexts: [] });
 			assert.deepEqual(Out.additionalContexts, []);
-			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suppressed dismissed Version"));
+			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suppressed dismissed History"));
 			assert.match(
-				DurableLine("suppressed dismissed Version"),
-				Durable("suppressed dismissed Version"),
+				DurableLine("suppressed dismissed History"),
+				Durable("suppressed dismissed History"),
 			);
 			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
 		});
@@ -110,40 +122,46 @@ export const runTest = async (): Promise<number> => {
 	{
 		rm();
 		const Run = Setup();
+		SeedHistory(Run, "b", Anchor, Companions);
 		await CheckAsync(Count, "D3: a path dismissal is recorded with its path", async () => {
-			const Out = await Run.Tools[0].execute({ intent: "Version", path: "package.json" }, {});
+			const Out = await Run.Tools[0].execute({ intent: "History", path: "CHANGELOG.md" }, {});
 			assert.equal(Out.dismissed, true);
-			assert.equal(Out.path, "package.json");
-			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: dismissed Version package.json"));
+			assert.equal(Out.path, "CHANGELOG.md");
+			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: dismissed History CHANGELOG.md"));
 		});
 		await CheckAsync(Count, "D3: the dismissed path leaves the note, the rest emits", async () => {
-			const Out = await Post(Run, StrongVersion("b"));
+			const Out = await Post(Run, Read("b"));
 			const Text = Out.additionalContexts[0].content[0].text;
-			assert.equal(Text.includes("- package.json - the monorepo manifest"), false);
-			assert.equal(Text.includes("- Site/package.json - the site manifest"), true);
-			assert.equal(Text.startsWith("[search-suggester] intent=Version confidence=0.92\ntargets (7):"), true);
-			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest Version 0.92 7 candidates"));
+			assert.equal(Text.includes("- CHANGELOG.md"), false);
+			assert.equal(Text.includes("- SCHEME.md - touched 1 time(s) after a similar call"), true);
+			assert.equal(
+				Text.startsWith("[search-suggester] intent=History confidence=0.87\ntargets (1):"),
+				true,
+			);
+			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest History 0.87 1 candidates"));
 		});
 	}
 
 	// Group D4: the durable reload and the TTL expiry.
 	{
 		rm();
-		Persist([{ intent: "Version", until: Math.floor(Date.now() / 1000) + 3600 }]);
+		Persist([{ intent: "History", until: Math.floor(Date.now() / 1000) + 3600 }]);
 		const Live = Make(Validate({ logFile: Ledger, enabled: true }));
+		SeedHistory(Live, "a", Anchor, Companions);
 		await CheckAsync(Count, "D4: a live dismissal survives a reload", async () => {
 			assert.equal(Live.State.Knowledge.dismissals.length, 1);
-			const Out = await Post(Live, StrongVersion("a"), { kind: "allow", additionalContexts: [] });
+			const Out = await Post(Live, Read("a"), { kind: "allow", additionalContexts: [] });
 			assert.deepEqual(Out.additionalContexts, []);
-			assert.ok(Live.Lines.includes("hook-dsh-search-suggester: suppressed dismissed Version"));
+			assert.ok(Live.Lines.includes("hook-dsh-search-suggester: suppressed dismissed History"));
 		});
 		rm();
-		Persist([{ intent: "Version", until: 1 }]);
+		Persist([{ intent: "History", until: 1 }]);
 		const Expired = Make(Validate({ logFile: Ledger, enabled: true }));
+		SeedHistory(Expired, "a", Anchor, Companions);
 		await CheckAsync(Count, "D4: an expired dismissal is pruned and the note returns", async () => {
 			assert.equal(Expired.State.Knowledge.dismissals.length, 1);
-			const Out = await Post(Expired, StrongVersion("a"));
-			assert.equal(Out.additionalContexts[0].source.summary, "Version 0.92");
+			const Out = await Post(Expired, Read("a"));
+			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
 			assert.equal(Expired.State.Knowledge.dismissals.length, 0);
 			assert.equal(Expired.Lines.filter((Line: string) => Line.includes("dismissed")).length, 0);
 		});
@@ -158,12 +176,17 @@ export const runTest = async (): Promise<number> => {
 				Run.Tools[0].execute({ intent: "Nope" }, {}),
 				/unknown suggestion family "Nope"/,
 			);
+			// A former built-in family id is no longer known either.
+			await assert.rejects(
+				Run.Tools[0].execute({ intent: "Version" }, {}),
+				/unknown suggestion family "Version"/,
+			);
 			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": dismissed ")).length, 0);
 		});
 		await CheckAsync(Count, "D5: a disabled suggester refuses the tool", async () => {
 			rm();
 			const Off = Make(Validate({ logFile: Ledger, enabled: false }));
-			await assert.rejects(Off.Tools[0].execute({ intent: "Version" }, {}), /disabled \(enabled=false\)/);
+			await assert.rejects(Off.Tools[0].execute({ intent: "History" }, {}), /disabled \(enabled=false\)/);
 		});
 	}
 

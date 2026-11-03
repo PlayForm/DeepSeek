@@ -5,101 +5,61 @@
 
 ## The role
 
-The convention-suggester hook: a DeepSeek Harness plugin that carries the conventions of the
-repository as a pattern pack and names them **before** the model violates them.
+The convention-suggester hook: a DeepSeek Harness plugin that names the companion files of a change
+**before** the model forgets them.
 
-On every `write`/`edit`/`raw-write` call it classifies the target path deterministically and
-prepends ONE labeled `additionalContexts` notice that names the companion targets the convention
-requires:
+The suggestions come from the agent's OWN PREVIOUS TOOL CALLS in this workspace: the hook folds
+every `tool/call` event into the session's history and, on every `write`/`edit`/`raw-write` call,
+names the files that were touched right after this one in the same session.
 
-- **Layout** - the entry stays wiring-only (`name`, `apply`, `Config`, `inject`), with one
-  definition per file and nameless default exports.
-- **Naming** - full-word PascalCase names, one word where possible, and no abbreviations (documented
-  exceptions keep their contract names).
-- **Docs** - a package ships `README.md` + `SCHEME.md`, and the SCHEME config table must match the
-  schema.
-- **Ledger** - the ledger strings are module-owned and byte-stable, and the four identity places
-  (package name, `name` export, State `module:` option, `logFile` default) must agree.
+A repeated co-touch outranks a single one and a near neighbour outranks a far one, so the notice
+carries the workspace's real working set instead of a literal pack:
 
-The arbiter is the smoke suite that asserts the convention
+```text
+[convention-suggester] intent=History confidence=0.70
+targets (2):
+- Source/Library.ts - touched 1 time(s) after this file
+- README.md - touched 1 time(s) after this file
+note: these files were touched right after this one in this workspace
+```
+
+A pack is an **explicit override**, never a fallback: a repository that ships `.dsh/pack.yml` (or a
+user-layer pack at `~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `convention/` intents when
+the session history is empty. The built-in pack is never consulted, so a workspace with no history
+and no pack abstains `abstained no-history  0.00`.
+
+The arbiter is the smoke suite that asserts the behavior
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) §9.4).
 
-The hook is READ-ONLY by design except the opt-in learner: it never edits, never rewrites arguments,
-and never denies.
+The hook is READ-ONLY by design: it never edits, never rewrites arguments, and never denies.
 
-Its surfaces are the notice and, only when learning is on, one PROPOSAL file (never the live pack).
+Its only surface is the labeled `additionalContexts` notice.
 
-The conventions are **pack-driven**: the built-in pack (the default of this monorepo) lives in
-[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `convention/`
-domain.
+## The retired learner
 
-A repository that ships `.dsh/pack.yml` (or a user-layer pack at
-`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `convention/` intents, and a repository
-without a pack stays silent.
-
-## The pack learner (D4)
-
-The hook is also the PACK LEARNER of the family: an **opt-in bootstrap** that derives the pack of a
-repo from the repo itself and writes it as a **proposal**, never as a live pack.
-
-- **Off by default.**
-
-    Flip the config's `learning` to `true` for every workspace, or let a repo opt itself in with a
-    minimal `.dsh/pack.yml`:
-
-    ```yaml
-    learning:
-        propose: true
-    ```
-
-    The config wins when true, and a false config (the default) leaves the decision to the pack.
-
-- **When.**
-
-    The first judged call in a packless workspace per process (the built-in pack, or a pack layer
-    with no families).
-
-    An installed pack is never proposed over.
-
-- **What.**
-
-    The doc graph (`Documentation/INDEX.md`, `ARCHIVE-STYLE.md`, `Plans`, `Guides`, `Skill`,
-    `Handoff`), the package layout (`package.json`, `README.md`, `SCHEME.md`, `cordis.patch.yml`,
-    `Source/{Library.ts,Function,Variable,Interface,Test}`) and the site
-    (`Site/Source/{Content,pages,Component,Library}`) become the families whose companions actually
-    exist.
-
-    The signature is `ARCHIVE-STYLE.md`, else `INDEX.md`, else `package.json`, and the slug is the
-    basename of the repo, lowercased.
-
-- **Where.**
-
-    `<home>/.dsh/playform/proposals/<slug>.yml` - a full pack object that parses back through
-    `@playform/ets-lib-dsh-pack`.
-
-    **Install it** by copying the file to `~/.dsh/playform/workspaces/<slug>.yml` and restarting,
-    because the library resolves packs at boot.
-
-- **The note.**
-
-    One `additionalContexts` notice naming the proposal path, the family count and the install step,
-    with the ledger line `learned proposal <slug> <n> families <path>`.
-
-The refine-from-edits layer (an accepted suggestion moving the weight of a companion) is the later
-D8 lane.
+The literal pack learner (D4) is **retired**: it is no longer called, writes no proposal, and emits
+no `learned proposal` ledger line. The `learning` config field stays only for compatibility until
+the history-driven proposal lands.
 
 ## How it works
 
-1. **The post-execute listener.**
+1. **The history fold.**
+
+    The `session/event` listener folds every `tool/call` event into one `Touch` (the sequence
+    number, the normalized path and the tool) in the session's history, capped at 512 touches.
+
+2. **The post-execute listener.**
 
     The `tools/post-execute` listener (waterfall, plain registration - after the `{prepend: true}`
     listener of ccr) calls `next()` first.
 
-    Then the hook runs detect -> gate -> prepend ONE notice.
+    Then it resolves the pack-independent workspace root (the nearest ancestor carrying `.git` or
+    `package.json`), reads the session history, and runs `Adjacent` → existence filter → gate →
+    prepend ONE notice.
 
     Content is never replaced.
 
-2. **The pre-step listener.**
+3. **The pre-step listener.**
 
     The `agent/pre-step` listener resets the note counter each turn when a user message enters.
 

@@ -149,7 +149,7 @@ export const Furnace: any = new FactoryClass({
 /**
  * The fake ctx: the ROOT object is DISTINCT from the ctx (a registration
  * made on the plugin ctx instead of the root cannot pass a root assertion);
- * ctx.on() captures into CtxListeners (the plugin's two listeners and the
+ * ctx.on() captures into CtxListeners (the plugin's three listeners and the
  * factory's loader/volatile-update listener land there); effect runs its
  * setup immediately; fs records every access and must stay untouched (the
  * doc suggester is a NON-MANIFEST module: zero fs calls).
@@ -315,12 +315,17 @@ if (InvokedDirectly) {
 	});
 	rm();
 	const Run = Setup();
-	Check(Count, "selfcheck: the fake ctx registers the plugin's two listeners", () => {
-		assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update", "tools/post-execute", "agent/pre-step"]);
+	Check(Count, "selfcheck: the fake ctx registers the plugin's three listeners", () => {
+		assert.deepEqual(Object.keys(Run.CtxListeners), [
+			"loader/volatile-update",
+			"session/event",
+			"tools/post-execute",
+			"agent/pre-step",
+		]);
 		assert.deepEqual(Run.RootNames, []);
 		assert.equal(Run.Returned, undefined);
 		assert.equal(Run.Fs.reads + Run.Fs.writes, 0);
-		assert.deepEqual(Run.Lines, [`hook-dsh-doc-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, families 7, threshold 0.75)`]);
+		assert.deepEqual(Run.Lines, [`hook-dsh-doc-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`]);
 	});
 	if (Count.N === 3 && Count.F === 1) {
 		console.log("Harness selfcheck OK");

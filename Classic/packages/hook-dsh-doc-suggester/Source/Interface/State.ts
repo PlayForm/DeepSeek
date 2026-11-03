@@ -28,15 +28,22 @@
 //                    one is present and the bounded memory fallback otherwise;
 //   Last           - the last decision record (Function/Decide) - the D8 audit
 //                    probe the smokes read, never a return value;
-//   Pack           - the embedded convention pack (Function/Pack) - the
-//                    families and their companion sets, never mutated;
+//   Pack           - the doc-domain projection of the built-in pack; EMPTY at
+//                    apply, because the candidates come from the session
+//                    history and only an EXPLICIT repo/user pack is compiled
+//                    (per call, in Function/Apply). The built-in pack is never
+//                    a candidate source;
 //   Rings          - the per-agent ring tracker (Function/Ring);
+//   History        - the per-session touch history (WeakMap keyed on the
+//                    session object, created lazily by the session/event fold
+//                    in Function/Apply);
 //   Factory        - the injected factory service itself (the ledger via
 //                    Factory.Append) - assigned once in Function/Apply.
 //
 // Test probes (the end-phase) read the state through the
 // `ctx.__hookDshDocSuggesterState` attachment (never a return value from
 // `apply` - the loader treats apply returns specially).
+import type { Touch } from "@playform/lib-dsh-pack";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 
@@ -76,10 +83,23 @@ export default interface State extends Shared {
 	Learning: Learning;
 	/** The last decision record (Function/Decide) - the D8 audit probe. */
 	Last: Decision | undefined;
-	/** The embedded convention pack (Function/Pack). */
+	/** The doc-domain projection of the built-in pack; empty at apply. */
 	Pack: Family[];
 	/** The per-agent ring tracker (Function/Ring). */
 	Rings: ReturnType<typeof Ring>;
+	/** The per-session touch history, keyed on the session object. */
+	History: WeakMap<object, SessionHistory>;
 	/** The injected @playform/plugin-dsh-factory service. */
 	Factory: Factory;
+}
+
+// The per-session history: the fold's running sequence number and the touches
+// (the previous tool calls that named a path), oldest first and capped at 512
+// by the session/event fold. The candidates come from these touches, never
+// from a literal pack.
+export interface SessionHistory {
+	/** The next touch's sequence number. */
+	Seq: number;
+	/** The folded touches, oldest first. */
+	Touches: Touch[];
 }

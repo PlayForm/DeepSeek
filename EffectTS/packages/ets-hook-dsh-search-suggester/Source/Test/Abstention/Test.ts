@@ -1,9 +1,14 @@
 // Source/Test/Abstention/Test.ts - the plan's suite 4: the abstention path.
-// The five reasons the plugin can give (no-signal, low-confidence,
-// no-companions, ambiguous-target, foreign-workspace), each with its
-// byte-exact ledger line, the downstream decision returned UNCHANGED, the
+// The six reasons the plugin can give (no-signal, low-confidence,
+// no-companions, ambiguous-target, foreign-workspace, no-history), each with
+// its byte-exact ledger line, the downstream decision returned UNCHANGED, the
 // durable `[ISO]` form, and the standing rule that an abstention is silence:
 // no note, ever.
+//
+// THE SOURCE SPLIT: the four classifier reasons are driven by an EXPLICIT
+// `.dsh/pack.yml` (the pack is an override only), while `foreign-workspace`
+// and `no-history` are the two reasons a workspace with no explicit pack and
+// no session history gives.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -37,7 +42,7 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 /** The optional harness service the probe reads (the real shape: get(session)). */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** A dedicated parent for the fixture trees (the sibling glob's base). */
+/** A dedicated parent for the fixture trees. */
 const Parent = Tree("search-suggester-abstention-");
 const Branch = (Name: string): string => {
 	const Full = Path.join(Parent, Name);
@@ -45,27 +50,12 @@ const Branch = (Name: string): string => {
 	return Full;
 };
 
-/** The EMPTY workspace: the built-in signature only, none of the Owner set. */
-const Empty = Branch("empty");
-Put(Empty, "Documentation/ARCHIVE-STYLE.md");
-const EmptyManifest = Put(Empty, "package.json");
-
-/** The FOREIGN workspace: a manifest, no signature. */
-const Foreign = Branch("foreign");
-const ForeignManifest = Put(Foreign, "package.json");
-
-/** The PACKED workspace: its own pack and one target, which the config excludes. */
-const Packed = Branch("packed");
-Put(
-	Packed,
-	".dsh/pack.yml",
-	`signature:
-  - docs/STYLE.md
-families:
+/** The temp pack: one search/Version family whose gate is the raised 0.9. */
+const Pack = `families:
   "search/Version":
     id: Version
     priority: 1
-    threshold: 0.5
+    threshold: 0.9
     signals:
       - rule: R1 literal-shape
         pattern: '\\bversion\\b'
@@ -75,27 +65,47 @@ families:
         kind: doc
         prior: 1.0
         reason: the temp versions
-`,
-);
-Put(Packed, "docs/STYLE.md");
-const PackedManifest = Put(Packed, "VERSIONS.md");
+`;
 
-/** The silence call: a judged grep with no matching intent. */
-const Unrelated = (Id: string): any => ({
+/** The PACKED workspace: the manifest, the pack and its companion. */
+const Packed = Branch("packed");
+Put(Packed, "package.json", "{}");
+Put(Packed, ".dsh/pack.yml", Pack);
+const PackedRead = Put(Packed, "README.md");
+Put(Packed, "VERSIONS.md");
+
+/** The EMPTY workspace: the pack whose companion does not exist. */
+const Empty = Branch("empty");
+Put(Empty, "package.json", "{}");
+Put(Empty, ".dsh/pack.yml", Pack);
+const EmptyRead = Put(Empty, "README.md");
+
+/** The BARE rooted workspace: a manifest, no pack, no history. */
+const Bare = Branch("bare");
+Put(Bare, "package.json", "{}");
+const BareRead = Put(Bare, "README.md");
+
+/** The FOREIGN workspace: no manifest, no cwd. */
+const Foreign = Branch("foreign");
+const ForeignRead = Put(Foreign, "README.md");
+
+/** One judged grep. */
+const Grep = (Pattern: string, Path_: string, Id: string): any => ({
 	name: "grep",
-	arguments: { pattern: "unrelated query", path: "" },
+	arguments: { pattern: Pattern, path: Path_ },
 	agent: AgentOf(Id),
 });
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
-	// Group A1: no-signal.
+	// Group A1: no-signal (the pack matched nothing).
 	{
 		const Run = Setup();
+		Run.Context.workingDirectory = Service(Packed);
 		await CheckAsync(Count, "A1: an unrelated call abstains no-signal", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(Run, Unrelated("a"), Decision);
+			const Out = await Post(Run, Grep("unrelated query", PackedRead, "a"), Decision);
 			assert.equal(Out, Decision);
 			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained no-signal  0.00"));
 			assert.match(
@@ -105,50 +115,39 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group A2: low-confidence.
+	// Group A2: low-confidence (the pack's own 0.9 gate holds 0.87).
 	{
 		const Run = Setup();
-		await CheckAsync(Count, "A2: a weak call abstains low-confidence", async () => {
+		Run.Context.workingDirectory = Service(Packed);
+		await CheckAsync(Count, "A2: a weak match abstains low-confidence", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(
-				Run,
-				{ name: "grep", arguments: { pattern: "1.2.3", path: "package.json" }, agent: AgentOf("a") },
-				Decision,
-			);
+			const Out = await Post(Run, Grep("version", PackedRead, "a"), Decision);
 			assert.equal(Out, Decision);
-			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained low-confidence Version 0.84"));
+			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained low-confidence Version 0.87"));
 			assert.match(
 				DurableLine("abstained low-confidence"),
-				Durable("abstained low-confidence Version 0.84"),
+				Durable("abstained low-confidence Version 0.87"),
 			);
 		});
 	}
 
-	// Group A3: no-companions (the empty workspace).
+	// Group A3: no-companions (the pack's companion is absent).
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Empty);
-		await CheckAsync(Count, "A3: an emptied intent abstains no-companions", async () => {
+		await CheckAsync(Count, "A3: an emptied family abstains no-companions", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(
-				Run,
-				{
-					name: "grep",
-					arguments: { pattern: "CONTRIBUTING", path: EmptyManifest },
-					agent: AgentOf("a"),
-				},
-				Decision,
-			);
+			const Out = await Post(Run, Grep("version", EmptyRead, "a"), Decision);
 			assert.equal(Out, Decision);
-			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained no-companions Owner 0.66"));
+			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained no-companions Version 0.87"));
 			assert.match(
 				DurableLine("abstained no-companions"),
-				Durable("abstained no-companions Owner 0.66"),
+				Durable("abstained no-companions Version 0.87"),
 			);
 		});
 	}
 
-	// Group A4: ambiguous-target (every candidate excluded).
+	// Group A4: ambiguous-target (every candidate excluded by the config).
 	{
 		rm();
 		const Run = Make(
@@ -157,11 +156,7 @@ export const runTest = async (): Promise<number> => {
 		Run.Context.workingDirectory = Service(Packed);
 		await CheckAsync(Count, "A4: an excluded candidate set abstains ambiguous-target", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(
-				Run,
-				{ name: "grep", arguments: { pattern: "version", path: PackedManifest }, agent: AgentOf("a") },
-				Decision,
-			);
+			const Out = await Post(Run, Grep("version", PackedRead, "a"), Decision);
 			assert.equal(Out, Decision);
 			assert.ok(
 				Run.Lines.includes("hook-dsh-search-suggester: abstained ambiguous-target Version 0.87"),
@@ -173,20 +168,12 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group A5: foreign-workspace.
+	// Group A5: foreign-workspace (no root marker, no session cwd).
 	{
 		const Run = Setup();
 		await CheckAsync(Count, "A5: a foreign workspace abstains foreign-workspace", async () => {
 			const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
-			const Out = await Post(
-				Run,
-				{
-					name: "grep",
-					arguments: { pattern: "1.2.3 version", path: ForeignManifest },
-					agent: AgentOf("a"),
-				},
-				Decision,
-			);
+			const Out = await Post(Run, Grep("version", ForeignRead, "a"), Decision);
 			assert.equal(Out, Decision);
 			assert.deepEqual(Out.additionalContexts, [{ id: "downstream" }]);
 			assert.ok(
@@ -199,16 +186,28 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group A6: the standing rule - an abstention never emits.
+	// Group A6: no-history (a rooted workspace with no pack and no history).
 	{
 		const Run = Setup();
-		await CheckAsync(Count, "A6: the abstention scenarios never emit a note", async () => {
-			await Post(Run, Unrelated("a"));
-			await Post(Run, {
-				name: "grep",
-				arguments: { pattern: "1.2.3", path: "package.json" },
-				agent: AgentOf("b"),
-			});
+		Run.Context.workingDirectory = Service(Bare);
+		await CheckAsync(Count, "A6: a rooted workspace with no history abstains no-history", async () => {
+			const Decision = { kind: "allow", additionalContexts: [] };
+			const Out = await Post(Run, Grep("version", BareRead, "a"), Decision);
+			assert.equal(Out, Decision);
+			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained no-history  0.00"));
+			assert.match(
+				DurableLine("abstained no-history"),
+				Durable("abstained no-history  0.00"),
+			);
+		});
+	}
+
+	// Group A7: the standing rule - an abstention never emits.
+	{
+		const Run = Setup();
+		await CheckAsync(Count, "A7: the abstention scenarios never emit a note", async () => {
+			await Post(Run, Grep("unrelated query", ForeignRead, "a"));
+			await Post(Run, Grep("version", BareRead, "b"));
 			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
 			assert.equal(Run.Warns.length, 0);
 		});

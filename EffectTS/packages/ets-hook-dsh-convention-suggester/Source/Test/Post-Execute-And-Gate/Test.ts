@@ -1,11 +1,11 @@
 // Source/Test/Post-Execute-And-Gate/Test.ts - the listener behavior against
-// the fake ctx: the emit path (the Ledger and Naming notes prepended to the
-// downstream decision's additionalContexts, with the byte-exact note text,
-// summary and `suggest` ledger lines in both forms), the silence path (a
-// non-matching call passes through with no ledger line), the abstention
-// path (an excluded candidate set), the gate paths (cooldown, per-turn cap),
-// the block-decision shape, the per-agent memory isolation, and the
-// agent/pre-step per-turn reset.
+// the fake ctx: the HISTORY emit path (the note built from the session's own
+// previous tool calls, with the byte-exact text, summary and `suggest` ledger
+// lines in both forms), the silence path (a non-judged call and a no-history
+// call, which abstains `no-history`), the abstention path (a fully excluded
+// candidate set), the gate paths (cooldown, per-turn cap), the block-decision
+// shape, the per-agent memory isolation, and the agent/pre-step per-turn
+// reset.
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -24,35 +24,63 @@ import {
 	Validate,
 } from "../Harness.js";
 
-/** The Ledger emit call: a write of the plugin entry function. */
-const LedgerWrite = (Id: string): any => ({
-	name: "write",
-	arguments: { file_path: "Source/Function/Apply.ts" },
-	agent: AgentOf(Id),
-});
+/** The anchor the history is keyed on: the judged call's own path. */
+const Anchor = "Source/Function/Apply.ts";
 
-/** The Naming emit call: a write of a TypeScript source leaf. */
-const NamingWrite = (Id: string): any => ({
+/** The two companions the history names, in the fold's score order. */
+const Companions = ["Source/Library.ts", "README.md"];
+
+/** The history note's byte-exact text (k = 0.60 + 0.05 * 2). */
+const HistoryText = [
+	"[convention-suggester] intent=History confidence=0.70",
+	"targets (2):",
+	"- Source/Library.ts - touched 1 time(s) after this file",
+	"- README.md - touched 1 time(s) after this file",
+	"note: these files were touched right after this one in this workspace",
+].join("\n");
+
+/** The byte-exact suggest line the history path appends. */
+const Suggest = "suggest History 0.70 2 candidates call write";
+
+/**
+ * Seed one agent's session history directly through the state probe: the
+ * anchor, then the two companions, exactly as the session/event fold would.
+ */
+const Seed = (Run: any, Id: string): void => {
+	Run.State.History.set(AgentOf(Id), {
+		Seq: 3,
+		Touches: [Anchor, ...Companions].map((Path: string, Seq: number) => ({
+			seq: Seq,
+			path: Path,
+			tool: "write",
+		})),
+	});
+};
+
+/** A judged write call on the anchor path. */
+const Write = (Id: string): any => ({
 	name: "write",
-	arguments: { file_path: "Source/Foo.ts" },
+	arguments: { file_path: Anchor },
 	agent: AgentOf(Id),
 });
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
-	// Group E1: the emit path.
+	// Group E1: the history emit path.
 	{
 		const Run = Setup();
-		await CheckAsync(Count, "E1: the Ledger note is prepended to the decision's additionalContexts", async () => {
+		Seed(Run, "a");
+		Seed(Run, "b");
+		await CheckAsync(Count, "E1: the History note is prepended to the decision's additionalContexts", async () => {
 			const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
-			const Out = await Post(Run, LedgerWrite("a"), Decision);
+			const Out = await Post(Run, Write("a"), Decision);
 			assert.notEqual(Out, Decision);
 			assert.equal(Out.kind, "allow");
 			assert.deepEqual(Out.additionalContexts[0].source, {
 				kind: "convention-suggester",
 				form: "notice",
-				summary: "Ledger 0.87",
+				summary: "History 0.70",
 			});
 			assert.equal(Out.additionalContexts[0].role, "user");
 			assert.equal(typeof Out.additionalContexts[0].id, "string");
@@ -60,29 +88,22 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Object.isFrozen(Out.additionalContexts[0]), true);
 		});
 		await CheckAsync(Count, "E1: the note text is byte-exact", async () => {
-			const Out = await Post(Run, NamingWrite("a"), { kind: "allow", additionalContexts: [] });
-			assert.equal(
-				Out.additionalContexts[0].content[0].text,
-				"[convention-suggester] intent=Naming confidence=0.80\ntargets (3):\n- Source/Function/*.ts - PascalCase, one word, action-oriented, present tense, singular\n- Source/Interface/*.ts - the type shapes, PascalCase full words (Config/State/Factory exempt)\n- Source/Variable/*.ts - the built-once constants (Config schema, defaults, packs)\nnote: full-word PascalCase names; no abbreviations; genuine acronyms stay.",
-			);
+			const Out = await Post(Run, Write("b"), { kind: "allow", additionalContexts: [] });
+			assert.equal(Out.additionalContexts[0].content[0].text, HistoryText);
 		});
-		await CheckAsync(Count, "E1: the suggest ledger lines are byte-exact in both forms", async () => {
-			assert.ok(Run.Lines.includes("convention-suggester: suggest Ledger 0.87 4 candidates call write"));
-			assert.match(
-				DurableLine("suggest Ledger 0.87 4 candidates call write"),
-				Durable("suggest Ledger 0.87 4 candidates call write"),
-			);
-			assert.equal(LedgerWith("suggest Ledger 0.87 4 candidates call write").length, 1);
-			assert.ok(Run.Lines.includes("convention-suggester: suggest Naming 0.80 3 candidates call write"));
+		await CheckAsync(Count, "E1: the suggest ledger line is byte-exact in both forms", async () => {
+			assert.ok(Run.Lines.includes(`convention-suggester: ${Suggest}`));
+			assert.match(DurableLine(Suggest), Durable(Suggest));
+			assert.equal(LedgerWith(Suggest).length, 2);
 		});
-		await CheckAsync(Count, "E1: the per-agent memory recorded the emits", async () => {
+		await CheckAsync(Count, "E1: the per-agent memory recorded the emit", async () => {
 			const Memory = Run.State.Agents.get(AgentOf("a"));
-			assert.equal(Memory.Calls, 2);
-			assert.equal(Memory.TurnNotes, 2);
-			assert.deepEqual([...Memory.Noted.keys()], ["Ledger", "Naming"]);
-			assert.equal(Memory.Noted.get("Ledger"), 1);
-			assert.equal(Memory.Ring.length, 2);
-			assert.ok(Memory.Ring[0].includes("Source/Foo.ts"));
+			assert.equal(Memory.Calls, 1);
+			assert.equal(Memory.TurnNotes, 1);
+			assert.deepEqual([...Memory.Noted.keys()], ["History"]);
+			assert.equal(Memory.Noted.get("History"), 1);
+			assert.equal(Memory.Ring.length, 1);
+			assert.ok(Memory.Ring[0].includes(Anchor));
 		});
 	}
 
@@ -91,21 +112,28 @@ export const runTest = async (): Promise<number> => {
 		const Run = Setup();
 		await CheckAsync(Count, "E2: a non-judged tool returns the decision unchanged with no ledger line", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(Run, { name: "bash", arguments: { command: "ls" }, agent: AgentOf("a") }, Decision);
+			const Out = await Post(Run, { name: "bash", arguments: { command: "ls" }, agent: AgentOf("c") }, Decision);
 			assert.equal(Out, Decision);
-			assert.deepEqual(Run.Lines, [`convention-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 4, threshold 0.75)`]);
+			assert.deepEqual(Run.Lines, [`convention-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`]);
 		});
-		await CheckAsync(Count, "E2: a judged call with no matching intent stays silent (no ledger line)", async () => {
+		await CheckAsync(Count, "E2: a judged call with no history and no pack abstains no-history", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(Run, { name: "write", arguments: { file_path: "random/path/file.txt" }, agent: AgentOf("a") }, Decision);
+			const Out = await Post(Run, Write("c"), Decision);
 			assert.equal(Out, Decision);
-			assert.deepEqual(Run.Lines, [`convention-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 4, threshold 0.75)`]);
+			assert.deepEqual(Out.additionalContexts, []);
+			assert.ok(Run.Lines.includes("convention-suggester: abstained no-history  0.00"));
+			assert.match(
+				DurableLine("abstained no-history"),
+				Durable("abstained no-history  0.00"),
+			);
+			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
 		});
 		await CheckAsync(Count, "E2: next() is awaited before any judgment", async () => {
+			Seed(Run, "d");
 			let NextCalled = false;
 			const Downstream = { kind: "allow", additionalContexts: [] };
 			const Out = await Run.CtxListeners["tools/post-execute"](
-				{ name: "write", arguments: { file_path: "Source/Function/Apply.ts" }, agent: AgentOf("z") },
+				Write("d"),
 				{},
 				async () => {
 					NextCalled = true;
@@ -120,14 +148,15 @@ export const runTest = async (): Promise<number> => {
 	// Group E3: the abstention path.
 	{
 		rm();
-		const Excluded = Make(Validate({ logFile: Ledger, enabled: true, exclude: ["README.md", "SCHEME.md", "cordis.patch.yml"] }));
+		const Excluded = Make(Validate({ logFile: Ledger, enabled: true, exclude: Companions }));
+		Seed(Excluded, "e");
 		await CheckAsync(Count, "E3: a fully excluded candidate set abstains ambiguous", async () => {
-			const Out = await Post(Excluded, { name: "write", arguments: { file_path: "Classic/packages/x/README.md" }, agent: AgentOf("a") }, { kind: "allow", additionalContexts: [] });
+			const Out = await Post(Excluded, Write("e"), { kind: "allow", additionalContexts: [] });
 			assert.deepEqual(Out.additionalContexts, []);
-			assert.ok(Excluded.Lines.includes("convention-suggester: abstained ambiguous Docs 0.80"));
+			assert.ok(Excluded.Lines.includes("convention-suggester: abstained ambiguous History 0.70"));
 			assert.match(
-				DurableLine("abstained ambiguous Docs 0.80"),
-				Durable("abstained ambiguous Docs 0.80"),
+				DurableLine("abstained ambiguous History 0.70"),
+				Durable("abstained ambiguous History 0.70"),
 			);
 		});
 	}
@@ -135,62 +164,66 @@ export const runTest = async (): Promise<number> => {
 	// Group E4: the gate paths.
 	{
 		const Run = Setup();
-		await CheckAsync(Count, "E4: the default cooldown suppresses an immediate same-intent repeat", async () => {
-			await Post(Run, LedgerWrite("a"));
-			const Out = await Post(Run, LedgerWrite("a"));
+		Seed(Run, "f");
+		await CheckAsync(Count, "E4: the default cooldown suppresses an immediate History repeat", async () => {
+			await Post(Run, Write("f"));
+			const Out = await Post(Run, Write("f"));
 			assert.deepEqual(Out.additionalContexts, []);
-			assert.ok(Run.Lines.includes("convention-suggester: suppressed cooldown Ledger"));
+			assert.ok(Run.Lines.includes("convention-suggester: suppressed cooldown History"));
 			assert.match(
-				DurableLine("suppressed cooldown Ledger"),
-				Durable("suppressed cooldown Ledger"),
+				DurableLine("suppressed cooldown History"),
+				Durable("suppressed cooldown History"),
 			);
 		});
 		rm();
-		const Capped = Make(Validate({ logFile: Ledger, enabled: true, maxNotesPerTurn: 1 }));
-		await CheckAsync(Count, "E4: the per-turn cap suppresses the second intent", async () => {
-			await Post(Capped, LedgerWrite("a"));
-			const Out = await Post(Capped, NamingWrite("a"));
+		const Capped = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0, maxNotesPerTurn: 1 }));
+		Seed(Capped, "g");
+		await CheckAsync(Count, "E4: the per-turn cap suppresses the second History note", async () => {
+			await Post(Capped, Write("g"));
+			const Out = await Post(Capped, Write("g"));
 			assert.deepEqual(Out.additionalContexts, []);
-			assert.ok(Capped.Lines.includes("convention-suggester: suppressed cap Naming"));
+			assert.ok(Capped.Lines.includes("convention-suggester: suppressed cap History"));
 		});
 		await CheckAsync(Count, "E4: the agent/pre-step reset releases the cap", async () => {
-			await Pre(Capped, { agent: AgentOf("a"), messages: [{ role: "user" }] });
-			const Out = await Post(Capped, NamingWrite("a"));
-			assert.equal(Out.additionalContexts[0].source.summary, "Naming 0.80");
-			assert.ok(Capped.Lines.includes("convention-suggester: suggest Naming 0.80 3 candidates call write"));
+			await Pre(Capped, { agent: AgentOf("g"), messages: [{ role: "user" }] });
+			const Out = await Post(Capped, Write("g"));
+			assert.equal(Out.additionalContexts[0].source.summary, "History 0.70");
+			assert.ok(Capped.Lines.includes(`convention-suggester: ${Suggest}`));
 		});
 		await CheckAsync(Count, "E4: a pre-step whose last message is not a user message does not reset", async () => {
-			await Pre(Capped, { agent: AgentOf("a"), messages: [{ role: "assistant" }] });
-			const Out = await Post(Capped, LedgerWrite("a"));
+			await Pre(Capped, { agent: AgentOf("g"), messages: [{ role: "assistant" }] });
+			const Out = await Post(Capped, Write("g"));
 			assert.deepEqual(Out.additionalContexts, []);
-			assert.ok(Capped.Lines.includes("convention-suggester: suppressed cooldown Ledger"));
+			assert.ok(Capped.Lines.includes("convention-suggester: suppressed cap History"));
 		});
 	}
 
 	// Group E5: the block decision and the per-agent isolation.
 	{
 		const Run = Setup();
+		Seed(Run, "h");
+		Seed(Run, "i");
 		await CheckAsync(Count, "E5: a block decision keeps kind and feedback and gains the note", async () => {
-			const Out = await Post(Run, LedgerWrite("b"), { kind: "block", feedback: "no", additionalContexts: [] });
+			const Out = await Post(Run, Write("h"), { kind: "block", feedback: "no", additionalContexts: [] });
 			assert.equal(Out.kind, "block");
 			assert.equal(Out.feedback, "no");
-			assert.equal(Out.additionalContexts[0].source.summary, "Ledger 0.87");
+			assert.equal(Out.additionalContexts[0].source.summary, "History 0.70");
 		});
 		await CheckAsync(Count, "E5: another agent's memory is independent", async () => {
-			const Out = await Post(Run, LedgerWrite("a"));
-			assert.equal(Out.additionalContexts[0].source.summary, "Ledger 0.87");
+			const Out = await Post(Run, Write("i"));
+			assert.equal(Out.additionalContexts[0].source.summary, "History 0.70");
 		});
 		await CheckAsync(Count, "E5: the ring buffer caps at eight probes", async () => {
 			for (let Index = 0; Index < 9; Index++) {
-				await Post(Run, { name: "write", arguments: { file_path: `random/path/file${Index}.txt` }, agent: AgentOf("c") });
+				await Post(Run, { name: "write", arguments: { file_path: `random/path/file${Index}.txt` }, agent: AgentOf("j") });
 			}
-			const Memory = Run.State.Agents.get(AgentOf("c"));
+			const Memory = Run.State.Agents.get(AgentOf("j"));
 			assert.equal(Memory.Ring.length, 8);
 			assert.equal(Memory.Calls, 9);
 			assert.ok(Memory.Ring[0].includes("file8.txt"));
 		});
 		await CheckAsync(Count, "E5: the reset listener is fail-open and returns the downstream decision", async () => {
-			const Out = await Pre(Run, { agent: AgentOf("a"), messages: [{ role: "user" }] });
+			const Out = await Pre(Run, { agent: AgentOf("h"), messages: [{ role: "user" }] });
 			assert.equal(Out, "down");
 			assert.deepEqual(Run.Warns, []);
 		});

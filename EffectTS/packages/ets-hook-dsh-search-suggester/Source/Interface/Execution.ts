@@ -13,7 +13,14 @@
 //               the evidence weight each match contributes;
 //   targets   - the ordered candidate set: a path or glob, a prior, a digest
 //               hint, and the one reason phrase the model reads;
-//   familyGlobs - the long-tail families appended as one aggregate row.
+//   familyGlobs - the long-tail families appended as one aggregate row;
+//   note      - the pack row's one-phrase caveat (absent when the domain has
+//               none; the search note keeps its standing caution instead).
+//
+// THE SYNTHETIC History ROW the post-execute listener builds from the
+// session's own tool calls is a FULL row of the same shape (the pack
+// library's `Family`), so the existing Detect/Filter/Score pipeline judges it
+// exactly like a resolved pack's family.
 export interface Signal {
 	/** The rule id (plan R1-R13) this row implements. */
 	rule: string;
@@ -53,6 +60,8 @@ export interface Intent {
 	targets: Target[];
 	/** The long-tail family globs. */
 	familyGlobs: string[];
+	/** The pack row's one-phrase caveat (the pack library's row carries it; the search note prints its own standing caution). */
+	note?: string;
 }
 
 /** One judged call, reduced to what the classifier reads. */

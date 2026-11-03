@@ -1,7 +1,8 @@
 // Source/Test/Loader-And-Activation/Test.ts - the loader contract, the cold
-// disabled mount, the enabled activation proof (byte-exact), the apply-time
-// wiring, the pass-through discipline, the pack filter, the schema
-// fail-loud, and the mount purity.
+// disabled mount, the enabled activation proof (byte-exact, the `history`
+// segment), the apply-time wiring, the session/event fold, the pass-through
+// discipline, the retired boot projection, the schema fail-loud, and the
+// mount purity.
 import assert from "node:assert/strict";
 import {
 	Check,
@@ -46,7 +47,8 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(LedgerWith("disabled (enabled=false)").length, 1);
 			assert.ok(LedgerLines()[0]?.endsWith("] disabled (enabled=false)"));
 		});
-		Check(Count, "L2: a disabled mount still wires both listeners on the plugin ctx", () => {
+		Check(Count, "L2: a disabled mount still wires every listener on the plugin ctx", () => {
+			assert.ok(Run.CtxListeners["session/event"] instanceof Function);
 			assert.ok(Run.CtxListeners["tools/post-execute"] instanceof Function);
 			assert.ok(Run.CtxListeners["agent/pre-step"] instanceof Function);
 		});
@@ -56,20 +58,21 @@ export const runTest = async (): Promise<number> => {
 	{
 		rm();
 		const Run = Make(Validate({ logFile: Ledger, enabled: true }));
-		Check(Count, "L3: the activation line is byte-exact", () => {
+		Check(Count, "L3: the activation line is byte-exact (the history segment)", () => {
 			assert.ok(
-				Run.Lines.includes(`test-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 2, threshold 0.75)`),
+				Run.Lines.includes(`test-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`),
 			);
 		});
 		Check(Count, "L3: the activation line is in the durable ledger exactly once", () => {
 			assert.equal(
-				LedgerWith(`activated (bundle ${process.env.VERSION_PACKAGE}, intents 2, threshold 0.75)`).length,
+				LedgerWith(`activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`).length,
 				1,
 			);
 		});
 		Check(Count, "L3: the listeners register on the plugin ctx in order", () => {
 			assert.deepEqual(Object.keys(Run.CtxListeners), [
 				"loader/volatile-update",
+				"session/event",
 				"tools/post-execute",
 				"agent/pre-step",
 			]);
@@ -77,9 +80,29 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "L3: the root is a distinct context object", () => {
 			assert.notEqual(Run.Root, Run.Context);
 		});
+		Check(Count, "L3: the session/event fold records one touch per tool/call and skips the rest", () => {
+			const Session = { id: "fold-session" };
+			Run.CtxListeners["session/event"](Session, {
+				type: "tool/call",
+				name: "read",
+				arguments: { file_path: "./Source/Test/Foo/Test.ts" },
+			});
+			Run.CtxListeners["session/event"](Session, { type: "message" });
+			Run.CtxListeners["session/event"](Session, {
+				type: "tool/call",
+				name: "grep",
+				arguments: '{"path":"README.md"}',
+			});
+			const History = Run.State.History.get(Session);
+			assert.equal(History.Seq, 2);
+			assert.deepEqual(History.Touches, [
+				{ seq: 0, path: "Source/Test/Foo/Test.ts", tool: "read" },
+				{ seq: 1, path: "README.md", tool: "grep" },
+			]);
+		});
 	}
 
-	// Group L4: the pass-through discipline and the pack filter.
+	// Group L4: the pass-through discipline and the retired boot projection.
 	{
 		const Run = Make(Validate({ logFile: Ledger, enabled: true }));
 		const Decision = { kind: "allow" };
@@ -92,13 +115,10 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Result, Decision);
 			assert.deepEqual(Run.Lines.filter((L: string) => L.includes("candidates call")), []);
 		});
-		Check(Count, "L4: an intents filter removes the pack intent from the compiled rules", () => {
-			const Filtered = Make(Validate({ logFile: Ledger, enabled: true, intents: ["Counts"] }));
-			assert.equal(Filtered.State.Rules.length, 1);
-			assert.equal(Filtered.State.Rules[0].id, "Counts");
-			assert.ok(
-				Filtered.Lines.includes(`test-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 1, threshold 0.75)`),
-			);
+		Check(Count, "L4: the boot projection is retired (no built-in pack at apply)", () => {
+			assert.equal(Run.State.Rules.length, 0);
+			assert.equal(Run.State.Intents.length, 0);
+			assert.ok(Run.State.History instanceof WeakMap);
 		});
 	}
 
@@ -124,7 +144,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		Check(Count, "L6: the state probe carries the factory's module identity", () => {
 			assert.equal(Run.State.Module, "test-suggester");
-			assert.equal(Run.State.Rules.length, 2);
+			assert.equal(Run.State.Rules.length, 0);
 			assert.equal(Run.State.Threshold, 0.75);
 		});
 	}

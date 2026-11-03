@@ -1,12 +1,9 @@
-// Source/Test/Workspace-Gate/Test.ts - the workspace gate and the existence
-// filter against the fake ctx and REAL temp workspaces: (a) a FOREIGN
-// workspace (a temp tree with the pack's triggering path but no
-// Documentation/ARCHIVE-STYLE.md) produces NO note and the
-// `abstained foreign-workspace` ledger line; (b) OUR workspace (a temp tree
-// WITH the signature, a package Source leaf and README.md, WITHOUT SCHEME.md
-// and cordis.patch.yml) emits a note naming ONLY the companion that exists;
-// (c) an intent whose whole target set is absent abstains `no-companions`;
-// (d) a foreign call never poisons the next in-workspace call.
+// Source/Test/Workspace-Gate/Test.ts - the workspace gate against the fake
+// ctx and REAL temp trees: (a) a call path with NO `.git`/`package.json` root
+// and no session cwd abstains `foreign-workspace`; (b) a call inside a temp
+// root that carries `.git` emits the HISTORY note naming the companions the
+// session touched right after the anchor, and the same root with no history
+// abstains `no-history`.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -43,29 +40,51 @@ const Write = (Path_: string, Id: string): any => ({
 	agent: AgentOf(Id),
 });
 
-/** The FOREIGN workspace: a Ledger-shaped path, no signature file. */
+/** The history note's byte-exact text (k = 0.60 + 0.05 * 2). */
+const HistoryText = [
+	"[convention-suggester] intent=History confidence=0.70",
+	"targets (2):",
+	"- Source/Library.ts - touched 1 time(s) after this file",
+	"- README.md - touched 1 time(s) after this file",
+	"note: these files were touched right after this one in this workspace",
+].join("\n");
+
+/**
+ * Seed one agent's session history through the state probe: the absolute
+ * anchor the call names, then the two relative companions.
+ */
+const Seed = (Run: any, Id: string, Anchor: string): void => {
+	Run.State.History.set(AgentOf(Id), {
+		Seq: 3,
+		Touches: [Anchor, "Source/Library.ts", "README.md"].map((Path_: string, Seq: number) => ({
+			seq: Seq,
+			path: Path_,
+			tool: "write",
+		})),
+	});
+};
+
+/** The FOREIGN tree: no `.git`, no `package.json`, and no session cwd. */
 const Foreign = Tree("convention-suggester-foreign-");
 const ForeignApply = Put(Foreign, "Source/Function/Apply.ts");
 
-/** OUR workspace: the signature, a package Source leaf and README.md. */
-const Ours = Tree("convention-suggester-ours-");
-Put(Ours, "Documentation/ARCHIVE-STYLE.md");
-const OursSource = Put(Ours, "Classic/packages/x/Source/Library.ts");
-Put(Ours, "README.md");
-
-/** The EMPTY workspace: the signature and one TypeScript leaf, no targets. */
-const Empty = Tree("convention-suggester-empty-");
-Put(Empty, "Documentation/ARCHIVE-STYLE.md");
-const EmptySource = Put(Empty, "Foo.ts");
+/** The ROOTED tree: a `.git` marker, the anchor and the two companions. */
+const Rooted = Tree("convention-suggester-rooted-");
+FileSystem.mkdirSync(Path.join(Rooted, ".git"));
+const RootedAnchor = Put(Rooted, "Source/Function/Apply.ts");
+Put(Rooted, "Source/Library.ts");
+Put(Rooted, "README.md");
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
-	// Group G1: the foreign workspace, cwd through the service.
+	// Group G1: no workspace root, no session cwd.
 	{
 		const Run = Setup();
-		Run.Context.workingDirectory = Service(Foreign);
-		await CheckAsync(Count, "G1: a foreign workspace produces NO note and the foreign-workspace line", async () => {
+		// The bare mount: without the service the absolute foreign path has
+		// no `.git`/`package.json` ancestor and no cwd fallback.
+		delete Run.Context.workingDirectory;
+		await CheckAsync(Count, "G1: a call with no .git/package.json root abstains foreign-workspace", async () => {
 			const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
 			const Out = await Post(Run, Write(ForeignApply, "a"), Decision);
 			assert.equal(Out, Decision);
@@ -96,78 +115,40 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group G2: the foreign workspace with NO service at all (the bare mount).
+	// Group G2: the history note inside a rooted temp tree.
 	{
 		const Run = Setup();
-		// The shared harness supplies a package cwd for the judged fixtures;
-		// this group proves the bare-mount fallback, so drop it.
-		delete Run.Context.workingDirectory;
-		await CheckAsync(Count, "G2: without the service the absolute foreign path still abstains", async () => {
-			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(Run, Write(ForeignApply, "a"), Decision);
-			assert.equal(Out, Decision);
-			assert.ok(Run.Lines.includes("convention-suggester: abstained foreign-workspace  0.00"));
-			assert.deepEqual(Run.Warns, []);
-		});
-	}
-
-	// Group G3: OUR workspace - the existence filter keeps only real targets.
-	{
-		const Run = Setup();
-		Run.Context.workingDirectory = Service(Ours);
-		await CheckAsync(Count, "G3: the note names only the companion that exists", async () => {
-			const Out = await Post(Run, Write(OursSource, "a"));
+		Run.Context.workingDirectory = Service(Rooted);
+		Seed(Run, "b", RootedAnchor);
+		await CheckAsync(Count, "G2: the History note names the companions of the temp root", async () => {
+			const Out = await Post(Run, Write(RootedAnchor, "b"));
 			assert.equal(Out.additionalContexts.length, 1);
 			assert.deepEqual(Out.additionalContexts[0].source, {
 				kind: "convention-suggester",
 				form: "notice",
-				summary: "Docs 0.95",
+				summary: "History 0.70",
 			});
-			const Text = Out.additionalContexts[0].content[0].text;
-			assert.equal(
-				Text,
-				"[convention-suggester] intent=Docs confidence=0.95\ntargets (1):\n- README.md - the package must ship its README\nnote: a package ships README + SCHEME; the config table must match the schema.",
-			);
-			assert.equal(Text.includes("SCHEME.md"), false);
-			assert.equal(Text.includes("cordis.patch.yml"), false);
+			assert.equal(Out.additionalContexts[0].content[0].text, HistoryText);
 		});
-		await CheckAsync(Count, "G3: the suggest line counts only the existing companion", async () => {
+		await CheckAsync(Count, "G2: the suggest line counts the two candidates", async () => {
 			assert.ok(
-				Run.Lines.includes("convention-suggester: suggest Docs 0.95 1 candidates call write"),
+				Run.Lines.includes("convention-suggester: suggest History 0.70 2 candidates call write"),
 			);
 			assert.match(
-				DurableLine("suggest Docs 0.95 1 candidates call write"),
-				Durable("suggest Docs 0.95 1 candidates call write"),
+				DurableLine("suggest History 0.70 2 candidates call write"),
+				Durable("suggest History 0.70 2 candidates call write"),
 			);
 		});
-	}
-
-	// Group G4: an intent whose whole target set is absent.
-	{
-		const Run = Setup();
-		Run.Context.workingDirectory = Service(Empty);
-		await CheckAsync(Count, "G4: an emptied intent abstains no-companions with the intent and kappa", async () => {
+		await CheckAsync(Count, "G2: the rooted workspace with no history abstains no-history", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(Run, Write(EmptySource, "a"), Decision);
+			const Out = await Post(Run, Write(RootedAnchor, "c"), Decision);
 			assert.equal(Out, Decision);
-			assert.ok(Run.Lines.includes("convention-suggester: abstained no-companions Naming 0.80"));
+			assert.deepEqual(Out.additionalContexts, []);
+			assert.ok(Run.Lines.includes("convention-suggester: abstained no-history  0.00"));
 			assert.match(
-				DurableLine("abstained no-companions"),
-				Durable("abstained no-companions Naming 0.80"),
+				DurableLine("abstained no-history"),
+				Durable("abstained no-history  0.00"),
 			);
-			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
-		});
-	}
-
-	// Group G5: the foreign abstention does not poison the next in-workspace call.
-	{
-		const Run = Setup();
-		Run.Context.workingDirectory = Service(Foreign);
-		await CheckAsync(Count, "G5: a foreign call never poisons the next in-workspace call", async () => {
-			await Post(Run, Write(ForeignApply, "a"));
-			Run.Context.workingDirectory = Service(Ours);
-			const Out = await Post(Run, Write(OursSource, "a"));
-			assert.equal(Out.additionalContexts[0].source.summary, "Docs 0.95");
 		});
 	}
 

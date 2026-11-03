@@ -11,23 +11,24 @@
 // catches this).
 //
 // @playform/hook-dsh-convention-suggester - the convention-suggester hook.
-// The repo's conventions (the naming, the layout, the docs, the ledger
-// strings) become patterns, and the suggester names them BEFORE the model
-// violates them: on every write/edit call it classifies the target path
-// deterministically and prepends ONE labeled additionalContexts notice
-// naming the companion targets the convention requires - the entry stays
-// wiring-only, one definition per file with nameless default exports, a
-// package ships README + SCHEME, the ledger strings are module-owned and
+// The candidates come from the agent's OWN PREVIOUS TOOL CALLS in this
+// workspace: the hook folds every `tool/call` event into the session's touch
+// history, and on every write/edit call it names the files that were touched
+// right after this one, so the model keeps the workspace's real working set
+// in view. An explicit repo/user pack (`.dsh/pack.yml` or the user layer) is
+// the override when the history is empty; the literal built-in pack is never
+// a candidate source. The entry stays wiring-only, one definition per file
+// with nameless default exports, the ledger strings are module-owned and
 // byte-stable with the four identity places agreeing. The arbiter is the
-// smoke suite that asserts the convention. Deterministic classifier (no LLM
-// in the hot path), high threshold, a cooldown, a per-turn cap, and an
-// abstention path (SEARCH-SUGGESTER-PLUGIN.md sections 3.4, 4, 8, 9.4 - the
-// convention consumer of the suggester family).
+// smoke suite that asserts the behavior. Deterministic fold (no LLM in the
+// hot path), a cooldown, a per-turn cap, and two abstention paths
+// (SEARCH-SUGGESTER-PLUGIN.md sections 3.4, 4, 8, 9.4 - the convention
+// consumer of the suggester family).
 //
-// READ-ONLY by design EXCEPT the opt-in learner (D4): the hook never edits,
-// never rewrites arguments, and never denies - its surfaces are the
-// additionalContexts notice and, only when `learning` is on, ONE proposal
-// file under `<home>/.dsh/playform/proposals/` (never the live pack).
+// READ-ONLY by design: the hook never edits, never rewrites arguments, and
+// never denies - its only surface is the additionalContexts notice. The
+// literal pack learner (D4) is retired; the config's `learning` field is kept
+// for compatibility until the history-driven proposal lands.
 //
 // FULLY CONTRACT-AWARE: every listener awaits next() FIRST and is fail-open
 // (never throws into a waterfall). The hook is a NON-MANIFEST module (no

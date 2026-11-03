@@ -17,6 +17,9 @@ const Put = (Root, Relative, Body = "x") => {
   FileSystem.writeFileSync(Full, Body, "utf8");
   return Full;
 };
+const Git = (Root) => {
+  FileSystem.mkdirSync(Path.join(Root, ".git"), { recursive: true });
+};
 const Pack = `signature:
   - docs/STYLE.md
 families:
@@ -37,22 +40,26 @@ families:
 `;
 const Service = (Cwd) => ({ get: () => Cwd });
 const Packed = Tree("convention-suggester-packed-");
+Git(Packed);
 Put(Packed, ".dsh/pack.yml", Pack);
 Put(Packed, "docs/STYLE.md");
 Put(Packed, "GUIDE.md");
 const Bare = Tree("convention-suggester-bare-");
+Git(Bare);
 Put(Bare, "GUIDE.md");
 const Unsigned = Tree("convention-suggester-unsigned-");
+Git(Unsigned);
 Put(Unsigned, ".dsh/pack.yml", Pack);
 const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Setup();
     Run.Context.workingDirectory = Service(Packed);
+    const Call = Path.join(Packed, "Source/Function/Apply.ts");
     await CheckAsync(Count, "P1: the temp pack's intent drives the note", async () => {
       const Out = await Post(Run, {
         name: "write",
-        arguments: { file_path: "Source/Function/Apply.ts" },
+        arguments: { file_path: Call },
         agent: AgentOf("pack-a")
       });
       assert.equal(Out.additionalContexts.length, 1);
@@ -79,20 +86,20 @@ const runTest = async () => {
   {
     const Run = Setup();
     Run.Context.workingDirectory = Service(Bare);
-    await CheckAsync(Count, "P2: the same workspace without the pack stays silent", async () => {
+    await CheckAsync(Count, "P2: the same workspace without the pack abstains no-history", async () => {
       const Decision = { kind: "allow", additionalContexts: [] };
       const Out = await Post(
         Run,
         {
           name: "write",
-          arguments: { file_path: "Source/Function/Apply.ts" },
+          arguments: { file_path: Path.join(Bare, "Source/Function/Apply.ts") },
           agent: AgentOf("pack-b")
         },
         Decision
       );
       assert.equal(Out, Decision);
       assert.ok(
-        Run.Lines.includes("convention-suggester: abstained foreign-workspace  0.00")
+        Run.Lines.includes("convention-suggester: abstained no-history  0.00")
       );
       assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 0);
     });
@@ -100,13 +107,13 @@ const runTest = async () => {
   {
     const Run = Setup();
     Run.Context.workingDirectory = Service(Unsigned);
-    await CheckAsync(Count, "P3: a pack whose signature marker is absent stays silent", async () => {
+    await CheckAsync(Count, "P3: a pack whose signature marker is absent abstains foreign-workspace", async () => {
       const Decision = { kind: "allow", additionalContexts: [] };
       const Out = await Post(
         Run,
         {
           name: "write",
-          arguments: { file_path: "Source/Function/Apply.ts" },
+          arguments: { file_path: Path.join(Unsigned, "Source/Function/Apply.ts") },
           agent: AgentOf("pack-c")
         },
         Decision
@@ -119,18 +126,22 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    await CheckAsync(Count, "P4: the built-in pack still drives the monorepo path", async () => {
-      const Out = await Post(Run, {
-        name: "write",
-        arguments: { file_path: "Source/Function/Foo.ts" },
-        agent: AgentOf("pack-d")
-      });
-      assert.equal(Out.additionalContexts[0].source.summary, "Layout 0.80");
-      const Text = Out.additionalContexts[0].content[0].text;
-      assert.equal(
-        Text.includes("- Source/Library.ts - the entry: wiring only - name, apply, Config, inject"),
-        true
+    await CheckAsync(Count, "P4: a monorepo source write with no history abstains no-history", async () => {
+      const Decision = { kind: "allow", additionalContexts: [] };
+      const Out = await Post(
+        Run,
+        {
+          name: "write",
+          arguments: { file_path: "Source/Function/Foo.ts" },
+          agent: AgentOf("pack-d")
+        },
+        Decision
       );
+      assert.equal(Out, Decision);
+      assert.ok(
+        Run.Lines.includes("convention-suggester: abstained no-history  0.00")
+      );
+      assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 0);
     });
   }
   return Finish(Count, "Pack-Driven");

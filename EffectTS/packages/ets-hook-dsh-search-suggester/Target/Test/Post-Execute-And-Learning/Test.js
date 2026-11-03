@@ -14,42 +14,52 @@ import {
   Pre,
   Post,
   rm,
+  SeedHistory,
+  Service,
   Setup,
-  Validate
+  Validate,
+  Workspace
 } from "../Harness.js";
-const StrongVersion = (Id) => ({
-  name: "grep",
-  arguments: { pattern: "1.2.3 version", path: "package.json" },
+const Anchor = "README.md";
+const Companions = ["CHANGELOG.md", "SCHEME.md"];
+const Space = Workspace([Anchor, ...Companions]);
+const Read = (Id) => ({
+  name: "read",
+  arguments: { file_path: Space.At(Anchor) },
   agent: AgentOf(Id)
 });
-const WeakVersion = (Id) => ({
+const Elsewhere = (Id, N) => ({
   name: "grep",
-  arguments: { pattern: "1.2.3", path: "Site/package.json" },
+  arguments: { pattern: `unrelated query ${N}`, path: Space.At("package.json") },
   agent: AgentOf(Id)
 });
 const FollowEdit = (Id) => ({
   name: "edit",
-  arguments: { file_path: "package.json" },
+  arguments: { file_path: "CHANGELOG.md" },
   agent: AgentOf(Id)
 });
-const Unrelated = (Id, N) => ({
-  name: "grep",
-  arguments: { pattern: `unrelated query ${N}`, path: "" },
-  agent: AgentOf(Id)
-});
+const HistoryText = [
+  "[search-suggester] intent=History confidence=0.87",
+  "targets (2):",
+  "- CHANGELOG.md - touched 1 time(s) after a similar call",
+  "- SCHEME.md - touched 1 time(s) after a similar call",
+  "note: open these before more searches; Target/ is generated, never edit it."
+].join("\n");
 const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Setup();
-    await CheckAsync(Count, "E1: the Version note is prepended to the decision's additionalContexts", async () => {
-      const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
-      const Out = await Post(Run, StrongVersion("a"), Decision);
+    Run.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
+    const Out = await Post(Run, Read("a"), Decision);
+    await CheckAsync(Count, "E1: the History note is prepended to the decision's additionalContexts", async () => {
       assert.notEqual(Out, Decision);
       assert.equal(Out.kind, "allow");
       assert.deepEqual(Out.additionalContexts[0].source, {
         kind: "search-suggester",
         form: "notice",
-        summary: "Version 0.92"
+        summary: "History 0.87"
       });
       assert.equal(Out.additionalContexts[0].role, "user");
       assert.equal(typeof Out.additionalContexts[0].id, "string");
@@ -57,25 +67,23 @@ const runTest = async () => {
       assert.equal(Object.isFrozen(Out.additionalContexts[0]), true);
     });
     await CheckAsync(Count, "E1: the note text is byte-exact", async () => {
-      const Out = await Post(Run, WeakVersion("a"), { kind: "allow", additionalContexts: [] });
-      assert.deepEqual(Out.additionalContexts, []);
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained low-confidence Version 0.84"));
+      assert.equal(Out.additionalContexts[0].content[0].text, HistoryText);
     });
     await CheckAsync(Count, "E1: the suggest ledger line is byte-exact in both forms", async () => {
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest Version 0.92 7 candidates"));
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest History 0.87 2 candidates"));
       assert.match(
-        DurableLine("suggest Version 0.92 7 candidates"),
-        Durable("suggest Version 0.92 7 candidates")
+        DurableLine("suggest History 0.87 2 candidates"),
+        Durable("suggest History 0.87 2 candidates")
       );
-      assert.equal(LedgerWith("suggest Version 0.92 7 candidates").length, 1);
+      assert.equal(LedgerWith("suggest History 0.87 2 candidates").length, 1);
     });
     await CheckAsync(Count, "E1: the ring recorded the emit (cooldown, recent, pending, counter)", async () => {
       const Rings = Run.State.Rings.State(AgentOf("a"));
-      assert.deepEqual([...Rings.cooled.keys()], ["Version"]);
-      assert.deepEqual([...Rings.recent.keys()].slice(0, 3), ["package.json", "Site/package.json", "Classic/packages/*/package.json"]);
-      assert.deepEqual(Rings.pending, { intent: "Version", since: 1 });
+      assert.deepEqual([...Rings.cooled.keys()], ["History"]);
+      assert.deepEqual([...Rings.recent.keys()], ["CHANGELOG.md", "SCHEME.md"]);
+      assert.deepEqual(Rings.pending, { intent: "History", since: 0 });
       assert.equal(Rings.notes, 1);
-      assert.equal(Rings.calls, 2);
+      assert.equal(Rings.calls, 1);
       assert.equal(Run.State.Knowledge.stats.emitted, 1);
     });
   }
@@ -85,18 +93,21 @@ const runTest = async () => {
       const Decision = { kind: "allow", additionalContexts: [] };
       const Out = await Post(Run, { name: "webfetch", arguments: { url: "https://example.com" }, agent: AgentOf("a") }, Decision);
       assert.equal(Out, Decision);
-      assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, intents 10, threshold 0.75)`]);
+      assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`]);
     });
-    await CheckAsync(Count, "E2: a bash call is judged through its command text", async () => {
+    await CheckAsync(Count, "E2: a bash call with no path and no cwd abstains foreign-workspace", async () => {
       const Out = await Post(Run, { name: "bash", arguments: { command: "npm version 1.2.3" }, agent: AgentOf("a") }, { kind: "allow", additionalContexts: [] });
       assert.deepEqual(Out.additionalContexts, []);
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained low-confidence Version 0.80"));
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained foreign-workspace  0.00"));
     });
     await CheckAsync(Count, "E2: next() is awaited before any judgment", async () => {
+      const Judge = Setup();
+      Judge.Context.workingDirectory = Service(Space.Root);
+      SeedHistory(Judge, "z", Space.At(Anchor), Companions);
       let NextCalled = false;
       const Downstream = { kind: "allow", additionalContexts: [] };
-      const Out = await Run.CtxListeners["tools/post-execute"](
-        { name: "grep", arguments: { pattern: "1.2.3 version", path: "package.json" }, agent: AgentOf("z") },
+      const Out = await Judge.CtxListeners["tools/post-execute"](
+        Read("z"),
         {},
         async () => {
           NextCalled = true;
@@ -109,23 +120,26 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    await CheckAsync(Count, "E3: an unrelated call abstains no-signal with the empty-intent line", async () => {
+    Run.Context.workingDirectory = Service(Space.Root);
+    await CheckAsync(Count, "E3: a judged call with no history abstains no-history", async () => {
       const Decision = { kind: "allow", additionalContexts: [] };
-      const Out = await Post(Run, Unrelated("a", "one"), Decision);
+      const Out = await Post(Run, Elsewhere("a", "one"), Decision);
       assert.equal(Out, Decision);
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained no-signal  0.00"));
-      assert.match(DurableLine("abstained no-signal"), Durable("abstained no-signal  0.00"));
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained no-history  0.00"));
+      assert.match(DurableLine("abstained no-history"), Durable("abstained no-history  0.00"));
     });
   }
   {
     const Run = Setup();
-    await CheckAsync(Count, "E4: an edit of a candidate path records `followed` and saves the knowledge", async () => {
-      await Post(Run, StrongVersion("a"));
+    Run.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    await CheckAsync(Count, "E4: an edit of a companion records `followed` and saves the knowledge", async () => {
+      await Post(Run, Read("a"));
       await Post(Run, FollowEdit("a"));
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: followed Version package.json"));
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: followed History CHANGELOG.md"));
       assert.match(
-        DurableLine("followed Version package.json"),
-        Durable("followed Version package.json")
+        DurableLine("followed History CHANGELOG.md"),
+        Durable("followed History CHANGELOG.md")
       );
       assert.equal(Run.State.Knowledge.stats.followed, 1);
       assert.equal(Run.State.Knowledge.stats.emitted, 1);
@@ -138,13 +152,15 @@ const runTest = async () => {
     });
     rm();
     const Loop = Make(Validate({ logFile: Ledger, enabled: true }));
+    Loop.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Loop, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "E4: a window closed untouched records `ignored`", async () => {
-      await Post(Loop, StrongVersion("a"));
-      await Post(Loop, Unrelated("a", "one"));
-      await Post(Loop, Unrelated("a", "two"));
-      await Post(Loop, Unrelated("a", "three"));
-      assert.ok(Loop.Lines.includes("hook-dsh-search-suggester: ignored Version"));
-      assert.match(DurableLine("ignored Version"), Durable("ignored Version"));
+      await Post(Loop, Read("a"));
+      await Post(Loop, Elsewhere("a", "one"));
+      await Post(Loop, Elsewhere("a", "two"));
+      await Post(Loop, Elsewhere("a", "three"));
+      assert.ok(Loop.Lines.includes("hook-dsh-search-suggester: ignored History"));
+      assert.match(DurableLine("ignored History"), Durable("ignored History"));
       assert.equal(Loop.State.Knowledge.stats.ignored, 1);
       assert.equal(Loop.State.Rings.State(AgentOf("a")).pending, void 0);
     });
@@ -152,40 +168,50 @@ const runTest = async () => {
   {
     rm();
     const NoCooldown = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0 }));
+    NoCooldown.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(NoCooldown, "a", Space.At(Anchor), Companions);
     await CheckAsync(Count, "E5: a zero cooldown window reaches the dedupe suppress", async () => {
-      await Post(NoCooldown, StrongVersion("a"));
-      const Out = await Post(NoCooldown, StrongVersion("a"));
+      await Post(NoCooldown, Read("a"));
+      const Out = await Post(NoCooldown, Read("a"));
       assert.deepEqual(Out.additionalContexts, []);
-      assert.ok(NoCooldown.Lines.includes("hook-dsh-search-suggester: suppressed dedupe Version"));
+      assert.ok(NoCooldown.Lines.includes("hook-dsh-search-suggester: suppressed dedupe History"));
     });
     rm();
-    const Capped = Make(Validate({ logFile: Ledger, enabled: true, maxNotesPerTurn: 1 }));
-    await CheckAsync(Count, "E5: the per-turn cap suppresses the second intent", async () => {
-      await Post(Capped, StrongVersion("a"));
-      await Pre(Capped, { agent: AgentOf("a"), messages: [{ role: "user", content: "run the failing test suite" }] });
-      const First = await Post(Capped, { name: "grep", arguments: { pattern: "assert suite", path: "" }, agent: AgentOf("a") }, { kind: "allow", additionalContexts: [] });
-      assert.deepEqual(First.additionalContexts, []);
-      assert.ok(Capped.Lines.includes("hook-dsh-search-suggester: abstained low-confidence Test 0.72"));
-      const Second = await Post(Capped, { name: "grep", arguments: { pattern: "assert suite", path: "" }, agent: AgentOf("a") }, { kind: "allow", additionalContexts: [] });
-      assert.deepEqual(Second.additionalContexts, []);
-      const Out = await Post(Capped, { name: "grep", arguments: { pattern: "assert suite", path: "" }, agent: AgentOf("a") }, { kind: "allow", additionalContexts: [] });
+    const Capped = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0, maxNotesPerTurn: 1 }));
+    Capped.Context.workingDirectory = Service(Space.Root);
+    Capped.State.History.set(AgentOf("a"), {
+      Seq: 4,
+      Touches: [
+        { seq: 0, path: Space.At(Anchor), tool: "read" },
+        { seq: 1, path: "CHANGELOG.md", tool: "read" },
+        { seq: 2, path: Space.At("package.json"), tool: "read" },
+        { seq: 3, path: "SCHEME.md", tool: "read" }
+      ]
+    });
+    await CheckAsync(Count, "E5: the per-turn cap suppresses the second note", async () => {
+      await Post(Capped, Read("a"));
+      const Out = await Post(Capped, {
+        name: "read",
+        arguments: { file_path: Space.At("package.json") },
+        agent: AgentOf("a")
+      }, { kind: "allow", additionalContexts: [] });
       assert.deepEqual(Out.additionalContexts, []);
-      assert.ok(Capped.Lines.includes("hook-dsh-search-suggester: suppressed cap Test"));
+      assert.ok(Capped.Lines.includes("hook-dsh-search-suggester: suppressed cap History"));
     });
     await CheckAsync(Count, "E5: the agent/pre-step reset re-arms the same agent", async () => {
-      await Post(Capped, StrongVersion("a"));
       await Pre(Capped, { agent: AgentOf("a"), messages: [{ source: { kind: "user" } }] });
       const Rings = Capped.State.Rings.State(AgentOf("a"));
       assert.equal(Rings.notes, 0);
       assert.equal(Rings.calls, 0);
       assert.equal(Rings.cooled.size, 0);
-      const Out = await Post(Capped, StrongVersion("a"));
-      assert.equal(Out.additionalContexts[0].source.summary, "Version 0.92");
+      const Out = await Post(Capped, Read("a"));
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
     });
     await CheckAsync(Count, "E5: another agent's ring is independent and the reset returns downstream", async () => {
-      const Out = await Post(Capped, StrongVersion("b"));
-      assert.equal(Out.additionalContexts[0].source.summary, "Version 0.92");
-      const Down = await Pre(Capped, { agent: AgentOf("a"), messages: [{ source: { kind: "user" } }] });
+      SeedHistory(Capped, "c", Space.At(Anchor), Companions);
+      const Out = await Post(Capped, Read("c"));
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+      const Down = await Pre(Capped, { agent: AgentOf("c"), messages: [{ source: { kind: "user" } }] });
       assert.equal(Down, "down");
       assert.deepEqual(Capped.Warns, []);
     });

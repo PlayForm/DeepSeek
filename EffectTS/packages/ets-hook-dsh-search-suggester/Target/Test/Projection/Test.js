@@ -13,55 +13,57 @@ import {
   MakeCounter,
   Post,
   rm,
+  SeedHistory,
   Setup,
   Validate
 } from "../Harness.js";
-const StrongVersion = (Id) => ({
-  name: "grep",
-  arguments: { pattern: "1.2.3 version", path: "package.json" },
+const Anchor = "README.md";
+const Companions = ["CHANGELOG.md", "SCHEME.md"];
+const Read = (Id) => ({
+  name: "read",
+  arguments: { file_path: Anchor },
   agent: AgentOf(Id)
 });
-const Nodes = [
-  { path: "package.json", kind: "File", version: "10" },
-  { path: "Site/package.json", kind: "File", version: "9" },
-  { path: "CHANGELOG.md", kind: "File", version: "8" },
-  { path: "Site/Source/Library/Content.ts", kind: "File", version: "7" },
-  { path: "Classic/packages/hook-dsh-ccr/Source/Function/Apply.ts", kind: "File", version: "6" },
-  { path: "Classic/packages/hook-dsh-ccr/Source/Function/Apply.ts", kind: "Symbol", version: "6" }
-];
-const Neutral = "[search-suggester] intent=Version confidence=0.92\ntargets (7):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- Classic/packages/*/package.json - the Classic manifests\n- EffectTS/packages/*/package.json - the EffectTS manifests\n- Site/Source/Library/Content.ts - the site release constant\n- CHANGELOG.md - the new section\n- Documentation/Plugins/PLUGIN-FAMILY.md - the roster versions\nnote: open these before more searches; Target/ is generated, never edit it.";
-const Projected = "[search-suggester] intent=Version confidence=0.92\ntargets (7):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- CHANGELOG.md - the new section\n- Site/Source/Library/Content.ts - the site release constant\n- Documentation/Plugins/PLUGIN-FAMILY.md - the roster versions\n- Site/Source/pages/reference.astro - the versions page\n- .github/workflows/NPM.yml - the publish trigger\nnote: open these before more searches; Target/ is generated, never edit it.";
-const UnprovenNote = "[search-suggester] intent=Version confidence=0.92\ntargets (7):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- Site/Source/Library/Content.ts - the site release constant\n- CHANGELOG.md - the new section\n- Documentation/Plugins/PLUGIN-FAMILY.md - the roster versions\n- Site/Source/pages/reference.astro - the versions page\n- .github/workflows/NPM.yml - the publish trigger\nnote: open these before more searches; Target/ is generated, never edit it.";
+const Neutral = "[search-suggester] intent=History confidence=0.87\ntargets (2):\n- CHANGELOG.md - touched 1 time(s) after a similar call\n- SCHEME.md - touched 1 time(s) after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
+const Projected = "[search-suggester] intent=History confidence=0.87\ntargets (2):\n- SCHEME.md - touched 1 time(s) after a similar call\n- CHANGELOG.md - touched 1 time(s) after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
 const runTest = async () => {
   const Count = MakeCounter();
   {
     rm();
-    const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
-      Context.workspaceGraph = FakeGraph(Nodes);
-    });
-    await CheckAsync(Count, "J1: the projected note leads with the graph-proven paths", async () => {
-      const Out = await Post(Run, StrongVersion("a"));
+    const Run = Make(
+      Validate({ logFile: Ledger, enabled: true }),
+      (Context) => {
+        Context.workspaceGraph = FakeGraph([
+          { path: "CHANGELOG.md", kind: "File", version: "1" },
+          { path: "SCHEME.md", kind: "File", version: "2" }
+        ]);
+      }
+    );
+    SeedHistory(Run, "a", Anchor, Companions);
+    await CheckAsync(Count, "J1: the projected note leads with the newer proven path", async () => {
+      const Out = await Post(Run, Read("a"));
       assert.equal(Out.additionalContexts.length, 1);
       assert.equal(Out.additionalContexts[0].content[0].text, Projected);
-      assert.equal(Out.additionalContexts[0].source.summary, "Version 0.92");
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
     });
     await CheckAsync(Count, "J1: the projection adds no ledger string", async () => {
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest Version 0.92 7 candidates"));
-      assert.equal(LedgerWith("suggest Version 0.92 7 candidates").length, 1);
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest History 0.87 2 candidates"));
+      assert.equal(LedgerWith("suggest History 0.87 2 candidates").length, 1);
       assert.match(
-        DurableLine("suggest Version 0.92 7 candidates"),
-        Durable("suggest Version 0.92 7 candidates")
+        DurableLine("suggest History 0.87 2 candidates"),
+        Durable("suggest History 0.87 2 candidates")
       );
       assert.deepEqual(Run.Lines, [
-        `hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, intents 10, threshold 0.75)`,
-        "hook-dsh-search-suggester: suggest Version 0.92 7 candidates"
+        `hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`,
+        "hook-dsh-search-suggester: suggest History 0.87 2 candidates"
       ]);
     });
   }
   {
     const Run = Setup();
-    await CheckAsync(Count, "J2: without a graph the note is byte-identical to the PoC", async () => {
-      const Out = await Post(Run, StrongVersion("a"));
+    SeedHistory(Run, "a", Anchor, Companions);
+    await CheckAsync(Count, "J2: without a graph the note is the neutral one", async () => {
+      const Out = await Post(Run, Read("a"));
       assert.equal(Out.additionalContexts[0].content[0].text, Neutral);
     });
   }
@@ -70,11 +72,15 @@ const runTest = async () => {
     const Sticky = Make(
       Validate({ logFile: Ledger, enabled: true, sectionMode: "sticky" }),
       (Context) => {
-        Context.workspaceGraph = FakeGraph(Nodes);
+        Context.workspaceGraph = FakeGraph([
+          { path: "CHANGELOG.md", kind: "File", version: "1" },
+          { path: "SCHEME.md", kind: "File", version: "2" }
+        ]);
       }
     );
+    SeedHistory(Sticky, "a", Anchor, Companions);
     await CheckAsync(Count, "J3: the sticky section renders the projected index", async () => {
-      await Post(Sticky, StrongVersion("a"));
+      await Post(Sticky, Read("a"));
       const Out = await Assemble(Sticky, AgentOf("a"));
       assert.deepEqual(Out.sections.map((Section) => Section.name), [
         "base",
@@ -82,7 +88,7 @@ const runTest = async () => {
       ]);
       assert.equal(
         Out.sections[1].text,
-        "[search-suggester] intent=Version confidence=1.00\ntargets (5):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- CHANGELOG.md - the new section\n- Site/Source/Library/Content.ts - the site release constant\n- Classic/packages/hook-dsh-ccr/Source/Function/Apply.ts - the const Version\nnote: open these before more searches; Target/ is generated, never edit it."
+        "[search-suggester] intent=History confidence=1.00\ntargets (2):\n- SCHEME.md - touched after a similar call\n- CHANGELOG.md - touched after a similar call\nnote: open these before more searches; Target/ is generated, never edit it."
       );
     });
     await CheckAsync(Count, "J3: the section stays gated by the enabled state", async () => {
@@ -90,7 +96,9 @@ const runTest = async () => {
       const Off = Make(
         Validate({ logFile: Ledger, enabled: false, sectionMode: "sticky" }),
         (Context) => {
-          Context.workspaceGraph = FakeGraph(Nodes);
+          Context.workspaceGraph = FakeGraph([
+            { path: "CHANGELOG.md", kind: "File", version: "1" }
+          ]);
         }
       );
       const Out = await Assemble(Off, AgentOf("a"));
@@ -103,9 +111,10 @@ const runTest = async () => {
     const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
       Context.workspaceGraph = FakeGraph([{ path: "unrelated/README.md", kind: "File" }]);
     });
+    SeedHistory(Run, "a", Anchor, Companions);
     await CheckAsync(Count, "J4: a graph that proves no candidate keeps the unproven tiers", async () => {
-      const Out = await Post(Run, StrongVersion("a"));
-      assert.equal(Out.additionalContexts[0].content[0].text, UnprovenNote);
+      const Out = await Post(Run, Read("a"));
+      assert.equal(Out.additionalContexts[0].content[0].text, Neutral);
     });
   }
   {
@@ -116,8 +125,9 @@ const runTest = async () => {
         { path: "CHANGELOG.md", kind: "File", version: "1" }
       ]);
     });
+    SeedHistory(Run, "a", Anchor, ["CHANGELOG.md", "package.json"]);
     await CheckAsync(Count, "J5: an unexpected node kind scores below an expected one", async () => {
-      const Out = await Post(Run, StrongVersion("a"));
+      const Out = await Post(Run, Read("a"));
       const Text = Out.additionalContexts[0].content[0].text;
       assert.ok(Text.indexOf("- CHANGELOG.md") < Text.indexOf("- package.json"));
       assert.equal(Text.indexOf("- CHANGELOG.md") > 0, true);
@@ -127,14 +137,15 @@ const runTest = async () => {
     rm();
     const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
       Context.workspaceGraph = FakeGraph([
-        { path: "CHANGELOG.md", kind: "File", version: "1" },
-        { path: "Site/Source/Library/Content.ts", kind: "File", version: "1" }
+        { path: "package.json", kind: "File", version: "1" },
+        { path: "Source/Function/Apply.ts", kind: "File", version: "1" }
       ]);
     });
+    SeedHistory(Run, "a", Anchor, ["Source/Function/Apply.ts", "package.json"]);
     await CheckAsync(Count, "J6: the shallower proven path leads the deeper one", async () => {
-      const Out = await Post(Run, StrongVersion("a"));
+      const Out = await Post(Run, Read("a"));
       const Text = Out.additionalContexts[0].content[0].text;
-      assert.ok(Text.indexOf("- CHANGELOG.md") < Text.indexOf("- Site/Source/Library/Content.ts"));
+      assert.ok(Text.indexOf("- package.json") < Text.indexOf("- Source/Function/Apply.ts"));
     });
   }
   return Finish(Count, "Projection");

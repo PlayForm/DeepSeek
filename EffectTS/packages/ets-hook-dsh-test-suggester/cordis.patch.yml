@@ -1,13 +1,20 @@
 # Bundle patch for @playform/hook-dsh-test-suggester.
-# The test-suggester hook answers the TEST task intent with a target set:
-# when the model searches for proof (a grep for PASS/FAIL/error TS, a read
-# of a Test.ts, a bash error sweep), the hook classifies the call
-# deterministically and prepends ONE labeled additionalContexts notice
-# naming the likely targets - the suite's Test.ts, the suite README (the
-# expected count), the aggregate runner, the README badge. Deterministic
-# classifier, no LLM in the hot path (Documentation/Plans/
-# SEARCH-SUGGESTER-PLUGIN.md sections 3, 4, 8; the family's second-consumer
-# shape: this hook carries its own embedded pack, no shared service).
+# The test-suggester hook answers the TEST task intent with a target set
+# drawn from the agent's OWN previous tool calls: the `session/event`
+# listener folds every `tool/call` into the session's touch history (one
+# touch per call, capped at 512), and on a judged call the files touched
+# right after this one in this workspace become ONE synthetic `History`
+# family that the deterministic classifier, the existence filter, the gate
+# and the note judge exactly like a pack row. The note is ONE labeled
+# additionalContexts notice; it never replaces content (Documentation/Plans/
+# SEARCH-SUGGESTER-PLUGIN.md sections 3, 4, 8).
+#
+# THE PACK IS AN EXPLICIT OVERRIDE ONLY: `<repo>/.dsh/pack.yml` or the user
+# layer, resolved with `builtin: false`, so the literal built-in pack is never
+# a candidate source. A workspace with no history and no pack abstains with
+# the byte-exact line `abstained no-history  0.00`; a call outside any
+# workspace (no `.git`/`package.json` root) abstains `abstained
+# foreign-workspace  0.00`.
 #
 # THE RECONCILIATION (the completion spec's wave 2c re-spec) rides the same
 # listener: on a judged call in a package it compares the package's smoke

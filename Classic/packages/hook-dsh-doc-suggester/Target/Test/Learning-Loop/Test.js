@@ -27,38 +27,28 @@ const Put = (Root, Relative, Body = "x") => {
   FileSystem.writeFileSync(Full, Body, "utf8");
   return Full;
 };
-const Pack = `signature:
-  - docs/STYLE.md
-families:
-  "doc/Index":
-    id: Index
-    priority: 1
-    threshold: 0.75
-    signals:
-      - rule: index
-        pattern: '(^|/)Documentation/INDEX\\.md$'
-        weight: 2.5
-    targets:
-      - path: docs/STYLE.md
-        kind: style
-        prior: 0.6
-        reason: the style
-      - path: docs/REFERENCE.md
-        kind: doc
-        prior: 0.6
-        reason: the reference
-`;
 const Workspace = Tree("doc-suggester-learning-");
-Put(Workspace, ".dsh/pack.yml", Pack);
+Put(Workspace, "package.json", "{}");
 Put(Workspace, "docs/STYLE.md");
 const Reference = Put(Workspace, "docs/REFERENCE.md");
 const Index = Put(Workspace, "Documentation/INDEX.md");
+const Other = Put(Workspace, "docs/OTHER.md");
 const Service = (Cwd) => ({ get: () => Cwd });
-const NoteOrder = (Head) => `[doc-suggester] family=Index confidence=0.87
+const NoteOrder = (Head) => `[doc-suggester] family=History confidence=0.87
 companions (2):
-- ${Head} - ${Head === "docs/STYLE.md" ? "the style" : "the reference"}
-- ${Head === "docs/STYLE.md" ? "docs/REFERENCE.md - the reference" : "docs/STYLE.md - the style"}
+- ${Head} - touched 1 time(s) after this file
+- ${Head === "docs/STYLE.md" ? "docs/REFERENCE.md" : "docs/STYLE.md"} - touched 1 time(s) after this file
 note: a documentation task rarely touches one file; keep the doc graph coherent.`;
+const Seed = (Run, Id) => {
+  Run.State.History.set(AgentOf(Id), {
+    Seq: 3,
+    Touches: [Index, "docs/STYLE.md", "docs/REFERENCE.md"].map((Path_, Seq) => ({
+      seq: Seq,
+      path: Path_,
+      tool: "read"
+    }))
+  });
+};
 const Emit = (Id) => ({
   name: "read",
   arguments: { file_path: Index },
@@ -71,7 +61,7 @@ const Touch = (Id) => ({
 });
 const Age = (Id) => ({
   name: "read",
-  arguments: { file_path: "unrelated/deep/file.go" },
+  arguments: { file_path: Other },
   agent: AgentOf(Id)
 });
 const runTest = async () => {
@@ -79,6 +69,7 @@ const runTest = async () => {
   {
     const Run = Setup();
     Run.Context.workingDirectory = Service(Workspace);
+    Seed(Run, "learn-a");
     await CheckAsync(Count, "L1: the note is byte-exact and records a pending decision", async () => {
       const Out = await Post(Run, Emit("learn-a"));
       assert.equal(
@@ -86,7 +77,7 @@ const runTest = async () => {
         NoteOrder("docs/STYLE.md")
       );
       const Last = Run.State.Last;
-      assert.equal(Last.family, "Index");
+      assert.equal(Last.family, "History");
       assert.equal(Last.outcome, "pending");
       assert.equal(Last.store, "memory");
       assert.equal(Last.companions.length, 2);
@@ -103,22 +94,22 @@ const runTest = async () => {
       ]);
       assert.ok(
         Run.Lines.includes(
-          "hook-dsh-doc-suggester: decided Index 0.87 2 companions docs/STYLE.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.25,literal=0.25,history=0.15,accept=0.00 store=memory"
+          "hook-dsh-doc-suggester: decided History 0.87 2 companions docs/STYLE.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.25,literal=0.25,history=0.15,accept=0.00 store=memory"
         )
       );
     });
     await CheckAsync(Count, "L1: touching a companion records the accept for it and its family", async () => {
       await Post(Run, Touch("learn-a"));
       assert.ok(
-        Run.Lines.includes("hook-dsh-doc-suggester: accepted Index docs/REFERENCE.md")
+        Run.Lines.includes("hook-dsh-doc-suggester: accepted History docs/REFERENCE.md")
       );
       assert.ok(
         Math.abs(
-          Run.State.Learning.Rate("Index", "docs/REFERENCE.md").Companion - (Neutral + AcceptBonus)
+          Run.State.Learning.Rate("History", "docs/REFERENCE.md").Companion - (Neutral + AcceptBonus)
         ) < 1e-9
       );
       assert.ok(
-        Math.abs(Run.State.Learning.Rate("Index", "").Family - (Neutral + AcceptBonus)) < 1e-9
+        Math.abs(Run.State.Learning.Rate("History", "").Family - (Neutral + AcceptBonus)) < 1e-9
       );
       assert.equal(Run.State.Last.outcome, "accepted");
     });
@@ -139,22 +130,23 @@ const runTest = async () => {
   {
     const Run = Setup();
     Run.Context.workingDirectory = Service(Workspace);
+    Seed(Run, "learn-b");
     await CheckAsync(Count, "L2: a window that closes untouched records the soft reject", async () => {
       await Post(Run, Emit("learn-b"));
       const First = Run.State.Last.companions[0].score;
       await Post(Run, Age("learn-b"));
       await Post(Run, Age("learn-b"));
       assert.equal(
-        Run.Lines.includes("hook-dsh-doc-suggester: rejected Index 2 companions"),
+        Run.Lines.includes("hook-dsh-doc-suggester: rejected History 2 companions"),
         false
       );
       await Post(Run, Age("learn-b"));
       assert.ok(
-        Run.Lines.includes("hook-dsh-doc-suggester: rejected Index 2 companions")
+        Run.Lines.includes("hook-dsh-doc-suggester: rejected History 2 companions")
       );
       assert.ok(
         Math.abs(
-          Run.State.Learning.Rate("Index", "docs/STYLE.md").Companion - (Neutral - RejectPenalty)
+          Run.State.Learning.Rate("History", "docs/STYLE.md").Companion - (Neutral - RejectPenalty)
         ) < 1e-9
       );
       assert.equal(Run.State.Last.outcome, "rejected");
@@ -180,6 +172,7 @@ const runTest = async () => {
       })
     );
     Disabled.Context.workingDirectory = Service(Workspace);
+    Seed(Disabled, "learn-c");
     await CheckAsync(Count, "L3: disabling a heuristic drops it from the enabled list and the score", async () => {
       await Post(Disabled, Emit("learn-c"));
       const Last = Disabled.State.Last;
@@ -188,7 +181,7 @@ const runTest = async () => {
       assert.ok(Math.abs(Last.companions[0].score - 0.55) < 1e-9);
       assert.ok(
         Disabled.Lines.includes(
-          "hook-dsh-doc-suggester: decided Index 0.87 2 companions docs/STYLE.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.25,literal=0.00,history=0.15,accept=0.00 store=memory"
+          "hook-dsh-doc-suggester: decided History 0.87 2 companions docs/STYLE.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.25,literal=0.00,history=0.15,accept=0.00 store=memory"
         )
       );
     });
@@ -201,6 +194,7 @@ const runTest = async () => {
       })
     );
     Raised.Context.workingDirectory = Service(Workspace);
+    Seed(Raised, "learn-d");
     await CheckAsync(Count, "L3: a raised weight raises the score and the ledger carries the table", async () => {
       await Post(Raised, Emit("learn-d"));
       const Last = Raised.State.Last;
@@ -208,7 +202,7 @@ const runTest = async () => {
       assert.ok(Math.abs(Last.companions[0].score - 0.825) < 1e-9);
       assert.ok(
         Raised.Lines.includes(
-          "hook-dsh-doc-suggester: decided Index 0.87 2 companions docs/STYLE.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.50,literal=0.25,history=0.15,accept=0.00 store=memory"
+          "hook-dsh-doc-suggester: decided History 0.87 2 companions docs/STYLE.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.50,literal=0.25,history=0.15,accept=0.00 store=memory"
         )
       );
     });
@@ -216,6 +210,7 @@ const runTest = async () => {
   {
     const Run = Setup();
     Run.Context.workingDirectory = Service(Workspace);
+    Seed(Run, "learn-e");
     await CheckAsync(Count, "L4: without a store the memory fallback answers the neutral 1/3", async () => {
       assert.equal(Run.State.Learning.Store(), "memory");
       await Post(Run, Emit("learn-e"));
@@ -226,7 +221,7 @@ const runTest = async () => {
     await CheckAsync(Count, "L4: the memory fallback keeps the decision record in its ring", async () => {
       assert.equal(Run.State.Learning.Recent().length, 1);
       const Record = Run.State.Learning.Recent()[0];
-      assert.equal(Record.family, "Index");
+      assert.equal(Record.family, "History");
       assert.deepEqual(
         Record.companions.map((Companion) => Companion.path),
         ["docs/STYLE.md", "docs/REFERENCE.md"]
@@ -247,6 +242,7 @@ const runTest = async () => {
     );
     Run.Context.pattern = First;
     Run.Context.workingDirectory = Service(Workspace);
+    Seed(Run, "learn-f");
     await CheckAsync(Count, "L5: the decision record is stored with the weights and the pending outcome", async () => {
       await Post(Run, Emit("learn-f"));
       assert.equal(Run.State.Learning.Store(), "pattern");
@@ -257,7 +253,7 @@ const runTest = async () => {
       assert.equal(Stored.length, 1);
       assert.deepEqual(Stored[0].targets, ["docs/STYLE.md", "docs/REFERENCE.md"]);
       assert.equal(Stored[0].arbiter, "pending");
-      assert.equal(Stored[0].intent, "Index");
+      assert.equal(Stored[0].intent, "History");
       assert.equal(
         Stored[0].transform[0],
         "weights scope=0.35,graph=0.00,prior=0.40,literal=0.25,history=0.15,accept=0.00"
@@ -310,8 +306,9 @@ const runTest = async () => {
       );
       Reopen.Context.pattern = Second;
       Reopen.Context.workingDirectory = Service(Workspace);
+      Seed(Reopen, "learn-g");
       const Out = await Post(Reopen, Emit("learn-g"));
-      assert.equal(Out.additionalContexts[0].source.summary, "Index 0.87");
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
       assert.equal(Reopen.State.Last.companions[0].path, "docs/REFERENCE.md");
       assert.equal(Reopen.State.Last.weights.prior, 0.4);
       assert.ok(

@@ -12,9 +12,13 @@ release).
 A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** for the modification
 tools (`write`, `edit`, `raw-write`).
 
-When the edited path matches one of the convention families, it prepends ONE labeled
-`additionalContexts` note that names the standard companions the model has not touched yet: **"this
-file rarely stands alone."**
+When a call edits a path, it prepends ONE labeled `additionalContexts` note that names the files the
+session touched right after this one in this workspace: the companions the task most likely needs
+next (the root manifest, the CHANGELOG section, the Config table row, the byte-exact test, the site
+mirror).
+
+The candidates come from the agent's **own previous tool calls**, never from a literal built-in
+pack. A pack is an explicit user/repo override only (see below).
 
 It is the second consumer of the pattern algebra of the search-suggester and of its two-consumer
 extraction trigger
@@ -35,23 +39,37 @@ The version lives in 36 manifests, 6 `Apply.ts` files, the CHANGELOG and the pro
 The search consumer deliberately refuses to own the edit transform, and this consumer owns the
 NOTIFY side of it: it names the companions, never the change.
 
-## The families
+## The candidates (the session history)
 
-Seven, in priority order: `Version` (0.85, because a wrong version companion set is costly),
-`Config`, `Symbol`, `Test`, `Doc`, `Prose`, `Workflow`.
+The `session/event` listener folds every `tool/call` event into the session's history: one touch per
+call (the sequence number, the normalized path and the tool), capped at 512, oldest first.
 
-Each family is a pack row: its path rules (regexes on the edited path with weights) and its standard
-companion set, where each companion is a path or glob with a prior and **one reason phrase** ("the
-Config section", "the byte-exact assertion", "the long tail").
+On a judged call, `Adjacent(touches, callPath, { limit: maxCompanions })` scores the paths that
+followed the anchor within a window of 8 calls: `1 / (1 + distance)` per occurrence, one count per
+occurrence.
 
-A companion without a reason is not emitted.
+A repeatedly co-touched path outranks a single one, and a near neighbour outranks a far one.
 
-The families are **pack-driven**: the built-in pack (the default of this monorepo) lives in
-[`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack) and is projected here as the `edit/` domain.
+Those rows become ONE synthetic `History` family (priority 0, threshold 0.75, one signal of weight
+2.5, companions with prior 0.6 and the reason `touched <count> time(s) after this file`), so the
+existing deterministic classifier, existence filter, scorer and decision record judge it exactly
+like a pack row.
 
-A repository that ships `.dsh/pack.yml` (or a user-layer pack at
-`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `edit/` families, and a repository without a
-pack stays silent.
+Its confidence is `k = sigmoid(2.5 - 0.6) = 0.87`.
+
+## The pack override
+
+The families are **pack-driven only when a pack is explicit**: `<repo>/.dsh/pack.yml` (or
+`.yaml`/`.json`) or the user-layer pack at `~/.dsh/playform/workspaces/<slug>.yml`.
+
+The listener resolves it with `Resolve(root, { home, builtin: false })`, so the literal built-in
+pack is never a candidate source.
+
+A repository that ships no pack and has no session history abstains with the byte-exact line
+`abstained no-history  0.00`.
+
+A repository that ships a pack gets its OWN `edit/` families, placed after the synthetic `History`
+family, and they drive the same classifier and note.
 
 ## The gate
 
@@ -91,7 +109,7 @@ The score is `sum over the enabled heuristics of weight * value`:
 | --------- | ------------------------------------------------------- | -------------- |
 | `scope`   | 1.00 - the call matched the family's path rules         | 0.35           |
 | `graph`   | 0.50 - the neutral graph-distance placeholder           | 0.00           |
-| `prior`   | the pack's prior for the companion                      | 0.25           |
+| `prior`   | the family's prior for the companion                    | 0.25           |
 | `literal` | 0.50 - the neutral literal (no generated index)         | 0.25           |
 | `history` | the **learned per-companion accept rate** (neutral 1/3) | 0.15           |
 | `accept`  | the **learned per-family accept rate** (neutral 1/3)    | 0.00           |
@@ -102,13 +120,26 @@ default behavior is unchanged byte-for-byte.
 A user can disable any heuristic (`heuristics`) or re-weight any of them (`weights`), and the
 decision record plus the `decided` line show the choice.
 
+Before the score, two workspace guards run.
+
+The workspace root (`Root` of [`@playform/ets-lib-dsh-pack`](../ets-lib-dsh-pack)) is
+PACK-INDEPENDENT: the nearest ancestor of the call path carrying `.git` or `package.json`, from the
+call path plus the session cwd. A call with no such root abstains `foreign-workspace`.
+
+The existence filter drops every companion that does not exist under that root, and it abstains
+`no-companions` when the winning family has none left.
+
+A note therefore never names a path from the history of this repository in a workspace that does not
+carry it.
+
 ## The delivery
 
 One note, never a content replacement and never a claim of the Transform: the post-execute listener
 runs after the ccr and the normalize family and only adds `additionalContexts`.
 
-The note carries the plugin's own source label
-(`{kind: "edit-suggester", form: "notice", summary}`).
+The note carries the plugin's own source label (`{kind: "edit-suggester", form: "notice", summary}`)
+and closes with the domain's standing caution: _this file rarely stands alone; check whether these
+need the same change._
 
 The `grep`/`read`/`bash` calls are not judged, because this is the edit side of the family and it is
 disjoint from the trigger set of the search suggester.

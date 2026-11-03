@@ -13,14 +13,21 @@
 // @playform/hook-dsh-test-suggester - the test-suggester hook. The model
 // runs search after search to find the proof for a change (PASS/FAIL/error
 // TS greps, Test.ts reads, error sweeps). This hook answers the TEST intent
-// with a TARGET SET: at the first call of the intent, it prepends ONE
-// labeled additionalContexts notice naming the standard locations - the
-// suite's Test.ts, the suite README (the expected count), the aggregate
-// runner, the README badge. Deterministic classifier (no LLM in the hot
-// path), high threshold, at most maxCandidates candidates with a stated
-// reason each, a cooldown, a per-turn cap, and an abstention path: a wrong
-// target set costs more than a missing one (SEARCH-SUGGESTER-PLUGIN.md
-// sections 3, 4, 8 - the test consumer of the suggester family).
+// with a TARGET SET drawn from the agent's OWN PREVIOUS TOOL CALLS: the
+// `session/event` listener folds every `tool/call` into the session history,
+// and on a judged call the files touched right after this one in this
+// workspace become ONE synthetic `History` family that the deterministic
+// classifier, the existence filter, the gate and the note judge exactly like
+// a pack row. The note is ONE labeled additionalContexts notice (at most
+// maxCandidates candidates with a stated reason each, a cooldown, a per-turn
+// cap, and an abstention path: a wrong target set costs more than a missing
+// one - SEARCH-SUGGESTER-PLUGIN.md sections 3, 4, 8, the test consumer of
+// the suggester family).
+//
+// THE PACK IS AN EXPLICIT OVERRIDE ONLY: `<repo>/.dsh/pack.yml` or the user
+// layer, resolved with `builtin: false`. The literal built-in pack is never
+// a candidate source; a workspace with no history and no pack abstains
+// `abstained no-history  0.00`.
 //
 // THE RECONCILIATION (the completion spec's wave 2c re-spec) rides the same
 // listener: on a judged call in a package, the package's smoke claims (the

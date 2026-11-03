@@ -249,12 +249,12 @@ if (InvokedDirectly) {
 	});
 	rm();
 	const Run = Setup();
-	Check(Count, "selfcheck: the fake ctx registers the plugin's two listeners", () => {
-		assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update", "tools/post-execute", "agent/pre-step"]);
+	Check(Count, "selfcheck: the fake ctx registers the plugin's three listeners", () => {
+		assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update", "session/event", "tools/post-execute", "agent/pre-step"]);
 		assert.deepEqual(Run.RootNames, []);
 		assert.equal(Run.Returned, undefined);
 		assert.equal(Run.Fs.reads + Run.Fs.writes, 0);
-		assert.deepEqual(Run.Lines, [`convention-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 4, threshold 0.75)`]);
+		assert.deepEqual(Run.Lines, [`convention-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`]);
 	});
 	if (Count.N === 3 && Count.F === 1) {
 		console.log("Harness selfcheck OK");

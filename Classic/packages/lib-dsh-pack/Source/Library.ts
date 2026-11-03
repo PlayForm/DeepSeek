@@ -30,6 +30,9 @@ export { default as Extends } from "./Function/Extends.js";
 export { default as Chain } from "./Function/Chain.js";
 export { default as Resolve } from "./Function/Resolve.js";
 export { default as Load } from "./Function/Load.js";
+export { default as Fold } from "./Function/Fold.js";
+export { default as Adjacent } from "./Function/Adjacent.js";
+export { default as Root } from "./Function/Root.js";
 export { default as Families } from "./Function/Families.js";
 export { default as Locate } from "./Function/Locate.js";
 export { default as Present } from "./Function/Present.js";
@@ -48,6 +51,7 @@ export type { default as Policy } from "./Interface/Policy.js";
 export type { default as Learning } from "./Interface/Learning.js";
 export type { default as Located } from "./Interface/Located.js";
 export type { default as Options } from "./Interface/Options.js";
+export type { default as Touch } from "./Interface/Touch.js";
 
 // The compiled package version (Source/Variable/Version, built in by the
 // ESBuild define). This is a LIBRARY, not a plugin bundle: no cordis patch,

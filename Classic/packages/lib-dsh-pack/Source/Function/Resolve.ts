@@ -3,7 +3,8 @@
 //   1. read the repo layer (`<root>/.dsh/pack.yml`) to discover a declared
 //      `slug` (the user layer is keyed by it);
 //   2. read the user layer (`<home>/.dsh/playform/workspaces/<slug>.yml`);
-//   3. no layer at all -> the BUILT-IN pack (this monorepo's default);
+//   3. no layer at all -> the BUILT-IN pack (this monorepo's default), or
+//      `undefined` when `builtin: false` opts out of the fallback;
 //   4. resolve the union of both layers' `extends:` chains as the BASE
 //      (cycle-guarded; the named bases live in the user layer);
 //   5. merge: the base packs first (deepest first), then the user layer,
@@ -26,7 +27,7 @@ import Repository from "./Repository.js";
 import Slug from "./Slug.js";
 import User from "./User.js";
 
-export default (Root: string, Options?: Options): Pack => {
+export default (Root: string, Options?: Options): Pack | undefined => {
 	const Home_ = Home(Options);
 	const RepoPath = Pick(Repository(Root));
 	const RepoRaw = RepoPath === undefined ? undefined : Read(RepoPath);
@@ -35,6 +36,9 @@ export default (Root: string, Options?: Options): Pack => {
 	const UserPath = Pick(User(Name, Home_));
 	const UserRaw = UserPath === undefined ? undefined : Read(UserPath);
 	if (RepoRaw === undefined && UserRaw === undefined) {
+		if (Options?.builtin === false) {
+			return undefined;
+		}
 		return Builtin;
 	}
 	const Names = [...Extends(RepoRaw ?? {}), ...Extends(UserRaw ?? {})];

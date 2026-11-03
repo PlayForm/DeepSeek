@@ -1,10 +1,7 @@
-// Source/Test/Learn-Note/Test.ts - the D4 bootstrap's NOTE gate: ONE note per
-// workspace per PROCESS, on the first JUDGED call. A non-judged call never
-// scans and never notes; the first judged call in a packless workspace writes
-// the proposal, appends the ledger line and prepends the note; a SECOND mount
-// of the hook in the same process does not re-note and does not recreate a
-// deleted proposal (the reservation is module-level, keyed by root); a
-// DIFFERENT workspace gets its own note; and learning off stays silent.
+// Source/Test/Learn-Note/Test.ts - the RETIRED learning note, at the Apply
+// level. The literal learner no longer notes or writes anything: a non-judged
+// call stays silent, and the first judged call in a packless workspace with
+// `learning: true` abstains `no-history` without a proposal file.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -34,7 +31,7 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** The temporary home the learner writes under (the real ~/.dsh is untouched). */
+/** The temporary home the retired learner would have written under. */
 const Home = Tree("convention-learn-note-home-");
 process.env["HOME"] = Home;
 
@@ -46,148 +43,63 @@ const Proposal = (Root: string): string =>
 		`${Path.basename(Root).toLowerCase()}.yml`,
 	);
 
-/** The learning note's byte-exact text. */
-const NoteText = (Root: string, Families: number): string => {
-	const Slug = Path.basename(Root).toLowerCase();
-	return [
-		`[convention-suggester] learned pack proposal for ${Slug}`,
-		`proposal: ${Proposal(Root)}`,
-		`families: ${Families}`,
-		`install: copy the proposal to ~/.dsh/playform/workspaces/${Slug}.yml`,
-	].join("\n");
-};
-
 /** The optional harness service the probe reads (the real shape: get(session)). */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** A judged write call. */
-const Write = (Path_: string, Id: string): any => ({
+/** One packless repo with a doc index, a package layout and its prose. */
+const Repo = Tree("convention-learn-note-repo-");
+FileSystem.mkdirSync(Path.join(Repo, ".git"), { recursive: true });
+for (const Relative of [
+	"Documentation/INDEX.md",
+	"package.json",
+	"README.md",
+	"SCHEME.md",
+	"Source/Library.ts",
+	"Source/Function/Apply.ts",
+]) {
+	Put(Repo, Relative);
+}
+
+/** The judged call: a write of the fixture's entry. */
+const Call = (Id: string): any => ({
 	name: "write",
-	arguments: { file_path: Path_ },
+	arguments: { file_path: Path.join(Repo, "Source/Function/Apply.ts") },
 	agent: AgentOf(Id),
 });
-
-/** One packless repo with a doc index, a package layout and its prose. */
-const MakeRepo = (Prefix: string): string => {
-	const Root = Tree(Prefix);
-	for (const Relative of [
-		"Documentation/INDEX.md",
-		"package.json",
-		"README.md",
-		"SCHEME.md",
-		"Source/Library.ts",
-		"Source/Function/Apply.ts",
-	]) {
-		Put(Root, Relative);
-	}
-	return Root;
-};
-
-/** The first workspace and a second one (the per-root key). */
-const Repo = MakeRepo("convention-learn-note-repo-");
-const Other = MakeRepo("convention-learn-note-other-");
-
-/** The learning-off repo: markers, no signature, the default config. */
-const Silent = Tree("convention-learn-note-silent-");
-Put(Silent, "Documentation/INDEX.md");
-Put(Silent, "package.json");
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
-	// Group N1: a non-judged call never scans, writes or notes.
-	{
-		rm();
-		const Run = Make(Validate({ logFile: Ledger, enabled: true, learning: true }));
-		Run.Context.workingDirectory = Service(Repo);
-		await CheckAsync(Count, "N1: a non-judged call writes nothing and notes nothing", async () => {
-			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(
-				Run,
-				{ name: "bash", arguments: { command: "ls" }, agent: AgentOf("a") },
-				Decision,
-			);
-			assert.equal(Out, Decision);
-			assert.equal(FileSystem.existsSync(Proposal(Repo)), false);
-			assert.deepEqual(Run.Lines, [
-				`convention-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 4, threshold 0.75)`,
-			]);
-		});
-	}
+	rm();
+	const Run = Make(Validate({ logFile: Ledger, enabled: true, learning: true }));
+	Run.Context.workingDirectory = Service(Repo);
 
-	// Group N2: the first judged call is the one that proposes.
-	{
-		const Run = Make(Validate({ logFile: Ledger, enabled: true, learning: true }));
-		Run.Context.workingDirectory = Service(Repo);
-		await CheckAsync(Count, "N2: the first judged call emits the note", async () => {
-			const Out = await Post(Run, Write("Source/Function/Apply.ts", "a"));
-			assert.equal(Out.additionalContexts.length, 1);
-			assert.deepEqual(Out.additionalContexts[0].source, {
-				kind: "convention-suggester",
-				form: "notice",
-				summary: "learned pack 4 families",
-			});
-			assert.equal(Out.additionalContexts[0].content[0].text, NoteText(Repo, 4));
-		});
-		await CheckAsync(Count, "N2: the ledger line is byte-exact in both forms", async () => {
-			const Line = `learned proposal ${Path.basename(Repo).toLowerCase()} 4 families ${Proposal(Repo)}`;
-			assert.ok(Run.Lines.includes(`convention-suggester: ${Line}`));
-			assert.match(DurableLine("learned proposal"), Durable(Line));
-		});
-		await CheckAsync(Count, "N2: the proposal file exists", async () => {
-			assert.equal(FileSystem.existsSync(Proposal(Repo)), true);
-		});
-	}
-
-	// Group N3: a second mount in the same process does not re-note.
-	{
-		FileSystem.rmSync(Proposal(Repo));
-		rm();
-		const Run = Make(Validate({ logFile: Ledger, enabled: true, learning: true }));
-		Run.Context.workingDirectory = Service(Repo);
-		await CheckAsync(Count, "N3: a second mount of the same root neither notes nor recreates the file", async () => {
-			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(Run, Write("Source/Function/Apply.ts", "b"), Decision);
-			assert.equal(Out, Decision);
-			assert.equal(FileSystem.existsSync(Proposal(Repo)), false);
-			assert.ok(
-				Run.Lines.includes("convention-suggester: abstained foreign-workspace  0.00"),
-			);
-			assert.equal(
-				Run.Lines.filter((Line: string) => Line.includes("learned proposal")).length,
-				0,
-			);
-		});
-	}
-
-	// Group N4: the reservation is keyed by root, not global.
-	{
-		rm();
-		const Run = Make(Validate({ logFile: Ledger, enabled: true, learning: true }));
-		Run.Context.workingDirectory = Service(Other);
-		await CheckAsync(Count, "N4: a different workspace gets its own proposal and note", async () => {
-			const Out = await Post(Run, Write("Source/Function/Apply.ts", "c"));
-			assert.equal(Out.additionalContexts[0].source.summary, "learned pack 4 families");
-			assert.equal(Out.additionalContexts[0].content[0].text, NoteText(Other, 4));
-			assert.equal(FileSystem.existsSync(Proposal(Other)), true);
-		});
-	}
-
-	// Group N5: learning off stays silent.
-	{
-		rm();
-		const Run = Make(Validate({ logFile: Ledger, enabled: true }));
-		Run.Context.workingDirectory = Service(Silent);
-		await CheckAsync(Count, "N5: learning off emits no note and writes no file", async () => {
-			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(Run, Write("Source/Function/Apply.ts", "d"), Decision);
-			assert.equal(Out, Decision);
-			assert.equal(FileSystem.existsSync(Proposal(Silent)), false);
-			assert.ok(
-				Run.Lines.includes("convention-suggester: abstained foreign-workspace  0.00"),
-			);
-		});
-	}
+	await CheckAsync(Count, "N1: a non-judged call writes nothing and notes nothing", async () => {
+		const Decision = { kind: "allow", additionalContexts: [] };
+		const Out = await Post(
+			Run,
+			{ name: "bash", arguments: { command: "ls" }, agent: AgentOf("a") },
+			Decision,
+		);
+		assert.equal(Out, Decision);
+		assert.equal(FileSystem.existsSync(Proposal(Repo)), false);
+		assert.deepEqual(Run.Lines, [
+			`convention-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`,
+		]);
+	});
+	await CheckAsync(Count, "N2: the first judged call abstains no-history and writes no proposal", async () => {
+		const Decision = { kind: "allow", additionalContexts: [] };
+		const Out = await Post(Run, Call("a"), Decision);
+		assert.equal(Out, Decision);
+		assert.deepEqual(Out.additionalContexts, []);
+		assert.equal(FileSystem.existsSync(Proposal(Repo)), false);
+		assert.ok(Run.Lines.includes("convention-suggester: abstained no-history  0.00"));
+		assert.match(
+			DurableLine("abstained no-history"),
+			Durable("abstained no-history  0.00"),
+		);
+		assert.equal(Run.Lines.filter((Line: string) => Line.includes("learned proposal")).length, 0);
+	});
 
 	return Finish(Count, "Learn-Note");
 };

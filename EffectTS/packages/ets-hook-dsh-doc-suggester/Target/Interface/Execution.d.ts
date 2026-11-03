@@ -24,6 +24,10 @@ export interface Family {
     priority: number;
     /** The family's own gate. */
     threshold: number;
+    /** The one-phrase caveat the pack row carries ("" when the domain has none). */
+    note: string;
+    /** The long-tail family globs ([] when the domain has none). */
+    familyGlobs: string[];
     /** The path rules. */
     signals: Signal[];
     /** The companion set. */

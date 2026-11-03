@@ -1,10 +1,12 @@
-// Source/Test/Pack-Driven/Test.ts - the PACK-DRIVEN behaviour: a temporary
-// repo with its own `.dsh/pack.yml` (its own signature and its own
-// `search/Version` intent) overrides the built-in intent, so the note names
-// the pack's target, never the built-in one; the same workspace WITHOUT the
-// pack stays silent (`abstained foreign-workspace`); a pack whose signature
-// marker is absent stays silent too; and the built-in pack still drives the
-// monorepo path (parity).
+// Source/Test/Pack-Driven/Test.ts - the EXPLICIT pack override: a temporary
+// repo with its own `.dsh/pack.yml` (its own `search/Version` family) speaks
+// when the session history is empty, so the note names the pack's companion
+// and never a built-in one; the same workspace WITHOUT the pack abstains
+// `no-history` (the built-in pack is never a candidate source); a pack in a
+// rooted tree still governs even when its declared signature marker is absent
+// (the root gates, not the signature); the monorepo path with no history
+// abstains `no-history` instead of naming a built-in companion; and the
+// History family is prepended before the pack's own rows.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -15,6 +17,7 @@ import {
 	Finish,
 	MakeCounter,
 	Post,
+	SeedHistory,
 	Setup,
 } from "../Harness.js";
 
@@ -29,7 +32,7 @@ const Put = (Root: string, Relative: string, Body = "x"): string => {
 	return Full;
 };
 
-/** The temp pack: a custom signature and one search/Version intent. */
+/** The temp pack: a custom signature and one search/Version family. */
 const Pack = `signature:
   - docs/STYLE.md
 families:
@@ -51,100 +54,117 @@ families:
 /** The optional harness service the probe reads (the real shape: get(session)). */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
-/** The PACKED workspace: the pack, its marker and the target. */
+/** The PACKED workspace: the manifest, the pack, its marker and the target. */
 const Packed = Tree("search-suggester-packed-");
+Put(Packed, "package.json", "{}");
 Put(Packed, ".dsh/pack.yml", Pack);
 Put(Packed, "docs/STYLE.md");
 Put(Packed, "VERSIONS.md");
+const PackedManifest = Path.join(Packed, "package.json");
 
 /** The SAME workspace without the pack. */
 const Bare = Tree("search-suggester-bare-");
+Put(Bare, "package.json", "{}");
 Put(Bare, "VERSIONS.md");
 
 /** The UNSIGNED workspace: a pack whose signature marker is absent. */
 const Unsigned = Tree("search-suggester-unsigned-");
+Put(Unsigned, "package.json", "{}");
 Put(Unsigned, ".dsh/pack.yml", Pack);
+
+/** One judged grep with no path argument (the cwd carries the workspace). */
+const Grep = (Id: string, Pattern = "version"): any => ({
+	name: "grep",
+	arguments: { pattern: Pattern },
+	agent: AgentOf(Id),
+});
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
-	// P1: the temp pack's intent overrides the built-in search/Version intent.
+	// P1: the explicit temp pack's family drives the note (empty history).
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Packed);
-		await CheckAsync(Count, "P1: the temp pack's intent drives the note", async () => {
-			const Out = await Post(Run, {
-				name: "grep",
-				arguments: { pattern: "version" },
-				agent: AgentOf("pack-a"),
-			});
+		await CheckAsync(Count, "P1: the temp pack's family drives the note", async () => {
+			const Out = await Post(Run, Grep("pack-a"));
 			assert.equal(Out.additionalContexts.length, 1);
 			assert.deepEqual(Out.additionalContexts[0].source, {
 				kind: "search-suggester",
 				form: "notice",
 				summary: "Version 0.87",
 			});
-			const Text = Out.additionalContexts[0].content[0].text;
 			assert.equal(
-				Text,
+				Out.additionalContexts[0].content[0].text,
 				"[search-suggester] intent=Version confidence=0.87\ntargets (1):\n- VERSIONS.md - the temp versions\nnote: open these before more searches; Target/ is generated, never edit it.",
 			);
-			assert.equal(Text.includes("the monorepo manifest"), false);
 		});
 		await CheckAsync(Count, "P1: the ledger counts the pack's one candidate", async () => {
 			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest Version 0.87 1 candidates"));
 		});
 	}
 
-	// P2: the same workspace without the pack stays silent.
+	// P2: the same workspace without the pack abstains no-history.
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Bare);
-		await CheckAsync(Count, "P2: the same workspace without the pack stays silent", async () => {
+		await CheckAsync(Count, "P2: the same workspace without the pack abstains no-history", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
-			const Out = await Post(
-				Run,
-				{ name: "grep", arguments: { pattern: "version" }, agent: AgentOf("pack-b") },
-				Decision,
-			);
+			const Out = await Post(Run, Grep("pack-b"), Decision);
 			assert.equal(Out, Decision);
+			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained no-history  0.00"));
+			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
+		});
+	}
+
+	// P3: the root gates the pack, not its declared signature marker.
+	{
+		const Run = Setup();
+		Run.Context.workingDirectory = Service(Unsigned);
+		await CheckAsync(Count, "P3: a pack with an absent companion abstains no-companions", async () => {
+			const Decision = { kind: "allow", additionalContexts: [] };
+			const Out = await Post(Run, Grep("pack-c"), Decision);
+			assert.equal(Out, Decision);
+			// The pack's family matched, and its one companion does not exist
+			// in the tree: the existence filter empties the set.
 			assert.ok(
-				Run.Lines.includes("hook-dsh-search-suggester: abstained foreign-workspace  0.00"),
+				Run.Lines.includes("hook-dsh-search-suggester: abstained no-companions Version 0.87"),
 			);
 			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
 		});
 	}
 
-	// P3: the pack's signature gates the workspace.
+	// P4: the built-in pack is NEVER a candidate source.
 	{
 		const Run = Setup();
-		Run.Context.workingDirectory = Service(Unsigned);
-		await CheckAsync(Count, "P3: a pack whose signature marker is absent stays silent", async () => {
+		await CheckAsync(Count, "P4: a monorepo read with no history abstains no-history", async () => {
 			const Decision = { kind: "allow", additionalContexts: [] };
 			const Out = await Post(
 				Run,
-				{ name: "grep", arguments: { pattern: "version" }, agent: AgentOf("pack-c") },
+				{ name: "read", arguments: { file_path: "package.json" }, agent: AgentOf("pack-d") },
 				Decision,
 			);
 			assert.equal(Out, Decision);
-			assert.ok(
-				Run.Lines.includes("hook-dsh-search-suggester: abstained foreign-workspace  0.00"),
-			);
+			assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained no-history  0.00"));
+			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 0);
 		});
 	}
 
-	// P4: the built-in pack still drives the monorepo path (parity).
+	// P5: the History family is prepended before the explicit pack's rows.
 	{
 		const Run = Setup();
-		await CheckAsync(Count, "P4: the built-in pack still drives the monorepo path", async () => {
+		Run.Context.workingDirectory = Service(Packed);
+		SeedHistory(Run, "pack-e", PackedManifest, ["VERSIONS.md"]);
+		await CheckAsync(Count, "P5: the History family outranks the explicit pack's row", async () => {
 			const Out = await Post(Run, {
 				name: "grep",
-				arguments: { pattern: "version 1.2.3", path: "package.json" },
-				agent: AgentOf("pack-d"),
+				arguments: { pattern: "version", path: PackedManifest },
+				agent: AgentOf("pack-e"),
 			});
-			assert.equal(Out.additionalContexts[0].source.summary, "Version 0.92");
-			const Text = Out.additionalContexts[0].content[0].text;
-			assert.equal(Text.includes("- package.json - the monorepo manifest"), true);
+			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+			assert.ok(
+				Run.Lines.includes("hook-dsh-search-suggester: suggest History 0.87 1 candidates"),
+			);
 		});
 	}
 

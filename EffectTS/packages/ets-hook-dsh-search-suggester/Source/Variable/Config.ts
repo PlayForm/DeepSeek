@@ -44,8 +44,9 @@ export default Compose(false, {
 	cooldownCalls: Schema.number().default(6).volatile(),
 	// Maximum notes per turn, per agent (volatile).
 	maxNotesPerTurn: Schema.number().default(3).volatile(),
-	// The enabled intent kinds, in priority order (volatile; the pack's rows
-	// not listed here are inert).
+	// The enabled intent kinds of an EXPLICIT pack, in priority order
+	// (volatile; the pack's rows not listed here are inert, and the synthetic
+	// History row is never filtered).
 	intents: Schema.array(String)
 		.default([
 			"Version",
@@ -89,8 +90,9 @@ export default Compose(false, {
 	// forgotten and the suggestion may return.
 	dismissTtl: Schema.number().default(86400).volatile(),
 	// The offline seed switch (volatile): at load the knowledge is seeded from
-	// the built-in pack's canonical candidates plus the graph projection
-	// (Function/Seed); false keeps the deterministic cold start.
+	// an EXPLICIT pack's canonical candidates plus the graph projection
+	// (Function/Seed); a repo without an explicit pack seeds nothing, and
+	// false keeps the deterministic cold start.
 	seed: Schema.boolean().default(true).volatile(),
 	// The second surface (volatile): "off" (the default) or "sticky".
 	sectionMode: Schema.string().default("off").volatile(),

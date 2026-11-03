@@ -12,20 +12,25 @@ import {
   MakeCounter,
   Post,
   rm,
+  SeedHistory,
   Setup,
   Validate
 } from "../Harness.js";
-const StrongVersion = (Id) => ({
-  name: "grep",
-  arguments: { pattern: "1.2.3 version", path: "package.json" },
-  agent: AgentOf(Id)
+const Anchor = "README.md";
+const Companions = ["CHANGELOG.md", "SCHEME.md"];
+const Read = (Id) => ({
+  name: "read",
+  arguments: { file_path: Anchor },
+  agent: Id === void 0 ? void 0 : AgentOf(Id)
 });
+const Section = "[search-suggester] intent=History confidence=1.00\ntargets (2):\n- CHANGELOG.md - touched after a similar call\n- SCHEME.md - touched after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
 const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Setup();
+    SeedHistory(Run, "a", Anchor, Companions);
     await CheckAsync(Count, "S1: with sectionMode off the assemble passes through untouched", async () => {
-      await Post(Run, StrongVersion("a"));
+      await Post(Run, Read("a"));
       const Out = await Assemble(Run, AgentOf("a"));
       assert.deepEqual(Out.sections, [{ name: "base", text: "b" }]);
       assert.ok(!Run.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
@@ -34,14 +39,12 @@ const runTest = async () => {
   {
     rm();
     const Sticky = Make(Validate({ logFile: Ledger, enabled: true, sectionMode: "sticky" }));
+    SeedHistory(Sticky, "a", Anchor, Companions);
     await CheckAsync(Count, "S2: after an emit the sticky section is appended", async () => {
-      await Post(Sticky, StrongVersion("a"));
+      await Post(Sticky, Read("a"));
       const Out = await Assemble(Sticky, AgentOf("a"));
-      assert.deepEqual(Out.sections.map((Section) => Section.name), ["base", "hook-dsh-search-suggester"]);
-      assert.equal(
-        Out.sections[1].text,
-        "[search-suggester] intent=Version confidence=1.00\ntargets (10):\n- package.json - the monorepo manifest\n- Site/package.json - the site manifest\n- Classic/packages/*/package.json - the Classic manifests\n- EffectTS/packages/*/package.json - the EffectTS manifests\n- */Source/Function/Apply.ts - the const Version\n- Site/Source/Library/Content.ts - the site release constant\n- CHANGELOG.md - the new section\n- Documentation/Plugins/PLUGIN-FAMILY.md - the roster versions\n- Site/Source/pages/reference.astro - the versions page\n- .github/workflows/NPM.yml - the publish trigger\nnote: open these before more searches; Target/ is generated, never edit it."
-      );
+      assert.deepEqual(Out.sections.map((Section_) => Section_.name), ["base", "hook-dsh-search-suggester"]);
+      assert.equal(Out.sections[1].text, Section);
       assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
       assert.match(
         DurableLine("section rebuilt (ttl 20)"),
@@ -53,7 +56,7 @@ const runTest = async () => {
       const Rings = Sticky.State.Rings.State(AgentOf("a"));
       const Built = Rings.sectionBuilt;
       const Out = await Assemble(Sticky, AgentOf("a"));
-      assert.deepEqual(Out.sections.map((Section) => Section.name), ["base", "hook-dsh-search-suggester"]);
+      assert.deepEqual(Out.sections.map((Section_) => Section_.name), ["base", "hook-dsh-search-suggester"]);
       assert.equal(Sticky.State.Rings.State(AgentOf("a")).sectionBuilt, Built);
       assert.equal(LedgerWith("section rebuilt (ttl 20)").length, 1);
     });
@@ -61,10 +64,20 @@ const runTest = async () => {
   {
     rm();
     const Sticky = Make(Validate({ logFile: Ledger, enabled: true, sectionMode: "sticky" }));
-    await CheckAsync(Count, "S3: the default ring builds its section on the no-agent emit and assemble", async () => {
-      await Post(Sticky, { name: "grep", arguments: { pattern: "1.2.3 version", path: "package.json" }, agent: void 0 });
+    await CheckAsync(Count, "S3: the default ring folds the no-session events and builds its section", async () => {
+      Sticky.CtxListeners["session/event"](void 0, {
+        type: "tool/call",
+        name: "read",
+        arguments: { file_path: Anchor }
+      });
+      Sticky.CtxListeners["session/event"](void 0, {
+        type: "tool/call",
+        name: "read",
+        arguments: { file_path: "CHANGELOG.md" }
+      });
+      await Post(Sticky, Read(void 0));
       const Out = await Assemble(Sticky, void 0);
-      assert.deepEqual(Out.sections.map((Section) => Section.name), ["base", "hook-dsh-search-suggester"]);
+      assert.deepEqual(Out.sections.map((Section_) => Section_.name), ["base", "hook-dsh-search-suggester"]);
       assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
     });
     await CheckAsync(Count, "S3: tools/change invalidates the default ring's cache with its ledger line", async () => {
@@ -76,7 +89,7 @@ const runTest = async () => {
         Durable("section invalidated (tools/change)")
       );
       const Out = await Assemble(Sticky, void 0);
-      assert.deepEqual(Out.sections.map((Section) => Section.name), ["base", "hook-dsh-search-suggester"]);
+      assert.deepEqual(Out.sections.map((Section_) => Section_.name), ["base", "hook-dsh-search-suggester"]);
       assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
     });
     await CheckAsync(Count, "S3: tools/change on an empty cache is silent", async () => {
@@ -89,10 +102,10 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    await CheckAsync(Count, "S4: an assemble with no cooled intent passes through with no section", async () => {
+    await CheckAsync(Count, "S4: an assemble with no cooled family passes through with no section", async () => {
       const Out = await Assemble(Run, void 0);
       assert.deepEqual(Out.sections, [{ name: "base", text: "b" }]);
-      assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, intents 10, threshold 0.75)`]);
+      assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`]);
       assert.deepEqual(Run.Warns, []);
     });
   }

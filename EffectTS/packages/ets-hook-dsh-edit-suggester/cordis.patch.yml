@@ -1,10 +1,14 @@
 # Bundle patch for @playform/hook-dsh-edit-suggester.
 # The modification-intent COMPANION SUGGESTER: it hooks the tools/post-execute
-# waterfall for the modification tools (write, edit, raw-write) and, when the
-# edited path matches one of the convention families, prepends ONE labeled
-# additionalContexts note naming the companions the model has not touched yet
-# - "this file rarely stands alone". Deterministic path rules; the note never
-# replaces content and never claims the Transform (the second consumer of the
+# waterfall for the modification tools (write, edit, raw-write) and, when a
+# judged call edits a path, prepends ONE labeled additionalContexts note
+# naming the files the session touched right after this one in this workspace
+# - the companions the task most likely needs next (the root manifest, the
+# CHANGELOG section, the Config table row, the byte-exact test, the site
+# mirror). The candidates come from the agent's own previous tool calls; a
+# repo/user pack is an explicit override only and the literal built-in pack is
+# never a candidate source. Deterministic path rules; the note never replaces
+# content and never claims the Transform (the second consumer of the
 # search-suggester's pattern algebra, SEARCH-SUGGESTER-PLUGIN.md section 8).
 #
 # New entries are declared with `insert:` (docs/user/develop/basic/

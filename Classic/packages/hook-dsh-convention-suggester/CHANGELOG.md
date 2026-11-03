@@ -2,6 +2,24 @@
 
 This file documents all notable changes to this package.
 
+## Unreleased
+
+### Changed
+
+- The suggestions come from the agent's OWN previous tool calls in this workspace: the new
+  `session/event` listener folds every `tool/call` into the session's touch history (capped at 512),
+  and the post-execute listener derives the candidates with `Adjacent`, so the notice names the
+  files that were touched right after the anchor.
+- A repo/user pack is now an EXPLICIT override: the listener resolves it with `builtin: false`, so
+  the literal built-in pack is never a candidate source. A workspace with no pack and no history
+  abstains with the new byte-exact line `abstained no-history  0.00`.
+- The workspace root is pack-independent (the nearest ancestor carrying `.git` or `package.json`),
+  and a call with no such root abstains `abstained foreign-workspace  0.00`.
+- The activation line's second segment is `history` (was `intents <n>`), because the boot compile is
+  empty.
+- The literal pack learner (D4) is retired: no proposal file and no `learned proposal` ledger line.
+  The `learning` config field is kept for compatibility until the history-driven proposal lands.
+
 ## 0.2.1
 
 ### Changed

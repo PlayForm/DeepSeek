@@ -4,7 +4,7 @@ export default _default;
 declare function _default(
 /** The loaded (or cold) knowledge, mutated in place. */
 Knowledge: Knowledge, 
-/** The built-in pack's intents (the seed source). */
+/** The explicit pack's search intents (the seed source; empty = no seed). */
 Pack: Intent[], 
 /** The graph projection when one was available at load. */
 Projection: Projection | undefined, 

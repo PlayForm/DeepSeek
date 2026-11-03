@@ -1,0 +1,187 @@
+import assert from "node:assert/strict";
+import { join } from "node:path";
+import {
+  Check,
+  Finish,
+  Library,
+  MakeCounter,
+  Put,
+  Tree
+} from "../Harness.js";
+const Call = (Seq, Path, Tool = "Write") => ({
+  seq: Seq,
+  path: Path,
+  tool: Tool
+});
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    Check(Count, "A1: the fold ignores every event that is not a tool/call", () => {
+      assert.equal(Library.Fold({ type: "text" }, 0), void 0);
+      assert.equal(Library.Fold({}, 1), void 0);
+    });
+    Check(Count, "A1: the fold parses a JSON string payload", () => {
+      assert.deepEqual(
+        Library.Fold(
+          { type: "tool/call", name: "Edit", arguments: '{"file_path":"docs/STYLE.md"}' },
+          3
+        ),
+        { seq: 3, path: "docs/STYLE.md", tool: "Edit" }
+      );
+    });
+    Check(Count, "A1: the fold accepts an object payload and prefers file_path", () => {
+      assert.deepEqual(
+        Library.Fold(
+          { type: "tool/call", name: "Read", arguments: { file_path: "a.md", path: "b.md" } },
+          4
+        ),
+        { seq: 4, path: "a.md", tool: "Read" }
+      );
+    });
+    Check(Count, "A1: the fold falls back to path and filePath", () => {
+      assert.deepEqual(
+        Library.Fold({ type: "tool/call", arguments: { path: "b.md" } }, 5),
+        { seq: 5, path: "b.md", tool: "" }
+      );
+      assert.deepEqual(
+        Library.Fold({ type: "tool/call", arguments: { filePath: "c.md" } }, 6),
+        { seq: 6, path: "c.md", tool: "" }
+      );
+    });
+    Check(Count, "A1: the fold normalizes backslashes and strips the leading ./", () => {
+      assert.equal(
+        Library.Fold({ type: "tool/call", arguments: { file_path: ".\\docs\\A.md" } }, 7)?.path,
+        "docs/A.md"
+      );
+      assert.equal(
+        Library.Fold({ type: "tool/call", arguments: { file_path: "./docs/B.md" } }, 8)?.path,
+        "docs/B.md"
+      );
+    });
+    Check(Count, "A1: the fold skips malformed JSON and path-less arguments", () => {
+      assert.equal(Library.Fold({ type: "tool/call", arguments: "{no" }, 9), void 0);
+      assert.equal(Library.Fold({ type: "tool/call", arguments: "42" }, 10), void 0);
+      assert.equal(Library.Fold({ type: "tool/call", arguments: {} }, 11), void 0);
+      assert.equal(Library.Fold({ type: "tool/call", arguments: { file_path: "" } }, 12), void 0);
+    });
+  }
+  {
+    const Touches = [
+      Call(0, "docs/A.md"),
+      Call(1, "docs/B.md"),
+      Call(2, "docs/A.md"),
+      Call(3, "docs/B.md"),
+      Call(4, "docs/A.md"),
+      Call(5, "docs/C.md"),
+      Call(6, "docs/D.md"),
+      Call(7, "docs/E.md")
+    ];
+    Check(Count, "A2: a repeated co-touch outranks a single one", () => {
+      const Rows = Library.Adjacent(Touches, "docs/A.md");
+      assert.equal(Rows[0]?.path, "docs/B.md");
+      assert.equal(Rows[0]?.count, 3);
+    });
+    Check(Count, "A2: the score prefers the near neighbour over the far one", () => {
+      const Rows = Library.Adjacent(Touches, "docs/A.md");
+      assert.equal(Rows[1]?.path, "docs/C.md");
+      assert.ok(Math.abs((Rows[1]?.score ?? 0) - 11 / 12) < 1e-9);
+      assert.ok(Math.abs((Rows[2]?.score ?? 0) - 71 / 105) < 1e-9);
+    });
+    Check(Count, "A2: the anchor itself is never a candidate", () => {
+      const Rows = Library.Adjacent(Touches, "docs/A.md");
+      assert.equal(Rows.some((Row) => Row.path === "docs/A.md"), false);
+      assert.deepEqual(Rows.map((Row) => Row.path).sort(), [
+        "docs/B.md",
+        "docs/C.md",
+        "docs/D.md",
+        "docs/E.md"
+      ]);
+    });
+    Check(Count, "A2: the window bounds how far a co-touch carries", () => {
+      const Far = [
+        Call(0, "docs/A.md"),
+        ...Array.from({ length: 9 }, (_, Index) => Call(Index + 1, `docs/F${Index}.md`))
+      ];
+      assert.deepEqual(
+        Library.Adjacent(Far, "docs/A.md", { window: 8, limit: 8 }).map((Row) => Row.path),
+        [
+          "docs/F0.md",
+          "docs/F1.md",
+          "docs/F2.md",
+          "docs/F3.md",
+          "docs/F4.md",
+          "docs/F5.md",
+          "docs/F6.md",
+          "docs/F7.md"
+        ]
+      );
+      assert.deepEqual(
+        Library.Adjacent(Far, "docs/A.md", { window: 2 }).map((Row) => Row.path),
+        ["docs/F0.md", "docs/F1.md"]
+      );
+    });
+    Check(Count, "A2: the limit slices the ranked candidates", () => {
+      const Far = [
+        Call(0, "docs/A.md"),
+        ...Array.from({ length: 9 }, (_, Index) => Call(Index + 1, `docs/F${Index}.md`))
+      ];
+      assert.equal(Library.Adjacent(Far, "docs/A.md").length, 7);
+      assert.equal(Library.Adjacent(Far, "docs/A.md", { limit: 3 }).length, 3);
+    });
+    Check(Count, "A2: an anchor that never appears folds to no candidates", () => {
+      assert.deepEqual(Library.Adjacent(Touches, "docs/Z.md"), []);
+    });
+  }
+  {
+    const Repo = Tree("pack-adjacent-root-");
+    Put(Repo, "package.json");
+    Put(Repo, "src/deep/File.ts");
+    Check(Count, "A3: a directory with package.json is the root", () => {
+      assert.equal(Library.Root(join(Repo, "src/deep/File.ts")), Repo);
+    });
+    const Outer = Tree("pack-adjacent-outer-");
+    Put(Outer, ".git/HEAD");
+    Put(Outer, "packages/inner/src/File.ts");
+    Check(Count, "A3: the walk climbs past bare directories to the repo", () => {
+      assert.equal(Library.Root(join(Outer, "packages/inner/src/File.ts")), Outer);
+    });
+    const Home = Tree("pack-adjacent-home-");
+    Check(Count, "A3: an empty path starts at the cwd and falls back to it", () => {
+      assert.equal(Library.Root("", Home), Home);
+    });
+  }
+  {
+    const Home = Tree("pack-adjacent-home-");
+    const Bare = Tree("pack-adjacent-bare-");
+    Check(Count, "A4: builtin false resolves a layer-less workspace to undefined", () => {
+      assert.equal(Library.Resolve(Bare, { home: Home, builtin: false }), void 0);
+      assert.equal(Library.Resolve(Bare, { home: Home }), Library.Builtin);
+    });
+    const Layered = Tree("pack-adjacent-layered-");
+    Put(
+      Layered,
+      ".dsh/pack.yml",
+      `signature:
+  - docs/STYLE.md
+slug: custom
+`
+    );
+    Put(Layered, "docs/STYLE.md");
+    Check(Count, "A4: builtin false still resolves the layer that exists", () => {
+      const Pack = Library.Resolve(Layered, { home: Home, builtin: false });
+      assert.notEqual(Pack, void 0);
+      assert.deepEqual(Pack?.signature, ["docs/STYLE.md"]);
+      assert.equal(Pack?.slug, "custom");
+    });
+  }
+  return Finish(Count, "Adjacent");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Adjacent`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

@@ -8,6 +8,13 @@
 // fresh set, so every folder is standalone-green and the aggregate replays
 // the same seams per folder.
 //
+// THE HISTORY SEAM: the candidates come from the agent's OWN previous tool
+// calls, so every candidate scenario seeds `Run.State.History` through
+// `SeedHistory` (the session/event fold's touch shape) instead of relying on
+// a literal pack. A folder that tests the EXPLICIT pack writes a real
+// `.dsh/pack.yml` into a temp tree; a folder that tests neither asserts the
+// `abstained no-history  0.00` line.
+//
 // Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
 // fake ctx actually wires the plugin (the vacuously-green backstop for every
 // folder's fixture) and exits nonzero when it does not.
@@ -75,6 +82,15 @@ export const Finish = (Count: Counter, Name: string): number => {
 };
 
 // -- the suite-level fixtures (fresh per folder process) --
+
+/**
+ * A FRESH TEMP HOME, assigned before any construction: the user-layer pack
+ * (`~/.dsh/playform/workspaces/<slug>.yml`) and the pattern service's JSON
+ * fallback stay inside it, never the real home - so an explicit pack is only
+ * ever the one a test writes into its own temp workspace.
+ */
+export const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "search-suggester-home-"));
+process.env["HOME"] = Home;
 
 export const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "search-suggester-smoke-"));
 export const Ledger = Path.join(Root, "search-suggester.log");
@@ -256,6 +272,27 @@ export const Setup = (): any => {
 	return Make(Validate({ logFile: Ledger, enabled: true }));
 };
 
+/**
+ * A fresh temp WORKSPACE: the `package.json` root marker plus one file per
+ * relative path. The judged call's path is the ABSOLUTE anchor
+ * (`Space.At("README.md")`), so the workspace gate resolves THIS tree whatever
+ * the process cwd is, while the companions stay relative and resolve under
+ * the tree's root (the base-aware existence filter).
+ */
+export const Workspace = (Files: readonly string[]): { Root: string; At: (Relative: string) => string } => {
+	const Space = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "search-suggester-workspace-"));
+	FileSystem.writeFileSync(Path.join(Space, "package.json"), "{}", "utf8");
+	for (const Relative of Files) {
+		const Full = Path.join(Space, Relative);
+		FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
+		FileSystem.writeFileSync(Full, "x", "utf8");
+	}
+	return { Root: Space, At: (Relative: string) => Path.join(Space, Relative) };
+};
+
+/** The optional harness service the probe reads (the real shape: get(session)). */
+export const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
+
 /** One judged tools/post-execute call: the agent is the caller's object. */
 export const Post = (Run: any, Exec: any, Decision: any = { kind: "allow", additionalContexts: [] }): Promise<any> =>
 	Run.CtxListeners["tools/post-execute"](Exec, {}, () => Promise.resolve(Decision));
@@ -282,6 +319,28 @@ export const AgentOf = (Id: string): any => {
 	}
 	return Agents.get(Id);
 };
+
+/**
+ * Seed one agent's session history (the session/event fold's touch shape):
+ * the anchor the judged call names, then the companions the session touched
+ * right after it. The history is keyed on the exact agent object the judged
+ * calls carry, so `AgentOf(Id)` must be used on both sides.
+ */
+export const SeedHistory = (
+	Run: any,
+	Id: string,
+	Anchor: string,
+	Companions: readonly string[],
+): void => {
+	Run.State.History.set(AgentOf(Id), {
+		Seq: Companions.length + 1,
+		Touches: [Anchor, ...Companions].map((Path: string, Seq: number) => ({
+			seq: Seq,
+			path: Path,
+			tool: "read",
+		})),
+	});
+};
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
@@ -296,9 +355,10 @@ if (InvokedDirectly) {
 	});
 	rm();
 	const Run = Setup();
-	Check(Count, "selfcheck: the fake ctx registers the plugin's four listeners", () => {
+	Check(Count, "selfcheck: the fake ctx registers the plugin's five listeners", () => {
 		assert.deepEqual(Object.keys(Run.CtxListeners), [
 			"loader/volatile-update",
+			"session/event",
 			"tools/post-execute",
 			"agent/pre-step",
 			"system-prompt/assemble",
@@ -307,7 +367,7 @@ if (InvokedDirectly) {
 		assert.deepEqual(Run.RootNames, []);
 		assert.equal(Run.Returned, undefined);
 		assert.equal(Run.Fs.reads + Run.Fs.writes, 0);
-		assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, intents 10, threshold 0.75)`]);
+		assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`]);
 	});
 	if (Count.N === 3 && Count.F === 1) {
 		console.log("Harness selfcheck OK");

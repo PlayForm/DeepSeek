@@ -38,9 +38,10 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    Check(Count, "W2: the two listeners register on the plugin context only", () => {
+    Check(Count, "W2: the three listeners register on the plugin context only", () => {
       assert.deepEqual(Object.keys(Run.CtxListeners), [
         "loader/volatile-update",
+        "session/event",
         "tools/post-execute",
         "agent/pre-step"
       ]);
@@ -49,13 +50,13 @@ const runTest = async () => {
       assert.equal(Object.getPrototypeOf(Run.Root), Object.prototype);
     });
     Check(Count, "W2: the activation line is byte-exact in the logger form", () => {
-      assert.deepEqual(Run.Lines, [`hook-dsh-edit-suggester: activated (bundle ${"0.2.1"}, families 7, threshold 0.75)`]);
+      assert.deepEqual(Run.Lines, [`hook-dsh-edit-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`]);
       assert.deepEqual(Run.Effects, []);
     });
     Check(Count, "W2: the activation line is byte-exact in the durable form", () => {
       assert.equal(LedgerLines().length, 1);
-      assert.match(FirstLine(), Durable(`activated (bundle ${"0.2.1"}, families 7, threshold 0.75)`));
-      assert.deepEqual(LedgerWith(`activated (bundle ${"0.2.1"}, families 7, threshold 0.75)`).length, 1);
+      assert.match(FirstLine(), Durable(`activated (bundle ${"0.2.1"}, history, threshold 0.75)`));
+      assert.deepEqual(LedgerWith(`activated (bundle ${"0.2.1"}, history, threshold 0.75)`).length, 1);
     });
   }
   {
@@ -75,8 +76,8 @@ const runTest = async () => {
     });
   }
   {
-    Check(Count, "W4: a string enabled fails loud at load", () => {
-      assert.throws(() => Validate({ enabled: "yes" }), /expected boolean but got yes/);
+    Check(Count, "W4: a string threshold fails loud at load", () => {
+      assert.throws(() => Validate({ threshold: "high" }), /expected number but got high/);
     });
     Check(Count, "W4: a string maxNoteChars fails loud at load", () => {
       assert.throws(() => Validate({ maxNoteChars: "long" }), /expected number but got long/);
@@ -91,14 +92,23 @@ const runTest = async () => {
       assert.equal(Run.State.CooldownCalls, 6);
       assert.equal(Run.State.MaxNotesPerTurn, 3);
       assert.deepEqual(Run.State.Exclude, ["node_modules", "Target", ".git", "dist"]);
-      assert.equal(Run.State.Pack.length, 7);
+      assert.equal(Run.State.Pack.length, 0);
+      assert.ok(Run.State.History instanceof WeakMap);
       assert.equal(Run.State.Factory, Run.Context.pluginFactory);
     });
   }
   {
     const Run = Setup();
-    await Post(Run, { name: "edit", arguments: { file_path: "package.json" }, agent: AgentOf("a") });
-    await Post(Run, { name: "edit", arguments: { file_path: "unrelated/deep/file.go" }, agent: AgentOf("a") });
+    Run.State.History.set(AgentOf("a"), {
+      Seq: 3,
+      Touches: [
+        { seq: 0, path: "Source/Variable/Config.ts", tool: "edit" },
+        { seq: 1, path: "README.md", tool: "edit" },
+        { seq: 2, path: "SCHEME.md", tool: "edit" }
+      ]
+    });
+    await Post(Run, { name: "edit", arguments: { file_path: "Source/Variable/Config.ts" }, agent: AgentOf("a") });
+    await Post(Run, { name: "edit", arguments: { file_path: "/repo/src/a.ts" }, agent: AgentOf("a") });
     Check(Count, "W5: zero ctx.fs calls across emit and abstain", () => {
       assert.equal(Run.Fs.reads, 0);
       assert.equal(Run.Fs.writes, 0);

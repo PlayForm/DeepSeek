@@ -271,17 +271,17 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "33d483c49865c9ac5bb1071cf2576ee9c7265c731ef44dd855bcdc5f601dc92e",
+			"seed": "64847acc093051a3976efea09daf7c651abca9368f210f0458ec77112a138ad1",
 			"grammar": "spike-star",
-			"order": 8,
-			"arms": 8,
+			"order": 12,
+			"arms": 4,
 			"rings": 1,
 			"orbit": 8,
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "6debb49e3c4ccad44698fb0517b6dc20cb9a6e3076969e738d1cff22e2c8f90d",
-				"colour": "c8ff445876ff3658040dd49cd43a4b59a441995cfd4a9df0b3bd39e959b7b211"
+				"mono": "37e8fe7cb66b04d0a9a3b4f96df3df46ea9f0219b1004d3472259840b6f3c5bc",
+				"colour": "fc7ac9b17fd249faf35c16af7b1b65fc74bd4b451fd3076d28c0f10a105c6689"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-convention-suggester.svg",
@@ -294,17 +294,17 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "c3cb9c7913c7a73ea1a2fa4f210e1ef3d5ed2e830e508202f91aec65847fef78",
+			"seed": "7819cd3de4d41929640b02611f78a26f1bed89d1dd18205d6cb30eb934c0d252",
 			"grammar": "spike-star",
-			"order": 8,
-			"arms": 8,
+			"order": 12,
+			"arms": 4,
 			"rings": 1,
 			"orbit": 8,
-			"rim": "none",
+			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "17eabd141150c550eb68274cb3e154ed8aeacb6cfeb928bf3a7e1c801245477e",
-				"colour": "e9e304c07405b591fbf4d6c52a7bc4c9e899e93d54dc351459f887ac748c33df"
+				"mono": "c7986638958c82de56fb36a96a543dd316fc589cd132315020b1e261e66a4628",
+				"colour": "bd9c2ae329906ad497f7ec9cebd937d61e354519764383d4e6e877926969d4fb"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-doc-suggester.svg",
@@ -317,17 +317,17 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "516dc20b3b68937ded284ef3e2a58ce6b775c5c6e9d68c622d61778a385a6e4d",
+			"seed": "b437e42b52b70b63ef0cd65eb4521db39a1d6e122f50354380f3a6fa3b0d1212",
 			"grammar": "spike-star",
-			"order": 8,
-			"arms": 8,
+			"order": 12,
+			"arms": 4,
 			"rings": 1,
 			"orbit": 8,
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "8f08c30f3fc60030bee60a2485f5a34d688467ea962b34ba51bf8614ed95cbf0",
-				"colour": "6be6aaabd53784c6d8db0678e69326d2457ec6df8c87f496174b20e52056aae4"
+				"mono": "f1da729a892f70a7901a68666a3b0cd592935ff3a447c44dfc9f19986ad71750",
+				"colour": "93bbe0825daed3d5ff238920edde68216007717df7c0870daaadf9e48352ddb8"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-edit-suggester.svg",
@@ -616,17 +616,17 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "128f3b62639d046d4e2d5164ee48959e10f483767aa4cf8e7188420385d99d6e",
+			"seed": "31e2b36a50971f9815457386225410d7e0e94ba1f8653b1ea6e59c35665eba0a",
 			"grammar": "spike-star",
 			"order": 12,
-			"arms": 6,
+			"arms": 8,
 			"rings": 1,
 			"orbit": 12,
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "2aad667eeaf9f80c1a55135779a309899f335f0e21f23cf009205048b8cf7d62",
-				"colour": "066bec34d4a1667f54438440a74f01a3a7ce325e7dbed5586cb62e5e736dc7cc"
+				"mono": "ea32971ab12c3dc0f5b035c1f4c7957fce0668c06c6d181e667525ee35bd637e",
+				"colour": "9e14c6372ab845ff3f13706ced4f756e891e8b23824df11bd865f34a7391e05c"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-search-suggester.svg",
@@ -639,17 +639,17 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "cbaca4e10b40843db9c8df86a325b17798efe37e97a3412caf5e28ba8c106ac5",
+			"seed": "a19fd127d897b567625158204ff85aeaf6e246873bb17e8544122cb40be5d213",
 			"grammar": "spike-star",
 			"order": 12,
-			"arms": 8,
+			"arms": 4,
 			"rings": 1,
 			"orbit": 8,
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "fe27298cac5818a03415f6cf425f4a2d01541e9d964cddfcbbc72a882a17a62a",
-				"colour": "01ad081e435ad0efaa1b293ec49731e8231e2bbee089403645100d0e4888bde5"
+				"mono": "9a61f2a27720f830f0282e910ad6a55c59f2f9c1c2c338cf1b77fd4d52af0b0d",
+				"colour": "8bc37d02cb0f7f62cc749f820dd7e3b7f1b1295f7f178920f4bbac139e46f71a"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-test-suggester.svg",
@@ -915,7 +915,7 @@
 			"kind": "lib",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "dbeb98a0bfec7bcd41be97d88b39c8866e32a654ff22e19fd8f878f0a31fa08e",
+			"seed": "ca4cea639a47e54a2bf17d9abebde8ae2aec1a14da53fbbda71b160cfcb4b89a",
 			"grammar": "crescent-ring",
 			"order": 4,
 			"arms": 4,
@@ -924,8 +924,8 @@
 			"rim": "none",
 			"mode": "traced",
 			"hash": {
-				"mono": "f2bef953c4c4b6f7d2ce18961e92212bb5c50ade69a7e3a318bcc64159f298c1",
-				"colour": "2b9fa9f9ec7c9bbaf7c6dfd6b2af2995cda7ad8b120806d4442d0ac0396bf816"
+				"mono": "1f1e9528453a24536dbbe5c371fcfa55e95f833d241e824bfaf5a1eef981f9b3",
+				"colour": "1883acde50711c491bda2e0e928473fb218f868eea17255bcba48d58124368bc"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-lib-dsh-pack.svg",
@@ -1559,17 +1559,17 @@
 			"kind": "hook",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "1bed80af6ab76635638d1fb7c902fa1f3d74e115a7cb5079d240c607b68d56d9",
+			"seed": "95f8247f1e7165c3412698f559a6ed90d1e69a61c749279aabca205b7e6a39cc",
 			"grammar": "spike-star",
-			"order": 8,
-			"arms": 8,
+			"order": 12,
+			"arms": 4,
 			"rings": 1,
 			"orbit": 8,
-			"rim": "diamond",
+			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "a7e7ef75ae869844e84d7207dba34101d9ca092073583bd4de3be18417004ec5",
-				"colour": "c3a0d2e7682ee617095b846c3f8579acf65cc652b0f5a5e1a125f6d6f185781f"
+				"mono": "3c2f191e2719de4dd80280efa52d75dd6d7f843be3befc886af3beea38152bcf",
+				"colour": "ecb71de51dcb91e90fd2fd03ab3ac6eeb9e4d3159ba0e3927b39e3eefde3781c"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-convention-suggester.svg",
@@ -1582,17 +1582,17 @@
 			"kind": "hook",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "16f8a4aea199b8c734fc9ef9611dde324afc9a49810adf3985715c9640f1a510",
+			"seed": "1ebaf656b0f6bf5678fd51b6a051abebb15d4c5187d05cdecd185a7edd386346",
 			"grammar": "spike-star",
-			"order": 8,
-			"arms": 8,
+			"order": 12,
+			"arms": 4,
 			"rings": 1,
 			"orbit": 8,
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "c142fa8a5e03793ee1d47300810206d647d5f5c76d0144d6473a0990caadbe10",
-				"colour": "22ec3c38c20a0967d8c862719b14789b644066e789f26c35963f091ab8072931"
+				"mono": "882d17234e9d8d9b1d087bfffb85782e0e3730e7f66d467c8f9717faebbb3cde",
+				"colour": "c2b9c6e1eeec2e1c3ea6cb07cd5683bbce83824774107e4a27c98ba356109086"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-doc-suggester.svg",
@@ -1605,17 +1605,17 @@
 			"kind": "hook",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "49a75fad9757f46fe968ac0343c41a627c775ad83a2a45397c420c401f669c88",
+			"seed": "1b7cae8262703324606c229303351f841f1d3208ad6482dcf63055a5c6093f2e",
 			"grammar": "spike-star",
-			"order": 8,
-			"arms": 8,
+			"order": 12,
+			"arms": 4,
 			"rings": 1,
 			"orbit": 8,
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "9b684a1ebf9786d34a855c2e7d7be7a6c47bb59a0ade82c3ccb3f1a695bb6f28",
-				"colour": "71bfebfd9300f7fd5d0a46526f634796edf6d7244eca4bd6502e1f1ef7467c02"
+				"mono": "666dc415ff2961e8a29442bf1dcb868a9c86500eeea54583206f05bc9f7c840f",
+				"colour": "d4ae2a5c370da92cc750bda1e34244bb61c6b62f4084588e37a09dc1ace859d3"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-edit-suggester.svg",
@@ -2203,7 +2203,7 @@
 			"kind": "lib",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "2b14c1f282cc73ac515b1a593fe0bc7e8064e4c8de3ed1c592d216e019705e79",
+			"seed": "bb1b78b6a035e3e9ac2c4fa4f63f69dac2f93d3c8312c25825a729ca02f0c61e",
 			"grammar": "crescent-ring",
 			"order": 4,
 			"arms": 4,
@@ -2212,8 +2212,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "6210c01a7f07bdbbfc826f27a20ef30008ab6e1a2c2b06cb00e8832c651c620e",
-				"colour": "6e36bfaa46368f8f735ea63cd1a8d987ad7e4d683814a627d316065b64d91b42"
+				"mono": "370af0b274ad3e6e4f8b6800d984e4ad7563cf9e9cda2d083bedf22e8f3cb96d",
+				"colour": "44abeedc3e09d8aae8153e88433113af653893fc5adb7199af7af37f972bed97"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-pack.svg",

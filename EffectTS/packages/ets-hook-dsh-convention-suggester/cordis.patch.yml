@@ -1,13 +1,13 @@
 # Bundle patch for @playform/hook-dsh-convention-suggester.
-# The convention-suggester hook carries the repo's conventions as a pattern
-# pack and names them BEFORE the model violates them: on every write/edit
-# call it classifies the target path deterministically (the layout family,
-# the naming family, the docs family, the ledger-string family) and prepends
-# ONE labeled additionalContexts notice naming the companion targets the
-# convention requires. The arbiter is the smoke suite that asserts the
-# convention (Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md sections 3.4,
-# 4, 8, 9.4). READ-ONLY by design: the hook never edits, never rewrites
-# arguments, and never denies.
+# The convention-suggester hook names the companion files of a change from
+# the agent's OWN previous tool calls in this workspace: it folds every
+# `tool/call` into the session's touch history and, on every write/edit call,
+# prepends ONE labeled additionalContexts notice naming the files touched
+# right after the anchor. An explicit repo/user pack is the override when the
+# history is empty. The arbiter is the smoke suite that asserts the behavior
+# (Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md sections 3.4, 4, 8, 9.4).
+# READ-ONLY by design: the hook never edits, never rewrites arguments, and
+# never denies.
 #
 # New entries are declared with `insert:` - a bare `id:` row PATCHES an
 # existing entry and the loader rejects unknown ids with 'entry "..." not
@@ -31,8 +31,8 @@
             maxNoteChars: 1200
             cooldownCalls: 6
             maxNotesPerTurn: 3
-            # The D4 pack learner is OFF: the bootstrap is opt-in (the config
-            # wins when true; a false config defers to a pack's learning.propose).
+            # The D4 pack learner is RETIRED: the field is kept for config
+            # compatibility until the history-driven proposal lands.
             learning: false
             emitOn:
                 - edit

@@ -10,6 +10,7 @@ import {
   Finish,
   MakeCounter,
   Post,
+  SeedHistory,
   Setup
 } from "../Harness.js";
 const Tree = (Prefix) => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
@@ -19,12 +20,6 @@ const Put = (Root, Relative, Body = "x") => {
   FileSystem.writeFileSync(Full, Body, "utf8");
   return Full;
 };
-const Service = (Cwd) => ({ get: () => Cwd });
-const Version = (Path_, Id) => ({
-  name: "grep",
-  arguments: { pattern: "1.2.3 version", path: Path_ },
-  agent: AgentOf(Id)
-});
 const Parent = Tree("search-suggester-workspaces-");
 const Branch = (Name) => {
   const Full = Path.join(Parent, Name);
@@ -32,24 +27,31 @@ const Branch = (Name) => {
   return Full;
 };
 const Foreign = Branch("foreign");
-const ForeignManifest = Put(Foreign, "package.json");
-const Ours = Branch("ours");
-Put(Ours, "Documentation/ARCHIVE-STYLE.md");
-const OursManifest = Put(Ours, "package.json");
-Put(Ours, "CHANGELOG.md");
-Put(Ours, "README.md");
-Put(Ours, "CONTRIBUTING.md");
-Put(Ours, "SCHEME.md");
-const Empty = Branch("empty");
-Put(Empty, "Documentation/ARCHIVE-STYLE.md");
+const ForeignIndex = Put(Foreign, "Documentation/INDEX.md");
+const Rooted = Branch("rooted");
+Put(Rooted, "package.json", "{}");
+const RootedAnchor = Put(Rooted, "README.md");
+Put(Rooted, "CHANGELOG.md");
+Put(Rooted, "SCHEME.md");
+const Service = (Cwd) => ({ get: () => Cwd });
+const Read = (Path_, Id) => ({
+  name: "read",
+  arguments: { file_path: Path_ },
+  agent: AgentOf(Id)
+});
+const HistoryText = [
+  "[search-suggester] intent=History confidence=0.87",
+  "targets (1):",
+  "- CHANGELOG.md - touched 1 time(s) after a similar call",
+  "note: open these before more searches; Target/ is generated, never edit it."
+].join("\n");
 const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Setup();
-    Run.Context.workingDirectory = Service(Foreign);
-    await CheckAsync(Count, "G1: a foreign workspace produces NO note and the foreign-workspace line", async () => {
+    await CheckAsync(Count, "G1: a call with no root abstains foreign-workspace", async () => {
       const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
-      const Out = await Post(Run, Version(ForeignManifest, "a"), Decision);
+      const Out = await Post(Run, Read(ForeignIndex, "a"), Decision);
       assert.equal(Out, Decision);
       assert.deepEqual(Out.additionalContexts, [{ id: "downstream" }]);
       assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained foreign-workspace  0.00"));
@@ -73,7 +75,7 @@ const runTest = async () => {
         }
       };
       const Decision = { kind: "allow", additionalContexts: [] };
-      const Out = await Post(Throwing, Version(ForeignManifest, "a"), Decision);
+      const Out = await Post(Throwing, Read(ForeignIndex, "a"), Decision);
       assert.equal(Out, Decision);
       assert.ok(Throwing.Lines.includes("hook-dsh-search-suggester: abstained foreign-workspace  0.00"));
       assert.deepEqual(Throwing.Warns, []);
@@ -81,74 +83,65 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    await CheckAsync(Count, "G2: without the service the absolute foreign path still abstains", async () => {
+    await CheckAsync(Count, "G2: a rooted tree with no history abstains no-history", async () => {
       const Decision = { kind: "allow", additionalContexts: [] };
-      const Out = await Post(Run, Version(ForeignManifest, "a"), Decision);
+      const Out = await Post(Run, Read(RootedAnchor, "b"), Decision);
       assert.equal(Out, Decision);
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained foreign-workspace  0.00"));
-      assert.deepEqual(Run.Warns, []);
+      assert.deepEqual(Out.additionalContexts, []);
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained no-history  0.00"));
+      assert.match(DurableLine("abstained no-history"), Durable("abstained no-history  0.00"));
+      assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 0);
     });
   }
   {
     const Run = Setup();
-    Run.Context.workingDirectory = Service(Ours);
-    await CheckAsync(Count, "G3: the note names only the candidates that exist", async () => {
-      const Out = await Post(Run, Version(OursManifest, "a"));
+    SeedHistory(Run, "c", RootedAnchor, ["CHANGELOG.md", "MISSING.md"]);
+    await CheckAsync(Count, "G3: the note names only the companions that exist", async () => {
+      const Out = await Post(Run, Read(RootedAnchor, "c"));
       assert.equal(Out.additionalContexts.length, 1);
       assert.deepEqual(Out.additionalContexts[0].source, {
         kind: "search-suggester",
         form: "notice",
-        summary: "Version 0.92"
+        summary: "History 0.87"
       });
-      const Text = Out.additionalContexts[0].content[0].text;
-      assert.equal(
-        Text,
-        "[search-suggester] intent=Version confidence=0.92\ntargets (5):\n- package.json - the monorepo manifest\n- CHANGELOG.md - the new section\n- **/README.md - the long tail\n- **/CONTRIBUTING.md - the long tail\n- **/SCHEME.md - the long tail\nnote: open these before more searches; Target/ is generated, never edit it."
-      );
-      assert.equal(Text.includes("Site/Source/Library/Content.ts"), false);
-      assert.equal(Text.includes("Documentation/Plugins/PLUGIN-FAMILY.md"), false);
+      assert.equal(Out.additionalContexts[0].content[0].text, HistoryText);
+      assert.equal(Out.additionalContexts[0].content[0].text.includes("MISSING.md"), false);
     });
-    await CheckAsync(Count, "G3: the suggest line counts only the existing candidates", async () => {
-      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest Version 0.92 5 candidates"));
+    await CheckAsync(Count, "G3: the suggest line counts only the existing companion", async () => {
+      assert.ok(
+        Run.Lines.includes(`hook-dsh-search-suggester: suggest History 0.87 1 candidates`)
+      );
       assert.match(
-        DurableLine("suggest Version 0.92 5 candidates"),
-        Durable("suggest Version 0.92 5 candidates")
+        DurableLine("suggest History 0.87 1 candidates"),
+        Durable("suggest History 0.87 1 candidates")
       );
     });
   }
   {
     const Run = Setup();
-    Run.Context.workingDirectory = Service(Empty);
-    await CheckAsync(Count, "G4: an emptied family abstains no-companions with the family and kappa", async () => {
+    SeedHistory(Run, "d", RootedAnchor, ["MISSING.md", "GONE.md"]);
+    await CheckAsync(Count, "G4: an emptied history abstains no-companions", async () => {
       const Decision = { kind: "allow", additionalContexts: [] };
-      const Out = await Post(
-        Run,
-        {
-          name: "grep",
-          arguments: { pattern: "CONTRIBUTING", path: "" },
-          agent: AgentOf("a")
-        },
-        Decision
-      );
+      const Out = await Post(Run, Read(RootedAnchor, "d"), Decision);
       assert.equal(Out, Decision);
       assert.ok(
-        Run.Lines.includes("hook-dsh-search-suggester: abstained no-companions Owner 0.66")
+        Run.Lines.includes("hook-dsh-search-suggester: abstained no-companions History 0.87")
       );
       assert.match(
         DurableLine("abstained no-companions"),
-        Durable("abstained no-companions Owner 0.66")
+        Durable("abstained no-companions History 0.87")
       );
       assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 0);
     });
   }
   {
     const Run = Setup();
-    Run.Context.workingDirectory = Service(Foreign);
+    SeedHistory(Run, "e", RootedAnchor, ["CHANGELOG.md"]);
     await CheckAsync(Count, "G5: a foreign call never poisons the next in-workspace call", async () => {
-      await Post(Run, Version(ForeignManifest, "a"));
-      Run.Context.workingDirectory = Service(Ours);
-      const Out = await Post(Run, Version(OursManifest, "a"));
-      assert.equal(Out.additionalContexts[0].source.summary, "Version 0.92");
+      await Post(Run, Read(ForeignIndex, "e"));
+      const Out = await Post(Run, Read(RootedAnchor, "e"));
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+      assert.equal(Out.additionalContexts[0].content[0].text.includes("- CHANGELOG.md"), true);
     });
   }
   return Finish(Count, "Workspace-Gate");

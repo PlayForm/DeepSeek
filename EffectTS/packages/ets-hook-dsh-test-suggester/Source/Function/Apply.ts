@@ -3,18 +3,31 @@
 // the shared mappings Ledger←logFile / Enabled←log and the module's own
 // fields via the setup `fields` map), emit the durable activation proof (the
 // module's own string, via Factory.Append - the factory never owns ledger
-// strings), compile the pack ONCE, and register the hook's OWN listeners:
+// strings), and register the hook's OWN listeners:
 //
-//   1. tools/post-execute (waterfall, plain ctx.on - AFTER the CCR
+//   1. session/event (plain): the HISTORY FOLD. Every `tool/call` event
+//      becomes one Touch in the SESSION's history (the pack library's fold
+//      unit, capped at 512 touches). This is the candidate source.
+//   2. tools/post-execute (waterfall, plain ctx.on - AFTER the CCR
 //      {prepend:true} listener and normalize's post-execute): next() first,
-//      the RECONCILIATION (the package's smoke claims against the tree, the
-//      wave 2c re-spec), then detect, gate, and prepend ONE
+//      then the RECONCILIATION (the package's smoke claims against the tree,
+//      the wave 2c re-spec), the HISTORY candidates (the files touched right
+//      after this one in this workspace) as ONE synthetic family, the
+//      EXPLICIT pack when one exists, detect, gate, and prepend ONE
 //      additionalContexts notice to the downstream decision. It never
 //      replaces content, only adds contexts, so a ccr-compressed result is
 //      unaffected.
-//   2. agent/pre-step (waterfall, plain): the per-turn reset - the
+//   3. agent/pre-step (waterfall, plain): the per-turn reset - the
 //      per-turn note counter when a user message enters (the tool-coach
 //      precedent).
+//
+// THE CANDIDATES COME FROM THE AGENT'S OWN PREVIOUS TOOL CALLS: the listener
+// folds the session history through `Adjacent(touches, callPath)` and names
+// the files that were touched right after this one in this workspace. The
+// literal built-in pack is NOT a candidate source; the pack survives only as
+// an EXPLICIT override (`<repo>/.dsh/pack.yml` or the user layer), resolved
+// with `builtin: false`. A workspace with no history and no pack abstains
+// (`abstained no-history  0.00`).
 //
 // THE WATERFALL DISCIPLINE (the ccr/tool-coach precedent, live-verified):
 //   * `next()` is ALWAYS awaited FIRST, before any decision;
@@ -23,17 +36,15 @@
 //     logger.warn records it and the downstream decision is returned
 //     UNCHANGED. A note never fails a tool call.
 //
-// THE WORKSPACE GATE + THE EXISTENCE FILTER: the pack is the repo's own
-// convention graph (the built-in pack when the repo has no pack file), so the
-// listener resolves the workspace root first (the nearest ancestor whose
-// pack signature matches; the built-in default is
-// Documentation/ARCHIVE-STYLE.md, from the call path plus the session cwd).
-// A foreign workspace has no pack and abstains (`abstained foreign-workspace`);
-// a target absent from all three bases is dropped BEFORE the gate
+// THE WORKSPACE GATE + THE EXISTENCE FILTER: the root is the PACK-INDEPENDENT
+// repo root (the nearest ancestor carrying `.git` or `package.json`, from the
+// call path plus the session cwd). A call outside any workspace has no
+// history to mine here and abstains (`abstained foreign-workspace`); a
+// target absent from all three bases is dropped BEFORE the gate
 // (`abstained no-companions` when the intent's whole target set is gone).
-// The intents come from the RESOLVED pack per call (Families(pack, "test")),
-// compiled once per root, so a repo pack overrides the built-in intents
-// without a restart.
+// The explicit pack's families come from the RESOLVED pack per call
+// (Families(pack, "test")), compiled once per root, so a repo pack overrides
+// the families without a restart.
 //
 // NOT factory machinery, deliberately: no fs/observed Wire, no Attach, no
 // factory Schema - the hook owns its schema (Variable/Config.ts) and its
@@ -48,12 +59,18 @@ import { isAbsolute, resolve } from "node:path";
 import type { Context } from "@deepseek-ai/cordis";
 import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
 import type Config from "@Interface/Config.js";
-import type { Candidate } from "@Interface/Pack.js";
+import type { Candidate, Intent } from "@Interface/Pack.js";
 import type { AgentMemory } from "@Interface/State.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/ets-base-dsh";
-import { Families, Locate } from "@playform/ets-lib-dsh-pack";
-import Defaults from "@Variable/Defaults.js";
+import {
+	Adjacent,
+	Families,
+	Fold,
+	Home,
+	Resolve,
+	Root as RootOf,
+} from "@playform/ets-lib-dsh-pack";
 import Version from "@Variable/Version.js";
 
 import Detect, { Compile } from "./Detect.js";
@@ -127,40 +144,20 @@ export default (Context: Context, Options: Config): void => {
 	State.Agents = new WeakMap();
 	// The reconciliation's per-root clear memo (one clear line per root).
 	State.Cleared = new Set();
+	// No boot projection: the candidates come from the session history, and
+	// only an EXPLICIT repo/user pack compiles (per call, below). The retired
+	// projection (Variable/Defaults) is no longer imported.
+	State.Rules = [];
+	// The per-session touch history (WeakMap keyed on the session object,
+	// created lazily by the session/event fold).
+	State.History = new WeakMap();
 
-	// The compile rule, shared by the built-in boot compile and the per-root
-	// workspace compile: the configured intent list filters the pack (empty =
-	// all), and the config threshold is a FLOOR (the pack may raise it).
-	const Build = (Rows: typeof Defaults) => {
-		const Enabled = State.Intents.length > 0 ? new Set(State.Intents) : undefined;
-		return Compile(
-			Rows.filter((Intent) => Enabled === undefined || Enabled.has(Intent.id)).map(
-				(Intent) => ({
-					...Intent,
-					threshold: Math.max(Intent.threshold, State.Threshold),
-				}),
-			),
-		);
-	};
-	// The built-in compile: the activation proof's count and the no-pack path.
-	State.Rules = Build(Defaults);
-	// The per-root compile memo: a resolved workspace pack's intents are
-	// compiled once per (root, threshold, intents) tuple, never on every call.
-	const Compiled = new Map<string, typeof State.Rules>();
-	const Rules = (Root: string, Rows: typeof Defaults): typeof State.Rules => {
-		const Key = `${Root}\u0000${State.Threshold}\u0000${State.Intents.join(",")}`;
-		const Hit = Compiled.get(Key);
-		if (Hit !== undefined) {
-			return Hit;
-		}
-		const Built = Build(Rows);
-		Compiled.set(Key, Built);
-		return Built;
-	};
-
+	// The history key for a call that carries neither a session nor an agent
+	// (the ring's precedent): one shared entry, so an agent-less mount still
+	// learns from its own calls.
+	const DefaultKey: object = {};
 	// The per-agent state (WeakMap keyed on the Agent object, the tool-coach
 	// precedent). A call without an agent shares the module's default key.
-	const DefaultKey: object = {};
 	const Agent = (Key: unknown): AgentMemory => {
 		const Object_ = (Key as object) ?? DefaultKey;
 		let Memory = State.Agents.get(Object_);
@@ -171,9 +168,38 @@ export default (Context: Context, Options: Config): void => {
 		return Memory;
 	};
 
+	// The compile rule for an EXPLICIT pack: the configured intent list
+	// filters the families (empty = all), and the config threshold is a FLOOR
+	// (the family may raise it).
+	const Build = (Rows: ReturnType<typeof Families>) => {
+		const Enabled = State.Intents.length > 0 ? new Set(State.Intents) : undefined;
+		return Compile(
+			Rows.filter((Intent) => Enabled === undefined || Enabled.has(Intent.id)).map(
+				(Intent) => ({
+					...Intent,
+					threshold: Math.max(Intent.threshold, State.Threshold),
+				}),
+			),
+		);
+	};
+	// The per-root compile memo: an explicit pack's families are compiled
+	// once per (root, threshold, intents) tuple, never on every call.
+	const Compiled = new Map<string, ReturnType<typeof Build>>();
+	const Rules = (Root: string, Rows: ReturnType<typeof Families>): ReturnType<typeof Build> => {
+		const Key = `${Root}\u0000${State.Threshold}\u0000${State.Intents.join(",")}`;
+		const Hit = Compiled.get(Key);
+		if (Hit !== undefined) {
+			return Hit;
+		}
+		const Built = Build(Rows);
+		Compiled.set(Key, Built);
+		return Built;
+	};
+
 	// Durable activation proof - "did it activate" must be answerable from the
-	// ledger alone. The FIELD LIST is the module's own; the `activated (`
-	// mechanics live in the core's Activate composer.
+	// ledger alone. The second segment is `history` (not an intent count):
+	// there is no boot pack, because the candidates come from the session's
+	// own tool calls and only an explicit pack may still speak.
 	if (!State.On) {
 		Factory.Append(State, "disabled (enabled=false)");
 	} else {
@@ -182,7 +208,7 @@ export default (Context: Context, Options: Config): void => {
 			Activate([
 				// Bare segments (empty key): the plan's activation format (§4.9).
 				["", `bundle ${Version}`],
-				["", `intents ${State.Rules.length}`],
+				["", "history"],
 				["", `threshold ${State.Threshold}`],
 			]),
 		);
@@ -198,7 +224,8 @@ export default (Context: Context, Options: Config): void => {
 		(State.Exclude ?? []).some((Prefix) => Prefix.length > 0 && Path.includes(Prefix));
 
 	// The note text: the intent header, the capped candidate list with one
-	// reason per candidate, and the pack's caveat line - bound to maxNoteChars.
+	// reason per candidate, and the family's caveat line - bound to
+	// maxNoteChars.
 	const Text = (
 		Intent: { id: string; note: string },
 		Targets: Candidate[],
@@ -292,9 +319,43 @@ export default (Context: Context, Options: Config): void => {
 		);
 	};
 
-	// Listener 1: tools/post-execute - the note. Plain registration: runs
-	// AFTER the ccr's {prepend:true} listener and normalize's post-execute,
-	// and never replaces content (only additionalContexts).
+	// ------------------------------------------------------------------
+	// Listener 1: session/event - the history fold. Every `tool/call` event
+	// becomes one Touch (the pack library's fold unit) in the SESSION's
+	// history, so the candidates come from the agent's OWN previous calls in
+	// this workspace. One entry per session object, created lazily; the touch
+	// array is capped at 512 (the oldest touch is shifted out). Fail-open: a
+	// malformed event is skipped, never thrown.
+	// ------------------------------------------------------------------
+	Context.on("session/event", (Session_: unknown, Event: unknown): void => {
+		try {
+			const Key = (Session_ as object | undefined) ?? DefaultKey;
+			let History = State.History.get(Key);
+			if (History === undefined) {
+				History = { Seq: 0, Touches: [] };
+				State.History.set(Key, History);
+			}
+			const Touch = Fold(
+				Event as { type?: string; name?: string; arguments?: unknown },
+				History.Seq,
+			);
+			if (Touch === undefined) {
+				return;
+			}
+			History.Seq += 1;
+			History.Touches.push(Touch);
+			if (History.Touches.length > 512) {
+				History.Touches.shift();
+			}
+		} catch {
+			/* the fold never breaks the event bus */
+		}
+	});
+
+	// ------------------------------------------------------------------
+	// Listener 2: tools/post-execute - the reconciliation, the history
+	// candidates, the explicit pack's note.
+	// ------------------------------------------------------------------
 	Context.on(
 		"tools/post-execute",
 		async (Exec: ToolExecution, _Result: unknown, Next: () => Promise<PostToolDecision>) => {
@@ -304,21 +365,18 @@ export default (Context: Context, Options: Config): void => {
 				if (!State.On || !Judged(Exec.name)) {
 					return Decision;
 				}
-				// The workspace gate, BEFORE detect/score: the pack is the
-				// repo's convention graph (the built-in pack when the repo has
-				// no pack file), so a call that belongs to another workspace
-				// has nothing to name here. The signature comes from the pack
-				// (default: Documentation/ARCHIVE-STYLE.md).
+				// The workspace gate, BEFORE any candidate work: the
+				// PACK-INDEPENDENT repo root (the nearest ancestor carrying
+				// `.git` or `package.json`) from the call path plus the
+				// session cwd. A call outside any workspace has no history to
+				// mine here and abstains.
 				const CallPath = Path(Exec);
 				const Cwd = Session(Context, Exec);
-				const Located = Locate(CallPath, Cwd);
-				if (Located === undefined) {
+				const Root = RootOf(CallPath, Cwd);
+				if (Root === undefined) {
 					Factory.Append(State, "abstained foreign-workspace  0.00");
 					return Decision;
 				}
-				// The resolved pack's intents, compiled once per root (the
-				// built-in compile covers the no-pack path).
-				const Intents = Rules(Located.root, Families(Located.pack, "test"));
 				const Memory = Agent(Exec.agent);
 				Memory.Calls += 1;
 				// The probe: the tool name plus the arguments JSON - the
@@ -326,16 +384,16 @@ export default (Context: Context, Options: Config): void => {
 				const Probe = `${Exec.name} ${JSON.stringify(Exec.arguments ?? {})}`;
 				Memory.Ring.unshift(Probe);
 				Memory.Ring.length = Math.min(Memory.Ring.length, 8);
-				// THE RECONCILIATION, before the intents: a drift is a fact
-				// about the tree, the pack targets are a suggestion - when the
+				// THE RECONCILIATION, before the candidates: a drift is a fact
+				// about the tree, the candidates are a suggestion - when the
 				// claims have drifted the note takes the call (one note per
-				// family, D9) and the intent note yields to the next call.
+				// family, D9) and the candidate note yields to the next call.
 				const ReconciledNote = ReconcileCall(
 					Memory,
-					Located.root,
+					Root,
 					Package(
 						isAbsolute(CallPath) ? CallPath : resolve(Cwd ?? process.cwd(), CallPath),
-						Located.root,
+						Root,
 					),
 					Exec.name,
 				);
@@ -360,7 +418,49 @@ export default (Context: Context, Options: Config): void => {
 							),
 						};
 				}
-				const Match = Detect(Intents, Exec.name, Probe);
+				// THE HISTORY (the candidate source): the agent's OWN previous
+				// tool calls in this workspace, folded per session and read
+				// through the pack library's Adjacent. A repeatedly co-touched
+				// path outranks a single one, and a near neighbour outranks a
+				// far one. The literal built-in pack is never consulted.
+				const Key =
+					(Exec.agent as { session?: object } | undefined)?.session ??
+					Exec.agent ??
+					DefaultKey;
+				const Touches = State.History.get(Key)?.Touches ?? [];
+				const Nearby = Adjacent(Touches, CallPath, { limit: State.MaxCandidates });
+				// The SYNTHETIC family: the co-touch rows as ONE pack row, so
+				// the existing Detect/gate/note pipeline judges them exactly
+				// like a resolved pack's family (the `History` header, the
+				// `suggest History` line, the cooldown/cap).
+				const Synthetic: Intent | undefined =
+					Nearby.length === 0
+						? undefined
+						: {
+								id: "History",
+								priority: 0,
+								threshold: 0.75,
+								note: "these files were touched right after this one in this workspace",
+								signals: [{ rule: "history", pattern: ".", weight: 2.5 }],
+								targets: Nearby.map((Entry) => ({
+									path: Entry.path,
+									prior: 0.6,
+									reason: `touched ${Entry.count} time(s) after this file`,
+								})),
+							};
+				// The EXPLICIT pack: `<repo>/.dsh/pack.yml` or the user layer,
+				// never the built-in fallback (`builtin: false`).
+				const Pack = Resolve(Root, { home: Home(), builtin: false });
+				const Rows = Pack === undefined ? [] : Families(Pack, "test");
+				const Ordered =
+					Synthetic === undefined
+						? Rules(Root, Rows)
+						: [...Compile([Synthetic]), ...Rules(Root, Rows)];
+				if (Ordered.length === 0) {
+					Factory.Append(State, "abstained no-history  0.00");
+					return Decision;
+				}
+				const Match = Detect(Ordered, Exec.name, Probe);
 				if (Match === null) {
 					return Decision;
 				}
@@ -368,7 +468,7 @@ export default (Context: Context, Options: Config): void => {
 				// absent from all three bases is dropped; an intent with none
 				// left abstains.
 				const Existing = Match.intent.targets.filter((Target) =>
-					Exists(Target.path, CallPath, Located.root, Cwd),
+					Exists(Target.path, CallPath, Root, Cwd),
 				);
 				if (Existing.length === 0) {
 					Factory.Append(
@@ -429,10 +529,12 @@ export default (Context: Context, Options: Config): void => {
 		},
 	);
 
-	// Listener 2: agent/pre-step - the per-turn reset. When the step's
+	// ------------------------------------------------------------------
+	// Listener 3: agent/pre-step - the per-turn reset. When the step's
 	// messages end with a user message (a new user turn), the per-turn note
 	// counter resets. The listener is a PURE OBSERVER of the counter: next()
 	// first, the downstream decision unchanged, fail-open.
+	// ------------------------------------------------------------------
 	Context.on("agent/pre-step", async (Payload, Next) => {
 		const Decision = await Next();
 		try {

@@ -3,9 +3,10 @@
 // search suggester's completion spec).
 //
 // Contract:
-//   * input: the suggestion FAMILY (the intent id the note named, e.g.
-//     "Version") and an OPTIONAL candidate path. A path dismisses that one
-//     candidate; no path dismisses the whole family;
+//   * input: the suggestion FAMILY (the family id a note named - `History` for
+//     the session-history source, or an id of an EXPLICIT repo/user pack) and
+//     an OPTIONAL candidate path. A path dismisses that one candidate; no path
+//     dismisses the whole family;
 //   * output: the recorded dismissal - `{ dismissed, intent, path?, until,
 //     detail }` - where `until` is the epoch-second expiry (`dismissTtl`
 //     seconds from the call);
@@ -15,6 +16,11 @@
 //     from the candidate list - the plan's section 6.2 rule);
 //   * an unknown family is a self-describing error (the ccr tool's
 //     precedent), and a disabled suggester refuses (silence-first).
+//
+// THE FAMILY VOCABULARY: the built-in pack is retired, so the known families
+// are the synthetic `History` row plus whatever an explicit pack carries. The
+// State.Pack list is empty at apply (Function/Apply), which is why the
+// history family is named here directly.
 //
 // The ledger line is documented in SCHEME section 3:
 //   dismissed <Intent> <path|*>.
@@ -27,8 +33,11 @@ import { defineTool } from "@deepseek-ai/dsh-tools";
 import type State from "../Interface/State.js";
 import { Dismiss, Save } from "./Persist.js";
 
+/** The synthetic family the session history builds (Function/Apply). */
+const History = "History";
+
 export default (
-	/** The built per-apply state (the knowledge, the TTL, the pack). */
+	/** The built per-apply state (the knowledge, the TTL, the family vocabulary). */
 	State: State,
 	/** The ledger append (the factory's Append, bound by Apply). */
 	Append: (Message: string) => void,
@@ -36,13 +45,13 @@ export default (
 	defineTool({
 		name: "suggestion_dismiss",
 		description:
-			"Dismiss a search-suggester suggestion so it is not repeated. Pass the suggestion family (the intent id a note named, e.g. Version, Test, Doc) and optionally one candidate path: with a path only that candidate is dismissed, without one the whole family is dismissed. The dismissal is durable (it survives a restart) and expires after the configured TTL; until then the note is suppressed and the dismissed paths are dropped from the candidate list. Returns the recorded dismissal with its expiry timestamp.",
+			"Dismiss a search-suggester suggestion so it is not repeated. Pass the suggestion family (the family id a note named: History for the session-history source, or a family of the repo's own pack) and optionally one candidate path: with a path only that candidate is dismissed, without one the whole family is dismissed. The dismissal is durable (it survives a restart) and expires after the configured TTL; until then the note is suppressed and the dismissed paths are dropped from the candidate list. Returns the recorded dismissal with its expiry timestamp.",
 		parameters: {
 			intent: {
 				type: "string",
 				required: true,
 				description:
-					"The suggestion family (the intent id the note named: Version, Path, Ledger, Config, Dependency, Test, Symbol, Doc, Usage, Owner).",
+					"The suggestion family (the family id the note named: History, or a family of the repo's own pack).",
 			},
 			path: {
 				type: "string",
@@ -73,9 +82,10 @@ export default (
 			const Intent = typeof args.intent === "string" ? args.intent : "";
 			const Path =
 				typeof args.path === "string" && args.path.length > 0 ? args.path : undefined;
-			if (!State.Pack.some((Row) => Row.id === Intent)) {
+			const Known = [History, ...State.Pack.map((Row) => Row.id)];
+			if (!Known.includes(Intent)) {
 				throw new Error(
-					`suggestion_dismiss: unknown suggestion family "${Intent}"; the pack carries ${State.Pack.map((Row) => Row.id).join(", ")}`,
+					`suggestion_dismiss: unknown suggestion family "${Intent}"; the known families are ${Known.join(", ")}`,
 				);
 			}
 			const At = Math.floor(Date.now() / 1000);

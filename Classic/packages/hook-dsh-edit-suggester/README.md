@@ -5,85 +5,103 @@
 
 ## The role
 
-This package is the modification-intent **companion suggester** for the
+The modification-intent **companion suggester** for the
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin family (the Classic
 release).
 
-It is a DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** for the
-modification tools (`write`, `edit`, `raw-write`).
+A DeepSeek Harness plugin that hooks the **`tools/post-execute` waterfall** for the modification
+tools (`write`, `edit`, `raw-write`).
 
-When the edited path matches one of the convention families, the hook prepends ONE labeled
-`additionalContexts` note that names the standard companions the model has not touched yet - **"this
-file rarely stands alone."**
+When a call edits a path, it prepends ONE labeled `additionalContexts` note that names the files the
+session touched right after this one in this workspace: the companions the task most likely needs
+next (the root manifest, the CHANGELOG section, the Config table row, the byte-exact test, the site
+mirror).
 
-This package is the second consumer of the search-suggester's pattern algebra and of its
-two-consumer extraction trigger
+The candidates come from the agent's **own previous tool calls**, never from a literal built-in
+pack. A pack is an explicit user/repo override only (see below).
+
+It is the second consumer of the pattern algebra of the search-suggester and of its two-consumer
+extraction trigger
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) sections 1.4 and
 8).
 
-## The surfaces
-
-- The `tools/post-execute` waterfall listener for the modification tools: one labeled
-  `additionalContexts` note, never a content replacement.
-- No tool, no service: the note is the only surface; the learning layer records through the optional
-  `pattern` service (`ctx.get("pattern")`, probed per use) or a bounded in-memory fallback.
-
 ## Why
 
-The search-suggester's evidence shows that the edit is where the discovery happens: the model edited
-its way to the target sets that it never thought to open.
+The evidence of the search-suggester shows that the edit is where the discovery happens: the model
+edited its way to the target sets that it never thought to open.
 
-The repo's convention is that a file rarely stands alone - the version lives in 36 manifests, 6
-`Apply.ts` files, the CHANGELOG and the prose; a `Config.ts` edit must also land in the README's
-Config section, SCHEME.md, the `cordis.patch.yml` row, and the byte-exact test.
+The convention of the repo is that a file rarely stands alone.
 
-The search consumer deliberately refuses to own the edit transform; this consumer owns the NOTIFY
-side of it: it names the companions, never the change.
+The version lives in 36 manifests, 6 `Apply.ts` files, the CHANGELOG and the prose, and a
+`Config.ts` edit must also land in the Config section of the README, SCHEME.md, the
+`cordis.patch.yml` row, and the byte-exact test.
 
-## The families
+The search consumer deliberately refuses to own the edit transform, and this consumer owns the
+NOTIFY side of it: it names the companions, never the change.
 
-Seven, priority order: `Version` (0.85 - a wrong version companion set is costly), `Config`,
-`Symbol`, `Test`, `Doc`, `Prose`, `Workflow`.
+## The candidates (the session history)
 
-Each family is a pack row: its path rules (regexes on the edited path with weights) and its standard
-companion set - each companion a path or glob with a prior and **one reason phrase** ("the Config
-section", "the byte-exact assertion", "the long tail").
+The `session/event` listener folds every `tool/call` event into the session's history: one touch per
+call (the sequence number, the normalized path and the tool), capped at 512, oldest first.
 
-A companion without a reason is not emitted.
+On a judged call, `Adjacent(touches, callPath, { limit: maxCompanions })` scores the paths that
+followed the anchor within a window of 8 calls: `1 / (1 + distance)` per occurrence, one count per
+occurrence.
 
-The families are **pack-driven**: the built-in pack (this monorepo's default) lives in
-[`@playform/lib-dsh-pack`](../lib-dsh-pack) and it is projected here as the `edit/` domain.
+A repeatedly co-touched path outranks a single one, and a near neighbour outranks a far one.
 
-A repository that ships `.dsh/pack.yml` (or a user-layer pack at
-`~/.dsh/playform/workspaces/<slug>.yml`) gets its OWN `edit/` families; a repository without a pack
-stays silent.
+Those rows become ONE synthetic `History` family (priority 0, threshold 0.75, one signal of weight
+2.5, companions with prior 0.6 and the reason `touched <count> time(s) after this file`), so the
+existing deterministic classifier, existence filter, scorer and decision record judge it exactly
+like a pack row.
+
+Its confidence is `k = sigmoid(2.5 - 0.6) = 0.87`.
+
+## The pack override
+
+The families are **pack-driven only when a pack is explicit**: `<repo>/.dsh/pack.yml` (or
+`.yaml`/`.json`) or the user-layer pack at `~/.dsh/playform/workspaces/<slug>.yml`.
+
+The listener resolves it with `Resolve(root, { home, builtin: false })`, so the literal built-in
+pack is never a candidate source.
+
+A repository that ships no pack and has no session history abstains with the byte-exact line
+`abstained no-history  0.00`.
+
+A repository that ships a pack gets its OWN `edit/` families, placed after the synthetic `History`
+family, and they drive the same classifier and note.
 
 ## The gate
 
-The gate uses the same algebra as the search consumer: `k = sigmoid(sum(weights) - 0.6)`, the
-candidate scoring over the **pickable heuristics** (see below), and the noise control - a cooldown,
-a dedupe, a per-turn cap, and the already-touched filter (companions the model edited earlier this
-turn are dropped; when nothing remains, the verdict is an `already-touched` abstention).
+The same algebra as the search consumer: `k = sigmoid(sum(weights) - 0.6)`, the candidate scoring
+over the **pickable heuristics** (see below), and the noise control (a cooldown, a dedupe, a
+per-turn cap, and the already-touched filter).
+
+Companions that the model edited earlier this turn are dropped, and when nothing remains the verdict
+is an `already-touched` abstention.
 
 Every abstention and suppression is a ledger line.
 
 ## The learning layer (D8)
 
-Every emitted note - and every gated silence worth learning from (`low-confidence`,
-`already-touched`) - records a **decision**: the family, the companion rows with their six pickable
+Every emitted note, and every gated silence worth learning from (`low-confidence`,
+`already-touched`), records a **decision**: the family, the companion rows with their six pickable
 heuristic values (`scope`, `graph`, `prior`, `literal`, `history`, `accept`), the effective weight
 table, the enabled list, and a `pending` outcome placeholder.
 
 The record is logged (`decided ...`) and stored through the optional **pattern service**
-(`ctx.get("pattern")`, probed per use, never an inject); without one it lives in a bounded in-memory
-fallback (`storeLimit`, default 512), which is per instance and documented as such.
+(`ctx.get("pattern")`, probed per use, never an inject).
 
-The note opens a **follow-through window** counted in judged calls (never a timer): a later call
-that names one of the note's companions is an **accept** for that companion and its family
-(`accepted <Family> <path>`); a window that reaches `learnWindow` judged calls untouched closes as a
-**soft reject** (`rejected <Family> <n> companions`).
+Without that service it lives in a bounded in-memory fallback (`storeLimit`, default 512), which is
+per instance and documented as such.
 
-Both fill the decision record's outcome and move the learned accept rates.
+The note opens a **follow-through window** counted in judged calls (never a timer).
+
+A later call that names one of the companions of the note is an **accept** for that companion and
+its family (`accepted <Family> <path>`), and a window that reaches `learnWindow` judged calls
+untouched closes as a **soft reject** (`rejected <Family> <n> companions`).
+
+Both fill the outcome of the decision record and move the learned accept rates.
 
 The score is `sum over the enabled heuristics of weight * value`:
 
@@ -91,7 +109,7 @@ The score is `sum over the enabled heuristics of weight * value`:
 | --------- | ------------------------------------------------------- | -------------- |
 | `scope`   | 1.00 - the call matched the family's path rules         | 0.35           |
 | `graph`   | 0.50 - the neutral graph-distance placeholder           | 0.00           |
-| `prior`   | the pack's prior for the companion                      | 0.25           |
+| `prior`   | the family's prior for the companion                    | 0.25           |
 | `literal` | 0.50 - the neutral literal (no generated index)         | 0.25           |
 | `history` | the **learned per-companion accept rate** (neutral 1/3) | 0.15           |
 | `accept`  | the **learned per-family accept rate** (neutral 1/3)    | 0.00           |
@@ -102,39 +120,36 @@ default behavior is unchanged byte-for-byte.
 A user can disable any heuristic (`heuristics`) or re-weight any of them (`weights`), and the
 decision record plus the `decided` line show the choice.
 
+Before the score, two workspace guards run.
+
+The workspace root (`Root` of [`@playform/lib-dsh-pack`](../lib-dsh-pack)) is PACK-INDEPENDENT: the
+nearest ancestor of the call path carrying `.git` or `package.json`, from the call path plus the
+session cwd. A call with no such root abstains `foreign-workspace`.
+
+The existence filter drops every companion that does not exist under that root, and it abstains
+`no-companions` when the winning family has none left.
+
+A note therefore never names a path from the history of this repository in a workspace that does not
+carry it.
+
 ## The delivery
 
-The hook delivers one note, never a content replacement and never a claim of the Transform: the
-post-execute listener runs after the ccr and the normalize family, and it only adds
-`additionalContexts`.
+One note, never a content replacement and never a claim of the Transform: the post-execute listener
+runs after the ccr and the normalize family and only adds `additionalContexts`.
 
-The note carries the plugin's own source label
-(`{kind: "edit-suggester", form: "notice", summary}`).
+The note carries the plugin's own source label (`{kind: "edit-suggester", form: "notice", summary}`)
+and closes with the domain's standing caution: _this file rarely stands alone; check whether these
+need the same change._
 
-The `grep`/`read`/`bash` calls are not judged - this is the edit side of the family, disjoint from
-the search suggester's trigger set.
+The `grep`/`read`/`bash` calls are not judged, because this is the edit side of the family and it is
+disjoint from the trigger set of the search suggester.
 
 ## The waterfall discipline
 
-The hook always awaits `next()` first; a pass-through returns the downstream decision unchanged; the
-whole transform is fail-open (an internal error logs a warning and the decision passes through - a
-note never fails a tool call).
+`next()` is always awaited first, and pass-through returns the downstream decision unchanged.
 
-## The ledger
-
-The lines are prefixed `hook-dsh-edit-suggester: ` and go to `logFile`, mirroring the doc suggester:
-
-```text
-activated (...)
-suggest <family> <k> <n> companions <path>
-decided <family>
-accepted <family> <path>
-rejected <family> <n> companions
-suppressed <reason> <family>
-abstained <reason> <family> <k>
-abstained foreign-workspace
-hook-dsh-edit-suggester: <error>
-```
+The whole transform is fail-open: an internal error logs a warning and the decision passes through,
+so a note never fails a tool call.
 
 ## The configuration
 

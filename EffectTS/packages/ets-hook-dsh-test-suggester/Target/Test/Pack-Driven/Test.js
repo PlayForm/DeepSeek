@@ -16,6 +16,9 @@ const Put = (Root, Relative, Body = "x") => {
   FileSystem.writeFileSync(Full, Body, "utf8");
   return Full;
 };
+const Manifest = (Root) => {
+  FileSystem.writeFileSync(Path.join(Root, "package.json"), "{}", "utf8");
+};
 const Pack = `signature:
   - docs/STYLE.md
 families:
@@ -35,23 +38,29 @@ families:
         reason: the temp suite
 `;
 const Service = (Cwd) => ({ get: () => Cwd });
+const Probe = (Root) => ({
+  file_path: Path.join(Root, "Source/Test/Foo/Test.ts"),
+  hint: "PASS"
+});
 const Packed = Tree("test-suggester-packed-");
+Manifest(Packed);
 Put(Packed, ".dsh/pack.yml", Pack);
 Put(Packed, "docs/STYLE.md");
 Put(Packed, "SUITE.md");
 const Bare = Tree("test-suggester-bare-");
+Manifest(Bare);
 Put(Bare, "SUITE.md");
 const Unsigned = Tree("test-suggester-unsigned-");
+Manifest(Unsigned);
 Put(Unsigned, ".dsh/pack.yml", Pack);
-const Probe = { file_path: "Source/Test/Foo/Test.ts", hint: "PASS" };
 const runTest = async () => {
   const Count = MakeCounter();
   {
     const Agent = { agent: { id: "pack-a" } };
     const Run = Setup();
     Run.Context.workingDirectory = Service(Packed);
-    await CheckAsync(Count, "P1: the temp pack's intent drives the note", async () => {
-      const Out = await Call(Run, "read", Probe, Agent);
+    await CheckAsync(Count, "P1: the temp pack's family drives the note", async () => {
+      const Out = await Call(Run, "read", Probe(Packed), Agent);
       assert.equal(Out.additionalContexts.length, 1);
       assert.deepEqual(Out.additionalContexts[0].source, {
         kind: "test-suggester",
@@ -75,11 +84,11 @@ const runTest = async () => {
     const Agent = { agent: { id: "pack-b" } };
     const Run = Setup();
     Run.Context.workingDirectory = Service(Bare);
-    await CheckAsync(Count, "P2: the same workspace without the pack stays silent", async () => {
+    await CheckAsync(Count, "P2: the same workspace without the pack abstains no-history", async () => {
       const Decision = { kind: "allow" };
-      const Out = await Call(Run, "read", Probe, Agent, Decision);
+      const Out = await Call(Run, "read", Probe(Bare), Agent, Decision);
       assert.equal(Out, Decision);
-      assert.ok(Run.Lines.includes("test-suggester: abstained foreign-workspace  0.00"));
+      assert.ok(Run.Lines.includes("test-suggester: abstained no-history  0.00"));
       assert.equal(Run.Lines.filter((Line) => Line.includes("candidates call")).length, 0);
     });
   }
@@ -87,27 +96,29 @@ const runTest = async () => {
     const Agent = { agent: { id: "pack-c" } };
     const Run = Setup();
     Run.Context.workingDirectory = Service(Unsigned);
-    await CheckAsync(Count, "P3: a pack whose signature marker is absent stays silent", async () => {
+    await CheckAsync(Count, "P3: a pack with an absent signature marker still governs the tree", async () => {
       const Decision = { kind: "allow" };
-      const Out = await Call(Run, "read", Probe, Agent, Decision);
+      const Out = await Call(Run, "read", Probe(Unsigned), Agent, Decision);
       assert.equal(Out, Decision);
-      assert.ok(Run.Lines.includes("test-suggester: abstained foreign-workspace  0.00"));
+      assert.ok(Run.Lines.includes("test-suggester: abstained no-companions Suite 0.87"));
+      assert.equal(Run.Lines.filter((Line) => Line.includes("candidates call")).length, 0);
     });
   }
   {
     const Agent = { agent: { id: "pack-d" } };
     const Run = Setup();
-    await CheckAsync(Count, "P4: the built-in pack still drives the monorepo path", async () => {
-      const Out = await Call(Run, "read", {
-        file_path: "Source/Test/Foo/Test.ts",
-        hint: "Run-Smokes says PASS"
-      }, Agent);
-      assert.equal(Out.additionalContexts[0].source.summary, "Suite 0.65");
-      const Text = Out.additionalContexts[0].content[0].text;
-      assert.equal(
-        Text.includes("- Source/Test/<Suite>/Test.ts - the assertion body - the suite that proves it"),
-        true
+    await CheckAsync(Count, "P4: a monorepo test read with no history abstains no-history", async () => {
+      const Decision = { kind: "allow" };
+      const Out = await Call(
+        Run,
+        "read",
+        { file_path: "Source/Test/Foo/Test.ts", hint: "Run-Smokes says PASS" },
+        Agent,
+        Decision
       );
+      assert.equal(Out, Decision);
+      assert.ok(Run.Lines.includes("test-suggester: abstained no-history  0.00"));
+      assert.equal(Run.Lines.filter((Line) => Line.includes("candidates call")).length, 0);
     });
   }
   return Finish(Count, "Pack-Driven");

@@ -1,45 +1,45 @@
-Workspace-Gate - the workspace gate and the existence filter
+Workspace-Gate - the workspace root and the history note
 
-The `tools/post-execute` listener against the fake ctx and REAL temp workspaces: a foreign workspace
-abstains before detect, our workspace emits only the target that exists, an emptied intent abstains
-`no-companions`, and a foreign call never poisons the next in-workspace call.
+The `tools/post-execute` listener against the fake ctx and REAL temp trees: a call path with no
+`.git`/`package.json` root and no session cwd abstains `foreign-workspace`, a call inside a rooted
+temp tree emits the HISTORY note naming the companions the session touched right after the anchor,
+and the same rooted tree with no history abstains `no-history`.
 
 ## Scenarios
 
-- G1: the FOREIGN workspace (a temp tree with `Source/Function/Apply.ts` but
-  no `Documentation/ARCHIVE-STYLE.md`), cwd through the optional
-  `workingDirectory` service - the downstream decision comes back UNCHANGED
+- G1: the FOREIGN path (a temp tree with `Source/Function/Apply.ts`, no
+  `.git` and no `package.json` anywhere above it, and NO
+  `workingDirectory` service) - the downstream decision comes back UNCHANGED
   with no note, the logger and durable forms carry the byte-exact
   `abstained foreign-workspace  0.00` line, no `suggest` line appears, and the
   foreign call never creates per-agent memory.
 
   A service getter that THROWS still abstains with no logger warning.
-- G2: with NO `workingDirectory` service at all, the absolute foreign path
-  still resolves to no root and abstains with the same line.
-- G3: OUR workspace (a temp tree WITH `Documentation/ARCHIVE-STYLE.md`, a
-  package `Source/Library.ts` and `README.md`, WITHOUT `SCHEME.md` and
-  `cordis.patch.yml`) - the Docs note is byte-exact, names ONLY `README.md`,
-  and never contains the missing paths; the `suggest Docs 0.95 1 candidates`
-  line counts only the existing companion.
-- G4: an intent whose whole target set is absent (Naming in the minimal tree,
-  whose `Source/...` globs do not exist) abstains
-  `abstained no-companions Naming 0.80`, both forms, with no note.
-- G5: a foreign abstention followed by an in-workspace write still emits the
-  Docs note (the gate is per call, not sticky).
+- G2: the ROOTED temp tree (a `.git` marker, the anchor
+  `Source/Function/Apply.ts`, `Source/Library.ts` and `README.md`) - the
+  session history is seeded through the `__conventionSuggesterState` probe,
+  and the History note is byte-exact (the two relative companion lines with
+  their `touched 1 time(s) after this file` reasons and the history caveat);
+  the `suggest History 0.70 2 candidates call write` line is byte-exact in
+  both forms.
+- G3: the SAME rooted tree with an agent that has no history abstains
+  `abstained no-history  0.00` (both forms) with no note - the root resolves,
+  the pack does not exist, and the history is the only candidate source.
 
 ## Fixtures
 
 The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target)
 plus `node:fs` temp trees under the OS temp dir.
 
-The optional service is injected as `Run.Context.workingDirectory = { get }`.
+The optional service is injected as `Run.Context.workingDirectory = { get }`; the foreign group
+deletes it so the root walk has no cwd fallback.
 
 ## Expected ledger strings (byte-exact, `convention-suggester: ` prefix)
 
 `abstained foreign-workspace  0.00` (empty intent, the no-signal shape),
-`abstained no-companions Naming 0.80`,
-`suggest Docs 0.95 1 candidates call write`.
+`abstained no-history  0.00`,
+`suggest History 0.70 2 candidates call write`.
 
 ## Expected count
 
-8 PASS.
+6 PASS.
