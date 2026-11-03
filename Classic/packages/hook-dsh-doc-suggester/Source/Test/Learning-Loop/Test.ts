@@ -30,6 +30,7 @@ import * as Path from "node:path";
 import {
 	AgentOf,
 	CheckAsync,
+	Commit,
 	FakeStorage,
 	Finish,
 	Ledger,
@@ -82,20 +83,17 @@ const NoteOrder = (Head: string): string =>
 	`[doc-suggester] family=History confidence=0.87\ncompanions (2):\n- ${Head} - touched 1 time(s) after this file\n- ${Head === "docs/STYLE.md" ? "docs/REFERENCE.md" : "docs/STYLE.md"} - touched 1 time(s) after this file\nnote: a documentation task rarely touches one file; keep the doc graph coherent.`;
 
 /**
- * Seed one agent's session history through the state probe: the absolute
- * anchor, then the two followers (the tools/post-execute fold's shape). The
- * followers are one and two calls away, so Adjacent ranks `docs/STYLE.md`
- * first.
+ * Seed one agent's session history through the PROJECTION drive: the absolute
+ * anchor, then the two followers, committed as `tool/call` events and folded
+ * by the registered unit into that session's cell. The followers are one and
+ * two calls away, so Adjacent ranks `docs/STYLE.md` first. There is no State
+ * fold to write to any more, so the seed travels the same init -> apply ->
+ * stateOf path the live harness drives.
  */
 const Seed = (Run: any, Id: string): void => {
-	Run.State.History.set(AgentOf(Id), {
-		Seq: 3,
-		Touches: [Index, "docs/STYLE.md", "docs/REFERENCE.md"].map((Path_: string, Seq: number) => ({
-			seq: Seq,
-			path: Path_,
-			tool: "read",
-		})),
-	});
+	Commit(Run, Id, Index);
+	Commit(Run, Id, "docs/STYLE.md");
+	Commit(Run, Id, "docs/REFERENCE.md");
 };
 
 /** The judged index read (the note trigger). */
@@ -113,9 +111,9 @@ const Touch = (Id: string): any => ({
 });
 
 /**
- * The judged anchor re-read: it ages the follow-through window, and because
- * the fold appends the anchor itself (never its own candidate) it adds no new
- * follower to the history the next note is ranked from.
+ * The judged anchor re-read: it ages the follow-through window. The anchor
+ * itself is never its own candidate, so the committed `tool/call` of this
+ * re-read adds no new follower to the history the next note is ranked from.
  */
 const Age = (Id: string): any => ({
 	name: "read",
@@ -178,9 +176,9 @@ export const runTest = async (): Promise<number> => {
 		});
 		await CheckAsync(Count, "L1: the next call ranks the accepted companion first and its score rises", async () => {
 			// The learned layer is per INSTANCE, so a later call from a second
-			// agent reads the accepted rate against its own clean history: the
-			// follow-through call above joined the first agent's history, and
-			// that appended call would otherwise outrank the learned rank.
+			// agent reads the accepted rate against its OWN clean session cell:
+			// the accept moved the shared rate table, while the second agent's
+			// history is seeded fresh.
 			Seed(Run, "learn-a2");
 			const Out = await Post(Run, Emit("learn-a2"));
 			assert.equal(

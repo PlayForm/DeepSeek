@@ -2,12 +2,13 @@ Learning-Loop - the D8 decision and learning layer tests
 
 The suite covers the decision records, the follow-through outcome signal, the learned accept rate, the
 pickable heuristics, and the storage fallback, against the fake ctx, REAL temp workspaces, and the
-REAL pattern service over a fake KV domain - with the candidates coming from the seeded session
-history (the synthetic `History` family), never from a built-in pack literal.
+REAL pattern service over a fake KV domain - with the candidates coming from the session history
+committed through the projection drive (the synthetic `History` family), never from a built-in pack
+literal.
 
 ## Scenarios
 
-- L1: a note from a seeded session history whose TWO companions carry the
+- L1: a note from a session history whose TWO companions carry the
   same prior (0.6, the History family's prior), so only the learned history
   can order them, is byte-exact and records a `pending` decision with the six
   pickable values, the enabled list, the effective weights, and
@@ -41,18 +42,18 @@ history (the synthetic `History` family), never from a built-in pack literal.
 ## Fixtures
 
 The shared Harness supplies the fake ctx with a DISTINCT root object, the real factory, the real built
-Target, and a fresh temp `$HOME`, so the JSON fallback of the pattern service can never touch the real
-home.
+Target, a fresh temp `$HOME`, so the JSON fallback of the pattern service can never touch the real
+home, and the fake `sessionProjections` registry (`register` + `stateOf` + the `Commit` drive).
 
 The REAL `@playform/plugin-dsh-pattern` service runs over `FakeStorage`, which gives the open capture,
 the map-backed tables, and the version fence, and the judged paths resolve against a REAL temp
 workspace whose `package.json` marks the pack-independent root and whose `docs/STYLE.md` and
 `docs/REFERENCE.md` are the two equal-prior history companions.
 
-The session history is seeded through the `__hookDshDocSuggesterState` probe (the shape the
-`tools/post-execute` fold writes), so the suite does not need a session bus; the judged calls the
-suite makes join that history too (reads included), and the fixtures name the anchor for the calls
-that only age the window.
+The session history is seeded by committing `tool/call` events through `Commit` (init -> apply ->
+stateOf), so the suite does not need a State field or a session bus; the judged calls the suite makes
+never append to that cell (the plugin folds nothing in its listener), and the fixtures name the
+anchor for the calls that only age the window.
 
 No sleeps and no fake clock run, because the window is counted in judged calls and `Flush`/`Save` of
 the service are awaited before the reopen.

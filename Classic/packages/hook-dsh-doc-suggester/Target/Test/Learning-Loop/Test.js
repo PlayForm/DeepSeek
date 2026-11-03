@@ -5,6 +5,7 @@ import * as Path from "node:path";
 import {
   AgentOf,
   CheckAsync,
+  Commit,
   FakeStorage,
   Finish,
   Ledger,
@@ -39,14 +40,9 @@ companions (2):
 - ${Head === "docs/STYLE.md" ? "docs/REFERENCE.md" : "docs/STYLE.md"} - touched 1 time(s) after this file
 note: a documentation task rarely touches one file; keep the doc graph coherent.`;
 const Seed = (Run, Id) => {
-  Run.State.History.set(AgentOf(Id), {
-    Seq: 3,
-    Touches: [Index, "docs/STYLE.md", "docs/REFERENCE.md"].map((Path_, Seq) => ({
-      seq: Seq,
-      path: Path_,
-      tool: "read"
-    }))
-  });
+  Commit(Run, Id, Index);
+  Commit(Run, Id, "docs/STYLE.md");
+  Commit(Run, Id, "docs/REFERENCE.md");
 };
 const Emit = (Id) => ({
   name: "read",

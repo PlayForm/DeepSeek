@@ -13,6 +13,7 @@ import * as Path from "node:path";
 import {
 	AgentOf,
 	CheckAsync,
+	Commit,
 	Durable,
 	DurableLine,
 	Finish,
@@ -63,18 +64,15 @@ const HistoryText = [
 ].join("\n");
 
 /**
- * Seed one agent's session history through the state probe: the absolute
- * anchor the call names, then the two relative companions.
+ * Seed one agent's session history through the PROJECTION drive: the absolute
+ * anchor the call names, then the two relative companions, committed as
+ * `tool/call` events and folded by the registered unit into that session's
+ * cell.
  */
 const Seed = (Run: any, Id: string): void => {
-	Run.State.History.set(AgentOf(Id), {
-		Seq: 3,
-		Touches: [RootedIndex, "README.md", "SCHEME.md"].map((Path_: string, Seq: number) => ({
-			seq: Seq,
-			path: Path_,
-			tool: "read",
-		})),
-	});
+	Commit(Run, Id, RootedIndex);
+	Commit(Run, Id, "README.md");
+	Commit(Run, Id, "SCHEME.md");
 };
 
 export const runTest = async (): Promise<number> => {

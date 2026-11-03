@@ -1,7 +1,9 @@
 // Source/Test/Post-Execute-And-Ring/Test.ts - the listener behavior against
-// the fake ctx: the History emit path (the seeded session history's co-touch
-// candidates, the byte-exact note text, summary and `suggest History` ledger
-// line in both forms), the pass-through paths (a non-judged tool, next()
+// the fake ctx: the History emit path (the session's co-touch candidates
+// committed through the projection drive, the byte-exact note text, summary
+// and `suggest History` ledger line in both forms), the REAL projection path
+// (committed `tool/call` events folded by the registered unit and read back
+// through `stateOf`), the pass-through paths (a non-judged tool, next()
 // called first), the abstention paths (no-history with the empty-family
 // double-space line, low-confidence under a raised config threshold), the
 // suppress paths (cooldown, dedupe, cap), the block-decision shape, the
@@ -10,6 +12,7 @@ import assert from "node:assert/strict";
 import {
 	AgentOf,
 	CheckAsync,
+	Commit,
 	Durable,
 	DurableLine,
 	Finish,
@@ -38,18 +41,17 @@ const ConfigEdit = (Id: string): any => ({
 });
 
 /**
- * Seed one agent's session history through the state probe: the anchor, then
- * the two followers (the session/event fold's shape).
+ * Seed one agent's session history through the PROJECTION drive: three
+ * committed `tool/call` events (the anchor, then the two companions) folded by
+ * the registered unit into that session's cell. There is no State fold to
+ * write to any more, so the seed travels the same init -> apply -> stateOf
+ * path the live harness drives.
  */
 const Seed = (Run: any, Id: string): void => {
-	Run.State.History.set(AgentOf(Id), {
-		Seq: 3,
-		Touches: [Anchor, ...Companions].map((Path: string, Seq: number) => ({
-			seq: Seq,
-			path: Path,
-			tool: "edit",
-		})),
-	});
+	Commit(Run, Id, Anchor);
+	for (const Companion of Companions) {
+		Commit(Run, Id, Companion);
+	}
 };
 
 /** The byte-exact History note text (k = sigmoid(2.5 - 0.6) = 0.87). */
@@ -67,8 +69,9 @@ export const runTest = async (): Promise<number> => {
 	// Group E1: the emit path (the history candidates).
 	{
 		const Run = Setup();
-		Seed(Run, "a");
 		await CheckAsync(Count, "E1: the History note is prepended to the decision's additionalContexts", async () => {
+			await Run.Ready;
+			Seed(Run, "a");
 			const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
 			const Out = await Post(Run, ConfigEdit("a"), Decision);
 			assert.notEqual(Out, Decision);
@@ -116,6 +119,7 @@ export const runTest = async (): Promise<number> => {
 			assert.deepEqual(Run.Lines, [`hook-dsh-edit-suggester: activated (bundle ${process.env.VERSION_PACKAGE}, history, threshold 0.75)`]);
 		});
 		await CheckAsync(Count, "E2: next() is awaited before any judgment", async () => {
+			await Run.Ready;
 			Seed(Run, "z");
 			let NextCalled = false;
 			const Downstream = { kind: "allow", additionalContexts: [] };
@@ -144,8 +148,9 @@ export const runTest = async (): Promise<number> => {
 		});
 		rm();
 		const Raised = Make(Validate({ logFile: Ledger, enabled: true, threshold: 0.9 }));
-		Seed(Raised, "a");
 		await CheckAsync(Count, "E3: a raised config threshold abstains low-confidence", async () => {
+			await Raised.Ready;
+			Seed(Raised, "a");
 			const Out = await Post(Raised, ConfigEdit("a"), { kind: "allow", additionalContexts: [] });
 			assert.deepEqual(Out.additionalContexts, []);
 			assert.ok(Raised.Lines.includes("hook-dsh-edit-suggester: abstained low-confidence History 0.87"));
@@ -157,8 +162,9 @@ export const runTest = async (): Promise<number> => {
 	{
 		rm();
 		const NoCooldown = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0 }));
-		Seed(NoCooldown, "a");
 		await CheckAsync(Count, "E4: a zero cooldown window reaches the dedupe suppress", async () => {
+			await NoCooldown.Ready;
+			Seed(NoCooldown, "a");
 			await Post(NoCooldown, ConfigEdit("a"));
 			const Out = await Post(NoCooldown, ConfigEdit("a"));
 			assert.deepEqual(Out.additionalContexts, []);
@@ -166,15 +172,17 @@ export const runTest = async (): Promise<number> => {
 		});
 		rm();
 		const Capped = Make(Validate({ logFile: Ledger, enabled: true, maxNotesPerTurn: 0 }));
-		Seed(Capped, "a");
 		await CheckAsync(Count, "E4: the per-turn cap suppresses the would-be note", async () => {
+			await Capped.Ready;
+			Seed(Capped, "a");
 			const Out = await Post(Capped, ConfigEdit("a"));
 			assert.deepEqual(Out.additionalContexts, []);
 			assert.ok(Capped.Lines.includes("hook-dsh-edit-suggester: suppressed cap History"));
 		});
 		const Run = Setup();
-		Seed(Run, "a");
 		await CheckAsync(Count, "E4: the default cooldown suppresses an immediate same-family repeat", async () => {
+			await Run.Ready;
+			Seed(Run, "a");
 			await Post(Run, ConfigEdit("a"));
 			const Out = await Post(Run, ConfigEdit("a"));
 			assert.deepEqual(Out.additionalContexts, []);
@@ -185,15 +193,16 @@ export const runTest = async (): Promise<number> => {
 	// Group E5: the block decision and the per-agent reset.
 	{
 		const Run = Setup();
-		Seed(Run, "b");
 		await CheckAsync(Count, "E5: a block decision keeps kind and feedback and gains the note", async () => {
+			await Run.Ready;
+			Seed(Run, "b");
 			const Out = await Post(Run, ConfigEdit("b"), { kind: "block", feedback: "no", additionalContexts: [] });
 			assert.equal(Out.kind, "block");
 			assert.equal(Out.feedback, "no");
 			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
 		});
-		Seed(Run, "a");
 		await CheckAsync(Count, "E5: another agent's ring is independent", async () => {
+			Seed(Run, "a");
 			const Out = await Post(Run, ConfigEdit("a"));
 			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
 		});
@@ -218,6 +227,49 @@ export const runTest = async (): Promise<number> => {
 			const Out = await Pre(Run, { agent: AgentOf("a"), messages: [{ source: { kind: "user" } }] });
 			assert.equal(Out, "down");
 			assert.deepEqual(Run.Warns, []);
+		});
+	}
+
+	// Group E6: the REAL projection path - no seeded state and no State fold.
+	// The events are COMMITTED through the registry's eager drive (the unit's
+	// `apply` folds them into that session's cell), the current call's own
+	// `tool/call` is committed the way the harness commits it before dispatch,
+	// and the judged call reads the state through `stateOf`.
+	{
+		const Run = Setup();
+		const FoldCompanion = "README.md";
+		await CheckAsync(Count, "E6: the committed tool/call events ARE the session history (no State fold)", async () => {
+			await Run.Ready;
+			assert.equal(Run.State.History, undefined);
+			Commit(Run, "real-fold", Anchor);
+			Commit(Run, "real-fold", FoldCompanion);
+			Commit(Run, "real-fold", Anchor);
+			const Folded = Run.Projections.StateOf(
+				AgentOf("real-fold").session,
+				"editHistory",
+			);
+			assert.equal(Folded.Seq, 3);
+			assert.deepEqual(
+				Folded.Touches.map((Touch: any) => Touch.path),
+				[Anchor, FoldCompanion, Anchor],
+			);
+			const Out = await Post(Run, ConfigEdit("real-fold"), {
+				kind: "allow",
+				additionalContexts: [],
+			});
+			assert.equal(Out.additionalContexts.length, 1);
+			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+			const NoteText = Out.additionalContexts[0].content[0].text;
+			assert.ok(NoteText.includes(`- ${FoldCompanion} - touched 1 time(s) after this file`));
+			assert.ok(
+				Run.Lines.includes(
+					`hook-dsh-edit-suggester: suggest History 0.87 1 companions ${Anchor}`,
+				),
+			);
+			assert.equal(
+				Run.Projections.StateOf(AgentOf("real-fold").session, "editHistory").Seq,
+				3,
+			);
 		});
 	}
 	return Finish(Count, "Post-Execute-And-Ring");

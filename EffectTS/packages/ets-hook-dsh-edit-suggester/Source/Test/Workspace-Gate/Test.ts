@@ -4,8 +4,9 @@
 // before any candidate work, whether the cwd arrives through the optional
 // harness service, is absent, or its getter throws; (b) a call inside a temp
 // root carrying a `package.json` emits the HISTORY note naming the two
-// companions the session touched right after the anchor; (c) the same rooted
-// tree with an agent that has no history abstains `no-history`.
+// companions the session touched right after the anchor, committed through the
+// projection drive; (c) the same rooted tree with an agent that has no history
+// abstains `no-history`.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -13,6 +14,7 @@ import * as Path from "node:path";
 import {
 	AgentOf,
 	CheckAsync,
+	Commit,
 	Durable,
 	DurableLine,
 	Finish,
@@ -63,18 +65,15 @@ const HistoryText = [
 ].join("\n");
 
 /**
- * Seed one agent's session history through the state probe: the absolute
- * anchor the call names, then the two relative companions.
+ * Seed one agent's session history through the PROJECTION drive: the absolute
+ * anchor the call names, then the two relative companions, committed as
+ * `tool/call` events and folded by the registered unit into that session's
+ * cell.
  */
-const Seed = (Run: any, Id: string): void => {
-	Run.State.History.set(AgentOf(Id), {
-		Seq: 3,
-		Touches: [RootedConfig, "README.md", "SCHEME.md"].map((Path_: string, Seq: number) => ({
-			seq: Seq,
-			path: Path_,
-			tool: "edit",
-		})),
-	});
+const Seed = (Run: any, Id: string, Anchor: string): void => {
+	Commit(Run, Id, Anchor);
+	Commit(Run, Id, "README.md");
+	Commit(Run, Id, "SCHEME.md");
 };
 
 export const runTest = async (): Promise<number> => {
@@ -123,8 +122,9 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Rooted);
-		Seed(Run, "b");
 		await CheckAsync(Count, "G2: the History note names the companions of the temp root", async () => {
+			await Run.Ready;
+			Seed(Run, "b", RootedConfig);
 			const Out = await Post(Run, Edit(RootedConfig, "b"));
 			assert.equal(Out.additionalContexts.length, 1);
 			assert.deepEqual(Out.additionalContexts[0].source, {

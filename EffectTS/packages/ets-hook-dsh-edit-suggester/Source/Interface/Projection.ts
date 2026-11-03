@@ -108,10 +108,7 @@ export interface ProjectionChild {
 
 // The optional-registration face of the plugin context (cordis `inject`).
 export interface InjectingContext {
-	inject?(
-		dependencies: string[],
-		callback: (child: ProjectionChild) => unknown,
-	): unknown;
+	inject?(dependencies: string[], callback: (child: ProjectionChild) => unknown): unknown;
 }
 
 // The optional-read face of the plugin context (cordis `get`): "Read a service

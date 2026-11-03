@@ -1,7 +1,9 @@
 // Source/Test/Learning-Loop/Test.ts - the D8 learning loop against the fake
 // ctx, REAL temp workspaces and the REAL pattern service, with the
 // candidates coming from the SESSION HISTORY (the synthetic `History`
-// family), never from a built-in pack literal:
+// family), never from a built-in pack literal. The history is the
+// `ctx.sessionProjections` unit's per-session cell, committed through the
+// registry's eager drive and read at detection time through `stateOf`:
 //
 //   L1: a note -> touching a named companion records the ACCEPT for that
 //       companion and its family -> the next call's rank and score rise;
@@ -30,6 +32,7 @@ import * as Path from "node:path";
 import {
 	AgentOf,
 	CheckAsync,
+	Commit,
 	FakeStorage,
 	Finish,
 	Ledger,
@@ -85,20 +88,18 @@ const NoteOrder = (Head: string): string =>
 	`[edit-suggester] family=History confidence=0.87\ncompanions (2):\n- ${Head} - touched 1 time(s) after this file\n- ${Head === "docs/STYLE.md" ? "docs/CHANGELOG.md" : "docs/STYLE.md"} - touched 1 time(s) after this file\nnote: this file rarely stands alone; check whether these need the same change.`;
 
 /**
- * Seed one agent's session history through the state probe: the absolute
- * anchor, then the two followers (the session/event fold's shape). The
- * followers are one and two calls away, so Adjacent ranks `docs/STYLE.md`
- * first.
+ * Seed one agent's session history through the PROJECTION drive: the absolute
+ * anchor, then the two followers, committed as `tool/call` events and folded
+ * by the registered unit into that session's cell. The followers are one and
+ * two calls away, so Adjacent ranks `docs/STYLE.md` first. The registration
+ * promise is awaited first, because a commit before the unit is installed
+ * would fold nothing.
  */
-const Seed = (Run: any, Id: string): void => {
-	Run.State.History.set(AgentOf(Id), {
-		Seq: 3,
-		Touches: [Anchor, "docs/STYLE.md", "docs/CHANGELOG.md"].map((Path_: string, Seq: number) => ({
-			seq: Seq,
-			path: Path_,
-			tool: "edit",
-		})),
-	});
+const Seed = async (Run: any, Id: string): Promise<void> => {
+	await Run.Ready;
+	Commit(Run, Id, Anchor);
+	Commit(Run, Id, "docs/STYLE.md");
+	Commit(Run, Id, "docs/CHANGELOG.md");
 };
 
 /** The judged anchor edit (the note trigger). */
@@ -129,7 +130,7 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Workspace);
-		Seed(Run, "learn-a");
+		await Seed(Run, "learn-a");
 		await CheckAsync(Count, "L1: the note is byte-exact and records a pending decision", async () => {
 			const Out = await Post(Run, Emit("learn-a"));
 			assert.equal(
@@ -195,7 +196,7 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Workspace);
-		Seed(Run, "learn-b");
+		await Seed(Run, "learn-b");
 		await CheckAsync(Count, "L2: a window that closes untouched records the soft reject", async () => {
 			await Post(Run, Emit("learn-b"));
 			const First = Run.State.Last.companions[0].score;
@@ -241,7 +242,7 @@ export const runTest = async (): Promise<number> => {
 			}),
 		);
 		Disabled.Context.workingDirectory = Service(Workspace);
-		Seed(Disabled, "learn-c");
+		await Seed(Disabled, "learn-c");
 		await CheckAsync(Count, "L3: disabling a heuristic drops it from the enabled list and the score", async () => {
 			await Post(Disabled, Emit("learn-c"));
 			const Last = Disabled.State.Last;
@@ -263,7 +264,7 @@ export const runTest = async (): Promise<number> => {
 			}),
 		);
 		Raised.Context.workingDirectory = Service(Workspace);
-		Seed(Raised, "learn-d");
+		await Seed(Raised, "learn-d");
 		await CheckAsync(Count, "L3: a raised weight raises the score and the ledger carries the table", async () => {
 			await Post(Raised, Emit("learn-d"));
 			const Last = Raised.State.Last;
@@ -281,7 +282,7 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Workspace);
-		Seed(Run, "learn-e");
+		await Seed(Run, "learn-e");
 		await CheckAsync(Count, "L4: without a store the memory fallback answers the neutral 1/3", async () => {
 			assert.equal(Run.State.Learning.Store(), "memory");
 			await Post(Run, Emit("learn-e"));
@@ -315,7 +316,7 @@ export const runTest = async (): Promise<number> => {
 		);
 		Run.Context.pattern = First;
 		Run.Context.workingDirectory = Service(Workspace);
-		Seed(Run, "learn-f");
+		await Seed(Run, "learn-f");
 		await CheckAsync(Count, "L5: the decision record is stored with the weights and the pending outcome", async () => {
 			await Post(Run, Emit("learn-f"));
 			assert.equal(Run.State.Learning.Store(), "pattern");
@@ -381,7 +382,7 @@ export const runTest = async (): Promise<number> => {
 			);
 			Reopen.Context.pattern = Second;
 			Reopen.Context.workingDirectory = Service(Workspace);
-			Seed(Reopen, "learn-g");
+			await Seed(Reopen, "learn-g");
 			const Out = await Post(Reopen, Emit("learn-g"));
 			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
 			assert.equal(Reopen.State.Last.companions[0].path, "docs/CHANGELOG.md");

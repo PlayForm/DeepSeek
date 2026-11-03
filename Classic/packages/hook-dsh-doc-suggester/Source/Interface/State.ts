@@ -34,17 +34,19 @@
 //                    (per call, in Function/Apply). The built-in pack is never
 //                    a candidate source;
 //   Rings          - the per-agent ring tracker (Function/Ring);
-//   History        - the per-session touch history (WeakMap keyed on the
-//                    session object, created lazily by the tools/post-execute
-//                    fold in Function/Apply - every tool call the hook sees,
-//                    reads included);
 //   Factory        - the injected factory service itself (the ledger via
 //                    Factory.Append) - assigned once in Function/Apply.
+//
+// THE HISTORY IS NOT A STATE FIELD: the per-session touch history is a
+// session-projection unit (Function/Unit, key `docHistory`, registered on
+// `sessionProjections`), so the registry owns one cell per session and
+// Function/History reads it at detection time through `stateOf(session, key)`.
+// Nothing here holds it, and no WeakMap in this module is keyed on the session
+// object.
 //
 // Test probes (the end-phase) read the state through the
 // `ctx.__hookDshDocSuggesterState` attachment (never a return value from
 // `apply` - the loader treats apply returns specially).
-import type { Touch } from "@playform/lib-dsh-pack";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 
@@ -88,19 +90,6 @@ export default interface State extends Shared {
 	Pack: Family[];
 	/** The per-agent ring tracker (Function/Ring). */
 	Rings: ReturnType<typeof Ring>;
-	/** The per-session touch history, keyed on the session object. */
-	History: WeakMap<object, SessionHistory>;
 	/** The injected @playform/plugin-dsh-factory service. */
 	Factory: Factory;
-}
-
-// The per-session history: the fold's running sequence number and the touches
-// (every tool call the hook sees that named a path, reads included), oldest
-// first and capped at 512 by the tools/post-execute fold. The candidates come
-// from these touches, never from a literal pack.
-export interface SessionHistory {
-	/** The next touch's sequence number. */
-	Seq: number;
-	/** The folded touches, oldest first. */
-	Touches: Touch[];
 }

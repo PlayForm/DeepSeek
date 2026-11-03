@@ -1,0 +1,1 @@
+import n from"./Unit.js";var c=t=>{try{const e=t.inject;if(typeof e!="function")return;e.call(t,["sessionProjections"],async o=>{try{await o.sessionProjections.register(n)}catch(r){try{t.logger?.warn(`hook-dsh-edit-suggester: the projection unit did not register: ${String(r)}`)}catch{}}})}catch{}};export{c as default};

@@ -1,15 +1,17 @@
 // Source/Test/Wiring-And-Ledger/Test.ts - the wiring and the ledger: the
 // loader contract (the default object carries name/apply/Config/inject,
 // apply returns nothing), the context-only listener registration with the
-// distinct root identity, the byte-exact activation and disabled lines
-// (logger form and durable `[ISO]` form), the config fail-loud, the schema
-// defaults on the built State, and the fs purity (the edit suggester is a
-// NON-MANIFEST module: zero ctx.fs calls).
+// distinct root identity, the optional projection injection and the installed
+// unit, the byte-exact activation and disabled lines (logger form and durable
+// `[ISO]` form), the config fail-loud, the schema defaults on the built State,
+// and the fs purity (the edit suggester is a NON-MANIFEST module: zero ctx.fs
+// calls).
 import assert from "node:assert/strict";
 import {
 	AgentOf,
 	Check,
 	CheckAsync,
+	Commit,
 	Durable,
 	Exports,
 	Finish,
@@ -47,16 +49,17 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group W2: the listener wiring.
+	// Group W2: the listener wiring and the projection injection.
 	{
 		const Run = Setup();
-		Check(Count, "W2: the three listeners register on the plugin context only", () => {
+		Check(Count, "W2: the two listeners and the projection injection register on the plugin context only", () => {
 			assert.deepEqual(Object.keys(Run.CtxListeners), [
 				"loader/volatile-update",
-				"session/event",
 				"tools/post-execute",
 				"agent/pre-step",
 			]);
+			assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+			assert.equal(Run.Projections.Units.has("editHistory"), true);
 			assert.deepEqual(Run.RootNames, []);
 			assert.notEqual(Run.Root, Run.Context);
 			assert.equal(Object.getPrototypeOf(Run.Root), Object.prototype);
@@ -109,7 +112,7 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run.State.MaxNotesPerTurn, 3);
 			assert.deepEqual(Run.State.Exclude, ["node_modules", "Target", ".git", "dist"]);
 			assert.equal(Run.State.Pack.length, 0);
-			assert.ok(Run.State.History instanceof WeakMap);
+			assert.equal(Run.State.History, undefined);
 			assert.equal(Run.State.Factory, Run.Context.pluginFactory);
 		});
 	}
@@ -117,16 +120,13 @@ export const runTest = async (): Promise<number> => {
 	// Group W5: the fs purity (the NON-MANIFEST posture).
 	{
 		const Run = Setup();
-		// The session history seeds the emit path: the anchor and the two
-		// followers all exist in the cwd the suite runs from.
-		Run.State.History.set(AgentOf("a"), {
-			Seq: 3,
-			Touches: [
-				{ seq: 0, path: "Source/Variable/Config.ts", tool: "edit" },
-				{ seq: 1, path: "README.md", tool: "edit" },
-				{ seq: 2, path: "SCHEME.md", tool: "edit" },
-			],
-		});
+		// The session history seeds the emit path through the projection drive:
+		// the anchor and the two followers all exist in the cwd the suite runs
+		// from.
+		await Run.Ready;
+		Commit(Run, "a", "Source/Variable/Config.ts");
+		Commit(Run, "a", "README.md");
+		Commit(Run, "a", "SCHEME.md");
 		await Post(Run, { name: "edit", arguments: { file_path: "Source/Variable/Config.ts" }, agent: AgentOf("a") });
 		await Post(Run, { name: "edit", arguments: { file_path: "/repo/src/a.ts" }, agent: AgentOf("a") });
 		Check(Count, "W5: zero ctx.fs calls across emit and abstain", () => {

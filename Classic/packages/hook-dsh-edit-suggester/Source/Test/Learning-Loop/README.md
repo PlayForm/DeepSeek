@@ -7,9 +7,9 @@ synthetic `History` family) and never from a built-in pack literal.
 
 ## Scenarios
 
-- L1: a note from a seeded session history with TWO equal-prior companions, so only the learned
-  history can order them, is byte-exact and records a `pending` decision with the six pickable
-  values, the enabled list, the effective weights, and `store=memory`.
+- L1: a note from a session history committed through the projection drive with TWO equal-prior
+  companions, so only the learned history can order them, is byte-exact and records a `pending`
+  decision with the six pickable values, the enabled list, the effective weights, and `store=memory`.
 - L1 continues: touching a named companion records `accepted History docs/CHANGELOG.md` for that
   companion and its family, where the rate moves from the neutral 1/3 by the +0.1 accept move of the
   service, and after the turn boundary the next call ranks the accepted companion FIRST and its score
@@ -42,9 +42,9 @@ the map-backed tables, and the version fence.
 
 The judged paths resolve against a REAL temp workspace carrying a `package.json` root marker, the
 anchor `Source/Variable/Config.ts`, the two companions `docs/STYLE.md` and `docs/CHANGELOG.md`, and a
-third path that only ages the window; the session history is seeded through the
-`__hookDshEditSuggesterState` probe, and no `.dsh/pack.yml` exists, so the history is the only
-candidate source.
+third path that only ages the window; the session history is committed through the fake
+`sessionProjections` registry's `Commit` drive (the registered unit folds each `tool/call` into that
+session's cell), and no `.dsh/pack.yml` exists, so the history is the only candidate source.
 
 No sleeps and no fake clock run, because the window is counted in judged calls and `Flush`/`Save` of
 the service are awaited before the reopen.

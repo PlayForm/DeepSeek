@@ -3,6 +3,7 @@ import {
   AgentOf,
   Check,
   CheckAsync,
+  Commit,
   Durable,
   Exports,
   Finish,
@@ -38,13 +39,14 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    Check(Count, "W2: the three listeners register on the plugin context only", () => {
+    Check(Count, "W2: the two listeners and the projection injection register on the plugin context only", () => {
       assert.deepEqual(Object.keys(Run.CtxListeners), [
         "loader/volatile-update",
-        "session/event",
         "tools/post-execute",
         "agent/pre-step"
       ]);
+      assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+      assert.equal(Run.Projections.Units.has("editHistory"), true);
       assert.deepEqual(Run.RootNames, []);
       assert.notEqual(Run.Root, Run.Context);
       assert.equal(Object.getPrototypeOf(Run.Root), Object.prototype);
@@ -93,20 +95,16 @@ const runTest = async () => {
       assert.equal(Run.State.MaxNotesPerTurn, 3);
       assert.deepEqual(Run.State.Exclude, ["node_modules", "Target", ".git", "dist"]);
       assert.equal(Run.State.Pack.length, 0);
-      assert.ok(Run.State.History instanceof WeakMap);
+      assert.equal(Run.State.History, void 0);
       assert.equal(Run.State.Factory, Run.Context.pluginFactory);
     });
   }
   {
     const Run = Setup();
-    Run.State.History.set(AgentOf("a"), {
-      Seq: 3,
-      Touches: [
-        { seq: 0, path: "Source/Variable/Config.ts", tool: "edit" },
-        { seq: 1, path: "README.md", tool: "edit" },
-        { seq: 2, path: "SCHEME.md", tool: "edit" }
-      ]
-    });
+    await Run.Ready;
+    Commit(Run, "a", "Source/Variable/Config.ts");
+    Commit(Run, "a", "README.md");
+    Commit(Run, "a", "SCHEME.md");
     await Post(Run, { name: "edit", arguments: { file_path: "Source/Variable/Config.ts" }, agent: AgentOf("a") });
     await Post(Run, { name: "edit", arguments: { file_path: "/repo/src/a.ts" }, agent: AgentOf("a") });
     Check(Count, "W5: zero ctx.fs calls across emit and abstain", () => {

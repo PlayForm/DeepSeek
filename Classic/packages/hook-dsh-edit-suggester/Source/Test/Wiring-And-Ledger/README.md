@@ -1,8 +1,9 @@
 Wiring-And-Ledger - the wiring and the ledger tests
 
 The loader wiring of the edit suggester and its durable proof: the loader contract, the context-only
-listener registration, the byte-exact activation and disabled lines (logger and durable forms), the
-config fail-loud, the schema defaults on the built State, and the fs purity.
+listener registration, the optional projection injection, the byte-exact activation and disabled
+lines (logger and durable forms), the config fail-loud, the schema defaults on the built State, and
+the fs purity.
 
 ## Scenarios
 
@@ -10,11 +11,12 @@ config fail-loud, the schema defaults on the built State, and the fs purity.
   and inject (`["pluginFactory"]`) with the values equal to the named
   exports, and apply returns NOTHING (a returned value silently kills event
   delivery).
-- W2: the enabled mount - the three listeners (`session/event`,
-  `tools/post-execute`, `agent/pre-step`) plus the factory's
-  `loader/volatile-update` register on the plugin context only (never on the
-  root; the fake root is a distinct object), the root identity is not the
-  plugin ctx, and the activation line
+- W2: the enabled mount - the two hook listeners (`tools/post-execute`,
+  `agent/pre-step`) plus the factory's `loader/volatile-update` register on
+  the plugin context only (never on the root; the fake root is a distinct
+  object), the optional projection injection is recorded as
+  `[["sessionProjections"]]` and installs the `editHistory` unit, the root
+  identity is not the plugin ctx, and the activation line
   `activated (bundle 0.2.1, history, threshold 0.75)` is byte-exact in the
   logger form and in the durable `[ISO]` form (exactly one line).
 - W3: the disabled mount - `disabled (enabled=false)` is byte-exact in both
@@ -23,18 +25,20 @@ config fail-loud, the schema defaults on the built State, and the fs purity.
   maxNoteChars throw at load with the exact schema messages; the schema
   defaults land on the built State (threshold 0.75, the three judged tools,
   maxCompanions 7, maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3,
-  the four exclude prefixes, an EMPTY boot pack, the per-session history
-  WeakMap, the factory assigned).
+  the four exclude prefixes, an EMPTY boot pack, no State-owned history
+  (`State.History` is `undefined` - the history is a projection unit), the
+  factory assigned).
 - W5: the fs purity - the edit suggester is a NON-MANIFEST module: zero
-  ctx.fs calls across an emit (a seeded history) and an abstain (a path with
-  no co-touch history), and no logger warnings.
+  ctx.fs calls across an emit (the history committed through the projection
+  drive) and an abstain (a path with no co-touch history), and no logger
+  warnings.
 
 ## Fixtures
 
 The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target).
 
-The history is seeded through the `__hookDshEditSuggesterState` probe, so the emit path runs without
-a session bus.
+The history is committed through the fake `sessionProjections` registry's `Commit` drive
+(`register` + `stateOf` + the eager fold), so the emit path runs without a session bus.
 
 No fake clock is needed, because the ring and the cooldown are counters driven by judged calls, and
 the ISO stamps of the durable ledger are matched with an anchored regex.

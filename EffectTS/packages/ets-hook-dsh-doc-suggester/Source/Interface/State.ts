@@ -38,8 +38,8 @@
 //                    Factory.Append) - assigned once in Function/Apply.
 //
 // THE HISTORY IS NOT A STATE FIELD: the per-session touch history is a
-// session-projection unit (Function/Unit, keyed on `sessionProjections` with
-// the `docHistory` key), so the registry owns one cell per session and
+// session-projection unit (Function/Unit, key `docHistory`, registered on
+// `sessionProjections`), so the registry owns one cell per session and
 // Function/History reads it at detection time through `stateOf(session, key)`.
 // Nothing here holds it, and no WeakMap in this module is keyed on the session
 // object.

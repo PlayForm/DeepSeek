@@ -1,14 +1,16 @@
 Post-Execute-And-Ring - the listener behavior tests
 
 The tools/post-execute and agent/pre-step listeners against the fake ctx: the History emit path, the
-pass-through paths, the abstention paths (including the `no-history` silence), the suppress paths,
-the block-decision shape, the per-agent ring isolation, and the per-turn reset.
+real projection path (committed `tool/call` events folded by the registered unit and read back through
+`stateOf`), the pass-through paths, the abstention paths (including the `no-history` silence), the
+suppress paths, the block-decision shape, the per-agent ring isolation, and the per-turn reset.
 
 ## Scenarios
 
-- E1: the emit path - a seeded session history (the anchor
+- E1: the emit path - the session history is seeded through the projection
+  drive (three committed `tool/call` events: the anchor
   `Documentation/Plans/POC-LEDGER.md`, then `README.md` and `package.json`)
-  prepends ONE frozen, identified note (source kind `doc-suggester`, form
+  and prepends ONE frozen, identified note (source kind `doc-suggester`, form
   `notice`, summary `History 0.87`) ahead of every downstream context; the
   note text is byte-exact (family line, the two companions with
   `touched 1 time(s) after this file`, the standing caution); the
@@ -31,22 +33,26 @@ the block-decision shape, the per-agent ring isolation, and the per-turn reset.
   the same call emits again; a pre-step without a user message does not
   reset; the reset listener is fail-open and returns the downstream
   decision.
-- E6: the REAL fold - three judged calls through `Post` (the anchor
-  `Documentation/Plans/POC-LEDGER.md`, `README.md`, then the anchor again)
-  feed the history through `tools/post-execute` (reads included), the turn
-  boundary clears the already-touched set without clearing the history, and
-  the third call emits the `family=History` note naming the one companion
+- E6: the REAL projection path - NO seeded state and NO State fold.
+  `State.History` is `undefined`; two `tool/call` events (the anchor, then
+  `README.md`) are committed through the fake registry's eager drive and the
+  cell carries `Seq 2` with those two touches. The current call's own
+  `tool/call` is then committed the way the harness commits it before
+  dispatch, and the judged call reads that state through `stateOf`: it emits
+  the `History 0.87` note naming the one companion
   (`README.md - touched 1 time(s) after this file`), with the byte-exact
   `suggest History 0.87 1 companions Documentation/Plans/POC-LEDGER.md` and
-  `decided History 0.87 1 companions README.md ...` ledger lines.
+  `decided History 0.87 1 companions README.md ...` ledger lines, and leaves
+  the cell at `Seq 3` (the plugin appends nothing).
 
 ## Fixtures
 
-The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target).
+The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target,
+and the fake `sessionProjections` registry: `register` + `stateOf` + the `Commit` drive).
 
-The session history is seeded through the `__hookDshDocSuggesterState` probe (the same shape the
-`tools/post-execute` fold writes) for the seeded cases, and E6 drives the fold through `Post` calls
-instead, so the suite never needs a session bus.
+Every history setup travels init -> apply -> stateOf: the seeded cases commit their `tool/call`
+events through `Commit`, and E6 proves the same path end to end, so the suite never seeds a State
+field and never needs a session bus.
 
 No fake clock is needed, because every timing assertion is on the counters of the ring and the
 cooldown window.

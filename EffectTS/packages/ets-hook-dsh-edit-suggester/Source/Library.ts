@@ -15,10 +15,11 @@
 // 8.1). The evidence: the edit is where the discovery happens - the model
 // edited its way to the target sets it never thought to open (section 1.4).
 // The plugin folds every `tool/call` event into the session's touch history
-// on the session/event bus and hooks the tools/post-execute waterfall for the
-// modification tools (write, edit, raw-write) to prepend ONE labeled
-// additionalContexts note naming the files the session touched right after
-// this one in this workspace - the companions the task most likely needs next
+// through a `ctx.sessionProjections` unit and hooks the tools/post-execute
+// waterfall for the modification tools (write, edit, raw-write) to prepend ONE
+// labeled additionalContexts note naming the files the session touched right
+// after this one in this workspace - the companions the task most likely needs
+// next
 // (the root manifest, the CHANGELOG section, the Config table row, the
 // byte-exact test, the site mirror). A repo/user pack is an EXPLICIT override
 // only; the literal built-in pack is never a candidate source. Deterministic
@@ -27,11 +28,11 @@
 // claims the Transform: it names the companions; deciding the change is the
 // model's.
 //
-// FULLY CONTRACT-AWARE: the session/event history fold, one tools/post-execute
-// waterfall listener (next() always awaited FIRST; pass-through returns the
-// downstream decision unchanged; fail-open try/catch never throws into the
-// waterfall), plus the agent/pre-step reset, and a validated Schemastery schema
-// (Variable/Config)
+// FULLY CONTRACT-AWARE: the history fold is a session-projection unit (the
+// registry drives `session/event`), one tools/post-execute waterfall listener
+// (next() always awaited FIRST; pass-through returns the downstream decision
+// unchanged; fail-open try/catch never throws into the waterfall), plus the
+// agent/pre-step reset, and a validated Schemastery schema (Variable/Config)
 // whose defaults Cordis fills at load. The factory's shared machinery is
 // consumed for what applies (State builder + ledger + cell unwrap); the
 // fs/observed Wire and the storage Journal do not (a NON-MANIFEST module).

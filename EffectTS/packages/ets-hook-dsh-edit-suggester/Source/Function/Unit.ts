@@ -7,7 +7,7 @@
 // computation the retired `session/event` listener fold performed, moved onto
 // the seam that actually receives the log. The drive reaches events the old
 // fold never saw: a resumed session's inherited prefix, a call whose
-// post-execute never ran, a call another plugin cancelled.
+// post-execute never ran, a call another plugin canceled.
 //
 // THE TWO LOAD-BEARING LAWS:
 //
@@ -29,8 +29,7 @@
 // `tool/call` as the call's STARTED record (recovery names a durable
 // `tool/call` with no result `TOOL_OUTCOME_UNKNOWN`), before dispatch, so the
 // anchor's prior touches are present without any post-execute append.
-import { Fold } from "@playform/ets-lib-dsh-pack";
-import type { Touch } from "@playform/ets-lib-dsh-pack";
+import { Fold, type Touch } from "@playform/ets-lib-dsh-pack";
 
 import type {
 	ProjectionUnit,
@@ -38,11 +37,7 @@ import type {
 	SessionHistory,
 	StateSchema,
 } from "../Interface/Projection.js";
-import {
-	ProjectionCap,
-	ProjectionKey,
-	ProjectionVersion,
-} from "../Variable/Projection.js";
+import { ProjectionCap, ProjectionKey, ProjectionVersion } from "../Variable/Projection.js";
 
 /** A non-negative integer, or the fallback (a corrupt persisted row). */
 const Count = (Value: unknown, Fallback: number): number =>
@@ -84,15 +79,11 @@ const Schema: StateSchema<SessionHistory> = {
 	parse(Value: unknown): SessionHistory {
 		const Row = (Value ?? {}) as { Seq?: unknown; Touches?: unknown };
 		const Touches = Array.isArray(Row.Touches)
-			? Row.Touches.map(Restore).filter(
-					(Entry): Entry is Touch => Entry !== undefined,
-				)
+			? Row.Touches.map(Restore).filter((Entry): Entry is Touch => Entry !== undefined)
 			: [];
 		return {
 			Seq: Count(Row.Seq, 0),
-			Touches: Touches.slice(
-				Math.max(0, Touches.length - ProjectionCap),
-			),
+			Touches: Touches.slice(Math.max(0, Touches.length - ProjectionCap)),
 		};
 	},
 };

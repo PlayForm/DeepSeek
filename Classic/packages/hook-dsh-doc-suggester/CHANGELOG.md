@@ -6,13 +6,19 @@ All notable changes to this package will be documented in this file.
 
 ### Changed
 
-- The history is fed by the hook's OWN `tools/post-execute` stream: every call the hook sees (reads
-  included) joins the session's touch history before the judged-tool guard, because the harness's
-  `session/event` bus does not deliver tool calls to this hook. The `session/event` listener is
-  removed, so the mount registers three listeners (`loader/volatile-update`, `tools/post-execute`,
-  `agent/pre-step`).
-- The suggestions come from the agent's OWN previous tool calls in this workspace: the touch history
-  folds every call that names a path (capped at 512), and the post-execute listener derives the
+- The session history is a `ctx.sessionProjections` unit (key `docHistory`), not a listener fold:
+  the registry subscribes to `session/event` once and folds every committed `tool/call` through the
+  unit's `apply`, so the hook holds no subscription of its own. The unit is registered through the
+  optional `ctx.inject(['sessionProjections'], ...)` form - a mount without the registry still
+  loads - and read at detection time through `stateOf(session, key)`. The `State.History` WeakMap
+  and the in-listener fold are gone.
+- No post-execute append: the current call's `tool/call` is the durable STARTED record, committed
+  before dispatch, so the anchor's prior touches are already in the projection state when
+  `tools/post-execute` runs. An append would fold the current call twice and inflate every later
+  co-touch count. The mount still registers three listeners (`loader/volatile-update`,
+  `tools/post-execute`, `agent/pre-step`); the projection unit registers separately and holds none.
+- The suggestions come from the agent's OWN previous tool calls in this workspace: the projection
+  unit folds every call that names a path (capped at 512) and the post-execute listener derives the
   candidates with `Adjacent`, so the note names the files that were touched right after the anchor.
 - The co-touch rows are judged as ONE synthetic `History` family (priority 0, threshold 0.75, one
   signal of weight 2.5, companions with prior 0.6), so the existing Detect/Measure/Score/Decide
@@ -26,11 +32,20 @@ All notable changes to this package will be documented in this file.
 - The activation line's second segment is `history` (was `families <n>`), because the boot pack
   projection is gone (`State.Pack` starts empty and `Function/Pack` was removed from the package).
 - The five smoke folders are rewritten onto the history candidates: the wiring asserts the new
-  activation line and the three listeners, the pack suite keeps the explicit `.dsh/pack.yml` case
-  with a rooted fixture, the workspace gate asserts the `History` note and the `no-history`
-  abstention, the post-execute suite seeds two touches for its emit case and folds three real calls
-  for its history case, and the learning loop seeds the two equal-prior companions for its decision,
-  follow-through and reopen proofs.
+  activation line, the three listeners and the `docHistory` registration, the pack suite keeps the
+  explicit `.dsh/pack.yml` case with a rooted fixture, the workspace gate asserts the `History` note
+  and the `no-history` abstention, the post-execute suite seeds its history through the projection
+  drive (committed `tool/call` events) and proves the real projection path, and the learning loop
+  seeds the two equal-prior companions through the same drive for its decision, follow-through and
+  reopen proofs.
+
+### Fixed
+
+- The session-history fold is fed by the durable `session/event` seam in its supported plugin-facing
+  form (`ctx.sessionProjections`) instead of the hook's own `tools/post-execute` stream. A raw
+  `ctx.on("session/event", ...)` listener received nothing in the live harness, so the fold stayed
+  empty and every judged call logged `abstained no-history  0.00` even after repeated edits. The
+  hook still registers three listeners; the projection unit registers separately and holds none.
 
 ## 0.2.1
 

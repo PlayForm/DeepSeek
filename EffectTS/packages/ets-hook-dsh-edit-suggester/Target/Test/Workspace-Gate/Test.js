@@ -5,6 +5,7 @@ import * as Path from "node:path";
 import {
   AgentOf,
   CheckAsync,
+  Commit,
   Durable,
   DurableLine,
   Finish,
@@ -39,15 +40,10 @@ const HistoryText = [
   "- SCHEME.md - touched 1 time(s) after this file",
   "note: this file rarely stands alone; check whether these need the same change."
 ].join("\n");
-const Seed = (Run, Id) => {
-  Run.State.History.set(AgentOf(Id), {
-    Seq: 3,
-    Touches: [RootedConfig, "README.md", "SCHEME.md"].map((Path_, Seq) => ({
-      seq: Seq,
-      path: Path_,
-      tool: "edit"
-    }))
-  });
+const Seed = (Run, Id, Anchor) => {
+  Commit(Run, Id, Anchor);
+  Commit(Run, Id, "README.md");
+  Commit(Run, Id, "SCHEME.md");
 };
 const runTest = async () => {
   const Count = MakeCounter();
@@ -89,8 +85,9 @@ const runTest = async () => {
   {
     const Run = Setup();
     Run.Context.workingDirectory = Service(Rooted);
-    Seed(Run, "b");
     await CheckAsync(Count, "G2: the History note names the companions of the temp root", async () => {
+      await Run.Ready;
+      Seed(Run, "b", RootedConfig);
       const Out = await Post(Run, Edit(RootedConfig, "b"));
       assert.equal(Out.additionalContexts.length, 1);
       assert.deepEqual(Out.additionalContexts[0].source, {

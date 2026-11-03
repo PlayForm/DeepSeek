@@ -1,17 +1,18 @@
 // Source/Test/Post-Execute-And-Ring/Test.ts - the listener behavior against
-// the fake ctx: the History emit path (the seeded session history's co-touch
+// the fake ctx: the History emit path (the session history's co-touch
 // candidates, the byte-exact note text, summary and `suggest History` ledger
-// line in both forms), the REAL fold (three judged calls feed the history
-// through tools/post-execute, and the third emits the note), the pass-through
-// paths (a non-judged tool, next() called first), the abstention paths
-// (no-history with the empty-family double-space line, low-confidence under a
-// raised config threshold), the suppress paths (cooldown, dedupe, cap), the
-// block-decision shape, the per-agent ring isolation, and the agent/pre-step
-// per-turn reset.
+// line in both forms), the REAL projection path (committed `tool/call` events,
+// folded by the registered unit, read back through `stateOf`), the
+// pass-through paths (a non-judged tool, next() called first), the abstention
+// paths (no-history with the empty-family double-space line, low-confidence
+// under a raised config threshold), the suppress paths (cooldown, dedupe,
+// cap), the block-decision shape, the per-agent ring isolation, and the
+// agent/pre-step per-turn reset.
 import assert from "node:assert/strict";
 import {
 	AgentOf,
 	CheckAsync,
+	Commit,
 	Durable,
 	DurableLine,
 	Finish,
@@ -40,18 +41,17 @@ const PlanRead = (Id: string): any => ({
 });
 
 /**
- * Seed one agent's session history through the state probe: the anchor, then
- * the two followers (the tools/post-execute fold's shape).
+ * Seed one agent's session history through the PROJECTION drive: the anchor,
+ * then the two followers, committed as `tool/call` events and folded by the
+ * registered unit into that session's cell. There is no State fold to write to
+ * any more, so the seed travels the same init -> apply -> stateOf path the
+ * live harness drives.
  */
 const Seed = (Run: any, Id: string): void => {
-	Run.State.History.set(AgentOf(Id), {
-		Seq: 3,
-		Touches: [Anchor, ...Companions].map((Path: string, Seq: number) => ({
-			seq: Seq,
-			path: Path,
-			tool: "read",
-		})),
-	});
+	Commit(Run, Id, Anchor);
+	for (const Companion of Companions) {
+		Commit(Run, Id, Companion);
+	}
 };
 
 /** The byte-exact History note text (k = sigmoid(2.5 - 0.6) = 0.87). */
@@ -223,28 +223,37 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group E6: the REAL fold (tools/post-execute feeds the history).
+	// Group E6: the REAL projection path - no seeded state and no WeakMap.
+	// The events are COMMITTED through the registry's eager drive (the unit's
+	// `apply` folds them into that session's cell), the current call's own
+	// `tool/call` is committed the way the harness commits it before dispatch,
+	// and the judged call reads the state through `stateOf`.
 	{
 		const Run = Setup();
-		/** One judged read: the call the fold appends. */
-		const Call = (Path_: string, Id: string): any => ({
-			name: "read",
-			arguments: { file_path: Path_ },
-			agent: AgentOf(Id),
-		});
 		await CheckAsync(
 			Count,
-			"E6: three judged calls fold the history and the third emits the History note",
+			"E6: the committed tool/call events are the session history and the judged call reads it",
 			async () => {
-				// The anchor, then the companion, then the anchor again: every
-				// call joins the history (reads included), so the third call
-				// sees the companion as the path touched right after the anchor.
-				await Post(Run, Call(Anchor, "fold"));
-				await Post(Run, Call("README.md", "fold"));
-				// The turn boundary clears the already-touched set; the history
-				// survives it.
-				await Pre(Run, { agent: AgentOf("fold"), messages: [{ source: { kind: "user" } }] });
-				const Out = await Post(Run, Call(Anchor, "fold"));
+				await Run.Ready;
+				// No State-owned history: the projection owns the cell.
+				assert.equal(Run.State.History, undefined);
+				// The anchor, then the companion: the same two events the old
+				// fold saw, now driven through the unit.
+				Commit(Run, "fold", Anchor);
+				Commit(Run, "fold", "README.md");
+				const Folded = Run.Projections.StateOf(
+					AgentOf("fold").session,
+					"docHistory",
+				);
+				assert.equal(Folded.Seq, 2);
+				assert.deepEqual(
+					Folded.Touches.map((Touch: any) => Touch.path),
+					[Anchor, "README.md"],
+				);
+				// The current call's own `tool/call` is the STARTED record the
+				// harness commits before dispatch; the judged call reads it.
+				Commit(Run, "fold", Anchor);
+				const Out = await Post(Run, PlanRead("fold"));
 				assert.equal(Out.additionalContexts.length, 1);
 				assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
 				assert.equal(
@@ -265,6 +274,12 @@ export const runTest = async (): Promise<number> => {
 					Run.Lines.includes(
 						"hook-dsh-doc-suggester: decided History 0.87 1 companions README.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.25,literal=0.25,history=0.15,accept=0.00 store=memory",
 					),
+				);
+				// The plugin appends nothing: the cell advanced only by the
+				// committed event, and the read left it at Seq 3.
+				assert.equal(
+					Run.Projections.StateOf(AgentOf("fold").session, "docHistory").Seq,
+					3,
 				);
 			},
 		);

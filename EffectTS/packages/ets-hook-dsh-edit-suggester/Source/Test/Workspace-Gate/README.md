@@ -16,11 +16,12 @@ no history abstains `no-history`.
   A service getter that THROWS still abstains with no logger warning (the
   probe never throws).
 - G2: the ROOTED tree (a `package.json`, the anchor `Source/Variable/Config.ts`,
-  and the two companions `README.md` and `SCHEME.md`) with a seeded session
-  history - the History note is byte-exact (family line, the two companions
-  with `touched 1 time(s) after this file`, the standing caution), and the
-  `suggest History 0.87 2 companions <path>` line is byte-exact in both
-  forms.
+  and the two companions `README.md` and `SCHEME.md`) with the session history
+  seeded through the projection drive (three committed `tool/call` events
+  folded by the registered unit) - the History note is byte-exact (family
+  line, the two companions with `touched 1 time(s) after this file`, the
+  standing caution), and the `suggest History 0.87 2 companions <path>` line
+  is byte-exact in both forms.
 - G2: the SAME rooted tree with an agent that has no history abstains
   `abstained no-history  0.00` (both forms) with no note - the root resolves,
   the pack does not exist, and the history is the only candidate source.
@@ -33,8 +34,9 @@ plus `node:fs` temp trees under the OS temp dir.
 The optional service is injected as `Run.Context.workingDirectory = { get }`, the same shape that
 the real harness service exposes, never a hard inject.
 
-The session history is seeded through the `__hookDshEditSuggesterState` probe (the same shape the
-`session/event` fold writes), so the suite does not need a session bus.
+The session history is committed through the fake `sessionProjections` registry's `Commit` drive
+(the registered unit folds each `tool/call` into that session's cell), so the suite does not need a
+session bus.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-edit-suggester: ` prefix)
 

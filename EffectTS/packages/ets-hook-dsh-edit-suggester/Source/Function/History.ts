@@ -30,9 +30,8 @@ export default (Context: Context, Session: unknown): readonly Touch[] => {
 		if (Session === undefined || Session === null) {
 			return [];
 		}
-		const Registry = (Context as unknown as ProbingContext).get?.(
-			"sessionProjections",
-		) as ProjectionRegistry | undefined;
+		const Registry = (Context as unknown as ProbingContext).get?.("sessionProjections") as
+			ProjectionRegistry | undefined;
 		const State = Registry?.stateOf?.(Session, ProjectionKey);
 		return Array.isArray(State?.Touches) ? State.Touches : [];
 	} catch {
