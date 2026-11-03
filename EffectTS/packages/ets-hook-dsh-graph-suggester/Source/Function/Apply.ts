@@ -3,8 +3,10 @@
 // activation proof, and register the hook's OWN listeners. The
 // graph-suggester's special step: the candidate list comes from the WORKSPACE
 // GRAPH SERVICE (`ctx.workspaceGraph.neighborhood(anchor, limit)`) - the
-// instantiated connected component (the definition, the importers, the tests,
-// the doc block) - and from NOWHERE else. The private literal pack and its
+// instantiated connected component with the ANCHOR EXCLUDED (the importers,
+// the dependencies, the tests, the doc block) - and from NOWHERE else. The
+// file the agent just touched is never a target, so the note names the files
+// around it, never the one it already read. The private literal pack and its
 // static fallback targets are RETIRED (`Variable/Defaults.ts` is unimported):
 // when the graph answers with an empty component the hook abstains
 // `abstained no-companions <id> <k>` instead of naming a literal path, and
@@ -23,7 +25,8 @@
 // answer yields at most two intents, prepended as data so the existing
 // Detect/gate/note pipeline judges them exactly like a compiled pack:
 //
-//   Neighborhood - priority 1: the whole connected component;
+//   Neighborhood - priority 1: the whole connected component, the anchor
+//                  excluded;
 //   Sibling      - priority 2: its same-directory projection (the anchor
 //                  excluded), the directory peers the same component names.
 //
@@ -61,8 +64,7 @@ import BuildNote, { Prepend } from "./Note.js";
 const GraphThreshold = 0.75;
 
 /** The Neighborhood intent's caveat line (byte-exact; carried into the per-call intent). */
-const NeighborhoodNote =
-	"the neighborhood is the connected component: definition, callers, tests, doc block.";
+const NeighborhoodNote = "the files around this one: importers, dependencies, tests, doc block.";
 
 /** The Sibling intent's caveat line (byte-exact; carried into the per-call intent). */
 const SiblingNote = "check the family roster before assuming a package exists or is wired.";
@@ -218,38 +220,55 @@ export default (Context: Context, Options: Config): void => {
 		}
 	};
 
+	// The comparison form of a path: backslashes become slashes and a leading
+	// `./` is stripped, so a repo-relative probe and a resolved display path
+	// agree on the same file. The note still names the entry's own path.
+	const Normalize = (Value: string): string => Value.replace(/\\/g, "/").replace(/^\.\//, "");
+
+	// Whether a component entry IS the anchor: an exact match after
+	// normalization, or - when the anchor is repo-relative - a path that ends
+	// with `/<anchor>`, so an absolute display path still matches. The anchor
+	// is the file the agent just touched, so it is never a target.
+	const IsAnchor = (Entry: string, Anchor: string): boolean =>
+		Entry === Anchor || (!Anchor.startsWith("/") && Entry.endsWith(`/${Anchor}`));
+
 	// The graph entries as candidates: prior 1.0 (the graph answered), the
 	// entry's own reason, its role when the reason is empty, and no path-less
-	// entry.
-	const Targets = (Entries: readonly GraphEntry[]): Candidate[] =>
-		Entries.filter((Entry) => Entry.path.length > 0).map((Entry) => ({
+	// entry. THE ANCHOR IS DROPPED HERE: naming the file the agent just read
+	// back to it is noise, so the component is reduced to its companions.
+	const Targets = (Entries: readonly GraphEntry[], AnchorPath: string): Candidate[] => {
+		const Companions = Entries.filter(
+			(Entry) => Entry.path.length > 0 && !IsAnchor(Normalize(Entry.path), AnchorPath),
+		);
+		return Companions.map((Entry) => ({
 			path: Entry.path,
 			reason: Entry.reason.length > 0 ? Entry.reason : Entry.role,
 			prior: 1.0,
 		}));
+	};
 
 	// THE SYNTHETIC INTENTS OF ONE CALL, prepended as data. Neighborhood is
-	// the whole component; Sibling is its SAME-DIRECTORY projection (the
-	// anchor excluded) and is synthesized only when that projection is
-	// non-empty. An intent the config does not enable is not synthesized.
+	// the whole component minus the anchor; Sibling is its SAME-DIRECTORY
+	// projection (the anchor excluded) and is synthesized only when that
+	// projection is non-empty. An intent the config does not enable is not
+	// synthesized.
 	// The config `threshold` is a FLOOR: it may raise the 0.75 gate, never
 	// lower it.
 	const Rows = (Path: string, Entries: GraphEntry[] | undefined): Intent[] => {
-		const All = Targets(Entries ?? []);
+		const Raw = Entries ?? [];
+		const AnchorPath = Normalize(Path);
+		const All = Targets(Raw, AnchorPath);
 		// The entry that IS the anchor (exact path, else path suffix - the
-		// graph's own anchor match), so a repo-relative probe and an absolute
-		// display path still agree on the directory.
+		// graph's own anchor match). It is no longer a target, but it still
+		// names the directory of the Sibling projection, so a repo-relative
+		// probe and an absolute display path agree on the folder.
 		const Folder = (Value: string): string => {
 			const Cut = Value.lastIndexOf("/");
 			return Cut < 0 ? "" : Value.slice(0, Cut + 1);
 		};
-		const AnchorEntry = All.find(
-			(Target) => Target.path === Path || Target.path.endsWith(`/${Path}`),
-		);
-		const Directory = Folder(AnchorEntry?.path ?? Path);
-		const Same = All.filter(
-			(Target) => Target !== AnchorEntry && Folder(Target.path) === Directory,
-		);
+		const AnchorEntry = Raw.find((Entry) => IsAnchor(Normalize(Entry.path), AnchorPath));
+		const Directory = Folder(Normalize(AnchorEntry?.path ?? AnchorPath));
+		const Same = All.filter((Target) => Folder(Normalize(Target.path)) === Directory);
 		const Build = (
 			Id: string,
 			Priority: number,
@@ -321,10 +340,11 @@ export default (Context: Context, Options: Config): void => {
 					);
 					return Decision;
 				}
-				// The component is EMPTY: the anchor is not in the graph, so
-				// there is no companion to name. The literal fallback is gone,
-				// and the honest answer is silence.
-				if (Entries.length === 0) {
+				// The component is EMPTY, or it holds nothing but the anchor
+				// itself: the file the agent just touched is not a companion, so
+				// there is no path to name. The literal fallback is gone, and the
+				// honest answer is silence.
+				if (Entries.length === 0 || Match.intent.targets.length === 0) {
 					Factory.Append(
 						State,
 						`abstained no-companions ${Match.intent.id} ${Match.k.toFixed(2)}`,

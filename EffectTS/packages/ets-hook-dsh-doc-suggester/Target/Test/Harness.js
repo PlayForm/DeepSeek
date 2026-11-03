@@ -71,12 +71,56 @@ const FirstLine = () => {
 const Furnace = new FactoryClass({
   reflect: { provide: () => void 0 }
 });
+const MakeProjections = () => {
+  const Units = /* @__PURE__ */ new Map();
+  const Cells = /* @__PURE__ */ new WeakMap();
+  const CellOf = (Session) => {
+    let Cell = Cells.get(Session);
+    if (Cell === void 0) {
+      Cell = /* @__PURE__ */ new Map();
+      Cells.set(Session, Cell);
+    }
+    return Cell;
+  };
+  const StateOf = (Session, Key) => {
+    const Unit = Units.get(Key);
+    if (Unit === void 0 || Session === void 0 || Session === null) {
+      return void 0;
+    }
+    const Cell = CellOf(Session);
+    if (!Cell.has(Key)) {
+      Cell.set(Key, Unit.init({}, 0));
+    }
+    return Cell.get(Key);
+  };
+  const Registry = {
+    register: (Definition) => {
+      Units.set(Definition.key, Definition);
+      return Promise.resolve({
+        stateOf: (Session) => StateOf(Session, Definition.key)
+      });
+    },
+    stateOf: StateOf
+  };
+  const Commit2 = (Session, Event) => {
+    for (const [Key, Unit] of Units) {
+      const Next = Unit.apply(StateOf(Session, Key), Event);
+      if (Next !== void 0) {
+        CellOf(Session).set(Key, Next);
+      }
+    }
+  };
+  return { Registry, Commit: Commit2, StateOf, Units };
+};
 const Make = (Raw) => {
   const CtxListeners = {};
   const Lines = [];
   const Warns = [];
   const Effects = [];
   const RootNames = [];
+  const Injected = [];
+  const Projections = MakeProjections();
+  let Ready = Promise.resolve();
   const Root2 = {
     on: (Name, _Listener) => {
       RootNames.push(Name);
@@ -95,6 +139,7 @@ const Make = (Raw) => {
   let Context;
   Context = {
     pluginFactory: Furnace,
+    sessionProjections: Projections.Registry,
     fs: Fs,
     logger: {
       info: (M) => {
@@ -109,6 +154,14 @@ const Make = (Raw) => {
       return () => true;
     },
     get: (Name) => Context[Name],
+    inject: (Deps, Callback) => {
+      Injected.push(Deps);
+      try {
+        Ready = Promise.resolve(Callback(Context));
+      } catch {
+      }
+      return Ready;
+    },
     effect: (Setup2, Label) => {
       Effects.push(Label ?? "unnamed");
       const Disposer = Setup2();
@@ -124,9 +177,22 @@ const Make = (Raw) => {
       }
     }
   };
-  const Run = { Context, Root: Root2, CtxListeners, Lines, Warns, Effects, RootNames, Fs, Raw };
+  const Run = {
+    Context,
+    Root: Root2,
+    CtxListeners,
+    Lines,
+    Warns,
+    Effects,
+    RootNames,
+    Fs,
+    Raw,
+    Injected,
+    Projections
+  };
   Run.Returned = Plugin.apply(Context, Raw);
   Run.State = Context.__hookDshDocSuggesterState;
+  Run.Ready = Ready;
   return Run;
 };
 const Validate = (Raw) => Plugin.Config({ ...Raw });
@@ -139,9 +205,16 @@ const Pre = (Run, Payload) => Run.CtxListeners["agent/pre-step"](Payload, () => 
 const Agents = /* @__PURE__ */ new Map();
 const AgentOf = (Id) => {
   if (!Agents.has(Id)) {
-    Agents.set(Id, { agent: { id: Id } });
+    Agents.set(Id, { id: Id, session: { id: `session-${Id}` } });
   }
   return Agents.get(Id);
+};
+const Commit = (Run, Id, Path_) => {
+  Run.Projections.Commit(AgentOf(Id).session, {
+    type: "tool/call",
+    seq: 0,
+    data: { name: "read", arguments: JSON.stringify({ file_path: Path_ }) }
+  });
 };
 const FakeStorage = (Options = {}) => {
   const Store = {
@@ -199,13 +272,14 @@ if (InvokedDirectly) {
   });
   rm();
   const Run = Setup();
-  Check(Count, "selfcheck: the fake ctx registers the plugin's three listeners", () => {
+  Check(Count, "selfcheck: the fake ctx wires the three listeners and the projection unit", () => {
     assert.deepEqual(Object.keys(Run.CtxListeners), [
       "loader/volatile-update",
-      "session/event",
       "tools/post-execute",
       "agent/pre-step"
     ]);
+    assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+    assert.equal(Run.Projections.Units.has("docHistory"), true);
     assert.deepEqual(Run.RootNames, []);
     assert.equal(Run.Returned, void 0);
     assert.equal(Run.Fs.reads + Run.Fs.writes, 0);
@@ -222,6 +296,7 @@ export {
   AgentOf,
   Check,
   CheckAsync,
+  Commit,
   Durable,
   DurableLine,
   Exports,

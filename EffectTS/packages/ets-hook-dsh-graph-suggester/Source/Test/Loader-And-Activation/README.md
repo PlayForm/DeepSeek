@@ -1,7 +1,8 @@
 # Loader-And-Activation - the loader contract and the activation tests
 
 The loader wiring of the graph-suggester: the default object, the cold mount, the activation proof,
-the apply-time wiring, the pass-through discipline, the schema fail-loud, and the mount purity.
+the apply-time wiring, the pass-through discipline, the schema fail-loud, the anchor exclusion at the
+mount seam, and the mount purity.
 
 ## Scenarios
 
@@ -25,6 +26,10 @@ the apply-time wiring, the pass-through discipline, the schema fail-loud, and th
   non-boolean `enabled` throw at load through the schema.
 - L6: the mount purity - ZERO fs operations; the state probe carries the
   factory's module identity, the empty boot rule set and the gate.
+- L7: the anchor exclusion at the mount seam - a mounted run whose fake
+  component carries the anchor plus one importer prepends a note naming only
+  the importer (`targets (1)`, `suggest Neighborhood 0.87 1 candidates call
+  read`), so the file the agent just read is never named back.
 
 ## Fixtures
 
@@ -39,4 +44,4 @@ No fake clock is needed, because the plugin has no clock dependency.
 
 ## Expected count
 
-15 PASS.
+16 PASS.

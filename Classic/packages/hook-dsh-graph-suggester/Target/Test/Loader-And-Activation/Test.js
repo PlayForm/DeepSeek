@@ -3,6 +3,7 @@ import {
   Check,
   CheckAsync,
   Finish,
+  FakeGraph,
   Ledger,
   LedgerLines,
   LedgerWith,
@@ -109,6 +110,35 @@ const runTest = async () => {
       assert.equal(Run.State.Module, "graph-suggester");
       assert.equal(Run.State.Rules.length, 0);
       assert.equal(Run.State.Threshold, 0.75);
+    });
+  }
+  {
+    rm();
+    const Mounted = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
+      Context.workspaceGraph = FakeGraph([
+        { path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+        { path: "src/Source/Use.ts", role: "importer", reason: "the importers" }
+      ]);
+    });
+    await CheckAsync(Count, "L7: the mounted note names only the companions, never the anchor", async () => {
+      const Note = await Mounted.CtxListeners["tools/post-execute"](
+        {
+          name: "read",
+          arguments: { file_path: "src/Source/Core.ts" },
+          agent: { agent: { id: "a" } }
+        },
+        void 0,
+        async () => ({ kind: "allow" })
+      );
+      assert.equal(
+        Note.additionalContexts[0].content[0].text,
+        "[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (1):\n- src/Source/Use.ts - the importers\nnote: the files around this one: importers, dependencies, tests, doc block."
+      );
+      assert.ok(
+        Mounted.Lines.includes(
+          "graph-suggester: suggest Neighborhood 0.87 1 candidates call read"
+        )
+      );
     });
   }
   return Finish(Count, "Loader-And-Activation");

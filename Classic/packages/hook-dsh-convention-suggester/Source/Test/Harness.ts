@@ -1,12 +1,21 @@
 // Source/Test/Harness.ts - the shared test harness for the
 // CONVENTION-SUGGESTER tests: the fake ctx (ctx listener capture, a DISTINCT
 // root object, the effect runner, logger capture, a recording fs the plugin
-// must never touch, reflect.provide capture) + the REAL
+// must never touch, reflect.provide capture, the optional `inject` seam) + the
+// fake `sessionProjections` registry (register + stateOf + the eager drive the
+// tests commit `tool/call` events through) + the REAL
 // @playform/plugin-dsh-factory instance from its built Target + the REAL
 // convention-suggester apply from its built Target - the family fake-ctx +
 // real-factory harness pattern, written ONCE per package and imported by
 // every test folder. Each folder process gets a fresh set, so every folder
 // is standalone-green and the aggregate replays the same seams per folder.
+//
+// THE PROJECTION FAKE IS THE POINT: the history is no longer seeded into a
+// `State` WeakMap (there is none), so every history assertion must travel the
+// seam the plugin actually uses - `register(definition)` installs the unit,
+// `Commit` folds one committed `tool/call` event through `apply` for the
+// session it belongs to, and `stateOf(session, key)` serves the folded state
+// to the detection. A test that bypassed the drive would prove nothing.
 //
 // Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
 // fake ctx actually wires the plugin (the vacuously-green backstop for every
@@ -137,10 +146,65 @@ export const Furnace: any = new FactoryClass({
 } as any);
 
 /**
+ * The fake `sessionProjections` registry: the two faces the hook consumes
+ * (`register`, `stateOf`) plus the eager drive (`Commit`) the tests commit one
+ * event through, so every history assertion travels init -> apply -> stateOf
+ * exactly as the real registry's drive does.
+ *
+ * The state is per SESSION (one cell per session per key, built lazily from
+ * `init` on first touch) and `apply`'s same-reference contract is honored: a
+ * unit that returns the state it was given changes nothing.
+ */
+const MakeProjections = () => {
+	const Units = new Map<string, any>();
+	const Cells = new WeakMap<object, Map<string, any>>();
+	const CellOf = (Session: object): Map<string, any> => {
+		let Cell = Cells.get(Session);
+		if (Cell === undefined) {
+			Cell = new Map();
+			Cells.set(Session, Cell);
+		}
+		return Cell;
+	};
+	const StateOf = (Session: any, Key: string): any => {
+		const Unit = Units.get(Key);
+		if (Unit === undefined || Session === undefined || Session === null) {
+			return undefined;
+		}
+		const Cell = CellOf(Session);
+		if (!Cell.has(Key)) {
+			Cell.set(Key, Unit.init({}, 0));
+		}
+		return Cell.get(Key);
+	};
+	const Registry = {
+		register: (Definition: any) => {
+			Units.set(Definition.key, Definition);
+			return Promise.resolve({
+				stateOf: (Session: any) => StateOf(Session, Definition.key),
+			});
+		},
+		stateOf: StateOf,
+	};
+	/** Fold ONE committed event through every registered unit (the eager drive). */
+	const Commit = (Session: any, Event: any): void => {
+		for (const [Key, Unit] of Units) {
+			const Next = Unit.apply(StateOf(Session, Key), Event);
+			if (Next !== undefined) {
+				CellOf(Session).set(Key, Next);
+			}
+		}
+	};
+	return { Registry, Commit, StateOf, Units };
+};
+
+/**
  * The fake ctx: the ROOT object is DISTINCT from the ctx; ctx.on() captures
  * into CtxListeners; effect runs its setup immediately; fs records every
  * access and must stay untouched (the convention suggester is a
- * NON-MANIFEST module: zero ctx.fs calls).
+ * NON-MANIFEST module: zero ctx.fs calls); `inject` runs the callback against
+ * the same ctx and records the dependency list, so the optional projection
+ * registration is observable; `sessionProjections` is the fake registry above.
  */
 export const Make = (Raw: any): any => {
 	const CtxListeners: any = {};
@@ -148,6 +212,9 @@ export const Make = (Raw: any): any => {
 	const Warns: string[] = [];
 	const Effects: string[] = [];
 	const RootNames: string[] = [];
+	const Injected: string[][] = [];
+	const Projections = MakeProjections();
+	let Ready: Promise<unknown> = Promise.resolve();
 	const Root: any = {
 		on: (Name: string, _Listener: unknown) => {
 			RootNames.push(Name);
@@ -166,6 +233,7 @@ export const Make = (Raw: any): any => {
 	let Context: any;
 	Context = {
 		pluginFactory: Furnace,
+		sessionProjections: Projections.Registry,
 		workingDirectory: { get: () => Package },
 		fs: Fs,
 		logger: {
@@ -181,6 +249,15 @@ export const Make = (Raw: any): any => {
 			return () => true;
 		},
 		get: (Name: string) => Context[Name],
+		inject: (Deps: string[], Callback: (Child: any) => unknown) => {
+			Injected.push(Deps);
+			try {
+				Ready = Promise.resolve(Callback(Context));
+			} catch {
+				/* the fake never fails a load */
+			}
+			return Ready;
+		},
 		effect: (Setup: () => unknown, Label?: string) => {
 			Effects.push(Label ?? "unnamed");
 			const Disposer = Setup();
@@ -197,9 +274,24 @@ export const Make = (Raw: any): any => {
 			},
 		},
 	};
-	const Run: any = { Context, Root, CtxListeners, Lines, Warns, Effects, RootNames, Fs, Raw };
+	const Run: any = {
+		Context,
+		Root,
+		CtxListeners,
+		Lines,
+		Warns,
+		Effects,
+		RootNames,
+		Fs,
+		Raw,
+		Injected,
+		Projections,
+	};
 	Run.Returned = (Plugin.apply as any)(Context, Raw);
 	Run.State = Context.__conventionSuggesterState;
+	// The registration promise `inject` captured during apply: awaiting it
+	// settles the unit's installation before a test commits any event.
+	Run.Ready = Ready;
 	return Run;
 };
 
@@ -226,13 +318,30 @@ export const Pre = (Run: any, Payload: any): Promise<any> =>
 
 /** The standard agent object (the WeakMap key the tests share). Memoized by
  *  id: the per-agent memory is a WeakMap keyed on the exact agent object, so
- *  all calls with the same id must share one identity. */
+ *  all calls with the same id must share one identity. Each agent carries a
+ *  DISTINCT session object - the real `exec.agent.session` shape the
+ *  projection cell is keyed on. */
 const Agents = new Map<string, any>();
 export const AgentOf = (Id: string): any => {
 	if (!Agents.has(Id)) {
-		Agents.set(Id, { agent: { id: Id } });
+		Agents.set(Id, { id: Id, session: { id: `session-${Id}` } });
 	}
 	return Agents.get(Id);
+};
+
+/**
+ * Commit ONE `tool/call` event for one agent's session - the eager drive, in
+ * the real event's shape (`arguments` is the RAW JSON STRING the model
+ * emitted, not a parsed object, so the unit's defensive parse is exercised).
+ * This is the only way a test may build history: there is no State fold to
+ * seed.
+ */
+export const Commit = (Run: any, Id: string, Path_: string): void => {
+	Run.Projections.Commit(AgentOf(Id).session, {
+		type: "tool/call",
+		seq: 0,
+		data: { name: "write", arguments: JSON.stringify({ file_path: Path_ }) },
+	});
 };
 
 // Standalone entry: `node Target/Test/Harness.js --selfcheck`.
@@ -249,8 +358,10 @@ if (InvokedDirectly) {
 	});
 	rm();
 	const Run = Setup();
-	Check(Count, "selfcheck: the fake ctx registers the plugin's three listeners", () => {
-		assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update", "session/event", "tools/post-execute", "agent/pre-step"]);
+	Check(Count, "selfcheck: the fake ctx wires the three listeners and the projection unit", () => {
+		assert.deepEqual(Object.keys(Run.CtxListeners), ["loader/volatile-update", "tools/post-execute", "agent/pre-step"]);
+		assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+		assert.equal(Run.Projections.Units.has("conventionHistory"), true);
 		assert.deepEqual(Run.RootNames, []);
 		assert.equal(Run.Returned, undefined);
 		assert.equal(Run.Fs.reads + Run.Fs.writes, 0);

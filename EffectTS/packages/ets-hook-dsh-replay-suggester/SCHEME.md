@@ -33,6 +33,11 @@ The complete scheme: every config field, every surface, every ledger string.
 
 The recall reader had no producer, so recall was always empty.
 
+THE STORE IS CROSS-SESSION BY DESIGN: it is durable (the `replay_history` domain or the JSON
+fallback), so it outlives the session that wrote it and a later session in the same workspace reads
+it back. That is the point of the recall, and it is also why every recalled path is validated
+against the CURRENT tree before it is named.
+
 The hook is now the PRODUCER of the store
 ([03-SUGGESTERS.md](../../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md)): on every judged
 call that names a path, the call is appended to the recall history BEFORE the recall runs, so it is
@@ -101,7 +106,7 @@ resolved pack's family:
   threshold: 0.75,
   note: "the last time this call was made, these files were touched",
   signals: [{ rule: "history", pattern: ".", weight: 2.5 }],
-  targets: recalled.files.map((file) => ({
+  targets: selected.map((file) => ({
     path: file,
     prior: 1.0,
     reason: `touched last time (${recalled.intent})`,
@@ -114,11 +119,20 @@ Its confidence is therefore `k = sigmoid(2.5 - 0.6) = 0.87`, and the note keeps 
 `suggest Repeat 0.87 <n> candidates call <tool>` ledger line, and the caveat line above when the
 record carries no `verify` command.
 
-The recalled files are HISTORY RECORDS, not workspace paths, so they are EXEMPT from the existence
-filter.
+THE RECALL IS VALIDATED AGAINST THE TREE. The store is cross-session by design - it outlives the
+session that wrote it - so a record may name a path that has since been deleted, a bare directory,
+or the call's own anchor. Before the record becomes a target set, `Function/Apply` (`Select`):
 
-A record with an EMPTY file set logs `abstained no-companions <Intent> <k>`, which is distinct from
-`no-memory`, the case where the winning intent matched but there was no record at all.
+1. drops the ANCHOR path itself (the file the current call names);
+2. keeps only paths that EXIST and are REGULAR FILES (`Function/Exists`'s `IsFile`, the `existsSync`
+   plus `statSync(...).isFile()` predicate);
+3. ranks the SAME RELEASE TREE first: a call under `<...>/Classic/...` keeps the recalled paths
+   under the same `<...>/Classic/...` prefix ahead of the others (the same for `.../EffectTS/...`),
+   with a STABLE partition that never drops a valid file only because it sits in the other tree.
+
+A record whose file set is EMPTY, or whose files ALL vanish, logs
+`abstained no-companions <Intent> <k>`, which is distinct from `no-memory`, the case where the
+winning intent matched but there was no record at all.
 
 The `note` above is the caveat: a recalled record that carries a `verify` command shows
 `note: last time verified with <command>` instead.
@@ -191,8 +205,9 @@ no-signal 0.00.
 The gate runs before the producer, so a foreign call is never recorded either.
 
 Any future static pack target is checked against the three bases of the call (repo root, package
-root, package parent), and a `<...>` placeholder target is illustrative and never checked; the
-recalled files stay exempt.
+root, package parent), and a `<...>` placeholder target is illustrative and never checked. The
+recalled files are not checked against those bases - their bases are the record's own - but they
+must still be existing regular files, as the validation above says.
 
 ## Ledger strings (byte-exact, module-owned)
 

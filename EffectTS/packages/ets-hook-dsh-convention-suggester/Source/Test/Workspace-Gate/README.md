@@ -17,11 +17,12 @@ and the same rooted tree with no history abstains `no-history`.
   A service getter that THROWS still abstains with no logger warning.
 - G2: the ROOTED temp tree (a `.git` marker, the anchor
   `Source/Function/Apply.ts`, `Source/Library.ts` and `README.md`) - the
-  session history is seeded through the `__conventionSuggesterState` probe,
-  and the History note is byte-exact (the two relative companion lines with
-  their `touched 1 time(s) after this file` reasons and the history caveat);
-  the `suggest History 0.70 2 candidates call write` line is byte-exact in
-  both forms.
+  session history is seeded through the projection drive (three committed
+  `tool/call` events folded by the registered unit), and the History note is
+  byte-exact (the two relative companion lines with their
+  `touched 1 time(s) after this file` reasons and the history caveat); the
+  `suggest History 0.70 2 candidates call write` line is byte-exact in both
+  forms.
 - G3: the SAME rooted tree with an agent that has no history abstains
   `abstained no-history  0.00` (both forms) with no note - the root resolves,
   the pack does not exist, and the history is the only candidate source.

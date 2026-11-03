@@ -69,9 +69,10 @@ Manifest(Packed);
 Put(Packed, ".dsh/pack.yml", Pack);
 Put(Packed, "Source/Version.ts");
 
-/** The SAME workspace without the pack. */
+/** The SAME workspace without the pack (the recalled file still exists). */
 const Bare = Tree("replay-suggester-bare-");
 Manifest(Bare);
+Put(Bare, "Source/Version.ts");
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();

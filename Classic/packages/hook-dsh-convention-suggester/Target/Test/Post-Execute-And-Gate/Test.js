@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
   AgentOf,
   CheckAsync,
+  Commit,
   Durable,
   DurableLine,
   Finish,
@@ -26,14 +27,10 @@ const HistoryText = [
 ].join("\n");
 const Suggest = "suggest History 0.70 2 candidates call write";
 const Seed = (Run, Id) => {
-  Run.State.History.set(AgentOf(Id), {
-    Seq: 3,
-    Touches: [Anchor, ...Companions].map((Path, Seq) => ({
-      seq: Seq,
-      path: Path,
-      tool: "write"
-    }))
-  });
+  Commit(Run, Id, Anchor);
+  for (const Companion of Companions) {
+    Commit(Run, Id, Companion);
+  }
 };
 const Write = (Id) => ({
   name: "write",
@@ -44,9 +41,10 @@ const runTest = async () => {
   const Count = MakeCounter();
   {
     const Run = Setup();
-    Seed(Run, "a");
-    Seed(Run, "b");
     await CheckAsync(Count, "E1: the History note is prepended to the decision's additionalContexts", async () => {
+      await Run.Ready;
+      Seed(Run, "a");
+      Seed(Run, "b");
       const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
       const Out = await Post(Run, Write("a"), Decision);
       assert.notEqual(Out, Decision);
@@ -101,6 +99,7 @@ const runTest = async () => {
       assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 0);
     });
     await CheckAsync(Count, "E2: next() is awaited before any judgment", async () => {
+      await Run.Ready;
       Seed(Run, "d");
       let NextCalled = false;
       const Downstream = { kind: "allow", additionalContexts: [] };
@@ -119,8 +118,9 @@ const runTest = async () => {
   {
     rm();
     const Excluded = Make(Validate({ logFile: Ledger, enabled: true, exclude: Companions }));
-    Seed(Excluded, "e");
     await CheckAsync(Count, "E3: a fully excluded candidate set abstains ambiguous", async () => {
+      await Excluded.Ready;
+      Seed(Excluded, "e");
       const Out = await Post(Excluded, Write("e"), { kind: "allow", additionalContexts: [] });
       assert.deepEqual(Out.additionalContexts, []);
       assert.ok(Excluded.Lines.includes("convention-suggester: abstained ambiguous History 0.70"));
@@ -132,8 +132,9 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    Seed(Run, "f");
     await CheckAsync(Count, "E4: the default cooldown suppresses an immediate History repeat", async () => {
+      await Run.Ready;
+      Seed(Run, "f");
       await Post(Run, Write("f"));
       const Out = await Post(Run, Write("f"));
       assert.deepEqual(Out.additionalContexts, []);
@@ -145,8 +146,9 @@ const runTest = async () => {
     });
     rm();
     const Capped = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0, maxNotesPerTurn: 1 }));
-    Seed(Capped, "g");
     await CheckAsync(Count, "E4: the per-turn cap suppresses the second History note", async () => {
+      await Capped.Ready;
+      Seed(Capped, "g");
       await Post(Capped, Write("g"));
       const Out = await Post(Capped, Write("g"));
       assert.deepEqual(Out.additionalContexts, []);
@@ -167,9 +169,10 @@ const runTest = async () => {
   }
   {
     const Run = Setup();
-    Seed(Run, "h");
-    Seed(Run, "i");
     await CheckAsync(Count, "E5: a block decision keeps kind and feedback and gains the note", async () => {
+      await Run.Ready;
+      Seed(Run, "h");
+      Seed(Run, "i");
       const Out = await Post(Run, Write("h"), { kind: "block", feedback: "no", additionalContexts: [] });
       assert.equal(Out.kind, "block");
       assert.equal(Out.feedback, "no");
@@ -192,6 +195,48 @@ const runTest = async () => {
       const Out = await Pre(Run, { agent: AgentOf("h"), messages: [{ role: "user" }] });
       assert.equal(Out, "down");
       assert.deepEqual(Run.Warns, []);
+    });
+  }
+  {
+    const Run = Setup();
+    const FoldAnchor = "Source/Function/Apply.ts";
+    const FoldCompanion = "Source/Library.ts";
+    const Call = (Path_) => ({
+      name: "write",
+      arguments: { file_path: Path_ },
+      agent: AgentOf("real-fold")
+    });
+    await CheckAsync(Count, "E6: the committed tool/call events ARE the session history (no State fold)", async () => {
+      await Run.Ready;
+      assert.equal(Run.State.History, void 0);
+      Commit(Run, "real-fold", FoldAnchor);
+      Commit(Run, "real-fold", FoldCompanion);
+      const Folded = Run.Projections.StateOf(
+        AgentOf("real-fold").session,
+        "conventionHistory"
+      );
+      assert.equal(Folded.Seq, 2);
+      assert.deepEqual(
+        Folded.Touches.map((Touch) => Touch.path),
+        [FoldAnchor, FoldCompanion]
+      );
+    });
+    await CheckAsync(Count, "E6: the judged call names the companion read from the projection state", async () => {
+      Commit(Run, "real-fold", FoldAnchor);
+      const Out = await Post(Run, Call(FoldAnchor), { kind: "allow", additionalContexts: [] });
+      assert.equal(Out.additionalContexts.length, 1);
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.65");
+      const NoteText = Out.additionalContexts[0].content[0].text;
+      assert.ok(NoteText.startsWith("[convention-suggester] intent=History confidence=0.65"));
+      assert.ok(NoteText.includes(`- ${FoldCompanion} - touched 1 time(s) after this file`));
+      assert.ok(
+        Run.Lines.includes("convention-suggester: suggest History 0.65 1 candidates call write")
+      );
+      assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 1);
+      assert.equal(
+        Run.Projections.StateOf(AgentOf("real-fold").session, "conventionHistory").Seq,
+        3
+      );
     });
   }
   return Finish(Count, "Post-Execute-And-Gate");

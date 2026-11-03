@@ -31,13 +31,22 @@ the block-decision shape, the per-agent ring isolation, and the per-turn reset.
   the same call emits again; a pre-step without a user message does not
   reset; the reset listener is fail-open and returns the downstream
   decision.
+- E6: the REAL fold - three judged calls through `Post` (the anchor
+  `Documentation/Plans/POC-LEDGER.md`, `README.md`, then the anchor again)
+  feed the history through `tools/post-execute` (reads included), the turn
+  boundary clears the already-touched set without clearing the history, and
+  the third call emits the `family=History` note naming the one companion
+  (`README.md - touched 1 time(s) after this file`), with the byte-exact
+  `suggest History 0.87 1 companions Documentation/Plans/POC-LEDGER.md` and
+  `decided History 0.87 1 companions README.md ...` ledger lines.
 
 ## Fixtures
 
 The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target).
 
 The session history is seeded through the `__hookDshDocSuggesterState` probe (the same shape the
-`session/event` fold writes), so the suite does not need a session bus.
+`tools/post-execute` fold writes) for the seeded cases, and E6 drives the fold through `Post` calls
+instead, so the suite never needs a session bus.
 
 No fake clock is needed, because every timing assertion is on the counters of the ring and the
 cooldown window.
@@ -45,10 +54,11 @@ cooldown window.
 ## Expected ledger strings (byte-exact, `hook-dsh-doc-suggester: ` prefix)
 
 `suggest History 0.87 2 companions Documentation/Plans/POC-LEDGER.md`,
+`suggest History 0.87 1 companions Documentation/Plans/POC-LEDGER.md`,
 `abstained no-history  0.00`,
 `abstained low-confidence History 0.87`,
 `suppressed dedupe History`, `suppressed cap History`, `suppressed cooldown History`.
 
 ## Expected count
 
-16 PASS.
+17 PASS.

@@ -48,6 +48,7 @@ Put(Packed, ".dsh/pack.yml", Pack);
 Put(Packed, "Source/Version.ts");
 const Bare = Tree("replay-suggester-bare-");
 Manifest(Bare);
+Put(Bare, "Source/Version.ts");
 const runTest = async () => {
   const Count = MakeCounter();
   {

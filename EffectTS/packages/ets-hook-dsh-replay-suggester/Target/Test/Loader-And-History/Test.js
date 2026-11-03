@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
 import {
   Check,
   CheckAsync,
@@ -15,6 +18,10 @@ import {
   Validate,
   WriteStore
 } from "../Harness.js";
+const Work = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-suggester-loader-"));
+FileSystem.writeFileSync(Path.join(Work, "package.json"), "{}", "utf8");
+FileSystem.mkdirSync(Path.join(Work, "src"), { recursive: true });
+FileSystem.writeFileSync(Path.join(Work, "src", "Other.ts"), "x", "utf8");
 const runTest = async () => {
   const Count = MakeCounter();
   {
@@ -74,11 +81,12 @@ const runTest = async () => {
     rm();
     WriteStore([
       { intent: "Repeat", probe: '{"file_path":"src/A.ts"}', files: ["src/A.ts"], verify: "pnpm test", at: 17e8 },
-      { intent: "Repeat", probe: "src/B.ts", files: ["src/B.ts"], verify: "", at: 1700000001 },
+      { intent: "Repeat", probe: "src/B.ts", files: ["src/Other.ts"], verify: "", at: 1700000001 },
       { intent: "Repeat", probe: "", files: ["src/C.ts"], verify: "", at: 1700000002 },
       { intent: "Repeat", files: ["src/D.ts"], verify: "", at: 1700000003 }
     ]);
     const Run = Setup_Missing();
+    Run.Context.workingDirectory = { get: () => Work };
     Check(Count, "L4: the loaded outcome is the byte-exact records line", () => {
       assert.deepEqual(LinesWith(Run, "history loaded"), [
         "replay-suggester: history loaded 2 records"

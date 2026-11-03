@@ -27,12 +27,14 @@
 //                    (once per root, in Function/Apply);
 //   Agents         - the per-agent ring/cooldown state (WeakMap keyed on the Agent object,
 //                    the tool-coach precedent), built once in Function/Apply;
-//   History        - the per-session touch history (WeakMap keyed on the session object,
-//                    created lazily by the tools/post-execute fold in Function/Apply - every
-//                    tool call the hook sees feeds it, reads included);
 //   Factory        - the injected factory service itself, consumed for the
 //                    ledger (Factory.Append) - assigned once in Function/Apply.
-import type { Touch } from "@playform/ets-lib-dsh-pack";
+//
+// THE HISTORY IS NOT A STATE FIELD: the per-session touch history is a
+// session-projection unit (Function/Unit, keyed on `sessionProjections`), so
+// the registry owns one cell per session and Function/History reads it at
+// detection time through `stateOf(session, key)`. Nothing here holds it, and
+// no WeakMap in this module is keyed on the session object.
 import type Factory from "@playform/ets-plugin-dsh-factory";
 import type { State as Shared } from "@playform/ets-plugin-dsh-factory";
 
@@ -63,8 +65,6 @@ export default interface State extends Shared {
 	Rules: CompiledIntent[];
 	/** The per-agent state, keyed on the Agent object. */
 	Agents: WeakMap<object, AgentMemory>;
-	/** The per-session touch history, keyed on the session object. */
-	History: WeakMap<object, SessionHistory>;
 	/** The injected @playform/ets-plugin-dsh-factory service - the ledger
 	 *  (Factory.Append) is consumed through it; assigned once in Function/Apply. */
 	Factory: Factory;
@@ -84,18 +84,3 @@ export interface AgentMemory {
 	/** The last probes (most recent first, capped at 8). */
 	Ring: string[];
 }
-
-// The per-session history: the fold's running sequence number and the touches
-// (the previous tool calls that named a path), oldest first and capped at 512
-// by the tools/post-execute fold - every call the hook sees feeds it, reads
-// included. The candidates come from these touches, never from a literal
-// pack.
-export interface SessionHistory {
-	/** The next touch's sequence number. */
-	Seq: number;
-	/** The folded touches, oldest first. */
-	Touches: Touch[];
-}
-
-// live-test B
-// live-test B2

@@ -15,8 +15,8 @@ history (the synthetic `History` family), never from a built-in pack literal.
 - L1 continues: reading a named companion records
   `accepted History docs/REFERENCE.md` for that companion and its family,
   where the rate moves from the neutral 1/3 by the +0.1 accept move of the
-  service, and after the turn boundary the next call ranks the accepted
-  companion FIRST and its score rises.
+  service, and a later call from a second agent (the learned layer is per
+  instance) ranks the accepted companion FIRST and its score rises.
 - L2: a note whose window closes untouched stays open after two judged calls,
   the third call, which is the configured `learnWindow`, records
   `rejected History 2 companions`, and the companions' rate moves by the
@@ -49,8 +49,10 @@ the map-backed tables, and the version fence, and the judged paths resolve again
 workspace whose `package.json` marks the pack-independent root and whose `docs/STYLE.md` and
 `docs/REFERENCE.md` are the two equal-prior history companions.
 
-The session history is seeded through the `__hookDshDocSuggesterState` probe (the same shape the
-`session/event` fold writes), so the suite does not need a session bus.
+The session history is seeded through the `__hookDshDocSuggesterState` probe (the shape the
+`tools/post-execute` fold writes), so the suite does not need a session bus; the judged calls the
+suite makes join that history too (reads included), and the fixtures name the anchor for the calls
+that only age the window.
 
 No sleeps and no fake clock run, because the window is counted in judged calls and `Flush`/`Save` of
 the service are awaited before the reopen.

@@ -40,9 +40,13 @@
 // THE WORKSPACE GATE: the root is PACK-INDEPENDENT (the nearest ancestor of
 // the call path carrying `.git` or `package.json`, from the call path plus the
 // session cwd). A call outside any workspace has no history to mine here and
-// abstains (`abstained foreign-workspace`). The recalled files are HISTORY
-// RECORDS, not workspace paths: they are EXEMPT from the existence filter,
-// while a record with an empty file set still logs `abstained no-companions`.
+// abstains (`abstained foreign-workspace`). THE RECALL IS VALIDATED AGAINST
+// THE TREE: the store is cross-session by design, so a record may name a path
+// that was deleted, a bare directory, or the call's own anchor - the anchor is
+// excluded, only an existing regular file survives (Function/Exists's
+// `IsFile`), and the same release tree (Classic with Classic, EffectTS with
+// EffectTS) ranks ahead of the other in a stable order. A record with no
+// surviving path logs `abstained no-companions`.
 // The explicit pack's families come from the RESOLVED pack per call
 // (Families(pack, "replay")), compiled once per root, so a repo pack's own
 // replay family joins the synthesized one without a restart.
@@ -50,6 +54,8 @@
 // `inject: ["pluginFactory"]` (Library.ts) - the factory is a REQUIRED
 // service (the State builder + the ledger); the loader's PENDING state
 // handles the ordering. The function returns NOTHING.
+import { isAbsolute, resolve, sep } from "node:path";
+
 import type { Context } from "@deepseek-ai/cordis";
 import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
 import type Config from "@Interface/Config.js";
@@ -62,6 +68,7 @@ import { Families, Home, Resolve, Root as RootOf } from "@playform/lib-dsh-pack"
 import Version from "@Variable/Version.js";
 
 import Detect, { Compile } from "./Detect.js";
+import { IsFile } from "./Exists.js";
 import History, { Recall } from "./History.js";
 import BuildNote, { Prepend } from "./Note.js";
 import RecallHistory from "./RecallHistory.js";
@@ -105,6 +112,49 @@ const Session = (Context: Context, Exec: ToolExecution): string | undefined => {
 		return typeof Cwd === "string" && Cwd.length > 0 ? Cwd : undefined;
 	} catch {
 		return undefined;
+	}
+};
+
+/** The two release trees the workspace keeps side by side. */
+const Trees = ["Classic", "EffectTS"] as const;
+
+/** The release-tree prefix (`<...>/Classic` or `<...>/EffectTS`) of a path. */
+const Tree = (Resolved: string): string | undefined => {
+	for (const Name of Trees) {
+		const Index = Resolved.indexOf(`${sep}${Name}${sep}`);
+		if (Index >= 0) {
+			return Resolved.slice(0, Index + Name.length + 1);
+		}
+	}
+	return undefined;
+};
+
+/** The absolute form of a recorded path (the store may hold relative ones). */
+const Absolute = (Value: string, Cwd: string | undefined): string =>
+	isAbsolute(Value) ? Value : resolve(Cwd ?? process.cwd(), Value);
+
+/**
+ * The recalled record's files as candidate targets, VALIDATED against the
+ * tree: the store is cross-session, so a record may name a path that was
+ * deleted, a bare directory, or the call's own anchor. The anchor is
+ * excluded, only an existing regular file survives (Exists's `IsFile`), and
+ * the same release tree ranks ahead of the other in a STABLE partition - a
+ * valid other-tree file is ranked after, never dropped.
+ */
+const Select = (Files: string[], Anchor: string, Cwd: string | undefined): string[] => {
+	const AnchorFull = Absolute(Anchor, Cwd);
+	const Own = Tree(AnchorFull);
+	const Kept = Files.map((File) => ({ File, Full: Absolute(File, Cwd) })).filter(
+		(Entry) => Entry.Full !== AnchorFull && IsFile(Entry.Full),
+	);
+	switch (true) {
+		case Own === undefined:
+			return Kept.map((Entry) => Entry.File);
+		default: {
+			const Same = Kept.filter((Entry) => Tree(Entry.Full) === Own);
+			const Other = Kept.filter((Entry) => Tree(Entry.Full) !== Own);
+			return [...Same, ...Other].map((Entry) => Entry.File);
+		}
 	}
 };
 
@@ -338,13 +388,18 @@ export default (Context: Context, Options: Config): void => {
 							});
 				// The recall: the SEEDED store first (the optional user seed),
 				// then the LIVE history - the agent's own ring, then the durable
-				// mirror (a reopened store's entries). The recalled files are
-				// HISTORY RECORDS, exempt from the existence filter.
+				// mirror (a reopened store's entries). The store is cross-session,
+				// so the record is validated against THIS tree below.
 				const Fence = Recorded === undefined ? Number.POSITIVE_INFINITY : Recorded.seq;
 				const Recalled =
 					Recall(State.Records, Probe) ??
 					RecallHistory(Memory.History, Probe, CallPath, State.LearnWindow, Fence) ??
 					RecallHistory(State.History, Probe, CallPath, State.LearnWindow, Fence);
+				// THE TREE VALIDATION: the store outlives the files it names, so
+				// a recorded path becomes a target only when the tree still has it
+				// as a regular file, the anchor is excluded, and the same release
+				// tree ranks first.
+				const Files = Recalled === undefined ? [] : Select(Recalled.files, CallPath, Cwd);
 				// THE SYNTHETIC FAMILY (the candidate source): the recalled
 				// record as ONE pack family, so the classifier, the gate and the
 				// note judge it exactly like a resolved pack's family. Its
@@ -359,7 +414,7 @@ export default (Context: Context, Options: Config): void => {
 								threshold: 0.75,
 								note: "the last time this call was made, these files were touched",
 								signals: [{ rule: "history", pattern: ".", weight: 2.5 }],
-								targets: Recalled.files.map((File) => ({
+								targets: Files.map((File) => ({
 									path: File,
 									prior: 1.0,
 									reason: `touched last time (${Recalled.intent})`,
@@ -389,8 +444,9 @@ export default (Context: Context, Options: Config): void => {
 				if (Recorded !== undefined) {
 					Recorded.intent = Match.intent.id;
 				}
-				// A record with an empty file set still abstains `no-companions`.
-				if (Recalled !== undefined && Recalled.files.length === 0) {
+				// A record with no surviving file abstains `no-companions` (an
+				// empty record and a fully vanished one take the same path).
+				if (Recalled !== undefined && Files.length === 0) {
 					Factory.Append(
 						State,
 						`abstained no-companions ${Match.intent.id} ${Match.k.toFixed(2)}`,

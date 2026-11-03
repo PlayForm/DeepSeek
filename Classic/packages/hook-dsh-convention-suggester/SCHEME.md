@@ -9,10 +9,26 @@ literal built-in pack.
 
 - **The fold.**
 
-    The `session/event` listener folds every `tool/call` event into one `Touch` (the sequence
-    number, the normalized path and the tool) in the SESSION's history, through the pack library's
-    `Touch` fold unit (`Fold` here). One entry per session object, created lazily; the touch array
-    is capped at 512, oldest first.
+    The fold is a session-projection unit (`Function/Unit`, key `conventionHistory`), not a listener
+    fold: `ctx.sessionProjections` subscribes to `session/event` ONCE and passes every committed
+    event through the unit's `apply`, so the hook holds no subscription of its own. Every
+    `tool/call` that names a path - reads included - becomes one `Touch` (the sequence number, the
+    normalized path and the tool) in THAT SESSION's cell, through the pack library's `Touch` fold
+    unit (`Fold` here). The unit is registered through the optional
+    `ctx.inject(['sessionProjections'], ...)` form, so a mount without the registry still loads and
+    simply has no history to mine.
+
+    The state is one cell per session, built lazily from `init` (`{ Seq: 0, Touches: [] }`); the
+    touch array is capped at 512, oldest first. `apply` returns the SAME state reference for an
+    event it ignores (the registry's zero-work signal) and a NEW plain-JSON state for a folded call.
+    The persisted-state validator (`stateSchema`) sanitizes a cached row instead of throwing, so a
+    damaged row degrades to a shorter history rather than a failed read.
+
+    The feed is the durable `session/event` seam in its supported plugin-facing form: a raw
+    `ctx.on("session/event", ...)` listener received nothing in the live harness, while the registry
+    is driven for every committed event of every agent. The detection-time read is the registry's
+    own face, `stateOf(session, key)` (`Function/History`), probed with `ctx.get` because the
+    registry is an optional service.
 
     The path comes from the first path-shaped argument (`file_path`, `path`, `filePath`), with
     backslashes normalized to slashes and a leading `./` stripped.
@@ -52,48 +68,45 @@ A pack is an EXPLICIT user/repo override, never a fallback:
 - `<repo>/.dsh/pack.yml` (or `.yaml`/`.json`), or
 - the user layer `~/.dsh/playform/workspaces/<slug>.yml`.
 
-The listener resolves it with `Resolve(root, { home, builtin: false })`, so a workspace with no pack
-layer resolves to `undefined` and abstains `no-history`. The package's own built-in projection
-(`Source/Variable/Defaults.ts`) was removed, so the built-in pack no longer exists here and an
-explicit pack is the only pack source. When a layer exists, its `convention/` families drive the
-existing deterministic classifier (`Detect`), the existence filter, the gate and the notice - so a
-repo that ships a hand-written pack still gets its own intents and caveats.
+The listener resolves it with `Resolve(root, { builtin: false })`, so a workspace with no pack layer
+resolves to `undefined` and abstains `no-history`. When a layer exists, its `convention/` families
+drive the existing deterministic classifier (`Detect`), the existence filter, the gate and the
+notice - so a repo that ships a hand-written pack still gets its own intents and caveats.
 
 The pack's own `signature` gates it (`Locate`): a pack whose declared marker is absent under the
 workspace root abstains `foreign-workspace`.
 
-## The learner was removed
+## The removed learner
 
-The literal pack learner (D4) was removed: its `Source/Function/Learn/` source and its three Learn-*
-smoke folders are gone, so no proposal file is written and no `learned proposal` ledger line exists
-any more. The `learning` config field remains in the schema as a retired compatibility field, until
-the history-driven proposal lands.
+The literal pack learner (D4) was removed: no proposal file is written, and no `learned proposal`
+ledger line exists. The `learning` config field remains in the schema as a retired compatibility
+field.
 
 ## Config (Schemastery, validated at load)
 
-| Field             | Type     | Default                                             | Volatile | Notes                                                                                                                 |
-| ----------------- | -------- | --------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
-| `log`             | boolean  | `true`                                              | yes      | The shared universal cell (the factory's minimal block).                                                              |
-| `logFile`         | string   | `~/.dsh/playform/hook-dsh-convention-suggester.log` | yes      | The hook's OWN ledger, one log per module.                                                                            |
-| `enabled`         | boolean  | `true`                                              | yes      | `false` logs `disabled (enabled=false)` and every listener passes through. The patch row ships `false`.               |
-| `threshold`       | number   | `0.75`                                              | yes      | The default confidence gate for an EXPLICIT pack; per-intent thresholds may raise it, never lower it.                 |
-| `maxCandidates`   | number   | `7`                                                 | yes      | The note's candidate cap (the plan §3.7), and the `Adjacent` limit.                                                   |
-| `maxNoteChars`    | number   | `1200`                                              | yes      | Hard character cap on the note text.                                                                                  |
-| `noiseFloor`      | number   | `0.5`                                               | yes      | Minimum confidence a candidate must have to be considered at all.                                                     |
-| `cooldownCalls`   | number   | `6`                                                 | yes      | No second note for the same intent within this many judged calls, per agent.                                          |
-| `maxNotesPerTurn` | number   | `3`                                                 | yes      | Reset per user turn (`agent/pre-step`).                                                                               |
-| `intents`         | string[] | `[]` (all pack intents enabled)                     | yes      | The enabled intent ids for an explicit pack; unknown ids are ignored.                                                 |
-| `emitOn`          | string[] | `["edit","raw-write","write"]`                      | yes      | The judged tool names (the modification family).                                                                      |
-| `exclude`         | string[] | `["node_modules","Target",".git","dist"]`           | yes      | Substrings; a candidate whose path matches one is never suggested.                                                    |
-| `learning`        | boolean  | `false`                                             | yes      | Retired: the literal pack learner was removed; kept for config compatibility until the history-driven proposal lands. |
+| Field             | Type     | Default                                             | Volatile | Notes                                                                                                                         |
+| ----------------- | -------- | --------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `log`             | boolean  | `true`                                              | yes      | The shared universal cell (the factory's minimal block).                                                                      |
+| `logFile`         | string   | `~/.dsh/playform/hook-dsh-convention-suggester.log` | yes      | The hook's OWN ledger, one log per module.                                                                                    |
+| `enabled`         | boolean  | `true`                                              | yes      | `false` logs `disabled (enabled=false)` and every listener passes through. The patch row ships `false`.                       |
+| `threshold`       | number   | `0.75`                                              | yes      | The default confidence gate for an EXPLICIT pack; per-intent thresholds may raise it, never lower it.                         |
+| `maxCandidates`   | number   | `7`                                                 | yes      | The note's candidate cap (the plan §3.7), and the `Adjacent` limit.                                                           |
+| `maxNoteChars`    | number   | `1200`                                              | yes      | Hard character cap on the note text.                                                                                          |
+| `noiseFloor`      | number   | `0.5`                                               | yes      | Minimum confidence a candidate must have to be considered at all.                                                             |
+| `cooldownCalls`   | number   | `6`                                                 | yes      | No second note for the same intent within this many judged calls, per agent.                                                  |
+| `maxNotesPerTurn` | number   | `3`                                                 | yes      | Reset per user turn (`agent/pre-step`).                                                                                       |
+| `intents`         | string[] | `[]` (all pack intents enabled)                     | yes      | The enabled intent ids for an explicit pack; unknown ids are ignored.                                                         |
+| `emitOn`          | string[] | `["edit","raw-write","write"]`                      | yes      | The judged tool names (the modification family).                                                                              |
+| `exclude`         | string[] | `["node_modules","Target",".git","dist"]`           | yes      | Substrings; a candidate whose path matches one is never suggested.                                                            |
+| `learning`        | boolean  | `false`                                             | yes      | Retired: the literal pack learner is no longer called; kept for config compatibility until the history-driven proposal lands. |
 
 ## Surfaces
 
-| Surface              | Mode                          | What it does                                                                                                                                                           |
-| -------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `session/event`      | plain                         | Folds every `tool/call` event into the session's history (one `Touch` per call, capped at 512). Fail-open: a malformed event is skipped.                               |
-| `tools/post-execute` | waterfall, plain registration | `next()` first; the history candidates (or, with an empty history, an explicit pack) → gate → prepend ONE labeled `additionalContexts` notice; never replaces content. |
-| `agent/pre-step`     | waterfall, plain              | Pure observer: resets the per-turn note counter when the step ends with a user message.                                                                                |
+| Surface                                | Mode                          | What it does                                                                                                                                                                                                                                                        |
+| -------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sessionProjections` (projection unit) | pure fold, host-only          | `apply(state, event)` folds every committed `tool/call` that names a path into the session's `{ Seq, Touches }`; registered through `ctx.inject(['sessionProjections'], ...)`, read at detection through `stateOf(session, key)`. No `wire` block: no client value. |
+| `tools/post-execute`                   | waterfall, plain registration | `next()` first; reads the session's projection state, then the history candidates (or, with an empty history, an explicit pack) → gate → prepend ONE labeled `additionalContexts` notice; never replaces content.                                                   |
+| `agent/pre-step`                       | waterfall, plain              | Pure observer: resets the per-turn note counter when the step ends with a user message.                                                                                                                                                                             |
 
 ## The workspace root
 

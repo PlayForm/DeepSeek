@@ -1,11 +1,13 @@
 // Source/Test/Post-Execute-And-Ring/Test.ts - the listener behavior against
 // the fake ctx: the History emit path (the seeded session history's co-touch
 // candidates, the byte-exact note text, summary and `suggest History` ledger
-// line in both forms), the pass-through paths (a non-judged tool, next()
-// called first), the abstention paths (no-history with the empty-family
-// double-space line, low-confidence under a raised config threshold), the
-// suppress paths (cooldown, dedupe, cap), the block-decision shape, the
-// per-agent ring isolation, and the agent/pre-step per-turn reset.
+// line in both forms), the REAL fold (three judged calls feed the history
+// through tools/post-execute, and the third emits the note), the pass-through
+// paths (a non-judged tool, next() called first), the abstention paths
+// (no-history with the empty-family double-space line, low-confidence under a
+// raised config threshold), the suppress paths (cooldown, dedupe, cap), the
+// block-decision shape, the per-agent ring isolation, and the agent/pre-step
+// per-turn reset.
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -39,7 +41,7 @@ const PlanRead = (Id: string): any => ({
 
 /**
  * Seed one agent's session history through the state probe: the anchor, then
- * the two followers (the session/event fold's shape).
+ * the two followers (the tools/post-execute fold's shape).
  */
 const Seed = (Run: any, Id: string): void => {
 	Run.State.History.set(AgentOf(Id), {
@@ -219,6 +221,53 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Out, "down");
 			assert.deepEqual(Run.Warns, []);
 		});
+	}
+
+	// Group E6: the REAL fold (tools/post-execute feeds the history).
+	{
+		const Run = Setup();
+		/** One judged read: the call the fold appends. */
+		const Call = (Path_: string, Id: string): any => ({
+			name: "read",
+			arguments: { file_path: Path_ },
+			agent: AgentOf(Id),
+		});
+		await CheckAsync(
+			Count,
+			"E6: three judged calls fold the history and the third emits the History note",
+			async () => {
+				// The anchor, then the companion, then the anchor again: every
+				// call joins the history (reads included), so the third call
+				// sees the companion as the path touched right after the anchor.
+				await Post(Run, Call(Anchor, "fold"));
+				await Post(Run, Call("README.md", "fold"));
+				// The turn boundary clears the already-touched set; the history
+				// survives it.
+				await Pre(Run, { agent: AgentOf("fold"), messages: [{ source: { kind: "user" } }] });
+				const Out = await Post(Run, Call(Anchor, "fold"));
+				assert.equal(Out.additionalContexts.length, 1);
+				assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+				assert.equal(
+					Out.additionalContexts[0].content[0].text,
+					[
+						"[doc-suggester] family=History confidence=0.87",
+						"companions (1):",
+						"- README.md - touched 1 time(s) after this file",
+						"note: a documentation task rarely touches one file; keep the doc graph coherent.",
+					].join("\n"),
+				);
+				assert.ok(
+					Run.Lines.includes(
+						`hook-dsh-doc-suggester: suggest History 0.87 1 companions ${Anchor}`,
+					),
+				);
+				assert.ok(
+					Run.Lines.includes(
+						"hook-dsh-doc-suggester: decided History 0.87 1 companions README.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.25,literal=0.25,history=0.15,accept=0.00 store=memory",
+					),
+				);
+			},
+		);
 	}
 	return Finish(Count, "Post-Execute-And-Ring");
 };

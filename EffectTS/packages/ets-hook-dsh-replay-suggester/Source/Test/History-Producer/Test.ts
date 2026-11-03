@@ -56,6 +56,24 @@ const Episode = async (Run: any, Agent: unknown): Promise<void> => {
 /** The optional harness service the probe reads (the real shape: get(session)). */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
+/**
+ * The REAL workspace behind the relative `src/...` records: the recall is
+ * validated against the tree, so every recalled companion must exist as a
+ * regular file.
+ */
+const Work = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-suggester-producer-"));
+FileSystem.writeFileSync(Path.join(Work, "package.json"), "{}", "utf8");
+FileSystem.mkdirSync(Path.join(Work, "src"), { recursive: true });
+for (const Name of ["A.ts", "B.ts", "C.ts", "D.ts", "E.ts", "Seed.ts"]) {
+	FileSystem.writeFileSync(Path.join(Work, "src", Name), "x", "utf8");
+}
+
+/** Attach the real workspace as the session cwd (the recall resolves there). */
+const At = (Run: any): any => {
+	Run.Context.workingDirectory = Service(Work);
+	return Run;
+};
+
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
@@ -93,7 +111,7 @@ export const runTest = async (): Promise<number> => {
 	// Group H2: a later call recalls the historical companions.
 	{
 		const Agent = { agent: { id: "recall-a" } };
-		const Run = Setup(Knobs);
+		const Run = At(Setup(Knobs));
 		await Run.State.Flush();
 		await Episode(Run, Agent);
 		const Result = await Call(Run, "read", Probe("src/E.ts"), Agent);
@@ -150,7 +168,7 @@ export const runTest = async (): Promise<number> => {
 			assert.ok(Facility.spec.tables.meta !== undefined);
 			assert.equal(Facility.spec.compatibleVersions, undefined);
 		});
-		const Second = Mount(Knobs, Facility);
+		const Second = At(Mount(Knobs, Facility));
 		await Second.State.Flush();
 		Check(Count, "H4: the reopen restores the entries with the byte-exact line", () => {
 			assert.deepEqual(LinesWith(Second, "store recovered"), [
@@ -185,7 +203,7 @@ export const runTest = async (): Promise<number> => {
 				["src/D.ts", "src/C.ts", "src/B.ts", "src/A.ts"],
 			);
 		});
-		const Second = Setup({ ...Knobs, recordPath: Shared });
+		const Second = At(Setup({ ...Knobs, recordPath: Shared }));
 		await Second.State.Flush();
 		Check(Count, "H5: the fallback reopen restores the entries with the byte-exact line", () => {
 			assert.deepEqual(LinesWith(Second, "store recovered"), [
@@ -249,7 +267,7 @@ export const runTest = async (): Promise<number> => {
 		rmStore();
 		WriteStore([{ intent: "Repeat", probe: "src", files: ["src/Seed.ts"], verify: "", at: 1 }]);
 		const Agent = { agent: { id: "seed-a" } };
-		const Run = Setup(Knobs);
+		const Run = At(Setup(Knobs));
 		await Run.State.Flush();
 		await Episode(Run, Agent);
 		const Result = await Call(Run, "read", Probe("src/E.ts"), Agent);

@@ -51,13 +51,14 @@ export const runTest = async (): Promise<number> => {
 	// Group W2: the listener wiring.
 	{
 		const Run = Setup();
-		Check(Count, "W2: the three listeners register on the plugin context only", () => {
+		Check(Count, "W2: the three listeners and the projection injection register on the plugin context only", () => {
 			assert.deepEqual(Object.keys(Run.CtxListeners), [
 				"loader/volatile-update",
-				"session/event",
 				"tools/post-execute",
 				"agent/pre-step",
 			]);
+			assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+			assert.equal(Run.Projections.Units.has("conventionHistory"), true);
 			assert.deepEqual(Run.RootNames, []);
 			assert.notEqual(Run.Root, Run.Context);
 			assert.equal(Object.getPrototypeOf(Run.Root), Object.prototype);
@@ -112,9 +113,9 @@ export const runTest = async (): Promise<number> => {
 			assert.deepEqual(Run.State.Exclude, ["node_modules", "Target", ".git", "dist"]);
 			assert.equal(Run.State.Factory, Run.Context.pluginFactory);
 		});
-		Check(Count, "W4: the boot compile is EMPTY (the history is the candidate source)", () => {
+		Check(Count, "W4: the boot compile is EMPTY and no State-owned history exists", () => {
 			assert.deepEqual(Run.State.Rules, []);
-			assert.equal(Run.State.History instanceof WeakMap, true);
+			assert.equal(Run.State.History, undefined);
 			assert.equal(Run.State.Agents instanceof WeakMap, true);
 		});
 		Check(Count, "W4: a configured intent list lands on the State (the boot line stays history)", () => {

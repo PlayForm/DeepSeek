@@ -10,6 +10,7 @@ import {
 	AgentOf,
 	Check,
 	CheckAsync,
+	Commit,
 	Durable,
 	Exports,
 	Finish,
@@ -53,10 +54,14 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "W2: the three listeners register on the plugin context only", () => {
 			assert.deepEqual(Object.keys(Run.CtxListeners), [
 				"loader/volatile-update",
-				"session/event",
 				"tools/post-execute",
 				"agent/pre-step",
 			]);
+			// The projection unit registers separately: the optional injection
+			// declares the service and installs the `docHistory` unit, and no
+			// listener is added for it.
+			assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+			assert.equal(Run.Projections.Units.has("docHistory"), true);
 			assert.deepEqual(Run.RootNames, []);
 			assert.notEqual(Run.Root, Run.Context);
 			assert.equal(Object.getPrototypeOf(Run.Root), Object.prototype);
@@ -109,7 +114,7 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run.State.MaxNotesPerTurn, 3);
 			assert.deepEqual(Run.State.Exclude, ["node_modules", "Target", ".git", "dist"]);
 			assert.equal(Run.State.Pack.length, 0);
-			assert.ok(Run.State.History instanceof WeakMap);
+			assert.equal(Run.State.History, undefined);
 			assert.equal(Run.State.Factory, Run.Context.pluginFactory);
 		});
 	}
@@ -117,16 +122,12 @@ export const runTest = async (): Promise<number> => {
 	// Group W5: the fs purity (the NON-MANIFEST posture).
 	{
 		const Run = Setup();
-		// The session history seeds the emit path: the anchor and the two
-		// followers both exist in the cwd the suite runs from.
-		Run.State.History.set(AgentOf("a"), {
-			Seq: 3,
-			Touches: [
-				{ seq: 0, path: "Documentation/Plans/POC-LEDGER.md", tool: "read" },
-				{ seq: 1, path: "README.md", tool: "read" },
-				{ seq: 2, path: "package.json", tool: "read" },
-			],
-		});
+		// The session history seeds the emit path through the projection drive:
+		// the anchor and the two followers both exist in the cwd the suite runs
+		// from.
+		Commit(Run, "a", "Documentation/Plans/POC-LEDGER.md");
+		Commit(Run, "a", "README.md");
+		Commit(Run, "a", "package.json");
 		await Post(Run, { name: "read", arguments: { file_path: "Documentation/Plans/POC-LEDGER.md" }, agent: AgentOf("a") });
 		await Post(Run, { name: "read", arguments: { file_path: "/repo/src/a.ts" }, agent: AgentOf("a") });
 		Check(Count, "W5: zero ctx.fs calls across emit and abstain", () => {

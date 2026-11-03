@@ -9,16 +9,26 @@ literal built-in pack.
 
 - **The fold.**
 
-    The `tools/post-execute` listener folds every tool call it sees - reads included, because the
-    stream carries every call the hook receives - into one `Touch` (the sequence number, the
-    normalized path and the tool) in the SESSION's history, through the pack library's `Touch` fold
-    unit (`Fold` here). The fold runs BEFORE the judged-tool guard, so a read feeds the history that
-    a later write consults. One entry per session object, created lazily; the touch array is capped
-    at 512, oldest first.
+    The fold is a session-projection unit (`Function/Unit`, key `conventionHistory`), not a listener
+    fold: `ctx.sessionProjections` subscribes to `session/event` ONCE and passes every committed
+    event through the unit's `apply`, so the hook holds no subscription of its own. Every
+    `tool/call` that names a path - reads included - becomes one `Touch` (the sequence number, the
+    normalized path and the tool) in THAT SESSION's cell, through the pack library's `Touch` fold
+    unit (`Fold` here). The unit is registered through the optional
+    `ctx.inject(['sessionProjections'], ...)` form, so a mount without the registry still loads and
+    simply has no history to mine.
 
-    The feed is the hook's OWN `tools/post-execute` stream, never a `session/event` listener: the
-    live harness does not deliver that event to the hook, so the fold stayed empty and every judged
-    call logged `abstained no-history  0.00`.
+    The state is one cell per session, built lazily from `init` (`{ Seq: 0, Touches: [] }`); the
+    touch array is capped at 512, oldest first. `apply` returns the SAME state reference for an
+    event it ignores (the registry's zero-work signal) and a NEW plain-JSON state for a folded call.
+    The persisted-state validator (`stateSchema`) sanitizes a cached row instead of throwing, so a
+    damaged row degrades to a shorter history rather than a failed read.
+
+    The feed is the durable `session/event` seam in its supported plugin-facing form: a raw
+    `ctx.on("session/event", ...)` listener received nothing in the live harness, while the registry
+    is driven for every committed event of every agent. The detection-time read is the registry's
+    own face, `stateOf(session, key)` (`Function/History`), probed with `ctx.get` because the
+    registry is an optional service.
 
     The path comes from the first path-shaped argument (`file_path`, `path`, `filePath`), with
     backslashes normalized to slashes and a leading `./` stripped.
@@ -91,10 +101,11 @@ field.
 
 ## Surfaces
 
-| Surface              | Mode                          | What it does                                                                                                                                                                                                                                                                |
-| -------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tools/post-execute` | waterfall, plain registration | `next()` first; folds the current call into the session history (every call that names a path, reads included), then the history candidates (or, with an empty history, an explicit pack) → gate → prepend ONE labeled `additionalContexts` notice; never replaces content. |
-| `agent/pre-step`     | waterfall, plain              | Pure observer: resets the per-turn note counter when the step ends with a user message.                                                                                                                                                                                     |
+| Surface                                | Mode                          | What it does                                                                                                                                                                                                                                                        |
+| -------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sessionProjections` (projection unit) | pure fold, host-only          | `apply(state, event)` folds every committed `tool/call` that names a path into the session's `{ Seq, Touches }`; registered through `ctx.inject(['sessionProjections'], ...)`, read at detection through `stateOf(session, key)`. No `wire` block: no client value. |
+| `tools/post-execute`                   | waterfall, plain registration | `next()` first; reads the session's projection state, then the history candidates (or, with an empty history, an explicit pack) → gate → prepend ONE labeled `additionalContexts` notice; never replaces content.                                                   |
+| `agent/pre-step`                       | waterfall, plain              | Pure observer: resets the per-turn note counter when the step ends with a user message.                                                                                                                                                                             |
 
 ## The workspace root
 

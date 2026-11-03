@@ -30,9 +30,9 @@ const runTest = async () => {
     const Result = await Call(Run, "read", NEIGHBORHOOD_ARGS);
     Check(Count, "P1: the suggest line is byte-exact (logger and durable ledger)", () => {
       assert.deepEqual(LinesWith(Run, "candidates call"), [
-        "graph-suggester: suggest Neighborhood 0.87 2 candidates call read"
+        "graph-suggester: suggest Neighborhood 0.87 1 candidates call read"
       ]);
-      assert.equal(LedgerWith("suggest Neighborhood 0.87 2 candidates call read").length, 1);
+      assert.equal(LedgerWith("suggest Neighborhood 0.87 1 candidates call read").length, 1);
     });
     await CheckAsync(Count, "P1: the note is one labeled notice prepended to the decision", async () => {
       assert.ok(Array.isArray(Result.additionalContexts));
@@ -46,7 +46,7 @@ const runTest = async () => {
       });
       assert.equal(
         Note.content[0].text,
-        "[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (2):\n- src/Source/Core.ts - the definition\n- src/Source/Use.ts - the callers\nnote: the neighborhood is the connected component: definition, callers, tests, doc block."
+        "[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (1):\n- src/Source/Use.ts - the callers\nnote: the files around this one: importers, dependencies, tests, doc block."
       );
       assert.equal(Object.isFrozen(Note), true);
       assert.equal(Result.kind, "allow");
@@ -134,7 +134,10 @@ const runTest = async () => {
   {
     const Agent = { agent: { id: "agent-a" } };
     const Run = Setup({}, (Context) => {
-      Context.workspaceGraph = FakeGraph([{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" }]);
+      Context.workspaceGraph = FakeGraph([
+        { path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+        { path: "src/Source/Core.test.ts", role: "test", reason: "the tests" }
+      ]);
     });
     await Call(Run, "read", NEIGHBORHOOD_ARGS, Agent);
     await Call(Run, "read", NEIGHBORHOOD_ARGS, Agent);
@@ -187,7 +190,10 @@ const runTest = async () => {
       ]);
     });
     const Block = Setup({}, (Context) => {
-      Context.workspaceGraph = FakeGraph([{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" }]);
+      Context.workspaceGraph = FakeGraph([
+        { path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+        { path: "src/Source/Use.ts", role: "importer", reason: "the importers" }
+      ]);
     });
     const Downstream = { kind: "block", feedback: "no", additionalContexts: [{ marker: "downstream" }] };
     const Result = await Call(Block, "read", NEIGHBORHOOD_ARGS, void 0, Downstream);
@@ -212,7 +218,10 @@ const runTest = async () => {
       assert.equal(LinesWith(Run, "abstained").length, 0);
     });
     const Trunc = Setup({ maxNoteChars: 60 }, (Context) => {
-      Context.workspaceGraph = FakeGraph([{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" }]);
+      Context.workspaceGraph = FakeGraph([
+        { path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+        { path: "src/Source/Use.ts", role: "importer", reason: "the importers" }
+      ]);
     });
     const Result = await Call(Trunc, "read", NEIGHBORHOOD_ARGS);
     Check(Count, "P7: a note longer than maxNoteChars is truncated with an ellipsis", () => {
@@ -235,6 +244,57 @@ const runTest = async () => {
       assert.equal(Pure.Fs.writes.length, 0);
       assert.equal(Pure.Fs.resolved.length, 0);
       assert.equal(Pure.Fs.stats.length, 0);
+    });
+  }
+  {
+    const Alone = Setup({}, (Context) => {
+      Context.workspaceGraph = FakeGraph([
+        { path: "src/Source/Core.ts", role: "definition", reason: "the definition" }
+      ]);
+    });
+    await Call(Alone, "read", NEIGHBORHOOD_ARGS);
+    Check(Count, "P9: a component that holds only the anchor abstains no-companions", () => {
+      assert.deepEqual(LinesWith(Alone, "candidates call"), []);
+      assert.deepEqual(LinesWith(Alone, "abstained"), [
+        "graph-suggester: abstained no-companions Neighborhood 0.87"
+      ]);
+      assert.equal(LinesWith(Alone, "graph unavailable").length, 0);
+    });
+    const Mixed = Setup({}, (Context) => {
+      Context.workspaceGraph = FakeGraph([
+        { path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+        { path: "src/Source/Use.ts", role: "importer", reason: "the importers" },
+        { path: "src/Source/Dep.ts", role: "dependency", reason: "the dependencies" }
+      ]);
+    });
+    const Result = await Call(Mixed, "read", NEIGHBORHOOD_ARGS);
+    Check(Count, "P9: the anchor is dropped and only its companions are named", () => {
+      assert.deepEqual(LinesWith(Mixed, "candidates call"), [
+        "graph-suggester: suggest Neighborhood 0.87 2 candidates call read"
+      ]);
+      assert.equal(
+        Result.additionalContexts[0].content[0].text,
+        "[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (2):\n- src/Source/Use.ts - the importers\n- src/Source/Dep.ts - the dependencies\nnote: the files around this one: importers, dependencies, tests, doc block."
+      );
+    });
+    const Normalized = Setup({}, (Context) => {
+      Context.workspaceGraph = FakeGraph([
+        { path: "./src\\Source\\Core.ts", role: "definition", reason: "the definition" },
+        { path: "src/Source/Use.ts", role: "importer", reason: "the importers" }
+      ]);
+    });
+    const Backslash = await Call(Normalized, "read", NEIGHBORHOOD_ARGS);
+    Check(Count, "P9: a backslash or ./-prefixed anchor entry is dropped too", () => {
+      assert.deepEqual(LinesWith(Normalized, "candidates call"), [
+        "graph-suggester: suggest Neighborhood 0.87 1 candidates call read"
+      ]);
+      assert.equal(LinesWith(Normalized, "abstained").length, 0);
+    });
+    Check(Count, "P9: no note ever names the anchor (plain and backslash forms)", () => {
+      for (const Note of [Result, Backslash]) {
+        const Text = Note.additionalContexts[0].content[0].text;
+        assert.equal(Text.includes("Core.ts"), false);
+      }
     });
   }
   return Finish(Count, "Pipeline-And-Graph");

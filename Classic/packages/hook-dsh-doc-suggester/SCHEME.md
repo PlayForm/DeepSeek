@@ -25,10 +25,12 @@ shared algebra of section 3).
 
 | Surface              | Mode                          | What it does                                                                                                            |
 | -------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `session/event`      | plain                         | Folds every `tool/call` event into the session's history (one touch per call, capped at 512)                            |
-| `tools/post-execute` | waterfall, plain registration | the note: `next()` first, then the history candidates (or an explicit pack), gate, and one `additionalContexts` message |
+| `tools/post-execute` | waterfall, plain registration | the history fold (every call the hook sees, reads included), then the note, the gate, and one `additionalContexts` note |
 | `agent/pre-step`     | plain                         | the per-turn reset (touched paths, cooldowns, dedupe, counters)                                                         |
 | `tools/pre-execute`  | NOT used                      | a suggestion cannot rewrite arguments; a deny would be a coach, not a suggester                                         |
+
+The mount registers three listeners: the factory's `loader/volatile-update` (the volatile refresh),
+`tools/post-execute`, and `agent/pre-step`.
 
 ## 2. The config schema (Variable/Config.ts)
 
@@ -88,10 +90,11 @@ top-ranked companion, whose row the values describe.
 The suggestions come from the agent's OWN PREVIOUS TOOL CALLS in this workspace, never from a
 literal built-in pack.
 
-The `session/event` listener folds every `tool/call` event into one touch (the sequence number, the
-normalized path and the tool) in the SESSION's history, through the fold unit of
-`@playform/lib-dsh-pack`. One entry per session object, created lazily; the touch array is capped at
-512, oldest first.
+The `tools/post-execute` listener folds every call the hook sees into one touch (the sequence
+number, the normalized path and the tool) in the SESSION's history, before the judged-tool guard and
+through the fold unit of `@playform/lib-dsh-pack`. Reads are included: the harness's `session/event`
+bus does not deliver tool calls to this hook. One entry per session object, created lazily; the
+touch array is capped at 512, oldest first.
 
 The path comes from the first path-shaped argument (`file_path`, `path`, `filePath`), with
 backslashes normalized to slashes and a leading `./` stripped.
@@ -261,9 +264,9 @@ the enabled list, so the choice is auditable.
 Source/
   Library.ts            the entry: name, apply, Config, inject (pluginFactory)
   Function/
-    Apply.ts            the wiring: the State build, the activation, the 3 listeners
-                        (the session/event history fold, the post-execute note,
-                        the per-turn reset)
+    Apply.ts            the wiring: the State build, the activation, the 3 registered
+                        listeners (the post-execute history fold + note, the
+                        per-turn reset, the factory's volatile refresh)
     Exists.ts           the BASE-AWARE companion existence filter (repo root,
                         package root, package parent; `<...>` targets exempt)
     Filter.ts           the base-aware existence filter over the detections (before score/gate)
@@ -295,7 +298,7 @@ Source/
 ## 5. The end-phase
 
 The smoke folders are `Post-Execute-And-Ring`, `Wiring-And-Ledger`, `Workspace-Gate`, `Pack-Driven`
-and `Learning-Loop` (16, 12, 6, 5 and 12 checks).
+and `Learning-Loop` (17, 12, 6, 5 and 12 checks).
 
 The learned layer of the end-phase list of the plan is landed (section 3.4 of this document), and
 `Learning-Loop` exercises it against the history candidates (the decision records, the

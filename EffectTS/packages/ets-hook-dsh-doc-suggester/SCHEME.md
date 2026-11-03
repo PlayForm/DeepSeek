@@ -23,12 +23,16 @@ shared algebra of section 3).
 
 ## 1. The surfaces
 
-| Surface              | Mode                          | What it does                                                                                                            |
-| -------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `session/event`      | plain                         | Folds every `tool/call` event into the session's history (one touch per call, capped at 512)                            |
-| `tools/post-execute` | waterfall, plain registration | the note: `next()` first, then the history candidates (or an explicit pack), gate, and one `additionalContexts` message |
-| `agent/pre-step`     | plain                         | the per-turn reset (touched paths, cooldowns, dedupe, counters)                                                         |
-| `tools/pre-execute`  | NOT used                      | a suggestion cannot rewrite arguments; a deny would be a coach, not a suggester                                         |
+| Surface                                | Mode                          | What it does                                                                                                                                                                                                                                                        |
+| -------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sessionProjections` (projection unit) | pure fold, host-only          | `apply(state, event)` folds every committed `tool/call` that names a path into the session's `{ Seq, Touches }`; registered through `ctx.inject(['sessionProjections'], ...)`, read at detection through `stateOf(session, key)`. No `wire` block: no client value. |
+| `tools/post-execute`                   | waterfall, plain registration | reads the session's projection state, then the note, the gate, and one `additionalContexts` note                                                                                                                                                                    |
+| `agent/pre-step`                       | plain                         | the per-turn reset (touched paths, cooldowns, dedupe, counters)                                                                                                                                                                                                     |
+| `tools/pre-execute`                    | NOT used                      | a suggestion cannot rewrite arguments; a deny would be a coach, not a suggester                                                                                                                                                                                     |
+
+The mount registers three listeners: the factory's `loader/volatile-update` (the volatile refresh),
+`tools/post-execute`, and `agent/pre-step`. The projection unit registers separately, on
+`ctx.sessionProjections`, and holds no listener.
 
 ## 2. The config schema (Variable/Config.ts)
 
@@ -88,20 +92,35 @@ top-ranked companion, whose row the values describe.
 The suggestions come from the agent's OWN PREVIOUS TOOL CALLS in this workspace, never from a
 literal built-in pack.
 
-The `session/event` listener folds every `tool/call` event into one touch (the sequence number, the
-normalized path and the tool) in the SESSION's history, through the fold unit of
-`@playform/ets-lib-dsh-pack`. One entry per session object, created lazily; the touch array is
-capped at 512, oldest first.
+The history is a session-projection unit (`Function/Unit`, key `docHistory`), not a listener fold:
+`ctx.sessionProjections` subscribes to `session/event` ONCE and passes every committed event through
+the unit's `apply`, so the hook holds no subscription of its own. Every `tool/call` that names a
+path
+
+- reads included - becomes one touch (the sequence number, the normalized path and the tool) in THAT
+  SESSION's cell, through the fold unit of `@playform/ets-lib-dsh-pack`. The unit is registered
+  through the optional `ctx.inject(['sessionProjections'], ...)` form, so a mount without the
+  registry still loads and simply has no history to mine.
+
+The state is one cell per session, built lazily from `init` (`{ Seq: 0, Touches: [] }`) and rebuilt
+from the log on first touch; the touch array is capped at 512, oldest first. `apply` returns the
+SAME state reference for an event it ignores (the registry's zero-work signal) and a NEW plain-JSON
+state for a folded call. The persisted-state validator (`stateSchema`) sanitizes a cached row
+instead of throwing, so a damaged row degrades to a shorter history rather than a failed read.
 
 The path comes from the first path-shaped argument (`file_path`, `path`, `filePath`), with
 backslashes normalized to slashes and a leading `./` stripped.
 
-On a judged call the listener reads the session's touches (keyed on the agent's session, then the
-agent, then one shared default entry) and calls
-`Adjacent(touches, callPath, { limit: maxCompanions })`: for every touch of the anchor path, the
-touches that follow it within a window of 8 calls contribute `1 / (1 + distance)` to the followed
-path's score and one to its count. A repeatedly co-touched path outranks a single one, and a near
-neighbour outranks a far one. The anchor itself is never a candidate.
+On a judged call the listener reads the session's cell through the registry's own face,
+`stateOf(session, key)` (`Function/History`), probed with `ctx.get` because the registry is an
+optional service, and calls `Adjacent(touches, callPath, { limit: maxCompanions })`: for every touch
+of the anchor path, the touches that follow it within a window of 8 calls contribute
+`1 / (1 + distance)` to the followed path's score and one to its count. A repeatedly co-touched path
+outranks a single one, and a near neighbour outranks a far one. The anchor itself is never a
+candidate.
+
+The current call's own `tool/call` is the durable STARTED record, committed before dispatch, so the
+anchor is already in the cell when the listener runs and the listener appends nothing.
 
 Those co-touch rows become ONE SYNTHETIC pack family, so the existing Detect/Measure/Score/Decide
 pipeline judges them exactly like a resolved pack's family:
@@ -259,12 +278,16 @@ the enabled list, so the choice is auditable.
 Source/
   Library.ts            the entry: name, apply, Config, inject (pluginFactory)
   Function/
-    Apply.ts            the wiring: the State build, the activation, the 3 listeners
-                        (the session/event history fold, the post-execute note,
-                        the per-turn reset)
+    Apply.ts            the wiring: the State build, the activation, the projection
+                        unit's registration, the 3 registered listeners (the
+                        post-execute note, the per-turn reset, the factory's
+                        volatile refresh)
     Exists.ts           the BASE-AWARE companion existence filter (repo root,
                         package root, package parent; `<...>` targets exempt)
     Filter.ts           the base-aware existence filter over the detections (before score/gate)
+    History.ts          the detection-time read of the session's projection cell
+    Register.ts         the optional `ctx.inject(['sessionProjections'], ...)` registration
+    Unit.ts             the pure per-session touch fold (the `docHistory` unit)
     Detect.ts           the deterministic path classifier, pure, no LLM
     Measure.ts          one companion -> the six pickable values + the weighted score
     Would.ts            a gated silence's would-be companion rows (the same Measure)
@@ -283,17 +306,19 @@ Source/
     Execution.ts        the family/detection/verdict types
     Factory.ts          the factory service's structural view + the Context augmentation
     Learning.ts         the learned layer's view (rate/move/remember/resolve)
-    State.ts            the per-apply state (plus the per-session history entry)
+    Projection.ts       the structural view of the session-projection seam
+    State.ts            the per-apply state (the history is NOT a state field)
   Variable/
     Config.ts           the Schemastery schema
     Heuristics.ts       the six pickable heuristic names
+    Projection.ts       the unit's key, cap and persisted-state version
     Weights.ts          the default weight table (the schema default's one source)
 ```
 
 ## 5. The end-phase
 
 The smoke folders are `Post-Execute-And-Ring`, `Wiring-And-Ledger`, `Workspace-Gate` and
-`Pack-Driven` (12, 16, 6 and 5 checks).
+`Pack-Driven` (12, 17, 6 and 5 checks).
 
 The learned layer of the end-phase list of the plan is landed (section 3.4 of this document).
 

@@ -5,8 +5,9 @@
 // the graph-unavailable/abstain paths (absent, throwing, graph:false), the
 // Sibling same-directory projection, the gate (cooldown, per-turn cap + the
 // pre-step reset), the block-decision preservation, the exclusion, the
-// volatile flip, the note truncation, and the fs purity across a full
-// scenario.
+// volatile flip, the note truncation, the anchor exclusion (a component that
+// holds only the anchor abstains, and no note ever names the anchor), and the
+// fs purity across a full scenario.
 import assert from "node:assert/strict";
 import {
 	Call,
@@ -44,9 +45,9 @@ export const runTest = async (): Promise<number> => {
 		const Result = await Call(Run, "read", NEIGHBORHOOD_ARGS);
 		Check(Count, "P1: the suggest line is byte-exact (logger and durable ledger)", () => {
 			assert.deepEqual(LinesWith(Run, "candidates call"), [
-				"graph-suggester: suggest Neighborhood 0.87 2 candidates call read",
+				"graph-suggester: suggest Neighborhood 0.87 1 candidates call read",
 			]);
-			assert.equal(LedgerWith("suggest Neighborhood 0.87 2 candidates call read").length, 1);
+			assert.equal(LedgerWith("suggest Neighborhood 0.87 1 candidates call read").length, 1);
 		});
 		await CheckAsync(Count, "P1: the note is one labeled notice prepended to the decision", async () => {
 			assert.ok(Array.isArray(Result.additionalContexts));
@@ -60,7 +61,7 @@ export const runTest = async (): Promise<number> => {
 			});
 			assert.equal(
 				Note.content[0].text,
-				"[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (2):\n- src/Source/Core.ts - the definition\n- src/Source/Use.ts - the callers\nnote: the neighborhood is the connected component: definition, callers, tests, doc block.",
+				"[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (1):\n- src/Source/Use.ts - the callers\nnote: the files around this one: importers, dependencies, tests, doc block.",
 			);
 			assert.equal(Object.isFrozen(Note), true);
 			assert.equal(Result.kind, "allow");
@@ -156,7 +157,10 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Agent = { agent: { id: "agent-a" } };
 		const Run = Setup({}, (Context: any) => {
-			Context.workspaceGraph = FakeGraph([{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" }]);
+			Context.workspaceGraph = FakeGraph([
+				{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+				{ path: "src/Source/Core.test.ts", role: "test", reason: "the tests" },
+			]);
 		});
 		await Call(Run, "read", NEIGHBORHOOD_ARGS, Agent);
 		await Call(Run, "read", NEIGHBORHOOD_ARGS, Agent);
@@ -211,7 +215,10 @@ export const runTest = async (): Promise<number> => {
 			]);
 		});
 		const Block = Setup({}, (Context: any) => {
-			Context.workspaceGraph = FakeGraph([{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" }]);
+			Context.workspaceGraph = FakeGraph([
+				{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+				{ path: "src/Source/Use.ts", role: "importer", reason: "the importers" },
+			]);
 		});
 		const Downstream = { kind: "block", feedback: "no", additionalContexts: [{ marker: "downstream" }] };
 		const Result = await Call(Block, "read", NEIGHBORHOOD_ARGS, undefined, Downstream);
@@ -238,7 +245,10 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(LinesWith(Run, "abstained").length, 0);
 		});
 		const Trunc = Setup({ maxNoteChars: 60 }, (Context: any) => {
-			Context.workspaceGraph = FakeGraph([{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" }]);
+			Context.workspaceGraph = FakeGraph([
+				{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+				{ path: "src/Source/Use.ts", role: "importer", reason: "the importers" },
+			]);
 		});
 		const Result = await Call(Trunc, "read", NEIGHBORHOOD_ARGS);
 		Check(Count, "P7: a note longer than maxNoteChars is truncated with an ellipsis", () => {
@@ -263,6 +273,60 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Pure.Fs.writes.length, 0);
 			assert.equal(Pure.Fs.resolved.length, 0);
 			assert.equal(Pure.Fs.stats.length, 0);
+		});
+	}
+
+	// Group P9: the anchor exclusion - the component includes the file the
+	// agent just touched, and naming it back is noise.
+	{
+		const Alone = Setup({}, (Context: any) => {
+			Context.workspaceGraph = FakeGraph([
+				{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+			]);
+		});
+		await Call(Alone, "read", NEIGHBORHOOD_ARGS);
+		Check(Count, "P9: a component that holds only the anchor abstains no-companions", () => {
+			assert.deepEqual(LinesWith(Alone, "candidates call"), []);
+			assert.deepEqual(LinesWith(Alone, "abstained"), [
+				"graph-suggester: abstained no-companions Neighborhood 0.87",
+			]);
+			assert.equal(LinesWith(Alone, "graph unavailable").length, 0);
+		});
+		const Mixed = Setup({}, (Context: any) => {
+			Context.workspaceGraph = FakeGraph([
+				{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+				{ path: "src/Source/Use.ts", role: "importer", reason: "the importers" },
+				{ path: "src/Source/Dep.ts", role: "dependency", reason: "the dependencies" },
+			]);
+		});
+		const Result = await Call(Mixed, "read", NEIGHBORHOOD_ARGS);
+		Check(Count, "P9: the anchor is dropped and only its companions are named", () => {
+			assert.deepEqual(LinesWith(Mixed, "candidates call"), [
+				"graph-suggester: suggest Neighborhood 0.87 2 candidates call read",
+			]);
+			assert.equal(
+				Result.additionalContexts[0].content[0].text,
+				"[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (2):\n- src/Source/Use.ts - the importers\n- src/Source/Dep.ts - the dependencies\nnote: the files around this one: importers, dependencies, tests, doc block.",
+			);
+		});
+		const Normalized = Setup({}, (Context: any) => {
+			Context.workspaceGraph = FakeGraph([
+				{ path: "./src\\Source\\Core.ts", role: "definition", reason: "the definition" },
+				{ path: "src/Source/Use.ts", role: "importer", reason: "the importers" },
+			]);
+		});
+		const Backslash = await Call(Normalized, "read", NEIGHBORHOOD_ARGS);
+		Check(Count, "P9: a backslash or ./-prefixed anchor entry is dropped too", () => {
+			assert.deepEqual(LinesWith(Normalized, "candidates call"), [
+				"graph-suggester: suggest Neighborhood 0.87 1 candidates call read",
+			]);
+			assert.equal(LinesWith(Normalized, "abstained").length, 0);
+		});
+		Check(Count, "P9: no note ever names the anchor (plain and backslash forms)", () => {
+			for (const Note of [Result, Backslash]) {
+				const Text = Note.additionalContexts[0].content[0].text;
+				assert.equal(Text.includes("Core.ts"), false);
+			}
 		});
 	}
 	return Finish(Count, "Pipeline-And-Graph");

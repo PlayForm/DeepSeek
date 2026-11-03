@@ -6,10 +6,14 @@ All notable changes to this package will be documented in this file.
 
 ### Changed
 
-- The suggestions come from the agent's OWN previous tool calls in this workspace: the new
-  `session/event` listener folds every `tool/call` into the session's touch history (capped at 512),
-  and the post-execute listener derives the candidates with `Adjacent`, so the note names the files
-  that were touched right after the anchor.
+- The history is fed by the hook's OWN `tools/post-execute` stream: every call the hook sees (reads
+  included) joins the session's touch history before the judged-tool guard, because the harness's
+  `session/event` bus does not deliver tool calls to this hook. The `session/event` listener is
+  removed, so the mount registers three listeners (`loader/volatile-update`, `tools/post-execute`,
+  `agent/pre-step`).
+- The suggestions come from the agent's OWN previous tool calls in this workspace: the touch history
+  folds every call that names a path (capped at 512), and the post-execute listener derives the
+  candidates with `Adjacent`, so the note names the files that were touched right after the anchor.
 - The co-touch rows are judged as ONE synthetic `History` family (priority 0, threshold 0.75, one
   signal of weight 2.5, companions with prior 0.6), so the existing Detect/Measure/Score/Decide
   pipeline, the `decided History` record and the follow-through machinery are unchanged.
@@ -24,8 +28,9 @@ All notable changes to this package will be documented in this file.
 - The five smoke folders are rewritten onto the history candidates: the wiring asserts the new
   activation line and the three listeners, the pack suite keeps the explicit `.dsh/pack.yml` case
   with a rooted fixture, the workspace gate asserts the `History` note and the `no-history`
-  abstention, the post-execute suite seeds two touches for its emit case, and the learning loop
-  seeds the two equal-prior companions for its decision, follow-through and reopen proofs.
+  abstention, the post-execute suite seeds two touches for its emit case and folds three real calls
+  for its history case, and the learning loop seeds the two equal-prior companions for its decision,
+  follow-through and reopen proofs.
 
 ## 0.2.1
 

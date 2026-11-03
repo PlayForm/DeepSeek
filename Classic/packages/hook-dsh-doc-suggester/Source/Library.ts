@@ -12,8 +12,9 @@
 // @playform/hook-dsh-doc-suggester - the doc-task COMPANION SUGGESTER, the
 // third consumer of the search-suggester's pattern algebra
 // (SEARCH-SUGGESTER-PLUGIN.md section 8: "the doc task -> the plans, guides,
-// site"). The plugin folds every `tool/call` event into the session's touch
-// history on the session/event bus and hooks the tools/post-execute waterfall
+// site"). The plugin folds every call it sees into the session's touch history
+// inside its tools/post-execute listener (the session/event bus does not
+// deliver tool calls to a hook) and hooks that waterfall
 // for the doc-task tools (read, grep, glob, write, edit, raw-write) to
 // prepend ONE labeled additionalContexts note naming the files the session
 // touched right after this one in this workspace - the companions the task
@@ -24,11 +25,11 @@
 // a hard gate, a cooldown, a dedupe, a per-turn cap, and an abstention line
 // for every silence.
 //
-// FULLY CONTRACT-AWARE: the session/event history fold, one tools/post-execute
-// waterfall listener (next() always awaited FIRST; pass-through returns the
-// downstream decision unchanged; fail-open try/catch never throws into the
-// waterfall), plus the agent/pre-step reset, and a validated Schemastery schema
-// (Variable/Config)
+// FULLY CONTRACT-AWARE: one tools/post-execute waterfall listener that folds
+// the history AND emits the note (next() always awaited FIRST; pass-through
+// returns the downstream decision unchanged; fail-open try/catch never throws
+// into the waterfall), plus the agent/pre-step reset, and a validated
+// Schemastery schema (Variable/Config)
 // whose defaults Cordis fills at load. The factory's shared machinery is
 // consumed for what applies (State builder + ledger + cell unwrap); the
 // fs/observed Wire and the storage Journal do not (a NON-MANIFEST module).

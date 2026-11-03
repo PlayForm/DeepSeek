@@ -1,16 +1,18 @@
 # Pipeline-And-Graph - the pipeline and the graph resolution tests
 
 The tools/post-execute pipeline against the fake `workspaceGraph` service: the Neighborhood
-resolution, the graph-only candidate source (an empty component abstains), the abstention paths, the
-Sibling same-directory projection, the gate, the exclusion, the volatile flip, and the purity.
+resolution, the graph-only candidate source (an empty component, or one that holds only the anchor,
+abstains), the abstention paths, the Sibling same-directory projection, the gate, the exclusion, the
+volatile flip, and the purity.
 
 ## Scenarios
 
 - P1: the Neighborhood resolution - the graph query receives the anchor and
   the candidate cap (7), the suggest line is byte-exact
-  (`suggest Neighborhood 0.87 2 candidates call read`), the note is ONE
-  labeled frozen notice (`kind: "graph-suggester"`, `form: "notice"`,
-  summary `Neighborhood 0.87`) prepended to the downstream decision.
+  (`suggest Neighborhood 0.87 1 candidates call read`, the anchor itself
+  dropped from the component), the note is ONE labeled frozen notice
+  (`kind: "graph-suggester"`, `form: "notice"`, summary `Neighborhood 0.87`)
+  prepended to the downstream decision.
 - P2: the empty-reason fallback (the role is used) and the empty component
   (an `abstained no-companions Neighborhood 0.87` line, no suggest, and no
   `graph unavailable` - the service answered honestly with nothing, so
@@ -37,6 +39,12 @@ Sibling same-directory projection, the gate, the exclusion, the volatile flip, a
   calls pass through; a note longer than `maxNoteChars` is truncated with an
   ellipsis.
 - P8: the fs purity - ZERO fs operations across the full scenario.
+- P9: the anchor exclusion - a component that holds only the anchor abstains
+  `abstained no-companions Neighborhood 0.87` (no suggest, no
+  `graph unavailable`), a component of anchor plus companions names only the
+  companions (`suggest Neighborhood 0.87 2 candidates call read`), an anchor
+  entry that arrives as `./src\Source\Core.ts` is normalized and dropped too,
+  and no note line ever names the anchor.
 
 ## Fixtures
 
@@ -58,4 +66,4 @@ per-signal sum.
 
 ## Expected count
 
-19 PASS.
+23 PASS.

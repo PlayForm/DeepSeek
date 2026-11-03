@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
   AgentOf,
   CheckAsync,
+  Commit,
   Durable,
   DurableLine,
   Finish,
@@ -23,14 +24,10 @@ const PlanRead = (Id) => ({
   agent: AgentOf(Id)
 });
 const Seed = (Run, Id) => {
-  Run.State.History.set(AgentOf(Id), {
-    Seq: 3,
-    Touches: [Anchor, ...Companions].map((Path, Seq) => ({
-      seq: Seq,
-      path: Path,
-      tool: "read"
-    }))
-  });
+  Commit(Run, Id, Anchor);
+  for (const Companion of Companions) {
+    Commit(Run, Id, Companion);
+  }
 };
 const HistoryText = [
   "[doc-suggester] family=History confidence=0.87",
@@ -187,6 +184,55 @@ const runTest = async () => {
       assert.equal(Out, "down");
       assert.deepEqual(Run.Warns, []);
     });
+  }
+  {
+    const Run = Setup();
+    await CheckAsync(
+      Count,
+      "E6: the committed tool/call events are the session history and the judged call reads it",
+      async () => {
+        await Run.Ready;
+        assert.equal(Run.State.History, void 0);
+        Commit(Run, "fold", Anchor);
+        Commit(Run, "fold", "README.md");
+        const Folded = Run.Projections.StateOf(
+          AgentOf("fold").session,
+          "docHistory"
+        );
+        assert.equal(Folded.Seq, 2);
+        assert.deepEqual(
+          Folded.Touches.map((Touch) => Touch.path),
+          [Anchor, "README.md"]
+        );
+        Commit(Run, "fold", Anchor);
+        const Out = await Post(Run, PlanRead("fold"));
+        assert.equal(Out.additionalContexts.length, 1);
+        assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+        assert.equal(
+          Out.additionalContexts[0].content[0].text,
+          [
+            "[doc-suggester] family=History confidence=0.87",
+            "companions (1):",
+            "- README.md - touched 1 time(s) after this file",
+            "note: a documentation task rarely touches one file; keep the doc graph coherent."
+          ].join("\n")
+        );
+        assert.ok(
+          Run.Lines.includes(
+            `hook-dsh-doc-suggester: suggest History 0.87 1 companions ${Anchor}`
+          )
+        );
+        assert.ok(
+          Run.Lines.includes(
+            "hook-dsh-doc-suggester: decided History 0.87 1 companions README.md scope=1.00,graph=0.50,prior=0.60,literal=0.50,history=0.33,accept=0.33 weights scope=0.35,graph=0.00,prior=0.25,literal=0.25,history=0.15,accept=0.00 store=memory"
+          )
+        );
+        assert.equal(
+          Run.Projections.StateOf(AgentOf("fold").session, "docHistory").Seq,
+          3
+        );
+      }
+    );
   }
   return Finish(Count, "Post-Execute-And-Ring");
 };

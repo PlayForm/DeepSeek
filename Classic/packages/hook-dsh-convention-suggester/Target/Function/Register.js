@@ -1,0 +1,1 @@
+import r from"./Unit.js";var c=t=>{try{const e=t.inject;if(typeof e!="function")return;e.call(t,["sessionProjections"],async n=>{try{await n.sessionProjections.register(r)}catch(o){try{t.logger?.warn(`convention-suggester: the projection unit did not register: ${String(o)}`)}catch{}}})}catch{}};export{c as default};

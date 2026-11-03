@@ -4,22 +4,22 @@
 	<style>
 		@media (prefers-reduced-motion: no-preference) {
 			.hook-dsh-replay-suggester-scene * { transform-box: view-box; transform-origin: 50% 50%; }
-		.hook-dsh-replay-suggester-counter { animation: hook-dsh-replay-suggester-counter 24s linear -1s infinite; }
+		.hook-dsh-replay-suggester-counter { animation: hook-dsh-replay-suggester-counter 21s linear -3s infinite; }
 		@keyframes hook-dsh-replay-suggester-counter { to { transform: rotate(-360deg); } }
-		.hook-dsh-replay-suggester-breathe { animation: hook-dsh-replay-suggester-breathe 7s ease-in-out -1s infinite; }
+		.hook-dsh-replay-suggester-breathe { animation: hook-dsh-replay-suggester-breathe 5s ease-in-out -3s infinite; }
 		@keyframes hook-dsh-replay-suggester-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
-		.hook-dsh-replay-suggester-fire { animation: hook-dsh-replay-suggester-fire 2.7s ease-in-out infinite; }
+		.hook-dsh-replay-suggester-fire { animation: hook-dsh-replay-suggester-fire 2.6s ease-in-out infinite; }
 		@keyframes hook-dsh-replay-suggester-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
-		.hook-dsh-replay-suggester-twinkle { animation: hook-dsh-replay-suggester-twinkle 8s ease-in-out -1s infinite; }
+		.hook-dsh-replay-suggester-twinkle { animation: hook-dsh-replay-suggester-twinkle 11s ease-in-out -3s infinite; }
 		@keyframes hook-dsh-replay-suggester-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
 		}
 	</style>
 	<defs>
 		<path id="hook-dsh-replay-suggester-0" d="M81,81 L19,81 L19,19 L81,19 Z"/>
-		<path id="hook-dsh-replay-suggester-1" d="M27,28 L26,29 L24,30 L23,29 L22,28 L23,26 L24,25 L26,26 Z"/>
-		<path id="hook-dsh-replay-suggester-2" d="M83,35 L82,36 L80,37 L79,36 L78,35 L79,33 L80,32 L82,33 Z"/>
-		<path id="hook-dsh-replay-suggester-3" d="M63,18 L63,20 L61,20 L59,20 L59,18 L59,16 L61,15 L63,16 Z"/>
-		<path id="hook-dsh-replay-suggester-4" d="M79,83 L40,95 L4,62 L16,16 L62,6 L97,38 Z M53,55 L72,90 L71,91 L53,55 Z M36,48 L36,49 L35,51 L34,52 L32,52 L31,52 L29,51 L28,49 L28,48 L28,46 L29,45 L31,44 L32,43 L34,44 L35,45 L36,46 Z M46,55 L22,86 L20,85 L46,55 Z M44,50 L4,50 L4,48 L44,50 Z M32,40 L32,42 L31,43 L30,44 L28,44 L27,44 L25,43 L24,42 L24,40 L24,38 L25,37 L27,36 L28,36 L30,36 L31,37 L32,38 Z M46,45 L21,15 L23,13 L46,45 Z M53,45 L73,10 L76,12 L53,45 Z M26,38 L26,39 L25,40 L24,40 L23,41 L22,40 L21,40 L20,39 L20,38 L20,36 L21,35 L22,35 L23,35 L24,35 L25,35 L26,36 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="hook-dsh-replay-suggester-1" d="M69,79 L69,81 L67,82 L65,81 L65,79 L65,78 L67,77 L69,78 Z"/>
+		<path id="hook-dsh-replay-suggester-2" d="M44,17 L43,19 L42,19 L40,19 L39,17 L40,15 L42,15 L43,15 Z"/>
+		<path id="hook-dsh-replay-suggester-3" d="M86,45 L85,47 L84,48 L82,47 L81,45 L82,44 L84,43 L85,44 Z"/>
+		<path id="hook-dsh-replay-suggester-4" d="M83,81 L40,92 L4,63 L16,17 L62,7 L96,39 Z M52,56 L64,94 L63,94 L52,56 Z M71,52 L70,53 L70,53 L69,54 L68,54 L67,54 L66,53 L65,53 L65,52 L65,51 L66,50 L67,49 L68,49 L69,49 L70,50 L70,51 Z M48,56 L38,94 L36,94 L48,56 Z M44,49 L4,45 L5,43 L44,49 Z M54,74 L54,75 L53,76 L52,77 L51,77 L50,77 L49,76 L48,75 L48,74 L48,73 L49,72 L50,71 L51,71 L52,71 L53,72 L54,73 Z M47,45 L27,10 L29,9 L47,45 Z M52,44 L68,8 L71,9 L53,45 Z M42,22 L42,24 L41,25 L40,26 L39,26 L37,26 L36,25 L35,24 L35,22 L35,21 L36,19 L37,19 L39,18 L40,19 L41,19 L42,21 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
 		<path id="hook-dsh-replay-suggester-5" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
 		<path id="hook-dsh-replay-suggester-6" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
 		<path id="hook-dsh-replay-suggester-7" d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z"/>
@@ -28,11 +28,11 @@
 		<path id="hook-dsh-replay-suggester-10" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
 		<path id="hook-dsh-replay-suggester-11" d="M33,66 L33,67 L32,67 L32,66 L32,66 L33,66 Z"/>
 		<path id="hook-dsh-replay-suggester-12" d="M45,27 L45,27 L44,27 L44,27 L44,26 L45,26 Z"/>
-		<path id="hook-dsh-replay-suggester-13" d="M11,38 L9,37 L11,36 Z"/>
-		<path id="hook-dsh-replay-suggester-14" d="M40,93 L38,95 L37,93 Z"/>
-		<path id="hook-dsh-replay-suggester-15" d="M73,14 L77,13 L77,17 Z"/>
-		<path id="hook-dsh-replay-suggester-16" d="M84,77 L84,81 L80,81 Z"/>
-		<path id="hook-dsh-replay-suggester-17" d="M74,84 L74,88 L71,86 Z"/>
+		<path id="hook-dsh-replay-suggester-13" d="M7,58 L3,56 L7,53 Z"/>
+		<path id="hook-dsh-replay-suggester-14" d="M9,60 L5,58 L8,56 Z"/>
+		<path id="hook-dsh-replay-suggester-15" d="M7,53 L5,51 L7,50 Z"/>
+		<path id="hook-dsh-replay-suggester-16" d="M49,91 L46,94 L44,91 Z"/>
+		<path id="hook-dsh-replay-suggester-17" d="M66,88 L65,93 L61,90 Z"/>
 		<path id="hook-dsh-replay-suggester-18" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
 	</defs>
 	<g class="hook-dsh-replay-suggester-scene">
@@ -40,9 +40,9 @@
 		<use class="hook-dsh-replay-suggester-breathe" href="#hook-dsh-replay-suggester-0"/>
 	</g>
 	<g fill="currentColor" fill-opacity="0.55" fill-rule="evenodd">
-		<use class="hook-dsh-replay-suggester-fire" style="animation-delay:-1.00s" href="#hook-dsh-replay-suggester-1"/>
-		<use class="hook-dsh-replay-suggester-fire" style="animation-delay:-1.18s" href="#hook-dsh-replay-suggester-2"/>
-		<use class="hook-dsh-replay-suggester-fire" style="animation-delay:-1.36s" href="#hook-dsh-replay-suggester-3"/>
+		<use class="hook-dsh-replay-suggester-fire" style="animation-delay:-3.00s" href="#hook-dsh-replay-suggester-1"/>
+		<use class="hook-dsh-replay-suggester-fire" style="animation-delay:-3.18s" href="#hook-dsh-replay-suggester-2"/>
+		<use class="hook-dsh-replay-suggester-fire" style="animation-delay:-3.36s" href="#hook-dsh-replay-suggester-3"/>
 	</g>
 	<g fill="currentColor" fill-opacity="1" fill-rule="evenodd">
 		<use href="#hook-dsh-replay-suggester-4"/>

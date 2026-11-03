@@ -1,4 +1,3 @@
-import type { Touch } from "@playform/lib-dsh-pack";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 import type { CompiledIntent } from "./Pack.js";
@@ -27,8 +26,6 @@ export default interface State extends Shared {
     Rules: CompiledIntent[];
     /** The per-agent state, keyed on the Agent object. */
     Agents: WeakMap<object, AgentMemory>;
-    /** The per-session touch history, keyed on the session object. */
-    History: WeakMap<object, SessionHistory>;
     /** The injected @playform/plugin-dsh-factory service - the ledger
      *  (Factory.Append) is consumed through it; assigned once in Function/Apply. */
     Factory: Factory;
@@ -42,10 +39,4 @@ export interface AgentMemory {
     TurnNotes: number;
     /** The last probes (most recent first, capped at 8). */
     Ring: string[];
-}
-export interface SessionHistory {
-    /** The next touch's sequence number. */
-    Seq: number;
-    /** The folded touches, oldest first. */
-    Touches: Touch[];
 }

@@ -35,8 +35,12 @@ never the change.
 
 ## The candidates (the session history)
 
-The `session/event` listener folds every `tool/call` event into the session's history: one touch per
-call (the sequence number, the normalized path and the tool), capped at 512, oldest first.
+The `tools/post-execute` listener folds every call the hook sees into the session's history before
+the judged-tool guard: one touch per call that names a path (the sequence number, the normalized
+path and the tool), reads included, capped at 512, oldest first.
+
+The harness's `session/event` bus does not deliver tool calls to this hook, so the hook feeds its
+own history from the stream it already receives.
 
 On a judged call, `Adjacent(touches, callPath, { limit: maxCompanions })` scores the paths that
 followed the anchor within a window of 8 calls: `1 / (1 + distance)` per occurrence, one count per
@@ -130,6 +134,9 @@ carry it.
 
 One note, never a content replacement: the post-execute listener runs after the ccr and the
 normalize family and only adds `additionalContexts`.
+
+The mount registers three listeners: the factory's `loader/volatile-update`, `tools/post-execute`,
+and `agent/pre-step`.
 
 The note carries the plugin's own source label (`{kind: "doc-suggester", form: "notice", summary}`).
 

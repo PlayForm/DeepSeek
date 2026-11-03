@@ -33,8 +33,8 @@ plus `node:fs` temp trees under the OS temp dir.
 The optional service is injected as `Run.Context.workingDirectory = { get }`, the same shape that
 the real harness service exposes, never a hard inject.
 
-The session history is seeded through the `__hookDshDocSuggesterState` probe (the same shape the
-`session/event` fold writes), so the suite does not need a session bus.
+The session history is seeded through the `__hookDshDocSuggesterState` probe (the shape the
+`tools/post-execute` fold writes), so the suite does not need a session bus.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-doc-suggester: ` prefix)
 

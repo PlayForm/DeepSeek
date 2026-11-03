@@ -1,21 +1,22 @@
 Post-Execute-And-Gate - the listener behavior tests
 
 The tools/post-execute and agent/pre-step listeners against the fake ctx: the history emit path, the
-real fold (three judged calls feed the history through the listener itself), the silence path
-(including the new `no-history` abstention), the abstention path, the gate paths, the block-decision
-shape, the per-agent memory isolation, and the per-turn reset.
+real projection path (committed `tool/call` events folded by the registered unit and read back
+through `stateOf`), the silence path (including the `no-history` abstention), the abstention path,
+the gate paths, the block-decision shape, the per-agent memory isolation, and the per-turn reset.
 
 ## Scenarios
 
 - E1: the history emit path - the session history is seeded through the
-  `__conventionSuggesterState` probe (the anchor path plus two companions), and
-  a write of the anchor prepends ONE frozen, identified note (source kind
-  `convention-suggester`, form `notice`, summary `History 0.70`) ahead of
-  every downstream context; the note text is byte-exact (intent line, the two
-  companion lines with their `touched 1 time(s) after this file` reasons, the
-  history caveat); the `suggest History 0.70 2 candidates call write` ledger
-  line is byte-exact in the logger and durable forms; the per-agent memory
-  records the call, the turn note, the `Noted` map and the probe ring.
+  projection drive (three committed `tool/call` events: the anchor path plus
+  two companions), and a write of the anchor prepends ONE frozen, identified
+  note (source kind `convention-suggester`, form `notice`, summary
+  `History 0.70`) ahead of every downstream context; the note text is
+  byte-exact (intent line, the two companion lines with their
+  `touched 1 time(s) after this file` reasons, the history caveat); the
+  `suggest History 0.70 2 candidates call write` ledger line is byte-exact in
+  the logger and durable forms; the per-agent memory records the call, the
+  turn note, the `Noted` map and the probe ring.
 - E2: the silence paths - a non-judged tool (bash) returns the decision
   unchanged with zero ledger lines; a judged call with NO history and NO pack
   abstains `abstained no-history  0.00` (both forms) with no note; next() is
@@ -33,15 +34,21 @@ shape, the per-agent memory isolation, and the per-turn reset.
   another agent's memory is independent; the probe ring caps at eight entries
   while the call counter keeps advancing; the reset listener is fail-open and
   returns the downstream decision.
-- E6: the REAL fold - NO seeded state: three judged calls through the listener
-  (anchor A, companion B, anchor A again) feed the session history
-  themselves, so the first two abstain `no-history` and the third emits the
-  `History 0.65` note naming B (`suggest History 0.65 1 candidates call
-  write`), which proves the feed is the `tools/post-execute` stream itself.
+- E6: the REAL projection path - NO seeded state and NO State fold. Two
+  `tool/call` events are committed through the fake registry's eager drive
+  (the unit's `apply` folds them into that session's cell), and the test
+  proves the state IS the fold: `Run.State.History` is `undefined`, the cell
+  carries `Seq 2` and the anchor-then-companion touches. The current call's
+  own `tool/call` is then committed the way the harness commits it before
+  dispatch, and the judged call reads that state through `stateOf`: it emits
+  the `History 0.65` note naming the companion
+  (`suggest History 0.65 1 candidates call write`) and leaves the cell at
+  `Seq 3`.
 
 ## Fixtures
 
-The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target).
+The shared Harness (fake ctx with a DISTINCT root object, the real factory, the real built Target,
+and the fake `sessionProjections` registry: `register` + `stateOf` + the `Commit` drive).
 
 No fake clock is needed, because every timing assertion is on the per-agent call counter and the
 cooldown window.
@@ -60,4 +67,4 @@ package base.
 
 ## Expected count
 
-17 PASS.
+18 PASS.

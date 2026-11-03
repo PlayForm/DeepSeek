@@ -10,13 +10,14 @@ suggester family from paths and globs to the **connected component around the sy
 ([SEARCH-SUGGESTER-PLUGIN.md](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) §9.2).
 
 When the model reads or greps a source file, the hook asks the workspace v4.1 graph service for the
-code-block neighborhood (the definition, the callers, the tests, the doc block) and prepends ONE
-labeled `additionalContexts` notice that names it.
+code-block neighborhood and prepends ONE labeled `additionalContexts` notice that names the files
+around it: the importers, the dependencies, the tests and the doc block. The file the agent just
+touched is never a target, so the note never names it back.
 
 Two intents are synthesized per call from that query (`Source/Function/Apply.ts`), and the graph is
 their only candidate source:
 
-- **Neighborhood** - the whole connected component of the anchor.
+- **Neighborhood** - the whole connected component of the anchor, with the anchor itself excluded.
 
 - **Sibling** - the same-directory projection of the same component, with the anchor excluded. It
   speaks when the config's `intents` list selects it alone, because the Neighborhood intent outranks
@@ -29,8 +30,13 @@ When the service is absent or throws, the intent **abstains** with a `graph unav
 (once per apply) and an `abstained graph-unavailable` line per call, because the graph intent never
 guesses.
 
-When the component is **empty**, the intent abstains `abstained no-companions` instead of falling
-back to literal targets.
+When the component is **empty**, or it holds nothing but the anchor, the intent abstains
+`abstained no-companions` instead of falling back to literal targets.
+
+The anchor is excluded from the targets: the component includes the file the agent just read, and
+naming it back is noise. The anchor and every entry path are normalized the same way (backslashes to
+slashes, a leading `./` stripped), and an entry is dropped when its path equals the anchor or - for
+a repo-relative anchor - ends with `/<anchor>`.
 
 The graph service shape is declared in the own `Source/Interface/Graph.ts` of this package (the
 self-contained PoC rule): no import from sibling workspace packages.

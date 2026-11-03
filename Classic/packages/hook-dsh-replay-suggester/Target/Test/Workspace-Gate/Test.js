@@ -36,9 +36,17 @@ const ForeignFile = Put(Foreign, "src/Core.ts");
 const Ours = Tree("replay-suggester-ours-");
 Manifest(Ours);
 const OursFile = Put(Ours, "README.md");
+Put(Ours, "src/Core.ts");
 const Empty = Tree("replay-suggester-empty-");
 Manifest(Empty);
 const EmptyFile = Put(Empty, "README.md");
+Put(Empty, "src/Core.ts");
+Put(Empty, "src/Nested/File.ts");
+const Release = Tree("replay-suggester-release-");
+Manifest(Release);
+const Peer = Put(Release, "Classic/src/Peer.ts");
+const Other = Put(Release, "EffectTS/src/Other.ts");
+const Anchor = Path.join(Release, "Classic/src/Anchor.ts");
 const runTest = async () => {
   const Count = MakeCounter();
   {
@@ -87,7 +95,7 @@ const runTest = async () => {
   {
     const Agent = { agent: { id: "agent-a" } };
     rmStore();
-    WriteStore([Rec("README.md", ["README.md"])]);
+    WriteStore([Rec("README.md", ["src/Core.ts"])]);
     const Run = Setup();
     Run.Context.workingDirectory = Service(Ours);
     await CheckAsync(Count, "G3: the note names only the recalled file that exists", async () => {
@@ -100,7 +108,7 @@ const runTest = async () => {
       });
       assert.equal(
         Out.additionalContexts[0].content[0].text,
-        "[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- README.md - touched last time (Repeat)\nnote: last time verified with pnpm test"
+        "[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- src/Core.ts - touched last time (Repeat)\nnote: last time verified with pnpm test"
       );
     });
     await CheckAsync(Count, "G3: the suggest line counts only the existing file", async () => {
@@ -113,18 +121,42 @@ const runTest = async () => {
   {
     const Agent = { agent: { id: "agent-a" } };
     rmStore();
-    WriteStore([Rec("README.md", ["src/Gone.ts"])]);
+    WriteStore([Rec("README.md", ["src/Gone.ts", "src/Core.ts"])]);
     const Run = Setup();
     Run.Context.workingDirectory = Service(Empty);
-    await CheckAsync(Count, "G4: a recalled file absent from the workspace is still named (history record)", async () => {
+    await CheckAsync(Count, "G4: a recalled path the tree no longer has is dropped", async () => {
       const Out = await Call(Run, "read", { file_path: EmptyFile }, Agent);
       assert.equal(
         Out.additionalContexts[0].content[0].text,
-        "[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- src/Gone.ts - touched last time (Repeat)\nnote: last time verified with pnpm test"
+        "[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- src/Core.ts - touched last time (Repeat)\nnote: last time verified with pnpm test"
       );
       assert.deepEqual(LinesWith(Run, "candidates call"), [
         "replay-suggester: suggest Repeat 0.87 1 candidates call read"
       ]);
+    });
+    rmStore();
+    WriteStore([Rec("README.md", ["src/Nested", "src/Core.ts"])]);
+    const Directory = Setup();
+    Directory.Context.workingDirectory = Service(Empty);
+    await CheckAsync(Count, "G4: a recalled directory is dropped", async () => {
+      const Out = await Call(Directory, "read", { file_path: EmptyFile }, Agent);
+      assert.equal(
+        Out.additionalContexts[0].content[0].text,
+        "[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- src/Core.ts - touched last time (Repeat)\nnote: last time verified with pnpm test"
+      );
+      assert.equal(Out.additionalContexts[0].content[0].text.includes("src/Nested"), false);
+    });
+    rmStore();
+    WriteStore([Rec("README.md", ["src/Gone.ts", "src/AlsoGone.ts"])]);
+    const Vanished = Setup();
+    Vanished.Context.workingDirectory = Service(Empty);
+    await CheckAsync(Count, "G4: a record whose files all vanish abstains no-companions", async () => {
+      const Decision = { kind: "allow" };
+      const Out = await Call(Vanished, "read", { file_path: EmptyFile }, Agent, Decision);
+      assert.equal(Out, Decision);
+      assert.ok(Vanished.Lines.includes("replay-suggester: abstained no-companions Repeat 0.87"));
+      assert.equal(LedgerWith("abstained no-companions Repeat 0.87").length, 1);
+      assert.equal(LinesWith(Vanished, "candidates call").length, 0);
     });
     rmStore();
     WriteStore([Rec("README.md", [])]);
@@ -142,7 +174,7 @@ const runTest = async () => {
   {
     const Agent = { agent: { id: "agent-a" } };
     rmStore();
-    WriteStore([Rec("README.md", ["README.md"])]);
+    WriteStore([Rec("README.md", ["src/Core.ts"])]);
     const Run = Setup();
     Run.Context.workingDirectory = Service(Foreign);
     await CheckAsync(Count, "G5: a foreign call never poisons the next in-workspace call", async () => {
@@ -150,6 +182,26 @@ const runTest = async () => {
       Run.Context.workingDirectory = Service(Ours);
       const Out = await Call(Run, "read", { file_path: OursFile }, Agent);
       assert.equal(Out.additionalContexts[0].source.summary, "Repeat 0.87");
+    });
+  }
+  {
+    const Agent = { agent: { id: "agent-a" } };
+    rmStore();
+    WriteStore([Rec("Anchor.ts", [Other, Peer])]);
+    const Run = Setup();
+    await CheckAsync(Count, "G6: a same-tree recalled path ranks ahead of the other tree's", async () => {
+      const Out = await Call(Run, "read", { file_path: Anchor }, Agent);
+      assert.equal(
+        Out.additionalContexts[0].content[0].text,
+        `[replay-suggester] intent=Repeat confidence=0.87
+targets (2):
+- ${Peer} - touched last time (Repeat)
+- ${Other} - touched last time (Repeat)
+note: last time verified with pnpm test`
+      );
+      assert.deepEqual(LinesWith(Run, "candidates call"), [
+        "replay-suggester: suggest Repeat 0.87 2 candidates call read"
+      ]);
     });
   }
   return Finish(Count, "Workspace-Gate");

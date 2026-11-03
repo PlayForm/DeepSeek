@@ -5,6 +5,7 @@ import * as Path from "node:path";
 import {
   AgentOf,
   CheckAsync,
+  Commit,
   Durable,
   DurableLine,
   Finish,
@@ -33,14 +34,9 @@ const HistoryText = [
   "note: these files were touched right after this one in this workspace"
 ].join("\n");
 const Seed = (Run, Id, Anchor) => {
-  Run.State.History.set(AgentOf(Id), {
-    Seq: 3,
-    Touches: [Anchor, "Source/Library.ts", "README.md"].map((Path_, Seq) => ({
-      seq: Seq,
-      path: Path_,
-      tool: "write"
-    }))
-  });
+  Commit(Run, Id, Anchor);
+  Commit(Run, Id, "Source/Library.ts");
+  Commit(Run, Id, "README.md");
 };
 const Foreign = Tree("convention-suggester-foreign-");
 const ForeignApply = Put(Foreign, "Source/Function/Apply.ts");
@@ -87,8 +83,9 @@ const runTest = async () => {
   {
     const Run = Setup();
     Run.Context.workingDirectory = Service(Rooted);
-    Seed(Run, "b", RootedAnchor);
     await CheckAsync(Count, "G2: the History note names the companions of the temp root", async () => {
+      await Run.Ready;
+      Seed(Run, "b", RootedAnchor);
       const Out = await Post(Run, Write(RootedAnchor, "b"));
       assert.equal(Out.additionalContexts.length, 1);
       assert.deepEqual(Out.additionalContexts[0].source, {

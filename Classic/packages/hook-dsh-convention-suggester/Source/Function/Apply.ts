@@ -5,25 +5,38 @@
 // module's own string, via Factory.Append - the factory never owns ledger
 // strings), and register the hook's OWN listeners:
 //
-//   1. session/event (plain): the HISTORY FOLD. Every `tool/call` event
-//      becomes one Touch in the session's history (the pack library's fold
-//      unit, capped at 512 touches). This is the candidate source.
-//   2. tools/post-execute (waterfall, plain ctx.on - AFTER the CCR
+//   1. tools/post-execute (waterfall, plain ctx.on - AFTER the CCR
 //      {prepend:true} listener and normalize's post-execute): next() first,
 //      then the co-touch candidates of the session history, or - only when
 //      that history is empty - the EXPLICIT repo/user pack. It never
 //      replaces content, only adds contexts.
-//   3. agent/pre-step (waterfall, plain): the per-turn reset - the
+//   2. agent/pre-step (waterfall, plain): the per-turn reset - the
 //      per-turn note counter when a user message enters (the tool-coach
 //      precedent).
 //
-// THE CANDIDATES COME FROM THE AGENT'S OWN PREVIOUS TOOL CALLS: the listener
-// folds the session history through `Adjacent(touches, callPath)` and names
-// the files that were touched right after this one in this workspace. The
-// literal built-in pack is NOT consulted; the pack survives only as an
-// EXPLICIT override (`<repo>/.dsh/pack.yml` or the user layer), resolved with
-// `builtin: false`. A packless workspace with no history abstains
-// (`abstained no-history`).
+// THE HISTORY IS A PROJECTION UNIT, NOT A LISTENER FOLD: `session/event` is
+// the durable, all-agent seam, and the supported plugin-facing form of it is
+// `ctx.sessionProjections` - the registry subscribes to `session/event` ONCE
+// and passes every committed event through every registered unit's `apply`
+// (Function/Unit is the unit, Function/Register installs it through the
+// optional `ctx.inject(['sessionProjections'], ...)` form). The hook therefore
+// holds no subscription of its own and folds nothing in this listener: it
+// reads the per-session state at detection time through `stateOf(session,
+// key)` (Function/History). The current call's own `tool/call` is committed
+// BEFORE dispatch - it is the call's STARTED record, the one recovery reports
+// as `TOOL_OUTCOME_UNKNOWN` when no result follows - so the anchor's prior
+// touches, and the anchor itself, are already folded when this listener runs
+// and NO post-execute append is needed (an append would fold the current call
+// twice and inflate every later co-touch count).
+//
+// THE CANDIDATES COME FROM THE AGENT'S OWN PREVIOUS TOOL CALLS: the unit folds
+// every committed `tool/call` that names a path (reads included) through the
+// pack library's `Fold`, and the listener runs
+// `Adjacent(touches, callPath)` to name the files that were touched right
+// after this one in this workspace. The literal built-in pack is NOT
+// consulted; the pack survives only as an EXPLICIT override
+// (`<repo>/.dsh/pack.yml` or the user layer), resolved with `builtin: false`.
+// A packless workspace with no history abstains (`abstained no-history`).
 //
 // THE LEARNING BOOTSTRAP IS RETIRED: the literal learner is no longer called
 // (the learner and its source files were removed) and the config's
@@ -52,20 +65,15 @@
 //
 // `inject: ["pluginFactory"]` (Library.ts) - the factory is a REQUIRED
 // service (the State builder + the ledger); the loader's PENDING state
-// handles the ordering, so bundle-layer order never matters.
+// handles the ordering, so bundle-layer order never matters. The projection
+// registry is deliberately NOT declared there: it is an OPTIONAL seam the hook
+// registers on through `ctx.inject` and reads through `ctx.get`, so a mount
+// without it still loads (Function/Register, Function/History).
 import type { Context } from "@deepseek-ai/cordis";
 import type { UserMessage } from "@deepseek-ai/dsh-llm";
 import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
 import { Activate } from "@playform/lib-dsh-core";
-import {
-	Adjacent,
-	Families,
-	Fold,
-	Home,
-	Locate,
-	Resolve,
-	Root as RootOf,
-} from "@playform/lib-dsh-pack";
+import { Adjacent, Families, Home, Locate, Resolve, Root as RootOf } from "@playform/lib-dsh-pack";
 
 import type Config from "../Interface/Config.js";
 import type { Candidate } from "../Interface/Pack.js";
@@ -74,7 +82,9 @@ import type State from "../Interface/State.js";
 import Version from "../Variable/Version.js";
 import Detect, { Compile } from "./Detect.js";
 import Exists from "./Exists.js";
+import History from "./History.js";
 import BuildNote, { Prepend } from "./Note.js";
+import Register from "./Register.js";
 
 /** Fresh per-agent memory. */
 const FreshMemory = (): AgentMemory => ({
@@ -156,7 +166,6 @@ export default (Context: Context, Options: Config): void => {
 	});
 	State.Factory = Factory;
 	State.Agents = new WeakMap();
-	State.History = new WeakMap();
 
 	// The compile rule, shared by every explicit-pack compile: the configured
 	// intent list filters the pack (empty = all), and the config threshold is
@@ -219,6 +228,13 @@ export default (Context: Context, Options: Config): void => {
 		);
 	}
 
+	// The history fold, installed on the seam that receives the log
+	// (Function/Register -> Function/Unit). Registered even when the hook is
+	// disabled: the fold is inert bookkeeping that emits nothing, and a
+	// VOLATILE re-enable must find the history already folded rather than
+	// starting empty.
+	Register(Context);
+
 	// Whether a call is judged: only the configured tool names.
 	const Judged = (Name: string): boolean =>
 		Array.isArray(State.EmitOn) && State.EmitOn.includes(Name);
@@ -259,47 +275,20 @@ export default (Context: Context, Options: Config): void => {
 		return "emit";
 	};
 
-	// Listener 1: session/event - the history fold. Every `tool/call` event
-	// becomes one Touch (the pack library's fold unit) in the SESSION's
-	// history, so the candidates come from the agent's OWN previous calls in
-	// this workspace. One entry per session object, created lazily; the array
-	// is capped at 512 (the oldest touch is shifted out). Fail-open: a
-	// malformed event is skipped, never thrown.
-	Context.on("session/event", (Session_: unknown, Event: unknown): void => {
-		try {
-			const Key = (Session_ as object | undefined) ?? DefaultKey;
-			let History = State.History.get(Key);
-			if (History === undefined) {
-				History = { Seq: 0, Touches: [] };
-				State.History.set(Key, History);
-			}
-			const Touch = Fold(
-				Event as { type?: string; name?: string; arguments?: unknown },
-				History.Seq,
-			);
-			if (Touch === undefined) {
-				return;
-			}
-			History.Seq += 1;
-			History.Touches.push(Touch);
-			if (History.Touches.length > 512) {
-				History.Touches.shift();
-			}
-		} catch {
-			/* the fold never breaks the event bus */
-		}
-	});
-
-	// Listener 2: tools/post-execute - the note. Plain registration: runs
-	// AFTER the ccr's {prepend:true} listener and normalize's post-execute,
-	// and never replaces content (only additionalContexts).
+	// Listener 1: tools/post-execute - the note. The history it reads is folded
+	// by the projection unit (Function/Unit), never here. Plain registration:
+	// runs AFTER the ccr's {prepend:true} listener and normalize's
+	// post-execute, and never replaces content (only additionalContexts).
 	Context.on(
 		"tools/post-execute",
 		async (Exec: ToolExecution, _Result: unknown, Next: () => Promise<PostToolDecision>) => {
 			// next() FIRST: the downstream listeners settle before any decision.
 			const Decision = await Next();
 			try {
-				if (!State.On || !Judged(Exec.name)) {
+				if (!State.On) {
+					return Decision;
+				}
+				if (!Judged(Exec.name)) {
 					return Decision;
 				}
 				// The workspace root, BEFORE any candidate work: the
@@ -322,12 +311,14 @@ export default (Context: Context, Options: Config): void => {
 				Memory.Ring.unshift(Probe);
 				Memory.Ring.length = Math.min(Memory.Ring.length, 8);
 				// The session history: the agent's OWN previous tool calls,
-				// folded per session, never the literal built-in pack.
-				const Key =
-					(Exec.agent as { session?: object } | undefined)?.session ??
-					Exec.agent ??
-					DefaultKey;
-				const Touches = State.History.get(Key)?.Touches ?? [];
+				// folded by the projection unit from THIS session's committed
+				// `tool/call` events - never the literal built-in pack. The
+				// read is the seam's own face (`stateOf(session, key)`), and
+				// the registry is probed because it is an optional service.
+				const Touches = History(
+					Context,
+					(Exec.agent as { session?: object } | undefined)?.session,
+				);
 				const Nearby = Adjacent(Touches, CallPath, { limit: State.MaxCandidates });
 				if (Nearby.length > 0) {
 					// The co-touch candidates: a repeatedly co-touched path
@@ -454,7 +445,7 @@ export default (Context: Context, Options: Config): void => {
 		},
 	);
 
-	// Listener 3: agent/pre-step - the per-turn reset. When the step's
+	// Listener 2: agent/pre-step - the per-turn reset. When the step's
 	// messages end with a user message (a new user turn), the per-turn note
 	// counter resets. The listener is a PURE OBSERVER of the counter: next()
 	// first, the downstream decision unchanged, fail-open.

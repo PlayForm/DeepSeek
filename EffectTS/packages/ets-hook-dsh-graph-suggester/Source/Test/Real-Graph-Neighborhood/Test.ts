@@ -6,7 +6,9 @@
 // proves the intent against FakeGraph; this one proves the consumer chain the
 // POC gap analysis named ("the live graph is empty; only FakeGraph-proven").
 // The graph is the ONLY candidate source: an anchor the graph does not know
-// abstains `no-companions` rather than naming a literal path.
+// abstains `no-companions` rather than naming a literal path, and the anchor
+// the graph DOES know is excluded from the targets - the component includes
+// the file the agent just touched, and the note must never name it back.
 import assert from "node:assert/strict";
 import {
 	Call,
@@ -64,7 +66,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		Check(Count, "G1: the suggest line is byte-exact and the graph answered", () => {
 			assert.deepEqual(LinesWith(Run, "candidates call"), [
-				"graph-suggester: suggest Neighborhood 0.87 3 candidates call read",
+				"graph-suggester: suggest Neighborhood 0.87 2 candidates call read",
 			]);
 			assert.equal(LinesWith(Run, "graph unavailable").length, 0);
 			assert.equal(LinesWith(Run, "abstained").length, 0);
@@ -74,18 +76,20 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Result.additionalContexts.length, 1);
 			assert.equal(
 				Result.additionalContexts[0].content[0].text,
-				"[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (3):\n- /ws/Source/Core.ts - the definition\n- /ws/Source/Core.test.ts - the tests\n- /ws/Source/Use.ts - the importers\nnote: the neighborhood is the connected component: definition, callers, tests, doc block.",
+				"[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (2):\n- /ws/Source/Core.test.ts - the tests\n- /ws/Source/Use.ts - the importers\nnote: the files around this one: importers, dependencies, tests, doc block.",
 			);
 			assert.equal(Result.kind, "allow");
 		});
-		Check(Count, "G1: the candidates are exactly the graph's own entries", () => {
+		Check(Count, "G1: the candidates are the graph's own entries minus the anchor", () => {
 			const Paths = Result.additionalContexts[0].content[0].text
 				.split("\n")
 				.filter((Line: string) => Line.startsWith("- "))
 				.map((Line: string) => Line.slice(2).split(" - ")[0]);
 			assert.deepEqual(
 				Paths,
-				Graph.neighborhood("/ws/Source/Core.ts").map((Entry: any) => Entry.path),
+				Graph.neighborhood("/ws/Source/Core.ts")
+					.map((Entry: any) => Entry.path)
+					.filter((Path: string) => Path !== "/ws/Source/Core.ts"),
 			);
 		});
 	}
@@ -113,6 +117,31 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run.Fs.writes.length, 0);
 			assert.equal(Run.Fs.resolved.length, 0);
 			assert.equal(Run.Fs.stats.length, 0);
+		});
+	}
+
+	// Group G4: an anchor whose real component holds only itself.
+	{
+		const Alone = Setup({}, (Context: any) => {
+			Context.workspaceGraph = Graph;
+		});
+		await Call(Alone, "read", { ...ARGS, file_path: "/ws/README.md" });
+		Check(Count, "G4: an anchor-only component abstains no-companions", () => {
+			assert.deepEqual(
+				Graph.neighborhood("/ws/README.md").map((Entry: any) => Entry.path),
+				["/ws/README.md"],
+			);
+			assert.deepEqual(LinesWith(Alone, "candidates call"), []);
+			assert.deepEqual(LinesWith(Alone, "abstained"), [
+				"graph-suggester: abstained no-companions Neighborhood 0.87",
+			]);
+			assert.equal(LinesWith(Alone, "graph unavailable").length, 0);
+		});
+		Check(Count, "G4: the note of the real component never names the anchor", () => {
+			assert.equal(
+				Result.additionalContexts[0].content[0].text.includes("/ws/Source/Core.ts"),
+				false,
+			);
 		});
 	}
 

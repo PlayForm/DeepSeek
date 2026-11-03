@@ -35,8 +35,20 @@ never the change.
 
 ## The candidates (the session history)
 
-The `session/event` listener folds every `tool/call` event into the session's history: one touch per
-call (the sequence number, the normalized path and the tool), capped at 512, oldest first.
+The history is a `ctx.sessionProjections` unit (key `docHistory`): the registry subscribes to
+`session/event` once and passes every committed event through the unit's `apply`, which turns each
+`tool/call` that names a path into one touch (the sequence number, the normalized path and the
+tool), reads included, capped at 512 touches, oldest first.
+
+The hook holds no subscription of its own: a raw `ctx.on("session/event", ...)` listener received
+nothing in the live harness, and the projection registry is the supported plugin-facing form of that
+seam. The unit is registered through the optional `ctx.inject(['sessionProjections'], ...)` form, so
+a mount without the registry still loads and simply has no history.
+
+The cell is rebuilt from the log on first touch and read at detection time through
+`stateOf(session, key)`. The current call's own `tool/call` is committed before dispatch, so the
+anchor is already in the state and the listener appends nothing - an append would fold the current
+call twice and inflate every later co-touch count.
 
 On a judged call, `Adjacent(touches, callPath, { limit: maxCompanions })` scores the paths that
 followed the anchor within a window of 8 calls: `1 / (1 + distance)` per occurrence, one count per
@@ -130,6 +142,10 @@ carry it.
 
 One note, never a content replacement: the post-execute listener runs after the ccr and the
 normalize family and only adds `additionalContexts`.
+
+The mount registers three listeners: the factory's `loader/volatile-update`, `tools/post-execute`,
+and `agent/pre-step`. The projection unit registers separately, on `ctx.sessionProjections`, and
+holds no listener.
 
 The note carries the plugin's own source label (`{kind: "doc-suggester", form: "notice", summary}`).
 

@@ -151,10 +151,11 @@ export const Furnace: any = new FactoryClass({
 /**
  * The fake ctx: the ROOT object is DISTINCT from the ctx (a registration
  * made on the plugin ctx instead of the root cannot pass a root assertion);
- * ctx.on() captures into CtxListeners (the plugin's three listeners and the
- * factory's loader/volatile-update listener land there); effect runs its
- * setup immediately; fs records every access and must stay untouched (the
- * doc suggester is a NON-MANIFEST module: zero fs calls).
+ * ctx.on() captures into CtxListeners (three registrations: the factory's
+ * loader/volatile-update listener plus the plugin's tools/post-execute and
+ * agent/pre-step); effect runs its setup immediately; fs records every access
+ * and must stay untouched (the doc suggester is a NON-MANIFEST module: zero fs
+ * calls).
  */
 export const Make = (Raw: any): any => {
 	const CtxListeners: any = {};
@@ -337,7 +338,6 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: the fake ctx registers the plugin's three listeners", () => {
 		assert.deepEqual(Object.keys(Run.CtxListeners), [
 			"loader/volatile-update",
-			"session/event",
 			"tools/post-execute",
 			"agent/pre-step",
 		]);

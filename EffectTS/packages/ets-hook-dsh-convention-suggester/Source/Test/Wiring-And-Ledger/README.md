@@ -14,7 +14,9 @@ the fs purity.
 - W2: the enabled mount - the two hook listeners (`tools/post-execute`,
   `agent/pre-step`) plus the factory's `loader/volatile-update` register on
   the plugin context only (never on the root; the fake root is a distinct
-  object), the root identity is not the plugin ctx, and the activation line
+  object), the optional projection injection is recorded as
+  `[["sessionProjections"]]` and installs the `conventionHistory` unit, the
+  root identity is not the plugin ctx, and the activation line
   `activated (bundle 0.2.1, history, threshold 0.75)` is byte-exact in the
   logger form and in the durable `[ISO]` form (exactly one line).
 - W3: the disabled mount - `disabled (enabled=false)` is byte-exact in both
@@ -24,10 +26,11 @@ the fs purity.
   defaults land on the built State (threshold 0.75, maxCandidates 7,
   maxNoteChars 1200, cooldownCalls 6, maxNotesPerTurn 3, the empty intent
   list, the three judged tools, the four exclude prefixes, the factory
-  assigned); the boot compile is EMPTY (the candidates come from the session
-  history, so no literal pack is compiled at apply) and both the agent and
-  the history maps are WeakMaps; a configured intent list lands on the State
-  and the boot line still reads `history`.
+  assigned); the boot compile is EMPTY (the candidates come from the
+  session history, so no literal pack is compiled at apply), the agent map
+  is a WeakMap, and no State-owned history remains (`State.History` is
+  `undefined` - the history is a projection unit); a configured intent list
+  lands on the State and the boot line still reads `history`.
 - W5: the fs purity - the convention suggester is a NON-MANIFEST module:
   zero ctx.fs calls across emit and silence, and no logger warnings.
 

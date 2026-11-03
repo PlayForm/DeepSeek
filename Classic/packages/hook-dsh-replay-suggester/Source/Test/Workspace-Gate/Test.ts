@@ -1,11 +1,12 @@
-// Source/Test/Workspace-Gate/Test.ts - the workspace gate and the existence
-// filter against the fake ctx and REAL temp workspaces: (a) a FOREIGN
+// Source/Test/Workspace-Gate/Test.ts - the workspace gate and the RECALL
+// VALIDATION against the fake ctx and REAL temp workspaces: (a) a FOREIGN
 // workspace (a temp tree with the recalled path but no `.git`/`package.json`
 // root) produces NO note and the `abstained foreign-workspace` ledger line;
-// (b) OUR workspace (a temp tree WITH the root marker and README.md, the
-// recalled file) emits a note naming only the recalled file that exists;
-// (c) a record whose whole file set is absent abstains `no-companions`;
-// (d) a foreign call never poisons the next in-workspace call.
+// (b) OUR workspace emits a note naming only the recalled regular file that
+// exists - a DELETED path and a bare DIRECTORY are dropped; (c) a record whose
+// files all vanish abstains `no-companions`; (d) a same-tree recalled path
+// ranks ahead of the other release tree's, which is never dropped; (e) a
+// foreign call never poisons the next in-workspace call.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -54,15 +55,25 @@ const Rec = (Probe: string, Files: string[], Verify = "pnpm test"): unknown => (
 const Foreign = Tree("replay-suggester-foreign-");
 const ForeignFile = Put(Foreign, "src/Core.ts");
 
-/** OUR workspace: the root marker and the recalled file. */
+/** OUR workspace: the root marker, the call path, and the recalled file. */
 const Ours = Tree("replay-suggester-ours-");
 Manifest(Ours);
 const OursFile = Put(Ours, "README.md");
+Put(Ours, "src/Core.ts");
 
-/** The EMPTY workspace: the root marker and the call path, not the recalled file. */
+/** The EMPTY workspace: the root marker, the call path, and one live file. */
 const Empty = Tree("replay-suggester-empty-");
 Manifest(Empty);
 const EmptyFile = Put(Empty, "README.md");
+Put(Empty, "src/Core.ts");
+Put(Empty, "src/Nested/File.ts");
+
+/** The two release trees side by side (the recall's same-tree rule). */
+const Release = Tree("replay-suggester-release-");
+Manifest(Release);
+const Peer = Put(Release, "Classic/src/Peer.ts");
+const Other = Put(Release, "EffectTS/src/Other.ts");
+const Anchor = Path.join(Release, "Classic/src/Anchor.ts");
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -114,11 +125,11 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group G3: OUR workspace - the existence filter keeps the recalled file.
+	// Group G3: OUR workspace - the recall names only the file the tree has.
 	{
 		const Agent = { agent: { id: "agent-a" } };
 		rmStore();
-		WriteStore([Rec("README.md", ["README.md"])]);
+		WriteStore([Rec("README.md", ["src/Core.ts"])]);
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Ours);
 		await CheckAsync(Count, "G3: the note names only the recalled file that exists", async () => {
@@ -131,7 +142,7 @@ export const runTest = async (): Promise<number> => {
 			});
 			assert.equal(
 				Out.additionalContexts[0].content[0].text,
-				"[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- README.md - touched last time (Repeat)\nnote: last time verified with pnpm test",
+				"[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- src/Core.ts - touched last time (Repeat)\nnote: last time verified with pnpm test",
 			);
 		});
 		await CheckAsync(Count, "G3: the suggest line counts only the existing file", async () => {
@@ -142,22 +153,46 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group G4: the recalled-history exemption and the empty record.
+	// Group G4: the tree validation (deleted, directory, vanished, empty).
 	{
 		const Agent = { agent: { id: "agent-a" } };
 		rmStore();
-		WriteStore([Rec("README.md", ["src/Gone.ts"])]);
+		WriteStore([Rec("README.md", ["src/Gone.ts", "src/Core.ts"])]);
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Empty);
-		await CheckAsync(Count, "G4: a recalled file absent from the workspace is still named (history record)", async () => {
+		await CheckAsync(Count, "G4: a recalled path the tree no longer has is dropped", async () => {
 			const Out = await Call(Run, "read", { file_path: EmptyFile }, Agent);
 			assert.equal(
 				Out.additionalContexts[0].content[0].text,
-				"[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- src/Gone.ts - touched last time (Repeat)\nnote: last time verified with pnpm test",
+				"[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- src/Core.ts - touched last time (Repeat)\nnote: last time verified with pnpm test",
 			);
 			assert.deepEqual(LinesWith(Run, "candidates call"), [
 				"replay-suggester: suggest Repeat 0.87 1 candidates call read",
 			]);
+		});
+		rmStore();
+		WriteStore([Rec("README.md", ["src/Nested", "src/Core.ts"])]);
+		const Directory = Setup();
+		Directory.Context.workingDirectory = Service(Empty);
+		await CheckAsync(Count, "G4: a recalled directory is dropped", async () => {
+			const Out = await Call(Directory, "read", { file_path: EmptyFile }, Agent);
+			assert.equal(
+				Out.additionalContexts[0].content[0].text,
+				"[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- src/Core.ts - touched last time (Repeat)\nnote: last time verified with pnpm test",
+			);
+			assert.equal(Out.additionalContexts[0].content[0].text.includes("src/Nested"), false);
+		});
+		rmStore();
+		WriteStore([Rec("README.md", ["src/Gone.ts", "src/AlsoGone.ts"])]);
+		const Vanished = Setup();
+		Vanished.Context.workingDirectory = Service(Empty);
+		await CheckAsync(Count, "G4: a record whose files all vanish abstains no-companions", async () => {
+			const Decision = { kind: "allow" };
+			const Out = await Call(Vanished, "read", { file_path: EmptyFile }, Agent, Decision);
+			assert.equal(Out, Decision);
+			assert.ok(Vanished.Lines.includes("replay-suggester: abstained no-companions Repeat 0.87"));
+			assert.equal(LedgerWith("abstained no-companions Repeat 0.87").length, 1);
+			assert.equal(LinesWith(Vanished, "candidates call").length, 0);
 		});
 		rmStore();
 		WriteStore([Rec("README.md", [])]);
@@ -177,7 +212,7 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Agent = { agent: { id: "agent-a" } };
 		rmStore();
-		WriteStore([Rec("README.md", ["README.md"])]);
+		WriteStore([Rec("README.md", ["src/Core.ts"])]);
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Foreign);
 		await CheckAsync(Count, "G5: a foreign call never poisons the next in-workspace call", async () => {
@@ -185,6 +220,24 @@ export const runTest = async (): Promise<number> => {
 			Run.Context.workingDirectory = Service(Ours);
 			const Out = await Call(Run, "read", { file_path: OursFile }, Agent);
 			assert.equal(Out.additionalContexts[0].source.summary, "Repeat 0.87");
+		});
+	}
+
+	// Group G6: the same-tree ranking (the other tree is never dropped).
+	{
+		const Agent = { agent: { id: "agent-a" } };
+		rmStore();
+		WriteStore([Rec("Anchor.ts", [Other, Peer])]);
+		const Run = Setup();
+		await CheckAsync(Count, "G6: a same-tree recalled path ranks ahead of the other tree's", async () => {
+			const Out = await Call(Run, "read", { file_path: Anchor }, Agent);
+			assert.equal(
+				Out.additionalContexts[0].content[0].text,
+				`[replay-suggester] intent=Repeat confidence=0.87\ntargets (2):\n- ${Peer} - touched last time (Repeat)\n- ${Other} - touched last time (Repeat)\nnote: last time verified with pnpm test`,
+			);
+			assert.deepEqual(LinesWith(Run, "candidates call"), [
+				"replay-suggester: suggest Repeat 0.87 2 candidates call read",
+			]);
 		});
 	}
 

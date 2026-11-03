@@ -5,6 +5,7 @@ import * as Path from "node:path";
 import {
   AgentOf,
   CheckAsync,
+  Commit,
   Durable,
   DurableLine,
   Finish,
@@ -40,14 +41,9 @@ const HistoryText = [
   "note: a documentation task rarely touches one file; keep the doc graph coherent."
 ].join("\n");
 const Seed = (Run, Id) => {
-  Run.State.History.set(AgentOf(Id), {
-    Seq: 3,
-    Touches: [RootedIndex, "README.md", "SCHEME.md"].map((Path_, Seq) => ({
-      seq: Seq,
-      path: Path_,
-      tool: "read"
-    }))
-  });
+  Commit(Run, Id, RootedIndex);
+  Commit(Run, Id, "README.md");
+  Commit(Run, Id, "SCHEME.md");
 };
 const runTest = async () => {
   const Count = MakeCounter();

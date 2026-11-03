@@ -213,7 +213,6 @@ if (InvokedDirectly) {
   Check(Count, "selfcheck: the fake ctx registers the plugin's three listeners", () => {
     assert.deepEqual(Object.keys(Run.CtxListeners), [
       "loader/volatile-update",
-      "session/event",
       "tools/post-execute",
       "agent/pre-step"
     ]);

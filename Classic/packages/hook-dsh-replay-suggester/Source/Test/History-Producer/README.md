@@ -20,6 +20,8 @@ Now every judged call in a workspace is appended to the call history, in the per
 
 The shared Harness (fake ctx, real factory, real built Target), the fake storage facility (the open capture, the map-backed tables, the version fence), and real temp store paths.
 
+The recall is validated against the tree, so the recall-emitting mounts point the session cwd at a REAL temp workspace holding the `src/...` companions as regular files.
+
 A fresh temp HOME and a fresh fallback-store path per mount keep every folder hermetic, so no scenario reads or writes the real `~/.dsh`.
 
 No sleeps: every write is awaited through `State.Flush()`.

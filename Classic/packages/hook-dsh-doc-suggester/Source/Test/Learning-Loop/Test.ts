@@ -74,9 +74,6 @@ Put(Workspace, "docs/STYLE.md");
 const Reference = Put(Workspace, "docs/REFERENCE.md");
 const Index = Put(Workspace, "Documentation/INDEX.md");
 
-/** A third path that only ages the follow-through window. */
-const Other = Put(Workspace, "docs/OTHER.md");
-
 /** The optional harness service the probe reads (the real shape: get(session)). */
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
@@ -86,7 +83,7 @@ const NoteOrder = (Head: string): string =>
 
 /**
  * Seed one agent's session history through the state probe: the absolute
- * anchor, then the two followers (the session/event fold's shape). The
+ * anchor, then the two followers (the tools/post-execute fold's shape). The
  * followers are one and two calls away, so Adjacent ranks `docs/STYLE.md`
  * first.
  */
@@ -115,10 +112,14 @@ const Touch = (Id: string): any => ({
 	agent: AgentOf(Id),
 });
 
-/** The judged non-family call (it only ages the window). */
+/**
+ * The judged anchor re-read: it ages the follow-through window, and because
+ * the fold appends the anchor itself (never its own candidate) it adds no new
+ * follower to the history the next note is ranked from.
+ */
 const Age = (Id: string): any => ({
 	name: "read",
-	arguments: { file_path: Other },
+	arguments: { file_path: Index },
 	agent: AgentOf(Id),
 });
 
@@ -176,8 +177,12 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run.State.Last.outcome, "accepted");
 		});
 		await CheckAsync(Count, "L1: the next call ranks the accepted companion first and its score rises", async () => {
-			await Pre(Run, { agent: AgentOf("learn-a"), messages: [{ source: { kind: "user" } }] });
-			const Out = await Post(Run, Emit("learn-a"));
+			// The learned layer is per INSTANCE, so a later call from a second
+			// agent reads the accepted rate against its own clean history: the
+			// follow-through call above joined the first agent's history, and
+			// that appended call would otherwise outrank the learned rank.
+			Seed(Run, "learn-a2");
+			const Out = await Post(Run, Emit("learn-a2"));
 			assert.equal(
 				Out.additionalContexts[0].content[0].text,
 				NoteOrder("docs/REFERENCE.md"),

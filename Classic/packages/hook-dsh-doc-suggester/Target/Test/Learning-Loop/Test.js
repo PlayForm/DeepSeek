@@ -32,7 +32,6 @@ Put(Workspace, "package.json", "{}");
 Put(Workspace, "docs/STYLE.md");
 const Reference = Put(Workspace, "docs/REFERENCE.md");
 const Index = Put(Workspace, "Documentation/INDEX.md");
-const Other = Put(Workspace, "docs/OTHER.md");
 const Service = (Cwd) => ({ get: () => Cwd });
 const NoteOrder = (Head) => `[doc-suggester] family=History confidence=0.87
 companions (2):
@@ -61,7 +60,7 @@ const Touch = (Id) => ({
 });
 const Age = (Id) => ({
   name: "read",
-  arguments: { file_path: Other },
+  arguments: { file_path: Index },
   agent: AgentOf(Id)
 });
 const runTest = async () => {
@@ -114,8 +113,8 @@ const runTest = async () => {
       assert.equal(Run.State.Last.outcome, "accepted");
     });
     await CheckAsync(Count, "L1: the next call ranks the accepted companion first and its score rises", async () => {
-      await Pre(Run, { agent: AgentOf("learn-a"), messages: [{ source: { kind: "user" } }] });
-      const Out = await Post(Run, Emit("learn-a"));
+      Seed(Run, "learn-a2");
+      const Out = await Post(Run, Emit("learn-a2"));
       assert.equal(
         Out.additionalContexts[0].content[0].text,
         NoteOrder("docs/REFERENCE.md")

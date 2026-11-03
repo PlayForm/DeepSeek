@@ -27,6 +27,16 @@ const Episode = async (Run, Agent) => {
   }
 };
 const Service = (Cwd) => ({ get: () => Cwd });
+const Work = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-suggester-producer-"));
+FileSystem.writeFileSync(Path.join(Work, "package.json"), "{}", "utf8");
+FileSystem.mkdirSync(Path.join(Work, "src"), { recursive: true });
+for (const Name of ["A.ts", "B.ts", "C.ts", "D.ts", "E.ts", "Seed.ts"]) {
+  FileSystem.writeFileSync(Path.join(Work, "src", Name), "x", "utf8");
+}
+const At = (Run) => {
+  Run.Context.workingDirectory = Service(Work);
+  return Run;
+};
 const runTest = async () => {
   const Count = MakeCounter();
   {
@@ -60,7 +70,7 @@ const runTest = async () => {
   }
   {
     const Agent = { agent: { id: "recall-a" } };
-    const Run = Setup(Knobs);
+    const Run = At(Setup(Knobs));
     await Run.State.Flush();
     await Episode(Run, Agent);
     const Result = await Call(Run, "read", Probe("src/E.ts"), Agent);
@@ -113,7 +123,7 @@ const runTest = async () => {
       assert.ok(Facility.spec.tables.meta !== void 0);
       assert.equal(Facility.spec.compatibleVersions, void 0);
     });
-    const Second = Mount(Knobs, Facility);
+    const Second = At(Mount(Knobs, Facility));
     await Second.State.Flush();
     Check(Count, "H4: the reopen restores the entries with the byte-exact line", () => {
       assert.deepEqual(LinesWith(Second, "store recovered"), [
@@ -146,7 +156,7 @@ const runTest = async () => {
         ["src/D.ts", "src/C.ts", "src/B.ts", "src/A.ts"]
       );
     });
-    const Second = Setup({ ...Knobs, recordPath: Shared });
+    const Second = At(Setup({ ...Knobs, recordPath: Shared }));
     await Second.State.Flush();
     Check(Count, "H5: the fallback reopen restores the entries with the byte-exact line", () => {
       assert.deepEqual(LinesWith(Second, "store recovered"), [
@@ -204,7 +214,7 @@ const runTest = async () => {
     rmStore();
     WriteStore([{ intent: "Repeat", probe: "src", files: ["src/Seed.ts"], verify: "", at: 1 }]);
     const Agent = { agent: { id: "seed-a" } };
-    const Run = Setup(Knobs);
+    const Run = At(Setup(Knobs));
     await Run.State.Flush();
     await Episode(Run, Agent);
     const Result = await Call(Run, "read", Probe("src/E.ts"), Agent);

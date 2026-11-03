@@ -11,6 +11,7 @@ import * as Path from "node:path";
 import {
 	AgentOf,
 	CheckAsync,
+	Commit,
 	Durable,
 	DurableLine,
 	Finish,
@@ -50,18 +51,15 @@ const HistoryText = [
 ].join("\n");
 
 /**
- * Seed one agent's session history through the state probe: the absolute
- * anchor the call names, then the two relative companions.
+ * Seed one agent's session history through the PROJECTION drive: the absolute
+ * anchor the call names, then the two relative companions, committed as
+ * `tool/call` events and folded by the registered unit into that session's
+ * cell.
  */
 const Seed = (Run: any, Id: string, Anchor: string): void => {
-	Run.State.History.set(AgentOf(Id), {
-		Seq: 3,
-		Touches: [Anchor, "Source/Library.ts", "README.md"].map((Path_: string, Seq: number) => ({
-			seq: Seq,
-			path: Path_,
-			tool: "write",
-		})),
-	});
+	Commit(Run, Id, Anchor);
+	Commit(Run, Id, "Source/Library.ts");
+	Commit(Run, Id, "README.md");
 };
 
 /** The FOREIGN tree: no `.git`, no `package.json`, and no session cwd. */
@@ -119,8 +117,9 @@ export const runTest = async (): Promise<number> => {
 	{
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Rooted);
-		Seed(Run, "b", RootedAnchor);
 		await CheckAsync(Count, "G2: the History note names the companions of the temp root", async () => {
+			await Run.Ready;
+			Seed(Run, "b", RootedAnchor);
 			const Out = await Post(Run, Write(RootedAnchor, "b"));
 			assert.equal(Out.additionalContexts.length, 1);
 			assert.deepEqual(Out.additionalContexts[0].source, {

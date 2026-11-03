@@ -27,11 +27,14 @@
 //   * a target carrying a `<...>` placeholder (`Source/Test/<Suite>/Test.ts`)
 //     is illustrative and always kept.
 //
-// THE RECALLED-HISTORY EXEMPTION (this package only): the Repeat intent's
-// targets come from a history RECORD, not from the workspace - they are
-// history records, so Function/Apply never runs them through this filter. The
-// workspace gate still runs on the call path. This module stays base-aware
-// for any future static target an explicit pack may carry.
+// THE RECALLED-HISTORY CHECK (this package only): the Repeat intent's targets
+// come from a history RECORD, not from the workspace - Function/Apply does not
+// run them through this BASE-AWARE filter (their bases are the record's own),
+// but it does call `IsFile`, the regular-file predicate this module owns: the
+// recall store is cross-session by design, so only a path that exists as a
+// regular file may be named. The workspace gate still runs on the call path.
+// This module stays base-aware for any future static target an explicit pack
+// may carry.
 import { existsSync, readdirSync, statSync } from "node:fs";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 
@@ -107,6 +110,25 @@ const Prefix = (Companion: string, Paths: string[]): boolean => {
 		Directory === "." ||
 		Paths.some((Base) => existsSync(join(Base, Directory)))
 	);
+};
+
+/**
+ * Whether a path exists AND is a regular file - never a bare directory, and
+ * never a path the recall store remembers but the tree no longer has. The
+ * recalled history's predicate (Function/Apply), exported here so the check
+ * lives in ONE place; a race (the file disappears between the two calls) is a
+ * miss, never a throw.
+ */
+export const IsFile = (Path: string): boolean => {
+	try {
+		if (!existsSync(Path)) {
+			return false;
+		}
+		const Stat = statSync(Path, { throwIfNoEntry: false });
+		return Stat !== undefined && Stat.isFile();
+	} catch {
+		return false;
+	}
 };
 
 export default (

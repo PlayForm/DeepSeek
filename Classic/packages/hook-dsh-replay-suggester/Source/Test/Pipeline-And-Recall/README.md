@@ -4,7 +4,7 @@ The tools/post-execute pipeline against the seeded history store: the Repeat int
 
 ## Scenarios
 
-- R1: the recall, where a record whose probe matches the call probe becomes the synthesized `Repeat` family (the `history` signal of weight 2.5), producing the byte-exact `suggest Repeat 0.87 2 candidates call read` line (logger and durable ledger) and ONE labeled frozen notice with the recalled files and the `note: last time verified with pnpm test` caveat.
+- R1: the recall, where a record whose probe matches the call probe becomes the synthesized `Repeat` family (the `history` signal of weight 2.5), producing the byte-exact `suggest Repeat 0.87 1 candidates call read` line (logger and durable ledger) and ONE labeled frozen notice with the surviving recalled file (the anchor is dropped) and the `note: last time verified with pnpm test` caveat.
 - R2: the longest matching probe wins, the recalled files are capped at `maxCandidates`, and a fully excluded recall abstains with the byte-exact `abstained ambiguous Repeat 0.87`.
 - R3: the gate, where a repeat within the cooldown is suppressed (`suppressed cooldown Repeat`), a note beyond the per-turn cap is suppressed (`suppressed cap Repeat`), and a user turn (agent/pre-step) resets the counter.
 - R4: the designed abstention, where a record that does not match leaves no synthesized family and no pack, so the call abstains with the byte-exact `abstained no-history  0.00` (the double space is the empty-family shape) and the decision passes through unchanged.
@@ -18,7 +18,7 @@ The shared Harness plus `WriteStore` (the history JSON writer).
 
 There is no fake clock, because the plugin has no clock dependency.
 
-The recalled files are HISTORY RECORDS, not workspace paths, so they are exempt from the existence filter and the seeded records keep their original `src/...` shapes.
+The recalled files are VALIDATED against the tree, so the fixture creates a REAL temp workspace (the `src/...` files plus the `package.json` marker) and every mount points the session cwd at it; the seeded records keep their original `src/...` shapes. The anchor file exists because the anchor is dropped by NAME, never by absence.
 
 The workspace gate still runs on the call path.
 

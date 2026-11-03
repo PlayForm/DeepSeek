@@ -8,10 +8,10 @@
 The convention-suggester hook: a DeepSeek Harness plugin that names the companion files of a change
 **before** the model forgets them.
 
-The suggestions come from the agent's OWN PREVIOUS TOOL CALLS in this workspace: the hook folds
-every tool call it sees in `tools/post-execute` into the session's history and, on every
-`write`/`edit`/`raw-write` call, names the files that were touched right after this one in the same
-session.
+The suggestions come from the agent's OWN PREVIOUS TOOL CALLS in this workspace: a
+session-projection unit folds every committed `tool/call` into the session's history and, on every
+`write`/`edit`/`raw-write` call, the hook names the files that were touched right after this one in
+the same session.
 
 A repeated co-touch outranks a single one and a near neighbour outranks a far one, so the notice
 carries the workspace's real working set instead of a literal pack:
@@ -46,13 +46,17 @@ compatibility field.
 
 1. **The history fold.**
 
-    The `tools/post-execute` listener folds every call it sees into one `Touch` (the sequence
-    number, the normalized path and the tool) in the session's history, capped at 512 touches. Every
-    call that names a path feeds it, reads included, because the fold runs before the judged-tool
-    guard.
+    The fold is a `ctx.sessionProjections` unit (key `conventionHistory`): the registry subscribes
+    to `session/event` once and passes every committed event through the unit's `apply`, which turns
+    each `tool/call` that names a path into one `Touch` (the sequence number, the normalized path
+    and the tool) in that session's cell, capped at 512 touches. Reads count, because every
+    committed call is folded.
 
-    There is no `session/event` listener: the live harness does not deliver that event to the hook,
-    so the hook's own `tools/post-execute` stream is the feed.
+    The hook holds no subscription of its own: a raw `ctx.on("session/event", ...)` listener
+    received nothing in the live harness, and the projection registry is the supported plugin-facing
+    form of that seam. The unit is registered through the optional
+    `ctx.inject(['sessionProjections'], ...)` form, so a mount without the registry still loads and
+    simply has no history.
 
 2. **The post-execute listener.**
 
@@ -60,8 +64,11 @@ compatibility field.
     listener of ccr) calls `next()` first.
 
     Then it resolves the pack-independent workspace root (the nearest ancestor carrying `.git` or
-    `package.json`), reads the session history, and runs `Adjacent` → existence filter → gate →
-    prepend ONE notice.
+    `package.json`), reads the session history through `stateOf(session, key)`, and runs `Adjacent`
+    → existence filter → gate → prepend ONE notice.
+
+    It appends nothing to the history: the current call's `tool/call` is committed before dispatch,
+    so the state it reads already carries the anchor's prior touches.
 
     Content is never replaced.
 
@@ -70,7 +77,7 @@ compatibility field.
     The `agent/pre-step` listener resets the note counter each turn when a user message enters.
 
 The registered listener list is exactly `loader/volatile-update`, `tools/post-execute` and
-`agent/pre-step`.
+`agent/pre-step`; the projection unit registers separately, on `ctx.sessionProjections`.
 
 ## The plan
 

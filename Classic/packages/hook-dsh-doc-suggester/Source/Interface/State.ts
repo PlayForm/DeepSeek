@@ -35,8 +35,9 @@
 //                    a candidate source;
 //   Rings          - the per-agent ring tracker (Function/Ring);
 //   History        - the per-session touch history (WeakMap keyed on the
-//                    session object, created lazily by the session/event fold
-//                    in Function/Apply);
+//                    session object, created lazily by the tools/post-execute
+//                    fold in Function/Apply - every tool call the hook sees,
+//                    reads included);
 //   Factory        - the injected factory service itself (the ledger via
 //                    Factory.Append) - assigned once in Function/Apply.
 //
@@ -94,9 +95,9 @@ export default interface State extends Shared {
 }
 
 // The per-session history: the fold's running sequence number and the touches
-// (the previous tool calls that named a path), oldest first and capped at 512
-// by the session/event fold. The candidates come from these touches, never
-// from a literal pack.
+// (every tool call the hook sees that named a path, reads included), oldest
+// first and capped at 512 by the tools/post-execute fold. The candidates come
+// from these touches, never from a literal pack.
 export interface SessionHistory {
 	/** The next touch's sequence number. */
 	Seq: number;

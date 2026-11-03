@@ -12,6 +12,13 @@ All notable changes to this package will be documented in this file.
   synthesized per judged call and prepended as data (priority 1 and 2, threshold 0.75, one `graph`
   signal of weight 2.5, targets with prior 1.0 and the entries' own reasons). Their confidence is
   `k = sigmoid(2.5 - 0.6) = 0.87`.
+- The anchor is excluded from the targets: the graph's component includes the file the agent just
+  read, so the hook normalizes the anchor and every entry path the same way (backslashes to slashes,
+  a leading `./` stripped) and drops an entry whose path equals the anchor or - for a repo-relative
+  anchor - ends with `/<anchor>`. A component that holds nothing but the anchor abstains
+  `abstained no-companions <Intent> <k>` (no new ledger line), and the note text now reads "the
+  files around this one: importers, dependencies, tests, doc block" instead of promising the
+  anchor's own definition.
 - The private literal pack was removed from the hot path: `Source/Variable/Defaults.ts` was deleted
   from the package, and `State.Rules` starts empty at apply.
 - The static fallback is gone: an empty component abstains with the new byte-exact line
@@ -24,7 +31,9 @@ All notable changes to this package will be documented in this file.
   projection is gone.
 - The three smoke folders are rewritten onto the graph-only model: no assertion names a literal pack
   path, the empty-component case asserts `no-companions`, and the Sibling case drives the
-  same-directory projection through the `intents` filter (19, 6 and 15 checks).
+  same-directory projection through the `intents` filter. The anchor-exclusion cases (an anchor-only
+  component abstains, only the companions are named, no note ever names the anchor) sit in the same
+  three folders (23, 8 and 16 checks).
 - SCHEME.md, README.md and the bundle patch header document the graph-only model.
 
 ## 0.2.1

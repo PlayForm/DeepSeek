@@ -53,7 +53,6 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "W2: the three listeners register on the plugin context only", () => {
 			assert.deepEqual(Object.keys(Run.CtxListeners), [
 				"loader/volatile-update",
-				"session/event",
 				"tools/post-execute",
 				"agent/pre-step",
 			]);

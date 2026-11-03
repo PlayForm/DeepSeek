@@ -3,12 +3,14 @@
 // the enabled activation proof (byte-exact, the `graph` segment), the
 // apply-time wiring (the two ctx listeners in registration order), the empty
 // boot rule set (the graph intents are synthesized per call), the schema
-// fail-loud, and the fs purity of the mount.
+// fail-loud, the anchor exclusion at the mount seam, and the fs purity of the
+// mount.
 import assert from "node:assert/strict";
 import {
 	Check,
 	CheckAsync,
 	Finish,
+	FakeGraph,
 	Ledger,
 	LedgerLines,
 	LedgerWith,
@@ -128,6 +130,38 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Run.State.Module, "graph-suggester");
 			assert.equal(Run.State.Rules.length, 0);
 			assert.equal(Run.State.Threshold, 0.75);
+		});
+	}
+
+	// Group L7: the anchor exclusion through a mounted run (the graph component
+	// includes the file the agent just touched; the note names only its peers).
+	{
+		rm();
+		const Mounted = Make(Validate({ logFile: Ledger, enabled: true }), (Context: any) => {
+			Context.workspaceGraph = FakeGraph([
+				{ path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+				{ path: "src/Source/Use.ts", role: "importer", reason: "the importers" },
+			]);
+		});
+		await CheckAsync(Count, "L7: the mounted note names only the companions, never the anchor", async () => {
+			const Note = await Mounted.CtxListeners["tools/post-execute"](
+				{
+					name: "read",
+					arguments: { file_path: "src/Source/Core.ts" },
+					agent: { agent: { id: "a" } },
+				},
+				undefined,
+				async () => ({ kind: "allow" }),
+			);
+			assert.equal(
+				Note.additionalContexts[0].content[0].text,
+				"[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (1):\n- src/Source/Use.ts - the importers\nnote: the files around this one: importers, dependencies, tests, doc block.",
+			);
+			assert.ok(
+				Mounted.Lines.includes(
+					"graph-suggester: suggest Neighborhood 0.87 1 candidates call read",
+				),
+			);
 		});
 	}
 	return Finish(Count, "Loader-And-Activation");

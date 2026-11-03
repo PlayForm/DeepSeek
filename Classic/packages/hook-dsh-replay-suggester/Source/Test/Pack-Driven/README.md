@@ -27,7 +27,7 @@ pack-independent, so a pack governs its tree even when the declared marker file 
 The shared Harness (fake ctx, the real factory, the real built Target) plus `node:fs` temporary trees
 under the OS temp dir and a real seeded history store.
 
-Every temp tree carries a `package.json` marker, because the workspace root is pack-independent.
+Every temp tree carries a `package.json` marker, because the workspace root is pack-independent, and the recall is validated against the tree, so both trees carry the recalled `Source/Version.ts` as a regular file.
 
 The pack is a real `.dsh/pack.yml` read by the strict YAML-subset parser in
 `@playform/lib-dsh-pack`.
