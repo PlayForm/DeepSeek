@@ -8,11 +8,14 @@ All notable changes to this package will be documented in this file.
 
 - The recall is validated against the tree: the durable store is cross-session by design, so a
   recalled record may name a deleted path, a bare directory, or the call's own anchor. The anchor is
-  excluded, only an existing regular file is named (`Function/Exists`'s `IsFile`, the `existsSync`
-  plus `statSync(...).isFile()` predicate), and same-tree paths (Classic with Classic, EffectTS with
-  EffectTS) rank ahead of the other release tree's in a stable partition that never drops a valid
-  file; a record with no surviving file takes the existing `abstained no-companions <Intent> <k>`
-  line.
+  excluded and only an existing regular file is named (`Function/Exists`'s `IsFile`, the `existsSync`
+  plus `statSync(...).isFile()` predicate), so a missing path and a directory are never named. A
+  recalled path in the anchor's OWN DIRECTORY now wins outright - when one survives, only those
+  paths are named, because a recall from the same folder is the strong signal (a live test named
+  unrelated subtrees from an earlier session). Without such a neighbor the same-tree partition still
+  applies (Classic with Classic, EffectTS with EffectTS) and never drops a valid other-tree file; a
+  record with no surviving file keeps the existing `abstained no-companions <Intent> <k>` line, and
+  the same-directory rule adds no new ledger line.
 - The candidates come from the agent's OWN previous tool calls: a recalled record is synthesized
   into ONE `Repeat` family (priority 0, threshold 0.75, one `history` signal of weight 2.5, the
   recalled files as its targets with prior 1.0 and the `touched last time (<intent>)` reason), and

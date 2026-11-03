@@ -4,9 +4,11 @@
 // root) produces NO note and the `abstained foreign-workspace` ledger line;
 // (b) OUR workspace emits a note naming only the recalled regular file that
 // exists - a DELETED path and a bare DIRECTORY are dropped; (c) a record whose
-// files all vanish abstains `no-companions`; (d) a same-tree recalled path
-// ranks ahead of the other release tree's, which is never dropped; (e) a
-// foreign call never poisons the next in-workspace call.
+// files all vanish abstains `no-companions`; (d) a recalled path in the
+// anchor's OWN directory wins outright and the unrelated subtrees are dropped;
+// (e) without such a neighbor a same-tree recalled path ranks ahead of the
+// other release tree's, which is never dropped; (f) a foreign call never
+// poisons the next in-workspace call.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
@@ -68,12 +70,23 @@ const EmptyFile = Put(Empty, "README.md");
 Put(Empty, "src/Core.ts");
 Put(Empty, "src/Nested/File.ts");
 
-/** The two release trees side by side (the recall's same-tree rule). */
+/** The two release trees side by side (the recall's same-tree rule): the
+ * anchor's own directory holds NO recalled file, so the release tree decides. */
 const Release = Tree("replay-suggester-release-");
 Manifest(Release);
-const Peer = Put(Release, "Classic/src/Peer.ts");
+const Peer = Put(Release, "Classic/lib/Peer.ts");
 const Other = Put(Release, "EffectTS/src/Other.ts");
 const Anchor = Path.join(Release, "Classic/src/Anchor.ts");
+
+/** The same-directory preference (the live-noise shape): the anchor's own
+ * folder holds one recalled file, two unrelated subtrees hold the rest, and
+ * the anchor itself is a brand-new path the tree does not have yet. */
+const Beside = Tree("replay-suggester-beside-");
+Manifest(Beside);
+const Neighbor = Put(Beside, "packages/one/Source/Function/Exists.ts");
+const Subtree = Put(Beside, "packages/two/Source/Function/Exists.ts");
+const Cousin = Put(Beside, "packages/one/Source/Interface/Exists.ts");
+const BesideAnchor = Path.join(Beside, "packages/one/Source/Function/Apply.ts");
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -223,7 +236,8 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group G6: the same-tree ranking (the other tree is never dropped).
+	// Group G6: the same-tree ranking (the other tree is never dropped), with NO
+	// recalled path in the anchor's own directory, so the fallback decides.
 	{
 		const Agent = { agent: { id: "agent-a" } };
 		rmStore();
@@ -239,6 +253,33 @@ export const runTest = async (): Promise<number> => {
 				"replay-suggester: suggest Repeat 0.87 2 candidates call read",
 			]);
 		});
+	}
+
+	// Group G7: the anchor's own directory wins (the live-noise fix) - the
+	// sibling beside the anchor is the only target and the unrelated subtrees
+	// are dropped, even though the anchor file is brand new.
+	{
+		const Agent = { agent: { id: "agent-a" } };
+		rmStore();
+		WriteStore([Rec("Apply.ts", [Subtree, Cousin, Neighbor])]);
+		const Run = Setup();
+		await CheckAsync(
+			Count,
+			"G7: a same-directory recalled path wins and the unrelated subtrees are dropped",
+			async () => {
+				const Out = await Call(Run, "read", { file_path: BesideAnchor }, Agent);
+				const Text = Out.additionalContexts[0].content[0].text;
+				assert.equal(
+					Text,
+					`[replay-suggester] intent=Repeat confidence=0.87\ntargets (1):\n- ${Neighbor} - touched last time (Repeat)\nnote: last time verified with pnpm test`,
+				);
+				assert.equal(Text.includes(Subtree), false);
+				assert.equal(Text.includes(Cousin), false);
+				assert.deepEqual(LinesWith(Run, "candidates call"), [
+					"replay-suggester: suggest Repeat 0.87 1 candidates call read",
+				]);
+			},
+		);
 	}
 
 	return Finish(Count, "Workspace-Gate");

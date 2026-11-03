@@ -44,9 +44,10 @@
 // THE TREE: the store is cross-session by design, so a record may name a path
 // that was deleted, a bare directory, or the call's own anchor - the anchor is
 // excluded, only an existing regular file survives (Function/Exists's
-// `IsFile`), and the same release tree (Classic with Classic, EffectTS with
-// EffectTS) ranks ahead of the other in a stable order. A record with no
-// surviving path logs `abstained no-companions`.
+// `IsFile`), a path in the anchor's OWN DIRECTORY wins outright (precision
+// first), and without one the same release tree (Classic with Classic,
+// EffectTS with EffectTS) ranks ahead of the other in a stable order. A
+// record with no surviving path logs `abstained no-companions`.
 // The explicit pack's families come from the RESOLVED pack per call
 // (Families(pack, "replay")), compiled once per root, so a repo pack's own
 // replay family joins the synthesized one without a restart.
@@ -54,7 +55,7 @@
 // `inject: ["pluginFactory"]` (Library.ts) - the factory is a REQUIRED
 // service (the State builder + the ledger); the loader's PENDING state
 // handles the ordering. The function returns NOTHING.
-import { isAbsolute, resolve, sep } from "node:path";
+import { dirname, isAbsolute, resolve, sep } from "node:path";
 
 import type { Context } from "@deepseek-ai/cordis";
 import type { PostToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
@@ -138,16 +139,24 @@ const Absolute = (Value: string, Cwd: string | undefined): string =>
  * tree: the store is cross-session, so a record may name a path that was
  * deleted, a bare directory, or the call's own anchor. The anchor is
  * excluded, only an existing regular file survives (Exists's `IsFile`), and
- * the same release tree ranks ahead of the other in a STABLE partition - a
- * valid other-tree file is ranked after, never dropped.
+ * the anchor's OWN DIRECTORY is the strong signal: when a surviving path sits
+ * beside the anchor, only those paths are named (precision first). Without
+ * such a neighbor the same release tree ranks ahead of the other in a STABLE
+ * partition - a valid other-tree file is ranked after, never dropped.
  */
 const Select = (Files: string[], Anchor: string, Cwd: string | undefined): string[] => {
 	const AnchorFull = Absolute(Anchor, Cwd);
+	const Directory = dirname(AnchorFull);
 	const Own = Tree(AnchorFull);
 	const Kept = Files.map((File) => ({ File, Full: Absolute(File, Cwd) })).filter(
 		(Entry) => Entry.Full !== AnchorFull && IsFile(Entry.Full),
 	);
+	const Neighbors = Kept.filter((Entry) => dirname(Entry.Full) === Directory);
 	switch (true) {
+		// Precision first: a recall from the anchor's own directory is the
+		// strong signal, so the neighbors ARE the answer.
+		case Neighbors.length > 0:
+			return Neighbors.map((Entry) => Entry.File);
 		case Own === undefined:
 			return Kept.map((Entry) => Entry.File);
 		default: {
@@ -397,8 +406,9 @@ export default (Context: Context, Options: Config): void => {
 					RecallHistory(State.History, Probe, CallPath, State.LearnWindow, Fence);
 				// THE TREE VALIDATION: the store outlives the files it names, so
 				// a recorded path becomes a target only when the tree still has it
-				// as a regular file, the anchor is excluded, and the same release
-				// tree ranks first.
+				// as a regular file, the anchor is excluded, a path in the anchor's
+				// own directory wins outright, and otherwise the same release tree
+				// ranks first.
 				const Files = Recalled === undefined ? [] : Select(Recalled.files, CallPath, Cwd);
 				// THE SYNTHETIC FAMILY (the candidate source): the recalled
 				// record as ONE pack family, so the classifier, the gate and the

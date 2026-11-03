@@ -125,10 +125,15 @@ or the call's own anchor. Before the record becomes a target set, `Function/Appl
 
 1. drops the ANCHOR path itself (the file the current call names);
 2. keeps only paths that EXIST and are REGULAR FILES (`Function/Exists`'s `IsFile`, the `existsSync`
-   plus `statSync(...).isFile()` predicate);
-3. ranks the SAME RELEASE TREE first: a call under `<...>/Classic/...` keeps the recalled paths
-   under the same `<...>/Classic/...` prefix ahead of the others (the same for `.../EffectTS/...`),
-   with a STABLE partition that never drops a valid file only because it sits in the other tree.
+   plus `statSync(...).isFile()` predicate), so a missing path and a bare directory are never named;
+3. prefers the ANCHOR'S OWN DIRECTORY: when at least one surviving path sits in the `dirname` of the
+   resolved anchor, ONLY those paths are named - precision first, because a recall from the same
+   directory is the strong signal (the anchor itself need not exist: a brand-new file still has a
+   folder);
+4. otherwise falls back to the SAME RELEASE TREE: a call under `<...>/Classic/...` keeps the recalled
+   paths under the same `<...>/Classic/...` prefix ahead of the others (the same for
+   `.../EffectTS/...`), with a STABLE partition that never drops a valid file only because it sits in
+   the other tree.
 
 A record whose file set is EMPTY, or whose files ALL vanish, logs
 `abstained no-companions <Intent> <k>`, which is distinct from `no-memory`, the case where the

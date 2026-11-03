@@ -18,8 +18,10 @@ files touched last time and the verification command.
   family per call, so the classifier, the gate and the note treat it exactly like a pack family.
 - **The recall is validated against the tree.** The store is cross-session by design, so a record
   may name a path that no longer exists, a bare directory, or the call's own anchor. The anchor is
-  excluded, only existing regular files are named, and same-tree paths (Classic with Classic,
-  EffectTS with EffectTS) rank first; a record with no surviving file abstains `no-companions`.
+  excluded and only existing regular files are named, so a missing path and a directory are never
+  named. A recalled file in the anchor's OWN directory wins outright and the rest are dropped
+  (precision first); without one, same-tree paths (Classic with Classic, EffectTS with EffectTS) rank
+  first; a record with no surviving file abstains `no-companions`.
 - **The recall store has a producer** (the wave 2c re-spec,
   [03-SUGGESTERS.md](../../Documentation/Plans/Completion-Spec/03-SUGGESTERS.md)).
 
