@@ -128,7 +128,7 @@ const Builtin: Pack = {
 					reason: "the index row",
 				},
 				{
-					path: "Site/Source/pages/plugins.astro",
+					path: "Site/Source/pages/package.astro",
 					kind: "site",
 					prior: 0.6,
 					reason: "the site page",
@@ -206,7 +206,7 @@ const Builtin: Pack = {
 					reason: "the family roster",
 				},
 				{
-					path: "Site/Source/pages/plugins.astro",
+					path: "Site/Source/pages/package.astro",
 					kind: "site",
 					prior: 0.6,
 					reason: "the site page",
@@ -301,7 +301,7 @@ const Builtin: Pack = {
 					reason: "the byte-exact assertion",
 				},
 				{
-					path: "Site/Source/Component/Configurator.astro",
+					path: "Site/Source/pages/setup.astro",
 					kind: "site",
 					prior: 0.6,
 					reason: "the site surface",
@@ -652,7 +652,7 @@ const Builtin: Pack = {
 				},
 				{ path: "SCHEME.md", kind: "doc", prior: 0.6, reason: "the full table" },
 				{
-					path: "Site/Source/Component/Configurator.astro",
+					path: "Site/Source/pages/setup.astro",
 					kind: "site",
 					prior: 0.6,
 					reason: "the site surface",
@@ -860,7 +860,7 @@ const Builtin: Pack = {
 					reason: "the roster",
 				},
 				{
-					path: "Site/Source/pages/plugins.astro",
+					path: "Site/Source/pages/package.astro",
 					kind: "site",
 					prior: 1.0,
 					reason: "the site page",

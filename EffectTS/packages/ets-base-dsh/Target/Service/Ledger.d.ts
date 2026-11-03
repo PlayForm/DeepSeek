@@ -1,4 +1,4 @@
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 import { Context, Effect, Layer } from "effect";
 declare const Ledger_base: Context.ServiceClass<Ledger, "dsh.factory.Ledger", {
     /** The ledger: logger + the durable appendFileSync file, never throws.

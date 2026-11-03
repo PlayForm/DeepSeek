@@ -205,7 +205,7 @@ export default (Found: Set<string>): Record<string, Family> => {
 				),
 				...Companion(
 					Found,
-					"Site/Source/pages/plugins.astro",
+					"Site/Source/pages/package.astro",
 					"site",
 					0.6,
 					"the site page",

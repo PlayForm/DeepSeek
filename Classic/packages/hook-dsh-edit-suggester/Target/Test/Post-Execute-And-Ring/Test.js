@@ -48,7 +48,7 @@ const runTest = async () => {
       const Out = await Post(Run, ConfigEdit("a"), { kind: "allow", additionalContexts: [] });
       assert.equal(
         Out.additionalContexts[0].content[0].text,
-        "[edit-suggester] family=Config confidence=0.87\ncompanions (5):\n- README.md - the Config section\n- SCHEME.md - the full table\n- cordis.patch.yml - the row value\n- Source/Test/Config-And-Activation/Test.ts - the byte-exact assertion\n- Site/Source/Component/Configurator.astro - the site surface\nnote: this file rarely stands alone; check whether these need the same change."
+        "[edit-suggester] family=Config confidence=0.87\ncompanions (5):\n- README.md - the Config section\n- SCHEME.md - the full table\n- cordis.patch.yml - the row value\n- Source/Test/Config-And-Activation/Test.ts - the byte-exact assertion\n- Site/Source/pages/setup.astro - the site surface\nnote: this file rarely stands alone; check whether these need the same change."
       );
     });
     await CheckAsync(Count, "E1: the suggest ledger line is byte-exact in both forms", async () => {

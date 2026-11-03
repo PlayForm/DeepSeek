@@ -99,9 +99,12 @@ export interface Tracing {
 // against the pinned devDependencies, but only these three facts are
 // consumed: the `NodeSdk.layer` constructor, the OTLP exporter and the
 // batch span processor. (Type-only references - erased at runtime; the
-// optional packages are never on the module-load path.)
+// optional packages are never on the module-load path.) `NodeSdk` is a
+// SUBPATH module in @effect/opentelemetry 4.x - the root barrel exports only
+// the OtelLogger/OtelMetrics/OtelTracer/Resource namespaces, so importing the
+// barrel's `NodeSdk` member fails to type-check (and is undefined at runtime).
 interface OtelBundle {
-	NodeSdk: typeof import("@effect/opentelemetry").NodeSdk;
+	NodeSdk: typeof import("@effect/opentelemetry/NodeSdk");
 	OTLPTraceExporter: typeof import("@opentelemetry/exporter-trace-otlp-http").OTLPTraceExporter;
 	BatchSpanProcessor: typeof import("@opentelemetry/sdk-trace-base").BatchSpanProcessor;
 }
@@ -132,12 +135,12 @@ const loadOtel = (): Promise<OtelBundle | null> =>
 	(Loading ??= (async (): Promise<OtelBundle | null> => {
 		try {
 			const [Otel, Exporter, Sdk] = await Promise.all([
-				import("@effect/opentelemetry"),
+				import("@effect/opentelemetry/NodeSdk"),
 				import("@opentelemetry/exporter-trace-otlp-http"),
 				import("@opentelemetry/sdk-trace-base"),
 			]);
 			return {
-				NodeSdk: Otel.NodeSdk,
+				NodeSdk: Otel,
 				OTLPTraceExporter: Exporter.OTLPTraceExporter,
 				BatchSpanProcessor: Sdk.BatchSpanProcessor,
 			};

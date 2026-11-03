@@ -314,7 +314,7 @@ export default {
 			"cordis.patch.yml",
 			"README.md",
 			"SCHEME.md",
-			"Site/Source/Component/Configurator.astro",
+			"Site/Source/pages/setup.astro",
 			"Source/Test/Config-And-Activation",
 		],
 		Symbol: [

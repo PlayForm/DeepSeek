@@ -50,7 +50,7 @@ const Markers = [
 	// The site.
 	"Site/Source/Content",
 	"Site/Source/pages",
-	"Site/Source/pages/plugins.astro",
+	"Site/Source/pages/package.astro",
 	"Site/Source/Component",
 	"Site/Source/Library",
 	"Site/Source/Library/Content.ts",

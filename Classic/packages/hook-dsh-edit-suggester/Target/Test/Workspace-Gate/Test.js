@@ -26,7 +26,7 @@ const Ours = Tree("edit-suggester-ours-");
 Put(Ours, "Documentation/ARCHIVE-STYLE.md");
 const OursConfig = Put(Ours, "Source/Variable/Config.ts");
 Put(Ours, "README.md");
-Put(Ours, "Site/Source/Component/Configurator.astro");
+Put(Ours, "Site/Source/pages/setup.astro");
 const Empty = Tree("edit-suggester-empty-");
 Put(Empty, "Documentation/ARCHIVE-STYLE.md");
 const EmptyWorkflow = Put(Empty, ".github/workflows/NPM.yml");
@@ -108,7 +108,7 @@ const runTest = async () => {
       const Text = Out.additionalContexts[0].content[0].text;
       assert.equal(
         Text,
-        "[edit-suggester] family=Config confidence=0.87\ncompanions (2):\n- README.md - the Config section\n- Site/Source/Component/Configurator.astro - the site surface\nnote: this file rarely stands alone; check whether these need the same change."
+        "[edit-suggester] family=Config confidence=0.87\ncompanions (2):\n- README.md - the Config section\n- Site/Source/pages/setup.astro - the site surface\nnote: this file rarely stands alone; check whether these need the same change."
       );
       assert.equal(Text.includes("SCHEME.md"), false);
       assert.equal(Text.includes("cordis.patch.yml"), false);
