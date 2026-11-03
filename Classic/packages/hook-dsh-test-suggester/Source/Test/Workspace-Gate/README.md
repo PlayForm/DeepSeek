@@ -6,17 +6,17 @@ The `tools/post-execute` pipeline against the fake ctx and REAL temp workspaces:
 
 - G1: the FOREIGN workspace (a temp tree with `Source/Test/Foo/Test.ts` but no `.git` and no `package.json`), with no session cwd: the downstream decision comes back UNCHANGED with no note, the byte-exact `abstained foreign-workspace  0.00` line appears in the logger and the durable ledger, no `suggest` line appears, and the foreign call never creates per-agent memory; a service getter that THROWS still abstains with no logger warning.
 - G2: the call path's own root wins over the session cwd: the cwd service points at the foreign tree, while the call path sits inside the rooted one, so the upward walk finds the call path's `package.json` before the cwd fallback and the History note still emits.
-- G3: OUR workspace (a temp tree WITH `package.json`, the anchor, `README.md` and `SCHEME.md`), where the seeded history makes `Adjacent` name the two companions: the `History 0.87` note is byte-exact and the `suggest History 0.87 2 candidates` line appears in both forms; another agent in the same tree, with no history, abstains `abstained no-history  0.00`.
+- G3: OUR workspace (a temp tree WITH `package.json`, the anchor, `README.md` and `SCHEME.md`), where the committed history makes `Adjacent` name the two companions: the `History 0.87` note is byte-exact and the `suggest History 0.87 2 candidates` line appears in both forms; another agent in the same tree, with no history, abstains `abstained no-history  0.00`.
 - G4: a history whose whole companion set is gone (`GONE.md`, `ALSO-GONE.md`) abstains `abstained no-companions History 0.87`, both forms, with no note.
 - G5: a foreign abstention followed by an in-workspace read still emits the History note, because the gate is per call and not sticky.
 
 ## Fixtures
 
-The shared Harness (fake ctx, real factory, real built Target) plus `node:fs` temp trees under the OS temp dir.
+The shared Harness (fake ctx, real factory, real built Target, and the fake `sessionProjections` registry: `register` + `stateOf` + the eager `Commit` drive) plus `node:fs` temp trees under the OS temp dir.
 
 The optional service is injected as `Run.Context.workingDirectory = { get }`.
 
-The session history is seeded through the state probe (`Run.State.History.set(agent, { Seq, Touches })`), the same shape the `session/event` fold produces.
+The session history is committed through the projection drive (`Commit(Run, id, path)` commits a `tool/call` event for that agent's session, folded by the registered unit), so every assertion travels init -> apply -> stateOf.
 
 ## Expected ledger strings (byte-exact, `test-suggester: ` prefix)
 

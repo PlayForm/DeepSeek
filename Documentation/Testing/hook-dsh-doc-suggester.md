@@ -10,10 +10,13 @@
   the INDEX row, the frontmatter statuses/registry/index block, the archive style, the
   cross-references, and the site mirror. The path rules are deterministic, no LLM is involved, and
   abstention is a ledger line for every silence.
-- HISTORY-DRIVEN: the candidates come from the `session/event` fold + `Adjacent` over the agent's
-  OWN PREVIOUS TOOL CALLS in this workspace (the synthetic `History` family): one touch per
-  `tool/call` (capped at 512), the paths that followed the anchor within a window of 8 calls scored
-  by `1 / (1 + distance)`, judged through the same Detect/Measure/Score/Decide pipeline as a pack
+- HISTORY-DRIVEN: the candidates come from a host-only `ctx.sessionProjections` unit, which folds
+  committed `tool/call` events (registered optionally through
+  `ctx.inject(["sessionProjections"], ...)`, read through `stateOf(session, key)`, rebuilt from the
+  log on first touch, with no post-execute append) and feeds `Adjacent` over the agent's OWN
+  PREVIOUS TOOL CALLS in this workspace (the synthetic `History` family): one touch per `tool/call`
+  (capped at 512), the paths that followed the anchor within a window of 8 calls scored by
+  `1 / (1 + distance)`, judged through the same Detect/Measure/Score/Decide pipeline as a pack
   family (confidence `k = sigmoid(2.5 - 0.6) = 0.87`). The built-in pack is retired and unimported.
 - A pack is an EXPLICIT override only: `<repo>/.dsh/pack.yml` (or the user layer
   `~/.dsh/playform/workspaces/<slug>.yml`) resolved with `Resolve(root, { home, builtin: false })`.
@@ -74,13 +77,15 @@
 
 ## Fix loop
 
-- Fix files: `Source/Function/` (the history fold, the adjacency, the family rules, the note
-  builder), `Source/Library.ts`, `Source/Variable/Config.ts`.
+- Fix files: `Source/Interface/Projection.ts`, `Source/Variable/Projection.ts`,
+  `Source/Function/Unit.ts`, `Source/Function/Register.ts`, `Source/Function/History.ts`,
+  `Source/Function/` (the adjacency, the family rules, the note builder), `Source/Library.ts`,
+  `Source/Variable/Config.ts`.
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-doc-suggester run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-doc-suggester/Target/Test/<Folder>/Test.js` per folder
-  under `Source/Test/` (`Learning-Loop`, `Pack-Driven`, `Post-Execute-And-Ring`,
-  `Wiring-And-Ledger`, `Workspace-Gate`), then restart the app.
+  under `Source/Test/` (52 PASS per the folder READMEs: `Learning-Loop` 12, `Pack-Driven` 5,
+  `Post-Execute-And-Ring` 17, `Wiring-And-Ledger` 12, `Workspace-Gate` 6), then restart the app.
 
 ## Report stub
 

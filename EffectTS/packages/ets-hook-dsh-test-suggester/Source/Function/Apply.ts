@@ -404,7 +404,7 @@ export default (Context: Context, Options: Config): void => {
 				// registry's own face (`stateOf(session, key)`, probed because
 				// the registry is an optional service). The pack library's
 				// Adjacent scores the co-touches: a repeatedly co-touched path
-				// outranks a single one, and a near neighbour outranks a far
+				// outranks a single one, and a near neighbor outranks a far
 				// one. The literal built-in pack is never consulted.
 				const Touches = History(
 					Context,

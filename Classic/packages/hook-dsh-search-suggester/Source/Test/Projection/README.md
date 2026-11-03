@@ -15,7 +15,7 @@ The candidate scoring derives from the graph (the node exists, its kind matches 
 
 ## The candidates
 
-Every scenario seeds one temp workspace (the anchor `README.md` plus the companions) and the agent's history with the anchor and its companions; the graph then proves those companion paths.
+Every scenario mounts one temp workspace (the anchor `README.md` plus the companions) and commits the agent's history through the projection drive (the anchor and its companions as `tool/call` events); the graph then proves those companion paths.
 
 `Variable/Kinds` gives the synthetic `History` family the plain-file kinds, so the kind test is meaningful for it.
 

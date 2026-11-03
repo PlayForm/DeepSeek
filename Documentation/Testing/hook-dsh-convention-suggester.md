@@ -9,11 +9,14 @@
   edit, raw-write, write) and prepends ONE labeled `additionalContexts` notice naming the companions
   the agent itself touched. The history adjacency is deterministic, no LLM sits in the hot path, and
   the hook is read-only by design (never edits, never rewrites arguments, never denies).
-- HISTORY-DRIVEN: the candidates come from the `session/event` fold + `Adjacent` over the agent's
-  OWN PREVIOUS TOOL CALLS in this workspace (the synthetic `History` family): the fold keeps one
-  `Touch` per `tool/call` (capped at 512), and the adjacency scores the paths that followed the
-  anchor within a window of 8 calls, so a repeated co-touch outranks a single one and a near
-  neighbour outranks a far one. The built-in pack is retired and unimported.
+- HISTORY-DRIVEN: the candidates come from a host-only `ctx.sessionProjections` unit, which folds
+  committed `tool/call` events (registered optionally through
+  `ctx.inject(["sessionProjections"], ...)`, read through `stateOf(session, key)`, rebuilt from the
+  log on first touch, with no post-execute append) and feeds `Adjacent` over the agent's OWN
+  PREVIOUS TOOL CALLS in this workspace (the synthetic `History` family): the fold keeps one `Touch`
+  per `tool/call` (capped at 512), and the adjacency scores the paths that followed the anchor
+  within a window of 8 calls, so a repeated co-touch outranks a single one and a near neighbour
+  outranks a far one. The built-in pack is retired and unimported.
 - A pack is an EXPLICIT override only: `<repo>/.dsh/pack.yml` (or the user layer
   `~/.dsh/playform/workspaces/<slug>.yml`) resolved with `Resolve(root, { home, builtin: false })`.
   When a layer exists, its `convention/` families drive the deterministic classifier (`Detect`), the
@@ -68,13 +71,14 @@
 
 ## Fix loop
 
-- Fix files: `Source/Function/` (the history fold, the adjacency, the note builder),
-  `Source/Library.ts`.
+- Fix files: `Source/Interface/Projection.ts`, `Source/Variable/Projection.ts`,
+  `Source/Function/Unit.ts`, `Source/Function/Register.ts`, `Source/Function/History.ts`,
+  `Source/Function/` (the adjacency, the note builder), `Source/Library.ts`.
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-convention-suggester run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-convention-suggester/Target/Test/<Folder>/Test.js` per
-  folder under `Source/Test/` (`Pack-Driven`, `Post-Execute-And-Gate`, `Wiring-And-Ledger`,
-  `Workspace-Gate`), then restart the app.
+  folder under `Source/Test/` (43 PASS per the folder READMEs: `Pack-Driven` 5,
+  `Post-Execute-And-Gate` 18, `Wiring-And-Ledger` 14, `Workspace-Gate` 6), then restart the app.
 
 ## Report stub
 

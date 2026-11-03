@@ -67,7 +67,7 @@ On a judged call, `Adjacent(touches, callPath, { limit: maxCandidates })` scores
 followed the anchor within a window of 8 calls: `1 / (1 + distance)` per occurrence, one count per
 occurrence.
 
-A repeatedly co-touched path outranks a single one, and a near neighbour outranks a far one.
+A repeatedly co-touched path outranks a single one, and a near neighbor outranks a far one.
 
 Those rows become ONE synthetic `History` family (priority 0, threshold 0.75, one signal of weight
 2.5, companions with prior 0.6 and the reason `touched <count> time(s) after this file`), so the

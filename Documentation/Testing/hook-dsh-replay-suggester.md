@@ -82,13 +82,14 @@
 
 ## Fix loop
 
-- Fix files: `Source/Function/` (the recall matcher, the producer, the note builder),
-  `Source/Library.ts`.
+- Fix files: `Source/Interface/Projection.ts`, `Source/Variable/Projection.ts`,
+  `Source/Function/Unit.ts`, `Source/Function/Register.ts`, `Source/Function/History.ts`,
+  `Source/Function/` (the recall matcher, the producer, the note builder), `Source/Library.ts`.
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-replay-suggester run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-replay-suggester/Target/Test/<Folder>/Test.js` per folder
-  under `Source/Test/` (`History-Producer`, `Loader-And-History`, `Pack-Driven`,
-  `Pipeline-And-Recall`, `Workspace-Gate`), then restart the app.
+  under `Source/Test/` (65 PASS per the folder READMEs: `History-Producer` 17, `Loader-And-History`
+  18, `Pack-Driven` 5, `Pipeline-And-Recall` 13, `Workspace-Gate` 12), then restart the app.
 
 ## Report stub
 

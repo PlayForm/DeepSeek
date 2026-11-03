@@ -3,8 +3,10 @@ import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 import {
+  AgentOf,
   Call,
   CheckAsync,
+  Commit,
   Finish,
   LedgerWith,
   LinesWith,
@@ -26,15 +28,11 @@ const RootedTest = Put(Rooted, "Source/Library.ts");
 Put(Rooted, "README.md");
 Put(Rooted, "SCHEME.md");
 const Service = (Cwd) => ({ get: () => Cwd });
-const Seed = (Run, Agent, Followers) => {
-  Run.State.History.set(Agent, {
-    Seq: Followers.length + 1,
-    Touches: [RootedTest, ...Followers].map((Path_, Seq) => ({
-      seq: Seq,
-      path: Path_,
-      tool: "read"
-    }))
-  });
+const Seed = (Run, Id, Followers) => {
+  Commit(Run, Id, RootedTest);
+  for (const Follower of Followers) {
+    Commit(Run, Id, Follower);
+  }
 };
 const HistoryText = [
   "[test-suggester] intent=History confidence=0.87",
@@ -46,7 +44,7 @@ const HistoryText = [
 const runTest = async () => {
   const Count = MakeCounter();
   {
-    const Agent = { agent: { id: "gate-a" } };
+    const Agent = AgentOf("gate-a");
     const Run = Setup();
     delete Run.Context.workingDirectory;
     await CheckAsync(Count, "G1: a call with no root abstains foreign-workspace", async () => {
@@ -76,20 +74,22 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "gate-b" } };
+    const Agent = AgentOf("gate-b");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Foreign);
-    Seed(Run, Agent, ["README.md", "SCHEME.md"]);
+    await Run.Ready;
+    Seed(Run, "gate-b", ["README.md", "SCHEME.md"]);
     await CheckAsync(Count, "G2: the call path's own root wins over the session cwd", async () => {
       const Out = await Call(Run, "read", { file_path: RootedTest }, Agent);
       assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
     });
   }
   {
-    const Agent = { agent: { id: "gate-c" } };
+    const Agent = AgentOf("gate-c");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Rooted);
-    Seed(Run, Agent, ["README.md", "SCHEME.md"]);
+    await Run.Ready;
+    Seed(Run, "gate-c", ["README.md", "SCHEME.md"]);
     await CheckAsync(Count, "G3: the History note names the companions of the temp root", async () => {
       const Out = await Call(Run, "read", { file_path: RootedTest }, Agent);
       assert.equal(Out.additionalContexts.length, 1);
@@ -108,7 +108,7 @@ const runTest = async () => {
     });
     await CheckAsync(Count, "G3: the rooted workspace with no history abstains no-history", async () => {
       const Decision = { kind: "allow" };
-      const Out = await Call(Run, "read", { file_path: RootedTest }, { agent: { id: "gate-d" } }, Decision);
+      const Out = await Call(Run, "read", { file_path: RootedTest }, AgentOf("gate-d"), Decision);
       assert.equal(Out, Decision);
       assert.deepEqual(Out.additionalContexts, void 0);
       assert.ok(Run.Lines.includes("test-suggester: abstained no-history  0.00"));
@@ -116,10 +116,11 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "gate-e" } };
+    const Agent = AgentOf("gate-e");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Rooted);
-    Seed(Run, Agent, ["GONE.md", "ALSO-GONE.md"]);
+    await Run.Ready;
+    Seed(Run, "gate-e", ["GONE.md", "ALSO-GONE.md"]);
     await CheckAsync(Count, "G4: an emptied history abstains no-companions with the family and kappa", async () => {
       const Decision = { kind: "allow" };
       const Out = await Call(Run, "read", { file_path: RootedTest }, Agent, Decision);
@@ -130,10 +131,11 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "gate-f" } };
+    const Agent = AgentOf("gate-f");
     const Run = Setup();
     delete Run.Context.workingDirectory;
-    Seed(Run, Agent, ["README.md", "SCHEME.md"]);
+    await Run.Ready;
+    Seed(Run, "gate-f", ["README.md", "SCHEME.md"]);
     await CheckAsync(Count, "G5: a foreign call never poisons the next in-workspace call", async () => {
       const Foreign_ = await Call(Run, "read", { file_path: ForeignTest }, Agent);
       assert.equal(Foreign_.kind, "allow");

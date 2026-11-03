@@ -3,6 +3,7 @@ import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 import {
+  AgentOf,
   Call,
   CheckAsync,
   Finish,
@@ -59,7 +60,7 @@ Put(Monorepo, "Documentation/Plans/POC-LEDGER.md");
 const runTest = async () => {
   const Count = MakeCounter();
   {
-    const Agent = { agent: { id: "pack-a" } };
+    const Agent = AgentOf("pack-a");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Packed);
     await CheckAsync(Count, "P1: the temp pack's family drives the note", async () => {
@@ -84,7 +85,7 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "pack-b" } };
+    const Agent = AgentOf("pack-b");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Bare);
     await CheckAsync(Count, "P2: the same workspace without the pack abstains no-history", async () => {
@@ -96,7 +97,7 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "pack-c" } };
+    const Agent = AgentOf("pack-c");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Unsigned);
     await CheckAsync(Count, "P3: a pack with an absent signature marker still governs the tree", async () => {
@@ -108,7 +109,7 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "pack-d" } };
+    const Agent = AgentOf("pack-d");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Monorepo);
     await CheckAsync(Count, "P4: a monorepo test read with no history abstains no-history", async () => {

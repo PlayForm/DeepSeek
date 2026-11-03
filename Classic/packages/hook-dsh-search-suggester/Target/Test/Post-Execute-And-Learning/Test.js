@@ -3,6 +3,7 @@ import * as FileSystem from "node:fs";
 import {
   AgentOf,
   CheckAsync,
+  Commit,
   Durable,
   DurableLine,
   Finish,
@@ -179,15 +180,10 @@ const runTest = async () => {
     rm();
     const Capped = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0, maxNotesPerTurn: 1 }));
     Capped.Context.workingDirectory = Service(Space.Root);
-    Capped.State.History.set(AgentOf("a"), {
-      Seq: 4,
-      Touches: [
-        { seq: 0, path: Space.At(Anchor), tool: "read" },
-        { seq: 1, path: "CHANGELOG.md", tool: "read" },
-        { seq: 2, path: Space.At("package.json"), tool: "read" },
-        { seq: 3, path: "SCHEME.md", tool: "read" }
-      ]
-    });
+    Commit(Capped, "a", Space.At(Anchor));
+    Commit(Capped, "a", "CHANGELOG.md");
+    Commit(Capped, "a", Space.At("package.json"));
+    Commit(Capped, "a", "SCHEME.md");
     await CheckAsync(Count, "E5: the per-turn cap suppresses the second note", async () => {
       await Post(Capped, Read("a"));
       const Out = await Post(Capped, {
@@ -214,6 +210,43 @@ const runTest = async () => {
       const Down = await Pre(Capped, { agent: AgentOf("c"), messages: [{ source: { kind: "user" } }] });
       assert.equal(Down, "down");
       assert.deepEqual(Capped.Warns, []);
+    });
+  }
+  {
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Space.Root);
+    const FoldAnchor = Space.At(Anchor);
+    const FoldCompanion = "CHANGELOG.md";
+    await CheckAsync(Count, "E6: the committed tool/call events ARE the session history (no State fold)", async () => {
+      await Run.Ready;
+      assert.equal(Run.State.History, void 0);
+      Commit(Run, "real-fold", FoldAnchor);
+      Commit(Run, "real-fold", FoldCompanion);
+      const Folded = Run.Projections.StateOf(AgentOf("real-fold").session, "searchHistory");
+      assert.equal(Folded.Seq, 2);
+      assert.deepEqual(
+        Folded.Touches.map((Touch) => Touch.path),
+        [FoldAnchor, FoldCompanion]
+      );
+    });
+    await CheckAsync(Count, "E6: the judged call reads the cell and appends nothing", async () => {
+      Commit(Run, "real-fold", FoldAnchor);
+      const Out = await Post(Run, Read("real-fold"), { kind: "allow", additionalContexts: [] });
+      assert.equal(Out.additionalContexts.length, 1);
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+      assert.ok(
+        Out.additionalContexts[0].content[0].text.includes(
+          `- ${FoldCompanion} - touched 1 time(s) after a similar call`
+        )
+      );
+      assert.ok(
+        Run.Lines.includes("hook-dsh-search-suggester: suggest History 0.87 1 candidates")
+      );
+      assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 1);
+      assert.equal(
+        Run.Projections.StateOf(AgentOf("real-fold").session, "searchHistory").Seq,
+        3
+      );
     });
   }
   return Finish(Count, "Post-Execute-And-Learning");

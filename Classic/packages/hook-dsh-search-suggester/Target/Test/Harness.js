@@ -76,6 +76,47 @@ const FirstLine = () => {
 const Furnace = new FactoryClass({
   reflect: { provide: () => void 0 }
 });
+const MakeProjections = () => {
+  const Units = /* @__PURE__ */ new Map();
+  const Cells = /* @__PURE__ */ new WeakMap();
+  const CellOf = (Session) => {
+    let Cell = Cells.get(Session);
+    if (Cell === void 0) {
+      Cell = /* @__PURE__ */ new Map();
+      Cells.set(Session, Cell);
+    }
+    return Cell;
+  };
+  const StateOf = (Session, Key) => {
+    const Unit = Units.get(Key);
+    if (Unit === void 0 || Session === void 0 || Session === null) {
+      return void 0;
+    }
+    const Cell = CellOf(Session);
+    if (!Cell.has(Key)) {
+      Cell.set(Key, Unit.init({}, 0));
+    }
+    return Cell.get(Key);
+  };
+  const Registry = {
+    register: (Definition) => {
+      Units.set(Definition.key, Definition);
+      return Promise.resolve({
+        stateOf: (Session) => StateOf(Session, Definition.key)
+      });
+    },
+    stateOf: StateOf
+  };
+  const Commit2 = (Session, Event) => {
+    for (const [Key, Unit] of Units) {
+      const Next = Unit.apply(StateOf(Session, Key), Event);
+      if (Next !== void 0) {
+        CellOf(Session).set(Key, Next);
+      }
+    }
+  };
+  return { Registry, Commit: Commit2, StateOf, Units };
+};
 const Make = (Raw, Prepare) => {
   const CtxListeners = {};
   const Lines = [];
@@ -83,6 +124,9 @@ const Make = (Raw, Prepare) => {
   const Effects = [];
   const RootNames = [];
   const Tools = [];
+  const Injected = [];
+  const Projections = MakeProjections();
+  let Ready = Promise.resolve();
   const Root2 = {
     on: (Name, _Listener) => {
       RootNames.push(Name);
@@ -101,6 +145,7 @@ const Make = (Raw, Prepare) => {
   let Context;
   Context = {
     pluginFactory: Furnace,
+    sessionProjections: Projections.Registry,
     fs: Fs,
     logger: {
       info: (M) => {
@@ -115,6 +160,14 @@ const Make = (Raw, Prepare) => {
       return () => true;
     },
     get: (Name) => Context[Name],
+    inject: (Deps, Callback) => {
+      Injected.push(Deps);
+      try {
+        Ready = Promise.resolve(Callback(Context));
+      } catch {
+      }
+      return Ready;
+    },
     tools: {
       register: (Definition) => {
         Tools.push(Definition);
@@ -137,9 +190,23 @@ const Make = (Raw, Prepare) => {
     }
   };
   Prepare?.(Context);
-  const Run = { Context, Root: Root2, CtxListeners, Lines, Warns, Effects, RootNames, Fs, Raw, Tools };
+  const Run = {
+    Context,
+    Root: Root2,
+    CtxListeners,
+    Lines,
+    Warns,
+    Effects,
+    RootNames,
+    Fs,
+    Raw,
+    Tools,
+    Injected,
+    Projections
+  };
   Run.Returned = Plugin.apply(Context, Raw);
   Run.State = Context.__hookDshSearchSuggesterState;
+  Run.Ready = Ready;
   return Run;
 };
 const FakeGraph = (Nodes, Revision = "r1") => {
@@ -191,19 +258,22 @@ const Assemble = (Run, Agent) => Run.CtxListeners["system-prompt/assemble"](
 const Agents = /* @__PURE__ */ new Map();
 const AgentOf = (Id) => {
   if (!Agents.has(Id)) {
-    Agents.set(Id, { agent: { id: Id } });
+    Agents.set(Id, { id: Id, session: { id: `session-${Id}` } });
   }
   return Agents.get(Id);
 };
-const SeedHistory = (Run, Id, Anchor, Companions) => {
-  Run.State.History.set(AgentOf(Id), {
-    Seq: Companions.length + 1,
-    Touches: [Anchor, ...Companions].map((Path2, Seq) => ({
-      seq: Seq,
-      path: Path2,
-      tool: "read"
-    }))
+const Commit = (Run, Id, Path_) => {
+  Run.Projections.Commit(AgentOf(Id).session, {
+    type: "tool/call",
+    seq: 0,
+    data: { name: "read", arguments: JSON.stringify({ file_path: Path_ }) }
   });
+};
+const SeedHistory = (Run, Id, Anchor, Companions) => {
+  Commit(Run, Id, Anchor);
+  for (const Companion of Companions) {
+    Commit(Run, Id, Companion);
+  }
 };
 const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
 if (InvokedDirectly) {
@@ -216,15 +286,16 @@ if (InvokedDirectly) {
   });
   rm();
   const Run = Setup();
-  Check(Count, "selfcheck: the fake ctx registers the plugin's five listeners", () => {
+  Check(Count, "selfcheck: the fake ctx wires the four listeners and the projection unit", () => {
     assert.deepEqual(Object.keys(Run.CtxListeners), [
       "loader/volatile-update",
-      "session/event",
       "tools/post-execute",
       "agent/pre-step",
       "system-prompt/assemble",
       "tools/change"
     ]);
+    assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+    assert.equal(Run.Projections.Units.has("searchHistory"), true);
     assert.deepEqual(Run.RootNames, []);
     assert.equal(Run.Returned, void 0);
     assert.equal(Run.Fs.reads + Run.Fs.writes, 0);
@@ -242,6 +313,7 @@ export {
   Assemble,
   Check,
   CheckAsync,
+  Commit,
   Durable,
   DurableLine,
   Exports,

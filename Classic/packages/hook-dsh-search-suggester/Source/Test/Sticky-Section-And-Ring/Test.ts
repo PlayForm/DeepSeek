@@ -6,9 +6,11 @@
 // invalidation for the default ring, and the assemble fail-open pass-through.
 //
 // THE SECTION'S SOURCE: the last family the ring noted. For the synthetic
-// History row the section renders the paths the note named, so the scenario
-// seeds the session history (and, for the default ring, folds real
-// `tool/call` events through the session/event listener).
+// History row the section renders the paths the note named, so the scenarios
+// seed the session history through the projection drive. The DEFAULT
+// (agent-less) ring cannot be reached through the projection - an agent-less
+// call carries no session, so its history is empty - so the tools/change
+// scenario arms that ring through the plugin's own `Ring.Mark` API.
 import assert from "node:assert/strict";
 import {
 	AgentOf,
@@ -39,10 +41,10 @@ const Companions = ["CHANGELOG.md", "SCHEME.md"];
 const Space = Workspace([Anchor, ...Companions]);
 
 /** One judged read of the anchor. */
-const Read = (Id: string | undefined): any => ({
+const Read = (Id: string): any => ({
 	name: "read",
 	arguments: { file_path: Space.At(Anchor) },
-	agent: Id === undefined ? undefined : AgentOf(Id),
+	agent: AgentOf(Id),
 });
 
 /** The byte-exact sticky section text (the note's paths, the generic reason). */
@@ -91,26 +93,23 @@ export const runTest = async (): Promise<number> => {
 		});
 	}
 
-	// Group S3: the tools/change invalidation.
+	// Group S3: the tools/change invalidation of the DEFAULT (agent-less) ring.
 	{
 		rm();
 		const Sticky = Make(Validate({ logFile: Ledger, enabled: true, sectionMode: "sticky" }));
-		await CheckAsync(Count, "S3: the default ring folds the no-session events and builds its section", async () => {
-			// The session/event fold with no session object lands on the
-			// shared default key, which the agent-less call reads back.
-			Sticky.CtxListeners["session/event"](undefined, {
-				type: "tool/call",
-				name: "read",
-				arguments: { file_path: Space.At(Anchor) },
-			});
-			Sticky.CtxListeners["session/event"](undefined, {
-				type: "tool/call",
-				name: "read",
-				arguments: { file_path: "CHANGELOG.md" },
-			});
-			await Post(Sticky, Read(undefined));
+		await CheckAsync(Count, "S3: the default ring builds its section from the last noted family", async () => {
+			// The default ring is not reachable through the session projection
+			// (an agent-less call carries no session, so its history is empty),
+			// so the scenario arms the ring through the plugin's own Ring.Mark
+			// API and reads back the section the History row renders.
+			const Rings = Sticky.State.Rings.State(undefined);
+			Sticky.State.Rings.Mark(Rings, "History", ["CHANGELOG.md"], "History CHANGELOG.md");
 			const Out = await Assemble(Sticky, undefined);
 			assert.deepEqual(Out.sections.map((Section_: any) => Section_.name), ["base", "hook-dsh-search-suggester"]);
+			assert.equal(
+				Out.sections[1].text,
+				"[search-suggester] intent=History confidence=1.00\ntargets (1):\n- CHANGELOG.md - touched after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.",
+			);
 			assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
 		});
 		await CheckAsync(Count, "S3: tools/change invalidates the default ring's cache with its ledger line", async () => {

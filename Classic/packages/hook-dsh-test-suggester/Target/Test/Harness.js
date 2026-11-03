@@ -80,6 +80,47 @@ const FakeFs = () => {
   };
   return Fs;
 };
+const MakeProjections = () => {
+  const Units = /* @__PURE__ */ new Map();
+  const Cells = /* @__PURE__ */ new WeakMap();
+  const CellOf = (Session) => {
+    let Cell = Cells.get(Session);
+    if (Cell === void 0) {
+      Cell = /* @__PURE__ */ new Map();
+      Cells.set(Session, Cell);
+    }
+    return Cell;
+  };
+  const StateOf = (Session, Key) => {
+    const Unit = Units.get(Key);
+    if (Unit === void 0 || Session === void 0 || Session === null) {
+      return void 0;
+    }
+    const Cell = CellOf(Session);
+    if (!Cell.has(Key)) {
+      Cell.set(Key, Unit.init({}, 0));
+    }
+    return Cell.get(Key);
+  };
+  const Registry = {
+    register: (Definition) => {
+      Units.set(Definition.key, Definition);
+      return Promise.resolve({
+        stateOf: (Session) => StateOf(Session, Definition.key)
+      });
+    },
+    stateOf: StateOf
+  };
+  const Commit2 = (Session, Event) => {
+    for (const [Key, Unit] of Units) {
+      const Next = Unit.apply(StateOf(Session, Key), Event);
+      if (Next !== void 0) {
+        CellOf(Session).set(Key, Next);
+      }
+    }
+  };
+  return { Registry, Commit: Commit2, StateOf, Units };
+};
 const Make = (Raw) => {
   const CtxListeners = {};
   const Lines = [];
@@ -87,11 +128,15 @@ const Make = (Raw) => {
   const Provided = {};
   const Effects = [];
   const Disposers = [];
+  const Injected = [];
+  const Projections = MakeProjections();
   const Fs = FakeFs();
   const RootObj = { on: () => () => true };
+  let Ready = Promise.resolve();
   let Context;
   Context = {
     pluginFactory: Furnace,
+    sessionProjections: Projections.Registry,
     workingDirectory: { get: () => Package },
     fs: Fs,
     logger: {
@@ -107,6 +152,14 @@ const Make = (Raw) => {
       return () => true;
     },
     get: (Name) => Context[Name],
+    inject: (Deps, Callback) => {
+      Injected.push(Deps);
+      try {
+        Ready = Promise.resolve(Callback(Context));
+      } catch {
+      }
+      return Ready;
+    },
     effect: (Setup2, Label) => {
       Effects.push(Label ?? "unnamed");
       const Disposer = Setup2();
@@ -134,10 +187,13 @@ const Make = (Raw) => {
     Effects,
     Disposers,
     Raw,
-    Fs
+    Fs,
+    Injected,
+    Projections
   };
   Run.Returned = Plugin.apply(Context, Raw);
   Run.State = Context.__testSuggesterState;
+  Run.Ready = Ready;
   return Run;
 };
 const Validate = (Raw) => Plugin.Config({ ...Raw });
@@ -145,12 +201,26 @@ const Setup = (Config = {}) => {
   rm();
   return Make(Validate({ logFile: Ledger, threshold: 0.5, ...Config }));
 };
-const Call = async (Run, Name, Arguments, Agent = { agent: { id: "agent-a" } }, Decision = { kind: "allow" }) => Run.CtxListeners["tools/post-execute"](
+const Agents = /* @__PURE__ */ new Map();
+const AgentOf = (Id) => {
+  if (!Agents.has(Id)) {
+    Agents.set(Id, { id: Id, session: { id: `session-${Id}` } });
+  }
+  return Agents.get(Id);
+};
+const Commit = (Run, Id, Path_) => {
+  Run.Projections.Commit(AgentOf(Id).session, {
+    type: "tool/call",
+    seq: 0,
+    data: { name: "write", arguments: JSON.stringify({ file_path: Path_ }) }
+  });
+};
+const Call = async (Run, Name, Arguments, Agent = AgentOf("agent-a"), Decision = { kind: "allow" }) => Run.CtxListeners["tools/post-execute"](
   { name: Name, arguments: Arguments, agent: Agent },
   void 0,
   async () => Decision
 );
-const PreStep = async (Run, Agent = { agent: { id: "agent-a" } }, Messages = [{ role: "user" }]) => Run.CtxListeners["agent/pre-step"]({ agent: Agent, messages: Messages }, async () => ({
+const PreStep = async (Run, Agent = AgentOf("agent-a"), Messages = [{ role: "user" }]) => Run.CtxListeners["agent/pre-step"]({ agent: Agent, messages: Messages }, async () => ({
   kind: "allow"
 }));
 const Write = /* @__PURE__ */ Symbol.for("cosmokit.volatile.write");
@@ -175,11 +245,15 @@ if (InvokedDirectly) {
   });
   rm();
   const Run = Make(Validate({ logFile: Ledger, enabled: true }));
-  Check(Count, "selfcheck: the fake ctx registers the plugin's apply-time wiring", () => {
+  Check(Count, "selfcheck: the fake ctx wires the two listeners and the projection unit", () => {
     assert.equal(Run.Returned, void 0);
-    assert.ok(Run.CtxListeners["session/event"] instanceof Function);
-    assert.ok(Run.CtxListeners["tools/post-execute"] instanceof Function);
-    assert.ok(Run.CtxListeners["agent/pre-step"] instanceof Function);
+    assert.deepEqual(Object.keys(Run.CtxListeners), [
+      "loader/volatile-update",
+      "tools/post-execute",
+      "agent/pre-step"
+    ]);
+    assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+    assert.equal(Run.Projections.Units.has("testHistory"), true);
     assert.ok(Run.State !== void 0);
     assert.ok(
       Run.Lines.includes(`test-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`)
@@ -193,9 +267,11 @@ if (InvokedDirectly) {
   }
 }
 export {
+  AgentOf,
   Call,
   Check,
   CheckAsync,
+  Commit,
   FakeFs,
   Finish,
   Flip,

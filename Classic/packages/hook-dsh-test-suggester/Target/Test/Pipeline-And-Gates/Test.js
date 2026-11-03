@@ -3,9 +3,11 @@ import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 import {
+  AgentOf,
   Call,
   Check,
   CheckAsync,
+  Commit,
   Finish,
   LedgerWith,
   LinesWith,
@@ -38,15 +40,10 @@ const Bare = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "test-suggester-no-hi
 Put(Bare, "package.json", "{}");
 const BareAnchor = Put(Bare, "Notes.md");
 const Service = (Cwd) => ({ get: () => Cwd });
-const Seed = (Run, Agent) => {
-  Run.State.History.set(Agent, {
-    Seq: 3,
-    Touches: [Anchor, "README.md", "SCHEME.md"].map((Path_, Seq) => ({
-      seq: Seq,
-      path: Path_,
-      tool: "read"
-    }))
-  });
+const Seed = (Run, Id) => {
+  Commit(Run, Id, Anchor);
+  Commit(Run, Id, "README.md");
+  Commit(Run, Id, "SCHEME.md");
 };
 const HistoryText = [
   "[test-suggester] intent=History confidence=0.87",
@@ -58,10 +55,11 @@ const HistoryText = [
 const runTest = async () => {
   const Count = MakeCounter();
   {
-    const Agent = { agent: { id: "pipeline-a" } };
+    const Agent = AgentOf("pipeline-a");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Rooted);
-    Seed(Run, Agent);
+    await Run.Ready;
+    Seed(Run, "pipeline-a");
     const Result = await Call(Run, "read", { file_path: Anchor }, Agent);
     Check(Count, "P1: the suggest line is byte-exact (logger and durable ledger)", () => {
       assert.deepEqual(LinesWith(Run, "candidates call"), [
@@ -88,7 +86,7 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "pipeline-b" } };
+    const Agent = AgentOf("pipeline-b");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Bare);
     await CheckAsync(Count, "P2: a rooted tree with no history and no pack abstains no-history", async () => {
@@ -101,10 +99,11 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "pipeline-c" } };
+    const Agent = AgentOf("pipeline-c");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Rooted);
-    Seed(Run, Agent);
+    await Run.Ready;
+    Seed(Run, "pipeline-c");
     await Call(Run, "read", { file_path: Anchor }, Agent);
     await Call(Run, "read", { file_path: Anchor }, Agent);
     Check(Count, "P3: a repeat within the cooldown is suppressed with the byte-exact line", () => {
@@ -115,7 +114,8 @@ const runTest = async () => {
     });
     const Capped = Setup({ cooldownCalls: 0, maxNotesPerTurn: 1 });
     Capped.Context.workingDirectory = Service(Rooted);
-    Seed(Capped, Agent);
+    await Capped.Ready;
+    Seed(Capped, "pipeline-c");
     await Call(Capped, "read", { file_path: Anchor }, Agent);
     await Call(Capped, "read", { file_path: Anchor }, Agent);
     Check(Count, "P3: a note beyond the per-turn cap is suppressed", () => {
@@ -130,10 +130,11 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "pipeline-d" } };
+    const Agent = AgentOf("pipeline-d");
     const Run = Setup({ exclude: ["README.md"] });
     Run.Context.workingDirectory = Service(Rooted);
-    Seed(Run, Agent);
+    await Run.Ready;
+    Seed(Run, "pipeline-d");
     await Call(Run, "read", { file_path: Anchor }, Agent);
     Check(Count, "P4: an excluded companion is filtered, the rest suggest", () => {
       assert.deepEqual(LinesWith(Run, "candidates call"), [
@@ -142,7 +143,8 @@ const runTest = async () => {
     });
     const All = Setup({ exclude: ["README.md", "SCHEME.md"] });
     All.Context.workingDirectory = Service(Rooted);
-    Seed(All, Agent);
+    await All.Ready;
+    Seed(All, "pipeline-d");
     await Call(All, "read", { file_path: Anchor }, Agent);
     Check(Count, "P4: a fully excluded candidate set abstains as ambiguous", () => {
       assert.deepEqual(LinesWith(All, "abstained"), [
@@ -151,10 +153,11 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "pipeline-e" } };
+    const Agent = AgentOf("pipeline-e");
     const Run = Setup({ maxNoteChars: 60 });
     Run.Context.workingDirectory = Service(Rooted);
-    Seed(Run, Agent);
+    await Run.Ready;
+    Seed(Run, "pipeline-e");
     const Result = await Call(Run, "read", { file_path: Anchor }, Agent);
     Check(Count, "P5: a note longer than maxNoteChars is truncated with an ellipsis", () => {
       const Text = Result.additionalContexts[0].content[0].text;
@@ -163,10 +166,11 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "pipeline-f" } };
+    const Agent = AgentOf("pipeline-f");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Rooted);
-    Seed(Run, Agent);
+    await Run.Ready;
+    Seed(Run, "pipeline-f");
     const Downstream = { kind: "block", feedback: "no", additionalContexts: [{ marker: "x" }] };
     const Result = await Call(Run, "read", { file_path: Anchor }, Agent, Downstream);
     Check(Count, "P6: a block decision keeps its feedback and prepends the note", () => {
@@ -178,10 +182,11 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "pipeline-g" } };
+    const Agent = AgentOf("pipeline-g");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Rooted);
-    Seed(Run, Agent);
+    await Run.Ready;
+    Seed(Run, "pipeline-g");
     Flip(Volatile(Run, "enabled"), false);
     Run.CtxListeners["loader/volatile-update"]([["enabled"]]);
     const Result = await Call(Run, "read", { file_path: Anchor }, Agent);
@@ -192,10 +197,11 @@ const runTest = async () => {
     });
   }
   {
-    const Agent = { agent: { id: "pipeline-h" } };
+    const Agent = AgentOf("pipeline-h");
     const Run = Setup();
     Run.Context.workingDirectory = Service(Rooted);
-    Seed(Run, Agent);
+    await Run.Ready;
+    Seed(Run, "pipeline-h");
     await Call(Run, "read", { file_path: Anchor }, Agent);
     await Call(Run, "grep", { pattern: "expected count", query: "badge" }, Agent);
     Check(Count, "P8: the full scenario performs ZERO fs operations", () => {
@@ -203,6 +209,29 @@ const runTest = async () => {
       assert.equal(Run.Fs.writes.length, 0);
       assert.equal(Run.Fs.resolved.length, 0);
       assert.equal(Run.Fs.stats.length, 0);
+    });
+  }
+  {
+    const Id = "pipeline-i";
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Rooted);
+    await Run.Ready;
+    await CheckAsync(Count, "P9: the committed tool/call events ARE the session cell (no State fold)", async () => {
+      assert.equal(Run.State.History, void 0);
+      Commit(Run, Id, Anchor);
+      Commit(Run, Id, "README.md");
+      const Folded = Run.Projections.StateOf(AgentOf(Id).session, "testHistory");
+      assert.equal(Folded.Seq, 2);
+      assert.deepEqual(
+        Folded.Touches.map((Touch) => Touch.path),
+        [Anchor, "README.md"]
+      );
+    });
+    await CheckAsync(Count, "P9: the judged call reads the cell and leaves it unappended", async () => {
+      Commit(Run, Id, Anchor);
+      const Out = await Call(Run, "read", { file_path: Anchor }, AgentOf(Id));
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+      assert.equal(Run.Projections.StateOf(AgentOf(Id).session, "testHistory").Seq, 3);
     });
   }
   return Finish(Count, "Pipeline-And-Gates");

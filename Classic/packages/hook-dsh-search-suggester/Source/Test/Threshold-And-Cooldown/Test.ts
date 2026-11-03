@@ -12,6 +12,7 @@ import assert from "node:assert/strict";
 import {
 	AgentOf,
 	CheckAsync,
+	Commit,
 	Finish,
 	Ledger,
 	Make,
@@ -124,15 +125,11 @@ export const runTest = async (): Promise<number> => {
 		Run.Context.workingDirectory = Service(Space.Root);
 		// One session history with two anchors: the two calls carry different
 		// candidate sets, so the second reaches the cap instead of the dedupe.
-		Run.State.History.set(AgentOf("a"), {
-			Seq: 4,
-			Touches: [
-				{ seq: 0, path: Space.At(Anchor), tool: "read" },
-				{ seq: 1, path: "CHANGELOG.md", tool: "read" },
-				{ seq: 2, path: Space.At("package.json"), tool: "read" },
-				{ seq: 3, path: "SCHEME.md", tool: "read" },
-			],
-		});
+		// The events are committed through the projection drive.
+		Commit(Run, "a", Space.At(Anchor));
+		Commit(Run, "a", "CHANGELOG.md");
+		Commit(Run, "a", Space.At("package.json"));
+		Commit(Run, "a", "SCHEME.md");
 		await CheckAsync(Count, "T4: the second note is capped", async () => {
 			await Post(Run, Read("a"));
 			const Out = await Post(

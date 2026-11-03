@@ -28,17 +28,19 @@
 //                    source, so the boot projection is retired;
 //   Agents         - the per-agent ring/cooldown state (WeakMap keyed on the Agent object,
 //                    the tool-coach precedent), built once in Function/Apply;
-//   History        - the per-session touch history (WeakMap keyed on the
-//                    session object, created lazily by the session/event fold
-//                    in Function/Apply);
 //   Cleared        - the package roots whose reconciliation already logged its
 //                    consistent-tree line (once per root per apply - the clear
 //                    line is a state change, not a per-call heartbeat);
 //   Factory        - the injected factory service itself, consumed for the
 //                    ledger (Factory.Append) - assigned once in Function/Apply.
+//
+// THE HISTORY IS NOT A STATE FIELD: the per-session touch history is a
+// session-projection unit (Function/Unit, keyed on `sessionProjections`), so
+// the registry owns one cell per session and Function/History reads it at
+// detection time through `stateOf(session, key)`. Nothing here holds it, and
+// no WeakMap in this module is keyed on the session object.
 import type Config from "@Interface/Config.js";
 import type { CompiledIntent } from "@Interface/Pack.js";
-import type { Touch } from "@playform/lib-dsh-pack";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 
@@ -65,8 +67,6 @@ export default interface State extends Shared {
 	Rules: CompiledIntent[];
 	/** The per-agent state, keyed on the Agent object. */
 	Agents: WeakMap<object, AgentMemory>;
-	/** The per-session touch history, keyed on the session object. */
-	History: WeakMap<object, SessionHistory>;
 	/** The package roots whose reconciliation logged its consistent-tree line. */
 	Cleared: Set<string>;
 	/** The injected @playform/plugin-dsh-factory service - the ledger
@@ -89,17 +89,6 @@ export interface AgentMemory {
 	Ring: string[];
 	/** Package root -> the drift signature of the last reconciliation note. */
 	Reconciled: Map<string, string>;
-}
-
-// The per-session history: the fold's running sequence number and the touches
-// (the previous tool calls that named a path), oldest first and capped at 512
-// by the session/event fold. The candidates come from these touches, never
-// from a literal pack.
-export interface SessionHistory {
-	/** The next touch's sequence number. */
-	Seq: number;
-	/** The folded touches, oldest first. */
-	Touches: Touch[];
 }
 
 // The config type the schema produces (re-exported for the listener's casts).

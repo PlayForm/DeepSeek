@@ -4,9 +4,10 @@
 // neutral fallback when the graph is absent, the projected sticky section,
 // the kind test, the depth test, and the no-new-ledger-string rule.
 //
-// THE CANDIDATES COME FROM THE SESSION HISTORY: every scenario seeds the
-// agent's history with the anchor and its companions, and the graph then
-// proves (or fails to prove) those companion paths.
+// THE CANDIDATES COME FROM THE SESSION HISTORY: every scenario commits the
+// agent's history through the projection drive (the anchor and its companions
+// as `tool/call` events), and the graph then proves (or fails to prove) those
+// companion paths.
 import assert from "node:assert/strict";
 import {
 	AgentOf,

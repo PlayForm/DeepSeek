@@ -5,10 +5,12 @@
 # session history knows the next files, prepends ONE labeled
 # additionalContexts note naming them - BEFORE the model burns the searches.
 #
-# THE CANDIDATES COME FROM THE AGENT'S OWN PREVIOUS TOOL CALLS: the
-# session/event listener folds every tool/call into the session's touch
-# history (capped at 512), and the post-execute listener reads it through the
-# pack library's Adjacent. The co-touch rows are judged as ONE synthetic
+# THE CANDIDATES COME FROM THE AGENT'S OWN PREVIOUS TOOL CALLS: the history
+# is a host-only `ctx.sessionProjections` unit that folds committed
+# `tool/call` events (capped at 512; registered optionally through
+# `ctx.inject(["sessionProjections"], ...)`, read through
+# `stateOf(session, key)`), and the post-execute listener reads it through
+# the pack library's Adjacent. The co-touch rows are judged as ONE synthetic
 # `History` family, so the deterministic classifier, the existence filter and
 # the score are unchanged. Deterministic: no LLM in the hot path; the note
 # never replaces content, so a ccr-compressed result is unaffected

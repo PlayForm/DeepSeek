@@ -14,7 +14,7 @@ The suite asserts the snapshot call counts (the refresh evidence) and the order 
 
 ## The candidates
 
-The anchor and its two companions (`CHANGELOG.md`, `package.json`) are seeded per agent in one temp workspace, and the graph proves one or both of the companions.
+The anchor and its two companions (`CHANGELOG.md`, `package.json`) are committed per agent's session through the projection drive in one temp workspace, and the graph proves one or both of the companions.
 
 ## Expected ledger strings (byte-exact, `hook-dsh-search-suggester: ` prefix)
 

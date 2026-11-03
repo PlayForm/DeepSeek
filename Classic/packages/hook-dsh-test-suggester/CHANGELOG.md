@@ -6,8 +6,18 @@ All notable changes to this package will be documented in this file.
 
 ### Changed
 
-- The suggestions come from the agent's OWN previous tool calls in this workspace: the new
-  `session/event` listener folds every `tool/call` into the session's touch history (capped at 512),
+- The session history is a `ctx.sessionProjections` unit (key `testHistory`), not a listener fold:
+  the registry subscribes to `session/event` once and folds every committed `tool/call` through the
+  unit's `apply`, so the hook holds no subscription of its own. The unit is registered through the
+  optional `ctx.inject(['sessionProjections'], ...)` form - a mount without the registry still loads
+    - and read at detection time through `stateOf(session, key)`. The `State.History` WeakMap and
+      the in-listener fold are gone.
+- No post-execute append: the current call's `tool/call` is the durable STARTED record, committed
+  before dispatch, so the anchor's prior touches are already in the projection state when
+  `tools/post-execute` runs. An append would fold the current call twice and inflate every later
+  co-touch count.
+- The suggestions come from the agent's OWN previous tool calls in this workspace: the projection
+  unit folds every `tool/call` that names a path into the session's touch history (capped at 512),
   and the post-execute listener derives the candidates with `Adjacent`, so the note names the files
   that were touched right after the anchor.
 - The co-touch rows are judged as ONE synthetic `History` family (priority 0, threshold 0.75, one
@@ -20,14 +30,24 @@ All notable changes to this package will be documented in this file.
   and a call with no such root abstains `abstained foreign-workspace  0.00`. The pack's declared
   signature no longer gates a call.
 - The activation line's second segment is `history` (was `intents <n>`), because the boot pack
-  projection is gone (`State.Rules` starts empty and `Variable/Defaults` was removed from the
-  package).
+  projection is gone (`State.Rules` starts empty and `Variable/Defaults` was removed).
 - The five smoke folders are rewritten onto the history candidates: the loader suite asserts the new
-  activation line, the three listeners and the session/event fold; the pack suite keeps the explicit
-  `.dsh/pack.yml` case with a rooted fixture; the pipeline suite seeds two touches for its emit case
-  and covers the `no-history` abstention; the workspace gate asserts the `History` note, the
-  `no-history` abstention and the emptied-history `no-companions`; the reconciliation suite keeps
-  the drift rows and the graph probe only.
+  activation line, the two listeners and the projection unit's fold; the pack suite keeps the
+  explicit `.dsh/pack.yml` case with a rooted fixture; the pipeline suite commits the anchor and its
+  followers through the projection drive for its emit case, proves the projection path (the
+  committed events are the cell, the judged call reads it, no append follows), and covers the
+  `no-history` abstention; the workspace gate asserts the `History` note, the `no-history`
+  abstention and the emptied-history `no-companions`; the reconciliation suite keeps the drift rows
+  and the graph probe only.
+
+### Fixed
+
+- The session-history fold is fed by the durable `session/event` seam in its supported plugin-facing
+  form (`ctx.sessionProjections`) instead of the hook's own `session/event` listener. A raw
+  `ctx.on("session/event", ...)` listener received nothing in the live harness, so the fold stayed
+  empty and every judged call logged `abstained no-history  0.00`. The hook now registers three
+  listeners: `loader/volatile-update`, `tools/post-execute` and `agent/pre-step`; the projection
+  unit registers separately and holds no listener.
 
 ## 0.2.1
 

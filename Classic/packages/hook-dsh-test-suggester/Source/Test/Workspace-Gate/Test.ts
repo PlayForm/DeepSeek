@@ -14,8 +14,10 @@ import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 import {
+	AgentOf,
 	Call,
 	CheckAsync,
+	Commit,
 	Finish,
 	LedgerWith,
 	LinesWith,
@@ -49,18 +51,15 @@ Put(Rooted, "SCHEME.md");
 const Service = (Cwd: string): { get: () => string } => ({ get: () => Cwd });
 
 /**
- * Seed one agent's session history through the state probe: the absolute
- * anchor the call names, then the followers.
+ * Seed one agent's session history through the PROJECTION drive: the absolute
+ * anchor the call names, then the followers, committed as `tool/call` events
+ * and folded by the registered unit into that session's cell.
  */
-const Seed = (Run: any, Agent: unknown, Followers: string[]): void => {
-	Run.State.History.set(Agent, {
-		Seq: Followers.length + 1,
-		Touches: [RootedTest, ...Followers].map((Path_: string, Seq: number) => ({
-			seq: Seq,
-			path: Path_,
-			tool: "read",
-		})),
-	});
+const Seed = (Run: any, Id: string, Followers: string[]): void => {
+	Commit(Run, Id, RootedTest);
+	for (const Follower of Followers) {
+		Commit(Run, Id, Follower);
+	}
 };
 
 /** The history note's byte-exact text (k = sigmoid(2.5 - 0.6) = 0.87). */
@@ -77,7 +76,7 @@ export const runTest = async (): Promise<number> => {
 
 	// Group G1: no workspace root, no session cwd.
 	{
-		const Agent = { agent: { id: "gate-a" } };
+		const Agent = AgentOf("gate-a");
 		const Run = Setup();
 		// The bare mount: without the service the absolute foreign path has
 		// no `.git`/`package.json` ancestor and no cwd fallback.
@@ -111,13 +110,14 @@ export const runTest = async (): Promise<number> => {
 
 	// Group G2: the call path's own root wins over the session cwd.
 	{
-		const Agent = { agent: { id: "gate-b" } };
+		const Agent = AgentOf("gate-b");
 		const Run = Setup();
 		// The cwd service points at the FOREIGN tree (no marker), while the
 		// call path sits inside the ROOTED one: the upward walk finds the
 		// call path's own `package.json` before the cwd fallback.
 		Run.Context.workingDirectory = Service(Foreign);
-		Seed(Run, Agent, ["README.md", "SCHEME.md"]);
+		await Run.Ready;
+		Seed(Run, "gate-b", ["README.md", "SCHEME.md"]);
 		await CheckAsync(Count, "G2: the call path's own root wins over the session cwd", async () => {
 			const Out = await Call(Run, "read", { file_path: RootedTest }, Agent);
 			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
@@ -126,10 +126,11 @@ export const runTest = async (): Promise<number> => {
 
 	// Group G3: the history note inside a rooted temp tree.
 	{
-		const Agent = { agent: { id: "gate-c" } };
+		const Agent = AgentOf("gate-c");
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Rooted);
-		Seed(Run, Agent, ["README.md", "SCHEME.md"]);
+		await Run.Ready;
+		Seed(Run, "gate-c", ["README.md", "SCHEME.md"]);
 		await CheckAsync(Count, "G3: the History note names the companions of the temp root", async () => {
 			const Out = await Call(Run, "read", { file_path: RootedTest }, Agent);
 			assert.equal(Out.additionalContexts.length, 1);
@@ -148,7 +149,7 @@ export const runTest = async (): Promise<number> => {
 		});
 		await CheckAsync(Count, "G3: the rooted workspace with no history abstains no-history", async () => {
 			const Decision = { kind: "allow" };
-			const Out = await Call(Run, "read", { file_path: RootedTest }, { agent: { id: "gate-d" } }, Decision);
+			const Out = await Call(Run, "read", { file_path: RootedTest }, AgentOf("gate-d"), Decision);
 			assert.equal(Out, Decision);
 			assert.deepEqual(Out.additionalContexts, undefined);
 			assert.ok(Run.Lines.includes("test-suggester: abstained no-history  0.00"));
@@ -158,10 +159,11 @@ export const runTest = async (): Promise<number> => {
 
 	// Group G4: a history whose whole companion set is gone.
 	{
-		const Agent = { agent: { id: "gate-e" } };
+		const Agent = AgentOf("gate-e");
 		const Run = Setup();
 		Run.Context.workingDirectory = Service(Rooted);
-		Seed(Run, Agent, ["GONE.md", "ALSO-GONE.md"]);
+		await Run.Ready;
+		Seed(Run, "gate-e", ["GONE.md", "ALSO-GONE.md"]);
 		await CheckAsync(Count, "G4: an emptied history abstains no-companions with the family and kappa", async () => {
 			const Decision = { kind: "allow" };
 			const Out = await Call(Run, "read", { file_path: RootedTest }, Agent, Decision);
@@ -174,12 +176,13 @@ export const runTest = async (): Promise<number> => {
 
 	// Group G5: the foreign abstention does not poison the next in-workspace call.
 	{
-		const Agent = { agent: { id: "gate-f" } };
+		const Agent = AgentOf("gate-f");
 		const Run = Setup();
 		// The first call is the bare mount (no root at all); the second
 		// arrives with the rooted tree's cwd and the seeded history.
 		delete Run.Context.workingDirectory;
-		Seed(Run, Agent, ["README.md", "SCHEME.md"]);
+		await Run.Ready;
+		Seed(Run, "gate-f", ["README.md", "SCHEME.md"]);
 		await CheckAsync(Count, "G5: a foreign call never poisons the next in-workspace call", async () => {
 			const Foreign_ = await Call(Run, "read", { file_path: ForeignTest }, Agent);
 			assert.equal(Foreign_.kind, "allow");

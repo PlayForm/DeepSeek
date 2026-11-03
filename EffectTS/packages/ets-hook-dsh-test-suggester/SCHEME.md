@@ -53,7 +53,7 @@ registry's own face, probed with `ctx.get` because the registry is an optional s
 `Adjacent(touches, callPath, { limit: maxCandidates })`: for every touch of the anchor path, the
 touches that follow it within a window of 8 calls contribute `1 / (1 + distance)` to the followed
 path's score and one to its count. A repeatedly co-touched path outranks a single one, and a near
-neighbour outranks a far one. The anchor itself is never a candidate.
+neighbor outranks a far one. The anchor itself is never a candidate.
 
 Those co-touch rows become ONE SYNTHETIC family, so the existing Detect/gate/note pipeline judges
 them exactly like a resolved pack's family:

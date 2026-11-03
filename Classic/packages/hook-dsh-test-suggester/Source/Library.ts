@@ -14,11 +14,11 @@
 // runs search after search to find the proof for a change (PASS/FAIL/error
 // TS greps, Test.ts reads, error sweeps). This hook answers the TEST intent
 // with a TARGET SET drawn from the agent's OWN PREVIOUS TOOL CALLS: the
-// `session/event` listener folds every `tool/call` into the session history,
-// and on a judged call the files touched right after this one in this
-// workspace become ONE synthetic `History` family that the deterministic
-// classifier, the existence filter, the gate and the note judge exactly like
-// a pack row. The note is ONE labeled additionalContexts notice (at most
+// `sessionProjections` unit (key `testHistory`) folds every committed
+// `tool/call` into the session's cell, and on a judged call the files touched
+// right after this one in this workspace become ONE synthetic `History`
+// family that the deterministic classifier, the existence filter, the gate
+// and the note judge exactly like a pack row. The note is ONE labeled additionalContexts notice (at most
 // maxCandidates candidates with a stated reason each, a cooldown, a per-turn
 // cap, and an abstention path: a wrong target set costs more than a missing
 // one - SEARCH-SUGGESTER-PLUGIN.md sections 3, 4, 8, the test consumer of

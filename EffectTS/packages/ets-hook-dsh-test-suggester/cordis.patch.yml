@@ -1,8 +1,10 @@
 # Bundle patch for @playform/hook-dsh-test-suggester.
 # The test-suggester hook answers the TEST task intent with a target set
-# drawn from the agent's OWN previous tool calls: the `session/event`
-# listener folds every `tool/call` into the session's touch history (one
-# touch per call, capped at 512), and on a judged call the files touched
+# drawn from the agent's OWN previous tool calls: the history is a host-only
+# `ctx.sessionProjections` unit that folds committed `tool/call` events (one
+# touch per call, capped at 512; registered optionally through
+# `ctx.inject(["sessionProjections"], ...)`, read through
+# `stateOf(session, key)`), and on a judged call the files touched
 # right after this one in this workspace become ONE synthetic `History`
 # family that the deterministic classifier, the existence filter, the gate
 # and the note judge exactly like a pack row. The note is ONE labeled
@@ -17,7 +19,7 @@
 # foreign-workspace  0.00`.
 #
 # THE RECONCILIATION (the completion spec's wave 2c re-spec) rides the same
-# listener: on a judged call in a package it compares the package's smoke
+# post-execute listener: on a judged call in a package it compares the package's smoke
 # claims (the folder READMEs' `## Expected count`) with the tree (the
 # folders, the suite files, the aggregate runner's roster) and, when the
 # workspace graph is present, its Test nodes - READ-ONLY, one note, gated by

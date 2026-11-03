@@ -1,4 +1,3 @@
-import type { Touch } from "@playform/lib-dsh-pack";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 import type Ring from "../Function/Ring.js";
@@ -48,14 +47,6 @@ export default interface State extends Shared {
     Knowledge: Knowledge;
     /** The per-agent ring tracker (Function/Ring). */
     Rings: ReturnType<typeof Ring>;
-    /** The per-session touch history, keyed on the session object. */
-    History: WeakMap<object, SessionHistory>;
     /** The injected @playform/plugin-dsh-factory service. */
     Factory: Factory;
-}
-export interface SessionHistory {
-    /** The next touch's sequence number. */
-    Seq: number;
-    /** The folded touches, oldest first. */
-    Touches: Touch[];
 }

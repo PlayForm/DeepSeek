@@ -35,8 +35,19 @@ history proves, delivered at the first call of a task.
 
 ## The candidates (the session history)
 
-The `session/event` listener folds every `tool/call` event into the session's history: one touch per
-call (the sequence number, the normalized path and the tool), capped at 512, oldest first.
+The history is a **session-projection unit**, not a listener fold and not a `State` map:
+`ctx.sessionProjections` subscribes to `session/event` once and passes every committed event through
+the unit's pure `apply`, so the hook holds no subscription of its own. One `tool/call` becomes one
+touch (the sequence number, the normalized path and the tool), capped at 512, oldest first, in THAT
+session's cell; the cell is built lazily from `init` and rebuilt from the session log on first
+touch.
+
+The unit is registered through the optional `ctx.inject(['sessionProjections'], ...)` form, so a
+mount without the registry still loads and simply has no history to mine; the detection reads it
+through `stateOf(session, key)`.
+
+There is no post-execute append: the harness commits `tool/call` as the call's STARTED record before
+dispatch, so the anchor's touches are already folded when the listener runs.
 
 On a judged call, `Adjacent(touches, anchor, { limit: maxCandidates })` scores the paths that
 followed the anchor within a window of 8 calls: `1 / (1 + distance)` per occurrence, one count per
@@ -124,8 +135,7 @@ Two layers, both deterministic and LLM-free.
   candidates of an EXPLICIT pack (prior 1.0) plus the graph projection (a proven candidate is seeded
   twice).
 
-    The built-in pack was removed from this package, so a repo without an explicit pack seeds
-    nothing.
+    The built-in pack is retired, so a repo without an explicit pack seeds nothing.
 
     It never overwrites an existing row, does not save (the next real write persists it), and is
     switched off by `learn: false` or `seed: false`.
@@ -193,10 +203,11 @@ each with its own `## Expected count`:
 - the six added suites (Classification, Threshold-And-Cooldown, Abstention, Persistence,
   Index-Refresh, Noise).
 
-Every candidate scenario seeds the session history (or writes an explicit `.dsh/pack.yml`), and
-every silence asserts the `no-history` line - no suite names a built-in pack literal.
+Every candidate scenario commits the session's `tool/call` events through the fake
+`sessionProjections` registry (init -> apply -> `stateOf`) or writes an explicit `.dsh/pack.yml`,
+and every silence asserts the `no-history` line - no suite names a built-in pack literal.
 
-The aggregate prints 126 PASS.
+The aggregate prints 128 PASS.
 
 ## The plan
 

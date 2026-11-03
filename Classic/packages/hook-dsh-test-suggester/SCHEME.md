@@ -20,31 +20,40 @@ The complete scheme: every config field, every surface, every ledger string.
 
 ## Surfaces
 
-| Surface              | Mode                          | What it does                                                                                                                                                                                                                                                        |
-| -------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `session/event`      | plain                         | Folds every `tool/call` event into the session's history (one touch per call, capped at 512, oldest first). This is the candidate source.                                                                                                                           |
-| `tools/post-execute` | waterfall, plain registration | `next()` first; the reconciliation (below) then the HISTORY candidates (or an explicit pack), detect → gate → prepend ONE labeled `additionalContexts` notice (source `{kind: 'test-suggester', form: 'notice', summary: '<Family> <k>'}`); never replaces content. |
-| `agent/pre-step`     | waterfall, plain              | Pure observer: resets the per-turn note counter when the step ends with a user message.                                                                                                                                                                             |
+| Surface                                | Mode                          | What it does                                                                                                                                                                                                                                                        |
+| -------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sessionProjections` (projection unit) | pure fold, host-only          | `apply(state, event)` folds every committed `tool/call` that names a path into the session's `{ Seq, Touches }`; registered through `ctx.inject(['sessionProjections'], ...)`, read at detection through `stateOf(session, key)`. No `wire` block: no client value. |
+| `tools/post-execute`                   | waterfall, plain registration | `next()` first; the reconciliation (below) then the HISTORY candidates (or an explicit pack), detect → gate → prepend ONE labeled `additionalContexts` notice (source `{kind: 'test-suggester', form: 'notice', summary: '<Family> <k>'}`); never replaces content. |
+| `agent/pre-step`                       | waterfall, plain              | Pure observer: resets the per-turn note counter when the step ends with a user message.                                                                                                                                                                             |
 
 ## The candidates (the session history)
 
 The suggestions come from the agent's OWN PREVIOUS TOOL CALLS in this workspace, never from a
 literal built-in pack.
 
-The `session/event` listener folds every `tool/call` event into one touch (the sequence number, the
-normalized path and the tool) in the SESSION's history, through the fold unit of
-`@playform/lib-dsh-pack`. One entry per session object, created lazily; the touch array is capped at
-512, oldest first.
+The history is a `sessionProjections` unit (key `testHistory`), not a listener fold: the registry
+subscribes to `session/event` ONCE and passes every committed event through the unit's `apply`, so
+the hook holds no subscription of its own. Every `tool/call` that names a path - reads included -
+becomes one `Touch` (the sequence number, the normalized path and the tool) in THAT SESSION's cell,
+through the fold unit of `@playform/lib-dsh-pack`. The unit is registered through the optional
+`ctx.inject(['sessionProjections'], ...)` form, so a mount without the registry still loads and
+simply has no history to mine.
+
+The state is one cell per session, built lazily from `init` (`{ Seq: 0, Touches: [] }`); the touch
+array is capped at 512, oldest first. `apply` returns the SAME state reference for an event it
+ignores (the registry's zero-work signal) and a NEW plain-JSON state for a folded call. The
+persisted-state validator (`stateSchema`) sanitizes a cached row instead of throwing, so a damaged
+row degrades to a shorter history rather than a failed read.
 
 The path comes from the first path-shaped argument (`file_path`, `path`, `filePath`), with
 backslashes normalized to slashes and a leading `./` stripped.
 
-On a judged call the listener reads the session's touches (keyed on the agent's session, then the
-agent, then one shared default entry) and calls
+On a judged call the listener reads the session's touches through `stateOf(session, key)` (the
+registry's own face, probed with `ctx.get` because the registry is an optional service) and calls
 `Adjacent(touches, callPath, { limit: maxCandidates })`: for every touch of the anchor path, the
 touches that follow it within a window of 8 calls contribute `1 / (1 + distance)` to the followed
 path's score and one to its count. A repeatedly co-touched path outranks a single one, and a near
-neighbour outranks a far one. The anchor itself is never a candidate.
+neighbor outranks a far one. The anchor itself is never a candidate.
 
 Those co-touch rows become ONE SYNTHETIC family, so the existing Detect/gate/note pipeline judges
 them exactly like a resolved pack's family:
@@ -86,9 +95,8 @@ config `threshold` is a FLOOR (a family may raise it, never lower it). The famil
 once per workspace root and tuple.
 
 The built-in pack of this monorepo is NOT a candidate source: its projection
-(`Source/Variable/Defaults.ts`) was removed from this package, so the built-in projection no longer
-exists here and an explicit repo/user pack is the only pack source, resolved with
-`Resolve(root, { home, builtin: false })`.
+(`Source/Variable/Defaults.ts`) was removed from this package, so the only pack source is an
+explicit repo/user pack resolved with `Resolve(root, { home, builtin: false })`.
 
 A workspace with no pack layer and no session history has no candidate source at all and abstains
 `abstained no-history  0.00` (the double space is the empty-family shape).

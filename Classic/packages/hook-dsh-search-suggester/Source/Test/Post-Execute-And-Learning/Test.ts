@@ -5,19 +5,24 @@
 // (a non-judged tool, a bash call with no path, next() called first), the
 // no-history abstention, the learning loop (the `followed` and `ignored`
 // ledger lines, the knowledge file, the pending window), the suppress paths
-// (dedupe under a zero cooldown, cap), the per-agent ring isolation, and the
-// agent/pre-step per-turn reset.
+// (dedupe under a zero cooldown, cap), the per-agent ring isolation, the
+// agent/pre-step per-turn reset, and the projection path itself (the committed
+// `tool/call` events are the cell, the judged call reads it through `stateOf`,
+// and the call appends nothing).
 //
 // THE CANDIDATES COME FROM THE SESSION HISTORY: every emit scenario mounts a
-// temp workspace, seeds `Run.State.History` (the session/event fold's touch
-// shape) through the harness's `SeedHistory`, and judges a call whose path is
-// the workspace's ABSOLUTE anchor - no built-in pack literal is named
-// anywhere.
+// temp workspace, commits the session's `tool/call` events through the fake
+// `sessionProjections` registry (`SeedHistory` -> `Commit`), and judges a call
+// whose path is the workspace's ABSOLUTE anchor - no built-in pack literal is
+// named anywhere. The last group proves the projection path itself: the
+// committed events ARE the cell, the judged call reads it through `stateOf`,
+// and the call appends nothing to it.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {
 	AgentOf,
 	CheckAsync,
+	Commit,
 	Durable,
 	DurableLine,
 	Finish,
@@ -221,16 +226,11 @@ export const runTest = async (): Promise<number> => {
 		Capped.Context.workingDirectory = Service(Space.Root);
 		// One session history with two anchors: the first call's candidate set
 		// and the second call's differ, so the second reaches the cap (not the
-		// dedupe).
-		Capped.State.History.set(AgentOf("a"), {
-			Seq: 4,
-			Touches: [
-				{ seq: 0, path: Space.At(Anchor), tool: "read" },
-				{ seq: 1, path: "CHANGELOG.md", tool: "read" },
-				{ seq: 2, path: Space.At("package.json"), tool: "read" },
-				{ seq: 3, path: "SCHEME.md", tool: "read" },
-			],
-		});
+		// dedupe). The events are committed through the projection drive.
+		Commit(Capped, "a", Space.At(Anchor));
+		Commit(Capped, "a", "CHANGELOG.md");
+		Commit(Capped, "a", Space.At("package.json"));
+		Commit(Capped, "a", "SCHEME.md");
 		await CheckAsync(Count, "E5: the per-turn cap suppresses the second note", async () => {
 			await Post(Capped, Read("a"));
 			const Out = await Post(Capped, {
@@ -257,6 +257,50 @@ export const runTest = async (): Promise<number> => {
 			const Down = await Pre(Capped, { agent: AgentOf("c"), messages: [{ source: { kind: "user" } }] });
 			assert.equal(Down, "down");
 			assert.deepEqual(Capped.Warns, []);
+		});
+	}
+	// Group E6: the REAL projection path - no seeded state and no State fold.
+	// The events are COMMITTED through the registry's eager drive (the unit's
+	// `apply` folds them into that session's cell), the judged call's own
+	// `tool/call` is committed the way the harness commits it before dispatch,
+	// and the judged call reads that state through `stateOf`.
+	{
+		const Run = Setup();
+		Run.Context.workingDirectory = Service(Space.Root);
+		const FoldAnchor = Space.At(Anchor);
+		const FoldCompanion = "CHANGELOG.md";
+		await CheckAsync(Count, "E6: the committed tool/call events ARE the session history (no State fold)", async () => {
+			await Run.Ready;
+			assert.equal(Run.State.History, undefined);
+			Commit(Run, "real-fold", FoldAnchor);
+			Commit(Run, "real-fold", FoldCompanion);
+			const Folded = Run.Projections.StateOf(AgentOf("real-fold").session, "searchHistory");
+			assert.equal(Folded.Seq, 2);
+			assert.deepEqual(
+				Folded.Touches.map((Touch: any) => Touch.path),
+				[FoldAnchor, FoldCompanion],
+			);
+		});
+		await CheckAsync(Count, "E6: the judged call reads the cell and appends nothing", async () => {
+			Commit(Run, "real-fold", FoldAnchor);
+			const Out = await Post(Run, Read("real-fold"), { kind: "allow", additionalContexts: [] });
+			assert.equal(Out.additionalContexts.length, 1);
+			assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+			assert.ok(
+				Out.additionalContexts[0].content[0].text.includes(
+					`- ${FoldCompanion} - touched 1 time(s) after a similar call`,
+				),
+			);
+			assert.ok(
+				Run.Lines.includes("hook-dsh-search-suggester: suggest History 0.87 1 candidates"),
+			);
+			assert.equal(Run.Lines.filter((Line: string) => Line.includes(": suggest ")).length, 1);
+			// NO POST-EXECUTE APPEND: the cell still carries exactly the three
+			// committed events, the judged call added nothing.
+			assert.equal(
+				Run.Projections.StateOf(AgentOf("real-fold").session, "searchHistory").Seq,
+				3,
+			);
 		});
 	}
 	return Finish(Count, "Post-Execute-And-Learning");

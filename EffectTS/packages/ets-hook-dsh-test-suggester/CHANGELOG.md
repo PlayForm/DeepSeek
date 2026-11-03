@@ -10,8 +10,8 @@ All notable changes to this package will be documented in this file.
   the registry subscribes to `session/event` once and folds every committed `tool/call` through the
   unit's `apply`, so the hook holds no subscription of its own. The unit is registered through the
   optional `ctx.inject(['sessionProjections'], ...)` form - a mount without the registry still loads
-  - and read at detection time through `stateOf(session, key)`. The `State.History` WeakMap and the
-  in-listener fold are gone.
+    - and read at detection time through `stateOf(session, key)`. The `State.History` WeakMap and
+      the in-listener fold are gone.
 - No post-execute append: the current call's `tool/call` is the durable STARTED record, committed
   before dispatch, so the anchor's prior touches are already in the projection state when
   `tools/post-execute` runs. An append would fold the current call twice and inflate every later

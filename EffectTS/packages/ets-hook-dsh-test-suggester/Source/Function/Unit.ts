@@ -7,7 +7,7 @@
 // computation the retired `session/event` fold performed, moved onto the seam
 // that actually receives the log. The drive reaches events the old fold never
 // saw: a resumed session's inherited prefix, a call whose post-execute never
-// ran, a call another plugin cancelled.
+// ran, a call another plugin canceled.
 //
 // THE TWO LOAD-BEARING LAWS:
 //

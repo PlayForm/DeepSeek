@@ -1,7 +1,9 @@
 # Bundle patch for @playform/hook-dsh-convention-suggester.
 # The convention-suggester hook names the companion files of a change from
-# the agent's OWN previous tool calls in this workspace: it folds every
-# `tool/call` into the session's touch history and, on every write/edit call,
+# the agent's OWN previous tool calls in this workspace: the history is a
+# host-only `ctx.sessionProjections` unit that folds committed `tool/call`
+# events (registered optionally through `ctx.inject(["sessionProjections"],
+# ...), read through `stateOf(session, key)`) and, on every write/edit call,
 # prepends ONE labeled additionalContexts notice naming the files touched
 # right after the anchor. An explicit repo/user pack is the override when the
 # history is empty. The arbiter is the smoke suite that asserts the behavior

@@ -1,10 +1,11 @@
 // Source/Test/Loader-And-Activation/Test.ts - the loader contract, the cold
 // disabled mount, the enabled activation proof (byte-exact, the `history`
-// segment), the apply-time wiring, the session/event fold, the pass-through
-// discipline, the retired boot projection, the schema fail-loud, and the
-// mount purity.
+// segment), the apply-time wiring, the projection unit's fold, the
+// pass-through discipline, the retired boot projection, the schema fail-loud,
+// and the mount purity.
 import assert from "node:assert/strict";
 import {
+	AgentOf,
 	Check,
 	CheckAsync,
 	Finish,
@@ -47,10 +48,14 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(LedgerWith("disabled (enabled=false)").length, 1);
 			assert.ok(LedgerLines()[0]?.endsWith("] disabled (enabled=false)"));
 		});
-		Check(Count, "L2: a disabled mount still wires every listener on the plugin ctx", () => {
-			assert.ok(Run.CtxListeners["session/event"] instanceof Function);
-			assert.ok(Run.CtxListeners["tools/post-execute"] instanceof Function);
-			assert.ok(Run.CtxListeners["agent/pre-step"] instanceof Function);
+		Check(Count, "L2: a disabled mount still wires every listener and registers the projection unit", () => {
+			assert.deepEqual(Object.keys(Run.CtxListeners), [
+				"loader/volatile-update",
+				"tools/post-execute",
+				"agent/pre-step",
+			]);
+			assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+			assert.equal(Run.Projections.Units.has("testHistory"), true);
 		});
 	}
 
@@ -72,28 +77,32 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "L3: the listeners register on the plugin ctx in order", () => {
 			assert.deepEqual(Object.keys(Run.CtxListeners), [
 				"loader/volatile-update",
-				"session/event",
 				"tools/post-execute",
 				"agent/pre-step",
 			]);
+			assert.deepEqual(Run.Injected, [["sessionProjections"]]);
 		});
 		Check(Count, "L3: the root is a distinct context object", () => {
 			assert.notEqual(Run.Root, Run.Context);
 		});
-		Check(Count, "L3: the session/event fold records one touch per tool/call and skips the rest", () => {
-			const Session = { id: "fold-session" };
-			Run.CtxListeners["session/event"](Session, {
+		await CheckAsync(Count, "L3: the projection unit folds one touch per committed tool/call and skips the rest", async () => {
+			await Run.Ready;
+			const Session = AgentOf("fold-agent").session;
+			Run.Projections.Commit(Session, {
 				type: "tool/call",
-				name: "read",
-				arguments: { file_path: "./Source/Test/Foo/Test.ts" },
+				seq: 0,
+				data: {
+					name: "read",
+					arguments: JSON.stringify({ file_path: "./Source/Test/Foo/Test.ts" }),
+				},
 			});
-			Run.CtxListeners["session/event"](Session, { type: "message" });
-			Run.CtxListeners["session/event"](Session, {
+			Run.Projections.Commit(Session, { type: "message" });
+			Run.Projections.Commit(Session, {
 				type: "tool/call",
-				name: "grep",
-				arguments: '{"path":"README.md"}',
+				seq: 1,
+				data: { name: "grep", arguments: '{"path":"README.md"}' },
 			});
-			const History = Run.State.History.get(Session);
+			const History = Run.Projections.StateOf(Session, "testHistory");
 			assert.equal(History.Seq, 2);
 			assert.deepEqual(History.Touches, [
 				{ seq: 0, path: "Source/Test/Foo/Test.ts", tool: "read" },
@@ -108,7 +117,7 @@ export const runTest = async (): Promise<number> => {
 		const Decision = { kind: "allow" };
 		await CheckAsync(Count, "L4: a non-judged tool passes the decision through unchanged", async () => {
 			const Result = await Run.CtxListeners["tools/post-execute"](
-				{ name: "write", arguments: { file_path: "x.md" }, agent: { agent: { id: "a" } } },
+				{ name: "write", arguments: { file_path: "x.md" }, agent: AgentOf("l4") },
 				undefined,
 				async () => Decision,
 			);
@@ -118,7 +127,8 @@ export const runTest = async (): Promise<number> => {
 		Check(Count, "L4: the boot projection is retired (no built-in pack at apply)", () => {
 			assert.equal(Run.State.Rules.length, 0);
 			assert.equal(Run.State.Intents.length, 0);
-			assert.ok(Run.State.History instanceof WeakMap);
+			assert.equal(Run.State.History, undefined);
+			assert.equal(Run.Projections.Units.has("testHistory"), true);
 		});
 	}
 

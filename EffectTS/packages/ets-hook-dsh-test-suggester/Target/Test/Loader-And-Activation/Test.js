@@ -103,7 +103,7 @@ const runTest = async () => {
     const Decision = { kind: "allow" };
     await CheckAsync(Count, "L4: a non-judged tool passes the decision through unchanged", async () => {
       const Result = await Run.CtxListeners["tools/post-execute"](
-        { name: "write", arguments: { file_path: "x.md" }, agent: { agent: { id: "a" } } },
+        { name: "write", arguments: { file_path: "x.md" }, agent: AgentOf("l4") },
         void 0,
         async () => Decision
       );

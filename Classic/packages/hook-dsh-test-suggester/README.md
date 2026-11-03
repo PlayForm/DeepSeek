@@ -23,17 +23,29 @@ It is the test consumer of the suggester family
 
 1. **The history fold.**
 
-    The `session/event` listener folds every `tool/call` event into the session's history: one touch
-    per call (the sequence number, the normalized path and the tool), capped at 512, oldest first.
+    The fold is a `ctx.sessionProjections` unit (key `testHistory`): the registry subscribes to
+    `session/event` once and passes every committed event through the unit's `apply`, which turns
+    each `tool/call` that names a path into one `Touch` (the sequence number, the normalized path
+    and the tool) in that session's cell, capped at 512 touches. Reads count, because every
+    committed call is folded.
+
+    The history is keyed per session and rebuilt from the log on first touch. The hook holds no
+    subscription of its own: a raw `ctx.on("session/event", ...)` listener received nothing in the
+    live harness, and the projection registry is the supported plugin-facing form of that seam. The
+    unit is registered through the optional `ctx.inject(['sessionProjections'], ...)` form, so a
+    mount without the registry still loads and simply has no history.
 
 2. **The post-execute listener.**
 
     The `tools/post-execute` listener (waterfall, plain registration, running **after** the CCR's
     `{ prepend: true }` listener) calls `next()` first.
 
-    Then the reconciliation runs, the history candidates are folded into one synthetic family, the
-    deterministic classifier and the gate apply, and **one** `additionalContexts` notice is
-    prepended to the downstream decision.
+    Then the reconciliation runs, the session history is read through `stateOf(session, key)` and
+    folded into one synthetic family, the deterministic classifier and the gate apply, and **one**
+    `additionalContexts` notice is prepended to the downstream decision.
+
+    It appends nothing to the history: the current call's `tool/call` is committed before dispatch,
+    so the state it reads already carries the anchor's prior touches.
 
     Content is never replaced, so a ccr-compressed result is unaffected.
 
@@ -44,6 +56,9 @@ It is the test consumer of the suggester family
 Every listener is fail-open: on any error a warning is logged and the downstream decision is
 returned unchanged.
 
+The registered listener list is exactly `loader/volatile-update`, `tools/post-execute` and
+`agent/pre-step`; the projection unit registers separately, on `ctx.sessionProjections`.
+
 A note never fails a tool call.
 
 ## The candidates (the session history)
@@ -52,7 +67,7 @@ On a judged call, `Adjacent(touches, callPath, { limit: maxCandidates })` scores
 followed the anchor within a window of 8 calls: `1 / (1 + distance)` per occurrence, one count per
 occurrence.
 
-A repeatedly co-touched path outranks a single one, and a near neighbour outranks a far one.
+A repeatedly co-touched path outranks a single one, and a near neighbor outranks a far one.
 
 Those rows become ONE synthetic `History` family (priority 0, threshold 0.75, one signal of weight
 2.5, companions with prior 0.6 and the reason `touched <count> time(s) after this file`), so the
@@ -151,8 +166,8 @@ The package, the Source, the smoke suites (five folders), and the build pass are
 reconciliation landed (the wave 2c re-spec of the completion spec), and the candidates now come from
 the session history with the pack as an explicit override only.
 
-The ETS twin and the live activation (the profile row flip and the restart) are the remaining
-end-phase steps (Documentation/Plans/POC-BRIEF.md section 8).
+The live activation (the profile row flip and the restart) is the remaining end-phase step
+(Documentation/Plans/POC-BRIEF.md section 8).
 
 - [SEARCH-SUGGESTER-PLUGIN](../../Documentation/Plans/SEARCH-SUGGESTER-PLUGIN.md) - sections 3, 4,
   8, the test consumer.

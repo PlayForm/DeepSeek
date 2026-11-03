@@ -12,10 +12,13 @@
   candidate carries a stated reason, with a cooldown and an abstention path. The reconciliation
   (wave 2c, `Source/Function/Reconcile.ts`) additionally audits the smoke claims of the package
   against the tree it actually has, read-only, with ONE notice as its only surface.
-- HISTORY-DRIVEN: the candidates come from the `session/event` fold + `Adjacent` over the agent's
-  OWN PREVIOUS TOOL CALLS in this workspace (the synthetic `History` family): one touch per
-  `tool/call` (capped at 512), the paths that followed the anchor within a window of 8 calls scored
-  by `1 / (1 + distance)`, judged through the same Detect/gate/note pipeline as a pack family
+- HISTORY-DRIVEN: the candidates come from a host-only `ctx.sessionProjections` unit, which folds
+  committed `tool/call` events (registered optionally through
+  `ctx.inject(["sessionProjections"], ...)`, read through `stateOf(session, key)`, rebuilt from the
+  log on first touch, with no post-execute append) and feeds `Adjacent` over the agent's OWN
+  PREVIOUS TOOL CALLS in this workspace (the synthetic `History` family): one touch per `tool/call`
+  (capped at 512), the paths that followed the anchor within a window of 8 calls scored by
+  `1 / (1 + distance)`, judged through the same Detect/gate/note pipeline as a pack family
   (confidence `k = sigmoid(2.5 - 0.6) = 0.87`). The built-in pack is retired and unimported; the
   retired projection (`Source/Variable/Defaults.ts`) is kept as the domain's reference table and is
   no longer imported by the hot path.
@@ -75,13 +78,14 @@
 
 ## Fix loop
 
-- Fix files: `Source/Function/` (the history fold, the adjacency, the reconciliation, the note
-  builder), `Source/Library.ts`.
+- Fix files: `Source/Interface/Projection.ts`, `Source/Variable/Projection.ts`,
+  `Source/Function/Unit.ts`, `Source/Function/Register.ts`, `Source/Function/History.ts`,
+  `Source/Function/` (the adjacency, the reconciliation, the note builder), `Source/Library.ts`.
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-test-suggester run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-test-suggester/Target/Test/<Folder>/Test.js` per folder
-  under `Source/Test/` (`Loader-And-Activation`, `Pack-Driven`, `Pipeline-And-Gates`,
-  `Reconciliation`, `Workspace-Gate`), then restart the app.
+  under `Source/Test/` (64 PASS per the folder READMEs: `Loader-And-Activation` 16, `Pack-Driven` 5,
+  `Pipeline-And-Gates` 15, `Reconciliation` 19, `Workspace-Gate` 9), then restart the app.
 
 ## Report stub
 

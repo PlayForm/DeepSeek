@@ -11,7 +11,10 @@
   `additionalContexts` note naming the likely target set. The confidence gate is 0.75 (an explicit
   pack's own gate, 0.85 for the destructive intents, may raise it), with ≤7 candidates each with a
   stated reason, cooldown, dedupe, a per-turn cap, and an explicit abstention path.
-- HISTORY-DRIVEN: the candidates come from the `session/event` fold + `Adjacent` over the agent's
+- HISTORY-DRIVEN: the candidates come from a host-only `ctx.sessionProjections` unit (seamed at
+  `Source/Interface/Session.ts`), which folds committed `tool/call` events (registered optionally
+  through `ctx.inject(["sessionProjections"], ...)`, read through `stateOf(session, key)`, rebuilt
+  from the log on first touch, with no post-execute append) and feeds `Adjacent` over the agent's
   OWN PREVIOUS TOOL CALLS in this workspace (the synthetic `History` family): the fold keeps one
   touch per `tool/call` (capped at 512, fail-open), and the adjacency scores the co-touch paths
   (confidence `sigmoid(2.5 - 0.6) = 0.87`, 0.89 on the R13 loop bonus). The built-in pack is retired
@@ -79,15 +82,18 @@
 
 ## Fix loop
 
-- Fix files: `Source/Function/` (the history fold, the adjacency, the detector, the scorer, the
-  projection, the seed, the dismiss tool), `Source/Library.ts`, `Source/Variable/Config.ts`.
+- Fix files: `Source/Interface/Session.ts`, `Source/Variable/Projection.ts`,
+  `Source/Function/Unit.ts`, `Source/Function/Register.ts`, `Source/Function/History.ts`,
+  `Source/Function/` (the adjacency, the detector, the scorer, the projection, the seed, the dismiss
+  tool), `Source/Library.ts`, `Source/Variable/Config.ts`.
 - Rebuild:
   `pnpm --config.verify-deps-before-run=false --dir Classic/packages/hook-dsh-search-suggester run prepublishOnly`
 - Smokes: `node Classic/packages/hook-dsh-search-suggester/Target/Test/<Folder>/Test.js` per folder
-  under `Source/Test/` (fifteen folders, 126 PASS per the folder READMEs: `Abstention`, `Benchmark`,
-  `Classification`, `Dismiss`, `Index-Refresh`, `Noise`, `Pack-Driven`, `Persistence`,
-  `Post-Execute-And-Learning`, `Projection`, `Seed`, `Sticky-Section-And-Ring`,
-  `Threshold-And-Cooldown`, `Wiring-And-Ledger`, `Workspace-Gate`), then restart the app.
+  under `Source/Test/` (fifteen folders, 128 PASS per the folder READMEs, with
+  `Post-Execute-And-Learning` at 17: `Abstention`, `Benchmark`, `Classification`, `Dismiss`,
+  `Index-Refresh`, `Noise`, `Pack-Driven`, `Persistence`, `Post-Execute-And-Learning`, `Projection`,
+  `Seed`, `Sticky-Section-And-Ring`, `Threshold-And-Cooldown`, `Wiring-And-Ledger`,
+  `Workspace-Gate`), then restart the app.
 
 ## Report stub
 
