@@ -1,6 +1,10 @@
 // Serve - the host half's route registration: GET <Path>?session=<id>&rows=<n>
 // answers one JSON envelope with content-type "application/json; charset=utf-8"
 // and cache-control "no-store", status 200 with the outcome in the envelope.
+// The same route carries the file-scoped read: GET <Path>?file=<encoded path>
+// answers the conversations that contributed to that file's cost under the
+// same status and headers, because the engine's contribution read returns
+// plain rows and the browser can only receive JSON.
 // The host half is transport only and owns NO SQL: the ledger is
 // @playform/plugin-dsh-cost's business, and this route parses the query,
 // clamps the row budget and carries the answer. The service is resolved
@@ -13,7 +17,9 @@
 // client-dsh-panel-family-host/Source/Function/Stream.ts). The route path
 // comes from Variable/Path and never from the query.
 //
-// The decision chain: a blank session id answers code "session" without
+// The decision chain: a present, non-blank `file` answers the engine's
+// contribution rows as { ok: true, contributions }, without an envelope of
+// its own; otherwise a blank session id answers code "session" without
 // calling the engine; a missing cost service answers code "unavailable" with
 // the one actionable line that names the missing package; a service that
 // throws answers code "error"; otherwise the service's own envelope is
@@ -26,6 +32,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
 import type { Context } from "@deepseek-ai/cordis";
+import type CostContributionRow from "@Interface/ContributionRow.js";
 import type CostResponse from "@Interface/Response.js";
 import type CostSummary from "@Interface/Summary.js";
 import type CostService from "@playform/plugin-dsh-cost/service";
@@ -51,6 +58,21 @@ const IsService = (Candidate: unknown): Candidate is CostService =>
 	typeof Candidate === "object" &&
 	Candidate !== null &&
 	typeof (Candidate as CostService).session === "function";
+
+// IsContributionService - the file-scoped read's own guard: the session
+// guard plus the contributions method, so an engine that carries only the
+// session read answers the unavailable line instead of throwing a TypeError
+// the catch would have to name.
+const IsContributionService = (Candidate: unknown): Candidate is CostService =>
+	IsService(Candidate) && typeof Candidate.contributions === "function";
+
+// The file-scoped answer: the contribution rows under the same
+// 200-with-envelope convention as the session read, with the rows unwrapped
+// because the engine's contribution read carries no envelope of its own.
+type ContributionAnswer = {
+	ok: true;
+	contributions: readonly CostContributionRow[];
+};
 
 export default function Serve(ctx: Context): void {
 	const Server = ctx.get("webServer");
@@ -96,7 +118,7 @@ export default function Serve(ctx: Context): void {
 				currencies: [],
 				topFiles: [],
 			});
-			const Answer = (res: ServerResponse, Body: CostResponse): void => {
+			const Answer = (res: ServerResponse, Body: CostResponse | ContributionAnswer): void => {
 				try {
 					res.writeHead(200, {
 						"content-type": "application/json; charset=utf-8",
@@ -128,14 +150,63 @@ export default function Serve(ctx: Context): void {
 				stages: null,
 				models: null,
 			});
+			// LedgerFailure - the one mapping of a throwing engine: the
+			// ledger's own actionable line for an unopenable file is the
+			// "unavailable" state, anything else a read error. Both reads
+			// answer through it, so a contribution read fails exactly as the
+			// session read does.
+			const LedgerFailure = (Caught: unknown, Rows: number): CostResponse => {
+				const Message = Caught instanceof Error ? Caught.message : String(Caught);
+				ctx.logger.warn(`cost route: ${Message}`);
+				return Failure(
+					Message.startsWith("plugin-dsh-cost: cannot open the ledger")
+						? "unavailable"
+						: "error",
+					Message.startsWith("plugin-dsh-cost: cannot open the ledger")
+						? Message
+						: `the ledger read failed: ${Message}`,
+					Rows,
+				);
+			};
+			// Contribution - the file-scoped answer: the engine's own rows,
+			// unwrapped, because the contribution read carries no envelope.
+			// An absent engine answers the same unavailable line the session
+			// read answers, and a throw maps through LedgerFailure.
+			const Contribution = (
+				res: ServerResponse,
+				Engine: unknown,
+				File: string,
+				Rows: number,
+			): void => {
+				switch (true) {
+					case !IsContributionService(Engine):
+						ctx.logger.warn(`cost route: ${AbsentMessage}`);
+						Answer(res, Failure("unavailable", AbsentMessage, Rows));
+						return;
+					default: {
+						try {
+							Answer(res, {
+								ok: true,
+								contributions: Engine.contributions(File),
+							});
+						} catch (Caught) {
+							Answer(res, LedgerFailure(Caught, Rows));
+						}
+					}
+				}
+			};
 			Server.register({
 				path: Path,
 				handler: (req, res) => {
 					const Url = new URL(req.url ?? "/", "http://localhost");
 					const SessionId = Url.searchParams.get("session") ?? "";
+					const File = Url.searchParams.get("file") ?? "";
 					const Rows = Applied(Url.searchParams.get("rows"));
 					const Engine = ctx.get("cost");
 					switch (true) {
+						case File.trim() !== "":
+							Contribution(res, Engine, File, Rows);
+							return;
 						case SessionId.trim() === "":
 							Answer(
 								res,
@@ -154,28 +225,7 @@ export default function Serve(ctx: Context): void {
 							try {
 								Answer(res, Engine.session(SessionId, Rows));
 							} catch (Caught) {
-								const Message =
-									Caught instanceof Error ? Caught.message : String(Caught);
-								ctx.logger.warn(`cost route: ${Message}`);
-								// The engine throws the ledger's own actionable
-								// line; an unopenable file is the "unavailable"
-								// state, anything else a read error.
-								Answer(
-									res,
-									Failure(
-										Message.startsWith(
-											"plugin-dsh-cost: cannot open the ledger",
-										)
-											? "unavailable"
-											: "error",
-										Message.startsWith(
-											"plugin-dsh-cost: cannot open the ledger",
-										)
-											? Message
-											: `the ledger read failed: ${Message}`,
-										Rows,
-									),
-								);
+								Answer(res, LedgerFailure(Caught, Rows));
 							}
 						}
 					}

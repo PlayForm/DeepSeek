@@ -73,7 +73,7 @@ function Price(Value2, Currency) {
   const Size = Math.abs(Value2);
   switch (true) {
     case (Size > 0 && Size < 1e-6):
-      return `<${Symbol2}0.000001`;
+      return `${Sign}<${Symbol2}0.000001`;
     default: {
       const Digits = Size === 0 || Size >= 1 ? 2 : Size >= 0.01 ? 4 : 6;
       const Fixed = Size.toFixed(Digits);
@@ -211,14 +211,6 @@ var Block = (File, Index, Currency, t) => {
         t("detail.readBeforeEdit")
       )
     );
-  if (File.touched === false)
-    Body.push(
-      (0, import_react2.createElement)(
-        "span",
-        { key: "untouched", className: "playform-cost-block-sub" },
-        t("detail.allocationOnly")
-      )
-    );
   return (0, import_react2.createElement)(
     "div",
     { className: "playform-cost-block", key: Index },
@@ -269,7 +261,10 @@ var Block = (File, Index, Currency, t) => {
     Body.length === 0 ? (0, import_react2.createElement)(
       "div",
       { className: "playform-cost-block-empty" },
-      t("detail.allocationOnly")
+      // Two fallbacks: a touched file without any optional change
+      // field is not an allocation-only file, and an untouched
+      // one is not a file the call changed.
+      Touched ? t("detail.touchedNoDetail") : t("detail.allocationOnly")
     ) : (0, import_react2.createElement)("div", { className: "playform-cost-block-body" }, Body)
   );
 };
@@ -442,6 +437,27 @@ function Fetch(SessionId, Rows) {
     );
   }
 }
+var IsContributionAnswer = (Candidate) => {
+  if (typeof Candidate !== "object" || Candidate === null) {
+    return false;
+  }
+  const Answer = Candidate;
+  return Answer.ok === true && Array.isArray(Answer.contributions);
+};
+function Contributions(Path) {
+  if (typeof fetch !== "function") {
+    return Promise.resolve([]);
+  }
+  try {
+    return fetch(`${Path_default}?file=${encodeURIComponent(Path)}`, {
+      method: "GET",
+      headers: { accept: "application/json" },
+      cache: "no-store"
+    }).then((Response) => Response.json()).then((Body) => IsContributionAnswer(Body) ? Body.contributions : []).catch(() => []);
+  } catch {
+    return Promise.resolve([]);
+  }
+}
 
 // Source/Function/FileFilters.ts
 var Kinds = ["all", "edited", "written", "readOnly"];
@@ -500,7 +516,10 @@ var StagesOf = (Rows) => {
   for (const Row of Rows) for (const Stage of Stages(Row.stages)) Seen.add(Stage);
   return [...Seen];
 };
-var Apply = (Rows, Current) => Sorted(Rows.filter((Row) => Match(Row, Current)), Current.Sort);
+var Apply = (Rows, Current) => Sorted(
+  Rows.filter((Row) => Match(Row, Current)),
+  Current.Sort
+);
 var FileFilters_default = { Kinds, Sorts, Default, StagesOf, Apply };
 
 // Source/Function/FileTable.ts
@@ -589,8 +608,9 @@ var Locale_en_default = {
   "files.more": "{count} more",
   "files.title": "{calls} calls: {files}",
   "files.contextOnly": "{tokens} tokens, no file",
-  "files.saving": "saved {value}",
-  "files.saving.title": "the cache saving against the uncached input rate",
+  "files.saving": "net cache benefit {value}",
+  "files.saving.title": "the net cache benefit against the uncached input rate",
+  "saving.negative.title": "a negative figure is cache-write overhead: the cache-write premium outweighed the cache-read saving",
   "files.lines": "{lines} lines",
   "cache.detail": "cache read {read}, input {input}, cache write {write}",
   "other.detail": "cache write {write}, reasoning {reasoning}, remainder {rest}",
@@ -607,7 +627,8 @@ var Locale_en_default = {
   "detail.bytes": "{bytes} bytes",
   "detail.readBeforeEdit": "read before edit",
   "detail.empty": "This call touched no file.",
-  "detail.allocationOnly": "allocated, not touched",
+  "detail.allocationOnly": "context allocation only; not touched in this call",
+  "detail.touchedNoDetail": "touched, but no change detail recorded",
   "detail.hidden": "{count} more files not shown",
   "detail.tool": "tool {tool}",
   "detail.kind": "kind {kind}",
@@ -621,7 +642,7 @@ var Locale_en_default = {
   "totals.session.title": "every call this session recorded in the ledger, not only the rows loaded here",
   "totals.calls": "{calls} calls, {unpriced} unpriced",
   "totals.cache": "cache hit {value}",
-  "totals.saving": "saved {value}",
+  "totals.saving": "net cache benefit {value}",
   "totals.tokens": "{tokens} tokens",
   "topFiles.label": "Top files",
   "topFiles.title": "the files with the largest allocated cost in this session",
@@ -666,6 +687,19 @@ var Locale_en_default = {
   "files.column.stage.title": "the first stage the file reached, and how many stages it reached in all",
   "files.column.verdict": "Verdict",
   "files.column.verdict.title": "the outcome the ledger recorded for this file in this session",
+  "files.contributions.title": "Conversations that paid for this file",
+  "files.contributions.empty": "No conversation contributed to this file.",
+  "files.contributions.loading": "Loading the contributing conversations...",
+  "files.contributions.failed": "The contribution read failed.",
+  "files.contributions.column.conversation": "Conversation",
+  "files.contributions.column.calls": "Calls",
+  "files.contributions.column.direct": "Direct",
+  "files.contributions.column.amortized": "Amortized",
+  "files.contributions.column.total": "Total",
+  "files.contributions.column.share": "Share",
+  "files.contributions.column.models": "Models",
+  "files.expand": "Expand the contributing conversations of {path}",
+  "files.collapse": "Collapse the contributing conversations of {path}",
   "files.filter.path": "Filter by path",
   "files.filter.kind": "Kind",
   "files.filter.stage": "Stage",
@@ -734,6 +768,8 @@ var BaseName = (Path) => {
   const Cut = Path.lastIndexOf("/");
   return Cut === -1 ? Path : Path.slice(Cut + 1);
 };
+var ShortSession = (SessionId) => SessionId.length <= 8 ? SessionId : `...${SessionId.slice(-8)}`;
+var Models = (Value2) => Array.isArray(Value2) ? Value2.filter((Item) => typeof Item === "string") : [];
 var ToneClass = (Tone2) => `playform-cost-tone${Tone2}`;
 var StageTone2 = (Stage) => StageTones2[Stage] ?? 7;
 var Word = (Key, Fallback, t) => {
@@ -749,6 +785,181 @@ var VerdictClass = (Verdict) => {
     default:
       return null;
   }
+};
+var CONTRIBUTION_COLUMNS = [
+  "conversation",
+  "calls",
+  "direct",
+  "amortized",
+  "total",
+  "share",
+  "models"
+];
+var ContributionLabel = (Row) => {
+  const Title = S2(Row.title);
+  switch (true) {
+    case Title !== "":
+      return Title;
+    default:
+      return ShortSession(S2(Row.sessionId));
+  }
+};
+var ModelsCell = (Cell, List) => {
+  switch (true) {
+    case List.length === 0:
+      return (0, import_react3.createElement)("td", { className: Cell }, Dash_default);
+    default: {
+      const First = List[0] ?? "";
+      return (0, import_react3.createElement)(
+        "td",
+        { className: Cell, title: List.join(", ") },
+        (0, import_react3.createElement)(
+          "div",
+          { className: "playform-cost-pills", style: { flexWrap: "nowrap" } },
+          (0, import_react3.createElement)("span", { className: "playform-cost-pill" }, First),
+          List.length > 1 ? (0, import_react3.createElement)(
+            "span",
+            {
+              className: "playform-cost-pill playform-cost-pill-muted"
+            },
+            `+${Count(List.length - 1)}`
+          ) : null
+        )
+      );
+    }
+  }
+};
+var ContributionRow = (Path, Entry, Currency, t) => {
+  const Phase = Entry === void 0 ? "loading" : Entry.Phase;
+  const Rows = Entry === void 0 ? [] : Entry.Rows;
+  const Cell = "playform-cost-step-metric";
+  const Table2 = (0, import_react3.createElement)(
+    "table",
+    { className: "playform-cost-table" },
+    (0, import_react3.createElement)(
+      "thead",
+      {},
+      (0, import_react3.createElement)(
+        "tr",
+        {},
+        CONTRIBUTION_COLUMNS.map(
+          (Key) => (0, import_react3.createElement)(
+            "th",
+            { key: Key, className: Cell },
+            t(`files.contributions.column.${Key}`)
+          )
+        )
+      )
+    ),
+    (0, import_react3.createElement)(
+      "tbody",
+      {},
+      Rows.map(
+        (Row, Index) => (0, import_react3.createElement)(
+          "tr",
+          { key: Index },
+          (0, import_react3.createElement)(
+            "td",
+            { className: Cell, title: S2(Row.sessionId) },
+            ContributionLabel(Row)
+          ),
+          (0, import_react3.createElement)(
+            "td",
+            { className: Cell },
+            (0, import_react3.createElement)(
+              "span",
+              { className: "playform-cost-num" },
+              Count(N2(Row.calls))
+            )
+          ),
+          (0, import_react3.createElement)(
+            "td",
+            { className: Cell },
+            (0, import_react3.createElement)(
+              "span",
+              { className: "playform-cost-money" },
+              Price(N2(Row.direct), Currency)
+            )
+          ),
+          (0, import_react3.createElement)(
+            "td",
+            { className: Cell },
+            (0, import_react3.createElement)(
+              "span",
+              { className: "playform-cost-money" },
+              Price(N2(Row.amortized), Currency)
+            )
+          ),
+          (0, import_react3.createElement)(
+            "td",
+            { className: Cell },
+            (0, import_react3.createElement)(
+              "span",
+              { className: "playform-cost-money" },
+              Price(N2(Row.total), Currency)
+            )
+          ),
+          (0, import_react3.createElement)(
+            "td",
+            { className: Cell },
+            (0, import_react3.createElement)(
+              "span",
+              { className: "playform-cost-num" },
+              Rate(N2(Row.share))
+            )
+          ),
+          ModelsCell(Cell, Models(Row.models))
+        )
+      )
+    )
+  );
+  const Body = (() => {
+    switch (true) {
+      case Phase === "loading":
+        return (0, import_react3.createElement)(
+          "div",
+          { className: "playform-cost-block-empty", role: "status" },
+          t("files.contributions.loading")
+        );
+      case Phase === "failed":
+        return (0, import_react3.createElement)(
+          "div",
+          { className: "playform-cost-block-empty" },
+          t("files.contributions.failed")
+        );
+      case Rows.length === 0:
+        return (0, import_react3.createElement)(
+          "div",
+          { className: "playform-cost-block-empty" },
+          t("files.contributions.empty")
+        );
+      default:
+        return Table2;
+    }
+  })();
+  return (0, import_react3.createElement)(
+    "tr",
+    {},
+    (0, import_react3.createElement)(
+      "td",
+      { className: "playform-cost-detail-cell", colSpan: COLUMNS2.length },
+      (0, import_react3.createElement)(
+        "div",
+        { className: "playform-cost-detail-head" },
+        (0, import_react3.createElement)(
+          "span",
+          { className: "playform-cost-detail-title" },
+          t("files.contributions.title")
+        ),
+        (0, import_react3.createElement)(
+          "span",
+          { className: "playform-cost-block-meta" },
+          ` - ${BaseName(Path)}`
+        )
+      ),
+      Body
+    )
+  );
 };
 var MoneyCell = (Cell, Value2, Currency, Title) => (0, import_react3.createElement)(
   "td",
@@ -887,6 +1098,8 @@ function FileTable(Props) {
   const Tag = Props.Currency === "" ? "USD" : Props.Currency;
   const Metric = "playform-cost-step-metric";
   const Plain = "playform-cost-step-files";
+  const [Open, SetOpen] = (0, import_react3.useState)(() => /* @__PURE__ */ new Set());
+  const [Cache, SetCache] = (0, import_react3.useState)({});
   let SumTouches = 0;
   let SumAdded = 0;
   let SumRemoved = 0;
@@ -903,8 +1116,51 @@ function FileTable(Props) {
     SumTotal += N2(Row.total);
     SumTurn += N2(Row.turn);
   }
+  const Toggle = (Path) => {
+    const Expanded = Open.has(Path);
+    SetOpen((Current) => {
+      const Next = new Set(Current);
+      switch (true) {
+        case Expanded:
+          Next.delete(Path);
+          break;
+        default:
+          Next.add(Path);
+          break;
+      }
+      return Next;
+    });
+    switch (true) {
+      case Expanded:
+      case Cache[Path] !== void 0:
+        return;
+      default:
+        SetCache((Current) => ({
+          ...Current,
+          [Path]: { Phase: "loading", Rows: [] }
+        }));
+        new Promise((Done) => {
+          Done(Contributions(Path));
+        }).then((Rows) => {
+          SetCache((Current) => ({
+            ...Current,
+            [Path]: { Phase: "ready", Rows }
+          }));
+        }).catch(() => {
+          SetCache((Current) => ({
+            ...Current,
+            [Path]: { Phase: "failed", Rows: [] }
+          }));
+        });
+        return;
+    }
+  };
   const Entry = (Row) => {
     const Path = S2(Row.path);
+    const Expanded = Open.has(Path);
+    const Label = t(Expanded ? "files.collapse" : "files.expand", {
+      path: BaseName(Path)
+    });
     const Reads = N2(Row.reads);
     const Edits = N2(Row.edits);
     const Writes = N2(Row.writes);
@@ -924,15 +1180,23 @@ function FileTable(Props) {
     if (Edits > 0) Pills.push(TouchPill("files.touch.edit", Edits, t));
     if (Writes > 0) Pills.push(TouchPill("files.touch.write", Writes, t));
     if (Reads > 0) Pills.push(TouchPill("files.touch.read", Reads, t));
-    return (0, import_react3.createElement)(
+    const Cells = (0, import_react3.createElement)(
       "tr",
-      { key: Path },
+      {},
       (0, import_react3.createElement)(
         "td",
         { className: Plain, title: Path },
         (0, import_react3.createElement)(
-          import_dsh_client_ui_primitives.Tooltip,
+          "button",
           {
+            type: "button",
+            className: "playform-cost-row-toggle",
+            "aria-expanded": Expanded,
+            "aria-label": Label,
+            title: Label,
+            onClick: () => Toggle(Path)
+          },
+          (0, import_react3.createElement)(import_dsh_client_ui_primitives.Tooltip, {
             label: Path,
             portal: true,
             disabled: Path === "",
@@ -948,7 +1212,7 @@ function FileTable(Props) {
               },
               BaseName(Path)
             )
-          }
+          })
         )
       ),
       (0, import_react3.createElement)(
@@ -985,6 +1249,12 @@ function FileTable(Props) {
       ShareCell(Metric, Total, Lifetime, t),
       StageCell(Plain, Stages2, t),
       VerdictCell(Plain, Verdict, t)
+    );
+    return (0, import_react3.createElement)(
+      import_react3.Fragment,
+      { key: Path },
+      Cells,
+      Expanded ? ContributionRow(Path, Cache[Path], Tag, t) : null
     );
   };
   return (0, import_react3.createElement)(
@@ -1056,11 +1326,7 @@ function FileTable(Props) {
             { className: "playform-cost-added" },
             `+${Count(SumAdded)}`
           ),
-          (0, import_react3.createElement)(
-            "span",
-            { className: "playform-cost-files-sep" },
-            "/"
-          ),
+          (0, import_react3.createElement)("span", { className: "playform-cost-files-sep" }, "/"),
           (0, import_react3.createElement)(
             "span",
             { className: "playform-cost-removed" },
@@ -1469,7 +1735,11 @@ var Model = (Props) => {
 var Files = (Props) => {
   const Shown = Props.Pills.slice(0, FilePillLimit);
   const Extra = Props.Pills.length - Shown.length;
-  const Quiet = !Props.Fail && Props.Pills.length === 0 && !(Props.Saving > 0);
+  const Saving = Number.isFinite(Props.Saving) ? Props.Saving : 0;
+  const Quiet = !Props.Fail && Props.Pills.length === 0 && Saving === 0;
+  const SavingText = Props.t("files.saving", {
+    value: Price(Saving, Props.Currency)
+  });
   return (0, import_react4.createElement)(
     "td",
     { className: Props.Cell },
@@ -1504,15 +1774,17 @@ var Files = (Props) => {
           { className: "playform-cost-pill playform-cost-pill-muted" },
           Props.t("files.more", { count: Extra })
         ) : null,
-        Props.Saving > 0 ? (0, import_react4.createElement)(
+        Saving !== 0 ? (0, import_react4.createElement)(
           "span",
           {
             className: "playform-cost-pill playform-cost-pill-muted",
-            title: Props.t("files.saving.title")
+            title: Saving < 0 ? Props.t("saving.negative.title") : Props.t("files.saving.title")
           },
-          Props.t("files.saving", {
-            value: Price(Props.Saving, Props.Currency)
-          })
+          Saving < 0 ? (0, import_react4.createElement)(
+            "span",
+            { className: "playform-cost-removed" },
+            SavingText
+          ) : SavingText
         ) : null
       ),
       Props.ShowMix && Props.Pills.length > 0 ? (0, import_react4.createElement)(
@@ -1739,7 +2011,10 @@ function StepRow(Props) {
   const Input = typeof Cost.input === "number" ? Cost.input : 0;
   const Output = typeof Cost.output === "number" ? Cost.output : 0;
   const Other = typeof Cost.other === "number" ? Cost.other : 0;
-  const HasDetail = Files2.length > 0 || Allocations > 0 || Total > 0;
+  const UsageContext = (typeof Tokens.input === "number" ? Tokens.input : 0) + (typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0) + (typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0);
+  const UsageOutput = typeof Tokens.output === "number" ? Tokens.output : 0;
+  const Failed = typeof Step.error === "string";
+  const HasDetail = Files2.length > 0 || Allocations > 0 || Total > 0 || UsageContext > 0 || UsageOutput > 0 || Failed;
   const Started = t("step.started.title", { time: Stamp(Step.at) });
   const ModelText2 = [
     Text2(Step.provider),
@@ -1750,7 +2025,7 @@ function StepRow(Props) {
   ].filter((Part) => Part !== "").join(" | ");
   const Row = ["playform-cost-step-row"];
   if (HasDetail) Row.push("playform-cost-step-row-clickable");
-  if (typeof Step.error === "string") Row.push("playform-cost-step-row-error");
+  if (Failed) Row.push("playform-cost-step-row-error");
   return (0, import_react5.createElement)(
     "tr",
     {
@@ -1769,7 +2044,9 @@ function StepRow(Props) {
           OnToggle: Props.OnToggle
         }
       } : { Label: t("step.label", { step: Step.step }) },
-      Hint: ` - ${Props.Expanded ? t("detail.hide") : t("detail.show")}`,
+      // The hint promises a disclosure the row does not offer, so it is
+      // rendered only when the row can actually expand.
+      ...HasDetail ? { Hint: ` - ${Props.Expanded ? t("detail.hide") : t("detail.show")}` } : {},
       Markers: Markers(Step, t)
     }),
     Cells_default.Model({
@@ -1791,7 +2068,7 @@ function StepRow(Props) {
         Count: 1,
         Lines: typeof File.linesDelta === "number" ? File.linesDelta : null
       })),
-      Fail: typeof Step.error === "string",
+      Fail: Failed,
       Saving,
       Calls: 1,
       Tokens: TokensTotal,
@@ -1852,9 +2129,10 @@ function SummaryStrip(Props) {
   const Raw = Array.isArray(Summary.topFiles) ? Summary.topFiles : [];
   const TopFiles = Raw.slice(0, TopFileLimit);
   const Hit = typeof Summary.cacheHit === "number" ? Summary.cacheHit : null;
-  const Saving = typeof Summary.saving === "number" ? Summary.saving : 0;
+  const Saving = typeof Summary.saving === "number" && Number.isFinite(Summary.saving) ? Summary.saving : 0;
   const Total = typeof Summary.cost?.total === "number" ? Summary.cost.total : 0;
   const Tokens = typeof Summary.tokens?.total === "number" ? Summary.tokens.total : 0;
+  const SavingText = t("totals.saving", { value: Price(Saving, Tag) });
   return (0, import_react6.createElement)(
     import_react6.Fragment,
     {},
@@ -1874,10 +2152,17 @@ function SummaryStrip(Props) {
           { className: "playform-cost-control-label" },
           t("totals.cache", { value: Rate(Hit) })
         ),
-        Saving > 0 ? (0, import_react6.createElement)(
+        Saving !== 0 ? (0, import_react6.createElement)(
           "span",
-          { className: "playform-cost-control-label" },
-          t("totals.saving", { value: Price(Saving, Tag) })
+          {
+            className: "playform-cost-control-label",
+            ...Saving < 0 ? { title: t("saving.negative.title") } : {}
+          },
+          Saving < 0 ? (0, import_react6.createElement)(
+            "span",
+            { className: "playform-cost-removed" },
+            SavingText
+          ) : SavingText
         ) : null,
         (0, import_react6.createElement)(
           "span",
@@ -1926,8 +2211,15 @@ function SummaryStrip(Props) {
         const Path = Text3(File.path);
         const Money3 = typeof File.total === "number" ? File.total : 0;
         return (0, import_react6.createElement)(
-          "span",
-          { className: "playform-cost-file-pill", key: Index, title: Path },
+          "button",
+          {
+            type: "button",
+            className: "playform-cost-file-pill",
+            key: Index,
+            title: Path,
+            style: { fontFamily: "inherit", cursor: "pointer" },
+            onClick: () => Props.OnOpenFile(Path)
+          },
           (0, import_react6.createElement)("span", {
             className: `playform-cost-dot playform-cost-tone${Tone(Path)}`
           }),
@@ -2264,6 +2556,10 @@ var Limits_default = {
 var import_react9 = require("react");
 var DefaultRows = 200;
 var MaxRows = 2e3;
+var BudgetOf = (Rows) => {
+  if (typeof Rows !== "number" || !Number.isFinite(Rows) || Rows < 1) return DefaultRows;
+  return Math.min(MaxRows, Math.floor(Rows));
+};
 var Fill = (Template, Params) => {
   if (Params === void 0) return Template;
   let Out = Template;
@@ -2306,11 +2602,7 @@ function View(Props) {
   const [Phase, SetPhase] = (0, import_react9.useState)("loading");
   const [Note, SetNote] = (0, import_react9.useState)(null);
   const [Snapshot, SetSnapshot] = (0, import_react9.useState)(null);
-  const [Rows, SetRows] = (0, import_react9.useState)(() => {
-    if (typeof Props.rows !== "number" || !Number.isFinite(Props.rows) || Props.rows < 1)
-      return DefaultRows;
-    return Math.min(MaxRows, Math.floor(Props.rows));
-  });
+  const [Rows, SetRows] = (0, import_react9.useState)(() => BudgetOf(Props.rows));
   const [Attempt, SetAttempt] = (0, import_react9.useState)(0);
   const [Truncated, SetTruncated] = (0, import_react9.useState)(false);
   const [Older, SetOlder] = (0, import_react9.useState)("idle");
@@ -2321,9 +2613,7 @@ function View(Props) {
   const [TurnOverride, SetTurnOverride] = (0, import_react9.useState)({});
   const [StepOpen, SetStepOpen] = (0, import_react9.useState)(/* @__PURE__ */ new Set());
   const [ShowAll, SetShowAll] = (0, import_react9.useState)(/* @__PURE__ */ new Set());
-  const [SeenTick, SetSeenTick] = (0, import_react9.useState)(0);
   const ScrollRef = (0, import_react9.useRef)(null);
-  const Visible = (0, import_react9.useRef)(/* @__PURE__ */ new Set());
   const Pending = (0, import_react9.useRef)(null);
   const Growing = (0, import_react9.useRef)(false);
   const Counted = (0, import_react9.useRef)(null);
@@ -2405,33 +2695,20 @@ function View(Props) {
       Live = false;
     };
   }, [SessionId, Rows, Attempt]);
+  const SessionRef = (0, import_react9.useRef)(SessionId);
   (0, import_react9.useEffect)(() => {
-    const Scroll = ScrollRef.current;
-    if (Scroll === null || typeof IntersectionObserver === "undefined") return;
-    const Seen = /* @__PURE__ */ new Set();
-    const Observer = new IntersectionObserver((Entries) => {
-      for (const Entry of Entries) {
-        const Mark = Entry.target.dataset["turn"];
-        const Turn = typeof Mark === "string" ? Number(Mark) : Number.NaN;
-        switch (true) {
-          case (Entry.isIntersecting && Number.isFinite(Turn)):
-            Seen.add(Turn);
-            break;
-          case !Entry.isIntersecting:
-            Seen.delete(Turn);
-            break;
-          default:
-            break;
-        }
-      }
-      Visible.current = Seen;
-      SetSeenTick((Tick) => Tick + 1);
-    });
-    Scroll.querySelectorAll("tr[data-turn]").forEach((Row) => Observer.observe(Row));
-    return () => {
-      Observer.disconnect();
-    };
-  }, [Snapshot, Phase]);
+    if (SessionRef.current === SessionId) return;
+    SessionRef.current = SessionId;
+    SetTurnOverride({});
+    SetStepOpen(/* @__PURE__ */ new Set());
+    SetShowAll(/* @__PURE__ */ new Set());
+    SetRows(BudgetOf(Props.rows));
+    SetTruncated(false);
+    SetOlder("idle");
+    Counted.current = null;
+    Growing.current = false;
+    Pending.current = null;
+  }, [SessionId, Props.rows]);
   (0, import_react9.useEffect)(() => {
     const Scroll = ScrollRef.current;
     const Restore = Pending.current;
@@ -2497,17 +2774,19 @@ function View(Props) {
     SetPhase("loading");
     SetAttempt((Current) => Current + 1);
   }, []);
+  const OpenFile = (0, import_react9.useCallback)((Path) => {
+    SetPane("files");
+    SetFileFilter({ ...FileFilters_default.Default, Path });
+  }, []);
   const TurnScale = (0, import_react9.useMemo)(() => {
     if (Snapshot === null) return 0;
-    const Seen = Visible.current;
-    const Source = Seen.size > 0 ? Snapshot.turns.filter((Turn) => Seen.has(Turn.turn)) : Snapshot.turns;
     let Top = 0;
-    for (const Turn of Source) {
+    for (const Turn of Snapshot.turns) {
       const Money3 = Turn.cost?.total;
       if (typeof Money3 === "number" && Money3 > Top) Top = Money3;
     }
     return Top;
-  }, [Snapshot, SeenTick]);
+  }, [Snapshot]);
   const Body = [];
   if (Snapshot !== null && Phase === "ready") {
     for (const Turn of Snapshot.turns) {
@@ -2697,6 +2976,7 @@ function View(Props) {
       AllOpen,
       AnyTurn: Snapshot.turns.length > 0,
       OnToggleAll: ToggleAllTurns,
+      OnOpenFile: OpenFile,
       t
     })
   );
@@ -2860,8 +3140,9 @@ var Locale_zh_default = {
   "files.more": "\u8FD8\u6709 {count} \u4E2A",
   "files.title": "{calls} \u4E2A\u8C03\u7528:{files}",
   "files.contextOnly": "{tokens} \u4EE4\u724C,\u65E0\u6587\u4EF6",
-  "files.saving": "\u5DF2\u8282\u7701 {value}",
-  "files.saving.title": "\u76F8\u5BF9\u4E8E\u672A\u7F13\u5B58\u8F93\u5165\u4EF7\u7684\u8282\u7701",
+  "files.saving": "\u51C0\u7F13\u5B58\u6536\u76CA {value}",
+  "files.saving.title": "\u76F8\u5BF9\u4E8E\u672A\u7F13\u5B58\u8F93\u5165\u4EF7\u7684\u51C0\u7F13\u5B58\u6536\u76CA",
+  "saving.negative.title": "\u8D1F\u503C\u8868\u793A\u7F13\u5B58\u5199\u5165\u5F00\u9500:\u7F13\u5B58\u5199\u5165\u6EA2\u4EF7\u8D85\u8FC7\u4E86\u7F13\u5B58\u8BFB\u53D6\u8282\u7701\u7684\u90E8\u5206",
   "files.lines": "{lines} \u884C",
   "cache.detail": "\u7F13\u5B58\u8BFB\u53D6 {read},\u8F93\u5165 {input},\u7F13\u5B58\u5199\u5165 {write}",
   "other.detail": "\u7F13\u5B58\u5199\u5165 {write},\u63A8\u7406 {reasoning},\u4F59\u989D {rest}",
@@ -2878,7 +3159,8 @@ var Locale_zh_default = {
   "detail.bytes": "{bytes} \u5B57\u8282",
   "detail.readBeforeEdit": "\u7F16\u8F91\u524D\u5DF2\u8BFB",
   "detail.empty": "\u6B64\u8C03\u7528\u6CA1\u6709\u89E6\u53CA\u4EFB\u4F55\u6587\u4EF6\u3002",
-  "detail.allocationOnly": "\u5DF2\u5206\u644A,\u672A\u89E6\u53CA",
+  "detail.allocationOnly": "\u4EC5\u4E0A\u4E0B\u6587\u5206\u644A;\u672C\u6B21\u8C03\u7528\u672A\u89E6\u53CA",
+  "detail.touchedNoDetail": "\u5DF2\u89E6\u53CA,\u4F46\u672A\u8BB0\u5F55\u53D8\u66F4\u660E\u7EC6",
   "detail.hidden": "\u8FD8\u6709 {count} \u4E2A\u6587\u4EF6\u672A\u663E\u793A",
   "detail.tool": "\u5DE5\u5177 {tool}",
   "detail.kind": "\u7C7B\u578B {kind}",
@@ -2892,7 +3174,7 @@ var Locale_zh_default = {
   "totals.session.title": "\u8BE5\u4F1A\u8BDD\u5728\u8D26\u672C\u4E2D\u8BB0\u5F55\u7684\u5168\u90E8\u8C03\u7528,\u800C\u4E0D\u53EA\u662F\u8FD9\u91CC\u52A0\u8F7D\u7684\u884C",
   "totals.calls": "{calls} \u4E2A\u8C03\u7528,{unpriced} \u4E2A\u672A\u5B9A\u4EF7",
   "totals.cache": "\u7F13\u5B58\u547D\u4E2D {value}",
-  "totals.saving": "\u5DF2\u8282\u7701 {value}",
+  "totals.saving": "\u51C0\u7F13\u5B58\u6536\u76CA {value}",
   "totals.tokens": "{tokens} \u4EE4\u724C",
   "topFiles.label": "\u6210\u672C\u6700\u9AD8\u6587\u4EF6",
   "topFiles.title": "\u672C\u4F1A\u8BDD\u4E2D\u5206\u644A\u6210\u672C\u6700\u9AD8\u7684\u6587\u4EF6",
@@ -2937,6 +3219,19 @@ var Locale_zh_default = {
   "files.column.stage.title": "\u6587\u4EF6\u5230\u8FBE\u7684\u9996\u4E2A\u9636\u6BB5,\u4EE5\u53CA\u5B83\u4E00\u5171\u7ECF\u8FC7\u7684\u9636\u6BB5\u6570",
   "files.column.verdict": "\u7ED3\u679C",
   "files.column.verdict.title": "\u8D26\u672C\u4E3A\u672C\u4F1A\u8BDD\u8BB0\u5F55\u7684\u8BE5\u6587\u4EF6\u7ED3\u679C",
+  "files.contributions.title": "\u4E3A\u8BE5\u6587\u4EF6\u5206\u644A\u6210\u672C\u7684\u4F1A\u8BDD",
+  "files.contributions.empty": "\u6CA1\u6709\u4F1A\u8BDD\u4E3A\u8BE5\u6587\u4EF6\u5206\u644A\u6210\u672C\u3002",
+  "files.contributions.loading": "\u6B63\u5728\u52A0\u8F7D\u5206\u644A\u4F1A\u8BDD...",
+  "files.contributions.failed": "\u5206\u644A\u660E\u7EC6\u8BFB\u53D6\u5931\u8D25\u3002",
+  "files.contributions.column.conversation": "\u4F1A\u8BDD",
+  "files.contributions.column.calls": "\u8C03\u7528",
+  "files.contributions.column.direct": "\u76F4\u63A5",
+  "files.contributions.column.amortized": "\u5206\u644A",
+  "files.contributions.column.total": "\u5408\u8BA1",
+  "files.contributions.column.share": "\u5360\u6BD4",
+  "files.contributions.column.models": "\u6A21\u578B",
+  "files.expand": "\u5C55\u5F00 {path} \u7684\u5206\u644A\u4F1A\u8BDD",
+  "files.collapse": "\u6298\u53E0 {path} \u7684\u5206\u644A\u4F1A\u8BDD",
   "files.filter.path": "\u6309\u8DEF\u5F84\u7B5B\u9009",
   "files.filter.kind": "\u7C7B\u578B",
   "files.filter.stage": "\u9636\u6BB5",

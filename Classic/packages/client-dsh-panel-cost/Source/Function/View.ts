@@ -30,6 +30,15 @@ const MaxRows = 2000;
 
 type Phase = "loading" | "ready" | "empty" | "unavailable" | "error";
 
+// BudgetOf - the starting row budget: the configured prop, clamped, and the
+// module default when the prop is missing or unusable. A session change
+// returns the budget to this value so one session's grown window does not
+// carry into the next.
+const BudgetOf = (Rows: number | undefined): number => {
+	if (typeof Rows !== "number" || !Number.isFinite(Rows) || Rows < 1) return DefaultRows;
+	return Math.min(MaxRows, Math.floor(Rows));
+};
+
 const Fill = (
 	Template: string,
 	Params: Readonly<Record<string, string | number>> | undefined,
@@ -95,11 +104,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 	const [Phase, SetPhase] = useState<Phase>("loading");
 	const [Note, SetNote] = useState<string | null>(null);
 	const [Snapshot, SetSnapshot] = useState<CostSnapshot | null>(null);
-	const [Rows, SetRows] = useState(() => {
-		if (typeof Props.rows !== "number" || !Number.isFinite(Props.rows) || Props.rows < 1)
-			return DefaultRows;
-		return Math.min(MaxRows, Math.floor(Props.rows));
-	});
+	const [Rows, SetRows] = useState(() => BudgetOf(Props.rows));
 	const [Attempt, SetAttempt] = useState(0);
 	const [Truncated, SetTruncated] = useState(false);
 	const [Older, SetOlder] = useState<"idle" | "loading" | "failed">("idle");
@@ -110,9 +115,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 	const [TurnOverride, SetTurnOverride] = useState<Record<number, boolean | undefined>>({});
 	const [StepOpen, SetStepOpen] = useState<ReadonlySet<string>>(new Set<string>());
 	const [ShowAll, SetShowAll] = useState<ReadonlySet<number>>(new Set<number>());
-	const [SeenTick, SetSeenTick] = useState(0);
 	const ScrollRef = useRef<HTMLDivElement | null>(null);
-	const Visible = useRef<ReadonlySet<number>>(new Set<number>());
 	const Pending = useRef<{ Height: number; Top: number } | null>(null);
 	const Growing = useRef(false);
 	const Counted = useRef<number | null>(null);
@@ -215,33 +218,24 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 		// the snapshot is read only to keep the table up across a grow refetch.
 	}, [SessionId, Rows, Attempt]);
 
+	// A session switch replaces every row the panel holds, so the expanded
+	// turns and steps, the show-all choices, the grown row budget, the
+	// truncation flag and the load-older bookkeeping of the old session are
+	// cleared before the new session's fetch resolves.
+	const SessionRef = useRef(SessionId);
 	useEffect(() => {
-		const Scroll = ScrollRef.current;
-		if (Scroll === null || typeof IntersectionObserver === "undefined") return;
-		const Seen = new Set<number>();
-		const Observer = new IntersectionObserver((Entries) => {
-			for (const Entry of Entries) {
-				const Mark = Entry.target.dataset["turn"];
-				const Turn = typeof Mark === "string" ? Number(Mark) : Number.NaN;
-				switch (true) {
-					case Entry.isIntersecting && Number.isFinite(Turn):
-						Seen.add(Turn);
-						break;
-					case !Entry.isIntersecting:
-						Seen.delete(Turn);
-						break;
-					default:
-						break;
-				}
-			}
-			Visible.current = Seen;
-			SetSeenTick((Tick) => Tick + 1);
-		});
-		Scroll.querySelectorAll("tr[data-turn]").forEach((Row) => Observer.observe(Row));
-		return () => {
-			Observer.disconnect();
-		};
-	}, [Snapshot, Phase]);
+		if (SessionRef.current === SessionId) return;
+		SessionRef.current = SessionId;
+		SetTurnOverride({});
+		SetStepOpen(new Set<string>());
+		SetShowAll(new Set<number>());
+		SetRows(BudgetOf(Props.rows));
+		SetTruncated(false);
+		SetOlder("idle");
+		Counted.current = null;
+		Growing.current = false;
+		Pending.current = null;
+	}, [SessionId, Props.rows]);
 
 	useEffect(() => {
 		const Scroll = ScrollRef.current;
@@ -321,18 +315,26 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 		SetAttempt((Current) => Current + 1);
 	}, []);
 
+	// A top file opens the Files view already filtered to that file: the
+	// other filters are cleared so the chosen file cannot be hidden by a
+	// kind or stage choice made earlier.
+	const OpenFile = useCallback((Path: string) => {
+		SetPane("files");
+		SetFileFilter({ ...FileFilters.Default, Path });
+	}, []);
+
+	// The turn bar scales against the largest turn total of the loaded
+	// snapshot, so a turn keeps the same bar length while the user scrolls;
+	// a visible-window scale would make the same turn change length.
 	const TurnScale = useMemo(() => {
 		if (Snapshot === null) return 0;
-		const Seen = Visible.current;
-		const Source =
-			Seen.size > 0 ? Snapshot.turns.filter((Turn) => Seen.has(Turn.turn)) : Snapshot.turns;
 		let Top = 0;
-		for (const Turn of Source) {
+		for (const Turn of Snapshot.turns) {
 			const Money = Turn.cost?.total;
 			if (typeof Money === "number" && Money > Top) Top = Money;
 		}
 		return Top;
-	}, [Snapshot, SeenTick]);
+	}, [Snapshot]);
 
 	const Body: Array<ReturnType<typeof createElement>> = [];
 	if (Snapshot !== null && Phase === "ready") {
@@ -549,6 +551,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 			AllOpen,
 			AnyTurn: Snapshot.turns.length > 0,
 			OnToggleAll: ToggleAllTurns,
+			OnOpenFile: OpenFile,
 			t,
 		}),
 	);

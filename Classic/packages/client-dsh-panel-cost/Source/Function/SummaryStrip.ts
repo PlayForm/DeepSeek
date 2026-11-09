@@ -1,6 +1,7 @@
 // SummaryStrip - the fixed footer bands under the scroll region: the
 // toolbar with the session summary, the control labels, the expand-all
-// button, and the top-files band with the five most expensive files.
+// button, and the top-files band whose five most expensive files are
+// buttons that open the Files view on that file's path.
 import CountShort from "@Function/CountShort";
 import Price from "@Function/Price";
 import Rate from "@Function/Rate";
@@ -17,6 +18,7 @@ type SummaryStripProps = {
 	AllOpen: boolean;
 	AnyTurn: boolean;
 	OnToggleAll: () => void;
+	OnOpenFile: (Path: string) => void;
 	t: Translate;
 };
 
@@ -49,9 +51,13 @@ export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeo
 	const Raw: readonly TopFile[] = Array.isArray(Summary.topFiles) ? Summary.topFiles : [];
 	const TopFiles = Raw.slice(0, TopFileLimit);
 	const Hit = typeof Summary.cacheHit === "number" ? Summary.cacheHit : null;
-	const Saving = typeof Summary.saving === "number" ? Summary.saving : 0;
+	// The signed net cache benefit: positive is a saving, negative is the
+	// cache-write premium the reads did not pay back.
+	const Saving =
+		typeof Summary.saving === "number" && Number.isFinite(Summary.saving) ? Summary.saving : 0;
 	const Total = typeof Summary.cost?.total === "number" ? Summary.cost.total : 0;
 	const Tokens = typeof Summary.tokens?.total === "number" ? Summary.tokens.total : 0;
+	const SavingText = t("totals.saving", { value: Price(Saving, Tag) });
 	return createElement(
 		Fragment,
 		{},
@@ -73,11 +79,20 @@ export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeo
 							{ className: "playform-cost-control-label" },
 							t("totals.cache", { value: Rate(Hit) }),
 						),
-				Saving > 0
+				Saving !== 0
 					? createElement(
 							"span",
-							{ className: "playform-cost-control-label" },
-							t("totals.saving", { value: Price(Saving, Tag) }),
+							{
+								className: "playform-cost-control-label",
+								...(Saving < 0 ? { title: t("saving.negative.title") } : {}),
+							},
+							Saving < 0
+								? createElement(
+										"span",
+										{ className: "playform-cost-removed" },
+										SavingText,
+									)
+								: SavingText,
 						)
 					: null,
 				createElement(
@@ -135,8 +150,15 @@ export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeo
 						const Path = Text(File.path);
 						const Money = typeof File.total === "number" ? File.total : 0;
 						return createElement(
-							"span",
-							{ className: "playform-cost-file-pill", key: Index, title: Path },
+							"button",
+							{
+								type: "button",
+								className: "playform-cost-file-pill",
+								key: Index,
+								title: Path,
+								style: { fontFamily: "inherit", cursor: "pointer" },
+								onClick: () => Props.OnOpenFile(Path),
+							},
 							createElement("span", {
 								className: `playform-cost-dot playform-cost-tone${Tone(Path)}`,
 							}),

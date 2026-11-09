@@ -6,19 +6,21 @@
 // price row in force at the call's own time, with the cache split's
 // CacheSaving), the Touch rows per tool/call (written the moment their Call
 // row exists, pending until then, each with its Stage and ReadBeforeEdit
-// derived from the file's own prior touches in the session), the ContextMass
+// derived from the file's own prior touches in the session and its BytesDelta
+// summed from the touch's own Edit rows, so the allocator's byte weighting
+// engages instead of falling back to equal shares - section 5.1), the ContextMass
 // rows from the surface replay (which now splits the cached prefix from the
 // uncached remainder), the Allocation rows from the attribution model
 // (allocated when the step ends, or at the end of the batch as the safety
 // net), the Verdict row per (session, file) when the session ends, and the
 // session Cursor advanced to the highest sequence folded. The call's own
-// pricing dimensions (section 17.1) - Mode, Region and the resolved tier -
-// are written on the Call row, and the cache split's CacheSaving is
-// measured against the modifier-adjusted rates (section 17.2). The v4 grain
-// rides the same fold: the Edit rows per touch (section 17.3), read from the
-// tool call's own arguments, and the telemetry columns on the Call row
-// (section 17.4), read from the batch's records up to each message. Every
-// insert
+// pricing dimensions (section 17.1) - Mode, Region, the resolved tier and the
+// time-of-day window its timestamp falls in (section 6) - are written on the
+// Call row, and the cache split's CacheSaving is measured against the
+// modifier-adjusted rates (section 17.2). The v4 grain rides the same fold:
+// the Edit rows per touch (section 17.3), read from the tool call's own
+// arguments, and the telemetry columns on the Call row (section 17.4), read
+// from the batch's records up to each message. Every insert
 // is INSERT OR IGNORE against the DDL's unique keys (the Verdict is
 // REPLACE), so draining the same events twice writes the same rows and no
 // duplicates. The drain never throws into the parallel dispatch: one failed
@@ -88,6 +90,25 @@ type AwaitedCall = {
 // edit (section 16.1) and whose presence makes a file's verdict "changed".
 const WriteKind = (Kind: string): boolean =>
 	Kind === "write" || Kind === "edit" || Kind === "delete" || Kind === "move";
+
+// One configured window's coverage (section 6): a half-open span of UTC hours
+// that starts at the window's first hour and runs for its length - so an end
+// past 24 (or an end before the start) wraps into the next day - and covers
+// nothing when the two hours are equal.
+const Covered = (Hour: number, Start: number, End: number): boolean => {
+	const From = ((Start % 24) + 24) % 24;
+	const Span = End - Start <= 0 ? End - Start + 24 : End - Start;
+	switch (true) {
+		case Start === End:
+			return false;
+		case Span >= 24:
+			return true;
+		default: {
+			const Into = (((Hour - From) % 24) + 24) % 24;
+			return Into < Span;
+		}
+	}
+};
 
 // The cache split's saving (section 2.2 and section 11's ring C): the reads
 // the cache made cheaper, minus the cache-write premium when the provider
@@ -166,6 +187,21 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 	const Book = Price(Database, Config);
 	const Cost = Book.Cost;
 
+	// The call's own time-of-day window (section 6): the configured window
+	// whose UTC hours cover the call's timestamp, else "any" - the generic row
+	// every price book falls back to when no window matches.
+	const WindowOf = (At: number): string => {
+		const Hour = new Date(At).getUTCHours();
+		for (const Window of Config.priceWindows) {
+			const Start = Math.round(Window.startUtcHour);
+			const End = Math.round(Window.endUtcHour);
+			if (Covered(Hour, Start, End)) {
+				return Window.label;
+			}
+		}
+		return "any";
+	};
+
 	const SelectCursor = Database.prepare("SELECT LastSeq FROM Cursor WHERE SessionId = ?");
 	const WriteCursor = Database.prepare(
 		"INSERT INTO Cursor (SessionId, LastSeq, UpdatedAt) VALUES (?, ?, ?) " +
@@ -208,8 +244,8 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 		"INSERT OR IGNORE INTO File (ProjectId, Path, FirstSeenAt) VALUES (?, ?, ?)",
 	);
 	const InsertTouch = Database.prepare(
-		"INSERT OR IGNORE INTO Touch (CallId, SessionId, Turn, Step, CallKey, Tool, FileId, Kind, Stage, ReadBeforeEdit, Seq, At) " +
-			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+		"INSERT OR IGNORE INTO Touch (CallId, SessionId, Turn, Step, CallKey, Tool, FileId, Kind, Stage, ReadBeforeEdit, BytesDelta, Seq, At) " +
+			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 	);
 	const SelectTouchId = Database.prepare(
 		"SELECT TouchId FROM Touch WHERE SessionId = ? AND CallKey = ? AND FileId = ?",
@@ -408,6 +444,17 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 			): void => {
 				const History = Histories.get(SessionId) ?? new Map<string, string[]>();
 				Histories.set(SessionId, History);
+				// the edit grain (section 17.3) is parsed once per tool call:
+				// its hunks are the call's measured churn, summed over both
+				// sides and written on the Touch row as BytesDelta, so the
+				// allocator's byte weighting engages at Fold time (section
+				// 5.1). A call whose arguments parse to no hunks leaves the
+				// delta NULL, which keeps the equal-share fallback intact.
+				const Hunks = Edit(Entry.Tool, Entry.Arguments, Entry.At);
+				const Delta =
+					Hunks.length === 0
+						? null
+						: Hunks.reduce((Sum, Hunk) => Sum + Hunk.BytesAdded + Hunk.BytesRemoved, 0);
 				for (const Row of Entry.Touched) {
 					const FileId = Filed(Row.Path, Entry.At);
 					if (FileId === null) {
@@ -434,23 +481,23 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 						Row.Kind,
 						Staged,
 						Read,
+						Delta,
 						Entry.Seq,
 						Entry.At,
 					);
 					const Seen = History.get(Row.Path) ?? [];
 					Seen.push(Row.Kind);
 					History.set(Row.Path, Seen);
-					// the edit grain (section 17.3): the hunks the tool call
-					// produced, read from its own arguments and inserted
-					// against the touch they belong to - a non-edit tool's
-					// arguments parse to no rows, so the insert is skipped
+					// the hunks themselves, inserted against the touch they
+					// belong to - a non-edit tool's arguments parse to no
+					// rows, so the insert is skipped
 					const Held = SelectTouchId.get(SessionId, Entry.CallKey, FileId) as
 						{ TouchId: unknown } | undefined;
 					const TouchId = typeof Held?.TouchId === "number" ? Held.TouchId : undefined;
 					if (TouchId === undefined) {
 						continue;
 					}
-					for (const Hunk of Edit(Entry.Tool, Entry.Arguments, Entry.At)) {
+					for (const Hunk of Hunks) {
 						InsertEdit.run(
 							TouchId,
 							Hunk.Ordinal,
@@ -666,15 +713,18 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 							}
 							const CachedSurface = Math.max(0, Math.round(Massed.CachedSurface));
 							Adopt(Record, {}, At);
-							// The price row in force at the call's own time, mode
-							// and region (section 17.1): the call's own signals,
-							// defaulting to standard and any region.
+							// The price row in force at the call's own time,
+							// mode, region and time-of-day window (sections
+							// 17.1 and 6): the call's own signals, defaulting
+							// to standard, any region and the window its
+							// timestamp falls in - else the generic "any" row.
 							const Rate = Book.Resolve(
 								Usage.Provider,
 								Usage.Model,
 								Usage.At,
 								Usage.Mode ?? "standard",
 								Usage.Region ?? null,
+								WindowOf(Usage.At),
 							);
 							const Costed = Cost(Usage, Rate);
 							// The cache split's saving is measured against the

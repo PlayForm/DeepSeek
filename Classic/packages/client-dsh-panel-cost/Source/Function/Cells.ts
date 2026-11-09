@@ -229,7 +229,13 @@ const Model = (Props: ModelCellProps): ReturnType<typeof createElement> => {
 const Files = (Props: FilesCellProps): ReturnType<typeof createElement> => {
 	const Shown = Props.Pills.slice(0, FilePillLimit);
 	const Extra = Props.Pills.length - Shown.length;
-	const Quiet = !Props.Fail && Props.Pills.length === 0 && !(Props.Saving > 0);
+	// The signed net cache benefit: positive is a saving, negative is the
+	// cache-write premium the reads did not pay back.
+	const Saving = Number.isFinite(Props.Saving) ? Props.Saving : 0;
+	const Quiet = !Props.Fail && Props.Pills.length === 0 && Saving === 0;
+	const SavingText = Props.t("files.saving", {
+		value: Price(Saving, Props.Currency),
+	});
 	return createElement(
 		"td",
 		{ className: Props.Cell },
@@ -272,16 +278,23 @@ const Files = (Props: FilesCellProps): ReturnType<typeof createElement> => {
 									Props.t("files.more", { count: Extra }),
 								)
 							: null,
-						Props.Saving > 0
+						Saving !== 0
 							? createElement(
 									"span",
 									{
 										className: "playform-cost-pill playform-cost-pill-muted",
-										title: Props.t("files.saving.title"),
+										title:
+											Saving < 0
+												? Props.t("saving.negative.title")
+												: Props.t("files.saving.title"),
 									},
-									Props.t("files.saving", {
-										value: Price(Props.Saving, Props.Currency),
-									}),
+									Saving < 0
+										? createElement(
+												"span",
+												{ className: "playform-cost-removed" },
+												SavingText,
+											)
+										: SavingText,
 								)
 							: null,
 					),

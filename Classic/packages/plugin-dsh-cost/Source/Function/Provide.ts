@@ -1,8 +1,11 @@
 // Provide - the engine service: `cost.session(SessionId, Rows)` answers one
-// session's CostResponse from the ledger, READ-ONLY. The path is this
-// package's own config default (Variable/Config's `Home(["cost",
-// "ledger.db"])`), never a caller's, and it is opened read-only once per call
-// and closed in a finally, so a failed read never leaks a handle. The
+// session's CostResponse from the ledger, and `cost.contributions(Path)`
+// answers the conversations that contributed to one file's cost, both
+// READ-ONLY. The ledger path is this package's own config default
+// (Variable/Config's `Home(["cost", "ledger.db"])`), never a caller's: the
+// contribution read's argument is a FILE path, not a ledger path, so it is
+// handed to the read and never opened. Each call opens the ledger read-only
+// once and closes it in a finally, so a failed read never leaks a handle. The
 // package's own Function/Open is the WRITE path (mkdir, the WAL pragmas, the
 // schema ladder), so it is not reused here: the local open expands a leading
 // "~/" once and throws one actionable line. The provider returns the disposer
@@ -11,10 +14,12 @@ import { homedir } from "node:os";
 import { DatabaseSync } from "node:sqlite";
 
 import type { Context } from "@deepseek-ai/cordis";
+import type CostContributionRow from "@Interface/ContributionRow.js";
 import type CostResponse from "@Interface/Response.js";
 import type CostService from "@Interface/Service.js";
 import { Home } from "@playform/lib-dsh-core";
 
+import Contributions from "./Contributions.js";
 import Reader from "./Reader.js";
 
 // The read-only open: a leading "~/" is expanded to the home-anchored
@@ -52,6 +57,16 @@ export default function Provide(Context: Context): () => void {
 				// The reader sees only the handle, so the service stamps the
 				// resolved ledger path the envelope's `path` field names.
 				return { ...Reader(Ledger.Database, SessionId, Rows), path: Path };
+			} finally {
+				Ledger.Close();
+			}
+		},
+		contributions: (FilePath: string): readonly CostContributionRow[] => {
+			// The argument is the file the caller asks about, so the ledger
+			// stays the package's own default and only the read sees the path.
+			const Ledger = Open(Path);
+			try {
+				return Contributions(Ledger.Database, FilePath);
 			} finally {
 				Ledger.Close();
 			}

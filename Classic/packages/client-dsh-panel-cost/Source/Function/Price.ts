@@ -1,7 +1,7 @@
 // Price - the one money formatter both halves render with, copied verbatim
 // from the design's Price ladder: the USD symbol, the currency word for any
-// other currency, a sub-micro floor, and a digit ladder of two decimals at
-// a dollar and up, four below it, six below a cent.
+// other currency, a signed sub-micro floor, and a digit ladder of two
+// decimals at a dollar and up, four below it, six below a cent.
 import Dash from "@Variable/Dash";
 
 export default function Price(Value: number | null, Currency: string): string {
@@ -11,7 +11,9 @@ export default function Price(Value: number | null, Currency: string): string {
 	const Size = Math.abs(Value);
 	switch (true) {
 		case Size > 0 && Size < 0.000001:
-			return `<${Symbol}0.000001`;
+			// The floor keeps the sign, so a tiny credit or comparison delta
+			// never reads as a positive amount.
+			return `${Sign}<${Symbol}0.000001`;
 		default: {
 			// A zero is a clean two-decimal figure, not a six-decimal one:
 			// the ladder's sub-cent precision is for a real sub-cent amount.

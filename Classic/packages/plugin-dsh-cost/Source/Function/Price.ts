@@ -1,16 +1,19 @@
 // Price - the rate resolution and the cost arithmetic
-// (Documentation/Plans/COST-TRACK-PLUGIN.md sections 2, 17.1 and 17.2): a
+// (Documentation/Plans/COST-TRACK-PLUGIN.md sections 2, 6, 17.1 and 17.2): a
 // call is priced at the most specific ledger price row in force at the
-// call's own time - an exact Mode or Region match wins over a NULL ("any")
-// row, the greatest EffectiveFrom wins among equals, and a call in an
-// unpriced mode or region costs zero - falling back to the configured price
-// book, which is seeded into the ledger's Price table on first use (Source
-// "config", append-only). The arithmetic is the marginal tier walk
-// (section 17.2): for each tier row of the resolved row's rate card in
-// ascending TierFrom, the tokens inside that tier's window are priced at
-// that tier's rate and summed - per bucket, each against its own rate
-// column, because a cached prefix that crosses a threshold is priced per
-// portion rather than per call. After the tier sum, the total and every
+// call's own time - the row's effective interval is half-open
+// (EffectiveFrom <= at < EffectiveTo, a NULL EffectiveTo staying open
+// forever), an exact Mode, Region or Window match wins over a NULL or 'any'
+// generic row (so a call in an exact region falls back to the generic row
+// when its region has no row of its own), the greatest EffectiveFrom wins
+// among equals, and a call in an unpriced mode or region costs zero -
+// falling back to the configured price book, which is seeded into the
+// ledger's Price table on first use (Source "config", append-only). The
+// arithmetic is the marginal tier walk (section 17.2): for each tier row of
+// the resolved row's rate card in ascending TierFrom, the tokens inside that
+// tier's window are priced at that tier's rate and summed - per bucket, each
+// against its own rate column, because a cached prefix that crosses a
+// threshold is priced per portion rather than per call. After the tier sum, the total and every
 // bucket are multiplied by the product of the applicable modifiers'
 // multipliers (section 17.2): a modifier applies when its Provider matches,
 // its Model is NULL or equals the model, its Kind matches the call's
@@ -115,12 +118,19 @@ export default (
 	Cost(Record: Usage, Rate: Price, Modifiers?: readonly Rule[]): Costed;
 	Applied(Provider: string, Kind: string, Model: string, At: number): number;
 } => {
+	// The rate row in force at the call's own time (section 6): the half-open
+	// effective interval, the exact-or-generic mode, the exact-or-generic
+	// region and the call's own window or the generic "any" window. The most
+	// specific row wins, then the greatest EffectiveFrom, so a historical
+	// invoice stays reproducible after a provider raises its rates.
 	const Select = Database.prepare(
 		"SELECT Provider, Model, Currency, InputRate, OutputRate, CacheReadRate, CacheWriteRate, ReasoningRate, " +
 			"EffectiveFrom, TierFrom, TierTo, Mode, Region " +
 			"FROM Price WHERE Provider = ? AND Model = ? AND EffectiveFrom <= ? " +
-			"AND (Mode = ? OR Mode IS NULL) AND Region IS ? AND (Window = ? OR Window = 'any') " +
-			"ORDER BY (Mode = ?) DESC, (Region = ?) DESC, (Window = ?) DESC, EffectiveFrom DESC LIMIT 1",
+			"AND (EffectiveTo IS NULL OR ? < EffectiveTo) " +
+			"AND (Mode = ? OR Mode IS NULL) AND (Region = ? OR Region IS NULL) " +
+			"AND (Window = ? OR Window = 'any') " +
+			"ORDER BY (Mode = ?) DESC, COALESCE(Region = ?, 0) DESC, (Window = ?) DESC, EffectiveFrom DESC LIMIT 1",
 	);
 	const Tiers = Database.prepare(
 		"SELECT TierFrom, TierTo, InputRate, OutputRate, CacheReadRate, CacheWriteRate " +
@@ -181,6 +191,7 @@ export default (
 			Provider,
 			Model,
 			When,
+			When,
 			Mode,
 			Region,
 			Window,
@@ -209,6 +220,7 @@ export default (
 			Found = Select.get(
 				Provider,
 				Model,
+				When,
 				When,
 				Mode,
 				Region,

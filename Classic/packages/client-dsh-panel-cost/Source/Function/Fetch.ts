@@ -1,12 +1,15 @@
-// Fetch - the browser half of the data path: one GET to the route path with
-// the encoded session id and the row budget, answered as a CostResponse.
-// The function never throws: a runtime without fetch, a failed request, a
-// non-JSON answer or a malformed envelope all resolve to the unavailable
-// envelope with one actionable line, so the panel can always render a
-// state. The envelope's `path` names the route, because the browser knows
-// no ledger path; the route's own message names the file.
+// Fetch - the browser half of the data path: the session GET (the route
+// path with the encoded session id and the row budget, answered as a
+// CostResponse) and the file-scoped GET that answers the conversations that
+// contributed to one file's cost. Neither function throws: a runtime
+// without fetch, a failed request, a non-JSON answer or a malformed body
+// resolve to the unavailable envelope and to an empty contribution list, so
+// the panel can always render a state. The envelope's `path` names the
+// route, because the browser knows no ledger path; the route's own message
+// names the file.
+import type CostContributionRow from "@Interface/ContributionRow.js";
 import type CostResponse from "@Interface/Response.js";
-import Path from "@Variable/Path.js";
+import Route from "@Variable/Path.js";
 
 // The minimal browser fetch surface this module needs (the build targets
 // ESNext with node types only, so the browser globals are declared here
@@ -40,7 +43,7 @@ const Fail = (Message: string, Rows: number): CostResponse => ({
 	ok: false,
 	code: "unavailable",
 	message: Message,
-	path: Path,
+	path: Route,
 	rows: Rows,
 	truncated: false,
 	session: null,
@@ -90,7 +93,7 @@ export default function Fetch(SessionId: string, Rows: number): Promise<CostResp
 		return Promise.resolve(Fail("the fetch API is not available in this runtime", Rows));
 	}
 	try {
-		return fetch(`${Path}?session=${encodeURIComponent(SessionId)}&rows=${Rows}`, {
+		return fetch(`${Route}?session=${encodeURIComponent(SessionId)}&rows=${Rows}`, {
 			method: "GET",
 			headers: { accept: "application/json" },
 			cache: "no-store",
@@ -114,5 +117,47 @@ export default function Fetch(SessionId: string, Rows: number): Promise<CostResp
 				Rows,
 			),
 		);
+	}
+}
+
+// The file-scoped answer: the engine's contribution rows under the same
+// 200-with-envelope convention as the session read, with the rows unwrapped
+// because the contribution read carries no envelope of its own.
+type ContributionAnswer = {
+	readonly ok: true;
+	readonly contributions: readonly CostContributionRow[];
+};
+
+// IsContributionAnswer - the file-scoped answer's guard: the ok flag and a
+// contributions array. The rows themselves are read defensively where they
+// render, so the guard stops at the shape the table indexes.
+const IsContributionAnswer = (Candidate: unknown): Candidate is ContributionAnswer => {
+	if (typeof Candidate !== "object" || Candidate === null) {
+		return false;
+	}
+	const Answer = Candidate as { ok?: unknown; contributions?: unknown };
+	return Answer.ok === true && Array.isArray(Answer.contributions);
+};
+
+// Contributions - the file-scoped read: one GET to the same route with the
+// encoded path, answered as the rows of the conversations that contributed
+// to that file's cost. It never throws: a runtime without fetch, a failed
+// request, a non-JSON answer or a malformed body all resolve to an empty
+// list, so a file row that opens always has a state to render.
+export function Contributions(Path: string): Promise<readonly CostContributionRow[]> {
+	if (typeof fetch !== "function") {
+		return Promise.resolve([]);
+	}
+	try {
+		return fetch(`${Route}?file=${encodeURIComponent(Path)}`, {
+			method: "GET",
+			headers: { accept: "application/json" },
+			cache: "no-store",
+		})
+			.then((Response) => Response.json())
+			.then((Body) => (IsContributionAnswer(Body) ? Body.contributions : []))
+			.catch(() => []);
+	} catch {
+		return Promise.resolve([]);
 	}
 }

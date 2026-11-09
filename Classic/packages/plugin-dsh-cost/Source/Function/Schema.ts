@@ -128,39 +128,48 @@ JOIN Call ON Call.CallId = Allocation.CallId
 JOIN File ON File.FileId = Allocation.FileId
 GROUP BY Allocation.FileId, File.Path;`;
 
+// The three aggregate views (section 5.6): each sums a call's tokens exactly
+// once. The per-call money and the call itself come from their own
+// subqueries - the Allocation rows collapsed to one row per CallId, then the
+// Call row joined once - so a call with several allocation rows can no longer
+// repeat its TotalTokens through the fan-out. The view names and the column
+// names stay unchanged; only the arithmetic behind them changes.
 export const ModelCost = `CREATE VIEW ModelCost AS
 SELECT Call.Provider AS Provider,
     Call.Model AS Model,
-    SUM(Allocation.DirectCost) AS Direct,
-    SUM(Allocation.AmortizedCost) AS Amortized,
-    SUM(Allocation.DirectCost + Allocation.AmortizedCost) AS Total,
-    COUNT(DISTINCT Allocation.CallId) AS Calls,
+    SUM(Money.Direct) AS Direct,
+    SUM(Money.Amortized) AS Amortized,
+    SUM(Money.Direct + Money.Amortized) AS Total,
+    COUNT(Call.CallId) AS Calls,
     SUM(Call.TotalTokens) AS Tokens
-FROM Allocation
-JOIN Call ON Call.CallId = Allocation.CallId
+FROM Call
+JOIN (SELECT CallId, SUM(DirectCost) AS Direct, SUM(AmortizedCost) AS Amortized
+    FROM Allocation GROUP BY CallId) AS Money ON Money.CallId = Call.CallId
 GROUP BY Call.Provider, Call.Model;`;
 
 export const SessionCost = `CREATE VIEW SessionCost AS
 SELECT Call.SessionId AS SessionId,
-    SUM(Allocation.DirectCost) AS Direct,
-    SUM(Allocation.AmortizedCost) AS Amortized,
-    SUM(Allocation.DirectCost + Allocation.AmortizedCost) AS Total,
-    COUNT(DISTINCT Allocation.CallId) AS Calls,
+    SUM(Money.Direct) AS Direct,
+    SUM(Money.Amortized) AS Amortized,
+    SUM(Money.Direct + Money.Amortized) AS Total,
+    COUNT(Call.CallId) AS Calls,
     SUM(Call.TotalTokens) AS Tokens
-FROM Allocation
-JOIN Call ON Call.CallId = Allocation.CallId
+FROM Call
+JOIN (SELECT CallId, SUM(DirectCost) AS Direct, SUM(AmortizedCost) AS Amortized
+    FROM Allocation GROUP BY CallId) AS Money ON Money.CallId = Call.CallId
 GROUP BY Call.SessionId;`;
 
 export const ClientCost = `CREATE VIEW ClientCost AS
 SELECT Project.ClientId AS ClientId,
     Client.Name AS Name,
-    SUM(Allocation.DirectCost) AS Direct,
-    SUM(Allocation.AmortizedCost) AS Amortized,
-    SUM(Allocation.DirectCost + Allocation.AmortizedCost) AS Total,
-    COUNT(DISTINCT Allocation.CallId) AS Calls,
+    SUM(Money.Direct) AS Direct,
+    SUM(Money.Amortized) AS Amortized,
+    SUM(Money.Direct + Money.Amortized) AS Total,
+    COUNT(Call.CallId) AS Calls,
     SUM(Call.TotalTokens) AS Tokens
-FROM Allocation
-JOIN Call ON Call.CallId = Allocation.CallId
+FROM Call
+JOIN (SELECT CallId, SUM(DirectCost) AS Direct, SUM(AmortizedCost) AS Amortized
+    FROM Allocation GROUP BY CallId) AS Money ON Money.CallId = Call.CallId
 JOIN Session ON Session.SessionId = Call.SessionId
 JOIN Project ON Project.ProjectId = Session.ProjectId
 JOIN Client ON Client.ClientId = Project.ClientId

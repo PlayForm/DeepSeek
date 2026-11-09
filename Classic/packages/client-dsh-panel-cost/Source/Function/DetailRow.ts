@@ -1,7 +1,7 @@
 // DetailRow - the per-file accordion under an expanded step row: the head
 // with the priced total, the five priced buckets, one block per file
-// sorted by its money and capped at the file limit, and the empty and
-// hidden notices.
+// sorted by its money and capped at the file limit, the touched and
+// allocation-only fallbacks, and the hidden notice.
 import Count from "@Function/Count";
 import Price from "@Function/Price";
 import { COLUMNS } from "@Function/Table";
@@ -97,14 +97,6 @@ const Block = (
 				t("detail.readBeforeEdit"),
 			),
 		);
-	if (File.touched === false)
-		Body.push(
-			createElement(
-				"span",
-				{ key: "untouched", className: "playform-cost-block-sub" },
-				t("detail.allocationOnly"),
-			),
-		);
 	return createElement(
 		"div",
 		{ className: "playform-cost-block", key: Index },
@@ -162,7 +154,10 @@ const Block = (
 			? createElement(
 					"div",
 					{ className: "playform-cost-block-empty" },
-					t("detail.allocationOnly"),
+					// Two fallbacks: a touched file without any optional change
+					// field is not an allocation-only file, and an untouched
+					// one is not a file the call changed.
+					Touched ? t("detail.touchedNoDetail") : t("detail.allocationOnly"),
 				)
 			: createElement("div", { className: "playform-cost-block-body" }, Body),
 	);

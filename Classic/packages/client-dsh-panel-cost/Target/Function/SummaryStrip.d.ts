@@ -8,6 +8,7 @@ type SummaryStripProps = {
     AllOpen: boolean;
     AnyTurn: boolean;
     OnToggleAll: () => void;
+    OnOpenFile: (Path: string) => void;
     t: Translate;
 };
 export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeof createElement>;

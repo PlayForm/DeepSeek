@@ -1,7 +1,8 @@
 // StepRow - the step row: the toggle button (only when the step carries
-// detail), the state markers, the step clock beside the model pill, the
-// eleven cells with the step-level classes, and the step bar scaled
-// against the largest step total of the step's own turn.
+// evidence: files, allocations, money, usage or an error), the state
+// markers, the step clock beside the model pill, the eleven cells with the
+// step-level classes, and the step bar scaled against the largest step
+// total of the step's own turn.
 import Cells from "@Function/Cells";
 import CountShort from "@Function/CountShort";
 import Price from "@Function/Price";
@@ -172,7 +173,22 @@ export default function StepRow(Props: StepRowProps): ReturnType<typeof createEl
 	const Input = typeof Cost.input === "number" ? Cost.input : 0;
 	const Output = typeof Cost.output === "number" ? Cost.output : 0;
 	const Other = typeof Cost.other === "number" ? Cost.other : 0;
-	const HasDetail = Files.length > 0 || Allocations > 0 || Total > 0;
+	// Usage is evidence too: a call the ledger recorded without a price row
+	// still has context and output tokens worth inspecting, and an error is
+	// worth inspecting even when nothing else reached the envelope.
+	const UsageContext =
+		(typeof Tokens.input === "number" ? Tokens.input : 0) +
+		(typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0) +
+		(typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0);
+	const UsageOutput = typeof Tokens.output === "number" ? Tokens.output : 0;
+	const Failed = typeof Step.error === "string";
+	const HasDetail =
+		Files.length > 0 ||
+		Allocations > 0 ||
+		Total > 0 ||
+		UsageContext > 0 ||
+		UsageOutput > 0 ||
+		Failed;
 	const Started = t("step.started.title", { time: Stamp(Step.at) });
 	const ModelText = [
 		Text(Step.provider),
@@ -185,7 +201,7 @@ export default function StepRow(Props: StepRowProps): ReturnType<typeof createEl
 		.join(" | ");
 	const Row = ["playform-cost-step-row"];
 	if (HasDetail) Row.push("playform-cost-step-row-clickable");
-	if (typeof Step.error === "string") Row.push("playform-cost-step-row-error");
+	if (Failed) Row.push("playform-cost-step-row-error");
 	return createElement(
 		"tr",
 		{
@@ -206,7 +222,11 @@ export default function StepRow(Props: StepRowProps): ReturnType<typeof createEl
 						},
 					}
 				: { Label: t("step.label", { step: Step.step }) }),
-			Hint: ` - ${Props.Expanded ? t("detail.hide") : t("detail.show")}`,
+			// The hint promises a disclosure the row does not offer, so it is
+			// rendered only when the row can actually expand.
+			...(HasDetail
+				? { Hint: ` - ${Props.Expanded ? t("detail.hide") : t("detail.show")}` }
+				: {}),
 			Markers: Markers(Step, t),
 		}),
 		Cells.Model({
@@ -228,7 +248,7 @@ export default function StepRow(Props: StepRowProps): ReturnType<typeof createEl
 				Count: 1,
 				Lines: typeof File.linesDelta === "number" ? File.linesDelta : null,
 			})),
-			Fail: typeof Step.error === "string",
+			Fail: Failed,
 			Saving,
 			Calls: 1,
 			Tokens: TokensTotal,
