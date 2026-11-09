@@ -1,7 +1,7 @@
-// The cordis bundle patch: one row, the Cost tab plugin. The tab mounts into
-// the conversation.view slot (the same slot family already owns), so the row
-// carries only the plugin identity and its volatile knobs; the loader
-// validates the schema at boot and refuses the row on a mismatch.
+# The cordis bundle patch: one row, the Cost tab plugin. The tab mounts into
+# the conversation.view slot (the same slot the family panel already owns), so
+# the row carries only the plugin identity and its volatile knobs; the loader
+# validates the schema at boot and refuses the row on a mismatch.
 - insert:
       - id: client-dsh-panel-cost
         name: "@playform/client-dsh-panel-cost"

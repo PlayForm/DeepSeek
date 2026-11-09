@@ -7,7 +7,7 @@ const runTest = () => {
     assert.equal(Run.Provided.routes.length, 1);
     assert.equal(Run.Provided.routes[0].path, "/api/playform-cost/session");
   });
-  Check(Count, "S2: the handler answers 200 JSON with the unavailable body", () => {
+  Check(Count, "S2: the handler answers 200 JSON and names the missing session", () => {
     let Status = 0;
     let Headers;
     let Body;
@@ -20,13 +20,21 @@ const runTest = () => {
         Body = body;
       }
     };
-    Run.Provided.routes[0].handler({}, Response);
+    Run.Provided.routes[0].handler(
+      { url: "/api/playform-cost/session" },
+      Response
+    );
     assert.equal(Status, 200);
-    assert.equal(Headers?.["content-type"], "application/json");
+    assert.equal(Headers?.["content-type"], "application/json; charset=utf-8");
+    assert.equal(Headers?.["cache-control"], "no-store");
     assert.equal(typeof Body, "string");
     const Parsed = JSON.parse(Body);
     assert.equal(Parsed.ok, false);
-    assert.equal(Parsed.code, "unavailable");
+    assert.equal(Parsed.code, "session");
+    assert.equal(Parsed.rows, 200);
+    assert.equal(Parsed.session, null);
+    assert.equal(Parsed.calls.length, 0);
+    assert.match(Parsed.message, /no session id/);
   });
   Check(Count, "S3: the port saw the registration and nothing else registered", () => {
     assert.equal(Run.Provided.routes.length, 1);

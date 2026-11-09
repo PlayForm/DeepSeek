@@ -1,9 +1,9 @@
 // Source/Test/Serve-Route/Test.ts - the host half's route registration,
 // exercised through the route the real built plugin apply actually
 // registered on the fake webServer port: the one /api/playform-cost/session
-// path, the handler's 200 JSON answer (the documented unwired-ledger
-// placeholder), the port-only registration channel, and the silent posture
-// when no webServer is present.
+// path, the handler's 200 JSON answer for a query without a session id (the
+// "session" code, which never opens the ledger), the port-only registration
+// channel, and the silent posture when no webServer is present.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Plugin } from "../Harness.js";
 
@@ -17,8 +17,9 @@ export const runTest = (): number => {
 		assert.equal(Run.Provided.routes[0].path, "/api/playform-cost/session");
 	});
 
-	// S2: the handler's answer is the documented placeholder.
-	Check(Count, "S2: the handler answers 200 JSON with the unavailable body", () => {
+	// S2: a query without a session id answers the "session" code, and the
+	// handler never opens the ledger for it.
+	Check(Count, "S2: the handler answers 200 JSON and names the missing session", () => {
 		let Status = 0;
 		let Headers: Record<string, string> | undefined;
 		let Body: string | undefined;
@@ -31,13 +32,21 @@ export const runTest = (): number => {
 				Body = body;
 			},
 		};
-		(Run.Provided.routes[0] as any).handler({} as any, Response as any);
+		(Run.Provided.routes[0] as any).handler(
+			{ url: "/api/playform-cost/session" } as any,
+			Response as any,
+		);
 		assert.equal(Status, 200);
-		assert.equal(Headers?.["content-type"], "application/json");
+		assert.equal(Headers?.["content-type"], "application/json; charset=utf-8");
+		assert.equal(Headers?.["cache-control"], "no-store");
 		assert.equal(typeof Body, "string");
 		const Parsed = JSON.parse(Body as string);
 		assert.equal(Parsed.ok, false);
-		assert.equal(Parsed.code, "unavailable");
+		assert.equal(Parsed.code, "session");
+		assert.equal(Parsed.rows, 200);
+		assert.equal(Parsed.session, null);
+		assert.equal(Parsed.calls.length, 0);
+		assert.match(Parsed.message, /no session id/);
 	});
 
 	// S3: the registration went through the webServer port, and only there.
