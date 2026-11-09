@@ -152,6 +152,12 @@ export default function DetailRow(Props: DetailRowProps): ReturnType<typeof crea
 	const Step = Props.Step;
 	const t = Props.t;
 	const Tag = Text(Step.currency) !== "" ? Text(Step.currency) : "USD";
+	const Source: unknown = Step.cost;
+	const Money = (Field: string): number => {
+		if (Source === null || typeof Source !== "object") return 0;
+		const Value = (Source as Record<string, unknown>)[Field];
+		return typeof Value === "number" ? Value : 0;
+	};
 	const Raw: readonly unknown[] = Array.isArray(Step.files) ? Step.files : [];
 	const Files = Raw.filter((File): File is CostFile => File !== null && typeof File === "object");
 	const Sorted = [...Files].sort((A, B) => {
@@ -186,7 +192,7 @@ export default function DetailRow(Props: DetailRowProps): ReturnType<typeof crea
 				createElement(
 					"span",
 					{ className: "playform-cost-block-meta" },
-					` - ${Price(typeof Step.cost?.total === "number" ? Step.cost.total : 0, Tag)}`,
+					` - ${Price(Money("total"), Tag)}`,
 				),
 			),
 			createElement(
@@ -201,14 +207,7 @@ export default function DetailRow(Props: DetailRowProps): ReturnType<typeof crea
 						createElement(
 							"span",
 							{ className: "playform-cost-bucket-value" },
-							Price(
-								Step.cost === null || Step.cost === undefined
-									? 0
-									: typeof Step.cost[Item.Field] === "number"
-										? Step.cost[Item.Field]
-										: 0,
-								Tag,
-							),
+							Price(Money(Item.Field), Tag),
 						),
 					),
 				),

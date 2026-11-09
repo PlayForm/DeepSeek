@@ -80,14 +80,24 @@ export default function TotalsRow(Props: TotalsRowProps): ReturnType<typeof crea
 	const Tag =
 		typeof Summary.currency === "string" && Summary.currency !== "" ? Summary.currency : "USD";
 	const Metric = "playform-cost-turn-metric";
-	const Cost: CostBuckets =
-		Summary.cost === null || Summary.cost === undefined
-			? { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, reasoning: 0, total: 0, other: 0 }
-			: Summary.cost;
-	const Tokens: CostTokens =
-		Summary.tokens === null || Summary.tokens === undefined
-			? { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, reasoning: 0, total: 0, reported: null }
-			: Summary.tokens;
+	const Cost: CostBuckets = Summary.cost ?? {
+		input: 0,
+		output: 0,
+		cacheRead: 0,
+		cacheWrite: 0,
+		reasoning: 0,
+		total: 0,
+		other: 0,
+	};
+	const Tokens: CostTokens = Summary.tokens ?? {
+		input: 0,
+		output: 0,
+		cacheRead: 0,
+		cacheWrite: 0,
+		reasoning: 0,
+		total: 0,
+		reported: null,
+	};
 	return createElement(
 		"tr",
 		{ className: "playform-cost-totals-row", title: t("totals.session.title") },

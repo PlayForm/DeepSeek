@@ -148,14 +148,24 @@ export default function StepRow(Props: StepRowProps): ReturnType<typeof createEl
 	const Files = Raw.filter((File): File is CostFile => File !== null && typeof File === "object");
 	const Allocations = typeof Step.allocations === "number" ? Step.allocations : 0;
 	const Saving = typeof Step.saving === "number" ? Step.saving : 0;
-	const Cost: CostBuckets =
-		Step.cost === null || Step.cost === undefined
-			? { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, reasoning: 0, total: 0, other: 0 }
-			: Step.cost;
-	const Tokens: CostTokens =
-		Step.tokens === null || Step.tokens === undefined
-			? { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, reasoning: 0, total: 0, reported: null }
-			: Step.tokens;
+	const Cost: CostBuckets = Step.cost ?? {
+		input: 0,
+		output: 0,
+		cacheRead: 0,
+		cacheWrite: 0,
+		reasoning: 0,
+		total: 0,
+		other: 0,
+	};
+	const Tokens: CostTokens = Step.tokens ?? {
+		input: 0,
+		output: 0,
+		cacheRead: 0,
+		cacheWrite: 0,
+		reasoning: 0,
+		total: 0,
+		reported: null,
+	};
 	const TokensTotal = typeof Tokens.total === "number" ? Tokens.total : 0;
 	const Total = typeof Cost.total === "number" ? Cost.total : 0;
 	const CacheRead = typeof Cost.cacheRead === "number" ? Cost.cacheRead : 0;

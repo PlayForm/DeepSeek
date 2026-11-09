@@ -304,7 +304,7 @@ const Alloc = (Props: AllocCellProps): ReturnType<typeof createElement> =>
 const Segment = (Key: string, Class: string, Value: number): ReturnType<typeof createElement> | null =>
 	Value > 0
 		? createElement("span", {
-				key,
+				key: Key,
 				className: `playform-cost-bar-segment ${Class}`,
 				style: { flexGrow: Value },
 			})
