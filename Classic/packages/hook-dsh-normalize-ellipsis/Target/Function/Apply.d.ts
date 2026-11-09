@@ -1,5 +1,5 @@
 import type { Context } from "@deepseek-ai/cordis";
-import type Config from "../Interface/Config.js";
+import type Config from "@Interface/Config.js";
 export default _default;
 /**
  * @module Apply

@@ -1,5 +1,5 @@
-import type Entry from "@Interface/Entry.js";
-import type Store from "@Interface/Store.js";
+import type Entry from "../Interface/Entry.js";
+import type Store from "../Interface/Store.js";
 /** Read the fallback snapshot; null on any failure or version mismatch. */
 export declare const Load: (Path: string) => Store | null;
 /** Write the fallback snapshot; never throws. */

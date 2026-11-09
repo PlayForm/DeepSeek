@@ -1,25 +1,34 @@
-// Storage - the hook's own P5-style storage-domain open and recovery (the
-// observe hook's Function/Storage pattern). THE DOMAIN: the hook's OWN
-// domain, named config `domain` (default workspace_merge). Version 1,
-// layout per-record, invalidRecords backup-and-skip, TWO tables:
-//   * `batches` - one record per batch, keyed by the batch id;
-//   * `meta`    - ONE record `__meta`: { sequence }.
-//
-// Best-effort and detached: an ABSENT facility is a SILENT SKIP; a PRESENT
-// facility whose open fails is LOUD (one best-effort ledger line
-// `storage open failed: <reason>`, never rethrown).
-//
-// THE RECOVERY (once, on mount): the batches table rebuilds the record
-// map, the `__meta` record restores the sequence - monotonic across
-// restarts, never a wall clock. A record that fails validation is
-// skipped, never guessed.
-//
-// The dynamic imports keep the optional packages off the module-load path.
+/**
+ * @module Storage
+ *
+ * The hook's own P5-style storage-domain open and recovery (the observe
+ * hook's Function/Storage pattern).
+ *
+ * @remarks
+ * THE DOMAIN: the hook's OWN
+ * domain, named config `domain` (default workspace_merge). Version 1,
+ * layout per-record, invalidRecords backup-and-skip, TWO tables:
+ *   * `batches` - one record per batch, keyed by the batch id;
+ *   * `meta`    - ONE record `__meta`: { sequence }.
+ *
+ * Best-effort and detached: an ABSENT facility is a SILENT SKIP; a PRESENT
+ * facility whose open fails is LOUD (one best-effort ledger line
+ * `storage open failed: <reason>`, never rethrown).
+ *
+ * THE RECOVERY (once, on mount): the batches table rebuilds the record
+ * map, the `__meta` record restores the sequence - monotonic across
+ * restarts, never a wall clock. A record that fails validation is
+ * skipped, never guessed.
+ *
+ * The dynamic imports keep the optional packages off the module-load path.
+ */
 import type Record from "@Interface/Record.js";
 import type State from "@Interface/State.js";
 
-/** The structural shape of one persisted batch record (the validation
- *  filter). */
+/**
+ * The structural shape of one persisted batch record (the validation
+ * filter).
+ */
 const Valid = (Row: unknown): Row is Record => {
 	const Data = Row as Partial<Record> | null;
 	return (

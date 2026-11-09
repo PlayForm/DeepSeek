@@ -9,6 +9,5 @@
  * test importing Target directly).
  */
 const Version: string = process.env["VERSION_PACKAGE"] ?? "0.0.0";
-const Version: string = process.env["VERSION_PACKAGE"] ?? "0.0.0";
 
 export default Version;

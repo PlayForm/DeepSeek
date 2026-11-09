@@ -1,5 +1,5 @@
-import type Entry from "@Interface/Entry.js";
-import type { ReplayRecord } from "@Interface/History.js";
+import type Entry from "../Interface/Entry.js";
+import type { ReplayRecord } from "../Interface/History.js";
 export default _default;
 declare function _default(
 /** The entries, newest first (an agent's ring or the durable mirror). */

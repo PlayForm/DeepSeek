@@ -36,22 +36,31 @@ export default class WorkspaceContext extends Service {
 		this.State = State;
 	}
 
-	/** The orientation packet for one query (memoized; invalidated by the trace). */
+	/**
+	 * The orientation packet for one query (memoized; invalidated by the
+	 * trace).
+	 */
 	packet(Query_: Query): Packet {
 		return Cached(this.State, Query_);
 	}
 
-	/** The available lens names (config `lenses`). */
+	/**
+	 * The available lens names (config `lenses`).
+	 */
 	lenses(): string[] {
 		return [...this.State.Lenses];
 	}
 
-	/** The caller's tracked focus, or undefined. */
+	/**
+	 * The caller's tracked focus, or undefined.
+	 */
 	focusOf(Caller: string): { id: string; version: string } | undefined {
 		return this.State.Focus.get(Caller);
 	}
 
-	/** The service statistics. */
+	/**
+	 * The service statistics.
+	 */
 	statistics(): {
 		packets: number;
 		clamped: number;
@@ -73,7 +82,9 @@ export default class WorkspaceContext extends Service {
 // Declaration merging: the typed accessor on the cordis Context.
 declare module "@deepseek-ai/cordis" {
 	interface Context {
-		/** The workspace-context service (registered from apply). */
+		/**
+		 * The workspace-context service (registered from apply).
+		 */
 		workspaceContext: WorkspaceContext;
 	}
 }

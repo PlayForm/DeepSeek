@@ -1,5 +1,5 @@
 import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 /**
  * @module Overpass
  *

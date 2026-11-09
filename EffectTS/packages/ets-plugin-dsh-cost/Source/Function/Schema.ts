@@ -1,14 +1,15 @@
 // Schema - the ledger's DDL (Documentation/Plans/COST-TRACK-PLUGIN.md
 // sections 3, 14 and 17.6): one exported string constant per table plus the
 // cost views, in creation order inside the exported Ddl array - a fresh file
-// creates the v4 schema directly, with the price book's tier, mode and
+// creates the v6 schema directly, with the price book's tier, mode and
 // region columns inline, the Modifier, Factor and CallFactor tables of
 // the factor layer, the Edit table of the edit grain and the telemetry
 // columns of the Call and Touch rows. The additive rungs are also exported
 // one constant each and rolled up into the Migration array (v1 to v2), the
-// MigrationFactor array (v2 to v3) and the MigrationTelemetry array (v3 to
-// v4), which Function/Open runs inside one transaction each when the
-// ledger's user_version sits below 4. Every table is STRICT; money
+// MigrationFactor array (v2 to v3), the MigrationTelemetry array (v3 to v4)
+// and the MigrationVersioning builder (below v6 to v6), which Function/Open
+// runs inside one transaction each when the ledger's user_version sits below
+// 6. Every table is STRICT; money
 // is REAL in one currency per row with rates stored per million tokens; the
 // price book is append-only and effective-dated so a historical invoice
 // stays reproducible, and one effective-dated rate card is now a family of
@@ -328,6 +329,31 @@ export const MigrationTelemetry: readonly string[] = [
 	TouchDuration,
 	TouchBytes,
 	"PRAGMA user_version = 4;",
+];
+
+// The v6 additions (the compatibility rung), exported one statement each: the
+// version grain's table and the column that ties a touch to the version it
+// wrote. The fresh DDL has carried both since the first release - FileVersion
+// between File and Call, Touch.VersionId beside FileId - but none of the rungs
+// above created them, so a ledger upgraded from v1-v4 would lack the table its
+// drain now writes. The rung below adds exactly the piece a file is missing,
+// which matters because a ledger whose fresh DDL already carried both must
+// not take a second CREATE or ALTER.
+export const TouchVersion = `ALTER TABLE Touch ADD COLUMN VersionId INTEGER REFERENCES FileVersion (VersionId);`;
+
+// The migration ladder's v6 rung: the version grain, for a ledger stamped
+// below 6. The two pieces are asked for separately because a file may carry
+// one without the other, and the order is the dependency's - the ALTER names
+// FileVersion's key. Function/Open probes the file's own table info and runs
+// the result inside the transaction whose last statement is the version
+// stamp, so a failure anywhere leaves the file at its old version and the
+// ladder never skips a rung.
+export const MigrationVersioning = (
+	HasFileVersion: boolean,
+	HasVersionId: boolean,
+): readonly string[] => [
+	...(HasFileVersion ? [] : [FileVersion]),
+	...(HasVersionId ? [] : [TouchVersion]),
 ];
 
 export const Ddl: readonly string[] = [

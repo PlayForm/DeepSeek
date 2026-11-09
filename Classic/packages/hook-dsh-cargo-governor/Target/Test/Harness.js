@@ -1,2 +1,221 @@
-import l from"node:assert/strict";import*as a from"node:fs";import*as F from"node:os";import*as d from"node:path";import*as f from"../../Target/Library.js";import S from"../../../plugin-dsh-factory/Target/Library.js";const P=()=>({N:0,F:0}),u=(e,n,t)=>{e.N++;try{t(),console.log(`PASS - ${n}`)}catch(r){e.F++,console.log(`FAIL - ${n}`),console.log(r instanceof Error?r.message:String(r))}},j=async(e,n,t)=>{e.N++;try{await t(),console.log(`PASS - ${n}`)}catch(r){e.F++,console.log(`FAIL - ${n}`),console.log(r instanceof Error?r.message:String(r))}},A=(e,n)=>{if(e.F!==0)throw new Error(`${n}: ${e.F} failed check(s)`);return e.N},y=a.mkdtempSync(d.join(F.tmpdir(),"cargo-smoke-")),x={},h={info:[],error:[]},m={info:e=>h.info.push(e),error:e=>h.error.push(e)};let g=null;const b=(e={})=>{const n={events:[],emitted:[],effects:[],serviceGets:[],writes:[],reads:[],controllers:[],started:[]},t=e.services??{},r=e.files??{},c={sandboxMode:e.sandboxMode},p={logger:m,reflect:{provide:(o,s)=>{x[o]=s}},on:(o,s)=>(n.events.push([o,s]),()=>!0),emit:(o,...s)=>{n.emitted.push([o,...s])},effect:(o,s)=>{const i=o();return n.effects.push([s,i]),()=>{}},get:o=>(n.serviceGets.push(o),t[o]??p[o]),fs:{get sandboxMode(){return c.sandboxMode},set sandboxMode(o){c.sandboxMode=o},readText:async(o,s)=>{n.reads.push([o.displayPath,!!s]);const i=r[o.displayPath];if(i===void 0)throw new Error("vanished");return i},writeText:async(o,s,i,k,w)=>(n.writes.push({path:o.displayPath,content:s,intent:i,signal:k??null,fence:w??null,inflight:g?g.Inflight.size:-1}),r[o.displayPath]=s,{version:e.freshVersion??"fresh-v2"}),stat:async()=>({version:"stat-v9"})},get root(){return p}};return{ctx:p,captured:n,files:r,services:t,store:c}},v=new S({logger:m,reflect:{provide:(e,n)=>{x[e]=n}},fs:{sandboxMode:void 0}}),I=e=>{const n=d.join(y,e);return a.mkdirSync(n,{recursive:!0}),n},C=e=>d.join(y,`${e}.log`),q=e=>a.existsSync(e)?a.readFileSync(e,"utf8").split(`
-`).filter(Boolean).map(n=>n.replace(/^\[[^\]]+\] /,"")):[],M=(e,n={})=>{const t=$({logFile:e.ledger,updateCooldownMs:0,...n});g=null;const r=f.apply(e.ctx,t);return g=e.ctx.__hookDshGovernorCargoState,e.listener=e.captured.events.filter(c=>c[0]==="fs/observed").at(-1)?.[1],{cfg:t,ret:r,listener:e.listener}},G=(e,n,t="v1",r="edit")=>e.listener?.(n,{kind:"present",version:t},{name:r}),_=(e,n)=>a.writeFileSync(d.join(e,"registry.json"),JSON.stringify({effectiveLatest:n})),B=(e,n)=>a.writeFileSync(d.join(e,"update-policy.json"),JSON.stringify(n)),N=(e={exitCode:0},n="")=>{const t=[];return{calls:t,resolveExecutable:async r=>`/resolved/${r}`,spawn:r=>(t.push(r),{done:Promise.resolve(e),collected:{stdout:{readFrom:()=>({text:n})},stderr:{readFrom:()=>({text:""})}}})}},T=async()=>{for(let e=0;e<12;e+=1)await new Promise(n=>setImmediate(n))},$=e=>f.Config({...e}),E=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(E){const e=P();u(e,"selfcheck: a passing assertion counts as PASS",()=>{l.equal(1,1)}),u(e,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{l.equal(1,2)});const n=b({services:{subprocess:N()}});n.ctx.pluginFactory=v,n.ledger=C("selfcheck"),M(n),u(e,"selfcheck: the fake ctx registers the cargo governor's apply-time wiring",()=>{l.ok(n.captured.events.some(t=>t[0]==="fs/observed")),l.equal(n.ctx.pluginFactory,v),l.equal(g.Module,"hook-dsh-governor-cargo")}),e.N===3&&e.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${e.N}, F=${e.F})`),process.exitCode=1)}export{M as Boot,u as Check,j as CheckAsync,A as Finish,G as Fire,T as Flush,v as Furnace,I as Group,q as Ledger,C as LedgerFile,h as LoggerLines,b as MakeContext,P as MakeCounter,B as Policy,g as ProbeState,x as Provided,_ as Registry,y as Root,N as SeamStub,$ as Validate};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import * as Cargo from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "cargo-smoke-"));
+const Provided = {};
+const LoggerLines = { info: [], error: [] };
+const fakeLogger = {
+  info: (m) => LoggerLines.info.push(m),
+  error: (m) => LoggerLines.error.push(m)
+};
+let ProbeState = null;
+const MakeContext = (Over = {}) => {
+  const captured = {
+    events: [],
+    emitted: [],
+    effects: [],
+    serviceGets: [],
+    writes: [],
+    reads: [],
+    controllers: [],
+    started: []
+  };
+  const services = Over.services ?? {};
+  const files = Over.files ?? {};
+  const store = { sandboxMode: Over.sandboxMode };
+  const ctx = {
+    logger: fakeLogger,
+    reflect: {
+      provide: (name, value) => {
+        Provided[name] = value;
+      }
+    },
+    on: (name, fn) => {
+      captured.events.push([name, fn]);
+      return () => true;
+    },
+    emit: (name, ...args) => {
+      captured.emitted.push([name, ...args]);
+    },
+    effect: (fn, label) => {
+      const dispose = fn();
+      captured.effects.push([label, dispose]);
+      return () => {
+      };
+    },
+    // Attach's P5 factory probe (ctx.get "pluginFactory") must find the real
+    // factory: the scenarios wire it as a ctx property
+    // (`m.ctx.pluginFactory = Furnace`), so get falls through to the ctx
+    // property when the services map lacks the name - without it the shared
+    // sink is never bound and the pre-bind buffer never drains.
+    get: (name) => {
+      captured.serviceGets.push(name);
+      return services[name] ?? ctx[name];
+    },
+    fs: {
+      get sandboxMode() {
+        return store.sandboxMode;
+      },
+      set sandboxMode(v) {
+        store.sandboxMode = v;
+      },
+      readText: async (target, signal) => {
+        captured.reads.push([target.displayPath, !!signal]);
+        const file = files[target.displayPath];
+        if (file === void 0) throw new Error("vanished");
+        return file;
+      },
+      writeText: async (target, content, intent, signal, fence) => {
+        captured.writes.push({
+          path: target.displayPath,
+          content,
+          intent,
+          signal: signal ?? null,
+          fence: fence ?? null,
+          inflight: ProbeState ? ProbeState.Inflight.size : -1
+        });
+        files[target.displayPath] = content;
+        return { version: Over.freshVersion ?? "fresh-v2" };
+      },
+      stat: async () => ({ version: "stat-v9" })
+    },
+    // The ROOT seam: the Wire registers on the root scope (`Context.root.on`),
+    // so the fake ctx must be its own root - ctx.root.on records into the
+    // same captured.events (a harness seam; zero assertion changes).
+    get root() {
+      return ctx;
+    }
+  };
+  return { ctx, captured, files, services, store };
+};
+const Furnace = new FactoryClass({
+  logger: fakeLogger,
+  reflect: {
+    provide: (name, value) => {
+      Provided[name] = value;
+    }
+  },
+  fs: { sandboxMode: void 0 }
+});
+const Group = (name) => {
+  const dir = Path.join(Root, name);
+  FileSystem.mkdirSync(dir, { recursive: true });
+  return dir;
+};
+const LedgerFile = (name) => Path.join(Root, `${name}.log`);
+const Ledger = (file) => FileSystem.existsSync(file) ? FileSystem.readFileSync(file, "utf8").split("\n").filter(Boolean).map((l) => l.replace(/^\[[^\]]+\] /, "")) : [];
+const Boot = (m, user = {}) => {
+  const cfg = Validate({ logFile: m.ledger, updateCooldownMs: 0, ...user });
+  ProbeState = null;
+  const ret = Cargo.apply(m.ctx, cfg);
+  ProbeState = m.ctx.__hookDshGovernorCargoState;
+  m.listener = m.captured.events.filter((e) => e[0] === "fs/observed").at(-1)?.[1];
+  return { cfg, ret, listener: m.listener };
+};
+const Fire = (m, t, version = "v1", actor = "edit") => m.listener?.(t, { kind: "present", version }, { name: actor });
+const Registry = (dir, names) => FileSystem.writeFileSync(
+  Path.join(dir, "registry.json"),
+  JSON.stringify({ effectiveLatest: names })
+);
+const Policy = (dir, body) => FileSystem.writeFileSync(Path.join(dir, "update-policy.json"), JSON.stringify(body));
+const SeamStub = (outcome = { exitCode: 0 }, stdoutText = "") => {
+  const calls = [];
+  return {
+    calls,
+    resolveExecutable: async (bin) => `/resolved/${bin}`,
+    spawn: (req) => {
+      calls.push(req);
+      return {
+        done: Promise.resolve(outcome),
+        collected: {
+          stdout: { readFrom: () => ({ text: stdoutText }) },
+          stderr: { readFrom: () => ({ text: "" }) }
+        }
+      };
+    }
+  };
+};
+const Flush = async () => {
+  for (let i = 0; i < 12; i += 1) await new Promise((r) => setImmediate(r));
+};
+const Validate = (Raw) => Cargo.Config({ ...Raw });
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  const m = MakeContext({ services: { subprocess: SeamStub() } });
+  m.ctx.pluginFactory = Furnace;
+  m.ledger = LedgerFile("selfcheck");
+  Boot(m);
+  Check(Count, "selfcheck: the fake ctx registers the cargo governor's apply-time wiring", () => {
+    assert.ok(m.captured.events.some((e) => e[0] === "fs/observed"));
+    assert.equal(m.ctx.pluginFactory, Furnace);
+    assert.equal(ProbeState.Module, "hook-dsh-governor-cargo");
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  Boot,
+  Check,
+  CheckAsync,
+  Finish,
+  Fire,
+  Flush,
+  Furnace,
+  Group,
+  Ledger,
+  LedgerFile,
+  LoggerLines,
+  MakeContext,
+  MakeCounter,
+  Policy,
+  ProbeState,
+  Provided,
+  Registry,
+  Root,
+  SeamStub,
+  Validate
+};
+//# sourceMappingURL=Harness.js.map

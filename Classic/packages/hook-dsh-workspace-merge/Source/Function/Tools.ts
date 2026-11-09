@@ -1,10 +1,14 @@
-// Tools - the merge hook's one model surface (Function/Tools, the
-// live-containers MonitorTools idiom): the tool lives inside its owning
-// hook (MERGE.md; the ccr registers ccr_retrieve). The commit action is
-// the only write path the hook exposes, and it writes only through the
-// factory's Write executor with an explicit version fence.
-//
-//   workspace_merge  - preview | commit | batch | list | stats.
+/**
+ * @module Tools
+ *
+ * The merge hook's one model surface: the tool lives inside its owning
+ * hook (MERGE.md; the ccr registers ccr_retrieve). The commit action is
+ * the only write path the hook exposes, and it writes only through the
+ * factory's Write executor with an explicit version fence.
+ *
+ * @remarks
+ *   workspace_merge  - preview | commit | batch | list | stats.
+ */
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import type { JsonValue } from "@deepseek-ai/dsh-util-values";
 import Commit from "@Function/Commit.js";
@@ -20,7 +24,9 @@ const ReadStr = (Args: unknown, Key: string): string => {
 	return typeof Value === "string" ? Value : "";
 };
 
-/** Normalize the operations argument (an array of {path, content, version}). */
+/**
+ * Normalize the operations argument (an array of {path, content, version}).
+ */
 const Operations = (Args: unknown): { path: string; content: string; version: string }[] => {
 	const Raw = Read(Args, "operations");
 	if (!Array.isArray(Raw)) {

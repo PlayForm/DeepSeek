@@ -1,16 +1,17 @@
 // Schema - the ledger's DDL (Documentation/Plans/COST-TRACK-PLUGIN.md
 // sections 3, 14 and 17.6): one exported string constant per table plus the
 // cost views, in creation order inside the exported Ddl array - a fresh file
-// creates the v5 schema directly, with the price book's tier, mode and
+// creates the v6 schema directly, with the price book's tier, mode and
 // region columns inline, the Modifier, Factor and CallFactor tables of
 // the factor layer, the Edit table of the edit grain, the telemetry
 // columns of the Call and Touch rows and the valuation model's Catalog,
 // Revision, RateRow, Valuation, ValuationCost and ValuationAllocation
 // tables. The additive rungs are also exported one constant each and rolled
 // up into the Migration array (v1 to v2), the MigrationFactor array (v2 to
-// v3), the MigrationTelemetry array (v3 to v4) and the MigrationPricing
-// array (v4 to v5), which Function/Open runs inside one transaction each
-// when the ledger's user_version sits below 5. The fresh path creates the
+// v3), the MigrationTelemetry array (v3 to v4), the MigrationPricing array
+// (v4 to v5) and the MigrationVersioning array (v5 to v6), which
+// Function/Open runs inside one transaction each when the ledger's
+// user_version sits below 6. The fresh path creates the
 // pricing tables EMPTY - a new file has no recorded book to seed - while the
 // v5 rung seeds the bootstrap catalog, its one published revision, the rate
 // rows copied out of Price and the as-recorded valuation, all inside the
@@ -402,6 +403,50 @@ SELECT 'as-recorded', Revision.RevisionId,
     'the recorded book, priced by the bootstrap revision'
 FROM Revision
 WHERE Revision.CatalogId = (SELECT CatalogId FROM Catalog WHERE Name = 'bootstrap');`;
+
+// The v6 additions (the old-ledger compatibility step): the fresh DDL has
+// carried the FileVersion table and the Touch.VersionId reference since the
+// file-version grain was added, but no earlier rung creates them, so a
+// ledger upgraded from v1 through v5 lacks the table the drain now writes.
+// FileVersionIfAbsent is the fresh definition with the IF NOT EXISTS clause
+// spliced in - one definition, so the fresh table and the upgraded one can
+// never drift, and a ledger that already carries the table keeps its shape.
+// TouchVersion is the reference column itself; SQLite has no ADD COLUMN IF
+// NOT EXISTS, so Function/Open reads PRAGMA table_info(Touch) and runs this
+// ALTER only when the column is absent, inside the transaction that stamps
+// the version.
+export const FileVersionIfAbsent = FileVersion.replace(
+	"CREATE TABLE FileVersion",
+	"CREATE TABLE IF NOT EXISTS FileVersion",
+);
+
+export const TouchVersion = `ALTER TABLE Touch ADD COLUMN VersionId INTEGER REFERENCES FileVersion (VersionId);`;
+
+// The migration ladder's v6 rung (the old-ledger compatibility step): the
+// array holds the CREATE, whose IF NOT EXISTS clause keeps it safe on a
+// ledger that already carries the table. Function/Open appends the
+// conditional Touch ALTER and the version stamp to this list and runs the
+// whole list inside one transaction, so a failure leaves the ledger at its
+// old version with nothing half-applied.
+// Every fresh-only object the ladder must also give an upgraded ledger: the
+// v1-v3 rungs never created Annotation, ContextMass, Cursor, Rollup or the
+// FileCost view, yet the drain writes the cursor and the annotations on any
+// ledger it opens. The helper rewrites the fresh statement into its IF NOT
+// EXISTS form so one definition serves both paths and cannot drift.
+const IfAbsent = (Statement: string): string =>
+	Statement.replace("CREATE TABLE ", "CREATE TABLE IF NOT EXISTS ").replace(
+		"CREATE VIEW ",
+		"CREATE VIEW IF NOT EXISTS ",
+	);
+
+export const MigrationVersioning: readonly string[] = [
+	FileVersionIfAbsent,
+	IfAbsent(Annotation),
+	IfAbsent(ContextMass),
+	IfAbsent(Cursor),
+	IfAbsent(Rollup),
+	IfAbsent(FileCost),
+];
 
 // The migration ladder's v2 rung: the ALTERs in dependency-free order, then
 // the new tables and the view, then the version stamp - run inside one

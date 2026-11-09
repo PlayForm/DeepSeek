@@ -46,5 +46,7 @@ export declare const TouchBytes = "ALTER TABLE Touch ADD COLUMN ResultBytes INTE
 export declare const Migration: readonly string[];
 export declare const MigrationFactor: readonly string[];
 export declare const MigrationTelemetry: readonly string[];
+export declare const TouchVersion = "ALTER TABLE Touch ADD COLUMN VersionId INTEGER REFERENCES FileVersion (VersionId);";
+export declare const MigrationVersioning: (HasFileVersion: boolean, HasVersionId: boolean) => readonly string[];
 export declare const Ddl: readonly string[];
 export default Ddl;

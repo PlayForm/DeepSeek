@@ -1,7 +1,7 @@
-import type Entry from "@Interface/Entry.js";
-import type Handle from "@Interface/Handle.js";
-import type { ReplayRecord } from "@Interface/History.js";
-import type { CompiledIntent } from "@Interface/Pack.js";
+import type Entry from "./Entry.js";
+import type Handle from "./Handle.js";
+import type { ReplayRecord } from "./History.js";
+import type { CompiledIntent } from "./Pack.js";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {

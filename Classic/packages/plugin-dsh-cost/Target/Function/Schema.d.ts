@@ -53,6 +53,9 @@ export declare const SeedCatalog = "INSERT INTO Catalog (Name) VALUES ('bootstra
 export declare const SeedRevision = "INSERT INTO Revision (CatalogId, ParentRevisionId, CreatedAt, Reason, Status)\nSELECT CatalogId, NULL, CAST(strftime('%s', 'now') AS INTEGER) * 1000,\n    'the recorded price book, seeded at the v5 rung', 'published'\nFROM Catalog WHERE Name = 'bootstrap';";
 export declare const SeedRateRow = "INSERT INTO RateRow (RevisionId, Provider, Model, Currency, InputRate, OutputRate,\n    CacheReadRate, CacheWriteRate, ReasoningRate, ValidFrom, ValidTo, Mode, Region, Window,\n    TierFrom, TierTo, Note)\nSELECT Revision.RevisionId, Provider, Model, Currency, InputRate, OutputRate,\n    CacheReadRate, CacheWriteRate, ReasoningRate, EffectiveFrom, EffectiveTo, Mode, Region,\n    Window, TierFrom, TierTo, Note\nFROM Price\nJOIN Revision ON Revision.CatalogId = (SELECT CatalogId FROM Catalog WHERE Name = 'bootstrap');";
 export declare const SeedValuation = "INSERT INTO Valuation (Basis, RevisionId, PolicyVersion, EvidenceCutoff, CreatedAt, Note)\nSELECT 'as-recorded', Revision.RevisionId,\n    COALESCE((SELECT Method FROM Allocation ORDER BY AllocationId DESC LIMIT 1), 'bytes/context'),\n    NULL, CAST(strftime('%s', 'now') AS INTEGER) * 1000,\n    'the recorded book, priced by the bootstrap revision'\nFROM Revision\nWHERE Revision.CatalogId = (SELECT CatalogId FROM Catalog WHERE Name = 'bootstrap');";
+export declare const FileVersionIfAbsent: string;
+export declare const TouchVersion = "ALTER TABLE Touch ADD COLUMN VersionId INTEGER REFERENCES FileVersion (VersionId);";
+export declare const MigrationVersioning: readonly string[];
 export declare const Migration: readonly string[];
 export declare const MigrationFactor: readonly string[];
 export declare const MigrationTelemetry: readonly string[];

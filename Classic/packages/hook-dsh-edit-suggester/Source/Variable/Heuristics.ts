@@ -22,4 +22,3 @@
  * is auditable.
  */
 export default ["scope", "graph", "prior", "literal", "history", "accept"] as string[];
-export default ["scope", "graph", "prior", "literal", "history", "accept"] as string[];

@@ -1,15 +1,15 @@
 // Source/Test/Migrate/Test.ts - THE MIGRATION LADDER (Documentation/Plans/
 // COST-TRACK-PLUGIN.md sections 14, 17.6, 17.3 and 17.4): opening a v1-shaped
-// ledger runs the v2, v3 and v4 rungs inside one transaction each - the
-// additive columns appear on Price, Call and Touch, the Alias and Verdict
-// tables and the FileLifetime view exist, the version stamp moves to 4, the
+// ledger runs the v2, v3, v4, v5 and v6 rungs inside one transaction each -
+// the additive columns appear on Price, Call and Touch, the Alias and Verdict
+// tables and the FileLifetime view exist, the version stamp moves to 6, the
 // fresh DDL never re-runs, and the v1 data survives. Opening a v2-shaped
-// ledger runs the v3 and v4 rungs: the factor layer's columns and its three
-// tables appear, and the v2 data survives with the new defaults filled.
-// Opening a v3-shaped ledger runs only the v4 rung: the Edit table and the
-// telemetry columns appear, and the v3 data survives. The fixtures here
-// carry exactly the tables each ladder statement touches, with the columns
-// of their own version only.
+// ledger runs the v3 through v6 rungs: the factor layer's columns and its
+// three tables appear, and the v2 data survives with the new defaults filled.
+// Opening a v3-shaped ledger runs the v4, v5 and v6 rungs: the Edit table,
+// the telemetry columns and the file-version grain appear, and the v3 data
+// survives. The fixtures here carry exactly the tables each ladder statement
+// touches, with the columns of their own version only.
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -74,8 +74,8 @@ export const runTest = async (): Promise<number> => {
 		try {
 			const Database = V1Ledger.Database;
 			const Version = Database.prepare("PRAGMA user_version").get() as { user_version: number };
-			Check(Count, "A3: the ladder stamps a v1 ledger version 5", () => {
-				assert.equal(Version.user_version, 5);
+			Check(Count, "A3: the ladder stamps a v1 ledger version 6", () => {
+				assert.equal(Version.user_version, 6);
 			});
 			Check(Count, "A1: the additive columns exist on Price, Call and Touch through every rung", () => {
 				assert.ok(Columns(Database, "Price").includes("Window"), "Price.Window");
@@ -101,13 +101,20 @@ export const runTest = async (): Promise<number> => {
 					"the FileLifetime view selects",
 				);
 			});
-			Check(Count, "A3: the fresh DDL never re-runs and the v1 data survives", () => {
+			Check(Count, "A3: the v6 rung adds the fresh-only tables and the v1 data survives", () => {
 				const Session = Database.prepare("SELECT SessionId FROM Session WHERE SessionId = 's1'").get();
 				assert.ok(Session !== undefined, "the v1 session row survived");
+				// The v6 rung creates the objects the earlier rungs never did,
+				// so an upgraded ledger can carry the drain's cursor and
+				// annotations; the fresh DDL still never runs wholesale.
 				const Rollup = Database.prepare(
 					"SELECT COUNT(*) AS N FROM sqlite_master WHERE type = 'table' AND name = 'Rollup'",
 				).get() as { N: number };
-				assert.equal(Rollup.N, 0, "the migration path did not run the fresh DDL");
+				assert.equal(Rollup.N, 1, "the v6 rung creates the fresh-only Rollup table");
+				const Cursor = Database.prepare(
+					"SELECT COUNT(*) AS N FROM sqlite_master WHERE type = 'table' AND name = 'Cursor'",
+				).get() as { N: number };
+				assert.equal(Cursor.N, 1, "the v6 rung creates the fresh-only Cursor table");
 			});
 		} finally {
 			V1Ledger.Close();
@@ -128,8 +135,8 @@ export const runTest = async (): Promise<number> => {
 		try {
 			const Database = V2Ledger.Database;
 			const Version = Database.prepare("PRAGMA user_version").get() as { user_version: number };
-			Check(Count, "A3: the v3 and v4 rungs stamp a v2 ledger version 4", () => {
-				assert.equal(Version.user_version, 5);
+			Check(Count, "A3: the v3 through v6 rungs stamp a v2 ledger version 6", () => {
+				assert.equal(Version.user_version, 6);
 			});
 			Check(Count, "A1: the factor columns exist on Price and Call", () => {
 				assert.ok(Columns(Database, "Price").includes("TierFrom"), "Price.TierFrom");
@@ -209,8 +216,15 @@ PRAGMA user_version = 3;
 		try {
 			const Database = V3Ledger.Database;
 			const Version = Database.prepare("PRAGMA user_version").get() as { user_version: number };
-			Check(Count, "A3: the v4 rung alone stamps a v3 ledger version 4", () => {
-				assert.equal(Version.user_version, 5);
+			Check(Count, "A3: the v4, v5 and v6 rungs stamp a v3 ledger version 6", () => {
+				assert.equal(Version.user_version, 6);
+			});
+			Check(Count, "A1: the v6 rung gives a v3 ledger the FileVersion table and Touch.VersionId", () => {
+				assert.ok(Columns(Database, "FileVersion").includes("VersionId"), "FileVersion.VersionId");
+				assert.ok(Columns(Database, "FileVersion").includes("ObservedAt"), "FileVersion.ObservedAt");
+				assert.ok(Columns(Database, "Touch").includes("VersionId"), "Touch.VersionId");
+				const Versions = Database.prepare("SELECT COUNT(*) AS N FROM FileVersion").get() as { N: number };
+				assert.equal(Versions.N, 0, "the migrated FileVersion table starts empty");
 			});
 			Check(Count, "A1: the telemetry columns and the Edit table exist", () => {
 				assert.ok(Columns(Database, "Call").includes("LatencyMs"), "Call.LatencyMs");
