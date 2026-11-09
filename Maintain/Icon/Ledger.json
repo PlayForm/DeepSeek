@@ -1,17 +1,40 @@
 {
 	"format": 1,
 	"counts": {
-		"packages": 121,
-		"classic": 61,
+		"packages": 122,
+		"classic": 62,
 		"effectTS": 60,
 		"hook": 60,
 		"plugin": 44,
-		"client": 6,
+		"client": 7,
 		"lib": 11,
-		"mono": 121,
-		"colour": 121
+		"mono": 122,
+		"colour": 122
 	},
 	"icons": [
+		{
+			"package": "@playform/client-dsh-panel-cost",
+			"dir": "client-dsh-panel-cost",
+			"kind": "client",
+			"tree": "Classic",
+			"version": "0.2.1",
+			"seed": "fc134cc8be37bc882a447e40f77dccc283c2d55f40d7c341139418990c51581d",
+			"grammar": "quatrefoil",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 8,
+			"rim": "scallop",
+			"mode": "single",
+			"hash": {
+				"mono": "30794beca061ba60e790f7c37965229fcdeec328d44acd102916921ff01d5208",
+				"colour": "9ef07ba4b43b41ff77fb996615d38104c16de15a2600ca576f41452372ec3efb"
+			},
+			"path": {
+				"mono": "Maintain/Icon/Asset/Mono/client-dsh-panel-cost.svg",
+				"colour": "Maintain/Icon/Asset/Color/client-dsh-panel-cost.svg"
+			}
+		},
 		{
 			"package": "@playform/client-dsh-panel-family",
 			"dir": "client-dsh-panel-family",
@@ -593,17 +616,17 @@
 			"kind": "hook",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "b9fcc72de34bf7dce2b834c4271f9098464d6fc7fe8fcfdb87c1a73e0f8e76fe",
+			"seed": "0c84ac0fe7a6e8b422055ce673b564b804ab9eec270fb3302afb171a77f2f2ea",
 			"grammar": "spike-star",
 			"order": 12,
 			"arms": 8,
 			"rings": 1,
 			"orbit": 8,
-			"rim": "none",
+			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "6070e061f059d7dee543604f2a43ef1d9334c13bd98c37cff19dd59741208a2c",
-				"colour": "21953ccb8d1027d32bd3f3c82546f7692941c0e7b55f60d4af20351699c5310e"
+				"mono": "6525f145b58c799051efe927bfc9d06c187b045592b8243e016c7ac12e96db39",
+				"colour": "5f63e5a45128d71c359fcfa2ed4d3f8f224042751754ef135c8c152d7e1d0f6d"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-hook-dsh-replay-suggester.svg",
@@ -1881,17 +1904,17 @@
 			"kind": "hook",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "103030695ef3fcb420189587ea98632852fef79ddc870afc08a9e1669aa943a7",
+			"seed": "72ab766762eb8589fd1f69364ca61bb6ab2976d966ba06fecd48d4ed9aeb9f80",
 			"grammar": "spike-star",
 			"order": 12,
 			"arms": 8,
 			"rings": 1,
 			"orbit": 8,
-			"rim": "diamond",
+			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "8ddc10b6d8fe70dc410491edbede57b1e1011e2807f0b08a6117d677354795e1",
-				"colour": "076f6a8a3c7130e8bb986bcca6df5171a9eeb23e28a7efb52927ea5a4a24f9dd"
+				"mono": "765c64bdfa6730c43a9b8e84be224692d53a89ed16f545f590ad8f1a34607150",
+				"colour": "86ec8d0c1e3d761e4e2ea54b23a112c7c352b6eec461db0e091c94e32803e9c7"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-replay-suggester.svg",

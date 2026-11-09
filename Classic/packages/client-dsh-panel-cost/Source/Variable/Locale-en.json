@@ -1,0 +1,8 @@
+{
+	"tab": "Cost",
+	"title": "Cost",
+	"loading": "Reading the cost ledger...",
+	"unavailable": "The cost ledger is not reachable from this session.",
+	"empty": "No priced call in this session yet.",
+	"error": "The cost ledger read failed."
+}

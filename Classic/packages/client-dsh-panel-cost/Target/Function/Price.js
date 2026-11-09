@@ -1,0 +1,1 @@
+import u from"../Variable/Dash.js";function f(e,n){if(typeof e!="number"||!Number.isFinite(e))return u;const r=e<0?"-":"",s=n==="USD"?"$":`${n} `,t=Math.abs(e);if(!0===(t>0&&t<1e-6))return`<${s}0.000001`;{const c=t===0||t>=1?2:t>=.01?4:6,i=t.toFixed(c),o=i.indexOf("."),d=i.slice(0,o).replace(/\B(?=(\d{3})+(?!\d))/g,",");return`${r}${s}${d}.${i.slice(o+1)}`}}export{f as default};

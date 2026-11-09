@@ -4,24 +4,24 @@
 	<style>
 		@media (prefers-reduced-motion: no-preference) {
 			.ets-hook-dsh-replay-suggester-scene * { transform-box: view-box; transform-origin: 50% 50%; }
-		.ets-hook-dsh-replay-suggester-counter { animation: ets-hook-dsh-replay-suggester-counter 25s linear -4s infinite; }
+		.ets-hook-dsh-replay-suggester-counter { animation: ets-hook-dsh-replay-suggester-counter 26s linear -4s infinite; }
 		@keyframes ets-hook-dsh-replay-suggester-counter { to { transform: rotate(-360deg); } }
 		.ets-hook-dsh-replay-suggester-breathe { animation: ets-hook-dsh-replay-suggester-breathe 5s ease-in-out -4s infinite; }
 		@keyframes ets-hook-dsh-replay-suggester-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
-		.ets-hook-dsh-replay-suggester-fire { animation: ets-hook-dsh-replay-suggester-fire 3.0s ease-in-out infinite; }
+		.ets-hook-dsh-replay-suggester-fire { animation: ets-hook-dsh-replay-suggester-fire 3.1s ease-in-out infinite; }
 		@keyframes ets-hook-dsh-replay-suggester-fire { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
-		.ets-hook-dsh-replay-suggester-twinkle { animation: ets-hook-dsh-replay-suggester-twinkle 7s ease-in-out -4s infinite; }
+		.ets-hook-dsh-replay-suggester-twinkle { animation: ets-hook-dsh-replay-suggester-twinkle 12s ease-in-out -4s infinite; }
 		@keyframes ets-hook-dsh-replay-suggester-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
-		.ets-hook-dsh-replay-suggester-trace { animation: ets-hook-dsh-replay-suggester-trace 6s ease-in-out -4s infinite; }
+		.ets-hook-dsh-replay-suggester-trace { animation: ets-hook-dsh-replay-suggester-trace 5s ease-in-out -4s infinite; }
 		@keyframes ets-hook-dsh-replay-suggester-trace { 0%, 100% { transform: translate(0, 0); opacity: 1; } 50% { transform: translate(1.4px, -1.4px); opacity: 0.35; } }
 		}
 	</style>
 	<defs>
 		<path id="ets-hook-dsh-replay-suggester-0" d="M81,81 L19,81 L19,19 L81,19 Z"/>
-		<path id="ets-hook-dsh-replay-suggester-1" d="M86,56 L85,58 L83,58 L82,58 L81,56 L82,54 L83,54 L85,54 Z"/>
-		<path id="ets-hook-dsh-replay-suggester-2" d="M76,74 L75,76 L74,77 L72,76 L71,74 L72,73 L74,72 L75,73 Z"/>
-		<path id="ets-hook-dsh-replay-suggester-3" d="M82,33 L81,35 L79,35 L78,35 L77,33 L78,31 L79,31 L81,31 Z"/>
-		<path id="ets-hook-dsh-replay-suggester-4" d="M97,52 L74,89 L28,96 L7,51 L26,11 L76,7 Z M55,53 L89,75 L88,76 L55,53 Z M39,60 L38,61 L37,62 L36,63 L35,63 L33,63 L32,62 L31,61 L31,60 L31,58 L32,57 L33,56 L35,56 L36,56 L37,57 L38,58 Z M50,56 L48,96 L46,96 L49,56 Z M46,54 L16,80 L14,79 L45,54 Z M72,65 L72,66 L71,67 L70,68 L69,68 L67,68 L66,67 L66,66 L65,65 L66,64 L66,63 L67,62 L69,62 L70,62 L71,63 L72,64 Z M45,47 L13,23 L14,21 L45,46 Z M50,44 L47,4 L50,4 L50,44 Z M84,45 L83,46 L82,48 L81,48 L80,49 L78,48 L77,48 L76,46 L76,45 L76,43 L77,42 L78,41 L80,41 L81,41 L82,42 L83,43 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="ets-hook-dsh-replay-suggester-1" d="M42,17 L42,19 L40,20 L38,19 L38,17 L38,16 L40,15 L42,16 Z"/>
+		<path id="ets-hook-dsh-replay-suggester-2" d="M27,28 L26,29 L24,30 L23,29 L22,28 L23,26 L24,25 L26,26 Z"/>
+		<path id="ets-hook-dsh-replay-suggester-3" d="M83,64 L83,66 L81,67 L79,66 L78,64 L79,63 L81,62 L83,63 Z"/>
+		<path id="ets-hook-dsh-replay-suggester-4" d="M94,64 L60,94 L14,79 L5,42 L38,5 L83,16 Z M55,54 L87,77 L87,78 L55,54 Z M71,49 L71,50 L70,51 L69,52 L68,52 L67,52 L66,51 L65,50 L65,49 L65,48 L66,47 L67,46 L68,46 L69,46 L70,47 L71,48 Z M51,56 L54,96 L52,96 L50,56 Z M46,54 L16,81 L14,79 L45,54 Z M77,56 L77,57 L76,58 L75,59 L73,59 L72,59 L71,58 L70,57 L70,56 L70,55 L71,53 L72,53 L73,52 L75,53 L76,53 L77,55 Z M44,49 L5,39 L6,36 L44,48 Z M48,44 L37,6 L40,5 L49,44 Z M61,79 L61,80 L60,81 L59,81 L58,82 L57,81 L56,81 L56,80 L55,79 L56,78 L56,77 L57,76 L58,76 L59,76 L60,77 L61,78 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
 		<path id="ets-hook-dsh-replay-suggester-5" d="M64,50 L64,54 L62,57 L60,60 L57,62 L54,64 L50,64 L46,64 L43,62 L40,60 L38,57 L36,54 L36,50 L36,46 L38,43 L40,40 L43,38 L46,36 L50,36 L54,36 L57,38 L60,40 L62,43 L64,46 Z M62,50 L61,53 L60,56 L58,58 L56,60 L53,61 L50,62 L47,61 L44,60 L42,58 L40,56 L39,53 L38,50 L39,47 L40,44 L42,42 L44,40 L47,39 L50,38 L53,39 L56,40 L58,42 L60,44 L61,47 Z"/>
 		<path id="ets-hook-dsh-replay-suggester-6" d="M55,50 L55,52 L54,54 L52,55 L50,55 L48,55 L46,54 L45,52 L45,50 L45,48 L46,46 L48,45 L50,45 L52,45 L54,46 L55,48 Z M53,50 L53,51 L52,52 L51,53 L50,53 L49,53 L48,52 L47,51 L47,50 L47,49 L48,48 L49,47 L50,47 L51,47 L52,48 L53,49 Z"/>
 		<path id="ets-hook-dsh-replay-suggester-7" d="M70,50 L69,54 L68,59 L66,62 L62,66 L59,68 L54,69 L50,70 L46,69 L41,68 L38,66 L34,62 L32,59 L31,54 L30,50 L31,46 L32,41 L34,38 L38,34 L41,32 L46,31 L50,30 L54,31 L59,32 L62,34 L66,38 L68,41 L69,46 Z M69,50 L68,54 L67,58 L65,62 L62,65 L58,67 L54,68 L50,69 L46,68 L42,67 L38,65 L35,62 L33,58 L32,54 L31,50 L32,46 L33,42 L35,38 L38,35 L42,33 L46,32 L50,31 L54,32 L58,33 L62,35 L65,38 L67,42 L68,46 Z"/>
@@ -30,18 +30,18 @@
 		<path id="ets-hook-dsh-replay-suggester-10" d="M74,57 L73,58 L73,58 L72,57 L73,56 L73,56 Z"/>
 		<path id="ets-hook-dsh-replay-suggester-11" d="M33,66 L33,67 L32,67 L32,66 L32,66 L33,66 Z"/>
 		<path id="ets-hook-dsh-replay-suggester-12" d="M45,27 L45,27 L44,27 L44,27 L44,26 L45,26 Z"/>
-		<path id="ets-hook-dsh-replay-suggester-13" d="M44,10 L46,7 L48,9 Z"/>
-		<path id="ets-hook-dsh-replay-suggester-14" d="M81,78 L82,83 L77,82 Z"/>
-		<path id="ets-hook-dsh-replay-suggester-15" d="M22,83 L18,84 L18,80 Z"/>
-		<path id="ets-hook-dsh-replay-suggester-16" d="M91,30 L95,31 L93,34 Z"/>
-		<path id="ets-hook-dsh-replay-suggester-17" d="M21,17 L21,15 L23,15 Z"/>
+		<path id="ets-hook-dsh-replay-suggester-13" d="M11,35 L9,31 L13,30 Z"/>
+		<path id="ets-hook-dsh-replay-suggester-14" d="M91,49 L94,51 L91,53 Z"/>
+		<path id="ets-hook-dsh-replay-suggester-15" d="M68,14 L72,13 L72,17 Z"/>
+		<path id="ets-hook-dsh-replay-suggester-16" d="M44,96 L42,97 L40,95 Z"/>
+		<path id="ets-hook-dsh-replay-suggester-17" d="M91,67 L93,72 L88,73 Z"/>
 		<path id="ets-hook-dsh-replay-suggester-18" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
 	</defs>
 	<g class="ets-hook-dsh-replay-suggester-scene">
-	<g fill="#E8D7BA" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#DFD0B8" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-replay-suggester-breathe" href="#ets-hook-dsh-replay-suggester-0"/>
 	</g>
-	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#9499CB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-replay-suggester-fire" style="animation-delay:-4.00s" href="#ets-hook-dsh-replay-suggester-1"/>
 		<use class="ets-hook-dsh-replay-suggester-fire" style="animation-delay:-4.18s" href="#ets-hook-dsh-replay-suggester-2"/>
 		<use class="ets-hook-dsh-replay-suggester-fire" style="animation-delay:-4.36s" href="#ets-hook-dsh-replay-suggester-3"/>
@@ -49,7 +49,7 @@
 	<g fill="#26305E" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use href="#ets-hook-dsh-replay-suggester-4"/>
 	</g>
-	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#9499CB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-replay-suggester-breathe" href="#ets-hook-dsh-replay-suggester-5"/>
 		<use class="ets-hook-dsh-replay-suggester-breathe" href="#ets-hook-dsh-replay-suggester-6"/>
 		<use class="ets-hook-dsh-replay-suggester-breathe" href="#ets-hook-dsh-replay-suggester-7"/>
@@ -60,19 +60,19 @@
 		<use class="ets-hook-dsh-replay-suggester-counter" href="#ets-hook-dsh-replay-suggester-12"/>
 		<use class="ets-hook-dsh-replay-suggester-twinkle" href="#ets-hook-dsh-replay-suggester-13"/>
 	</g>
-	<g fill="#9499CB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-replay-suggester-twinkle" href="#ets-hook-dsh-replay-suggester-14"/>
 	</g>
-	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#9499CB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-replay-suggester-twinkle" href="#ets-hook-dsh-replay-suggester-15"/>
 	</g>
-	<g fill="#9499CB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-replay-suggester-twinkle" href="#ets-hook-dsh-replay-suggester-16"/>
 	</g>
-	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#9499CB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-replay-suggester-twinkle" href="#ets-hook-dsh-replay-suggester-17"/>
 	</g>
-	<g fill="#9499CB" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+	<g fill="#5B6BC0" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
 		<use class="ets-hook-dsh-replay-suggester-breathe" href="#ets-hook-dsh-replay-suggester-18"/>
 	</g>
 	<g class="ets-hook-dsh-replay-suggester-trace" fill="#26305E" fill-opacity="0.18" fill-rule="evenodd" stroke="none">

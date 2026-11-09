@@ -1,0 +1,63 @@
+{
+	"name": "@playform/client-dsh-panel-cost",
+	"version": "0.2.1",
+	"private": false,
+	"description": "The Cost tab of the PlayForm plugin family: a Statistics-style cost table over the plugin-dsh-cost SQLite ledger, mounted as one conversation.view tab. The host half registers a read-only JSON route over the ledger; the browser half folds the rows into turns and steps and renders the table.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./client": "./Target/Client.bundle.js",
+		"./locale/*.json": "./Source/Variable/*.json",
+		"./cordis.patch.yml": "./cordis.patch.yml",
+		"./SCHEME.md": "./SCHEME.md",
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"cordis.patch.yml",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"devDependencies": {
+		"@deepseek-ai/cordis": "4.1.0",
+		"@deepseek-ai/schemastery": "3.19.0",
+		"@playform/build": "0.3.5",
+		"@types/node": "26.6.6",
+		"@types/react": "19.3.0",
+		"react": "19.3.1",
+		"tsc-alias": "1.9.10",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		},
+		"client": {
+			"platform": "web",
+			"immediately": true,
+			"inject": [
+				"@deepseek-ai/dsh-client-locale",
+				"@deepseek-ai/dsh-client-ui-layout"
+			]
+		}
+	}
+}

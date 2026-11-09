@@ -1,0 +1,51 @@
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter, Make, Plugin } from "../Harness.js";
+const runTest = () => {
+  const Count = MakeCounter();
+  const Run = Make();
+  Check(Count, "S1: exactly one route, /api/playform-cost/session", () => {
+    assert.equal(Run.Provided.routes.length, 1);
+    assert.equal(Run.Provided.routes[0].path, "/api/playform-cost/session");
+  });
+  Check(Count, "S2: the handler answers 200 JSON with the unavailable body", () => {
+    let Status = 0;
+    let Headers;
+    let Body;
+    const Response = {
+      writeHead: (status, headers) => {
+        Status = status;
+        Headers = headers;
+      },
+      end: (body) => {
+        Body = body;
+      }
+    };
+    Run.Provided.routes[0].handler({}, Response);
+    assert.equal(Status, 200);
+    assert.equal(Headers?.["content-type"], "application/json");
+    assert.equal(typeof Body, "string");
+    const Parsed = JSON.parse(Body);
+    assert.equal(Parsed.ok, false);
+    assert.equal(Parsed.code, "unavailable");
+  });
+  Check(Count, "S3: the port saw the registration and nothing else registered", () => {
+    assert.equal(Run.Provided.routes.length, 1);
+    assert.equal(Run.Server.Seen.n, 1);
+    assert.equal(typeof Run.Provided.routes[0].handler, "function");
+  });
+  const Bare = Make({ none: true, defer: true });
+  Check(Count, "S4: no webServer means no throw and no registration", () => {
+    assert.doesNotThrow(() => Plugin.apply(Bare.Ctx));
+    assert.equal(Bare.Provided.routes.length, 0);
+  });
+  return Finish(Count, "Serve-Route");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = runTest();
+  console.log(`${Pass} PASS - Serve-Route`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

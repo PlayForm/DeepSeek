@@ -1,0 +1,1 @@
+import{homedir as n}from"node:os";import{DatabaseSync as o}from"node:sqlite";function s(e){const r=e.startsWith("~/")?`${n()}${e.slice(1)}`:e;let t;try{t=new o(r,{readOnly:!0})}catch(a){throw new Error(`client-dsh-panel-cost: cannot open the ledger at ${r} - ${a instanceof Error?a.message:String(a)}`)}return{Database:t,Close:()=>{t.close()}}}export{s as default};

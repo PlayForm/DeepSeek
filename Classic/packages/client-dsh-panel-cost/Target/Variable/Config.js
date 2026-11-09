@@ -1,0 +1,1 @@
+import e from"@deepseek-ai/schemastery";var a=e.object({enabled:e.boolean().default(!0).volatile(),tabOrder:e.number().default(30).volatile(),rows:e.number().default(200).volatile(),locale:e.union(["en","zh"]).default("en").volatile()});export{a as default};

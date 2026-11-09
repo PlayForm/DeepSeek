@@ -1,0 +1,1 @@
+import i from"../../Source/Variable/Locale-en.json";import{createElement as n}from"react";const s=(t,e)=>t===void 0?i[e]??e:t(e);function r(t){return n("section",{className:"playform-cost-panel","data-session":t.sessionId??""},n("h2",{},s(t.t,"title")),n("p",{},s(t.t,"loading")))}export{r as default};

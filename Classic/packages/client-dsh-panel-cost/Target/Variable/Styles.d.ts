@@ -1,0 +1,2 @@
+declare const _default = "\n.playform-cost-panel {\n\tdisplay: grid;\n\tgap: 12px;\n\tbox-sizing: border-box;\n\twidth: 100%;\n\tmax-width: 1180px;\n\tmin-height: 0;\n\tmargin: 0 auto;\n\tpadding: 16px 16px 28px;\n\toverflow: auto;\n\tcolor: var(--dsw-alias-label-primary);\n\tfont-size: var(--dsw-font-xs-13, 13px);\n}\n\n.playform-cost-panel > p {\n\tmargin: 0;\n\tpadding: 24px 16px;\n\tcolor: var(--dsw-alias-label-secondary);\n\tfont-size: 13px;\n\tline-height: 20px;\n\ttext-align: center;\n}\n";
+export default _default;
