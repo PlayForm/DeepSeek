@@ -688,6 +688,27 @@ function FileCalls(Path, SessionId) {
     return Promise.resolve([]);
   }
 }
+var IsVersionAnswer = (Candidate) => {
+  if (typeof Candidate !== "object" || Candidate === null) {
+    return false;
+  }
+  const Answer = Candidate;
+  return Answer.ok === true && Array.isArray(Answer.versions);
+};
+function History(Path) {
+  if (typeof fetch !== "function") {
+    return Promise.resolve([]);
+  }
+  try {
+    return fetch(`${Path_default}?history=${encodeURIComponent(Path)}`, {
+      method: "GET",
+      headers: { accept: "application/json" },
+      cache: "no-store"
+    }).then((Response) => Response.json()).then((Body) => IsVersionAnswer(Body) ? Body.versions : []).catch(() => []);
+  } catch {
+    return Promise.resolve([]);
+  }
+}
 var IsCatalogAnswer = (Candidate) => {
   if (typeof Candidate !== "object" || Candidate === null) {
     return false;
@@ -1040,6 +1061,26 @@ var Locale_en_default = {
   "contributions.evidence.carry": "context carry",
   "contributions.evidence.touched.title": "this call touched the file, so it paid the file's direct share",
   "contributions.evidence.carry.title": "this call only carried the file in its context, so it paid the amortized share",
+  "contributions.version.title": "Version history",
+  "contributions.version.count": "{count} versions",
+  "contributions.version.loading": "Reading the file's version history...",
+  "contributions.version.failed": "The version history read failed.",
+  "contributions.version.empty": "The ledger recorded no content version for this file yet.",
+  "contributions.version.column.hash": "Version",
+  "contributions.version.column.hash.title": "the short prefix of the SHA-256 content hash the ledger recorded for this version",
+  "contributions.version.column.bytes": "Size",
+  "contributions.version.column.bytes.title": "the encoded byte length of this version's content",
+  "contributions.version.column.lines": "Lines",
+  "contributions.version.column.lines.title": "the line count of this version's content",
+  "contributions.version.column.observed": "Observed",
+  "contributions.version.column.observed.title": "when the ledger first recorded this exact content",
+  "contributions.version.column.touches": "Touches",
+  "contributions.version.column.touches.title": "{touches} touches bound to this version: {kinds}; first {first}, last {last}",
+  "contributions.version.column.touches.none.title": "no touch is bound to this content version yet",
+  "contributions.version.column.sessions": "Sessions",
+  "contributions.version.column.sessions.title": "the distinct conversations whose touches bound to this content version",
+  "contributions.version.current": "current",
+  "contributions.version.current.title": "the newest content version the ledger observed for this file; it is the last version recorded, not a claim about the file on disk now",
   "valuation.label": "Cost basis",
   "valuation.revision": "revision {revision}",
   "valuation.title": "the same recorded usage revalued against catalog revision {revision} under attribution policy {policy}",
@@ -1193,6 +1234,31 @@ var CALL_WIDTHS = {
   stage: 10,
   evidence: 14
 };
+var VERSION_COLUMNS = ["version", "bytes", "lines", "observed", "touches", "sessions"];
+var VERSION_LABELS = {
+  version: "contributions.version.column.hash",
+  bytes: "contributions.version.column.bytes",
+  lines: "contributions.version.column.lines",
+  observed: "contributions.version.column.observed",
+  touches: "contributions.version.column.touches",
+  sessions: "contributions.version.column.sessions"
+};
+var VERSION_TITLES = {
+  version: "contributions.version.column.hash.title",
+  bytes: "contributions.version.column.bytes.title",
+  lines: "contributions.version.column.lines.title",
+  observed: "contributions.version.column.observed.title",
+  touches: null,
+  sessions: "contributions.version.column.sessions.title"
+};
+var VERSION_WIDTHS = {
+  version: 26,
+  bytes: 12,
+  lines: 10,
+  observed: 18,
+  touches: 24,
+  sessions: 10
+};
 var StageTones = {
   discover: 5,
   read: 0,
@@ -1205,6 +1271,7 @@ var N = (Value3) => typeof Value3 === "number" && Number.isFinite(Value3) ? Valu
 var S = (Value3) => typeof Value3 === "string" ? Value3 : "";
 var Epoch = (Value3) => typeof Value3 === "number" && Number.isFinite(Value3) ? Value3 : null;
 var Models = (Value3) => Array.isArray(Value3) ? Value3.filter((Item) => typeof Item === "string") : [];
+var Kinds = (Value3) => Array.isArray(Value3) ? Value3.filter((Item) => typeof Item === "string") : [];
 var BaseName = (Path) => {
   const Cut = Path.lastIndexOf("/");
   return Cut === -1 ? Path : Path.slice(Cut + 1);
@@ -1426,6 +1493,79 @@ var CallTable = (Entry, Columns2, Currency, t) => {
     (0, import_react3.createElement)("td", { className: "playform-cost-detail-cell", colSpan: Columns2 }, Body)
   );
 };
+var VersionRow = (Row2, Current, t) => {
+  const Cell = "playform-cost-step-metric";
+  const Shown = (Value3) => typeof Value3 === "number" && Number.isFinite(Value3) ? Count(Value3) : Dash_default;
+  const List = Kinds(Row2.kinds);
+  const Touched = N(Row2.touches);
+  const Hash = S(Row2.hash);
+  return (0, import_react3.createElement)(
+    "tr",
+    { key: N(Row2.versionId) },
+    (0, import_react3.createElement)(
+      "td",
+      { className: Cell, title: t("contributions.version.column.hash.title") },
+      (0, import_react3.createElement)("span", { className: "playform-cost-num" }, Hash === "" ? Dash_default : Hash),
+      Current ? (0, import_react3.createElement)(
+        "span",
+        {
+          className: "playform-cost-pill",
+          title: t("contributions.version.current.title")
+        },
+        t("contributions.version.current")
+      ) : null
+    ),
+    (0, import_react3.createElement)(
+      "td",
+      { className: Cell, title: t("contributions.version.column.bytes.title") },
+      (0, import_react3.createElement)("span", { className: "playform-cost-num" }, Shown(Row2.bytes))
+    ),
+    (0, import_react3.createElement)(
+      "td",
+      { className: Cell, title: t("contributions.version.column.lines.title") },
+      (0, import_react3.createElement)("span", { className: "playform-cost-num" }, Shown(Row2.lines))
+    ),
+    (0, import_react3.createElement)(
+      "td",
+      { className: Cell, title: t("contributions.version.column.observed.title") },
+      (0, import_react3.createElement)("span", { className: "playform-cost-num" }, Stamp(Epoch(Row2.observedAt)))
+    ),
+    (0, import_react3.createElement)(
+      "td",
+      {
+        className: Cell,
+        title: Touched === 0 ? t("contributions.version.column.touches.none.title") : t("contributions.version.column.touches.title", {
+          touches: Count(Touched),
+          kinds: List.map((Kind) => Word(`files.touch.${Kind}`, Kind, t)).join(
+            ", "
+          ),
+          first: Stamp(Epoch(Row2.firstAt)),
+          last: Stamp(Epoch(Row2.lastAt))
+        })
+      },
+      (0, import_react3.createElement)(
+        "div",
+        { className: "playform-cost-pills" },
+        (0, import_react3.createElement)("span", { className: "playform-cost-num" }, Count(Touched)),
+        List.map(
+          (Kind) => (0, import_react3.createElement)(
+            "span",
+            {
+              className: "playform-cost-pill playform-cost-pill-muted",
+              key: Kind
+            },
+            Word(`files.touch.${Kind}`, Kind, t)
+          )
+        )
+      )
+    ),
+    (0, import_react3.createElement)(
+      "td",
+      { className: Cell, title: t("contributions.version.column.sessions.title") },
+      (0, import_react3.createElement)("span", { className: "playform-cost-num" }, Count(N(Row2.sessions)))
+    )
+  );
+};
 function ContributionsPage(Props) {
   const t = Props.t;
   const Currency = Props.currency === "" ? "USD" : Props.currency;
@@ -1438,6 +1578,10 @@ function ContributionsPage(Props) {
     Rows: []
   });
   const [Calls, SetCalls] = (0, import_react3.useState)({});
+  const [Chain, SetChain] = (0, import_react3.useState)({
+    Phase: "idle",
+    Rows: []
+  });
   const [Open, SetOpen] = (0, import_react3.useState)(() => /* @__PURE__ */ new Set());
   (0, import_react3.useEffect)(() => {
     let Live = true;
@@ -1459,6 +1603,31 @@ function ContributionsPage(Props) {
         }).catch(() => {
           if (!Live) return;
           SetRead({ Phase: "failed", Rows: [] });
+        });
+        return () => {
+          Live = false;
+        };
+      }
+    }
+  }, [Applied, Attempt]);
+  (0, import_react3.useEffect)(() => {
+    let Live = true;
+    switch (true) {
+      case Applied === "":
+        SetChain({ Phase: "idle", Rows: [] });
+        return () => {
+          Live = false;
+        };
+      default: {
+        SetChain({ Phase: "loading", Rows: [] });
+        new Promise((Done) => {
+          Done(History(Applied));
+        }).then((Rows) => {
+          if (!Live) return;
+          SetChain({ Phase: "ready", Rows });
+        }).catch(() => {
+          if (!Live) return;
+          SetChain({ Phase: "failed", Rows: [] });
         });
         return () => {
           Live = false;
@@ -1633,6 +1802,72 @@ function ContributionsPage(Props) {
         return Table2;
     }
   })();
+  const Versions = (() => {
+    switch (true) {
+      case Chain.Phase === "idle":
+      case Chain.Phase === "loading":
+        return (0, import_react3.createElement)(
+          "div",
+          { className: "playform-cost-block-empty", role: "status" },
+          t("contributions.version.loading")
+        );
+      case Chain.Phase === "failed":
+        return (0, import_react3.createElement)(
+          "div",
+          { className: "playform-cost-block-empty" },
+          t("contributions.version.failed")
+        );
+      case Chain.Rows.length === 0:
+        return (0, import_react3.createElement)(
+          "div",
+          { className: "playform-cost-block-empty" },
+          t("contributions.version.empty")
+        );
+      default:
+        return (0, import_react3.createElement)(
+          "table",
+          {
+            className: "playform-cost-table",
+            "aria-label": t("contributions.version.title")
+          },
+          (0, import_react3.createElement)(
+            "colgroup",
+            {},
+            VERSION_COLUMNS.map(
+              (Id) => (0, import_react3.createElement)("col", {
+                key: Id,
+                style: { width: `${VERSION_WIDTHS[Id]}%` }
+              })
+            )
+          ),
+          (0, import_react3.createElement)(
+            "thead",
+            {},
+            (0, import_react3.createElement)(
+              "tr",
+              {},
+              VERSION_COLUMNS.map((Id) => {
+                const Title = VERSION_TITLES[Id];
+                return (0, import_react3.createElement)(
+                  "th",
+                  {
+                    key: Id,
+                    className: Id === "version" ? "playform-cost-th-left" : "playform-cost-th",
+                    ...Title === null ? {} : { title: t(Title) }
+                  },
+                  t(VERSION_LABELS[Id])
+                );
+              })
+            )
+          ),
+          (0, import_react3.createElement)(
+            "tbody",
+            {},
+            Chain.Rows.map((Row2, Index) => VersionRow(Row2, Index === 0, t))
+          )
+        );
+    }
+  })();
   return (0, import_react3.createElement)(
     import_react3.Fragment,
     {},
@@ -1698,6 +1933,27 @@ function ContributionsPage(Props) {
         )
       ),
       Conversations
+    ),
+    Applied === "" ? null : (0, import_react3.createElement)(
+      "div",
+      { className: "playform-cost-block" },
+      (0, import_react3.createElement)(
+        "div",
+        { className: "playform-cost-block-head" },
+        (0, import_react3.createElement)(
+          "span",
+          { className: "playform-cost-block-path" },
+          t("contributions.version.title")
+        ),
+        Chain.Phase === "ready" ? (0, import_react3.createElement)(
+          "span",
+          { className: "playform-cost-block-meta" },
+          t("contributions.version.count", {
+            count: Count(Chain.Rows.length)
+          })
+        ) : null
+      ),
+      Versions
     )
   );
 }
@@ -1911,7 +2167,7 @@ function DetailRow(Props) {
 }
 
 // Source/Function/FileFilters.ts
-var Kinds = ["all", "edited", "written", "readOnly"];
+var Kinds2 = ["all", "edited", "written", "readOnly"];
 var Sorts = ["conversation", "lifetime", "lines", "touches"];
 var Default = { Path: "", Kind: "all", Stage: null, Sort: "conversation" };
 var N2 = (Value3) => typeof Value3 === "number" && Number.isFinite(Value3) ? Value3 : 0;
@@ -1971,7 +2227,7 @@ var Apply = (Rows, Current) => Sorted(
   Rows.filter((Row2) => Match(Row2, Current)),
   Current.Sort
 );
-var FileFilters_default = { Kinds, Sorts, Default, StagesOf, Apply };
+var FileFilters_default = { Kinds: Kinds2, Sorts, Default, StagesOf, Apply };
 
 // Source/Function/FileTable.ts
 var import_dsh_client_ui_primitives2 = require("@deepseek-ai/dsh-client-ui-primitives");
@@ -5653,6 +5909,26 @@ var Locale_zh_default = {
   "contributions.evidence.carry": "\u4E0A\u4E0B\u6587\u627F\u8F7D",
   "contributions.evidence.touched.title": "\u8BE5\u8C03\u7528\u89E6\u53CA\u4E86\u6587\u4EF6,\u56E0\u6B64\u627F\u62C5\u8BE5\u6587\u4EF6\u7684\u76F4\u63A5\u6210\u672C",
   "contributions.evidence.carry.title": "\u8BE5\u8C03\u7528\u4EC5\u5728\u4E0A\u4E0B\u6587\u4E2D\u627F\u8F7D\u4E86\u6587\u4EF6,\u56E0\u6B64\u53EA\u627F\u62C5\u5206\u644A\u6210\u672C",
+  "contributions.version.title": "\u7248\u672C\u5386\u53F2",
+  "contributions.version.count": "{count} \u4E2A\u7248\u672C",
+  "contributions.version.loading": "\u6B63\u5728\u8BFB\u53D6\u8BE5\u6587\u4EF6\u7684\u7248\u672C\u5386\u53F2...",
+  "contributions.version.failed": "\u7248\u672C\u5386\u53F2\u8BFB\u53D6\u5931\u8D25\u3002",
+  "contributions.version.empty": "\u8D26\u672C\u8FD8\u6CA1\u6709\u4E3A\u8BE5\u6587\u4EF6\u8BB0\u5F55\u4EFB\u4F55\u5185\u5BB9\u7248\u672C\u3002",
+  "contributions.version.column.hash": "\u7248\u672C",
+  "contributions.version.column.hash.title": "\u8D26\u672C\u4E3A\u8BE5\u7248\u672C\u8BB0\u5F55\u7684\u5185\u5BB9 SHA-256 \u54C8\u5E0C\u524D\u7F00",
+  "contributions.version.column.bytes": "\u5927\u5C0F",
+  "contributions.version.column.bytes.title": "\u8BE5\u7248\u672C\u5185\u5BB9\u7684\u7F16\u7801\u5B57\u8282\u957F\u5EA6",
+  "contributions.version.column.lines": "\u884C\u6570",
+  "contributions.version.column.lines.title": "\u8BE5\u7248\u672C\u5185\u5BB9\u7684\u884C\u6570",
+  "contributions.version.column.observed": "\u8BB0\u5F55\u65F6\u95F4",
+  "contributions.version.column.observed.title": "\u8D26\u672C\u9996\u6B21\u8BB0\u5F55\u8BE5\u786E\u5207\u5185\u5BB9\u7684\u65F6\u523B",
+  "contributions.version.column.touches": "\u89E6\u53CA",
+  "contributions.version.column.touches.title": "\u7ED1\u5B9A\u5230\u8BE5\u7248\u672C\u7684 {touches} \u6B21\u89E6\u53CA:{kinds};\u9996\u6B21 {first},\u672B\u6B21 {last}",
+  "contributions.version.column.touches.none.title": "\u8FD8\u6CA1\u6709\u89E6\u53CA\u7ED1\u5B9A\u5230\u8BE5\u5185\u5BB9\u7248\u672C",
+  "contributions.version.column.sessions": "\u4F1A\u8BDD",
+  "contributions.version.column.sessions.title": "\u89E6\u53CA\u7ED1\u5B9A\u5230\u8BE5\u5185\u5BB9\u7248\u672C\u7684\u4E0D\u540C\u4F1A\u8BDD\u6570",
+  "contributions.version.current": "\u5F53\u524D",
+  "contributions.version.current.title": "\u8D26\u672C\u4E3A\u8BE5\u6587\u4EF6\u89C2\u5BDF\u5230\u7684\u6700\u65B0\u5185\u5BB9\u7248\u672C;\u5B83\u662F\u6700\u540E\u8BB0\u5F55\u7684\u7248\u672C,\u4E0D\u4EE3\u8868\u78C1\u76D8\u4E0A\u6B64\u523B\u7684\u5185\u5BB9",
   "valuation.label": "\u8BA1\u4EF7\u57FA\u51C6",
   "valuation.revision": "\u7248\u672C {revision}",
   "valuation.title": "\u540C\u4E00\u6279\u5DF2\u8BB0\u5F55\u7528\u91CF\u6309\u76EE\u5F55\u7248\u672C {revision},\u5F52\u5C5E\u7B56\u7565 {policy} \u91CD\u65B0\u8BA1\u4EF7",

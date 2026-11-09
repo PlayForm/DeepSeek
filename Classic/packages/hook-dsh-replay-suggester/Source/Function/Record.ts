@@ -40,13 +40,19 @@ export interface Draft {
 }
 
 export default (
-	/** The plugin state (the mirror, the sequence, the store chain). */
+	/**
+	 * The plugin state (the mirror, the sequence, the store chain).
+	 */
 	State: State,
 
-	/** The agent's memory (its own ring). */
+	/**
+	 * The agent's memory (its own ring).
+	 */
 	Memory: AgentMemory,
 
-	/** The call's draft fields. */
+	/**
+	 * The call's draft fields.
+	 */
 	Draft: Draft,
 ): Entry => {
 	const Entry_: Entry = { seq: State.Seq, ...Draft };

@@ -2,12 +2,15 @@
 // answers one JSON envelope with content-type "application/json; charset=utf-8"
 // and cache-control "no-store", status 200 with the outcome in the envelope.
 // The same route carries the file-scoped reads: GET <Path>?file=<encoded path>
-// answers the conversations that contributed to that file's cost, and
+// answers the conversations that contributed to that file's cost,
 // GET <Path>?file=<encoded path>&conversation=<session id> answers that
 // conversation's calls that allocated money to the same file - the deeper
-// level of the same product question, as { ok, calls } - under the same
-// status and headers, because the engine's file-scoped reads return plain
-// rows and the browser can only receive JSON.
+// level of the same product question, as { ok, calls } - and
+// GET <Path>?history=<encoded path> answers the content versions the ledger
+// recorded for that same file with the touches bound to each - the lineage
+// level, as { ok, versions } - under the same status and headers, because the
+// engine's file-scoped reads return plain rows and the browser can only
+// receive JSON.
 // The host half is transport only and owns NO SQL: the ledger is
 // @playform/plugin-dsh-cost's business, and this route parses the query,
 // clamps the row budget and carries the answer. The service is resolved
@@ -49,16 +52,18 @@
 // publish leaves the ledger exactly as it was. The route is appended after
 // `rates`, so the three reads keep their registration order.
 //
-// The decision chain: a present, non-blank `file` with a non-blank
-// `conversation` answers the engine's per-call rows as { ok: true, calls }; a
-// present, non-blank `file` alone answers the engine's contribution rows as
-// { ok: true, contributions }, without an envelope of its own; otherwise a
-// blank session id answers code "session" without calling the engine; an
-// unknown basis or a malformed revision answers code "error" with one line; a
-// missing cost service answers code "unavailable" with the one actionable
-// line that names the missing package; a service that throws answers code
-// "error"; otherwise the service's own envelope is answered verbatim, because
-// it owns the ledger path, the currency facts and the codes. Every failure is logged once through ctx.logger.warn with the
+// The decision chain: a present, non-blank `history` answers the engine's
+// version rows as { ok: true, versions }; a present, non-blank `file` with a
+// non-blank `conversation` answers the engine's per-call rows as
+// { ok: true, calls }; a present, non-blank `file` alone answers the engine's
+// contribution rows as { ok: true, contributions }, without an envelope of its
+// own; otherwise a blank session id answers code "session" without calling the
+// engine; an unknown basis or a malformed revision answers code "error" with
+// one line; a missing cost service answers code "unavailable" with the one
+// actionable line that names the missing package; a service that throws
+// answers code "error"; otherwise the service's own envelope is answered
+// verbatim, because it owns the ledger path, the currency facts and the codes.
+// Every failure is logged once through ctx.logger.warn with the
 // "cost route: " prefix, and the response write never throws into the request
 // lifecycle. The panel's own envelopes name the route in `path`, because the
 // host half no longer knows the ledger file - the convention
@@ -73,6 +78,7 @@ import type CostService from "@playform/plugin-dsh-cost/service";
 import type {
 	Catalog,
 	CostFileCallRow,
+	CostVersionRow,
 	PricingService,
 	RateRow,
 	Revision,
@@ -147,6 +153,12 @@ const IsContributionService = (Candidate: unknown): Candidate is CostService =>
 const IsCallService = (Candidate: unknown): Candidate is CostService =>
 	IsContributionService(Candidate) && typeof Candidate.fileCalls === "function";
 
+// IsVersionService - the lineage read's guard: the call guard plus the history
+// method, so an engine that carries only the two earlier file-scoped reads
+// answers the unavailable line instead of throwing inside the route.
+const IsVersionService = (Candidate: unknown): Candidate is CostService =>
+	IsCallService(Candidate) && typeof Candidate.history === "function";
+
 // IsPricing - the pricing surface's guard: the three reads the two routes
 // carry, so a partial service answers the unavailable line rather than
 // throwing inside the route.
@@ -177,6 +189,14 @@ type ContributionAnswer = {
 type FileCallAnswer = {
 	ok: true;
 	calls: readonly CostFileCallRow[];
+};
+
+// The version answer: the file's content versions with the touches bound to
+// each, unwrapped the same way the contribution and call answers are - the ok
+// flag and the versions array are the shape the browser's guard reads.
+type VersionAnswer = {
+	ok: true;
+	versions: readonly CostVersionRow[];
 };
 
 // The pricing answers: the catalogs with their revisions, and one revision's
@@ -212,7 +232,13 @@ type PublishBody = {
 };
 
 type AnswerBody =
-	CostResponse | ContributionAnswer | FileCallAnswer | CatalogAnswer | RateAnswer | PublishAnswer;
+	| CostResponse
+	| ContributionAnswer
+	| FileCallAnswer
+	| VersionAnswer
+	| CatalogAnswer
+	| RateAnswer
+	| PublishAnswer;
 
 // The body reader: the JSON text a POST carries, capped at one rate book's
 // worth. A request the port cannot read, or one that runs past the cap, is
@@ -653,6 +679,32 @@ export default function Serve(ctx: Context): void {
 					}
 				}
 			};
+			// Versions - the lineage level of the file-scoped answer: the
+			// content versions the ledger recorded for the file with the
+			// touches bound to each, unwrapped because the version read
+			// carries no envelope of its own. An absent engine answers the
+			// same unavailable line the session read answers, and a throw
+			// maps through LedgerFailure.
+			const Versions = (
+				res: ServerResponse,
+				Engine: unknown,
+				File: string,
+				Rows: number,
+			): void => {
+				switch (true) {
+					case !IsVersionService(Engine):
+						ctx.logger.warn(`cost route: ${AbsentMessage}`);
+						Answer(res, Failure("unavailable", AbsentMessage, Rows));
+						return;
+					default: {
+						try {
+							Answer(res, { ok: true, versions: Engine.history(File) });
+						} catch (Caught) {
+							Answer(res, LedgerFailure(Caught, Rows));
+						}
+					}
+				}
+			};
 			// Catalogs - the catalog list with every revision of each,
 			// flattened in catalog order: the Revision row carries its
 			// CatalogId, so the settings view groups the two arrays without a
@@ -752,12 +804,16 @@ export default function Serve(ctx: Context): void {
 					const SessionId = Url.searchParams.get("session") ?? "";
 					const File = Url.searchParams.get("file") ?? "";
 					const Conversation = Url.searchParams.get("conversation") ?? "";
+					const History = Url.searchParams.get("history") ?? "";
 					const Rows = Applied(Url.searchParams.get("rows"));
 					const Basis = Url.searchParams.get("basis");
 					const RevisionRaw = Url.searchParams.get("revision");
 					const Revision = RevisionOf(RevisionRaw);
 					const Engine = ctx.get("cost");
 					switch (true) {
+						case History.trim() !== "":
+							Versions(res, Engine, History, Rows);
+							return;
 						case File.trim() !== "" && Conversation.trim() !== "":
 							Calls(res, Engine, File, Conversation, Rows);
 							return;

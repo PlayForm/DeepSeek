@@ -1,19 +1,25 @@
-// View - the live view's pure element builder: the presented representations
-// (the Entity/Presentation/Interaction model's latest observed state, never a
-// running OS process), the documented empty note, the D5 trace tail (newest
-// first, bounded by the store; one line per envelope as `<kind> <path>`, the
-// payload's path when it carries one, else the envelope's trace id), and the
-// child-slot element the tab/section hands in. No hooks and no service reads:
-// the wrappers own the subscriptions, so the smoke suite can inspect the
-// exact tree.
-//
-// The state surfaces are the harness UI primitives (the shell's seed word,
-// @deepseek-ai/dsh-client-ui-primitives): the live dot is a StateDot, a
-// representation's kind is a Tag from the fixed eight-tone set (the kind
-// moves out of the meta line, which keeps the version and the sequence), and
-// the trace tail's in-between states are a DetailDocument whose state comes
-// from detailDocumentState. Every className, the remaining strings and every
-// node stay: the primitive replaces the exact span it stands for.
+/**
+ * @module View
+ *
+ * The live view's pure element builder.
+ *
+ * @remarks
+ * The presented representations (the Entity/Presentation/Interaction model's
+ * latest observed state, never a running OS process), the documented empty
+ * note, the D5 trace tail (newest first, bounded by the store; one line per
+ * envelope as `<kind> <path>`, the payload's path when it carries one, else
+ * the envelope's trace id), and the child-slot element the tab/section hands
+ * in. No hooks and no service reads: the wrappers own the subscriptions, so
+ * the smoke suite can inspect the exact tree.
+ *
+ * The state surfaces are the harness UI primitives (the shell's seed word,
+ * @deepseek-ai/dsh-client-ui-primitives): the live dot is a StateDot, a
+ * representation's kind is a Tag from the fixed eight-tone set (the kind
+ * moves out of the meta line, which keeps the version and the sequence), and
+ * the trace tail's in-between states are a DetailDocument whose state comes
+ * from detailDocumentState. Every className, the remaining strings and every
+ * node stay: the primitive replaces the exact span it stands for.
+ */
 import {
 	DetailDocument,
 	detailDocumentState,
@@ -29,7 +35,9 @@ import type { TraceEnvelope } from "@Interface/Trace.js";
 import EN_DICTIONARY from "@Variable/Locale-en.json";
 import { createElement, type ReactNode } from "react";
 
-/** The envelope's display key: its payload path, else its trace id. */
+/**
+ * The envelope's display key: its payload path, else its trace id.
+ */
 const Key = (Envelope: TraceEnvelope): string => {
 	const Path = Envelope.payload["path"];
 	switch (true) {
@@ -40,11 +48,13 @@ const Key = (Envelope: TraceEnvelope): string => {
 	}
 };
 
-/** The dot state the live flag paints: a resolved trace bus is the healthy
- *  `done` dot, and the documented static state (no bus composed) is the
- *  neutral `idle` grey. The trace contract reports no failure and no
- *  in-flight state, so the primitive's `error` and `ongoing` arms have no
- *  source here. */
+/**
+ * The dot state the live flag paints: a resolved trace bus is the healthy
+ * `done` dot, and the documented static state (no bus composed) is the
+ * neutral `idle` grey. The trace contract reports no failure and no
+ * in-flight state, so the primitive's `error` and `ongoing` arms have no
+ * source here.
+ */
 const DotOf = (Live: boolean): StateDotState => {
 	switch (true) {
 		case Live:
@@ -54,9 +64,11 @@ const DotOf = (Live: boolean): StateDotState => {
 	}
 };
 
-/** The tone one representation kind paints. A kind is an informational
- *  classification, so the palette stays inside the read-only tones: `success`,
- *  `danger` and `solid` state health or selection, which a kind does not. */
+/**
+ * The tone one representation kind paints. A kind is an informational
+ * classification, so the palette stays inside the read-only tones: `success`,
+ * `danger` and `solid` state health or selection, which a kind does not.
+ */
 const ToneOf = (Kind: Representation["kind"]): TagTone => {
 	switch (true) {
 		case Kind === "file":
@@ -72,12 +84,14 @@ const ToneOf = (Kind: Representation["kind"]): TagTone => {
 	}
 };
 
-/** The detail document's chrome from the package's own dictionary: the tab
- *  title names the region and the placeholder. The retry and the markdown
- *  copy stay empty because this body renders neither a document nor the
- *  failure arm - the trace contract reports a live bus or the documented
- *  static state, never a failure - and the dictionaries are not this file's
- *  to extend. */
+/**
+ * The detail document's chrome from the package's own dictionary: the tab
+ * title names the region and the placeholder. The retry and the markdown
+ * copy stay empty because this body renders neither a document nor the
+ * failure arm - the trace contract reports a live bus or the documented
+ * static state, never a failure - and the dictionaries are not this file's
+ * to extend.
+ */
 const Labels: DetailDocumentLabels = {
 	title: EN_DICTIONARY.tab,
 	loading: EN_DICTIONARY.tab,
@@ -85,13 +99,17 @@ const Labels: DetailDocumentLabels = {
 	markdown: { code: { copyLabel: "", copiedLabel: "" }, footnotes: "" },
 };
 
-/** The retry the primitive requires: unreachable, because the failure arm is
- *  the only one that draws the control and this view has no failure source. */
+/**
+ * The retry the primitive requires: unreachable, because the failure arm is
+ * the only one that draws the control and this view has no failure source.
+ */
 const Retry = (): void => undefined;
 
-/** The tail read the body stands for: the harness loading skeleton while a
- *  live bus has delivered nothing yet, and the primitive's "nothing" arm in
- *  the documented static state (no bus composed) - never a failure. */
+/**
+ * The tail read the body stands for: the harness loading skeleton while a
+ * live bus has delivered nothing yet, and the primitive's "nothing" arm in
+ * the documented static state (no bus composed) - never a failure.
+ */
 const ReadOf = (Live: boolean): DetailDocumentRead => {
 	switch (true) {
 		case Live:

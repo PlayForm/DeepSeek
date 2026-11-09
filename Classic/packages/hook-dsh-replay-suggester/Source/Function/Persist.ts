@@ -25,13 +25,20 @@ import type State from "@Interface/State.js";
 import { Save } from "./Snapshot.js";
 
 export default async (
-	/** The plugin state (the handle, the mirror, the record path, the ledger). */
+	/**
+	 * The plugin state (the handle, the mirror, the record path, the ledger).
+	 */
 	State: State,
 
-	/** The entry just recorded (its intent is final by now). */
+	/**
+	 * The entry just recorded (its intent is final by now).
+	 */
 	Entry_: Entry,
 
-	/** The bounded store size right after this append (captured at record time). */
+	/**
+	 * The bounded store size right after this append (captured at record
+	 * time).
+	 */
 	Size: number,
 ): Promise<void> => {
 	const Entries = State.History;

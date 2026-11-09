@@ -1,3 +1,6 @@
+/**
+ * The shipped default policy the schema's defaults merge over.
+ */
 export declare const DEFAULT_POLICY: {
     coder: {
         provider: string;

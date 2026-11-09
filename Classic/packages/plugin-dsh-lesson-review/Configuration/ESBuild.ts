@@ -1,22 +1,27 @@
-// Configuration/ESBuild.ts - the plain-ESM twin convention (the
-// live-containers / factory / normalize family template). The base
-// configuration from @playform/build already applies: format esm, platform
-// node, bundle false - each Source file transpiles to its own Target file,
-// imports stay external (the runtime import of @deepseek-ai/schemastery is
-// never bundled; the type-only imports of cordis and of the factory's Schema
-// helper are erased), and tsconfig paths aliases are rewritten to relative
-// output paths.
-//
-// minify: true is safe: every ledger line is a runtime-evaluated template
-// literal, and the loader contract is name/export based.
-//
-// The define block makes the build-time constants explicit: the package's own
-// name and version (read at config-load time) compile into
-// `process.env.NAME_PACKAGE` and `process.env.VERSION_PACKAGE` rather than
-// relying on the build tool's default define.
-//
-// The Target plugin wipes outdir "Target" recursively on start so stale
-// files can never linger after a rename or removal.
+/**
+ * @module ESBuild
+ *
+ * The plain-ESM twin convention (the live-containers / factory / normalize family template).
+ *
+ * @remarks
+ * The base configuration from @playform/build already applies: format esm,
+ * platform node, bundle false - each Source file transpiles to its own Target
+ * file, imports stay external (the runtime import of @deepseek-ai/schemastery
+ * is never bundled; the type-only imports of cordis and of the factory's
+ * Schema helper are erased), and tsconfig paths aliases are rewritten to
+ * relative output paths.
+ *
+ * minify: true is safe: every ledger line is a runtime-evaluated template
+ * literal, and the loader contract is name/export based.
+ *
+ * The define block makes the build-time constants explicit: the package's own
+ * name and version (read at config-load time) compile into
+ * `process.env.NAME_PACKAGE` and `process.env.VERSION_PACKAGE` rather than
+ * relying on the build tool's default define.
+ *
+ * The Target plugin wipes outdir "Target" recursively on start so stale
+ * files can never linger after a rename or removal.
+ */
 import { readFileSync } from "node:fs";
 
 import type { BuildOptions, Plugin } from "esbuild";

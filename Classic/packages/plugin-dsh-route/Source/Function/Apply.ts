@@ -1,17 +1,23 @@
-// Apply - the plugin entry function: fail-loud validation, the State build
-// (the factory's cell unwrap + the P10 volatile refresh), the durable
-// activation proof, the `dshRoute` service instantiation, and the launch-path
-// listeners. The function returns NOTHING (the loader treats apply returns
-// specially - a returned value silently kills event delivery).
-//
-// The listener set is exactly two, the two halves of one seam: Function/Inject
-// on tools/pre-execute (the `subagent` tool's launch - the silent route
-// injection plus the prompt hint), and Function/Launch on agent/pre-step (the
-// child's first step - the hint for a child started straight through
-// `ctx.subagents.startActivation`, which never passes through a tool).
-// Everything else - the resolution, the classification, the escalation - is
-// the `dshRoute` service surface consumed by the sibling orchestration
-// plugins (the queue's routed dispatch) and by the user's audit.
+/**
+ * @module Apply
+ *
+ * The plugin entry function: fail-loud validation, the State build (the
+ * factory's cell unwrap + the P10 volatile refresh), the durable activation
+ * proof, the `dshRoute` service instantiation, and the launch-path listeners.
+ *
+ * @remarks
+ * The function returns NOTHING - the loader treats apply returns specially,
+ * and a returned value silently kills event delivery.
+ *
+ * The listener set is exactly two, the two halves of one seam: Function/Inject
+ * on tools/pre-execute (the `subagent` tool's launch - the silent route
+ * injection plus the prompt hint), and Function/Launch on agent/pre-step (the
+ * child's first step - the hint for a child started straight through
+ * `ctx.subagents.startActivation`, which never passes through a tool).
+ * Everything else - the resolution, the classification, the escalation - is
+ * the `dshRoute` service surface consumed by the sibling orchestration plugins
+ * (the queue's routed dispatch) and by the user's audit.
+ */
 import type { Context } from "@deepseek-ai/cordis";
 import Enforcer from "@Function/Enforcer.js";
 import Inject from "@Function/Inject.js";
@@ -22,7 +28,9 @@ import type State from "@Interface/State.js";
 import { Activate } from "@playform/lib-dsh-core";
 import Version from "@Variable/Version.js";
 
-/** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
+/**
+ * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
+ */
 const Cell = (Value: unknown): unknown =>
 	typeof (Value as { get?: unknown } | null)?.get === "function"
 		? (Value as { get: () => unknown }).get()
@@ -31,7 +39,7 @@ const Cell = (Value: unknown): unknown =>
 export default (Context: Context, Options: Config): void => {
 	// Fail-loud validation BEFORE the State build: invalid config throws at
 	// load, never silently defaults (the tool-coach precedent). The volatile
-	// cells are unwrapped first — the loader hands apply stable `{ get }`
+	// cells are unwrapped first - the loader hands apply stable `{ get }`
 	// references and the State builder unwraps them later.
 	Validate(
 		Cell(Options.policy) as Parameters<typeof Validate>[0],

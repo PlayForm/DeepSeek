@@ -4,7 +4,7 @@ What this test verifies.
 
 ## Intent
 
-`Analysis.Effectiveness` - the cost per surviving line (Documentation/Plans/COST-TRACK-PLUGIN.md
+`Analysis.Effectiveness` - the cost per added line on changed files (Documentation/Plans/COST-TRACK-PLUGIN.md
 section 16.4, with the verdict of section 14): over the files whose `Verdict.State` is `changed`
 in the window, the allocated cost (`DirectCost + AmortizedCost`) divided by the lines the file's
 edit hunks added (`Edit.LinesAdded` joined through `Touch` to `File`); a file whose verdict is only

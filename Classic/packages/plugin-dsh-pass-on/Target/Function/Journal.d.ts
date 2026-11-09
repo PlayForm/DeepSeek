@@ -1,5 +1,7 @@
 import type State from "../Interface/State.js";
-/** The fields the journal line reads (satisfied by both proposal shapes). */
+/**
+ * The fields the journal line reads (satisfied by both proposal shapes).
+ */
 interface Record {
     id: string;
     digest: string;

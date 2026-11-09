@@ -1,35 +1,42 @@
-// Client - the live client's client half body (Source/Client.ts delegates
-// its apply here). The wiring:
-//
-//   1. Provide the workspaceLive service (the Store): snapshot / subscribe /
-//      ingest / refresh. The disposer removes the service with the plugin.
-//   2. Register the locale dictionaries and the live trace source: the D5 bus
-//      (`ctx.get("trace")`) is the live source; without it the view is the
-//      documented static state (empty tail, `live: false`), never an error.
-//   3. Mount the conversation.view tab "workspace-live" (order =
-//      Config.tabOrder), rendering the LiveView snapshot and the stored trace
-//      tail (newest first, bounded by Config.maxEvents). When the panel
-//      family is composed (`playformFamilyPanel` present), the tab ADOPTS THE
-//      CHILD-SLOT MODEL: its registration declares `workspace.live.section`
-//      in its `children` table and the component renders it through the
-//      renderer's `renderSlot` prop.
-//   4. When the panel family is composed, register the live section into the
-//      declared child slot; its registration's INJECT face (`{ section,
-//      ports }`) is the data path - the section reads the store and the trace
-//      tail through the ports, never through the context.
-//   5. When the composition carries the right Sidebar (`sidebarRightTabs`
-//      present), register the live view as a tab TYPE: stage one into that
-//      registry, stage two into the keyed `sidebar.right.pane.tab` seat under
-//      the type's own id. The registry is probed structurally - no inject row
-//      and no import - and an absent one is a silent skip, so the
-//      conversation.view tab above stays the only surface (fail-open).
-//
-// The stable-until-event rule: the tab re-renders only on a new store
-// snapshot or a new trace envelope; there is no polling and no timer. React
-// arrives via createElement calls (no JSX in this package) and stays
-// external. Locale strings route through the client locale service
-// (namespace "client-dsh-workspace-live"); the visible strings live in
-// Variable/Locale-en.json / Variable/Locale-zh.json.
+/**
+ * @module Client
+ *
+ * The live client's client half body: `Source/Client.ts` delegates its apply
+ * here.
+ *
+ * @remarks
+ * The wiring:
+ *
+ * 1. Provide the workspaceLive service (the Store): snapshot / subscribe /
+ *    ingest / refresh. The disposer removes the service with the plugin.
+ * 2. Register the locale dictionaries and the live trace source: the D5 bus
+ *    (`ctx.get("trace")`) is the live source; without it the view is the
+ *    documented static state (empty tail, `live: false`), never an error.
+ * 3. Mount the conversation.view tab "workspace-live" (order =
+ *    Config.tabOrder), rendering the LiveView snapshot and the stored trace
+ *    tail (newest first, bounded by Config.maxEvents). When the panel
+ *    family is composed (`playformFamilyPanel` present), the tab ADOPTS THE
+ *    CHILD-SLOT MODEL: its registration declares `workspace.live.section`
+ *    in its `children` table and the component renders it through the
+ *    renderer's `renderSlot` prop.
+ * 4. When the panel family is composed, register the live section into the
+ *    declared child slot; its registration's INJECT face (`{ section,
+ *    ports }`) is the data path - the section reads the store and the trace
+ *    tail through the ports, never through the context.
+ * 5. When the composition carries the right Sidebar (`sidebarRightTabs`
+ *    present), register the live view as a tab TYPE: stage one into that
+ *    registry, stage two into the keyed `sidebar.right.pane.tab` seat under
+ *    the type's own id. The registry is probed structurally - no inject row
+ *    and no import - and an absent one is a silent skip, so the
+ *    conversation.view tab above stays the only surface (fail-open).
+ *
+ * The stable-until-event rule: the tab re-renders only on a new store
+ * snapshot or a new trace envelope; there is no polling and no timer. React
+ * arrives via createElement calls (no JSX in this package) and stays
+ * external. Locale strings route through the client locale service
+ * (namespace "client-dsh-workspace-live"); the visible strings live in
+ * `Variable/Locale-en.json` / `Variable/Locale-zh.json`.
+ */
 import Section from "@Function/Section.js";
 import StoreFn from "@Function/Store.js";
 import TraceFn from "@Function/Trace.js";
@@ -45,7 +52,9 @@ import { createElement, useEffect, useState, type ReactNode } from "react";
 
 const NAMESPACE = "client-dsh-workspace-live";
 
-/** The panel family's slot-aware registry face (the optional composition). */
+/**
+ * The panel family's slot-aware registry face (the optional composition).
+ */
 type Registry = {
 	register: (section: unknown) => () => void;
 	getVersion: () => number;
@@ -57,7 +66,9 @@ const IsRegistry = (Candidate: unknown): Candidate is Registry =>
 	typeof (Candidate as Registry).register === "function" &&
 	typeof (Candidate as Registry).getVersion === "function";
 
-/** The panel family's registry when the composition carries it. */
+/**
+ * The panel family's registry when the composition carries it.
+ */
 const RegistryOf = (ctx: ClientContext): Registry | undefined => {
 	const Candidate = ctx.get("playformFamilyPanel");
 	switch (true) {
@@ -68,16 +79,20 @@ const RegistryOf = (ctx: ClientContext): Registry | undefined => {
 	}
 };
 
-/** The right-Sidebar tab type's identity: unique across every registration
- *  and the key its body registers under in the pane seat (the harness's
- *  tab-registry contract: a definition's `id` is the stage-two key). */
+/**
+ * The right-Sidebar tab type's identity: unique across every registration
+ * and the key its body registers under in the pane seat (the harness's
+ * tab-registry contract: a definition's `id` is the stage-two key).
+ */
 const TAB_ID = "playform-workspace-live";
 
-/** The right-Sidebar tab-type registry (the optional composition): stage one
- *  of a tab type's registration. Only `register` is required - the body's
- *  keyed pane registration is stage two, into a seat ui-sidebar-right
- *  declares. Neither the package nor its types are imported: the face is
- *  structural, exactly like the panel family's registry. */
+/**
+ * The right-Sidebar tab-type registry (the optional composition): stage one
+ * of a tab type's registration. Only `register` is required - the body's
+ * keyed pane registration is stage two, into a seat ui-sidebar-right
+ * declares. Neither the package nor its types are imported: the face is
+ * structural, exactly like the panel family's registry.
+ */
 type TabRegistrar = {
 	register: (definition: {
 		id: string;
@@ -93,8 +108,10 @@ const IsTabRegistrar = (Candidate: unknown): Candidate is TabRegistrar =>
 	Candidate !== null &&
 	typeof (Candidate as TabRegistrar).register === "function";
 
-/** The right-Sidebar tab-type registry when the composition carries
- *  ui-sidebar-right. */
+/**
+ * The right-Sidebar tab-type registry when the composition carries
+ * ui-sidebar-right.
+ */
 const TabRegistrarOf = (ctx: ClientContext): TabRegistrar | undefined => {
 	const Candidate = ctx.get("sidebarRightTabs");
 	switch (true) {
@@ -105,12 +122,16 @@ const TabRegistrarOf = (ctx: ClientContext): TabRegistrar | undefined => {
 	}
 };
 
-/** The renderer's child-slot dispatch prop. */
+/**
+ * The renderer's child-slot dispatch prop.
+ */
 type RenderSlot = (name: string, props: object) => ReactNode;
 
-/** The keyed registration face of the slot service: the right-Sidebar pane
- *  seat is keyed by the tab type's own id, which the context's list-shaped
- *  mirror does not declare. */
+/**
+ * The keyed registration face of the slot service: the right-Sidebar pane
+ * seat is keyed by the tab type's own id, which the context's list-shaped
+ * mirror does not declare.
+ */
 type KeyedSlots = {
 	register: (
 		options: { name: string; key: string },
@@ -118,7 +139,9 @@ type KeyedSlots = {
 	) => () => void;
 };
 
-/** The live view tab body: the representations, the trace tail, the child slot. */
+/**
+ * The live view tab body: the representations, the trace tail, the child slot.
+ */
 function LiveTab(props: {
 	store: ReturnType<typeof StoreFn>;
 	trace: LiveTrace;

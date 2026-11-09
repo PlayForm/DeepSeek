@@ -1,31 +1,39 @@
-// Storage - the hook's own P5-style storage-domain open and recovery (the
-// observe hook's Function/Storage pattern, the factory's {Open,Attach}
-// precedent).
-//
-// THE DOMAIN: the hook's OWN domain, named config `domain` (default
-// workspace_operate) - NOT extension records in the shared
-// package_governance domain. Version 1, layout per-record,
-// invalidRecords backup-and-skip, TWO tables:
-//   * `proposals` - one record per proposal, keyed by the id;
-//   * `meta`      - ONE record `__meta`: { sequence, refused }.
-//
-// Best-effort and detached, exactly like the observe hook: the open is
-// kicked off with `void` from the plugin's effect; an ABSENT facility is a
-// SILENT SKIP (the proposals live in memory only); a PRESENT facility
-// whose open fails is LOUD: one best-effort ledger line
-// `storage open failed: <reason>`, never rethrown.
-//
-// THE RECOVERY (once, on mount): the proposals table rebuilds the live
-// map, the `__meta` record restores the sequence and refusal counters -
-// both monotonic across restarts, never wall clocks. A record that fails
-// validation is skipped, never guessed.
-//
-// The dynamic imports keep the optional packages off the module-load path
-// (the factory's live-verified pitfall); the type-only devDeps pin them.
+/**
+ * @module Storage
+ *
+ * The hook's own P5-style storage-domain open and recovery: the proposal
+ * table's durable tier.
+ *
+ * @remarks
+ * The pattern is the observe hook's Function/Storage, the factory's
+ * {Open,Attach} precedent. THE DOMAIN: the hook's OWN domain, named config
+ * `domain` (default workspace_operate) - NOT extension records in the shared
+ * package_governance domain. Version 1, layout per-record,
+ * invalidRecords backup-and-skip, TWO tables:
+ *
+ *   - `proposals` - one record per proposal, keyed by the id;
+ *   - `meta` - ONE record `__meta`: { sequence, refused }.
+ *
+ * Best-effort and detached, exactly like the observe hook: the open is
+ * kicked off with `void` from the plugin's effect; an ABSENT facility is a
+ * SILENT SKIP (the proposals live in memory only); a PRESENT facility
+ * whose open fails is LOUD: one best-effort ledger line
+ * `storage open failed: <reason>`, never rethrown.
+ *
+ * THE RECOVERY (once, on mount): the proposals table rebuilds the live
+ * map, the `__meta` record restores the sequence and refusal counters -
+ * both monotonic across restarts, never wall clocks. A record that fails
+ * validation is skipped, never guessed.
+ *
+ * The dynamic imports keep the optional packages off the module-load path
+ * (the factory's live-verified pitfall); the type-only devDeps pin them.
+ */
 import type Proposal from "@Interface/Proposal.js";
 import type State from "@Interface/State.js";
 
-/** The structural shape of one persisted proposal (the validation filter). */
+/**
+ * The structural shape of one persisted proposal (the validation filter).
+ */
 const Valid = (Row: unknown): Row is Proposal => {
 	const Record = Row as Partial<Proposal> | null;
 	return (

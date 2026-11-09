@@ -1,7 +1,14 @@
-// Operate - the operation synthesis (plan section 3): the deterministic
-// transform per target, per kind. Declarative: the pass-on computes
-// find/replace but never executes them. Returns null when the kind makes no
-// change for this target (the target is then skipped, with the reason).
+/**
+ * @module Operate
+ *
+ * The operation synthesis (plan section 3): the deterministic transform per
+ * target, per kind.
+ *
+ * @remarks
+ * Declarative: the pass-on computes find/replace but never executes them.
+ * Returns null when the kind makes no change for this target (the target is
+ * then skipped, with the reason).
+ */
 import type Operation from "../Interface/Operation.js";
 
 export default (

@@ -1,3 +1,13 @@
+/**
+ * @module Query
+ *
+ * The read side of the proposal table: the filtered list, the single lookup,
+ * and the honest statistics triple.
+ *
+ * @remarks
+ * The list limit defaults to config limitDefault and is capped at config
+ * limitMaximum - the graph's own rule.
+ */
 import type Filter from "../Interface/Filter.js";
 import type Proposal from "../Interface/Proposal.js";
 import type State from "../Interface/State.js";

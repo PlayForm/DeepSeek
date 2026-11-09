@@ -2,14 +2,16 @@
 // path with the encoded session id and the row budget, answered as a
 // CostResponse), the file-scoped GET that answers the conversations that
 // contributed to one file's cost, the deeper file-scoped GET that answers one
-// conversation's calls that allocated money to that same file, the two
-// pricing GETs a settings surface lists (lane B4d): the catalogs with their
+// conversation's calls that allocated money to that same file, the lineage GET
+// that answers one file's content versions with the touches bound to each, the
+// two pricing GETs a settings surface lists (lane B4d): the catalogs with their
 // revisions and one revision's rate rows, and the one pricing POST (lane B4f)
 // that publishes a revision. None of the functions throws: a runtime without
 // fetch, a failed request, a non-JSON answer or a malformed body resolve to
 // the unavailable envelope, to an empty contribution list, to an empty call
-// list, to the empty catalog answer, to an empty rate list or to a refused
-// publish answer, so the panel can always render a state. The envelope's `path` names the route, because the browser knows no
+// list, to an empty version list, to the empty catalog answer, to an empty
+// rate list or to a refused publish answer, so the panel can always render a
+// state. The envelope's `path` names the route, because the browser knows no
 // ledger path; the route's own message names the file.
 //
 // THE VALUATION SELECTION (lane B4d; the research's section 8): the session
@@ -24,6 +26,7 @@ import type CostResponse from "@Interface/Response.js";
 import type {
 	Catalog,
 	CostFileCallRow,
+	CostVersionRow,
 	RateRow,
 	Revision,
 	ValuationSelection,
@@ -250,6 +253,48 @@ export function FileCalls(Path: string, SessionId: string): Promise<readonly Cos
 		)
 			.then((Response) => Response.json())
 			.then((Body) => (IsFileCallAnswer(Body) ? Body.calls : []))
+			.catch(() => []);
+	} catch {
+		return Promise.resolve([]);
+	}
+}
+
+// The version answer: the file's content versions with the touches bound to
+// each, unwrapped the same way the contribution and call answers are - the ok
+// flag and the versions array are the shape the block indexes.
+type VersionAnswer = {
+	readonly ok: true;
+	readonly versions: readonly CostVersionRow[];
+};
+
+// IsVersionAnswer - the version answer's guard: the ok flag and a versions
+// array. The rows themselves are read defensively where they render, so the
+// guard stops at the shape the table indexes.
+const IsVersionAnswer = (Candidate: unknown): Candidate is VersionAnswer => {
+	if (typeof Candidate !== "object" || Candidate === null) {
+		return false;
+	}
+	const Answer = Candidate as { ok?: unknown; versions?: unknown };
+	return Answer.ok === true && Array.isArray(Answer.versions);
+};
+
+// History - the lineage read: one GET to the same route with the encoded path
+// under `history`, answered as the file's content versions, newest first, each
+// with the touches bound to it. It never throws: a runtime without fetch, a
+// failed request, a non-JSON answer or a malformed body all resolve to an
+// empty list, so the block always has a state to render.
+export function History(Path: string): Promise<readonly CostVersionRow[]> {
+	if (typeof fetch !== "function") {
+		return Promise.resolve([]);
+	}
+	try {
+		return fetch(`${Route}?history=${encodeURIComponent(Path)}`, {
+			method: "GET",
+			headers: { accept: "application/json" },
+			cache: "no-store",
+		})
+			.then((Response) => Response.json())
+			.then((Body) => (IsVersionAnswer(Body) ? Body.versions : []))
 			.catch(() => []);
 	} catch {
 		return Promise.resolve([]);

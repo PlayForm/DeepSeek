@@ -1,16 +1,23 @@
-// Config - the plugin's Schemastery Config schema (a Variable: one constant
-// built once at load). Every tunable is a field; the shape this schema
-// produces is Interface/Config.ts.
-//
-// The class plugin (`export default class PassOn extends Service`) carries
-// this schema as a static `Config` (the registry applies a plugin's standard
-// schema to the config before the class is constructed). No volatile cells
-// here: the class form has no factory State to hot-refresh, so a config edit
-// reloads the plugin.
-//
-// `enabled` defaults to true once the plugin is ACTIVATED: the pass-on is
-// READ-ONLY - it never writes a file (plan section 3), so its idle risk is
-// nil; the write path lives entirely in the ingester.
+/**
+ * @module Config
+ *
+ * The plugin's Schemastery Config schema (a Variable: one constant built once
+ * at load).
+ *
+ * @remarks
+ * Every tunable is a field; the shape this schema produces is
+ * Interface/Config.ts.
+ *
+ * The class plugin (`export default class PassOn extends Service`) carries
+ * this schema as a static `Config` (the registry applies a plugin's standard
+ * schema to the config before the class is constructed). No volatile cells
+ * here: the class form has no factory State to hot-refresh, so a config edit
+ * reloads the plugin.
+ *
+ * `enabled` defaults to true once the plugin is ACTIVATED: the pass-on is
+ * READ-ONLY - it never writes a file (plan section 3), so its idle risk is
+ * nil; the write path lives entirely in the ingester.
+ */
 import Schema from "@deepseek-ai/schemastery";
 import { Policy } from "@playform/plugin-dsh-factory";
 import { DEFAULT_KINDS } from "@Variable/Kinds.js";
@@ -21,6 +28,10 @@ const DefaultMaxTargets = 20;
 const DefaultMaxPreviewBytes = 2048;
 const DefaultExpiresSeconds = 3600;
 
+/**
+ * The schema constant: built once at load, carried by the class plugin as its
+ * static `Config`.
+ */
 export default Schema.object({
 	enabled: Schema.boolean().default(DefaultEnabled),
 	logFile: Schema.string().default(DefaultLogFile),

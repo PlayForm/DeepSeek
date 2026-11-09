@@ -1,82 +1,134 @@
-// Task - the queue's task schema (SUBAGENT-QUEUE-PLUGIN.md section 2.1): the
-// task as DATA. Each carries the id, the spec (the full self-contained
-// prompt - the queue NEVER alters it, the dispatcher only schedules), the
-// role/task type for the routing, the priority and the dependencies, the
-// state, the assigned-agent id and the result hash. The state vocabulary is
-// queued -> dispatched -> running -> completed/failed/interrupted.
-//
-// THE SPAWN FIELDS (the completion wave): `childId` is the harness child the
-// spawn actually started (the restart reconcile's live-agent check) and
-// `attempts` counts the reconciles that already requeued the task (one
-// requeue, then an honest failure). `agentOptions` is the resolved route the
-// spawn hands the child - the ledger's `route <p> <m> <e>` string stays the
-// audit form, this is the launch form.
+/**
+ * @module Task
+ *
+ * The queue's task schema (SUBAGENT-QUEUE-PLUGIN.md section 2.1): the
+ * task as DATA.
+ *
+ * @remarks
+ * Each carries the id, the spec (the full self-contained
+ * prompt - the queue NEVER alters it, the dispatcher only schedules), the
+ * role/task type for the routing, the priority and the dependencies, the
+ * state, the assigned-agent id and the result hash. The state vocabulary is
+ * queued -> dispatched -> running -> completed/failed/interrupted.
+ *
+ * THE SPAWN FIELDS (the completion wave): `childId` is the harness child the
+ * spawn actually started (the restart reconcile's live-agent check) and
+ * `attempts` counts the reconciles that already requeued the task (one
+ * requeue, then an honest failure). `agentOptions` is the resolved route the
+ * spawn hands the child - the ledger's `route <p> <m> <e>` string stays the
+ * audit form, this is the launch form.
+ */
 
-/** The three routing roles of the task-routing skill (the queue's own copy
- * of the vocabulary; the routing enforcer declares the same three). */
+/**
+ * The three routing roles of the task-routing skill (the queue's own copy
+ * of the vocabulary; the routing enforcer declares the same three).
+ */
 export type Role = "explorer" | "coder" | "planner";
 
-/** The task-state vocabulary. */
+/**
+ * The task-state vocabulary.
+ */
 export type TaskState =
 	"queued" | "dispatched" | "running" | "completed" | "failed" | "interrupted";
 
-/** The child route the spawn passes as `agentOptions` (the harness's
- * AgentOptions vocabulary: provider / model / reasoningEffort). */
+/**
+ * The child route the spawn passes as `agentOptions` (the harness's
+ * AgentOptions vocabulary: provider / model / reasoningEffort).
+ */
 export interface AgentRoute {
+	/**
+	 * The child's provider id.
+	 */
 	provider: string;
+	/**
+	 * The child's model id.
+	 */
 	model: string;
+	/**
+	 * The child's reasoning-effort id.
+	 */
 	reasoningEffort: string;
 }
 
 export default interface Task {
-	/** The queue id, assigned at enqueue time (`queue-<n>`, monotonic). */
+	/**
+	 * The queue id, assigned at enqueue time (`queue-<n>`, monotonic).
+	 */
 	id: string;
 
-	/** The full self-contained prompt. The queue never alters it. */
+	/**
+	 * The full self-contained prompt. The queue never alters it.
+	 */
 	spec: string;
 
-	/** The declared task type, when the enqueuer declares one (undefined =
-	 * the routing's keyword inference decides at dispatch). */
+	/**
+	 * The declared task type, when the enqueuer declares one (undefined =
+	 * the routing's keyword inference decides at dispatch).
+	 */
 	role?: Role | undefined;
 
-	/** Higher priority dispatches first (dependencies still win). */
+	/**
+	 * Higher priority dispatches first (dependencies still win).
+	 */
 	priority: number;
 
-	/** The ids of the tasks that must be completed before this one. */
+	/**
+	 * The ids of the tasks that must be completed before this one.
+	 */
 	dependsOn: string[];
 
-	/** The lifecycle state. */
+	/**
+	 * The lifecycle state.
+	 */
 	state: TaskState;
 
-	/** The agent id this task is assigned to (set at dispatch). */
+	/**
+	 * The agent id this task is assigned to (set at dispatch).
+	 */
 	assignedAgent?: string | undefined;
 
-	/** The result hash, set at completion (the adjudication's key). */
+	/**
+	 * The result hash, set at completion (the adjudication's key).
+	 */
 	resultHash?: string | undefined;
 
-	/** The monotonic enqueue sequence (the FIFO tiebreaker). */
+	/**
+	 * The monotonic enqueue sequence (the FIFO tiebreaker).
+	 */
 	seq: number;
 
-	/** When the task was enqueued (epoch ms). */
+	/**
+	 * When the task was enqueued (epoch ms).
+	 */
 	queuedAt: number;
 
-	/** When the task was dispatched (epoch ms; undefined while queued). */
+	/**
+	 * When the task was dispatched (epoch ms; undefined while queued).
+	 */
 	dispatchedAt?: number | undefined;
 
-	/** The route the dispatch resolved for this task, when the routing
-	 * enforcer was present at dispatch time (the routed dispatch). */
+	/**
+	 * The route the dispatch resolved for this task, when the routing
+	 * enforcer was present at dispatch time (the routed dispatch).
+	 */
 	route?: string | undefined;
 
-	/** The resolved route in the harness's launch form (the spawn's
-	 * `agentOptions`); absent when the dispatch was unrouted. */
+	/**
+	 * The resolved route in the harness's launch form (the spawn's
+	 * `agentOptions`); absent when the dispatch was unrouted.
+	 */
 	agentOptions?: AgentRoute | undefined;
 
-	/** The harness child the spawn started (`startActivation`'s childId);
+	/**
+	 * The harness child the spawn started (`startActivation`'s childId);
 	 * absent until a spawn succeeded. The restart reconcile checks exactly
-	 * this id against the live agent registry. */
+	 * this id against the live agent registry.
+	 */
 	childId?: string | undefined;
 
-	/** How many reconciles already requeued this task (one requeue, then an
-	 * honest failure - the task's work is not retried forever). */
+	/**
+	 * How many reconciles already requeued this task (one requeue, then an
+	 * honest failure - the task's work is not retried forever).
+	 */
 	attempts: number;
 }

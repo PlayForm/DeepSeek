@@ -3,14 +3,16 @@
 // answers the conversations that contributed to one file's cost,
 // `cost.fileCalls(Path, SessionId)` answers the calls of one conversation that
 // allocated money to that same file (the deeper level of the same
-// file-scoped read), and `costPricing` (Interface/PricingService.ts,
+// file-scoped read), `cost.history(Path)` answers the content versions the
+// ledger recorded for that same file with the touches bound to each (the
+// lineage level), and `costPricing` (Interface/PricingService.ts,
 // Function/Pricing.ts) answers the versioned catalog surface over the v5
 // tables - catalogs, revisions and rate rows as reads, `publish` as the one
 // write, and `preview` as the re-pricing that persists nothing. The ledger
 // path is this package's own config default (Variable/Config's
-// `Home(["cost", "ledger.db"])`), never a caller's: both file-scoped reads
-// take a FILE path and a session id, not a ledger path, so they are handed to
-// the read and never opened.
+// `Home(["cost", "ledger.db"])`), never a caller's: all three file-scoped
+// reads take a FILE path (and a session id), not a ledger path, so they are
+// handed to the read and never opened.
 //
 // THE READ SERVICE opens the ledger read-only once per call and closes it in a
 // finally, so a failed read never leaks a handle. The package's own
@@ -48,9 +50,10 @@ import type PricingService from "@Interface/PricingService.js";
 import type CostResponse from "@Interface/Response.js";
 import type CostService from "@Interface/Service.js";
 import type ValuationSelection from "@Interface/ValuationSelection.js";
+import type CostVersionRow from "@Interface/VersionRow.js";
 import { Home } from "@playform/lib-dsh-core";
 
-import Contributions, { FileCalls } from "./Contributions.js";
+import Contributions, { FileCalls, History } from "./Contributions.js";
 import Pricing from "./Pricing.js";
 import Reader from "./Reader.js";
 
@@ -146,6 +149,18 @@ export default function Provide(
 					const Ledger = Open(Path);
 					try {
 						return FileCalls(Ledger.Database, FilePath, SessionId);
+					} finally {
+						Ledger.Close();
+					}
+				},
+				history: (FilePath: string): readonly CostVersionRow[] => {
+					// The lineage level's own open: the same read-only handle,
+					// the same finally, and the file path is again the only
+					// caller argument - a path the ledger does not record
+					// answers an empty array, never a throw.
+					const Ledger = Open(Path);
+					try {
+						return History(Ledger.Database, FilePath);
 					} finally {
 						Ledger.Close();
 					}

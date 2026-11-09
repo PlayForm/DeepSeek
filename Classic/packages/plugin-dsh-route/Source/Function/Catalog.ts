@@ -1,14 +1,21 @@
-// Catalog - the LIVE model catalog probe: the escalation ladder verifies its
-// rung against the models the provider actually advertises, exactly the data
-// `list_subagent_models` reads (the `llm` service's `listProviders` /
-// `listModels` / `resolveModelInfo`). The route plugin consumes the narrowest
-// slice: the advertised model ids for ONE provider.
-//
-// Probed at use time (never an injection dependency - the plugin ships
-// disabled independently of the LLM runtime) and fail-open by design: an
-// absent service, a throwing adapter, or a malformed answer all yield
-// `undefined`, which Function/Ladder reads as "no catalog proof - keep the
-// policy's rung". Silence is the contract; a catalog failure never surfaces.
+/**
+ * @module Catalog
+ *
+ * The LIVE model catalog probe: the escalation ladder verifies its rung
+ * against the models the provider actually advertises, exactly the data
+ * `list_subagent_models` reads (the `llm` service's `listProviders` /
+ * `listModels` / `resolveModelInfo`).
+ *
+ * @remarks
+ * The route plugin consumes the narrowest slice: the advertised model ids for
+ * ONE provider.
+ *
+ * Probed at use time (never an injection dependency - the plugin ships
+ * disabled independently of the LLM runtime) and fail-open by design: an
+ * absent service, a throwing adapter, or a malformed answer all yield
+ * `undefined`, which Function/Ladder reads as "no catalog proof - keep the
+ * policy's rung". Silence is the contract; a catalog failure never surfaces.
+ */
 import type CatalogService from "@Interface/Catalog.js";
 
 export default async (Context: unknown, Provider: string): Promise<string[] | undefined> => {

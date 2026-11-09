@@ -29,20 +29,30 @@
 // amortized share). Both labels carry their own tooltip, so the difference is
 // readable without the research document.
 //
+// THE VERSION HISTORY is the artifact-lineage level (the research's sections
+// 3.C and 4): when a path is applied, a third block lists the file's content
+// versions newest first - the short hash the ledger recorded, the size and the
+// line count it measured, when it observed that content, the touches bound to
+// it with their distinct kinds, and how many conversations those touches came
+// from. The newest row is marked current, because it is the version the ledger
+// saw last; the block claims nothing about the bytes on disk now. It is a read
+// like the other two: no navigation, no write, and its own empty and failed
+// states render a line rather than a crash.
+//
 // EVERY STATE renders a line rather than a crash: the idle pane (no path
 // applied), the loading read, the failed read and the empty read for the
-// conversation level, and the loading, failed and empty state of one
-// conversation's calls. Both fetches resolve instead of throwing, so the pane
-// always has a state to show.
+// conversation level, the loading, failed and empty state of one
+// conversation's calls, and the same three states of the version chain. Both
+// fetches resolve instead of throwing, so the pane always has a state to show.
 import Count from "@Function/Count";
 import CountShort from "@Function/CountShort";
-import { Contributions, FileCalls } from "@Function/Fetch";
+import { Contributions, FileCalls, History } from "@Function/Fetch";
 import Price from "@Function/Price";
 import Rate from "@Function/Rate";
 import Stamp from "@Function/Stamp";
 import type CostContributionRow from "@Interface/ContributionRow";
 import type { Translate } from "@Interface/Translate";
-import type { CostFileCallRow } from "@playform/plugin-dsh-cost/service";
+import type { CostFileCallRow, CostVersionRow } from "@playform/plugin-dsh-cost/service";
 import Dash from "@Variable/Dash";
 import EN_DICTIONARY from "@Variable/Locale-en.json";
 import { createElement, Fragment, useCallback, useEffect, useState } from "react";
@@ -143,6 +153,44 @@ const CALL_WIDTHS: Record<CallColumn, number> = {
 	evidence: 14,
 };
 
+// The version table's one column definition, the same way: the content chain's
+// grain, from the version's short hash through the size and line count the
+// ledger measured, the instant it observed that content, the touches bound to
+// the version and the conversations those touches came from.
+const VERSION_COLUMNS = ["version", "bytes", "lines", "observed", "touches", "sessions"] as const;
+
+type VersionColumn = (typeof VERSION_COLUMNS)[number];
+
+const VERSION_LABELS: Readonly<Record<VersionColumn, string>> = {
+	version: "contributions.version.column.hash",
+	bytes: "contributions.version.column.bytes",
+	lines: "contributions.version.column.lines",
+	observed: "contributions.version.column.observed",
+	touches: "contributions.version.column.touches",
+	sessions: "contributions.version.column.sessions",
+};
+
+// The touches column carries its tooltip on the cell rather than the header,
+// because the kinds and the two times belong to one version row and not to the
+// column, so its header title is null.
+const VERSION_TITLES: Readonly<Record<VersionColumn, string | null>> = {
+	version: "contributions.version.column.hash.title",
+	bytes: "contributions.version.column.bytes.title",
+	lines: "contributions.version.column.lines.title",
+	observed: "contributions.version.column.observed.title",
+	touches: null,
+	sessions: "contributions.version.column.sessions.title",
+};
+
+const VERSION_WIDTHS: Record<VersionColumn, number> = {
+	version: 26,
+	bytes: 12,
+	lines: 10,
+	observed: 18,
+	touches: 24,
+	sessions: 10,
+};
+
 // The stage tone map the Files, turn and step rows share: the same palette,
 // keyed by the same stage words, so a call's stage reads as the same color in
 // every view.
@@ -174,6 +222,12 @@ const Epoch = (Value: unknown): number | null =>
 // Models - one contribution row's model list, read defensively: the rows cross
 // the route as JSON, and an entry that is not a string is not a model.
 const Models = (Value: unknown): readonly string[] =>
+	Array.isArray(Value) ? Value.filter((Item: unknown) => typeof Item === "string") : [];
+
+// Kinds - one version row's distinct touch kinds, read the same defensive way:
+// the rows cross the route as JSON, and an entry that is not a string is not a
+// kind.
+const Kinds = (Value: unknown): readonly string[] =>
 	Array.isArray(Value) ? Value.filter((Item: unknown) => typeof Item === "string") : [];
 
 const BaseName = (Path: string): string => {
@@ -472,6 +526,98 @@ const CallTable = (
 	);
 };
 
+// VersionRow - one content version of the applied file: the short hash the
+// ledger recorded with the current marker on the newest row, the size and the
+// line count it measured, the instant it observed that content, the touches
+// bound to the version - their count and their distinct kinds - and the
+// distinct conversations those touches came from. A version no touch has bound
+// yet keeps its row: the count is zero and the kinds are none.
+const VersionRow = (
+	Row: CostVersionRow,
+	Current: boolean,
+	t: Translate,
+): ReturnType<typeof createElement> => {
+	const Cell = "playform-cost-step-metric";
+	// A figure the ledger may not have recorded: the dash rather than a zero it
+	// never stored, because the two columns are nullable.
+	const Shown = (Value: number | null): string =>
+		typeof Value === "number" && Number.isFinite(Value) ? Count(Value) : Dash;
+	const List = Kinds(Row.kinds);
+	const Touched = N(Row.touches);
+	const Hash = S(Row.hash);
+	return createElement(
+		"tr",
+		{ key: N(Row.versionId) },
+		createElement(
+			"td",
+			{ className: Cell, title: t("contributions.version.column.hash.title") },
+			createElement("span", { className: "playform-cost-num" }, Hash === "" ? Dash : Hash),
+			Current
+				? createElement(
+						"span",
+						{
+							className: "playform-cost-pill",
+							title: t("contributions.version.current.title"),
+						},
+						t("contributions.version.current"),
+					)
+				: null,
+		),
+		createElement(
+			"td",
+			{ className: Cell, title: t("contributions.version.column.bytes.title") },
+			createElement("span", { className: "playform-cost-num" }, Shown(Row.bytes)),
+		),
+		createElement(
+			"td",
+			{ className: Cell, title: t("contributions.version.column.lines.title") },
+			createElement("span", { className: "playform-cost-num" }, Shown(Row.lines)),
+		),
+		createElement(
+			"td",
+			{ className: Cell, title: t("contributions.version.column.observed.title") },
+			createElement("span", { className: "playform-cost-num" }, Stamp(Epoch(Row.observedAt))),
+		),
+		createElement(
+			"td",
+			{
+				className: Cell,
+				title:
+					Touched === 0
+						? t("contributions.version.column.touches.none.title")
+						: t("contributions.version.column.touches.title", {
+								touches: Count(Touched),
+								kinds: List.map((Kind) =>
+									Word(`files.touch.${Kind}`, Kind, t),
+								).join(", "),
+								first: Stamp(Epoch(Row.firstAt)),
+								last: Stamp(Epoch(Row.lastAt)),
+							}),
+			},
+			createElement(
+				"div",
+				{ className: "playform-cost-pills" },
+				createElement("span", { className: "playform-cost-num" }, Count(Touched)),
+				List.map((Kind) =>
+					createElement(
+						"span",
+						{
+							className: "playform-cost-pill playform-cost-pill-muted",
+							key: Kind,
+						},
+						Word(`files.touch.${Kind}`, Kind, t),
+					),
+				),
+			),
+		),
+		createElement(
+			"td",
+			{ className: Cell, title: t("contributions.version.column.sessions.title") },
+			createElement("span", { className: "playform-cost-num" }, Count(N(Row.sessions))),
+		),
+	);
+};
+
 type ContributionsPageProps = {
 	path: string;
 	currency: string;
@@ -492,6 +638,10 @@ export default function ContributionsPage(
 		Rows: [],
 	});
 	const [Calls, SetCalls] = useState<Readonly<Record<string, Reading<CostFileCallRow>>>>({});
+	const [Chain, SetChain] = useState<Reading<CostVersionRow>>({
+		Phase: "idle",
+		Rows: [],
+	});
 	const [Open, SetOpen] = useState<ReadonlySet<string>>(() => new Set<string>());
 
 	// The one conversation-level read: the applied path alone drives it, so a
@@ -521,6 +671,38 @@ export default function ContributionsPage(
 					.catch(() => {
 						if (!Live) return;
 						SetRead({ Phase: "failed", Rows: [] });
+					});
+				return () => {
+					Live = false;
+				};
+			}
+		}
+	}, [Applied, Attempt]);
+
+	// The version read: the same applied path drives it, so a new file's chain
+	// replaces the previous one and a repeated Read of the same path retries a
+	// failed answer. The engine answers the rows newest first, so the first row
+	// is the version the ledger saw last - the one the block marks current.
+	useEffect(() => {
+		let Live = true;
+		switch (true) {
+			case Applied === "":
+				SetChain({ Phase: "idle", Rows: [] });
+				return () => {
+					Live = false;
+				};
+			default: {
+				SetChain({ Phase: "loading", Rows: [] });
+				new Promise<readonly CostVersionRow[]>((Done) => {
+					Done(History(Applied));
+				})
+					.then((Rows) => {
+						if (!Live) return;
+						SetChain({ Phase: "ready", Rows });
+					})
+					.catch(() => {
+						if (!Live) return;
+						SetChain({ Phase: "failed", Rows: [] });
 					});
 				return () => {
 					Live = false;
@@ -720,6 +902,80 @@ export default function ContributionsPage(
 		}
 	})();
 
+	// The version level's body: the table, or the one line of the loading, the
+	// failed and the empty read. The idle phase answers the loading line,
+	// because the block renders only once a path is applied and the effect has
+	// already asked for the chain by then.
+	const Versions = ((): ReturnType<typeof createElement> => {
+		switch (true) {
+			case Chain.Phase === "idle":
+			case Chain.Phase === "loading":
+				return createElement(
+					"div",
+					{ className: "playform-cost-block-empty", role: "status" },
+					t("contributions.version.loading"),
+				);
+			case Chain.Phase === "failed":
+				return createElement(
+					"div",
+					{ className: "playform-cost-block-empty" },
+					t("contributions.version.failed"),
+				);
+			case Chain.Rows.length === 0:
+				return createElement(
+					"div",
+					{ className: "playform-cost-block-empty" },
+					t("contributions.version.empty"),
+				);
+			default:
+				return createElement(
+					"table",
+					{
+						className: "playform-cost-table",
+						"aria-label": t("contributions.version.title"),
+					},
+					createElement(
+						"colgroup",
+						{},
+						VERSION_COLUMNS.map((Id) =>
+							createElement("col", {
+								key: Id,
+								style: { width: `${VERSION_WIDTHS[Id]}%` },
+							}),
+						),
+					),
+					createElement(
+						"thead",
+						{},
+						createElement(
+							"tr",
+							{},
+							VERSION_COLUMNS.map((Id) => {
+								const Title = VERSION_TITLES[Id];
+								return createElement(
+									"th",
+									{
+										key: Id,
+										className:
+											Id === "version"
+												? "playform-cost-th-left"
+												: "playform-cost-th",
+										...(Title === null ? {} : { title: t(Title) }),
+									},
+									t(VERSION_LABELS[Id]),
+								);
+							}),
+						),
+					),
+					createElement(
+						"tbody",
+						{},
+						Chain.Rows.map((Row, Index) => VersionRow(Row, Index === 0, t)),
+					),
+				);
+		}
+	})();
+
 	return createElement(
 		Fragment,
 		{},
@@ -788,5 +1044,30 @@ export default function ContributionsPage(
 			),
 			Conversations,
 		),
+		Applied === ""
+			? null
+			: createElement(
+					"div",
+					{ className: "playform-cost-block" },
+					createElement(
+						"div",
+						{ className: "playform-cost-block-head" },
+						createElement(
+							"span",
+							{ className: "playform-cost-block-path" },
+							t("contributions.version.title"),
+						),
+						Chain.Phase === "ready"
+							? createElement(
+									"span",
+									{ className: "playform-cost-block-meta" },
+									t("contributions.version.count", {
+										count: Count(Chain.Rows.length),
+									}),
+								)
+							: null,
+					),
+					Versions,
+				),
 	);
 }

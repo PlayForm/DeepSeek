@@ -1,13 +1,15 @@
-// Contributions - the engine's second, file-scoped read family: for one file
-// path, the conversations that contributed to that file's cost, each with the
+// Contributions - the engine's file-scoped read family: for one file path,
+// the conversations that contributed to that file's cost, each with the
 // money it allocated to the file and its share of the file's whole lifetime
-// total, and - the deeper level - one conversation's calls that allocated to
-// that same file, each with its own money, tokens, stage and touch evidence.
-// This is the product question the ledger exists to answer (the file, then
-// its conversations, then their calls and models), so each read is one
-// statement and no envelope: the session reader keeps its CostResponse
-// untouched, and a path or a session the ledger does not record answers an
-// empty array rather than a throw.
+// total, the deeper level of one conversation's calls that allocated to that
+// same file, each with its own money, tokens, stage and touch evidence, and -
+// the lineage level - the file's own content versions with the touches bound
+// to each. This is the product question the ledger exists to answer (the
+// file, then its conversations, then their calls and models, then the content
+// chain those calls produced), so each read is one statement and no envelope:
+// the session reader keeps its CostResponse untouched, and a path or a
+// session the ledger does not record answers an empty array rather than a
+// throw.
 //
 // THE CONVERSATION READ resolves the file by its exact path (File.Path, which
 // the ledger keys per project, so every FileId carrying that path is in
@@ -30,24 +32,43 @@
 // answer with `touched` false and a null stage. The order is the
 // conversation's own grain: turn, step, then the call id.
 //
+// THE VERSION READ is the artifact-lineage step (the research's sections 3.C
+// and 4): the same exact-path file scope, the FileVersion rows of those files
+// LEFT JOINed to the Touch rows that carry each version as their VersionId and
+// grouped per version, so a version no touch has bound yet - a write's after
+// content, until a later touch comes - keeps its row with a zero count instead
+// of disappearing. The touch count, the first and last touch time and the
+// distinct session count collapse in one grouped subquery, so a version bound
+// by many touches is still one row and the join can never fan out; the
+// distinct kinds are the correlated JSON array of that version's own touch
+// rows, the same one-array hand-over the conversation read uses for its
+// models. The order is newest first - ObservedAt, then VersionId, both
+// descending - because a content chain reads from the version the ledger saw
+// last.
+//
 // Every statement reads only; the read-only open lives in Function/Provide,
 // so this module sees the open handle and never a path it resolves itself.
 import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
 
 import type CostContributionRow from "@Interface/ContributionRow.js";
 import type CostFileCallRow from "@Interface/FileCallRow.js";
+import type CostVersionRow from "@Interface/VersionRow.js";
 
-// The two read-only statements: FileScope pins the path, CallMoney collapses
-// the Allocation rows to one money row per call, Lifetime sums that same
-// money across every session, SessionRow groups it by the call's session,
-// and FileCalls joins that same per-call money to the call row and to the
-// per-call touch. TouchRow is the same collapse on the touch side: the touch
-// count is the evidence flag and the stage is the call's own stage word - the
-// greatest name when one call recorded more than one touch of the file, so
-// the row stays one per call and never fans out. The model list is a
+// The three read-only statements: FileScope pins the path, CallMoney
+// collapses the Allocation rows to one money row per call, Lifetime sums that
+// same money across every session, SessionRow groups it by the call's
+// session, and FileCalls joins that same per-call money to the call row and
+// to the per-call touch. TouchRow is the same collapse on the touch side: the
+// touch count is the evidence flag and the stage is the call's own stage word
+// - the greatest name when one call recorded more than one touch of the file,
+// so the row stays one per call and never fans out. The model list is a
 // correlated subquery over the group's calls, so the fan-out the statements
 // avoid in money never returns in the string. The conversation sort is the
-// unrounded total, descending, with the session id as the tiebreak.
+// unrounded total, descending, with the session id as the tiebreak. History
+// is the version grain: VersionRow is the file's own FileVersion rows,
+// TouchRow the same collapse keyed by VersionId, and the kind list the
+// correlated JSON array of the version's touches - newest version first, the
+// version id breaking a shared clock tick.
 const Query = {
 	Contributions: `WITH FileScope AS (
     SELECT File.FileId AS FileId
@@ -154,11 +175,56 @@ FROM CallMoney
 JOIN CallScope ON CallScope.CallId = CallMoney.CallId
 LEFT JOIN TouchRow ON TouchRow.CallId = CallMoney.CallId
 ORDER BY CallScope.Turn ASC, CallScope.Step ASC, CallScope.CallId ASC;`,
+
+	History: `WITH FileScope AS (
+    SELECT File.FileId AS FileId
+    FROM File
+    WHERE File.Path = ?
+),
+VersionRow AS (
+    SELECT FileVersion.VersionId AS VersionId,
+        FileVersion.Hash AS Hash,
+        FileVersion.Bytes AS Bytes,
+        FileVersion.Lines AS Lines,
+        FileVersion.ObservedAt AS ObservedAt
+    FROM FileVersion
+    JOIN FileScope ON FileScope.FileId = FileVersion.FileId
+),
+TouchRow AS (
+    SELECT Touch.VersionId AS VersionId,
+        COUNT(*) AS Touches,
+        MIN(Touch.At) AS FirstAt,
+        MAX(Touch.At) AS LastAt,
+        COUNT(DISTINCT Touch.SessionId) AS Sessions
+    FROM Touch
+    JOIN FileScope ON FileScope.FileId = Touch.FileId
+    WHERE Touch.VersionId IS NOT NULL
+    GROUP BY Touch.VersionId
+)
+SELECT VersionRow.VersionId AS VersionId,
+    VersionRow.Hash AS Hash,
+    VersionRow.Bytes AS Bytes,
+    VersionRow.Lines AS Lines,
+    VersionRow.ObservedAt AS ObservedAt,
+    COALESCE(TouchRow.Touches, 0) AS Touches,
+    TouchRow.FirstAt AS FirstAt,
+    TouchRow.LastAt AS LastAt,
+    COALESCE(TouchRow.Sessions, 0) AS Sessions,
+    (SELECT json_group_array(Kind) FROM (
+            SELECT DISTINCT Touch.Kind AS Kind
+            FROM Touch
+            JOIN FileScope ON FileScope.FileId = Touch.FileId
+            WHERE Touch.VersionId = VersionRow.VersionId
+            ORDER BY Kind ASC
+        ) AS Kind) AS Kinds
+FROM VersionRow
+LEFT JOIN TouchRow ON TouchRow.VersionId = VersionRow.VersionId
+ORDER BY VersionRow.ObservedAt DESC, VersionRow.VersionId DESC;`,
 } as const;
 
-// The row readers both statements share: every statement of this module hands
-// over the same SQLite value shapes, so the four helpers are defined once and
-// read the same way whichever grain the caller asked for.
+// The row readers all three statements share: every statement of this module
+// hands over the same SQLite value shapes, so the four helpers are defined
+// once and read the same way whichever grain the caller asked for.
 const Text = (Row: Record<string, SQLOutputValue>, Key: string): string | null => {
 	const Value = Row[Key];
 	return typeof Value === "string" ? Value : null;
@@ -176,6 +242,13 @@ const Stored = (Row: Record<string, SQLOutputValue>, Key: string): number => Fig
 // session reader and with the report of the same sum, and a call row agrees
 // with the conversation row above it.
 const Round = (Value: number): number => Math.round(Value * 1e6) / 1e6;
+
+// The version row's short hash: the first twelve hex characters of the
+// SHA-256 digest the drain stored, the git-style version label a chain reads
+// by. A version the ledger stored no hash for answers null - the row says
+// "unrecorded" rather than inventing a label - and a hash the ledger stored
+// shorter than this keeps every character it has.
+const HASH_PREFIX = 12;
 
 export default function Contributions(
 	Database: DatabaseSync,
@@ -255,4 +328,42 @@ export function FileCalls(
 			touched: Stored(Row, "Touched") > 0,
 		};
 	});
+}
+
+// History - the lineage level of the same read (the research's sections 3.C
+// and 4): one row per content version the ledger recorded for one file path,
+// newest first, each with its short hash, the size and line count it measured,
+// when it was observed, and the touches bound to it - their count, their first
+// and last times, the distinct kinds they recorded and the distinct sessions
+// that produced them. A path the ledger does not record answers an empty
+// array, because the statement matches no File row; a version no touch has
+// bound yet keeps its row with a zero count, an empty kind list and null first
+// and last times. Nothing here throws and nothing here writes.
+export function History(Database: DatabaseSync, Path: string): readonly CostVersionRow[] {
+	// The kind list arrives as one JSON array, read exactly the way the model
+	// list is: never split from a comma-joined string, because a kind the
+	// ledger gains later may carry punctuation the aggregate does not escape.
+	const KindList = (Raw: SQLOutputValue | undefined): readonly string[] => {
+		if (typeof Raw !== "string") {
+			return [];
+		}
+		const Parsed: unknown = JSON.parse(Raw);
+		return Array.isArray(Parsed)
+			? Parsed.filter((One): One is string => typeof One === "string")
+			: [];
+	};
+
+	const Rows = Database.prepare(Query.History).all(Path);
+	return Rows.map((Row) => ({
+		versionId: Stored(Row, "VersionId"),
+		hash: Text(Row, "Hash")?.slice(0, HASH_PREFIX) ?? null,
+		bytes: Figure(Row, "Bytes"),
+		lines: Figure(Row, "Lines"),
+		observedAt: Stored(Row, "ObservedAt"),
+		touches: Stored(Row, "Touches"),
+		firstAt: Figure(Row, "FirstAt"),
+		lastAt: Figure(Row, "LastAt"),
+		kinds: KindList(Row["Kinds"]),
+		sessions: Stored(Row, "Sessions"),
+	}));
 }
