@@ -1,10 +1,17 @@
-// Tail - the tail(namespace, lines) method. The namespace must match the
-// family module-name pattern (lowercase letters, digits, hyphens) - anything
-// else, including any path separator or dot, is rejected (`rejected`), not
-// sanitized: the endpoint never opens a path its namespace pattern didn't
-// produce. The log path is `<logRoot>/<namespace>.log` with the leading `~`
-// resolved to os.homedir(). Read-only: one openFileSync-equivalent read, no
-// write surface.
+/**
+ * @module Tail
+ *
+ * The `tail(namespace, lines)` method over the family log files.
+ *
+ * @remarks
+ * The namespace must match the family module-name pattern (lowercase letters,
+ * digits, hyphens) - anything else, including any path separator or dot, is
+ * rejected (`rejected`), not sanitized: the endpoint never opens a path its
+ * namespace pattern didn't produce. The log path is
+ * `<logRoot>/<namespace>.log` with the leading `~` resolved to
+ * `os.homedir()`. Read-only: one openFileSync-equivalent read, no write
+ * surface.
+ */
 import { readFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";

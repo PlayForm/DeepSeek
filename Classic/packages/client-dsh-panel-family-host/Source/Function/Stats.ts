@@ -1,6 +1,12 @@
-// Stats - the stats() method: the ccr store summary. The LRU internals are
-// not exposed by any existing remote, so v1 returns the ccr log summary
-// (path, byte size, line count) from the Config ccrLog file. Read-only.
+/**
+ * @module Stats
+ *
+ * The `stats()` method: the ccr store summary from the Config ccrLog file.
+ *
+ * @remarks
+ * The LRU internals are not exposed by any existing remote, so v1 returns the
+ * ccr log summary (path, byte size, line count). Read-only.
+ */
 import { readFile, stat } from "node:fs/promises";
 import { homedir } from "node:os";
 
