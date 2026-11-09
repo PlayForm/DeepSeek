@@ -1,3 +1,29 @@
+/**
+ * @module Detach
+ *
+ * The two-arm transform (G1, IMPLEMENTATION-DESIGN.md section 3.2;
+ * Requirements/01 section 12).
+ *
+ * @remarks
+ * The pre-execute arm decides + starts the job + tags the exec object; the
+ * execute arm, seeing the tag, returns the fabricated canonical-value result
+ * WITHOUT calling `next()` - the bash body never runs, and the pipeline
+ * renders a SUCCESSFUL (`isError: false`) tool result whose text is exactly
+ * the marker.
+ *
+ * THE EFFECTIVE-GATE ORDER (I2 section 3, binding):
+ *
+ *     non-detachable -> await marker -> dedup -> escalation -> policy guards
+ *
+ * A marked call to a non-detachable tool is IGNORED with the I2 4.1 ledger
+ * line (never refused); the marker check sits after the class rule and before
+ * dedup/escalation/policy; `Policy.Decide` runs only for unmarked calls.
+ *
+ * THE FAIL-OPEN RULE (I1 12.2.2, HARD): every branch wrapped; on ANY internal
+ * error the just-started job is killed (`marker-failed`), the tag is removed,
+ * the ledger records `transform failed <tool> -> inline`, and the call runs
+ * inline exactly as if the plugin were not mounted. The listener NEVER denies.
+ */
 import type { PreToolDecision, ToolDispatchExecution, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
 import type { Log } from "./Render.js";
 import type State from "../Interface/State.js";

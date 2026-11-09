@@ -1,3 +1,26 @@
+/**
+ * @module Watchlist
+ *
+ * The classification module (the FILE-MONITOR design section 3.2).
+ *
+ * @remarks
+ * Config and data, never code: the file -> check-set resolution is the
+ * watchlist override, else the effective check-set catalog's globs. Pure
+ * functions over the plugin's own state - no I/O, no eval.
+ *
+ * THE ENROLLMENT SPLIT (the R3 3.1 rule):
+ *
+ * - the AUTOMATIC enrollment (the `fs/observed` path) is watchlist-gated:
+ *   only a matching watchlist entry enrolls a file; the default watchlist
+ *   is empty, so nothing auto-enrolls (no scan, no watch-all);
+ * - the EXPLICIT enrollment (`live_monitor <path>`) falls back to the
+ *   catalog globs when no watchlist entry matches - the model's escape
+ *   hatch works out of the box.
+ *
+ * No match anywhere: the effective set is [] - the band renders the
+ * `checks: none` form and nothing ever runs (honest: with no checks, no
+ * verification is claimed).
+ */
 import type { WatchlistEntry } from "../Interface/Events.js";
 import type State from "../Interface/State.js";
 /** Convert one glob to a RegExp (the small self-contained converter; the

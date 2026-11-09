@@ -1,27 +1,34 @@
-// Render - the substitution engine and the section builder (research section
-// 3 + IMPLEMENTATION-DESIGN.md section 3.1, phase 1). {{token}} replace ONLY
-// - no eval, no expressions, no `new Function` (research section 5: the
-// programmable stage routes evaluation through the ptc-runtime later; v1 has
-// no evaluation path at all, provable by grep in the smoke suite). An
-// unknown token renders LITERALLY and logs `render unknown <id> <token>` -
-// never a failure (the harness's own unresolved-variable failure must never
-// be inherited; this section is contributed with interpolate: false, so only
-// this engine touches its tokens).
-//
-// Every enabled block renders inside the FIXED frame so the model cannot
-// mistake it for harness state:
-//
-//   --- LIVE CONTAINER <id> (recomputed each request; not harness state) ---
-//   <rendered body>
-//   --- END LIVE CONTAINER <id> ---
-//
-// (the dashes come from config `separator`, default `---`). The section body
-// is one frame per rendered block, joined with newlines; when it exceeds
-// config `sectionBudgetBytes`, the OLDEST frames collapse to one-line
-// summaries - never silently dropped (ledger `failsafe section-collapse <n>`).
-//
-// Fail-open: a render failure skips the block and logs
-// `render failed <id> -> skipped`; the assembly still resolves.
+/**
+ * @module Render
+ *
+ * The substitution engine and the section builder (research section 3 +
+ * IMPLEMENTATION-DESIGN.md section 3.1, phase 1).
+ *
+ * @remarks
+ * `{{token}}` replace ONLY - no eval, no expressions, no `new Function`
+ * (research section 5: the programmable stage routes evaluation through the
+ * ptc-runtime later; v1 has no evaluation path at all, provable by grep in
+ * the smoke suite). An unknown token renders LITERALLY and logs
+ * `render unknown <id> <token>` - never a failure (the harness's own
+ * unresolved-variable failure must never be inherited; this section is
+ * contributed with `interpolate: false`, so only this engine touches its
+ * tokens).
+ *
+ * Every enabled block renders inside the FIXED frame so the model cannot
+ * mistake it for harness state:
+ *
+ *     --- LIVE CONTAINER <id> (recomputed each request; not harness state) ---
+ *     <rendered body>
+ *     --- END LIVE CONTAINER <id> ---
+ *
+ * (the dashes come from config `separator`, default `---`). The section body
+ * is one frame per rendered block, joined with newlines; when it exceeds
+ * config `sectionBudgetBytes`, the OLDEST frames collapse to one-line
+ * summaries - never silently dropped (ledger `failsafe section-collapse <n>`).
+ *
+ * Fail-open: a render failure skips the block and logs
+ * `render failed <id> -> skipped`; the assembly still resolves.
+ */
 import Clock from "@Function/Clock.js";
 import { Table } from "@Function/Counters.js";
 import {

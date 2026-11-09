@@ -1,30 +1,42 @@
-// Events - the STRUCTURAL TYPES of the wave-2 runtime data plus the service
-// and event vocabulary the wave-2 listeners consume (IMPLEMENTATION-DESIGN.md
-// sections 2-6). Pure data and declarations - no behavior.
-//
-// THE PARITY RULE FOR TYPES: the @deepseek-ai jobs/shell/subagent/agent-loop
-// packages are NOT workspace devDependencies (only dsh-tools, dsh-system-prompt
-// and dsh-llm are, per the family precedent), so the wave-2 code binds to them
-// STRUCTURALLY: the shapes below were verified first-hand against the running
-// harness's own packages (app.asar, read in place 2026-10-20) and are kept
-// minimal - only the fields this plugin reads or writes. The SCHEME documents
-// this coupling like the fabricated-result coupling of the execute arm.
-//
-// The event names the plugin registers but whose owning packages are not in
-// the workspace (`session/event` - the dsh-session log event bus; the
-// `agent/inbox/spliced` events ride it) are registered through the cordis
-// Context's structural `on(name: string | symbol, ...)` overload, never
-// through a new Events-interface augmentation: re-declaring a name another
-// package already augments would be a conflicting duplicate.
+/**
+ * @module Events
+ *
+ * The STRUCTURAL TYPES of the wave-2 runtime data plus the service and event
+ * vocabulary the wave-2 listeners consume (IMPLEMENTATION-DESIGN.md sections
+ * 2-6). Pure data and declarations - no behavior.
+ *
+ * @remarks
+ * THE PARITY RULE FOR TYPES: the @deepseek-ai jobs/shell/subagent/agent-loop
+ * packages are NOT workspace devDependencies (only dsh-tools, dsh-system-prompt
+ * and dsh-llm are, per the family precedent), so the wave-2 code binds to them
+ * STRUCTURALLY: the shapes below were verified first-hand against the running
+ * harness's own packages (app.asar, read in place 2026-10-20) and are kept
+ * minimal - only the fields this plugin reads or writes. The SCHEME documents
+ * this coupling like the fabricated-result coupling of the execute arm.
+ *
+ * The event names the plugin registers but whose owning packages are not in
+ * the workspace (`session/event` - the dsh-session log event bus; the
+ * `agent/inbox/spliced` events ride it) are registered through the cordis
+ * Context's structural `on(name: string | symbol, ...)` overload, never
+ * through a new Events-interface augmentation: re-declaring a name another
+ * package already augments would be a conflicting duplicate.
+ */
 
 /** One resolved shell execution spec (the ctx.shell.resolve product). */
 export interface ShellSpecification {
+	/** The command line to run. */
 	command: string;
+	/** The working directory (default: the session cwd). */
 	workdir?: string | undefined;
+	/** The inline deadline in ms. */
 	timeoutMs?: number | undefined;
+	/** The trusted-environment variables (the shellEnv.collect product). */
 	dshEnv?: unknown;
+	/** The sandbox policy (the sandboxPolicy.resolve product). */
 	sandboxPolicy?: { mode: string } | undefined;
+	/** The inline-expiry policy ("none" for every detached dispatch). */
 	onExpiry?: "none" | "kill" | undefined;
+	/** The job-owned cancellation signal. */
 	signal?: AbortSignal | undefined;
 }
 
@@ -40,23 +52,37 @@ export interface StreamReader {
 
 /** One settled or running process handle (the ctx.shell.execute product). */
 export interface ShellProcess {
+	/** The process state. */
 	status: "running" | "completed" | "killed";
+	/** The exit code (null while running or on a kill). */
 	exitCode: number | null;
+	/** The terminating signal (null when none). */
 	signal: string | null;
+	/** The two observed stream readers. */
 	observed: { stdout: StreamReader; stderr: StreamReader };
+	/** Resolves with the exit facts when the process finishes. */
 	done: Promise<{ exitCode: number | null; signal: string | null }>;
+	/** Kill the process (best-effort). */
 	kill(): boolean;
+	/** The awaited foreground projection. */
 	result(): Promise<ShellResult>;
 }
 
 /** The foreground result projection of one finished shell run. */
 export interface ShellResult {
+	/** The exit code (null on a kill). */
 	exitCode: number | null;
+	/** The terminating signal (null when none). */
 	signal: string | null;
+	/** Whether the inline deadline expired. */
 	timedOut?: boolean | undefined;
+	/** Whether the run was aborted. */
 	aborted?: boolean | undefined;
+	/** The inline deadline in ms. */
 	timeoutMs?: number | undefined;
+	/** The stdout projection. */
 	stdout: { text: string; truncated: boolean; spillPath?: string };
+	/** The stderr projection. */
 	stderr: { text: string; truncated: boolean; spillPath?: string };
 }
 
@@ -65,24 +91,31 @@ export interface ShellExecution extends ShellProcess {}
 
 /** The shell capability seam (verified against dsh-shell/dsh-bash-local). */
 export interface Shell {
+	/** Resolve one request into the canonical spec (sandbox + deadlines included). */
 	resolve(request: Partial<ShellSpecification>): ShellSpecification;
+	/** Execute one resolved spec. */
 	execute(spec: ShellSpecification): Promise<ShellExecution>;
+	/** The harness's sandbox mode label, when exposed. */
 	sandboxMode?: string;
 }
 
 /** The trusted-environment collector (verified against dsh-tool-bash usage). */
 export interface ShellEnv {
+	/** Collect the trusted-environment variables for one exec. */
 	collect(exec: { agent?: unknown; signal?: AbortSignal }): unknown;
 }
 
 /** The working-directory seam (verified against dsh-tool-bash usage). */
 export interface WorkingDirectory {
+	/** Ensure the session's working directory and return it. */
 	ensure(agent: unknown, signal?: AbortSignal): Promise<string | undefined>;
 }
 
 /** One job output pull source (verified against dsh-jobs-local startPump). */
 export interface JobSource {
+	/** The stream the source reads. */
 	channel: "stdout" | "stderr";
+	/** Read non-consumingly from one byte offset. */
 	read(fromByte: number): {
 		text: string;
 		nextOffset: number;
@@ -93,12 +126,19 @@ export interface JobSource {
 
 /** The producer-facing job spec (verified against dsh-jobs-local start()). */
 export interface JobSpecification {
+	/** The job kind ("bash" for the detach path, "monitor" for the monitor path). */
 	kind: string;
+	/** The human label (the first bytes of the command, or the monitor label). */
 	label: string;
+	/** The originating tool call ids. */
 	toolCall?: { callId: string; rootCallId: string } | undefined;
+	/** The owning agent's session id. */
 	owner?: string | undefined;
+	/** The ring byte cap. */
 	outputLimitBytes?: number | undefined;
+	/** The pull sources the registry pumps. */
 	output?: JobSource[] | undefined;
+	/** The producer adapter: one `run` plus its done/cancel pair. */
 	run(handle: {
 		append(text: string, options?: unknown): void;
 		updateProgress(line: string): void;
@@ -110,16 +150,27 @@ export interface JobSpecification {
 
 /** The read-only job projection (verified against dsh-jobs-local view()). */
 export interface JobView {
+	/** The registry job id. */
 	id: string;
+	/** The job kind. */
 	kind: string;
+	/** The human label. */
 	label: string;
+	/** The owning agent's session id. */
 	owner?: string | undefined;
+	/** The ring byte cap. */
 	outputLimitBytes?: number | undefined;
+	/** The job state. */
 	status: "running" | "stopping" | "completed" | "killed" | "failed";
+	/** The latest progress line. */
 	progress?: string | undefined;
+	/** The settled detail (the exit detail or kill reason). */
 	detail?: string | undefined;
+	/** The start time in clock ms. */
 	startedAt: number;
+	/** The finish time in clock ms. */
 	finishedAt?: number | undefined;
+	/** The ring's totals and spill paths. */
 	output: { total: number; earliest: number; spillPaths?: string[] };
 }
 

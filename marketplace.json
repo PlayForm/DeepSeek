@@ -84,11 +84,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794228697,
+					"publishTimestamp": 1794230589,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "8df10296985f06ed6d485dc5874a5b14c7e5828d",
+						"commit": "1287bedc4c05401d0089785a4567eb0acdf2125b",
 						"path": "Classic/packages/client-dsh-panel-cost"
 					},
 					"engines": {}
@@ -6228,11 +6228,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794227329,
+					"publishTimestamp": 1794230589,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "c7571deb9ee0222775d13debe30d94ad5bcd52f4",
+						"commit": "1287bedc4c05401d0089785a4567eb0acdf2125b",
 						"path": "Classic/packages/plugin-dsh-skill-learn"
 					},
 					"engines": {}

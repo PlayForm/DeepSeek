@@ -1,8 +1,15 @@
-// Plant - the `live_plant` tool (CAN-2; Requirements/02 section 4; the design
-// section 3.4): opens a planted board in the calling agent's per-agent state,
-// enrolls the pinned members, and starts expecting reports. The I5 3.3 prune
-// twin lives on live_container_set's prune verb; the lease is never
-// model-chosen (the config's plant.leaseTurns is the only window source).
+/**
+ * @module Plant
+ *
+ * The `live_plant` tool (CAN-2; Requirements/02 section 4; the design section
+ * 3.4).
+ *
+ * @remarks
+ * Opens a planted board in the calling agent's per-agent state, enrolls the
+ * pinned members, and starts expecting reports. The I5 3.3 prune twin lives
+ * on `live_container_set`'s prune verb; the lease is never model-chosen (the
+ * config's `plant.leaseTurns` is the only window source).
+ */
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import * as Board from "@Function/Board.js";
 import type { Log } from "@Function/Render.js";

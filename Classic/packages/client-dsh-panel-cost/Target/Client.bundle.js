@@ -2881,8 +2881,7 @@ function PricingSettings(Props) {
           SetReason("");
           SetRevisionId(Revision.RevisionId);
           Read(false);
-          if (Props.onPublished !== void 0)
-            Props.onPublished(Revision.RevisionId);
+          if (Props.onPublished !== void 0) Props.onPublished(Revision.RevisionId);
         }).catch((Caught) => {
           SetPublishing(false);
           SetOutcome({

@@ -1,15 +1,21 @@
-// MonitorTools - the two monitor tool surfaces (the FILE-MONITOR design
-// section 9; the Plant.ts defineTool idiom). Read-only semantics, never a
-// write path: the tools enroll, list, opt out and dispatch checks - they
-// never gate or deny an edit and never touch file content.
-//
-//   live_monitor        - enroll a path (the effective classification), the
-//                         per-glob opt-out, the list of enrolled files, and
-//                         the parent-into-child target agent;
-//   live_monitor_check  - the deep check: the full check set once, bypassing
-//                         the debounce, admission-guarded; the model reads
-//                         the full ring via job_output (the job id is in the
-//                         output text).
+/**
+ * @module MonitorTools
+ *
+ * The two monitor tool surfaces (the FILE-MONITOR design section 9; the
+ * `Plant.ts` defineTool idiom).
+ *
+ * @remarks
+ * Read-only semantics, never a write path: the tools enroll, list, opt out
+ * and dispatch checks - they never gate or deny an edit and never touch file
+ * content.
+ *
+ * - `live_monitor` - enroll a path (the effective classification), the
+ *   per-glob opt-out, the list of enrolled files, and the parent-into-child
+ *   target agent.
+ * - `live_monitor_check` - the deep check: the full check set once, bypassing
+ *   the debounce, admission-guarded; the model reads the full ring via
+ *   `job_output` (the job id is in the output text).
+ */
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import * as Band from "@Function/Band.js";
 import Clock from "@Function/Clock.js";

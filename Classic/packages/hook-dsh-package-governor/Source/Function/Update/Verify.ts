@@ -67,9 +67,9 @@ const ThroughSeam = async (
 				State.Factory.Append(State, `update: verifyCommand ok`);
 				return true;
 			case Outcome.exitCode === 127:
-				// command not found (the host process PATH is not the user's
-				// shell PATH — pnpm etc. may be absent). Non-fatal: the bumps
-				// already landed; the catch-up can be run manually.
+				// command not found (the host process PATH is not the user's shell PATH - pnpm
+				// etc. may be absent). Non-fatal: the bumps already landed; the catch-up can be
+				// run manually.
 				State.Factory.Append(
 					State,
 					`update: verifyCommand runner unavailable (exit 127) — skipped, non-fatal`,
@@ -91,8 +91,8 @@ const ThroughSeam = async (
 	}
 };
 
-// ThroughChild: the fallback when no subprocess seam exists in this
-// deployment. Asynchronous; the abort signal kills the child.
+// ThroughChild: the fallback when no subprocess seam exists in this deployment.
+// Asynchronous; the abort signal kills the child.
 const ThroughChild = (
 	State: State,
 	Command: string,

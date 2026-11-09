@@ -1,3 +1,25 @@
+/**
+ * @module Jobs
+ *
+ * The producer re-dispatch (G2, IMPLEMENTATION-DESIGN.md section 5.1).
+ *
+ * @remarks
+ * The command-runner wrapper that replicates the bash tool's OWN background
+ * adapter (dsh-tool-bash startJob/processJob/processSources) over the SAME
+ * governed path - `ctx.shell.resolve` + `ctx.shell.execute` (sandbox +
+ * deadlines unmodified), `ctx.shellEnv.collect(exec)`,
+ * `ctx.workingDirectory.ensure(agent, signal)`,
+ * `ctx.get("sandboxPolicy")?.resolve({session})`, `ctx.jobs.start(...)`.
+ *
+ * THE TAIL CAPTURE (section 5.1 step 3): the same observed streams feed the
+ * registry's pull sources AND a bounded private tail (stdout + stderr, 2 KiB
+ * total) - the completion composer's only legal render source, because the
+ * settled event carries no ring content and a host plugin is not the job owner
+ * (readAt on an owned job fails authorization - jobs-local `expect()`).
+ *
+ * The wrapper is command-runner-only BY CONSTRUCTION (`Policy.ts`'s
+ * detachable set); the non-detachable mutation family never reaches it.
+ */
 import type { JobSource, JobSpecification, ShellProcess, ShellSpecification } from "../Interface/Events.js";
 import type State from "../Interface/State.js";
 /** The per-job private tail (bounded; the completion frame's output source). */

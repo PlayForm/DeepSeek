@@ -1,3 +1,22 @@
+/**
+ * @module Counters
+ *
+ * The per-scope state and the variable table (research section 3: "the
+ * variables v1 ships" - `{{time}} {{date}} {{tz}} {{messageCount}}
+ * {{turnCount}} {{sinceLastTool}} {{sessionId}} {{cwd}}`).
+ *
+ * @remarks
+ * The per-scope state lives in a WeakMap keyed on the scope/agent object (the
+ * tool-coach precedent; the assemble context exposes only an opaque scope key
+ * - docs/cordis-api, dsh-scope ScopeKey - so a dispatch without a key shares
+ * the module's default key). All counters count what the plugin itself
+ * observes at `agent/pre-step` and `tools/post-execute`; exact token counts
+ * are NOT available to plugins (research residual 3) - the gauge variables
+ * are honest approximations.
+ *
+ * All time reads go through the Clock module (the smoke's fake clock). No
+ * I/O, no eval - pure functions over the state.
+ */
 import type { AgentState, Variables } from "../Interface/Execution.js";
 import type State from "../Interface/State.js";
 /** The module's default scope key (a dispatch without a scope shares it). */

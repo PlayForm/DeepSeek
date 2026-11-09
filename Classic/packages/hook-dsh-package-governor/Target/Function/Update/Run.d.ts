@@ -1,3 +1,15 @@
+/**
+ * @module Run
+ *
+ * Dispatches every policy invocation through the selected mode and reports whether all
+ * invocations succeeded.
+ *
+ * @remarks
+ * The modes are "bin" (the ncu binary via the stored subprocess seam) and the default
+ * programmatic library path. The function runs inside the detached update continuation (no
+ * child process): ledger lines go through the FACTORY (State.Factory.Append); in bin mode the
+ * raw CLI output is additionally piped to the optional job ring (Emit, P1).
+ */
 import type Invocation from "../../Interface/Invocation.js";
 import type State from "../../Interface/State.js";
 export default _default;
