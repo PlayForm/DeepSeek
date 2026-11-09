@@ -37,9 +37,15 @@ export interface Draft {
 }
 export default _default;
 declare function _default(
-/** The plugin state (the mirror, the sequence, the store chain). */
+/**
+ * The plugin state (the mirror, the sequence, the store chain).
+ */
 State: State, 
-/** The agent's memory (its own ring). */
+/**
+ * The agent's memory (its own ring).
+ */
 Memory: AgentMemory, 
-/** The call's draft fields. */
+/**
+ * The call's draft fields.
+ */
 Draft: Draft): Entry;

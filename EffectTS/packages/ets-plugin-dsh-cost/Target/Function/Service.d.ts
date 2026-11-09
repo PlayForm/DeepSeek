@@ -1,10 +1,10 @@
 import type { DatabaseSync } from "node:sqlite";
 import { Service, type Context } from "@deepseek-ai/cordis";
-import type Catalog from "../Interface/Catalog.js";
-import type Config from "../Interface/Config.js";
-import type PricingPreview from "../Interface/PricingPreview.js";
-import type RateRow from "../Interface/RateRow.js";
-import type Revision from "../Interface/Revision.js";
+import type Catalog from "@Interface/Catalog.js";
+import type Config from "@Interface/Config.js";
+import type PricingPreview from "@Interface/PricingPreview.js";
+import type RateRow from "@Interface/RateRow.js";
+import type Revision from "@Interface/Revision.js";
 export default class CostPricing extends Service {
     /** The engine the methods delegate to (Function/Pricing over this ledger). */
     private readonly Engine;

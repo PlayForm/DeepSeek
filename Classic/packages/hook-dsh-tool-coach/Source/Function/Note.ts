@@ -1,19 +1,26 @@
-// Note - the tier-1 additionalContexts notice builder (plan Part 3 §3.5
-// step 5). Builds the labeled UserMessage the post-execute listener prepends
-// to the downstream decision's additionalContexts.
-//
-// THE SOURCE LABEL IS LOAD-BEARING (the repeat-tool-reminder precedent,
-// README:89): an unlabeled context would render as a user prompt in derived
-// history. The label is `{ kind: 'tool-coach', form: 'notice', summary }` -
-// the merge-extensible MessageSource vocabulary (this module declares the
-// coach's own kind in its own module, per the vocabulary's contract), with
-// the `notice` form's required one-line `summary` (`<tool> <class> ×
-// <count>`, bound to the harness's 120-char summary limit).
-//
-// The message factory mirrors the @deepseek-ai/dsh-llm `createUserMessage`
-// contract LOCALLY (identified, deep-frozen, random UUID) - the repeat-
-// tool-reminder bundles the same helper instead of importing it, so the
-// built Target carries no runtime import of the harness's own packages.
+/**
+ * @module Note
+ *
+ * The tier-1 additionalContexts notice builder: the labeled UserMessage the
+ * post-execute listener prepends to the downstream decision's
+ * additionalContexts.
+ *
+ * @remarks
+ * Plan Part 3 §3.5 step 5.
+ *
+ * THE SOURCE LABEL IS LOAD-BEARING (the repeat-tool-reminder precedent,
+ * README:89): an unlabeled context would render as a user prompt in derived
+ * history. The label is `{ kind: 'tool-coach', form: 'notice', summary }` -
+ * the merge-extensible MessageSource vocabulary (this module declares the
+ * coach's own kind in its own module, per the vocabulary's contract), with
+ * the `notice` form's required one-line `summary` (`<tool> <class> ×
+ * <count>`, bound to the harness's 120-char summary limit).
+ *
+ * The message factory mirrors the @deepseek-ai/dsh-llm `createUserMessage`
+ * contract LOCALLY (identified, deep-frozen, random UUID) - the repeat-
+ * tool-reminder bundles the same helper instead of importing it, so the
+ * built Target carries no runtime import of the harness's own packages.
+ */
 import { randomUUID } from "node:crypto";
 
 import type { MessageSource, UserMessage } from "@deepseek-ai/dsh-llm";
@@ -30,10 +37,14 @@ declare module "@deepseek-ai/dsh-llm" {
 	}
 }
 
-/** The harness's bound for a notice summary (dsh-llm CONTEXT_SUMMARY_MAX_CHARS). */
+/**
+ * The harness's bound for a notice summary (dsh-llm CONTEXT_SUMMARY_MAX_CHARS).
+ */
 const SUMMARY_MAX = 120;
 
-/** Deep-freeze a value in place (the dsh-llm message contract). */
+/**
+ * Deep-freeze a value in place (the dsh-llm message contract).
+ */
 const DeepFreeze = <T>(Value: T): T => {
 	if (Value && typeof Value === "object") {
 		for (const Key of Object.keys(Value as object)) {
@@ -44,7 +55,9 @@ const DeepFreeze = <T>(Value: T): T => {
 	return Value;
 };
 
-/** Bind a notice summary to the harness's 120-char limit (ellipsized). */
+/**
+ * Bind a notice summary to the harness's 120-char limit (ellipsized).
+ */
 export const BoundSummary = (Summary: string): string => {
 	if (Summary.length <= SUMMARY_MAX) {
 		return Summary;

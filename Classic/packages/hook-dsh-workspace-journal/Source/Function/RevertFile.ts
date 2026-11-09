@@ -1,7 +1,12 @@
-// RevertFile - one file's replay (Function/RevertFile): the per-file half
-// of Revert. See Revert.ts for the semantics; this module holds the two
-// replay arms (the pre-image write-back and the absence unlink) and their
-// ledger lines.
+/**
+ * @module RevertFile
+ *
+ * One file's replay: the per-file half of Revert.
+ *
+ * @remarks
+ * See Revert.ts for the semantics; this module holds the two replay arms
+ * (the pre-image write-back and the absence unlink) and their ledger lines.
+ */
 import * as FileSystem from "node:fs";
 
 import type EntryRecord from "@Interface/Entry.js";

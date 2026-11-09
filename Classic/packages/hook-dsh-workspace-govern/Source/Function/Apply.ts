@@ -1,30 +1,35 @@
-// Apply - the plugin entry function: fail-loud validation, the State build
-// (the factory's cell unwrap + the P10 volatile refresh), the service
-// registration (Function/Service - `workspaceGovern`), the activation proof,
-// and the gate listeners:
-//
-//   L1  tools/pre-execute  (waterfall, next() first, fail-open envelope):
-//       the gate arm - extract the proposal (the operate family's attached
-//       record, or the minimal synthesis from the call itself), run the
-//       recursion guard, run the four independent means-checks, and return
-//       the downstream decision UNCHANGED on pass, the deny decision on
-//       deny, and the ask decision on escalate;
-//   L2  tools/post-execute (waterfall, plain observer): records the outcome
-//       of a gated call in the ledger (`observed <operation> (accepted |
-//       errored)`) so the gate's decision trail is auditable per call.
-//
-// THE WATERFALL DISCIPLINE: `next()` is ALWAYS awaited first; pass-through
-// returns the downstream decision unchanged; FAIL-OPEN: every listener body
-// is one try/catch - on any error a logger line records it and the
-// downstream decision is returned UNCHANGED. A gate error never breaks a
-// dispatch (per-obligation failures are governed by the recovery table
-// instead - Function/Recovery).
-//
-// THE IDLE-FOREVER POSTURE: `enabled` defaults to false. A cold mount logs
-// `disabled (enabled=false)` and wires NOTHING.
-//
-// The function returns NOTHING (the loader contract). The test probe is the
-// `ctx.__hookDshWorkspaceGovernState` attachment.
+/**
+ * @module Apply
+ *
+ * The plugin entry function: fail-loud validation, the State build (the
+ * factory's cell unwrap plus the P10 volatile refresh), the service
+ * registration (`Function/Service` - `workspaceGovern`), the activation proof,
+ * and the gate listeners.
+ *
+ * @remarks
+ * L1 `tools/pre-execute` (waterfall, next() first, fail-open envelope): the
+ * gate arm - extract the proposal (the operate family's attached record, or the
+ * minimal synthesis from the call itself), run the recursion guard, run the
+ * four independent means-checks, and return the downstream decision UNCHANGED
+ * on pass, the deny decision on deny, and the ask decision on escalate.
+ *
+ * L2 `tools/post-execute` (waterfall, plain observer): records the outcome of a
+ * gated call in the ledger (`observed <operation> (accepted | errored)`) so the
+ * gate's decision trail is auditable per call.
+ *
+ * THE WATERFALL DISCIPLINE: `next()` is ALWAYS awaited first; pass-through
+ * returns the downstream decision unchanged; FAIL-OPEN: every listener body is
+ * one try/catch - on any error a logger line records it and the downstream
+ * decision is returned UNCHANGED. A gate error never breaks a dispatch
+ * (per-obligation failures are governed by the recovery table instead -
+ * `Function/Recovery`).
+ *
+ * THE IDLE-FOREVER POSTURE: `enabled` defaults to false. A cold mount logs
+ * `disabled (enabled=false)` and wires NOTHING.
+ *
+ * The function returns NOTHING (the loader contract). The test probe is the
+ * `ctx.__hookDshWorkspaceGovernState` attachment.
+ */
 import type { Context } from "@deepseek-ai/cordis";
 import type {
 	PostToolDecision,
@@ -42,14 +47,18 @@ import type FactoryHandle from "@Interface/Factory.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/lib-dsh-core";
 
-/** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
+/**
+ * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
+ */
 const Cell = (Value: unknown): unknown =>
 	typeof (Value as { get?: unknown } | null)?.get === "function"
 		? (Value as { get: () => unknown }).get()
 		: Value;
 
-/** The fail-loud validation (runs BEFORE the State build so an invalid
- * config throws at load, never silently defaults). */
+/**
+ * The fail-loud validation (runs BEFORE the State build so an invalid config
+ * throws at load, never silently defaults).
+ */
 const Validate = (Options: unknown): void => {
 	const Raw = (Options ?? {}) as Record<string, unknown>;
 	const Fail = (Message: string): never => {

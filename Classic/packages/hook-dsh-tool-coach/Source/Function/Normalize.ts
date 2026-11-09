@@ -79,10 +79,14 @@ export const StripQuotes = (Text: string): string =>
 		.replace(/'([^']*)'/g, "$1")
 		.replace(/"([^"]*)"/g, "$1");
 
-/** Collapse runs of whitespace to single spaces and trim. */
+/**
+ * Collapse runs of whitespace to single spaces and trim.
+ */
 export const Collapse = (Text: string): string => Text.replace(/\s+/g, " ").trim();
 
-/** Normalize ONE pipeline's text (no splitting): the plan's §2.7a steps. */
+/**
+ * Normalize ONE pipeline's text (no splitting): the plan's §2.7a steps.
+ */
 const Normalize = (Pipeline: string): string => {
 	let Text = StripHeredocs(Pipeline);
 
@@ -107,13 +111,17 @@ const Normalize = (Pipeline: string): string => {
 
 export default Normalize;
 
-/** Split a pipeline into its pipe segments (the unit of classification). */
+/**
+ * Split a pipeline into its pipe segments (the unit of classification).
+ */
 export const Segments = (Pipeline: string): string[] =>
 	Pipeline.split("|")
 		.map((Segment) => Segment.trim())
 		.filter((Segment) => Segment.length > 0);
 
-/** The pipeline's head command word (its first segment's first token). */
+/**
+ * The pipeline's head command word (its first segment's first token).
+ */
 export const Head = (Pipeline: string): string => {
 	const First = Segments(Pipeline)[0] ?? "";
 	const Space = First.indexOf(" ");
