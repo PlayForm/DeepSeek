@@ -1,11 +1,11 @@
-// Source/Test/All-Adapters/Test.ts - the full THIRTEEN-ADAPTER roster,
-// against the real built functions, the thirteen real manifests the package
+// Source/Test/All-Adapters/Test.ts - the full FIFTEEN-ADAPTER roster,
+// against the real built functions, the fifteen real manifests the package
 // ships, and the real built closure-factory bundle: the roster table, the
-// thirteen adapter effects, the section-slot registrations, the activation
+// fifteen adapter effects, the section-slot registrations, the activation
 // and trace vocabulary, the schema-derived config forms (a representative
 // volatile and plain field per adapter), the two write routes on the new
 // adapters, and the bundle executed through a fake `window.__ModuleLoader__`
-// (it must export the same id/inject and register the same thirteen).
+// (it must export the same id/inject and register the same fifteen).
 import assert from "node:assert/strict";
 import Schema from "@deepseek-ai/schemastery";
 import * as React from "react";
@@ -42,6 +42,9 @@ const PackagePinner = (await import("@Variable/Reference/PackagePinner.js"))
 const CargoGovernor = (await import("@Variable/Reference/CargoGovernor.js"))
 	.default;
 const Ccr = (await import("@Variable/Reference/Ccr.js")).default;
+const Cost = (await import("@Variable/Reference/Cost.js")).default;
+const CostAnalysis = (await import("@Variable/Reference/CostAnalysis.js"))
+	.default;
 
 const Roster = [
 	Normalize,
@@ -57,6 +60,8 @@ const Roster = [
 	PackagePinner,
 	CargoGovernor,
 	Ccr,
+	Cost,
+	CostAnalysis,
 ];
 
 // -- schema mirrors of the ten plugins' Variable/Config.ts (real Schemastery
@@ -302,9 +307,9 @@ const BundleContext = (): any => {
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 
-	// B1: the full thirteen-manifest roster table.
+	// B1: the full fifteen-manifest roster table.
 	{
-		Check(Count, "B1: the thirteen shipped manifests are the exact roster", () => {
+		Check(Count, "B1: the fifteen shipped manifests are the exact roster", () => {
 			assert.deepEqual(
 				Roster.map((Adapter: any) => [
 					Adapter.id,
@@ -327,6 +332,8 @@ export const runTest = async (): Promise<number> => {
 					["adapter-hook-dsh-package-pinner", "@playform/hook-dsh-package-pinner", "hook-dsh-package-pinner", 55, "playform.panel.section"],
 					["adapter-hook-dsh-cargo-governor", "@playform/hook-dsh-cargo-governor", "hook-dsh-cargo-governor", 60, "playform.panel.section"],
 					["adapter-hook-dsh-ccr", "@playform/hook-dsh-ccr", "hook-dsh-ccr", 70, "playform.panel.section"],
+					["adapter-plugin-dsh-cost", "@playform/plugin-dsh-cost", "plugin-dsh-cost", 80, "playform.panel.section"],
+					["adapter-plugin-dsh-cost-analysis", "@playform/plugin-dsh-cost-analysis", "plugin-dsh-cost-analysis", 85, "playform.panel.section"],
 				],
 			);
 		});
@@ -338,16 +345,16 @@ export const runTest = async (): Promise<number> => {
 		const EffectLabels = Run.Effects.filter((Label: string) =>
 			Label.startsWith("panel: adapter "),
 		);
-		Check(Count, "B2: the client apply wires exactly thirteen adapter effects", () => {
-			assert.equal(EffectLabels.length, 13);
+		Check(Count, "B2: the client apply wires exactly fifteen adapter effects", () => {
+			assert.equal(EffectLabels.length, 15);
 			assert.deepEqual(
 				EffectLabels,
 				Roster.map((Adapter: any) => `panel: adapter ${Adapter.id}`),
 			);
 		});
 		const Records = Run.OpenSlot("playform.panel.section");
-		Check(Count, "B3: the thirteen adapters register one section child each", () => {
-			assert.equal((Run.Injects["playform.panel.section"] ?? []).length, 13);
+		Check(Count, "B3: the fifteen adapters register one section child each", () => {
+			assert.equal((Run.Injects["playform.panel.section"] ?? []).length, 15);
 			assert.equal(Run.Injects["playform.panel.overlay"], undefined);
 			assert.deepEqual(
 				Records.map((Record: any) => [Record.options.id, Record.options.order]),
@@ -475,7 +482,7 @@ export const runTest = async (): Promise<number> => {
 
 	// B9: the built closure-factory bundle through the fake module loader.
 	{
-		Check(Count, "B9: the built bundle executes and registers the thirteen adapters", () => {
+		Check(Count, "B9: the built bundle executes and registers the fifteen adapters", () => {
 			const Code = BundleSource();
 			assert.equal(Code.includes("window.__ModuleLoader__.load({"), true);
 			const Rows: any[] = [];
@@ -498,12 +505,12 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(
 				Recorded.Effects.filter((Label: string) => Label.startsWith("panel: adapter "))
 					.length,
-				13,
+				15,
 			);
 			const Factories = Recorded.Injects["playform.panel.section"] ?? [];
-			assert.equal(Factories.length, 13);
+			assert.equal(Factories.length, 15);
 			for (const Factory of Factories) Factory();
-			assert.equal(Recorded.Registered.length, 13);
+			assert.equal(Recorded.Registered.length, 15);
 			assert.equal(typeof Recorded.Registered[0].component, "function");
 		});
 	}

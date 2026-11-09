@@ -14,7 +14,7 @@
 //      The components render their declared child slots through the
 //      renderSlot prop; the registry only supplies the data (the occupancy
 //      count for the empty state, the adapter manifests).
-//   4. Register the thirteen shipped adapters (Function/Reference.ts) - the
+//   4. Register the fifteen shipped adapters (Function/Reference.ts) - the
 //      three references plus the ten that copied their pattern.
 //
 // The locale strings come through the client locale service (R-UI-1 A6):
@@ -145,6 +145,6 @@ export default function Client(ctx: ClientContext): void {
 			),
 		"panel: overlay mount",
 	);
-	// The thirteen shipped adapters (three references + ten copies).
+	// The fifteen shipped adapters (three references + ten copies).
 	Reference(ctx, ports);
 }

@@ -1,8 +1,10 @@
-// Reference - the thirteen per-bundle adapters the central package ships:
+// Reference - the fifteen per-bundle adapters the central package ships:
 // the three references (the normalize dash flavor, the tool coach, the
 // suggesters) plus the ten that copied the pattern - the five remaining
 // normalize flavors (orders 11-15), plugin-dsh-normalize-file (20), the
-// three governors (50/55/60), and hook-dsh-ccr (70). Each manifest is wired
+// three governors (50/55/60), and hook-dsh-ccr (70) - and the two cost
+// plugins, plugin-dsh-cost (80) and plugin-dsh-cost-analysis (85). Each
+// manifest is wired
 // through Function/Adapter, so the panel proves the whole chain live for
 // every family member: the manifest, the child-slot section, the status,
 // and the config form.
@@ -11,6 +13,8 @@ import type { ClientContext } from "@Interface/Client.js";
 import type { PanelPorts } from "@Interface/Ports.js";
 import CargoGovernor from "@Variable/Reference/CargoGovernor.js";
 import Ccr from "@Variable/Reference/Ccr.js";
+import Cost from "@Variable/Reference/Cost.js";
+import CostAnalysis from "@Variable/Reference/CostAnalysis.js";
 import Ellipsis from "@Variable/Reference/Ellipsis.js";
 import Fullwidth from "@Variable/Reference/Fullwidth.js";
 import Invisible from "@Variable/Reference/Invisible.js";
@@ -38,6 +42,8 @@ export default function Reference(ctx: ClientContext, Ports: PanelPorts): void {
 		PackagePinner,
 		CargoGovernor,
 		Ccr,
+		Cost,
+		CostAnalysis,
 	]) {
 		Adapter(ctx, Ports, Section);
 	}

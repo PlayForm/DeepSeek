@@ -18,9 +18,9 @@ var __export = (target, all) => {
 };
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
-    for (let key2 of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key2) && key2 !== except)
-        __defProp(to, key2, { get: () => from[key2], enumerable: !(desc = __getOwnPropDesc(from, key2)) || desc.enumerable });
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
   }
   return to;
 };
@@ -785,7 +785,7 @@ var Alloc = (Props) => (0, import_react2.createElement)(
   ] : Dash_default
 );
 var Segment = (Key, Class, Value) => Value > 0 ? (0, import_react2.createElement)("span", {
-  key,
+  key: Key,
   className: `playform-cost-bar-segment ${Class}`,
   style: { flexGrow: Value }
 }) : null;
@@ -1767,7 +1767,7 @@ function View(Props) {
     const Seen = /* @__PURE__ */ new Set();
     const Observer = new IntersectionObserver((Entries) => {
       for (const Entry of Entries) {
-        const Mark = Entry.target instanceof HTMLElement ? Entry.target.dataset.turn : void 0;
+        const Mark = Entry.target.dataset["turn"];
         const Turn = typeof Mark === "string" ? Number(Mark) : Number.NaN;
         switch (true) {
           case (Entry.isIntersecting && Number.isFinite(Turn)):

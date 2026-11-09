@@ -1,29 +1,29 @@
-# All-Adapters - the thirteen shipped adapters
+# All-Adapters - the fifteen shipped adapters
 
 The suite walks the full per-bundle roster end to end.
 
-All THIRTEEN manifests register, which is the three references plus the ten that
-copied the pattern, and each manifest declares its exact slot, bundle, order,
-activation, and trace vocabulary.
+All FIFTEEN manifests register, which is the three references plus the ten that
+copied the pattern and the two cost plugins, and each manifest declares its
+exact slot, bundle, order, activation, and trace vocabulary.
 
-The client apply wires thirteen adapter effects, each form derives the schema shape of
+The client apply wires fifteen adapter effects, each form derives the schema shape of
 its plugin with a representative volatile field and plain field per adapter, the two
 write routes work for the new adapters, and the built closure-factory bundle executes
-through a fake `window.__ModuleLoader__` and registers the same thirteen adapters.
+through a fake `window.__ModuleLoader__` and registers the same fifteen adapters.
 
 ## Scenarios
 
-- B1: the thirteen shipped manifests are the exact roster (id, bundle,
+- B1: the fifteen shipped manifests are the exact roster (id, bundle,
   namespace, order, slot): normalize-dash 10, tool-coach 30, suggester 40,
   normalize-quotes 11, normalize-ellipsis 12, normalize-spaces 13,
   normalize-invisible 14, normalize-fullwidth 15, plugin-dsh-normalize-file
-  20, package-governor 50, package-pinner 55, cargo-governor 60, ccr 70 - all
-  in the `playform.panel.section` slot.
-- B2: the client apply wires exactly thirteen `panel: adapter <id>` effects
+  20, package-governor 50, package-pinner 55, cargo-governor 60, ccr 70,
+  cost 80, cost-analysis 85 - all in the `playform.panel.section` slot.
+- B2: the client apply wires exactly fifteen `panel: adapter <id>` effects
   after the four panel effects, in the order of the roster.
-- B3: the thirteen adapters inject exactly the section child slot, and opening
-  it yields thirteen registrations whose ids equal the ids of the roster.
-- B4: every static activation is `enabled`, because none of the thirteen
+- B3: the fifteen adapters inject exactly the section child slot, and opening
+  it yields fifteen registrations whose ids equal the ids of the roster.
+- B4: every static activation is `enabled`, because none of the fifteen
   schemas has a master switch and the bundle row decides, and every traceKinds
   holds the three D5 names (`observe/stamp`, `graph/indexed`,
   `graph/invalidated`).

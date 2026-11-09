@@ -165,7 +165,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 		const Seen = new Set<number>();
 		const Observer = new IntersectionObserver((Entries) => {
 			for (const Entry of Entries) {
-				const Mark = Entry.target instanceof HTMLElement ? Entry.target.dataset.turn : undefined;
+				const Mark = Entry.target.dataset["turn"];
 				const Turn = typeof Mark === "string" ? Number(Mark) : Number.NaN;
 				switch (true) {
 					case Entry.isIntersecting && Number.isFinite(Turn):
