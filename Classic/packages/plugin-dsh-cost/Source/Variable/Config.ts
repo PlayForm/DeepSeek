@@ -174,7 +174,8 @@ const DefaultModifiers = [
 		effectiveFrom: "2026-01-01",
 	},
 ];
-const DefaultPriceWindows: Array<{ window: string; multiplier: number; effectiveFrom: string }> = [];
+const DefaultPriceWindows: Array<{ window: string; multiplier: number; effectiveFrom: string }> =
+	[];
 const DefaultLog = false;
 
 export default Schema.object({

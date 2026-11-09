@@ -49,9 +49,7 @@ export default Compose(false, {
 	// The excluded path patterns (the hook's own match, Function/Match - the
 	// shared Default list is the factory's segment list; the brief's default
 	// is the glob triple, which the hook's matcher understands).
-	exclude: Schema.array(Schema.string())
-		.default(DefaultExclude)
-		.volatile(),
+	exclude: Schema.array(Schema.string()).default(DefaultExclude).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. The hook's action class
 	// is RECORD - it records an observation stamp on every fs/observed event -
 	// and that class is AUTOMATIC, so this package has NO gated action: it

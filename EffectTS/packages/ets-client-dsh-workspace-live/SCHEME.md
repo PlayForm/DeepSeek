@@ -85,9 +85,9 @@ The wrappers (`LiveTab`, `Section`) own the subscriptions, and the container car
 
 ## 9. Verification
 
-- `prepublishOnly` builds `Target/`, writes `Target/Client.bundle.js` through
-  `Maintain/Build/Client-Bundle/Index.mjs`, builds `Target/Test/`, runs the harness selfcheck, and
-  type-checks the Test tree.
+- `prepublishOnly` builds `Target/`, writes `Target/Client.bundle.js` through the package's own
+  `Configuration/Bundle.mjs`, builds `Target/Test/`, runs the harness selfcheck, and type-checks the
+  Test tree.
 - The three smoke folders: `Contract-And-Wiring` 12 PASS, `Store-And-Snapshot` 11 PASS,
   `Child-Slot-And-Trace` 12 PASS.
 

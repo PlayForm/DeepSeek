@@ -197,8 +197,8 @@ client-dsh-panel-family: plain-field secret refused for <namespace>
 mounts the sheet. The bundler compiles it, so nothing is generated and the ESM half stays
 style-free.
 
-`pnpm prepublishOnly` runs the two-step build: the plugin build (ESM `Target/`), then
-`Maintain/Build/Client-Bundle/Index.mjs` (the harness closure factory
+`pnpm prepublishOnly` runs the two-step build: the plugin build (ESM `Target/`), then the package's
+own `Configuration/Bundle.mjs` (the harness closure factory
 `window.__ModuleLoader__.load({ id, factory(require) })` written to `Target/Client.bundle.js`), then
 the Test build and the harness selfcheck.
 

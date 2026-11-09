@@ -39,8 +39,8 @@
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.1.0",
 		"@deepseek-ai/dsh-fs": "0.2.1-rc.5",
-		"@deepseek-ai/dsh-system-prompt": "0.2.1-rc.5",
 		"@deepseek-ai/dsh-storage-domain": "0.2.1-rc.5",
+		"@deepseek-ai/dsh-system-prompt": "0.2.1-rc.5",
 		"@deepseek-ai/dsh-tools": "0.2.1-rc.5",
 		"@deepseek-ai/schemastery": "3.19.0",
 		"@playform/build": "0.3.5",

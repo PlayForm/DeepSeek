@@ -48,9 +48,7 @@ export default Compose(false, {
 	maxEntryBytes: Schema.number().default(DefaultMaxEntryBytes).volatile(),
 	// The excluded path patterns (the factory's segment match). Default: the
 	// family's standard triple.
-	exclude: Schema.array(Schema.string())
-		.default(DefaultExclude)
-		.volatile(),
+	exclude: Schema.array(Schema.string()).default(DefaultExclude).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. The journal's ONE
 	// gated action is the revert - it writes the pre-images back, so `write`
 	// defaults to `approve` and a revert waits for the user (the documented

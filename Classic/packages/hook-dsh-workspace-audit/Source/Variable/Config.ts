@@ -36,9 +36,7 @@ export default Compose(false, {
 	maxLines: Schema.number().default(DefaultMaxLines).volatile(),
 	// The excluded path patterns (the factory's segment match). Default: the
 	// family's standard triple.
-	exclude: Schema.array(Schema.string())
-		.default(DefaultExclude)
-		.volatile(),
+	exclude: Schema.array(Schema.string()).default(DefaultExclude).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. This hook's action
 	// class is RECORD - every line and every assessment is recorded - and it
 	// is AUTOMATIC, so this package has NO gated action: it never writes a

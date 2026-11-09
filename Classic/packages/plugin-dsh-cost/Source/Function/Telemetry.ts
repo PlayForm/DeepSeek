@@ -135,8 +135,7 @@ export default (
 							break;
 						default: {
 							const Window = Number(Data["contextWindow"]);
-							ContextWindow =
-								Number.isFinite(Window) && Window > 0 ? Window : null;
+							ContextWindow = Number.isFinite(Window) && Window > 0 ? Window : null;
 							break;
 						}
 					}

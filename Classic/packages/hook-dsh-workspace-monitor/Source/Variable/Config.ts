@@ -59,9 +59,7 @@ export default Compose(false, {
 	include: Schema.array(Schema.string()).default(DefaultInclude).volatile(),
 	// The excluded path patterns (the hook's own match via the factory's
 	// segment match).
-	exclude: Schema.array(Schema.string())
-		.default(DefaultExclude)
-		.volatile(),
+	exclude: Schema.array(Schema.string()).default(DefaultExclude).volatile(),
 	// The check-set classification table: the shipped catalog is the
 	// default, so classification works out of the box; an override replaces
 	// the whole table (the dict is a volatile cell - the table is the

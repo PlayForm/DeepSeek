@@ -39,17 +39,13 @@ export default Compose(false, {
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The gated tools: the tool names whose calls carry the gate (the
 	// mutating surface of the workspace family's operate step).
-	tools: Schema.array(Schema.string())
-		.default(DefaultTools)
-		.volatile(),
+	tools: Schema.array(Schema.string()).default(DefaultTools).volatile(),
 	// The authorized-scope allowlist (globs). Empty = unrestricted (the
 	// scope obligation evaluates "n/a"); non-empty = every gated target must
 	// match at least one glob, and an unevaluable match FAILS CLOSED.
 	scope: Schema.array(Schema.string()).default(DefaultScope).volatile(),
 	// The excluded target globs - never gated (the family's internals).
-	exclude: Schema.array(Schema.string())
-		.default(DefaultExclude)
-		.volatile(),
+	exclude: Schema.array(Schema.string()).default(DefaultExclude).volatile(),
 	// The policy table: rules per proposal kind; the first match wins.
 	policy: Schema.array(
 		Schema.object({
