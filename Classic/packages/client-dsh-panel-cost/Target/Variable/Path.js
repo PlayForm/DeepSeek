@@ -1,1 +1,1 @@
-const a="/api/playform-cost/catalogs",t="/api/playform-cost/rates";var o="/api/playform-cost/session";export{a as CatalogPath,t as RatePath,o as default};
+const t="/api/playform-cost/catalogs",a="/api/playform-cost/publish",o="/api/playform-cost/rates";var s="/api/playform-cost/session";export{t as CatalogPath,a as PublishPath,o as RatePath,s as default};

@@ -18,17 +18,17 @@
 			"kind": "client",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "6170a0d91bee04780c67312469fd8db3a186d28d6176ee8df54f9c884c6156fd",
+			"seed": "8647b6e668052ad5935a30dda7b9f5eb7dd56fa0b986ab4da861dbce1b2c28fc",
 			"grammar": "quatrefoil",
-			"order": 4,
+			"order": 12,
 			"arms": 4,
 			"rings": 1,
 			"orbit": 8,
-			"rim": "none",
+			"rim": "scallop",
 			"mode": "single",
 			"hash": {
-				"mono": "0467a71234969f18a5a4c81eabd6fe8eebd642390d9cb1da177444c8c9f176d7",
-				"colour": "9423b974d70f2b95384e45dbdd1b4636fe0b64a6e260ed148f160718bdd6091c"
+				"mono": "b15c8a0927740c63ebbd61224d7bf0e46e4312949c2b961088616ffb218ca28b",
+				"colour": "67e92a0ee2e513f770b3e2341a6bff27b95bee9fc796c13fd761d3e92a6821f5"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/client-dsh-panel-cost.svg",

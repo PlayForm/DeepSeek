@@ -1,27 +1,29 @@
-// Source/Test/Harness.ts - the shared test harness for the TOOL COACH tests:
-// the fake ctx (on capture, get serving the REAL @playform/plugin-dsh-factory
-// instance from its built Target, logger capture, a configurable tools.schemas
-// seam + the root seam) + the REAL tool-coach apply from its built Target -
-// the seams from the source suite (Classic/smokes/tool-coach-smoke.mjs),
-// written ONCE per package and imported by every test folder. The suite-level
-// fixtures (the tmp ledger, the live registry schema fixture, the Post/Pre/
-// Assemble waterfall helpers, the pattern-row locators) live here too: each
-// folder process gets a fresh set (the module state is per-process), so every
-// folder is standalone-green and the aggregate replays the same seams per
-// folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually wires
-// the coach (the vacuously-green backstop for every folder's fixture);
-// prepublishOnly.sh gates the build on it. Imported as a library, this module
-// only exports.
-//
-// The fake clock: the coach measures time in JUDGED CALLS, not wall time -
-// the cooldown window, the clean window and sectionTtl are all judged-call
-// counters (strike 8 at the 6th call since the note, 12 clean calls, calls-9
-// >= ttl 2), so the TTL/cooldown paths are driven deterministically by the
-// call sequences in the folders; there are no timer stubs to fake.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the TOOL COACH tests: the fake ctx (on capture, get serving the REAL
+ * @playform/plugin-dsh-factory instance from its built Target, logger capture, a configurable
+ * tools.schemas seam + the root seam) plus the REAL tool-coach apply from its built Target - the
+ * seams from the source suite (Classic/smokes/tool-coach-smoke.mjs), written ONCE per package and
+ * imported by every test folder.
+ *
+ * @remarks
+ * The suite-level fixtures (the tmp ledger, the live registry schema fixture, the Post/Pre/Assemble
+ * waterfall helpers, the pattern-row locators) live here too: each folder process gets a fresh set
+ * (the module state is per-process), so every folder is standalone-green and the aggregate replays
+ * the same seams per folder.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the counter through one
+ * deliberate pass + one deliberate failure and exits 0 only when both are counted exactly, then
+ * proves the fake ctx actually wires the coach (the vacuously-green backstop for every folder's
+ * fixture); prepublishOnly.sh gates the build on it. Imported as a library, this module only
+ * exports.
+ *
+ * The fake clock: the coach measures time in JUDGED CALLS, not wall time - the cooldown window, the
+ * clean window and sectionTtl are all judged-call counters (strike 8 at the 6th call since the
+ * note, 12 clean calls, calls-9 >= ttl 2), so the TTL/cooldown paths are driven deterministically
+ * by the call sequences in the folders; there are no timer stubs to fake.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

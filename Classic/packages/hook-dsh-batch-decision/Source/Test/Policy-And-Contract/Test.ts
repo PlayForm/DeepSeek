@@ -1,9 +1,14 @@
-// Source/Test/Policy-And-Contract/Test.ts - the loader contract and the
-// decision gate's policy: the default object carries name/apply/Config/
-// inject, apply returns nothing, the IDLE-forever cold mount logs the
-// byte-exact disabled line, the enabled mount logs the byte-exact activation
-// line, the fail-loud validation, the listener registration shape, and the
-// conservative auto-approve policy's every gate (the first-batch rule).
+/**
+ * @module Test
+ *
+ * Verifies the loader contract and the decision gate's policy.
+ *
+ * @remarks
+ * Covers the default object carrying name/apply/Config/inject, apply returning nothing, the
+ * IDLE-forever cold mount logging the byte-exact disabled line, the enabled mount logging the
+ * byte-exact activation line, the fail-loud validation, the listener registration shape, and the
+ * conservative auto-approve policy's every gate (the first-batch rule).
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import Plugin, { apply, Config, inject, name } from "../../../Target/Library.js";

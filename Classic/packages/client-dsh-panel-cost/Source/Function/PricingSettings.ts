@@ -396,16 +396,15 @@ const Build = (
 	let Problem: string | null = null;
 	for (const Source of Book) {
 		const Draft = Drafts[Source.RateRowId];
-		switch (true) {
-			case Draft === undefined:
-				Rows.push(Row(Source));
-				continue;
-			default: {
-				const MergedOne = Merged(Source, Draft, t);
-				Problem = Problem === null ? MergedOne.Problem : Problem;
-				Rows.push(MergedOne.Row);
-			}
+		// Early continue, because the narrowing has to survive into the merge;
+		// a switch (true) arm cannot carry it.
+		if (Draft === undefined) {
+			Rows.push(Row(Source));
+			continue;
 		}
+		const MergedOne = Merged(Source, Draft, t);
+		Problem = Problem === null ? MergedOne.Problem : Problem;
+		Rows.push(MergedOne.Row);
 	}
 	return { Rows, Problem };
 };
@@ -747,22 +746,17 @@ export default function PricingSettings(
 		})
 			.then((Answer) => {
 				SetListing(Answer);
-				switch (true) {
-					case !Adopt:
-						return;
-					default: {
-						const First = Answer.catalogs[0];
-						switch (true) {
-							case First === undefined:
-								SetCatalogId(null);
-								SetRevisionId(null);
-								return;
-							default:
-								SetCatalogId(First.CatalogId);
-								SetRevisionId(Newest(Answer.revisions, First.CatalogId));
-						}
-					}
+				// Early returns, because the narrowing has to survive into the
+				// constructed selection; a switch (true) arm cannot carry it.
+				if (!Adopt) return;
+				const First = Answer.catalogs[0];
+				if (First === undefined) {
+					SetCatalogId(null);
+					SetRevisionId(null);
+					return;
 				}
+				SetCatalogId(First.CatalogId);
+				SetRevisionId(Newest(Answer.revisions, First.CatalogId));
 			})
 			.catch(() => undefined);
 	}, []);
@@ -774,33 +768,33 @@ export default function PricingSettings(
 	// The rate read: the selected revision's rate rows, in the card order the
 	// engine answers. A failed read is a state with a retry, never a throw.
 	useEffect(() => {
-		const Stated = RevisionId;
 		let Live = true;
-		switch (true) {
-			case Stated === null:
-				SetBook([]);
-				SetReading("idle");
-				return () => {
-					Live = false;
-				};
-			default:
-				SetReading("loading");
-				new Promise<readonly RateRow[]>((Done) => {
-					Done(ReadRates(Stated));
-				})
-					.then((Rows) => {
-						if (!Live) return;
-						SetBook(Rows);
-						SetReading("idle");
-					})
-					.catch(() => {
-						if (!Live) return;
-						SetReading("failed");
-					});
-				return () => {
-					Live = false;
-				};
+		// Early returns, because the narrowing has to survive into the
+		// promise's callback; a switch (true) arm cannot carry it.
+		if (RevisionId === null) {
+			SetBook([]);
+			SetReading("idle");
+			return () => {
+				Live = false;
+			};
 		}
+		const Stated = RevisionId;
+		SetReading("loading");
+		new Promise<readonly RateRow[]>((Done) => {
+			Done(ReadRates(Stated));
+		})
+			.then((Rows) => {
+				if (!Live) return;
+				SetBook(Rows);
+				SetReading("idle");
+			})
+			.catch(() => {
+				if (!Live) return;
+				SetReading("failed");
+			});
+		return () => {
+			Live = false;
+		};
 	}, [RevisionId, Attempt]);
 
 	// Whether the draft differs from the book at all: the impact preview is
@@ -812,82 +806,79 @@ export default function PricingSettings(
 	// which is the same preview the engine answers for the valuation block.
 	// Nothing is written; the preview computes and the ledger stays read-only.
 	useEffect(() => {
-		const Stated = RevisionId;
 		let Live = true;
-		switch (true) {
-			case Stated === null:
-			case Dirty:
-			case Props.sessionId === "":
-				SetPreview({
-					Phase: "idle",
-					Block: null,
-					Unpriced: 0,
-					Currency: "USD",
-					Message: null,
-				});
-				return () => {
-					Live = false;
-				};
-			default:
-				SetPreview({
-					Phase: "loading",
-					Block: null,
-					Unpriced: 0,
-					Currency: "USD",
-					Message: null,
-				});
-				new Promise<CostResponse>((Done) => {
-					Done(
-						Fetch(Props.sessionId, Props.rows, {
-							basis: "corrected",
-							revisionId: Stated,
-						}),
-					);
-				})
-					.then((Envelope) => {
-						if (!Live) return;
-						const Block = Comparison(Envelope);
-						switch (true) {
-							case Block !== undefined:
-								SetPreview({
-									Phase: "ready",
-									Block,
-									Unpriced:
-										typeof Envelope.summary?.unpriced === "number"
-											? Envelope.summary.unpriced
-											: 0,
-									Currency:
-										typeof Envelope.currency === "string" &&
-										Envelope.currency !== ""
-											? Envelope.currency
-											: "USD",
-									Message: null,
-								});
-								return;
-							default:
-								SetPreview({
-									Phase: "failed",
-									Block: null,
-									Unpriced: 0,
-									Currency: "USD",
-									Message: Envelope.ok === false ? Envelope.message : null,
-								});
-						}
-					})
-					.catch(() => {
-						if (!Live) return;
-						SetPreview({
-							Phase: "failed",
-							Block: null,
-							Unpriced: 0,
-							Currency: "USD",
-							Message: null,
-						});
-					});
-				return () => {
-					Live = false;
-				};
+		// Early returns, because the narrowing has to survive into the
+		// promise's callback and the constructed selection; a switch (true)
+		// arm cannot carry it.
+		if (RevisionId === null || Dirty || Props.sessionId === "") {
+			SetPreview({
+				Phase: "idle",
+				Block: null,
+				Unpriced: 0,
+				Currency: "USD",
+				Message: null,
+			});
+			return () => {
+				Live = false;
+			};
 		}
+		const Stated = RevisionId;
+		SetPreview({
+			Phase: "loading",
+			Block: null,
+			Unpriced: 0,
+			Currency: "USD",
+			Message: null,
+		});
+		new Promise<CostResponse>((Done) => {
+			Done(
+				Fetch(Props.sessionId, Props.rows, {
+					basis: "corrected",
+					revisionId: Stated,
+				}),
+			);
+		})
+			.then((Envelope) => {
+				if (!Live) return;
+				const Block = Comparison(Envelope);
+				if (Block !== undefined) {
+					SetPreview({
+						Phase: "ready",
+						Block,
+						Unpriced:
+							typeof Envelope.summary?.unpriced === "number"
+								? Envelope.summary.unpriced
+								: 0,
+						Currency:
+							typeof Envelope.currency === "string" &&
+							Envelope.currency !== ""
+								? Envelope.currency
+								: "USD",
+						Message: null,
+					});
+					return;
+				}
+				SetPreview({
+					Phase: "failed",
+					Block: null,
+					Unpriced: 0,
+					Currency: "USD",
+					Message: Envelope.ok === false ? Envelope.message : null,
+				});
+			})
+			.catch(() => {
+				if (!Live) return;
+				SetPreview({
+					Phase: "failed",
+					Block: null,
+					Unpriced: 0,
+					Currency: "USD",
+					Message: null,
+				});
+			});
+		return () => {
+			Live = false;
+		};
 	}, [Props.sessionId, Props.rows, RevisionId, Dirty]);
 
 	const Listed = Listing === null ? [] : Listing.catalogs;
@@ -955,21 +946,14 @@ export default function PricingSettings(
 	// what creates the draft entry, from the recorded row.
 	const Change = useCallback(
 		(Patch: Partial<Draft>): void => {
-			switch (true) {
-				case Editing === null:
-					return;
-				default: {
-					const Source = Book.find((One) => One.RateRowId === Editing);
-					switch (true) {
-						case Source === undefined:
-							return;
-						default: {
-							const Base = Drafts[Editing] ?? DraftOf(Source);
-							SetDrafts({ ...Drafts, [Editing]: { ...Base, ...Patch } });
-						}
-					}
-				}
-			}
+			// Early returns, because the narrowing has to survive into the
+			// index and the constructed record; a switch (true) arm cannot
+			// carry it.
+			if (Editing === null) return;
+			const Source = Book.find((One) => One.RateRowId === Editing);
+			if (Source === undefined) return;
+			const Base = Drafts[Editing] ?? DraftOf(Source);
+			SetDrafts({ ...Drafts, [Editing]: { ...Base, ...Patch } });
 		},
 		[Editing, Book, Drafts],
 	);
@@ -977,18 +961,13 @@ export default function PricingSettings(
 	// Revert drops the open row's draft entry, so the row publishes exactly
 	// what the revision already records.
 	const Revert = useCallback((): void => {
-		switch (true) {
-			case Editing === null:
-				return;
-			default: {
-				const Next: Record<number, Draft> = {};
-				for (const [Key, Value] of Object.entries(Drafts)) {
-					if (Number(Key) === Editing) continue;
-					Next[Number(Key)] = Value;
-				}
-				SetDrafts(Next);
-			}
+		if (Editing === null) return;
+		const Next: Record<number, Draft> = {};
+		for (const [Key, Value] of Object.entries(Drafts)) {
+			if (Number(Key) === Editing) continue;
+			Next[Number(Key)] = Value;
 		}
+		SetDrafts(Next);
 	}, [Editing, Drafts]);
 
 	const Retry = useCallback(() => {
@@ -1004,16 +983,14 @@ export default function PricingSettings(
 		Reason.trim() === "" ||
 		Drafted.Problem !== null;
 	const OutcomeLine = ((): string | null => {
-		switch (true) {
-			case Outcome !== null:
-				return Outcome.Kind === "published"
-					? t("pricing.published", { revision: Outcome.RevisionId ?? 0 })
-					: Outcome.Message;
-			case Reason.trim() === "":
-				return t("pricing.problem.reason");
-			default:
-				return Drafted.Problem;
+		// Early returns, because the narrowing has to survive into the
+		// constructed line; a switch (true) arm cannot carry it.
+		if (Outcome !== null) {
+			return Outcome.Kind === "published"
+				? t("pricing.published", { revision: Outcome.RevisionId ?? 0 })
+				: Outcome.Message;
 		}
+		return Reason.trim() === "" ? t("pricing.problem.reason") : Drafted.Problem;
 	})();
 
 	// The one write: the whole edited row set, the base revision and the
@@ -1067,28 +1044,29 @@ export default function PricingSettings(
 					.then((Reply) => {
 						SetPublishing(false);
 						const Revision = Reply.revision;
-						switch (true) {
-							case Revision === null:
-								SetOutcome({
-									Kind: "failed",
-									RevisionId: null,
-									Message: Reply.message,
-								});
-								return;
-							default:
-								SetOutcome({
-									Kind: "published",
-									RevisionId: Revision.RevisionId,
-									Message: null,
-								});
-								SetDrafts({});
-								SetEditing(null);
-								SetReason("");
-								SetRevisionId(Revision.RevisionId);
-								Read(false);
-								if (Props.onPublished !== undefined)
-									Props.onPublished(Revision.RevisionId);
+						// Early return, because the narrowing has to survive
+						// into the constructed outcome; a switch (true) arm
+						// cannot carry it.
+						if (Revision === null) {
+							SetOutcome({
+								Kind: "failed",
+								RevisionId: null,
+								Message: Reply.message,
+							});
+							return;
 						}
+						SetOutcome({
+							Kind: "published",
+							RevisionId: Revision.RevisionId,
+							Message: null,
+						});
+						SetDrafts({});
+						SetEditing(null);
+						SetReason("");
+						SetRevisionId(Revision.RevisionId);
+						Read(false);
+						if (Props.onPublished !== undefined)
+							Props.onPublished(Revision.RevisionId);
 					})
 					.catch((Caught) => {
 						SetPublishing(false);

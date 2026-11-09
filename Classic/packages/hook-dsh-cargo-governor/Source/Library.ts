@@ -139,15 +139,17 @@ export const Config = Definition;
  */
 export { Version };
 
-// Required services (skill: declare, never rely on load order). `fs` — the
-// factory's primitives read and rewrite the governed manifest and stat for
-// the U₂ refresh. `pluginFactory` — the family's shared service provider
-// (the factory bundle; the plugin stays PENDING until both services exist —
-// load order never matters). `ctx.jobs` is AGENT-SCOPED (verified live: "no
-// job controller serves this agent" for a root plugin) so the update stage
-// runs as the detached contained continuation instead; `ctx.subprocess` (the
-// cargo CLI) is probed ONCE at State build time through the factory's
-// probe-once seam accessor (never injected, never the direct accessor).
+/**
+ * Required services (skill: declare, never rely on load order). `fs` — the
+ * factory's primitives read and rewrite the governed manifest and stat for
+ * the U₂ refresh. `pluginFactory` — the family's shared service provider
+ * (the factory bundle; the plugin stays PENDING until both services exist —
+ * load order never matters). `ctx.jobs` is AGENT-SCOPED (verified live: "no
+ * job controller serves this agent" for a root plugin) so the update stage
+ * runs as the detached contained continuation instead; `ctx.subprocess` (the
+ * cargo CLI) is probed ONCE at State build time through the factory's
+ * probe-once seam accessor (never injected, never the direct accessor).
+ */
 export const inject = ["fs", "pluginFactory"];
 
 export const apply = Apply;

@@ -1,15 +1,20 @@
-// Source/Test/Deny-Tools/Test.ts - one singular test: the unconditional
-// per-tool deny list (config `denyTools`), the sibling of the strikes ladder.
-// The list denies a listed tool on its VERY FIRST call - something the ladder
-// can never do (enforceThreshold >= 1 means a strike must exist first) - and
-// it fires BEFORE and INDEPENDENT of the ladder check, so `enforce: "off"`
-// never suppresses it while the ladder itself stays inert. The reason text is
-// the byte-exact NOTE_DENIED_TOOL template (placeholder-safe: the deny carries
-// no match, so the composer fills nothing and leaves no unfilled
-// placeholder), the denied ledger line is byte-exact
-// (`denied <tool> denyTools`), a tool outside the list is never denied by it,
-// and an empty notes.deniedTool fails validation loud. The suite runs
-// standalone (`node Target/Test/Deny-Tools/Test.js`) AND under the aggregate.
+/**
+ * @module Test
+ *
+ * Runs one singular test: the unconditional per-tool deny list (config `denyTools`), the sibling of
+ * the strikes ladder.
+ *
+ * @remarks
+ * The list denies a listed tool on its VERY FIRST call - something the ladder can never do
+ * (enforceThreshold >= 1 means a strike must exist first) - and it fires BEFORE and INDEPENDENT of
+ * the ladder check, so `enforce: "off"` never suppresses it while the ladder itself stays inert.
+ *
+ * The reason text is the byte-exact NOTE_DENIED_TOOL template (placeholder-safe: the deny carries no
+ * match, so the composer fills nothing and leaves no unfilled placeholder), the denied ledger line
+ * is byte-exact (`denied <tool> denyTools`), a tool outside the list is never denied by it, and an
+ * empty notes.deniedTool fails validation loud. The suite runs standalone
+ * (`node Target/Test/Deny-Tools/Test.js`) AND under the aggregate.
+ */
 
 import assert from "node:assert/strict";
 import {

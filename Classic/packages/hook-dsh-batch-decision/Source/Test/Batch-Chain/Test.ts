@@ -1,16 +1,19 @@
-// Source/Test/Batch-Chain/Test.ts - THE END-TO-END BATCH CHAIN, the wave-1
-// acceptance proof:
-//
-//   pass-on.Prepare -> batch/proposed (the bus) + the harness inbox (the
-//   delivery) -> batchstate's splice (the board) -> batch_decision (the user)
-//   -> the inbox (the board's status) + batch/decision (the bus) -> the
-//   ingester's apply through the content fence -> the feedback outcome.
-//
-// ONE process, ONE shared fake context, the REAL built libraries of all five
-// packages. The fake agent registry mirrors the harness's own inbox commit
-// (`agent.inject` -> the durable `agent/inbox/spliced` + the live
-// `agent/inbox/inserted`), so the chain exercises exactly the channel the
-// harness provides. No sleeps: the ingester's `WhenIdle` drains the apply.
+/**
+ * @module Test
+ *
+ * Proves THE END-TO-END BATCH CHAIN, the wave-1 acceptance proof.
+ *
+ * @remarks
+ * The chain runs pass-on.Prepare -> batch/proposed (the bus) + the harness inbox (the delivery) ->
+ * batchstate's splice (the board) -> batch_decision (the user) -> the inbox (the board's status) +
+ * batch/decision (the bus) -> the ingester's apply through the content fence -> the feedback
+ * outcome.
+ *
+ * It uses ONE process, ONE shared fake context, and the REAL built libraries of all five packages.
+ * The fake agent registry mirrors the harness's own inbox commit (`agent.inject` -> the durable
+ * `agent/inbox/spliced` + the live `agent/inbox/inserted`), so the chain exercises exactly the
+ * channel the harness provides. No sleeps: the ingester's `WhenIdle` drains the apply.
+ */
 import assert from "node:assert/strict";
 import { createHash as Hash } from "node:crypto";
 import * as FileSystem from "node:fs";

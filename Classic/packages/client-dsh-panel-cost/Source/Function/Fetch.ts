@@ -356,10 +356,13 @@ const Normalize = (Body: unknown): PublishAnswer => {
 				message?: unknown;
 				path?: unknown;
 			};
-			// The local keeps the narrowing local: a guard on a property
+			// The locals keep the narrowing local: a guard on a property
 			// access narrows the access expression, and a binding is the
 			// shape the case arms can rely on.
 			const Found = Answer.revision;
+			const Line = Answer.message;
+			const Code = Answer.code;
+			const Named = Answer.path;
 			switch (true) {
 				case Answer.ok === true && IsRevision(Found):
 					return {
@@ -369,14 +372,13 @@ const Normalize = (Body: unknown): PublishAnswer => {
 						message: null,
 						path: PublishPath,
 					};
-				case Answer.ok === false && typeof Answer.message === "string":
+				case Answer.ok === false && typeof Line === "string":
 					return {
 						ok: false,
 						revision: null,
-						code: typeof Answer.code === "string" ? Answer.code : "error",
-						message: Answer.message,
-						path:
-							typeof Answer.path === "string" ? Answer.path : PublishPath,
+						code: typeof Code === "string" ? Code : "error",
+						message: Line,
+						path: typeof Named === "string" ? Named : PublishPath,
 					};
 				default:
 					return Refused("the publish route answered a malformed answer");

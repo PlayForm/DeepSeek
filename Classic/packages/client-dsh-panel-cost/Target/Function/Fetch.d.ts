@@ -9,3 +9,18 @@ export type CatalogAnswer = {
 };
 export declare function Catalogs(): Promise<CatalogAnswer>;
 export declare function Rates(RevisionId: number): Promise<readonly RateRow[]>;
+export type PublishRow = Omit<RateRow, "RateRowId" | "RevisionId">;
+export type PublishRequest = {
+    readonly catalogId: number;
+    readonly baseRevisionId: number | null;
+    readonly reason: string;
+    readonly rows: readonly PublishRow[];
+};
+export type PublishAnswer = {
+    readonly ok: boolean;
+    readonly revision: Revision | null;
+    readonly code: string;
+    readonly message: string | null;
+    readonly path: string;
+};
+export declare function Publish(Request: PublishRequest): Promise<PublishAnswer>;

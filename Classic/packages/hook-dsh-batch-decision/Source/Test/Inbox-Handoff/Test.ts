@@ -1,9 +1,14 @@
-// Source/Test/Inbox-Handoff/Test.ts - THE HANDOFF: a recorded decision is
-// written into the harness agent-team inbox (the channel the board
-// consumes), the return address resolves origin -> initiator -> first live
-// agent with an honest ledger line when nothing is live, and the ingester
-// seam now finds the REAL service (registered as `ingester`) as well as the
-// declared `batchIngester` seam - carrying the proposal the apply needs.
+/**
+ * @module Test
+ *
+ * Proves THE HANDOFF into the harness agent-team inbox.
+ *
+ * @remarks
+ * A recorded decision is written into the harness agent-team inbox (the channel the board
+ * consumes), the return address resolves origin -> initiator -> first live agent with an honest
+ * ledger line when nothing is live, and the ingester seam now finds the REAL service (registered as
+ * `ingester`) as well as the declared `batchIngester` seam - carrying the proposal the apply needs.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

@@ -5,6 +5,15 @@
 // and 8). It fetches the route on mount and on every session, row-budget or
 // valuation-selection change, folds the envelope, and never throws: a failed
 // fetch, a malformed body, or a missing session id renders a state line.
+//
+// THE PRICING PANE (lane B4f; the research's A4 sections 1-3 and A6 section
+// 6): the switcher's third chip renders Function/PricingSettings in the same
+// scroll region, under the same toolbar, so the view switcher and the
+// valuation control stay reachable while the rate book is open. The pane owns
+// its reads and its draft; the view only hands it the session, the row budget
+// and the callback that pins a freshly published revision as the panel's
+// valuation - which is what makes the recorded views revalue through the
+// selection they already send.
 import { Button } from "@deepseek-ai/dsh-client-ui-primitives";
 import Turns, { type TurnsCells } from "@Function/Columns";
 import DetailRow from "@Function/DetailRow";
@@ -12,6 +21,7 @@ import Fetch, { Catalogs, type CatalogAnswer } from "@Function/Fetch";
 import FileFilters, { type Filter } from "@Function/FileFilters";
 import FileTable from "@Function/FileTable";
 import Fold from "@Function/Fold";
+import PricingSettings from "@Function/PricingSettings";
 import Resolve from "@Function/Resolve";
 import StepRow from "@Function/StepRow";
 import SummaryStrip from "@Function/SummaryStrip";
@@ -202,7 +212,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 	const [Attempt, SetAttempt] = useState(0);
 	const [Truncated, SetTruncated] = useState(false);
 	const [Older, SetOlder] = useState<"idle" | "loading" | "failed">("idle");
-	const [Pane, SetPane] = useState<"turns" | "files">("turns");
+	const [Pane, SetPane] = useState<"turns" | "files" | "pricing">("turns");
 	const [Files, SetFiles] = useState<readonly CostFileRow[]>([]);
 	const [FileFilter, SetFileFilter] = useState<Filter>(FileFilters.Default);
 	const [TurnMode, SetTurnMode] = useState<"newest" | "all" | "none">("newest");
@@ -448,6 +458,20 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 		SetFileFilter({ ...FileFilters.Default, Path });
 	}, []);
 
+	// A published revision becomes the panel's valuation: the toolbar's select
+	// pins it, and the catalogs answer is re-read because it now lists one
+	// more revision. Nothing is written from here - the publish already went
+	// through the one route - so the recorded views only change which
+	// interpretation they ask for.
+	const Adopt = useCallback((RevisionId: number) => {
+		SetSelection({ basis: "corrected", revisionId: RevisionId });
+		new Promise<CatalogAnswer>((Done) => {
+			Done(Catalogs());
+		})
+			.then((Answer) => SetListing(Answer))
+			.catch(() => undefined);
+	}, []);
+
 	// The turn bar scales against the largest turn total of the loaded
 	// snapshot, so a turn keeps the same bar length while the user scrolls;
 	// a visible-window scale would make the same turn change length.
@@ -688,6 +712,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 				},
 				Chip(t("view.turns"), Pane === "turns", () => SetPane("turns"), "turns"),
 				Chip(t("view.files"), Pane === "files", () => SetPane("files"), "files"),
+				Chip(t("view.pricing"), Pane === "pricing", () => SetPane("pricing"), "pricing"),
 			),
 			// The valuation control: a native select, the house pattern for an
 			// enum (ui-primitives ships none), wrapped in its label so the visible
@@ -732,6 +757,25 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 			t,
 		}),
 	);
+	// The Pricing pane: the settings surface in the same scroll region and
+	// under the same toolbar, so the switcher and the valuation control stay
+	// reachable while the rate book is open. The pane reads its own catalogs,
+	// revisions and rate rows, holds the draft locally and publishes through
+	// the one route; the callback pins the new revision, which is what
+	// revalues the recorded views above.
+	if (Pane === "pricing")
+		return Shell(
+			[
+				createElement(PricingSettings, {
+					key: "pricing",
+					sessionId: SessionId,
+					rows: Rows,
+					onPublished: Adopt,
+					t,
+				}),
+			],
+			Footer,
+		);
 	if (Pane === "files") {
 		const Shown = FileFilters.Apply(Files, FileFilter);
 		const Stages = FileFilters.StagesOf(Files);

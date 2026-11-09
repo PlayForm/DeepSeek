@@ -1,3 +1,40 @@
+/**
+ * @module State
+ *
+ * The per-apply plugin state of the cargo module, built once by the factory's
+ * State builder.
+ *
+ * @remarks
+ * `ctx.pluginFactory.State(ctx, config, setup)` — Function/Apply — and probed
+ * by tests through the `ctx.__cargoGovernorState` attachment (never returned
+ * from `apply` — the loader treats apply return values specially, a
+ * live-verified lesson).
+ *
+ * THE SHAPE: the factory's shared State (its named type export `State` —
+ * the v0.1.1 declaration fix: the built Target/Library.d.ts ships RELATIVE
+ * specifiers, so the extracted shared shape is the real one and the
+ * leak-era STRUCTURAL MIRROR is gone) plus the module's own fields.
+ *
+ * The shared machinery collections implement loop control by construction:
+ *
+ * - Stash — targetKey → the version token we last processed (the idempotence
+ *   gate for our own re-emits within the async window; seeded by the factory's
+ *   GuardedWrite / Refresh).
+ * - Inflight — targetKey → the abort controller of the detached work in flight
+ *   (P2: aborted and cleared by the factory's Attach effect when the plugin
+ *   unloads; the factory's Continue registers the chain pass's controller
+ *   under the PLAIN key, Dispatch the update run's under the namespaced
+ *   State.Factory.UpdateKey).
+ * - Seams — the probe-once cache of optional services (the factory's
+ *   Function/Seam — the "subprocess" seam is probed ONCE at State build time
+ *   through it).
+ * - Queue — the pre-open journal queue (the P5 storage sink, capped and
+ *   drained by the factory's Open).
+ *
+ * The opaque identity types come from @deepseek-ai/dsh-fs: `FsTargetKey` and
+ * `FsVersion` are branded strings the backend owns — the governor stores and
+ * compares them but never parses or computes them (subsystems/filesystem.md).
+ */
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 import type PluginFactory from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {

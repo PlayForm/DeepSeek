@@ -392,19 +392,22 @@ const RequestOf = (Value: unknown): PublishBody => {
 		throw new Error(BodyMessage);
 	}
 	const Body = Value as Record<string, unknown>;
-	const CatalogId = Figure(Body["catalogId"]);
+	// The two locals carry the narrowing: a switch (true) arm cannot narrow
+	// the original binding for the value the return below constructs, so each
+	// validated figure is re-bound to its narrowed type first.
+	const Stated = Figure(Body["catalogId"]);
 	switch (true) {
-		case CatalogId === null || !Number.isInteger(CatalogId) || CatalogId <= 0:
+		case Stated === null || !Number.isInteger(Stated) || Stated <= 0:
 			throw new Error(
 				"client-dsh-panel-cost: the publish body names no catalog - catalogId must be a positive integer",
 			);
 		default:
 	}
+	const CatalogId = Stated === null ? 0 : Stated;
 	const Raw = Body["baseRevisionId"];
 	const BaseRevisionId = Raw === null || Raw === undefined ? null : Figure(Raw);
 	switch (true) {
-		case BaseRevisionId !== null &&
-			(!Number.isInteger(BaseRevisionId) || BaseRevisionId <= 0):
+		case BaseRevisionId !== null && (!Number.isInteger(BaseRevisionId) || BaseRevisionId <= 0):
 			throw new Error(
 				"client-dsh-panel-cost: baseRevisionId must be a positive integer or null - a revision corrects the revision it names",
 			);
@@ -667,12 +670,7 @@ export default function Serve(ctx: Context): void {
 						ctx.logger.warn(`cost route: ${PricingMessage}`);
 						Answer(
 							res,
-							Failure(
-								"unavailable",
-								PricingMessage,
-								Limits.DefaultRows,
-								PublishPath,
-							),
+							Failure("unavailable", PricingMessage, Limits.DefaultRows, PublishPath),
 						);
 						return;
 					default: {
@@ -692,10 +690,7 @@ export default function Serve(ctx: Context): void {
 							const Message =
 								Caught instanceof Error ? Caught.message : String(Caught);
 							ctx.logger.warn(`cost route: ${Message}`);
-							Answer(
-								res,
-								Failure("error", Message, Limits.DefaultRows, PublishPath),
-							);
+							Answer(res, Failure("error", Message, Limits.DefaultRows, PublishPath));
 						}
 					}
 				}
@@ -787,6 +782,26 @@ export default function Serve(ctx: Context): void {
 							return;
 						default:
 							Rates(res, ctx.get("costPricing"), Revision);
+					}
+				},
+			});
+			// The one write, appended after the three reads so their order is
+			// unchanged. A GET answers the method line rather than reading a
+			// body that cannot be there, and the POST itself hands the body to
+			// the one handler that validates and publishes it.
+			Server.register({
+				path: PublishPath,
+				handler: (req, res) => {
+					switch (true) {
+						case req.method !== "POST":
+							ctx.logger.warn(`cost route: ${MethodMessage}`);
+							Answer(
+								res,
+								Failure("error", MethodMessage, Limits.DefaultRows, PublishPath),
+							);
+							return;
+						default:
+							return Published(res, ctx.get("costPricing"), req);
 					}
 				},
 			});
