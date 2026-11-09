@@ -22,31 +22,43 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-govern.log";
+const DefaultEnabled = false;
+const DefaultTools = ["write", "edit", "bash", "applyPatch"];
+const DefaultScope: string[] = [];
+const DefaultExclude = ["node_modules/**", "**/Target/**", "**/.git/**"];
+const DefaultPolicyTable: { kind: string; decision: string; operation?: string }[] = [];
+const DefaultPolicyDecision = "allow";
+const DefaultRecoveryTable: { obligation: string; behavior: string }[] = [];
+const DefaultRecoveryBehavior = "fail-open";
+const DefaultLoopBound = 4;
+const DefaultMaxDecisions = 500;
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-workspace-govern.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The gated tools: the tool names whose calls carry the gate (the
 	// mutating surface of the workspace family's operate step).
 	tools: Schema.array(Schema.string())
-		.default(["write", "edit", "bash", "applyPatch"])
+		.default(DefaultTools)
 		.volatile(),
 	// The authorized-scope allowlist (globs). Empty = unrestricted (the
 	// scope obligation evaluates "n/a"); non-empty = every gated target must
 	// match at least one glob, and an unevaluable match FAILS CLOSED.
-	scope: Schema.array(Schema.string()).default([]).volatile(),
+	scope: Schema.array(Schema.string()).default(DefaultScope).volatile(),
 	// The excluded target globs - never gated (the family's internals).
 	exclude: Schema.array(Schema.string())
-		.default(["node_modules/**", "**/Target/**", "**/.git/**"])
+		.default(DefaultExclude)
 		.volatile(),
 	// The policy table: rules per proposal kind; the first match wins.
 	policy: Schema.array(
 		Schema.object({
 			kind: Schema.string().required(),
-			decision: Schema.string().default("allow"),
+			decision: Schema.string().default(DefaultPolicyDecision),
 			operation: Schema.string(),
 		}),
 	)
-		.default([])
+		.default(DefaultPolicyTable)
 		.volatile(),
 	// The recovery-table overrides: per-obligation failure behavior. The
 	// default table is fail-open for contributes / policy / preconditions
@@ -54,16 +66,16 @@ export default Compose(false, {
 	recovery: Schema.array(
 		Schema.object({
 			obligation: Schema.string().required(),
-			behavior: Schema.string().default("fail-open"),
+			behavior: Schema.string().default(DefaultRecoveryBehavior),
 		}),
 	)
-		.default([])
+		.default(DefaultRecoveryTable)
 		.volatile(),
 	// The loop bound (recursion prevention): an operation identifier gated
 	// more than loopBound times in one session is dropped.
-	loopBound: Schema.number().default(4).volatile(),
+	loopBound: Schema.number().default(DefaultLoopBound).volatile(),
 	// The decision ring bound: the last maxDecisions decisions survive.
-	maxDecisions: Schema.number().default(500).volatile(),
+	maxDecisions: Schema.number().default(DefaultMaxDecisions).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. The key is
 	// `automation`, NOT `policy` - this hook's `policy` is already the
 	// DECISION RULE TABLE (rules per proposal kind, mapped to

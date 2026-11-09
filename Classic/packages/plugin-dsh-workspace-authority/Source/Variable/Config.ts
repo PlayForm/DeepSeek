@@ -20,31 +20,41 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-authority.log";
+const DefaultEnabled = false;
+// The default lease TTL (ms).
+const DefaultTtlMs = 300_000;
+// The lease ceiling per holder.
+const DefaultMaxLeasesPerHolder = 8;
+// The capability ceiling per holder.
+const DefaultMaxCapabilitiesPerHolder = 16;
+// The revocation grace (ms): how long a revoked capability still shields
+// its resource's promote protection (the policy's revocation timing).
+const DefaultRevocationGraceMs = 0;
+const DefaultDisposition = "keep";
+// The empty default: `never[]` is assignable to the schema's own element
+// type, which widens `disposition` to `string` and so is not the interface's
+// union; the table is empty until configured.
+const DefaultPolicy: never[] = [];
+
 export default Compose(false, {
-	logFile: Schema.string()
-		.default("~/.dsh/playform/plugin-dsh-workspace-authority.log")
-		.volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
-	// The default lease TTL (ms).
-	defaultTtlMs: Schema.number().default(300_000).volatile(),
-	// The lease ceiling per holder.
-	maxLeasesPerHolder: Schema.number().default(8).volatile(),
-	// The capability ceiling per holder.
-	maxCapabilitiesPerHolder: Schema.number().default(16).volatile(),
-	// The revocation grace (ms): how long a revoked capability still shields
-	// its resource's promote protection (the policy's revocation timing).
-	revocationGraceMs: Schema.number().default(0).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	defaultTtlMs: Schema.number().default(DefaultTtlMs).volatile(),
+	maxLeasesPerHolder: Schema.number().default(DefaultMaxLeasesPerHolder).volatile(),
+	maxCapabilitiesPerHolder: Schema.number().default(DefaultMaxCapabilitiesPerHolder).volatile(),
+	revocationGraceMs: Schema.number().default(DefaultRevocationGraceMs).volatile(),
 	// The policy table: rules per resource kind; the first match wins.
 	policy: Schema.array(
 		Schema.object({
 			kind: Schema.string().required(),
-			disposition: Schema.string().default("keep"),
+			disposition: Schema.string().default(DefaultDisposition),
 			ttlMs: Schema.number(),
 			maxResidencyMs: Schema.number(),
 			revocationGraceMs: Schema.number(),
 		}),
 	)
-		.default([])
+		.default(DefaultPolicy)
 		.volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist, the shared factory
 	// block. The key is `automation`, NOT `policy` - this package's `policy`

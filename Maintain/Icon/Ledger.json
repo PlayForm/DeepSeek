@@ -1,15 +1,15 @@
 {
 	"format": 1,
 	"counts": {
-		"packages": 125,
-		"classic": 64,
+		"packages": 126,
+		"classic": 65,
 		"effectTS": 61,
 		"hook": 60,
 		"plugin": 44,
 		"client": 7,
-		"lib": 14,
-		"mono": 125,
-		"colour": 125
+		"lib": 15,
+		"mono": 126,
+		"colour": 126
 	},
 	"icons": [
 		{
@@ -2195,6 +2195,29 @@
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-workspace-operate.svg",
 				"colour": "Maintain/Icon/Asset/Color/hook-dsh-workspace-operate.svg"
+			}
+		},
+		{
+			"package": "@playform/lib-dsh-bundle",
+			"dir": "lib-dsh-bundle",
+			"kind": "lib",
+			"tree": "Classic",
+			"version": "0.2.1",
+			"seed": "680d135b9de6564e7516c4dfef7a2bcfe274c32c5a200881cbc75b1e4476ffd9",
+			"grammar": "crescent-ring",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "04906fb6c75109a5e83edeb85365375b738e0a2c3f1ce893cf4a5b1dc181db78",
+				"colour": "03dae96a80308ce9fabe505e2f3bec0161a4837b1525c63174cfaa621c54c3ca"
+			},
+			"path": {
+				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-bundle.svg",
+				"colour": "Maintain/Icon/Asset/Color/lib-dsh-bundle.svg"
 			}
 		},
 		{

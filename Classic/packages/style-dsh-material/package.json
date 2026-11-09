@@ -21,6 +21,9 @@
 	"scripts": {
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
+	"devDependencies": {
+		"@playform/lib-dsh-bundle": "0.2.1"
+	},
 	"publishConfig": {
 		"access": "public",
 		"provenance": true

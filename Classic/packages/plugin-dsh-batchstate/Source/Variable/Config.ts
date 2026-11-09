@@ -28,28 +28,36 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-batchstate.log";
+const DefaultEnabled = false;
+const DefaultBatch = "default";
+const DefaultDomain = "batch_state";
+const DefaultStateFile = "~/.dsh/batch-state.json";
+const DefaultMaxRecent = 8;
+const DefaultMaxProposals = 16;
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-batchstate.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The batch key: ONE state store serves every batch, isolated by this
 	// key (the plan's multi-batch support, section 7.3).
-	batch: Schema.string().default("default").volatile(),
+	batch: Schema.string().default(DefaultBatch).volatile(),
 	// The KV domain name: the storage-domain PRIMARY store (the JSON file
 	// below is the fallback). A lowercase unit name (the library's
 	// UNIT_NAME_RE); the fail-loud check lives in Function/Apply.
-	domain: Schema.string().default("batch_state").volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
 	// The well-known JSON state file: the FALLBACK store (plan section 3
 	// item 1), engaged only when no storage facility is provided (or its
 	// open fails) - every write then persists the full snapshot here, so the
 	// agents' prompts can read the LIVE state from the file when the storage
 	// domain is unavailable.
-	stateFile: Schema.string().default("~/.dsh/batch-state.json").volatile(),
+	stateFile: Schema.string().default(DefaultStateFile).volatile(),
 	// The completions ring bound: the last maxRecent completions survive
 	// (compact, never the histories - plan section 3 item 5).
-	maxRecent: Schema.number().default(8).volatile(),
+	maxRecent: Schema.number().default(DefaultMaxRecent).volatile(),
 	// The spliced-proposal ring bound: the last maxProposals proposals the
 	// inbox splice projected survive (the board's memory stays bounded).
-	maxProposals: Schema.number().default(16).volatile(),
+	maxProposals: Schema.number().default(DefaultMaxProposals).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist, the shared factory
 	// block composed into this schema. The board is a RECORDER/projection: it
 	// reads, records and suggests (all automatic) and never writes files,

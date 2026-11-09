@@ -32,18 +32,30 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
 import { NOTE_DENIED, NOTE_DENIED_TOOL, NOTE_FIRST, NOTE_PERSISTENT } from "@Variable/Notes.js";
 import { DEFAULT_EXEMPTS, DEFAULT_PATTERNS } from "@Variable/Patterns.js";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-tool-coach.log";
+const DefaultEnabled = true;
+const DefaultJudgeTools = ["bash", "pwsh"];
+const DefaultDenyTools: string[] = [];
+const DefaultThreshold = 3;
+const DefaultWindow = 8;
+const DefaultCooldown = 10;
+const DefaultEscalateThreshold = 6;
+const DefaultCleanWindow = 12;
+const DefaultEnforce = "off";
+const DefaultEnforceThreshold = 4;
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-tool-coach.log").volatile(),
-	enabled: Schema.boolean().default(true).volatile(),
-	judgeTools: Schema.array(Schema.string()).default(["bash", "pwsh"]).volatile(),
-	denyTools: Schema.array(Schema.string()).default([]).volatile(),
-	threshold: Schema.number().default(3).volatile(),
-	window: Schema.number().default(8).volatile(),
-	cooldown: Schema.number().default(10).volatile(),
-	escalateThreshold: Schema.number().default(6).volatile(),
-	cleanWindow: Schema.number().default(12).volatile(),
-	enforce: Schema.union(["off", "write", "all"]).default("off").volatile(),
-	enforceThreshold: Schema.number().default(4).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	judgeTools: Schema.array(Schema.string()).default(DefaultJudgeTools).volatile(),
+	denyTools: Schema.array(Schema.string()).default(DefaultDenyTools).volatile(),
+	threshold: Schema.number().default(DefaultThreshold).volatile(),
+	window: Schema.number().default(DefaultWindow).volatile(),
+	cooldown: Schema.number().default(DefaultCooldown).volatile(),
+	escalateThreshold: Schema.number().default(DefaultEscalateThreshold).volatile(),
+	cleanWindow: Schema.number().default(DefaultCleanWindow).volatile(),
+	enforce: Schema.union(["off", "write", "all"]).default(DefaultEnforce).volatile(),
+	enforceThreshold: Schema.number().default(DefaultEnforceThreshold).volatile(),
 	exemptPatterns: Schema.array(Schema.string()).default(DEFAULT_EXEMPTS).volatile(),
 	patternTable: Schema.array(
 		Schema.object({

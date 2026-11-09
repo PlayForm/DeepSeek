@@ -5,3 +5,6 @@ declare function _default(
 State: State, 
 /** The probed storage facility (ctx.storage.domain or ctx.storageDomain). */
 Facility: unknown): Promise<void>;
+/** Close the open handle (the effect's disposer; a no-op when absent or
+ *  already closed - idempotent by the cleared State.Handle). */
+export declare const Close: (State: State) => void;

@@ -34,33 +34,38 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-semantics.log";
+const DefaultEnabled = false;
+// The KV domain name (the service's own domain, not a shared one).
+const DefaultDomain = "workspace_semantics";
+// The index bound: the last maxEntries built models survive in memory
+// (and in the domain's models table).
+const DefaultMaxEntries = 256;
+// The excluded path patterns (the factory's segment match; the default is
+// the same glob triple the observe hook ships).
+const DefaultExclude: string[] = ["node_modules/**", "**/Target/**", "**/.git/**"];
+// The workspace root the deepener's LSP queries resolve against; the
+// empty string means the process working directory (the harness's session
+// workspace).
+const DefaultRoot = "";
+// The harness LSP deepener (the primary TypeScript reference answer); an
+// absent seam or an unhandled extension falls back to the lexical adapter.
+const DefaultLsp = true;
+// The opt-in any-file adapters, by catalog name (Variable/Adapters):
+// `json` (.json keys), `yaml` (.yml/.yaml keys), `markdown` (.md/.markdown
+// link targets), `package` (package.json dependency names). Empty = the
+// TypeScript/JavaScript adapter only.
+const DefaultAdapters: string[] = [];
+
 export default Compose(false, {
-	logFile: Schema.string()
-		.default("~/.dsh/playform/plugin-dsh-workspace-semantics.log")
-		.volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
-	// The KV domain name (the service's own domain, not a shared one).
-	domain: Schema.string().default("workspace_semantics").volatile(),
-	// The index bound: the last maxEntries built models survive in memory
-	// (and in the domain's models table).
-	maxEntries: Schema.number().default(256).volatile(),
-	// The excluded path patterns (the factory's segment match; the default is
-	// the same glob triple the observe hook ships).
-	exclude: Schema.array(Schema.string())
-		.default(["node_modules/**", "**/Target/**", "**/.git/**"])
-		.volatile(),
-	// The workspace root the deepener's LSP queries resolve against; the
-	// empty string means the process working directory (the harness's session
-	// workspace).
-	root: Schema.string().default("").volatile(),
-	// The harness LSP deepener (the primary TypeScript reference answer); an
-	// absent seam or an unhandled extension falls back to the lexical adapter.
-	lsp: Schema.boolean().default(true).volatile(),
-	// The opt-in any-file adapters, by catalog name (Variable/Adapters):
-	// `json` (.json keys), `yaml` (.yml/.yaml keys), `markdown` (.md/.markdown
-	// link targets), `package` (package.json dependency names). Empty = the
-	// TypeScript/JavaScript adapter only.
-	adapters: Schema.array(Schema.string()).default([]).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
+	maxEntries: Schema.number().default(DefaultMaxEntries).volatile(),
+	exclude: Schema.array(Schema.string()).default(DefaultExclude).volatile(),
+	root: Schema.string().default(DefaultRoot).volatile(),
+	lsp: Schema.boolean().default(DefaultLsp).volatile(),
+	adapters: Schema.array(Schema.string()).default(DefaultAdapters).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. This package's action
 	// class is read-only - resolve, symbol, references and the rename PLAN
 	// are AUTOMATIC, and the plan goes to the operate proposals (the service

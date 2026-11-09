@@ -32,20 +32,36 @@ import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 import { DEFAULT_KEYWORDS } from "@Variable/Keywords.js";
 import { DEFAULT_POLICY } from "@Variable/Policy.js";
 
+// The route defaults, hoisted (P1): the CHEAP lane is the safe role default
+// and the planner stays on the DeepSeek flash lane at max.
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-route.log";
+const DefaultEnabled = false;
+const DefaultRoleProvider = "cloudflare-workers-ai";
+const DefaultRoleModel = "@cf/zai-org/glm-5.3-flash";
+const DefaultRoleEffort = "low";
+const DefaultDefaultRole = "explorer";
+const DefaultPlannerProvider = "cloudflare-workers-ai";
+const DefaultPlannerModel = "@cf/deepseek-ai/deepseek-v4.1-flash-1017";
+const DefaultPlannerEffort = "max";
+const DefaultEscalationEnabled = true;
+const DefaultEscalationMax = 1;
+
 // One role's schema (the route triple; effort exactly low / high / max).
 const Role = () =>
 	Schema.object({
-		provider: Schema.string().default("cloudflare-workers-ai"),
-		model: Schema.string().default("@cf/zai-org/glm-5.3-flash"),
-		reasoningEffort: Schema.union(["low", "high", "max"]).default("low"),
+		provider: Schema.string().default(DefaultRoleProvider),
+		model: Schema.string().default(DefaultRoleModel),
+		reasoningEffort: Schema.union(["low", "high", "max"]).default(DefaultRoleEffort),
 	});
 
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-route.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The omission's default role: the CHEAP lane is the safe default - the
 	// plan's incident is the expensive parent route being inherited silently.
-	defaultRole: Schema.union(["explorer", "coder", "planner"]).default("explorer").volatile(),
+	defaultRole: Schema.union(["explorer", "coder", "planner"])
+		.default(DefaultDefaultRole)
+		.volatile(),
 	// The user's policy. The defaults are the shipped DEFAULT_POLICY (the
 	// task-routing skill's routing table); the user's ~/.dsh values override
 	// them through this schema - the plugin NEVER writes the policy.
@@ -53,15 +69,15 @@ export default Compose(false, {
 		coder: Role(),
 		explorer: Role(),
 		planner: Schema.object({
-			provider: Schema.string().default("cloudflare-workers-ai"),
-			model: Schema.string().default("@cf/deepseek-ai/deepseek-v4.1-flash-1017"),
-			reasoningEffort: Schema.union(["low", "high", "max"]).default("max"),
+			provider: Schema.string().default(DefaultPlannerProvider),
+			model: Schema.string().default(DefaultPlannerModel),
+			reasoningEffort: Schema.union(["low", "high", "max"]).default(DefaultPlannerEffort),
 		}),
 		allowedModels: Schema.array(Schema.string()).default(DEFAULT_POLICY.allowedModels),
 		escalation: Schema.object({
-			enabled: Schema.boolean().default(true),
+			enabled: Schema.boolean().default(DefaultEscalationEnabled),
 			// The attempts ladder: at most ONE DeepSeek max re-dispatch.
-			max: Schema.number().default(1),
+			max: Schema.number().default(DefaultEscalationMax),
 		}),
 	})
 		.default(DEFAULT_POLICY)

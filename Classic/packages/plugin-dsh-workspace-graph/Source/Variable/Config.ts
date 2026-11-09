@@ -20,23 +20,37 @@ import Schema from "@deepseek-ai/schemastery";
 import { Policy } from "@playform/plugin-dsh-factory";
 import DEFAULT_EXCLUDE from "@Variable/Default.js";
 
+const DefaultEnabled = false;
+const DefaultDomain = "workspace_graph";
+const DefaultLanguages: Array<"typescript" | "javascript" | "markdown"> = [
+	"typescript",
+	"javascript",
+	"markdown",
+];
+const DefaultInclude: string[] = [];
+const DefaultMaxFileBytes = 1000000;
+const DefaultMaxNodesPerFile = 5000;
+// The `indexWorkspace` walk bound (the one field the indexing trigger
+// added to the brief's table): the walk stops after this many candidate
+// files, so a call on a large tree is bounded work. A caller's explicit
+// `maxFiles` option overrides it for that call.
+const DefaultMaxFiles = 2000;
+const DefaultLimitDefault = 50;
+const DefaultLimitMaximum = 500;
+
 export default Schema.object({
-	enabled: Schema.boolean().default(false).volatile(),
-	domain: Schema.string().default("workspace_graph").volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
 	languages: Schema.array(Schema.union(["typescript", "javascript", "markdown"]))
-		.default(["typescript", "javascript", "markdown"])
+		.default(DefaultLanguages)
 		.volatile(),
-	include: Schema.array(Schema.string()).default([]).volatile(),
+	include: Schema.array(Schema.string()).default(DefaultInclude).volatile(),
 	exclude: Schema.array(Schema.string()).default(DEFAULT_EXCLUDE).volatile(),
-	maxFileBytes: Schema.number().default(1000000).volatile(),
-	maxNodesPerFile: Schema.number().default(5000).volatile(),
-	// The `indexWorkspace` walk bound (the one field the indexing trigger
-	// added to the brief's table): the walk stops after this many candidate
-	// files, so a call on a large tree is bounded work. A caller's explicit
-	// `maxFiles` option overrides it for that call.
-	maxFiles: Schema.number().default(2000).volatile(),
-	limitDefault: Schema.number().default(50).volatile(),
-	limitMaximum: Schema.number().default(500).volatile(),
+	maxFileBytes: Schema.number().default(DefaultMaxFileBytes).volatile(),
+	maxNodesPerFile: Schema.number().default(DefaultMaxNodesPerFile).volatile(),
+	maxFiles: Schema.number().default(DefaultMaxFiles).volatile(),
+	limitDefault: Schema.number().default(DefaultLimitDefault).volatile(),
+	limitMaximum: Schema.number().default(DefaultLimitMaximum).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. The graph's actions are
 	// INDEX (automatic), so this package has NO gated action: it never writes a
 	// file, commits a batch or spawns an agent, and no verdict can refuse it.

@@ -24,21 +24,25 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-evidence.log";
+const DefaultEnabled = false;
+// The KV domain name (the service's own domain, not a shared one).
+const DefaultDomain = "workspace_evidence";
+// The store bound: the last maxValidations validation objects survive
+// (in memory and in the domain's validations table).
+const DefaultMaxValidations = 512;
+// The excluded path patterns (the factory's segment match; an fs/observed
+// event for a matched segment triggers no invalidation). Default matches
+// the shared built-in list the observe hook ships (SEGMENT names, not
+// globs - the factory's Function/Match is a segment matcher).
+const DefaultExclude: string[] = ["node_modules", "Target", ".git"];
+
 export default Compose(false, {
-	logFile: Schema.string()
-		.default("~/.dsh/playform/plugin-dsh-workspace-evidence.log")
-		.volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
-	// The KV domain name (the service's own domain, not a shared one).
-	domain: Schema.string().default("workspace_evidence").volatile(),
-	// The store bound: the last maxValidations validation objects survive
-	// (in memory and in the domain's validations table).
-	maxValidations: Schema.number().default(512).volatile(),
-	// The excluded path patterns (the factory's segment match; an fs/observed
-	// event for a matched segment triggers no invalidation). Default matches
-	// the shared built-in list the observe hook ships (SEGMENT names, not
-	// globs - the factory's Function/Match is a segment matcher).
-	exclude: Schema.array(Schema.string()).default(["node_modules", "Target", ".git"]).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
+	maxValidations: Schema.number().default(DefaultMaxValidations).volatile(),
+	exclude: Schema.array(Schema.string()).default(DefaultExclude).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. This package's action
 	// classes are read-only and record - the validation objects, the stale
 	// invalidation and the read surface are AUTOMATIC, so this package has NO

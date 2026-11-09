@@ -15,17 +15,26 @@ import Schema from "@deepseek-ai/schemastery";
 import { Policy } from "@playform/plugin-dsh-factory";
 import { DEFAULT_KINDS } from "@Variable/Kinds.js";
 
+const DefaultEnabled = true;
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-pass-on.log";
+const DefaultMaxTargets = 20;
+const DefaultMaxPreviewBytes = 2048;
+const DefaultExpiresSeconds = 3600;
+
 export default Schema.object({
-	enabled: Schema.boolean().default(true),
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-pass-on.log"),
+	enabled: Schema.boolean().default(DefaultEnabled),
+	logFile: Schema.string().default(DefaultLogFile),
 	root: Schema.string().default(process.cwd()),
-	maxTargets: Schema.number().default(20),
-	maxPreviewBytes: Schema.number().default(2048),
-	expiresSeconds: Schema.number().default(3600),
+	maxTargets: Schema.number().default(DefaultMaxTargets),
+	maxPreviewBytes: Schema.number().default(DefaultMaxPreviewBytes),
+	expiresSeconds: Schema.number().default(DefaultExpiresSeconds),
 	// The kind DICT is a plain (non-volatile) table: a configured dict
 	// replaces the catalog wholesale.
 	kinds: Schema.dict(
 		Schema.object({
+			// The empty literal stays inline: hoisting it widens the dict's
+			// inferred type to a cosmokit Dict the declaration emit cannot
+			// name, and this schema's type is what Library.ts re-exports.
 			globs: Schema.array(Schema.string()).default([]),
 			param: Schema.string(),
 		}),

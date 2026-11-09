@@ -46,7 +46,7 @@
 		"prettier-plugin-svelte": "4.1.1",
 		"prettier-plugin-tailwindcss": "0.8.1",
 		"prettier-plugin-toml": "4.1.0",
-		"sass-embedded": "1.106.1",
+		"sass-embedded": "1.108.1",
 		"tailwindcss": "4.3.3",
 		"turbo": "2.11.10"
 	},

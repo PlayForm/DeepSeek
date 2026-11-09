@@ -102,14 +102,6 @@ const Patches = [
 			"\t});",
 		].join("\n"),
 	},
-	{
-		Twin: "ets-client-dsh-workspace-live",
-		File: "Source/prepublishOnly.sh",
-		Reason: "the client bundle's loader id (the unquoted Build-Client-Bundle argument the quoted package rules cannot see)",
-		Find: "node ../../../Maintain/Build/Client-Bundle/Index.mjs . Source/Client.ts @playform/client-dsh-workspace-live",
-		Replace:
-			"node ../../../Maintain/Build/Client-Bundle/Index.mjs . Source/Client.ts @playform/ets-client-dsh-workspace-live",
-	},
 ];
 
 Patches.push(...HarnessPatches);

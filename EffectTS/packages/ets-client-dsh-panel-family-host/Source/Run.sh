@@ -13,9 +13,10 @@ set -e
 Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
 	--ESBuild Configuration/ESBuild.ts
 
-# The client half (the harness closure-factory bundle); regenerate on every
-# dev run so the served ./client export matches the source.
-node ../../../Maintain/Build/Client-Bundle/Index.mjs . Source/Client.ts @playform/ets-client-dsh-panel-family-host
+# The client half (the harness closure-factory bundle): the package's own
+# Configuration/Bundle.mjs builds it, regenerated on every dev run so the
+# served ./client export matches the source.
+node Configuration/Bundle.mjs
 
 Build "Source/Test/**/*.ts" \
 	--ESBuild Configuration/Test-ESBuild.ts \

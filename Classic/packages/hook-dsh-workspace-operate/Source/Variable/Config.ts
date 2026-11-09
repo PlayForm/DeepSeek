@@ -21,17 +21,24 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-operate.log";
+const DefaultEnabled = false;
+const DefaultDomain = "workspace_operate";
+const DefaultMaxProposals = 500;
+const DefaultLimitDefault = 50;
+const DefaultLimitMaximum = 500;
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-workspace-operate.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The KV domain name (the hook's own domain, NOT the shared
 	// package_governance one - the hook owns its record schema).
-	domain: Schema.string().default("workspace_operate").volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
 	// The live proposal table bound: a pass is refused when full.
-	maxProposals: Schema.number().default(500).volatile(),
+	maxProposals: Schema.number().default(DefaultMaxProposals).volatile(),
 	// The list limits (the graph's rule: default, capped at maximum).
-	limitDefault: Schema.number().default(50).volatile(),
-	limitMaximum: Schema.number().default(500).volatile(),
+	limitDefault: Schema.number().default(DefaultLimitDefault).volatile(),
+	limitMaximum: Schema.number().default(DefaultLimitMaximum).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. The hook's action class
 	// is SUGGEST - it records a typed proposal and never applies it - and that
 	// class is AUTOMATIC, so this package has NO gated action: it never writes

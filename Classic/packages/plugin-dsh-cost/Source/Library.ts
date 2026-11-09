@@ -39,10 +39,17 @@ export { Version };
 
 // Required services. The factory (@playform/plugin-dsh-factory) provides the
 // State builder (cell unwrap + shared fields + the P10 volatile refresh) and
-// the ledger. The token meter prices the model-visible surface (the weights
-// of the amortized half); the commands service owns the human surface (the
-// three /cost commands, the engine lane's next refinement). The plugin
-// registers NO tool and never touches the model-visible surface.
+// the ledger. The token meter is REUSED rather than re-implemented: it prices
+// the model-visible surface (the weights of the amortized half), and it is
+// the one source of the telemetry figures Function/Telemetry would otherwise
+// re-derive from the raw session log - the context window from
+// `contextPressure` and the surface total from `measure` when a caller has
+// none. The meter is projection-backed and replay-stable and reports the
+// provider's own cache buckets, which is why this package needs no
+// @deepseek-ai/dsh-token-meter import: the service is already injected here.
+// The commands service owns the human surface (the three /cost commands, the
+// engine lane's next refinement). The plugin registers NO tool and never
+// touches the model-visible surface.
 export const inject = ["pluginFactory", "tokenMeter", "commands"];
 
 export const apply = Apply;

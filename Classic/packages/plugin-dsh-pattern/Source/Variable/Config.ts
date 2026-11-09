@@ -11,22 +11,35 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultEnabled = false;
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-pattern.log";
+const DefaultDomain = "pattern";
+const DefaultStoragePath = "~/.dsh/pattern/registry.json";
+const DefaultMatchThreshold = 0.35;
+const DefaultMaxMatches = 3;
+const DefaultAmbiguityEpsilon = 0.02;
+const DefaultDecayHalfLifeDays = 14;
+const DefaultAcceptBonus = 0.1;
+const DefaultRejectPenalty = 0.2;
+const DefaultAppliedBonus = 0.15;
+const DefaultFailedPenalty = 0.25;
+
 export default Compose(false, {
-	enabled: Schema.boolean().default(false).volatile(),
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-pattern.log").volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The storage-domain name: the KV domain is the PRIMARY store (the JSON
 	// snapshot below is the fallback). A lowercase unit name (the library's
 	// UNIT_NAME_RE); the fail-loud check lives in Function/Knobs.
-	domain: Schema.string().default("pattern").volatile(),
-	storagePath: Schema.string().default("~/.dsh/pattern/registry.json").volatile(),
-	matchThreshold: Schema.number().default(0.35).volatile(),
-	maxMatches: Schema.number().default(3).volatile(),
-	ambiguityEpsilon: Schema.number().default(0.02).volatile(),
-	decayHalfLifeDays: Schema.number().default(14).volatile(),
-	acceptBonus: Schema.number().default(0.1).volatile(),
-	rejectPenalty: Schema.number().default(0.2).volatile(),
-	appliedBonus: Schema.number().default(0.15).volatile(),
-	failedPenalty: Schema.number().default(0.25).volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
+	storagePath: Schema.string().default(DefaultStoragePath).volatile(),
+	matchThreshold: Schema.number().default(DefaultMatchThreshold).volatile(),
+	maxMatches: Schema.number().default(DefaultMaxMatches).volatile(),
+	ambiguityEpsilon: Schema.number().default(DefaultAmbiguityEpsilon).volatile(),
+	decayHalfLifeDays: Schema.number().default(DefaultDecayHalfLifeDays).volatile(),
+	acceptBonus: Schema.number().default(DefaultAcceptBonus).volatile(),
+	rejectPenalty: Schema.number().default(DefaultRejectPenalty).volatile(),
+	appliedBonus: Schema.number().default(DefaultAppliedBonus).volatile(),
+	failedPenalty: Schema.number().default(DefaultFailedPenalty).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist, the shared factory
 	// block composed into this schema. The pattern service MATCHES, RECORDS
 	// and DECAYS (read/record/suggest, all automatic) and never writes files,

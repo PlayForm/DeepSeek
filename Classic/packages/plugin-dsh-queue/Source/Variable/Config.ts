@@ -18,9 +18,18 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-queue.log";
+const DefaultEnabled = false;
+const DefaultCapacityMain = 10;
+const DefaultCapacityChild = 2;
+const DefaultAutoDispatch = true;
+const DefaultRoutedDispatch = true;
+const DefaultAutoSpawn = false;
+const DefaultSpawnProvider = "spawn";
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-queue.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The user's capacity model is the law (SUBAGENT-QUEUE-PLUGIN.md section
 	// 2.2): the MAIN conversation holds up to 10 subagents (the pool's
 	// reserved slots, including the IDLE-held lanes); EVERY spawned agent's
@@ -28,18 +37,18 @@ export default Compose(false, {
 	// harness's own maxActiveSubagents knob stays the backstop; the plugin
 	// enforces its model at the dispatch level.
 	capacity: Schema.object({
-		main: Schema.number().default(10).min(1),
-		child: Schema.number().default(2).min(1),
+		main: Schema.number().default(DefaultCapacityMain).min(1),
+		child: Schema.number().default(DefaultCapacityChild).min(1),
 	}).volatile(),
 	// When a slot frees (a task completes, fails or is interrupted), the
 	// dispatcher automatically assigns the next task (the IDLE coexistence:
 	// the settled IDLE children release their active slots and the queue
 	// fills them).
-	autoDispatch: Schema.boolean().default(true).volatile(),
+	autoDispatch: Schema.boolean().default(DefaultAutoDispatch).volatile(),
 	// The routed dispatch: when the routing enforcer's `dshRoute` service is
 	// present, each dispatch resolves the route per the user's policy
 	// (silently); absent, the dispatch proceeds unrouted (the contained skip).
-	routedDispatch: Schema.boolean().default(true).volatile(),
+	routedDispatch: Schema.boolean().default(DefaultRoutedDispatch).volatile(),
 	// THE SPAWN (the completion spec's D6 approval posture): when true, an
 	// assignment actually STARTS a subagent through the harness's own
 	// `ctx.subagents` service (never a private spawn, never a shell), with
@@ -47,13 +56,13 @@ export default Compose(false, {
 	// is a privileged action, so the plugin assigns seats only until the user
 	// turns it on. False = the manual posture - the dispatch still assigns
 	// and still ledgers, it just never launches.
-	autoSpawn: Schema.boolean().default(false).volatile(),
+	autoSpawn: Schema.boolean().default(DefaultAutoSpawn).volatile(),
 	// The harness subagent provider the spawn selects by name
 	// (`ctx.subagents.startActivation({ provider })`). The in-process spawn
 	// backend registers as "spawn" (subagent-spawn-in-process's
 	// `providerName` default); another backend (fork/acp/dsh-sdk) is selected
 	// by naming it here.
-	spawnProvider: Schema.string().default("spawn").volatile(),
+	spawnProvider: Schema.string().default(DefaultSpawnProvider).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist, the OUTER gate in front
 	// of `autoSpawn` - `spawn` defaults to `approve`, so even with the knob on
 	// an assignment waits for the user (the `spawn held` line). Composed from

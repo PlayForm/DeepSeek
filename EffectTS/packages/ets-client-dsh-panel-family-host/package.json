@@ -36,6 +36,7 @@
 		"@deepseek-ai/cordis": "4.1.0",
 		"@deepseek-ai/schemastery": "3.19.0",
 		"@playform/build": "0.3.5",
+		"@playform/lib-dsh-bundle": "0.2.1",
 		"@types/node": "26.6.6",
 		"tsc-alias": "1.9.10",
 		"typescript": "7.0.2"

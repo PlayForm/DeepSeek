@@ -27,22 +27,29 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-journal.log";
+const DefaultEnabled = false;
+const DefaultDomain = "workspace_journal";
+const DefaultMaxBatches = 200;
+const DefaultMaxEntryBytes = 65536;
+const DefaultExclude = ["node_modules/**", "**/Target/**", "**/.git/**"];
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-workspace-journal.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The KV domain name (the hook's own domain - the rollback layer's
 	// per-batch records and revert data; a NEW domain, never an extension
 	// record in the shared package_governance one).
-	domain: Schema.string().default("workspace_journal").volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
 	// The ring bound: the last maxBatches batch records survive eviction.
-	maxBatches: Schema.number().default(200).volatile(),
+	maxBatches: Schema.number().default(DefaultMaxBatches).volatile(),
 	// The pre-image size cap in bytes: a larger pre-image is recorded
 	// truncated and its replay is skipped with a ledger line - never half-applied.
-	maxEntryBytes: Schema.number().default(65536).volatile(),
+	maxEntryBytes: Schema.number().default(DefaultMaxEntryBytes).volatile(),
 	// The excluded path patterns (the factory's segment match). Default: the
 	// family's standard triple.
 	exclude: Schema.array(Schema.string())
-		.default(["node_modules/**", "**/Target/**", "**/.git/**"])
+		.default(DefaultExclude)
 		.volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. The journal's ONE
 	// gated action is the revert - it writes the pre-images back, so `write`

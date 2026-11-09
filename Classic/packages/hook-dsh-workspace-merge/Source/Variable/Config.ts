@@ -16,17 +16,24 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-merge.log";
+const DefaultEnabled = false;
+const DefaultDomain = "workspace_merge";
+const DefaultMode = "all-or-nothing";
+const DefaultMaxFiles = 50;
+const DefaultMaxTotalBytes = 1000000;
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-workspace-merge.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The KV domain name (the hook's own domain, NOT the shared
 	// package_governance one - the hook owns its record schema).
-	domain: Schema.string().default("workspace_merge").volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
 	// The atomicity mode: all-or-nothing (default) or survivors.
-	mode: Schema.union(["all-or-nothing", "survivors"]).default("all-or-nothing").volatile(),
+	mode: Schema.union(["all-or-nothing", "survivors"]).default(DefaultMode).volatile(),
 	// The batch gates.
-	maxFiles: Schema.number().default(50).volatile(),
-	maxTotalBytes: Schema.number().default(1000000).volatile(),
+	maxFiles: Schema.number().default(DefaultMaxFiles).volatile(),
+	maxTotalBytes: Schema.number().default(DefaultMaxTotalBytes).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. The merge's ONE gated
 	// action is the commit - `commit` defaults to `approve`, so a batch waits
 	// for the user and writes nothing (the documented `merge held (<n> files)

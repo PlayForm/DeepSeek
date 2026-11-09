@@ -12,14 +12,22 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultEnabled = false;
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-batch-decision.log";
+const DefaultAutoApprove = "off";
+const DefaultAllowlist: string[] = [];
+const DefaultMaxAutoTargets = 5;
+const DefaultMinConfidence = 0.8;
+const DefaultPendingTtlMs = 3600000;
+
 export default Compose(false, {
-	enabled: Schema.boolean().default(false).volatile(),
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-batch-decision.log").volatile(),
-	autoApprove: Schema.union(["off", "on"]).default("off").volatile(),
-	allowlist: Schema.array(Schema.string()).default([]).volatile(),
-	maxAutoTargets: Schema.number().default(5).volatile(),
-	minConfidence: Schema.number().default(0.8).volatile(),
-	pendingTtlMs: Schema.number().default(3600000).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	autoApprove: Schema.union(["off", "on"]).default(DefaultAutoApprove).volatile(),
+	allowlist: Schema.array(Schema.string()).default(DefaultAllowlist).volatile(),
+	maxAutoTargets: Schema.number().default(DefaultMaxAutoTargets).volatile(),
+	minConfidence: Schema.number().default(DefaultMinConfidence).volatile(),
+	pendingTtlMs: Schema.number().default(DefaultPendingTtlMs).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist, the OUTER gate in front
 	// of `autoApprove` - `commit` defaults to `approve`, so a policy
 	// auto-approval waits for the user until the pack/config opens it (the

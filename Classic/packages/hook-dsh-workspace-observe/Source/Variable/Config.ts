@@ -27,23 +27,30 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-observe.log";
+const DefaultEnabled = false;
+const DefaultDomain = "workspace_observe";
+const DefaultMaxStamps = 1000;
+const DefaultInclude: string[] = [];
+const DefaultExclude = ["node_modules/**", "**/Target/**", "**/.git/**"];
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-workspace-observe.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The KV domain name (the hook's own domain, NOT the shared
 	// package_governance one - a new domain name has no collision and the
 	// hook owns its record schema).
-	domain: Schema.string().default("workspace_observe").volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
 	// The ring bound: the last maxStamps stamps survive in the meta record.
-	maxStamps: Schema.number().default(1000).volatile(),
+	maxStamps: Schema.number().default(DefaultMaxStamps).volatile(),
 	// The optional allowlist. Default EMPTY - every path records; a non-empty
 	// list restricts recording to matching paths (reason `not included`).
-	include: Schema.array(Schema.string()).default([]).volatile(),
+	include: Schema.array(Schema.string()).default(DefaultInclude).volatile(),
 	// The excluded path patterns (the hook's own match, Function/Match - the
 	// shared Default list is the factory's segment list; the brief's default
 	// is the glob triple, which the hook's matcher understands).
 	exclude: Schema.array(Schema.string())
-		.default(["node_modules/**", "**/Target/**", "**/.git/**"])
+		.default(DefaultExclude)
 		.volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. The hook's action class
 	// is RECORD - it records an observation stamp on every fs/observed event -

@@ -13,10 +13,23 @@
 // factor layer's arrays (section 17): `modifiers` ships the four mode
 // multipliers and `priceWindows` the time-of-day windows (empty by default).
 //
+// EVERY DEFAULT IS A NAMED CONSTANT ABOVE THE SCHEMA (the harness convention,
+// Reuse-Host.md:41, 43), and the ledger and the log resolve through the
+// harness home precedence - an explicit configured path wins at the caller,
+// then $DSH_HOME, then ~/.dsh (Reuse-Host.md:11; lib-dsh-core Function/Home) -
+// so a profile-scoped home moves the ledger with it. The price book, the
+// modifier rows and the price windows are deployment data and are NOT aligned
+// to a harness value: the harness ships no price book (Reuse-Host.md:18).
+//
+// `log` is off by default: the harness ships no plugin diagnostic-log
+// convention, so a log file on by default would be this plugin's own
+// invention writing to the user's home (Reuse-Host.md:14).
+//
 // This is one of the modules in the tree with a runtime import of
 // @deepseek-ai/schemastery (the schema must be a real schemastery instance -
 // the loader consumes it through the Standard Schema `~standard` interface).
 import Schema from "@deepseek-ai/schemastery";
+import { Home } from "@playform/lib-dsh-core";
 
 // One price row's schema: the rate columns are per million tokens, in the
 // row's own currency.
@@ -40,9 +53,11 @@ const Rate = () =>
 			"Price per million reasoning tokens; absent means that bucket is unpriced.",
 		),
 		effectiveFrom: Schema.string()
-			.default("2026-01-01")
+			.default(DefaultEffectiveFrom)
 			.description("First date the row is in force; the newest row in force prices a call."),
-		currency: Schema.string().default("USD").description("Currency of this row's rates."),
+		currency: Schema.string()
+			.default(DefaultCurrency)
+			.description("Currency of this row's rates."),
 	});
 
 // One modifier row's schema (section 17.2): an effective-dated multiplier
@@ -91,18 +106,90 @@ const PriceWindow = () =>
 			.description("UTC hour the window ends at; a value past 24 wraps into the next day."),
 	});
 
+// The named defaults, one constant per field, declared above the schema and
+// referenced by `.default` (the harness convention, Reuse-Host.md:41, 43).
+// The two paths go through the harness home precedence, so the ledger is a
+// sibling of the profile's sessions and storages instead of a fixed tilde
+// path (Reuse-Host.md:11). The three data defaults below are this
+// deployment's own: the harness ships no price book, no modifier rows and no
+// price windows, and a copy of the harness's model defaults would price every
+// call at zero (Reuse-Host.md:18).
+const DefaultDatabasePath = Home(["cost", "ledger.db"]);
+const DefaultCurrency = "USD";
+const DefaultClient = "default";
+const DefaultEffectiveFrom = "2026-01-01";
+const DefaultMarker = "dsh-cost";
+const DefaultMaxLines = 8;
+const DefaultExportFormat = "csv";
+const DefaultPrices = [
+	{
+		provider: "cloudflare-workers-ai",
+		model: "@cf/zai-org/glm-5.3-flash",
+		input: 0.15,
+		output: 0.5,
+		cacheRead: 0.03,
+	},
+	{
+		provider: "cloudflare-workers-ai",
+		model: "@cf/deepseek-ai/deepseek-v4.1-flash-1017",
+		input: 0.3,
+		output: 1.2,
+		cacheRead: 0.006,
+	},
+	{
+		provider: "cloudflare-workers-ai",
+		model: "@cf/deepseek-ai/deepseek-v4-flash-0731",
+		input: 0.44,
+		output: 1.32,
+		cacheRead: 0.044,
+	},
+];
+const DefaultModifiers = [
+	{
+		provider: "cloudflare-workers-ai",
+		kind: "batch",
+		value: "shipped-batch",
+		multiplier: 0.5,
+		effectiveFrom: "2026-01-01",
+	},
+	{
+		provider: "cloudflare-workers-ai",
+		kind: "flex",
+		value: "shipped-flex",
+		multiplier: 0.5,
+		effectiveFrom: "2026-01-01",
+	},
+	{
+		provider: "cloudflare-workers-ai",
+		kind: "priority",
+		value: "shipped-priority",
+		multiplier: 2,
+		effectiveFrom: "2026-01-01",
+	},
+	{
+		provider: "cloudflare-workers-ai",
+		kind: "ultrafast",
+		value: "shipped-ultrafast",
+		multiplier: 6,
+		effectiveFrom: "2026-01-01",
+	},
+];
+const DefaultPriceWindows: Array<{ window: string; multiplier: number; effectiveFrom: string }> = [];
+const DefaultLog = false;
+
 export default Schema.object({
 	enabled: Schema.boolean()
 		.default(true)
+		.volatile()
 		.description("Master switch: when false the plugin records nothing."),
 	databasePath: Schema.string()
-		.default("~/.dsh/cost/ledger.db")
+		.default(DefaultDatabasePath)
 		.description("SQLite ledger file; a leading tilde expands to the home directory."),
 	currency: Schema.string()
-		.default("USD")
+		.default(DefaultCurrency)
 		.description("Fallback currency for rows priced without their own."),
 	client: Schema.string()
-		.default("default")
+		.default(DefaultClient)
 		.description("Name of the paying party new projects are billed to."),
 	capture: Schema.object({
 		sessions: Schema.boolean()
@@ -136,86 +223,38 @@ export default Schema.object({
 				"Allow writing the accumulated cost into files as a marker-delimited comment.",
 			),
 		marker: Schema.string()
-			.default("dsh-cost")
+			.default(DefaultMarker)
 			.description("Marker word that delimits the cost comment block."),
 		maxLines: Schema.number()
-			.default(8)
+			.default(DefaultMaxLines)
 			.description("Maximum lines of one cost comment block."),
 	}).description("The comment writer (off by default; the one toggle the user asked for)."),
 	export: Schema.object({
 		format: Schema.union(["csv", "json", "markdown"])
-			.default("csv")
+			.default(DefaultExportFormat)
 			.description("Bundle format for the export command: csv, json or markdown."),
 		directory: Schema.string()
 			.default("")
 			.description("Directory exports are written to; empty means beside the project root."),
 	}).description("The export shape for a client invoice."),
 	prices: Schema.array(Rate())
-		.default([
-			{
-				provider: "cloudflare-workers-ai",
-				model: "@cf/zai-org/glm-5.3-flash",
-				input: 0.15,
-				output: 0.5,
-				cacheRead: 0.03,
-			},
-			{
-				provider: "cloudflare-workers-ai",
-				model: "@cf/deepseek-ai/deepseek-v4.1-flash-1017",
-				input: 0.3,
-				output: 1.2,
-				cacheRead: 0.006,
-			},
-			{
-				provider: "cloudflare-workers-ai",
-				model: "@cf/deepseek-ai/deepseek-v4-flash-0731",
-				input: 0.44,
-				output: 1.32,
-				cacheRead: 0.044,
-			},
-		])
+		.default(DefaultPrices)
 		.description("The effective-dated price book, per million tokens; a change appends a row."),
 	modifiers: Schema.array(Modifier())
-		.default([
-			{
-				provider: "cloudflare-workers-ai",
-				kind: "batch",
-				value: "shipped-batch",
-				multiplier: 0.5,
-				effectiveFrom: "2026-01-01",
-			},
-			{
-				provider: "cloudflare-workers-ai",
-				kind: "flex",
-				value: "shipped-flex",
-				multiplier: 0.5,
-				effectiveFrom: "2026-01-01",
-			},
-			{
-				provider: "cloudflare-workers-ai",
-				kind: "priority",
-				value: "shipped-priority",
-				multiplier: 2,
-				effectiveFrom: "2026-01-01",
-			},
-			{
-				provider: "cloudflare-workers-ai",
-				kind: "ultrafast",
-				value: "shipped-ultrafast",
-				multiplier: 6,
-				effectiveFrom: "2026-01-01",
-			},
-		])
+		.default(DefaultModifiers)
 		.description(
 			"The effective-dated modifier rows (section 17.2); a row multiplies the priced total of a call in its pricing mode.",
 		),
 	priceWindows: Schema.array(PriceWindow())
-		.default([])
+		.default(DefaultPriceWindows)
 		.description(
 			"The time-of-day windows a price row's Window column resolves against; empty means every call is any-window.",
 		),
-	log: Schema.boolean().default(true).description("Write the plugin's own diagnostic log file."),
+	log: Schema.boolean()
+		.default(DefaultLog)
+		.volatile()
+		.description("Write the plugin's own diagnostic log file."),
 	logFile: Schema.string()
-		.default("~/.dsh/cost/cost.log")
+		.default(Home(["cost", "cost.log"]))
 		.description("Path of the diagnostic log; a leading tilde expands to the home directory."),
 });

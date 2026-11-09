@@ -75,7 +75,7 @@ import BuildNote, { Prepend } from "./Note.js";
 import RecallHistory from "./RecallHistory.js";
 import Record from "./Record.js";
 import Recover from "./Recover.js";
-import Storage from "./Storage.js";
+import Storage, { Close } from "./Storage.js";
 
 /** Fresh per-agent memory. */
 const FreshMemory = (): AgentMemory => ({
@@ -223,16 +223,10 @@ export default (Context: Context, Options: Config): void => {
 			Context.effect?.(() => {
 				State.Pending = State.Pending.then(() => Storage(State, Facility));
 				return () => {
-					const Handle = State.Handle;
-					State.Handle = undefined;
-					switch (true) {
-						case !!Handle:
-							void Handle.close().catch(() => {
-								/* close best-effort */
-							});
-							break;
-						default:
-					}
+					// The disposer (Function/Storage's Close): close the open
+					// handle best-effort, never rethrown; after it the JSON
+					// fallback is the whole persistence path again.
+					Close(State);
 				};
 			}, "replay-history-storage");
 			break;

@@ -28,21 +28,27 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-reflect.log";
+const DefaultEnabled = false;
+// The default rename scope: "block" renames inside the operation's span
+// only; "file" renames whole-word across the whole file (the one-call
+// bundling of the affected references). The operation's own `scope`
+// field overrides this default.
+const DefaultPropagate = "block";
+// Files larger than this are refused (`rejected <path> (file too large)`)
+// - the operation reads the whole file into memory to transform it.
+const DefaultMaxFileBytes = 1000000;
+// A replace/rename span wider than this many lines is refused
+// (`rejected <path> (span too large)`) - the span guard against a
+// whole-file replacement smuggled in as a "block" operation.
+const DefaultMaxBlockLines = 5000;
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-workspace-reflect.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
-	// The default rename scope: "block" renames inside the operation's span
-	// only; "file" renames whole-word across the whole file (the one-call
-	// bundling of the affected references). The operation's own `scope`
-	// field overrides this default.
-	propagate: Schema.union(["block", "file"]).default("block").volatile(),
-	// Files larger than this are refused (`rejected <path> (file too large)`)
-	// - the operation reads the whole file into memory to transform it.
-	maxFileBytes: Schema.number().default(1000000).volatile(),
-	// A replace/rename span wider than this many lines is refused
-	// (`rejected <path> (span too large)`) - the span guard against a
-	// whole-file replacement smuggled in as a "block" operation.
-	maxBlockLines: Schema.number().default(5000).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	propagate: Schema.union(["block", "file"]).default(DefaultPropagate).volatile(),
+	maxFileBytes: Schema.number().default(DefaultMaxFileBytes).volatile(),
+	maxBlockLines: Schema.number().default(DefaultMaxBlockLines).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. The reflect's gated
 	// actions are the WRITES - a replace or a rename - so `write` defaults to
 	// `approve` and the operation waits for the user (the documented

@@ -62,9 +62,14 @@ const DEFAULT_DENY = [
 // explicitly.
 const DEFAULT_ALLOW = ["status", "log", "diff", "show", "rev-parse", "ls-files", "fetch"];
 
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-gitguard.log";
+const DefaultEnabled = false;
+const DefaultStrict = false;
+const DefaultExclude: string[] = [];
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-gitguard.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The deny-list: the git subcommands that are always refused. Setting
 	// the field REPLACES the default list (not merge).
 	denyPatterns: Schema.array(Schema.string()).default(DEFAULT_DENY).volatile(),
@@ -72,10 +77,10 @@ export default Compose(false, {
 	allowPatterns: Schema.array(Schema.string()).default(DEFAULT_ALLOW).volatile(),
 	// Strict mode: deny EVERY git command (the plan's "deny ALL git
 	// commands vs deny-list only" - default deny-list).
-	strict: Schema.boolean().default(false).volatile(),
+	strict: Schema.boolean().default(DefaultStrict).volatile(),
 	// The paths the guard ignores (the factory's segment match): a dispatch
 	// whose working directory matches skips the guard entirely.
-	exclude: Schema.array(Schema.string()).default([]).volatile(),
+	exclude: Schema.array(Schema.string()).default(DefaultExclude).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. The guard itself is a
 	// READ-ONLY gate (it never writes, commits or spawns), so its own action
 	// classes are `read` (the classification) and `record` (the denial

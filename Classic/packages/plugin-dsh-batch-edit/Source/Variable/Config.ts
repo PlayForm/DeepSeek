@@ -28,25 +28,34 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-batch-edit.log";
+const DefaultEnabled = false;
+const DefaultMachinesPerAgent = 2;
+const DefaultOpsPerCommit = 64;
+const DefaultDeadlineMs = 120000;
+const DefaultStrictMode = false;
+const DefaultInterceptBash = false;
+const DefaultMonitorChecksets: string[] = [];
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-batch-edit.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The per-agent machine capacity (the planted-board lease semantics).
-	machinesPerAgent: Schema.number().default(2).volatile(),
+	machinesPerAgent: Schema.number().default(DefaultMachinesPerAgent).volatile(),
 	// The op-line cap per commit; larger batches use the opfile path (the
 	// [live-report] ingest precedent, no schema limit).
-	opsPerCommit: Schema.number().default(64).volatile(),
+	opsPerCommit: Schema.number().default(DefaultOpsPerCommit).volatile(),
 	// The in-line deadline, capped at 120000 (the composition contract); the
 	// schema accepts 1000..120000 and validation fails loud outside it.
-	deadlineMs: Schema.number().default(120000).volatile(),
+	deadlineMs: Schema.number().default(DefaultDeadlineMs).volatile(),
 	// Search-not-found: error the file (true) or skip the op (false).
-	strictMode: Schema.boolean().default(false).volatile(),
+	strictMode: Schema.boolean().default(DefaultStrictMode).volatile(),
 	// The advisory bash intercept: OFF in v1 (never denies; enforcement
 	// stays out of scope for this plugin).
-	interceptBash: Schema.boolean().default(false).volatile(),
+	interceptBash: Schema.boolean().default(DefaultInterceptBash).volatile(),
 	// Per-file check-set names (the live containers' monitor vocabulary,
 	// reused as labels in v1).
-	monitorChecksets: Schema.array(Schema.string()).default([]).volatile(),
+	monitorChecksets: Schema.array(Schema.string()).default(DefaultMonitorChecksets).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist, the OUTER gate in front
 	// of an apply - `write` defaults to `approve`, so a commit refuses before
 	// planning or writing (the documented `apply refused` line) until the user

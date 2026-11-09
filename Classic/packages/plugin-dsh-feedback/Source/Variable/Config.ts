@@ -5,7 +5,8 @@
 // The class plugin (`export default class Feedback extends Service`) carries
 // this schema as a static `Config` (the registry applies a plugin's standard
 // schema to the config before the class is constructed - registry.d.ts
-// Plugin.Base). No volatile cells here: the class form has no factory State
+// Plugin.Base). Volatile cells here are the two universal ones (`enabled`,
+// `logFile`): the class form has no factory State
 // to hot-refresh, so a config edit reloads the plugin (the PO C decision is
 // recorded in SCHEME.md).
 //
@@ -17,17 +18,28 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultEnabled = true;
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-feedback.log";
+const DefaultMaxBlockBytes = 4096;
+const DefaultMaxChain = 8;
+const DefaultMaxSessions = 128;
+const DefaultSummaryTerms = 10;
+const DefaultMaxOutcomes = 16;
+
 export default Schema.object({
-	enabled: Schema.boolean().default(true),
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-feedback.log"),
-	maxBlockBytes: Schema.number().default(4096),
-	maxChain: Schema.number().default(8),
-	maxSessions: Schema.number().default(128),
-	summaryTerms: Schema.number().default(10),
+	// The class form has no factory State to hot-refresh, so these stay plain
+	// values: a volatile cell would reach the service as a `{ get() }` object
+	// and `Config.enabled` would read as truthy forever.
+	enabled: Schema.boolean().default(DefaultEnabled),
+	logFile: Schema.string().default(DefaultLogFile),
+	maxBlockBytes: Schema.number().default(DefaultMaxBlockBytes),
+	maxChain: Schema.number().default(DefaultMaxChain),
+	maxSessions: Schema.number().default(DefaultMaxSessions),
+	summaryTerms: Schema.number().default(DefaultSummaryTerms),
 	// The per-session batch-outcome ring bound: the orchestration layer's
 	// apply outcomes (applied / rejected / denied / expired) are appended to
 	// the session's summary and bounded here.
-	maxOutcomes: Schema.number().default(16),
+	maxOutcomes: Schema.number().default(DefaultMaxOutcomes),
 	// THE POLICY BLOCK (D6): the per-action allowlist, the shared factory
 	// block composed into this schema. The feedback member is a PASSIVE
 	// collector: it records outcomes and suggests summaries (`record` and

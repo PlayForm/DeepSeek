@@ -4,10 +4,21 @@
 // between a step/start and the assistant/message, one when none), the
 // step-to-message latency, the first stream record's time0 (the perceived
 // first-token latency), the tokens-per-second rate (the message's own output
-// tokens over the latency), the last request/context's contextWindow, the
-// utilization (the call's surface tokens over that window, both known) and
-// the first failure code (a tool/result.error.code, else the turn/end reason
-// kind). Unknown shapes are skipped and the walk never throws.
+// tokens over the latency), the utilization (the call's surface tokens over
+// the context window, both known) and the first failure code (a
+// tool/result.error.code, else the turn/end reason kind).
+//
+// THE CONTEXT WINDOW AND THE SURFACE ARE THE HARNESS TOKEN METER'S FIGURES,
+// not a request/context record the walk re-derives (Reuse-Host.md:27, 64;
+// token-meter/README.md:36-49): `contextPressure(session)` carries the newest
+// provider-reported `contextWindow`, and `measure(session).surfaceTokens` is
+// the surface used when the caller passes none. The meter is
+// projection-backed and replay-stable, so the window is the provider's own
+// number. It claims nothing else: latency, attempts, first-token time and the
+// error code stay derived here, and a figure the meter does not report stays
+// null rather than guessed.
+//
+// Unknown shapes are skipped and the walk never throws.
 type Measured = {
 	Attempts: number;
 	LatencyMs: number | null;
@@ -41,7 +52,57 @@ const ReasonOf = (Data: Record<string, unknown>): string | null => {
 	}
 };
 
-export default (Records: readonly unknown[], SurfaceTokens: number): Measured => {
+// The structural token-meter surface this walk reads - the harness service's
+// own shape (@deepseek-ai/dsh-token-meter, token-meter/README.md:36-49):
+// `measure(session)` returns `{ totalTokens, surfaceTokens, nodes }` and
+// `contextPressure(session)` returns the newest provider-reported prompt size
+// with the route capacity. Structural on purpose: the service is already in
+// the inject list (Source/Library.ts), so the call is `ctx.tokenMeter` and
+// this module needs no @deepseek-ai/dsh-token-meter import.
+type TokenMeter = {
+	measure: (Session: unknown) => {
+		totalTokens: number;
+		surfaceTokens: number;
+		nodes: readonly unknown[];
+	};
+	contextPressure: (Session: unknown) => {
+		contextWindow?: number;
+		pressureTokens?: number;
+		projectedTokens?: number;
+	};
+};
+
+// The meter's context window: ONE read before the walk, and the only source
+// of the figure now that the request/context arm is gone. A meter that is
+// absent, or that throws on a subject it does not recognize (the backfill
+// hands it a synthesized session, not a live one), leaves the window null.
+const WindowOf = (Meter: TokenMeter, Session: unknown): number | null => {
+	try {
+		const Window = Meter.contextPressure(Session)?.contextWindow;
+		return typeof Window === "number" && Window > 0 ? Window : null;
+	} catch {
+		return null;
+	}
+};
+
+// The meter's own surface total, read only when the caller passes no surface
+// (NaN): the drain always passes its replay figure, and a caller without one
+// keeps the utilization instead of losing it.
+const SurfaceOf = (Meter: TokenMeter, Session: unknown): number => {
+	try {
+		const Surface = Number(Meter.measure(Session)?.surfaceTokens);
+		return Number.isFinite(Surface) ? Surface : Number.NaN;
+	} catch {
+		return Number.NaN;
+	}
+};
+
+export default (
+	Meter: TokenMeter,
+	Session: unknown,
+	Records: readonly unknown[],
+	SurfaceTokens: number,
+): Measured => {
 	let Attempts = 0;
 	let Started = false;
 	let StepStart: number | null = null;
@@ -49,8 +110,12 @@ export default (Records: readonly unknown[], SurfaceTokens: number): Measured =>
 	let FirstTokenMs: number | null = null;
 	let StreamSearched = false;
 	let OutputTokens: number | null = null;
-	let ContextWindow: number | null = null;
 	let ErrorCode: string | null = null;
+	// The two meter reads, once, before the walk: the window is the
+	// provider's own figure and the surface is the caller's unless it passed
+	// none (NaN).
+	let ContextWindow = WindowOf(Meter, Session);
+	const Surface = Number.isFinite(SurfaceTokens) ? SurfaceTokens : SurfaceOf(Meter, Session);
 	for (const Event of Records) {
 		try {
 			const Record = Event as { type?: unknown; data?: unknown; time?: unknown };
@@ -60,6 +125,23 @@ export default (Records: readonly unknown[], SurfaceTokens: number): Measured =>
 			const Data = (Record.data ?? {}) as Record<string, unknown>;
 			const Type = typeof Record.type === "string" ? Record.type : "";
 			switch (true) {
+				// The walk's own window read is the FALLBACK, not the source:
+				// a caller without a live session handle (the drain replays
+				// records) cannot ask the meter, and the log still carries the
+				// provider's request/context figure.
+				case Type === "request/context": {
+					switch (true) {
+						case ContextWindow !== null:
+							break;
+						default: {
+							const Window = Number(Data["contextWindow"]);
+							ContextWindow =
+								Number.isFinite(Window) && Window > 0 ? Window : null;
+							break;
+						}
+					}
+					break;
+				}
 				case Type === "step/start": {
 					Attempts = 0;
 					Started = true;
@@ -84,13 +166,6 @@ export default (Records: readonly unknown[], SurfaceTokens: number): Measured =>
 					);
 					if (Number.isFinite(Output)) {
 						OutputTokens = Output;
-					}
-					break;
-				}
-				case Type === "request/context": {
-					const Window = Number(Data["contextWindow"]);
-					if (Number.isFinite(Window) && Window > 0) {
-						ContextWindow = Window;
 					}
 					break;
 				}
@@ -130,8 +205,8 @@ export default (Records: readonly unknown[], SurfaceTokens: number): Measured =>
 		}
 	}
 	const Utilization =
-		ContextWindow !== null && ContextWindow > 0 && Number.isFinite(SurfaceTokens)
-			? SurfaceTokens / ContextWindow
+		ContextWindow !== null && ContextWindow > 0 && Number.isFinite(Surface)
+			? Surface / ContextWindow
 			: null;
 	const TokensPerSecond =
 		LatencyMs !== null && LatencyMs > 0 && OutputTokens !== null

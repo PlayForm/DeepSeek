@@ -28,21 +28,27 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-approve.log";
+const DefaultEnabled = false;
+const DefaultDomain = "workspace_approve";
+const DefaultMaxBindings = 1000;
+const DefaultRequireConstraints = true;
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-workspace-approve.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The KV domain name (the hook's OWN domain - a new domain name has no
 	// collision and the hook owns its record schema).
-	domain: Schema.string().default("workspace_approve").volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
 	// The bound-ring capacity: the last maxBindings bindings survive in the
 	// meta record (the eviction disposition `evict`, applied FIFO on the
 	// ring - never silently, the drop is ledgered).
-	maxBindings: Schema.number().default(1000).volatile(),
+	maxBindings: Schema.number().default(DefaultMaxBindings).volatile(),
 	// The constraint law: when true (the default), a bind request without at
 	// least one constraint is rejected - the constraints travel with the
 	// approval, so an approval without a stated constraint set is not an
 	// approval.
-	requireConstraints: Schema.boolean().default(true).volatile(),
+	requireConstraints: Schema.boolean().default(DefaultRequireConstraints).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. This hook's action
 	// class is RECORD - every service call records a binding (or a decision
 	// about one) - and it is AUTOMATIC, so this package has NO gated action:

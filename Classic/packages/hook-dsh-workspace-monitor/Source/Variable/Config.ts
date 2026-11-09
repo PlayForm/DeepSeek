@@ -29,29 +29,38 @@ import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 import DefaultCheckSets from "@Variable/DefaultCheckSets.js";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-monitor.log";
+const DefaultEnabled = false;
+const DefaultDomain = "workspace_monitor";
+const DefaultDebounceMs = 250;
+const DefaultSweepIntervalMs = 600000;
+const DefaultMaxWatch = 500;
+const DefaultInclude: string[] = [];
+const DefaultExclude = ["node_modules/**", "**/Target/**", "**/.git/**"];
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-workspace-monitor.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The KV domain name reserved for the hook (its own domain name, no
 	// collision, the hook owns its record schema).
-	domain: Schema.string().default("workspace_monitor").volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
 	// The watch-to-sweep debounce window (clock-based; the deadline scan
 	// runs at the event-driven checkpoints, never a real timer).
-	debounceMs: Schema.number().default(250).volatile(),
+	debounceMs: Schema.number().default(DefaultDebounceMs).volatile(),
 	// The sweep cadence: how long an entry waits after a sweep before it
 	// becomes sweepable again. 0 sweeps at every checkpoint.
-	sweepIntervalMs: Schema.number().default(600000).volatile(),
+	sweepIntervalMs: Schema.number().default(DefaultSweepIntervalMs).volatile(),
 	// The watch bound: the newest maxWatch entries survive (the oldest is
 	// dropped and the drop ledgered).
-	maxWatch: Schema.number().default(500).volatile(),
+	maxWatch: Schema.number().default(DefaultMaxWatch).volatile(),
 	// The optional allowlist. Default EMPTY - every path watches; a
 	// non-empty list restricts watching to matching paths
 	// (reason `not included`).
-	include: Schema.array(Schema.string()).default([]).volatile(),
+	include: Schema.array(Schema.string()).default(DefaultInclude).volatile(),
 	// The excluded path patterns (the hook's own match via the factory's
 	// segment match).
 	exclude: Schema.array(Schema.string())
-		.default(["node_modules/**", "**/Target/**", "**/.git/**"])
+		.default(DefaultExclude)
 		.volatile(),
 	// The check-set classification table: the shipped catalog is the
 	// default, so classification works out of the box; an override replaces

@@ -1,0 +1,45 @@
+{
+	"name": "@playform/lib-dsh-bundle",
+	"version": "0.2.1",
+	"private": false,
+	"description": "The BUNDLE: the build tooling of the UI family (@playform/lib-dsh-bundle) - the harness client-bundle envelope (window.__ModuleLoader__.load({ id, factory(require) })) and the stylesheet compile, the two steps every UI package's build calls from its own package-local script. A package takes it as a devDependency, so a standalone install builds the same bundle the monorepo does and no plugin reaches into Maintain/. It owns no runtime, no ledger string and no loader contract - the CLASSIC build of the classical group. Usable outside the harness entirely (the PlayForm ecosystem).",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"dependencies": {
+		"esbuild": "0.28.2",
+		"sass-embedded": "1.106.1"
+	},
+	"devDependencies": {
+		"@playform/build": "0.3.5",
+		"@types/node": "26.6.6",
+		"tsc-alias": "1.9.10",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	}
+}

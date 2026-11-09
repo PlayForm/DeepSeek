@@ -19,19 +19,25 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-workspace-audit.log";
+const DefaultEnabled = false;
+const DefaultDomain = "workspace_audit";
+const DefaultMaxLines = 2000;
+const DefaultExclude = ["node_modules/**", "**/Target/**", "**/.git/**"];
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-workspace-audit.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The KV domain name (the hook's own domain - the accountability
 	// records; a NEW domain, never an extension record in the shared
 	// package_governance one).
-	domain: Schema.string().default("workspace_audit").volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
 	// The ring bound: the last maxLines audit lines survive in the meta record.
-	maxLines: Schema.number().default(2000).volatile(),
+	maxLines: Schema.number().default(DefaultMaxLines).volatile(),
 	// The excluded path patterns (the factory's segment match). Default: the
 	// family's standard triple.
 	exclude: Schema.array(Schema.string())
-		.default(["node_modules/**", "**/Target/**", "**/.git/**"])
+		.default(DefaultExclude)
 		.volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. This hook's action
 	// class is RECORD - every line and every assessment is recorded - and it

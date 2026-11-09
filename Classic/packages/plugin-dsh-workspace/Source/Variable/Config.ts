@@ -24,29 +24,42 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace.log";
+const DefaultEnabled = false;
+const DefaultMapDepth = 2;
+const DefaultMapMaxModules = 20;
+const DefaultFindLimit = 50;
+const DefaultFindLimitMax = 500;
+const DefaultExpandDepth = 1;
+const DefaultExpandMaxNeighbors = 50;
+const DefaultPacketTokenBudget = 2000;
+const DefaultPacketTokenMax = 4000;
+const DefaultTokenCharsPerToken = 4;
+const DefaultKinds: Array<"File" | "Symbol" | "Block" | "Test" | "DocSection"> = [];
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-workspace.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The workspace_map knobs (V4-1 §3.4: the top-level modules, depth).
-	mapDepth: Schema.number().default(2).volatile(),
-	mapMaxModules: Schema.number().default(20).volatile(),
+	mapDepth: Schema.number().default(DefaultMapDepth).volatile(),
+	mapMaxModules: Schema.number().default(DefaultMapMaxModules).volatile(),
 	// The workspace_find knobs (the limits match the graph service's own
 	// contract defaults: limitDefault 50, limitMaximum 500, W1 §4.5).
-	findLimit: Schema.number().default(50).volatile(),
-	findLimitMax: Schema.number().default(500).volatile(),
+	findLimit: Schema.number().default(DefaultFindLimit).volatile(),
+	findLimitMax: Schema.number().default(DefaultFindLimitMax).volatile(),
 	// The workspace_expand knobs (the graph caps depth at 3, W1 §4.3).
-	expandDepth: Schema.number().default(1).volatile(),
-	expandMaxNeighbors: Schema.number().default(50).volatile(),
+	expandDepth: Schema.number().default(DefaultExpandDepth).volatile(),
+	expandMaxNeighbors: Schema.number().default(DefaultExpandMaxNeighbors).volatile(),
 	// The workspace_context packet budget (V4-1 §3.5: target 2k tokens, the
 	// hard cap configurable). No token counter is injected in v0 - the budget
 	// is enforced through the characters-per-token estimate, honest and
 	// documented in the SCHEME.
-	packetTokenBudget: Schema.number().default(2000).volatile(),
-	packetTokenMax: Schema.number().default(4000).volatile(),
-	tokenCharsPerToken: Schema.number().default(4).volatile(),
+	packetTokenBudget: Schema.number().default(DefaultPacketTokenBudget).volatile(),
+	packetTokenMax: Schema.number().default(DefaultPacketTokenMax).volatile(),
+	tokenCharsPerToken: Schema.number().default(DefaultTokenCharsPerToken).volatile(),
 	// The node kinds filter (empty = all kinds).
 	kinds: Schema.array(Schema.union(["File", "Symbol", "Block", "Test", "DocSection"]))
-		.default([])
+		.default(DefaultKinds)
 		.volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. The workspace agent's
 	// actions are READ-ONLY (automatic), so this package has NO gated action:

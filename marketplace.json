@@ -4,7 +4,7 @@
 		"en": "DSH Family @ PlayForm"
 	},
 	"description": {
-		"en": "The PlayForm DeepSeek Harness plugin family: 125 packages across the Classic TypeScript and Effect-TS trees."
+		"en": "The PlayForm DeepSeek Harness plugin family: 126 packages across the Classic TypeScript and Effect-TS trees."
 	},
 	"metadata": {
 		"categories": {
@@ -84,11 +84,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794205091,
+					"publishTimestamp": 1794206379,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b6831c14ec5ab53e587e37a02c957e29689010e3",
+						"commit": "95f13b0eed37802bf4740ebbb650f1e6436d8093",
 						"path": "Classic/packages/client-dsh-panel-cost"
 					},
 					"engines": {}
@@ -340,11 +340,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794205091,
+					"publishTimestamp": 1794206379,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b6831c14ec5ab53e587e37a02c957e29689010e3",
+						"commit": "95f13b0eed37802bf4740ebbb650f1e6436d8093",
 						"path": "EffectTS/packages/ets-client-dsh-panel-family"
 					},
 					"engines": {}
@@ -5122,6 +5122,46 @@
 			]
 		},
 		{
+			"name": "@playform/lib-dsh-bundle",
+			"title": {
+				"en": "Bundle"
+			},
+			"description": {
+				"en": "The BUNDLE: the build tooling of the UI family (@playform/lib-dsh-bundle) - the harness client-bundle envelope (window.__ModuleLoader__.load({ id, factory(require) })) and the stylesheet compile, the two steps every UI package's build..."
+			},
+			"icon": "Icon/lib-dsh-bundle.svg",
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/lib-dsh-bundle"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"bundle",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1794206379,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "95f13b0eed37802bf4740ebbb650f1e6436d8093",
+						"path": "Classic/packages/lib-dsh-bundle"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
 			"name": "@playform/lib-dsh-conversation",
 			"title": {
 				"en": "Conversation"
@@ -6605,11 +6645,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794202912,
+					"publishTimestamp": 1794206379,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "53d344b219d3b1abc87c98b9c5bd74a16ad7f08e",
+						"commit": "95f13b0eed37802bf4740ebbb650f1e6436d8093",
 						"path": "Classic/packages/style-dsh-material"
 					},
 					"engines": {}

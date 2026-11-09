@@ -35,15 +35,33 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-normalize-file.log";
+const DefaultReplacement = "-";
+const DefaultScopeConversation = true;
+const DefaultScopeReasoning = true;
+const DefaultScopeToolInput = false;
+const DefaultScopeToolResults = false;
+const DefaultScopeFiles = true;
+const DefaultScopeBatch = false;
+const DefaultToolResultsExempt = [
+	"read",
+	"edit",
+	"raw-write",
+	"normalize-file",
+	"ccr_retrieve",
+	"subagent",
+	"ask_user_question",
+];
+
 export default Compose(false, {
 	// Ledger file - the file-flavor ledger, SEPARATE from the family's
 	// logs (one log per module) - volatile: hot-editable without remounting
 	// (overrides the minimal shared block's empty default).
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-normalize-file.log").volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The dash replacement - the transform's ONLY knob. ASCII hyphen-minus by
 	// default (the transform's literal `-`). Volatile: hot-editable; the
 	// next tool call picks it up with no remount.
-	replacement: Schema.string().default("-").volatile(),
+	replacement: Schema.string().default(DefaultReplacement).volatile(),
 	// Granular scope gates - ALL volatile (live toggling, no remount):
 	// conversation=text/block-end, reasoning=its sub-gate, toolInput=tool-call
 	// arguments arm, toolResults=tools/post-execute arm, files=the
@@ -56,12 +74,12 @@ export default Compose(false, {
 	// enclosing volatile field): one leaf change commits one update whose
 	// whole object the State's refresh listener re-reads.
 	scopes: Schema.object({
-		conversation: Schema.boolean().default(true),
-		reasoning: Schema.boolean().default(true),
-		toolInput: Schema.boolean().default(false),
-		toolResults: Schema.boolean().default(false),
-		files: Schema.boolean().default(true),
-		batch: Schema.boolean().default(false),
+		conversation: Schema.boolean().default(DefaultScopeConversation),
+		reasoning: Schema.boolean().default(DefaultScopeReasoning),
+		toolInput: Schema.boolean().default(DefaultScopeToolInput),
+		toolResults: Schema.boolean().default(DefaultScopeToolResults),
+		files: Schema.boolean().default(DefaultScopeFiles),
+		batch: Schema.boolean().default(DefaultScopeBatch),
 	}).volatile(),
 	// Tool-results exemption list (the name-exempt precedent of the core's
 	// stream gate, made configurable): a tool result whose exec name is listed
@@ -70,14 +88,6 @@ export default Compose(false, {
 	// retrieval contract, subagent/ask_user_question carry prompt material
 	// matched verbatim.
 	toolResultsExempt: Schema.array(Schema.string())
-		.default([
-			"read",
-			"edit",
-			"raw-write",
-			"normalize-file",
-			"ccr_retrieve",
-			"subagent",
-			"ask_user_question",
-		])
+		.default(DefaultToolResultsExempt)
 		.volatile(),
 });

@@ -21,25 +21,37 @@ import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 import DefaultLens from "@Variable/DefaultLens.js";
 
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-context.log";
+const DefaultEnabled = false;
+// The budget: target 2k tokens (V4-1 section 3.5), hard cap configurable.
+const DefaultBudgetTokens = 2000;
+const DefaultBudgetMaximum = 4000;
+const DefaultLensDefault = "code";
+// The packet shape caps.
+const DefaultNeighborLimit = 20;
+const DefaultEvidenceLimit = 12;
+const DefaultMapLimit = 12;
+// The workspace header name.
+const DefaultWorkspaceName = "workspace";
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-workspace-context.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
-	// The budget: target 2k tokens (V4-1 section 3.5), hard cap configurable.
-	budgetTokens: Schema.number().default(2000).volatile(),
-	budgetMaximum: Schema.number().default(4000).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	budgetTokens: Schema.number().default(DefaultBudgetTokens).volatile(),
+	budgetMaximum: Schema.number().default(DefaultBudgetMaximum).volatile(),
 	// The lenses: the catalog names the packet can be built through; the
 	// default is the full shipped catalog.
 	lenses: Schema.array(Schema.string())
 		.default(DefaultLens.map((Lens) => Lens.name))
 		.volatile(),
 	// The lens used when the caller names none.
-	lensDefault: Schema.string().default("code").volatile(),
+	lensDefault: Schema.string().default(DefaultLensDefault).volatile(),
 	// The packet shape caps.
-	neighborLimit: Schema.number().default(20).volatile(),
-	evidenceLimit: Schema.number().default(12).volatile(),
-	mapLimit: Schema.number().default(12).volatile(),
+	neighborLimit: Schema.number().default(DefaultNeighborLimit).volatile(),
+	evidenceLimit: Schema.number().default(DefaultEvidenceLimit).volatile(),
+	mapLimit: Schema.number().default(DefaultMapLimit).volatile(),
 	// The workspace header name.
-	workspaceName: Schema.string().default("workspace").volatile(),
+	workspaceName: Schema.string().default(DefaultWorkspaceName).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist. The context service's
 	// actions are READ-ONLY (automatic), so this package has NO gated action:
 	// it never writes a file, commits a batch or spawns an agent, and no

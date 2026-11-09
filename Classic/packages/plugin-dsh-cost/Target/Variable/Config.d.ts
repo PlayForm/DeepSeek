@@ -1,6 +1,6 @@
 import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
-    enabled: Schema<boolean, boolean, "defined">;
+    enabled: Schema<boolean, boolean, "volatile-defined">;
     databasePath: Schema<string, string, "defined">;
     currency: Schema<string, string, "defined">;
     client: Schema<string, string, "defined">;
@@ -83,10 +83,10 @@ declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
         startUtcHour: Schema<number, number, "defined">;
         endUtcHour: Schema<number, number, "defined">;
     }>>[], "defined">;
-    log: Schema<boolean, boolean, "defined">;
+    log: Schema<boolean, boolean, "volatile-defined">;
     logFile: Schema<string, string, "defined">;
 }>>, Schemastery.ObjectT<NoInfer<{
-    enabled: Schema<boolean, boolean, "defined">;
+    enabled: Schema<boolean, boolean, "volatile-defined">;
     databasePath: Schema<string, string, "defined">;
     currency: Schema<string, string, "defined">;
     client: Schema<string, string, "defined">;
@@ -169,7 +169,7 @@ declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
         startUtcHour: Schema<number, number, "defined">;
         endUtcHour: Schema<number, number, "defined">;
     }>>[], "defined">;
-    log: Schema<boolean, boolean, "defined">;
+    log: Schema<boolean, boolean, "volatile-defined">;
     logFile: Schema<string, string, "defined">;
 }>>, "plain">;
 export default _default;

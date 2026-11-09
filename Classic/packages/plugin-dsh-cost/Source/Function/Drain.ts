@@ -138,6 +138,12 @@ const Identify = (Session: unknown, Records: readonly EventRecord[]): string | u
 };
 
 export default (Context: Context, Database: DatabaseSync, Config: Config) => {
+	// The harness token meter, probed once for the telemetry reads: an absent
+	// service is a handle whose session-scoped calls throw and are contained
+	// by Telemetry's own never-throw guards.
+	const Meter = (Context as unknown as Record<string, unknown>)["tokenMeter"] as Parameters<
+		typeof Telemetry
+	>[0];
 	// The estimator: the harness token meter's estimateMessage where probed
 	// (the design document's estimator for replay). An absent or throwing
 	// meter prices every message at zero, which empties the per-file masses
@@ -703,7 +709,16 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 							// the context window and its utilization, the
 							// failure code - and the tokens-per-second rate
 							// from the call's own output tokens over it.
-							const Measured = Telemetry(Records.slice(0, Index + 1), Surface);
+							// The drain replays records without a live session
+							// handle, so the meter's session-scoped reads are
+							// skipped here and the walk's own request/context
+							// arm supplies the window (the backfill case).
+							const Measured = Telemetry(
+								Meter,
+								undefined,
+								Records.slice(0, Index + 1),
+								Surface,
+							);
 							const PerSecond =
 								Measured.LatencyMs !== null && Measured.LatencyMs > 0
 									? Usage.OutputTokens / (Measured.LatencyMs / 1000)

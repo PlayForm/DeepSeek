@@ -17,29 +17,52 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultEnabled = false;
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-lesson-review.log";
+const DefaultDomain = "lesson";
+const DefaultStoragePath = "~/.dsh/lesson/usage.json";
+const DefaultIntervalTurns = 10;
+const DefaultIdleOnly = true;
+const DefaultStaleAfterDays = 14;
+const DefaultArchiveAfterDays = 30;
+const DefaultNeverUsedGraceDays = 14;
+const DefaultDigestTail = 24;
+const DefaultMaxInputChars = 120_000;
+const DefaultMaxProposals = 8;
+const DefaultConsolidate = false;
+const DefaultPromptFile = "";
+const DefaultSkillsRoot = "~/.dsh/skills";
+const DefaultArchiveRoot = "~/.dsh/skills/.archive";
+const DefaultAgreementPath = "~/.dsh/AGENTS.md";
+const DefaultReportsRoot = "~/.dsh/lesson/reports";
+const DefaultPendingPath = "~/.dsh/lesson/pending.jsonl";
+const DefaultProvider = "";
+const DefaultModel = "";
+const DefaultMaxTokens = 4000;
+
 export default Compose(false, {
-	enabled: Schema.boolean().default(false).volatile(),
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-lesson-review.log").volatile(),
-	domain: Schema.string().default("lesson").volatile(),
-	storagePath: Schema.string().default("~/.dsh/lesson/usage.json").volatile(),
-	intervalTurns: Schema.number().default(10).volatile(),
-	idleOnly: Schema.boolean().default(true).volatile(),
-	staleAfterDays: Schema.number().default(14).volatile(),
-	archiveAfterDays: Schema.number().default(30).volatile(),
-	neverUsedGraceDays: Schema.number().default(14).volatile(),
-	digestTail: Schema.number().default(24).volatile(),
-	maxInputChars: Schema.number().default(120_000).volatile(),
-	maxProposals: Schema.number().default(8).volatile(),
-	consolidate: Schema.boolean().default(false).volatile(),
-	promptFile: Schema.string().default("").volatile(),
-	skillsRoot: Schema.string().default("~/.dsh/skills").volatile(),
-	archiveRoot: Schema.string().default("~/.dsh/skills/.archive").volatile(),
-	agreementPath: Schema.string().default("~/.dsh/AGENTS.md").volatile(),
-	reportsRoot: Schema.string().default("~/.dsh/lesson/reports").volatile(),
-	pendingPath: Schema.string().default("~/.dsh/lesson/pending.jsonl").volatile(),
-	provider: Schema.string().default("").volatile(),
-	model: Schema.string().default("").volatile(),
-	maxTokens: Schema.number().default(4000).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	domain: Schema.string().default(DefaultDomain).volatile(),
+	storagePath: Schema.string().default(DefaultStoragePath).volatile(),
+	intervalTurns: Schema.number().default(DefaultIntervalTurns).volatile(),
+	idleOnly: Schema.boolean().default(DefaultIdleOnly).volatile(),
+	staleAfterDays: Schema.number().default(DefaultStaleAfterDays).volatile(),
+	archiveAfterDays: Schema.number().default(DefaultArchiveAfterDays).volatile(),
+	neverUsedGraceDays: Schema.number().default(DefaultNeverUsedGraceDays).volatile(),
+	digestTail: Schema.number().default(DefaultDigestTail).volatile(),
+	maxInputChars: Schema.number().default(DefaultMaxInputChars).volatile(),
+	maxProposals: Schema.number().default(DefaultMaxProposals).volatile(),
+	consolidate: Schema.boolean().default(DefaultConsolidate).volatile(),
+	promptFile: Schema.string().default(DefaultPromptFile).volatile(),
+	skillsRoot: Schema.string().default(DefaultSkillsRoot).volatile(),
+	archiveRoot: Schema.string().default(DefaultArchiveRoot).volatile(),
+	agreementPath: Schema.string().default(DefaultAgreementPath).volatile(),
+	reportsRoot: Schema.string().default(DefaultReportsRoot).volatile(),
+	pendingPath: Schema.string().default(DefaultPendingPath).volatile(),
+	provider: Schema.string().default(DefaultProvider).volatile(),
+	model: Schema.string().default(DefaultModel).volatile(),
+	maxTokens: Schema.number().default(DefaultMaxTokens).volatile(),
 	// THE POLICY BLOCK (D6): the per-action allowlist, the shared factory
 	// block composed into this schema. The review READS the corpus, RECORDS
 	// usage and SUGGESTS lessons (read/index/record/suggest, all automatic)

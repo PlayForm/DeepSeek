@@ -9,17 +9,26 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultEnabled = true;
+const DefaultLogFile = "~/.dsh/playform/plugin-dsh-ingester.log";
+const DefaultMaxTargets = 20;
+const DefaultStopOnConflict = true;
+const DefaultMaxProposals = 16;
+
 export default Schema.object({
-	enabled: Schema.boolean().default(true),
-	logFile: Schema.string().default("~/.dsh/playform/plugin-dsh-ingester.log"),
-	maxTargets: Schema.number().default(20),
+	// The class form has no factory State to hot-refresh, so these stay plain
+	// values: a volatile cell would reach the service as a `{ get() }` object
+	// and `Config.enabled` would read as truthy forever.
+	enabled: Schema.boolean().default(DefaultEnabled),
+	logFile: Schema.string().default(DefaultLogFile),
+	maxTargets: Schema.number().default(DefaultMaxTargets),
 	// The plan's honest-failure rule: a conflict stops at that target. The
 	// default true makes the batch all-or-nothing-past-the-conflict; false
 	// lets the apply continue and report each remaining target honestly.
-	stopOnConflict: Schema.boolean().default(true),
+	stopOnConflict: Schema.boolean().default(DefaultStopOnConflict),
 	// The recorded-proposal ring bound: the decision consumer holds the
 	// proposals it heard on `batch/proposed`, newest last, bounded.
-	maxProposals: Schema.number().default(16),
+	maxProposals: Schema.number().default(DefaultMaxProposals),
 	// THE POLICY BLOCK (D6): the per-action allowlist, the shared factory
 	// block composed into this schema. The ingester is THE WRITER of the batch
 	// flow, so its own action class is `write` - which stays the shipped

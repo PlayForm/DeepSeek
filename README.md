@@ -2,11 +2,11 @@
 
 [![release](https://img.shields.io/static/v1?label=release&message=v0.2.1&color=blue)](CHANGELOG.md)
 [![smokes](https://img.shields.io/static/v1?label=smokes&message=595%20suites%20%2F%207%2C288%20checks&color=blue)](Classic/smokes/README.md)
-[![packages](https://img.shields.io/static/v1?label=packages&message=64%20%2B%2061&color=white)](Classic/packages/)
+[![packages](https://img.shields.io/static/v1?label=packages&message=65%20%2B%2061&color=white)](Classic/packages/)
 [![license](https://img.shields.io/static/v1?label=license&message=CC0-1.0&color=lightgrey)](LICENSE)
 
-Tame the model's output and govern the project's files with one hundred and twenty-five TypeScript
-packages - 64 Classic and 61 EffectTS.
+Tame the model's output and govern the project's files with one hundred and twenty-six TypeScript
+packages - 65 Classic and 61 EffectTS.
 
 The set holds the original 14 plugins (the factory, the core, the governance trio, the seven-member
 normalize family, the two guardians and the live block) plus the 36 plugins of the 2026-10-22
@@ -47,7 +47,7 @@ setup binary.
 
 ```sh
 pnpm install --ignore-scripts
-pnpm run build:classic   # the 64 Classic packages, one workspace pass
+pnpm run build:classic   # the 65 Classic packages, one workspace pass
 pnpm run build:effect-ts # the 61 EffectTS packages
 pnpm run test            # all 595 smoke folders - the arbiter
 ```
@@ -178,7 +178,7 @@ By area:
 | The original plugins     | 14             | the factory, the governance trio, the six stream flavors + the file normalizer, ccr, tool-coach, live-containers                                                                                                                     |
 | The workspace family     | 15 + 1 library | the ten-step invisible flow: observe → semantics → operate → govern → authority → approve → merge → journal → audit → context/monitor/evidence/graph/reflect, plus `lib-dsh-workspace-live`                                          |
 | The client family        | 3              | `client-dsh-panel-family`, `client-dsh-panel-family-host`, `client-dsh-workspace-live`                                                                                                                                               |
-| The style family         | 2 + 1 twin     | `style-dsh-material` (the shared SCSS material), `lib-dsh-style` (the shared `<style>` injector) and its `ets-lib-dsh-style` twin                                                                                                    |
+| The style family         | 3 + 1 twin     | `style-dsh-material` (the shared SCSS material), `lib-dsh-style` (the shared `<style>` injector), `lib-dsh-bundle` (the build tooling) and its `ets-lib-dsh-style` twin                                                              |
 | The suggesters           | 7              | `hook-dsh-{search,edit,doc,convention,graph,replay,test}-suggester`                                                                                                                                                                  |
 | The orchestration set    | 10             | `plugin-dsh-batch-edit`, `plugin-dsh-batchstate`, `plugin-dsh-gitguard`, `plugin-dsh-route`, `plugin-dsh-queue`, `plugin-dsh-feedback`, `plugin-dsh-pass-on`, `plugin-dsh-ingester`, `plugin-dsh-pattern`, `hook-dsh-batch-decision` |
 | The completion libraries | 2              | `lib-dsh-trace` (the trace bus's library half), `lib-dsh-pack` (the pack layer)                                                                                                                                                      |
@@ -187,8 +187,9 @@ By area:
 | The overpass filter      | 1              | `hook-dsh-comment-filter` (the comment-stripping overpass)                                                                                                                                                                           |
 | The conversation spine   | 1 library      | `lib-dsh-conversation` (the conversation vocabulary and the pure fold)                                                                                                                                                               |
 
-Sixty of the 64 Classic packages have an ETS twin; `client-dsh-panel-cost`, `plugin-dsh-boot`,
-`plugin-dsh-skill-learn` and the runtime-free `style-dsh-material` have none.
+Sixty of the 65 Classic packages have an ETS twin; `client-dsh-panel-cost`, `plugin-dsh-boot`,
+`plugin-dsh-skill-learn`, the runtime-free `style-dsh-material` and the build tooling
+`lib-dsh-bundle` have none.
 
 ## Architecture
 
@@ -337,25 +338,27 @@ The original 14 plugins (plus `lib-dsh-core`) each read as an @-sentence:
   `plugin-dsh-batchstate` (the live board), `plugin-dsh-gitguard`, `plugin-dsh-route`,
   `plugin-dsh-queue`, `plugin-dsh-feedback`, `plugin-dsh-pass-on`, `plugin-dsh-ingester`,
   `plugin-dsh-pattern`, and `hook-dsh-batch-decision`.
-- **The style family (2 + 1 twin)** - `style-dsh-material` (the shared SCSS material every UI
-  plugin's own sheet `@use`s), `lib-dsh-style` (the shared `<style>` injector), and its
+- **The style family (3 + 1 twin)** - `style-dsh-material` (the shared SCSS material every UI
+  plugin's own sheet `@use`s), `lib-dsh-style` (the shared `<style>` injector), `lib-dsh-bundle`
+  (the build tooling: the client-bundle envelope and the stylesheet compile), and its
   `ets-lib-dsh-style` twin.
 
-Sixty of the 64 Classic packages have an ETS twin; `client-dsh-panel-cost`, `plugin-dsh-boot`,
-`plugin-dsh-skill-learn` and the runtime-free `style-dsh-material` have none.
+Sixty of the 65 Classic packages have an ETS twin; `client-dsh-panel-cost`, `plugin-dsh-boot`,
+`plugin-dsh-skill-learn`, the runtime-free `style-dsh-material` and the build tooling
+`lib-dsh-bundle` have none.
 
 ### The two trees and the layout
 
 | Tree        | What it is                                                                                                                                      |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 64 packages; 299 smoke folders.          |
+| `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 65 packages; 299 smoke folders.          |
 | `EffectTS/` | The Effect v4 port - the same contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.7 pin). 61 packages; 296 smoke folders. |
 
-Sixty of the 64 Classic packages carry an `ets-*` twin, and the ETS tree also carries
+Sixty of the 65 Classic packages carry an `ets-*` twin, and the ETS tree also carries
 `ets-base-dsh`, which has no Classic twin.
 
 ```text
-    Classic/         the plain-TypeScript release: 64 packages + smokes
+    Classic/         the plain-TypeScript release: 65 packages + smokes
     EffectTS/        the Effect v4 port: 61 packages + smokes
     Site/            the static site (its own repository)
     Test/            the fixture archive: the governance batteries, the markdown proofs, the probes

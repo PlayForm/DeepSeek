@@ -19,14 +19,22 @@ const Message = (Time: number, Extra: Record<string, unknown> = {}): unknown => 
 	data: { time: Time, usage: { outputTokens: 200 }, ...Extra },
 });
 
+// A meter that cannot answer for this synthetic subject: these checks exercise
+// the walk's own request/context fallback, which is the path the drain takes
+// when it replays records without a live session handle.
+const Meter = {
+	measure: () => ({ totalTokens: 0, surfaceTokens: Number.NaN, nodes: [] }),
+	contextPressure: () => ({}),
+};
+
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Check(Count, "E4: two attempts between the step and the message are counted", () => {
-		const One = Telemetry([Step, { type: "assistant/attempt" }, { type: "assistant/attempt" }, Message(3000)], 0);
+		const One = Telemetry(Meter, undefined, [Step, { type: "assistant/attempt" }, { type: "assistant/attempt" }, Message(3000)], 0);
 		assert.equal(One.Attempts, 2, `attempts ${One.Attempts}`);
 	});
 	Check(Count, "E4: the latency is the step-to-message distance and the rate follows", () => {
-		const One = Telemetry([Step, Message(3000)], 0);
+		const One = Telemetry(Meter, undefined, [Step, Message(3000)], 0);
 		assert.equal(One.LatencyMs, 2000, `latency ${One.LatencyMs}`);
 		assert.ok(
 			One.TokensPerSecond !== null && Math.abs(One.TokensPerSecond - 100) <= 1e-9,
@@ -34,25 +42,25 @@ export const runTest = async (): Promise<number> => {
 		);
 	});
 	Check(Count, "E4: a missing or empty stream yields a null first-token latency", () => {
-		assert.equal(Telemetry([Step, Message(3000)], 0).FirstTokenMs, null, "no stream field");
+		assert.equal(Telemetry(Meter, undefined, [Step, Message(3000)], 0).FirstTokenMs, null, "no stream field");
 		assert.equal(
-			Telemetry([Step, Message(3000, { stream: [] })], 0).FirstTokenMs,
+			Telemetry(Meter, undefined, [Step, Message(3000, { stream: [] })], 0).FirstTokenMs,
 			null,
 			"an empty stream",
 		);
 		assert.equal(
-			Telemetry([Step, Message(3000, { stream: [{ other: 1 }] })], 0).FirstTokenMs,
+			Telemetry(Meter, undefined, [Step, Message(3000, { stream: [{ other: 1 }] })], 0).FirstTokenMs,
 			null,
 			"an absent time0",
 		);
 		assert.equal(
-			Telemetry([Step, Message(3000, { stream: [{ time0: 1500 }] })], 0).FirstTokenMs,
+			Telemetry(Meter, undefined, [Step, Message(3000, { stream: [{ time0: 1500 }] })], 0).FirstTokenMs,
 			1500,
 			"the first stream record's time0",
 		);
 	});
 	Check(Count, "E4: utilization is the surface over the window, null when the window is absent", () => {
-		const Windowed = Telemetry(
+		const Windowed = Telemetry(Meter, undefined, 
 			[Step, Message(3000), { type: "request/context", data: { contextWindow: 1000 } }],
 			250,
 		);
@@ -61,12 +69,12 @@ export const runTest = async (): Promise<number> => {
 			Windowed.Utilization !== null && Math.abs(Windowed.Utilization - 0.25) <= 1e-9,
 			`utilization ${Windowed.Utilization}`,
 		);
-		const Blind = Telemetry([Step, Message(3000)], 250);
+		const Blind = Telemetry(Meter, undefined, [Step, Message(3000)], 250);
 		assert.equal(Blind.ContextWindow, null, "the window is absent");
 		assert.equal(Blind.Utilization, null, "the utilization is unknown");
 	});
 	Check(Count, "E4: an unknown shape never throws and the attempts default to one", () => {
-		const One = Telemetry(
+		const One = Telemetry(Meter, undefined, 
 			[null, 42, { type: "step/start" }, {}, { type: "assistant/message" }],
 			0,
 		);

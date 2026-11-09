@@ -34,7 +34,7 @@ the same partials with sass, and one cross-tree edge on a package with no runtim
 than duplicating the material per tree. The two release trees never share a dependency graph because
 the Effect `Update` returns an Effect envelope; a stylesheet has no envelope. A plugin's
 `Source/Function/Styles.ts` imports its own `Source/Stylesheet/Plugin.scss`, and the client bundler
-compiles it through `Maintain/Build/Stylesheet/Index.mjs` when the bundle is built, so nothing is
+compiles it through the shared `@playform/lib-dsh-bundle` when the bundle is built, so nothing is
 generated and no twin is committed.
 
 CC0-1.0.
