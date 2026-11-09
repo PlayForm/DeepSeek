@@ -136,3 +136,13 @@ ets-lib-dsh-pack), so they are no longer in that set.
 The option-B Learning-Loop exclusion remains the only Classic-only test surface; the two
 Classic-only packages are plugin-dsh-boot and plugin-dsh-skill-learn, the latter's ETS twin deferred
 rather than refused.
+
+## 5. The style family (2026-11-09)
+
+| Package            | What it is                    | ETS twin                | Context                     |
+| ------------------ | ----------------------------- | ----------------------- | --------------------------- |
+| style-dsh-material | the shared SCSS material      | no (by design)          | (the stylesheet extraction) |
+| lib-dsh-style      | the shared `<style>` injector | yes (ets-lib-dsh-style) | (the stylesheet extraction) |
+| ets-lib-dsh-style  | the injector's ETS twin       | -                       | (the stylesheet extraction) |
+
+The material is the one package with no twin by design: both trees compile its runtime-free SCSS.

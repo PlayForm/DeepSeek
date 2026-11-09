@@ -43,64 +43,72 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-comment-filter.log";
+const DefaultEnabled = true;
+const DefaultTargets = ["read", "ccr_retrieve"];
+const DefaultExempt = [
+	"edit",
+	"raw-write",
+	"normalize-file",
+	"subagent",
+	"ask_user_question",
+];
+const DefaultIntent = true;
+const DefaultIntentKeywords = [
+	"comment",
+	"comments",
+	"commented",
+	"commenting",
+	"docstring",
+	"docstrings",
+	"jsdoc",
+	"tsdoc",
+	"license",
+	"licence",
+	"annotation",
+	"annotations",
+	"inline comment",
+	"block comment",
+	"comment out",
+];
+const DefaultNotice = true;
+
 export default Compose(false, {
 	// Ledger file - the comment-filter ledger, SEPARATE from the family's logs
 	// (one log per module) - volatile: hot-editable without remounting
 	// (overrides the minimal shared block's empty default).
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-comment-filter.log").volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The whole filter on/off - the per-call Gate's FIRST arm. It maps onto
 	// `State.Active`, NOT the shared `State.Enabled` (the ledger gate - see
 	// the header), so switching the filter off still records the activation
 	// line. Volatile: a mid-session off takes effect on the next dispatch
 	// with no remount.
-	enabled: Schema.boolean().default(true).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The tool names the filter may touch. `read` is HERE - the deliberate
 	// opposite of the normalize flavors, which exempt it as byte-contracted;
 	// `ccr_retrieve` is here because a retrieval re-enters the model exactly
 	// like a read. Structural (plain): editing it remounts the plugin.
-	targets: Schema.array(Schema.string()).default(["read", "ccr_retrieve"]),
+	targets: Schema.array(Schema.string()).default(DefaultTargets),
 	// The tool names that always pass by identity. `read` and `ccr_retrieve`
 	// are ABSENT by design (that is the whole point of the flavor); the rest
 	// are the family's standard byte-contracted / verbatim contracts: edit's
 	// old_string must match real file bytes, raw-write/normalize-file own
 	// their content decisions, subagent/ask_user_question carry prompt
 	// material matched verbatim. Structural (plain).
-	exempt: Schema.array(Schema.string()).default([
-		"edit",
-		"raw-write",
-		"normalize-file",
-		"subagent",
-		"ask_user_question",
-	]),
+	exempt: Schema.array(Schema.string()).default(DefaultExempt),
 	// Consult the per-task intent gate stashed at agent/pre-step. Off means
 	// "always strip" (the Gate's fourth arm returns true) - the blunt mode
 	// for a profile that wants the bytes gone unconditionally. Volatile.
-	intent: Schema.boolean().default(true).volatile(),
+	intent: Schema.boolean().default(DefaultIntent).volatile(),
 	// The intent keywords: a task text containing one (case-insensitive
 	// substring) means the task is ABOUT comments, so the read result must
 	// stay untouched - stripping the very bytes the task is asking about
 	// would sabotage it. Volatile: the tuning surface of the gate.
 	intentKeywords: Schema.array(Schema.string())
-		.default([
-			"comment",
-			"comments",
-			"commented",
-			"commenting",
-			"docstring",
-			"docstrings",
-			"jsdoc",
-			"tsdoc",
-			"license",
-			"licence",
-			"annotation",
-			"annotations",
-			"inline comment",
-			"block comment",
-			"comment out",
-		])
+		.default(DefaultIntentKeywords)
 		.volatile(),
 	// Append the omission notice line to a stripped result: the model must be
 	// able to tell that the result is complete code with comments removed,
 	// not a file that never had comments. Volatile.
-	notice: Schema.boolean().default(true).volatile(),
+	notice: Schema.boolean().default(DefaultNotice).volatile(),
 });

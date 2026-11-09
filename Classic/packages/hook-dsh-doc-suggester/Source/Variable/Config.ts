@@ -21,36 +21,49 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
 import Names from "./Heuristics.js";
 import Defaults from "./Weights.js";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-doc-suggester.log";
+const DefaultEnabled = true;
+const DefaultThreshold = 0.75;
+const DefaultTools = ["read", "grep", "glob", "write", "edit", "raw-write"];
+const DefaultMaxCompanions = 7;
+const DefaultMaxNoteChars = 1200;
+const DefaultCooldownCalls = 6;
+const DefaultMaxNotesPerTurn = 3;
+const DefaultExclude = ["node_modules", "Target", ".git", "dist"];
+const DefaultLearn = true;
+const DefaultLearnWindow = 3;
+const DefaultStoreLimit = 512;
+
 export default Compose(false, {
 	// Ledger file - the doc suggester's ledger, SEPARATE from the family's
 	// logs (one log per module) - volatile: hot-editable without remounting.
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-doc-suggester.log").volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The master switch (volatile): false mutes every listener to a passthrough.
-	enabled: Schema.boolean().default(true).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The confidence gate (volatile); the pack's per-family thresholds override.
-	threshold: Schema.number().default(0.75).volatile(),
+	threshold: Schema.number().default(DefaultThreshold).volatile(),
 	// The judged doc-task tools (volatile): the read/search calls that touch
 	// documentation plus the edits that land on it.
 	tools: Schema.array(String)
-		.default(["read", "grep", "glob", "write", "edit", "raw-write"])
+		.default(DefaultTools)
 		.volatile(),
 	// Maximum companions in one note (volatile).
-	maxCompanions: Schema.number().default(7).volatile(),
+	maxCompanions: Schema.number().default(DefaultMaxCompanions).volatile(),
 	// Hard character cap on the note text (volatile).
-	maxNoteChars: Schema.number().default(1200).volatile(),
+	maxNoteChars: Schema.number().default(DefaultMaxNoteChars).volatile(),
 	// No second note for the same family within this many judged calls (volatile).
-	cooldownCalls: Schema.number().default(6).volatile(),
+	cooldownCalls: Schema.number().default(DefaultCooldownCalls).volatile(),
 	// Maximum notes per turn, per agent (volatile).
-	maxNotesPerTurn: Schema.number().default(3).volatile(),
+	maxNotesPerTurn: Schema.number().default(DefaultMaxNotesPerTurn).volatile(),
 	// The excluded directories - a doc task inside them never notes (volatile).
-	exclude: Schema.array(String).default(["node_modules", "Target", ".git", "dist"]).volatile(),
+	exclude: Schema.array(String).default(DefaultExclude).volatile(),
 	// The learning layer's master switch (volatile): false keeps the pure PoC
 	// posture - no decision records, no outcome records, the neutral history.
-	learn: Schema.boolean().default(true).volatile(),
+	learn: Schema.boolean().default(DefaultLearn).volatile(),
 	// The follow-through window, in JUDGED CALLS (volatile; no timers): an
 	// emitted note's companions must be touched within this many judged calls,
 	// or the note closes as a soft reject on the call that reaches the window.
-	learnWindow: Schema.number().default(3).volatile(),
+	learnWindow: Schema.number().default(DefaultLearnWindow).volatile(),
 	// The ENABLED pickable heuristics (volatile): a name left out of this list
 	// is dropped from the score (its effective weight becomes 0) and the
 	// decision record's `enabled` list. The canonical six live in
@@ -66,5 +79,5 @@ export default Compose(false, {
 		.volatile(),
 	// The in-memory fallback's bound (volatile): the learned-rate rows and the
 	// decision ring evict the oldest entry past this count.
-	storeLimit: Schema.number().default(512).volatile(),
+	storeLimit: Schema.number().default(DefaultStoreLimit).volatile(),
 });

@@ -351,11 +351,12 @@ which both trees compile.
 | `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 61 packages; 299 smoke folders.          |
 | `EffectTS/` | The Effect v4 port - the same contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.7 pin). 61 packages; 296 smoke folders. |
 
-Every package carries an `ets-*` twin, which gives 59 twins for the 59 Classic packages.
+Every package carries an `ets-*` twin except the runtime-free `style-dsh-material`, and the ETS tree
+also carries `ets-base-dsh`, which has no Classic twin.
 
 ```text
-    Classic/         the plain-TypeScript release: 59 packages + smokes
-    EffectTS/        the Effect v4 port: 60 packages + smokes
+    Classic/         the plain-TypeScript release: 61 packages + smokes
+    EffectTS/        the Effect v4 port: 61 packages + smokes
     Site/            the static site (its own repository)
     Test/            the fixture archive: the governance batteries, the markdown proofs, the probes
     Documentation/   the framework, the guides, the skills, the plans, the reports, the test plans

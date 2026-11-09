@@ -1,4 +1,4 @@
-// Config — the plugin's Schemastery Config schema (a Variable: one constant
+// Config - the plugin's Schemastery Config schema (a Variable: one constant
 // built once at load). Cordis validates the exported schema while the plugin
 // loads and fills every default (docs/user/develop/basic/config.md:45), so
 // invalid configuration fails LOUD at load instead of silently falling back
@@ -6,21 +6,21 @@
 // this schema produces is Interface/Config.ts; every default below is the
 // schema-level home of that shape's field values.
 //
-// COMPOSED BY THE FACTORY'S STANDALONE helper (factory v0.1.1, P1 —
+// COMPOSED BY THE FACTORY'S STANDALONE helper (factory v0.1.1, P1 -
 // `Schema(shared?, module?)` as a MODULE-LEVEL named export): the NON-MANIFEST
-// posture uses `shared: false` — the MINIMAL shared block, ONLY the two
+// posture uses `shared: false` - the MINIMAL shared block, ONLY the two
 // universal volatile cells (`log`, `logFile`). The pre-v0.1.1 deviation
 // (hand-defining the schema here, because `Factory.Schema(shared?, module?)`
-// ALWAYS emitted the fs/observed shared block — updateCooldownMs,
-// mutationTools, policyFile, exclude — machinery the hook-dsh-normalize-dash has NONE of: it
+// ALWAYS emitted the fs/observed shared block - updateCooldownMs,
+// mutationTools, policyFile, exclude - machinery the hook-dsh-normalize-dash has NONE of: it
 // hooks llm/stream, not fs/observed; shipping those dead fields would
 // advertise behavior the plugin does not have) is gone: `shared: false`
 // emits nothing the hook-dsh-normalize-dash does not use. The hook-dsh-normalize-dash's own `logFile` default
 // (its SEPARATE ledger) is supplied through its own fields, which override
 // the minimal block's.
 //
-// P8 — VOLATILE CELLS: `log`, `logFile` and `replacement` are `.volatile()`
-// — hot edits commit WITHOUT remounting the plugin. `replacement` is the
+// P8 - VOLATILE CELLS: `log`, `logFile` and `replacement` are `.volatile()`
+// - hot edits commit WITHOUT remounting the plugin. `replacement` is the
 // transform's only knob, so a mid-session re-tune must not drop the
 // registration; the loader hands volatile fields to apply as stable
 // references (`{ get() }` cells) and the factory's State builder unwraps
@@ -28,66 +28,78 @@
 // the dispatch SEMANTICS, so they remount on edit (plain fields).
 //
 // This is the ONLY module in the tree with a runtime import of
-// @deepseek-ai/schemastery (the schema must be a real schemastery instance —
+// @deepseek-ai/schemastery (the schema must be a real schemastery instance -
 // the loader consumes it through the Standard Schema `~standard` interface;
 // the import resolves from the running dsh's own copy,
 // docs/user/develop/basic/publish.md:103).
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-normalize-dash.log";
+const DefaultReplacement = "-";
+const DefaultNormalizeReasoning = true;
+const DefaultNormalizeToolArguments = false;
+const DefaultScopeConversation = true;
+const DefaultScopeReasoning = true;
+const DefaultScopeToolInput = false;
+const DefaultScopeToolResults = false;
+const DefaultScopeFiles = true;
+const DefaultScopeBatch = false;
+const DefaultToolResultsExempt = [
+	"read",
+	"edit",
+	"raw-write",
+	"normalize-file",
+	"ccr_retrieve",
+	"subagent",
+	"ask_user_question",
+];
+
 export default Compose(false, {
-	// Ledger file — the hook-dsh-normalize-dash ledger, SEPARATE from the family's logs (one
-	// log per module) — volatile: hot-editable without remounting (overrides
+	// Ledger file - the hook-dsh-normalize-dash ledger, SEPARATE from the family's logs (one
+	// log per module) - volatile: hot-editable without remounting (overrides
 	// the minimal shared block's empty default).
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-normalize-dash.log").volatile(),
-	// The dash replacement — the transform's ONLY knob. ASCII hyphen-minus by
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	// The dash replacement - the transform's ONLY knob. ASCII hyphen-minus by
 	// default (the transform's literal `-`). Volatile: hot-editable; the
 	// next stream picks it up with no remount.
-	replacement: Schema.string().default("-").volatile(),
+	replacement: Schema.string().default(DefaultReplacement).volatile(),
 	// Normalize reasoning deltas and the assembled ReasoningBlock too (the
 	// transform applies to whatever the model wrote; the deltas AND the block must
 	// agree, or consumers see inconsistencies).
-	normalizeReasoning: Schema.boolean().default(true),
-	// IMPLEMENTED (default OFF — the SCHEMA default stays off for
+	normalizeReasoning: Schema.boolean().default(DefaultNormalizeReasoning),
+	// IMPLEMENTED (default OFF - the SCHEMA default stays off for
 	// everyone): when on, the tool-call argumentsDelta and the assembled
 	// ToolCallBlock.arguments are rewritten by the transform too. The
 	// arguments are execution-critical raw JSON, so enabling it is the
-	// user's accepted risk — this profile's cordis.patch.yml turns it on.
+	// user's accepted risk - this profile's cordis.patch.yml turns it on.
 	// DEPRECATED in favor of `scopes.toolInput`: kept and OR-ed in (effective
 	// toolInput = this field || scopes.toolInput) so every existing profile
 	// keeps working; new configs should use the scope gate.
-	normalizeToolArguments: Schema.boolean().default(false),
-	// Granular scope gates — ALL volatile (live toggling, no remount):
+	normalizeToolArguments: Schema.boolean().default(DefaultNormalizeToolArguments),
+	// Granular scope gates - ALL volatile (live toggling, no remount):
 	// conversation=text/block-end, reasoning=its sub-gate, toolInput=tool-call
 	// arguments arm, toolResults=tools/post-execute arm, files=the
 	// normalize-file tool (inert in stream flavors so one patch override drives
 	// the whole family), batch=agent/pre-step arm. The OBJECT carries the
-	// volatile marker (its leaves stay plain — schemastery rejects volatile
+	// volatile marker (its leaves stay plain - schemastery rejects volatile
 	// leaves under an enclosing volatile field): one leaf change commits one
 	// update whose whole object the State's refresh listener re-reads.
 	scopes: Schema.object({
-		conversation: Schema.boolean().default(true),
-		reasoning: Schema.boolean().default(true),
-		toolInput: Schema.boolean().default(false),
-		toolResults: Schema.boolean().default(false),
-		files: Schema.boolean().default(true),
-		batch: Schema.boolean().default(false),
+		conversation: Schema.boolean().default(DefaultScopeConversation),
+		reasoning: Schema.boolean().default(DefaultScopeReasoning),
+		toolInput: Schema.boolean().default(DefaultScopeToolInput),
+		toolResults: Schema.boolean().default(DefaultScopeToolResults),
+		files: Schema.boolean().default(DefaultScopeFiles),
+		batch: Schema.boolean().default(DefaultScopeBatch),
 	}).volatile(),
 	// Tool-results exemption list (the name-exempt precedent of the core's
 	// stream gate, made configurable): a tool result whose exec name is listed
-	// passes through by identity — read/edit are byte-contracted, raw-write/
+	// passes through by identity - read/edit are byte-contracted, raw-write/
 	// normalize-file own their normalization, ccr_retrieve's bytes are the
 	// retrieval contract, subagent/ask_user_question carry prompt material
 	// matched verbatim.
 	toolResultsExempt: Schema.array(Schema.string())
-		.default([
-			"read",
-			"edit",
-			"raw-write",
-			"normalize-file",
-			"ccr_retrieve",
-			"subagent",
-			"ask_user_question",
-		])
+		.default(DefaultToolResultsExempt)
 		.volatile(),
 });

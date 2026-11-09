@@ -8,10 +8,14 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
+const DefaultEnabled = false;
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-lesson-nudge.log";
+const DefaultMaxReviewsPerSession = 3;
+
 export default Compose(false, {
-	enabled: Schema.boolean().default(false).volatile(),
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-lesson-nudge.log").volatile(),
-	maxReviewsPerSession: Schema.number().default(3).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	maxReviewsPerSession: Schema.number().default(DefaultMaxReviewsPerSession).volatile(),
 	// THE POLICY BLOCK (D6): the shared factory block. The nudge reads the
 	// agent's status and spawns a maintenance task; `spawn` stays the shipped
 	// `approve` because a maintenance task is not a subagent, and this hook

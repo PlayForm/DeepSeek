@@ -84,11 +84,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794202912,
+					"publishTimestamp": 1794203481,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "53d344b219d3b1abc87c98b9c5bd74a16ad7f08e",
+						"commit": "9857cc6fa46c59e7f70526abe42e52963a49f81e",
 						"path": "Classic/packages/client-dsh-panel-cost"
 					},
 					"engines": {}
@@ -340,11 +340,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794202912,
+					"publishTimestamp": 1794203481,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "53d344b219d3b1abc87c98b9c5bd74a16ad7f08e",
+						"commit": "9857cc6fa46c59e7f70526abe42e52963a49f81e",
 						"path": "EffectTS/packages/ets-client-dsh-panel-family"
 					},
 					"engines": {}
@@ -2128,11 +2128,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794202912,
+					"publishTimestamp": 1794203481,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "53d344b219d3b1abc87c98b9c5bd74a16ad7f08e",
+						"commit": "9857cc6fa46c59e7f70526abe42e52963a49f81e",
 						"path": "EffectTS/packages/ets-lib-dsh-conversation"
 					},
 					"engines": {}
@@ -2273,11 +2273,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794202912,
+					"publishTimestamp": 1794203481,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "53d344b219d3b1abc87c98b9c5bd74a16ad7f08e",
+						"commit": "9857cc6fa46c59e7f70526abe42e52963a49f81e",
 						"path": "EffectTS/packages/ets-lib-dsh-style"
 					},
 					"engines": {}

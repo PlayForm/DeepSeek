@@ -35,79 +35,104 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-ccr.log";
+const DefaultTargets = [
+	"bash",
+	"glob",
+	"grep",
+	"read",
+	"web_fetch",
+	"web_search",
+	"list",
+	"search",
+];
+const DefaultExempt = [
+	"write",
+	"edit",
+	"raw-write",
+	"subagent",
+	"ask_user_question",
+	"ccr_retrieve",
+];
+const DefaultThresholdBytes = 1024;
+const DefaultInlineThresholdBytes = 1024;
+const DefaultAutoExpand = true;
+const DefaultAutoExpandLimitBytes = 102400;
+const DefaultCompressFailures = false;
+const DefaultMultiplierTerminal = 1;
+const DefaultMultiplierError = 8;
+const DefaultMultiplierGrep = 2;
+const DefaultMultiplierPaths = 2;
+const DefaultMultiplierFile = 1;
+const DefaultMultiplierJson = 1;
+const DefaultMultiplierWeb = 2;
+const DefaultMultiplierFallback = 1;
+const DefaultPreviewMaxChars = 240;
+const DefaultTtlSeconds = 3600;
+const DefaultStoreBudgetBytes = 268435456;
+const DefaultJournalPath = "";
+const DefaultContextEngine = false;
+const DefaultContextEngineThresholdPct = 30;
+const DefaultProtectFirstTurns = 2;
+const DefaultProtectLastTurns = 4;
+
 export default Compose(false, {
 	// Ledger file - the CCR hook's ledger, SEPARATE from the family's logs (one
 	// log per module) - volatile: hot-editable without remounting (overrides
 	// the minimal shared block's empty default).
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-ccr.log").volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// The target allow-list: tools whose oversized results are compressed (the
 	// terminal/search/fetch family). Structural: remounts on edit.
-	targets: Schema.array(String).default([
-		"bash",
-		"glob",
-		"grep",
-		"read",
-		"web_fetch",
-		"web_search",
-		"list",
-		"search",
-	]),
+	targets: Schema.array(String).default(DefaultTargets),
 	// The exemption list: never compressed (execution-critical mutators and
 	// their own echo, the plugin's own retrieval tool, another agent's brief,
 	// a user gate). Structural: remounts on edit.
-	exempt: Schema.array(String).default([
-		"write",
-		"edit",
-		"raw-write",
-		"subagent",
-		"ask_user_question",
-		"ccr_retrieve",
-	]),
+	exempt: Schema.array(String).default(DefaultExempt),
 	// The one byte gate for all tools (volatile: hot-editable).
-	thresholdBytes: Schema.number().default(1024).volatile(),
+	thresholdBytes: Schema.number().default(DefaultThresholdBytes).volatile(),
 	// Results at or below this size are inlined in the store and previewed
 	// fully (Aphrodite's inline_threshold). Structural: remounts on edit.
-	inlineThresholdBytes: Schema.number().default(1024),
+	inlineThresholdBytes: Schema.number().default(DefaultInlineThresholdBytes),
 	// Auto-expand: store + preview, but return the FULL content while under
 	// the limit - no marker reaches the model. Structural: remounts on edit.
-	autoExpand: Schema.boolean().default(true),
+	autoExpand: Schema.boolean().default(DefaultAutoExpand),
 	// The auto-expand ceiling in bytes (Aphrodite's auto_expand_limit).
-	autoExpandLimitBytes: Schema.number().default(102400),
+	autoExpandLimitBytes: Schema.number().default(DefaultAutoExpandLimitBytes),
 	// Compress failing results too (default off - the error x8 tier is the
 	// only beneficiary). Structural: remounts on edit.
-	compressFailures: Schema.boolean().default(false),
+	compressFailures: Schema.boolean().default(DefaultCompressFailures),
 	// Per-type multipliers on the byte gate (volatile: hot-editable). Errors
 	// are high-signal and compress late (x8); grep/paths/web compress early
 	// (x2); the rest at parity (x1).
 	multipliers: Schema.object({
-		terminal: Schema.number().default(1),
-		error: Schema.number().default(8),
-		grep: Schema.number().default(2),
-		paths: Schema.number().default(2),
-		file: Schema.number().default(1),
-		json: Schema.number().default(1),
-		web: Schema.number().default(2),
-		default: Schema.number().default(1),
+		terminal: Schema.number().default(DefaultMultiplierTerminal),
+		error: Schema.number().default(DefaultMultiplierError),
+		grep: Schema.number().default(DefaultMultiplierGrep),
+		paths: Schema.number().default(DefaultMultiplierPaths),
+		file: Schema.number().default(DefaultMultiplierFile),
+		json: Schema.number().default(DefaultMultiplierJson),
+		web: Schema.number().default(DefaultMultiplierWeb),
+		default: Schema.number().default(DefaultMultiplierFallback),
 	}).volatile(),
 	// Hard character cap on every preview line (volatile: hot-editable).
-	previewMaxChars: Schema.number().default(240).volatile(),
+	previewMaxChars: Schema.number().default(DefaultPreviewMaxChars).volatile(),
 	// Store TTL in seconds (Aphrodite's ccr_ttl_seconds).
-	ttlSeconds: Schema.number().default(3600),
+	ttlSeconds: Schema.number().default(DefaultTtlSeconds),
 	// The LRU budget in bytes (Aphrodite's inline store, 256 MiB).
-	storeBudgetBytes: Schema.number().default(268435456),
+	storeBudgetBytes: Schema.number().default(DefaultStoreBudgetBytes),
 	// Optional JSONL disk journal; empty (the default) = memory-only
 	// (Aphrodite's inline mode - Aphrodite's SQLite ccr.db is adapted to JSONL
 	// because SQLite is a native dep the family does not carry).
-	journalPath: Schema.string().default(""),
+	journalPath: Schema.string().default(DefaultJournalPath),
 	// Phase-4 context engine (middle-turn archiving): implemented and OFF by
 	// default - when on, the agent/pre-step engine listener is registered
 	// (Function/Engine, SCHEME.md §9).
-	contextEngine: Schema.boolean().default(false),
+	contextEngine: Schema.boolean().default(DefaultContextEngine),
 	// Phase-4: the context-usage percent that starts archiving (30% of the
 	// nominal budget = the store's storeBudgetBytes).
-	contextEngineThresholdPct: Schema.number().default(30),
+	contextEngineThresholdPct: Schema.number().default(DefaultContextEngineThresholdPct),
 	// Phase-4: turns protected from archiving at the head.
-	protectFirstTurns: Schema.number().default(2),
+	protectFirstTurns: Schema.number().default(DefaultProtectFirstTurns),
 	// Phase-4: turns protected from archiving at the tail.
-	protectLastTurns: Schema.number().default(4),
+	protectLastTurns: Schema.number().default(DefaultProtectLastTurns),
 });

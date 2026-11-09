@@ -24,33 +24,45 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-graph-suggester.log";
+const DefaultEnabled = true;
+const DefaultThreshold = 0.75;
+const DefaultMaxCandidates = 7;
+const DefaultMaxNoteChars = 1200;
+const DefaultCooldownCalls = 6;
+const DefaultMaxNotesPerTurn = 3;
+const DefaultIntents = [];
+const DefaultEmitOn = ["glob", "grep", "read"];
+const DefaultExclude = ["node_modules", "Target", ".git", "dist"];
+const DefaultGraph = true;
+
 export default Compose(false, {
 	// Ledger file - the hook's own ledger, SEPARATE from the family's logs (one
 	// log per module) - volatile: hot-editable without remounting.
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-graph-suggester.log").volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// Master switch (volatile: the kill-criterion flip is a hot edit).
-	enabled: Schema.boolean().default(true).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The default confidence gate (volatile). The graph intents' 0.75 floor
 	// may raise it; a lower config value never lowers the floor (the gate is
 	// the max of the two).
-	threshold: Schema.number().default(0.75).volatile(),
+	threshold: Schema.number().default(DefaultThreshold).volatile(),
 	// Maximum candidates in one note (volatile).
-	maxCandidates: Schema.number().default(7).volatile(),
+	maxCandidates: Schema.number().default(DefaultMaxCandidates).volatile(),
 	// Hard character cap on the note text (volatile).
-	maxNoteChars: Schema.number().default(1200).volatile(),
+	maxNoteChars: Schema.number().default(DefaultMaxNoteChars).volatile(),
 	// No second note for the same intent within this many judged calls (volatile).
-	cooldownCalls: Schema.number().default(6).volatile(),
+	cooldownCalls: Schema.number().default(DefaultCooldownCalls).volatile(),
 	// Maximum notes per agent turn (volatile).
-	maxNotesPerTurn: Schema.number().default(3).volatile(),
+	maxNotesPerTurn: Schema.number().default(DefaultMaxNotesPerTurn).volatile(),
 	// The enabled intent ids (volatile). Empty = both graph intents enabled.
-	intents: Schema.array(String).default([]).volatile(),
+	intents: Schema.array(String).default(DefaultIntents).volatile(),
 	// The judged tool names - the read/search family (the graph pack's
 	// trigger is the discovery call, SEARCH-SUGGESTER-PLUGIN.md §9.2).
-	emitOn: Schema.array(String).default(["glob", "grep", "read"]).volatile(),
+	emitOn: Schema.array(String).default(DefaultEmitOn).volatile(),
 	// Path prefixes a candidate is never drawn from (volatile).
-	exclude: Schema.array(String).default(["node_modules", "Target", ".git", "dist"]).volatile(),
+	exclude: Schema.array(String).default(DefaultExclude).volatile(),
 	// Whether the graph intents may fire (volatile). False = they abstain
 	// through the unavailable path; nothing is guessed from a literal
 	// fallback, because the hook no longer carries one.
-	graph: Schema.boolean().default(true).volatile(),
+	graph: Schema.boolean().default(DefaultGraph).volatile(),
 });

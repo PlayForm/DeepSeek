@@ -230,6 +230,15 @@ CoreChunk(Input, (Text) => Replace(Text, Dashes, "-"), Reasoning);
   stage is INJECTED through the dependencies, so the module keeps its ledger vocabulary (the smokes
   stay the arbiter).
 
+- **`Home(segments, environment?)`** - the harness home precedence without a harness import: an
+  explicit configured path wins at the caller, then `$DSH_HOME` (a whitespace-only value counts as
+  unset, the `resolveDshHome` rule), then `${HOME ?? "~"}/.dsh`, with the segments joined by `/`.
+  Pure string mechanics: no fs, no directory creation, and no environment read at module scope.
+
+- **`Bound(items, limit)`** - the bounded-list envelope the harness lists use: `{ Shown, More }`
+  where `Shown` is the first `max(0, limit)` items and `More` is the remainder count, so a caller
+  renders "first N plus N more" without re-deriving the arithmetic.
+
 - **`Activate(fields)`** - the ACTIVATION-LINE composer: the `activated (...)` proof line's shared
   string mechanics - the `activated (` prefix, the `k=v` pair join with `, `, the `)` suffix, and
   the skip-absent-field rule (a pair with an `undefined` value is omitted; an empty key renders a

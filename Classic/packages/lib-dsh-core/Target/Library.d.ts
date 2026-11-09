@@ -7,6 +7,8 @@ export { default as Refusal } from "./Function/Refusal.js";
 export { default as Activate } from "./Function/Activate.js";
 export { default as Expand } from "./Function/Expand.js";
 export { default as Update } from "./Function/Update.js";
+export { default as Home } from "./Function/Home.js";
+export { default as Bound } from "./Function/Bound.js";
 export { default as Replace } from "./Normalize/Replace.js";
 export { default as ReplaceMap } from "./Normalize/ReplaceMap.js";
 export { default as Dashes } from "./Normalize/Dashes.js";

@@ -24,35 +24,46 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-convention-suggester.log";
+const DefaultEnabled = true;
+const DefaultThreshold = 0.75;
+const DefaultMaxCandidates = 7;
+const DefaultMaxNoteChars = 1200;
+const DefaultNoiseFloor = 0.5;
+const DefaultCooldownCalls = 6;
+const DefaultMaxNotesPerTurn = 3;
+const DefaultIntents = [];
+const DefaultEmitOn = ["edit", "raw-write", "write"];
+const DefaultExclude = ["node_modules", "Target", ".git", "dist"];
+const DefaultLearning = false;
+
 export default Compose(false, {
 	// Ledger file - the hook's own ledger, SEPARATE from the family's logs (one
 	// log per module) - volatile: hot-editable without remounting.
-	logFile: Schema.string()
-		.default("~/.dsh/playform/hook-dsh-convention-suggester.log")
-		.volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// Master switch (volatile: the kill-criterion flip is a hot edit).
-	enabled: Schema.boolean().default(true).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The default confidence gate (volatile). The pack's per-intent thresholds
 	// may raise it; they may never lower it (the gate is max of the two).
-	threshold: Schema.number().default(0.75).volatile(),
+	threshold: Schema.number().default(DefaultThreshold).volatile(),
 	// Maximum candidates in one note (volatile).
-	maxCandidates: Schema.number().default(7).volatile(),
+	maxCandidates: Schema.number().default(DefaultMaxCandidates).volatile(),
 	// Hard character cap on the note text (volatile).
-	maxNoteChars: Schema.number().default(1200).volatile(),
+	maxNoteChars: Schema.number().default(DefaultMaxNoteChars).volatile(),
 	// Minimum confidence a candidate must have to be considered at all - candidates
 	// scoring below this are background noise and are dropped (volatile).
-	noiseFloor: Schema.number().default(0.5).volatile(),
+	noiseFloor: Schema.number().default(DefaultNoiseFloor).volatile(),
 	// No second note for the same intent within this many judged calls (volatile).
-	cooldownCalls: Schema.number().default(6).volatile(),
+	cooldownCalls: Schema.number().default(DefaultCooldownCalls).volatile(),
 	// Maximum notes per agent turn (volatile).
-	maxNotesPerTurn: Schema.number().default(3).volatile(),
+	maxNotesPerTurn: Schema.number().default(DefaultMaxNotesPerTurn).volatile(),
 	// The enabled intent ids (volatile). Empty = all pack intents enabled.
-	intents: Schema.array(String).default([]).volatile(),
+	intents: Schema.array(String).default(DefaultIntents).volatile(),
 	// The judged tool names - the write/edit family (the convention pack's
 	// trigger is the modification call, SEARCH-SUGGESTER-PLUGIN.md §9.4).
-	emitOn: Schema.array(String).default(["edit", "raw-write", "write"]).volatile(),
+	emitOn: Schema.array(String).default(DefaultEmitOn).volatile(),
 	// Path prefixes a candidate is never drawn from (volatile).
-	exclude: Schema.array(String).default(["node_modules", "Target", ".git", "dist"]).volatile(),
+	exclude: Schema.array(String).default(DefaultExclude).volatile(),
 	/** Retired: the literal pack learner is no longer called; kept for config compatibility until the history-driven proposal lands. */
-	learning: Schema.boolean().default(false).volatile(),
+	learning: Schema.boolean().default(DefaultLearning).volatile(),
 });

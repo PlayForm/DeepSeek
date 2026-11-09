@@ -34,11 +34,33 @@ switch (true) {
 		process.exit(1);
 }
 
+// The harness module-table seed words: the exact PLATFORM_MODULES list the shell
+// resolves to its own single instance at require time (packages/client/web/
+// src/platform.ts:8-15; the resolution order is modules/src/client/system.ts:
+// 328-351). A specifier on this list stays a bare require in the bundle; every
+// other @deepseek-ai/* import is inlined, which is a second copy, not a reuse.
+// Bare package names only: esbuild also externalizes subpaths, and the module
+// system normalizes only "<id>" and "<id>/client" (manifest.ts:218-220), so a
+// subpath would be an unresolvable require at mount.
+const PlatformModules = [
+	"react",
+	"react/jsx-runtime",
+	"react-dom",
+	"react-dom/client",
+	"@deepseek-ai/cordis",
+	"zod",
+	"@tanstack/react-virtual",
+	"@deepseek-ai/dsh-client-store",
+	"@deepseek-ai/dsh-client-ui-slots",
+	"@deepseek-ai/dsh-client-ui-primitives",
+	"@deepseek-ai/dsh-client-ui-dockkit",
+];
+
 const Root = Path.resolve(PackageDirectory);
 const Result = await build({
 	bundle: true,
 	entryPoints: [Path.join(Root, Entry)],
-	external: ["react", "react-dom", "react/jsx-runtime"],
+	external: PlatformModules,
 	format: "cjs",
 	logLevel: "silent",
 	platform: "browser",
