@@ -178,6 +178,7 @@ By area:
 | The original plugins     | 14             | the factory, the governance trio, the six stream flavors + the file normalizer, ccr, tool-coach, live-containers                                                                                                                     |
 | The workspace family     | 15 + 1 library | the ten-step invisible flow: observe → semantics → operate → govern → authority → approve → merge → journal → audit → context/monitor/evidence/graph/reflect, plus `lib-dsh-workspace-live`                                          |
 | The client family        | 3              | `client-dsh-panel-family`, `client-dsh-panel-family-host`, `client-dsh-workspace-live`                                                                                                                                               |
+| The style family         | 2 + 1 twin     | `style-dsh-material` (the shared SCSS material), `lib-dsh-style` (the shared `<style>` injector) and its `ets-lib-dsh-style` twin                                                                                                    |
 | The suggesters           | 7              | `hook-dsh-{search,edit,doc,convention,graph,replay,test}-suggester`                                                                                                                                                                  |
 | The orchestration set    | 10             | `plugin-dsh-batch-edit`, `plugin-dsh-batchstate`, `plugin-dsh-gitguard`, `plugin-dsh-route`, `plugin-dsh-queue`, `plugin-dsh-feedback`, `plugin-dsh-pass-on`, `plugin-dsh-ingester`, `plugin-dsh-pattern`, `hook-dsh-batch-decision` |
 | The completion libraries | 2              | `lib-dsh-trace` (the trace bus's library half), `lib-dsh-pack` (the pack layer)                                                                                                                                                      |
@@ -186,7 +187,8 @@ By area:
 | The overpass filter      | 1              | `hook-dsh-comment-filter` (the comment-stripping overpass)                                                                                                                                                                           |
 | The conversation spine   | 1 library      | `lib-dsh-conversation` (the conversation vocabulary and the pure fold)                                                                                                                                                               |
 
-Every one of the 59 Classic packages has an ETS twin.
+Every one of the 61 Classic packages has an ETS twin except the runtime-free `style-dsh-material`,
+which both trees compile.
 
 ## Architecture
 
@@ -335,6 +337,9 @@ The original 14 plugins (plus `lib-dsh-core`) each read as an @-sentence:
   `plugin-dsh-batchstate` (the live board), `plugin-dsh-gitguard`, `plugin-dsh-route`,
   `plugin-dsh-queue`, `plugin-dsh-feedback`, `plugin-dsh-pass-on`, `plugin-dsh-ingester`,
   `plugin-dsh-pattern`, and `hook-dsh-batch-decision`.
+- **The style family (2 + 1 twin)** - `style-dsh-material` (the shared SCSS material every UI
+  plugin's own sheet `@use`s), `lib-dsh-style` (the shared `<style>` injector), and its
+  `ets-lib-dsh-style` twin.
 
 Every one of the 59 Classic packages has an ETS twin.
 
