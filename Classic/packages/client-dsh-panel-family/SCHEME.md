@@ -186,8 +186,8 @@ client-dsh-panel-family: plain-field secret refused for <namespace>
   harness, and type-checks the Test tree.
 - The five smoke folders hold the counts: `Contract-And-Wiring` 13 PASS, `Registry-And-Sections` 7
   PASS, `Child-Slot-Model` 10 PASS, `Reference-Adapter` 14 PASS, and `All-Adapters` 9 PASS, which
-  covers the fifteen-manifest roster, the forms, the two write routes, and the built bundle
-  executed through a fake `window.__ModuleLoader__`.
+  covers the fifteen-manifest roster, the forms, the two write routes, and the built bundle executed
+  through a fake `window.__ModuleLoader__`.
 
 ## 11. The EffectTS twin
 

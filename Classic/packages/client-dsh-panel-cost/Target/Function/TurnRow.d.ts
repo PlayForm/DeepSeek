@@ -1,5 +1,5 @@
-import type CostTurn from "../Interface/Turn.js";
 import type { Translate } from "../Interface/Translate.js";
+import type CostTurn from "../Interface/Turn.js";
 import { createElement } from "react";
 type TurnRowProps = {
     Turn: CostTurn;

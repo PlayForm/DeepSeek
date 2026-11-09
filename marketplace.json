@@ -84,11 +84,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794201456,
+					"publishTimestamp": 1794201680,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "b9036edaeba43290ad6715323ab43f3cbb9edfc9",
+						"commit": "5dbf9f3149825fadd145eb0af578a1a65a84a61a",
 						"path": "Classic/packages/client-dsh-panel-cost"
 					},
 					"engines": {}

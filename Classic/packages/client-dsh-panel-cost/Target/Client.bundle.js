@@ -106,7 +106,10 @@ var Block = (File, Index, Currency, t) => {
     Body.push(
       (0, import_react.createElement)(
         "span",
-        { key: "lines", className: Added > 0 ? "playform-cost-added" : "playform-cost-removed" },
+        {
+          key: "lines",
+          className: Added > 0 ? "playform-cost-added" : "playform-cost-removed"
+        },
         t("detail.lines", { added: Count(Added), removed: Count(Removed) })
       )
     );
@@ -147,13 +150,18 @@ var Block = (File, Index, Currency, t) => {
         { className: "playform-cost-block-meta" },
         t("detail.allocation", {
           direct: Price(typeof File.direct === "number" ? File.direct : 0, Currency),
-          amortized: Price(typeof File.amortized === "number" ? File.amortized : 0, Currency)
+          amortized: Price(
+            typeof File.amortized === "number" ? File.amortized : 0,
+            Currency
+          )
         })
       ),
       (0, import_react.createElement)(
         "span",
         { className: "playform-cost-block-meta" },
-        t("bar.total", { value: Price(typeof File.total === "number" ? File.total : 0, Currency) })
+        t("bar.total", {
+          value: Price(typeof File.total === "number" ? File.total : 0, Currency)
+        })
       ),
       Touched ? (0, import_react.createElement)(
         "span",
@@ -165,12 +173,23 @@ var Block = (File, Index, Currency, t) => {
       ) : null,
       Kind !== "" ? (0, import_react.createElement)(
         "span",
-        { className: "playform-cost-pill", title: t("detail.kind", { kind: Kind }) },
+        {
+          className: "playform-cost-pill",
+          title: t("detail.kind", { kind: Kind })
+        },
         Kind
       ) : null,
-      Tool !== "" ? (0, import_react.createElement)("span", { className: "playform-cost-block-meta" }, t("detail.tool", { tool: Tool })) : null
+      Tool !== "" ? (0, import_react.createElement)(
+        "span",
+        { className: "playform-cost-block-meta" },
+        t("detail.tool", { tool: Tool })
+      ) : null
     ),
-    Body.length === 0 ? (0, import_react.createElement)("div", { className: "playform-cost-block-empty" }, t("detail.allocationOnly")) : (0, import_react.createElement)("div", { className: "playform-cost-block-body" }, Body)
+    Body.length === 0 ? (0, import_react.createElement)(
+      "div",
+      { className: "playform-cost-block-empty" },
+      t("detail.allocationOnly")
+    ) : (0, import_react.createElement)("div", { className: "playform-cost-block-body" }, Body)
   );
 };
 function DetailRow(Props) {
@@ -227,8 +246,14 @@ function DetailRow(Props) {
           (Item) => (0, import_react.createElement)(
             "span",
             { className: "playform-cost-bucket", key: Item.Field },
-            (0, import_react.createElement)("span", { className: `playform-cost-bucket-dot ${Item.Dot}` }),
-            (0, import_react.createElement)("span", { className: "playform-cost-bucket-label" }, t(Item.Label)),
+            (0, import_react.createElement)("span", {
+              className: `playform-cost-bucket-dot ${Item.Dot}`
+            }),
+            (0, import_react.createElement)(
+              "span",
+              { className: "playform-cost-bucket-label" },
+              t(Item.Label)
+            ),
             (0, import_react.createElement)(
               "span",
               { className: "playform-cost-bucket-value" },
@@ -237,7 +262,11 @@ function DetailRow(Props) {
           )
         )
       ),
-      Files2.length === 0 ? (0, import_react.createElement)("div", { className: "playform-cost-block-empty" }, t("detail.empty")) : Shown.map((File, Index) => Block(File, Index, Tag, t)),
+      Files2.length === 0 ? (0, import_react.createElement)(
+        "div",
+        { className: "playform-cost-block-empty" },
+        t("detail.empty")
+      ) : Shown.map((File, Index) => Block(File, Index, Tag, t)),
       Files2.length > DetailFileLimit ? (0, import_react.createElement)(
         "div",
         { className: "playform-cost-block-empty" },
@@ -722,9 +751,15 @@ var Files = (Props) => {
             {
               key: Index,
               className: "playform-cost-pill",
-              ...Pill.Lines === null || Pill.Lines === 0 ? {} : { title: Props.t("files.lines", { lines: Lines(Pill.Lines) }) }
+              ...Pill.Lines === null || Pill.Lines === 0 ? {} : {
+                title: Props.t("files.lines", {
+                  lines: Lines(Pill.Lines)
+                })
+              }
             },
-            (0, import_react2.createElement)("span", { className: `playform-cost-dot ${ToneClass(Pill.Tone)}` }),
+            (0, import_react2.createElement)("span", {
+              className: `playform-cost-dot ${ToneClass(Pill.Tone)}`
+            }),
             Pill.Name
           )
         ),
@@ -739,7 +774,9 @@ var Files = (Props) => {
             className: "playform-cost-pill playform-cost-pill-muted",
             title: Props.t("files.saving.title")
           },
-          Props.t("files.saving", { value: Price(Props.Saving, Props.Currency) })
+          Props.t("files.saving", {
+            value: Price(Props.Saving, Props.Currency)
+          })
         ) : null
       ),
       Props.ShowMix && Props.Pills.length > 0 ? (0, import_react2.createElement)(
@@ -763,7 +800,11 @@ var Money = (Props) => (0, import_react2.createElement)(
     className: Props.Cell,
     ...Props.Title === void 0 ? {} : { title: Props.Title }
   },
-  (0, import_react2.createElement)("span", { className: "playform-cost-money" }, Price(Props.Value, Props.Currency))
+  (0, import_react2.createElement)(
+    "span",
+    { className: "playform-cost-money" },
+    Price(Props.Value, Props.Currency)
+  )
 );
 var Alloc = (Props) => (0, import_react2.createElement)(
   "td",
@@ -1144,7 +1185,11 @@ function SummaryStrip(Props) {
           Props.AllOpen ? t("collapse.all") : t("expand.all")
         ) : (0, import_react4.createElement)(
           "button",
-          { type: "button", className: "playform-cost-button-off", disabled: true },
+          {
+            type: "button",
+            className: "playform-cost-button-off",
+            disabled: true
+          },
           t("expand.all")
         )
       )
@@ -1316,7 +1361,12 @@ function TotalsRow(Props) {
     ),
     (0, import_react6.createElement)("td", { className: Metric }),
     TokenCell2(Metric, typeof Tokens.total === "number" ? Tokens.total : 0),
-    CacheCell2(Metric, Tokens, typeof Summary.cacheHit === "number" ? Summary.cacheHit : null, t),
+    CacheCell2(
+      Metric,
+      Tokens,
+      typeof Summary.cacheHit === "number" ? Summary.cacheHit : null,
+      t
+    ),
     Cells_default.Money({ Cell: Metric, Value: Cost.cacheRead, Currency: Tag }),
     Cells_default.Money({ Cell: Metric, Value: Cost.input, Currency: Tag }),
     Cells_default.Money({ Cell: Metric, Value: Cost.output, Currency: Tag }),
@@ -1843,7 +1893,8 @@ function View(Props) {
   }, [AllOpen]);
   const LoadOlder = (0, import_react8.useCallback)(() => {
     const Scroll = ScrollRef.current;
-    if (Scroll !== null) Pending.current = { Height: Scroll.scrollHeight, Top: Scroll.scrollTop };
+    if (Scroll !== null)
+      Pending.current = { Height: Scroll.scrollHeight, Top: Scroll.scrollTop };
     Growing.current = true;
     SetOlder("loading");
     SetRows((Current) => Math.min(MaxRows, Current * LoadOlderFactor));
@@ -2002,8 +2053,7 @@ function View(Props) {
     default:
       break;
   }
-  if (Phase === "loading" || Snapshot === null)
-    return Shell([Line(t("loading"), true)], null);
+  if (Phase === "loading" || Snapshot === null) return Shell([Line(t("loading"), true)], null);
   if (Snapshot.turns.length === 0)
     return Shell(
       [Line(t("empty"), false)],
