@@ -4,6 +4,13 @@ import type CostModelRow from "./ModelRow.js";
 import type CostSession from "./Session.js";
 import type CostStageRow from "./StageRow.js";
 import type CostSummary from "./Summary.js";
+import type CostTokens from "./Tokens.js";
+interface Coverage {
+    calls: number;
+    priced: number;
+    unpriced: number;
+    unpricedTokens: CostTokens;
+}
 export default interface CostResponse {
     ok: boolean;
     code: "ok" | "session" | "unavailable" | "error";
@@ -15,8 +22,10 @@ export default interface CostResponse {
     currency: string;
     currencies: readonly string[];
     summary: CostSummary;
+    coverage: Coverage;
     calls: readonly CostCall[];
     files: readonly CostFileRow[] | null;
     stages: readonly CostStageRow[] | null;
     models: readonly CostModelRow[] | null;
 }
+export {};

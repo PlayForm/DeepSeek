@@ -1,4 +1,5 @@
 export default interface Price {
+    readonly PriceId: number | null;
     readonly Provider: string;
     readonly Model: string;
     readonly Currency: string;
@@ -12,4 +13,5 @@ export default interface Price {
     readonly TierTo: number | null;
     readonly Mode: string;
     readonly Region: string | null;
+    readonly Window: string;
 }

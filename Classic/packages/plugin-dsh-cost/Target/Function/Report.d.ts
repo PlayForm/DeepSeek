@@ -34,6 +34,13 @@ type EditRow = {
     Hunks: number;
     Cost: number;
 };
+type CoverageRow = {
+    SessionId: string;
+    Calls: number;
+    Priced: number;
+    Unpriced: number;
+    UnpricedTokens: number;
+};
 declare const Row: (Scope: Row["Scope"], Raw: Record<string, unknown>) => Row;
 export default _default;
 declare function _default(Database: DatabaseSync): {
@@ -46,4 +53,5 @@ declare function _default(Database: DatabaseSync): {
     Stages: (Path?: string) => readonly StageRow[];
     Factors: () => readonly FactorRow[];
     Edits: (Path?: string) => readonly EditRow[];
+    Coverage: (SessionId?: string) => readonly CoverageRow[];
 };

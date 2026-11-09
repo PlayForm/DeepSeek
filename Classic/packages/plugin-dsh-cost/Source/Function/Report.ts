@@ -15,7 +15,11 @@
 // removed, the hunk count and the summed cost. Each returns plain rows whose
 // cost columns
 // are rounded to six decimals, so a report, an export and a re-derivation
-// land the same numbers at the same precision. The FileCost view carries no
+// land the same numbers at the same precision. The coverage read (research
+// section 2.2) groups Call by session and states the priced and unpriced call
+// counts with the tokens the unpriced calls spent, because a session whose
+// calls have no rate card carries zero money and must be reported as unpriced
+// rather than free. The FileCost view carries no
 // token column, so file rows report Tokens zero.
 import type { DatabaseSync } from "node:sqlite";
 
@@ -57,6 +61,16 @@ type EditRow = {
 	LinesRemoved: number;
 	Hunks: number;
 	Cost: number;
+};
+
+// One session's coverage: the calls it booked, how many carried a price row,
+// how many did not, and the tokens the unpriced ones spent.
+type CoverageRow = {
+	SessionId: string;
+	Calls: number;
+	Priced: number;
+	Unpriced: number;
+	UnpricedTokens: number;
 };
 
 // One money column: a non-finite or absent sum is zero, never guessed, and
@@ -245,6 +259,36 @@ export default (Database: DatabaseSync) => ({
 			LinesRemoved: typeof One["LinesRemoved"] === "number" ? One["LinesRemoved"] : 0,
 			Hunks: typeof One["Hunks"] === "number" ? One["Hunks"] : 0,
 			Cost: Round(One["Cost"]),
+		}));
+	},
+	// The coverage read (research section 2.2): one row per session with the
+	// calls it booked, how many carried a price row and how many did not, and
+	// the tokens the unpriced ones spent. A session whose calls resolved no
+	// card carries zero money in every other read, so this is the fact that
+	// labels it unpriced instead of free; a session with nothing unpriced
+	// still gets its row, because the priced count is the other half of the
+	// statement.
+	Coverage: (SessionId?: string): readonly CoverageRow[] => {
+		const Argument = SessionId === undefined || SessionId.length === 0 ? undefined : SessionId;
+		const Statement = Database.prepare(
+			"SELECT Call.SessionId AS SessionId, COUNT(*) AS Calls, " +
+				"SUM(CASE WHEN Call.PriceId IS NULL THEN 0 ELSE 1 END) AS Priced, " +
+				"SUM(CASE WHEN Call.PriceId IS NULL THEN 1 ELSE 0 END) AS Unpriced, " +
+				"SUM(CASE WHEN Call.PriceId IS NULL THEN " +
+				"Call.InputTokens + Call.OutputTokens + Call.CacheReadTokens + Call.CacheWriteTokens " +
+				"ELSE 0 END) AS UnpricedTokens " +
+				"FROM Call WHERE (? IS NULL OR Call.SessionId = ?) " +
+				"GROUP BY Call.SessionId ORDER BY Unpriced DESC, Call.SessionId ASC",
+		);
+		const Found = (
+			Argument === undefined ? Statement.all(null, null) : Statement.all(Argument, Argument)
+		) as Record<string, unknown>[];
+		return Found.map((One) => ({
+			SessionId: typeof One["SessionId"] === "string" ? One["SessionId"] : "",
+			Calls: typeof One["Calls"] === "number" ? One["Calls"] : 0,
+			Priced: typeof One["Priced"] === "number" ? One["Priced"] : 0,
+			Unpriced: typeof One["Unpriced"] === "number" ? One["Unpriced"] : 0,
+			UnpricedTokens: typeof One["UnpricedTokens"] === "number" ? One["UnpricedTokens"] : 0,
 		}));
 	},
 });

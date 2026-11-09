@@ -153,7 +153,7 @@ GROUP BY f.FileId;`,Y="ALTER TABLE Price ADD COLUMN TierFrom INTEGER NOT NULL DE
     LinesRemoved INTEGER NOT NULL DEFAULT 0, BytesAdded INTEGER NOT NULL DEFAULT 0,
     BytesRemoved INTEGER NOT NULL DEFAULT 0, BeforeHash TEXT, AfterHash TEXT,
     At INTEGER NOT NULL, UNIQUE (TouchId, Ordinal)
-) STRICT;`,z="ALTER TABLE Call ADD COLUMN LatencyMs INTEGER;",k="ALTER TABLE Call ADD COLUMN FirstTokenMs INTEGER;",w="ALTER TABLE Call ADD COLUMN TokensPerSecond REAL;",j="ALTER TABLE Call ADD COLUMN Attempts INTEGER NOT NULL DEFAULT 1;",b="ALTER TABLE Call ADD COLUMN ErrorCode TEXT;",J="ALTER TABLE Call ADD COLUMN ContextWindow INTEGER;",Q="ALTER TABLE Call ADD COLUMN Utilization REAL;",H="ALTER TABLE Touch ADD COLUMN DurationMs INTEGER;",_="ALTER TABLE Touch ADD COLUMN ResultBytes INTEGER;",R=`CREATE TABLE Catalog (
+) STRICT;`,z="ALTER TABLE Call ADD COLUMN LatencyMs INTEGER;",k="ALTER TABLE Call ADD COLUMN FirstTokenMs INTEGER;",w="ALTER TABLE Call ADD COLUMN TokensPerSecond REAL;",j="ALTER TABLE Call ADD COLUMN Attempts INTEGER NOT NULL DEFAULT 1;",Q="ALTER TABLE Call ADD COLUMN ErrorCode TEXT;",b="ALTER TABLE Call ADD COLUMN ContextWindow INTEGER;",J="ALTER TABLE Call ADD COLUMN Utilization REAL;",H="ALTER TABLE Touch ADD COLUMN DurationMs INTEGER;",_="ALTER TABLE Touch ADD COLUMN ResultBytes INTEGER;",R=`CREATE TABLE Catalog (
     CatalogId INTEGER PRIMARY KEY, Name TEXT NOT NULL UNIQUE
 ) STRICT;`,i=`CREATE TABLE Revision (
     RevisionId INTEGER PRIMARY KEY,
@@ -184,11 +184,12 @@ GROUP BY f.FileId;`,Y="ALTER TABLE Price ADD COLUMN TierFrom INTEGER NOT NULL DE
     Component TEXT NOT NULL, Amount REAL NOT NULL, Currency TEXT NOT NULL,
     PRIMARY KEY (ValuationId, CallId, Component)
 ) STRICT;`,n=`CREATE TABLE ValuationAllocation (
+    ValuationAllocationId INTEGER PRIMARY KEY,
     ValuationId INTEGER NOT NULL REFERENCES Valuation (ValuationId),
     CallId INTEGER NOT NULL REFERENCES Call (CallId),
     FileId INTEGER REFERENCES File (FileId),
     Amount REAL NOT NULL, Currency TEXT NOT NULL,
-    PRIMARY KEY (ValuationId, CallId, FileId)
+    UNIQUE (ValuationId, CallId, FileId)
 ) STRICT;`,q="INSERT INTO Catalog (Name) VALUES ('bootstrap');",Z=`INSERT INTO Revision (CatalogId, ParentRevisionId, CreatedAt, Reason, Status)
 SELECT CatalogId, NULL, CAST(strftime('%s', 'now') AS INTEGER) * 1000,
     'the recorded price book, seeded at the v5 rung', 'published'
@@ -205,4 +206,4 @@ SELECT 'as-recorded', Revision.RevisionId,
     NULL, CAST(strftime('%s', 'now') AS INTEGER) * 1000,
     'the recorded book, priced by the bootstrap revision'
 FROM Revision
-WHERE Revision.CatalogId = (SELECT CatalogId FROM Catalog WHERE Name = 'bootstrap');`,eE=[B,x,m,v,y,E,T,e,"PRAGMA user_version = 2;"],oE=[Y,g,h,V,o,t,N,f,K,W,"PRAGMA user_version = 3;"],tE=[L,z,k,w,j,b,J,Q,H,_,"PRAGMA user_version = 4;"],NE=[R,i,l,a,I,n,q,Z,$,EE,"PRAGMA user_version = 5;"],TE=[A,r,C,d,s,U,O,c,S,F,M,G,D,p,P,u,X,E,T,e,o,t,N,L,R,i,l,a,I,n];var LE=TE;export{E as Alias,F as Allocation,G as Annotation,O as Call,j as CallAttempts,b as CallError,N as CallFactor,k as CallFirstToken,z as CallLatency,f as CallMode,w as CallRate,K as CallRegion,x as CallSaving,W as CallTier,Q as CallUtilization,J as CallWindow,R as Catalog,r as Client,X as ClientCost,S as ContextMass,D as Cursor,TE as Ddl,L as Edit,t as Factor,s as File,p as FileCost,e as FileLifetime,U as FileVersion,eE as Migration,oE as MigrationFactor,NE as MigrationPricing,tE as MigrationTelemetry,P as ModelCost,o as Modifier,A as Price,h as PriceMode,V as PriceRegion,Y as PriceTier,g as PriceTierTo,B as PriceWindow,C as Project,l as RateRow,i as Revision,M as Rollup,q as SeedCatalog,$ as SeedRateRow,Z as SeedRevision,EE as SeedValuation,d as Session,u as SessionCost,c as Touch,v as TouchBranch,_ as TouchBytes,H as TouchDuration,y as TouchRead,m as TouchStage,a as Valuation,n as ValuationAllocation,I as ValuationCost,T as Verdict,LE as default};
+WHERE Revision.CatalogId = (SELECT CatalogId FROM Catalog WHERE Name = 'bootstrap');`,eE=[B,x,m,v,y,E,T,e,"PRAGMA user_version = 2;"],oE=[Y,g,h,V,o,t,N,f,K,W,"PRAGMA user_version = 3;"],tE=[L,z,k,w,j,Q,b,J,H,_,"PRAGMA user_version = 4;"],NE=[R,i,l,a,I,n,q,Z,$,EE,"PRAGMA user_version = 5;"],TE=[A,r,C,d,s,U,O,c,S,F,M,G,D,p,P,u,X,E,T,e,o,t,N,L,R,i,l,a,I,n];var LE=TE;export{E as Alias,F as Allocation,G as Annotation,O as Call,j as CallAttempts,Q as CallError,N as CallFactor,k as CallFirstToken,z as CallLatency,f as CallMode,w as CallRate,K as CallRegion,x as CallSaving,W as CallTier,J as CallUtilization,b as CallWindow,R as Catalog,r as Client,X as ClientCost,S as ContextMass,D as Cursor,TE as Ddl,L as Edit,t as Factor,s as File,p as FileCost,e as FileLifetime,U as FileVersion,eE as Migration,oE as MigrationFactor,NE as MigrationPricing,tE as MigrationTelemetry,P as ModelCost,o as Modifier,A as Price,h as PriceMode,V as PriceRegion,Y as PriceTier,g as PriceTierTo,B as PriceWindow,C as Project,l as RateRow,i as Revision,M as Rollup,q as SeedCatalog,$ as SeedRateRow,Z as SeedRevision,EE as SeedValuation,d as Session,u as SessionCost,c as Touch,v as TouchBranch,_ as TouchBytes,H as TouchDuration,y as TouchRead,m as TouchStage,a as Valuation,n as ValuationAllocation,I as ValuationCost,T as Verdict,LE as default};

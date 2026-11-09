@@ -11,7 +11,12 @@
 // conversation produced), the stage ranking and the model ranking. Each is
 // its own statement joined on FileId - the money is never joined from
 // Allocation to Touch in one FROM clause, so a call that touched one file
-// twice cannot fan its allocation out. Every statement runs through
+// twice cannot fan its allocation out. Beside the summary the envelope
+// carries `coverage`: the priced and unpriced call counts and the token
+// buckets the unpriced calls spent, because a call whose rate card the book
+// does not carry stores zero money and must be read as unpriced, never as
+// free (research section 2.2 - a missing rate is unpriced, a known free rate
+// is an explicit zero row). Every statement runs through
 // the Query table below and reads only; a session the ledger does not record
 // answers ok false with code "session" and the zero summary; every nullable
 // column stays null when the ledger stores no value. The read-only open lives
@@ -40,7 +45,10 @@ import type CostTopFile from "@Interface/TopFile.js";
 // orders by (CallId, Seq) so a file's first touch in Seq order wins;
 // Summary aggregates the whole session in one row - the allocation money is
 // pre-aggregated per call first so the join cannot multiply the call sums -
-// and carries the dominant currency and the distinct currency list as JSON;
+// and carries the dominant currency and the distinct currency list as JSON,
+// plus the priced and unpriced call counts and the token buckets the unpriced
+// calls spent (the coverage the envelope repeats for a caller that reads only
+// the summary);
 // TopFiles applies the route's TopFileLimit of 5 in SQL. Files is the FILES
 // view: one CTE per aggregate (this session's money, the touches with their
 // kind counts and stage set, the edit lines and bytes through Touch, the
@@ -163,6 +171,12 @@ SELECT
     (SELECT COUNT(*) FROM CallRow) AS Calls,
     (SELECT COUNT(*) FROM CallRow WHERE PriceId IS NOT NULL) AS Priced,
     (SELECT COUNT(*) FROM CallRow WHERE PriceId IS NULL) AS Unpriced,
+    (SELECT SUM(InputTokens) FROM CallRow WHERE PriceId IS NULL) AS UnpricedInput,
+    (SELECT SUM(OutputTokens) FROM CallRow WHERE PriceId IS NULL) AS UnpricedOutput,
+    (SELECT SUM(CacheReadTokens) FROM CallRow WHERE PriceId IS NULL) AS UnpricedCacheRead,
+    (SELECT SUM(CacheWriteTokens) FROM CallRow WHERE PriceId IS NULL) AS UnpricedCacheWrite,
+    (SELECT SUM(ReasoningTokens) FROM CallRow WHERE PriceId IS NULL) AS UnpricedReasoning,
+    (SELECT SUM(TotalTokens) FROM CallRow WHERE PriceId IS NULL) AS UnpricedReported,
     (SELECT COUNT(DISTINCT Turn) FROM CallRow) AS Turns,
     (SELECT COUNT(*) FROM CallRow) AS Steps,
     (SELECT SUM(InputTokens) FROM CallRow) AS InputTokens,
@@ -468,6 +482,20 @@ export default function Reader(
 				currencies: [],
 				topFiles: [],
 			},
+			coverage: {
+				calls: 0,
+				priced: 0,
+				unpriced: 0,
+				unpricedTokens: {
+					input: 0,
+					output: 0,
+					cacheRead: 0,
+					cacheWrite: 0,
+					reasoning: 0,
+					total: 0,
+					reported: null,
+				},
+			},
 			calls: [],
 			files: null,
 			stages: null,
@@ -739,6 +767,29 @@ export default function Reader(
 		currencies: CurrencyList(SummaryRow["Currencies"]),
 		topFiles: TopFiles,
 	};
+	// The coverage the envelope carries beside the summary (research section
+	// 2.2): the same counts the summary states, plus the token buckets the
+	// unpriced calls spent - read from the same statement, so the two can
+	// never disagree. A session with no unpriced call carries zeros here, and
+	// a zero-cost call is then read as unpriced only when the count says so.
+	const UnpricedInput = Stored(SummaryRow, "UnpricedInput");
+	const UnpricedOutput = Stored(SummaryRow, "UnpricedOutput");
+	const UnpricedCacheRead = Stored(SummaryRow, "UnpricedCacheRead");
+	const UnpricedCacheWrite = Stored(SummaryRow, "UnpricedCacheWrite");
+	const Coverage = {
+		calls: Summary.calls,
+		priced: Summary.priced,
+		unpriced: Summary.unpriced,
+		unpricedTokens: {
+			input: UnpricedInput,
+			output: UnpricedOutput,
+			cacheRead: UnpricedCacheRead,
+			cacheWrite: UnpricedCacheWrite,
+			reasoning: Stored(SummaryRow, "UnpricedReasoning"),
+			total: UnpricedInput + UnpricedCacheRead + UnpricedCacheWrite + UnpricedOutput,
+			reported: Figure(SummaryRow, "UnpricedReported"),
+		},
+	};
 
 	return {
 		ok: true,
@@ -751,6 +802,7 @@ export default function Reader(
 		currency: Summary.currency,
 		currencies: Summary.currencies,
 		summary: Summary,
+		coverage: Coverage,
 		calls: Calls,
 		files: Files,
 		stages: Stages,

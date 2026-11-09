@@ -9,7 +9,20 @@
 // TierTo bound one tier of a marginal rate card (a NULL TierTo is the open
 // top tier), and a NULL Mode or Region means "any mode" or "any region", so
 // the most specific row in force prices the call.
+//
+// Window names the row's time-of-day card ('any' when it applies at every
+// hour): the tier family is bound to it beside the effective date, the mode
+// and the region, so a windowed card's bands are read inside that window
+// only and never mixed with another window's bands.
+//
+// PriceId is the resolved row's own identity, and NULL is the UNPRICED
+// resolution: no row matched, so the row's zero rates mean no rate exists,
+// never that the rate is zero (research section 2.2 - a missing rate is
+// unpriced, a known free rate is an explicit zero row). A caller that stores
+// the resolved row's identity on a call writes PriceId NULL for the unpriced
+// case, so the ledger's own PriceId column carries the distinction.
 export default interface Price {
+	readonly PriceId: number | null;
 	readonly Provider: string;
 	readonly Model: string;
 	readonly Currency: string;
@@ -23,4 +36,5 @@ export default interface Price {
 	readonly TierTo: number | null;
 	readonly Mode: string;
 	readonly Region: string | null;
+	readonly Window: string;
 }
