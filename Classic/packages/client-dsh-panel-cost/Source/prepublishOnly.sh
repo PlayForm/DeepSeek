@@ -17,6 +17,10 @@
 
 set -e
 
+# The compiled sheet must match its source: the twin is generated, never
+# hand-edited, and a stale one would ship the old CSS.
+node ../../../Maintain/Generate/Stylesheet/Index.mjs --check .
+
 Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
 	--ESBuild Configuration/ESBuild.ts
 

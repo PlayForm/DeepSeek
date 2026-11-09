@@ -100,6 +100,12 @@ The build is `pnpm prepublishOnly` (Source/prepublishOnly.sh): the plugin build 
 tree excluded), then `Build-Client-Bundle.mjs` (`Target/Client.bundle.js`), then the Test build, the
 harness selfcheck, and the Test type-check.
 
+`Source/Stylesheet/Plugin.scss` is the sheet - the plugin's own, `@use`ing the shared
+`@playform/style-dsh-material` material - and `Source/Variable/Styles.ts` is its generated twin
+(`pnpm stylesheets`). `Source/Function/Styles.ts` binds the identifier to the shared
+`@playform/lib-dsh-style` injector, and `pnpm prepublishOnly` fails when the twin drifts from
+the sheet.
+
 ## The plan
 
 - [Workspace-Family/LIVE](../../Documentation/Plans/Workspace-Family/LIVE.md) - the live-view plan.

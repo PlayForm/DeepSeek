@@ -1,0 +1,206 @@
+@use "Token" as Token;
+
+// The scrollable tab shell: the panel body every client plugin mounts.
+@mixin Scroll {
+	display: grid;
+	flex: 1;
+	gap: 12px;
+	align-content: start;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 880px;
+	min-height: 0;
+	margin: 0 auto;
+	padding: 20px 16px 28px;
+	overflow: auto;
+}
+
+// The empty-state line: one centered paragraph in the quiet voice.
+@mixin Notice {
+	margin: 0;
+	padding: 24px 16px;
+	color: var(--dsw-alias-label-secondary);
+	font-size: 13px;
+	line-height: 20px;
+	text-align: center;
+}
+
+// The frame a notice gains when it stands in for content.
+@mixin NoticeFrame {
+	background: var(--dsw-alias-settings-card-fill);
+	border: 0.5px dashed var(--dsw-alias-border-l2);
+	border-radius: var(--dsw-radius-lg);
+}
+
+// The card face: one fill, one hairline, one radius, zero elevation.
+@mixin Surface($Radius: var(--dsw-radius-lg)) {
+	box-sizing: border-box;
+	background: var(--dsw-alias-settings-card-fill);
+	border: 0.5px solid var(--dsw-alias-settings-card-stroke);
+	border-radius: $Radius;
+}
+
+// The section heading: the primary voice, semibold, one line.
+@mixin Heading {
+	color: var(--dsw-alias-label-primary);
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 18px;
+}
+
+// The meta voice: counts and stamps at the small size.
+@mixin Meta {
+	color: var(--dsw-alias-label-secondary);
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 16px;
+}
+
+// The eyebrow: the uppercase label that names a band or a state.
+@mixin Label($Size: 11px) {
+	color: var(--dsw-alias-label-secondary);
+	font-size: $Size;
+	font-weight: 500;
+	line-height: 16px;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+// The code voice: the mono stack at the small size.
+@mixin Code {
+	color: var(--dsw-alias-label-secondary);
+	font-family: Token.$Font;
+	font-size: 11px;
+	line-height: 16px;
+}
+
+// The tray: the inset mono list that carries a ledger tail.
+@mixin Tray($Height: 136px) {
+	display: grid;
+	gap: 2px;
+	margin: 0;
+	padding: 8px 10px;
+	max-height: $Height;
+	overflow: auto;
+	list-style: none;
+	color: var(--dsw-alias-label-secondary);
+	font-family: Token.$Font;
+	font-size: 11px;
+	line-height: 16px;
+	background: var(--dsw-alias-bg-layer-1);
+	border: 0.5px solid var(--dsw-alias-border-l1);
+	border-radius: var(--dsw-radius-md);
+}
+
+// The lamp: the one state dot. The caller owns its display and its ink.
+@mixin Lamp($Size: 6px) {
+	width: $Size;
+	height: $Size;
+	border-radius: 50%;
+	corner-shape: round;
+}
+
+// The truncation: one line, an ellipsis, no wrap.
+@mixin Truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+// The form grid: fields wrap when the panel narrows.
+@mixin Form {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 10px 12px;
+	margin: 2px 0 0;
+}
+
+// The field: a label over its control.
+@mixin Field {
+	display: grid;
+	gap: 4px;
+	min-width: 0;
+	color: var(--dsw-alias-label-primary);
+	font-size: 12px;
+	line-height: 16px;
+}
+
+// The input: one hairline, one radius, the brand focus ring.
+@mixin Input {
+	box-sizing: border-box;
+	width: 100%;
+	height: 28px;
+	padding: 0 8px;
+	color: var(--dsw-alias-label-primary);
+	font: inherit;
+	font-size: 12px;
+	background: var(--dsw-alias-bg-layer-1);
+	border: 0.5px solid var(--dsw-alias-border-l1);
+	border-radius: var(--dsw-radius-sm);
+	outline: none;
+
+	&:focus-visible {
+		border-color: var(--dsw-alias-brand-primary);
+		outline: 2px solid var(--dsw-alias-brand-primary);
+		outline-offset: 1px;
+	}
+}
+
+// The chip: one short value on the layered fill.
+@mixin Chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	height: 19px;
+	padding: 0 6px;
+	border: 0.5px solid var(--dsw-alias-border-l2);
+	border-radius: 2px;
+	background: var(--dsw-alias-bg-layer-2);
+	color: var(--dsw-alias-label-primary);
+	font-size: 10px;
+	font-weight: 650;
+}
+
+// The pill: the family's own marker, in the brand ink.
+@mixin Pill {
+	padding: 1px 7px;
+	color: var(--dsw-alias-brand-primary);
+	font-size: 10px;
+	font-weight: 500;
+	line-height: 14px;
+	background: var(--dsw-alias-bg-layer-1);
+	border: 0.5px solid var(--dsw-alias-border-l2);
+	border-radius: 999px;
+	corner-shape: round;
+}
+
+// The overlay panel: the shell.overlay face.
+@mixin Overlay {
+	box-sizing: border-box;
+	display: grid;
+	gap: 12px;
+	width: 100%;
+	max-height: 80vh;
+	padding: 20px;
+	overflow: auto;
+	background: var(--dsw-alias-bg-overlay);
+	border: 0;
+	border-radius: var(--dsw-radius-panel);
+	box-shadow: var(--dsw-elevation-panel);
+}
+
+// The focus ring: one hairline of the business ink, offset from the control.
+@mixin FocusRing($Offset: 1px) {
+	outline: 1px solid var(--dsw-alias-state-business-primary);
+	outline-offset: $Offset;
+}
+
+// The column: a full-height flex stack with the inner scroll.
+@mixin Column {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	height: 100%;
+	min-height: 0;
+	overflow: hidden;
+}

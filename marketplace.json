@@ -4,7 +4,7 @@
 		"en": "DSH Family @ PlayForm"
 	},
 	"description": {
-		"en": "The PlayForm DeepSeek Harness plugin family: 122 packages across the Classic TypeScript and Effect-TS trees."
+		"en": "The PlayForm DeepSeek Harness plugin family: 125 packages across the Classic TypeScript and Effect-TS trees."
 	},
 	"metadata": {
 		"categories": {
@@ -84,11 +84,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794201680,
+					"publishTimestamp": 1794201918,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "5dbf9f3149825fadd145eb0af578a1a65a84a61a",
+						"commit": "4ce33fc8dfdabe88fed60429f4508059906ff1bc",
 						"path": "Classic/packages/client-dsh-panel-cost"
 					},
 					"engines": {}
@@ -2240,6 +2240,45 @@
 					"publishTimestamp": 1793221405,
 					"source": {
 						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/ets-lib-dsh-style",
+			"title": {
+				"en": "Style (Effect-TS)"
+			},
+			"description": {
+				"en": "The STYLE: the one runtime stylesheet injector of the UI family (@playform/ets-lib-dsh-style) - the single <style> mount every client plugin calls, keyed by the data-plugin-css attribute, appended to the document head once per plugin file,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "EffectTS/packages/ets-lib-dsh-style"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"style",
+					"effectts"
+				],
+				"labels": [
+					"effectts",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1794201918,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "4ce33fc8dfdabe88fed60429f4508059906ff1bc",
+						"path": "EffectTS/packages/ets-lib-dsh-style"
 					},
 					"engines": {}
 				}
@@ -5225,6 +5264,45 @@
 			]
 		},
 		{
+			"name": "@playform/lib-dsh-style",
+			"title": {
+				"en": "Style"
+			},
+			"description": {
+				"en": "The STYLE: the one runtime stylesheet injector of the UI family (@playform/lib-dsh-style) - the single <style> mount every client plugin calls, keyed by the data-plugin-css attribute, appended to the document head once per plugin file,..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/lib-dsh-style"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"style",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1794201918,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "4ce33fc8dfdabe88fed60429f4508059906ff1bc",
+						"path": "Classic/packages/lib-dsh-style"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
 			"name": "@playform/lib-dsh-trace",
 			"title": {
 				"en": "Trace"
@@ -6491,6 +6569,45 @@
 					"publishTimestamp": 1793221180,
 					"source": {
 						"type": "npm"
+					},
+					"engines": {}
+				}
+			]
+		},
+		{
+			"name": "@playform/style-dsh-material",
+			"title": {
+				"en": "Style Material"
+			},
+			"description": {
+				"en": "The MATERIAL: the one place the family's UI base is developed (@playform/style-dsh-material) - the mixins, the base classes and the token expressions every client plugin's own stylesheet @uses over the harness alias tokens, so a new plugin..."
+			},
+			"author": "PlayForm",
+			"repository": {
+				"url": "https://github.com/PlayForm/DeepSeek",
+				"directory": "Classic/packages/style-dsh-material"
+			},
+			"metadata": {
+				"category": "library",
+				"keywords": [
+					"material",
+					"classic"
+				],
+				"labels": [
+					"classic",
+					"source"
+				],
+				"sortKeys": {}
+			},
+			"versions": [
+				{
+					"version": "0.2.1",
+					"publishTimestamp": 1794201918,
+					"source": {
+						"type": "git",
+						"url": "https://github.com/PlayForm/DeepSeek",
+						"commit": "4ce33fc8dfdabe88fed60429f4508059906ff1bc",
+						"path": "Classic/packages/style-dsh-material"
 					},
 					"engines": {}
 				}

@@ -1,1 +1,0 @@
-import e from"../Trace.js";var n={id:"adapter-hook-dsh-package-pinner",bundle:"@playform/ets-hook-dsh-package-pinner",namespace:"hook-dsh-package-pinner",title:"package-pinner",order:55,slot:"playform.panel.section",activation:"enabled",traceKinds:e.kinds};export{n as default};

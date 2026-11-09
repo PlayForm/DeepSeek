@@ -33,10 +33,14 @@
 		"Run": "sh Source/Run.sh",
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
+	"dependencies": {
+		"@playform/lib-dsh-style": "0.2.1"
+	},
 	"devDependencies": {
 		"@deepseek-ai/cordis": "4.1.0",
 		"@deepseek-ai/schemastery": "3.19.0",
 		"@playform/build": "0.3.5",
+		"@playform/style-dsh-material": "0.2.1",
 		"@types/node": "26.6.6",
 		"@types/react": "19.3.0",
 		"react": "19.3.1",

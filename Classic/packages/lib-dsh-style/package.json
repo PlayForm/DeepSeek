@@ -1,0 +1,41 @@
+{
+	"name": "@playform/lib-dsh-style",
+	"version": "0.2.1",
+	"private": false,
+	"description": "The STYLE: the one runtime stylesheet injector of the UI family (@playform/lib-dsh-style) - the single <style> mount every client plugin calls, keyed by the data-plugin-css attribute, appended to the document head once per plugin file, with no removal path. A plugin binds its identifier to its compiled sheet and calls Inject; the mount dedupes by key and guards SSR, and it owns no ledger string, no loader contract and no dependency on any family package - the CLASSIC, dependency-free build of the classical group. Usable outside the harness entirely (the PlayForm ecosystem).",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./Target/Library.d.ts",
+			"default": "./Target/Library.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "./Target/Library.js",
+	"types": "./Target/Library.d.ts",
+	"files": [
+		"Target",
+		"!Target/Test",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"Run": "sh Source/Run.sh",
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"devDependencies": {
+		"@playform/build": "0.3.5",
+		"@types/node": "26.6.6",
+		"tsc-alias": "1.9.10",
+		"typescript": "7.0.2"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	}
+}

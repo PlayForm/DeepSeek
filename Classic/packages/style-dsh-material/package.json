@@ -1,0 +1,28 @@
+{
+	"name": "@playform/style-dsh-material",
+	"version": "0.2.1",
+	"private": false,
+	"description": "The MATERIAL: the one place the family's UI base is developed (@playform/style-dsh-material) - the mixins, the base classes and the token expressions every client plugin's own stylesheet @uses over the harness alias tokens, so a new plugin extends the base instead of copying it. SCSS only and runtime-free: the Classic tree owns the source and the EffectTS plugins compile the same partials, the one cross-tree edge the family allows because a stylesheet has no Effect envelope.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PlayForm/DeepSeek.git"
+	},
+	"license": "CC0-1.0",
+	"type": "module",
+	"exports": {
+		"./Source/Stylesheet/*": "./Source/Stylesheet/*.scss",
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"Source/Stylesheet",
+		"README.md",
+		"SCHEME.md"
+	],
+	"scripts": {
+		"prepublishOnly": "sh Source/prepublishOnly.sh"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	}
+}

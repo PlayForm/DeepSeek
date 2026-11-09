@@ -1,0 +1,116 @@
+// Plugin.scss for @playform/client-dsh-panel-family: the shared faces come from
+// the material, while the selectors and the geometry stay this plugin's own.
+@use "@playform/style-dsh-material/Source/Stylesheet/Material" as Material;
+
+.playform-family-tab {
+	@include Material.Scroll;
+}
+
+.playform-family-tab > p {
+	@include Material.Notice;
+}
+
+.playform-family-section {
+	@include Material.Surface(var(--dsw-radius-xl));
+
+	display: grid;
+	gap: 8px;
+	padding: 14px 16px 16px;
+}
+
+.playform-family-section h3 {
+	@include Material.Heading;
+
+	margin: 0;
+}
+
+.playform-family-status {
+	@include Material.Label;
+
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0;
+}
+
+.playform-family-status::before {
+	@include Material.Lamp;
+
+	content: "";
+	flex: none;
+	background: var(--dsw-alias-state-idle-primary);
+}
+
+.playform-family-section[data-activation="enabled"] .playform-family-status::before {
+	background: var(--dsw-alias-state-success-primary);
+}
+
+.playform-family-section[data-activation="unknown"] .playform-family-status::before {
+	background: var(--dsw-alias-state-warn-primary);
+}
+
+.playform-family-tail {
+	@include Material.Tray(136px);
+}
+
+.playform-family-tail li {
+	@include Material.Truncate;
+}
+
+.playform-family-tail li[data-kind="observe/stamp"] {
+	color: var(--dsw-alias-brand-primary);
+}
+
+.playform-family-form {
+	@include Material.Form;
+}
+
+.playform-family-field {
+	@include Material.Field;
+}
+
+.playform-family-field-label {
+	@include Material.Truncate;
+
+	color: var(--dsw-alias-label-secondary);
+}
+
+.playform-family-field input[type="text"],
+.playform-family-field input[type="number"],
+.playform-family-field select {
+	@include Material.Input;
+}
+
+.playform-family-field input[type="checkbox"] {
+	width: 14px;
+	height: 14px;
+	margin: 2px 0 0;
+	accent-color: var(--dsw-alias-brand-primary);
+}
+
+.playform-family-field-override {
+	@include Material.Pill;
+
+	justify-self: start;
+}
+
+.playform-family-field-secret {
+	color: var(--dsw-alias-label-secondary);
+	font-size: 12px;
+	font-style: italic;
+}
+
+.playform-family-form-note {
+	margin: 0;
+	color: var(--dsw-alias-label-secondary);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.playform-family-overlay {
+	@include Material.Overlay;
+}
+
+.playform-family-overlay:not(:has(.playform-family-section)) {
+	display: none;
+}

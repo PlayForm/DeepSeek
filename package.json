@@ -17,6 +17,8 @@
 		"marketplace": "node Maintain/Generate/Marketplace/Index.mjs",
 		"marketplace:check": "node Maintain/Generate/Marketplace/Index.mjs --check",
 		"site": "pnpm --dir Site run Run",
+		"stylesheets": "node Maintain/Generate/Stylesheet/Index.mjs",
+		"stylesheets:check": "node Maintain/Generate/Stylesheet/Index.mjs --check",
 		"test": "node Maintain/Run/Smokes/Index.mjs",
 		"test:icons": "node Test/Icons/Check.mjs",
 		"test:types": "node Maintain/Run/Types/Index.mjs",
@@ -46,6 +48,7 @@
 		"prettier-plugin-svelte": "4.1.1",
 		"prettier-plugin-tailwindcss": "0.8.1",
 		"prettier-plugin-toml": "4.1.0",
+		"sass-embedded": "1.106.1",
 		"tailwindcss": "4.3.3",
 		"turbo": "2.11.10"
 	},

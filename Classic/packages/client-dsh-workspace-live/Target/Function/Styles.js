@@ -1,1 +1,1 @@
-import o from"../Variable/Styles.js";const t="@playform/client-dsh-workspace-live",n=`${t}/client.css`;function l(){if(typeof document>"u"||document.querySelector(`style[data-plugin-css="${n}"]`)!==null)return;const e=document.createElement("style");e.dataset.plugin=t,e.dataset.pluginCss=n,e.textContent=o,document.head.append(e)}export{l as default};
+import o from"@playform/lib-dsh-style";import t from"../Variable/Styles.js";const e="@playform/client-dsh-workspace-live";function r(){o(e,t)}export{r as default};

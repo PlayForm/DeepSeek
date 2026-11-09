@@ -1,1 +1,0 @@
-import o from"./Variable/Config.js";import t from"./Variable/Version.js";const n="client-dsh-panel-family",e=o,i=[];function r(){}var c={name:n,apply:r,Config:e,inject:i};export{e as Config,t as Version,r as apply,c as default,i as inject,n as name};

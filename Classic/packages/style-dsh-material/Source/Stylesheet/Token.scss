@@ -1,0 +1,9 @@
+// The harness's code stack with the family's fallback chain: the alias is the
+// harness's, the fallbacks are the family's promise.
+$Font: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);
+
+// The one state palette: a lamp is idle until its data says otherwise.
+$Idle: var(--dsw-alias-state-idle-primary);
+$Success: var(--dsw-alias-state-success-primary);
+$Warn: var(--dsw-alias-state-warn-primary);
+$Brand: var(--dsw-alias-brand-primary);

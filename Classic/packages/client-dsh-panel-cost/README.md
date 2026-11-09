@@ -29,9 +29,9 @@ semantics, because the ledger writes no latency, first-token, or tool-duration c
 - `Source/Function/SummaryStrip.ts` - the session summary and the top-file band.
 - `Source/Function/Price.ts`, `Count.ts`, `CountShort.ts`, `Rate.ts`, `Clock.ts`, `Stamp.ts`,
   `Share.ts`, `Lines.ts` - the formatters.
-- `Source/Function/Styles.ts` - the stylesheet injector.
-- `Source/Variable/Styles.ts` - the stylesheet (the harness's rules, ported, on the family's
-  `--dsw-alias-*` tokens).
+- `Source/Function/Styles.ts` - the binding to `@playform/lib-dsh-style`.
+- `Source/Stylesheet/Plugin.scss` - the plugin's own sheet, on the shared material.
+- `Source/Variable/Styles.ts` - the generated twin (`pnpm stylesheets`).
 - `Source/Variable/Config.ts` - the Schemastery schema.
 - `Source/Variable/Slots.ts` - the slot points.
 - `Source/Variable/Path.ts`, `Source/Variable/Limits.ts` - the route path and the row budget.
