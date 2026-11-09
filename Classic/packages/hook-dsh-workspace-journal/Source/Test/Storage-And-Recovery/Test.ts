@@ -1,9 +1,14 @@
-// Source/Test/Storage-And-Recovery/Test.ts - the storage domain and the
-// restart recovery: the byte-exact domain spec (name/version/layout/
-// invalidRecords/three tables), the batch/entry/ring persistence, the
-// restart recovery with the rebuilds, the validation filter (a bad record is
-// skipped, never guessed), the absent facility (silent skip), the loud open
-// failure, and the effect's disposer closing the handle.
+/**
+ * @module Test
+ *
+ * The storage domain and the restart recovery.
+ *
+ * @remarks
+ * Covers the byte-exact domain spec (name/version/layout/invalidRecords/three tables), the
+ * batch/entry/ring persistence, the restart recovery with the rebuilds, the validation filter (a
+ * bad record is skipped, never guessed), the absent facility (silent skip), the loud open
+ * failure, and the effect's disposer closing the handle.
+ */
 import assert from "node:assert/strict";
 import {
 	Boot,

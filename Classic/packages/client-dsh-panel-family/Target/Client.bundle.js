@@ -824,8 +824,8 @@ var Normalize_default = {
   title: "normalize",
   order: 10,
   slot: "playform.panel.section",
-  // The schema has no master switch: the bundle row decides, so the static
-  // posture is "enabled" until a trace envelope reports otherwise.
+  // The schema has no master switch: the bundle row decides, so the static posture is
+  // "enabled" until a trace envelope reports otherwise.
   activation: "enabled",
   traceKinds: Trace_default.kinds
 };
@@ -898,8 +898,8 @@ var Suggester_default = {
   title: "suggester",
   order: 40,
   slot: "playform.panel.section",
-  // Config.enabled defaults to true (Variable/Config.ts): the static posture
-  // is the schema default, not a live read.
+  // `Config.enabled` defaults to true (`Variable/Config.ts`): the static posture is the schema
+  // default, not a live read.
   activation: "enabled",
   traceKinds: Trace_default.kinds
 };
@@ -912,8 +912,8 @@ var ToolCoach_default = {
   title: "tool-coach",
   order: 30,
   slot: "playform.panel.section",
-  // Config.enabled defaults to true (Variable/Config.ts): the static posture
-  // is the schema default, not a live read.
+  // `Config.enabled` defaults to true (`Variable/Config.ts`): the static posture is the schema
+  // default, not a live read.
   activation: "enabled",
   traceKinds: Trace_default.kinds
 };
@@ -1046,9 +1046,8 @@ function Registry(Log) {
           break;
       }
     },
-    // The wiring point: the shell overlay mount supplies the real open
-    // implementation (the ui-layout overlay host); until it is attached,
-    // open() only records the request.
+    // The wiring point: the shell overlay mount supplies the real open implementation (the
+    // ui-layout overlay host); until it is attached, open() only records the request.
     AttachOpen(OpenImplementation) {
       Open = OpenImplementation;
     },

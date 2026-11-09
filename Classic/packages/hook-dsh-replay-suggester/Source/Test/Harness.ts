@@ -1,19 +1,23 @@
-// Source/Test/Harness.ts - the shared test harness for the REPLAY-SUGGESTER
-// tests: the fake ctx (ctx listener capture, reflect.provide capture, the
-// effect runner, the logger capture, the fs capture that must stay untouched,
-// the distinct root seam) + the REAL @playform/plugin-dsh-factory instance
-// from its built Target + the REAL replay-suggester apply from its built
-// Target - the family fake-ctx + real-factory harness pattern, written ONCE
-// per package and imported by every test folder. Each folder process gets a
-// fresh set, so every folder is standalone-green.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO FAKE CLOCK: the plugin has no clock dependency at all.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the REPLAY-SUGGESTER tests.
+ *
+ * @remarks
+ * Combines the fake ctx (ctx listener capture, reflect.provide capture, the effect runner, the
+ * logger capture, the fs capture that must stay untouched, the distinct root seam) with the REAL
+ * `@playform/plugin-dsh-factory` instance from its built Target and the REAL replay-suggester
+ * apply from its built Target - the family fake-ctx + real-factory harness pattern, written ONCE
+ * per package and imported by every test folder. Each folder process gets a fresh set, so every
+ * folder is standalone-green.
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` runs the counter through
+ * one deliberate pass + one deliberate failure and exits 0 only when both are counted exactly,
+ * then proves the fake ctx actually wires the plugin (the vacuously-green backstop for every
+ * folder's fixture).
+ *
+ * NO FAKE CLOCK: the plugin has no clock dependency at all.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

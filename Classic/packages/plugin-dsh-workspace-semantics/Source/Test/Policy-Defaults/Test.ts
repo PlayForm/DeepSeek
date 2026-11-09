@@ -1,13 +1,17 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the
-// semantics service: the shared block's defaults in the schema and on the
-// built State (`Allow`), the per-action override, and the service's
-// read-only posture - its own action classes (read and index) are automatic,
-// so it has NO gated action and no verdict can refuse a call.
-//
-// The representative actions are the pure read projections (`statistics` and
-// `references`): no I/O, no building, no throwing - the cheapest real calls
-// in the service's surface, which prove the automatic posture lets a read
-// proceed and that it touches no file content.
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the semantics service: the shared block's defaults in the schema and
+ * on the built State (`Allow`), the per-action override, and the service's read-only posture.
+ *
+ * @remarks
+ * Its own action classes (read and index) are automatic, so it has NO gated action and no verdict
+ * can refuse a call.
+ *
+ * The representative actions are the pure read projections (`statistics` and `references`): no
+ * I/O, no building, no throwing. They are the cheapest real calls in the service's surface, which
+ * prove the automatic posture lets a read proceed and that it touches no file content.
+ */
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";

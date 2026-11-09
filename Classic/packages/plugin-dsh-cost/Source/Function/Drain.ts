@@ -39,18 +39,18 @@
 // "changed"; a touch with no before version or no confirmable after content
 // keeps the signal false instead of guessing. Every insert is INSERT OR
 // IGNORE against the DDL's unique keys (the Verdict is REPLACE), so draining
-// the same events twice writes the same rows and no duplicates. The drain never throws into the parallel dispatch: one
-// failed batch rolls back whole, restores its session's in-memory replay
-// state, logs one line and reports false - the flush handler owns the
-// acknowledgement and decides the retry, so a batch that never committed stays
-// queued. The fold also runs in a replay-only mode (E2, A2 section 1.4): it
-// walks the events exactly as the booking fold does - the surface buffer, the
-// pending touch sets, the awaiting calls, the per-file histories, the
-// per-file versions, the per-file restoration flags, the read targets and
-// the folded set all advance - but it writes no row, advances no cursor and
-// never touches the capture queue, so a partially processed session can
-// rebuild the state a continuous run would hold before it books the events
-// past its cursor.
+// the same events twice writes the same rows and no duplicates. The drain
+// never throws into the parallel dispatch: one failed batch rolls back whole,
+// restores its session's in-memory replay state, logs one line and reports
+// false - the flush handler owns the acknowledgement and decides the retry,
+// so a batch that never committed stays queued. The fold also runs in a
+// replay-only mode (E2, A2 section 1.4): it walks the events exactly as the
+// booking fold does - the surface buffer, the pending touch sets, the
+// awaiting calls, the per-file histories, the per-file versions, the
+// per-file restoration flags, the read targets and the folded set all
+// advance - but it writes no row, advances no cursor and never touches the
+// capture queue, so a partially processed session can rebuild the state a
+// continuous run would hold before it books the events past its cursor.
 import { createHash } from "node:crypto";
 import { basename } from "node:path";
 import type { DatabaseSync } from "node:sqlite";

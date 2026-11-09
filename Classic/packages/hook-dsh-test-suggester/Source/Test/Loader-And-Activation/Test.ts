@@ -1,8 +1,13 @@
-// Source/Test/Loader-And-Activation/Test.ts - the loader contract, the cold
-// disabled mount, the enabled activation proof (byte-exact, the `history`
-// segment), the apply-time wiring, the projection unit's fold, the
-// pass-through discipline, the retired boot projection, the schema fail-loud,
-// and the mount purity.
+/**
+ * @module Test
+ *
+ * The loader contract, the cold disabled mount, the enabled activation proof, the apply-time
+ * wiring, the projection unit's fold, the pass-through discipline, the retired boot projection,
+ * the schema fail-loud, and the mount purity.
+ *
+ * @remarks
+ * The enabled activation proof is byte-exact, with the `history` segment.
+ */
 import assert from "node:assert/strict";
 import {
 	AgentOf,

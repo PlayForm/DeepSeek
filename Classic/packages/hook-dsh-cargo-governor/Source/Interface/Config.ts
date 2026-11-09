@@ -1,18 +1,24 @@
-// Config — the validated plugin-config shape the loader hands to `apply`
-// (CARGO MODULE). Cordis validates the exported Schemastery schema while the
-// plugin loads and fills every default (docs/user/develop/basic/config.md:45),
-// so `apply` receives a plain object of exactly this shape. The schema that
-// produces it lives in Variable/Config.ts; every field here is a config field
-// (the cordis.yml test — no hardcoded tunables).
-//
-// `updateMode` stays a plain `string` (the schema field is Schema.string()).
-// For the CARGO MODULE the ONLY mode is "cargo" — the Rust-side CLI
-// (`cargo upgrade`, cargo-edit): Rust does not co-opt into the TypeScript
-// ecosystem and there is no npm-library equivalent for cargo manifest
-// updates, so the update stage operates at the exclusionary level through
-// the cargo CLI. The field is kept open (like the parent governor's) so a
-// future mode can be added without a schema change; anything other than
-// "cargo" still runs the cargo CLI today (the only implemented path).
+/**
+ * @module Config
+ *
+ * The validated plugin-config shape the loader hands to `apply`.
+ *
+ * @remarks
+ * CARGO MODULE. Cordis validates the exported Schemastery schema while the
+ * plugin loads and fills every default (docs/user/develop/basic/config.md:45),
+ * so `apply` receives a plain object of exactly this shape. The schema that
+ * produces it lives in Variable/Config.ts; every field here is a config field
+ * (the cordis.yml test — no hardcoded tunables).
+ *
+ * `updateMode` stays a plain `string` (the schema field is Schema.string()).
+ * For the CARGO MODULE the ONLY mode is "cargo" — the Rust-side CLI
+ * (`cargo upgrade`, cargo-edit): Rust does not co-opt into the TypeScript
+ * ecosystem and there is no npm-library equivalent for cargo manifest
+ * updates, so the update stage operates at the exclusionary level through
+ * the cargo CLI. The field is kept open (like the parent governor's) so a
+ * future mode can be added without a schema change; anything other than
+ * "cargo" still runs the cargo CLI today (the only implemented path).
+ */
 export default interface Config {
 	/** Ledger enabled — write the durable log file. */
 	log: boolean;

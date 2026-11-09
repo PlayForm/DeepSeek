@@ -1,8 +1,13 @@
-// Slots - the runtime slot vocabulary: the two CHILD SLOTS the panel declares
-// and renders (the v4.1 model), plus the two host slots the panel mounts
-// into. The type side lives in Interface/Panel.ts (PanelSlot); the
-// `satisfies` annotations make a typo a compile error while keeping the
-// literal types for the byte-exact smoke assertions.
+/**
+ * @module Slots
+ *
+ * The runtime slot vocabulary: the two child slots the panel declares and renders (the v4.1
+ * model), plus the two host slots the panel mounts into.
+ *
+ * @remarks
+ * The type side lives in `Interface/Panel.ts` (`PanelSlot`); the `satisfies` annotations make a
+ * typo a compile error while keeping the literal types for the byte-exact smoke assertions.
+ */
 import type { PanelSlot } from "@Interface/Panel.js";
 
 export default {

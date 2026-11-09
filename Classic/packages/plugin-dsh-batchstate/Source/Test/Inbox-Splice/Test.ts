@@ -1,16 +1,21 @@
-// Source/Test/Inbox-Splice/Test.ts - THE INBOX SPLICE and the board's new
-// surfaces: a batch proposal delivered through the harness agent-team inbox
-// (the durable `agent/inbox/spliced` session event AND the live
-// `agent/inbox/inserted` emit) is projected onto the board exactly once; a
-// decision delivered the same way moves the proposal's status; the Gates
-// block and the queue projection render the arbiter truth and the queue's
-// own seats read-only; and the board survives a restart (the state file
-// carries the proposals and the gates back).
-//
-// The inbox fixture mirrors the harness's own splice payload
-// (packages/core/agent/src/types.ts:96) and message shape - a user message
-// with text content - so the listener sees exactly what the agent-loop
-// emits.
+/**
+ * @module Test
+ *
+ * THE INBOX SPLICE and the board's new surfaces: a spliced batch proposal is projected onto the
+ * board exactly once, and the board survives a restart.
+ *
+ * @remarks
+ * A batch proposal delivered through the harness agent-team inbox (the durable
+ * `agent/inbox/spliced` session event AND the live `agent/inbox/inserted` emit) is projected onto
+ * the board exactly once. A decision delivered the same way moves the proposal's status. The
+ * Gates block and the queue projection render the arbiter truth, and the queue's own seats are
+ * read-only. The board survives a restart: the state file carries the proposals and the gates
+ * back.
+ *
+ * The inbox fixture mirrors the harness's own splice payload
+ * (`packages/core/agent/src/types.ts:96`) and message shape - a user message with text content -
+ * so the listener sees exactly what the agent-loop emits.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {

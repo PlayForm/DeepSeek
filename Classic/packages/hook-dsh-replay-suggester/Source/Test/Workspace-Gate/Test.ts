@@ -1,14 +1,17 @@
-// Source/Test/Workspace-Gate/Test.ts - the workspace gate and the RECALL
-// VALIDATION against the fake ctx and REAL temp workspaces: (a) a FOREIGN
-// workspace (a temp tree with the recalled path but no `.git`/`package.json`
-// root) produces NO note and the `abstained foreign-workspace` ledger line;
-// (b) OUR workspace emits a note naming only the recalled regular file that
-// exists - a DELETED path and a bare DIRECTORY are dropped; (c) a record whose
-// files all vanish abstains `no-companions`; (d) a recalled path in the
-// anchor's OWN directory wins outright and the unrelated subtrees are dropped;
-// (e) without such a neighbor a same-tree recalled path ranks ahead of the
-// other release tree's, which is never dropped; (f) a foreign call never
-// poisons the next in-workspace call.
+/**
+ * @module Test
+ *
+ * The workspace gate and the RECALL VALIDATION against the fake ctx and REAL temp workspaces.
+ *
+ * @remarks
+ * (a) a FOREIGN workspace (a temp tree with the recalled path but no `.git`/`package.json` root)
+ * produces NO note and the `abstained foreign-workspace` ledger line; (b) OUR workspace emits a
+ * note naming only the recalled regular file that exists - a DELETED path and a bare DIRECTORY
+ * are dropped; (c) a record whose files all vanish abstains `no-companions`; (d) a recalled path
+ * in the anchor's OWN directory wins outright and the unrelated subtrees are dropped; (e) without
+ * such a neighbor a same-tree recalled path ranks ahead of the other release tree's, which is
+ * never dropped; (f) a foreign call never poisons the next in-workspace call.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

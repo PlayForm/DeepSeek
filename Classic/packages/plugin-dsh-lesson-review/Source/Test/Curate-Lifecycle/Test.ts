@@ -1,10 +1,14 @@
-// Source/Test/Curate-Lifecycle/Test.ts - THE LIFECYCLE: the always-on,
-// token-free half of the review.
-//
-// A corpus that only grows is a corpus nobody loads. The pass is deterministic
-// on purpose, and its four protections are the whole contract: pinned entries do
-// not move, only `createdBy: agent` entries are in its jurisdiction, a zero-use
-// entry gets a grace floor, and an archive is a RENAME (its own undo).
+/**
+ * @module Test
+ *
+ * THE LIFECYCLE: the always-on, token-free half of the review.
+ *
+ * @remarks
+ * A corpus that only grows is a corpus nobody loads. The pass is deterministic on purpose, and
+ * its four protections are the whole contract: pinned entries do not move, only `createdBy:
+ * agent` entries are in its jurisdiction, a zero-use entry gets a grace floor, and an archive is
+ * a RENAME (its own undo).
+ */
 import assert from "node:assert/strict";
 import FileSystem from "node:fs";
 import * as Path from "node:path";

@@ -14,8 +14,8 @@
 // @playform/plugin-dsh-cost-analysis - the read-only analysis half of the
 // cost family: it opens the ledger the cost plugin wrote with
 // { readOnly: true } and answers questions about contribution and
-// efficiency (read credit, read-before-edit effectiveness, cost per
-// surviving line, exploration overhead, cache efficiency). It never writes
+// efficiency (read credit, read-before-edit effectiveness, cost per added
+// line on changed files, exploration overhead, cache efficiency). It never writes
 // a row, never creates a table, and never registers a tool or a prompt
 // section: its only surface is the one /cost analysis command.
 import Apply from "./Function/Apply.js";

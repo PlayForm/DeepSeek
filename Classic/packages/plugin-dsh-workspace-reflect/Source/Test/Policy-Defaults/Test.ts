@@ -1,11 +1,15 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the reflect
-// service: the shared block's defaults in the schema and on the built State,
-// the `approve` verdict HOLDING a replace and a rename with the documented
-// lines and ZERO writes, the `auto` verdict proceeding to the write path, and
-// the rule that only the `write` key opens this gate.
-//
-// The mount keeps the SHIPPED `write: approve`; a scenario that wants the
-// gate open passes `policy: { write: "auto" }` explicitly.
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the reflect service: the shared block's defaults in the schema and on
+ * the built State, the `approve` verdict HOLDING a replace and a rename, the `auto` verdict
+ * proceeding to the write path, and the rule that only the `write` key opens this gate.
+ *
+ * @remarks
+ * The `approve` verdict holds with the documented lines and ZERO writes. The mount keeps the
+ * SHIPPED `write: approve`; a scenario that wants the gate open passes `policy: { write: "auto" }`
+ * explicitly.
+ */
 import assert from "node:assert/strict";
 
 import {

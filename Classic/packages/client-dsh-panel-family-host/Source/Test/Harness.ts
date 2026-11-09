@@ -1,20 +1,23 @@
-// Source/Test/Harness.ts - the shared test harness for the PANEL-FAMILY
-// HOST tests: the fake ctx (the ctx.provide capture for the
-// panelFamilyHost service, logger capture) + the REAL
-// @playform/client-dsh-panel-family-host apply from its built Target - the
-// family fake-ctx harness pattern, written ONCE per package and imported by
-// every test folder. The host injects NO services and reads the REAL
-// filesystem (its own logs, read-only), so the harness works against a
-// disposable temp directory that stands in for the log root.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO FAKE CLOCK: the host has no clock dependency at all - every assertion
-// is on the endpoint results, the file bytes, and the activation lines.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the PANEL-FAMILY HOST tests: the fake ctx (the ctx.provide capture
+ * for the panelFamilyHost service, logger capture) plus the REAL
+ * @playform/client-dsh-panel-family-host apply from its built Target - the family fake-ctx harness
+ * pattern, written ONCE per package and imported by every test folder.
+ *
+ * @remarks
+ * The host injects NO services and reads the REAL filesystem (its own logs, read-only), so the
+ * harness works against a disposable temp directory that stands in for the log root.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the counter through one
+ * deliberate pass + one deliberate failure and exits 0 only when both are counted exactly, then
+ * proves the fake ctx actually wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * NO FAKE CLOCK: the host has no clock dependency at all - every assertion is on the endpoint
+ * results, the file bytes, and the activation lines.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

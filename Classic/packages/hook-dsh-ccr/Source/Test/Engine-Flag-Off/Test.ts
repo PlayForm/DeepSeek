@@ -1,13 +1,18 @@
-// Source/Test/Engine-Flag-Off/Test.ts - one singular test: the fully inert
-// postures with the engine flag OFF (the default) - no engine runtime, no
-// agent/pre-step listener, no engine traces from post-execute traffic - plus
-// the byte-identical pass-throughs that hold regardless of the engine: the
-// six exempt tools, the failing result, the value-carrying accepted decision
-// and the block decision.
-// Runs standalone (`node Target/Test/Engine-Flag-Off/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-ccr: the fake ctx + the REAL factory +
-// the REAL CCR apply, from the Harness.
+/**
+ * @module Test
+ *
+ * The fully inert postures with the engine flag OFF (the default), in one singular test.
+ *
+ * @remarks
+ * A unit smoke of `@playform/hook-dsh-ccr`: the fake ctx + the REAL factory + the REAL CCR
+ * apply, from the Harness. With the flag OFF there is no engine runtime, no agent/pre-step
+ * listener, no engine traces from post-execute traffic - plus the byte-identical pass-throughs
+ * that hold regardless of the engine: the six exempt tools, the failing result, the
+ * value-carrying accepted decision and the block decision.
+ *
+ * Runs standalone (`node Target/Test/Engine-Flag-Off/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

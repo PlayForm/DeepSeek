@@ -1,12 +1,17 @@
-// Source/Test/Pipeline-And-Gates/Test.ts - the pipeline: the HISTORY emit
-// path (the committed session events' co-touch candidates, the byte-exact
-// note text, the summary and the `suggest History` ledger line in both
-// forms), the REAL projection path (the committed events ARE the cell, the
-// judged call reads it, and no append follows), the consistent smoke tree's
-// clear line (the reconciliation runs first and never preempts a clean call),
-// the no-history abstention, the gate (cooldown, cap + the pre-step reset),
-// the exclusion, the note truncation, the block decision, the volatile flip,
-// and the fs purity.
+/**
+ * @module Test
+ *
+ * The pipeline.
+ *
+ * @remarks
+ * Covers the HISTORY emit path (the committed session events' co-touch candidates, the byte-exact
+ * note text, the summary and the `suggest History` ledger line in both forms), the REAL
+ * projection path (the committed events ARE the cell, the judged call reads it, and no append
+ * follows), the consistent smoke tree's clear line (the reconciliation runs first and never
+ * preempts a clean call), the no-history abstention, the gate (cooldown, cap + the pre-step
+ * reset), the exclusion, the note truncation, the block decision, the volatile flip, and the fs
+ * purity.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

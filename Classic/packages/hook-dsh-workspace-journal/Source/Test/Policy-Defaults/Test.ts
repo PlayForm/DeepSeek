@@ -1,11 +1,16 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the journal
-// hook: the shared block's defaults in the schema and on the built State, the
-// `approve` verdict HOLDING the revert with the documented line, zero writes,
-// an unchanged batch state and no record, the `auto` verdict replaying, and
-// the rule that only the `write` key opens this gate.
-//
-// The mount keeps the SHIPPED `write: approve`; a scenario that wants the
-// gate open passes `policy: { write: "auto" }` explicitly.
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the journal hook.
+ *
+ * @remarks
+ * Covers the shared block's defaults in the schema and on the built State, the `approve` verdict
+ * HOLDING the revert with the documented line, zero writes, an unchanged batch state and no
+ * record, the `auto` verdict replaying, and the rule that only the `write` key opens this gate.
+ *
+ * The mount keeps the SHIPPED `write: approve`; a scenario that wants the gate open passes
+ * `policy: { write: "auto" }` explicitly.
+ */
 import assert from "node:assert/strict";
 
 import {

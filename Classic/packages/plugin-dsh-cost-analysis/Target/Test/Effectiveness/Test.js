@@ -110,7 +110,7 @@ const runTest = async () => {
       Check(Count, "T2: the changed file's cost per line is its cost over its lines", () => {
         assert.ok(One !== void 0, "c.ts keeps a reading");
         const Per = One.Rows.find((Row) => Row.Metric === "cost_per_line");
-        const Lines = One.Rows.find((Row) => Row.Metric === "surviving_lines");
+        const Lines = One.Rows.find((Row) => Row.Metric === "added_lines_on_changed_files");
         const Cost = One.Rows.find((Row) => Row.Metric === "cost");
         assert.ok(Per !== void 0 && Lines !== void 0 && Cost !== void 0, "the three metrics exist");
         assert.equal(Per.Unit, "USD/line");

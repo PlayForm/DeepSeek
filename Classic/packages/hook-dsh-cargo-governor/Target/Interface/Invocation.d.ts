@@ -1,3 +1,16 @@
+/**
+ * @module Invocation
+ *
+ * One planned cargo upgrade run.
+ *
+ * @remarks
+ * CARGO MODULE. The package.json governor derives one invocation per policy
+ * target; the cargo module has no per-package target selector (documented
+ * mapping gap), so there is exactly ONE invocation per update run: the merged
+ * exclusion list (the policy's reject list ∪ the chain deps — the cordis-trap
+ * analog: cargo upgrade must never bump a chain-governed pin) and, when the
+ * policy names `allow` crates, the restriction to those crates.
+ */
 export default interface Invocation {
     /** Ledger label for the run ("base"). */
     label: string;

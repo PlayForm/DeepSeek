@@ -1,7 +1,13 @@
-// Source/Test/Tail-And-Stats/Test.ts - the endpoints against real files in a
-// disposable log root: the tail slicing and the namespace/lines validation,
-// the maxLines cap, the not-found surfaces, the ccr stats summary, and the
-// read-only guarantee (the fixture bytes unchanged, no new files).
+/**
+ * @module Test
+ *
+ * Exercises the endpoints against real files in a disposable log root.
+ *
+ * @remarks
+ * Covers the tail slicing and the namespace/lines validation, the maxLines cap, the not-found
+ * surfaces, the ccr stats summary, and the read-only guarantee (the fixture bytes unchanged, no new
+ * files).
+ */
 import assert from "node:assert/strict";
 import {
 	Bytes,

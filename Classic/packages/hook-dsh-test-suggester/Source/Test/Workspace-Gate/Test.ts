@@ -1,14 +1,18 @@
-// Source/Test/Workspace-Gate/Test.ts - the workspace root and the history
-// note against the fake ctx and REAL temp trees: (a) a call path with NO
-// `.git`/`package.json` root and no session cwd abstains `foreign-workspace`
-// before any candidate work, whether the cwd arrives through the optional
-// harness service or is absent, or its getter throws; (b) the call path's own
-// root wins over the session cwd; (c) a call inside a temp root carrying a
-// `package.json` emits the HISTORY note naming the two companions the session
-// touched right after the anchor; (d) the same rooted tree with an agent that
-// has no history abstains `no-history`; (e) a history whose whole companion
-// set is gone abstains `no-companions`; (f) a foreign call never poisons the
-// next in-workspace call.
+/**
+ * @module Test
+ *
+ * The workspace root and the history note against the fake ctx and REAL temp trees.
+ *
+ * @remarks
+ * (a) a call path with NO `.git`/`package.json` root and no session cwd abstains
+ * `foreign-workspace` before any candidate work, whether the cwd arrives through the optional
+ * harness service or is absent, or its getter throws; (b) the call path's own root wins over the
+ * session cwd; (c) a call inside a temp root carrying a `package.json` emits the HISTORY note
+ * naming the two companions the session touched right after the anchor; (d) the same rooted tree
+ * with an agent that has no history abstains `no-history`; (e) a history whose whole companion
+ * set is gone abstains `no-companions`; (f) a foreign call never poisons the next in-workspace
+ * call.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

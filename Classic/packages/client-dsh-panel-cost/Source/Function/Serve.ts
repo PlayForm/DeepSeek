@@ -34,6 +34,18 @@
 // same unavailable envelope the session route answers when that service is
 // absent, because a settings surface must render a state rather than a crash.
 //
+// THE PUBLISH ROUTE (lane B4f) is the surface's one write: POST <PublishPath>
+// with a JSON body of { catalogId, baseRevisionId, reason, rows } answers
+// { ok, revision } after the engine's `publish` inserted one published
+// revision and its rate rows in one transaction. The transport owns the body
+// boundary: it caps the size, parses the JSON, validates every field the
+// engine inserts (a non-negative rate, a currency, a mode, a window, a
+// half-open interval, a tier band that does not invert) and refuses with the
+// existing error envelope and one actionable line. Nothing observed is
+// written: the route can only add a revision and its rate rows, and a refused
+// publish leaves the ledger exactly as it was. The route is appended after
+// `rates`, so the three reads keep their registration order.
+//
 // The decision chain: a present, non-blank `file` answers the engine's
 // contribution rows as { ok: true, contributions }, without an envelope of
 // its own; otherwise a blank session id answers code "session" without
@@ -63,7 +75,7 @@ import type {
 	ValuationSelection,
 } from "@playform/plugin-dsh-cost/service";
 import Limits from "@Variable/Limits.js";
-import Path, { CatalogPath, RatePath } from "@Variable/Path.js";
+import Path, { CatalogPath, PublishPath, RatePath } from "@Variable/Path.js";
 
 type WebServer = {
 	register(route: {
@@ -77,6 +89,19 @@ const AbsentMessage =
 
 const PricingMessage =
 	"client-dsh-panel-cost: the pricing service is not available - @playform/plugin-dsh-cost provides it when its ledger opens, so check that the plugin is loaded and its databasePath opens";
+
+// The publish route's own refusals: a body the transport cannot read never
+// reaches the engine, so its line is the transport's; a body the engine
+// refuses keeps the engine's line, which already names what to fix.
+const BodyMessage =
+	"client-dsh-panel-cost: the publish route needs a JSON body - POST { catalogId, baseRevisionId, reason, rows }";
+
+const MethodMessage =
+	"client-dsh-panel-cost: the publish route accepts POST only - send the revision as a POST body";
+
+// The publish body's cap: one rate book is a few hundred rows, so a megabyte
+// is generous and a runaway upload is refused before it is parsed.
+const MaxBody = 1_000_000;
 
 // The four bases the engine's ValuationSelection declares, spelled as a
 // record so a fifth basis in the engine's union is a compile error here rather
@@ -121,6 +146,12 @@ const IsPricing = (Candidate: unknown): Candidate is PricingService =>
 	typeof (Candidate as PricingService).revisions === "function" &&
 	typeof (Candidate as PricingService).rates === "function";
 
+// IsPublisher - the publish route's guard: the three reads plus the one
+// write, so a service that only lists answers the unavailable line instead of
+// throwing a TypeError inside the route.
+const IsPublisher = (Candidate: unknown): Candidate is PricingService =>
+	IsPricing(Candidate) && typeof (Candidate as PricingService).publish === "function";
+
 // The file-scoped answer: the contribution rows under the same
 // 200-with-envelope convention as the session read, with the rows unwrapped
 // because the engine's contribution read carries no envelope of its own.
@@ -143,7 +174,265 @@ type RateAnswer = {
 	rates: readonly RateRow[];
 };
 
-type AnswerBody = CostResponse | ContributionAnswer | CatalogAnswer | RateAnswer;
+// The publish answer: the one write's new revision, unwrapped the same way
+// the pricing reads are.
+type PublishAnswer = {
+	ok: true;
+	revision: Revision;
+};
+
+// The publish body the transport hands the engine: the catalog, the base
+// revision the draft corrects, the reason the audit reads and the rate rows
+// the revision will carry. The field names are the body's own, so the
+// validation reads as the wire shape it checks.
+type PublishBody = {
+	readonly CatalogId: number;
+	readonly BaseRevisionId: number | null;
+	readonly Reason: string;
+	readonly Rows: readonly RateRow[];
+};
+
+type AnswerBody = CostResponse | ContributionAnswer | CatalogAnswer | RateAnswer | PublishAnswer;
+
+// The body reader: the JSON text a POST carries, capped at one rate book's
+// worth. A request the port cannot read, or one that runs past the cap, is
+// refused with the transport's own line before any parsing happens.
+const Read = (req: IncomingMessage): Promise<string> =>
+	new Promise<string>((Done, Fail) => {
+		switch (true) {
+			case typeof req.on !== "function":
+				Fail(new Error(BodyMessage));
+				return;
+			default: {
+				let Text = "";
+				let Size = 0;
+				req.on("data", (Chunk: Buffer | string) => {
+					Size += Chunk.length;
+					switch (true) {
+						case Size > MaxBody:
+							Fail(
+								new Error(
+									"client-dsh-panel-cost: the publish body is larger than one megabyte - publish one rate book at a time",
+								),
+							);
+							return;
+						default:
+							Text += Chunk.toString();
+					}
+				});
+				req.on("end", () => {
+					Done(Text);
+				});
+				req.on("error", (Failure: Error) => {
+					Fail(Failure);
+				});
+			}
+		}
+	});
+
+// Parse - the body text as a JSON value, or the transport's one line. An
+// empty body is the same refusal as an unparseable one, because a publish
+// with no body names no catalog and no rate row.
+const Parse = (Text: string): unknown => {
+	switch (true) {
+		case Text.trim() === "":
+			throw new Error(BodyMessage);
+		default: {
+			try {
+				return JSON.parse(Text) as unknown;
+			} catch {
+				throw new Error(BodyMessage);
+			}
+		}
+	}
+};
+
+const Label = (Value: unknown): string => (typeof Value === "string" ? Value : "");
+
+const Figure = (Value: unknown): number | null =>
+	typeof Value === "number" && Number.isFinite(Value) ? Value : null;
+
+// Required - one required rate of a rate row: a non-negative finite number,
+// else the one line naming the row and the field. The engine stores what this
+// validated, so the transport refuses rather than storing a guess.
+const Required = (Value: unknown, Index: number, Field: string): number => {
+	const Parsed = Figure(Value);
+	if (Parsed === null || Parsed < 0) {
+		throw new Error(
+			`client-dsh-panel-cost: rate row ${Index} carries no usable ${Field} - a rate is a non-negative number`,
+		);
+	}
+	return Parsed;
+};
+
+// OptionalRate - one optional rate: absent and null both mean the bucket is
+// not separately priced, a non-negative finite number is the rate, and
+// anything else is refused, because a missing rate must stay unpriced rather
+// than become a zero.
+const OptionalRate = (Value: unknown, Index: number, Field: string): number | null => {
+	switch (true) {
+		case Value === null || Value === undefined:
+			return null;
+		default: {
+			const Parsed = Figure(Value);
+			if (Parsed === null || Parsed < 0) {
+				throw new Error(
+					`client-dsh-panel-cost: rate row ${Index} carries an unusable ${Field} - a rate is a non-negative number or null`,
+				);
+			}
+			return Parsed;
+		}
+	}
+};
+
+// OptionalMoment - one optional instant: null means the interval or the tier
+// is open, a finite number is the bound, and anything else is refused.
+const OptionalMoment = (Value: unknown, Index: number, Field: string): number | null => {
+	switch (true) {
+		case Value === null || Value === undefined:
+			return null;
+		default: {
+			const Parsed = Figure(Value);
+			if (Parsed === null) {
+				throw new Error(
+					`client-dsh-panel-cost: rate row ${Index} carries an unusable ${Field} - an instant is epoch milliseconds or null`,
+				);
+			}
+			return Parsed;
+		}
+	}
+};
+
+// RowOf - one rate row of the publish body, validated field by field: the
+// identity fields a card cannot do without, the two required rates, the three
+// optional ones, the half-open interval and the tier band. The two
+// ledger-assigned ids are placeholders, because publish assigns the revision
+// id and the row id and never reads what the caller sent there.
+const RowOf = (Value: unknown, Index: number): RateRow => {
+	if (typeof Value !== "object" || Value === null) {
+		throw new Error(
+			`client-dsh-panel-cost: rate row ${Index} is not an object - every row needs provider, model, currency, the two token rates and a valid-from instant`,
+		);
+	}
+	const Row = Value as Record<string, unknown>;
+	const Provider = Label(Row["Provider"]);
+	const Model = Label(Row["Model"]);
+	const Currency = Label(Row["Currency"]);
+	const Mode = Label(Row["Mode"]);
+	const Window = Label(Row["Window"]);
+	switch (true) {
+		case Provider === "":
+			throw new Error(
+				`client-dsh-panel-cost: rate row ${Index} names no provider - every row needs provider and model`,
+			);
+		case Model === "":
+			throw new Error(
+				`client-dsh-panel-cost: rate row ${Index} names no model - every row needs provider and model`,
+			);
+		case Currency === "":
+			throw new Error(
+				`client-dsh-panel-cost: rate row ${Index} carries no currency - one currency per row`,
+			);
+		case Mode === "":
+			throw new Error(
+				`client-dsh-panel-cost: rate row ${Index} carries no mode - use "standard" when the row is not mode-specific`,
+			);
+		case Window === "":
+			throw new Error(
+				`client-dsh-panel-cost: rate row ${Index} carries no window - use "any" when the row is not window-specific`,
+			);
+		default:
+	}
+	const ValidFrom = Required(Row["ValidFrom"], Index, "valid-from instant");
+	const ValidTo = OptionalMoment(Row["ValidTo"], Index, "valid-to instant");
+	switch (true) {
+		case ValidTo !== null && ValidTo <= ValidFrom:
+			throw new Error(
+				`client-dsh-panel-cost: rate row ${Index} ends at or before it starts - the interval is half-open, so ValidTo must be after ValidFrom`,
+			);
+		default:
+	}
+	const TierFrom = Required(Row["TierFrom"], Index, "tier floor");
+	const TierTo = OptionalMoment(Row["TierTo"], Index, "tier ceiling");
+	switch (true) {
+		case TierTo !== null && TierTo <= TierFrom:
+			throw new Error(
+				`client-dsh-panel-cost: rate row ${Index} ends its tier at or before its floor - TierTo must be above TierFrom`,
+			);
+		default:
+	}
+	return {
+		RateRowId: 0,
+		RevisionId: 0,
+		Provider,
+		Model,
+		Currency,
+		InputRate: Required(Row["InputRate"], Index, "input rate"),
+		OutputRate: Required(Row["OutputRate"], Index, "output rate"),
+		CacheReadRate: OptionalRate(Row["CacheReadRate"], Index, "cache read rate"),
+		CacheWriteRate: OptionalRate(Row["CacheWriteRate"], Index, "cache write rate"),
+		ReasoningRate: OptionalRate(Row["ReasoningRate"], Index, "reasoning rate"),
+		ValidFrom,
+		ValidTo,
+		Mode,
+		Region: typeof Row["Region"] === "string" ? Row["Region"] : null,
+		Window,
+		TierFrom,
+		TierTo,
+		Note: typeof Row["Note"] === "string" ? Row["Note"] : null,
+	};
+};
+
+// RequestOf - the publish body the engine accepts: one catalog, the base
+// revision the draft corrects, the reason the audit reads and the rate rows
+// the revision carries. Every field is validated here because the browser is
+// the only writer and the ledger must never receive a half-formed book.
+const RequestOf = (Value: unknown): PublishBody => {
+	if (typeof Value !== "object" || Value === null || Array.isArray(Value)) {
+		throw new Error(BodyMessage);
+	}
+	const Body = Value as Record<string, unknown>;
+	const CatalogId = Figure(Body["catalogId"]);
+	switch (true) {
+		case CatalogId === null || !Number.isInteger(CatalogId) || CatalogId <= 0:
+			throw new Error(
+				"client-dsh-panel-cost: the publish body names no catalog - catalogId must be a positive integer",
+			);
+		default:
+	}
+	const Raw = Body["baseRevisionId"];
+	const BaseRevisionId = Raw === null || Raw === undefined ? null : Figure(Raw);
+	switch (true) {
+		case BaseRevisionId !== null &&
+			(!Number.isInteger(BaseRevisionId) || BaseRevisionId <= 0):
+			throw new Error(
+				"client-dsh-panel-cost: baseRevisionId must be a positive integer or null - a revision corrects the revision it names",
+			);
+		default:
+	}
+	const Reason = Label(Body["reason"]).trim();
+	switch (true) {
+		case Reason === "":
+			throw new Error(
+				"client-dsh-panel-cost: the publish body carries no reason - say what changed and why",
+			);
+		default:
+	}
+	const Listed = Body["rows"];
+	switch (true) {
+		case !Array.isArray(Listed) || Listed.length === 0:
+			throw new Error(
+				"client-dsh-panel-cost: the publish body carries no rate row - a revision needs at least one",
+			);
+		default: {
+			const Rows: RateRow[] = [];
+			for (const [Index, One] of Listed.entries()) {
+				Rows.push(RowOf(One, Index + 1));
+			}
+			return { CatalogId, BaseRevisionId, Reason, Rows };
+		}
+	}
+};
 
 export default function Serve(ctx: Context): void {
 	const Server = ctx.get("webServer");
@@ -358,6 +647,55 @@ export default function Serve(ctx: Context): void {
 							Answer(res, { ok: true, rates: Engine.rates(RevisionId) });
 						} catch (Caught) {
 							Answer(res, LedgerFailure(Caught, Limits.DefaultRows, RatePath));
+						}
+					}
+				}
+			};
+			// Published - the one write: the body is read, parsed and
+			// validated by the transport, then the engine publishes the
+			// revision and its rate rows inside its own transaction. A refused
+			// publish keeps the engine's one actionable line; a body the
+			// transport cannot read answers its own. Nothing observed is
+			// written - only a revision and its rate rows can land.
+			const Published = async (
+				res: ServerResponse,
+				Engine: unknown,
+				req: IncomingMessage,
+			): Promise<void> => {
+				switch (true) {
+					case !IsPublisher(Engine):
+						ctx.logger.warn(`cost route: ${PricingMessage}`);
+						Answer(
+							res,
+							Failure(
+								"unavailable",
+								PricingMessage,
+								Limits.DefaultRows,
+								PublishPath,
+							),
+						);
+						return;
+					default: {
+						try {
+							const Pricing = Engine;
+							const Request = RequestOf(Parse(await Read(req)));
+							Answer(res, {
+								ok: true,
+								revision: Pricing.publish(
+									Request.CatalogId,
+									Request.BaseRevisionId,
+									Request.Reason,
+									Request.Rows,
+								),
+							});
+						} catch (Caught) {
+							const Message =
+								Caught instanceof Error ? Caught.message : String(Caught);
+							ctx.logger.warn(`cost route: ${Message}`);
+							Answer(
+								res,
+								Failure("error", Message, Limits.DefaultRows, PublishPath),
+							);
 						}
 					}
 				}

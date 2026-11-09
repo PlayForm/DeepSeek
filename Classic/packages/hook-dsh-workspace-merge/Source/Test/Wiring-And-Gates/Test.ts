@@ -1,9 +1,14 @@
-// Source/Test/Wiring-And-Gates/Test.ts - the loader contract, the service
-// registration, the cold-mount idle-forever posture, the activation proof,
-// the fail-loud validation, and the ATOMIC GATES in their frozen order:
-// empty batch, size, bytes, duplicates, the missing version fence, the
-// version conflict (all-or-nothing rejects the whole batch), and the
-// no-write preview (gates + digest, zero writeText calls).
+/**
+ * @module Test
+ *
+ * The loader contract, the service registration, the cold-mount idle-forever posture, the
+ * activation proof, the fail-loud validation, and the ATOMIC GATES in their frozen order.
+ *
+ * @remarks
+ * The gates cover the empty batch, size, bytes, duplicates, the missing version fence, the
+ * version conflict (all-or-nothing rejects the whole batch), and the no-write preview (gates +
+ * digest, zero writeText calls).
+ */
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import {

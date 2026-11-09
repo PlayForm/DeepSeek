@@ -1,12 +1,18 @@
-// Source/Test/Adapters/Test.ts - the any-file adapters and the LSP deepener:
-// one fixture per adapter (JSON keys, YAML keys, Markdown link targets,
-// package.json dependency names) covering resolve, references and rename, the
-// basename-before-extension selection (package.json never falls through to the
-// JSON adapter), the harness LSP seam as the PRIMARY TypeScript reference
-// answer (the request the service sends, the same-file filter, the deepened
-// ledger line, the rename derived from the seam's locations), and the lexical
-// FALLBACK on every "cannot answer" path (lsp disabled, no query method, a
-// throwing seam).
+/**
+ * @module Test
+ *
+ * The any-file adapters and the LSP deepener.
+ *
+ * @remarks
+ * One fixture per adapter (JSON keys, YAML keys, Markdown link targets, package.json dependency
+ * names) covers resolve, references and rename. The basename-before-extension selection keeps
+ * package.json from falling through to the JSON adapter.
+ *
+ * The harness LSP seam is the PRIMARY TypeScript reference answer: the request the service sends,
+ * the same-file filter, the deepened ledger line, and the rename derived from the seam's
+ * locations. The lexical FALLBACK runs on every "cannot answer" path (lsp disabled, no query
+ * method, a throwing seam).
+ */
 import assert from "node:assert/strict";
 import {
 	Boot,

@@ -1,13 +1,18 @@
-// Source/Test/Batch-Proposal/Test.ts - THE REAL BATCH-CONTRACT WIRING: a
-// prepared proposal becomes the CANONICAL batch proposal (the contract the
-// board splices and the decision hook records), is emitted on
-// `batch/proposed`, and is delivered into the harness agent-team inbox
-// through `agent.inject` - the exact channel plugin-dsh-batchstate consumes.
-//
-// The assertions are byte-exact where the contract is bytes (the envelope,
-// the journal lines) and deep-equal where the contract is data (the
-// canonical object, the preview region computed by the same pure formula the
-// plugin uses).
+/**
+ * @module Test
+ *
+ * THE REAL BATCH-CONTRACT WIRING: a prepared proposal becomes the CANONICAL batch proposal, is
+ * emitted on `batch/proposed`, and is delivered into the harness agent-team inbox through
+ * `agent.inject`.
+ *
+ * @remarks
+ * The canonical object is the contract the board splices and the decision hook records, and
+ * `agent.inject` is the exact channel plugin-dsh-batchstate consumes.
+ *
+ * The assertions are byte-exact where the contract is bytes (the envelope, the journal lines) and
+ * deep-equal where the contract is data (the canonical object, the preview region computed by the
+ * same pure formula the plugin uses).
+ */
 import assert from "node:assert/strict";
 import Digest from "../../../Target/Function/Digest.js";
 import {

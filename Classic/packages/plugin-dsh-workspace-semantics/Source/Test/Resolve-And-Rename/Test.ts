@@ -1,9 +1,11 @@
-// Source/Test/Resolve-And-Rename/Test.ts - the resolve/rename/refusal
-// semantics: the lazy model build through the default TypeScript adapter,
-// the byte-exact resolve and refusal lines, the symbol lookup and the
-// reference list, the invalidation-driven rebuild, the index cap, the
-// any-file adapter seam, the rename plan and its refusal arms, and the
-// statistics triple.
+/**
+ * @module Test
+ *
+ * The resolve/rename/refusal semantics: the lazy model build through the default TypeScript
+ * adapter, the byte-exact resolve and refusal lines, the symbol lookup and the reference list, the
+ * invalidation-driven rebuild, the index cap, the any-file adapter seam, the rename plan and its
+ * refusal arms, and the statistics triple.
+ */
 import assert from "node:assert/strict";
 import {
 	Boot,

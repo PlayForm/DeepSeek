@@ -1,10 +1,17 @@
-// Source/Test/Storage-Domain/Test.ts - the storage-domain PRIMARY store and
-// the JSON fallback: the byte-exact domain spec (name/version/layout/tables,
-// NO compatibleVersions), the open, the per-mutation round-trip (the spliced
-// proposals, the gates, the members and the idle queue land in their tables,
-// and a clear deletes them), the reopen (restart) restoring the board, the
-// absent-facility fallback still writing and reading the JSON state file, and
-// the domain-version failure mode (a loud line, then the JSON fallback).
+/**
+ * @module Test
+ *
+ * The storage-domain PRIMARY store and the JSON fallback: the byte-exact domain spec, the open,
+ * the per-mutation round-trip, the reopen restoring the board, the absent-facility fallback and
+ * the domain-version failure mode.
+ *
+ * @remarks
+ * The domain spec carries name/version/layout/tables and NO compatibleVersions. The per-mutation
+ * round-trip puts the spliced proposals, the gates, the members and the idle queue in their
+ * tables, and a clear deletes them. A reopen (restart) restores the board. With the facility
+ * absent the fallback still writes and reads the JSON state file. A domain-version mismatch
+ * writes a loud line and then falls back to JSON.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {

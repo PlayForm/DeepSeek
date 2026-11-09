@@ -1,11 +1,15 @@
-// Source/Test/Rules-And-Refusals/Test.ts - the loader contract, the service
-// registration, the cold-mount idle-forever posture, the activation proof,
-// the fail-loud validation, and the resolution rules through the real
-// service: the happy-path proposals with their byte-exact lines, and the
-// full refusal-to-guess vocabulary (bad-request, missing-version,
-// graph-unavailable, unknown-symbol, name-collision, duplicate-edge,
-// incompatible-edge, stale-version, span-beyond-file), plus the purity rule
-// (zero writeText calls - the hook never writes a file).
+/**
+ * @module Test
+ *
+ * The loader contract, the service registration, the cold-mount idle-forever posture, the
+ * activation proof, the fail-loud validation, and the resolution rules through the real service.
+ *
+ * @remarks
+ * Covers the happy-path proposals with their byte-exact lines, and the full refusal-to-guess
+ * vocabulary (bad-request, missing-version, graph-unavailable, unknown-symbol, name-collision,
+ * duplicate-edge, incompatible-edge, stale-version, span-beyond-file), plus the purity rule
+ * (zero writeText calls - the hook never writes a file).
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

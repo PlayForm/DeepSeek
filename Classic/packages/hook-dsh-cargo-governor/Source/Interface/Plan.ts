@@ -1,7 +1,14 @@
-// Plan — the chain pass's output (Function/Satisfy) consumed by the surgical
-// rewrite (Function/Pin): the exact entry-level changes, as pure data. The
-// rewrite never re-derives them from parsed values — it applies only these,
-// line-surgically, so nothing outside the planned entries can change.
+/**
+ * @module Plan
+ *
+ * The chain pass's output (Function/Satisfy) consumed by the surgical rewrite
+ * (Function/Pin).
+ *
+ * @remarks
+ * The exact entry-level changes, as pure data. The rewrite never re-derives
+ * them from parsed values — it applies only these, line-surgically, so nothing
+ * outside the planned entries can change.
+ */
 export default interface Plan {
 	/** Version canonicalizations: one per dep entry whose version is out of
 	 *  chain. `from` is the current version requirement string (used only as a

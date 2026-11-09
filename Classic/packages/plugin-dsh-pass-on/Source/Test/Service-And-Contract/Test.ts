@@ -1,9 +1,14 @@
-// Source/Test/Service-And-Contract/Test.ts - the loader contract and the
-// service surface: the class form's static shape, the immediate registration
-// under the service name, the identity, the Get read, the disabled posture
-// (Prepare refuses, the journal still records honestly), the tilde-expanded
-// ledger default, and the silence invariant (the plugin never logs - the
-// journal file is its only voice).
+/**
+ * @module Test
+ *
+ * The loader contract and the service surface.
+ *
+ * @remarks
+ * Covers the class form's static shape, the immediate registration under the service name, the
+ * identity, the Get read, the disabled posture (Prepare refuses, the journal still records
+ * honestly), the tilde-expanded ledger default, and the silence invariant (the plugin never logs
+ * - the journal file is its only voice).
+ */
 import assert from "node:assert/strict";
 import * as OS from "node:os";
 import {

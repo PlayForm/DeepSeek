@@ -1,9 +1,13 @@
-// Source/Test/Parse-And-Judge/Test.ts - THE GATE: the strict reply parse and
-// the deterministic acceptance rules.
-//
-// The parse decides whether a reply IS a proposal; the judge decides whether a
-// proposal may land. Both are pure, and both are asserted per rule: a rule with
-// no test is a rule the next refactor deletes.
+/**
+ * @module Test
+ *
+ * THE GATE: the strict reply parse and the deterministic acceptance rules.
+ *
+ * @remarks
+ * The parse decides whether a reply IS a proposal; the judge decides whether a proposal may
+ * land. Both are pure, and both are asserted per rule: a rule with no test is a rule the next
+ * refactor deletes.
+ */
 import assert from "node:assert/strict";
 
 import Judge from "../../../Target/Function/Judge.js";

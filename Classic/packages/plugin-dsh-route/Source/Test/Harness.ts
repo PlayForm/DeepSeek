@@ -1,15 +1,20 @@
-// Source/Test/Harness.ts - the shared test harness for the ROUTING ENFORCER
-// tests: the fake ctx (ctx listener capture with a DISTINCT root object,
-// reflect.provide capture, the effect runner, the logger capture) + the REAL
-// @playform/plugin-dsh-factory instance from its built Target + the REAL
-// plugin-dsh-route apply from its built Target - the family fake-ctx +
-// real-factory harness pattern, adapted from the workspace-observe reference
-// harness. Each folder process gets a fresh set, so every folder is
-// standalone-green.
-//
-// NO FAKE CLOCK, NO FAKE FS: the route plugin touches no files (it injects
-// into the launch and writes only its own ledger through the factory) and
-// has no timer dependency - the harness needs neither seam.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the ROUTING ENFORCER tests.
+ *
+ * @remarks
+ * Combines the fake ctx (ctx listener capture with a DISTINCT root object, reflect.provide
+ * capture, the effect runner, the logger capture) with the REAL
+ * `@playform/plugin-dsh-factory` instance from its built Target and the REAL plugin-dsh-route
+ * apply from its built Target - the family fake-ctx + real-factory harness pattern, adapted from
+ * the workspace-observe reference harness. Each folder process gets a fresh set, so every folder
+ * is standalone-green.
+ *
+ * NO FAKE CLOCK, NO FAKE FS: the route plugin touches no files (it injects into the launch and
+ * writes only its own ledger through the factory) and has no timer dependency - the harness
+ * needs neither seam.
+ */
 import assert from "node:assert/strict";
 import Plugin from "../../Target/Library.js";
 import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";

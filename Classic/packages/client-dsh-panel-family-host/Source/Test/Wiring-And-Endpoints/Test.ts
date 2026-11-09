@@ -1,8 +1,13 @@
-// Source/Test/Wiring-And-Endpoints/Test.ts - the wiring: the loader contract
-// (the default object carries name/apply/Config/inject, apply returns
-// nothing), the service provided through ctx.provide, the byte-exact
-// activation lines for both postures, the disabled gate on both endpoints,
-// and the fail-loud schema validation.
+/**
+ * @module Test
+ *
+ * Verifies the wiring of the panel-family host.
+ *
+ * @remarks
+ * Covers the loader contract (the default object carries name/apply/Config/inject, apply returns
+ * nothing), the service provided through ctx.provide, the byte-exact activation lines for both
+ * postures, the disabled gate on both endpoints, and the fail-loud schema validation.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

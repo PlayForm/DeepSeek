@@ -1,11 +1,17 @@
-// Jobs — the probed view of the DSH jobs service (the root-level runtime).
-// The service is NEVER injected: it is optional, and on contexts without a
-// job controller the direct `ctx.jobs` accessor can throw — the documented
-// optional-dep probe is `ctx.get(name)` (live-verified 2026-10-03, the same
-// lesson as `ctx.subprocess`), with today's detached contained continuation
-// as the fallback (Function/Dispatch). The service is not part of the
-// published @deepseek-ai/cordis typings, so the shapes the plugin consumes
-// are mirrored here structurally.
+/**
+ * @module Jobs
+ *
+ * The probed view of the DSH jobs service (the root-level runtime).
+ *
+ * @remarks
+ * The service is NEVER injected: it is optional, and on contexts without a
+ * job controller the direct `ctx.jobs` accessor can throw — the documented
+ * optional-dep probe is `ctx.get(name)` (live-verified 2026-10-03, the same
+ * lesson as `ctx.subprocess`), with today's detached contained continuation
+ * as the fallback (Function/Dispatch). The service is not part of the
+ * published @deepseek-ai/cordis typings, so the shapes the plugin consumes
+ * are mirrored here structurally.
+ */
 import type Job from "@Interface/Job.js";
 
 export default interface Jobs {

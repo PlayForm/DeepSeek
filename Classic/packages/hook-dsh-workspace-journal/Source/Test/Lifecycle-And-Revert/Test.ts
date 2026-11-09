@@ -1,9 +1,14 @@
-// Source/Test/Lifecycle-And-Revert/Test.ts - the open/seal/revert/recover
-// lifecycle against the real built library: the journal-before-writes open,
-// the seal transitions and their refusals, the byte-exact lifecycle ledger
-// lines (logger and durable), the bounded ring cap with its eviction line,
-// the truncated pre-image skip, the version-fenced revert with its conflict
-// arms, and the boot recovery pass.
+/**
+ * @module Test
+ *
+ * The open/seal/revert/recover lifecycle against the real built library.
+ *
+ * @remarks
+ * Covers the journal-before-writes open, the seal transitions and their refusals, the byte-exact
+ * lifecycle ledger lines (logger and durable), the bounded ring cap with its eviction line, the
+ * truncated pre-image skip, the version-fenced revert with its conflict arms, and the boot
+ * recovery pass.
+ */
 import assert from "node:assert/strict";
 import {
 	Boot,

@@ -1,13 +1,20 @@
-// Source/Test/Trace-Service/Test.ts - the factory's TRACE SERVICE: the
-// `ctx.trace` registration (provided ONCE from the factory constructor, the
-// family's shared-machinery owner), the emit/on round-trip with the bus-
-// completed envelope, the emitter-supplied trace/at preservation, the bounded
-// newest-first ring, the disposer, the fail-open containment (one throwing
-// listener never silences the rest and never reaches the caller), the
-// malformed-draft refusal, `flush`, and the unload path (`dispose` on the
-// fiber effect: a late emit and a late subscription are contained no-ops).
-// Unit smoke of @playform/plugin-dsh-factory: the fake ctx + the REAL factory
-// class, from the Harness.
+/**
+ * @module Test
+ *
+ * The factory's TRACE SERVICE: the `ctx.trace` registration, the emit/on round-trip, the bounded
+ * newest-first ring, the disposer, the fail-open containment, `flush` and the unload path.
+ *
+ * @remarks
+ * The service is provided ONCE from the factory constructor, the family's shared-machinery owner.
+ * The round-trip carries the bus-completed envelope and the emitter-supplied trace/at
+ * preservation. The fail-open containment keeps one throwing listener from silencing the rest and
+ * from reaching the caller. The suite also proves the malformed-draft refusal. The unload path
+ * runs `dispose` on the fiber effect, so a late emit and a late subscription are contained
+ * no-ops.
+ *
+ * Unit smoke of `@playform/plugin-dsh-factory`: the fake ctx plus the REAL factory class, from
+ * the Harness.
+ */
 import assert from "node:assert/strict";
 import { Names } from "@playform/lib-dsh-trace";
 import { Check, CheckAsync, Finish, MakeCounter, Make, FactoryClass } from "../Harness.js";

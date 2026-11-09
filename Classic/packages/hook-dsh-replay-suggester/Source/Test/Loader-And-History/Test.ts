@@ -1,7 +1,12 @@
-// Source/Test/Loader-And-History/Test.ts - the loader contract, the cold
-// disabled mount, the activation proof with the history load outcome
-// (missing, loaded, corrupt - all byte-exact), the schema fail-loud, and the
-// wiring order.
+/**
+ * @module Test
+ *
+ * The loader contract, the cold disabled mount, the activation proof with the history load
+ * outcome, the schema fail-loud, and the wiring order.
+ *
+ * @remarks
+ * The history load outcome covers missing, loaded, corrupt - all byte-exact.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

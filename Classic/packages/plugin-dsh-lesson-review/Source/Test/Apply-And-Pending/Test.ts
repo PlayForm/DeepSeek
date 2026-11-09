@@ -1,16 +1,19 @@
-// Source/Test/Apply-And-Pending/Test.ts - THE REVIEW END TO END, and the write
-// fence.
-//
-// This is the folder that proves the package's central promise: by default a
-// review PROPOSES, nothing lands in the corpus, and the proposal waits in a
-// queue until it is accepted. The `write: auto` opt-in is the same pipeline with
-// the queue replaced by the guarded write, and the four degradation paths (no
-// llm service, no route, a provider failure, an unparseable reply) each end in
-// an outcome class instead of a throw.
-//
-// EVERY CHECK STARTS FROM AN EMPTY `~/.dsh` (the `Case` wrapper): the store and
-// the queue are the package's own state, so a scenario that inherited them from
-// its predecessor would assert a count it never created.
+/**
+ * @module Test
+ *
+ * THE REVIEW END TO END, and the write fence.
+ *
+ * @remarks
+ * This is the folder that proves the package's central promise: by default a review PROPOSES,
+ * nothing lands in the corpus, and the proposal waits in a queue until it is accepted. The
+ * `write: auto` opt-in is the same pipeline with the queue replaced by the guarded write, and the
+ * four degradation paths (no llm service, no route, a provider failure, an unparseable reply)
+ * each end in an outcome class instead of a throw.
+ *
+ * EVERY CHECK STARTS FROM AN EMPTY `~/.dsh` (the `Case` wrapper): the store and the queue are the
+ * package's own state, so a scenario that inherited them from its predecessor would assert a
+ * count it never created.
+ */
 import assert from "node:assert/strict";
 import FileSystem from "node:fs";
 import * as Path from "node:path";

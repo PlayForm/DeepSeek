@@ -1,29 +1,33 @@
-// Source/Test/Harness.ts - the shared test harness for the LESSON-REVIEW
-// service: the fake ctx (reflect.provide capture for the Service base, the
-// logger capture, the effect runner, the probe-once `get`) + the REAL
-// LessonService class from its built Target - the family fake-ctx +
-// real-built-library harness pattern, written ONCE per package and imported by
-// every test folder. Each folder process gets a fresh set, so every folder is
-// standalone-green.
-//
-// THE HOME REDIRECT: every knob is a `~/.dsh/...` path, so the harness points
-// $HOME at a fresh OS temp directory BEFORE any construction. A scenario then
-// writes its own corpus under `<Home>/.dsh/skills` and asserts against the real
-// filesystem - no path is stubbed, and the user's real home is never touched.
-//
-// THE LLM IS A FAKE SERVICE, not a stubbed module: `FakeLlm` answers with the
-// reply split into two `text-delta` frames (the streaming shape the service
-// reads) and records the request it was handed, so a scenario can assert the
-// digest + prompt that went out as well as the operations that came back. The
-// absent-llm path is simply a ctx without one.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0 only
-// when both are counted exactly, then proves the fake ctx actually wires the
-// Service constructor and the activation line (the vacuously-green backstop).
-//
-// NO FAKE CLOCK: Curate takes an explicit `Now`, and every entry carries
-// explicit timestamps, so every timing assertion is on a passed value.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the LESSON-REVIEW service.
+ *
+ * @remarks
+ * Combines the fake ctx (reflect.provide capture for the Service base, the logger capture, the
+ * effect runner, the probe-once `get`) with the REAL LessonService class from its built Target -
+ * the family fake-ctx + real-built-library harness pattern, written ONCE per package and
+ * imported by every test folder. Each folder process gets a fresh set, so every folder is
+ * standalone-green.
+ *
+ * THE HOME REDIRECT: every knob is a `~/.dsh/...` path, so the harness points $HOME at a fresh
+ * OS temp directory BEFORE any construction. A scenario then writes its own corpus under
+ * `<Home>/.dsh/skills` and asserts against the real filesystem - no path is stubbed, and the
+ * user's real home is never touched.
+ *
+ * THE LLM IS A FAKE SERVICE, not a stubbed module: `FakeLlm` answers with the reply split into
+ * two `text-delta` frames (the streaming shape the service reads) and records the request it was
+ * handed, so a scenario can assert the digest + prompt that went out as well as the operations
+ * that came back. The absent-llm path is simply a ctx without one.
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` runs the counter through
+ * one deliberate pass + one deliberate failure and exits 0 only when both are counted exactly,
+ * then proves the fake ctx actually wires the Service constructor and the activation line (the
+ * vacuously-green backstop).
+ *
+ * NO FAKE CLOCK: Curate takes an explicit `Now`, and every entry carries explicit timestamps, so
+ * every timing assertion is on a passed value.
+ */
 import assert from "node:assert/strict";
 import FileSystem from "node:fs";
 import * as OS from "node:os";

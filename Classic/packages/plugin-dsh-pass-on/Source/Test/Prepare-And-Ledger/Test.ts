@@ -1,10 +1,15 @@
-// Source/Test/Prepare-And-Ledger/Test.ts - the prepare paths and the journal:
-// the explicit-target version bump (the byte-exact target/operation shapes and
-// the content-derived digest recomputed with the plugin's own Digest module),
-// the Get read and the expiry, the null paths (no-op target, unknown kind, no
-// targets), the glob walk with its exclusions and the maxTargets cap, the
-// bounded preview, the replace kind, the journal JSON lines, the determinism,
-// and the READ-ONLY law (the fixture files are never modified).
+/**
+ * @module Test
+ *
+ * The prepare paths and the journal.
+ *
+ * @remarks
+ * Covers the explicit-target version bump (the byte-exact target/operation shapes and the
+ * content-derived digest recomputed with the plugin's own Digest module), the Get read and the
+ * expiry, the null paths (no-op target, unknown kind, no targets), the glob walk with its
+ * exclusions and the maxTargets cap, the bounded preview, the replace kind, the journal JSON
+ * lines, the determinism, and the READ-ONLY law (the fixture files are never modified).
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";

@@ -5,12 +5,12 @@
  * session history is empty, while the same workspace without the pack abstains `no-history`.
  *
  * @remarks
- * A temporary repo with its own `.dsh/pack.yml` (its own `edit/Version` family) still speaks when
- * the session history is empty, so the note names the pack's companion and never the built-in
- * one. The same workspace WITHOUT the pack abstains `no-history`, because the built-in pack is
- * never a candidate source. A pack in a rooted tree still governs even when its declared
- * signature marker is absent (the root gates, not the signature). The monorepo path with no
- * history abstains `no-history` instead of naming the built-in pack's companions.
+ * With the pack present, its own `edit/Version` family drives the note: the note names the pack's
+ * companion and never the built-in one. The same workspace WITHOUT the pack abstains
+ * `no-history`, because the built-in pack is never a candidate source. A pack in a rooted tree
+ * still governs even when its declared signature marker is absent (the root gates, not the
+ * signature). The monorepo path with no history abstains `no-history` instead of naming the
+ * built-in pack's companions.
  */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";

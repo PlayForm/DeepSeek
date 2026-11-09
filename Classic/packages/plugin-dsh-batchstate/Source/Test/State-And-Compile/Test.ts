@@ -1,8 +1,14 @@
-// Source/Test/State-And-Compile/Test.ts - the write API and the compiler:
-// the task/status/scope/queue/clear ledger lines byte-exact, the
-// batch/state-change events, the startedAt stamp and the reactivation, the
-// queue movements and the completions ring cap, the compiled context/scope/
-// else blocks byte-exact, and the full snapshot.
+/**
+ * @module Test
+ *
+ * The write API and the compiler: the ledger lines, the `batch/state-change` events, the
+ * `startedAt` stamp and the reactivation, the queue movements and the completions ring cap, the
+ * compiled blocks byte-exact, and the full snapshot.
+ *
+ * @remarks
+ * The task/status/scope/queue/clear ledger lines are byte-exact. The compiled context/scope/else
+ * blocks are byte-exact too.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

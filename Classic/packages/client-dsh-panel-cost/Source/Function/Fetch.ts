@@ -1,14 +1,15 @@
 // Fetch - the browser half of the data path: the session GET (the route
 // path with the encoded session id and the row budget, answered as a
 // CostResponse), the file-scoped GET that answers the conversations that
-// contributed to one file's cost, and the two pricing GETs a settings surface
+// contributed to one file's cost, the two pricing GETs a settings surface
 // lists (lane B4d): the catalogs with their revisions and one revision's rate
-// rows. None of the functions throws: a runtime without fetch, a failed
-// request, a non-JSON answer or a malformed body resolve to the unavailable
-// envelope, to an empty contribution list, to the empty catalog answer or to
-// an empty rate list, so the panel can always render a state. The envelope's
-// `path` names the route, because the browser knows no ledger path; the
-// route's own message names the file.
+// rows, and the one pricing POST (lane B4f) that publishes a revision. None
+// of the functions throws: a runtime without fetch, a failed request, a
+// non-JSON answer or a malformed body resolve to the unavailable envelope, to
+// an empty contribution list, to the empty catalog answer, to an empty rate
+// list or to a refused publish answer, so the panel can always render a
+// state. The envelope's `path` names the route, because the browser knows no
+// ledger path; the route's own message names the file.
 //
 // THE VALUATION SELECTION (lane B4d; the research's section 8): the session
 // fetch accepts the basis and the revision the panel selected and sends them
@@ -25,12 +26,13 @@ import type {
 	Revision,
 	ValuationSelection,
 } from "@playform/plugin-dsh-cost/service";
-import Route, { CatalogPath, RatePath } from "@Variable/Path.js";
+import Route, { CatalogPath, PublishPath, RatePath } from "@Variable/Path.js";
 
 // The minimal browser fetch surface this module needs (the build targets
 // ESNext with node types only, so the browser globals are declared here
 // instead of pulling in the full DOM library - the Interface/Document.ts
-// pattern).
+// pattern). `body` is the one member the publish POST adds: the session, the
+// contribution and the two pricing reads all send a bare GET.
 declare const fetch:
 	| ((
 			input: string,
@@ -38,6 +40,7 @@ declare const fetch:
 				method?: string | undefined;
 				headers?: Record<string, string> | undefined;
 				cache?: string | undefined;
+				body?: string | undefined;
 			},
 	  ) => Promise<{ json(): Promise<unknown> }>)
 	| undefined;
@@ -281,5 +284,138 @@ export function Rates(RevisionId: number): Promise<readonly RateRow[]> {
 			} catch {
 				return Promise.resolve([]);
 			}
+	}
+}
+
+// PublishRow - one rate row as the publish body carries it: every field the
+// engine inserts, and neither ledger-assigned id, because the publish assigns
+// the revision id and the row id itself. The host half validates exactly this
+// shape and hands the engine the full RateRow, so the browser never invents
+// an id and the engine never stores one.
+export type PublishRow = Omit<RateRow, "RateRowId" | "RevisionId">;
+
+// PublishRequest - the one write's body: the catalog the revision belongs to,
+// the revision the draft corrects (null for a catalog's first revision), the
+// reason the audit reads and the whole edited row set. A concurrent publish
+// is answered by the engine's own base-revision check, so the caller always
+// names the book it was editing.
+export type PublishRequest = {
+	readonly catalogId: number;
+	readonly baseRevisionId: number | null;
+	readonly reason: string;
+	readonly rows: readonly PublishRow[];
+};
+
+// PublishAnswer - the publish route's answer, flat so the caller reads one
+// field instead of narrowing a union: the ok flag, the new revision when the
+// write landed, and the route's own code, line and path when it did not. An
+// error envelope comes back as this value, never as a rejection, so the
+// settings surface can render the refusal inline.
+export type PublishAnswer = {
+	readonly ok: boolean;
+	readonly revision: Revision | null;
+	readonly code: string;
+	readonly message: string | null;
+	readonly path: string;
+};
+
+// Refused - the answer a failed request resolves to: the route's own line
+// when one came back, and the browser's line when the request never landed.
+const Refused = (Message: string): PublishAnswer => ({
+	ok: false,
+	revision: null,
+	code: "unavailable",
+	message: Message,
+	path: PublishPath,
+});
+
+// IsRevision - the one field the caller reads off a published revision: an
+// answer that names a revision without an id is a malformed answer, not a
+// successful publish.
+const IsRevision = (Candidate: unknown): Candidate is Revision => {
+	if (typeof Candidate !== "object" || Candidate === null) {
+		return false;
+	}
+	const Shape = Candidate as { RevisionId?: unknown };
+	return typeof Shape.RevisionId === "number" && Number.isFinite(Shape.RevisionId);
+};
+
+// Normalize - the raw answer as the flat PublishAnswer: the success shape
+// (`{ ok, revision }`) and the existing error envelope (`{ ok: false, code,
+// message, path }`) both land in one record, and anything else is refused
+// rather than rendered as a half-read outcome.
+const Normalize = (Body: unknown): PublishAnswer => {
+	switch (true) {
+		case typeof Body !== "object" || Body === null:
+			return Refused("the publish route answered a malformed answer");
+		default: {
+			const Answer = Body as {
+				ok?: unknown;
+				revision?: unknown;
+				code?: unknown;
+				message?: unknown;
+				path?: unknown;
+			};
+			// The local keeps the narrowing local: a guard on a property
+			// access narrows the access expression, and a binding is the
+			// shape the case arms can rely on.
+			const Found = Answer.revision;
+			switch (true) {
+				case Answer.ok === true && IsRevision(Found):
+					return {
+						ok: true,
+						revision: Found,
+						code: "ok",
+						message: null,
+						path: PublishPath,
+					};
+				case Answer.ok === false && typeof Answer.message === "string":
+					return {
+						ok: false,
+						revision: null,
+						code: typeof Answer.code === "string" ? Answer.code : "error",
+						message: Answer.message,
+						path:
+							typeof Answer.path === "string" ? Answer.path : PublishPath,
+					};
+				default:
+					return Refused("the publish route answered a malformed answer");
+			}
+		}
+	}
+};
+
+// Publish - the one write: one POST to the publish route with the whole body
+// as JSON. It never throws: a runtime without fetch, a failed request, a
+// non-JSON answer or a malformed body all resolve to a refused answer whose
+// message is the one line the settings surface shows.
+export function Publish(Request: PublishRequest): Promise<PublishAnswer> {
+	if (typeof fetch !== "function") {
+		return Promise.resolve(Refused("the fetch API is not available in this runtime"));
+	}
+	try {
+		return fetch(PublishPath, {
+			method: "POST",
+			headers: { accept: "application/json", "content-type": "application/json" },
+			cache: "no-store",
+			body: JSON.stringify(Request),
+		})
+			.then((Response) => Response.json())
+			.then((Body) => Normalize(Body))
+			.catch((Caught) =>
+				Refused(
+					`the publish request failed: ${
+						Caught instanceof Error ? Caught.message : String(Caught)
+					}`,
+				),
+			);
+	} catch (Failure) {
+		return Promise.resolve(
+			Refused(
+				`the publish request failed: ${
+					Failure instanceof Error ? Failure.message : String(Failure)
+				}`,
+			),
+		);
 	}
 }

@@ -1,15 +1,19 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE-JOURNAL
-// tests: the fake ctx (root listener capture with a DISTINCT root object, the
-// ctx listener capture, reflect.provide capture, the effect runner, logger
-// capture + the fs/storage seams) + the REAL @playform/plugin-dsh-factory
-// instance from its built Target + the REAL workspace-journal apply from its
-// built Target - the family fake-ctx + real-factory harness pattern, adapted
-// from the workspace-observe reference harness. Each folder process gets a
-// fresh set, so every folder is standalone-green.
-//
-// NO FAKE CLOCK: the journal has no timer dependency - the batch's `at` is a
-// record field, the lifecycle is the state machine, so the harness needs no
-// time seam.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the WORKSPACE-JOURNAL tests.
+ *
+ * @remarks
+ * Combines the fake ctx (root listener capture with a DISTINCT root object, the ctx listener
+ * capture, reflect.provide capture, the effect runner, logger capture + the fs/storage seams)
+ * with the REAL `@playform/plugin-dsh-factory` instance from its built Target and the REAL
+ * workspace-journal apply from its built Target - the family fake-ctx + real-factory harness
+ * pattern, adapted from the workspace-observe reference harness. Each folder process gets a
+ * fresh set, so every folder is standalone-green.
+ *
+ * NO FAKE CLOCK: the journal has no timer dependency - the batch's `at` is a record field, the
+ * lifecycle is the state machine, so the harness needs no time seam.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

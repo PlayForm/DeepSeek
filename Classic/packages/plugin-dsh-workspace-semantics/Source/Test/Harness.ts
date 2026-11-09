@@ -1,19 +1,24 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE-SEMANTICS
-// tests: the fake ctx (root listener capture with a DISTINCT root object, the
-// ctx listener capture, reflect.provide capture, the effect runner, logger
-// capture + the fs/storage seams) + the REAL @playform/plugin-dsh-factory
-// instance from its built Target + the REAL workspace-semantics apply from
-// its built Target - the family fake-ctx + real-factory harness pattern,
-// adapted from the workspace-observe reference harness. Each folder process
-// gets a fresh set, so every folder is standalone-green.
-//
-// NOTE: the semantics service legitimately READS file text (the lazy model
-// build) - the fake fs provides a recording readText over seeded contents;
-// it never writes (writeText RECORDS then THROWS, the B10 discipline).
-//
-// NO FAKE CLOCK: the service's only clock-like value is the index revision -
-// the plugin's own monotonic counter (the no-wall-clock rule), so the
-// harness needs no time seam.
+/**
+ * @module Harness
+ *
+ * The shared fake-ctx plus real-factory harness for the workspace-semantics tests, adapted from
+ * the workspace-observe reference harness.
+ *
+ * @remarks
+ * The fake ctx carries the root listener capture with a DISTINCT root object, the ctx listener
+ * capture, the `reflect.provide` capture, the effect runner, the logger capture and the
+ * fs/storage seams. Beside it sit the REAL `@playform/plugin-dsh-factory` instance from its built
+ * Target and the REAL workspace-semantics apply from its built Target - the family fake-ctx plus
+ * real-factory pattern. Each folder process gets a fresh set, so every folder is
+ * standalone-green.
+ *
+ * NOTE: the semantics service legitimately READS file text (the lazy model build), so the fake fs
+ * provides a recording readText over seeded contents. It never writes: writeText RECORDS then
+ * THROWS, the B10 discipline.
+ *
+ * NO FAKE CLOCK: the service's only clock-like value is the index revision, the plugin's own
+ * monotonic counter (the no-wall-clock rule), so the harness needs no time seam.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

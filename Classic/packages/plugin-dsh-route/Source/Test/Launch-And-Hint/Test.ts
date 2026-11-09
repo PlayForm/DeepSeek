@@ -1,14 +1,20 @@
-// Source/Test/Launch-And-Hint/Test.ts - THE LAUNCH SEAM (the completion
-// wave's arbiter): the routing hint lands in the child's prompt through the
-// harness's own `agent/pre-step` waterfall (the service-spawned child that
-// never passes through a tool), the tool path appends the same hint to the
-// launch prompt, the escalation marker picks the ladder, and the LIVE catalog
-// (`list_subagent_models`' source) decides the rung's model.
-//
-// Every assertion is byte-exact: the hint template
-// `[route: <taskType> <provider> <model> <effort>]`, the ledger line
-// `hint <taskType> <provider> <model> <effort>`, and the unchanged
-// `route <taskType> <source> <provider> <model> <effort>` audit line.
+/**
+ * @module Test
+ *
+ * THE LAUNCH SEAM (the completion wave's arbiter): the routing hint lands in the child's prompt
+ * through the harness's own `agent/pre-step` waterfall (the service-spawned child that never
+ * passes through a tool).
+ *
+ * @remarks
+ * Also covers the tool path appending the same hint to the launch prompt, the escalation marker
+ * picking the ladder, and the LIVE catalog (`list_subagent_models`' source) deciding the rung's
+ * model.
+ *
+ * Every assertion is byte-exact: the hint template
+ * `[route: <taskType> <provider> <model> <effort>]`, the ledger line
+ * `hint <taskType> <provider> <model> <effort>`, and the unchanged
+ * `route <taskType> <source> <provider> <model> <effort>` audit line.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

@@ -1,20 +1,23 @@
-// Source/Test/Policy-And-Decide/Test.ts - one singular test: THE POLICY BLOCK
-// (D6) - the `Policy` schema-block builder and the `Decide` verdict lookup,
-// the two module-level named exports beside `Schema`.
-//
-// What is asserted: the block's eight action classes in the D6 order and with
-// the D6 defaults (read/index/record/suggest/message = auto; write/commit/
-// spawn = approve), the schema's real validation (an explicit override
-// replaces one action and keeps the rest; an unknown verdict fails loud), the
-// composed use (`policy: Policy()` inside a consumer's Schema call is ONE
-// volatile cell carrying the same block), and the lookup's contract (the
-// action names ARE the keys; a missing or malformed key takes that action's
-// D6 default, never a blanket "auto").
-//
-// Runs standalone (`node Target/Test/Policy-And-Decide/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/plugin-dsh-factory: the REAL built Library entry
-// (the helpers are module-level, so no fake ctx is needed).
+/**
+ * @module Test
+ *
+ * One singular test: THE POLICY BLOCK (D6) - the `Policy` schema-block builder and the `Decide`
+ * verdict lookup, the two module-level named exports beside `Schema`.
+ *
+ * @remarks
+ * What is asserted: the block's eight action classes in the D6 order and with the D6 defaults
+ * (read/index/record/suggest/message = auto; write/commit/spawn = approve), the schema's real
+ * validation (an explicit override replaces one action and keeps the rest; an unknown verdict
+ * fails loud), the composed use (`policy: Policy()` inside a consumer's Schema call is ONE
+ * volatile cell carrying the same block), and the lookup's contract (the action names ARE the
+ * keys; a missing or malformed key takes that action's D6 default, never a blanket "auto").
+ *
+ * Runs standalone (`node Target/Test/Policy-And-Decide/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of `@playform/plugin-dsh-factory`: the REAL built Library entry (the helpers are
+ * module-level, so no fake ctx is needed).
+ */
 import assert from "node:assert/strict";
 
 import { Check, Finish, MakeCounter } from "../Harness.js";

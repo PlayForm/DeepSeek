@@ -1,8 +1,11 @@
-// Source/Test/Packet-And-Budget/Test.ts - the packet build and the budget
-// clamp: the eight fixed sections against a fake sibling graph, the ranked
-// neighbors, the lens filtering, the absent-graph degradation, the staleness
-// contract, the focus tracking, the budget clamp with its byte-exact ledger
-// line, the optional token meter, the tool surface, and the zero-fs purity.
+/**
+ * @module Test
+ *
+ * The packet build and the budget clamp: the eight fixed sections against a fake sibling graph,
+ * the ranked neighbors, the lens filtering, the absent-graph degradation, the staleness contract,
+ * the focus tracking, the budget clamp with its byte-exact ledger line, the optional token meter,
+ * the tool surface, and the zero-fs purity.
+ */
 import assert from "node:assert/strict";
 import Render from "../../../Target/Function/Render.js";
 import {

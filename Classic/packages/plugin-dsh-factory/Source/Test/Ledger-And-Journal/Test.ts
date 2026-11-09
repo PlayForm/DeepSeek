@@ -1,13 +1,20 @@
-// Source/Test/Ledger-And-Journal/Test.ts - one singular test: the ledger
-// Append semantics (the [ISO] file line, the module-prefixed logger line, the
-// Enabled gate, the never-throws posture), the Journal sink (the pre-bind
-// buffer, the per-State fallback, the silent containment), and the Attach
-// effects (the P1 jobs controller, the P2 inflight disposal, the P5 storage
-// open/drain/close and its loud failed-open ledger line).
-// Runs standalone (`node Target/Test/Ledger-And-Journal/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/plugin-dsh-factory: the fake ctx + the REAL factory
-// class, from the Harness.
+/**
+ * @module Test
+ *
+ * One singular test: the ledger Append semantics, the Journal sink and the Attach effects.
+ *
+ * @remarks
+ * The Append semantics cover the `[ISO]` file line, the module-prefixed logger line, the Enabled
+ * gate and the never-throws posture. The Journal sink covers the pre-bind buffer, the per-State
+ * fallback and the silent containment. The Attach effects cover the P1 jobs controller, the P2
+ * inflight disposal, and the P5 storage open/drain/close with its loud failed-open ledger line.
+ *
+ * Runs standalone (`node Target/Test/Ledger-And-Journal/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of `@playform/plugin-dsh-factory`: the fake ctx plus the REAL factory class, from
+ * the Harness.
+ */
 import assert from "node:assert/strict";
 import { readFileSync, statSync } from "node:fs";
 import * as Path from "node:path";

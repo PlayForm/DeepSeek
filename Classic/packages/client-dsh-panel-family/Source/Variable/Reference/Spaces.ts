@@ -1,8 +1,14 @@
-// Spaces - the adapter for hook-dsh-normalize-spaces, the third of the five
-// remaining normalize flavors (order 13). Same reference pattern: the child
-// slot, the settings namespace, the static activation posture, and the D5
-// trace names. The spaces schema carries the volatile `replacement` knob
-// (the plain ASCII space by default).
+/**
+ * @module Spaces
+ *
+ * The adapter for `hook-dsh-normalize-spaces`, the third of the five remaining normalize flavors
+ * (order 13).
+ *
+ * @remarks
+ * Same reference pattern: the child slot, the settings namespace, the static activation posture,
+ * and the D5 trace names. The spaces schema carries the volatile `replacement` knob (the plain
+ * ASCII space by default).
+ */
 import type { PanelSection } from "@Interface/Panel.js";
 import Trace from "@Variable/Trace.js";
 

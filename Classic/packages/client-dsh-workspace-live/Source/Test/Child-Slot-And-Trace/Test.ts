@@ -1,18 +1,20 @@
-// Source/Test/Child-Slot-And-Trace/Test.ts - the live view's two new
-// contracts, against the real built client apply and the real built trace
-// source / view:
-//
-//   * THE CHILD-SLOT MODEL: with the panel family composed
-//     (`playformFamilyPanel` present) the tab declares `workspace.live.section`
-//     in its `children` table and renders it through the renderer's
-//     `renderSlot` prop; the section registers into that declared child slot
-//     and its registration's INJECT face (`{ section, ports }`) is the data
-//     path.
-//   * THE D5 INGEST: the trace source forwards a bus envelope into the
-//     newest-first bounded tail, a new envelope notifies the subscribers
-//     (stable-until-event, no timer), and a missing bus is the documented
-//     static state (`live: false`, empty tail) - never an error. The View
-//     renders the stored tail.
+/**
+ * @module Test
+ *
+ * The live view's two new contracts, against the real built client apply and the real built
+ * trace source / view.
+ *
+ * @remarks
+ * The child-slot model: with the panel family composed (`playformFamilyPanel` present) the tab
+ * declares `workspace.live.section` in its `children` table and renders it through the
+ * renderer's `renderSlot` prop; the section registers into that declared child slot and its
+ * registration's INJECT face (`{ section, ports }`) is the data path.
+ *
+ * The D5 ingest: the trace source forwards a bus envelope into the newest-first bounded tail, a
+ * new envelope notifies the subscribers (stable-until-event, no timer), and a missing bus is the
+ * documented static state (`live: false`, empty tail) - never an error. The View renders the
+ * stored tail.
+ */
 import assert from "node:assert/strict";
 import {
 	BundleSource,

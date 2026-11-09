@@ -1,9 +1,14 @@
-// Source/Test/Query-Withdraw-Observe/Test.ts - the observe side and the
-// management surface: the silent fs/observed fence tracker (no ledger noise,
-// never throws, own-actor ignored), the staleness rule's use of the
-// observed version as the fence when the caller gives none, the withdrawal
-// path with its byte-exact line, the filtered query with its limits, the
-// honest statistics, and the full-table refusal.
+/**
+ * @module Test
+ *
+ * The observe side and the management surface.
+ *
+ * @remarks
+ * Covers the silent fs/observed fence tracker (no ledger noise, never throws, own-actor
+ * ignored), the staleness rule's use of the observed version as the fence when the caller gives
+ * none, the withdrawal path with its byte-exact line, the filtered query with its limits, the
+ * honest statistics, and the full-table refusal.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

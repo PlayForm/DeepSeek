@@ -1,10 +1,13 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) and the knob
-// contract on the lesson-review service.
-//
-// `write: approve` is the single most important default in this package: it is
-// what makes the review a PROPOSER rather than an autonomous editor. The block's
-// eight verdicts, the schema's fill, the bare-construction fallback and the
-// fail-loud knob checks are all pinned here.
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) and the knob contract on the lesson-review service.
+ *
+ * @remarks
+ * `write: approve` is the single most important default in this package: it is what makes the
+ * review a PROPOSER rather than an autonomous editor. The block's eight verdicts, the schema's
+ * fill, the bare-construction fallback and the fail-loud knob checks are all pinned here.
+ */
 import assert from "node:assert/strict";
 
 import { Check, Finish, LessonService, Make, MakeCounter } from "../Harness.js";

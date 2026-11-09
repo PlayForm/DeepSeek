@@ -1,23 +1,28 @@
-// Source/Test/History-Producer/Test.ts - THE STORE'S PRODUCER (the completion
-// spec's wave 2c re-spec): the recall reader finally has data. Every judged
-// call in a workspace is appended to the call history - the per-agent ring
-// plus the durable tier (the `replay_history` KV domain, or the JSON fallback
-// when the harness provides no storage) - and a later call recalls the paths
-// that accompanied a similar prior call.
-//
-// The scenarios:
-//   * a sequence of judged calls fills the store (the mirror, the ring, the
-//     byte-exact `recorded` lines);
-//   * a later call recalls and the note names the historical companions
-//     (byte-exact note and suggest line);
-//   * an empty store abstains honestly (no note, no claim);
-//   * the KV path survives a reopen (the domain spec, the recovered line, a
-//     recall from the restored mirror);
-//   * the JSON fallback survives a reopen without any storage facility;
-//   * the ring is bounded by `historyDepth`;
-//   * a non-judged call and a foreign-workspace call are never recorded;
-//   * the SEEDED store still wins (the fixtures' precedence);
-//   * a failed domain open is loud and degrades to the file.
+/**
+ * @module Test
+ *
+ * THE STORE'S PRODUCER (the completion spec's wave 2c re-spec): the recall reader finally has
+ * data.
+ *
+ * @remarks
+ * Every judged call in a workspace is appended to the call history - the per-agent ring plus the
+ * durable tier (the `replay_history` KV domain, or the JSON fallback when the harness provides no
+ * storage) - and a later call recalls the paths that accompanied a similar prior call.
+ *
+ * The scenarios:
+ * - a sequence of judged calls fills the store (the mirror, the ring, the byte-exact `recorded`
+ *   lines);
+ * - a later call recalls and the note names the historical companions (byte-exact note and
+ *   suggest line);
+ * - an empty store abstains honestly (no note, no claim);
+ * - the KV path survives a reopen (the domain spec, the recovered line, a recall from the
+ *   restored mirror);
+ * - the JSON fallback survives a reopen without any storage facility;
+ * - the ring is bounded by `historyDepth`;
+ * - a non-judged call and a foreign-workspace call are never recorded;
+ * - the SEEDED store still wins (the fixtures' precedence);
+ * - a failed domain open is loud and degrades to the file.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

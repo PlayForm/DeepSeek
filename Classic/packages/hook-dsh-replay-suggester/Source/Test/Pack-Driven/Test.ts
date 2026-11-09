@@ -1,11 +1,16 @@
-// Source/Test/Pack-Driven/Test.ts - the EXPLICIT pack override: a temporary
-// repo with its own `.dsh/pack.yml` (its own `replay/Rerun` family, which
-// outranks the synthesized one) drives the intent and the caveat while the
-// candidates still come from the recall, so the pack never supplies a file;
-// the same workspace WITHOUT the pack emits the synthesized Repeat note (the
-// recall is the only default source); the pack with NO record matches and
-// abstains `no-memory`; and a workspace with neither a pack nor a record
-// abstains `no-history` instead of naming a literal built-in pack.
+/**
+ * @module Test
+ *
+ * The EXPLICIT pack override: a temporary repo with its own `.dsh/pack.yml` drives the intent
+ * and the caveat while the candidates still come from the recall.
+ *
+ * @remarks
+ * The pack's own `replay/Rerun` family outranks the synthesized one, so the pack never supplies a
+ * file. The same workspace WITHOUT the pack emits the synthesized Repeat note (the recall is the
+ * only default source); the pack with NO record matches and abstains `no-memory`; and a workspace
+ * with neither a pack nor a record abstains `no-history` instead of naming a literal built-in
+ * pack.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

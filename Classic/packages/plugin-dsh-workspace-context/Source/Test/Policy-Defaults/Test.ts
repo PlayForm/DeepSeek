@@ -1,14 +1,18 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the
-// workspace-context service: the shared block's defaults in the schema and on
-// the built State, the per-key override landing on `State.Allow`, the proof
-// that the package has NO gated action (every action class it uses decides
-// "auto" and the mount writes no policy/held line), and a representative
-// read-only packet build still proceeding under the shipped defaults while
-// writing no file.
-//
-// The context service is a pure reader: no gate, no Decide call in the plugin
-// itself. The block is the shared posture, and this folder proves it is real
-// config, not dead text.
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the workspace-context service: the shared block's defaults in the
+ * schema and on the built State, the per-key override landing on `State.Allow`, and the proof
+ * that the package has NO gated action.
+ *
+ * @remarks
+ * Every action class the service uses decides "auto", and the mount writes no policy/held line. A
+ * representative read-only packet build still proceeds under the shipped defaults while writing
+ * no file.
+ *
+ * The context service is a pure reader: no gate, no `Decide` call in the plugin itself. The block
+ * is the shared posture, and this folder proves it is real config, not dead text.
+ */
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";

@@ -1,10 +1,15 @@
-// Source/Test/Pipeline-And-Recall/Test.ts - the pipeline against the seeded
-// history store: the Repeat intent fires ONLY through the recalled record
-// (the synthesized family crosses the gate), the anchor drop and the recalled
-// candidates, the verification caveat, the longest-probe rule, the candidate
-// cap, the exclusion, the gate (cooldown, cap + the pre-step reset), the
-// `no-history` abstention without a record, the block decision, the volatile
-// flip, and the fs purity.
+/**
+ * @module Test
+ *
+ * The pipeline against the seeded history store.
+ *
+ * @remarks
+ * The Repeat intent fires ONLY through the recalled record (the synthesized family crosses the
+ * gate). Also covers the anchor drop and the recalled candidates, the verification caveat, the
+ * longest-probe rule, the candidate cap, the exclusion, the gate (cooldown, cap + the pre-step
+ * reset), the `no-history` abstention without a record, the block decision, the volatile flip,
+ * and the fs purity.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

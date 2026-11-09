@@ -1,9 +1,15 @@
-// Source/Test/Wiring-And-Recovery/Test.ts - the wiring and the recovery:
-// the loader contract (the default object carries name/apply/Config/inject,
-// apply returns nothing), the IDLE-forever cold mount, the activation proof,
-// the service registered from apply, the fail-loud validation, the state
-// file recovery (missing, seeded, corrupt; the honest active downgrade),
-// and the zero context-fs guarantee.
+/**
+ * @module Test
+ *
+ * The wiring and the recovery: the loader contract, the IDLE-forever cold mount, the activation
+ * proof, the service registered from apply, the fail-loud validation, the state file recovery and
+ * the zero context-fs guarantee.
+ *
+ * @remarks
+ * The loader contract: the default object carries name/apply/Config/inject, and apply returns
+ * nothing. The state file recovery covers the missing, seeded and corrupt cases, with the honest
+ * active downgrade.
+ */
 import assert from "node:assert/strict";
 import * as Path from "node:path";
 import {

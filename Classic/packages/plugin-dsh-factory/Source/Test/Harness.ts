@@ -1,18 +1,23 @@
-// Source/Test/Harness.ts - the shared test harness for the FACTORY tests: the
-// fake ctx of the source suite (the capture seams on/emit/effect/get/reflect/
-// fs/logger + the ROOT seam, since the Wire and the State builder register on
-// the root scope) + the REAL factory class from the built Target - the seams
-// from the source suite, written ONCE per package and imported by every test
-// folder. Every folder constructs its own factory instance from the class
-// (the Service base registers through ctx.reflect.provide) and drives the
-// State builder, the write executor and the registry against it.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually wires
-// the Service constructor (the vacuously-green backstop for every folder's
-// fixture); prepublishOnly.sh gates the build on it. Imported as a library,
-// this module only exports.
+/**
+ * @module Harness
+ *
+ * The shared harness for the factory tests: the fake ctx of the source suite plus the REAL
+ * factory class from the built Target, written once per package and imported by every test
+ * folder.
+ *
+ * @remarks
+ * The fake ctx carries the capture seams `on`/`emit`/`effect`/`get`/`reflect`/`fs`/`logger` plus
+ * the ROOT seam, since the Wire and the State builder register on the root scope. Every folder
+ * constructs its own factory instance from the class (the Service base registers through
+ * `ctx.reflect.provide`) and drives the State builder, the write executor and the registry
+ * against it.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the counter through one
+ * deliberate pass and one deliberate failure and exits 0 only when both are counted exactly, then
+ * proves the fake ctx actually wires the Service constructor (the vacuously-green backstop for
+ * every folder's fixture); `prepublishOnly.sh` gates the build on it. Imported as a library, this
+ * module only exports.
+ */
 import assert from "node:assert/strict";
 import { mkdtempSync } from "node:fs";
 import * as OS from "node:os";

@@ -1,11 +1,16 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the merge
-// hook: the shared block's defaults in the schema and on the built State, the
-// `approve` verdict HOLDING the whole batch with the documented line and ZERO
-// writes, the `auto` verdict proceeding to the gates and the commits, and the
-// rule that only the `commit` key opens this gate.
-//
-// The mount keeps the SHIPPED `commit: approve`; a scenario that wants the
-// gate open passes `policy: { commit: "auto" }` explicitly.
+/**
+ * @module Test
+ *
+ * THE POLICY BLOCK (D6) on the merge hook.
+ *
+ * @remarks
+ * Covers the shared block's defaults in the schema and on the built State, the `approve` verdict
+ * HOLDING the whole batch with the documented line and ZERO writes, the `auto` verdict proceeding
+ * to the gates and the commits, and the rule that only the `commit` key opens this gate.
+ *
+ * The mount keeps the SHIPPED `commit: approve`; a scenario that wants the gate open passes
+ * `policy: { commit: "auto" }` explicitly.
+ */
 import assert from "node:assert/strict";
 
 import {

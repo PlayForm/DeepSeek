@@ -1,12 +1,19 @@
-// Source/Test/Match-Discover-Policy/Test.ts - one singular test: the pure
-// helpers - the exclusion-first Match, the Discover walk-up with the
-// node_modules boundary and the nearest-wins rule, the contained Parse, and
-// the ResolvePolicy union keep-list with the P3 chain keys and the
-// unreadable/absent handling.
-// Runs standalone (`node Target/Test/Match-Discover-Policy/Test.js`) AND
-// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/plugin-dsh-factory: the fake ctx + the REAL factory
-// class, from the Harness.
+/**
+ * @module Test
+ *
+ * One singular test: the pure helpers - the exclusion-first Match, the Discover walk-up, the
+ * contained Parse, and the ResolvePolicy union keep-list.
+ *
+ * @remarks
+ * The Discover walk-up carries the `node_modules` boundary and the nearest-wins rule. The
+ * ResolvePolicy keep-list carries the P3 chain keys and the unreadable/absent handling.
+ *
+ * Runs standalone (`node Target/Test/Match-Discover-Policy/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of `@playform/plugin-dsh-factory`: the fake ctx plus the REAL factory class, from
+ * the Harness.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";

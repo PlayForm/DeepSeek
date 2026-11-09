@@ -13,8 +13,8 @@
  *
  * With no settings client the form shows the documented "not composed" state; with no trace the
  * status is static - neither is an error. The form's in-between states are the harness
- * `DetailDocument`: a skeleton while the settings mirror answers and nothing when the plugin exposes
- * no configurable field. The activation lamp is a harness `StateDot` (`Function/Status`).
+ * `DetailDocument`: a skeleton while the settings mirror answers and nothing when the plugin
+ * exposes no configurable field. The activation lamp is a harness `StateDot` (`Function/Status`).
  */
 import {
 	DetailDocument,

@@ -1,9 +1,15 @@
-// Source/Test/Connect-And-Carry/Test.ts - the connect op and the reflective
-// carry: the import insertion with a symbol, the comment form without one,
-// the idempotence (already connected), the identity rejection, the relative
-// specifier computation, and the carry (absent graph silent skip, present
-// graph reindexes with the byte-exact carried line, a graph failure is
-// contained and never undoes the applied write).
+/**
+ * @module Test
+ *
+ * The connect op and the reflective carry: the import insertion with a symbol, the comment form
+ * without one, the idempotence, the identity rejection, the relative specifier computation, and
+ * the carry.
+ *
+ * @remarks
+ * The idempotence case is the already-connected path. The carry skips silently when the graph is
+ * absent, reindexes with the byte-exact carried line when the graph is present, and contains a
+ * graph failure without ever undoing the applied write.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

@@ -1,17 +1,22 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE-LIVE
-// client-half smokes: the alias hooks load the REAL built Target (the
-// ./client export, the loader row and the Store), and the fake CLIENT ctx
-// captures exactly the seams the client body uses - locale.register,
-// slots.inject, slots.register, effect, provide. This is the
-// hook-dsh-workspace-observe harness pattern adapted to the client SDK:
-// no root listener, no fs capture, no waterfall - the client half is a
-// pure browser module that touches no filesystem and, per the
-// stable-until-event contract, has NO timer or polling: the no-timer
-// invariant is asserted on the built code and on the live store itself.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves
-// the fake ctx actually wires the real client apply (the vacuously-green
-// backstop for every folder's fixture).
+/**
+ * @module Harness
+ *
+ * The shared test harness for the WORKSPACE-LIVE client-half smokes.
+ *
+ * @remarks
+ * The alias hooks load the REAL built Target (the `./client` export, the loader row and the
+ * Store), and the fake CLIENT ctx captures exactly the seams the client body uses -
+ * `locale.register`, `slots.inject`, `slots.register`, `effect`, `provide`.
+ *
+ * This is the hook-dsh-workspace-observe harness pattern adapted to the client SDK: no root
+ * listener, no fs capture, no waterfall - the client half is a pure browser module that touches
+ * no filesystem and, per the stable-until-event contract, has NO timer or polling. The no-timer
+ * invariant is asserted on the built code and on the live store itself.
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` proves the fake ctx
+ * actually wires the real client apply (the vacuously-green backstop for every folder's
+ * fixture).
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 

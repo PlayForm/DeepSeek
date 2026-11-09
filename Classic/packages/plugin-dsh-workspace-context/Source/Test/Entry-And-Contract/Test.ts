@@ -1,10 +1,15 @@
-// Source/Test/Entry-And-Contract/Test.ts - the loader contract and the
-// mount: the default object carries name/apply/Config/inject (the ONLY named
-// exports - apply alone never catches a missing inject), the cold mount is
-// IDLE-forever with the byte-exact disabled line and no tool, the enabled
-// mount registers the service and the tool with the byte-exact activation
-// line, the fail-loud validation throws at load, and the durable ledger
-// carries the [ISO] forms.
+/**
+ * @module Test
+ *
+ * The loader contract and the mount: the default object's four exports, the IDLE-forever cold
+ * mount, the enabled mount, the fail-loud validation and the durable ledger forms.
+ *
+ * @remarks
+ * The default object carries name/apply/Config/inject, the ONLY named exports - apply alone never
+ * catches a missing inject. The cold mount is IDLE-forever with the byte-exact disabled line and
+ * no tool. The enabled mount registers the service and the tool with the byte-exact activation
+ * line. The fail-loud validation throws at load, and the durable ledger carries the `[ISO]` forms.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

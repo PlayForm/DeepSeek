@@ -126,7 +126,7 @@ export const runTest = async (): Promise<number> => {
 			Check(Count, "T2: the changed file's cost per line is its cost over its lines", () => {
 				assert.ok(One !== undefined, "c.ts keeps a reading");
 				const Per = One.Rows.find((Row) => Row.Metric === "cost_per_line");
-				const Lines = One.Rows.find((Row) => Row.Metric === "surviving_lines");
+				const Lines = One.Rows.find((Row) => Row.Metric === "added_lines_on_changed_files");
 				const Cost = One.Rows.find((Row) => Row.Metric === "cost");
 				assert.ok(Per !== undefined && Lines !== undefined && Cost !== undefined, "the three metrics exist");
 				assert.equal(Per.Unit, "USD/line");

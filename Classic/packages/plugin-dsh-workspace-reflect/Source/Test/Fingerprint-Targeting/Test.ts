@@ -1,12 +1,17 @@
-// Source/Test/Fingerprint-Targeting/Test.ts - the AST-aware targeting: a
-// reflective Replace resolves its span from the GRAPH's node (the Symbol/Block
-// nodes carry spans and content-derived fingerprints), verifies the span's
-// fingerprint against the CURRENT text before writing, and rewrites only that
-// span - a mismatch refuses and writes nothing. The folder also pins the
-// textual fallback (no graph: the explicit span is used and still verified),
-// the documented targeting refusals, and the rename's semantics consumer wiring
-// (the real built semantics service mounted on the same fake context: the plan's
-// edits are filtered to the operation's scope).
+/**
+ * @module Test
+ *
+ * The AST-aware targeting: a reflective Replace resolves its span from the GRAPH's node, verifies
+ * the span's fingerprint against the CURRENT text before writing, and rewrites only that span - a
+ * mismatch refuses and writes nothing.
+ *
+ * @remarks
+ * The Symbol/Block nodes carry spans and content-derived fingerprints. The folder also pins the
+ * textual fallback (no graph: the explicit span is used and still verified), the documented
+ * targeting refusals, and the rename's semantics consumer wiring (the real built semantics
+ * service mounted on the same fake context: the plan's edits are filtered to the operation's
+ * scope).
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

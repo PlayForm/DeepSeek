@@ -1,14 +1,21 @@
-// Source/Test/Schema-Wire-Govern/Test.ts - one singular test: the Schema
-// factory (the shared volatile fields, the per-module defaults, the real
-// validation + unwrap, the module field slots appended verbatim), the Wire
-// registration (the fiber-owned fs/observed listener + the module-supplied
-// activation proof) and the direct-govern registry (RegisterGovern storage,
-// selection resolution, basename routing, per-step containment, in-place
-// re-registration).
-// Runs standalone (`node Target/Test/Schema-Wire-Govern/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/plugin-dsh-factory: the fake ctx + the REAL factory
-// class, from the Harness.
+/**
+ * @module Test
+ *
+ * One singular test: the Schema factory, the Wire registration and the direct-govern registry.
+ *
+ * @remarks
+ * The Schema factory covers the shared volatile fields, the per-module defaults, the real
+ * validation plus unwrap, and the module field slots appended verbatim. The Wire registration
+ * covers the fiber-owned fs/observed listener plus the module-supplied activation proof. The
+ * direct-govern registry covers the RegisterGovern storage, the selection resolution, the
+ * basename routing, the per-step containment and the in-place re-registration.
+ *
+ * Runs standalone (`node Target/Test/Schema-Wire-Govern/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * Unit smoke of `@playform/plugin-dsh-factory`: the fake ctx plus the REAL factory class, from
+ * the Harness.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
