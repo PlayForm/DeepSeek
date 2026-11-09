@@ -13,11 +13,13 @@
 // (emit, post-commit) is the synchronous recorder: it pushes the event into
 // the capture queue and never awaits, never touches I/O and never throws - a
 // throw here would fail the tool call that produced the event.
-// `session/flush` (parallel) is the durability checkpoint: it takes the
-// session's queue and folds it into the ledger. Both listeners are disposed
-// with the ledger effect. The plugin stays silent - no tool, no prompt
-// section, no model-visible message; the commands render their text OUTSIDE
-// model history.
+// `session/flush` (parallel) is the durability checkpoint: it peeks the
+// session's queue, folds it into the ledger inside the drain's transaction,
+// acknowledges the batch only after the fold returns committed, and keeps it
+// for a bounded retry when the fold fails (E1, A2 section 1.3). Both
+// listeners are disposed with the ledger effect. The plugin stays silent -
+// no tool, no prompt section, no model-visible message; the commands render
+// their text OUTSIDE model history.
 //
 // THE HUMAN SURFACE: the registry's name law allows no spaces in a command
 // name, so ONE command owns the grammar and the verb is its first word -
@@ -107,6 +109,10 @@ export default (Context: Context, Options: Config): void => {
 	let OffFlush: (() => boolean) | undefined;
 	Context.effect(() => {
 		Ledger = Open(Options);
+		// The retry timers: one per session, so a fresh flush supersedes a
+		// pending retry, and every one of them is cleared with the ledger
+		// effect - a timer must never fold into a closed database.
+		const Timers = new Map<string, ReturnType<typeof setTimeout>>();
 		if (Ledger !== undefined) {
 			const Queue = Capture(Options);
 			const Fold = Drain(Context, Ledger.Database, Options);
@@ -114,6 +120,72 @@ export default (Context: Context, Options: Config): void => {
 			// own events landed in, so a range report or a forecast reads a
 			// current Rollup instead of waiting for a rebuild (section 17.5).
 			const Refresh = Rollup(Ledger.Database);
+			// The bounded retry (E1, A2 section 1.3): a failed fold keeps its
+			// batch and comes back after a short backoff, at most RetryLimit
+			// attempts; the last one leaves the batch queued for the next
+			// flush instead of spinning. The backoff doubles per attempt and
+			// the timer is unref'd, so a parked retry never holds the loop.
+			const RetryLimit = 3;
+			const Backoff = 200;
+			// One contained line per failed fold: the drain's own line carries
+			// the reason, this one carries the decision. A throwing logger
+			// never reaches the dispatch.
+			const Warn = (Line: string): void => {
+				try {
+					(
+						Context as unknown as {
+							logger?: { warn?: (message: string) => void };
+						}
+					).logger?.warn?.(Line);
+				} catch {
+					/* silence above all */
+				}
+			};
+			// The flush: peek, fold inside the drain's transaction, and
+			// acknowledge only what the drain committed. A false from the
+			// drain means the transaction rolled back and the batch is still
+			// queued, so the retry re-reads the same events - the cursor and
+			// the insert guards make a replayed batch a no-op.
+			const Flush = (Subject: unknown, SessionId: string, Attempt: number): void => {
+				const Held = Timers.get(SessionId);
+				if (Held !== undefined) {
+					clearTimeout(Held);
+					Timers.delete(SessionId);
+				}
+				const Events = Queue.Peek(SessionId);
+				if (Events.length === 0) {
+					return;
+				}
+				if (!Fold(Subject, Events)) {
+					if (Attempt + 1 >= RetryLimit) {
+						Warn(
+							`plugin-dsh-cost: the flush batch was kept for the next flush (${RetryLimit} attempts failed)`,
+						);
+						return;
+					}
+					const Wait = Backoff * 2 ** Attempt;
+					Warn(
+						`plugin-dsh-cost: the flush batch was kept for retry (attempt ${Attempt + 1} of ${RetryLimit} in ${Wait}ms)`,
+					);
+					const Timer = setTimeout((): void => {
+						Timers.delete(SessionId);
+						try {
+							Flush(Subject, SessionId, Attempt + 1);
+						} catch {
+							/* a retry never throws into the timer */
+						}
+					}, Wait);
+					(Timer as { unref?: () => void }).unref?.();
+					Timers.set(SessionId, Timer);
+					return;
+				}
+				Queue.Acknowledge(SessionId, Events.length);
+				Refresh(
+					Events.map((One) => (One as { time?: unknown }).time).filter(
+						(At): At is number => typeof At === "number",
+					),
+				);
+			};
 			OffEvent = Context.on("session/event", (Subject, Event): void => {
 				Queue.Push(Subject, Event);
 			});
@@ -123,16 +195,7 @@ export default (Context: Context, Options: Config): void => {
 					if (typeof SessionId !== "string") {
 						return;
 					}
-					const Events = Queue.Take(SessionId);
-					if (Events.length === 0) {
-						return;
-					}
-					Fold(Subject, Events);
-					Refresh(
-						Events.map((One) => (One as { time?: unknown }).time).filter(
-							(At): At is number => typeof At === "number",
-						),
-					);
+					Flush(Subject, SessionId, 0);
 				} catch {
 					/* the flush never throws into the parallel dispatch */
 				}
@@ -145,6 +208,10 @@ export default (Context: Context, Options: Config): void => {
 			} catch {
 				/* already disposed with the fiber */
 			}
+			for (const Timer of Timers.values()) {
+				clearTimeout(Timer);
+			}
+			Timers.clear();
 			Ledger?.Close();
 		};
 	}, "plugin-dsh-cost.ledger()");
