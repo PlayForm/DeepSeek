@@ -1,5 +1,5 @@
-import type Configuration from "@Interface/Config.js";
-import type { Op } from "@Interface/Proposal.js";
+import type Configuration from "../Interface/Config.js";
+import type { Op } from "../Interface/Proposal.js";
 /**
  * Expand a leading `~` (the family's path convention for every knob).
  */

@@ -1,1 +1,80 @@
-import a from"node:assert/strict";import{Check as t,Finish as n,LessonService as r,Make as i,MakeCounter as l}from"../Harness.js";const o={read:"auto",index:"auto",record:"auto",suggest:"auto",write:"approve",commit:"approve",spawn:"approve",message:"auto"},u=async()=>{const s=l();return t(s,"P1: the schema fills the D6 policy defaults",()=>{const e=r.Config({});a.deepEqual(e.policy.get(),o,"the composed block carries the defaults")}),t(s,"P2: a bare construction carries the D6 block in the knobs",()=>{const e=i();a.deepEqual(e.Service.Knobs.policy,o,"the bare default is the D6 table")}),t(s,"P3: a partial policy override merges over the defaults",()=>{const e=i({policy:{write:"auto"}});a.deepEqual(e.Service.Knobs.policy,{...o,write:"auto"},"the override replaces one verdict and keeps the rest")}),t(s,"P4: the shipped posture is PROPOSE (write stays approve)",()=>{const e=i();a.equal(e.Service.Knobs.policy.write,"approve","a review never writes unasked"),a.equal(e.Service.Knobs.policy.suggest,"auto","but it may always suggest")}),t(s,"P5: the schema's own defaults are the idle-forever posture",()=>{const e=r.Config({});a.equal(e.enabled.get(),!1,"a loaded plugin ships disabled"),a.equal(e.intervalTurns.get(),10,"the nudge interval is ten turns"),a.equal(e.staleAfterDays.get(),14,"the stale line is fourteen days"),a.equal(e.archiveAfterDays.get(),30,"the archive line is thirty"),a.equal(e.consolidate.get(),!1,"the LLM consolidation pass is opt-in")}),t(s,"P6: a reversed stale/archive pair throws AT LOAD",()=>{a.throws(()=>i({staleAfterDays:30,archiveAfterDays:10}),/archiveAfterDays must be >= staleAfterDays/,"a reversed pair would archive the moment it stales")}),t(s,"P7: a bad domain name throws AT LOAD",()=>{a.throws(()=>i({domain:"Lesson Review"}),/domain must be a lowercase unit name/,"the store's name is validated where it is cheap")}),t(s,"P8: a non-finite numeric knob falls back to its default",()=>{const e=i({intervalTurns:Number.NaN,digestTail:"nonsense"});a.equal(e.Service.Knobs.intervalTurns,10,"NaN is not a cadence"),a.equal(e.Service.Knobs.digestTail,24,"a string is not a tail")}),t(s,"P9: the digest tail below two is refused",()=>{a.throws(()=>i({digestTail:1}),/digestTail must be >= 2/,"a one-message digest is no digest")}),n(s,"Policy-Defaults")},c=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(c){const s=await u();console.log(`${s} PASS - Policy-Defaults`)}export{u as runTest};
+import assert from "node:assert/strict";
+import { Check, Finish, LessonService, Make, MakeCounter } from "../Harness.js";
+const Defaults = {
+  read: "auto",
+  index: "auto",
+  record: "auto",
+  suggest: "auto",
+  write: "approve",
+  commit: "approve",
+  spawn: "approve",
+  message: "auto"
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  Check(Count, "P1: the schema fills the D6 policy defaults", () => {
+    const Config = LessonService.Config({});
+    assert.deepEqual(Config.policy.get(), Defaults, "the composed block carries the defaults");
+  });
+  Check(Count, "P2: a bare construction carries the D6 block in the knobs", () => {
+    const Run = Make();
+    assert.deepEqual(Run.Service.Knobs.policy, Defaults, "the bare default is the D6 table");
+  });
+  Check(Count, "P3: a partial policy override merges over the defaults", () => {
+    const Run = Make({ policy: { write: "auto" } });
+    assert.deepEqual(
+      Run.Service.Knobs.policy,
+      { ...Defaults, write: "auto" },
+      "the override replaces one verdict and keeps the rest"
+    );
+  });
+  Check(Count, "P4: the shipped posture is PROPOSE (write stays approve)", () => {
+    const Run = Make();
+    assert.equal(Run.Service.Knobs.policy.write, "approve", "a review never writes unasked");
+    assert.equal(Run.Service.Knobs.policy.suggest, "auto", "but it may always suggest");
+  });
+  Check(Count, "P5: the schema's own defaults are the idle-forever posture", () => {
+    const Config = LessonService.Config({});
+    assert.equal(Config.enabled.get(), false, "a loaded plugin ships disabled");
+    assert.equal(Config.intervalTurns.get(), 10, "the nudge interval is ten turns");
+    assert.equal(Config.staleAfterDays.get(), 14, "the stale line is fourteen days");
+    assert.equal(Config.archiveAfterDays.get(), 30, "the archive line is thirty");
+    assert.equal(Config.consolidate.get(), false, "the LLM consolidation pass is opt-in");
+  });
+  Check(Count, "P6: a reversed stale/archive pair throws AT LOAD", () => {
+    assert.throws(
+      () => Make({ staleAfterDays: 30, archiveAfterDays: 10 }),
+      /archiveAfterDays must be >= staleAfterDays/,
+      "a reversed pair would archive the moment it stales"
+    );
+  });
+  Check(Count, "P7: a bad domain name throws AT LOAD", () => {
+    assert.throws(
+      () => Make({ domain: "Lesson Review" }),
+      /domain must be a lowercase unit name/,
+      "the store's name is validated where it is cheap"
+    );
+  });
+  Check(Count, "P8: a non-finite numeric knob falls back to its default", () => {
+    const Run = Make({ intervalTurns: Number.NaN, digestTail: "nonsense" });
+    assert.equal(Run.Service.Knobs.intervalTurns, 10, "NaN is not a cadence");
+    assert.equal(Run.Service.Knobs.digestTail, 24, "a string is not a tail");
+  });
+  Check(Count, "P9: the digest tail below two is refused", () => {
+    assert.throws(
+      () => Make({ digestTail: 1 }),
+      /digestTail must be >= 2/,
+      "a one-message digest is no digest"
+    );
+  });
+  return Finish(Count, "Policy-Defaults");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Policy-Defaults`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

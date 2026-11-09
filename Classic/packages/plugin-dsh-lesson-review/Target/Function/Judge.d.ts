@@ -19,7 +19,7 @@
  * acceptability. A refused operation is reported, not repaired - a repaired
  * write is a write nobody proposed.
  */
-import type { Corpus } from "@Interface/Corpus.js";
-import type { Proposal, Verdict } from "@Interface/Proposal.js";
+import type { Corpus } from "../Interface/Corpus.js";
+import type { Proposal, Verdict } from "../Interface/Proposal.js";
 export default _default;
 declare function _default(Proposal_: Proposal, Corpus: Corpus): Verdict;

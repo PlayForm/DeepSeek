@@ -25,7 +25,7 @@
  * returns specially, a live-verified lesson recorded in the plugin-
  * development skill).
  */
-import type { AgentState, CoachNotes, CoachRow } from "./Execution.js";
+import type { AgentState, CoachNotes, CoachRow } from "@Interface/Execution.js";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {

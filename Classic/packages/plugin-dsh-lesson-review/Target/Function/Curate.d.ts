@@ -25,8 +25,8 @@
  * record that has never been used - so an entry cannot be immortal by being
  * ignored.
  */
-import type Configuration from "@Interface/Config.js";
-import type Entry from "@Interface/Entry.js";
+import type Configuration from "../Interface/Config.js";
+import type Entry from "../Interface/Entry.js";
 /**
  * What one pass moved.
  */

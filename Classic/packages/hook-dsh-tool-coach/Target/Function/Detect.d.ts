@@ -35,7 +35,7 @@
  *   - wrappers (sh -c / bash -c / eval / xargs / find -exec) never exempt:
  *     the INNER payload is re-scanned through the same rows.
  */
-import type { CoachRow, Detection } from "../Interface/Execution.js";
+import type { CoachRow, Detection } from "@Interface/Execution.js";
 export default _default;
 /**
  * Detect one judged terminal call. `Command` is the raw command string; `Rows`

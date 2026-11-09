@@ -23,6 +23,6 @@
  * The plugin never invents a model: every candidate comes from the user's
  * allowed set, and the escalation's effort stays the planner row's `max`.
  */
-import type { PolicyShape, RoleSpec } from "@Interface/Policy.js";
+import type { PolicyShape, RoleSpec } from "../Interface/Policy.js";
 export default _default;
 declare function _default(Policy: PolicyShape, Advertised?: readonly string[]): RoleSpec;

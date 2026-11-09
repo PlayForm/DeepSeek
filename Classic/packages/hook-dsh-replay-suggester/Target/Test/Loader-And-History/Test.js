@@ -1,1 +1,179 @@
-import e from"node:assert/strict";import*as l from"node:fs";import*as k from"node:os";import*as d from"node:path";import{Check as r,CheckAsync as x,Finish as S,Ledger as f,LedgerWith as c,LinesWith as n,MakeCounter as q,Make as m,Plugin as u,rm as a,rmStore as b,Store as L,Validate as o,WriteStore as p}from"../Harness.js";const h=l.mkdtempSync(d.join(k.tmpdir(),"replay-suggester-loader-"));l.writeFileSync(d.join(h,"package.json"),"{}","utf8"),l.mkdirSync(d.join(h,"src"),{recursive:!0}),l.writeFileSync(d.join(h,"src","Other.ts"),"x","utf8");const w=async()=>{const s=q();r(s,"L1: the default object carries name/apply/Config/inject",()=>{e.equal(u.name,"replay-suggester"),e.equal(typeof u.apply,"function"),e.ok(u.Config!==void 0),e.deepEqual(u.inject,["pluginFactory"])});{a(),b();const t=m(o({logFile:f,historyPath:L,enabled:!1}));r(s,"L2: apply returns NOTHING and the state probe exists",()=>{e.equal(t.Returned,void 0),e.ok(t.State!==void 0),e.equal(t.State.On,!1)}),r(s,"L2: the cold mount logs the byte-exact disabled line",()=>{e.deepEqual(n(t,"disabled (enabled=false)"),["replay-suggester: disabled (enabled=false)"])}),r(s,"L2: the disabled line is in the durable ledger exactly once",()=>{e.equal(c("disabled (enabled=false)").length,1),e.ok(c("disabled (enabled=false)")[0]?.endsWith("] disabled (enabled=false)"))}),r(s,"L2: a disabled mount still wires both listeners on the plugin ctx",()=>{e.ok(t.CtxListeners["tools/post-execute"]instanceof Function),e.ok(t.CtxListeners["agent/pre-step"]instanceof Function)})}{a(),b();const t=i();r(s,"L3: the activation line is byte-exact",()=>{e.ok(t.Lines.includes("replay-suggester: activated (bundle 0.2.1, history, threshold 0.75, history 0)"))}),r(s,"L3: a missing store degrades to silence with the byte-exact line",()=>{e.deepEqual(n(t,"history missing"),["replay-suggester: history missing (starting empty)"]),e.equal(c("history missing (starting empty)").length,1)}),r(s,"L3: the records stay empty and the listeners are wired",()=>{e.equal(t.State.Records.length,0),e.ok(t.CtxListeners["tools/post-execute"]instanceof Function)})}{a(),p([{intent:"Repeat",probe:'{"file_path":"src/A.ts"}',files:["src/A.ts"],verify:"pnpm test",at:17e8},{intent:"Repeat",probe:"src/B.ts",files:["src/Other.ts"],verify:"",at:1700000001},{intent:"Repeat",probe:"",files:["src/C.ts"],verify:"",at:1700000002},{intent:"Repeat",files:["src/D.ts"],verify:"",at:1700000003}]);const t=i();t.Context.workingDirectory={get:()=>h},r(s,"L4: the loaded outcome is the byte-exact records line",()=>{e.deepEqual(n(t,"history loaded"),["replay-suggester: history loaded 2 records"]),e.equal(c("history loaded 2 records").length,1)}),r(s,"L4: invalid records are filtered, valid ones are kept",()=>{e.equal(t.State.Records.length,2),e.deepEqual(t.State.Records[0].files,["src/A.ts"])}),await x(s,"L4: a record with an empty verification falls back to the synthesized caveat",async()=>{const g={kind:"allow"};await t.CtxListeners["tools/post-execute"]({name:"read",arguments:{file_path:"src/B.ts",pattern:"export function",glob:"**/*.ts"},agent:{agent:{id:"a"}}},void 0,async()=>g),e.ok(t.Lines.some(y=>y.includes("suggest Repeat 0.87 1 candidates call read")))})}{a(),p("this is not json");const t=i();r(s,"L5: unparseable JSON degrades with the corrupt line and a reason",()=>{e.equal(n(t,"history corrupt").length,1),e.ok(n(t,"history corrupt")[0]?.startsWith("replay-suggester: history corrupt (starting empty)")),e.equal(t.State.Records.length,0)}),a(),p({schema:2,records:[]});const g=i();r(s,"L5: a wrong schema version degrades with the corrupt line",()=>{e.deepEqual(n(g,"history corrupt"),["replay-suggester: history corrupt (starting empty)"])}),a(),p("null");const y=i();r(s,"L5: a null store degrades with the corrupt line",()=>{e.deepEqual(n(y,"history corrupt"),["replay-suggester: history corrupt (starting empty)"])})}r(s,"L6: a non-numeric threshold fails loud at load",()=>{e.throws(()=>o({threshold:"high"}))}),r(s,"L6: a non-boolean enabled fails loud at load",()=>{e.throws(()=>o({enabled:"yes"}))});{a(),b();const t=m(o({logFile:f,historyPath:L,enabled:!0}));r(s,"L7: the listeners register on the plugin ctx in order",()=>{e.deepEqual(Object.keys(t.CtxListeners),["loader/volatile-update","tools/post-execute","agent/pre-step"])}),r(s,"L7: the root is a distinct context object",()=>{e.notEqual(t.Root,t.Context)})}return S(s,"Loader-And-History")},i=()=>(a(),m(o({logFile:f,historyPath:L,enabled:!0}))),R=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(R){const s=await w();console.log(`${s} PASS - Loader-And-History`)}export{w as runTest};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import {
+  Check,
+  CheckAsync,
+  Finish,
+  Ledger,
+  LedgerWith,
+  LinesWith,
+  MakeCounter,
+  Make,
+  Plugin,
+  rm,
+  rmStore,
+  Store,
+  Validate,
+  WriteStore
+} from "../Harness.js";
+const Work = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "replay-suggester-loader-"));
+FileSystem.writeFileSync(Path.join(Work, "package.json"), "{}", "utf8");
+FileSystem.mkdirSync(Path.join(Work, "src"), { recursive: true });
+FileSystem.writeFileSync(Path.join(Work, "src", "Other.ts"), "x", "utf8");
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    Check(Count, "L1: the default object carries name/apply/Config/inject", () => {
+      assert.equal(Plugin.name, "replay-suggester");
+      assert.equal(typeof Plugin.apply, "function");
+      assert.ok(Plugin.Config !== void 0);
+      assert.deepEqual(Plugin.inject, ["pluginFactory"]);
+    });
+  }
+  {
+    rm();
+    rmStore();
+    const Run = Make(Validate({ logFile: Ledger, historyPath: Store, enabled: false }));
+    Check(Count, "L2: apply returns NOTHING and the state probe exists", () => {
+      assert.equal(Run.Returned, void 0);
+      assert.ok(Run.State !== void 0);
+      assert.equal(Run.State.On, false);
+    });
+    Check(Count, "L2: the cold mount logs the byte-exact disabled line", () => {
+      assert.deepEqual(LinesWith(Run, "disabled (enabled=false)"), [
+        "replay-suggester: disabled (enabled=false)"
+      ]);
+    });
+    Check(Count, "L2: the disabled line is in the durable ledger exactly once", () => {
+      assert.equal(LedgerWith("disabled (enabled=false)").length, 1);
+      assert.ok(LedgerWith("disabled (enabled=false)")[0]?.endsWith("] disabled (enabled=false)"));
+    });
+    Check(Count, "L2: a disabled mount still wires both listeners on the plugin ctx", () => {
+      assert.ok(Run.CtxListeners["tools/post-execute"] instanceof Function);
+      assert.ok(Run.CtxListeners["agent/pre-step"] instanceof Function);
+    });
+  }
+  {
+    rm();
+    rmStore();
+    const Run = Setup_Missing();
+    Check(Count, "L3: the activation line is byte-exact", () => {
+      assert.ok(
+        Run.Lines.includes(
+          `replay-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75, history 0)`
+        )
+      );
+    });
+    Check(Count, "L3: a missing store degrades to silence with the byte-exact line", () => {
+      assert.deepEqual(LinesWith(Run, "history missing"), [
+        "replay-suggester: history missing (starting empty)"
+      ]);
+      assert.equal(LedgerWith("history missing (starting empty)").length, 1);
+    });
+    Check(Count, "L3: the records stay empty and the listeners are wired", () => {
+      assert.equal(Run.State.Records.length, 0);
+      assert.ok(Run.CtxListeners["tools/post-execute"] instanceof Function);
+    });
+  }
+  {
+    rm();
+    WriteStore([
+      { intent: "Repeat", probe: '{"file_path":"src/A.ts"}', files: ["src/A.ts"], verify: "pnpm test", at: 17e8 },
+      { intent: "Repeat", probe: "src/B.ts", files: ["src/Other.ts"], verify: "", at: 1700000001 },
+      { intent: "Repeat", probe: "", files: ["src/C.ts"], verify: "", at: 1700000002 },
+      { intent: "Repeat", files: ["src/D.ts"], verify: "", at: 1700000003 }
+    ]);
+    const Run = Setup_Missing();
+    Run.Context.workingDirectory = { get: () => Work };
+    Check(Count, "L4: the loaded outcome is the byte-exact records line", () => {
+      assert.deepEqual(LinesWith(Run, "history loaded"), [
+        "replay-suggester: history loaded 2 records"
+      ]);
+      assert.equal(LedgerWith("history loaded 2 records").length, 1);
+    });
+    Check(Count, "L4: invalid records are filtered, valid ones are kept", () => {
+      assert.equal(Run.State.Records.length, 2);
+      assert.deepEqual(Run.State.Records[0].files, ["src/A.ts"]);
+    });
+    await CheckAsync(Count, "L4: a record with an empty verification falls back to the synthesized caveat", async () => {
+      const Decision = { kind: "allow" };
+      await Run.CtxListeners["tools/post-execute"](
+        {
+          name: "read",
+          arguments: { file_path: "src/B.ts", pattern: "export function", glob: "**/*.ts" },
+          agent: { agent: { id: "a" } }
+        },
+        void 0,
+        async () => Decision
+      );
+      assert.ok(
+        Run.Lines.some((L) => L.includes("suggest Repeat 0.87 1 candidates call read"))
+      );
+    });
+  }
+  {
+    rm();
+    WriteStore("this is not json");
+    const Run = Setup_Missing();
+    Check(Count, "L5: unparseable JSON degrades with the corrupt line and a reason", () => {
+      assert.equal(LinesWith(Run, "history corrupt").length, 1);
+      assert.ok(LinesWith(Run, "history corrupt")[0]?.startsWith("replay-suggester: history corrupt (starting empty)"));
+      assert.equal(Run.State.Records.length, 0);
+    });
+    rm();
+    WriteStore({ schema: 2, records: [] });
+    const WrongSchema = Setup_Missing();
+    Check(Count, "L5: a wrong schema version degrades with the corrupt line", () => {
+      assert.deepEqual(LinesWith(WrongSchema, "history corrupt"), [
+        "replay-suggester: history corrupt (starting empty)"
+      ]);
+    });
+    rm();
+    WriteStore("null");
+    const NullStore = Setup_Missing();
+    Check(Count, "L5: a null store degrades with the corrupt line", () => {
+      assert.deepEqual(LinesWith(NullStore, "history corrupt"), [
+        "replay-suggester: history corrupt (starting empty)"
+      ]);
+    });
+  }
+  {
+    Check(Count, "L6: a non-numeric threshold fails loud at load", () => {
+      assert.throws(() => Validate({ threshold: "high" }));
+    });
+    Check(Count, "L6: a non-boolean enabled fails loud at load", () => {
+      assert.throws(() => Validate({ enabled: "yes" }));
+    });
+  }
+  {
+    rm();
+    rmStore();
+    const Run = Make(Validate({ logFile: Ledger, historyPath: Store, enabled: true }));
+    Check(Count, "L7: the listeners register on the plugin ctx in order", () => {
+      assert.deepEqual(Object.keys(Run.CtxListeners), [
+        "loader/volatile-update",
+        "tools/post-execute",
+        "agent/pre-step"
+      ]);
+    });
+    Check(Count, "L7: the root is a distinct context object", () => {
+      assert.notEqual(Run.Root, Run.Context);
+    });
+  }
+  return Finish(Count, "Loader-And-History");
+};
+const Setup_Missing = () => {
+  rm();
+  return Make(Validate({ logFile: Ledger, historyPath: Store, enabled: true }));
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Loader-And-History`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

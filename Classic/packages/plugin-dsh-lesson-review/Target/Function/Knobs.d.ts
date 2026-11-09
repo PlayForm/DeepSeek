@@ -20,6 +20,6 @@
  * config (the loader always passes it), which is the documented
  * idle-forever posture (disabled, the bundle patch row).
  */
-import type Configuration from "@Interface/Config.js";
+import type Configuration from "../Interface/Config.js";
 export default _default;
 declare function _default(Raw: unknown): Configuration;

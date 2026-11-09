@@ -19,8 +19,8 @@
  * measurable from the ledger alone. The count is the mirror's length AFTER
  * the append (the bounded size, never the lifetime total).
  */
-import type Entry from "@Interface/Entry.js";
-import type State from "@Interface/State.js";
+import type Entry from "../Interface/Entry.js";
+import type State from "../Interface/State.js";
 export default _default;
 declare function _default(
 /**

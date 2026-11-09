@@ -1,11 +1,11 @@
-import type CostCall from "@Interface/Call.js";
-import type CostFileRow from "@Interface/FileRow.js";
-import type CostModelRow from "@Interface/ModelRow.js";
-import type CostSession from "@Interface/Session.js";
-import type CostStageRow from "@Interface/StageRow.js";
-import type CostSummary from "@Interface/Summary.js";
-import type CostTokens from "@Interface/Tokens.js";
-import type { ValuationBasis } from "@Interface/ValuationSelection.js";
+import type CostCall from "./Call.js";
+import type CostFileRow from "./FileRow.js";
+import type CostModelRow from "./ModelRow.js";
+import type CostSession from "./Session.js";
+import type CostStageRow from "./StageRow.js";
+import type CostSummary from "./Summary.js";
+import type CostTokens from "./Tokens.js";
+import type { ValuationBasis } from "./ValuationSelection.js";
 interface Coverage {
     calls: number;
     priced: number;

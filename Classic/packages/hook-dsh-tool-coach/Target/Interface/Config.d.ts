@@ -1,4 +1,4 @@
-import type { CoachNotes, CoachRow } from "./Execution.js";
+import type { CoachNotes, CoachRow } from "@Interface/Execution.js";
 /**
  * @module Config
  *

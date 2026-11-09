@@ -24,7 +24,7 @@
  * `fetchLive: false` (the escape hatch) uses the static table unconditionally
  * and never logs a fetch-failure line.
  */
-import type { ToolCatalog } from "../Interface/Execution.js";
+import type { ToolCatalog } from "@Interface/Execution.js";
 /**
  * The tools-service surface Fetch needs (structural; the injected `tools`).
  */

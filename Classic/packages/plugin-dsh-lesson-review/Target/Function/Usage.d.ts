@@ -1,4 +1,4 @@
-import type Entry from "@Interface/Entry.js";
+import type Entry from "../Interface/Entry.js";
 /**
  * The load result: how many records, or why there are none.
  */

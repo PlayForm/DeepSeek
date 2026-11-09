@@ -21,7 +21,7 @@
  * once per root and the synthesized family once per call) - this leaf never
  * compiles a regex itself.
  */
-import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
+import type { CompiledIntent, Intent, Match } from "../Interface/Pack.js";
 export default _default;
 declare function _default(Rules: CompiledIntent[], Tool: string, Probe: string): Match | null;
 /**

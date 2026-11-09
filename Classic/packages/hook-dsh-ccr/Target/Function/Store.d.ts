@@ -1,4 +1,4 @@
-import type Entry from "../Interface/Entry.js";
+import type Entry from "@Interface/Entry.js";
 /**
  * One eviction reported to the caller (the reason tags the ledger line).
  */

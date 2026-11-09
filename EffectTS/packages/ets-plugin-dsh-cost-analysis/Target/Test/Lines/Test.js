@@ -1,4 +1,144 @@
-import t from"node:assert/strict";import{mkdtemp as h,rm as y}from"node:fs/promises";import{tmpdir as w}from"node:os";import{join as r}from"node:path";import C from"../../../../ets-plugin-dsh-cost/Target/Library.js";import b from"../../../../ets-plugin-dsh-cost/Target/Function/Drain.js";import q from"../../../../ets-plugin-dsh-cost/Target/Function/Open.js";import v from"../../../Target/Function/Analysis.js";import R from"../../../Target/Function/Open.js";import{Check as p,Finish as A,Make as F,MakeCounter as L,Validate as S}from"../Harness.js";const T=n=>C.Config({databasePath:r(n,"ledger.db"),client:"fixture",prices:[{provider:"p",model:"m",input:1,output:2}]}),V=(n,s)=>{const d=n.prepare("SELECT COALESCE(SUM(Allocation.DirectCost + Allocation.AmortizedCost), 0) AS Cost FROM Allocation JOIN File ON File.FileId = Allocation.FileId WHERE File.Path = ?").get(s),l=Number(d?.Cost);return Number.isFinite(l)?l:0},D=async()=>{const n=L(),s=await h(r(w(),"dsh-cost-analysis-lines-"));try{const d=T(s),l=S({databasePath:r(s,"ledger.db")}),c=q(d),o=u=>Date.now()+u*1e3;let f=0;try{const u=b(F(d).Context,c.Database,d),k=[{seq:0,type:"session",time:o(0),cwd:s},{seq:1,type:"assistant/message",time:o(1),data:{turn:1,step:1,usage:{inputTokens:0,outputTokens:10},message:{source:{provider:"p",model:"m"}}}},{seq:2,type:"tool/call",time:o(2),data:{turn:1,step:1,name:"write",callId:"c1",arguments:JSON.stringify({file_path:r(s,"a.ts"),content:`one
-two
-three`})}},{seq:3,type:"tool/result",time:o(3),data:{turn:1,step:1,message:{source:{callId:"c1"}}}},{seq:4,type:"step/end",time:o(4),data:{turn:1,step:1}},{seq:5,type:"assistant/message",time:o(5),data:{turn:1,step:2,usage:{inputTokens:0,outputTokens:10},message:{source:{provider:"p",model:"m"}}}},{seq:6,type:"tool/call",time:o(6),data:{turn:1,step:2,name:"edit",callId:"c2",arguments:JSON.stringify({file_path:r(s,"a.ts"),old_string:"two",new_string:`TWO
-!`})}},{seq:7,type:"tool/result",time:o(7),data:{turn:1,step:2,message:{source:{callId:"c2"}}}},{seq:8,type:"step/end",time:o(8),data:{turn:1,step:2}}];u({id:"s",cwd:s},k),f=V(c.Database,r(s,"a.ts"))}finally{c.Close()}const g=R(l);try{const i=v(g.Database,l).Lines("file").find(e=>e.Key===r(s,"a.ts"));p(n,"T3: the lines added and removed are the hunks' sums",()=>{t.ok(i!==void 0,"a.ts keeps a reading");const e=i.Rows.find(m=>m.Metric==="lines_added"),a=i.Rows.find(m=>m.Metric==="lines_removed");t.ok(e!==void 0&&a!==void 0,"both line metrics exist"),t.equal(e.Unit,"lines"),t.equal(a.Unit,"lines"),t.equal(e.Value,5,`lines added ${e.Value}`),t.equal(a.Value,1,`lines removed ${a.Value}`)}),p(n,"T3: the hunks are counted per file",()=>{t.ok(i!==void 0,"a.ts keeps a reading");const e=i.Rows.find(a=>a.Metric==="hunks");t.ok(e!==void 0,"the hunk metric exists"),t.equal(e.Unit,"hunks"),t.equal(e.Value,2,`hunks ${e.Value}`)}),p(n,"T3: the cost per added line is the allocated cost over the added lines",()=>{t.ok(i!==void 0,"a.ts keeps a reading");const e=i.Rows.find(a=>a.Metric==="cost_per_added_line");t.ok(e!==void 0,"the cost per added line exists"),t.equal(e.Unit,"USD/line"),t.ok(Math.abs(e.Value-f/5)<=1e-12,`cost per added line ${e.Value}`)})}finally{g.Close()}}finally{await y(s,{recursive:!0,force:!0})}return A(n,"Lines")},O=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(O){const n=await D();console.log(`${n} PASS - Lines`)}export{D as runTest};
+import assert from "node:assert/strict";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import LedgerPlugin from "../../../../ets-plugin-dsh-cost/Target/Library.js";
+import LedgerDrain from "../../../../ets-plugin-dsh-cost/Target/Function/Drain.js";
+import LedgerOpen from "../../../../ets-plugin-dsh-cost/Target/Function/Open.js";
+import Analysis from "../../../Target/Function/Analysis.js";
+import Reader from "../../../Target/Function/Open.js";
+import { Check, Finish, Make, MakeCounter, Validate } from "../Harness.js";
+const LedgerConfig = (Home) => LedgerPlugin.Config({
+  databasePath: join(Home, "ledger.db"),
+  client: "fixture",
+  prices: [{ provider: "p", model: "m", input: 1, output: 2 }]
+});
+const Allocated = (Database, Path) => {
+  const Row = Database.prepare(
+    "SELECT COALESCE(SUM(Allocation.DirectCost + Allocation.AmortizedCost), 0) AS Cost FROM Allocation JOIN File ON File.FileId = Allocation.FileId WHERE File.Path = ?"
+  ).get(Path);
+  const Cost = Number(Row?.Cost);
+  return Number.isFinite(Cost) ? Cost : 0;
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  const Home = await mkdtemp(join(tmpdir(), "dsh-cost-analysis-lines-"));
+  try {
+    const Priced = LedgerConfig(Home);
+    const Read = Validate({ databasePath: join(Home, "ledger.db") });
+    const Ledger = LedgerOpen(Priced);
+    const At = (Offset) => Date.now() + Offset * 1e3;
+    let Cost = 0;
+    try {
+      const Fold = LedgerDrain(Make(Priced).Context, Ledger.Database, Priced);
+      const Events = [
+        { seq: 0, type: "session", time: At(0), cwd: Home },
+        {
+          seq: 1,
+          type: "assistant/message",
+          time: At(1),
+          data: {
+            turn: 1,
+            step: 1,
+            usage: { inputTokens: 0, outputTokens: 10 },
+            message: { source: { provider: "p", model: "m" } }
+          }
+        },
+        {
+          seq: 2,
+          type: "tool/call",
+          time: At(2),
+          data: {
+            turn: 1,
+            step: 1,
+            name: "write",
+            callId: "c1",
+            arguments: JSON.stringify({
+              file_path: join(Home, "a.ts"),
+              content: "one\ntwo\nthree"
+            })
+          }
+        },
+        { seq: 3, type: "tool/result", time: At(3), data: { turn: 1, step: 1, message: { source: { callId: "c1" } } } },
+        { seq: 4, type: "step/end", time: At(4), data: { turn: 1, step: 1 } },
+        {
+          seq: 5,
+          type: "assistant/message",
+          time: At(5),
+          data: {
+            turn: 1,
+            step: 2,
+            usage: { inputTokens: 0, outputTokens: 10 },
+            message: { source: { provider: "p", model: "m" } }
+          }
+        },
+        {
+          seq: 6,
+          type: "tool/call",
+          time: At(6),
+          data: {
+            turn: 1,
+            step: 2,
+            name: "edit",
+            callId: "c2",
+            arguments: JSON.stringify({
+              file_path: join(Home, "a.ts"),
+              old_string: "two",
+              new_string: "TWO\n!"
+            })
+          }
+        },
+        { seq: 7, type: "tool/result", time: At(7), data: { turn: 1, step: 2, message: { source: { callId: "c2" } } } },
+        { seq: 8, type: "step/end", time: At(8), data: { turn: 1, step: 2 } }
+      ];
+      Fold({ id: "s", cwd: Home }, Events);
+      Cost = Allocated(Ledger.Database, join(Home, "a.ts"));
+    } finally {
+      Ledger.Close();
+    }
+    const Opened = Reader(Read);
+    try {
+      const Views = Analysis(Opened.Database, Read);
+      const Found = Views.Lines("file");
+      const One = Found.find((Reading) => Reading.Key === join(Home, "a.ts"));
+      Check(Count, "T3: the lines added and removed are the hunks' sums", () => {
+        assert.ok(One !== void 0, "a.ts keeps a reading");
+        const Added = One.Rows.find((Row) => Row.Metric === "lines_added");
+        const Removed = One.Rows.find((Row) => Row.Metric === "lines_removed");
+        assert.ok(Added !== void 0 && Removed !== void 0, "both line metrics exist");
+        assert.equal(Added.Unit, "lines");
+        assert.equal(Removed.Unit, "lines");
+        assert.equal(Added.Value, 5, `lines added ${Added.Value}`);
+        assert.equal(Removed.Value, 1, `lines removed ${Removed.Value}`);
+      });
+      Check(Count, "T3: the hunks are counted per file", () => {
+        assert.ok(One !== void 0, "a.ts keeps a reading");
+        const Hunks = One.Rows.find((Row) => Row.Metric === "hunks");
+        assert.ok(Hunks !== void 0, "the hunk metric exists");
+        assert.equal(Hunks.Unit, "hunks");
+        assert.equal(Hunks.Value, 2, `hunks ${Hunks.Value}`);
+      });
+      Check(Count, "T3: the cost per added line is the allocated cost over the added lines", () => {
+        assert.ok(One !== void 0, "a.ts keeps a reading");
+        const Per = One.Rows.find((Row) => Row.Metric === "cost_per_added_line");
+        assert.ok(Per !== void 0, "the cost per added line exists");
+        assert.equal(Per.Unit, "USD/line");
+        assert.ok(Math.abs(Per.Value - Cost / 5) <= 1e-12, `cost per added line ${Per.Value}`);
+      });
+    } finally {
+      Opened.Close();
+    }
+  } finally {
+    await rm(Home, { recursive: true, force: true });
+  }
+  return Finish(Count, "Lines");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Lines`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

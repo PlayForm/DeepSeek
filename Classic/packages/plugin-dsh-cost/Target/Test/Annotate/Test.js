@@ -1,7 +1,144 @@
-import s from"node:assert/strict";import{mkdtemp as I,rm as f}from"node:fs/promises";import{tmpdir as y}from"node:os";import{join as u}from"node:path";import k from"../../../Target/Function/Annotate.js";import E from"../../../Target/Function/Open.js";import{CheckAsync as p,Finish as S,Make as R,MakeCounter as T,Validate as O}from"../Harness.js";const w=()=>{const e=new Map;let l=0;return{Files:e,Fs:{resolve:async n=>({targetKey:n,displayPath:n}),stat:async n=>{const o=e.get(n.targetKey);return o===void 0?void 0:{version:o.Version,type:"file",size:o.Content.length}},readText:async n=>{const o=e.get(n.targetKey);if(o===void 0)throw new Error(`cannot read "${n.displayPath}": no such file`);return o.Content},writeText:async(n,o,a)=>{const c=e.get(n.targetKey);if(a?.kind==="replaceIfVersion"){if(c===void 0)throw new Error(`cannot write "${n.displayPath}": file no longer exists`);if(c.Version!==a.version)throw new Error(`cannot write "${n.displayPath}": file changed since it was read`)}const d=c===void 0?null:c.Content,t=`v${l+=1}`;return e.set(n.targetKey,{Content:o,Version:t}),{operation:c===void 0?"create":"update",version:t,before:d,after:o}}}}},h=(e,l,i,n,o,a,c,d,t)=>{e.prepare("INSERT OR IGNORE INTO Client (Name) VALUES ('default')").run();const r=e.prepare("SELECT ClientId AS ClientId FROM Client WHERE Name = 'default'").get();e.prepare("INSERT OR IGNORE INTO Project (ClientId, Name, Root) VALUES (?, 'sample', ?)").run(r.ClientId,l);const g=e.prepare("SELECT ProjectId AS ProjectId FROM Project WHERE Root = ?").get(l);e.prepare("INSERT OR IGNORE INTO Session (SessionId, ProjectId, CreatedAt) VALUES ('s1', ?, ?)").run(g.ProjectId,t),e.prepare("INSERT OR IGNORE INTO File (ProjectId, Path, FirstSeenAt) VALUES (?, ?, ?)").run(g.ProjectId,i,t);const m=e.prepare("SELECT FileId AS FileId FROM File WHERE ProjectId = ? AND Path = ?").get(g.ProjectId,i);e.prepare("INSERT INTO Call (SessionId, Turn, Step, Seq, Provider, Model, InputTokens, OutputTokens, CostInput, CostOutput, CostCacheRead, CostCacheWrite, CostReasoning, CostTotal, Currency, SurfaceTokens, At) VALUES ('s1', ?, ?, ?, 'p', ?, 0, 0, 0, 0, 0, 0, 0, ?, 'USD', 0, ?)").run(c,d,d,n,o+a,t);const C=e.prepare("SELECT CallId AS CallId FROM Call WHERE SessionId = 's1' AND Turn = ? AND Step = ?").get(c,d);e.prepare("INSERT INTO Allocation (CallId, FileId, DirectCost, AmortizedCost, ContextTokens, SurfaceTokens, Weight, Method, At) VALUES (?, ?, ?, ?, 0, 0, 0, 'bytes/context', ?)").run(C.CallId,m.FileId,o,a,t)},b=async()=>{const e=T(),l=await I(u(y(),"dsh-cost-annotate-"));try{const i=u(l,"sample.ts"),n=O({databasePath:u(l,"ledger.db"),annotate:{enabled:!0,marker:"dsh-cost",maxLines:8}}),o=E(n);try{const a=w();a.Files.set(i,{Content:`export const Value = 1;
-// a trailing note
-`,Version:"v0"}),h(o.Database,l,i,"m1",3.1022,6.7799,1,1,Date.parse("2026-10-21T10:00:00Z")),h(o.Database,l,i,"m2",0,2.5362,1,2,Date.parse("2026-10-27T10:00:00Z"));const c=R(n,a.Fs),d=k(c.Context,o.Database,n);await p(e,"T5: the block is appended once, after one blank line",async()=>{const t=await d(i);s.equal(t.Written,!0,t.Reason);const r=a.Files.get(i)?.Content??"";s.equal(r.split("dsh-cost:begin").length-1,1,"exactly one begin marker"),s.ok(r.includes("12.4183"),"the total is rendered"),s.ok(r.includes("// a trailing note"),"the trailing note survives"),s.ok(r.includes(`
-
-// dsh-cost:begin`),"one blank line before the block"),s.ok(r.endsWith(`// dsh-cost:end
-`),"the block closes the file")}),await p(e,"T5: a second run with the same numbers changes nothing",async()=>{const t=await d(i);s.equal(t.Written,!1,t.Reason),s.equal(t.Reason,"unchanged"),s.equal((a.Files.get(i)?.Content??"").split("dsh-cost:begin").length-1,1)}),await p(e,"T5: a changed total replaces the block in place, the note survives",async()=>{o.Database.prepare("UPDATE Allocation SET AmortizedCost = AmortizedCost + 1").run();const t=await d(i);s.equal(t.Written,!0,t.Reason),s.equal(t.Reason,"replaced");const r=a.Files.get(i)?.Content??"";s.equal(r.split("dsh-cost:begin").length-1,1,"still exactly one block"),s.ok(r.includes("// a trailing note"),"the note survives the replacement"),s.ok(r.indexOf("// a trailing note")<r.indexOf("// dsh-cost:begin"),"the note stays ahead"),s.ok(r.includes("14.4183"),"the new total is in the block")}),await p(e,"T5: an unknown extension is skipped, never guessed",async()=>{const t=u(l,"mystery.unknownext");a.Files.set(t,{Content:`x
-`,Version:"v0"});const r=await d(t);s.equal(r.Written,!1),s.ok(r.Reason.includes("unknown extension"),r.Reason)})}finally{o.Close()}}finally{await f(l,{recursive:!0,force:!0})}return S(e,"Annotate")},A=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(A){const e=await b();console.log(`${e} PASS - Annotate`)}export{b as runTest};
+import assert from "node:assert/strict";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import Annotate from "../../../Target/Function/Annotate.js";
+import Open from "../../../Target/Function/Open.js";
+import { CheckAsync, Finish, Make, MakeCounter, Validate } from "../Harness.js";
+const MakeStore = () => {
+  const Files = /* @__PURE__ */ new Map();
+  let Tick = 0;
+  const Write = async (Target, Content, Expected) => {
+    const One = Files.get(Target.targetKey);
+    if (Expected?.kind === "replaceIfVersion") {
+      if (One === void 0) {
+        throw new Error(`cannot write "${Target.displayPath}": file no longer exists`);
+      }
+      if (One.Version !== Expected.version) {
+        throw new Error(`cannot write "${Target.displayPath}": file changed since it was read`);
+      }
+    }
+    const Before = One === void 0 ? null : One.Content;
+    const Version = `v${Tick += 1}`;
+    Files.set(Target.targetKey, { Content, Version });
+    return { operation: One === void 0 ? "create" : "update", version: Version, before: Before, after: Content };
+  };
+  return {
+    Files,
+    Fs: {
+      resolve: async (Path) => ({ targetKey: Path, displayPath: Path }),
+      stat: async (Target) => {
+        const One = Files.get(Target.targetKey);
+        return One === void 0 ? void 0 : { version: One.Version, type: "file", size: One.Content.length };
+      },
+      readText: async (Target) => {
+        const One = Files.get(Target.targetKey);
+        if (One === void 0) {
+          throw new Error(`cannot read "${Target.displayPath}": no such file`);
+        }
+        return One.Content;
+      },
+      writeText: Write
+    }
+  };
+};
+const Seed = (Database, Home, Path, Model, Direct, Amortized, Turn, Step, At) => {
+  Database.prepare("INSERT OR IGNORE INTO Client (Name) VALUES ('default')").run();
+  const Client = Database.prepare("SELECT ClientId AS ClientId FROM Client WHERE Name = 'default'").get();
+  Database.prepare("INSERT OR IGNORE INTO Project (ClientId, Name, Root) VALUES (?, 'sample', ?)").run(
+    Client.ClientId,
+    Home
+  );
+  const Project = Database.prepare("SELECT ProjectId AS ProjectId FROM Project WHERE Root = ?").get(Home);
+  Database.prepare("INSERT OR IGNORE INTO Session (SessionId, ProjectId, CreatedAt) VALUES ('s1', ?, ?)").run(
+    Project.ProjectId,
+    At
+  );
+  Database.prepare("INSERT OR IGNORE INTO File (ProjectId, Path, FirstSeenAt) VALUES (?, ?, ?)").run(
+    Project.ProjectId,
+    Path,
+    At
+  );
+  const File = Database.prepare("SELECT FileId AS FileId FROM File WHERE ProjectId = ? AND Path = ?").get(
+    Project.ProjectId,
+    Path
+  );
+  Database.prepare(
+    "INSERT INTO Call (SessionId, Turn, Step, Seq, Provider, Model, InputTokens, OutputTokens, CostInput, CostOutput, CostCacheRead, CostCacheWrite, CostReasoning, CostTotal, Currency, SurfaceTokens, At) VALUES ('s1', ?, ?, ?, 'p', ?, 0, 0, 0, 0, 0, 0, 0, ?, 'USD', 0, ?)"
+  ).run(Turn, Step, Step, Model, Direct + Amortized, At);
+  const Call = Database.prepare("SELECT CallId AS CallId FROM Call WHERE SessionId = 's1' AND Turn = ? AND Step = ?").get(
+    Turn,
+    Step
+  );
+  Database.prepare(
+    "INSERT INTO Allocation (CallId, FileId, DirectCost, AmortizedCost, ContextTokens, SurfaceTokens, Weight, Method, At) VALUES (?, ?, ?, ?, 0, 0, 0, 'bytes/context', ?)"
+  ).run(Call.CallId, File.FileId, Direct, Amortized, At);
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  const Home = await mkdtemp(join(tmpdir(), "dsh-cost-annotate-"));
+  try {
+    const Sample = join(Home, "sample.ts");
+    const Config = Validate({
+      databasePath: join(Home, "ledger.db"),
+      annotate: { enabled: true, marker: "dsh-cost", maxLines: 8 }
+    });
+    const Ledger = Open(Config);
+    try {
+      const Store = MakeStore();
+      Store.Files.set(Sample, { Content: "export const Value = 1;\n// a trailing note\n", Version: "v0" });
+      Seed(Ledger.Database, Home, Sample, "m1", 3.1022, 6.7799, 1, 1, Date.parse("2026-10-21T10:00:00Z"));
+      Seed(Ledger.Database, Home, Sample, "m2", 0, 2.5362, 1, 2, Date.parse("2026-10-27T10:00:00Z"));
+      const Run = Make(Config, Store.Fs);
+      const AnnotateFile = Annotate(Run.Context, Ledger.Database, Config);
+      await CheckAsync(Count, "T5: the block is appended once, after one blank line", async () => {
+        const One = await AnnotateFile(Sample);
+        assert.equal(One.Written, true, One.Reason);
+        const Text = Store.Files.get(Sample)?.Content ?? "";
+        assert.equal(Text.split("dsh-cost:begin").length - 1, 1, "exactly one begin marker");
+        assert.ok(Text.includes("12.4183"), "the total is rendered");
+        assert.ok(Text.includes("// a trailing note"), "the trailing note survives");
+        assert.ok(Text.includes("\n\n// dsh-cost:begin"), "one blank line before the block");
+        assert.ok(Text.endsWith("// dsh-cost:end\n"), "the block closes the file");
+      });
+      await CheckAsync(Count, "T5: a second run with the same numbers changes nothing", async () => {
+        const One = await AnnotateFile(Sample);
+        assert.equal(One.Written, false, One.Reason);
+        assert.equal(One.Reason, "unchanged");
+        assert.equal((Store.Files.get(Sample)?.Content ?? "").split("dsh-cost:begin").length - 1, 1);
+      });
+      await CheckAsync(Count, "T5: a changed total replaces the block in place, the note survives", async () => {
+        Ledger.Database.prepare("UPDATE Allocation SET AmortizedCost = AmortizedCost + 1").run();
+        const One = await AnnotateFile(Sample);
+        assert.equal(One.Written, true, One.Reason);
+        assert.equal(One.Reason, "replaced");
+        const Text = Store.Files.get(Sample)?.Content ?? "";
+        assert.equal(Text.split("dsh-cost:begin").length - 1, 1, "still exactly one block");
+        assert.ok(Text.includes("// a trailing note"), "the note survives the replacement");
+        assert.ok(Text.indexOf("// a trailing note") < Text.indexOf("// dsh-cost:begin"), "the note stays ahead");
+        assert.ok(Text.includes("14.4183"), "the new total is in the block");
+      });
+      await CheckAsync(Count, "T5: an unknown extension is skipped, never guessed", async () => {
+        const Other = join(Home, "mystery.unknownext");
+        Store.Files.set(Other, { Content: "x\n", Version: "v0" });
+        const One = await AnnotateFile(Other);
+        assert.equal(One.Written, false);
+        assert.ok(One.Reason.includes("unknown extension"), One.Reason);
+      });
+    } finally {
+      Ledger.Close();
+    }
+  } finally {
+    await rm(Home, { recursive: true, force: true });
+  }
+  return Finish(Count, "Annotate");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Annotate`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

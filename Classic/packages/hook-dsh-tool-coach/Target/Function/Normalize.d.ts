@@ -28,7 +28,7 @@
  * highest-priority class wins. Trailing redirect context belongs to the
  * segment it follows, so `cat f > out.txt` is one segment with a redirect.
  */
-import type { CoachClass } from "../Interface/Execution.js";
+import type { CoachClass } from "@Interface/Execution.js";
 /**
  * The class priority rank of a class (lower = more severe).
  */

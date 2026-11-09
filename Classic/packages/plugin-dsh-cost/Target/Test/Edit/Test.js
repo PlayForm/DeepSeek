@@ -1,10 +1,80 @@
-import n from"node:assert/strict";import d from"../../../Target/Function/Edit.js";import{Check as o,Finish as r,MakeCounter as l}from"../Harness.js";const u=async()=>{const i=l();return o(i,"E3: a single edit yields one row with the right line and byte counts",()=>{const t=d("edit",JSON.stringify({file_path:"/w/a.ts",old_string:`a
-b
-c`,new_string:`x
-y`}),0);n.equal(t.length,1,`rows ${t.length}`);const e=t[0];n.ok(e!==void 0,"the single hunk exists"),n.equal(e.Ordinal,0,`ordinal ${e.Ordinal}`),n.equal(e.LinesRemoved,3,`lines removed ${e.LinesRemoved}`),n.equal(e.LinesAdded,2,`lines added ${e.LinesAdded}`),n.equal(e.BytesRemoved,5,`bytes removed ${e.BytesRemoved}`),n.equal(e.BytesAdded,3,`bytes added ${e.BytesAdded}`)}),o(i,"E3: a multi-edit yields one row per entry with ascending ordinals",()=>{const t=d("multi_edit",JSON.stringify({file_path:"/w/a.ts",edits:[{old_string:"one",new_string:`1
-2`},{old_string:`two
-three`,new_string:"2"},{old_string:"x",new_string:`y
-z
-w`}]}),0);n.equal(t.length,3,`rows ${t.length}`),n.deepEqual(t.map(a=>a.Ordinal),[0,1,2],"the ordinals ascend");const e=t[0];n.ok(e!==void 0,"the first hunk exists"),n.equal(e.LinesAdded,2,`first added ${e.LinesAdded}`),n.equal(e.LinesRemoved,1,`first removed ${e.LinesRemoved}`);const s=t[1];n.ok(s!==void 0,"the second hunk exists"),n.equal(s.LinesRemoved,2,`second removed ${s.LinesRemoved}`)}),o(i,"E3: a write yields one row from the content",()=>{const t=d("write",JSON.stringify({file_path:"/w/a.ts",content:`one
-two
-three`}),0);n.equal(t.length,1,`rows ${t.length}`);const e=t[0];n.ok(e!==void 0,"the written hunk exists"),n.equal(e.LinesAdded,3,`lines added ${e.LinesAdded}`),n.equal(e.LinesRemoved,0,`lines removed ${e.LinesRemoved}`),n.equal(e.BytesAdded,13,`bytes added ${e.BytesAdded}`);const s=d("write",JSON.stringify({file_path:"/w/a.ts",content:""}),0);n.equal(s[0]?.LinesAdded,0,"an empty content adds no lines")}),o(i,"E3: malformed or alien arguments yield an empty array and do not throw",()=>{n.deepEqual(d("edit","{not json",0),[],"malformed JSON"),n.deepEqual(d("write","[]",0),[],"a non-object payload"),n.deepEqual(d("unknown",JSON.stringify({content:"x"}),0),[],"an unmapped tool"),n.deepEqual(d("multi_edit",JSON.stringify({edits:"no"}),0),[],"a non-array edits key"),n.deepEqual(d("edit","null",0),[],"a null payload")}),r(i,"Edit")},m=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(m){const i=await u();console.log(`${i} PASS - Edit`)}export{u as runTest};
+import assert from "node:assert/strict";
+import Edit from "../../../Target/Function/Edit.js";
+import { Check, Finish, MakeCounter } from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  Check(Count, "E3: a single edit yields one row with the right line and byte counts", () => {
+    const Rows = Edit(
+      "edit",
+      JSON.stringify({ file_path: "/w/a.ts", old_string: "a\nb\nc", new_string: "x\ny" }),
+      0
+    );
+    assert.equal(Rows.length, 1, `rows ${Rows.length}`);
+    const Row = Rows[0];
+    assert.ok(Row !== void 0, "the single hunk exists");
+    assert.equal(Row.Ordinal, 0, `ordinal ${Row.Ordinal}`);
+    assert.equal(Row.LinesRemoved, 3, `lines removed ${Row.LinesRemoved}`);
+    assert.equal(Row.LinesAdded, 2, `lines added ${Row.LinesAdded}`);
+    assert.equal(Row.BytesRemoved, 5, `bytes removed ${Row.BytesRemoved}`);
+    assert.equal(Row.BytesAdded, 3, `bytes added ${Row.BytesAdded}`);
+  });
+  Check(Count, "E3: a multi-edit yields one row per entry with ascending ordinals", () => {
+    const Rows = Edit(
+      "multi_edit",
+      JSON.stringify({
+        file_path: "/w/a.ts",
+        edits: [
+          { old_string: "one", new_string: "1\n2" },
+          { old_string: "two\nthree", new_string: "2" },
+          { old_string: "x", new_string: "y\nz\nw" }
+        ]
+      }),
+      0
+    );
+    assert.equal(Rows.length, 3, `rows ${Rows.length}`);
+    assert.deepEqual(
+      Rows.map((Row) => Row.Ordinal),
+      [0, 1, 2],
+      "the ordinals ascend"
+    );
+    const First = Rows[0];
+    assert.ok(First !== void 0, "the first hunk exists");
+    assert.equal(First.LinesAdded, 2, `first added ${First.LinesAdded}`);
+    assert.equal(First.LinesRemoved, 1, `first removed ${First.LinesRemoved}`);
+    const Second = Rows[1];
+    assert.ok(Second !== void 0, "the second hunk exists");
+    assert.equal(Second.LinesRemoved, 2, `second removed ${Second.LinesRemoved}`);
+  });
+  Check(Count, "E3: a write yields one row from the content", () => {
+    const Rows = Edit(
+      "write",
+      JSON.stringify({ file_path: "/w/a.ts", content: "one\ntwo\nthree" }),
+      0
+    );
+    assert.equal(Rows.length, 1, `rows ${Rows.length}`);
+    const Row = Rows[0];
+    assert.ok(Row !== void 0, "the written hunk exists");
+    assert.equal(Row.LinesAdded, 3, `lines added ${Row.LinesAdded}`);
+    assert.equal(Row.LinesRemoved, 0, `lines removed ${Row.LinesRemoved}`);
+    assert.equal(Row.BytesAdded, 13, `bytes added ${Row.BytesAdded}`);
+    const Empty = Edit("write", JSON.stringify({ file_path: "/w/a.ts", content: "" }), 0);
+    assert.equal(Empty[0]?.LinesAdded, 0, "an empty content adds no lines");
+  });
+  Check(Count, "E3: malformed or alien arguments yield an empty array and do not throw", () => {
+    assert.deepEqual(Edit("edit", "{not json", 0), [], "malformed JSON");
+    assert.deepEqual(Edit("write", "[]", 0), [], "a non-object payload");
+    assert.deepEqual(Edit("unknown", JSON.stringify({ content: "x" }), 0), [], "an unmapped tool");
+    assert.deepEqual(Edit("multi_edit", JSON.stringify({ edits: "no" }), 0), [], "a non-array edits key");
+    assert.deepEqual(Edit("edit", "null", 0), [], "a null payload");
+  });
+  return Finish(Count, "Edit");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Edit`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

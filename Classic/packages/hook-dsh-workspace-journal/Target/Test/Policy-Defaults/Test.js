@@ -1,1 +1,123 @@
-import t from"node:assert/strict";import{Boot as h,Check as w,CheckAsync as r,Finish as d,Ledger as c,LinesWith as o,Make as v,MakeCounter as y,rm as b,Validate as p}from"../Harness.js";const n={read:"auto",index:"auto",record:"auto",suggest:"auto",write:"approve",commit:"approve",spawn:"approve",message:"auto"},s=async(a={})=>{b();const e=v(p({logFile:c,enabled:!0,...a}));return e.Fs.files={"/a":"1"},await h(),e},i=async a=>{await a.Context.workspaceJournal.open({batchId:"b1",operation:"workspace.commit",files:["/a","/b"]},[{path:"/a",state:"present",version:"1",content:"ORIGINAL"},{path:"/b",state:"absent",version:"absent",content:""}])},m=async()=>{const a=y();w(a,"P1: the hook's schema fills the D6 policy defaults",()=>{const e=p({logFile:c});t.deepEqual(e.policy.get(),n,"the composed block carries the defaults")}),await r(a,"P1: the built State carries the block on Allow",async()=>{const e=await s();t.deepEqual(e.State.Allow,n,"the apply maps policy -> Allow")}),await r(a,"P1: a policy override lands on the built State",async()=>{const e=await s({policy:{write:"auto"}});t.deepEqual(e.State.Allow,{...n,write:"auto"},"the override replaces write and keeps the rest")});{const e=await s();await i(e),await r(a,"P2: an approve verdict refuses the revert with the exact line",async()=>{await t.rejects(()=>e.Context.workspaceJournal.revert("b1"),/batch b1 is held by the policy \(write=approve\)/),t.deepEqual(o(e,"revert held"),["journal: revert held (2 files) (policy write=approve)"])}),await r(a,"P2: ZERO writes, no state change and no revert record",async()=>{t.equal(e.Fs.writes.length,0,"no write reaches the filesystem"),t.equal(e.Fs.resolved.length,0,"no target is even resolved"),t.equal(e.State.Batches.get("b1").state,"applying","the batch stays reversible"),t.equal(o(e,"reverted").length,0,"no replay line at all")})}{const e=await s({policy:{write:"auto"}});await i(e);const u=await e.Context.workspaceJournal.revert("b1");await r(a,"P3: an auto verdict replays the batch backward",async()=>{t.deepEqual(u.files.map(l=>[l.path,l.action]),[["/b","removed"],["/a","restored"]]),t.deepEqual(o(e,"reverted b1 ("),["journal: reverted b1 (2 files)"]),t.equal(e.Fs.writes.length,1,"the one present pre-image is written back"),t.equal(o(e,"revert held").length,0,"no held line when the gate is open")})}{const e=await s({policy:{commit:"auto"}});await i(e),await r(a,"P4: a commit override never opens the revert gate",async()=>{await t.rejects(()=>e.Context.workspaceJournal.revert("b1"),/batch b1 is held by the policy \(write=approve\)/),t.ok(o(e,"revert held").includes("journal: revert held (2 files) (policy write=approve)"),"the documented held line"),t.equal(e.Fs.writes.length,0,"still zero writes")})}return d(a,"Policy-Defaults")},g=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(g){const a=await m();console.log(`${a} PASS - Policy-Defaults`)}export{m as runTest};
+import assert from "node:assert/strict";
+import {
+  Boot,
+  Check,
+  CheckAsync,
+  Finish,
+  Ledger,
+  LinesWith,
+  Make,
+  MakeCounter,
+  rm,
+  Validate
+} from "../Harness.js";
+const Defaults = {
+  read: "auto",
+  index: "auto",
+  record: "auto",
+  suggest: "auto",
+  write: "approve",
+  commit: "approve",
+  spawn: "approve",
+  message: "auto"
+};
+const Mount = async (Config = {}) => {
+  rm();
+  const Run = Make(Validate({ logFile: Ledger, enabled: true, ...Config }));
+  Run.Fs.files = { "/a": "1" };
+  await Boot();
+  return Run;
+};
+const Open = async (Run) => {
+  await Run.Context.workspaceJournal.open(
+    { batchId: "b1", operation: "workspace.commit", files: ["/a", "/b"] },
+    [
+      { path: "/a", state: "present", version: "1", content: "ORIGINAL" },
+      { path: "/b", state: "absent", version: "absent", content: "" }
+    ]
+  );
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    Check(Count, "P1: the hook's schema fills the D6 policy defaults", () => {
+      const Config = Validate({ logFile: Ledger });
+      assert.deepEqual(Config.policy.get(), Defaults, "the composed block carries the defaults");
+    });
+    await CheckAsync(Count, "P1: the built State carries the block on Allow", async () => {
+      const Run = await Mount();
+      assert.deepEqual(Run.State.Allow, Defaults, "the apply maps policy -> Allow");
+    });
+    await CheckAsync(Count, "P1: a policy override lands on the built State", async () => {
+      const Run = await Mount({ policy: { write: "auto" } });
+      assert.deepEqual(
+        Run.State.Allow,
+        { ...Defaults, write: "auto" },
+        "the override replaces write and keeps the rest"
+      );
+    });
+  }
+  {
+    const Run = await Mount();
+    await Open(Run);
+    await CheckAsync(Count, "P2: an approve verdict refuses the revert with the exact line", async () => {
+      await assert.rejects(
+        () => Run.Context.workspaceJournal.revert("b1"),
+        /batch b1 is held by the policy \(write=approve\)/
+      );
+      assert.deepEqual(LinesWith(Run, "revert held"), [
+        "journal: revert held (2 files) (policy write=approve)"
+      ]);
+    });
+    await CheckAsync(Count, "P2: ZERO writes, no state change and no revert record", async () => {
+      assert.equal(Run.Fs.writes.length, 0, "no write reaches the filesystem");
+      assert.equal(Run.Fs.resolved.length, 0, "no target is even resolved");
+      assert.equal(Run.State.Batches.get("b1").state, "applying", "the batch stays reversible");
+      assert.equal(LinesWith(Run, "reverted").length, 0, "no replay line at all");
+    });
+  }
+  {
+    const Run = await Mount({ policy: { write: "auto" } });
+    await Open(Run);
+    const Report = await Run.Context.workspaceJournal.revert("b1");
+    await CheckAsync(Count, "P3: an auto verdict replays the batch backward", async () => {
+      assert.deepEqual(
+        Report.files.map((File) => [File.path, File.action]),
+        [
+          ["/b", "removed"],
+          ["/a", "restored"]
+        ]
+      );
+      assert.deepEqual(LinesWith(Run, "reverted b1 ("), ["journal: reverted b1 (2 files)"]);
+      assert.equal(Run.Fs.writes.length, 1, "the one present pre-image is written back");
+      assert.equal(LinesWith(Run, "revert held").length, 0, "no held line when the gate is open");
+    });
+  }
+  {
+    const Run = await Mount({ policy: { commit: "auto" } });
+    await Open(Run);
+    await CheckAsync(Count, "P4: a commit override never opens the revert gate", async () => {
+      await assert.rejects(
+        () => Run.Context.workspaceJournal.revert("b1"),
+        /batch b1 is held by the policy \(write=approve\)/
+      );
+      assert.ok(
+        LinesWith(Run, "revert held").includes(
+          "journal: revert held (2 files) (policy write=approve)"
+        ),
+        "the documented held line"
+      );
+      assert.equal(Run.Fs.writes.length, 0, "still zero writes");
+    });
+  }
+  return Finish(Count, "Policy-Defaults");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Policy-Defaults`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

@@ -25,7 +25,7 @@
  * what the reviewer needs, so the oldest collapsed lines are what get
  * dropped.
  */
-import type { ReviewMessage } from "@Interface/Review.js";
+import type { ReviewMessage } from "../Interface/Review.js";
 /**
  * The digest result: the text plus what it cost to build.
  */

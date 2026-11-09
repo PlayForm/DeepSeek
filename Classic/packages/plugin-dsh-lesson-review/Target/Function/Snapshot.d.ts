@@ -31,6 +31,6 @@
  * block stringified into a digest is noise the reviewer would treat as
  * prose).
  */
-import type { ReviewMessage } from "@Interface/Review.js";
+import type { ReviewMessage } from "../Interface/Review.js";
 export default _default;
 declare function _default(Agent: unknown, OnFailure?: (Detail: string) => void): ReviewMessage[];

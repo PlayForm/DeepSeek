@@ -1,2 +1,61 @@
-import*as n from"node:fs";import*as o from"node:module";const r=t=>{const e=String(t.parentURL??""),a=e.indexOf("/Target/");return a===-1?e:e.slice(0,a)},i=["export const StateDot = (Props) => Props.children ?? null;","export const Tag = (Props) => Props.children ?? null;","export const DetailDocument = (Props) => Props.children ?? null;","export const detailDocumentState = (Read) => {","	if (Read?.status === 'ready') {","		return Read.markdown === undefined ? { status: 'none' } : { status: 'found', markdown: Read.markdown };","	}","	return Read?.status === 'error' ? Read : { status: 'loading' };","};"].join(`
-`),u=(t,e,a)=>{switch(!0){case t.startsWith("@Function/"):return a(`${r(e)}/Target/Function/${t.slice(10)}`,e);case(t.startsWith("@Variable/")&&t.endsWith(".json")):return a(`${r(e)}/Source/Variable/${t.slice(10)}`,e);case t.startsWith("@Variable/"):return a(`${r(e)}/Target/Variable/${t.slice(10)}`,e);case(t==="@deepseek-ai/dsh-client-ui-primitives"||t.startsWith("@deepseek-ai/dsh-client-ui-primitives/")):return{url:`data:text/javascript,${encodeURIComponent(i)}`,format:"module",shortCircuit:!0};default:return a(t,e)}},l=(t,e,a)=>{if(!0===(t.endsWith("/Source/Variable/Locale-en.json")||t.endsWith("/Source/Variable/Locale-zh.json"))){const s=n.readFileSync(new URL(t).pathname,"utf8");return{format:"module",shortCircuit:!0,source:`export default ${JSON.stringify(JSON.parse(s))};`}}else return a(t,e)};o.registerHooks({resolve:u,load:l});
+import * as FileSystem from "node:fs";
+import * as Module from "node:module";
+const Root = (Context) => {
+  const Parent = String(Context.parentURL ?? "");
+  const Marker = Parent.indexOf("/Target/");
+  return Marker === -1 ? Parent : Parent.slice(0, Marker);
+};
+const Primitives = [
+  "export const StateDot = (Props) => Props.children ?? null;",
+  "export const Tag = (Props) => Props.children ?? null;",
+  "export const DetailDocument = (Props) => Props.children ?? null;",
+  "export const detailDocumentState = (Read) => {",
+  "	if (Read?.status === 'ready') {",
+  "		return Read.markdown === undefined ? { status: 'none' } : { status: 'found', markdown: Read.markdown };",
+  "	}",
+  "	return Read?.status === 'error' ? Read : { status: 'loading' };",
+  "};"
+].join("\n");
+const Resolve = (Specifier, Context, Next) => {
+  switch (true) {
+    case Specifier.startsWith("@Function/"):
+      return Next(
+        `${Root(Context)}/Target/Function/${Specifier.slice("@Function/".length)}`,
+        Context
+      );
+    case (Specifier.startsWith("@Variable/") && Specifier.endsWith(".json")):
+      return Next(
+        `${Root(Context)}/Source/Variable/${Specifier.slice("@Variable/".length)}`,
+        Context
+      );
+    case Specifier.startsWith("@Variable/"):
+      return Next(
+        `${Root(Context)}/Target/Variable/${Specifier.slice("@Variable/".length)}`,
+        Context
+      );
+    case (Specifier === "@deepseek-ai/dsh-client-ui-primitives" || Specifier.startsWith("@deepseek-ai/dsh-client-ui-primitives/")):
+      return {
+        url: `data:text/javascript,${encodeURIComponent(Primitives)}`,
+        format: "module",
+        shortCircuit: true
+      };
+    default:
+      return Next(Specifier, Context);
+  }
+};
+const Load = (Url, Context, Next) => {
+  switch (true) {
+    case (Url.endsWith("/Source/Variable/Locale-en.json") || Url.endsWith("/Source/Variable/Locale-zh.json")): {
+      const Text = FileSystem.readFileSync(new URL(Url).pathname, "utf8");
+      return {
+        format: "module",
+        shortCircuit: true,
+        source: `export default ${JSON.stringify(JSON.parse(Text))};`
+      };
+    }
+    default:
+      return Next(Url, Context);
+  }
+};
+Module.registerHooks({ resolve: Resolve, load: Load });
+//# sourceMappingURL=Alias-Hooks.js.map

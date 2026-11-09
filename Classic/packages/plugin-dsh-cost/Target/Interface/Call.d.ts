@@ -1,6 +1,6 @@
-import type CostBuckets from "@Interface/Buckets.js";
-import type CostFile from "@Interface/File.js";
-import type CostTokens from "@Interface/Tokens.js";
+import type CostBuckets from "./Buckets.js";
+import type CostFile from "./File.js";
+import type CostTokens from "./Tokens.js";
 export default interface CostCall {
     turn: number;
     step: number;

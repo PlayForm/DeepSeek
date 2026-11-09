@@ -23,7 +23,7 @@
  * EVERYTHING ELSE IS REFUSED: an unknown `op`, a non-string name, a
  * `support` without a `file`, or more operations than the cap.
  */
-import type { Operation, Proposal } from "@Interface/Proposal.js";
+import type { Operation, Proposal } from "../Interface/Proposal.js";
 /**
  * The closed operation set (the judge's vocabulary; Parse owns admission).
  */
