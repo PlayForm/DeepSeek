@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="@playform/style-dsh-material - crescent-ring">
+	<title>@playform/style-dsh-material - crescent-ring</title>
+	<style>
+		@media (prefers-reduced-motion: no-preference) {
+			.style-dsh-material-scene * { transform-box: view-box; transform-origin: 50% 50%; }
+		.style-dsh-material-breathe { animation: style-dsh-material-breathe 5s ease-in-out -5s infinite; }
+		@keyframes style-dsh-material-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
+		.style-dsh-material-twinkle { animation: style-dsh-material-twinkle 7s ease-in-out -5s infinite; }
+		@keyframes style-dsh-material-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
+		}
+	</style>
+	<defs>
+		<path id="style-dsh-material-0" d="M91,67 L88,73 L83,79 L79,83 L73,88 L67,91 L60,93 L53,94 L47,94 L40,93 L33,91 L27,88 L21,83 L17,79 L12,73 L9,67 L7,60 L6,53 L6,47 L7,40 L9,33 L12,27 L17,21 L21,17 L27,12 L33,9 L40,7 L47,6 L53,6 L60,7 L67,9 L73,12 L79,17 L83,21 L88,27 L91,33 L93,40 L94,47 L94,53 L93,60 Z"/>
+		<path id="style-dsh-material-1" d="M76,65 L50,67 L26,65 L34,42 L49,20 L64,41 Z M53,55 L73,90 L72,90 L53,55 Z M51,68 L51,69 L50,71 L49,71 L47,72 L46,71 L45,71 L44,69 L44,68 L44,66 L45,65 L46,64 L47,64 L49,64 L50,65 L51,66 Z M49,56 L43,95 L41,95 L49,56 Z"/>
+		<path id="style-dsh-material-2" d="M89,54 L91,56 L89,57 Z"/>
+		<path id="style-dsh-material-3" d="M85,36 L88,37 L86,39 Z"/>
+		<path id="style-dsh-material-4" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
+	</defs>
+	<g class="style-dsh-material-scene">
+	<g fill="#EBD0B7" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="style-dsh-material-breathe" href="#style-dsh-material-0"/>
+	</g>
+	<g fill="#241536" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use href="#style-dsh-material-1"/>
+	</g>
+	<g fill="#97568B" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="style-dsh-material-twinkle" href="#style-dsh-material-2"/>
+	</g>
+	<g fill="#A66BB8" fill-opacity="1" fill-rule="evenodd" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" paint-order="stroke fill">
+		<use class="style-dsh-material-twinkle" href="#style-dsh-material-3"/>
+		<use class="style-dsh-material-breathe" href="#style-dsh-material-4"/>
+	</g>
+	</g>
+</svg>

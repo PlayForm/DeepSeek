@@ -1,4 +1,9 @@
-import e from"node:assert/strict";import{Check as r,Finish as o,Library as a,MakeCounter as p,Put as n,Tree as l}from"../Harness.js";const i=async()=>{const s=p();return r(s,"P1: a pack-shaped mapping/sequence tree parses",()=>{e.deepEqual(a.Parse(`signature:
+import assert from "node:assert/strict";
+import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  Check(Count, "P1: a pack-shaped mapping/sequence tree parses", () => {
+    const Text = `signature:
   - docs/STYLE.md
 families:
   "doc/Plan":
@@ -13,19 +18,63 @@ families:
         kind: style
         prior: 1.0
         reason: the temp style
-`),{signature:["docs/STYLE.md"],families:{"doc/Plan":{priority:2,threshold:.75,signals:[{rule:"plan",pattern:"Documentation/Plans/.*\\.md$",weight:2.5}],targets:[{path:"docs/STYLE.md",kind:"style",prior:1,reason:"the temp style"}]}}})}),r(s,"P2: comments, blank lines and the document markers are dropped",()=>{e.deepEqual(a.Parse(`---
+`;
+    assert.deepEqual(Library.Parse(Text), {
+      signature: ["docs/STYLE.md"],
+      families: {
+        "doc/Plan": {
+          priority: 2,
+          threshold: 0.75,
+          signals: [
+            {
+              rule: "plan",
+              pattern: "Documentation/Plans/.*\\.md$",
+              weight: 2.5
+            }
+          ],
+          targets: [
+            {
+              path: "docs/STYLE.md",
+              kind: "style",
+              prior: 1,
+              reason: "the temp style"
+            }
+          ]
+        }
+      }
+    });
+  });
+  Check(Count, "P2: comments, blank lines and the document markers are dropped", () => {
+    const Text = `---
 # the pack
 signature: [a, b] # inline
 
 learning:
   propose: true # on
 ...
-`),{signature:["a","b"],learning:{propose:!0}})}),r(s,"P3: single, double and flow scalars",()=>{e.deepEqual(a.Parse(`single: 'it''s'
+`;
+    assert.deepEqual(Library.Parse(Text), {
+      signature: ["a", "b"],
+      learning: { propose: true }
+    });
+  });
+  Check(Count, "P3: single, double and flow scalars", () => {
+    const Text = `single: 'it''s'
 double: "a\\tb"
 flow: ["a", 'b']
 empty: []
 mapping: {}
-`),{single:"it's",double:"a	b",flow:["a","b"],empty:[],mapping:{}})}),r(s,"P4: booleans, null and numbers",()=>{e.deepEqual(a.Parse(`a: true
+`;
+    assert.deepEqual(Library.Parse(Text), {
+      single: "it's",
+      double: "a	b",
+      flow: ["a", "b"],
+      empty: [],
+      mapping: {}
+    });
+  });
+  Check(Count, "P4: booleans, null and numbers", () => {
+    const Text = `a: true
 b: false
 c: null
 d: ~
@@ -33,10 +82,50 @@ e: 1.5
 f: -2
 g: 01
 h: plain text
-`),{a:!0,b:!1,c:null,d:null,e:1.5,f:-2,g:"01",h:"plain text"})}),r(s,"P5: the unsupported constructs throw a line-numbered error",()=>{e.throws(()=>a.Parse("a:	1"),/tabs are not supported/),e.throws(()=>a.Parse("a: &x 1"),/anchors are not supported/),e.throws(()=>a.Parse("a: *x"),/aliases are not supported/),e.throws(()=>a.Parse("a: !x 1"),/tags are not supported/),e.throws(()=>a.Parse("a: |"),/block scalars are not supported/),e.throws(()=>a.Parse("a: {b: c}"),/flow collections/),e.throws(()=>a.Parse(`a: 1
-a: 2`),/duplicate key a/),e.throws(()=>a.Parse(`a: 1
-  b: 2`),/unexpected indentation/),e.throws(()=>a.Parse("a: 'open"),/unterminated single-quoted/)}),r(s,"P6: Read parses .yml and .json and refuses a non-mapping root",()=>{const t=l("pack-parser-");n(t,"pack.yml",`signature:
-  - docs/A.md
-`),n(t,"pack.json",JSON.stringify({signature:["docs/B.md"]})),n(t,"array.yml",`- a
-- b
-`),e.deepEqual(a.Read(`${t}/pack.yml`),{signature:["docs/A.md"]}),e.deepEqual(a.Read(`${t}/pack.json`),{signature:["docs/B.md"]}),e.throws(()=>a.Read(`${t}/array.yml`),/the root must be a mapping/)}),o(s,"Parser")},d=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(d){const s=await i();console.log(`${s} PASS - Parser`)}export{i as runTest};
+`;
+    assert.deepEqual(Library.Parse(Text), {
+      a: true,
+      b: false,
+      c: null,
+      d: null,
+      e: 1.5,
+      f: -2,
+      g: "01",
+      h: "plain text"
+    });
+  });
+  Check(Count, "P5: the unsupported constructs throw a line-numbered error", () => {
+    assert.throws(() => Library.Parse("a:	1"), /tabs are not supported/);
+    assert.throws(() => Library.Parse("a: &x 1"), /anchors are not supported/);
+    assert.throws(() => Library.Parse("a: *x"), /aliases are not supported/);
+    assert.throws(() => Library.Parse("a: !x 1"), /tags are not supported/);
+    assert.throws(() => Library.Parse("a: |"), /block scalars are not supported/);
+    assert.throws(() => Library.Parse("a: {b: c}"), /flow collections/);
+    assert.throws(() => Library.Parse("a: 1\na: 2"), /duplicate key a/);
+    assert.throws(() => Library.Parse("a: 1\n  b: 2"), /unexpected indentation/);
+    assert.throws(() => Library.Parse("a: 'open"), /unterminated single-quoted/);
+  });
+  Check(Count, "P6: Read parses .yml and .json and refuses a non-mapping root", () => {
+    const Root = Tree("pack-parser-");
+    Put(Root, "pack.yml", "signature:\n  - docs/A.md\n");
+    Put(Root, "pack.json", JSON.stringify({ signature: ["docs/B.md"] }));
+    Put(Root, "array.yml", "- a\n- b\n");
+    assert.deepEqual(Library.Read(`${Root}/pack.yml`), {
+      signature: ["docs/A.md"]
+    });
+    assert.deepEqual(Library.Read(`${Root}/pack.json`), {
+      signature: ["docs/B.md"]
+    });
+    assert.throws(() => Library.Read(`${Root}/array.yml`), /the root must be a mapping/);
+  });
+  return Finish(Count, "Parser");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Parser`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

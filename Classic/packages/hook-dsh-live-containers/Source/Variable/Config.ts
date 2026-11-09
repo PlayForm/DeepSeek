@@ -40,39 +40,118 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
 import { DEFAULT_BLOCKS } from "@Variable/DefaultBlocks.js";
 import { DEFAULT_CHECK_SETS } from "@Variable/DefaultCheckSets.js";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-live-containers.log";
+const DefaultEnabled = false;
+const DefaultSectionName = "live-containers";
+const DefaultRefresh = "request";
+const DefaultTtlCalls = 8;
+const DefaultSeparator = "---";
+const DefaultSectionBudgetBytes = 4096;
+const DefaultBlockEnabled = true;
+const DefaultBlockTrigger = "request";
+const DefaultBlockScope = "always";
+const DefaultDetachMode = "off";
+const DefaultDetachAllRequiresConfirm = false;
+const DefaultDetachLongRunningMarkers = [
+	"cargo build",
+	"pnpm build",
+	"npm install",
+	"pnpm install",
+	"pip install",
+	"cmake",
+	"make",
+	"go build",
+	"tsc -b",
+	"next build",
+];
+const DefaultDetachMinHistoricalMs = 20000;
+const DefaultDetachHistoryWindow = 5;
+const DefaultDetachSelectedTools: string[] = [];
+const DefaultDetachSelectedPatterns: string[] = [];
+const DefaultDetachMaxLivePerAgent = 5;
+const DefaultDetachMinLatencyMs = 2000;
+const DefaultDetachLiveTimeoutMs = 120000;
+const DefaultDetachDedup = true;
+const DefaultDetachRetryFailsafeCount = 3;
+const DefaultPlantStallMs = 45000;
+const DefaultPlantCloseMs = 300000;
+const DefaultPlantReportRateMs = 2000;
+const DefaultPlantStallBudgetMs = 180000;
+const DefaultPlantStallAction = "warn-only";
+const DefaultPlantOrphanBudgetMs = 600000;
+const DefaultPlantBoardsPerAgent = 4;
+const DefaultPlantLeaseTurns = 3;
+const DefaultFailsafes = "off";
+const DefaultHangBudgetMs = 120000;
+const DefaultHangAction = "warn-only";
+const DefaultFailsafesPerTurn = 5;
+const DefaultSuggester = "off";
+const DefaultSuggesterPrivacy = "redact";
+const DefaultSuggestGateMinChars = 40;
+const DefaultMaxSuggestionsPerHour = 6;
+const DefaultMaxPromptBytes = 4000;
+const DefaultSuggestTimeoutMs = 8000;
+const DefaultAutoPlant = false;
+const DefaultRouteProvider = "cloudflare-workers-ai";
+const DefaultRouteModel = "@cf/zai-org/glm-5.3-flash";
+const DefaultRouteReasoningEffort = "low";
+const DefaultSuggesterRoute = {
+	provider: DefaultRouteProvider,
+	model: DefaultRouteModel,
+	reasoningEffort: DefaultRouteReasoningEffort,
+};
+const DefaultCompletionCapBytes = 4096;
+const DefaultMonitors = "off";
+const DefaultWatchlist: Array<{ glob: string; checks: string[] }> = [];
+const DefaultWatchlistChecks: string[] = [];
+const DefaultCheckFast = true;
+const DefaultCheckIntervalMs = 0;
+const DefaultMonitorDebounceMs = 1500;
+const DefaultMonitorMaxMonitors = 8;
+const DefaultMonitorMaxMonitorJobs = 3;
+const DefaultMonitorRetireMs = 600000;
+const DefaultMonitorStaleMs = 300000;
+const DefaultMonitorSlowCheckIntervalMs = 0;
+const DefaultMonitorBandCapBytes = 2048;
+const DefaultMonitorCheckTimeoutMs = 120000;
+const DefaultMonitorLinkageAlertVersions = 3;
+const DefaultMonitorDedupWindowMs = 30000;
+
 export default Compose(false, {
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-live-containers.log").volatile(),
-	enabled: Schema.boolean().default(false).volatile(),
-	sectionName: Schema.string().default("live-containers").volatile(),
-	refresh: Schema.union(["request", "ttl"]).default("request").volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
+	sectionName: Schema.string().default(DefaultSectionName).volatile(),
+	refresh: Schema.union(["request", "ttl"]).default(DefaultRefresh).volatile(),
 	// Assemblies between section rebuilds when refresh = "ttl" (the
 	// tool-coach's sectionTtl pattern). The design's 8 (not the research
 	// draft's 1): the TTL exists for KV-cache friendliness, and 8 is the
 	// design's recommended cadence for always-differing blocks.
-	ttlCalls: Schema.number().default(8).volatile(),
+	ttlCalls: Schema.number().default(DefaultTtlCalls).volatile(),
 	// The frame dashes; the fixed frame becomes `--- LIVE CONTAINER <id> ...`
 	// with the default.
-	separator: Schema.string().default("---").volatile(),
+	separator: Schema.string().default(DefaultSeparator).volatile(),
 	// When the rendered body exceeds this, the OLDEST frames collapse to
 	// one-line summaries (the failsafe 8 path; ledger
 	// `failsafe section-collapse <n>` - never silently dropped).
-	sectionBudgetBytes: Schema.number().default(4096).volatile(),
+	sectionBudgetBytes: Schema.number().default(DefaultSectionBudgetBytes).volatile(),
 	// The block table. The ARRAY is the volatile cell; its leaves stay plain.
 	blocks: Schema.array(
 		Schema.object({
 			id: Schema.string().required(),
 			kind: Schema.string().required(),
 			template: Schema.string().required(),
-			enabled: Schema.boolean().default(true),
+			enabled: Schema.boolean().default(DefaultBlockEnabled),
 			vars: Schema.dict(Schema.string()),
-			trigger: Schema.union(["request", "event", "ttl", "manual"]).default("request"),
-			ttlCalls: Schema.number().default(8),
+			trigger: Schema.union(["request", "event", "ttl", "manual"]).default(
+				DefaultBlockTrigger,
+			),
+			ttlCalls: Schema.number().default(DefaultTtlCalls),
 			scope: Schema.union([
 				"always",
 				"when-agents-active",
 				"when-tasks-live",
 				"never",
-			]).default("always"),
+			]).default(DefaultBlockScope),
 		}),
 	)
 		.default(DEFAULT_BLOCKS)
@@ -81,96 +160,83 @@ export default Compose(false, {
 	// enclosing object cell). `mode "all"` FAILS LOUD at load unless
 	// allRequiresConfirm is true (the DANGEROUS flag, 01 section 5).
 	detach: Schema.object({
-		mode: Schema.union(["off", "long-running", "all", "selected"]).default("off"),
-		allRequiresConfirm: Schema.boolean().default(false),
-		longRunningMarkers: Schema.array(Schema.string()).default([
-			"cargo build",
-			"pnpm build",
-			"npm install",
-			"pnpm install",
-			"pip install",
-			"cmake",
-			"make",
-			"go build",
-			"tsc -b",
-			"next build",
-		]),
-		minHistoricalMs: Schema.number().default(20000),
-		historyWindow: Schema.number().default(5),
-		selectedTools: Schema.array(Schema.string()).default([]),
-		selectedPatterns: Schema.array(Schema.string()).default([]),
-		maxLivePerAgent: Schema.number().default(5),
-		minLatencyMs: Schema.number().default(2000),
+		mode: Schema.union(["off", "long-running", "all", "selected"]).default(DefaultDetachMode),
+		allRequiresConfirm: Schema.boolean().default(DefaultDetachAllRequiresConfirm),
+		longRunningMarkers: Schema.array(Schema.string()).default(DefaultDetachLongRunningMarkers),
+		minHistoricalMs: Schema.number().default(DefaultDetachMinHistoricalMs),
+		historyWindow: Schema.number().default(DefaultDetachHistoryWindow),
+		selectedTools: Schema.array(Schema.string()).default(DefaultDetachSelectedTools),
+		selectedPatterns: Schema.array(Schema.string()).default(DefaultDetachSelectedPatterns),
+		maxLivePerAgent: Schema.number().default(DefaultDetachMaxLivePerAgent),
+		minLatencyMs: Schema.number().default(DefaultDetachMinLatencyMs),
 		// liveTimeoutMs <= the inline deadline for the tool family is a
 		// composition contract (the I1 sandbox rule; the bash executor's inline
 		// default is timeoutMs 120000) - the SCHEME documents it; the schema
 		// validates the 1000..600000 range.
-		liveTimeoutMs: Schema.number().default(120000),
-		dedup: Schema.boolean().default(true),
-		retryFailsafeCount: Schema.number().default(3),
+		liveTimeoutMs: Schema.number().default(DefaultDetachLiveTimeoutMs),
+		dedup: Schema.boolean().default(DefaultDetachDedup),
+		retryFailsafeCount: Schema.number().default(DefaultDetachRetryFailsafeCount),
 	}).volatile(),
 	// The planted-block knobs (design section 2.4 + I5 section 8).
 	plant: Schema.object({
-		stallMs: Schema.number().default(45000),
-		closeMs: Schema.number().default(300000),
-		reportRateMs: Schema.number().default(2000),
-		stallBudgetMs: Schema.number().default(180000),
-		stallAction: Schema.union(["warn-only", "prune"]).default("warn-only"),
-		orphanBudgetMs: Schema.number().default(600000),
-		boardsPerAgent: Schema.number().default(4),
+		stallMs: Schema.number().default(DefaultPlantStallMs),
+		closeMs: Schema.number().default(DefaultPlantCloseMs),
+		reportRateMs: Schema.number().default(DefaultPlantReportRateMs),
+		stallBudgetMs: Schema.number().default(DefaultPlantStallBudgetMs),
+		stallAction: Schema.union(["warn-only", "prune"]).default(DefaultPlantStallAction),
+		orphanBudgetMs: Schema.number().default(DefaultPlantOrphanBudgetMs),
+		boardsPerAgent: Schema.number().default(DefaultPlantBoardsPerAgent),
 		// The I5 lease window (parent turns per member).
-		leaseTurns: Schema.number().default(3),
+		leaseTurns: Schema.number().default(DefaultPlantLeaseTurns),
 	}).volatile(),
 	// The failsafe master switch (design section 2.5): on = only templates
 	// render; failsafes are a second explicit flip.
-	failsafes: Schema.union(["off", "on"]).default("off").volatile(),
-	hangBudgetMs: Schema.number().default(120000).volatile(),
-	hangAction: Schema.union(["warn-only", "kill"]).default("warn-only").volatile(),
-	failsafesPerTurn: Schema.number().default(5).volatile(),
+	failsafes: Schema.union(["off", "on"]).default(DefaultFailsafes).volatile(),
+	hangBudgetMs: Schema.number().default(DefaultHangBudgetMs).volatile(),
+	hangAction: Schema.union(["warn-only", "kill"]).default(DefaultHangAction).volatile(),
+	failsafesPerTurn: Schema.number().default(DefaultFailsafesPerTurn).volatile(),
 	// The suggester (design section 2.6 + I6 section 8). "section" = the plain
 	// LIVE SUGGESTION note; "plant" = the configured-block flow.
-	suggester: Schema.union(["off", "section", "plant"]).default("off").volatile(),
+	suggester: Schema.union(["off", "section", "plant"]).default(DefaultSuggester).volatile(),
 	// The privacy gate: "redact" sends the first 200 chars of the request plus
 	// its length; "verbatim" forwards the whole excerpt (<= maxPromptBytes) to
 	// the configured route - the config flag IS the consent surface (the
 	// SCHEME carries the disclosure paragraph).
-	suggesterPrivacy: Schema.union(["redact", "verbatim"]).default("redact").volatile(),
-	suggestGateMinChars: Schema.number().default(40).volatile(),
-	maxSuggestionsPerHour: Schema.number().default(6).volatile(),
-	maxPromptBytes: Schema.number().default(4000).volatile(),
-	suggestTimeoutMs: Schema.number().default(8000).volatile(),
-	autoPlant: Schema.boolean().default(false).volatile(),
+	suggesterPrivacy: Schema.union(["redact", "verbatim"])
+		.default(DefaultSuggesterPrivacy)
+		.volatile(),
+	suggestGateMinChars: Schema.number().default(DefaultSuggestGateMinChars).volatile(),
+	maxSuggestionsPerHour: Schema.number().default(DefaultMaxSuggestionsPerHour).volatile(),
+	maxPromptBytes: Schema.number().default(DefaultMaxPromptBytes).volatile(),
+	suggestTimeoutMs: Schema.number().default(DefaultSuggestTimeoutMs).volatile(),
+	autoPlant: Schema.boolean().default(DefaultAutoPlant).volatile(),
 	suggesterRoute: Schema.object({
-		provider: Schema.string().default("cloudflare-workers-ai"),
-		model: Schema.string().default("@cf/zai-org/glm-5.3-flash"),
-		reasoningEffort: Schema.string().default("low"),
+		provider: Schema.string().default(DefaultRouteProvider),
+		model: Schema.string().default(DefaultRouteModel),
+		reasoningEffort: Schema.string().default(DefaultRouteReasoningEffort),
 	})
-		.default({
-			provider: "cloudflare-workers-ai",
-			model: "@cf/zai-org/glm-5.3-flash",
-			reasoningEffort: "low",
-		})
+		.default(DefaultSuggesterRoute)
 		.volatile(),
 	// The merged pending-text cap in bytes (the I4 1.3 4 KiB cap; R4: raising
 	// it is a config field, not a grammar change).
-	completionCapBytes: Schema.number().default(4096).volatile(),
+	completionCapBytes: Schema.number().default(DefaultCompletionCapBytes).volatile(),
 	// WAVE-3 CELLS (the C3 extension - appended only; the phase-1 and wave-2
 	// cells above are untouched). Every knob is a volatile cell; the
 	// watchlist ARRAY and the checksets DICT are the volatile cells with
 	// plain leaves (the schemastery rule - the blocks table precedent).
 	// `monitors` is the SECOND explicit flip after the plugin's own `enable`
 	// (the IDLE-forever posture: "off" even when the plugin is enabled).
-	monitors: Schema.union(["off", "on"]).default("off").volatile(),
+	monitors: Schema.union(["off", "on"]).default(DefaultMonitors).volatile(),
 	// The watchlist: the automatic enrollment is watchlist-gated. Default
 	// EMPTY - enroll-on-write only, no scan, no watch-all (privacy and cost
 	// contained; the R3 point 5 rule).
 	watchlist: Schema.array(
 		Schema.object({
 			glob: Schema.string().required(),
-			checks: Schema.array(Schema.string()).default([]),
+			checks: Schema.array(Schema.string()).default(DefaultWatchlistChecks),
 		}),
 	)
-		.default([])
+		.default(DefaultWatchlist)
 		.volatile(),
 	// The check-set catalog: dict name -> spec. Default: the shipped catalog
 	// (Variable/DefaultCheckSets - data, not code). The DICT is the volatile
@@ -181,8 +247,8 @@ export default Compose(false, {
 			glob: Schema.string(),
 			command: Schema.string(),
 			link: Schema.union(["none", "governance"]),
-			fast: Schema.boolean().default(true),
-			intervalMs: Schema.number().default(0),
+			fast: Schema.boolean().default(DefaultCheckFast),
+			intervalMs: Schema.number().default(DefaultCheckIntervalMs),
 			timeoutMs: Schema.number(),
 		}),
 	)
@@ -195,15 +261,15 @@ export default Compose(false, {
 	// accepted, defaulted, inert in v1 (the extension ships after v1 - the
 	// same posture the wave-2 catalog kinds had in phase 1).
 	monitor: Schema.object({
-		debounceMs: Schema.number().default(1500),
-		maxMonitors: Schema.number().default(8),
-		maxMonitorJobs: Schema.number().default(3),
-		retireMs: Schema.number().default(600000),
-		staleMs: Schema.number().default(300000),
-		slowCheckIntervalMs: Schema.number().default(0),
-		bandCapBytes: Schema.number().default(2048),
-		checkTimeoutMs: Schema.number().default(120000),
-		linkageAlertVersions: Schema.number().default(3),
-		dedupWindowMs: Schema.number().default(30000),
+		debounceMs: Schema.number().default(DefaultMonitorDebounceMs),
+		maxMonitors: Schema.number().default(DefaultMonitorMaxMonitors),
+		maxMonitorJobs: Schema.number().default(DefaultMonitorMaxMonitorJobs),
+		retireMs: Schema.number().default(DefaultMonitorRetireMs),
+		staleMs: Schema.number().default(DefaultMonitorStaleMs),
+		slowCheckIntervalMs: Schema.number().default(DefaultMonitorSlowCheckIntervalMs),
+		bandCapBytes: Schema.number().default(DefaultMonitorBandCapBytes),
+		checkTimeoutMs: Schema.number().default(DefaultMonitorCheckTimeoutMs),
+		linkageAlertVersions: Schema.number().default(DefaultMonitorLinkageAlertVersions),
+		dedupWindowMs: Schema.number().default(DefaultMonitorDedupWindowMs),
 	}).volatile(),
 });

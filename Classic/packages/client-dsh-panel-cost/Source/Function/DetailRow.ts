@@ -4,6 +4,7 @@
 // hidden notices.
 import Count from "@Function/Count";
 import Price from "@Function/Price";
+import { COLUMNS } from "@Function/Table";
 import type CostFile from "@Interface/File";
 import type CostStep from "@Interface/Step";
 import type { Translate } from "@Interface/Translate";
@@ -199,7 +200,7 @@ export default function DetailRow(Props: DetailRowProps): ReturnType<typeof crea
 		{},
 		createElement(
 			"td",
-			{ className: "playform-cost-detail-cell", colSpan: 11 },
+			{ className: "playform-cost-detail-cell", colSpan: COLUMNS.length },
 			createElement(
 				"div",
 				{ className: "playform-cost-detail-head" },

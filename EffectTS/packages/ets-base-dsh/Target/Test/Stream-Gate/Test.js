@@ -1,1 +1,182 @@
-import r from"node:assert/strict";import{CheckAsync as S,Finish as C,MakeCounter as G}from"../Harness.js";import{Dashes as q,Replace as D}from"../../../../ets-lib-dsh-core/Target/Library.js";import{Chunk as E,StreamGate as u}from"../../../Target/Library.js";import{Stream as n}from"effect";const T=async()=>{const i=G();return await S(i,"Gate: the stream transformer \u2014 reducer equivalence, per-call raw state, error propagation, completion-only count summary, fresh state per materialization",async()=>{const s=t=>D(t,q,"-"),c=t=>({[Symbol.asyncIterator]:async function*(){yield*t}}),m=async(t,e=!1,a)=>{const h=u(n.fromAsyncIterable(c(t),f=>f),s,!0,e,a);return Array.fromAsync(n.toAsyncIterable(h))},l=[{type:"text-delta",index:0,text:"a \u2014 b"},{type:"usage",usage:{input:1,output:2}},{type:"text-delta",index:0,text:"plain"}],w=await m(l);r.deepEqual(w,l.map(t=>E(t,s,!0).chunk),"the gate stream's output equals the reducer-level Chunk dispatch, in order"),r.equal(w[1],l[1],"usage passes through BY IDENTITY through the stream");let A=-1;await m(l,!1,t=>A=t),r.equal(A,1,"the count summary reports the stream's total after a NORMAL completion (1 dash in 'a \u2014 b', none in 'plain')");const p={type:"tool-call-delta",index:1,id:"call_1",name:"write",argumentsDelta:'{"__normalize":false,"path":"a\u2014b"}'},g={type:"tool-call-delta",index:1,id:"call_1",name:"write",argumentsDelta:',"note":"x\u2014y"}'},d={type:"tool-call-delta",index:1,id:"call_2",name:"write",argumentsDelta:'{"path":"c\u2014d"}'},y=await m([p,g,d],!0);r.deepEqual(y[0],{type:"tool-call-delta",index:1,id:"call_1",name:"write",argumentsDelta:'{"path":"a\u2014b"}'},"the raw-marked call's first delta is stripped and UNNORMALIZED"),r.equal(y[1],g,"a later delta of the SAME raw call passes through BY IDENTITY"),r.deepEqual(y[2],{type:"tool-call-delta",index:1,id:"call_2",name:"write",argumentsDelta:'{"path":"c-d"}'},"the NEXT call id resets the raw state \u2192 its arguments normalize");const b=new Error("upstream boom");async function*k(){throw yield{type:"text-delta",index:0,text:"\u2014x"},b}await r.rejects(async()=>{const t=u(n.fromAsyncIterable(k(),e=>e),s,!0);for await(const e of n.toAsyncIterable(t));},t=>t===b,"an upstream failure propagates through the gate stream untouched");let I=0;{const t=u(n.fromAsyncIterable(c(l),a=>a),s,!0,!1,a=>I=a),e=n.toAsyncIterable(t)[Symbol.asyncIterator]();await e.next(),await e.return?.(),await new Promise(a=>setImmediate(a))}r.equal(I,0,"an abandoned stream never reaches the count summary");let x=-1;{const t=u(n.fromAsyncIterable(c([p,d]),o=>o),s,!0,!0,o=>x=o),e=await Array.fromAsync(n.toAsyncIterable(t));let a=-1;const h=u(n.fromAsyncIterable(c([p,d]),o=>o),s,!0,!0,o=>a=o),f=await Array.fromAsync(n.toAsyncIterable(h));r.deepEqual(e,f,"two materializations of the gate produce identical output"),r.equal(a,x,"the per-materialization state is fresh (same count both runs)")}}),C(i,"Stream-Gate")},v=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(v){const i=await T();console.log(`${i} PASS - Stream-Gate`)}export{T as runTest};
+import assert from "node:assert/strict";
+import { CheckAsync, Finish, MakeCounter } from "../Harness.js";
+import { Dashes, Replace } from "../../../../ets-lib-dsh-core/Target/Library.js";
+import { Chunk, StreamGate as Gate } from "../../../Target/Library.js";
+import { Stream } from "effect";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    await CheckAsync(
+      Count,
+      "Gate: the stream transformer \u2014 reducer equivalence, per-call raw state, error propagation, completion-only count summary, fresh state per materialization",
+      async () => {
+        const ToDash = (Text) => Replace(Text, Dashes, "-");
+        const Replay = (Chunks) => ({
+          [Symbol.asyncIterator]: async function* () {
+            yield* Chunks;
+          }
+        });
+        const Collect = async (Chunks, ToolArgs = false, OnCount) => {
+          const Out = Gate(
+            Stream.fromAsyncIterable(Replay(Chunks), (Error2) => Error2),
+            ToDash,
+            true,
+            ToolArgs,
+            OnCount
+          );
+          return Array.fromAsync(Stream.toAsyncIterable(Out));
+        };
+        const GateChunks = [
+          { type: "text-delta", index: 0, text: "a \u2014 b" },
+          { type: "usage", usage: { input: 1, output: 2 } },
+          { type: "text-delta", index: 0, text: "plain" }
+        ];
+        const GateGot = await Collect(GateChunks);
+        assert.deepEqual(
+          GateGot,
+          GateChunks.map((Original) => Chunk(Original, ToDash, true).chunk),
+          "the gate stream's output equals the reducer-level Chunk dispatch, in order"
+        );
+        assert.equal(
+          GateGot[1],
+          GateChunks[1],
+          "usage passes through BY IDENTITY through the stream"
+        );
+        let GateSum = -1;
+        await Collect(GateChunks, false, (Count2) => GateSum = Count2);
+        assert.equal(
+          GateSum,
+          1,
+          "the count summary reports the stream's total after a NORMAL completion (1 dash in 'a \u2014 b', none in 'plain')"
+        );
+        const GateRaw = {
+          type: "tool-call-delta",
+          index: 1,
+          id: "call_1",
+          name: "write",
+          argumentsDelta: '{"__normalize":false,"path":"a\u2014b"}'
+        };
+        const GateRawNext = {
+          type: "tool-call-delta",
+          index: 1,
+          id: "call_1",
+          name: "write",
+          argumentsDelta: ',"note":"x\u2014y"}'
+        };
+        const GatePlain = {
+          type: "tool-call-delta",
+          index: 1,
+          id: "call_2",
+          name: "write",
+          argumentsDelta: '{"path":"c\u2014d"}'
+        };
+        const GateRawGot = await Collect([GateRaw, GateRawNext, GatePlain], true);
+        assert.deepEqual(
+          GateRawGot[0],
+          {
+            type: "tool-call-delta",
+            index: 1,
+            id: "call_1",
+            name: "write",
+            argumentsDelta: '{"path":"a\u2014b"}'
+          },
+          "the raw-marked call's first delta is stripped and UNNORMALIZED"
+        );
+        assert.equal(
+          GateRawGot[1],
+          GateRawNext,
+          "a later delta of the SAME raw call passes through BY IDENTITY"
+        );
+        assert.deepEqual(
+          GateRawGot[2],
+          {
+            type: "tool-call-delta",
+            index: 1,
+            id: "call_2",
+            name: "write",
+            argumentsDelta: '{"path":"c-d"}'
+          },
+          "the NEXT call id resets the raw state \u2192 its arguments normalize"
+        );
+        const Boom = new Error("upstream boom");
+        async function* Broken() {
+          yield { type: "text-delta", index: 0, text: "\u2014x" };
+          throw Boom;
+        }
+        await assert.rejects(
+          async () => {
+            const Out = Gate(
+              Stream.fromAsyncIterable(Broken(), (Error2) => Error2),
+              ToDash,
+              true
+            );
+            for await (const ChunkOut of Stream.toAsyncIterable(Out)) {
+              void ChunkOut;
+            }
+          },
+          (Error2) => Error2 === Boom,
+          "an upstream failure propagates through the gate stream untouched"
+        );
+        let AbandonedSum = 0;
+        {
+          const Out = Gate(
+            Stream.fromAsyncIterable(Replay(GateChunks), (Error2) => Error2),
+            ToDash,
+            true,
+            false,
+            (Count2) => AbandonedSum = Count2
+          );
+          const Iterator = Stream.toAsyncIterable(Out)[Symbol.asyncIterator]();
+          await Iterator.next();
+          await Iterator.return?.();
+          await new Promise((Resolve) => setImmediate(Resolve));
+        }
+        assert.equal(
+          AbandonedSum,
+          0,
+          "an abandoned stream never reaches the count summary"
+        );
+        let TwiceSum = -1;
+        {
+          const Out = Gate(
+            Stream.fromAsyncIterable(Replay([GateRaw, GatePlain]), (Error2) => Error2),
+            ToDash,
+            true,
+            true,
+            (Count2) => TwiceSum = Count2
+          );
+          const First = await Array.fromAsync(Stream.toAsyncIterable(Out));
+          let SecondSum = -1;
+          const Again = Gate(
+            Stream.fromAsyncIterable(Replay([GateRaw, GatePlain]), (Error2) => Error2),
+            ToDash,
+            true,
+            true,
+            (Count2) => SecondSum = Count2
+          );
+          const Second = await Array.fromAsync(Stream.toAsyncIterable(Again));
+          assert.deepEqual(
+            First,
+            Second,
+            "two materializations of the gate produce identical output"
+          );
+          assert.equal(
+            SecondSum,
+            TwiceSum,
+            "the per-materialization state is fresh (same count both runs)"
+          );
+        }
+      }
+    );
+  }
+  return Finish(Count, "Stream-Gate");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Stream-Gate`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

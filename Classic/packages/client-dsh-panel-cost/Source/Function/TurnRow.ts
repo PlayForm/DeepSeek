@@ -181,6 +181,7 @@ export default function TurnRow(Props: TurnRowProps): ReturnType<typeof createEl
 			Cell: "playform-cost-turn-files",
 			Pills: Turn.files.map((Tally) => ({
 				Name: BaseName(Tally.key),
+				Path: Tally.key,
 				Tone: StageTone(Tally.stage),
 				Count: Tally.count,
 				Lines: Tally.lines,

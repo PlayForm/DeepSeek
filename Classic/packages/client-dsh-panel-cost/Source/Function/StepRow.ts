@@ -223,6 +223,7 @@ export default function StepRow(Props: StepRowProps): ReturnType<typeof createEl
 			Cell: "playform-cost-step-files",
 			Pills: Files.map((File) => ({
 				Name: BaseName(Text(File.path)),
+				Path: Text(File.path),
 				Tone: StageTone(Text(File.stage) === "" ? null : Text(File.stage)),
 				Count: 1,
 				Lines: typeof File.linesDelta === "number" ? File.linesDelta : null,

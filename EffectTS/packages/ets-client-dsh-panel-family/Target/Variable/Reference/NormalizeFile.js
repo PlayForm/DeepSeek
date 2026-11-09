@@ -1,0 +1,1 @@
+import e from"../Trace.js";var a={id:"adapter-plugin-dsh-normalize-file",bundle:"@playform/ets-plugin-dsh-normalize-file",namespace:"plugin-dsh-normalize-file",title:"normalize-file",order:20,slot:"playform.panel.section",activation:"enabled",traceKinds:e.kinds};export{a as default};

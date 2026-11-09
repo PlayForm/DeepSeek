@@ -1,12 +1,14 @@
 // Table - the table shell: the fixed eleven-column layout with its
 // colgroup, the sticky header row carrying the column locale keys, and the
-// body and footer the view composes.
+// body and footer the view composes. The eleven columns are one tuple: the
+// header row, the colgroup widths and the view's colSpan all read it.
 import type { Translate } from "@Interface/Translate";
 import { createElement } from "react";
 
-const WIDTHS = [11, 15, 13, 6.5, 6.5, 7.5, 7, 7, 7, 7.5, 12] as const;
-
-const HEADERS = [
+// The one column definition: the names are the shipped locale keys, in the
+// shipped order, and the width record beside it carries the shipped column
+// widths. A new column is one tuple entry plus its width.
+export const COLUMNS = [
 	"scope",
 	"model",
 	"files",
@@ -20,6 +22,22 @@ const HEADERS = [
 	"total",
 ] as const;
 
+type Column = (typeof COLUMNS)[number];
+
+const COLUMN_WIDTHS: Record<Column, number> = {
+	scope: 11,
+	model: 15,
+	files: 13,
+	tokens: 6.5,
+	cache: 6.5,
+	cacheRead: 7.5,
+	input: 7,
+	output: 7,
+	other: 7,
+	allocation: 7.5,
+	total: 12,
+};
+
 type TableProps = {
 	Body: readonly ReturnType<typeof createElement>[];
 	Totals: ReturnType<typeof createElement>;
@@ -27,9 +45,9 @@ type TableProps = {
 };
 
 export default function Table(Props: TableProps): ReturnType<typeof createElement> {
-	const Cols: Array<ReturnType<typeof createElement>> = [];
-	for (let Index = 0; Index < WIDTHS.length; Index += 1)
-		Cols.push(createElement("col", { key: Index }));
+	const Cols = COLUMNS.map((Name) =>
+		createElement("col", { key: Name, style: { width: `${COLUMN_WIDTHS[Name]}%` } }),
+	);
 	return createElement(
 		"table",
 		{ className: "playform-cost-table", "aria-label": Props.t("view") },
@@ -40,7 +58,7 @@ export default function Table(Props: TableProps): ReturnType<typeof createElemen
 			createElement(
 				"tr",
 				{},
-				HEADERS.map((Name, Index) =>
+				COLUMNS.map((Name, Index) =>
 					createElement(
 						"th",
 						{

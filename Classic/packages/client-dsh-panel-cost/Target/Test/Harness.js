@@ -1,1 +1,160 @@
-import u from"node:assert/strict";await import("./Alias-Hooks.js");const h=()=>({N:0,F:0}),d=(n,o,s)=>{n.N++;try{s(),console.log(`PASS - ${o}`)}catch(r){n.F++,console.log(`FAIL - ${o}`),console.log(r instanceof Error?r.message:String(r))}},v=(n,o)=>{if(n.F!==0)throw new Error(`${o}: ${n.F} failed check(s)`);return n.N},y=await import("../../Target/Library.js"),k=await import("../../Target/Client.js"),f=y.default,w=k.default,R=(n={})=>f.Config({...n}),m=(n={})=>{const o=[],s=[],r=[],p={routes:o},c={n:0},l={Seen:c,register:e=>(c.n+=1,o.push(e),()=>!0)},a={};n.none!==!0&&(a.webServer=l);const g={get:e=>a[e],logger:{info:e=>{s.push(e)},warn:e=>{r.push(e)},error:e=>{r.push(e)},debug:()=>{}},effect:e=>{const i=e();return typeof i=="function"?i:void 0}},t={Ctx:g,Provided:p,Routes:o,Server:l,Services:a,Info:s,Warn:r};return n.defer!==!0&&f.apply(g),t},x=()=>{const n=[],o=[],s=[],r=[],p=[],c=[],l={tabs:n,locales:o,disposers:s},a={get:()=>{},logger:{info:t=>{p.push(t)},warn:t=>{c.push(t)},error:t=>{c.push(t)},debug:()=>{}},locale:{register:(t,e)=>{o.push({namespace:t,dictionaries:e});const i=()=>!0;return s.push(i),i}},slots:{inject:(t,e)=>{r.push(`inject ${t}`);const i=e();return typeof i=="function"&&s.push(i),()=>!0},register:(t,e)=>{n.push({options:t,component:e});const i=()=>!0;return s.push(i),i}},effect:(t,e)=>(r.push(e??"unnamed"),t(),()=>!0)},g={Ctx:a,Provided:l,Tabs:n,Locales:o,Disposers:s,Effects:r,Info:p,Warn:c};return w.apply(a),g};if(process.argv.includes("--selfcheck")){const n=h(),o=m();d(n,"selfcheck: the fake host ctx registers the route wiring",()=>{u.equal(o.Provided.routes.length,1),u.equal(o.Provided.routes[0].path,"/api/playform-cost/session")});const s=x();d(n,"selfcheck: the fake client ctx registers the tab and the locale wiring",()=>{u.equal(s.Provided.tabs.length,1),u.equal(s.Provided.tabs[0].options.id,"playform-cost"),u.equal(s.Provided.locales.length,1),u.equal(s.Provided.locales[0].namespace,"client-dsh-panel-cost")}),n.F===0&&n.N===2?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${n.N}, F=${n.F})`),process.exitCode=1)}export{d as Check,k as Client,w as ClientPlugin,v as Finish,y as Library,m as Make,x as MakeClient,h as MakeCounter,f as Plugin,R as Validate};
+import assert from "node:assert/strict";
+await import("./Alias-Hooks.js");
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const Library = await import("../../Target/Library.js");
+const Client = await import("../../Target/Client.js");
+const Plugin = Library.default;
+const ClientPlugin = Client.default;
+const Validate = (Raw = {}) => Plugin.Config({ ...Raw });
+const Make = (Options = {}) => {
+  const Routes = [];
+  const Info = [];
+  const Warn = [];
+  const Provided = { routes: Routes };
+  const Seen = { n: 0 };
+  const Server = {
+    Seen,
+    register: (Route) => {
+      Seen.n += 1;
+      Routes.push(Route);
+      return () => true;
+    }
+  };
+  const Services = {};
+  if (Options.none !== true) Services["webServer"] = Server;
+  const Ctx = {
+    get: (Name) => Services[Name],
+    logger: {
+      info: (Message) => {
+        Info.push(Message);
+      },
+      warn: (Message) => {
+        Warn.push(Message);
+      },
+      error: (Message) => {
+        Warn.push(Message);
+      },
+      debug: () => void 0
+    },
+    effect: (Setup) => {
+      const Disposer = Setup();
+      return typeof Disposer === "function" ? Disposer : void 0;
+    }
+  };
+  const Run = { Ctx, Provided, Routes, Server, Services, Info, Warn };
+  if (Options.defer !== true) {
+    Plugin.apply(Ctx);
+  }
+  return Run;
+};
+const MakeClient = () => {
+  const Tabs = [];
+  const Locales = [];
+  const Disposers = [];
+  const Effects = [];
+  const Info = [];
+  const Warn = [];
+  const Provided = { tabs: Tabs, locales: Locales, disposers: Disposers };
+  const Ctx = {
+    get: () => void 0,
+    logger: {
+      info: (Message) => {
+        Info.push(Message);
+      },
+      warn: (Message) => {
+        Warn.push(Message);
+      },
+      error: (Message) => {
+        Warn.push(Message);
+      },
+      debug: () => void 0
+    },
+    locale: {
+      register: (Namespace, Dictionaries) => {
+        Locales.push({ namespace: Namespace, dictionaries: Dictionaries });
+        const Disposer = () => true;
+        Disposers.push(Disposer);
+        return Disposer;
+      }
+    },
+    slots: {
+      inject: (Slot, Factory) => {
+        Effects.push(`inject ${Slot}`);
+        const Disposer = Factory();
+        if (typeof Disposer === "function") {
+          Disposers.push(Disposer);
+        }
+        return () => true;
+      },
+      register: (Registration, Component) => {
+        Tabs.push({ options: Registration, component: Component });
+        const Disposer = () => true;
+        Disposers.push(Disposer);
+        return Disposer;
+      }
+    },
+    effect: (Setup, Label) => {
+      Effects.push(Label ?? "unnamed");
+      Setup();
+      return () => true;
+    }
+  };
+  const Run = { Ctx, Provided, Tabs, Locales, Disposers, Effects, Info, Warn };
+  ClientPlugin.apply(Ctx);
+  return Run;
+};
+if (process.argv.includes("--selfcheck")) {
+  const Count = MakeCounter();
+  const HostRun = Make();
+  Check(Count, "selfcheck: the fake host ctx registers the route wiring", () => {
+    assert.equal(HostRun.Provided.routes.length, 1);
+    assert.equal(HostRun.Provided.routes[0].path, "/api/playform-cost/session");
+  });
+  const ClientRun = MakeClient();
+  Check(
+    Count,
+    "selfcheck: the fake client ctx registers the tab and the locale wiring",
+    () => {
+      assert.equal(ClientRun.Provided.tabs.length, 1);
+      assert.equal(ClientRun.Provided.tabs[0].options.id, "playform-cost");
+      assert.equal(ClientRun.Provided.locales.length, 1);
+      assert.equal(ClientRun.Provided.locales[0].namespace, "client-dsh-panel-cost");
+    }
+  );
+  if (Count.F === 0 && Count.N === 2) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  Check,
+  Client,
+  ClientPlugin,
+  Finish,
+  Library,
+  Make,
+  MakeClient,
+  MakeCounter,
+  Plugin,
+  Validate
+};
+//# sourceMappingURL=Harness.js.map

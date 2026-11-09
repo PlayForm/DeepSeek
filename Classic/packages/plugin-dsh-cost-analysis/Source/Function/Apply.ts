@@ -16,11 +16,12 @@
 // open failure is recorded, the plugin still loads, and the command says so
 // when it is invoked.
 import type { Context } from "@deepseek-ai/cordis";
-import type { CommandResult } from "@playform/lib-dsh-core";
+import { Bound, type CommandResult } from "@playform/lib-dsh-core";
 import type Factory from "@playform/plugin-dsh-factory";
 
 import type Config from "../Interface/Config.js";
 import type Metric from "../Interface/Metric.js";
+import { DefaultRenderLimit } from "../Variable/Config.js";
 import Analysis from "./Analysis.js";
 import Open from "./Open.js";
 
@@ -144,14 +145,21 @@ export default (Context: Context, Options: Config): void => {
 							text: `cost analysis ${Scope}: the ledger is empty`,
 						};
 					}
+					// The bounded render (the harness's list-page convention, the
+					// /cost report precedent): the first DefaultRenderLimit
+					// readings print, and the remainder is counted.
+					const { Shown, More } = Bound(Readings, DefaultRenderLimit);
 					const Lines: string[] = [
 						`cost analysis ${Scope} - ${Readings.length} reading(s)`,
 					];
-					for (const One of Readings) {
+					for (const One of Shown) {
 						Lines.push(`${One.Scope}  ${One.Key}`);
 						for (const Row of One.Rows) {
 							Lines.push(`  ${Short(Row)}`);
 						}
+					}
+					if (More > 0) {
+						Lines.push(`... ${More} more reading(s)`);
 					}
 					return { kind: "success", text: Lines.join("\n") };
 				},

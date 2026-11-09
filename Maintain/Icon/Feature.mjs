@@ -224,9 +224,14 @@ export const featuresOf = (root, dir) => {
 	const ChangelogPath = join(Base, "CHANGELOG.md");
 	const ChangelogText = existsSync(ChangelogPath) ? readFileSync(ChangelogPath, "utf8") : "";
 
+	// A runtime-free package (the SCSS-only material) ships no Library.ts, so
+	// the injection count is zero rather than a failed read.
+	const LibraryPath = join(Base, "Source", "Library.ts");
+	const Library = existsSync(LibraryPath) ? codeOf(readFileSync(LibraryPath, "utf8")) : "";
+
 	const features = {
 		functions,
-		injections: injectionsOf(codeOf(readFileSync(join(Base, "Source", "Library.ts"), "utf8"))),
+		injections: injectionsOf(Library),
 		events: eventsOf(Source),
 		tools: toolsOf(Source),
 		seams: seamsOf(Source),

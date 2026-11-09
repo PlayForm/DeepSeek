@@ -1,0 +1,1 @@
+import e from"../Trace.js";var o={id:"adapter-hook-dsh-normalize-invisible",bundle:"@playform/ets-hook-dsh-normalize-invisible",namespace:"hook-dsh-normalize-invisible",title:"normalize-invisible",order:14,slot:"playform.panel.section",activation:"enabled",traceKinds:e.kinds};export{o as default};

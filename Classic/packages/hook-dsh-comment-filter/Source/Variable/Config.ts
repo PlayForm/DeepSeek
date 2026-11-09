@@ -46,13 +46,7 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
 const DefaultLogFile = "~/.dsh/playform/hook-dsh-comment-filter.log";
 const DefaultEnabled = true;
 const DefaultTargets = ["read", "ccr_retrieve"];
-const DefaultExempt = [
-	"edit",
-	"raw-write",
-	"normalize-file",
-	"subagent",
-	"ask_user_question",
-];
+const DefaultExempt = ["edit", "raw-write", "normalize-file", "subagent", "ask_user_question"];
 const DefaultIntent = true;
 const DefaultIntentKeywords = [
 	"comment",
@@ -104,9 +98,7 @@ export default Compose(false, {
 	// substring) means the task is ABOUT comments, so the read result must
 	// stay untouched - stripping the very bytes the task is asking about
 	// would sabotage it. Volatile: the tuning surface of the gate.
-	intentKeywords: Schema.array(Schema.string())
-		.default(DefaultIntentKeywords)
-		.volatile(),
+	intentKeywords: Schema.array(Schema.string()).default(DefaultIntentKeywords).volatile(),
 	// Append the omission notice line to a stripped result: the model must be
 	// able to tell that the result is complete code with comments removed,
 	// not a file that never had comments. Volatile.

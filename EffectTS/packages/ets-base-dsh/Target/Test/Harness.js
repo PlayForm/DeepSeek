@@ -1,1 +1,58 @@
-import t from"node:assert/strict";import*as c from"node:fs";import*as i from"node:os";import*as a from"node:path";const l=()=>({N:0,F:0}),n=(o,e,s)=>{o.N++;try{s(),console.log(`PASS - ${e}`)}catch(r){o.F++,console.log(`FAIL - ${e}`),console.log(r instanceof Error?r.message:String(r))}},g=async(o,e,s)=>{o.N++;try{await s(),console.log(`PASS - ${e}`)}catch(r){o.F++,console.log(`FAIL - ${e}`),console.log(r instanceof Error?r.message:String(r))}},f=(o,e)=>{if(o.F!==0)throw new Error(`${e}: ${o.F} failed check(s)`);return o.N},F=o=>c.mkdtempSync(a.join(i.tmpdir(),o)),m=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(m){const o=l();n(o,"selfcheck: a passing assertion counts as PASS",()=>{t.equal(1,1)}),n(o,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{t.equal(1,2)}),o.N===2&&o.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${o.N}, F=${o.F})`),process.exitCode=1)}export{n as Check,g as CheckAsync,f as Finish,l as MakeCounter,F as TempRoot};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const TempRoot = (Prefix) => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  if (Count.N === 2 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  Check,
+  CheckAsync,
+  Finish,
+  MakeCounter,
+  TempRoot
+};
+//# sourceMappingURL=Harness.js.map

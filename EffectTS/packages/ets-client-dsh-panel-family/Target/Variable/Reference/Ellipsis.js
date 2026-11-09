@@ -1,0 +1,1 @@
+import e from"../Trace.js";var l={id:"adapter-hook-dsh-normalize-ellipsis",bundle:"@playform/ets-hook-dsh-normalize-ellipsis",namespace:"hook-dsh-normalize-ellipsis",title:"normalize-ellipsis",order:12,slot:"playform.panel.section",activation:"enabled",traceKinds:e.kinds};export{l as default};

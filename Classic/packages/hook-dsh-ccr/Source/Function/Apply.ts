@@ -48,8 +48,11 @@
 //     hook registers its own plain `ctx.on("tools/post-execute", ...)`,
 //     fiber-owned, removed on unload, no manual bookkeeping;
 //   * Factory.Attach has no consumer here: no jobs, no inflight
-//     continuations, no storage-domain journal traffic (the compression
-//     store is the plugin's OWN LRU, not the factory's lifecycle journal);
+//     continuations, no storage-domain journal traffic through the FACTORY
+//     (the compression store is the plugin's OWN LRU, not the factory's
+//     lifecycle journal); the P4 arm below opens the plugin's OWN
+//     `ccr_store` domain for the store's durable mirror, with the JSONL
+//     file as the recovery fallback for one release;
 //     the activation record still reaches the shared domain best-effort via
 //     Factory.Journal like every module's lifecycle line.
 //   * Factory.Schema is not used for Config: the module owns its schema
@@ -77,6 +80,7 @@ import Compress, { type Verdict } from "./Compress.js";
 import { Decide, type EngineRecord, type EngineRuntime } from "./Engine.js";
 import Marker from "./Marker.js";
 import Retrieve from "./Retrieve.js";
+import Storage, { Close } from "./Storage.js";
 import Store, { type Eviction } from "./Store.js";
 
 export default (Context: Context, Options: Config): void => {
@@ -113,6 +117,27 @@ export default (Context: Context, Options: Config): void => {
 	// global - HMR reloads rebind it cleanly.
 	State.Store = new Store(State.JournalPath);
 	State.Store.BudgetBytes = State.Budget;
+
+	// The P4 storage effect: probe `storageDomain` once and open the CCR
+	// hook's own domain (never awaited - best-effort inside). An ABSENT
+	// facility is a silent skip: the store keeps its existing JSONL journal
+	// path (the recovery fallback for one release). The disposer closes the
+	// handle (best-effort, never rethrown).
+	Context.effect?.(() => {
+		const Facility = Context.get?.("storageDomain");
+		switch (true) {
+			case !!Facility:
+				void Storage(State, Facility);
+				break;
+			default:
+				// Silent skip: nothing to open, nothing to close; the store's
+				// file journal remains the whole persistence path.
+				return () => {};
+		}
+		return () => {
+			Close();
+		};
+	}, "ccr-storage");
 
 	// The phase-4 context engine runtime: built ONLY when the flag is on.
 	// When off (the default), `EngineRuntime` stays undefined - no pre-step

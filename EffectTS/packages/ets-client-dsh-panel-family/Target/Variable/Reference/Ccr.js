@@ -1,0 +1,1 @@
+import e from"../Trace.js";var a={id:"adapter-hook-dsh-ccr",bundle:"@playform/ets-hook-dsh-ccr",namespace:"hook-dsh-ccr",title:"ccr",order:70,slot:"playform.panel.section",activation:"enabled",traceKinds:e.kinds};export{a as default};

@@ -1,1 +1,1 @@
-import l from"../Variable/Styles.js";const t="@playform/client-dsh-panel-family",n=`${t}/client.css`;function o(){if(typeof document>"u"||document.querySelector(`style[data-plugin-css="${n}"]`)!==null)return;const e=document.createElement("style");e.dataset.plugin=t,e.dataset.pluginCss=n,e.textContent=l,document.head.append(e)}export{o as default};
+import{Inject as t}from"@playform/lib-dsh-style";import o from"../Variable/Styles.js";const e="@playform/client-dsh-panel-family";function f(){t(e,o)}export{f as default};

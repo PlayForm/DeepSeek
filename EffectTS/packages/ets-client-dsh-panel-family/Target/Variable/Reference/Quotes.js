@@ -1,0 +1,1 @@
+import e from"../Trace.js";var a={id:"adapter-hook-dsh-normalize-quotes",bundle:"@playform/ets-hook-dsh-normalize-quotes",namespace:"hook-dsh-normalize-quotes",title:"normalize-quotes",order:11,slot:"playform.panel.section",activation:"enabled",traceKinds:e.kinds};export{a as default};

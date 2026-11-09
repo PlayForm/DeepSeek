@@ -1,0 +1,1 @@
+const r=e=>typeof e=="object"&&e!==null&&typeof e.editFull=="function";function i(e){const n=e.get("panelFamilyBridge");if(!0===r(n))return n;{const t=e.get("remote")?.playformFamilyPanel;return!0===r(t)?t:void 0}}export{i as default};

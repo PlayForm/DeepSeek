@@ -1,15 +1,15 @@
 {
 	"format": 1,
 	"counts": {
-		"packages": 122,
-		"classic": 62,
-		"effectTS": 60,
+		"packages": 125,
+		"classic": 64,
+		"effectTS": 61,
 		"hook": 60,
 		"plugin": 44,
 		"client": 7,
-		"lib": 11,
-		"mono": 122,
-		"colour": 122
+		"lib": 14,
+		"mono": 125,
+		"colour": 125
 	},
 	"icons": [
 		{
@@ -956,6 +956,29 @@
 			}
 		},
 		{
+			"package": "@playform/ets-lib-dsh-style",
+			"dir": "ets-lib-dsh-style",
+			"kind": "lib",
+			"tree": "EffectTS",
+			"version": "0.2.1",
+			"seed": "b0baafc6c0ecba1cda2db307db6f75e2339823c76270cdeefb20fd22e7f9ecbc",
+			"grammar": "crescent-ring",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "woven",
+			"mode": "traced",
+			"hash": {
+				"mono": "d720957faa70c0e2d2f772bbb907a1955f08a1eca296a192c24be204060c7845",
+				"colour": "023cf9a525a8323c58ed7437e4eb6a41671b8d4c41cf42b7436ace126544da38"
+			},
+			"path": {
+				"mono": "Maintain/Icon/Asset/Mono/ets-lib-dsh-style.svg",
+				"colour": "Maintain/Icon/Asset/Color/ets-lib-dsh-style.svg"
+			}
+		},
+		{
 			"package": "@playform/ets-lib-dsh-trace",
 			"dir": "ets-lib-dsh-trace",
 			"kind": "lib",
@@ -1536,17 +1559,17 @@
 			"kind": "hook",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "f896b0667205e3add769b6fbc20cd853946a1ac44c0bd38bfb3cf1eed75b8e00",
+			"seed": "3c018725ad081f0440a795678c5816919aaa8e78cfc25a0cdfe26f4d7aa5c568",
 			"grammar": "spike-star",
 			"order": 8,
 			"arms": 8,
 			"rings": 2,
 			"orbit": 12,
-			"rim": "diamond",
+			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "b3089e42619e589af5415b3ca86d07bd9efc4254d250ded4c9fdc39da5d4d288",
-				"colour": "a1b24122740d537e044b8462b77351ebc21df9656364b6e26ea326a12269cebb"
+				"mono": "659f81c19aadc426cc0c390330d9962fc44db583ca0e39b9bec7f817208fafb7",
+				"colour": "a7db87f87a74b854a28aec4eaedb16c08526bebe3e76aa060fa28502f22f3c90"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-ccr.svg",
@@ -2203,7 +2226,7 @@
 			"kind": "lib",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "9ebd4af40e37ffb7eee5d0dc70aea990d797e8e176dbc0cf9d4346ab51fbee70",
+			"seed": "1becf07f4644e6e99d399260aa456f6acabc7ddd6e12b235bd88aed60647ad0c",
 			"grammar": "crescent-ring",
 			"order": 4,
 			"arms": 4,
@@ -2212,8 +2235,8 @@
 			"rim": "none",
 			"mode": "single",
 			"hash": {
-				"mono": "dbab3f4abc0fd7cc5cb1ccaf070b683e8de40edc44e68369674abaab5f567e5a",
-				"colour": "e8fd5f022da710cdf548f9640b23e8be0db94e4acbff769a65848172bd870c88"
+				"mono": "07e6feebb60744c267868648af08507cc09c9c8d70b4d9b3ac5cb4fa5eb33419",
+				"colour": "3392159fd001bded0eda6965152591229302cf7a873f357daf502740db9832ce"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-core.svg",
@@ -2241,6 +2264,29 @@
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-pack.svg",
 				"colour": "Maintain/Icon/Asset/Color/lib-dsh-pack.svg"
+			}
+		},
+		{
+			"package": "@playform/lib-dsh-style",
+			"dir": "lib-dsh-style",
+			"kind": "lib",
+			"tree": "Classic",
+			"version": "0.2.1",
+			"seed": "ab2474d627f723916391eb948de4c0b7512c48d560e2449e03eb9f1f1ae5c207",
+			"grammar": "crescent-ring",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "woven",
+			"mode": "single",
+			"hash": {
+				"mono": "704e97fa18917074c85665fe4e8e037837868e52362b66d29e56db34524e289b",
+				"colour": "ab69a91b76396773abbb1f9515ce76b0e9be68d756696c8a0be80e4d025e1ec8"
+			},
+			"path": {
+				"mono": "Maintain/Icon/Asset/Mono/lib-dsh-style.svg",
+				"colour": "Maintain/Icon/Asset/Color/lib-dsh-style.svg"
 			}
 		},
 		{
@@ -2816,6 +2862,29 @@
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-workspace-semantics.svg",
 				"colour": "Maintain/Icon/Asset/Color/plugin-dsh-workspace-semantics.svg"
+			}
+		},
+		{
+			"package": "@playform/style-dsh-material",
+			"dir": "style-dsh-material",
+			"kind": "lib",
+			"tree": "Classic",
+			"version": "0.2.1",
+			"seed": "3fb8b20d77e14da321b4fa95fe2e4376627e08b7bf59c9c4ec1a78f46f6598d8",
+			"grammar": "crescent-ring",
+			"order": 4,
+			"arms": 4,
+			"rings": 0,
+			"orbit": 4,
+			"rim": "none",
+			"mode": "single",
+			"hash": {
+				"mono": "1b49ce2c538a3dc7d7e453468f9c074add47dac0ae1c1c8057efc122f355236e",
+				"colour": "260909e977f37b3885381b8e3e471b6fc787b151560d3da172ebd4dd3feab74f"
+			},
+			"path": {
+				"mono": "Maintain/Icon/Asset/Mono/style-dsh-material.svg",
+				"colour": "Maintain/Icon/Asset/Color/style-dsh-material.svg"
 			}
 		}
 	]

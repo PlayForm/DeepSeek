@@ -44,9 +44,7 @@ export default Compose(false, {
 	threshold: Schema.number().default(DefaultThreshold).volatile(),
 	// The judged doc-task tools (volatile): the read/search calls that touch
 	// documentation plus the edits that land on it.
-	tools: Schema.array(String)
-		.default(DefaultTools)
-		.volatile(),
+	tools: Schema.array(String).default(DefaultTools).volatile(),
 	// Maximum companions in one note (volatile).
 	maxCompanions: Schema.number().default(DefaultMaxCompanions).volatile(),
 	// Hard character cap on the note text (volatile).

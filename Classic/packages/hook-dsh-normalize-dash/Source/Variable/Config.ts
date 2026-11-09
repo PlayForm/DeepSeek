@@ -99,7 +99,5 @@ export default Compose(false, {
 	// normalize-file own their normalization, ccr_retrieve's bytes are the
 	// retrieval contract, subagent/ask_user_question carry prompt material
 	// matched verbatim.
-	toolResultsExempt: Schema.array(Schema.string())
-		.default(DefaultToolResultsExempt)
-		.volatile(),
+	toolResultsExempt: Schema.array(Schema.string()).default(DefaultToolResultsExempt).volatile(),
 });

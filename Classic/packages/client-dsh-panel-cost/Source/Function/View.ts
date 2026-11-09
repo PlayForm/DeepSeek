@@ -4,12 +4,13 @@
 // strip. It fetches the route on mount and on every session or row-budget
 // change, folds the envelope, and never throws: a failed fetch, a malformed
 // body, or a missing session id renders a state line.
+import { Button } from "@deepseek-ai/dsh-client-ui-primitives";
 import DetailRow from "@Function/DetailRow";
 import Fetch from "@Function/Fetch";
 import Fold from "@Function/Fold";
 import StepRow from "@Function/StepRow";
 import SummaryStrip from "@Function/SummaryStrip";
-import Table from "@Function/Table";
+import Table, { COLUMNS } from "@Function/Table";
 import TotalsRow from "@Function/TotalsRow";
 import TurnRow from "@Function/TurnRow";
 import type CostResponse from "@Interface/Response";
@@ -17,13 +18,12 @@ import type CostSnapshot from "@Interface/Snapshot";
 import type { Translate } from "@Interface/Translate";
 import type CostTurn from "@Interface/Turn";
 import type ViewProps from "@Interface/View";
+import Limits from "@Variable/Limits";
 import EN_DICTIONARY from "@Variable/Locale-en.json";
 import { createElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const DefaultRows = 200;
 const MaxRows = 2000;
-const LoadOlderFactor = 2;
-const StepLimit = 24;
 
 type Phase = "loading" | "ready" | "empty" | "unavailable" | "error";
 
@@ -259,7 +259,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 			Pending.current = { Height: Scroll.scrollHeight, Top: Scroll.scrollTop };
 		Growing.current = true;
 		SetOlder("loading");
-		SetRows((Current) => Math.min(MaxRows, Current * LoadOlderFactor));
+		SetRows((Current) => Math.min(MaxRows, Current * Limits.LoadOlderFactor));
 	}, []);
 
 	const Retry = useCallback(() => {
@@ -296,15 +296,15 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 			);
 			if (!Open) continue;
 			const Total = Turn.steps.length;
-			const All = ShowAll.has(Turn.turn) || Total <= StepLimit;
-			if (Total > StepLimit)
+			const All = ShowAll.has(Turn.turn) || Total <= Limits.StepLimit;
+			if (Total > Limits.StepLimit)
 				Body.push(
 					createElement(
 						"tr",
 						{ key: `more:${Turn.turn}` },
 						createElement(
 							"td",
-							{ className: "playform-cost-more-cell", colSpan: 11 },
+							{ className: "playform-cost-more-cell", colSpan: COLUMNS.length },
 							createElement(
 								"span",
 								{ className: "playform-cost-more-text" },
@@ -321,12 +321,14 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 								},
 								All
 									? t("steps.all", { total: Total })
-									: t("steps.tail", { limit: StepLimit }),
+									: t("steps.tail", { limit: Limits.StepLimit }),
 							),
 						),
 					),
 				);
-			const Shown = All ? Turn.steps : Turn.steps.slice(Math.max(0, Total - StepLimit));
+			const Shown = All
+				? Turn.steps
+				: Turn.steps.slice(Math.max(0, Total - Limits.StepLimit));
 			for (const Step of Shown) {
 				const Key = `${Turn.turn}:${Step.step}`;
 				const Expanded = StepOpen.has(Key);
@@ -363,14 +365,26 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 				);
 			case Older === "failed":
 				return createElement(
-					"button",
-					{ type: "button", className: "playform-cost-button", onClick: LoadOlder },
+					Button,
+					{
+						variant: "outline",
+						size: "sm",
+						type: "button",
+						className: "playform-cost-button",
+						onClick: LoadOlder,
+					},
 					t("loadOlder.failed"),
 				);
 			case Truncated:
 				return createElement(
-					"button",
-					{ type: "button", className: "playform-cost-button", onClick: LoadOlder },
+					Button,
+					{
+						variant: "outline",
+						size: "sm",
+						type: "button",
+						className: "playform-cost-button",
+						onClick: LoadOlder,
+					},
 					t("loadOlder"),
 				);
 			default:
@@ -425,8 +439,14 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 						t("error"),
 						false,
 						createElement(
-							"button",
-							{ type: "button", className: "playform-cost-button", onClick: Retry },
+							Button,
+							{
+								variant: "outline",
+								size: "sm",
+								type: "button",
+								className: "playform-cost-button",
+								onClick: Retry,
+							},
 							t("retry"),
 						),
 					),

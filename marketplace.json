@@ -2253,6 +2253,7 @@
 			"description": {
 				"en": "The STYLE: the one runtime stylesheet injector of the UI family (@playform/ets-lib-dsh-style) - the single <style> mount every client plugin calls, keyed by the data-plugin-css attribute, appended to the document head once per plugin file,..."
 			},
+			"icon": "Icon/ets-lib-dsh-style.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -5271,6 +5272,7 @@
 			"description": {
 				"en": "The STYLE: the one runtime stylesheet injector of the UI family (@playform/lib-dsh-style) - the single <style> mount every client plugin calls, keyed by the data-plugin-css attribute, appended to the document head once per plugin file,..."
 			},
+			"icon": "Icon/lib-dsh-style.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",
@@ -6582,6 +6584,7 @@
 			"description": {
 				"en": "The MATERIAL: the one place the family's UI base is developed (@playform/style-dsh-material) - the mixins, the base classes and the token expressions every client plugin's own stylesheet @uses over the harness alias tokens, so a new plugin..."
 			},
+			"icon": "Icon/style-dsh-material.svg",
 			"author": "PlayForm",
 			"repository": {
 				"url": "https://github.com/PlayForm/DeepSeek",

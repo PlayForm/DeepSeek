@@ -3,6 +3,7 @@
 // and Alloc. Every renderer emits exactly the classes and locale keys of
 // the design's sections 2 to 6, reads every field defensively, and never
 // throws on a malformed envelope.
+import { Tooltip } from "@deepseek-ai/dsh-client-ui-primitives";
 import Clock from "@Function/Clock";
 import CountShort from "@Function/CountShort";
 import Lines from "@Function/Lines";
@@ -49,6 +50,7 @@ type ModelCellProps = {
 
 type FilePill = {
 	Name: string;
+	Path?: string;
 	Tone: number;
 	Count: number;
 	Lines: number | null;
@@ -94,6 +96,40 @@ type BarCellProps = {
 };
 
 const ToneClass = (Tone: number): string => `playform-cost-tone${Tone}`;
+
+const ModelText = (Text: string, Identifier: string): ReturnType<typeof createElement> =>
+	createElement(Tooltip, {
+		label: Identifier,
+		portal: true,
+		onlyWhenClipped: true,
+		disabled: Identifier === "",
+		children: createElement("span", { className: "playform-cost-model-text" }, Text),
+	});
+
+// The pill carries the full path in a tooltip and keeps the native lines
+// title only when no path reached it: two hover answers would both fire.
+const PillNode = (
+	Pill: FilePill,
+	Index: number,
+	t: Translate,
+): ReturnType<typeof createElement> =>
+	createElement(Tooltip, {
+		key: Index,
+		label: Pill.Path ?? Pill.Name,
+		portal: true,
+		disabled: Pill.Path === undefined,
+		children: createElement(
+			"span",
+			{
+				className: "playform-cost-pill",
+				...(Pill.Path === undefined && Pill.Lines !== null && Pill.Lines !== 0
+					? { title: t("files.lines", { lines: Lines(Pill.Lines) }) }
+					: {}),
+			},
+			createElement("span", { className: `playform-cost-dot ${ToneClass(Pill.Tone)}` }),
+			Pill.Name,
+		),
+	});
 
 const MarkerSpan = (Marker: Marker, Index: number): ReturnType<typeof createElement> =>
 	createElement(
@@ -149,6 +185,7 @@ const Model = (Props: ModelCellProps): ReturnType<typeof createElement> => {
 	const Region = Props.Region;
 	const Tier = Props.Tier;
 	const When = Props.When;
+	const Identifier = [Props.Provider, Props.Model].filter((Part) => Part !== "").join("/");
 	return createElement(
 		"td",
 		{
@@ -166,7 +203,7 @@ const Model = (Props: ModelCellProps): ReturnType<typeof createElement> => {
 			"span",
 			{ className: "playform-cost-model-clip" },
 			createElement("span", { className: "playform-cost-model-pill" }, Props.Provider),
-			createElement("span", { className: "playform-cost-model-text" }, Props.Model),
+			ModelText(Props.Model, Identifier),
 			Mode === undefined || Mode === ""
 				? null
 				: createElement("span", { className: "playform-cost-pill" }, Mode),
@@ -220,22 +257,21 @@ const Files = (Props: FilesCellProps): ReturnType<typeof createElement> => {
 							: null,
 						Shown.map((Pill, Index) =>
 							createElement(
-								"span",
+								Tooltip,
 								{
 									key: Index,
-									className: "playform-cost-pill",
-									...(Pill.Lines === null || Pill.Lines === 0
-										? {}
-										: {
-												title: Props.t("files.lines", {
-													lines: Lines(Pill.Lines),
-												}),
-											}),
+									label: Pill.Path ?? Pill.Name,
+									portal: true,
+									disabled: Pill.Path === undefined,
 								},
-								createElement("span", {
-									className: `playform-cost-dot ${ToneClass(Pill.Tone)}`,
-								}),
-								Pill.Name,
+								createElement(
+									"span",
+									{ className: "playform-cost-pill", ...PillTitle(Pill, Props.t) },
+									createElement("span", {
+										className: `playform-cost-dot ${ToneClass(Pill.Tone)}`,
+									}),
+									Pill.Name,
+								),
 							),
 						),
 						Extra > 0
