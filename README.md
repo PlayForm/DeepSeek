@@ -341,14 +341,15 @@ The original 14 plugins (plus `lib-dsh-core`) each read as an @-sentence:
   plugin's own sheet `@use`s), `lib-dsh-style` (the shared `<style>` injector), and its
   `ets-lib-dsh-style` twin.
 
-Every one of the 59 Classic packages has an ETS twin.
+Every one of the 61 Classic packages has an ETS twin except the runtime-free `style-dsh-material`,
+which both trees compile.
 
 ### The two trees and the layout
 
 | Tree        | What it is                                                                                                                                      |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 59 packages; 299 smoke folders.          |
-| `EffectTS/` | The Effect v4 port - the same contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.7 pin). 60 packages; 296 smoke folders. |
+| `Classic/`  | The plain-TypeScript release - classes, Maps and plain functions, zero runtime framework dependencies. 61 packages; 299 smoke folders.          |
+| `EffectTS/` | The Effect v4 port - the same contracts re-expressed on Effect-TS services and layers (the `effect` 4.0.7 pin). 61 packages; 296 smoke folders. |
 
 Every package carries an `ets-*` twin, which gives 59 twins for the 59 Classic packages.
 
