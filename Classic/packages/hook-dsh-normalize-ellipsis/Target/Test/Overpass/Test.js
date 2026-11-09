@@ -1,13 +1,5 @@
 import assert from "node:assert/strict";
-import {
-  Check,
-  Finish,
-  Furnace,
-  MakeCounter,
-  Ledger,
-  Make,
-  rm
-} from "../Harness.js";
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   rm();
@@ -53,7 +45,10 @@ const runTest = async () => {
     const Sub = "overpass: the agent/pre-step arm is registered";
     {
       Check(Count, Sub, () => {
-        assert.ok(typeof PreO === "function", "overpass: the agent/pre-step arm is registered");
+        assert.ok(
+          typeof PreO === "function",
+          "overpass: the agent/pre-step arm is registered"
+        );
       });
     }
   }
@@ -217,7 +212,10 @@ const runTest = async () => {
     const Sub = "overpass: N=0 -> no ledger line (the no-op rule)";
     {
       Check(Count, Sub, () => {
-        assert.ok(RunO.Lines.length === LinesBeforeO5, "overpass: N=0 -> no ledger line (the no-op rule)");
+        assert.ok(
+          RunO.Lines.length === LinesBeforeO5,
+          "overpass: N=0 -> no ledger line (the no-op rule)"
+        );
       });
     }
   }
@@ -271,7 +269,10 @@ const runTest = async () => {
   const OutO8 = await PostO(
     ExecO("bash"),
     { isError: false, value: {}, content: [{ type: "text", text: "raw \u2026 result" }] },
-    async () => ({ kind: "accept", content: [{ type: "text", text: "downstream \u2026 shaped" }] })
+    async () => ({
+      kind: "accept",
+      content: [{ type: "text", text: "downstream \u2026 shaped" }]
+    })
   );
   {
     const Sub = "overpass: the downstream decision's content is the basis (not the raw result)";
@@ -365,7 +366,10 @@ const runTest = async () => {
     const Sub = "overpass: N=0 batch -> no ledger line";
     {
       Check(Count, Sub, () => {
-        assert.ok(RunO.Lines.length === LinesBeforeO11, "overpass: N=0 batch -> no ledger line");
+        assert.ok(
+          RunO.Lines.length === LinesBeforeO11,
+          "overpass: N=0 batch -> no ledger line"
+        );
       });
     }
   }
@@ -497,7 +501,10 @@ const runTest = async () => {
     const Sub = "overpass: 'results' without on|off is a usage error";
     {
       Check(Count, Sub, () => {
-        assert.ok(ResultsBadO.kind === "error", "overpass: 'results' without on|off is a usage error");
+        assert.ok(
+          ResultsBadO.kind === "error",
+          "overpass: 'results' without on|off is a usage error"
+        );
       });
     }
   }

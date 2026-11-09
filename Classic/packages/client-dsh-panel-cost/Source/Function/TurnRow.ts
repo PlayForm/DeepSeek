@@ -1,16 +1,13 @@
 // TurnRow - the turn row: the toggle button, the turn clock, the scope
-// markers, the eleven cells with the turn-level classes, and the turn bar
-// scaled against the largest turn total of the loaded window.
-import Cells from "@Function/Cells";
-import CountShort from "@Function/CountShort";
-import Price from "@Function/Price";
-import Rate from "@Function/Rate";
+// markers, and one cell per resolved column. The row builds the cell source
+// from the turn's own aggregates and lets each column's render build its
+// cell, so a hidden or reordered column moves the header and the body
+// together.
+import type { TurnsCells } from "@Function/Columns";
 import Stamp from "@Function/Stamp";
-import type CostBuckets from "@Interface/Buckets";
-import type CostTokens from "@Interface/Tokens";
+import type { ResolvedTable } from "@Interface/Table";
 import type { Translate } from "@Interface/Translate";
 import type CostTurn from "@Interface/Turn";
-import Dash from "@Variable/Dash";
 import { createElement } from "react";
 
 const CacheMissThreshold = 0.5;
@@ -26,6 +23,7 @@ type TurnRowProps = {
 	Open: boolean;
 	Scale: number;
 	OnToggle: () => void;
+	Resolved: ResolvedTable<TurnsCells>;
 	t: Translate;
 };
 
@@ -87,77 +85,14 @@ const Markers = (Turn: CostTurn, t: Translate): readonly Marker[] => {
 	return List;
 };
 
-const TokenCell = (Cell: string, Value: number): ReturnType<typeof createElement> =>
-	createElement(
-		"td",
-		{ className: Cell },
-		createElement("span", { className: "playform-cost-num" }, CountShort(Value)),
-	);
-
-const CacheCell = (
-	Cell: string,
-	Tokens: CostTokens,
-	Hit: number | null,
-	t: Translate,
-): ReturnType<typeof createElement> => {
-	const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
-	const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
-	const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
-	const Base = Read + Input + Write;
-	switch (true) {
-		case Base <= 0:
-			return createElement("td", { className: Cell, title: t("unknown") }, Dash);
-		case Read > 0 || Write > 0:
-			return createElement(
-				"td",
-				{
-					className: Cell,
-					title: t("cache.detail", {
-						read: CountShort(Read),
-						input: CountShort(Input),
-						write: CountShort(Write),
-					}),
-				},
-				createElement("span", { className: "playform-cost-num" }, Rate(Hit)),
-			);
-		default:
-			return createElement(
-				"td",
-				{ className: Cell, title: t("column.cache.title") },
-				createElement("span", { className: "playform-cost-num" }, Rate(Hit)),
-			);
-	}
-};
-
-const OtherTitle = (Cost: CostBuckets, Currency: string, t: Translate): string => {
-	const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
-	const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
-	switch (true) {
-		case Write > 0 || Reasoning > 0:
-			return t("other.detail", {
-				write: Price(Write, Currency),
-				reasoning: Price(Reasoning, Currency),
-				rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency),
-			});
-		default:
-			return t("column.other.title");
-	}
-};
-
 export default function TurnRow(Props: TurnRowProps): ReturnType<typeof createElement> {
 	const Turn = Props.Turn;
 	const t = Props.t;
 	const Tag = Money(Turn);
 	const Metric = "playform-cost-turn-metric";
-	return createElement(
-		"tr",
-		{
-			className: "playform-cost-turn-row",
-			"data-turn": String(Turn.turn),
-			title: t("turn.toggle.title"),
-			onClick: Props.OnToggle,
-		},
-		Cells.Scope({
+	const Row: TurnsCells = {
+		Key: `turn:${Turn.turn}`,
+		scope: {
 			Cell: "playform-cost-turn-cell",
 			Toggle: {
 				Expanded: Props.Open,
@@ -171,13 +106,13 @@ export default function TurnRow(Props: TurnRowProps): ReturnType<typeof createEl
 				Title: t("turn.started", { time: Stamp(Turn.at) }),
 			},
 			Markers: Markers(Turn, t),
-		}),
-		Cells.Model({
+		},
+		model: {
 			Cell: "playform-cost-model-cell-turn",
 			Provider: Turn.provider,
 			Model: Turn.model,
-		}),
-		Cells.Files({
+		},
+		files: {
 			Cell: "playform-cost-turn-files",
 			Pills: Turn.files.map((Tally) => ({
 				Name: BaseName(Tally.key),
@@ -192,28 +127,21 @@ export default function TurnRow(Props: TurnRowProps): ReturnType<typeof createEl
 			Tokens: Turn.tokens.total,
 			Currency: Tag,
 			ShowMix: Turn.files.length > 0,
-			t,
-		}),
-		TokenCell(Metric, Turn.tokens.total),
-		CacheCell(Metric, Turn.tokens, Turn.cacheHit, t),
-		Cells.Money({ Cell: Metric, Value: Turn.cost.cacheRead, Currency: Tag }),
-		Cells.Money({ Cell: Metric, Value: Turn.cost.input, Currency: Tag }),
-		Cells.Money({ Cell: Metric, Value: Turn.cost.output, Currency: Tag }),
-		Cells.Money({
-			Cell: Metric,
-			Value: Turn.cost.other,
-			Currency: Tag,
-			Title: OtherTitle(Turn.cost, Tag, t),
-		}),
-		Cells.Alloc({
+		},
+		tokens: { Cell: Metric, Value: Turn.tokens.total },
+		cache: { Cell: Metric, Tokens: Turn.tokens, Hit: Turn.cacheHit },
+		cacheRead: { Cell: Metric, Value: Turn.cost.cacheRead, Currency: Tag },
+		input: { Cell: Metric, Value: Turn.cost.input, Currency: Tag },
+		output: { Cell: Metric, Value: Turn.cost.output, Currency: Tag },
+		other: { Cell: Metric, Value: Turn.cost.other, Currency: Tag, Cost: Turn.cost },
+		allocation: {
 			Cell: Metric,
 			Direct: Turn.direct,
 			Amortized: Turn.amortized,
 			Has: Turn.direct !== 0 || Turn.amortized !== 0,
 			Currency: Tag,
-			t,
-		}),
-		Cells.Bar({
+		},
+		total: {
 			Cell: Metric,
 			Track: "playform-cost-bar-turn",
 			Total: Turn.cost.total,
@@ -221,7 +149,16 @@ export default function TurnRow(Props: TurnRowProps): ReturnType<typeof createEl
 			Scale: Props.Scale,
 			Currency: Tag,
 			Start: null,
-			t,
-		}),
+		},
+	};
+	return createElement(
+		"tr",
+		{
+			className: "playform-cost-turn-row",
+			"data-turn": String(Turn.turn),
+			title: t("turn.toggle.title"),
+			onClick: Props.OnToggle,
+		},
+		...Props.Resolved.columns.map((Column) => Column.render(Row, { t })),
 	);
 }

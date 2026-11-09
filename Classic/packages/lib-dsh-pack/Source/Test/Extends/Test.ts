@@ -1,17 +1,15 @@
-import assert from "node:assert/strict";
-
-import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
-
 /**
  * @module Test
  *
- * The cycle-guarded extends chain against REAL temporary user layers: a base, a
- * middle pack, a cycle, a self-cycle, a missing link and an array of bases.
+ * The cycle-guarded extends chain against REAL temporary user layers: a base, a middle pack,
+ * a cycle, a self-cycle, a missing link and an array of bases.
  *
  * @remarks
- * The repo layer always overrides its bases; a base already visited is merged
- * once.
+ * The repo layer always overrides its bases; a base already visited is merged once.
  */
+import assert from "node:assert/strict";
+
+import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
 
 /** The repo layer: the slug, the signature and the extends link. */
 const Repo = (Extends: string, Family = ""): string =>
@@ -41,11 +39,7 @@ export const runTest = async (): Promise<number> => {
 		const Root = Tree("pack-extends-chain-");
 		Put(Home, ".dsh/playform/workspaces/base.yml", Pack("", "docs/BASE.md", 1));
 		Put(Home, ".dsh/playform/workspaces/mid.yml", Pack("base", "docs/MID.md", 2));
-		Put(
-			Root,
-			".dsh/pack.yml",
-			Repo("mid", `families:\n  "doc/Plan":\n    threshold: 0.5\n`),
-		);
+		Put(Root, ".dsh/pack.yml", Repo("mid", `families:\n  "doc/Plan":\n    threshold: 0.5\n`));
 		Put(Root, "docs/S.md");
 		Check(Count, "E1: the chain merges base, middle and repo in order", () => {
 			const Plan = Library.Resolve(Root, { home: Home }).families?.["doc/Plan"];

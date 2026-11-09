@@ -1,12 +1,5 @@
 import assert from "node:assert/strict";
-import {
-  Check,
-  Finish,
-  Library,
-  MakeCounter,
-  Put,
-  Tree
-} from "../Harness.js";
+import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
 const Repo = `signature:
   - docs/STYLE.md
 slug: custom
@@ -36,11 +29,15 @@ const runTest = async () => {
       assert.equal(Library.Resolve(Root, { home: Home }), Library.Builtin);
       assert.equal(Library.Families(Library.Resolve(Root, { home: Home }), "doc").length, 7);
     });
-    Check(Count, "R1: the locator finds the built-in workspace by the default signature", () => {
-      const Located = Library.Locate("Documentation/INDEX.md", Root, { home: Home });
-      assert.equal(Located?.root, Root);
-      assert.equal(Located?.pack, Library.Builtin);
-    });
+    Check(
+      Count,
+      "R1: the locator finds the built-in workspace by the default signature",
+      () => {
+        const Located = Library.Locate("Documentation/INDEX.md", Root, { home: Home });
+        assert.equal(Located?.root, Root);
+        assert.equal(Located?.pack, Library.Builtin);
+      }
+    );
   }
   {
     const Home = Tree("pack-resolve-home-");

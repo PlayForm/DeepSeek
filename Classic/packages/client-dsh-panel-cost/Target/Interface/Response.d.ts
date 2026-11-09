@@ -4,6 +4,15 @@ import type CostModelRow from "./ModelRow.js";
 import type CostSession from "./Session.js";
 import type CostStageRow from "./StageRow.js";
 import type CostSummary from "./Summary.js";
+export interface Valuation {
+    basis: "as-recorded" | "corrected" | "current" | "scenario";
+    revisionId: number;
+    policyVersion: string;
+    calculatedAt: number;
+    recorded: number;
+    revised: number;
+    difference: number;
+}
 export default interface CostResponse {
     ok: boolean;
     code: "ok" | "session" | "unavailable" | "error";
@@ -19,4 +28,5 @@ export default interface CostResponse {
     files: readonly CostFileRow[] | null;
     stages: readonly CostStageRow[] | null;
     models: readonly CostModelRow[] | null;
+    valuation?: Valuation;
 }

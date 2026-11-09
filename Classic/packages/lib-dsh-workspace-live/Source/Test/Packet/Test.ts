@@ -1,16 +1,16 @@
-import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Packet } from "../Harness.js";
-
 /**
  * @module Test
  *
- * The orientation-packet renderer's smokes over the built `Packet` export.
+ * The Packet unit smoke: the orientation-packet renderer.
  *
  * @remarks
- * The full eight-line grammar byte-exact, the `(none)` placeholders for absent
- * bands, the omitted FOCUS and STALE lines, and the STALE-only-on-difference
- * rule.
+ * The folder covers the full eight-line grammar byte-exact, the `(none)`
+ * placeholders for absent bands, the omitted FOCUS and STALE lines, and the
+ * STALE-only-on-difference rule.
  */
+import assert from "node:assert/strict";
+
+import { Check, Finish, MakeCounter, Packet } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -49,27 +49,31 @@ export const runTest = async (): Promise<number> => {
 
 	// Group P2: the absent bands.
 	{
-		Check(Count, "P2: absent bands render `(none)` placeholders and FOCUS/STALE are omitted", () => {
-			assert.equal(
-				Packet({
-					workspace: "w",
-					indexRevision: "r1",
-					scope: "s",
-					map: [],
-					neighbors: [],
-					evidence: [],
-					open: [],
-				}),
-				[
-					"WORKSPACE w @ r1",
-					"SCOPE s",
-					"MAP (none)",
-					"NEIGHBORS (none)",
-					"EVIDENCE (none)",
-					"OPEN (none)",
-				].join("\n"),
-			);
-		});
+		Check(
+			Count,
+			"P2: absent bands render `(none)` placeholders and FOCUS/STALE are omitted",
+			() => {
+				assert.equal(
+					Packet({
+						workspace: "w",
+						indexRevision: "r1",
+						scope: "s",
+						map: [],
+						neighbors: [],
+						evidence: [],
+						open: [],
+					}),
+					[
+						"WORKSPACE w @ r1",
+						"SCOPE s",
+						"MAP (none)",
+						"NEIGHBORS (none)",
+						"EVIDENCE (none)",
+						"OPEN (none)",
+					].join("\n"),
+				);
+			},
+		);
 	}
 
 	// Group P3: the stale marker.
@@ -103,7 +107,7 @@ export const runTest = async (): Promise<number> => {
 	return Finish(Count, "Packet");
 };
 
-/** Standalone entry: `node Target/Test/Packet/Test.js`. */
+// Standalone entry: `node Target/Test/Packet/Test.js`.
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

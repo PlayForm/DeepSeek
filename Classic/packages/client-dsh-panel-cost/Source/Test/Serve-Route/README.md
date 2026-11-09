@@ -6,8 +6,9 @@ registration rather than a re-implementation of the handler.
 
 ## Scenarios
 
-- S1: the apply registered exactly one route, and its path is the documented
-  `/api/playform-cost/session`.
+- S1: the apply registered the three routes in order, and their paths are the
+  documented `/api/playform-cost/session`, `/api/playform-cost/catalogs` and
+  `/api/playform-cost/rates`.
 - S2: calling the route's handler with a fake request whose URL carries no
   `session` parameter and a fake response (`writeHead` + `end`, capturing
   into local variables) writes a 200 with
@@ -16,10 +17,10 @@ registration rather than a re-implementation of the handler.
   `ok === false`, `code === "session"`, `rows === 200`, `session === null`,
   an empty `calls` list, and a message naming the missing session id. The
   handler never opens the ledger on that path.
-- S3: the registration happened through the webServer port and only there:
-  the route captured into `Provided.routes` is exactly what the fake
-  server's own register counter saw (`Seen.n === 1`), and the handler is a
-  function.
+- S3: the registrations happened through the webServer port and only there:
+  the three routes captured into `Provided.routes` are exactly what the fake
+  server's own register counter saw (`Seen.n === 3`), and the first handler is
+  a function.
 - S4: with no webServer (`ctx.get` returns undefined) the host apply does
   not throw and registers nothing.
 

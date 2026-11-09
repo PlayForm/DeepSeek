@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Ledger, Make } from "../Harness.js";
+import { Check, Finish, Ledger, Make, MakeCounter } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   const SCOPES_DEFAULT = {
@@ -49,7 +49,10 @@ const runTest = async () => {
     const Sub = "scopes.conversation off: text-delta passes by identity";
     {
       Check(Count, Sub, () => {
-        assert.ok(OutS1[0] === TextChunkS, "scopes.conversation off: text-delta passes by identity");
+        assert.ok(
+          OutS1[0] === TextChunkS,
+          "scopes.conversation off: text-delta passes by identity"
+        );
       });
     }
   }

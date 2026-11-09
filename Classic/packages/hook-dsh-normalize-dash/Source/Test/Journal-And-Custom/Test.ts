@@ -1,20 +1,31 @@
-// Source/Test/Journal-And-Custom/Test.ts - one singular test: the journaling
-// mechanics and the custom-replacement run - the P5 record shape and routing,
-// the N=0/throw/identity negative controls, the custom $-literal replacement
-// (config unwrap, literal insertion, its count line and its journal record),
-// and the transport-boom error path. The suite's journal arithmetic is
-// CUMULATIVE on the factory-level PendingJournal, so this folder replays the
-// generating streams (Run 1's 10-replacement stream, Run 2, Run 3, Run 4,
-// Run 5, Run 7, 7b, 7c, 7d) as silent fixtures in suite order - every check
-// below is byte-verbatim and the arithmetic reproduces the source suite's
-// values exactly when run standalone OR under the aggregate.
-// Runs standalone (`node Target/Test/Journal-And-Custom/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
-import { existsSync, readFileSync } from "node:fs";
+/**
+ * @module Test
+ *
+ * The Journal-And-Custom unit smoke: the journaling mechanics and the
+ * custom-replacement run.
+ *
+ * @remarks
+ * The one singular test covers the P5 record shape and routing, the
+ * N=0/throw/identity negative controls, the custom `$`-literal replacement (the
+ * Config unwrap, the literal insertion, its count line and its journal record),
+ * and the transport-boom error path.
+ *
+ * The suite's journal arithmetic is CUMULATIVE on the factory-level
+ * PendingJournal, so this folder replays the generating streams (Run 1's
+ * 10-replacement stream, Run 2, Run 3, Run 4, Run 5, Run 7, 7b, 7c, 7d) as
+ * silent fixtures in suite order. Every check is byte-verbatim and the
+ * arithmetic reproduces the source suite's values exactly when the folder runs
+ * standalone or under the aggregate.
+ *
+ * The smoke is the fake ctx + the REAL factory + the REAL dash apply, all from
+ * the Harness. The folder runs standalone
+ * (`node Target/Test/Journal-And-Custom/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
+import { existsSync, readFileSync } from "node:fs";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -37,7 +48,11 @@ export const runTest = async (): Promise<number> => {
 			{ type: "reasoning-delta", index: 2, text: "\u2014x\u2013" },
 			{ type: "block-end", index: 0, block: { type: "text", text: "\u2014kept \u2013gone" } },
 			{ type: "block-end", index: 2, block: { type: "reasoning", text: "\u2014y" } },
-			{ type: "block-end", index: 3, block: { type: "reasoning", text: "", thinking: "\u2014z" } },
+			{
+				type: "block-end",
+				index: 3,
+				block: { type: "reasoning", text: "", thinking: "\u2014z" },
+			},
 			{ type: "usage", usage: { input: 1, output: 2 } },
 			{ type: "finish", reason: "stop" },
 		];
@@ -87,9 +102,12 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 		{
-			const Sub = "the record routes to the factory pre-bind buffer (stage 2), not the per-State queue";
+			const Sub =
+				"the record routes to the factory pre-bind buffer (stage 2), not the per-State queue";
 			Check(Count, Sub, () => {
-				assert.ok(Run1.State.Queue.filter((R: any) => R.event === "normalized").length === 0);
+				assert.ok(
+					Run1.State.Queue.filter((R: any) => R.event === "normalized").length === 0,
+				);
 			});
 		}
 	}
@@ -110,7 +128,10 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "NO journal record when nothing was replaced (N=0)";
 			Check(Count, Sub, () => {
-				assert.ok(Furnace.PendingJournal.filter((R: any) => R.event === "normalized").length === 1);
+				assert.ok(
+					Furnace.PendingJournal.filter((R: any) => R.event === "normalized").length ===
+						1,
+				);
 			});
 		}
 	}
@@ -134,7 +155,8 @@ export const runTest = async (): Promise<number> => {
 			Out3.push(C);
 		}
 		{
-			const Sub = "custom replacement inserted LITERALLY (function replacer, no $-pattern interpretation)";
+			const Sub =
+				"custom replacement inserted LITERALLY (function replacer, no $-pattern interpretation)";
 			Check(Count, Sub, () => {
 				assert.ok(Out3[0].text === "$&end");
 			});
@@ -143,7 +165,11 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "count line reflects custom-replacement run";
 			Check(Count, Sub, () => {
-				assert.ok(readFileSync(Ledger, "utf8").includes("normalized 1 dash char(s) in one stream"));
+				assert.ok(
+					readFileSync(Ledger, "utf8").includes(
+						"normalized 1 dash char(s) in one stream",
+					),
+				);
 			});
 		}
 		const JournalRun3 = Furnace.PendingJournal.filter((R: any) => R.event === "normalized");
@@ -191,13 +217,18 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "NO count line after an upstream throw";
 			Check(Count, Sub, () => {
-				assert.ok(!existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized"));
+				assert.ok(
+					!existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized"),
+				);
 			});
 		}
 		{
 			const Sub = "NO journal record after an upstream throw";
 			Check(Count, Sub, () => {
-				assert.ok(Furnace.PendingJournal.filter((R: any) => R.event === "normalized").length === 2);
+				assert.ok(
+					Furnace.PendingJournal.filter((R: any) => R.event === "normalized").length ===
+						2,
+				);
 			});
 		}
 	}
@@ -217,7 +248,10 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "identity stream (count 0) adds no journal record";
 			Check(Count, Sub, () => {
-				assert.ok(Furnace.PendingJournal.filter((R: any) => R.event === "normalized").length === 2);
+				assert.ok(
+					Furnace.PendingJournal.filter((R: any) => R.event === "normalized").length ===
+						2,
+				);
 			});
 		}
 	}
@@ -237,7 +271,12 @@ export const runTest = async (): Promise<number> => {
 		const ToolBlockEnd7 = {
 			type: "block-end",
 			index: 2,
-			block: { type: "tool-call", id: "call_1", name: "write", arguments: '{"path":"a\u2014b"}' },
+			block: {
+				type: "tool-call",
+				id: "call_1",
+				name: "write",
+				arguments: '{"path":"a\u2014b"}',
+			},
 		};
 		for await (const C of L7(Object.freeze({}), () =>
 			(async function* () {
@@ -252,7 +291,8 @@ export const runTest = async (): Promise<number> => {
 			const Sub = "tool-args replacements journal too (delta + block in one count record)";
 			Check(Count, Sub, () => {
 				assert.ok(
-					JournalRun7.length === 3 && JournalRun7[2].detail === "normalized 2 dash char(s) in one stream",
+					JournalRun7.length === 3 &&
+						JournalRun7[2].detail === "normalized 2 dash char(s) in one stream",
 				);
 			});
 		}
@@ -290,7 +330,10 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "NO journal record for an edit-only stream (nothing normalized)";
 			Check(Count, Sub, () => {
-				assert.ok(Furnace.PendingJournal.filter((R: any) => R.event === "normalized").length === 3);
+				assert.ok(
+					Furnace.PendingJournal.filter((R: any) => R.event === "normalized").length ===
+						3,
+				);
 			});
 		}
 	}
@@ -333,9 +376,13 @@ export const runTest = async (): Promise<number> => {
 			void C;
 		}
 		{
-			const Sub = "NO journal record for a raw-marked stream (the strip is not a normalization)";
+			const Sub =
+				"NO journal record for a raw-marked stream (the strip is not a normalization)";
 			Check(Count, Sub, () => {
-				assert.ok(Furnace.PendingJournal.filter((R: any) => R.event === "normalized").length === 3);
+				assert.ok(
+					Furnace.PendingJournal.filter((R: any) => R.event === "normalized").length ===
+						3,
+				);
 			});
 		}
 	}
@@ -366,7 +413,8 @@ export const runTest = async (): Promise<number> => {
 		}
 		const JournalRun7d = Furnace.PendingJournal.filter((R: any) => R.event === "normalized");
 		{
-			const Sub = "the run 7d record journals only the normalized call (the raw call stays invisible)";
+			const Sub =
+				"the run 7d record journals only the normalized call (the raw call stays invisible)";
 			Check(Count, Sub, () => {
 				assert.ok(
 					JournalRun7d.length === 4 &&

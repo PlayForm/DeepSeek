@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Ledger } from "../Harness.js";
+import { Check, Finish, Ledger, Make, MakeCounter } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   {

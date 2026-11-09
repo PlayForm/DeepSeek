@@ -1,19 +1,17 @@
 // StepRow - the step row: the toggle button (only when the step carries
 // evidence: files, allocations, money, usage or an error), the state
-// markers, the step clock beside the model pill, the eleven cells with the
-// step-level classes, and the step bar scaled against the largest step
-// total of the step's own turn.
-import Cells from "@Function/Cells";
-import CountShort from "@Function/CountShort";
-import Price from "@Function/Price";
-import Rate from "@Function/Rate";
+// markers, the step clock beside the model pill, and one cell per resolved
+// column. The row builds the cell source from the step's own ledger fields
+// and lets each column's render build its cell, so a hidden or reordered
+// column moves the header and the body together.
+import type { TurnsCells } from "@Function/Columns";
 import Stamp from "@Function/Stamp";
 import type CostBuckets from "@Interface/Buckets";
 import type CostFile from "@Interface/File";
 import type CostStep from "@Interface/Step";
+import type { ResolvedTable } from "@Interface/Table";
 import type CostTokens from "@Interface/Tokens";
 import type { Translate } from "@Interface/Translate";
-import Dash from "@Variable/Dash";
 import { createElement } from "react";
 
 const CacheMissThreshold = 0.5;
@@ -29,6 +27,7 @@ type StepRowProps = {
 	Expanded: boolean;
 	Scale: number;
 	OnToggle: () => void;
+	Resolved: ResolvedTable<TurnsCells>;
 	t: Translate;
 };
 
@@ -81,63 +80,6 @@ const Markers = (Step: CostStep, t: Translate): readonly Marker[] => {
 			Title: t("state.cacheMiss.title"),
 		});
 	return List;
-};
-
-const TokenCell = (Cell: string, Value: number): ReturnType<typeof createElement> =>
-	createElement(
-		"td",
-		{ className: Cell },
-		createElement("span", { className: "playform-cost-num" }, CountShort(Value)),
-	);
-
-const CacheCell = (
-	Cell: string,
-	Tokens: CostTokens,
-	Hit: number | null,
-	t: Translate,
-): ReturnType<typeof createElement> => {
-	const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
-	const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
-	const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
-	const Base = Read + Input + Write;
-	switch (true) {
-		case Base <= 0:
-			return createElement("td", { className: Cell, title: t("unknown") }, Dash);
-		case Read > 0 || Write > 0:
-			return createElement(
-				"td",
-				{
-					className: Cell,
-					title: t("cache.detail", {
-						read: CountShort(Read),
-						input: CountShort(Input),
-						write: CountShort(Write),
-					}),
-				},
-				createElement("span", { className: "playform-cost-num" }, Rate(Hit)),
-			);
-		default:
-			return createElement(
-				"td",
-				{ className: Cell, title: t("column.cache.title") },
-				createElement("span", { className: "playform-cost-num" }, Rate(Hit)),
-			);
-	}
-};
-
-const OtherTitle = (Cost: CostBuckets, Currency: string, t: Translate): string => {
-	const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
-	const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
-	switch (true) {
-		case Write > 0 || Reasoning > 0:
-			return t("other.detail", {
-				write: Price(Write, Currency),
-				reasoning: Price(Reasoning, Currency),
-				rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency),
-			});
-		default:
-			return t("column.other.title");
-	}
 };
 
 export default function StepRow(Props: StepRowProps): ReturnType<typeof createElement> {
@@ -199,17 +141,12 @@ export default function StepRow(Props: StepRowProps): ReturnType<typeof createEl
 	]
 		.filter((Part) => Part !== "")
 		.join(" | ");
-	const Row = ["playform-cost-step-row"];
-	if (HasDetail) Row.push("playform-cost-step-row-clickable");
-	if (Failed) Row.push("playform-cost-step-row-error");
-	return createElement(
-		"tr",
-		{
-			className: Row.join(" "),
-			"data-step": String(Step.step),
-			...(HasDetail ? { onClick: Props.OnToggle, title: t("detail.title") } : {}),
-		},
-		Cells.Scope({
+	const Classes = ["playform-cost-step-row"];
+	if (HasDetail) Classes.push("playform-cost-step-row-clickable");
+	if (Failed) Classes.push("playform-cost-step-row-error");
+	const Row: TurnsCells = {
+		Key: `step:${Step.turn}:${Step.step}`,
+		scope: {
 			Cell: "playform-cost-step-cell",
 			...(HasDetail
 				? {
@@ -228,8 +165,8 @@ export default function StepRow(Props: StepRowProps): ReturnType<typeof createEl
 				? { Hint: ` - ${Props.Expanded ? t("detail.hide") : t("detail.show")}` }
 				: {}),
 			Markers: Markers(Step, t),
-		}),
-		Cells.Model({
+		},
+		model: {
 			Cell: "playform-cost-prompt-cell",
 			Provider: Text(Step.provider),
 			Model: Text(Step.model),
@@ -238,8 +175,8 @@ export default function StepRow(Props: StepRowProps): ReturnType<typeof createEl
 			Tier: typeof Step.tier === "number" ? Step.tier : null,
 			When: { Text: Stamp(Step.at) },
 			Title: `${Started} | ${ModelText}`,
-		}),
-		Cells.Files({
+		},
+		files: {
 			Cell: "playform-cost-step-files",
 			Pills: Files.map((File) => ({
 				Name: BaseName(Text(File.path)),
@@ -254,28 +191,21 @@ export default function StepRow(Props: StepRowProps): ReturnType<typeof createEl
 			Tokens: TokensTotal,
 			Currency: Tag,
 			ShowMix: Files.length >= 2,
-			t,
-		}),
-		TokenCell(Metric, TokensTotal),
-		CacheCell(Metric, Tokens, Step.cacheHit, t),
-		Cells.Money({ Cell: Metric, Value: CacheRead, Currency: Tag }),
-		Cells.Money({ Cell: Metric, Value: Input, Currency: Tag }),
-		Cells.Money({ Cell: Metric, Value: Output, Currency: Tag }),
-		Cells.Money({
-			Cell: Metric,
-			Value: Other,
-			Currency: Tag,
-			Title: OtherTitle(Cost, Tag, t),
-		}),
-		Cells.Alloc({
+		},
+		tokens: { Cell: Metric, Value: TokensTotal },
+		cache: { Cell: Metric, Tokens, Hit: Step.cacheHit },
+		cacheRead: { Cell: Metric, Value: CacheRead, Currency: Tag },
+		input: { Cell: Metric, Value: Input, Currency: Tag },
+		output: { Cell: Metric, Value: Output, Currency: Tag },
+		other: { Cell: Metric, Value: Other, Currency: Tag, Cost },
+		allocation: {
 			Cell: Metric,
 			Direct: typeof Step.direct === "number" ? Step.direct : 0,
 			Amortized: typeof Step.amortized === "number" ? Step.amortized : 0,
 			Has: Allocations > 0,
 			Currency: Tag,
-			t,
-		}),
-		Cells.Bar({
+		},
+		total: {
 			Cell: Metric,
 			Track: "playform-cost-bar-step",
 			Total,
@@ -283,7 +213,15 @@ export default function StepRow(Props: StepRowProps): ReturnType<typeof createEl
 			Scale: Props.Scale,
 			Currency: Tag,
 			Start: typeof Step.at === "number" ? Step.at : null,
-			t,
-		}),
+		},
+	};
+	return createElement(
+		"tr",
+		{
+			className: Classes.join(" "),
+			"data-step": String(Step.step),
+			...(HasDetail ? { onClick: Props.OnToggle, title: t("detail.title") } : {}),
+		},
+		...Props.Resolved.columns.map((Column) => Column.render(Row, { t })),
 	);
 }

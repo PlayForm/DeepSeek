@@ -1,10 +1,10 @@
-// Provide - the engine services: `cost.session(SessionId, Rows)` answers one
-// session's CostResponse from the ledger, `cost.contributions(Path)` answers
-// the conversations that contributed to one file's cost, and `costPricing`
-// (Interface/PricingService.ts, Function/Pricing.ts) answers the versioned
-// catalog surface over the v5 tables - catalogs, revisions and rate rows as
-// reads, `publish` as the one write, and `preview` as the re-pricing that
-// persists nothing. The ledger path is this package's own config default
+// Provide - the engine services: `cost.session(SessionId, Rows, Selection?)`
+// answers one session's CostResponse from the ledger, `cost.contributions(Path)`
+// answers the conversations that contributed to one file's cost, and
+// `costPricing` (Interface/PricingService.ts, Function/Pricing.ts) answers the
+// versioned catalog surface over the v5 tables - catalogs, revisions and rate
+// rows as reads, `publish` as the one write, and `preview` as the re-pricing
+// that persists nothing. The ledger path is this package's own config default
 // (Variable/Config's `Home(["cost", "ledger.db"])`), never a caller's: the
 // contribution read's argument is a FILE path, not a ledger path, so it is
 // handed to the read and never opened.
@@ -15,12 +15,22 @@
 // so it is not reused here: the local open expands a leading "~/" once and
 // throws one actionable line.
 //
+// THE VALUATION SELECTION (lane B4d) is the third argument of the session
+// read: the basis and the catalog revision the caller wants the recorded usage
+// interpreted under. The read service hands it to the reader together with the
+// pricing service, so a selection that names a non-recorded basis and a
+// revision gets its `valuation` block from the same preview the settings
+// surface uses - one pricing engine, never a second copy. Absent, the
+// argument changes nothing: the reader answers the recorded envelope.
+//
 // THE PRICING SERVICE is the one service that writes, so it rides the ledger
 // effect's own handle (passed in by Function/Apply): the WAL pragmas and the
 // foreign keys already in force there are the ones `publish`'s transaction
 // uses, and no second write handle is opened for a rare insert. A handle that
 // is absent (the ledger effect never ran) leaves the pricing service
-// unprovided rather than opening a path of its own.
+// unprovided rather than opening a path of its own; the session read still
+// answers the recorded envelope, and a selected basis then throws one
+// actionable line instead of pretending the comparison happened.
 //
 // Both services are returned as one disposer, so they are removed with the
 // fiber: the pricing service first, then the read service.
@@ -33,6 +43,7 @@ import type CostContributionRow from "@Interface/ContributionRow.js";
 import type PricingService from "@Interface/PricingService.js";
 import type CostResponse from "@Interface/Response.js";
 import type CostService from "@Interface/Service.js";
+import type ValuationSelection from "@Interface/ValuationSelection.js";
 import { Home } from "@playform/lib-dsh-core";
 
 import Contributions from "./Contributions.js";
@@ -71,28 +82,6 @@ export default function Provide(
 	// The ledger path: this package's own config default, resolved through the
 	// harness home precedence - never a path from the caller.
 	const Path = Home(["cost", "ledger.db"]);
-	const Service: CostService = {
-		session: (SessionId: string, Rows: number): CostResponse => {
-			const Ledger = Open(Path);
-			try {
-				// The reader sees only the handle, so the service stamps the
-				// resolved ledger path the envelope's `path` field names.
-				return { ...Reader(Ledger.Database, SessionId, Rows), path: Path };
-			} finally {
-				Ledger.Close();
-			}
-		},
-		contributions: (FilePath: string): readonly CostContributionRow[] => {
-			// The argument is the file the caller asks about, so the ledger
-			// stays the package's own default and only the read sees the path.
-			const Ledger = Open(Path);
-			try {
-				return Contributions(Ledger.Database, FilePath);
-			} finally {
-				Ledger.Close();
-			}
-		},
-	};
 	// A fake context without the reflection service (the smoke harness) gets
 	// the same silent posture as every optional service in this tree: the
 	// providers are absent, and nothing throws into apply. Both providers
@@ -102,14 +91,53 @@ export default function Provide(
 		case typeof Context.reflect?.provide !== "function":
 			return () => undefined;
 		default: {
+			// The pricing service is constructed once, over the ledger's own
+			// write handle, before either provider is registered: the session
+			// read hands it to the reader so a selected basis can preview the
+			// same session, and `costPricing` hands it to the settings surface.
+			// Without the handle there is nothing to publish into and nothing
+			// to preview against, so the session read stands alone and the
+			// pricing provider is never registered rather than inventing an
+			// open of its own.
+			const Catalog: PricingService | undefined =
+				Database === undefined ? undefined : Pricing(Database, Config);
+			const Service: CostService = {
+				session: (
+					SessionId: string,
+					Rows: number,
+					Selection?: ValuationSelection,
+				): CostResponse => {
+					const Ledger = Open(Path);
+					try {
+						// The reader sees only the handle, so the service
+						// stamps the resolved ledger path the envelope's
+						// `path` field names; the pricing service is the
+						// preview source the valuation block rides, never a
+						// second ledger handle.
+						return {
+							...Reader(Ledger.Database, SessionId, Rows, Selection, Catalog),
+							path: Path,
+						};
+					} finally {
+						Ledger.Close();
+					}
+				},
+				contributions: (FilePath: string): readonly CostContributionRow[] => {
+					// The argument is the file the caller asks about, so the
+					// ledger stays the package's own default and only the read
+					// sees the path.
+					const Ledger = Open(Path);
+					try {
+						return Contributions(Ledger.Database, FilePath);
+					} finally {
+						Ledger.Close();
+					}
+				},
+			};
 			const OffCost = Context.reflect.provide("cost", Service);
-			// The pricing service needs the ledger's write handle; without it
-			// there is nothing to publish into, so the read service stands
-			// alone rather than the provider inventing an open of its own.
-			if (Database === undefined) {
+			if (Catalog === undefined) {
 				return OffCost;
 			}
-			const Catalog: PricingService = Pricing(Database, Config);
 			const OffPricing = Context.reflect.provide("costPricing", Catalog);
 			return () => {
 				OffPricing();

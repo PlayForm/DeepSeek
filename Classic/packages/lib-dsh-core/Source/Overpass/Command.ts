@@ -1,34 +1,38 @@
-// Command - the GENERIC `normalize-overpass` human-command handler shared by
-// the six stream flavors, as a dependency-free factory leaf: the module's
-// Function/Command is a thin delegate that re-exports this handler and its
-// service types, while the module keeps its identity through `State.Module`
-// (every composed line is prefixed with it - the core never hardcodes a
-// module name) and its settings/editor seams through Function/Apply.
-//
-// Grammar (the rawInput begins after the parsed command name):
-//
-//   files <path...>   -> DECLINED here: the file sweep is owned by the
-//                      normalize-file hook (its own Function/Command), so the
-//                      stream flavors return the exact decline line;
-//   batch           -> arm the one-shot step-batch overpass (the flavor's
-//                      Function/StepBatch consumes it on the next batch);
-//   results on|off  -> flip `scopes.toolResults` through the settings
-//                      service when present, else the config editor, else
-//                      report the settings-UI path - the command NEVER
-//                      mutates State directly (config stays the single
-//                      source of truth, R1 §4b);
-//   scopes          -> report the current effective values (read-only).
-//
-// The handler returns a CommandResult (`success`/`error` with text) - the
-// dispatching UI renders it directly. Pure per call: the only State mutation
-// is the one-shot `Overpass` flag, which is the designed arm mechanism.
-//
-// The State is STRUCTURAL: only the cells this handler reads are named
-// (Module, Scopes, Exempt, Overpass), so each flavor's own State interface
-// satisfies it without the core importing the factory's types (the core stays
-// dependency-free). The schema-default scopes and exemption list are the
-// family defaults, identical in every stream flavor; the per-apply cells win
-// when present.
+/**
+ * @module Command
+ *
+ * The generic `normalize-overpass` human-command handler shared by the six stream flavors,
+ * as a dependency-free factory leaf.
+ *
+ * @remarks
+ * The module's `Function/Command` is a thin delegate that re-exports this handler and its
+ * service types, while the module keeps its identity through `State.Module` (every composed
+ * line is prefixed with it - the core never hardcodes a module name) and its settings/editor
+ * seams through `Function/Apply`.
+ *
+ * Grammar (the rawInput begins after the parsed command name):
+ *
+ *   files <path...>   -> DECLINED here: the file sweep is owned by the normalize-file hook
+ *                      (its own Function/Command), so the stream flavors return the exact
+ *                      decline line;
+ *   batch           -> arm the one-shot step-batch overpass (the flavor's
+ *                      Function/StepBatch consumes it on the next batch);
+ *   results on|off  -> flip `scopes.toolResults` through the settings service when present,
+ *                      else the config editor, else report the settings-UI path - the
+ *                      command NEVER mutates State directly (config stays the single source
+ *                      of truth, R1 §4b);
+ *   scopes          -> report the current effective values (read-only).
+ *
+ * The handler returns a CommandResult (`success`/`error` with text) - the dispatching UI
+ * renders it directly. Pure per call: the only State mutation is the one-shot `Overpass`
+ * flag, which is the designed arm mechanism.
+ *
+ * The State is STRUCTURAL: only the cells this handler reads are named (Module, Scopes,
+ * Exempt, Overpass), so each flavor's own State interface satisfies it without the core
+ * importing the factory's types (the core stays dependency-free). The schema-default scopes
+ * and exemption list are the family defaults, identical in every stream flavor; the
+ * per-apply cells win when present.
+ */
 /** The schema-default scopes (the fallback for a hand-built config). */
 const DefaultScopes = {
 	conversation: true,

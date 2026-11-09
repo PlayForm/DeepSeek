@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter } from "../Harness.js";
 import { Suppress } from "../../../Target/Library.js";
+import { Check, Finish, MakeCounter } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   {
@@ -18,7 +18,9 @@ const runTest = async () => {
           "the listener shape with a string cause"
         );
         assert.equal(
-          Suppress("cargo-governor", "listener", new Error("")) === "cargo-governor: listener error (suppressed): " || Suppress("cargo-governor", "listener", new Error("")).includes("(suppressed):"),
+          Suppress("cargo-governor", "listener", new Error("")) === "cargo-governor: listener error (suppressed): " || Suppress("cargo-governor", "listener", new Error("")).includes(
+            "(suppressed):"
+          ),
           true,
           "an empty-message error still composes the suppressed line"
         );

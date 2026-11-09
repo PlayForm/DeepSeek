@@ -1,22 +1,22 @@
-// Source/Test/Overpass/Test.ts - one singular test: the overpass arms and the
-// human command (Run O) - the tool-results arm (tools/post-execute), the
-// step-batch arm (agent/pre-step), the normalize-overpass command, the
-// ordering guard and the history-safety invariant, with the volatile flips
-// (O2/O10) and the one-shot batch grammar (O12).
-// Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/hook-dsh-normalize-ellipsis: the fake ctx + the REAL
-// factory + the REAL ellipsis apply (the seams live in ../Harness.js).
+/**
+ * @module Test
+ *
+ * The Overpass unit smoke: the overpass arms and the human command (Run O).
+ *
+ * @remarks
+ * The one singular test covers the tool-results arm (`tools/post-execute`), the
+ * step-batch arm (`agent/pre-step`), the `normalize-overpass` command, the
+ * ordering guard and the history-safety invariant, with the volatile flips
+ * (O2/O10) and the one-shot batch grammar (O12).
+ *
+ * The smoke is the fake ctx + the REAL factory + the REAL ellipsis apply; the
+ * seams live in `../Harness.js`. The folder runs standalone
+ * (`node Target/Test/Overpass/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
-import {
-	Check,
-	Finish,
-	Furnace,
-	MakeCounter,
-	Ledger,
-	Make,
-	rm,
-} from "../Harness.js";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -76,12 +76,16 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "overpass: the agent/pre-step arm is registered";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(typeof PreO === "function", "overpass: the agent/pre-step arm is registered");
+				assert.ok(
+					typeof PreO === "function",
+					"overpass: the agent/pre-step arm is registered",
+				);
 			});
 		}
 	}
 	{
-		const Sub = "overpass: the post-execute arm PREPENDS (outermost vs the CCR arm's own prepend)";
+		const Sub =
+			"overpass: the post-execute arm PREPENDS (outermost vs the CCR arm's own prepend)";
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
@@ -92,7 +96,8 @@ export const runTest = async (): Promise<number> => {
 		}
 	}
 	{
-		const Sub = "overpass: the pre-step arm uses default ordering (nothing needs to precede it)";
+		const Sub =
+			"overpass: the pre-step arm uses default ordering (nothing needs to precede it)";
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
@@ -147,7 +152,9 @@ export const runTest = async (): Promise<number> => {
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
-					OutO2.kind === "accept" && OutO2.content.length === 1 && OutO2.content[0].text === "a ... b",
+					OutO2.kind === "accept" &&
+						OutO2.content.length === 1 &&
+						OutO2.content[0].text === "a ... b",
 					"overpass: toolResults on -> the text block is rewritten (em dash -> hyphen)",
 				);
 			});
@@ -214,7 +221,8 @@ export const runTest = async (): Promise<number> => {
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
-					OutO4.content[0] === ToolBlockO && OutO4.content[0].arguments === '{"a":"\u2026"}',
+					OutO4.content[0] === ToolBlockO &&
+						OutO4.content[0].arguments === '{"a":"\u2026"}',
 					"overpass: tool-call/argument blocks pass untouched (execution-critical JSON)",
 				);
 			});
@@ -255,7 +263,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "overpass: N=0 -> no ledger line (the no-op rule)";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(RunO.Lines.length === LinesBeforeO5, "overpass: N=0 -> no ledger line (the no-op rule)");
+				assert.ok(
+					RunO.Lines.length === LinesBeforeO5,
+					"overpass: N=0 -> no ledger line (the no-op rule)",
+				);
 			});
 		}
 	}
@@ -316,7 +327,10 @@ export const runTest = async (): Promise<number> => {
 	const OutO8 = await PostO(
 		ExecO("bash"),
 		{ isError: false, value: {}, content: [{ type: "text", text: "raw \u2026 result" }] },
-		async () => ({ kind: "accept", content: [{ type: "text", text: "downstream \u2026 shaped" }] }),
+		async () => ({
+			kind: "accept",
+			content: [{ type: "text", text: "downstream \u2026 shaped" }],
+		}),
 	);
 	{
 		const Sub = "overpass: the downstream decision's content is the basis (not the raw result)";
@@ -348,7 +362,8 @@ export const runTest = async (): Promise<number> => {
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
-					OutO9.kind === "enter" && OutO9.messages[0].content[0].text === "a \u2026 batch",
+					OutO9.kind === "enter" &&
+						OutO9.messages[0].content[0].text === "a \u2026 batch",
 					"overpass: batch off (default) -> the enter decision passes untouched",
 				);
 			});
@@ -416,7 +431,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "overpass: N=0 batch -> no ledger line";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(RunO.Lines.length === LinesBeforeO11, "overpass: N=0 batch -> no ledger line");
+				assert.ok(
+					RunO.Lines.length === LinesBeforeO11,
+					"overpass: N=0 batch -> no ledger line",
+				);
 			});
 		}
 	}
@@ -494,7 +512,8 @@ export const runTest = async (): Promise<number> => {
 		async () => ({ kind: "enter", messages: [MsgO("a \u2026 batch")] }),
 	);
 	{
-		const Sub = "overpass: the second batch after the one-shot passes untouched (exactly one use)";
+		const Sub =
+			"overpass: the second batch after the one-shot passes untouched (exactly one use)";
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
@@ -544,7 +563,8 @@ export const runTest = async (): Promise<number> => {
 	}
 	const FilesO = await CommandO.handler({ rawInput: "files /tmp/x.txt" });
 	{
-		const Sub = "overpass: the files sweep is declined by a stream flavor (owned by normalize-file)";
+		const Sub =
+			"overpass: the files sweep is declined by a stream flavor (owned by normalize-file)";
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
@@ -559,7 +579,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "overpass: 'results' without on|off is a usage error";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(ResultsBadO.kind === "error", "overpass: 'results' without on|off is a usage error");
+				assert.ok(
+					ResultsBadO.kind === "error",
+					"overpass: 'results' without on|off is a usage error",
+				);
 			});
 		}
 	}

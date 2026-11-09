@@ -24,6 +24,21 @@
 // migrates the schema - so it is never reused here), which is why the reader
 // sees only the open handle and the service overwrites `path` with the
 // resolved ledger path.
+//
+// THE VALUATION SELECTION (lane B4d; the research's sections 4 and 8): the
+// caller may carry the basis it wants the read interpreted under and the
+// catalog revision that basis evaluates against. An absent selection and the
+// 'as-recorded' basis leave every byte of the envelope as it was - the
+// recorded read is the default and the block is never added to it. A selection
+// that names both a non-recorded basis and a revision asks the pricing service
+// for its preview over this same session and appends the `valuation` block:
+// the money the ledger recorded, the money that revision gives the same usage,
+// and the difference between the two, beside the basis, the revision, the
+// attribution policy version and when the comparison ran. The preview reads
+// the whole session, not the page budget, so the block is a session headline;
+// per-call money stays as recorded in this lane. A session the ledger does not
+// record answers the failure envelope without a block, because no read
+// happened to compare.
 import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
 
 import type CostBuckets from "@Interface/Buckets.js";
@@ -31,14 +46,17 @@ import type CostCall from "@Interface/Call.js";
 import type CostFile from "@Interface/File.js";
 import type CostFileRow from "@Interface/FileRow.js";
 import type CostModelRow from "@Interface/ModelRow.js";
+import type PricingService from "@Interface/PricingService.js";
 import type CostResponse from "@Interface/Response.js";
+import type { Valuation } from "@Interface/Response.js";
 import type CostSession from "@Interface/Session.js";
 import type CostStageRow from "@Interface/StageRow.js";
 import type CostSummary from "@Interface/Summary.js";
 import type CostTokens from "@Interface/Tokens.js";
 import type CostTopFile from "@Interface/TopFile.js";
+import type ValuationSelection from "@Interface/ValuationSelection.js";
 
-// The ten read-only statements the engine runs (the panel's Design.md
+// The eleven read-only statements the engine runs (the panel's Design.md
 // section 9.1): every one is a plain SELECT keyed by the session id, with no
 // pragma that writes, no INSERT, UPDATE or DELETE. Calls selects the newest
 // budget first and the reader re-sorts it ascending by (turn, step); Touches
@@ -59,7 +77,11 @@ import type CostTopFile from "@Interface/TopFile.js";
 // touched file; Models groups this session's calls by provider and model
 // with the tokens the calls reported and the money their allocations
 // carried, its per-call money pre-aggregated so the file grain cannot
-// multiply the token sums.
+// multiply the token sums. Policy is the one statement not keyed by the
+// session: the ledger's declared attribution policy - the newest Valuation
+// row's PolicyVersion, else the newest Allocation row's Method, else the v5
+// seed's own 'bytes/context' fallback - which the valuation block labels the
+// recorded money's split with.
 const Query = {
 	Session: `SELECT Session.Title AS Title,
     Session.Cwd AS Cwd,
@@ -350,6 +372,11 @@ FROM CallRow
 LEFT JOIN CallMoney ON CallMoney.CallId = CallRow.CallId
 GROUP BY CallRow.Provider, CallRow.Model
 ORDER BY Total DESC, CallRow.Provider ASC, CallRow.Model ASC;`,
+
+	Policy: `SELECT COALESCE(
+    (SELECT Valuation.PolicyVersion FROM Valuation ORDER BY Valuation.ValuationId DESC LIMIT 1),
+    (SELECT Allocation.Method FROM Allocation ORDER BY Allocation.AllocationId DESC LIMIT 1),
+    'bytes/context') AS PolicyVersion;`,
 } as const;
 
 // The row budget the reader applies (the tab's Limits, kept identical so the
@@ -363,6 +390,8 @@ export default function Reader(
 	Database: DatabaseSync,
 	SessionId: string,
 	Rows: number,
+	Selection?: ValuationSelection,
+	Pricing?: PricingService,
 ): CostResponse {
 	const Requested = Number.isFinite(Rows) ? Math.floor(Rows) : DefaultRows;
 	const Budget = Math.min(Math.max(Requested, MinRows), MaxRows);
@@ -435,6 +464,46 @@ export default function Reader(
 		}
 		const Found = Raw.split(",").filter((One) => One.length > 0);
 		return Found.sort();
+	};
+	// The valuation block (lane B4d; the research's sections 4 and 8): the
+	// headline comparison a selected basis adds to the envelope. `recorded` is
+	// the preview's stored money and `revised` its repriced total, both over
+	// the same calls, so `difference` compares like with like; the preview
+	// reads the whole session rather than the page budget, so the block is a
+	// session headline. `policyVersion` is the attribution policy the ledger
+	// declares - the newest Valuation row, else the newest Allocation method,
+	// else the v5 seed's own fallback - because this lane reallocates nothing
+	// and the recorded split is the ledger's own fact. An absent selection, the
+	// 'as-recorded' basis and a basis without a revision all answer undefined,
+	// so the recorded read keeps its exact bytes; a basis that names a
+	// revision while the pricing service is absent is one actionable line,
+	// never a silently recorded-only answer.
+	const Comparison = (): Valuation | undefined => {
+		switch (true) {
+			case Selection === undefined:
+				return undefined;
+			case Selection.basis === "as-recorded":
+				return undefined;
+			case Selection.revisionId === undefined:
+				return undefined;
+			case Pricing === undefined:
+				throw new Error(
+					`plugin-dsh-cost: the valuation basis "${Selection.basis}" needs the pricing service, which this context did not provide - the ledger write handle was absent`,
+				);
+			default: {
+				const Preview = Pricing.preview(Selection.revisionId, SessionId);
+				const Policy = Database.prepare(Query.Policy).get() ?? EmptyRow;
+				return {
+					basis: Selection.basis,
+					revisionId: Selection.revisionId,
+					policyVersion: Text(Policy, "PolicyVersion") ?? "bytes/context",
+					calculatedAt: Date.now(),
+					recorded: Preview.current,
+					revised: Preview.revised,
+					difference: Preview.difference,
+				};
+			}
+		}
 	};
 
 	const SessionRow = Database.prepare(Query.Session).get(SessionId);
@@ -791,7 +860,7 @@ export default function Reader(
 		},
 	};
 
-	return {
+	const Envelope: CostResponse = {
 		ok: true,
 		code: "ok",
 		message: null,
@@ -808,4 +877,9 @@ export default function Reader(
 		stages: Stages,
 		models: Models,
 	};
+	// The recorded read returns the envelope exactly as built; a selected
+	// basis appends the block, so the JSON carries no `valuation` key at all
+	// when the caller names none.
+	const Block = Comparison();
+	return Block === undefined ? Envelope : { ...Envelope, valuation: Block };
 }

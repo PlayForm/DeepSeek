@@ -1,4 +1,5 @@
 import Schema from "@deepseek-ai/schemastery";
+/** The plugin's validated Schemastery Config schema, defaulted at load. */
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     log: Schema<boolean, boolean, "volatile-defined">;
     logFile: Schema<string, string, "volatile-defined">;

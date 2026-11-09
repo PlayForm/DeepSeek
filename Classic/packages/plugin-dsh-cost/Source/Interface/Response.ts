@@ -16,6 +16,15 @@
 // zero): the call counts the summary already states beside the token buckets
 // the unpriced calls spent, so a zero-cost row is labelled unpriced instead
 // of free.
+//
+// `valuation` is the one optional field (lane B4d; the research's section 8):
+// the headline comparison a selected cost basis adds beside the recorded
+// money - the basis, the revision it evaluates against, the attribution policy
+// version, when it ran, and the recorded, revised and difference figures over
+// the same session. It is absent when the caller names no basis or asks for
+// 'as-recorded', so the recorded read is byte-identical to the envelope before
+// this lane; when present it never replaces a per-call money field, which
+// stays as recorded.
 import type CostCall from "@Interface/Call.js";
 import type CostFileRow from "@Interface/FileRow.js";
 import type CostModelRow from "@Interface/ModelRow.js";
@@ -23,6 +32,7 @@ import type CostSession from "@Interface/Session.js";
 import type CostStageRow from "@Interface/StageRow.js";
 import type CostSummary from "@Interface/Summary.js";
 import type CostTokens from "@Interface/Tokens.js";
+import type { ValuationBasis } from "@Interface/ValuationSelection.js";
 
 // The priced-versus-unpriced facts of one read: how many calls the session
 // booked, how many of them carried a price row, how many did not, and the
@@ -33,6 +43,28 @@ interface Coverage {
 	priced: number;
 	unpriced: number;
 	unpricedTokens: CostTokens;
+}
+
+// Valuation - the headline comparison a selected basis adds to the envelope
+// (lane B4d; the research's sections 4 and 8): which basis was asked for, the
+// catalog revision it evaluates against, the attribution policy version the
+// ledger declares, when the comparison ran, the money the ledger recorded for
+// the session, the money the selected revision gives that same usage, and the
+// difference between the two. It is a comparison block, not the stored
+// Valuation row of Interface/Valuation.ts: nothing is persisted, and the
+// per-call money fields stay as recorded. `recorded` and `revised` cover the
+// same calls - the ones the revision prices in the preview's currency - so
+// `difference` compares like with like. The field is absent, never null, when
+// no selection names a basis and a revision, so the recorded read keeps the
+// exact envelope it had before this lane.
+export interface Valuation {
+	basis: ValuationBasis;
+	revisionId: number;
+	policyVersion: string;
+	calculatedAt: number;
+	recorded: number;
+	revised: number;
+	difference: number;
 }
 
 export default interface CostResponse {
@@ -51,4 +83,5 @@ export default interface CostResponse {
 	files: readonly CostFileRow[] | null;
 	stages: readonly CostStageRow[] | null;
 	models: readonly CostModelRow[] | null;
+	valuation?: Valuation;
 }

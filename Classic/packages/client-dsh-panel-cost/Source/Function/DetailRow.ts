@@ -1,12 +1,14 @@
 // DetailRow - the per-file accordion under an expanded step row: the head
 // with the priced total, the five priced buckets, one block per file
 // sorted by its money and capped at the file limit, the touched and
-// allocation-only fallbacks, and the hidden notice.
+// allocation-only fallbacks, and the hidden notice. The cell spans every
+// column the resolved definition keeps, so it cannot outgrow the header.
+import type { TurnsCells } from "@Function/Columns";
 import Count from "@Function/Count";
 import Price from "@Function/Price";
-import { COLUMNS } from "@Function/Table";
 import type CostFile from "@Interface/File";
 import type CostStep from "@Interface/Step";
+import type { ResolvedTable } from "@Interface/Table";
 import type { Translate } from "@Interface/Translate";
 import { createElement } from "react";
 
@@ -14,6 +16,7 @@ const DetailFileLimit = 100;
 
 type DetailRowProps = {
 	Step: CostStep;
+	Resolved: ResolvedTable<TurnsCells>;
 	t: Translate;
 };
 
@@ -195,7 +198,7 @@ export default function DetailRow(Props: DetailRowProps): ReturnType<typeof crea
 		{},
 		createElement(
 			"td",
-			{ className: "playform-cost-detail-cell", colSpan: COLUMNS.length },
+			{ className: "playform-cost-detail-cell", colSpan: Props.Resolved.columns.length },
 			createElement(
 				"div",
 				{ className: "playform-cost-detail-head" },

@@ -84,17 +84,21 @@ const runTest = async () => {
       }
     }
   ]);
-  Check(Count, "F2: a tool call with a relative path resolves against the session header's cwd", () => {
-    const [Touch] = Relative.Touches;
-    if (Touch === void 0) {
-      throw new Error("the touch is missing");
+  Check(
+    Count,
+    "F2: a tool call with a relative path resolves against the session header's cwd",
+    () => {
+      const [Touch] = Relative.Touches;
+      if (Touch === void 0) {
+        throw new Error("the touch is missing");
+      }
+      assert.equal(Touch.Path, resolve("/home/u/project", "src/a.ts"), "the resolved path");
+      assert.equal(Touch.Kind, "read");
+      assert.equal(Touch.Turn, 1);
+      assert.equal(Touch.Step, 1);
+      assert.deepEqual(Relative.Files, [resolve("/home/u/project", "src/a.ts")]);
     }
-    assert.equal(Touch.Path, resolve("/home/u/project", "src/a.ts"), "the resolved path");
-    assert.equal(Touch.Kind, "read");
-    assert.equal(Touch.Turn, 1);
-    assert.equal(Touch.Step, 1);
-    assert.deepEqual(Relative.Files, [resolve("/home/u/project", "src/a.ts")]);
-  });
+  );
   const Search = Fold([
     { seq: 0, type: "session", time: 1e3, id: "s3", cwd: "/home/u/project" },
     {

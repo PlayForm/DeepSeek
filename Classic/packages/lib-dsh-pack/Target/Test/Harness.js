@@ -51,16 +51,20 @@ if (InvokedDirectly) {
   Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
     assert.equal(1, 2);
   });
-  Check(Count, "selfcheck: the built library loads, the built-in projects and the locator resolves", () => {
-    assert.equal(Object.keys(Library.Builtin.families ?? {}).length, 31);
-    assert.equal(Library.Families(Library.Builtin, "doc").length, 7);
-    assert.equal(Library.Families(Library.Builtin, "search").length, 10);
-    assert.deepEqual(Library.Parse("a: 1"), { a: 1 });
-    const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "pack-selfcheck-home-"));
-    const Located = Library.Locate("Documentation/INDEX.md", void 0, { home: Home });
-    assert.notEqual(Located, void 0);
-    assert.equal(Located?.pack, Library.Builtin);
-  });
+  Check(
+    Count,
+    "selfcheck: the built library loads, the built-in projects and the locator resolves",
+    () => {
+      assert.equal(Object.keys(Library.Builtin.families ?? {}).length, 31);
+      assert.equal(Library.Families(Library.Builtin, "doc").length, 7);
+      assert.equal(Library.Families(Library.Builtin, "search").length, 10);
+      assert.deepEqual(Library.Parse("a: 1"), { a: 1 });
+      const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "pack-selfcheck-home-"));
+      const Located = Library.Locate("Documentation/INDEX.md", void 0, { home: Home });
+      assert.notEqual(Located, void 0);
+      assert.equal(Located?.pack, Library.Builtin);
+    }
+  );
   if (Count.N === 3 && Count.F === 1) {
     console.log("Harness selfcheck OK");
   } else {

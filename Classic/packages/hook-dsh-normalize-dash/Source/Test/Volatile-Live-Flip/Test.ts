@@ -1,15 +1,23 @@
-// Source/Test/Volatile-Live-Flip/Test.ts - one singular test: the P10
-// volatile live-flip - a fresh mount whose `replacement` arrives as a
-// hand-built stable volatile cell, the factory's loader/volatile-update
-// dispatch refreshing State in place, and the next stream picking the new
-// replacement up WITHOUT remount: no second activation line, State identity
-// preserved, the normal count line still written.
-// Runs standalone (`node Target/Test/Volatile-Live-Flip/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
+/**
+ * @module Test
+ *
+ * The Volatile-Live-Flip unit smoke: the P10 volatile live-flip.
+ *
+ * @remarks
+ * The one singular test covers a fresh mount whose `replacement` arrives as a
+ * hand-built stable volatile cell, the factory's `loader/volatile-update`
+ * dispatch refreshing State in place, and the next stream picking the new
+ * replacement up WITHOUT a remount: no second activation line, the State
+ * identity preserved, and the normal count line still written.
+ *
+ * The smoke is the fake ctx + the REAL factory + the REAL dash apply, all from
+ * the Harness. The folder runs standalone
+ * (`node Target/Test/Volatile-Live-Flip/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
+
+import { Check, Finish, Ledger, Make, MakeCounter, Rm } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -32,7 +40,8 @@ export const runTest = async (): Promise<number> => {
 			normalizeToolArguments: false,
 		};
 		const RunV = Make(RawV);
-		const Activations = () => RunV.Lines.filter((L: string) => L.includes("activated (")).length;
+		const Activations = () =>
+			RunV.Lines.filter((L: string) => L.includes("activated (")).length;
 		{
 			const Sub = "P10: the refresh listener is registered";
 			Check(Count, Sub, () => {
@@ -90,7 +99,11 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "P10: the flipped stream still writes its normal count line";
 			Check(Count, Sub, () => {
-				assert.ok(RunV.Lines.some((L: string) => L.includes("normalized 1 dash char(s) in one stream")));
+				assert.ok(
+					RunV.Lines.some((L: string) =>
+						L.includes("normalized 1 dash char(s) in one stream"),
+					),
+				);
 			});
 		}
 		{

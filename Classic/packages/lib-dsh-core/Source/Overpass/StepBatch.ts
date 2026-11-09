@@ -1,51 +1,53 @@
-// StepBatch - the STEP-BATCH arm of the post-hoc normalization, as a FACTORY
-// over the shared machinery: one `agent/pre-step` waterfall listener per
-// flavor, built from four injected pieces and registered in the flavor's
-// Function/Apply. The arm sees only the INCOMING batch of user-role messages
-// for the step (user-authored text plus user-role injected content) - never
-// the assistant/tool history (append-only) - and it is the last chance
-// boundary before the model reads them.
-//
-// The parameterization boundary (the plan's section 3.1):
-//   * Transform(Text, State) - the flavor's replacement, read PER CALL from
-//     the (volatile-refreshed) State, so a hot-edited replacement lands on
-//     the next batch; the one-argument fullwidth delegate ignores State.
-//   * Line - the module's ledger-line composer, REQUIRED: the module owns its
-//     strings, the core owns only the mechanics. StepBatch's arity is
-//     `(Count, Turn, Step)`; the module returns the exact line it asserts.
-//   * Ledger { Append, Journal } - the factory's ledger sink, INJECTED, so
-//     the core never names the factory's type (and the Append(State) shape
-//     stays the module's own).
-//   * State - the flavor's per-apply state, structurally narrowed here to
-//     the two cells this arm reads (`Scopes.batch`, the one-shot `Overpass`).
-//
-// Semantics (given pre-step fires per step):
-//   * next() is ALWAYS awaited first - the downstream decision is
-//     authoritative and only an `enter` decision (the step accepted the
-//     batch) can have its messages replaced;
-//   * CONTINUOUS mode: while the scope gate (`State.Scopes.batch`) is on,
-//     every incoming batch is normalized;
-//   * ONE-SHOT mode: the `normalize-overpass batch` command arms
-//     `State.Overpass` regardless of the scope value; the flag is consumed
-//     by the next batch (cleared after one use, scope value irrelevant);
-//   * both off -> the downstream decision passes through UNTOUCHED;
-//   * TEXT blocks only, with the same CCR MARKER GUARD as the tool-results
-//     arm (Overpass/Blocks) - normalization never touches a CCR replacement;
-//     never assistant/tool history;
-//   * N = 0 -> the downstream decision unchanged (no ledger line);
-//   * N > 0 -> `{ ...Decision, messages: <rewritten> }` and the module's
-//     ledger line via Ledger.Append, plus the shared `normalized` journal
-//     event with the scope in the path slot;
-//   * re-normalizing injected content across steps is harmless: the
-//     transforms are idempotent on their own output (ASCII-replacement maps
-//     are fixed points);
-//   * FAIL-OPEN: one try/catch around everything - on any error the
-//     downstream decision is returned UNCHANGED (never throw into the
-//     waterfall).
-//
-// Pure per call: no module-level state - the one-shot flag lives on the
-// per-apply State object, so an HMR reload resets it cleanly.
 import RewriteBlocks from "./Blocks.js";
+
+/**
+ * @module StepBatch
+ *
+ * The step-batch arm of the post-hoc normalization, as a FACTORY over the shared machinery:
+ * one `agent/pre-step` waterfall listener per flavor, built from four injected pieces and
+ * registered in the flavor's `Function/Apply`.
+ *
+ * @remarks
+ * The arm sees only the INCOMING batch of user-role messages for the step (user-authored
+ * text plus user-role injected content) - never the assistant/tool history (append-only) -
+ * and it is the last chance boundary before the model reads them.
+ *
+ * The parameterization boundary (the plan's section 3.1):
+ *   * Transform(Text, State) - the flavor's replacement, read PER CALL from the
+ *     (volatile-refreshed) State, so a hot-edited replacement lands on the next batch; the
+ *     one-argument fullwidth delegate ignores State.
+ *   * Line - the module's ledger-line composer, REQUIRED: the module owns its strings, the
+ *     core owns only the mechanics. StepBatch's arity is `(Count, Turn, Step)`; the module
+ *     returns the exact line it asserts.
+ *   * Ledger { Append, Journal } - the factory's ledger sink, INJECTED, so the core never
+ *     names the factory's type (and the Append(State) shape stays the module's own).
+ *   * State - the flavor's per-apply state, structurally narrowed here to the two cells this
+ *     arm reads (`Scopes.batch`, the one-shot `Overpass`).
+ *
+ * Semantics (given pre-step fires per step):
+ *   * next() is ALWAYS awaited first - the downstream decision is authoritative and only an
+ *     `enter` decision (the step accepted the batch) can have its messages replaced;
+ *   * CONTINUOUS mode: while the scope gate (`State.Scopes.batch`) is on, every incoming
+ *     batch is normalized;
+ *   * ONE-SHOT mode: the `normalize-overpass batch` command arms `State.Overpass` regardless
+ *     of the scope value; the flag is consumed by the next batch (cleared after one use,
+ *     scope value irrelevant);
+ *   * both off -> the downstream decision passes through UNTOUCHED;
+ *   * TEXT blocks only, with the same CCR MARKER GUARD as the tool-results arm
+ *     (Overpass/Blocks) - normalization never touches a CCR replacement; never
+ *     assistant/tool history;
+ *   * N = 0 -> the downstream decision unchanged (no ledger line);
+ *   * N > 0 -> `{ ...Decision, messages: <rewritten> }` and the module's ledger line via
+ *     Ledger.Append, plus the shared `normalized` journal event with the scope in the path
+ *     slot;
+ *   * re-normalizing injected content across steps is harmless: the transforms are idempotent
+ *     on their own output (ASCII-replacement maps are fixed points);
+ *   * FAIL-OPEN: one try/catch around everything - on any error the downstream decision is
+ *     returned UNCHANGED (never throw into the waterfall).
+ *
+ * Pure per call: no module-level state - the one-shot flag lives on the per-apply State
+ * object, so an HMR reload resets it cleanly.
+ */
 
 /** The schema-default scope gates (the fallback for a hand-built config). */
 const DefaultScopes = {

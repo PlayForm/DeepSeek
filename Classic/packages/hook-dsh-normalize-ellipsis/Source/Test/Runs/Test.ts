@@ -1,24 +1,23 @@
-// Source/Test/Runs/Test.ts - one singular test: the Run-2 through Run-7
-// matrix - reasoning off, the custom replacement's $-literal safety, the
-// upstream throw, the identity stream, the fresh-state probe and the
-// tool-args normalization, including their cumulative pre-bind journal
-// counts.
-// Runs standalone (`node Target/Test/Runs/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/hook-dsh-normalize-ellipsis: the fake ctx + the REAL
-// factory + the REAL ellipsis apply (the seams live in ../Harness.js).
+/**
+ * @module Test
+ *
+ * The Runs unit smoke: the Run-2 through Run-7 matrix of the ellipsis hook.
+ *
+ * @remarks
+ * The one singular test covers reasoning off, the custom replacement's
+ * `$`-literal safety, the upstream throw, the identity stream, the fresh-state
+ * probe, and the tool-args normalization, including their cumulative pre-bind
+ * journal counts.
+ *
+ * The smoke is the fake ctx + the REAL factory + the REAL ellipsis apply; the
+ * seams live in `../Harness.js`. The folder runs standalone
+ * (`node Target/Test/Runs/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
-import {
-	Check,
-	Finish,
-	Furnace,
-	MakeCounter,
-	Ledger,
-	Make,
-	rm,
-	Validate,
-} from "../Harness.js";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -47,7 +46,11 @@ export const runTest = async (): Promise<number> => {
 		{ type: "reasoning-delta", index: 2, text: "\u2026x\u2026" },
 		{ type: "block-end", index: 0, block: { type: "text", text: "\u2026kept \u2026gone" } },
 		{ type: "block-end", index: 2, block: { type: "reasoning", text: "\u2026y" } },
-		{ type: "block-end", index: 3, block: { type: "reasoning", text: "", thinking: "\u2026z" } },
+		{
+			type: "block-end",
+			index: 3,
+			block: { type: "reasoning", text: "", thinking: "\u2026z" },
+		},
 		{ type: "usage", usage: { input: 1, output: 2 } },
 		{ type: "finish", reason: "stop" },
 	];
@@ -142,12 +145,16 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "volatile unwrap: custom replacement unwrapped";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(Run3.State.Replacement === "$&", "volatile unwrap: custom replacement unwrapped");
+				assert.ok(
+					Run3.State.Replacement === "$&",
+					"volatile unwrap: custom replacement unwrapped",
+				);
 			});
 		}
 	}
 	{
-		const Sub = "custom replacement inserted LITERALLY (function replacer, no $-pattern interpretation)";
+		const Sub =
+			"custom replacement inserted LITERALLY (function replacer, no $-pattern interpretation)";
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
@@ -163,7 +170,9 @@ export const runTest = async (): Promise<number> => {
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
-					readFileSync(Ledger, "utf8").includes("normalized 1 ellipsis char(s) in one stream"),
+					readFileSync(Ledger, "utf8").includes(
+						"normalized 1 ellipsis char(s) in one stream",
+					),
 					"count line reflects custom-replacement run",
 				);
 			});
@@ -262,7 +271,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "unchanged text-delta passes through BY IDENTITY (count 0)";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(Out5[0] === Keep, "unchanged text-delta passes through BY IDENTITY (count 0)");
+				assert.ok(
+					Out5[0] === Keep,
+					"unchanged text-delta passes through BY IDENTITY (count 0)",
+				);
 			});
 		}
 	}
@@ -313,7 +325,9 @@ export const runTest = async (): Promise<number> => {
 			Check(Count, Sub, () => {
 				assert.ok(
 					Run7.Lines.some(
-						(L) => L.startsWith("hook-dsh-normalize-ellipsis: activated") && L.includes("toolArgs=on"),
+						(L) =>
+							L.startsWith("hook-dsh-normalize-ellipsis: activated") &&
+							L.includes("toolArgs=on"),
 					),
 					"activation line reflects toolArgs=on",
 				);
@@ -365,7 +379,8 @@ export const runTest = async (): Promise<number> => {
 		}
 	}
 	{
-		const Sub = "block-end ToolCallBlock.arguments normalized too (the deltas AND the block agree)";
+		const Sub =
+			"block-end ToolCallBlock.arguments normalized too (the deltas AND the block agree)";
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
@@ -381,7 +396,9 @@ export const runTest = async (): Promise<number> => {
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
-					readFileSync(Ledger, "utf8").includes("normalized 2 ellipsis char(s) in one stream"),
+					readFileSync(Ledger, "utf8").includes(
+						"normalized 2 ellipsis char(s) in one stream",
+					),
 					"count line includes the tool-args replacements (delta + block)",
 				);
 			});
@@ -393,7 +410,8 @@ export const runTest = async (): Promise<number> => {
 		{
 			Check(Count, Sub, () => {
 				assert.ok(
-					JournalRun7.length === 3 && JournalRun7[2]!.detail === "normalized 2 ellipsis char(s) in one stream",
+					JournalRun7.length === 3 &&
+						JournalRun7[2]!.detail === "normalized 2 ellipsis char(s) in one stream",
 					"tool-args replacements journal too (delta + block in one count record)",
 				);
 			});

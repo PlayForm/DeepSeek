@@ -1,24 +1,18 @@
-import assert from "node:assert/strict";
-
-import { Check, Finish, Library, MakeCounter } from "../Harness.js";
-
 /**
  * @module Test
  *
- * The merge rules in isolation: families by id, targets by path, scalars
- * replace, arrays replace, and the section objects merge key by key.
+ * The merge rules in isolation: families by id, targets by path, scalars replace, arrays
+ * replace, and the section objects merge key by key.
  *
  * @remarks
  * Pure object fixtures: no filesystem.
  */
+import assert from "node:assert/strict";
+
+import { Check, Finish, Library, MakeCounter } from "../Harness.js";
 
 /** One family row with the given priority/threshold/targets. */
-const Family = (
-	Priority: number,
-	Threshold: number,
-	Targets: Library.Target[],
-	Rule = "rule",
-) => ({
+const Family = (Priority: number, Threshold: number, Targets: Library.Target[], Rule = "rule") => ({
 	id: "Plan",
 	priority: Priority,
 	threshold: Threshold,

@@ -1,15 +1,6 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
-import {
-  Check,
-  Finish,
-  Furnace,
-  MakeCounter,
-  Ledger,
-  Make,
-  rm,
-  Validate
-} from "../Harness.js";
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   rm();
@@ -29,7 +20,11 @@ const runTest = async () => {
     { type: "reasoning-delta", index: 2, text: "\u2026x\u2026" },
     { type: "block-end", index: 0, block: { type: "text", text: "\u2026kept \u2026gone" } },
     { type: "block-end", index: 2, block: { type: "reasoning", text: "\u2026y" } },
-    { type: "block-end", index: 3, block: { type: "reasoning", text: "", thinking: "\u2026z" } },
+    {
+      type: "block-end",
+      index: 3,
+      block: { type: "reasoning", text: "", thinking: "\u2026z" }
+    },
     { type: "usage", usage: { input: 1, output: 2 } },
     { type: "finish", reason: "stop" }
   ];
@@ -65,7 +60,10 @@ const runTest = async () => {
     const Sub = "next() was called BEFORE any upstream iteration";
     {
       Check(Count, Sub, () => {
-        assert.ok(IteratedAtNext === false, "next() was called BEFORE any upstream iteration");
+        assert.ok(
+          IteratedAtNext === false,
+          "next() was called BEFORE any upstream iteration"
+        );
       });
     }
   }
@@ -81,7 +79,10 @@ const runTest = async () => {
     const Sub = "chunk order/count preserved (1 in, 1 out)";
     {
       Check(Count, Sub, () => {
-        assert.ok(Out.length === Chunks.length, "chunk order/count preserved (1 in, 1 out)");
+        assert.ok(
+          Out.length === Chunks.length,
+          "chunk order/count preserved (1 in, 1 out)"
+        );
       });
     }
   }
@@ -168,7 +169,10 @@ const runTest = async () => {
     const Sub = "reasoning-delta normalized when reasoning=on";
     {
       Check(Count, Sub, () => {
-        assert.ok(Out[3].text === "...x...", "reasoning-delta normalized when reasoning=on");
+        assert.ok(
+          Out[3].text === "...x...",
+          "reasoning-delta normalized when reasoning=on"
+        );
       });
     }
   }
@@ -176,7 +180,10 @@ const runTest = async () => {
     const Sub = "block-end TextBlock.text normalized";
     {
       Check(Count, Sub, () => {
-        assert.ok(Out[4].block.text === "...kept ...gone", "block-end TextBlock.text normalized");
+        assert.ok(
+          Out[4].block.text === "...kept ...gone",
+          "block-end TextBlock.text normalized"
+        );
       });
     }
   }
@@ -184,7 +191,10 @@ const runTest = async () => {
     const Sub = "block-end ReasoningBlock.text normalized (rc.2 field)";
     {
       Check(Count, Sub, () => {
-        assert.ok(Out[5].block.text === "...y", "block-end ReasoningBlock.text normalized (rc.2 field)");
+        assert.ok(
+          Out[5].block.text === "...y",
+          "block-end ReasoningBlock.text normalized (rc.2 field)"
+        );
       });
     }
   }

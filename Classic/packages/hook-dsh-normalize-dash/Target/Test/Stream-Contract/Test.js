@@ -1,6 +1,6 @@
-import { existsSync, readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Ledger } from "../Harness.js";
+import { existsSync, readFileSync } from "node:fs";
+import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   Rm();
@@ -21,7 +21,11 @@ const runTest = async () => {
       { type: "reasoning-delta", index: 2, text: "\u2014x\u2013" },
       { type: "block-end", index: 0, block: { type: "text", text: "\u2014kept \u2013gone" } },
       { type: "block-end", index: 2, block: { type: "reasoning", text: "\u2014y" } },
-      { type: "block-end", index: 3, block: { type: "reasoning", text: "", thinking: "\u2014z" } },
+      {
+        type: "block-end",
+        index: 3,
+        block: { type: "reasoning", text: "", thinking: "\u2014z" }
+      },
       { type: "usage", usage: { input: 1, output: 2 } },
       { type: "finish", reason: "stop" }
     ];
@@ -69,7 +73,9 @@ const runTest = async () => {
     {
       const Sub = "chunk type sequence identical to upstream";
       Check(Count, Sub, () => {
-        assert.ok(Out.map((C) => C.type).join(",") === Chunks.map((C) => C.type).join(","));
+        assert.ok(
+          Out.map((C) => C.type).join(",") === Chunks.map((C) => C.type).join(",")
+        );
       });
     }
     {
@@ -203,7 +209,9 @@ const runTest = async () => {
     {
       const Sub = "NO count line when nothing replaced (N=0)";
       Check(Count, Sub, () => {
-        assert.ok(!existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized"));
+        assert.ok(
+          !existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized")
+        );
       });
     }
   }

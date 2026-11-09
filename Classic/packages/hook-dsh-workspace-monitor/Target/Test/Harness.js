@@ -1,2 +1,223 @@
-import i from"node:assert/strict";import*as u from"node:fs";import*as R from"node:os";import*as F from"node:path";import l from"../../Target/Library.js";import S from"../../../plugin-dsh-factory/Target/Library.js";const b=()=>({N:0,F:0}),d=(e,n,t)=>{e.N++;try{t(),console.log(`PASS - ${n}`)}catch(s){e.F++,console.log(`FAIL - ${n}`),console.log(s instanceof Error?s.message:String(s))}},P=(e,n)=>{if(e.F!==0)throw new Error(`${n}: ${e.F} failed check(s)`);return e.N},C=u.mkdtempSync(F.join(R.tmpdir(),"workspace-monitor-smoke-")),p=F.join(C,"monitor.log"),E=()=>{try{u.rmSync(p)}catch{}},N=()=>(()=>{try{return u.readFileSync(p,"utf8").split(`
-`).filter(Boolean)}catch{return[]}})(),q=new S({reflect:{provide:()=>{}}}),A=(e={})=>{const n={files:e,targets:new Map,writes:[],reads:[],resolved:[],stats:[]};return n.resolve=async t=>{n.resolved.push(t);const s={targetKey:t,displayPath:t};return n.targets.set(t,s),s},n.stat=async t=>{n.stats.push(t);const s=n.files[t.displayPath];return s===void 0?void 0:{version:s,type:"file"}},n.writeText=async(...t)=>{throw n.writes.push(t),new Error("writeText must never be called")},n.readText=async(...t)=>{throw n.reads.push(t),new Error("readText must never be called")},n},W=e=>{const n={},t={},s=[],g=[],f={},y=[],k=[],m=[],w=[],h={on:(r,o)=>(m.push(r),n[r]=o,()=>!0),emit:(r,...o)=>(w.push([r,...o]),!0)},v=A();let a;a={pluginFactory:q,fs:v,logger:{info:r=>{s.push(r)},warn:r=>{g.push(r)}},on:(r,o)=>(t[r]=o,()=>!0),get:r=>a[r],effect:(r,o)=>{y.push(o??"unnamed");const x=r();return typeof x=="function"&&k.push(x),()=>!0},root:h,reflect:{provide:(r,o)=>(f[r]=o??!0,a[r]=o,()=>!0)}};const c={Context:a,Root:h,Listeners:n,CtxListeners:t,Lines:s,Warns:g,Provided:f,Effects:y,Disposers:k,RootNames:m,Emitted:w,Raw:e,Fs:v};return c.Returned=l.apply(a,e),c.State=a.__hookDshWorkspaceMonitorState,c},$=e=>l.Config({...e}),_=(e,n,t,s={agent:{id:"agent-a"}})=>{e.Listeners["fs/observed"]({displayPath:n,targetKey:n},{kind:"present",version:t},s)},I=(e,n)=>{e.Listeners["fs/observed"]({displayPath:n,targetKey:n},{kind:"absent"},{agent:{id:"agent-a"}})},O=e=>{e.Listeners["fs/observed"](null,null,void 0)},L=Symbol.for("cosmokit.volatile.write"),j=(e,n)=>{const t=e;if(typeof t?.[L]!="function")throw new Error("Flip: not a volatile cell (no cosmokit write symbol)");t[L](n)},B=(e,n)=>e.Lines.filter(t=>t.includes(n)),H=e=>N().filter(n=>n.includes(e)),K=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(K){const e=b();d(e,"selfcheck: a passing assertion counts as PASS",()=>{i.equal(1,1)}),d(e,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{i.equal(1,2)}),E();const n=W($({logFile:p,enabled:!0}));d(e,"selfcheck: the fake ctx registers the plugin's apply-time wiring",()=>{i.equal(n.RootNames.length,1),i.equal(n.RootNames[0],"fs/observed"),i.equal(n.Returned,void 0),i.ok(n.State!==void 0),i.deepEqual(n.Lines,["monitor: activated (domain=workspace_monitor, checksets=4)"])}),e.N===3&&e.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${e.N}, F=${e.F})`),process.exitCode=1)}export{d as Check,A as FakeFs,P as Finish,_ as Fire,I as FireAbsent,O as FireMalformed,j as Flip,q as Furnace,p as Ledger,N as LedgerLines,H as LedgerWith,B as LinesWith,W as Make,b as MakeCounter,l as Plugin,C as Root,$ as Validate,E as rm};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "workspace-monitor-smoke-"));
+const Ledger = Path.join(Root, "monitor.log");
+const rm = () => {
+  try {
+    FileSystem.rmSync(Ledger);
+  } catch {
+  }
+};
+const LedgerLines = () => (() => {
+  try {
+    return FileSystem.readFileSync(Ledger, "utf8").split("\n").filter(Boolean);
+  } catch {
+    return [];
+  }
+})();
+const Furnace = new FactoryClass({
+  reflect: { provide: () => void 0 }
+});
+const FakeFs = (Files = {}) => {
+  const Fs = {
+    files: Files,
+    targets: /* @__PURE__ */ new Map(),
+    writes: [],
+    reads: [],
+    resolved: [],
+    stats: []
+  };
+  Fs.resolve = async (P) => {
+    Fs.resolved.push(P);
+    const Target = { targetKey: P, displayPath: P };
+    Fs.targets.set(P, Target);
+    return Target;
+  };
+  Fs.stat = async (Target) => {
+    Fs.stats.push(Target);
+    const Version = Fs.files[Target.displayPath];
+    return Version === void 0 ? void 0 : { version: Version, type: "file" };
+  };
+  Fs.writeText = async (...Parts) => {
+    Fs.writes.push(Parts);
+    throw new Error("writeText must never be called");
+  };
+  Fs.readText = async (...Parts) => {
+    Fs.reads.push(Parts);
+    throw new Error("readText must never be called");
+  };
+  return Fs;
+};
+const Make = (Raw) => {
+  const Listeners = {};
+  const CtxListeners = {};
+  const Lines = [];
+  const Warns = [];
+  const Provided = {};
+  const Effects = [];
+  const Disposers = [];
+  const RootNames = [];
+  const Emitted = [];
+  const Root2 = {
+    on: (Name, Listener) => {
+      RootNames.push(Name);
+      Listeners[Name] = Listener;
+      return () => true;
+    },
+    emit: (Name, ...Parts) => {
+      Emitted.push([Name, ...Parts]);
+      return true;
+    }
+  };
+  const Fs = FakeFs();
+  let Context;
+  Context = {
+    pluginFactory: Furnace,
+    fs: Fs,
+    logger: {
+      info: (M) => {
+        Lines.push(M);
+      },
+      warn: (M) => {
+        Warns.push(M);
+      }
+    },
+    on: (Name, Listener) => {
+      CtxListeners[Name] = Listener;
+      return () => true;
+    },
+    get: (Name) => Context[Name],
+    effect: (Setup, Label) => {
+      Effects.push(Label ?? "unnamed");
+      const Disposer = Setup();
+      if (typeof Disposer === "function") {
+        Disposers.push(Disposer);
+      }
+      return () => true;
+    },
+    root: Root2,
+    reflect: {
+      provide: (Name, Value) => {
+        Provided[Name] = Value ?? true;
+        Context[Name] = Value;
+        return () => true;
+      }
+    }
+  };
+  const Run = {
+    Context,
+    Root: Root2,
+    Listeners,
+    CtxListeners,
+    Lines,
+    Warns,
+    Provided,
+    Effects,
+    Disposers,
+    RootNames,
+    Emitted,
+    Raw,
+    Fs
+  };
+  Run.Returned = Plugin.apply(Context, Raw);
+  Run.State = Context.__hookDshWorkspaceMonitorState;
+  return Run;
+};
+const Validate = (Raw) => Plugin.Config({ ...Raw });
+const Fire = (Run, Path2, Version, Actor = { agent: { id: "agent-a" } }) => {
+  Run.Listeners["fs/observed"](
+    { displayPath: Path2, targetKey: Path2 },
+    { kind: "present", version: Version },
+    Actor
+  );
+};
+const FireAbsent = (Run, Path2) => {
+  Run.Listeners["fs/observed"](
+    { displayPath: Path2, targetKey: Path2 },
+    { kind: "absent" },
+    { agent: { id: "agent-a" } }
+  );
+};
+const FireMalformed = (Run) => {
+  Run.Listeners["fs/observed"](null, null, void 0);
+};
+const Write = /* @__PURE__ */ Symbol.for("cosmokit.volatile.write");
+const Flip = (CellValue, New) => {
+  const Cell = CellValue;
+  if (typeof Cell?.[Write] !== "function") {
+    throw new Error("Flip: not a volatile cell (no cosmokit write symbol)");
+  }
+  Cell[Write](New);
+};
+const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
+const LedgerWith = (Needle) => LedgerLines().filter((L) => L.includes(Needle));
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  rm();
+  const Run = Make(Validate({ logFile: Ledger, enabled: true }));
+  Check(Count, "selfcheck: the fake ctx registers the plugin's apply-time wiring", () => {
+    assert.equal(Run.RootNames.length, 1);
+    assert.equal(Run.RootNames[0], "fs/observed");
+    assert.equal(Run.Returned, void 0);
+    assert.ok(Run.State !== void 0);
+    assert.deepEqual(Run.Lines, [
+      "monitor: activated (domain=workspace_monitor, checksets=4)"
+    ]);
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  Check,
+  FakeFs,
+  Finish,
+  Fire,
+  FireAbsent,
+  FireMalformed,
+  Flip,
+  Furnace,
+  Ledger,
+  LedgerLines,
+  LedgerWith,
+  LinesWith,
+  Make,
+  MakeCounter,
+  Plugin,
+  Root,
+  Validate,
+  rm
+};
+//# sourceMappingURL=Harness.js.map

@@ -1,3 +1,20 @@
+/**
+ * @module Fullwidth
+ *
+ * The full-width to half-width map: the entire FULLWIDTH FORMS range U+FF01-U+FF5E mapped to
+ * its ASCII counterparts U+0021-U+007E.
+ *
+ * @remarks
+ * This is the standard fullwidth-to-halfwidth mapping
+ * (`String.fromCharCode(0xFF01 + i)` -> `String.fromCharCode(0x21 + i)` for i in 0..93),
+ * expanded to a LITERAL object below: no runtime computation, the table is data, not logic.
+ *
+ * Full-width punctuation, digits and letters arrive from CJK input methods; the half-width
+ * forms are the unambiguous ASCII that every parser, shell and diff understands.
+ *
+ * Consumed by the char->char MAP replacer (ReplaceMap): one character in, the half-width
+ * counterpart out, the count = the replaced characters.
+ */
 declare const _default: {
     "！": string;
     "＂": string;

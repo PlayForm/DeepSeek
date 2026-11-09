@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
+import { Check, Finish, Ledger, Make, MakeCounter, Rm } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   {
@@ -72,7 +72,11 @@ const runTest = async () => {
     {
       const Sub = "P10: the flipped stream still writes its normal count line";
       Check(Count, Sub, () => {
-        assert.ok(RunV.Lines.some((L) => L.includes("normalized 1 dash char(s) in one stream")));
+        assert.ok(
+          RunV.Lines.some(
+            (L) => L.includes("normalized 1 dash char(s) in one stream")
+          )
+        );
       });
     }
     {

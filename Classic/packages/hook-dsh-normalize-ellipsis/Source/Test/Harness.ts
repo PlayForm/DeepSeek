@@ -1,25 +1,33 @@
-// Source/Test/Harness.ts - the shared test harness for the ellipsis flavor's
-// per-test folders: the fake ctx + the REAL factory instance + the REAL
-// ellipsis apply, written ONCE per package and imported by every test folder
-// (the seams are the source suite's, Classic/smokes/ellipsis-smoke.mjs, moved
-// verbatim - the .mjs suite duplicates its harness per file; here it is one
-// file).
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly (the negative control for the harness
-// itself); prepublishOnly.sh gates the build on it. Imported as a library,
-// this module only exports.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the ellipsis flavor's per-test folders: the fake
+ * ctx, the REAL factory instance, and the REAL ellipsis apply.
+ *
+ * @remarks
+ * The harness is written ONCE per package and imported by every test folder.
+ * Its seams are the source suite's, `Classic/smokes/ellipsis-smoke.mjs`, moved
+ * verbatim - the `.mjs` suite duplicates its harness per file; here it is one
+ * file.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass and one deliberate failure, and exits 0
+ * only when both are counted exactly (the negative control for the harness
+ * itself). `prepublishOnly.sh` gates the build on it. Imported as a library,
+ * this module only exports.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
+
 import type { Context as CordisContext } from "@deepseek-ai/cordis";
+
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
 // Import depths: this file sits at Source/Test/ (ONE level shallower than
 // the per-test folders), so the own-bundle import is ../../Target/Library.js
 // and the cross-bundle factory import is ../../../plugin-dsh-factory/... -
 // valid from BOTH trees (Source/Test/ and Target/Test/ mirror each other).
 import type State from "../../Target/Interface/State.js";
 import Ellipsis from "../../Target/Library.js";
-import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
 
 // (apply + Config live on both named and default - same as the source suite.)
 const { apply, Config: Schema } = Ellipsis;
@@ -94,9 +102,9 @@ export const Finish = (Count: Counter, Name: string): number => {
 // The REAL factory instance, constructed exactly the way the factory's own
 // smoke does (the Service base constructor registers through
 // ctx.reflect.provide; the stub context is used once and discarded).
-export const Furnace = new FactoryClass(
-	{ reflect: { provide: () => undefined } } as unknown as CordisContext,
-);
+export const Furnace = new FactoryClass({
+	reflect: { provide: () => undefined },
+} as unknown as CordisContext);
 
 // The ledger file path - the source suite's exact fixture (one /tmp log per
 // suite; the identity-driven path is asserted in Config-And-State).

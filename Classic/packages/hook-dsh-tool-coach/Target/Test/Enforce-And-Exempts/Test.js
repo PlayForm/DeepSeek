@@ -1,1 +1,148 @@
-import t from"node:assert/strict";import*as b from"node:fs";import{CheckAsync as n,Finish as v,Make as l,MakeCounter as A,Validate as d,Pre as u,Post as o,rm as f,ALLOW as k,ACCEPT as F,Agent as h,LinesWith as w,SED_ROW as O,JQ_EXEMPT as E,Ledger as r}from"../Harness.js";const S=async()=>{const e=A();{f();const a=l(d({logFile:r,enforce:"write"})),c=h("agent-r5");for(let s=0;s<7;s+=1)await o(a,"sed -i s/x/y/ f",c);await n(e,"R5: the tier-1 note fired at the write-class threshold on the way",async()=>{t.ok(w(a,": strike 3/3 bash write -> note edit").length===1)});const y=await u(a,"sed -i s/x/y/ f",c);await n(e,"R5/D1: the deny reason is the byte-exact NOTE_DENIED text with the fetched edit entry",async()=>{t.equal(JSON.stringify(y),JSON.stringify({kind:"deny",reason:'Blocked by tool-coach: "sed -i s/x/y/ f" is forbidden (write-class bash pattern). Use the edit tool for this operation instead \u2014 Edit an existing UTF-8 text file by replacing literal text. (key parameter: old_string). Then rerun only the legitimate command parts (build/test/git), if any.'}))}),await n(e,"R5: the denied ledger line is byte-exact: 'denied bash write <sed row> -> use edit'",async()=>{t.ok(w(a,`: denied bash write ${O} -> use edit`).length===1)});const m=await u(a,"cat f",c);await n(e,"R5: read class is NOT denied under enforce='write'",async()=>{t.ok(m===k)}),f();const g=l(d({logFile:r,enforce:"all"})),p=h("agent-r5-all");for(let s=0;s<7;s+=1)await o(g,"cat f",p);const i=await u(g,"cat f",p);await n(e,"R5: under enforce='all' the read class IS denied",async()=>{t.ok(i.kind==="deny")}),f();const R=l(d({logFile:r,enforce:"off"})),x=h("agent-r5-off");for(let s=0;s<7;s+=1)await o(R,"sed -i s/x/y/ f",x);await n(e,"R5: under enforce='off' nothing is ever denied",async()=>{t.ok(await u(R,"sed -i s/x/y/ f",x)===k)})}{f();const a=l(d({logFile:r})),c=h("agent-r6");for(const i of["rm -rf build","git commit -m x","cp a b","echo hi","python script.py"])await o(a,i,c);await n(e,"R6: rm/git commit/cp/echo/python script.py write NO lines (not even exempt)",async()=>{t.ok(a.Lines.every(i=>!i.includes(": offense")&&!i.includes(": exempt")))}),await o(a,"cat f.json | jq",c),await n(e,"R6: the cat|jq carve-out logs the exempt line once: 'exempt bash <carve-out>'",async()=>{t.ok(w(a,`: exempt bash ${E}`).length===1)}),await o(a,"cat g.json | jq",c),await n(e,"R6: the exempt line is deduped per distinct pattern per agent",async()=>{t.ok(w(a,": exempt bash").length===1)}),await n(e,"the durable ledger file carries the [ISO] exempt line",async()=>{t.ok(b.existsSync(r)&&b.readFileSync(r,"utf8").includes(`] exempt bash ${E}`))}),f();const y=l(d({logFile:r,enabled:!1}));await n(e,"R6: the disabled ledger line is byte-exact: 'disabled (enabled=false)'",async()=>{t.ok(y.Lines.includes("hook-dsh-tool-coach: disabled (enabled=false)"))});const m=await o(y,"cat a.md",h("agent-r6-off"));await n(e,"R6: enabled=false - every listener returns next() untouched (full passthrough)",async()=>{t.ok(m===F)}),await n(e,"R6: enabled=false writes no offense lines",async()=>{t.ok(y.Lines.every(i=>!i.includes(": offense")))}),f();const g=l(d({logFile:r,patternTable:[]})),p=await o(g,"cat a.md",h("agent-r6-n0"));await n(e,"R6: an emptied pattern table = N=0 passthrough",async()=>{t.ok(p.kind==="accept"&&p.additionalContexts===void 0)}),await n(e,"R6: N=0 writes no offense lines",async()=>{t.ok(g.Lines.every(i=>!i.includes(": offense")))})}return v(e,"Enforce-And-Exempts")},C=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(C){const e=await S();console.log(`${e} PASS - Enforce-And-Exempts`)}export{S as runTest};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import {
+  CheckAsync,
+  Finish,
+  Make,
+  MakeCounter,
+  Validate,
+  Pre,
+  Post,
+  rm,
+  ALLOW,
+  ACCEPT,
+  Agent,
+  LinesWith,
+  SED_ROW,
+  JQ_EXEMPT,
+  Ledger
+} from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    rm();
+    const RunR5 = Make(Validate({ logFile: Ledger, enforce: "write" }));
+    const AgentR5 = Agent("agent-r5");
+    for (let Index = 0; Index < 7; Index += 1) {
+      await Post(RunR5, "sed -i s/x/y/ f", AgentR5);
+    }
+    await CheckAsync(Count, "R5: the tier-1 note fired at the write-class threshold on the way", async () => {
+      assert.ok(LinesWith(RunR5, ": strike 3/3 bash write -> note edit").length === 1);
+    });
+    const R5Denied = await Pre(RunR5, "sed -i s/x/y/ f", AgentR5);
+    await CheckAsync(
+      Count,
+      "R5/D1: the deny reason is the byte-exact NOTE_DENIED text with the fetched edit entry",
+      async () => {
+        assert.equal(
+          JSON.stringify(R5Denied),
+          JSON.stringify({
+            kind: "deny",
+            reason: `Blocked by tool-coach: "sed -i s/x/y/ f" is forbidden (write-class bash pattern). Use the edit tool for this operation instead \u2014 Edit an existing UTF-8 text file by replacing literal text. (key parameter: old_string). Then rerun only the legitimate command parts (build/test/git), if any.`
+          })
+        );
+      }
+    );
+    await CheckAsync(
+      Count,
+      "R5: the denied ledger line is byte-exact: 'denied bash write <sed row> -> use edit'",
+      async () => {
+        assert.ok(LinesWith(RunR5, `: denied bash write ${SED_ROW} -> use edit`).length === 1);
+      }
+    );
+    const R5Cat = await Pre(RunR5, "cat f", AgentR5);
+    await CheckAsync(Count, "R5: read class is NOT denied under enforce='write'", async () => {
+      assert.ok(R5Cat === ALLOW);
+    });
+    rm();
+    const RunR5all = Make(Validate({ logFile: Ledger, enforce: "all" }));
+    const AgentR5all = Agent("agent-r5-all");
+    for (let Index = 0; Index < 7; Index += 1) {
+      await Post(RunR5all, "cat f", AgentR5all);
+    }
+    const R5allCat = await Pre(RunR5all, "cat f", AgentR5all);
+    await CheckAsync(Count, "R5: under enforce='all' the read class IS denied", async () => {
+      assert.ok(R5allCat.kind === "deny");
+    });
+    rm();
+    const RunR5off = Make(Validate({ logFile: Ledger, enforce: "off" }));
+    const AgentR5off = Agent("agent-r5-off");
+    for (let Index = 0; Index < 7; Index += 1) {
+      await Post(RunR5off, "sed -i s/x/y/ f", AgentR5off);
+    }
+    await CheckAsync(Count, "R5: under enforce='off' nothing is ever denied", async () => {
+      assert.ok(await Pre(RunR5off, "sed -i s/x/y/ f", AgentR5off) === ALLOW);
+    });
+  }
+  {
+    rm();
+    const RunR6 = Make(Validate({ logFile: Ledger }));
+    const AgentR6 = Agent("agent-r6");
+    for (const Command of ["rm -rf build", "git commit -m x", "cp a b", "echo hi", "python script.py"]) {
+      await Post(RunR6, Command, AgentR6);
+    }
+    await CheckAsync(
+      Count,
+      "R6: rm/git commit/cp/echo/python script.py write NO lines (not even exempt)",
+      async () => {
+        assert.ok(RunR6.Lines.every((L) => !L.includes(": offense") && !L.includes(": exempt")));
+      }
+    );
+    await Post(RunR6, "cat f.json | jq", AgentR6);
+    await CheckAsync(
+      Count,
+      "R6: the cat|jq carve-out logs the exempt line once: 'exempt bash <carve-out>'",
+      async () => {
+        assert.ok(LinesWith(RunR6, `: exempt bash ${JQ_EXEMPT}`).length === 1);
+      }
+    );
+    await Post(RunR6, "cat g.json | jq", AgentR6);
+    await CheckAsync(Count, "R6: the exempt line is deduped per distinct pattern per agent", async () => {
+      assert.ok(LinesWith(RunR6, ": exempt bash").length === 1);
+    });
+    await CheckAsync(Count, "the durable ledger file carries the [ISO] exempt line", async () => {
+      assert.ok(
+        FileSystem.existsSync(Ledger) && FileSystem.readFileSync(Ledger, "utf8").includes(`] exempt bash ${JQ_EXEMPT}`)
+      );
+    });
+    rm();
+    const RunR6off = Make(Validate({ logFile: Ledger, enabled: false }));
+    await CheckAsync(
+      Count,
+      "R6: the disabled ledger line is byte-exact: 'disabled (enabled=false)'",
+      async () => {
+        assert.ok(RunR6off.Lines.includes("hook-dsh-tool-coach: disabled (enabled=false)"));
+      }
+    );
+    const R6offOut = await Post(RunR6off, "cat a.md", Agent("agent-r6-off"));
+    await CheckAsync(
+      Count,
+      "R6: enabled=false - every listener returns next() untouched (full passthrough)",
+      async () => {
+        assert.ok(R6offOut === ACCEPT);
+      }
+    );
+    await CheckAsync(Count, "R6: enabled=false writes no offense lines", async () => {
+      assert.ok(RunR6off.Lines.every((L) => !L.includes(": offense")));
+    });
+    rm();
+    const RunR6n0 = Make(Validate({ logFile: Ledger, patternTable: [] }));
+    const R6n0Out = await Post(RunR6n0, "cat a.md", Agent("agent-r6-n0"));
+    await CheckAsync(Count, "R6: an emptied pattern table = N=0 passthrough", async () => {
+      assert.ok(R6n0Out.kind === "accept" && R6n0Out.additionalContexts === void 0);
+    });
+    await CheckAsync(Count, "R6: N=0 writes no offense lines", async () => {
+      assert.ok(RunR6n0.Lines.every((L) => !L.includes(": offense")));
+    });
+  }
+  return Finish(Count, "Enforce-And-Exempts");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Enforce-And-Exempts`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

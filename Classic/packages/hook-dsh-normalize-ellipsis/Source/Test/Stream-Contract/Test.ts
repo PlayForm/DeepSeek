@@ -1,24 +1,24 @@
-// Source/Test/Stream-Contract/Test.ts - one singular test: the full
-// llm/stream waterfall contract of the Run-1 stream - the next() mechanics,
-// the untouched options, the passthrough-by-identity groups, the rewrite
-// groups, the count ledger line and the P5 journal routing of the count
-// event (factory pre-bind buffer, not the per-State queue).
-// Runs standalone (`node Target/Test/Stream-Contract/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/hook-dsh-normalize-ellipsis: the fake ctx + the REAL
-// factory + the REAL ellipsis apply (the seams live in ../Harness.js).
+/**
+ * @module Test
+ *
+ * The Stream-Contract unit smoke: the full `llm/stream` waterfall contract of
+ * the Run-1 stream.
+ *
+ * @remarks
+ * The one singular test covers the `next()` mechanics, the untouched options,
+ * the passthrough-by-identity groups, the rewrite groups, the count ledger
+ * line, and the P5 journal routing of the count event (the factory pre-bind
+ * buffer, not the per-State queue).
+ *
+ * The smoke is the fake ctx + the REAL factory + the REAL ellipsis apply; the
+ * seams live in `../Harness.js`. The folder runs standalone
+ * (`node Target/Test/Stream-Contract/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
-import {
-	Check,
-	Finish,
-	Furnace,
-	MakeCounter,
-	Ledger,
-	Make,
-	rm,
-	Validate,
-} from "../Harness.js";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -43,7 +43,11 @@ export const runTest = async (): Promise<number> => {
 		{ type: "reasoning-delta", index: 2, text: "\u2026x\u2026" },
 		{ type: "block-end", index: 0, block: { type: "text", text: "\u2026kept \u2026gone" } },
 		{ type: "block-end", index: 2, block: { type: "reasoning", text: "\u2026y" } },
-		{ type: "block-end", index: 3, block: { type: "reasoning", text: "", thinking: "\u2026z" } },
+		{
+			type: "block-end",
+			index: 3,
+			block: { type: "reasoning", text: "", thinking: "\u2026z" },
+		},
 		{ type: "usage", usage: { input: 1, output: 2 } },
 		{ type: "finish", reason: "stop" },
 	];
@@ -88,7 +92,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "next() was called BEFORE any upstream iteration";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(IteratedAtNext === false, "next() was called BEFORE any upstream iteration");
+				assert.ok(
+					IteratedAtNext === false,
+					"next() was called BEFORE any upstream iteration",
+				);
 			});
 		}
 	}
@@ -105,7 +112,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "chunk order/count preserved (1 in, 1 out)";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(Out.length === Chunks.length, "chunk order/count preserved (1 in, 1 out)");
+				assert.ok(
+					Out.length === Chunks.length,
+					"chunk order/count preserved (1 in, 1 out)",
+				);
 			});
 		}
 	}
@@ -194,7 +204,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "reasoning-delta normalized when reasoning=on";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(Out[3].text === "...x...", "reasoning-delta normalized when reasoning=on");
+				assert.ok(
+					Out[3].text === "...x...",
+					"reasoning-delta normalized when reasoning=on",
+				);
 			});
 		}
 	}
@@ -202,7 +215,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "block-end TextBlock.text normalized";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(Out[4].block.text === "...kept ...gone", "block-end TextBlock.text normalized");
+				assert.ok(
+					Out[4].block.text === "...kept ...gone",
+					"block-end TextBlock.text normalized",
+				);
 			});
 		}
 	}
@@ -210,7 +226,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "block-end ReasoningBlock.text normalized (rc.2 field)";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(Out[5].block.text === "...y", "block-end ReasoningBlock.text normalized (rc.2 field)");
+				assert.ok(
+					Out[5].block.text === "...y",
+					"block-end ReasoningBlock.text normalized (rc.2 field)",
+				);
 			});
 		}
 	}
@@ -325,7 +344,8 @@ export const runTest = async (): Promise<number> => {
 		}
 	}
 	{
-		const Sub = "the record routes to the factory pre-bind buffer (stage 2), not the per-State queue";
+		const Sub =
+			"the record routes to the factory pre-bind buffer (stage 2), not the per-State queue";
 		{
 			Check(Count, Sub, () => {
 				assert.ok(

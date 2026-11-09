@@ -1,8 +1,14 @@
-// Home - the harness home precedence without a harness import: an explicit
-// configured path wins at the caller, then $DSH_HOME, then ~/.dsh (the
-// resolveDshHome order, packages/util/home-paths/src/index.ts:12, 127-137).
-// Pure string mechanics: no fs, no directory creation, no ledger string, and
-// no environment read at module scope - the caller passes the environment.
+/**
+ * @module Home
+ *
+ * The harness home precedence without a harness import: an explicit configured path wins
+ * at the caller, then `$DSH_HOME`, then `~/.dsh`.
+ *
+ * @remarks
+ * The order matches `resolveDshHome` (`packages/util/home-paths/src/index.ts:12, 127-137`).
+ * Pure string mechanics: no fs, no directory creation, no ledger string, and no environment
+ * read at module scope - the caller passes the environment.
+ */
 const Root = (Environment: Record<string, string | undefined>): string => {
 	const Override = Environment["DSH_HOME"];
 	switch (true) {

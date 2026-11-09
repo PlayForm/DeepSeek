@@ -1,21 +1,21 @@
-// Source/Test/Config-And-State/Test.ts - one singular test: the Run-1
-// defaults - the volatile config cells, the schema defaults, the listener
-// registration posture, the State wiring and the byte-exact activation line.
-// Runs standalone (`node Target/Test/Config-And-State/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/hook-dsh-normalize-ellipsis: the fake ctx + the REAL
-// factory + the REAL ellipsis apply (the seams live in ../Harness.js).
+/**
+ * @module Test
+ *
+ * The Config-And-State unit smoke: the Run-1 defaults of the ellipsis hook.
+ *
+ * @remarks
+ * The one singular test covers the volatile Config cells, the schema defaults,
+ * the listener registration posture, the State wiring, and the byte-exact
+ * activation line.
+ *
+ * The smoke is the fake ctx + the REAL factory + the REAL ellipsis apply; the
+ * seams live in `../Harness.js`. The folder runs standalone
+ * (`node Target/Test/Config-And-State/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
-import {
-	Check,
-	Finish,
-	Furnace,
-	MakeCounter,
-	Ledger,
-	Make,
-	rm,
-	Validate,
-} from "../Harness.js";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -64,7 +64,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "config default normalizeReasoning=true";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(Raw1.normalizeReasoning === true, "config default normalizeReasoning=true");
+				assert.ok(
+					Raw1.normalizeReasoning === true,
+					"config default normalizeReasoning=true",
+				);
 			});
 		}
 	}
@@ -113,7 +116,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "state carries the REAL factory instance";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(Run1.State && Run1.State.Factory === Furnace, "state carries the REAL factory instance");
+				assert.ok(
+					Run1.State && Run1.State.Factory === Furnace,
+					"state carries the REAL factory instance",
+				);
 			});
 		}
 	}

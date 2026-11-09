@@ -56,13 +56,48 @@ function Styles() {
 // Source/Function/View.ts
 var import_dsh_client_ui_primitives3 = require("@deepseek-ai/dsh-client-ui-primitives");
 
+// Source/Function/Cells.ts
+var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
+
 // Source/Variable/Dash.ts
 var Dash_default = "-";
+
+// Source/Function/Clock.ts
+var Pad = (Value2) => String(Value2).padStart(2, "0");
+function Clock(Value2) {
+  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
+  const Moment = new Date(Value2);
+  switch (true) {
+    case Number.isNaN(Moment.getTime()):
+      return Dash_default;
+    default:
+      return `${Pad(Moment.getHours())}:${Pad(Moment.getMinutes())}:${Pad(Moment.getSeconds())}`;
+  }
+}
+
+// Source/Function/CountShort.ts
+function CountShort(Value2) {
+  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
+  switch (true) {
+    case Value2 >= 1e7:
+      return `${(Value2 / 1e6).toFixed(1)}M`;
+    case Value2 >= 1e3:
+      return `${(Value2 / 1e3).toFixed(1)}K`;
+    default:
+      return `${(Value2 / 1e3).toFixed(2)}K`;
+  }
+}
 
 // Source/Function/Count.ts
 function Count(Value2) {
   if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
   return String(Math.round(Value2)).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+// Source/Function/Lines.ts
+function Lines(Value2) {
+  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return "";
+  return Value2 >= 0 ? `+${Count(Value2)}` : `-${Count(Math.abs(Value2))}`;
 }
 
 // Source/Function/Price.ts
@@ -84,68 +119,429 @@ function Price(Value2, Currency) {
   }
 }
 
-// Source/Function/Table.ts
-var import_react = require("react");
-var COLUMNS = [
-  "scope",
-  "model",
-  "files",
-  "tokens",
-  "cache",
-  "cacheRead",
-  "input",
-  "output",
-  "other",
-  "allocation",
-  "total"
-];
-var COLUMN_WIDTHS = {
-  scope: 11,
-  model: 15,
-  files: 13,
-  tokens: 6.5,
-  cache: 6.5,
-  cacheRead: 7.5,
-  input: 7,
-  output: 7,
-  other: 7,
-  allocation: 7.5,
-  total: 12
-};
-function Table(Props) {
-  const Cols = COLUMNS.map(
-    (Name) => (0, import_react.createElement)("col", { key: Name, style: { width: `${COLUMN_WIDTHS[Name]}%` } })
-  );
-  return (0, import_react.createElement)(
-    "table",
-    { className: "playform-cost-table", "aria-label": Props.t("view") },
-    (0, import_react.createElement)("colgroup", {}, Cols),
-    (0, import_react.createElement)(
-      "thead",
-      {},
-      (0, import_react.createElement)(
-        "tr",
-        {},
-        COLUMNS.map(
-          (Name, Index) => (0, import_react.createElement)(
-            "th",
-            {
-              key: Name,
-              className: Index < 3 ? "playform-cost-th-left" : "playform-cost-th",
-              title: Props.t(`column.${Name}.title`)
-            },
-            Props.t(`column.${Name}`)
-          )
-        )
-      )
-    ),
-    (0, import_react.createElement)("tbody", {}, Props.Body),
-    (0, import_react.createElement)("tfoot", {}, Props.Totals)
-  );
+// Source/Function/Share.ts
+function Share(Total, Scale) {
+  if (typeof Scale !== "number" || !Number.isFinite(Scale) || Scale <= 0) return 1;
+  if (Total <= 0) return 0;
+  return Math.min(1, Math.sqrt(Total / Scale));
 }
 
-// Source/Function/DetailRow.ts
+// Source/Function/Cells.ts
+var import_react = require("react");
+var FilePillLimit = 3;
+var ToneClass = (Tone2) => `playform-cost-tone${Tone2}`;
+var ModelText = (Text4, Identifier) => (0, import_react.createElement)(import_dsh_client_ui_primitives.Tooltip, {
+  label: Identifier,
+  portal: true,
+  onlyWhenClipped: true,
+  disabled: Identifier === "",
+  children: (0, import_react.createElement)(
+    "span",
+    {
+      className: "playform-cost-model-text",
+      // The tooltip's anchor contract is all-optional, so the span must
+      // name one of its keys for the weak-type check; the primitive
+      // clones the child and injects its own handler at runtime.
+      onPointerEnter: void 0
+    },
+    Text4
+  )
+});
+var PillNode = (Pill, Index, t) => (0, import_react.createElement)(import_dsh_client_ui_primitives.Tooltip, {
+  key: Index,
+  label: Pill.Path ?? Pill.Name,
+  portal: true,
+  disabled: Pill.Path === void 0,
+  children: (0, import_react.createElement)(
+    "span",
+    {
+      className: "playform-cost-pill",
+      // The anchor contract's weak-type check needs one of its keys;
+      // the tooltip injects the real handler when it clones the child.
+      onPointerEnter: void 0,
+      ...Pill.Path === void 0 && Pill.Lines !== null && Pill.Lines !== 0 ? { title: t("files.lines", { lines: Lines(Pill.Lines) }) } : {}
+    },
+    (0, import_react.createElement)("span", { className: `playform-cost-dot ${ToneClass(Pill.Tone)}` }),
+    Pill.Name
+  )
+});
+var MarkerSpan = (Marker, Index) => (0, import_react.createElement)(
+  "span",
+  {
+    key: Index,
+    className: Marker.Class,
+    ...Marker.Title === void 0 ? {} : { title: Marker.Title }
+  },
+  Marker.Text
+);
+var Scope = (Props) => {
+  const Toggle = Props.Toggle;
+  const ClockCell = Props.Clock;
+  const Hint = Props.Hint;
+  return (0, import_react.createElement)(
+    "td",
+    { className: Props.Cell },
+    Toggle === void 0 ? Props.Label ?? null : (0, import_react.createElement)(
+      "button",
+      {
+        type: "button",
+        className: "playform-cost-row-toggle",
+        "aria-expanded": Toggle.Expanded,
+        "aria-label": Toggle.Aria,
+        title: Toggle.Title,
+        onClick: (Event) => {
+          Event.stopPropagation();
+          Toggle.OnToggle();
+        }
+      },
+      Toggle.Label
+    ),
+    ClockCell === void 0 ? null : (0, import_react.createElement)(
+      "span",
+      { className: "playform-cost-turn-clock", title: ClockCell.Title },
+      ClockCell.Text
+    ),
+    Hint === void 0 ? null : (0, import_react.createElement)("span", { className: "playform-cost-detail-hint" }, Hint),
+    Props.Markers.map(MarkerSpan)
+  );
+};
+var Model = (Props) => {
+  const Mode = Props.Mode;
+  const Region = Props.Region;
+  const Tier = Props.Tier;
+  const When = Props.When;
+  const Identifier = [Props.Provider, Props.Model].filter((Part) => Part !== "").join("/");
+  return (0, import_react.createElement)(
+    "td",
+    {
+      className: Props.Cell,
+      ...Props.Title === void 0 ? {} : { title: Props.Title }
+    },
+    When === void 0 ? null : (0, import_react.createElement)(
+      "span",
+      { className: "playform-cost-step-when" },
+      (0, import_react.createElement)("span", { className: "playform-cost-step-clock" }, When.Text)
+    ),
+    (0, import_react.createElement)(
+      "span",
+      { className: "playform-cost-model-clip" },
+      (0, import_react.createElement)("span", { className: "playform-cost-model-pill" }, Props.Provider),
+      ModelText(Props.Model, Identifier),
+      Mode === void 0 || Mode === "" ? null : (0, import_react.createElement)("span", { className: "playform-cost-pill" }, Mode),
+      Region === void 0 || Region === "" ? null : (0, import_react.createElement)("span", { className: "playform-cost-pill" }, Region),
+      typeof Tier === "number" ? (0, import_react.createElement)("span", { className: "playform-cost-pill" }, String(Tier)) : null
+    )
+  );
+};
+var Files = (Props) => {
+  const Shown = Props.Pills.slice(0, FilePillLimit);
+  const Extra = Props.Pills.length - Shown.length;
+  const Saving = Number.isFinite(Props.Saving) ? Props.Saving : 0;
+  const Quiet = !Props.Fail && Props.Pills.length === 0 && Saving === 0;
+  const SavingText = Props.t("files.saving", {
+    value: Price(Saving, Props.Currency)
+  });
+  return (0, import_react.createElement)(
+    "td",
+    { className: Props.Cell },
+    Quiet ? (0, import_react.createElement)(
+      "span",
+      { className: "playform-cost-files-clip" },
+      (0, import_react.createElement)(
+        "span",
+        { className: "playform-cost-files-stat" },
+        Props.t("files.contextOnly", { tokens: CountShort(Props.Tokens) })
+      )
+    ) : [
+      (0, import_react.createElement)(
+        "div",
+        {
+          className: "playform-cost-pills",
+          ...Props.Pills.length === 0 ? {} : {
+            title: Props.t("files.title", {
+              calls: Props.Calls,
+              files: Props.Pills.map((Pill) => Pill.Name).join(" | ")
+            })
+          }
+        },
+        Props.Fail ? (0, import_react.createElement)(
+          "span",
+          { className: "playform-cost-fail-pill" },
+          Props.t("state.failed")
+        ) : null,
+        Shown.map((Pill, Index) => PillNode(Pill, Index, Props.t)),
+        Extra > 0 ? (0, import_react.createElement)(
+          "span",
+          { className: "playform-cost-pill playform-cost-pill-muted" },
+          Props.t("files.more", { count: Extra })
+        ) : null,
+        Saving !== 0 ? (0, import_react.createElement)(
+          "span",
+          {
+            className: "playform-cost-pill playform-cost-pill-muted",
+            title: Saving < 0 ? Props.t("saving.negative.title") : Props.t("files.saving.title")
+          },
+          Saving < 0 ? (0, import_react.createElement)(
+            "span",
+            { className: "playform-cost-removed" },
+            SavingText
+          ) : SavingText
+        ) : null
+      ),
+      Props.ShowMix && Props.Pills.length > 0 ? (0, import_react.createElement)(
+        "div",
+        { className: "playform-cost-mix" },
+        Props.Pills.map(
+          (Pill, Index) => (0, import_react.createElement)("span", {
+            key: Index,
+            className: `playform-cost-mix-segment ${ToneClass(Pill.Tone)}`,
+            style: { flexGrow: Pill.Count },
+            title: Props.t("files.count", { count: Pill.Count })
+          })
+        )
+      ) : null
+    ]
+  );
+};
+var Money = (Props) => (0, import_react.createElement)(
+  "td",
+  {
+    className: Props.Cell,
+    ...Props.Title === void 0 ? {} : { title: Props.Title }
+  },
+  (0, import_react.createElement)(
+    "span",
+    { className: "playform-cost-money" },
+    Price(Props.Value, Props.Currency)
+  )
+);
+var Alloc = (Props) => (0, import_react.createElement)(
+  "td",
+  {
+    className: Props.Cell,
+    ...Props.Has ? {} : { title: Props.t("unknown") }
+  },
+  Props.Has ? [
+    (0, import_react.createElement)(
+      "span",
+      { key: "direct", className: "playform-cost-num" },
+      Price(Props.Direct, Props.Currency)
+    ),
+    (0, import_react.createElement)(
+      "span",
+      { key: "amortized", className: "playform-cost-num-delta" },
+      Price(Props.Amortized, Props.Currency)
+    )
+  ] : Dash_default
+);
+var Segment = (Key, Class, Value2) => Value2 > 0 ? (0, import_react.createElement)("span", {
+  key: Key,
+  className: `playform-cost-bar-segment ${Class}`,
+  style: { flexGrow: Value2 }
+}) : null;
+var Bar = (Props) => {
+  const Figure = (Value2) => typeof Value2 === "number" && Number.isFinite(Value2) ? Value2 : 0;
+  const Total = Figure(Props.Total);
+  const CacheRead = Math.max(0, Figure(Props.Cost.cacheRead));
+  const Input = Math.max(0, Figure(Props.Cost.input));
+  const Output = Math.max(0, Figure(Props.Cost.output));
+  const Other = Math.max(0, Total - CacheRead - Input - Output);
+  const Tag = (Value2) => Price(Value2, Props.Currency);
+  const Parts = [
+    ...Props.Start === null ? [] : [Props.t("bar.start", { clock: Clock(Props.Start) })],
+    Props.t("bar.cacheRead", { value: Tag(CacheRead) }),
+    Props.t("bar.input", { value: Tag(Input) }),
+    Props.t("bar.output", { value: Tag(Output) }),
+    Props.t("bar.other", { value: Tag(Other) }),
+    Props.t("bar.total", { value: Tag(Total) })
+  ];
+  return (0, import_react.createElement)(
+    "td",
+    { className: Props.Cell, title: Parts.join(" | ") },
+    (0, import_react.createElement)(
+      "div",
+      { className: "playform-cost-bar-wrap" },
+      (0, import_react.createElement)(
+        "div",
+        { className: Props.Track },
+        (0, import_react.createElement)(
+          "div",
+          {
+            className: "playform-cost-bar-fill",
+            style: { width: `${Math.round(Share(Total, Props.Scale) * 100)}%` }
+          },
+          Segment("cacheRead", "playform-cost-bar-cache", CacheRead),
+          Segment("input", "playform-cost-bar-input", Input),
+          Segment("output", "playform-cost-bar-output", Output),
+          Segment("other", "playform-cost-bar-other", Other)
+        )
+      ),
+      (0, import_react.createElement)("span", { className: "playform-cost-bar-value" }, Tag(Total))
+    )
+  );
+};
+var Cells_default = { Scope, Model, Files, Money, Bar, Alloc };
+
+// Source/Function/Rate.ts
+function Rate(Value2) {
+  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
+  return `${(Value2 * 100).toFixed(2)}%`;
+}
+
+// Source/Function/Columns.ts
 var import_react2 = require("react");
+var Token = (Cell, Value2) => (0, import_react2.createElement)(
+  "td",
+  { className: Cell },
+  (0, import_react2.createElement)("span", { className: "playform-cost-num" }, CountShort(Value2))
+);
+var Cache = (Cell, Tokens, Hit, t) => {
+  const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
+  const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
+  const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
+  const Base = Read + Input + Write;
+  switch (true) {
+    case Base <= 0:
+      return (0, import_react2.createElement)("td", { className: Cell, title: t("unknown") }, Dash_default);
+    case (Read > 0 || Write > 0):
+      return (0, import_react2.createElement)(
+        "td",
+        {
+          className: Cell,
+          title: t("cache.detail", {
+            read: CountShort(Read),
+            input: CountShort(Input),
+            write: CountShort(Write)
+          })
+        },
+        (0, import_react2.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
+      );
+    default:
+      return (0, import_react2.createElement)(
+        "td",
+        { className: Cell, title: t("column.cache.title") },
+        (0, import_react2.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
+      );
+  }
+};
+var OtherTitle = (Cost, Currency, t) => {
+  const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
+  const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
+  switch (true) {
+    case (Write > 0 || Reasoning > 0):
+      return t("other.detail", {
+        write: Price(Write, Currency),
+        reasoning: Price(Reasoning, Currency),
+        rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency)
+      });
+    default:
+      return t("column.other.title");
+  }
+};
+var Columns_default = {
+  id: "turns",
+  version: 1,
+  columns: [
+    {
+      id: "scope",
+      labelKey: "column.scope",
+      kind: "text",
+      width: 11,
+      sortable: false,
+      render: (Row) => Cells_default.Scope(Row.scope)
+    },
+    {
+      id: "model",
+      labelKey: "column.model",
+      kind: "text",
+      width: 15,
+      sortable: true,
+      render: (Row) => Cells_default.Model(Row.model)
+    },
+    {
+      id: "files",
+      labelKey: "column.files",
+      kind: "status",
+      width: 13,
+      sortable: false,
+      render: (Row, Context) => Cells_default.Files({ ...Row.files, t: Context.t })
+    },
+    {
+      id: "tokens",
+      labelKey: "column.tokens",
+      kind: "number",
+      width: 6.5,
+      sortable: true,
+      render: (Row) => Token(Row.tokens.Cell, Row.tokens.Value)
+    },
+    {
+      id: "cache",
+      labelKey: "column.cache",
+      kind: "ratio",
+      width: 6.5,
+      sortable: true,
+      render: (Row, Context) => Cache(Row.cache.Cell, Row.cache.Tokens, Row.cache.Hit, Context.t)
+    },
+    {
+      id: "cacheRead",
+      labelKey: "column.cacheRead",
+      kind: "money",
+      width: 7.5,
+      sortable: true,
+      render: (Row) => Cells_default.Money(Row.cacheRead)
+    },
+    {
+      id: "input",
+      labelKey: "column.input",
+      kind: "money",
+      width: 7,
+      sortable: true,
+      render: (Row) => Cells_default.Money(Row.input)
+    },
+    {
+      id: "output",
+      labelKey: "column.output",
+      kind: "money",
+      width: 7,
+      sortable: true,
+      render: (Row) => Cells_default.Money(Row.output)
+    },
+    {
+      id: "other",
+      labelKey: "column.other",
+      kind: "money",
+      width: 7,
+      sortable: true,
+      render: (Row, Context) => Cells_default.Money({
+        Cell: Row.other.Cell,
+        Value: Row.other.Value,
+        Currency: Row.other.Currency,
+        Title: OtherTitle(Row.other.Cost, Row.other.Currency, Context.t)
+      })
+    },
+    {
+      id: "allocation",
+      labelKey: "column.allocation",
+      kind: "money",
+      width: 7.5,
+      sortable: true,
+      render: (Row, Context) => Cells_default.Alloc({ ...Row.allocation, t: Context.t })
+    },
+    {
+      id: "total",
+      labelKey: "column.total",
+      kind: "money",
+      width: 12,
+      sortable: true,
+      render: (Row, Context) => Cells_default.Bar({ ...Row.total, t: Context.t })
+    }
+  ],
+  defaultSort: [],
+  rowKey: (Row) => Row.Key
+};
+
+// Source/Function/DetailRow.ts
+var import_react3 = require("react");
 var DetailFileLimit = 100;
 var BUCKETS = [
   { Field: "input", Label: "bucket.input", Dot: "playform-cost-bar-input" },
@@ -185,7 +581,7 @@ var Block = (File, Index, Currency, t) => {
     const Added = Math.max(0, Delta);
     const Removed = Math.max(0, -Delta);
     Body.push(
-      (0, import_react2.createElement)(
+      (0, import_react3.createElement)(
         "span",
         {
           key: "lines",
@@ -197,7 +593,7 @@ var Block = (File, Index, Currency, t) => {
   }
   if (typeof File.bytesDelta === "number")
     Body.push(
-      (0, import_react2.createElement)(
+      (0, import_react3.createElement)(
         "span",
         { key: "bytes", className: "playform-cost-block-sub" },
         t("detail.bytes", { bytes: Count(File.bytesDelta) })
@@ -205,20 +601,20 @@ var Block = (File, Index, Currency, t) => {
     );
   if (File.readBeforeEdit === true)
     Body.push(
-      (0, import_react2.createElement)(
+      (0, import_react3.createElement)(
         "span",
         { key: "read", className: "playform-cost-block-sub" },
         t("detail.readBeforeEdit")
       )
     );
-  return (0, import_react2.createElement)(
+  return (0, import_react3.createElement)(
     "div",
     { className: "playform-cost-block", key: Index },
-    (0, import_react2.createElement)(
+    (0, import_react3.createElement)(
       "div",
       { className: "playform-cost-block-head" },
-      (0, import_react2.createElement)("span", { className: "playform-cost-block-path", title: Path }, Path),
-      (0, import_react2.createElement)(
+      (0, import_react3.createElement)("span", { className: "playform-cost-block-path", title: Path }, Path),
+      (0, import_react3.createElement)(
         "span",
         { className: "playform-cost-block-meta" },
         t("detail.allocation", {
@@ -229,22 +625,22 @@ var Block = (File, Index, Currency, t) => {
           )
         })
       ),
-      (0, import_react2.createElement)(
+      (0, import_react3.createElement)(
         "span",
         { className: "playform-cost-block-meta" },
         t("bar.total", {
           value: Price(typeof File.total === "number" ? File.total : 0, Currency)
         })
       ),
-      Touched ? (0, import_react2.createElement)(
+      Touched ? (0, import_react3.createElement)(
         "span",
         { className: "playform-cost-pill" },
-        (0, import_react2.createElement)("span", {
+        (0, import_react3.createElement)("span", {
           className: `playform-cost-dot playform-cost-tone${StageTone(Stage)}`
         }),
         StageLabel(Stage, t)
       ) : null,
-      Kind !== "" ? (0, import_react2.createElement)(
+      Kind !== "" ? (0, import_react3.createElement)(
         "span",
         {
           className: "playform-cost-pill",
@@ -252,20 +648,20 @@ var Block = (File, Index, Currency, t) => {
         },
         Kind
       ) : null,
-      Tool !== "" ? (0, import_react2.createElement)(
+      Tool !== "" ? (0, import_react3.createElement)(
         "span",
         { className: "playform-cost-block-meta" },
         t("detail.tool", { tool: Tool })
       ) : null
     ),
-    Body.length === 0 ? (0, import_react2.createElement)(
+    Body.length === 0 ? (0, import_react3.createElement)(
       "div",
       { className: "playform-cost-block-empty" },
       // Two fallbacks: a touched file without any optional change
       // field is not an allocation-only file, and an untouched
       // one is not a file the call changed.
       Touched ? t("detail.touchedNoDetail") : t("detail.allocationOnly")
-    ) : (0, import_react2.createElement)("div", { className: "playform-cost-block-body" }, Body)
+    ) : (0, import_react3.createElement)("div", { className: "playform-cost-block-body" }, Body)
   );
 };
 function DetailRow(Props) {
@@ -295,42 +691,42 @@ function DetailRow(Props) {
     }
   });
   const Shown = Sorted2.slice(0, DetailFileLimit);
-  return (0, import_react2.createElement)(
+  return (0, import_react3.createElement)(
     "tr",
     {},
-    (0, import_react2.createElement)(
+    (0, import_react3.createElement)(
       "td",
-      { className: "playform-cost-detail-cell", colSpan: COLUMNS.length },
-      (0, import_react2.createElement)(
+      { className: "playform-cost-detail-cell", colSpan: Props.Resolved.columns.length },
+      (0, import_react3.createElement)(
         "div",
         { className: "playform-cost-detail-head" },
-        (0, import_react2.createElement)(
+        (0, import_react3.createElement)(
           "span",
           { className: "playform-cost-detail-title" },
           t("detail.files", { count: Files2.length })
         ),
-        (0, import_react2.createElement)(
+        (0, import_react3.createElement)(
           "span",
           { className: "playform-cost-block-meta" },
           ` - ${Price(Money3("total"), Tag)}`
         )
       ),
-      (0, import_react2.createElement)(
+      (0, import_react3.createElement)(
         "div",
         { className: "playform-cost-buckets", title: t("detail.buckets") },
         BUCKETS.map(
-          (Item) => (0, import_react2.createElement)(
+          (Item) => (0, import_react3.createElement)(
             "span",
             { className: "playform-cost-bucket", key: Item.Field },
-            (0, import_react2.createElement)("span", {
+            (0, import_react3.createElement)("span", {
               className: `playform-cost-bucket-dot ${Item.Dot}`
             }),
-            (0, import_react2.createElement)(
+            (0, import_react3.createElement)(
               "span",
               { className: "playform-cost-bucket-label" },
               t(Item.Label)
             ),
-            (0, import_react2.createElement)(
+            (0, import_react3.createElement)(
               "span",
               { className: "playform-cost-bucket-value" },
               Price(Money3(Item.Field), Tag)
@@ -338,12 +734,12 @@ function DetailRow(Props) {
           )
         )
       ),
-      Files2.length === 0 ? (0, import_react2.createElement)(
+      Files2.length === 0 ? (0, import_react3.createElement)(
         "div",
         { className: "playform-cost-block-empty" },
         t("detail.empty")
       ) : Shown.map((File, Index) => Block(File, Index, Tag, t)),
-      Files2.length > DetailFileLimit ? (0, import_react2.createElement)(
+      Files2.length > DetailFileLimit ? (0, import_react3.createElement)(
         "div",
         { className: "playform-cost-block-empty" },
         t("detail.hidden", { count: Files2.length - DetailFileLimit })
@@ -362,6 +758,17 @@ var IsEnvelope = (Candidate) => {
   }
   const Envelope = Candidate;
   return typeof Envelope.ok === "boolean" && typeof Envelope.code === "string" && typeof Envelope.rows === "number" && Array.isArray(Envelope.calls);
+};
+var Selected = (SessionId, Rows, Selection) => {
+  const Query = `${Path_default}?session=${encodeURIComponent(SessionId)}&rows=${Rows}`;
+  switch (true) {
+    case Selection === void 0:
+      return Query;
+    case Selection.revisionId === void 0:
+      return `${Query}&basis=${encodeURIComponent(Selection.basis)}`;
+    default:
+      return `${Query}&basis=${encodeURIComponent(Selection.basis)}&revision=${Selection.revisionId}`;
+  }
 };
 var Fail = (Message, Rows) => ({
   ok: false,
@@ -411,12 +818,12 @@ var Fail = (Message, Rows) => ({
   stages: null,
   models: null
 });
-function Fetch(SessionId, Rows) {
+function Fetch(SessionId, Rows, Selection) {
   if (typeof fetch !== "function") {
     return Promise.resolve(Fail("the fetch API is not available in this runtime", Rows));
   }
   try {
-    return fetch(`${Path_default}?session=${encodeURIComponent(SessionId)}&rows=${Rows}`, {
+    return fetch(Selected(SessionId, Rows, Selection), {
       method: "GET",
       headers: { accept: "application/json" },
       cache: "no-store"
@@ -523,22 +930,10 @@ var Apply = (Rows, Current) => Sorted(
 var FileFilters_default = { Kinds, Sorts, Default, StagesOf, Apply };
 
 // Source/Function/FileTable.ts
-var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
-
-// Source/Function/Lines.ts
-function Lines(Value2) {
-  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return "";
-  return Value2 >= 0 ? `+${Count(Value2)}` : `-${Count(Math.abs(Value2))}`;
-}
-
-// Source/Function/Rate.ts
-function Rate(Value2) {
-  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
-  return `${(Value2 * 100).toFixed(2)}%`;
-}
+var import_dsh_client_ui_primitives2 = require("@deepseek-ai/dsh-client-ui-primitives");
 
 // Source/Function/Stamp.ts
-var Pad = (Value2) => String(Value2).padStart(2, "0");
+var Pad2 = (Value2) => String(Value2).padStart(2, "0");
 function Stamp(Value2) {
   if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
   const Moment = new Date(Value2);
@@ -546,9 +941,9 @@ function Stamp(Value2) {
     case Number.isNaN(Moment.getTime()):
       return Dash_default;
     default:
-      return `${Pad(Moment.getMonth() + 1)}-${Pad(Moment.getDate())} ${Pad(
+      return `${Pad2(Moment.getMonth() + 1)}-${Pad2(Moment.getDate())} ${Pad2(
         Moment.getHours()
-      )}:${Pad(Moment.getMinutes())}`;
+      )}:${Pad2(Moment.getMinutes())}`;
   }
 }
 
@@ -727,8 +1122,8 @@ var Locale_en_default = {
 };
 
 // Source/Function/FileTable.ts
-var import_react3 = require("react");
-var COLUMNS2 = [
+var import_react4 = require("react");
+var COLUMNS = [
   "file",
   "touches",
   "lines",
@@ -740,7 +1135,7 @@ var COLUMNS2 = [
   "stage",
   "verdict"
 ];
-var COLUMN_WIDTHS2 = {
+var COLUMN_WIDTHS = {
   file: 20,
   touches: 14,
   lines: 8,
@@ -770,7 +1165,7 @@ var BaseName = (Path) => {
 };
 var ShortSession = (SessionId) => SessionId.length <= 8 ? SessionId : `...${SessionId.slice(-8)}`;
 var Models = (Value2) => Array.isArray(Value2) ? Value2.filter((Item) => typeof Item === "string") : [];
-var ToneClass = (Tone2) => `playform-cost-tone${Tone2}`;
+var ToneClass2 = (Tone2) => `playform-cost-tone${Tone2}`;
 var StageTone2 = (Stage) => StageTones2[Stage] ?? 7;
 var Word = (Key, Fallback, t) => {
   const Known = Locale_en_default[Key];
@@ -807,17 +1202,17 @@ var ContributionLabel = (Row) => {
 var ModelsCell = (Cell, List) => {
   switch (true) {
     case List.length === 0:
-      return (0, import_react3.createElement)("td", { className: Cell }, Dash_default);
+      return (0, import_react4.createElement)("td", { className: Cell }, Dash_default);
     default: {
       const First = List[0] ?? "";
-      return (0, import_react3.createElement)(
+      return (0, import_react4.createElement)(
         "td",
         { className: Cell, title: List.join(", ") },
-        (0, import_react3.createElement)(
+        (0, import_react4.createElement)(
           "div",
           { className: "playform-cost-pills", style: { flexWrap: "nowrap" } },
-          (0, import_react3.createElement)("span", { className: "playform-cost-pill" }, First),
-          List.length > 1 ? (0, import_react3.createElement)(
+          (0, import_react4.createElement)("span", { className: "playform-cost-pill" }, First),
+          List.length > 1 ? (0, import_react4.createElement)(
             "span",
             {
               className: "playform-cost-pill playform-cost-pill-muted"
@@ -833,17 +1228,17 @@ var ContributionRow = (Path, Entry, Currency, t) => {
   const Phase = Entry === void 0 ? "loading" : Entry.Phase;
   const Rows = Entry === void 0 ? [] : Entry.Rows;
   const Cell = "playform-cost-step-metric";
-  const Table2 = (0, import_react3.createElement)(
+  const Table2 = (0, import_react4.createElement)(
     "table",
     { className: "playform-cost-table" },
-    (0, import_react3.createElement)(
+    (0, import_react4.createElement)(
       "thead",
       {},
-      (0, import_react3.createElement)(
+      (0, import_react4.createElement)(
         "tr",
         {},
         CONTRIBUTION_COLUMNS.map(
-          (Key) => (0, import_react3.createElement)(
+          (Key) => (0, import_react4.createElement)(
             "th",
             { key: Key, className: Cell },
             t(`files.contributions.column.${Key}`)
@@ -851,58 +1246,58 @@ var ContributionRow = (Path, Entry, Currency, t) => {
         )
       )
     ),
-    (0, import_react3.createElement)(
+    (0, import_react4.createElement)(
       "tbody",
       {},
       Rows.map(
-        (Row, Index) => (0, import_react3.createElement)(
+        (Row, Index) => (0, import_react4.createElement)(
           "tr",
           { key: Index },
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)(
             "td",
             { className: Cell, title: S2(Row.sessionId) },
             ContributionLabel(Row)
           ),
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)(
             "td",
             { className: Cell },
-            (0, import_react3.createElement)(
+            (0, import_react4.createElement)(
               "span",
               { className: "playform-cost-num" },
               Count(N2(Row.calls))
             )
           ),
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)(
             "td",
             { className: Cell },
-            (0, import_react3.createElement)(
+            (0, import_react4.createElement)(
               "span",
               { className: "playform-cost-money" },
               Price(N2(Row.direct), Currency)
             )
           ),
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)(
             "td",
             { className: Cell },
-            (0, import_react3.createElement)(
+            (0, import_react4.createElement)(
               "span",
               { className: "playform-cost-money" },
               Price(N2(Row.amortized), Currency)
             )
           ),
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)(
             "td",
             { className: Cell },
-            (0, import_react3.createElement)(
+            (0, import_react4.createElement)(
               "span",
               { className: "playform-cost-money" },
               Price(N2(Row.total), Currency)
             )
           ),
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)(
             "td",
             { className: Cell },
-            (0, import_react3.createElement)(
+            (0, import_react4.createElement)(
               "span",
               { className: "playform-cost-num" },
               Rate(N2(Row.share))
@@ -916,19 +1311,19 @@ var ContributionRow = (Path, Entry, Currency, t) => {
   const Body = (() => {
     switch (true) {
       case Phase === "loading":
-        return (0, import_react3.createElement)(
+        return (0, import_react4.createElement)(
           "div",
           { className: "playform-cost-block-empty", role: "status" },
           t("files.contributions.loading")
         );
       case Phase === "failed":
-        return (0, import_react3.createElement)(
+        return (0, import_react4.createElement)(
           "div",
           { className: "playform-cost-block-empty" },
           t("files.contributions.failed")
         );
       case Rows.length === 0:
-        return (0, import_react3.createElement)(
+        return (0, import_react4.createElement)(
           "div",
           { className: "playform-cost-block-empty" },
           t("files.contributions.empty")
@@ -937,21 +1332,21 @@ var ContributionRow = (Path, Entry, Currency, t) => {
         return Table2;
     }
   })();
-  return (0, import_react3.createElement)(
+  return (0, import_react4.createElement)(
     "tr",
     {},
-    (0, import_react3.createElement)(
+    (0, import_react4.createElement)(
       "td",
-      { className: "playform-cost-detail-cell", colSpan: COLUMNS2.length },
-      (0, import_react3.createElement)(
+      { className: "playform-cost-detail-cell", colSpan: COLUMNS.length },
+      (0, import_react4.createElement)(
         "div",
         { className: "playform-cost-detail-head" },
-        (0, import_react3.createElement)(
+        (0, import_react4.createElement)(
           "span",
           { className: "playform-cost-detail-title" },
           t("files.contributions.title")
         ),
-        (0, import_react3.createElement)(
+        (0, import_react4.createElement)(
           "span",
           { className: "playform-cost-block-meta" },
           ` - ${BaseName(Path)}`
@@ -961,40 +1356,40 @@ var ContributionRow = (Path, Entry, Currency, t) => {
     )
   );
 };
-var MoneyCell = (Cell, Value2, Currency, Title) => (0, import_react3.createElement)(
+var MoneyCell = (Cell, Value2, Currency, Title) => (0, import_react4.createElement)(
   "td",
   { className: Cell, ...Title === void 0 ? {} : { title: Title } },
-  (0, import_react3.createElement)("span", { className: "playform-cost-money" }, Price(Value2, Currency))
+  (0, import_react4.createElement)("span", { className: "playform-cost-money" }, Price(Value2, Currency))
 );
-var TouchPill = (Key, Value2, t) => (0, import_react3.createElement)(
+var TouchPill = (Key, Value2, t) => (0, import_react4.createElement)(
   "span",
   { key: Key, className: "playform-cost-pill" },
   `${t(Key)} ${Count(Value2)}`
 );
 var ShareCell = (Cell, Total, Lifetime, t) => {
   const Ratio = Lifetime > 0 ? Math.max(0, Math.min(1, Total / Lifetime)) : null;
-  return (0, import_react3.createElement)(
+  return (0, import_react4.createElement)(
     "td",
     { className: Cell, title: t("files.column.share.title") },
-    (0, import_react3.createElement)(
+    (0, import_react4.createElement)(
       "div",
       { className: "playform-cost-bar-wrap" },
-      (0, import_react3.createElement)(
+      (0, import_react4.createElement)(
         "div",
         { className: "playform-cost-bar-step" },
-        Ratio === null ? null : (0, import_react3.createElement)(
+        Ratio === null ? null : (0, import_react4.createElement)(
           "div",
           {
             className: "playform-cost-bar-fill",
             style: { width: `${Math.round(Ratio * 100)}%` }
           },
-          (0, import_react3.createElement)("span", {
+          (0, import_react4.createElement)("span", {
             className: "playform-cost-bar-segment playform-cost-bar-input",
             style: { flexGrow: 1 }
           })
         )
       ),
-      (0, import_react3.createElement)("span", { className: "playform-cost-bar-value" }, Rate(Ratio))
+      (0, import_react4.createElement)("span", { className: "playform-cost-bar-value" }, Rate(Ratio))
     )
   );
 };
@@ -1002,27 +1397,27 @@ var StageCell = (Cell, Stages2, t) => {
   const Title = t("files.column.stage.title");
   switch (true) {
     case Stages2.length === 0:
-      return (0, import_react3.createElement)("td", { className: Cell, title: Title }, Dash_default);
+      return (0, import_react4.createElement)("td", { className: Cell, title: Title }, Dash_default);
     default: {
       const First = Stages2[0] ?? "";
-      return (0, import_react3.createElement)(
+      return (0, import_react4.createElement)(
         "td",
         {
           className: Cell,
           title: Stages2.map((Stage) => Word(`stage.${Stage}`, Stage, t)).join(" | ")
         },
-        (0, import_react3.createElement)(
+        (0, import_react4.createElement)(
           "div",
           { className: "playform-cost-pills", style: { flexWrap: "nowrap" } },
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)(
             "span",
             { className: "playform-cost-pill" },
-            (0, import_react3.createElement)("span", {
-              className: `playform-cost-dot ${ToneClass(StageTone2(First))}`
+            (0, import_react4.createElement)("span", {
+              className: `playform-cost-dot ${ToneClass2(StageTone2(First))}`
             }),
             Word(`stage.${First}`, First, t)
           ),
-          Stages2.length > 1 ? (0, import_react3.createElement)(
+          Stages2.length > 1 ? (0, import_react4.createElement)(
             "span",
             {
               className: "playform-cost-pill playform-cost-pill-muted"
@@ -1038,13 +1433,13 @@ var VerdictCell = (Cell, Verdict, t) => {
   const Title = t("files.column.verdict.title");
   switch (true) {
     case Verdict === "":
-      return (0, import_react3.createElement)("td", { className: Cell, title: Title }, Dash_default);
+      return (0, import_react4.createElement)("td", { className: Cell, title: Title }, Dash_default);
     default: {
       const Class = VerdictClass(Verdict);
-      return (0, import_react3.createElement)(
+      return (0, import_react4.createElement)(
         "td",
         { className: Cell, title: Title },
-        (0, import_react3.createElement)(
+        (0, import_react4.createElement)(
           "span",
           { ...Class === null ? {} : { className: Class } },
           Word(`files.verdict.${Verdict}`, Verdict, t)
@@ -1062,12 +1457,12 @@ var LinesCell = (Cell, Added, Removed, BytesAdded, BytesRemoved, t) => {
   });
   switch (true) {
     case (Added === 0 && Removed === 0):
-      return (0, import_react3.createElement)("td", { className: Cell, title: Title }, Dash_default);
+      return (0, import_react4.createElement)("td", { className: Cell, title: Title }, Dash_default);
     default: {
       const Marks = [];
       if (Added > 0)
         Marks.push(
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)(
             "span",
             { key: "added", className: "playform-cost-added" },
             Lines(Added)
@@ -1075,7 +1470,7 @@ var LinesCell = (Cell, Added, Removed, BytesAdded, BytesRemoved, t) => {
         );
       if (Added > 0 && Removed > 0)
         Marks.push(
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)(
             "span",
             { key: "sep", className: "playform-cost-files-sep" },
             "/"
@@ -1083,13 +1478,13 @@ var LinesCell = (Cell, Added, Removed, BytesAdded, BytesRemoved, t) => {
         );
       if (Removed > 0)
         Marks.push(
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)(
             "span",
             { key: "removed", className: "playform-cost-removed" },
             Lines(-Removed)
           )
         );
-      return (0, import_react3.createElement)("td", { className: Cell, title: Title }, Marks);
+      return (0, import_react4.createElement)("td", { className: Cell, title: Title }, Marks);
     }
   }
 };
@@ -1098,8 +1493,8 @@ function FileTable(Props) {
   const Tag = Props.Currency === "" ? "USD" : Props.Currency;
   const Metric = "playform-cost-step-metric";
   const Plain = "playform-cost-step-files";
-  const [Open, SetOpen] = (0, import_react3.useState)(() => /* @__PURE__ */ new Set());
-  const [Cache, SetCache] = (0, import_react3.useState)({});
+  const [Open, SetOpen] = (0, import_react4.useState)(() => /* @__PURE__ */ new Set());
+  const [Cache2, SetCache] = (0, import_react4.useState)({});
   let SumTouches = 0;
   let SumAdded = 0;
   let SumRemoved = 0;
@@ -1132,7 +1527,7 @@ function FileTable(Props) {
     });
     switch (true) {
       case Expanded:
-      case Cache[Path] !== void 0:
+      case Cache2[Path] !== void 0:
         return;
       default:
         SetCache((Current) => ({
@@ -1180,13 +1575,13 @@ function FileTable(Props) {
     if (Edits > 0) Pills.push(TouchPill("files.touch.edit", Edits, t));
     if (Writes > 0) Pills.push(TouchPill("files.touch.write", Writes, t));
     if (Reads > 0) Pills.push(TouchPill("files.touch.read", Reads, t));
-    const Cells = (0, import_react3.createElement)(
+    const Cells = (0, import_react4.createElement)(
       "tr",
       {},
-      (0, import_react3.createElement)(
+      (0, import_react4.createElement)(
         "td",
         { className: Plain, title: Path },
-        (0, import_react3.createElement)(
+        (0, import_react4.createElement)(
           "button",
           {
             type: "button",
@@ -1196,11 +1591,11 @@ function FileTable(Props) {
             title: Label,
             onClick: () => Toggle(Path)
           },
-          (0, import_react3.createElement)(import_dsh_client_ui_primitives.Tooltip, {
+          (0, import_react4.createElement)(import_dsh_client_ui_primitives2.Tooltip, {
             label: Path,
             portal: true,
             disabled: Path === "",
-            children: (0, import_react3.createElement)(
+            children: (0, import_react4.createElement)(
               "span",
               {
                 className: "playform-cost-model-text",
@@ -1215,7 +1610,7 @@ function FileTable(Props) {
           })
         )
       ),
-      (0, import_react3.createElement)(
+      (0, import_react4.createElement)(
         "td",
         {
           className: Plain,
@@ -1229,10 +1624,10 @@ function FileTable(Props) {
             last: Stamp(Epoch(Row.lastAt))
           })
         },
-        (0, import_react3.createElement)(
+        (0, import_react4.createElement)(
           "div",
           { className: "playform-cost-pills", style: { flexWrap: "nowrap" } },
-          Pills.length === 0 ? (0, import_react3.createElement)(
+          Pills.length === 0 ? (0, import_react4.createElement)(
             "span",
             {
               className: "playform-cost-pill playform-cost-pill-muted"
@@ -1250,34 +1645,34 @@ function FileTable(Props) {
       StageCell(Plain, Stages2, t),
       VerdictCell(Plain, Verdict, t)
     );
-    return (0, import_react3.createElement)(
-      import_react3.Fragment,
+    return (0, import_react4.createElement)(
+      import_react4.Fragment,
       { key: Path },
       Cells,
-      Expanded ? ContributionRow(Path, Cache[Path], Tag, t) : null
+      Expanded ? ContributionRow(Path, Cache2[Path], Tag, t) : null
     );
   };
-  return (0, import_react3.createElement)(
+  return (0, import_react4.createElement)(
     "table",
     { className: "playform-cost-table", "aria-label": t("view.files") },
-    (0, import_react3.createElement)(
+    (0, import_react4.createElement)(
       "colgroup",
       {},
-      COLUMNS2.map(
-        (Key) => (0, import_react3.createElement)("col", {
+      COLUMNS.map(
+        (Key) => (0, import_react4.createElement)("col", {
           key: Key,
-          style: { width: `${COLUMN_WIDTHS2[Key]}%` }
+          style: { width: `${COLUMN_WIDTHS[Key]}%` }
         })
       )
     ),
-    (0, import_react3.createElement)(
+    (0, import_react4.createElement)(
       "thead",
       {},
-      (0, import_react3.createElement)(
+      (0, import_react4.createElement)(
         "tr",
         {},
-        COLUMNS2.map(
-          (Key, Index) => (0, import_react3.createElement)(
+        COLUMNS.map(
+          (Key, Index) => (0, import_react4.createElement)(
             "th",
             {
               key: Key,
@@ -1289,22 +1684,22 @@ function FileTable(Props) {
         )
       )
     ),
-    (0, import_react3.createElement)(
+    (0, import_react4.createElement)(
       "tbody",
       {},
       Props.Files.map((Row) => Entry(Row))
     ),
-    (0, import_react3.createElement)(
+    (0, import_react4.createElement)(
       "tfoot",
       {},
-      (0, import_react3.createElement)(
+      (0, import_react4.createElement)(
         "tr",
         { className: "playform-cost-totals-row" },
-        (0, import_react3.createElement)(
+        (0, import_react4.createElement)(
           "td",
           { className: "playform-cost-totals-label" },
           t("files.totals"),
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)(
             "span",
             { className: "playform-cost-totals-meta" },
             ` - ${t("files.totals.meta", {
@@ -1313,21 +1708,21 @@ function FileTable(Props) {
             })}`
           )
         ),
-        (0, import_react3.createElement)(
+        (0, import_react4.createElement)(
           "td",
           { className: Metric },
-          (0, import_react3.createElement)("span", { className: "playform-cost-num" }, Count(SumTouches))
+          (0, import_react4.createElement)("span", { className: "playform-cost-num" }, Count(SumTouches))
         ),
-        (0, import_react3.createElement)(
+        (0, import_react4.createElement)(
           "td",
           { className: Metric },
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)(
             "span",
             { className: "playform-cost-added" },
             `+${Count(SumAdded)}`
           ),
-          (0, import_react3.createElement)("span", { className: "playform-cost-files-sep" }, "/"),
-          (0, import_react3.createElement)(
+          (0, import_react4.createElement)("span", { className: "playform-cost-files-sep" }, "/"),
+          (0, import_react4.createElement)(
             "span",
             { className: "playform-cost-removed" },
             `-${Count(SumRemoved)}`
@@ -1338,8 +1733,8 @@ function FileTable(Props) {
         MoneyCell(Metric, SumTotal, Tag),
         MoneyCell(Metric, SumTurn, Tag),
         ShareCell(Metric, SumTotal, SumLifetime, t),
-        (0, import_react3.createElement)("td", { className: Metric }),
-        (0, import_react3.createElement)("td", { className: Metric })
+        (0, import_react4.createElement)("td", { className: Metric }),
+        (0, import_react4.createElement)("td", { className: Metric })
       )
     )
   );
@@ -1589,297 +1984,38 @@ function Fold(Response) {
   return { turns: Turns, steps: Steps, summary: Response?.summary ?? ZeroSummary };
 }
 
-// Source/Function/Cells.ts
-var import_dsh_client_ui_primitives2 = require("@deepseek-ai/dsh-client-ui-primitives");
-
-// Source/Function/Clock.ts
-var Pad2 = (Value2) => String(Value2).padStart(2, "0");
-function Clock(Value2) {
-  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
-  const Moment = new Date(Value2);
-  switch (true) {
-    case Number.isNaN(Moment.getTime()):
-      return Dash_default;
-    default:
-      return `${Pad2(Moment.getHours())}:${Pad2(Moment.getMinutes())}:${Pad2(Moment.getSeconds())}`;
-  }
+// Source/Function/Resolve.ts
+var Rank = (Order) => {
+  const Places = /* @__PURE__ */ new Map();
+  for (const [Index, Id] of Order.entries()) if (!Places.has(Id)) Places.set(Id, Index);
+  return Places;
+};
+function Resolve(Definition, Preferences) {
+  const Hidden = new Set(Preferences.hidden);
+  const Identity = Definition.columns[0]?.id;
+  const Kept = Definition.columns.filter(
+    (Column) => Column.id === Identity || !Hidden.has(Column.id)
+  );
+  const Places = Rank(Preferences.order ?? []);
+  const Ordered = Kept.map((Column, Index) => ({ Column, Index })).sort((Left, Right) => {
+    const LeftPlace = Places.get(Left.Column.id);
+    const RightPlace = Places.get(Right.Column.id);
+    switch (true) {
+      case (LeftPlace !== void 0 && RightPlace !== void 0):
+        return LeftPlace - RightPlace;
+      case LeftPlace !== void 0:
+        return -1;
+      case RightPlace !== void 0:
+        return 1;
+      default:
+        return Left.Index - Right.Index;
+    }
+  }).map((Entry) => Entry.Column);
+  return {
+    columns: Ordered,
+    width: Ordered.reduce((Total, Column) => Total + Column.width, 0)
+  };
 }
-
-// Source/Function/CountShort.ts
-function CountShort(Value2) {
-  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
-  switch (true) {
-    case Value2 >= 1e7:
-      return `${(Value2 / 1e6).toFixed(1)}M`;
-    case Value2 >= 1e3:
-      return `${(Value2 / 1e3).toFixed(1)}K`;
-    default:
-      return `${(Value2 / 1e3).toFixed(2)}K`;
-  }
-}
-
-// Source/Function/Share.ts
-function Share(Total, Scale) {
-  if (typeof Scale !== "number" || !Number.isFinite(Scale) || Scale <= 0) return 1;
-  if (Total <= 0) return 0;
-  return Math.min(1, Math.sqrt(Total / Scale));
-}
-
-// Source/Function/Cells.ts
-var import_react4 = require("react");
-var FilePillLimit = 3;
-var ToneClass2 = (Tone2) => `playform-cost-tone${Tone2}`;
-var ModelText = (Text4, Identifier) => (0, import_react4.createElement)(import_dsh_client_ui_primitives2.Tooltip, {
-  label: Identifier,
-  portal: true,
-  onlyWhenClipped: true,
-  disabled: Identifier === "",
-  children: (0, import_react4.createElement)(
-    "span",
-    {
-      className: "playform-cost-model-text",
-      // The tooltip's anchor contract is all-optional, so the span must
-      // name one of its keys for the weak-type check; the primitive
-      // clones the child and injects its own handler at runtime.
-      onPointerEnter: void 0
-    },
-    Text4
-  )
-});
-var PillNode = (Pill, Index, t) => (0, import_react4.createElement)(import_dsh_client_ui_primitives2.Tooltip, {
-  key: Index,
-  label: Pill.Path ?? Pill.Name,
-  portal: true,
-  disabled: Pill.Path === void 0,
-  children: (0, import_react4.createElement)(
-    "span",
-    {
-      className: "playform-cost-pill",
-      // The anchor contract's weak-type check needs one of its keys;
-      // the tooltip injects the real handler when it clones the child.
-      onPointerEnter: void 0,
-      ...Pill.Path === void 0 && Pill.Lines !== null && Pill.Lines !== 0 ? { title: t("files.lines", { lines: Lines(Pill.Lines) }) } : {}
-    },
-    (0, import_react4.createElement)("span", { className: `playform-cost-dot ${ToneClass2(Pill.Tone)}` }),
-    Pill.Name
-  )
-});
-var MarkerSpan = (Marker, Index) => (0, import_react4.createElement)(
-  "span",
-  {
-    key: Index,
-    className: Marker.Class,
-    ...Marker.Title === void 0 ? {} : { title: Marker.Title }
-  },
-  Marker.Text
-);
-var Scope = (Props) => {
-  const Toggle = Props.Toggle;
-  const ClockCell = Props.Clock;
-  const Hint = Props.Hint;
-  return (0, import_react4.createElement)(
-    "td",
-    { className: Props.Cell },
-    Toggle === void 0 ? Props.Label ?? null : (0, import_react4.createElement)(
-      "button",
-      {
-        type: "button",
-        className: "playform-cost-row-toggle",
-        "aria-expanded": Toggle.Expanded,
-        "aria-label": Toggle.Aria,
-        title: Toggle.Title,
-        onClick: (Event) => {
-          Event.stopPropagation();
-          Toggle.OnToggle();
-        }
-      },
-      Toggle.Label
-    ),
-    ClockCell === void 0 ? null : (0, import_react4.createElement)(
-      "span",
-      { className: "playform-cost-turn-clock", title: ClockCell.Title },
-      ClockCell.Text
-    ),
-    Hint === void 0 ? null : (0, import_react4.createElement)("span", { className: "playform-cost-detail-hint" }, Hint),
-    Props.Markers.map(MarkerSpan)
-  );
-};
-var Model = (Props) => {
-  const Mode = Props.Mode;
-  const Region = Props.Region;
-  const Tier = Props.Tier;
-  const When = Props.When;
-  const Identifier = [Props.Provider, Props.Model].filter((Part) => Part !== "").join("/");
-  return (0, import_react4.createElement)(
-    "td",
-    {
-      className: Props.Cell,
-      ...Props.Title === void 0 ? {} : { title: Props.Title }
-    },
-    When === void 0 ? null : (0, import_react4.createElement)(
-      "span",
-      { className: "playform-cost-step-when" },
-      (0, import_react4.createElement)("span", { className: "playform-cost-step-clock" }, When.Text)
-    ),
-    (0, import_react4.createElement)(
-      "span",
-      { className: "playform-cost-model-clip" },
-      (0, import_react4.createElement)("span", { className: "playform-cost-model-pill" }, Props.Provider),
-      ModelText(Props.Model, Identifier),
-      Mode === void 0 || Mode === "" ? null : (0, import_react4.createElement)("span", { className: "playform-cost-pill" }, Mode),
-      Region === void 0 || Region === "" ? null : (0, import_react4.createElement)("span", { className: "playform-cost-pill" }, Region),
-      typeof Tier === "number" ? (0, import_react4.createElement)("span", { className: "playform-cost-pill" }, String(Tier)) : null
-    )
-  );
-};
-var Files = (Props) => {
-  const Shown = Props.Pills.slice(0, FilePillLimit);
-  const Extra = Props.Pills.length - Shown.length;
-  const Saving = Number.isFinite(Props.Saving) ? Props.Saving : 0;
-  const Quiet = !Props.Fail && Props.Pills.length === 0 && Saving === 0;
-  const SavingText = Props.t("files.saving", {
-    value: Price(Saving, Props.Currency)
-  });
-  return (0, import_react4.createElement)(
-    "td",
-    { className: Props.Cell },
-    Quiet ? (0, import_react4.createElement)(
-      "span",
-      { className: "playform-cost-files-clip" },
-      (0, import_react4.createElement)(
-        "span",
-        { className: "playform-cost-files-stat" },
-        Props.t("files.contextOnly", { tokens: CountShort(Props.Tokens) })
-      )
-    ) : [
-      (0, import_react4.createElement)(
-        "div",
-        {
-          className: "playform-cost-pills",
-          ...Props.Pills.length === 0 ? {} : {
-            title: Props.t("files.title", {
-              calls: Props.Calls,
-              files: Props.Pills.map((Pill) => Pill.Name).join(" | ")
-            })
-          }
-        },
-        Props.Fail ? (0, import_react4.createElement)(
-          "span",
-          { className: "playform-cost-fail-pill" },
-          Props.t("state.failed")
-        ) : null,
-        Shown.map((Pill, Index) => PillNode(Pill, Index, Props.t)),
-        Extra > 0 ? (0, import_react4.createElement)(
-          "span",
-          { className: "playform-cost-pill playform-cost-pill-muted" },
-          Props.t("files.more", { count: Extra })
-        ) : null,
-        Saving !== 0 ? (0, import_react4.createElement)(
-          "span",
-          {
-            className: "playform-cost-pill playform-cost-pill-muted",
-            title: Saving < 0 ? Props.t("saving.negative.title") : Props.t("files.saving.title")
-          },
-          Saving < 0 ? (0, import_react4.createElement)(
-            "span",
-            { className: "playform-cost-removed" },
-            SavingText
-          ) : SavingText
-        ) : null
-      ),
-      Props.ShowMix && Props.Pills.length > 0 ? (0, import_react4.createElement)(
-        "div",
-        { className: "playform-cost-mix" },
-        Props.Pills.map(
-          (Pill, Index) => (0, import_react4.createElement)("span", {
-            key: Index,
-            className: `playform-cost-mix-segment ${ToneClass2(Pill.Tone)}`,
-            style: { flexGrow: Pill.Count },
-            title: Props.t("files.count", { count: Pill.Count })
-          })
-        )
-      ) : null
-    ]
-  );
-};
-var Money = (Props) => (0, import_react4.createElement)(
-  "td",
-  {
-    className: Props.Cell,
-    ...Props.Title === void 0 ? {} : { title: Props.Title }
-  },
-  (0, import_react4.createElement)(
-    "span",
-    { className: "playform-cost-money" },
-    Price(Props.Value, Props.Currency)
-  )
-);
-var Alloc = (Props) => (0, import_react4.createElement)(
-  "td",
-  {
-    className: Props.Cell,
-    ...Props.Has ? {} : { title: Props.t("unknown") }
-  },
-  Props.Has ? [
-    (0, import_react4.createElement)(
-      "span",
-      { key: "direct", className: "playform-cost-num" },
-      Price(Props.Direct, Props.Currency)
-    ),
-    (0, import_react4.createElement)(
-      "span",
-      { key: "amortized", className: "playform-cost-num-delta" },
-      Price(Props.Amortized, Props.Currency)
-    )
-  ] : Dash_default
-);
-var Segment = (Key, Class, Value2) => Value2 > 0 ? (0, import_react4.createElement)("span", {
-  key: Key,
-  className: `playform-cost-bar-segment ${Class}`,
-  style: { flexGrow: Value2 }
-}) : null;
-var Bar = (Props) => {
-  const Figure = (Value2) => typeof Value2 === "number" && Number.isFinite(Value2) ? Value2 : 0;
-  const Total = Figure(Props.Total);
-  const CacheRead = Math.max(0, Figure(Props.Cost.cacheRead));
-  const Input = Math.max(0, Figure(Props.Cost.input));
-  const Output = Math.max(0, Figure(Props.Cost.output));
-  const Other = Math.max(0, Total - CacheRead - Input - Output);
-  const Tag = (Value2) => Price(Value2, Props.Currency);
-  const Parts = [
-    ...Props.Start === null ? [] : [Props.t("bar.start", { clock: Clock(Props.Start) })],
-    Props.t("bar.cacheRead", { value: Tag(CacheRead) }),
-    Props.t("bar.input", { value: Tag(Input) }),
-    Props.t("bar.output", { value: Tag(Output) }),
-    Props.t("bar.other", { value: Tag(Other) }),
-    Props.t("bar.total", { value: Tag(Total) })
-  ];
-  return (0, import_react4.createElement)(
-    "td",
-    { className: Props.Cell, title: Parts.join(" | ") },
-    (0, import_react4.createElement)(
-      "div",
-      { className: "playform-cost-bar-wrap" },
-      (0, import_react4.createElement)(
-        "div",
-        { className: Props.Track },
-        (0, import_react4.createElement)(
-          "div",
-          {
-            className: "playform-cost-bar-fill",
-            style: { width: `${Math.round(Share(Total, Props.Scale) * 100)}%` }
-          },
-          Segment("cacheRead", "playform-cost-bar-cache", CacheRead),
-          Segment("input", "playform-cost-bar-input", Input),
-          Segment("output", "playform-cost-bar-output", Output),
-          Segment("other", "playform-cost-bar-other", Other)
-        )
-      ),
-      (0, import_react4.createElement)("span", { className: "playform-cost-bar-value" }, Tag(Total))
-    )
-  );
-};
-var Cells_default = { Scope, Model, Files, Money, Bar, Alloc };
 
 // Source/Function/StepRow.ts
 var import_react5 = require("react");
@@ -1930,54 +2066,6 @@ var Markers = (Step, t) => {
     });
   return List;
 };
-var TokenCell = (Cell, Value2) => (0, import_react5.createElement)(
-  "td",
-  { className: Cell },
-  (0, import_react5.createElement)("span", { className: "playform-cost-num" }, CountShort(Value2))
-);
-var CacheCell = (Cell, Tokens, Hit, t) => {
-  const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
-  const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
-  const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
-  const Base = Read + Input + Write;
-  switch (true) {
-    case Base <= 0:
-      return (0, import_react5.createElement)("td", { className: Cell, title: t("unknown") }, Dash_default);
-    case (Read > 0 || Write > 0):
-      return (0, import_react5.createElement)(
-        "td",
-        {
-          className: Cell,
-          title: t("cache.detail", {
-            read: CountShort(Read),
-            input: CountShort(Input),
-            write: CountShort(Write)
-          })
-        },
-        (0, import_react5.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
-      );
-    default:
-      return (0, import_react5.createElement)(
-        "td",
-        { className: Cell, title: t("column.cache.title") },
-        (0, import_react5.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
-      );
-  }
-};
-var OtherTitle = (Cost, Currency, t) => {
-  const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
-  const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
-  switch (true) {
-    case (Write > 0 || Reasoning > 0):
-      return t("other.detail", {
-        write: Price(Write, Currency),
-        reasoning: Price(Reasoning, Currency),
-        rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency)
-      });
-    default:
-      return t("column.other.title");
-  }
-};
 function StepRow(Props) {
   const Step = Props.Step;
   const t = Props.t;
@@ -2023,17 +2111,12 @@ function StepRow(Props) {
     Text2(Step.region),
     typeof Step.tier === "number" ? String(Step.tier) : ""
   ].filter((Part) => Part !== "").join(" | ");
-  const Row = ["playform-cost-step-row"];
-  if (HasDetail) Row.push("playform-cost-step-row-clickable");
-  if (Failed) Row.push("playform-cost-step-row-error");
-  return (0, import_react5.createElement)(
-    "tr",
-    {
-      className: Row.join(" "),
-      "data-step": String(Step.step),
-      ...HasDetail ? { onClick: Props.OnToggle, title: t("detail.title") } : {}
-    },
-    Cells_default.Scope({
+  const Classes = ["playform-cost-step-row"];
+  if (HasDetail) Classes.push("playform-cost-step-row-clickable");
+  if (Failed) Classes.push("playform-cost-step-row-error");
+  const Row = {
+    Key: `step:${Step.turn}:${Step.step}`,
+    scope: {
       Cell: "playform-cost-step-cell",
       ...HasDetail ? {
         Toggle: {
@@ -2048,8 +2131,8 @@ function StepRow(Props) {
       // rendered only when the row can actually expand.
       ...HasDetail ? { Hint: ` - ${Props.Expanded ? t("detail.hide") : t("detail.show")}` } : {},
       Markers: Markers(Step, t)
-    }),
-    Cells_default.Model({
+    },
+    model: {
       Cell: "playform-cost-prompt-cell",
       Provider: Text2(Step.provider),
       Model: Text2(Step.model),
@@ -2058,8 +2141,8 @@ function StepRow(Props) {
       Tier: typeof Step.tier === "number" ? Step.tier : null,
       When: { Text: Stamp(Step.at) },
       Title: `${Started} | ${ModelText2}`
-    }),
-    Cells_default.Files({
+    },
+    files: {
       Cell: "playform-cost-step-files",
       Pills: Files2.map((File) => ({
         Name: BaseName2(Text2(File.path)),
@@ -2073,38 +2156,39 @@ function StepRow(Props) {
       Calls: 1,
       Tokens: TokensTotal,
       Currency: Tag,
-      ShowMix: Files2.length >= 2,
-      t
-    }),
-    TokenCell(Metric, TokensTotal),
-    CacheCell(Metric, Tokens, Step.cacheHit, t),
-    Cells_default.Money({ Cell: Metric, Value: CacheRead, Currency: Tag }),
-    Cells_default.Money({ Cell: Metric, Value: Input, Currency: Tag }),
-    Cells_default.Money({ Cell: Metric, Value: Output, Currency: Tag }),
-    Cells_default.Money({
-      Cell: Metric,
-      Value: Other,
-      Currency: Tag,
-      Title: OtherTitle(Cost, Tag, t)
-    }),
-    Cells_default.Alloc({
+      ShowMix: Files2.length >= 2
+    },
+    tokens: { Cell: Metric, Value: TokensTotal },
+    cache: { Cell: Metric, Tokens, Hit: Step.cacheHit },
+    cacheRead: { Cell: Metric, Value: CacheRead, Currency: Tag },
+    input: { Cell: Metric, Value: Input, Currency: Tag },
+    output: { Cell: Metric, Value: Output, Currency: Tag },
+    other: { Cell: Metric, Value: Other, Currency: Tag, Cost },
+    allocation: {
       Cell: Metric,
       Direct: typeof Step.direct === "number" ? Step.direct : 0,
       Amortized: typeof Step.amortized === "number" ? Step.amortized : 0,
       Has: Allocations > 0,
-      Currency: Tag,
-      t
-    }),
-    Cells_default.Bar({
+      Currency: Tag
+    },
+    total: {
       Cell: Metric,
       Track: "playform-cost-bar-step",
       Total,
       Cost,
       Scale: Props.Scale,
       Currency: Tag,
-      Start: typeof Step.at === "number" ? Step.at : null,
-      t
-    })
+      Start: typeof Step.at === "number" ? Step.at : null
+    }
+  };
+  return (0, import_react5.createElement)(
+    "tr",
+    {
+      className: Classes.join(" "),
+      "data-step": String(Step.step),
+      ...HasDetail ? { onClick: Props.OnToggle, title: t("detail.title") } : {}
+    },
+    ...Props.Resolved.columns.map((Column) => Column.render(Row, { t }))
   );
 }
 
@@ -2230,56 +2314,49 @@ function SummaryStrip(Props) {
   );
 }
 
-// Source/Function/TotalsRow.ts
+// Source/Function/Table.ts
 var import_react7 = require("react");
-var TokenCell2 = (Cell, Value2) => (0, import_react7.createElement)(
-  "td",
-  { className: Cell },
-  (0, import_react7.createElement)("span", { className: "playform-cost-num" }, CountShort(Value2))
-);
-var CacheCell2 = (Cell, Tokens, Hit, t) => {
-  const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
-  const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
-  const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
-  const Base = Read + Input + Write;
-  switch (true) {
-    case Base <= 0:
-      return (0, import_react7.createElement)("td", { className: Cell, title: t("unknown") }, Dash_default);
-    case (Read > 0 || Write > 0):
-      return (0, import_react7.createElement)(
-        "td",
-        {
-          className: Cell,
-          title: t("cache.detail", {
-            read: CountShort(Read),
-            input: CountShort(Input),
-            write: CountShort(Write)
-          })
-        },
-        (0, import_react7.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
-      );
-    default:
-      return (0, import_react7.createElement)(
-        "td",
-        { className: Cell, title: t("column.cache.title") },
-        (0, import_react7.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
-      );
-  }
-};
-var OtherTitle2 = (Cost, Currency, t) => {
-  const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
-  const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
-  switch (true) {
-    case (Write > 0 || Reasoning > 0):
-      return t("other.detail", {
-        write: Price(Write, Currency),
-        reasoning: Price(Reasoning, Currency),
-        rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency)
-      });
-    default:
-      return t("column.other.title");
-  }
-};
+function Table(Props) {
+  return (0, import_react7.createElement)(
+    "table",
+    { className: "playform-cost-table", "aria-label": Props.t("view") },
+    (0, import_react7.createElement)(
+      "colgroup",
+      {},
+      Props.Resolved.columns.map(
+        (Column) => (0, import_react7.createElement)("col", { key: Column.id, style: { width: `${Column.width}%` } })
+      )
+    ),
+    (0, import_react7.createElement)(
+      "thead",
+      {},
+      (0, import_react7.createElement)(
+        "tr",
+        {},
+        Props.Resolved.columns.map(
+          (Column) => (0, import_react7.createElement)(
+            "th",
+            {
+              key: Column.id,
+              // The shipped header left-aligns the text and status
+              // columns (the first three in the shipped order) and
+              // right-aligns the metrics; the kind is what the rule
+              // reads, so a reordered column keeps its alignment.
+              className: Column.kind === "text" || Column.kind === "status" ? "playform-cost-th-left" : "playform-cost-th",
+              title: Props.t(`${Column.labelKey}.title`)
+            },
+            Props.t(Column.labelKey)
+          )
+        )
+      )
+    ),
+    (0, import_react7.createElement)("tbody", {}, Props.Body),
+    (0, import_react7.createElement)("tfoot", {}, Props.Totals)
+  );
+}
+
+// Source/Function/TotalsRow.ts
+var import_react8 = require("react");
 function TotalsRow(Props) {
   const Summary = Props.Summary;
   const t = Props.t;
@@ -2303,62 +2380,90 @@ function TotalsRow(Props) {
     total: 0,
     reported: null
   };
-  return (0, import_react7.createElement)(
-    "tr",
-    { className: "playform-cost-totals-row", title: t("totals.session.title") },
-    (0, import_react7.createElement)(
-      "td",
-      { className: "playform-cost-totals-label", colSpan: 2 },
-      t("totals.session"),
-      (0, import_react7.createElement)(
-        "span",
-        { className: "playform-cost-totals-meta" },
-        ` - ${t("totals.calls", {
-          calls: typeof Summary.calls === "number" ? Summary.calls : 0,
-          unpriced: typeof Summary.unpriced === "number" ? Summary.unpriced : 0
-        })}`
-      )
-    ),
-    (0, import_react7.createElement)("td", { className: Metric }),
-    TokenCell2(Metric, typeof Tokens.total === "number" ? Tokens.total : 0),
-    CacheCell2(
-      Metric,
-      Tokens,
-      typeof Summary.cacheHit === "number" ? Summary.cacheHit : null,
-      t
-    ),
-    Cells_default.Money({ Cell: Metric, Value: Cost.cacheRead, Currency: Tag }),
-    Cells_default.Money({ Cell: Metric, Value: Cost.input, Currency: Tag }),
-    Cells_default.Money({ Cell: Metric, Value: Cost.output, Currency: Tag }),
-    Cells_default.Money({
+  const Label = (Span) => (0, import_react8.createElement)(
+    "td",
+    { className: "playform-cost-totals-label", colSpan: Span },
+    t("totals.session"),
+    (0, import_react8.createElement)(
+      "span",
+      { className: "playform-cost-totals-meta" },
+      ` - ${t("totals.calls", {
+        calls: typeof Summary.calls === "number" ? Summary.calls : 0,
+        unpriced: typeof Summary.unpriced === "number" ? Summary.unpriced : 0
+      })}`
+    )
+  );
+  const Row = {
+    Key: "totals:session",
+    scope: { Cell: Metric, Markers: [] },
+    model: { Cell: Metric, Provider: "", Model: "" },
+    files: {
       Cell: Metric,
-      Value: Cost.other,
+      Pills: [],
+      Fail: false,
+      Saving: 0,
+      Calls: 0,
+      Tokens: 0,
       Currency: Tag,
-      Title: OtherTitle2(Cost, Tag, t)
-    }),
-    Cells_default.Alloc({
+      ShowMix: false
+    },
+    tokens: { Cell: Metric, Value: typeof Tokens.total === "number" ? Tokens.total : 0 },
+    cache: {
+      Cell: Metric,
+      Tokens,
+      Hit: typeof Summary.cacheHit === "number" ? Summary.cacheHit : null
+    },
+    cacheRead: { Cell: Metric, Value: Cost.cacheRead, Currency: Tag },
+    input: { Cell: Metric, Value: Cost.input, Currency: Tag },
+    output: { Cell: Metric, Value: Cost.output, Currency: Tag },
+    other: { Cell: Metric, Value: Cost.other, Currency: Tag, Cost },
+    allocation: {
       Cell: Metric,
       Direct: typeof Summary.direct === "number" ? Summary.direct : 0,
       Amortized: typeof Summary.amortized === "number" ? Summary.amortized : 0,
       Has: typeof Summary.direct === "number" && Summary.direct !== 0 || typeof Summary.amortized === "number" && Summary.amortized !== 0,
-      Currency: Tag,
-      t
-    }),
-    Cells_default.Bar({
+      Currency: Tag
+    },
+    total: {
       Cell: Metric,
       Track: "playform-cost-bar-turn",
       Total: Cost.total,
       Cost,
       Scale: typeof Cost.total === "number" ? Cost.total : 0,
       Currency: Tag,
-      Start: null,
-      t
-    })
+      Start: null
+    }
+  };
+  const Identity = Props.Resolved.columns.filter(
+    (Column) => Column.id === "scope" || Column.id === "model"
+  ).length;
+  const Body = [];
+  let Placed = false;
+  for (const Column of Props.Resolved.columns) {
+    switch (true) {
+      case (Column.id === "scope" || Column.id === "model"):
+        if (!Placed) {
+          Body.push(Label(Identity));
+          Placed = true;
+        }
+        break;
+      case Column.id === "files":
+        Body.push((0, import_react8.createElement)("td", { className: Metric }));
+        break;
+      default:
+        Body.push(Column.render(Row, { t }));
+        break;
+    }
+  }
+  return (0, import_react8.createElement)(
+    "tr",
+    { className: "playform-cost-totals-row", title: t("totals.session.title") },
+    ...Body
   );
 }
 
 // Source/Function/TurnRow.ts
-var import_react8 = require("react");
+var import_react9 = require("react");
 var CacheMissThreshold2 = 0.5;
 var BaseName4 = (Path) => {
   const Cut = Path.lastIndexOf("/");
@@ -2413,68 +2518,14 @@ var Markers2 = (Turn, t) => {
     });
   return List;
 };
-var TokenCell3 = (Cell, Value2) => (0, import_react8.createElement)(
-  "td",
-  { className: Cell },
-  (0, import_react8.createElement)("span", { className: "playform-cost-num" }, CountShort(Value2))
-);
-var CacheCell3 = (Cell, Tokens, Hit, t) => {
-  const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
-  const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
-  const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
-  const Base = Read + Input + Write;
-  switch (true) {
-    case Base <= 0:
-      return (0, import_react8.createElement)("td", { className: Cell, title: t("unknown") }, Dash_default);
-    case (Read > 0 || Write > 0):
-      return (0, import_react8.createElement)(
-        "td",
-        {
-          className: Cell,
-          title: t("cache.detail", {
-            read: CountShort(Read),
-            input: CountShort(Input),
-            write: CountShort(Write)
-          })
-        },
-        (0, import_react8.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
-      );
-    default:
-      return (0, import_react8.createElement)(
-        "td",
-        { className: Cell, title: t("column.cache.title") },
-        (0, import_react8.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
-      );
-  }
-};
-var OtherTitle3 = (Cost, Currency, t) => {
-  const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
-  const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
-  switch (true) {
-    case (Write > 0 || Reasoning > 0):
-      return t("other.detail", {
-        write: Price(Write, Currency),
-        reasoning: Price(Reasoning, Currency),
-        rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency)
-      });
-    default:
-      return t("column.other.title");
-  }
-};
 function TurnRow(Props) {
   const Turn = Props.Turn;
   const t = Props.t;
   const Tag = Money2(Turn);
   const Metric = "playform-cost-turn-metric";
-  return (0, import_react8.createElement)(
-    "tr",
-    {
-      className: "playform-cost-turn-row",
-      "data-turn": String(Turn.turn),
-      title: t("turn.toggle.title"),
-      onClick: Props.OnToggle
-    },
-    Cells_default.Scope({
+  const Row = {
+    Key: `turn:${Turn.turn}`,
+    scope: {
       Cell: "playform-cost-turn-cell",
       Toggle: {
         Expanded: Props.Open,
@@ -2488,13 +2539,13 @@ function TurnRow(Props) {
         Title: t("turn.started", { time: Stamp(Turn.at) })
       },
       Markers: Markers2(Turn, t)
-    }),
-    Cells_default.Model({
+    },
+    model: {
       Cell: "playform-cost-model-cell-turn",
       Provider: Turn.provider,
       Model: Turn.model
-    }),
-    Cells_default.Files({
+    },
+    files: {
       Cell: "playform-cost-turn-files",
       Pills: Turn.files.map((Tally) => ({
         Name: BaseName4(Tally.key),
@@ -2508,38 +2559,40 @@ function TurnRow(Props) {
       Calls: Turn.steps.length,
       Tokens: Turn.tokens.total,
       Currency: Tag,
-      ShowMix: Turn.files.length > 0,
-      t
-    }),
-    TokenCell3(Metric, Turn.tokens.total),
-    CacheCell3(Metric, Turn.tokens, Turn.cacheHit, t),
-    Cells_default.Money({ Cell: Metric, Value: Turn.cost.cacheRead, Currency: Tag }),
-    Cells_default.Money({ Cell: Metric, Value: Turn.cost.input, Currency: Tag }),
-    Cells_default.Money({ Cell: Metric, Value: Turn.cost.output, Currency: Tag }),
-    Cells_default.Money({
-      Cell: Metric,
-      Value: Turn.cost.other,
-      Currency: Tag,
-      Title: OtherTitle3(Turn.cost, Tag, t)
-    }),
-    Cells_default.Alloc({
+      ShowMix: Turn.files.length > 0
+    },
+    tokens: { Cell: Metric, Value: Turn.tokens.total },
+    cache: { Cell: Metric, Tokens: Turn.tokens, Hit: Turn.cacheHit },
+    cacheRead: { Cell: Metric, Value: Turn.cost.cacheRead, Currency: Tag },
+    input: { Cell: Metric, Value: Turn.cost.input, Currency: Tag },
+    output: { Cell: Metric, Value: Turn.cost.output, Currency: Tag },
+    other: { Cell: Metric, Value: Turn.cost.other, Currency: Tag, Cost: Turn.cost },
+    allocation: {
       Cell: Metric,
       Direct: Turn.direct,
       Amortized: Turn.amortized,
       Has: Turn.direct !== 0 || Turn.amortized !== 0,
-      Currency: Tag,
-      t
-    }),
-    Cells_default.Bar({
+      Currency: Tag
+    },
+    total: {
       Cell: Metric,
       Track: "playform-cost-bar-turn",
       Total: Turn.cost.total,
       Cost: Turn.cost,
       Scale: Props.Scale,
       Currency: Tag,
-      Start: null,
-      t
-    })
+      Start: null
+    }
+  };
+  return (0, import_react9.createElement)(
+    "tr",
+    {
+      className: "playform-cost-turn-row",
+      "data-turn": String(Turn.turn),
+      title: t("turn.toggle.title"),
+      onClick: Props.OnToggle
+    },
+    ...Props.Resolved.columns.map((Column) => Column.render(Row, { t }))
   );
 }
 
@@ -2553,7 +2606,7 @@ var Limits_default = {
 };
 
 // Source/Function/View.ts
-var import_react9 = require("react");
+var import_react10 = require("react");
 var DefaultRows = 200;
 var MaxRows = 2e3;
 var BudgetOf = (Rows) => {
@@ -2585,7 +2638,7 @@ var StageName = (Stage, t) => {
   const Known = Locale_en_default[`stage.${Stage}`];
   return Known === void 0 ? Stage : t(`stage.${Stage}`);
 };
-var Chip = (Label, Active, OnClick, Key) => (0, import_react9.createElement)(
+var Chip = (Label, Active, OnClick, Key) => (0, import_react10.createElement)(
   "button",
   {
     key: Key,
@@ -2599,26 +2652,26 @@ var Chip = (Label, Active, OnClick, Key) => (0, import_react9.createElement)(
 function View(Props) {
   const t = Props.t ?? Local;
   const SessionId = typeof Props.sessionId === "string" ? Props.sessionId : "";
-  const [Phase, SetPhase] = (0, import_react9.useState)("loading");
-  const [Note, SetNote] = (0, import_react9.useState)(null);
-  const [Snapshot, SetSnapshot] = (0, import_react9.useState)(null);
-  const [Rows, SetRows] = (0, import_react9.useState)(() => BudgetOf(Props.rows));
-  const [Attempt, SetAttempt] = (0, import_react9.useState)(0);
-  const [Truncated, SetTruncated] = (0, import_react9.useState)(false);
-  const [Older, SetOlder] = (0, import_react9.useState)("idle");
-  const [Pane, SetPane] = (0, import_react9.useState)("turns");
-  const [Files2, SetFiles] = (0, import_react9.useState)([]);
-  const [FileFilter, SetFileFilter] = (0, import_react9.useState)(FileFilters_default.Default);
-  const [TurnMode, SetTurnMode] = (0, import_react9.useState)("newest");
-  const [TurnOverride, SetTurnOverride] = (0, import_react9.useState)({});
-  const [StepOpen, SetStepOpen] = (0, import_react9.useState)(/* @__PURE__ */ new Set());
-  const [ShowAll, SetShowAll] = (0, import_react9.useState)(/* @__PURE__ */ new Set());
-  const ScrollRef = (0, import_react9.useRef)(null);
-  const Pending = (0, import_react9.useRef)(null);
-  const Growing = (0, import_react9.useRef)(false);
-  const Counted = (0, import_react9.useRef)(null);
-  const FetchedFor = (0, import_react9.useRef)("");
-  (0, import_react9.useEffect)(() => {
+  const [Phase, SetPhase] = (0, import_react10.useState)("loading");
+  const [Note, SetNote] = (0, import_react10.useState)(null);
+  const [Snapshot, SetSnapshot] = (0, import_react10.useState)(null);
+  const [Rows, SetRows] = (0, import_react10.useState)(() => BudgetOf(Props.rows));
+  const [Attempt, SetAttempt] = (0, import_react10.useState)(0);
+  const [Truncated, SetTruncated] = (0, import_react10.useState)(false);
+  const [Older, SetOlder] = (0, import_react10.useState)("idle");
+  const [Pane, SetPane] = (0, import_react10.useState)("turns");
+  const [Files2, SetFiles] = (0, import_react10.useState)([]);
+  const [FileFilter, SetFileFilter] = (0, import_react10.useState)(FileFilters_default.Default);
+  const [TurnMode, SetTurnMode] = (0, import_react10.useState)("newest");
+  const [TurnOverride, SetTurnOverride] = (0, import_react10.useState)({});
+  const [StepOpen, SetStepOpen] = (0, import_react10.useState)(/* @__PURE__ */ new Set());
+  const [ShowAll, SetShowAll] = (0, import_react10.useState)(/* @__PURE__ */ new Set());
+  const ScrollRef = (0, import_react10.useRef)(null);
+  const Pending = (0, import_react10.useRef)(null);
+  const Growing = (0, import_react10.useRef)(false);
+  const Counted = (0, import_react10.useRef)(null);
+  const FetchedFor = (0, import_react10.useRef)("");
+  (0, import_react10.useEffect)(() => {
     let Live = true;
     if (SessionId === "") {
       SetSnapshot(null);
@@ -2695,8 +2748,8 @@ function View(Props) {
       Live = false;
     };
   }, [SessionId, Rows, Attempt]);
-  const SessionRef = (0, import_react9.useRef)(SessionId);
-  (0, import_react9.useEffect)(() => {
+  const SessionRef = (0, import_react10.useRef)(SessionId);
+  (0, import_react10.useEffect)(() => {
     if (SessionRef.current === SessionId) return;
     SessionRef.current = SessionId;
     SetTurnOverride({});
@@ -2709,7 +2762,7 @@ function View(Props) {
     Growing.current = false;
     Pending.current = null;
   }, [SessionId, Props.rows]);
-  (0, import_react9.useEffect)(() => {
+  (0, import_react10.useEffect)(() => {
     const Scroll = ScrollRef.current;
     const Restore = Pending.current;
     if (Scroll === null || Restore === null) return;
@@ -2718,7 +2771,7 @@ function View(Props) {
   }, [Snapshot, Phase]);
   const Last = Snapshot === null ? void 0 : Snapshot.turns[Snapshot.turns.length - 1];
   const Latest = Last === void 0 ? -1 : Last.turn;
-  const TurnOpen = (0, import_react9.useCallback)(
+  const TurnOpen = (0, import_react10.useCallback)(
     (Turn) => {
       const Override = TurnOverride[Turn];
       switch (true) {
@@ -2735,13 +2788,13 @@ function View(Props) {
     [TurnOverride, TurnMode, Latest]
   );
   const AllOpen = Snapshot !== null && Snapshot.turns.length > 0 && Snapshot.turns.every((Turn) => TurnOpen(Turn.turn));
-  const ToggleTurn = (0, import_react9.useCallback)(
+  const ToggleTurn = (0, import_react10.useCallback)(
     (Turn) => {
       SetTurnOverride((Current) => ({ ...Current, [Turn]: !TurnOpen(Turn) }));
     },
     [TurnOpen]
   );
-  const ToggleStep = (0, import_react9.useCallback)((Key) => {
+  const ToggleStep = (0, import_react10.useCallback)((Key) => {
     SetStepOpen((Current) => {
       const Next = new Set(Current);
       if (Next.has(Key)) Next.delete(Key);
@@ -2749,7 +2802,7 @@ function View(Props) {
       return Next;
     });
   }, []);
-  const ToggleAllSteps = (0, import_react9.useCallback)((Turn) => {
+  const ToggleAllSteps = (0, import_react10.useCallback)((Turn) => {
     SetShowAll((Current) => {
       const Next = new Set(Current);
       if (Next.has(Turn)) Next.delete(Turn);
@@ -2757,12 +2810,12 @@ function View(Props) {
       return Next;
     });
   }, []);
-  const ToggleAllTurns = (0, import_react9.useCallback)(() => {
+  const ToggleAllTurns = (0, import_react10.useCallback)(() => {
     if (AllOpen) SetTurnMode("none");
     else SetTurnMode("all");
     SetTurnOverride({});
   }, [AllOpen]);
-  const LoadOlder = (0, import_react9.useCallback)(() => {
+  const LoadOlder = (0, import_react10.useCallback)(() => {
     const Scroll = ScrollRef.current;
     if (Scroll !== null)
       Pending.current = { Height: Scroll.scrollHeight, Top: Scroll.scrollTop };
@@ -2770,15 +2823,15 @@ function View(Props) {
     SetOlder("loading");
     SetRows((Current) => Math.min(MaxRows, Current * Limits_default.LoadOlderFactor));
   }, []);
-  const Retry = (0, import_react9.useCallback)(() => {
+  const Retry = (0, import_react10.useCallback)(() => {
     SetPhase("loading");
     SetAttempt((Current) => Current + 1);
   }, []);
-  const OpenFile = (0, import_react9.useCallback)((Path) => {
+  const OpenFile = (0, import_react10.useCallback)((Path) => {
     SetPane("files");
     SetFileFilter({ ...FileFilters_default.Default, Path });
   }, []);
-  const TurnScale = (0, import_react9.useMemo)(() => {
+  const TurnScale = (0, import_react10.useMemo)(() => {
     if (Snapshot === null) return 0;
     let Top = 0;
     for (const Turn of Snapshot.turns) {
@@ -2787,17 +2840,19 @@ function View(Props) {
     }
     return Top;
   }, [Snapshot]);
+  const Resolved = (0, import_react10.useMemo)(() => Resolve(Columns_default, { hidden: [] }), []);
   const Body = [];
   if (Snapshot !== null && Phase === "ready") {
     for (const Turn of Snapshot.turns) {
       const Open = TurnOpen(Turn.turn);
       Body.push(
-        (0, import_react9.createElement)(TurnRow, {
+        (0, import_react10.createElement)(TurnRow, {
           key: `turn:${Turn.turn}`,
           Turn,
           Open,
           Scale: TurnScale,
           OnToggle: () => ToggleTurn(Turn.turn),
+          Resolved,
           t
         })
       );
@@ -2806,18 +2861,18 @@ function View(Props) {
       const All = ShowAll.has(Turn.turn) || Total <= Limits_default.StepLimit;
       if (Total > Limits_default.StepLimit)
         Body.push(
-          (0, import_react9.createElement)(
+          (0, import_react10.createElement)(
             "tr",
             { key: `more:${Turn.turn}` },
-            (0, import_react9.createElement)(
+            (0, import_react10.createElement)(
               "td",
-              { className: "playform-cost-more-cell", colSpan: COLUMNS.length },
-              (0, import_react9.createElement)(
+              { className: "playform-cost-more-cell", colSpan: Resolved.columns.length },
+              (0, import_react10.createElement)(
                 "span",
                 { className: "playform-cost-more-text" },
                 t("steps.total", { total: Total })
               ),
-              (0, import_react9.createElement)(
+              (0, import_react10.createElement)(
                 "button",
                 {
                   type: "button",
@@ -2834,17 +2889,18 @@ function View(Props) {
         const Key = `${Turn.turn}:${Step.step}`;
         const Expanded = StepOpen.has(Key);
         Body.push(
-          (0, import_react9.createElement)(StepRow, {
+          (0, import_react10.createElement)(StepRow, {
             key: `step:${Key}`,
             Step,
             Expanded,
             Scale: StepScaleOf(Turn),
             OnToggle: () => ToggleStep(Key),
+            Resolved,
             t
           })
         );
         if (Expanded)
-          Body.push((0, import_react9.createElement)(DetailRow, { key: `detail:${Key}`, Step, t }));
+          Body.push((0, import_react10.createElement)(DetailRow, { key: `detail:${Key}`, Step, Resolved, t }));
       }
     }
   }
@@ -2852,19 +2908,19 @@ function View(Props) {
     if (Snapshot === null || Phase !== "ready") return null;
     switch (true) {
       case Older === "loading":
-        return (0, import_react9.createElement)(
+        return (0, import_react10.createElement)(
           "span",
           { className: "playform-cost-older-status", role: "status" },
           t("loadOlder.loading")
         );
       case (Truncated && Rows >= MaxRows):
-        return (0, import_react9.createElement)(
+        return (0, import_react10.createElement)(
           "span",
           { className: "playform-cost-older-status" },
           t("loadOlder.capped", { rows: MaxRows })
         );
       case Older === "failed":
-        return (0, import_react9.createElement)(
+        return (0, import_react10.createElement)(
           import_dsh_client_ui_primitives3.Button,
           {
             variant: "outline",
@@ -2876,7 +2932,7 @@ function View(Props) {
           t("loadOlder.failed")
         );
       case Truncated:
-        return (0, import_react9.createElement)(
+        return (0, import_react10.createElement)(
           import_dsh_client_ui_primitives3.Button,
           {
             variant: "outline",
@@ -2888,23 +2944,23 @@ function View(Props) {
           t("loadOlder")
         );
       default:
-        return (0, import_react9.createElement)(
+        return (0, import_react10.createElement)(
           "span",
           { className: "playform-cost-older-status" },
           t("loadOlder.done")
         );
     }
   })();
-  const Line = (Text4, Status, Action) => (0, import_react9.createElement)(
+  const Line = (Text4, Status, Action) => (0, import_react10.createElement)(
     "div",
     { className: "playform-cost-empty", ...Status ? { role: "status" } : {} },
     Text4,
     Action === void 0 ? null : Action
   );
-  const Shell = (Inner, Footer2) => (0, import_react9.createElement)(
+  const Shell = (Inner, Footer2) => (0, import_react10.createElement)(
     "section",
     { className: "playform-cost-root" },
-    (0, import_react9.createElement)(
+    (0, import_react10.createElement)(
       "div",
       {
         className: "playform-cost-scroll",
@@ -2922,7 +2978,7 @@ function View(Props) {
       return Shell(
         [
           Line(t("unavailable"), false),
-          Note === null ? null : (0, import_react9.createElement)("p", { className: "playform-cost-block-meta" }, Note)
+          Note === null ? null : (0, import_react10.createElement)("p", { className: "playform-cost-block-meta" }, Note)
         ],
         null
       );
@@ -2932,7 +2988,7 @@ function View(Props) {
           Line(
             t("error"),
             false,
-            (0, import_react9.createElement)(
+            (0, import_react10.createElement)(
               import_dsh_client_ui_primitives3.Button,
               {
                 variant: "outline",
@@ -2952,13 +3008,13 @@ function View(Props) {
   }
   if (Phase === "loading" || Snapshot === null) return Shell([Line(t("loading"), true)], null);
   const Currency = typeof Snapshot.summary.currency === "string" && Snapshot.summary.currency !== "" ? Snapshot.summary.currency : "USD";
-  const Footer = (0, import_react9.createElement)(
-    import_react9.Fragment,
+  const Footer = (0, import_react10.createElement)(
+    import_react10.Fragment,
     {},
-    (0, import_react9.createElement)(
+    (0, import_react10.createElement)(
       "div",
       { className: "playform-cost-toolbar" },
-      (0, import_react9.createElement)(
+      (0, import_react10.createElement)(
         "div",
         {
           className: "playform-cost-controls",
@@ -2969,7 +3025,7 @@ function View(Props) {
         Chip(t("view.files"), Pane === "files", () => SetPane("files"), "files")
       )
     ),
-    (0, import_react9.createElement)(SummaryStrip, {
+    (0, import_react10.createElement)(SummaryStrip, {
       Summary: Snapshot.summary,
       Turns: Snapshot.turns.length,
       Steps: Snapshot.steps,
@@ -2983,14 +3039,14 @@ function View(Props) {
   if (Pane === "files") {
     const Shown = FileFilters_default.Apply(Files2, FileFilter);
     const Stages2 = FileFilters_default.StagesOf(Files2);
-    const Controls = (0, import_react9.createElement)(
+    const Controls = (0, import_react10.createElement)(
       "div",
       {
         className: "playform-cost-controls",
         role: "group",
         "aria-label": t("view.files")
       },
-      (0, import_react9.createElement)("input", {
+      (0, import_react10.createElement)("input", {
         type: "text",
         className: "playform-cost-button",
         // The chip face carries cursor: pointer; a text field must not.
@@ -3000,7 +3056,7 @@ function View(Props) {
         "aria-label": t("files.filter.path"),
         onChange: (Event) => SetFileFilter({ ...FileFilter, Path: Value(Event) })
       }),
-      (0, import_react9.createElement)(
+      (0, import_react10.createElement)(
         "span",
         { className: "playform-cost-control-label" },
         t("files.filter.kind")
@@ -3013,7 +3069,7 @@ function View(Props) {
           Kind
         )
       ),
-      (0, import_react9.createElement)(
+      (0, import_react10.createElement)(
         "span",
         { className: "playform-cost-control-label" },
         t("files.filter.stage")
@@ -3035,7 +3091,7 @@ function View(Props) {
           `stage:${Stage}`
         )
       ),
-      (0, import_react9.createElement)(
+      (0, import_react10.createElement)(
         "span",
         { className: "playform-cost-control-label" },
         t("files.filter.sort")
@@ -3058,7 +3114,7 @@ function View(Props) {
         return Shell(
           [
             Controls,
-            (0, import_react9.createElement)(FileTable, {
+            (0, import_react10.createElement)(FileTable, {
               key: "files",
               Files: Shown,
               Currency,
@@ -3072,11 +3128,12 @@ function View(Props) {
   if (Snapshot.turns.length === 0) return Shell([Line(t("empty"), false)], Footer);
   return Shell(
     [
-      Strip === null ? null : (0, import_react9.createElement)("div", { className: "playform-cost-older", key: "older" }, Strip),
-      (0, import_react9.createElement)(Table, {
+      Strip === null ? null : (0, import_react10.createElement)("div", { className: "playform-cost-older", key: "older" }, Strip),
+      (0, import_react10.createElement)(Table, {
         key: "table",
         Body,
-        Totals: (0, import_react9.createElement)(TotalsRow, { Summary: Snapshot.summary, t }),
+        Totals: (0, import_react10.createElement)(TotalsRow, { Summary: Snapshot.summary, Resolved, t }),
+        Resolved,
         t
       })
     ],
@@ -3262,7 +3319,7 @@ var Locale_zh_default = {
 var Slots_default = { tab: "conversation.view" };
 
 // Source/Function/Client.ts
-var import_react10 = require("react");
+var import_react11 = require("react");
 var NAMESPACE = "client-dsh-panel-cost";
 var config = { tabOrder: 30, rows: 200 };
 function Client(ctx) {
@@ -3281,7 +3338,7 @@ function Client(ctx) {
           locale: NAMESPACE,
           label: () => Locale_en_default.tab
         },
-        (props = {}) => (0, import_react10.createElement)(View, props)
+        (props = {}) => (0, import_react11.createElement)(View, props)
       )
     ),
     "cost panel: tab"

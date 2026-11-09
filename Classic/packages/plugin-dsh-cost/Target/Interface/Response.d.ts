@@ -5,11 +5,21 @@ import type CostSession from "./Session.js";
 import type CostStageRow from "./StageRow.js";
 import type CostSummary from "./Summary.js";
 import type CostTokens from "./Tokens.js";
+import type { ValuationBasis } from "./ValuationSelection.js";
 interface Coverage {
     calls: number;
     priced: number;
     unpriced: number;
     unpricedTokens: CostTokens;
+}
+export interface Valuation {
+    basis: ValuationBasis;
+    revisionId: number;
+    policyVersion: string;
+    calculatedAt: number;
+    recorded: number;
+    revised: number;
+    difference: number;
 }
 export default interface CostResponse {
     ok: boolean;
@@ -27,5 +37,6 @@ export default interface CostResponse {
     files: readonly CostFileRow[] | null;
     stages: readonly CostStageRow[] | null;
     models: readonly CostModelRow[] | null;
+    valuation?: Valuation;
 }
 export {};

@@ -1,16 +1,17 @@
-import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Render, Collapse } from "../Harness.js";
-
 /**
  * @module Test
  *
- * The section framer and the budget collapse's smokes.
+ * The Render-And-Collapse unit smoke: the section framer and the budget
+ * collapse.
  *
  * @remarks
- * The fixed frame byte-exact (with and without the version stamp), the empty
- * section, the fully-fitting budget, the overflow summary (never a silent
- * drop), and the order preservation.
+ * The folder covers the fixed frame byte-exact (with and without the version
+ * stamp), the empty section, the fully-fitting budget, the overflow summary
+ * (never a silent drop), and the order preservation.
  */
+import assert from "node:assert/strict";
+
+import { Check, Collapse, Finish, MakeCounter, Render } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -19,7 +20,13 @@ export const runTest = async (): Promise<number> => {
 	{
 		Check(Count, "R1: the frame is byte-exact with the version stamp", () => {
 			assert.equal(
-				Render({ id: "map", kind: "map", title: "workspace map", lines: ["a.ts: entry", "b.ts: util"], version: "v2" }),
+				Render({
+					id: "map",
+					kind: "map",
+					title: "workspace map",
+					lines: ["a.ts: entry", "b.ts: util"],
+					version: "v2",
+				}),
 				[
 					"--- WORKSPACE SECTION map (map) - workspace map @ v2 ---",
 					"a.ts: entry",
@@ -39,7 +46,10 @@ export const runTest = async (): Promise<number> => {
 			);
 		});
 		Check(Count, "R1: an empty section renders as the empty string", () => {
-			assert.equal(Render({ id: "open", kind: "open", title: "questions", lines: [], version: "v3" }), "");
+			assert.equal(
+				Render({ id: "open", kind: "open", title: "questions", lines: [], version: "v3" }),
+				"",
+			);
 		});
 	}
 
@@ -58,11 +68,15 @@ export const runTest = async (): Promise<number> => {
 		});
 		const S1Length = Render(Sections[0]).length;
 		const Tight = Collapse(Sections, S1Length);
-		Check(Count, "C1: the overflow section collapses to its one-line version-stamped summary", () => {
-			assert.equal(Tight[0]?.collapsed, false);
-			assert.equal(Tight[1]?.collapsed, true);
-			assert.equal(Tight[1]?.text, "s2 (focus) collapsed: two @ v5");
-		});
+		Check(
+			Count,
+			"C1: the overflow section collapses to its one-line version-stamped summary",
+			() => {
+				assert.equal(Tight[0]?.collapsed, false);
+				assert.equal(Tight[1]?.collapsed, true);
+				assert.equal(Tight[1]?.text, "s2 (focus) collapsed: two @ v5");
+			},
+		);
 		Check(Count, "C1: the summary keeps the section visible, never dropped", () => {
 			assert.ok(Tight.every((E) => E.text.length > 0));
 			assert.equal(Tight.length, 2);
@@ -77,7 +91,7 @@ export const runTest = async (): Promise<number> => {
 	return Finish(Count, "Render-And-Collapse");
 };
 
-/** Standalone entry: `node Target/Test/Render-And-Collapse/Test.js`. */
+// Standalone entry: `node Target/Test/Render-And-Collapse/Test.js`.
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

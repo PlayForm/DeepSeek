@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter } from "../Harness.js";
 import { Dashes, Fullwidth, Quotes, Replace, ReplaceMap } from "../../../Target/Library.js";
+import { Check, Finish, MakeCounter } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   {

@@ -9,8 +9,9 @@
 // NOTE: the harness's Finish guard is aliased to `Guard` here so the source
 // suite's fixture naming stays untouched.
 import assert from "node:assert/strict";
-import { Check, Finish as Guard, MakeCounter } from "../Harness.js";
+
 import { Block, Dashes, Replace } from "../../../Target/Library.js";
+import { Check, Finish as Guard, MakeCounter } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -32,9 +33,17 @@ export const runTest = async (): Promise<number> => {
 						"-kept -gone",
 						"Block: TextBlock.text normalized",
 					);
-					const BlockReasoning = { type: "reasoning", text: "\u2014y", thinking: "\u2014z" };
+					const BlockReasoning = {
+						type: "reasoning",
+						text: "\u2014y",
+						thinking: "\u2014z",
+					};
 					const BlockReasoningOut = Block(BlockReasoning, ToDash);
-					assert.equal(BlockReasoningOut.block.text, "-y", "Block: ReasoningBlock.text normalized");
+					assert.equal(
+						BlockReasoningOut.block.text,
+						"-y",
+						"Block: ReasoningBlock.text normalized",
+					);
 					assert.equal(
 						BlockReasoningOut.block.thinking,
 						"-z",
@@ -74,7 +83,12 @@ export const runTest = async (): Promise<number> => {
 					const BlockToolOnOut = Block(BlockTool, ToDash, true);
 					assert.deepEqual(
 						BlockToolOnOut.block,
-						{ type: "tool-call", id: "call_1", name: "write", arguments: '{"path":"a-b"}' },
+						{
+							type: "tool-call",
+							id: "call_1",
+							name: "write",
+							arguments: '{"path":"a-b"}',
+						},
 						"Block: tool-call arguments normalized when the tool-args flag is ON",
 					);
 					assert.notEqual(
@@ -160,7 +174,11 @@ export const runTest = async (): Promise<number> => {
 						BlockNormalizeFileOut.block.arguments.includes("\u2014"),
 						"Block: normalize-file arguments dash still verbatim",
 					);
-					assert.equal(BlockNormalizeFileOut.count, 0, "Block: normalize-file block count 0");
+					assert.equal(
+						BlockNormalizeFileOut.count,
+						0,
+						"Block: normalize-file block count 0",
+					);
 					assert.equal(
 						Block(BlockNormalizeFile, ToDash, true, false).block,
 						BlockNormalizeFile,
@@ -180,7 +198,12 @@ export const runTest = async (): Promise<number> => {
 					const BlockRawOut = Block(BlockRaw, ToDash, true, true);
 					assert.deepEqual(
 						BlockRawOut.block,
-						{ type: "tool-call", id: "call_3", name: "write", arguments: '{"path":"a\u2014b"}' },
+						{
+							type: "tool-call",
+							id: "call_3",
+							name: "write",
+							arguments: '{"path":"a\u2014b"}',
+						},
 						"Block: raw-marked block - the marker entry is stripped and the arguments pass through UNNORMALIZED",
 					);
 					assert.ok(

@@ -1,15 +1,23 @@
-// Source/Test/Stream-Contract/Test.ts - one singular test: the llm/stream
-// waterfall contract - next() called once synchronously before any upstream
-// iteration, the deep-frozen options untouched, chunk order/count preserved,
-// the passthrough identities, the rewrite groups with their exact ledger
-// strings, the reasoning-off passthrough, and the count-0 identity.
-// Runs standalone (`node Target/Test/Stream-Contract/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
-import { existsSync, readFileSync } from "node:fs";
+/**
+ * @module Test
+ *
+ * The Stream-Contract unit smoke: the `llm/stream` waterfall contract.
+ *
+ * @remarks
+ * The one singular test covers `next()` called once synchronously before any
+ * upstream iteration, the deep-frozen options untouched, chunk order and count
+ * preserved, the passthrough identities, the rewrite groups with their exact
+ * ledger strings, the reasoning-off passthrough, and the count-0 identity.
+ *
+ * The smoke is the fake ctx + the REAL factory + the REAL dash apply, all from
+ * the Harness. The folder runs standalone
+ * (`node Target/Test/Stream-Contract/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Ledger } from "../Harness.js";
+import { existsSync, readFileSync } from "node:fs";
+
+import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -33,7 +41,11 @@ export const runTest = async (): Promise<number> => {
 			{ type: "reasoning-delta", index: 2, text: "\u2014x\u2013" },
 			{ type: "block-end", index: 0, block: { type: "text", text: "\u2014kept \u2013gone" } },
 			{ type: "block-end", index: 2, block: { type: "reasoning", text: "\u2014y" } },
-			{ type: "block-end", index: 3, block: { type: "reasoning", text: "", thinking: "\u2014z" } },
+			{
+				type: "block-end",
+				index: 3,
+				block: { type: "reasoning", text: "", thinking: "\u2014z" },
+			},
 			{ type: "usage", usage: { input: 1, output: 2 } },
 			{ type: "finish", reason: "stop" },
 		];
@@ -85,7 +97,9 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "chunk type sequence identical to upstream";
 			Check(Count, Sub, () => {
-				assert.ok(Out.map((C: any) => C.type).join(",") === Chunks.map((C) => C.type).join(","));
+				assert.ok(
+					Out.map((C: any) => C.type).join(",") === Chunks.map((C) => C.type).join(","),
+				);
 			});
 		}
 		{
@@ -95,7 +109,8 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 		{
-			const Sub = "tool-call-delta passthrough BY IDENTITY (argumentsDelta raw JSON untouched)";
+			const Sub =
+				"tool-call-delta passthrough BY IDENTITY (argumentsDelta raw JSON untouched)";
 			Check(Count, Sub, () => {
 				assert.ok(Out[2] === Chunks[2]);
 			});
@@ -180,7 +195,8 @@ export const runTest = async (): Promise<number> => {
 			Check(Count, Sub, () => {
 				assert.ok(
 					Run1.Lines.filter((L: string) => L.includes("normalized")).length === 1 &&
-						Run1.Lines[1] === "hook-dsh-normalize-dash: normalized 10 dash char(s) in one stream",
+						Run1.Lines[1] ===
+							"hook-dsh-normalize-dash: normalized 10 dash char(s) in one stream",
 				);
 			});
 		}
@@ -221,7 +237,9 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "NO count line when nothing replaced (N=0)";
 			Check(Count, Sub, () => {
-				assert.ok(!existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized"));
+				assert.ok(
+					!existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized"),
+				);
 			});
 		}
 	}

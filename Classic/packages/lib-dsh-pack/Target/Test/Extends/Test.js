@@ -21,14 +21,10 @@ const runTest = async () => {
     const Root = Tree("pack-extends-chain-");
     Put(Home, ".dsh/playform/workspaces/base.yml", Pack("", "docs/BASE.md", 1));
     Put(Home, ".dsh/playform/workspaces/mid.yml", Pack("base", "docs/MID.md", 2));
-    Put(
-      Root,
-      ".dsh/pack.yml",
-      Repo("mid", `families:
+    Put(Root, ".dsh/pack.yml", Repo("mid", `families:
   "doc/Plan":
     threshold: 0.5
-`)
-    );
+`));
     Put(Root, "docs/S.md");
     Check(Count, "E1: the chain merges base, middle and repo in order", () => {
       const Plan = Library.Resolve(Root, { home: Home }).families?.["doc/Plan"];

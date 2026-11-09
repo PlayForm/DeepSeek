@@ -10,11 +10,17 @@ import { Check, Finish, MakeCounter, Make, Plugin } from "../Harness.js";
 export const runTest = (): number => {
 	const Count = MakeCounter();
 
-	// S1: the route exists, once, under the documented path.
+	// S1: the three routes exist, in order, under the documented paths.
 	const Run = Make();
-	Check(Count, "S1: exactly one route, /api/playform-cost/session", () => {
-		assert.equal(Run.Provided.routes.length, 1);
-		assert.equal(Run.Provided.routes[0].path, "/api/playform-cost/session");
+	Check(Count, "S1: three routes, session then catalogs then rates", () => {
+		assert.deepEqual(
+			Run.Provided.routes.map((Route: { path: string }) => Route.path),
+			[
+				"/api/playform-cost/session",
+				"/api/playform-cost/catalogs",
+				"/api/playform-cost/rates",
+			],
+		);
 	});
 
 	// S2: a query without a session id answers the "session" code, and the
@@ -50,9 +56,9 @@ export const runTest = (): number => {
 	});
 
 	// S3: the registration went through the webServer port, and only there.
-	Check(Count, "S3: the port saw the registration and nothing else registered", () => {
-		assert.equal(Run.Provided.routes.length, 1);
-		assert.equal(Run.Server.Seen.n, 1);
+	Check(Count, "S3: the port saw the three registrations and nothing else", () => {
+		assert.equal(Run.Provided.routes.length, 3);
+		assert.equal(Run.Server.Seen.n, 3);
 		assert.equal(typeof Run.Provided.routes[0].handler, "function");
 	});
 

@@ -10,8 +10,9 @@
 // NOTE: the harness's Finish guard is aliased to `Guard` here so the source
 // suite's `Finish` chunk fixture keeps its name.
 import assert from "node:assert/strict";
+
+import { Chunk, Dashes, Quotes, Replace, ReplaceMap } from "../../../Target/Library.js";
 import { Check, Finish as Guard, MakeCounter } from "../Harness.js";
-import { Chunk, Dashes, Replace, ReplaceMap, Quotes } from "../../../Target/Library.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -43,8 +44,16 @@ export const runTest = async (): Promise<number> => {
 						Delta,
 						"rewritten text-delta is a new object (index preserved)",
 					);
-					assert.equal(DeltaOut.chunk.index, 0, "the rewritten chunk preserves the index");
-					assert.equal(DeltaOut.count, 4, "the text-delta count is the replaced characters");
+					assert.equal(
+						DeltaOut.chunk.index,
+						0,
+						"the rewritten chunk preserves the index",
+					);
+					assert.equal(
+						DeltaOut.count,
+						4,
+						"the text-delta count is the replaced characters",
+					);
 					const Keep = { type: "text-delta", index: 0, text: "plain" };
 					assert.equal(
 						Chunk(Keep, ToDash, true).chunk,
@@ -195,7 +204,11 @@ export const runTest = async (): Promise<number> => {
 						ToolNormalizeFileOut.chunk.argumentsDelta.includes("\u2014"),
 						"normalize-file argumentsDelta dash still verbatim",
 					);
-					assert.equal(ToolNormalizeFileOut.count, 0, "normalize-file tool-call-delta count 0");
+					assert.equal(
+						ToolNormalizeFileOut.count,
+						0,
+						"normalize-file tool-call-delta count 0",
+					);
 					assert.equal(
 						Chunk(ToolNormalizeFile, ToDash, true, false).chunk,
 						ToolNormalizeFile,
@@ -235,7 +248,11 @@ export const runTest = async (): Promise<number> => {
 						0,
 						"raw-marked count 0 (the strip is not a normalization)",
 					);
-					assert.notEqual(ToolRawOut.chunk, ToolRaw, "the stripped raw-marked delta is a new object");
+					assert.notEqual(
+						ToolRawOut.chunk,
+						ToolRaw,
+						"the stripped raw-marked delta is a new object",
+					);
 					const ToolRawEmpty = {
 						type: "tool-call-delta",
 						index: 1,
@@ -294,11 +311,23 @@ export const runTest = async (): Promise<number> => {
 						"reasoning-delta passthrough (identity) when the reasoning flag is off",
 					);
 					const Start = { type: "block-start", index: 0, blockType: "text" };
-					assert.equal(Chunk(Start, ToDash, true).chunk, Start, "block-start passthrough BY IDENTITY");
+					assert.equal(
+						Chunk(Start, ToDash, true).chunk,
+						Start,
+						"block-start passthrough BY IDENTITY",
+					);
 					const Usage = { type: "usage", usage: { input: 1, output: 2 } };
-					assert.equal(Chunk(Usage, ToDash, true).chunk, Usage, "usage passthrough BY IDENTITY");
+					assert.equal(
+						Chunk(Usage, ToDash, true).chunk,
+						Usage,
+						"usage passthrough BY IDENTITY",
+					);
 					const Finish = { type: "finish", reason: "stop" };
-					assert.equal(Chunk(Finish, ToDash, true).chunk, Finish, "finish passthrough BY IDENTITY");
+					assert.equal(
+						Chunk(Finish, ToDash, true).chunk,
+						Finish,
+						"finish passthrough BY IDENTITY",
+					);
 				}
 				{
 					// Branch: the block-end fields (text/reasoning/thinking).
@@ -308,8 +337,16 @@ export const runTest = async (): Promise<number> => {
 						block: { type: "text", text: "\u2014kept \u2013gone" },
 					};
 					const EndTextOut = Chunk(EndText, ToDash, true);
-					assert.equal(EndTextOut.chunk.block.text, "-kept -gone", "block-end TextBlock.text normalized");
-					assert.notEqual(EndTextOut.chunk, EndText, "rewritten block-end is a new object");
+					assert.equal(
+						EndTextOut.chunk.block.text,
+						"-kept -gone",
+						"block-end TextBlock.text normalized",
+					);
+					assert.notEqual(
+						EndTextOut.chunk,
+						EndText,
+						"rewritten block-end is a new object",
+					);
 					const EndReason = {
 						type: "block-end",
 						index: 2,

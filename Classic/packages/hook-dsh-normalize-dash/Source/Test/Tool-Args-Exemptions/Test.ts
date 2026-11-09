@@ -1,17 +1,26 @@
-// Source/Test/Tool-Args-Exemptions/Test.ts - one singular test: the tool-args
-// gate and its exemption family - the deprecated normalizeToolArguments flag
-// on (plain fields + activation line + the delta and block rewrites), the
-// edit exemption (byte-contracted old_string passes by identity), the
-// per-call raw marker (strip variants, the reset at the next call id), and
-// the N=0 negative controls. The journal-count siblings live in
-// Journal-And-Custom.
-// Runs standalone (`node Target/Test/Tool-Args-Exemptions/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
-import { existsSync, readFileSync } from "node:fs";
+/**
+ * @module Test
+ *
+ * The Tool-Args-Exemptions unit smoke: the tool-args gate and its exemption
+ * family.
+ *
+ * @remarks
+ * The one singular test covers the deprecated `normalizeToolArguments` flag on
+ * (the plain fields, the activation line, and the delta and block rewrites),
+ * the edit exemption (a byte-contracted `old_string` passes by identity), the
+ * per-call raw marker (the strip variants and the reset at the next call id),
+ * and the N=0 negative controls. The journal-count siblings live in
+ * Journal-And-Custom.
+ *
+ * The smoke is the fake ctx + the REAL factory + the REAL dash apply, all from
+ * the Harness. The folder runs standalone
+ * (`node Target/Test/Tool-Args-Exemptions/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Ledger } from "../Harness.js";
+import { existsSync, readFileSync } from "node:fs";
+
+import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -31,7 +40,8 @@ export const runTest = async (): Promise<number> => {
 				assert.ok(
 					Run7.Lines.some(
 						(L: string) =>
-							L.startsWith("hook-dsh-normalize-dash: activated") && L.includes("toolArgs=on"),
+							L.startsWith("hook-dsh-normalize-dash: activated") &&
+							L.includes("toolArgs=on"),
 					),
 				);
 			});
@@ -47,7 +57,12 @@ export const runTest = async (): Promise<number> => {
 		const ToolBlockEnd7 = {
 			type: "block-end",
 			index: 2,
-			block: { type: "tool-call", id: "call_1", name: "write", arguments: '{"path":"a\u2014b"}' },
+			block: {
+				type: "tool-call",
+				id: "call_1",
+				name: "write",
+				arguments: '{"path":"a\u2014b"}',
+			},
 		};
 		const Out7: any[] = [];
 		for await (const C of L7(Object.freeze({}), () =>
@@ -71,7 +86,8 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 		{
-			const Sub = "block-end ToolCallBlock.arguments normalized too (the deltas AND the block agree)";
+			const Sub =
+				"block-end ToolCallBlock.arguments normalized too (the deltas AND the block agree)";
 			Check(Count, Sub, () => {
 				assert.ok(Out7[1].block.arguments === '{"path":"a-b"}');
 			});
@@ -80,7 +96,11 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "count line includes the tool-args replacements (delta + block)";
 			Check(Count, Sub, () => {
-				assert.ok(readFileSync(Ledger, "utf8").includes("normalized 2 dash char(s) in one stream"));
+				assert.ok(
+					readFileSync(Ledger, "utf8").includes(
+						"normalized 2 dash char(s) in one stream",
+					),
+				);
 			});
 		}
 	}
@@ -129,7 +149,8 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 		{
-			const Sub = "edit ToolCallBlock passes through BY IDENTITY too (the deltas AND the block agree)";
+			const Sub =
+				"edit ToolCallBlock passes through BY IDENTITY too (the deltas AND the block agree)";
 			Check(Count, Sub, () => {
 				assert.ok(Out7b[1].block === EditBlockEnd7b.block);
 			});
@@ -144,7 +165,9 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "NO count line for an edit-only stream (nothing normalized)";
 			Check(Count, Sub, () => {
-				assert.ok(!existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized"));
+				assert.ok(
+					!existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized"),
+				);
 			});
 		}
 	}
@@ -218,7 +241,8 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 		{
-			const Sub = "the executed arguments carry no __normalize key (no additionalProperties rejection)";
+			const Sub =
+				"the executed arguments carry no __normalize key (no additionalProperties rejection)";
 			Check(Count, Sub, () => {
 				assert.ok(JSON.parse(Out7c[2].block.arguments).__normalize === undefined);
 			});
@@ -227,7 +251,9 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "NO count line for a raw-marked stream (the strip is not a normalization)";
 			Check(Count, Sub, () => {
-				assert.ok(!existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized"));
+				assert.ok(
+					!existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized"),
+				);
 			});
 		}
 	}
@@ -273,7 +299,11 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "count line counts only the normalized call (the raw call stays invisible)";
 			Check(Count, Sub, () => {
-				assert.ok(readFileSync(Ledger, "utf8").includes("normalized 1 dash char(s) in one stream"));
+				assert.ok(
+					readFileSync(Ledger, "utf8").includes(
+						"normalized 1 dash char(s) in one stream",
+					),
+				);
 			});
 		}
 	}

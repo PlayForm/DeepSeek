@@ -1,24 +1,23 @@
+/**
+ * @module Harness
+ *
+ * The shared test harness for the PACKS (@playform/lib-dsh-pack): the tiny check counter
+ * every folder imports, the temporary-tree helpers (a fixture repo and a temporary home, so
+ * a smoke never touches the real `~/.dsh`), and the standalone selfcheck that proves the
+ * built library loads, the built-in pack projects, the locator finds this monorepo and the
+ * parser parses.
+ *
+ * @remarks
+ * The library is PURE: there is no fake ctx and no factory here - the fixtures are real
+ * temporary directories and the real built Target.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
+
 import * as Library from "../../Target/Library.js";
 
-/**
- * @module Harness
- *
- * The shared test harness for the PACKS (`@playform/lib-dsh-pack`): the tiny
- * check counter every folder imports, the temporary-tree helpers (a fixture
- * repo and a temporary home, so a smoke never touches the real `~/.dsh`), and
- * the standalone selfcheck.
- *
- * @remarks
- * The selfcheck proves the built library loads, the built-in pack projects, the
- * locator finds this monorepo and the parser parses.
- *
- * The library is PURE: there is no fake ctx and no factory here - the fixtures
- * are real temporary directories and the real built `Target`.
- */
 export { Library };
 
 /** The per-folder counter: N passing checks, F failing checks. */
@@ -94,18 +93,22 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
-	Check(Count, "selfcheck: the built library loads, the built-in projects and the locator resolves", () => {
-		assert.equal(Object.keys(Library.Builtin.families ?? {}).length, 31);
-		assert.equal(Library.Families(Library.Builtin, "doc").length, 7);
-		assert.equal(Library.Families(Library.Builtin, "search").length, 10);
-		assert.deepEqual(Library.Parse("a: 1"), { a: 1 });
-		// A temporary home keeps the selfcheck independent of the real
-		// ~/.dsh (a user-layer pack must not change the built-in proof).
-		const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "pack-selfcheck-home-"));
-		const Located = Library.Locate("Documentation/INDEX.md", undefined, { home: Home });
-		assert.notEqual(Located, undefined);
-		assert.equal(Located?.pack, Library.Builtin);
-	});
+	Check(
+		Count,
+		"selfcheck: the built library loads, the built-in projects and the locator resolves",
+		() => {
+			assert.equal(Object.keys(Library.Builtin.families ?? {}).length, 31);
+			assert.equal(Library.Families(Library.Builtin, "doc").length, 7);
+			assert.equal(Library.Families(Library.Builtin, "search").length, 10);
+			assert.deepEqual(Library.Parse("a: 1"), { a: 1 });
+			// A temporary home keeps the selfcheck independent of the real
+			// ~/.dsh (a user-layer pack must not change the built-in proof).
+			const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "pack-selfcheck-home-"));
+			const Located = Library.Locate("Documentation/INDEX.md", undefined, { home: Home });
+			assert.notEqual(Located, undefined);
+			assert.equal(Located?.pack, Library.Builtin);
+		},
+	);
 	if (Count.N === 3 && Count.F === 1) {
 		console.log("Harness selfcheck OK");
 	} else {

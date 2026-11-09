@@ -1,72 +1,52 @@
-// Table - the table shell: the fixed eleven-column layout with its
-// colgroup, the sticky header row carrying the column locale keys, and the
-// body and footer the view composes. The eleven columns are one tuple: the
-// header row, the colgroup widths and the view's colSpan all read it.
+// Table - the table shell: the colgroup, the sticky header row carrying the
+// column locale keys, and the body and footer the view composes. Every part
+// reads the one resolved definition the view hands down, so the header and
+// the widths cannot drift from the cells the rows emit.
+import type { TurnsCells } from "@Function/Columns";
+import type { ResolvedTable } from "@Interface/Table";
 import type { Translate } from "@Interface/Translate";
 import { createElement } from "react";
-
-// The one column definition: the names are the shipped locale keys, in the
-// shipped order, and the width record beside it carries the shipped column
-// widths. A new column is one tuple entry plus its width.
-export const COLUMNS = [
-	"scope",
-	"model",
-	"files",
-	"tokens",
-	"cache",
-	"cacheRead",
-	"input",
-	"output",
-	"other",
-	"allocation",
-	"total",
-] as const;
-
-type Column = (typeof COLUMNS)[number];
-
-const COLUMN_WIDTHS: Record<Column, number> = {
-	scope: 11,
-	model: 15,
-	files: 13,
-	tokens: 6.5,
-	cache: 6.5,
-	cacheRead: 7.5,
-	input: 7,
-	output: 7,
-	other: 7,
-	allocation: 7.5,
-	total: 12,
-};
 
 type TableProps = {
 	Body: readonly ReturnType<typeof createElement>[];
 	Totals: ReturnType<typeof createElement>;
+	Resolved: ResolvedTable<TurnsCells>;
 	t: Translate;
 };
 
 export default function Table(Props: TableProps): ReturnType<typeof createElement> {
-	const Cols = COLUMNS.map((Name) =>
-		createElement("col", { key: Name, style: { width: `${COLUMN_WIDTHS[Name]}%` } }),
-	);
 	return createElement(
 		"table",
 		{ className: "playform-cost-table", "aria-label": Props.t("view") },
-		createElement("colgroup", {}, Cols),
+		createElement(
+			"colgroup",
+			{},
+			Props.Resolved.columns.map((Column) =>
+				createElement("col", { key: Column.id, style: { width: `${Column.width}%` } }),
+			),
+		),
 		createElement(
 			"thead",
 			{},
 			createElement(
 				"tr",
 				{},
-				COLUMNS.map((Name, Index) =>
+				Props.Resolved.columns.map((Column) =>
 					createElement(
 						"th",
 						{
-							key: Name,
-							className: Index < 3 ? "playform-cost-th-left" : "playform-cost-th",
-							title: Props.t(`column.${Name}.title`),
+							key: Column.id,
+							// The shipped header left-aligns the text and status
+							// columns (the first three in the shipped order) and
+							// right-aligns the metrics; the kind is what the rule
+							// reads, so a reordered column keeps its alignment.
+							className:
+								Column.kind === "text" || Column.kind === "status"
+									? "playform-cost-th-left"
+									: "playform-cost-th",
+							title: Props.t(`${Column.labelKey}.title`),
 						},
-						Props.t(`column.${Name}`),
+						Props.t(Column.labelKey),
 					),
 				),
 			),

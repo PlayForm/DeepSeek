@@ -7,8 +7,9 @@
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
-import { Check, Finish, MakeCounter, TempRoot } from "../Harness.js";
+
 import { Policy } from "../../../Target/Library.js";
+import { Check, Finish, MakeCounter, TempRoot } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();

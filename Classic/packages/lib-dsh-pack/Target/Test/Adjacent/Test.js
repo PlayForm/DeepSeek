@@ -1,13 +1,6 @@
 import assert from "node:assert/strict";
 import { join } from "node:path";
-import {
-  Check,
-  Finish,
-  Library,
-  MakeCounter,
-  Put,
-  Tree
-} from "../Harness.js";
+import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
 const Call = (Seq, Path, Tool = "Write") => ({
   seq: Seq,
   path: Path,
@@ -32,17 +25,22 @@ const runTest = async () => {
     Check(Count, "A1: the fold accepts an object payload and prefers file_path", () => {
       assert.deepEqual(
         Library.Fold(
-          { type: "tool/call", name: "Read", arguments: { file_path: "a.md", path: "b.md" } },
+          {
+            type: "tool/call",
+            name: "Read",
+            arguments: { file_path: "a.md", path: "b.md" }
+          },
           4
         ),
         { seq: 4, path: "a.md", tool: "Read" }
       );
     });
     Check(Count, "A1: the fold falls back to path and filePath", () => {
-      assert.deepEqual(
-        Library.Fold({ type: "tool/call", arguments: { path: "b.md" } }, 5),
-        { seq: 5, path: "b.md", tool: "" }
-      );
+      assert.deepEqual(Library.Fold({ type: "tool/call", arguments: { path: "b.md" } }, 5), {
+        seq: 5,
+        path: "b.md",
+        tool: ""
+      });
       assert.deepEqual(
         Library.Fold({ type: "tool/call", arguments: { filePath: "c.md" } }, 6),
         { seq: 6, path: "c.md", tool: "" }
@@ -62,7 +60,10 @@ const runTest = async () => {
       assert.equal(Library.Fold({ type: "tool/call", arguments: "{no" }, 9), void 0);
       assert.equal(Library.Fold({ type: "tool/call", arguments: "42" }, 10), void 0);
       assert.equal(Library.Fold({ type: "tool/call", arguments: {} }, 11), void 0);
-      assert.equal(Library.Fold({ type: "tool/call", arguments: { file_path: "" } }, 12), void 0);
+      assert.equal(
+        Library.Fold({ type: "tool/call", arguments: { file_path: "" } }, 12),
+        void 0
+      );
     });
   }
   {
@@ -89,7 +90,10 @@ const runTest = async () => {
     });
     Check(Count, "A2: the anchor itself is never a candidate", () => {
       const Rows = Library.Adjacent(Touches, "docs/A.md");
-      assert.equal(Rows.some((Row) => Row.path === "docs/A.md"), false);
+      assert.equal(
+        Rows.some((Row) => Row.path === "docs/A.md"),
+        false
+      );
       assert.deepEqual(Rows.map((Row) => Row.path).sort(), [
         "docs/B.md",
         "docs/C.md",
@@ -148,10 +152,14 @@ const runTest = async () => {
     const Home = Tree("pack-adjacent-home-");
     const CwdRepo = Tree("pack-adjacent-cwd-repo-");
     Put(CwdRepo, "package.json");
-    Check(Count, "A3: an empty path starts at the cwd and a markerless walk returns undefined", () => {
-      assert.equal(Library.Root("", CwdRepo), CwdRepo);
-      assert.equal(Library.Root("", Home), void 0);
-    });
+    Check(
+      Count,
+      "A3: an empty path starts at the cwd and a markerless walk returns undefined",
+      () => {
+        assert.equal(Library.Root("", CwdRepo), CwdRepo);
+        assert.equal(Library.Root("", Home), void 0);
+      }
+    );
   }
   {
     const Home = Tree("pack-adjacent-home-");
@@ -161,14 +169,10 @@ const runTest = async () => {
       assert.equal(Library.Resolve(Bare, { home: Home }), Library.Builtin);
     });
     const Layered = Tree("pack-adjacent-layered-");
-    Put(
-      Layered,
-      ".dsh/pack.yml",
-      `signature:
+    Put(Layered, ".dsh/pack.yml", `signature:
   - docs/STYLE.md
 slug: custom
-`
-    );
+`);
     Put(Layered, "docs/STYLE.md");
     Check(Count, "A4: builtin false still resolves the layer that exists", () => {
       const Pack = Library.Resolve(Layered, { home: Home, builtin: false });

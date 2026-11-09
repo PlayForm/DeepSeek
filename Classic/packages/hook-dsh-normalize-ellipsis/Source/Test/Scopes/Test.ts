@@ -1,13 +1,21 @@
-// Source/Test/Scopes/Test.ts - one singular test: the granular scope gates
-// (Run S) - each scope on/off with everything else at defaults, the
-// effective-toolInput OR semantics with the deprecated field, and the S5
-// volatile scope flip applied to the NEXT stream without remount.
-// Runs standalone (`node Target/Test/Scopes/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/hook-dsh-normalize-ellipsis: the fake ctx + the REAL
-// factory + the REAL ellipsis apply (the seams live in ../Harness.js).
+/**
+ * @module Test
+ *
+ * The Scopes unit smoke: the granular scope gates (Run S).
+ *
+ * @remarks
+ * The one singular test covers each scope on and off with everything else at
+ * defaults, the effective-toolInput OR semantics with the deprecated field, and
+ * the S5 volatile scope flip applied to the NEXT stream without a remount.
+ *
+ * The smoke is the fake ctx + the REAL factory + the REAL ellipsis apply; the
+ * seams live in `../Harness.js`. The folder runs standalone
+ * (`node Target/Test/Scopes/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Ledger, Make } from "../Harness.js";
+
+import { Check, Finish, Ledger, Make, MakeCounter } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -71,7 +79,10 @@ export const runTest = async (): Promise<number> => {
 		const Sub = "scopes.conversation off: text-delta passes by identity";
 		{
 			Check(Count, Sub, () => {
-				assert.ok(OutS1[0] === TextChunkS, "scopes.conversation off: text-delta passes by identity");
+				assert.ok(
+					OutS1[0] === TextChunkS,
+					"scopes.conversation off: text-delta passes by identity",
+				);
 			});
 		}
 	}
@@ -158,7 +169,8 @@ export const runTest = async (): Promise<number> => {
 	S5.Listeners["loader/volatile-update"]!([["scopes", "conversation"]]);
 	const OutS5 = await DriveS(S5, [TextChunkS]);
 	{
-		const Sub = "volatile scope flip: conversation off applies to the NEXT stream without remount";
+		const Sub =
+			"volatile scope flip: conversation off applies to the NEXT stream without remount";
 		{
 			Check(Count, Sub, () => {
 				assert.ok(

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   Rm();
@@ -140,7 +140,11 @@ const runTest = async () => {
       const All6 = "a\u2014b\u201Cc\u201D\u2026d\xA0e\u200Bf\uFF21g";
       const Normalized6 = 'a-b"c"...d efAg';
       const Out8b = await Tool.execute(
-        { file_path: "/tmp/normalize-dash-smoke-normalized.txt", content: All6, normalize: true },
+        {
+          file_path: "/tmp/normalize-dash-smoke-normalized.txt",
+          content: All6,
+          normalize: true
+        },
         Exec()
       );
       {
@@ -162,11 +166,17 @@ const runTest = async () => {
       {
         const Sub = "an overwrite reports update with the real before/after contents";
         Check(Count, Sub, () => {
-          assert.ok(Out8d.operation === "update" && Out8d.before === Verbatim && Out8d.after === All6);
+          assert.ok(
+            Out8d.operation === "update" && Out8d.before === Verbatim && Out8d.after === All6
+          );
         });
       }
       await Tool.execute(
-        { file_path: "/tmp/normalize-dash-smoke-explicit.txt", content: All6, normalize: false },
+        {
+          file_path: "/tmp/normalize-dash-smoke-explicit.txt",
+          content: All6,
+          normalize: false
+        },
         Exec()
       );
       {
@@ -180,7 +190,11 @@ const runTest = async () => {
       Rm();
       const Run8b = Make(Validate({ replacement: "$&", logFile: Ledger }));
       await Run8b.Registered[0].execute(
-        { file_path: "/tmp/normalize-dash-smoke-replacement.txt", content: "a\u2014b", normalize: true },
+        {
+          file_path: "/tmp/normalize-dash-smoke-replacement.txt",
+          content: "a\u2014b",
+          normalize: true
+        },
         Exec()
       );
       {
@@ -231,7 +245,11 @@ const runTest = async () => {
     const QuotesOnly = 'a\u2014b"c"\u2026d\xA0e\u200Bf\uFF21g';
     {
       const Out9a = await Tool.execute(
-        { file_path: "/tmp/normalize-dash-smoke-sel-dash.txt", content: All6, normalize: ["dash"] },
+        {
+          file_path: "/tmp/normalize-dash-smoke-sel-dash.txt",
+          content: All6,
+          normalize: ["dash"]
+        },
         Exec()
       );
       {
@@ -249,7 +267,11 @@ const runTest = async () => {
     }
     {
       await Tool.execute(
-        { file_path: "/tmp/normalize-dash-smoke-sel-quotes.txt", content: All6, normalize: ["quotes"] },
+        {
+          file_path: "/tmp/normalize-dash-smoke-sel-quotes.txt",
+          content: All6,
+          normalize: ["quotes"]
+        },
         Exec()
       );
       {
@@ -295,7 +317,11 @@ const runTest = async () => {
     }
     {
       await Tool.execute(
-        { file_path: "/tmp/normalize-dash-smoke-sel-all.txt", content: All6, normalize: "all" },
+        {
+          file_path: "/tmp/normalize-dash-smoke-sel-all.txt",
+          content: All6,
+          normalize: "all"
+        },
         Exec()
       );
       {
@@ -307,7 +333,11 @@ const runTest = async () => {
     }
     {
       await Tool.execute(
-        { file_path: "/tmp/normalize-dash-smoke-sel-empty.txt", content: All6, normalize: [] },
+        {
+          file_path: "/tmp/normalize-dash-smoke-sel-empty.txt",
+          content: All6,
+          normalize: []
+        },
         Exec()
       );
       {
@@ -374,7 +404,11 @@ const runTest = async () => {
       const Writes10 = Run8.Writes.length;
       const StepsBefore = Object.keys(Furnace.GovernSteps).length;
       const Out10a = await Tool.execute(
-        { file_path: "/tmp/normalize-dash-smoke-gov-true.txt", content: All6, govern: true },
+        {
+          file_path: "/tmp/normalize-dash-smoke-gov-true.txt",
+          content: All6,
+          govern: true
+        },
         Exec()
       );
       {
@@ -414,7 +448,11 @@ const runTest = async () => {
       let GovBogusError = null;
       try {
         await Tool.execute(
-          { file_path: "/tmp/normalize-dash-smoke-gov-bogus.txt", content: All6, govern: ["bogus"] },
+          {
+            file_path: "/tmp/normalize-dash-smoke-gov-bogus.txt",
+            content: All6,
+            govern: ["bogus"]
+          },
           Exec()
         );
       } catch (E) {
@@ -429,7 +467,11 @@ const runTest = async () => {
         });
       }
       const Out10c = await Tool.execute(
-        { file_path: "/tmp/normalize-dash-smoke-gov-all.txt", content: All6, govern: "all" },
+        {
+          file_path: "/tmp/normalize-dash-smoke-gov-all.txt",
+          content: All6,
+          govern: "all"
+        },
         Exec()
       );
       {
@@ -466,7 +508,11 @@ const runTest = async () => {
         });
       }
       const Out10e = await Tool.execute(
-        { file_path: "/tmp/normalize-dash-smoke-gov-false.txt", content: All6, govern: false },
+        {
+          file_path: "/tmp/normalize-dash-smoke-gov-false.txt",
+          content: All6,
+          govern: false
+        },
         Exec()
       );
       {
@@ -493,7 +539,11 @@ const runTest = async () => {
       );
       const Writes10 = Run8.Writes.length;
       const Out10f = await Tool.execute(
-        { file_path: "/tmp/normalize-dash-smoke-gov-actor.txt", content: All6, govern: ["pin"] },
+        {
+          file_path: "/tmp/normalize-dash-smoke-gov-actor.txt",
+          content: All6,
+          govern: ["pin"]
+        },
         Exec()
       );
       {
@@ -521,12 +571,18 @@ const runTest = async () => {
       {
         const Sub = "govern actor probe: the spread preserves the exec fields (callId, signal ride along)";
         Check(Count, Sub, () => {
-          assert.ok(ProbeRuns[0].actor.callId === "call_smoke" && "signal" in ProbeRuns[0].actor);
+          assert.ok(
+            ProbeRuns[0].actor.callId === "call_smoke" && "signal" in ProbeRuns[0].actor
+          );
         });
       }
       const ProbeRunsBefore = ProbeRuns.length;
       await Tool.execute(
-        { file_path: "/tmp/normalize-dash-smoke-gov-actor-false.txt", content: All6, govern: false },
+        {
+          file_path: "/tmp/normalize-dash-smoke-gov-actor-false.txt",
+          content: All6,
+          govern: false
+        },
         Exec()
       );
       {
@@ -545,7 +601,11 @@ const runTest = async () => {
         }
       );
       const OutSlow = await Tool.execute(
-        { file_path: "/tmp/normalize-dash-smoke-gov-async.txt", content: All6, govern: true },
+        {
+          file_path: "/tmp/normalize-dash-smoke-gov-async.txt",
+          content: All6,
+          govern: true
+        },
         Exec()
       );
       {
@@ -565,7 +625,9 @@ const runTest = async () => {
       {
         const Sub = "govern sequential fold: the async step receives the wrapped actor like the sync steps";
         Check(Count, Sub, () => {
-          assert.ok(SlowRuns[0].actor && JSON.stringify(SlowRuns[0].actor.govern) === "true");
+          assert.ok(
+            SlowRuns[0].actor && JSON.stringify(SlowRuns[0].actor.govern) === "true"
+          );
         });
       }
     }

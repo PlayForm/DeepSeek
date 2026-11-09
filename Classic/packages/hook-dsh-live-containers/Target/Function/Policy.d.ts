@@ -1,5 +1,5 @@
-import type State from "@Interface/State.js";
-import type { DetachConfig } from "@Interface/State.js";
+import type State from "../Interface/State.js";
+import type { DetachConfig } from "../Interface/State.js";
 /** The permanently non-detachable content-mutating family (I1 12.1, HARD -
  * hardcoded, never config; rejected even under "all" and "selected"). */
 export declare const NON_DETACHABLE: readonly string[];

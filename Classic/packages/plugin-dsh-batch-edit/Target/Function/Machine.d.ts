@@ -1,6 +1,6 @@
-import type { FsObservation, FsTarget } from "@Interface/Fs.js";
-import type { MachineRecord, OpLine, ProcessCell, SearchSpec } from "@Interface/Process.js";
-import type State from "@Interface/State.js";
+import type { FsObservation, FsTarget } from "../Interface/Fs.js";
+import type { MachineRecord, OpLine, ProcessCell, SearchSpec } from "../Interface/Process.js";
+import type State from "../Interface/State.js";
 /** The agent id of an exec (the planted-board keying; "(unowned)" is the
  *  module-global fallback the counters use). */
 export declare const AgentOf: (Exec: unknown) => string;

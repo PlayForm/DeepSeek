@@ -1,14 +1,5 @@
 import assert from "node:assert/strict";
-import {
-  Check,
-  Finish,
-  Furnace,
-  MakeCounter,
-  Ledger,
-  Make,
-  rm,
-  Validate
-} from "../Harness.js";
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   rm();
@@ -51,7 +42,10 @@ const runTest = async () => {
     const Sub = "config default normalizeReasoning=true";
     {
       Check(Count, Sub, () => {
-        assert.ok(Raw1.normalizeReasoning === true, "config default normalizeReasoning=true");
+        assert.ok(
+          Raw1.normalizeReasoning === true,
+          "config default normalizeReasoning=true"
+        );
       });
     }
   }
@@ -92,7 +86,10 @@ const runTest = async () => {
     const Sub = "state carries the REAL factory instance";
     {
       Check(Count, Sub, () => {
-        assert.ok(Run1.State && Run1.State.Factory === Furnace, "state carries the REAL factory instance");
+        assert.ok(
+          Run1.State && Run1.State.Factory === Furnace,
+          "state carries the REAL factory instance"
+        );
       });
     }
   }

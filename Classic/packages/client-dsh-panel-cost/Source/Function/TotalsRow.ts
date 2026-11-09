@@ -1,77 +1,20 @@
-// TotalsRow - the tfoot row: the session label with the call count, the
-// files-column spacer, the seven session metrics, and the session bar that
-// always fills its track because its scale is the session total itself.
-import Cells from "@Function/Cells";
-import CountShort from "@Function/CountShort";
-import Price from "@Function/Price";
-import Rate from "@Function/Rate";
+// TotalsRow - the tfoot row: the session label spanning the identity
+// columns with the call count, the files-column spacer, and one cell per
+// remaining resolved column, each built by that column's render. The row
+// reads the same resolved definition as the header and the body, so its
+// cell count cannot drift from theirs.
+import type { TurnsCells } from "@Function/Columns";
 import type CostBuckets from "@Interface/Buckets";
 import type CostSummary from "@Interface/Summary";
+import type { ResolvedTable } from "@Interface/Table";
 import type CostTokens from "@Interface/Tokens";
 import type { Translate } from "@Interface/Translate";
-import Dash from "@Variable/Dash";
-import { createElement } from "react";
+import { createElement, type ReactNode } from "react";
 
 type TotalsRowProps = {
 	Summary: CostSummary;
+	Resolved: ResolvedTable<TurnsCells>;
 	t: Translate;
-};
-
-const TokenCell = (Cell: string, Value: number): ReturnType<typeof createElement> =>
-	createElement(
-		"td",
-		{ className: Cell },
-		createElement("span", { className: "playform-cost-num" }, CountShort(Value)),
-	);
-
-const CacheCell = (
-	Cell: string,
-	Tokens: CostTokens,
-	Hit: number | null,
-	t: Translate,
-): ReturnType<typeof createElement> => {
-	const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
-	const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
-	const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
-	const Base = Read + Input + Write;
-	switch (true) {
-		case Base <= 0:
-			return createElement("td", { className: Cell, title: t("unknown") }, Dash);
-		case Read > 0 || Write > 0:
-			return createElement(
-				"td",
-				{
-					className: Cell,
-					title: t("cache.detail", {
-						read: CountShort(Read),
-						input: CountShort(Input),
-						write: CountShort(Write),
-					}),
-				},
-				createElement("span", { className: "playform-cost-num" }, Rate(Hit)),
-			);
-		default:
-			return createElement(
-				"td",
-				{ className: Cell, title: t("column.cache.title") },
-				createElement("span", { className: "playform-cost-num" }, Rate(Hit)),
-			);
-	}
-};
-
-const OtherTitle = (Cost: CostBuckets, Currency: string, t: Translate): string => {
-	const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
-	const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
-	switch (true) {
-		case Write > 0 || Reasoning > 0:
-			return t("other.detail", {
-				write: Price(Write, Currency),
-				reasoning: Price(Reasoning, Currency),
-				rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency),
-			});
-		default:
-			return t("column.other.title");
-	}
 };
 
 export default function TotalsRow(Props: TotalsRowProps): ReturnType<typeof createElement> {
@@ -98,12 +41,10 @@ export default function TotalsRow(Props: TotalsRowProps): ReturnType<typeof crea
 		total: 0,
 		reported: null,
 	};
-	return createElement(
-		"tr",
-		{ className: "playform-cost-totals-row", title: t("totals.session.title") },
+	const Label = (Span: number): ReturnType<typeof createElement> =>
 		createElement(
 			"td",
-			{ className: "playform-cost-totals-label", colSpan: 2 },
+			{ className: "playform-cost-totals-label", colSpan: Span },
 			t("totals.session"),
 			createElement(
 				"span",
@@ -113,25 +54,36 @@ export default function TotalsRow(Props: TotalsRowProps): ReturnType<typeof crea
 					unpriced: typeof Summary.unpriced === "number" ? Summary.unpriced : 0,
 				})}`,
 			),
-		),
-		createElement("td", { className: Metric }),
-		TokenCell(Metric, typeof Tokens.total === "number" ? Tokens.total : 0),
-		CacheCell(
-			Metric,
-			Tokens,
-			typeof Summary.cacheHit === "number" ? Summary.cacheHit : null,
-			t,
-		),
-		Cells.Money({ Cell: Metric, Value: Cost.cacheRead, Currency: Tag }),
-		Cells.Money({ Cell: Metric, Value: Cost.input, Currency: Tag }),
-		Cells.Money({ Cell: Metric, Value: Cost.output, Currency: Tag }),
-		Cells.Money({
+		);
+	// The totals row never renders the identity columns or the files column:
+	// its label spans the identity pair and the files column is the empty
+	// spacer the shipped footer carries. The bag still names their shape so
+	// one row contract serves the turn, the step and the totals row.
+	const Row: TurnsCells = {
+		Key: "totals:session",
+		scope: { Cell: Metric, Markers: [] },
+		model: { Cell: Metric, Provider: "", Model: "" },
+		files: {
 			Cell: Metric,
-			Value: Cost.other,
+			Pills: [],
+			Fail: false,
+			Saving: 0,
+			Calls: 0,
+			Tokens: 0,
 			Currency: Tag,
-			Title: OtherTitle(Cost, Tag, t),
-		}),
-		Cells.Alloc({
+			ShowMix: false,
+		},
+		tokens: { Cell: Metric, Value: typeof Tokens.total === "number" ? Tokens.total : 0 },
+		cache: {
+			Cell: Metric,
+			Tokens,
+			Hit: typeof Summary.cacheHit === "number" ? Summary.cacheHit : null,
+		},
+		cacheRead: { Cell: Metric, Value: Cost.cacheRead, Currency: Tag },
+		input: { Cell: Metric, Value: Cost.input, Currency: Tag },
+		output: { Cell: Metric, Value: Cost.output, Currency: Tag },
+		other: { Cell: Metric, Value: Cost.other, Currency: Tag, Cost },
+		allocation: {
 			Cell: Metric,
 			Direct: typeof Summary.direct === "number" ? Summary.direct : 0,
 			Amortized: typeof Summary.amortized === "number" ? Summary.amortized : 0,
@@ -139,9 +91,8 @@ export default function TotalsRow(Props: TotalsRowProps): ReturnType<typeof crea
 				(typeof Summary.direct === "number" && Summary.direct !== 0) ||
 				(typeof Summary.amortized === "number" && Summary.amortized !== 0),
 			Currency: Tag,
-			t,
-		}),
-		Cells.Bar({
+		},
+		total: {
 			Cell: Metric,
 			Track: "playform-cost-bar-turn",
 			Total: Cost.total,
@@ -149,7 +100,35 @@ export default function TotalsRow(Props: TotalsRowProps): ReturnType<typeof crea
 			Scale: typeof Cost.total === "number" ? Cost.total : 0,
 			Currency: Tag,
 			Start: null,
-			t,
-		}),
+		},
+	};
+	// The label takes the place of the first identity column and spans every
+	// identity column the resolution keeps, so a hidden or reordered identity
+	// column moves the footer with it.
+	const Identity = Props.Resolved.columns.filter(
+		(Column) => Column.id === "scope" || Column.id === "model",
+	).length;
+	const Body: ReactNode[] = [];
+	let Placed = false;
+	for (const Column of Props.Resolved.columns) {
+		switch (true) {
+			case Column.id === "scope" || Column.id === "model":
+				if (!Placed) {
+					Body.push(Label(Identity));
+					Placed = true;
+				}
+				break;
+			case Column.id === "files":
+				Body.push(createElement("td", { className: Metric }));
+				break;
+			default:
+				Body.push(Column.render(Row, { t }));
+				break;
+		}
+	}
+	return createElement(
+		"tr",
+		{ className: "playform-cost-totals-row", title: t("totals.session.title") },
+		...Body,
 	);
 }

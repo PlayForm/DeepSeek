@@ -1,13 +1,6 @@
 import assert from "node:assert/strict";
+import { Dashes, Ellipsis, Fullwidth, Invisible, Quotes, Spaces } from "../../../Target/Library.js";
 import { Check, Finish, MakeCounter } from "../Harness.js";
-import {
-  Dashes,
-  Ellipsis,
-  Fullwidth,
-  Invisible,
-  Quotes,
-  Spaces
-} from "../../../Target/Library.js";
 const runTest = async () => {
   const Count = MakeCounter();
   {

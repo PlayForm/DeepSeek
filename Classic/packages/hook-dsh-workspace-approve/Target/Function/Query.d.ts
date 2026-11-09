@@ -1,5 +1,5 @@
-import type Binding from "@Interface/Binding.js";
-import type State from "@Interface/State.js";
+import type Binding from "../Interface/Binding.js";
+import type State from "../Interface/State.js";
 /** One binding by id, or undefined. */
 export declare const ById: (State: State, Id: string) => Binding | undefined;
 /** The ring, NEWEST first; an optional limit slices the head. */

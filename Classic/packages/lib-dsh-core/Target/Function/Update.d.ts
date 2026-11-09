@@ -1,12 +1,70 @@
 export default _default;
+/**
+ * @module Update
+ *
+ * The shared update-stage envelope of the governance family: the Dispatch/Settle pair
+ * every update engine is wrapped in.
+ *
+ * @remarks
+ * The package governor (ncu) and the cargo governor (cargo upgrade) run the SAME control
+ * flow - only the child execution stage and the module's own ledger strings differ - so the
+ * flow lives here as a BUILDER: the module supplies its injected dependencies (the State's
+ * maps and functions, the factory delegates, the job lifecycle hooks, the P5 journal event
+ * names and EVERY ledger string) and receives the pair. A new governance module's update
+ * stage reduces to a child runner plus strings; the flow is not forked per module.
+ *
+ * The flow (byte-identical across the family, verified by the smokes):
+ *
+ *   Dispatch - the g4 stage (U):
+ *     1. the gates, all as switch (true) cases: circuit breaker -> in-flight ->
+ *        cooldown; the per-dir maps (Stamp/Set/Count) stay in the module's State and
+ *        guard the dispatch; each gate logs its own module-owned line and returns;
+ *     2. the task-owned AbortController, registered in the module's in-flight map under
+ *        the FACTORY's namespaced key (UpdateKey - distinct from the chain pass's plain
+ *        key: the collision lesson, P2) and removed on settlement;
+ *     3. the JOBS ENVELOPE via the module's Start hook: an UNOWNED job (`owner` key
+ *        absent - open to any caller until service disposal) whose `cancel` aborts the
+ *        task-owned signal and whose `done` is the never-rejecting chain Stage -> Settle
+ *        -> `{ status, detail: `exit code: <code>` }`; a bug-level rejection still
+ *        settles the breaker and resolves `failed` with the module's rejected detail.
+ *        When no job registry serves the context (or the starter rejects), the module's
+ *        Start hook invokes the detached fallback instead: the same contained chain,
+ *        unobserved;
+ *     4. the P5 dispatched journal record, then the dispatched ledger line (the
+ *        governor-family order: journal first, then the line).
+ *
+ *   Settle - the post-completion stage of the update continuation: removes the per-dir
+ *   in-flight marker and the P2 registration, updates the circuit breaker (reset on 0,
+ *   increment + the module's failure line + the P5 failure journal record otherwise), then
+ *   runs U₂ - stat the mutated manifest (metadata, never content) and hand the stat's
+ *   version to the module's Refresh (the Stash registration + the same-actor fs/observed
+ *   re-emit), best-effort. Returns the code it was given so the dispatch chain can map it.
+ *   Never rejects.
+ *
+ * The core NEVER imports the harness or the factory: the module identity, the maps and
+ * every string arrive through `Dependencies` (structural - the module's State and target
+ * are opaque `S`/`T` the core only passes back).
+ */
 declare function _default<S, T, V, R>(Dependency: Dependencies<S, T, V, R>): {
     Dispatch: (State: S, Target: T, Actor: object | undefined, Dir: string, Registry: R | null, PolicyPath: string) => Promise<void>;
     Settle: (State: S, Dir: string, Target: T, Actor: object | undefined, Code: number) => Promise<number>;
 };
+/**
+ * The output-ring handle the jobs runtime passes to a started job's `run` callback
+ * (structural: the only member the envelope consumes). The module's child stage pipes its
+ * raw output into it IN ADDITION to the ledger; the ledger record stays byte-identical.
+ */
 export interface Job {
     /** Append one output chunk to the job's live log. */
     append(text: string): void;
 }
+/**
+ * The module-supplied injections (structural, never imported machinery).
+ *
+ * `S` is the module's State, `T` its fs target, `V` the version token it exchanges with the
+ * factory, `R` its registry view - all opaque to the core, which only passes them back
+ * through the injections.
+ */
 export interface Dependencies<S, T, V, R> {
     /** Directory → consecutive update-stage failures (the circuit breaker). */
     Count: (State: S) => Map<string, number>;

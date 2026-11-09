@@ -1,24 +1,17 @@
-import assert from "node:assert/strict";
-import {
-	Check,
-	Finish,
-	Library,
-	MakeCounter,
-	Put,
-	Tree,
-} from "../Harness.js";
-
 /**
  * @module Test
  *
- * The layered resolution against REAL temporary trees: the built-in fallback,
- * the repo layer, the user layer and the repo override, the declared slug, the
- * signature gate, and the user-only layer.
+ * The layered resolution against REAL temporary trees: the built-in fallback, the repo
+ * layer, the user layer and the repo override, the declared slug, the signature gate, and
+ * the user-only layer.
  *
  * @remarks
- * Every scenario uses a fresh root (the `Load` memo is per-root) and a temporary
- * home (never the real `~/.dsh`).
+ * Every scenario uses a fresh root (the Load memo is per-root) and a temporary home (never
+ * the real `~/.dsh`).
  */
+import assert from "node:assert/strict";
+
+import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
 
 /** The repo layer's text: a custom signature, a slug, one doc family. */
 const Repo = `signature:
@@ -53,11 +46,15 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Library.Resolve(Root, { home: Home }), Library.Builtin);
 			assert.equal(Library.Families(Library.Resolve(Root, { home: Home }), "doc").length, 7);
 		});
-		Check(Count, "R1: the locator finds the built-in workspace by the default signature", () => {
-			const Located = Library.Locate("Documentation/INDEX.md", Root, { home: Home });
-			assert.equal(Located?.root, Root);
-			assert.equal(Located?.pack, Library.Builtin);
-		});
+		Check(
+			Count,
+			"R1: the locator finds the built-in workspace by the default signature",
+			() => {
+				const Located = Library.Locate("Documentation/INDEX.md", Root, { home: Home });
+				assert.equal(Located?.root, Root);
+				assert.equal(Located?.pack, Library.Builtin);
+			},
+		);
 	}
 
 	// R2: the repo layer - a custom signature, a slug and one family.

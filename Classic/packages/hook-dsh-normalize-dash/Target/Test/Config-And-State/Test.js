@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   Rm();
@@ -105,7 +105,9 @@ const runTest = async () => {
     {
       const Sub = "each apply builds a FRESH state (no module-level globals)";
       Check(Count, Sub, () => {
-        assert.ok(First !== Second && First.Replacement === "-" && Second.Replacement === "-");
+        assert.ok(
+          First !== Second && First.Replacement === "-" && Second.Replacement === "-"
+        );
       });
     }
   }

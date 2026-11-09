@@ -33,27 +33,31 @@ const runTest = async () => {
     });
   }
   {
-    Check(Count, "P2: absent bands render `(none)` placeholders and FOCUS/STALE are omitted", () => {
-      assert.equal(
-        Packet({
-          workspace: "w",
-          indexRevision: "r1",
-          scope: "s",
-          map: [],
-          neighbors: [],
-          evidence: [],
-          open: []
-        }),
-        [
-          "WORKSPACE w @ r1",
-          "SCOPE s",
-          "MAP (none)",
-          "NEIGHBORS (none)",
-          "EVIDENCE (none)",
-          "OPEN (none)"
-        ].join("\n")
-      );
-    });
+    Check(
+      Count,
+      "P2: absent bands render `(none)` placeholders and FOCUS/STALE are omitted",
+      () => {
+        assert.equal(
+          Packet({
+            workspace: "w",
+            indexRevision: "r1",
+            scope: "s",
+            map: [],
+            neighbors: [],
+            evidence: [],
+            open: []
+          }),
+          [
+            "WORKSPACE w @ r1",
+            "SCOPE s",
+            "MAP (none)",
+            "NEIGHBORS (none)",
+            "EVIDENCE (none)",
+            "OPEN (none)"
+          ].join("\n")
+        );
+      }
+    );
   }
   {
     Check(Count, "P3: STALE renders only when the caller's version differs", () => {

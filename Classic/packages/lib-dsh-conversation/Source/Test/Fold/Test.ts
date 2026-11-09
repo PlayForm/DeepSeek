@@ -1,23 +1,21 @@
+/**
+ * @module Test
+ *
+ * The Fold unit smoke: the conversation fold over hand-written event arrays.
+ *
+ * @remarks
+ * The folder exercises the fold's smokes from the conversation spine's section
+ * 3.1: a two-step session folds turn, step and both calls with their usage; a
+ * tool call with a relative path resolves against the session header's cwd; a
+ * grep whose path is a directory produces no file touch; an unknown event shape
+ * is skipped without throwing. There is no ctx, no factory and no fs - the fold
+ * is pure.
+ */
 import assert from "node:assert/strict";
 import { resolve } from "node:path";
 
 import { Fold } from "../../../Target/Library.js";
 import { Check, Finish, MakeCounter } from "../Harness.js";
-
-/**
- * @module Test
- *
- * The fold's smokes over hand-written event arrays.
- *
- * @remarks
- * The shapes follow the conversation spine's section 3.1. A two-step session
- * folds turn, step and both calls with their usage; a tool call with a
- * relative path resolves against the session header's cwd; a grep whose path
- * is a directory produces no file touch; an unknown event shape is skipped
- * without throwing.
- *
- * No ctx, no factory, no fs - the fold is pure.
- */
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -103,17 +101,21 @@ export const runTest = async (): Promise<number> => {
 			},
 		},
 	]);
-	Check(Count, "F2: a tool call with a relative path resolves against the session header's cwd", () => {
-		const [Touch] = Relative.Touches;
-		if (Touch === undefined) {
-			throw new Error("the touch is missing");
-		}
-		assert.equal(Touch.Path, resolve("/home/u/project", "src/a.ts"), "the resolved path");
-		assert.equal(Touch.Kind, "read");
-		assert.equal(Touch.Turn, 1);
-		assert.equal(Touch.Step, 1);
-		assert.deepEqual(Relative.Files, [resolve("/home/u/project", "src/a.ts")]);
-	});
+	Check(
+		Count,
+		"F2: a tool call with a relative path resolves against the session header's cwd",
+		() => {
+			const [Touch] = Relative.Touches;
+			if (Touch === undefined) {
+				throw new Error("the touch is missing");
+			}
+			assert.equal(Touch.Path, resolve("/home/u/project", "src/a.ts"), "the resolved path");
+			assert.equal(Touch.Kind, "read");
+			assert.equal(Touch.Turn, 1);
+			assert.equal(Touch.Step, 1);
+			assert.deepEqual(Relative.Files, [resolve("/home/u/project", "src/a.ts")]);
+		},
+	);
 
 	const Search = Fold([
 		{ seq: 0, type: "session", time: 1000, id: "s3", cwd: "/home/u/project" },
@@ -154,7 +156,7 @@ export const runTest = async (): Promise<number> => {
 	return Finish(Count, "Fold");
 };
 
-/** Standalone entry: `node Target/Test/Fold/Test.js`. */
+// Standalone entry: `node Target/Test/Fold/Test.js`.
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

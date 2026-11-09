@@ -3,10 +3,31 @@
 // contribution read that answers which conversations paid for one file and
 // what share each one carried. Both read the same ledger read-only; the
 // contribution read returns plain rows, so it carries no envelope.
+//
+// THE SESSION READ accepts an optional valuation selection (lane B4d): the
+// basis and the catalog revision the caller wants the recorded usage
+// interpreted under. Absent, or the 'as-recorded' basis, answers exactly the
+// recorded envelope; a selection that names a non-recorded basis and a
+// revision adds the `valuation` block - the stored money, the repriced total
+// and their difference over the same session - while every per-call money
+// field stays as recorded.
+//
+// THE PRICING CONTRACT is re-exported here because package.json exposes one
+// types entry (`./service`) and the panel's settings surface must list
+// catalogs, revisions and rate rows without reaching into Target paths. The
+// re-exports are type-only: the host half imports no engine code at runtime.
 import type CostContributionRow from "./ContributionRow.js";
 import type CostResponse from "./Response.js";
+import type ValuationSelection from "./ValuationSelection.js";
+
+export type { default as Catalog } from "./Catalog.js";
+export type { default as PricingService } from "./PricingService.js";
+export type { default as RateRow } from "./RateRow.js";
+export type { default as Revision } from "./Revision.js";
+export type { ValuationBasis } from "./ValuationSelection.js";
+export type { ValuationSelection };
 
 export default interface CostService {
-	session(SessionId: string, Rows: number): CostResponse;
+	session(SessionId: string, Rows: number, Selection?: ValuationSelection): CostResponse;
 	contributions(Path: string): readonly CostContributionRow[];
 }

@@ -1,15 +1,6 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
-import {
-  Check,
-  Finish,
-  Furnace,
-  MakeCounter,
-  Ledger,
-  Make,
-  rm,
-  Validate
-} from "../Harness.js";
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, rm, Validate } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   rm();
@@ -27,7 +18,11 @@ const runTest = async () => {
     { type: "reasoning-delta", index: 2, text: "\u2026x\u2026" },
     { type: "block-end", index: 0, block: { type: "text", text: "\u2026kept \u2026gone" } },
     { type: "block-end", index: 2, block: { type: "reasoning", text: "\u2026y" } },
-    { type: "block-end", index: 3, block: { type: "reasoning", text: "", thinking: "\u2026z" } },
+    {
+      type: "block-end",
+      index: 3,
+      block: { type: "reasoning", text: "", thinking: "\u2026z" }
+    },
     { type: "usage", usage: { input: 1, output: 2 } },
     { type: "finish", reason: "stop" }
   ];
@@ -119,7 +114,10 @@ const runTest = async () => {
     const Sub = "volatile unwrap: custom replacement unwrapped";
     {
       Check(Count, Sub, () => {
-        assert.ok(Run3.State.Replacement === "$&", "volatile unwrap: custom replacement unwrapped");
+        assert.ok(
+          Run3.State.Replacement === "$&",
+          "volatile unwrap: custom replacement unwrapped"
+        );
       });
     }
   }
@@ -140,7 +138,9 @@ const runTest = async () => {
     {
       Check(Count, Sub, () => {
         assert.ok(
-          readFileSync(Ledger, "utf8").includes("normalized 1 ellipsis char(s) in one stream"),
+          readFileSync(Ledger, "utf8").includes(
+            "normalized 1 ellipsis char(s) in one stream"
+          ),
           "count line reflects custom-replacement run"
         );
       });
@@ -236,7 +236,10 @@ const runTest = async () => {
     const Sub = "unchanged text-delta passes through BY IDENTITY (count 0)";
     {
       Check(Count, Sub, () => {
-        assert.ok(Out5[0] === Keep, "unchanged text-delta passes through BY IDENTITY (count 0)");
+        assert.ok(
+          Out5[0] === Keep,
+          "unchanged text-delta passes through BY IDENTITY (count 0)"
+        );
       });
     }
   }
@@ -352,7 +355,9 @@ const runTest = async () => {
     {
       Check(Count, Sub, () => {
         assert.ok(
-          readFileSync(Ledger, "utf8").includes("normalized 2 ellipsis char(s) in one stream"),
+          readFileSync(Ledger, "utf8").includes(
+            "normalized 2 ellipsis char(s) in one stream"
+          ),
           "count line includes the tool-args replacements (delta + block)"
         );
       });

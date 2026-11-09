@@ -1,19 +1,22 @@
-import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
-
 /**
  * @module Test
  *
- * The apply-time wiring's smoke: the config defaults and volatile cells, the
- * listener set, the state unwraps, and the fresh-state-per-apply posture (no
- * module-level globals).
+ * The Config-And-State unit smoke: the apply-time wiring of the dash hook.
  *
  * @remarks
- * Runs standalone (`node Target/Test/Config-And-State/Test.js`) AND under the
- * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
- * `@playform/hook-dsh-normalize-dash`: the fake ctx + the REAL factory + the
- * REAL dash apply, from the Harness.
+ * The one singular test covers the apply-time wiring - the Config defaults and
+ * volatile cells, the listener set, the State unwraps, and the
+ * fresh-State-per-apply posture (no module-level globals).
+ *
+ * The smoke is the fake ctx + the REAL factory + the REAL dash apply, all from
+ * the Harness.
+ *
+ * The folder runs standalone (`node Target/Test/Config-And-State/Test.js`) and
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
  */
+import assert from "node:assert/strict";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -126,14 +129,16 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Sub = "each apply builds a FRESH state (no module-level globals)";
 			Check(Count, Sub, () => {
-				assert.ok(First !== Second && First.Replacement === "-" && Second.Replacement === "-");
+				assert.ok(
+					First !== Second && First.Replacement === "-" && Second.Replacement === "-",
+				);
 			});
 		}
 	}
 	return Finish(Count, "Config-And-State");
 };
 
-/** Standalone entry: `node Target/Test/Config-And-State/Test.js`. */
+// Standalone entry: `node Target/Test/Config-And-State/Test.js`.
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

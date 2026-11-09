@@ -5,14 +5,16 @@
 // change, folds the envelope, and never throws: a failed fetch, a malformed
 // body, or a missing session id renders a state line.
 import { Button } from "@deepseek-ai/dsh-client-ui-primitives";
+import Turns, { type TurnsCells } from "@Function/Columns";
 import DetailRow from "@Function/DetailRow";
 import Fetch from "@Function/Fetch";
 import FileFilters, { type Filter } from "@Function/FileFilters";
 import FileTable from "@Function/FileTable";
 import Fold from "@Function/Fold";
+import Resolve from "@Function/Resolve";
 import StepRow from "@Function/StepRow";
 import SummaryStrip from "@Function/SummaryStrip";
-import Table, { COLUMNS } from "@Function/Table";
+import Table from "@Function/Table";
 import TotalsRow from "@Function/TotalsRow";
 import TurnRow from "@Function/TurnRow";
 import type CostFileRow from "@Interface/FileRow";
@@ -336,6 +338,12 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 		return Top;
 	}, [Snapshot]);
 
+	// The one resolved Turns layout: the shipped definition with the default
+	// preference set, which hides nothing and keeps the shipped order. The
+	// header, the widths, every body cell, the totals row and the detail span
+	// read this one list, so none of them can drift from the others.
+	const Resolved = useMemo(() => Resolve<TurnsCells>(Turns, { hidden: [] }), []);
+
 	const Body: Array<ReturnType<typeof createElement>> = [];
 	if (Snapshot !== null && Phase === "ready") {
 		for (const Turn of Snapshot.turns) {
@@ -347,6 +355,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 					Open,
 					Scale: TurnScale,
 					OnToggle: () => ToggleTurn(Turn.turn),
+					Resolved,
 					t,
 				}),
 			);
@@ -360,7 +369,10 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 						{ key: `more:${Turn.turn}` },
 						createElement(
 							"td",
-							{ className: "playform-cost-more-cell", colSpan: COLUMNS.length },
+							{
+								className: "playform-cost-more-cell",
+								colSpan: Resolved.columns.length,
+							},
 							createElement(
 								"span",
 								{ className: "playform-cost-more-text" },
@@ -395,11 +407,14 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 						Expanded,
 						Scale: StepScaleOf(Turn),
 						OnToggle: () => ToggleStep(Key),
+						Resolved,
 						t,
 					}),
 				);
 				if (Expanded)
-					Body.push(createElement(DetailRow, { key: `detail:${Key}`, Step, t }));
+					Body.push(
+						createElement(DetailRow, { key: `detail:${Key}`, Step, Resolved, t }),
+					);
 			}
 		}
 	}
@@ -654,7 +669,8 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 			createElement(Table, {
 				key: "table",
 				Body,
-				Totals: createElement(TotalsRow, { Summary: Snapshot.summary, t }),
+				Totals: createElement(TotalsRow, { Summary: Snapshot.summary, Resolved, t }),
+				Resolved,
 				t,
 			}),
 		],

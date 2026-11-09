@@ -196,8 +196,14 @@ if (process.argv.includes("--selfcheck")) {
 	const Count = MakeCounter();
 	const HostRun = Make();
 	Check(Count, "selfcheck: the fake host ctx registers the route wiring", () => {
-		assert.equal(HostRun.Provided.routes.length, 1);
-		assert.equal(HostRun.Provided.routes[0].path, "/api/playform-cost/session");
+		assert.deepEqual(
+			HostRun.Provided.routes.map((Route: { path: string }) => Route.path),
+			[
+				"/api/playform-cost/session",
+				"/api/playform-cost/catalogs",
+				"/api/playform-cost/rates",
+			],
+		);
 	});
 	const ClientRun = MakeClient();
 	Check(

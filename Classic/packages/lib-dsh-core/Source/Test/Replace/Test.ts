@@ -9,8 +9,9 @@
 // (`Maintain/Run/Smokes/Index.mjs` spawns it).
 // Unit smoke of @playform/lib-dsh-core: the REAL built entry only.
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter } from "../Harness.js";
+
 import { Dashes, Fullwidth, Quotes, Replace, ReplaceMap } from "../../../Target/Library.js";
+import { Check, Finish, MakeCounter } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();

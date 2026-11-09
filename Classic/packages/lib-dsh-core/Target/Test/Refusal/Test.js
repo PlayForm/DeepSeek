@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter } from "../Harness.js";
 import { Refusal, Section } from "../../../Target/Library.js";
+import { Check, Finish, MakeCounter } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   {
@@ -14,8 +14,16 @@ const runTest = async () => {
           dependencies: { a: "^1.0.0" },
           scripts: { build: "tsc" }
         };
-        const NextOk = { name: "x", dependencies: { a: "1.0.0" }, scripts: { build: "tsc" } };
-        const NextBad = { name: "x", dependencies: { a: "1.0.0" }, scripts: { build: "bun" } };
+        const NextOk = {
+          name: "x",
+          dependencies: { a: "1.0.0" },
+          scripts: { build: "tsc" }
+        };
+        const NextBad = {
+          name: "x",
+          dependencies: { a: "1.0.0" },
+          scripts: { build: "bun" }
+        };
         assert.equal(
           Refusal(RAppend, "/x/package.json", Section, Current, NextOk),
           false,

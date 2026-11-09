@@ -1,4 +1,4 @@
-import type { BlockSpecification } from "@Interface/Execution.js";
+import type { BlockSpecification } from "../Interface/Execution.js";
 /** One catalog entry: the block spec plus the suggester's projection fields. */
 export interface CatalogEntry {
     id: string;

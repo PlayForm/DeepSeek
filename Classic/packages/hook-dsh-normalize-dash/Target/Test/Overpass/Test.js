@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Furnace, Ledger } from "../Harness.js";
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   Rm();
@@ -134,7 +134,9 @@ const runTest = async () => {
       {
         const Sub = "overpass: tool-call/argument blocks pass untouched (execution-critical JSON)";
         Check(Count, Sub, () => {
-          assert.ok(OutO4.content[0] === ToolBlockO && OutO4.content[0].arguments === '{"a":"\u2014"}');
+          assert.ok(
+            OutO4.content[0] === ToolBlockO && OutO4.content[0].arguments === '{"a":"\u2014"}'
+          );
         });
       }
       {
@@ -201,8 +203,15 @@ const runTest = async () => {
     {
       const OutO8 = await PostO(
         ExecO("bash"),
-        { isError: false, value: {}, content: [{ type: "text", text: "raw \u2014 result" }] },
-        async () => ({ kind: "accept", content: [{ type: "text", text: "downstream \u2014 shaped" }] })
+        {
+          isError: false,
+          value: {},
+          content: [{ type: "text", text: "raw \u2014 result" }]
+        },
+        async () => ({
+          kind: "accept",
+          content: [{ type: "text", text: "downstream \u2014 shaped" }]
+        })
       );
       const Sub = "overpass: the downstream decision's content is the basis (not the raw result)";
       Check(Count, Sub, () => {
@@ -210,7 +219,10 @@ const runTest = async () => {
       });
     }
     {
-      const MsgO = (Text) => ({ role: "user", content: [{ type: "text", text: Text }] });
+      const MsgO = (Text) => ({
+        role: "user",
+        content: [{ type: "text", text: Text }]
+      });
       const OutO9 = await PreO(
         {
           agent: {},
@@ -223,13 +235,18 @@ const runTest = async () => {
       );
       const Sub = "overpass: batch off (default) -> the enter decision passes untouched";
       Check(Count, Sub, () => {
-        assert.ok(OutO9.kind === "enter" && OutO9.messages[0].content[0].text === "a \u2014 batch");
+        assert.ok(
+          OutO9.kind === "enter" && OutO9.messages[0].content[0].text === "a \u2014 batch"
+        );
       });
     }
     {
       LiveScopesO.batch = true;
       RunO.Listeners["loader/volatile-update"]([["scopes", "batch"]]);
-      const MsgO = (Text) => ({ role: "user", content: [{ type: "text", text: Text }] });
+      const MsgO = (Text) => ({
+        role: "user",
+        content: [{ type: "text", text: Text }]
+      });
       const OutO10 = await PreO(
         {
           agent: {},
@@ -243,7 +260,9 @@ const runTest = async () => {
       {
         const Sub = "overpass: batch on -> the text blocks in the incoming batch are rewritten";
         Check(Count, Sub, () => {
-          assert.ok(OutO10.kind === "enter" && OutO10.messages[0].content[0].text === "a - batch");
+          assert.ok(
+            OutO10.kind === "enter" && OutO10.messages[0].content[0].text === "a - batch"
+          );
         });
       }
       {
@@ -259,7 +278,10 @@ const runTest = async () => {
     }
     {
       const LinesBeforeO11 = RunO.Lines.length;
-      const MsgO = (Text) => ({ role: "user", content: [{ type: "text", text: Text }] });
+      const MsgO = (Text) => ({
+        role: "user",
+        content: [{ type: "text", text: Text }]
+      });
       const OutO11 = await PreO(
         {
           agent: {},
@@ -287,7 +309,10 @@ const runTest = async () => {
       LiveScopesO.batch = false;
       RunO.Listeners["loader/volatile-update"]([["scopes", "batch"]]);
       const CommandO = RunO.CommandsRegistered[0];
-      const MsgO = (Text) => ({ role: "user", content: [{ type: "text", text: Text }] });
+      const MsgO = (Text) => ({
+        role: "user",
+        content: [{ type: "text", text: Text }]
+      });
       const ArmO = await CommandO.handler({ rawInput: "batch" });
       {
         const Sub = "overpass: the command's batch grammar arms the one-shot flag";
@@ -345,7 +370,10 @@ const runTest = async () => {
       }
     }
     {
-      const MsgO = (Text) => ({ role: "user", content: [{ type: "text", text: Text }] });
+      const MsgO = (Text) => ({
+        role: "user",
+        content: [{ type: "text", text: Text }]
+      });
       const OutO13 = await PreO(
         {
           agent: {},

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
-import Ellipsis from "../../Target/Library.js";
 import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+import Ellipsis from "../../Target/Library.js";
 const { apply, Config: Schema } = Ellipsis;
 const MakeCounter = () => ({ N: 0, F: 0 });
 const Check = (Count, Label, Assertions) => {
@@ -32,9 +32,9 @@ const Finish = (Count, Name) => {
   }
   return Count.N;
 };
-const Furnace = new FactoryClass(
-  { reflect: { provide: () => void 0 } }
-);
+const Furnace = new FactoryClass({
+  reflect: { provide: () => void 0 }
+});
 const Ledger = "/tmp/ellipsis-smoke-ledger.log";
 const rm = () => {
   try {

@@ -1,13 +1,5 @@
 import assert from "node:assert/strict";
-import {
-  Bound,
-  Complete,
-  IsEnvelope,
-  IsStamp,
-  Key,
-  Loop,
-  Names
-} from "../../../Target/Library.js";
+import { Bound, Complete, IsEnvelope, IsStamp, Key, Loop, Names } from "../../../Target/Library.js";
 import { Check, CheckAsync, Finish, MakeCounter } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
@@ -60,10 +52,7 @@ const runTest = async () => {
     const Sub = "IsEnvelope: a complete envelope passes, a partial or null value fails";
     {
       Check(Count, Sub, () => {
-        assert.equal(
-          IsEnvelope({ trace: "trace-1", kind: "x", at: 1, payload: {} }),
-          true
-        );
+        assert.equal(IsEnvelope({ trace: "trace-1", kind: "x", at: 1, payload: {} }), true);
         assert.equal(IsEnvelope(null), false);
         assert.equal(IsEnvelope({ kind: "x", payload: {} }), false, "no trace id");
         assert.equal(IsEnvelope({ trace: "t", kind: "", at: 1, payload: {} }), false);
@@ -76,10 +65,7 @@ const runTest = async () => {
     const Sub = "IsStamp: the observe/stamp payload guard (path/version/origin)";
     {
       Check(Count, Sub, () => {
-        assert.equal(
-          IsStamp({ path: "/a.ts", version: "1", origin: "fs/observed" }),
-          true
-        );
+        assert.equal(IsStamp({ path: "/a.ts", version: "1", origin: "fs/observed" }), true);
         assert.equal(IsStamp({ path: "", version: "1", origin: "x" }), false);
         assert.equal(IsStamp({ path: "/a.ts", origin: "x" }), false, "no version");
         assert.equal(IsStamp({ path: "/a.ts", version: "1" }), false, "no origin");

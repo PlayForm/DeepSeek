@@ -1,16 +1,24 @@
-// Source/Test/Overpass/Test.ts - one singular test: the overpass arms and the
-// command - the registration facts (the two arms with their ordering
-// contract, the normalize-overpass command), the tool-results arm (default
-// off, the O2 volatile flip with the exact ledger line, the read exemption,
-// the block rules, the N=0 no-op, the value-carrying and CCR-marker
-// pass-throughs, the downstream basis), the step-batch arm (default off, the
-// O10 flip, the one-shot command arm), and the history-safety invariant.
-// Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
+/**
+ * @module Test
+ *
+ * The Overpass unit smoke: the overpass arms and the `normalize-overpass`
+ * command.
+ *
+ * @remarks
+ * The one singular test covers the registration facts (the two arms with their
+ * ordering contract, and the `normalize-overpass` command), the tool-results
+ * arm (default off, the O2 volatile flip with the exact ledger line, the read
+ * exemption, the block rules, the N=0 no-op, the value-carrying and CCR-marker
+ * pass-throughs, and the downstream basis), the step-batch arm (default off,
+ * the O10 flip, the one-shot command arm), and the history-safety invariant.
+ *
+ * The smoke is the fake ctx + the REAL factory + the REAL dash apply, all from
+ * the Harness. The folder runs standalone (`node Target/Test/Overpass/Test.js`)
+ * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Furnace, Ledger } from "../Harness.js";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -63,19 +71,22 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 		{
-			const Sub = "overpass: the post-execute arm PREPENDS (outermost vs the CCR arm's own prepend)";
+			const Sub =
+				"overpass: the post-execute arm PREPENDS (outermost vs the CCR arm's own prepend)";
 			Check(Count, Sub, () => {
 				assert.ok(RunO.ListenerOptions["tools/post-execute"]?.prepend === true);
 			});
 		}
 		{
-			const Sub = "overpass: the pre-step arm uses default ordering (nothing needs to precede it)";
+			const Sub =
+				"overpass: the pre-step arm uses default ordering (nothing needs to precede it)";
 			Check(Count, Sub, () => {
 				assert.ok(RunO.ListenerOptions["agent/pre-step"] === undefined);
 			});
 		}
 		{
-			const Sub = "overpass: the normalize-overpass command is registered (name without slash)";
+			const Sub =
+				"overpass: the normalize-overpass command is registered (name without slash)";
 			Check(Count, Sub, () => {
 				assert.ok(
 					RunO.CommandsRegistered.length === 1 &&
@@ -109,10 +120,13 @@ export const runTest = async (): Promise<number> => {
 				NextAcceptO,
 			);
 			{
-				const Sub = "overpass: toolResults on -> the text block is rewritten (em dash -> hyphen)";
+				const Sub =
+					"overpass: toolResults on -> the text block is rewritten (em dash -> hyphen)";
 				Check(Count, Sub, () => {
 					assert.ok(
-						OutO2.kind === "accept" && OutO2.content.length === 1 && OutO2.content[0].text === "a - b",
+						OutO2.kind === "accept" &&
+							OutO2.content.length === 1 &&
+							OutO2.content[0].text === "a - b",
 					);
 				});
 			}
@@ -158,9 +172,13 @@ export const runTest = async (): Promise<number> => {
 				NextAcceptO,
 			);
 			{
-				const Sub = "overpass: tool-call/argument blocks pass untouched (execution-critical JSON)";
+				const Sub =
+					"overpass: tool-call/argument blocks pass untouched (execution-critical JSON)";
 				Check(Count, Sub, () => {
-					assert.ok(OutO4.content[0] === ToolBlockO && OutO4.content[0].arguments === '{"a":"\u2014"}');
+					assert.ok(
+						OutO4.content[0] === ToolBlockO &&
+							OutO4.content[0].arguments === '{"a":"\u2014"}',
+					);
 				});
 			}
 			{
@@ -216,13 +234,15 @@ export const runTest = async (): Promise<number> => {
 				NextAcceptO,
 			);
 			{
-				const Sub = "overpass: marker-bearing content passes through the arm unchanged (N=0 on a CCR replacement)";
+				const Sub =
+					"overpass: marker-bearing content passes through the arm unchanged (N=0 on a CCR replacement)";
 				Check(Count, Sub, () => {
 					assert.ok(OutO7.kind === "accept" && !("content" in OutO7));
 				});
 			}
 			{
-				const Sub = "overpass: O5/O6/O7 added NO ledger lines (the no-op and pass-through rules)";
+				const Sub =
+					"overpass: O5/O6/O7 added NO ledger lines (the no-op and pass-through rules)";
 				Check(Count, Sub, () => {
 					assert.ok(RunO.Lines.length === LinesBeforeO5);
 				});
@@ -232,17 +252,28 @@ export const runTest = async (): Promise<number> => {
 		{
 			const OutO8 = await PostO(
 				ExecO("bash"),
-				{ isError: false, value: {}, content: [{ type: "text", text: "raw \u2014 result" }] },
-				async () => ({ kind: "accept", content: [{ type: "text", text: "downstream \u2014 shaped" }] }),
+				{
+					isError: false,
+					value: {},
+					content: [{ type: "text", text: "raw \u2014 result" }],
+				},
+				async () => ({
+					kind: "accept",
+					content: [{ type: "text", text: "downstream \u2014 shaped" }],
+				}),
 			);
-			const Sub = "overpass: the downstream decision's content is the basis (not the raw result)";
+			const Sub =
+				"overpass: the downstream decision's content is the basis (not the raw result)";
 			Check(Count, Sub, () => {
 				assert.ok(OutO8.content[0].text === "downstream - shaped");
 			});
 		}
 		// O9: the batch scope is OFF by default -> the enter decision passes.
 		{
-			const MsgO = (Text: string) => ({ role: "user", content: [{ type: "text", text: Text }] });
+			const MsgO = (Text: string) => ({
+				role: "user",
+				content: [{ type: "text", text: Text }],
+			});
 			const OutO9 = await PreO(
 				{
 					agent: {},
@@ -255,14 +286,20 @@ export const runTest = async (): Promise<number> => {
 			);
 			const Sub = "overpass: batch off (default) -> the enter decision passes untouched";
 			Check(Count, Sub, () => {
-				assert.ok(OutO9.kind === "enter" && OutO9.messages[0].content[0].text === "a \u2014 batch");
+				assert.ok(
+					OutO9.kind === "enter" &&
+						OutO9.messages[0].content[0].text === "a \u2014 batch",
+				);
 			});
 		}
 		// O10: batch ON via the volatile flip -> normalized messages + exact ledger.
 		{
 			LiveScopesO.batch = true;
 			RunO.Listeners["loader/volatile-update"]([["scopes", "batch"]]);
-			const MsgO = (Text: string) => ({ role: "user", content: [{ type: "text", text: Text }] });
+			const MsgO = (Text: string) => ({
+				role: "user",
+				content: [{ type: "text", text: Text }],
+			});
 			const OutO10 = await PreO(
 				{
 					agent: {},
@@ -274,9 +311,13 @@ export const runTest = async (): Promise<number> => {
 				async () => ({ kind: "enter", messages: [MsgO("a \u2014 batch")] }),
 			);
 			{
-				const Sub = "overpass: batch on -> the text blocks in the incoming batch are rewritten";
+				const Sub =
+					"overpass: batch on -> the text blocks in the incoming batch are rewritten";
 				Check(Count, Sub, () => {
-					assert.ok(OutO10.kind === "enter" && OutO10.messages[0].content[0].text === "a - batch");
+					assert.ok(
+						OutO10.kind === "enter" &&
+							OutO10.messages[0].content[0].text === "a - batch",
+					);
 				});
 			}
 			{
@@ -293,7 +334,10 @@ export const runTest = async (): Promise<number> => {
 		// O11: N=0 batch -> decision unchanged, no ledger line.
 		{
 			const LinesBeforeO11 = RunO.Lines.length;
-			const MsgO = (Text: string) => ({ role: "user", content: [{ type: "text", text: Text }] });
+			const MsgO = (Text: string) => ({
+				role: "user",
+				content: [{ type: "text", text: Text }],
+			});
 			const OutO11 = await PreO(
 				{
 					agent: {},
@@ -322,7 +366,10 @@ export const runTest = async (): Promise<number> => {
 			LiveScopesO.batch = false;
 			RunO.Listeners["loader/volatile-update"]([["scopes", "batch"]]);
 			const CommandO = RunO.CommandsRegistered[0];
-			const MsgO = (Text: string) => ({ role: "user", content: [{ type: "text", text: Text }] });
+			const MsgO = (Text: string) => ({
+				role: "user",
+				content: [{ type: "text", text: Text }],
+			});
 			const ArmO = await CommandO.handler({ rawInput: "batch" });
 			{
 				const Sub = "overpass: the command's batch grammar arms the one-shot flag";
@@ -341,7 +388,8 @@ export const runTest = async (): Promise<number> => {
 				async () => ({ kind: "enter", messages: [MsgO("a \u2014 batch")] }),
 			);
 			{
-				const Sub = "overpass: the one-shot arm normalizes the next batch with the scope off";
+				const Sub =
+					"overpass: the one-shot arm normalizes the next batch with the scope off";
 				Check(Count, Sub, () => {
 					assert.ok(OutO12.messages[0].content[0].text === "a - batch");
 				});
@@ -373,7 +421,8 @@ export const runTest = async (): Promise<number> => {
 				async () => ({ kind: "enter", messages: [MsgO("a \u2014 batch")] }),
 			);
 			{
-				const Sub = "overpass: the second batch after the one-shot passes untouched (exactly one use)";
+				const Sub =
+					"overpass: the second batch after the one-shot passes untouched (exactly one use)";
 				Check(Count, Sub, () => {
 					assert.ok(OutO12b.messages[0].content[0].text === "a \u2014 batch");
 				});
@@ -381,7 +430,10 @@ export const runTest = async (): Promise<number> => {
 		}
 		// O13: a rejected step is never touched.
 		{
-			const MsgO = (Text: string) => ({ role: "user", content: [{ type: "text", text: Text }] });
+			const MsgO = (Text: string) => ({
+				role: "user",
+				content: [{ type: "text", text: Text }],
+			});
 			const OutO13 = await PreO(
 				{
 					agent: {},
@@ -415,7 +467,8 @@ export const runTest = async (): Promise<number> => {
 			}
 			const FilesO = await CommandO.handler({ rawInput: "files /tmp/x.txt" });
 			{
-				const Sub = "overpass: the files sweep is declined by a stream flavor (owned by normalize-file)";
+				const Sub =
+					"overpass: the files sweep is declined by a stream flavor (owned by normalize-file)";
 				Check(Count, Sub, () => {
 					assert.ok(FilesO.kind === "error" && FilesO.text.includes("normalize-file"));
 				});
@@ -441,15 +494,18 @@ export const runTest = async (): Promise<number> => {
 				Check(Count, Sub, () => {
 					assert.ok(
 						ResultsO.kind === "success" &&
-							(ResultsO.text.includes("settings") || ResultsO.text.includes("config")),
+							(ResultsO.text.includes("settings") ||
+								ResultsO.text.includes("config")),
 					);
 				});
 			}
 			{
-				const Sub = "overpass: zero fs/observed emissions and zero writes from ANY overpass path (history safety)";
+				const Sub =
+					"overpass: zero fs/observed emissions and zero writes from ANY overpass path (history safety)";
 				Check(Count, Sub, () => {
 					assert.ok(
-						RunO.Observations.length === ObservationsO && RunO.Writes.length === WritesO,
+						RunO.Observations.length === ObservationsO &&
+							RunO.Writes.length === WritesO,
 					);
 				});
 			}

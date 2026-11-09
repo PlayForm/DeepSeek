@@ -1,16 +1,25 @@
-// Source/Test/Raw-Write-Tool/Test.ts - one singular test: the raw-write tool
-// surface - the captured registration (name, input schema with the OPTIONAL
-// normalize/govern unions, output envelope), the execution path (verbatim by
-// default, all six transforms on, the real before/after of an overwrite, the
-// pre-aborted rejection), the per-call flavor selection with the family
-// order, the presenters' selection-aware view, and the govern call path with
-// the wrapped actor, the sequential fold and the omission rule.
-// Runs standalone (`node Target/Test/Raw-Write-Tool/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
+/**
+ * @module Test
+ *
+ * The Raw-Write-Tool unit smoke: the `raw-write` tool surface.
+ *
+ * @remarks
+ * The one singular test covers the captured registration (the name, the input
+ * schema with the OPTIONAL normalize/govern unions, and the output envelope),
+ * the execution path (verbatim by default, all six transforms on, the real
+ * before/after of an overwrite, and the pre-aborted rejection), the per-call
+ * flavor selection with the family order, the presenters' selection-aware view,
+ * and the govern call path with the wrapped actor, the sequential fold and the
+ * omission rule.
+ *
+ * The smoke is the fake ctx + the REAL factory + the REAL dash apply, all from
+ * the Harness. The folder runs standalone
+ * (`node Target/Test/Raw-Write-Tool/Test.js`) and under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
+
+import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -74,7 +83,8 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 		{
-			const Sub = 'input schema: govern is an OPTIONAL union (boolean | "all" | the step-name array)';
+			const Sub =
+				'input schema: govern is an OPTIONAL union (boolean | "all" | the step-name array)';
 			Check(Count, Sub, () => {
 				const GovernUnion = Tool.parameters.properties.govern.oneOf;
 				assert.ok(
@@ -96,7 +106,8 @@ export const runTest = async (): Promise<number> => {
 			});
 		}
 		{
-			const Sub = "output schema mirrors the built-in write envelope (path/operation/before/after)";
+			const Sub =
+				"output schema mirrors the built-in write envelope (path/operation/before/after)";
 			Check(Count, Sub, () => {
 				assert.ok(
 					Tool.output.schema.properties.path.type === "string" &&
@@ -118,13 +129,15 @@ export const runTest = async (): Promise<number> => {
 				Exec(),
 			);
 			{
-				const Sub = "normalize absent: content written VERBATIM (em dash and curly quotes untouched)";
+				const Sub =
+					"normalize absent: content written VERBATIM (em dash and curly quotes untouched)";
 				Check(Count, Sub, () => {
 					assert.ok(Run8.Writes.length === 1 && Run8.Writes[0].content === Verbatim);
 				});
 			}
 			{
-				const Sub = "the fs/write-intent waterfall's next() default flowed through (unconditional write)";
+				const Sub =
+					"the fs/write-intent waterfall's next() default flowed through (unconditional write)";
 				Check(Count, Sub, () => {
 					assert.ok(Run8.Writes[0].intent === undefined);
 				});
@@ -136,7 +149,8 @@ export const runTest = async (): Promise<number> => {
 				});
 			}
 			{
-				const Sub = "fs/observed emitted with the written version (the governance hooks' trigger)";
+				const Sub =
+					"fs/observed emitted with the written version (the governance hooks' trigger)";
 				Check(Count, Sub, () => {
 					assert.ok(
 						Run8.Observations.some(
@@ -171,7 +185,8 @@ export const runTest = async (): Promise<number> => {
 				});
 			}
 			{
-				const Sub = "the write outcome is returned (path, create, before null, after verbatim)";
+				const Sub =
+					"the write outcome is returned (path, create, before null, after verbatim)";
 				Check(Count, Sub, () => {
 					assert.ok(
 						Out8a.path === "/tmp/normalize-dash-smoke-verbatim.txt" &&
@@ -187,7 +202,11 @@ export const runTest = async (): Promise<number> => {
 			const All6 = "a\u2014b\u201Cc\u201D\u2026d\u00A0e\u200Bf\uFF21g";
 			const Normalized6 = 'a-b"c"...d efAg';
 			const Out8b = await Tool.execute(
-				{ file_path: "/tmp/normalize-dash-smoke-normalized.txt", content: All6, normalize: true },
+				{
+					file_path: "/tmp/normalize-dash-smoke-normalized.txt",
+					content: All6,
+					normalize: true,
+				},
 				Exec(),
 			);
 			{
@@ -198,7 +217,8 @@ export const runTest = async (): Promise<number> => {
 				});
 			}
 			{
-				const Sub = "the normalized write to a new path reports create with the normalized after";
+				const Sub =
+					"the normalized write to a new path reports create with the normalized after";
 				Check(Count, Sub, () => {
 					assert.ok(Out8b.operation === "create" && Out8b.after === Normalized6);
 				});
@@ -211,12 +231,20 @@ export const runTest = async (): Promise<number> => {
 			{
 				const Sub = "an overwrite reports update with the real before/after contents";
 				Check(Count, Sub, () => {
-					assert.ok(Out8d.operation === "update" && Out8d.before === Verbatim && Out8d.after === All6);
+					assert.ok(
+						Out8d.operation === "update" &&
+							Out8d.before === Verbatim &&
+							Out8d.after === All6,
+					);
 				});
 			}
 			// normalize: false EXPLICITLY \u2192 verbatim.
 			await Tool.execute(
-				{ file_path: "/tmp/normalize-dash-smoke-explicit.txt", content: All6, normalize: false },
+				{
+					file_path: "/tmp/normalize-dash-smoke-explicit.txt",
+					content: All6,
+					normalize: false,
+				},
 				Exec(),
 			);
 			{
@@ -231,11 +259,16 @@ export const runTest = async (): Promise<number> => {
 			Rm();
 			const Run8b = Make(Validate({ replacement: "$&", logFile: Ledger }));
 			await Run8b.Registered[0].execute(
-				{ file_path: "/tmp/normalize-dash-smoke-replacement.txt", content: "a\u2014b", normalize: true },
+				{
+					file_path: "/tmp/normalize-dash-smoke-replacement.txt",
+					content: "a\u2014b",
+					normalize: true,
+				},
 				Exec(),
 			);
 			{
-				const Sub = "the volatile replacement knob flows into the tool (literal $& \u2014 the function replacer)";
+				const Sub =
+					"the volatile replacement knob flows into the tool (literal $& \u2014 the function replacer)";
 				Check(Count, Sub, () => {
 					assert.ok(Run8b.Writes[0].content === "a$&b");
 				});
@@ -285,7 +318,11 @@ export const runTest = async (): Promise<number> => {
 		const QuotesOnly = 'a\u2014b"c"\u2026d\u00A0e\u200Bf\uFF21g'; // ONLY the curly quotes replaced
 		{
 			const Out9a = await Tool.execute(
-				{ file_path: "/tmp/normalize-dash-smoke-sel-dash.txt", content: All6, normalize: ["dash"] },
+				{
+					file_path: "/tmp/normalize-dash-smoke-sel-dash.txt",
+					content: All6,
+					normalize: ["dash"],
+				},
 				Exec(),
 			);
 			{
@@ -296,7 +333,7 @@ export const runTest = async (): Promise<number> => {
 				});
 			}
 			{
-				const Sub = "the [\"dash\"] write's after mirrors the selection";
+				const Sub = 'the ["dash"] write\'s after mirrors the selection';
 				Check(Count, Sub, () => {
 					assert.ok(Out9a.after === DashOnly);
 				});
@@ -304,11 +341,16 @@ export const runTest = async (): Promise<number> => {
 		}
 		{
 			await Tool.execute(
-				{ file_path: "/tmp/normalize-dash-smoke-sel-quotes.txt", content: All6, normalize: ["quotes"] },
+				{
+					file_path: "/tmp/normalize-dash-smoke-sel-quotes.txt",
+					content: All6,
+					normalize: ["quotes"],
+				},
 				Exec(),
 			);
 			{
-				const Sub = 'normalize: ["quotes"] \u2192 ONLY the curly quotes replaced (em dash untouched)';
+				const Sub =
+					'normalize: ["quotes"] \u2192 ONLY the curly quotes replaced (em dash untouched)';
 				Check(Count, Sub, () => {
 					assert.ok(Run8.Writes.at(-1).content === QuotesOnly);
 				});
@@ -324,10 +366,12 @@ export const runTest = async (): Promise<number> => {
 				Exec(),
 			);
 			{
-				const Sub = 'normalize: ["fullwidth"] \u2192 ONLY the fullwidth mapped (\uFF21 \u2192 A)';
+				const Sub =
+					'normalize: ["fullwidth"] \u2192 ONLY the fullwidth mapped (\uFF21 \u2192 A)';
 				Check(Count, Sub, () => {
 					assert.ok(
-						Run8.Writes.at(-1).content === "a\u2014b\u201Cc\u201D\u2026d\u00A0e\u200Bf" + "Ag",
+						Run8.Writes.at(-1).content ===
+							"a\u2014b\u201Cc\u201D\u2026d\u00A0e\u200Bf" + "Ag",
 					);
 				});
 			}
@@ -353,11 +397,16 @@ export const runTest = async (): Promise<number> => {
 		// "all" as a string is the legacy boolean behavior, byte-equivalent.
 		{
 			await Tool.execute(
-				{ file_path: "/tmp/normalize-dash-smoke-sel-all.txt", content: All6, normalize: "all" },
+				{
+					file_path: "/tmp/normalize-dash-smoke-sel-all.txt",
+					content: All6,
+					normalize: "all",
+				},
 				Exec(),
 			);
 			{
-				const Sub = 'normalize: "all" \u2192 all six transforms (byte-equivalent with normalize: true)';
+				const Sub =
+					'normalize: "all" \u2192 all six transforms (byte-equivalent with normalize: true)';
 				Check(Count, Sub, () => {
 					assert.ok(Run8.Writes.at(-1).content === Normalized6);
 				});
@@ -366,7 +415,11 @@ export const runTest = async (): Promise<number> => {
 		// An empty selection and unknown names are verbatim.
 		{
 			await Tool.execute(
-				{ file_path: "/tmp/normalize-dash-smoke-sel-empty.txt", content: All6, normalize: [] },
+				{
+					file_path: "/tmp/normalize-dash-smoke-sel-empty.txt",
+					content: All6,
+					normalize: [],
+				},
 				Exec(),
 			);
 			{
@@ -395,7 +448,8 @@ export const runTest = async (): Promise<number> => {
 					'normalize: ["bogus"] \u2014 the union schema REJECTS unknown flavor names (harness-style args validation; the chain\'s own filter is the second gate)';
 				Check(Count, Sub, () => {
 					assert.ok(
-						BogusError !== null && /must match exactly one oneOf branch/.test(BogusError.message),
+						BogusError !== null &&
+							/must match exactly one oneOf branch/.test(BogusError.message),
 					);
 				});
 			}
@@ -404,7 +458,8 @@ export const runTest = async (): Promise<number> => {
 		{
 			const Call9 = Tool.presentCall({ file_path: "/x", content: All6, normalize: ["dash"] });
 			{
-				const Sub = "presentCall shows the selection-aware content (card and file can never disagree)";
+				const Sub =
+					"presentCall shows the selection-aware content (card and file can never disagree)";
 				Check(Count, Sub, () => {
 					assert.ok(Call9.diffs[0].newText === DashOnly);
 				});
@@ -436,7 +491,11 @@ export const runTest = async (): Promise<number> => {
 			const Writes10 = Run8.Writes.length;
 			const StepsBefore = Object.keys(Furnace.GovernSteps).length;
 			const Out10a = await Tool.execute(
-				{ file_path: "/tmp/normalize-dash-smoke-gov-true.txt", content: All6, govern: true },
+				{
+					file_path: "/tmp/normalize-dash-smoke-gov-true.txt",
+					content: All6,
+					govern: true,
+				},
 				Exec(),
 			);
 			{
@@ -469,7 +528,8 @@ export const runTest = async (): Promise<number> => {
 				});
 			}
 			{
-				const Sub = "govern: [steps] \u2014 the wrapped actor carries the array selection as-is";
+				const Sub =
+					"govern: [steps] \u2014 the wrapped actor carries the array selection as-is";
 				Check(Count, Sub, () => {
 					assert.ok(
 						JSON.stringify(Run8.Observations.at(-1).actor.govern) ===
@@ -480,22 +540,32 @@ export const runTest = async (): Promise<number> => {
 			let GovBogusError: any = null;
 			try {
 				await Tool.execute(
-					{ file_path: "/tmp/normalize-dash-smoke-gov-bogus.txt", content: All6, govern: ["bogus"] },
+					{
+						file_path: "/tmp/normalize-dash-smoke-gov-bogus.txt",
+						content: All6,
+						govern: ["bogus"],
+					},
 					Exec(),
 				);
 			} catch (E) {
 				GovBogusError = E;
 			}
 			{
-				const Sub = 'govern: ["bogus"] \u2014 the union schema rejects unknown step names at the harness boundary';
+				const Sub =
+					'govern: ["bogus"] \u2014 the union schema rejects unknown step names at the harness boundary';
 				Check(Count, Sub, () => {
 					assert.ok(
-						GovBogusError !== null && /must match exactly one oneOf branch/.test(GovBogusError.message),
+						GovBogusError !== null &&
+							/must match exactly one oneOf branch/.test(GovBogusError.message),
 					);
 				});
 			}
 			const Out10c = await Tool.execute(
-				{ file_path: "/tmp/normalize-dash-smoke-gov-all.txt", content: All6, govern: "all" },
+				{
+					file_path: "/tmp/normalize-dash-smoke-gov-all.txt",
+					content: All6,
+					govern: "all",
+				},
 				Exec(),
 			);
 			{
@@ -511,7 +581,8 @@ export const runTest = async (): Promise<number> => {
 				});
 			}
 			{
-				const Sub = "govern: the empty registry stays empty (no steps registered by the calls)";
+				const Sub =
+					"govern: the empty registry stays empty (no steps registered by the calls)";
 				Check(Count, Sub, () => {
 					assert.ok(Object.keys(Furnace.GovernSteps).length === StepsBefore);
 				});
@@ -527,7 +598,8 @@ export const runTest = async (): Promise<number> => {
 				Exec(),
 			);
 			{
-				const Sub = "govern + normalize compose on one call (selection-aware write, contained govern)";
+				const Sub =
+					"govern + normalize compose on one call (selection-aware write, contained govern)";
 				Check(Count, Sub, () => {
 					assert.ok(Run8.Writes.length === Writes10 + 4 && Out10d.after === DashOnly);
 				});
@@ -535,7 +607,11 @@ export const runTest = async (): Promise<number> => {
 			// govern: false \u2192 no governance (the default posture), still verbatim
 			// without normalize.
 			const Out10e = await Tool.execute(
-				{ file_path: "/tmp/normalize-dash-smoke-gov-false.txt", content: All6, govern: false },
+				{
+					file_path: "/tmp/normalize-dash-smoke-gov-false.txt",
+					content: All6,
+					govern: false,
+				},
 				Exec(),
 			);
 			{
@@ -565,11 +641,16 @@ export const runTest = async (): Promise<number> => {
 			);
 			const Writes10 = Run8.Writes.length;
 			const Out10f = await Tool.execute(
-				{ file_path: "/tmp/normalize-dash-smoke-gov-actor.txt", content: All6, govern: ["pin"] },
+				{
+					file_path: "/tmp/normalize-dash-smoke-gov-actor.txt",
+					content: All6,
+					govern: ["pin"],
+				},
 				Exec(),
 			);
 			{
-				const Sub = "govern actor probe: the write completes with a registered step in the chain";
+				const Sub =
+					"govern actor probe: the write completes with a registered step in the chain";
 				Check(Count, Sub, () => {
 					assert.ok(Run8.Writes.length === Writes10 + 1 && Out10f.after === All6);
 				});
@@ -579,7 +660,8 @@ export const runTest = async (): Promise<number> => {
 					"govern actor probe: the direct step runs once with the written outcome's fresh version (the fs/observed emit's token)";
 				Check(Count, Sub, () => {
 					assert.ok(
-						ProbeRuns.length === 1 && ProbeRuns[0].version === Run8.Observations.at(-1).observation.version,
+						ProbeRuns.length === 1 &&
+							ProbeRuns[0].version === Run8.Observations.at(-1).observation.version,
 					);
 				});
 			}
@@ -595,16 +677,24 @@ export const runTest = async (): Promise<number> => {
 				});
 			}
 			{
-				const Sub = "govern actor probe: the spread preserves the exec fields (callId, signal ride along)";
+				const Sub =
+					"govern actor probe: the spread preserves the exec fields (callId, signal ride along)";
 				Check(Count, Sub, () => {
-					assert.ok(ProbeRuns[0].actor.callId === "call_smoke" && "signal" in ProbeRuns[0].actor);
+					assert.ok(
+						ProbeRuns[0].actor.callId === "call_smoke" &&
+							"signal" in ProbeRuns[0].actor,
+					);
 				});
 			}
 			// govern: false omits the Govern call entirely \u2014 the registered probe
 			// never runs.
 			const ProbeRunsBefore = ProbeRuns.length;
 			await Tool.execute(
-				{ file_path: "/tmp/normalize-dash-smoke-gov-actor-false.txt", content: All6, govern: false },
+				{
+					file_path: "/tmp/normalize-dash-smoke-gov-actor-false.txt",
+					content: All6,
+					govern: false,
+				},
 				Exec(),
 			);
 			{
@@ -628,11 +718,16 @@ export const runTest = async (): Promise<number> => {
 				},
 			);
 			const OutSlow = await Tool.execute(
-				{ file_path: "/tmp/normalize-dash-smoke-gov-async.txt", content: All6, govern: true },
+				{
+					file_path: "/tmp/normalize-dash-smoke-gov-async.txt",
+					content: All6,
+					govern: true,
+				},
 				Exec(),
 			);
 			{
-				const Sub = "govern sequential fold: the write completes with an async registered step in the chain";
+				const Sub =
+					"govern sequential fold: the write completes with an async registered step in the chain";
 				Check(Count, Sub, () => {
 					// +3 relative to the recaptured baseline: the actor probe's own
 					// write, then the gov-actor-false verbatim write, then this
@@ -646,14 +741,18 @@ export const runTest = async (): Promise<number> => {
 					"govern sequential fold: the async step ran ONCE and completed BEFORE the tool result returned (the exec awaits the fold)";
 				Check(Count, Sub, () => {
 					assert.ok(
-						SlowRuns.length === 1 && SlowRuns[0].version === Run8.Observations.at(-1).observation.version,
+						SlowRuns.length === 1 &&
+							SlowRuns[0].version === Run8.Observations.at(-1).observation.version,
 					);
 				});
 			}
 			{
-				const Sub = "govern sequential fold: the async step receives the wrapped actor like the sync steps";
+				const Sub =
+					"govern sequential fold: the async step receives the wrapped actor like the sync steps";
 				Check(Count, Sub, () => {
-					assert.ok(SlowRuns[0].actor && JSON.stringify(SlowRuns[0].actor.govern) === "true");
+					assert.ok(
+						SlowRuns[0].actor && JSON.stringify(SlowRuns[0].actor.govern) === "true",
+					);
 				});
 			}
 		}

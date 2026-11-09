@@ -1,6 +1,6 @@
-import { existsSync, readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { Check, Finish, MakeCounter, Make, Rm, Validate, Ledger } from "../Harness.js";
+import { existsSync, readFileSync } from "node:fs";
+import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   {
@@ -33,7 +33,12 @@ const runTest = async () => {
     const ToolBlockEnd7 = {
       type: "block-end",
       index: 2,
-      block: { type: "tool-call", id: "call_1", name: "write", arguments: '{"path":"a\u2014b"}' }
+      block: {
+        type: "tool-call",
+        id: "call_1",
+        name: "write",
+        arguments: '{"path":"a\u2014b"}'
+      }
     };
     const Out7 = [];
     for await (const C of L7(
@@ -67,7 +72,11 @@ const runTest = async () => {
     {
       const Sub = "count line includes the tool-args replacements (delta + block)";
       Check(Count, Sub, () => {
-        assert.ok(readFileSync(Ledger, "utf8").includes("normalized 2 dash char(s) in one stream"));
+        assert.ok(
+          readFileSync(Ledger, "utf8").includes(
+            "normalized 2 dash char(s) in one stream"
+          )
+        );
       });
     }
   }
@@ -130,7 +139,9 @@ const runTest = async () => {
     {
       const Sub = "NO count line for an edit-only stream (nothing normalized)";
       Check(Count, Sub, () => {
-        assert.ok(!existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized"));
+        assert.ok(
+          !existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized")
+        );
       });
     }
   }
@@ -213,7 +224,9 @@ const runTest = async () => {
     {
       const Sub = "NO count line for a raw-marked stream (the strip is not a normalization)";
       Check(Count, Sub, () => {
-        assert.ok(!existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized"));
+        assert.ok(
+          !existsSync(Ledger) || !readFileSync(Ledger, "utf8").includes("normalized")
+        );
       });
     }
   }
@@ -259,7 +272,11 @@ const runTest = async () => {
     {
       const Sub = "count line counts only the normalized call (the raw call stays invisible)";
       Check(Count, Sub, () => {
-        assert.ok(readFileSync(Ledger, "utf8").includes("normalized 1 dash char(s) in one stream"));
+        assert.ok(
+          readFileSync(Ledger, "utf8").includes(
+            "normalized 1 dash char(s) in one stream"
+          )
+        );
       });
     }
   }

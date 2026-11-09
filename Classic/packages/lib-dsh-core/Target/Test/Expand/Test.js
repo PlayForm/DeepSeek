@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
-import { Check, Finish, MakeCounter } from "../Harness.js";
 import { Expand } from "../../../Target/Library.js";
+import { Check, Finish, MakeCounter } from "../Harness.js";
 const runTest = async () => {
   const Count = MakeCounter();
   {
