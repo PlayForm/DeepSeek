@@ -22,9 +22,9 @@
  * restored store continues from its highest), so the KV keys stay unique
  * across sessions and the episode window is deterministic.
  */
-import type Entry from "../Interface/Entry.js";
-import type { AgentMemory } from "../Interface/State.js";
-import type State from "../Interface/State.js";
+import type Entry from "@Interface/Entry.js";
+import type { AgentMemory } from "@Interface/State.js";
+import type State from "@Interface/State.js";
 /**
  * One call's draft: everything the entry needs except the sequence.
  */

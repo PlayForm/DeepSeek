@@ -24,7 +24,7 @@
  * A config override (config `recovery`) replaces one row; an unknown obligation
  * or behavior in an override is ignored, never guessed.
  */
-import type RecoveryRule from "../Interface/Recovery.js";
+import type RecoveryRule from "@Interface/Recovery.js";
 /**
  * The per-obligation failure behavior.
  */

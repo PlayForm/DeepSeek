@@ -20,7 +20,7 @@
  * (erased at build), so `ctx.pluginFactory` is fully typed at every
  * consumption site.
  */
-import type Enforcer from "../Function/Enforcer.js";
+import type Enforcer from "@Function/Enforcer.js";
 import type Factory from "@playform/plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {

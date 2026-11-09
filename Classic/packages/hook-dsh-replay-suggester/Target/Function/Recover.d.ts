@@ -16,6 +16,6 @@
  *
  * A missing or corrupt file starts the store EMPTY - never guessed.
  */
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 export default _default;
 declare function _default(State: State): void;

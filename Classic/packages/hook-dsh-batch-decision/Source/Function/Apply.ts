@@ -48,14 +48,18 @@ import { Activate } from "@playform/lib-dsh-core";
 import { Decide } from "@playform/plugin-dsh-factory";
 import Version from "@Variable/Version.js";
 
-/** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
+/**
+ * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
+ */
 const Cell = (Value: unknown): unknown =>
 	typeof (Value as { get?: unknown } | null)?.get === "function"
 		? (Value as { get: () => unknown }).get()
 		: Value;
 
-/** The fail-loud validation (the schema always fills these; a hand-built
- *  config without them is invalid). */
+/**
+ * The fail-loud validation (the schema always fills these; a hand-built
+ * config without them is invalid).
+ */
 const Validate = (Options: unknown): void => {
 	const Raw = (Options ?? {}) as Record<string, unknown>;
 	const Fail = (Message: string): never => {

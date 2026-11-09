@@ -36,8 +36,8 @@
  * this tool, and the two never double up).
  */
 import type { PreToolDecision, ToolExecution } from "@deepseek-ai/dsh-tools";
-import type Route from "../Interface/Route.js";
-import type State from "../Interface/State.js";
+import type Route from "@Interface/Route.js";
+import type State from "@Interface/State.js";
 /**
  * The ledger line (the audit format, section 2.3 + exploration item 5).
  * Byte-stable template: `route <taskType> <source> <provider> <model> <effort>`.

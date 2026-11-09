@@ -20,9 +20,9 @@
  * - `statistics()` - { decisions, sequence }.
  */
 import { Service, type Context } from "@deepseek-ai/cordis";
-import type Decision from "../Interface/Decision.js";
-import type Proposal from "../Interface/Proposal.js";
-import type State from "../Interface/State.js";
+import type Decision from "@Interface/Decision.js";
+import type Proposal from "@Interface/Proposal.js";
+import type State from "@Interface/State.js";
 export default class WorkspaceGovern extends Service {
     /**
      * The apply-built state the methods read and write.

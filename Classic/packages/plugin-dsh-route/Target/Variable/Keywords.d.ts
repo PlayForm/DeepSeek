@@ -22,7 +22,7 @@
  * keyword parameter defaults to this table, and a literal-inferred type would
  * reject the KeywordTable the state carries (Record<string, string[]>).
  */
-import type { KeywordTable } from "../Interface/Policy.js";
+import type { KeywordTable } from "@Interface/Policy.js";
 /**
  * The shipped keyword table, keyed by role.
  */

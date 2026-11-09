@@ -1,4 +1,4 @@
-import Version from "./Variable/Version.js";
+import Version from "@Variable/Version.js";
 export declare const name = "client-dsh-workspace-live";
 export declare const Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
     enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
