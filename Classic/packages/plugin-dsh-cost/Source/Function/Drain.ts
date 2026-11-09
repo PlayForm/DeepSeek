@@ -728,15 +728,11 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 					// version, or the previous write's after version. The
 					// replay pass resolves both without writing a row.
 					let Version: number | null = null;
-					switch (true) {
-						case Written === undefined:
-							break;
-						default: {
-							Version = PriorVersion(Row.Path, FileId, Entry.At);
-							const After = VersionOf(FileId, Written, Entry.At);
-							if (After !== undefined) {
-								Remember(Row.Path, After);
-							}
+					if (Written !== undefined) {
+						Version = PriorVersion(Row.Path, FileId, Entry.At);
+						const After = VersionOf(FileId, Written, Entry.At);
+						if (After !== undefined) {
+							Remember(Row.Path, After);
 						}
 					}
 					switch (true) {
@@ -841,9 +837,14 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 			// and a call with no callId record nothing, so their results are
 			// never attributed.
 			const Recall = (Entry: PendingCall, Rows: readonly TouchRow[]): void => {
-				const Row = Rows.length === 1 ? Rows[0] : undefined;
+				if (Rows.length !== 1) {
+					return;
+				}
+				const Row = Rows[0];
+				if (Row === undefined) {
+					return;
+				}
 				switch (true) {
-					case Row === undefined:
 					case Row.Kind !== "read":
 					case Entry.CallId.length === 0:
 						return;

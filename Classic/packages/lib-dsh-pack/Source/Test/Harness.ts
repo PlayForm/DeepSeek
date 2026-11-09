@@ -1,18 +1,24 @@
-// Source/Test/Harness.ts - the shared test harness for the PACKS
-// (@playform/lib-dsh-pack): the tiny check counter every folder imports, the
-// temporary-tree helpers (a fixture repo and a temporary home, so a smoke
-// never touches the real ~/.dsh), and the standalone selfcheck that proves
-// the built library loads, the built-in pack projects, the locator finds
-// this monorepo and the parser parses.
-//
-// The library is PURE: there is no fake ctx and no factory here - the
-// fixtures are real temporary directories and the real built Target.
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";
 import * as Library from "../../Target/Library.js";
 
+/**
+ * @module Harness
+ *
+ * The shared test harness for the PACKS (`@playform/lib-dsh-pack`): the tiny
+ * check counter every folder imports, the temporary-tree helpers (a fixture
+ * repo and a temporary home, so a smoke never touches the real `~/.dsh`), and
+ * the standalone selfcheck.
+ *
+ * @remarks
+ * The selfcheck proves the built library loads, the built-in pack projects, the
+ * locator finds this monorepo and the parser parses.
+ *
+ * The library is PURE: there is no fake ctx and no factory here - the fixtures
+ * are real temporary directories and the real built `Target`.
+ */
 export { Library };
 
 /** The per-folder counter: N passing checks, F failing checks. */

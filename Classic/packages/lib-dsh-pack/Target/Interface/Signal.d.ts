@@ -1,3 +1,10 @@
+/**
+ * @module Signal
+ *
+ * One path/pattern rule of a pack family: the rule id (for the ledger and the
+ * smokes), the regex source, the evidence weight a match contributes, and an
+ * optional tool-name restriction (absent = any tool).
+ */
 export default interface Signal {
     /** The rule id this row implements. */
     rule: string;

@@ -5150,11 +5150,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794208158,
+					"publishTimestamp": 1794224968,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "8b0fd8eb25cb5f52b8592c0b0908e25bbaa270df",
+						"commit": "f1cb3cf325fb092eceac9e093d654516b439bc6f",
 						"path": "Classic/packages/lib-dsh-bundle"
 					},
 					"engines": {}
@@ -5333,11 +5333,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794202912,
+					"publishTimestamp": 1794224968,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "53d344b219d3b1abc87c98b9c5bd74a16ad7f08e",
+						"commit": "f1cb3cf325fb092eceac9e093d654516b439bc6f",
 						"path": "Classic/packages/lib-dsh-style"
 					},
 					"engines": {}

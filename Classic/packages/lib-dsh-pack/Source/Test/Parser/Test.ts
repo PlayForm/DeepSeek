@@ -1,10 +1,15 @@
-// Source/Test/Parser/Test.ts - the strict YAML-subset parser: mappings,
-// sequences, sequence-of-maps items, quoted and flow scalars, comments,
-// document markers, the scalar types, the reader's .json path, and the
-// constructs the parser REFUSES with a line-numbered error.
 import assert from "node:assert/strict";
 
 import { Check, Finish, Library, MakeCounter, Put, Tree } from "../Harness.js";
+
+/**
+ * @module Test
+ *
+ * The strict YAML-subset parser: mappings, sequences, sequence-of-maps items,
+ * quoted and flow scalars, comments, document markers, the scalar types, the
+ * reader's `.json` path, and the constructs the parser REFUSES with a
+ * line-numbered error.
+ */
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();

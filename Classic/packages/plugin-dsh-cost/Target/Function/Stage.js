@@ -1,0 +1,1 @@
+var c=(t,e,s)=>{switch(!0){case e==="search":return"discover";case s:return"revert";case e==="read":{const a=t.some(r=>r==="write"||r==="edit");switch(!0){case a:return"verify";case t.some(r=>r==="read"):return"reread";default:return"read"}}case(e==="write"||e==="edit"||e==="delete"||e==="move"):return"edit";default:return"discover"}};export{c as default};

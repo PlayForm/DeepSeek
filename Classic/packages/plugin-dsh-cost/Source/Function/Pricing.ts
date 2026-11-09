@@ -69,7 +69,8 @@ import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
 
 import type Catalog from "@Interface/Catalog.js";
 import type Config from "@Interface/Config.js";
-import type PricingService, { PricingPreview } from "@Interface/PricingService.js";
+import type PricingService from "@Interface/PricingService.js";
+import type { PricingPreview } from "@Interface/PricingService.js";
 import type RateRow from "@Interface/RateRow.js";
 import type Revision from "@Interface/Revision.js";
 
@@ -247,8 +248,7 @@ const Figure = (Row: Record<string, SQLOutputValue>, Key: string): number | null
 	return typeof Value === "number" && Number.isFinite(Value) ? Value : null;
 };
 
-const Stored = (Row: Record<string, SQLOutputValue>, Key: string): number =>
-	Figure(Row, Key) ?? 0;
+const Stored = (Row: Record<string, SQLOutputValue>, Key: string): number => Figure(Row, Key) ?? 0;
 
 const CatalogOf = (Row: Record<string, SQLOutputValue>): Catalog => ({
 	CatalogId: Stored(Row, "CatalogId"),
@@ -449,17 +449,15 @@ export default (Database: DatabaseSync, Config: Config): PricingService => {
 	// factor layer's modifiers are not applied: a revision's rate rows are the
 	// whole book it declares.
 	const Cost = (RevisionId: number, Call: CallRow, Rate: Rate): number => {
-		const Family = SelectFamily
-			.all(
-				RevisionId,
-				Rate.Provider,
-				Rate.Model,
-				Rate.ValidFrom,
-				Rate.Mode,
-				Rate.Region,
-				Rate.Window,
-			)
-			.map(RateOf);
+		const Family = SelectFamily.all(
+			RevisionId,
+			Rate.Provider,
+			Rate.Model,
+			Rate.ValidFrom,
+			Rate.Mode,
+			Rate.Region,
+			Rate.Window,
+		).map(RateOf);
 		// A conditional row is not a band of the marginal walk: the two
 		// readings are separated first, and a card without marginal tiers is
 		// the resolved row itself as one open tier - the flat arithmetic.
@@ -523,7 +521,7 @@ export default (Database: DatabaseSync, Config: Config): PricingService => {
 					throw new Error(
 						`plugin-dsh-cost: base revision ${BaseRevisionId} is not in the ledger`,
 					);
-				case Stored(Parent, "CatalogId") !== CatalogId:
+				case Parent !== undefined && Stored(Parent, "CatalogId") !== CatalogId:
 					throw new Error(
 						`plugin-dsh-cost: base revision ${BaseRevisionId} belongs to another catalog - a revision corrects its own catalog`,
 					);
@@ -643,7 +641,8 @@ export default (Database: DatabaseSync, Config: Config): PricingService => {
 		catalogs: (): readonly Catalog[] => SelectCatalogs.all().map(CatalogOf),
 		revisions: (CatalogId: number): readonly Revision[] =>
 			SelectRevisions.all(CatalogId).map(RevisionOf),
-		rates: (RevisionId: number): readonly RateRow[] => SelectRates.all(RevisionId).map(RateRowOf),
+		rates: (RevisionId: number): readonly RateRow[] =>
+			SelectRates.all(RevisionId).map(RateRowOf),
 		publish: Publish,
 		preview: Preview,
 	};

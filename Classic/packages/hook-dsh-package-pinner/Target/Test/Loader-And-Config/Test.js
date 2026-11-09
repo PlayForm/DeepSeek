@@ -1,1 +1,74 @@
-import e from"node:assert/strict";import{Check as l,Finish as s,MakeCounter as r}from"../Harness.js";import*as a from"../../../Target/Library.js";const p=async()=>{const t=r();return l(t,"loader contract: name/apply/Config/inject + the full default object",()=>{e.equal(a.name,"hook-dsh-pinner-package","name export"),e.equal(typeof a.apply,"function","apply export"),e.equal(typeof a.Config,"function","Config export is a callable schema"),e.ok(a.Config.dict,"Config carries the schema dictionary"),e.deepEqual(a.inject,["fs","pluginFactory"],"inject declares fs + the factory service"),e.deepEqual(Object.keys(a.default).sort(),["Config","apply","inject","name"],"default object carries all four"),e.equal(a.default.apply,a.apply,"default.apply is the named apply")}),l(t,"Config schema: all six shared/own fields validated with the historical defaults",()=>{const i=a.Config,o=i({});e.equal(o.log.get(),!0,"log default (volatile cell)"),e.equal(o.logFile.get(),"~/.dsh/playform/hook-dsh-package-pinner.log","logFile default (volatile cell)"),e.deepEqual(o.mutationTools.get(),["write","edit","str_replace_editor","raw-write"],"mutationTools default (volatile cell)"),e.equal(o.updateCooldownMs.get(),3e3,"factory shared updateCooldownMs present (the pinner never reads it)"),e.equal(o.policyFile,"","policyFile default (non-volatile)"),e.deepEqual(o.sections,["dependencies","devDependencies","peerDependencies","optionalDependencies"],"sections default"),e.deepEqual(o.exclude,["node_modules",".git",".dsh",".pnpm",".store","DeepSeek Harness.app"],"exclude default")}),s(t,"Loader-And-Config")},d=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(d){const t=await p();console.log(`${t} PASS - Loader-And-Config`)}export{p as runTest};
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter } from "../Harness.js";
+import * as Pinner from "../../../Target/Library.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Sub = "loader contract: name/apply/Config/inject + the full default object";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(Pinner.name, "hook-dsh-pinner-package", "name export");
+        assert.equal(typeof Pinner.apply, "function", "apply export");
+        assert.equal(typeof Pinner.Config, "function", "Config export is a callable schema");
+        assert.ok(Pinner.Config.dict, "Config carries the schema dictionary");
+        assert.deepEqual(
+          Pinner.inject,
+          ["fs", "pluginFactory"],
+          "inject declares fs + the factory service"
+        );
+        assert.deepEqual(
+          Object.keys(Pinner.default).sort(),
+          ["Config", "apply", "inject", "name"],
+          "default object carries all four"
+        );
+        assert.equal(Pinner.default.apply, Pinner.apply, "default.apply is the named apply");
+      });
+    }
+  }
+  {
+    const Sub = "Config schema: all six shared/own fields validated with the historical defaults";
+    {
+      Check(Count, Sub, () => {
+        const schema = Pinner.Config;
+        const validated = schema({});
+        assert.equal(validated.log.get(), true, "log default (volatile cell)");
+        assert.equal(
+          validated.logFile.get(),
+          "~/.dsh/playform/hook-dsh-package-pinner.log",
+          "logFile default (volatile cell)"
+        );
+        assert.deepEqual(
+          validated["mutationTools"].get(),
+          ["write", "edit", "str_replace_editor", "raw-write"],
+          "mutationTools default (volatile cell)"
+        );
+        assert.equal(
+          validated["updateCooldownMs"].get(),
+          3e3,
+          "factory shared updateCooldownMs present (the pinner never reads it)"
+        );
+        assert.equal(validated["policyFile"], "", "policyFile default (non-volatile)");
+        assert.deepEqual(
+          validated["sections"],
+          ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"],
+          "sections default"
+        );
+        assert.deepEqual(
+          validated["exclude"],
+          ["node_modules", ".git", ".dsh", ".pnpm", ".store", "DeepSeek Harness.app"],
+          "exclude default"
+        );
+      });
+    }
+  }
+  return Finish(Count, "Loader-And-Config");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Loader-And-Config`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

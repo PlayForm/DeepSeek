@@ -1,1 +1,109 @@
-import t from"node:assert/strict";import*as n from"node:path";import{Boot as x,Check as g,Finish as y,Ledger as l,Lines as c,MakeCounter as f,Root as j,Settle as u}from"../Harness.js";const b=async()=>{const s=f(),m=x(),{ctx:e,listener:a,st:d}=m,i=n.join(j,"gates"),p={reads:e.reads.length,writes:e.writes.length};a({targetKey:"g-actor",displayPath:n.join(i,"package.json")},{kind:"present",version:"v1"},{name:"grep"}),a({targetKey:"g-kind",displayPath:n.join(i,"package.json")},{kind:"absent",version:"v1"},{name:"edit"}),a({targetKey:"g-base",displayPath:n.join(i,"Cargo.toml")},{kind:"present",version:"v1"},{name:"edit"}),await u(d),g(s,"gates: actor / kind / basename \u2014 no read, no write, no line",()=>{t.equal(e.reads.length,p.reads,"non-trigger events: no read"),t.equal(e.writes.length,p.writes,"non-trigger events: no write"),t.equal(c(l).filter(o=>o.includes("skipped")).length,0,"non-trigger events: no ledger line")});const h=n.join(i,"node_modules","x","package.json");a({targetKey:"g-excl",displayPath:h},{kind:"present",version:"v1"},{name:"edit"}),await u(d),g(s,"gates: exclusion-first \u2192 skipped (excluded) line, file untouched",()=>{t.equal(e.reads.length,p.reads,"excluded: no read"),t.ok(c(l).some(o=>/^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] skipped \(excluded\) .*node_modules.*package\.json$/.test(o)),"skipped (excluded) line byte-format")}),d.Stash.set("g-dup","v1");const k=c(l).filter(r=>r.includes("skipped (excluded)")).length;a({targetKey:"g-dup",displayPath:n.join(i,"package.json")},{kind:"present",version:"v1"},{name:"edit"});const v=e.reads.length;return a({targetKey:"g-dup",displayPath:n.join(i,"node_modules","y","package.json")},{kind:"present",version:"v1"},{name:"edit"}),await u(d),g(s,"gates: Stash idempotence \u2014 silent re-emit, precedence over the excluded line",()=>{t.equal(e.reads.length,v,"idempotent re-emit \u2192 no read"),t.equal(c(l).filter(o=>o.includes("skipped (excluded)")).length,k,"idempotence precedes exclusion (the re-emit is silent even on an excluded path)")}),y(s,"Gates")},w=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(w){const s=await b();console.log(`${s} PASS - Gates`)}export{b as runTest};
+import assert from "node:assert/strict";
+import * as Path from "node:path";
+import {
+  Boot,
+  Check,
+  Finish,
+  Ledger,
+  Lines,
+  MakeCounter,
+  Root,
+  Settle
+} from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  const World = Boot();
+  const { ctx, listener, st } = World;
+  const gatesDir = Path.join(Root, "gates");
+  const before = { reads: ctx.reads.length, writes: ctx.writes.length };
+  listener(
+    { targetKey: "g-actor", displayPath: Path.join(gatesDir, "package.json") },
+    { kind: "present", version: "v1" },
+    { name: "grep" }
+  );
+  listener(
+    { targetKey: "g-kind", displayPath: Path.join(gatesDir, "package.json") },
+    { kind: "absent", version: "v1" },
+    { name: "edit" }
+  );
+  listener(
+    { targetKey: "g-base", displayPath: Path.join(gatesDir, "Cargo.toml") },
+    { kind: "present", version: "v1" },
+    { name: "edit" }
+  );
+  await Settle(st);
+  {
+    const Sub = "gates: actor / kind / basename \u2014 no read, no write, no line";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(ctx.reads.length, before.reads, "non-trigger events: no read");
+        assert.equal(ctx.writes.length, before.writes, "non-trigger events: no write");
+        assert.equal(
+          Lines(Ledger).filter((l) => l.includes("skipped")).length,
+          0,
+          "non-trigger events: no ledger line"
+        );
+      });
+    }
+  }
+  const excludedPath = Path.join(gatesDir, "node_modules", "x", "package.json");
+  listener(
+    { targetKey: "g-excl", displayPath: excludedPath },
+    { kind: "present", version: "v1" },
+    { name: "edit" }
+  );
+  await Settle(st);
+  {
+    const Sub = "gates: exclusion-first \u2192 skipped (excluded) line, file untouched";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(ctx.reads.length, before.reads, "excluded: no read");
+        assert.ok(
+          Lines(Ledger).some(
+            (l) => /^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] skipped \(excluded\) .*node_modules.*package\.json$/.test(
+              l
+            )
+          ),
+          "skipped (excluded) line byte-format"
+        );
+      });
+    }
+  }
+  st.Stash.set("g-dup", "v1");
+  const exclLinesBefore = Lines(Ledger).filter((l) => l.includes("skipped (excluded)")).length;
+  listener(
+    { targetKey: "g-dup", displayPath: Path.join(gatesDir, "package.json") },
+    { kind: "present", version: "v1" },
+    { name: "edit" }
+  );
+  const dupReads = ctx.reads.length;
+  listener(
+    { targetKey: "g-dup", displayPath: Path.join(gatesDir, "node_modules", "y", "package.json") },
+    { kind: "present", version: "v1" },
+    { name: "edit" }
+  );
+  await Settle(st);
+  {
+    const Sub = "gates: Stash idempotence \u2014 silent re-emit, precedence over the excluded line";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(ctx.reads.length, dupReads, "idempotent re-emit \u2192 no read");
+        assert.equal(
+          Lines(Ledger).filter((l) => l.includes("skipped (excluded)")).length,
+          exclLinesBefore,
+          "idempotence precedes exclusion (the re-emit is silent even on an excluded path)"
+        );
+      });
+    }
+  }
+  return Finish(Count, "Gates");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Gates`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

@@ -1,12 +1,19 @@
-// Source/Test/Config-And-State/Test.ts - one singular test: the apply-time
-// wiring - the config defaults and volatile cells, the listener set, the
-// state unwraps, and the fresh-state-per-apply posture (no module-level
-// globals). Runs standalone (`node Target/Test/Config-And-State/Test.js`) AND
-// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-normalize-dash: the fake ctx + the REAL
-// factory + the REAL dash apply, from the Harness.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
+
+/**
+ * @module Test
+ *
+ * The apply-time wiring's smoke: the config defaults and volatile cells, the
+ * listener set, the state unwraps, and the fresh-state-per-apply posture (no
+ * module-level globals).
+ *
+ * @remarks
+ * Runs standalone (`node Target/Test/Config-And-State/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * `@playform/hook-dsh-normalize-dash`: the fake ctx + the REAL factory + the
+ * REAL dash apply, from the Harness.
+ */
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -126,7 +133,7 @@ export const runTest = async (): Promise<number> => {
 	return Finish(Count, "Config-And-State");
 };
 
-// Standalone entry: `node Target/Test/Config-And-State/Test.js`.
+/** Standalone entry: `node Target/Test/Config-And-State/Test.js`. */
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

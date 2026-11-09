@@ -1,5 +1,5 @@
-import type { WatchlistEntry } from "../Interface/Events.js";
-import type State from "../Interface/State.js";
+import type { WatchlistEntry } from "@Interface/Events.js";
+import type State from "@Interface/State.js";
 /** Convert one glob to a RegExp (the small self-contained converter; the
  * Policy.ts self-contained precedent): a single star within a segment, a
  * double star across segments (the double-star-slash leading form makes any

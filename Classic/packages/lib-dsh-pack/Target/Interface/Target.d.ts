@@ -1,3 +1,11 @@
+/**
+ * @module Target
+ *
+ * One companion of a pack family: the path or glob, the kind (the domain's own
+ * vocabulary; `""` when the family has no kinds), the static prior, the one
+ * reason phrase the model reads, and an optional digest hint (the short literal
+ * a generated index may verify; never parsed at runtime).
+ */
 export default interface Target {
     /** The companion path or glob (repo-, package- or sibling-relative). */
     path: string;

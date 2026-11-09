@@ -1,22 +1,29 @@
-// Source/Test/Harness.ts - the shared test harness for the DASH tests: the
-// fake ctx (on capture, get returning the REAL @playform/plugin-dsh-factory
-// instance from its built Target, logger capture) + the REAL dash apply (from
-// the built Target) - the seams from the source suite, written ONCE per
-// package and imported by every test folder. The ctx carries the tool/fs/
-// waterfall/emit seams too (a BARE backend: sandboxMode undefined, so the
-// standing sandbox-policy path is skipped), so the raw-write tool folder and
-// the overpass folder drive the same machinery the source suite drives.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually wires
-// apply (the vacuously-green backstop for every folder's fixture);
-// prepublishOnly.sh gates the build on it. Imported as a library, this module
-// only exports.
 import assert from "node:assert/strict";
 import { rmSync } from "node:fs";
 import NormalizeDash from "../../Target/Library.js";
 import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+
+/**
+ * @module Harness
+ *
+ * The shared test harness for the DASH tests: the fake ctx (on capture, get
+ * returning the REAL `@playform/plugin-dsh-factory` instance from its built
+ * `Target`, logger capture) + the REAL dash apply (from the built `Target`).
+ *
+ * @remarks
+ * The seams from the source suite, written ONCE per package and imported by
+ * every test folder. The ctx carries the tool/fs/waterfall/emit seams too (a
+ * BARE backend: sandboxMode undefined, so the standing sandbox-policy path is
+ * skipped), so the raw-write tool folder and the overpass folder drive the
+ * same machinery the source suite drives.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually wires
+ * apply (the vacuously-green backstop for every folder's fixture);
+ * `prepublishOnly.sh` gates the build on it. Imported as a library, this
+ * module only exports.
+ */
 
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks. Passed
@@ -84,9 +91,11 @@ export const Finish = (Count: Counter, Name: string): number => {
 	return Count.N;
 };
 
-// The durable ledger file (the source suite's fixed path, verbatim) and the
-// rm helper every folder calls at its start and at the same points the source
-// suite does.
+/**
+ * The durable ledger file (the source suite's fixed path, verbatim) and the
+ * rm helper every folder calls at its start and at the same points the source
+ * suite does.
+ */
 export const Ledger = "/tmp/normalize-dash-smoke-ledger.log";
 export const Rm = (): void => {
 	try {
@@ -94,11 +103,13 @@ export const Rm = (): void => {
 	} catch {}
 };
 
-// The REAL factory instance, constructed exactly the way the factory's own
-// smoke does (the Service base constructor registers through
-// ctx.reflect.provide; the stub context is used once and discarded). One
-// instance per folder process - the journal arithmetic inside a folder
-// accumulates on it exactly like the source suite's arithmetic does.
+/**
+ * The REAL factory instance, constructed exactly the way the factory's own
+ * smoke does (the Service base constructor registers through
+ * `ctx.reflect.provide`; the stub context is used once and discarded). One
+ * instance per folder process - the journal arithmetic inside a folder
+ * accumulates on it exactly like the source suite's arithmetic does.
+ */
 export const Furnace: any = new FactoryClass({
 	reflect: { provide: () => undefined },
 } as any);
@@ -244,7 +255,7 @@ export const Make = (Raw: any): any => {
 	};
 };
 
-// Standalone entry: `node Target/Test/Harness.js --selfcheck`.
+/** Standalone entry: `node Target/Test/Harness.js --selfcheck`. */
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

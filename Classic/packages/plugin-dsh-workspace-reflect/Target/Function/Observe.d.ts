@@ -1,5 +1,5 @@
-import type Reply from "@Interface/Reply.js";
-import type State from "@Interface/State.js";
+import type Reply from "../Interface/Reply.js";
+import type State from "../Interface/State.js";
 interface Observed {
     target: unknown;
     version: string;
