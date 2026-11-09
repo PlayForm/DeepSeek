@@ -1,22 +1,28 @@
-// Duplicate - the repeat-event guard (Function/Duplicate): the COALESCER. A
-// repeat event for the same path that carries the SAME version within the
-// window on the module's clock announces a file state that was already
-// processed (the version token identifies the file state), so it is dropped
-// before any work: no revision advance, no index drop, no storage put, no
-// ledger line. A different version - or a repeat outside the window - is
-// processed normally, so the LAST distinct version always wins. The clock is
-// the monitor's pattern: `State.Now` (the test seam) when set, otherwise the
-// wall clock; there is NO timer anywhere (the family's no-real-timers rule).
-//
-// The guard keeps one entry per path in `State.Seen` (the version plus the
-// clock stamp of the processing). The map is capped at `Limit` with a silent
-// eviction of the oldest entry: a MISSING entry always processes, so the cap
-// can never skip a first sighting.
-
+/**
+ * @module Duplicate
+ *
+ * The repeat-event guard and COALESCER: a repeat event for the same path
+ * inside the window is dropped.
+ *
+ * @remarks
+ * A repeat event for the same path that carries the SAME version within the
+ * window on the module's clock announces a file state that was already
+ * processed (the version token identifies the file state), so it is dropped
+ * before any work: no revision advance, no index drop, no storage put, no
+ * ledger line. A different version - or a repeat outside the window - is
+ * processed normally, so the LAST distinct version always wins. The clock is
+ * the monitor's pattern: `State.Now` (the test seam) when set, otherwise the
+ * wall clock; there is NO timer anywhere (the family's no-real-timers rule).
+ *
+ * The guard keeps one entry per path in `State.Seen` (the version plus the
+ * clock stamp of the processing). The map is capped at `Limit` with a silent
+ * eviction of the oldest entry: a MISSING entry always processes, so the cap
+ * can never skip a first sighting.
+ */
 import type State from "@Interface/State.js";
 
-// The coalescing window in milliseconds: a repeat inside the window that
-// carries the same version is dropped.
+// The coalescing window in milliseconds: a repeat inside the window that carries the same
+// version is dropped.
 const Window = 2000;
 
 // The seen map's entry cap (the oldest entry is evicted silently).

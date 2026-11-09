@@ -1,33 +1,33 @@
-// Dismiss - the `suggestion_dismiss` tool (the plan's section 4.7 dismiss
-// path, promoted from the sketch to a registered tool; the P4 item of the
-// search suggester's completion spec).
-//
-// Contract:
-//   * input: the suggestion FAMILY (the family id a note named - `History` for
-//     the session-history source, or an id of an EXPLICIT repo/user pack) and
-//     an OPTIONAL candidate path. A path dismisses that one candidate; no path
-//     dismisses the whole family;
-//   * output: the recorded dismissal - `{ dismissed, intent, path?, until,
-//     detail }` - where `until` is the epoch-second expiry (`dismissTtl`
-//     seconds from the call);
-//   * a dismissal is durable: it lives in the knowledge file
-//     (`dismissals`), survives a restart, and is honoured by the score gate
-//     until it expires (the family suppresses the note, the path is dropped
-//     from the candidate list - the plan's section 6.2 rule);
-//   * an unknown family is a self-describing error (the ccr tool's
-//     precedent), and a disabled suggester refuses (silence-first).
-//
-// THE FAMILY VOCABULARY: the built-in pack is retired, so the known families
-// are the synthetic `History` row plus whatever an explicit pack carries. The
-// State.Pack list is empty at apply (Function/Apply), which is why the
-// history family is named here directly.
-//
-// The ledger line is documented in SCHEME section 3:
-//   dismissed <Intent> <path|*>.
-//
-// This file only BUILDS the definition; the registration call lives in
-// Function/Apply (the batch-decision/ccr idiom: the definition is readonly
-// after registration).
+/**
+ * @module Dismiss
+ *
+ * The `suggestion_dismiss` tool, promoted from the sketch to a registered tool.
+ *
+ * @remarks
+ * The module is the plan's section 4.7 dismiss path and the P4 item of the search suggester's
+ * completion spec. Contract:
+ *
+ *   - input: the suggestion FAMILY (the family id a note named - `History` for the
+ *     session-history source, or an id of an EXPLICIT repo/user pack) and an OPTIONAL
+ *     candidate path. A path dismisses that one candidate; no path dismisses the whole
+ *     family;
+ *   - output: the recorded dismissal - `{ dismissed, intent, path?, until, detail }` - where
+ *     `until` is the epoch-second expiry (`dismissTtl` seconds from the call);
+ *   - a dismissal is durable: it lives in the knowledge file (`dismissals`), survives a
+ *     restart, and is honoured by the score gate until it expires (the family suppresses the
+ *     note, the path is dropped from the candidate list - the plan's section 6.2 rule);
+ *   - an unknown family is a self-describing error (the ccr tool's precedent), and a disabled
+ *     suggester refuses (silence-first).
+ *
+ * THE FAMILY VOCABULARY: the built-in pack is retired, so the known families are the
+ * synthetic `History` row plus whatever an explicit pack carries. The State.Pack list is
+ * empty at apply (Function/Apply), which is why the history family is named here directly.
+ *
+ * The ledger line is documented in SCHEME section 3: `dismissed <Intent> <path|*>`.
+ *
+ * This file only BUILDS the definition; the registration call lives in Function/Apply (the
+ * batch-decision/ccr idiom: the definition is readonly after registration).
+ */
 import { defineTool } from "@deepseek-ai/dsh-tools";
 
 import type State from "../Interface/State.js";

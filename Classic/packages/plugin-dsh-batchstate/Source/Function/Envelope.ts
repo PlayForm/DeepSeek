@@ -1,27 +1,36 @@
-// Envelope - the inbox block parser (Function/Envelope): the ONE wire format
-// the batch packages share through the harness inbox. The producer (the
-// pass-on for a proposal, the decision hook for a decision) renders a block
-//
-//   [BATCH PROPOSAL - <id>]
-//   <the canonical proposal JSON>
-//
-//   [BATCH DECISION - <id>]
-//   <the canonical decision JSON>
-//
-// and the board parses the FIRST such block out of any text the inbox
-// carries. The markers are a cross-package contract (each package declares
-// its own copy - the self-contained rule), so their bytes are the contract:
-// `[BATCH PROPOSAL - ` / `[BATCH DECISION - ` on their own line, the JSON
-// body starting on the next line.
-//
-// A text without a marker is null (the inbox carries ordinary messages too).
-// A marker with an unparseable body is returned with `payload: undefined` so
-// the caller can record the honest refusal instead of guessing.
+/**
+ * @module Envelope
+ *
+ * The inbox block parser: the ONE wire format the batch packages share through the harness inbox.
+ *
+ * @remarks
+ * The producer (the pass-on for a proposal, the decision hook for a decision) renders a block
+ *
+ * ```
+ * [BATCH PROPOSAL - <id>]
+ * <the canonical proposal JSON>
+ *
+ * [BATCH DECISION - <id>]
+ * <the canonical decision JSON>
+ * ```
+ *
+ * and the board parses the FIRST such block out of any text the inbox carries. The markers are a
+ * cross-package contract (each package declares its own copy - the self-contained rule), so their
+ * bytes are the contract: `[BATCH PROPOSAL - ` / `[BATCH DECISION - ` on their own line, the JSON
+ * body starting on the next line.
+ *
+ * A text without a marker is null (the inbox carries ordinary messages too). A marker with an
+ * unparseable body is returned with `payload: undefined` so the caller can record the honest
+ * refusal instead of guessing.
+ */
 export type Kind = "proposal" | "decision";
 
 export interface Envelope {
+	/** The block kind: a proposal or a decision. */
 	kind: Kind;
+	/** The proposal or decision id, trimmed. */
 	id: string;
+	/** The parsed JSON body, or undefined when the body is unparseable or not an object. */
 	payload: Record<string, unknown> | undefined;
 }
 

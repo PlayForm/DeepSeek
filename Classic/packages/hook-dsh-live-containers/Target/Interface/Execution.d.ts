@@ -1,3 +1,21 @@
+/**
+ * @module Execution
+ *
+ * The structural types of the live-containers runtime data: the block spec,
+ * the per-scope counter state, and the rendered parts. Pure data - no
+ * behavior (the family's Rust-style composition separates Interface from
+ * Function).
+ *
+ * @remarks
+ * The kind registry: phase 1 renders the six v1 kinds (LIVE-CONTAINERS-
+ * RESEARCH.md section 3: time, counter, manifest, gauge, note, template);
+ * the wave-2 catalog kinds (IMPLEMENTATION-DESIGN.md section 2.7, from
+ * Requirements/03 section 3) are ACCEPTED IN CONFIG from day one (the
+ * default block table ships them) and render as skipped blocks - reason
+ * "unknown kind" - until the wave-2 render engine lands. One registry, two
+ * consumers: the fail-loud config validation and the render dispatch.
+ */
+/** Every block kind accepted in config (the fail-loud registry). */
 export declare const KINDS: readonly ["time", "counter", "manifest", "gauge", "note", "template", "todo-list", "agent-progress-board", "task-failsafe-guard", "command-runner", "countdown-expiry", "session-stats", "diff-summary", "constraint-reminder", "scoreboard", "live-manifest", "memory-block", "validator", "environment-drift", "delegation-inbox"];
 /** The block kinds accepted in config (see KINDS above). */
 export type BlockKind = (typeof KINDS)[number];

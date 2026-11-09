@@ -182,22 +182,32 @@ export type JobEvent =
 
 /** The jobs capability seam (verified against dsh-jobs-local). */
 export interface JobsRegistry {
+	/** Start one job and return its id. */
 	start(spec: JobSpecification): string;
+	/** List the visible jobs. */
 	list(caller?: string): JobView[];
+	/** Get one job's view (caller-scoped). */
 	get(id: string, caller?: string): JobView;
+	/** Read a job's ring chunks. */
 	read(
 		id: string,
 		caller?: string,
 	): { chunks: { channel: string; text: string; offset: number }[]; lossy: boolean };
+	/** Read a job's ring from one byte offset (owner-authorized only). */
 	readAt(
 		id: string,
 		from: number,
 		caller?: string,
 	): { text: string; nextOffset: number; lossy: boolean };
+	/** Kill one job and return the reason. */
 	kill(id: string, caller: string | undefined, reason?: string): string;
+	/** Wait for one job's settlement (with a timeout and a signal). */
 	wait(id: string, timeoutMs: number, caller?: string, signal?: AbortSignal): Promise<JobView>;
+	/** Remove one settled job's record. */
 	remove(id: string, caller?: string): void;
+	/** Attach a named controller. */
 	attachController(name: string): unknown;
+	/** The registry's event stream (the subscribe seam). */
 	events: {
 		subscribe(
 			filter: { owner?: string } | { owners: "all" | "scope" },
@@ -208,34 +218,51 @@ export interface JobsRegistry {
 
 /** One inbox splice record (verified against dsh-agent-loop's splice event). */
 export interface InboxSplice {
+	/** The target session id. */
 	target: string;
+	/** The splice start index. */
 	start: number;
+	/** How many messages were removed. */
 	removedCount?: number;
+	/** The inserted messages. */
 	inserted: { source?: { kind?: string }; content?: { type?: string; text?: string }[] }[];
+	/** The splice outcome payload. */
 	outcome?: unknown;
 }
 
 /** One session log event (the dsh-session `session/event` bus payload). */
 export interface SessionEvent {
+	/** The event's sequence number. */
 	seq: number;
+	/** The event type. */
 	type: string;
+	/** The event payload. */
 	data: unknown;
+	/** The source event sequences the event derives from. */
 	sourceEventSeqs?: number[];
 }
 
 /** The subagent activation request (verified against dsh-subagent). */
 export interface ActivationRequest {
+	/** The parent session. */
 	parent: { id: string };
+	/** The child's prompt. */
 	prompt: string;
+	/** The depth cap. */
 	maxDepth?: number;
+	/** Extra agent options. */
 	agentOptions?: Record<string, unknown>;
+	/** The agent preset id. */
 	agentPreset?: string;
+	/** The structured output schema. */
 	outputSchema?: Record<string, unknown>;
+	/** The child's working directory. */
 	cwd?: string;
 }
 
 /** The subagent capability seam (verified against dsh-subagent README). */
 export interface Subagent {
+	/** Start one detached activation. */
 	startActivation(spec: {
 		provider: string;
 		label: string;
@@ -252,14 +279,19 @@ export interface Subagent {
 
 /** The agents registry seam (verified against dsh-agent + dsh-tool-jobs). */
 export interface AgentsRegistry {
+	/** Get one agent's registry record. */
 	get(id: string): { id: string; status?: string } | undefined;
 }
 
 /** The bounded private tail of one detached job (the Jobs.JobTail shape). */
 export interface TailBuffer {
+	/** The stdout side of the bounded tail. */
 	Stdout: string;
+	/** The stderr side of the bounded tail. */
 	Stderr: string;
+	/** Append one channel's chunk, keeping the buffer bounded. */
 	Append(channel: "stdout" | "stderr", text: string): void;
+	/** Render the bounded tail (the total cap applied). */
 	Render(): string;
 }
 
@@ -296,10 +328,15 @@ export interface DetachRecord {
 
 /** The per-exec tag the pre-execute arm leaves for the execute arm. */
 export interface TagRecord {
+	/** The registry job id. */
 	jobId: string;
+	/** The owning agent's session id. */
 	agentId: string;
+	/** The tool that was transformed. */
 	tool: string;
+	/** The resolved workdir for the fabricated result. */
 	cwd: string | undefined;
+	/** The timeout the fabricated result reports. */
 	timeoutMs: number;
 	/** Whether the tag is a dedup hit (the already-running line, not a fresh marker). */
 	dedup: boolean;
@@ -339,10 +376,13 @@ export interface LeaseEntry {
 
 /** One planted board member's row state. */
 export interface BoardMember {
+	/** The member's agent id. */
 	agentId: string;
+	/** The row's state. */
 	status: "running" | "stalled" | "stale" | "done" | "failed";
 	/** The latest report payload, capped (the row's text). */
 	lastReport: string;
+	/** The clock ms of the last report. */
 	lastReportAt: number | undefined;
 	/** The settled summary (first line of the answer, capped). */
 	summary: string | undefined;
@@ -352,14 +392,19 @@ export interface BoardMember {
 
 /** One planted board (the I5 lease + the D2 3.4 design). */
 export interface BoardState {
+	/** The board's label (its per-agent key). */
 	id: string;
+	/** The owning agent's session id. */
 	agentId: string;
+	/** The board type. */
 	plantType: "agent-board" | "todo-fill" | "aggregate" | "custom" | "monitors";
 	/** The template for the "custom" type (the rendered body). */
 	template: string | undefined;
+	/** The expected member count. */
 	expect: number;
 	/** The member slots; length <= expect; overflow members are counted only. */
 	members: BoardMember[];
+	/** The unboarded children that reported. */
 	overflow: { agentId: string; summary: string }[];
 	/** The board's item slots: todo-fill numbers its items; the monitors
 	 * board's items are the monitored files (label = the path, state = the
@@ -367,9 +412,11 @@ export interface BoardState {
 	items: { label: string; state: string; by: string | undefined; at: number | undefined }[];
 	/** The lease: reporters + windows (the I5 2.1 record). */
 	lease: { reporters: Map<string, LeaseEntry>; state: "open" | "stale" | "closed" };
+	/** The open time in clock ms. */
 	openedAt: number;
 	/** The clock ms after which empty slots drop and the board closes. */
 	closeAt: number;
+	/** The close time in clock ms. */
 	closedAt: number | undefined;
 	/** Whether the closing line rendered (withdraw after one request). */
 	closeRendered: boolean;
@@ -387,16 +434,23 @@ export interface BoardState {
 
 /** One stored suggestion (the I6 configured-block design). */
 export interface Suggestion {
+	/** The suggestion id (`sug-<4 hex>`). */
 	id: string;
+	/** The owning agent's session id. */
 	agentId: string;
+	/** The suggested template's catalog id. */
 	templateId: string;
+	/** The mini-model's fit answer. */
 	fit: "yes" | "no" | "unknown";
+	/** The rationale, capped. */
 	rationale: string;
 	/** The clamped tokens (the stored configuration verbatim at accept). */
 	tokens: { expectAgents?: number; steps?: string[] };
+	/** The turn that spawned the suggestion. */
 	createdTurn: number;
 	/** Rendered once, then withdrawn (the one-assembly window). */
 	renderedTurn: number | undefined;
+	/** Whether the suggestion is withdrawn. */
 	withdrawn: boolean;
 	/** Whether the dormant block was planted (autoPlant). */
 	planted: boolean;
@@ -438,15 +492,20 @@ export interface CheckSetSpecification {
 
 /** One watchlist entry (config `watchlist[]`; design section 3.2). */
 export interface WatchlistEntry {
+	/** The glob the entry matches. */
 	glob: string;
+	/** The check-set ids the entry enrolls. */
 	checks: string[];
 }
 
 /** One persisted monitor record (the storage domain's `checks` table row;
  * design section 1). */
 export interface MonitorRecord {
+	/** The record kind. */
 	event: "monitor-enrolled" | "monitor-check" | "monitor-retired";
+	/** The displayPath. */
 	path: string;
+	/** The owning session (agent id). */
 	agent: string;
 	/** The raw fs/observed version token, verbatim. */
 	version: string;
@@ -462,11 +521,13 @@ export interface MonitorRecord {
 	infra: string | null;
 	/** The bounded tail (<= 2 KiB), embedded. */
 	tail: string;
+	/** The record's provenance. */
 	provenance: "live" | "recovered";
 }
 
 /** One check result (design section 3.5). */
 export interface CheckResult {
+	/** The check set the result belongs to. */
 	setId: string;
 	/** The registry id (the job_output hint). */
 	jobId: string;
@@ -476,10 +537,13 @@ export interface CheckResult {
 	checkedVersion: string;
 	/** The writer of the checked version. */
 	writer: string;
+	/** The exit code (null on infra/kill/deny). */
 	exit: number | null;
+	/** The infrastructure note (null when a plain exit). */
 	infra: string | null;
 	/** The bounded head-tail (<= 2 KiB). */
 	tail: string;
+	/** The result's provenance. */
 	provenance: "live" | "recovered";
 }
 
@@ -492,6 +556,7 @@ export interface MonitorEntry {
 	pathKey: string;
 	/** The owning session (agent id). */
 	agentId: string;
+	/** The enrollment time in clock ms. */
 	enrolledAt: number;
 	/** The latest observed version token (verbatim). */
 	lastVersion?: string | undefined;
@@ -512,9 +577,13 @@ export interface MonitorEntry {
 /** One live monitor job's record (State.MonitorJobs; design section 2). The
  * settle fold, the board skip guard and the deadline scan read it. */
 export interface MonitorJobRecord {
+	/** The owning session (agent id). */
 	agentId: string;
+	/** The displayPath. */
 	path: string;
+	/** The targetKey (the state key). */
 	pathKey: string;
+	/** The check set the job runs. */
 	setId: string;
 	/** The clock ms at dispatch (the deadline scan's start). */
 	startedAt: number;

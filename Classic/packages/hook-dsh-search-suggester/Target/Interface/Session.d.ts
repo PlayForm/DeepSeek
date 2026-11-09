@@ -1,3 +1,52 @@
+/**
+ * @module Session
+ *
+ * The structural view of the harness's session-projection seam (`ctx.sessionProjections`, the
+ * `SessionProjectionRegistry` of `@deepseek-ai/dsh-session-projection`), the seam this hook
+ * folds the session history through.
+ *
+ * @remarks
+ * The types are structural on purpose: the projection package is NOT a dependency of this
+ * hook (no runtime import, no type import), so the seam is described here by the faces the
+ * hook consumes, verified against the installed harness source and the subsystem guide:
+ *
+ *   - register(definition) - "Register one domain's unit on the calling context's fiber ...
+ *     Callers must await registration before publishing consumers" (the generated service
+ *     surface of the installed build);
+ *   - stateOf(session, key) - "reads one unit's live read-only host state without computing
+ *     unrelated views" (the same surface, and the face every shipped consumer uses, e.g.
+ *     `ctx.sessionProjections.stateOf(session, "turnBoundary")`).
+ *
+ * THE UNIT CONTRACT (the subsystem guide's `ProjectionDefinition`): `apply(state, event)` is
+ * "Pure transition: previous state + one committed event -> next state. A unit uninterested
+ * in an event MUST return the same state reference - an unchanged reference (`Object.is`)
+ * produces zero downstream work." `state` MUST be plain JSON (the persisted-cache
+ * precondition), and `stateSchema` "Validates persisted state before it seeds a fold" - the
+ * registry reads it through `parse` only (`def.stateSchema.parse(row.val)` in the installed
+ * source), which is why `StateSchema` below is the one-face structural stand-in rather than a
+ * zod type this package cannot import.
+ *
+ * THE DRIVE (the installed service description): "The service subscribes to `session/event`
+ * once; every committed event passes every registered unit's `apply` (eager drive) ... Cells
+ * build lazily - a unit registered after events flowed, or a session older than the registry,
+ * folds `init` over the in-memory log on first touch (event or read)." The hook therefore
+ * owns NO subscription: it registers the unit and reads the per-session cell.
+ *
+ * THE VERSION SKEW, AND WHY THE READ GOES THROUGH THE REGISTRY: the installed build's
+ * `register(definition)` is a plain method whose README calls the result a disposer, while
+ * the current source's generated surface types it `Promise<ProjectionHandle<S>>` (a handle
+ * with `stateOf(session)`, `readerFor(session)`, `dispose()`). The hook only AWAITS the
+ * result and discards it, so both generations work, and it reads state through
+ * `registry.stateOf(session, key)` - a face both generations serve and the one every shipped
+ * consumer uses. A handle-based read would break on the installed build, where `register`
+ * returns a function, not a handle.
+ *
+ * THE FILE NAME: this package already owns `Interface/Projection.ts` for the P2 GRAPH
+ * projection (the `workspaceGraph` snapshot shape that `Function/Projection`,
+ * `Function/Measure`, `Function/Projected`, `Function/Score` and `Function/Seed` consume), so
+ * the session-projection seam lives here instead of under that name. The two are unrelated:
+ * one is a per-session event fold, the other a per-apply graph snapshot.
+ */
 import type { Touch } from "@playform/lib-dsh-pack";
 export interface SessionHistory {
     /** The next touch's sequence number. */

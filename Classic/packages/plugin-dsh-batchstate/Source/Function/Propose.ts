@@ -1,21 +1,24 @@
-// Propose - the inbox splice (Function/Propose): record one batch proposal
-// on the board. THE SPLICE the plan's exploration item 1 asked for: the
-// proposal arrives as an inbox message (the harness agent-team channel), the
-// board parses it (Function/Envelope) and projects it into its state, so the
-// board, the compiled context and every consumer see the SAME proposal.
-//
-// THE FENCES:
-//   - the id: a payload without one is refused (`proposal rejected`), never
-//     invented;
-//   - the revision: a proposal already held at the same or a higher revision
-//     is ignored (`skipped (revision not newer)`) - a re-delivery of the same
-//     batch is the same batch;
-//   - the ring: the newest MaxProposals entries survive (the board's memory
-//     is bounded like the completions ring).
-//
-// The write is ledgered, persisted (Function/Persist) and emitted as
-// `batch/state-change` kind `proposal` AFTER the state moved - the same
-// contract the write API follows.
+/**
+ * @module Propose
+ *
+ * The inbox splice: it records one batch proposal on the board.
+ *
+ * @remarks
+ * THE SPLICE the plan's exploration item 1 asked for: the proposal arrives as an inbox message (the
+ * harness agent-team channel), the board parses it (Function/Envelope) and projects it into its
+ * state, so the board, the compiled context and every consumer see the SAME proposal.
+ *
+ * THE FENCES:
+ *
+ * - the id: a payload without one is refused (`proposal rejected`), never invented;
+ * - the revision: a proposal already held at the same or a higher revision is ignored (`skipped
+ *   (revision not newer)`) - a re-delivery of the same batch is the same batch;
+ * - the ring: the newest MaxProposals entries survive (the board's memory is bounded like the
+ *   completions ring).
+ *
+ * The write is ledgered, persisted (Function/Persist) and emitted as `batch/state-change` kind
+ * `proposal` AFTER the state moved - the same contract the write API follows.
+ */
 import Emit from "@Function/Emit.js";
 import Persist from "@Function/Persist.js";
 import type Entry from "@Interface/Entry.js";

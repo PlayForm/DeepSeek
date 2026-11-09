@@ -1,31 +1,37 @@
-// Exists - the BASE-AWARE companion existence filter: does a pack target
-// exist under any of the call's three path bases? The embedded packs are this
-// repo's conventions as DATA, and they mix three bases:
-//
-//   * repo-relative    (`CHANGELOG.md` and any other repo-relative path);
-//   * package-relative (`SCHEME.md`, `README.md`, `cordis.patch.yml`,
-//     `Source/Test/...`, `Source/Function/Apply.ts`);
-//   * sibling-relative (`*/package.json`, `*/Source/Function/Apply.ts`).
-//
-// A single-root filter silently dropped the most relevant companions (the
-// package's own SCHEME.md and patch row), so the filter computes three bases
-// from the RESOLVED call path:
-//
-//   * RepoRoot - the workspace root resolved by the pack library's `Root`
-//     (the nearest ancestor carrying `.git` or `package.json`), never a
-//     pack signature;
-//   * PackageRoot - the nearest ancestor of the call path that contains
-//     package.json, at or below RepoRoot;
-//   * PackageParent - PackageRoot's parent directory.
-//
-// The rules (the filter only DROPS a target, it never rewrites one):
-//   * a literal path (no `*`) -> exists under RepoRoot, PackageRoot or
-//     PackageParent; a directory target passes by the same check;
-//   * a `*/<rest>` glob -> at least one immediate subdirectory of
-//     PackageParent or of RepoRoot contains `<rest>`;
-//   * any other glob -> its literal prefix directory exists under a base;
-//   * a target carrying a `<...>` placeholder (`Source/Test/<Suite>/Test.ts`)
-//     is illustrative and always kept.
+/**
+ * @module Exists
+ *
+ * The base-aware companion existence filter: whether a pack target exists under any of the
+ * call's three path bases.
+ *
+ * @remarks
+ * The embedded packs are this repo's conventions as DATA, and they mix three bases:
+ *
+ *   - repo-relative (`CHANGELOG.md` and any other repo-relative path);
+ *   - package-relative (`SCHEME.md`, `README.md`, `cordis.patch.yml`, `Source/Test/...`,
+ *     `Source/Function/Apply.ts`);
+ *   - sibling-relative (a `*` segment before `/package.json` and before
+ *     `/Source/Function/Apply.ts`).
+ *
+ * A single-root filter silently dropped the most relevant companions (the package's own
+ * SCHEME.md and patch row), so the filter computes three bases from the RESOLVED call path:
+ *
+ *   - RepoRoot - the workspace root resolved by the pack library's `Root` (the nearest
+ *     ancestor carrying `.git` or `package.json`), never a pack signature;
+ *   - PackageRoot - the nearest ancestor of the call path that contains package.json, at or
+ *     below RepoRoot;
+ *   - PackageParent - PackageRoot's parent directory.
+ *
+ * The rules (the filter only DROPS a target, it never rewrites one):
+ *
+ *   - a literal path (no `*`) -> exists under RepoRoot, PackageRoot or PackageParent; a
+ *     directory target passes by the same check;
+ *   - a `*` then `/<rest>` glob -> at least one immediate subdirectory of PackageParent or of
+ *     RepoRoot contains `<rest>`;
+ *   - any other glob -> its literal prefix directory exists under a base;
+ *   - a target carrying a `<...>` placeholder (`Source/Test/<Suite>/Test.ts`) is illustrative
+ *     and always kept.
+ */
 import { existsSync, readdirSync, statSync } from "node:fs";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 

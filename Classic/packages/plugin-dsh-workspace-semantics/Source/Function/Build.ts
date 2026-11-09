@@ -1,24 +1,31 @@
-// Build - the lazy model builder (Function/Build), the service's resolve().
-// A FRESH index hit (the model's version matches the path's latest observed
-// version) returns without any I/O. Otherwise the file's text is read through
-// the injected `fs` facility, the path's adapter is selected (Function/Select:
-// the exact basename first, then the extension), and the adapter's scan
-// produces the model. The refusal-to-guess rule: a path with no adapter for
-// its extension resolves to `undefined` and ONE ledger line
-// `refused <path> (no adapter for <ext>)` - never a guessed model.
-//
-// THE DEEPENING: when a deepener is registered for the extension
-// (Function/Deepen - the harness LSP seam, Function/Lsp), it is asked for the
-// scope-resolved reference list AFTER the lexical scan. An answer (an array)
-// replaces the lexical references and ledgers
-// `deepened <path> (<n> references via <name>)`; `undefined` - the seam is
-// absent, has no provider, or failed - keeps the lexical list and adds no
-// line. The symbols always come from the adapter (the seam enumerates none).
-//
-// The index cap: when the index exceeds `maxEntries`, the OLDEST entries by
-// index revision are dropped (the bounded index, the observe ring's cap
-// pattern). The revision is the service's own monotonic counter - never a
-// wall clock.
+/**
+ * @module Build
+ *
+ * The lazy model builder: the service's resolve() reads a file and produces its
+ * semantic model on demand.
+ *
+ * @remarks
+ * A FRESH index hit (the model's version matches the path's latest observed
+ * version) returns without any I/O. Otherwise the file's text is read through
+ * the injected `fs` facility, the path's adapter is selected (Function/Select:
+ * the exact basename first, then the extension), and the adapter's scan
+ * produces the model. The refusal-to-guess rule: a path with no adapter for
+ * its extension resolves to `undefined` and ONE ledger line
+ * `refused <path> (no adapter for <ext>)` - never a guessed model.
+ *
+ * THE DEEPENING: when a deepener is registered for the extension
+ * (Function/Deepen - the harness LSP seam, Function/Lsp), it is asked for the
+ * scope-resolved reference list AFTER the lexical scan. An answer (an array)
+ * replaces the lexical references and ledgers
+ * `deepened <path> (<n> references via <name>)`; `undefined` - the seam is
+ * absent, has no provider, or failed - keeps the lexical list and adds no line.
+ * The symbols always come from the adapter (the seam enumerates none).
+ *
+ * The index cap: when the index exceeds `maxEntries`, the OLDEST entries by
+ * index revision are dropped (the bounded index, the observe ring's cap
+ * pattern). The revision is the service's own monotonic counter - never a wall
+ * clock.
+ */
 import Select from "@Function/Select.js";
 import type Model from "@Interface/Model.js";
 import type ReferenceNode from "@Interface/ReferenceNode.js";
@@ -48,8 +55,8 @@ const Cap = (State: State): void => {
 export default async (State: State, Path: string): Promise<Model | undefined> => {
 	switch (true) {
 		case !State.On:
-			// The idle-forever posture: a disabled service answers honestly
-			// with nothing, never with a guessed model.
+			// The idle-forever posture: a disabled service answers honestly with nothing,
+			// never with a guessed model.
 			return undefined;
 		case typeof Path !== "string" || Path.length === 0:
 			State.Factory.Append(State, "failed resolve (empty path)");

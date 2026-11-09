@@ -1,16 +1,23 @@
-// Compile - the presentation compiler (BATCH-STATE-PLUGIN.md section 7.1):
-// pure, deterministic functions over the state. Every block the agents
-// receive is a COMPILED OUTPUT - the LLM's only role is to READ it and act;
-// the batch state is never described ad-hoc by any agent. The blocks are
-// bounded (the compact TOC + the scope + the pending - never the histories;
-// plan section 3 item 5).
-//
-//   State(State)    -> the full snapshot (getState);
-//   Context(State, agent) -> the dynamic table-of-contents block (getContext);
-//   Scope(State, agent)   -> the compiled scope view (getScope);
-//   Else(State, agent)    -> the "you are never alone" block (whoElse);
-//   Gates(State)          -> the arbiter truth (the Gates block);
-//   Schedule(State)       -> the queue projection (the queue's own line).
+/**
+ * @module Compile
+ *
+ * The presentation compiler (BATCH-STATE-PLUGIN.md section 7.1): pure, deterministic functions over
+ * the state.
+ *
+ * @remarks
+ * Every block the agents receive is a COMPILED OUTPUT - the LLM's only role is to READ it and act;
+ * the batch state is never described ad-hoc by any agent. The blocks are bounded (the compact TOC +
+ * the scope + the pending - never the histories; plan section 3 item 5).
+ *
+ * The exports:
+ *
+ * - `Snapshot(State)` - the full snapshot (getState);
+ * - `Context(State, agent)` - the dynamic table-of-contents block (getContext);
+ * - `Scope(State, agent)` - the compiled scope view (getScope);
+ * - `Else(State, agent)` - the "you are never alone" block (whoElse);
+ * - `Gates(State)` - the arbiter truth (the Gates block);
+ * - `Schedule(State)` - the queue projection (the queue's own line).
+ */
 import Projection from "@Function/Projection.js";
 import type Gate from "@Interface/Gate.js";
 import type Member from "@Interface/Member.js";
@@ -18,9 +25,8 @@ import type Scope from "@Interface/Scope.js";
 import type Snapshot from "@Interface/Snapshot.js";
 import type State from "@Interface/State.js";
 
-/** The surfaces another lane owns exclusively - the OFF-LIMITS list for one
- *  agent. A surface the agent shares with the owner is NOT off-limits (it
- *  is a shared overlap, reported by Scope). */
+/** The surfaces another lane owns exclusively - the OFF-LIMITS list for one agent. A surface the
+ * agent shares with the owner is NOT off-limits (it is a shared overlap, reported by Scope). */
 export const Off = (State: State, Agent: string): string[] => {
 	const Mine = State.Members.get(Agent)?.scope ?? [];
 	const Taken: string[] = [];
@@ -41,8 +47,7 @@ export const Off = (State: State, Agent: string): string[] => {
 	return Taken;
 };
 
-/** The running members, queue order first (a non-queued member sorts by
- *  its activation timestamp). */
+/** The running members, queue order first (a non-queued member sorts by its activation timestamp). */
 export const Running = (State: State): Member[] => {
 	const Members = [...State.Members.values()].filter((One) => One.status === "active");
 	return Members.sort((Left, Right) => {
@@ -69,9 +74,9 @@ export const Snapshot = (State: State): Snapshot => ({
 	gates: [...State.Gates.values()],
 });
 
-/** The compiled arbiter truth (the Gates block, plan section 7.1 item 2):
- *  the gates sorted by name, each `<name> <state>` plus the owning lane when
- *  one was reported - `GATES: none` when the board holds no gate. */
+/** The compiled arbiter truth (the Gates block, plan section 7.1 item 2): the gates sorted by name,
+ * each `<name> <state>` plus the owning lane when one was reported - `GATES: none` when the board
+ * holds no gate. */
 export const Gates = (State: State): string => {
 	const Rows: Gate[] = [...State.Gates.values()].sort((Left, Right) =>
 		Left.name.localeCompare(Right.name),
@@ -88,13 +93,12 @@ export const Gates = (State: State): string => {
 	}
 };
 
-/** The queue projection (the queue service's own compiled line, read
- *  read-only) - `QUEUE: none` when no queue service is mounted. */
+/** The queue projection (the queue service's own compiled line, read read-only) - `QUEUE: none`
+ * when no queue service is mounted. */
 export const Schedule = (State: State): string => Projection(State.Context) ?? "QUEUE: none";
 
-/** The compiled scope view for one agent (getScope): the file-ownership
- *  matrix derived at call time - pre-baked conflict avoidance, never
- *  negotiated (plan section 7.2 item 1). */
+/** The compiled scope view for one agent (getScope): the file-ownership matrix derived at call
+ * time - pre-baked conflict avoidance, never negotiated (plan section 7.2 item 1). */
 export const Scope = (State: State, Agent: string): Scope => {
 	const Mine = State.Members.get(Agent)?.scope ?? [];
 	const Shared: Record<string, string[]> = {};
@@ -114,10 +118,9 @@ export const Scope = (State: State, Agent: string): Scope => {
 	return { yours: [...Mine], shared: Shared, offLimits: Off(State, Agent) };
 };
 
-/** The compiled dynamic context block for one agent (getContext): the
- *  table of contents + the scope reminders + the pending list - what gets
- *  spliced (plan section 2.2). READ-ONLY for the agents: the block is the
- *  injected context, clearly delimited, never their own content. */
+/** The compiled dynamic context block for one agent (getContext): the table of contents + the
+ * scope reminders + the pending list - what gets spliced (plan section 2.2). READ-ONLY for the
+ * agents: the block is the injected context, clearly delimited, never their own content. */
 export const Context = (State: State, Agent: string): string => {
 	const Lines = [`[BATCH STATE - ${State.Batch} - live]`];
 	const Running0 = Running(State);
@@ -169,8 +172,8 @@ export const Context = (State: State, Agent: string): string => {
 	return Lines.join("\n");
 };
 
-/** The concurrent lanes' CURRENT activities for one agent (whoElse): the
- *  "you are never alone" block (plan section 2.1). */
+/** The concurrent lanes' CURRENT activities for one agent (whoElse): the "you are never alone"
+ * block (plan section 2.1). */
 export const Else = (State: State, Agent: string): string => {
 	const Lines = ["[CONCURRENT LANES - live]"];
 	for (const One of Running(State)) {

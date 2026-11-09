@@ -1,9 +1,14 @@
-// Measurement - one pack candidate measured against the graph projection
-// (Function/Measure). The two scores it carries replace the neutral 0.5
-// literal of the PoC: `literal` is the graph's proof of the candidate (node
-// exists, kind matches the intent's expected kinds, the node's recency), and
-// `scope` is the path's depth tier (the plan's section 3.7 scope component,
-// which the generated index was to supply).
+/**
+ * @module Measurement
+ *
+ * One pack candidate measured against the graph projection (Function/Measure).
+ *
+ * @remarks
+ * The two scores it carries replace the neutral 0.5 literal of the PoC: `literal` is the
+ * graph's proof of the candidate (node exists, kind matches the intent's expected kinds, the
+ * node's recency), and `scope` is the path's depth tier (the plan's section 3.7 scope
+ * component, which the generated index was to supply).
+ */
 export default interface Measurement {
 	/** Whether the graph has a node at the candidate path (or under its glob). */
 	exists: boolean;

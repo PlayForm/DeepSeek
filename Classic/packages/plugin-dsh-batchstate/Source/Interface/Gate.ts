@@ -1,8 +1,13 @@
-// Gate - one arbiter gate's live state (BATCH-STATE-PLUGIN.md section 7.1,
-// the Gates block): the build/smokes truth the compiler renders for every
-// lane. The board never runs the gates itself - the parent reports them
-// through setGate, and the compiled block carries the programmatic truth
-// (green / red / unknown) plus the lane that owns the failure.
+/**
+ * @module Gate
+ *
+ * One arbiter gate's live state (BATCH-STATE-PLUGIN.md section 7.1, the Gates block): the
+ * build/smokes truth the compiler renders for every lane.
+ *
+ * @remarks
+ * The board never runs the gates itself - the parent reports them through setGate, and the compiled
+ * block carries the programmatic truth (green / red / unknown) plus the lane that owns the failure.
+ */
 export type GateState = "green" | "red" | "unknown";
 
 export default interface Gate {

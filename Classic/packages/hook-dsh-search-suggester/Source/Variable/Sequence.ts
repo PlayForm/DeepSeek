@@ -1,19 +1,23 @@
-// Sequence - the fixed replay corpus of the P4 BENCHMARK (the plan's
-// section 10.5): fifty search-class calls, five lanes of ten, each lane one
-// intent and one agent (the per-agent ring keeps the lanes independent
-// without a user message). The calls are the plan's release / test / doc /
-// config / symbol lanes reduced to their literals: the first call of a lane
-// carries the strong signal, the rest repeat the same intent through the
-// variants the evidence recorded (the loop the suggester exists to cut).
-//
-// The `expected` block is the HAND-LABELLED eventual target set per lane -
-// the plan's section 3.6 canonical sets plus the long-tail files the lane
-// really touched and the pack does NOT name (setup.astro, FRAMEWORK.md,
-// EffectTS/smokes/README.md, Source/Test/Config-And-Activation, Target) -
-// so the recall is honest and a rule change that loses a target shows up as
-// a recall drop (the regression gate).
-//
-// Deterministic data: no timestamps, no absolute paths, no session ids.
+/**
+ * @module Sequence
+ *
+ * The fixed replay corpus of the P4 benchmark: fifty search-class calls in five lanes of ten.
+ *
+ * @remarks
+ * The corpus is the plan's section 10.5. Each lane is one intent and one agent (the per-agent
+ * ring keeps the lanes independent without a user message). The calls are the plan's release
+ * / test / doc / config / symbol lanes reduced to their literals: the first call of a lane
+ * carries the strong signal, the rest repeat the same intent through the variants the
+ * evidence recorded (the loop the suggester exists to cut).
+ *
+ * The `expected` block is the HAND-LABELLED eventual target set per lane - the plan's section
+ * 3.6 canonical sets plus the long-tail files the lane really touched and the pack does NOT
+ * name (setup.astro, FRAMEWORK.md, EffectTS/smokes/README.md, Source/Test/Config-And-Activation,
+ * Target) - so the recall is honest and a rule change that loses a target shows up as a
+ * recall drop (the regression gate).
+ *
+ * Deterministic data: no timestamps, no absolute paths, no session ids.
+ */
 export interface Call {
 	/** The lane's agent id (one ring per lane). */
 	agent: string;
@@ -27,8 +31,8 @@ export interface Call {
 
 export default {
 	calls: [
-		// The Version lane: the semver literal, the manifest shape, the
-		// version word, the glob - one emit, then the same set repeats.
+		// The Version lane: the semver literal, the manifest shape, the version word, the
+		// glob - one emit, then the same set repeats.
 		{
 			agent: "version",
 			name: "grep",
@@ -47,10 +51,10 @@ export default {
 		{ agent: "version", name: "grep", arguments: { pattern: "semver", path: "package.json" } },
 		{ agent: "version", name: "read", arguments: { file_path: "Site/package.json" } },
 		{ agent: "version", name: "glob", arguments: { pattern: "**/CHANGELOG.md" } },
-		// The Test lane: the pass/fail/build literals and the aggregate. The
-		// user message carries the R12 context word; the third same-intent
-		// call adds the R13 loop credit, which is what lifts the lane over
-		// the pack's 0.75 gate (the plan's section 3.9 arithmetic).
+		// The Test lane: the pass/fail/build literals and the aggregate. The user message
+		// carries the R12 context word; the third same-intent call adds the R13 loop credit,
+		// which is what lifts the lane over the pack's 0.75 gate (the plan's section 3.9
+		// arithmetic).
 		{
 			agent: "test",
 			name: "grep",

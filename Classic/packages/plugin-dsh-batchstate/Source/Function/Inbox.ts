@@ -1,23 +1,28 @@
-// Inbox - the harness inbox listener (Function/Inbox): THE SPLICE. The
-// batch packages talk to each other through the harness agent-team inbox -
-// the same channel the harness itself delivers agent messages on - so the
-// board registers on the inbox events and projects every batch block it sees
-// into its state.
-//
-// THE CHANNELS (verified in the harness checkout):
-//   - `session/event` with `type === "agent/inbox/spliced"` - the DURABLE
-//     splice the agent-loop appends
-//     (packages/core/agent-loop/src/inbox.ts:227-241; the event map
-//     packages/core/agent/src/types.ts:96);
-//   - `agent/inbox/inserted` - the LIVE per-agent notification emitted right
-//     after that commit (packages/core/agent/src/runtime-types.ts:288).
-// Both fire for one inserted message, so the listener de-duplicates on the
-// message id (the live emit and the durable splice are one delivery).
-//
-// The names are registered STRUCTURALLY (a loose `on` cast): the events are
-// declared by the harness's agent/session packages, which this package does
-// not depend on (the self-contained PoC rule). An ordinary message without a
-// batch block is ignored - silence is the default.
+/**
+ * @module Inbox
+ *
+ * The harness inbox listener: THE SPLICE.
+ *
+ * @remarks
+ * The batch packages talk to each other through the harness agent-team inbox - the same channel the
+ * harness itself delivers agent messages on - so the board registers on the inbox events and
+ * projects every batch block it sees into its state.
+ *
+ * THE CHANNELS (verified in the harness checkout):
+ *
+ * - `session/event` with `type === "agent/inbox/spliced"` - the DURABLE splice the agent-loop
+ *   appends (packages/core/agent-loop/src/inbox.ts:227-241; the event map
+ *   packages/core/agent/src/types.ts:96);
+ * - `agent/inbox/inserted` - the LIVE per-agent notification emitted right after that commit
+ *   (packages/core/agent/src/runtime-types.ts:288).
+ *
+ * Both fire for one inserted message, so the listener de-duplicates on the message id (the live
+ * emit and the durable splice are one delivery).
+ *
+ * The names are registered STRUCTURALLY (a loose `on` cast): the events are declared by the
+ * harness's agent/session packages, which this package does not depend on (the self-contained PoC
+ * rule). An ordinary message without a batch block is ignored - silence is the default.
+ */
 import Decide from "@Function/Decide.js";
 import Envelope from "@Function/Envelope.js";
 import Propose from "@Function/Propose.js";

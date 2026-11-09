@@ -106,11 +106,17 @@ export interface WatchlistOption {
 }
 /** One check-set spec (volatile). */
 export interface CheckSetOption {
+    /** The catalog glob (the spec is catalog-owned when present). */
     glob?: string;
+    /** The command template; required when link is absent. */
     command?: string;
+    /** The governance link ("none" | "governance"); linked sets never run. */
     link?: "none" | "governance";
+    /** Whether the set auto-runs per edit (default true). */
     fast?: boolean;
+    /** The slow-cadence override in ms. */
     intervalMs?: number;
+    /** The check deadline override in ms. */
     timeoutMs?: number;
 }
 export default interface Config {

@@ -1,3 +1,32 @@
+/**
+ * @module State
+ *
+ * The per-apply plugin state: the FACTORY's shared shape (built by
+ * `Factory.State(ctx, config, { ... })` - factory SCHEME.md §2.10) extended
+ * with the live-containers' own fields.
+ *
+ * @remarks
+ * The shared half comes from the factory's NAMED type export (`State`). The
+ * shared machinery that stays inert here: Tool/Policy/PolicyName/List (no
+ * fs/observed machinery - live-containers is a NON-MANIFEST module), Stash/
+ * Inflight/Subprocess/Seams/Queue/Journal (no governance traffic; the only
+ * journal-domain line is the activation record, best-effort). The shared
+ * `Enabled` field stays bound to the config's `log` cell (the DURABLE ledger
+ * toggle); the plugin's MASTER SWITCH is the `On` field below (config
+ * `enabled`).
+ *
+ * Every config-derived field below is refreshed IN PLACE by the factory's
+ * P10 loader/volatile-update listener (every cell in the schema is volatile),
+ * so a flip takes effect on the next assembly without a remount.
+ *
+ * `Now` is the CLOCK SEAM (the smoke's fake-clock requirement,
+ * IMPLEMENTATION-DESIGN.md section 7.1): when set, every time read in
+ * Counters/Render goes through it; production leaves it undefined and
+ * `Clock.ts` falls back to `Date.now()`. The smoke sets it through the
+ * `ctx.__hookDshLiveContainersState` probe attachment - never a return value
+ * from `apply` (the loader treats apply returns specially, a live-verified
+ * lesson recorded in the plugin-development skill).
+ */
 import type { BoardState, CheckSetSpecification, CompletionSlot, DetachRecord, MonitorEntry, MonitorJobRecord, MonitorRecord, SuggesterState, Suggestion, TagRecord, WatchlistEntry } from "./Events.js";
 import type { AgentState, BlockSpecification } from "./Execution.js";
 import type Factory from "@playform/plugin-dsh-factory";
@@ -138,28 +167,48 @@ export default interface State extends Shared {
 }
 /** The detach policy knobs (design section 2.3; every knob volatile). */
 export interface DetachConfig {
+    /** The detach mode ("off" | "long-running" | "all" | "selected"). */
     mode: "off" | "long-running" | "all" | "selected";
+    /** Required when mode is "all" (the fail-loud confirmation). */
     allRequiresConfirm: boolean;
+    /** Long-running markers the "long-running" mode matches on. */
     longRunningMarkers: string[];
+    /** The history-average threshold in ms for the "long-running" mode. */
     minHistoricalMs: number;
+    /** How many past durations the same-prefix history keeps. */
     historyWindow: number;
+    /** Extra tools the "selected" mode may detach. */
     selectedTools: string[];
+    /** Extra command regexes the "selected" mode may detach. */
     selectedPatterns: string[];
+    /** The per-agent live-job cap. */
     maxLivePerAgent: number;
+    /** The minimum estimated duration in ms before a detach pays off. */
     minLatencyMs: number;
+    /** The detached deadline in ms (1000..600000). */
     liveTimeoutMs: number;
+    /** Collapse a repeat call onto the still-live job. */
     dedup: boolean;
+    /** The dedup-hit count past which the retry-loop failsafe fires. */
     retryFailsafeCount: number;
 }
 /** The planted-block knobs (design section 2.4 + I5 section 8). */
 export interface PlantConfig {
+    /** The no-report interval in ms before a member renders [stalled]. */
     stallMs: number;
+    /** The board auto-close window in ms. */
     closeMs: number;
+    /** The coalescing window in ms: one lease reset per report. */
     reportRateMs: number;
+    /** The prune budget in ms (the stall failsafe's deadline). */
     stallBudgetMs: number;
+    /** The stall action ("warn-only" | "prune"). */
     stallAction: "warn-only" | "prune";
+    /** The orphan budget in ms for the parent-request gap. */
     orphanBudgetMs: number;
+    /** The per-agent planted-board cap. */
     boardsPerAgent: number;
+    /** The lease window in parent turns (the only window source). */
     leaseTurns: number;
 }
 /** The wave-2 runtime composite the modules share (bound once in Apply). */

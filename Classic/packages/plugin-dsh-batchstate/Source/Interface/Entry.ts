@@ -1,8 +1,13 @@
-// Entry - one spliced proposal's board record (Interface/Entry): the
-// proposal itself plus the board's own status. The status starts `proposed`
-// and moves exactly once per decision (approved / denied / expired); the
-// board never decides - it reflects what the decision hook delivered into
-// the same inbox channel.
+/**
+ * @module Entry
+ *
+ * One spliced proposal's board record: the proposal itself plus the board's own status.
+ *
+ * @remarks
+ * The status starts `proposed` and moves exactly once per decision (approved / denied / expired);
+ * the board never decides - it reflects what the decision hook delivered into the same inbox
+ * channel.
+ */
 import type Proposal from "@Interface/Proposal.js";
 
 export default interface Entry {

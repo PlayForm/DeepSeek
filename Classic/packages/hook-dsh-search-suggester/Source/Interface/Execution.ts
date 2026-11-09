@@ -1,26 +1,32 @@
-// Execution - the suggester's domain types: the pack (the intents, their
-// signals and their target sets, plan section 3.6/8.2), the call view, the
-// detection, the scored candidates, and the learned knowledge shape. These
-// are the SELF-CONTAINED PoC declarations: the pack is data, and the end-phase
-// extraction (the core pattern service after two consumers) moves these
-// definitions, never their shapes.
-//
-// One intent = one pack row:
-//   id        - the intent kind (X of Searchable<X>);
-//   priority  - lower wins when two fire on one call (destructive first);
-//   threshold - the intent's own gate (destructive: 0.85, the rest 0.75);
-//   signals   - the rule table (plan R1-R11): a compiled-on-apply regex and
-//               the evidence weight each match contributes;
-//   targets   - the ordered candidate set: a path or glob, a prior, a digest
-//               hint, and the one reason phrase the model reads;
-//   familyGlobs - the long-tail families appended as one aggregate row;
-//   note      - the pack row's one-phrase caveat (absent when the domain has
-//               none; the search note keeps its standing caution instead).
-//
-// THE SYNTHETIC History ROW the post-execute listener builds from the
-// session's own tool calls is a FULL row of the same shape (the pack
-// library's `Family`), so the existing Detect/Filter/Score pipeline judges it
-// exactly like a resolved pack's family.
+/**
+ * @module Execution
+ *
+ * The suggester's domain types: the pack (the intents, their signals and their target sets,
+ * plan section 3.6/8.2), the call view, the detection, the scored candidates, and the learned
+ * knowledge shape.
+ *
+ * @remarks
+ * These are the SELF-CONTAINED PoC declarations: the pack is data, and the end-phase
+ * extraction (the core pattern service after two consumers) moves these definitions, never
+ * their shapes.
+ *
+ * One intent = one pack row:
+ *
+ *   - id - the intent kind (X of Searchable<X>);
+ *   - priority - lower wins when two fire on one call (destructive first);
+ *   - threshold - the intent's own gate (destructive: 0.85, the rest 0.75);
+ *   - signals - the rule table (plan R1-R11): a compiled-on-apply regex and the evidence
+ *     weight each match contributes;
+ *   - targets - the ordered candidate set: a path or glob, a prior, a digest hint, and the
+ *     one reason phrase the model reads;
+ *   - familyGlobs - the long-tail families appended as one aggregate row;
+ *   - note - the pack row's one-phrase caveat (absent when the domain has none; the search
+ *     note keeps its standing caution instead).
+ *
+ * THE SYNTHETIC History ROW the post-execute listener builds from the session's own tool calls
+ * is a FULL row of the same shape (the pack library's `Family`), so the existing
+ * Detect/Filter/Score pipeline judges it exactly like a resolved pack's family.
+ */
 export interface Signal {
 	/** The rule id (plan R1-R13) this row implements. */
 	rule: string;

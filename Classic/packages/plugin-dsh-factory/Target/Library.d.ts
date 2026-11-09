@@ -1,3 +1,73 @@
+/**
+ * @module Library
+ *
+ * The entry module of the FACTORY (@playform/plugin-dsh-factory), the FIRST
+ * class/service plugin in the governance family
+ * (docs/user/develop/framework/service.md).
+ *
+ * @remarks
+ * Loader contract: the class form - `export default class PluginFactory
+ * extends Service` with `super(Context, "pluginFactory")`, registered
+ * immediately on construction and removed with its owning fiber;
+ * `static inject = ["fs"]` because the factory's primitives call ctx.fs (the
+ * governed-file read and the version-guarded write). The ONLY named exports
+ * are the five TYPE re-exports (State/Options/Gate/Transform/Output - the
+ * consumer contract, P0-1): every other module is a nameless default export
+ * composed Rust-style, and each service method is a thin delegate to one
+ * Function module.
+ *
+ * THE SERVICE SURFACE (ctx.pluginFactory - every signature documented in
+ * README.md / SCHEME.md):
+ *
+ *     Append(state, message)                 - the ledger (logger + appendFileSync, never throws)
+ *     Match(path, list)                      - the exclusion segment match
+ *     Discover(dir) / Parse(path)            - the auxiliary plain-fs discovery (the exemption)
+ *     ResolvePolicy(state, dir, found, chain, opts?) - the union keep-list discovery (P3 chain-keys included)
+ *     Gate(state, target, observation, actor, opts)  - the g1 gate set (logs nothing)
+ *     Write(state, target, content, over?)   - the ONE shared write executor (intent/policy/observe/stash/transform)
+ *     GuardedWrite(state, target, content, version, signal?) - the GUARDED ALIAS of Write (P4 fence + Stash)
+ *     Refresh(state, target, actor, version) - the P3/U2 re-emit (same actor)
+ *     Continue(state, target, actor, dir, found, version, transform) - the detached contained continuation
+ *     State(ctx, config, {module, fields, policyFileName?}) - the State builder
+ *     Wire(ctx, state, observe)              - the fs/observed registration
+ *     Attach(ctx, {state, name})             - the P1 jobs + P2 inflight + P5 storage effects
+ *     Journal(state, event, path, detail)    - the P5 storage writer (best-effort)
+ *     Schema(shared?, module?)               - the Schemastery schema factory
+ *     UpdateKey(target)                      - the namespaced Inflight key for update stages
+ *     Seam(state, name)                      - the probe-once optional-service accessor
+ *     RegisterGovern(basename, name, run)    - the direct-govern step registration (the modules call it at apply)
+ *     Govern(target, selection, actor, version): Promise<void> - the direct-govern entry (the raw-write tool's post-write call; the SEQUENTIAL FOLD, v0.2.1)
+ *
+ * THE POLICY BLOCK (D6) - the two MODULE-LEVEL named helpers (not service
+ * methods, so the class surface stays at the documented nineteen):
+ *
+ *     Policy()                               - the shared policy-block builder (one key per action class)
+ *     Decide(policy, action)                 - the verdict lookup: "auto" | "approve"
+ *
+ * The `Allowlist` type re-export names the block's shape. Every orchestration
+ * package composes `policy: Policy()` into its own schema, maps the block to
+ * `State.Allow`, and consults `Decide(...)` before its gated action; the
+ * pack's `policy` section overrides the defaults when a pack is resolved (the
+ * wiring is the next refinement; the type already exists in lib-dsh-pack).
+ *
+ * THE DIRECT-GOVERN REGISTRY (`GovernSteps`, the SharedJournal pattern at the
+ * instance level): basename -> the ordered steps `{ name, run }` the modules
+ * registered at apply (`Function/Govern`). The run closures capture their own
+ * State, so every ledger string stays the MODULE'S own, byte-identical.
+ * `Govern` resolves the steps for the target's basename, filters them by the
+ * selection (`true`/"all" = all; an array or a single name = the named steps;
+ * unknown names ignored; false/absent = none), and runs each contained. The
+ * SEQUENTIAL FOLD (v0.2.1): the steps are AWAITED one at a time, so each
+ * step's chain (its guarded write + its ledger line) completes before the
+ * next step reads the file - the version-guarded writes can never race.
+ *
+ * The MODULE LEDGER STRINGS stay in the modules (the factory never owns
+ * them): the transform's messages, the activation proof, the observe-path
+ * lines. The factory's own composed strings are parameterized machinery
+ * (the unreadable-policy line, the suppressed-error lines prefixed with
+ * State.Module) and stay byte-identical when the module keeps its historical
+ * name.
+ */
 import { Service, type Context } from "@deepseek-ai/cordis";
 import type { FsObservation, FsTarget, FsVersion, FsWriteOutcome } from "@deepseek-ai/dsh-fs";
 import { type Registry as GovernRegistry, type Selection as GovernSelection } from "./Function/Govern.js";
@@ -11,6 +81,13 @@ import type Shape from "./Interface/State.js";
 import type Trace from "./Interface/Trace.js";
 import type Transform from "./Interface/Transform.js";
 import Version from "./Variable/Version.js";
+/** The NAMED TYPE exports (P0-1): the four structural contracts + the output
+ * shape, re-exported from the entry so consumers can `import type { State,
+ * Options, Gate, Transform, Output } from "@playform/plugin-dsh-factory"`
+ * instead of deriving them through `Parameters<Factory["…"]>[0]` - and
+ * instead of mirroring the shapes locally (the pre-fix structural mirrors).
+ * The declarations ship RELATIVE specifiers (the deterministic build emits
+ * ./Interface/*.js), so a consumer's tsconfig paths never re-map them. */
 export type { default as State } from "./Interface/State.js";
 export type { default as Options } from "./Interface/Options.js";
 export type { default as Gate } from "./Interface/Gate.js";
@@ -18,8 +95,24 @@ export type { default as Transform } from "./Interface/Transform.js";
 export type { default as Output } from "./Interface/Output.js";
 export type { default as Journal } from "./Interface/Journal.js";
 export type { default as Trace } from "./Interface/Trace.js";
+/** The policy block's shape (D6): the eight action classes and their verdict
+ * union. The builder is the `Policy` named export below, the lookup is
+ * `Decide` - the type cannot share the builder's name (TS2323), so the shape
+ * ships as `Allowlist`. */
 export type { default as Allowlist } from "./Interface/Allowlist.js";
+/** The compiled package version (Source/Variable/Version, built in by the
+ * ESBuild define) - NOT a loader key: the class-form loader contract
+ * (`export default class PluginFactory`, `static inject`) is unchanged, and
+ * no ledger or identity surface reads this export. */
 export { Version };
+/** The standalone SCHEMA helper (v0.1.1, P1): the module-level composition of
+ * the shared block + the module's own fields - `Schema(shared?, module?)`,
+ * exactly the instance method's delegate (`Function/Schema` never reads
+ * `this`). The loader needs `Config` at MODULE-EVALUATION time, before any
+ * context (and therefore any service instance) exists, so a consumer cannot
+ * literally `export const Config = factory.Schema(...)` - this named export
+ * is the module-load use. `shared: false` emits the MINIMAL block (only the
+ * universal log/logFile volatile cells) for non-manifest modules. */
 export declare function Schema(Shared?: {
     log?: boolean;
     logFile?: string;
@@ -28,8 +121,20 @@ export declare function Schema(Shared?: {
     exclude?: string[];
     policyFile?: string;
 } | false, Module?: Record<string, unknown>): ReturnType<typeof SchemaFn>;
+/** The POLICY-BLOCK builder (D6): the module-level composition of the shared
+ * per-action allowlist - `policy: Policy()` inside a consumer's own schema.
+ * Exactly the module-load use `Schema` has (the loader needs the composed
+ * `Config` at module-evaluation time), and exactly as `this`-free:
+ * `Function/Policy` never reads a service. The block is volatile as one
+ * object; the D6 defaults are read/index/record/suggest/message = "auto",
+ * write/commit/spawn = "approve". */
 export declare function Policy(): ReturnType<typeof PolicyFn>;
+/** The POLICY VERDICT lookup (D6): the action names are the block's keys, so
+ * `Decide(policy, "spawn")` answers "auto" | "approve". A missing key falls
+ * back to that action's D6 default (never a blanket "auto"), and a malformed
+ * value is treated as missing - the helper never throws. */
 export declare function Decide(Policy: Allowlist, Action: keyof Allowlist): "auto" | "approve";
+/** The service: class form, injected on fs, registered as `pluginFactory`. */
 export default class PluginFactory extends Service {
     static inject: string[];
     constructor(Context: Context);

@@ -1,9 +1,14 @@
-// File - the persisted state shape (Interface/File): what one durable store
-// holds - the members, the idle queue, the spliced proposals and the arbiter
-// gates. ONE shape, TWO sources: the JSON fallback's file (Function/Recover
-// reads it) and the KV domain's four tables (Function/Storage projects them
-// onto it), so the recovery (Function/Restore) is written once and both
-// stores feed it.
+/**
+ * @module File
+ *
+ * The persisted state shape: what one durable store holds - the members, the idle queue, the
+ * spliced proposals and the arbiter gates.
+ *
+ * @remarks
+ * ONE shape, TWO sources: the JSON fallback's file (Function/Recover reads it) and the KV domain's
+ * four tables (Function/Storage projects them onto it), so the recovery (Function/Restore) is
+ * written once and both stores feed it.
+ */
 import type Entry from "@Interface/Entry.js";
 import type Gate from "@Interface/Gate.js";
 import type Member from "@Interface/Member.js";

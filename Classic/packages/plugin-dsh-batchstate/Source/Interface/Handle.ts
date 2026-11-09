@@ -1,8 +1,13 @@
-// Handle - the structural shape of one OPEN storage domain (Interface/Handle):
-// the KV facet the plugin consumes, declared here so the plugin never imports
-// the storage library's types (an absent storage package can then never break
-// the module load - the factory's live-verified pitfall). The library's
-// Domain<S> satisfies this shape; the smokes' fake domain does too.
+/**
+ * @module Handle
+ *
+ * The structural shape of one OPEN storage domain: the KV facet the plugin consumes.
+ *
+ * @remarks
+ * Declared here so the plugin never imports the storage library's types (an absent storage package
+ * can then never break the module load - the factory's live-verified pitfall). The library's
+ * `Domain<S>` satisfies this shape; the smokes' fake domain does too.
+ */
 export default interface Handle {
 	/** Release the domain (the storage effect's disposer; idempotent). */
 	close(): Promise<void>;

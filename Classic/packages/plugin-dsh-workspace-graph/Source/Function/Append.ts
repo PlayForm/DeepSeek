@@ -1,9 +1,16 @@
+import * as FileSystem from "node:fs";
+import { dirname as Parent } from "node:path";
+
+import type State from "@Interface/State.js";
+import { Expand } from "@playform/lib-dsh-core";
+
 /**
  * @module Append
  *
  * The ledger write: one global log line through the module's own channel.
  *
  * @remarks
+ *
  * The family's Append pattern writes the logger first, then the durable ledger file. The logger
  * prefix is the module's frozen `graph: ` tag; the message strings are the module's own and
  * byte-stable (the brief's section 4.6 list).
@@ -15,12 +22,6 @@
  *
  * Both writes are best-effort and never rethrow.
  */
-import * as FileSystem from "node:fs";
-import { dirname as Parent } from "node:path";
-
-import type State from "@Interface/State.js";
-import { Expand } from "@playform/lib-dsh-core";
-
 export default (StateRef: State, Message: string): void => {
 	try {
 		StateRef.Context.logger.info(`graph: ${Message}`);

@@ -1,10 +1,15 @@
-// Filter - the BASE-AWARE workspace filter over the detections: each intent's
-// candidate set is reduced to the targets that exist under any of the call's
-// three bases (the repo root, the package root, the package parent), BEFORE
-// the score/gate step (the runner-up intent too, since a close second folds
-// into the same note). An intent whose whole candidate set is absent survives
-// as a detection with zero targets, and Score turns that into the
-// `no-companions` abstention.
+/**
+ * @module Filter
+ *
+ * The base-aware workspace filter over the detections: each intent's candidate set is reduced
+ * to the targets that exist under any of the call's three bases.
+ *
+ * @remarks
+ * The three bases are the repo root, the package root and the package parent. The reduction
+ * happens BEFORE the score/gate step (the runner-up intent too, since a close second folds
+ * into the same note). An intent whose whole candidate set is absent survives as a detection
+ * with zero targets, and Score turns that into the `no-companions` abstention.
+ */
 import type { Detection, Intent } from "../Interface/Execution.js";
 import Exists from "./Exists.js";
 

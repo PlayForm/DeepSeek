@@ -1,3 +1,55 @@
+/**
+ * @module State
+ *
+ * The per-apply plugin state: the factory's shared shape (built by
+ * `Factory.State(ctx, config, { ... })` - factory SCHEME.md section 2.10) extended with the
+ * search suggester's own fields.
+ *
+ * @remarks
+ * The shared half comes from the factory's NAMED type export (`State`): the built
+ * Target/Library.d.ts ships RELATIVE specifiers, so a consumer's tsconfig paths never hijack
+ * the declaration imports. The shared machinery that stays inert here: Tool/Policy/PolicyName/
+ * List (no fs/observed machinery - the suggester is a NON-MANIFEST module), Stash/Inflight/
+ * Subprocess/Seams/Queue/Journal (no governance traffic; the only journal-domain line is the
+ * activation record, best-effort).
+ *
+ * The search suggester's own fields:
+ *
+ *   - On - the master switch (config `enabled`, volatile);
+ *   - Threshold - the default confidence gate (config `threshold`, volatile);
+ *   - MaxCandidates / MaxNoteChars / CooldownCalls / MaxNotesPerTurn - the note's shape and
+ *     the noise control (volatile);
+ *   - Intents - the enabled intent kinds of an EXPLICIT pack, in priority order (volatile;
+ *     the synthetic History row is never filtered);
+ *   - EmitOn - the judged tools (volatile);
+ *   - ScopeRoots / Exclude - the scope and the exclusions (volatile);
+ *   - Learn / LearnWindow - the learner's switch and window (volatile);
+ *   - PersistPath / IndexPath / RefreshOnBoot - the memory paths (structural; IndexPath is
+ *     retired by the P2 re-spec);
+ *   - DismissTtl / Seed - the dismissal TTL and the offline seed switch (volatile; the
+ *     seed's source is the EXPLICIT pack);
+ *   - SectionMode / SectionTtl - the second surface (volatile);
+ *   - Pack - EMPTY at apply: the candidates come from the session history, and only an
+ *     EXPLICIT repo/user pack is compiled (per call, in Function/Apply). The literal built-in
+ *     pack is NEVER a candidate source;
+ *   - Knowledge - the learned knowledge (Function/Persist), loaded once at apply and saved
+ *     after each emit/follow/dismiss (best-effort);
+ *   - Rings - the per-agent ring tracker (Function/Ring);
+ *   - Factory - the injected factory service itself (the ledger via Factory.Append) -
+ *     assigned once in Function/Apply.
+ *
+ * THE HISTORY IS NOT A STATE FIELD: the per-session touch history is a session-projection
+ * unit (Function/Unit, keyed on `ctx.sessionProjections`), so the registry owns one cell per
+ * session and Function/History reads it at detection time through `stateOf(session, key)`.
+ * Nothing here holds it, and no WeakMap in this module is keyed on the session object. The
+ * unit's structural types live in Interface/Session.ts (Interface/Projection.ts is the
+ * unrelated P2 graph projection).
+ *
+ * Test probes (the end-phase) read the state through the
+ * `ctx.__hookDshSearchSuggesterState` attachment (never a return value from `apply` - the
+ * loader treats apply returns specially, a live-verified lesson recorded in the
+ * plugin-development skill).
+ */
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 import type Ring from "../Function/Ring.js";

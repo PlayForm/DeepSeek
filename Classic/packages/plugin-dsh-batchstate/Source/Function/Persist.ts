@@ -1,30 +1,31 @@
-// Persist - the state write (Function/Persist): the PRIMARY/FALLBACK split
-// of the completion spec's wave 3 storage migration.
-//
-// THE PRIMARY: the storage-domain KV domain (Function/Storage, the config
-// `domain`). Every state change writes the FULL state into the four tables -
-// the members keyed by id, the queue under `__queue`, the proposals keyed by
-// id, the gates keyed by name - and every table is RECONCILED first: a record
-// the live state no longer holds is deleted, so a clear cannot resurrect a
-// member from the medium. The writes are serialised on State.Pending (the
-// same chain the open/recovery runs on), so the open always lands before the
-// first write and the smokes can await the chain without a sleep.
-//
-// THE FALLBACK: the well-known JSON file (the plan's file-based fallback),
-// engaged only when no storage facility is present or its open failed. Its
-// write is SYNCHRONOUS and unconditional - the exact behaviour the file-only
-// lane shipped, so a mount without storage keeps the file readable the moment
-// a state change returns (the restart smokes depend on that ordering).
-//
-// THE FILE IS THE PLUGIN'S OWN STORE: a plain fs write, NOT a governed file
-// (the same documented exemption the ledger carries - ctx.fs has no append,
-// and re-reading + rewriting the plugin's own snapshot through a governed
-// write would be both racy and wrong). The tilde is expanded once at the
-// write site (the config default is `~/.dsh/batch-state.json`).
-//
-// Best-effort: a failed persist (a missing parent directory, a read-only
-// volume, a closed domain) is swallowed - the ledger and the live state stay
-// the truth, and a state change must never fail on its store.
+/**
+ * @module Persist
+ *
+ * The state write: the PRIMARY/FALLBACK split of the completion spec's wave 3 storage migration.
+ *
+ * @remarks
+ * THE PRIMARY: the storage-domain KV domain (Function/Storage, the config `domain`). Every state
+ * change writes the FULL state into the four tables - the members keyed by id, the queue under
+ * `__queue`, the proposals keyed by id, the gates keyed by name - and every table is RECONCILED
+ * first: a record the live state no longer holds is deleted, so a clear cannot resurrect a member
+ * from the medium. The writes are serialised on State.Pending (the same chain the open/recovery
+ * runs on), so the open always lands before the first write and the smokes can await the chain
+ * without a sleep.
+ *
+ * THE FALLBACK: the well-known JSON file (the plan's file-based fallback), engaged only when no
+ * storage facility is present or its open failed. Its write is SYNCHRONOUS and unconditional - the
+ * exact behaviour the file-only lane shipped, so a mount without storage keeps the file readable
+ * the moment a state change returns (the restart smokes depend on that ordering).
+ *
+ * THE FILE IS THE PLUGIN'S OWN STORE: a plain fs write, NOT a governed file (the same documented
+ * exemption the ledger carries - ctx.fs has no append, and re-reading + rewriting the plugin's own
+ * snapshot through a governed write would be both racy and wrong). The tilde is expanded once at
+ * the write site (the config default is `~/.dsh/batch-state.json`).
+ *
+ * Best-effort: a failed persist (a missing parent directory, a read-only volume, a closed domain)
+ * is swallowed - the ledger and the live state stay the truth, and a state change must never fail
+ * on its store.
+ */
 import { mkdirSync as Make, writeFileSync as Write } from "node:fs";
 import { dirname as Parent } from "node:path";
 

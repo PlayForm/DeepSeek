@@ -4,6 +4,7 @@
  * The minimal matcher for the config's include and exclude globs.
  *
  * @remarks
+ *
  * `**` matches across separators, `*` within one, `?` a single character, and everything
  * else is literal.
  *

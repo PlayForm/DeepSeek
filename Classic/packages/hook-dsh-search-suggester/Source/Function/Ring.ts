@@ -1,8 +1,14 @@
-// Ring - the per-agent state (the tool-coach precedent): a WeakMap keyed on
-// the Agent object holding the last 8 tool calls (name + classified text +
-// path), the intent ids they produced, the cooldown counters, the dedupe set
-// and the per-turn note count. Reset on `agent/pre-step` when a user message
-// enters the step (the per-turn boundary of plan section 4.2).
+/**
+ * @module Ring
+ *
+ * The per-agent state (the tool-coach precedent): a WeakMap keyed on the Agent object.
+ *
+ * @remarks
+ * The map holds the last 8 tool calls (name + classified text + path), the intent ids they
+ * produced, the cooldown counters, the dedupe set and the per-turn note count. Reset on
+ * `agent/pre-step` when a user message enters the step (the per-turn boundary of plan section
+ * 4.2).
+ */
 import type { CallView } from "../Interface/Execution.js";
 
 /** One ring entry: the call view plus the intent id the classifier produced. */

@@ -1,13 +1,43 @@
+/**
+ * @module Events
+ *
+ * The STRUCTURAL TYPES of the wave-2 runtime data plus the service and event
+ * vocabulary the wave-2 listeners consume (IMPLEMENTATION-DESIGN.md sections
+ * 2-6). Pure data and declarations - no behavior.
+ *
+ * @remarks
+ * THE PARITY RULE FOR TYPES: the @deepseek-ai jobs/shell/subagent/agent-loop
+ * packages are NOT workspace devDependencies (only dsh-tools, dsh-system-prompt
+ * and dsh-llm are, per the family precedent), so the wave-2 code binds to them
+ * STRUCTURALLY: the shapes below were verified first-hand against the running
+ * harness's own packages (app.asar, read in place 2026-10-20) and are kept
+ * minimal - only the fields this plugin reads or writes. The SCHEME documents
+ * this coupling like the fabricated-result coupling of the execute arm.
+ *
+ * The event names the plugin registers but whose owning packages are not in
+ * the workspace (`session/event` - the dsh-session log event bus; the
+ * `agent/inbox/spliced` events ride it) are registered through the cordis
+ * Context's structural `on(name: string | symbol, ...)` overload, never
+ * through a new Events-interface augmentation: re-declaring a name another
+ * package already augments would be a conflicting duplicate.
+ */
 /** One resolved shell execution spec (the ctx.shell.resolve product). */
 export interface ShellSpecification {
+    /** The command line to run. */
     command: string;
+    /** The working directory (default: the session cwd). */
     workdir?: string | undefined;
+    /** The inline deadline in ms. */
     timeoutMs?: number | undefined;
+    /** The trusted-environment variables (the shellEnv.collect product). */
     dshEnv?: unknown;
+    /** The sandbox policy (the sandboxPolicy.resolve product). */
     sandboxPolicy?: {
         mode: string;
     } | undefined;
+    /** The inline-expiry policy ("none" for every detached dispatch). */
     onExpiry?: "none" | "kill" | undefined;
+    /** The job-owned cancellation signal. */
     signal?: AbortSignal | undefined;
 }
 /** One non-consuming stream reader over a process's captured output. */
@@ -21,32 +51,46 @@ export interface StreamReader {
 }
 /** One settled or running process handle (the ctx.shell.execute product). */
 export interface ShellProcess {
+    /** The process state. */
     status: "running" | "completed" | "killed";
+    /** The exit code (null while running or on a kill). */
     exitCode: number | null;
+    /** The terminating signal (null when none). */
     signal: string | null;
+    /** The two observed stream readers. */
     observed: {
         stdout: StreamReader;
         stderr: StreamReader;
     };
+    /** Resolves with the exit facts when the process finishes. */
     done: Promise<{
         exitCode: number | null;
         signal: string | null;
     }>;
+    /** Kill the process (best-effort). */
     kill(): boolean;
+    /** The awaited foreground projection. */
     result(): Promise<ShellResult>;
 }
 /** The foreground result projection of one finished shell run. */
 export interface ShellResult {
+    /** The exit code (null on a kill). */
     exitCode: number | null;
+    /** The terminating signal (null when none). */
     signal: string | null;
+    /** Whether the inline deadline expired. */
     timedOut?: boolean | undefined;
+    /** Whether the run was aborted. */
     aborted?: boolean | undefined;
+    /** The inline deadline in ms. */
     timeoutMs?: number | undefined;
+    /** The stdout projection. */
     stdout: {
         text: string;
         truncated: boolean;
         spillPath?: string;
     };
+    /** The stderr projection. */
     stderr: {
         text: string;
         truncated: boolean;
@@ -58,12 +102,16 @@ export interface ShellExecution extends ShellProcess {
 }
 /** The shell capability seam (verified against dsh-shell/dsh-bash-local). */
 export interface Shell {
+    /** Resolve one request into the canonical spec (sandbox + deadlines included). */
     resolve(request: Partial<ShellSpecification>): ShellSpecification;
+    /** Execute one resolved spec. */
     execute(spec: ShellSpecification): Promise<ShellExecution>;
+    /** The harness's sandbox mode label, when exposed. */
     sandboxMode?: string;
 }
 /** The trusted-environment collector (verified against dsh-tool-bash usage). */
 export interface ShellEnv {
+    /** Collect the trusted-environment variables for one exec. */
     collect(exec: {
         agent?: unknown;
         signal?: AbortSignal;
@@ -71,11 +119,14 @@ export interface ShellEnv {
 }
 /** The working-directory seam (verified against dsh-tool-bash usage). */
 export interface WorkingDirectory {
+    /** Ensure the session's working directory and return it. */
     ensure(agent: unknown, signal?: AbortSignal): Promise<string | undefined>;
 }
 /** One job output pull source (verified against dsh-jobs-local startPump). */
 export interface JobSource {
+    /** The stream the source reads. */
     channel: "stdout" | "stderr";
+    /** Read non-consumingly from one byte offset. */
     read(fromByte: number): {
         text: string;
         nextOffset: number;
@@ -85,15 +136,22 @@ export interface JobSource {
 }
 /** The producer-facing job spec (verified against dsh-jobs-local start()). */
 export interface JobSpecification {
+    /** The job kind ("bash" for the detach path, "monitor" for the monitor path). */
     kind: string;
+    /** The human label (the first bytes of the command, or the monitor label). */
     label: string;
+    /** The originating tool call ids. */
     toolCall?: {
         callId: string;
         rootCallId: string;
     } | undefined;
+    /** The owning agent's session id. */
     owner?: string | undefined;
+    /** The ring byte cap. */
     outputLimitBytes?: number | undefined;
+    /** The pull sources the registry pumps. */
     output?: JobSource[] | undefined;
+    /** The producer adapter: one `run` plus its done/cancel pair. */
     run(handle: {
         append(text: string, options?: unknown): void;
         updateProgress(line: string): void;
@@ -107,16 +165,27 @@ export interface JobSpecification {
 }
 /** The read-only job projection (verified against dsh-jobs-local view()). */
 export interface JobView {
+    /** The registry job id. */
     id: string;
+    /** The job kind. */
     kind: string;
+    /** The human label. */
     label: string;
+    /** The owning agent's session id. */
     owner?: string | undefined;
+    /** The ring byte cap. */
     outputLimitBytes?: number | undefined;
+    /** The job state. */
     status: "running" | "stopping" | "completed" | "killed" | "failed";
+    /** The latest progress line. */
     progress?: string | undefined;
+    /** The settled detail (the exit detail or kill reason). */
     detail?: string | undefined;
+    /** The start time in clock ms. */
     startedAt: number;
+    /** The finish time in clock ms. */
     finishedAt?: number | undefined;
+    /** The ring's totals and spill paths. */
     output: {
         total: number;
         earliest: number;
@@ -140,9 +209,13 @@ export type JobEvent = {
 };
 /** The jobs capability seam (verified against dsh-jobs-local). */
 export interface JobsRegistry {
+    /** Start one job and return its id. */
     start(spec: JobSpecification): string;
+    /** List the visible jobs. */
     list(caller?: string): JobView[];
+    /** Get one job's view (caller-scoped). */
     get(id: string, caller?: string): JobView;
+    /** Read a job's ring chunks. */
     read(id: string, caller?: string): {
         chunks: {
             channel: string;
@@ -151,15 +224,21 @@ export interface JobsRegistry {
         }[];
         lossy: boolean;
     };
+    /** Read a job's ring from one byte offset (owner-authorized only). */
     readAt(id: string, from: number, caller?: string): {
         text: string;
         nextOffset: number;
         lossy: boolean;
     };
+    /** Kill one job and return the reason. */
     kill(id: string, caller: string | undefined, reason?: string): string;
+    /** Wait for one job's settlement (with a timeout and a signal). */
     wait(id: string, timeoutMs: number, caller?: string, signal?: AbortSignal): Promise<JobView>;
+    /** Remove one settled job's record. */
     remove(id: string, caller?: string): void;
+    /** Attach a named controller. */
     attachController(name: string): unknown;
+    /** The registry's event stream (the subscribe seam). */
     events: {
         subscribe(filter: {
             owner?: string;
@@ -170,9 +249,13 @@ export interface JobsRegistry {
 }
 /** One inbox splice record (verified against dsh-agent-loop's splice event). */
 export interface InboxSplice {
+    /** The target session id. */
     target: string;
+    /** The splice start index. */
     start: number;
+    /** How many messages were removed. */
     removedCount?: number;
+    /** The inserted messages. */
     inserted: {
         source?: {
             kind?: string;
@@ -182,29 +265,42 @@ export interface InboxSplice {
             text?: string;
         }[];
     }[];
+    /** The splice outcome payload. */
     outcome?: unknown;
 }
 /** One session log event (the dsh-session `session/event` bus payload). */
 export interface SessionEvent {
+    /** The event's sequence number. */
     seq: number;
+    /** The event type. */
     type: string;
+    /** The event payload. */
     data: unknown;
+    /** The source event sequences the event derives from. */
     sourceEventSeqs?: number[];
 }
 /** The subagent activation request (verified against dsh-subagent). */
 export interface ActivationRequest {
+    /** The parent session. */
     parent: {
         id: string;
     };
+    /** The child's prompt. */
     prompt: string;
+    /** The depth cap. */
     maxDepth?: number;
+    /** Extra agent options. */
     agentOptions?: Record<string, unknown>;
+    /** The agent preset id. */
     agentPreset?: string;
+    /** The structured output schema. */
     outputSchema?: Record<string, unknown>;
+    /** The child's working directory. */
     cwd?: string;
 }
 /** The subagent capability seam (verified against dsh-subagent README). */
 export interface Subagent {
+    /** Start one detached activation. */
     startActivation(spec: {
         provider: string;
         label: string;
@@ -223,6 +319,7 @@ export interface Subagent {
 }
 /** The agents registry seam (verified against dsh-agent + dsh-tool-jobs). */
 export interface AgentsRegistry {
+    /** Get one agent's registry record. */
     get(id: string): {
         id: string;
         status?: string;
@@ -230,9 +327,13 @@ export interface AgentsRegistry {
 }
 /** The bounded private tail of one detached job (the Jobs.JobTail shape). */
 export interface TailBuffer {
+    /** The stdout side of the bounded tail. */
     Stdout: string;
+    /** The stderr side of the bounded tail. */
     Stderr: string;
+    /** Append one channel's chunk, keeping the buffer bounded. */
     Append(channel: "stdout" | "stderr", text: string): void;
+    /** Render the bounded tail (the total cap applied). */
     Render(): string;
 }
 /** One detached command's per-agent record (the completion + fleet source). */
@@ -267,10 +368,15 @@ export interface DetachRecord {
 }
 /** The per-exec tag the pre-execute arm leaves for the execute arm. */
 export interface TagRecord {
+    /** The registry job id. */
     jobId: string;
+    /** The owning agent's session id. */
     agentId: string;
+    /** The tool that was transformed. */
     tool: string;
+    /** The resolved workdir for the fabricated result. */
     cwd: string | undefined;
+    /** The timeout the fabricated result reports. */
     timeoutMs: number;
     /** Whether the tag is a dedup hit (the already-running line, not a fresh marker). */
     dedup: boolean;
@@ -307,10 +413,13 @@ export interface LeaseEntry {
 }
 /** One planted board member's row state. */
 export interface BoardMember {
+    /** The member's agent id. */
     agentId: string;
+    /** The row's state. */
     status: "running" | "stalled" | "stale" | "done" | "failed";
     /** The latest report payload, capped (the row's text). */
     lastReport: string;
+    /** The clock ms of the last report. */
     lastReportAt: number | undefined;
     /** The settled summary (first line of the answer, capped). */
     summary: string | undefined;
@@ -319,14 +428,19 @@ export interface BoardMember {
 }
 /** One planted board (the I5 lease + the D2 3.4 design). */
 export interface BoardState {
+    /** The board's label (its per-agent key). */
     id: string;
+    /** The owning agent's session id. */
     agentId: string;
+    /** The board type. */
     plantType: "agent-board" | "todo-fill" | "aggregate" | "custom" | "monitors";
     /** The template for the "custom" type (the rendered body). */
     template: string | undefined;
+    /** The expected member count. */
     expect: number;
     /** The member slots; length <= expect; overflow members are counted only. */
     members: BoardMember[];
+    /** The unboarded children that reported. */
     overflow: {
         agentId: string;
         summary: string;
@@ -345,9 +459,11 @@ export interface BoardState {
         reporters: Map<string, LeaseEntry>;
         state: "open" | "stale" | "closed";
     };
+    /** The open time in clock ms. */
     openedAt: number;
     /** The clock ms after which empty slots drop and the board closes. */
     closeAt: number;
+    /** The close time in clock ms. */
     closedAt: number | undefined;
     /** Whether the closing line rendered (withdraw after one request). */
     closeRendered: boolean;
@@ -364,19 +480,26 @@ export interface BoardState {
 }
 /** One stored suggestion (the I6 configured-block design). */
 export interface Suggestion {
+    /** The suggestion id (`sug-<4 hex>`). */
     id: string;
+    /** The owning agent's session id. */
     agentId: string;
+    /** The suggested template's catalog id. */
     templateId: string;
+    /** The mini-model's fit answer. */
     fit: "yes" | "no" | "unknown";
+    /** The rationale, capped. */
     rationale: string;
     /** The clamped tokens (the stored configuration verbatim at accept). */
     tokens: {
         expectAgents?: number;
         steps?: string[];
     };
+    /** The turn that spawned the suggestion. */
     createdTurn: number;
     /** Rendered once, then withdrawn (the one-assembly window). */
     renderedTurn: number | undefined;
+    /** Whether the suggestion is withdrawn. */
     withdrawn: boolean;
     /** Whether the dormant block was planted (autoPlant). */
     planted: boolean;
@@ -409,14 +532,19 @@ export interface CheckSetSpecification {
 }
 /** One watchlist entry (config `watchlist[]`; design section 3.2). */
 export interface WatchlistEntry {
+    /** The glob the entry matches. */
     glob: string;
+    /** The check-set ids the entry enrolls. */
     checks: string[];
 }
 /** One persisted monitor record (the storage domain's `checks` table row;
  * design section 1). */
 export interface MonitorRecord {
+    /** The record kind. */
     event: "monitor-enrolled" | "monitor-check" | "monitor-retired";
+    /** The displayPath. */
     path: string;
+    /** The owning session (agent id). */
     agent: string;
     /** The raw fs/observed version token, verbatim. */
     version: string;
@@ -432,10 +560,12 @@ export interface MonitorRecord {
     infra: string | null;
     /** The bounded tail (<= 2 KiB), embedded. */
     tail: string;
+    /** The record's provenance. */
     provenance: "live" | "recovered";
 }
 /** One check result (design section 3.5). */
 export interface CheckResult {
+    /** The check set the result belongs to. */
     setId: string;
     /** The registry id (the job_output hint). */
     jobId: string;
@@ -445,10 +575,13 @@ export interface CheckResult {
     checkedVersion: string;
     /** The writer of the checked version. */
     writer: string;
+    /** The exit code (null on infra/kill/deny). */
     exit: number | null;
+    /** The infrastructure note (null when a plain exit). */
     infra: string | null;
     /** The bounded head-tail (<= 2 KiB). */
     tail: string;
+    /** The result's provenance. */
     provenance: "live" | "recovered";
 }
 /** One enrolled file's monitor state (design section 3.5). Staleness is
@@ -460,6 +593,7 @@ export interface MonitorEntry {
     pathKey: string;
     /** The owning session (agent id). */
     agentId: string;
+    /** The enrollment time in clock ms. */
     enrolledAt: number;
     /** The latest observed version token (verbatim). */
     lastVersion?: string | undefined;
@@ -481,9 +615,13 @@ export interface MonitorEntry {
 /** One live monitor job's record (State.MonitorJobs; design section 2). The
  * settle fold, the board skip guard and the deadline scan read it. */
 export interface MonitorJobRecord {
+    /** The owning session (agent id). */
     agentId: string;
+    /** The displayPath. */
     path: string;
+    /** The targetKey (the state key). */
     pathKey: string;
+    /** The check set the job runs. */
     setId: string;
     /** The clock ms at dispatch (the deadline scan's start). */
     startedAt: number;

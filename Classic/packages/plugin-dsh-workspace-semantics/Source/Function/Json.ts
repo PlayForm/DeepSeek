@@ -1,14 +1,21 @@
-// Json - the JSON adapter (Function/Json): the file's keys are its symbols and
-// a string VALUE that repeats a key's text is a reference to that key (the v0
-// JSON cross-reference convention: JSON has no identifier space beyond the
-// key/string namespace, so a repeated string is the only in-file reference the
-// format offers). Nested keys are NOT qualified in v0: the symbol name is the
-// key token, so the same key in two objects is one symbol name.
-//
-// The spans are the token's INNER range (without the quotes): the rename plan
-// rewrites that range, so the quotes survive. The certainty is "references":
-// the plan rewrites every key and every value token with the same text - the
-// reference list's reach, not a scope analysis.
+/**
+ * @module Json
+ *
+ * The JSON adapter: the file's keys are its symbols and a string value that
+ * repeats a key's text is a reference to that key.
+ *
+ * @remarks
+ * A string VALUE that repeats a key's text is a reference to that key (the v0
+ * JSON cross-reference convention: JSON has no identifier space beyond the
+ * key/string namespace, so a repeated string is the only in-file reference the
+ * format offers). Nested keys are NOT qualified in v0: the symbol name is the
+ * key token, so the same key in two objects is one symbol name.
+ *
+ * The spans are the token's INNER range (without the quotes): the rename plan
+ * rewrites that range, so the quotes survive. The certainty is "references":
+ * the plan rewrites every key and every value token with the same text - the
+ * reference list's reach, not a scope analysis.
+ */
 import type Adapter from "@Interface/Adapter.js";
 import type ReferenceNode from "@Interface/ReferenceNode.js";
 import type Span from "@Interface/Span.js";
