@@ -1,0 +1,1 @@
+function u(e,s){if(typeof document>"u")return;const n=`${e}/client.css`;if(document.querySelector(`style[data-plugin-css="${n}"]`)!==null)return;const t=document.createElement("style");t.dataset.plugin=e,t.dataset.pluginCss=n,t.textContent=s,document.head.append(t)}export{u as default};

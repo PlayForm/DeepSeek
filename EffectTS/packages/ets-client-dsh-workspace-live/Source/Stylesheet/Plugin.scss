@@ -1,0 +1,100 @@
+// Plugin.scss for @playform/client-dsh-workspace-live: the shared faces come from
+// the material, while the selectors and the geometry stay this plugin's own.
+@use "@playform/style-dsh-material/Source/Stylesheet/Material" as Material;
+
+.playform-workspace-live {
+	@include Material.Scroll;
+}
+
+.playform-workspace-header {
+	@include Material.Heading;
+
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.playform-workspace-dot {
+	@include Material.Lamp(7px);
+
+	flex: none;
+	background: var(--dsw-alias-state-idle-primary);
+}
+
+.playform-workspace-dot[data-live="true"] {
+	background: var(--dsw-alias-state-success-primary);
+}
+
+.playform-workspace-title {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.playform-workspace-count {
+	@include Material.Meta;
+
+	margin-left: auto;
+}
+
+.playform-workspace-representations {
+	display: grid;
+	gap: 8px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.playform-workspace-representations li {
+	@include Material.Surface;
+
+	display: grid;
+	gap: 2px;
+	padding: 10px 12px;
+}
+
+.playform-workspace-representation-label {
+	@include Material.Truncate;
+
+	color: var(--dsw-alias-label-primary);
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 18px;
+}
+
+.playform-workspace-representation-meta {
+	@include Material.Code;
+}
+
+.playform-workspace-live > p {
+	@include Material.Notice;
+	@include Material.NoticeFrame;
+}
+
+.playform-workspace-trace {
+	@include Material.Tray(160px);
+}
+
+.playform-workspace-trace li {
+	@include Material.Truncate;
+}
+
+.playform-workspace-trace li[data-kind="batch/decision"],
+.playform-workspace-trace li[data-kind="batch/state-change"] {
+	color: var(--dsw-alias-brand-primary);
+}
+
+.playform-workspace-live[data-live="false"] .playform-workspace-trace {
+	opacity: 0.55;
+}
+
+.playform-family-section .playform-workspace-live {
+	max-width: none;
+	margin: 0;
+	padding: 0;
+	overflow: visible;
+}
+
+.playform-family-section .playform-workspace-header {
+	display: none;
+}

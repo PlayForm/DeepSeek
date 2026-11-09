@@ -89,6 +89,12 @@ This package keeps no ledger file, because it is a pure client with no host writ
 | `Store-And-Snapshot`   | 11 PASS | the stable-until-event store, the ingest fold, the bounds, the refresh                                                                                         |
 | `Child-Slot-And-Trace` | 12 PASS | the child-slot declaration + the section inject face (panel family composed), the D5 ingest, the newest-first bounded tail, the static state, the built bundle |
 
+`Source/Stylesheet/Plugin.scss` is the sheet - the plugin's own, `@use`ing the shared
+`@playform/style-dsh-material` material - and `Source/Variable/Styles.ts` is its generated twin
+(`pnpm stylesheets`). `Source/Function/Styles.ts` binds the identifier to the shared
+`@playform/ets-lib-dsh-style` injector, and `pnpm prepublishOnly` fails when the twin drifts from
+the sheet.
+
 ## The plan
 
 - [Workspace-Family/LIVE](../../Documentation/Plans/Workspace-Family/LIVE.md) - the live-view plan.
