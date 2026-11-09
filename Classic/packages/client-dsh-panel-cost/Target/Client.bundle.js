@@ -1378,7 +1378,10 @@ var CallTable = (Entry, Columns2, Currency, t) => {
       default:
         return (0, import_react3.createElement)(
           "table",
-          { className: "playform-cost-table", "aria-label": t("contributions.calls.title") },
+          {
+            className: "playform-cost-table",
+            "aria-label": t("contributions.calls.title")
+          },
           (0, import_react3.createElement)(
             "colgroup",
             {},
@@ -1420,11 +1423,7 @@ var CallTable = (Entry, Columns2, Currency, t) => {
   return (0, import_react3.createElement)(
     "tr",
     {},
-    (0, import_react3.createElement)(
-      "td",
-      { className: "playform-cost-detail-cell", colSpan: Columns2 },
-      Body
-    )
+    (0, import_react3.createElement)("td", { className: "playform-cost-detail-cell", colSpan: Columns2 }, Body)
   );
 };
 function ContributionsPage(Props) {
@@ -2931,11 +2930,7 @@ var OverviewPage_default = (Props) => {
     // is the cache-write premium the reads did not pay back.
     Stat(
       t("overview.saving"),
-      Saving < 0 ? (0, import_react6.createElement)(
-        "span",
-        { className: "playform-cost-removed" },
-        Price(Saving, Tag)
-      ) : Price(Saving, Tag),
+      Saving < 0 ? (0, import_react6.createElement)("span", { className: "playform-cost-removed" }, Price(Saving, Tag)) : Price(Saving, Tag),
       Saving < 0 ? t("saving.negative.title") : t("files.saving.title")
     ),
     Stat(
@@ -4834,7 +4829,9 @@ function View(Props) {
   const [Attempt, SetAttempt] = (0, import_react13.useState)(0);
   const [Truncated, SetTruncated] = (0, import_react13.useState)(false);
   const [Older, SetOlder] = (0, import_react13.useState)("idle");
-  const [Pane, SetPane] = (0, import_react13.useState)("overview");
+  const [Pane, SetPane] = (0, import_react13.useState)(
+    "overview"
+  );
   const [Files2, SetFiles] = (0, import_react13.useState)([]);
   const [FileFilter, SetFileFilter] = (0, import_react13.useState)(FileFilters_default.Default);
   const [TurnMode, SetTurnMode] = (0, import_react13.useState)("newest");

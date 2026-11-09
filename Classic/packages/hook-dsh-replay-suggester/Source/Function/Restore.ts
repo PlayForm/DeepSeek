@@ -1,20 +1,28 @@
-// Restore - the shared store recovery (Function/Restore): validate the rows
-// the tier returned, keep the newest `historyDepth`, and repopulate the
-// in-memory mirror and the sequence counter. Both tiers (the KV domain and the
-// JSON fallback) land here, so their behaviour is identical.
-//
-// THE VALIDATION IS LENIENT BY DESIGN (the seeded reader's posture): a row
-// that is not a plausible Entry is dropped, never guessed. The newest-first
-// order is the ring's order and the note's order.
-//
-// THE LEDGER: one line per mount - `store recovered <n> entries (<source>)`
-// when the tier held anything, `store empty (starting fresh)` when it held
-// nothing. Byte-exact (SCHEME.md) and distinct from the seeded history
-// reader's lines: this is the PRODUCER's own store, not the fixtures' seed.
+/**
+ * @module Restore
+ *
+ * The shared store recovery: it validates the rows a tier returned, keeps the
+ * newest `historyDepth`, and repopulates the mirror and the sequence counter.
+ *
+ * @remarks
+ * Both tiers (the KV domain and the JSON fallback) land here, so their
+ * behaviour is identical.
+ *
+ * THE VALIDATION IS LENIENT BY DESIGN (the seeded reader's posture): a row
+ * that is not a plausible Entry is dropped, never guessed. The newest-first
+ * order is the ring's order and the note's order.
+ *
+ * THE LEDGER: one line per mount - `store recovered <n> entries (<source>)`
+ * when the tier held anything, `store empty (starting fresh)` when it held
+ * nothing. Byte-exact (SCHEME.md) and distinct from the seeded history
+ * reader's lines: this is the PRODUCER's own store, not the fixtures' seed.
+ */
 import type Entry from "@Interface/Entry.js";
 import type State from "@Interface/State.js";
 
-/** Whether a parsed value is a plausible entry. */
+/**
+ * Whether a parsed value is a plausible entry.
+ */
 const Valid = (Value: unknown): Value is Entry => {
 	if (Value === null || typeof Value !== "object") {
 		return false;

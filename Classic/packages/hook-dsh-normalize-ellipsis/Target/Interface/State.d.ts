@@ -42,7 +42,7 @@
  * returns specially, a live-verified lesson recorded in the
  * plugin-development skill).
  */
-import type { Scopes } from "@Interface/Config.js";
+import type { Scopes } from "./Config.js";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {

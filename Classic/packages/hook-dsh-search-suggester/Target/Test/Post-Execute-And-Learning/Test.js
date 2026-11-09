@@ -1,2 +1,262 @@
-import e from"node:assert/strict";import*as S from"node:fs";import{AgentOf as l,CheckAsync as d,Commit as h,Durable as C,DurableLine as E,Finish as L,Knowledge as R,Ledger as k,LedgerWith as O,Make as q,MakeCounter as b,Pre as A,Post as r,rm as H,SeedHistory as m,Service as g,Setup as y,Validate as x,Workspace as G}from"../Harness.js";const c="README.md",w=["CHANGELOG.md","SCHEME.md"],n=G([c,...w]),u=s=>({name:"read",arguments:{file_path:n.At(c)},agent:l(s)}),f=(s,t)=>({name:"grep",arguments:{pattern:`unrelated query ${t}`,path:n.At("package.json")},agent:l(s)}),D=s=>({name:"edit",arguments:{file_path:"CHANGELOG.md"},agent:l(s)}),N=["[search-suggester] intent=History confidence=0.87","targets (2):","- CHANGELOG.md - touched 1 time(s) after a similar call","- SCHEME.md - touched 1 time(s) after a similar call","note: open these before more searches; Target/ is generated, never edit it."].join(`
-`),F=async()=>{const s=b();{const t=y();t.Context.workingDirectory=g(n.Root),m(t,"a",n.At(c),w);const o={kind:"allow",additionalContexts:[{id:"downstream"}]},a=await r(t,u("a"),o);await d(s,"E1: the History note is prepended to the decision's additionalContexts",async()=>{e.notEqual(a,o),e.equal(a.kind,"allow"),e.deepEqual(a.additionalContexts[0].source,{kind:"search-suggester",form:"notice",summary:"History 0.87"}),e.equal(a.additionalContexts[0].role,"user"),e.equal(typeof a.additionalContexts[0].id,"string"),e.equal(a.additionalContexts[1].id,"downstream"),e.equal(Object.isFrozen(a.additionalContexts[0]),!0)}),await d(s,"E1: the note text is byte-exact",async()=>{e.equal(a.additionalContexts[0].content[0].text,N)}),await d(s,"E1: the suggest ledger line is byte-exact in both forms",async()=>{e.ok(t.Lines.includes("hook-dsh-search-suggester: suggest History 0.87 2 candidates")),e.match(E("suggest History 0.87 2 candidates"),C("suggest History 0.87 2 candidates")),e.equal(O("suggest History 0.87 2 candidates").length,1)}),await d(s,"E1: the ring recorded the emit (cooldown, recent, pending, counter)",async()=>{const i=t.State.Rings.State(l("a"));e.deepEqual([...i.cooled.keys()],["History"]),e.deepEqual([...i.recent.keys()],["CHANGELOG.md","SCHEME.md"]),e.deepEqual(i.pending,{intent:"History",since:0}),e.equal(i.notes,1),e.equal(i.calls,1),e.equal(t.State.Knowledge.stats.emitted,1)})}{const t=y();await d(s,"E2: a non-judged tool returns the decision unchanged with no ledger line",async()=>{const o={kind:"allow",additionalContexts:[]},a=await r(t,{name:"webfetch",arguments:{url:"https://example.com"},agent:l("a")},o);e.equal(a,o),e.deepEqual(t.Lines,["hook-dsh-search-suggester: activated (bundle 0.2.1, history, threshold 0.75)"])}),await d(s,"E2: a bash call with no path and no cwd abstains foreign-workspace",async()=>{const o=await r(t,{name:"bash",arguments:{command:"npm version 1.2.3"},agent:l("a")},{kind:"allow",additionalContexts:[]});e.deepEqual(o.additionalContexts,[]),e.ok(t.Lines.includes("hook-dsh-search-suggester: abstained foreign-workspace  0.00"))}),await d(s,"E2: next() is awaited before any judgment",async()=>{const o=y();o.Context.workingDirectory=g(n.Root),m(o,"z",n.At(c),w);let a=!1;const i={kind:"allow",additionalContexts:[]},p=await o.CtxListeners["tools/post-execute"](u("z"),{},async()=>(a=!0,i));e.equal(a,!0),e.notEqual(p,i)})}{const t=y();t.Context.workingDirectory=g(n.Root),await d(s,"E3: a judged call with no history abstains no-history",async()=>{const o={kind:"allow",additionalContexts:[]},a=await r(t,f("a","one"),o);e.equal(a,o),e.ok(t.Lines.includes("hook-dsh-search-suggester: abstained no-history  0.00")),e.match(E("abstained no-history"),C("abstained no-history  0.00"))})}{const t=y();t.Context.workingDirectory=g(n.Root),m(t,"a",n.At(c),w),await d(s,"E4: an edit of a companion records `followed` and saves the knowledge",async()=>{await r(t,u("a")),await r(t,D("a")),e.ok(t.Lines.includes("hook-dsh-search-suggester: followed History CHANGELOG.md")),e.match(E("followed History CHANGELOG.md"),C("followed History CHANGELOG.md")),e.equal(t.State.Knowledge.stats.followed,1),e.equal(t.State.Knowledge.stats.emitted,1),e.equal(t.State.Rings.State(l("a")).pending,void 0),e.equal(S.existsSync(R),!0)});const o=q(x({logFile:k,enabled:!0}));await d(s,"E4: the knowledge reloads from the saved file",async()=>{e.deepEqual(o.State.Knowledge.stats,{emitted:1,followed:1,ignored:0,dismissed:0})}),H();const a=q(x({logFile:k,enabled:!0}));a.Context.workingDirectory=g(n.Root),m(a,"a",n.At(c),w),await d(s,"E4: a window closed untouched records `ignored`",async()=>{await r(a,u("a")),await r(a,f("a","one")),await r(a,f("a","two")),await r(a,f("a","three")),e.ok(a.Lines.includes("hook-dsh-search-suggester: ignored History")),e.match(E("ignored History"),C("ignored History")),e.equal(a.State.Knowledge.stats.ignored,1),e.equal(a.State.Rings.State(l("a")).pending,void 0)})}{H();const t=q(x({logFile:k,enabled:!0,cooldownCalls:0}));t.Context.workingDirectory=g(n.Root),m(t,"a",n.At(c),w),await d(s,"E5: a zero cooldown window reaches the dedupe suppress",async()=>{await r(t,u("a"));const a=await r(t,u("a"));e.deepEqual(a.additionalContexts,[]),e.ok(t.Lines.includes("hook-dsh-search-suggester: suppressed dedupe History"))}),H();const o=q(x({logFile:k,enabled:!0,cooldownCalls:0,maxNotesPerTurn:1}));o.Context.workingDirectory=g(n.Root),h(o,"a",n.At(c)),h(o,"a","CHANGELOG.md"),h(o,"a",n.At("package.json")),h(o,"a","SCHEME.md"),await d(s,"E5: the per-turn cap suppresses the second note",async()=>{await r(o,u("a"));const a=await r(o,{name:"read",arguments:{file_path:n.At("package.json")},agent:l("a")},{kind:"allow",additionalContexts:[]});e.deepEqual(a.additionalContexts,[]),e.ok(o.Lines.includes("hook-dsh-search-suggester: suppressed cap History"))}),await d(s,"E5: the agent/pre-step reset re-arms the same agent",async()=>{await A(o,{agent:l("a"),messages:[{source:{kind:"user"}}]});const a=o.State.Rings.State(l("a"));e.equal(a.notes,0),e.equal(a.calls,0),e.equal(a.cooled.size,0);const i=await r(o,u("a"));e.equal(i.additionalContexts[0].source.summary,"History 0.87")}),await d(s,"E5: another agent's ring is independent and the reset returns downstream",async()=>{m(o,"c",n.At(c),w);const a=await r(o,u("c"));e.equal(a.additionalContexts[0].source.summary,"History 0.87");const i=await A(o,{agent:l("c"),messages:[{source:{kind:"user"}}]});e.equal(i,"down"),e.deepEqual(o.Warns,[])})}{const t=y();t.Context.workingDirectory=g(n.Root);const o=n.At(c),a="CHANGELOG.md";await d(s,"E6: the committed tool/call events ARE the session history (no State fold)",async()=>{await t.Ready,e.equal(t.State.History,void 0),h(t,"real-fold",o),h(t,"real-fold",a);const i=t.Projections.StateOf(l("real-fold").session,"searchHistory");e.equal(i.Seq,2),e.deepEqual(i.Touches.map(p=>p.path),[o,a])}),await d(s,"E6: the judged call reads the cell and appends nothing",async()=>{h(t,"real-fold",o);const i=await r(t,u("real-fold"),{kind:"allow",additionalContexts:[]});e.equal(i.additionalContexts.length,1),e.equal(i.additionalContexts[0].source.summary,"History 0.87"),e.ok(i.additionalContexts[0].content[0].text.includes(`- ${a} - touched 1 time(s) after a similar call`)),e.ok(t.Lines.includes("hook-dsh-search-suggester: suggest History 0.87 1 candidates")),e.equal(t.Lines.filter(p=>p.includes(": suggest ")).length,1),e.equal(t.Projections.StateOf(l("real-fold").session,"searchHistory").Seq,3)})}return L(s,"Post-Execute-And-Learning")},j=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(j){const s=await F();console.log(`${s} PASS - Post-Execute-And-Learning`)}export{F as runTest};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import {
+  AgentOf,
+  CheckAsync,
+  Commit,
+  Durable,
+  DurableLine,
+  Finish,
+  Knowledge,
+  Ledger,
+  LedgerWith,
+  Make,
+  MakeCounter,
+  Pre,
+  Post,
+  rm,
+  SeedHistory,
+  Service,
+  Setup,
+  Validate,
+  Workspace
+} from "../Harness.js";
+const Anchor = "README.md";
+const Companions = ["CHANGELOG.md", "SCHEME.md"];
+const Space = Workspace([Anchor, ...Companions]);
+const Read = (Id) => ({
+  name: "read",
+  arguments: { file_path: Space.At(Anchor) },
+  agent: AgentOf(Id)
+});
+const Elsewhere = (Id, N) => ({
+  name: "grep",
+  arguments: { pattern: `unrelated query ${N}`, path: Space.At("package.json") },
+  agent: AgentOf(Id)
+});
+const FollowEdit = (Id) => ({
+  name: "edit",
+  arguments: { file_path: "CHANGELOG.md" },
+  agent: AgentOf(Id)
+});
+const HistoryText = [
+  "[search-suggester] intent=History confidence=0.87",
+  "targets (2):",
+  "- CHANGELOG.md - touched 1 time(s) after a similar call",
+  "- SCHEME.md - touched 1 time(s) after a similar call",
+  "note: open these before more searches; Target/ is generated, never edit it."
+].join("\n");
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    const Decision = { kind: "allow", additionalContexts: [{ id: "downstream" }] };
+    const Out = await Post(Run, Read("a"), Decision);
+    await CheckAsync(Count, "E1: the History note is prepended to the decision's additionalContexts", async () => {
+      assert.notEqual(Out, Decision);
+      assert.equal(Out.kind, "allow");
+      assert.deepEqual(Out.additionalContexts[0].source, {
+        kind: "search-suggester",
+        form: "notice",
+        summary: "History 0.87"
+      });
+      assert.equal(Out.additionalContexts[0].role, "user");
+      assert.equal(typeof Out.additionalContexts[0].id, "string");
+      assert.equal(Out.additionalContexts[1].id, "downstream");
+      assert.equal(Object.isFrozen(Out.additionalContexts[0]), true);
+    });
+    await CheckAsync(Count, "E1: the note text is byte-exact", async () => {
+      assert.equal(Out.additionalContexts[0].content[0].text, HistoryText);
+    });
+    await CheckAsync(Count, "E1: the suggest ledger line is byte-exact in both forms", async () => {
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: suggest History 0.87 2 candidates"));
+      assert.match(
+        DurableLine("suggest History 0.87 2 candidates"),
+        Durable("suggest History 0.87 2 candidates")
+      );
+      assert.equal(LedgerWith("suggest History 0.87 2 candidates").length, 1);
+    });
+    await CheckAsync(Count, "E1: the ring recorded the emit (cooldown, recent, pending, counter)", async () => {
+      const Rings = Run.State.Rings.State(AgentOf("a"));
+      assert.deepEqual([...Rings.cooled.keys()], ["History"]);
+      assert.deepEqual([...Rings.recent.keys()], ["CHANGELOG.md", "SCHEME.md"]);
+      assert.deepEqual(Rings.pending, { intent: "History", since: 0 });
+      assert.equal(Rings.notes, 1);
+      assert.equal(Rings.calls, 1);
+      assert.equal(Run.State.Knowledge.stats.emitted, 1);
+    });
+  }
+  {
+    const Run = Setup();
+    await CheckAsync(Count, "E2: a non-judged tool returns the decision unchanged with no ledger line", async () => {
+      const Decision = { kind: "allow", additionalContexts: [] };
+      const Out = await Post(Run, { name: "webfetch", arguments: { url: "https://example.com" }, agent: AgentOf("a") }, Decision);
+      assert.equal(Out, Decision);
+      assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`]);
+    });
+    await CheckAsync(Count, "E2: a bash call with no path and no cwd abstains foreign-workspace", async () => {
+      const Out = await Post(Run, { name: "bash", arguments: { command: "npm version 1.2.3" }, agent: AgentOf("a") }, { kind: "allow", additionalContexts: [] });
+      assert.deepEqual(Out.additionalContexts, []);
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained foreign-workspace  0.00"));
+    });
+    await CheckAsync(Count, "E2: next() is awaited before any judgment", async () => {
+      const Judge = Setup();
+      Judge.Context.workingDirectory = Service(Space.Root);
+      SeedHistory(Judge, "z", Space.At(Anchor), Companions);
+      let NextCalled = false;
+      const Downstream = { kind: "allow", additionalContexts: [] };
+      const Out = await Judge.CtxListeners["tools/post-execute"](
+        Read("z"),
+        {},
+        async () => {
+          NextCalled = true;
+          return Downstream;
+        }
+      );
+      assert.equal(NextCalled, true);
+      assert.notEqual(Out, Downstream);
+    });
+  }
+  {
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Space.Root);
+    await CheckAsync(Count, "E3: a judged call with no history abstains no-history", async () => {
+      const Decision = { kind: "allow", additionalContexts: [] };
+      const Out = await Post(Run, Elsewhere("a", "one"), Decision);
+      assert.equal(Out, Decision);
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: abstained no-history  0.00"));
+      assert.match(DurableLine("abstained no-history"), Durable("abstained no-history  0.00"));
+    });
+  }
+  {
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    await CheckAsync(Count, "E4: an edit of a companion records `followed` and saves the knowledge", async () => {
+      await Post(Run, Read("a"));
+      await Post(Run, FollowEdit("a"));
+      assert.ok(Run.Lines.includes("hook-dsh-search-suggester: followed History CHANGELOG.md"));
+      assert.match(
+        DurableLine("followed History CHANGELOG.md"),
+        Durable("followed History CHANGELOG.md")
+      );
+      assert.equal(Run.State.Knowledge.stats.followed, 1);
+      assert.equal(Run.State.Knowledge.stats.emitted, 1);
+      assert.equal(Run.State.Rings.State(AgentOf("a")).pending, void 0);
+      assert.equal(FileSystem.existsSync(Knowledge), true);
+    });
+    const Reload = Make(Validate({ logFile: Ledger, enabled: true }));
+    await CheckAsync(Count, "E4: the knowledge reloads from the saved file", async () => {
+      assert.deepEqual(Reload.State.Knowledge.stats, { emitted: 1, followed: 1, ignored: 0, dismissed: 0 });
+    });
+    rm();
+    const Loop = Make(Validate({ logFile: Ledger, enabled: true }));
+    Loop.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Loop, "a", Space.At(Anchor), Companions);
+    await CheckAsync(Count, "E4: a window closed untouched records `ignored`", async () => {
+      await Post(Loop, Read("a"));
+      await Post(Loop, Elsewhere("a", "one"));
+      await Post(Loop, Elsewhere("a", "two"));
+      await Post(Loop, Elsewhere("a", "three"));
+      assert.ok(Loop.Lines.includes("hook-dsh-search-suggester: ignored History"));
+      assert.match(DurableLine("ignored History"), Durable("ignored History"));
+      assert.equal(Loop.State.Knowledge.stats.ignored, 1);
+      assert.equal(Loop.State.Rings.State(AgentOf("a")).pending, void 0);
+    });
+  }
+  {
+    rm();
+    const NoCooldown = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0 }));
+    NoCooldown.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(NoCooldown, "a", Space.At(Anchor), Companions);
+    await CheckAsync(Count, "E5: a zero cooldown window reaches the dedupe suppress", async () => {
+      await Post(NoCooldown, Read("a"));
+      const Out = await Post(NoCooldown, Read("a"));
+      assert.deepEqual(Out.additionalContexts, []);
+      assert.ok(NoCooldown.Lines.includes("hook-dsh-search-suggester: suppressed dedupe History"));
+    });
+    rm();
+    const Capped = Make(Validate({ logFile: Ledger, enabled: true, cooldownCalls: 0, maxNotesPerTurn: 1 }));
+    Capped.Context.workingDirectory = Service(Space.Root);
+    Commit(Capped, "a", Space.At(Anchor));
+    Commit(Capped, "a", "CHANGELOG.md");
+    Commit(Capped, "a", Space.At("package.json"));
+    Commit(Capped, "a", "SCHEME.md");
+    await CheckAsync(Count, "E5: the per-turn cap suppresses the second note", async () => {
+      await Post(Capped, Read("a"));
+      const Out = await Post(Capped, {
+        name: "read",
+        arguments: { file_path: Space.At("package.json") },
+        agent: AgentOf("a")
+      }, { kind: "allow", additionalContexts: [] });
+      assert.deepEqual(Out.additionalContexts, []);
+      assert.ok(Capped.Lines.includes("hook-dsh-search-suggester: suppressed cap History"));
+    });
+    await CheckAsync(Count, "E5: the agent/pre-step reset re-arms the same agent", async () => {
+      await Pre(Capped, { agent: AgentOf("a"), messages: [{ source: { kind: "user" } }] });
+      const Rings = Capped.State.Rings.State(AgentOf("a"));
+      assert.equal(Rings.notes, 0);
+      assert.equal(Rings.calls, 0);
+      assert.equal(Rings.cooled.size, 0);
+      const Out = await Post(Capped, Read("a"));
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+    });
+    await CheckAsync(Count, "E5: another agent's ring is independent and the reset returns downstream", async () => {
+      SeedHistory(Capped, "c", Space.At(Anchor), Companions);
+      const Out = await Post(Capped, Read("c"));
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+      const Down = await Pre(Capped, { agent: AgentOf("c"), messages: [{ source: { kind: "user" } }] });
+      assert.equal(Down, "down");
+      assert.deepEqual(Capped.Warns, []);
+    });
+  }
+  {
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Space.Root);
+    const FoldAnchor = Space.At(Anchor);
+    const FoldCompanion = "CHANGELOG.md";
+    await CheckAsync(Count, "E6: the committed tool/call events ARE the session history (no State fold)", async () => {
+      await Run.Ready;
+      assert.equal(Run.State.History, void 0);
+      Commit(Run, "real-fold", FoldAnchor);
+      Commit(Run, "real-fold", FoldCompanion);
+      const Folded = Run.Projections.StateOf(AgentOf("real-fold").session, "searchHistory");
+      assert.equal(Folded.Seq, 2);
+      assert.deepEqual(
+        Folded.Touches.map((Touch) => Touch.path),
+        [FoldAnchor, FoldCompanion]
+      );
+    });
+    await CheckAsync(Count, "E6: the judged call reads the cell and appends nothing", async () => {
+      Commit(Run, "real-fold", FoldAnchor);
+      const Out = await Post(Run, Read("real-fold"), { kind: "allow", additionalContexts: [] });
+      assert.equal(Out.additionalContexts.length, 1);
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+      assert.ok(
+        Out.additionalContexts[0].content[0].text.includes(
+          `- ${FoldCompanion} - touched 1 time(s) after a similar call`
+        )
+      );
+      assert.ok(
+        Run.Lines.includes("hook-dsh-search-suggester: suggest History 0.87 1 candidates")
+      );
+      assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 1);
+      assert.equal(
+        Run.Projections.StateOf(AgentOf("real-fold").session, "searchHistory").Seq,
+        3
+      );
+    });
+  }
+  return Finish(Count, "Post-Execute-And-Learning");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Post-Execute-And-Learning`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

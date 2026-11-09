@@ -1,5 +1,9 @@
 import Version from "./Variable/Version.js";
 export declare const name = "plugin-dsh-workspace-reflect";
+/**
+ * The loader contract (cordis): the exported schema is validated and defaulted
+ * while the plugin loads; apply receives a plain validated config object.
+ */
 export declare const Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
     log: import("@deepseek-ai/schemastery").default<boolean, boolean, "volatile-defined">;
     logFile: import("@deepseek-ai/schemastery").default<string, string, "volatile-defined">;
@@ -21,7 +25,20 @@ export declare const Config: import("@deepseek-ai/schemastery").default<Schemast
     policyFile: import("@deepseek-ai/schemastery").default<string, string, "defined">;
     exclude: import("@deepseek-ai/schemastery").default<string[], string[], "defined">;
 }>>, "plain">;
+/**
+ * The compiled package version (`Source/Variable/Version.ts`, built in by the
+ * ESBuild define) - NOT a loader key: the contract's four names (name, apply,
+ * Config, inject) are unchanged, and the default object below stays exactly
+ * `{ name, apply, Config, inject }`.
+ */
 export { Version };
+/**
+ * Required services. `pluginFactory` provides the State builder (cell unwrap
+ * + shared fields + the P10 volatile refresh), the ledger and the guarded
+ * write. `fs` provides the resolve/stat/read of the representations the ops
+ * transform. The optional `workspaceGraph` is NOT an inject: it is probed at
+ * use time (an absent graph is an honest skip of the carry only).
+ */
 export declare const inject: string[];
 export declare const apply: (Context: import("@deepseek-ai/cordis").Context, Options: import("./Interface/Config.js").default) => void;
 declare const _default: {

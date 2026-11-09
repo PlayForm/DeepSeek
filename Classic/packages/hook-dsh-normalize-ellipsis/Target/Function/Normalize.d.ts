@@ -1,5 +1,5 @@
 import type { StreamChunk } from "@deepseek-ai/dsh-llm";
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 /**
  * @module Normalize
  *

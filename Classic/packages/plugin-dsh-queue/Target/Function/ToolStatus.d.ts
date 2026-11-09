@@ -1,3 +1,12 @@
+/**
+ * @module ToolStatus
+ *
+ * The `queue_status` tool: the queue record's surface (the active lanes and
+ * their tasks, the queued lanes, the board line).
+ *
+ * @remarks
+ * One canonical JSON value; the presenter is pure.
+ */
 import type State from "../Interface/State.js";
 export default _default;
 declare function _default(State: State): {

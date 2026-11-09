@@ -43,12 +43,16 @@ export default class WorkspaceMerge extends Service {
      * All recorded batches.
      */
     batches(): Record[];
-    /** The honest statistics. */
+    /**
+     * The honest statistics.
+     */
     statistics(): Statistics;
 }
 declare module "@deepseek-ai/cordis" {
     interface Context {
-        /** The workspace-merge hook's service (registered from apply). */
+        /**
+         * The workspace-merge hook's service (registered from apply).
+         */
         workspaceMerge: WorkspaceMerge;
     }
 }

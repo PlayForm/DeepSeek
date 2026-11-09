@@ -1,8 +1,119 @@
-import t from"node:assert/strict";import{AgentOf as o,Assemble as c,CheckAsync as i,Durable as y,DurableLine as b,Finish as A,Ledger as d,LedgerWith as k,Make as h,MakeCounter as R,Post as S,rm as u,SeedHistory as f,Setup as E,Validate as g,Workspace as q}from"../Harness.js";const r="README.md",m=["CHANGELOG.md","SCHEME.md"],p=q([r,...m]),w=n=>({name:"read",arguments:{file_path:p.At(r)},agent:o(n)}),C=`[search-suggester] intent=History confidence=1.00
-targets (2):
-- CHANGELOG.md - touched after a similar call
-- SCHEME.md - touched after a similar call
-note: open these before more searches; Target/ is generated, never edit it.`,O=async()=>{const n=R();{const e=E();f(e,"a",p.At(r),m),await i(n,"S1: with sectionMode off the assemble passes through untouched",async()=>{await S(e,w("a"));const s=await c(e,o("a"));t.deepEqual(s.sections,[{name:"base",text:"b"}]),t.ok(!e.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"))})}{u();const e=h(g({logFile:d,enabled:!0,sectionMode:"sticky"}));f(e,"a",p.At(r),m),await i(n,"S2: after an emit the sticky section is appended",async()=>{await S(e,w("a"));const s=await c(e,o("a"));t.deepEqual(s.sections.map(a=>a.name),["base","hook-dsh-search-suggester"]),t.equal(s.sections[1].text,C),t.ok(e.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)")),t.match(b("section rebuilt (ttl 20)"),y("section rebuilt (ttl 20)")),t.equal(k("section rebuilt (ttl 20)").length,1)}),await i(n,"S2: the section is cached until the TTL expires",async()=>{const a=e.State.Rings.State(o("a")).sectionBuilt,l=await c(e,o("a"));t.deepEqual(l.sections.map(L=>L.name),["base","hook-dsh-search-suggester"]),t.equal(e.State.Rings.State(o("a")).sectionBuilt,a),t.equal(k("section rebuilt (ttl 20)").length,1)})}{u();const e=h(g({logFile:d,enabled:!0,sectionMode:"sticky"}));await i(n,"S3: the default ring builds its section from the last noted family",async()=>{const s=e.State.Rings.State(void 0);e.State.Rings.Mark(s,"History",["CHANGELOG.md"],"History CHANGELOG.md");const a=await c(e,void 0);t.deepEqual(a.sections.map(l=>l.name),["base","hook-dsh-search-suggester"]),t.equal(a.sections[1].text,`[search-suggester] intent=History confidence=1.00
-targets (1):
-- CHANGELOG.md - touched after a similar call
-note: open these before more searches; Target/ is generated, never edit it.`),t.ok(e.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"))}),await i(n,"S3: tools/change invalidates the default ring's cache with its ledger line",async()=>{e.Lines.length=0,e.CtxListeners["tools/change"](),t.ok(e.Lines.includes("hook-dsh-search-suggester: section invalidated (tools/change)")),t.match(b("section invalidated (tools/change)"),y("section invalidated (tools/change)"));const s=await c(e,void 0);t.deepEqual(s.sections.map(a=>a.name),["base","hook-dsh-search-suggester"]),t.ok(e.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"))}),await i(n,"S3: tools/change on an empty cache is silent",async()=>{u();const s=h(g({logFile:d,enabled:!0,sectionMode:"sticky"}));s.Lines.length=0,s.CtxListeners["tools/change"](),t.deepEqual(s.Lines,[])})}{const e=E();await i(n,"S4: an assemble with no cooled family passes through with no section",async()=>{const s=await c(e,void 0);t.deepEqual(s.sections,[{name:"base",text:"b"}]),t.deepEqual(e.Lines,["hook-dsh-search-suggester: activated (bundle 0.2.1, history, threshold 0.75)"]),t.deepEqual(e.Warns,[])})}return A(n,"Sticky-Section-And-Ring")},H=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(H){const n=await O();console.log(`${n} PASS - Sticky-Section-And-Ring`)}export{O as runTest};
+import assert from "node:assert/strict";
+import {
+  AgentOf,
+  Assemble,
+  CheckAsync,
+  Durable,
+  DurableLine,
+  Finish,
+  Ledger,
+  LedgerWith,
+  Make,
+  MakeCounter,
+  Post,
+  rm,
+  SeedHistory,
+  Setup,
+  Validate,
+  Workspace
+} from "../Harness.js";
+const Anchor = "README.md";
+const Companions = ["CHANGELOG.md", "SCHEME.md"];
+const Space = Workspace([Anchor, ...Companions]);
+const Read = (Id) => ({
+  name: "read",
+  arguments: { file_path: Space.At(Anchor) },
+  agent: AgentOf(Id)
+});
+const Section = "[search-suggester] intent=History confidence=1.00\ntargets (2):\n- CHANGELOG.md - touched after a similar call\n- SCHEME.md - touched after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Run = Setup();
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    await CheckAsync(Count, "S1: with sectionMode off the assemble passes through untouched", async () => {
+      await Post(Run, Read("a"));
+      const Out = await Assemble(Run, AgentOf("a"));
+      assert.deepEqual(Out.sections, [{ name: "base", text: "b" }]);
+      assert.ok(!Run.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
+    });
+  }
+  {
+    rm();
+    const Sticky = Make(Validate({ logFile: Ledger, enabled: true, sectionMode: "sticky" }));
+    SeedHistory(Sticky, "a", Space.At(Anchor), Companions);
+    await CheckAsync(Count, "S2: after an emit the sticky section is appended", async () => {
+      await Post(Sticky, Read("a"));
+      const Out = await Assemble(Sticky, AgentOf("a"));
+      assert.deepEqual(Out.sections.map((Section_) => Section_.name), ["base", "hook-dsh-search-suggester"]);
+      assert.equal(Out.sections[1].text, Section);
+      assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
+      assert.match(
+        DurableLine("section rebuilt (ttl 20)"),
+        Durable("section rebuilt (ttl 20)")
+      );
+      assert.equal(LedgerWith("section rebuilt (ttl 20)").length, 1);
+    });
+    await CheckAsync(Count, "S2: the section is cached until the TTL expires", async () => {
+      const Rings = Sticky.State.Rings.State(AgentOf("a"));
+      const Built = Rings.sectionBuilt;
+      const Out = await Assemble(Sticky, AgentOf("a"));
+      assert.deepEqual(Out.sections.map((Section_) => Section_.name), ["base", "hook-dsh-search-suggester"]);
+      assert.equal(Sticky.State.Rings.State(AgentOf("a")).sectionBuilt, Built);
+      assert.equal(LedgerWith("section rebuilt (ttl 20)").length, 1);
+    });
+  }
+  {
+    rm();
+    const Sticky = Make(Validate({ logFile: Ledger, enabled: true, sectionMode: "sticky" }));
+    await CheckAsync(Count, "S3: the default ring builds its section from the last noted family", async () => {
+      const Rings = Sticky.State.Rings.State(void 0);
+      Sticky.State.Rings.Mark(Rings, "History", ["CHANGELOG.md"], "History CHANGELOG.md");
+      const Out = await Assemble(Sticky, void 0);
+      assert.deepEqual(Out.sections.map((Section_) => Section_.name), ["base", "hook-dsh-search-suggester"]);
+      assert.equal(
+        Out.sections[1].text,
+        "[search-suggester] intent=History confidence=1.00\ntargets (1):\n- CHANGELOG.md - touched after a similar call\nnote: open these before more searches; Target/ is generated, never edit it."
+      );
+      assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
+    });
+    await CheckAsync(Count, "S3: tools/change invalidates the default ring's cache with its ledger line", async () => {
+      Sticky.Lines.length = 0;
+      Sticky.CtxListeners["tools/change"]();
+      assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section invalidated (tools/change)"));
+      assert.match(
+        DurableLine("section invalidated (tools/change)"),
+        Durable("section invalidated (tools/change)")
+      );
+      const Out = await Assemble(Sticky, void 0);
+      assert.deepEqual(Out.sections.map((Section_) => Section_.name), ["base", "hook-dsh-search-suggester"]);
+      assert.ok(Sticky.Lines.includes("hook-dsh-search-suggester: section rebuilt (ttl 20)"));
+    });
+    await CheckAsync(Count, "S3: tools/change on an empty cache is silent", async () => {
+      rm();
+      const Fresh = Make(Validate({ logFile: Ledger, enabled: true, sectionMode: "sticky" }));
+      Fresh.Lines.length = 0;
+      Fresh.CtxListeners["tools/change"]();
+      assert.deepEqual(Fresh.Lines, []);
+    });
+  }
+  {
+    const Run = Setup();
+    await CheckAsync(Count, "S4: an assemble with no cooled family passes through with no section", async () => {
+      const Out = await Assemble(Run, void 0);
+      assert.deepEqual(Out.sections, [{ name: "base", text: "b" }]);
+      assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`]);
+      assert.deepEqual(Run.Warns, []);
+    });
+  }
+  return Finish(Count, "Sticky-Section-And-Ring");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Sticky-Section-And-Ring`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

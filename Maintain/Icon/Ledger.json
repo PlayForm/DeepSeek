@@ -1076,17 +1076,17 @@
 			"kind": "plugin",
 			"tree": "EffectTS",
 			"version": "0.2.1",
-			"seed": "ba7f16bb60d73460328a881311a9bac6cac037e21499c20e43ddce513b86d86f",
+			"seed": "0e9a339c28dc06e8d1660fbf2cc1465ed4b09ff41fd7538b4ef8b8a50e5c0901",
 			"grammar": "interlace-tile",
 			"order": 12,
 			"arms": 8,
 			"rings": 3,
 			"orbit": 8,
-			"rim": "diamond",
+			"rim": "woven",
 			"mode": "traced",
 			"hash": {
-				"mono": "733b4a181af8b8439c8c4eb530b179fd7fb824876d27cf048628d863fd2793ab",
-				"colour": "fd8f0b2b5aebaf65df4b64798193a514658bbe615c5e298f23f64800e40704b0"
+				"mono": "a78b00883629ab8bf26e356ac21f78410e6d1b4a10439b6bb3699e9c59ca2551",
+				"colour": "d5c3581ab551bf4a44585a9148c9d2d29a0507bb6b0a1b0ad755abc4e85f724d"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-cost.svg",

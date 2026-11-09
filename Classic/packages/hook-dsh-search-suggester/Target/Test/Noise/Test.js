@@ -1,1 +1,88 @@
-import r from"node:assert/strict";import{AgentOf as l,CheckAsync as c,Finish as p,MakeCounter as y,Post as g,Pre as f,Service as d,Setup as h,Workspace as m}from"../Harness.js";const u=m(["package.json"]),i=(n,e,s)=>g(n,{name:"grep",arguments:{pattern:s,path:u.At("package.json")},agent:l(e)}),o=(n,e,s)=>g(n,{name:e,arguments:s,agent:l("noise")}),q=async()=>{const n=y();{const e=h();e.Context.workingDirectory=d(u.Root);let s=0;const a=t=>{s+=(t.additionalContexts??[]).length};await c(n,"N1: twenty legitimate calls produce exactly zero notes",async()=>{for(let t=0;t<5;t+=1)a(await i(e,`n${t}`,`unrelated query ${t}`));for(const[t,w]of["threshold","PASS","const Thing","README","hook-dsh-noise"].entries())a(await i(e,`l${t}`,w));a(await o(e,"webfetch",{url:"https://example.com"})),a(await o(e,"agent",{prompt:"read the docs"})),a(await o(e,"web_search",{queries:["search suggester"]})),a(await o(e,"list_agents",{})),a(await o(e,"write",{file_path:"Temporary/scratch.txt",content:"x"}));for(let t=5;t<10;t+=1)a(await i(e,`n${t}`,`unrelated query ${t}`));r.equal(s,0)}),await c(n,"N1: the silence is measured (fifteen no-history lines)",async()=>{r.equal(e.Lines.filter(t=>t.includes(": suggest ")).length,0),r.equal(e.Lines.filter(t=>t.includes("abstained no-history")).length,15),r.equal(e.Lines.filter(t=>t.includes("abstained low-confidence")).length,0)}),await c(n,"N1: no warning fired during the silent run",async()=>{r.deepEqual(e.Warns,[])})}{const e=h();e.Context.workingDirectory=d(u.Root),await c(n,"N2: a fresh turn stays silent after a silent turn",async()=>{await i(e,"a","unrelated query one"),await f(e,{agent:l("a"),messages:[{source:{kind:"user"}}]});const s=await i(e,"a","unrelated query two");r.deepEqual(s.additionalContexts??[],[]),r.equal(e.Lines.filter(a=>a.includes(": suggest ")).length,0)})}return p(n,"Noise")},x=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(x){const n=await q();console.log(`${n} PASS - Noise`)}export{q as runTest};
+import assert from "node:assert/strict";
+import {
+  AgentOf,
+  CheckAsync,
+  Finish,
+  MakeCounter,
+  Post,
+  Pre,
+  Service,
+  Setup,
+  Workspace
+} from "../Harness.js";
+const Space = Workspace(["package.json"]);
+const Grep = (Run, Agent, Pattern) => Post(Run, {
+  name: "grep",
+  arguments: { pattern: Pattern, path: Space.At("package.json") },
+  agent: AgentOf(Agent)
+});
+const Other = (Run, Name, Args) => Post(Run, { name: Name, arguments: Args, agent: AgentOf("noise") });
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Space.Root);
+    let Notes = 0;
+    const Record = (Out) => {
+      Notes += (Out.additionalContexts ?? []).length;
+    };
+    await CheckAsync(Count, "N1: twenty legitimate calls produce exactly zero notes", async () => {
+      for (let Index = 0; Index < 5; Index += 1) {
+        Record(await Grep(Run, `n${Index}`, `unrelated query ${Index}`));
+      }
+      for (const [Index, Pattern] of [
+        "threshold",
+        "PASS",
+        "const Thing",
+        "README",
+        "hook-dsh-noise"
+      ].entries()) {
+        Record(await Grep(Run, `l${Index}`, Pattern));
+      }
+      Record(await Other(Run, "webfetch", { url: "https://example.com" }));
+      Record(await Other(Run, "agent", { prompt: "read the docs" }));
+      Record(await Other(Run, "web_search", { queries: ["search suggester"] }));
+      Record(await Other(Run, "list_agents", {}));
+      Record(await Other(Run, "write", { file_path: "Temporary/scratch.txt", content: "x" }));
+      for (let Index = 5; Index < 10; Index += 1) {
+        Record(await Grep(Run, `n${Index}`, `unrelated query ${Index}`));
+      }
+      assert.equal(Notes, 0);
+    });
+    await CheckAsync(Count, "N1: the silence is measured (fifteen no-history lines)", async () => {
+      assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 0);
+      assert.equal(
+        Run.Lines.filter((Line) => Line.includes("abstained no-history")).length,
+        15
+      );
+      assert.equal(
+        Run.Lines.filter((Line) => Line.includes("abstained low-confidence")).length,
+        0
+      );
+    });
+    await CheckAsync(Count, "N1: no warning fired during the silent run", async () => {
+      assert.deepEqual(Run.Warns, []);
+    });
+  }
+  {
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Space.Root);
+    await CheckAsync(Count, "N2: a fresh turn stays silent after a silent turn", async () => {
+      await Grep(Run, "a", "unrelated query one");
+      await Pre(Run, { agent: AgentOf("a"), messages: [{ source: { kind: "user" } }] });
+      const Second = await Grep(Run, "a", "unrelated query two");
+      assert.deepEqual(Second.additionalContexts ?? [], []);
+      assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 0);
+    });
+  }
+  return Finish(Count, "Noise");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Noise`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

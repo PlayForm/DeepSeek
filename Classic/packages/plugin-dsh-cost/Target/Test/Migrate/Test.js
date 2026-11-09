@@ -1,11 +1,4 @@
-import assert from "node:assert/strict";
-import { mkdtemp, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { DatabaseSync } from "node:sqlite";
-import Open from "../../../Target/Function/Open.js";
-import { Check, Finish, MakeCounter, Validate } from "../Harness.js";
-const V1 = `
+import e from"node:assert/strict";import{mkdtemp as p,rm as h}from"node:fs/promises";import{tmpdir as m}from"node:os";import{join as d}from"node:path";import{DatabaseSync as R}from"node:sqlite";import I from"../../../Target/Function/Open.js";import{Check as N,Finish as G,MakeCounter as P,Validate as u}from"../Harness.js";const v=`
 CREATE TABLE Session (SessionId TEXT PRIMARY KEY, CreatedAt INTEGER NOT NULL) STRICT;
 CREATE TABLE File (FileId INTEGER PRIMARY KEY, Path TEXT NOT NULL) STRICT;
 CREATE TABLE Price (PriceId INTEGER PRIMARY KEY, Provider TEXT NOT NULL, Model TEXT NOT NULL, InputRate REAL NOT NULL, OutputRate REAL NOT NULL, Currency TEXT NOT NULL DEFAULT 'USD', CacheReadRate REAL, CacheWriteRate REAL, ReasoningRate REAL, EffectiveTo INTEGER, Note TEXT, EffectiveFrom INTEGER NOT NULL) STRICT;
@@ -13,8 +6,7 @@ CREATE TABLE Call (CallId INTEGER PRIMARY KEY, SessionId TEXT NOT NULL REFERENCE
 CREATE TABLE Allocation (AllocationId INTEGER PRIMARY KEY, CallId INTEGER NOT NULL REFERENCES Call (CallId), FileId INTEGER REFERENCES File (FileId), DirectCost REAL NOT NULL, AmortizedCost REAL NOT NULL, ContextTokens INTEGER NOT NULL, SurfaceTokens INTEGER NOT NULL, Weight REAL NOT NULL, Method TEXT NOT NULL, At INTEGER NOT NULL) STRICT;
 CREATE TABLE Touch (TouchId INTEGER PRIMARY KEY, CallId INTEGER NOT NULL REFERENCES Call (CallId), SessionId TEXT NOT NULL, Turn INTEGER NOT NULL, Step INTEGER NOT NULL, CallKey TEXT NOT NULL, Tool TEXT NOT NULL, FileId INTEGER NOT NULL REFERENCES File (FileId), Kind TEXT NOT NULL, Seq INTEGER NOT NULL, At INTEGER NOT NULL) STRICT;
 PRAGMA user_version = 1;
-`;
-const V2 = `
+`,f=`
 CREATE TABLE Session (SessionId TEXT PRIMARY KEY, CreatedAt INTEGER NOT NULL) STRICT;
 CREATE TABLE File (FileId INTEGER PRIMARY KEY, Path TEXT NOT NULL) STRICT;
 CREATE TABLE Price (PriceId INTEGER PRIMARY KEY, Provider TEXT NOT NULL, Model TEXT NOT NULL, InputRate REAL NOT NULL, OutputRate REAL NOT NULL, Currency TEXT NOT NULL DEFAULT 'USD', CacheReadRate REAL, CacheWriteRate REAL, ReasoningRate REAL, EffectiveTo INTEGER, Note TEXT, EffectiveFrom INTEGER NOT NULL, Window TEXT NOT NULL DEFAULT 'any') STRICT;
@@ -32,119 +24,7 @@ JOIN Allocation AS a ON a.FileId = f.FileId
 JOIN Call AS c ON c.CallId = a.CallId
 GROUP BY f.FileId;
 PRAGMA user_version = 2;
-`;
-const Columns = (Database, Table) => Database.prepare(`PRAGMA table_info(${Table})`).all().map(
-  (One) => One.name
-);
-const runTest = async () => {
-  const Count = MakeCounter();
-  const Home = await mkdtemp(join(tmpdir(), "dsh-cost-migrate-"));
-  try {
-    const V1Path = join(Home, "v1.db");
-    const V1Seed = new DatabaseSync(V1Path);
-    V1Seed.exec(V1);
-    V1Seed.prepare("INSERT INTO Session (SessionId, CreatedAt) VALUES ('s1', 0)").run();
-    V1Seed.prepare("INSERT INTO File (FileId, Path) VALUES (1, '/w/a.ts')").run();
-    V1Seed.close();
-    const V1Ledger = Open(Validate({ databasePath: V1Path }));
-    try {
-      const Database = V1Ledger.Database;
-      const Version = Database.prepare("PRAGMA user_version").get();
-      Check(Count, "A3: the ladder stamps a v1 ledger version 6", () => {
-        assert.equal(Version.user_version, 6);
-      });
-      Check(Count, "A1: the additive columns exist on Price, Call and Touch through every rung", () => {
-        assert.ok(Columns(Database, "Price").includes("Window"), "Price.Window");
-        assert.ok(Columns(Database, "Price").includes("TierFrom"), "Price.TierFrom");
-        assert.ok(Columns(Database, "Call").includes("CacheSaving"), "Call.CacheSaving");
-        assert.ok(Columns(Database, "Call").includes("Mode"), "Call.Mode");
-        assert.ok(Columns(Database, "Call").includes("Tier"), "Call.Tier");
-        assert.ok(Columns(Database, "Call").includes("LatencyMs"), "Call.LatencyMs");
-        assert.ok(Columns(Database, "Call").includes("Attempts"), "Call.Attempts");
-        assert.ok(Columns(Database, "Call").includes("Utilization"), "Call.Utilization");
-        assert.ok(Columns(Database, "Touch").includes("Stage"), "Touch.Stage");
-        assert.ok(Columns(Database, "Touch").includes("Branch"), "Touch.Branch");
-        assert.ok(Columns(Database, "Touch").includes("ReadBeforeEdit"), "Touch.ReadBeforeEdit");
-        assert.ok(Columns(Database, "Touch").includes("DurationMs"), "Touch.DurationMs");
-        assert.ok(Columns(Database, "Touch").includes("ResultBytes"), "Touch.ResultBytes");
-        assert.ok(Columns(Database, "Edit").includes("Ordinal"), "Edit.Ordinal");
-      });
-      Check(Count, "A1: the Alias and Verdict tables and the FileLifetime view exist", () => {
-        assert.ok(Columns(Database, "Alias").includes("FromPath"), "Alias.FromPath");
-        assert.ok(Columns(Database, "Verdict").includes("State"), "Verdict.State");
-        assert.ok(
-          Database.prepare("SELECT FileId, Path, Sessions, Direct, Amortized, Cost FROM FileLifetime").all() !== void 0,
-          "the FileLifetime view selects"
-        );
-      });
-      Check(Count, "A3: the v6 rung adds the fresh-only tables and the v1 data survives", () => {
-        const Session = Database.prepare("SELECT SessionId FROM Session WHERE SessionId = 's1'").get();
-        assert.ok(Session !== void 0, "the v1 session row survived");
-        const Rollup = Database.prepare(
-          "SELECT COUNT(*) AS N FROM sqlite_master WHERE type = 'table' AND name = 'Rollup'"
-        ).get();
-        assert.equal(Rollup.N, 1, "the v6 rung creates the fresh-only Rollup table");
-        const Cursor = Database.prepare(
-          "SELECT COUNT(*) AS N FROM sqlite_master WHERE type = 'table' AND name = 'Cursor'"
-        ).get();
-        assert.equal(Cursor.N, 1, "the v6 rung creates the fresh-only Cursor table");
-      });
-    } finally {
-      V1Ledger.Close();
-    }
-    const V2Path = join(Home, "v2.db");
-    const V2Seed = new DatabaseSync(V2Path);
-    V2Seed.exec(V2);
-    V2Seed.prepare("INSERT INTO Session (SessionId, CreatedAt) VALUES ('s2', 0)").run();
-    V2Seed.prepare("INSERT INTO File (FileId, Path) VALUES (1, '/w/a.ts')").run();
-    V2Seed.prepare("INSERT INTO Price (Provider, Model, InputRate, OutputRate, EffectiveFrom) VALUES ('p', 'm', 1, 2, 0)").run();
-    V2Seed.prepare(
-      "INSERT INTO Call (CallId, SessionId, Turn, Step, Seq, Provider, Model, InputTokens, OutputTokens, CostTotal, Currency, At) VALUES (1, 's2', 1, 1, 0, 'p', 'm', 10, 5, 0.01, 'USD', 0)"
-    ).run();
-    V2Seed.close();
-    const V2Ledger = Open(Validate({ databasePath: V2Path }));
-    try {
-      const Database = V2Ledger.Database;
-      const Version = Database.prepare("PRAGMA user_version").get();
-      Check(Count, "A3: the v3 through v6 rungs stamp a v2 ledger version 6", () => {
-        assert.equal(Version.user_version, 6);
-      });
-      Check(Count, "A1: the factor columns exist on Price and Call", () => {
-        assert.ok(Columns(Database, "Price").includes("TierFrom"), "Price.TierFrom");
-        assert.ok(Columns(Database, "Price").includes("TierTo"), "Price.TierTo");
-        assert.ok(Columns(Database, "Price").includes("Mode"), "Price.Mode");
-        assert.ok(Columns(Database, "Price").includes("Region"), "Price.Region");
-        assert.ok(Columns(Database, "Call").includes("Mode"), "Call.Mode");
-        assert.ok(Columns(Database, "Call").includes("Region"), "Call.Region");
-        assert.ok(Columns(Database, "Call").includes("Tier"), "Call.Tier");
-      });
-      Check(Count, "A1: the Modifier, Factor and CallFactor tables exist", () => {
-        assert.ok(Columns(Database, "Modifier").includes("Multiplier"), "Modifier.Multiplier");
-        assert.ok(Columns(Database, "Modifier").includes("EffectiveFrom"), "Modifier.EffectiveFrom");
-        assert.ok(Columns(Database, "Factor").includes("Value"), "Factor.Value");
-        assert.ok(Columns(Database, "CallFactor").includes("Weight"), "CallFactor.Weight");
-        assert.ok(Columns(Database, "CallFactor").includes("FactorId"), "CallFactor.FactorId");
-      });
-      Check(Count, "A3: the v2 data survives with the new defaults filled", () => {
-        const Price = Database.prepare(
-          "SELECT Provider, TierFrom, Mode FROM Price WHERE Provider = 'p'"
-        ).get();
-        assert.ok(Price !== void 0, "the v2 price row survived");
-        assert.equal(Price.TierFrom, 0, "the tier floor defaulted to zero");
-        assert.equal(Price.Mode, "standard", "the price mode defaulted to standard");
-        const Call = Database.prepare(
-          "SELECT Provider, Mode, Region, Tier, Attempts FROM Call WHERE CallId = 1"
-        ).get();
-        assert.ok(Call !== void 0, "the v2 call row survived");
-        assert.equal(Call.Mode, "standard", "the call mode defaulted to standard");
-        assert.equal(Call.Region, null, "the call region defaulted to any region");
-        assert.equal(Call.Tier, null, "the call tier stayed unset");
-        assert.equal(Call.Attempts, 1, "the attempts defaulted to one");
-      });
-    } finally {
-      V2Ledger.Close();
-    }
-    const V3 = `
+`,E=(t,l)=>t.prepare(`PRAGMA table_info(${l})`).all().map(L=>L.name),M=async()=>{const t=P(),l=await p(d(m(),"dsh-cost-migrate-"));try{const L=d(l,"v1.db"),n=new R(L);n.exec(v),n.prepare("INSERT INTO Session (SessionId, CreatedAt) VALUES ('s1', 0)").run(),n.prepare("INSERT INTO File (FileId, Path) VALUES (1, '/w/a.ts')").run(),n.close();const c=I(u({databasePath:L}));try{const T=c.Database,s=T.prepare("PRAGMA user_version").get();N(t,"A3: the ladder stamps a v1 ledger version 6",()=>{e.equal(s.user_version,6)}),N(t,"A1: the additive columns exist on Price, Call and Touch through every rung",()=>{e.ok(E(T,"Price").includes("Window"),"Price.Window"),e.ok(E(T,"Price").includes("TierFrom"),"Price.TierFrom"),e.ok(E(T,"Call").includes("CacheSaving"),"Call.CacheSaving"),e.ok(E(T,"Call").includes("Mode"),"Call.Mode"),e.ok(E(T,"Call").includes("Tier"),"Call.Tier"),e.ok(E(T,"Call").includes("LatencyMs"),"Call.LatencyMs"),e.ok(E(T,"Call").includes("Attempts"),"Call.Attempts"),e.ok(E(T,"Call").includes("Utilization"),"Call.Utilization"),e.ok(E(T,"Touch").includes("Stage"),"Touch.Stage"),e.ok(E(T,"Touch").includes("Branch"),"Touch.Branch"),e.ok(E(T,"Touch").includes("ReadBeforeEdit"),"Touch.ReadBeforeEdit"),e.ok(E(T,"Touch").includes("DurationMs"),"Touch.DurationMs"),e.ok(E(T,"Touch").includes("ResultBytes"),"Touch.ResultBytes"),e.ok(E(T,"Edit").includes("Ordinal"),"Edit.Ordinal")}),N(t,"A1: the Alias and Verdict tables and the FileLifetime view exist",()=>{e.ok(E(T,"Alias").includes("FromPath"),"Alias.FromPath"),e.ok(E(T,"Verdict").includes("State"),"Verdict.State"),e.ok(T.prepare("SELECT FileId, Path, Sessions, Direct, Amortized, Cost FROM FileLifetime").all()!==void 0,"the FileLifetime view selects")}),N(t,"A3: the v6 rung adds the fresh-only tables and the v1 data survives",()=>{const o=T.prepare("SELECT SessionId FROM Session WHERE SessionId = 's1'").get();e.ok(o!==void 0,"the v1 session row survived");const i=T.prepare("SELECT COUNT(*) AS N FROM sqlite_master WHERE type = 'table' AND name = 'Rollup'").get();e.equal(i.N,1,"the v6 rung creates the fresh-only Rollup table");const F=T.prepare("SELECT COUNT(*) AS N FROM sqlite_master WHERE type = 'table' AND name = 'Cursor'").get();e.equal(F.N,1,"the v6 rung creates the fresh-only Cursor table")})}finally{c.Close()}const A=d(l,"v2.db"),a=new R(A);a.exec(f),a.prepare("INSERT INTO Session (SessionId, CreatedAt) VALUES ('s2', 0)").run(),a.prepare("INSERT INTO File (FileId, Path) VALUES (1, '/w/a.ts')").run(),a.prepare("INSERT INTO Price (Provider, Model, InputRate, OutputRate, EffectiveFrom) VALUES ('p', 'm', 1, 2, 0)").run(),a.prepare("INSERT INTO Call (CallId, SessionId, Turn, Step, Seq, Provider, Model, InputTokens, OutputTokens, CostTotal, Currency, At) VALUES (1, 's2', 1, 1, 0, 'p', 'm', 10, 5, 0.01, 'USD', 0)").run(),a.close();const C=I(u({databasePath:A}));try{const T=C.Database,s=T.prepare("PRAGMA user_version").get();N(t,"A3: the v3 through v6 rungs stamp a v2 ledger version 6",()=>{e.equal(s.user_version,6)}),N(t,"A1: the factor columns exist on Price and Call",()=>{e.ok(E(T,"Price").includes("TierFrom"),"Price.TierFrom"),e.ok(E(T,"Price").includes("TierTo"),"Price.TierTo"),e.ok(E(T,"Price").includes("Mode"),"Price.Mode"),e.ok(E(T,"Price").includes("Region"),"Price.Region"),e.ok(E(T,"Call").includes("Mode"),"Call.Mode"),e.ok(E(T,"Call").includes("Region"),"Call.Region"),e.ok(E(T,"Call").includes("Tier"),"Call.Tier")}),N(t,"A1: the Modifier, Factor and CallFactor tables exist",()=>{e.ok(E(T,"Modifier").includes("Multiplier"),"Modifier.Multiplier"),e.ok(E(T,"Modifier").includes("EffectiveFrom"),"Modifier.EffectiveFrom"),e.ok(E(T,"Factor").includes("Value"),"Factor.Value"),e.ok(E(T,"CallFactor").includes("Weight"),"CallFactor.Weight"),e.ok(E(T,"CallFactor").includes("FactorId"),"CallFactor.FactorId")}),N(t,"A3: the v2 data survives with the new defaults filled",()=>{const o=T.prepare("SELECT Provider, TierFrom, Mode FROM Price WHERE Provider = 'p'").get();e.ok(o!==void 0,"the v2 price row survived"),e.equal(o.TierFrom,0,"the tier floor defaulted to zero"),e.equal(o.Mode,"standard","the price mode defaulted to standard");const i=T.prepare("SELECT Provider, Mode, Region, Tier, Attempts FROM Call WHERE CallId = 1").get();e.ok(i!==void 0,"the v2 call row survived"),e.equal(i.Mode,"standard","the call mode defaulted to standard"),e.equal(i.Region,null,"the call region defaulted to any region"),e.equal(i.Tier,null,"the call tier stayed unset"),e.equal(i.Attempts,1,"the attempts defaulted to one")})}finally{C.Close()}const S=`
 CREATE TABLE Session (SessionId TEXT PRIMARY KEY, CreatedAt INTEGER NOT NULL) STRICT;
 CREATE TABLE File (FileId INTEGER PRIMARY KEY, Path TEXT NOT NULL) STRICT;
 CREATE TABLE Price (PriceId INTEGER PRIMARY KEY, Provider TEXT NOT NULL, Model TEXT NOT NULL, InputRate REAL NOT NULL, OutputRate REAL NOT NULL, Currency TEXT NOT NULL DEFAULT 'USD', CacheReadRate REAL, CacheWriteRate REAL, ReasoningRate REAL, EffectiveTo INTEGER, Note TEXT, EffectiveFrom INTEGER NOT NULL, Window TEXT NOT NULL DEFAULT 'any', TierFrom INTEGER NOT NULL DEFAULT 0, TierTo INTEGER, Mode TEXT NOT NULL DEFAULT 'standard', Region TEXT) STRICT;
@@ -165,69 +45,4 @@ JOIN Allocation AS a ON a.FileId = f.FileId
 JOIN Call AS c ON c.CallId = a.CallId
 GROUP BY f.FileId;
 PRAGMA user_version = 3;
-`;
-    const V3Path = join(Home, "v3.db");
-    const V3Seed = new DatabaseSync(V3Path);
-    V3Seed.exec(V3);
-    V3Seed.prepare("INSERT INTO Session (SessionId, CreatedAt) VALUES ('s3', 0)").run();
-    V3Seed.prepare("INSERT INTO File (FileId, Path) VALUES (1, '/w/a.ts')").run();
-    V3Seed.prepare(
-      "INSERT INTO Call (CallId, SessionId, Turn, Step, Seq, Provider, Model, InputTokens, OutputTokens, CostTotal, Currency, At) VALUES (1, 's3', 1, 1, 0, 'p', 'm', 10, 5, 0.01, 'USD', 0)"
-    ).run();
-    V3Seed.close();
-    const V3Ledger = Open(Validate({ databasePath: V3Path }));
-    try {
-      const Database = V3Ledger.Database;
-      const Version = Database.prepare("PRAGMA user_version").get();
-      Check(Count, "A3: the v4, v5 and v6 rungs stamp a v3 ledger version 6", () => {
-        assert.equal(Version.user_version, 6);
-      });
-      Check(Count, "A1: the v6 rung gives a v3 ledger the FileVersion table and Touch.VersionId", () => {
-        assert.ok(Columns(Database, "FileVersion").includes("VersionId"), "FileVersion.VersionId");
-        assert.ok(Columns(Database, "FileVersion").includes("ObservedAt"), "FileVersion.ObservedAt");
-        assert.ok(Columns(Database, "Touch").includes("VersionId"), "Touch.VersionId");
-        const Versions = Database.prepare("SELECT COUNT(*) AS N FROM FileVersion").get();
-        assert.equal(Versions.N, 0, "the migrated FileVersion table starts empty");
-      });
-      Check(Count, "A1: the telemetry columns and the Edit table exist", () => {
-        assert.ok(Columns(Database, "Call").includes("LatencyMs"), "Call.LatencyMs");
-        assert.ok(Columns(Database, "Call").includes("FirstTokenMs"), "Call.FirstTokenMs");
-        assert.ok(Columns(Database, "Call").includes("TokensPerSecond"), "Call.TokensPerSecond");
-        assert.ok(Columns(Database, "Call").includes("Attempts"), "Call.Attempts");
-        assert.ok(Columns(Database, "Call").includes("ErrorCode"), "Call.ErrorCode");
-        assert.ok(Columns(Database, "Call").includes("ContextWindow"), "Call.ContextWindow");
-        assert.ok(Columns(Database, "Call").includes("Utilization"), "Call.Utilization");
-        assert.ok(Columns(Database, "Touch").includes("DurationMs"), "Touch.DurationMs");
-        assert.ok(Columns(Database, "Touch").includes("ResultBytes"), "Touch.ResultBytes");
-        assert.ok(Columns(Database, "Edit").includes("Ordinal"), "Edit.Ordinal");
-        assert.ok(Columns(Database, "Edit").includes("LinesAdded"), "Edit.LinesAdded");
-        assert.ok(Columns(Database, "Edit").includes("AfterHash"), "Edit.AfterHash");
-      });
-      Check(Count, "A3: the v3 data survives, the attempts default to one and Edit starts empty", () => {
-        const Call = Database.prepare(
-          "SELECT Provider, Attempts, ContextWindow FROM Call WHERE CallId = 1"
-        ).get();
-        assert.ok(Call !== void 0, "the v3 call row survived");
-        assert.equal(Call.Provider, "p", "the call row kept its provider");
-        assert.equal(Call.Attempts, 1, "the attempts defaulted to one");
-        assert.equal(Call.ContextWindow, null, "the context window stayed unset");
-        const Edits = Database.prepare("SELECT COUNT(*) AS N FROM Edit").get();
-        assert.equal(Edits.N, 0, "the migrated Edit table starts empty");
-      });
-    } finally {
-      V3Ledger.Close();
-    }
-  } finally {
-    await rm(Home, { recursive: true, force: true });
-  }
-  return Finish(Count, "Migrate");
-};
-const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
-if (InvokedDirectly) {
-  const Pass = await runTest();
-  console.log(`${Pass} PASS - Migrate`);
-}
-export {
-  runTest
-};
-//# sourceMappingURL=Test.js.map
+`,O=d(l,"v3.db"),r=new R(O);r.exec(S),r.prepare("INSERT INTO Session (SessionId, CreatedAt) VALUES ('s3', 0)").run(),r.prepare("INSERT INTO File (FileId, Path) VALUES (1, '/w/a.ts')").run(),r.prepare("INSERT INTO Call (CallId, SessionId, Turn, Step, Seq, Provider, Model, InputTokens, OutputTokens, CostTotal, Currency, At) VALUES (1, 's3', 1, 1, 0, 'p', 'm', 10, 5, 0.01, 'USD', 0)").run(),r.close();const U=I(u({databasePath:O}));try{const T=U.Database,s=T.prepare("PRAGMA user_version").get();N(t,"A3: the v4, v5 and v6 rungs stamp a v3 ledger version 6",()=>{e.equal(s.user_version,6)}),N(t,"A1: the v6 rung gives a v3 ledger the FileVersion table and Touch.VersionId",()=>{e.ok(E(T,"FileVersion").includes("VersionId"),"FileVersion.VersionId"),e.ok(E(T,"FileVersion").includes("ObservedAt"),"FileVersion.ObservedAt"),e.ok(E(T,"Touch").includes("VersionId"),"Touch.VersionId");const o=T.prepare("SELECT COUNT(*) AS N FROM FileVersion").get();e.equal(o.N,0,"the migrated FileVersion table starts empty")}),N(t,"A1: the telemetry columns and the Edit table exist",()=>{e.ok(E(T,"Call").includes("LatencyMs"),"Call.LatencyMs"),e.ok(E(T,"Call").includes("FirstTokenMs"),"Call.FirstTokenMs"),e.ok(E(T,"Call").includes("TokensPerSecond"),"Call.TokensPerSecond"),e.ok(E(T,"Call").includes("Attempts"),"Call.Attempts"),e.ok(E(T,"Call").includes("ErrorCode"),"Call.ErrorCode"),e.ok(E(T,"Call").includes("ContextWindow"),"Call.ContextWindow"),e.ok(E(T,"Call").includes("Utilization"),"Call.Utilization"),e.ok(E(T,"Touch").includes("DurationMs"),"Touch.DurationMs"),e.ok(E(T,"Touch").includes("ResultBytes"),"Touch.ResultBytes"),e.ok(E(T,"Edit").includes("Ordinal"),"Edit.Ordinal"),e.ok(E(T,"Edit").includes("LinesAdded"),"Edit.LinesAdded"),e.ok(E(T,"Edit").includes("AfterHash"),"Edit.AfterHash")}),N(t,"A3: the v3 data survives, the attempts default to one and Edit starts empty",()=>{const o=T.prepare("SELECT Provider, Attempts, ContextWindow FROM Call WHERE CallId = 1").get();e.ok(o!==void 0,"the v3 call row survived"),e.equal(o.Provider,"p","the call row kept its provider"),e.equal(o.Attempts,1,"the attempts defaulted to one"),e.equal(o.ContextWindow,null,"the context window stayed unset");const i=T.prepare("SELECT COUNT(*) AS N FROM Edit").get();e.equal(i.N,0,"the migrated Edit table starts empty")})}finally{U.Close()}}finally{await h(l,{recursive:!0,force:!0})}return G(t,"Migrate")},k=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(k){const t=await M();console.log(`${t} PASS - Migrate`)}export{M as runTest};

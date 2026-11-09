@@ -1,11 +1,139 @@
-import s from"node:assert/strict";import{AgentOf as C,CheckAsync as p,FakeGraph as g,Finish as A,Ledger as m,Make as f,MakeCounter as G,Post as r,rm as w,SeedHistory as h,Setup as R,Validate as y,Workspace as b}from"../Harness.js";const o="README.md",i=["CHANGELOG.md","package.json"],c=b([o,...i]),l=n=>({name:"read",arguments:{file_path:c.At(o)},agent:C(n)}),x=`[search-suggester] intent=History confidence=0.87
-targets (2):
-- CHANGELOG.md - touched 1 time(s) after a similar call
-- package.json - touched 1 time(s) after a similar call
-note: open these before more searches; Target/ is generated, never edit it.`,q=async()=>{const n=G();{w();const t=g([{path:"package.json",kind:"File",version:"1"}]),e=f(y({logFile:m,enabled:!0}),a=>{a.workspaceGraph=t});h(e,"a",c.At(o),i),h(e,"b",c.At(o),i),await p(n,"R1: the projection is built once and reused",async()=>{s.equal(t.Calls.snapshots,1),await r(e,l("a")),await r(e,l("b")),s.equal(t.Calls.snapshots,1)})}{w();const t=[{path:"package.json",kind:"File",version:"1"}],e=g(t),a=f(y({logFile:m,enabled:!0}),d=>{d.workspaceGraph=e});h(a,"a",c.At(o),i),h(a,"b",c.At(o),i);const u=await r(a,l("a"));await p(n,"R2: the first projection leads with the only proven path",async()=>{const d=u.additionalContexts[0].content[0].text;s.equal(d.startsWith(`[search-suggester] intent=History confidence=0.87
-targets (2):
-- package.json - touched 1 time(s) after a similar call`),!0)}),await p(n,"R2: tools/change invalidates the projection lazily",async()=>{t.push({path:"CHANGELOG.md",kind:"File",version:"2"}),a.CtxListeners["tools/change"](),s.equal(e.Calls.snapshots,1)}),await p(n,"R2: the rebuilt projection reflects the re-indexed graph",async()=>{const d=await r(a,l("b"));s.equal(e.Calls.snapshots,2);const k=d.additionalContexts[0].content[0].text;s.equal(k.startsWith(`[search-suggester] intent=History confidence=0.87
-targets (2):
-- CHANGELOG.md - touched 1 time(s) after a similar call`),!0)})}{w();const t=[{path:"package.json",kind:"File",version:"1"}],e=g(t),a=f(y({logFile:m,enabled:!0,refreshOnBoot:!1}),u=>{u.workspaceGraph=e});h(a,"a",c.At(o),i),h(a,"b",c.At(o),i),await r(a,l("a")),await p(n,"R3: a frozen projection is not rebuilt on tools/change",async()=>{t.push({path:"CHANGELOG.md",kind:"File",version:"2"}),a.CtxListeners["tools/change"](),s.equal(e.Calls.snapshots,1);const u=await r(a,l("b"));s.equal(u.additionalContexts[0].content[0].text.startsWith(`[search-suggester] intent=History confidence=0.87
-targets (2):
-- package.json - touched 1 time(s) after a similar call`),!0)})}{w();const t=g([]),e=f(y({logFile:m,enabled:!0}),a=>{a.workspaceGraph=t});h(e,"a",c.At(o),i),await p(n,"R4: an empty graph is re-probed on every read",async()=>{s.equal(t.Calls.snapshots,1),await r(e,l("a")),await r(e,l("a")),s.equal(t.Calls.snapshots,3),s.equal(e.Lines.filter(a=>a.includes(": suggest ")).length,1)})}{const t=R();h(t,"a",c.At(o),i),await p(n,"R5: without a service the note is the neutral one",async()=>{const e=await r(t,l("a"));s.equal(e.additionalContexts[0].content[0].text,x),s.deepEqual(t.Warns,[])})}return A(n,"Index-Refresh")},v=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(v){const n=await q();console.log(`${n} PASS - Index-Refresh`)}export{q as runTest};
+import assert from "node:assert/strict";
+import {
+  AgentOf,
+  CheckAsync,
+  FakeGraph,
+  Finish,
+  Ledger,
+  Make,
+  MakeCounter,
+  Post,
+  rm,
+  SeedHistory,
+  Setup,
+  Validate,
+  Workspace
+} from "../Harness.js";
+const Anchor = "README.md";
+const Companions = ["CHANGELOG.md", "package.json"];
+const Space = Workspace([Anchor, ...Companions]);
+const Read = (Id) => ({
+  name: "read",
+  arguments: { file_path: Space.At(Anchor) },
+  agent: AgentOf(Id)
+});
+const Neutral = "[search-suggester] intent=History confidence=0.87\ntargets (2):\n- CHANGELOG.md - touched 1 time(s) after a similar call\n- package.json - touched 1 time(s) after a similar call\nnote: open these before more searches; Target/ is generated, never edit it.";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    rm();
+    const Graph = FakeGraph([{ path: "package.json", kind: "File", version: "1" }]);
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
+      Context.workspaceGraph = Graph;
+    });
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    SeedHistory(Run, "b", Space.At(Anchor), Companions);
+    await CheckAsync(Count, "R1: the projection is built once and reused", async () => {
+      assert.equal(Graph.Calls.snapshots, 1);
+      await Post(Run, Read("a"));
+      await Post(Run, Read("b"));
+      assert.equal(Graph.Calls.snapshots, 1);
+    });
+  }
+  {
+    rm();
+    const Nodes = [{ path: "package.json", kind: "File", version: "1" }];
+    const Graph = FakeGraph(Nodes);
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
+      Context.workspaceGraph = Graph;
+    });
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    SeedHistory(Run, "b", Space.At(Anchor), Companions);
+    const Before = await Post(Run, Read("a"));
+    await CheckAsync(Count, "R2: the first projection leads with the only proven path", async () => {
+      const Text = Before.additionalContexts[0].content[0].text;
+      assert.equal(
+        Text.startsWith(
+          "[search-suggester] intent=History confidence=0.87\ntargets (2):\n- package.json - touched 1 time(s) after a similar call"
+        ),
+        true
+      );
+    });
+    await CheckAsync(Count, "R2: tools/change invalidates the projection lazily", async () => {
+      Nodes.push({ path: "CHANGELOG.md", kind: "File", version: "2" });
+      Run.CtxListeners["tools/change"]();
+      assert.equal(Graph.Calls.snapshots, 1);
+    });
+    await CheckAsync(Count, "R2: the rebuilt projection reflects the re-indexed graph", async () => {
+      const Out = await Post(Run, Read("b"));
+      assert.equal(Graph.Calls.snapshots, 2);
+      const Text = Out.additionalContexts[0].content[0].text;
+      assert.equal(
+        Text.startsWith(
+          "[search-suggester] intent=History confidence=0.87\ntargets (2):\n- CHANGELOG.md - touched 1 time(s) after a similar call"
+        ),
+        true
+      );
+    });
+  }
+  {
+    rm();
+    const Nodes = [{ path: "package.json", kind: "File", version: "1" }];
+    const Graph = FakeGraph(Nodes);
+    const Run = Make(
+      Validate({ logFile: Ledger, enabled: true, refreshOnBoot: false }),
+      (Context) => {
+        Context.workspaceGraph = Graph;
+      }
+    );
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    SeedHistory(Run, "b", Space.At(Anchor), Companions);
+    await Post(Run, Read("a"));
+    await CheckAsync(Count, "R3: a frozen projection is not rebuilt on tools/change", async () => {
+      Nodes.push({ path: "CHANGELOG.md", kind: "File", version: "2" });
+      Run.CtxListeners["tools/change"]();
+      assert.equal(Graph.Calls.snapshots, 1);
+      const Out = await Post(Run, Read("b"));
+      assert.equal(
+        Out.additionalContexts[0].content[0].text.startsWith(
+          "[search-suggester] intent=History confidence=0.87\ntargets (2):\n- package.json - touched 1 time(s) after a similar call"
+        ),
+        true
+      );
+    });
+  }
+  {
+    rm();
+    const Graph = FakeGraph([]);
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
+      Context.workspaceGraph = Graph;
+    });
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    await CheckAsync(Count, "R4: an empty graph is re-probed on every read", async () => {
+      assert.equal(Graph.Calls.snapshots, 1);
+      await Post(Run, Read("a"));
+      await Post(Run, Read("a"));
+      assert.equal(Graph.Calls.snapshots, 3);
+      assert.equal(Run.Lines.filter((Line) => Line.includes(": suggest ")).length, 1);
+    });
+  }
+  {
+    const Run = Setup();
+    SeedHistory(Run, "a", Space.At(Anchor), Companions);
+    await CheckAsync(Count, "R5: without a service the note is the neutral one", async () => {
+      const Out = await Post(Run, Read("a"));
+      assert.equal(Out.additionalContexts[0].content[0].text, Neutral);
+      assert.deepEqual(Run.Warns, []);
+    });
+  }
+  return Finish(Count, "Index-Refresh");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Index-Refresh`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

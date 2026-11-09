@@ -1,33 +1,41 @@
-// RecallHistory - the LIVE history's recall (Function/RecallHistory): the
-// companions of a similar prior call. This is the reader the completion
-// spec's wave 2c re-spec finally feeds - before the producer
-// (Function/Record) the recall always missed.
-//
-// THE MATCH: the most recent prior entry that is SIMILAR to this call. Two
-// calls are similar when
-//   1. their probes share the tool name (the probe's first segment), AND
-//   2. one probe literal occurs in the other (the seeded store's rule - the
-//      repeated identical call), OR
-//   3. their paths share a directory (the same area was touched before).
-//
-// THE EPISODE: the anchor plus the entries within `learnWindow` positions of
-// it, newest first - the paths that ACCOMPANIED the similar call. That is the
-// "what did the last run of this touch" answer, and it is why one entry alone
-// is not the recall.
-//
-// THE CURRENT CALL IS NEVER ITS OWN HISTORY: the producer records the call
-// BEFORE the recall runs (so the entry exists on every return path), and the
-// `Before` sequence fence excludes it and anything newer.
-//
-// The answer is the SEEDED record shape (Interface/History) with an empty
-// `verify`, so the note path, the caveat fallback and the delivery surface
-// are the same for both sources.
+/**
+ * @module RecallHistory
+ *
+ * The live history's recall: the companions of a similar prior call, read
+ * from an agent's ring or the durable mirror.
+ *
+ * @remarks
+ * This is the reader the completion spec's wave 2c re-spec finally feeds -
+ * before the producer (Function/Record) the recall always missed.
+ *
+ * THE MATCH: the most recent prior entry that is SIMILAR to this call. Two
+ * calls are similar when
+ *   1. their probes share the tool name (the probe's first segment), AND
+ *   2. one probe literal occurs in the other (the seeded store's rule - the
+ *      repeated identical call), OR
+ *   3. their paths share a directory (the same area was touched before).
+ *
+ * THE EPISODE: the anchor plus the entries within `learnWindow` positions of
+ * it, newest first - the paths that ACCOMPANIED the similar call. That is the
+ * "what did the last run of this touch" answer, and it is why one entry alone
+ * is not the recall.
+ *
+ * THE CURRENT CALL IS NEVER ITS OWN HISTORY: the producer records the call
+ * BEFORE the recall runs (so the entry exists on every return path), and the
+ * `Before` sequence fence excludes it and anything newer.
+ *
+ * The answer is the SEEDED record shape (Interface/History) with an empty
+ * `verify`, so the note path, the caveat fallback and the delivery surface
+ * are the same for both sources.
+ */
 import { dirname } from "node:path";
 
 import type Entry from "@Interface/Entry.js";
 import type { ReplayRecord } from "@Interface/History.js";
 
-/** Whether a prior entry is similar to this call. */
+/**
+ * Whether a prior entry is similar to this call.
+ */
 const Similar = (Entry_: Entry, Probe: string, Path: string): boolean => {
 	const Tool = Probe.split(" ")[0] ?? "";
 	switch (true) {

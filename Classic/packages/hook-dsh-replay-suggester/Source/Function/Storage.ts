@@ -1,42 +1,48 @@
-// Storage - the storage-domain open and recovery (Function/Storage), the
-// PRIMARY tier of the recall store (pattern P4 of Temporary/Harness-Wave/
-// Plan.md section 6; the shipped sequence copied from hook-dsh-workspace-
-// observe/Source/Function/Storage.ts:51-103). THE DOMAIN: `replay_history`,
-// version 1, per-record layout, backup-and-skip invalid records, and NO
-// `compatibleVersions` - the library rejects an entry that is not strictly
-// BELOW the declared version, so `[1]` against version 1 throws at load (the
-// family's learned rule). TWO tables:
-//   * `history` - one record per entry: key `String(seq)`, value the Entry;
-//   * `meta`    - ONE record `__savedAt`: the snapshot timestamp.
-//
-// THE RECOVERY FALLBACK (one release): when the domain table is EMPTY on
-// open (a fresh domain after the migration), the old JSON record file
-// (config `recordPath`) seeds the store once - Recover runs the shared
-// Function/Restore, so the byte-exact `store recovered <n> entries (file)`
-// line, the newest-N bound and the malformed-row skip are identical on both
-// tiers - and the surviving entries are then put into the domain table (the
-// one-time migration). The file itself is never deleted here, so a
-// deployment that never opens the facility keeps working byte-for-byte.
-//
-// THE WRITE MIRROR: the open handle's `history` table is shadowed with an
-// own-property wrapper (the ccr precedent's ShadowPut shape), so every
-// future domain write also refreshes the JSON fallback file - the fallback
-// stays fresh for one release. The wrapper passes through untouched once
-// the handle is closed (State.Handle is cleared by the effect's disposer,
-// Function/Storage's Close).
-//
-// The recovery lands in the SAME Function/Restore the JSON fallback uses, so
-// the malformed-row skip and the sequence restart are identical on both tiers.
-//
-// Best-effort and detached (the family's P5-style posture): the open runs on
-// the store chain from Apply, and every failure is contained here. A PRESENT
-// facility whose open fails is LOUD: one best-effort ledger line
-// `store open failed: <reason>`, then the JSON fallback recovers (the
-// documented degraded store) - never rethrown.
-//
-// The dynamic imports keep the optional storage packages off the module-load
-// path (a module-level import of an unresolvable package would crash the
-// whole bundle load - the factory's live-verified pitfall).
+/**
+ * @module Storage
+ *
+ * The storage-domain open and recovery: the PRIMARY tier of the recall store.
+ *
+ * @remarks
+ * Pattern P4 of Temporary/Harness-Wave/Plan.md section 6; the shipped
+ * sequence copied from hook-dsh-workspace-observe/Source/Function/Storage.ts
+ * :51-103. THE DOMAIN: `replay_history`, version 1, per-record layout,
+ * backup-and-skip invalid records, and NO `compatibleVersions` - the library
+ * rejects an entry that is not strictly BELOW the declared version, so `[1]`
+ * against version 1 throws at load (the family's learned rule). TWO tables:
+ *
+ *   - `history` - one record per entry: key `String(seq)`, value the Entry;
+ *   - `meta` - ONE record `__savedAt`: the snapshot timestamp.
+ *
+ * THE RECOVERY FALLBACK (one release): when the domain table is EMPTY on
+ * open (a fresh domain after the migration), the old JSON record file
+ * (config `recordPath`) seeds the store once - Recover runs the shared
+ * Function/Restore, so the byte-exact `store recovered <n> entries (file)`
+ * line, the newest-N bound and the malformed-row skip are identical on both
+ * tiers - and the surviving entries are then put into the domain table (the
+ * one-time migration). The file itself is never deleted here, so a
+ * deployment that never opens the facility keeps working byte-for-byte.
+ *
+ * THE WRITE MIRROR: the open handle's `history` table is shadowed with an
+ * own-property wrapper (the ccr precedent's ShadowPut shape), so every
+ * future domain write also refreshes the JSON fallback file - the fallback
+ * stays fresh for one release. The wrapper passes through untouched once
+ * the handle is closed (State.Handle is cleared by the effect's disposer,
+ * Function/Storage's Close).
+ *
+ * The recovery lands in the SAME Function/Restore the JSON fallback uses, so
+ * the malformed-row skip and the sequence restart are identical on both tiers.
+ *
+ * Best-effort and detached (the family's P5-style posture): the open runs on
+ * the store chain from Apply, and every failure is contained here. A PRESENT
+ * facility whose open fails is LOUD: one best-effort ledger line
+ * `store open failed: <reason>`, then the JSON fallback recovers (the
+ * documented degraded store) - never rethrown.
+ *
+ * The dynamic imports keep the optional storage packages off the module-load
+ * path (a module-level import of an unresolvable package would crash the
+ * whole bundle load - the factory's live-verified pitfall).
+ */
 import type Handle from "@Interface/Handle.js";
 import type { Table } from "@Interface/Handle.js";
 import type State from "@Interface/State.js";
@@ -45,10 +51,12 @@ import Recover from "./Recover.js";
 import Restore from "./Restore.js";
 import { Save } from "./Snapshot.js";
 
-/** The JSON fallback's fresh write (the mirror: the fallback file stays
- *  current for one release while the domain is the primary tier). The save
- *  is best-effort (Snapshot.Save never throws) and never on the caller's
- *  await path - the store must never break a judged call. */
+/**
+ * The JSON fallback's fresh write (the mirror: the fallback file stays
+ * current for one release while the domain is the primary tier). The save
+ * is best-effort (Snapshot.Save never throws) and never on the caller's
+ * await path - the store must never break a judged call.
+ */
 const Mirror = (State: State): void => {
 	try {
 		void Save(State.RecordPath, State.History, Date.now()).catch(() => {
@@ -59,10 +67,12 @@ const Mirror = (State: State): void => {
 	}
 };
 
-/** Shadow the open handle's `history` table with an own-property wrapper:
- *  the original KV write runs first, then the JSON mirror. The wrapper
- *  becomes a pass-through once the handle is closed (State.Handle is
- *  cleared, so Persist stops reaching the table at all). */
+/**
+ * Shadow the open handle's `history` table with an own-property wrapper:
+ * the original KV write runs first, then the JSON mirror. The wrapper
+ * becomes a pass-through once the handle is closed (State.Handle is
+ * cleared, so Persist stops reaching the table at all).
+ */
 const Shadow = (State: State, Handle: Handle): void => {
 	const Resolve = Handle.table.bind(Handle);
 	Handle.table = (Name: string): Table => {
@@ -175,8 +185,10 @@ export default async (
 	}
 };
 
-/** Close the open handle (the effect's disposer; a no-op when absent or
- *  already closed - idempotent by the cleared State.Handle). */
+/**
+ * Close the open handle (the effect's disposer; a no-op when absent or
+ * already closed - idempotent by the cleared State.Handle).
+ */
 export const Close = (State: State): void => {
 	const Handle = State.Handle;
 	State.Handle = undefined;

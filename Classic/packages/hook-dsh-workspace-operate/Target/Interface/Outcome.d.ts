@@ -1,5 +1,5 @@
-import type Proposal from "@Interface/Proposal.js";
-import type Refusal from "@Interface/Refusal.js";
+import type Proposal from "./Proposal.js";
+import type Refusal from "./Refusal.js";
 export default interface Outcome {
     status: "proposed" | "refused";
     proposal?: Proposal;

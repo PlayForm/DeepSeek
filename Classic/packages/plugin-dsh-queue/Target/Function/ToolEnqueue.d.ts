@@ -1,3 +1,15 @@
+/**
+ * @module ToolEnqueue
+ *
+ * The `queue_enqueue` tool: the orchestrator's surface for queueing a task
+ * (the task as data - the spec is stored verbatim, the dispatcher only
+ * schedules).
+ *
+ * @remarks
+ * The definition is built once at apply (the
+ * registration is readonly after registration); the tool's result is one
+ * canonical JSON value.
+ */
 import type State from "../Interface/State.js";
 export default _default;
 declare function _default(State: State): {

@@ -23,5 +23,3 @@
  */
 declare const _default: string[];
 export default _default;
-declare const _default_1: string[];
-export default _default_1;

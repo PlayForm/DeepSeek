@@ -1,1 +1,153 @@
-import e from"node:assert/strict";import*as y from"node:fs";import{AgentOf as r,Check as n,CheckAsync as E,Durable as g,Exports as i,Finish as S,FirstLine as h,Knowledge as b,Ledger as p,LedgerLines as d,LedgerWith as C,Make as m,MakeCounter as x,Plugin as o,Post as u,rm as q,SeedHistory as w,Service as A,Setup as c,Validate as l,Workspace as W}from"../Harness.js";const k=async()=>{const a=x();{n(a,"W1: the default object carries name/apply/Config/inject",()=>{e.equal(o.name,"hook-dsh-search-suggester"),e.equal(o.apply,i.apply),e.equal(o.Config,i.Config),e.deepEqual(o.inject,["pluginFactory"]),e.equal(i.name,"hook-dsh-search-suggester"),e.equal(typeof o.apply,"function"),e.equal(typeof o.Config,"function")}),q();const t=m(l({logFile:p,enabled:!0}));n(a,"W1: apply returns NOTHING (a returned value kills delivery)",()=>{e.equal(t.Returned,void 0)})}{const t=c();n(a,"W2: the five listeners register on the plugin context only",()=>{e.deepEqual(Object.keys(t.CtxListeners),["loader/volatile-update","tools/post-execute","agent/pre-step","system-prompt/assemble","tools/change"]),e.deepEqual(t.Injected,[["sessionProjections"]]),e.deepEqual(t.RootNames,[]),e.notEqual(t.Root,t.Context),e.equal(Object.getPrototypeOf(t.Root),Object.prototype)}),n(a,"W2: the activation line is byte-exact in the logger form",()=>{e.deepEqual(t.Lines,["hook-dsh-search-suggester: activated (bundle 0.2.1, history, threshold 0.75)"]),e.deepEqual(t.Effects,[])}),n(a,"W2: the activation line is byte-exact in the durable form",()=>{e.equal(d().length,1),e.match(h(),g("activated (bundle 0.2.1, history, threshold 0.75)")),e.deepEqual(C("activated (bundle 0.2.1, history, threshold 0.75)").length,1)})}{q();const t=m(l({logFile:p,enabled:!1}));n(a,"W3: the disabled line is byte-exact in both forms",()=>{e.deepEqual(t.Lines,["hook-dsh-search-suggester: disabled (enabled=false)"]),e.equal(d().length,1),e.match(h(),g("disabled (enabled=false)"))}),await E(a,"W3: a disabled mount passes every call through with zero new lines",async()=>{const s={kind:"allow",additionalContexts:[]},f=await u(t,{name:"read",arguments:{file_path:"README.md"},agent:r("a")},s);e.equal(f,s),e.deepEqual(t.Lines,["hook-dsh-search-suggester: disabled (enabled=false)"]),e.equal(d().length,1)})}{n(a,"W4: a string maxCandidates fails loud at load",()=>{e.throws(()=>l({maxCandidates:"many"}),/expected number but got many/)}),n(a,"W4: a string intents fails loud at load",()=>{e.throws(()=>l({intents:"Version"}),/expected array but got Version/)});const t=c();n(a,"W4: the schema defaults land on the built State",()=>{e.equal(t.State.On,!0),e.equal(t.State.Threshold,.75),e.equal(t.State.MaxCandidates,7),e.equal(t.State.MaxNoteChars,1200),e.equal(t.State.CooldownCalls,6),e.equal(t.State.MaxNotesPerTurn,3),e.equal(t.State.Learn,!0),e.equal(t.State.LearnWindow,2),e.equal(t.State.SectionMode,"off"),e.equal(t.State.SectionTtl,20),e.deepEqual(t.State.EmitOn,["grep","glob","read","bash"]),e.deepEqual(t.State.Intents,["Version","Path","Ledger","Config","Dependency","Test","Symbol","Doc","Usage","Owner"]),e.deepEqual(t.State.Exclude,["node_modules","Target",".git","Site/Target","dist"]),e.equal(t.State.Pack.length,0),e.equal(t.State.History,void 0),e.equal(t.Projections.Units.has("searchHistory"),!0),e.equal(t.State.Factory,t.Context.pluginFactory)}),n(a,"W4: the knowledge loads cold from a missing file",()=>{e.deepEqual(t.State.Knowledge.stats,{emitted:0,followed:0,ignored:0,dismissed:0}),e.equal(y.existsSync(b),!1)})}{const t=W(["README.md","CHANGELOG.md","SCHEME.md"]),s=c();s.Context.workingDirectory=A(t.Root),w(s,"a",t.At("README.md"),["CHANGELOG.md","SCHEME.md"]),await u(s,{name:"read",arguments:{file_path:t.At("README.md")},agent:r("a")}),await u(s,{name:"grep",arguments:{pattern:"unrelated query",path:t.At("package.json")},agent:r("a")}),n(a,"W5: zero ctx.fs calls across emit and abstain",()=>{e.equal(s.Fs.reads,0),e.equal(s.Fs.writes,0)}),n(a,"W5: no logger warnings (the fail-open path never fired)",()=>{e.deepEqual(s.Warns,[])})}return S(a,"Wiring-And-Ledger")},v=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(v){const a=await k();console.log(`${a} PASS - Wiring-And-Ledger`)}export{k as runTest};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import {
+  AgentOf,
+  Check,
+  CheckAsync,
+  Durable,
+  Exports,
+  Finish,
+  FirstLine,
+  Knowledge,
+  Ledger,
+  LedgerLines,
+  LedgerWith,
+  Make,
+  MakeCounter,
+  Plugin,
+  Post,
+  rm,
+  SeedHistory,
+  Service,
+  Setup,
+  Validate,
+  Workspace
+} from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    Check(Count, "W1: the default object carries name/apply/Config/inject", () => {
+      assert.equal(Plugin.name, "hook-dsh-search-suggester");
+      assert.equal(Plugin.apply, Exports.apply);
+      assert.equal(Plugin.Config, Exports.Config);
+      assert.deepEqual(Plugin.inject, ["pluginFactory"]);
+      assert.equal(Exports.name, "hook-dsh-search-suggester");
+      assert.equal(typeof Plugin.apply, "function");
+      assert.equal(typeof Plugin.Config, "function");
+    });
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }));
+    Check(Count, "W1: apply returns NOTHING (a returned value kills delivery)", () => {
+      assert.equal(Run.Returned, void 0);
+    });
+  }
+  {
+    const Run = Setup();
+    Check(Count, "W2: the five listeners register on the plugin context only", () => {
+      assert.deepEqual(Object.keys(Run.CtxListeners), [
+        "loader/volatile-update",
+        "tools/post-execute",
+        "agent/pre-step",
+        "system-prompt/assemble",
+        "tools/change"
+      ]);
+      assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+      assert.deepEqual(Run.RootNames, []);
+      assert.notEqual(Run.Root, Run.Context);
+      assert.equal(Object.getPrototypeOf(Run.Root), Object.prototype);
+    });
+    Check(Count, "W2: the activation line is byte-exact in the logger form", () => {
+      assert.deepEqual(Run.Lines, [`hook-dsh-search-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`]);
+      assert.deepEqual(Run.Effects, []);
+    });
+    Check(Count, "W2: the activation line is byte-exact in the durable form", () => {
+      assert.equal(LedgerLines().length, 1);
+      assert.match(FirstLine(), Durable(`activated (bundle ${"0.2.1"}, history, threshold 0.75)`));
+      assert.deepEqual(LedgerWith(`activated (bundle ${"0.2.1"}, history, threshold 0.75)`).length, 1);
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+    Check(Count, "W3: the disabled line is byte-exact in both forms", () => {
+      assert.deepEqual(Run.Lines, ["hook-dsh-search-suggester: disabled (enabled=false)"]);
+      assert.equal(LedgerLines().length, 1);
+      assert.match(FirstLine(), Durable("disabled (enabled=false)"));
+    });
+    await CheckAsync(Count, "W3: a disabled mount passes every call through with zero new lines", async () => {
+      const Decision = { kind: "allow", additionalContexts: [] };
+      const Out = await Post(Run, { name: "read", arguments: { file_path: "README.md" }, agent: AgentOf("a") }, Decision);
+      assert.equal(Out, Decision);
+      assert.deepEqual(Run.Lines, ["hook-dsh-search-suggester: disabled (enabled=false)"]);
+      assert.equal(LedgerLines().length, 1);
+    });
+  }
+  {
+    Check(Count, "W4: a string maxCandidates fails loud at load", () => {
+      assert.throws(() => Validate({ maxCandidates: "many" }), /expected number but got many/);
+    });
+    Check(Count, "W4: a string intents fails loud at load", () => {
+      assert.throws(() => Validate({ intents: "Version" }), /expected array but got Version/);
+    });
+    const Run = Setup();
+    Check(Count, "W4: the schema defaults land on the built State", () => {
+      assert.equal(Run.State.On, true);
+      assert.equal(Run.State.Threshold, 0.75);
+      assert.equal(Run.State.MaxCandidates, 7);
+      assert.equal(Run.State.MaxNoteChars, 1200);
+      assert.equal(Run.State.CooldownCalls, 6);
+      assert.equal(Run.State.MaxNotesPerTurn, 3);
+      assert.equal(Run.State.Learn, true);
+      assert.equal(Run.State.LearnWindow, 2);
+      assert.equal(Run.State.SectionMode, "off");
+      assert.equal(Run.State.SectionTtl, 20);
+      assert.deepEqual(Run.State.EmitOn, ["grep", "glob", "read", "bash"]);
+      assert.deepEqual(Run.State.Intents, [
+        "Version",
+        "Path",
+        "Ledger",
+        "Config",
+        "Dependency",
+        "Test",
+        "Symbol",
+        "Doc",
+        "Usage",
+        "Owner"
+      ]);
+      assert.deepEqual(Run.State.Exclude, ["node_modules", "Target", ".git", "Site/Target", "dist"]);
+      assert.equal(Run.State.Pack.length, 0);
+      assert.equal(Run.State.History, void 0);
+      assert.equal(Run.Projections.Units.has("searchHistory"), true);
+      assert.equal(Run.State.Factory, Run.Context.pluginFactory);
+    });
+    Check(Count, "W4: the knowledge loads cold from a missing file", () => {
+      assert.deepEqual(Run.State.Knowledge.stats, { emitted: 0, followed: 0, ignored: 0, dismissed: 0 });
+      assert.equal(FileSystem.existsSync(Knowledge), false);
+    });
+  }
+  {
+    const Space = Workspace(["README.md", "CHANGELOG.md", "SCHEME.md"]);
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Space.Root);
+    SeedHistory(Run, "a", Space.At("README.md"), ["CHANGELOG.md", "SCHEME.md"]);
+    await Post(Run, { name: "read", arguments: { file_path: Space.At("README.md") }, agent: AgentOf("a") });
+    await Post(Run, { name: "grep", arguments: { pattern: "unrelated query", path: Space.At("package.json") }, agent: AgentOf("a") });
+    Check(Count, "W5: zero ctx.fs calls across emit and abstain", () => {
+      assert.equal(Run.Fs.reads, 0);
+      assert.equal(Run.Fs.writes, 0);
+    });
+    Check(Count, "W5: no logger warnings (the fail-open path never fired)", () => {
+      assert.deepEqual(Run.Warns, []);
+    });
+  }
+  return Finish(Count, "Wiring-And-Ledger");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Wiring-And-Ledger`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

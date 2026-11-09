@@ -1,4 +1,154 @@
-import e from"node:assert/strict";import{Check as s,CheckAsync as c,Finish as p,FakeGraph as b,Ledger as i,LedgerLines as f,LedgerWith as h,MakeCounter as L,Make as l,Plugin as d,rm as u,Validate as a}from"../Harness.js";const m=async()=>{const n=L();s(n,"L1: the default object carries name/apply/Config/inject",()=>{e.equal(d.name,"graph-suggester"),e.equal(typeof d.apply,"function"),e.ok(d.Config!==void 0),e.deepEqual(d.inject,["pluginFactory","workspaceGraph"])});{u();const t=l(a({logFile:i,enabled:!1}));s(n,"L2: apply returns NOTHING and the state probe exists",()=>{e.equal(t.Returned,void 0),e.ok(t.State!==void 0),e.equal(t.State.On,!1)}),s(n,"L2: the cold mount logs the byte-exact disabled line",()=>{e.deepEqual(t.Lines,["graph-suggester: disabled (enabled=false)"])}),s(n,"L2: the disabled line is in the durable ledger exactly once",()=>{e.equal(h("disabled (enabled=false)").length,1),e.ok(f()[0]?.endsWith("] disabled (enabled=false)"))}),s(n,"L2: a disabled mount still wires both listeners on the plugin ctx",()=>{e.ok(t.CtxListeners["tools/post-execute"]instanceof Function),e.ok(t.CtxListeners["agent/pre-step"]instanceof Function)})}{u();const t=l(a({logFile:i,enabled:!0}));s(n,"L3: the activation line is byte-exact",()=>{e.ok(t.Lines.includes("graph-suggester: activated (bundle 0.2.1, graph, threshold 0.75)"))}),s(n,"L3: the activation line is in the durable ledger exactly once",()=>{e.equal(h("activated (bundle 0.2.1, graph, threshold 0.75)").length,1)}),s(n,"L3: the listeners register on the plugin ctx in order",()=>{e.deepEqual(Object.keys(t.CtxListeners),["loader/volatile-update","tools/post-execute","agent/pre-step"])}),s(n,"L3: the root is a distinct context object",()=>{e.notEqual(t.Root,t.Context)})}{const t=l(a({logFile:i,enabled:!0})),o={kind:"allow"};await c(n,"L4: a non-judged tool passes the decision through unchanged",async()=>{const r=await t.CtxListeners["tools/post-execute"]({name:"write",arguments:{file_path:"x.md"},agent:{agent:{id:"a"}}},void 0,async()=>o);e.equal(r,o),e.deepEqual(t.Lines.filter(g=>g.includes("candidates call")),[])}),s(n,"L4: the boot rule set is empty and the intents filter survives for the query",()=>{const r=l(a({logFile:i,enabled:!0,intents:["Sibling"]}));e.equal(r.State.Rules.length,0),e.deepEqual(r.State.Intents,["Sibling"]),e.ok(r.Lines.includes("graph-suggester: activated (bundle 0.2.1, graph, threshold 0.75)"))})}s(n,"L5: a non-numeric threshold fails loud at load",()=>{e.throws(()=>a({threshold:"high"}))}),s(n,"L5: a non-boolean enabled fails loud at load",()=>{e.throws(()=>a({enabled:"yes"}))});{u();const t=l(a({logFile:i,enabled:!0}));s(n,"L6: the mount performs ZERO fs operations (read-only by design)",()=>{e.equal(t.Fs.reads.length,0),e.equal(t.Fs.writes.length,0),e.equal(t.Fs.resolved.length,0),e.equal(t.Fs.stats.length,0)}),s(n,"L6: the state probe carries the factory's module identity",()=>{e.equal(t.State.Module,"graph-suggester"),e.equal(t.State.Rules.length,0),e.equal(t.State.Threshold,.75)})}{u();const t=l(a({logFile:i,enabled:!0}),o=>{o.workspaceGraph=b([{path:"src/Source/Core.ts",role:"definition",reason:"the definition"},{path:"src/Source/Use.ts",role:"importer",reason:"the importers"}])});await c(n,"L7: the mounted note names only the companions, never the anchor",async()=>{const o=await t.CtxListeners["tools/post-execute"]({name:"read",arguments:{file_path:"src/Source/Core.ts"},agent:{agent:{id:"a"}}},void 0,async()=>({kind:"allow"}));e.equal(o.additionalContexts[0].content[0].text,`[graph-suggester] intent=Neighborhood confidence=0.87
-targets (1):
-- src/Source/Use.ts - the importers
-note: the files around this one: importers, dependencies, tests, doc block.`),e.ok(t.Lines.includes("graph-suggester: suggest Neighborhood 0.87 1 candidates call read"))})}return p(n,"Loader-And-Activation")},y=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(y){const n=await m();console.log(`${n} PASS - Loader-And-Activation`)}export{m as runTest};
+import assert from "node:assert/strict";
+import {
+  Check,
+  CheckAsync,
+  Finish,
+  FakeGraph,
+  Ledger,
+  LedgerLines,
+  LedgerWith,
+  MakeCounter,
+  Make,
+  Plugin,
+  rm,
+  Validate
+} from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    Check(Count, "L1: the default object carries name/apply/Config/inject", () => {
+      assert.equal(Plugin.name, "graph-suggester");
+      assert.equal(typeof Plugin.apply, "function");
+      assert.ok(Plugin.Config !== void 0);
+      assert.deepEqual(Plugin.inject, ["pluginFactory", "workspaceGraph"]);
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+    Check(Count, "L2: apply returns NOTHING and the state probe exists", () => {
+      assert.equal(Run.Returned, void 0);
+      assert.ok(Run.State !== void 0);
+      assert.equal(Run.State.On, false);
+    });
+    Check(Count, "L2: the cold mount logs the byte-exact disabled line", () => {
+      assert.deepEqual(Run.Lines, ["graph-suggester: disabled (enabled=false)"]);
+    });
+    Check(Count, "L2: the disabled line is in the durable ledger exactly once", () => {
+      assert.equal(LedgerWith("disabled (enabled=false)").length, 1);
+      assert.ok(LedgerLines()[0]?.endsWith("] disabled (enabled=false)"));
+    });
+    Check(Count, "L2: a disabled mount still wires both listeners on the plugin ctx", () => {
+      assert.ok(Run.CtxListeners["tools/post-execute"] instanceof Function);
+      assert.ok(Run.CtxListeners["agent/pre-step"] instanceof Function);
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }));
+    Check(Count, "L3: the activation line is byte-exact", () => {
+      assert.ok(
+        Run.Lines.includes(`graph-suggester: activated (bundle ${"0.2.1"}, graph, threshold 0.75)`)
+      );
+    });
+    Check(Count, "L3: the activation line is in the durable ledger exactly once", () => {
+      assert.equal(
+        LedgerWith(`activated (bundle ${"0.2.1"}, graph, threshold 0.75)`).length,
+        1
+      );
+    });
+    Check(Count, "L3: the listeners register on the plugin ctx in order", () => {
+      assert.deepEqual(Object.keys(Run.CtxListeners), [
+        "loader/volatile-update",
+        "tools/post-execute",
+        "agent/pre-step"
+      ]);
+    });
+    Check(Count, "L3: the root is a distinct context object", () => {
+      assert.notEqual(Run.Root, Run.Context);
+    });
+  }
+  {
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }));
+    const Decision = { kind: "allow" };
+    await CheckAsync(Count, "L4: a non-judged tool passes the decision through unchanged", async () => {
+      const Result = await Run.CtxListeners["tools/post-execute"](
+        { name: "write", arguments: { file_path: "x.md" }, agent: { agent: { id: "a" } } },
+        void 0,
+        async () => Decision
+      );
+      assert.equal(Result, Decision);
+      assert.deepEqual(Run.Lines.filter((L) => L.includes("candidates call")), []);
+    });
+    Check(Count, "L4: the boot rule set is empty and the intents filter survives for the query", () => {
+      const Filtered = Make(Validate({ logFile: Ledger, enabled: true, intents: ["Sibling"] }));
+      assert.equal(Filtered.State.Rules.length, 0);
+      assert.deepEqual(Filtered.State.Intents, ["Sibling"]);
+      assert.ok(
+        Filtered.Lines.includes(`graph-suggester: activated (bundle ${"0.2.1"}, graph, threshold 0.75)`)
+      );
+    });
+  }
+  {
+    Check(Count, "L5: a non-numeric threshold fails loud at load", () => {
+      assert.throws(() => Validate({ threshold: "high" }));
+    });
+    Check(Count, "L5: a non-boolean enabled fails loud at load", () => {
+      assert.throws(() => Validate({ enabled: "yes" }));
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }));
+    Check(Count, "L6: the mount performs ZERO fs operations (read-only by design)", () => {
+      assert.equal(Run.Fs.reads.length, 0);
+      assert.equal(Run.Fs.writes.length, 0);
+      assert.equal(Run.Fs.resolved.length, 0);
+      assert.equal(Run.Fs.stats.length, 0);
+    });
+    Check(Count, "L6: the state probe carries the factory's module identity", () => {
+      assert.equal(Run.State.Module, "graph-suggester");
+      assert.equal(Run.State.Rules.length, 0);
+      assert.equal(Run.State.Threshold, 0.75);
+    });
+  }
+  {
+    rm();
+    const Mounted = Make(Validate({ logFile: Ledger, enabled: true }), (Context) => {
+      Context.workspaceGraph = FakeGraph([
+        { path: "src/Source/Core.ts", role: "definition", reason: "the definition" },
+        { path: "src/Source/Use.ts", role: "importer", reason: "the importers" }
+      ]);
+    });
+    await CheckAsync(Count, "L7: the mounted note names only the companions, never the anchor", async () => {
+      const Note = await Mounted.CtxListeners["tools/post-execute"](
+        {
+          name: "read",
+          arguments: { file_path: "src/Source/Core.ts" },
+          agent: { agent: { id: "a" } }
+        },
+        void 0,
+        async () => ({ kind: "allow" })
+      );
+      assert.equal(
+        Note.additionalContexts[0].content[0].text,
+        "[graph-suggester] intent=Neighborhood confidence=0.87\ntargets (1):\n- src/Source/Use.ts - the importers\nnote: the files around this one: importers, dependencies, tests, doc block."
+      );
+      assert.ok(
+        Mounted.Lines.includes(
+          "graph-suggester: suggest Neighborhood 0.87 1 candidates call read"
+        )
+      );
+    });
+  }
+  return Finish(Count, "Loader-And-Activation");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Loader-And-Activation`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

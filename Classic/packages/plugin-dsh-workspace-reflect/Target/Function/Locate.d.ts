@@ -1,18 +1,28 @@
 import type State from "../Interface/State.js";
-/** The resolved target of a node-targeted operation. */
+/**
+ * The resolved target of a node-targeted operation.
+ */
 export interface Located {
     ok: true;
-    /** The 1-based inclusive span to rewrite. */
+    /**
+     * The 1-based inclusive span to rewrite.
+     */
     span: {
         startLine: number;
         endLine: number;
     };
-    /** The fingerprint's kind component (Symbol / Block). */
+    /**
+     * The fingerprint's kind component (Symbol / Block).
+     */
     kind: string;
-    /** The fingerprint's name component (a Block hashes the empty name). */
+    /**
+     * The fingerprint's name component (a Block hashes the empty name).
+     */
     name: string;
 }
-/** A refusal with its documented reason. */
+/**
+ * A refusal with its documented reason.
+ */
 export interface Refused {
     ok: false;
     reason: string;

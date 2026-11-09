@@ -1,6 +1,6 @@
-import type BatchRecord from "../Interface/Batch.js";
-import type EntryRecord from "../Interface/Entry.js";
-import type State from "../Interface/State.js";
+import type BatchRecord from "@Interface/Batch.js";
+import type EntryRecord from "@Interface/Entry.js";
+import type State from "@Interface/State.js";
 /** One batch by ID, or undefined. */
 export declare const Batch: (State: State, BatchId: string) => BatchRecord | undefined;
 /** All batch records (ring order, oldest first). */

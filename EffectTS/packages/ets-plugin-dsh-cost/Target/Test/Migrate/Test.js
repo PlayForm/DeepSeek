@@ -8,7 +8,7 @@ import { Check, Finish, MakeCounter, Validate } from "../Harness.js";
 const V1 = `
 CREATE TABLE Session (SessionId TEXT PRIMARY KEY, CreatedAt INTEGER NOT NULL) STRICT;
 CREATE TABLE File (FileId INTEGER PRIMARY KEY, Path TEXT NOT NULL) STRICT;
-CREATE TABLE Price (PriceId INTEGER PRIMARY KEY, Provider TEXT NOT NULL, Model TEXT NOT NULL, InputRate REAL NOT NULL, OutputRate REAL NOT NULL, EffectiveFrom INTEGER NOT NULL) STRICT;
+CREATE TABLE Price (PriceId INTEGER PRIMARY KEY, Provider TEXT NOT NULL, Model TEXT NOT NULL, InputRate REAL NOT NULL, OutputRate REAL NOT NULL, Currency TEXT NOT NULL DEFAULT 'USD', CacheReadRate REAL, CacheWriteRate REAL, ReasoningRate REAL, EffectiveTo INTEGER, Note TEXT, EffectiveFrom INTEGER NOT NULL) STRICT;
 CREATE TABLE Call (CallId INTEGER PRIMARY KEY, SessionId TEXT NOT NULL REFERENCES Session (SessionId), Turn INTEGER NOT NULL, Step INTEGER NOT NULL, Seq INTEGER NOT NULL, Provider TEXT NOT NULL, Model TEXT NOT NULL, InputTokens INTEGER NOT NULL, OutputTokens INTEGER NOT NULL, CostTotal REAL NOT NULL, Currency TEXT NOT NULL, SurfaceTokens INTEGER NOT NULL DEFAULT 0, At INTEGER NOT NULL) STRICT;
 CREATE TABLE Allocation (AllocationId INTEGER PRIMARY KEY, CallId INTEGER NOT NULL REFERENCES Call (CallId), FileId INTEGER REFERENCES File (FileId), DirectCost REAL NOT NULL, AmortizedCost REAL NOT NULL, ContextTokens INTEGER NOT NULL, SurfaceTokens INTEGER NOT NULL, Weight REAL NOT NULL, Method TEXT NOT NULL, At INTEGER NOT NULL) STRICT;
 CREATE TABLE Touch (TouchId INTEGER PRIMARY KEY, CallId INTEGER NOT NULL REFERENCES Call (CallId), SessionId TEXT NOT NULL, Turn INTEGER NOT NULL, Step INTEGER NOT NULL, CallKey TEXT NOT NULL, Tool TEXT NOT NULL, FileId INTEGER NOT NULL REFERENCES File (FileId), Kind TEXT NOT NULL, Seq INTEGER NOT NULL, At INTEGER NOT NULL) STRICT;
@@ -17,7 +17,7 @@ PRAGMA user_version = 1;
 const V2 = `
 CREATE TABLE Session (SessionId TEXT PRIMARY KEY, CreatedAt INTEGER NOT NULL) STRICT;
 CREATE TABLE File (FileId INTEGER PRIMARY KEY, Path TEXT NOT NULL) STRICT;
-CREATE TABLE Price (PriceId INTEGER PRIMARY KEY, Provider TEXT NOT NULL, Model TEXT NOT NULL, InputRate REAL NOT NULL, OutputRate REAL NOT NULL, EffectiveFrom INTEGER NOT NULL, Window TEXT NOT NULL DEFAULT 'any') STRICT;
+CREATE TABLE Price (PriceId INTEGER PRIMARY KEY, Provider TEXT NOT NULL, Model TEXT NOT NULL, InputRate REAL NOT NULL, OutputRate REAL NOT NULL, Currency TEXT NOT NULL DEFAULT 'USD', CacheReadRate REAL, CacheWriteRate REAL, ReasoningRate REAL, EffectiveTo INTEGER, Note TEXT, EffectiveFrom INTEGER NOT NULL, Window TEXT NOT NULL DEFAULT 'any') STRICT;
 CREATE TABLE Call (CallId INTEGER PRIMARY KEY, SessionId TEXT NOT NULL REFERENCES Session (SessionId), Turn INTEGER NOT NULL, Step INTEGER NOT NULL, Seq INTEGER NOT NULL, Provider TEXT NOT NULL, Model TEXT NOT NULL, InputTokens INTEGER NOT NULL, OutputTokens INTEGER NOT NULL, CostTotal REAL NOT NULL, Currency TEXT NOT NULL, SurfaceTokens INTEGER NOT NULL DEFAULT 0, CacheSaving REAL NOT NULL DEFAULT 0, At INTEGER NOT NULL) STRICT;
 CREATE TABLE Allocation (AllocationId INTEGER PRIMARY KEY, CallId INTEGER NOT NULL REFERENCES Call (CallId), FileId INTEGER REFERENCES File (FileId), DirectCost REAL NOT NULL, AmortizedCost REAL NOT NULL, ContextTokens INTEGER NOT NULL, SurfaceTokens INTEGER NOT NULL, Weight REAL NOT NULL, Method TEXT NOT NULL, At INTEGER NOT NULL) STRICT;
 CREATE TABLE Touch (TouchId INTEGER PRIMARY KEY, CallId INTEGER NOT NULL REFERENCES Call (CallId), SessionId TEXT NOT NULL, Turn INTEGER NOT NULL, Step INTEGER NOT NULL, CallKey TEXT NOT NULL, Tool TEXT NOT NULL, FileId INTEGER NOT NULL REFERENCES File (FileId), Kind TEXT NOT NULL, Stage TEXT, Branch TEXT, ReadBeforeEdit INTEGER NOT NULL DEFAULT 0, Seq INTEGER NOT NULL, At INTEGER NOT NULL) STRICT;
@@ -51,7 +51,7 @@ const runTest = async () => {
       const Database = V1Ledger.Database;
       const Version = Database.prepare("PRAGMA user_version").get();
       Check(Count, "A3: the ladder stamps a v1 ledger version 6", () => {
-        assert.equal(Version.user_version, 6);
+        assert.equal(Version.user_version, 7);
       });
       Check(Count, "A1: the additive columns exist on Price, Call and Touch through every rung", () => {
         assert.ok(Columns(Database, "Price").includes("Window"), "Price.Window");
@@ -112,7 +112,7 @@ const runTest = async () => {
       const Database = V2Ledger.Database;
       const Version = Database.prepare("PRAGMA user_version").get();
       Check(Count, "A3: the v3, v4 and v6 rungs stamp a v2 ledger version 6", () => {
-        assert.equal(Version.user_version, 6);
+        assert.equal(Version.user_version, 7);
       });
       Check(Count, "A1: the factor columns exist on Price and Call", () => {
         assert.ok(Columns(Database, "Price").includes("TierFrom"), "Price.TierFrom");
@@ -152,7 +152,7 @@ const runTest = async () => {
     const V3 = `
 CREATE TABLE Session (SessionId TEXT PRIMARY KEY, CreatedAt INTEGER NOT NULL) STRICT;
 CREATE TABLE File (FileId INTEGER PRIMARY KEY, Path TEXT NOT NULL) STRICT;
-CREATE TABLE Price (PriceId INTEGER PRIMARY KEY, Provider TEXT NOT NULL, Model TEXT NOT NULL, InputRate REAL NOT NULL, OutputRate REAL NOT NULL, EffectiveFrom INTEGER NOT NULL, Window TEXT NOT NULL DEFAULT 'any', TierFrom INTEGER NOT NULL DEFAULT 0, TierTo INTEGER, Mode TEXT NOT NULL DEFAULT 'standard', Region TEXT) STRICT;
+CREATE TABLE Price (PriceId INTEGER PRIMARY KEY, Provider TEXT NOT NULL, Model TEXT NOT NULL, InputRate REAL NOT NULL, OutputRate REAL NOT NULL, Currency TEXT NOT NULL DEFAULT 'USD', CacheReadRate REAL, CacheWriteRate REAL, ReasoningRate REAL, EffectiveTo INTEGER, Note TEXT, EffectiveFrom INTEGER NOT NULL, Window TEXT NOT NULL DEFAULT 'any', TierFrom INTEGER NOT NULL DEFAULT 0, TierTo INTEGER, Mode TEXT NOT NULL DEFAULT 'standard', Region TEXT) STRICT;
 CREATE TABLE Call (CallId INTEGER PRIMARY KEY, SessionId TEXT NOT NULL REFERENCES Session (SessionId), Turn INTEGER NOT NULL, Step INTEGER NOT NULL, Seq INTEGER NOT NULL, Provider TEXT NOT NULL, Model TEXT NOT NULL, InputTokens INTEGER NOT NULL, OutputTokens INTEGER NOT NULL, CostTotal REAL NOT NULL, Currency TEXT NOT NULL, SurfaceTokens INTEGER NOT NULL DEFAULT 0, CacheSaving REAL NOT NULL DEFAULT 0, At INTEGER NOT NULL, Mode TEXT NOT NULL DEFAULT 'standard', Region TEXT, Tier INTEGER) STRICT;
 CREATE TABLE Allocation (AllocationId INTEGER PRIMARY KEY, CallId INTEGER NOT NULL REFERENCES Call (CallId), FileId INTEGER REFERENCES File (FileId), DirectCost REAL NOT NULL, AmortizedCost REAL NOT NULL, ContextTokens INTEGER NOT NULL, SurfaceTokens INTEGER NOT NULL, Weight REAL NOT NULL, Method TEXT NOT NULL, At INTEGER NOT NULL) STRICT;
 CREATE TABLE Touch (TouchId INTEGER PRIMARY KEY, CallId INTEGER NOT NULL REFERENCES Call (CallId), SessionId TEXT NOT NULL, Turn INTEGER NOT NULL, Step INTEGER NOT NULL, CallKey TEXT NOT NULL, Tool TEXT NOT NULL, FileId INTEGER NOT NULL REFERENCES File (FileId), Kind TEXT NOT NULL, Stage TEXT, Branch TEXT, ReadBeforeEdit INTEGER NOT NULL DEFAULT 0, Seq INTEGER NOT NULL, At INTEGER NOT NULL) STRICT;
@@ -185,7 +185,7 @@ PRAGMA user_version = 3;
       const Database = V3Ledger.Database;
       const Version = Database.prepare("PRAGMA user_version").get();
       Check(Count, "A3: the v4 and v6 rungs stamp a v3 ledger version 6", () => {
-        assert.equal(Version.user_version, 6);
+        assert.equal(Version.user_version, 7);
       });
       Check(Count, "A1: the telemetry columns and the Edit table exist", () => {
         assert.ok(Columns(Database, "Call").includes("LatencyMs"), "Call.LatencyMs");

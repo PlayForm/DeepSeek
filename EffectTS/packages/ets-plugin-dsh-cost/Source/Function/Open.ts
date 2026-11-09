@@ -3,14 +3,19 @@
 // document's (section 3): journal_mode=WAL, foreign_keys=ON,
 // synchronous=NORMAL, every table STRICT. The schema runs exactly once per
 // file - a fresh file (user_version 0) takes every DDL statement AND its
-// version stamp inside ONE transaction; a v1 ledger runs the v2, v3, v4 and
-// v6 rungs of the ladder (sections 14, 17.6, 17.3, 17.4 and the version
-// grain), a v2 ledger runs the v3, v4 and v6 rungs, a v3 ledger runs the v4
-// and v6 rungs, a v4 or v5 ledger runs the v6 rung alone, and version 6
-// opens as-is. The v6 rung is the compatibility rung: FileVersion and
+// version stamp inside ONE transaction; a v1 ledger runs the v2, v3, v4, v6
+// and v7 rungs of the ladder (sections 14, 17.6, 17.3, 17.4, the version
+// grain and the valuation model), a v2 ledger runs the v3, v4, v6 and v7
+// rungs, a v3 ledger runs the v4, v6 and v7 rungs, a v4 or v5 ledger runs the
+// v6 and v7 rungs, a v6 ledger runs the v7 rung alone, and version 7 opens
+// as-is. The v6 rung is the compatibility rung: FileVersion and
 // Touch.VersionId live in the fresh DDL but in none of the earlier rungs, so
 // a ledger upgraded from v1-v5 gains the table and the column its drain now
 // writes, each added only when the file's own table info says it is absent.
+// The v7 rung is the valuation model: the six pricing tables plus the
+// bootstrap catalog seeded from the file's own Price rows, all inside the
+// transaction whose last statement is the version stamp, so an upgraded
+// ledger never shows half a catalog.
 // A file stamped ABOVE this build's version is refused with one actionable
 // line instead of being opened as though it were compatible (section 1.7).
 // The import is the static `node:sqlite` core module (DatabaseSync), which
@@ -25,6 +30,7 @@ import type Config from "../Interface/Config.js";
 import Ddl, {
 	Migration,
 	MigrationFactor,
+	MigrationPricing,
 	MigrationTelemetry,
 	MigrationVersioning,
 } from "./Schema.js";
@@ -32,8 +38,13 @@ import Ddl, {
 // The schema version this build writes and understands: the ladder's top
 // rung. A fresh file is stamped with it inside the transaction that creates
 // its tables, and a file stamped above it belongs to a newer build.
-const Supported = 6;
-const Stamp = "PRAGMA user_version = 6;";
+const Supported = 7;
+const Stamp = "PRAGMA user_version = 7;";
+
+// The v6 rung's own stamp: the versioning rung lands before the pricing rung
+// runs, and each rung stamps itself, so a failure leaves the file at the rung
+// it completed rather than at the top of the ladder.
+const VersioningStamp = "PRAGMA user_version = 6;";
 
 export default (Config: Config): { Database: DatabaseSync; Close(): void } => {
 	// The tilde expansion (ets-base-dsh's Expand): a config-supplied path is
@@ -60,14 +71,15 @@ export default (Config: Config): { Database: DatabaseSync; Close(): void } => {
 
 	// The schema, guarded by user_version (sections 3, 14, 17.6, 17.3, 17.4
 	// and 1.7): a fresh file takes the whole DDL and its version stamp inside
-	// ONE transaction; a v1 ledger runs the four migration rungs in order
-	// (v1 to v2, then v2 to v3, then v3 to v4, then v4 to v6), a v2 ledger
-	// runs the v3, v4 and v6 rungs, a v3 ledger runs the v4 and v6 rungs, a
-	// v4 or v5 ledger runs only the v6 rung - each rung inside its own
-	// transaction, whose last statement is the rung's stamp itself. A failed
-	// statement rolls the whole rung back - the ledger never opens half-built,
-	// and the ladder never skips a rung. A file stamped above this build's
-	// version is refused, never opened as compatible.
+	// ONE transaction; a v1 ledger runs the five migration rungs in order
+	// (v1 to v2, then v2 to v3, then v3 to v4, then v4 to v6, then v6 to v7),
+	// a v2 ledger runs the v3, v4, v6 and v7 rungs, a v3 ledger runs the v4,
+	// v6 and v7 rungs, a v4 or v5 ledger runs the v6 and v7 rungs, and a v6
+	// ledger runs the v7 rung alone - each rung inside its own transaction,
+	// whose last statement is the rung's stamp itself. A failed statement
+	// rolls the whole rung back - the ledger never opens half-built, and the
+	// ladder never skips a rung. A file stamped above this build's version is
+	// refused, never opened as compatible.
 	const Row = Database.prepare("PRAGMA user_version").get() as { user_version: number };
 	const Rung = (Statements: readonly string[]): void => {
 		Database.exec("BEGIN TRANSACTION");
@@ -115,25 +127,34 @@ export default (Config: Config): { Database: DatabaseSync; Close(): void } => {
 			Rung(Migration);
 			Rung(MigrationFactor);
 			Rung(MigrationTelemetry);
-			Rung([...Versioning, Stamp]);
+			Rung([...Versioning, VersioningStamp]);
+			Rung(MigrationPricing);
 			break;
 		case Row.user_version === 2:
 			Rung(MigrationFactor);
 			Rung(MigrationTelemetry);
-			Rung([...Versioning, Stamp]);
+			Rung([...Versioning, VersioningStamp]);
+			Rung(MigrationPricing);
 			break;
 		case Row.user_version === 3:
 			Rung(MigrationTelemetry);
-			Rung([...Versioning, Stamp]);
+			Rung([...Versioning, VersioningStamp]);
+			Rung(MigrationPricing);
 			break;
 		case Row.user_version === 4:
 		case Row.user_version === 5:
 			// the v4 and v5 ledgers: every table above the version grain is
-			// already in place, so the v6 rung is the only one left to run
-			Rung([...Versioning, Stamp]);
+			// already in place, so the v6 and v7 rungs are the ones left
+			Rung([...Versioning, VersioningStamp]);
+			Rung(MigrationPricing);
+			break;
+		case Row.user_version === 6:
+			// the v6 ledger: the pricing tables and their seed are the only
+			// rung it lacks
+			Rung(MigrationPricing);
 			break;
 		default:
-		// version 6 itself: the ladder is at its top rung, so it opens as-is
+		// version 7 itself: the ladder is at its top rung, so it opens as-is
 	}
 
 	return {

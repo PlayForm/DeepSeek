@@ -49,6 +49,7 @@ import Forecast from "./Forecast.js";
 import Open from "./Open.js";
 import Report from "./Report.js";
 import Rollup from "./Rollup.js";
+import CostPricing from "./Service.js";
 
 // The factory vocabulary, the command registry and the session-log seam,
 // published on this module's augmentation (the hook-dsh-ccr and the factory's
@@ -109,6 +110,22 @@ export default (Context: Context, Options: Config): void => {
 	let OffFlush: (() => boolean) | undefined;
 	Context.effect(() => {
 		Ledger = Open(Options);
+		// The pricing service (Function/Service): the versioned catalog surface
+		// over the v7 valuation tables, constructed over the ledger's own write
+		// handle so `publish` rides the pragmas already in force and no second
+		// write handle is opened for a rare insert. The Service base registers
+		// it as `costPricing` and removes it with the fiber, so a reloaded
+		// plugin never leaves a service over a closed database. An open that
+		// throws above never reaches this line, so the service is never
+		// constructed over a handle that does not exist.
+		// The reflection service is the provider seam: a fake context (the
+		// smoke harness) has none, and the Service base would throw on
+		// `reflect.provide`. The real loader always carries it.
+		const Reflection = (Context as unknown as Record<string, unknown>)["reflect"] as
+			{ provide?: unknown } | undefined;
+		if (Ledger !== undefined && typeof Reflection?.provide === "function") {
+			new CostPricing(Context, Ledger.Database, Options);
+		}
 		// The retry timers: one per session, so a fresh flush supersedes a
 		// pending retry, and every one of them is cleared with the ledger
 		// effect - a timer must never fold into a closed database.

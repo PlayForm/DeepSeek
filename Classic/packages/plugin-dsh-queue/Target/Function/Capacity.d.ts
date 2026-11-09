@@ -1,11 +1,39 @@
+/**
+ * @module Capacity
+ *
+ * The seat/release bookkeeping (SUBAGENT-QUEUE-PLUGIN.md section
+ * 2.2).
+ *
+ * @remarks
+ * The RESERVATION model: the queue holds the tasks as data; the
+ * dispatcher spawns when the capacity allows. Two capacities:
+ *
+ *   Capacity(main)  = capacity.main  - active(main)   # the main's pool (10)
+ *   Capacity(agent) = capacity.child - active(agent)   # the per-agent cap (2)
+ *
+ * The seat bookkeeping is the Seats map: agent id -> the number of ACTIVE
+ * (dispatched or running) tasks. The key `main` is the main conversation's
+ * pool; every other key is a spawned agent whose own children are capped -
+ * the two-active regime that makes the workflow fan-out flood structurally
+ * impossible. A seat is taken at dispatch and released at completion, failure
+ * or interruption (Function/Settle).
+ */
 import type State from "../Interface/State.js";
-/** The agent key for the main conversation's pool. */
+/**
+ * The agent key for the main conversation's pool.
+ */
 export declare const MAIN = "main";
 export default _default;
-/** How many slots the agent currently has free (negative = over-committed;
- * the caller treats any value <= 0 as no capacity). */
+/**
+ * How many slots the agent currently has free (negative = over-committed;
+ * the caller treats any value <= 0 as no capacity).
+ */
 declare function _default(State: State, Agent: string): number;
-/** Take one seat for the agent (the dispatcher calls this on an assignment). */
+/**
+ * Take one seat for the agent (the dispatcher calls this on an assignment).
+ */
 export declare const Seat: (State: State, Agent: string) => void;
-/** Release one seat for the agent (settle; never goes below zero). */
+/**
+ * Release one seat for the agent (settle; never goes below zero).
+ */
 export declare const Release: (State: State, Agent: string) => void;

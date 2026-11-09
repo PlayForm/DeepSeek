@@ -1,7 +1,13 @@
-// State - the per-apply plugin state: the FACTORY's shared shape (built by
-// Factory.State(ctx, config, { ... })) extended with the queue's own fields.
-// Every config-derived field is volatile in the schema, so the factory's P10
-// loader/volatile-update listener refreshes them in place.
+/**
+ * @module State
+ *
+ * The per-apply plugin state: the FACTORY's shared shape (built by
+ * Factory.State(ctx, config, { ... })) extended with the queue's own fields.
+ *
+ * @remarks
+ * Every config-derived field is volatile in the schema, so the factory's P10
+ * loader/volatile-update listener refreshes them in place.
+ */
 
 import type Dispatcher from "@Function/Dispatcher.js";
 import type Factory from "@playform/plugin-dsh-factory";

@@ -1,0 +1,4 @@
+const l={Policy:`SELECT COALESCE(
+    (SELECT Valuation.PolicyVersion FROM Valuation ORDER BY Valuation.ValuationId DESC LIMIT 1),
+    (SELECT Allocation.Method FROM Allocation ORDER BY Allocation.AllocationId DESC LIMIT 1),
+    'bytes/context') AS PolicyVersion;`},u=(i,e)=>{const t=i[e];return typeof t=="string"?t:null},d={};var f=(i,e)=>{const t=i.prepare(l.Policy);return{Block:(a,c)=>{const o=c?.basis??"as-recorded",r=c?.revisionId;switch(!0){case o==="as-recorded":return;case r===void 0:return;case e===void 0:throw new Error(`plugin-dsh-cost: the valuation basis "${o}" needs the pricing service, which this context did not provide - the ledger write handle was absent`);default:{const n=e.preview(r,a),s=t.get()??d;return{Basis:o,RevisionId:r,PolicyVersion:u(s,"PolicyVersion")??"bytes/context",CalculatedAt:Date.now(),Recorded:n.Current,Revised:n.Revised,Difference:n.Difference,Unpriced:n.Unpriced}}}}}};export{f as default};
