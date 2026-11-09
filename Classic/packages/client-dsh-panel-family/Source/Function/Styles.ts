@@ -1,5 +1,6 @@
 import { Inject } from "@playform/lib-dsh-style";
-import Sheet from "@Variable/Styles.js";
+
+import Sheet from "../Stylesheet/Plugin.scss";
 
 const IDENTIFIER = "@playform/client-dsh-panel-family";
 

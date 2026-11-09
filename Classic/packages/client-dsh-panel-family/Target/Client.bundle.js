@@ -26,14 +26,32 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// Source/Client.ts
-var Client_exports = {};
-__export(Client_exports, {
+// Source/Bundle.ts
+var Bundle_exports = {};
+__export(Bundle_exports, {
   apply: () => apply,
-  default: () => Client_default,
+  default: () => Bundle_default,
   inject: () => inject
 });
-module.exports = __toCommonJS(Client_exports);
+module.exports = __toCommonJS(Bundle_exports);
+
+// ../lib-dsh-style/Target/Function/Inject.js
+function u(e, s) {
+  if (typeof document > "u") return;
+  const n = `${e}/client.css`;
+  if (document.querySelector(`style[data-plugin-css="${n}"]`) !== null) return;
+  const t = document.createElement("style");
+  t.dataset.plugin = e, t.dataset.pluginCss = n, t.textContent = s, document.head.append(t);
+}
+
+// stylesheet:/Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Classic/packages/client-dsh-panel-family/Source/Stylesheet/Plugin.scss
+var Plugin_default = '.playform-family-tab {\n  display: grid;\n  flex: 1;\n  gap: 12px;\n  align-content: start;\n  box-sizing: border-box;\n  width: 100%;\n  max-width: 880px;\n  min-height: 0;\n  margin: 0 auto;\n  padding: 20px 16px 28px;\n  overflow: auto;\n}\n\n.playform-family-tab > p {\n  margin: 0;\n  padding: 24px 16px;\n  color: var(--dsw-alias-label-secondary);\n  font-size: 13px;\n  line-height: 20px;\n  text-align: center;\n}\n\n.playform-family-section {\n  box-sizing: border-box;\n  background: var(--dsw-alias-settings-card-fill);\n  border: 0.5px solid var(--dsw-alias-settings-card-stroke);\n  border-radius: var(--dsw-radius-xl);\n  display: grid;\n  gap: 8px;\n  padding: 14px 16px 16px;\n}\n\n.playform-family-section h3 {\n  color: var(--dsw-alias-label-primary);\n  font-size: 13px;\n  font-weight: 600;\n  line-height: 18px;\n  margin: 0;\n}\n\n.playform-family-status {\n  color: var(--dsw-alias-label-secondary);\n  font-size: 11px;\n  font-weight: 500;\n  line-height: 16px;\n  letter-spacing: 0.04em;\n  text-transform: uppercase;\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  margin: 0;\n}\n\n.playform-family-tail {\n  display: grid;\n  gap: 2px;\n  margin: 0;\n  padding: 8px 10px;\n  max-height: 136px;\n  overflow: auto;\n  list-style: none;\n  color: var(--dsw-alias-label-secondary);\n  font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);\n  font-size: 11px;\n  line-height: 16px;\n  background: var(--dsw-alias-bg-layer-1);\n  border: 0.5px solid var(--dsw-alias-border-l1);\n  border-radius: var(--dsw-radius-md);\n}\n\n.playform-family-tail li {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.playform-family-tail li[data-kind="observe/stamp"] {\n  color: var(--dsw-alias-brand-primary);\n}\n\n.playform-family-form {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\n  gap: 10px 12px;\n  margin: 2px 0 0;\n}\n\n.playform-family-field {\n  display: grid;\n  gap: 4px;\n  min-width: 0;\n  color: var(--dsw-alias-label-primary);\n  font-size: 12px;\n  line-height: 16px;\n}\n\n.playform-family-field-label {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: var(--dsw-alias-label-secondary);\n}\n\n.playform-family-field select {\n  box-sizing: border-box;\n  width: 100%;\n  height: 28px;\n  padding: 0 8px;\n  color: var(--dsw-alias-label-primary);\n  font: inherit;\n  font-size: 12px;\n  background: var(--dsw-alias-bg-layer-1);\n  border: 0.5px solid var(--dsw-alias-border-l1);\n  border-radius: var(--dsw-radius-sm);\n  outline: none;\n}\n.playform-family-field select:focus-visible {\n  border-color: var(--dsw-alias-brand-primary);\n  outline: 2px solid var(--dsw-alias-brand-primary);\n  outline-offset: 1px;\n}\n\n.playform-family-field-override {\n  padding: 1px 7px;\n  color: var(--dsw-alias-brand-primary);\n  font-size: 10px;\n  font-weight: 500;\n  line-height: 14px;\n  background: var(--dsw-alias-bg-layer-1);\n  border: 0.5px solid var(--dsw-alias-border-l2);\n  border-radius: 999px;\n  corner-shape: round;\n  justify-self: start;\n}\n\n.playform-family-field-secret {\n  color: var(--dsw-alias-label-secondary);\n  font-size: 12px;\n  font-style: italic;\n}\n\n.playform-family-form-note {\n  margin: 0;\n  color: var(--dsw-alias-label-secondary);\n  font-size: 12px;\n  line-height: 18px;\n}\n\n.playform-family-overlay {\n  box-sizing: border-box;\n  display: grid;\n  gap: 12px;\n  width: 100%;\n  max-height: 80vh;\n  padding: 20px;\n  overflow: auto;\n  background: var(--dsw-alias-bg-overlay);\n  border: 0;\n  border-radius: var(--dsw-radius-panel);\n  box-shadow: var(--dsw-elevation-panel);\n}\n\n.playform-family-overlay:not(:has(.playform-family-section)) {\n  display: none;\n}';
+
+// Source/Function/Styles.ts
+var IDENTIFIER = "@playform/client-dsh-panel-family";
+function Styles() {
+  u(IDENTIFIER, Plugin_default);
+}
 
 // Source/Function/Bridge.ts
 var IsBridge = (Candidate) => typeof Candidate === "object" && Candidate !== null && typeof Candidate.editFull === "function";
@@ -95,6 +113,12 @@ function Live(Trace2, Kinds) {
     }
   };
 }
+
+// Source/Function/Section.ts
+var import_dsh_client_ui_primitives3 = require("@deepseek-ai/dsh-client-ui-primitives");
+
+// Source/Function/Field.ts
+var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
 
 // Source/Variable/Lines.ts
 var Lines_default = {
@@ -261,10 +285,10 @@ var Control = (props) => {
         Translate(props.t, "form.secret")
       );
     case Field2.type === "boolean":
-      return (0, import_react.createElement)("input", {
-        type: "checkbox",
+      return (0, import_react.createElement)(import_dsh_client_ui_primitives.Switch, {
         checked: Field2.value === true,
-        onChange: (Event) => Commit(Event.target.checked)
+        onChange: (Next) => Commit(Next),
+        label: Field2.label
       });
     case Field2.options !== void 0:
       return (0, import_react.createElement)(
@@ -278,13 +302,13 @@ var Control = (props) => {
         )
       );
     case Field2.type === "number":
-      return (0, import_react.createElement)("input", {
+      return (0, import_react.createElement)(import_dsh_client_ui_primitives.Input, {
         type: "number",
         defaultValue: String(Field2.value ?? ""),
         onChange: (Event) => Commit(Number(Event.target.value))
       });
     default:
-      return (0, import_react.createElement)("input", {
+      return (0, import_react.createElement)(import_dsh_client_ui_primitives.Input, {
         type: "text",
         defaultValue: typeof Field2.value === "string" ? Field2.value : JSON.stringify(Field2.value ?? null),
         onChange: (Event) => Commit(Parse(Event.target.value))
@@ -452,19 +476,19 @@ var Fields = (Root, Refs, View, Path, Inherited, Depth) => {
     }
   }
 };
-function Form(Section2, Input) {
+function Form(Section2, Input2) {
   const Base = {
     namespace: Section2.namespace,
-    writable: Input.writable,
-    bridge: Input.bridge
+    writable: Input2.writable,
+    bridge: Input2.bridge
   };
   switch (true) {
-    case !Input.available:
+    case !Input2.available:
       return { ...Base, status: "unavailable", secret: false, fields: [] };
-    case Input.view === void 0:
+    case Input2.view === void 0:
       return { ...Base, status: "loading", secret: false, fields: [] };
     default: {
-      const View = Input.view;
+      const View = Input2.view;
       const Refs = RefsOf(View.schema);
       const Root = Resolve(View.schema, Refs);
       const Inherited = Root !== void 0 && IsRecord2(Root.meta) && Root.meta["volatile"] === true;
@@ -481,6 +505,8 @@ function Form(Section2, Input) {
 }
 
 // Source/Function/Status.ts
+var import_dsh_client_ui_primitives2 = require("@deepseek-ai/dsh-client-ui-primitives");
+var import_react2 = require("react");
 var Key = (Envelope) => {
   const Path = Envelope.payload["path"];
   switch (true) {
@@ -502,6 +528,17 @@ var Activation = (Envelope) => {
       return void 0;
   }
 };
+var StateOf = (Posture) => {
+  switch (true) {
+    case Posture === "enabled":
+      return "done";
+    case Posture === "unknown":
+      return "warning";
+    default:
+      return "idle";
+  }
+};
+var Lamp = (props) => (0, import_react2.createElement)(import_dsh_client_ui_primitives2.StateDot, { state: StateOf(props.activation) });
 function Status(Section2, Live2) {
   const Envelopes = Live2 === void 0 ? [] : Live2.tail();
   const Matched = Section2.match === void 0 ? Envelopes : Envelopes.filter((Envelope) => Section2.match?.(Envelope) === true);
@@ -517,7 +554,7 @@ function Status(Section2, Live2) {
 }
 
 // Source/Function/Section.ts
-var import_react2 = require("react");
+var import_react3 = require("react");
 var Translate2 = (T, Key3) => {
   switch (true) {
     case T !== void 0:
@@ -538,32 +575,40 @@ var Read = (Section2, Ports) => {
     bridge: Ports.bridge !== void 0
   });
 };
+var Labels = (T, Section2) => ({
+  title: Translate2(T, Section2.title),
+  loading: Translate2(T, "form.loading"),
+  retry: "",
+  markdown: { code: { copyLabel: "", copiedLabel: "" }, footnotes: "" }
+});
+var ReadOf = (View) => {
+  switch (true) {
+    case View.status === "loading":
+      return { status: "loading" };
+    default:
+      return { status: "ready", markdown: void 0 };
+  }
+};
 function FormBody(props) {
   switch (true) {
     case props.view.status === "unavailable":
-      return (0, import_react2.createElement)(
+      return (0, import_react3.createElement)(
         "p",
         { className: "playform-family-form-note" },
         Translate2(props.t, "form.unavailable")
       );
-    case props.view.status === "loading":
-      return (0, import_react2.createElement)(
-        "p",
-        { className: "playform-family-form-note" },
-        Translate2(props.t, "form.loading")
-      );
-    case props.view.fields.length === 0:
-      return (0, import_react2.createElement)(
-        "p",
-        { className: "playform-family-form-note" },
-        Translate2(props.t, "form.empty")
-      );
+    case (props.view.status === "loading" || props.view.fields.length === 0):
+      return (0, import_react3.createElement)(import_dsh_client_ui_primitives3.DetailDocument, {
+        state: (0, import_dsh_client_ui_primitives3.detailDocumentState)(ReadOf(props.view)),
+        labels: Labels(props.t, props.section),
+        onRetry: props.onRetry
+      });
     default:
-      return (0, import_react2.createElement)(
+      return (0, import_react3.createElement)(
         "div",
         { className: "playform-family-form" },
         props.view.fields.map(
-          (FieldView) => (0, import_react2.createElement)(Field, {
+          (FieldView) => (0, import_react3.createElement)(Field, {
             key: FieldView.label,
             field: FieldView,
             view: props.view,
@@ -580,11 +625,11 @@ var Kind = (Line2) => {
   return Index === -1 ? Line2 : Line2.slice(0, Index);
 };
 function Section(props) {
-  const [FormView, SetFormView] = (0, import_react2.useState)(() => Read(props.section, props.ports));
-  const [StatusView, SetStatusView] = (0, import_react2.useState)(
+  const [FormView, SetFormView] = (0, import_react3.useState)(() => Read(props.section, props.ports));
+  const [StatusView, SetStatusView] = (0, import_react3.useState)(
     () => Status(props.section, props.ports.live)
   );
-  (0, import_react2.useEffect)(() => {
+  (0, import_react3.useEffect)(() => {
     const Disposers = [
       props.ports.configForms?.describe().subscribe(() => SetFormView(Read(props.section, props.ports))),
       props.ports.configForms?.get(props.section.namespace).subscribe(() => SetFormView(Read(props.section, props.ports))),
@@ -596,33 +641,35 @@ function Section(props) {
       for (const Dispose of Disposers) Dispose?.();
     };
   }, []);
-  return (0, import_react2.createElement)(
+  return (0, import_react3.createElement)(
     "section",
     {
       className: "playform-family-section",
       "data-bundle": props.section.bundle,
       "data-activation": StatusView.activation
     },
-    (0, import_react2.createElement)("h3", {}, Translate2(props.t, props.section.title)),
-    (0, import_react2.createElement)(
+    (0, import_react3.createElement)("h3", {}, Translate2(props.t, props.section.title)),
+    (0, import_react3.createElement)(
       "p",
       { className: "playform-family-status" },
+      (0, import_react3.createElement)(Lamp, { activation: StatusView.activation }),
       `${Translate2(props.t, `status.${StatusView.activation}`)} - ${Translate2(
         props.t,
         StatusView.live ? "status.live" : "status.static"
       )}`
     ),
-    (0, import_react2.createElement)(
+    (0, import_react3.createElement)(
       "ul",
       { className: "playform-family-tail" },
       StatusView.tail.map(
-        (Line2) => (0, import_react2.createElement)("li", { key: Line2, "data-kind": Kind(Line2) }, Line2)
+        (Line2) => (0, import_react3.createElement)("li", { key: Line2, "data-kind": Kind(Line2) }, Line2)
       )
     ),
-    (0, import_react2.createElement)(FormBody, {
+    (0, import_react3.createElement)(FormBody, {
       view: FormView,
       section: props.section,
       ports: props.ports,
+      onRetry: () => SetFormView(Read(props.section, props.ports)),
       ...props.t === void 0 ? {} : { t: props.t }
     })
   );
@@ -641,9 +688,9 @@ var Slots_default = {
 };
 
 // Source/Function/Adapter.ts
-var import_react3 = require("react");
+var import_react4 = require("react");
 var NAMESPACE = "client-dsh-panel-family";
-var Component = (props = {}) => (0, import_react3.createElement)(Section, props);
+var Component = (props = {}) => (0, import_react4.createElement)(Section, props);
 function Adapter(ctx, Ports, SectionDefinition) {
   const Slot = SectionDefinition.slot ?? Slots_default.section;
   ctx.effect(() => {
@@ -1062,16 +1109,16 @@ var Locale_zh_default = {
 };
 
 // Source/Function/Client.ts
-var import_react4 = require("react");
+var import_react5 = require("react");
 var NAMESPACE2 = "client-dsh-panel-family";
 function FamilyTab(props) {
-  const [, SetVersion] = (0, import_react4.useState)(props.registry.getVersion());
-  (0, import_react4.useEffect)(() => props.registry.subscribe(() => SetVersion(props.registry.getVersion())), []);
+  const [, SetVersion] = (0, import_react5.useState)(props.registry.getVersion());
+  (0, import_react5.useEffect)(() => props.registry.subscribe(() => SetVersion(props.registry.getVersion())), []);
   const Sections = props.registry.entries(Slots_default.section);
-  return (0, import_react4.createElement)(
+  return (0, import_react5.createElement)(
     "div",
     { className: "playform-family-tab" },
-    Sections.length === 0 ? (0, import_react4.createElement)("p", {}, Locale_en_default.empty) : void 0,
+    Sections.length === 0 ? (0, import_react5.createElement)("p", {}, Locale_en_default.empty) : void 0,
     props.renderSlot === void 0 ? void 0 : props.renderSlot(Slots_default.section, {})
   );
 }
@@ -1110,7 +1157,7 @@ function Client(ctx) {
           label: () => Locale_en_default.tab,
           children: { [Slots_default.section]: { kind: "list", scope: "session" } }
         },
-        (props = {}) => (0, import_react4.createElement)(FamilyTab, {
+        (props = {}) => (0, import_react5.createElement)(FamilyTab, {
           registry,
           ...typeof props["renderSlot"] === "function" ? { renderSlot: props["renderSlot"] } : {}
         })
@@ -1129,7 +1176,7 @@ function Client(ctx) {
           label: () => Locale_en_default.overlay,
           children: { [Slots_default.overlay]: { kind: "list", scope: "root" } }
         },
-        (props = {}) => (0, import_react4.createElement)(
+        (props = {}) => (0, import_react5.createElement)(
           "div",
           {
             className: "playform-family-overlay",
@@ -1144,226 +1191,15 @@ function Client(ctx) {
   Reference(ctx, ports);
 }
 
-// ../lib-dsh-style/Target/Function/Inject.js
-function u(e, s) {
-  if (typeof document > "u") return;
-  const n = `${e}/client.css`;
-  if (document.querySelector(`style[data-plugin-css="${n}"]`) !== null) return;
-  const t = document.createElement("style");
-  t.dataset.plugin = e, t.dataset.pluginCss = n, t.textContent = s, document.head.append(t);
-}
-
-// Source/Variable/Styles.ts
-var Styles_default = `
-.playform-family-tab {
-  display: grid;
-  flex: 1;
-  gap: 12px;
-  align-content: start;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 880px;
-  min-height: 0;
-  margin: 0 auto;
-  padding: 20px 16px 28px;
-  overflow: auto;
-}
-
-.playform-family-tab > p {
-  margin: 0;
-  padding: 24px 16px;
-  color: var(--dsw-alias-label-secondary);
-  font-size: 13px;
-  line-height: 20px;
-  text-align: center;
-}
-
-.playform-family-section {
-  box-sizing: border-box;
-  background: var(--dsw-alias-settings-card-fill);
-  border: 0.5px solid var(--dsw-alias-settings-card-stroke);
-  border-radius: var(--dsw-radius-xl);
-  display: grid;
-  gap: 8px;
-  padding: 14px 16px 16px;
-}
-
-.playform-family-section h3 {
-  color: var(--dsw-alias-label-primary);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 18px;
-  margin: 0;
-}
-
-.playform-family-status {
-  color: var(--dsw-alias-label-secondary);
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 16px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 0;
-}
-
-.playform-family-status::before {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  corner-shape: round;
-  content: "";
-  flex: none;
-  background: var(--dsw-alias-state-idle-primary);
-}
-
-.playform-family-section[data-activation=enabled] .playform-family-status::before {
-  background: var(--dsw-alias-state-success-primary);
-}
-
-.playform-family-section[data-activation=unknown] .playform-family-status::before {
-  background: var(--dsw-alias-state-warn-primary);
-}
-
-.playform-family-tail {
-  display: grid;
-  gap: 2px;
-  margin: 0;
-  padding: 8px 10px;
-  max-height: 136px;
-  overflow: auto;
-  list-style: none;
-  color: var(--dsw-alias-label-secondary);
-  font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 11px;
-  line-height: 16px;
-  background: var(--dsw-alias-bg-layer-1);
-  border: 0.5px solid var(--dsw-alias-border-l1);
-  border-radius: var(--dsw-radius-md);
-}
-
-.playform-family-tail li {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.playform-family-tail li[data-kind="observe/stamp"] {
-  color: var(--dsw-alias-brand-primary);
-}
-
-.playform-family-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px 12px;
-  margin: 2px 0 0;
-}
-
-.playform-family-field {
-  display: grid;
-  gap: 4px;
-  min-width: 0;
-  color: var(--dsw-alias-label-primary);
-  font-size: 12px;
-  line-height: 16px;
-}
-
-.playform-family-field-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--dsw-alias-label-secondary);
-}
-
-.playform-family-field input[type=text],
-.playform-family-field input[type=number],
-.playform-family-field select {
-  box-sizing: border-box;
-  width: 100%;
-  height: 28px;
-  padding: 0 8px;
-  color: var(--dsw-alias-label-primary);
-  font: inherit;
-  font-size: 12px;
-  background: var(--dsw-alias-bg-layer-1);
-  border: 0.5px solid var(--dsw-alias-border-l1);
-  border-radius: var(--dsw-radius-sm);
-  outline: none;
-}
-.playform-family-field input[type=text]:focus-visible,
-.playform-family-field input[type=number]:focus-visible,
-.playform-family-field select:focus-visible {
-  border-color: var(--dsw-alias-brand-primary);
-  outline: 2px solid var(--dsw-alias-brand-primary);
-  outline-offset: 1px;
-}
-
-.playform-family-field input[type=checkbox] {
-  width: 14px;
-  height: 14px;
-  margin: 2px 0 0;
-  accent-color: var(--dsw-alias-brand-primary);
-}
-
-.playform-family-field-override {
-  padding: 1px 7px;
-  color: var(--dsw-alias-brand-primary);
-  font-size: 10px;
-  font-weight: 500;
-  line-height: 14px;
-  background: var(--dsw-alias-bg-layer-1);
-  border: 0.5px solid var(--dsw-alias-border-l2);
-  border-radius: 999px;
-  corner-shape: round;
-  justify-self: start;
-}
-
-.playform-family-field-secret {
-  color: var(--dsw-alias-label-secondary);
-  font-size: 12px;
-  font-style: italic;
-}
-
-.playform-family-form-note {
-  margin: 0;
-  color: var(--dsw-alias-label-secondary);
-  font-size: 12px;
-  line-height: 18px;
-}
-
-.playform-family-overlay {
-  box-sizing: border-box;
-  display: grid;
-  gap: 12px;
-  width: 100%;
-  max-height: 80vh;
-  padding: 20px;
-  overflow: auto;
-  background: var(--dsw-alias-bg-overlay);
-  border: 0;
-  border-radius: var(--dsw-radius-panel);
-  box-shadow: var(--dsw-elevation-panel);
-}
-
-.playform-family-overlay:not(:has(.playform-family-section)) {
-  display: none;
-}`;
-
-// Source/Function/Styles.ts
-var IDENTIFIER = "@playform/client-dsh-panel-family";
-function Styles() {
-  u(IDENTIFIER, Styles_default);
-}
-
 // Source/Client.ts
-Styles();
 var inject = ["slots", "locale"];
 function apply(ctx) {
   Client(ctx);
 }
-var Client_default = { inject, apply };
+
+// Source/Bundle.ts
+Styles();
+var Bundle_default = { inject, apply };
 
 		})(module, module.exports, require);
 		return module.exports;

@@ -14,7 +14,7 @@ Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
 
 # The client half (the harness closure-factory bundle); regenerate on every
 # dev run so the served ./client export matches the source.
-node ../../../Maintain/Build/Client-Bundle/Index.mjs . Source/Client.ts @playform/client-dsh-panel-cost
+node ../../../Maintain/Build/Client-Bundle/Index.mjs . Source/Bundle.ts @playform/client-dsh-panel-cost
 
 Build "Source/Test/**/*.ts" \
 	--ESBuild Configuration/Test-ESBuild.ts \

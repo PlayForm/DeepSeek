@@ -17,6 +17,12 @@
 //      declared child slot; its registration's INJECT face (`{ section,
 //      ports }`) is the data path - the section reads the store and the trace
 //      tail through the ports, never through the context.
+//   5. When the composition carries the right Sidebar (`sidebarRightTabs`
+//      present), register the live view as a tab TYPE: stage one into that
+//      registry, stage two into the keyed `sidebar.right.pane.tab` seat under
+//      the type's own id. The registry is probed structurally - no inject row
+//      and no import - and an absent one is a silent skip, so the
+//      conversation.view tab above stays the only surface (fail-open).
 //
 // The stable-until-event rule: the tab re-renders only on a new store
 // snapshot or a new trace envelope; there is no polling and no timer. React
@@ -62,8 +68,55 @@ const RegistryOf = (ctx: ClientContext): Registry | undefined => {
 	}
 };
 
+/** The right-Sidebar tab type's identity: unique across every registration
+ *  and the key its body registers under in the pane seat (the harness's
+ *  tab-registry contract: a definition's `id` is the stage-two key). */
+const TAB_ID = "playform-workspace-live";
+
+/** The right-Sidebar tab-type registry (the optional composition): stage one
+ *  of a tab type's registration. Only `register` is required - the body's
+ *  keyed pane registration is stage two, into a seat ui-sidebar-right
+ *  declares. Neither the package nor its types are imported: the face is
+ *  structural, exactly like the panel family's registry. */
+type TabRegistrar = {
+	register: (definition: {
+		id: string;
+		kind: string;
+		patterns: readonly string[];
+		title: () => string;
+		keepMounted: boolean;
+	}) => () => void;
+};
+
+const IsTabRegistrar = (Candidate: unknown): Candidate is TabRegistrar =>
+	typeof Candidate === "object" &&
+	Candidate !== null &&
+	typeof (Candidate as TabRegistrar).register === "function";
+
+/** The right-Sidebar tab-type registry when the composition carries
+ *  ui-sidebar-right. */
+const TabRegistrarOf = (ctx: ClientContext): TabRegistrar | undefined => {
+	const Candidate = ctx.get("sidebarRightTabs");
+	switch (true) {
+		case IsTabRegistrar(Candidate):
+			return Candidate;
+		default:
+			return undefined;
+	}
+};
+
 /** The renderer's child-slot dispatch prop. */
 type RenderSlot = (name: string, props: object) => ReactNode;
+
+/** The keyed registration face of the slot service: the right-Sidebar pane
+ *  seat is keyed by the tab type's own id, which the context's list-shaped
+ *  mirror does not declare. */
+type KeyedSlots = {
+	register: (
+		options: { name: string; key: string },
+		component: (props?: Record<string, unknown>) => unknown,
+	) => () => void;
+};
 
 /** The live view tab body: the representations, the trace tail, the child slot. */
 function LiveTab(props: {
@@ -155,6 +208,46 @@ export default function Client(
 			trace.dispose();
 		};
 	}, "live: workspace tab");
+	// The right-Sidebar tab type (the optional composition): the registry is
+	// probed structurally, so an absent ui-sidebar-right is a silent skip - no
+	// inject row, no import, no error - and the conversation.view tab above
+	// stays the only surface. When the registry is present, both stages ride
+	// one effect: stage one registers the type, stage two keys the same body
+	// into the pane seat under the type's own id.
+	const registrar = TabRegistrarOf(ctx);
+	switch (true) {
+		case registrar !== undefined: {
+			const Tabs = registrar;
+			ctx.effect(() => {
+				const Keyed = ctx.slots as unknown as KeyedSlots;
+				const Disposers = [
+					Tabs.register({
+						id: TAB_ID,
+						kind: "playform",
+						// The harness matcher tests the whole address when the pattern
+						// carries a scheme separator, and `*` does not cross `/`, so
+						// this claims the bare `dsh-resource://<type>` addresses and
+						// leaves every nested file address to the shipped viewers; the
+						// tab itself opens by kind (`openTab("playform")`).
+						patterns: ["dsh-resource://*"],
+						title: () => EN_DICTIONARY.tab,
+						keepMounted: true,
+					}),
+					ctx.slots.inject(Slots.pane, () =>
+						Keyed.register({ name: Slots.pane, key: TAB_ID }, () =>
+							createElement(LiveTab, { store, trace }),
+						),
+					),
+				];
+				return () => {
+					for (const Dispose of Disposers) Dispose();
+				};
+			}, "live: sidebar tab");
+			break;
+		}
+		default:
+			break;
+	}
 	// The child-slot contribution: one section, its data through the inject
 	// face. Registered only when the panel family is composed - the standalone
 	// tab keeps its legacy registration shape (the compatibility rule).

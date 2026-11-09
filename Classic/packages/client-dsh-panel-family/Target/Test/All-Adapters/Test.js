@@ -411,10 +411,9 @@ const runTest = async () => {
       assert.equal(Rows.length, 1);
       assert.equal(Rows[0].id, "@playform/client-dsh-panel-family");
       assert.equal(typeof Rows[0].factory, "function");
-      const Exports = Rows[0].factory((Name) => {
-        assert.equal(Name, "react");
-        return React;
-      });
+      const Exports = Rows[0].factory(
+        (Name) => Name === "react" ? React : {}
+      );
       assert.deepEqual(Exports.inject, ["slots", "locale"]);
       assert.equal(typeof Exports.apply, "function");
       assert.deepEqual(Exports.default.inject, ["slots", "locale"]);

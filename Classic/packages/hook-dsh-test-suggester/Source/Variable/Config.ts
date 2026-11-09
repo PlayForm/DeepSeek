@@ -24,28 +24,39 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-test-suggester.log";
+const DefaultEnabled = true;
+const DefaultThreshold = 0.75;
+const DefaultMaxCandidates = 7;
+const DefaultMaxNoteChars = 1200;
+const DefaultCooldownCalls = 6;
+const DefaultMaxNotesPerTurn = 3;
+const DefaultIntents: string[] = [];
+const DefaultEmitOn = ["bash", "glob", "grep", "read"];
+const DefaultExclude = ["node_modules", "Target", ".git", "dist"];
+
 export default Compose(false, {
 	// Ledger file - the hook's own ledger, SEPARATE from the family's logs (one
 	// log per module) - volatile: hot-editable without remounting.
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-test-suggester.log").volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// Master switch (volatile: the kill-criterion flip is a hot edit).
-	enabled: Schema.boolean().default(true).volatile(),
+	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The default confidence gate (volatile). The pack's per-intent thresholds
 	// may raise it; they may never lower it (the gate is max of the two).
-	threshold: Schema.number().default(0.75).volatile(),
+	threshold: Schema.number().default(DefaultThreshold).volatile(),
 	// Maximum candidates in one note (volatile).
-	maxCandidates: Schema.number().default(7).volatile(),
+	maxCandidates: Schema.number().default(DefaultMaxCandidates).volatile(),
 	// Hard character cap on the note text (volatile).
-	maxNoteChars: Schema.number().default(1200).volatile(),
+	maxNoteChars: Schema.number().default(DefaultMaxNoteChars).volatile(),
 	// No second note for the same intent within this many judged calls (volatile).
-	cooldownCalls: Schema.number().default(6).volatile(),
+	cooldownCalls: Schema.number().default(DefaultCooldownCalls).volatile(),
 	// Maximum notes per agent turn (volatile).
-	maxNotesPerTurn: Schema.number().default(3).volatile(),
+	maxNotesPerTurn: Schema.number().default(DefaultMaxNotesPerTurn).volatile(),
 	// The enabled intent ids of an EXPLICIT pack (volatile). Empty = all.
-	intents: Schema.array(String).default([]).volatile(),
+	intents: Schema.array(String).default(DefaultIntents).volatile(),
 	// The judged tool names - the search-class family plus the edit family
 	// (the plan's emitOn, §4.8). Structural semantics, volatile anyway.
-	emitOn: Schema.array(String).default(["bash", "glob", "grep", "read"]).volatile(),
+	emitOn: Schema.array(String).default(DefaultEmitOn).volatile(),
 	// Path prefixes a candidate is never drawn from (volatile).
-	exclude: Schema.array(String).default(["node_modules", "Target", ".git", "dist"]).volatile(),
+	exclude: Schema.array(String).default(DefaultExclude).volatile(),
 });

@@ -26,6 +26,23 @@ const Root = (Context: any): string => {
 	return Marker === -1 ? Parent : Parent.slice(0, Marker);
 };
 
+/** The stub module the smoke graph gets in place of the harness UI
+ *  primitives: the smoke graph evaluates the real built client, the published
+ *  ESM entry imports CSS modules Node cannot load, so the arm substitutes
+ *  renderer stubs while the browser bundle keeps the shell's real module
+ *  through the externals list. */
+const Primitives = [
+	"export const StateDot = (Props) => Props.children ?? null;",
+	"export const Tag = (Props) => Props.children ?? null;",
+	"export const DetailDocument = (Props) => Props.children ?? null;",
+	"export const detailDocumentState = (Read) => {",
+	"	if (Read?.status === 'ready') {",
+	"		return Read.markdown === undefined ? { status: 'none' } : { status: 'found', markdown: Read.markdown };",
+	"	}",
+	"	return Read?.status === 'error' ? Read : { status: 'loading' };",
+	"};",
+].join("\n");
+
 /** The resolve hook: `@Function/*` -> Target/Function, `@Variable/*` ->
  *  Target/Variable (built .js) or Source/Variable (the JSON dictionaries). */
 const Resolve = (Specifier: string, Context: any, Next: any): any => {
@@ -45,6 +62,13 @@ const Resolve = (Specifier: string, Context: any, Next: any): any => {
 				`${Root(Context)}/Target/Variable/${Specifier.slice("@Variable/".length)}`,
 				Context,
 			);
+		case Specifier === "@deepseek-ai/dsh-client-ui-primitives" ||
+			Specifier.startsWith("@deepseek-ai/dsh-client-ui-primitives/"):
+			return {
+				url: `data:text/javascript,${encodeURIComponent(Primitives)}`,
+				format: "module",
+				shortCircuit: true,
+			};
 		default:
 			return Next(Specifier, Context);
 	}

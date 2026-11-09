@@ -15,12 +15,18 @@
 // The ESM Target/Client.js stays the dev/test surface; the package's
 // `exports["./client"]` points the module system at the bundle.
 //
+// The bundler also compiles the plugin's `Source/Stylesheet/Plugin.scss` into
+// the bundle through `Maintain/Build/Stylesheet/Index.mjs`, which is why the
+// entry is `Source/Bundle.ts` and the ESM half stays style-free.
+//
 // Usage (from the package directory):
 //   node ../../../Maintain/Build/Client-Bundle/Index.mjs . <entry> <packageName>
 import * as FS from "node:fs";
 import * as Path from "node:path";
 
 import { build } from "esbuild";
+
+import { Stylesheet } from "../Stylesheet/Index.mjs";
 
 const [PackageDirectory, Entry, PackageName] = process.argv.slice(2);
 
@@ -64,6 +70,7 @@ const Result = await build({
 	format: "cjs",
 	logLevel: "silent",
 	platform: "browser",
+	plugins: [Stylesheet()],
 	target: "es2022",
 	tsconfig: Path.join(Root, "tsconfig.json"),
 	write: false,

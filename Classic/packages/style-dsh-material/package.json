@@ -10,11 +10,11 @@
 	"license": "CC0-1.0",
 	"type": "module",
 	"exports": {
-		"./Source/Stylesheet/*": "./Source/Stylesheet/*.scss",
+		"./Target/Stylesheet/*": "./Target/Stylesheet/*",
 		"./package.json": "./package.json"
 	},
 	"files": [
-		"Source/Stylesheet",
+		"Target",
 		"README.md",
 		"SCHEME.md"
 	],

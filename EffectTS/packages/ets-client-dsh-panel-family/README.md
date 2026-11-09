@@ -192,10 +192,10 @@ client-dsh-panel-family: plain-field secret refused for <namespace>
 ## The build and the tests
 
 `Source/Stylesheet/Plugin.scss` is the sheet - the plugin's own, `@use`ing the shared
-`@playform/style-dsh-material` material - and `Source/Variable/Styles.ts` is its generated twin
-(`pnpm stylesheets`). `Source/Function/Styles.ts` binds the identifier to the shared
-`@playform/ets-lib-dsh-style` injector, and `pnpm prepublishOnly` fails when the twin drifts from
-the sheet.
+`@playform/style-dsh-material` material. `Source/Function/Styles.ts` imports it and calls the shared
+`@playform/ets-lib-dsh-style` injector, and `Source/Bundle.ts` is the client bundle's entry that
+mounts the sheet. The bundler compiles it, so nothing is generated and the ESM half stays
+style-free.
 
 `pnpm prepublishOnly` runs the two-step build: the plugin build (ESM `Target/`), then
 `Maintain/Build/Client-Bundle/Index.mjs` (the harness closure factory

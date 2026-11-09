@@ -14,7 +14,7 @@ semantics, because the ledger writes no latency, first-token, or tool-duration c
 ## Layout
 
 - `Source/Library.ts` - the loader contract: name, Config, inject, apply.
-- `Source/Client.ts` - the client entry: styles, inject, apply.
+- `Source/Client.ts` - the client entry: inject, apply.
 - `Source/Function/Serve.ts` - the host route registration and its error codes.
 - `Source/Function/Open.ts` - the read-only SQLite open (tilde expansion, `readOnly: true`).
 - `Source/Function/Query.ts` - the seven read-only SQL statements.
@@ -31,7 +31,9 @@ semantics, because the ledger writes no latency, first-token, or tool-duration c
   `Share.ts`, `Lines.ts` - the formatters.
 - `Source/Function/Styles.ts` - the binding to `@playform/lib-dsh-style`.
 - `Source/Stylesheet/Plugin.scss` - the plugin's own sheet, on the shared material.
-- `Source/Variable/Styles.ts` - the generated twin (`pnpm stylesheets`).
+- `Source/Bundle.ts` - the client bundle's entry: it mounts the sheet, so the bundler compiles it
+  and nothing is generated; the ESM half stays style-free.
+- `Source/Interface/Stylesheet.d.ts` - the ambient `*.scss` module the sheet import resolves to.
 - `Source/Variable/Config.ts` - the Schemastery schema.
 - `Source/Variable/Slots.ts` - the slot points.
 - `Source/Variable/Path.ts`, `Source/Variable/Limits.ts` - the route path and the row budget.

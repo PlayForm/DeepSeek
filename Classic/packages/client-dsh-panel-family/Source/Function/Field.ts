@@ -4,7 +4,11 @@
 // the bridge, secret -> never). A secret field renders the "configured
 // (secret)" marker and NO value: the host redacts secrets and the panel must
 // never display one (UI-FAMILY-V4-1 section 3.4). The row is a pure element
-// builder (no hooks), so the smoke suite can inspect the exact tree.
+// builder (no hooks), so the smoke suite can inspect the exact tree. The text,
+// number and boolean controls are the harness UI primitives (Input and
+// Switch - a seed word, so the shell's single instance costs no bundle size);
+// the enum control stays a native select because ui-primitives ships none.
+import { Input, Switch } from "@deepseek-ai/dsh-client-ui-primitives";
 import Apply from "@Function/Apply.js";
 import type { PanelFormField, PanelFormView } from "@Interface/Form.js";
 import type { PanelSection } from "@Interface/Panel.js";
@@ -69,10 +73,10 @@ const Control = (props: {
 				Translate(props.t, "form.secret"),
 			);
 		case Field.type === "boolean":
-			return createElement("input", {
-				type: "checkbox",
+			return createElement(Switch, {
 				checked: Field.value === true,
-				onChange: (Event: { target: { checked: boolean } }) => Commit(Event.target.checked),
+				onChange: (Next: boolean) => Commit(Next),
+				label: Field.label,
 			});
 		case Field.options !== undefined:
 			return createElement(
@@ -86,20 +90,20 @@ const Control = (props: {
 				),
 			);
 		case Field.type === "number":
-			return createElement("input", {
+			return createElement(Input, {
 				type: "number",
 				defaultValue: String(Field.value ?? ""),
-				onChange: (Event: { target: { value: string } }) =>
+				onChange: (Event: { target: HTMLInputElement }) =>
 					Commit(Number(Event.target.value)),
 			});
 		default:
-			return createElement("input", {
+			return createElement(Input, {
 				type: "text",
 				defaultValue:
 					typeof Field.value === "string"
 						? Field.value
 						: JSON.stringify(Field.value ?? null),
-				onChange: (Event: { target: { value: string } }) =>
+				onChange: (Event: { target: HTMLInputElement }) =>
 					Commit(Parse(Event.target.value)),
 			});
 	}

@@ -5,7 +5,10 @@
 // otherwise. The activation state is the adapter's declared posture unless
 // the NEWEST matching envelope carries `payload.activation` of "enabled" or
 // "disabled" - the one live override the panel honours. Without a trace the
-// status is static and the tail is empty (the documented fallback).
+// status is static and the tail is empty (the documented fallback). The
+// activation LAMP is a harness StateDot: the dot carries the state, the status
+// line beside it carries the words (the dot is aria-hidden).
+import { StateDot, type StateDotState } from "@deepseek-ai/dsh-client-ui-primitives";
 import type {
 	PanelActivation,
 	PanelEnvelope,
@@ -13,6 +16,7 @@ import type {
 	PanelStatus,
 } from "@Interface/Panel.js";
 import type { PanelLive } from "@Interface/Trace.js";
+import { createElement } from "react";
 
 /** The envelope's display key: its payload path, else its trace id. */
 const Key = (Envelope: PanelEnvelope): string => {
@@ -40,6 +44,25 @@ const Activation = (Envelope: PanelEnvelope): PanelActivation | undefined => {
 			return undefined;
 	}
 };
+
+/** The dot state one activation posture paints: an enabled adapter is done,
+ *  an unknown posture is the user-attention warning, and a disabled one is the
+ *  neutral idle grey. The primitive's `error` and `ongoing` states have no
+ *  posture here: the panel never reports a failed or a running activation. */
+const StateOf = (Posture: PanelActivation): StateDotState => {
+	switch (true) {
+		case Posture === "enabled":
+			return "done";
+		case Posture === "unknown":
+			return "warning";
+		default:
+			return "idle";
+	}
+};
+
+/** The activation lamp: the harness state dot for one activation posture. */
+export const Lamp = (props: { activation: PanelActivation }): ReturnType<typeof createElement> =>
+	createElement(StateDot, { state: StateOf(props.activation) });
 
 export default function Status(Section: PanelSection, Live: PanelLive | undefined): PanelStatus {
 	const Envelopes = Live === undefined ? [] : Live.tail();

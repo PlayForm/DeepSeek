@@ -493,10 +493,12 @@ export const runTest = async (): Promise<number> => {
 			assert.equal(Rows.length, 1);
 			assert.equal(Rows[0].id, "@playform/client-dsh-panel-family");
 			assert.equal(typeof Rows[0].factory, "function");
-			const Exports = Rows[0].factory((Name: string) => {
-				assert.equal(Name, "react");
-				return React;
-			});
+			// The factory's require resolves the module-table seed words: react
+			// is real, and a seeded primitive package is a stub here because
+			// this check proves the registration surface, not a render.
+			const Exports = Rows[0].factory((Name: string) =>
+				Name === "react" ? React : {},
+			);
 			assert.deepEqual(Exports.inject, ["slots", "locale"]);
 			assert.equal(typeof Exports.apply, "function");
 			assert.deepEqual(Exports.default.inject, ["slots", "locale"]);

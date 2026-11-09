@@ -1,0 +1,60 @@
+@use "Material" as Material;
+
+.dsh-scroll {
+	@include Material.Scroll;
+}
+.dsh-notice {
+	@include Material.Notice;
+}
+.dsh-notice--framed {
+	@include Material.NoticeFrame;
+}
+.dsh-card {
+	@include Material.Surface;
+}
+.dsh-heading {
+	@include Material.Heading;
+}
+.dsh-meta {
+	@include Material.Meta;
+}
+.dsh-label {
+	@include Material.Label;
+}
+.dsh-code {
+	@include Material.Code;
+}
+.dsh-tray {
+	@include Material.Tray;
+}
+.dsh-lamp {
+	@include Material.Lamp;
+}
+.dsh-truncate {
+	@include Material.Truncate;
+}
+.dsh-form {
+	@include Material.Form;
+}
+.dsh-field {
+	@include Material.Field;
+}
+.dsh-input {
+	@include Material.Input;
+}
+.dsh-chip {
+	@include Material.Chip;
+}
+.dsh-pill {
+	@include Material.Pill;
+}
+.dsh-overlay {
+	@include Material.Overlay;
+}
+.dsh-column {
+	@include Material.Column;
+}
+
+.dsh-focus:focus-visible {
+	@include Material.FocusRing;
+}

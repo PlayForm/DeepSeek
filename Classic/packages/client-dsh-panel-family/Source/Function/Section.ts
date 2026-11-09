@@ -6,10 +6,19 @@
 // standard locale `t`; it subscribes to the settings mirror and the trace tail
 // for live updates and unwinds every subscription on unmount. With no
 // settings client the form shows the documented "not composed" state; with no
-// trace the status is static - neither is an error.
+// trace the status is static - neither is an error. The form's in-between
+// states are the harness DetailDocument: a skeleton while the settings mirror
+// answers and nothing when the plugin exposes no configurable field. The
+// activation lamp is a harness StateDot (Function/Status).
+import {
+	DetailDocument,
+	detailDocumentState,
+	type DetailDocumentLabels,
+	type DetailDocumentRead,
+} from "@deepseek-ai/dsh-client-ui-primitives";
 import Field from "@Function/Field.js";
 import Form from "@Function/Form.js";
-import Status from "@Function/Status.js";
+import Status, { Lamp } from "@Function/Status.js";
 import type { PanelFormView } from "@Interface/Form.js";
 import type { PanelSection, PanelStatus } from "@Interface/Panel.js";
 import type { PanelPorts } from "@Interface/Ports.js";
@@ -40,11 +49,40 @@ const Read = (Section: PanelSection, Ports: PanelPorts): PanelFormView => {
 	});
 };
 
-/** The form body: one note per unavailable/loading/empty state, else the rows. */
+/** The detail document's chrome from the panel's own locale strings: the
+ *  section title names the region and the form's loading line names the
+ *  skeleton. The retry and markdown copy stay empty because this form renders
+ *  neither a document body nor the failure state - the package has no retry
+ *  string and the dictionaries are not this file's to extend. */
+const Labels = (
+	T: ((key: string) => string) | undefined,
+	Section: PanelSection,
+): DetailDocumentLabels => ({
+	title: Translate(T, Section.title),
+	loading: Translate(T, "form.loading"),
+	retry: "",
+	markdown: { code: { copyLabel: "", copiedLabel: "" }, footnotes: "" },
+});
+
+/** The read a form body stands for: the settings mirror still loading, or a
+ *  settled form with no configurable field (the primitive's "nothing to
+ *  show"). */
+const ReadOf = (View: PanelFormView): DetailDocumentRead => {
+	switch (true) {
+		case View.status === "loading":
+			return { status: "loading" };
+		default:
+			return { status: "ready", markdown: undefined };
+	}
+};
+
+/** The form body: the not-composed note, the detail document's loading and
+ *  empty states, else the rows. */
 function FormBody(props: {
 	view: PanelFormView;
 	section: PanelSection;
 	ports: PanelPorts;
+	onRetry: () => void;
 	t?: (key: string) => string;
 }): ReturnType<typeof createElement> {
 	switch (true) {
@@ -54,18 +92,12 @@ function FormBody(props: {
 				{ className: "playform-family-form-note" },
 				Translate(props.t, "form.unavailable"),
 			);
-		case props.view.status === "loading":
-			return createElement(
-				"p",
-				{ className: "playform-family-form-note" },
-				Translate(props.t, "form.loading"),
-			);
-		case props.view.fields.length === 0:
-			return createElement(
-				"p",
-				{ className: "playform-family-form-note" },
-				Translate(props.t, "form.empty"),
-			);
+		case props.view.status === "loading" || props.view.fields.length === 0:
+			return createElement(DetailDocument, {
+				state: detailDocumentState(ReadOf(props.view)),
+				labels: Labels(props.t, props.section),
+				onRetry: props.onRetry,
+			});
 		default:
 			return createElement(
 				"div",
@@ -125,6 +157,7 @@ export default function Section(props: {
 		createElement(
 			"p",
 			{ className: "playform-family-status" },
+			createElement(Lamp, { activation: StatusView.activation }),
 			`${Translate(props.t, `status.${StatusView.activation}`)} - ${Translate(
 				props.t,
 				StatusView.live ? "status.live" : "status.static",
@@ -141,6 +174,7 @@ export default function Section(props: {
 			view: FormView,
 			section: props.section,
 			ports: props.ports,
+			onRetry: () => SetFormView(Read(props.section, props.ports)),
 			...(props.t === undefined ? {} : { t: props.t }),
 		}),
 	);

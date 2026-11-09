@@ -1,6 +1,6 @@
 // Plugin.scss for @playform/client-dsh-panel-family: the shared faces come from
 // the material, while the selectors and the geometry stay this plugin's own.
-@use "@playform/style-dsh-material/Source/Stylesheet/Material" as Material;
+@use "@playform/style-dsh-material/Target/Stylesheet/Material" as Material;
 
 .playform-family-tab {
 	@include Material.Scroll;
@@ -33,22 +33,6 @@
 	margin: 0;
 }
 
-.playform-family-status::before {
-	@include Material.Lamp;
-
-	content: "";
-	flex: none;
-	background: var(--dsw-alias-state-idle-primary);
-}
-
-.playform-family-section[data-activation="enabled"] .playform-family-status::before {
-	background: var(--dsw-alias-state-success-primary);
-}
-
-.playform-family-section[data-activation="unknown"] .playform-family-status::before {
-	background: var(--dsw-alias-state-warn-primary);
-}
-
 .playform-family-tail {
 	@include Material.Tray(136px);
 }
@@ -75,17 +59,11 @@
 	color: var(--dsw-alias-label-secondary);
 }
 
-.playform-family-field input[type="text"],
-.playform-family-field input[type="number"],
+// The text and number controls are the harness Input primitive, which brings
+// its own frame and focus ring; only the enum's native select still needs the
+// material's input face.
 .playform-family-field select {
 	@include Material.Input;
-}
-
-.playform-family-field input[type="checkbox"] {
-	width: 14px;
-	height: 14px;
-	margin: 2px 0 0;
-	accent-color: var(--dsw-alias-brand-primary);
 }
 
 .playform-family-field-override {

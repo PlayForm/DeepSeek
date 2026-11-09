@@ -103,16 +103,22 @@ const ModelText = (Text: string, Identifier: string): ReturnType<typeof createEl
 		portal: true,
 		onlyWhenClipped: true,
 		disabled: Identifier === "",
-		children: createElement("span", { className: "playform-cost-model-text" }, Text),
+		children: createElement(
+			"span",
+			{
+				className: "playform-cost-model-text",
+				// The tooltip's anchor contract is all-optional, so the span must
+				// name one of its keys for the weak-type check; the primitive
+				// clones the child and injects its own handler at runtime.
+				onPointerEnter: undefined,
+			},
+			Text,
+		),
 	});
 
 // The pill carries the full path in a tooltip and keeps the native lines
 // title only when no path reached it: two hover answers would both fire.
-const PillNode = (
-	Pill: FilePill,
-	Index: number,
-	t: Translate,
-): ReturnType<typeof createElement> =>
+const PillNode = (Pill: FilePill, Index: number, t: Translate): ReturnType<typeof createElement> =>
 	createElement(Tooltip, {
 		key: Index,
 		label: Pill.Path ?? Pill.Name,
@@ -122,6 +128,9 @@ const PillNode = (
 			"span",
 			{
 				className: "playform-cost-pill",
+				// The anchor contract's weak-type check needs one of its keys;
+				// the tooltip injects the real handler when it clones the child.
+				onPointerEnter: undefined,
 				...(Pill.Path === undefined && Pill.Lines !== null && Pill.Lines !== 0
 					? { title: t("files.lines", { lines: Lines(Pill.Lines) }) }
 					: {}),
@@ -255,25 +264,7 @@ const Files = (Props: FilesCellProps): ReturnType<typeof createElement> => {
 									Props.t("state.failed"),
 								)
 							: null,
-						Shown.map((Pill, Index) =>
-							createElement(
-								Tooltip,
-								{
-									key: Index,
-									label: Pill.Path ?? Pill.Name,
-									portal: true,
-									disabled: Pill.Path === undefined,
-								},
-								createElement(
-									"span",
-									{ className: "playform-cost-pill", ...PillTitle(Pill, Props.t) },
-									createElement("span", {
-										className: `playform-cost-dot ${ToneClass(Pill.Tone)}`,
-									}),
-									Pill.Name,
-								),
-							),
-						),
+						Shown.map((Pill, Index) => PillNode(Pill, Index, Props.t)),
 						Extra > 0
 							? createElement(
 									"span",

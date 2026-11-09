@@ -1,6 +1,6 @@
 // The cost sheet: the shared faces come from the material, while the table
 // grammar, the bars, the buckets, and the tone palette stay the plugin's own.
-@use "@playform/style-dsh-material/Source/Stylesheet/Material" as Material;
+@use "@playform/style-dsh-material/Target/Stylesheet/Material" as Material;
 
 .playform-cost-root {
 	@include Material.Column;

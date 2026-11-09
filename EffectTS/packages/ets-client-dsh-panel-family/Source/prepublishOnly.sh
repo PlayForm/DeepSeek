@@ -17,10 +17,6 @@
 
 set -e
 
-# The compiled sheet must match its source: the twin is generated, never
-# hand-edited, and a stale one would ship the old CSS.
-node ../../../Maintain/Generate/Stylesheet/Index.mjs --check .
-
 Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
 	--ESBuild Configuration/ESBuild.ts
 
@@ -28,7 +24,7 @@ Build "Source/**/*.ts" "!Source/Test/**/*.ts" \
 # `window.__ModuleLoader__.load({ id, factory })` expects - the ESM build
 # above is NOT servable by the client module system). Runs after the plugin
 # build because that build wipes Target/.
-node ../../../Maintain/Build/Client-Bundle/Index.mjs . Source/Client.ts @playform/ets-client-dsh-panel-family
+node ../../../Maintain/Build/Client-Bundle/Index.mjs . Source/Bundle.ts @playform/ets-client-dsh-panel-family
 
 Build "Source/Test/**/*.ts" \
 	--ESBuild Configuration/Test-ESBuild.ts

@@ -229,8 +229,10 @@ export const runTest = (): number => {
 							() => undefined,
 						],
 					};
+				// A seeded platform package (the UI primitives) is a stub here:
+				// this check proves the registration surface, not a render.
 				default:
-					throw new Error(`unexpected external ${Name}`);
+					return {};
 			}
 		});
 		assert.deepEqual(Exports.inject, ["slots", "locale"]);

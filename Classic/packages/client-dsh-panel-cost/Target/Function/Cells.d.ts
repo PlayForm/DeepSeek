@@ -37,6 +37,7 @@ type ModelCellProps = {
 };
 type FilePill = {
     Name: string;
+    Path?: string;
     Tone: number;
     Count: number;
     Lines: number | null;

@@ -26,14 +26,32 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// Source/Client.ts
-var Client_exports = {};
-__export(Client_exports, {
+// Source/Bundle.ts
+var Bundle_exports = {};
+__export(Bundle_exports, {
   apply: () => apply,
-  default: () => Client_default,
+  default: () => Bundle_default,
   inject: () => inject
 });
-module.exports = __toCommonJS(Client_exports);
+module.exports = __toCommonJS(Bundle_exports);
+
+// ../ets-lib-dsh-style/Target/Function/Inject.js
+function u(e, s) {
+  if (typeof document > "u") return;
+  const n = `${e}/client.css`;
+  if (document.querySelector(`style[data-plugin-css="${n}"]`) !== null) return;
+  const t = document.createElement("style");
+  t.dataset.plugin = e, t.dataset.pluginCss = n, t.textContent = s, document.head.append(t);
+}
+
+// stylesheet:/Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/EffectTS/packages/ets-client-dsh-panel-family/Source/Stylesheet/Plugin.scss
+var Plugin_default = '.playform-family-tab {\n  display: grid;\n  flex: 1;\n  gap: 12px;\n  align-content: start;\n  box-sizing: border-box;\n  width: 100%;\n  max-width: 880px;\n  min-height: 0;\n  margin: 0 auto;\n  padding: 20px 16px 28px;\n  overflow: auto;\n}\n\n.playform-family-tab > p {\n  margin: 0;\n  padding: 24px 16px;\n  color: var(--dsw-alias-label-secondary);\n  font-size: 13px;\n  line-height: 20px;\n  text-align: center;\n}\n\n.playform-family-section {\n  box-sizing: border-box;\n  background: var(--dsw-alias-settings-card-fill);\n  border: 0.5px solid var(--dsw-alias-settings-card-stroke);\n  border-radius: var(--dsw-radius-xl);\n  display: grid;\n  gap: 8px;\n  padding: 14px 16px 16px;\n}\n\n.playform-family-section h3 {\n  color: var(--dsw-alias-label-primary);\n  font-size: 13px;\n  font-weight: 600;\n  line-height: 18px;\n  margin: 0;\n}\n\n.playform-family-status {\n  color: var(--dsw-alias-label-secondary);\n  font-size: 11px;\n  font-weight: 500;\n  line-height: 16px;\n  letter-spacing: 0.04em;\n  text-transform: uppercase;\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  margin: 0;\n}\n\n.playform-family-status::before {\n  width: 6px;\n  height: 6px;\n  border-radius: 50%;\n  corner-shape: round;\n  content: "";\n  flex: none;\n  background: var(--dsw-alias-state-idle-primary);\n}\n\n.playform-family-section[data-activation=enabled] .playform-family-status::before {\n  background: var(--dsw-alias-state-success-primary);\n}\n\n.playform-family-section[data-activation=unknown] .playform-family-status::before {\n  background: var(--dsw-alias-state-warn-primary);\n}\n\n.playform-family-tail {\n  display: grid;\n  gap: 2px;\n  margin: 0;\n  padding: 8px 10px;\n  max-height: 136px;\n  overflow: auto;\n  list-style: none;\n  color: var(--dsw-alias-label-secondary);\n  font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);\n  font-size: 11px;\n  line-height: 16px;\n  background: var(--dsw-alias-bg-layer-1);\n  border: 0.5px solid var(--dsw-alias-border-l1);\n  border-radius: var(--dsw-radius-md);\n}\n\n.playform-family-tail li {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.playform-family-tail li[data-kind="observe/stamp"] {\n  color: var(--dsw-alias-brand-primary);\n}\n\n.playform-family-form {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\n  gap: 10px 12px;\n  margin: 2px 0 0;\n}\n\n.playform-family-field {\n  display: grid;\n  gap: 4px;\n  min-width: 0;\n  color: var(--dsw-alias-label-primary);\n  font-size: 12px;\n  line-height: 16px;\n}\n\n.playform-family-field-label {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: var(--dsw-alias-label-secondary);\n}\n\n.playform-family-field input[type=text],\n.playform-family-field input[type=number],\n.playform-family-field select {\n  box-sizing: border-box;\n  width: 100%;\n  height: 28px;\n  padding: 0 8px;\n  color: var(--dsw-alias-label-primary);\n  font: inherit;\n  font-size: 12px;\n  background: var(--dsw-alias-bg-layer-1);\n  border: 0.5px solid var(--dsw-alias-border-l1);\n  border-radius: var(--dsw-radius-sm);\n  outline: none;\n}\n.playform-family-field input[type=text]:focus-visible,\n.playform-family-field input[type=number]:focus-visible,\n.playform-family-field select:focus-visible {\n  border-color: var(--dsw-alias-brand-primary);\n  outline: 2px solid var(--dsw-alias-brand-primary);\n  outline-offset: 1px;\n}\n\n.playform-family-field input[type=checkbox] {\n  width: 14px;\n  height: 14px;\n  margin: 2px 0 0;\n  accent-color: var(--dsw-alias-brand-primary);\n}\n\n.playform-family-field-override {\n  padding: 1px 7px;\n  color: var(--dsw-alias-brand-primary);\n  font-size: 10px;\n  font-weight: 500;\n  line-height: 14px;\n  background: var(--dsw-alias-bg-layer-1);\n  border: 0.5px solid var(--dsw-alias-border-l2);\n  border-radius: 999px;\n  corner-shape: round;\n  justify-self: start;\n}\n\n.playform-family-field-secret {\n  color: var(--dsw-alias-label-secondary);\n  font-size: 12px;\n  font-style: italic;\n}\n\n.playform-family-form-note {\n  margin: 0;\n  color: var(--dsw-alias-label-secondary);\n  font-size: 12px;\n  line-height: 18px;\n}\n\n.playform-family-overlay {\n  box-sizing: border-box;\n  display: grid;\n  gap: 12px;\n  width: 100%;\n  max-height: 80vh;\n  padding: 20px;\n  overflow: auto;\n  background: var(--dsw-alias-bg-overlay);\n  border: 0;\n  border-radius: var(--dsw-radius-panel);\n  box-shadow: var(--dsw-elevation-panel);\n}\n\n.playform-family-overlay:not(:has(.playform-family-section)) {\n  display: none;\n}';
+
+// Source/Function/Styles.ts
+var IDENTIFIER = "@playform/ets-client-dsh-panel-family";
+function Styles() {
+  u(IDENTIFIER, Plugin_default);
+}
 
 // Source/Function/Bridge.ts
 var IsBridge = (Candidate) => typeof Candidate === "object" && Candidate !== null && typeof Candidate.editFull === "function";
@@ -1118,226 +1136,15 @@ function Client(ctx) {
   Reference(ctx, ports);
 }
 
-// ../ets-lib-dsh-style/Target/Function/Inject.js
-function u(e, s) {
-  if (typeof document > "u") return;
-  const n = `${e}/client.css`;
-  if (document.querySelector(`style[data-plugin-css="${n}"]`) !== null) return;
-  const t = document.createElement("style");
-  t.dataset.plugin = e, t.dataset.pluginCss = n, t.textContent = s, document.head.append(t);
-}
-
-// Source/Variable/Styles.ts
-var Styles_default = `
-.playform-family-tab {
-  display: grid;
-  flex: 1;
-  gap: 12px;
-  align-content: start;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 880px;
-  min-height: 0;
-  margin: 0 auto;
-  padding: 20px 16px 28px;
-  overflow: auto;
-}
-
-.playform-family-tab > p {
-  margin: 0;
-  padding: 24px 16px;
-  color: var(--dsw-alias-label-secondary);
-  font-size: 13px;
-  line-height: 20px;
-  text-align: center;
-}
-
-.playform-family-section {
-  box-sizing: border-box;
-  background: var(--dsw-alias-settings-card-fill);
-  border: 0.5px solid var(--dsw-alias-settings-card-stroke);
-  border-radius: var(--dsw-radius-xl);
-  display: grid;
-  gap: 8px;
-  padding: 14px 16px 16px;
-}
-
-.playform-family-section h3 {
-  color: var(--dsw-alias-label-primary);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 18px;
-  margin: 0;
-}
-
-.playform-family-status {
-  color: var(--dsw-alias-label-secondary);
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 16px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 0;
-}
-
-.playform-family-status::before {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  corner-shape: round;
-  content: "";
-  flex: none;
-  background: var(--dsw-alias-state-idle-primary);
-}
-
-.playform-family-section[data-activation=enabled] .playform-family-status::before {
-  background: var(--dsw-alias-state-success-primary);
-}
-
-.playform-family-section[data-activation=unknown] .playform-family-status::before {
-  background: var(--dsw-alias-state-warn-primary);
-}
-
-.playform-family-tail {
-  display: grid;
-  gap: 2px;
-  margin: 0;
-  padding: 8px 10px;
-  max-height: 136px;
-  overflow: auto;
-  list-style: none;
-  color: var(--dsw-alias-label-secondary);
-  font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 11px;
-  line-height: 16px;
-  background: var(--dsw-alias-bg-layer-1);
-  border: 0.5px solid var(--dsw-alias-border-l1);
-  border-radius: var(--dsw-radius-md);
-}
-
-.playform-family-tail li {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.playform-family-tail li[data-kind="observe/stamp"] {
-  color: var(--dsw-alias-brand-primary);
-}
-
-.playform-family-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px 12px;
-  margin: 2px 0 0;
-}
-
-.playform-family-field {
-  display: grid;
-  gap: 4px;
-  min-width: 0;
-  color: var(--dsw-alias-label-primary);
-  font-size: 12px;
-  line-height: 16px;
-}
-
-.playform-family-field-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--dsw-alias-label-secondary);
-}
-
-.playform-family-field input[type=text],
-.playform-family-field input[type=number],
-.playform-family-field select {
-  box-sizing: border-box;
-  width: 100%;
-  height: 28px;
-  padding: 0 8px;
-  color: var(--dsw-alias-label-primary);
-  font: inherit;
-  font-size: 12px;
-  background: var(--dsw-alias-bg-layer-1);
-  border: 0.5px solid var(--dsw-alias-border-l1);
-  border-radius: var(--dsw-radius-sm);
-  outline: none;
-}
-.playform-family-field input[type=text]:focus-visible,
-.playform-family-field input[type=number]:focus-visible,
-.playform-family-field select:focus-visible {
-  border-color: var(--dsw-alias-brand-primary);
-  outline: 2px solid var(--dsw-alias-brand-primary);
-  outline-offset: 1px;
-}
-
-.playform-family-field input[type=checkbox] {
-  width: 14px;
-  height: 14px;
-  margin: 2px 0 0;
-  accent-color: var(--dsw-alias-brand-primary);
-}
-
-.playform-family-field-override {
-  padding: 1px 7px;
-  color: var(--dsw-alias-brand-primary);
-  font-size: 10px;
-  font-weight: 500;
-  line-height: 14px;
-  background: var(--dsw-alias-bg-layer-1);
-  border: 0.5px solid var(--dsw-alias-border-l2);
-  border-radius: 999px;
-  corner-shape: round;
-  justify-self: start;
-}
-
-.playform-family-field-secret {
-  color: var(--dsw-alias-label-secondary);
-  font-size: 12px;
-  font-style: italic;
-}
-
-.playform-family-form-note {
-  margin: 0;
-  color: var(--dsw-alias-label-secondary);
-  font-size: 12px;
-  line-height: 18px;
-}
-
-.playform-family-overlay {
-  box-sizing: border-box;
-  display: grid;
-  gap: 12px;
-  width: 100%;
-  max-height: 80vh;
-  padding: 20px;
-  overflow: auto;
-  background: var(--dsw-alias-bg-overlay);
-  border: 0;
-  border-radius: var(--dsw-radius-panel);
-  box-shadow: var(--dsw-elevation-panel);
-}
-
-.playform-family-overlay:not(:has(.playform-family-section)) {
-  display: none;
-}`;
-
-// Source/Function/Styles.ts
-var IDENTIFIER = "@playform/ets-client-dsh-panel-family";
-function Styles() {
-  u(IDENTIFIER, Styles_default);
-}
-
 // Source/Client.ts
-Styles();
 var inject = ["slots", "locale"];
 function apply(ctx) {
   Client(ctx);
 }
-var Client_default = { inject, apply };
+
+// Source/Bundle.ts
+Styles();
+var Bundle_default = { inject, apply };
 
 		})(module, module.exports, require);
 		return module.exports;

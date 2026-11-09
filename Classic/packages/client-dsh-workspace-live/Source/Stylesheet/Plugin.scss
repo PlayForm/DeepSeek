@@ -1,6 +1,6 @@
 // Plugin.scss for @playform/client-dsh-workspace-live: the shared faces come from
 // the material, while the selectors and the geometry stay this plugin's own.
-@use "@playform/style-dsh-material/Source/Stylesheet/Material" as Material;
+@use "@playform/style-dsh-material/Target/Stylesheet/Material" as Material;
 
 .playform-workspace-live {
 	@include Material.Scroll;
@@ -14,15 +14,11 @@
 	gap: 8px;
 }
 
+// The dot is the harness StateDot, which paints its own tone and size; the
+// sheet keeps only the layout cell so the primitive's state colour is never
+// masked by a local background.
 .playform-workspace-dot {
-	@include Material.Lamp(7px);
-
 	flex: none;
-	background: var(--dsw-alias-state-idle-primary);
-}
-
-.playform-workspace-dot[data-live="true"] {
-	background: var(--dsw-alias-state-success-primary);
 }
 
 .playform-workspace-title {

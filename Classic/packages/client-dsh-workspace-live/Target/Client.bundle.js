@@ -26,14 +26,35 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// Source/Client.ts
-var Client_exports = {};
-__export(Client_exports, {
+// Source/Bundle.ts
+var Bundle_exports = {};
+__export(Bundle_exports, {
   apply: () => apply,
-  default: () => Client_default,
+  default: () => Bundle_default,
   inject: () => inject
 });
-module.exports = __toCommonJS(Client_exports);
+module.exports = __toCommonJS(Bundle_exports);
+
+// ../lib-dsh-style/Target/Function/Inject.js
+function u(e, s) {
+  if (typeof document > "u") return;
+  const n = `${e}/client.css`;
+  if (document.querySelector(`style[data-plugin-css="${n}"]`) !== null) return;
+  const t = document.createElement("style");
+  t.dataset.plugin = e, t.dataset.pluginCss = n, t.textContent = s, document.head.append(t);
+}
+
+// stylesheet:/Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Classic/packages/client-dsh-workspace-live/Source/Stylesheet/Plugin.scss
+var Plugin_default = '.playform-workspace-live {\n  display: grid;\n  flex: 1;\n  gap: 12px;\n  align-content: start;\n  box-sizing: border-box;\n  width: 100%;\n  max-width: 880px;\n  min-height: 0;\n  margin: 0 auto;\n  padding: 20px 16px 28px;\n  overflow: auto;\n}\n\n.playform-workspace-header {\n  color: var(--dsw-alias-label-primary);\n  font-size: 13px;\n  font-weight: 600;\n  line-height: 18px;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n\n.playform-workspace-dot {\n  flex: none;\n}\n\n.playform-workspace-title {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.playform-workspace-count {\n  color: var(--dsw-alias-label-secondary);\n  font-size: 11px;\n  font-weight: 500;\n  line-height: 16px;\n  margin-left: auto;\n}\n\n.playform-workspace-representations {\n  display: grid;\n  gap: 8px;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n\n.playform-workspace-representations li {\n  box-sizing: border-box;\n  background: var(--dsw-alias-settings-card-fill);\n  border: 0.5px solid var(--dsw-alias-settings-card-stroke);\n  border-radius: var(--dsw-radius-lg);\n  display: grid;\n  gap: 2px;\n  padding: 10px 12px;\n}\n\n.playform-workspace-representation-label {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: var(--dsw-alias-label-primary);\n  font-size: 13px;\n  font-weight: 500;\n  line-height: 18px;\n}\n\n.playform-workspace-representation-meta {\n  color: var(--dsw-alias-label-secondary);\n  font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);\n  font-size: 11px;\n  line-height: 16px;\n}\n\n.playform-workspace-live > p {\n  margin: 0;\n  padding: 24px 16px;\n  color: var(--dsw-alias-label-secondary);\n  font-size: 13px;\n  line-height: 20px;\n  text-align: center;\n  background: var(--dsw-alias-settings-card-fill);\n  border: 0.5px dashed var(--dsw-alias-border-l2);\n  border-radius: var(--dsw-radius-lg);\n}\n\n.playform-workspace-trace {\n  display: grid;\n  gap: 2px;\n  margin: 0;\n  padding: 8px 10px;\n  max-height: 160px;\n  overflow: auto;\n  list-style: none;\n  color: var(--dsw-alias-label-secondary);\n  font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);\n  font-size: 11px;\n  line-height: 16px;\n  background: var(--dsw-alias-bg-layer-1);\n  border: 0.5px solid var(--dsw-alias-border-l1);\n  border-radius: var(--dsw-radius-md);\n}\n\n.playform-workspace-trace li {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.playform-workspace-trace li[data-kind="batch/decision"],\n.playform-workspace-trace li[data-kind="batch/state-change"] {\n  color: var(--dsw-alias-brand-primary);\n}\n\n.playform-workspace-live[data-live=false] .playform-workspace-trace {\n  opacity: 0.55;\n}\n\n.playform-family-section .playform-workspace-live {\n  max-width: none;\n  margin: 0;\n  padding: 0;\n  overflow: visible;\n}\n\n.playform-family-section .playform-workspace-header {\n  display: none;\n}';
+
+// Source/Function/Styles.ts
+var IDENTIFIER = "@playform/client-dsh-workspace-live";
+function Styles() {
+  u(IDENTIFIER, Plugin_default);
+}
+
+// Source/Function/View.ts
+var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
 
 // Source/Variable/Locale-en.json
 var Locale_en_default = {
@@ -52,6 +73,43 @@ var Key = (Envelope) => {
       return Envelope.trace;
   }
 };
+var DotOf = (Live) => {
+  switch (true) {
+    case Live:
+      return "done";
+    default:
+      return "idle";
+  }
+};
+var ToneOf = (Kind) => {
+  switch (true) {
+    case Kind === "file":
+      return "info";
+    case Kind === "test":
+      return "warning";
+    case Kind === "block":
+      return "quiet";
+    case Kind === "doc":
+      return "outline";
+    default:
+      return "neutral";
+  }
+};
+var Labels = {
+  title: Locale_en_default.tab,
+  loading: Locale_en_default.tab,
+  retry: "",
+  markdown: { code: { copyLabel: "", copiedLabel: "" }, footnotes: "" }
+};
+var Retry = () => void 0;
+var ReadOf = (Live) => {
+  switch (true) {
+    case Live:
+      return { status: "loading" };
+    default:
+      return { status: "ready", markdown: void 0 };
+  }
+};
 function View(props) {
   return (0, import_react.createElement)(
     "div",
@@ -62,10 +120,9 @@ function View(props) {
     (0, import_react.createElement)(
       "header",
       { className: "playform-workspace-header" },
-      (0, import_react.createElement)("span", {
+      (0, import_react.createElement)(import_dsh_client_ui_primitives.StateDot, {
         className: "playform-workspace-dot",
-        "data-live": props.live ? "true" : "false",
-        "aria-hidden": "true"
+        state: DotOf(props.live)
       }),
       (0, import_react.createElement)("span", { className: "playform-workspace-title" }, Locale_en_default.tab),
       (0, import_react.createElement)(
@@ -81,6 +138,7 @@ function View(props) {
         (Representation) => (0, import_react.createElement)(
           "li",
           { key: Representation.id },
+          (0, import_react.createElement)(import_dsh_client_ui_primitives.Tag, { tone: ToneOf(Representation.kind) }, Representation.kind),
           (0, import_react.createElement)(
             "span",
             { className: "playform-workspace-representation-label" },
@@ -89,12 +147,17 @@ function View(props) {
           (0, import_react.createElement)(
             "span",
             { className: "playform-workspace-representation-meta" },
-            `${Representation.kind} / v${String(Representation.version)} / seq ${String(Representation.lastSequence)}`
+            `v${String(Representation.version)} / seq ${String(Representation.lastSequence)}`
           )
         )
       )
     ),
     props.view.representations.length === 0 ? (0, import_react.createElement)("p", {}, Locale_en_default.empty) : void 0,
+    props.tail.length === 0 ? (0, import_react.createElement)(import_dsh_client_ui_primitives.DetailDocument, {
+      labels: Labels,
+      onRetry: Retry,
+      state: (0, import_dsh_client_ui_primitives.detailDocumentState)(ReadOf(props.live))
+    }) : void 0,
     (0, import_react.createElement)(
       "ul",
       { className: "playform-workspace-trace" },
@@ -281,6 +344,9 @@ var Section_default = {
 var Slots_default = {
   /** The host slot the workspace tab mounts into. */
   tab: "conversation.view",
+  /** The host slot the right-Sidebar tab body mounts into (keyed by the tab
+   *  type's id; declared by ui-sidebar-right). */
+  pane: "sidebar.right.pane.tab",
   /** The child slot the workspace tab declares and renders. */
   section: "workspace.live.section"
 };
@@ -293,6 +359,17 @@ var RegistryOf = (ctx) => {
   const Candidate = ctx.get("playformFamilyPanel");
   switch (true) {
     case IsRegistry(Candidate):
+      return Candidate;
+    default:
+      return void 0;
+  }
+};
+var TAB_ID = "playform-workspace-live";
+var IsTabRegistrar = (Candidate) => typeof Candidate === "object" && Candidate !== null && typeof Candidate.register === "function";
+var TabRegistrarOf = (ctx) => {
+  const Candidate = ctx.get("sidebarRightTabs");
+  switch (true) {
+    case IsTabRegistrar(Candidate):
       return Candidate;
     default:
       return void 0;
@@ -366,6 +443,42 @@ function Client(ctx, config) {
       trace.dispose();
     };
   }, "live: workspace tab");
+  const registrar = TabRegistrarOf(ctx);
+  switch (true) {
+    case registrar !== void 0: {
+      const Tabs = registrar;
+      ctx.effect(() => {
+        const Keyed = ctx.slots;
+        const Disposers = [
+          Tabs.register({
+            id: TAB_ID,
+            kind: "playform",
+            // The harness matcher tests the whole address when the pattern
+            // carries a scheme separator, and `*` does not cross `/`, so
+            // this claims the bare `dsh-resource://<type>` addresses and
+            // leaves every nested file address to the shipped viewers; the
+            // tab itself opens by kind (`openTab("playform")`).
+            patterns: ["dsh-resource://*"],
+            title: () => Locale_en_default.tab,
+            keepMounted: true
+          }),
+          ctx.slots.inject(
+            Slots_default.pane,
+            () => Keyed.register(
+              { name: Slots_default.pane, key: TAB_ID },
+              () => (0, import_react3.createElement)(LiveTab, { store, trace })
+            )
+          )
+        ];
+        return () => {
+          for (const Dispose of Disposers) Dispose();
+        };
+      }, "live: sidebar tab");
+      break;
+    }
+    default:
+      break;
+  }
   switch (true) {
     case registry !== void 0:
       ctx.effect(
@@ -393,171 +506,15 @@ function Client(ctx, config) {
   }
 }
 
-// ../lib-dsh-style/Target/Function/Inject.js
-function u(e, s) {
-  if (typeof document > "u") return;
-  const n = `${e}/client.css`;
-  if (document.querySelector(`style[data-plugin-css="${n}"]`) !== null) return;
-  const t = document.createElement("style");
-  t.dataset.plugin = e, t.dataset.pluginCss = n, t.textContent = s, document.head.append(t);
-}
-
-// Source/Variable/Styles.ts
-var Styles_default = `
-.playform-workspace-live {
-  display: grid;
-  flex: 1;
-  gap: 12px;
-  align-content: start;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 880px;
-  min-height: 0;
-  margin: 0 auto;
-  padding: 20px 16px 28px;
-  overflow: auto;
-}
-
-.playform-workspace-header {
-  color: var(--dsw-alias-label-primary);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 18px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.playform-workspace-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  corner-shape: round;
-  flex: none;
-  background: var(--dsw-alias-state-idle-primary);
-}
-
-.playform-workspace-dot[data-live=true] {
-  background: var(--dsw-alias-state-success-primary);
-}
-
-.playform-workspace-title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.playform-workspace-count {
-  color: var(--dsw-alias-label-secondary);
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 16px;
-  margin-left: auto;
-}
-
-.playform-workspace-representations {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.playform-workspace-representations li {
-  box-sizing: border-box;
-  background: var(--dsw-alias-settings-card-fill);
-  border: 0.5px solid var(--dsw-alias-settings-card-stroke);
-  border-radius: var(--dsw-radius-lg);
-  display: grid;
-  gap: 2px;
-  padding: 10px 12px;
-}
-
-.playform-workspace-representation-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--dsw-alias-label-primary);
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 18px;
-}
-
-.playform-workspace-representation-meta {
-  color: var(--dsw-alias-label-secondary);
-  font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 11px;
-  line-height: 16px;
-}
-
-.playform-workspace-live > p {
-  margin: 0;
-  padding: 24px 16px;
-  color: var(--dsw-alias-label-secondary);
-  font-size: 13px;
-  line-height: 20px;
-  text-align: center;
-  background: var(--dsw-alias-settings-card-fill);
-  border: 0.5px dashed var(--dsw-alias-border-l2);
-  border-radius: var(--dsw-radius-lg);
-}
-
-.playform-workspace-trace {
-  display: grid;
-  gap: 2px;
-  margin: 0;
-  padding: 8px 10px;
-  max-height: 160px;
-  overflow: auto;
-  list-style: none;
-  color: var(--dsw-alias-label-secondary);
-  font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 11px;
-  line-height: 16px;
-  background: var(--dsw-alias-bg-layer-1);
-  border: 0.5px solid var(--dsw-alias-border-l1);
-  border-radius: var(--dsw-radius-md);
-}
-
-.playform-workspace-trace li {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.playform-workspace-trace li[data-kind="batch/decision"],
-.playform-workspace-trace li[data-kind="batch/state-change"] {
-  color: var(--dsw-alias-brand-primary);
-}
-
-.playform-workspace-live[data-live=false] .playform-workspace-trace {
-  opacity: 0.55;
-}
-
-.playform-family-section .playform-workspace-live {
-  max-width: none;
-  margin: 0;
-  padding: 0;
-  overflow: visible;
-}
-
-.playform-family-section .playform-workspace-header {
-  display: none;
-}`;
-
-// Source/Function/Styles.ts
-var IDENTIFIER = "@playform/client-dsh-workspace-live";
-function Styles() {
-  u(IDENTIFIER, Styles_default);
-}
-
 // Source/Client.ts
-Styles();
 var inject = ["slots", "locale"];
 function apply(ctx) {
   Client(ctx, { tabOrder: 25, maxEvents: 50, maxRepresentations: 100 });
 }
-var Client_default = { inject, apply };
+
+// Source/Bundle.ts
+Styles();
+var Bundle_default = { inject, apply };
 
 		})(module, module.exports, require);
 		return module.exports;

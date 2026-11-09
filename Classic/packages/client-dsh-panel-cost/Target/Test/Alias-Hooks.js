@@ -5,6 +5,10 @@ const Root = (Context) => {
   const Marker = Parent.indexOf("/Target/");
   return Marker === -1 ? Parent : Parent.slice(0, Marker);
 };
+const Primitives = [
+  "export const Button = (Props) => Props.children ?? null;",
+  "export const Tooltip = (Props) => Props.children ?? null;"
+].join("\n");
 const Resolve = (Specifier, Context, Next) => {
   switch (true) {
     case Specifier.startsWith("@Function/"):
@@ -27,6 +31,12 @@ const Resolve = (Specifier, Context, Next) => {
         `${Root(Context)}/Target/Variable/${Specifier.slice("@Variable/".length)}`,
         Context
       );
+    case (Specifier === "@deepseek-ai/dsh-client-ui-primitives" || Specifier.startsWith("@deepseek-ai/dsh-client-ui-primitives/")):
+      return {
+        url: `data:text/javascript,${encodeURIComponent(Primitives)}`,
+        format: "module",
+        shortCircuit: true
+      };
     default:
       return Next(Specifier, Context);
   }

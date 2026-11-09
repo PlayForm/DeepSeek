@@ -1,5 +1,5 @@
 import type { Context } from "@deepseek-ai/cordis";
-import type { CommandResult } from "@playform/lib-dsh-core";
+import { type CommandResult } from "@playform/lib-dsh-core";
 import type Factory from "@playform/plugin-dsh-factory";
 import type Config from "../Interface/Config.js";
 declare module "@deepseek-ai/cordis" {

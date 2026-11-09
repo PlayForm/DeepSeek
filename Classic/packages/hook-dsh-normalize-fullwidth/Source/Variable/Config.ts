@@ -36,15 +36,34 @@
 import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
+const DefaultLogFile = "~/.dsh/playform/hook-dsh-normalize-fullwidth.log";
+const DefaultNormalizeReasoning = true;
+const DefaultNormalizeToolArguments = false;
+const DefaultScopeConversation = true;
+const DefaultScopeReasoning = true;
+const DefaultScopeToolInput = false;
+const DefaultScopeToolResults = false;
+const DefaultScopeFiles = true;
+const DefaultScopeBatch = false;
+const DefaultToolResultsExempt = [
+	"read",
+	"edit",
+	"raw-write",
+	"normalize-file",
+	"ccr_retrieve",
+	"subagent",
+	"ask_user_question",
+];
+
 export default Compose(false, {
 	// Ledger file — the fullwidth ledger, SEPARATE from the family's logs
 	// (one log per module) — volatile: hot-editable without remounting
 	// (overrides the minimal shared block's empty default).
-	logFile: Schema.string().default("~/.dsh/playform/hook-dsh-normalize-fullwidth.log").volatile(),
+	logFile: Schema.string().default(DefaultLogFile).volatile(),
 	// Normalize reasoning deltas and the assembled ReasoningBlock too (the
 	// map applies to whatever the model wrote; the deltas AND the block must
 	// agree, or consumers see inconsistencies).
-	normalizeReasoning: Schema.boolean().default(true),
+	normalizeReasoning: Schema.boolean().default(DefaultNormalizeReasoning),
 	// IMPLEMENTED (default OFF — the SCHEMA default stays off for
 	// everyone): when on, the tool-call argumentsDelta and the assembled
 	// ToolCallBlock.arguments are rewritten by the transform too. The
@@ -53,7 +72,7 @@ export default Compose(false, {
 	// DEPRECATED in favor of `scopes.toolInput`: kept and OR-ed in (effective
 	// toolInput = this field || scopes.toolInput) so every existing profile
 	// keeps working; new configs should use the scope gate.
-	normalizeToolArguments: Schema.boolean().default(false),
+	normalizeToolArguments: Schema.boolean().default(DefaultNormalizeToolArguments),
 	// Granular scope gates — ALL volatile (live toggling, no remount):
 	// conversation=text/block-end, reasoning=its sub-gate, toolInput=tool-call
 	// arguments arm, toolResults=tools/post-execute arm, files=the
@@ -63,12 +82,12 @@ export default Compose(false, {
 	// leaves under an enclosing volatile field): one leaf change commits one
 	// update whose whole object the State's refresh listener re-reads.
 	scopes: Schema.object({
-		conversation: Schema.boolean().default(true),
-		reasoning: Schema.boolean().default(true),
-		toolInput: Schema.boolean().default(false),
-		toolResults: Schema.boolean().default(false),
-		files: Schema.boolean().default(true),
-		batch: Schema.boolean().default(false),
+		conversation: Schema.boolean().default(DefaultScopeConversation),
+		reasoning: Schema.boolean().default(DefaultScopeReasoning),
+		toolInput: Schema.boolean().default(DefaultScopeToolInput),
+		toolResults: Schema.boolean().default(DefaultScopeToolResults),
+		files: Schema.boolean().default(DefaultScopeFiles),
+		batch: Schema.boolean().default(DefaultScopeBatch),
 	}).volatile(),
 	// Tool-results exemption list (the name-exempt precedent of the core's
 	// stream gate, made configurable): a tool result whose exec name is listed
@@ -76,15 +95,5 @@ export default Compose(false, {
 	// normalize-file own their normalization, ccr_retrieve's bytes are the
 	// retrieval contract, subagent/ask_user_question carry prompt material
 	// matched verbatim.
-	toolResultsExempt: Schema.array(Schema.string())
-		.default([
-			"read",
-			"edit",
-			"raw-write",
-			"normalize-file",
-			"ccr_retrieve",
-			"subagent",
-			"ask_user_question",
-		])
-		.volatile(),
+	toolResultsExempt: Schema.array(Schema.string()).default(DefaultToolResultsExempt).volatile(),
 });

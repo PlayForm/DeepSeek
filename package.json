@@ -17,8 +17,6 @@
 		"marketplace": "node Maintain/Generate/Marketplace/Index.mjs",
 		"marketplace:check": "node Maintain/Generate/Marketplace/Index.mjs --check",
 		"site": "pnpm --dir Site run Run",
-		"stylesheets": "node Maintain/Generate/Stylesheet/Index.mjs",
-		"stylesheets:check": "node Maintain/Generate/Stylesheet/Index.mjs --check",
 		"test": "node Maintain/Run/Smokes/Index.mjs",
 		"test:icons": "node Test/Icons/Check.mjs",
 		"test:types": "node Maintain/Run/Types/Index.mjs",

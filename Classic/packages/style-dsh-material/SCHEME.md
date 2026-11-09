@@ -3,7 +3,7 @@
 The material's contract: the mixin table, the base-class table, and the naming rule. Everything
 below is what the three partials do today; nothing else is claimed.
 
-## 1. The mixins (`Source/Stylesheet/Material.scss`)
+## 1. The mixins (`Target/Stylesheet/Material.scss`)
 
 | Mixin         | Owns                                                                            | Came from                                                   |
 | ------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------- |
@@ -27,7 +27,7 @@ below is what the three partials do today; nothing else is claimed.
 | `FocusRing`   | the business-ink hairline with `$Offset`                                        | cost focus                                                  |
 | `Column`      | the full-height flex column with the inner scroll                               | cost root                                                   |
 
-## 2. The base classes (`Source/Stylesheet/Base.scss`)
+## 2. The base classes (`Target/Stylesheet/Base.scss`)
 
 | Class                      | Mixin         | Emits                        |
 | -------------------------- | ------------- | ---------------------------- |

@@ -1,6 +1,6 @@
-// Plugin.scss for @playform/client-dsh-workspace-live: the shared faces come from
+// Plugin.scss for @playform/ets-client-dsh-workspace-live: the shared faces come from
 // the material, while the selectors and the geometry stay this plugin's own.
-@use "@playform/style-dsh-material/Source/Stylesheet/Material" as Material;
+@use "@playform/style-dsh-material/Target/Stylesheet/Material" as Material;
 
 .playform-workspace-live {
 	@include Material.Scroll;

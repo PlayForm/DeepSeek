@@ -101,10 +101,9 @@ tree excluded), then `Build-Client-Bundle.mjs` (`Target/Client.bundle.js`), then
 harness selfcheck, and the Test type-check.
 
 `Source/Stylesheet/Plugin.scss` is the sheet - the plugin's own, `@use`ing the shared
-`@playform/style-dsh-material` material - and `Source/Variable/Styles.ts` is its generated twin
-(`pnpm stylesheets`). `Source/Function/Styles.ts` binds the identifier to the shared
-`@playform/lib-dsh-style` injector, and `pnpm prepublishOnly` fails when the twin drifts from the
-sheet.
+`@playform/style-dsh-material` material. `Source/Function/Styles.ts` imports it and calls the shared
+`@playform/lib-dsh-style` injector, and `Source/Bundle.ts` is the client bundle's entry that mounts
+the sheet. The bundler compiles it, so nothing is generated and the ESM half stays style-free.
 
 ## The plan
 

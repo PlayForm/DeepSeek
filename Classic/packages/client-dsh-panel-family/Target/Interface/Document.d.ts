@@ -11,3 +11,6 @@ declare const document: {
         append(node: unknown): void;
     };
 };
+interface HTMLInputElement {
+    value: string;
+}

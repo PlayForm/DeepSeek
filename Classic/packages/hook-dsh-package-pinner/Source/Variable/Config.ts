@@ -28,6 +28,8 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
 import Default from "./Default.js";
 import Section from "./Section.js";
 
+const DefaultLog = false;
+
 export default Compose(
 	{
 		// Ledger file (SEPARATE from the governor's — the pinner is its own plugin).
@@ -38,6 +40,9 @@ export default Compose(
 		exclude: Default,
 	},
 	{
+		// The ledger switch: diagnostic logs OFF by default; volatile so a
+		// hot edit commits without remounting.
+		log: Schema.boolean().default(DefaultLog).volatile(),
 		// Dependency sections the pinner may rewrite — Variable/Section.
 		sections: Schema.array(Schema.string()).default(Section),
 	},

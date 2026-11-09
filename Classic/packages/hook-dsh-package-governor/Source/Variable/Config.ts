@@ -38,6 +38,12 @@ import { Schema as Compose } from "@playform/plugin-dsh-factory";
 
 import Default from "./Default.js";
 
+const DefaultLog = false;
+const DefaultStrict = false;
+const DefaultMaxUpdateFailures = 3;
+const DefaultUpdateMode = "programmatic";
+const DefaultNcuBin = "ncu";
+
 export default Compose(
 	{
 		// Ledger file (one global log; defaults to the active profile's DSH_HOME).
@@ -48,13 +54,16 @@ export default Compose(
 		exclude: Default,
 	},
 	{
+		// The ledger switch: diagnostic logs OFF by default; volatile so a
+		// hot edit commits without remounting.
+		log: Schema.boolean().default(DefaultLog).volatile(),
 		// Strict chain pass: strip unknown deps in a governed workspace.
-		strict: Schema.boolean().default(false),
+		strict: Schema.boolean().default(DefaultStrict),
 		// Circuit breaker: consecutive update-stage failures per directory before pause.
-		maxUpdateFailures: Schema.number().default(3),
+		maxUpdateFailures: Schema.number().default(DefaultMaxUpdateFailures),
 		// Update stage mode: "programmatic" (ncu library in-process) or "bin".
-		updateMode: Schema.string().default("programmatic"),
+		updateMode: Schema.string().default(DefaultUpdateMode),
 		// ncu binary for bin mode (binary name or absolute path — resolved via the host PATH).
-		ncuBin: Schema.string().default("ncu"),
+		ncuBin: Schema.string().default(DefaultNcuBin),
 	},
 );

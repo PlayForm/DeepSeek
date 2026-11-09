@@ -26,14 +26,32 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// Source/Client.ts
-var Client_exports = {};
-__export(Client_exports, {
+// Source/Bundle.ts
+var Bundle_exports = {};
+__export(Bundle_exports, {
   apply: () => apply,
-  default: () => Client_default,
+  default: () => Bundle_default,
   inject: () => inject
 });
-module.exports = __toCommonJS(Client_exports);
+module.exports = __toCommonJS(Bundle_exports);
+
+// ../ets-lib-dsh-style/Target/Function/Inject.js
+function u(e, s) {
+  if (typeof document > "u") return;
+  const n = `${e}/client.css`;
+  if (document.querySelector(`style[data-plugin-css="${n}"]`) !== null) return;
+  const t = document.createElement("style");
+  t.dataset.plugin = e, t.dataset.pluginCss = n, t.textContent = s, document.head.append(t);
+}
+
+// stylesheet:/Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/EffectTS/packages/ets-client-dsh-workspace-live/Source/Stylesheet/Plugin.scss
+var Plugin_default = '.playform-workspace-live {\n  display: grid;\n  flex: 1;\n  gap: 12px;\n  align-content: start;\n  box-sizing: border-box;\n  width: 100%;\n  max-width: 880px;\n  min-height: 0;\n  margin: 0 auto;\n  padding: 20px 16px 28px;\n  overflow: auto;\n}\n\n.playform-workspace-header {\n  color: var(--dsw-alias-label-primary);\n  font-size: 13px;\n  font-weight: 600;\n  line-height: 18px;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n\n.playform-workspace-dot {\n  width: 7px;\n  height: 7px;\n  border-radius: 50%;\n  corner-shape: round;\n  flex: none;\n  background: var(--dsw-alias-state-idle-primary);\n}\n\n.playform-workspace-dot[data-live=true] {\n  background: var(--dsw-alias-state-success-primary);\n}\n\n.playform-workspace-title {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.playform-workspace-count {\n  color: var(--dsw-alias-label-secondary);\n  font-size: 11px;\n  font-weight: 500;\n  line-height: 16px;\n  margin-left: auto;\n}\n\n.playform-workspace-representations {\n  display: grid;\n  gap: 8px;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n\n.playform-workspace-representations li {\n  box-sizing: border-box;\n  background: var(--dsw-alias-settings-card-fill);\n  border: 0.5px solid var(--dsw-alias-settings-card-stroke);\n  border-radius: var(--dsw-radius-lg);\n  display: grid;\n  gap: 2px;\n  padding: 10px 12px;\n}\n\n.playform-workspace-representation-label {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: var(--dsw-alias-label-primary);\n  font-size: 13px;\n  font-weight: 500;\n  line-height: 18px;\n}\n\n.playform-workspace-representation-meta {\n  color: var(--dsw-alias-label-secondary);\n  font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);\n  font-size: 11px;\n  line-height: 16px;\n}\n\n.playform-workspace-live > p {\n  margin: 0;\n  padding: 24px 16px;\n  color: var(--dsw-alias-label-secondary);\n  font-size: 13px;\n  line-height: 20px;\n  text-align: center;\n  background: var(--dsw-alias-settings-card-fill);\n  border: 0.5px dashed var(--dsw-alias-border-l2);\n  border-radius: var(--dsw-radius-lg);\n}\n\n.playform-workspace-trace {\n  display: grid;\n  gap: 2px;\n  margin: 0;\n  padding: 8px 10px;\n  max-height: 160px;\n  overflow: auto;\n  list-style: none;\n  color: var(--dsw-alias-label-secondary);\n  font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);\n  font-size: 11px;\n  line-height: 16px;\n  background: var(--dsw-alias-bg-layer-1);\n  border: 0.5px solid var(--dsw-alias-border-l1);\n  border-radius: var(--dsw-radius-md);\n}\n\n.playform-workspace-trace li {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.playform-workspace-trace li[data-kind="batch/decision"],\n.playform-workspace-trace li[data-kind="batch/state-change"] {\n  color: var(--dsw-alias-brand-primary);\n}\n\n.playform-workspace-live[data-live=false] .playform-workspace-trace {\n  opacity: 0.55;\n}\n\n.playform-family-section .playform-workspace-live {\n  max-width: none;\n  margin: 0;\n  padding: 0;\n  overflow: visible;\n}\n\n.playform-family-section .playform-workspace-header {\n  display: none;\n}';
+
+// Source/Function/Styles.ts
+var IDENTIFIER = "@playform/client-dsh-workspace-live";
+function Styles() {
+  u(IDENTIFIER, Plugin_default);
+}
 
 // Source/Variable/Locale-en.json
 var Locale_en_default = {
@@ -370,171 +388,15 @@ function Client(ctx, config) {
   }
 }
 
-// ../ets-lib-dsh-style/Target/Function/Inject.js
-function u(e, s) {
-  if (typeof document > "u") return;
-  const n = `${e}/client.css`;
-  if (document.querySelector(`style[data-plugin-css="${n}"]`) !== null) return;
-  const t = document.createElement("style");
-  t.dataset.plugin = e, t.dataset.pluginCss = n, t.textContent = s, document.head.append(t);
-}
-
-// Source/Variable/Styles.ts
-var Styles_default = `
-.playform-workspace-live {
-  display: grid;
-  flex: 1;
-  gap: 12px;
-  align-content: start;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 880px;
-  min-height: 0;
-  margin: 0 auto;
-  padding: 20px 16px 28px;
-  overflow: auto;
-}
-
-.playform-workspace-header {
-  color: var(--dsw-alias-label-primary);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 18px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.playform-workspace-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  corner-shape: round;
-  flex: none;
-  background: var(--dsw-alias-state-idle-primary);
-}
-
-.playform-workspace-dot[data-live=true] {
-  background: var(--dsw-alias-state-success-primary);
-}
-
-.playform-workspace-title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.playform-workspace-count {
-  color: var(--dsw-alias-label-secondary);
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 16px;
-  margin-left: auto;
-}
-
-.playform-workspace-representations {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.playform-workspace-representations li {
-  box-sizing: border-box;
-  background: var(--dsw-alias-settings-card-fill);
-  border: 0.5px solid var(--dsw-alias-settings-card-stroke);
-  border-radius: var(--dsw-radius-lg);
-  display: grid;
-  gap: 2px;
-  padding: 10px 12px;
-}
-
-.playform-workspace-representation-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--dsw-alias-label-primary);
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 18px;
-}
-
-.playform-workspace-representation-meta {
-  color: var(--dsw-alias-label-secondary);
-  font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 11px;
-  line-height: 16px;
-}
-
-.playform-workspace-live > p {
-  margin: 0;
-  padding: 24px 16px;
-  color: var(--dsw-alias-label-secondary);
-  font-size: 13px;
-  line-height: 20px;
-  text-align: center;
-  background: var(--dsw-alias-settings-card-fill);
-  border: 0.5px dashed var(--dsw-alias-border-l2);
-  border-radius: var(--dsw-radius-lg);
-}
-
-.playform-workspace-trace {
-  display: grid;
-  gap: 2px;
-  margin: 0;
-  padding: 8px 10px;
-  max-height: 160px;
-  overflow: auto;
-  list-style: none;
-  color: var(--dsw-alias-label-secondary);
-  font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 11px;
-  line-height: 16px;
-  background: var(--dsw-alias-bg-layer-1);
-  border: 0.5px solid var(--dsw-alias-border-l1);
-  border-radius: var(--dsw-radius-md);
-}
-
-.playform-workspace-trace li {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.playform-workspace-trace li[data-kind="batch/decision"],
-.playform-workspace-trace li[data-kind="batch/state-change"] {
-  color: var(--dsw-alias-brand-primary);
-}
-
-.playform-workspace-live[data-live=false] .playform-workspace-trace {
-  opacity: 0.55;
-}
-
-.playform-family-section .playform-workspace-live {
-  max-width: none;
-  margin: 0;
-  padding: 0;
-  overflow: visible;
-}
-
-.playform-family-section .playform-workspace-header {
-  display: none;
-}`;
-
-// Source/Function/Styles.ts
-var IDENTIFIER = "@playform/client-dsh-workspace-live";
-function Styles() {
-  u(IDENTIFIER, Styles_default);
-}
-
 // Source/Client.ts
-Styles();
 var inject = ["slots", "locale"];
 function apply(ctx) {
   Client(ctx, { tabOrder: 25, maxEvents: 50, maxRepresentations: 100 });
 }
-var Client_default = { inject, apply };
+
+// Source/Bundle.ts
+Styles();
+var Bundle_default = { inject, apply };
 
 		})(module, module.exports, require);
 		return module.exports;

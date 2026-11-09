@@ -26,14 +26,35 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// Source/Client.ts
-var Client_exports = {};
-__export(Client_exports, {
+// Source/Bundle.ts
+var Bundle_exports = {};
+__export(Bundle_exports, {
   apply: () => apply,
-  default: () => Client_default,
+  default: () => Bundle_default,
   inject: () => inject
 });
-module.exports = __toCommonJS(Client_exports);
+module.exports = __toCommonJS(Bundle_exports);
+
+// ../lib-dsh-style/Target/Function/Inject.js
+function u(e, s) {
+  if (typeof document > "u") return;
+  const n = `${e}/client.css`;
+  if (document.querySelector(`style[data-plugin-css="${n}"]`) !== null) return;
+  const t = document.createElement("style");
+  t.dataset.plugin = e, t.dataset.pluginCss = n, t.textContent = s, document.head.append(t);
+}
+
+// stylesheet:/Volumes/CORSAIR/Developer/macOS/Application/PlayForm/DeepSeek/Classic/packages/client-dsh-panel-cost/Source/Stylesheet/Plugin.scss
+var Plugin_default = ".playform-cost-root {\n  display: flex;\n  flex-direction: column;\n  box-sizing: border-box;\n  height: 100%;\n  min-height: 0;\n  overflow: hidden;\n  padding-bottom: calc(var(--dsh-composer-height, 152px) + 8px);\n  color: var(--dsw-alias-label-primary);\n  font: var(--dsw-font-xxs-12);\n}\n\n.playform-cost-scroll {\n  box-sizing: border-box;\n  flex: 1;\n  height: 100%;\n  min-height: 0;\n  overflow-y: auto;\n  padding: 0 20px 16px;\n}\n\n.playform-cost-scroll > :first-child {\n  margin-top: 12px;\n}\n\n.playform-cost-empty {\n  padding: 24px 0;\n  color: var(--dsw-alias-label-secondary);\n}\n\n.playform-cost-table {\n  width: 100%;\n  table-layout: fixed;\n  border-collapse: collapse;\n  border-spacing: 0;\n  font: var(--dsw-font-xxs-12);\n  font-variant-numeric: tabular-nums;\n}\n\n.playform-cost-table col:nth-child(1) {\n  width: 11%;\n}\n\n.playform-cost-table col:nth-child(2) {\n  width: 15%;\n}\n\n.playform-cost-table col:nth-child(3) {\n  width: 13%;\n}\n\n.playform-cost-table col:nth-child(4) {\n  width: 6.5%;\n}\n\n.playform-cost-table col:nth-child(5) {\n  width: 6.5%;\n}\n\n.playform-cost-table col:nth-child(6) {\n  width: 7.5%;\n}\n\n.playform-cost-table col:nth-child(7) {\n  width: 7%;\n}\n\n.playform-cost-table col:nth-child(8) {\n  width: 7%;\n}\n\n.playform-cost-table col:nth-child(9) {\n  width: 7%;\n}\n\n.playform-cost-table col:nth-child(10) {\n  width: 7.5%;\n}\n\n.playform-cost-table col:nth-child(11) {\n  width: 12%;\n}\n\n.playform-cost-th,\n.playform-cost-th-left {\n  position: sticky;\n  z-index: 2;\n  top: 0;\n  box-sizing: border-box;\n  padding: 4px 8px;\n  border-bottom: 0.5px solid var(--dsw-alias-border-l2);\n  background: var(--dsw-alias-bg-layer-1);\n  background-clip: padding-box;\n  color: var(--dsw-alias-label-tertiary);\n  font: var(--dsw-font-xxs-12);\n  font-weight: 500;\n  line-height: 1.25;\n  vertical-align: bottom;\n  white-space: normal;\n  text-align: left;\n}\n\n.playform-cost-turn-row {\n  cursor: pointer;\n}\n\n.playform-cost-turn-cell,\n.playform-cost-turn-metric,\n.playform-cost-turn-files,\n.playform-cost-model-cell-turn {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  padding: 6px 8px;\n  border-top: 0.5px solid var(--dsw-alias-border-l2);\n  border-bottom: 0.5px solid var(--dsw-alias-border-l1);\n  white-space: nowrap;\n}\n\n.playform-cost-turn-cell {\n  overflow: hidden;\n  font-weight: 600;\n  white-space: normal;\n}\n\n.playform-cost-turn-metric {\n  font-weight: 600;\n  text-align: left;\n}\n\n.playform-cost-turn-files {\n  white-space: nowrap;\n}\n\n.playform-cost-turn-clock {\n  color: var(--dsw-alias-label-secondary);\n  font-weight: 400;\n}\n\n.playform-cost-row-toggle {\n  padding: 0;\n  border: 0;\n  background: none;\n  color: inherit;\n  cursor: pointer;\n  font: inherit;\n  text-align: left;\n}\n\n.playform-cost-row-toggle:focus-visible {\n  outline: 1px solid var(--dsw-alias-state-business-primary);\n  outline-offset: 2px;\n}\n\n.playform-cost-older {\n  display: flex;\n  justify-content: center;\n  padding: 2px 0 10px;\n}\n\n.playform-cost-older-status {\n  color: var(--dsw-alias-label-secondary);\n  font: var(--dsw-font-xxs-12);\n}\n\n.playform-cost-step-row-clickable {\n  cursor: pointer;\n}\n\n.playform-cost-step-row-error {\n  background: color-mix(in srgb, var(--dsw-alias-state-error-primary) 8%, transparent);\n}\n\n.playform-cost-step-cell {\n  box-sizing: border-box;\n  height: 30px;\n  padding: 0 8px 0 22px;\n  border-bottom: 0.5px solid var(--dsw-alias-border-l1);\n  box-shadow: inset 2px 0 0 var(--dsw-alias-border-l1);\n  color: var(--dsw-alias-label-secondary);\n  white-space: nowrap;\n}\n\n.playform-cost-step-metric,\n.playform-cost-step-files,\n.playform-cost-prompt-cell {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  box-sizing: border-box;\n  height: 30px;\n  padding: 0 8px;\n  border-bottom: 0.5px solid var(--dsw-alias-border-l1);\n  white-space: nowrap;\n}\n\n.playform-cost-step-metric {\n  text-align: left;\n}\n\n.playform-cost-step-when {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n  min-height: 30px;\n  color: var(--dsw-alias-label-secondary);\n  font-variant-numeric: tabular-nums;\n  vertical-align: middle;\n}\n\n.playform-cost-step-clock {\n  color: var(--dsw-alias-label-primary);\n}\n\n.playform-cost-state-unpriced {\n  margin-left: 6px;\n  color: var(--dsw-alias-label-secondary);\n  font-weight: 400;\n}\n\n.playform-cost-state-error,\n.playform-cost-state-attempts {\n  margin-left: 6px;\n  color: var(--dsw-alias-state-warn-primary);\n  font-weight: 400;\n}\n\n.playform-cost-detail-hint {\n  color: var(--dsw-alias-label-tertiary);\n  font: var(--dsw-font-xxxs-11);\n  font-weight: 400;\n}\n\n.playform-cost-model-text {\n  display: inline-block;\n  max-width: 260px;\n  overflow: hidden;\n  color: var(--dsw-alias-label-primary);\n  text-overflow: ellipsis;\n  vertical-align: bottom;\n  white-space: nowrap;\n}\n\n.playform-cost-model-clip {\n  display: flex;\n  align-items: center;\n  gap: 4px;\n  min-width: 0;\n}\n\n.playform-cost-model-clip .playform-cost-model-text {\n  flex: 1;\n  min-width: 0;\n  max-width: none;\n}\n\n.playform-cost-model-pill {\n  flex: none;\n  max-width: 70%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  margin-right: 4px;\n  padding: 0 4px;\n  border: 0.5px solid var(--dsw-alias-border-l2);\n  border-radius: 4px;\n  color: var(--dsw-alias-label-secondary);\n  font: var(--dsw-font-xxxs-11);\n}\n\n.playform-cost-files-clip {\n  display: inline-block;\n  max-width: 380px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  vertical-align: bottom;\n  white-space: nowrap;\n}\n\n.playform-cost-files-sep {\n  margin: 0 4px;\n  color: var(--dsw-alias-label-caption);\n}\n\n.playform-cost-files-stat {\n  color: var(--dsw-alias-label-primary);\n}\n\n.playform-cost-added {\n  color: var(--dsw-alias-state-success-primary);\n}\n\n.playform-cost-removed {\n  color: var(--dsw-alias-state-error-primary);\n}\n\n.playform-cost-count-badge {\n  display: inline-flex;\n  align-items: center;\n  height: 19px;\n  margin: 0 3px;\n  padding: 0 5px;\n  border: 0.5px solid var(--dsw-alias-border-l2);\n  border-radius: 2px;\n  background: var(--dsw-alias-bg-layer-2);\n  color: var(--dsw-alias-label-primary);\n  font-size: 10px;\n  font-weight: 650;\n  line-height: 14px;\n  vertical-align: bottom;\n}\n\n.playform-cost-fail-pill {\n  display: inline-flex;\n  align-items: center;\n  height: 19px;\n  margin-right: 6px;\n  padding: 0 6px;\n  border-radius: 2px;\n  background: var(--dsw-alias-state-error-primary);\n  color: var(--dsw-alias-bg-base);\n  font-size: 10px;\n  font-weight: 650;\n  line-height: 14px;\n  vertical-align: bottom;\n}\n\n.playform-cost-pills {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: 6px;\n  max-width: 380px;\n}\n\n.playform-cost-pill {\n  display: inline-flex;\n  align-items: center;\n  gap: 5px;\n  height: 19px;\n  padding: 0 6px;\n  border: 0.5px solid var(--dsw-alias-border-l2);\n  border-radius: 2px;\n  background: var(--dsw-alias-bg-layer-2);\n  color: var(--dsw-alias-label-primary);\n  font-size: 10px;\n  font-weight: 650;\n}\n\n.playform-cost-pill-muted {\n  color: var(--dsw-alias-label-secondary);\n}\n\n.playform-cost-dot {\n  width: 6px;\n  height: 6px;\n  border-radius: 50%;\n  corner-shape: round;\n  display: inline-block;\n  background: var(--playform-cost-tone, var(--dsw-alias-label-secondary));\n}\n\n.playform-cost-mix {\n  display: flex;\n  height: 4px;\n  max-width: 380px;\n  margin-top: 5px;\n  border-radius: 2px;\n  background: var(--dsw-alias-bg-layer-2);\n  overflow: hidden;\n}\n\n.playform-cost-mix-segment {\n  display: block;\n  background: var(--playform-cost-tone, var(--dsw-alias-label-secondary));\n}\n\n.playform-cost-tone0 {\n  --playform-cost-tone: var(--dsw-alias-state-business-primary);\n}\n\n.playform-cost-tone1 {\n  --playform-cost-tone: var(--dsw-alias-state-success-primary);\n}\n\n.playform-cost-tone2 {\n  --playform-cost-tone: var(--dsw-alias-state-warn-primary);\n}\n\n.playform-cost-tone3 {\n  --playform-cost-tone: var(--dsw-alias-state-error-secondary);\n}\n\n.playform-cost-tone4 {\n  --playform-cost-tone: var(\n  	--dsw-alias-brand-primary-new-colorprimary-new-color,\n  	var(--dsw-alias-brand-primary)\n  );\n}\n\n.playform-cost-tone5 {\n  --playform-cost-tone: var(--dsw-alias-state-success-secondary);\n}\n\n.playform-cost-tone6 {\n  --playform-cost-tone: var(--dsw-alias-state-warn-label);\n}\n\n.playform-cost-tone7 {\n  --playform-cost-tone: var(--dsw-alias-label-caption);\n}\n\n.playform-cost-num {\n  display: inline-block;\n  min-width: 62px;\n  font-variant-numeric: tabular-nums;\n  text-align: left;\n}\n\n.playform-cost-num-delta {\n  display: inline-block;\n  min-width: 62px;\n  font: var(--dsw-font-xxxs-11);\n  font-variant-numeric: tabular-nums;\n  text-align: left;\n}\n\n.playform-cost-delta-up {\n  color: var(--dsw-alias-state-success-primary);\n}\n\n.playform-cost-delta-down {\n  color: var(--dsw-alias-state-error-primary);\n}\n\n.playform-cost-money {\n  display: inline-block;\n  min-width: 68px;\n  font-variant-numeric: tabular-nums;\n  text-align: left;\n}\n\n.playform-cost-bar-wrap {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  width: 100%;\n}\n\n.playform-cost-bar-turn {\n  display: inline-block;\n  box-sizing: border-box;\n  flex: 1;\n  min-width: 40px;\n  height: 14px;\n  border: 0.5px solid var(--dsw-alias-border-l2);\n  border-radius: 2px;\n  background: var(--dsw-alias-bg-layer-2);\n  overflow: hidden;\n  vertical-align: middle;\n}\n\n.playform-cost-bar-step {\n  display: inline-block;\n  flex: 1;\n  min-width: 32px;\n  height: 6px;\n  border-radius: 2px;\n  background: var(--dsw-alias-bg-layer-2);\n  overflow: hidden;\n  vertical-align: middle;\n}\n\n.playform-cost-bar-fill {\n  display: flex;\n  height: 100%;\n}\n\n.playform-cost-bar-segment {\n  display: block;\n  height: 100%;\n}\n\n.playform-cost-bar-cache {\n  background: var(--dsw-alias-state-business-primary);\n  opacity: 0.5;\n}\n\n.playform-cost-bar-input {\n  background: var(--dsw-alias-state-business-primary);\n}\n\n.playform-cost-bar-output {\n  background: var(--dsw-alias-state-warn-primary);\n}\n\n.playform-cost-bar-other {\n  background: var(--dsw-alias-label-caption);\n}\n\n.playform-cost-bar-value {\n  min-width: 58px;\n  font-variant-numeric: tabular-nums;\n  text-align: left;\n}\n\n.playform-cost-more-cell {\n  padding: 2px 8px 8px;\n  color: var(--dsw-alias-label-secondary);\n  font: var(--dsw-font-xxxs-11);\n  line-height: 1.9;\n  white-space: normal;\n}\n\n.playform-cost-more-text {\n  margin-right: 10px;\n}\n\n.playform-cost-chip,\n.playform-cost-chip-on {\n  display: inline-flex;\n  align-items: center;\n  gap: 5px;\n  height: 19px;\n  padding: 0 6px;\n  border: 0.5px solid var(--dsw-alias-border-l2);\n  border-radius: 2px;\n  background: var(--dsw-alias-bg-layer-2);\n  color: var(--dsw-alias-label-primary);\n  font-size: 10px;\n  font-weight: 650;\n  margin-right: 8px;\n  cursor: pointer;\n}\n\n.playform-cost-chip-on {\n  border-color: var(--dsw-alias-state-business-primary);\n}\n\n.playform-cost-chip:focus-visible,\n.playform-cost-chip-on:focus-visible {\n  outline: 1px solid var(--dsw-alias-state-business-primary);\n  outline-offset: 1px;\n}\n\n.playform-cost-detail-cell {\n  padding: 6px 8px 12px 22px;\n  border-bottom: 0.5px solid var(--dsw-alias-border-l1);\n  box-shadow: inset 2px 0 0 var(--dsw-alias-border-l1);\n  font: var(--dsw-font-xs-13);\n}\n\n.playform-cost-detail-head {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  margin: 2px 0 8px;\n}\n\n.playform-cost-detail-title {\n  font: var(--dsw-font-xs-strong-13);\n}\n\n.playform-cost-detail-actions {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  margin-left: auto;\n}\n\n.playform-cost-block {\n  margin-bottom: 10px;\n  border: 0.5px solid var(--dsw-alias-border-l2);\n  border-radius: 6px;\n  overflow: hidden;\n}\n\n.playform-cost-block-head {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  height: 26px;\n  padding: 0 8px;\n  background: var(--dsw-alias-bg-layer-2);\n  font: var(--dsw-font-xxs-12);\n}\n\n.playform-cost-block-path {\n  min-width: 0;\n  overflow: hidden;\n  color: var(--dsw-alias-label-primary);\n  font-weight: 500;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.playform-cost-block-meta {\n  color: var(--dsw-alias-label-tertiary);\n  font: var(--dsw-font-xxxs-11);\n  white-space: nowrap;\n}\n\n.playform-cost-block-sub {\n  padding: 4px 8px 0;\n  color: var(--dsw-alias-label-tertiary);\n  font: var(--dsw-font-xxxs-11);\n}\n\n.playform-cost-block-empty {\n  display: block;\n  padding: 6px 8px;\n  color: var(--dsw-alias-label-secondary);\n  font: var(--dsw-font-xxxs-11);\n}\n\n.playform-cost-block-body {\n  padding: 4px 8px 6px;\n  color: var(--dsw-alias-label-secondary);\n  font: var(--dsw-font-xxs-12);\n  white-space: normal;\n  overflow-wrap: anywhere;\n}\n\n.playform-cost-buckets {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: 6px 12px;\n  margin: 0 0 10px;\n}\n\n.playform-cost-bucket {\n  display: inline-flex;\n  align-items: center;\n  gap: 5px;\n  height: 19px;\n  padding: 0 6px;\n  border: 0.5px solid var(--dsw-alias-border-l2);\n  border-radius: 2px;\n  background: var(--dsw-alias-bg-layer-2);\n  color: var(--dsw-alias-label-primary);\n  font-size: 10px;\n  font-weight: 650;\n}\n\n.playform-cost-bucket-dot {\n  display: inline-block;\n  width: 6px;\n  height: 6px;\n  border-radius: 50%;\n  corner-shape: round;\n}\n\n.playform-cost-bucket-label {\n  color: var(--dsw-alias-label-secondary);\n}\n\n.playform-cost-bucket-value {\n  font-variant-numeric: tabular-nums;\n}\n\n.playform-cost-toolbar {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  margin: 8px 20px 0;\n  padding: 8px 0;\n  border-top: 0.5px solid var(--dsw-alias-border-l1);\n  font: var(--dsw-font-xxs-12);\n}\n\n.playform-cost-summary {\n  margin-right: auto;\n  color: var(--dsw-alias-label-secondary);\n}\n\n.playform-cost-controls {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  row-gap: 6px;\n  flex-wrap: wrap;\n}\n\n.playform-cost-control-label {\n  color: var(--dsw-alias-label-secondary);\n  white-space: nowrap;\n}\n\n.playform-cost-top-files {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  flex-wrap: wrap;\n  margin: 0 20px;\n  padding: 6px 0 8px;\n  border-top: 0.5px solid var(--dsw-alias-border-l1);\n  font: var(--dsw-font-xxs-12);\n}\n\n.playform-cost-file-pill {\n  display: inline-flex;\n  align-items: center;\n  gap: 5px;\n  height: 19px;\n  padding: 0 6px;\n  border: 0.5px solid var(--dsw-alias-border-l2);\n  border-radius: 2px;\n  background: var(--dsw-alias-bg-layer-2);\n  color: var(--dsw-alias-label-primary);\n  font-size: 10px;\n  font-weight: 650;\n  font-variant-numeric: tabular-nums;\n}\n\n.playform-cost-totals-row td {\n  border-top: 0.5px solid var(--dsw-alias-border-l2);\n  background: var(--dsw-alias-bg-layer-1);\n  font-weight: 600;\n}\n\n.playform-cost-totals-label {\n  color: var(--dsw-alias-label-primary);\n  font-weight: 600;\n}\n\n.playform-cost-totals-meta {\n  color: var(--dsw-alias-label-secondary);\n  font-weight: 400;\n}\n\n.playform-cost-button {\n  padding: 4px 10px;\n  border: 0.5px solid var(--dsw-alias-border-l1);\n  border-radius: 6px;\n  background: var(--dsw-alias-bg-layer-2);\n  color: var(--dsw-alias-label-primary);\n  cursor: pointer;\n  font-size: 12px;\n}\n\n@media (hover: hover) {\n  .playform-cost-button:hover {\n    background: var(--dsw-alias-interactive-bg-hover);\n  }\n}\n.playform-cost-button:focus-visible {\n  outline: 1px solid var(--dsw-alias-state-business-primary);\n  outline-offset: 1px;\n}\n\n.playform-cost-button-off {\n  padding: 4px 10px;\n  border: 0.5px solid var(--dsw-alias-border-l1);\n  border-radius: 6px;\n  background: transparent;\n  color: var(--dsw-alias-label-secondary);\n  cursor: default;\n  font-size: 12px;\n}";
+
+// Source/Function/Styles.ts
+var IDENTIFIER = "@playform/client-dsh-panel-cost";
+function Styles() {
+  u(IDENTIFIER, Plugin_default);
+}
+
+// Source/Function/View.ts
+var import_dsh_client_ui_primitives2 = require("@deepseek-ai/dsh-client-ui-primitives");
 
 // Source/Variable/Dash.ts
 var Dash_default = "-";
@@ -63,8 +84,68 @@ function Price(Value, Currency) {
   }
 }
 
-// Source/Function/DetailRow.ts
+// Source/Function/Table.ts
 var import_react = require("react");
+var COLUMNS = [
+  "scope",
+  "model",
+  "files",
+  "tokens",
+  "cache",
+  "cacheRead",
+  "input",
+  "output",
+  "other",
+  "allocation",
+  "total"
+];
+var COLUMN_WIDTHS = {
+  scope: 11,
+  model: 15,
+  files: 13,
+  tokens: 6.5,
+  cache: 6.5,
+  cacheRead: 7.5,
+  input: 7,
+  output: 7,
+  other: 7,
+  allocation: 7.5,
+  total: 12
+};
+function Table(Props) {
+  const Cols = COLUMNS.map(
+    (Name) => (0, import_react.createElement)("col", { key: Name, style: { width: `${COLUMN_WIDTHS[Name]}%` } })
+  );
+  return (0, import_react.createElement)(
+    "table",
+    { className: "playform-cost-table", "aria-label": Props.t("view") },
+    (0, import_react.createElement)("colgroup", {}, Cols),
+    (0, import_react.createElement)(
+      "thead",
+      {},
+      (0, import_react.createElement)(
+        "tr",
+        {},
+        COLUMNS.map(
+          (Name, Index) => (0, import_react.createElement)(
+            "th",
+            {
+              key: Name,
+              className: Index < 3 ? "playform-cost-th-left" : "playform-cost-th",
+              title: Props.t(`column.${Name}.title`)
+            },
+            Props.t(`column.${Name}`)
+          )
+        )
+      )
+    ),
+    (0, import_react.createElement)("tbody", {}, Props.Body),
+    (0, import_react.createElement)("tfoot", {}, Props.Totals)
+  );
+}
+
+// Source/Function/DetailRow.ts
+var import_react2 = require("react");
 var DetailFileLimit = 100;
 var BUCKETS = [
   { Field: "input", Label: "bucket.input", Dot: "playform-cost-bar-input" },
@@ -104,7 +185,7 @@ var Block = (File, Index, Currency, t) => {
     const Added = Math.max(0, Delta);
     const Removed = Math.max(0, -Delta);
     Body.push(
-      (0, import_react.createElement)(
+      (0, import_react2.createElement)(
         "span",
         {
           key: "lines",
@@ -116,7 +197,7 @@ var Block = (File, Index, Currency, t) => {
   }
   if (typeof File.bytesDelta === "number")
     Body.push(
-      (0, import_react.createElement)(
+      (0, import_react2.createElement)(
         "span",
         { key: "bytes", className: "playform-cost-block-sub" },
         t("detail.bytes", { bytes: Count(File.bytesDelta) })
@@ -124,7 +205,7 @@ var Block = (File, Index, Currency, t) => {
     );
   if (File.readBeforeEdit === true)
     Body.push(
-      (0, import_react.createElement)(
+      (0, import_react2.createElement)(
         "span",
         { key: "read", className: "playform-cost-block-sub" },
         t("detail.readBeforeEdit")
@@ -132,20 +213,20 @@ var Block = (File, Index, Currency, t) => {
     );
   if (File.touched === false)
     Body.push(
-      (0, import_react.createElement)(
+      (0, import_react2.createElement)(
         "span",
         { key: "untouched", className: "playform-cost-block-sub" },
         t("detail.allocationOnly")
       )
     );
-  return (0, import_react.createElement)(
+  return (0, import_react2.createElement)(
     "div",
     { className: "playform-cost-block", key: Index },
-    (0, import_react.createElement)(
+    (0, import_react2.createElement)(
       "div",
       { className: "playform-cost-block-head" },
-      (0, import_react.createElement)("span", { className: "playform-cost-block-path", title: Path }, Path),
-      (0, import_react.createElement)(
+      (0, import_react2.createElement)("span", { className: "playform-cost-block-path", title: Path }, Path),
+      (0, import_react2.createElement)(
         "span",
         { className: "playform-cost-block-meta" },
         t("detail.allocation", {
@@ -156,22 +237,22 @@ var Block = (File, Index, Currency, t) => {
           )
         })
       ),
-      (0, import_react.createElement)(
+      (0, import_react2.createElement)(
         "span",
         { className: "playform-cost-block-meta" },
         t("bar.total", {
           value: Price(typeof File.total === "number" ? File.total : 0, Currency)
         })
       ),
-      Touched ? (0, import_react.createElement)(
+      Touched ? (0, import_react2.createElement)(
         "span",
         { className: "playform-cost-pill" },
-        (0, import_react.createElement)("span", {
+        (0, import_react2.createElement)("span", {
           className: `playform-cost-dot playform-cost-tone${StageTone(Stage)}`
         }),
         StageLabel(Stage, t)
       ) : null,
-      Kind !== "" ? (0, import_react.createElement)(
+      Kind !== "" ? (0, import_react2.createElement)(
         "span",
         {
           className: "playform-cost-pill",
@@ -179,17 +260,17 @@ var Block = (File, Index, Currency, t) => {
         },
         Kind
       ) : null,
-      Tool !== "" ? (0, import_react.createElement)(
+      Tool !== "" ? (0, import_react2.createElement)(
         "span",
         { className: "playform-cost-block-meta" },
         t("detail.tool", { tool: Tool })
       ) : null
     ),
-    Body.length === 0 ? (0, import_react.createElement)(
+    Body.length === 0 ? (0, import_react2.createElement)(
       "div",
       { className: "playform-cost-block-empty" },
       t("detail.allocationOnly")
-    ) : (0, import_react.createElement)("div", { className: "playform-cost-block-body" }, Body)
+    ) : (0, import_react2.createElement)("div", { className: "playform-cost-block-body" }, Body)
   );
 };
 function DetailRow(Props) {
@@ -219,42 +300,42 @@ function DetailRow(Props) {
     }
   });
   const Shown = Sorted.slice(0, DetailFileLimit);
-  return (0, import_react.createElement)(
+  return (0, import_react2.createElement)(
     "tr",
     {},
-    (0, import_react.createElement)(
+    (0, import_react2.createElement)(
       "td",
-      { className: "playform-cost-detail-cell", colSpan: 11 },
-      (0, import_react.createElement)(
+      { className: "playform-cost-detail-cell", colSpan: COLUMNS.length },
+      (0, import_react2.createElement)(
         "div",
         { className: "playform-cost-detail-head" },
-        (0, import_react.createElement)(
+        (0, import_react2.createElement)(
           "span",
           { className: "playform-cost-detail-title" },
           t("detail.files", { count: Files2.length })
         ),
-        (0, import_react.createElement)(
+        (0, import_react2.createElement)(
           "span",
           { className: "playform-cost-block-meta" },
           ` - ${Price(Money3("total"), Tag)}`
         )
       ),
-      (0, import_react.createElement)(
+      (0, import_react2.createElement)(
         "div",
         { className: "playform-cost-buckets", title: t("detail.buckets") },
         BUCKETS.map(
-          (Item) => (0, import_react.createElement)(
+          (Item) => (0, import_react2.createElement)(
             "span",
             { className: "playform-cost-bucket", key: Item.Field },
-            (0, import_react.createElement)("span", {
+            (0, import_react2.createElement)("span", {
               className: `playform-cost-bucket-dot ${Item.Dot}`
             }),
-            (0, import_react.createElement)(
+            (0, import_react2.createElement)(
               "span",
               { className: "playform-cost-bucket-label" },
               t(Item.Label)
             ),
-            (0, import_react.createElement)(
+            (0, import_react2.createElement)(
               "span",
               { className: "playform-cost-bucket-value" },
               Price(Money3(Item.Field), Tag)
@@ -262,12 +343,12 @@ function DetailRow(Props) {
           )
         )
       ),
-      Files2.length === 0 ? (0, import_react.createElement)(
+      Files2.length === 0 ? (0, import_react2.createElement)(
         "div",
         { className: "playform-cost-block-empty" },
         t("detail.empty")
       ) : Shown.map((File, Index) => Block(File, Index, Tag, t)),
-      Files2.length > DetailFileLimit ? (0, import_react.createElement)(
+      Files2.length > DetailFileLimit ? (0, import_react2.createElement)(
         "div",
         { className: "playform-cost-block-empty" },
         t("detail.hidden", { count: Files2.length - DetailFileLimit })
@@ -603,6 +684,9 @@ function Fold(Response) {
   return { turns: Turns, steps: Steps, summary: Response?.summary ?? ZeroSummary };
 }
 
+// Source/Function/Cells.ts
+var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
+
 // Source/Function/Clock.ts
 var Pad = (Value) => String(Value).padStart(2, "0");
 function Clock(Value) {
@@ -643,10 +727,41 @@ function Share(Total, Scale) {
 }
 
 // Source/Function/Cells.ts
-var import_react2 = require("react");
+var import_react3 = require("react");
 var FilePillLimit = 3;
 var ToneClass = (Tone2) => `playform-cost-tone${Tone2}`;
-var MarkerSpan = (Marker, Index) => (0, import_react2.createElement)(
+var ModelText = (Text4, Identifier) => (0, import_react3.createElement)(import_dsh_client_ui_primitives.Tooltip, {
+  label: Identifier,
+  portal: true,
+  onlyWhenClipped: true,
+  disabled: Identifier === "",
+  children: (0, import_react3.createElement)("span", {
+    className: "playform-cost-model-text",
+    // The tooltip's anchor contract is all-optional, so the span must
+    // name one of its keys for the weak-type check; the primitive
+    // clones the child and injects its own handler at runtime.
+    onPointerEnter: void 0
+  }, Text4)
+});
+var PillNode = (Pill, Index, t) => (0, import_react3.createElement)(import_dsh_client_ui_primitives.Tooltip, {
+  key: Index,
+  label: Pill.Path ?? Pill.Name,
+  portal: true,
+  disabled: Pill.Path === void 0,
+  children: (0, import_react3.createElement)(
+    "span",
+    {
+      className: "playform-cost-pill",
+      // The anchor contract's weak-type check needs one of its keys;
+      // the tooltip injects the real handler when it clones the child.
+      onPointerEnter: void 0,
+      ...Pill.Path === void 0 && Pill.Lines !== null && Pill.Lines !== 0 ? { title: t("files.lines", { lines: Lines(Pill.Lines) }) } : {}
+    },
+    (0, import_react3.createElement)("span", { className: `playform-cost-dot ${ToneClass(Pill.Tone)}` }),
+    Pill.Name
+  )
+});
+var MarkerSpan = (Marker, Index) => (0, import_react3.createElement)(
   "span",
   {
     key: Index,
@@ -659,10 +774,10 @@ var Scope = (Props) => {
   const Toggle = Props.Toggle;
   const ClockCell = Props.Clock;
   const Hint = Props.Hint;
-  return (0, import_react2.createElement)(
+  return (0, import_react3.createElement)(
     "td",
     { className: Props.Cell },
-    Toggle === void 0 ? Props.Label ?? null : (0, import_react2.createElement)(
+    Toggle === void 0 ? Props.Label ?? null : (0, import_react3.createElement)(
       "button",
       {
         type: "button",
@@ -677,12 +792,12 @@ var Scope = (Props) => {
       },
       Toggle.Label
     ),
-    ClockCell === void 0 ? null : (0, import_react2.createElement)(
+    ClockCell === void 0 ? null : (0, import_react3.createElement)(
       "span",
       { className: "playform-cost-turn-clock", title: ClockCell.Title },
       ClockCell.Text
     ),
-    Hint === void 0 ? null : (0, import_react2.createElement)("span", { className: "playform-cost-detail-hint" }, Hint),
+    Hint === void 0 ? null : (0, import_react3.createElement)("span", { className: "playform-cost-detail-hint" }, Hint),
     Props.Markers.map(MarkerSpan)
   );
 };
@@ -691,25 +806,26 @@ var Model = (Props) => {
   const Region = Props.Region;
   const Tier = Props.Tier;
   const When = Props.When;
-  return (0, import_react2.createElement)(
+  const Identifier = [Props.Provider, Props.Model].filter((Part) => Part !== "").join("/");
+  return (0, import_react3.createElement)(
     "td",
     {
       className: Props.Cell,
       ...Props.Title === void 0 ? {} : { title: Props.Title }
     },
-    When === void 0 ? null : (0, import_react2.createElement)(
+    When === void 0 ? null : (0, import_react3.createElement)(
       "span",
       { className: "playform-cost-step-when" },
-      (0, import_react2.createElement)("span", { className: "playform-cost-step-clock" }, When.Text)
+      (0, import_react3.createElement)("span", { className: "playform-cost-step-clock" }, When.Text)
     ),
-    (0, import_react2.createElement)(
+    (0, import_react3.createElement)(
       "span",
       { className: "playform-cost-model-clip" },
-      (0, import_react2.createElement)("span", { className: "playform-cost-model-pill" }, Props.Provider),
-      (0, import_react2.createElement)("span", { className: "playform-cost-model-text" }, Props.Model),
-      Mode === void 0 || Mode === "" ? null : (0, import_react2.createElement)("span", { className: "playform-cost-pill" }, Mode),
-      Region === void 0 || Region === "" ? null : (0, import_react2.createElement)("span", { className: "playform-cost-pill" }, Region),
-      typeof Tier === "number" ? (0, import_react2.createElement)("span", { className: "playform-cost-pill" }, String(Tier)) : null
+      (0, import_react3.createElement)("span", { className: "playform-cost-model-pill" }, Props.Provider),
+      ModelText(Props.Model, Identifier),
+      Mode === void 0 || Mode === "" ? null : (0, import_react3.createElement)("span", { className: "playform-cost-pill" }, Mode),
+      Region === void 0 || Region === "" ? null : (0, import_react3.createElement)("span", { className: "playform-cost-pill" }, Region),
+      typeof Tier === "number" ? (0, import_react3.createElement)("span", { className: "playform-cost-pill" }, String(Tier)) : null
     )
   );
 };
@@ -717,19 +833,19 @@ var Files = (Props) => {
   const Shown = Props.Pills.slice(0, FilePillLimit);
   const Extra = Props.Pills.length - Shown.length;
   const Quiet = !Props.Fail && Props.Pills.length === 0 && !(Props.Saving > 0);
-  return (0, import_react2.createElement)(
+  return (0, import_react3.createElement)(
     "td",
     { className: Props.Cell },
-    Quiet ? (0, import_react2.createElement)(
+    Quiet ? (0, import_react3.createElement)(
       "span",
       { className: "playform-cost-files-clip" },
-      (0, import_react2.createElement)(
+      (0, import_react3.createElement)(
         "span",
         { className: "playform-cost-files-stat" },
         Props.t("files.contextOnly", { tokens: CountShort(Props.Tokens) })
       )
     ) : [
-      (0, import_react2.createElement)(
+      (0, import_react3.createElement)(
         "div",
         {
           className: "playform-cost-pills",
@@ -740,35 +856,18 @@ var Files = (Props) => {
             })
           }
         },
-        Props.Fail ? (0, import_react2.createElement)(
+        Props.Fail ? (0, import_react3.createElement)(
           "span",
           { className: "playform-cost-fail-pill" },
           Props.t("state.failed")
         ) : null,
-        Shown.map(
-          (Pill, Index) => (0, import_react2.createElement)(
-            "span",
-            {
-              key: Index,
-              className: "playform-cost-pill",
-              ...Pill.Lines === null || Pill.Lines === 0 ? {} : {
-                title: Props.t("files.lines", {
-                  lines: Lines(Pill.Lines)
-                })
-              }
-            },
-            (0, import_react2.createElement)("span", {
-              className: `playform-cost-dot ${ToneClass(Pill.Tone)}`
-            }),
-            Pill.Name
-          )
-        ),
-        Extra > 0 ? (0, import_react2.createElement)(
+        Shown.map((Pill, Index) => PillNode(Pill, Index, Props.t)),
+        Extra > 0 ? (0, import_react3.createElement)(
           "span",
           { className: "playform-cost-pill playform-cost-pill-muted" },
           Props.t("files.more", { count: Extra })
         ) : null,
-        Props.Saving > 0 ? (0, import_react2.createElement)(
+        Props.Saving > 0 ? (0, import_react3.createElement)(
           "span",
           {
             className: "playform-cost-pill playform-cost-pill-muted",
@@ -779,11 +878,11 @@ var Files = (Props) => {
           })
         ) : null
       ),
-      Props.ShowMix && Props.Pills.length > 0 ? (0, import_react2.createElement)(
+      Props.ShowMix && Props.Pills.length > 0 ? (0, import_react3.createElement)(
         "div",
         { className: "playform-cost-mix" },
         Props.Pills.map(
-          (Pill, Index) => (0, import_react2.createElement)("span", {
+          (Pill, Index) => (0, import_react3.createElement)("span", {
             key: Index,
             className: `playform-cost-mix-segment ${ToneClass(Pill.Tone)}`,
             style: { flexGrow: Pill.Count },
@@ -794,38 +893,38 @@ var Files = (Props) => {
     ]
   );
 };
-var Money = (Props) => (0, import_react2.createElement)(
+var Money = (Props) => (0, import_react3.createElement)(
   "td",
   {
     className: Props.Cell,
     ...Props.Title === void 0 ? {} : { title: Props.Title }
   },
-  (0, import_react2.createElement)(
+  (0, import_react3.createElement)(
     "span",
     { className: "playform-cost-money" },
     Price(Props.Value, Props.Currency)
   )
 );
-var Alloc = (Props) => (0, import_react2.createElement)(
+var Alloc = (Props) => (0, import_react3.createElement)(
   "td",
   {
     className: Props.Cell,
     ...Props.Has ? {} : { title: Props.t("unknown") }
   },
   Props.Has ? [
-    (0, import_react2.createElement)(
+    (0, import_react3.createElement)(
       "span",
       { key: "direct", className: "playform-cost-num" },
       Price(Props.Direct, Props.Currency)
     ),
-    (0, import_react2.createElement)(
+    (0, import_react3.createElement)(
       "span",
       { key: "amortized", className: "playform-cost-num-delta" },
       Price(Props.Amortized, Props.Currency)
     )
   ] : Dash_default
 );
-var Segment = (Key, Class, Value) => Value > 0 ? (0, import_react2.createElement)("span", {
+var Segment = (Key, Class, Value) => Value > 0 ? (0, import_react3.createElement)("span", {
   key: Key,
   className: `playform-cost-bar-segment ${Class}`,
   style: { flexGrow: Value }
@@ -846,16 +945,16 @@ var Bar = (Props) => {
     Props.t("bar.other", { value: Tag(Other) }),
     Props.t("bar.total", { value: Tag(Total) })
   ];
-  return (0, import_react2.createElement)(
+  return (0, import_react3.createElement)(
     "td",
     { className: Props.Cell, title: Parts.join(" | ") },
-    (0, import_react2.createElement)(
+    (0, import_react3.createElement)(
       "div",
       { className: "playform-cost-bar-wrap" },
-      (0, import_react2.createElement)(
+      (0, import_react3.createElement)(
         "div",
         { className: Props.Track },
-        (0, import_react2.createElement)(
+        (0, import_react3.createElement)(
           "div",
           {
             className: "playform-cost-bar-fill",
@@ -867,7 +966,7 @@ var Bar = (Props) => {
           Segment("other", "playform-cost-bar-other", Other)
         )
       ),
-      (0, import_react2.createElement)("span", { className: "playform-cost-bar-value" }, Tag(Total))
+      (0, import_react3.createElement)("span", { className: "playform-cost-bar-value" }, Tag(Total))
     )
   );
 };
@@ -895,7 +994,7 @@ function Stamp(Value) {
 }
 
 // Source/Function/StepRow.ts
-var import_react3 = require("react");
+var import_react4 = require("react");
 var CacheMissThreshold = 0.5;
 var Text2 = (Value) => typeof Value === "string" ? Value : "";
 var BaseName = (Path) => {
@@ -943,10 +1042,10 @@ var Markers = (Step, t) => {
     });
   return List;
 };
-var TokenCell = (Cell, Value) => (0, import_react3.createElement)(
+var TokenCell = (Cell, Value) => (0, import_react4.createElement)(
   "td",
   { className: Cell },
-  (0, import_react3.createElement)("span", { className: "playform-cost-num" }, CountShort(Value))
+  (0, import_react4.createElement)("span", { className: "playform-cost-num" }, CountShort(Value))
 );
 var CacheCell = (Cell, Tokens, Hit, t) => {
   const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
@@ -955,9 +1054,9 @@ var CacheCell = (Cell, Tokens, Hit, t) => {
   const Base = Read + Input + Write;
   switch (true) {
     case Base <= 0:
-      return (0, import_react3.createElement)("td", { className: Cell, title: t("unknown") }, Dash_default);
+      return (0, import_react4.createElement)("td", { className: Cell, title: t("unknown") }, Dash_default);
     case (Read > 0 || Write > 0):
-      return (0, import_react3.createElement)(
+      return (0, import_react4.createElement)(
         "td",
         {
           className: Cell,
@@ -967,13 +1066,13 @@ var CacheCell = (Cell, Tokens, Hit, t) => {
             write: CountShort(Write)
           })
         },
-        (0, import_react3.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
+        (0, import_react4.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
       );
     default:
-      return (0, import_react3.createElement)(
+      return (0, import_react4.createElement)(
         "td",
         { className: Cell, title: t("column.cache.title") },
-        (0, import_react3.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
+        (0, import_react4.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
       );
   }
 };
@@ -1026,7 +1125,7 @@ function StepRow(Props) {
   const Other = typeof Cost.other === "number" ? Cost.other : 0;
   const HasDetail = Files2.length > 0 || Allocations > 0 || Total > 0;
   const Started = t("step.started.title", { time: Stamp(Step.at) });
-  const ModelText = [
+  const ModelText2 = [
     Text2(Step.provider),
     Text2(Step.model),
     Text2(Step.mode),
@@ -1036,7 +1135,7 @@ function StepRow(Props) {
   const Row = ["playform-cost-step-row"];
   if (HasDetail) Row.push("playform-cost-step-row-clickable");
   if (typeof Step.error === "string") Row.push("playform-cost-step-row-error");
-  return (0, import_react3.createElement)(
+  return (0, import_react4.createElement)(
     "tr",
     {
       className: Row.join(" "),
@@ -1065,12 +1164,13 @@ function StepRow(Props) {
       Region: Text2(Step.region),
       Tier: typeof Step.tier === "number" ? Step.tier : null,
       When: { Text: Stamp(Step.at) },
-      Title: `${Started} | ${ModelText}`
+      Title: `${Started} | ${ModelText2}`
     }),
     Cells_default.Files({
       Cell: "playform-cost-step-files",
       Pills: Files2.map((File) => ({
         Name: BaseName(Text2(File.path)),
+        Path: Text2(File.path),
         Tone: StageTone2(Text2(File.stage) === "" ? null : Text2(File.stage)),
         Count: 1,
         Lines: typeof File.linesDelta === "number" ? File.linesDelta : null
@@ -1116,7 +1216,7 @@ function StepRow(Props) {
 }
 
 // Source/Function/SummaryStrip.ts
-var import_react4 = require("react");
+var import_react5 = require("react");
 var TopFileLimit = 5;
 var Text3 = (Value) => typeof Value === "string" ? Value : "";
 var BaseName2 = (Path) => {
@@ -1139,43 +1239,43 @@ function SummaryStrip(Props) {
   const Saving = typeof Summary.saving === "number" ? Summary.saving : 0;
   const Total = typeof Summary.cost?.total === "number" ? Summary.cost.total : 0;
   const Tokens = typeof Summary.tokens?.total === "number" ? Summary.tokens.total : 0;
-  return (0, import_react4.createElement)(
-    import_react4.Fragment,
+  return (0, import_react5.createElement)(
+    import_react5.Fragment,
     {},
-    (0, import_react4.createElement)(
+    (0, import_react5.createElement)(
       "div",
       { className: "playform-cost-toolbar" },
-      (0, import_react4.createElement)(
+      (0, import_react5.createElement)(
         "span",
         { className: "playform-cost-summary" },
         t("summary", { turns: Props.Turns, steps: Props.Steps, cost: Price(Total, Tag) })
       ),
-      (0, import_react4.createElement)(
+      (0, import_react5.createElement)(
         "div",
         { className: "playform-cost-controls" },
-        Hit === null ? null : (0, import_react4.createElement)(
+        Hit === null ? null : (0, import_react5.createElement)(
           "span",
           { className: "playform-cost-control-label" },
           t("totals.cache", { value: Rate(Hit) })
         ),
-        Saving > 0 ? (0, import_react4.createElement)(
+        Saving > 0 ? (0, import_react5.createElement)(
           "span",
           { className: "playform-cost-control-label" },
           t("totals.saving", { value: Price(Saving, Tag) })
         ) : null,
-        (0, import_react4.createElement)(
+        (0, import_react5.createElement)(
           "span",
           { className: "playform-cost-control-label" },
           t("totals.tokens", { tokens: CountShort(Tokens) })
         ),
-        (0, import_react4.createElement)(
+        (0, import_react5.createElement)(
           "span",
           { className: "playform-cost-control-label" },
           Currencies.length > 1 ? t("money.mixed", {
             currencies: Currencies.map((Name) => Text3(Name)).filter((Name) => Name !== "").join(", ")
           }) : t("money.currency", { currency: Tag })
         ),
-        Props.AnyTurn ? (0, import_react4.createElement)(
+        Props.AnyTurn ? (0, import_react5.createElement)(
           "button",
           {
             type: "button",
@@ -1183,7 +1283,7 @@ function SummaryStrip(Props) {
             onClick: Props.OnToggleAll
           },
           Props.AllOpen ? t("collapse.all") : t("expand.all")
-        ) : (0, import_react4.createElement)(
+        ) : (0, import_react5.createElement)(
           "button",
           {
             type: "button",
@@ -1194,91 +1294,31 @@ function SummaryStrip(Props) {
         )
       )
     ),
-    (0, import_react4.createElement)(
+    (0, import_react5.createElement)(
       "div",
       { className: "playform-cost-top-files" },
-      (0, import_react4.createElement)(
+      (0, import_react5.createElement)(
         "span",
         { className: "playform-cost-control-label", title: t("topFiles.title") },
         t("topFiles.label")
       ),
-      TopFiles.length === 0 ? (0, import_react4.createElement)(
+      TopFiles.length === 0 ? (0, import_react5.createElement)(
         "span",
         { className: "playform-cost-control-label" },
         t("topFiles.empty")
       ) : TopFiles.map((File, Index) => {
         const Path = Text3(File.path);
         const Money3 = typeof File.total === "number" ? File.total : 0;
-        return (0, import_react4.createElement)(
+        return (0, import_react5.createElement)(
           "span",
           { className: "playform-cost-file-pill", key: Index, title: Path },
-          (0, import_react4.createElement)("span", {
+          (0, import_react5.createElement)("span", {
             className: `playform-cost-dot playform-cost-tone${Tone(Path)}`
           }),
           `${BaseName2(Path)} ${Price(Money3, Tag)}`
         );
       })
     )
-  );
-}
-
-// Source/Function/Table.ts
-var import_react5 = require("react");
-var COLUMNS = [
-  "scope",
-  "model",
-  "files",
-  "tokens",
-  "cache",
-  "cacheRead",
-  "input",
-  "output",
-  "other",
-  "allocation",
-  "total"
-];
-var COLUMN_WIDTHS = {
-  scope: 11,
-  model: 15,
-  files: 13,
-  tokens: 6.5,
-  cache: 6.5,
-  cacheRead: 7.5,
-  input: 7,
-  output: 7,
-  other: 7,
-  allocation: 7.5,
-  total: 12
-};
-function Table(Props) {
-  const Cols = COLUMNS.map(
-    (Name) => (0, import_react5.createElement)("col", { key: Name, style: { width: `${COLUMN_WIDTHS[Name]}%` } })
-  );
-  return (0, import_react5.createElement)(
-    "table",
-    { className: "playform-cost-table", "aria-label": Props.t("view") },
-    (0, import_react5.createElement)("colgroup", {}, Cols),
-    (0, import_react5.createElement)(
-      "thead",
-      {},
-      (0, import_react5.createElement)(
-        "tr",
-        {},
-        COLUMNS.map(
-          (Name, Index) => (0, import_react5.createElement)(
-            "th",
-            {
-              key: Name,
-              className: Index < 3 ? "playform-cost-th-left" : "playform-cost-th",
-              title: Props.t(`column.${Name}.title`)
-            },
-            Props.t(`column.${Name}`)
-          )
-        )
-      )
-    ),
-    (0, import_react5.createElement)("tbody", {}, Props.Body),
-    (0, import_react5.createElement)("tfoot", {}, Props.Totals)
   );
 }
 
@@ -1550,6 +1590,7 @@ function TurnRow(Props) {
       Cell: "playform-cost-turn-files",
       Pills: Turn.files.map((Tally) => ({
         Name: BaseName3(Tally.key),
+        Path: Tally.key,
         Tone: StageTone3(Tally.stage),
         Count: Tally.count,
         Lines: Tally.lines
@@ -1593,6 +1634,15 @@ function TurnRow(Props) {
     })
   );
 }
+
+// Source/Variable/Limits.ts
+var Limits_default = {
+  DefaultRows: 200,
+  MinRows: 1,
+  MaxRows: 2e3,
+  StepLimit: 24,
+  LoadOlderFactor: 2
+};
 
 // Source/Variable/Locale-en.json
 var Locale_en_default = {
@@ -1710,8 +1760,6 @@ var Locale_en_default = {
 var import_react8 = require("react");
 var DefaultRows = 200;
 var MaxRows = 2e3;
-var LoadOlderFactor = 2;
-var StepLimit = 24;
 var Fill = (Template, Params) => {
   if (Params === void 0) return Template;
   let Out = Template;
@@ -1909,7 +1957,7 @@ function View(Props) {
       Pending.current = { Height: Scroll.scrollHeight, Top: Scroll.scrollTop };
     Growing.current = true;
     SetOlder("loading");
-    SetRows((Current) => Math.min(MaxRows, Current * LoadOlderFactor));
+    SetRows((Current) => Math.min(MaxRows, Current * Limits_default.LoadOlderFactor));
   }, []);
   const Retry = (0, import_react8.useCallback)(() => {
     SetPhase("loading");
@@ -1942,15 +1990,15 @@ function View(Props) {
       );
       if (!Open) continue;
       const Total = Turn.steps.length;
-      const All = ShowAll.has(Turn.turn) || Total <= StepLimit;
-      if (Total > StepLimit)
+      const All = ShowAll.has(Turn.turn) || Total <= Limits_default.StepLimit;
+      if (Total > Limits_default.StepLimit)
         Body.push(
           (0, import_react8.createElement)(
             "tr",
             { key: `more:${Turn.turn}` },
             (0, import_react8.createElement)(
               "td",
-              { className: "playform-cost-more-cell", colSpan: 11 },
+              { className: "playform-cost-more-cell", colSpan: COLUMNS.length },
               (0, import_react8.createElement)(
                 "span",
                 { className: "playform-cost-more-text" },
@@ -1963,12 +2011,12 @@ function View(Props) {
                   className: All ? "playform-cost-chip playform-cost-chip-on" : "playform-cost-chip",
                   onClick: () => ToggleAllSteps(Turn.turn)
                 },
-                All ? t("steps.all", { total: Total }) : t("steps.tail", { limit: StepLimit })
+                All ? t("steps.all", { total: Total }) : t("steps.tail", { limit: Limits_default.StepLimit })
               )
             )
           )
         );
-      const Shown = All ? Turn.steps : Turn.steps.slice(Math.max(0, Total - StepLimit));
+      const Shown = All ? Turn.steps : Turn.steps.slice(Math.max(0, Total - Limits_default.StepLimit));
       for (const Step of Shown) {
         const Key = `${Turn.turn}:${Step.step}`;
         const Expanded = StepOpen.has(Key);
@@ -2004,14 +2052,26 @@ function View(Props) {
         );
       case Older === "failed":
         return (0, import_react8.createElement)(
-          "button",
-          { type: "button", className: "playform-cost-button", onClick: LoadOlder },
+          import_dsh_client_ui_primitives2.Button,
+          {
+            variant: "outline",
+            size: "sm",
+            type: "button",
+            className: "playform-cost-button",
+            onClick: LoadOlder
+          },
           t("loadOlder.failed")
         );
       case Truncated:
         return (0, import_react8.createElement)(
-          "button",
-          { type: "button", className: "playform-cost-button", onClick: LoadOlder },
+          import_dsh_client_ui_primitives2.Button,
+          {
+            variant: "outline",
+            size: "sm",
+            type: "button",
+            className: "playform-cost-button",
+            onClick: LoadOlder
+          },
           t("loadOlder")
         );
       default:
@@ -2054,8 +2114,14 @@ function View(Props) {
             t("error"),
             false,
             (0, import_react8.createElement)(
-              "button",
-              { type: "button", className: "playform-cost-button", onClick: Retry },
+              import_dsh_client_ui_primitives2.Button,
+              {
+                variant: "outline",
+                size: "sm",
+                type: "button",
+                className: "playform-cost-button",
+                onClick: Retry
+              },
               t("retry")
             )
           )
@@ -2243,788 +2309,15 @@ function Client(ctx) {
   );
 }
 
-// ../lib-dsh-style/Target/Function/Inject.js
-function u(e, s) {
-  if (typeof document > "u") return;
-  const n = `${e}/client.css`;
-  if (document.querySelector(`style[data-plugin-css="${n}"]`) !== null) return;
-  const t = document.createElement("style");
-  t.dataset.plugin = e, t.dataset.pluginCss = n, t.textContent = s, document.head.append(t);
-}
-
-// Source/Variable/Styles.ts
-var Styles_default = `
-.playform-cost-root {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
-  padding-bottom: calc(var(--dsh-composer-height, 152px) + 8px);
-  color: var(--dsw-alias-label-primary);
-  font: var(--dsw-font-xxs-12);
-}
-
-.playform-cost-scroll {
-  box-sizing: border-box;
-  flex: 1;
-  height: 100%;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 0 20px 16px;
-}
-
-.playform-cost-scroll > :first-child {
-  margin-top: 12px;
-}
-
-.playform-cost-empty {
-  padding: 24px 0;
-  color: var(--dsw-alias-label-secondary);
-}
-
-.playform-cost-table {
-  width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
-  border-spacing: 0;
-  font: var(--dsw-font-xxs-12);
-  font-variant-numeric: tabular-nums;
-}
-
-.playform-cost-table col:nth-child(1) {
-  width: 11%;
-}
-
-.playform-cost-table col:nth-child(2) {
-  width: 15%;
-}
-
-.playform-cost-table col:nth-child(3) {
-  width: 13%;
-}
-
-.playform-cost-table col:nth-child(4) {
-  width: 6.5%;
-}
-
-.playform-cost-table col:nth-child(5) {
-  width: 6.5%;
-}
-
-.playform-cost-table col:nth-child(6) {
-  width: 7.5%;
-}
-
-.playform-cost-table col:nth-child(7) {
-  width: 7%;
-}
-
-.playform-cost-table col:nth-child(8) {
-  width: 7%;
-}
-
-.playform-cost-table col:nth-child(9) {
-  width: 7%;
-}
-
-.playform-cost-table col:nth-child(10) {
-  width: 7.5%;
-}
-
-.playform-cost-table col:nth-child(11) {
-  width: 12%;
-}
-
-.playform-cost-th,
-.playform-cost-th-left {
-  position: sticky;
-  z-index: 2;
-  top: 0;
-  box-sizing: border-box;
-  padding: 4px 8px;
-  border-bottom: 0.5px solid var(--dsw-alias-border-l2);
-  background: var(--dsw-alias-bg-layer-1);
-  background-clip: padding-box;
-  color: var(--dsw-alias-label-tertiary);
-  font: var(--dsw-font-xxs-12);
-  font-weight: 500;
-  line-height: 1.25;
-  vertical-align: bottom;
-  white-space: normal;
-  text-align: left;
-}
-
-.playform-cost-turn-row {
-  cursor: pointer;
-}
-
-.playform-cost-turn-cell,
-.playform-cost-turn-metric,
-.playform-cost-turn-files,
-.playform-cost-model-cell-turn {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 6px 8px;
-  border-top: 0.5px solid var(--dsw-alias-border-l2);
-  border-bottom: 0.5px solid var(--dsw-alias-border-l1);
-  white-space: nowrap;
-}
-
-.playform-cost-turn-cell {
-  overflow: hidden;
-  font-weight: 600;
-  white-space: normal;
-}
-
-.playform-cost-turn-metric {
-  font-weight: 600;
-  text-align: left;
-}
-
-.playform-cost-turn-files {
-  white-space: nowrap;
-}
-
-.playform-cost-turn-clock {
-  color: var(--dsw-alias-label-secondary);
-  font-weight: 400;
-}
-
-.playform-cost-row-toggle {
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  cursor: pointer;
-  font: inherit;
-  text-align: left;
-}
-
-.playform-cost-row-toggle:focus-visible {
-  outline: 1px solid var(--dsw-alias-state-business-primary);
-  outline-offset: 2px;
-}
-
-.playform-cost-older {
-  display: flex;
-  justify-content: center;
-  padding: 2px 0 10px;
-}
-
-.playform-cost-older-status {
-  color: var(--dsw-alias-label-secondary);
-  font: var(--dsw-font-xxs-12);
-}
-
-.playform-cost-step-row-clickable {
-  cursor: pointer;
-}
-
-.playform-cost-step-row-error {
-  background: color-mix(in srgb, var(--dsw-alias-state-error-primary) 8%, transparent);
-}
-
-.playform-cost-step-cell {
-  box-sizing: border-box;
-  height: 30px;
-  padding: 0 8px 0 22px;
-  border-bottom: 0.5px solid var(--dsw-alias-border-l1);
-  box-shadow: inset 2px 0 0 var(--dsw-alias-border-l1);
-  color: var(--dsw-alias-label-secondary);
-  white-space: nowrap;
-}
-
-.playform-cost-step-metric,
-.playform-cost-step-files,
-.playform-cost-prompt-cell {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-sizing: border-box;
-  height: 30px;
-  padding: 0 8px;
-  border-bottom: 0.5px solid var(--dsw-alias-border-l1);
-  white-space: nowrap;
-}
-
-.playform-cost-step-metric {
-  text-align: left;
-}
-
-.playform-cost-step-when {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 30px;
-  color: var(--dsw-alias-label-secondary);
-  font-variant-numeric: tabular-nums;
-  vertical-align: middle;
-}
-
-.playform-cost-step-clock {
-  color: var(--dsw-alias-label-primary);
-}
-
-.playform-cost-state-unpriced {
-  margin-left: 6px;
-  color: var(--dsw-alias-label-secondary);
-  font-weight: 400;
-}
-
-.playform-cost-state-error,
-.playform-cost-state-attempts {
-  margin-left: 6px;
-  color: var(--dsw-alias-state-warn-primary);
-  font-weight: 400;
-}
-
-.playform-cost-detail-hint {
-  color: var(--dsw-alias-label-tertiary);
-  font: var(--dsw-font-xxxs-11);
-  font-weight: 400;
-}
-
-.playform-cost-model-text {
-  display: inline-block;
-  max-width: 260px;
-  overflow: hidden;
-  color: var(--dsw-alias-label-primary);
-  text-overflow: ellipsis;
-  vertical-align: bottom;
-  white-space: nowrap;
-}
-
-.playform-cost-model-clip {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  min-width: 0;
-}
-
-.playform-cost-model-clip .playform-cost-model-text {
-  flex: 1;
-  min-width: 0;
-  max-width: none;
-}
-
-.playform-cost-model-pill {
-  flex: none;
-  max-width: 70%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-right: 4px;
-  padding: 0 4px;
-  border: 0.5px solid var(--dsw-alias-border-l2);
-  border-radius: 4px;
-  color: var(--dsw-alias-label-secondary);
-  font: var(--dsw-font-xxxs-11);
-}
-
-.playform-cost-files-clip {
-  display: inline-block;
-  max-width: 380px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: bottom;
-  white-space: nowrap;
-}
-
-.playform-cost-files-sep {
-  margin: 0 4px;
-  color: var(--dsw-alias-label-caption);
-}
-
-.playform-cost-files-stat {
-  color: var(--dsw-alias-label-primary);
-}
-
-.playform-cost-added {
-  color: var(--dsw-alias-state-success-primary);
-}
-
-.playform-cost-removed {
-  color: var(--dsw-alias-state-error-primary);
-}
-
-.playform-cost-count-badge {
-  display: inline-flex;
-  align-items: center;
-  height: 19px;
-  margin: 0 3px;
-  padding: 0 5px;
-  border: 0.5px solid var(--dsw-alias-border-l2);
-  border-radius: 2px;
-  background: var(--dsw-alias-bg-layer-2);
-  color: var(--dsw-alias-label-primary);
-  font-size: 10px;
-  font-weight: 650;
-  line-height: 14px;
-  vertical-align: bottom;
-}
-
-.playform-cost-fail-pill {
-  display: inline-flex;
-  align-items: center;
-  height: 19px;
-  margin-right: 6px;
-  padding: 0 6px;
-  border-radius: 2px;
-  background: var(--dsw-alias-state-error-primary);
-  color: var(--dsw-alias-bg-base);
-  font-size: 10px;
-  font-weight: 650;
-  line-height: 14px;
-  vertical-align: bottom;
-}
-
-.playform-cost-pills {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  max-width: 380px;
-}
-
-.playform-cost-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 19px;
-  padding: 0 6px;
-  border: 0.5px solid var(--dsw-alias-border-l2);
-  border-radius: 2px;
-  background: var(--dsw-alias-bg-layer-2);
-  color: var(--dsw-alias-label-primary);
-  font-size: 10px;
-  font-weight: 650;
-}
-
-.playform-cost-pill-muted {
-  color: var(--dsw-alias-label-secondary);
-}
-
-.playform-cost-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  corner-shape: round;
-  display: inline-block;
-  background: var(--playform-cost-tone, var(--dsw-alias-label-secondary));
-}
-
-.playform-cost-mix {
-  display: flex;
-  height: 4px;
-  max-width: 380px;
-  margin-top: 5px;
-  border-radius: 2px;
-  background: var(--dsw-alias-bg-layer-2);
-  overflow: hidden;
-}
-
-.playform-cost-mix-segment {
-  display: block;
-  background: var(--playform-cost-tone, var(--dsw-alias-label-secondary));
-}
-
-.playform-cost-tone0 {
-  --playform-cost-tone: var(--dsw-alias-state-business-primary);
-}
-
-.playform-cost-tone1 {
-  --playform-cost-tone: var(--dsw-alias-state-success-primary);
-}
-
-.playform-cost-tone2 {
-  --playform-cost-tone: var(--dsw-alias-state-warn-primary);
-}
-
-.playform-cost-tone3 {
-  --playform-cost-tone: var(--dsw-alias-state-error-secondary);
-}
-
-.playform-cost-tone4 {
-  --playform-cost-tone: var(
-  	--dsw-alias-brand-primary-new-colorprimary-new-color,
-  	var(--dsw-alias-brand-primary)
-  );
-}
-
-.playform-cost-tone5 {
-  --playform-cost-tone: var(--dsw-alias-state-success-secondary);
-}
-
-.playform-cost-tone6 {
-  --playform-cost-tone: var(--dsw-alias-state-warn-label);
-}
-
-.playform-cost-tone7 {
-  --playform-cost-tone: var(--dsw-alias-label-caption);
-}
-
-.playform-cost-num {
-  display: inline-block;
-  min-width: 62px;
-  font-variant-numeric: tabular-nums;
-  text-align: left;
-}
-
-.playform-cost-num-delta {
-  display: inline-block;
-  min-width: 62px;
-  font: var(--dsw-font-xxxs-11);
-  font-variant-numeric: tabular-nums;
-  text-align: left;
-}
-
-.playform-cost-delta-up {
-  color: var(--dsw-alias-state-success-primary);
-}
-
-.playform-cost-delta-down {
-  color: var(--dsw-alias-state-error-primary);
-}
-
-.playform-cost-money {
-  display: inline-block;
-  min-width: 68px;
-  font-variant-numeric: tabular-nums;
-  text-align: left;
-}
-
-.playform-cost-bar-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-}
-
-.playform-cost-bar-turn {
-  display: inline-block;
-  box-sizing: border-box;
-  flex: 1;
-  min-width: 40px;
-  height: 14px;
-  border: 0.5px solid var(--dsw-alias-border-l2);
-  border-radius: 2px;
-  background: var(--dsw-alias-bg-layer-2);
-  overflow: hidden;
-  vertical-align: middle;
-}
-
-.playform-cost-bar-step {
-  display: inline-block;
-  flex: 1;
-  min-width: 32px;
-  height: 6px;
-  border-radius: 2px;
-  background: var(--dsw-alias-bg-layer-2);
-  overflow: hidden;
-  vertical-align: middle;
-}
-
-.playform-cost-bar-fill {
-  display: flex;
-  height: 100%;
-}
-
-.playform-cost-bar-segment {
-  display: block;
-  height: 100%;
-}
-
-.playform-cost-bar-cache {
-  background: var(--dsw-alias-state-business-primary);
-  opacity: 0.5;
-}
-
-.playform-cost-bar-input {
-  background: var(--dsw-alias-state-business-primary);
-}
-
-.playform-cost-bar-output {
-  background: var(--dsw-alias-state-warn-primary);
-}
-
-.playform-cost-bar-other {
-  background: var(--dsw-alias-label-caption);
-}
-
-.playform-cost-bar-value {
-  min-width: 58px;
-  font-variant-numeric: tabular-nums;
-  text-align: left;
-}
-
-.playform-cost-more-cell {
-  padding: 2px 8px 8px;
-  color: var(--dsw-alias-label-secondary);
-  font: var(--dsw-font-xxxs-11);
-  line-height: 1.9;
-  white-space: normal;
-}
-
-.playform-cost-more-text {
-  margin-right: 10px;
-}
-
-.playform-cost-chip,
-.playform-cost-chip-on {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 19px;
-  padding: 0 6px;
-  border: 0.5px solid var(--dsw-alias-border-l2);
-  border-radius: 2px;
-  background: var(--dsw-alias-bg-layer-2);
-  color: var(--dsw-alias-label-primary);
-  font-size: 10px;
-  font-weight: 650;
-  margin-right: 8px;
-  cursor: pointer;
-}
-
-.playform-cost-chip-on {
-  border-color: var(--dsw-alias-state-business-primary);
-}
-
-.playform-cost-chip:focus-visible,
-.playform-cost-chip-on:focus-visible {
-  outline: 1px solid var(--dsw-alias-state-business-primary);
-  outline-offset: 1px;
-}
-
-.playform-cost-detail-cell {
-  padding: 6px 8px 12px 22px;
-  border-bottom: 0.5px solid var(--dsw-alias-border-l1);
-  box-shadow: inset 2px 0 0 var(--dsw-alias-border-l1);
-  font: var(--dsw-font-xs-13);
-}
-
-.playform-cost-detail-head {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 2px 0 8px;
-}
-
-.playform-cost-detail-title {
-  font: var(--dsw-font-xs-strong-13);
-}
-
-.playform-cost-detail-actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-left: auto;
-}
-
-.playform-cost-block {
-  margin-bottom: 10px;
-  border: 0.5px solid var(--dsw-alias-border-l2);
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.playform-cost-block-head {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 26px;
-  padding: 0 8px;
-  background: var(--dsw-alias-bg-layer-2);
-  font: var(--dsw-font-xxs-12);
-}
-
-.playform-cost-block-path {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--dsw-alias-label-primary);
-  font-weight: 500;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.playform-cost-block-meta {
-  color: var(--dsw-alias-label-tertiary);
-  font: var(--dsw-font-xxxs-11);
-  white-space: nowrap;
-}
-
-.playform-cost-block-sub {
-  padding: 4px 8px 0;
-  color: var(--dsw-alias-label-tertiary);
-  font: var(--dsw-font-xxxs-11);
-}
-
-.playform-cost-block-empty {
-  display: block;
-  padding: 6px 8px;
-  color: var(--dsw-alias-label-secondary);
-  font: var(--dsw-font-xxxs-11);
-}
-
-.playform-cost-block-body {
-  padding: 4px 8px 6px;
-  color: var(--dsw-alias-label-secondary);
-  font: var(--dsw-font-xxs-12);
-  white-space: normal;
-  overflow-wrap: anywhere;
-}
-
-.playform-cost-buckets {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 12px;
-  margin: 0 0 10px;
-}
-
-.playform-cost-bucket {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 19px;
-  padding: 0 6px;
-  border: 0.5px solid var(--dsw-alias-border-l2);
-  border-radius: 2px;
-  background: var(--dsw-alias-bg-layer-2);
-  color: var(--dsw-alias-label-primary);
-  font-size: 10px;
-  font-weight: 650;
-}
-
-.playform-cost-bucket-dot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  corner-shape: round;
-}
-
-.playform-cost-bucket-label {
-  color: var(--dsw-alias-label-secondary);
-}
-
-.playform-cost-bucket-value {
-  font-variant-numeric: tabular-nums;
-}
-
-.playform-cost-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 8px 20px 0;
-  padding: 8px 0;
-  border-top: 0.5px solid var(--dsw-alias-border-l1);
-  font: var(--dsw-font-xxs-12);
-}
-
-.playform-cost-summary {
-  margin-right: auto;
-  color: var(--dsw-alias-label-secondary);
-}
-
-.playform-cost-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  row-gap: 6px;
-  flex-wrap: wrap;
-}
-
-.playform-cost-control-label {
-  color: var(--dsw-alias-label-secondary);
-  white-space: nowrap;
-}
-
-.playform-cost-top-files {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin: 0 20px;
-  padding: 6px 0 8px;
-  border-top: 0.5px solid var(--dsw-alias-border-l1);
-  font: var(--dsw-font-xxs-12);
-}
-
-.playform-cost-file-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 19px;
-  padding: 0 6px;
-  border: 0.5px solid var(--dsw-alias-border-l2);
-  border-radius: 2px;
-  background: var(--dsw-alias-bg-layer-2);
-  color: var(--dsw-alias-label-primary);
-  font-size: 10px;
-  font-weight: 650;
-  font-variant-numeric: tabular-nums;
-}
-
-.playform-cost-totals-row td {
-  border-top: 0.5px solid var(--dsw-alias-border-l2);
-  background: var(--dsw-alias-bg-layer-1);
-  font-weight: 600;
-}
-
-.playform-cost-totals-label {
-  color: var(--dsw-alias-label-primary);
-  font-weight: 600;
-}
-
-.playform-cost-totals-meta {
-  color: var(--dsw-alias-label-secondary);
-  font-weight: 400;
-}
-
-.playform-cost-button {
-  padding: 4px 10px;
-  border: 0.5px solid var(--dsw-alias-border-l1);
-  border-radius: 6px;
-  background: var(--dsw-alias-bg-layer-2);
-  color: var(--dsw-alias-label-primary);
-  cursor: pointer;
-  font-size: 12px;
-}
-
-@media (hover: hover) {
-  .playform-cost-button:hover {
-    background: var(--dsw-alias-interactive-bg-hover);
-  }
-}
-.playform-cost-button:focus-visible {
-  outline: 1px solid var(--dsw-alias-state-business-primary);
-  outline-offset: 1px;
-}
-
-.playform-cost-button-off {
-  padding: 4px 10px;
-  border: 0.5px solid var(--dsw-alias-border-l1);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--dsw-alias-label-secondary);
-  cursor: default;
-  font-size: 12px;
-}`;
-
-// Source/Function/Styles.ts
-var IDENTIFIER = "@playform/client-dsh-panel-cost";
-function Styles() {
-  u(IDENTIFIER, Styles_default);
-}
-
 // Source/Client.ts
-Styles();
 var inject = ["slots", "locale"];
 function apply(ctx) {
   Client(ctx);
 }
-var Client_default = { inject, apply };
+
+// Source/Bundle.ts
+Styles();
+var Bundle_default = { inject, apply };
 
 		})(module, module.exports, require);
 		return module.exports;
