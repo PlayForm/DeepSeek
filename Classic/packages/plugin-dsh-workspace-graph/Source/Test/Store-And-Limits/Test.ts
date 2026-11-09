@@ -1,12 +1,19 @@
-// Source/Test/Store-And-Limits/Test.ts - the store round-trip and the gate
-// limits: the domain opens on the fake facility with the byte-exact opened
-// line, indexFile persists the record and the meta revision and snapshot
-// returns what it stored (A6), removeFile deletes/bumps/ledgers, a stored
-// record that fails validation is skipped and counted (never guessed), the
-// find limits and filters, the size gate, the exclude and include gates, the
-// disabled posture, and the A7 purity guard (zero writeText calls).
-// Unit smoke of @playform/plugin-dsh-workspace-graph: the fake ctx + the REAL
-// built class, from the Harness.
+/**
+ * @module Test
+ *
+ * The store round-trip and the gate limits.
+ *
+ * @remarks
+ * The domain opens on the fake facility with the byte-exact opened line,
+ * indexFile persists the record and the meta revision and snapshot returns what
+ * it stored (A6), removeFile deletes/bumps/ledgers, a stored record that fails
+ * validation is skipped and counted (never guessed), the find limits and filters,
+ * the size gate, the exclude and include gates, the disabled posture, and the A7
+ * purity guard (zero writeText calls).
+ *
+ * Unit smoke of `@playform/plugin-dsh-workspace-graph`: the fake ctx + the REAL
+ * built class, from the Harness.
+ */
 import assert from "node:assert/strict";
 import { Check, CheckAsync, Contexts, FakeStorage, Finish, MakeCounter, MakeGraph, Settled } from "../Harness.js";
 

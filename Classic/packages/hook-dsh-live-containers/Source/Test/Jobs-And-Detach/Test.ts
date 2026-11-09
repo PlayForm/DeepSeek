@@ -1,8 +1,13 @@
-// Source/Test/Jobs-And-Detach/Test.ts - the J-series tests: the live
-// tool-call transform's decision arm, carrier arm, re-dispatch spec, dedup,
-// live-timeout, awaited skip, capacity, history heuristics, and the
-// {"__await":true first-key marker. Every ledger assertion is byte-exact;
-// every negative (fail-open) path proves the inline fallback.
+/**
+ * @module Test
+ *
+ * The J-series tests: the live tool-call transform's decision arm, carrier arm, re-dispatch
+ * spec, dedup, live-timeout, awaited skip, capacity and history heuristics.
+ *
+ * @remarks
+ * The suite also covers the `{"__await":true` first-key marker. Every ledger assertion is
+ * byte-exact; every negative (fail-open) path proves the inline fallback.
+ */
 import assert from "node:assert/strict";
 import {
 	Advance,

@@ -1,14 +1,22 @@
-// Source/Test/Classification/Test.ts - the plan's suite 1 (Classification):
-// the rule table of an EXPLICIT pack (one case per family, the priority
-// tie-break, and the evidence total beating the priority), the History
-// family's precedence over the pack, and the two silences (no-signal inside a
-// packed workspace, no-history in a workspace with neither a pack nor a
-// history). The classifier's verdict is read from the ledger line (a note or
-// the low-confidence abstention names the winning family), so the suite
-// asserts the RULE TABLE, not the delivery.
-//
-// THE BUILT-IN PACK IS RETIRED: every rule below belongs to the temporary
-// `.dsh/pack.yml`, never to a literal built-in family.
+/**
+ * @module Test
+ *
+ * The plan's suite 1: the classification rule table of an EXPLICIT pack, the
+ * History family's precedence, and the two silences.
+ *
+ * @remarks
+ * The rule table (one case per family, the priority tie-break, and the evidence
+ * total beating the priority), the History family's precedence over the pack,
+ * and the two silences (no-signal inside a packed workspace, no-history in a
+ * workspace with neither a pack nor a history).
+ *
+ * The classifier's verdict is read from the ledger line (a note or the
+ * low-confidence abstention names the winning family), so the suite asserts the
+ * RULE TABLE, not the delivery.
+ *
+ * THE BUILT-IN PACK IS RETIRED: every rule below belongs to the temporary
+ * `.dsh/pack.yml`, never to a literal built-in family.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

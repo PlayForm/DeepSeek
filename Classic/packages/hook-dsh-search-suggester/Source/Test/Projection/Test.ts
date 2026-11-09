@@ -1,13 +1,19 @@
-// Source/Test/Projection/Test.ts - the P2 GRAPH PROJECTION against the fake
-// ctx and a fake workspaceGraph: the projected candidate scoring (the note's
-// order changes when the graph proves the candidates), the byte-exact
-// neutral fallback when the graph is absent, the projected sticky section,
-// the kind test, the depth test, and the no-new-ledger-string rule.
-//
-// THE CANDIDATES COME FROM THE SESSION HISTORY: every scenario commits the
-// agent's history through the projection drive (the anchor and its companions
-// as `tool/call` events), and the graph then proves (or fails to prove) those
-// companion paths.
+/**
+ * @module Test
+ *
+ * The P2 graph projection against the fake ctx and a fake workspaceGraph.
+ *
+ * @remarks
+ * The projected candidate scoring (the note's order changes when the graph
+ * proves the candidates), the byte-exact neutral fallback when the graph is
+ * absent, the projected sticky section, the kind test, the depth test, and the
+ * no-new-ledger-string rule.
+ *
+ * THE CANDIDATES COME FROM THE SESSION HISTORY: every scenario commits the
+ * agent's history through the projection drive (the anchor and its companions as
+ * `tool/call` events), and the graph then proves (or fails to prove) those
+ * companion paths.
+ */
 import assert from "node:assert/strict";
 import {
 	AgentOf,

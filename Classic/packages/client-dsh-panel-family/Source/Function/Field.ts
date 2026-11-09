@@ -1,13 +1,19 @@
-// Field - one config-form row: the field label with its write-route marker,
-// the control bound to the field's current value, and the provenance note.
-// The control commits through Apply (volatile -> the settings mutate, plain ->
-// the bridge, secret -> never). A secret field renders the "configured
-// (secret)" marker and NO value: the host redacts secrets and the panel must
-// never display one (UI-FAMILY-V4-1 section 3.4). The row is a pure element
-// builder (no hooks), so the smoke suite can inspect the exact tree. The text,
-// number and boolean controls are the harness UI primitives (Input and
-// Switch - a seed word, so the shell's single instance costs no bundle size);
-// the enum control stays a native select because ui-primitives ships none.
+/**
+ * @module Field
+ *
+ * One config-form row: the field label with its write-route marker, the control bound to the
+ * field's current value, and the provenance note.
+ *
+ * @remarks
+ * The control commits through `Apply` (volatile -> the settings mutate, plain -> the bridge, secret
+ * -> never). A secret field renders the "configured (secret)" marker and no value: the host redacts
+ * secrets and the panel must never display one (UI-FAMILY-V4-1 section 3.4).
+ *
+ * The row is a pure element builder (no hooks), so the smoke suite can inspect the exact tree. The
+ * text, number and boolean controls are the harness UI primitives (`Input` and `Switch` - a seed
+ * word, so the shell's single instance costs no bundle size); the enum control stays a native
+ * `select` because ui-primitives ships none.
+ */
 import { Input, Switch } from "@deepseek-ai/dsh-client-ui-primitives";
 import Apply from "@Function/Apply.js";
 import type { PanelFormField, PanelFormView } from "@Interface/Form.js";

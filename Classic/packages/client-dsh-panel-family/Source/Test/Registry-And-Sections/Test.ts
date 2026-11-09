@@ -1,10 +1,15 @@
-// Source/Test/Registry-And-Sections/Test.ts - the playformFamilyPanel
-// registry body, exercised through the instance the client apply actually
-// provided: register adds and replaces by id, entries snapshots ordered by
-// (order, id), subscribe/getVersion track every mutation, open() delegates
-// to the attached implementation (and only records before one is
-// attached), the register disposer unregisters, and unregister of an
-// unknown id is a no-op.
+/**
+ * @module Test
+ *
+ * The `playformFamilyPanel` registry body, exercised through the instance the
+ * client apply actually provided.
+ *
+ * @remarks
+ * register adds and replaces by id, entries snapshots ordered by (order, id),
+ * subscribe/getVersion track every mutation, open() delegates to the attached
+ * implementation (and only records before one is attached), the register
+ * disposer unregisters, and unregister of an unknown id is a no-op.
+ */
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make } from "../Harness.js";
 

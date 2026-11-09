@@ -1,10 +1,17 @@
-// Source/Test/Gates-And-Registry-Discovery/Test.ts - one singular test: the
-// trigger gates (actor + kind, basename, exclusion-first with no read/write,
-// the Stash idempotence gate) and the registry discovery lines (the
-// no-registry skip and the unreadable-registry skip).
-// Runs standalone (`node Target/Test/Gates-And-Registry-Discovery/Test.js`)
-// AND under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-cargo-governor.
+/**
+ * @module Test
+ *
+ * One singular test of the trigger gates and the registry discovery lines.
+ *
+ * @remarks
+ * The suite covers the trigger gates (actor + kind, basename, exclusion-first
+ * with no read/write, the Stash idempotence gate) and the registry discovery
+ * lines (the no-registry skip and the unreadable-registry skip).
+ *
+ * Runs standalone (`node Target/Test/Gates-And-Registry-Discovery/Test.js`)
+ * AND under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit
+ * smoke of `@playform/hook-dsh-cargo-governor`.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";

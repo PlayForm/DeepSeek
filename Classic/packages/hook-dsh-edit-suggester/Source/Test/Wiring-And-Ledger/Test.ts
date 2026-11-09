@@ -1,11 +1,19 @@
-// Source/Test/Wiring-And-Ledger/Test.ts - the wiring and the ledger: the
-// loader contract (the default object carries name/apply/Config/inject,
-// apply returns nothing), the context-only listener registration with the
-// distinct root identity, the optional projection injection and the installed
-// unit, the byte-exact activation and disabled lines (logger form and durable
-// `[ISO]` form), the config fail-loud, the schema defaults on the built State,
-// and the fs purity (the edit suggester is a NON-MANIFEST module: zero ctx.fs
-// calls).
+/**
+ * @module Test
+ *
+ * The wiring and the ledger: the loader contract, the context-only listener registration, the
+ * optional projection injection, the byte-exact activation and disabled lines, the config
+ * fail-loud, the schema defaults and the fs purity.
+ *
+ * @remarks
+ * The loader contract: the default object carries name/apply/Config/inject, and apply returns
+ * nothing. The listeners register on the context only, with the distinct root identity, and the
+ * suite proves the optional projection injection and the installed unit. The activation and
+ * disabled lines are byte-exact in both the logger form and the durable `[ISO]` form. The suite
+ * also proves the config fail-loud and the schema defaults on the built State.
+ *
+ * The fs purity: the edit suggester is a NON-MANIFEST module, so it makes zero `ctx.fs` calls.
+ */
 import assert from "node:assert/strict";
 import {
 	AgentOf,

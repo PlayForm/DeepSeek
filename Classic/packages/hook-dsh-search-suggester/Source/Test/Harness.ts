@@ -1,34 +1,39 @@
-// Source/Test/Harness.ts - the shared test harness for the SEARCH-SUGGESTER
-// tests: the fake ctx (ctx listener capture, a DISTINCT root object, the
-// effect runner, logger capture, a recording fs the plugin must never touch,
-// reflect.provide capture, the optional `inject` seam) + the fake
-// `sessionProjections` registry (register + stateOf + the eager drive the
-// tests commit `tool/call` events through) + the REAL
-// @playform/plugin-dsh-factory instance from its built Target + the REAL
-// search-suggester apply from its built Target - the family fake-ctx +
-// real-factory harness pattern, written ONCE per package and imported by every
-// test folder. Each folder process gets a fresh set, so every folder is
-// standalone-green and the aggregate replays the same seams per folder.
-//
-// THE PROJECTION FAKE IS THE POINT: the history is no longer seeded into a
-// `State` WeakMap (there is none), so every history assertion must travel the
-// seam the plugin actually uses - `register(definition)` installs the unit,
-// `Commit` folds one committed `tool/call` event through `apply` for the
-// session it belongs to, and `stateOf(session, key)` serves the folded state
-// to the detection. A test that bypassed the drive would prove nothing. A
-// folder that tests the EXPLICIT pack writes a real `.dsh/pack.yml` into a
-// temp tree; a folder that tests neither asserts the
-// `abstained no-history  0.00` line.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
-// fake ctx actually wires the plugin (the vacuously-green backstop for every
-// folder's fixture) and exits nonzero when it does not.
-//
-// NO FAKE CLOCK: the ring, the cooldown and the learning window are counters
-// driven by judged calls (the no-wall-clock rule); the only timestamps are
-// the durable ledger's ISO stamps, asserted with an anchored regex. The
-// learner's knowledge file is a real temp file (the plugin's own
-// node:fs channel, not ctx.fs).
+/**
+ * @module Harness
+ *
+ * The shared test harness for the search-suggester tests, written once per
+ * package and imported by every test folder.
+ *
+ * @remarks
+ * The harness carries the fake ctx (ctx listener capture, a DISTINCT root
+ * object, the effect runner, logger capture, a recording fs the plugin must
+ * never touch, reflect.provide capture, the optional `inject` seam), the fake
+ * `sessionProjections` registry (register + stateOf + the eager drive the tests
+ * commit `tool/call` events through), the REAL `@playform/plugin-dsh-factory`
+ * instance from its built Target, and the REAL search-suggester apply from its
+ * built Target - the family fake-ctx + real-factory harness pattern. Each folder
+ * process gets a fresh set, so every folder is standalone-green and the
+ * aggregate replays the same seams per folder.
+ *
+ * THE PROJECTION FAKE IS THE POINT: the history is no longer seeded into a
+ * `State` WeakMap (there is none), so every history assertion must travel the
+ * seam the plugin actually uses - `register(definition)` installs the unit,
+ * `Commit` folds one committed `tool/call` event through `apply` for the session
+ * it belongs to, and `stateOf(session, key)` serves the folded state to the
+ * detection. A test that bypassed the drive would prove nothing. A folder that
+ * tests the EXPLICIT pack writes a real `.dsh/pack.yml` into a temp tree; a
+ * folder that tests neither asserts the `abstained no-history  0.00` line.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
+ * fake ctx actually wires the plugin (the vacuously-green backstop for every
+ * folder's fixture) and exits nonzero when it does not.
+ *
+ * NO FAKE CLOCK: the ring, the cooldown and the learning window are counters
+ * driven by judged calls (the no-wall-clock rule); the only timestamps are the
+ * durable ledger's ISO stamps, asserted with an anchored regex. The learner's
+ * knowledge file is a real temp file (the plugin's own `node:fs` channel, not
+ * `ctx.fs`).
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

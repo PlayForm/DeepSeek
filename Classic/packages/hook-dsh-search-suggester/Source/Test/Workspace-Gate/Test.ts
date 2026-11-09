@@ -1,12 +1,18 @@
-// Source/Test/Workspace-Gate/Test.ts - the workspace gate and the existence
-// filter against the fake ctx and REAL temp trees: (a) a call path with NO
-// `.git`/`package.json` root and no session cwd abstains `foreign-workspace`
-// before any candidate work, whether the cwd service is absent or its getter
-// throws; (b) a rooted tree with no history abstains `no-history`; (c) a
-// rooted tree with a history committed through the projection drive emits the
-// HISTORY note naming ONLY the companions that exist; (d) a history whose
-// whole companion set is absent abstains `no-companions`; (e) a foreign call
-// never poisons the next in-workspace call.
+/**
+ * @module Test
+ *
+ * The workspace gate and the existence filter against the fake ctx and REAL
+ * temp trees.
+ *
+ * @remarks
+ * (a) a call path with NO `.git`/`package.json` root and no session cwd abstains
+ * `foreign-workspace` before any candidate work, whether the cwd service is
+ * absent or its getter throws; (b) a rooted tree with no history abstains
+ * `no-history`; (c) a rooted tree with a history committed through the projection
+ * drive emits the HISTORY note naming ONLY the companions that exist; (d) a
+ * history whose whole companion set is absent abstains `no-companions`; (e) a
+ * foreign call never poisons the next in-workspace call.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

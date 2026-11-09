@@ -1,12 +1,18 @@
-// Source/Test/Pack-Driven/Test.ts - the EXPLICIT pack override: a temporary
-// repo with its own `.dsh/pack.yml` (its own `search/Version` family) speaks
-// when the session history is empty, so the note names the pack's companion
-// and never a built-in one; the same workspace WITHOUT the pack abstains
-// `no-history` (the built-in pack is never a candidate source); a pack in a
-// rooted tree still governs even when its declared signature marker is absent
-// (the root gates, not the signature); the monorepo path with no history
-// abstains `no-history` instead of naming a built-in companion; and the
-// History family is prepended before the pack's own rows.
+/**
+ * @module Test
+ *
+ * The explicit pack override: a temporary repo with its own `.dsh/pack.yml`
+ * speaks when the session history is empty.
+ *
+ * @remarks
+ * The pack's own `search/Version` family names the pack's companion and never a
+ * built-in one; the same workspace WITHOUT the pack abstains `no-history` (the
+ * built-in pack is never a candidate source); a pack in a rooted tree still
+ * governs even when its declared signature marker is absent (the root gates, not
+ * the signature); the monorepo path with no history abstains `no-history`
+ * instead of naming a built-in companion; and the History family is prepended
+ * before the pack's own rows.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

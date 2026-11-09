@@ -1,18 +1,23 @@
-// Source/Test/Trigger-And-Cap/Test.ts - THE IDLE EDGE: the iteration counter,
-// the threshold, both write caps, and the maintenance claim.
-//
-// The gate is the only thing between the harness's idle edge and a model call,
-// so every arm here is about what does NOT happen: a disabled service, a count
-// below the threshold, a capped session and a busy agent each end the run
-// before the review body is reached. The caps count SUCCESSES, never attempts,
-// which is the one property the existing nudge hook gets wrong
-// (`Source/Function/Trigger.ts:15-20`), and the interval advances on a CLAIMED
-// run rather than on a write.
-//
-// The last check walks all twelve outcome classes: five are produced by the
-// gate itself, and the other seven are the review's own result, which the gate
-// passes through verbatim. That is what "reachable without a model" means - no
-// folder here needs an llm service to name a class.
+/**
+ * @module Test
+ *
+ * The idle edge: the iteration counter, the threshold, both write caps, and the
+ * maintenance claim.
+ *
+ * @remarks
+ * The gate is the only thing between the harness's idle edge and a model call,
+ * so every arm here is about what does NOT happen: a disabled service, a count
+ * below the threshold, a capped session and a busy agent each end the run before
+ * the review body is reached. The caps count SUCCESSES, never attempts, which is
+ * the one property the existing nudge hook gets wrong
+ * (`Source/Function/Trigger.ts:15-20`), and the interval advances on a CLAIMED
+ * run rather than on a write.
+ *
+ * The last check walks all twelve outcome classes: five are produced by the gate
+ * itself, and the other seven are the review's own result, which the gate passes
+ * through verbatim. That is what "reachable without a model" means - no folder
+ * here needs an llm service to name a class.
+ */
 import assert from "node:assert/strict";
 
 import Gate from "../../../Target/Function/Trigger.js";

@@ -1,13 +1,20 @@
-// Source/Test/Post-Execute-And-Ring/Test.ts - the listener behavior against
-// the fake ctx: the History emit path (the session history's co-touch
-// candidates, the byte-exact note text, summary and `suggest History` ledger
-// line in both forms), the REAL projection path (committed `tool/call` events,
-// folded by the registered unit, read back through `stateOf`), the
-// pass-through paths (a non-judged tool, next() called first), the abstention
-// paths (no-history with the empty-family double-space line, low-confidence
-// under a raised config threshold), the suppress paths (cooldown, dedupe,
-// cap), the block-decision shape, the per-agent ring isolation, and the
-// agent/pre-step per-turn reset.
+/**
+ * @module Test
+ *
+ * The listener behavior against the fake ctx: the emit path, the REAL projection path, the
+ * pass-through, abstention and suppress paths, the block-decision shape, the per-agent ring
+ * isolation and the `agent/pre-step` per-turn reset.
+ *
+ * @remarks
+ * The History emit path covers the session history's co-touch candidates, the byte-exact note
+ * text, the summary and the `suggest History` ledger line in both forms. The REAL projection path
+ * covers the committed `tool/call` events, folded by the registered unit and read back through
+ * `stateOf`. The pass-through paths cover a non-judged tool and `next()` called first. The
+ * abstention paths cover `no-history` with the empty-family double-space line and `low-confidence`
+ * under a raised config threshold. The suppress paths cover cooldown, dedupe and cap. The suite
+ * also proves the block-decision shape, the per-agent ring isolation and the `agent/pre-step`
+ * per-turn reset.
+ */
 import assert from "node:assert/strict";
 import {
 	AgentOf,

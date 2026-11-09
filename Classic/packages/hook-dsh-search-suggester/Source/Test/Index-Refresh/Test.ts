@@ -1,13 +1,19 @@
-// Source/Test/Index-Refresh/Test.ts - the plan's suite 7 (Index-Refresh),
-// re-specified onto the P2 graph projection: the projection is built once per
-// apply, reused across calls, rebuilt on `tools/change` while `refreshOnBoot`
-// holds, frozen when it does not, and re-probed while the graph is empty. The
-// suite asserts the SNAPSHOT CALL COUNTS (the refresh evidence) and the
-// note's order before and after a re-index.
-//
-// THE CANDIDATES COME FROM THE SESSION HISTORY: the anchor and its two
-// companions are committed per agent's session through the projection drive,
-// and the graph proves (or fails to prove) the companions.
+/**
+ * @module Test
+ *
+ * The plan's suite 7: the index refresh, re-specified onto the P2 graph
+ * projection.
+ *
+ * @remarks
+ * The projection is built once per apply, reused across calls, rebuilt on
+ * `tools/change` while `refreshOnBoot` holds, frozen when it does not, and
+ * re-probed while the graph is empty. The suite asserts the SNAPSHOT CALL COUNTS
+ * (the refresh evidence) and the note's order before and after a re-index.
+ *
+ * THE CANDIDATES COME FROM THE SESSION HISTORY: the anchor and its two
+ * companions are committed per agent's session through the projection drive, and
+ * the graph proves (or fails to prove) the companions.
+ */
 import assert from "node:assert/strict";
 import {
 	AgentOf,

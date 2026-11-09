@@ -1,23 +1,28 @@
-// Source/Test/Write-And-Revert/Test.ts - THE FENCE and the undo.
-//
-// The fence is asserted AS DATA, not as a message: which intent a write
-// carried, which version an edit carried, whether a write was attempted at all.
-// That is the only way to prove the three properties the whole write path rests
-// on (`Source/Function/Write.ts:4-32`):
-//
-//   1. a create uses `createIfAbsent`, so an existing path is refused rather
-//      than overwritten;
-//   2. a patch stats IMMEDIATELY before the edit and passes THAT version, so a
-//      stale body is refused by the harness before a character is matched;
-//   3. a body that drifted between the confirm prompt and the write is refused
-//      BEFORE any call, because the carried text and the disk text are compared
-//      byte for byte.
-//
-// THE REPLAY GATE lives in this folder (`W14`): one run of the whole pipeline -
-// transcript, digest, catalog, plan, parse, confirm, parse, judge, write,
-// ledger - over a recorded transcript and a recorded corpus, printing the
-// digest counts and the applied operations. It is not a ninth folder; it is one
-// printed run inside this one, so the count stays honest.
+/**
+ * @module Test
+ *
+ * The fence and the undo.
+ *
+ * @remarks
+ * The fence is asserted AS DATA, not as a message: which intent a write carried,
+ * which version an edit carried, whether a write was attempted at all. That is
+ * the only way to prove the three properties the whole write path rests on
+ * (`Source/Function/Write.ts:4-32`):
+ *
+ * 1. a create uses `createIfAbsent`, so an existing path is refused rather than
+ *    overwritten;
+ * 2. a patch stats IMMEDIATELY before the edit and passes THAT version, so a
+ *    stale body is refused by the harness before a character is matched;
+ * 3. a body that drifted between the confirm prompt and the write is refused
+ *    BEFORE any call, because the carried text and the disk text are compared
+ *    byte for byte.
+ *
+ * THE REPLAY GATE lives in this folder (`W14`): one run of the whole pipeline -
+ * transcript, digest, catalog, plan, parse, confirm, parse, judge, write,
+ * ledger - over a recorded transcript and a recorded corpus, printing the digest
+ * counts and the applied operations. It is not a ninth folder; it is one printed
+ * run inside this one, so the count stays honest.
+ */
 import assert from "node:assert/strict";
 import * as Path from "node:path";
 

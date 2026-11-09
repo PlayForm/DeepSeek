@@ -1,18 +1,25 @@
-// Source/Test/Harness.ts - the shared test harness for the PANEL-FAMILY
-// client-half smokes: the alias hooks load the REAL built Target (the
-// ./client export and the loader row), and the fake CLIENT ctx captures
-// exactly the seams the client body uses - locale.register, slots.inject,
-// slots.register, effect, reflect.provide, ctx.get (the optional trace /
-// settings / bridge services), and the logger. This is the
-// hook-dsh-workspace-observe harness pattern adapted to the client SDK:
-// there is no root listener, no fs capture and no waterfall here - the
-// client half is a pure browser module that touches no filesystem and has
-// no clock, so the harness has neither an fs seam nor a time seam; the
-// purity is asserted directly on the built code instead.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves
-// the fake ctx actually wires the real client apply (the vacuously-green
-// backstop for every folder's fixture).
+/**
+ * @module Harness
+ *
+ * The shared test harness for the panel-family client-half smokes.
+ *
+ * @remarks
+ * The alias hooks load the REAL built Target (the `./client` export and the
+ * loader row), and the fake CLIENT ctx captures exactly the seams the client
+ * body uses - locale.register, slots.inject, slots.register, effect,
+ * reflect.provide, ctx.get (the optional trace / settings / bridge services),
+ * and the logger.
+ *
+ * This is the `hook-dsh-workspace-observe` harness pattern adapted to the
+ * client SDK: there is no root listener, no fs capture and no waterfall here -
+ * the client half is a pure browser module that touches no filesystem and has
+ * no clock, so the harness has neither an fs seam nor a time seam; the purity
+ * is asserted directly on the built code instead.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
+ * fake ctx actually wires the real client apply (the vacuously-green backstop
+ * for every folder's fixture).
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 

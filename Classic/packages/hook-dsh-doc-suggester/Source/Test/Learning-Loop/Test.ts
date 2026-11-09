@@ -1,28 +1,30 @@
-// Source/Test/Learning-Loop/Test.ts - the D8 learning loop against the fake
-// ctx, REAL temp workspaces and the REAL pattern service, with the
-// candidates coming from the SESSION HISTORY (the synthetic `History`
-// family), never from a built-in pack literal:
-//
-//   L1: a note -> touching a named companion records the ACCEPT for that
-//       companion and its family -> the next call's rank and score rise;
-//   L2: a note -> the window closes untouched -> the soft REJECT -> the
-//       companions' rate and the next note's score fall;
-//   L3: the PICKABLE heuristics: disabling one drops it from the enabled
-//       list, the weights and the score; a raised weight raises the score,
-//       and the `decided` ledger line carries the table byte-exactly;
-//   L4: no store -> the bounded memory fallback answers the neutral 1/3, so
-//       the default score is the PoC's;
-//   L5: the pattern service stores the decision record (weights, enabled
-//       list, pending outcome) and the learned rates; the accept fills the
-//       outcome, and a reopen through the KV store reads the rate back and
-//       reproduces the same weights.
-//
-// The two companions carry the SAME prior (0.6, the History family's prior)
-// and the SAME reason, so the learned history is the only thing that can
-// order them (the rank proof).
-//
-// NO SLEEPS: the window is counted in judged calls, and the pattern service's
-// Flush/Save are awaited (its documented seams) before the reopen.
+/**
+ * @module Test
+ *
+ * The D8 learning loop against the fake ctx, REAL temp workspaces and the REAL pattern service,
+ * with the candidates coming from the SESSION HISTORY and never from a built-in pack literal.
+ *
+ * @remarks
+ * - L1: a note -> touching a named companion records the ACCEPT for that companion and its
+ *   family -> the next call's rank and score rise.
+ * - L2: a note -> the window closes untouched -> the soft REJECT -> the companions' rate and the
+ *   next note's score fall.
+ * - L3: the PICKABLE heuristics: disabling one drops it from the enabled list, the weights and
+ *   the score; a raised weight raises the score, and the `decided` ledger line carries the table
+ *   byte-exactly.
+ * - L4: no store -> the bounded memory fallback answers the neutral 1/3, so the default score is
+ *   the PoC's.
+ * - L5: the pattern service stores the decision record (weights, enabled list, pending outcome)
+ *   and the learned rates; the accept fills the outcome, and a reopen through the KV store reads
+ *   the rate back and reproduces the same weights.
+ *
+ * The candidates come from the synthetic `History` family. The two companions carry the SAME
+ * prior (0.6, the History family's prior) and the SAME reason, so the learned history is the only
+ * thing that can order them (the rank proof).
+ *
+ * NO SLEEPS: the window is counted in judged calls, and the pattern service's Flush/Save are
+ * awaited (its documented seams) before the reopen.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

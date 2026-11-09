@@ -1,11 +1,18 @@
-// Source/Test/Parse-And-Fingerprint/Test.ts - the v0 parser against the
-// committed fixtures: the exact node set and spans for the TypeScript fixture
-// (A4), the span containment invariants, the contains edges, the
-// relative-import edge with the skipped non-relative specifier, the Markdown
-// DocSections with the frozen spans, the test-path Test node, the fingerprint
-// formula recomputed independently, and the byte-exact unsupported-language
-// skip. Unit smoke of @playform/plugin-dsh-workspace-graph: the fake ctx +
-// the REAL built class, from the Harness.
+/**
+ * @module Test
+ *
+ * The v0 parser against the committed fixtures.
+ *
+ * @remarks
+ * The suite covers the exact node set and spans for the TypeScript fixture (A4),
+ * the span containment invariants, the contains edges, the relative-import edge
+ * with the skipped non-relative specifier, the Markdown DocSections with the
+ * frozen spans, the test-path Test node, the fingerprint formula recomputed
+ * independently, and the byte-exact unsupported-language skip.
+ *
+ * Unit smoke of `@playform/plugin-dsh-workspace-graph`: the fake ctx + the REAL
+ * built class, from the Harness.
+ */
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";

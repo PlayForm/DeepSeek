@@ -1,7 +1,13 @@
-// Source/Test/Monitors-Tools/Test.ts - the tool surface tests: live_monitor
-// (enroll with the effective classification, the per-glob opt-out, the list,
-// the parent-into-child target agent) and live_monitor_check (the deep path,
-// the output text with the job id, the admission-full pending form).
+/**
+ * @module Test
+ *
+ * The tool surface tests: `live_monitor` and `live_monitor_check`.
+ *
+ * @remarks
+ * `live_monitor` covers the enroll with the effective classification, the per-glob opt-out, the
+ * list and the parent-into-child target agent. `live_monitor_check` covers the deep path, the
+ * output text with the job id and the admission-full pending form.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

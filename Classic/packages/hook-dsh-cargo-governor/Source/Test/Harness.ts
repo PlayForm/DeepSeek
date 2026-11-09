@@ -1,20 +1,28 @@
-// Source/Test/Harness.ts - the shared test harness for the CARGO GOVERNOR
-// tests: the fake ctx (on/emit/effect/get/fs capture with the services/files/
-// sandboxMode/freshVersion knobs + the root seam) + the REAL
-// @playform/plugin-dsh-factory instance + the cargo governor's REAL built Target
-// - the seams from the source suite (Classic/smokes/cargo-smoke.mjs),
-// written ONCE per package and imported by every test folder. The suite-level
-// fixtures (the tmp Root, the provided services map, the logger capture, the
-// ProbeState holder, the seamStub subprocess fake) live here too: each folder
-// process gets a fresh set (the module state is per-process), so every folder
-// is standalone-green and the aggregate replays the same seams per folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually wires
-// the cargo governor (the vacuously-green backstop for every folder's
-// fixture); prepublishOnly.sh gates the build on it. Imported as a library,
-// this module only exports.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the cargo governor tests, written once per
+ * package and imported by every test folder.
+ *
+ * @remarks
+ * The harness carries the fake ctx (on/emit/effect/get/fs capture with the
+ * services/files/sandboxMode/freshVersion knobs + the root seam), the REAL
+ * `@playform/plugin-dsh-factory` instance, and the cargo governor's REAL built
+ * Target - the seams from the source suite (`Classic/smokes/cargo-smoke.mjs`).
+ *
+ * The suite-level fixtures (the tmp Root, the provided services map, the logger
+ * capture, the ProbeState holder, the seamStub subprocess fake) live here too:
+ * each folder process gets a fresh set (the module state is per-process), so
+ * every folder is standalone-green and the aggregate replays the same seams per
+ * folder.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0 only
+ * when both are counted exactly, then proves the fake ctx actually wires the
+ * cargo governor (the vacuously-green backstop for every folder's fixture);
+ * `prepublishOnly.sh` gates the build on it. Imported as a library, this module
+ * only exports.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

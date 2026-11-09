@@ -749,6 +749,7 @@ function DetailRow(Props) {
 }
 
 // Source/Variable/Path.ts
+var CatalogPath = "/api/playform-cost/catalogs";
 var Path_default = "/api/playform-cost/session";
 
 // Source/Function/Fetch.ts
@@ -761,13 +762,15 @@ var IsEnvelope = (Candidate) => {
 };
 var Selected = (SessionId, Rows, Selection) => {
   const Query = `${Path_default}?session=${encodeURIComponent(SessionId)}&rows=${Rows}`;
+  const Basis = Selection?.basis;
+  const Revision = Selection?.revisionId;
   switch (true) {
-    case Selection === void 0:
+    case Basis === void 0:
       return Query;
-    case Selection.revisionId === void 0:
-      return `${Query}&basis=${encodeURIComponent(Selection.basis)}`;
+    case Revision === void 0:
+      return `${Query}&basis=${encodeURIComponent(Basis)}`;
     default:
-      return `${Query}&basis=${encodeURIComponent(Selection.basis)}&revision=${Selection.revisionId}`;
+      return `${Query}&basis=${encodeURIComponent(Basis)}&revision=${Revision}`;
   }
 };
 var Fail = (Message, Rows) => ({
@@ -863,6 +866,28 @@ function Contributions(Path) {
     }).then((Response) => Response.json()).then((Body) => IsContributionAnswer(Body) ? Body.contributions : []).catch(() => []);
   } catch {
     return Promise.resolve([]);
+  }
+}
+var IsCatalogAnswer = (Candidate) => {
+  if (typeof Candidate !== "object" || Candidate === null) {
+    return false;
+  }
+  const Answer = Candidate;
+  return Answer.ok === true && Array.isArray(Answer.catalogs) && Array.isArray(Answer.revisions);
+};
+var Blank = () => ({ catalogs: [], revisions: [] });
+function Catalogs() {
+  if (typeof fetch !== "function") {
+    return Promise.resolve(Blank());
+  }
+  try {
+    return fetch(CatalogPath, {
+      method: "GET",
+      headers: { accept: "application/json" },
+      cache: "no-store"
+    }).then((Response) => Response.json()).then((Body) => IsCatalogAnswer(Body) ? Body : Blank()).catch(() => Blank());
+  } catch {
+    return Promise.resolve(Blank());
   }
 }
 
@@ -1118,7 +1143,17 @@ var Locale_en_default = {
   "files.verdict.read": "read",
   "files.empty": "This conversation has not touched a file yet.",
   "files.totals": "Files total",
-  "files.totals.meta": "{files} files, {touches} touches"
+  "files.totals.meta": "{files} files, {touches} touches",
+  "valuation.label": "Cost basis",
+  "valuation.revision": "revision {revision}",
+  "valuation.title": "the same recorded usage revalued against catalog revision {revision} under attribution policy {policy}",
+  "valuation.recorded": "recorded {value}",
+  "valuation.revised": "revised {value}",
+  "valuation.difference": "difference {value}",
+  "valuation.basis.as-recorded": "As recorded",
+  "valuation.basis.corrected": "Corrected historical",
+  "valuation.basis.current": "Current rates",
+  "valuation.basis.scenario": "Scenario"
 };
 
 // Source/Function/FileTable.ts
@@ -2207,6 +2242,7 @@ var Tone = (Path) => {
 };
 function SummaryStrip(Props) {
   const Summary = Props.Summary;
+  const Valuation = Props.Valuation;
   const t = Props.t;
   const Tag = typeof Summary.currency === "string" && Summary.currency !== "" ? Summary.currency : "USD";
   const Currencies = Array.isArray(Summary.currencies) ? Summary.currencies : [];
@@ -2310,6 +2346,46 @@ function SummaryStrip(Props) {
           `${BaseName3(Path)} ${Price(Money3, Tag)}`
         );
       })
+    ),
+    // The comparison line: the same recorded usage valued under the
+    // selected basis, with the stored money beside the repriced money and
+    // the signed difference between them. The title names the catalog
+    // revision the read was valued against and the attribution policy
+    // version the ledger declared, so the figure is never an anonymous
+    // total. No block means no band, so the recorded read is unchanged.
+    Valuation === null ? null : (0, import_react6.createElement)(
+      "div",
+      {
+        className: "playform-cost-toolbar",
+        title: t("valuation.title", {
+          revision: Valuation.revisionId,
+          policy: Valuation.policyVersion
+        })
+      },
+      (0, import_react6.createElement)(
+        "span",
+        { className: "playform-cost-control-label" },
+        t(`valuation.basis.${Valuation.basis}`)
+      ),
+      (0, import_react6.createElement)(
+        "div",
+        { className: "playform-cost-controls" },
+        (0, import_react6.createElement)(
+          "span",
+          { className: "playform-cost-control-label" },
+          t("valuation.recorded", { value: Price(Valuation.recorded, Tag) })
+        ),
+        (0, import_react6.createElement)(
+          "span",
+          { className: "playform-cost-control-label" },
+          t("valuation.revised", { value: Price(Valuation.revised, Tag) })
+        ),
+        (0, import_react6.createElement)(
+          "span",
+          { className: "playform-cost-control-label" },
+          t("valuation.difference", { value: Price(Valuation.difference, Tag) })
+        )
+      )
     )
   );
 }
@@ -2609,6 +2685,13 @@ var Limits_default = {
 var import_react10 = require("react");
 var DefaultRows = 200;
 var MaxRows = 2e3;
+var Recorded = { basis: "as-recorded" };
+var Bases = {
+  "as-recorded": true,
+  corrected: true,
+  current: true,
+  scenario: true
+};
 var BudgetOf = (Rows) => {
   if (typeof Rows !== "number" || !Number.isFinite(Rows) || Rows < 1) return DefaultRows;
   return Math.min(MaxRows, Math.floor(Rows));
@@ -2638,6 +2721,44 @@ var StageName = (Stage, t) => {
   const Known = Locale_en_default[`stage.${Stage}`];
   return Known === void 0 ? Stage : t(`stage.${Stage}`);
 };
+var Choices = (Answer, t) => {
+  const Names = /* @__PURE__ */ new Map();
+  for (const One of Answer.catalogs) Names.set(One.CatalogId, One.Name);
+  const Listed = [];
+  for (const One of Answer.revisions) {
+    if (One.Status !== "published") continue;
+    const Revision = t("valuation.revision", { revision: One.RevisionId });
+    const Name = Names.get(One.CatalogId) ?? "";
+    Listed.push({
+      value: `revision:${One.RevisionId}`,
+      label: Name === "" ? Revision : `${Name} - ${Revision}`
+    });
+  }
+  return Listed;
+};
+var Chosen = (Text4) => {
+  const Cut = Text4.indexOf(":");
+  const Id = Cut === -1 ? 0 : Number(Text4.slice(Cut + 1));
+  switch (true) {
+    case (Cut !== -1 && Number.isInteger(Id) && Id > 0):
+      return { basis: "corrected", revisionId: Id };
+    default:
+      return Recorded;
+  }
+};
+var ChoiceOf = (Selection) => Selection.revisionId === void 0 ? "recorded" : `revision:${Selection.revisionId}`;
+var ValuationOf = (Envelope) => {
+  const Block2 = Envelope?.valuation;
+  switch (true) {
+    case (typeof Block2 !== "object" || Block2 === null):
+      return void 0;
+    default: {
+      const Candidate = Block2;
+      const Matches = typeof Candidate.basis === "string" && Object.hasOwn(Bases, Candidate.basis) && typeof Candidate.revisionId === "number" && typeof Candidate.policyVersion === "string" && typeof Candidate.recorded === "number" && typeof Candidate.revised === "number" && typeof Candidate.difference === "number";
+      return Matches ? Candidate : void 0;
+    }
+  }
+};
 var Chip = (Label, Active, OnClick, Key) => (0, import_react10.createElement)(
   "button",
   {
@@ -2655,6 +2776,9 @@ function View(Props) {
   const [Phase, SetPhase] = (0, import_react10.useState)("loading");
   const [Note, SetNote] = (0, import_react10.useState)(null);
   const [Snapshot, SetSnapshot] = (0, import_react10.useState)(null);
+  const [Selection, SetSelection] = (0, import_react10.useState)(Recorded);
+  const [Listing, SetListing] = (0, import_react10.useState)(null);
+  const [Valuation, SetValuation] = (0, import_react10.useState)(void 0);
   const [Rows, SetRows] = (0, import_react10.useState)(() => BudgetOf(Props.rows));
   const [Attempt, SetAttempt] = (0, import_react10.useState)(0);
   const [Truncated, SetTruncated] = (0, import_react10.useState)(false);
@@ -2671,10 +2795,12 @@ function View(Props) {
   const Growing = (0, import_react10.useRef)(false);
   const Counted = (0, import_react10.useRef)(null);
   const FetchedFor = (0, import_react10.useRef)("");
+  const Requested = Selection.basis === "as-recorded" ? void 0 : Selection;
   (0, import_react10.useEffect)(() => {
     let Live = true;
     if (SessionId === "") {
       SetSnapshot(null);
+      SetValuation(void 0);
       SetPhase("unavailable");
       SetOlder("idle");
       SetTruncated(false);
@@ -2688,7 +2814,7 @@ function View(Props) {
     );
     FetchedFor.current = SessionId;
     new Promise((Done) => {
-      Done(Fetch(SessionId, Rows));
+      Done(Fetch(SessionId, Rows, Requested));
     }).then((Response) => {
       if (!Live) return;
       const Grow = Growing.current;
@@ -2701,6 +2827,7 @@ function View(Props) {
         }
         SetSnapshot(Fold(Response));
         SetFiles([]);
+        SetValuation(void 0);
         SetNote(
           typeof Envelope.message === "string" ? Envelope.message : null
         );
@@ -2716,6 +2843,7 @@ function View(Props) {
       Counted.current = Calls.length;
       SetSnapshot(Fold(Response));
       SetFiles(Array.isArray(Response.files) ? Response.files : []);
+      SetValuation(ValuationOf(Envelope));
       SetTruncated(Response.truncated === true);
       if (Calls.length === 0) {
         SetPhase("empty");
@@ -2747,7 +2875,19 @@ function View(Props) {
     return () => {
       Live = false;
     };
-  }, [SessionId, Rows, Attempt]);
+  }, [SessionId, Rows, Attempt, Selection]);
+  (0, import_react10.useEffect)(() => {
+    let Live = true;
+    new Promise((Done) => {
+      Done(Catalogs());
+    }).then((Answer) => {
+      if (!Live) return;
+      SetListing(Answer);
+    }).catch(() => void 0);
+    return () => {
+      Live = false;
+    };
+  }, []);
   const SessionRef = (0, import_react10.useRef)(SessionId);
   (0, import_react10.useEffect)(() => {
     if (SessionRef.current === SessionId) return;
@@ -2866,7 +3006,10 @@ function View(Props) {
             { key: `more:${Turn.turn}` },
             (0, import_react10.createElement)(
               "td",
-              { className: "playform-cost-more-cell", colSpan: Resolved.columns.length },
+              {
+                className: "playform-cost-more-cell",
+                colSpan: Resolved.columns.length
+              },
               (0, import_react10.createElement)(
                 "span",
                 { className: "playform-cost-more-text" },
@@ -2900,7 +3043,9 @@ function View(Props) {
           })
         );
         if (Expanded)
-          Body.push((0, import_react10.createElement)(DetailRow, { key: `detail:${Key}`, Step, Resolved, t }));
+          Body.push(
+            (0, import_react10.createElement)(DetailRow, { key: `detail:${Key}`, Step, Resolved, t })
+          );
       }
     }
   }
@@ -3008,6 +3153,10 @@ function View(Props) {
   }
   if (Phase === "loading" || Snapshot === null) return Shell([Line(t("loading"), true)], null);
   const Currency = typeof Snapshot.summary.currency === "string" && Snapshot.summary.currency !== "" ? Snapshot.summary.currency : "USD";
+  const Options = [
+    { value: "recorded", label: t("valuation.basis.as-recorded") },
+    ...Listing === null ? [] : Choices(Listing, t)
+  ];
   const Footer = (0, import_react10.createElement)(
     import_react10.Fragment,
     {},
@@ -3023,10 +3172,41 @@ function View(Props) {
         },
         Chip(t("view.turns"), Pane === "turns", () => SetPane("turns"), "turns"),
         Chip(t("view.files"), Pane === "files", () => SetPane("files"), "files")
+      ),
+      // The valuation control: a native select, the house pattern for an
+      // enum (ui-primitives ships none), wrapped in its label so the visible
+      // word is the control's accessible name. The recorded option sends no
+      // parameters; a revision option pins that revision and asks the route
+      // for the corrected basis, which adds the envelope's valuation block.
+      (0, import_react10.createElement)(
+        "label",
+        { className: "playform-cost-controls" },
+        (0, import_react10.createElement)(
+          "span",
+          { className: "playform-cost-control-label" },
+          t("valuation.label")
+        ),
+        (0, import_react10.createElement)(
+          "select",
+          {
+            className: "playform-cost-button",
+            value: ChoiceOf(Selection),
+            style: { fontFamily: "inherit" },
+            onChange: (Event) => SetSelection(Chosen(Value(Event)))
+          },
+          Options.map(
+            (Option) => (0, import_react10.createElement)(
+              "option",
+              { key: Option.value, value: Option.value },
+              Option.label
+            )
+          )
+        )
       )
     ),
     (0, import_react10.createElement)(SummaryStrip, {
       Summary: Snapshot.summary,
+      Valuation: Valuation ?? null,
       Turns: Snapshot.turns.length,
       Steps: Snapshot.steps,
       AllOpen,
@@ -3312,7 +3492,17 @@ var Locale_zh_default = {
   "files.verdict.read": "\u53EA\u8BFB",
   "files.empty": "\u672C\u4F1A\u8BDD\u8FD8\u6CA1\u6709\u89E6\u53CA\u4EFB\u4F55\u6587\u4EF6\u3002",
   "files.totals": "\u6587\u4EF6\u5408\u8BA1",
-  "files.totals.meta": "{files} \u4E2A\u6587\u4EF6,{touches} \u6B21\u89E6\u53CA"
+  "files.totals.meta": "{files} \u4E2A\u6587\u4EF6,{touches} \u6B21\u89E6\u53CA",
+  "valuation.label": "\u8BA1\u4EF7\u57FA\u51C6",
+  "valuation.revision": "\u7248\u672C {revision}",
+  "valuation.title": "\u540C\u4E00\u6279\u5DF2\u8BB0\u5F55\u7528\u91CF\u6309\u76EE\u5F55\u7248\u672C {revision},\u5F52\u5C5E\u7B56\u7565 {policy} \u91CD\u65B0\u8BA1\u4EF7",
+  "valuation.recorded": "\u8BB0\u5F55 {value}",
+  "valuation.revised": "\u91CD\u7B97 {value}",
+  "valuation.difference": "\u5DEE\u989D {value}",
+  "valuation.basis.as-recorded": "\u6309\u8BB0\u5F55",
+  "valuation.basis.corrected": "\u4FEE\u6B63\u5386\u53F2\u4EF7",
+  "valuation.basis.current": "\u5F53\u524D\u4EF7\u683C",
+  "valuation.basis.scenario": "\u60C5\u666F"
 };
 
 // Source/Variable/Slots.ts

@@ -148,10 +148,13 @@ const CreditRows = (
 	});
 };
 
-// Effectiveness - cost per surviving line (section 16.4): per key, the
-// allocated cost over the lines its changed edits added, where a key counts
-// only when one of its files carries a changed Verdict in the window
-// (section 14) - a read-only file yields no row.
+// Effectiveness - cost per added line on changed files (section 16.4): per
+// key, the allocated cost over the lines its changed edits added, where a key
+// counts only when one of its files carries a changed Verdict in the window
+// (section 14) - a read-only file yields no row. A line added and later
+// removed still counts until content lineage exists, so the metric is named
+// for the added lines on changed files rather than for lines that survived
+// (Backlog A2, the research's section 5).
 const EffectivenessRows = (
 	Database: DatabaseSync,
 	Scope: string,
@@ -187,30 +190,30 @@ const EffectivenessRows = (
 		Key,
 		[...Span.Values, ...Stamps],
 	);
-	const Survived = new Map<string, number>();
+	const Additions = new Map<string, number>();
 	for (const One of Lines) {
 		const Group = One["Key"];
 		if (typeof Group === "string") {
-			Survived.set(Group, Num(One, "Lines"));
+			Additions.set(Group, Num(One, "Lines"));
 		}
 	}
 	return Gather(Scope, Costs, (One, Group) => {
 		const Cost = Num(One, "Cost");
-		const Count = Survived.get(Group) ?? 0;
+		const Added = Additions.get(Group) ?? 0;
 		return [
 			{
 				Metric: "cost_per_line",
 				Key: Group,
-				Value: Ratio(Cost, Count),
+				Value: Ratio(Cost, Added),
 				Unit: "USD/line",
-				Note: "the allocated cost over the surviving lines",
+				Note: "the allocated cost over the added lines on changed files",
 			},
 			{
-				Metric: "surviving_lines",
+				Metric: "added_lines_on_changed_files",
 				Key: Group,
-				Value: Count,
+				Value: Added,
 				Unit: "lines",
-				Note: "the lines the changed edits added",
+				Note: "the lines the changed files' edit hunks added",
 			},
 			{
 				Metric: "cost",

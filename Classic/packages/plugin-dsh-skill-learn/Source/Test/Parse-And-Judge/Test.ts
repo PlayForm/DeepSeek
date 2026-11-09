@@ -1,22 +1,27 @@
-// Source/Test/Parse-And-Judge/Test.ts - THE GATE: the strict reply parse and the
-// sixteen deterministic rules between a reply and the corpus.
-//
-// The parse decides whether a reply IS an operation list; the judge decides
-// whether one operation may land. Both are pure, both are asserted per rule,
-// and every refusal string is asserted BYTE FOR BYTE because it is what the
-// ledger and the report carry (`Source/Function/Judge.ts:183-304`,
-// `Source/Function/Parse.ts:182-291`). A rule with no test is a rule the next
-// refactor deletes.
-//
-// The parse is strict on purpose: prose around the object, a second fenced
-// block, a non-json fence, a coerced number and a fourth operation kind are all
-// FAILURES rather than silently empty replies, because an empty operation list
-// and a broken reply look identical to the lifecycle.
-//
-// ONE BOUNDARY IS DELIBERATE: a blank `oldString` or `newString` is not a parse
-// failure. The judge's `anchor-changed` owns it, so a blank anchor ends the run
-// as `refused` rather than `unparsable` - the model's evidence is blamed, not
-// its syntax.
+/**
+ * @module Test
+ *
+ * The gate: the strict reply parse and the sixteen deterministic rules between a
+ * reply and the corpus.
+ *
+ * @remarks
+ * The parse decides whether a reply IS an operation list; the judge decides
+ * whether one operation may land. Both are pure, both are asserted per rule, and
+ * every refusal string is asserted BYTE FOR BYTE because it is what the ledger
+ * and the report carry (`Source/Function/Judge.ts:183-304`,
+ * `Source/Function/Parse.ts:182-291`). A rule with no test is a rule the next
+ * refactor deletes.
+ *
+ * The parse is strict on purpose: prose around the object, a second fenced
+ * block, a non-json fence, a coerced number and a fourth operation kind are all
+ * FAILURES rather than silently empty replies, because an empty operation list
+ * and a broken reply look identical to the lifecycle.
+ *
+ * ONE BOUNDARY IS DELIBERATE: a blank `oldString` or `newString` is not a parse
+ * failure. The judge's `anchor-changed` owns it, so a blank anchor ends the run
+ * as `refused` rather than `unparsable` - the model's evidence is blamed, not
+ * its syntax.
+ */
 import assert from "node:assert/strict";
 import * as Path from "node:path";
 

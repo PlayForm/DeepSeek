@@ -1,7 +1,10 @@
-// Source/Test/Suggester-And-Set/Test.ts - the S-series tests: the suggester
-// gate, the privacy default, the rate cap, the parse containment, the
-// configured-block frame, the accept/dismiss verbs, autoPlant, and the
-// live_container_set tool surface.
+/**
+ * @module Test
+ *
+ * The S-series tests: the suggester gate, the privacy default, the rate cap, the parse
+ * containment, the configured-block frame, the accept/dismiss verbs, autoPlant, and the
+ * `live_container_set` tool surface.
+ */
 import assert from "node:assert/strict";
 import {
 	AgentA,

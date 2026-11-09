@@ -1,18 +1,22 @@
-// Source/Test/Plan-And-Confirm/Test.ts - THE TWO REQUESTS: the plan call that
-// carries the index and no bodies, and the confirm call that carries every body
-// the plan asked to see.
-//
-// The phase split IS the read-before-write property. Phase 1 can only name the
-// skills whose bodies it needs, phase 2 is the only request that may return the
-// final list, and the union the caller loads is `views` plus every patch and
-// support target. The union itself is computed in `Source/Library.ts` (a
-// parallel lane), so this folder proves the two halves the leaves own: phase 1
-// carries no body, phase 2 renders exactly the set it is handed, and a patch
-// target that was not carried cannot pass the judge.
-//
-// TWO CALLS MAXIMUM is asserted where it is enforceable: phase 1's reply may
-// carry `views`, phase 2's reply may not, so a third request is not
-// expressible rather than merely discouraged.
+/**
+ * @module Test
+ *
+ * The two requests: the plan call that carries the index and no bodies, and the
+ * confirm call that carries every body the plan asked to see.
+ *
+ * @remarks
+ * The phase split IS the read-before-write property. Phase 1 can only name the
+ * skills whose bodies it needs, phase 2 is the only request that may return the
+ * final list, and the union the caller loads is `views` plus every patch and
+ * support target. The union itself is computed in `Source/Library.ts` (a
+ * parallel lane), so this folder proves the two halves the leaves own: phase 1
+ * carries no body, phase 2 renders exactly the set it is handed, and a patch
+ * target that was not carried cannot pass the judge.
+ *
+ * TWO CALLS MAXIMUM is asserted where it is enforceable: phase 1's reply may
+ * carry `views`, phase 2's reply may not, so a third request is not expressible
+ * rather than merely discouraged.
+ */
 import assert from "node:assert/strict";
 
 import Catalog from "../../../Target/Function/Catalog.js";

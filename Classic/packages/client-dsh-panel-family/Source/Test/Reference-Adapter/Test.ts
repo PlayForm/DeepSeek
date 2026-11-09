@@ -1,12 +1,19 @@
-// Source/Test/Reference-Adapter/Test.ts - one REFERENCE ADAPTER end to end,
-// against the real built functions and the real manifest the package ships:
-// the STATUS (the static fallback, the live trace tail, the activation
-// override), the CONFIG FORM generated from the plugin's serialized
-// Schemastery schema (the volatile/plain/secret classification, defaults,
-// provenance, enum options, nested object fields), and the two write routes
-// (the revision-fenced volatile mutate, the plain-field bridge with its audit
-// line, the secret-namespace and missing-bridge refusals). The three shipped
-// manifests and their adapter effects close the roster.
+/**
+ * @module Test
+ *
+ * One reference adapter end to end, against the real built functions and the
+ * real manifest the package ships.
+ *
+ * @remarks
+ * The suite covers the STATUS (the static fallback, the live trace tail, the
+ * activation override), the CONFIG FORM generated from the plugin's serialized
+ * Schemastery schema (the volatile/plain/secret classification, defaults,
+ * provenance, enum options, nested object fields), and the two write routes
+ * (the revision-fenced volatile mutate, the plain-field bridge with its audit
+ * line, the secret-namespace and missing-bridge refusals).
+ *
+ * The three shipped manifests and their adapter effects close the roster.
+ */
 import assert from "node:assert/strict";
 import Schema from "@deepseek-ai/schemastery";
 import {

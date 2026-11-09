@@ -1,11 +1,18 @@
-// Source/Test/Entry-And-Config/Test.ts - the entry seam and the config
-// contract: the service registers on the fake ctx under the exact name
-// workspaceGraph (A3), the class carries the loader contract (static inject,
-// static Config), the byte-exact activation line, the schema defaults,
-// the volatile-cell unwrap, the Schemastery type throw, the fail-loud
-// validation messages, and the declaration-merging compile proof.
-// Unit smoke of @playform/plugin-dsh-workspace-graph: the fake ctx + the REAL
-// built class, from the Harness.
+/**
+ * @module Test
+ *
+ * The entry seam and the config contract of the workspace graph.
+ *
+ * @remarks
+ * The service registers on the fake ctx under the exact name `workspaceGraph`
+ * (A3), the class carries the loader contract (static inject, static Config), the
+ * byte-exact activation line, the schema defaults, the volatile-cell unwrap, the
+ * Schemastery type throw, the fail-loud validation messages, and the
+ * declaration-merging compile proof.
+ *
+ * Unit smoke of `@playform/plugin-dsh-workspace-graph`: the fake ctx + the REAL
+ * built class, from the Harness.
+ */
 import assert from "node:assert/strict";
 import type { Context } from "@deepseek-ai/cordis";
 import { Check, Finish, MakeCounter, MakeGraph } from "../Harness.js";

@@ -1,12 +1,18 @@
-// Source/Test/References/Test.ts - the `references` edge's consumer wiring
-// over a REAL temp tree and the REAL built semantics service: the graph probes
-// the service (never injects it), asks it for the file's reference list after
-// the parse, and emits one honest edge per resolved reference - from the node
-// that USES the symbol to the Symbol node it uses. The folder also pins the
-// honesty rules: no service means NO references edges, a disabled service is
-// silence, a service that answers with a target the file does not declare
-// produces NO dangling edge, and the plan's short service alias `semantics` is
-// honored.
+/**
+ * @module Test
+ *
+ * The `references` edge's consumer wiring over a REAL temp tree and the REAL
+ * built semantics service.
+ *
+ * @remarks
+ * The graph probes the service (never injects it), asks it for the file's
+ * reference list after the parse, and emits one honest edge per resolved
+ * reference - from the node that USES the symbol to the Symbol node it uses. The
+ * folder also pins the honesty rules: no service means NO references edges, a
+ * disabled service is silence, a service that answers with a target the file does
+ * not declare produces NO dangling edge, and the plan's short service alias
+ * `semantics` is honored.
+ */
 import assert from "node:assert/strict";
 import { Check, Finish, GraphClass, LinesWith, MakeCounter, MakeDisk, Tree } from "../Harness.js";
 import Semantics from "../../../../plugin-dsh-workspace-semantics/Target/Library.js";

@@ -1,21 +1,26 @@
-// Source/Test/Usage-And-Ledger/Test.ts - THE STORE and the audit ledger.
-//
-// The usage store is the curator's whole input, so its thirteen fields, the
-// writers that own each one, and the reuse watermark are the contract. Two
-// postures matter more than the fields:
-//
-//   - A CORRUPT STORE IS QUARANTINED, NOT OVERWRITTEN. Hermes reads a corrupt
-//     store as `{}` and the next bump rewrites the whole file with one record,
-//     silently losing every other record. Here the unreadable file is moved to
-//     `<storagePath>.corrupt-<stamp>`, one ledger line names it, and the next
-//     write creates a fresh store while the quarantined bytes stay on disk.
-//   - WRITES ARE ATOMIC AND ORDERED. One promise chain, one temporary file, one
-//     rename, so a load always precedes a write and two saves cannot interleave.
-//
-// The ledger half is the other mechanism this package needs: blobs are
-// content-addressed and deduplicated, a row names the addresses it captured,
-// and a rotation keeps `snapshotKeep` manifests while never pruning a protected
-// one - because a revert's safety snapshot must survive its own pass.
+/**
+ * @module Test
+ *
+ * The store and the audit ledger.
+ *
+ * @remarks
+ * The usage store is the curator's whole input, so its thirteen fields, the
+ * writers that own each one, and the reuse watermark are the contract. Two
+ * postures matter more than the fields:
+ *
+ * - A CORRUPT STORE IS QUARANTINED, NOT OVERWRITTEN. Hermes reads a corrupt
+ *   store as `{}` and the next bump rewrites the whole file with one record,
+ *   silently losing every other record. Here the unreadable file is moved to
+ *   `<storagePath>.corrupt-<stamp>`, one ledger line names it, and the next
+ *   write creates a fresh store while the quarantined bytes stay on disk.
+ * - WRITES ARE ATOMIC AND ORDERED. One promise chain, one temporary file, one
+ *   rename, so a load always precedes a write and two saves cannot interleave.
+ *
+ * The ledger half is the other mechanism this package needs: blobs are
+ * content-addressed and deduplicated, a row names the addresses it captured, and
+ * a rotation keeps `snapshotKeep` manifests while never pruning a protected one -
+ * because a revert's safety snapshot must survive its own pass.
+ */
 import assert from "node:assert/strict";
 import FileSystem from "node:fs";
 import * as Path from "node:path";

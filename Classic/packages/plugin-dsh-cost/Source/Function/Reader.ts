@@ -479,23 +479,25 @@ export default function Reader(
 	// revision while the pricing service is absent is one actionable line,
 	// never a silently recorded-only answer.
 	const Comparison = (): Valuation | undefined => {
+		// The two locals narrow the optional selection for the switch's later
+		// arms; a switch (true) arm cannot narrow the original binding.
+		const Basis = Selection?.basis ?? "as-recorded";
+		const Revision = Selection?.revisionId;
 		switch (true) {
-			case Selection === undefined:
+			case Basis === "as-recorded":
 				return undefined;
-			case Selection.basis === "as-recorded":
-				return undefined;
-			case Selection.revisionId === undefined:
+			case Revision === undefined:
 				return undefined;
 			case Pricing === undefined:
 				throw new Error(
-					`plugin-dsh-cost: the valuation basis "${Selection.basis}" needs the pricing service, which this context did not provide - the ledger write handle was absent`,
+					`plugin-dsh-cost: the valuation basis "${Basis}" needs the pricing service, which this context did not provide - the ledger write handle was absent`,
 				);
 			default: {
-				const Preview = Pricing.preview(Selection.revisionId, SessionId);
+				const Preview = Pricing.preview(Revision, SessionId);
 				const Policy = Database.prepare(Query.Policy).get() ?? EmptyRow;
 				return {
-					basis: Selection.basis,
-					revisionId: Selection.revisionId,
+					basis: Basis,
+					revisionId: Revision,
 					policyVersion: Text(Policy, "PolicyVersion") ?? "bytes/context",
 					calculatedAt: Date.now(),
 					recorded: Preview.current,

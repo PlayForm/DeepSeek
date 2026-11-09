@@ -1,42 +1,42 @@
-// Source/Test/Harness.ts - the shared test harness for the EDIT-SUGGESTER
-// tests: the fake ctx (ctx listener capture, a DISTINCT root object, the
-// effect runner, logger capture, a recording fs the plugin must never touch,
-// reflect.provide capture, the optional `inject` seam) + the fake
-// `sessionProjections` registry (register + stateOf + the eager drive the
-// tests commit `tool/call` events through) + the REAL
-// @playform/plugin-dsh-factory instance from its built Target + the REAL
-// edit-suggester apply from its built Target - the family fake-ctx +
-// real-factory harness pattern, written ONCE per package and imported by
-// every test folder. Each folder process gets a fresh set, so every folder is
-// standalone-green and the aggregate replays the same seams per folder.
-//
-// THE PROJECTION FAKE IS THE POINT: the history is no longer seeded into a
-// `State` WeakMap (there is none), so every history assertion must travel the
-// seam the plugin actually uses - `register(definition)` installs the unit,
-// `Commit` folds one committed `tool/call` event through `apply` for the
-// session it belongs to, and `stateOf(session, key)` serves the folded state
-// to the detection. A test that bypassed the drive would prove nothing.
-//
-// THE LEARNING SEAMS (the D8 layer): `Home` is a fresh OS temp directory
-// assigned to $HOME BEFORE any construction, so the optional pattern
-// service's JSON fallback path (`~/.dsh/pattern/registry.json`) can never
-// read or write the user's real home; `Pattern` builds the REAL
-// PatternService from its built Target over a fake storage facility
-// (`FakeStorage`, the authority/evidence fake-storage pattern: the open
-// capture, the map-backed tables, the version fence), so the learning smokes
-// exercise the service's real Record/Get/Put/Save semantics over a real KV
-// domain, and a "reopen" is a second service over the same tables. The
-// Learning-Loop folder attaches it; every other folder runs the plugin's
-// in-memory fallback - the neutral path.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
-// fake ctx actually wires the plugin (the vacuously-green backstop for every
-// folder's fixture) and exits nonzero when it does not.
-//
-// NO FAKE CLOCK: the plugin has no clock dependency - the ring and cooldown
-// are counters driven by judged calls (the no-wall-clock rule); the only
-// timestamps are the durable ledger's ISO stamps, asserted with an anchored
-// regex.
+/**
+ * @module Harness
+ *
+ * The shared fake-ctx plus real-factory harness for the edit-suggester tests, written once per
+ * package and imported by every test folder.
+ *
+ * @remarks
+ * The fake ctx carries the ctx listener capture, a DISTINCT root object, the effect runner, the
+ * logger capture, a recording fs the plugin must never touch, the `reflect.provide` capture and
+ * the optional `inject` seam. Beside it sit the fake `sessionProjections` registry (register,
+ * stateOf and the eager drive the tests commit `tool/call` events through), the REAL
+ * `@playform/plugin-dsh-factory` instance from its built Target and the REAL edit-suggester apply
+ * from its built Target - the family fake-ctx plus real-factory pattern. Each folder process gets
+ * a fresh set, so every folder is standalone-green and the aggregate replays the same seams per
+ * folder.
+ *
+ * THE PROJECTION FAKE IS THE POINT: the history is no longer seeded into a `State` WeakMap (there
+ * is none), so every history assertion must travel the seam the plugin actually uses.
+ * `register(definition)` installs the unit, `Commit` folds one committed `tool/call` event through
+ * `apply` for the session it belongs to, and `stateOf(session, key)` serves the folded state to
+ * the detection. A test that bypassed the drive would prove nothing.
+ *
+ * THE LEARNING SEAMS (the D8 layer): `Home` is a fresh OS temp directory assigned to $HOME BEFORE
+ * any construction, so the optional pattern service's JSON fallback path
+ * (`~/.dsh/pattern/registry.json`) can never read or write the user's real home. `Pattern` builds
+ * the REAL PatternService from its built Target over a fake storage facility (`FakeStorage`, the
+ * authority/evidence fake-storage pattern: the open capture, the map-backed tables, the version
+ * fence), so the learning smokes exercise the service's real Record/Get/Put/Save semantics over a
+ * real KV domain, and a "reopen" is a second service over the same tables. The Learning-Loop
+ * folder attaches it; every other folder runs the plugin's in-memory fallback - the neutral path.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's fixture) and exits nonzero
+ * when it does not.
+ *
+ * NO FAKE CLOCK: the plugin has no clock dependency - the ring and cooldown are counters driven by
+ * judged calls (the no-wall-clock rule); the only timestamps are the durable ledger's ISO stamps,
+ * asserted with an anchored regex.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

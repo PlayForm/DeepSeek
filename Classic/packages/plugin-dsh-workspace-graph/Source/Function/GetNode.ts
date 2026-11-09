@@ -1,5 +1,12 @@
-// GetNode - the getNode body: a linear scan over the mirror's nodes by id
-// (first match wins; ids are unique by construction). Sync, no I/O.
+/**
+ * @module GetNode
+ *
+ * The getNode body: a linear scan over the mirror's nodes by id.
+ *
+ * @remarks
+ * The first match wins, because ids are unique by construction. The scan is synchronous
+ * and performs no I/O.
+ */
 import type Node from "@Interface/Node.js";
 import type State from "@Interface/State.js";
 

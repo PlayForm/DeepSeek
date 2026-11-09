@@ -1,13 +1,21 @@
-// Source/Test/Keep-Refusal-And-Guarded-Write/Test.ts - one singular test: the
-// keep-list discovery (directory pin-policy.json, the configured global
-// keepFile, the registry-adjacent source), the refusal guard (the unmatched
-// plan aborts and skips the update stage), the designed silence (non-TOML and
-// vanished manifests), and the guarded write + P3 (the versioned intent, the
-// Stash pre-registration, the same-actor re-emit, both sandbox postures, the
-// contained racing write).
-// Runs standalone (`node Target/Test/Keep-Refusal-And-Guarded-Write/Test.js`)
-// AND under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-cargo-governor.
+/**
+ * @module Test
+ *
+ * One singular test of the keep-list discovery, the refusal guard, the designed
+ * silence, and the guarded write with P3.
+ *
+ * @remarks
+ * The keep-list discovery (directory pin-policy.json, the configured global
+ * keepFile, the registry-adjacent source), the refusal guard (the unmatched plan
+ * aborts and skips the update stage), the designed silence (non-TOML and
+ * vanished manifests), and the guarded write + P3 (the versioned intent, the
+ * Stash pre-registration, the same-actor re-emit, both sandbox postures, the
+ * contained racing write).
+ *
+ * Runs standalone (`node Target/Test/Keep-Refusal-And-Guarded-Write/Test.js`)
+ * AND under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit
+ * smoke of `@playform/hook-dsh-cargo-governor`.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";

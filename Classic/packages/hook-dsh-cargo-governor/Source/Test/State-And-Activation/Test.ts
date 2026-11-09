@@ -1,12 +1,19 @@
-// Source/Test/State-And-Activation/Test.ts - one singular test: the activation
-// posture (the ledger byte-shape regex + the State.Module logger prefix), the
-// factory-built shared state shape with the cargo module fields, the wire
-// posture (exactly one fiber-owned fs/observed registration + the State
-// builder's P10 volatile-update refresh), and the attach posture (the
-// P1/P2/P5 effect labels + the P1 root jobs controller).
-// Runs standalone (`node Target/Test/State-And-Activation/Test.js`) AND
-// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-cargo-governor.
+/**
+ * @module Test
+ *
+ * One singular test of the activation, wire, and attach postures.
+ *
+ * @remarks
+ * The activation posture (the ledger byte-shape regex + the State.Module logger
+ * prefix), the factory-built shared state shape with the cargo module fields,
+ * the wire posture (exactly one fiber-owned fs/observed registration + the State
+ * builder's P10 volatile-update refresh), and the attach posture (the P1/P2/P5
+ * effect labels + the P1 root jobs controller).
+ *
+ * Runs standalone (`node Target/Test/State-And-Activation/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * `@playform/hook-dsh-cargo-governor`.
+ */
 import assert from "node:assert/strict";
 import {
 	Boot,

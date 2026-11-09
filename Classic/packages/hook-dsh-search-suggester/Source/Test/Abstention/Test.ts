@@ -1,14 +1,21 @@
-// Source/Test/Abstention/Test.ts - the plan's suite 4: the abstention path.
-// The six reasons the plugin can give (no-signal, low-confidence,
-// no-companions, ambiguous-target, foreign-workspace, no-history), each with
-// its byte-exact ledger line, the downstream decision returned UNCHANGED, the
-// durable `[ISO]` form, and the standing rule that an abstention is silence:
-// no note, ever.
-//
-// THE SOURCE SPLIT: the four classifier reasons are driven by an EXPLICIT
-// `.dsh/pack.yml` (the pack is an override only), while `foreign-workspace`
-// and `no-history` are the two reasons a workspace with no explicit pack and
-// no session history gives.
+/**
+ * @module Test
+ *
+ * The abstention path: the six reasons the plugin can give, each with its
+ * byte-exact ledger line and the downstream decision returned unchanged.
+ *
+ * @remarks
+ * The six reasons are no-signal, low-confidence, no-companions,
+ * ambiguous-target, foreign-workspace, and no-history. Each carries its
+ * byte-exact ledger line, the downstream decision returned UNCHANGED, the
+ * durable `[ISO]` form, and the standing rule that an abstention is silence: no
+ * note, ever.
+ *
+ * THE SOURCE SPLIT: the four classifier reasons are driven by an EXPLICIT
+ * `.dsh/pack.yml` (the pack is an override only), while `foreign-workspace` and
+ * `no-history` are the two reasons a workspace with no explicit pack and no
+ * session history gives.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

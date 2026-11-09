@@ -1,12 +1,19 @@
-// Source/Test/Gate-Matrix/Test.ts - one singular test: the g1 gate matrix
-// through the wired fs/observed listener - the silent gates (missing target,
-// non-mutation actor, absent observation, non-package.json basename, Stash
-// idempotence), the exclusion-first `skipped (excluded)` line with its P5
-// record and zero writes, and the listener throw containment (the silence
-// invariant).
-// Runs standalone (`node Target/Test/Gate-Matrix/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-package-governor.
+/**
+ * @module Test
+ *
+ * One singular test of the g1 gate matrix through the wired fs/observed
+ * listener.
+ *
+ * @remarks
+ * The silent gates (missing target, non-mutation actor, absent observation,
+ * non-package.json basename, Stash idempotence), the exclusion-first
+ * `skipped (excluded)` line with its P5 record and zero writes, and the
+ * listener throw containment (the silence invariant).
+ *
+ * Runs standalone (`node Target/Test/Gate-Matrix/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * `@playform/hook-dsh-package-governor`.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";

@@ -168,5 +168,15 @@
 	"files.verdict.read": "read",
 	"files.empty": "This conversation has not touched a file yet.",
 	"files.totals": "Files total",
-	"files.totals.meta": "{files} files, {touches} touches"
+	"files.totals.meta": "{files} files, {touches} touches",
+	"valuation.label": "Cost basis",
+	"valuation.revision": "revision {revision}",
+	"valuation.title": "the same recorded usage revalued against catalog revision {revision} under attribution policy {policy}",
+	"valuation.recorded": "recorded {value}",
+	"valuation.revised": "revised {value}",
+	"valuation.difference": "difference {value}",
+	"valuation.basis.as-recorded": "As recorded",
+	"valuation.basis.corrected": "Corrected historical",
+	"valuation.basis.current": "Current rates",
+	"valuation.basis.scenario": "Scenario"
 }

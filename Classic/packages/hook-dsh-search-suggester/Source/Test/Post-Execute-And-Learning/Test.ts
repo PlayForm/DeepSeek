@@ -1,22 +1,29 @@
-// Source/Test/Post-Execute-And-Learning/Test.ts - the listener behavior
-// against the fake ctx: the emit path (the History note prepended to the
-// downstream decision's additionalContexts, with the byte-exact note text,
-// summary and `suggest` ledger line in both forms), the pass-through paths
-// (a non-judged tool, a bash call with no path, next() called first), the
-// no-history abstention, the learning loop (the `followed` and `ignored`
-// ledger lines, the knowledge file, the pending window), the suppress paths
-// (dedupe under a zero cooldown, cap), the per-agent ring isolation, the
-// agent/pre-step per-turn reset, and the projection path itself (the committed
-// `tool/call` events are the cell, the judged call reads it through `stateOf`,
-// and the call appends nothing).
-//
-// THE CANDIDATES COME FROM THE SESSION HISTORY: every emit scenario mounts a
-// temp workspace, commits the session's `tool/call` events through the fake
-// `sessionProjections` registry (`SeedHistory` -> `Commit`), and judges a call
-// whose path is the workspace's ABSOLUTE anchor - no built-in pack literal is
-// named anywhere. The last group proves the projection path itself: the
-// committed events ARE the cell, the judged call reads it through `stateOf`,
-// and the call appends nothing to it.
+/**
+ * @module Test
+ *
+ * The listener behavior against the fake ctx: the emit path, the pass-through
+ * paths, the abstention, the learning loop, the suppress paths, and the
+ * projection path.
+ *
+ * @remarks
+ * The emit path (the History note prepended to the downstream decision's
+ * additionalContexts, with the byte-exact note text, summary and `suggest`
+ * ledger line in both forms), the pass-through paths (a non-judged tool, a bash
+ * call with no path, next() called first), the no-history abstention, the
+ * learning loop (the `followed` and `ignored` ledger lines, the knowledge file,
+ * the pending window), the suppress paths (dedupe under a zero cooldown, cap),
+ * the per-agent ring isolation, the agent/pre-step per-turn reset, and the
+ * projection path itself (the committed `tool/call` events are the cell, the
+ * judged call reads it through `stateOf`, and the call appends nothing).
+ *
+ * THE CANDIDATES COME FROM THE SESSION HISTORY: every emit scenario mounts a
+ * temp workspace, commits the session's `tool/call` events through the fake
+ * `sessionProjections` registry (`SeedHistory` -> `Commit`), and judges a call
+ * whose path is the workspace's ABSOLUTE anchor - no built-in pack literal is
+ * named anywhere. The last group proves the projection path itself: the
+ * committed events ARE the cell, the judged call reads it through `stateOf`, and
+ * the call appends nothing to it.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {

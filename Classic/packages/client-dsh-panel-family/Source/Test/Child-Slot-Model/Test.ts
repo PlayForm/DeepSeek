@@ -1,13 +1,20 @@
-// Source/Test/Child-Slot-Model/Test.ts - the v4.1 CHILD-SLOT model, proven
-// against the real built client apply: both panels declare their child slots
-// in the registration's `children` table, the fifteen shipped adapters
-// inject the section slot and register one child each with its manifest
-// through the inject face, and the slot-aware registry enforces one adapter
-// per bundle per slot (the documented refusal line), maps a legacy `mount`
-// onto a slot, filters entries by slot, and releases ownership on
-// unregister. The second panel (the overlay) proves the same declaration on
-// a different mount, and each panel hands its declared child slot to the
-// renderer through renderSlot.
+/**
+ * @module Test
+ *
+ * The v4.1 child-slot model, proven against the real built client apply.
+ *
+ * @remarks
+ * Both panels declare their child slots in the registration's `children`
+ * table, the fifteen shipped adapters inject the section slot and register one
+ * child each with its manifest through the inject face, and the slot-aware
+ * registry enforces one adapter per bundle per slot (the documented refusal
+ * line), maps a legacy `mount` onto a slot, filters entries by slot, and
+ * releases ownership on unregister.
+ *
+ * The second panel (the overlay) proves the same declaration on a different
+ * mount, and each panel hands its declared child slot to the renderer through
+ * renderSlot.
+ */
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make } from "../Harness.js";
 

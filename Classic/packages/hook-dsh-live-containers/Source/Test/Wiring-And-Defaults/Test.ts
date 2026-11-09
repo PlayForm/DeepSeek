@@ -1,14 +1,19 @@
-// Source/Test/Wiring-And-Defaults/Test.ts - one singular test: the loader
-// contract and the config defaults are the two surfaces every other folder
-// (and every consumer) silently depends on - the volatile cells, the
-// defaults, the activation posture (five registrations, the REAL factory on
-// the state, the byte-exact `disabled (enabled=false)` cold-mount line and
-// the byte-exact `activated (...)` line, the durable [ISO] proofs), and the
-// fail-loud validation refusals. A drift here breaks every later folder, so
-// it is its own folder.
-// Unit smoke of @playform/hook-dsh-live-containers. Runs standalone
-// (`node Target/Test/Wiring-And-Defaults/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
+/**
+ * @module Test
+ *
+ * One singular test: the loader contract and the config defaults, the two surfaces every other
+ * folder and every consumer silently depends on.
+ *
+ * @remarks
+ * The suite covers the volatile cells, the defaults, the activation posture (five registrations,
+ * the REAL factory on the state, the byte-exact `disabled (enabled=false)` cold-mount line and
+ * the byte-exact `activated (...)` line, the durable `[ISO]` proofs) and the fail-loud validation
+ * refusals. A drift here breaks every later folder, so it is its own folder.
+ *
+ * Unit smoke of `@playform/hook-dsh-live-containers`. It runs standalone
+ * (`node Target/Test/Wiring-And-Defaults/Test.js`) AND under the aggregate
+ * (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ */
 import assert from "node:assert/strict";
 import {
 	Block,

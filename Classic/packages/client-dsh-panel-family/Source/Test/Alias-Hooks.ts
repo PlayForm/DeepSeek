@@ -1,22 +1,28 @@
-// Source/Test/Alias-Hooks.ts - the module-resolution hooks for the client
-// halves' smoke suites. The built client half (Target/Client.js and its
-// Function/ imports) keeps the SOURCE aliases `@Function/*` and
-// `@Variable/*` external (bundle: false - the module system resolves them
-// at materialization time), so a plain Node run cannot import the built
-// client without help. This hook maps the aliases back onto the real built
-// Target (and the real JSON dictionaries, which the transpile-only plugin
-// build does not copy into Target) so every smoke loads the REAL built
-// client code - never a mock (the smoke-writing law).
-//
-// The mapping is rooted at the package root (the parentURL of the importing
-// Target file, cut at its `/Target/` marker), so the same rule serves
-// imports from Target/*.js and Target/Function/*.js alike. Everything else
-// (react, schemastery, node builtins, relative imports) falls through to
-// the default resolver untouched.
-//
-// Registered with `module.registerHooks` (the in-thread hook API), so the
-// registration is synchronous and applies to the dynamic imports the
-// Harness performs right after loading this module.
+/**
+ * @module Alias-Hooks
+ *
+ * The module-resolution hooks that let the client-half smoke suites load the
+ * real built Target instead of a mock.
+ *
+ * @remarks
+ * The built client half (`Target/Client.js` and its `Function/` imports) keeps
+ * the SOURCE aliases `@Function/*` and `@Variable/*` external (bundle: false -
+ * the module system resolves them at materialization time), so a plain Node run
+ * cannot import the built client without help. This hook maps the aliases back
+ * onto the real built Target (and the real JSON dictionaries, which the
+ * transpile-only plugin build does not copy into Target) so every smoke loads
+ * the REAL built client code - never a mock (the smoke-writing law).
+ *
+ * The mapping is rooted at the package root (the parentURL of the importing
+ * Target file, cut at its `/Target/` marker), so the same rule serves imports
+ * from `Target/*.js` and `Target/Function/*.js` alike. Everything else (react,
+ * schemastery, node builtins, relative imports) falls through to the default
+ * resolver untouched.
+ *
+ * Registered with `module.registerHooks` (the in-thread hook API), so the
+ * registration is synchronous and applies to the dynamic imports the Harness
+ * performs right after loading this module.
+ */
 import * as FileSystem from "node:fs";
 import * as Module from "node:module";
 

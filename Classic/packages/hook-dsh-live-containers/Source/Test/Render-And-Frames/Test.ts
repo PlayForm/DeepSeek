@@ -1,12 +1,19 @@
-// Source/Test/Render-And-Frames/Test.ts - the R-series: the section shape
-// (exactly one appended section named live-containers, interpolate: false),
-// the byte-exact LIVE CONTAINER frame for every phase-1 block kind, the
-// variable table (time/date/tz under the FAKE CLOCK, counters, manifest,
-// gauge), the per-block vars override, the {{token}} replace-only engine
-// (unknown tokens render literally + ledger `render unknown <id> <token>`),
-// and the budget failsafe (the oldest frames collapse to one-line summaries
-// + ledger `failsafe section-collapse <n>`). Every assertion lands on the
-// rendered section text or a ledger line - never on "no throw".
+/**
+ * @module Test
+ *
+ * The R-series: the section shape, the byte-exact LIVE CONTAINER frame for every phase-1 block
+ * kind, the variable table, the per-block vars override, the `{{token}}` replace-only engine and
+ * the budget failsafe.
+ *
+ * @remarks
+ * The section shape is exactly one appended section named live-containers, with interpolate:
+ * false. The variable table covers time/date/tz under the FAKE CLOCK, the counters, the manifest
+ * and the gauge. The `{{token}}` engine replaces only: an unknown token renders literally and
+ * writes the ledger line `render unknown <id> <token>`. The budget failsafe collapses the oldest
+ * frames to one-line summaries and writes `failsafe section-collapse <n>`.
+ *
+ * Every assertion lands on the rendered section text or a ledger line - never on "no throw".
+ */
 import assert from "node:assert/strict";
 import {
 	Advance,

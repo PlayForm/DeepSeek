@@ -1,8 +1,14 @@
-// Source/Test/Monitors-Boards/Test.ts - the monitors board tests: the rows
-// from the members' monitor settles, the [live-report] monitored fold (the
-// outcome-first payload, the path with spaces), the SKIP GUARD (a member's
-// monitor settle never flips the member's task row), and the unchanged
-// close/withdraw lifecycle for ordinary job settles.
+/**
+ * @module Test
+ *
+ * The monitors board tests: the rows from the members' monitor settles, the `[live-report]`
+ * monitored fold, the SKIP GUARD and the unchanged close/withdraw lifecycle for ordinary job
+ * settles.
+ *
+ * @remarks
+ * The `[live-report]` monitored fold carries the outcome-first payload and the path with spaces.
+ * The SKIP GUARD proves that a member's monitor settle never flips the member's task row.
+ */
 import assert from "node:assert/strict";
 import {
 	Advance,

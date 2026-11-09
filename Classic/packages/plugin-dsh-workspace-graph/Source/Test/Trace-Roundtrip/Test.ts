@@ -1,17 +1,21 @@
-// Source/Test/Trace-Roundtrip/Test.ts - the TRACE ROUND-TRIP (D5): observe ->
-// trace -> graph -> context, across four REAL built packages and ONE shared
-// fake ctx:
-//
-//   * the observe hook hears `fs/observed` on the root, records its stamp
-//     (byte-exact ledger line) and emits `observe/stamp` on the factory's bus;
-//   * the graph consumes the stamp through its Trace/ adapter, coalesces a
-//     pair into ONE re-index through the library's detached loop, and emits
-//     `graph/invalidated` (the replaced record) + `graph/indexed`;
-//   * the context consumes `graph/invalidated` and drops its packet memo, so
-//     the next identical query rebuilds against the new revision.
-//
-// No sleeps anywhere: the graph's `State.Flush` is the loop's flush promise and
-// the bus's `flush()` settles deterministically.
+/**
+ * @module Test
+ *
+ * The trace round-trip (D5): observe -> trace -> graph -> context, across four
+ * REAL built packages and ONE shared fake ctx.
+ *
+ * @remarks
+ * - the observe hook hears `fs/observed` on the root, records its stamp
+ *   (byte-exact ledger line) and emits `observe/stamp` on the factory's bus;
+ * - the graph consumes the stamp through its Trace/ adapter, coalesces a pair
+ *   into ONE re-index through the library's detached loop, and emits
+ *   `graph/invalidated` (the replaced record) + `graph/indexed`;
+ * - the context consumes `graph/invalidated` and drops its packet memo, so the
+ *   next identical query rebuilds against the new revision.
+ *
+ * No sleeps anywhere: the graph's `State.Flush` is the loop's flush promise and
+ * the bus's `flush()` settles deterministically.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

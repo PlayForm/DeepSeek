@@ -1,14 +1,21 @@
-// Source/Test/Update-Stage/Test.ts - one singular test: the update stage's
-// gates and engines, probed directly - the pure leaves (Decode/Filter/Satisfy),
-// the circuit-breaker / in-flight / cooldown gates, the FAILED path (breaker
-// increment + journal + the U\u2082 refresh), the first-wins Resolve pick, the
-// policy engine (verifyCommand through the seam), the built-in default
-// fallbacks, the programmatic ncu mode, the P1 job-ring piping, the detached
-// fallbacks, the Follow passage gate, the factory keep-list wiring, and the
-// ledger-prefix invariant over the whole folder's logger capture.
-// Runs standalone (`node Target/Test/Update-Stage/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-package-governor.
+/**
+ * @module Test
+ *
+ * One singular test of the update stage's gates and engines, probed directly.
+ *
+ * @remarks
+ * The pure leaves (Decode/Filter/Satisfy), the circuit-breaker / in-flight /
+ * cooldown gates, the FAILED path (breaker increment + journal + the U2
+ * refresh), the first-wins Resolve pick, the policy engine (verifyCommand
+ * through the seam), the built-in default fallbacks, the programmatic ncu mode,
+ * the P1 job-ring piping, the detached fallbacks, the Follow passage gate, the
+ * factory keep-list wiring, and the ledger-prefix invariant over the whole
+ * folder's logger capture.
+ *
+ * Runs standalone (`node Target/Test/Update-Stage/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * `@playform/hook-dsh-package-governor`.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";

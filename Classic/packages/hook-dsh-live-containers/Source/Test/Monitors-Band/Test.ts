@@ -1,8 +1,13 @@
-// Source/Test/Monitors-Band/Test.ts - the R-series byte-identity tests for
-// the monitor stanza: every outcome line of the design section 6 byte-exact,
-// the STALE flips without a re-run, the recovered forms, the summary
-// arithmetic, the token budget and the KV stability. The glyphs are asserted
-// as the rendered characters (the source writes the escapes).
+/**
+ * @module Test
+ *
+ * The R-series byte-identity tests for the monitor stanza: every outcome line of the design
+ * section 6 byte-exact, the STALE flips without a re-run, the recovered forms, the summary
+ * arithmetic, the token budget and the KV stability.
+ *
+ * @remarks
+ * The glyphs are asserted as the rendered characters; the source writes the escapes.
+ */
 import assert from "node:assert/strict";
 import * as Monitors from "../../../Target/Function/Monitors.js";
 import {

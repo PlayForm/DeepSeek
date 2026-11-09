@@ -61,13 +61,17 @@ const IsEnvelope = (Candidate: unknown): Candidate is CostResponse => {
 // values are encoded exactly as the route decodes them.
 const Selected = (SessionId: string, Rows: number, Selection?: ValuationSelection): string => {
 	const Query = `${Route}?session=${encodeURIComponent(SessionId)}&rows=${Rows}`;
+	// The locals narrow the optional selection; a switch (true) arm cannot
+	// narrow the original binding for its later arms.
+	const Basis = Selection?.basis;
+	const Revision = Selection?.revisionId;
 	switch (true) {
-		case Selection === undefined:
+		case Basis === undefined:
 			return Query;
-		case Selection.revisionId === undefined:
-			return `${Query}&basis=${encodeURIComponent(Selection.basis)}`;
+		case Revision === undefined:
+			return `${Query}&basis=${encodeURIComponent(Basis)}`;
 		default:
-			return `${Query}&basis=${encodeURIComponent(Selection.basis)}&revision=${Selection.revisionId}`;
+			return `${Query}&basis=${encodeURIComponent(Basis)}&revision=${Revision}`;
 	}
 };
 

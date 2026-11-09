@@ -1,16 +1,24 @@
-// Source/Test/Wiring-And-Ledger/Test.ts - the wiring and the ledger: the
-// loader contract (the default object carries name/apply/Config/inject,
-// apply returns nothing), the five-listener registration with the distinct
-// root identity, the byte-exact activation and disabled lines (logger form
-// and durable `[ISO]` form), the config fail-loud, the schema defaults and
-// the knowledge load on the built State, and the fs purity (the suggester
-// writes its knowledge through its own node:fs channel, never ctx.fs).
-//
-// THE HISTORY MODEL: the activation's second segment is `history` (there is no
-// boot pack), `State.Pack` is empty at apply, the per-session history is a
-// session-projection unit registered through `ctx.inject` (no `State` field,
-// no listener of its own), and the candidates come from the committed session
-// history.
+/**
+ * @module Test
+ *
+ * The wiring and the ledger: the loader contract, the listener registration,
+ * the byte-exact activation and disabled lines, the config fail-loud, the schema
+ * defaults, and the fs purity.
+ *
+ * @remarks
+ * The loader contract (the default object carries name/apply/Config/inject,
+ * apply returns nothing), the five-listener registration with the distinct root
+ * identity, the byte-exact activation and disabled lines (logger form and
+ * durable `[ISO]` form), the config fail-loud, the schema defaults and the
+ * knowledge load on the built State, and the fs purity (the suggester writes its
+ * knowledge through its own `node:fs` channel, never `ctx.fs`).
+ *
+ * THE HISTORY MODEL: the activation's second segment is `history` (there is no
+ * boot pack), `State.Pack` is empty at apply, the per-session history is a
+ * session-projection unit registered through `ctx.inject` (no `State` field, no
+ * listener of its own), and the candidates come from the committed session
+ * history.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {

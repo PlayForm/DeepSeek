@@ -1,9 +1,14 @@
-// Source/Test/Monitors-Engine/Test.ts - the M-series engine tests: the
-// enrollment (watchlist-gated, the never-monitored negative), the
-// classification (the most-specific glob wins, the catalog fallback), the
-// debounce coalescing, the admission coalesce, the retirement, the overflow
-// collapse and the per-glob opt-out. Every timing transition is a clock
-// advance + a checkpoint; every ledger assertion is byte-exact.
+/**
+ * @module Test
+ *
+ * The M-series engine tests: the enrollment, the classification, the debounce coalescing, the
+ * admission coalesce, the retirement, the overflow collapse and the per-glob opt-out.
+ *
+ * @remarks
+ * The enrollment is watchlist-gated, and the never-monitored case is the negative. The
+ * classification lets the most-specific glob win, with the catalog fallback. Every timing
+ * transition is a clock advance plus a checkpoint; every ledger assertion is byte-exact.
+ */
 import assert from "node:assert/strict";
 import {
 	AgentA,

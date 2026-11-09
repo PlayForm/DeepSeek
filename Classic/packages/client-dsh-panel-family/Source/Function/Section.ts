@@ -1,15 +1,21 @@
-// Section - the section component one adapter registers into its declared
-// child slot. It renders the plugin's STATUS (the activation state and the
-// live trace tail) and its CONFIG FORM (the fields derived from the plugin's
-// schema by Function/Form). The component receives its data through the slot
-// registration's inject face (`{ section, ports }`) plus the renderer's
-// standard locale `t`; it subscribes to the settings mirror and the trace tail
-// for live updates and unwinds every subscription on unmount. With no
-// settings client the form shows the documented "not composed" state; with no
-// trace the status is static - neither is an error. The form's in-between
-// states are the harness DetailDocument: a skeleton while the settings mirror
-// answers and nothing when the plugin exposes no configurable field. The
-// activation lamp is a harness StateDot (Function/Status).
+/**
+ * @module Section
+ *
+ * The section component one adapter registers into its declared child slot.
+ *
+ * @remarks
+ * It renders the plugin's status (the activation state and the live trace tail) and its config form
+ * (the fields derived from the plugin's schema by `Function/Form`).
+ *
+ * The component receives its data through the slot registration's inject face (`{ section,
+ * ports }`) plus the renderer's standard locale `t`; it subscribes to the settings mirror and the
+ * trace tail for live updates and unwinds every subscription on unmount.
+ *
+ * With no settings client the form shows the documented "not composed" state; with no trace the
+ * status is static - neither is an error. The form's in-between states are the harness
+ * `DetailDocument`: a skeleton while the settings mirror answers and nothing when the plugin exposes
+ * no configurable field. The activation lamp is a harness `StateDot` (`Function/Status`).
+ */
 import {
 	DetailDocument,
 	detailDocumentState,
@@ -49,11 +55,12 @@ const Read = (Section: PanelSection, Ports: PanelPorts): PanelFormView => {
 	});
 };
 
-/** The detail document's chrome from the panel's own locale strings: the
- *  section title names the region and the form's loading line names the
- *  skeleton. The retry and markdown copy stay empty because this form renders
- *  neither a document body nor the failure state - the package has no retry
- *  string and the dictionaries are not this file's to extend. */
+/**
+ * The detail document's chrome from the panel's own locale strings: the section title names the
+ * region and the form's loading line names the skeleton. The retry and markdown copy stay empty
+ * because this form renders neither a document body nor the failure state - the package has no
+ * retry string and the dictionaries are not this file's to extend.
+ */
 const Labels = (
 	T: ((key: string) => string) | undefined,
 	Section: PanelSection,
@@ -64,9 +71,10 @@ const Labels = (
 	markdown: { code: { copyLabel: "", copiedLabel: "" }, footnotes: "" },
 });
 
-/** The read a form body stands for: the settings mirror still loading, or a
- *  settled form with no configurable field (the primitive's "nothing to
- *  show"). */
+/**
+ * The read a form body stands for: the settings mirror still loading, or a settled form with no
+ * configurable field (the primitive's "nothing to show").
+ */
 const ReadOf = (View: PanelFormView): DetailDocumentRead => {
 	switch (true) {
 		case View.status === "loading":
@@ -76,8 +84,10 @@ const ReadOf = (View: PanelFormView): DetailDocumentRead => {
 	}
 };
 
-/** The form body: the not-composed note, the detail document's loading and
- *  empty states, else the rows. */
+/**
+ * The form body: the not-composed note, the detail document's loading and empty states, else the
+ * rows.
+ */
 function FormBody(props: {
 	view: PanelFormView;
 	section: PanelSection;

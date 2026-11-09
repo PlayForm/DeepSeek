@@ -1,10 +1,18 @@
-// Source/Test/Entry-And-Config/Test.ts - one singular test: the entry
-// contract (name/apply/Config/inject), the built Target's factory-consumption
-// posture (the ONLY factory import is the Config module's standalone Schema),
-// and the Config schema's volatile cells + defaults.
-// Runs standalone (`node Target/Test/Entry-And-Config/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-package-governor.
+/**
+ * @module Test
+ *
+ * One singular test of the entry contract, the built Target's factory
+ * consumption, and the Config schema.
+ *
+ * @remarks
+ * The entry contract (name/apply/Config/inject), the built Target's
+ * factory-consumption posture (the ONLY factory import is the Config module's
+ * standalone Schema), and the Config schema's volatile cells + defaults.
+ *
+ * Runs standalone (`node Target/Test/Entry-And-Config/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * `@playform/hook-dsh-package-governor`.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";

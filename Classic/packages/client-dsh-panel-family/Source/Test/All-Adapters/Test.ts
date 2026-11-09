@@ -1,11 +1,20 @@
-// Source/Test/All-Adapters/Test.ts - the full FIFTEEN-ADAPTER roster,
-// against the real built functions, the fifteen real manifests the package
-// ships, and the real built closure-factory bundle: the roster table, the
-// fifteen adapter effects, the section-slot registrations, the activation
-// and trace vocabulary, the schema-derived config forms (a representative
-// volatile and plain field per adapter), the two write routes on the new
-// adapters, and the bundle executed through a fake `window.__ModuleLoader__`
-// (it must export the same id/inject and register the same fifteen).
+/**
+ * @module Test
+ *
+ * The full fifteen-adapter roster, proven against the real built functions,
+ * manifests, and closure-factory bundle.
+ *
+ * @remarks
+ * The suite covers the roster table, the fifteen adapter effects, the
+ * section-slot registrations, the activation and trace vocabulary, the
+ * schema-derived config forms (a representative volatile and plain field per
+ * adapter), the two write routes on the new adapters, and the bundle executed
+ * through a fake `window.__ModuleLoader__` (it must export the same id/inject
+ * and register the same fifteen).
+ *
+ * Everything runs against the real built functions, the fifteen real manifests
+ * the package ships, and the real built closure-factory bundle.
+ */
 import assert from "node:assert/strict";
 import Schema from "@deepseek-ai/schemastery";
 import * as React from "react";

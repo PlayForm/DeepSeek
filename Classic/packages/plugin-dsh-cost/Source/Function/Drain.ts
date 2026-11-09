@@ -31,19 +31,26 @@
 // NULL VersionId instead of a guess. The hash is the SHA-256 of the exact
 // content, and a row already recorded for the same bytes is reused, so an
 // unchanged file never accumulates versions and a replay never duplicates
-// one. Every insert is INSERT OR IGNORE against the DDL's unique keys (the
-// Verdict is REPLACE), so draining the same events twice writes the same rows
-// and no duplicates. The drain never throws into the parallel dispatch: one
+// one. That version evidence is also the revert signal (B6b, the research's
+// section 5): a mutating touch whose written content resolves to a version
+// row recorded earlier than the touch - and not to the version the file held
+// just now - is staged as a revert, because the file went back to an earlier
+// content hash, and its file's verdict records "reverted" rather than
+// "changed"; a touch with no before version or no confirmable after content
+// keeps the signal false instead of guessing. Every insert is INSERT OR
+// IGNORE against the DDL's unique keys (the Verdict is REPLACE), so draining
+// the same events twice writes the same rows and no duplicates. The drain never throws into the parallel dispatch: one
 // failed batch rolls back whole, restores its session's in-memory replay
 // state, logs one line and reports false - the flush handler owns the
 // acknowledgement and decides the retry, so a batch that never committed stays
 // queued. The fold also runs in a replay-only mode (E2, A2 section 1.4): it
 // walks the events exactly as the booking fold does - the surface buffer, the
 // pending touch sets, the awaiting calls, the per-file histories, the
-// per-file versions, the read targets and the folded set all advance - but it
-// writes no row, advances no cursor and never touches the capture queue, so a
-// partially processed session can rebuild the state a continuous run would
-// hold before it books the events past its cursor.
+// per-file versions, the per-file restoration flags, the read targets and
+// the folded set all advance - but it writes no row, advances no cursor and
+// never touches the capture queue, so a partially processed session can
+// rebuild the state a continuous run would hold before it books the events
+// past its cursor.
 import { createHash } from "node:crypto";
 import { basename } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
@@ -122,15 +129,17 @@ type AwaitedCall = {
 // when the transaction rolls back: the surface buffer every later call's mass
 // is replayed over, the pending touch sets, the awaiting calls, the per-file
 // ordered touch kinds, the per-file version each fold has observed (so a
-// later touch binds to the version the file actually held), the read calls
-// still waiting for their result, and the calls this drain has already
-// folded.
+// later touch binds to the version the file actually held), the restoration
+// flag of each file's latest mutating touch (so the session's verdict is
+// written from the same evidence its stages were), the read calls still
+// waiting for their result, and the calls this drain has already folded.
 type ReplayState = {
 	Surfaces: unknown[];
 	Histories: Map<string, string[]>;
 	Pending: Map<string, PendingCall[]>;
 	Awaiting: Map<string, AwaitedCall>;
 	Versions: Map<string, number>;
+	Restorations: Map<string, boolean>;
 	Readings: Map<string, Reading>;
 	Folded: number[];
 };
@@ -227,15 +236,19 @@ const Fingerprint = (Body: string): { Hash: string; Bytes: number; Lines: number
 
 // One file's verdict at session end (section 14): a file whose last
 // write-kind touch is a revert is "reverted", a file with any write-kind
-// touch is "changed", a file with only read-kind touches is "read".
-const VerdictOf = (Kinds: readonly string[]): string => {
+// touch is "changed", a file with only read-kind touches is "read". The
+// restoration flag is the same evidence the touch's stage was classified
+// with (B6b), so a session that returns a file to an earlier content hash
+// records "reverted" rather than "changed" - and a file with no version
+// evidence keeps "changed", never a guess.
+const VerdictOf = (Kinds: readonly string[], Restored: boolean): string => {
 	const Last = Kinds.reduce((Found, Kind, Index) => (WriteKind(Kind) ? Index : Found), -1);
 	switch (true) {
 		case Last < 0:
 			return "read";
 		default: {
 			const Current = Kinds[Last] ?? "";
-			const Staged = StageOf(Kinds.slice(0, Last), Current, false);
+			const Staged = StageOf(Kinds.slice(0, Last), Current, Restored);
 			return Staged === "revert" ? "reverted" : "changed";
 		}
 	}
@@ -344,6 +357,9 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 	const SelectVersion = Database.prepare(
 		"SELECT VersionId FROM FileVersion WHERE FileId = ? AND Hash = ?",
 	);
+	const SelectVersionObserved = Database.prepare(
+		"SELECT ObservedAt FROM FileVersion WHERE VersionId = ?",
+	);
 	const SelectLatestVersion = Database.prepare(
 		"SELECT VersionId FROM FileVersion WHERE FileId = ? AND ObservedAt <= ? " +
 			"ORDER BY ObservedAt DESC, VersionId DESC LIMIT 1",
@@ -388,13 +404,16 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 	// length), the pending touch sets, the awaiting calls, the per-file
 	// ordered touch kinds every later touch's stage and the session's
 	// verdicts read (section 16.1), the version each fold has observed for a
-	// file (so a touch binds to what the file actually held), and the read
-	// calls still waiting for the result that carries their text.
+	// file (so a touch binds to what the file actually held), the
+	// restoration flag each file's latest mutating touch set (so the verdict
+	// reads the same evidence the stage did), and the read calls still
+	// waiting for the result that carries their text.
 	const Surfaces = new Map<string, unknown[]>();
 	const Pending = new Map<string, Map<string, PendingCall[]>>();
 	const Awaiting = new Map<string, Map<string, AwaitedCall>>();
 	const Histories = new Map<string, Map<string, string[]>>();
 	const Versions = new Map<string, Map<string, number>>();
+	const Restorations = new Map<string, Map<string, boolean>>();
 	const Readings = new Map<string, Map<string, Reading>>();
 	const Folded = new Set<number>();
 
@@ -420,6 +439,7 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 		),
 		Awaiting: new Map(Awaiting.get(SessionId) ?? new Map<string, AwaitedCall>()),
 		Versions: new Map(Versions.get(SessionId) ?? new Map<string, number>()),
+		Restorations: new Map(Restorations.get(SessionId) ?? new Map<string, boolean>()),
 		Readings: new Map(Readings.get(SessionId) ?? new Map<string, Reading>()),
 		Folded: [...Folded],
 	});
@@ -429,6 +449,7 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 		Pending.set(SessionId, Held.Pending);
 		Awaiting.set(SessionId, Held.Awaiting);
 		Versions.set(SessionId, Held.Versions);
+		Restorations.set(SessionId, Held.Restorations);
 		Readings.set(SessionId, Held.Readings);
 		Folded.clear();
 		for (const CallId of Held.Folded) {
@@ -635,6 +656,18 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 				Versions.set(SessionId, Held);
 			};
 
+			// The restoration signal of the file's latest mutating touch
+			// (B6b): the verdict at the session boundary reads it, so a file
+			// whose last write-kind touch went back to an earlier recorded
+			// version records "reverted". A mutating touch with no version
+			// evidence clears the flag, because the verdict speaks for the
+			// last such touch and never inherits an older signal.
+			const RememberRestoration = (Path: string, Restored: boolean): void => {
+				const Held = Restorations.get(SessionId) ?? new Map<string, boolean>();
+				Held.set(Path, Restored);
+				Restorations.set(SessionId, Held);
+			};
+
 			// The file's latest known version before one touch: the version
 			// this session's fold recorded last - the read version, or the
 			// previous write's after version - else the newest row the ledger
@@ -712,28 +745,55 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 					if (FileId === null) {
 						continue;
 					}
-					// the stage and the read-before-edit flag (section 16.1):
-					// derived from the file's own prior touch kinds in this
-					// session. The restore signal is not carried by the current
-					// log shape, so the classifier's revert rule is fed false
-					// until a hash-aware touch arrives - the Verdict's reverted
-					// state recomputes when one does.
-					const Prior = History.get(Row.Path) ?? [];
-					const Staged = StageOf(Prior, Row.Kind, false);
-					const Read =
-						WriteKind(Row.Kind) && Prior.some((Kind) => Kind === "read") ? 1 : 0;
 					// the version binding (E7): the after version the written
 					// content makes, recorded the same way a read's is, and the
 					// version the file held BEFORE this touch - the read
 					// version, or the previous write's after version. The
 					// replay pass resolves both without writing a row.
 					let Version: number | null = null;
+					let Restored = false;
 					if (Written !== undefined) {
 						Version = PriorVersion(Row.Path, FileId, Entry.At);
 						const After = VersionOf(FileId, Written, Entry.At);
 						if (After !== undefined) {
 							Remember(Row.Path, After);
+							// the restoration signal (B6b, the research's
+							// section 5): the written content is a revert when
+							// its version row was recorded BEFORE this touch
+							// and is not the row of the content the file held
+							// just now - the file went back to an earlier
+							// content hash. A row this touch created carries
+							// the touch's own time, so it is never evidence;
+							// the row id below the before version proves the
+							// recording order even when both share a clock
+							// tick. No before version, no after row or no
+							// earlier record leaves the signal false.
+							const Observed = SelectVersionObserved.get(After) as
+								{ ObservedAt: unknown } | undefined;
+							const Recorded =
+								typeof Observed?.ObservedAt === "number"
+									? Observed.ObservedAt
+									: Entry.At;
+							Restored =
+								Version !== null &&
+								After !== Version &&
+								(After < Version || Recorded < Entry.At);
 						}
+					}
+					// the stage and the read-before-edit flag (section 16.1):
+					// derived from the file's own prior touch kinds in this
+					// session and the restoration signal above, so a write
+					// that returns the file to an earlier content hash is
+					// staged as a revert rather than an edit.
+					const Prior = History.get(Row.Path) ?? [];
+					const Staged = StageOf(Prior, Row.Kind, Restored);
+					const Read =
+						WriteKind(Row.Kind) && Prior.some((Kind) => Kind === "read") ? 1 : 0;
+					// the verdict's copy of the signal: every mutating touch
+					// replaces it, so the session boundary reads the flag of
+					// the file's LAST write-kind touch and never an older one.
+					if (WriteKind(Row.Kind)) {
+						RememberRestoration(Row.Path, Restored);
 					}
 					switch (true) {
 						case ReplayOnly:
@@ -1288,13 +1348,14 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 						}
 						case Type === "session/disposed" || Type === "turn/end": {
 							// the session boundary (section 14): the Verdict row
-							// per (session, file) from the touch kinds seen so
-							// far - REPLACE keeps the latest end's state, so a
-							// mid-session turn's premature row is corrected by
-							// the final one and the verdict stays recomputable
-							// from Touch alone. The replay pass keeps the
-							// histories and writes no verdict: the booking fold
-							// replaces the row when the session really ends.
+							// per (session, file) from the touch kinds and the
+							// restoration signal seen so far - REPLACE keeps
+							// the latest end's state, so a mid-session turn's
+							// premature row is corrected by the final one and
+							// the verdict stays recomputable from Touch alone.
+							// The replay pass keeps the histories and writes no
+							// verdict: the booking fold replaces the row when
+							// the session really ends.
 							switch (true) {
 								case ReplayOnly:
 									break;
@@ -1306,10 +1367,12 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 											if (FileId === null) {
 												continue;
 											}
+											const Restored =
+												Restorations.get(SessionId)?.get(Path) === true;
 											InsertVerdict.run(
 												SessionId,
 												FileId,
-												VerdictOf(Kinds),
+												VerdictOf(Kinds, Restored),
 												0,
 												0,
 												Math.round(At),

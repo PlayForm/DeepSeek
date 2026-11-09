@@ -1,12 +1,19 @@
-// Source/Test/Dismiss/Test.ts - the P4 DISMISS TOOL: the registration
-// through the loader's tool API, the recorded dismissal and its byte-exact
-// ledger line, the family suppression, the path-level candidate drop, the
-// durable reload, the TTL expiry, and the two refusals (unknown family,
-// disabled plugin).
-//
-// THE FAMILY VOCABULARY: the built-in pack is retired, so the note's family is
-// the synthetic `History` row; the refusal cases prove that a former built-in
-// family id is no longer known.
+/**
+ * @module Test
+ *
+ * The P4 dismiss tool: its registration, the recorded dismissal, the
+ * suppressions, the durable reload, the TTL expiry, and the two refusals.
+ *
+ * @remarks
+ * The registration through the loader's tool API, the recorded dismissal and its
+ * byte-exact ledger line, the family suppression, the path-level candidate drop,
+ * the durable reload, the TTL expiry, and the two refusals (unknown family,
+ * disabled plugin).
+ *
+ * THE FAMILY VOCABULARY: the built-in pack is retired, so the note's family is
+ * the synthetic `History` row; the refusal cases prove that a former built-in
+ * family id is no longer known.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import {

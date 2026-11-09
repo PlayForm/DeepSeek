@@ -1,27 +1,30 @@
-// Source/Test/Harness.ts - the shared test harness for the LIVE CONTAINERS
-// tests: the fake ctx (on capture, get serving the REAL
-// @playform/plugin-dsh-factory instance from its built Target, logger
-// capture + the root seam) + the REAL live-containers apply from its built
-// Target - the family fake-ctx + real-factory harness pattern, written ONCE
-// per package and imported by every test folder. The suite-level fixtures
-// (the tmp ledger, the FAKE CLOCK, the assemble/pre-step/post-execute
-// waterfall helpers, the volatile-cell flip seam, the block-spec builders)
-// live here too: each folder process gets a fresh set (the module state is
-// per-process), so every folder is standalone-green and the aggregate
-// replays the same seams per folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// THE FAKE CLOCK: the plugin reads time ONLY through Function/Clock, which
-// consults State.Now (the clock seam on the built State) before falling
-// back to Date.now(). The harness exposes a mutable ClockBox; every folder
-// sets `Run.State.Now = FakeClock` through the
-// `ctx.__hookDshLiveContainersState` probe attachment and advances the
-// clock - never a sleep, never a real clock dependence.
+/**
+ * @module Harness
+ *
+ * The shared fake-ctx plus real-factory harness for the live-containers tests, with the
+ * suite-level fixtures and the fake clock.
+ *
+ * @remarks
+ * The fake ctx carries the `on` capture, a `get` that serves the REAL
+ * `@playform/plugin-dsh-factory` instance from its built Target, the logger capture and the root
+ * seam. Beside it sits the REAL live-containers apply from its built Target - the family fake-ctx
+ * plus real-factory harness pattern, written ONCE per package and imported by every test folder.
+ * The suite-level fixtures live here too: the tmp ledger, the FAKE CLOCK, the
+ * assemble/pre-step/post-execute waterfall helpers, the volatile-cell flip seam and the block-spec
+ * builders. Each folder process gets a fresh set (the module state is per-process), so every
+ * folder is standalone-green and the aggregate replays the same seams per folder.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the counter through one
+ * deliberate pass and one deliberate failure and exits 0 only when both are counted exactly, then
+ * proves the fake ctx actually wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * THE FAKE CLOCK: the plugin reads time ONLY through `Function/Clock`, which consults `State.Now`
+ * (the clock seam on the built State) before falling back to `Date.now()`. The harness exposes a
+ * mutable ClockBox; every folder sets `Run.State.Now = FakeClock` through the
+ * `ctx.__hookDshLiveContainersState` probe attachment and advances the clock - never a sleep,
+ * never a real clock dependence.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

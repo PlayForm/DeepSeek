@@ -1,14 +1,22 @@
-// Source/Test/Chain-Pass/Test.ts - one singular test: the chain pass through
-// Factory.Continue + the module transform - the guarded write (the fresh-stat
-// replaceIfVersion intent, the task-owned abort signal, the P4 fence on a bare
-// backend), the canonicalized content with the public dep and non-dependency
-// sections preserved, the byte-identical `governed <path> -> <version>` line,
-// the P5 record, the same-actor re-emit, the Stash pre-registration, the P2
-// Inflight lifecycle, the jobs envelope with the bin-mode engine run, the
-// settlement cleanup, and the silent re-entrant pass.
-// Runs standalone (`node Target/Test/Chain-Pass/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-package-governor.
+/**
+ * @module Test
+ *
+ * One singular test of the chain pass through `Factory.Continue` and the module
+ * transform.
+ *
+ * @remarks
+ * The guarded write (the fresh-stat replaceIfVersion intent, the task-owned
+ * abort signal, the P4 fence on a bare backend), the canonicalized content with
+ * the public dep and non-dependency sections preserved, the byte-identical
+ * `governed <path> -> <version>` line, the P5 record, the same-actor re-emit,
+ * the Stash pre-registration, the P2 Inflight lifecycle, the jobs envelope with
+ * the bin-mode engine run, the settlement cleanup, and the silent re-entrant
+ * pass.
+ *
+ * Runs standalone (`node Target/Test/Chain-Pass/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). Unit smoke of
+ * `@playform/hook-dsh-package-governor`.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";

@@ -1,13 +1,20 @@
-// Source/Test/Threshold-And-Cooldown/Test.ts - the plan's suite 2: the gate
-// arithmetic (the config floor and the synthetic family's own 0.75 gate, the
-// R13 loop bonus on the ring), the cooldown window, the dedupe, and the
-// per-turn cap. Every refusal is a byte-exact ledger line; the counters are
-// judged calls, never a clock.
-//
-// THE CANDIDATES COME FROM THE SESSION HISTORY (k = sigmoid(2.5 - 0.6) =
-// 0.87), so the gate arithmetic is asserted on the history path instead of a
-// pack row's per-intent threshold. Every scenario mounts a temp workspace and
-// judges the workspace's absolute anchor.
+/**
+ * @module Test
+ *
+ * The plan's suite 2: the gate arithmetic, the cooldown window, the dedupe, and
+ * the per-turn cap.
+ *
+ * @remarks
+ * The gate arithmetic (the config floor and the synthetic family's own 0.75
+ * gate, the R13 loop bonus on the ring), the cooldown window, the dedupe, and
+ * the per-turn cap. Every refusal is a byte-exact ledger line; the counters are
+ * judged calls, never a clock.
+ *
+ * THE CANDIDATES COME FROM THE SESSION HISTORY (k = sigmoid(2.5 - 0.6) = 0.87),
+ * so the gate arithmetic is asserted on the history path instead of a pack row's
+ * per-intent threshold. Every scenario mounts a temp workspace and judges the
+ * workspace's absolute anchor.
+ */
 import assert from "node:assert/strict";
 import {
 	AgentOf,

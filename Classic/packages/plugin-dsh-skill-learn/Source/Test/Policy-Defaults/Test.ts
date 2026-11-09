@@ -1,17 +1,22 @@
-// Source/Test/Policy-Defaults/Test.ts - THE SHIPPED POSTURE: the schema's
-// defaults, the knob reader's defaults, and the identity places.
-//
-// The schema is the truth (`Source/Variable/Configuration.ts:5-7`), and the
-// knob reader exists because a bare construction never passes through
-// Schemastery. Two readers of one table is a duplicate by construction, so this
-// folder compares BOTH to one written-out table of plan section 9 - a drift in
-// either one fails here rather than at the first live review.
-//
-// `enabled: false` is the idle-forever posture, and `write: auto` is the one
-// verdict that differs from the lesson-review sibling: this plugin publishes
-// its own judged operations behind the fence rather than queueing them for
-// acceptance. `commit` and `spawn` stay `approve` because the plugin never
-// commits and never spawns an agent.
+/**
+ * @module Test
+ *
+ * The shipped posture: the schema's defaults, the knob reader's defaults, and
+ * the identity places.
+ *
+ * @remarks
+ * The schema is the truth (`Source/Variable/Configuration.ts:5-7`), and the knob
+ * reader exists because a bare construction never passes through Schemastery.
+ * Two readers of one table is a duplicate by construction, so this folder
+ * compares BOTH to one written-out table of plan section 9 - a drift in either
+ * one fails here rather than at the first live review.
+ *
+ * `enabled: false` is the idle-forever posture, and `write: auto` is the one
+ * verdict that differs from the lesson-review sibling: this plugin publishes its
+ * own judged operations behind the fence rather than queueing them for
+ * acceptance. `commit` and `spawn` stay `approve` because the plugin never
+ * commits and never spawns an agent.
+ */
 import assert from "node:assert/strict";
 import FileSystem from "node:fs";
 

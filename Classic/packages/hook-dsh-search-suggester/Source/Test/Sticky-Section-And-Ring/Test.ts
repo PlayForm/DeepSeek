@@ -1,16 +1,22 @@
-// Source/Test/Sticky-Section-And-Ring/Test.ts - the second surface and the
-// ring lifecycle against the fake ctx: the sticky section off by default (the
-// assemble waterfall passes through untouched), the sticky section built
-// after an emit (the byte-exact section name and text, the `section rebuilt
-// (ttl N)` ledger line in both forms), the TTL rebuild, the tools/change
-// invalidation for the default ring, and the assemble fail-open pass-through.
-//
-// THE SECTION'S SOURCE: the last family the ring noted. For the synthetic
-// History row the section renders the paths the note named, so the scenarios
-// seed the session history through the projection drive. The DEFAULT
-// (agent-less) ring cannot be reached through the projection - an agent-less
-// call carries no session, so its history is empty - so the tools/change
-// scenario arms that ring through the plugin's own `Ring.Mark` API.
+/**
+ * @module Test
+ *
+ * The second surface and the ring lifecycle against the fake ctx.
+ *
+ * @remarks
+ * The sticky section off by default (the assemble waterfall passes through
+ * untouched), the sticky section built after an emit (the byte-exact section
+ * name and text, the `section rebuilt (ttl N)` ledger line in both forms), the
+ * TTL rebuild, the tools/change invalidation for the default ring, and the
+ * assemble fail-open pass-through.
+ *
+ * THE SECTION'S SOURCE: the last family the ring noted. For the synthetic
+ * History row the section renders the paths the note named, so the scenarios
+ * seed the session history through the projection drive. The DEFAULT
+ * (agent-less) ring cannot be reached through the projection - an agent-less call
+ * carries no session, so its history is empty - so the tools/change scenario
+ * arms that ring through the plugin's own `Ring.Mark` API.
+ */
 import assert from "node:assert/strict";
 import {
 	AgentOf,

@@ -1,37 +1,41 @@
-// Source/Test/Harness.ts - the shared harness for the SKILL-LEARN smokes: the
-// fake context (fs, skills, llm, logger, workingDirectory) and the counter that
-// every folder imports.
-//
-// WHY THERE IS NO SERVICE HERE: `Source/Library.ts` is written by a parallel
-// lane, and every folder in this suite asserts a LEAF, so the harness stops at
-// the seams that service will be handed. The sibling package's harness
-// constructs its service (`Classic/packages/plugin-dsh-lesson-review/Source/Test/
-// Harness.ts:32-38`); this one exports the same helper names (`Make`,
-// `FakeLlm`, `Seed`, `Exists`, `Read`, `Messages`, `Check`, `CheckAsync`,
-// `Finish`, `MakeCounter`, `Home`, `Settle`) so a reader of both packages sees
-// one pattern, and adds the fakes a leaf needs (`FakeFs`, `FakeSkills`,
-// `FakeAgent`, `FakeLogger`, `CorpusView`).
-//
-// THE HOME REDIRECT: every knob is a `~/.dsh/...` path, so the harness points
-// $HOME at a fresh OS temp directory BEFORE any leaf expands a path. The
-// plugin's own bookkeeping (the ledger, the blobs, the usage store, the
-// snapshots) then lands under that temp home through `node:fs`, exactly as it
-// does live, and the user's real home is never touched.
-//
-// THE FAKE FS IS A REAL FENCE, NOT A RECORDER. `createIfAbsent` refuses an
-// existing path, `replaceIfVersion` refuses an absent or moved one, and
-// `editText` checks the version BEFORE it matches and refuses a non-unique
-// anchor - the harness's own contract (`dsh-fs/lib/types/types.d.ts:105-116`,
-// `:162`). Every call is recorded with the intent and the version it carried,
-// so a folder can assert the fence AS DATA - which intent was passed, which
-// version was passed, whether a write was attempted at all - without
-// re-implementing the rule it checks.
-//
-// THE CORPUS IS THE FAKE FS, THE BOOKKEEPING IS THE REAL DISK. `Seed` puts a
-// `SKILL.md` in the fake tree, because every corpus read in this package goes
-// through `ctx.fs`; the usage store, the ledger, the blobs and the snapshots
-// are the plugin's own files and are written with `node:fs`, so their folders
-// assert against the temp home the way the live plugin would.
+/**
+ * @module Harness
+ *
+ * The shared harness for the skill-learn smokes: the fake context (fs, skills,
+ * llm, logger, workingDirectory) and the counter every folder imports.
+ *
+ * @remarks
+ * WHY THERE IS NO SERVICE HERE: `Source/Library.ts` is written by a parallel
+ * lane, and every folder in this suite asserts a LEAF, so the harness stops at
+ * the seams that service will be handed. The sibling package's harness
+ * constructs its service
+ * (`Classic/packages/plugin-dsh-lesson-review/Source/Test/Harness.ts:32-38`);
+ * this one exports the same helper names (`Make`, `FakeLlm`, `Seed`, `Exists`,
+ * `Read`, `Messages`, `Check`, `CheckAsync`, `Finish`, `MakeCounter`, `Home`,
+ * `Settle`) so a reader of both packages sees one pattern, and adds the fakes a
+ * leaf needs (`FakeFs`, `FakeSkills`, `FakeAgent`, `FakeLogger`, `CorpusView`).
+ *
+ * THE HOME REDIRECT: every knob is a `~/.dsh/...` path, so the harness points
+ * $HOME at a fresh OS temp directory BEFORE any leaf expands a path. The
+ * plugin's own bookkeeping (the ledger, the blobs, the usage store, the
+ * snapshots) then lands under that temp home through `node:fs`, exactly as it
+ * does live, and the user's real home is never touched.
+ *
+ * THE FAKE FS IS A REAL FENCE, NOT A RECORDER. `createIfAbsent` refuses an
+ * existing path, `replaceIfVersion` refuses an absent or moved one, and
+ * `editText` checks the version BEFORE it matches and refuses a non-unique
+ * anchor - the harness's own contract (`dsh-fs/lib/types/types.d.ts:105-116`,
+ * `:162`). Every call is recorded with the intent and the version it carried, so
+ * a folder can assert the fence AS DATA - which intent was passed, which version
+ * was passed, whether a write was attempted at all - without re-implementing the
+ * rule it checks.
+ *
+ * THE CORPUS IS THE FAKE FS, THE BOOKKEEPING IS THE REAL DISK. `Seed` puts a
+ * `SKILL.md` in the fake tree, because every corpus read in this package goes
+ * through `ctx.fs`; the usage store, the ledger, the blobs and the snapshots are
+ * the plugin's own files and are written with `node:fs`, so their folders assert
+ * against the temp home the way the live plugin would.
+ */
 import FileSystem from "node:fs";
 import * as OS from "node:os";
 import * as Path from "node:path";

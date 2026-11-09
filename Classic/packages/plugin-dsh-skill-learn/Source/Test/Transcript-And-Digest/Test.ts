@@ -1,15 +1,19 @@
-// Source/Test/Transcript-And-Digest/Test.ts - THE TRANSCRIPT PROJECTION and the
-// bounded digest the review model receives.
-//
-// `deriveMessages()` is the only history accessor the harness has, and the
-// digest is the only place the review spends its input budget. The two rules
-// that make the digest safe are the two that are easiest to break: the tail is
-// verbatim and never starts on a tool result, and the summary keeps both sides
-// of the conversation rather than an assistant-only highlight reel.
-//
-// The projection is asserted against the harness's real block union: a
-// `reasoning` block is a block the plugin never sends, so it must be dropped at
-// the boundary rather than silently reaching the digest.
+/**
+ * @module Test
+ *
+ * The transcript projection and the bounded digest the review model receives.
+ *
+ * @remarks
+ * `deriveMessages()` is the only history accessor the harness has, and the
+ * digest is the only place the review spends its input budget. The two rules
+ * that make the digest safe are the two that are easiest to break: the tail is
+ * verbatim and never starts on a tool result, and the summary keeps both sides
+ * of the conversation rather than an assistant-only highlight reel.
+ *
+ * The projection is asserted against the harness's real block union: a
+ * `reasoning` block is a block the plugin never sends, so it must be dropped at
+ * the boundary rather than silently reaching the digest.
+ */
 import assert from "node:assert/strict";
 
 import Digest from "../../../Target/Function/Digest.js";

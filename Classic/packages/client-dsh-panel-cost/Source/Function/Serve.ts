@@ -180,16 +180,15 @@ export default function Serve(ctx: Context): void {
 				Basis: string | null,
 				Revision: number | null,
 			): ValuationSelection | undefined => {
-				switch (true) {
-					case Basis === null:
-						return undefined;
-					case !IsBasis(Basis):
-						return undefined;
-					case Revision === null:
-						return { basis: Basis };
-					default:
-						return { basis: Basis, revisionId: Revision };
+				// Early returns, because the narrowing has to survive into the
+				// constructed selection; a switch (true) arm cannot carry it.
+				if (Basis === null || !IsBasis(Basis)) {
+					return undefined;
 				}
+				if (Revision === null) {
+					return { basis: Basis };
+				}
+				return { basis: Basis, revisionId: Revision };
 			};
 			const Zero = (): CostSummary => ({
 				calls: 0,

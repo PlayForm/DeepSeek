@@ -1,3 +1,53 @@
+/**
+ * @module Library
+ *
+ * The entry module of the WORKSPACE GRAPH (`@playform/plugin-dsh-workspace-graph`).
+ *
+ * @remarks
+ * Loader contract, CLASS form (the brief's section 3): `export default class WorkspaceGraph
+ * extends Service` with `super(Context, "workspaceGraph")` (the service registers immediately
+ * on construction and is removed with its owning fiber) and `static inject = ["fs",
+ * "storage"]` (the fs seam for every read, the storage hub for the KV domain). `static Config`
+ * carries the Schemastery schema so the loader validates and defaults the config before the
+ * class runs; the ONLY other named exports are the TYPE re-exports (the consumer contract, the
+ * factory's P0-1 pattern) - every other module is a nameless default export composed
+ * Rust-style, and each service method is a thin delegate to one Function module.
+ *
+ * THE SERVICE SURFACE (`ctx.workspaceGraph`, the brief's section 4.3 plus the INDEXING TRIGGER
+ * the later stages needed):
+ *
+ * - `indexFile(path)` - resolve, stat, gate, read, parse, store, bump, ledger
+ * - `indexWorkspace(root?, { maxFiles? })` - the walk plus per-file `indexFile`, the counts
+ *   out (the indexing trigger: it fills the graph in one call)
+ * - `removeFile(path)` - delete the record, bump, ledger
+ * - `getNode(id)` - the node by stable id
+ * - `find(query)` - name/pattern/kind filtered, limit clamped
+ * - `expand(id, opts)` - outgoing BFS, depth default 1 capped at 3
+ * - `neighborhood(path, limit?)` - the connected component the graph-suggester consumes
+ * - `snapshot()` - the loadAll read (invalid records skipped and counted)
+ * - `statistics()` - files, nodes, edges, `indexRevision`
+ *
+ * THE CONSTRUCTOR: unwrap the volatile config cells, run the fail-loud validation
+ * (`Function/Validate` - a bad config throws at construction, which is the class-form "at
+ * load"), attach the `__workspaceGraphState` probe (the family's smoke seam), ledger the
+ * byte-exact `graph: activated (domain=<domain>, languages=<n>)` line, fire the best-effort
+ * storage-domain open (`Function/Open`) detached - its promise is kept on the state and
+ * awaited by the async writers, so the store behavior is deterministic without a sleep - and,
+ * when enabled, wire the TRACE ADAPTER (`Trace/Adapter`): the graph consumes `observe/stamp`
+ * from the family's bus (`ctx.trace`, provided by the factory) instead of registering
+ * `ctx.root.on("fs/observed")` directly, and emits `graph/indexed` / `graph/invalidated`. The
+ * indexer is inferred from the bus - there is no separate process and no separate indexer
+ * plugin (D5).
+ *
+ * DECLARATION MERGING: the module augments the cordis Context with
+ * `workspaceGraph: WorkspaceGraph`, so `ctx.workspaceGraph` is a typed accessor (the brief's
+ * section 4.3; the compile proof lives in the smoke).
+ *
+ * THE IDLE-FOREVER POSTURE: the plugin ships disabled (the schema default and the patch row);
+ * with config `enabled=false` the service still registers, `indexFile` skips with the
+ * byte-exact `skipped <path> (disabled)` line, and NO listener is wired (a disabled graph
+ * hears nothing).
+ */
 import { Service, type Context } from "@deepseek-ai/cordis";
 import type { EdgeKind } from "./Interface/Edge.js";
 import type Expansion from "./Interface/Expansion.js";

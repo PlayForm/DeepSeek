@@ -5,7 +5,10 @@
 // session, in this exact order: a search locates, a restored edit reverts, a
 // read after an edit verifies, a read after a read rereads, a first read
 // reads, every mutating touch edits - and anything the classifier cannot
-// place is a discovery, never a guess.
+// place is a discovery, never a guess. The restoration flag is evidence, not
+// a heuristic (B6b): the drain passes true only when the file's after
+// content hash resolves to an earlier FileVersion row for the same file, and
+// false when no such row exists.
 export default (Prior: readonly string[], Kind: string, Restored: boolean): string => {
 	switch (true) {
 		case Kind === "search":

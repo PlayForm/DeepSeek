@@ -1,21 +1,27 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE GRAPH
-// tests: the fake ctx (fs resolve/stat/readText over a files map with a
-// captured writeText, the reflect.provide capture, the logger capture, the
-// root seam) + the REAL workspace graph class from its built Target - the
-// family fake-ctx + real-built-library harness pattern, written ONCE per
-// package and imported by every test folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// constructs the service (the vacuously-green backstop for every folder's
-// fixture); prepublishOnly.sh gates the build on it.
-//
-// THE FAKE STORAGE: MakeGraph optionally attaches a FakeStorage facility as
-// both `ctx.storage.domain` and `ctx.storageDomain` - the two probes the
-// real Open tries - so the KV round-trip runs through the fake domain exactly
-// as the service code does. The A7 purity guard (zero writeText calls) reads
-// the summed captures of every fake ctx created in the folder.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the workspace graph tests, written once per
+ * package and imported by every test folder.
+ *
+ * @remarks
+ * The harness carries the fake ctx (fs resolve/stat/readText over a files map
+ * with a captured writeText, the reflect.provide capture, the logger capture, the
+ * root seam) and the REAL workspace graph class from its built Target - the
+ * family fake-ctx + real-built-library harness pattern.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0 only
+ * when both are counted exactly, then proves the fake ctx actually constructs the
+ * service (the vacuously-green backstop for every folder's fixture);
+ * `prepublishOnly.sh` gates the build on it.
+ *
+ * THE FAKE STORAGE: MakeGraph optionally attaches a FakeStorage facility as both
+ * `ctx.storage.domain` and `ctx.storageDomain` - the two probes the real Open
+ * tries - so the KV round-trip runs through the fake domain exactly as the
+ * service code does. The A7 purity guard (zero writeText calls) reads the summed
+ * captures of every fake ctx created in the folder.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

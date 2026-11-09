@@ -1,15 +1,21 @@
-// Source/Test/Index-Workspace/Test.ts - the INDEXING TRIGGER over a REAL
-// temp fixture tree: `indexWorkspace` walks the tree deterministically, never
-// follows a symlink out of the root, prunes an excluded directory, bounds the
-// walk with maxFiles, and indexes every candidate through the existing
-// per-file gates; the graph it fills answers snapshot/find/getNode/expand and
-// neighborhood; a second run is idempotent; the fs/observed listener
-// re-indexes an observed change with a per-path debounce; and the disabled
-// gate still skips every candidate with the byte-exact lines.
-//
-// The tree is written to disk (node:fs) and served through the harness's
-// disk-backed fake fs, so the walk, the realpath identity and the symlink
-// containment are exercised for real.
+/**
+ * @module Test
+ *
+ * The indexing trigger over a REAL temp fixture tree.
+ *
+ * @remarks
+ * `indexWorkspace` walks the tree deterministically, never follows a symlink out
+ * of the root, prunes an excluded directory, bounds the walk with maxFiles, and
+ * indexes every candidate through the existing per-file gates; the graph it fills
+ * answers snapshot/find/getNode/expand and neighborhood; a second run is
+ * idempotent; the fs/observed listener re-indexes an observed change with a
+ * per-path debounce; and the disabled gate still skips every candidate with the
+ * byte-exact lines.
+ *
+ * The tree is written to disk (`node:fs`) and served through the harness's
+ * disk-backed fake fs, so the walk, the realpath identity and the symlink
+ * containment are exercised for real.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";

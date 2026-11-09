@@ -1,10 +1,16 @@
 // SummaryStrip - the fixed footer bands under the scroll region: the
 // toolbar with the session summary, the control labels, the expand-all
-// button, and the top-files band whose five most expensive files are
-// buttons that open the Files view on that file's path.
+// button, the top-files band whose five most expensive files are buttons that
+// open the Files view on that file's path, and the valuation comparison line a
+// selected cost basis adds under those bands (lane B4e; the research's
+// sections 4 and 8): the basis the read was valued under, the recorded and
+// revised totals over the same calls, and their signed difference, titled with
+// the revision and the attribution policy version. Without a valuation block
+// the strip renders exactly the bands it always rendered.
 import CountShort from "@Function/CountShort";
 import Price from "@Function/Price";
 import Rate from "@Function/Rate";
+import type { Valuation as CostValuation } from "@Interface/Response";
 import type CostSummary from "@Interface/Summary";
 import type { Translate } from "@Interface/Translate";
 import { createElement, Fragment } from "react";
@@ -13,6 +19,7 @@ const TopFileLimit = 5;
 
 type SummaryStripProps = {
 	Summary: CostSummary;
+	Valuation: CostValuation | null;
 	Turns: number;
 	Steps: number;
 	AllOpen: boolean;
@@ -42,6 +49,7 @@ const Tone = (Path: string): number => {
 
 export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeof createElement> {
 	const Summary = Props.Summary;
+	const Valuation = Props.Valuation;
 	const t = Props.t;
 	const Tag =
 		typeof Summary.currency === "string" && Summary.currency !== "" ? Summary.currency : "USD";
@@ -166,5 +174,47 @@ export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeo
 						);
 					}),
 		),
+		// The comparison line: the same recorded usage valued under the
+		// selected basis, with the stored money beside the repriced money and
+		// the signed difference between them. The title names the catalog
+		// revision the read was valued against and the attribution policy
+		// version the ledger declared, so the figure is never an anonymous
+		// total. No block means no band, so the recorded read is unchanged.
+		Valuation === null
+			? null
+			: createElement(
+					"div",
+					{
+						className: "playform-cost-toolbar",
+						title: t("valuation.title", {
+							revision: Valuation.revisionId,
+							policy: Valuation.policyVersion,
+						}),
+					},
+					createElement(
+						"span",
+						{ className: "playform-cost-control-label" },
+						t(`valuation.basis.${Valuation.basis}`),
+					),
+					createElement(
+						"div",
+						{ className: "playform-cost-controls" },
+						createElement(
+							"span",
+							{ className: "playform-cost-control-label" },
+							t("valuation.recorded", { value: Price(Valuation.recorded, Tag) }),
+						),
+						createElement(
+							"span",
+							{ className: "playform-cost-control-label" },
+							t("valuation.revised", { value: Price(Valuation.revised, Tag) }),
+						),
+						createElement(
+							"span",
+							{ className: "playform-cost-control-label" },
+							t("valuation.difference", { value: Price(Valuation.difference, Tag) }),
+						),
+					),
+				),
 	);
 }

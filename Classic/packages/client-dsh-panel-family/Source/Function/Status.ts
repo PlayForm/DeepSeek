@@ -1,13 +1,19 @@
-// Status - resolve one adapter's status from its declared static posture and
-// the panel's live trace tail. The tail lines are byte-exact
-// `<kind> <key>` strings, where the key is the envelope's payload path when it
-// carries one (the coalescing key of the D5 contract) and its trace id
-// otherwise. The activation state is the adapter's declared posture unless
-// the NEWEST matching envelope carries `payload.activation` of "enabled" or
-// "disabled" - the one live override the panel honours. Without a trace the
-// status is static and the tail is empty (the documented fallback). The
-// activation LAMP is a harness StateDot: the dot carries the state, the status
-// line beside it carries the words (the dot is aria-hidden).
+/**
+ * @module Status
+ *
+ * Resolve one adapter's status from its declared static posture and the panel's live trace tail.
+ *
+ * @remarks
+ * The tail lines are byte-exact `<kind> <key>` strings, where the key is the envelope's payload
+ * path when it carries one (the coalescing key of the D5 contract) and its trace id otherwise.
+ *
+ * The activation state is the adapter's declared posture unless the newest matching envelope
+ * carries `payload.activation` of "enabled" or "disabled" - the one live override the panel honours.
+ * Without a trace the status is static and the tail is empty (the documented fallback).
+ *
+ * The activation lamp is a harness `StateDot`: the dot carries the state, the status line beside it
+ * carries the words (the dot is aria-hidden).
+ */
 import { StateDot, type StateDotState } from "@deepseek-ai/dsh-client-ui-primitives";
 import type {
 	PanelActivation,
@@ -45,10 +51,12 @@ const Activation = (Envelope: PanelEnvelope): PanelActivation | undefined => {
 	}
 };
 
-/** The dot state one activation posture paints: an enabled adapter is done,
- *  an unknown posture is the user-attention warning, and a disabled one is the
- *  neutral idle grey. The primitive's `error` and `ongoing` states have no
- *  posture here: the panel never reports a failed or a running activation. */
+/**
+ * The dot state one activation posture paints: an enabled adapter is done, an unknown posture is
+ * the user-attention warning, and a disabled one is the neutral idle grey. The primitive's `error`
+ * and `ongoing` states have no posture here: the panel never reports a failed or a running
+ * activation.
+ */
 const StateOf = (Posture: PanelActivation): StateDotState => {
 	switch (true) {
 		case Posture === "enabled":

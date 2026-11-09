@@ -1,28 +1,32 @@
-// Source/Test/Curate-And-Archive/Test.ts - THE CURATOR: the deterministic
-// transitions R1-R10, the cutoffs, the one-transition-per-pass rule, and the
-// archive/restore pair.
-//
-// The curator is the always-on, token-free half: a corpus that only ever grows
-// is a corpus nobody loads, and ageing it needs no model's opinion. The rules
-// are R1-R10 of plan section 7.1, of which R2 and R4 have no subject in this
-// harness and are stated as absent rather than faked.
-//
-// THE ORDER IS THE CONTRACT. R1 to R6 are `continue` guards and R7 to R9 are one
-// chain, so at most one transition happens per skill per pass: a record deep
-// past the archive cutoff is archived directly, never marked stale on the way.
-// The pin must precede the seeding, and the archive must precede the stale.
-//
-// THE ANCHOR IS `lastActivityAt`, the maximum of the two activity stamps, and it
-// deliberately EXCLUDES `createdAt`: a skill created today but used forty days
-// ago is an old skill, which is why R5 is asserted with a fresh creation stamp.
-//
-// THE THRESHOLDS ARE FLOORED AT ONE DAY, because a cutoff at or past now would
-// transition the whole corpus on one bad config.
-//
-// Archive is a COPY plus a NEUTRALIZATION, because the harness seam has no move
-// and no delete: the live package keeps its bytes and gains
-// `disable-model-invocation: true`, the archive holds a copy, and `Restore`
-// puts the frontmatter back.
+/**
+ * @module Test
+ *
+ * The curator: the deterministic transitions R1-R10, the cutoffs, the
+ * one-transition-per-pass rule, and the archive/restore pair.
+ *
+ * @remarks
+ * The curator is the always-on, token-free half: a corpus that only ever grows
+ * is a corpus nobody loads, and ageing it needs no model's opinion. The rules
+ * are R1-R10 of plan section 7.1, of which R2 and R4 have no subject in this
+ * harness and are stated as absent rather than faked.
+ *
+ * THE ORDER IS THE CONTRACT. R1 to R6 are `continue` guards and R7 to R9 are one
+ * chain, so at most one transition happens per skill per pass: a record deep
+ * past the archive cutoff is archived directly, never marked stale on the way.
+ * The pin must precede the seeding, and the archive must precede the stale.
+ *
+ * THE ANCHOR IS `lastActivityAt`, the maximum of the two activity stamps, and it
+ * deliberately EXCLUDES `createdAt`: a skill created today but used forty days
+ * ago is an old skill, which is why R5 is asserted with a fresh creation stamp.
+ *
+ * THE THRESHOLDS ARE FLOORED AT ONE DAY, because a cutoff at or past now would
+ * transition the whole corpus on one bad config.
+ *
+ * Archive is a COPY plus a NEUTRALIZATION, because the harness seam has no move
+ * and no delete: the live package keeps its bytes and gains
+ * `disable-model-invocation: true`, the archive holds a copy, and `Restore` puts
+ * the frontmatter back.
+ */
 import assert from "node:assert/strict";
 import * as Path from "node:path";
 

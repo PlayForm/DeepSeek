@@ -22,7 +22,8 @@
 		"prepublishOnly": "sh Source/prepublishOnly.sh"
 	},
 	"devDependencies": {
-		"@playform/lib-dsh-bundle": "0.2.1"
+		"@playform/lib-dsh-bundle": "0.2.1",
+		"@types/node": "26.6.6"
 	},
 	"publishConfig": {
 		"access": "public",

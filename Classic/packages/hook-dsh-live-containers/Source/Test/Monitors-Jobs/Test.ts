@@ -1,9 +1,14 @@
-// Source/Test/Monitors-Jobs/Test.ts - the D-series runner tests: the
-// dispatch through the SHIPPED G2 wrapper with the exact re-dispatch spec,
-// the settle mapping (clean only from an observed exit 0 of the exact
-// version), the problem tail, the head-keep capture, the killed and
-// sandbox-denied mappings, the deadline kill, the fail-open paths and the
-// teardown. Every ledger assertion is byte-exact.
+/**
+ * @module Test
+ *
+ * The D-series runner tests: the dispatch through the SHIPPED G2 wrapper with the exact
+ * re-dispatch spec, the settle mapping, the problem tail, the head-keep capture, the killed and
+ * sandbox-denied mappings, the deadline kill, the fail-open paths and the teardown.
+ *
+ * @remarks
+ * The settle maps to clean only from an observed exit 0 of the exact version. Every ledger
+ * assertion is byte-exact.
+ */
 import assert from "node:assert/strict";
 import * as JobsModule from "../../../Target/Function/Jobs.js";
 import {

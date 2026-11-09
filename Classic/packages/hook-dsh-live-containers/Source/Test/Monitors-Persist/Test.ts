@@ -1,8 +1,15 @@
-// Source/Test/Monitors-Persist/Test.ts - the storage tests: the P5-style
-// open with the byte-exact domain spec, the record shapes, the pre-bind
-// buffer and its cap, the absent facility (silent skip, honest degradation
-// after a restart), the loud open failure, the recovery (provenance, the
-// time-stale treatment) and the empty read (no fabricated clean).
+/**
+ * @module Test
+ *
+ * The storage tests: the P5-style open with the byte-exact domain spec, the record shapes, the
+ * pre-bind buffer and its cap, the absent facility, the loud open failure, the recovery and the
+ * empty read.
+ *
+ * @remarks
+ * The absent facility is a silent skip with an honest degradation after a restart. The recovery
+ * covers the provenance and the time-stale treatment. The empty read never fabricates a clean
+ * result.
+ */
 import assert from "node:assert/strict";
 import {
 	Advance,

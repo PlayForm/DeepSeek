@@ -1,14 +1,21 @@
-// Source/Test/Persistence/Test.ts - the plan's suite 6: the knowledge file.
-// The atomic write (temp + rename, mode 0600, no temp left behind), the
-// documented JSON schema (schema 1, the learned rows, the journal, the
-// dismissals, the stats), the reload, and the corruption fallback - a corrupt
-// or foreign-schema file degrades to the cold start, never to a crash, and
-// the plugin still emits from the session history.
-//
-// THE SEED MARKER: the offline seed's source is an EXPLICIT pack, so this
-// workspace (the package itself, no `.dsh/pack.yml`) seeds nothing and the
-// file carries `seed: false` without a `seededAt` stamp - the documented
-// optional field appears only after a pack seed (Function/Seed).
+/**
+ * @module Test
+ *
+ * The plan's suite 6: the knowledge file, its atomic write, its schema, its
+ * reload, and its corruption fallback.
+ *
+ * @remarks
+ * The atomic write (temp + rename, mode 0600, no temp left behind), the
+ * documented JSON schema (schema 1, the learned rows, the journal, the
+ * dismissals, the stats), the reload, and the corruption fallback - a corrupt or
+ * foreign-schema file degrades to the cold start, never to a crash, and the
+ * plugin still emits from the session history.
+ *
+ * THE SEED MARKER: the offline seed's source is an EXPLICIT pack, so this
+ * workspace (the package itself, no `.dsh/pack.yml`) seeds nothing and the file
+ * carries `seed: false` without a `seededAt` stamp - the documented optional
+ * field appears only after a pack seed (`Function/Seed`).
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
