@@ -124,6 +124,9 @@ export default function Serve(ctx: Context): void {
 				currencies: [],
 				summary: Zero(),
 				calls: [],
+				files: null,
+				stages: null,
+				models: null,
 			});
 			Server.register({
 				path: Path,

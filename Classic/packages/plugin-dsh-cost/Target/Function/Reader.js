@@ -1,4 +1,4 @@
-const T={Session:`SELECT Session.Title AS Title,
+const u={Session:`SELECT Session.Title AS Title,
     Session.Cwd AS Cwd,
     Session.Origin AS Origin,
     Session.AgentPreset AS AgentPreset,
@@ -133,4 +133,133 @@ JOIN File ON File.FileId = Allocation.FileId
 WHERE Call.SessionId = ?
 GROUP BY File.Path
 ORDER BY SUM(Allocation.DirectCost + Allocation.AmortizedCost) DESC, File.Path ASC
-LIMIT 5;`},$=200,X=1,Z=2e3;function ee(S,C,L){const j=Number.isFinite(L)?Math.floor(L):$,h=Math.min(Math.max(j,X),Z),f={},l=(e,o)=>{const n=e[o];return typeof n=="string"?n:null},r=(e,o)=>{const n=e[o];return typeof n=="number"&&Number.isFinite(n)?n:null},t=(e,o)=>r(e,o)??0,P=(e,o)=>e[o]===1,v=(e,o,n)=>{const i=o+e+n;return i>0?Math.min(1,o/i):null},H=e=>{const o=t(e,"InputTokens"),n=t(e,"OutputTokens"),i=t(e,"CacheReadTokens"),d=t(e,"CacheWriteTokens");return{input:o,output:n,cacheRead:i,cacheWrite:d,reasoning:t(e,"ReasoningTokens"),total:o+i+d+n,reported:r(e,"TotalTokens")}},b=e=>{const o=t(e,"CostInput"),n=t(e,"CostOutput"),i=t(e,"CostCacheRead"),d=t(e,"CostTotal");return{input:o,output:n,cacheRead:i,cacheWrite:t(e,"CostCacheWrite"),reasoning:t(e,"CostReasoning"),total:d,other:Math.max(0,d-i-o-n)}},w=e=>{if(typeof e!="string")return[];const o=JSON.parse(e);return Array.isArray(o)?o.filter(n=>typeof n=="string"):[]},u=S.prepare(T.Session).get(C);if(u===void 0)return{ok:!1,code:"session",message:`client-dsh-panel-cost: the session ${C} is not recorded in the ledger`,path:"",rows:h,truncated:!1,session:null,currency:"USD",currencies:[],summary:{calls:0,priced:0,unpriced:0,turns:0,steps:0,tokens:{input:0,output:0,cacheRead:0,cacheWrite:0,reasoning:0,total:0,reported:null},cost:{input:0,output:0,cacheRead:0,cacheWrite:0,reasoning:0,total:0,other:0},direct:0,amortized:0,saving:0,cacheHit:null,files:0,currency:"USD",currencies:[],topFiles:[]},calls:[]};const R=S.prepare(T.Project).get(C)??f,V={id:C,project:l(R,"Name"),root:l(R,"Root"),client:l(R,"ClientName"),title:l(u,"Title"),cwd:l(u,"Cwd"),origin:l(u,"Origin"),agentPreset:l(u,"AgentPreset"),parentSessionId:l(u,"ParentSessionId"),delegationDepth:r(u,"DelegationDepth"),createdAt:t(u,"CreatedAt"),endedAt:r(u,"EndedAt")},Q=S.prepare(T.Calls).all(C,h),x=S.prepare(T.Touches).all(C),q=S.prepare(T.Allocations).all(C),J=S.prepare(T.TopFiles).all(C),s=S.prepare(T.Summary).get(C)??f,E=new Map;for(const e of q){const o=t(e,"CallId"),n=E.get(o);n===void 0?E.set(o,[e]):n.push(e)}const m=new Map;for(const e of x){const o=t(e,"CallId"),n=m.get(o);n===void 0?m.set(o,[e]):n.push(e)}const O=Q.map(e=>{const o=t(e,"CallId"),n=t(e,"At"),i=E.get(o)??[],d=m.get(o)??[],p=new Map;for(const a of d){const c=t(a,"FileId");p.has(c)||p.set(c,{path:l(a,"Path")??"",kind:l(a,"Kind"),stage:l(a,"Stage"),tool:l(a,"Tool"),branch:l(a,"Branch"),readBeforeEdit:P(a,"ReadBeforeEdit"),direct:0,amortized:0,total:0,linesDelta:r(a,"LinesDelta"),bytesDelta:r(a,"BytesDelta"),durationMs:r(a,"DurationMs"),touched:!0,at:t(a,"At")})}for(const a of i){const c=l(a,"Path");if(c===null)continue;const B=t(a,"FileId"),k=t(a,"DirectCost"),y=t(a,"AmortizedCost"),A=p.get(B);if(A===void 0){p.set(B,{path:c,kind:null,stage:null,tool:null,branch:null,readBeforeEdit:!1,direct:k,amortized:y,total:k+y,linesDelta:null,bytesDelta:null,durationMs:null,touched:!1,at:n});continue}A.direct+=k,A.amortized+=y,A.total=A.direct+A.amortized}const K=[...p.values()].sort((a,c)=>c.total-a.total||(a.path<c.path?-1:1)),G=i.reduce((a,c)=>a+t(c,"DirectCost"),0),_=i.reduce((a,c)=>a+t(c,"AmortizedCost"),0);return{turn:t(e,"Turn"),step:t(e,"Step"),seq:t(e,"Seq"),at:n,provider:l(e,"Provider")??"",model:l(e,"Model")??"",mode:l(e,"Mode")??"standard",region:l(e,"Region"),tier:r(e,"Tier"),priced:P(e,"Priced"),currency:l(e,"Currency")??"USD",tokens:H(e),cost:b(e),saving:t(e,"CacheSaving"),attempts:t(e,"Attempts"),error:l(e,"ErrorCode"),surfaceTokens:t(e,"SurfaceTokens"),purpose:l(e,"Purpose"),contextWindow:r(e,"ContextWindow"),utilization:r(e,"Utilization"),latencyMs:r(e,"LatencyMs"),firstTokenMs:r(e,"FirstTokenMs"),tokensPerSecond:r(e,"TokensPerSecond"),direct:G,amortized:_,allocations:i.length,files:K}});O.sort((e,o)=>e.turn-o.turn||e.step-o.step);const I=t(s,"InputTokens"),D=t(s,"OutputTokens"),g=t(s,"CacheReadTokens"),M=t(s,"CacheWriteTokens"),U=t(s,"CostInput"),N=t(s,"CostOutput"),W=t(s,"CostCacheRead"),z=t(s,"CostTotal"),Y=J.map(e=>{const o=t(e,"Direct"),n=t(e,"Amortized");return{path:l(e,"Path")??"",direct:o,amortized:n,total:o+n,calls:t(e,"Calls")}}),F={calls:t(s,"Calls"),priced:t(s,"Priced"),unpriced:t(s,"Unpriced"),turns:t(s,"Turns"),steps:t(s,"Steps"),tokens:{input:I,output:D,cacheRead:g,cacheWrite:M,reasoning:t(s,"ReasoningTokens"),total:I+g+M+D,reported:r(s,"ReportedTokens")},cost:{input:U,output:N,cacheRead:W,cacheWrite:t(s,"CostCacheWrite"),reasoning:t(s,"CostReasoning"),total:z,other:Math.max(0,z-W-U-N)},direct:t(s,"Direct"),amortized:t(s,"Amortized"),saving:t(s,"Saving"),cacheHit:v(I,g,M),files:t(s,"Files"),currency:l(s,"Currency")??"USD",currencies:w(s.Currencies),topFiles:Y};return{ok:!0,code:"ok",message:null,path:"",rows:h,truncated:O.length===h,session:V,currency:F.currency,currencies:F.currencies,summary:F,calls:O}}export{ee as default};
+LIMIT 5;`,Files:`WITH SessionCall AS (
+    SELECT Call.CallId AS CallId, Call.Turn AS Turn
+    FROM Call
+    WHERE Call.SessionId = ?
+),
+Money AS (
+    SELECT Allocation.FileId AS FileId,
+        SUM(Allocation.DirectCost) AS Direct,
+        SUM(Allocation.AmortizedCost) AS Amortized
+    FROM Allocation
+    JOIN SessionCall ON SessionCall.CallId = Allocation.CallId
+    WHERE Allocation.FileId IS NOT NULL
+    GROUP BY Allocation.FileId
+),
+TurnMoney AS (
+    SELECT Allocation.FileId AS FileId,
+        SUM(Allocation.DirectCost + Allocation.AmortizedCost) AS Turn
+    FROM Allocation
+    JOIN SessionCall ON SessionCall.CallId = Allocation.CallId
+    WHERE Allocation.FileId IS NOT NULL
+        AND SessionCall.Turn = (SELECT MAX(Turn) FROM SessionCall)
+    GROUP BY Allocation.FileId
+),
+Lifetime AS (
+    SELECT Allocation.FileId AS FileId,
+        SUM(Allocation.DirectCost + Allocation.AmortizedCost) AS Lifetime
+    FROM Allocation
+    JOIN Call ON Call.CallId = Allocation.CallId
+    WHERE Allocation.FileId IS NOT NULL
+    GROUP BY Allocation.FileId
+),
+Tally AS (
+    SELECT Touch.FileId AS FileId,
+        COUNT(*) AS Touches,
+        SUM(CASE WHEN Touch.Kind = 'read' THEN 1 ELSE 0 END) AS Reads,
+        SUM(CASE WHEN Touch.Kind = 'write' THEN 1 ELSE 0 END) AS Writes,
+        SUM(CASE WHEN Touch.Kind = 'edit' THEN 1 ELSE 0 END) AS Edits,
+        SUM(CASE WHEN Touch.Kind = 'search' THEN 1 ELSE 0 END) AS Searches,
+        MAX(Touch.ReadBeforeEdit) AS ReadBeforeEdit,
+        GROUP_CONCAT(DISTINCT COALESCE(Touch.Stage, 'unclassified')) AS Stages,
+        MIN(Touch.At) AS FirstAt,
+        MAX(Touch.At) AS LastAt
+    FROM Touch
+    JOIN SessionCall ON SessionCall.CallId = Touch.CallId
+    GROUP BY Touch.FileId
+),
+EditLine AS (
+    SELECT Touch.FileId AS FileId,
+        SUM(Edit.LinesAdded) AS Added,
+        SUM(Edit.LinesRemoved) AS Removed,
+        SUM(Edit.BytesAdded) AS BytesAdded,
+        SUM(Edit.BytesRemoved) AS BytesRemoved
+    FROM Edit
+    JOIN Touch ON Touch.TouchId = Edit.TouchId
+    JOIN SessionCall ON SessionCall.CallId = Touch.CallId
+    GROUP BY Touch.FileId
+),
+VerdictRow AS (
+    SELECT Verdict.FileId AS FileId, Verdict.State AS State
+    FROM Verdict
+    WHERE Verdict.SessionId = ?
+),
+Seed AS (
+    SELECT FileId FROM Tally
+    UNION
+    SELECT FileId FROM Money
+)
+SELECT File.Path AS Path,
+    COALESCE(Tally.Touches, 0) AS Touches,
+    COALESCE(Tally.Reads, 0) AS Reads,
+    COALESCE(Tally.Edits, 0) AS Edits,
+    COALESCE(Tally.Writes, 0) AS Writes,
+    COALESCE(Tally.Searches, 0) AS Searches,
+    COALESCE(EditLine.Added, 0) AS Added,
+    COALESCE(EditLine.Removed, 0) AS Removed,
+    COALESCE(EditLine.BytesAdded, 0) AS BytesAdded,
+    COALESCE(EditLine.BytesRemoved, 0) AS BytesRemoved,
+    COALESCE(Money.Direct, 0) AS Direct,
+    COALESCE(Money.Amortized, 0) AS Amortized,
+    COALESCE(Money.Direct, 0) + COALESCE(Money.Amortized, 0) AS Total,
+    Lifetime.Lifetime AS Lifetime,
+    TurnMoney.Turn AS Turn,
+    Tally.Stages AS Stages,
+    VerdictRow.State AS Verdict,
+    COALESCE(Tally.ReadBeforeEdit, 0) AS ReadBeforeEdit,
+    Tally.FirstAt AS FirstAt,
+    Tally.LastAt AS LastAt
+FROM Seed
+JOIN File ON File.FileId = Seed.FileId
+LEFT JOIN Tally ON Tally.FileId = Seed.FileId
+LEFT JOIN Money ON Money.FileId = Seed.FileId
+LEFT JOIN TurnMoney ON TurnMoney.FileId = Seed.FileId
+LEFT JOIN Lifetime ON Lifetime.FileId = Seed.FileId
+LEFT JOIN EditLine ON EditLine.FileId = Seed.FileId
+LEFT JOIN VerdictRow ON VerdictRow.FileId = Seed.FileId
+ORDER BY (COALESCE(Money.Direct, 0) + COALESCE(Money.Amortized, 0)) DESC, File.Path ASC
+LIMIT 500;`,Stages:`SELECT COALESCE(Touch.Stage, 'unclassified') AS Stage,
+    COUNT(*) AS Touches,
+    SUM(Call.TotalTokens) AS Tokens,
+    SUM(COALESCE(Allocation.DirectCost, 0) + COALESCE(Allocation.AmortizedCost, 0)) AS Cost
+FROM Touch
+JOIN Call ON Call.CallId = Touch.CallId
+LEFT JOIN Allocation ON Allocation.CallId = Touch.CallId AND Allocation.FileId = Touch.FileId
+WHERE Call.SessionId = ?
+GROUP BY Stage
+ORDER BY Cost DESC, Stage ASC;`,Models:`WITH CallRow AS (
+    SELECT Call.CallId AS CallId, Call.Provider AS Provider, Call.Model AS Model,
+        Call.InputTokens AS InputTokens, Call.OutputTokens AS OutputTokens,
+        Call.CacheReadTokens AS CacheReadTokens
+    FROM Call
+    WHERE Call.SessionId = ?
+),
+CallMoney AS (
+    SELECT Allocation.CallId AS CallId,
+        SUM(Allocation.DirectCost + Allocation.AmortizedCost) AS Cost
+    FROM Allocation
+    JOIN CallRow ON CallRow.CallId = Allocation.CallId
+    GROUP BY Allocation.CallId
+)
+SELECT CallRow.Provider AS Provider,
+    CallRow.Model AS Model,
+    COUNT(*) AS Calls,
+    SUM(CallRow.InputTokens) AS Input,
+    SUM(CallRow.OutputTokens) AS Output,
+    SUM(CallRow.CacheReadTokens) AS CacheRead,
+    SUM(COALESCE(CallMoney.Cost, 0)) AS Total
+FROM CallRow
+LEFT JOIN CallMoney ON CallMoney.CallId = CallRow.CallId
+GROUP BY CallRow.Provider, CallRow.Model
+ORDER BY Total DESC, CallRow.Provider ASC, CallRow.Model ASC;`},ne=200,se=1,ie=2e3;function re(d,C,k){const H=Number.isFinite(k)?Math.floor(k):ne,O=Math.min(Math.max(H,se),ie),U={},a=(e,l)=>{const o=e[l];return typeof o=="string"?o:null},r=(e,l)=>{const o=e[l];return typeof o=="number"&&Number.isFinite(o)?o:null},t=(e,l)=>r(e,l)??0,p=(e,l)=>e[l]===1,J=(e,l,o)=>{const i=l+e+o;return i>0?Math.min(1,l/i):null},V=e=>{const l=t(e,"InputTokens"),o=t(e,"OutputTokens"),i=t(e,"CacheReadTokens"),S=t(e,"CacheWriteTokens");return{input:l,output:o,cacheRead:i,cacheWrite:S,reasoning:t(e,"ReasoningTokens"),total:l+i+S+o,reported:r(e,"TotalTokens")}},j=e=>{const l=t(e,"CostInput"),o=t(e,"CostOutput"),i=t(e,"CostCacheRead"),S=t(e,"CostTotal");return{input:l,output:o,cacheRead:i,cacheWrite:t(e,"CostCacheWrite"),reasoning:t(e,"CostReasoning"),total:S,other:Math.max(0,S-i-l-o)}},Y=e=>{if(typeof e!="string")return[];const l=JSON.parse(e);return Array.isArray(l)?l.filter(o=>typeof o=="string"):[]},T=e=>Math.round(e*1e6)/1e6,w=e=>typeof e!="string"?[]:e.split(",").filter(o=>o.length>0).sort(),A=d.prepare(u.Session).get(C);if(A===void 0)return{ok:!1,code:"session",message:`client-dsh-panel-cost: the session ${C} is not recorded in the ledger`,path:"",rows:O,truncated:!1,session:null,currency:"USD",currencies:[],summary:{calls:0,priced:0,unpriced:0,turns:0,steps:0,tokens:{input:0,output:0,cacheRead:0,cacheWrite:0,reasoning:0,total:0,reported:null},cost:{input:0,output:0,cacheRead:0,cacheWrite:0,reasoning:0,total:0,other:0},direct:0,amortized:0,saving:0,cacheHit:null,files:0,currency:"USD",currencies:[],topFiles:[]},calls:[],files:null,stages:null,models:null};const R=d.prepare(u.Project).get(C)??U,b={id:C,project:a(R,"Name"),root:a(R,"Root"),client:a(R,"ClientName"),title:a(A,"Title"),cwd:a(A,"Cwd"),origin:a(A,"Origin"),agentPreset:a(A,"AgentPreset"),parentSessionId:a(A,"ParentSessionId"),delegationDepth:r(A,"DelegationDepth"),createdAt:t(A,"CreatedAt"),endedAt:r(A,"EndedAt")},Q=d.prepare(u.Calls).all(C,O),G=d.prepare(u.Touches).all(C),x=d.prepare(u.Allocations).all(C),q=d.prepare(u.TopFiles).all(C),n=d.prepare(u.Summary).get(C)??U,K=d.prepare(u.Files).all(C,C),X=d.prepare(u.Stages).all(C),_=d.prepare(u.Models).all(C),h=new Map;for(const e of x){const l=t(e,"CallId"),o=h.get(l);o===void 0?h.set(l,[e]):o.push(e)}const F=new Map;for(const e of G){const l=t(e,"CallId"),o=F.get(l);o===void 0?F.set(l,[e]):o.push(e)}const M=Q.map(e=>{const l=t(e,"CallId"),o=t(e,"At"),i=h.get(l)??[],S=F.get(l)??[],I=new Map;for(const s of S){const c=t(s,"FileId");I.has(c)||I.set(c,{path:a(s,"Path")??"",kind:a(s,"Kind"),stage:a(s,"Stage"),tool:a(s,"Tool"),branch:a(s,"Branch"),readBeforeEdit:p(s,"ReadBeforeEdit"),direct:0,amortized:0,total:0,linesDelta:r(s,"LinesDelta"),bytesDelta:r(s,"BytesDelta"),durationMs:r(s,"DurationMs"),touched:!0,at:t(s,"At")})}for(const s of i){const c=a(s,"Path");if(c===null)continue;const v=t(s,"FileId"),N=t(s,"DirectCost"),f=t(s,"AmortizedCost"),E=I.get(v);if(E===void 0){I.set(v,{path:c,kind:null,stage:null,tool:null,branch:null,readBeforeEdit:!1,direct:N,amortized:f,total:N+f,linesDelta:null,bytesDelta:null,durationMs:null,touched:!1,at:o});continue}E.direct+=N,E.amortized+=f,E.total=E.direct+E.amortized}const le=[...I.values()].sort((s,c)=>c.total-s.total||(s.path<c.path?-1:1)),oe=i.reduce((s,c)=>s+t(c,"DirectCost"),0),ae=i.reduce((s,c)=>s+t(c,"AmortizedCost"),0);return{turn:t(e,"Turn"),step:t(e,"Step"),seq:t(e,"Seq"),at:o,provider:a(e,"Provider")??"",model:a(e,"Model")??"",mode:a(e,"Mode")??"standard",region:a(e,"Region"),tier:r(e,"Tier"),priced:p(e,"Priced"),currency:a(e,"Currency")??"USD",tokens:V(e),cost:j(e),saving:t(e,"CacheSaving"),attempts:t(e,"Attempts"),error:a(e,"ErrorCode"),surfaceTokens:t(e,"SurfaceTokens"),purpose:a(e,"Purpose"),contextWindow:r(e,"ContextWindow"),utilization:r(e,"Utilization"),latencyMs:r(e,"LatencyMs"),firstTokenMs:r(e,"FirstTokenMs"),tokensPerSecond:r(e,"TokensPerSecond"),direct:oe,amortized:ae,allocations:i.length,files:le}});M.sort((e,l)=>e.turn-l.turn||e.step-l.step);const m=t(n,"InputTokens"),D=t(n,"OutputTokens"),L=t(n,"CacheReadTokens"),y=t(n,"CacheWriteTokens"),P=t(n,"CostInput"),W=t(n,"CostOutput"),B=t(n,"CostCacheRead"),z=t(n,"CostTotal"),$=q.map(e=>{const l=t(e,"Direct"),o=t(e,"Amortized");return{path:a(e,"Path")??"",direct:l,amortized:o,total:l+o,calls:t(e,"Calls")}}),Z=K.map(e=>{const l=T(t(e,"Direct")),o=T(t(e,"Amortized")),i=T(l+o),S=r(e,"Lifetime");return{path:a(e,"Path")??"",touches:t(e,"Touches"),reads:t(e,"Reads"),edits:t(e,"Edits"),writes:t(e,"Writes"),searches:t(e,"Searches"),added:t(e,"Added"),removed:t(e,"Removed"),bytesAdded:t(e,"BytesAdded"),bytesRemoved:t(e,"BytesRemoved"),direct:l,amortized:o,total:i,lifetime:S,before:S===null?null:T(S-i),turn:r(e,"Turn"),stages:w(e.Stages),verdict:a(e,"Verdict"),readBeforeEdit:p(e,"ReadBeforeEdit"),firstAt:r(e,"FirstAt"),lastAt:r(e,"LastAt")}}),ee=X.map(e=>({stage:a(e,"Stage")??"unclassified",touches:t(e,"Touches"),tokens:t(e,"Tokens"),cost:T(t(e,"Cost"))})),te=_.map(e=>{const l=t(e,"Input"),o=t(e,"Output"),i=t(e,"CacheRead");return{provider:a(e,"Provider")??"",model:a(e,"Model")??"",calls:t(e,"Calls"),tokens:l+o+i,input:l,output:o,cacheRead:i,total:T(t(e,"Total"))}}),g={calls:t(n,"Calls"),priced:t(n,"Priced"),unpriced:t(n,"Unpriced"),turns:t(n,"Turns"),steps:t(n,"Steps"),tokens:{input:m,output:D,cacheRead:L,cacheWrite:y,reasoning:t(n,"ReasoningTokens"),total:m+L+y+D,reported:r(n,"ReportedTokens")},cost:{input:P,output:W,cacheRead:B,cacheWrite:t(n,"CostCacheWrite"),reasoning:t(n,"CostReasoning"),total:z,other:Math.max(0,z-B-P-W)},direct:t(n,"Direct"),amortized:t(n,"Amortized"),saving:t(n,"Saving"),cacheHit:J(m,L,y),files:t(n,"Files"),currency:a(n,"Currency")??"USD",currencies:Y(n.Currencies),topFiles:$};return{ok:!0,code:"ok",message:null,path:"",rows:O,truncated:M.length===O,session:b,currency:g.currency,currencies:g.currencies,summary:g,calls:M,files:Z,stages:ee,models:te}}export{re as default};

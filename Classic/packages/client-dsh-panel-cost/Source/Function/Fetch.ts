@@ -80,6 +80,9 @@ const Fail = (Message: string, Rows: number): CostResponse => ({
 		topFiles: [],
 	},
 	calls: [],
+	files: null,
+	stages: null,
+	models: null,
 });
 
 export default function Fetch(SessionId: string, Rows: number): Promise<CostResponse> {

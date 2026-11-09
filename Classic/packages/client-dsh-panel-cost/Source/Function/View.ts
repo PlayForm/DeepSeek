@@ -7,12 +7,15 @@
 import { Button } from "@deepseek-ai/dsh-client-ui-primitives";
 import DetailRow from "@Function/DetailRow";
 import Fetch from "@Function/Fetch";
+import FileFilters, { type Filter } from "@Function/FileFilters";
+import FileTable from "@Function/FileTable";
 import Fold from "@Function/Fold";
 import StepRow from "@Function/StepRow";
 import SummaryStrip from "@Function/SummaryStrip";
 import Table, { COLUMNS } from "@Function/Table";
 import TotalsRow from "@Function/TotalsRow";
 import TurnRow from "@Function/TurnRow";
+import type CostFileRow from "@Interface/FileRow";
 import type CostResponse from "@Interface/Response";
 import type CostSnapshot from "@Interface/Snapshot";
 import type { Translate } from "@Interface/Translate";
@@ -20,7 +23,7 @@ import type CostTurn from "@Interface/Turn";
 import type ViewProps from "@Interface/View";
 import Limits from "@Variable/Limits";
 import EN_DICTIONARY from "@Variable/Locale-en.json";
-import { createElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createElement, Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const DefaultRows = 200;
 const MaxRows = 2000;
@@ -50,6 +53,42 @@ const StepScaleOf = (Turn: CostTurn): number => {
 	return Top;
 };
 
+// Value - the text a change event carries. The DOM overload of createElement
+// cannot infer the element type from a string tag, so the event arrives as
+// unknown and the field is read defensively.
+const Value = (Event: unknown): string => {
+	const Target = (Event as { target?: unknown } | null)?.target;
+	const Text = (Target as { value?: unknown } | null)?.value;
+	return typeof Text === "string" ? Text : "";
+};
+
+// StageName - the shipped stage word; a stage the dictionary does not carry
+// is shown as the ledger spelled it rather than as a missing key.
+const StageName = (Stage: string, t: Translate): string => {
+	const Known = (EN_DICTIONARY as unknown as Record<string, string>)[`stage.${Stage}`];
+	return Known === undefined ? Stage : t(`stage.${Stage}`);
+};
+
+// Chip - one chip of the view switcher and of the filter bar: the two chip
+// classes the sheet ships, the pressed state, and the handler.
+const Chip = (
+	Label: string,
+	Active: boolean,
+	OnClick: () => void,
+	Key: string,
+): ReturnType<typeof createElement> =>
+	createElement(
+		"button",
+		{
+			key: Key,
+			type: "button",
+			className: Active ? "playform-cost-chip playform-cost-chip-on" : "playform-cost-chip",
+			"aria-pressed": Active,
+			onClick: OnClick,
+		},
+		Label,
+	);
+
 export default function View(Props: ViewProps): ReturnType<typeof createElement> {
 	const t: Translate = Props.t ?? Local;
 	const SessionId = typeof Props.sessionId === "string" ? Props.sessionId : "";
@@ -64,6 +103,9 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 	const [Attempt, SetAttempt] = useState(0);
 	const [Truncated, SetTruncated] = useState(false);
 	const [Older, SetOlder] = useState<"idle" | "loading" | "failed">("idle");
+	const [Pane, SetPane] = useState<"turns" | "files">("turns");
+	const [Files, SetFiles] = useState<readonly CostFileRow[]>([]);
+	const [FileFilter, SetFileFilter] = useState<Filter>(FileFilters.Default);
 	const [TurnMode, SetTurnMode] = useState<"newest" | "all" | "none">("newest");
 	const [TurnOverride, SetTurnOverride] = useState<Record<number, boolean | undefined>>({});
 	const [StepOpen, SetStepOpen] = useState<ReadonlySet<string>>(new Set<string>());
@@ -110,6 +152,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 						return;
 					}
 					SetSnapshot(Fold(Response));
+					SetFiles([]);
 					// The envelope's own line names the cause (no session id,
 					// the cost plugin absent, the ledger unreadable); the state
 					// line above it stays the short, translated one.
@@ -133,6 +176,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 				const Previous = Counted.current;
 				Counted.current = Calls.length;
 				SetSnapshot(Fold(Response));
+				SetFiles(Array.isArray(Response.files) ? Response.files : []);
 				SetTruncated(Response.truncated === true);
 				if (Calls.length === 0) {
 					SetPhase("empty");
@@ -475,19 +519,130 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 			break;
 	}
 	if (Phase === "loading" || Snapshot === null) return Shell([Line(t("loading"), true)], null);
-	if (Snapshot.turns.length === 0)
-		return Shell(
-			[Line(t("empty"), false)],
-			createElement(SummaryStrip, {
-				Summary: Snapshot.summary,
-				Turns: 0,
-				Steps: Snapshot.steps,
-				AllOpen: false,
-				AnyTurn: false,
-				OnToggleAll: ToggleAllTurns,
-				t,
+	const Currency =
+		typeof Snapshot.summary.currency === "string" && Snapshot.summary.currency !== ""
+			? Snapshot.summary.currency
+			: "USD";
+	// The footer is the same two bands in every state: the view switcher in
+	// its own toolbar, then the session summary and the top files.
+	const Footer = createElement(
+		Fragment,
+		{},
+		createElement(
+			"div",
+			{ className: "playform-cost-toolbar" },
+			createElement(
+				"div",
+				{
+					className: "playform-cost-controls",
+					role: "group",
+					"aria-label": t("view.switcher"),
+				},
+				Chip(t("view.turns"), Pane === "turns", () => SetPane("turns"), "turns"),
+				Chip(t("view.files"), Pane === "files", () => SetPane("files"), "files"),
+			),
+		),
+		createElement(SummaryStrip, {
+			Summary: Snapshot.summary,
+			Turns: Snapshot.turns.length,
+			Steps: Snapshot.steps,
+			AllOpen,
+			AnyTurn: Snapshot.turns.length > 0,
+			OnToggleAll: ToggleAllTurns,
+			t,
+		}),
+	);
+	if (Pane === "files") {
+		const Shown = FileFilters.Apply(Files, FileFilter);
+		const Stages = FileFilters.StagesOf(Files);
+		const Controls = createElement(
+			"div",
+			{
+				className: "playform-cost-controls",
+				role: "group",
+				"aria-label": t("view.files"),
+			},
+			createElement("input", {
+				type: "text",
+				className: "playform-cost-button",
+				// The chip face carries cursor: pointer; a text field must not.
+				style: { cursor: "text" },
+				value: FileFilter.Path,
+				placeholder: t("files.filter.path"),
+				"aria-label": t("files.filter.path"),
+				onChange: (Event: unknown) => SetFileFilter({ ...FileFilter, Path: Value(Event) }),
 			}),
+			createElement(
+				"span",
+				{ className: "playform-cost-control-label" },
+				t("files.filter.kind"),
+			),
+			FileFilters.Kinds.map((Kind) =>
+				Chip(
+					t(`files.kind.${Kind}`),
+					FileFilter.Kind === Kind,
+					() => SetFileFilter({ ...FileFilter, Kind }),
+					Kind,
+				),
+			),
+			createElement(
+				"span",
+				{ className: "playform-cost-control-label" },
+				t("files.filter.stage"),
+			),
+			Chip(
+				t("files.filter.stageAll"),
+				FileFilter.Stage === null,
+				() => SetFileFilter({ ...FileFilter, Stage: null }),
+				"stage:all",
+			),
+			Stages.map((Stage) =>
+				Chip(
+					StageName(Stage, t),
+					FileFilter.Stage === Stage,
+					() =>
+						SetFileFilter({
+							...FileFilter,
+							Stage: FileFilter.Stage === Stage ? null : Stage,
+						}),
+					`stage:${Stage}`,
+				),
+			),
+			createElement(
+				"span",
+				{ className: "playform-cost-control-label" },
+				t("files.filter.sort"),
+			),
+			FileFilters.Sorts.map((Sort) =>
+				Chip(
+					t(`files.sort.${Sort}`),
+					FileFilter.Sort === Sort,
+					() => SetFileFilter({ ...FileFilter, Sort }),
+					Sort,
+				),
+			),
 		);
+		switch (true) {
+			case Files.length === 0:
+				return Shell([Line(t("files.empty"), false)], Footer);
+			case Shown.length === 0:
+				return Shell([Controls, Line(t("files.filter.empty"), false)], Footer);
+			default:
+				return Shell(
+					[
+						Controls,
+						createElement(FileTable, {
+							key: "files",
+							Files: Shown,
+							Currency,
+							t,
+						}),
+					],
+					Footer,
+				);
+		}
+	}
+	if (Snapshot.turns.length === 0) return Shell([Line(t("empty"), false)], Footer);
 	return Shell(
 		[
 			Strip === null
@@ -500,14 +655,6 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 				t,
 			}),
 		],
-		createElement(SummaryStrip, {
-			Summary: Snapshot.summary,
-			Turns: Snapshot.turns.length,
-			Steps: Snapshot.steps,
-			AllOpen,
-			AnyTurn: Snapshot.turns.length > 0,
-			OnToggleAll: ToggleAllTurns,
-			t,
-		}),
+		Footer,
 	);
 }

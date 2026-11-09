@@ -1,5 +1,8 @@
 import type CostCall from "./Call.js";
+import type CostFileRow from "./FileRow.js";
+import type CostModelRow from "./ModelRow.js";
 import type CostSession from "./Session.js";
+import type CostStageRow from "./StageRow.js";
 import type CostSummary from "./Summary.js";
 export default interface CostResponse {
     ok: boolean;
@@ -13,4 +16,7 @@ export default interface CostResponse {
     currencies: readonly string[];
     summary: CostSummary;
     calls: readonly CostCall[];
+    files: readonly CostFileRow[] | null;
+    stages: readonly CostStageRow[] | null;
+    models: readonly CostModelRow[] | null;
 }

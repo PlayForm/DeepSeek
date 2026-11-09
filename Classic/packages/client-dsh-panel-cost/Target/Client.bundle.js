@@ -54,23 +54,23 @@ function Styles() {
 }
 
 // Source/Function/View.ts
-var import_dsh_client_ui_primitives2 = require("@deepseek-ai/dsh-client-ui-primitives");
+var import_dsh_client_ui_primitives3 = require("@deepseek-ai/dsh-client-ui-primitives");
 
 // Source/Variable/Dash.ts
 var Dash_default = "-";
 
 // Source/Function/Count.ts
-function Count(Value) {
-  if (typeof Value !== "number" || !Number.isFinite(Value)) return Dash_default;
-  return String(Math.round(Value)).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+function Count(Value2) {
+  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
+  return String(Math.round(Value2)).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 // Source/Function/Price.ts
-function Price(Value, Currency) {
-  if (typeof Value !== "number" || !Number.isFinite(Value)) return Dash_default;
-  const Sign = Value < 0 ? "-" : "";
+function Price(Value2, Currency) {
+  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
+  const Sign = Value2 < 0 ? "-" : "";
   const Symbol2 = Currency === "USD" ? "$" : `${Currency} `;
-  const Size = Math.abs(Value);
+  const Size = Math.abs(Value2);
   switch (true) {
     case (Size > 0 && Size < 1e-6):
       return `<${Symbol2}0.000001`;
@@ -162,7 +162,7 @@ var StageTones = {
   verify: 1,
   revert: 3
 };
-var Text = (Value) => typeof Value === "string" ? Value : "";
+var Text = (Value2) => typeof Value2 === "string" ? Value2 : "";
 var StageTone = (Stage) => {
   if (Stage === null) return 7;
   return StageTones[Stage] ?? 7;
@@ -280,12 +280,12 @@ function DetailRow(Props) {
   const Source = Step.cost;
   const Money3 = (Field) => {
     if (Source === null || typeof Source !== "object") return 0;
-    const Value = Source[Field];
-    return typeof Value === "number" ? Value : 0;
+    const Value2 = Source[Field];
+    return typeof Value2 === "number" ? Value2 : 0;
   };
   const Raw = Array.isArray(Step.files) ? Step.files : [];
   const Files2 = Raw.filter((File) => File !== null && typeof File === "object");
-  const Sorted = [...Files2].sort((A, B) => {
+  const Sorted2 = [...Files2].sort((A, B) => {
     const Left = typeof A.total === "number" ? A.total : 0;
     const Right = typeof B.total === "number" ? B.total : 0;
     switch (true) {
@@ -299,7 +299,7 @@ function DetailRow(Props) {
         return 0;
     }
   });
-  const Shown = Sorted.slice(0, DetailFileLimit);
+  const Shown = Sorted2.slice(0, DetailFileLimit);
   return (0, import_react2.createElement)(
     "tr",
     {},
@@ -411,7 +411,10 @@ var Fail = (Message, Rows) => ({
     currencies: [],
     topFiles: []
   },
-  calls: []
+  calls: [],
+  files: null,
+  stages: null,
+  models: null
 });
 function Fetch(SessionId, Rows) {
   if (typeof fetch !== "function") {
@@ -440,1213 +443,95 @@ function Fetch(SessionId, Rows) {
   }
 }
 
-// Source/Function/Fold.ts
-var ZeroTokens = {
-  input: 0,
-  output: 0,
-  cacheRead: 0,
-  cacheWrite: 0,
-  reasoning: 0,
-  total: 0,
-  reported: null
-};
-var ZeroSummary = {
-  calls: 0,
-  priced: 0,
-  unpriced: 0,
-  turns: 0,
-  steps: 0,
-  tokens: ZeroTokens,
-  cost: {
-    input: 0,
-    output: 0,
-    cacheRead: 0,
-    cacheWrite: 0,
-    reasoning: 0,
-    total: 0,
-    other: 0
-  },
-  direct: 0,
-  amortized: 0,
-  saving: 0,
-  cacheHit: null,
-  files: 0,
-  currency: "USD",
-  currencies: [],
-  topFiles: []
-};
-var N = (Value) => typeof Value === "number" && Number.isFinite(Value) ? Value : 0;
-var S = (Value) => typeof Value === "string" ? Value : "";
-var CacheHit = (Tokens) => {
-  const Read = N(Tokens?.cacheRead);
-  const Input = N(Tokens?.input);
-  const Write = N(Tokens?.cacheWrite);
-  const Base = Read + Input + Write;
+// Source/Function/FileFilters.ts
+var Kinds = ["all", "edited", "written", "readOnly"];
+var Sorts = ["conversation", "lifetime", "lines", "touches"];
+var Default = { Path: "", Kind: "all", Stage: null, Sort: "conversation" };
+var N = (Value2) => typeof Value2 === "number" && Number.isFinite(Value2) ? Value2 : 0;
+var S = (Value2) => typeof Value2 === "string" ? Value2 : "";
+var Stages = (Value2) => Array.isArray(Value2) ? Value2.filter((Item) => typeof Item === "string") : [];
+var Match = (Row, Current) => {
+  const Path = S(Row.path).toLowerCase();
+  const Needle = Current.Path.trim().toLowerCase();
+  const Edits = N(Row.edits);
+  const Writes = N(Row.writes);
   switch (true) {
-    case Base <= 0:
-      return null;
+    case (Needle !== "" && !Path.includes(Needle)):
+      return false;
+    case (Current.Kind === "edited" && Edits === 0):
+      return false;
+    case (Current.Kind === "written" && Writes === 0):
+      return false;
+    case (Current.Kind === "readOnly" && (Edits > 0 || Writes > 0)):
+      return false;
+    case (Current.Stage !== null && !Stages(Row.stages).includes(Current.Stage)):
+      return false;
     default:
-      return Math.min(1, Read / Base);
+      return true;
   }
 };
-var FilesOf = (Call) => Array.isArray(Call.files) ? Call.files : [];
-function Fold(Response) {
-  const Calls = Array.isArray(Response?.calls) ? Response.calls : [];
-  const Groups = /* @__PURE__ */ new Map();
-  for (const Item of Calls) {
-    if (Item === null || typeof Item !== "object") continue;
-    const Call = Item;
-    const Turn = N(Call.turn);
-    const Group = Groups.get(Turn);
-    if (Group === void 0) Groups.set(Turn, [Call]);
-    else Group.push(Call);
+var Weight = (Row, Choice) => {
+  switch (true) {
+    case Choice === "lifetime":
+      return N(Row.lifetime);
+    case Choice === "lines":
+      return N(Row.added) + N(Row.removed);
+    case Choice === "touches":
+      return N(Row.touches);
+    default:
+      return N(Row.total);
   }
-  const Turns = [];
-  let Steps = 0;
-  const Keys = [...Groups.keys()].sort((A, B) => A - B);
-  for (const Key of Keys) {
-    const Group = Groups.get(Key);
-    if (Group === void 0) continue;
-    Group.sort((A, B) => N(A.step) - N(B.step));
-    const StepList = [];
-    const FileMap = /* @__PURE__ */ new Map();
-    const ToolMap = /* @__PURE__ */ new Map();
-    const Currencies = /* @__PURE__ */ new Set();
-    let At = Number.POSITIVE_INFINITY;
-    let EndedAt = Number.NEGATIVE_INFINITY;
-    let CostRead = 0;
-    let CostInput = 0;
-    let CostOutput = 0;
-    let CostWrite = 0;
-    let CostReasoning = 0;
-    let CostTotal = 0;
-    let TokenRead = 0;
-    let TokenInput = 0;
-    let TokenWrite = 0;
-    let TokenOutput = 0;
-    let TokenReasoning = 0;
-    let Reported = null;
-    let Direct = 0;
-    let Amortized = 0;
-    let Saving = 0;
-    let Retries = 0;
-    let Errors = 0;
-    let Unpriced = 0;
-    let Dominant;
-    for (const Call of Group) {
-      StepList.push({ ...Call, cacheHit: CacheHit(Call.tokens) });
-      if (typeof Call.at === "number" && Number.isFinite(Call.at)) {
-        if (Call.at < At) At = Call.at;
-        if (Call.at > EndedAt) EndedAt = Call.at;
-      }
-      CostRead += N(Call.cost?.cacheRead);
-      CostInput += N(Call.cost?.input);
-      CostOutput += N(Call.cost?.output);
-      CostWrite += N(Call.cost?.cacheWrite);
-      CostReasoning += N(Call.cost?.reasoning);
-      CostTotal += N(Call.cost?.total);
-      TokenRead += N(Call.tokens?.cacheRead);
-      TokenInput += N(Call.tokens?.input);
-      TokenWrite += N(Call.tokens?.cacheWrite);
-      TokenOutput += N(Call.tokens?.output);
-      TokenReasoning += N(Call.tokens?.reasoning);
-      const ReportedValue = Call.tokens?.reported;
-      if (typeof ReportedValue === "number" && Number.isFinite(ReportedValue))
-        Reported = (Reported ?? 0) + ReportedValue;
-      Direct += N(Call.direct);
-      Amortized += N(Call.amortized);
-      Saving += N(Call.saving);
-      Retries += Math.max(0, N(Call.attempts) - 1);
-      if (Call.error != null) Errors += 1;
-      if (Call.priced === false) Unpriced += 1;
-      const Currency2 = S(Call.currency);
-      if (Currency2 !== "") Currencies.add(Currency2);
-      const Money3 = N(Call.cost?.total);
-      const Total = N(Call.tokens?.total);
-      if (Dominant === void 0)
-        Dominant = { Provider: S(Call.provider), Model: S(Call.model), Money: Money3, Total };
-      else if (Money3 > Dominant.Money)
-        Dominant = { Provider: S(Call.provider), Model: S(Call.model), Money: Money3, Total };
-      else if (Money3 === Dominant.Money && Total > Dominant.Total)
-        Dominant = { Provider: S(Call.provider), Model: S(Call.model), Money: Money3, Total };
-      for (const Item of FilesOf(Call)) {
-        if (Item === null || typeof Item !== "object") continue;
-        const File = Item;
-        const Path = S(File.path);
-        if (Path === "") continue;
-        const Money22 = N(File.total);
-        const Stage = S(File.stage);
-        const Entry = FileMap.get(Path) ?? {
-          Count: 0,
-          Total: 0,
-          Direct: 0,
-          Amortized: 0,
-          Lines: 0,
-          Best: Number.NEGATIVE_INFINITY,
-          Stage: null,
-          Touched: false
-        };
-        Entry.Count += 1;
-        Entry.Total += Money22;
-        Entry.Direct += N(File.direct);
-        Entry.Amortized += N(File.amortized);
-        if (typeof File.linesDelta === "number" && Number.isFinite(File.linesDelta))
-          Entry.Lines += File.linesDelta;
-        if (Money22 > Entry.Best) {
-          Entry.Best = Money22;
-          Entry.Stage = Stage || null;
-        }
-        if (File.touched === true) Entry.Touched = true;
-        FileMap.set(Path, Entry);
-        if (File.touched !== true) continue;
-        const Tool = S(File.tool);
-        if (Tool === "") continue;
-        const Tally = ToolMap.get(Tool) ?? { Count: 0 };
-        Tally.Count += 1;
-        ToolMap.set(Tool, Tally);
-      }
-    }
-    if (!Number.isFinite(At)) At = 0;
-    if (!Number.isFinite(EndedAt)) EndedAt = 0;
-    const Cost = {
-      input: CostInput,
-      output: CostOutput,
-      cacheRead: CostRead,
-      cacheWrite: CostWrite,
-      reasoning: CostReasoning,
-      total: CostTotal,
-      other: Math.max(0, CostTotal - CostRead - CostInput - CostOutput)
-    };
-    const Tokens = {
-      input: TokenInput,
-      output: TokenOutput,
-      cacheRead: TokenRead,
-      cacheWrite: TokenWrite,
-      reasoning: TokenReasoning,
-      total: TokenInput + TokenRead + TokenWrite + TokenOutput,
-      reported: Reported
-    };
-    const Files2 = [];
-    for (const [Path, Entry] of FileMap)
-      Files2.push({
-        key: Path,
-        count: Entry.Count,
-        total: Entry.Total,
-        direct: Entry.Direct,
-        amortized: Entry.Amortized,
-        lines: Entry.Lines,
-        stage: Entry.Touched ? Entry.Stage : null
-      });
-    Files2.sort((A, B) => B.total - A.total || (A.key < B.key ? -1 : A.key > B.key ? 1 : 0));
-    const Tools = [];
-    for (const [Name, Entry] of ToolMap)
-      Tools.push({
-        key: Name,
-        count: Entry.Count,
-        total: 0,
-        direct: 0,
-        amortized: 0,
-        lines: 0,
-        stage: null
-      });
-    Tools.sort((A, B) => B.count - A.count || (A.key < B.key ? -1 : A.key > B.key ? 1 : 0));
-    let Currency = "";
-    for (const Step of StepList) {
-      const Name = S(Step.currency);
-      if (Name !== "") {
-        Currency = Name;
-        break;
-      }
-    }
-    Turns.push({
-      turn: Key,
-      at: At,
-      endedAt: EndedAt,
-      steps: StepList,
-      cost: Cost,
-      tokens: Tokens,
-      cacheHit: CacheHit(Tokens),
-      provider: Dominant?.Provider ?? "",
-      model: Dominant?.Model ?? "",
-      files: Files2,
-      tools: Tools,
-      direct: Direct,
-      amortized: Amortized,
-      saving: Saving,
-      retries: Retries,
-      errors: Errors,
-      unpriced: Unpriced,
-      currency: Currency,
-      mixed: Currencies.size > 1
-    });
-    Steps += StepList.length;
+};
+var Compare = (Left, Right) => {
+  const A = S(Left.path);
+  const B = S(Right.path);
+  switch (true) {
+    case A < B:
+      return -1;
+    case A > B:
+      return 1;
+    default:
+      return 0;
   }
-  return { turns: Turns, steps: Steps, summary: Response?.summary ?? ZeroSummary };
-}
+};
+var Sorted = (Rows, Choice) => [...Rows].sort((A, B) => Weight(B, Choice) - Weight(A, Choice) || Compare(A, B));
+var StagesOf = (Rows) => {
+  const Seen = /* @__PURE__ */ new Set();
+  for (const Row of Rows) for (const Stage of Stages(Row.stages)) Seen.add(Stage);
+  return [...Seen];
+};
+var Apply = (Rows, Current) => Sorted(Rows.filter((Row) => Match(Row, Current)), Current.Sort);
+var FileFilters_default = { Kinds, Sorts, Default, StagesOf, Apply };
 
-// Source/Function/Cells.ts
+// Source/Function/FileTable.ts
 var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
 
-// Source/Function/Clock.ts
-var Pad = (Value) => String(Value).padStart(2, "0");
-function Clock(Value) {
-  if (typeof Value !== "number" || !Number.isFinite(Value)) return Dash_default;
-  const Moment = new Date(Value);
-  switch (true) {
-    case Number.isNaN(Moment.getTime()):
-      return Dash_default;
-    default:
-      return `${Pad(Moment.getHours())}:${Pad(Moment.getMinutes())}:${Pad(Moment.getSeconds())}`;
-  }
-}
-
-// Source/Function/CountShort.ts
-function CountShort(Value) {
-  if (typeof Value !== "number" || !Number.isFinite(Value)) return Dash_default;
-  switch (true) {
-    case Value >= 1e7:
-      return `${(Value / 1e6).toFixed(1)}M`;
-    case Value >= 1e3:
-      return `${(Value / 1e3).toFixed(1)}K`;
-    default:
-      return `${(Value / 1e3).toFixed(2)}K`;
-  }
-}
-
 // Source/Function/Lines.ts
-function Lines(Value) {
-  if (typeof Value !== "number" || !Number.isFinite(Value)) return "";
-  return Value >= 0 ? `+${Count(Value)}` : `-${Count(Math.abs(Value))}`;
+function Lines(Value2) {
+  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return "";
+  return Value2 >= 0 ? `+${Count(Value2)}` : `-${Count(Math.abs(Value2))}`;
 }
-
-// Source/Function/Share.ts
-function Share(Total, Scale) {
-  if (typeof Scale !== "number" || !Number.isFinite(Scale) || Scale <= 0) return 1;
-  if (Total <= 0) return 0;
-  return Math.min(1, Math.sqrt(Total / Scale));
-}
-
-// Source/Function/Cells.ts
-var import_react3 = require("react");
-var FilePillLimit = 3;
-var ToneClass = (Tone2) => `playform-cost-tone${Tone2}`;
-var ModelText = (Text4, Identifier) => (0, import_react3.createElement)(import_dsh_client_ui_primitives.Tooltip, {
-  label: Identifier,
-  portal: true,
-  onlyWhenClipped: true,
-  disabled: Identifier === "",
-  children: (0, import_react3.createElement)(
-    "span",
-    {
-      className: "playform-cost-model-text",
-      // The tooltip's anchor contract is all-optional, so the span must
-      // name one of its keys for the weak-type check; the primitive
-      // clones the child and injects its own handler at runtime.
-      onPointerEnter: void 0
-    },
-    Text4
-  )
-});
-var PillNode = (Pill, Index, t) => (0, import_react3.createElement)(import_dsh_client_ui_primitives.Tooltip, {
-  key: Index,
-  label: Pill.Path ?? Pill.Name,
-  portal: true,
-  disabled: Pill.Path === void 0,
-  children: (0, import_react3.createElement)(
-    "span",
-    {
-      className: "playform-cost-pill",
-      // The anchor contract's weak-type check needs one of its keys;
-      // the tooltip injects the real handler when it clones the child.
-      onPointerEnter: void 0,
-      ...Pill.Path === void 0 && Pill.Lines !== null && Pill.Lines !== 0 ? { title: t("files.lines", { lines: Lines(Pill.Lines) }) } : {}
-    },
-    (0, import_react3.createElement)("span", { className: `playform-cost-dot ${ToneClass(Pill.Tone)}` }),
-    Pill.Name
-  )
-});
-var MarkerSpan = (Marker, Index) => (0, import_react3.createElement)(
-  "span",
-  {
-    key: Index,
-    className: Marker.Class,
-    ...Marker.Title === void 0 ? {} : { title: Marker.Title }
-  },
-  Marker.Text
-);
-var Scope = (Props) => {
-  const Toggle = Props.Toggle;
-  const ClockCell = Props.Clock;
-  const Hint = Props.Hint;
-  return (0, import_react3.createElement)(
-    "td",
-    { className: Props.Cell },
-    Toggle === void 0 ? Props.Label ?? null : (0, import_react3.createElement)(
-      "button",
-      {
-        type: "button",
-        className: "playform-cost-row-toggle",
-        "aria-expanded": Toggle.Expanded,
-        "aria-label": Toggle.Aria,
-        title: Toggle.Title,
-        onClick: (Event) => {
-          Event.stopPropagation();
-          Toggle.OnToggle();
-        }
-      },
-      Toggle.Label
-    ),
-    ClockCell === void 0 ? null : (0, import_react3.createElement)(
-      "span",
-      { className: "playform-cost-turn-clock", title: ClockCell.Title },
-      ClockCell.Text
-    ),
-    Hint === void 0 ? null : (0, import_react3.createElement)("span", { className: "playform-cost-detail-hint" }, Hint),
-    Props.Markers.map(MarkerSpan)
-  );
-};
-var Model = (Props) => {
-  const Mode = Props.Mode;
-  const Region = Props.Region;
-  const Tier = Props.Tier;
-  const When = Props.When;
-  const Identifier = [Props.Provider, Props.Model].filter((Part) => Part !== "").join("/");
-  return (0, import_react3.createElement)(
-    "td",
-    {
-      className: Props.Cell,
-      ...Props.Title === void 0 ? {} : { title: Props.Title }
-    },
-    When === void 0 ? null : (0, import_react3.createElement)(
-      "span",
-      { className: "playform-cost-step-when" },
-      (0, import_react3.createElement)("span", { className: "playform-cost-step-clock" }, When.Text)
-    ),
-    (0, import_react3.createElement)(
-      "span",
-      { className: "playform-cost-model-clip" },
-      (0, import_react3.createElement)("span", { className: "playform-cost-model-pill" }, Props.Provider),
-      ModelText(Props.Model, Identifier),
-      Mode === void 0 || Mode === "" ? null : (0, import_react3.createElement)("span", { className: "playform-cost-pill" }, Mode),
-      Region === void 0 || Region === "" ? null : (0, import_react3.createElement)("span", { className: "playform-cost-pill" }, Region),
-      typeof Tier === "number" ? (0, import_react3.createElement)("span", { className: "playform-cost-pill" }, String(Tier)) : null
-    )
-  );
-};
-var Files = (Props) => {
-  const Shown = Props.Pills.slice(0, FilePillLimit);
-  const Extra = Props.Pills.length - Shown.length;
-  const Quiet = !Props.Fail && Props.Pills.length === 0 && !(Props.Saving > 0);
-  return (0, import_react3.createElement)(
-    "td",
-    { className: Props.Cell },
-    Quiet ? (0, import_react3.createElement)(
-      "span",
-      { className: "playform-cost-files-clip" },
-      (0, import_react3.createElement)(
-        "span",
-        { className: "playform-cost-files-stat" },
-        Props.t("files.contextOnly", { tokens: CountShort(Props.Tokens) })
-      )
-    ) : [
-      (0, import_react3.createElement)(
-        "div",
-        {
-          className: "playform-cost-pills",
-          ...Props.Pills.length === 0 ? {} : {
-            title: Props.t("files.title", {
-              calls: Props.Calls,
-              files: Props.Pills.map((Pill) => Pill.Name).join(" | ")
-            })
-          }
-        },
-        Props.Fail ? (0, import_react3.createElement)(
-          "span",
-          { className: "playform-cost-fail-pill" },
-          Props.t("state.failed")
-        ) : null,
-        Shown.map((Pill, Index) => PillNode(Pill, Index, Props.t)),
-        Extra > 0 ? (0, import_react3.createElement)(
-          "span",
-          { className: "playform-cost-pill playform-cost-pill-muted" },
-          Props.t("files.more", { count: Extra })
-        ) : null,
-        Props.Saving > 0 ? (0, import_react3.createElement)(
-          "span",
-          {
-            className: "playform-cost-pill playform-cost-pill-muted",
-            title: Props.t("files.saving.title")
-          },
-          Props.t("files.saving", {
-            value: Price(Props.Saving, Props.Currency)
-          })
-        ) : null
-      ),
-      Props.ShowMix && Props.Pills.length > 0 ? (0, import_react3.createElement)(
-        "div",
-        { className: "playform-cost-mix" },
-        Props.Pills.map(
-          (Pill, Index) => (0, import_react3.createElement)("span", {
-            key: Index,
-            className: `playform-cost-mix-segment ${ToneClass(Pill.Tone)}`,
-            style: { flexGrow: Pill.Count },
-            title: Props.t("files.count", { count: Pill.Count })
-          })
-        )
-      ) : null
-    ]
-  );
-};
-var Money = (Props) => (0, import_react3.createElement)(
-  "td",
-  {
-    className: Props.Cell,
-    ...Props.Title === void 0 ? {} : { title: Props.Title }
-  },
-  (0, import_react3.createElement)(
-    "span",
-    { className: "playform-cost-money" },
-    Price(Props.Value, Props.Currency)
-  )
-);
-var Alloc = (Props) => (0, import_react3.createElement)(
-  "td",
-  {
-    className: Props.Cell,
-    ...Props.Has ? {} : { title: Props.t("unknown") }
-  },
-  Props.Has ? [
-    (0, import_react3.createElement)(
-      "span",
-      { key: "direct", className: "playform-cost-num" },
-      Price(Props.Direct, Props.Currency)
-    ),
-    (0, import_react3.createElement)(
-      "span",
-      { key: "amortized", className: "playform-cost-num-delta" },
-      Price(Props.Amortized, Props.Currency)
-    )
-  ] : Dash_default
-);
-var Segment = (Key, Class, Value) => Value > 0 ? (0, import_react3.createElement)("span", {
-  key: Key,
-  className: `playform-cost-bar-segment ${Class}`,
-  style: { flexGrow: Value }
-}) : null;
-var Bar = (Props) => {
-  const Figure = (Value) => typeof Value === "number" && Number.isFinite(Value) ? Value : 0;
-  const Total = Figure(Props.Total);
-  const CacheRead = Math.max(0, Figure(Props.Cost.cacheRead));
-  const Input = Math.max(0, Figure(Props.Cost.input));
-  const Output = Math.max(0, Figure(Props.Cost.output));
-  const Other = Math.max(0, Total - CacheRead - Input - Output);
-  const Tag = (Value) => Price(Value, Props.Currency);
-  const Parts = [
-    ...Props.Start === null ? [] : [Props.t("bar.start", { clock: Clock(Props.Start) })],
-    Props.t("bar.cacheRead", { value: Tag(CacheRead) }),
-    Props.t("bar.input", { value: Tag(Input) }),
-    Props.t("bar.output", { value: Tag(Output) }),
-    Props.t("bar.other", { value: Tag(Other) }),
-    Props.t("bar.total", { value: Tag(Total) })
-  ];
-  return (0, import_react3.createElement)(
-    "td",
-    { className: Props.Cell, title: Parts.join(" | ") },
-    (0, import_react3.createElement)(
-      "div",
-      { className: "playform-cost-bar-wrap" },
-      (0, import_react3.createElement)(
-        "div",
-        { className: Props.Track },
-        (0, import_react3.createElement)(
-          "div",
-          {
-            className: "playform-cost-bar-fill",
-            style: { width: `${Math.round(Share(Total, Props.Scale) * 100)}%` }
-          },
-          Segment("cacheRead", "playform-cost-bar-cache", CacheRead),
-          Segment("input", "playform-cost-bar-input", Input),
-          Segment("output", "playform-cost-bar-output", Output),
-          Segment("other", "playform-cost-bar-other", Other)
-        )
-      ),
-      (0, import_react3.createElement)("span", { className: "playform-cost-bar-value" }, Tag(Total))
-    )
-  );
-};
-var Cells_default = { Scope, Model, Files, Money, Bar, Alloc };
 
 // Source/Function/Rate.ts
-function Rate(Value) {
-  if (typeof Value !== "number" || !Number.isFinite(Value)) return Dash_default;
-  return `${(Value * 100).toFixed(2)}%`;
+function Rate(Value2) {
+  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
+  return `${(Value2 * 100).toFixed(2)}%`;
 }
 
 // Source/Function/Stamp.ts
-var Pad2 = (Value) => String(Value).padStart(2, "0");
-function Stamp(Value) {
-  if (typeof Value !== "number" || !Number.isFinite(Value)) return Dash_default;
-  const Moment = new Date(Value);
+var Pad = (Value2) => String(Value2).padStart(2, "0");
+function Stamp(Value2) {
+  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
+  const Moment = new Date(Value2);
   switch (true) {
     case Number.isNaN(Moment.getTime()):
       return Dash_default;
     default:
-      return `${Pad2(Moment.getMonth() + 1)}-${Pad2(Moment.getDate())} ${Pad2(
+      return `${Pad(Moment.getMonth() + 1)}-${Pad(Moment.getDate())} ${Pad(
         Moment.getHours()
-      )}:${Pad2(Moment.getMinutes())}`;
+      )}:${Pad(Moment.getMinutes())}`;
   }
 }
-
-// Source/Function/StepRow.ts
-var import_react4 = require("react");
-var CacheMissThreshold = 0.5;
-var Text2 = (Value) => typeof Value === "string" ? Value : "";
-var BaseName = (Path) => {
-  const Cut = Path.lastIndexOf("/");
-  return Cut === -1 ? Path : Path.slice(Cut + 1);
-};
-var StageTones2 = {
-  discover: 5,
-  read: 0,
-  reread: 0,
-  edit: 2,
-  verify: 1,
-  revert: 3
-};
-var StageTone2 = (Stage) => {
-  if (Stage === null) return 7;
-  return StageTones2[Stage] ?? 7;
-};
-var Markers = (Step, t) => {
-  const List = [];
-  const Attempts = typeof Step.attempts === "number" ? Step.attempts : 1;
-  if (Step.priced === false)
-    List.push({
-      Class: "playform-cost-state-unpriced",
-      Text: t("state.unpriced"),
-      Title: t("state.unpriced.title")
-    });
-  if (typeof Step.error === "string")
-    List.push({
-      Class: "playform-cost-state-error",
-      Text: t("state.failed"),
-      Title: t("state.failed.title", { code: Step.error })
-    });
-  if (Attempts > 1)
-    List.push({
-      Class: "playform-cost-state-attempts",
-      Text: t("state.attempts", { count: Attempts - 1 }),
-      Title: t("state.attempts.title", { count: Attempts })
-    });
-  if (Step.cacheHit !== null && Step.cacheHit < CacheMissThreshold)
-    List.push({
-      Class: "playform-cost-state-attempts",
-      Text: t("state.cacheMiss"),
-      Title: t("state.cacheMiss.title")
-    });
-  return List;
-};
-var TokenCell = (Cell, Value) => (0, import_react4.createElement)(
-  "td",
-  { className: Cell },
-  (0, import_react4.createElement)("span", { className: "playform-cost-num" }, CountShort(Value))
-);
-var CacheCell = (Cell, Tokens, Hit, t) => {
-  const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
-  const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
-  const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
-  const Base = Read + Input + Write;
-  switch (true) {
-    case Base <= 0:
-      return (0, import_react4.createElement)("td", { className: Cell, title: t("unknown") }, Dash_default);
-    case (Read > 0 || Write > 0):
-      return (0, import_react4.createElement)(
-        "td",
-        {
-          className: Cell,
-          title: t("cache.detail", {
-            read: CountShort(Read),
-            input: CountShort(Input),
-            write: CountShort(Write)
-          })
-        },
-        (0, import_react4.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
-      );
-    default:
-      return (0, import_react4.createElement)(
-        "td",
-        { className: Cell, title: t("column.cache.title") },
-        (0, import_react4.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
-      );
-  }
-};
-var OtherTitle = (Cost, Currency, t) => {
-  const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
-  const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
-  switch (true) {
-    case (Write > 0 || Reasoning > 0):
-      return t("other.detail", {
-        write: Price(Write, Currency),
-        reasoning: Price(Reasoning, Currency),
-        rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency)
-      });
-    default:
-      return t("column.other.title");
-  }
-};
-function StepRow(Props) {
-  const Step = Props.Step;
-  const t = Props.t;
-  const Tag = Text2(Step.currency) !== "" ? Text2(Step.currency) : "USD";
-  const Metric = "playform-cost-step-metric";
-  const Raw = Array.isArray(Step.files) ? Step.files : [];
-  const Files2 = Raw.filter((File) => File !== null && typeof File === "object");
-  const Allocations = typeof Step.allocations === "number" ? Step.allocations : 0;
-  const Saving = typeof Step.saving === "number" ? Step.saving : 0;
-  const Cost = Step.cost ?? {
-    input: 0,
-    output: 0,
-    cacheRead: 0,
-    cacheWrite: 0,
-    reasoning: 0,
-    total: 0,
-    other: 0
-  };
-  const Tokens = Step.tokens ?? {
-    input: 0,
-    output: 0,
-    cacheRead: 0,
-    cacheWrite: 0,
-    reasoning: 0,
-    total: 0,
-    reported: null
-  };
-  const TokensTotal = typeof Tokens.total === "number" ? Tokens.total : 0;
-  const Total = typeof Cost.total === "number" ? Cost.total : 0;
-  const CacheRead = typeof Cost.cacheRead === "number" ? Cost.cacheRead : 0;
-  const Input = typeof Cost.input === "number" ? Cost.input : 0;
-  const Output = typeof Cost.output === "number" ? Cost.output : 0;
-  const Other = typeof Cost.other === "number" ? Cost.other : 0;
-  const HasDetail = Files2.length > 0 || Allocations > 0 || Total > 0;
-  const Started = t("step.started.title", { time: Stamp(Step.at) });
-  const ModelText2 = [
-    Text2(Step.provider),
-    Text2(Step.model),
-    Text2(Step.mode),
-    Text2(Step.region),
-    typeof Step.tier === "number" ? String(Step.tier) : ""
-  ].filter((Part) => Part !== "").join(" | ");
-  const Row = ["playform-cost-step-row"];
-  if (HasDetail) Row.push("playform-cost-step-row-clickable");
-  if (typeof Step.error === "string") Row.push("playform-cost-step-row-error");
-  return (0, import_react4.createElement)(
-    "tr",
-    {
-      className: Row.join(" "),
-      "data-step": String(Step.step),
-      ...HasDetail ? { onClick: Props.OnToggle, title: t("detail.title") } : {}
-    },
-    Cells_default.Scope({
-      Cell: "playform-cost-step-cell",
-      ...HasDetail ? {
-        Toggle: {
-          Expanded: Props.Expanded,
-          Label: t("step.label", { step: Step.step }),
-          Aria: t("step.toggle.aria", { step: Step.step }),
-          Title: t("detail.title"),
-          OnToggle: Props.OnToggle
-        }
-      } : { Label: t("step.label", { step: Step.step }) },
-      Hint: ` - ${Props.Expanded ? t("detail.hide") : t("detail.show")}`,
-      Markers: Markers(Step, t)
-    }),
-    Cells_default.Model({
-      Cell: "playform-cost-prompt-cell",
-      Provider: Text2(Step.provider),
-      Model: Text2(Step.model),
-      Mode: Text2(Step.mode),
-      Region: Text2(Step.region),
-      Tier: typeof Step.tier === "number" ? Step.tier : null,
-      When: { Text: Stamp(Step.at) },
-      Title: `${Started} | ${ModelText2}`
-    }),
-    Cells_default.Files({
-      Cell: "playform-cost-step-files",
-      Pills: Files2.map((File) => ({
-        Name: BaseName(Text2(File.path)),
-        Path: Text2(File.path),
-        Tone: StageTone2(Text2(File.stage) === "" ? null : Text2(File.stage)),
-        Count: 1,
-        Lines: typeof File.linesDelta === "number" ? File.linesDelta : null
-      })),
-      Fail: typeof Step.error === "string",
-      Saving,
-      Calls: 1,
-      Tokens: TokensTotal,
-      Currency: Tag,
-      ShowMix: Files2.length >= 2,
-      t
-    }),
-    TokenCell(Metric, TokensTotal),
-    CacheCell(Metric, Tokens, Step.cacheHit, t),
-    Cells_default.Money({ Cell: Metric, Value: CacheRead, Currency: Tag }),
-    Cells_default.Money({ Cell: Metric, Value: Input, Currency: Tag }),
-    Cells_default.Money({ Cell: Metric, Value: Output, Currency: Tag }),
-    Cells_default.Money({
-      Cell: Metric,
-      Value: Other,
-      Currency: Tag,
-      Title: OtherTitle(Cost, Tag, t)
-    }),
-    Cells_default.Alloc({
-      Cell: Metric,
-      Direct: typeof Step.direct === "number" ? Step.direct : 0,
-      Amortized: typeof Step.amortized === "number" ? Step.amortized : 0,
-      Has: Allocations > 0,
-      Currency: Tag,
-      t
-    }),
-    Cells_default.Bar({
-      Cell: Metric,
-      Track: "playform-cost-bar-step",
-      Total,
-      Cost,
-      Scale: Props.Scale,
-      Currency: Tag,
-      Start: typeof Step.at === "number" ? Step.at : null,
-      t
-    })
-  );
-}
-
-// Source/Function/SummaryStrip.ts
-var import_react5 = require("react");
-var TopFileLimit = 5;
-var Text3 = (Value) => typeof Value === "string" ? Value : "";
-var BaseName2 = (Path) => {
-  const Cut = Path.lastIndexOf("/");
-  return Cut === -1 ? Path : Path.slice(Cut + 1);
-};
-var Tone = (Path) => {
-  let Hash = 0;
-  for (const Character of Path) Hash = (Hash * 31 + Character.charCodeAt(0)) % 9973;
-  return Hash % 8;
-};
-function SummaryStrip(Props) {
-  const Summary = Props.Summary;
-  const t = Props.t;
-  const Tag = typeof Summary.currency === "string" && Summary.currency !== "" ? Summary.currency : "USD";
-  const Currencies = Array.isArray(Summary.currencies) ? Summary.currencies : [];
-  const Raw = Array.isArray(Summary.topFiles) ? Summary.topFiles : [];
-  const TopFiles = Raw.slice(0, TopFileLimit);
-  const Hit = typeof Summary.cacheHit === "number" ? Summary.cacheHit : null;
-  const Saving = typeof Summary.saving === "number" ? Summary.saving : 0;
-  const Total = typeof Summary.cost?.total === "number" ? Summary.cost.total : 0;
-  const Tokens = typeof Summary.tokens?.total === "number" ? Summary.tokens.total : 0;
-  return (0, import_react5.createElement)(
-    import_react5.Fragment,
-    {},
-    (0, import_react5.createElement)(
-      "div",
-      { className: "playform-cost-toolbar" },
-      (0, import_react5.createElement)(
-        "span",
-        { className: "playform-cost-summary" },
-        t("summary", { turns: Props.Turns, steps: Props.Steps, cost: Price(Total, Tag) })
-      ),
-      (0, import_react5.createElement)(
-        "div",
-        { className: "playform-cost-controls" },
-        Hit === null ? null : (0, import_react5.createElement)(
-          "span",
-          { className: "playform-cost-control-label" },
-          t("totals.cache", { value: Rate(Hit) })
-        ),
-        Saving > 0 ? (0, import_react5.createElement)(
-          "span",
-          { className: "playform-cost-control-label" },
-          t("totals.saving", { value: Price(Saving, Tag) })
-        ) : null,
-        (0, import_react5.createElement)(
-          "span",
-          { className: "playform-cost-control-label" },
-          t("totals.tokens", { tokens: CountShort(Tokens) })
-        ),
-        (0, import_react5.createElement)(
-          "span",
-          { className: "playform-cost-control-label" },
-          Currencies.length > 1 ? t("money.mixed", {
-            currencies: Currencies.map((Name) => Text3(Name)).filter((Name) => Name !== "").join(", ")
-          }) : t("money.currency", { currency: Tag })
-        ),
-        Props.AnyTurn ? (0, import_react5.createElement)(
-          "button",
-          {
-            type: "button",
-            className: "playform-cost-button",
-            onClick: Props.OnToggleAll
-          },
-          Props.AllOpen ? t("collapse.all") : t("expand.all")
-        ) : (0, import_react5.createElement)(
-          "button",
-          {
-            type: "button",
-            className: "playform-cost-button-off",
-            disabled: true
-          },
-          t("expand.all")
-        )
-      )
-    ),
-    (0, import_react5.createElement)(
-      "div",
-      { className: "playform-cost-top-files" },
-      (0, import_react5.createElement)(
-        "span",
-        { className: "playform-cost-control-label", title: t("topFiles.title") },
-        t("topFiles.label")
-      ),
-      TopFiles.length === 0 ? (0, import_react5.createElement)(
-        "span",
-        { className: "playform-cost-control-label" },
-        t("topFiles.empty")
-      ) : TopFiles.map((File, Index) => {
-        const Path = Text3(File.path);
-        const Money3 = typeof File.total === "number" ? File.total : 0;
-        return (0, import_react5.createElement)(
-          "span",
-          { className: "playform-cost-file-pill", key: Index, title: Path },
-          (0, import_react5.createElement)("span", {
-            className: `playform-cost-dot playform-cost-tone${Tone(Path)}`
-          }),
-          `${BaseName2(Path)} ${Price(Money3, Tag)}`
-        );
-      })
-    )
-  );
-}
-
-// Source/Function/TotalsRow.ts
-var import_react6 = require("react");
-var TokenCell2 = (Cell, Value) => (0, import_react6.createElement)(
-  "td",
-  { className: Cell },
-  (0, import_react6.createElement)("span", { className: "playform-cost-num" }, CountShort(Value))
-);
-var CacheCell2 = (Cell, Tokens, Hit, t) => {
-  const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
-  const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
-  const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
-  const Base = Read + Input + Write;
-  switch (true) {
-    case Base <= 0:
-      return (0, import_react6.createElement)("td", { className: Cell, title: t("unknown") }, Dash_default);
-    case (Read > 0 || Write > 0):
-      return (0, import_react6.createElement)(
-        "td",
-        {
-          className: Cell,
-          title: t("cache.detail", {
-            read: CountShort(Read),
-            input: CountShort(Input),
-            write: CountShort(Write)
-          })
-        },
-        (0, import_react6.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
-      );
-    default:
-      return (0, import_react6.createElement)(
-        "td",
-        { className: Cell, title: t("column.cache.title") },
-        (0, import_react6.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
-      );
-  }
-};
-var OtherTitle2 = (Cost, Currency, t) => {
-  const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
-  const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
-  switch (true) {
-    case (Write > 0 || Reasoning > 0):
-      return t("other.detail", {
-        write: Price(Write, Currency),
-        reasoning: Price(Reasoning, Currency),
-        rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency)
-      });
-    default:
-      return t("column.other.title");
-  }
-};
-function TotalsRow(Props) {
-  const Summary = Props.Summary;
-  const t = Props.t;
-  const Tag = typeof Summary.currency === "string" && Summary.currency !== "" ? Summary.currency : "USD";
-  const Metric = "playform-cost-turn-metric";
-  const Cost = Summary.cost ?? {
-    input: 0,
-    output: 0,
-    cacheRead: 0,
-    cacheWrite: 0,
-    reasoning: 0,
-    total: 0,
-    other: 0
-  };
-  const Tokens = Summary.tokens ?? {
-    input: 0,
-    output: 0,
-    cacheRead: 0,
-    cacheWrite: 0,
-    reasoning: 0,
-    total: 0,
-    reported: null
-  };
-  return (0, import_react6.createElement)(
-    "tr",
-    { className: "playform-cost-totals-row", title: t("totals.session.title") },
-    (0, import_react6.createElement)(
-      "td",
-      { className: "playform-cost-totals-label", colSpan: 2 },
-      t("totals.session"),
-      (0, import_react6.createElement)(
-        "span",
-        { className: "playform-cost-totals-meta" },
-        ` - ${t("totals.calls", {
-          calls: typeof Summary.calls === "number" ? Summary.calls : 0,
-          unpriced: typeof Summary.unpriced === "number" ? Summary.unpriced : 0
-        })}`
-      )
-    ),
-    (0, import_react6.createElement)("td", { className: Metric }),
-    TokenCell2(Metric, typeof Tokens.total === "number" ? Tokens.total : 0),
-    CacheCell2(
-      Metric,
-      Tokens,
-      typeof Summary.cacheHit === "number" ? Summary.cacheHit : null,
-      t
-    ),
-    Cells_default.Money({ Cell: Metric, Value: Cost.cacheRead, Currency: Tag }),
-    Cells_default.Money({ Cell: Metric, Value: Cost.input, Currency: Tag }),
-    Cells_default.Money({ Cell: Metric, Value: Cost.output, Currency: Tag }),
-    Cells_default.Money({
-      Cell: Metric,
-      Value: Cost.other,
-      Currency: Tag,
-      Title: OtherTitle2(Cost, Tag, t)
-    }),
-    Cells_default.Alloc({
-      Cell: Metric,
-      Direct: typeof Summary.direct === "number" ? Summary.direct : 0,
-      Amortized: typeof Summary.amortized === "number" ? Summary.amortized : 0,
-      Has: typeof Summary.direct === "number" && Summary.direct !== 0 || typeof Summary.amortized === "number" && Summary.amortized !== 0,
-      Currency: Tag,
-      t
-    }),
-    Cells_default.Bar({
-      Cell: Metric,
-      Track: "playform-cost-bar-turn",
-      Total: Cost.total,
-      Cost,
-      Scale: typeof Cost.total === "number" ? Cost.total : 0,
-      Currency: Tag,
-      Start: null,
-      t
-    })
-  );
-}
-
-// Source/Function/TurnRow.ts
-var import_react7 = require("react");
-var CacheMissThreshold2 = 0.5;
-var BaseName3 = (Path) => {
-  const Cut = Path.lastIndexOf("/");
-  return Cut === -1 ? Path : Path.slice(Cut + 1);
-};
-var StageTones3 = {
-  discover: 5,
-  read: 0,
-  reread: 0,
-  edit: 2,
-  verify: 1,
-  revert: 3
-};
-var StageTone3 = (Stage) => {
-  if (Stage === null) return 7;
-  return StageTones3[Stage] ?? 7;
-};
-var Money2 = (Turn) => Turn.currency !== "" ? Turn.currency : "USD";
-var Markers2 = (Turn, t) => {
-  const List = [];
-  if (Turn.unpriced > 0)
-    List.push({
-      Class: "playform-cost-state-unpriced",
-      Text: t("state.unpriced"),
-      Title: t("state.unpriced.title")
-    });
-  if (Turn.errors > 0) {
-    let Code = "";
-    for (const Step of Turn.steps) {
-      if (typeof Step.error === "string" && Step.error !== "") {
-        Code = Step.error;
-        break;
-      }
-    }
-    List.push({
-      Class: "playform-cost-state-error",
-      Text: t("state.failed"),
-      Title: t("state.failed.title", { code: Code === "" ? t("unknown") : Code })
-    });
-  }
-  if (Turn.retries > 0)
-    List.push({
-      Class: "playform-cost-state-attempts",
-      Text: t("state.attempts", { count: Turn.retries }),
-      Title: t("state.attempts.title", { count: Turn.retries })
-    });
-  if (Turn.cacheHit !== null && Turn.cacheHit < CacheMissThreshold2)
-    List.push({
-      Class: "playform-cost-state-attempts",
-      Text: t("state.cacheMiss"),
-      Title: t("state.cacheMiss.title")
-    });
-  return List;
-};
-var TokenCell3 = (Cell, Value) => (0, import_react7.createElement)(
-  "td",
-  { className: Cell },
-  (0, import_react7.createElement)("span", { className: "playform-cost-num" }, CountShort(Value))
-);
-var CacheCell3 = (Cell, Tokens, Hit, t) => {
-  const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
-  const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
-  const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
-  const Base = Read + Input + Write;
-  switch (true) {
-    case Base <= 0:
-      return (0, import_react7.createElement)("td", { className: Cell, title: t("unknown") }, Dash_default);
-    case (Read > 0 || Write > 0):
-      return (0, import_react7.createElement)(
-        "td",
-        {
-          className: Cell,
-          title: t("cache.detail", {
-            read: CountShort(Read),
-            input: CountShort(Input),
-            write: CountShort(Write)
-          })
-        },
-        (0, import_react7.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
-      );
-    default:
-      return (0, import_react7.createElement)(
-        "td",
-        { className: Cell, title: t("column.cache.title") },
-        (0, import_react7.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
-      );
-  }
-};
-var OtherTitle3 = (Cost, Currency, t) => {
-  const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
-  const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
-  switch (true) {
-    case (Write > 0 || Reasoning > 0):
-      return t("other.detail", {
-        write: Price(Write, Currency),
-        reasoning: Price(Reasoning, Currency),
-        rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency)
-      });
-    default:
-      return t("column.other.title");
-  }
-};
-function TurnRow(Props) {
-  const Turn = Props.Turn;
-  const t = Props.t;
-  const Tag = Money2(Turn);
-  const Metric = "playform-cost-turn-metric";
-  return (0, import_react7.createElement)(
-    "tr",
-    {
-      className: "playform-cost-turn-row",
-      "data-turn": String(Turn.turn),
-      title: t("turn.toggle.title"),
-      onClick: Props.OnToggle
-    },
-    Cells_default.Scope({
-      Cell: "playform-cost-turn-cell",
-      Toggle: {
-        Expanded: Props.Open,
-        Label: t("turn.label", { turn: Turn.turn }),
-        Aria: t("turn.toggle.aria", { turn: Turn.turn }),
-        Title: t("turn.toggle.title"),
-        OnToggle: Props.OnToggle
-      },
-      Clock: {
-        Text: ` - ${Stamp(Turn.at)}`,
-        Title: t("turn.started", { time: Stamp(Turn.at) })
-      },
-      Markers: Markers2(Turn, t)
-    }),
-    Cells_default.Model({
-      Cell: "playform-cost-model-cell-turn",
-      Provider: Turn.provider,
-      Model: Turn.model
-    }),
-    Cells_default.Files({
-      Cell: "playform-cost-turn-files",
-      Pills: Turn.files.map((Tally) => ({
-        Name: BaseName3(Tally.key),
-        Path: Tally.key,
-        Tone: StageTone3(Tally.stage),
-        Count: Tally.count,
-        Lines: Tally.lines
-      })),
-      Fail: Turn.errors > 0,
-      Saving: Turn.saving,
-      Calls: Turn.steps.length,
-      Tokens: Turn.tokens.total,
-      Currency: Tag,
-      ShowMix: Turn.files.length > 0,
-      t
-    }),
-    TokenCell3(Metric, Turn.tokens.total),
-    CacheCell3(Metric, Turn.tokens, Turn.cacheHit, t),
-    Cells_default.Money({ Cell: Metric, Value: Turn.cost.cacheRead, Currency: Tag }),
-    Cells_default.Money({ Cell: Metric, Value: Turn.cost.input, Currency: Tag }),
-    Cells_default.Money({ Cell: Metric, Value: Turn.cost.output, Currency: Tag }),
-    Cells_default.Money({
-      Cell: Metric,
-      Value: Turn.cost.other,
-      Currency: Tag,
-      Title: OtherTitle3(Turn.cost, Tag, t)
-    }),
-    Cells_default.Alloc({
-      Cell: Metric,
-      Direct: Turn.direct,
-      Amortized: Turn.amortized,
-      Has: Turn.direct !== 0 || Turn.amortized !== 0,
-      Currency: Tag,
-      t
-    }),
-    Cells_default.Bar({
-      Cell: Metric,
-      Track: "playform-cost-bar-turn",
-      Total: Turn.cost.total,
-      Cost: Turn.cost,
-      Scale: Props.Scale,
-      Currency: Tag,
-      Start: null,
-      t
-    })
-  );
-}
-
-// Source/Variable/Limits.ts
-var Limits_default = {
-  DefaultRows: 200,
-  MinRows: 1,
-  MaxRows: 2e3,
-  StepLimit: 24,
-  LoadOlderFactor: 2
-};
 
 // Source/Variable/Locale-en.json
 var Locale_en_default = {
@@ -1757,18 +642,1633 @@ var Locale_en_default = {
   "stage.edit": "edit",
   "stage.verify": "verify",
   "stage.revert": "revert",
-  "stage.unknown": "unknown stage"
+  "stage.unknown": "unknown stage",
+  "view.turns": "Turns",
+  "view.files": "Files",
+  "view.switcher": "Choose the cost view",
+  "files.column.file": "File",
+  "files.column.file.title": "the file this conversation touched; the full path is in the tooltip",
+  "files.column.touches": "Touches",
+  "files.column.touches.title": "{touches} touches: {reads} reads, {edits} edits, {writes} writes, {searches} searches; first {first}, last {last}",
+  "files.column.lines": "Lines",
+  "files.column.lines.title": "{added} lines added, {removed} lines removed; {bytesAdded} bytes in, {bytesRemoved} bytes out",
+  "files.column.lifetime": "Lifetime",
+  "files.column.lifetime.title": "every conversation's allocation to this file",
+  "files.column.before": "Before",
+  "files.column.before.title": "the lifetime cost this conversation inherited: lifetime minus this conversation",
+  "files.column.conversation": "This conversation",
+  "files.column.conversation.title": "this conversation's allocation to the file: direct plus amortized",
+  "files.column.turn": "Last turn",
+  "files.column.turn.title": "what the last turn of this conversation spent on the file",
+  "files.column.share": "Share",
+  "files.column.share.title": "this conversation's share of the file's lifetime cost",
+  "files.column.stage": "Stage",
+  "files.column.stage.title": "the first stage the file reached, and how many stages it reached in all",
+  "files.column.verdict": "Verdict",
+  "files.column.verdict.title": "the outcome the ledger recorded for this file in this session",
+  "files.filter.path": "Filter by path",
+  "files.filter.kind": "Kind",
+  "files.filter.stage": "Stage",
+  "files.filter.sort": "Sort",
+  "files.filter.stageAll": "all stages",
+  "files.filter.empty": "No file matches this filter.",
+  "files.kind.all": "all",
+  "files.kind.edited": "edited",
+  "files.kind.written": "written",
+  "files.kind.readOnly": "read only",
+  "files.sort.conversation": "conversation",
+  "files.sort.lifetime": "lifetime",
+  "files.sort.lines": "lines",
+  "files.sort.touches": "touches",
+  "files.touch.edit": "edit",
+  "files.touch.write": "write",
+  "files.touch.read": "read",
+  "files.touch.total": "{count} touches",
+  "files.verdict.changed": "changed",
+  "files.verdict.reverted": "reverted",
+  "files.verdict.read": "read",
+  "files.empty": "This conversation has not touched a file yet.",
+  "files.totals": "Files total",
+  "files.totals.meta": "{files} files, {touches} touches"
+};
+
+// Source/Function/FileTable.ts
+var import_react3 = require("react");
+var COLUMNS2 = [
+  "file",
+  "touches",
+  "lines",
+  "lifetime",
+  "before",
+  "conversation",
+  "turn",
+  "share",
+  "stage",
+  "verdict"
+];
+var COLUMN_WIDTHS2 = {
+  file: 20,
+  touches: 14,
+  lines: 8,
+  lifetime: 8,
+  before: 8,
+  conversation: 9,
+  turn: 8,
+  share: 11,
+  stage: 8,
+  verdict: 6
+};
+var StageTones2 = {
+  discover: 5,
+  read: 0,
+  reread: 0,
+  edit: 2,
+  verify: 1,
+  revert: 3
+};
+var N2 = (Value2) => typeof Value2 === "number" && Number.isFinite(Value2) ? Value2 : 0;
+var S2 = (Value2) => typeof Value2 === "string" ? Value2 : "";
+var Epoch = (Value2) => typeof Value2 === "number" && Number.isFinite(Value2) ? Value2 : null;
+var StageList = (Value2) => Array.isArray(Value2) ? Value2.filter((Item) => typeof Item === "string") : [];
+var BaseName = (Path) => {
+  const Cut = Path.lastIndexOf("/");
+  return Cut === -1 ? Path : Path.slice(Cut + 1);
+};
+var ToneClass = (Tone2) => `playform-cost-tone${Tone2}`;
+var StageTone2 = (Stage) => StageTones2[Stage] ?? 7;
+var Word = (Key, Fallback, t) => {
+  const Known = Locale_en_default[Key];
+  return Known === void 0 ? Fallback : t(Key);
+};
+var VerdictClass = (Verdict) => {
+  switch (true) {
+    case Verdict === "changed":
+      return "playform-cost-added";
+    case Verdict === "reverted":
+      return "playform-cost-removed";
+    default:
+      return null;
+  }
+};
+var MoneyCell = (Cell, Value2, Currency, Title) => (0, import_react3.createElement)(
+  "td",
+  { className: Cell, ...Title === void 0 ? {} : { title: Title } },
+  (0, import_react3.createElement)("span", { className: "playform-cost-money" }, Price(Value2, Currency))
+);
+var TouchPill = (Key, Value2, t) => (0, import_react3.createElement)(
+  "span",
+  { key: Key, className: "playform-cost-pill" },
+  `${t(Key)} ${Count(Value2)}`
+);
+var ShareCell = (Cell, Total, Lifetime, t) => {
+  const Ratio = Lifetime > 0 ? Math.max(0, Math.min(1, Total / Lifetime)) : null;
+  return (0, import_react3.createElement)(
+    "td",
+    { className: Cell, title: t("files.column.share.title") },
+    (0, import_react3.createElement)(
+      "div",
+      { className: "playform-cost-bar-wrap" },
+      (0, import_react3.createElement)(
+        "div",
+        { className: "playform-cost-bar-step" },
+        Ratio === null ? null : (0, import_react3.createElement)(
+          "div",
+          {
+            className: "playform-cost-bar-fill",
+            style: { width: `${Math.round(Ratio * 100)}%` }
+          },
+          (0, import_react3.createElement)("span", {
+            className: "playform-cost-bar-segment playform-cost-bar-input",
+            style: { flexGrow: 1 }
+          })
+        )
+      ),
+      (0, import_react3.createElement)("span", { className: "playform-cost-bar-value" }, Rate(Ratio))
+    )
+  );
+};
+var StageCell = (Cell, Stages2, t) => {
+  const Title = t("files.column.stage.title");
+  switch (true) {
+    case Stages2.length === 0:
+      return (0, import_react3.createElement)("td", { className: Cell, title: Title }, Dash_default);
+    default: {
+      const First = Stages2[0] ?? "";
+      return (0, import_react3.createElement)(
+        "td",
+        {
+          className: Cell,
+          title: Stages2.map((Stage) => Word(`stage.${Stage}`, Stage, t)).join(" | ")
+        },
+        (0, import_react3.createElement)(
+          "div",
+          { className: "playform-cost-pills", style: { flexWrap: "nowrap" } },
+          (0, import_react3.createElement)(
+            "span",
+            { className: "playform-cost-pill" },
+            (0, import_react3.createElement)("span", {
+              className: `playform-cost-dot ${ToneClass(StageTone2(First))}`
+            }),
+            Word(`stage.${First}`, First, t)
+          ),
+          Stages2.length > 1 ? (0, import_react3.createElement)(
+            "span",
+            {
+              className: "playform-cost-pill playform-cost-pill-muted"
+            },
+            `+${Count(Stages2.length - 1)}`
+          ) : null
+        )
+      );
+    }
+  }
+};
+var VerdictCell = (Cell, Verdict, t) => {
+  const Title = t("files.column.verdict.title");
+  switch (true) {
+    case Verdict === "":
+      return (0, import_react3.createElement)("td", { className: Cell, title: Title }, Dash_default);
+    default: {
+      const Class = VerdictClass(Verdict);
+      return (0, import_react3.createElement)(
+        "td",
+        { className: Cell, title: Title },
+        (0, import_react3.createElement)(
+          "span",
+          { ...Class === null ? {} : { className: Class } },
+          Word(`files.verdict.${Verdict}`, Verdict, t)
+        )
+      );
+    }
+  }
+};
+var LinesCell = (Cell, Added, Removed, BytesAdded, BytesRemoved, t) => {
+  const Title = t("files.column.lines.title", {
+    added: Count(Added),
+    removed: Count(Removed),
+    bytesAdded: Count(BytesAdded),
+    bytesRemoved: Count(BytesRemoved)
+  });
+  switch (true) {
+    case (Added === 0 && Removed === 0):
+      return (0, import_react3.createElement)("td", { className: Cell, title: Title }, Dash_default);
+    default: {
+      const Marks = [];
+      if (Added > 0)
+        Marks.push(
+          (0, import_react3.createElement)(
+            "span",
+            { key: "added", className: "playform-cost-added" },
+            Lines(Added)
+          )
+        );
+      if (Added > 0 && Removed > 0)
+        Marks.push(
+          (0, import_react3.createElement)(
+            "span",
+            { key: "sep", className: "playform-cost-files-sep" },
+            "/"
+          )
+        );
+      if (Removed > 0)
+        Marks.push(
+          (0, import_react3.createElement)(
+            "span",
+            { key: "removed", className: "playform-cost-removed" },
+            Lines(-Removed)
+          )
+        );
+      return (0, import_react3.createElement)("td", { className: Cell, title: Title }, Marks);
+    }
+  }
+};
+function FileTable(Props) {
+  const t = Props.t;
+  const Tag = Props.Currency === "" ? "USD" : Props.Currency;
+  const Metric = "playform-cost-step-metric";
+  const Plain = "playform-cost-step-files";
+  let SumTouches = 0;
+  let SumAdded = 0;
+  let SumRemoved = 0;
+  let SumLifetime = 0;
+  let SumBefore = 0;
+  let SumTotal = 0;
+  let SumTurn = 0;
+  for (const Row of Props.Files) {
+    SumTouches += N2(Row.touches);
+    SumAdded += N2(Row.added);
+    SumRemoved += N2(Row.removed);
+    SumLifetime += N2(Row.lifetime);
+    SumBefore += N2(Row.before);
+    SumTotal += N2(Row.total);
+    SumTurn += N2(Row.turn);
+  }
+  const Entry = (Row) => {
+    const Path = S2(Row.path);
+    const Reads = N2(Row.reads);
+    const Edits = N2(Row.edits);
+    const Writes = N2(Row.writes);
+    const Searches = N2(Row.searches);
+    const Touches = N2(Row.touches);
+    const Added = N2(Row.added);
+    const Removed = N2(Row.removed);
+    const BytesAdded = N2(Row.bytesAdded);
+    const BytesRemoved = N2(Row.bytesRemoved);
+    const Lifetime = N2(Row.lifetime);
+    const Before = N2(Row.before);
+    const Total = N2(Row.total);
+    const Turn = N2(Row.turn);
+    const Stages2 = StageList(Row.stages);
+    const Verdict = S2(Row.verdict);
+    const Pills = [];
+    if (Edits > 0) Pills.push(TouchPill("files.touch.edit", Edits, t));
+    if (Writes > 0) Pills.push(TouchPill("files.touch.write", Writes, t));
+    if (Reads > 0) Pills.push(TouchPill("files.touch.read", Reads, t));
+    return (0, import_react3.createElement)(
+      "tr",
+      { key: Path },
+      (0, import_react3.createElement)(
+        "td",
+        { className: Plain, title: Path },
+        (0, import_react3.createElement)(
+          import_dsh_client_ui_primitives.Tooltip,
+          {
+            label: Path,
+            portal: true,
+            disabled: Path === "",
+            children: (0, import_react3.createElement)(
+              "span",
+              {
+                className: "playform-cost-model-text",
+                // The tooltip's anchor contract is all-optional, so the
+                // span must name one of its keys for the weak-type
+                // check; the primitive clones the child and injects
+                // its own handler at runtime.
+                onPointerEnter: void 0
+              },
+              BaseName(Path)
+            )
+          }
+        )
+      ),
+      (0, import_react3.createElement)(
+        "td",
+        {
+          className: Plain,
+          title: t("files.column.touches.title", {
+            touches: Count(Touches),
+            reads: Count(Reads),
+            edits: Count(Edits),
+            writes: Count(Writes),
+            searches: Count(Searches),
+            first: Stamp(Epoch(Row.firstAt)),
+            last: Stamp(Epoch(Row.lastAt))
+          })
+        },
+        (0, import_react3.createElement)(
+          "div",
+          { className: "playform-cost-pills", style: { flexWrap: "nowrap" } },
+          Pills.length === 0 ? (0, import_react3.createElement)(
+            "span",
+            {
+              className: "playform-cost-pill playform-cost-pill-muted"
+            },
+            t("files.touch.total", { count: Count(Touches) })
+          ) : Pills
+        )
+      ),
+      LinesCell(Metric, Added, Removed, BytesAdded, BytesRemoved, t),
+      MoneyCell(Metric, Lifetime, Tag, t("files.column.lifetime.title")),
+      MoneyCell(Metric, Before, Tag, t("files.column.before.title")),
+      MoneyCell(Metric, Total, Tag, t("files.column.conversation.title")),
+      MoneyCell(Metric, Turn, Tag, t("files.column.turn.title")),
+      ShareCell(Metric, Total, Lifetime, t),
+      StageCell(Plain, Stages2, t),
+      VerdictCell(Plain, Verdict, t)
+    );
+  };
+  return (0, import_react3.createElement)(
+    "table",
+    { className: "playform-cost-table", "aria-label": t("view.files") },
+    (0, import_react3.createElement)(
+      "colgroup",
+      {},
+      COLUMNS2.map(
+        (Key) => (0, import_react3.createElement)("col", {
+          key: Key,
+          style: { width: `${COLUMN_WIDTHS2[Key]}%` }
+        })
+      )
+    ),
+    (0, import_react3.createElement)(
+      "thead",
+      {},
+      (0, import_react3.createElement)(
+        "tr",
+        {},
+        COLUMNS2.map(
+          (Key, Index) => (0, import_react3.createElement)(
+            "th",
+            {
+              key: Key,
+              className: Index === 0 ? "playform-cost-th-left" : "playform-cost-th",
+              title: t(`files.column.${Key}.title`)
+            },
+            t(`files.column.${Key}`)
+          )
+        )
+      )
+    ),
+    (0, import_react3.createElement)(
+      "tbody",
+      {},
+      Props.Files.map((Row) => Entry(Row))
+    ),
+    (0, import_react3.createElement)(
+      "tfoot",
+      {},
+      (0, import_react3.createElement)(
+        "tr",
+        { className: "playform-cost-totals-row" },
+        (0, import_react3.createElement)(
+          "td",
+          { className: "playform-cost-totals-label" },
+          t("files.totals"),
+          (0, import_react3.createElement)(
+            "span",
+            { className: "playform-cost-totals-meta" },
+            ` - ${t("files.totals.meta", {
+              files: Count(Props.Files.length),
+              touches: Count(SumTouches)
+            })}`
+          )
+        ),
+        (0, import_react3.createElement)(
+          "td",
+          { className: Metric },
+          (0, import_react3.createElement)("span", { className: "playform-cost-num" }, Count(SumTouches))
+        ),
+        (0, import_react3.createElement)(
+          "td",
+          { className: Metric },
+          (0, import_react3.createElement)(
+            "span",
+            { className: "playform-cost-added" },
+            `+${Count(SumAdded)}`
+          ),
+          (0, import_react3.createElement)(
+            "span",
+            { className: "playform-cost-files-sep" },
+            "/"
+          ),
+          (0, import_react3.createElement)(
+            "span",
+            { className: "playform-cost-removed" },
+            `-${Count(SumRemoved)}`
+          )
+        ),
+        MoneyCell(Metric, SumLifetime, Tag),
+        MoneyCell(Metric, SumBefore, Tag),
+        MoneyCell(Metric, SumTotal, Tag),
+        MoneyCell(Metric, SumTurn, Tag),
+        ShareCell(Metric, SumTotal, SumLifetime, t),
+        (0, import_react3.createElement)("td", { className: Metric }),
+        (0, import_react3.createElement)("td", { className: Metric })
+      )
+    )
+  );
+}
+
+// Source/Function/Fold.ts
+var ZeroTokens = {
+  input: 0,
+  output: 0,
+  cacheRead: 0,
+  cacheWrite: 0,
+  reasoning: 0,
+  total: 0,
+  reported: null
+};
+var ZeroSummary = {
+  calls: 0,
+  priced: 0,
+  unpriced: 0,
+  turns: 0,
+  steps: 0,
+  tokens: ZeroTokens,
+  cost: {
+    input: 0,
+    output: 0,
+    cacheRead: 0,
+    cacheWrite: 0,
+    reasoning: 0,
+    total: 0,
+    other: 0
+  },
+  direct: 0,
+  amortized: 0,
+  saving: 0,
+  cacheHit: null,
+  files: 0,
+  currency: "USD",
+  currencies: [],
+  topFiles: []
+};
+var N3 = (Value2) => typeof Value2 === "number" && Number.isFinite(Value2) ? Value2 : 0;
+var S3 = (Value2) => typeof Value2 === "string" ? Value2 : "";
+var CacheHit = (Tokens) => {
+  const Read = N3(Tokens?.cacheRead);
+  const Input = N3(Tokens?.input);
+  const Write = N3(Tokens?.cacheWrite);
+  const Base = Read + Input + Write;
+  switch (true) {
+    case Base <= 0:
+      return null;
+    default:
+      return Math.min(1, Read / Base);
+  }
+};
+var FilesOf = (Call) => Array.isArray(Call.files) ? Call.files : [];
+function Fold(Response) {
+  const Calls = Array.isArray(Response?.calls) ? Response.calls : [];
+  const Groups = /* @__PURE__ */ new Map();
+  for (const Item of Calls) {
+    if (Item === null || typeof Item !== "object") continue;
+    const Call = Item;
+    const Turn = N3(Call.turn);
+    const Group = Groups.get(Turn);
+    if (Group === void 0) Groups.set(Turn, [Call]);
+    else Group.push(Call);
+  }
+  const Turns = [];
+  let Steps = 0;
+  const Keys = [...Groups.keys()].sort((A, B) => A - B);
+  for (const Key of Keys) {
+    const Group = Groups.get(Key);
+    if (Group === void 0) continue;
+    Group.sort((A, B) => N3(A.step) - N3(B.step));
+    const StepList = [];
+    const FileMap = /* @__PURE__ */ new Map();
+    const ToolMap = /* @__PURE__ */ new Map();
+    const Currencies = /* @__PURE__ */ new Set();
+    let At = Number.POSITIVE_INFINITY;
+    let EndedAt = Number.NEGATIVE_INFINITY;
+    let CostRead = 0;
+    let CostInput = 0;
+    let CostOutput = 0;
+    let CostWrite = 0;
+    let CostReasoning = 0;
+    let CostTotal = 0;
+    let TokenRead = 0;
+    let TokenInput = 0;
+    let TokenWrite = 0;
+    let TokenOutput = 0;
+    let TokenReasoning = 0;
+    let Reported = null;
+    let Direct = 0;
+    let Amortized = 0;
+    let Saving = 0;
+    let Retries = 0;
+    let Errors = 0;
+    let Unpriced = 0;
+    let Dominant;
+    for (const Call of Group) {
+      StepList.push({ ...Call, cacheHit: CacheHit(Call.tokens) });
+      if (typeof Call.at === "number" && Number.isFinite(Call.at)) {
+        if (Call.at < At) At = Call.at;
+        if (Call.at > EndedAt) EndedAt = Call.at;
+      }
+      CostRead += N3(Call.cost?.cacheRead);
+      CostInput += N3(Call.cost?.input);
+      CostOutput += N3(Call.cost?.output);
+      CostWrite += N3(Call.cost?.cacheWrite);
+      CostReasoning += N3(Call.cost?.reasoning);
+      CostTotal += N3(Call.cost?.total);
+      TokenRead += N3(Call.tokens?.cacheRead);
+      TokenInput += N3(Call.tokens?.input);
+      TokenWrite += N3(Call.tokens?.cacheWrite);
+      TokenOutput += N3(Call.tokens?.output);
+      TokenReasoning += N3(Call.tokens?.reasoning);
+      const ReportedValue = Call.tokens?.reported;
+      if (typeof ReportedValue === "number" && Number.isFinite(ReportedValue))
+        Reported = (Reported ?? 0) + ReportedValue;
+      Direct += N3(Call.direct);
+      Amortized += N3(Call.amortized);
+      Saving += N3(Call.saving);
+      Retries += Math.max(0, N3(Call.attempts) - 1);
+      if (Call.error != null) Errors += 1;
+      if (Call.priced === false) Unpriced += 1;
+      const Currency2 = S3(Call.currency);
+      if (Currency2 !== "") Currencies.add(Currency2);
+      const Money3 = N3(Call.cost?.total);
+      const Total = N3(Call.tokens?.total);
+      if (Dominant === void 0)
+        Dominant = { Provider: S3(Call.provider), Model: S3(Call.model), Money: Money3, Total };
+      else if (Money3 > Dominant.Money)
+        Dominant = { Provider: S3(Call.provider), Model: S3(Call.model), Money: Money3, Total };
+      else if (Money3 === Dominant.Money && Total > Dominant.Total)
+        Dominant = { Provider: S3(Call.provider), Model: S3(Call.model), Money: Money3, Total };
+      for (const Item of FilesOf(Call)) {
+        if (Item === null || typeof Item !== "object") continue;
+        const File = Item;
+        const Path = S3(File.path);
+        if (Path === "") continue;
+        const Money22 = N3(File.total);
+        const Stage = S3(File.stage);
+        const Entry = FileMap.get(Path) ?? {
+          Count: 0,
+          Total: 0,
+          Direct: 0,
+          Amortized: 0,
+          Lines: 0,
+          Best: Number.NEGATIVE_INFINITY,
+          Stage: null,
+          Touched: false
+        };
+        Entry.Count += 1;
+        Entry.Total += Money22;
+        Entry.Direct += N3(File.direct);
+        Entry.Amortized += N3(File.amortized);
+        if (typeof File.linesDelta === "number" && Number.isFinite(File.linesDelta))
+          Entry.Lines += File.linesDelta;
+        if (Money22 > Entry.Best) {
+          Entry.Best = Money22;
+          Entry.Stage = Stage || null;
+        }
+        if (File.touched === true) Entry.Touched = true;
+        FileMap.set(Path, Entry);
+        if (File.touched !== true) continue;
+        const Tool = S3(File.tool);
+        if (Tool === "") continue;
+        const Tally = ToolMap.get(Tool) ?? { Count: 0 };
+        Tally.Count += 1;
+        ToolMap.set(Tool, Tally);
+      }
+    }
+    if (!Number.isFinite(At)) At = 0;
+    if (!Number.isFinite(EndedAt)) EndedAt = 0;
+    const Cost = {
+      input: CostInput,
+      output: CostOutput,
+      cacheRead: CostRead,
+      cacheWrite: CostWrite,
+      reasoning: CostReasoning,
+      total: CostTotal,
+      other: Math.max(0, CostTotal - CostRead - CostInput - CostOutput)
+    };
+    const Tokens = {
+      input: TokenInput,
+      output: TokenOutput,
+      cacheRead: TokenRead,
+      cacheWrite: TokenWrite,
+      reasoning: TokenReasoning,
+      total: TokenInput + TokenRead + TokenWrite + TokenOutput,
+      reported: Reported
+    };
+    const Files2 = [];
+    for (const [Path, Entry] of FileMap)
+      Files2.push({
+        key: Path,
+        count: Entry.Count,
+        total: Entry.Total,
+        direct: Entry.Direct,
+        amortized: Entry.Amortized,
+        lines: Entry.Lines,
+        stage: Entry.Touched ? Entry.Stage : null
+      });
+    Files2.sort((A, B) => B.total - A.total || (A.key < B.key ? -1 : A.key > B.key ? 1 : 0));
+    const Tools = [];
+    for (const [Name, Entry] of ToolMap)
+      Tools.push({
+        key: Name,
+        count: Entry.Count,
+        total: 0,
+        direct: 0,
+        amortized: 0,
+        lines: 0,
+        stage: null
+      });
+    Tools.sort((A, B) => B.count - A.count || (A.key < B.key ? -1 : A.key > B.key ? 1 : 0));
+    let Currency = "";
+    for (const Step of StepList) {
+      const Name = S3(Step.currency);
+      if (Name !== "") {
+        Currency = Name;
+        break;
+      }
+    }
+    Turns.push({
+      turn: Key,
+      at: At,
+      endedAt: EndedAt,
+      steps: StepList,
+      cost: Cost,
+      tokens: Tokens,
+      cacheHit: CacheHit(Tokens),
+      provider: Dominant?.Provider ?? "",
+      model: Dominant?.Model ?? "",
+      files: Files2,
+      tools: Tools,
+      direct: Direct,
+      amortized: Amortized,
+      saving: Saving,
+      retries: Retries,
+      errors: Errors,
+      unpriced: Unpriced,
+      currency: Currency,
+      mixed: Currencies.size > 1
+    });
+    Steps += StepList.length;
+  }
+  return { turns: Turns, steps: Steps, summary: Response?.summary ?? ZeroSummary };
+}
+
+// Source/Function/Cells.ts
+var import_dsh_client_ui_primitives2 = require("@deepseek-ai/dsh-client-ui-primitives");
+
+// Source/Function/Clock.ts
+var Pad2 = (Value2) => String(Value2).padStart(2, "0");
+function Clock(Value2) {
+  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
+  const Moment = new Date(Value2);
+  switch (true) {
+    case Number.isNaN(Moment.getTime()):
+      return Dash_default;
+    default:
+      return `${Pad2(Moment.getHours())}:${Pad2(Moment.getMinutes())}:${Pad2(Moment.getSeconds())}`;
+  }
+}
+
+// Source/Function/CountShort.ts
+function CountShort(Value2) {
+  if (typeof Value2 !== "number" || !Number.isFinite(Value2)) return Dash_default;
+  switch (true) {
+    case Value2 >= 1e7:
+      return `${(Value2 / 1e6).toFixed(1)}M`;
+    case Value2 >= 1e3:
+      return `${(Value2 / 1e3).toFixed(1)}K`;
+    default:
+      return `${(Value2 / 1e3).toFixed(2)}K`;
+  }
+}
+
+// Source/Function/Share.ts
+function Share(Total, Scale) {
+  if (typeof Scale !== "number" || !Number.isFinite(Scale) || Scale <= 0) return 1;
+  if (Total <= 0) return 0;
+  return Math.min(1, Math.sqrt(Total / Scale));
+}
+
+// Source/Function/Cells.ts
+var import_react4 = require("react");
+var FilePillLimit = 3;
+var ToneClass2 = (Tone2) => `playform-cost-tone${Tone2}`;
+var ModelText = (Text4, Identifier) => (0, import_react4.createElement)(import_dsh_client_ui_primitives2.Tooltip, {
+  label: Identifier,
+  portal: true,
+  onlyWhenClipped: true,
+  disabled: Identifier === "",
+  children: (0, import_react4.createElement)(
+    "span",
+    {
+      className: "playform-cost-model-text",
+      // The tooltip's anchor contract is all-optional, so the span must
+      // name one of its keys for the weak-type check; the primitive
+      // clones the child and injects its own handler at runtime.
+      onPointerEnter: void 0
+    },
+    Text4
+  )
+});
+var PillNode = (Pill, Index, t) => (0, import_react4.createElement)(import_dsh_client_ui_primitives2.Tooltip, {
+  key: Index,
+  label: Pill.Path ?? Pill.Name,
+  portal: true,
+  disabled: Pill.Path === void 0,
+  children: (0, import_react4.createElement)(
+    "span",
+    {
+      className: "playform-cost-pill",
+      // The anchor contract's weak-type check needs one of its keys;
+      // the tooltip injects the real handler when it clones the child.
+      onPointerEnter: void 0,
+      ...Pill.Path === void 0 && Pill.Lines !== null && Pill.Lines !== 0 ? { title: t("files.lines", { lines: Lines(Pill.Lines) }) } : {}
+    },
+    (0, import_react4.createElement)("span", { className: `playform-cost-dot ${ToneClass2(Pill.Tone)}` }),
+    Pill.Name
+  )
+});
+var MarkerSpan = (Marker, Index) => (0, import_react4.createElement)(
+  "span",
+  {
+    key: Index,
+    className: Marker.Class,
+    ...Marker.Title === void 0 ? {} : { title: Marker.Title }
+  },
+  Marker.Text
+);
+var Scope = (Props) => {
+  const Toggle = Props.Toggle;
+  const ClockCell = Props.Clock;
+  const Hint = Props.Hint;
+  return (0, import_react4.createElement)(
+    "td",
+    { className: Props.Cell },
+    Toggle === void 0 ? Props.Label ?? null : (0, import_react4.createElement)(
+      "button",
+      {
+        type: "button",
+        className: "playform-cost-row-toggle",
+        "aria-expanded": Toggle.Expanded,
+        "aria-label": Toggle.Aria,
+        title: Toggle.Title,
+        onClick: (Event) => {
+          Event.stopPropagation();
+          Toggle.OnToggle();
+        }
+      },
+      Toggle.Label
+    ),
+    ClockCell === void 0 ? null : (0, import_react4.createElement)(
+      "span",
+      { className: "playform-cost-turn-clock", title: ClockCell.Title },
+      ClockCell.Text
+    ),
+    Hint === void 0 ? null : (0, import_react4.createElement)("span", { className: "playform-cost-detail-hint" }, Hint),
+    Props.Markers.map(MarkerSpan)
+  );
+};
+var Model = (Props) => {
+  const Mode = Props.Mode;
+  const Region = Props.Region;
+  const Tier = Props.Tier;
+  const When = Props.When;
+  const Identifier = [Props.Provider, Props.Model].filter((Part) => Part !== "").join("/");
+  return (0, import_react4.createElement)(
+    "td",
+    {
+      className: Props.Cell,
+      ...Props.Title === void 0 ? {} : { title: Props.Title }
+    },
+    When === void 0 ? null : (0, import_react4.createElement)(
+      "span",
+      { className: "playform-cost-step-when" },
+      (0, import_react4.createElement)("span", { className: "playform-cost-step-clock" }, When.Text)
+    ),
+    (0, import_react4.createElement)(
+      "span",
+      { className: "playform-cost-model-clip" },
+      (0, import_react4.createElement)("span", { className: "playform-cost-model-pill" }, Props.Provider),
+      ModelText(Props.Model, Identifier),
+      Mode === void 0 || Mode === "" ? null : (0, import_react4.createElement)("span", { className: "playform-cost-pill" }, Mode),
+      Region === void 0 || Region === "" ? null : (0, import_react4.createElement)("span", { className: "playform-cost-pill" }, Region),
+      typeof Tier === "number" ? (0, import_react4.createElement)("span", { className: "playform-cost-pill" }, String(Tier)) : null
+    )
+  );
+};
+var Files = (Props) => {
+  const Shown = Props.Pills.slice(0, FilePillLimit);
+  const Extra = Props.Pills.length - Shown.length;
+  const Quiet = !Props.Fail && Props.Pills.length === 0 && !(Props.Saving > 0);
+  return (0, import_react4.createElement)(
+    "td",
+    { className: Props.Cell },
+    Quiet ? (0, import_react4.createElement)(
+      "span",
+      { className: "playform-cost-files-clip" },
+      (0, import_react4.createElement)(
+        "span",
+        { className: "playform-cost-files-stat" },
+        Props.t("files.contextOnly", { tokens: CountShort(Props.Tokens) })
+      )
+    ) : [
+      (0, import_react4.createElement)(
+        "div",
+        {
+          className: "playform-cost-pills",
+          ...Props.Pills.length === 0 ? {} : {
+            title: Props.t("files.title", {
+              calls: Props.Calls,
+              files: Props.Pills.map((Pill) => Pill.Name).join(" | ")
+            })
+          }
+        },
+        Props.Fail ? (0, import_react4.createElement)(
+          "span",
+          { className: "playform-cost-fail-pill" },
+          Props.t("state.failed")
+        ) : null,
+        Shown.map((Pill, Index) => PillNode(Pill, Index, Props.t)),
+        Extra > 0 ? (0, import_react4.createElement)(
+          "span",
+          { className: "playform-cost-pill playform-cost-pill-muted" },
+          Props.t("files.more", { count: Extra })
+        ) : null,
+        Props.Saving > 0 ? (0, import_react4.createElement)(
+          "span",
+          {
+            className: "playform-cost-pill playform-cost-pill-muted",
+            title: Props.t("files.saving.title")
+          },
+          Props.t("files.saving", {
+            value: Price(Props.Saving, Props.Currency)
+          })
+        ) : null
+      ),
+      Props.ShowMix && Props.Pills.length > 0 ? (0, import_react4.createElement)(
+        "div",
+        { className: "playform-cost-mix" },
+        Props.Pills.map(
+          (Pill, Index) => (0, import_react4.createElement)("span", {
+            key: Index,
+            className: `playform-cost-mix-segment ${ToneClass2(Pill.Tone)}`,
+            style: { flexGrow: Pill.Count },
+            title: Props.t("files.count", { count: Pill.Count })
+          })
+        )
+      ) : null
+    ]
+  );
+};
+var Money = (Props) => (0, import_react4.createElement)(
+  "td",
+  {
+    className: Props.Cell,
+    ...Props.Title === void 0 ? {} : { title: Props.Title }
+  },
+  (0, import_react4.createElement)(
+    "span",
+    { className: "playform-cost-money" },
+    Price(Props.Value, Props.Currency)
+  )
+);
+var Alloc = (Props) => (0, import_react4.createElement)(
+  "td",
+  {
+    className: Props.Cell,
+    ...Props.Has ? {} : { title: Props.t("unknown") }
+  },
+  Props.Has ? [
+    (0, import_react4.createElement)(
+      "span",
+      { key: "direct", className: "playform-cost-num" },
+      Price(Props.Direct, Props.Currency)
+    ),
+    (0, import_react4.createElement)(
+      "span",
+      { key: "amortized", className: "playform-cost-num-delta" },
+      Price(Props.Amortized, Props.Currency)
+    )
+  ] : Dash_default
+);
+var Segment = (Key, Class, Value2) => Value2 > 0 ? (0, import_react4.createElement)("span", {
+  key: Key,
+  className: `playform-cost-bar-segment ${Class}`,
+  style: { flexGrow: Value2 }
+}) : null;
+var Bar = (Props) => {
+  const Figure = (Value2) => typeof Value2 === "number" && Number.isFinite(Value2) ? Value2 : 0;
+  const Total = Figure(Props.Total);
+  const CacheRead = Math.max(0, Figure(Props.Cost.cacheRead));
+  const Input = Math.max(0, Figure(Props.Cost.input));
+  const Output = Math.max(0, Figure(Props.Cost.output));
+  const Other = Math.max(0, Total - CacheRead - Input - Output);
+  const Tag = (Value2) => Price(Value2, Props.Currency);
+  const Parts = [
+    ...Props.Start === null ? [] : [Props.t("bar.start", { clock: Clock(Props.Start) })],
+    Props.t("bar.cacheRead", { value: Tag(CacheRead) }),
+    Props.t("bar.input", { value: Tag(Input) }),
+    Props.t("bar.output", { value: Tag(Output) }),
+    Props.t("bar.other", { value: Tag(Other) }),
+    Props.t("bar.total", { value: Tag(Total) })
+  ];
+  return (0, import_react4.createElement)(
+    "td",
+    { className: Props.Cell, title: Parts.join(" | ") },
+    (0, import_react4.createElement)(
+      "div",
+      { className: "playform-cost-bar-wrap" },
+      (0, import_react4.createElement)(
+        "div",
+        { className: Props.Track },
+        (0, import_react4.createElement)(
+          "div",
+          {
+            className: "playform-cost-bar-fill",
+            style: { width: `${Math.round(Share(Total, Props.Scale) * 100)}%` }
+          },
+          Segment("cacheRead", "playform-cost-bar-cache", CacheRead),
+          Segment("input", "playform-cost-bar-input", Input),
+          Segment("output", "playform-cost-bar-output", Output),
+          Segment("other", "playform-cost-bar-other", Other)
+        )
+      ),
+      (0, import_react4.createElement)("span", { className: "playform-cost-bar-value" }, Tag(Total))
+    )
+  );
+};
+var Cells_default = { Scope, Model, Files, Money, Bar, Alloc };
+
+// Source/Function/StepRow.ts
+var import_react5 = require("react");
+var CacheMissThreshold = 0.5;
+var Text2 = (Value2) => typeof Value2 === "string" ? Value2 : "";
+var BaseName2 = (Path) => {
+  const Cut = Path.lastIndexOf("/");
+  return Cut === -1 ? Path : Path.slice(Cut + 1);
+};
+var StageTones3 = {
+  discover: 5,
+  read: 0,
+  reread: 0,
+  edit: 2,
+  verify: 1,
+  revert: 3
+};
+var StageTone3 = (Stage) => {
+  if (Stage === null) return 7;
+  return StageTones3[Stage] ?? 7;
+};
+var Markers = (Step, t) => {
+  const List = [];
+  const Attempts = typeof Step.attempts === "number" ? Step.attempts : 1;
+  if (Step.priced === false)
+    List.push({
+      Class: "playform-cost-state-unpriced",
+      Text: t("state.unpriced"),
+      Title: t("state.unpriced.title")
+    });
+  if (typeof Step.error === "string")
+    List.push({
+      Class: "playform-cost-state-error",
+      Text: t("state.failed"),
+      Title: t("state.failed.title", { code: Step.error })
+    });
+  if (Attempts > 1)
+    List.push({
+      Class: "playform-cost-state-attempts",
+      Text: t("state.attempts", { count: Attempts - 1 }),
+      Title: t("state.attempts.title", { count: Attempts })
+    });
+  if (Step.cacheHit !== null && Step.cacheHit < CacheMissThreshold)
+    List.push({
+      Class: "playform-cost-state-attempts",
+      Text: t("state.cacheMiss"),
+      Title: t("state.cacheMiss.title")
+    });
+  return List;
+};
+var TokenCell = (Cell, Value2) => (0, import_react5.createElement)(
+  "td",
+  { className: Cell },
+  (0, import_react5.createElement)("span", { className: "playform-cost-num" }, CountShort(Value2))
+);
+var CacheCell = (Cell, Tokens, Hit, t) => {
+  const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
+  const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
+  const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
+  const Base = Read + Input + Write;
+  switch (true) {
+    case Base <= 0:
+      return (0, import_react5.createElement)("td", { className: Cell, title: t("unknown") }, Dash_default);
+    case (Read > 0 || Write > 0):
+      return (0, import_react5.createElement)(
+        "td",
+        {
+          className: Cell,
+          title: t("cache.detail", {
+            read: CountShort(Read),
+            input: CountShort(Input),
+            write: CountShort(Write)
+          })
+        },
+        (0, import_react5.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
+      );
+    default:
+      return (0, import_react5.createElement)(
+        "td",
+        { className: Cell, title: t("column.cache.title") },
+        (0, import_react5.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
+      );
+  }
+};
+var OtherTitle = (Cost, Currency, t) => {
+  const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
+  const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
+  switch (true) {
+    case (Write > 0 || Reasoning > 0):
+      return t("other.detail", {
+        write: Price(Write, Currency),
+        reasoning: Price(Reasoning, Currency),
+        rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency)
+      });
+    default:
+      return t("column.other.title");
+  }
+};
+function StepRow(Props) {
+  const Step = Props.Step;
+  const t = Props.t;
+  const Tag = Text2(Step.currency) !== "" ? Text2(Step.currency) : "USD";
+  const Metric = "playform-cost-step-metric";
+  const Raw = Array.isArray(Step.files) ? Step.files : [];
+  const Files2 = Raw.filter((File) => File !== null && typeof File === "object");
+  const Allocations = typeof Step.allocations === "number" ? Step.allocations : 0;
+  const Saving = typeof Step.saving === "number" ? Step.saving : 0;
+  const Cost = Step.cost ?? {
+    input: 0,
+    output: 0,
+    cacheRead: 0,
+    cacheWrite: 0,
+    reasoning: 0,
+    total: 0,
+    other: 0
+  };
+  const Tokens = Step.tokens ?? {
+    input: 0,
+    output: 0,
+    cacheRead: 0,
+    cacheWrite: 0,
+    reasoning: 0,
+    total: 0,
+    reported: null
+  };
+  const TokensTotal = typeof Tokens.total === "number" ? Tokens.total : 0;
+  const Total = typeof Cost.total === "number" ? Cost.total : 0;
+  const CacheRead = typeof Cost.cacheRead === "number" ? Cost.cacheRead : 0;
+  const Input = typeof Cost.input === "number" ? Cost.input : 0;
+  const Output = typeof Cost.output === "number" ? Cost.output : 0;
+  const Other = typeof Cost.other === "number" ? Cost.other : 0;
+  const HasDetail = Files2.length > 0 || Allocations > 0 || Total > 0;
+  const Started = t("step.started.title", { time: Stamp(Step.at) });
+  const ModelText2 = [
+    Text2(Step.provider),
+    Text2(Step.model),
+    Text2(Step.mode),
+    Text2(Step.region),
+    typeof Step.tier === "number" ? String(Step.tier) : ""
+  ].filter((Part) => Part !== "").join(" | ");
+  const Row = ["playform-cost-step-row"];
+  if (HasDetail) Row.push("playform-cost-step-row-clickable");
+  if (typeof Step.error === "string") Row.push("playform-cost-step-row-error");
+  return (0, import_react5.createElement)(
+    "tr",
+    {
+      className: Row.join(" "),
+      "data-step": String(Step.step),
+      ...HasDetail ? { onClick: Props.OnToggle, title: t("detail.title") } : {}
+    },
+    Cells_default.Scope({
+      Cell: "playform-cost-step-cell",
+      ...HasDetail ? {
+        Toggle: {
+          Expanded: Props.Expanded,
+          Label: t("step.label", { step: Step.step }),
+          Aria: t("step.toggle.aria", { step: Step.step }),
+          Title: t("detail.title"),
+          OnToggle: Props.OnToggle
+        }
+      } : { Label: t("step.label", { step: Step.step }) },
+      Hint: ` - ${Props.Expanded ? t("detail.hide") : t("detail.show")}`,
+      Markers: Markers(Step, t)
+    }),
+    Cells_default.Model({
+      Cell: "playform-cost-prompt-cell",
+      Provider: Text2(Step.provider),
+      Model: Text2(Step.model),
+      Mode: Text2(Step.mode),
+      Region: Text2(Step.region),
+      Tier: typeof Step.tier === "number" ? Step.tier : null,
+      When: { Text: Stamp(Step.at) },
+      Title: `${Started} | ${ModelText2}`
+    }),
+    Cells_default.Files({
+      Cell: "playform-cost-step-files",
+      Pills: Files2.map((File) => ({
+        Name: BaseName2(Text2(File.path)),
+        Path: Text2(File.path),
+        Tone: StageTone3(Text2(File.stage) === "" ? null : Text2(File.stage)),
+        Count: 1,
+        Lines: typeof File.linesDelta === "number" ? File.linesDelta : null
+      })),
+      Fail: typeof Step.error === "string",
+      Saving,
+      Calls: 1,
+      Tokens: TokensTotal,
+      Currency: Tag,
+      ShowMix: Files2.length >= 2,
+      t
+    }),
+    TokenCell(Metric, TokensTotal),
+    CacheCell(Metric, Tokens, Step.cacheHit, t),
+    Cells_default.Money({ Cell: Metric, Value: CacheRead, Currency: Tag }),
+    Cells_default.Money({ Cell: Metric, Value: Input, Currency: Tag }),
+    Cells_default.Money({ Cell: Metric, Value: Output, Currency: Tag }),
+    Cells_default.Money({
+      Cell: Metric,
+      Value: Other,
+      Currency: Tag,
+      Title: OtherTitle(Cost, Tag, t)
+    }),
+    Cells_default.Alloc({
+      Cell: Metric,
+      Direct: typeof Step.direct === "number" ? Step.direct : 0,
+      Amortized: typeof Step.amortized === "number" ? Step.amortized : 0,
+      Has: Allocations > 0,
+      Currency: Tag,
+      t
+    }),
+    Cells_default.Bar({
+      Cell: Metric,
+      Track: "playform-cost-bar-step",
+      Total,
+      Cost,
+      Scale: Props.Scale,
+      Currency: Tag,
+      Start: typeof Step.at === "number" ? Step.at : null,
+      t
+    })
+  );
+}
+
+// Source/Function/SummaryStrip.ts
+var import_react6 = require("react");
+var TopFileLimit = 5;
+var Text3 = (Value2) => typeof Value2 === "string" ? Value2 : "";
+var BaseName3 = (Path) => {
+  const Cut = Path.lastIndexOf("/");
+  return Cut === -1 ? Path : Path.slice(Cut + 1);
+};
+var Tone = (Path) => {
+  let Hash = 0;
+  for (const Character of Path) Hash = (Hash * 31 + Character.charCodeAt(0)) % 9973;
+  return Hash % 8;
+};
+function SummaryStrip(Props) {
+  const Summary = Props.Summary;
+  const t = Props.t;
+  const Tag = typeof Summary.currency === "string" && Summary.currency !== "" ? Summary.currency : "USD";
+  const Currencies = Array.isArray(Summary.currencies) ? Summary.currencies : [];
+  const Raw = Array.isArray(Summary.topFiles) ? Summary.topFiles : [];
+  const TopFiles = Raw.slice(0, TopFileLimit);
+  const Hit = typeof Summary.cacheHit === "number" ? Summary.cacheHit : null;
+  const Saving = typeof Summary.saving === "number" ? Summary.saving : 0;
+  const Total = typeof Summary.cost?.total === "number" ? Summary.cost.total : 0;
+  const Tokens = typeof Summary.tokens?.total === "number" ? Summary.tokens.total : 0;
+  return (0, import_react6.createElement)(
+    import_react6.Fragment,
+    {},
+    (0, import_react6.createElement)(
+      "div",
+      { className: "playform-cost-toolbar" },
+      (0, import_react6.createElement)(
+        "span",
+        { className: "playform-cost-summary" },
+        t("summary", { turns: Props.Turns, steps: Props.Steps, cost: Price(Total, Tag) })
+      ),
+      (0, import_react6.createElement)(
+        "div",
+        { className: "playform-cost-controls" },
+        Hit === null ? null : (0, import_react6.createElement)(
+          "span",
+          { className: "playform-cost-control-label" },
+          t("totals.cache", { value: Rate(Hit) })
+        ),
+        Saving > 0 ? (0, import_react6.createElement)(
+          "span",
+          { className: "playform-cost-control-label" },
+          t("totals.saving", { value: Price(Saving, Tag) })
+        ) : null,
+        (0, import_react6.createElement)(
+          "span",
+          { className: "playform-cost-control-label" },
+          t("totals.tokens", { tokens: CountShort(Tokens) })
+        ),
+        (0, import_react6.createElement)(
+          "span",
+          { className: "playform-cost-control-label" },
+          Currencies.length > 1 ? t("money.mixed", {
+            currencies: Currencies.map((Name) => Text3(Name)).filter((Name) => Name !== "").join(", ")
+          }) : t("money.currency", { currency: Tag })
+        ),
+        Props.AnyTurn ? (0, import_react6.createElement)(
+          "button",
+          {
+            type: "button",
+            className: "playform-cost-button",
+            onClick: Props.OnToggleAll
+          },
+          Props.AllOpen ? t("collapse.all") : t("expand.all")
+        ) : (0, import_react6.createElement)(
+          "button",
+          {
+            type: "button",
+            className: "playform-cost-button-off",
+            disabled: true
+          },
+          t("expand.all")
+        )
+      )
+    ),
+    (0, import_react6.createElement)(
+      "div",
+      { className: "playform-cost-top-files" },
+      (0, import_react6.createElement)(
+        "span",
+        { className: "playform-cost-control-label", title: t("topFiles.title") },
+        t("topFiles.label")
+      ),
+      TopFiles.length === 0 ? (0, import_react6.createElement)(
+        "span",
+        { className: "playform-cost-control-label" },
+        t("topFiles.empty")
+      ) : TopFiles.map((File, Index) => {
+        const Path = Text3(File.path);
+        const Money3 = typeof File.total === "number" ? File.total : 0;
+        return (0, import_react6.createElement)(
+          "span",
+          { className: "playform-cost-file-pill", key: Index, title: Path },
+          (0, import_react6.createElement)("span", {
+            className: `playform-cost-dot playform-cost-tone${Tone(Path)}`
+          }),
+          `${BaseName3(Path)} ${Price(Money3, Tag)}`
+        );
+      })
+    )
+  );
+}
+
+// Source/Function/TotalsRow.ts
+var import_react7 = require("react");
+var TokenCell2 = (Cell, Value2) => (0, import_react7.createElement)(
+  "td",
+  { className: Cell },
+  (0, import_react7.createElement)("span", { className: "playform-cost-num" }, CountShort(Value2))
+);
+var CacheCell2 = (Cell, Tokens, Hit, t) => {
+  const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
+  const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
+  const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
+  const Base = Read + Input + Write;
+  switch (true) {
+    case Base <= 0:
+      return (0, import_react7.createElement)("td", { className: Cell, title: t("unknown") }, Dash_default);
+    case (Read > 0 || Write > 0):
+      return (0, import_react7.createElement)(
+        "td",
+        {
+          className: Cell,
+          title: t("cache.detail", {
+            read: CountShort(Read),
+            input: CountShort(Input),
+            write: CountShort(Write)
+          })
+        },
+        (0, import_react7.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
+      );
+    default:
+      return (0, import_react7.createElement)(
+        "td",
+        { className: Cell, title: t("column.cache.title") },
+        (0, import_react7.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
+      );
+  }
+};
+var OtherTitle2 = (Cost, Currency, t) => {
+  const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
+  const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
+  switch (true) {
+    case (Write > 0 || Reasoning > 0):
+      return t("other.detail", {
+        write: Price(Write, Currency),
+        reasoning: Price(Reasoning, Currency),
+        rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency)
+      });
+    default:
+      return t("column.other.title");
+  }
+};
+function TotalsRow(Props) {
+  const Summary = Props.Summary;
+  const t = Props.t;
+  const Tag = typeof Summary.currency === "string" && Summary.currency !== "" ? Summary.currency : "USD";
+  const Metric = "playform-cost-turn-metric";
+  const Cost = Summary.cost ?? {
+    input: 0,
+    output: 0,
+    cacheRead: 0,
+    cacheWrite: 0,
+    reasoning: 0,
+    total: 0,
+    other: 0
+  };
+  const Tokens = Summary.tokens ?? {
+    input: 0,
+    output: 0,
+    cacheRead: 0,
+    cacheWrite: 0,
+    reasoning: 0,
+    total: 0,
+    reported: null
+  };
+  return (0, import_react7.createElement)(
+    "tr",
+    { className: "playform-cost-totals-row", title: t("totals.session.title") },
+    (0, import_react7.createElement)(
+      "td",
+      { className: "playform-cost-totals-label", colSpan: 2 },
+      t("totals.session"),
+      (0, import_react7.createElement)(
+        "span",
+        { className: "playform-cost-totals-meta" },
+        ` - ${t("totals.calls", {
+          calls: typeof Summary.calls === "number" ? Summary.calls : 0,
+          unpriced: typeof Summary.unpriced === "number" ? Summary.unpriced : 0
+        })}`
+      )
+    ),
+    (0, import_react7.createElement)("td", { className: Metric }),
+    TokenCell2(Metric, typeof Tokens.total === "number" ? Tokens.total : 0),
+    CacheCell2(
+      Metric,
+      Tokens,
+      typeof Summary.cacheHit === "number" ? Summary.cacheHit : null,
+      t
+    ),
+    Cells_default.Money({ Cell: Metric, Value: Cost.cacheRead, Currency: Tag }),
+    Cells_default.Money({ Cell: Metric, Value: Cost.input, Currency: Tag }),
+    Cells_default.Money({ Cell: Metric, Value: Cost.output, Currency: Tag }),
+    Cells_default.Money({
+      Cell: Metric,
+      Value: Cost.other,
+      Currency: Tag,
+      Title: OtherTitle2(Cost, Tag, t)
+    }),
+    Cells_default.Alloc({
+      Cell: Metric,
+      Direct: typeof Summary.direct === "number" ? Summary.direct : 0,
+      Amortized: typeof Summary.amortized === "number" ? Summary.amortized : 0,
+      Has: typeof Summary.direct === "number" && Summary.direct !== 0 || typeof Summary.amortized === "number" && Summary.amortized !== 0,
+      Currency: Tag,
+      t
+    }),
+    Cells_default.Bar({
+      Cell: Metric,
+      Track: "playform-cost-bar-turn",
+      Total: Cost.total,
+      Cost,
+      Scale: typeof Cost.total === "number" ? Cost.total : 0,
+      Currency: Tag,
+      Start: null,
+      t
+    })
+  );
+}
+
+// Source/Function/TurnRow.ts
+var import_react8 = require("react");
+var CacheMissThreshold2 = 0.5;
+var BaseName4 = (Path) => {
+  const Cut = Path.lastIndexOf("/");
+  return Cut === -1 ? Path : Path.slice(Cut + 1);
+};
+var StageTones4 = {
+  discover: 5,
+  read: 0,
+  reread: 0,
+  edit: 2,
+  verify: 1,
+  revert: 3
+};
+var StageTone4 = (Stage) => {
+  if (Stage === null) return 7;
+  return StageTones4[Stage] ?? 7;
+};
+var Money2 = (Turn) => Turn.currency !== "" ? Turn.currency : "USD";
+var Markers2 = (Turn, t) => {
+  const List = [];
+  if (Turn.unpriced > 0)
+    List.push({
+      Class: "playform-cost-state-unpriced",
+      Text: t("state.unpriced"),
+      Title: t("state.unpriced.title")
+    });
+  if (Turn.errors > 0) {
+    let Code = "";
+    for (const Step of Turn.steps) {
+      if (typeof Step.error === "string" && Step.error !== "") {
+        Code = Step.error;
+        break;
+      }
+    }
+    List.push({
+      Class: "playform-cost-state-error",
+      Text: t("state.failed"),
+      Title: t("state.failed.title", { code: Code === "" ? t("unknown") : Code })
+    });
+  }
+  if (Turn.retries > 0)
+    List.push({
+      Class: "playform-cost-state-attempts",
+      Text: t("state.attempts", { count: Turn.retries }),
+      Title: t("state.attempts.title", { count: Turn.retries })
+    });
+  if (Turn.cacheHit !== null && Turn.cacheHit < CacheMissThreshold2)
+    List.push({
+      Class: "playform-cost-state-attempts",
+      Text: t("state.cacheMiss"),
+      Title: t("state.cacheMiss.title")
+    });
+  return List;
+};
+var TokenCell3 = (Cell, Value2) => (0, import_react8.createElement)(
+  "td",
+  { className: Cell },
+  (0, import_react8.createElement)("span", { className: "playform-cost-num" }, CountShort(Value2))
+);
+var CacheCell3 = (Cell, Tokens, Hit, t) => {
+  const Read = typeof Tokens.cacheRead === "number" ? Tokens.cacheRead : 0;
+  const Input = typeof Tokens.input === "number" ? Tokens.input : 0;
+  const Write = typeof Tokens.cacheWrite === "number" ? Tokens.cacheWrite : 0;
+  const Base = Read + Input + Write;
+  switch (true) {
+    case Base <= 0:
+      return (0, import_react8.createElement)("td", { className: Cell, title: t("unknown") }, Dash_default);
+    case (Read > 0 || Write > 0):
+      return (0, import_react8.createElement)(
+        "td",
+        {
+          className: Cell,
+          title: t("cache.detail", {
+            read: CountShort(Read),
+            input: CountShort(Input),
+            write: CountShort(Write)
+          })
+        },
+        (0, import_react8.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
+      );
+    default:
+      return (0, import_react8.createElement)(
+        "td",
+        { className: Cell, title: t("column.cache.title") },
+        (0, import_react8.createElement)("span", { className: "playform-cost-num" }, Rate(Hit))
+      );
+  }
+};
+var OtherTitle3 = (Cost, Currency, t) => {
+  const Write = typeof Cost.cacheWrite === "number" ? Cost.cacheWrite : 0;
+  const Reasoning = typeof Cost.reasoning === "number" ? Cost.reasoning : 0;
+  switch (true) {
+    case (Write > 0 || Reasoning > 0):
+      return t("other.detail", {
+        write: Price(Write, Currency),
+        reasoning: Price(Reasoning, Currency),
+        rest: Price(Math.max(0, Cost.other - Write - Reasoning), Currency)
+      });
+    default:
+      return t("column.other.title");
+  }
+};
+function TurnRow(Props) {
+  const Turn = Props.Turn;
+  const t = Props.t;
+  const Tag = Money2(Turn);
+  const Metric = "playform-cost-turn-metric";
+  return (0, import_react8.createElement)(
+    "tr",
+    {
+      className: "playform-cost-turn-row",
+      "data-turn": String(Turn.turn),
+      title: t("turn.toggle.title"),
+      onClick: Props.OnToggle
+    },
+    Cells_default.Scope({
+      Cell: "playform-cost-turn-cell",
+      Toggle: {
+        Expanded: Props.Open,
+        Label: t("turn.label", { turn: Turn.turn }),
+        Aria: t("turn.toggle.aria", { turn: Turn.turn }),
+        Title: t("turn.toggle.title"),
+        OnToggle: Props.OnToggle
+      },
+      Clock: {
+        Text: ` - ${Stamp(Turn.at)}`,
+        Title: t("turn.started", { time: Stamp(Turn.at) })
+      },
+      Markers: Markers2(Turn, t)
+    }),
+    Cells_default.Model({
+      Cell: "playform-cost-model-cell-turn",
+      Provider: Turn.provider,
+      Model: Turn.model
+    }),
+    Cells_default.Files({
+      Cell: "playform-cost-turn-files",
+      Pills: Turn.files.map((Tally) => ({
+        Name: BaseName4(Tally.key),
+        Path: Tally.key,
+        Tone: StageTone4(Tally.stage),
+        Count: Tally.count,
+        Lines: Tally.lines
+      })),
+      Fail: Turn.errors > 0,
+      Saving: Turn.saving,
+      Calls: Turn.steps.length,
+      Tokens: Turn.tokens.total,
+      Currency: Tag,
+      ShowMix: Turn.files.length > 0,
+      t
+    }),
+    TokenCell3(Metric, Turn.tokens.total),
+    CacheCell3(Metric, Turn.tokens, Turn.cacheHit, t),
+    Cells_default.Money({ Cell: Metric, Value: Turn.cost.cacheRead, Currency: Tag }),
+    Cells_default.Money({ Cell: Metric, Value: Turn.cost.input, Currency: Tag }),
+    Cells_default.Money({ Cell: Metric, Value: Turn.cost.output, Currency: Tag }),
+    Cells_default.Money({
+      Cell: Metric,
+      Value: Turn.cost.other,
+      Currency: Tag,
+      Title: OtherTitle3(Turn.cost, Tag, t)
+    }),
+    Cells_default.Alloc({
+      Cell: Metric,
+      Direct: Turn.direct,
+      Amortized: Turn.amortized,
+      Has: Turn.direct !== 0 || Turn.amortized !== 0,
+      Currency: Tag,
+      t
+    }),
+    Cells_default.Bar({
+      Cell: Metric,
+      Track: "playform-cost-bar-turn",
+      Total: Turn.cost.total,
+      Cost: Turn.cost,
+      Scale: Props.Scale,
+      Currency: Tag,
+      Start: null,
+      t
+    })
+  );
+}
+
+// Source/Variable/Limits.ts
+var Limits_default = {
+  DefaultRows: 200,
+  MinRows: 1,
+  MaxRows: 2e3,
+  StepLimit: 24,
+  LoadOlderFactor: 2
 };
 
 // Source/Function/View.ts
-var import_react8 = require("react");
+var import_react9 = require("react");
 var DefaultRows = 200;
 var MaxRows = 2e3;
 var Fill = (Template, Params) => {
   if (Params === void 0) return Template;
   let Out = Template;
-  for (const [Name, Value] of Object.entries(Params))
-    Out = Out.replaceAll(`{${Name}}`, () => String(Value));
+  for (const [Name, Value2] of Object.entries(Params))
+    Out = Out.replaceAll(`{${Name}}`, () => String(Value2));
   return Out;
 };
 var Local = (Key, Params) => Fill(Locale_en_default[Key] ?? Key, Params);
@@ -1780,32 +2280,55 @@ var StepScaleOf = (Turn) => {
   }
   return Top;
 };
+var Value = (Event) => {
+  const Target = Event?.target;
+  const Text4 = Target?.value;
+  return typeof Text4 === "string" ? Text4 : "";
+};
+var StageName = (Stage, t) => {
+  const Known = Locale_en_default[`stage.${Stage}`];
+  return Known === void 0 ? Stage : t(`stage.${Stage}`);
+};
+var Chip = (Label, Active, OnClick, Key) => (0, import_react9.createElement)(
+  "button",
+  {
+    key: Key,
+    type: "button",
+    className: Active ? "playform-cost-chip playform-cost-chip-on" : "playform-cost-chip",
+    "aria-pressed": Active,
+    onClick: OnClick
+  },
+  Label
+);
 function View(Props) {
   const t = Props.t ?? Local;
   const SessionId = typeof Props.sessionId === "string" ? Props.sessionId : "";
-  const [Phase, SetPhase] = (0, import_react8.useState)("loading");
-  const [Note, SetNote] = (0, import_react8.useState)(null);
-  const [Snapshot, SetSnapshot] = (0, import_react8.useState)(null);
-  const [Rows, SetRows] = (0, import_react8.useState)(() => {
+  const [Phase, SetPhase] = (0, import_react9.useState)("loading");
+  const [Note, SetNote] = (0, import_react9.useState)(null);
+  const [Snapshot, SetSnapshot] = (0, import_react9.useState)(null);
+  const [Rows, SetRows] = (0, import_react9.useState)(() => {
     if (typeof Props.rows !== "number" || !Number.isFinite(Props.rows) || Props.rows < 1)
       return DefaultRows;
     return Math.min(MaxRows, Math.floor(Props.rows));
   });
-  const [Attempt, SetAttempt] = (0, import_react8.useState)(0);
-  const [Truncated, SetTruncated] = (0, import_react8.useState)(false);
-  const [Older, SetOlder] = (0, import_react8.useState)("idle");
-  const [TurnMode, SetTurnMode] = (0, import_react8.useState)("newest");
-  const [TurnOverride, SetTurnOverride] = (0, import_react8.useState)({});
-  const [StepOpen, SetStepOpen] = (0, import_react8.useState)(/* @__PURE__ */ new Set());
-  const [ShowAll, SetShowAll] = (0, import_react8.useState)(/* @__PURE__ */ new Set());
-  const [SeenTick, SetSeenTick] = (0, import_react8.useState)(0);
-  const ScrollRef = (0, import_react8.useRef)(null);
-  const Visible = (0, import_react8.useRef)(/* @__PURE__ */ new Set());
-  const Pending = (0, import_react8.useRef)(null);
-  const Growing = (0, import_react8.useRef)(false);
-  const Counted = (0, import_react8.useRef)(null);
-  const FetchedFor = (0, import_react8.useRef)("");
-  (0, import_react8.useEffect)(() => {
+  const [Attempt, SetAttempt] = (0, import_react9.useState)(0);
+  const [Truncated, SetTruncated] = (0, import_react9.useState)(false);
+  const [Older, SetOlder] = (0, import_react9.useState)("idle");
+  const [Pane, SetPane] = (0, import_react9.useState)("turns");
+  const [Files2, SetFiles] = (0, import_react9.useState)([]);
+  const [FileFilter, SetFileFilter] = (0, import_react9.useState)(FileFilters_default.Default);
+  const [TurnMode, SetTurnMode] = (0, import_react9.useState)("newest");
+  const [TurnOverride, SetTurnOverride] = (0, import_react9.useState)({});
+  const [StepOpen, SetStepOpen] = (0, import_react9.useState)(/* @__PURE__ */ new Set());
+  const [ShowAll, SetShowAll] = (0, import_react9.useState)(/* @__PURE__ */ new Set());
+  const [SeenTick, SetSeenTick] = (0, import_react9.useState)(0);
+  const ScrollRef = (0, import_react9.useRef)(null);
+  const Visible = (0, import_react9.useRef)(/* @__PURE__ */ new Set());
+  const Pending = (0, import_react9.useRef)(null);
+  const Growing = (0, import_react9.useRef)(false);
+  const Counted = (0, import_react9.useRef)(null);
+  const FetchedFor = (0, import_react9.useRef)("");
+  (0, import_react9.useEffect)(() => {
     let Live = true;
     if (SessionId === "") {
       SetSnapshot(null);
@@ -1834,6 +2357,7 @@ function View(Props) {
           return;
         }
         SetSnapshot(Fold(Response));
+        SetFiles([]);
         SetNote(
           typeof Envelope.message === "string" ? Envelope.message : null
         );
@@ -1848,6 +2372,7 @@ function View(Props) {
       const Previous = Counted.current;
       Counted.current = Calls.length;
       SetSnapshot(Fold(Response));
+      SetFiles(Array.isArray(Response.files) ? Response.files : []);
       SetTruncated(Response.truncated === true);
       if (Calls.length === 0) {
         SetPhase("empty");
@@ -1880,7 +2405,7 @@ function View(Props) {
       Live = false;
     };
   }, [SessionId, Rows, Attempt]);
-  (0, import_react8.useEffect)(() => {
+  (0, import_react9.useEffect)(() => {
     const Scroll = ScrollRef.current;
     if (Scroll === null || typeof IntersectionObserver === "undefined") return;
     const Seen = /* @__PURE__ */ new Set();
@@ -1907,7 +2432,7 @@ function View(Props) {
       Observer.disconnect();
     };
   }, [Snapshot, Phase]);
-  (0, import_react8.useEffect)(() => {
+  (0, import_react9.useEffect)(() => {
     const Scroll = ScrollRef.current;
     const Restore = Pending.current;
     if (Scroll === null || Restore === null) return;
@@ -1916,7 +2441,7 @@ function View(Props) {
   }, [Snapshot, Phase]);
   const Last = Snapshot === null ? void 0 : Snapshot.turns[Snapshot.turns.length - 1];
   const Latest = Last === void 0 ? -1 : Last.turn;
-  const TurnOpen = (0, import_react8.useCallback)(
+  const TurnOpen = (0, import_react9.useCallback)(
     (Turn) => {
       const Override = TurnOverride[Turn];
       switch (true) {
@@ -1933,13 +2458,13 @@ function View(Props) {
     [TurnOverride, TurnMode, Latest]
   );
   const AllOpen = Snapshot !== null && Snapshot.turns.length > 0 && Snapshot.turns.every((Turn) => TurnOpen(Turn.turn));
-  const ToggleTurn = (0, import_react8.useCallback)(
+  const ToggleTurn = (0, import_react9.useCallback)(
     (Turn) => {
       SetTurnOverride((Current) => ({ ...Current, [Turn]: !TurnOpen(Turn) }));
     },
     [TurnOpen]
   );
-  const ToggleStep = (0, import_react8.useCallback)((Key) => {
+  const ToggleStep = (0, import_react9.useCallback)((Key) => {
     SetStepOpen((Current) => {
       const Next = new Set(Current);
       if (Next.has(Key)) Next.delete(Key);
@@ -1947,7 +2472,7 @@ function View(Props) {
       return Next;
     });
   }, []);
-  const ToggleAllSteps = (0, import_react8.useCallback)((Turn) => {
+  const ToggleAllSteps = (0, import_react9.useCallback)((Turn) => {
     SetShowAll((Current) => {
       const Next = new Set(Current);
       if (Next.has(Turn)) Next.delete(Turn);
@@ -1955,12 +2480,12 @@ function View(Props) {
       return Next;
     });
   }, []);
-  const ToggleAllTurns = (0, import_react8.useCallback)(() => {
+  const ToggleAllTurns = (0, import_react9.useCallback)(() => {
     if (AllOpen) SetTurnMode("none");
     else SetTurnMode("all");
     SetTurnOverride({});
   }, [AllOpen]);
-  const LoadOlder = (0, import_react8.useCallback)(() => {
+  const LoadOlder = (0, import_react9.useCallback)(() => {
     const Scroll = ScrollRef.current;
     if (Scroll !== null)
       Pending.current = { Height: Scroll.scrollHeight, Top: Scroll.scrollTop };
@@ -1968,11 +2493,11 @@ function View(Props) {
     SetOlder("loading");
     SetRows((Current) => Math.min(MaxRows, Current * Limits_default.LoadOlderFactor));
   }, []);
-  const Retry = (0, import_react8.useCallback)(() => {
+  const Retry = (0, import_react9.useCallback)(() => {
     SetPhase("loading");
     SetAttempt((Current) => Current + 1);
   }, []);
-  const TurnScale = (0, import_react8.useMemo)(() => {
+  const TurnScale = (0, import_react9.useMemo)(() => {
     if (Snapshot === null) return 0;
     const Seen = Visible.current;
     const Source = Seen.size > 0 ? Snapshot.turns.filter((Turn) => Seen.has(Turn.turn)) : Snapshot.turns;
@@ -1988,7 +2513,7 @@ function View(Props) {
     for (const Turn of Snapshot.turns) {
       const Open = TurnOpen(Turn.turn);
       Body.push(
-        (0, import_react8.createElement)(TurnRow, {
+        (0, import_react9.createElement)(TurnRow, {
           key: `turn:${Turn.turn}`,
           Turn,
           Open,
@@ -2002,18 +2527,18 @@ function View(Props) {
       const All = ShowAll.has(Turn.turn) || Total <= Limits_default.StepLimit;
       if (Total > Limits_default.StepLimit)
         Body.push(
-          (0, import_react8.createElement)(
+          (0, import_react9.createElement)(
             "tr",
             { key: `more:${Turn.turn}` },
-            (0, import_react8.createElement)(
+            (0, import_react9.createElement)(
               "td",
               { className: "playform-cost-more-cell", colSpan: COLUMNS.length },
-              (0, import_react8.createElement)(
+              (0, import_react9.createElement)(
                 "span",
                 { className: "playform-cost-more-text" },
                 t("steps.total", { total: Total })
               ),
-              (0, import_react8.createElement)(
+              (0, import_react9.createElement)(
                 "button",
                 {
                   type: "button",
@@ -2030,7 +2555,7 @@ function View(Props) {
         const Key = `${Turn.turn}:${Step.step}`;
         const Expanded = StepOpen.has(Key);
         Body.push(
-          (0, import_react8.createElement)(StepRow, {
+          (0, import_react9.createElement)(StepRow, {
             key: `step:${Key}`,
             Step,
             Expanded,
@@ -2040,7 +2565,7 @@ function View(Props) {
           })
         );
         if (Expanded)
-          Body.push((0, import_react8.createElement)(DetailRow, { key: `detail:${Key}`, Step, t }));
+          Body.push((0, import_react9.createElement)(DetailRow, { key: `detail:${Key}`, Step, t }));
       }
     }
   }
@@ -2048,20 +2573,20 @@ function View(Props) {
     if (Snapshot === null || Phase !== "ready") return null;
     switch (true) {
       case Older === "loading":
-        return (0, import_react8.createElement)(
+        return (0, import_react9.createElement)(
           "span",
           { className: "playform-cost-older-status", role: "status" },
           t("loadOlder.loading")
         );
       case (Truncated && Rows >= MaxRows):
-        return (0, import_react8.createElement)(
+        return (0, import_react9.createElement)(
           "span",
           { className: "playform-cost-older-status" },
           t("loadOlder.capped", { rows: MaxRows })
         );
       case Older === "failed":
-        return (0, import_react8.createElement)(
-          import_dsh_client_ui_primitives2.Button,
+        return (0, import_react9.createElement)(
+          import_dsh_client_ui_primitives3.Button,
           {
             variant: "outline",
             size: "sm",
@@ -2072,8 +2597,8 @@ function View(Props) {
           t("loadOlder.failed")
         );
       case Truncated:
-        return (0, import_react8.createElement)(
-          import_dsh_client_ui_primitives2.Button,
+        return (0, import_react9.createElement)(
+          import_dsh_client_ui_primitives3.Button,
           {
             variant: "outline",
             size: "sm",
@@ -2084,23 +2609,23 @@ function View(Props) {
           t("loadOlder")
         );
       default:
-        return (0, import_react8.createElement)(
+        return (0, import_react9.createElement)(
           "span",
           { className: "playform-cost-older-status" },
           t("loadOlder.done")
         );
     }
   })();
-  const Line = (Text4, Status, Action) => (0, import_react8.createElement)(
+  const Line = (Text4, Status, Action) => (0, import_react9.createElement)(
     "div",
     { className: "playform-cost-empty", ...Status ? { role: "status" } : {} },
     Text4,
     Action === void 0 ? null : Action
   );
-  const Shell = (Inner, Footer) => (0, import_react8.createElement)(
+  const Shell = (Inner, Footer2) => (0, import_react9.createElement)(
     "section",
     { className: "playform-cost-root" },
-    (0, import_react8.createElement)(
+    (0, import_react9.createElement)(
       "div",
       {
         className: "playform-cost-scroll",
@@ -2111,14 +2636,14 @@ function View(Props) {
       },
       Inner
     ),
-    Footer
+    Footer2
   );
   switch (true) {
     case Phase === "unavailable":
       return Shell(
         [
           Line(t("unavailable"), false),
-          Note === null ? null : (0, import_react8.createElement)("p", { className: "playform-cost-block-meta" }, Note)
+          Note === null ? null : (0, import_react9.createElement)("p", { className: "playform-cost-block-meta" }, Note)
         ],
         null
       );
@@ -2128,8 +2653,8 @@ function View(Props) {
           Line(
             t("error"),
             false,
-            (0, import_react8.createElement)(
-              import_dsh_client_ui_primitives2.Button,
+            (0, import_react9.createElement)(
+              import_dsh_client_ui_primitives3.Button,
               {
                 variant: "outline",
                 size: "sm",
@@ -2147,30 +2672,25 @@ function View(Props) {
       break;
   }
   if (Phase === "loading" || Snapshot === null) return Shell([Line(t("loading"), true)], null);
-  if (Snapshot.turns.length === 0)
-    return Shell(
-      [Line(t("empty"), false)],
-      (0, import_react8.createElement)(SummaryStrip, {
-        Summary: Snapshot.summary,
-        Turns: 0,
-        Steps: Snapshot.steps,
-        AllOpen: false,
-        AnyTurn: false,
-        OnToggleAll: ToggleAllTurns,
-        t
-      })
-    );
-  return Shell(
-    [
-      Strip === null ? null : (0, import_react8.createElement)("div", { className: "playform-cost-older", key: "older" }, Strip),
-      (0, import_react8.createElement)(Table, {
-        key: "table",
-        Body,
-        Totals: (0, import_react8.createElement)(TotalsRow, { Summary: Snapshot.summary, t }),
-        t
-      })
-    ],
-    (0, import_react8.createElement)(SummaryStrip, {
+  const Currency = typeof Snapshot.summary.currency === "string" && Snapshot.summary.currency !== "" ? Snapshot.summary.currency : "USD";
+  const Footer = (0, import_react9.createElement)(
+    import_react9.Fragment,
+    {},
+    (0, import_react9.createElement)(
+      "div",
+      { className: "playform-cost-toolbar" },
+      (0, import_react9.createElement)(
+        "div",
+        {
+          className: "playform-cost-controls",
+          role: "group",
+          "aria-label": t("view.switcher")
+        },
+        Chip(t("view.turns"), Pane === "turns", () => SetPane("turns"), "turns"),
+        Chip(t("view.files"), Pane === "files", () => SetPane("files"), "files")
+      )
+    ),
+    (0, import_react9.createElement)(SummaryStrip, {
       Summary: Snapshot.summary,
       Turns: Snapshot.turns.length,
       Steps: Snapshot.steps,
@@ -2179,6 +2699,108 @@ function View(Props) {
       OnToggleAll: ToggleAllTurns,
       t
     })
+  );
+  if (Pane === "files") {
+    const Shown = FileFilters_default.Apply(Files2, FileFilter);
+    const Stages2 = FileFilters_default.StagesOf(Files2);
+    const Controls = (0, import_react9.createElement)(
+      "div",
+      {
+        className: "playform-cost-controls",
+        role: "group",
+        "aria-label": t("view.files")
+      },
+      (0, import_react9.createElement)("input", {
+        type: "text",
+        className: "playform-cost-button",
+        // The chip face carries cursor: pointer; a text field must not.
+        style: { cursor: "text" },
+        value: FileFilter.Path,
+        placeholder: t("files.filter.path"),
+        "aria-label": t("files.filter.path"),
+        onChange: (Event) => SetFileFilter({ ...FileFilter, Path: Value(Event) })
+      }),
+      (0, import_react9.createElement)(
+        "span",
+        { className: "playform-cost-control-label" },
+        t("files.filter.kind")
+      ),
+      FileFilters_default.Kinds.map(
+        (Kind) => Chip(
+          t(`files.kind.${Kind}`),
+          FileFilter.Kind === Kind,
+          () => SetFileFilter({ ...FileFilter, Kind }),
+          Kind
+        )
+      ),
+      (0, import_react9.createElement)(
+        "span",
+        { className: "playform-cost-control-label" },
+        t("files.filter.stage")
+      ),
+      Chip(
+        t("files.filter.stageAll"),
+        FileFilter.Stage === null,
+        () => SetFileFilter({ ...FileFilter, Stage: null }),
+        "stage:all"
+      ),
+      Stages2.map(
+        (Stage) => Chip(
+          StageName(Stage, t),
+          FileFilter.Stage === Stage,
+          () => SetFileFilter({
+            ...FileFilter,
+            Stage: FileFilter.Stage === Stage ? null : Stage
+          }),
+          `stage:${Stage}`
+        )
+      ),
+      (0, import_react9.createElement)(
+        "span",
+        { className: "playform-cost-control-label" },
+        t("files.filter.sort")
+      ),
+      FileFilters_default.Sorts.map(
+        (Sort) => Chip(
+          t(`files.sort.${Sort}`),
+          FileFilter.Sort === Sort,
+          () => SetFileFilter({ ...FileFilter, Sort }),
+          Sort
+        )
+      )
+    );
+    switch (true) {
+      case Files2.length === 0:
+        return Shell([Line(t("files.empty"), false)], Footer);
+      case Shown.length === 0:
+        return Shell([Controls, Line(t("files.filter.empty"), false)], Footer);
+      default:
+        return Shell(
+          [
+            Controls,
+            (0, import_react9.createElement)(FileTable, {
+              key: "files",
+              Files: Shown,
+              Currency,
+              t
+            })
+          ],
+          Footer
+        );
+    }
+  }
+  if (Snapshot.turns.length === 0) return Shell([Line(t("empty"), false)], Footer);
+  return Shell(
+    [
+      Strip === null ? null : (0, import_react9.createElement)("div", { className: "playform-cost-older", key: "older" }, Strip),
+      (0, import_react9.createElement)(Table, {
+        key: "table",
+        Body,
+        Totals: (0, import_react9.createElement)(TotalsRow, { Summary: Snapshot.summary, t }),
+        t
+      })
+    ],
+    Footer
   );
 }
 
@@ -2291,14 +2913,61 @@ var Locale_zh_default = {
   "stage.edit": "\u7F16\u8F91",
   "stage.verify": "\u9A8C\u8BC1",
   "stage.revert": "\u56DE\u9000",
-  "stage.unknown": "\u672A\u77E5\u9636\u6BB5"
+  "stage.unknown": "\u672A\u77E5\u9636\u6BB5",
+  "view.turns": "\u8F6E\u6B21",
+  "view.files": "\u6587\u4EF6",
+  "view.switcher": "\u9009\u62E9\u6210\u672C\u89C6\u56FE",
+  "files.column.file": "\u6587\u4EF6",
+  "files.column.file.title": "\u672C\u4F1A\u8BDD\u89E6\u53CA\u7684\u6587\u4EF6;\u5B8C\u6574\u8DEF\u5F84\u5728\u60AC\u6D6E\u63D0\u793A\u4E2D",
+  "files.column.touches": "\u89E6\u53CA",
+  "files.column.touches.title": "{touches} \u6B21\u89E6\u53CA:{reads} \u6B21\u8BFB\u53D6\u3001{edits} \u6B21\u7F16\u8F91\u3001{writes} \u6B21\u5199\u5165\u3001{searches} \u6B21\u641C\u7D22;\u9996\u6B21 {first},\u672B\u6B21 {last}",
+  "files.column.lines": "\u884C\u6570",
+  "files.column.lines.title": "\u65B0\u589E {added} \u884C,\u5220\u9664 {removed} \u884C;\u65B0\u589E {bytesAdded} \u5B57\u8282,\u5220\u9664 {bytesRemoved} \u5B57\u8282",
+  "files.column.lifetime": "\u5168\u751F\u547D\u5468\u671F",
+  "files.column.lifetime.title": "\u6240\u6709\u4F1A\u8BDD\u5BF9\u8BE5\u6587\u4EF6\u7684\u5206\u644A\u5408\u8BA1",
+  "files.column.before": "\u672C\u6B21\u4E4B\u524D",
+  "files.column.before.title": "\u672C\u4F1A\u8BDD\u7EE7\u627F\u7684\u5386\u53F2\u6210\u672C:\u5168\u751F\u547D\u5468\u671F\u51CF\u53BB\u672C\u4F1A\u8BDD",
+  "files.column.conversation": "\u672C\u4F1A\u8BDD",
+  "files.column.conversation.title": "\u672C\u4F1A\u8BDD\u5BF9\u8BE5\u6587\u4EF6\u7684\u5206\u644A:\u76F4\u63A5\u52A0\u644A\u9500",
+  "files.column.turn": "\u4E0A\u4E00\u8F6E",
+  "files.column.turn.title": "\u672C\u4F1A\u8BDD\u6700\u540E\u4E00\u8F6E\u5728\u8BE5\u6587\u4EF6\u4E0A\u82B1\u7684\u94B1",
+  "files.column.share": "\u5360\u6BD4",
+  "files.column.share.title": "\u672C\u4F1A\u8BDD\u5728\u8BE5\u6587\u4EF6\u5168\u751F\u547D\u5468\u671F\u6210\u672C\u4E2D\u7684\u5360\u6BD4",
+  "files.column.stage": "\u9636\u6BB5",
+  "files.column.stage.title": "\u6587\u4EF6\u5230\u8FBE\u7684\u9996\u4E2A\u9636\u6BB5,\u4EE5\u53CA\u5B83\u4E00\u5171\u7ECF\u8FC7\u7684\u9636\u6BB5\u6570",
+  "files.column.verdict": "\u7ED3\u679C",
+  "files.column.verdict.title": "\u8D26\u672C\u4E3A\u672C\u4F1A\u8BDD\u8BB0\u5F55\u7684\u8BE5\u6587\u4EF6\u7ED3\u679C",
+  "files.filter.path": "\u6309\u8DEF\u5F84\u7B5B\u9009",
+  "files.filter.kind": "\u7C7B\u578B",
+  "files.filter.stage": "\u9636\u6BB5",
+  "files.filter.sort": "\u6392\u5E8F",
+  "files.filter.stageAll": "\u5168\u90E8\u9636\u6BB5",
+  "files.filter.empty": "\u6CA1\u6709\u6587\u4EF6\u7B26\u5408\u6B64\u7B5B\u9009\u3002",
+  "files.kind.all": "\u5168\u90E8",
+  "files.kind.edited": "\u5DF2\u7F16\u8F91",
+  "files.kind.written": "\u5DF2\u5199\u5165",
+  "files.kind.readOnly": "\u53EA\u8BFB",
+  "files.sort.conversation": "\u672C\u4F1A\u8BDD",
+  "files.sort.lifetime": "\u5168\u751F\u547D\u5468\u671F",
+  "files.sort.lines": "\u884C\u6570",
+  "files.sort.touches": "\u89E6\u53CA",
+  "files.touch.edit": "\u7F16\u8F91",
+  "files.touch.write": "\u5199\u5165",
+  "files.touch.read": "\u8BFB\u53D6",
+  "files.touch.total": "{count} \u6B21\u89E6\u53CA",
+  "files.verdict.changed": "\u5DF2\u66F4\u6539",
+  "files.verdict.reverted": "\u5DF2\u56DE\u9000",
+  "files.verdict.read": "\u53EA\u8BFB",
+  "files.empty": "\u672C\u4F1A\u8BDD\u8FD8\u6CA1\u6709\u89E6\u53CA\u4EFB\u4F55\u6587\u4EF6\u3002",
+  "files.totals": "\u6587\u4EF6\u5408\u8BA1",
+  "files.totals.meta": "{files} \u4E2A\u6587\u4EF6,{touches} \u6B21\u89E6\u53CA"
 };
 
 // Source/Variable/Slots.ts
 var Slots_default = { tab: "conversation.view" };
 
 // Source/Function/Client.ts
-var import_react9 = require("react");
+var import_react10 = require("react");
 var NAMESPACE = "client-dsh-panel-cost";
 var config = { tabOrder: 30, rows: 200 };
 function Client(ctx) {
@@ -2317,7 +2986,7 @@ function Client(ctx) {
           locale: NAMESPACE,
           label: () => Locale_en_default.tab
         },
-        (props = {}) => (0, import_react9.createElement)(View, props)
+        (props = {}) => (0, import_react10.createElement)(View, props)
       )
     ),
     "cost panel: tab"

@@ -4,7 +4,14 @@
 // one CostFile per FileId (the first touch in Seq order supplies the touch
 // fields, the single allocation row supplies the money, and the unattributed
 // allocation row stays out of `files` but keeps its money in `direct` and
-// `amortized`), and the whole-session summary. Every statement runs through
+// `amortized`), and the whole-session summary. Beside those, three view
+// statements ride the same envelope: the per-file rows (this session's money
+// for a file beside the file's all-sessions total, the carry-in before this
+// conversation, this session's last turn's share and the change the
+// conversation produced), the stage ranking and the model ranking. Each is
+// its own statement joined on FileId - the money is never joined from
+// Allocation to Touch in one FROM clause, so a call that touched one file
+// twice cannot fan its allocation out. Every statement runs through
 // the Query table below and reads only; a session the ledger does not record
 // answers ok false with code "session" and the zero summary; every nullable
 // column stays null when the ledger stores no value. The read-only open lives
@@ -17,13 +24,16 @@ import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
 import type CostBuckets from "@Interface/Buckets.js";
 import type CostCall from "@Interface/Call.js";
 import type CostFile from "@Interface/File.js";
+import type CostFileRow from "@Interface/FileRow.js";
+import type CostModelRow from "@Interface/ModelRow.js";
 import type CostResponse from "@Interface/Response.js";
 import type CostSession from "@Interface/Session.js";
+import type CostStageRow from "@Interface/StageRow.js";
 import type CostSummary from "@Interface/Summary.js";
 import type CostTokens from "@Interface/Tokens.js";
 import type CostTopFile from "@Interface/TopFile.js";
 
-// The seven read-only statements the engine runs (the panel's Design.md
+// The ten read-only statements the engine runs (the panel's Design.md
 // section 9.1): every one is a plain SELECT keyed by the session id, with no
 // pragma that writes, no INSERT, UPDATE or DELETE. Calls selects the newest
 // budget first and the reader re-sorts it ascending by (turn, step); Touches
@@ -31,7 +41,17 @@ import type CostTopFile from "@Interface/TopFile.js";
 // Summary aggregates the whole session in one row - the allocation money is
 // pre-aggregated per call first so the join cannot multiply the call sums -
 // and carries the dominant currency and the distinct currency list as JSON;
-// TopFiles applies the route's TopFileLimit of 5 in SQL.
+// TopFiles applies the route's TopFileLimit of 5 in SQL. Files is the FILES
+// view: one CTE per aggregate (this session's money, the touches with their
+// kind counts and stage set, the edit lines and bytes through Touch, the
+// lifetime money with no session filter, the last turn's money and the
+// verdict), joined on FileId in one FROM clause where the money never meets
+// Touch, sorted by total then path and capped at 500 rows. Stages groups
+// this session's touches by Stage with the carrying call's allocation to the
+// touched file; Models groups this session's calls by provider and model
+// with the tokens the calls reported and the money their allocations
+// carried, its per-call money pre-aggregated so the file grain cannot
+// multiply the token sums.
 const Query = {
 	Session: `SELECT Session.Title AS Title,
     Session.Cwd AS Cwd,
@@ -181,6 +201,141 @@ WHERE Call.SessionId = ?
 GROUP BY File.Path
 ORDER BY SUM(Allocation.DirectCost + Allocation.AmortizedCost) DESC, File.Path ASC
 LIMIT 5;`,
+
+	Files: `WITH SessionCall AS (
+    SELECT Call.CallId AS CallId, Call.Turn AS Turn
+    FROM Call
+    WHERE Call.SessionId = ?
+),
+Money AS (
+    SELECT Allocation.FileId AS FileId,
+        SUM(Allocation.DirectCost) AS Direct,
+        SUM(Allocation.AmortizedCost) AS Amortized
+    FROM Allocation
+    JOIN SessionCall ON SessionCall.CallId = Allocation.CallId
+    WHERE Allocation.FileId IS NOT NULL
+    GROUP BY Allocation.FileId
+),
+TurnMoney AS (
+    SELECT Allocation.FileId AS FileId,
+        SUM(Allocation.DirectCost + Allocation.AmortizedCost) AS Turn
+    FROM Allocation
+    JOIN SessionCall ON SessionCall.CallId = Allocation.CallId
+    WHERE Allocation.FileId IS NOT NULL
+        AND SessionCall.Turn = (SELECT MAX(Turn) FROM SessionCall)
+    GROUP BY Allocation.FileId
+),
+Lifetime AS (
+    SELECT Allocation.FileId AS FileId,
+        SUM(Allocation.DirectCost + Allocation.AmortizedCost) AS Lifetime
+    FROM Allocation
+    JOIN Call ON Call.CallId = Allocation.CallId
+    WHERE Allocation.FileId IS NOT NULL
+    GROUP BY Allocation.FileId
+),
+Tally AS (
+    SELECT Touch.FileId AS FileId,
+        COUNT(*) AS Touches,
+        SUM(CASE WHEN Touch.Kind = 'read' THEN 1 ELSE 0 END) AS Reads,
+        SUM(CASE WHEN Touch.Kind = 'write' THEN 1 ELSE 0 END) AS Writes,
+        SUM(CASE WHEN Touch.Kind = 'edit' THEN 1 ELSE 0 END) AS Edits,
+        SUM(CASE WHEN Touch.Kind = 'search' THEN 1 ELSE 0 END) AS Searches,
+        MAX(Touch.ReadBeforeEdit) AS ReadBeforeEdit,
+        GROUP_CONCAT(DISTINCT COALESCE(Touch.Stage, 'unclassified')) AS Stages,
+        MIN(Touch.At) AS FirstAt,
+        MAX(Touch.At) AS LastAt
+    FROM Touch
+    JOIN SessionCall ON SessionCall.CallId = Touch.CallId
+    GROUP BY Touch.FileId
+),
+EditLine AS (
+    SELECT Touch.FileId AS FileId,
+        SUM(Edit.LinesAdded) AS Added,
+        SUM(Edit.LinesRemoved) AS Removed,
+        SUM(Edit.BytesAdded) AS BytesAdded,
+        SUM(Edit.BytesRemoved) AS BytesRemoved
+    FROM Edit
+    JOIN Touch ON Touch.TouchId = Edit.TouchId
+    JOIN SessionCall ON SessionCall.CallId = Touch.CallId
+    GROUP BY Touch.FileId
+),
+VerdictRow AS (
+    SELECT Verdict.FileId AS FileId, Verdict.State AS State
+    FROM Verdict
+    WHERE Verdict.SessionId = ?
+),
+Seed AS (
+    SELECT FileId FROM Tally
+    UNION
+    SELECT FileId FROM Money
+)
+SELECT File.Path AS Path,
+    COALESCE(Tally.Touches, 0) AS Touches,
+    COALESCE(Tally.Reads, 0) AS Reads,
+    COALESCE(Tally.Edits, 0) AS Edits,
+    COALESCE(Tally.Writes, 0) AS Writes,
+    COALESCE(Tally.Searches, 0) AS Searches,
+    COALESCE(EditLine.Added, 0) AS Added,
+    COALESCE(EditLine.Removed, 0) AS Removed,
+    COALESCE(EditLine.BytesAdded, 0) AS BytesAdded,
+    COALESCE(EditLine.BytesRemoved, 0) AS BytesRemoved,
+    COALESCE(Money.Direct, 0) AS Direct,
+    COALESCE(Money.Amortized, 0) AS Amortized,
+    COALESCE(Money.Direct, 0) + COALESCE(Money.Amortized, 0) AS Total,
+    Lifetime.Lifetime AS Lifetime,
+    TurnMoney.Turn AS Turn,
+    Tally.Stages AS Stages,
+    VerdictRow.State AS Verdict,
+    COALESCE(Tally.ReadBeforeEdit, 0) AS ReadBeforeEdit,
+    Tally.FirstAt AS FirstAt,
+    Tally.LastAt AS LastAt
+FROM Seed
+JOIN File ON File.FileId = Seed.FileId
+LEFT JOIN Tally ON Tally.FileId = Seed.FileId
+LEFT JOIN Money ON Money.FileId = Seed.FileId
+LEFT JOIN TurnMoney ON TurnMoney.FileId = Seed.FileId
+LEFT JOIN Lifetime ON Lifetime.FileId = Seed.FileId
+LEFT JOIN EditLine ON EditLine.FileId = Seed.FileId
+LEFT JOIN VerdictRow ON VerdictRow.FileId = Seed.FileId
+ORDER BY (COALESCE(Money.Direct, 0) + COALESCE(Money.Amortized, 0)) DESC, File.Path ASC
+LIMIT 500;`,
+
+	Stages: `SELECT COALESCE(Touch.Stage, 'unclassified') AS Stage,
+    COUNT(*) AS Touches,
+    SUM(Call.TotalTokens) AS Tokens,
+    SUM(COALESCE(Allocation.DirectCost, 0) + COALESCE(Allocation.AmortizedCost, 0)) AS Cost
+FROM Touch
+JOIN Call ON Call.CallId = Touch.CallId
+LEFT JOIN Allocation ON Allocation.CallId = Touch.CallId AND Allocation.FileId = Touch.FileId
+WHERE Call.SessionId = ?
+GROUP BY Stage
+ORDER BY Cost DESC, Stage ASC;`,
+
+	Models: `WITH CallRow AS (
+    SELECT Call.CallId AS CallId, Call.Provider AS Provider, Call.Model AS Model,
+        Call.InputTokens AS InputTokens, Call.OutputTokens AS OutputTokens,
+        Call.CacheReadTokens AS CacheReadTokens
+    FROM Call
+    WHERE Call.SessionId = ?
+),
+CallMoney AS (
+    SELECT Allocation.CallId AS CallId,
+        SUM(Allocation.DirectCost + Allocation.AmortizedCost) AS Cost
+    FROM Allocation
+    JOIN CallRow ON CallRow.CallId = Allocation.CallId
+    GROUP BY Allocation.CallId
+)
+SELECT CallRow.Provider AS Provider,
+    CallRow.Model AS Model,
+    COUNT(*) AS Calls,
+    SUM(CallRow.InputTokens) AS Input,
+    SUM(CallRow.OutputTokens) AS Output,
+    SUM(CallRow.CacheReadTokens) AS CacheRead,
+    SUM(COALESCE(CallMoney.Cost, 0)) AS Total
+FROM CallRow
+LEFT JOIN CallMoney ON CallMoney.CallId = CallRow.CallId
+GROUP BY CallRow.Provider, CallRow.Model
+ORDER BY Total DESC, CallRow.Provider ASC, CallRow.Model ASC;`,
 } as const;
 
 // The row budget the reader applies (the tab's Limits, kept identical so the
@@ -253,6 +408,20 @@ export default function Reader(
 			? Parsed.filter((One): One is string => typeof One === "string")
 			: [];
 	};
+	// One money column of a view row: the rounding is to the sixth decimal,
+	// the precision every report read lands on, so a file row, a stage row and
+	// a model row agree with the report of the same sum.
+	const Round = (Value: number): number => Math.round(Value * 1e6) / 1e6;
+	// The stage set a file passed through: the statement hands it over as one
+	// comma-joined list (the stage vocabulary carries no comma), so the reader
+	// splits it and sorts it, because the aggregate itself defines no order.
+	const StageList = (Raw: SQLOutputValue | undefined): readonly string[] => {
+		if (typeof Raw !== "string") {
+			return [];
+		}
+		const Found = Raw.split(",").filter((One) => One.length > 0);
+		return Found.sort();
+	};
 
 	const SessionRow = Database.prepare(Query.Session).get(SessionId);
 	if (SessionRow === undefined) {
@@ -300,6 +469,9 @@ export default function Reader(
 				topFiles: [],
 			},
 			calls: [],
+			files: null,
+			stages: null,
+			models: null,
 		};
 	}
 
@@ -324,6 +496,12 @@ export default function Reader(
 	const AllocationRows = Database.prepare(Query.Allocations).all(SessionId);
 	const TopFileRows = Database.prepare(Query.TopFiles).all(SessionId);
 	const SummaryRow = Database.prepare(Query.Summary).get(SessionId) ?? EmptyRow;
+	// The three view statements: the file rows bind the session twice (the
+	// session's calls and the session's verdicts), and every placeholder is
+	// the same id, so no view can read another session's rows.
+	const FileRows = Database.prepare(Query.Files).all(SessionId, SessionId);
+	const StageRows = Database.prepare(Query.Stages).all(SessionId);
+	const ModelRows = Database.prepare(Query.Models).all(SessionId);
 
 	const AllocationsByCall = new Map<number, Record<string, SQLOutputValue>[]>();
 	for (const One of AllocationRows) {
@@ -462,6 +640,69 @@ export default function Reader(
 			calls: Stored(Row, "Calls"),
 		};
 	});
+	// The FILES view: one row per file the session touched or allocated to,
+	// with this session's money, the file's all-sessions lifetime (null when
+	// no allocation ever priced it, which also leaves the carry-in null), the
+	// session's last turn's share (null when that turn did not allocate it)
+	// and the change the edit grain recorded. Every count is zero when the
+	// statement stores none, never a guess.
+	const Files: CostFileRow[] = FileRows.map((Row) => {
+		const Direct = Round(Stored(Row, "Direct"));
+		const Amortized = Round(Stored(Row, "Amortized"));
+		const Total = Round(Direct + Amortized);
+		const Lifetime = Figure(Row, "Lifetime");
+		return {
+			path: Text(Row, "Path") ?? "",
+			touches: Stored(Row, "Touches"),
+			reads: Stored(Row, "Reads"),
+			edits: Stored(Row, "Edits"),
+			writes: Stored(Row, "Writes"),
+			searches: Stored(Row, "Searches"),
+			added: Stored(Row, "Added"),
+			removed: Stored(Row, "Removed"),
+			bytesAdded: Stored(Row, "BytesAdded"),
+			bytesRemoved: Stored(Row, "BytesRemoved"),
+			direct: Direct,
+			amortized: Amortized,
+			total: Total,
+			lifetime: Lifetime,
+			before: Lifetime === null ? null : Round(Lifetime - Total),
+			turn: Figure(Row, "Turn"),
+			stages: StageList(Row["Stages"]),
+			verdict: Text(Row, "Verdict"),
+			readBeforeEdit: Flag(Row, "ReadBeforeEdit"),
+			firstAt: Figure(Row, "FirstAt"),
+			lastAt: Figure(Row, "LastAt"),
+		};
+	});
+	// The STAGES view: the stage ranking the report reads by file, scoped to
+	// this session and keyed by the stage the touches carry, with an
+	// unclassified touch its own row and the tokens zero when no call
+	// reported them.
+	const Stages: CostStageRow[] = StageRows.map((Row) => ({
+		stage: Text(Row, "Stage") ?? "unclassified",
+		touches: Stored(Row, "Touches"),
+		tokens: Stored(Row, "Tokens"),
+		cost: Round(Stored(Row, "Cost")),
+	}));
+	// The MODELS view: one row per provider and model this session called,
+	// with the tokens the calls reported and the money their allocations
+	// carried across every file they touched.
+	const Models: CostModelRow[] = ModelRows.map((Row) => {
+		const Input = Stored(Row, "Input");
+		const Output = Stored(Row, "Output");
+		const CacheRead = Stored(Row, "CacheRead");
+		return {
+			provider: Text(Row, "Provider") ?? "",
+			model: Text(Row, "Model") ?? "",
+			calls: Stored(Row, "Calls"),
+			tokens: Input + Output + CacheRead,
+			input: Input,
+			output: Output,
+			cacheRead: CacheRead,
+			total: Round(Stored(Row, "Total")),
+		};
+	});
 	const Summary: CostSummary = {
 		calls: Stored(SummaryRow, "Calls"),
 		priced: Stored(SummaryRow, "Priced"),
@@ -511,5 +752,8 @@ export default function Reader(
 		currencies: Summary.currencies,
 		summary: Summary,
 		calls: Calls,
+		files: Files,
+		stages: Stages,
+		models: Models,
 	};
 }
