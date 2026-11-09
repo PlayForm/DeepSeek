@@ -1,0 +1,32 @@
+import type CostBuckets from "./Buckets.js";
+import type CostFile from "./File.js";
+import type CostTokens from "./Tokens.js";
+export default interface CostCall {
+    turn: number;
+    step: number;
+    seq: number;
+    at: number;
+    provider: string;
+    model: string;
+    mode: string;
+    region: string | null;
+    tier: number | null;
+    priced: boolean;
+    currency: string;
+    tokens: CostTokens;
+    cost: CostBuckets;
+    saving: number;
+    attempts: number;
+    error: string | null;
+    surfaceTokens: number;
+    purpose: string | null;
+    contextWindow: number | null;
+    utilization: number | null;
+    latencyMs: number | null;
+    firstTokenMs: number | null;
+    tokensPerSecond: number | null;
+    direct: number;
+    amortized: number;
+    allocations: number;
+    files: readonly CostFile[];
+}

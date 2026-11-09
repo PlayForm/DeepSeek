@@ -1,1 +1,1 @@
-import e from"./Function/Serve.js";import o from"./Variable/Config.js";import r from"./Variable/Version.js";const p="client-dsh-panel-cost",i=[];function n(t){e(t)}var f={name:p,inject:i,Config:o,apply:n};export{o as Config,r as Version,n as apply,f as default,i as inject,p as name};
+import t from"./Function/Serve.js";import e from"./Variable/Config.js";import r from"./Variable/Version.js";const p="client-dsh-panel-cost",i=["webServer"];function n(o){t(o)}var f={name:p,inject:i,Config:e,apply:n};export{e as Config,r as Version,n as apply,f as default,i as inject,p as name};

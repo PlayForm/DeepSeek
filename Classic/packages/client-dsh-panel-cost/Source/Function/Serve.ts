@@ -1,28 +1,36 @@
-// Serve - the host half's route registration (the rewrite of the
-// placeholder): GET <Path>?session=<id>&rows=<n> answers one JSON envelope
-// with content-type "application/json; charset=utf-8" and cache-control
-// "no-store", status 200 with the outcome in the envelope. The web server
-// is probed structurally (the fail-open switch (true) guard of
-// client-dsh-panel-family-host/Source/Function/Stream.ts), so the package
-// never imports the web-server library. The ledger path is the cost
-// plugin's config default, tilde-expanded here once so the envelope can
-// name the file; the route never takes a path from the query. A missing or
-// blank session id answers code "session" without opening the ledger, an
-// unopenable ledger answers code "unavailable" with the reader's one
-// actionable line, and any other read failure answers code "error" - each
-// logged once through ctx.logger.warn with the "cost route: " prefix, and
-// the response write never throws into the request lifecycle.
+// Serve - the host half's route registration: GET <Path>?session=<id>&rows=<n>
+// answers one JSON envelope with content-type "application/json; charset=utf-8"
+// and cache-control "no-store", status 200 with the outcome in the envelope.
+// The host half is transport only and owns NO SQL: the ledger is
+// @playform/plugin-dsh-cost's business, and this route parses the query,
+// clamps the row budget and carries the answer. The service is resolved
+// structurally as `ctx.get("cost")` - the injection mechanism, the same way
+// the family host reads its trace bus - so the package never imports the
+// ledger library and a plugin that loads after the panel is still found at
+// request time. Library declares `inject: ["webServer"]`, so the loader
+// orders this row after the harness web server; the server itself is still
+// probed structurally (the fail-open switch (true) guard of
+// client-dsh-panel-family-host/Source/Function/Stream.ts). The route path
+// comes from Variable/Path and never from the query.
+//
+// The decision chain: a blank session id answers code "session" without
+// calling the engine; a missing cost service answers code "unavailable" with
+// the one actionable line that names the missing package; a service that
+// throws answers code "error"; otherwise the service's own envelope is
+// answered verbatim, because it owns the ledger path, the currency facts and
+// the codes. Every failure is logged once through ctx.logger.warn with the
+// "cost route: " prefix, and the response write never throws into the request
+// lifecycle. The panel's own envelopes name the route in `path`, because the
+// host half no longer knows the ledger file - the convention
+// Function/Fetch.ts documents for the browser half.
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { homedir } from "node:os";
 
 import type { Context } from "@deepseek-ai/cordis";
 import type CostResponse from "@Interface/Response.js";
 import type CostSummary from "@Interface/Summary.js";
+import type CostService from "@playform/plugin-dsh-cost/service";
 import Limits from "@Variable/Limits.js";
 import Path from "@Variable/Path.js";
-
-import Open from "./Open.js";
-import Read from "./Read.js";
 
 type WebServer = {
 	register(route: {
@@ -31,14 +39,18 @@ type WebServer = {
 	}): () => void;
 };
 
-const LedgerPath = "~/.dsh/cost/ledger.db";
-
-const OpenPrefix = "client-dsh-panel-cost: cannot open the ledger";
+const AbsentMessage =
+	"client-dsh-panel-cost: the cost plugin is not loaded - add @playform/plugin-dsh-cost to the profile";
 
 const IsWebServer = (Candidate: unknown): Candidate is WebServer =>
 	typeof Candidate === "object" &&
 	Candidate !== null &&
 	typeof (Candidate as WebServer).register === "function";
+
+const IsService = (Candidate: unknown): Candidate is CostService =>
+	typeof Candidate === "object" &&
+	Candidate !== null &&
+	typeof (Candidate as CostService).session === "function";
 
 export default function Serve(ctx: Context): void {
 	const Server = ctx.get("webServer");
@@ -46,9 +58,6 @@ export default function Serve(ctx: Context): void {
 		case !IsWebServer(Server):
 			return;
 		default: {
-			const Resolved = LedgerPath.startsWith("~/")
-				? `${homedir()}${LedgerPath.slice(1)}`
-				: LedgerPath;
 			const Applied = (Raw: string | null): number => {
 				const Parsed = Raw === null || Raw.trim() === "" ? Limits.DefaultRows : Number(Raw);
 				const Finite = Number.isFinite(Parsed) ? Math.floor(Parsed) : Limits.DefaultRows;
@@ -107,7 +116,7 @@ export default function Serve(ctx: Context): void {
 				ok: false,
 				code: Code,
 				message: Message,
-				path: Resolved,
+				path: Path,
 				rows: Rows,
 				truncated: false,
 				session: null,
@@ -122,6 +131,7 @@ export default function Serve(ctx: Context): void {
 					const Url = new URL(req.url ?? "/", "http://localhost");
 					const SessionId = Url.searchParams.get("session") ?? "";
 					const Rows = Applied(Url.searchParams.get("rows"));
+					const Engine = ctx.get("cost");
 					switch (true) {
 						case SessionId.trim() === "":
 							Answer(
@@ -133,27 +143,33 @@ export default function Serve(ctx: Context): void {
 								),
 							);
 							return;
+						case !IsService(Engine):
+							ctx.logger.warn(`cost route: ${AbsentMessage}`);
+							Answer(res, Failure("unavailable", AbsentMessage, Rows));
+							return;
 						default: {
 							try {
-								const Ledger = Open(Resolved);
-								try {
-									Answer(res, {
-										...Read(Ledger.Database, SessionId, Rows),
-										path: Resolved,
-									});
-								} finally {
-									Ledger.Close();
-								}
+								Answer(res, Engine.session(SessionId, Rows));
 							} catch (Caught) {
 								const Message =
 									Caught instanceof Error ? Caught.message : String(Caught);
-								const Unopenable = Message.startsWith(OpenPrefix);
 								ctx.logger.warn(`cost route: ${Message}`);
+								// The engine throws the ledger's own actionable
+								// line; an unopenable file is the "unavailable"
+								// state, anything else a read error.
 								Answer(
 									res,
 									Failure(
-										Unopenable ? "unavailable" : "error",
-										Unopenable ? Message : `the ledger read failed: ${Message}`,
+										Message.startsWith(
+											"plugin-dsh-cost: cannot open the ledger",
+										)
+											? "unavailable"
+											: "error",
+										Message.startsWith(
+											"plugin-dsh-cost: cannot open the ledger",
+										)
+											? Message
+											: `the ledger read failed: ${Message}`,
 										Rows,
 									),
 								);

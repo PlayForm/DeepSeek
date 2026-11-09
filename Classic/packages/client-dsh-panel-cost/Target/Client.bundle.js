@@ -1784,6 +1784,7 @@ function View(Props) {
   const t = Props.t ?? Local;
   const SessionId = typeof Props.sessionId === "string" ? Props.sessionId : "";
   const [Phase, SetPhase] = (0, import_react8.useState)("loading");
+  const [Note, SetNote] = (0, import_react8.useState)(null);
   const [Snapshot, SetSnapshot] = (0, import_react8.useState)(null);
   const [Rows, SetRows] = (0, import_react8.useState)(() => {
     if (typeof Props.rows !== "number" || !Number.isFinite(Props.rows) || Props.rows < 1)
@@ -1833,6 +1834,9 @@ function View(Props) {
           return;
         }
         SetSnapshot(Fold(Response));
+        SetNote(
+          typeof Envelope.message === "string" ? Envelope.message : null
+        );
         SetPhase(
           typeof Envelope === "object" && Envelope !== null && Envelope.code === "unavailable" ? "unavailable" : "error"
         );
@@ -1840,6 +1844,7 @@ function View(Props) {
       }
       const Source = Response.calls;
       const Calls = Array.isArray(Source) ? Source : [];
+      SetNote(null);
       const Previous = Counted.current;
       Counted.current = Calls.length;
       SetSnapshot(Fold(Response));
@@ -2110,7 +2115,13 @@ function View(Props) {
   );
   switch (true) {
     case Phase === "unavailable":
-      return Shell([Line(t("unavailable"), false)], null);
+      return Shell(
+        [
+          Line(t("unavailable"), false),
+          Note === null ? null : (0, import_react8.createElement)("p", { className: "playform-cost-block-meta" }, Note)
+        ],
+        null
+      );
     case Phase === "error":
       return Shell(
         [

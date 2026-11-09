@@ -18,17 +18,17 @@
 			"kind": "client",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "0865fbd814b2d6b275cb0610653a3cd87a80a768d401b5ded15cf78dc6579f74",
+			"seed": "a18629cec4ac3d5ac1bc16b4ce911f10c570a6b2f57529f0a0afca0ffc05595b",
 			"grammar": "quatrefoil",
 			"order": 4,
 			"arms": 4,
-			"rings": 0,
+			"rings": 1,
 			"orbit": 8,
 			"rim": "scallop",
 			"mode": "single",
 			"hash": {
-				"mono": "8c5b8ee4d9931f5f565500d9c8ef7049edf2f490aa9ae07b4203b77de3f4d7f5",
-				"colour": "391f1722ad953ca1147f264933a19815e8083fb9480c83a0787a0892acc1f01a"
+				"mono": "b390e3216a742c4b332f98c3676e439a5fc65ac52331e841dd889bb4b8c48034",
+				"colour": "c06291c3aaf130350e6ca47298d06d22e1e37eefe25c3aaf26ea16ad7fd79429"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/client-dsh-panel-cost.svg",
@@ -2433,17 +2433,17 @@
 			"kind": "plugin",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "c87c5cf55df81a781987edbdd230e8e46c6456db498a1b78c01772887d075e71",
+			"seed": "86e3e2bdb16091853773a7af9a0889efdd2d2b7c8ad5aa44aa8ce63f87e07afb",
 			"grammar": "interlace-tile",
 			"order": 12,
 			"arms": 8,
 			"rings": 3,
 			"orbit": 8,
-			"rim": "square",
+			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "6d524db6c62cb8092decb30d8e3aa333e085a9f8350c6ad3dbcfb06b6441dbbf",
-				"colour": "a79ada8210c004e7adec06d3b78a1fd17115e6af3bad3b26c3809a3a46c7b461"
+				"mono": "710bba68c7a840f71fe1c1ee19da26581e2130416a9c45e4bc33cda4dc92b313",
+				"colour": "87732be9ac7789bfe355bdab2dc1d9adba17429cfa9328738506e5807f5f0421"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-cost.svg",

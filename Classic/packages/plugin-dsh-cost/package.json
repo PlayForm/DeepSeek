@@ -14,6 +14,10 @@
 			"types": "./Target/Library.d.ts",
 			"default": "./Target/Library.js"
 		},
+		"./service": {
+			"types": "./Target/Interface/Service.d.ts",
+			"default": "./Target/Interface/Service.js"
+		},
 		"./cordis.patch.yml": "./cordis.patch.yml",
 		"./package.json": "./package.json"
 	},

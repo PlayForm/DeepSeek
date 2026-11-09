@@ -84,11 +84,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794206379,
+					"publishTimestamp": 1794208158,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "95f13b0eed37802bf4740ebbb650f1e6436d8093",
+						"commit": "8b0fd8eb25cb5f52b8592c0b0908e25bbaa270df",
 						"path": "Classic/packages/client-dsh-panel-cost"
 					},
 					"engines": {}
@@ -340,11 +340,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794206379,
+					"publishTimestamp": 1794208162,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "95f13b0eed37802bf4740ebbb650f1e6436d8093",
+						"commit": "a0da636b255a770c96f3c27e28262bc821deb460",
 						"path": "EffectTS/packages/ets-client-dsh-panel-family"
 					},
 					"engines": {}
@@ -382,11 +382,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794198609,
+					"publishTimestamp": 1794208158,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "7ca3dea463c582a241e9385bf1759d855ce82c3d",
+						"commit": "8b0fd8eb25cb5f52b8592c0b0908e25bbaa270df",
 						"path": "EffectTS/packages/ets-client-dsh-panel-family-host"
 					},
 					"engines": {}
@@ -5150,11 +5150,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794206379,
+					"publishTimestamp": 1794208158,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "95f13b0eed37802bf4740ebbb650f1e6436d8093",
+						"commit": "8b0fd8eb25cb5f52b8592c0b0908e25bbaa270df",
 						"path": "Classic/packages/lib-dsh-bundle"
 					},
 					"engines": {}
@@ -6645,11 +6645,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794206379,
+					"publishTimestamp": 1794208158,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "95f13b0eed37802bf4740ebbb650f1e6436d8093",
+						"commit": "8b0fd8eb25cb5f52b8592c0b0908e25bbaa270df",
 						"path": "Classic/packages/style-dsh-material"
 					},
 					"engines": {}

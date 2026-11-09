@@ -4,11 +4,11 @@
 	<style>
 		@media (prefers-reduced-motion: no-preference) {
 			.client-dsh-panel-cost-scene * { transform-box: view-box; transform-origin: 50% 50%; }
-		.client-dsh-panel-cost-counter { animation: client-dsh-panel-cost-counter 20s linear -6s infinite; }
+		.client-dsh-panel-cost-counter { animation: client-dsh-panel-cost-counter 24s linear -3s infinite; }
 		@keyframes client-dsh-panel-cost-counter { to { transform: rotate(-360deg); } }
-		.client-dsh-panel-cost-breathe { animation: client-dsh-panel-cost-breathe 8s ease-in-out -6s infinite; }
+		.client-dsh-panel-cost-breathe { animation: client-dsh-panel-cost-breathe 8s ease-in-out -3s infinite; }
 		@keyframes client-dsh-panel-cost-breathe { 50% { transform: scale(1.06); opacity: 0.85; } }
-		.client-dsh-panel-cost-twinkle { animation: client-dsh-panel-cost-twinkle 7s ease-in-out -6s infinite; }
+		.client-dsh-panel-cost-twinkle { animation: client-dsh-panel-cost-twinkle 10s ease-in-out -3s infinite; }
 		@keyframes client-dsh-panel-cost-twinkle { 0%, 100% { transform: scale(0.94); opacity: 0.4; } 50% { transform: scale(1.06); opacity: 1; } }
 		}
 	</style>
@@ -20,10 +20,10 @@
 		<path id="client-dsh-panel-cost-4" d="M33,66 L33,67 L32,67 L32,66 L32,66 L33,66 Z"/>
 		<path id="client-dsh-panel-cost-5" d="M28,43 L27,44 L27,44 L26,43 L27,42 L27,42 Z"/>
 		<path id="client-dsh-panel-cost-6" d="M45,27 L45,27 L44,27 L44,27 L44,26 L45,26 Z"/>
-		<path id="client-dsh-panel-cost-7" d="M88,75 L54,82 L5,67 L25,33 L49,6 L74,34 Z M54,54 L84,81 L83,82 L54,54 Z M55,68 L55,70 L54,71 L52,72 L51,72 L49,72 L48,71 L47,70 L46,68 L47,66 L48,65 L49,64 L51,64 L52,64 L54,65 L55,66 Z M50,56 L49,96 L47,96 L50,56 Z M44,50 L4,47 L4,45 L44,49 Z M52,74 L52,75 L51,77 L49,78 L48,78 L46,78 L45,77 L44,75 L44,74 L44,72 L45,71 L46,70 L48,70 L49,70 L51,71 L52,72 Z M46,45 L23,13 L25,11 L47,45 Z M53,45 L75,11 L77,13 L54,45 Z M24,51 L24,52 L23,54 L22,54 L20,55 L18,54 L17,54 L16,52 L16,51 L16,49 L17,48 L18,47 L20,46 L22,47 L23,48 L24,49 Z M56,48 L93,33 L94,36 L56,48 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
+		<path id="client-dsh-panel-cost-7" d="M90,73 L46,85 L15,73 L15,32 L52,3 L73,34 Z M54,55 L79,86 L78,86 L54,55 Z M55,68 L55,69 L54,70 L53,70 L52,71 L51,70 L50,70 L50,69 L50,68 L50,67 L50,66 L51,65 L52,65 L53,65 L54,66 L55,67 Z M48,56 L35,94 L34,93 L48,56 Z M44,52 L7,65 L6,63 L44,52 Z M64,29 L64,30 L63,31 L62,32 L61,32 L59,32 L58,31 L57,30 L57,29 L57,27 L58,26 L59,25 L61,25 L62,25 L63,26 L64,27 Z M45,46 L13,23 L14,21 L45,46 Z M53,45 L74,11 L76,12 L53,45 Z M81,61 L80,61 L80,62 L79,63 L78,63 L77,63 L76,62 L76,61 L76,61 L76,60 L76,59 L77,58 L78,58 L79,58 L80,59 L80,60 Z M56,50 L96,53 L96,56 L56,51 Z M54,50 L54,52 L53,53 L52,54 L50,54 L48,54 L47,53 L46,52 L46,50 L46,48 L47,47 L48,46 L50,46 L52,46 L53,47 L54,48 Z"/>
 		<path id="client-dsh-panel-cost-8" d="M68,34 L68,34 L67,34 L67,34 L67,33 L68,33 Z"/>
-		<path id="client-dsh-panel-cost-9" d="M74,87 L74,91 L70,89 Z"/>
-		<path id="client-dsh-panel-cost-10" d="M9,45 L7,42 L10,41 Z"/>
+		<path id="client-dsh-panel-cost-9" d="M82,25 L86,25 L85,29 Z"/>
+		<path id="client-dsh-panel-cost-10" d="M8,40 L6,38 L9,37 Z"/>
 		<path id="client-dsh-panel-cost-11" d="M53,50 L52,52 L51,52 L49,52 L48,52 L47,50 L48,48 L49,48 L51,48 L52,48 Z"/>
 	</defs>
 	<g class="client-dsh-panel-cost-scene">

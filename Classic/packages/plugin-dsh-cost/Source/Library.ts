@@ -20,7 +20,15 @@
 // client-facing bundle and can write it back into a file as a marker-
 // delimited comment (off by default). It never adds a tool, a prompt section,
 // or a model-visible message: the plugin's surface is the session listeners
-// (the engine lane's capture and flush) and the human commands only.
+// (the engine lane's capture and flush), the human commands, and the `cost`
+// service below.
+//
+// THE ENGINE SERVICE: apply also provides `cost` (Interface/Service.ts,
+// Function/Provide.ts) - one session's rows as the panel's CostResponse, read
+// READ-ONLY from the same ledger. The Cost tab's UI package resolves the
+// service through injection (`ctx.get("cost")`) and imports the shared
+// contract from this package's `./service` entry, so the envelope types have
+// exactly one definition.
 import Apply from "./Function/Apply.js";
 import Definition from "./Variable/Config.js";
 import Version from "./Variable/Version.js";

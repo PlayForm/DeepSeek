@@ -54,6 +54,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 	const t: Translate = Props.t ?? Local;
 	const SessionId = typeof Props.sessionId === "string" ? Props.sessionId : "";
 	const [Phase, SetPhase] = useState<Phase>("loading");
+	const [Note, SetNote] = useState<string | null>(null);
 	const [Snapshot, SetSnapshot] = useState<CostSnapshot | null>(null);
 	const [Rows, SetRows] = useState(() => {
 		if (typeof Props.rows !== "number" || !Number.isFinite(Props.rows) || Props.rows < 1)
@@ -109,6 +110,14 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 						return;
 					}
 					SetSnapshot(Fold(Response));
+					// The envelope's own line names the cause (no session id,
+					// the cost plugin absent, the ledger unreadable); the state
+					// line above it stays the short, translated one.
+					SetNote(
+						typeof (Envelope as { message?: unknown }).message === "string"
+							? (Envelope as { message: string }).message
+							: null,
+					);
 					SetPhase(
 						typeof Envelope === "object" &&
 							Envelope !== null &&
@@ -120,6 +129,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 				}
 				const Source: unknown = Response.calls;
 				const Calls: readonly unknown[] = Array.isArray(Source) ? Source : [];
+				SetNote(null);
 				const Previous = Counted.current;
 				Counted.current = Calls.length;
 				SetSnapshot(Fold(Response));
@@ -431,7 +441,15 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 
 	switch (true) {
 		case Phase === "unavailable":
-			return Shell([Line(t("unavailable"), false)], null);
+			return Shell(
+				[
+					Line(t("unavailable"), false),
+					Note === null
+						? null
+						: createElement("p", { className: "playform-cost-block-meta" }, Note),
+				],
+				null,
+			);
 		case Phase === "error":
 			return Shell(
 				[

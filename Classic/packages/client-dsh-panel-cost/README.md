@@ -1,9 +1,10 @@
 # @playform/client-dsh-panel-cost
 
 The Cost tab of the PlayForm plugin family: one conversation.view tab that renders a
-Statistics-style cost table over the plugin-dsh-cost SQLite ledger. The host half registers a
-read-only JSON route over the ledger; the browser half folds the rows into turns and steps and
-renders the table.
+Statistics-style cost table over the plugin-dsh-cost SQLite ledger. The tab is UI and transport
+only: it resolves the `cost` service that `@playform/plugin-dsh-cost` provides (through
+`ctx.get("cost")`) and answers its read-only JSON route from that engine; the browser half folds the
+rows into turns and steps and renders the table.
 
 The table keeps the harness Statistics panel's grammar - a sticky-header eleven-column table,
 expandable turn rows whose step rows expand into a per-file detail block, tool and file pills with
@@ -16,9 +17,7 @@ semantics, because the ledger writes no latency, first-token, or tool-duration c
 - `Source/Library.ts` - the loader contract: name, Config, inject, apply.
 - `Source/Client.ts` - the client entry: inject, apply.
 - `Source/Function/Serve.ts` - the host route registration and its error codes.
-- `Source/Function/Open.ts` - the read-only SQLite open (tilde expansion, `readOnly: true`).
-- `Source/Function/Query.ts` - the seven read-only SQL statements.
-- `Source/Function/Read.ts` - the rows-to-envelope read (session, calls, touches, allocations).
+- `Source/Function/Serve.ts` - the host route registration, answered from the `cost` service.
 - `Source/Function/Fetch.ts` - the browser half of the route.
 - `Source/Function/Client.ts` - the client body: dictionaries and the tab.
 - `Source/Function/View.ts` - the panel shell, its five states, paging, and expansion.
@@ -46,11 +45,15 @@ semantics, because the ledger writes no latency, first-token, or tool-duration c
 
 ## The data path
 
-`GET /api/playform-cost/session?session=<id>&rows=<n>` answers one JSON envelope. `code` is `ok`
-when the ledger was read, `session` when the query carries no session id (the ledger is never
-opened), `unavailable` when the ledger file cannot be opened, and `error` for any other read
-failure. Every failure keeps the same envelope shape, so the browser renders a state line instead of
-a broken table.
+The engine is `@playform/plugin-dsh-cost`: it provides the `cost` service
+(`session(sessionId, rows)` returning the envelope) and exports its contract at
+`@playform/plugin-dsh-cost/service`. This package injects `webServer` so the loader orders its row
+after the harness web server, and `GET /api/playform-cost/session?session=<id>&rows=<n>` answers one
+JSON envelope from that service. `code` is `ok` when the ledger was read, `session` when the query
+carries no session id (the engine is never called), `unavailable` when the cost plugin is not
+loaded, and `error` for any other read failure. Every failure keeps the same envelope shape, and the
+panel renders the envelope's own line under the state line, so the cause is visible instead of
+guessed.
 
 ## Tests
 

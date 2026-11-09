@@ -44,6 +44,7 @@ import Drain from "./Drain.js";
 import Export from "./Export.js";
 import Forecast from "./Forecast.js";
 import Open from "./Open.js";
+import Provide from "./Provide.js";
 import Report from "./Report.js";
 import Rollup from "./Rollup.js";
 
@@ -147,6 +148,14 @@ export default (Context: Context, Options: Config): void => {
 			Ledger?.Close();
 		};
 	}, "plugin-dsh-cost.ledger()");
+
+	// THE ENGINE SERVICE (the Cost tab's data surface): `cost.session(id,
+	// rows)` answers one session's CostResponse through the read-only reader.
+	// It rides the fiber like every other effect, so a reload removes the
+	// service with the plugin instead of leaving a stale provider behind; the
+	// service opens the ledger READ-ONLY and never touches the write path
+	// above.
+	Context.effect(() => Provide(Context), "plugin-dsh-cost.cost()");
 
 	// The project: resolved from the session cwd and created on first sight,
 	// billed to the configured client (section 3 - the dimension exists so one
