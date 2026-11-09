@@ -13,6 +13,7 @@ import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Run V - the P10 volatile live-flip. The KEY new smoke: a fresh
 	// mount whose `replacement` arrives as a volatile cell (the schema freezes
 	// its own cells, so the fake loader simulation here builds the STABLE

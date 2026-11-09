@@ -36,6 +36,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: R5 - enforce: the tier-3 deny fires for the write class at the
 	// threshold, the reason is the byte-exact NOTE_DENIED text, read class is
 	// not denied under 'write', 'all' denies read too, 'off' never denies.

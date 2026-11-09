@@ -99,7 +99,9 @@ export default (Command: string, Rows: CoachRow[], Exempts: string[]): Detection
 			Best.match = Candidate;
 		}
 	};
+
 	// Per-pipeline classification (each pipeline is classified independently;
+
 	// the exemption override is per pipeline too).
 	const Local: { match: Match | null } = { match: null };
 	const ConsiderLocal = (Candidate: Match): void => {

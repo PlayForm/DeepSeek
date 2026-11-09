@@ -43,6 +43,7 @@ import type { ContentBlock } from "@Interface/Message.js";
 export interface TranscriptResult {
 	/** Every message that carries a known role and a block list, in order. */
 	readonly messages: readonly Message[];
+
 	/** The number of `tool-call` blocks across the whole transcript. */
 	readonly toolCalls: number;
 }

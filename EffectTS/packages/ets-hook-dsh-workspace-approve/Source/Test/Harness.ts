@@ -207,6 +207,7 @@ export const FakeStorage = (Options: { failOpen?: boolean } = {}): any => {
 			};
 		},
 	};
+
 	/** Seed one record (the restart scenario: the store outlives the process). */
 	Store.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Store.tables.has(Name)) {
@@ -291,6 +292,7 @@ export const Make = (Raw: any, Attach?: (Context: any, Run: any) => void): any =
 		Raw,
 		Fs,
 	};
+
 	// The optional pre-apply attachment: the storage facility and the seeded
 	// fs files must be in place BEFORE apply runs (the effect probes at
 	// apply time).
@@ -390,6 +392,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually wires the plugin (the
 	// vacuously-green backstop for every folder's fixture - a broken seam
 	// would print fewer checks in every folder, which the runner's

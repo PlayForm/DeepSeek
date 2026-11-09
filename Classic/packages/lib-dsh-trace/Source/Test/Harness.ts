@@ -99,6 +99,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the detached loop actually runs and coalesces a pair
 	// into ONE run (the vacuously-green backstop for the loop fixture).
 	const Ran: string[] = [];

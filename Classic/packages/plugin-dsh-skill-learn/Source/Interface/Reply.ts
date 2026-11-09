@@ -16,6 +16,7 @@ import type { Operation } from "@Interface/Operation.js";
 export interface PlanReply {
 	/** The skills whose current body the caller must load before phase 2. */
 	readonly views: readonly string[];
+
 	/** The operations the model wants to perform, before it has seen the bodies. */
 	readonly operations: readonly Operation[];
 }

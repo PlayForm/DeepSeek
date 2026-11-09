@@ -55,6 +55,7 @@ import type { Scope } from "effect";
 export default interface State extends Shared {
 	/** Dependency sections the pinner may rewrite (config `sections`). */
 	Section: string[];
+
 	/** THE EFFECT DELTA (R4): the plugin's long-lived Effect `Scope` — the
 	 *  family's uniform fiber home, created in Function/Apply. Unused at
 	 *  runtime (the pinner has no typed-effect stage); optional so sim States

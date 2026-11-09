@@ -229,6 +229,7 @@ const Model = (Props: ModelCellProps): ReturnType<typeof createElement> => {
 const Files = (Props: FilesCellProps): ReturnType<typeof createElement> => {
 	const Shown = Props.Pills.slice(0, FilePillLimit);
 	const Extra = Props.Pills.length - Shown.length;
+
 	// The signed net cache benefit: positive is a saving, negative is the
 	// cache-write premium the reads did not pay back.
 	const Saving = Number.isFinite(Props.Saving) ? Props.Saving : 0;

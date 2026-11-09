@@ -83,6 +83,7 @@ export default Compose(false, {
 	// accepted risk - this profile's cordis.patch.yml turns it on. DEPRECATED
 	// in favor of `scopes.toolInput`: kept and OR-ed in (effective toolInput =
 	// this field || scopes.toolInput) so every existing profile keeps working;
+
 	// new configs should use the scope gate.
 	normalizeToolArguments: Schema.boolean().default(DefaultNormalizeToolArguments),
 	// Granular scope gates - ALL volatile (live toggling, no remount):

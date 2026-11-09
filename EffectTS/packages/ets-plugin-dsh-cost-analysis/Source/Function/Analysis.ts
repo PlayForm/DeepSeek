@@ -166,6 +166,7 @@ const EffectivenessRows = (
 	const Span = Window(Start);
 	const Stamp = Start === null ? "" : " AND Verdict.At >= ?";
 	const Stamps: readonly number[] = Start === null ? [] : [Start];
+
 	// The verdict gate: the (session, file) pair the money or the hunk hangs
 	// on must carry State 'changed' inside the window, so a group's cost and
 	// lines both count only its changed files.
@@ -413,6 +414,7 @@ export default (
 		Number.isFinite(Config.window) && Config.window > 0
 			? Date.now() - Config.window * 86400000
 			: null;
+
 	// The shared gates: an open database, a non-empty optional key filter and
 	// the family's own config switch. The unknown scope is caught inside each
 	// family by the anchor lookup.

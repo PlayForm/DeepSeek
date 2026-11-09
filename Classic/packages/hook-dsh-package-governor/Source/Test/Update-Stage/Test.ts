@@ -57,6 +57,7 @@ export const runTest = async (): Promise<number> => {
 	Boot();
 	Probe.Mode = "bin";
 	const Listener = Events.find((e) => e[0] === "fs/observed")![1];
+
 	// Group: pure leaves.
 	{
 		const Sub = "pure leaves: Decode \u2014 contained parse, null on failure/non-object";
@@ -413,12 +414,14 @@ export const runTest = async (): Promise<number> => {
 	Probe.Stamp.delete(projF);
 	await Dispatch(Probe, tF, actor, projF, null, "");
 	await settle();
+
 	// The source suite asserted the dispatched count BETWEEN the two fallback
 	// runs; capture that intermediate count in the fixture phase so the single
 	// check asserts the same point in the flow.
 	const afterFirstDispatched = find(
 		`update stage dispatched for ${projF} (mode=bin, ncu via ${NCU_BIN}, built-in default policy)`,
 	).length;
+
 	// preflight rejection \u2192 detached
 	Services["jobs"] = {
 		attachController: (n: string) => {
@@ -470,6 +473,7 @@ export const runTest = async (): Promise<number> => {
 	};
 	Probe.Count.delete(projF);
 	Probe.Count.set(projF, 0);
+
 	// Group: the Follow passage gate.
 	const followBefore = ledgerLines().length;
 	await Follow(Probe, tF, actor, projF, null, null, {

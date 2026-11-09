@@ -138,6 +138,7 @@ export const Context = (State: State, Agent: string): string => {
 			Idle0.length > 0 ? ` (${Idle0.map((One) => One.id).join(", ")})` : ""
 		}`,
 	);
+
 	// The Gates block and the queue projection render only when the board
 	// holds a truth to render: no gate reported / no queue service mounted
 	// means the block does not speak (silence is the honest default).

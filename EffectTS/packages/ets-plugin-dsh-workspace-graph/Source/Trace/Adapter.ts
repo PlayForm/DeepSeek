@@ -36,6 +36,7 @@ interface Seams {
 
 export default (StateRef: State): void => {
 	const Context = StateRef.Context as unknown as Seams;
+
 	/** Wire the bus on the context that owns the subscription (the graph's
 	 *  fiber, or the injected sub-fiber when the bus arrived late). */
 	const Attach = (Trace: Adapter, Owner: Seams): void => {

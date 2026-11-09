@@ -53,12 +53,14 @@ export interface FactoryGovernStep {
 export default interface FactoryService {
 	/** The ledger: logger + appendFileSync, never throws. */
 	Append(State: FactoryState, Message: string): void;
+
 	/** The State builder: cell unwrap + shared fields + module extras. */
 	State<Extra extends object = Record<string, unknown>>(
 		Context: Context,
 		Config: unknown,
 		Setup: FactorySetup,
 	): FactoryState & Extra;
+
 	/** The fs/observed registration on the ROOT context (the module supplies
 	 *  its own synchronous observer). */
 	Wire(
@@ -66,6 +68,7 @@ export default interface FactoryService {
 		State: FactoryState,
 		Observe: (Target: FsTarget, Observation: FsObservation, Actor: object | undefined) => void,
 	): void;
+
 	/** The ONE shared write executor: intent/policy/observe/stash/transform. */
 	Write(
 		State: FactoryState,
@@ -73,6 +76,7 @@ export default interface FactoryService {
 		Content: string,
 		Over?: FactoryWriteOver,
 	): Promise<FsWriteOutcome>;
+
 	/** The direct-govern entry: run the registered steps for the target's
 	 *  basename (selection true = all), sequential fold, never throws. */
 	Govern(
@@ -81,6 +85,7 @@ export default interface FactoryService {
 		Actor: object | undefined,
 		Version: FsVersion,
 	): Promise<void>;
+
 	/** Register a direct-govern step for one basename (the modules call this
 	 *  at apply; the batch tool registers none but the type stays honest). */
 	RegisterGovern(Basename: string, Name: string, Run: FactoryGovernStep["run"]): void;

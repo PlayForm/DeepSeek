@@ -412,6 +412,7 @@ const RequestOf = (Value: unknown): PublishBody => {
 		throw new Error(BodyMessage);
 	}
 	const Body = Value as Record<string, unknown>;
+
 	// The two locals carry the narrowing: a switch (true) arm cannot narrow
 	// the original binding for the value the return below constructs, so each
 	// validated figure is re-bound to its narrowed type first.
@@ -442,6 +443,7 @@ const RequestOf = (Value: unknown): PublishBody => {
 		default:
 	}
 	const Listed = Body["rows"];
+
 	// Early throw, because the narrowing has to survive into the row walk; a
 	// switch (true) arm cannot carry it.
 	if (!Array.isArray(Listed) || Listed.length === 0) {

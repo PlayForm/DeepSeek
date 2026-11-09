@@ -94,6 +94,7 @@ export interface GraphStatistics {
 /** The workspaceGraph service surface (WAVE-1-BRIEF.md section 4.3). */
 export interface WorkspaceGraph {
 	indexFile(path: string): Promise<IndexOutcome>;
+
 	/** The INDEXING TRIGGER: walk the root (default = the session cwd) and
 	 * index every candidate file; the counts are the graph service's. */
 	indexWorkspace(root?: string, options?: { maxFiles?: number }): Promise<IndexSummary>;

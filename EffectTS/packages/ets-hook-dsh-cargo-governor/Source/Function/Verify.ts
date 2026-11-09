@@ -30,6 +30,7 @@ export default async (
 	Signal: AbortSignal,
 ): Promise<boolean> => {
 	Factory.Append(State, `update: running verifyCommand: ${Command}`);
+
 	// The subprocess seam is OPTIONAL — see the header (probed ONCE by the
 	// factory's State builder, consumed from State here). Undefined → the
 	// node:child_process fallback below.

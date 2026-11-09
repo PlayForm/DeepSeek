@@ -62,6 +62,7 @@ export default (
 	Config: Config,
 ): readonly Allocation[] => {
 	const Output = Cost.Output + Cost.Reasoning;
+
 	// The cache-write allocation (section 18, decision 7): the write is paid
 	// by the set that benefits from the later reads, so it rides the cached
 	// side with the cache reads instead of the uncached side. With no cache

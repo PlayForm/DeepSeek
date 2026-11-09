@@ -37,8 +37,10 @@ export type Lookup = { found: Entry } | { gone: "expired" | "unknown" };
 export default class Store {
 	/** The live entries, keyed by hash (insertion order = LRU tiebreak). */
 	Entries = new Map<string, Entry>();
+
 	/** The total byte size of the live entries (the LRU's accounting). */
 	Bytes = 0;
+
 	/** The journal path; "" = memory-only. */
 	Path: string;
 

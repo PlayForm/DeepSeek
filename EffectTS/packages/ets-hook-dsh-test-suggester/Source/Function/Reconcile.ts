@@ -56,8 +56,10 @@ const Declared = (Readme: string): number | undefined => {
 export default (
 	/** The package root (already resolved by Function/Package). */
 	PackageRoot: string,
+
 	/** The resolved workspace root (the display base). */
 	Root: string,
+
 	/** The graph's Test node paths for the package (empty when absent). */
 	Nodes: string[],
 ): Reconciliation | undefined => {

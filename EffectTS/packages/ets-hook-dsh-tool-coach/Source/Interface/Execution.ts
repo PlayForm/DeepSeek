@@ -10,12 +10,16 @@ export type CoachClass = "write" | "read" | "search" | "discovery" | "control";
 export interface Match {
 	/** The offending command segment as written (first 200 chars). */
 	command: string;
+
 	/** The regression class. */
 	class: CoachClass;
+
 	/** The dedicated tool the note names (from the matched row). */
 	tool: string;
+
 	/** The matched pattern source (or `<catch-all>`). */
 	pattern: string;
+
 	/** Optional per-row note override (from the matched row). */
 	note?: string | undefined;
 }
@@ -49,6 +53,7 @@ export interface ToolEntry {
 export interface ToolCatalog {
 	/** `live` = fetched from ctx.tools.schemas(); `static` = fallback table. */
 	source: "live" | "static";
+
 	/** Tool name -> entry. */
 	tools: Map<string, ToolEntry>;
 }
@@ -62,24 +67,34 @@ export interface ToolCatalog {
 export interface AgentState {
 	/** The last `window` judged calls: the offense match, or null when clean. */
 	window: (Match | null)[];
+
 	/** Judged calls since the last coaching note (tier-1 cooldown counter). */
 	sinceNote: number;
+
 	/** Total offenses since the last note (tier-2 escalation counter). */
 	strikesSinceNote: number;
+
 	/** Per-class offenses since the last note (tier-3 enforce counter). */
 	classStrikes: Record<CoachClass, number>;
+
 	/** Consecutive clean judged calls (tier-2 clean-window counter). */
 	sinceClean: number;
+
 	/** Whether the persistent tier-2 section is currently on for this agent. */
 	tier2: boolean;
+
 	/** The composed tier-2 section cache: text + the judged-call count at build. */
 	sectionCache?: { built: number; text: string } | undefined;
+
 	/** Total judged calls for this agent (the tier-2 section TTL clock). */
 	calls: number;
+
 	/** Distinct exempt pattern sources already logged for this agent. */
 	exemptSeen: Set<string>;
+
 	/** The most recent offense's command segment (the tier-2 template fill). */
 	lastCommand: string;
+
 	/** The most recent offense's class. */
 	lastClass: CoachClass;
 }
@@ -88,18 +103,25 @@ export interface AgentState {
 export interface Decision {
 	/** This call's offense, or null when the call was clean. */
 	match: Match | null;
+
 	/** The highest channel that fired on this call (0 = ledger only). */
 	tier: 0 | 1 | 2 | 3;
+
 	/** A tier-1 note fired on this call. */
 	note: boolean;
+
 	/** The tier-2 section turned ON on this call. */
 	tier2On: boolean;
+
 	/** The tier-2 section turned OFF on this call. */
 	tier2Off: boolean;
+
 	/** The note trigger was active but the cooldown suppressed it. */
 	suppressed: boolean;
+
 	/** Total strikes in the current window. */
 	strikes: number;
+
 	/** Judged calls since the last note. */
 	sinceNote: number;
 }

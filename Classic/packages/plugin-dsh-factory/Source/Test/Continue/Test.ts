@@ -30,6 +30,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// The folder fixtures: the temp root with the proj directory, the
 	// auxiliary registry ({effectiveLatest: {leftpad: '1.0.0'}} - the chain
 	// source) and the global policy ({keep: ['g','a']}). NO pin-policy.json is
@@ -79,6 +80,7 @@ export const runTest = async (): Promise<number> => {
 				`pinned ${CURRENT.lastTarget?.displayPath} (${count} versions) \u2192 ${outcome.version}`,
 		};
 	};
+
 	// Group: 12a - the CHANGE path: Inflight registered during, write + message
 	// + re-emit + removed after.
 	{
@@ -136,6 +138,7 @@ export const runTest = async (): Promise<number> => {
 		}
 	}
 	// Group: 12b - the NO-OP paths: null transform \u2192 no write, no emit, silent;
+
 	// count === 0 \u2192 designed no-op.
 	{
 		const Sub = "Continue: no-op paths (null + count 0) silent, Inflight cleaned";

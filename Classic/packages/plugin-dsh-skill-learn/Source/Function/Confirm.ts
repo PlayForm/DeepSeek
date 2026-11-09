@@ -44,12 +44,16 @@ export interface View {
 /** One phase-2 call: the route, the system prompt, the user text's parts, and the run's limits. */
 export interface ConfirmOptions {
 	readonly route: Route;
+
 	/** `Prompt(2)`, the byte-stable phase-2 text. */
 	readonly system: string;
+
 	/** The digest text (`Function/Digest`). */
 	readonly digest: string;
+
 	/** The catalog index lines (`Function/Catalog`). */
 	readonly index: readonly string[];
+
 	/** The bodies the plan asked for, in the order the caller loaded them. */
 	readonly views: readonly View[];
 	readonly maxTokens: number;

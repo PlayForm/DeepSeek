@@ -17,6 +17,7 @@ import Defaults from "../Variable/Weights.js";
 export default (
 	/** The enabled heuristic names (config `heuristics`, volatile). */
 	Enabled: string[],
+
 	/** The configured weight table (config `weights`, volatile). */
 	Configured: Record<string, number>,
 ): { enabled: string[]; weights: HeuristicValues } => {

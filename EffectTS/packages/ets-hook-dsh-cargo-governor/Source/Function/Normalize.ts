@@ -23,6 +23,7 @@
 // Pure internal calculation — one of the standing exemptions.
 export default (Version: string): string | null => {
 	let Value = Version.trim();
+
 	// Complex requirement syntax is never normalized.
 	switch (true) {
 		case /^[~^><*]/.test(Value):

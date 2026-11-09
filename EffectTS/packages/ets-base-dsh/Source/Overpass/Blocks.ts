@@ -59,6 +59,7 @@ export default <T extends Block>(
 		Count.value += Result.count;
 		return { ...Block, text: Result.text };
 	});
+
 	// Unchanged -> the ORIGINAL array by identity.
 	return Changed ? Next : (Content as unknown as T[]);
 };

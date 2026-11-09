@@ -114,6 +114,7 @@ const Reason = (Thrown: unknown): string => {
 export default (Agent: unknown, OnFailure?: (Detail: string) => void): ReviewMessage[] => {
 	const Session = Member(Agent, "session");
 	const Surface = Member(Session, "surface");
+
 	// THE PRIMARY ARM: the derived history the agent loop itself reads. The
 	// member read is guarded, so an older host without the accessor falls
 	// through to the legacy probes; the call is guarded too, and a throw is

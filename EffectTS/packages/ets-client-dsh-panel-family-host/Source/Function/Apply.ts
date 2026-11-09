@@ -55,6 +55,7 @@ export default function Apply(ctx: Context, config: Config): void {
 						message: "the panel-family host is disabled (enabled=false)",
 					},
 	});
+
 	// The plain-field bridge: the ONE trusted full-config write surface. The
 	// disabled gate refuses before the editor is ever resolved.
 	ctx.provide("panelFamilyBridge", {
@@ -68,6 +69,7 @@ export default function Apply(ctx: Context, config: Config): void {
 			}
 		},
 	});
+
 	// The D5 forwarder: only when the host process carries the bus.
 	const HostTrace = TraceFn(ctx);
 	switch (true) {
@@ -82,6 +84,7 @@ export default function Apply(ctx: Context, config: Config): void {
 	// the fiber (one teardown, no leak). A composition without a webServer
 	// never reaches apply at all - the loader keeps the row PENDING.
 	ctx.effect(() => StreamFn(ctx) ?? (() => {}), "panel: trace stream");
+
 	// The activation line (ledger string, byte-stable):
 	// `host: activated (enabled=<enabled>)`.
 	ctx.logger.info(`host: activated (enabled=${String(enabled)})`);

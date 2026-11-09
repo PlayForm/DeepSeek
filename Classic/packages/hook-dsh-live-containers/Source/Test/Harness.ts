@@ -223,6 +223,7 @@ export const Make = (Raw: any, Attach?: (Context: any, Run: any) => void): any =
 		},
 	};
 	const Run: any = { Context, Listeners, Lines, Warns, Raw };
+
 	// The optional pre-apply attachment: the wave-2 services are read at apply
 	// time, so they must be on the Context BEFORE apply runs.
 	Attach?.(Context, Run);
@@ -503,6 +504,7 @@ export const FakeJobsHub = () => {
 		remove: () => undefined,
 		attachController: () => undefined,
 	};
+
 	/** Fabricate one settled event (the smoke's controllable settle). The job
 	 * kind is taken from the started spec when the id was started through the
 	 * fake registry (the monitor jobs carry kind "monitor"), else "bash". */
@@ -577,6 +579,7 @@ export const FakeSubagent = () => {
 			return { childId: `child-${Sub.spawns.length}`, result: Result, dispose: async () => undefined };
 		},
 	};
+
 	/** Resolve the Nth spawn's result with the given output blocks. */
 	Sub.answer = (Index: number, Output: any): void => {
 		Sub.resolvers[Index]?.({ output: Output, stopReason: "end_turn" });
@@ -700,6 +703,7 @@ export const FakeStorage = (Options: { failOpen?: boolean } = {}): any => {
 			};
 		},
 	};
+
 	/** Seed one record (the restart scenario: the store outlives the process). */
 	Store.seed = (Key: string, Record: any): void => {
 		Store.records.set(Key, Record);
@@ -827,6 +831,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually wires the plugin (the
 	// vacuously-green backstop for every folder's fixture - a broken seam
 	// would print fewer checks in every folder, which the runner's

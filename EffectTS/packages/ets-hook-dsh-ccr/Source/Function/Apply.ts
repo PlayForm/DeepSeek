@@ -83,6 +83,7 @@ export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).
 	const Factory = Context.pluginFactory;
+
 	// The State: the factory's shared shape plus the CCR hook's own fields,
 	// copied from the (cell-unwrapped) validated config by the setup map.
 	const State: State = Factory.State<State>(Context, Options, {
@@ -137,6 +138,7 @@ export default (Context: Context, Options: Config): void => {
 			["", `budget ${String(State.Budget)}`],
 		]),
 	);
+
 	// The lifecycle record into the shared storage domain (best-effort; the
 	// detail is byte-identical to the ledger line).
 	Factory.Journal(

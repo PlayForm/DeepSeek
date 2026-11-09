@@ -67,6 +67,7 @@ export default function Client(ctx: Context): void {
 	ctx.inject(["remote.playformFamilyPanel"], (Ready) => {
 		Provide(Ready);
 	});
+
 	// The stream fallback: the generated remote namespace does not exist in
 	// this repo, so without it the browser half feeds the panel's `trace`
 	// service from the host's SSE route. The stream is created and disposed

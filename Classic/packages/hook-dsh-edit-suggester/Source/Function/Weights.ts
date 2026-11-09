@@ -25,6 +25,7 @@ export default (
 	 * The enabled heuristic names (config `heuristics`, volatile).
 	 */
 	Enabled: string[],
+
 	/**
 	 * The configured weight table (config `weights`, volatile).
 	 */

@@ -32,6 +32,7 @@ export const runTest = async (): Promise<number> => {
 	const World = Boot();
 	const { ctx, listener, st } = World;
 	const actor = { name: "edit" };
+
 	// Group: the pin pass - the range law across all four sections.
 	const pinDir = Path.join(Root, "pin-basic");
 	const pinPath = Path.join(pinDir, "package.json");
@@ -65,6 +66,7 @@ export const runTest = async (): Promise<number> => {
 	const writesBefore = ctx.writes.length;
 	const readsBefore = ctx.reads.length;
 	listener(target, { kind: "present", version: v1 }, actor);
+
 	// The await-free assertion point (the source suite asserts it BEFORE the
 	// settle); capture the count here for the check.
 	const writesAtFire = ctx.writes.length;

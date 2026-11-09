@@ -15,6 +15,7 @@ import { Stream } from "effect";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Gate - the stream transformer (EffectTS additive). A replayable
 	// async iterable (the reducer-level contract: Stream.flatMap is sequential
 	// by default, so one in - one out, strictly sequential).

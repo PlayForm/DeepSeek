@@ -72,19 +72,25 @@ export interface Over {
 	/** An explicit intent skips the waterfall; `{ waterfall: true }` (the
 	 *  default) runs the fs/write-intent waterfall, `next() => undefined`. */
 	intent?: FsWriteIntent | { waterfall: true };
+
 	/** Forwarded to `writeText` end to end. */
 	signal?: AbortSignal | undefined;
+
 	/** `"standing"` (default): the built-in's no-escalation replica. `"p4"`:
 	 *  the sandbox-mode-decided per-call fence. Or an explicit policy. */
 	policy?: "standing" | "p4" | SandboxExecutionPolicy | undefined;
+
 	/** The fs/observed and fs/write-intent actor (the tool's `exec`). */
 	actor?: object | undefined;
+
 	/** Emit `fs/observed { kind: "present", version }` after success
 	 *  (default true; the guarded path delegates the re-emit to Refresh). */
 	observe?: boolean;
+
 	/** Pre-register the outcome's fresh version in State.Stash (default
 	 *  false - the guarded path's idempotence gate). */
 	stash?: boolean;
+
 	/** The caller's content step, applied before the write. */
 	transform?: (content: string) => string;
 }
@@ -96,9 +102,11 @@ export default async (
 	Over: Over = {},
 ): Promise<FsWriteOutcome> => {
 	const FS = State.Context.fs;
+
 	// The caller's content step (raw-write's six-fold Rewrite chain), applied
 	// before anything else.
 	const Written = Over.transform === undefined ? Content : Over.transform(Content);
+
 	// The intent: an explicit intent is used as-is (the waterfall is SKIPPED -
 	// the guarded path); the default runs the fs/write-intent waterfall - the
 	// observation policy's single-slot guarded-write decision - with `next()`
@@ -110,6 +118,7 @@ export default async (
 		"waterfall" in Requested
 			? await State.Context.waterfall("fs/write-intent", Target, Over.actor, () => undefined)
 			: Requested;
+
 	// The sandbox posture. `"standing"` - the EXACT no-escalation replica of
 	// the built-in write's FsSandboxController: a bare backend writes
 	// unconditionally; a confining backend must have the `sandboxPolicy`
@@ -151,10 +160,13 @@ export default async (
 		Over.signal,
 		policy,
 	);
+
 	// The fresh version, pre-registered BEFORE the emit so a re-entrant
 	// listener call hits the idempotence gate (the guarded path's behavior;
+
 	// harmless off by default).
 	if (Over.stash) State.Stash.set(Target.targetKey, Outcome.version);
+
 	// The fs/observed present emit - byte-identical to the built-in's step 5,
 	// on the ROOT context (the built-in write's own posture: its ctx IS the
 	// root, and a plugin-scope emit is never heard by the governance hooks'

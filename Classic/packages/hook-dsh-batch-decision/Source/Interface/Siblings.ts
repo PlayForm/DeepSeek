@@ -18,6 +18,7 @@
  *  proposal itself) - the seam is declared so a host wiring can resolve it. */
 export interface PassOnService {
 	prepare(input: unknown): Promise<unknown | null>;
+
 	/** The live service's read (the internal proposal). */
 	Get?(id: string): unknown;
 }

@@ -32,6 +32,7 @@ import type { State } from "@playform/ets-base-dsh";
 export default (
 	Context: Context,
 	// Accepted for signature stability (every module passes its built State);
+
 	// the registration itself needs no state today.
 	_State: State,
 	Observe: (Target: FsTarget, Observation: FsObservation, Actor: object | undefined) => void,

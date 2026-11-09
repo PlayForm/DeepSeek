@@ -30,6 +30,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// The folder fixtures: the fake ctx + the REAL factory instance, the temp
 	// root and the source suite's st1 State.
 	const Fake = Make(null, { files: {} });
@@ -52,6 +53,7 @@ export const runTest = async (): Promise<number> => {
 		},
 		{ module: "smoke-flavor", fields: { Section: "sections", Strict: "strict" } },
 	);
+
 	// Group: 8 - Append: byte-identical ledger semantics.
 	{
 		const Sub = "Append: [ISO] line + logger prefix + Enabled gate + never throws";

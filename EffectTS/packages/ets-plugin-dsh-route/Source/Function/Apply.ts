@@ -90,6 +90,7 @@ export default (Context: Context, Options: Config): void => {
 	// on the child's first `agent/pre-step` (the SERVICE launch - the queue's
 	// spawn never passes through a tool, so only the pre-step seam reaches it).
 	Context.on("tools/pre-execute", (Exec, Next) => Inject(State, Exec, Next, Append));
+
 	// The pre-step decision carries the harness's branded message identity,
 	// which a structural shape cannot mint, so the listener crosses the
 	// event's exact declaration through this one documented cast (the

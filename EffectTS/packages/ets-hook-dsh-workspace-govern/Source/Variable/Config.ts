@@ -75,6 +75,7 @@ export default Compose(false, {
 	// AUTOMATIC, so this package has NO gated action: no verdict can refuse
 	// it. read/index/record/suggest/message are automatic; write/commit/spawn
 	// wait for approval for the family's write paths. Volatile as one object;
+
 	// a resolved pack's `policy` section overrides the defaults per action
 	// (the wiring is the next refinement; the type already exists).
 	automation: Policy(),

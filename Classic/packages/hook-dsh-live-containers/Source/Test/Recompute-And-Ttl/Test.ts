@@ -35,6 +35,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: refresh "ttl" with ttlCalls=2 - one render, one cache reuse, one
 	// TTL rebuild (the time block's value CHANGES at the rebuild).
 	rm();

@@ -135,6 +135,7 @@ export const Make = (
 		},
 	};
 	const Run: any = { Context, Lines, Warns, Provided, Effects, Disposers };
+
 	// The optional pre-construction attachment: the llm service must be in
 	// place BEFORE the constructor runs its probes.
 	Attach?.(Context, Run);
@@ -214,6 +215,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually wires the Service constructor.
 	const Run = Make();
 	Check(Count, "selfcheck: the fake ctx registers the service", () => {

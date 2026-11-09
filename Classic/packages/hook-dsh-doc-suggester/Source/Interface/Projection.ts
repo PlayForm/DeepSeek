@@ -55,6 +55,7 @@ export interface SessionHistory {
 	 * The next touch's sequence number.
 	 */
 	Seq: number;
+
 	/**
 	 * The folded touches, oldest first.
 	 */
@@ -71,10 +72,12 @@ export interface SessionEvent {
 	 * The event kind (`tool/call`, `tool/result`, `turn/start`, ...).
 	 */
 	readonly type?: string;
+
 	/**
 	 * The committed log position.
 	 */
 	readonly seq?: number;
+
 	/**
 	 * The event payload.
 	 */
@@ -97,18 +100,22 @@ export interface ProjectionUnit<S> {
 	 * The projection key this unit owns.
 	 */
 	readonly key: string;
+
 	/**
 	 * Validates persisted state before it seeds a fold.
 	 */
 	readonly stateSchema: StateSchema<S>;
+
 	/**
 	 * State for the empty log and its immutable Session metadata.
 	 */
 	init(header: unknown, inheritedEventCount: unknown): S;
+
 	/**
 	 * Pure transition: previous state + one committed event -> next state.
 	 */
 	apply(state: S, event: SessionEvent): S;
+
 	/**
 	 * Persisted-cache invalidation version.
 	 */
@@ -121,6 +128,7 @@ export interface ProjectionRegistry {
 	 * Install one unit on the calling context's fiber.
 	 */
 	register(unit: ProjectionUnit<SessionHistory>): unknown;
+
 	/**
 	 * Read one unit's live read-only host state for one session.
 	 */

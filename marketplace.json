@@ -2528,11 +2528,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794198609,
+					"publishTimestamp": 1794235387,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "7ca3dea463c582a241e9385bf1759d855ce82c3d",
+						"commit": "67e5d9c836204b8e307ab917c42f3f9749591170",
 						"path": "EffectTS/packages/ets-plugin-dsh-cost"
 					},
 					"engines": {}

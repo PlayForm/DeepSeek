@@ -1,46 +1,142 @@
-import type Config from "@Interface/Config.js";
-import type { CompiledIntent } from "@Interface/Pack.js";
+/**
+ * @module State
+ *
+ * The per-apply plugin state: the FACTORY's shared shape extended with the
+ * test-suggester hook's own fields.
+ *
+ * @remarks
+ * The shared half is built by `Factory.State(ctx, config, { ... })` (factory
+ * SCHEME.md §2.10). The shared shape comes from the factory's NAMED type
+ * export (`State`): the built Target/Library.d.ts ships RELATIVE specifiers,
+ * so a consumer's tsconfig paths never hijack the declaration imports. The
+ * machinery that stays inert here: the fs/observed domain (this hook is a
+ * NON-MANIFEST module that consumes the factory for the State builder and the
+ * ledger only).
+ *
+ * The test-suggester's own fields:
+ *
+ * - `On` - the master switch (config `enabled`, volatile);
+ * - `Threshold` - the default confidence gate (config `threshold`, volatile);
+ * - `MaxCandidates` - the note's candidate cap AND the `Adjacent` limit
+ *   (config `maxCandidates`, volatile);
+ * - `MaxNoteChars` - the note's character cap (config `maxNoteChars`,
+ *   volatile);
+ * - `Cooldown` - the per-intent cooldown in judged calls (config
+ *   `cooldownCalls`, volatile);
+ * - `MaxNotesPerTurn` - the per-turn note cap (config `maxNotesPerTurn`,
+ *   volatile);
+ * - `Intents` - the enabled intent ids of an EXPLICIT pack (config `intents`,
+ *   volatile);
+ * - `EmitOn` - the judged tool names (config `emitOn`, volatile);
+ * - `Exclude` - candidate path prefixes never suggested (config `exclude`,
+ *   volatile);
+ * - `Rules` - the compiled EXPLICIT pack; EMPTY at apply, because the
+ *   candidates come from the session history and only an explicit repo/user
+ *   pack is compiled (per call, in `Function/Apply`). The built-in pack is
+ *   never a candidate source, so the boot projection is retired;
+ * - `Agents` - the per-agent ring/cooldown state (WeakMap keyed on the Agent
+ *   object, the tool-coach precedent), built once in `Function/Apply`;
+ * - `Cleared` - the package roots whose reconciliation already logged its
+ *   consistent-tree line (once per root per apply - the clear line is a state
+ *   change, not a per-call heartbeat);
+ * - `Factory` - the injected factory service itself, consumed for the ledger
+ *   (Factory.Append) - assigned once in `Function/Apply`.
+ *
+ * THE HISTORY IS NOT A STATE FIELD: the per-session touch history is a
+ * session-projection unit (`Function/Unit`, keyed on `sessionProjections`), so
+ * the registry owns one cell per session and `Function/History` reads it at
+ * detection time through `stateOf(session, key)`. Nothing here holds it, and
+ * no WeakMap in this module is keyed on the session object.
+ */
+import type Config from "./Config.js";
+import type { CompiledIntent } from "./Pack.js";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { State as Shared } from "@playform/plugin-dsh-factory";
 export default interface State extends Shared {
-    /** The master switch (config `enabled`, volatile). */
+    /**
+     * The master switch (config `enabled`, volatile).
+     */
     On: boolean;
-    /** The default confidence gate (config `threshold`, volatile). */
+    /**
+     * The default confidence gate (config `threshold`, volatile).
+     */
     Threshold: number;
-    /** The note's candidate cap (config `maxCandidates`, volatile). */
+    /**
+     * The note's candidate cap (config `maxCandidates`, volatile).
+     */
     MaxCandidates: number;
-    /** The note's character cap (config `maxNoteChars`, volatile). */
+    /**
+     * The note's character cap (config `maxNoteChars`, volatile).
+     */
     MaxNoteChars: number;
-    /** The per-intent cooldown in judged calls (config `cooldownCalls`, volatile). */
+    /**
+     * The per-intent cooldown in judged calls (config `cooldownCalls`, volatile).
+     */
     Cooldown: number;
-    /** The per-turn note cap (config `maxNotesPerTurn`, volatile). */
+    /**
+     * The per-turn note cap (config `maxNotesPerTurn`, volatile).
+     */
     MaxNotesPerTurn: number;
-    /** The enabled intent ids of an explicit pack (config `intents`, volatile). */
+    /**
+     * The enabled intent ids of an explicit pack (config `intents`, volatile).
+     */
     Intents: string[];
-    /** The judged tool names (config `emitOn`, volatile). */
+    /**
+     * The judged tool names (config `emitOn`, volatile).
+     */
     EmitOn: string[];
-    /** The candidate path prefixes never suggested (config `exclude`, volatile). */
+    /**
+     * The candidate path prefixes never suggested (config `exclude`, volatile).
+     */
     Exclude: string[];
-    /** The compiled explicit pack; empty at apply (the boot projection is retired). */
+    /**
+     * The compiled explicit pack; empty at apply (the boot projection is
+     * retired).
+     */
     Rules: CompiledIntent[];
-    /** The per-agent state, keyed on the Agent object. */
+    /**
+     * The per-agent state, keyed on the Agent object.
+     */
     Agents: WeakMap<object, AgentMemory>;
-    /** The package roots whose reconciliation logged its consistent-tree line. */
+    /**
+     * The package roots whose reconciliation logged its consistent-tree line.
+     */
     Cleared: Set<string>;
-    /** The injected @playform/plugin-dsh-factory service - the ledger
-     *  (Factory.Append) is consumed through it; assigned once in Function/Apply. */
+    /**
+     * The injected @playform/plugin-dsh-factory service - the ledger
+     * (Factory.Append) is consumed through it; assigned once in `Function/Apply`.
+     */
     Factory: Factory;
 }
+/**
+ * The per-agent memory: the call counter (the cooldown's clock), the last note
+ * call per intent (the cooldown), the notes emitted this turn (the per-turn
+ * cap), the last probes (the ring; kept for parity with the plan's ring
+ * buffer), and the reconciliation's dedupe signatures.
+ */
 export interface AgentMemory {
-    /** Judged calls seen since the agent's memory was created. */
+    /**
+     * Judged calls seen since the agent's memory was created.
+     */
     Calls: number;
-    /** Intent id -> the call index of the last note for that intent. */
+    /**
+     * Intent id -> the call index of the last note for that intent.
+     */
     Noted: Map<string, number>;
-    /** Notes emitted since the last user turn (the per-turn cap). */
+    /**
+     * Notes emitted since the last user turn (the per-turn cap).
+     */
     TurnNotes: number;
-    /** The last probes (most recent first, capped at 8). */
+    /**
+     * The last probes (most recent first, capped at 8).
+     */
     Ring: string[];
-    /** Package root -> the drift signature of the last reconciliation note. */
+    /**
+     * Package root -> the drift signature of the last reconciliation note.
+     */
     Reconciled: Map<string, string>;
 }
+/**
+ * The config type the schema produces (re-exported for the listener's casts).
+ */
 export type { Config };

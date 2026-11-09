@@ -17,6 +17,7 @@ import type Job from "@Interface/Job.js";
 export default interface Jobs {
 	/** Register this plugin as a root-level job controller (Function/Apply). */
 	attachController(name: string): unknown;
+
 	/** Start one background job. `run` receives the Job handle and returns the
 	 *  cancel/done pair; `done` NEVER rejects — it resolves the settled
 	 *  outcome (`status`/`detail`), exactly the semantics of the detached

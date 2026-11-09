@@ -80,6 +80,7 @@ export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).
 	const Factory = Context.pluginFactory;
+
 	// The State: the factory's shared shape plus the normalizer's own fields,
 	// copied from the (cell-unwrapped) validated config by the setup map.
 	const State: State = Factory.State<State>(Context, Options, {

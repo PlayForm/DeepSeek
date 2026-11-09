@@ -19,8 +19,10 @@ export type RouteSource = "resolved" | "kept" | "corrected" | "escalated";
 export default interface Route extends RoleSpec {
 	/** The task type the route was resolved for. */
 	taskType: Role;
+
 	/** The source classification above. */
 	source: RouteSource;
+
 	/** The route as the launcher passed it, when one was passed and it was
 	 * corrected or kept (the audit trail; absent for "resolved"). */
 	passed?: RouteHint | undefined;

@@ -66,6 +66,7 @@ export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).
 	const Factory = Context.pluginFactory;
+
 	// The State: the factory's shared shape plus the comment filter's own
 	// fields, copied from the (cell-unwrapped) validated config by the setup
 	// map.
@@ -81,6 +82,7 @@ export default (Context: Context, Options: Config): void => {
 		},
 	});
 	State.Factory = Factory;
+
 	// The runtime-only fields (NOT config cells: the intent stash and the core
 	// scope adapter are per-apply state, initialized here).
 	State.IntentMap = new Map();

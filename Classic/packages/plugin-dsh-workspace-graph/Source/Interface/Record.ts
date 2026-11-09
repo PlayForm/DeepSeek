@@ -15,10 +15,13 @@ import type Node from "@Interface/Node.js";
 export default interface Record {
 	/** The file version token at index time. */
 	version: string;
+
 	/** The file node's fingerprint. */
 	fingerprint: string;
+
 	/** The nodes the parse produced. */
 	nodes: Node[];
+
 	/** The edges the parse produced. */
 	edges: Edge[];
 }

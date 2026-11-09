@@ -98,6 +98,7 @@ const Entry = (Key: string, Value: unknown): Family => {
 
 export default (Pack: Pack): Pack => {
 	const Result: Pack = { ...Pack };
+
 	// A scalar `signature:` is accepted; arrays replace the inherited list.
 	const Signature = Result.signature as unknown;
 	if (Signature !== undefined) {

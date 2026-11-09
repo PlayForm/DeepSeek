@@ -32,6 +32,7 @@ export default (State: State, Proposal_: Proposal): Obligations => {
 		scope: "n/a",
 		preconditions: "n/a",
 	};
+
 	// contributes: declared and non-empty -> satisfied; declared and empty
 	// -> denied; not declared -> n/a.
 	if (!Proposal_.declared) {
@@ -40,6 +41,7 @@ export default (State: State, Proposal_: Proposal): Obligations => {
 		Obligations.contributes = Proposal_.contribution.length > 0 ? "satisfied" : "denied";
 	}
 	// scope: no allowlist -> n/a; a match hit -> satisfied; no hit -> denied;
+
 	// an unevaluable match -> the recovery row (fail-closed -> denied,
 	// fail-open -> recovery).
 	if (State.Scope.length === 0) {

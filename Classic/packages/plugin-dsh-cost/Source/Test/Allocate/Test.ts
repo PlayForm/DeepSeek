@@ -13,6 +13,7 @@ import { Check, Finish, MakeCounter, Validate } from "../Harness.js";
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const Config = Validate({ enabled: true });
+
 	// The shared priced call: input 10, output 8, no cache buckets priced.
 	const Costed = { Input: 10, Output: 8, CacheRead: 0, CacheWrite: 0, Reasoning: 0, Total: 18, Currency: "USD" };
 	const Usage = {

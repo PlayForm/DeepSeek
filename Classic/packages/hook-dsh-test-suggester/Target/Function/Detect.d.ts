@@ -20,7 +20,7 @@
  * The regexes arrive precompiled (`Function/Apply` compiles once at apply) -
  * the hot path never compiles a regex.
  */
-import type { CompiledIntent, Intent, Match } from "@Interface/Pack.js";
+import type { CompiledIntent, Intent, Match } from "../Interface/Pack.js";
 export default _default;
 declare function _default(Rules: CompiledIntent[], Tool: string, Probe: string): Match | null;
 /**

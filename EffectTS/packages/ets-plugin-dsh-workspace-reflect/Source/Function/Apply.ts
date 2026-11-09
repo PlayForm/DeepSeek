@@ -77,6 +77,7 @@ export default (Context: Context, Options: Config): void => {
 		},
 	}) as State;
 	State.Factory = Factory;
+
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceReflect", this).
 	new ServiceClass(Context, State);
@@ -89,6 +90,7 @@ export default (Context: Context, Options: Config): void => {
 	}
 	// The activation proof (the module's own composed line).
 	Factory.Append(State, Activate([["propagate", State.Propagate]]));
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__pluginDshWorkspaceReflectState"] = State;

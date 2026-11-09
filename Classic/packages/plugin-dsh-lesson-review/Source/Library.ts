@@ -83,6 +83,7 @@ const Expand = (Path: string): string =>
 export interface Tick {
 	/** Whether a review is due now. */
 	due: boolean;
+
 	/** The counter's value after this tick. */
 	count: number;
 }
@@ -91,6 +92,7 @@ export interface Tick {
 export interface Queued {
 	/** Epoch ms when it was queued. */
 	at: number;
+
 	/** The operation. */
 	op: Op;
 }

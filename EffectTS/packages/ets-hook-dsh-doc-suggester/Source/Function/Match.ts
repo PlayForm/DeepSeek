@@ -25,6 +25,7 @@ const Pattern = (Glob: string): RegExp => {
 export default (
 	/** The companion path or glob the note named. */
 	Companion: string,
+
 	/** The judged call's path. */
 	CallPath: string,
 ): boolean => {

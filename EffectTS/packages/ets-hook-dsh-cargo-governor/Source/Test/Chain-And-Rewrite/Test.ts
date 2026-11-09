@@ -29,6 +29,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: the member table canonicalization.
 	{
 		const dir = Group("chain1");

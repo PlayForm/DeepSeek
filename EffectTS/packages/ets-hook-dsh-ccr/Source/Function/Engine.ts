@@ -83,14 +83,19 @@ import type { ContentBlock } from "@deepseek-ai/dsh-llm";
 export type EngineRecord = {
 	/** The engine turn cursor at observation time. */
 	turn: number;
+
 	/** The tool name (the compress path re-runs the exempt/targets gates). */
 	name: string;
+
 	/** Whether the result was a failure. */
 	isError: boolean;
+
 	/** The serialized byte size of the content (the accumulator's unit). */
 	size: number;
+
 	/** The original content blocks - pass-through results only. */
 	content?: ContentBlock[];
+
 	/** The store hash - results the post-execute gate already stored. */
 	hash?: string;
 };
@@ -100,6 +105,7 @@ export type EngineRecord = {
 export type EngineRuntime = {
 	/** The current logical turn (the last pre-step payload's `turn`, or 1). */
 	Turn: number;
+
 	/** The observation log, in arrival order (archiving removes from it). */
 	Records: EngineRecord[];
 };

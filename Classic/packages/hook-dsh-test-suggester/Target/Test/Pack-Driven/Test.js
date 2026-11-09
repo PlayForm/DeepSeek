@@ -1,4 +1,26 @@
-import s from"node:assert/strict";import*as l from"node:fs";import*as C from"node:os";import*as u from"node:path";import{AgentOf as g,Call as m,CheckAsync as d,Finish as v,MakeCounter as L,Setup as p}from"../Harness.js";const h=e=>l.mkdtempSync(u.join(C.tmpdir(),e)),o=(e,i,t="x")=>{const n=u.join(e,i);return l.mkdirSync(u.dirname(n),{recursive:!0}),l.writeFileSync(n,t,"utf8"),n},k=e=>{l.writeFileSync(u.join(e,"package.json"),"{}","utf8")},D=`signature:
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import {
+  AgentOf,
+  Call,
+  CheckAsync,
+  Finish,
+  MakeCounter,
+  Setup
+} from "../Harness.js";
+const Tree = (Prefix) => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
+const Put = (Root, Relative, Body = "x") => {
+  const Full = Path.join(Root, Relative);
+  FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
+  FileSystem.writeFileSync(Full, Body, "utf8");
+  return Full;
+};
+const Manifest = (Root) => {
+  FileSystem.writeFileSync(Path.join(Root, "package.json"), "{}", "utf8");
+};
+const Pack = `signature:
   - docs/STYLE.md
 families:
   "test/Suite":
@@ -15,7 +37,103 @@ families:
         kind: ''
         prior: 1.0
         reason: the temp suite
-`,S=e=>({get:()=>e}),f=e=>({file_path:u.join(e,"Source/Test/Foo/Test.ts"),hint:"PASS"}),r=h("test-suggester-packed-");k(r),o(r,".dsh/pack.yml",D),o(r,"docs/STYLE.md"),o(r,"SUITE.md");const y=h("test-suggester-bare-");k(y),o(y,"SUITE.md");const w=h("test-suggester-unsigned-");k(w),o(w,".dsh/pack.yml",D);const P=h("test-suggester-monorepo-");k(P),o(P,"Documentation/Plans/POC-LEDGER.md");const T=async()=>{const e=L();{const i=g("pack-a"),t=p();t.Context.workingDirectory=S(r),await d(e,"P1: the temp pack's family drives the note",async()=>{const n=await m(t,"read",f(r),i);s.equal(n.additionalContexts.length,1),s.deepEqual(n.additionalContexts[0].source,{kind:"test-suggester",form:"notice",summary:"Suite 0.87"});const a=n.additionalContexts[0].content[0].text;s.equal(a,`[test-suggester] intent=Suite confidence=0.87
-targets (1):
-- SUITE.md - the temp suite
-note: the temp test caveat`),s.equal(a.includes("the assertion body"),!1)}),await d(e,"P1: the ledger counts the pack's one candidate",async()=>{s.ok(t.Lines.includes("test-suggester: suggest Suite 0.87 1 candidates call read"))})}{const i=g("pack-b"),t=p();t.Context.workingDirectory=S(y),await d(e,"P2: the same workspace without the pack abstains no-history",async()=>{const n={kind:"allow"},a=await m(t,"read",f(y),i,n);s.equal(a,n),s.ok(t.Lines.includes("test-suggester: abstained no-history  0.00")),s.equal(t.Lines.filter(c=>c.includes("candidates call")).length,0)})}{const i=g("pack-c"),t=p();t.Context.workingDirectory=S(w),await d(e,"P3: a pack with an absent signature marker still governs the tree",async()=>{const n={kind:"allow"},a=await m(t,"read",f(w),i,n);s.equal(a,n),s.ok(t.Lines.includes("test-suggester: abstained no-companions Suite 0.87")),s.equal(t.Lines.filter(c=>c.includes("candidates call")).length,0)})}{const i=g("pack-d"),t=p();t.Context.workingDirectory=S(P),await d(e,"P4: a monorepo test read with no history abstains no-history",async()=>{const n={kind:"allow"},a=await m(t,"read",{file_path:"Documentation/Plans/POC-LEDGER.md",hint:"Run-Smokes says PASS"},i,n);s.equal(a,n),s.ok(t.Lines.includes("test-suggester: abstained no-history  0.00")),s.equal(t.Lines.filter(c=>c.includes("candidates call")).length,0)})}return v(e,"Pack-Driven")},b=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(b){const e=await T();console.log(`${e} PASS - Pack-Driven`)}export{T as runTest};
+`;
+const Service = (Cwd) => ({ get: () => Cwd });
+const Probe = (Root) => ({
+  file_path: Path.join(Root, "Source/Test/Foo/Test.ts"),
+  hint: "PASS"
+});
+const Packed = Tree("test-suggester-packed-");
+Manifest(Packed);
+Put(Packed, ".dsh/pack.yml", Pack);
+Put(Packed, "docs/STYLE.md");
+Put(Packed, "SUITE.md");
+const Bare = Tree("test-suggester-bare-");
+Manifest(Bare);
+Put(Bare, "SUITE.md");
+const Unsigned = Tree("test-suggester-unsigned-");
+Manifest(Unsigned);
+Put(Unsigned, ".dsh/pack.yml", Pack);
+const Monorepo = Tree("test-suggester-monorepo-");
+Manifest(Monorepo);
+Put(Monorepo, "Documentation/Plans/POC-LEDGER.md");
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Agent = AgentOf("pack-a");
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Packed);
+    await CheckAsync(Count, "P1: the temp pack's family drives the note", async () => {
+      const Out = await Call(Run, "read", Probe(Packed), Agent);
+      assert.equal(Out.additionalContexts.length, 1);
+      assert.deepEqual(Out.additionalContexts[0].source, {
+        kind: "test-suggester",
+        form: "notice",
+        summary: "Suite 0.87"
+      });
+      const Text = Out.additionalContexts[0].content[0].text;
+      assert.equal(
+        Text,
+        "[test-suggester] intent=Suite confidence=0.87\ntargets (1):\n- SUITE.md - the temp suite\nnote: the temp test caveat"
+      );
+      assert.equal(Text.includes("the assertion body"), false);
+    });
+    await CheckAsync(Count, "P1: the ledger counts the pack's one candidate", async () => {
+      assert.ok(
+        Run.Lines.includes("test-suggester: suggest Suite 0.87 1 candidates call read")
+      );
+    });
+  }
+  {
+    const Agent = AgentOf("pack-b");
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Bare);
+    await CheckAsync(Count, "P2: the same workspace without the pack abstains no-history", async () => {
+      const Decision = { kind: "allow" };
+      const Out = await Call(Run, "read", Probe(Bare), Agent, Decision);
+      assert.equal(Out, Decision);
+      assert.ok(Run.Lines.includes("test-suggester: abstained no-history  0.00"));
+      assert.equal(Run.Lines.filter((Line) => Line.includes("candidates call")).length, 0);
+    });
+  }
+  {
+    const Agent = AgentOf("pack-c");
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Unsigned);
+    await CheckAsync(Count, "P3: a pack with an absent signature marker still governs the tree", async () => {
+      const Decision = { kind: "allow" };
+      const Out = await Call(Run, "read", Probe(Unsigned), Agent, Decision);
+      assert.equal(Out, Decision);
+      assert.ok(Run.Lines.includes("test-suggester: abstained no-companions Suite 0.87"));
+      assert.equal(Run.Lines.filter((Line) => Line.includes("candidates call")).length, 0);
+    });
+  }
+  {
+    const Agent = AgentOf("pack-d");
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Monorepo);
+    await CheckAsync(Count, "P4: a monorepo test read with no history abstains no-history", async () => {
+      const Decision = { kind: "allow" };
+      const Out = await Call(
+        Run,
+        "read",
+        { file_path: "Documentation/Plans/POC-LEDGER.md", hint: "Run-Smokes says PASS" },
+        Agent,
+        Decision
+      );
+      assert.equal(Out, Decision);
+      assert.ok(Run.Lines.includes("test-suggester: abstained no-history  0.00"));
+      assert.equal(Run.Lines.filter((Line) => Line.includes("candidates call")).length, 0);
+    });
+  }
+  return Finish(Count, "Pack-Driven");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Pack-Driven`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

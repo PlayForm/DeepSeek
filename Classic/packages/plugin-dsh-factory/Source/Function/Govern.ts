@@ -51,6 +51,7 @@ import type { FsTarget, FsVersion } from "@deepseek-ai/dsh-fs";
 export interface Step {
 	/** The module's step name (the selection key). */
 	name: string;
+
 	/** The run closure (the step's own chain pass). */
 	run: (Target: FsTarget, Actor: object | undefined, Version: FsVersion) => Promise<void> | void;
 }
@@ -73,6 +74,7 @@ export default async (
 	// module claimed - the factory's registry is empty in the raw-write smoke's
 	// posture, and `govern` is a contained no-op there).
 	const Listed = Steps[Base(Target.displayPath)] ?? [];
+
 	// Resolve the selection to the set of step names to run; `null` means "all
 	// registered steps" (the filter below lets everything through).
 	let Chosen: Set<string> | null;

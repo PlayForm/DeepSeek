@@ -7,6 +7,7 @@ export default (Options: unknown): void => {
 	const Fail = (Message: string): never => {
 		throw new Error(`merge: ${Message}`);
 	};
+
 	/** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
 	const Cell = (Value: unknown): unknown =>
 		typeof (Value as { get?: unknown } | null)?.get === "function"

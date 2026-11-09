@@ -25,20 +25,28 @@ export type ConsolidationAction = "keep" | "patch" | "create" | "write_file";
 export interface ConsolidationCandidate {
 	/** The skill name. */
 	readonly name: string;
+
 	/** The curation opt-in flag, which decides jurisdiction rather than authorship. */
 	readonly createdBy: null | "agent" | "learn";
+
 	/** The lifecycle state at survey time. */
 	readonly state: "active" | "stale" | "archived";
+
 	/** Whether the record is pinned, and therefore exempt from every row. */
 	readonly pinned: boolean;
+
 	/** How many recorded activities the skill has. */
 	readonly activityCount: number;
+
 	/** Observed loads through the `skill` tool. */
 	readonly useCount: number;
+
 	/** Successful writes to the skill. */
 	readonly patchCount: number;
+
 	/** The last activity stamp, or null before the first. */
 	readonly lastActivityAt: string | null;
+
 	/** Whether the record was seeded by the curator rather than observed in use. */
 	readonly seeded: boolean;
 }
@@ -47,10 +55,13 @@ export interface ConsolidationCandidate {
 export interface ConsolidationRow {
 	/** The row's action; `keep` is the only one that writes nothing. */
 	readonly action: ConsolidationAction;
+
 	/** The skill the row names. */
 	readonly skill: string;
+
 	/** The write the row proposes; absent for `keep`. */
 	readonly operation?: Operation;
+
 	/** One sentence naming why the row exists. */
 	readonly reason: string;
 }
@@ -65,14 +76,19 @@ export interface ConsolidationPlan {
 export interface ConsolidationResult {
 	/** The class the pass ended in; `disabled` when `consolidate` is false. */
 	readonly outcome: Outcome;
+
 	/** Rows the plan proposed, before the budget and the judge ran. */
 	readonly proposed: number;
+
 	/** Rows applied, counted on successes rather than attempts. */
 	readonly applied: number;
+
 	/** Rows the budget, the judge, or the fence refused. */
 	readonly refused: number;
+
 	/** The snapshot taken before the first write; empty when none was taken. */
 	readonly snapshot: string;
+
 	/** The report directory; empty when no report was written. */
 	readonly report: string;
 }

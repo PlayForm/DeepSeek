@@ -46,10 +46,13 @@ import type UsageRecord from "@Interface/Record.js";
 export interface LoadResult {
 	/** How many records the store held. */
 	readonly loaded: number;
+
 	/** How many entries were dropped because they were not records. */
 	readonly dropped: number;
+
 	/** Why the store could not be read, when it could not. */
 	readonly error?: string;
+
 	/** Where the unreadable store was moved, when the quarantine succeeded. */
 	readonly quarantined?: string;
 }
@@ -57,6 +60,7 @@ export interface LoadResult {
 /** What a save did. */
 export interface SaveResult {
 	readonly ok: boolean;
+
 	/** Why the save failed, when it did. */
 	readonly error?: string;
 }
@@ -65,6 +69,7 @@ export interface SaveResult {
 export interface Stored {
 	/** The skill name, which is the store's key. */
 	readonly name: string;
+
 	/** The record itself. */
 	readonly record: UsageRecord;
 }
@@ -72,8 +77,10 @@ export interface Stored {
 /** What one use did, so the report can say whether the skill was reused after a patch. */
 export interface Reused {
 	readonly record: UsageRecord;
+
 	/** Whether this was not the first use. */
 	readonly reused: boolean;
+
 	/** Whether the skill was used again after a patch landed since the last reuse. */
 	readonly reuseAfterPatch: boolean;
 }
@@ -135,6 +142,7 @@ const Coerce = (Raw: unknown): UsageRecord | undefined => {
 			? Math.floor(Given)
 			: 0;
 	};
+
 	// A record with no creation stamp cannot be aged, so it is dropped rather than
 	// anchored to the epoch and archived on the next pass.
 	const Created = Stamp("createdAt");

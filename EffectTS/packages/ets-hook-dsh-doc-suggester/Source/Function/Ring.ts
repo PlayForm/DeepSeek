@@ -18,8 +18,10 @@ import Match from "./Match.js";
 export interface Pending {
 	/** The family that emitted. */
 	family: string;
+
 	/** The companion paths the note named. */
 	companions: string[];
+
 	/** Judged calls since the emit (the window's position). */
 	since: number;
 }
@@ -27,14 +29,19 @@ export interface Pending {
 export interface RingState {
 	/** The doc paths touched since the last user message (already-touched companions are dropped from later notes). */
 	touched: Set<string>;
+
 	/** The family ids that emitted within the cooldown window (id → age in judged calls). */
 	cooled: Map<string, number>;
+
 	/** The dedupe keys already noted this turn. */
 	cooledNoted: Set<string>;
+
 	/** Notes emitted this turn. */
 	notes: number;
+
 	/** Judged calls since the last user message (the turn counter). */
 	calls: number;
+
 	/** The open note the follow-through watches (undefined when none). */
 	pending?: Pending | undefined;
 }

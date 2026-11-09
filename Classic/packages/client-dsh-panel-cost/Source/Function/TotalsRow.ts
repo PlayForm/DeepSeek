@@ -55,6 +55,7 @@ export default function TotalsRow(Props: TotalsRowProps): ReturnType<typeof crea
 				})}`,
 			),
 		);
+
 	// The totals row never renders the identity columns or the files column:
 	// its label spans the identity pair and the files column is the empty
 	// spacer the shipped footer carries. The bag still names their shape so
@@ -102,6 +103,7 @@ export default function TotalsRow(Props: TotalsRowProps): ReturnType<typeof crea
 			Start: null,
 		},
 	};
+
 	// The label takes the place of the first identity column and spans every
 	// identity column the resolution keeps, so a hidden or reordered identity
 	// column moves the footer with it.

@@ -31,6 +31,7 @@ export default async (
 		return false;
 	}
 	const Default = Library?.["default"] as Record<string, unknown> | undefined;
+
 	// CJS-with-default packages (npm-check-updates): access `run` defensively
 	// (Mod.run ?? Mod.default?.run) — a live-verified pitfall.
 	const Run = (Library?.["run"] ?? Default?.["run"] ?? Default) as

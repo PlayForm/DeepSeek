@@ -14,6 +14,7 @@ import { Check, Finish, MakeCounter, Make, Rm, Validate, Ledger } from "../Harne
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();
+
 	// Group: the waterfall listener, exercised (the source suite's section
 	// right after Run 1).
 	{

@@ -18,6 +18,7 @@ export default interface Plan {
 		/** The canonical version requirement string. */
 		to: string;
 	}>;
+
 	/** Strict-mode strips: entries to remove entirely (the whole
 	 *  `name = "…"` line, or the entry table) — the documented Cargo-specific
 	 *  decision for unknown deps in an explicitly strict workspace. */

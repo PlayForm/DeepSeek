@@ -48,6 +48,7 @@ export const NOTE_DENIED_TOOL = `Blocked by tool-coach: this tool is disabled in
 export interface StaticToolLine {
 	/** The fallback first-sentence description. */
 	description: string;
+
 	/** The fallback key parameter name. */
 	param: string;
 }

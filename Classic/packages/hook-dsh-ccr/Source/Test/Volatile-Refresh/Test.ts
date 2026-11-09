@@ -33,6 +33,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Run 1 - the State builder's P10 refresh listener on the CCR State.
 	Rm();
 	const Raw1 = Validate({ logFile: Ledger });

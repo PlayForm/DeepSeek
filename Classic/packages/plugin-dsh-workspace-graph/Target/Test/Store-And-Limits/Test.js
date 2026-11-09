@@ -1,4 +1,175 @@
-import t from"node:assert/strict";import{Check as r,CheckAsync as h,Contexts as g,FakeStorage as p,Finish as m,MakeCounter as f,MakeGraph as o,Settled as u}from"../Harness.js";const k=s=>Array.from({length:s},(a,n)=>`export const value${n} = ${n};
-`).join(""),x=async()=>{const s=f(),a="/proj/src/store.ts",n={[a]:k(4)};{const e=p(),i=o({enabled:!0,files:n},e);await u(i),r(s,"store: the domain opens on the fake facility and the opened line is byte-exact",()=>{t.equal(e.spec?.name,"workspace_graph"),t.equal(e.spec?.layout,"per-record"),t.ok(e.spec?.tables?.records!==void 0,"the records table is declared"),t.ok(i.loggerLines.includes("graph: domain workspace_graph opened (0 records)"),JSON.stringify(i.loggerLines))})}{const e=p(),i=o({enabled:!0,files:n},e);await u(i);const l=await i.Graph.indexFile(a),d=e.records.get(a);r(s,"store: indexFile persists the record and the meta revision (A6)",()=>{t.equal(l.status,"indexed"),t.equal(d.version,"v1"),t.equal(d.nodes.length,l.nodes),t.equal(d.edges.length,l.edges),t.deepEqual(e.records.get("__meta").indexRevision,1)}),r(s,"store: snapshot returns what indexFile stored and the revision increments (A6)",()=>{const c=i.Graph.snapshot();t.deepEqual(c.nodes,d.nodes),t.deepEqual(c.edges,d.edges),t.equal(c.indexRevision,"1"),t.equal(i.Graph.statistics().files,1),t.equal(i.State.Revision,1)})}{const e=o({enabled:!0,files:n});await e.Graph.indexFile(a),await e.Graph.indexFile(a),r(s,"store: the revision increments with every successful index (A6)",()=>{t.equal(e.Graph.statistics().indexRevision,"2"),t.equal(e.State.Revision,2)})}{const e=p(),i=o({enabled:!0,files:n},e);await u(i),await i.Graph.indexFile(a);const l=await i.Graph.removeFile(a);await h(s,"store: removeFile deletes the record, bumps the revision and logs the byte-exact removed line",async()=>{t.equal(l,!0),t.equal(e.records.has(a),!1),t.equal(i.Graph.statistics().files,0),t.equal(i.Graph.statistics().indexRevision,"2"),t.ok(i.loggerLines.includes(`graph: removed ${a}`)),t.equal(await i.Graph.removeFile(a),!1,"removing again is a silent false")})}{const e=p();e.seed("/proj/src/broken.ts",{version:42}),e.seed(a,{version:"v1",fingerprint:"seeded",nodes:[{id:`File:${a}`,kind:"File",path:a,fingerprint:"seeded",version:"v1"}],edges:[]});const i=o({enabled:!0,files:n},e);await u(i),r(s,"store: a stored record that fails validation is skipped and counted, never guessed",()=>{t.equal(i.State.Invalid,1,"the broken record was counted"),t.ok(i.loggerLines.includes("graph: domain workspace_graph opened (1 records)"),"only the valid record was loaded"),t.equal(i.Graph.getNode(`File:${a}`)?.fingerprint,"seeded"),t.equal(i.Graph.snapshot().nodes.some(l=>l.id.includes("broken")),!1)})}{const e=o({enabled:!0,files:n});await e.Graph.indexFile(a),e.State.Config.limitMaximum=2,r(s,"limits: find defaults to limitDefault and caps at limitMaximum",()=>{t.equal(e.Graph.find({}).length,2,"default 50 capped at 2"),t.equal(e.Graph.find({limit:99}).length,2,"request capped at 2"),t.equal(e.Graph.find({limit:1}).length,1,"smaller request honored")}),e.State.Config.limitMaximum=500,r(s,"limits: find filters by kind, name and pattern",()=>{t.equal(e.Graph.find({kind:"File"}).length,1),t.equal(e.Graph.find({kind:"Symbol"}).length,4),t.equal(e.Graph.find({name:"value2"}).length,1),t.equal(e.Graph.find({pattern:"VALUE2"}).length,1,"pattern is case-insensitive"),t.equal(e.Graph.find({name:"value2",kind:"Block"}).length,0)})}{const e=o({enabled:!0,files:n});await e.Graph.indexFile(a),e.State.Config.maxFileBytes=5;const i=await e.Graph.indexFile(a);r(s,"limits: a file above maxFileBytes is skipped with the byte-exact line",()=>{t.deepEqual(i,{path:a,status:"skipped",nodes:0,edges:0,reason:`file too large (${n[a].length} > 5 bytes)`}),t.ok(e.loggerLines.includes(`graph: skipped ${a} (file too large (${n[a].length} > 5 bytes))`))})}{const e=o({enabled:!0,files:{"/proj/node_modules/pkg/index.ts":`export const a = 1;
-`}}),i=await e.Graph.indexFile("/proj/node_modules/pkg/index.ts");r(s,"limits: an excluded path is skipped with the byte-exact excluded line",()=>{t.equal(i.reason,"excluded"),t.ok(e.loggerLines.includes("graph: skipped /proj/node_modules/pkg/index.ts (excluded)"))})}{const e=o({enabled:!0,files:{"/proj/other/thing.ts":`export const a = 1;
-`},include:["**/src/**"]}),i=await e.Graph.indexFile("/proj/other/thing.ts");r(s,"limits: a file outside the include list is skipped with the byte-exact line",()=>{t.equal(i.reason,"not included"),t.ok(e.loggerLines.includes("graph: skipped /proj/other/thing.ts (not included)"))})}{const e=o({files:n,enabled:!1}),i=await e.Graph.indexFile(a);r(s,"disabled: with enabled=false indexFile skips with the byte-exact disabled line",()=>{t.equal(i.reason,"disabled"),t.ok(e.loggerLines.includes(`graph: skipped ${a} (disabled)`)),t.equal(e.Graph.statistics().files,0),t.ok(e.loggerLines.includes("graph: activated (domain=workspace_graph, languages=3)"),"the service still registers and announces itself")})}return r(s,"purity: the fake fs records zero writeText calls (A7)",()=>{const e=g.reduce((i,l)=>i+l.__writeCapture.length,0);t.equal(e,0,"the plugin never writes a file through ctx.fs")}),m(s,"Store-And-Limits")},v=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(v){const s=await x();console.log(`${s} PASS - Store-And-Limits`)}export{x as runTest};
+import assert from "node:assert/strict";
+import { Check, CheckAsync, Contexts, FakeStorage, Finish, MakeCounter, MakeGraph, Settled } from "../Harness.js";
+const Content = (Count) => Array.from({ length: Count }, (_, Index) => `export const value${Index} = ${Index};
+`).join("");
+const runTest = async () => {
+  const Count = MakeCounter();
+  const Path = "/proj/src/store.ts";
+  const Files = { [Path]: Content(4) };
+  {
+    const Storage = FakeStorage();
+    const Run = MakeGraph({ enabled: true, files: Files }, Storage);
+    await Settled(Run);
+    Check(Count, "store: the domain opens on the fake facility and the opened line is byte-exact", () => {
+      assert.equal(Storage.spec?.name, "workspace_graph");
+      assert.equal(Storage.spec?.layout, "per-record");
+      assert.ok(Storage.spec?.tables?.records !== void 0, "the records table is declared");
+      assert.ok(
+        Run.loggerLines.includes("graph: domain workspace_graph opened (0 records)"),
+        JSON.stringify(Run.loggerLines)
+      );
+    });
+  }
+  {
+    const Storage = FakeStorage();
+    const Run = MakeGraph({ enabled: true, files: Files }, Storage);
+    await Settled(Run);
+    const First = await Run.Graph.indexFile(Path);
+    const Stored = Storage.records.get(Path);
+    Check(Count, "store: indexFile persists the record and the meta revision (A6)", () => {
+      assert.equal(First.status, "indexed");
+      assert.equal(Stored.version, "v1");
+      assert.equal(Stored.nodes.length, First.nodes);
+      assert.equal(Stored.edges.length, First.edges);
+      assert.deepEqual(Storage.records.get("__meta").indexRevision, 1);
+    });
+    Check(Count, "store: snapshot returns what indexFile stored and the revision increments (A6)", () => {
+      const Snapshot = Run.Graph.snapshot();
+      assert.deepEqual(Snapshot.nodes, Stored.nodes);
+      assert.deepEqual(Snapshot.edges, Stored.edges);
+      assert.equal(Snapshot.indexRevision, "1");
+      assert.equal(Run.Graph.statistics().files, 1);
+      assert.equal(Run.State.Revision, 1);
+    });
+  }
+  {
+    const Run = MakeGraph({ enabled: true, files: Files });
+    await Run.Graph.indexFile(Path);
+    await Run.Graph.indexFile(Path);
+    Check(Count, "store: the revision increments with every successful index (A6)", () => {
+      assert.equal(Run.Graph.statistics().indexRevision, "2");
+      assert.equal(Run.State.Revision, 2);
+    });
+  }
+  {
+    const Storage = FakeStorage();
+    const Run = MakeGraph({ enabled: true, files: Files }, Storage);
+    await Settled(Run);
+    await Run.Graph.indexFile(Path);
+    const Removed = await Run.Graph.removeFile(Path);
+    await CheckAsync(Count, "store: removeFile deletes the record, bumps the revision and logs the byte-exact removed line", async () => {
+      assert.equal(Removed, true);
+      assert.equal(Storage.records.has(Path), false);
+      assert.equal(Run.Graph.statistics().files, 0);
+      assert.equal(Run.Graph.statistics().indexRevision, "2");
+      assert.ok(Run.loggerLines.includes(`graph: removed ${Path}`));
+      assert.equal(await Run.Graph.removeFile(Path), false, "removing again is a silent false");
+    });
+  }
+  {
+    const Storage = FakeStorage();
+    Storage.seed("/proj/src/broken.ts", { version: 42 });
+    Storage.seed(Path, {
+      version: "v1",
+      fingerprint: "seeded",
+      nodes: [
+        { id: `File:${Path}`, kind: "File", path: Path, fingerprint: "seeded", version: "v1" }
+      ],
+      edges: []
+    });
+    const Run = MakeGraph({ enabled: true, files: Files }, Storage);
+    await Settled(Run);
+    Check(Count, "store: a stored record that fails validation is skipped and counted, never guessed", () => {
+      assert.equal(Run.State.Invalid, 1, "the broken record was counted");
+      assert.ok(
+        Run.loggerLines.includes("graph: domain workspace_graph opened (1 records)"),
+        "only the valid record was loaded"
+      );
+      assert.equal(Run.Graph.getNode(`File:${Path}`)?.fingerprint, "seeded");
+      assert.equal(Run.Graph.snapshot().nodes.some((N) => N.id.includes("broken")), false);
+    });
+  }
+  {
+    const Run = MakeGraph({ enabled: true, files: Files });
+    await Run.Graph.indexFile(Path);
+    Run.State.Config.limitMaximum = 2;
+    Check(Count, "limits: find defaults to limitDefault and caps at limitMaximum", () => {
+      assert.equal(Run.Graph.find({}).length, 2, "default 50 capped at 2");
+      assert.equal(Run.Graph.find({ limit: 99 }).length, 2, "request capped at 2");
+      assert.equal(Run.Graph.find({ limit: 1 }).length, 1, "smaller request honored");
+    });
+    Run.State.Config.limitMaximum = 500;
+    Check(Count, "limits: find filters by kind, name and pattern", () => {
+      assert.equal(Run.Graph.find({ kind: "File" }).length, 1);
+      assert.equal(Run.Graph.find({ kind: "Symbol" }).length, 4);
+      assert.equal(Run.Graph.find({ name: "value2" }).length, 1);
+      assert.equal(Run.Graph.find({ pattern: "VALUE2" }).length, 1, "pattern is case-insensitive");
+      assert.equal(Run.Graph.find({ name: "value2", kind: "Block" }).length, 0);
+    });
+  }
+  {
+    const Run = MakeGraph({ enabled: true, files: Files });
+    await Run.Graph.indexFile(Path);
+    Run.State.Config.maxFileBytes = 5;
+    const TooBig = await Run.Graph.indexFile(Path);
+    Check(Count, "limits: a file above maxFileBytes is skipped with the byte-exact line", () => {
+      assert.deepEqual(TooBig, {
+        path: Path,
+        status: "skipped",
+        nodes: 0,
+        edges: 0,
+        reason: `file too large (${Files[Path].length} > 5 bytes)`
+      });
+      assert.ok(
+        Run.loggerLines.includes(`graph: skipped ${Path} (file too large (${Files[Path].length} > 5 bytes))`)
+      );
+    });
+  }
+  {
+    const Run = MakeGraph({ enabled: true, files: { "/proj/node_modules/pkg/index.ts": "export const a = 1;\n" } });
+    const Outcome = await Run.Graph.indexFile("/proj/node_modules/pkg/index.ts");
+    Check(Count, "limits: an excluded path is skipped with the byte-exact excluded line", () => {
+      assert.equal(Outcome.reason, "excluded");
+      assert.ok(
+        Run.loggerLines.includes("graph: skipped /proj/node_modules/pkg/index.ts (excluded)")
+      );
+    });
+  }
+  {
+    const Run = MakeGraph({ enabled: true, files: { "/proj/other/thing.ts": "export const a = 1;\n" }, include: ["**/src/**"] });
+    const Outcome = await Run.Graph.indexFile("/proj/other/thing.ts");
+    Check(Count, "limits: a file outside the include list is skipped with the byte-exact line", () => {
+      assert.equal(Outcome.reason, "not included");
+      assert.ok(Run.loggerLines.includes("graph: skipped /proj/other/thing.ts (not included)"));
+    });
+  }
+  {
+    const Run = MakeGraph({ files: Files, enabled: false });
+    const Outcome = await Run.Graph.indexFile(Path);
+    Check(Count, "disabled: with enabled=false indexFile skips with the byte-exact disabled line", () => {
+      assert.equal(Outcome.reason, "disabled");
+      assert.ok(Run.loggerLines.includes(`graph: skipped ${Path} (disabled)`));
+      assert.equal(Run.Graph.statistics().files, 0);
+      assert.ok(
+        Run.loggerLines.includes("graph: activated (domain=workspace_graph, languages=3)"),
+        "the service still registers and announces itself"
+      );
+    });
+  }
+  {
+    Check(Count, "purity: the fake fs records zero writeText calls (A7)", () => {
+      const Total = Contexts.reduce((Sum, Ctx) => Sum + Ctx.__writeCapture.length, 0);
+      assert.equal(Total, 0, "the plugin never writes a file through ctx.fs");
+    });
+  }
+  return Finish(Count, "Store-And-Limits");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Store-And-Limits`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

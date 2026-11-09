@@ -35,6 +35,7 @@ export default (State: State, Input_: Input, Append: (Message: string) => void):
 		attempts: 0,
 	};
 	State.Tasks.set(Task_.id, Task_);
+
 	// The journal record (best-effort, the factory's P5 writer) + the ledger
 	// line. Byte-stable template: `queued <id> <role|auto> p<priority> deps<n>`.
 	State.Factory?.Journal(State, EventOf("queued"), Task_.id, `p${Task_.priority}`);

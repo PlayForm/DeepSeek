@@ -497,6 +497,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 
 	// The turn bar scales against the largest turn total of the loaded
 	// snapshot, so a turn keeps the same bar length while the user scrolls;
+
 	// a visible-window scale would make the same turn change length.
 	const TurnScale = useMemo(() => {
 		if (Snapshot === null) return 0;
@@ -710,6 +711,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 		typeof Snapshot.summary.currency === "string" && Snapshot.summary.currency !== ""
 			? Snapshot.summary.currency
 			: "USD";
+
 	// The valuation select's options: the recorded read first, then every
 	// published revision the catalogs answer listed. Before the answer lands,
 	// and when the route is unavailable, the list is the recorded option alone.
@@ -717,6 +719,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 		{ value: "recorded", label: t("valuation.basis.as-recorded") },
 		...(Listing === null ? [] : Choices(Listing, t)),
 	];
+
 	// The footer is the same bands in every state: the toolbar with the page
 	// band and the valuation control, then the session summary, the top
 	// files and - only when a basis is selected - the valuation comparison.
@@ -792,6 +795,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 			t,
 		}),
 	);
+
 	// The Overview pane: the session at a glance, the page the band opens on.
 	// It reads the summary the fetch already folded and the valuation block
 	// the same envelope carried, so the page adds no request; a top-file
@@ -811,6 +815,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 			],
 			Footer,
 		);
+
 	// The Pricing pane: the settings surface in the same scroll region and
 	// under the same toolbar, so the page band and the valuation control stay
 	// reachable while the rate book is open. The pane reads its own catalogs,
@@ -830,6 +835,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 			],
 			Footer,
 		);
+
 	// The Contributions pane: the file-to-conversation-to-call question in the
 	// same scroll region and under the same toolbar. The pane owns its path,
 	// its two reads and its expansion state; the view hands it the path the

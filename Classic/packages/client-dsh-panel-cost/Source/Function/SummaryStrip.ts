@@ -78,6 +78,7 @@ export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeo
 	const Raw: readonly TopFile[] = Array.isArray(Summary.topFiles) ? Summary.topFiles : [];
 	const TopFiles = Raw.slice(0, TopFileLimit);
 	const Hit = typeof Summary.cacheHit === "number" ? Summary.cacheHit : null;
+
 	// The signed net cache benefit: positive is a saving, negative is the
 	// cache-write premium the reads did not pay back.
 	const Saving =

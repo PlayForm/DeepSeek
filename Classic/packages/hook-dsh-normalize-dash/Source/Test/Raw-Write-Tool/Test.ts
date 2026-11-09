@@ -24,6 +24,7 @@ import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();
+
 	// Group: Run 8 - the raw-write tool (registration capture + exec).
 	{
 		const Run8 = Make(Validate({ logFile: Ledger }));

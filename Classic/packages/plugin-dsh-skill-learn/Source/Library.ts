@@ -111,16 +111,22 @@ import Version from "./Variable/Version.js";
 export interface Status {
 	/** Every record the usage store holds. */
 	readonly total: number;
+
 	/** Records in the `active` state. */
 	readonly active: number;
+
 	/** Records in the `stale` state. */
 	readonly stale: number;
+
 	/** Records in the `archived` state; only `Restore` leaves it. */
 	readonly archived: number;
+
 	/** Records exempt from every transition. */
 	readonly pinned: number;
+
 	/** Records in the curator's jurisdiction, which is what `Curate` walks. */
 	readonly tracked: number;
+
 	/** When the curator last ran, or null before its first pass. */
 	readonly lastRunAt: string | null;
 }
@@ -129,6 +135,7 @@ export interface Status {
 export interface Lifecycle {
 	/** Whether the lifecycle move landed. */
 	readonly ok: boolean;
+
 	/** The class the move ended in; the first five are successes. */
 	readonly outcome:
 		| "pinned"
@@ -139,6 +146,7 @@ export interface Lifecycle {
 		| "destination-exists"
 		| "foreign-root"
 		| "failed";
+
 	/** One clause naming why a move was refused, or the path it wrote. */
 	readonly detail: string;
 }
@@ -164,8 +172,10 @@ const Empty = { text: "", kept: 0, collapsed: 0 } satisfies DigestResult;
 interface Evidence {
 	/** Every name the run probed, and the catalog's answer; null when it resolved none. */
 	readonly skills: Map<string, LoadedSkill | null>;
+
 	/** The bodies the confirm prompt carried, by skill name. */
 	readonly bodies: Map<string, string>;
+
 	/** The support files the run read, by `Support` key; null when the file was absent. */
 	readonly supports: Map<string, string | null>;
 }
@@ -174,24 +184,34 @@ interface Evidence {
 interface Draft {
 	/** When the run started; the report's directory name and its first line. */
 	readonly startedAt: Date;
+
 	/** The provider that answered, or "" when no call was made. */
 	provider: string;
+
 	/** The model that answered, or "" when no call was made. */
 	model: string;
+
 	/** What the digest kept and collapsed. */
 	digest: DigestResult;
+
 	/** How many skill bodies the confirm prompt carried. */
 	views: number;
+
 	/** How many operations the final reply named. */
 	operations: number;
+
 	/** The skills whose bytes changed. */
 	applied: string[];
+
 	/** Every operation the judge or the fence refused. */
 	refused: ReviewRefusal[];
+
 	/** The audit row ids the run appended. */
 	ledger: string[];
+
 	/** The snapshot taken before the run; always "" for a review, which takes none. */
 	snapshot: string;
+
 	/** The session's spent write count at the end of the run. */
 	writes: number;
 }

@@ -52,24 +52,34 @@ const Weights = { Scope: 0.35, Prior: 0.25, Literal: 0.25, History: 0.15, Recent
 export interface Gate {
 	/** The intent ids that emitted within the cooldown window. */
 	Cooled: string[];
+
 	/** The dedupe keys ("intent:candidate-set-hash") already noted this turn. */
 	Noted: Set<string>;
+
 	/** The candidate paths suggested within the cooldown window. */
 	Recent: Set<string>;
+
 	/** Notes emitted this turn. */
 	Notes: number;
+
 	/** The per-turn cap. */
 	MaxNotes: number;
+
 	/** The config's threshold (the non-destructive default). */
 	Threshold: number;
+
 	/** The candidate cap. */
 	MaxCandidates: number;
+
 	/** The excluded directories (a candidate inside them is out of scope). */
 	Exclude: string[];
+
 	/** The history lookup (the knowledge's Laplace inputs). */
 	History: (Intent: string, Path: string) => KnowledgeRow | undefined;
+
 	/** The dismissal lookup (the knowledge's durable dismissals; Path undefined = the family). */
 	Dismissed: (Intent: string, Path: string | undefined) => boolean;
+
 	/** The graph projection, when one is available (Function/Projection). */
 	Projection: Projection | undefined;
 }
@@ -88,6 +98,7 @@ const Key = (Intent: string, Paths: string[]): string =>
 export default (
 	/** The ranked detections (Detect's output). */
 	Detections: Detection[],
+
 	/** The gate input. */
 	Input: Gate,
 ): Verdict => {
@@ -97,6 +108,7 @@ export default (
 	}
 	const Evidence = Winner.evidence + Winner.context + Winner.loop;
 	const Kappa = Sigmoid(Evidence + Bias);
+
 	// The existence filter runs BEFORE the gate: an intent whose whole candidate set is
 	// absent from the workspace is a structural silence, not a confidence one, so
 	// `no-companions` wins over the threshold.
@@ -105,6 +117,7 @@ export default (
 	}
 	// The intent's own gate: the destructive pack rows override the config's.
 	const Threshold = Math.max(Winner.intent.threshold, Input.Threshold);
+
 	// The runner-up folds into one note only when its kappa is within 0.1.
 	const Second = Detections[1];
 	const SecondKappa =
@@ -159,6 +172,7 @@ export default (
 	}
 	// The family globs: one aggregate row, appended after the exact targets. With a
 	// projection the row is measured too (a proven family scores by its scope and literal);
+
 	// without one it keeps the legacy fixed score.
 	for (const Glob of Winner.intent.familyGlobs) {
 		if (Paths.has(Glob)) {

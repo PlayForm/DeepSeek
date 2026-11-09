@@ -45,6 +45,7 @@ const EntryConfig = (Dump: string, Id: string): string | null => {
 // Group: the bundle layer defaults (no user patch, no overlay).
 {
 	const Plain = (await Wiring.DumpConfig("plain")) as string;
+
 	// Leaf 1: the bundle layer's governor config carries
 	// updateCooldownMs: 3000 before any patch.
 	const GovernorDefault = EntryConfig(Plain, "ets-hook-dsh-package-governor") ?? "";
@@ -52,6 +53,7 @@ const EntryConfig = (Dump: string, Id: string): string | null => {
 		GovernorDefault.includes("updateCooldownMs: 3000"),
 		"the bundle layer's governor config carries updateCooldownMs: 3000 before any patch",
 	);
+
 	// Leaf 2: the bundle layer's logFile default is the un-expanded ~/.dsh
 	// form (the silent-catch ledger gap).
 	Check(
@@ -61,12 +63,14 @@ const EntryConfig = (Dump: string, Id: string): string | null => {
 
 	// Group: the wiring overlay - the wholesale replacement.
 	const Overlay = (await Wiring.DumpConfig("overlay", `${Home}/overlay.yml`)) as string;
+
 	// Leaf 3: the overlay's governor logFile replaces the entry config.
 	const GovernorOverlay = EntryConfig(Overlay, "ets-hook-dsh-package-governor") ?? "";
 	Check(
 		GovernorOverlay.includes(`logFile: ${Home}/ledgers/governor.log`),
 		"the overlay's governor logFile replaces the entry config",
 	);
+
 	// Leaf 4: the bundle layer's dash normalizeToolArguments is true before
 	// any patch.
 	Check(
@@ -76,6 +80,7 @@ const EntryConfig = (Dump: string, Id: string): string | null => {
 		"the bundle layer's dash normalizeToolArguments is true before any patch",
 	);
 	const DashOverlay = EntryConfig(Overlay, "ets-hook-dsh-normalize-dash") ?? "";
+
 	// Leaf 5: the dash flavor's overlay config is projected exactly.
 	Check(
 		DashOverlay.includes("replacement: '-'") && DashOverlay.includes("normalizeToolArguments: true"),

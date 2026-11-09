@@ -216,29 +216,40 @@ export interface TailBuffer {
 export interface DetachRecord {
 	/** The registry job id (`bash-<16 hex>`). */
 	jobId: string;
+
 	/** The owning agent's session id. */
 	agentId: string;
+
 	/** The tool that was transformed (always a command runner). */
 	tool: string;
+
 	/** The command's head bytes (single-line, first 80 bytes for the marker). */
 	cmdHead: string;
+
 	/** The command's first 120 bytes for the standing frame's cmd line. */
 	cmdLine: string;
+
 	/** The dedup key this job was started under. */
 	dedupKey: string;
+
 	/** The clock ms at detach. */
 	startedAt: number;
+
 	/** The live-timeout deadline in clock ms. */
 	deadlineAt: number;
+
 	/** The captured private tail (the completion frame's output source). */
 	tail: TailBuffer;
+
 	/** The settled facts once the L6 subscription observed them. */
 	status?: "completed" | "killed" | "failed" | undefined;
 	detail?: string | undefined;
 	cause?: "producer" | "kill" | "teardown" | undefined;
 	awaited?: boolean | undefined;
+
 	/** The clock ms of the settlement observation (the elapsed calculation). */
 	settledAt?: number | undefined;
+
 	/** Whether the completion frame was already rendered (withdrawn after). */
 	completedRendered?: boolean | undefined;
 }
@@ -250,10 +261,13 @@ export interface TagRecord {
 	tool: string;
 	cwd: string | undefined;
 	timeoutMs: number;
+
 	/** Whether the tag is a dedup hit (the already-running line, not a fresh marker). */
 	dedup: boolean;
+
 	/** The command the tag carries (the marker's cmd-head source). */
 	command: string;
+
 	/** The retry-loop counter at tag time (the extension's attempt number). */
 	attempt: number;
 }
@@ -262,10 +276,13 @@ export interface TagRecord {
 export interface CompletionSlot {
 	/** The undelivered frames, in settle order (failures sort first at render). */
 	frames: DetachRecord[];
+
 	/** The last delivered text - the provider's stable tail between batches. */
 	delivered: string;
+
 	/** Whether the batch was ever rendered (the ledger guard). */
 	rendered: boolean;
+
 	/** The turn-set denominator for the k/n hint (jobs detached since the last delivery). */
 	turnSet: number;
 }
@@ -274,14 +291,19 @@ export interface CompletionSlot {
 export interface LeaseEntry {
 	/** The member's full window in parent turns (plant.leaseTurns at enroll). */
 	turnWindow: number;
+
 	/** Remaining parent turns of silence before expiry. */
 	remaining: number;
+
 	/** Whether the stale row has been declared (emitted once). */
 	declared: boolean;
+
 	/** The parent turn of the declaration (the prune's one-assembly gate). */
 	declaredTurn: number;
+
 	/** The clock ms of the last foldable report. */
 	lastReportAt: number;
+
 	/** Whether the member-stalled ledger line has been emitted (once per member). */
 	stalledLedged: boolean;
 }
@@ -290,11 +312,14 @@ export interface LeaseEntry {
 export interface BoardMember {
 	agentId: string;
 	status: "running" | "stalled" | "stale" | "done" | "failed";
+
 	/** The latest report payload, capped (the row's text). */
 	lastReport: string;
 	lastReportAt: number | undefined;
+
 	/** The settled summary (first line of the answer, capped). */
 	summary: string | undefined;
+
 	/** When the member's child job settled, in clock ms. */
 	settledAt: number | undefined;
 }
@@ -304,32 +329,43 @@ export interface BoardState {
 	id: string;
 	agentId: string;
 	plantType: "agent-board" | "todo-fill" | "aggregate" | "custom" | "monitors";
+
 	/** The template for the "custom" type (the rendered body). */
 	template: string | undefined;
 	expect: number;
+
 	/** The member slots; length <= expect; overflow members are counted only. */
 	members: BoardMember[];
 	overflow: { agentId: string; summary: string }[];
+
 	/** The board's item slots: todo-fill numbers its items; the monitors
 	 * board's items are the monitored files (label = the path, state = the
 	 * outcome text - the todo-fill precedent widened for the wave-3 board). */
 	items: { label: string; state: string; by: string | undefined; at: number | undefined }[];
+
 	/** The lease: reporters + windows (the I5 2.1 record). */
 	lease: { reporters: Map<string, LeaseEntry>; state: "open" | "stale" | "closed" };
 	openedAt: number;
+
 	/** The clock ms after which empty slots drop and the board closes. */
 	closeAt: number;
 	closedAt: number | undefined;
+
 	/** Whether the closing line rendered (withdraw after one request). */
 	closeRendered: boolean;
+
 	/** Whether the lost declaration rendered (restart honesty). */
 	lostRendered: boolean;
+
 	/** The suggested-state marker (the I6 5.5 dormant form). */
 	suggested: string | undefined;
+
 	/** The configured suggestion this board instantiates (the accept path). */
 	suggestionId: string | undefined;
+
 	/** The prune-failsafe's effect: members dropped from the expect count. */
 	pruned: number;
+
 	/** The clock ms of the previous assemble pass (the lease's turn gate). */
 	lastTurnAt: number | undefined;
 }
@@ -341,12 +377,15 @@ export interface Suggestion {
 	templateId: string;
 	fit: "yes" | "no" | "unknown";
 	rationale: string;
+
 	/** The clamped tokens (the stored configuration verbatim at accept). */
 	tokens: { expectAgents?: number; steps?: string[] };
 	createdTurn: number;
+
 	/** Rendered once, then withdrawn (the one-assembly window). */
 	renderedTurn: number | undefined;
 	withdrawn: boolean;
+
 	/** Whether the dormant block was planted (autoPlant). */
 	planted: boolean;
 }
@@ -355,6 +394,7 @@ export interface Suggestion {
 export interface SuggesterState {
 	/** The clock ms of the qualifying turns that spawned a suggestion. */
 	ticks: number[];
+
 	/** The turn of the last spawned suggestion (the debounce). */
 	lastTurn: number;
 }
@@ -371,16 +411,21 @@ export interface SuggesterState {
 export interface CheckSetSpecification {
 	/** The catalog glob this set applies to (the explicit-enrollment classification). */
 	glob?: string;
+
 	/** The command template (`{{path}}`, `{{basename}}`, `{{dir}}`); template
 	 * replace only, no eval. Absent for linked sets. */
 	command?: string;
+
 	/** A linked set renders the linked form and never re-runs (the R3 3.2 rule:
 	 * the governor/pinner's own verbs are not duplicated). */
 	link?: "none" | "governance";
+
 	/** Fast sets schedule per-edit with the debounce; slow sets never auto-run per-edit. */
 	fast?: boolean;
+
 	/** The slow schedule interval in ms (0 = never scheduled). */
 	intervalMs?: number;
+
 	/** The set's own deadline cap (<= the inline deadline; default from config). */
 	timeoutMs?: number;
 }
@@ -397,18 +442,25 @@ export interface MonitorRecord {
 	event: "monitor-enrolled" | "monitor-check" | "monitor-retired";
 	path: string;
 	agent: string;
+
 	/** The raw fs/observed version token, verbatim. */
 	version: string;
+
 	/** The writer agent id ("-" when absent). */
 	writer: string;
+
 	/** "" for the enrolled/retired records. */
 	checkSetId: string;
+
 	/** The clock ms. */
 	ranAt: number;
+
 	/** null = no exit (infra/killed/denied/linked). */
 	exit: number | null;
+
 	/** "killed:<reason>" | "sandbox" | "producer:<detail>" | "linked" | null. */
 	infra: string | null;
+
 	/** The bounded tail (<= 2 KiB), embedded. */
 	tail: string;
 	provenance: "live" | "recovered";
@@ -417,16 +469,21 @@ export interface MonitorRecord {
 /** One check result (design section 3.5). */
 export interface CheckResult {
 	setId: string;
+
 	/** The registry id (the job_output hint). */
 	jobId: string;
+
 	/** The settle observation (clock ms). */
 	ranAt: number;
+
 	/** The version at dispatch (the raw fs/observed token, verbatim). */
 	checkedVersion: string;
+
 	/** The writer of the checked version. */
 	writer: string;
 	exit: number | null;
 	infra: string | null;
+
 	/** The bounded head-tail (<= 2 KiB). */
 	tail: string;
 	provenance: "live" | "recovered";
@@ -437,23 +494,32 @@ export interface CheckResult {
 export interface MonitorEntry {
 	/** The displayPath (the band label). */
 	path: string;
+
 	/** The targetKey (the state key). */
 	pathKey: string;
+
 	/** The owning session (agent id). */
 	agentId: string;
 	enrolledAt: number;
+
 	/** The latest observed version token (verbatim). */
 	lastVersion?: string | undefined;
+
 	/** The latest observed writer ("-" when absent). */
 	lastWriter?: string | undefined;
+
 	/** The latest fs/observed touch. */
 	lastObservedAt?: number | undefined;
+
 	/** The pending debounce records, per checkSetId (never rendered). */
 	pending: Map<string, { since: number }>;
+
 	/** The entry's check sets, fixed at enrollment (in enrollment order). */
 	sets: string[];
+
 	/** One result per check set, newest wins, in first-seen order. */
 	checks: CheckResult[];
+
 	/** Whether the retirement closing line has been marked (rendered once, then withdrawn). */
 	closingRendered?: boolean | undefined;
 }
@@ -465,12 +531,16 @@ export interface MonitorJobRecord {
 	path: string;
 	pathKey: string;
 	setId: string;
+
 	/** The clock ms at dispatch (the deadline scan's start). */
 	startedAt: number;
+
 	/** The version the check runs against (captured at dispatch). */
 	checkedVersion: string;
+
 	/** The writer of the checked version (captured at dispatch). */
 	writer: string;
+
 	/** The private head-keep tail (the problem band's render source). */
 	tail: TailBuffer;
 }

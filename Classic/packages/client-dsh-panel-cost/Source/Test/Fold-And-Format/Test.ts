@@ -201,6 +201,7 @@ export const runTest = (): number => {
 	);
 
 	// F7: the dominant provider and model follow the largest call total;
+
 	// on a full tie (same money, same tokens) the earlier step keeps the
 	// turn, because a later step must strictly exceed to take over.
 	Check(

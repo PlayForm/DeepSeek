@@ -14,6 +14,7 @@ import { Dashes, Fullwidth, Quotes, Replace, ReplaceMap } from "../../../Target/
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: the replacement mechanics.
 	{
 		// Sub: the generic class-to-string replacer. The Check label is the

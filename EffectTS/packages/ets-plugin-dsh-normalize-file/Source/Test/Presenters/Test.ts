@@ -13,6 +13,7 @@ import { Check, Finish, MakeCounter, Make, Rm, Validate, Ledger } from "../Harne
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();
+
 	// Group: Run 7 - the presenters (pure, outcome-metadata driven).
 	{
 		const Run1 = Make(Validate({ logFile: Ledger }));

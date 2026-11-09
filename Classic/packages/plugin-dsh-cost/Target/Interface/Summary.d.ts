@@ -1,6 +1,6 @@
-import type CostBuckets from "@Interface/Buckets.js";
-import type CostTokens from "@Interface/Tokens.js";
-import type CostTopFile from "@Interface/TopFile.js";
+import type CostBuckets from "./Buckets.js";
+import type CostTokens from "./Tokens.js";
+import type CostTopFile from "./TopFile.js";
 export default interface CostSummary {
     calls: number;
     priced: number;

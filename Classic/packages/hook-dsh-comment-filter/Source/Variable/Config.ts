@@ -80,6 +80,7 @@ export default Compose(false, {
 	enabled: Schema.boolean().default(DefaultEnabled).volatile(),
 	// The tool names the filter may touch. `read` is HERE - the deliberate
 	// opposite of the normalize flavors, which exempt it as byte-contracted;
+
 	// `ccr_retrieve` is here because a retrieval re-enters the model exactly
 	// like a read. Structural (plain): editing it remounts the plugin.
 	targets: Schema.array(Schema.string()).default(DefaultTargets),

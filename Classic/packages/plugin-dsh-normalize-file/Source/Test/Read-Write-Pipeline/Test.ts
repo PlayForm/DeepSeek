@@ -25,6 +25,7 @@ import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();
+
 	// Group: Run 1b - a file with all six families -> N > 0 -> the write lands.
 	// All six transforms in one file (the dash smoke's All6 fixture): em dash,
 	// curly double quotes, ellipsis, NBSP, zero-width space, fullwidth A.

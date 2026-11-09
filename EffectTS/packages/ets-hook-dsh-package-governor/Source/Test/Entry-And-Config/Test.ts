@@ -13,6 +13,7 @@ import * as Governor from "../../../Target/Library.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: the entry contract.
 	{
 		const Sub = "entry: name/apply/Config/inject + the default object carries all four";

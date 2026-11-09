@@ -44,8 +44,10 @@ const Begin = (Resolved: string): string => {
 export default (
 	/** The call path (absolute or workspace-relative). */
 	Path: string,
+
 	/** The session cwd, when the harness service exposes one. */
 	Cwd?: string,
+
 	/** The resolution seam (a smoke's temporary home). */
 	Options?: Options,
 ): Located | undefined => {

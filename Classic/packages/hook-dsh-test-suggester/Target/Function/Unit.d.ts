@@ -34,7 +34,7 @@
  * result `TOOL_OUTCOME_UNKNOWN`), before dispatch, so the anchor's prior
  * touches are present without any post-execute append.
  */
-import type { ProjectionUnit, SessionHistory } from "@Interface/Projection.js";
+import type { ProjectionUnit, SessionHistory } from "../Interface/Projection.js";
 /**
  * The unit: host-only (no `wire` block), versioned, and pure.
  */

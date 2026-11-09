@@ -41,12 +41,16 @@ const Scope = 1;
 export interface MeasureInput {
 	/** The EFFECTIVE weight table (Function/Weights). */
 	weights: HeuristicValues;
+
 	/** The learned per-companion rate lookup (Function/Store). */
 	rate: (Path: string) => number;
+
 	/** The learned per-family rate (read once per call). */
 	familyRate: number;
+
 	/** The excluded directories (a companion or a call inside them is out of scope). */
 	exclude: string[];
+
 	/** The judged call's path (never its own companion). */
 	callPath: string;
 }
@@ -58,6 +62,7 @@ const Excluded = (Path: string, Exclude: string[]): boolean =>
 export default (
 	/** The pack companion. */
 	Target: Target,
+
 	/** The measure input. */
 	Input: MeasureInput,
 ): CompanionDecision | undefined => {

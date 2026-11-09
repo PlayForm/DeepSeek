@@ -28,8 +28,10 @@ export type Kind = "proposal" | "decision";
 export interface Envelope {
 	/** The block kind: a proposal or a decision. */
 	kind: Kind;
+
 	/** The proposal or decision id, trimmed. */
 	id: string;
+
 	/** The parsed JSON body, or undefined when the body is unparseable or not an object. */
 	payload: Record<string, unknown> | undefined;
 }

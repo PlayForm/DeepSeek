@@ -49,6 +49,7 @@ export const runTest = async (): Promise<number> => {
 	Boot();
 	Probe.Mode = "bin";
 	const Listener = Events.find((e) => e[0] === "fs/observed")![1];
+
 	// Group: the chain pass through Factory.Continue + the module transform.
 	const projA = Path.join(Root, "proj-a");
 	FileSystem.mkdirSync(projA);
@@ -67,6 +68,7 @@ export const runTest = async (): Promise<number> => {
 	Inflight.DuringRead = -1;
 	Listener(mkTarget(projA, "k-a"), { kind: "present", version: "v1" }, actor);
 	await settle();
+
 	// g2 lines
 	{
 		const Sub =

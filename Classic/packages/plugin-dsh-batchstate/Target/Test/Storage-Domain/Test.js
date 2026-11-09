@@ -1,2 +1,246 @@
-import t from"node:assert/strict";import*as b from"node:fs";import{Check as r,CheckAsync as c,Finish as k,FakeStorage as d,Ledger as v,LinesWith as f,Make as P,MakeCounter as D,Seed as E,StateFile as u,Validate as x,rm as h}from"../Harness.js";const p=()=>({id:"prop-1",intent:"version-bump",targets:[{path:"/tmp/pkg.json",version:"v1",why:"version 1.0.0 -> 2.0.0"}],operations:[{kind:"replace",path:"/tmp/pkg.json",find:'"version": "1.0.0"',replace:'"version": "2.0.0"',why:"version 1.0.0 -> 2.0.0"}],preview:{entries:[],changes:1,skipped:[]},digest:"digest-1",revision:1,expiresAt:4e12,confidence:.9,origin:"agent-a"}),C=()=>({proposal:p(),status:"proposed",at:1e6}),q=()=>({name:"build",state:"green",owner:""}),R=(s,e)=>({id:s,role:"user",content:[{type:"text",text:e}],source:{kind:"user"}}),g=(s,e,a="msg-1")=>{s.CtxListeners["session/event"]({id:"agent-a"},{type:"agent/inbox/spliced",data:{target:"next-step",start:0,inserted:[R(a,e)]}})},m=s=>`[BATCH PROPOSAL - ${s.id}]
-${JSON.stringify(s)}`,l=(s={},e)=>{h();try{b.rmSync(u)}catch{}return y(s,e)},w=(s={},e)=>(h(),y(s,e)),y=(s={},e)=>P(x({logFile:v,enabled:!0,stateFile:u,...s}),a=>{e!==void 0&&(a.storageDomain=e.facility)}),S=()=>JSON.parse(b.readFileSync(u,"utf8")),_=async()=>{const s=D();{const e=d(),a=l({},e);await a.State.Pending,r(s,"D1: the spec is name/version/layout/tables with NO compatibleVersions",()=>{t.equal(e.spec.name,"batch_state"),t.equal(e.spec.version,1),t.equal(e.spec.layout,"per-record"),t.equal(e.spec.invalidRecords,"backup-and-skip");for(const n of["members","queue","proposals","gates"])t.ok(e.spec.tables[n]!==void 0,n);t.equal(e.spec.compatibleVersions,void 0)}),r(s,"D1: the open binds the domain and the effect closes it on dispose",()=>{t.deepEqual(a.Effects,["batchstate-storage"]),t.equal(a.Disposers.length,1),t.equal(e.closed,!1),a.Disposers[0](),t.equal(e.closed,!0)})}{const e=d(),a=l({},e);await a.State.Pending,g(a,m(p())),a.Context.batchstate.setGate("build","green"),a.Context.batchstate.setTask("a","Building the parser"),a.Context.batchstate.queue("a"),await a.State.Pending,r(s,"D2: the spliced proposal lands in the proposals table keyed by id",()=>{const n=e.tables.get("proposals");t.equal(n.get("prop-1").proposal.intent,"version-bump"),t.equal(n.get("prop-1").status,"proposed"),t.ok(e.writes.some(([o,i])=>o==="proposals"&&i==="prop-1"))}),r(s,"D2: the gate lands in the gates table keyed by name",()=>{const n=e.tables.get("gates");t.deepEqual(n.get("build"),{name:"build",state:"green",owner:""}),t.ok(e.writes.some(([o,i])=>o==="gates"&&i==="build"))}),r(s,"D2: the member and the idle queue land in their tables",()=>{const n=e.tables.get("members"),o=e.tables.get("queue");t.equal(n.get("a").task,"Building the parser"),t.equal(n.get("a").status,"active"),t.deepEqual(o.get("__queue"),["a"])}),await c(s,"D2: a clear DELETES the records from the domain, never resurrects them",async()=>{a.Context.batchstate.clear(),await a.State.Pending,t.equal(e.tables.get("proposals").size,0),t.equal(e.tables.get("gates").size,0),t.equal(e.tables.get("members").size,0),t.deepEqual(e.tables.get("queue").get("__queue"),[]),t.ok(e.deletes.length>0)})}{const e=d(),a=l({},e);await a.State.Pending,g(a,m(p())),a.Context.batchstate.setGate("build","green"),await a.State.Pending;const n=l({},e);await n.State.Pending,r(s,"D3: a reopen restores the proposals and the gates from the domain",()=>{t.equal(n.State.Proposals.get("prop-1")?.proposal.intent,"version-bump"),t.equal(n.State.Gates.get("build")?.state,"green"),t.ok(n.Lines.includes("batchstate: recovered (0 members, queue 0)")),t.deepEqual(n.Lines.slice(0,2),[`batchstate: activated (batch=default, stateFile=${u})`,"batchstate: recovered (0 members, queue 0)"])}),r(s,"D3: the restored proposal is still the live read",()=>{t.equal(n.Context.batchstate.getProposals().length,1),t.ok(n.Context.batchstate.getContext("a").includes("GATES: build green"))}),await c(s,"D3: a write in the open window survives the recovery",async()=>{const o=d();o.seed("gates","seeded",{name:"seeded",state:"red",owner:""});const i=l({},o);i.Context.batchstate.setGate("build","green"),await i.State.Pending,t.deepEqual([...i.State.Gates.keys()].sort(),["build","seeded"]),t.equal(i.State.Gates.get("build")?.state,"green"),t.deepEqual([...o.tables.get("gates").keys()].sort(),["build","seeded"])})}{const e=l();g(e,m(p())),e.Context.batchstate.setGate("build","green"),r(s,"D4: without a facility the JSON state file is the store",()=>{const n=S();t.equal(n.proposals[0].proposal.id,"prop-1"),t.deepEqual(n.gates,[q()]),t.deepEqual(e.Effects,[])});const a=w();r(s,"D4: without a facility the JSON recovery restores the board",()=>{t.equal(a.State.Proposals.get("prop-1")?.proposal.intent,"version-bump"),t.equal(a.State.Gates.get("build")?.state,"green"),t.ok(a.Lines.includes("batchstate: recovered (0 members, queue 0)"))})}{E(JSON.stringify({members:[],queue:[],proposals:[C()],gates:[q()]}));const e=d({version:2}),a=w({},e);await a.State.Pending,r(s,"D5: a domain-version mismatch is loud and degrades to the JSON fallback",()=>{t.deepEqual(f(a,"storage open failed"),["batchstate: storage open failed: version-mismatch: stored 2, declared 1"]),t.equal(e.spec,void 0),t.equal(a.State.Proposals.get("prop-1")?.proposal.intent,"version-bump"),t.ok(a.Lines.includes("batchstate: recovered (0 members, queue 0)"))}),await c(s,"D5: the degraded mount keeps writing the JSON fallback, never the domain",async()=>{a.Context.batchstate.setGate("smokes","red","coder-a"),await a.State.Pending;const n=S();t.deepEqual(n.gates.map(o=>[o.name,o.state]),[["build","green"],["smokes","red"]]),t.deepEqual(e.writes,[])})}{const e=d();await l({domain:"batch_state_test"},e).State.Pending,r(s,"D6: the domain knob renames the domain",()=>{t.equal(e.spec.name,"batch_state_test")}),r(s,"D6: an invalid domain name fails loud at load",()=>{t.throws(()=>l({domain:"Batch-State"}),/batchstate: domain must be a lowercase unit name/)})}return k(s,"Storage-Domain")},M=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(M){const s=await _();console.log(`${s} PASS - Storage-Domain`)}export{_ as runTest};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import {
+  Check,
+  CheckAsync,
+  Finish,
+  FakeStorage,
+  Ledger,
+  LinesWith,
+  Make,
+  MakeCounter,
+  Seed,
+  StateFile,
+  Validate,
+  rm
+} from "../Harness.js";
+const Proposal = () => ({
+  id: "prop-1",
+  intent: "version-bump",
+  targets: [{ path: "/tmp/pkg.json", version: "v1", why: "version 1.0.0 -> 2.0.0" }],
+  operations: [
+    {
+      kind: "replace",
+      path: "/tmp/pkg.json",
+      find: '"version": "1.0.0"',
+      replace: '"version": "2.0.0"',
+      why: "version 1.0.0 -> 2.0.0"
+    }
+  ],
+  preview: { entries: [], changes: 1, skipped: [] },
+  digest: "digest-1",
+  revision: 1,
+  expiresAt: 4e12,
+  confidence: 0.9,
+  origin: "agent-a"
+});
+const Entry = () => ({ proposal: Proposal(), status: "proposed", at: 1e6 });
+const Gate = () => ({ name: "build", state: "green", owner: "" });
+const Message = (Id, Text) => ({
+  id: Id,
+  role: "user",
+  content: [{ type: "text", text: Text }],
+  source: { kind: "user" }
+});
+const Splice = (Run, Text, Id = "msg-1") => {
+  Run.CtxListeners["session/event"](
+    { id: "agent-a" },
+    {
+      type: "agent/inbox/spliced",
+      data: { target: "next-step", start: 0, inserted: [Message(Id, Text)] }
+    }
+  );
+};
+const ProposalBlock = (Value) => `[BATCH PROPOSAL - ${Value.id}]
+${JSON.stringify(Value)}`;
+const Mount = (Config = {}, Store) => {
+  rm();
+  try {
+    FileSystem.rmSync(StateFile);
+  } catch {
+  }
+  return Setup(Config, Store);
+};
+const Reopen = (Config = {}, Store) => {
+  rm();
+  return Setup(Config, Store);
+};
+const Setup = (Config = {}, Store) => Make(Validate({ logFile: Ledger, enabled: true, stateFile: StateFile, ...Config }), (Context) => {
+  if (Store !== void 0) {
+    Context.storageDomain = Store.facility;
+  }
+});
+const ReadFile = () => JSON.parse(FileSystem.readFileSync(StateFile, "utf8"));
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Store = FakeStorage();
+    const Run = Mount({}, Store);
+    await Run.State.Pending;
+    Check(Count, "D1: the spec is name/version/layout/tables with NO compatibleVersions", () => {
+      assert.equal(Store.spec.name, "batch_state");
+      assert.equal(Store.spec.version, 1);
+      assert.equal(Store.spec.layout, "per-record");
+      assert.equal(Store.spec.invalidRecords, "backup-and-skip");
+      for (const Table of ["members", "queue", "proposals", "gates"]) {
+        assert.ok(Store.spec.tables[Table] !== void 0, Table);
+      }
+      assert.equal(Store.spec.compatibleVersions, void 0);
+    });
+    Check(Count, "D1: the open binds the domain and the effect closes it on dispose", () => {
+      assert.deepEqual(Run.Effects, ["batchstate-storage"]);
+      assert.equal(Run.Disposers.length, 1);
+      assert.equal(Store.closed, false);
+      Run.Disposers[0]();
+      assert.equal(Store.closed, true);
+    });
+  }
+  {
+    const Store = FakeStorage();
+    const Run = Mount({}, Store);
+    await Run.State.Pending;
+    Splice(Run, ProposalBlock(Proposal()));
+    Run.Context.batchstate.setGate("build", "green");
+    Run.Context.batchstate.setTask("a", "Building the parser");
+    Run.Context.batchstate.queue("a");
+    await Run.State.Pending;
+    Check(Count, "D2: the spliced proposal lands in the proposals table keyed by id", () => {
+      const Proposals = Store.tables.get("proposals");
+      assert.equal(Proposals.get("prop-1").proposal.intent, "version-bump");
+      assert.equal(Proposals.get("prop-1").status, "proposed");
+      assert.ok(Store.writes.some(([Table, Key]) => Table === "proposals" && Key === "prop-1"));
+    });
+    Check(Count, "D2: the gate lands in the gates table keyed by name", () => {
+      const Gates = Store.tables.get("gates");
+      assert.deepEqual(Gates.get("build"), { name: "build", state: "green", owner: "" });
+      assert.ok(Store.writes.some(([Table, Key]) => Table === "gates" && Key === "build"));
+    });
+    Check(Count, "D2: the member and the idle queue land in their tables", () => {
+      const Members = Store.tables.get("members");
+      const Queue = Store.tables.get("queue");
+      assert.equal(Members.get("a").task, "Building the parser");
+      assert.equal(Members.get("a").status, "active");
+      assert.deepEqual(Queue.get("__queue"), ["a"]);
+    });
+    await CheckAsync(Count, "D2: a clear DELETES the records from the domain, never resurrects them", async () => {
+      Run.Context.batchstate.clear();
+      await Run.State.Pending;
+      assert.equal(Store.tables.get("proposals").size, 0);
+      assert.equal(Store.tables.get("gates").size, 0);
+      assert.equal(Store.tables.get("members").size, 0);
+      assert.deepEqual(Store.tables.get("queue").get("__queue"), []);
+      assert.ok(Store.deletes.length > 0);
+    });
+  }
+  {
+    const Store = FakeStorage();
+    const First = Mount({}, Store);
+    await First.State.Pending;
+    Splice(First, ProposalBlock(Proposal()));
+    First.Context.batchstate.setGate("build", "green");
+    await First.State.Pending;
+    const Second = Mount({}, Store);
+    await Second.State.Pending;
+    Check(Count, "D3: a reopen restores the proposals and the gates from the domain", () => {
+      assert.equal(Second.State.Proposals.get("prop-1")?.proposal.intent, "version-bump");
+      assert.equal(Second.State.Gates.get("build")?.state, "green");
+      assert.ok(Second.Lines.includes("batchstate: recovered (0 members, queue 0)"));
+      assert.deepEqual(Second.Lines.slice(0, 2), [
+        `batchstate: activated (batch=default, stateFile=${StateFile})`,
+        "batchstate: recovered (0 members, queue 0)"
+      ]);
+    });
+    Check(Count, "D3: the restored proposal is still the live read", () => {
+      assert.equal(Second.Context.batchstate.getProposals().length, 1);
+      assert.ok(Second.Context.batchstate.getContext("a").includes("GATES: build green"));
+    });
+    await CheckAsync(Count, "D3: a write in the open window survives the recovery", async () => {
+      const Seeded = FakeStorage();
+      Seeded.seed("gates", "seeded", { name: "seeded", state: "red", owner: "" });
+      const Window = Mount({}, Seeded);
+      Window.Context.batchstate.setGate("build", "green");
+      await Window.State.Pending;
+      assert.deepEqual([...Window.State.Gates.keys()].sort(), ["build", "seeded"]);
+      assert.equal(Window.State.Gates.get("build")?.state, "green");
+      assert.deepEqual(
+        [...Seeded.tables.get("gates").keys()].sort(),
+        ["build", "seeded"]
+      );
+    });
+  }
+  {
+    const Run = Mount();
+    Splice(Run, ProposalBlock(Proposal()));
+    Run.Context.batchstate.setGate("build", "green");
+    Check(Count, "D4: without a facility the JSON state file is the store", () => {
+      const Raw = ReadFile();
+      assert.equal(Raw.proposals[0].proposal.id, "prop-1");
+      assert.deepEqual(Raw.gates, [Gate()]);
+      assert.deepEqual(Run.Effects, []);
+    });
+    const Second = Reopen();
+    Check(Count, "D4: without a facility the JSON recovery restores the board", () => {
+      assert.equal(Second.State.Proposals.get("prop-1")?.proposal.intent, "version-bump");
+      assert.equal(Second.State.Gates.get("build")?.state, "green");
+      assert.ok(Second.Lines.includes("batchstate: recovered (0 members, queue 0)"));
+    });
+  }
+  {
+    Seed(
+      JSON.stringify({
+        members: [],
+        queue: [],
+        proposals: [Entry()],
+        gates: [Gate()]
+      })
+    );
+    const Store = FakeStorage({ version: 2 });
+    const Run = Reopen({}, Store);
+    await Run.State.Pending;
+    Check(Count, "D5: a domain-version mismatch is loud and degrades to the JSON fallback", () => {
+      assert.deepEqual(LinesWith(Run, "storage open failed"), [
+        "batchstate: storage open failed: version-mismatch: stored 2, declared 1"
+      ]);
+      assert.equal(Store.spec, void 0);
+      assert.equal(Run.State.Proposals.get("prop-1")?.proposal.intent, "version-bump");
+      assert.ok(Run.Lines.includes("batchstate: recovered (0 members, queue 0)"));
+    });
+    await CheckAsync(Count, "D5: the degraded mount keeps writing the JSON fallback, never the domain", async () => {
+      Run.Context.batchstate.setGate("smokes", "red", "coder-a");
+      await Run.State.Pending;
+      const Raw = ReadFile();
+      assert.deepEqual(
+        Raw.gates.map((One) => [One.name, One.state]),
+        [
+          ["build", "green"],
+          ["smokes", "red"]
+        ]
+      );
+      assert.deepEqual(Store.writes, []);
+    });
+  }
+  {
+    const Store = FakeStorage();
+    const Run = Mount({ domain: "batch_state_test" }, Store);
+    await Run.State.Pending;
+    Check(Count, "D6: the domain knob renames the domain", () => {
+      assert.equal(Store.spec.name, "batch_state_test");
+    });
+    Check(Count, "D6: an invalid domain name fails loud at load", () => {
+      assert.throws(
+        () => Mount({ domain: "Batch-State" }),
+        /batchstate: domain must be a lowercase unit name/
+      );
+    });
+  }
+  return Finish(Count, "Storage-Domain");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Storage-Domain`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

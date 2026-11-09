@@ -36,18 +36,25 @@ const Bias = -0.6;
 export interface Gate {
 	/** The family ids that emitted within the cooldown window. */
 	Cooled: string[];
+
 	/** The dedupe keys already noted this turn. */
 	Noted: Set<string>;
+
 	/** The paths touched since the last user message (already-touched companions are dropped). */
 	Touched: Set<string>;
+
 	/** Notes emitted this turn. */
 	Notes: number;
+
 	/** The per-turn cap. */
 	MaxNotes: number;
+
 	/** The config's threshold. */
 	Threshold: number;
+
 	/** The companion cap. */
 	MaxCompanions: number;
+
 	/** The measure input: the effective weights and the learned-rate lookups. */
 	Measure: MeasureInput;
 }
@@ -62,6 +69,7 @@ const Key = (Family: string, Paths: string[]): string =>
 export default (
 	/** The ranked detections (Detect's output). */
 	Detections: Detection[],
+
 	/** The gate input. */
 	Input: Gate,
 ): Verdict => {
@@ -70,6 +78,7 @@ export default (
 		return { action: "abstain", reason: "no-signal", kappa: 0, candidates: [] };
 	}
 	const Kappa = Sigmoid(Winner.evidence + Bias);
+
 	// The existence filter runs BEFORE the gate: a family whose whole
 	// companion set is absent from the workspace is a structural silence, not
 	// a confidence one, so `no-companions` wins over the threshold.

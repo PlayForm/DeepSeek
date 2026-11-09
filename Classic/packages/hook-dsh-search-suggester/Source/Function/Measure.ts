@@ -75,8 +75,10 @@ const Relative = (Projection: Projection, Path: string): string =>
 export default (
 	/** The built projection (Function/Projection). */
 	Projection: Projection,
+
 	/** The intent the candidate belongs to (its expected kinds). */
 	Intent: Intent,
+
 	/** The pack candidate. */
 	Target: Target,
 ): Measurement => {

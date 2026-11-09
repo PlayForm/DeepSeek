@@ -50,14 +50,18 @@ import type UsageRecord from "@Interface/Record.js";
 /** One consolidation pass's whole input. */
 export interface Request {
 	readonly store: Usage;
+
 	/** The read-only catalog view; a patch row's body must already be carried here. */
 	readonly corpus: Corpus;
 	readonly seam: Seam;
 	readonly configuration: Configuration;
+
 	/** Whether the pass computes the plan and applies nothing. */
 	readonly dryRun: boolean;
+
 	/** The report directory, when the caller is writing one; "" otherwise. */
 	readonly report: string;
+
 	/**
 	 * The one model call: the nine-field survey in, the plan out, or null when the
 	 * call failed or the reply did not parse.
@@ -112,6 +116,7 @@ export default async (Request_: Request): Promise<ConsolidationResult> => {
 		snapshot: "",
 		report: Request_.report,
 	};
+
 	// consolidate-enabled: the shipped posture is off, and off means no call at all.
 	switch (true) {
 		case !Knobs.consolidate:

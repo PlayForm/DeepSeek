@@ -255,6 +255,7 @@ export const ComposePending = (
 		return (Left.settledAt ?? 0) - (Right.settledAt ?? 0);
 	});
 	const Bodies = Fit(Agent, Sorted, Append);
+
 	// The last-line stack is intentional: the per-frame pointer is per-job,
 	// the hint is per-batch - and there is NO blank line between the last
 	// frame's job_output line and the hint (I4 section 3).

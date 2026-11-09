@@ -68,6 +68,7 @@ export default async (State: State, Kind: Proposal["kind"], Input: unknown): Pro
 		return typeof Value === "string" ? Value : "";
 	};
 	const Path = Str("path");
+
 	// The version fence: the caller's token, else the hook's own observed
 	// version for the path (only if one was actually heard).
 	const Fence = (FencePath: string): string | undefined => {

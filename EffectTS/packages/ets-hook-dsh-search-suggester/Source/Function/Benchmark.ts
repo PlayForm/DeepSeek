@@ -22,6 +22,7 @@ import { Match } from "./Measure.js";
 export default (
 	/** The emitted notes of the replay (one per `suggest`). */
 	Notes: Note[],
+
 	/** The hand-labelled eventual target set per intent. */
 	Expected: Record<string, string[]>,
 ): {

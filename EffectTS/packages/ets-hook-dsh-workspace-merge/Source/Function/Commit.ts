@@ -39,6 +39,7 @@ export default async (State: State, Request: Batch): Promise<Commit> => {
 			: `batch-${State.Sequence}`;
 	const Operations = Array.isArray(Request.operations) ? Request.operations : [];
 	const TotalBytes = Operations.reduce((Sum, Op) => Sum + (Op?.content?.length ?? 0), 0);
+
 	// THE POLICY GATE (D6): the OUTER gate, in front of the atomic gates and
 	// every write. An `approve` verdict refuses the whole merge with the
 	// documented line and ZERO writes - the batch never starts, nothing is

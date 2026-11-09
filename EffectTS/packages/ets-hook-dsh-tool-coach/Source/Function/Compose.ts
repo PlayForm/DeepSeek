@@ -91,6 +91,7 @@ export const Persistent = (
 		"${command}": Escape(State.lastCommand),
 		"${traceability}": TRACEABILITY,
 	};
+
 	// The table: the pattern-table-mapped tools first (in the plan's class
 	// priority order, then first appearance), topped up with the remaining
 	// live tools alphabetically, capped at maxSectionTools rows.

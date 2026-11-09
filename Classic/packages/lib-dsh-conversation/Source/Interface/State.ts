@@ -40,14 +40,19 @@ export interface Touch {
 export default interface State {
 	/** The current turn (0 before the first turn/start). */
 	readonly Turn: number;
+
 	/** The current step (0 before the first step/start). */
 	readonly Step: number;
+
 	/** One call per assistant/message, in sequence order. */
 	readonly Calls: readonly Call[];
+
 	/** One entry per tool/call, in sequence order. */
 	readonly Tools: readonly Tool[];
+
 	/** One entry per resolved file touch, in sequence order. */
 	readonly Touches: readonly Touch[];
+
 	/** The distinct touched paths, in first-seen order. */
 	readonly Files: readonly string[];
 }

@@ -191,6 +191,7 @@ const TracingScope = Scope.makeUnsafe();
 
 export const materialize = (Factory: Host): Services => {
 	const Graph = layers(Factory);
+
 	// The DEFAULT (knob unset, or the bundle not loaded yet): the original
 	// synchronous no-op build - byte-identical with the pre-tracing runtime.
 	if (tracing.config === undefined || Bundle === undefined) {

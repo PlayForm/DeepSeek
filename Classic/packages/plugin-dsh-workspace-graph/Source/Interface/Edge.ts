@@ -20,10 +20,13 @@ export type EdgeKind = "contains" | "imports" | "references";
 export default interface Edge {
 	/** The edge kind: `contains`, `imports` or `references`. */
 	kind: EdgeKind;
+
 	/** The id of the source node. */
 	from: string;
+
 	/** The id of the target node. */
 	to: string;
+
 	/** The source span the edge was read from. */
 	span?: Span;
 }

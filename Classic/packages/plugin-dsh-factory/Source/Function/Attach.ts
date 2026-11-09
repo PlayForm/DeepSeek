@@ -51,6 +51,7 @@ export default (Context: Context, Module: { state: State; name: string }): void 
 			}
 		};
 	}, `${Module.name}-jobs`);
+
 	// P2 - in-flight disposal: abort every update continuation that is still
 	// in flight (a spawned child is killed via its signal; a library run that
 	// is not signal-aware settles on its own).
@@ -67,6 +68,7 @@ export default (Context: Context, Module: { state: State; name: string }): void 
 		},
 		`${Module.name}-inflight`,
 	);
+
 	// P5 - the optional storage seam (see header).
 	Context.effect?.(() => {
 		const Facility = Context.get?.("storageDomain") as Parameters<typeof Open>[1] | undefined;

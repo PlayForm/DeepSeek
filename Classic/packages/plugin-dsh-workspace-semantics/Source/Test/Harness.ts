@@ -179,6 +179,7 @@ export const FakeStorage = (Options: { failOpen?: boolean } = {}): any => {
 			};
 		},
 	};
+
 	/** Seed one record (the restart scenario: the store outlives the process). */
 	Store.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Store.tables.has(Name)) {

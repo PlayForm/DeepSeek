@@ -298,6 +298,7 @@ export const Make = (Raw: any, Attach?: (Context: any, Run: any) => void): any =
 		Raw,
 		Fs,
 	};
+
 	// The optional pre-apply attachment: the workspaceGraph service must be in
 	// place BEFORE apply runs (the listener reads it at use time, but the
 	// first fire is the earliest observable use).
@@ -404,6 +405,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually wires the plugin (the
 	// vacuously-green backstop for every folder's fixture).
 	rm();

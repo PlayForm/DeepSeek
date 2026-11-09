@@ -43,6 +43,7 @@ export default (Context: Context, Options: Config): void => {
 	// plugin stays PENDING until both exist; the accessor is the consumption
 	// form declared by Interface/Factory).
 	const Factory = Context.pluginFactory;
+
 	// 1. The factory's State builder. The module fields are copied from the
 	//    (cell-unwrapped) config by name; "Section" and "PinStyle" map config
 	//    keys this module's schema does not define (the identified dependency
@@ -64,11 +65,13 @@ export default (Context: Context, Options: Config): void => {
 		policyFileName: "pin-policy.json",
 		journalDomain: "hook_dsh_cargo_governor", // the cargo module's own journal domain (unit-name rule: lowercase/digits/underscores)
 	});
+
 	// The update stage's per-directory collections (cooldown, in-flight set,
 	// circuit breaker) — module-owned loop control on top of the shared shape.
 	State.Stamp = new Map();
 	State.Set = new Set();
 	State.Count = new Map();
+
 	// The injected factory service stored on the State (the governor-family
 	// pattern): the P2 UpdateKey helper and the ledger/journal delegates
 	// consume it from every module function.

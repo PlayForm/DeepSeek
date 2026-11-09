@@ -47,6 +47,7 @@ export default function Status(Section: PanelSection, Live: PanelLive | undefine
 		Section.match === undefined
 			? Envelopes
 			: Envelopes.filter((Envelope) => Section.match?.(Envelope) === true);
+
 	// Newest first: the first envelope carrying an activation wins.
 	const Override = Matched.find((Envelope) => Activation(Envelope) !== undefined);
 	const Declared: PanelActivation = Section.activation ?? "unknown";

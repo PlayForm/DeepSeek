@@ -119,6 +119,7 @@ export const Race: { Armed: null | { path: string; content: string } } = { Armed
  */
 export const token = (p: string): string => {
 	const s = FileSystem.statSync(p);
+
 	// The source suite reads `s.mtimeNs`/`s.ctimeNs` verbatim: on a plain
 	// (non-bigint) Stats those fields are absent, so the token carries the
 	// string "undefined" for them - a consistent, collision-free token either
@@ -170,6 +171,7 @@ export const MakeContext = (): any => {
 			return ctx;
 		},
 	};
+
 	// The governed-fs backend: REAL temp-dir I/O, version tokens
 	// (dev:size:mtimeNs:ctimeNs) enforcing the replaceIfVersion guard.
 	ctx.fs = {
@@ -260,6 +262,7 @@ export const Validate = (Raw: Record<string, unknown>): any =>
  */
 export const Boot = () => {
 	const ctx = MakeContext();
+
 	// Fixture-only scaffolding: the factory typed as `any` so the fixtures can
 	// pass plain runtime strings/targets exactly like the source suite does.
 	const Factory: any = new FactoryClass(ctx);
@@ -288,6 +291,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the real-token fs actually wires the pinner (the
 	// vacuously-green backstop for every folder's fixture - a broken seam would
 	// print fewer checks in every folder, which the runner's expected-count

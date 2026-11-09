@@ -37,6 +37,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Run 9 - the JSONL journal (opt-in) round-trip + boot compaction.
 	// ONE store, exactly as the source suite does: the record checks read the
 	// journal after that single store, and the corruption + restart follows.

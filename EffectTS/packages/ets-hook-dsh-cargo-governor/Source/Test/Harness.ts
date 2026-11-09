@@ -315,6 +315,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually wires the cargo governor (the
 	// vacuously-green backstop for every folder's fixture - a broken seam would
 	// print fewer checks in every folder, which the runner's expected-count

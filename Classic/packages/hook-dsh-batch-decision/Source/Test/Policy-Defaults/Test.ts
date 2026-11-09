@@ -48,6 +48,7 @@ const Setup = (Policy?: Record<string, string>): any => {
 			...(Policy === undefined ? {} : { policy: Policy }),
 		}),
 	);
+
 	// The first-batch rule: the intent class has one previous USER approval,
 	// so the auto-approve policy itself says "auto-approve".
 	Run.State.SeenIntents.set("version-bump", 1);

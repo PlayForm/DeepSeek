@@ -52,6 +52,7 @@ export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).
 	const Factory = Context.pluginFactory;
+
 	// The State: the factory's shared shape plus the fullwidth hook's own
 	// fields, copied from the (cell-unwrapped) validated config by the setup
 	// map. A MAP flavor has NO replacement field: the substitution is the
@@ -97,9 +98,11 @@ export default (Context: Context, Options: Config): void => {
 	// bookkeeping, ever). The waterfall discipline:
 	//   * next() is ALWAYS called, unconditionally, first — omitting it
 	//     short-circuits the waterfall and the model call never happens;
+
 	//   * options (the request, `_Request` — never read, NEVER touched) is a
 	//     LOOP-built deep-frozen object whose content is a pure function of
 	//     the session log: listeners read it, never rewrite it;
+
 	//   * the returned wrapped iterable is what every downstream consumer
 	//     (live UI and durable transcript) sees — the normalization is
 	//     VISIBLE by construction.

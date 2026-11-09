@@ -50,6 +50,7 @@ export default Compose(false, {
 	emitOn: Schema.array(String).default(["edit", "raw-write", "write"]).volatile(),
 	// Path prefixes a candidate is never drawn from (volatile).
 	exclude: Schema.array(String).default(["node_modules", "Target", ".git", "dist"]).volatile(),
+
 	/** Retired: the literal pack learner is no longer called; kept for config compatibility until the history-driven proposal lands. */
 	learning: Schema.boolean().default(false).volatile(),
 });

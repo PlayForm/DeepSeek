@@ -31,6 +31,7 @@ export default (
 	}
 	Release(State, Agent);
 	State.Factory?.Journal(State, `task ${Next}`, Id, Agent);
+
 	// Byte-stable template: `<state> <id> (<agent>)`.
 	Append?.(`${Next} ${Id} (${Agent})`);
 	return Task_;

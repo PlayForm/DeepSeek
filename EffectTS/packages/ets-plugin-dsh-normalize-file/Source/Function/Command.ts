@@ -49,6 +49,7 @@ export default async (
 	const Words = Raw.length === 0 ? [] : Raw.split(/\s+/);
 	const Head = Words[0] ?? "";
 	const Rest = Words.slice(1);
+
 	// The files sweep: the ONLY real implementation (the stream flavors
 	// decline this scope in the base handler). A missing path is the shared
 	// usage error; a failing path fails the command with the context prefix.

@@ -76,12 +76,16 @@ type Target = Parameters<State["Factory"]["Write"]>[1];
 export interface Outcome {
 	/** The target's display path (model/UI-facing). */
 	path: string;
+
 	/** Replaced character count across all six transforms. */
 	count: number;
+
 	/** Whether a write happened (N > 0). */
 	changed: boolean;
+
 	/** The file's content BEFORE the write (only when changed). */
 	before?: string | null;
+
 	/** The file's content AFTER the write (only when changed). */
 	after?: string;
 }
@@ -135,6 +139,7 @@ export default async (
 	}
 	// Stage 2 - COUNT (the six-fold chain, counts summed).
 	const Rewritten = Rewrite(Content, State.Replacement);
+
 	// Stage 3 - CONDITION: N = 0 → NO write at all.
 	if (Rewritten.count === 0) {
 		return { path: Target.displayPath, count: 0, changed: false };
@@ -144,6 +149,7 @@ export default async (
 		actor: Exec,
 		policy: "standing",
 	});
+
 	// Stage 4 - LEDGER (N > 0 only): the count line and the P5 journal record
 	// (event `normalized`, path = the target's displayPath, detail =
 	// byte-identical to the ledger line).

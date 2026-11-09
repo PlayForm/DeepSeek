@@ -56,6 +56,7 @@ const Omission =
 
 export default (Text: string, State: State): { text: string; count: number } => {
 	const Match = Envelope.exec(Text);
+
 	// 1. Not a read envelope: pass by identity (the core's no-op contract).
 	if (Match === null) {
 		return { text: Text, count: 0 };
@@ -63,6 +64,7 @@ export default (Text: string, State: State): { text: string; count: number } => 
 	const Path = Match[1] ?? "";
 	const Body = Match[2] ?? "";
 	const Syntax = Detect(Path);
+
 	// 2. Unknown extension: never strip what cannot be parsed.
 	if (Syntax === undefined) {
 		return { text: Text, count: 0 };
@@ -80,6 +82,7 @@ export default (Text: string, State: State): { text: string; count: number } => 
 		Count += Result.count;
 		return `${Prefix[1]}: ${Result.text}`;
 	});
+
 	// 6. Nothing stripped: the original text by identity, no ledger line.
 	if (Count === 0) {
 		return { text: Text, count: 0 };

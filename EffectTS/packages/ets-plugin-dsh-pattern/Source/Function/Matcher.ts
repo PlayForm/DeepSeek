@@ -42,6 +42,7 @@ export default (
 			Right.score - Left.score || Left.pattern.id.localeCompare(Right.pattern.id),
 	);
 	const Top = Scored.slice(0, Math.max(Knobs.maxMatches, 1));
+
 	// Ambiguity: the top two within epsilon -> the empty result.
 	const [First, Second] = Top;
 	if (

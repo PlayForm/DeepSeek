@@ -260,6 +260,7 @@ export default (Agent: State, Scope: AgentState, Label: string, Append: Log): st
 		return Collapsed;
 	}
 	const Text = Body();
+
 	// The global TTL (refresh "ttl"): the whole body is cached and rebuilt
 	// every ttlCalls assemblies (the tool-coach's sectionTtl pattern); the
 	// per-block staleness above decides which frames actually re-render on a

@@ -14,6 +14,7 @@ import type { KeywordTable, Role } from "@Interface/Policy.js";
 
 export default (Spec: string, Keywords: KeywordTable): Role | undefined => {
 	const Text = Spec.toLowerCase();
+
 	// The scan order: planner, coder, explorer (a later scan never downgrades
 	// an earlier match).
 	const Order: Role[] = ["planner", "coder", "explorer"];

@@ -23,6 +23,7 @@ export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const World = Boot();
 	const { ctx, listener, st } = World;
+
 	// Group: the g1 gate set (end-to-end through the real listener).
 	const gatesDir = Path.join(Root, "gates");
 	const before = { reads: ctx.reads.length, writes: ctx.writes.length };

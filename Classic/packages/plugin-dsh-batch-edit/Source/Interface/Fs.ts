@@ -12,6 +12,7 @@
 export interface FsTarget {
 	/** The human-facing absolute path (the fs backend's own display form). */
 	displayPath: string;
+
 	/** The opaque target key the backend derives from the path. */
 	targetKey?: string;
 	[key: string]: unknown;

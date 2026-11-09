@@ -7,6 +7,7 @@
 export default {
 	/** The host slot the workspace tab mounts into. */
 	tab: "conversation.view",
+
 	/** The child slot the workspace tab declares and renders. */
 	section: "workspace.live.section",
 } as const;

@@ -111,6 +111,7 @@ export default (
 	let StreamSearched = false;
 	let OutputTokens: number | null = null;
 	let ErrorCode: string | null = null;
+
 	// The two meter reads, once, before the walk: the window is the
 	// provider's own figure and the surface is the caller's unless it passed
 	// none (NaN).

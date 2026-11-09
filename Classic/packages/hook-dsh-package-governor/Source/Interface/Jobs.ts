@@ -22,6 +22,7 @@ export default interface Jobs {
 	 * the disposer that detaches it. Duplicate names stay independent.
 	 */
 	attachController(name: string): () => void;
+
 	/**
 	 * Preflight, then atomically register the work and call `run` with the
 	 * job's producer face; returns the registry-issued `<kind>-N` id.

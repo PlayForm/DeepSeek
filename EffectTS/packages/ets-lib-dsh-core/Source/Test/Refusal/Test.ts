@@ -10,6 +10,7 @@ import { Refusal, Section } from "../../../Target/Library.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Refusal - only the declared dependency sections may differ.
 	{
 		const Sub = "Refusal: the shared refusal guard (sections-only changes allowed)";

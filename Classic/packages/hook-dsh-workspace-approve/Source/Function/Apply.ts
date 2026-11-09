@@ -75,10 +75,12 @@ export default (Context: Context, Options: Config): void => {
 	State.Ring = [];
 	State.Sequence = 0;
 	State.Handle = undefined;
+
 	// The hook's OWN actor marker: an fs/observed event carrying exactly this
 	// object as its actor is the hook's own (the identity check in the
 	// listener) and is ignored.
 	State.Self = { plugin: "hook-dsh-workspace-approve" };
+
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceApprove", this).
 	new ServiceClass(Context, State);
@@ -91,6 +93,7 @@ export default (Context: Context, Options: Config): void => {
 	}
 	// The activation proof (the module's own composed line).
 	Factory.Append(State, Activate([["domain", State.DomainName]]));
+
 	// The fs/observed listener, on the ROOT context (the factory's Wire): it
 	// invalidates bindings whose file moved under the approval.
 	Factory.Wire(
@@ -99,6 +102,7 @@ export default (Context: Context, Options: Config): void => {
 		(Target: unknown, Observation: unknown, Actor: object | undefined) =>
 			Invalidate(State, Target, Observation, Actor),
 	);
+
 	// The own P5-style storage effect: probe `storageDomain` once, open the
 	// hook's domain (never awaited - best-effort inside), close on dispose.
 	Context.effect?.(() => {
@@ -124,6 +128,7 @@ export default (Context: Context, Options: Config): void => {
 			}
 		};
 	}, "approve-storage");
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__hookDshWorkspaceApproveState"] = State;

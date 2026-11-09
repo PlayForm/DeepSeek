@@ -13,6 +13,7 @@ import type Node from "@Interface/Node.js";
 export default interface Expansion {
 	/** The start node first, then every reached node in visit order. */
 	nodes: Node[];
+
 	/** The edges traversed by the walk. */
 	edges: Edge[];
 }

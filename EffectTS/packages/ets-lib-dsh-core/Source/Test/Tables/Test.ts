@@ -18,6 +18,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: the normalization tables - the six exact contents.
 	{
 		// Sub: the four character classes. The Check label is the source

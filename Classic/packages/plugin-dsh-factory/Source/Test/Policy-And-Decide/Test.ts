@@ -40,8 +40,10 @@ const Defaults: Allowlist = {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// The block builder: the schema itself (a volatile object schema).
 	const Block = (Policy as unknown as () => any)();
+
 	// Group: the block's shape and defaults.
 	{
 		const Sub = "Policy: the eight action classes in the D6 order with the D6 defaults";

@@ -29,6 +29,7 @@ export default async (
 	Signal: AbortSignal,
 ): Promise<boolean> => {
 	State.Factory.Append(State, `update: running verifyCommand: ${Command}`);
+
 	// The subprocess seam is probed ONCE at State build (the factory's State builder, P9)
 	// and stored on State - never a per-site accessor fallback (a direct
 	// `State.Context.subprocess` access THROWS on service accessors without inject -

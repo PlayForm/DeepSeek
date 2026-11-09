@@ -27,8 +27,10 @@ import type SymbolNode from "@Interface/SymbolNode.js";
 export default interface Deepening {
 	/** The name the ledger reports (`deepened <path> ... via <name>`). */
 	name: string;
+
 	/** The file extensions (with dot, lowercase) the deepener owns. */
 	extensions: string[];
+
 	/**
 	 * The scope-resolved references for the file's declared symbols; `undefined` means
 	 * "cannot answer" - the lexical list stands.
@@ -40,6 +42,7 @@ export default interface Deepening {
 		Text: string,
 		Symbols: SymbolNode[],
 	): Promise<ReferenceNode[] | undefined>;
+
 	/**
 	 * The scope-resolved rename plan for the identifier at `span`; `undefined` means
 	 * "cannot answer" - the adapter's plan stands.

@@ -11,10 +11,13 @@
 export interface Signal {
 	/** The rule name, for the ledger and the smokes. */
 	rule: string;
+
 	/** The regex source, tested against the call probe (tool name + arguments JSON). */
 	pattern: string;
+
 	/** The weight added to the intent's score when the signal matches. */
 	weight: number;
+
 	/** Optional tool-name restriction: empty/undefined = any tool. */
 	tools?: string[];
 }
@@ -22,8 +25,10 @@ export interface Signal {
 export interface Candidate {
 	/** The target path, as the graph answered it (repo-relative or its display path; never invented). */
 	path: string;
+
 	/** The one phrase the model reads; a candidate without a reason is not emitted. */
 	reason: string;
+
 	/** The static prior in [0,1]: 1.0 canonical (a graph entry), 0.6 family, 0.3 illustrative. */
 	prior: number;
 }
@@ -31,14 +36,19 @@ export interface Candidate {
 export interface Intent {
 	/** The intent id (e.g. "Neighborhood"). */
 	id: string;
+
 	/** Priority: the lower number wins when two intents fire on one call. */
 	priority: number;
+
 	/** The confidence gate for this intent. */
 	threshold: number;
+
 	/** The signals that open the intent. */
 	signals: Signal[];
+
 	/** The ordered target set. */
 	targets: Candidate[];
+
 	/** The one-phrase caveat appended to the note. */
 	note: string;
 }
@@ -46,8 +56,10 @@ export interface Intent {
 export default interface Pack {
 	/** The pack name (this consumer's domain). */
 	pack: string;
+
 	/** The pack schema version. */
 	version: number;
+
 	/** The intents, priority-ordered (the retired reference table's shape). */
 	intents: Intent[];
 }

@@ -33,6 +33,7 @@ type SmokeDependencies = Dependencies<SmokeState, unknown, number, null>;
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Activate + Update - the builders' shapes (same names, additive).
 	{
 		const Sub =

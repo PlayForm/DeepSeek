@@ -23,6 +23,7 @@ export default (State: State, Block: FeedbackBlock): void => {
 		order: [],
 	};
 	const Existing = Session.blocks.get(Safe.agentId);
+
 	// The same agent's newer block replaces the older one in place (the
 	// council record holds the latest signal per agent); the delta chain
 	// survives - the deltas are part of the block.

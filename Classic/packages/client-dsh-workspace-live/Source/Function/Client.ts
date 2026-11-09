@@ -156,9 +156,11 @@ export default function Client(
 	const store = StoreFn(config);
 	const trace = TraceFn(ctx, config.maxEvents);
 	const registry = RegistryOf(ctx);
+
 	// The section's manifest: its identity is stable, its order follows the
 	// Config tabOrder at registration time.
 	const manifest = { ...SectionIdentity, order: config.tabOrder };
+
 	// The workspaceLive service: removed with the plugin.
 	ctx.provide("workspaceLive", {
 		getSnapshot: () => store.getSnapshot(),
@@ -166,11 +168,13 @@ export default function Client(
 		ingest: (event: Parameters<typeof store.ingest>[0]) => store.ingest(event),
 		refresh: (graph: Parameters<typeof store.refresh>[0]) => store.refresh(graph),
 	});
+
 	// The locale dictionaries: registered inside ctx.effect.
 	ctx.effect(
 		() => ctx.locale.register(NAMESPACE, { en: EN_DICTIONARY, zh: ZH_DICTIONARY }),
 		"live: dictionaries",
 	);
+
 	// The tab: registered inside ctx.effect so an unload removes it; the trace
 	// source unwinds with the same effect (one label, the existing contract).
 	ctx.effect(() => {
@@ -208,6 +212,7 @@ export default function Client(
 			trace.dispose();
 		};
 	}, "live: workspace tab");
+
 	// The right-Sidebar tab type (the optional composition): the registry is
 	// probed structurally, so an absent ui-sidebar-right is a silent skip - no
 	// inject row, no import, no error - and the conversation.view tab above

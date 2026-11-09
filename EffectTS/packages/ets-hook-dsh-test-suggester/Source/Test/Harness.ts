@@ -218,6 +218,7 @@ const MakeProjections = () => {
 		},
 		stateOf: StateOf,
 	};
+
 	/** Fold ONE committed event through every registered unit (the eager drive). */
 	const Commit = (Session: any, Event: any): void => {
 		for (const [Key, Unit] of Units) {
@@ -312,6 +313,7 @@ export const Make = (Raw: any): any => {
 	};
 	Run.Returned = (Plugin.apply as any)(Context, Raw);
 	Run.State = Context.__testSuggesterState;
+
 	// The registration promise `inject` captured during apply: awaiting it
 	// settles the unit's installation before a test commits any event.
 	Run.Ready = Ready;
@@ -442,6 +444,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually wires the plugin (the
 	// vacuously-green backstop for every folder's fixture).
 	rm();

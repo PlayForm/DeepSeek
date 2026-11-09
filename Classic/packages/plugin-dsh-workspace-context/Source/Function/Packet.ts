@@ -1,16 +1,23 @@
-// Packet - the orientation packet builder (Function/Packet): the orient
-// step of V4-1 section 3.5's "orient -> drill -> act" loop. Consumes the
-// sibling workspace-graph's snapshot through the structural handle
-// (Interface/Graph), filters through the resolved lens (Function/LensFn),
-// ranks the neighbors by edge strength (Function/Rank), composes the eight
-// fixed sections, records the caller's focus (Function/Focus), and hands the
-// result to the budget clamp (Function/Budget).
-//
-// SELF-CONTAINED: the graph handle is probed at call time (State.Graph,
-// injected as "workspaceGraph" when the sibling provides it). An absent
-// sibling is NOT a crash: the packet still renders with an honest OPEN line
-// ("workspace graph unavailable") - the attention projection degrades, it
-// never lies.
+/**
+ * @module Packet
+ *
+ * The orientation packet builder (Function/Packet): the orient step of V4-1
+ * section 3.5's "orient -> drill -> act" loop.
+ *
+ * @remarks
+ * Consumes the sibling workspace-graph's snapshot through the structural
+ * handle (Interface/Graph), filters through the resolved lens
+ * (Function/LensFn), ranks the neighbors by edge strength (Function/Rank),
+ * composes the eight fixed sections, records the caller's focus
+ * (Function/Focus), and hands the result to the budget clamp
+ * (Function/Budget).
+ *
+ * SELF-CONTAINED: the graph handle is probed at call time (State.Graph,
+ * injected as "workspaceGraph" when the sibling provides it). An absent
+ * sibling is NOT a crash: the packet still renders with an honest OPEN line
+ * ("workspace graph unavailable") - the attention projection degrades, it
+ * never lies.
+ */
 import Budget from "@Function/Budget.js";
 import Focus from "@Function/Focus.js";
 import LensFn from "@Function/LensFn.js";
@@ -22,7 +29,9 @@ import type State from "@Interface/State.js";
 import DefaultLens from "@Variable/DefaultLens.js";
 import EdgeWeight from "@Variable/EdgeWeight.js";
 
-/** One MAP line: "<dir> (<count> files)". */
+/**
+ * One MAP line: "<dir> (<count> files)".
+ */
 const MapLine = (Dir: string, Count: number): string => `${Dir} (${Count} files)`;
 
 export default (State: State, Options: Query): Packet => {
@@ -67,6 +76,7 @@ export default (State: State, Options: Query): Packet => {
 			: undefined);
 	const FocusId = Focus2?.id ?? Options.id ?? Options.query ?? "";
 	const Scope = Options.query ?? Options.id ?? "(no scope given)";
+
 	// The MAP: the directories of the eligible files, biggest first. The band
 	// groups by the file's PARENT directory (not by its first segment): the
 	// real graph stores resolved absolute paths, whose first segment is empty
@@ -90,11 +100,13 @@ export default (State: State, Options: Query): Packet => {
 		.sort((A, B) => B[1] - A[1] || A[0].localeCompare(B[0]))
 		.slice(0, State.MapLimit)
 		.map(([Dir, Count]) => MapLine(Dir, Count));
+
 	// The FOCUS line.
 	const FocusLine =
 		Focus2 === undefined
 			? `FOCUS (none: ${Options.id ?? Options.query ?? "no scope"})`
 			: `FOCUS ${Focus2.id} span ${Focus2.span?.startLine ?? 0}-${Focus2.span?.endLine ?? 0} fp ${String(Focus2.fingerprint).slice(0, 12)} v ${Focus2.version}`;
+
 	// The NEIGHBORS: the strongest edges first, lens-filtered.
 	const Raw =
 		Focus2 !== undefined && Snapshot !== undefined
@@ -111,6 +123,7 @@ export default (State: State, Options: Query): Packet => {
 		default:
 	}
 	const Neighbors = Ranked.map((Edge) => `${Edge.kind} ${Edge.from} -> ${Edge.to}`);
+
 	// The EVIDENCE: the files/spans the packet is built from, focus first.
 	const Evidence: string[] = [];
 	if (Focus2 !== undefined) {
@@ -148,6 +161,7 @@ export default (State: State, Options: Query): Packet => {
 		nodeId: Focus2?.id,
 		nodeVersion: Focus2?.version,
 	};
+
 	// The focus tracker and the ledger (after the budget so the token count
 	// is final; the tracker records the version the caller now holds).
 	const Out = Budget(State, Item);

@@ -110,15 +110,18 @@ export default (Context: Context, Options: Config): void => {
 	State.Deepenings = new Map();
 	State.Handle = undefined;
 	State.Seen = new Map();
+
 	// The service's OWN actor marker: an fs/observed event carrying exactly
 	// this object as its actor is the service's own (the identity check in
 	// the listener) and is ignored.
 	State.Self = { plugin: "plugin-dsh-workspace-semantics" };
+
 	// The adapters: the default TypeScript adapter registers itself; the
 	// config `adapters` names add the opt-in any-file adapters; callers add
 	// more through the service's adapt() (the any-file adapter seam).
 	Register(State, TypeScriptAdapter);
 	Adapters(State, State.AdapterNames);
+
 	// The LSP deepener (the primary TypeScript reference answer): registered
 	// silently (no ledger line - the adapter lines stay byte-exact), probed at
 	// use time; `lsp: false` keeps the model purely lexical.
@@ -140,6 +143,7 @@ export default (Context: Context, Options: Config): void => {
 	}
 	// The activation proof (the module's own composed line).
 	Factory.Append(State, Activate([["domain", State.DomainName]]));
+
 	// The fs/observed listener, on the ROOT context (the factory's Wire).
 	Factory.Wire(
 		Context,
@@ -147,6 +151,7 @@ export default (Context: Context, Options: Config): void => {
 		(Target: FsTarget, Observation: FsObservation, Actor: object | undefined) =>
 			Watch(State, Target, Observation, Actor),
 	);
+
 	// The own P5-style storage effect: probe `storageDomain` once, open the
 	// service's domain (never awaited - best-effort inside), close on dispose.
 	Context.effect?.(() => {
@@ -172,6 +177,7 @@ export default (Context: Context, Options: Config): void => {
 			}
 		};
 	}, "semantics-storage");
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__pluginDshWorkspaceSemanticsState"] = State;

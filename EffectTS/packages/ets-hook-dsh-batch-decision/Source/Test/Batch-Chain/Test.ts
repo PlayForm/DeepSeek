@@ -116,6 +116,7 @@ export const runTest = async (): Promise<number> => {
 			}
 		}
 	};
+
 	// The fake agent registry: inject mirrors the harness's inbox commit.
 	const Injected: any[] = [];
 	const Agents = {

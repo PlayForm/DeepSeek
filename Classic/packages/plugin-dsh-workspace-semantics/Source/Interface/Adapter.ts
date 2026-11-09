@@ -24,11 +24,13 @@ import type SymbolNode from "@Interface/SymbolNode.js";
 export default interface Adapter {
 	/** The file extensions (with dot, lowercase) the adapter owns. */
 	extensions: string[];
+
 	/**
 	 * The exact basenames the adapter owns (checked before the extension). Absent or empty
 	 * for the extension adapters.
 	 */
 	files?: string[];
+
 	/** Build the model from the file's text. */
 	scan(
 		text: string,
@@ -39,6 +41,7 @@ export default interface Adapter {
 		dependencies: string[];
 		certain: boolean;
 	};
+
 	/**
 	 * Compute the rename plan for the identifier at `span` (or refuse). The refusal-to-guess
 	 * rule lives HERE: an adapter that cannot be certain returns undefined, and the service

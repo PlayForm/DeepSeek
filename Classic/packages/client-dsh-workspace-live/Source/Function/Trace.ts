@@ -41,6 +41,7 @@ export default function Trace(ctx: Context, Bound: number): LiveTrace {
 		while (Tail.length > Bound) Tail.pop();
 		for (const Listener of Listeners) Listener();
 	};
+
 	/** Resolve the bus once, seed the tail from its ring, and subscribe. */
 	const Attach = (): void => {
 		switch (true) {

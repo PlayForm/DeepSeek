@@ -309,11 +309,13 @@ export default (Context: Context, Options: Config): void => {
 		},
 	});
 	State.Factory = Factory;
+
 	// No boot projection of the built-in pack: the candidates come from the session history,
 	// and only an EXPLICIT repo/user pack compiles (per call, below).
 	State.Pack = [];
 	State.Knowledge = Load(State.PersistPath);
 	State.Rings = Ring();
+
 	// THE HISTORY IS NOT A STATE FIELD: the per-session touch history is a session-projection
 	// unit (Function/Unit, keyed on `sessionProjections`), so the registry owns one cell per
 	// session and Function/History reads it at detection time through

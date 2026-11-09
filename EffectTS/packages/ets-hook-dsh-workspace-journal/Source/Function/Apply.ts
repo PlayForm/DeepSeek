@@ -82,10 +82,12 @@ export default (Context: Context, Options: Config): void => {
 	State.Entries = new Map();
 	State.Ring = [];
 	State.Handle = undefined;
+
 	// The hook's OWN actor marker: an fs/observed event carrying exactly this
 	// object as its actor is the hook's own (the identity check in the
 	// listener) and is ignored.
 	State.Self = { plugin: "hook-dsh-workspace-journal" };
+
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceJournal", this).
 	new ServiceClass(Context, State);
@@ -104,6 +106,7 @@ export default (Context: Context, Options: Config): void => {
 			["maxBatches", String(State.MaxBatches)],
 		]),
 	);
+
 	// The fs/observed listener, on the ROOT context (the factory's Wire) -
 	// the recovery checkpoint for open batches.
 	Factory.Wire(
@@ -112,6 +115,7 @@ export default (Context: Context, Options: Config): void => {
 		(Target: FsTarget, Observation: FsObservation, Actor: object | undefined) =>
 			Observe(State, Target, Observation, Actor),
 	);
+
 	// The own P5-style storage effect: probe `storageDomain` once, open the
 	// hook's domain (never awaited - best-effort inside), close on dispose.
 	Context.effect?.(() => {
@@ -137,6 +141,7 @@ export default (Context: Context, Options: Config): void => {
 			}
 		};
 	}, "journal-storage");
+
 	// The boot recovery pass: mark batches still `applying` at mount as
 	// recovery-required (the honest all-or-nothing). Queued as a microtask
 	// so it runs after the storage open's first tick had a chance.
@@ -145,6 +150,7 @@ export default (Context: Context, Options: Config): void => {
 			{ recover(): Promise<unknown> } | undefined;
 		void Service?.recover();
 	});
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__hookDshWorkspaceJournalState"] = State;

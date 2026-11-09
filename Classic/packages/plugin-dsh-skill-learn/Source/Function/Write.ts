@@ -111,6 +111,7 @@ export interface Seam {
 export interface Attempt {
 	/** The judged operation to land. */
 	readonly operation: Operation;
+
 	/**
 	 * The text the confirm prompt carried for the file this operation writes: the
 	 * `SKILL.md` for a create or a patch, the support file for a support write,
@@ -126,10 +127,13 @@ export interface Attempt {
 export interface Applied {
 	/** The absolute path the bytes landed at. */
 	readonly path: string;
+
 	/** The skill the write belongs to, by frontmatter name. */
 	readonly skill: string;
+
 	/** The text before the write, or null for a creation. */
 	readonly before: string | null;
+
 	/** The text after the write. */
 	readonly after: string;
 }
@@ -147,6 +151,7 @@ export type Fenced =
 export interface Located {
 	/** The absolute path the operation writes. */
 	readonly path: string;
+
 	/** The skill directory the path may not leave. */
 	readonly base: string;
 }

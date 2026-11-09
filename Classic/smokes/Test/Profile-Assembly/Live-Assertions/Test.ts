@@ -69,14 +69,17 @@ const FamilyNames = [
 // resolution).
 {
 	const IdIndex = (Id: string): number => Dump.indexOf(`- id: ${Id}`);
+
 	// Leaf 1: the factory bundle layer is composed.
 	Check(IdIndex("plugin-dsh-factory") > 0, "the factory bundle layer is composed");
 	const Positions = FamilyIds.map((Id) => IdIndex(Id));
+
 	// Leaf 2: all eleven family plugin entries are composed.
 	Check(
 		Positions.every((Position) => Position > 0),
 		"all eleven family plugin entries are composed",
 	);
+
 	// Leaf 3: the family layers compose in the bundle-list order (factory,
 	// governor, pinner, cargo, the flavors, normalize-file).
 	Check(
@@ -84,6 +87,7 @@ const FamilyNames = [
 		"the family layers compose in the bundle-list order (factory, governor, pinner, cargo, the flavors, normalize-file)",
 	);
 	const NamePositions = FamilyNames.map((Name) => Dump.indexOf(`name: '${Name}'`));
+
 	// Leaf 4: each composed entry carries the package's real name (the
 	// bundle alias to the identity).
 	Check(
@@ -125,10 +129,13 @@ const FamilyNames = [
 	const Home = Wiring.ScratchHome();
 	const PinnerStamp = Stamp(FirstLine(`${Home}/ledgers/pinner.log`));
 	const GovernorStamp = Stamp(FirstLine(`${Home}/ledgers/governor.log`));
+
 	// Leaf 8: the pinner's activation line is ISO-stamped.
 	Check(PinnerStamp !== null, "the pinner's activation line is ISO-stamped");
+
 	// Leaf 9: the governor's activation line is ISO-stamped.
 	Check(GovernorStamp !== null, "the governor's activation line is ISO-stamped");
+
 	// The activation stamps race at millisecond resolution (the pinner's
 	// observed precedence is the live behavior, but two activations within
 	// the same few milliseconds can log in either order). The window
@@ -138,6 +145,7 @@ const FamilyNames = [
 		const Match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\.(\d{3})Z$/.exec(Stamp ?? "");
 		return Match ? Date.parse(Stamp!) : Number.NaN;
 	};
+
 	// Leaf 10: the pinner's activation precedes the governor's, within the
 	// race window.
 	Check(

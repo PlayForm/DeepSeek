@@ -37,25 +37,34 @@ import type { Scope } from "effect";
 export default interface State extends Shared {
 	/** Strict chain pass: strip unknown deps in a governed workspace. */
 	Strict: boolean;
+
 	/** Cooldown between update-stage dispatches, per directory (epoch ms). */
 	Wait: number;
+
 	/** Circuit breaker: consecutive update-stage failures per directory. */
 	Limit: number;
+
 	/** ncu binary for bin mode (binary name or absolute path — resolved via
 	 *  the host PATH). */
 	Binary: string;
+
 	/** Update stage mode: "programmatic" (ncu library in-process) or "bin". */
 	Mode: string;
+
 	/** Directory → epoch ms of the last update-stage dispatch (cooldown). */
 	Stamp: Map<string, number>;
+
 	/** Directories with an update run in flight. */
 	Set: Set<string>;
+
 	/** Directory → consecutive update-stage failures (circuit breaker). */
 	Count: Map<string, number>;
+
 	/** The injected @playform/ets-plugin-dsh-factory service — every absorbed
 	 *  primitive (Append/Journal/Gate/Discover/Parse/Continue/Refresh) is
 	 *  consumed through it; assigned once in Function/Apply. */
 	Factory: Factory;
+
 	/** THE EFFECT DELTA (register #13, R3): the plugin's long-lived Effect
 	 *  `Scope` — the fiber home of the CORE's typed-effect update envelope.
 	 *  The envelope's `Dispatch: Effect<void, never, Scope.Scope>` requires

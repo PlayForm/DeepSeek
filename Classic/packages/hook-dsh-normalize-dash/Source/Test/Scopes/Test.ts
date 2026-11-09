@@ -19,6 +19,7 @@ import { Check, Finish, Ledger, Make, MakeCounter } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Run S - the granular scope gates. Each scope gate on/off with
 	// everything else at defaults; the config is hand-built with a `scopes`
 	// volatile cell whose getter returns a mutable object (the same

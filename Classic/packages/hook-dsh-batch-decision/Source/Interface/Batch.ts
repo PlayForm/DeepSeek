@@ -11,8 +11,10 @@
 export interface BatchTarget {
 	path: string;
 	version: string;
+
 	/** The byte/line span within the file, when the edit is partial. */
 	span?: string | undefined;
+
 	/** Why this target is in the batch. */
 	why: string;
 }
@@ -40,19 +42,25 @@ export interface BatchPreview {
 export interface BatchProposal {
 	/** Stable, content-derived. */
 	id: string;
+
 	/** The intent label, e.g. "version-bump". */
 	intent: string;
 	targets: BatchTarget[];
 	operations: BatchOperation[];
 	preview: BatchPreview;
+
 	/** sha256(targets + operations + versions) - the fence. */
 	digest: string;
+
 	/** The batch's own revision. */
 	revision: number;
+
 	/** Epoch ms after which the proposal expires. */
 	expiresAt: number;
+
 	/** The intent's confidence, when the suggester supplied it. */
 	confidence?: number | undefined;
+
 	/** The agent whose inbox carried the proposal - the decision's return
 	 *  address (Function/Inbox delivers there first). */
 	origin?: string | undefined;

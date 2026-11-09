@@ -33,6 +33,7 @@ import {
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const Raw1 = Validate({ logFile: Ledger });
+
 	// Group: Run 1b - the vacuously-green companion - a compressed case.
 	// autoExpand OFF so the marker path is exercised at a small size.
 	Rm();

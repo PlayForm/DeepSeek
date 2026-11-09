@@ -29,14 +29,17 @@ import Governor from "../../../Target/Library.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// The source suite resets the effect capture before its apply; in a folder
 	// process this apply is the first, so the reset is a no-op (kept verbatim).
 	Effects.length = 0;
+
 	// Fixture-only scaffolding: the source suite passes a partial config (the
 	// loader fills the defaults); the Schema callable accepts it at runtime.
 	const Raw = (Governor.Config as any)({ logFile: Ledger });
 	const Returned = Governor.apply(Context, Raw);
 	const Probe = Context.__hookDshGovernorPackageState;
+
 	// Group: the apply contract and the factory-built state.
 	{
 		const Sub = "apply: returns nothing; the state exposed via ctx.__hookDshGovernorPackageState";

@@ -29,6 +29,7 @@ export const runTest = async (): Promise<number> => {
 	// the factory's volatile-update dispatch like Run V / Run S. The fixtures
 	// use this flavor's own character class.
 	rm();
+
 	// SCOPES_DEFAULT is defined in the Run S section of the source suite but
 	// read in the Run O section (const LiveScopesO = { ...SCOPES_DEFAULT }),
 	// so this folder duplicates the const (each folder is one standalone

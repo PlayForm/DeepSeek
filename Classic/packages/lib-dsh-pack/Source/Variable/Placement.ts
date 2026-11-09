@@ -13,10 +13,13 @@
 export default {
 	/** The user layer's directory, relative to the home directory. */
 	UserDirectory: ".dsh/playform/workspaces",
+
 	/** The repo layer's directory, relative to the workspace root. */
 	RepoDirectory: ".dsh",
+
 	/** The repo layer's file stem (the extension is appended). */
 	RepoFile: "pack",
+
 	/** The probed extensions, in order. */
 	Extensions: [".yml", ".yaml", ".json"],
 };

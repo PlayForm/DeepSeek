@@ -268,6 +268,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually constructs the service (the
 	// vacuously-green backstop for every folder's fixture).
 	const Run = Build();

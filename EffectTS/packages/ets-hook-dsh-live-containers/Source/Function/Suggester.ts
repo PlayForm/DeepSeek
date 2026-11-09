@@ -239,6 +239,7 @@ export const Store = (
 	PerAgent.set(ID, Suggestion_);
 	Agent.Suggestions.set(AgentID, PerAgent);
 	Append(`suggested ${ID} ${Parsed.templateId} (fit ${Parsed.fit})`);
+
 	// autoPlant (I6 5.5): skip the preview frame and instantiate the suggestion
 	// DIRECTLY as a DORMANT planted block.
 	if (Agent.AutoPlant && Parsed.fit === "yes") {

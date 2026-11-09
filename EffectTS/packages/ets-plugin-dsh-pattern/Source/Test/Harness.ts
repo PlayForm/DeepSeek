@@ -146,6 +146,7 @@ export const Make = (
 		},
 	};
 	const Run: any = { Context, Lines, Warns, Provided, Effects, Disposers };
+
 	// The optional pre-construction attachment: the storage facility must be
 	// in place BEFORE the constructor probes it.
 	Attach?.(Context, Run);
@@ -209,6 +210,7 @@ export const FakeStorage = (Options: { failOpen?: boolean; version?: number } = 
 			};
 		},
 	};
+
 	/** Seed one record (the restart scenario: the store outlives the process). */
 	Store.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Store.tables.has(Name)) {
@@ -238,6 +240,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually wires the Service
 	// constructor (the vacuously-green backstop for every folder's fixture).
 	const Run = Make();

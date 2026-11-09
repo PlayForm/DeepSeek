@@ -1,20 +1,27 @@
-// Apply - the plugin entry function: fail-loud validation, the State build
-// (the factory's cell unwrap + the P10 volatile refresh), the service
-// registration (Function/Service - `workspaceContext`, constructed here so
-// `ctx.workspaceContext` resolves), the activation proof, the trace adapter
-// (consume `graph/invalidated` to invalidate the packet memo - wired only
-// after the enabled gate), the tool registration, and the optional token-meter
-// probe (V4-1 section 4: the orientation budget uses ctx.tokenMeter where
-// available).
-//
-// THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
-// and the bundle patch row). A cold mount logs `disabled (enabled=false)`,
-// registers the service (it answers honestly from whatever the graph
-// provides), and registers no tool.
-//
-// The function returns NOTHING (the loader contract: a returned value
-// silently kills event delivery). The test probe is the
-// `ctx.__pluginDshWorkspaceContextState` attachment.
+/**
+ * @module Apply
+ *
+ * The plugin entry function: fail-loud validation, the State build, the
+ * service registration, the activation proof, the trace adapter, the tool
+ * registration, and the optional token-meter probe.
+ *
+ * @remarks
+ * The State build is the factory's cell unwrap + the P10 volatile refresh.
+ * The service registration is Function/Service (`workspaceContext`,
+ * constructed here so `ctx.workspaceContext` resolves). The trace adapter
+ * consumes `graph/invalidated` to invalidate the packet memo - wired only
+ * after the enabled gate. The token-meter probe is V4-1 section 4: the
+ * orientation budget uses ctx.tokenMeter where available.
+ *
+ * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
+ * and the bundle patch row). A cold mount logs `disabled (enabled=false)`,
+ * registers the service (it answers honestly from whatever the graph
+ * provides), and registers no tool.
+ *
+ * The function returns NOTHING (the loader contract: a returned value
+ * silently kills event delivery). The test probe is the
+ * `ctx.__pluginDshWorkspaceContextState` attachment.
+ */
 import type { Context } from "@deepseek-ai/cordis";
 import ServiceClass from "@Function/Service.js";
 import Tool from "@Function/Tool.js";
@@ -25,14 +32,18 @@ import { Activate } from "@playform/lib-dsh-core";
 
 import Adapter from "../Trace/Adapter.js";
 
-/** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
+/**
+ * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
+ */
 const Cell = (Value: unknown): unknown =>
 	typeof (Value as { get?: unknown } | null)?.get === "function"
 		? (Value as { get: () => unknown }).get()
 		: Value;
 
-/** The fail-loud validation; runs BEFORE the State build so an invalid
- * config throws at load, never silently defaults. */
+/**
+ * The fail-loud validation; runs BEFORE the State build so an invalid
+ * config throws at load, never silently defaults.
+ */
 const Validate = (Options: unknown): void => {
 	const Raw = (Options ?? {}) as Record<string, unknown>;
 	const Fail = (Message: string): never => {
@@ -91,12 +102,15 @@ export default (Context: Context, Options: Config): void => {
 	State.Packets = 0;
 	State.Clamped = 0;
 	State.Stale = 0;
+
 	// The sibling graph handle: probed, never injected (an absent sibling is
 	// an honest OPEN line in the packet, never a load failure).
 	State.Graph = (Context as unknown as Record<string, unknown>)["workspaceGraph"];
+
 	// The optional token meter: probed once (V4-1 section 4).
 	State.Meter = (Context as unknown as Record<string, unknown>)["tokenMeter"] as
 		{ estimate?: (text: string) => number } | undefined;
+
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceContext", this).
 	new ServiceClass(Context, State);
@@ -115,16 +129,19 @@ export default (Context: Context, Options: Config): void => {
 			["lenses", String(State.Lenses.length)],
 		]),
 	);
+
 	// The trace adapter (D5): consume `graph/invalidated` to invalidate the
 	// packet memo. Wired only after the enabled gate; the bus is optional (an
 	// absent service subscribes to nothing) and the subscription is disposed
 	// with the fiber.
 	Adapter(State);
+
 	// The tool registration (the live-containers posture: the context's
 	// `tools` facility, probed defensively).
 	const Tools = (Context as unknown as { tools?: { register?: (definition: unknown) => void } })
 		.tools;
 	Tools?.register?.(Tool(State));
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__pluginDshWorkspaceContextState"] = State;

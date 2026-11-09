@@ -97,6 +97,7 @@ const Mapped = (
 	Argument?: string,
 ): readonly Row[] => {
 	const Statement = Database.prepare(Sql);
+
 	// The filter placeholder is written twice (the IS NULL probe and the
 	// match), so the argument is bound to both; an absent argument binds null.
 	const Found = (

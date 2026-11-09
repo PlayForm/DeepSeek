@@ -40,6 +40,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: the keep-list discovery.
 	{
 		const dir = Group("keep1");

@@ -74,34 +74,42 @@ interface Stored {
 	 * The registry id.
 	 */
 	id: string;
+
 	/**
 	 * The intent label (the family id).
 	 */
 	intent: string;
+
 	/**
 	 * The trigger signals (the family id or the companion path, lowercased).
 	 */
 	trigger: { tool?: string | undefined; keywords: string[] };
+
 	/**
 	 * The target subgraph as paths (the companion set).
 	 */
 	targets: string[];
+
 	/**
 	 * The descriptions-only lines (the decision record's projection).
 	 */
 	transform: string[];
+
 	/**
 	 * The arbiter (the outcome for a decision record, the module for a rate).
 	 */
 	arbiter: string;
+
 	/**
 	 * The confidence in 0..1 (the learned rate, or the decision's kappa).
 	 */
 	confidence: number;
+
 	/**
 	 * The decision hook's eligibility hint (always false here).
 	 */
 	allowlist: boolean;
+
 	/**
 	 * Last write time, epoch ms.
 	 */
@@ -116,10 +124,12 @@ interface Registry {
 	 * One record by id.
 	 */
 	Get?: (Id: string) => Stored | undefined;
+
 	/**
 	 * Idempotent upsert by id.
 	 */
 	Put?: (Pattern: Stored) => void;
+
 	/**
 	 * The outcome move on one record.
 	 */
@@ -131,10 +141,12 @@ export default (
 	 * The plugin context (the optional service probe).
 	 */
 	Context: Context,
+
 	/**
 	 * The module id (the key prefix and the rate records' arbiter).
 	 */
 	Module: string,
+
 	/**
 	 * The memory fallback's bound (config `storeLimit`).
 	 */
@@ -144,11 +156,13 @@ export default (
 	 * The fallback's rates: key -> learned rate (insertion-ordered, bounded).
 	 */
 	const Memory = new Map<string, number>();
+
 	/**
 	 * The decision ring: key -> record (bounded; also the Resolve index).
 	 */
 	const Decisions = new Map<string, Decision>();
 	const Bound = Math.max(1, Math.trunc(Number.isFinite(Limit) ? Limit : 512));
+
 	/**
 	 * The optional pattern service, when it answers the whole contract.
 	 */
@@ -164,16 +178,19 @@ export default (
 			return undefined;
 		}
 	};
+
 	/**
 	 * The rate key of a family (Path "") or a companion.
 	 */
 	const Key = (Family: string, Path: string): string =>
 		Path === "" ? `${Module}:family:${Family}` : `${Module}:companion:${Path}`;
+
 	/**
 	 * The decision key: the family plus its sorted companion set.
 	 */
 	const DecisionKey = (Family: string, Paths: string[]): string =>
 		`${Module}:decision:${Family}:${Paths.slice().sort().join("|")}`;
+
 	/**
 	 * Read one rate: the service's record, else the memory row, else neutral.
 	 */
@@ -193,6 +210,7 @@ export default (
 			}
 		}
 	};
+
 	/**
 	 * A rate record, seeded at the current rate before its first outcome.
 	 */
@@ -209,6 +227,7 @@ export default (
 		allowlist: false,
 		updatedAt: Date.now(),
 	});
+
 	/**
 	 * The decision record projected onto the pattern schema's string fields.
 	 */
@@ -235,6 +254,7 @@ export default (
 		allowlist: false,
 		updatedAt: Date.now(),
 	});
+
 	/**
 	 * The bounded insert: evict the oldest entry when the bound is reached.
 	 */

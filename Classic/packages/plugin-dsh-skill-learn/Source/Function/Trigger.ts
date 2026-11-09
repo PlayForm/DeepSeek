@@ -41,6 +41,7 @@ import type { Trigger } from "@Interface/Trigger.js";
 export interface Session {
 	/** The session's spent write count, re-read before every operation (SKILL-LEARN-PLUGIN.md:492). */
 	readonly writes: number;
+
 	/** Count one write that landed; returns the new session total. */
 	spend(): number;
 }
@@ -49,12 +50,14 @@ export interface Session {
 export interface Attempt {
 	/** The agent the idle edge reported; the cap is keyed on this object (SKILL-LEARN-PLUGIN.md:838). */
 	readonly agent: Agent;
+
 	/**
 	 * The tool-call blocks the session has produced (`Function/Transcript` reports
 	 * them as `toolCalls`); the counter's input.
 	 */
 	readonly count: number;
 	readonly configuration: Configuration;
+
 	/**
 	 * The review itself, run inside the claimed idle phase. It must never throw:
 	 * every degradation is an outcome class on its result.

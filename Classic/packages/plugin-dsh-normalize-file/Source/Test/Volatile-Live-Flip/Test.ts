@@ -22,8 +22,10 @@ import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Run V - the P10 volatile live-flip. The replacement arrives as a
 	// STABLE volatile cell (built by hand - the schema freezes its own cells;
+
 	// the getter reads a mutable outer binding, exactly the loader's "commit
 	// into the running reference" semantics). The factory's
 	// loader/volatile-update listener is dispatched; the NEXT tool call picks

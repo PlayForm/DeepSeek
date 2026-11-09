@@ -1975,15 +1975,15 @@
 			"version": "0.2.1",
 			"seed": "4ff3d75ceb260ecc52e92d2a6d3ed0469edbf9e61be3ba8c8262bd6e74afd0be",
 			"grammar": "spike-star",
-			"order": 12,
+			"order": 8,
 			"arms": 8,
 			"rings": 1,
 			"orbit": 8,
 			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "a770a724a3356ec46d660656dcb94189c3477ff20806a5cd15efd0696c3ee2b9",
-				"colour": "41bbac77f08ec8cdc6f61ae0454e71e01e97314a1f9f3bb36f50dc037c558a35"
+				"mono": "3374c11f8b79b1a06166d3ff3657955278d87c82b4a7a4f828063fc85955e453",
+				"colour": "a454cf890397d24a53a8db946a10eefcf9cd605ea0f02ed95f711a4c35036d6a"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/hook-dsh-test-suggester.svg",

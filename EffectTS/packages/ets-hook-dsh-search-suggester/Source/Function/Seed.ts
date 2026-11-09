@@ -32,10 +32,13 @@ import Measure from "./Measure.js";
 export default (
 	/** The loaded (or cold) knowledge, mutated in place. */
 	Knowledge: Knowledge,
+
 	/** The explicit pack's search intents (the seed source; empty = no seed). */
 	Pack: Intent[],
+
 	/** The graph projection when one was available at load. */
 	Projection: Projection | undefined,
+
 	/** The epoch-seconds timestamp recorded on every seeded row. */
 	At: number,
 ): number => {

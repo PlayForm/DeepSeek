@@ -156,6 +156,7 @@ export const Make = (Options: MakeOptions = {}): any => {
 		Warn,
 	};
 	(ClientPlugin.apply as any)(Ctx);
+
 	/** Open one slot point: run every injected factory, return the
 	 *  slots.register records they produced (the tab/overlay/section
 	 *  registrations). */
@@ -318,6 +319,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually wires the client apply (the
 	// vacuously-green backstop for every folder's fixture).
 	const Run = Make();

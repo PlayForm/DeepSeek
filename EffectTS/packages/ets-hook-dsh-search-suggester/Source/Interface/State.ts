@@ -57,48 +57,70 @@ import type { Intent, Knowledge } from "./Execution.js";
 export default interface State extends Shared {
 	/** The master switch (config `enabled`, volatile). */
 	On: boolean;
+
 	/** The default confidence gate (config `threshold`, volatile). */
 	Threshold: number;
+
 	/** The candidate cap (config `maxCandidates`, volatile). */
 	MaxCandidates: number;
+
 	/** The note character cap (config `maxNoteChars`, volatile). */
 	MaxNoteChars: number;
+
 	/** The cooldown window in judged calls (config `cooldownCalls`, volatile). */
 	CooldownCalls: number;
+
 	/** The per-turn note cap (config `maxNotesPerTurn`, volatile). */
 	MaxNotesPerTurn: number;
+
 	/** The enabled intent kinds of an explicit pack (config `intents`, volatile). */
 	Intents: string[];
+
 	/** The judged tools (config `emitOn`, volatile). */
 	EmitOn: string[];
+
 	/** The scope roots (config `scopeRoots`, volatile). */
 	ScopeRoots: string[];
+
 	/** The excluded directories (config `exclude`, volatile). */
 	Exclude: string[];
+
 	/** The learner switch (config `learn`, volatile). */
 	Learn: boolean;
+
 	/** The learner's window (config `learnWindow`, volatile). */
 	LearnWindow: number;
+
 	/** The knowledge file path (config `persistPath`, structural). */
 	PersistPath: string;
+
 	/** RETIRED: the generated index path (config `indexPath`, structural; never read). */
 	IndexPath: string;
+
 	/** The projection refresh switch (config `refreshOnBoot`, structural). */
 	RefreshOnBoot: boolean;
+
 	/** The dismissal TTL in seconds (config `dismissTtl`, volatile). */
 	DismissTtl: number;
+
 	/** The offline seed switch (config `seed`, volatile; the source is the explicit pack). */
 	Seed: boolean;
+
 	/** The second surface mode (config `sectionMode`, volatile). */
 	SectionMode: string;
+
 	/** The sticky section TTL (config `sectionTtl`, volatile). */
 	SectionTtl: number;
+
 	/** The explicit pack's families; EMPTY at apply (the built-in pack is retired). */
 	Pack: Intent[];
+
 	/** The learned knowledge, loaded once at apply, saved best-effort. */
 	Knowledge: Knowledge;
+
 	/** The per-agent ring tracker (Function/Ring). */
 	Rings: ReturnType<typeof Ring>;
+
 	/** The injected @playform/ets-plugin-dsh-factory service. */
 	Factory: Factory;
 }

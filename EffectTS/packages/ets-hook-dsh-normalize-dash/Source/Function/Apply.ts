@@ -111,6 +111,7 @@ export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).
 	const Factory = Context.pluginFactory;
+
 	// The State: the factory's shared shape plus the dash hook's own fields,
 	// copied from the (cell-unwrapped) validated config by the setup map.
 	const State: State = Factory.State<State>(Context, Options, {
@@ -135,6 +136,7 @@ export default (Context: Context, Options: Config): void => {
 	// (apply is a sync seam; a sync `Scope.make` under runSync is fully
 	// synchronous, so no async boundary is introduced). Unused at runtime by
 	// this module (the Stream pipeline runs with no services and no scope);
+
 	// kept for the family's uniform State shape.
 	State.Scope = Effect.runSync(Scope.make());
 
@@ -166,9 +168,11 @@ export default (Context: Context, Options: Config): void => {
 	//     short-circuits the waterfall and the model call never happens (the
 	//     `Stream.fromAsyncIterable(Next(), ...)` argument list evaluates
 	//     Next() synchronously at listener invocation, before any iteration);
+
 	//   * options (the request, `_Request` - never read, NEVER touched) is a
 	//     LOOP-built deep-frozen object whose content is a pure function of
 	//     the session log: listeners read it, never rewrite it;
+
 	//   * the returned wrapped iterable is what every downstream consumer
 	//     (live UI and durable transcript) sees - the normalization is
 	//     VISIBLE by construction.
@@ -185,6 +189,7 @@ export default (Context: Context, Options: Config): void => {
 		batch: false,
 	};
 	const ScopesOf = () => State.Scopes ?? SCOPES_DEFAULT;
+
 	// The registration is typed against the harness's own listener contract
 	// (`Events["llm/stream"]`, declared by @deepseek-ai/dsh-llm's Events
 	// augmentation). The program carries TWO @deepseek-ai/dsh-llm copies

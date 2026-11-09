@@ -24,6 +24,7 @@ import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Run O - the overpass arms + the command. The tool-results arm and
 	// step-batch arm with the SIX-FOLD transform (the same chain the tool body
 	// runs), the files sweep, and the history-safety invariant. Hand-built

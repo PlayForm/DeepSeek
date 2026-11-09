@@ -29,6 +29,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// The folder fixtures: a fresh factory instance of its own (the marker's
 	// steps are registered on it, disjoint from any other folder's registry)
 	// and the disjoint step files.
@@ -43,6 +44,7 @@ export const runTest = async (): Promise<number> => {
 	const fileC = Path.join(dirP, "parallel-c.txt");
 	const eventsP: string[] = [];
 	const actor = { name: "edit" };
+
 	// A DISJOINT-safe step: records its start, waits (so a parallel run can
 	// be distinguished from a sequential one), writes its OWN file, records
 	// its completion. The write is the step's settled effect.
@@ -55,6 +57,7 @@ export const runTest = async (): Promise<number> => {
 	factoryP.RegisterGovern("package.json", "par-a", step("par-a", fileA, 25));
 	factoryP.RegisterGovern("package.json", "par-b", step("par-b", fileB, 15));
 	factoryP.RegisterGovern("package.json", "par-c", step("par-c", fileC, 10));
+
 	// Group: 18a - the marker is ACCEPTED and the steps ALL run and complete.
 	{
 		const Sub =

@@ -29,18 +29,25 @@ export type HaltReason = "stale" | "deadline" | "pause" | "interrupted";
 export interface ProcessCell {
 	/** The absolute display path the fs backend resolved at insert. */
 	path: string;
+
 	/** The process state. */
 	status: ProcessStatus;
+
 	/** The held version (the license stamp at insert or last reconciliation). */
 	version: FsVersion | undefined;
+
 	/** The fresh version after an applied write (the reconciliation stamp). */
 	freshVersion: FsVersion | undefined;
+
 	/** Why the process halted (set only in the halted state). */
 	haltReason: HaltReason | undefined;
+
 	/** The errored state's reason (the op's message, contained). */
 	error: string | undefined;
+
 	/** The last applied transition's diff (set on done, preview parity). */
 	diff: string | undefined;
+
 	/** The op index this process is at within the current commit (running). */
 	opAt: number | undefined;
 }
@@ -51,13 +58,17 @@ export interface ProcessCell {
 export interface OpLine {
 	/** The file selector: an exact held path or a glob over the held set. */
 	file: string;
+
 	/** The named search this op reads (declared in `searches`). */
 	search: string;
+
 	/** The transition mode. */
 	op: "replace" | "insert-after" | "insert-before" | "remove-line" | "append" | "prepend";
+
 	/** The replacement / inserted text (required by replace, insert-after,
 	 *  insert-before, append, prepend). */
 	with: string | undefined;
+
 	/** The match scope: first occurrence, all occurrences, or a count. */
 	mode: "first" | "all" | number | undefined;
 }
@@ -66,10 +77,13 @@ export interface OpLine {
  *  (a simple regex, v1 scope). */
 export interface SearchSpec {
 	name: string;
+
 	/** The raw pattern text as the agent wrote it. */
 	pattern: string;
+
 	/** True when the pattern is a simple regex (the `re:` prefix). */
 	regex: boolean;
+
 	/** The compiled matcher (regex mode) or the literal needle. */
 	matcher: RegExp | string;
 }
@@ -79,20 +93,27 @@ export interface SearchSpec {
 export interface MachineRecord {
 	/** The machine id (`open` returns it; the agent re-presents it). */
 	id: string;
+
 	/** The scope string the agent declared at open (the glob that seeded it
 	 *  or the literal scope label). */
 	scope: string;
+
 	/** The declared searches (the named patterns). */
 	searches: Map<string, SearchSpec>;
+
 	/** The transition table (the op lines), stored at open. */
 	ops: OpLine[];
+
 	/** The held processes, keyed on the display path. */
 	files: Map<string, ProcessCell>;
+
 	/** Whether the machine stays open across turns (true = persistent lease;
 	 *  false = one-shot, the machine closes after commit). */
 	persistent: boolean;
+
 	/** Set when the machine was closed (the settle-first rule). */
 	closed: boolean;
+
 	/** The insert misses listed at open/insert, never guessed. */
 	misses: string[];
 }

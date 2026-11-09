@@ -43,6 +43,7 @@ const DetachConfig = {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group F1: the hang detector.
 	rm();
 	ClockBox.Now = 1700000000000;

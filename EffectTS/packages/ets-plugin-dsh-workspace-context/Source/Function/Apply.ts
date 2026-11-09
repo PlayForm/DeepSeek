@@ -91,12 +91,15 @@ export default (Context: Context, Options: Config): void => {
 	State.Packets = 0;
 	State.Clamped = 0;
 	State.Stale = 0;
+
 	// The sibling graph handle: probed, never injected (an absent sibling is
 	// an honest OPEN line in the packet, never a load failure).
 	State.Graph = (Context as unknown as Record<string, unknown>)["workspaceGraph"];
+
 	// The optional token meter: probed once (V4-1 section 4).
 	State.Meter = (Context as unknown as Record<string, unknown>)["tokenMeter"] as
 		{ estimate?: (text: string) => number } | undefined;
+
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceContext", this).
 	new ServiceClass(Context, State);
@@ -115,16 +118,19 @@ export default (Context: Context, Options: Config): void => {
 			["lenses", String(State.Lenses.length)],
 		]),
 	);
+
 	// The trace adapter (D5): consume `graph/invalidated` to invalidate the
 	// packet memo. Wired only after the enabled gate; the bus is optional (an
 	// absent service subscribes to nothing) and the subscription is disposed
 	// with the fiber.
 	Adapter(State);
+
 	// The tool registration (the live-containers posture: the context's
 	// `tools` facility, probed defensively).
 	const Tools = (Context as unknown as { tools?: { register?: (definition: unknown) => void } })
 		.tools;
 	Tools?.register?.(Tool(State));
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__pluginDshWorkspaceContextState"] = State;

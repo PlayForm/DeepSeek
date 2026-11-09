@@ -246,6 +246,7 @@ export default (
 			"AND (Note IS NULL OR substr(Note, 1, 10) <> 'condition:') " +
 			"ORDER BY (Mode = ?) DESC, COALESCE(Region = ?, 0) DESC, (Window = ?) DESC, EffectiveFrom DESC, TierFrom ASC LIMIT 1",
 	);
+
 	// The rate card's rows: the resolved row's own family, which is the same
 	// provider, model and effective date in the same mode, region AND window -
 	// the window is part of the card's identity, so a peak card's bands are

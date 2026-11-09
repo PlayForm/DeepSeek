@@ -87,6 +87,7 @@ const Head = (Text: string): string | null => {
 /** Why the result would not load as a skill file, or null when it would (DESIGN-BRIEF.md:56-62). */
 const Parseable = (Result: string, Name: string): string | null => {
 	const Block = Head(Result);
+
 	// The fence is what every check below reads, so its absence is a refusal here
 	// rather than a null that the switch would have to carry.
 	if (Block === null) {
@@ -180,6 +181,7 @@ export default (
 	// fourth kind past the first rule.
 	const Kind: string = Operation_.kind;
 	const Name = Operation_.skill;
+
 	// The three per-kind fields, read once, so no rule has to cast the union.
 	const SupportPath = Operation_.kind === "support" ? Operation_.filePath : "";
 	const Old = Operation_.kind === "patch" ? Operation_.oldString : "";

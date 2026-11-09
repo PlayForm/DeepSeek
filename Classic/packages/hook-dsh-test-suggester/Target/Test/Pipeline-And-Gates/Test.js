@@ -1,7 +1,247 @@
-import t from"node:assert/strict";import*as f from"node:fs";import*as k from"node:os";import*as w from"node:path";import{AgentOf as d,Call as l,Check as c,CheckAsync as q,Commit as y,Finish as E,LedgerWith as C,LinesWith as g,MakeCounter as R,PreStep as S,Flip as b,Setup as u,Volatile as P}from"../Harness.js";const m=(s,n,e="x")=>{const a=w.join(s,n);return f.mkdirSync(w.dirname(a),{recursive:!0}),f.writeFileSync(a,e,"utf8"),a},A=s=>`# Suite
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import {
+  AgentOf,
+  Call,
+  Check,
+  CheckAsync,
+  Commit,
+  Finish,
+  LedgerWith,
+  LinesWith,
+  MakeCounter,
+  PreStep,
+  Flip,
+  Setup,
+  Volatile
+} from "../Harness.js";
+const Put = (Root, Relative, Body = "x") => {
+  const Full = Path.join(Root, Relative);
+  FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
+  FileSystem.writeFileSync(Full, Body, "utf8");
+  return Full;
+};
+const Counted = (Count) => `# Suite
 
 ## Expected count
 
-${s} PASS.
-`,o=f.mkdtempSync(w.join(k.tmpdir(),"test-suggester-pipeline-"));m(o,"package.json","{}");const r=m(o,"Source/Test/Foo/Test.ts");m(o,"Source/Test/Foo/README.md",A(4)),m(o,"Target/Test/Foo/Test.js"),m(o,"README.md"),m(o,"SCHEME.md");const x=f.mkdtempSync(w.join(k.tmpdir(),"test-suggester-no-history-"));m(x,"package.json","{}");const D=m(x,"Notes.md"),p=s=>({get:()=>s}),h=(s,n)=>{y(s,n,r),y(s,n,"README.md"),y(s,n,"SCHEME.md")},H=["[test-suggester] intent=History confidence=0.87","targets (2):","- README.md - touched 1 time(s) after this file","- SCHEME.md - touched 1 time(s) after this file","note: these files were touched right after this one in this workspace"].join(`
-`),F=async()=>{const s=R();{const n=d("pipeline-a"),e=u();e.Context.workingDirectory=p(o),await e.Ready,h(e,"pipeline-a");const a=await l(e,"read",{file_path:r},n);c(s,"P1: the suggest line is byte-exact (logger and durable ledger)",()=>{t.deepEqual(g(e,"candidates call"),["test-suggester: suggest History 0.87 2 candidates call read"]),t.equal(C("suggest History 0.87 2 candidates call read").length,1)}),await q(s,"P1: the note is one labeled frozen notice naming the history companions",async()=>{const i=a.additionalContexts[0];t.deepEqual(i.source,{kind:"test-suggester",form:"notice",summary:"History 0.87"}),t.equal(i.role,"user"),t.equal(typeof i.id,"string"),t.equal(i.content[0].text,H),t.equal(Object.isFrozen(i),!0)}),c(s,"P1: the consistent smoke tree logs its clear line once and never preempts the note",()=>{t.deepEqual(g(e,"reconciliation"),[`test-suggester: reconciliation clear ${w.basename(o)} (4 expected, 4 actual)`])})}{const n=d("pipeline-b"),e=u();e.Context.workingDirectory=p(x),await q(s,"P2: a rooted tree with no history and no pack abstains no-history",async()=>{const a={kind:"allow"},i=await l(e,"read",{file_path:D},n,a);t.equal(i,a),t.ok(e.Lines.includes("test-suggester: abstained no-history  0.00")),t.equal(C("abstained no-history  0.00").length,1),t.equal(g(e,"candidates call").length,0)})}{const n=d("pipeline-c"),e=u();e.Context.workingDirectory=p(o),await e.Ready,h(e,"pipeline-c"),await l(e,"read",{file_path:r},n),await l(e,"read",{file_path:r},n),c(s,"P3: a repeat within the cooldown is suppressed with the byte-exact line",()=>{t.deepEqual(g(e,"suppressed"),["test-suggester: suppressed cooldown History"]),t.equal(g(e,"candidates call").length,1)});const a=u({cooldownCalls:0,maxNotesPerTurn:1});a.Context.workingDirectory=p(o),await a.Ready,h(a,"pipeline-c"),await l(a,"read",{file_path:r},n),await l(a,"read",{file_path:r},n),c(s,"P3: a note beyond the per-turn cap is suppressed",()=>{t.deepEqual(g(a,"suppressed"),["test-suggester: suppressed cap History"])}),await S(a,n),await l(a,"read",{file_path:r},n),c(s,"P3: a user turn resets the per-turn counter and the note emits again",()=>{t.equal(g(a,"candidates call").length,2)})}{const n=d("pipeline-d"),e=u({exclude:["README.md"]});e.Context.workingDirectory=p(o),await e.Ready,h(e,"pipeline-d"),await l(e,"read",{file_path:r},n),c(s,"P4: an excluded companion is filtered, the rest suggest",()=>{t.deepEqual(g(e,"candidates call"),["test-suggester: suggest History 0.87 1 candidates call read"])});const a=u({exclude:["README.md","SCHEME.md"]});a.Context.workingDirectory=p(o),await a.Ready,h(a,"pipeline-d"),await l(a,"read",{file_path:r},n),c(s,"P4: a fully excluded candidate set abstains as ambiguous",()=>{t.deepEqual(g(a,"abstained"),["test-suggester: abstained ambiguous History 0.87"])})}{const n=d("pipeline-e"),e=u({maxNoteChars:60});e.Context.workingDirectory=p(o),await e.Ready,h(e,"pipeline-e");const a=await l(e,"read",{file_path:r},n);c(s,"P5: a note longer than maxNoteChars is truncated with an ellipsis",()=>{const i=a.additionalContexts[0].content[0].text;t.equal(i.endsWith("..."),!0),t.equal(i.length,62)})}{const n=d("pipeline-f"),e=u();e.Context.workingDirectory=p(o),await e.Ready,h(e,"pipeline-f");const a={kind:"block",feedback:"no",additionalContexts:[{marker:"x"}]},i=await l(e,"read",{file_path:r},n,a);c(s,"P6: a block decision keeps its feedback and prepends the note",()=>{t.equal(i.kind,"block"),t.equal(i.feedback,"no"),t.equal(i.additionalContexts.length,2),t.equal(i.additionalContexts[0].source.kind,"test-suggester"),t.equal(i.additionalContexts[1],a.additionalContexts[0])})}{const n=d("pipeline-g"),e=u();e.Context.workingDirectory=p(o),await e.Ready,h(e,"pipeline-g"),b(P(e,"enabled"),!1),e.CtxListeners["loader/volatile-update"]([["enabled"]]);const a=await l(e,"read",{file_path:r},n);c(s,"P7: after the flip every call passes through unchanged",()=>{t.equal(e.State.On,!1),t.equal(g(e,"candidates call").length,0),t.equal(a.kind,"allow")})}{const n=d("pipeline-h"),e=u();e.Context.workingDirectory=p(o),await e.Ready,h(e,"pipeline-h"),await l(e,"read",{file_path:r},n),await l(e,"grep",{pattern:"expected count",query:"badge"},n),c(s,"P8: the full scenario performs ZERO fs operations",()=>{t.equal(e.Fs.reads.length,0),t.equal(e.Fs.writes.length,0),t.equal(e.Fs.resolved.length,0),t.equal(e.Fs.stats.length,0)})}{const n="pipeline-i",e=u();e.Context.workingDirectory=p(o),await e.Ready,await q(s,"P9: the committed tool/call events ARE the session cell (no State fold)",async()=>{t.equal(e.State.History,void 0),y(e,n,r),y(e,n,"README.md");const a=e.Projections.StateOf(d(n).session,"testHistory");t.equal(a.Seq,2),t.deepEqual(a.Touches.map(i=>i.path),[r,"README.md"])}),await q(s,"P9: the judged call reads the cell and leaves it unappended",async()=>{y(e,n,r);const a=await l(e,"read",{file_path:r},d(n));t.equal(a.additionalContexts[0].source.summary,"History 0.87"),t.equal(e.Projections.StateOf(d(n).session,"testHistory").Seq,3)})}return E(s,"Pipeline-And-Gates")},_=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(_){const s=await F();console.log(`${s} PASS - Pipeline-And-Gates`)}export{F as runTest};
+${Count} PASS.
+`;
+const Rooted = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "test-suggester-pipeline-"));
+Put(Rooted, "package.json", "{}");
+const Anchor = Put(Rooted, "Source/Test/Foo/Test.ts");
+Put(Rooted, "Source/Test/Foo/README.md", Counted(4));
+Put(Rooted, "Target/Test/Foo/Test.js");
+Put(Rooted, "README.md");
+Put(Rooted, "SCHEME.md");
+const Bare = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "test-suggester-no-history-"));
+Put(Bare, "package.json", "{}");
+const BareAnchor = Put(Bare, "Notes.md");
+const Service = (Cwd) => ({ get: () => Cwd });
+const Seed = (Run, Id) => {
+  Commit(Run, Id, Anchor);
+  Commit(Run, Id, "README.md");
+  Commit(Run, Id, "SCHEME.md");
+};
+const HistoryText = [
+  "[test-suggester] intent=History confidence=0.87",
+  "targets (2):",
+  "- README.md - touched 1 time(s) after this file",
+  "- SCHEME.md - touched 1 time(s) after this file",
+  "note: these files were touched right after this one in this workspace"
+].join("\n");
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Agent = AgentOf("pipeline-a");
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Rooted);
+    await Run.Ready;
+    Seed(Run, "pipeline-a");
+    const Result = await Call(Run, "read", { file_path: Anchor }, Agent);
+    Check(Count, "P1: the suggest line is byte-exact (logger and durable ledger)", () => {
+      assert.deepEqual(LinesWith(Run, "candidates call"), [
+        "test-suggester: suggest History 0.87 2 candidates call read"
+      ]);
+      assert.equal(LedgerWith("suggest History 0.87 2 candidates call read").length, 1);
+    });
+    await CheckAsync(Count, "P1: the note is one labeled frozen notice naming the history companions", async () => {
+      const Note = Result.additionalContexts[0];
+      assert.deepEqual(Note.source, {
+        kind: "test-suggester",
+        form: "notice",
+        summary: "History 0.87"
+      });
+      assert.equal(Note.role, "user");
+      assert.equal(typeof Note.id, "string");
+      assert.equal(Note.content[0].text, HistoryText);
+      assert.equal(Object.isFrozen(Note), true);
+    });
+    Check(Count, "P1: the consistent smoke tree logs its clear line once and never preempts the note", () => {
+      assert.deepEqual(LinesWith(Run, "reconciliation"), [
+        `test-suggester: reconciliation clear ${Path.basename(Rooted)} (4 expected, 4 actual)`
+      ]);
+    });
+  }
+  {
+    const Agent = AgentOf("pipeline-b");
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Bare);
+    await CheckAsync(Count, "P2: a rooted tree with no history and no pack abstains no-history", async () => {
+      const Decision = { kind: "allow" };
+      const Out = await Call(Run, "read", { file_path: BareAnchor }, Agent, Decision);
+      assert.equal(Out, Decision);
+      assert.ok(Run.Lines.includes("test-suggester: abstained no-history  0.00"));
+      assert.equal(LedgerWith("abstained no-history  0.00").length, 1);
+      assert.equal(LinesWith(Run, "candidates call").length, 0);
+    });
+  }
+  {
+    const Agent = AgentOf("pipeline-c");
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Rooted);
+    await Run.Ready;
+    Seed(Run, "pipeline-c");
+    await Call(Run, "read", { file_path: Anchor }, Agent);
+    await Call(Run, "read", { file_path: Anchor }, Agent);
+    Check(Count, "P3: a repeat within the cooldown is suppressed with the byte-exact line", () => {
+      assert.deepEqual(LinesWith(Run, "suppressed"), [
+        "test-suggester: suppressed cooldown History"
+      ]);
+      assert.equal(LinesWith(Run, "candidates call").length, 1);
+    });
+    const Capped = Setup({ cooldownCalls: 0, maxNotesPerTurn: 1 });
+    Capped.Context.workingDirectory = Service(Rooted);
+    await Capped.Ready;
+    Seed(Capped, "pipeline-c");
+    await Call(Capped, "read", { file_path: Anchor }, Agent);
+    await Call(Capped, "read", { file_path: Anchor }, Agent);
+    Check(Count, "P3: a note beyond the per-turn cap is suppressed", () => {
+      assert.deepEqual(LinesWith(Capped, "suppressed"), [
+        "test-suggester: suppressed cap History"
+      ]);
+    });
+    await PreStep(Capped, Agent);
+    await Call(Capped, "read", { file_path: Anchor }, Agent);
+    Check(Count, "P3: a user turn resets the per-turn counter and the note emits again", () => {
+      assert.equal(LinesWith(Capped, "candidates call").length, 2);
+    });
+  }
+  {
+    const Agent = AgentOf("pipeline-d");
+    const Run = Setup({ exclude: ["README.md"] });
+    Run.Context.workingDirectory = Service(Rooted);
+    await Run.Ready;
+    Seed(Run, "pipeline-d");
+    await Call(Run, "read", { file_path: Anchor }, Agent);
+    Check(Count, "P4: an excluded companion is filtered, the rest suggest", () => {
+      assert.deepEqual(LinesWith(Run, "candidates call"), [
+        "test-suggester: suggest History 0.87 1 candidates call read"
+      ]);
+    });
+    const All = Setup({ exclude: ["README.md", "SCHEME.md"] });
+    All.Context.workingDirectory = Service(Rooted);
+    await All.Ready;
+    Seed(All, "pipeline-d");
+    await Call(All, "read", { file_path: Anchor }, Agent);
+    Check(Count, "P4: a fully excluded candidate set abstains as ambiguous", () => {
+      assert.deepEqual(LinesWith(All, "abstained"), [
+        "test-suggester: abstained ambiguous History 0.87"
+      ]);
+    });
+  }
+  {
+    const Agent = AgentOf("pipeline-e");
+    const Run = Setup({ maxNoteChars: 60 });
+    Run.Context.workingDirectory = Service(Rooted);
+    await Run.Ready;
+    Seed(Run, "pipeline-e");
+    const Result = await Call(Run, "read", { file_path: Anchor }, Agent);
+    Check(Count, "P5: a note longer than maxNoteChars is truncated with an ellipsis", () => {
+      const Text = Result.additionalContexts[0].content[0].text;
+      assert.equal(Text.endsWith("..."), true);
+      assert.equal(Text.length, 62);
+    });
+  }
+  {
+    const Agent = AgentOf("pipeline-f");
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Rooted);
+    await Run.Ready;
+    Seed(Run, "pipeline-f");
+    const Downstream = { kind: "block", feedback: "no", additionalContexts: [{ marker: "x" }] };
+    const Result = await Call(Run, "read", { file_path: Anchor }, Agent, Downstream);
+    Check(Count, "P6: a block decision keeps its feedback and prepends the note", () => {
+      assert.equal(Result.kind, "block");
+      assert.equal(Result.feedback, "no");
+      assert.equal(Result.additionalContexts.length, 2);
+      assert.equal(Result.additionalContexts[0].source.kind, "test-suggester");
+      assert.equal(Result.additionalContexts[1], Downstream.additionalContexts[0]);
+    });
+  }
+  {
+    const Agent = AgentOf("pipeline-g");
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Rooted);
+    await Run.Ready;
+    Seed(Run, "pipeline-g");
+    Flip(Volatile(Run, "enabled"), false);
+    Run.CtxListeners["loader/volatile-update"]([["enabled"]]);
+    const Result = await Call(Run, "read", { file_path: Anchor }, Agent);
+    Check(Count, "P7: after the flip every call passes through unchanged", () => {
+      assert.equal(Run.State.On, false);
+      assert.equal(LinesWith(Run, "candidates call").length, 0);
+      assert.equal(Result.kind, "allow");
+    });
+  }
+  {
+    const Agent = AgentOf("pipeline-h");
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Rooted);
+    await Run.Ready;
+    Seed(Run, "pipeline-h");
+    await Call(Run, "read", { file_path: Anchor }, Agent);
+    await Call(Run, "grep", { pattern: "expected count", query: "badge" }, Agent);
+    Check(Count, "P8: the full scenario performs ZERO fs operations", () => {
+      assert.equal(Run.Fs.reads.length, 0);
+      assert.equal(Run.Fs.writes.length, 0);
+      assert.equal(Run.Fs.resolved.length, 0);
+      assert.equal(Run.Fs.stats.length, 0);
+    });
+  }
+  {
+    const Id = "pipeline-i";
+    const Run = Setup();
+    Run.Context.workingDirectory = Service(Rooted);
+    await Run.Ready;
+    await CheckAsync(Count, "P9: the committed tool/call events ARE the session cell (no State fold)", async () => {
+      assert.equal(Run.State.History, void 0);
+      Commit(Run, Id, Anchor);
+      Commit(Run, Id, "README.md");
+      const Folded = Run.Projections.StateOf(AgentOf(Id).session, "testHistory");
+      assert.equal(Folded.Seq, 2);
+      assert.deepEqual(
+        Folded.Touches.map((Touch) => Touch.path),
+        [Anchor, "README.md"]
+      );
+    });
+    await CheckAsync(Count, "P9: the judged call reads the cell and leaves it unappended", async () => {
+      Commit(Run, Id, Anchor);
+      const Out = await Call(Run, "read", { file_path: Anchor }, AgentOf(Id));
+      assert.equal(Out.additionalContexts[0].source.summary, "History 0.87");
+      assert.equal(Run.Projections.StateOf(AgentOf(Id).session, "testHistory").Seq, 3);
+    });
+  }
+  return Finish(Count, "Pipeline-And-Gates");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Pipeline-And-Gates`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

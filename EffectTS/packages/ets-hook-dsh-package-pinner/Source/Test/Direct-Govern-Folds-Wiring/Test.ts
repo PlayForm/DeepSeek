@@ -39,6 +39,7 @@ export const runTest = async (): Promise<number> => {
 	const World = Boot();
 	const { ctx, Factory, listener, st } = World;
 	const actor = { name: "edit" };
+
 	// Group: the direct-govern path (Factory.Govern to the registered pin step).
 	{
 		// The raw-write tool's per-call `govern` route: the step registered at

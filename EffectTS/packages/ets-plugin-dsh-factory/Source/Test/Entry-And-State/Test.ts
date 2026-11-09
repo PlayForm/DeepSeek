@@ -23,6 +23,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// The folder fixtures: the fake ctx + the REAL factory instance (the
 	// Service base registers through ctx.reflect.provide), the temp root and
 	// the ledger path from the source suite.
@@ -32,6 +33,7 @@ export const runTest = async (): Promise<number> => {
 	const Root = TempRoot("factory-smoke-");
 	const Ledger = Path.join(Root, "ledger.log");
 	const factory: any = new FactoryClass(ctx);
+
 	// Group: 1 - the entry contract.
 	{
 		const Sub = "entry: class extends Service, static inject=[fs], registered as ctx.pluginFactory";

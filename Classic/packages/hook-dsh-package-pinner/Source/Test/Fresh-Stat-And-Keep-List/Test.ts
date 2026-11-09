@@ -44,6 +44,7 @@ export const runTest = async (): Promise<number> => {
 	const World = Boot();
 	const { ctx, listener, st } = World;
 	const actor = { name: "edit" };
+
 	// Group: the fresh-stat write basis (the sequential-fold fix).
 	{
 		// (a) A racing author write BETWEEN the observation and the chain (the

@@ -13,10 +13,13 @@ import type { NodeKind } from "@Interface/Node.js";
 export default interface Query {
 	/** The exact node name to match. */
 	name?: string;
+
 	/** The case-insensitive substring to match against the id and the name. */
 	pattern?: string;
+
 	/** The node kind to keep. */
 	kind?: NodeKind;
+
 	/** The maximum number of results, clamped to [0, limitMaximum]. */
 	limit?: number;
 }

@@ -41,6 +41,7 @@ export default async (
 	Emit?: (text: string) => void,
 ): Promise<number> => {
 	const Chosen = Policy(State, PolicyPath);
+
 	// reject = policy.reject union chain deps (the cordis-trap guard), both modes.
 	const Reject = [
 		...new Set([...(Chosen.reject ?? []), ...Object.keys(Registry?.effectiveLatest ?? {})]),

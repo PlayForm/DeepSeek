@@ -12,6 +12,7 @@
 export interface ReviewMessage {
 	/** The message role (`user`, `assistant`, `tool`, `system`). */
 	role: string;
+
 	/** The model-facing text of the message. */
 	text: string;
 }
@@ -20,12 +21,16 @@ export interface ReviewMessage {
 export interface ReviewInput {
 	/** The agent the review belongs to (read for its route only). */
 	Agent?: unknown;
+
 	/** The session id, for the report and the ledger. */
 	Session?: string;
+
 	/** The conversation snapshot to review. */
 	Messages: readonly ReviewMessage[];
+
 	/** The turn's cancellation signal (a preempted review must abort). */
 	Signal?: AbortSignal;
+
 	/** An explicitly requested review (`/refine`): focus text, and attended. */
 	Focus?: string;
 }
@@ -47,14 +52,19 @@ export type Outcome =
 export interface ReviewResult {
 	/** The outcome class. */
 	outcome: Outcome;
+
 	/** The names that landed in the corpus. */
 	applied: string[];
+
 	/** The names queued for acceptance. */
 	proposed: string[];
+
 	/** The refused operations, with their rule ids. */
 	rejected: { name: string; rule: string }[];
+
 	/** The report directory (`""` when no report was written). */
 	report: string;
+
 	/** One clause of detail for the ledger (a failure's cause, a skip's reason). */
 	detail?: string;
 }

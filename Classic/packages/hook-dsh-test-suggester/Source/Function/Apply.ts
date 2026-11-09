@@ -148,6 +148,7 @@ export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).
 	const Factory = Context.pluginFactory;
+
 	// The State: the factory's shared shape plus the hook's own fields,
 	// copied from the (cell-unwrapped) validated config by the setup map.
 	const State: State = Factory.State<State>(Context, Options, {
@@ -166,8 +167,10 @@ export default (Context: Context, Options: Config): void => {
 	});
 	State.Factory = Factory;
 	State.Agents = new WeakMap();
+
 	// The reconciliation's per-root clear memo (one clear line per root).
 	State.Cleared = new Set();
+
 	// No boot projection: the candidates come from the session history, and
 	// only an EXPLICIT repo/user pack compiles (per call, below). The retired
 	// projection (Variable/Defaults) is no longer imported.
@@ -200,6 +203,7 @@ export default (Context: Context, Options: Config): void => {
 			),
 		);
 	};
+
 	// The per-root compile memo: an explicit pack's families are compiled
 	// once per (root, threshold, intents) tuple, never on every call.
 	const Compiled = new Map<string, ReturnType<typeof Build>>();

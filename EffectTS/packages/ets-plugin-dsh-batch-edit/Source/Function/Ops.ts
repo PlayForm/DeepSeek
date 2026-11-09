@@ -329,9 +329,11 @@ export const Commit = async (
 		(Cell) =>
 			Cell.status === "observed" || Cell.status === "halted" || Cell.status === "errored",
 	);
+
 	// Per-file check-set names recorded on the run (the live containers'
 	// monitor vocabulary, reused as labels in v1).
 	void Options.monitors;
+
 	// ---- PHASE 1: plan everything before writing anything. ----
 	const Plans: Plan[] = [];
 	let Applied = 0;

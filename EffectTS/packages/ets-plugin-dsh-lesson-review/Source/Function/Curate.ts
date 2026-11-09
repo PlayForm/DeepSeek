@@ -31,6 +31,7 @@ const Day = 86_400_000;
 export interface Curation {
 	/** Entries that went `active -> stale`. */
 	stale: string[];
+
 	/** Entries that were archived (a rename into the archive root). */
 	archived: string[];
 }

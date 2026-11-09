@@ -14,8 +14,10 @@ import Measure, { type MeasureInput } from "./Measure.js";
 export default (
 	/** The winning family (already existence-filtered). */
 	Family: Family,
+
 	/** The measure input (the effective weights and the learned rates). */
 	Input: MeasureInput,
+
 	/** The companion cap (config `maxCompanions`). */
 	Limit: number,
 ): CompanionDecision[] => {

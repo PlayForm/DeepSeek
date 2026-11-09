@@ -96,6 +96,7 @@ export default (Context: Context, Options: Config): void => {
 		},
 	}) as State;
 	State.Factory = Factory;
+
 	// The live collections: the members map, the idle queue, the completions
 	// ring (the State builder creates the shared machinery only - the
 	// module's own collections start empty and are repopulated by the store's
@@ -103,17 +104,20 @@ export default (Context: Context, Options: Config): void => {
 	State.Members = new Map();
 	State.IdleQueue = [];
 	State.Recent = [];
+
 	// The inbox splice's collections: the spliced proposals, the arbiter
 	// gates, and the message-id de-duplication ring (the live emit and the
 	// durable splice of one message project once).
 	State.Proposals = new Map();
 	State.Gates = new Map();
 	State.Seen = [];
+
 	// The store's own state: no domain open yet, nothing on the chain, and the
 	// JSON fallback as the default until a facility is probed.
 	State.Handle = undefined;
 	State.Pending = Promise.resolve();
 	State.Store = "file";
+
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("batchstate", this).
 	new ServiceClass(Context, State);
@@ -132,6 +136,7 @@ export default (Context: Context, Options: Config): void => {
 			["stateFile", State.StateFile],
 		]),
 	);
+
 	// THE STORE PROBE (the family's P5-style optional facility): the storage
 	// hub's domain form first, then the provided storageDomain service.
 	// `ctx.get` never throws on a missing service.
@@ -168,6 +173,7 @@ export default (Context: Context, Options: Config): void => {
 	// inbox is the channel the batch packages share - the board projects
 	// every batch proposal/decision that arrives through it into this state.
 	Inbox(State);
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__pluginDshBatchstateState"] = State;

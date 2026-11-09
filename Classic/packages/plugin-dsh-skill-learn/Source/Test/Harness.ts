@@ -179,12 +179,16 @@ export const State = (Tag: string): StatePaths => {
 export interface FsCall {
 	readonly method: "resolve" | "stat" | "readText" | "listDir" | "writeText" | "editText" | "contains";
 	readonly path: string;
+
 	/** The intent kind a write carried, `edit` for an edit, and `""` for a read. */
 	readonly intent: string;
+
 	/** The version a guarded write or an edit carried, or null. */
 	readonly version: string | null;
+
 	/** The edit's `replaceAll`, or null for every other call. */
 	readonly replaceAll: boolean | null;
+
 	/** The edit's anchor, or null for every other call. */
 	readonly oldString: string | null;
 }
@@ -193,10 +197,13 @@ export interface FsCall {
 export interface FakeFsOptions {
 	/** The files the tree starts with, keyed by absolute path. */
 	readonly files?: Record<string, string>;
+
 	/** Bump every file's version right after a `stat` returns: the concurrent-writer shape. */
 	readonly bumpAfterStat?: boolean;
+
 	/** The code the NEXT `writeText` throws, for the failed-write arm. */
 	readonly failWrite?: string;
+
 	/** The code the NEXT `editText` throws, for the failed-edit arm. */
 	readonly failEdit?: string;
 }
@@ -205,14 +212,19 @@ export interface FakeFsOptions {
 export interface FakeFs extends FsSlice {
 	/** Every call recorded so far, in order. */
 	readonly Calls: FsCall[];
+
 	/** Put a file in the tree WITHOUT recording a call: scenario setup is not behaviour. */
 	Put(Path_: string, Text_: string): void;
+
 	/** A file's text, or null when it is absent. */
 	Text(Path_: string): string | null;
+
 	/** A file's version, or null when it is absent. */
 	Version(Path_: string): string | null;
+
 	/** The recorded calls of one method. */
 	Of(Method: FsCall["method"]): readonly FsCall[];
+
 	/** Forget the recorded calls, so a probe after the setup sees only the behaviour. */
 	Clear(): void;
 }
@@ -403,6 +415,7 @@ export const FakeFs = (Options: FakeFsOptions = {}): FakeFs => {
 export interface FakeSkillsOptions {
 	/** The rows `list` returns, verbatim. */
 	readonly rows?: readonly SkillRow[];
+
 	/** The skills `get` resolves, keyed by name; the body is the loaded content. */
 	readonly skills?: Record<string, string>;
 }
@@ -411,6 +424,7 @@ export interface FakeSkillsOptions {
 export interface FakeSkills extends SkillsSlice {
 	/** One entry per call: `list`, `get:<name>`, or `invalidateCache`. */
 	readonly Calls: string[];
+
 	/** Put a loaded skill in the catalog without recording a call. */
 	Put(Name: string, Content: string): void;
 }
@@ -453,10 +467,13 @@ export const FakeSkills = (Options: FakeSkillsOptions = {}): FakeSkills => {
 export interface FakeLlmOptions {
 	/** Throw synchronously out of `stream`: the provider-exploded arm. */
 	readonly fail?: boolean;
+
 	/** Yield no frame at all: the empty-reply arm. */
 	readonly silent?: boolean;
+
 	/** Yield exactly these frames, so a folder can prove which arms are read. */
 	readonly frames?: readonly StreamFrame[];
+
 	/** One reply per call, in order; the shipped reply answers any call past the list. */
 	readonly replies?: readonly string[];
 }
@@ -531,12 +548,15 @@ export const Messages = (Logger_: FakeLogger): string[] =>
 /** The programmable parts of the fake agent. */
 export interface FakeAgentOptions {
 	readonly id?: string;
+
 	/** The route's provider; omitted together with `model` for the no-route agent. */
 	readonly provider?: string;
 	readonly model?: string;
 	readonly messages?: readonly Message[];
+
 	/** Throw synchronously out of `runMaintenance`: the busy agent. */
 	readonly busy?: boolean;
+
 	/** Throw out of `deriveMessages`: the disposed session. */
 	readonly deriveThrows?: boolean;
 }
@@ -611,12 +631,16 @@ export const Foreign = (Role: string, Blocks: readonly Record<string, unknown>[]
 export interface CorpusSeed {
 	/** The current body of each skill, keyed by name. */
 	readonly bodies?: Record<string, string>;
+
 	/** The body the confirm prompt carried, keyed by name. */
 	readonly carried?: Record<string, string>;
+
 	/** The support files, keyed by `<name>/<filePath>`. */
 	readonly support?: Record<string, string>;
+
 	/** The path the catalog resolves, keyed by name, when it is not the corpus default. */
 	readonly resolved?: Record<string, string>;
+
 	/** The usage records, keyed by name. */
 	readonly records?: Record<string, UsageRecord>;
 }

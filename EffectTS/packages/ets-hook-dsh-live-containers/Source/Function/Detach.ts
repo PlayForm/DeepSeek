@@ -137,6 +137,7 @@ export const PreExecute = async (
 ): Promise<PreToolDecision> => {
 	// next() FIRST: the downstream listeners settle before any decision.
 	const Downstream = await Next();
+
 	// The job started by this pass, if any (the half-detached guard: a failure
 	// between start and tag still kills the job).
 	let StartedJobID: string | undefined;

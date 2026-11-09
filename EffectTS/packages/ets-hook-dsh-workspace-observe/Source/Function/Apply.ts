@@ -73,10 +73,12 @@ export default (Context: Context, Options: Config): void => {
 	State.Sequence = 0;
 	State.Handle = undefined;
 	State.Seen = new Map();
+
 	// The hook's OWN actor marker: an fs/observed event carrying exactly this
 	// object as its actor is the hook's own (the identity check in the
 	// listener) and is ignored.
 	State.Self = { plugin: "hook-dsh-workspace-observe" };
+
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceObserve", this).
 	new ServiceClass(Context, State);
@@ -89,6 +91,7 @@ export default (Context: Context, Options: Config): void => {
 	}
 	// The activation proof (the module's own composed line).
 	Factory.Append(State, Activate([["domain", State.DomainName]]));
+
 	// The fs/observed listener, on the ROOT context (the factory's Wire).
 	Factory.Wire(
 		Context,
@@ -96,6 +99,7 @@ export default (Context: Context, Options: Config): void => {
 		(Target: FsTarget, Observation: FsObservation, Actor: object | undefined) =>
 			Observe(State, Target, Observation, Actor),
 	);
+
 	// The own P5-style storage effect: probe `storageDomain` once, open the
 	// hook's domain (never awaited - best-effort inside), close on dispose.
 	Context.effect?.(() => {
@@ -121,6 +125,7 @@ export default (Context: Context, Options: Config): void => {
 			}
 		};
 	}, "observe-storage");
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__hookDshWorkspaceObserveState"] = State;

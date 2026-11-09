@@ -42,6 +42,7 @@ export default (Context: Context, Options: Config): void => {
 	State.Sequence = 0;
 	State.Handle = undefined;
 	State.Self = { plugin: "hook-dsh-workspace-merge" };
+
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceMerge", this).
 	new ServiceClass(Context, State);
@@ -60,6 +61,7 @@ export default (Context: Context, Options: Config): void => {
 			["mode", State.Mode],
 		]),
 	);
+
 	// The one tool (the probe keeps the POC self-contained: the tools
 	// service is a host facility, not a sibling package).
 	const Host = Context as unknown as {
@@ -93,6 +95,7 @@ export default (Context: Context, Options: Config): void => {
 			}
 		};
 	}, "merge-storage");
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__hookDshWorkspaceMergeState"] = State;

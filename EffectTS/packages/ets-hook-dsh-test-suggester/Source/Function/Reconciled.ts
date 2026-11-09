@@ -22,6 +22,7 @@ export default (
 		expected: number;
 		actual: number;
 	},
+
 	/** The hard character cap (config `maxNoteChars`, volatile). */
 	MaxChars: number,
 ): string => {

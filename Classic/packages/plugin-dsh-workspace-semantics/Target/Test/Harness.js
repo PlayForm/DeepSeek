@@ -1,2 +1,277 @@
-import g from"node:assert/strict";import*as u from"node:fs";import*as S from"node:os";import*as F from"node:path";import d from"../../Target/Library.js";import b from"../../../plugin-dsh-factory/Target/Library.js";const L=()=>({N:0,F:0}),y=(n,e,t)=>{n.N++;try{t(),console.log(`PASS - ${e}`)}catch(s){n.F++,console.log(`FAIL - ${e}`),console.log(s instanceof Error?s.message:String(s))}},I=async(n,e,t)=>{n.N++;try{await t(),console.log(`PASS - ${e}`)}catch(s){n.F++,console.log(`FAIL - ${e}`),console.log(s instanceof Error?s.message:String(s))}},K=(n,e)=>{if(n.F!==0)throw new Error(`${e}: ${n.F} failed check(s)`);return n.N},R=u.mkdtempSync(F.join(S.tmpdir(),"workspace-semantics-smoke-")),f=F.join(R,"semantics.log"),E=()=>{try{u.rmSync(f)}catch{}},C=()=>(()=>{try{return u.readFileSync(f,"utf8").split(`
-`).filter(Boolean)}catch{return[]}})(),M=new b({reflect:{provide:()=>{}}}),A=(n={})=>{const e={contents:n,targets:new Map,writes:[],reads:[],resolved:[],stats:[]};return e.resolve=async t=>{e.resolved.push(t);const s={targetKey:t,displayPath:t};return e.targets.set(t,s),s},e.stat=async t=>(e.stats.push(t),{version:"1",type:"file"}),e.writeText=async(...t)=>{throw e.writes.push(t),new Error("writeText must never be called")},e.readText=async t=>{e.reads.push(t);const s=e.contents[t];if(s===void 0)throw new Error(`ENOENT: no such file: ${t}`);return s},e},_=(n={})=>{const e={spec:void 0,tables:new Map,failOpen:n.failOpen===!0};return e.facility={open:async t=>{if(e.failOpen)throw new Error("storage unavailable");return e.spec=t,{close:async()=>{},table:s=>{e.tables.has(s)||e.tables.set(s,new Map);const o=e.tables.get(s);return{put:async(i,l)=>{o.set(i,l)},entries:()=>o.entries(),keys:()=>o.keys(),get:i=>o.get(i),delete:async i=>o.delete(i),get size(){return o.size}}}}}},e.seed=(t,s,o)=>{e.tables.has(t)||e.tables.set(t,new Map),e.tables.get(t).set(s,o)},e},O=(n,e)=>{const t={},s={},o=[],i=[],l={},w=[],m=[],k=[],h={on:(r,a)=>(k.push(r),t[r]=a,()=>!0)},v=A();let c;c={pluginFactory:M,fs:v,logger:{info:r=>{o.push(r)},warn:r=>{i.push(r)}},on:(r,a)=>(s[r]=a,()=>!0),get:r=>c[r],effect:(r,a)=>{w.push(a??"unnamed");const x=r();return typeof x=="function"&&m.push(x),()=>!0},root:h,reflect:{provide:(r,a)=>(l[r]=a??!0,c[r]=a,()=>!0)}};const p={Context:c,Root:h,Listeners:t,CtxListeners:s,Lines:o,Warns:i,Provided:l,Effects:w,Disposers:m,RootNames:k,Raw:n,Fs:v};return e?.(c,p),p.Returned=d.apply(c,n),p.State=c.__pluginDshWorkspaceSemanticsState,p},$=n=>d.Config({...n}),D=async()=>{await new Promise(n=>setImmediate(n))},W=(n,e,t="1",s={agent:{id:"agent-a"}})=>{n.Listeners["fs/observed"]({displayPath:e,targetKey:e},{kind:"present",version:t},s)},B=(n,e)=>{n.Listeners["fs/observed"]({displayPath:e,targetKey:e},{kind:"absent"},{agent:{id:"agent-a"}})},j=n=>{n.Listeners["fs/observed"](null,null,void 0)},z=async(n,e)=>{await(await import("../../Target/Function/Storage.js")).default(n.State,e)},H=(n,e)=>n.Lines.filter(t=>t.includes(e)),U=n=>C().filter(e=>e.includes(n)),N=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(N){const n=L();y(n,"selfcheck: a passing assertion counts as PASS",()=>{g.equal(1,1)}),y(n,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{g.equal(1,2)}),E();const e=O($({logFile:f,enabled:!0}));y(n,"selfcheck: the fake ctx registers the plugin's apply-time wiring",()=>{g.equal(e.RootNames.length,1),g.equal(e.RootNames[0],"fs/observed"),g.ok(e.Provided.workspaceSemantics!==void 0),g.deepEqual(e.Lines,["semantics: adapters registered (7 extensions)","semantics: activated (domain=workspace_semantics)"])}),n.N===3&&n.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${n.N}, F=${n.F})`),process.exitCode=1)}export{D as Boot,y as Check,I as CheckAsync,A as FakeFs,_ as FakeStorage,K as Finish,W as Fire,B as FireAbsent,j as FireMalformed,M as Furnace,f as Ledger,C as LedgerLines,U as LedgerWith,H as LinesWith,O as Make,L as MakeCounter,z as OpenStorage,d as Plugin,R as Root,$ as Validate,E as rm};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "workspace-semantics-smoke-"));
+const Ledger = Path.join(Root, "semantics.log");
+const rm = () => {
+  try {
+    FileSystem.rmSync(Ledger);
+  } catch {
+  }
+};
+const LedgerLines = () => (() => {
+  try {
+    return FileSystem.readFileSync(Ledger, "utf8").split("\n").filter(Boolean);
+  } catch {
+    return [];
+  }
+})();
+const Furnace = new FactoryClass({
+  reflect: { provide: () => void 0 }
+});
+const FakeFs = (Contents = {}) => {
+  const Fs = {
+    contents: Contents,
+    targets: /* @__PURE__ */ new Map(),
+    writes: [],
+    reads: [],
+    resolved: [],
+    stats: []
+  };
+  Fs.resolve = async (P) => {
+    Fs.resolved.push(P);
+    const Target = { targetKey: P, displayPath: P };
+    Fs.targets.set(P, Target);
+    return Target;
+  };
+  Fs.stat = async (Target) => {
+    Fs.stats.push(Target);
+    return { version: "1", type: "file" };
+  };
+  Fs.writeText = async (...Parts) => {
+    Fs.writes.push(Parts);
+    throw new Error("writeText must never be called");
+  };
+  Fs.readText = async (P) => {
+    Fs.reads.push(P);
+    const Content = Fs.contents[P];
+    if (Content === void 0) {
+      throw new Error(`ENOENT: no such file: ${P}`);
+    }
+    return Content;
+  };
+  return Fs;
+};
+const FakeStorage = (Options = {}) => {
+  const Store = {
+    spec: void 0,
+    tables: /* @__PURE__ */ new Map(),
+    failOpen: Options.failOpen === true
+  };
+  Store.facility = {
+    open: async (Specification) => {
+      if (Store.failOpen) {
+        throw new Error("storage unavailable");
+      }
+      Store.spec = Specification;
+      return {
+        close: async () => void 0,
+        table: (Name) => {
+          if (!Store.tables.has(Name)) {
+            Store.tables.set(Name, /* @__PURE__ */ new Map());
+          }
+          const Rows = Store.tables.get(Name);
+          return {
+            put: async (Key, Value) => {
+              Rows.set(Key, Value);
+            },
+            entries: () => Rows.entries(),
+            keys: () => Rows.keys(),
+            get: (Key) => Rows.get(Key),
+            delete: async (Key) => Rows.delete(Key),
+            get size() {
+              return Rows.size;
+            }
+          };
+        }
+      };
+    }
+  };
+  Store.seed = (Name, Key, Value) => {
+    if (!Store.tables.has(Name)) {
+      Store.tables.set(Name, /* @__PURE__ */ new Map());
+    }
+    Store.tables.get(Name).set(Key, Value);
+  };
+  return Store;
+};
+const Make = (Raw, Attach) => {
+  const Listeners = {};
+  const CtxListeners = {};
+  const Lines = [];
+  const Warns = [];
+  const Provided = {};
+  const Effects = [];
+  const Disposers = [];
+  const RootNames = [];
+  const Root2 = {
+    on: (Name, Listener) => {
+      RootNames.push(Name);
+      Listeners[Name] = Listener;
+      return () => true;
+    }
+  };
+  const Fs = FakeFs();
+  let Context;
+  Context = {
+    pluginFactory: Furnace,
+    fs: Fs,
+    logger: {
+      info: (M) => {
+        Lines.push(M);
+      },
+      warn: (M) => {
+        Warns.push(M);
+      }
+    },
+    on: (Name, Listener) => {
+      CtxListeners[Name] = Listener;
+      return () => true;
+    },
+    get: (Name) => Context[Name],
+    effect: (Setup, Label) => {
+      Effects.push(Label ?? "unnamed");
+      const Disposer = Setup();
+      if (typeof Disposer === "function") {
+        Disposers.push(Disposer);
+      }
+      return () => true;
+    },
+    root: Root2,
+    reflect: {
+      provide: (Name, Value) => {
+        Provided[Name] = Value ?? true;
+        Context[Name] = Value;
+        return () => true;
+      }
+    }
+  };
+  const Run = {
+    Context,
+    Root: Root2,
+    Listeners,
+    CtxListeners,
+    Lines,
+    Warns,
+    Provided,
+    Effects,
+    Disposers,
+    RootNames,
+    Raw,
+    Fs
+  };
+  Attach?.(Context, Run);
+  Run.Returned = Plugin.apply(Context, Raw);
+  Run.State = Context.__pluginDshWorkspaceSemanticsState;
+  return Run;
+};
+const Validate = (Raw) => Plugin.Config({ ...Raw });
+const Boot = async () => {
+  await new Promise((Resolve) => setImmediate(Resolve));
+};
+const Fire = (Run, Path2, Version = "1", Actor = { agent: { id: "agent-a" } }) => {
+  Run.Listeners["fs/observed"](
+    { displayPath: Path2, targetKey: Path2 },
+    { kind: "present", version: Version },
+    Actor
+  );
+};
+const FireAbsent = (Run, Path2) => {
+  Run.Listeners["fs/observed"](
+    { displayPath: Path2, targetKey: Path2 },
+    { kind: "absent" },
+    { agent: { id: "agent-a" } }
+  );
+};
+const FireMalformed = (Run) => {
+  Run.Listeners["fs/observed"](null, null, void 0);
+};
+const OpenStorage = async (Run, Facility) => {
+  const Storage = await import("../../Target/Function/Storage.js");
+  await Storage.default(Run.State, Facility);
+};
+const LinesWith = (Run, Needle) => Run.Lines.filter((L) => L.includes(Needle));
+const LedgerWith = (Needle) => LedgerLines().filter((L) => L.includes(Needle));
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  rm();
+  const Run = Make(Validate({ logFile: Ledger, enabled: true }));
+  Check(Count, "selfcheck: the fake ctx registers the plugin's apply-time wiring", () => {
+    assert.equal(Run.RootNames.length, 1);
+    assert.equal(Run.RootNames[0], "fs/observed");
+    assert.ok(Run.Provided["workspaceSemantics"] !== void 0);
+    assert.deepEqual(Run.Lines, [
+      "semantics: adapters registered (7 extensions)",
+      "semantics: activated (domain=workspace_semantics)"
+    ]);
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  Boot,
+  Check,
+  CheckAsync,
+  FakeFs,
+  FakeStorage,
+  Finish,
+  Fire,
+  FireAbsent,
+  FireMalformed,
+  Furnace,
+  Ledger,
+  LedgerLines,
+  LedgerWith,
+  LinesWith,
+  Make,
+  MakeCounter,
+  OpenStorage,
+  Plugin,
+  Root,
+  Validate,
+  rm
+};
+//# sourceMappingURL=Harness.js.map

@@ -45,6 +45,7 @@ export const NOTE_DENIED = `Blocked by tool-coach: "\${command}" is forbidden (\
 export interface StaticToolLine {
 	/** The fallback first-sentence description. */
 	description: string;
+
 	/** The fallback key parameter name. */
 	param: string;
 }

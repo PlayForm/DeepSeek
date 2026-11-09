@@ -138,6 +138,7 @@ export const Make = (Options: { registry?: unknown; trace?: unknown } = {}): any
 		Services,
 	};
 	ClientPlugin.apply(Ctx);
+
 	/** Open the workspace-live slot point: run the injected factory and
 	 *  return the slots.register record it produced. */
 	Run.OpenSlot = (Slot: string): any => {
@@ -220,6 +221,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually wires the client apply (the
 	// vacuously-green backstop for every folder's fixture).
 	const Run = Make();

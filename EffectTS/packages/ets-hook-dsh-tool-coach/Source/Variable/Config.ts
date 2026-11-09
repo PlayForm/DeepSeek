@@ -57,6 +57,7 @@ export default Compose(false, {
 	// The three note templates. The OBJECT carries the volatile marker and
 	// its leaves stay PLAIN - schemastery rejects volatile leaves under an
 	// enclosing volatile field (the normalize family's scopes precedent);
+
 	// one template edit commits one update whose whole object the State's
 	// refresh listener re-reads.
 	notes: Schema.object({

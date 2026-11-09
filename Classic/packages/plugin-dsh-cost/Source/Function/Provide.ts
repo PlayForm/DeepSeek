@@ -86,6 +86,7 @@ export default function Provide(
 	// The ledger path: this package's own config default, resolved through the
 	// harness home precedence - never a path from the caller.
 	const Path = Home(["cost", "ledger.db"]);
+
 	// A fake context without the reflection service (the smoke harness) gets
 	// the same silent posture as every optional service in this tree: the
 	// providers are absent, and nothing throws into apply. Both providers

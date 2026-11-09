@@ -11,11 +11,11 @@
  * Append prefixes with `<State.Module>: `. The npm identity lives in the package name and the
  * `name` export (plugin-dsh-batchstate); the ledger prefix is the module's OWN contract string.
  */
-import type Entry from "@Interface/Entry.js";
-import type FactoryHandle from "@Interface/Factory.js";
-import type Gate from "@Interface/Gate.js";
-import type Handle from "@Interface/Handle.js";
-import type Member from "@Interface/Member.js";
+import type Entry from "./Entry.js";
+import type FactoryHandle from "./Factory.js";
+import type Gate from "./Gate.js";
+import type Handle from "./Handle.js";
+import type Member from "./Member.js";
 import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";
 interface Extra {
     /** The master switch (config `enabled` - the IDLE-forever posture). */

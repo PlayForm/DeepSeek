@@ -22,6 +22,7 @@ import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm } from "../Harnes
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Run O - the overpass arms + the command. The tool-results arm
 	// (tools/post-execute), the step-batch arm (agent/pre-step), the
 	// normalize-overpass command, the ordering guard and the history-safety

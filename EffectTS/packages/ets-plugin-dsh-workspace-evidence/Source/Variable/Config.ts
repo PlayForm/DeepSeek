@@ -48,6 +48,7 @@ export default Compose(false, {
 	// write paths (declared here for uniformity - this package never takes
 	// them). Volatile as one object; a resolved pack's `policy` section
 	// overrides the defaults per action (the wiring is the next refinement;
+
 	// the type already exists).
 	policy: Policy(),
 });

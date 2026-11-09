@@ -100,6 +100,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the built library actually loads and carries its
 	// named surface (the vacuously-green backstop for the Target chain the
 	// folders import).

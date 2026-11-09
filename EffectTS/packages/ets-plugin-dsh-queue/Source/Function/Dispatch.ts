@@ -50,6 +50,7 @@ export default (
 	Task_.state = "dispatched";
 	Task_.assignedAgent = Agent;
 	Task_.dispatchedAt = Date.now();
+
 	// The routed dispatch (section 2.4): the route resolved per the user's
 	// policy, silently, when the routing enforcer is present and enabled.
 	if (State.RoutedDispatch) {
@@ -71,9 +72,11 @@ export default (
 		}
 	}
 	State.Factory?.Journal(State, "task dispatched", Task_.id, Task_.assignedAgent);
+
 	// Byte-stable template: `dispatched <id> -> <agent>[ route <p> <m> <e>]`.
 	const RouteLine = Task_.route ? ` route ${Task_.route}` : "";
 	Append(`dispatched ${Task_.id} -> ${Agent}${RouteLine}`);
+
 	// The launch: only when the user allowed the spawn (the approval posture)
 	// AND the policy's outer gate is open (D6). An `approve` verdict refuses
 	// the launch with the documented line - the task keeps its seat and waits.

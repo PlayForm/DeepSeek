@@ -309,12 +309,14 @@ export default (Context: Context, Options: Config): void => {
 		},
 	});
 	State.Factory = Factory;
+
 	// No boot projection of the built-in pack: the candidates come from the
 	// session history, and only an EXPLICIT repo/user pack compiles (per
 	// call, below).
 	State.Pack = [];
 	State.Knowledge = Load(State.PersistPath);
 	State.Rings = Ring();
+
 	// THE HISTORY IS NOT A STATE FIELD: the per-session touch history is a
 	// session-projection unit (Function/Unit, keyed on `sessionProjections`),
 	// so the registry owns one cell per session and Function/History reads it
@@ -343,6 +345,7 @@ export default (Context: Context, Options: Config): void => {
 	// built-in pack is retired), proven twice when the graph already sees
 	// them. A repo without an explicit pack seeds nothing and leaves the
 	// knowledge's seed marker alone. It mutates the in-memory knowledge only;
+
 	// the next real save (an emit, a follow, a dismissal) persists it, so a
 	// cold start leaves no file behind.
 	// ------------------------------------------------------------------

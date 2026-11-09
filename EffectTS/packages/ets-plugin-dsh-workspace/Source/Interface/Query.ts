@@ -43,6 +43,7 @@ export interface FindResult {
  * tests) around the focus node. */
 export interface ExpandResult {
 	indexRevision: string;
+
 	/** The focus node - absent when the id does not resolve (an honest miss,
 	 * never a fabricated row). */
 	node?: NodeRow;

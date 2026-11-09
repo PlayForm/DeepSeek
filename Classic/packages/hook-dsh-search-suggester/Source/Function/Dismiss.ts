@@ -39,6 +39,7 @@ const History = "History";
 export default (
 	/** The built per-apply state (the knowledge, the TTL, the family vocabulary). */
 	State: State,
+
 	/** The ledger append (the factory's Append, bound by Apply). */
 	Append: (Message: string) => void,
 ) =>

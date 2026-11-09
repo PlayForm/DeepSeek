@@ -28,6 +28,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// The folder fixtures: the fake ctx + the REAL factory instance, the temp
 	// root with the proj directory, the auxiliary registry and the policy
 	// files of the source suite. NO pin-policy.json is created here - the
@@ -40,6 +41,7 @@ export const runTest = async (): Promise<number> => {
 	const Ledger = Path.join(Root, "ledger.log");
 	const factory: any = new FactoryClass(ctx);
 	const volatileCell = { get: () => ["write", "edit"] };
+
 	// The source suite's section 2 State, rebuilt verbatim as this folder's
 	// st1 (the Options-parameterized ResolvePolicy scenario resolves against
 	// it).
@@ -56,6 +58,7 @@ export const runTest = async (): Promise<number> => {
 		},
 		{ module: "smoke-flavor", fields: { Section: "sections", Strict: "strict" } },
 	);
+
 	// Group: 4 - Match: exclusion-first segment match.
 	{
 		const Sub = "Match: exclusion-first segment match";

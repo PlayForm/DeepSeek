@@ -451,10 +451,12 @@ export default function Reader(
 			? Parsed.filter((One): One is string => typeof One === "string")
 			: [];
 	};
+
 	// One money column of a view row: the rounding is to the sixth decimal,
 	// the precision every report read lands on, so a file row, a stage row and
 	// a model row agree with the report of the same sum.
 	const Round = (Value: number): number => Math.round(Value * 1e6) / 1e6;
+
 	// The stage set a file passed through: the statement hands it over as one
 	// comma-joined list (the stage vocabulary carries no comma), so the reader
 	// splits it and sorts it, because the aggregate itself defines no order.
@@ -465,6 +467,7 @@ export default function Reader(
 		const Found = Raw.split(",").filter((One) => One.length > 0);
 		return Found.sort();
 	};
+
 	// The valuation block (lane B4d; the research's sections 4 and 8): the
 	// headline comparison a selected basis adds to the envelope. `recorded` is
 	// the preview's stored money and `revised` its repriced total, both over
@@ -599,6 +602,7 @@ export default function Reader(
 	const AllocationRows = Database.prepare(Query.Allocations).all(SessionId);
 	const TopFileRows = Database.prepare(Query.TopFiles).all(SessionId);
 	const SummaryRow = Database.prepare(Query.Summary).get(SessionId) ?? EmptyRow;
+
 	// The three view statements: the file rows bind the session twice (the
 	// session's calls and the session's verdicts), and every placeholder is
 	// the same id, so no view can read another session's rows.
@@ -743,6 +747,7 @@ export default function Reader(
 			calls: Stored(Row, "Calls"),
 		};
 	});
+
 	// The FILES view: one row per file the session touched or allocated to,
 	// with this session's money, the file's all-sessions lifetime (null when
 	// no allocation ever priced it, which also leaves the carry-in null), the
@@ -778,6 +783,7 @@ export default function Reader(
 			lastAt: Figure(Row, "LastAt"),
 		};
 	});
+
 	// The STAGES view: the stage ranking the report reads by file, scoped to
 	// this session and keyed by the stage the touches carry, with an
 	// unclassified touch its own row and the tokens zero when no call
@@ -788,6 +794,7 @@ export default function Reader(
 		tokens: Stored(Row, "Tokens"),
 		cost: Round(Stored(Row, "Cost")),
 	}));
+
 	// The MODELS view: one row per provider and model this session called,
 	// with the tokens the calls reported and the money their allocations
 	// carried across every file they touched.
@@ -842,6 +849,7 @@ export default function Reader(
 		currencies: CurrencyList(SummaryRow["Currencies"]),
 		topFiles: TopFiles,
 	};
+
 	// The coverage the envelope carries beside the summary (research section
 	// 2.2): the same counts the summary states, plus the token buckets the
 	// unpriced calls spent - read from the same statement, so the two can
@@ -883,6 +891,7 @@ export default function Reader(
 		stages: Stages,
 		models: Models,
 	};
+
 	// The recorded read returns the envelope exactly as built; a selected
 	// basis appends the block, so the JSON carries no `valuation` key at all
 	// when the caller names none.

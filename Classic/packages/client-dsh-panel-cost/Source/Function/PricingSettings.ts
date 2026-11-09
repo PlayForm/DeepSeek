@@ -737,6 +737,7 @@ export default function PricingSettings(
 
 	// The catalogs read: every catalog and revision the route answers. The
 	// first read adopts the first catalog and its newest published revision;
+
 	// a read after a publish keeps the user's selection and only refreshes
 	// the selector's options, because the publish selects the new revision.
 	const Read = useCallback((Adopt: boolean): void => {

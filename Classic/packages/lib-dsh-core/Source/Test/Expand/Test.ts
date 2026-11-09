@@ -21,6 +21,7 @@ import { Check, Finish, MakeCounter } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Expand - the tilde expansion (home, home/child, unchanged).
 	{
 		const Sub = "Expand: the tilde expansion (home, home/child, unchanged paths)";

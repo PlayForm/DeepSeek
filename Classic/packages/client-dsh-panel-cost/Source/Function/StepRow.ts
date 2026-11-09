@@ -115,6 +115,7 @@ export default function StepRow(Props: StepRowProps): ReturnType<typeof createEl
 	const Input = typeof Cost.input === "number" ? Cost.input : 0;
 	const Output = typeof Cost.output === "number" ? Cost.output : 0;
 	const Other = typeof Cost.other === "number" ? Cost.other : 0;
+
 	// Usage is evidence too: a call the ledger recorded without a price row
 	// still has context and output tokens worth inspecting, and an error is
 	// worth inspecting even when nothing else reached the envelope.

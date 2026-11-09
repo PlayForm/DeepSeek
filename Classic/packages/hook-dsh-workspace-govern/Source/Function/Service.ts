@@ -24,6 +24,7 @@ import Decide from "./Decide.js";
 export default class WorkspaceGovern extends Service {
 	/** The apply-built state the methods read and write. */
 	State: State;
+
 	/** The ledger sink the gate writes through. */
 	Append: (Message: string) => void;
 

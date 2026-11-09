@@ -27,6 +27,7 @@
 /** One text block: the visible model-facing text. */
 export interface TextBlock {
 	readonly type: "text";
+
 	/** The block's text. */
 	readonly text: string;
 }
@@ -34,6 +35,7 @@ export interface TextBlock {
 /** One tool call: the type only, with the name optional. */
 export interface ToolCallBlock {
 	readonly type: "tool-call";
+
 	/** The tool's name; absent when the model's call carried none. */
 	readonly name?: string;
 }
@@ -49,6 +51,7 @@ export default interface Message {
 	 * digest must be able to state that it contributes nothing.
 	 */
 	readonly role: "system" | "user" | "assistant" | "tool" | "developer";
+
 	/** The model-facing blocks, in order. */
 	readonly content: readonly ContentBlock[];
 }

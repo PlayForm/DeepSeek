@@ -43,8 +43,10 @@ const Shape = /^\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}Z(?:-\d{2})?$/;
 export interface Taken {
 	/** The snapshot id, or "" when the capture failed. */
 	readonly id: string;
+
 	/** The manifest that was written, or null when the capture failed. */
 	readonly manifest: SnapshotManifest | null;
+
 	/** Why the capture failed, for the one log line. */
 	readonly error?: string;
 }
@@ -53,8 +55,10 @@ export interface Taken {
 export interface Rotated {
 	/** The snapshot ids the rotation pruned. */
 	readonly pruned: readonly string[];
+
 	/** How many unreferenced blobs the sweep deleted. */
 	readonly swept: number;
+
 	/** Why the rotation stopped early, when it did. */
 	readonly error?: string;
 }

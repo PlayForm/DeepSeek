@@ -276,6 +276,7 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 	const Meter = (Context as unknown as Record<string, unknown>)["tokenMeter"] as Parameters<
 		typeof Telemetry
 	>[0];
+
 	// The estimator: the harness token meter's estimateMessage where probed
 	// (the design document's estimator for replay). An absent or throwing
 	// meter prices every message at zero, which empties the per-file masses

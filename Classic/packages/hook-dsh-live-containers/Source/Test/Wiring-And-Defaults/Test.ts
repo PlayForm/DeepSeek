@@ -30,6 +30,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: the volatile cells and the config defaults (the schema's
 	// `{ get }` cell shape + every default value).
 	rm();

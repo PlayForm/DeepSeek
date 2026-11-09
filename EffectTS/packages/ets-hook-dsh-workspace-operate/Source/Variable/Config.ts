@@ -40,6 +40,7 @@ export default Compose(false, {
 	// a file, commits a batch or spawns an agent, and no verdict can refuse
 	// it. read/index/record/suggest/message are automatic; write/commit/spawn
 	// wait for approval for the family's write paths. Volatile as one object;
+
 	// a resolved pack's `policy` section overrides the defaults per action
 	// (the wiring is the next refinement; the type already exists).
 	policy: Policy(),

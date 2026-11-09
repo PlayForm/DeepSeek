@@ -66,6 +66,7 @@ const IsEnvelope = (Candidate: unknown): Candidate is CostResponse => {
 // values are encoded exactly as the route decodes them.
 const Selected = (SessionId: string, Rows: number, Selection?: ValuationSelection): string => {
 	const Query = `${Route}?session=${encodeURIComponent(SessionId)}&rows=${Rows}`;
+
 	// The locals narrow the optional selection; a switch (true) arm cannot
 	// narrow the original binding for its later arms.
 	const Basis = Selection?.basis;
@@ -405,6 +406,7 @@ const Normalize = (Body: unknown): PublishAnswer => {
 		message?: unknown;
 		path?: unknown;
 	};
+
 	// Early returns, because the narrowing has to survive into the
 	// constructed answer; a switch (true) arm cannot carry it.
 	const Found = Answer.revision;

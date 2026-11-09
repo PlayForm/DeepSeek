@@ -95,6 +95,7 @@ const Shadow = (State: State, Handle: Handle): void => {
 export default async (
 	/** The plugin state (the mirror, the handle, the ledger). */
 	State: State,
+
 	/** The probed storage facility (ctx.storage.domain or ctx.storageDomain). */
 	Facility: unknown,
 ): Promise<void> => {

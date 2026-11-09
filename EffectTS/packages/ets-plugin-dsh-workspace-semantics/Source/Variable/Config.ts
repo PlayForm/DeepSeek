@@ -67,6 +67,7 @@ export default Compose(false, {
 	// never writes a file), so this package has NO gated action: it never
 	// writes a file, commits a batch or spawns an agent, and no verdict can
 	// refuse it. read/index/record/suggest/message are automatic;
+
 	// write/commit/spawn wait for approval for the family's write paths
 	// (declared here for uniformity - this package never takes them).
 	// Volatile as one object; a resolved pack's `policy` section overrides

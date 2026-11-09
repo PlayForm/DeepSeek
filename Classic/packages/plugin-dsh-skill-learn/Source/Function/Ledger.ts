@@ -41,6 +41,7 @@ const Actions: readonly string[] = ["create", "patch", "support", "archive", "re
 export interface Touched {
 	/** The absolute path the bytes belong to. */
 	readonly path: string;
+
 	/** The file's text, or null when the file did not exist on that side of the mutation. */
 	readonly text: string | null;
 }
@@ -51,8 +52,10 @@ export interface Mutation {
 	readonly action: "create" | "patch" | "support" | "archive" | "restore" | "revert";
 	readonly skill: string;
 	readonly evidence: LedgerEvidence;
+
 	/** The files as they were, with their text. */
 	readonly before: readonly Touched[];
+
 	/** The files as they are, with their text. */
 	readonly after: readonly Touched[];
 }
@@ -61,6 +64,7 @@ export interface Mutation {
 export interface Appended {
 	/** The twelve hex characters that name the row, or "" when the append failed. */
 	readonly id: string;
+
 	/** Why the append failed, for the one log line; absent on success. */
 	readonly error?: string;
 }

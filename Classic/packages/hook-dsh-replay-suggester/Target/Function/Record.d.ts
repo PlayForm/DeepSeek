@@ -1,6 +1,6 @@
-import type Entry from "../Interface/Entry.js";
-import type { AgentMemory } from "../Interface/State.js";
-import type State from "../Interface/State.js";
+import type Entry from "@Interface/Entry.js";
+import type { AgentMemory } from "@Interface/State.js";
+import type State from "@Interface/State.js";
 /** One call's draft: everything the entry needs except the sequence. */
 export interface Draft {
     path: string;

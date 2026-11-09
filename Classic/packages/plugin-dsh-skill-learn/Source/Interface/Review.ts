@@ -21,8 +21,10 @@ import type { Outcome } from "@Interface/Trigger.js";
 export interface ReviewInput {
 	/** The agent whose session is reviewed; narrowed by the service. */
 	readonly agent: unknown;
+
 	/** The maintenance signal; aborting it must stop the run between calls. */
 	readonly signal: AbortSignal;
+
 	/** Why the review was requested, when it was requested by name. */
 	readonly reason?: string;
 }
@@ -50,8 +52,10 @@ export type ReviewRule =
 export interface ReviewRefusal {
 	/** The refused operation, as parsed. */
 	readonly operation: Operation;
+
 	/** The rule id; the first one in a run is the id the ledger names. */
 	readonly rule: ReviewRule;
+
 	/** The byte-stable refusal string the report and the ledger detail carry. */
 	readonly detail: string;
 }
@@ -60,12 +64,16 @@ export interface ReviewRefusal {
 export interface ReviewResult {
 	/** The class the run ended in; exactly one of the twelve. */
 	readonly outcome: Outcome;
+
 	/** The skills whose bytes changed, in the order they were written. */
 	readonly applied: readonly string[];
+
 	/** Every operation the judge or the fence refused. */
 	readonly refused: readonly ReviewRefusal[];
+
 	/** The report directory; empty when no report was written. */
 	readonly report: string;
+
 	/** One clause of detail for the ledger: a failure's cause, a drift, a skip. */
 	readonly detail?: string;
 }

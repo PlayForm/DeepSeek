@@ -29,6 +29,7 @@ const LongRequest =
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group S1: the zero-subagent guarantee.
 	rm();
 	ClockBox.Now = 1700000000000;

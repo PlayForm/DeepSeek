@@ -51,6 +51,7 @@ export const runTest = async (): Promise<number> => {
 	Boot();
 	Probe.Mode = "bin";
 	const Listener = Events.find((e) => e[0] === "fs/observed")![1];
+
 	// The two-chain-writer fold transforms (the live failure mode's sim steps).
 	const foldPinT = (P: string) => (text: string, _section: unknown, keep: string[]) => {
 		const doc = JSON.parse(text);
@@ -71,6 +72,7 @@ export const runTest = async (): Promise<number> => {
 		const next = { ...doc, dependencies: { ...doc.dependencies, leftpad: "^1.0.0" } };
 		return { next, count: 1, message: (o: any) => `governed ${P} \u2192 ${o.version}` };
 	};
+
 	// The sim steps' Refresh re-emits must not re-enter the module's live
 	// listener: the sim State is NOT the listener's State, so the listener's
 	// Stash has no entry for the sim target keys and a re-emit would detach a
@@ -86,6 +88,7 @@ export const runTest = async (): Promise<number> => {
 			Events.push(...Saved);
 		}
 	};
+
 	// Group: the P2 namespaced UpdateKey (the collision window).
 	{
 		const colid = Path.join(Root, "colid");

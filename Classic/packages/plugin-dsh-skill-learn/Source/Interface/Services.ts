@@ -44,6 +44,7 @@ import type { LoadedSkill, SkillRow } from "@Interface/Skill.js";
 export interface FsTarget {
 	/** The opaque identity token. */
 	readonly targetKey: string;
+
 	/** The absolute spelling the caller asked for, for messages and the ledger. */
 	readonly displayPath: string;
 }
@@ -52,8 +53,10 @@ export interface FsTarget {
 export interface FsInfo {
 	/** The opaque freshness token a guarded write carries. */
 	readonly version: string;
+
 	/** The node kind the stat saw. */
 	readonly type: "file" | "directory" | "other";
+
 	/** The file's size in bytes, when the provider reports one. */
 	readonly size?: number;
 }
@@ -68,10 +71,13 @@ export type FsWriteIntent =
 export interface FsWriteOutcome {
 	/** Whether the write created or updated the target. */
 	readonly operation: "create" | "update";
+
 	/** The version after the write, which is what the next guard carries. */
 	readonly version: string;
+
 	/** The prior text, or null on a create; the ledger's `before` blob comes from it. */
 	readonly before: string | null;
+
 	/** The text as written; the ledger's `after` blob comes from it. */
 	readonly after: string;
 }
@@ -79,8 +85,10 @@ export interface FsWriteOutcome {
 export interface FsEditRequest {
 	/** The anchor text the edit matches exactly once. */
 	readonly oldString: string;
+
 	/** The replacement text. */
 	readonly newString: string;
+
 	/** Always false for a skill patch: exactly one anchor is the rule the fence enforces. */
 	readonly replaceAll: boolean;
 }
@@ -88,8 +96,10 @@ export interface FsEditRequest {
 export interface FsEditOutcome {
 	/** The version after the edit. */
 	readonly version: string;
+
 	/** The text before the edit. */
 	readonly before: string;
+
 	/** The text after the edit. */
 	readonly after: string;
 }
@@ -98,12 +108,16 @@ export interface FsEditOutcome {
 export interface FsDirEntry {
 	/** The child's name as the listing reported it. */
 	readonly name: string;
+
 	/** The node kind. */
 	readonly type: "file" | "directory" | "other";
+
 	/** The resolved target for the child. */
 	readonly target: FsTarget;
+
 	/** The child's version, when the provider reports one. */
 	readonly version?: string;
+
 	/** The child's size in bytes, when the provider reports one. */
 	readonly size?: number;
 }
@@ -114,12 +128,16 @@ export interface FsSlice {
 		path: string,
 		options?: { readonly cwd?: string; readonly signal?: AbortSignal },
 	): Promise<FsTarget>;
+
 	/** One target's metadata, or `undefined` when it is absent. */
 	stat(target: FsTarget, signal?: AbortSignal): Promise<FsInfo | undefined>;
+
 	/** One target's full text; the read the digest and the fence compare. */
 	readText(target: FsTarget, signal?: AbortSignal): Promise<string>;
+
 	/** The direct children of a directory; the archive copy walks a skill package with it. */
 	listDir(target: FsTarget, signal?: AbortSignal): Promise<readonly FsDirEntry[]>;
+
 	/** Write a whole file behind the guarded write intent. */
 	writeText(
 		target: FsTarget,
@@ -127,6 +145,7 @@ export interface FsSlice {
 		intent?: FsWriteIntent,
 		signal?: AbortSignal,
 	): Promise<FsWriteOutcome>;
+
 	/** Edit one file behind a literal anchor and an expected version. */
 	editText(
 		target: FsTarget,
@@ -134,8 +153,10 @@ export interface FsSlice {
 		expected?: { readonly version: string },
 		signal?: AbortSignal,
 	): Promise<FsEditOutcome>;
+
 	/** Canonical containment: the root fence and the archive refusal both use it. */
 	contains(parent: FsTarget, child: FsTarget): boolean;
+
 	/** The host path of a resolved target, for the configured-root comparisons. */
 	processPath(target: FsTarget): string;
 }
@@ -147,11 +168,13 @@ export interface SkillsSlice {
 		readonly scope?: string;
 		readonly signal?: AbortSignal;
 	}): Promise<readonly SkillRow[]>;
+
 	/** The parsed skill, or `undefined` when the catalog does not resolve the name. */
 	get(
 		name: string,
 		options?: { readonly cwd?: string; readonly signal?: AbortSignal },
 	): Promise<LoadedSkill | undefined>;
+
 	/**
 	 * Drop the collection cache and announce the change
 	 * (`dsh-skill/lib/index.js:376-380`). Called after every mutation, because
@@ -229,10 +252,13 @@ export interface WorkingDirectorySlice {
 export interface LoggerSlice {
 	/** One informational line. */
 	info(format: unknown, ...parameter: unknown[]): void;
+
 	/** One warning line. */
 	warn(format: unknown, ...parameter: unknown[]): void;
+
 	/** One error line. */
 	error(format: unknown, ...parameter: unknown[]): void;
+
 	/** One debug line. */
 	debug(format: unknown, ...parameter: unknown[]): void;
 }
@@ -240,12 +266,16 @@ export interface LoggerSlice {
 export default interface Services {
 	/** Injected: the only seam that may touch a file. */
 	readonly fs: FsSlice;
+
 	/** Injected: the catalog the review reads and the cache a write invalidates. */
 	readonly skills: SkillsSlice;
+
 	/** Probed: absent is the `no-llm` outcome, never a throw. */
 	readonly llm?: LlmSlice;
+
 	/** Probed: absent falls back to the configured corpus root. */
 	readonly workingDirectory?: WorkingDirectorySlice;
+
 	/** Probed: absent means no ledger line, never a failed run. */
 	readonly logger?: LoggerSlice;
 }

@@ -28,14 +28,19 @@ export type PanelLog = {
 export type PanelPorts = {
 	/** The slot-aware registry: the data path every section reads. */
 	registry: PanelRegistry;
+
 	/** The trace tail: the live status source. */
 	live: PanelLive;
+
 	/** The open callback: launches a registered overlay view. */
 	open: (target: LaunchTarget) => void;
+
 	/** The logger seam for the panel's documented lines. */
 	log: PanelLog;
+
 	/** The settings forms service, absent when the host never composed it. */
 	configForms?: PanelConfigForms;
+
 	/** The plain-field bridge, absent when the host exposes no full-config write. */
 	bridge?: PanelBridge;
 };

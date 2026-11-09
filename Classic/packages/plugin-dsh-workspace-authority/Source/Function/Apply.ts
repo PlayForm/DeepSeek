@@ -92,6 +92,7 @@ export default (Context: Context, Options: Config): void => {
 	State.Residency = new Map();
 	State.Graveyard = new Map();
 	State.Sequence = 0;
+
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceAuthority", this).
 	new ServiceClass(Context, State);

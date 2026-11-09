@@ -31,6 +31,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: the board opens with the exact rows.
 	rm();
 	ClockBox.Now = 1700000000000;

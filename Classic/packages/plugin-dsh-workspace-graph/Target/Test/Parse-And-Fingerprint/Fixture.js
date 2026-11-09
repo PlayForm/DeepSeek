@@ -1,1 +1,18 @@
-import"./helper";import"node:path";const p=1;function r(e){return`hello ${e}`}class a{wave(){return r("wave")}}let l=0;export{a as Greeter,p as VERSION,r as greet};
+import { helper } from "./helper";
+import path from "node:path";
+const VERSION = 1;
+function greet(name) {
+  return `hello ${name}`;
+}
+class Greeter {
+  wave() {
+    return greet("wave");
+  }
+}
+let counter = 0;
+export {
+  Greeter,
+  VERSION,
+  greet
+};
+//# sourceMappingURL=Fixture.js.map

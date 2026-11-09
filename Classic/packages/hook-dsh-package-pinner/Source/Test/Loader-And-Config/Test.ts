@@ -18,6 +18,7 @@ import * as Pinner from "../../../Target/Library.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: the loader contract.
 	{
 		const Sub = "loader contract: name/apply/Config/inject + the full default object";

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../Source/Test/Parse-And-Fingerprint/Fixture.ts"],
+  "sourcesContent": ["import { helper } from \"./helper\";\nimport path from \"node:path\";\n\nexport const VERSION = 1;\n\nexport function greet(name: string): string {\n\treturn `hello ${name}`;\n}\n\nexport class Greeter {\n\twave(): string {\n\t\treturn greet(\"wave\");\n\t}\n}\n\ninterface Shape {\n\tkind: string;\n}\n\ntype Alias = Shape | null;\n\nlet counter = 0;\n"],
+  "mappings": "AAAA,SAAS,cAAc;AACvB,OAAO,UAAU;AAEV,MAAM,UAAU;AAEhB,SAAS,MAAM,MAAsB;AAC3C,SAAO,SAAS,IAAI;AACrB;AAEO,MAAM,QAAQ;AAAA,EACpB,OAAe;AACd,WAAO,MAAM,MAAM;AAAA,EACpB;AACD;AAQA,IAAI,UAAU;",
+  "names": []
+}

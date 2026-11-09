@@ -62,6 +62,7 @@ export const runTest = async (): Promise<number> => {
 	};
 
 	// Deep-frozen options - the wrapper must never touch it (a mutation throws;
+
 	// even a read is fine, a write is not - Object.freeze proves it).
 	const Request = Object.freeze(Object.freeze({ model: "x", messages: [] }));
 	const Wrapped = Listener(Request, Next);

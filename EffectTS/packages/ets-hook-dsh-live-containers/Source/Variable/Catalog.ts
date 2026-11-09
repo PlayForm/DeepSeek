@@ -17,12 +17,16 @@ import type { BlockSpecification } from "@Interface/Execution.js";
 export interface CatalogEntry {
 	id: string;
 	kind: string;
+
 	/** One-line use case (03 section 3). */
 	use: string;
+
 	/** The template's token names (the docs' variable list). */
 	tokens: string[];
+
 	/** Whether the kind is suggestable-configured in v1 (the frozen grammar). */
 	configurable: boolean;
+
 	/** The shape class: board-shaped (expectAgents) or list-shaped (steps). */
 	shape: "board" | "list" | "none";
 }

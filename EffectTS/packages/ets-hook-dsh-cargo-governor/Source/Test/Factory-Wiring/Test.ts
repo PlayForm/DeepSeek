@@ -31,6 +31,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: the silence/sync contract.
 	{
 		const dir = Group("silence");

@@ -40,6 +40,7 @@ export default (
 	 * The companion path or glob the note named.
 	 */
 	Companion: string,
+
 	/**
 	 * The judged call's path.
 	 */

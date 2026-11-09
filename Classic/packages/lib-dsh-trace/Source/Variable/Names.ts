@@ -11,10 +11,13 @@
 export default {
 	/** The service name the factory provides (`ctx.trace`). */
 	service: "trace",
+
 	/** The observe hook's recorded stamp (the indexer's first source). */
 	observe: "observe/stamp",
+
 	/** The graph stored (or replaced) a file record. */
 	indexed: "graph/indexed",
+
 	/** The graph's record for a path is no longer valid (replaced, removed, absent). */
 	invalidated: "graph/invalidated",
 } as const;

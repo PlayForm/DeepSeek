@@ -10,9 +10,11 @@
 export default {
 	/** The host slot the workspace tab mounts into. */
 	tab: "conversation.view",
+
 	/** The host slot the right-Sidebar tab body mounts into (keyed by the tab
 	 *  type's id; declared by ui-sidebar-right). */
 	pane: "sidebar.right.pane.tab",
+
 	/** The child slot the workspace tab declares and renders. */
 	section: "workspace.live.section",
 } as const;

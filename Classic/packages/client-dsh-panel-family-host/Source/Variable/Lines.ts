@@ -8,16 +8,22 @@
 export default {
 	/** The plain-field bridge's refusal for a namespace declaring a secret. */
 	secret: (namespace: string): string => `bridge: secret namespace refused for ${namespace}`,
+
 	/** The bridge's refusal for a namespace that is not a non-empty string. */
 	invalidNamespace: (namespace: string): string => `bridge: invalid namespace ${namespace}`,
+
 	/** The bridge's refusal for a namespace that names no profile entry. */
 	unknown: (namespace: string): string => `bridge: unknown namespace ${namespace}`,
+
 	/** The bridge's refusal when no config editor is composed. */
 	unavailable: (): string => "bridge: config editor unavailable",
+
 	/** The bridge's refusal when the package ships disabled. */
 	disabled: (): string => "bridge: disabled (enabled=false)",
+
 	/** The bridge's refusal for a patch that is not a plain object. */
 	invalid: (namespace: string): string => `bridge: invalid patch for ${namespace}`,
+
 	/** The bridge's note when the config editor rejects the write. */
 	failed: (namespace: string): string => `bridge: write failed for ${namespace}`,
 } as const;

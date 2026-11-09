@@ -72,14 +72,18 @@ export const Collapse = (Text: string): string => Text.replace(/\s+/g, " ").trim
 /** Normalize ONE pipeline's text (no splitting): the plan's §2.7a steps. */
 const Normalize = (Pipeline: string): string => {
 	let Text = StripHeredocs(Pipeline);
+
 	// Subshells -> the «sub» marker (one pass; nested content is dropped).
 	Text = Text.replace(/\$\(([^()]*)\)/g, "«sub»").replace(/`([^`]*)`/g, "«sub»");
+
 	// $IFS is the classic whitespace obfuscation -> a literal space.
 	Text = Text.replace(/\$IFS/g, " ");
+
 	// ${VAR} and $VAR -> the «var» marker (positional parameters too).
 	Text = Text.replace(/\$\{[^}]*\}/g, "«var»").replace(/\$[A-Za-z_][A-Za-z0-9_]*|\$\d/g, "«var»");
 	Text = StripQuotes(Text);
 	Text = Collapse(Text);
+
 	// Lowercase ONLY the leading command word (paths stay case-sensitive).
 	const Space = Text.indexOf(" ");
 	if (Space === -1) {

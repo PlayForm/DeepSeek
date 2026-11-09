@@ -212,6 +212,7 @@ export default (Context: Context, Options: Config): void => {
 		}
 		return IsDefaultRows(Configured) ? DEFAULT_PATTERNS : [...DEFAULT_PATTERNS, ...Configured];
 	};
+
 	// The effective exemptions: built-in defaults + the user's, deduped.
 	const Exempts = (): string[] => [
 		...new Set([...DEFAULT_EXEMPTS, ...(Array.isArray(State.Exempt) ? State.Exempt : [])]),

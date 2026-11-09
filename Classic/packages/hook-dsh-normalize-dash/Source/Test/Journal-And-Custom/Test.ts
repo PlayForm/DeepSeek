@@ -30,6 +30,7 @@ import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();
+
 	// Fixture: Run 1's 10-replacement waterfall stream (the journal record's
 	// generator - its assertions live in Stream-Contract).
 	{

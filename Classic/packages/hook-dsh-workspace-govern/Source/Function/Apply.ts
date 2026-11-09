@@ -125,6 +125,7 @@ export default (Context: Context, Options: Config): void => {
 	State.Recent = new Map();
 	State.Sequence = 0;
 	State.Self = { plugin: "hook-dsh-workspace-govern" };
+
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceGovern", this).
 	const Append = (Message: string): void => {
@@ -146,6 +147,7 @@ export default (Context: Context, Options: Config): void => {
 			["policy", String(State.PolicyRules.length)],
 		]),
 	);
+
 	// The gate arm: tools/pre-execute.
 	Context.on(
 		"tools/pre-execute",
@@ -194,6 +196,7 @@ export default (Context: Context, Options: Config): void => {
 			}
 		},
 	);
+
 	// The outcome observer: tools/post-execute.
 	Context.on(
 		"tools/post-execute",
@@ -226,6 +229,7 @@ export default (Context: Context, Options: Config): void => {
 			}
 		},
 	);
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__hookDshWorkspaceGovernState"] = State;

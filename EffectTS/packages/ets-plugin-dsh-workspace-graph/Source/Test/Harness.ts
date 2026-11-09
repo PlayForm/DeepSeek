@@ -131,6 +131,7 @@ export const Make = (Raw: any = {}): any => {
 	const subscriptions = new Map<string, number>();
 	const Trace = CreateTrace();
 	const Subscribe = Trace.on.bind(Trace);
+
 	// Count live subscriptions per event name: the mechanism assertion (the
 	// graph consumes observe/stamp from the bus; it registers NOTHING on
 	// fs/observed). The disposer decrements, so an unload is observable too.
@@ -142,8 +143,10 @@ export const Make = (Raw: any = {}): any => {
 			Dispose();
 		};
 	};
+
 	/** The absolute display path of a fixture path (the disk mode's root join). */
 	const Display = (P: string): string => (disk === undefined ? P : Path.resolve(disk, P));
+
 	/** The canonical identity: a realpath on disk, the path itself in map mode. */
 	const Identity = (P: string): string => {
 		const Absolute = Display(P);
@@ -456,6 +459,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually constructs the service (the
 	// vacuously-green backstop for every folder's fixture - a broken seam
 	// would print fewer checks in every folder, which the runner's
@@ -468,6 +472,7 @@ if (InvokedDirectly) {
 			Run.loggerLines.some((L: string) => L === "graph: activated (domain=workspace_graph, languages=3)"),
 		);
 	});
+
 	// The trace seam selfcheck: an enabled graph subscribes to observe/stamp
 	// on the REAL bus (the mechanism the folders drive through Emit), and a
 	// disabled graph subscribes to nothing.

@@ -12,6 +12,7 @@ import { Policy } from "../../../Target/Library.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Policy - the read -> fallback -> diagnostics mechanics. The
 	// fixture is the tmpdir root from the harness; the diagnostics are the
 	// module's contract strings.
@@ -19,6 +20,7 @@ export const runTest = async (): Promise<number> => {
 	const Lines: string[] = [];
 	const Append = (Message: string) => Lines.push(Message);
 	const Defaults = { reject: [], verifyCommand: null };
+
 	// Sub-scenario 1: absent file -> the built-in default + the no-policy +
 	// default lines.
 	{

@@ -25,6 +25,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: R1 - legitimate bash passthrough.
 	{
 		rm();

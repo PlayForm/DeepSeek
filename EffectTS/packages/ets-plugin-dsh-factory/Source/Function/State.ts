@@ -49,6 +49,7 @@ export default <Extra extends object = Record<string, unknown>>(
 	// Defensive cell unwrap (see header). Plain-object copy; cells unwrapped
 	// best-effort, a failed unwrap keeps the raw value (the schema default).
 	const Plain = Unwrap(Config);
+
 	// The pre-open journal queue (P5): the sink below queues lifecycle records
 	// until the optional storage domain opens, capped so a deployment without
 	// storage cannot grow it unboundedly; Function/Open drains it on success
@@ -82,11 +83,13 @@ export default <Extra extends object = Record<string, unknown>>(
 			}
 		},
 	};
+
 	// P9 — the subprocess seam is probed ONCE per load, through the same
 	// probe-once accessor the new seams use (a direct `ctx.subprocess`
 	// accessor fallback THROWS on service accessors without inject —
 	// live-verified 2026-10-03).
 	Shared.Subprocess = Seam(Shared, "subprocess") as SubprocessService | undefined;
+
 	// The module's own fields, copied from the unwrapped config by name.
 	const State = Object.assign(
 		Shared,
@@ -94,6 +97,7 @@ export default <Extra extends object = Record<string, unknown>>(
 			Object.entries(Setup.fields ?? {}).map(([Key, Source]) => [Key, Plain[Source]]),
 		),
 	) as State & Extra;
+
 	// P10 — the volatile refresh (see header): the retained raw cells and the
 	// key→field map (fixed shared mappings, then the module's own `fields`
 	// map inverted — Setup.fields maps StateKey → configKey, the listener

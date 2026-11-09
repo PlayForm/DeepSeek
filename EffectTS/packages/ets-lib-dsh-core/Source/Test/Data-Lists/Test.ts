@@ -11,6 +11,7 @@ import { Default, Section } from "../../../Target/Library.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: the data lists.
 	{
 		const Sub = "Section: the canonical npm dependency sections";

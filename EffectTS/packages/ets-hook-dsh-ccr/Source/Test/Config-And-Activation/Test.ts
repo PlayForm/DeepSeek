@@ -27,6 +27,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Run 1 - the volatile cells and the config defaults.
 	Rm();
 	const Raw1 = Validate({ logFile: Ledger });

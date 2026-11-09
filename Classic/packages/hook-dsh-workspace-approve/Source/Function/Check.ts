@@ -23,6 +23,7 @@ export default (State: State, Request: Request): Check => {
 	const Path = String(Request.path ?? "");
 	const Fingerprint = String(Request.fingerprint ?? "");
 	const Version = String(Request.version ?? "");
+
 	// Newest-first: the ring holds the bindings in creation order, the latest
 	// decision for the exact candidate is the one that counts.
 	const Found = [...State.Ring]

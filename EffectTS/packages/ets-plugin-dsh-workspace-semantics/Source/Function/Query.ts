@@ -9,6 +9,7 @@ export default {
 	References(State: State, Path: string): ReferenceNode[] {
 		return State.Index.get(Path)?.references ?? [];
 	},
+
 	/** The statistics triple: index size, revision, adapter count. */
 	Statistics(State: State): {
 		paths: number;

@@ -294,6 +294,7 @@ export const Make = (Raw: any, Attach?: (Context: any, Run: any) => void): any =
 		Raw,
 		Fs,
 	};
+
 	// The optional pre-apply attachment: the workspaceGraph and tokenMeter
 	// must be in place BEFORE apply runs (the apply-time probes).
 	Attach?.(Context, Run);
@@ -350,6 +351,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually wires the plugin.
 	rm();
 	const Run = Make(Validate({ logFile: Ledger, enabled: true }));

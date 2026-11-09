@@ -235,6 +235,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually wires the plugin.
 	rm();
 	const Run = Make(Validate({ logFile: Ledger, enabled: true }));

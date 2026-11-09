@@ -1,1 +1,97 @@
-import c from"node:assert/strict";import k from"../../Target/Library.js";const h=()=>({N:0,F:0}),m=(n,o,r)=>{n.N++;try{r(),console.log(`PASS - ${o}`)}catch(t){n.F++,console.log(`FAIL - ${o}`),console.log(t instanceof Error?t.message:String(t))}},v=async(n,o,r)=>{n.N++;try{await r(),console.log(`PASS - ${o}`)}catch(t){n.F++,console.log(`FAIL - ${o}`),console.log(t instanceof Error?t.message:String(t))}},N=(n,o)=>{if(n.F!==0)throw new Error(`${o}: ${n.F} failed check(s)`);return n.N},y=(n,o)=>{const r={},t=[],f=[],l=[],a={Registered:[]};a.register=e=>{a.Registered.push(e)};const p={State:(e,s,i)=>({Context:e,Module:i?.module??"plugin-dsh-cost",Stash:new Map,Inflight:new Map}),Append:(e,s)=>{t.push(s)},Write:async(e,s,i,u)=>{const d=await e.Context.fs.writeText(s,i,u?.intent,u?.signal);return u?.observe!==!1&&e.Context.root.emit("fs/observed",s,{kind:"present",version:d.version},u?.actor),d}};let g;return g={pluginFactory:p,commands:a,tokenMeter:{estimateMessage:()=>10},logger:{info:e=>{t.push(e)},warn:e=>{f.push(e)}},on:(e,s)=>(r[e]=s,()=>!0),get:e=>g[e],effect:(e,s)=>{l.push(s??"unnamed");const i=e();return typeof i=="function"?i:()=>!0},root:{emit:()=>{}},fs:o,Raw:n},{Context:g,Factory:p,Commands:a,Listeners:r,Lines:t,Warns:f,Effects:l,Raw:n}},w=n=>k.Config({...n}),F=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(F){const n=h(),o=y(w({enabled:!0}));m(n,"selfcheck: a failing assertion counts as FAIL",()=>{c.equal(1,2)}),m(n,"selfcheck: the fake ctx carries the spec's surfaces",()=>{c.equal(n.N,2),c.equal(n.F,1),c.equal(typeof o.Context.on,"function"),c.equal(typeof o.Context.commands.register,"function"),c.equal(typeof o.Factory.Append,"function")}),console.log(n.N===2&&n.F===1?"Harness selfcheck OK":`Harness selfcheck BROKEN (N=${n.N}, F=${n.F})`),(n.N!==2||n.F!==1)&&(process.exitCode=1)}export{m as Check,v as CheckAsync,N as Finish,y as Make,h as MakeCounter,k as Plugin,w as Validate};
+import assert from "node:assert/strict";
+import Plugin from "../../Target/Library.js";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (Issue) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(Issue instanceof Error ? Issue.message : String(Issue));
+  }
+};
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (Issue) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(Issue instanceof Error ? Issue.message : String(Issue));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  return Count.N;
+};
+const Make = (Raw, Fs) => {
+  const Listeners = {};
+  const Lines = [];
+  const Warns = [];
+  const Effects = [];
+  const Commands = { Registered: [] };
+  Commands.register = (Definition) => void Commands.Registered.push(Definition);
+  const Factory = {
+    State: (Context2, _Config, Setup) => ({ Context: Context2, Module: Setup?.module ?? "plugin-dsh-cost", Stash: /* @__PURE__ */ new Map(), Inflight: /* @__PURE__ */ new Map() }),
+    Append: (_State, Message) => void Lines.push(Message),
+    Write: async (State, Target, Content, Over) => {
+      const Outcome = await State.Context.fs.writeText(Target, Content, Over?.intent, Over?.signal);
+      if (Over?.observe !== false) {
+        State.Context.root.emit("fs/observed", Target, { kind: "present", version: Outcome.version }, Over?.actor);
+      }
+      return Outcome;
+    }
+  };
+  let Context;
+  Context = {
+    pluginFactory: Factory,
+    commands: Commands,
+    tokenMeter: { estimateMessage: () => 10 },
+    logger: { info: (M) => void Lines.push(M), warn: (M) => void Warns.push(M) },
+    on: (Name, Listener) => {
+      Listeners[Name] = Listener;
+      return () => true;
+    },
+    get: (Name) => Context[Name],
+    effect: (Setup, Label) => {
+      Effects.push(Label ?? "unnamed");
+      const Disposer = Setup();
+      return typeof Disposer === "function" ? Disposer : () => true;
+    },
+    root: { emit: () => void 0 },
+    fs: Fs,
+    Raw
+  };
+  return { Context, Factory, Commands, Listeners, Lines, Warns, Effects, Raw };
+};
+const Validate = (Raw) => Plugin.Config({ ...Raw });
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  const Run = Make(Validate({ enabled: true }));
+  Check(Count, "selfcheck: a failing assertion counts as FAIL", () => {
+    assert.equal(1, 2);
+  });
+  Check(Count, "selfcheck: the fake ctx carries the spec's surfaces", () => {
+    assert.equal(Count.N, 2);
+    assert.equal(Count.F, 1);
+    assert.equal(typeof Run.Context.on, "function");
+    assert.equal(typeof Run.Context.commands.register, "function");
+    assert.equal(typeof Run.Factory.Append, "function");
+  });
+  console.log(Count.N === 2 && Count.F === 1 ? "Harness selfcheck OK" : `Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+  if (Count.N !== 2 || Count.F !== 1) process.exitCode = 1;
+}
+export {
+  Check,
+  CheckAsync,
+  Finish,
+  Make,
+  MakeCounter,
+  Plugin,
+  Validate
+};
+//# sourceMappingURL=Harness.js.map

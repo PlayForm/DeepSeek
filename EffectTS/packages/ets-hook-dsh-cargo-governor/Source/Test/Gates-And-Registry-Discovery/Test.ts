@@ -26,6 +26,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: the actor + kind gates.
 	{
 		const dir = Group("gates");

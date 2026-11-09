@@ -100,7 +100,9 @@ export const Open = (
 	};
 	Boards.set(ID, Board);
 	Append(`plant opened ${ID} (expect ${Expect})`);
+
 	// The pinned members enroll through Enroll (the ledger line per member);
+
 	// more pins than slots overflow.
 	for (const MemberID of Pinned) {
 		const Enrolled = Enroll(Agent, Board, MemberID, Append);
@@ -385,6 +387,7 @@ const MONITORED_OUTCOMES: Record<string, string> = {
 /** The agent-board frame (D2 4.4 + I5, byte-exact). */
 export const Frame = (Agent: State, Board: BoardState, Separator: string): string => {
 	const At = Clock(Agent);
+
 	// The board-level STALE declaration (the orphan case, I5 2.4 + D2 4.4
 	// verbatim): the parent's previous request is older than orphanBudgetMs.
 	const LastTurn = Agent.LastTurnAt.get(Board.agentId);
@@ -495,6 +498,7 @@ export const Frame = (Agent: State, Board: BoardState, Separator: string): strin
 		(Member) => Member.status === "stale" || Member.status === "stalled",
 	).length;
 	Lines.push(`total: ${Done} done / ${Running} running / ${Stale} stale / ${Empty} empty`);
+
 	// The re-dispatch hint (I5 3.3): one line, appended as the LAST line of
 	// the board frame when any member's lease has expired AND failsafes are
 	// on. The hint is channel 4 - it renders with stallAction warn-only too.
@@ -526,10 +530,12 @@ export const SectionParts = (
 	Append: Log,
 ): string[] => {
 	const At = Clock(Agent);
+
 	// The deadline scan (the live-timeout kill and the hang failsafe check at
 	// every assemble pass and on every jobs event - no real timers in the
 	// plugin; the next event is the bound, matching "acts at the next request").
 	ScanDeadlines(Agent, Append);
+
 	// The live jobs (the fleet).
 	const Records = Agent.Detached.get(AgentID);
 	const Live = [...(Records?.values() ?? [])].filter((Record) => Record.status === undefined);

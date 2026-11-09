@@ -26,6 +26,7 @@ import SectionList from "../../../Target/Variable/Default.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// The folder fixtures: the fake ctx + the REAL factory instance, the temp
 	// root, the flavor ledger and the source suite's st1 State.
 	const Fake = Make(null, { files: {} });
@@ -54,6 +55,7 @@ export const runTest = async (): Promise<number> => {
 		},
 		{ module: "smoke-flavor", fields: { Section: "sections", Strict: "strict" } },
 	);
+
 	// Group: 15 - Schema: shared volatile fields + module fields.
 	{
 		const Sub =

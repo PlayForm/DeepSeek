@@ -23,6 +23,7 @@ export default interface Host {
 	 *  `not-found` when the log file does not exist, `rejected` when the
 	 *  namespace or the line count is invalid. */
 	tail(namespace: string, lines: number): Promise<unknown>;
+
 	/** stats(): the CCR store summary. The LRU internals are not exposed by
 	 *  any existing remote (the ccr adapter's LRU count stays deferred to
 	 *  the Typert spike), so v1 returns the ccr log summary (the log path,

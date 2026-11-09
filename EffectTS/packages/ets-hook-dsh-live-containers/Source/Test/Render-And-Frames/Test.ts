@@ -45,6 +45,7 @@ const Expected1 = Object.values(ExpectedFrames).join("\n");
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: the section shape and the six kind frames (one assembly over a
 	// table with one block of every phase-1 kind plus one wave-2 kind).
 	rm();

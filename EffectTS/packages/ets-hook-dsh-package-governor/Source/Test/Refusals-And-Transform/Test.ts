@@ -43,6 +43,7 @@ export const runTest = async (): Promise<number> => {
 	Boot();
 	Probe.Mode = "bin";
 	const Listener = Events.find((e) => e[0] === "fs/observed")![1];
+
 	// -- the silent replay fixture (source suite section 5, unasserted) --
 	const projA = Path.join(Root, "proj-a");
 	FileSystem.mkdirSync(projA);
@@ -58,6 +59,7 @@ export const runTest = async (): Promise<number> => {
 	});
 	Listener(mkTarget(projA, "k-a"), { kind: "present", version: "v1" }, actor);
 	await settle();
+
 	// Group: chain-pass no-ops and refusals.
 	{
 		// non-JSON manifest
@@ -206,6 +208,7 @@ export const runTest = async (): Promise<number> => {
 		undefined,
 		["a", "leftpad"],
 	);
+
 	// Type-level narrowing for the raw-tsc emit (the L5A awaited step): the
 	// factory types the transform's result `Output | null` (idempotent
 	// manifests yield the designed no-op) and `next` unknown; this manifest
@@ -233,6 +236,7 @@ export const runTest = async (): Promise<number> => {
 		}
 	}
 	// The compose arm of the factory's `message?` union (string | composer);
+
 	// the assertion below already proves the composed bytes.
 	const Compose = out.message as (outcome: { version: string }) => string;
 	const msg = Compose({ version: "fresh-9" });

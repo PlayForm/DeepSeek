@@ -10,6 +10,7 @@ import { Suppress } from "../../../Target/Library.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Suppress - the suppression-line composer (module/kind/cause).
 	{
 		const Sub = "Suppress: the suppression-line composer (module/kind/cause)";

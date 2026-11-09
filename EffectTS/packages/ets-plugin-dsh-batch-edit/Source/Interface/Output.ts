@@ -21,11 +21,14 @@ export default interface Output {
 	applied: number;
 	failed: number;
 	halted: number;
+
 	/** The background job id when the commit exceeded the deadline and
 	 *  continues as a background job. */
 	jobId?: string;
+
 	/** The misses listed at open/insert (never guessed). */
 	misses?: string[];
+
 	/** The advisory intercept's note when a bash call on a held file was
 	 *  observed (v1, interceptBash on). */
 	offer?: string;

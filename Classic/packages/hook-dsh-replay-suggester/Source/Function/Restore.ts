@@ -33,8 +33,10 @@ const Valid = (Value: unknown): Value is Entry => {
 export default (
 	/** The plugin state (the mirror, the sequence and the ledger). */
 	State: State,
+
 	/** The tier's rows, in store order (untrusted). */
 	Rows: unknown[],
+
 	/** The tier's name for the ledger line (`replay_history` or `file`). */
 	Source: string,
 ): void => {

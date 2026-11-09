@@ -44,6 +44,7 @@ export const runTest = async (): Promise<number> => {
 		dedup: true,
 		retryFailsafeCount: 3,
 	};
+
 	// Group J1: the transform (detach + fabricated result).
 	rm();
 	ClockBox.Now = 1700000000000;

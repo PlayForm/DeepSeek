@@ -52,10 +52,12 @@ export default (
 	const Snapshot = Graph_.snapshot();
 	const Scope = Request.id ?? Request.query ?? "workspace overview";
 	const FocusNode = Request.id === undefined ? undefined : Focus(Graph_, Request.id);
+
 	// The top modules: the File nodes under the focus path (or all files),
 	// capped at the config's mapMaxModules.
 	const Files = Graph_.find({ kind: "File", limit: State_.MapMaxModules });
 	const MapLines = Files.map((File_) => `${File_.path} (${Role(Graph_, File_.path)})`);
+
 	// The neighbors: expanded from the focus, ranked by edge strength.
 	const Expansion = FocusNode
 		? Graph_.expand(FocusNode.id, { depth: State_.ExpandDepth })
@@ -64,6 +66,7 @@ export default (
 		(Left, Right) => (Strength[Right.kind] ?? 0) - (Strength[Left.kind] ?? 0),
 	);
 	const NeighborLines = Ranked.map((Edge_) => `${Edge_.from} -${Edge_.kind}-> ${Edge_.to}`);
+
 	// The evidence: the focus node's own file and span.
 	const EvidenceLines =
 		FocusNode === undefined
@@ -71,12 +74,14 @@ export default (
 			: [
 					`${FocusNode.path}:${FocusNode.span?.startLine ?? 1}-${FocusNode.span?.endLine ?? "?"}`,
 				];
+
 	// The open questions: the deferred W1 edge kinds, honestly.
 	const OpenLines = [
 		"references edges are deferred to W2+ - call/reference counts are unavailable",
 		"calls edges are deferred to W2+ - call ranking is unavailable",
 		"tests edges are deferred to W2+ - test coverage ranking is unavailable",
 	];
+
 	// The stale marker: only when the caller's version differs.
 	const Stale =
 		Request.version !== undefined && Request.version !== Snapshot.indexRevision

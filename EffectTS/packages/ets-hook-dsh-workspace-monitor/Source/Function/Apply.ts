@@ -75,6 +75,7 @@ export default (Context: Context, Options: Config): void => {
 	State.Events = 0;
 	State.Sweeps = 0;
 	State.LastSweepAt = undefined;
+
 	// The hook's OWN actor marker: an fs/observed event carrying exactly this
 	// object as its actor is the hook's own (the identity check in the
 	// listener) and is ignored.
@@ -94,10 +95,12 @@ export default (Context: Context, Options: Config): void => {
 			["checksets", String(Object.keys(State.CheckSets ?? {}).length)],
 		]),
 	);
+
 	// The fs/observed listener, on the ROOT context (the factory's Wire).
 	Factory.Wire(Context, State, (Target, Observation, Actor) =>
 		Watch(State, Target, Observation, Actor),
 	);
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__hookDshWorkspaceMonitorState"] = State;

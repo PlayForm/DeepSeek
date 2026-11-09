@@ -314,6 +314,7 @@ const Validate = (Options: unknown): void => {
 	const MonitorCell = (
 		typeof MonitorRaw === "object" && MonitorRaw !== null ? MonitorRaw : {}
 	) as Record<string, unknown>;
+
 	// A strict numeric helper for the monitor knobs: absent or non-finite
 	// values fail loud (the schema always fills them; a hand-built config
 	// without them is invalid).
@@ -522,6 +523,7 @@ export default (Context: Context, Options: Config): void => {
 	State.Registry = new Set();
 	State.Labels = new WeakMap();
 	State.LabelCount = 0;
+
 	// The wave-2 state (appended only): per-agent records keyed on the agent's
 	// session id, the exec tags, and the config-derived wave-2 knobs (unwrapped
 	// from their volatile cells).
@@ -610,6 +612,7 @@ export default (Context: Context, Options: Config): void => {
 	State.HangWatch = new Map();
 	State.LastTurnAt = new Map();
 	State.Variables = new Map();
+
 	// The wave-3 state (appended only): the per-agent monitor sets, the live
 	// monitor jobs, and the storage sink (the P5-style open fills it). The
 	// monitor knobs (MonitorOn/Monitor/Watchlist/CheckSets) come from the
@@ -639,6 +642,7 @@ export default (Context: Context, Options: Config): void => {
 			SandboxPolicy: Raw["sandboxPolicy"] as NonNullable<State["Wave"]>["SandboxPolicy"],
 		};
 	})();
+
 	// The wave-2 cross-module bindings (the board module's Open for the
 	// suggester's dormant blocks).
 	Suggester.BindBoard(Board.Open);
@@ -1060,6 +1064,7 @@ export default (Context: Context, Options: Config): void => {
 	// precedent) so every write the harness emits is heard. The arming gate
 	// is the SAME one the wave-2 listeners use: the bare phase-1 fixture
 	// (no services) mounts the phase-1 listener set unchanged, byte-for-byte;
+
 	// in production `inject` guarantees ctx.jobs, so the gate is always open.
 	// ------------------------------------------------------------------
 	if (WaveArmed) {

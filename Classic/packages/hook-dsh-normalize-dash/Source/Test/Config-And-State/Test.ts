@@ -21,6 +21,7 @@ import { Check, Finish, Furnace, Ledger, Make, MakeCounter, Rm, Validate } from 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	Rm();
+
 	// Group: Run 1 - defaults (the config cells, the listeners, the state).
 	{
 		const Raw1 = Validate({ logFile: Ledger });

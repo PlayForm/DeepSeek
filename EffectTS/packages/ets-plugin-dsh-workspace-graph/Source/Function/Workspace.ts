@@ -32,6 +32,7 @@ export default async (
 		targetKey: string;
 		displayPath: string;
 	};
+
 	// The bound: a finite option >= 0 is honored (0 = index nothing); an
 	// absent, negative or non-finite option falls back to the config, so the
 	// walk can never run unbounded on a NaN.

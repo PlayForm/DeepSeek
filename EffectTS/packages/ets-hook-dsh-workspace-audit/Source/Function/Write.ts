@@ -35,6 +35,7 @@ export default (
 		sequence: State.Sequence,
 		at: Date.now(),
 	};
+
 	// The ledger line: the accountability record in human-readable form.
 	// An assessment line renders its verdict; everything else renders the
 	// outcome.

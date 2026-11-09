@@ -22,6 +22,7 @@ export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 	const World = Boot();
 	const { ctx, Factory, Returned, st } = World;
+
 	// Group: the real service and the apply contract.
 	{
 		const Sub = "the REAL factory service instantiated against the fake ctx";

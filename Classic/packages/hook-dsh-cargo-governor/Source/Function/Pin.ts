@@ -47,8 +47,10 @@ import SplitPath from "./Pin/SplitPath.js";
 export interface Outcome {
 	/** The rewritten text (unchanged when nothing matched or on refusal). */
 	Text: string;
+
 	/** Whether any line was modified. */
 	Changed: boolean;
+
 	/** Refusal message when the rewrite was aborted, else null. */
 	Refusal: string | null;
 }
@@ -71,6 +73,7 @@ export default (Text: string, Plan: Plan, Path: string): Outcome => {
 	const Lines = Text.split("\n");
 	let Changed = false;
 	let Refusal: string | null = null;
+
 	// Scanner state: the current section path (when inside a planned dependency
 	// section) and, for table-style entries, the pending entry it opens.
 	let CurrentSection: string | null = null;

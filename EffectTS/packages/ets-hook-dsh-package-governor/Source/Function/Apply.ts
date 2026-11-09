@@ -40,6 +40,7 @@ export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).
 	const Factory = Context.pluginFactory;
+
 	// The State: the factory's shared shape plus the governor's own fields,
 	// copied from the (cell-unwrapped) validated config by the setup map.
 	const State: State = Factory.State(Context, Options, {
@@ -53,6 +54,7 @@ export default (Context: Context, Options: Config): void => {
 		},
 		policyFileName: "update-policy.json",
 	});
+
 	// The update engine's own collections (module state, not factory
 	// machinery): cooldown stamps, per-dir in-flight set, circuit breaker.
 	State.Stamp = new Map();
@@ -105,6 +107,7 @@ export default (Context: Context, Options: Config): void => {
 	Factory.Wire(Context, State, (Target, Observation, Actor) =>
 		Observe(State, Target, Observation, Actor),
 	);
+
 	// The direct-govern registration (the factory's GovernSteps registry): the
 	// raw-write tool's per-call `govern` path. Two steps for the
 	// "package.json" basename, in registered order — the chain pass WITHOUT
@@ -117,6 +120,7 @@ export default (Context: Context, Options: Config): void => {
 	Factory.RegisterGovern("package.json", "update", (Target, Actor, Version) =>
 		Direct.Update(State, Target, Actor, Version),
 	);
+
 	// The loader ignores any return value; the smoke harness probes the
 	// per-dir in-flight/breaker maps through this debug attachment instead
 	// (a bare `return State` is avoided: loader behavior on apply return

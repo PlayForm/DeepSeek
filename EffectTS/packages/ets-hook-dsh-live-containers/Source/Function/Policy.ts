@@ -220,6 +220,7 @@ export const Decide = (
 	Turn: number,
 ): Decision => {
 	const Detach = Agent.Detach;
+
 	// Capacity: maxLivePerAgent (the registry's own per-owner cap is checked by
 	// the registry's start() itself).
 	if (LiveCount(Agent, AgentID) >= Detach.maxLivePerAgent) {

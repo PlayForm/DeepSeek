@@ -35,6 +35,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: R2 - detect + strike: 3 offenses below the per-class threshold,
 	// the 4th (same class) notes; the note text is byte-exact and carries the
 	// LIVE fetch (D1's discriminator).

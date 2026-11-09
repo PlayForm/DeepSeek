@@ -17,6 +17,7 @@
 export default (Segment: string): string | undefined => {
 	const Tokens = Segment.trim().split(/\s+/);
 	let Index = 0;
+
 	// Skip leading `KEY=VALUE` env assignments.
 	while (Index < Tokens.length && /^[A-Za-z_][A-Za-z0-9_]*=/.test(Tokens[Index] ?? "")) {
 		Index += 1;
@@ -26,6 +27,7 @@ export default (Segment: string): string | undefined => {
 			return undefined;
 	}
 	Index += 1;
+
 	// Skip flags between `git` and the subcommand.
 	while (Index < Tokens.length && (Tokens[Index] ?? "").startsWith("-")) {
 		Index += 1;

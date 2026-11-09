@@ -78,11 +78,13 @@ export default (Context: Context, Options: Config): void => {
 			["allowPatterns", String(State.Allow.length)],
 		]),
 	);
+
 	// The tools/pre-execute registration: the intercept (the plan's
 	// trigger surface - the same pre-execute hook the family's mutation
 	// gating uses for file writes). The guard judges the terminal commands
 	// and refuses the git mutations. The event key and the decision type come
 	// from @deepseek-ai/dsh-tools' own augmentation (never re-declared here);
+
 	// the guard's refusal payload is returned VERBATIM - the cast is
 	// type-level only and changes no runtime bytes.
 	Context.on(
@@ -90,6 +92,7 @@ export default (Context: Context, Options: Config): void => {
 		(Payload: ToolExecution, Next: () => Promise<PreToolDecision>) =>
 			Guard(State, Payload, Next) as Promise<PreToolDecision>,
 	);
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__pluginDshGitguardState"] = State;

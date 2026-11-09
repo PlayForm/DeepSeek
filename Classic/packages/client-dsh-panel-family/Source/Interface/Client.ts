@@ -26,6 +26,7 @@ export type ClientContext = Context & {
 	locale: {
 		register(namespace: string, dictionaries: Record<string, unknown>): () => void;
 	};
+
 	/** The client slot service: mounts components into named slots. */
 	slots: {
 		/**

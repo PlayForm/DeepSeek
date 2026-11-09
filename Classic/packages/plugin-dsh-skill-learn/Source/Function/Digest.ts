@@ -39,8 +39,10 @@ import type Message from "@Interface/Message.js";
 export interface DigestLimits {
 	/** Messages kept verbatim; older ones collapse into the summary lines. */
 	readonly digestTail: number;
+
 	/** The cap on one `USER: ` summary line. */
 	readonly digestUserChars: number;
+
 	/** The cap on one `ASSISTANT: ` summary line. */
 	readonly digestAssistantChars: number;
 }
@@ -49,8 +51,10 @@ export interface DigestLimits {
 export interface DigestResult {
 	/** The digest text; empty only for an empty transcript. */
 	readonly text: string;
+
 	/** How many trailing messages were kept verbatim. */
 	readonly kept: number;
+
 	/** How many leading messages collapsed into the summary. */
 	readonly collapsed: number;
 }
@@ -149,6 +153,7 @@ export default (Messages: readonly Message[], Limits: DigestLimits): DigestResul
 	const Kept = Messages.slice(Messages.length - Keep);
 	const Older = Messages.slice(0, Messages.length - Keep);
 	const Verbatim = Kept.flatMap((Entry) => Lines(Entry, Whole));
+
 	// The no-op case: the transcript already fits in the tail, so it is returned
 	// unchanged and no header is invented (`agent/background_review.py:342-343`).
 	switch (true) {

@@ -31,6 +31,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// The folder fixtures: the fake ctx + the REAL factory instance, the temp
 	// root, the source suite's st1 and st3 States and the Gate fixtures.
 	const Fake = Make(null, { files: {} });
@@ -59,6 +60,7 @@ export const runTest = async (): Promise<number> => {
 	const actor = { name: "edit" };
 	const present = { kind: "present", version: "v1" };
 	const base = { basename: "package.json" };
+
 	// Group: 7 - Gate: the full g1 matrix.
 	{
 		const Sub = "Gate: full g1 matrix (target/govern/actor/kind/idempotent/basename/excluded/pass)";

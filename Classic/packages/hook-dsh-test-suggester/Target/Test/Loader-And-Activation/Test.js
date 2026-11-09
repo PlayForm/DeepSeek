@@ -1,1 +1,153 @@
-import e from"node:assert/strict";import{AgentOf as c,Check as a,CheckAsync as h,Finish as m,Ledger as i,LedgerLines as y,LedgerWith as p,MakeCounter as q,Make as r,Plugin as d,rm as u,Validate as n}from"../Harness.js";const f=async()=>{const s=q();a(s,"L1: the default object carries name/apply/Config/inject",()=>{e.equal(d.name,"test-suggester"),e.equal(typeof d.apply,"function"),e.ok(d.Config!==void 0),e.deepEqual(d.inject,["pluginFactory"])});{u();const t=r(n({logFile:i,enabled:!1}));a(s,"L2: apply returns NOTHING and the state probe exists",()=>{e.equal(t.Returned,void 0),e.ok(t.State!==void 0),e.equal(t.State.On,!1)}),a(s,"L2: the cold mount logs the byte-exact disabled line",()=>{e.deepEqual(t.Lines,["test-suggester: disabled (enabled=false)"])}),a(s,"L2: the disabled line is in the durable ledger exactly once",()=>{e.equal(p("disabled (enabled=false)").length,1),e.ok(y()[0]?.endsWith("] disabled (enabled=false)"))}),a(s,"L2: a disabled mount still wires every listener and registers the projection unit",()=>{e.deepEqual(Object.keys(t.CtxListeners),["loader/volatile-update","tools/post-execute","agent/pre-step"]),e.deepEqual(t.Injected,[["sessionProjections"]]),e.equal(t.Projections.Units.has("testHistory"),!0)})}{u();const t=r(n({logFile:i,enabled:!0}));a(s,"L3: the activation line is byte-exact (the history segment)",()=>{e.ok(t.Lines.includes("test-suggester: activated (bundle 0.2.1, history, threshold 0.75)"))}),a(s,"L3: the activation line is in the durable ledger exactly once",()=>{e.equal(p("activated (bundle 0.2.1, history, threshold 0.75)").length,1)}),a(s,"L3: the listeners register on the plugin ctx in order",()=>{e.deepEqual(Object.keys(t.CtxListeners),["loader/volatile-update","tools/post-execute","agent/pre-step"]),e.deepEqual(t.Injected,[["sessionProjections"]])}),a(s,"L3: the root is a distinct context object",()=>{e.notEqual(t.Root,t.Context)}),await h(s,"L3: the projection unit folds one touch per committed tool/call and skips the rest",async()=>{await t.Ready;const o=c("fold-agent").session;t.Projections.Commit(o,{type:"tool/call",seq:0,data:{name:"read",arguments:JSON.stringify({file_path:"./Source/Test/Foo/Test.ts"})}}),t.Projections.Commit(o,{type:"message"}),t.Projections.Commit(o,{type:"tool/call",seq:1,data:{name:"grep",arguments:'{"path":"README.md"}'}});const l=t.Projections.StateOf(o,"testHistory");e.equal(l.Seq,2),e.deepEqual(l.Touches,[{seq:0,path:"Source/Test/Foo/Test.ts",tool:"read"},{seq:1,path:"README.md",tool:"grep"}])})}{const t=r(n({logFile:i,enabled:!0})),o={kind:"allow"};await h(s,"L4: a non-judged tool passes the decision through unchanged",async()=>{const l=await t.CtxListeners["tools/post-execute"]({name:"write",arguments:{file_path:"x.md"},agent:c("l4")},void 0,async()=>o);e.equal(l,o),e.deepEqual(t.Lines.filter(g=>g.includes("candidates call")),[])}),a(s,"L4: the boot projection is retired (no built-in pack at apply)",()=>{e.equal(t.State.Rules.length,0),e.equal(t.State.Intents.length,0),e.equal(t.State.History,void 0),e.equal(t.Projections.Units.has("testHistory"),!0)})}a(s,"L5: a non-numeric threshold fails loud at load",()=>{e.throws(()=>n({threshold:"high"}))}),a(s,"L5: a non-boolean enabled fails loud at load",()=>{e.throws(()=>n({enabled:"yes"}))});{u();const t=r(n({logFile:i,enabled:!0}));a(s,"L6: the mount performs ZERO fs operations (read-only by design)",()=>{e.equal(t.Fs.reads.length,0),e.equal(t.Fs.writes.length,0),e.equal(t.Fs.resolved.length,0),e.equal(t.Fs.stats.length,0)}),a(s,"L6: the state probe carries the factory's module identity",()=>{e.equal(t.State.Module,"test-suggester"),e.equal(t.State.Rules.length,0),e.equal(t.State.Threshold,.75)})}return m(s,"Loader-And-Activation")},b=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(b){const s=await f();console.log(`${s} PASS - Loader-And-Activation`)}export{f as runTest};
+import assert from "node:assert/strict";
+import {
+  AgentOf,
+  Check,
+  CheckAsync,
+  Finish,
+  Ledger,
+  LedgerLines,
+  LedgerWith,
+  MakeCounter,
+  Make,
+  Plugin,
+  rm,
+  Validate
+} from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    Check(Count, "L1: the default object carries name/apply/Config/inject", () => {
+      assert.equal(Plugin.name, "test-suggester");
+      assert.equal(typeof Plugin.apply, "function");
+      assert.ok(Plugin.Config !== void 0);
+      assert.deepEqual(Plugin.inject, ["pluginFactory"]);
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: false }));
+    Check(Count, "L2: apply returns NOTHING and the state probe exists", () => {
+      assert.equal(Run.Returned, void 0);
+      assert.ok(Run.State !== void 0);
+      assert.equal(Run.State.On, false);
+    });
+    Check(Count, "L2: the cold mount logs the byte-exact disabled line", () => {
+      assert.deepEqual(Run.Lines, ["test-suggester: disabled (enabled=false)"]);
+    });
+    Check(Count, "L2: the disabled line is in the durable ledger exactly once", () => {
+      assert.equal(LedgerWith("disabled (enabled=false)").length, 1);
+      assert.ok(LedgerLines()[0]?.endsWith("] disabled (enabled=false)"));
+    });
+    Check(Count, "L2: a disabled mount still wires every listener and registers the projection unit", () => {
+      assert.deepEqual(Object.keys(Run.CtxListeners), [
+        "loader/volatile-update",
+        "tools/post-execute",
+        "agent/pre-step"
+      ]);
+      assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+      assert.equal(Run.Projections.Units.has("testHistory"), true);
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }));
+    Check(Count, "L3: the activation line is byte-exact (the history segment)", () => {
+      assert.ok(
+        Run.Lines.includes(`test-suggester: activated (bundle ${"0.2.1"}, history, threshold 0.75)`)
+      );
+    });
+    Check(Count, "L3: the activation line is in the durable ledger exactly once", () => {
+      assert.equal(
+        LedgerWith(`activated (bundle ${"0.2.1"}, history, threshold 0.75)`).length,
+        1
+      );
+    });
+    Check(Count, "L3: the listeners register on the plugin ctx in order", () => {
+      assert.deepEqual(Object.keys(Run.CtxListeners), [
+        "loader/volatile-update",
+        "tools/post-execute",
+        "agent/pre-step"
+      ]);
+      assert.deepEqual(Run.Injected, [["sessionProjections"]]);
+    });
+    Check(Count, "L3: the root is a distinct context object", () => {
+      assert.notEqual(Run.Root, Run.Context);
+    });
+    await CheckAsync(Count, "L3: the projection unit folds one touch per committed tool/call and skips the rest", async () => {
+      await Run.Ready;
+      const Session = AgentOf("fold-agent").session;
+      Run.Projections.Commit(Session, {
+        type: "tool/call",
+        seq: 0,
+        data: {
+          name: "read",
+          arguments: JSON.stringify({ file_path: "./Source/Test/Foo/Test.ts" })
+        }
+      });
+      Run.Projections.Commit(Session, { type: "message" });
+      Run.Projections.Commit(Session, {
+        type: "tool/call",
+        seq: 1,
+        data: { name: "grep", arguments: '{"path":"README.md"}' }
+      });
+      const History = Run.Projections.StateOf(Session, "testHistory");
+      assert.equal(History.Seq, 2);
+      assert.deepEqual(History.Touches, [
+        { seq: 0, path: "Source/Test/Foo/Test.ts", tool: "read" },
+        { seq: 1, path: "README.md", tool: "grep" }
+      ]);
+    });
+  }
+  {
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }));
+    const Decision = { kind: "allow" };
+    await CheckAsync(Count, "L4: a non-judged tool passes the decision through unchanged", async () => {
+      const Result = await Run.CtxListeners["tools/post-execute"](
+        { name: "write", arguments: { file_path: "x.md" }, agent: AgentOf("l4") },
+        void 0,
+        async () => Decision
+      );
+      assert.equal(Result, Decision);
+      assert.deepEqual(Run.Lines.filter((L) => L.includes("candidates call")), []);
+    });
+    Check(Count, "L4: the boot projection is retired (no built-in pack at apply)", () => {
+      assert.equal(Run.State.Rules.length, 0);
+      assert.equal(Run.State.Intents.length, 0);
+      assert.equal(Run.State.History, void 0);
+      assert.equal(Run.Projections.Units.has("testHistory"), true);
+    });
+  }
+  {
+    Check(Count, "L5: a non-numeric threshold fails loud at load", () => {
+      assert.throws(() => Validate({ threshold: "high" }));
+    });
+    Check(Count, "L5: a non-boolean enabled fails loud at load", () => {
+      assert.throws(() => Validate({ enabled: "yes" }));
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }));
+    Check(Count, "L6: the mount performs ZERO fs operations (read-only by design)", () => {
+      assert.equal(Run.Fs.reads.length, 0);
+      assert.equal(Run.Fs.writes.length, 0);
+      assert.equal(Run.Fs.resolved.length, 0);
+      assert.equal(Run.Fs.stats.length, 0);
+    });
+    Check(Count, "L6: the state probe carries the factory's module identity", () => {
+      assert.equal(Run.State.Module, "test-suggester");
+      assert.equal(Run.State.Rules.length, 0);
+      assert.equal(Run.State.Threshold, 0.75);
+    });
+  }
+  return Finish(Count, "Loader-And-Activation");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Loader-And-Activation`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

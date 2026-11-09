@@ -4,6 +4,7 @@
 // batch actually wrote (W4.1 section 6, check 4).
 export default interface Preview {
 	id: string;
+
 	/** True when every gate and fence passed (the batch is ready). */
 	ok: boolean;
 	files: {
@@ -13,8 +14,10 @@ export default interface Preview {
 		bytes: number;
 		status: "ready" | "conflict";
 	}[];
+
 	/** SHA-256 of the joined intended contents (hex). */
 	digest: string;
+
 	/** The gate reason when the batch is not ready. */
 	reason?: string;
 }

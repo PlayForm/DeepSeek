@@ -52,14 +52,19 @@ const Depth = 3;
 export interface Archived {
 	/** Whether the copy landed and the live file was neutralized. */
 	readonly ok: boolean;
+
 	/** `archived` is the only success; the rest name why nothing was archived. */
 	readonly outcome: "archived" | "absent" | "foreign-root" | "failed";
+
 	/** The archive directory the copy landed in, or "" when nothing was copied. */
 	readonly path: string;
+
 	/** The live package as it was, for the ledger row's before side. */
 	readonly before: readonly Touched[];
+
 	/** The archive copy as it is, for the ledger row's after side. */
 	readonly after: readonly Touched[];
+
 	/** One clause of detail when the outcome is not `archived`. */
 	readonly detail?: string;
 }
@@ -68,11 +73,14 @@ export interface Archived {
 export interface Restored {
 	/** Whether the live file was written back. */
 	readonly ok: boolean;
+
 	/** `restored` is the only success; the rest name why nothing was written. */
 	readonly outcome:
 		"restored" | "not-archived" | "destination-exists" | "foreign-root" | "failed";
+
 	/** The live path that was written, or "" when nothing was written. */
 	readonly path: string;
+
 	/** One clause of detail when the outcome is not `restored`. */
 	readonly detail?: string;
 }

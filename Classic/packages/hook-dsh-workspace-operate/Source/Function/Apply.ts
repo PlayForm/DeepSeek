@@ -50,6 +50,7 @@ export default (Context: Context, Options: Config): void => {
 	State.Graph = undefined;
 	State.Handle = undefined;
 	State.Self = { plugin: "hook-dsh-workspace-operate" };
+
 	// The service is registered from apply: the Service base constructor
 	// calls ctx.reflect.provide("workspaceOperate", this).
 	new ServiceClass(Context, State);
@@ -62,11 +63,13 @@ export default (Context: Context, Options: Config): void => {
 	}
 	// The activation proof (the module's own composed line).
 	Factory.Append(State, Activate([["domain", State.DomainName]]));
+
 	// The fs/observed fence tracker, on the ROOT context (the factory's
 	// Wire) - silent by design, the staleness rule's data source.
 	Factory.Wire(Context, State, (Target, Observation, Actor) =>
 		Observe(State, Target, Observation, Actor),
 	);
+
 	// The two tools (the probe keeps the POC self-contained: the tools
 	// service is a host facility, not a sibling package).
 	const Host = Context as unknown as {
@@ -101,6 +104,7 @@ export default (Context: Context, Options: Config): void => {
 			}
 		};
 	}, "operate-storage");
+
 	// The test probe (live-containers precedent): apply returns NOTHING; the
 	// state is exposed through the context attachment.
 	(Context as unknown as Record<string, unknown>)["__hookDshWorkspaceOperateState"] = State;

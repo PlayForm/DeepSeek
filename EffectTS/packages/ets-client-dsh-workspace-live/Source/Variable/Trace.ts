@@ -17,18 +17,25 @@ const StateChange = "batch/state-change";
 export default {
 	/** The service name the factory provides on the host (`ctx.trace`). */
 	service: "trace",
+
 	/** The observe hook's recorded stamp (the indexer's first source). */
 	observe: Observe,
+
 	/** The graph stored (or replaced) a file record. */
 	indexed: Indexed,
+
 	/** The graph's record for a path is no longer valid. */
 	invalidated: Invalidated,
+
 	/** The batch gate heard a proposal (the decision hook's event). */
 	proposed: Proposed,
+
 	/** The batch gate decided a proposal (the decision hook's event). */
 	decision: Decision,
+
 	/** The batch state machine moved (the batchstate plugin's event). */
 	stateChange: StateChange,
+
 	/** Every name the live view follows. */
 	kinds: [Observe, Indexed, Invalidated, Proposed, Decision, StateChange],
 } as const;

@@ -185,10 +185,12 @@ export default (Context: Context, Options: Config): void => {
 		},
 	});
 	State.Factory = Factory;
+
 	// No boot projection: the candidates come from the session history, and
 	// only an EXPLICIT repo/user pack compiles (per call, below).
 	State.Pack = [];
 	State.Rings = Ring();
+
 	// The learned layer: the pattern service when the host provides one, the
 	// bounded memory fallback otherwise (probed per use - the service may load
 	// after this plugin).

@@ -59,6 +59,7 @@ const Accept = async () => ({ kind: "accept" });
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: I - the intent stash and the per-task gate. One apply with the
 	// REAL schema defaults; two fake agent identities (plain objects stand in
 	// for the harness's Agent instances - the Map keys by identity).

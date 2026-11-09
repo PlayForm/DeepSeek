@@ -244,6 +244,7 @@ export const Make = (Raw: any, Attach?: (Context: any, Run: any) => void): any =
 		Raw,
 		Fs,
 	};
+
 	// The optional pre-apply attachment: the seeded state file must be in
 	// place BEFORE apply runs (the recovery reads it at apply time).
 	Attach?.(Context, Run);
@@ -314,6 +315,7 @@ export const FakeStorage = (Options: { failOpen?: boolean; version?: number } = 
 			};
 		},
 	};
+
 	/** Seed one record (the restart scenario: the store outlives the process). */
 	Store.seed = (Name: string, Key: string, Value: unknown): void => {
 		if (!Store.tables.has(Name)) {
@@ -356,6 +358,7 @@ if (InvokedDirectly) {
 	Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
 		assert.equal(1, 2);
 	});
+
 	// The seam selfcheck: the fake ctx actually wires the plugin (the
 	// vacuously-green backstop for every folder's fixture - a broken seam
 	// would print fewer checks in every folder, which the runner's

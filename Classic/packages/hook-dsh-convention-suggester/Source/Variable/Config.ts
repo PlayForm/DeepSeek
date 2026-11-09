@@ -64,6 +64,7 @@ export default Compose(false, {
 	emitOn: Schema.array(String).default(DefaultEmitOn).volatile(),
 	// Path prefixes a candidate is never drawn from (volatile).
 	exclude: Schema.array(String).default(DefaultExclude).volatile(),
+
 	/** Retired: the literal pack learner is no longer called; kept for config compatibility until the history-driven proposal lands. */
 	learning: Schema.boolean().default(DefaultLearning).volatile(),
 });

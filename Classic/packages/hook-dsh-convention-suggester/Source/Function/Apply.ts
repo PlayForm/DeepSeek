@@ -147,6 +147,7 @@ export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).
 	const Factory = Context.pluginFactory;
+
 	// The State: the factory's shared shape plus the hook's own fields,
 	// copied from the (cell-unwrapped) validated config by the setup map.
 	const State: State = Factory.State<State>(Context, Options, {
@@ -181,9 +182,11 @@ export default (Context: Context, Options: Config): void => {
 			),
 		);
 	};
+
 	// No boot compile: the candidates come from the session history, and only
 	// an explicit pack compiles (per root, below).
 	State.Rules = [];
+
 	// The per-root compile memo: a resolved workspace pack's intents are
 	// compiled once per (root, threshold, intents) tuple, never on every call.
 	const Compiled = new Map<string, typeof State.Rules>();

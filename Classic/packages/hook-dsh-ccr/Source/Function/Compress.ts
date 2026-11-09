@@ -55,20 +55,26 @@ export type Verdict =
 export default (State: State, Name: string, IsError: boolean, Content: ContentBlock[]): Verdict => {
 	// 1. Empty content - nothing to compress, nothing to retrieve.
 	if (Content.length === 0) return { action: "pass" };
+
 	// 2. The exemption list - byte-identical pass-through, always.
 	if (State.Exempt.includes(Name)) return { action: "pass" };
+
 	// 3. Failures pass through unless compressFailures.
 	if (IsError && !State.Failures) return { action: "pass" };
+
 	// 4. The target allow-list.
 	if (!State.Targets.includes(Name)) return { action: "pass" };
+
 	// The classified type (an error result classifies as `error`, the ×8 tier).
 	const Type = Classify(Name, IsError, Content);
+
 	// 5. The byte gate: thresholdBytes × the type's multiplier; over it, compress.
 	const Serialized = JSON.stringify(Content);
 	const Size = Buffer.byteLength(Serialized, "utf8");
 	const Multipliers = State.Multipliers ?? ({} as State["Multipliers"]);
 	const Multiplier = Multipliers[Type as keyof typeof Multipliers] ?? Multipliers.default ?? 1;
 	if (!(Size > State.Threshold * Multiplier)) return { action: "pass" };
+
 	// 6. Store: the hash of the FULL serialized bytes, the deep-copied content
 	// (the result object is read-only and caller-owned), the TTL stamp, and the
 	// live budget (volatile: read at every insert).
@@ -83,6 +89,7 @@ export default (State: State, Name: string, IsError: boolean, Content: ContentBl
 		ttlAt: Date.now() + State.Ttl * 1000,
 		lastAccessed: Date.now(),
 	});
+
 	// The auto-expand branch: store + full content, no marker.
 	if (State.AutoExpand && Size <= State.AutoExpandLimit) {
 		return { action: "store", type: Type, size: Size, hash: Hash24, evicted: Evicted };

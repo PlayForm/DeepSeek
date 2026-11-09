@@ -177,6 +177,7 @@ export const runTest = async (): Promise<number> => {
 		}
 	}
 	// Group: Run 1 - the activation line (the module's own string, byte-exact;
+
 	// the replacement knob prints as `replacement= ` -- a space value after the
 	// equals sign).
 	{

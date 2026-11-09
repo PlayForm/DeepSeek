@@ -34,8 +34,10 @@ export interface Draft {
 export default (
 	/** The plugin state (the mirror, the sequence, the store chain). */
 	State: State,
+
 	/** The agent's memory (its own ring). */
 	Memory: AgentMemory,
+
 	/** The call's draft fields. */
 	Draft: Draft,
 ): Entry => {
@@ -45,6 +47,7 @@ export default (
 	Memory.History.length = Math.min(Memory.History.length, State.Depth);
 	State.History.unshift(Entry_);
 	State.History.length = Math.min(State.History.length, State.Depth);
+
 	// The store's size AFTER this append, captured now: the persist runs
 	// later on the chain, and the ledger line must report the append's own
 	// bounded size, not whatever the mirror grew to by then.

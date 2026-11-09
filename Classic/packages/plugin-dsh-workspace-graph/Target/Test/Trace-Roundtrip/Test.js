@@ -1,22 +1,312 @@
-import n from"node:assert/strict";import*as p from"node:fs";import*as R from"node:os";import*as l from"node:path";import{Names as m}from"@playform/lib-dsh-trace";import k from"../../../../plugin-dsh-workspace-context/Target/Library.js";import F from"../../../../plugin-dsh-factory/Target/Library.js";import w from"../../../../hook-dsh-workspace-observe/Target/Library.js";import b from"../../../Target/Library.js";import{Check as u,CheckAsync as q,Finish as C,MakeCounter as P}from"../Harness.js";const T=`import { util } from "./util.ts";
-
-export function core(): number {
-	return util;
-}
-`,S=`${T}
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import { Names } from "@playform/lib-dsh-trace";
+import ContextPlugin from "../../../../plugin-dsh-workspace-context/Target/Library.js";
+import FactoryClass from "../../../../plugin-dsh-factory/Target/Library.js";
+import ObservePlugin from "../../../../hook-dsh-workspace-observe/Target/Library.js";
+import GraphClass from "../../../Target/Library.js";
+import { Check, CheckAsync, Finish, MakeCounter } from "../Harness.js";
+const CORE = 'import { util } from "./util.ts";\n\nexport function core(): number {\n	return util;\n}\n';
+const CORE_CHANGED = `${CORE}
 export function extra(): number {
 	return 2;
 }
-`,$=`export const util = 1;
-`,E=`import { core } from "./core.ts";
-
-export const suite = core;
-`,j=`# The workspace
-
-Intro text.
-
-## Section
-`,A=()=>({resolve:async d=>{const s=l.resolve(d);let c=s;try{c=p.realpathSync(s)}catch{}return{targetKey:c,displayPath:s}},stat:async d=>{try{const s=p.statSync(String(d.targetKey));return{version:`${s.mtimeMs}-${s.size}`,type:s.isFile()?"file":s.isDirectory()?"directory":"other",size:s.size}}catch{return}},readText:async d=>p.readFileSync(String(d.targetKey),"utf8"),listDir:async d=>p.readdirSync(String(d.targetKey),{withFileTypes:!0}).sort((s,c)=>s.name.localeCompare(c.name)).map(s=>({name:s.name,type:s.isFile()?"file":s.isDirectory()?"directory":"other",target:{targetKey:l.join(String(d.targetKey),s.name),displayPath:l.join(String(d.displayPath),s.name)}})),contains:(d,s)=>{const c=String(d.targetKey),a=String(s.targetKey);return a===c||a.startsWith(`${c}${l.sep}`)},writeText:async()=>{throw new Error("the round-trip must never write through ctx.fs")}}),D=()=>{const i={},d=[],s=[],c=[],a=[],y={},e={},h={on:(r,o)=>((y[r]??=[]).push(o),()=>!0)};let t;return t={fs:A(),logger:{info:r=>d.push(r),warn:r=>d.push(r),error:r=>d.push(r)},on:(r,o)=>(e[r]=o,()=>!0),get:r=>t[r],effect:(r,o)=>{const f=o??"unnamed";s.push(f);const x=r();return typeof x=="function"&&c.push({label:f,dispose:x}),()=>!0},root:h,tools:{register:r=>{a.push(r)}},reflect:{provide:(r,o)=>(i[r]=o,t[r]=o,()=>!0)},provide:(r,o)=>(i[r]=o,t[r]=o,()=>!0)},{Context:t,Provided:i,Lines:d,Effects:s,Disposers:c,Tools:a,RootListeners:y,CtxListeners:e}},v=(i,d,s,c="present")=>{for(const a of i.RootListeners["fs/observed"]??[])a({displayPath:d,targetKey:d},c==="present"?{kind:"present",version:s}:{kind:c},{agent:{id:"agent-a"}})},g=(i,d)=>i.Lines.filter(s=>s.includes(d)),L=async()=>{const i=P(),d=p.mkdtempSync(l.join(R.tmpdir(),"workspace-trace-roundtrip-")),s=l.join(d,"ws"),c={"src/core.ts":T,"src/util.ts":$,"src/core.test.ts":E,"README.md":j};for(const[t,r]of Object.entries(c)){const o=l.join(s,t);p.mkdirSync(l.dirname(o),{recursive:!0}),p.writeFileSync(o,r)}const a=l.join(s,"src/core.ts"),y=l.join(s,"src/util.ts"),e=D(),h=e.Context;{const t=new F(h);w.apply(h,w.Config({enabled:!0}));const r=new b(h,b.Config({enabled:!0}));k.apply(h,k.Config({enabled:!0})),e.Factory=t,e.Graph=r,e.Trace=e.Provided.trace,u(i,"T1: the factory provides the one bus and every plugin registers on the ctx",()=>{n.ok(e.Trace!==void 0,"ctx.trace is provided"),n.equal(e.Trace,t.Trace,"the factory holds the same bus"),n.equal(e.Provided.pluginFactory,t),n.equal(e.Provided.workspaceObserve!==void 0,!0),n.equal(e.Provided.workspaceGraph,r),n.equal(e.Provided.workspaceContext!==void 0,!0),n.equal(e.Tools.length,1,"the context tool registered")}),u(i,"T1: the observe hook is the ONLY fs/observed listener (the graph uses the bus)",()=>{n.equal(e.RootListeners["fs/observed"]?.length,1)})}{const t=await e.Graph.indexWorkspace(s);u(i,"T2: the graph indexes the tree and emits graph/indexed for every record",()=>{n.deepEqual(t,{indexed:4,skipped:0,failed:0,files:4});const r=e.Trace.ring().filter(o=>o.kind===m.indexed).map(o=>o.payload.path).sort();n.deepEqual(r,[a,y,l.join(s,"README.md"),l.join(s,"src/core.test.ts")].sort()),n.equal(e.Trace.ring().some(o=>o.kind===m.invalidated),!1,"a first index invalidates nothing")})}{const t=h.workspaceContext.packet({id:`File:${a}`,caller:"tester"}),r=h.workspaceContext.packet({id:`File:${a}`,caller:"tester"});u(i,"T3: the packet carries the real revision and a repeated query is memoized",()=>{n.equal(t.workspace,"WORKSPACE workspace @ 4"),n.equal(t.nodeId,`File:${a}`),n.equal(r,t,"the second identical query is served from the memo"),n.equal(g(e,"context: packet").length,1,"a memo hit adds no ledger line")})}p.writeFileSync(a,S),v(e,a,"v2"),v(e,a,"v2"),await q(i,"T4: a coalesced pair re-indexes ONCE through the bus",async()=>{await e.Graph.State.Flush,n.deepEqual(g(e,`graph: reindexed ${a}`),[`graph: reindexed ${a} (indexed)`]),n.equal(e.Graph.statistics().indexRevision,"5"),n.equal(e.Graph.find({name:"extra"}).length,1,"the change is in the graph")}),u(i,"T4: the observe stamp is recorded byte-exactly and carried on the bus",()=>{n.deepEqual(g(e,`observe: stamped ${a}`),[`observe: stamped ${a} version v2 (fs/observed)`]);const t=e.Trace.ring().find(r=>r.kind===m.observe);n.deepEqual(t.payload,{path:a,version:"v2",origin:"fs/observed"}),n.match(t.trace,/^trace-\d+$/)}),u(i,"T4: the graph emits graph/invalidated (replaced) then graph/indexed",()=>{const t=e.Trace.ring().filter(o=>o.kind===m.invalidated);n.equal(t.length,1),n.deepEqual(t[0].payload,{path:a,reason:"replaced",version:t[0].payload.version}),n.equal(t[0].payload.path,a);const r=e.Trace.ring().find(o=>o.kind===m.indexed&&o.payload.path===a);n.equal(r.payload.revision,5)});{const t=h.workspaceContext.packet({id:`File:${a}`,caller:"tester"});u(i,"T5: graph/invalidated cleared the memo - the next query rebuilds",()=>{n.notEqual(t.workspace,"WORKSPACE workspace @ 4","not the stale packet"),n.equal(t.workspace,"WORKSPACE workspace @ 5","the new revision"),n.equal(g(e,"context: packet").length,2,"the rebuild ledgers its line")})}await q(i,"T6: the bus flush and the loop flush settle without a sleep",async()=>{await n.doesNotReject(()=>e.Trace.flush()),await n.doesNotReject(()=>e.Graph.State.Flush)});{const t=e.Graph.statistics().indexRevision;v(e,y,"v1","absent"),u(i,"T7: an absent stamp emits graph/invalidated (absent) and re-indexes nothing",()=>{n.equal(e.Graph.statistics().indexRevision,t),n.equal(g(e,`graph: reindexed ${y}`).length,0);const r=e.Trace.ring().find(o=>o.kind===m.invalidated&&o.payload.path===y);n.deepEqual(r.payload,{path:y,reason:"absent"})})}{const t=l.join(s,"node_modules/pkg/index.ts");p.mkdirSync(l.dirname(t),{recursive:!0}),p.writeFileSync(t,`export const vendored = 1;
-`),v(e,t,"v1"),u(i,"T8: an excluded path never reaches the bus (the source's guard)",()=>{n.deepEqual(g(e,`observe: ignored ${t}`),[`observe: ignored ${t} (excluded)`]),n.equal(g(e,`graph: reindexed ${t}`).length,0)})}return u(i,"T9: the graph adapter's disposer stops the re-index (the stamp still records)",()=>{const t=e.Disposers.find(r=>r.label==="graph-trace");n.ok(t!==void 0,"the adapter registered its unload effect"),t.dispose(),p.writeFileSync(a,`${S}
+`;
+const UTIL = "export const util = 1;\n";
+const TEST_FILE = 'import { core } from "./core.ts";\n\nexport const suite = core;\n';
+const MARKDOWN = "# The workspace\n\nIntro text.\n\n## Section\n";
+const DiskFs = () => {
+  const Fs = {
+    resolve: async (P) => {
+      const Display = Path.resolve(P);
+      let Identity = Display;
+      try {
+        Identity = FileSystem.realpathSync(Display);
+      } catch {
+      }
+      return { targetKey: Identity, displayPath: Display };
+    },
+    stat: async (Target) => {
+      try {
+        const Stat = FileSystem.statSync(String(Target.targetKey));
+        return {
+          version: `${Stat.mtimeMs}-${Stat.size}`,
+          type: Stat.isFile() ? "file" : Stat.isDirectory() ? "directory" : "other",
+          size: Stat.size
+        };
+      } catch {
+        return void 0;
+      }
+    },
+    readText: async (Target) => FileSystem.readFileSync(String(Target.targetKey), "utf8"),
+    listDir: async (Target) => FileSystem.readdirSync(String(Target.targetKey), { withFileTypes: true }).sort((Left, Right) => Left.name.localeCompare(Right.name)).map((Entry) => ({
+      name: Entry.name,
+      type: Entry.isFile() ? "file" : Entry.isDirectory() ? "directory" : "other",
+      target: {
+        targetKey: Path.join(String(Target.targetKey), Entry.name),
+        displayPath: Path.join(String(Target.displayPath), Entry.name)
+      }
+    })),
+    contains: (Parent, Child) => {
+      const Left = String(Parent.targetKey);
+      const Right = String(Child.targetKey);
+      return Right === Left || Right.startsWith(`${Left}${Path.sep}`);
+    },
+    writeText: async () => {
+      throw new Error("the round-trip must never write through ctx.fs");
+    }
+  };
+  return Fs;
+};
+const Make = () => {
+  const Provided = {};
+  const Lines = [];
+  const Effects = [];
+  const Disposers = [];
+  const Tools = [];
+  const RootListeners = {};
+  const CtxListeners = {};
+  const Root = {
+    on: (Name, Listener) => {
+      (RootListeners[Name] ??= []).push(Listener);
+      return () => true;
+    }
+  };
+  let Context;
+  Context = {
+    fs: DiskFs(),
+    logger: {
+      info: (Message) => Lines.push(Message),
+      warn: (Message) => Lines.push(Message),
+      error: (Message) => Lines.push(Message)
+    },
+    on: (Name, Listener) => {
+      CtxListeners[Name] = Listener;
+      return () => true;
+    },
+    get: (Name) => Context[Name],
+    effect: (Setup, Label) => {
+      const Name = Label ?? "unnamed";
+      Effects.push(Name);
+      const Disposer = Setup();
+      if (typeof Disposer === "function") {
+        Disposers.push({ label: Name, dispose: Disposer });
+      }
+      return () => true;
+    },
+    root: Root,
+    tools: {
+      register: (Definition) => {
+        Tools.push(Definition);
+      }
+    },
+    reflect: {
+      provide: (Name, Value) => {
+        Provided[Name] = Value;
+        Context[Name] = Value;
+        return () => true;
+      }
+    },
+    provide: (Name, Value) => {
+      Provided[Name] = Value;
+      Context[Name] = Value;
+      return () => true;
+    }
+  };
+  return {
+    Context,
+    Provided,
+    Lines,
+    Effects,
+    Disposers,
+    Tools,
+    RootListeners,
+    CtxListeners
+  };
+};
+const Fire = (Run, Path_, Version, Kind = "present") => {
+  for (const Listener of Run.RootListeners["fs/observed"] ?? []) {
+    Listener(
+      { displayPath: Path_, targetKey: Path_ },
+      Kind === "present" ? { kind: "present", version: Version } : { kind: Kind },
+      { agent: { id: "agent-a" } }
+    );
+  }
+};
+const LinesWith = (Run, Needle) => Run.Lines.filter((Line) => Line.includes(Needle));
+const runTest = async () => {
+  const Count = MakeCounter();
+  const Base = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "workspace-trace-roundtrip-"));
+  const Root = Path.join(Base, "ws");
+  const Files = {
+    "src/core.ts": CORE,
+    "src/util.ts": UTIL,
+    "src/core.test.ts": TEST_FILE,
+    "README.md": MARKDOWN
+  };
+  for (const [Relative, Text] of Object.entries(Files)) {
+    const Absolute = Path.join(Root, Relative);
+    FileSystem.mkdirSync(Path.dirname(Absolute), { recursive: true });
+    FileSystem.writeFileSync(Absolute, Text);
+  }
+  const CorePath = Path.join(Root, "src/core.ts");
+  const UtilPath = Path.join(Root, "src/util.ts");
+  const Run = Make();
+  const Context = Run.Context;
+  {
+    const Factory = new FactoryClass(Context);
+    ObservePlugin.apply(Context, ObservePlugin.Config({ enabled: true }));
+    const Graph = new GraphClass(Context, GraphClass.Config({ enabled: true }));
+    ContextPlugin.apply(Context, ContextPlugin.Config({ enabled: true }));
+    Run.Factory = Factory;
+    Run.Graph = Graph;
+    Run.Trace = Run.Provided["trace"];
+    Check(Count, "T1: the factory provides the one bus and every plugin registers on the ctx", () => {
+      assert.ok(Run.Trace !== void 0, "ctx.trace is provided");
+      assert.equal(Run.Trace, Factory.Trace, "the factory holds the same bus");
+      assert.equal(Run.Provided["pluginFactory"], Factory);
+      assert.equal(Run.Provided["workspaceObserve"] !== void 0, true);
+      assert.equal(Run.Provided["workspaceGraph"], Graph);
+      assert.equal(Run.Provided["workspaceContext"] !== void 0, true);
+      assert.equal(Run.Tools.length, 1, "the context tool registered");
+    });
+    Check(Count, "T1: the observe hook is the ONLY fs/observed listener (the graph uses the bus)", () => {
+      assert.equal(Run.RootListeners["fs/observed"]?.length, 1);
+    });
+  }
+  {
+    const Summary = await Run.Graph.indexWorkspace(Root);
+    Check(Count, "T2: the graph indexes the tree and emits graph/indexed for every record", () => {
+      assert.deepEqual(Summary, { indexed: 4, skipped: 0, failed: 0, files: 4 });
+      const Indexed = Run.Trace.ring().filter((Envelope) => Envelope.kind === Names.indexed).map((Envelope) => Envelope.payload.path).sort();
+      assert.deepEqual(Indexed, [CorePath, UtilPath, Path.join(Root, "README.md"), Path.join(Root, "src/core.test.ts")].sort());
+      assert.equal(
+        Run.Trace.ring().some((Envelope) => Envelope.kind === Names.invalidated),
+        false,
+        "a first index invalidates nothing"
+      );
+    });
+  }
+  {
+    const First = Context.workspaceContext.packet({ id: `File:${CorePath}`, caller: "tester" });
+    const Second = Context.workspaceContext.packet({ id: `File:${CorePath}`, caller: "tester" });
+    Check(Count, "T3: the packet carries the real revision and a repeated query is memoized", () => {
+      assert.equal(First.workspace, "WORKSPACE workspace @ 4");
+      assert.equal(First.nodeId, `File:${CorePath}`);
+      assert.equal(Second, First, "the second identical query is served from the memo");
+      assert.equal(LinesWith(Run, "context: packet").length, 1, "a memo hit adds no ledger line");
+    });
+  }
+  {
+    FileSystem.writeFileSync(CorePath, CORE_CHANGED);
+    Fire(Run, CorePath, "v2");
+    Fire(Run, CorePath, "v2");
+    await CheckAsync(Count, "T4: a coalesced pair re-indexes ONCE through the bus", async () => {
+      await Run.Graph.State.Flush;
+      assert.deepEqual(LinesWith(Run, `graph: reindexed ${CorePath}`), [
+        `graph: reindexed ${CorePath} (indexed)`
+      ]);
+      assert.equal(Run.Graph.statistics().indexRevision, "5");
+      assert.equal(Run.Graph.find({ name: "extra" }).length, 1, "the change is in the graph");
+    });
+    Check(Count, "T4: the observe stamp is recorded byte-exactly and carried on the bus", () => {
+      assert.deepEqual(LinesWith(Run, `observe: stamped ${CorePath}`), [
+        `observe: stamped ${CorePath} version v2 (fs/observed)`
+      ]);
+      const Stamp = Run.Trace.ring().find((Envelope) => Envelope.kind === Names.observe);
+      assert.deepEqual(Stamp.payload, {
+        path: CorePath,
+        version: "v2",
+        origin: "fs/observed"
+      });
+      assert.match(Stamp.trace, /^trace-\d+$/);
+    });
+    Check(Count, "T4: the graph emits graph/invalidated (replaced) then graph/indexed", () => {
+      const Invalidated = Run.Trace.ring().filter((Envelope) => Envelope.kind === Names.invalidated);
+      assert.equal(Invalidated.length, 1);
+      assert.deepEqual(Invalidated[0].payload, {
+        path: CorePath,
+        reason: "replaced",
+        version: Invalidated[0].payload.version
+      });
+      assert.equal(Invalidated[0].payload.path, CorePath);
+      const Indexed = Run.Trace.ring().find(
+        (Envelope) => Envelope.kind === Names.indexed && Envelope.payload.path === CorePath
+      );
+      assert.equal(Indexed.payload.revision, 5);
+    });
+  }
+  {
+    const Third = Context.workspaceContext.packet({ id: `File:${CorePath}`, caller: "tester" });
+    Check(Count, "T5: graph/invalidated cleared the memo - the next query rebuilds", () => {
+      assert.notEqual(Third.workspace, "WORKSPACE workspace @ 4", "not the stale packet");
+      assert.equal(Third.workspace, "WORKSPACE workspace @ 5", "the new revision");
+      assert.equal(LinesWith(Run, "context: packet").length, 2, "the rebuild ledgers its line");
+    });
+  }
+  {
+    await CheckAsync(Count, "T6: the bus flush and the loop flush settle without a sleep", async () => {
+      await assert.doesNotReject(() => Run.Trace.flush());
+      await assert.doesNotReject(() => Run.Graph.State.Flush);
+    });
+  }
+  {
+    const Revision = Run.Graph.statistics().indexRevision;
+    Fire(Run, UtilPath, "v1", "absent");
+    Check(Count, "T7: an absent stamp emits graph/invalidated (absent) and re-indexes nothing", () => {
+      assert.equal(Run.Graph.statistics().indexRevision, Revision);
+      assert.equal(LinesWith(Run, `graph: reindexed ${UtilPath}`).length, 0);
+      const Absent = Run.Trace.ring().find(
+        (Envelope) => Envelope.kind === Names.invalidated && Envelope.payload.path === UtilPath
+      );
+      assert.deepEqual(Absent.payload, { path: UtilPath, reason: "absent" });
+    });
+  }
+  {
+    const Excluded = Path.join(Root, "node_modules/pkg/index.ts");
+    FileSystem.mkdirSync(Path.dirname(Excluded), { recursive: true });
+    FileSystem.writeFileSync(Excluded, "export const vendored = 1;\n");
+    Fire(Run, Excluded, "v1");
+    Check(Count, "T8: an excluded path never reaches the bus (the source's guard)", () => {
+      assert.deepEqual(LinesWith(Run, `observe: ignored ${Excluded}`), [
+        `observe: ignored ${Excluded} (excluded)`
+      ]);
+      assert.equal(LinesWith(Run, `graph: reindexed ${Excluded}`).length, 0);
+    });
+  }
+  {
+    Check(Count, "T9: the graph adapter's disposer stops the re-index (the stamp still records)", () => {
+      const Effect = Run.Disposers.find(
+        (Entry) => Entry.label === "graph-trace"
+      );
+      assert.ok(Effect !== void 0, "the adapter registered its unload effect");
+      Effect.dispose();
+      FileSystem.writeFileSync(CorePath, `${CORE_CHANGED}
 export const later = 3;
-`),v(e,a,"v3"),n.equal(g(e,`graph: reindexed ${a}`).length,1,"no second re-index after the disposer"),n.equal(g(e,`observe: stamped ${a} version v3`).length,1,"the observe hook still records (its own wiring is untouched)")}),C(i,"Trace-Roundtrip")},G=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(G){const i=await L();console.log(`${i} PASS - Trace-Roundtrip`)}export{L as runTest};
+`);
+      Fire(Run, CorePath, "v3");
+      assert.equal(
+        LinesWith(Run, `graph: reindexed ${CorePath}`).length,
+        1,
+        "no second re-index after the disposer"
+      );
+      assert.equal(
+        LinesWith(Run, `observe: stamped ${CorePath} version v3`).length,
+        1,
+        "the observe hook still records (its own wiring is untouched)"
+      );
+    });
+  }
+  return Finish(Count, "Trace-Roundtrip");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Trace-Roundtrip`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

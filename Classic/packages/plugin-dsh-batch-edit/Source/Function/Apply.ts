@@ -175,6 +175,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// ------------------------------------------------------------------
 	// L2: tools/pre-execute (the advisory bash intercept). next() FIRST;
+
 	// the downstream decision passes through UNCHANGED in every branch
 	// (advisory, never denies); fail-open.
 	// ------------------------------------------------------------------
@@ -214,6 +215,7 @@ export default (Context: Context, Options: Config): void => {
 
 	// ------------------------------------------------------------------
 	// L8: agent/pre-step (the turn boundary seam). next() FIRST;
+
 	// fail-open; the v1 body is the pass-through that holds the seam (the
 	// deadline scan and settle fold ride the jobs subscription once the
 	// background branch is exercised end-to-end).

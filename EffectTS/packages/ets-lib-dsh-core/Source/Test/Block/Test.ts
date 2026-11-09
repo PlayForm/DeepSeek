@@ -15,6 +15,7 @@ import { Block } from "../../../../ets-base-dsh/Target/Library.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Chunk + Block - the generic injected-transform dispatch.
 	{
 		// Sub: Block - the generic block-end normalizer. The Check label is the

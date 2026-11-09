@@ -26,8 +26,10 @@
 export interface GraphEntry {
 	/** The repo-relative path of the neighborhood entry. */
 	path: string;
+
 	/** The role of the entry in the component: "definition" | "caller" | "test" | "doc" | a graph-specific role. */
 	role: string;
+
 	/** The one phrase the model reads (e.g. "the callers"). */
 	reason: string;
 }

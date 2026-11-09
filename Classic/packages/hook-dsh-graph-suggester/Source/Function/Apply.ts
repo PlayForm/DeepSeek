@@ -81,6 +81,7 @@ export default (Context: Context, Options: Config): void => {
 	// The injected factory service (typed via Interface/Factory's Context
 	// augmentation; guaranteed present by the inject declaration).
 	const Factory = Context.pluginFactory;
+
 	// The State: the factory's shared shape plus the hook's own fields,
 	// copied from the (cell-unwrapped) validated config by the setup map.
 	const State: State = Factory.State<State>(Context, Options, {
@@ -101,6 +102,7 @@ export default (Context: Context, Options: Config): void => {
 	State.Factory = Factory;
 	State.Agents = new WeakMap();
 	State.Unavailable = false;
+
 	// NO BOOT PACK: the intents are synthesized per call from the graph query,
 	// so the compiled rule set starts empty and the retired literal pack
 	// (Variable/Defaults) is never imported.

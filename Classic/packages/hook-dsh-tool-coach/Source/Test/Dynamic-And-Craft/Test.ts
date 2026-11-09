@@ -37,6 +37,7 @@ import {
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: D2 - the fetch failure: schemas() throws, the note degrades to
 	// the static table, the ledger carries the fetch-failure line, the
 	// waterfall continues.

@@ -44,10 +44,13 @@ const Line = (Message: ReviewMessage): string => {
 export interface DigestResult {
 	/** The digest text (never empty - an empty conversation yields a marker). */
 	text: string;
+
 	/** How many trailing messages were kept verbatim. */
 	kept: number;
+
 	/** How many leading messages collapsed into the summary. */
 	collapsed: number;
+
 	/** Whether the character cap dropped collapsed lines. */
 	trimmed: boolean;
 }
@@ -78,6 +81,7 @@ export default (
 				"review's cost. Recent turns follow verbatim below.]",
 			].join("\n")
 		: "";
+
 	// The cap is applied to the COLLAPSED part first (the recent turns are the
 	// reviewer's evidence), then to the whole.
 	let Summary = Lines.join("\n");

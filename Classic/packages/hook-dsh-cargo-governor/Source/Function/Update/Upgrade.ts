@@ -99,6 +99,7 @@ export default async (
 			break;
 	}
 	const Argv = ["upgrade", ...Flags];
+
 	// The subprocess seam is OPTIONAL — probed ONCE at State build time (the
 	// FACTORY's State builder: Function/Seam's ctx.get("subprocess") — the
 	// documented optional-dep probe; the direct accessor is not a fallback, it

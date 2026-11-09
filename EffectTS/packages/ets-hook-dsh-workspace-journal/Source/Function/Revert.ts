@@ -65,6 +65,7 @@ export default async (State: State, BatchId: string): Promise<Result> => {
 			throw new Error(`batch ${BatchId} is held by the policy (write=approve)`);
 	}
 	const Files: Result["files"] = [];
+
 	// Reverse order: last written, first restored.
 	for (const Path of [...Batch.files].reverse()) {
 		const Entry = State.Entries.get(`${BatchId}:${Path}`);

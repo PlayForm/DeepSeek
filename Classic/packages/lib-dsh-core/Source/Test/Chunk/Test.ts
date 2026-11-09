@@ -25,6 +25,7 @@ import { Check, Finish as Guard, MakeCounter } from "../Harness.js";
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
+
 	// Group: Chunk + Block - the generic injected-transform dispatch.
 	{
 		// Sub: Chunk - the generic per-chunk dispatch. The Check label is the

@@ -206,6 +206,7 @@ export const Frame = (
 	Now: number,
 ): { frame: string; truncated: boolean } => {
 	const Lines = Body(State, Entry, Now);
+
 	// The primary (worst-state) line first; ties keep the set order.
 	const Ordered = [...Lines].sort((Left, Right) => RANK[Right.state] - RANK[Left.state]);
 	const Primary = Ordered[0];
