@@ -1,16 +1,21 @@
-// Verify — run the policy's verifyCommand after the bumps. Exit 127 is
-// non-fatal: the command was not found because the child's PATH is not the
-// user's shell PATH (pnpm etc. may be absent) — the bumps already landed and
-// the lockfile/store catch-up can be run manually.
-//
-// The command runs through the subprocess seam stored on State (probed once
-// by the factory's State builder, P9) — the seam never shell-interprets argv,
-// so the shell command string is passed as `/bin/sh -c <command>` (same shell
-// semantics as the old spawnSync(shell: true)). When the seam is absent
-// (probed, optional — not an injected service), the node:child_process
-// fallback runs INSIDE the detached continuation. The process management is
-// not exempt — only the ncu binary/library is. Ledger lines go through the
-// FACTORY (State.Factory.Append).
+/**
+ * @module Verify
+ *
+ * Runs the policy's verifyCommand after the bumps.
+ *
+ * @remarks
+ * Exit 127 is non-fatal: the command was not found because the child's PATH is not the user's
+ * shell PATH (pnpm etc. may be absent) - the bumps already landed and the lockfile/store
+ * catch-up can be run manually.
+ *
+ * The command runs through the subprocess seam stored on State (probed once by the factory's
+ * State builder, P9) - the seam never shell-interprets argv, so the shell command string is
+ * passed as `/bin/sh -c <command>` (same shell semantics as the old spawnSync(shell: true)).
+ * When the seam is absent (probed, optional - not an injected service), the
+ * node:child_process fallback runs INSIDE the detached continuation. The process management
+ * is not exempt - only the ncu binary/library is. Ledger lines go through the FACTORY
+ * (State.Factory.Append).
+ */
 import * as ChildProcess from "node:child_process";
 
 // SubprocessService is the module's default export (dsh-subprocess 0.2.0-rc.2).
@@ -24,10 +29,10 @@ export default async (
 	Signal: AbortSignal,
 ): Promise<boolean> => {
 	State.Factory.Append(State, `update: running verifyCommand: ${Command}`);
-	// The subprocess seam is probed ONCE at State build (the factory's State
-	// builder, P9) and stored on State — never a per-site accessor fallback (a
-	// direct `State.Context.subprocess` access THROWS on service accessors
-	// without inject — live-verified 2026-10-03).
+	// The subprocess seam is probed ONCE at State build (the factory's State builder, P9)
+	// and stored on State - never a per-site accessor fallback (a direct
+	// `State.Context.subprocess` access THROWS on service accessors without inject -
+	// live-verified 2026-10-03).
 	const Seam = State.Subprocess;
 	switch (true) {
 		case !!Seam && typeof Seam.spawn === "function":

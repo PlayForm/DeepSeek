@@ -1,36 +1,41 @@
-// Parse - the strict reply parser for both phases: one JSON object, a closed
-// operation set, and nothing repaired.
-//
-// THE FAILURE MODE THIS PREVENTS: a lenient parser. A reviewer that answers with
-// prose, a second fenced block, or an operation kind nobody implemented must be
-// a FAILED review, not a silently empty one - an empty operation list and a
-// broken reply look identical to the lifecycle, and the difference is the only
-// signal that the prompt or the route needs attention. So the parser never
-// repairs, never retries, and never coerces: a number where a string belongs is
-// a failure, not a `String(...)` (plan section 4.3).
-//
-// THE TWO TOLERANCES ARE THE PLAN'S, AND THERE ARE NO OTHERS: a bare object, or
-// exactly one ```json fence around the object. "One fenced json block around the
-// object is accepted; anything else is rejected unread" (plan section 5), so
-// prose before or after the fence is `fence`, and a fence that is not `json` is
-// `fence` too. This is stricter than the sibling parser, which slices to the
-// outermost object and therefore accepts a preamble
-// (`Classic/packages/plugin-dsh-lesson-review/Source/Function/Parse.ts:36-43`).
-//
-// THE EVALUATION ORDER IS THIS FILE'S, AND IT IS STATED HERE BECAUSE THE PLAN
-// LISTS THE NINE RULES RATHER THAN SCHEDULING THEM (plan section 4.3): empty,
-// fence, json, shape, unknown-key, count, then per operation the field checks,
-// the kind, the name grammar, and finally the `views` entries. The one placement
-// worth defending is `count` before the per-operation work: the array's length is
-// known the moment it is known to be an array, and a nine-operation reply should
-// be refused without parsing nine objects.
-//
-// ONE BOUNDARY IS DELIBERATE AND NEEDS ITS REASON: a blank `oldString` or
-// `newString` on a patch is NOT a parse failure. The judge's `anchor-changed`
-// rule refuses it (plan section 4.5), and the two must not both claim it, or a
-// blank anchor would end the run as `unparsable` instead of `refused` and the
-// ledger would blame the model's syntax rather than its evidence. So this parser
-// requires the anchors to be strings and leaves blankness to the judge.
+/**
+ * @module Parse
+ *
+ * The strict reply parser for both phases: one JSON object, a closed operation set,
+ * and nothing repaired.
+ *
+ * @remarks
+ * THE FAILURE MODE THIS PREVENTS: a lenient parser. A reviewer that answers with
+ * prose, a second fenced block, or an operation kind nobody implemented must be a
+ * FAILED review, not a silently empty one - an empty operation list and a broken reply
+ * look identical to the lifecycle, and the difference is the only signal that the
+ * prompt or the route needs attention. So the parser never repairs, never retries, and
+ * never coerces: a number where a string belongs is a failure, not a `String(...)`
+ * (plan section 4.3).
+ *
+ * THE TWO TOLERANCES ARE THE PLAN'S, AND THERE ARE NO OTHERS: a bare object, or exactly
+ * one ```json fence around the object. "One fenced json block around the object is
+ * accepted; anything else is rejected unread" (plan section 5), so prose before or
+ * after the fence is `fence`, and a fence that is not `json` is `fence` too. This is
+ * stricter than the sibling parser, which slices to the outermost object and therefore
+ * accepts a preamble
+ * (`Classic/packages/plugin-dsh-lesson-review/Source/Function/Parse.ts:36-43`).
+ *
+ * THE EVALUATION ORDER IS THIS FILE'S, AND IT IS STATED HERE BECAUSE THE PLAN LISTS
+ * THE NINE RULES RATHER THAN SCHEDULING THEM (plan section 4.3): empty, fence, json,
+ * shape, unknown-key, count, then per operation the field checks, the kind, the name
+ * grammar, and finally the `views` entries. The one placement worth defending is
+ * `count` before the per-operation work: the array's length is known the moment it is
+ * known to be an array, and a nine-operation reply should be refused without parsing
+ * nine objects.
+ *
+ * ONE BOUNDARY IS DELIBERATE AND NEEDS ITS REASON: a blank `oldString` or `newString`
+ * on a patch is NOT a parse failure. The judge's `anchor-changed` rule refuses it (plan
+ * section 4.5), and the two must not both claim it, or a blank anchor would end the run
+ * as `unparsable` instead of `refused` and the ledger would blame the model's syntax
+ * rather than its evidence. So this parser requires the anchors to be strings and
+ * leaves blankness to the judge.
+ */
 import type { Operation } from "@Interface/Operation.js";
 import type { ConfirmReply, ParseFailure, ParseResult, PlanReply } from "@Interface/Reply.js";
 

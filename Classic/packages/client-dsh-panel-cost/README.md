@@ -46,14 +46,16 @@ semantics, because the ledger writes no latency, first-token, or tool-duration c
 ## The data path
 
 The engine is `@playform/plugin-dsh-cost`: it provides the `cost` service
-(`session(sessionId, rows)` returning the envelope) and exports its contract at
+(`session(sessionId, rows, selection?)` returning the envelope) and the `costPricing` service
+(catalogs, revisions, rates, publish, preview), and exports both contracts at
 `@playform/plugin-dsh-cost/service`. This package injects `webServer` so the loader orders its row
-after the harness web server, and `GET /api/playform-cost/session?session=<id>&rows=<n>` answers one
-JSON envelope from that service. `code` is `ok` when the ledger was read, `session` when the query
-carries no session id (the engine is never called), `unavailable` when the cost plugin is not
-loaded, and `error` for any other read failure. Every failure keeps the same envelope shape, and the
-panel renders the envelope's own line under the state line, so the cause is visible instead of
-guessed.
+after the harness web server, and registers four routes: `GET /api/playform-cost/session` (the one
+envelope), `GET /api/playform-cost/catalogs`, `GET /api/playform-cost/rates` and
+`POST /api/playform-cost/publish` (the one write, which inserts a pricing revision and never touches
+recorded usage). `code` is `ok` when the read succeeded, `session` when the query carries no session
+id (the engine is never called), `unavailable` when the cost plugin is not loaded, and `error` for
+any other failure. Every failure keeps the same envelope shape, and the panel renders the envelope's
+own line under the state line, so the cause is visible instead of guessed.
 
 ## Tests
 

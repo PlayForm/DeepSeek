@@ -172,4 +172,10 @@ export default class SkillLearnService extends Service {
     /** The judge's read-only corpus view, over the evidence one run gathered. */
     private CorpusView;
 }
+/**
+ * The compiled package version (Source/Variable/Version, built in by the ESBuild define)
+ * - NOT a loader key: the contract's names are unchanged (the class form's default
+ * export with static inject/Config), and Version is a standalone named export, not on
+ * the class (`Classic/packages/plugin-dsh-lesson-review/Source/Library.ts:696-701`).
+ */
 export { Version };

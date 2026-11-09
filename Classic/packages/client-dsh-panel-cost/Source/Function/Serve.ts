@@ -422,19 +422,18 @@ const RequestOf = (Value: unknown): PublishBody => {
 		default:
 	}
 	const Listed = Body["rows"];
-	switch (true) {
-		case !Array.isArray(Listed) || Listed.length === 0:
-			throw new Error(
-				"client-dsh-panel-cost: the publish body carries no rate row - a revision needs at least one",
-			);
-		default: {
-			const Rows: RateRow[] = [];
-			for (const [Index, One] of Listed.entries()) {
-				Rows.push(RowOf(One, Index + 1));
-			}
-			return { CatalogId, BaseRevisionId, Reason, Rows };
-		}
+	// Early throw, because the narrowing has to survive into the row walk; a
+	// switch (true) arm cannot carry it.
+	if (!Array.isArray(Listed) || Listed.length === 0) {
+		throw new Error(
+			"client-dsh-panel-cost: the publish body carries no rate row - a revision needs at least one",
+		);
 	}
+	const Rows: RateRow[] = [];
+	for (const [Index, One] of Listed.entries()) {
+		Rows.push(RowOf(One, Index + 1));
+	}
+	return { CatalogId, BaseRevisionId, Reason, Rows };
 };
 
 export default function Serve(ctx: Context): void {

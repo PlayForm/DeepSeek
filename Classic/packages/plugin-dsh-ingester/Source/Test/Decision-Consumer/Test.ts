@@ -1,8 +1,13 @@
-// Source/Test/Decision-Consumer/Test.ts - THE TRACE ADAPTER: the ingester
-// consumes `batch/proposed` (recording the proposal) and `batch/decision`
-// (applying it through the existing content fence), with one apply per
-// decision however many times the decision is delivered, the honest refusals,
-// the feedback outcome handoff, and the WhenIdle flush seam.
+/**
+ * @module Test
+ *
+ * Exercises THE TRACE ADAPTER: the ingester consumes `batch/proposed` (recording the proposal) and
+ * `batch/decision` (applying it through the existing content fence).
+ *
+ * @remarks
+ * One apply runs per decision however many times the decision is delivered; the suite also covers
+ * the honest refusals, the feedback outcome handoff, and the WhenIdle flush seam.
+ */
 import assert from "node:assert/strict";
 import {
 	Build,

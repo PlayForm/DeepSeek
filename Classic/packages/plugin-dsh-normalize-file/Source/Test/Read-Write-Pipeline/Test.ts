@@ -1,13 +1,23 @@
-// Source/Test/Read-Write-Pipeline/Test.ts - one singular test: the read ->
-// count -> write pipeline through Factory.Write (the shared executor) - the
-// resolve/read single-pass, the six-transform write, the fs/write-intent
-// waterfall, the fs/observed emit with the call's exec, the outcome and the
-// real before/after, the count ledger line, the durable file, the P5 journal
-// record shape and routing, and the volatile replacement knob flowing into
-// the tool. Runs standalone (`node Target/Test/Read-Write-Pipeline/Test.js`)
-// AND under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/plugin-dsh-normalize-file: the fake ctx + the REAL
-// factory + the REAL normalize-file apply, from the Harness.
+/**
+ * @module Test
+ *
+ * The read -> count -> write pipeline of @playform/plugin-dsh-normalize-file
+ * through Factory.Write, covered in one singular smoke.
+ *
+ * @remarks
+ * The test covers the read -> count -> write pipeline through Factory.Write
+ * (the shared executor): the resolve/read single-pass, the six-transform
+ * write, the fs/write-intent waterfall, the fs/observed emit with the call's
+ * exec, the outcome and the real before/after, the count ledger line, the
+ * durable file, the P5 journal record shape and routing, and the volatile
+ * replacement knob flowing into the tool.
+ *
+ * The file runs standalone (`node Target/Test/Read-Write-Pipeline/Test.js`)
+ * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * The unit smoke runs the fake ctx + the real factory + the real
+ * normalize-file apply, from the Harness.
+ */
 import { existsSync, readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";

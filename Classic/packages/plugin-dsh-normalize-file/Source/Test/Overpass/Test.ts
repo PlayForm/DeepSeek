@@ -1,15 +1,24 @@
-// Source/Test/Overpass/Test.ts - one singular test: the overpass arms and the
-// command - the registration facts (the two arms with their ordering
-// contract, the normalize-overpass command as the files sweep owner), the
-// tool-results arm (default off, the volatile flip with the SIX-FOLD rewrite
-// and the exact ledger line, the read exemption, the block rules, the N=0
-// no-op, the value-carrying and CCR-marker pass-throughs), the files sweep
-// through the command, the step-batch arm, the command's other grammars, and
-// the history-safety invariant. Runs standalone (`node
-// Target/Test/Overpass/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/plugin-dsh-normalize-file: the fake ctx + the REAL
-// factory + the REAL normalize-file apply, from the Harness.
+/**
+ * @module Test
+ *
+ * The overpass arms and the command of @playform/plugin-dsh-normalize-file,
+ * covered in one singular smoke.
+ *
+ * @remarks
+ * The test covers the registration facts (the two arms with their ordering
+ * contract, the normalize-overpass command as the files sweep owner), the
+ * tool-results arm (default off, the volatile flip with the SIX-FOLD rewrite
+ * and the exact ledger line, the read exemption, the block rules, the N=0
+ * no-op, the value-carrying and CCR-marker pass-throughs), the files sweep
+ * through the command, the step-batch arm, the command's other grammars, and
+ * the history-safety invariant.
+ *
+ * The file runs standalone (`node Target/Test/Overpass/Test.js`) and under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * The unit smoke runs the fake ctx + the real factory + the real
+ * normalize-file apply, from the Harness.
+ */
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
 

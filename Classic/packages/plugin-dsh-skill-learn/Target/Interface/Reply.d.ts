@@ -1,3 +1,15 @@
+/**
+ * @module Reply
+ *
+ * The two reply shapes the model may return, and the strict parse's result.
+ *
+ * @remarks
+ * The phase split IS the read-before-write property, so the shapes differ by exactly one
+ * key: phase 1 may ask for bodies (`views`), phase 2 carries them and returns the final
+ * list. The parse result is a union rather than a nullable value so a caller cannot read
+ * a reply without having read why the parse stopped, and the failure id is a closed set
+ * because the ledger names it byte-stably.
+ */
 import type { Operation } from "./Operation.js";
 /** The phase-1 plan: the bodies to load, then the operations that want them. */
 export interface PlanReply {

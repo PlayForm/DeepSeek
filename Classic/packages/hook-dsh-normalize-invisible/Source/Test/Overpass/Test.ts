@@ -1,12 +1,21 @@
-// Source/Test/Overpass/Test.ts - one singular test: the overpass arms and the
-// human command (Run O) - the tool-results arm (tools/post-execute), the
-// step-batch arm (agent/pre-step), the normalize-overpass command, the
-// ordering guard and the history-safety invariant, with the volatile flips
-// (O2/O10) and the one-shot batch grammar (O12).
-// Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/hook-dsh-normalize-invisible: the fake ctx + the REAL
-// factory + the REAL invisible apply (the seams live in ../Harness.js).
+/**
+ * @module Test
+ *
+ * The overpass arms and the human command of
+ * @playform/hook-dsh-normalize-invisible, covered in one singular smoke.
+ *
+ * @remarks
+ * Run O covers the tool-results arm (tools/post-execute), the step-batch arm
+ * (agent/pre-step), the normalize-overpass command, the ordering guard and
+ * the history-safety invariant, with the volatile flips (O2/O10) and the
+ * one-shot batch grammar (O12).
+ *
+ * The file runs standalone (`node Target/Test/Overpass/Test.js`) and under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * The smoke runs the fake ctx + the real factory + the real invisible apply
+ * (the seams live in ../Harness.js).
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

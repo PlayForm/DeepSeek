@@ -1,11 +1,21 @@
-// Source/Test/Runs/Test.ts - one singular test: the Run-2 through Run-7
-// matrix - reasoning off, the whole Quotes table in one segment, the upstream
-// throw, the identity stream, the fresh-state probe and the tool-args
-// normalization, including their cumulative pre-bind journal counts.
-// Runs standalone (`node Target/Test/Runs/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/hook-dsh-normalize-quotes: the fake ctx + the REAL
-// factory + the REAL quotes apply (the seams live in ../Harness.js).
+/**
+ * @module Test
+ *
+ * The Run-2 through Run-7 matrix of @playform/hook-dsh-normalize-quotes,
+ * covered in one singular smoke.
+ *
+ * @remarks
+ * Runs 2-7 cover reasoning off, the whole Quotes table in one segment, the
+ * upstream throw, the identity stream, the fresh-state probe and the
+ * tool-args normalization, including their cumulative pre-bind journal
+ * counts.
+ *
+ * The file runs standalone (`node Target/Test/Runs/Test.js`) and under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * The smoke runs the fake ctx + the real factory + the real quotes apply
+ * (the seams live in ../Harness.js).
+ */
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import {

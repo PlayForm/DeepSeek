@@ -1,3 +1,19 @@
+/**
+ * @module Review
+ *
+ * The review's input, its refusals, and its result record.
+ *
+ * @remarks
+ * The agent is typed `unknown` on purpose: this interface package must not take a type
+ * dependency on the agent package, and the service is the single place that narrows it
+ * to the surface it reads (the route, the session, the maintenance claim). The input
+ * carries the signal because a review that loses its agent must stop between the two
+ * model calls, not after them.
+ *
+ * The rule ids are the judge's closed vocabulary, and they live here because the refusal
+ * is part of the result: the interface layer owns the words, the judge owns the
+ * evaluation, and the ledger prints the id it was handed.
+ */
 import type { Operation } from "./Operation.js";
 import type { Outcome } from "./Trigger.js";
 /** One review request, from the idle edge. */

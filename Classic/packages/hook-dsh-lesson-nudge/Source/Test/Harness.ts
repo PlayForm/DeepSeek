@@ -1,21 +1,28 @@
-// Source/Test/Harness.ts - the shared test harness for the LESSON-NUDGE hook:
-// the fake ctx (the listener capture, the logger, the probe-once `get`), the
-// fake plugin factory (the State builder + the ledger), the fake lesson service
-// and the fake agent - plus the REAL built `apply` from Target/Library.js. The
-// family fake-ctx + real-built-library pattern, written ONCE per package.
-//
-// THE LISTENER IS CAPTURED, NOT DISPATCHED: the hook registers through
-// `ctx.on("agent/status", fn)`, so the harness records each registration and the
-// scenario fires it by hand with a literal payload. That is what makes the idle
-// edge assertable without a live agent loop.
-//
-// THE AGENT'S MAINTENANCE IS SYNCHRONOUS-ENOUGH: `runMaintenance` records the
-// task and then runs it on the microtask queue, so `Settle()` is the whole
-// waiting story - no timers, no polling.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
-// counter counts, the fake factory writes the ledger, and the real `apply`
-// registers exactly one listener (the vacuously-green backstop).
+/**
+ * @module Harness
+ *
+ * The shared test harness for the LESSON-NUDGE hook.
+ *
+ * @remarks
+ * The harness pairs the fake ctx (the listener capture, the logger, the
+ * probe-once `get`), the fake plugin factory (the State builder + the
+ * ledger), the fake lesson service and the fake agent with the REAL built
+ * `apply` from `Target/Library.js` - the family fake-ctx + real-built-library
+ * pattern, written ONCE per package.
+ *
+ * THE LISTENER IS CAPTURED, NOT DISPATCHED: the hook registers through
+ * `ctx.on("agent/status", fn)`, so the harness records each registration and
+ * the scenario fires it by hand with a literal payload. That is what makes
+ * the idle edge assertable without a live agent loop.
+ *
+ * THE AGENT'S MAINTENANCE IS SYNCHRONOUS-ENOUGH: `runMaintenance` records the
+ * task and then runs it on the microtask queue, so `Settle()` is the whole
+ * waiting story - no timers, no polling.
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` proves
+ * the counter counts, the fake factory writes the ledger, and the real
+ * `apply` registers exactly one listener (the vacuously-green backstop).
+ */
 import assert from "node:assert/strict";
 
 import { apply, Config, inject, name } from "../../Target/Library.js";

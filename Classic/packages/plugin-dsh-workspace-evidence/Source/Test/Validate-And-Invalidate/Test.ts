@@ -1,7 +1,15 @@
-// Source/Test/Validate-And-Invalidate/Test.ts - the validation objects and
-// the Acar seam: the exact record shape, the fail-loud validation errors,
-// the supersede path, the counter monotonicity, the invalidate pass with its
-// byte-exact ledger lines, the store cap eviction, and the read surface.
+/**
+ * @module Test
+ *
+ * The validation objects and the Acar seam of the workspace-evidence plugin,
+ * covered in one singular test.
+ *
+ * @remarks
+ * The test covers the validation objects and the Acar seam: the exact record
+ * shape, the fail-loud validation errors, the supersede path, the counter
+ * monotonicity, the invalidate pass with its byte-exact ledger lines, the
+ * store cap eviction, and the read surface.
+ */
 import assert from "node:assert/strict";
 import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
 

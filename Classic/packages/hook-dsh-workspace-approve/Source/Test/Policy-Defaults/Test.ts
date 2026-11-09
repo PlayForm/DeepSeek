@@ -1,8 +1,13 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the approve
-// hook: the shared block's defaults in the schema and on the built State, the
-// override landing on `Allow`, and the proof that the package has NO gated
-// action - a record action (the bind) proceeds under the shipped defaults,
-// writes no file and refuses nothing.
+/**
+ * @module Test
+ *
+ * Exercises THE POLICY BLOCK (D6) on the approve hook.
+ *
+ * @remarks
+ * Covers the shared block's defaults in the schema and on the built State, the override landing on
+ * `Allow`, and the proof that the package has NO gated action - a record action (the bind) proceeds
+ * under the shipped defaults, writes no file and refuses nothing.
+ */
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";

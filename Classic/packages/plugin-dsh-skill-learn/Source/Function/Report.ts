@@ -1,20 +1,25 @@
-// Report - the per-run record: `run.json` for full fidelity and `REPORT.md` for
-// the person who reads it, one timestamped directory per run.
-//
-// WHY A FILE AND NOT JUST THE LEDGER LINE: the ledger is a line-per-event contract
-// every plugin in the family shares, so it stays terse and byte-stable. A review
-// needs more - the digest shape, the route that answered, every refusal WITH its
-// rule id and its clause - and that detail is what turns "the review did nothing"
-// into "the judge refused `negative-claim` four times, fix the prompt"
-// (SKILL-LEARN-PLUGIN.md:150, :498-519).
-//
-// A REPORT WRITE IS BEST-EFFORT: a failure returns "" and the run's result is
-// unchanged. The run already happened; losing its paperwork must not turn a
-// successful pass into an error.
-//
-// THE DIRECTORY NAME IS SORTABLE AND DISAMBIGUATED: `YYYYMMDD-HHMMSS` in UTC, and
-// `-2`, `-3` on a same-second collision, which is the Hermes report directory rule
-// (agent/curator.py:705-709).
+/**
+ * @module Report
+ *
+ * The per-run record: `run.json` for full fidelity and `REPORT.md` for the person who
+ * reads it, one timestamped directory per run.
+ *
+ * @remarks
+ * WHY A FILE AND NOT JUST THE LEDGER LINE: the ledger is a line-per-event contract
+ * every plugin in the family shares, so it stays terse and byte-stable. A review needs
+ * more - the digest shape, the route that answered, every refusal WITH its rule id and
+ * its clause - and that detail is what turns "the review did nothing" into "the judge
+ * refused `negative-claim` four times, fix the prompt" (SKILL-LEARN-PLUGIN.md:150,
+ * :498-519).
+ *
+ * A REPORT WRITE IS BEST-EFFORT: a failure returns "" and the run's result is
+ * unchanged. The run already happened; losing its paperwork must not turn a successful
+ * pass into an error.
+ *
+ * THE DIRECTORY NAME IS SORTABLE AND DISAMBIGUATED: `YYYYMMDD-HHMMSS` in UTC, and `-2`,
+ * `-3` on a same-second collision, which is the Hermes report directory rule
+ * (agent/curator.py:705-709).
+ */
 import FileSystem from "node:fs/promises";
 import Path from "node:path";
 

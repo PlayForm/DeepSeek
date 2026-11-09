@@ -1,11 +1,17 @@
-// Trigger - the verdict the idle edge gets back.
-//
-// The twelve outcome classes live here rather than beside the review because
-// the verdict is where the pipeline stops: every gate that can end a run before
-// the model does, and every way the model's own run can end, is one arm of this
-// union. `due` is a separate fact from `outcome` on purpose - a run that is due
-// and then finds the agent busy is not the same event as one that never came
-// due, and the ledger tells those apart.
+/**
+ * @module Trigger
+ *
+ * The verdict the idle edge gets back.
+ *
+ * @remarks
+ * The twelve outcome classes live here rather than beside the review because the verdict
+ * is where the pipeline stops: every gate that can end a run before the model does, and
+ * every way the model's own run can end, is one arm of this union. `due` is a separate
+ * fact from `outcome` on purpose - a run that is due and then finds the agent busy is
+ * not the same event as one that never came due, and the ledger tells those apart.
+ */
+
+/** The closed twelve-class outcome set. */
 export type Outcome =
 	| "disabled"
 	| "below-threshold"

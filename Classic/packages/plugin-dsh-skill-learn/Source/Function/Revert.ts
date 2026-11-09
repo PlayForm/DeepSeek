@@ -1,27 +1,31 @@
-// Revert - one ledger row back to files, fail-closed.
-//
-// THE ROW NAMES THE BLOBS AND THE BLOBS ARE THE CONTENT, so a revert never has to
-// guess what a file looked like before (SKILL-LEARN-PLUGIN.md:470-484). It is the
-// same mechanism as the backup, which is why the ledger is the only durable
-// record this plugin needs.
-//
-// THE ORDER IS THE SAFETY. Every referenced blob is pre-checked BEFORE anything
-// changes: a missing blob aborts the whole revert, because restoring four of five
-// files would leave a package nobody asked for (curator_backup.py:409-427,
-// Hermes-Consolidation.md:390-392). Then a whole-tree snapshot and a
-// `pre-rollback` row are written; if either fails, nothing changes. Only then do
-// the files move.
-//
-// THIS IS THE ONE PATH THAT FAILS CLOSED. The ledger is telemetry everywhere else
-// and a mutation still lands when an append fails (tools/skill_ledger.py:8); here
-// a failed safety capture stops the run, because the run's whole purpose is to
-// make the previous state recoverable.
-//
-// THE DELIBERATE DIVERGENCE FROM HERMES: an undone `create` is ARCHIVED, never
-// removed (SKILL-LEARN-PLUGIN.md:484). Hermes' rollback deletes files it created
-// (`curator.md:166-169`); this plugin's "never delete" is absolute, so the bytes
-// stay in the archive where the user can still reach them. A single support file
-// has no archive form, so it is left in place and reported as retained.
+/**
+ * @module Revert
+ *
+ * One ledger row back to files, fail-closed.
+ *
+ * @remarks
+ * THE ROW NAMES THE BLOBS AND THE BLOBS ARE THE CONTENT, so a revert never has to guess
+ * what a file looked like before (SKILL-LEARN-PLUGIN.md:470-484). It is the same
+ * mechanism as the backup, which is why the ledger is the only durable record this
+ * plugin needs.
+ *
+ * THE ORDER IS THE SAFETY. Every referenced blob is pre-checked BEFORE anything
+ * changes: a missing blob aborts the whole revert, because restoring four of five files
+ * would leave a package nobody asked for (curator_backup.py:409-427,
+ * Hermes-Consolidation.md:390-392). Then a whole-tree snapshot and a `pre-rollback` row
+ * are written; if either fails, nothing changes. Only then do the files move.
+ *
+ * THIS IS THE ONE PATH THAT FAILS CLOSED. The ledger is telemetry everywhere else and a
+ * mutation still lands when an append fails (tools/skill_ledger.py:8); here a failed
+ * safety capture stops the run, because the run's whole purpose is to make the previous
+ * state recoverable.
+ *
+ * THE DELIBERATE DIVERGENCE FROM HERMES: an undone `create` is ARCHIVED, never removed
+ * (SKILL-LEARN-PLUGIN.md:484). Hermes' rollback deletes files it created
+ * (`curator.md:166-169`); this plugin's "never delete" is absolute, so the bytes stay
+ * in the archive where the user can still reach them. A single support file has no
+ * archive form, so it is left in place and reported as retained.
+ */
 import Archive from "@Function/Archive.js";
 import Append, { Blob, Rows, type Touched } from "@Function/Ledger.js";
 import Snapshot from "@Function/Snapshot.js";

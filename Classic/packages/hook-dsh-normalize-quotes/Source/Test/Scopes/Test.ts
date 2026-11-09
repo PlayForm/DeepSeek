@@ -1,11 +1,20 @@
-// Source/Test/Scopes/Test.ts - one singular test: the granular scope gates
-// (Run S) - each scope on/off with everything else at defaults, the
-// effective-toolInput OR semantics with the deprecated field, and the S5
-// volatile scope flip applied to the NEXT stream without remount.
-// Runs standalone (`node Target/Test/Scopes/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/hook-dsh-normalize-quotes: the fake ctx + the REAL
-// factory + the REAL quotes apply (the seams live in ../Harness.js).
+/**
+ * @module Test
+ *
+ * The granular scope gates (Run S) of @playform/hook-dsh-normalize-quotes,
+ * covered in one singular smoke.
+ *
+ * @remarks
+ * Run S covers each scope on/off with everything else at defaults, the
+ * effective-toolInput OR semantics with the deprecated field, and the S5
+ * volatile scope flip applied to the NEXT stream without remount.
+ *
+ * The file runs standalone (`node Target/Test/Scopes/Test.js`) and under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * The smoke runs the fake ctx + the real factory + the real quotes apply
+ * (the seams live in ../Harness.js).
+ */
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Ledger, Make } from "../Harness.js";
 

@@ -1,6 +1,12 @@
-// Filter — true when any dependency name is NOT in the registry's
-// effectiveLatest — i.e. something public for ncu to do. Pure internal
-// calculation — part of the standing exemptions.
+/**
+ * @module Filter
+ *
+ * Returns true when any dependency name is not in the registry's effectiveLatest.
+ *
+ * @remarks
+ * In other words, something public exists for ncu to do. Pure internal calculation - part of
+ * the standing exemptions.
+ */
 import type Manifest from "@Interface/Manifest.js";
 import type Registry from "@Interface/Registry.js";
 import Section from "@Variable/Section.js";

@@ -1,8 +1,13 @@
-// Source/Test/Guards-And-Ring/Test.ts - the guard chain and the bounded
-// ring: the excluded path, the own-actor identity check, the include
-// allowlist, the latest-overwrite rule, the ring cap with the byte-exact
-// capped line, the malformed event containment, and the volatile flip of the
-// ring bound (the factory's P10 refresh).
+/**
+ * @module Test
+ *
+ * Exercises the guard chain and the bounded ring.
+ *
+ * @remarks
+ * Covers the excluded path, the own-actor identity check, the include allowlist, the
+ * latest-overwrite rule, the ring cap with the byte-exact capped line, the malformed event
+ * containment, and the volatile flip of the ring bound (the factory's P10 refresh).
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

@@ -1,8 +1,15 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the batch
-// edit tool: the shared block's defaults in the schema and on the built
-// State, the `approve` verdict REFUSING the apply with the documented line
-// (nothing planned, nothing written, the machine still open), and the `auto`
-// verdict proceeding to the commit.
+/**
+ * @module Test
+ *
+ * The policy block (D6) of the batch-edit plugin, covered in one singular
+ * test.
+ *
+ * @remarks
+ * The test covers the shared block's defaults in the schema and on the built
+ * State, the `approve` verdict refusing the apply with the documented line
+ * (nothing planned, nothing written, the machine still open), and the `auto`
+ * verdict proceeding to the commit.
+ */
 import assert from "node:assert/strict";
 
 import {

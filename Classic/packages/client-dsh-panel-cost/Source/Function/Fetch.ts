@@ -345,46 +345,39 @@ const IsRevision = (Candidate: unknown): Candidate is Revision => {
 // message, path }`) both land in one record, and anything else is refused
 // rather than rendered as a half-read outcome.
 const Normalize = (Body: unknown): PublishAnswer => {
-	switch (true) {
-		case typeof Body !== "object" || Body === null:
-			return Refused("the publish route answered a malformed answer");
-		default: {
-			const Answer = Body as {
-				ok?: unknown;
-				revision?: unknown;
-				code?: unknown;
-				message?: unknown;
-				path?: unknown;
-			};
-			// The locals keep the narrowing local: a guard on a property
-			// access narrows the access expression, and a binding is the
-			// shape the case arms can rely on.
-			const Found = Answer.revision;
-			const Line = Answer.message;
-			const Code = Answer.code;
-			const Named = Answer.path;
-			switch (true) {
-				case Answer.ok === true && IsRevision(Found):
-					return {
-						ok: true,
-						revision: Found,
-						code: "ok",
-						message: null,
-						path: PublishPath,
-					};
-				case Answer.ok === false && typeof Line === "string":
-					return {
-						ok: false,
-						revision: null,
-						code: typeof Code === "string" ? Code : "error",
-						message: Line,
-						path: typeof Named === "string" ? Named : PublishPath,
-					};
-				default:
-					return Refused("the publish route answered a malformed answer");
-			}
-		}
+	if (typeof Body !== "object" || Body === null) {
+		return Refused("the publish route answered a malformed answer");
 	}
+	const Answer = Body as {
+		ok?: unknown;
+		revision?: unknown;
+		code?: unknown;
+		message?: unknown;
+		path?: unknown;
+	};
+	// Early returns, because the narrowing has to survive into the
+	// constructed answer; a switch (true) arm cannot carry it.
+	const Found = Answer.revision;
+	if (Answer.ok === true && IsRevision(Found)) {
+		return {
+			ok: true,
+			revision: Found,
+			code: "ok",
+			message: null,
+			path: PublishPath,
+		};
+	}
+	const Line = Answer.message;
+	if (Answer.ok === false && typeof Line === "string") {
+		return {
+			ok: false,
+			revision: null,
+			code: typeof Answer.code === "string" ? Answer.code : "error",
+			message: Line,
+			path: typeof Answer.path === "string" ? Answer.path : PublishPath,
+		};
+	}
+	return Refused("the publish route answered a malformed answer");
 };
 
 // Publish - the one write: one POST to the publish route with the whole body

@@ -1,16 +1,21 @@
-// Snapshot - one whole-tree snapshot manifest.
-//
-// A snapshot names content instead of copying it: every file's bytes already
-// live in the blob store, so a snapshot of an unchanged corpus costs one small
-// JSON file, and a rotation can drop a manifest without losing a byte that a
-// retained ledger row still references. The manifest is therefore the unit a
-// restore and a rotation reason about, and the blob sweep is what reconciles
-// the two.
-//
-// The file entry is its own type rather than the ledger's, because the two are
-// separate on-disk formats with separate rotations: sharing one type would let
-// a change to a ledger row silently rewrite the manifest schema that a restore
-// depends on.
+/**
+ * @module Snapshot
+ *
+ * One whole-tree snapshot manifest.
+ *
+ * @remarks
+ * A snapshot names content instead of copying it: every file's bytes already live in the
+ * blob store, so a snapshot of an unchanged corpus costs one small JSON file, and a
+ * rotation can drop a manifest without losing a byte that a retained ledger row still
+ * references. The manifest is therefore the unit a restore and a rotation reason about,
+ * and the blob sweep is what reconciles the two.
+ *
+ * The file entry is its own type rather than the ledger's, because the two are separate
+ * on-disk formats with separate rotations: sharing one type would let a change to a
+ * ledger row silently rewrite the manifest schema that a restore depends on.
+ */
+
+/** One file a manifest names. */
 export interface SnapshotFile {
 	/** The absolute path the bytes belong to. */
 	readonly path: string;
@@ -18,6 +23,7 @@ export interface SnapshotFile {
 	readonly sha256: string;
 }
 
+/** The manifest as it is written to `<snapshotRoot>/<id>.json`. */
 export interface SnapshotManifest {
 	/** `<YYYY-MM-DD>T<HH-MM-SSZ>`, with `-01` and `-02` appended on a same-second collision. */
 	readonly id: string;

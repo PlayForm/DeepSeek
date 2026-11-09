@@ -1,8 +1,14 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the git
-// guard: the shared block's defaults in the schema and on the built State
-// (`Verdicts` - `Allow` is already the git allow-list), the override, and the
-// guard's read-only posture (its own action classes - read and record - are
-// automatic).
+/**
+ * @module Test
+ *
+ * One singular test of THE POLICY BLOCK (D6) on the git guard.
+ *
+ * @remarks
+ * The test covers the shared block's defaults in the schema and on the built
+ * State (`Verdicts` - `Allow` is already the git allow-list), the override,
+ * and the guard's read-only posture (its own action classes - read and
+ * record - are automatic).
+ */
 import assert from "node:assert/strict";
 
 import { Check, Finish, Ledger, Make, MakeCounter, Validate } from "../Harness.js";

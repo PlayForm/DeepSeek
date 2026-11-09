@@ -1,10 +1,18 @@
-// Source/Test/Tables/Test.ts - one singular test: the six normalization tables
-// carry their exact contents - the four character classes (Dashes, Ellipsis,
-// Spaces, Invisible) with the g flag and their pattern sources verbatim, and
-// the two maps (Quotes, Fullwidth) with their exact entries.
-// Runs standalone (`node Target/Test/Tables/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/lib-dsh-core: the REAL built entry only.
+/**
+ * @module Test
+ *
+ * One singular test of the six normalization tables.
+ *
+ * @remarks
+ * The test asserts the tables carry their exact contents - the four
+ * character classes (Dashes, Ellipsis, Spaces, Invisible) with the g flag
+ * and their pattern sources verbatim, and the two maps (Quotes, Fullwidth)
+ * with their exact entries.
+ *
+ * The file runs standalone (`node Target/Test/Tables/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit smoke
+ * of `@playform/lib-dsh-core`: the REAL built entry only.
+ */
 import assert from "node:assert/strict";
 
 import { Dashes, Ellipsis, Fullwidth, Invisible, Quotes, Spaces } from "../../../Target/Library.js";

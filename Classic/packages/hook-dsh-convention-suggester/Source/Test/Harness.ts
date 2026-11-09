@@ -1,29 +1,35 @@
-// Source/Test/Harness.ts - the shared test harness for the
-// CONVENTION-SUGGESTER tests: the fake ctx (ctx listener capture, a DISTINCT
-// root object, the effect runner, logger capture, a recording fs the plugin
-// must never touch, reflect.provide capture, the optional `inject` seam) + the
-// fake `sessionProjections` registry (register + stateOf + the eager drive the
-// tests commit `tool/call` events through) + the REAL
-// @playform/plugin-dsh-factory instance from its built Target + the REAL
-// convention-suggester apply from its built Target - the family fake-ctx +
-// real-factory harness pattern, written ONCE per package and imported by
-// every test folder. Each folder process gets a fresh set, so every folder
-// is standalone-green and the aggregate replays the same seams per folder.
-//
-// THE PROJECTION FAKE IS THE POINT: the history is no longer seeded into a
-// `State` WeakMap (there is none), so every history assertion must travel the
-// seam the plugin actually uses - `register(definition)` installs the unit,
-// `Commit` folds one committed `tool/call` event through `apply` for the
-// session it belongs to, and `stateOf(session, key)` serves the folded state
-// to the detection. A test that bypassed the drive would prove nothing.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
-// fake ctx actually wires the plugin (the vacuously-green backstop for every
-// folder's fixture) and exits nonzero when it does not.
-//
-// NO FAKE CLOCK: the plugin has no clock dependency - the per-agent memory
-// is a call counter and a map (the no-wall-clock rule); the only timestamps
-// are the durable ledger's ISO stamps, asserted with an anchored regex.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the convention-suggester tests: the fake ctx
+ * (ctx listener capture, a distinct root object, the effect runner, logger
+ * capture, a recording fs the plugin must never touch, reflect.provide
+ * capture, the optional `inject` seam), the fake `sessionProjections`
+ * registry (register + stateOf + the eager drive the tests commit
+ * `tool/call` events through), the real @playform/plugin-dsh-factory
+ * instance from its built Target, and the real convention-suggester apply
+ * from its built Target - the family fake-ctx + real-factory harness
+ * pattern, written once per package and imported by every test folder. Each
+ * folder process gets a fresh set, so every folder is standalone-green and
+ * the aggregate replays the same seams per folder.
+ *
+ * @remarks
+ * The projection fake is the point: the history is no longer seeded into a
+ * `State` WeakMap (there is none), so every history assertion must travel
+ * the seam the plugin actually uses - `register(definition)` installs the
+ * unit, `Commit` folds one committed `tool/call` event through `apply` for
+ * the session it belongs to, and `stateOf(session, key)` serves the folded
+ * state to the detection. A test that bypassed the drive would prove
+ * nothing.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` proves the
+ * fake ctx actually wires the plugin (the vacuously-green backstop for every
+ * folder's fixture) and exits nonzero when it does not.
+ *
+ * No fake clock: the plugin has no clock dependency - the per-agent memory
+ * is a call counter and a map (the no-wall-clock rule); the only timestamps
+ * are the durable ledger's ISO stamps, asserted with an anchored regex.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

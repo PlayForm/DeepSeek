@@ -1,15 +1,23 @@
-// Source/Test/Intent/Test.ts - one singular test: the INTENT GATE - the
-// agent/pre-step stash (the observer returns the downstream decision
-// unchanged) and the per-task gate it feeds: a task ABOUT comments leaves the
-// read result untouched, a normal task strips it, the stash is PER AGENT, a
-// call with no agent identity falls back to the global text, a step with no
-// user message keeps the previous intent, `intent: false` always strips,
-// `enabled: false` never strips, and a filter switched off still records its
-// ACTIVATION line in the ledger (the switch maps onto `State.Active`, never
-// onto the factory's ledger gate). Runs standalone (`node Target/Test/Intent/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-comment-filter: the fake ctx + the REAL
-// factory + the REAL comment-filter apply, from the Harness.
+/**
+ * @module Test
+ *
+ * One singular test of the INTENT GATE of the comment filter.
+ *
+ * @remarks
+ * The test covers the `agent/pre-step` stash (the observer returns the
+ * downstream decision unchanged) and the per-task gate it feeds: a task ABOUT
+ * comments leaves the read result untouched, a normal task strips it, the
+ * stash is PER AGENT, a call with no agent identity falls back to the global
+ * text, a step with no user message keeps the previous intent,
+ * `intent: false` always strips, `enabled: false` never strips, and a filter
+ * switched off still records its ACTIVATION line in the ledger (the switch
+ * maps onto `State.Active`, never onto the factory's ledger gate).
+ *
+ * The file runs standalone (`node Target/Test/Intent/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit smoke
+ * of `@playform/hook-dsh-comment-filter`: the fake ctx + the REAL factory +
+ * the REAL comment-filter apply, from the Harness.
+ */
 import assert from "node:assert/strict";
 
 import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";

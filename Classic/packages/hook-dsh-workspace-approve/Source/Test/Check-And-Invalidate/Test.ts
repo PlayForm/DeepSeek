@@ -1,9 +1,14 @@
-// Source/Test/Check-And-Invalidate/Test.ts - the exactness check and the
-// invalidation listener: the check guard chain (unbound, pending, denied,
-// revoked, stale, approved) with the byte-exact checked lines, and the
-// fs/observed listener (the same-version no-op, the version-changed
-// invalidation, the own-actor identity check, the malformed containment,
-// the absent-kind no-op) plus the invalidated-then-checked loop.
+/**
+ * @module Test
+ *
+ * Exercises the exactness check and the invalidation listener.
+ *
+ * @remarks
+ * Covers the check guard chain (unbound, pending, denied, revoked, stale, approved) with the
+ * byte-exact checked lines, and the fs/observed listener (the same-version no-op, the version-changed
+ * invalidation, the own-actor identity check, the malformed containment, the absent-kind no-op)
+ * plus the invalidated-then-checked loop.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

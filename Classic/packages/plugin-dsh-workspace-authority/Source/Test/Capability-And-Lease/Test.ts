@@ -1,7 +1,13 @@
-// Source/Test/Capability-And-Lease/Test.ts - the capability and the lease
-// records: the grant/revoke/authorize paths with their byte-exact lines, the
-// per-holder ceilings, the lease TTL (explicit, policy override, default),
-// the lazy expiry sweep, the release path, and the statistics.
+/**
+ * @module Test
+ *
+ * Exercises the capability and the lease records.
+ *
+ * @remarks
+ * Covers the grant/revoke/authorize paths with their byte-exact lines, the per-holder ceilings, the
+ * lease TTL (explicit, policy override, default), the lazy expiry sweep, the release path, and the
+ * statistics.
+ */
 import assert from "node:assert/strict";
 import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
 

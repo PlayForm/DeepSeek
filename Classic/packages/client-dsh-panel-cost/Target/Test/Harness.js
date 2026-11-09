@@ -129,7 +129,8 @@ if (process.argv.includes("--selfcheck")) {
       [
         "/api/playform-cost/session",
         "/api/playform-cost/catalogs",
-        "/api/playform-cost/rates"
+        "/api/playform-cost/rates",
+        "/api/playform-cost/publish"
       ]
     );
   });

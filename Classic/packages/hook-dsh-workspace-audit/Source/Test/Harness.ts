@@ -1,16 +1,23 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE-AUDIT
-// tests: the fake ctx (root listener capture with a DISTINCT root object, the
-// ctx listener capture, reflect.provide capture, the effect runner, logger
-// capture + the fs/storage seams) + the REAL @playform/plugin-dsh-factory
-// instance from its built Target + the REAL workspace-audit apply from its
-// built Target - the family fake-ctx + real-factory harness pattern, adapted
-// from the workspace-observe reference harness. Each folder process gets a
-// fresh set, so every folder is standalone-green.
-//
-// NO FAKE CLOCK: the audit's only time field is the line's `at` record; the
-// sequencing is the plugin's own monotonic counter (the no-wall-clock rule),
-// so the harness needs no time seam; every timing assertion is on the
-// counter.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the workspace-audit tests: the fake ctx, the
+ * real factory instance and the real workspace-audit apply.
+ *
+ * @remarks
+ * The fake ctx carries root listener capture with a distinct root object, the
+ * ctx listener capture, reflect.provide capture, the effect runner, logger
+ * capture + the fs/storage seams; the real @playform/plugin-dsh-factory
+ * instance comes from its built Target, as does the real workspace-audit
+ * apply. This is the family fake-ctx + real-factory harness pattern, adapted
+ * from the workspace-observe reference harness. Each folder process gets a
+ * fresh set, so every folder is standalone-green.
+ *
+ * No fake clock: the audit's only time field is the line's `at` record; the
+ * sequencing is the plugin's own monotonic counter (the no-wall-clock rule),
+ * so the harness needs no time seam; every timing assertion is on the
+ * counter.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

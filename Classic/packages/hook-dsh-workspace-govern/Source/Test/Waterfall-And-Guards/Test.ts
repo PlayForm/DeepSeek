@@ -1,9 +1,14 @@
-// Source/Test/Waterfall-And-Guards/Test.ts - the waterfall discipline and the
-// guards: next() first with the downstream decision returned unchanged on
-// pass, the deny and ask envelopes, the synthesized proposal from a plain
-// tool call, the excluded-target silence, the own-actor exemption, the
-// recursion guard with its byte-exact loop line, the outcome observer with
-// its byte-exact observed lines, and the fail-open containment.
+/**
+ * @module Test
+ *
+ * Exercises the waterfall discipline and the guards.
+ *
+ * @remarks
+ * Covers next() first with the downstream decision returned unchanged on pass, the deny and ask
+ * envelopes, the synthesized proposal from a plain tool call, the excluded-target silence, the
+ * own-actor exemption, the recursion guard with its byte-exact loop line, the outcome observer with
+ * its byte-exact observed lines, and the fail-open containment.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

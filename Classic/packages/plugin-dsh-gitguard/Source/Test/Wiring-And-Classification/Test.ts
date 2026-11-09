@@ -1,10 +1,16 @@
-// Source/Test/Wiring-And-Classification/Test.ts - the wiring and the
-// classifier: the loader contract (the default object carries
-// name/apply/Config/inject, apply returns nothing), the IDLE-forever cold
-// mount, the activation proof, the tools/pre-execute registration on the
-// plugin context (never the root), the classification table (allow, deny,
-// strict, the allow-list win, compounds, env prefixes, flags, bare git), and
-// the fail-loud validation.
+/**
+ * @module Test
+ *
+ * One singular test of the git-guard's wiring and classifier.
+ *
+ * @remarks
+ * The test covers the loader contract (the default object carries
+ * name/apply/Config/inject, apply returns nothing), the IDLE-forever cold
+ * mount, the activation proof, the tools/pre-execute registration on the
+ * plugin context (never the root), the classification table (allow, deny,
+ * strict, the allow-list win, compounds, env prefixes, flags, bare git), and
+ * the fail-loud validation.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

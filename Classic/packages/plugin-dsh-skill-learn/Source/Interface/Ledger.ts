@@ -1,15 +1,20 @@
-// Ledger - one row of the audit ledger, which is also the revert handle.
-//
-// A row is append-only and self-sufficient: it names content addresses, and the
-// blobs those addresses point at are the content, so a revert never has to
-// guess what a file looked like before. That is why the row is written after
-// the bytes are captured and why an append failure only logs - the write it
-// describes has already happened, so refusing the write because the record
-// failed would trade a durable change for a missing note.
-//
-// The two manifests are deltas: a path whose hash is identical on both sides is
-// dropped, and a path present on one side only is kept, which is how a creation
-// and a removal stay visible while an unchanged sibling disappears.
+/**
+ * @module Ledger
+ *
+ * One row of the audit ledger, which is also the revert handle.
+ *
+ * @remarks
+ * A row is append-only and self-sufficient: it names content addresses, and the blobs
+ * those addresses point at are the content, so a revert never has to guess what a file
+ * looked like before. That is why the row is written after the bytes are captured and
+ * why an append failure only logs - the write it describes has already happened, so
+ * refusing the write because the record failed would trade a durable change for a
+ * missing note.
+ *
+ * The two manifests are deltas: a path whose hash is identical on both sides is dropped,
+ * and a path present on one side only is kept, which is how a creation and a removal
+ * stay visible while an unchanged sibling disappears.
+ */
 export interface LedgerFile {
 	/** The absolute path the bytes belong to. */
 	readonly path: string;
@@ -41,6 +46,7 @@ export interface LedgerRow {
 	readonly action: "create" | "patch" | "support" | "archive" | "restore" | "revert";
 	/** The skill the row is about, by frontmatter name rather than directory name. */
 	readonly skill: string;
+	/** The evidence a row carries: who, why, and which rule let it through. */
 	readonly evidence: LedgerEvidence;
 	/** The paths and bytes as they were; empty for a creation. */
 	readonly before: readonly LedgerFile[];

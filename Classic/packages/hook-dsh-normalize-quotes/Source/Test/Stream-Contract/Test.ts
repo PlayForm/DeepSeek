@@ -1,12 +1,22 @@
-// Source/Test/Stream-Contract/Test.ts - one singular test: the full
-// llm/stream waterfall contract of the Run-1 stream - the next() mechanics,
-// the untouched options, the passthrough-by-identity groups, the rewrite
-// groups, the count ledger line and the P5 journal routing of the count
-// event (factory pre-bind buffer, not the per-State queue).
-// Runs standalone (`node Target/Test/Stream-Contract/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Smoke of @playform/hook-dsh-normalize-quotes: the fake ctx + the REAL
-// factory + the REAL quotes apply (the seams live in ../Harness.js).
+/**
+ * @module Test
+ *
+ * The full llm/stream waterfall contract of @playform/hook-dsh-normalize-
+ * quotes, covered in one singular smoke.
+ *
+ * @remarks
+ * The test covers the full llm/stream waterfall contract of the Run-1
+ * stream: the next() mechanics, the untouched options, the
+ * passthrough-by-identity groups, the rewrite groups, the count ledger line
+ * and the P5 journal routing of the count event (factory pre-bind buffer,
+ * not the per-State queue).
+ *
+ * The file runs standalone (`node Target/Test/Stream-Contract/Test.js`) and
+ * under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * The smoke runs the fake ctx + the real factory + the real quotes apply
+ * (the seams live in ../Harness.js).
+ */
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import {

@@ -1,43 +1,44 @@
-// Write - the fence: the ONLY leaf that turns a judged operation into bytes, and
-// the home of the two pieces of vocabulary the whole write side shares.
-//
-// THE FENCE IS THREE CHECKS IN ORDER, and each exists because the layer below it
-// cannot be trusted to make it (SKILL-LEARN-PLUGIN.md:427-445):
-//
-//   1. THE ROOT FENCE. The resolved target must be contained by `skillsRoot` and
-//      NOT by `archiveRoot`, and a support path must stay inside its own skill
-//      directory. `resolve` is "a resolution default, NOT a containment boundary"
-//      (dsh-fs-local/lib/index.js:719-723), so a skill whose catalog entry lives
-//      under a project root, ~/.agents/skills, or a bundled root resolves to a
-//      perfectly valid target, and the plugin's own `contains` call is the only
-//      thing that refuses it. The failure class is `foreign-root`
-//      (SKILL-LEARN-PLUGIN.md:441).
-//
-//   2. THE BODY RE-FETCH. The target's current text is compared byte for byte
-//      with the body the confirm prompt carried, so a body that moved between the
-//      two model calls is refused instead of patched at the wrong offset
-//      (SKILL-LEARN-PLUGIN.md:290-297). A difference is `body-carried` with
-//      `detail: body-drifted`, and the write is never attempted.
-//
-//   3. THE EXISTENCE LINE. A create writes with `createIfAbsent`, which rejects an
-//      existing path with FS_NOT_OBSERVED; a patch edits with `editText` behind
-//      the version `stat` just returned, which checks the version BEFORE it
-//      matches a character and reports FS_STALE_VERSION rather than an ambiguous
-//      match (dsh-fs/lib/types/types.d.ts:105-116,
-//      dsh-fs/lib/types/index.d.ts:222-225). Omitting the intent would be an
-//      unconditional overwrite, which this plugin never performs
-//      (dsh-fs/lib/types/types.d.ts:106-110).
-//
-// A REFUSAL IS RETURNED, NEVER THROWN: the caller records it and keeps the rest of
-// the run, and a throw here would discard every operation the judge accepted.
-//
-// WHY THE SEAM IS DECLARED HERE. Interface/Services.ts owns the harness's own
-// shape; this leaf restates the seven members the write path calls as a
-// structural subset, for three reasons: a widened service cannot widen the fence
-// by accident, the version token stays opaque so no consumer manufactures one
-// (dsh-fs/lib/types/types.d.ts:32-36), and the service passes `ctx.fs` to it
-// structurally. `Expand` lives here for the family precedent that puts it beside
-// the write (Classic/packages/plugin-dsh-lesson-review/Source/Function/Apply.ts:26-28).
+/**
+ * @module Write
+ *
+ * The fence: the ONLY leaf that turns a judged operation into bytes, and the home of
+ * the two pieces of vocabulary the whole write side shares.
+ *
+ * @remarks
+ * THE FENCE IS THREE CHECKS IN ORDER, and each exists because the layer below it cannot
+ * be trusted to make it (SKILL-LEARN-PLUGIN.md:427-445):
+ *
+ * - THE ROOT FENCE. The resolved target must be contained by `skillsRoot` and NOT by
+ *   `archiveRoot`, and a support path must stay inside its own skill directory.
+ *   `resolve` is "a resolution default, NOT a containment boundary"
+ *   (dsh-fs-local/lib/index.js:719-723), so a skill whose catalog entry lives under a
+ *   project root, ~/.agents/skills, or a bundled root resolves to a perfectly valid
+ *   target, and the plugin's own `contains` call is the only thing that refuses it. The
+ *   failure class is `foreign-root` (SKILL-LEARN-PLUGIN.md:441).
+ * - THE BODY RE-FETCH. The target's current text is compared byte for byte with the
+ *   body the confirm prompt carried, so a body that moved between the two model calls
+ *   is refused instead of patched at the wrong offset (SKILL-LEARN-PLUGIN.md:290-297).
+ *   A difference is `body-carried` with `detail: body-drifted`, and the write is never
+ *   attempted.
+ * - THE EXISTENCE LINE. A create writes with `createIfAbsent`, which rejects an
+ *   existing path with FS_NOT_OBSERVED; a patch edits with `editText` behind the
+ *   version `stat` just returned, which checks the version BEFORE it matches a
+ *   character and reports FS_STALE_VERSION rather than an ambiguous match
+ *   (dsh-fs/lib/types/types.d.ts:105-116, dsh-fs/lib/types/index.d.ts:222-225).
+ *   Omitting the intent would be an unconditional overwrite, which this plugin never
+ *   performs (dsh-fs/lib/types/types.d.ts:106-110).
+ *
+ * A REFUSAL IS RETURNED, NEVER THROWN: the caller records it and keeps the rest of the
+ * run, and a throw here would discard every operation the judge accepted.
+ *
+ * WHY THE SEAM IS DECLARED HERE. Interface/Services.ts owns the harness's own shape;
+ * this leaf restates the seven members the write path calls as a structural subset, for
+ * three reasons: a widened service cannot widen the fence by accident, the version
+ * token stays opaque so no consumer manufactures one
+ * (dsh-fs/lib/types/types.d.ts:32-36), and the service passes `ctx.fs` to it
+ * structurally. `Expand` lives here for the family precedent that puts it beside the
+ * write (Classic/packages/plugin-dsh-lesson-review/Source/Function/Apply.ts:26-28).
+ */
 import OS from "node:os";
 import Path from "node:path";
 

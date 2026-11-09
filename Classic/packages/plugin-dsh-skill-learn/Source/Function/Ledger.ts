@@ -1,26 +1,31 @@
-// Ledger - the audit ledger: one row per mutation, the content-addressed blobs
-// the row points at, and the delta manifests that make a revert possible.
-//
-// TELEMETRY, NOT A GATE (tools/skill_ledger.py:8, Hermes-Curator-Pass.md:274-282).
-// Every public write path here swallows its failure and returns why: the write it
-// describes has already happened, so refusing the write because the record failed
-// would trade a durable change for a missing note. The one caller that treats a
-// ledger failure as fatal is a revert, and it fails closed on the SNAPSHOT it
-// takes, not on this row.
-//
-// THE BLOBS ARE THE CONTENT, and the row is a set of addresses. `before` and
-// `after` are DELTAS: a path whose hash is identical on both sides is dropped, and
-// a path present on one side only is kept, which is how a creation stays visible
-// while an unchanged sibling disappears (tools/skill_ledger.py:286-295,
-// SKILL-LEARN-PLUGIN.md:468). The bytes are stored before the row is appended, so
-// a row never names a blob that does not exist yet.
-//
-// THIS IS THE ONE SANCTIONED USE OF `node:fs` for the plugin's own bookkeeping,
-// bounded to `<stateRoot>` and `<blobRoot>`: the harness offers an append and a
-// prune that `ctx.fs` does not, and the family's sibling already writes its
-// corpus that way (Classic/packages/plugin-dsh-lesson-review/Source/Function/
-// Apply.ts:19, SKILL-LEARN-PLUGIN.md:401-406). It never touches a skill path;
-// every skill mutation goes through the fence in Function/Write.ts.
+/**
+ * @module Ledger
+ *
+ * The audit ledger: one row per mutation, the content-addressed blobs the row points
+ * at, and the delta manifests that make a revert possible.
+ *
+ * @remarks
+ * TELEMETRY, NOT A GATE (tools/skill_ledger.py:8, Hermes-Curator-Pass.md:274-282).
+ * Every public write path here swallows its failure and returns why: the write it
+ * describes has already happened, so refusing the write because the record failed would
+ * trade a durable change for a missing note. The one caller that treats a ledger
+ * failure as fatal is a revert, and it fails closed on the SNAPSHOT it takes, not on
+ * this row.
+ *
+ * THE BLOBS ARE THE CONTENT, and the row is a set of addresses. `before` and `after`
+ * are DELTAS: a path whose hash is identical on both sides is dropped, and a path
+ * present on one side only is kept, which is how a creation stays visible while an
+ * unchanged sibling disappears (tools/skill_ledger.py:286-295,
+ * SKILL-LEARN-PLUGIN.md:468). The bytes are stored before the row is appended, so a row
+ * never names a blob that does not exist yet.
+ *
+ * THIS IS THE ONE SANCTIONED USE OF `node:fs` for the plugin's own bookkeeping, bounded
+ * to `<stateRoot>` and `<blobRoot>`: the harness offers an append and a prune that
+ * `ctx.fs` does not, and the family's sibling already writes its corpus that way
+ * (Classic/packages/plugin-dsh-lesson-review/Source/Function/Apply.ts:19,
+ * SKILL-LEARN-PLUGIN.md:401-406). It never touches a skill path; every skill mutation
+ * goes through the fence in `Function/Write.ts`.
+ */
 import { createHash, randomBytes } from "node:crypto";
 import FileSystem from "node:fs/promises";
 import Path from "node:path";

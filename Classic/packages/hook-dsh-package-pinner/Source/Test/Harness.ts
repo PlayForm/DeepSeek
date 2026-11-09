@@ -1,18 +1,25 @@
-// Source/Test/Harness.ts - the shared test harness for the PINNER tests: the
-// fake ctx (on/emit/effect/get/reflect capture + the root seam) with the
-// REAL-TOKEN fs backend (real temp-dir I/O whose version tokens
-// dev:size:mtimeNs:ctimeNs enforce the replaceIfVersion guard) + the REAL
-// @playform/plugin-dsh-factory instance from its built Target + the pinner's
-// REAL built Target - the seams from the source suite
-// (Classic/smokes/pinner-smoke.mjs), written ONCE per package and imported by
-// every test folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the real-token fs actually
-// wires the pinner (the vacuously-green backstop for every folder's fixture);
-// prepublishOnly.sh gates the build on it. Imported as a library, this module
-// only exports.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the pinner tests: the fake ctx with the
+ * real-token fs backend, the real factory instance and the pinner's real
+ * built Target.
+ *
+ * @remarks
+ * The fake ctx carries on/emit/effect/get/reflect capture + the root seam;
+ * the real-token fs backend runs real temp-dir I/O whose version tokens
+ * dev:size:mtimeNs:ctimeNs enforce the replaceIfVersion guard; the real
+ * @playform/plugin-dsh-factory instance comes from its built Target. These
+ * are the seams from the source suite (Classic/smokes/pinner-smoke.mjs),
+ * written once per package and imported by every test folder.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the real-token fs actually
+ * wires the pinner (the vacuously-green backstop for every folder's fixture);
+ * prepublishOnly.sh gates the build on it. Imported as a library, this module
+ * only exports.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

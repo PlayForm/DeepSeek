@@ -1,12 +1,20 @@
-// Source/Test/Post-Execute-And-Gate/Test.ts - the listener behavior against
-// the fake ctx: the HISTORY emit path (the note built from the session's own
-// previous tool calls, with the byte-exact text, summary and `suggest` ledger
-// lines in both forms), the REAL projection path (committed `tool/call`
-// events, folded by the registered unit, read back through `stateOf`), the
-// silence path (a non-judged call and a no-history call, which abstains
-// `no-history`), the abstention path (a fully excluded candidate set), the
-// gate paths (cooldown, per-turn cap), the block-decision shape, the per-agent
-// memory isolation, and the agent/pre-step per-turn reset.
+/**
+ * @module Test
+ *
+ * The listener behavior of the convention-suggester against the fake ctx:
+ * emit, projection, silence, abstention, gates and reset.
+ *
+ * @remarks
+ * The covered paths are the history emit path (the note built from the
+ * session's own previous tool calls, with the byte-exact text, summary and
+ * `suggest` ledger lines in both forms), the real projection path (committed
+ * `tool/call` events, folded by the registered unit, read back through
+ * `stateOf`), the silence path (a non-judged call and a no-history call,
+ * which abstains `no-history`), the abstention path (a fully excluded
+ * candidate set), the gate paths (cooldown, per-turn cap), the
+ * block-decision shape, the per-agent memory isolation, and the
+ * agent/pre-step per-turn reset.
+ */
 import assert from "node:assert/strict";
 import {
 	AgentOf,

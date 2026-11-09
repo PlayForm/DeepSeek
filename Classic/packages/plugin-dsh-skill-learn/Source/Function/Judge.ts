@@ -1,27 +1,32 @@
-// Judge - the sixteen deterministic rules between the model's reply and the
-// corpus, one id each, first refusal wins.
-//
-// WHY A JUDGE AT ALL. Every rule here is a content rule the prompt states in
-// prose (SKILL-LEARN-PLUGIN.md:305-379) and that prose alone cannot enforce: a
-// model that ignores an instruction still produces a plausible artifact, and a
-// plausible artifact in the corpus is worse than no artifact. Each rule is a
-// shape the corpus must never contain, expressed as a test.
-//
-// THE ORDER IS SECTION 6.2's GUARD PRECEDENCE, not the table order of 4.5
-// (SKILL-LEARN-PLUGIN.md:427-445): the path rules (J11, J12, J10) run before the
-// body rules, because a write to the agreement or into the archive must be
-// refused before the judge spends a read on an anchor, and the content rules
-// (J13-J15) run before the result rules (J8, J9, J16) because the result is
-// computed from text that has already passed them. The ids and the strings are
-// section 4.5's, byte for byte (SKILL-LEARN-PLUGIN.md:267-284).
-//
-// WHAT THE JUDGE DOES NOT DO: it never repairs an operation into acceptability.
-// A refused operation is reported, not edited, and the first refusal is the only
-// error the model and the ledger see.
-//
-// The judge is SYNCHRONOUS on purpose. Its whole input is the read-only Corpus
-// view, so a rule that could wait would be a rule whose refusal can arrive after
-// the write it was meant to stop (Interface/Corpus.ts:1-13).
+/**
+ * @module Judge
+ *
+ * The sixteen deterministic rules between the model's reply and the corpus, one id
+ * each, first refusal wins.
+ *
+ * @remarks
+ * WHY A JUDGE AT ALL. Every rule here is a content rule the prompt states in prose
+ * (SKILL-LEARN-PLUGIN.md:305-379) and that prose alone cannot enforce: a model that
+ * ignores an instruction still produces a plausible artifact, and a plausible artifact
+ * in the corpus is worse than no artifact. Each rule is a shape the corpus must never
+ * contain, expressed as a test.
+ *
+ * THE ORDER IS SECTION 6.2's GUARD PRECEDENCE, not the table order of 4.5
+ * (SKILL-LEARN-PLUGIN.md:427-445): the path rules (J11, J12, J10) run before the body
+ * rules, because a write to the agreement or into the archive must be refused before
+ * the judge spends a read on an anchor, and the content rules (J13-J15) run before the
+ * result rules (J8, J9, J16) because the result is computed from text that has already
+ * passed them. The ids and the strings are section 4.5's, byte for byte
+ * (SKILL-LEARN-PLUGIN.md:267-284).
+ *
+ * WHAT THE JUDGE DOES NOT DO: it never repairs an operation into acceptability. A
+ * refused operation is reported, not edited, and the first refusal is the only error
+ * the model and the ledger see.
+ *
+ * The judge is SYNCHRONOUS on purpose. Its whole input is the read-only Corpus view,
+ * so a rule that could wait would be a rule whose refusal can arrive after the write
+ * it was meant to stop (Interface/Corpus.ts:1-13).
+ */
 import Path from "node:path";
 
 import { Expand, Locate } from "@Function/Write.js";

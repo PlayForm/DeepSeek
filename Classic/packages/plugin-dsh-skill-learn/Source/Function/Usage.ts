@@ -1,38 +1,41 @@
-// Usage - the usage store: one JSON object keyed by skill name, never inside a
-// `SKILL.md`, and the curator's whole input.
-//
-// THE STORE IS A SIDECAR, never the corpus: the corpus is directories of markdown
-// a person reads and edits, so bookkeeping lives beside it where a bad write
-// cannot corrupt a skill (tools/skill_usage.py:1-2, :51-52).
-//
-// ONE TOP-LEVEL KEY IS NOT A RECORD: the curator's clock is persisted under
-// `curatedAt` beside the skill keys, because the clock has to survive a restart
-// and this store is the one thing the plugin already writes atomically
-// (SKILL-LEARN-PLUGIN.md:146). A skill name can never collide with it, since the
-// corpus grammar is `/^[a-z0-9]+(?:-[a-z0-9]+)*$/`, so the reader recognises the
-// key by name and never coerces it into a record - and a second store would be a
-// second failure mode for one number.
-//
-// A CORRUPT STORE IS QUARANTINED, NOT OVERWRITTEN. Hermes reads a corrupt or
-// unreadable store as `{}` and the next successful bump rewrites the whole file
-// with a map holding one record, which silently loses every other record
-// (tools/skill_usage.py:369-377, :406, Hermes-Curator-Pass.md:406). That
-// behaviour is not copied: a read failure moves the file to
-// `<storagePath>.corrupt-<YYYYMMDDHHMMSS>` and starts from an empty store, one
-// ledger line names the error and the quarantine path, and the quarantined bytes
-// stay on disk for inspection (SKILL-LEARN-PLUGIN.md:647-657). When the move
-// itself fails, the store REFUSES to save, so the next write cannot destroy the
-// only copy.
-//
-// TWO FIELDS ARE DERIVED AND NEVER PERSISTED: `lastActivityAt` is the maximum of
-// the two activity stamps with `createdAt` deliberately excluded, so a skill that
-// was never active stays distinguishable from one that was
-// (tools/skill_usage.py:123-127), and it is recomputed on every mutation rather
-// than stored, so a read never sees a stale value (Interface/Record.ts:42-43).
-//
-// WRITES ARE ATOMIC AND ORDERED: one promise chain, so a load always precedes a
-// write and two saves cannot interleave, and each save lands through a temporary
-// file and a rename (tools/skill_usage.py:384, SKILL-LEARN-PLUGIN.md:657).
+/**
+ * @module Usage
+ *
+ * The usage store: one JSON object keyed by skill name, never inside a `SKILL.md`, and
+ * the curator's whole input.
+ *
+ * @remarks
+ * THE STORE IS A SIDECAR, never the corpus: the corpus is directories of markdown a
+ * person reads and edits, so bookkeeping lives beside it where a bad write cannot
+ * corrupt a skill (tools/skill_usage.py:1-2, :51-52).
+ *
+ * ONE TOP-LEVEL KEY IS NOT A RECORD: the curator's clock is persisted under `curatedAt`
+ * beside the skill keys, because the clock has to survive a restart and this store is
+ * the one thing the plugin already writes atomically (SKILL-LEARN-PLUGIN.md:146). A
+ * skill name can never collide with it, since the corpus grammar is
+ * `/^[a-z0-9]+(?:-[a-z0-9]+)*$/`, so the reader recognises the key by name and never
+ * coerces it into a record - and a second store would be a second failure mode for one
+ * number.
+ *
+ * A CORRUPT STORE IS QUARANTINED, NOT OVERWRITTEN. Hermes reads a corrupt or unreadable
+ * store as `{}` and the next successful bump rewrites the whole file with a map holding
+ * one record, which silently loses every other record (tools/skill_usage.py:369-377,
+ * :406, Hermes-Curator-Pass.md:406). That behaviour is not copied: a read failure moves
+ * the file to `<storagePath>.corrupt-<YYYYMMDDHHMMSS>` and starts from an empty store,
+ * one ledger line names the error and the quarantine path, and the quarantined bytes
+ * stay on disk for inspection (SKILL-LEARN-PLUGIN.md:647-657). When the move itself
+ * fails, the store REFUSES to save, so the next write cannot destroy the only copy.
+ *
+ * TWO FIELDS ARE DERIVED AND NEVER PERSISTED: `lastActivityAt` is the maximum of the
+ * two activity stamps with `createdAt` deliberately excluded, so a skill that was never
+ * active stays distinguishable from one that was (tools/skill_usage.py:123-127), and it
+ * is recomputed on every mutation rather than stored, so a read never sees a stale
+ * value (Interface/Record.ts:42-43).
+ *
+ * WRITES ARE ATOMIC AND ORDERED: one promise chain, so a load always precedes a write
+ * and two saves cannot interleave, and each save lands through a temporary file and a
+ * rename (tools/skill_usage.py:384, SKILL-LEARN-PLUGIN.md:657).
+ */
 import { randomBytes } from "node:crypto";
 import FileSystem from "node:fs/promises";
 import Path from "node:path";

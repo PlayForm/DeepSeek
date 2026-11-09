@@ -1,15 +1,20 @@
-// Consolidation - the opt-in survey, the plan it produces, and the result.
-//
-// The action set is closed at four and has no delete member and no
-// absorbed-into field, which is the fence holding inside the second half of the
-// curator too: the worst outcome a pass can produce is still a move into the
-// archive, so no merge decision can be hallucinated because no merge can be
-// expressed. A row that writes carries a normal operation, which is what lets
-// the same sixteen judge rules run over a consolidation patch.
-//
-// A pass with `consolidate: false` reports `disabled`, because the twelve-class
-// set has no arm for a gated half and `unavailable` is the ledger verb of the
-// no-llm, no-route and empty-transcript classes rather than a thirteenth arm.
+/**
+ * @module Consolidation
+ *
+ * The opt-in survey, the plan it produces, and the result.
+ *
+ * @remarks
+ * The action set is closed at four and has no delete member and no absorbed-into field,
+ * which is the fence holding inside the second half of the curator too: the worst
+ * outcome a pass can produce is still a move into the archive, so no merge decision can
+ * be hallucinated because no merge can be expressed. A row that writes carries a normal
+ * operation, which is what lets the same sixteen judge rules run over a consolidation
+ * patch.
+ *
+ * A pass with `consolidate: false` reports `disabled`, because the twelve-class set has
+ * no arm for a gated half and `unavailable` is the ledger verb of the no-llm, no-route
+ * and empty-transcript classes rather than a thirteenth arm.
+ */
 import type { Operation } from "@Interface/Operation.js";
 import type { Outcome } from "@Interface/Trigger.js";
 

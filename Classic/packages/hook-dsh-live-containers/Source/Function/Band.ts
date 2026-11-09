@@ -1,17 +1,23 @@
-// Band - the byte-exact renderer of the monitor stanza (the FILE-MONITOR
-// design section 6 - the C3 implements to these bytes). Pure functions over
-// the per-agent monitor state; no I/O, no eval.
-//
-// THE GLYPHS: U+2204 THERE DOES NOT EXIST (clean) and U+2205 EMPTY SET
-// (not-run-yet) are written in source as the escaped forms - the family's
-// escape discipline - and rendered as the characters. `!` problem, `~`
-// stale, `x` infrastructure.
-//
-// THE KV-CACHE HONESTY: no relative ages anywhere in the stanza - the check
-// time is HH:MM:SS and the staleness is derived per render from the raw
-// version tokens, so the text changes only on the events of the design
-// section 5.2 set (the retirement closing line is the one documented
-// exception - a terminal one-time change).
+/**
+ * @module Band
+ *
+ * The byte-exact renderer of the monitor stanza (the FILE-MONITOR design
+ * section 6 - the C3 implements to these bytes).
+ *
+ * @remarks
+ * Pure functions over the per-agent monitor state; no I/O, no eval.
+ *
+ * THE GLYPHS: U+2204 THERE DOES NOT EXIST (clean) and U+2205 EMPTY SET
+ * (not-run-yet) are written in source as the escaped forms - the family's
+ * escape discipline - and rendered as the characters. `!` problem, `~` stale,
+ * `x` infrastructure.
+ *
+ * THE KV-CACHE HONESTY: no relative ages anywhere in the stanza - the check
+ * time is HH:MM:SS and the staleness is derived per render from the raw
+ * version tokens, so the text changes only on the events of the design
+ * section 5.2 set (the retirement closing line is the one documented
+ * exception - a terminal one-time change).
+ */
 import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
 import type { CheckResult, MonitorEntry } from "@Interface/Events.js";
 import type State from "@Interface/State.js";

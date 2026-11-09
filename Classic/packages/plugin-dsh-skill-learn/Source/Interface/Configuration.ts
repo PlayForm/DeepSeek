@@ -1,13 +1,17 @@
-// Configuration - the validated plugin-config shape for the skill-learn
-// service (the schema that produces it lives in Variable/Configuration.ts).
-// Every knob is a volatile cell in the schema; the service reads them through
-// its Configure method, so a hot edit lands on the next call without a
-// remount.
-//
-// The factory's minimal shared block contributes the universal `log` cell
-// alongside these knobs, and this type deliberately leaves it out: the service
-// logs through its own `logFile` sink and cannot act on the shared flag, so a
-// knob it cannot read has no place in the surface the loader hands it.
+/**
+ * @module Configuration
+ *
+ * The validated plugin-config shape for the skill-learn service (the schema that
+ * produces it lives in `Variable/Configuration.ts`). Every knob is a volatile cell in
+ * the schema; the service reads them through its Configure method, so a hot edit lands
+ * on the next call without a remount.
+ *
+ * @remarks
+ * The factory's minimal shared block contributes the universal `log` cell alongside
+ * these knobs, and this type deliberately leaves it out: the service logs through its
+ * own `logFile` sink and cannot act on the shared flag, so a knob it cannot read has no
+ * place in the surface the loader hands it.
+ */
 import type { Allowlist } from "@playform/plugin-dsh-factory";
 
 export default interface Configuration {

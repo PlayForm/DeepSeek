@@ -1,68 +1,69 @@
-// Library - the entry module of the SKILL-LEARN service
-// (@playform/plugin-dsh-skill-learn), the Hermes learning loop as one fenced
-// package: the post-turn review that turns a finished session into skill edits,
-// and the curator that ages the corpus. Loader contract: the CLASS form the
-// family uses - `export default class SkillLearnService extends Service` with
-// `super(Context, "skillLearn")`, `static inject`, `static Config = Definition`
-// and the named `Config` schema export beside it
-// (`Classic/packages/plugin-dsh-lesson-review/Source/Library.ts:112-116`). Every
-// service method is a thin delegate; the only behaviour this file owns is the
-// sequencing of the leaves and the ledger lines, because the leaves have no
-// logger (plan section 6.7).
-//
-// THE SERVICE SURFACE (ctx.skillLearn), thirteen methods (plan section 2):
-//
-//   Configure(options)        - apply validated config knobs (volatile cells)
-//   Trigger(agent)            - the idle-edge gate: the counter, the caps, the
-//                               claim, the review, one ledger line
-//   Review({agent, signal})   - ONE review: transcript -> digest -> llm -> route
-//                               -> catalog -> phase 1 -> parse -> views -> phase 2
-//                               -> parse -> judge -> write -> ledger -> report
-//   Curate(now?)              - the deterministic R1-R10 lifecycle pass
-//   Consolidate({dryRun?})    - the opt-in survey pass (ships off)
-//   Record(name, agent?)      - one observed load through the `skill` tool
-//   Revert(identifier)        - one audit row back to files, fail-closed
-//   Status()                  - counts (total/active/stale/archived/pinned/
-//                               tracked/lastRunAt)
-//   Pin(name, pinned)         - the lifecycle exemption
-//   Restore(name)             - put a neutralized skill back into the catalog
-//   Digest(messages)          - the bounded digest (Function/Digest)
-//   Prompt(phase)             - the byte-stable phase prompt (Function/Prompt)
-//   Save()                    - the store flush (the smoke seam)
-//
-// THE TWO LISTENERS ARE REGISTERED HERE, because a listener is wiring and the
-// family keeps wiring in the entry (`code-authoring` rule 13). A class plugin
-// has no `apply`: construction IS the load, and the fiber is already active
-// (`Service`'s own constructor provides the service through `ctx.reflect`), so
-// both registrations below are apply-time effects.
-//
-//   1. `agent/status` (EMIT, idle only). An emit listener is a SYNCHRONOUS
-//      recorder: the review is detached with a `.catch` that ledgers and never
-//      throws into the emitter, the pattern at
-//      `Classic/packages/hook-dsh-lesson-nudge/Source/Function/Apply.ts:187-192`.
-//      The idle edge is the only moment a review may run, because
-//      `agent.runMaintenance` is what claims that phase
-//      (`dsh-agent/lib/types/runtime-types.d.ts:164-174`), and the claim lives
-//      in `Function/Trigger`, not here.
-//   2. `tools/post-execute` (WATERFALL). It calls `next()` exactly once, and
-//      records one use when `exec.name === "skill"`. A waterfall observer that
-//      omits `next()` silently swallows the downstream default, so the omission
-//      would break every `skill` call rather than merely skipping a record
-//      (plan section 8.2 item 4).
-//
-// WHY THE HARNESS TYPES ARE IMPORTED FOR THEIR DECLARATIONS ALONE: the
-// `agent/status` and `tools/post-execute` events are declared inside
-// `declare module "@deepseek-ai/cordis"` blocks in the harness's own type
-// files, and those augmentations are visible only in a compilation unit that
-// has LOADED them. `import type {}` loads them and emits nothing - the pattern
-// at `Classic/packages/hook-dsh-lesson-nudge/Source/Interface/Agent.ts:1-15`
-// and `Classic/packages/hook-dsh-ccr/Source/Interface/Factory.ts:14-19`.
-//
-// EVERY DEGRADATION IS LOUD AND NON-FATAL: no `llm` service, no model route, an
-// empty transcript, an unparseable reply, a failed model call - each is one of
-// the twelve outcome classes (plan section 3.2), and each ends in exactly one
-// byte-stable ledger line (plan section 6.7). Nothing here throws into the
-// emitter, and nothing here throws into the maintenance task.
+/**
+ * @module Library
+ *
+ * The entry module of the SKILL-LEARN service (@playform/plugin-dsh-skill-learn), the
+ * Hermes learning loop as one fenced package: the post-turn review that turns a finished
+ * session into skill edits, and the curator that ages the corpus.
+ *
+ * @remarks
+ * Loader contract: the CLASS form the family uses - `export default class
+ * SkillLearnService extends Service` with `super(Context, "skillLearn")`, `static
+ * inject`, `static Config = Definition` and the named `Config` schema export beside it
+ * (`Classic/packages/plugin-dsh-lesson-review/Source/Library.ts:112-116`). Every service
+ * method is a thin delegate; the only behaviour this file owns is the sequencing of the
+ * leaves and the ledger lines, because the leaves have no logger (plan section 6.7).
+ *
+ * THE SERVICE SURFACE (ctx.skillLearn), thirteen methods (plan section 2):
+ *
+ * - Configure(options) - apply validated config knobs (volatile cells)
+ * - Trigger(agent) - the idle-edge gate: the counter, the caps, the claim, the review,
+ *   one ledger line
+ * - Review({agent, signal}) - ONE review: transcript -> digest -> llm -> route ->
+ *   catalog -> phase 1 -> parse -> views -> phase 2 -> parse -> judge -> write -> ledger
+ *   -> report
+ * - Curate(now?) - the deterministic R1-R10 lifecycle pass
+ * - Consolidate({dryRun?}) - the opt-in survey pass (ships off)
+ * - Record(name, agent?) - one observed load through the `skill` tool
+ * - Revert(identifier) - one audit row back to files, fail-closed
+ * - Status() - counts (total/active/stale/archived/pinned/tracked/lastRunAt)
+ * - Pin(name, pinned) - the lifecycle exemption
+ * - Restore(name) - put a neutralized skill back into the catalog
+ * - Digest(messages) - the bounded digest (Function/Digest)
+ * - Prompt(phase) - the byte-stable phase prompt (Function/Prompt)
+ * - Save() - the store flush (the smoke seam)
+ *
+ * THE TWO LISTENERS ARE REGISTERED HERE, because a listener is wiring and the family
+ * keeps wiring in the entry (`code-authoring` rule 13). A class plugin has no `apply`:
+ * construction IS the load, and the fiber is already active (`Service`'s own constructor
+ * provides the service through `ctx.reflect`), so both registrations below are
+ * apply-time effects.
+ *
+ * 1. `agent/status` (EMIT, idle only). An emit listener is a SYNCHRONOUS recorder: the
+ *    review is detached with a `.catch` that ledgers and never throws into the emitter,
+ *    the pattern at
+ *    `Classic/packages/hook-dsh-lesson-nudge/Source/Function/Apply.ts:187-192`. The idle
+ *    edge is the only moment a review may run, because `agent.runMaintenance` is what
+ *    claims that phase (`dsh-agent/lib/types/runtime-types.d.ts:164-174`), and the claim
+ *    lives in `Function/Trigger`, not here.
+ * 2. `tools/post-execute` (WATERFALL). It calls `next()` exactly once, and records one
+ *    use when `exec.name === "skill"`. A waterfall observer that omits `next()` silently
+ *    swallows the downstream default, so the omission would break every `skill` call
+ *    rather than merely skipping a record (plan section 8.2 item 4).
+ *
+ * WHY THE HARNESS TYPES ARE IMPORTED FOR THEIR DECLARATIONS ALONE: the `agent/status`
+ * and `tools/post-execute` events are declared inside `declare module
+ * "@deepseek-ai/cordis"` blocks in the harness's own type files, and those augmentations
+ * are visible only in a compilation unit that has LOADED them. `import type {}` loads
+ * them and emits nothing - the pattern at
+ * `Classic/packages/hook-dsh-lesson-nudge/Source/Interface/Agent.ts:1-15` and
+ * `Classic/packages/hook-dsh-ccr/Source/Interface/Factory.ts:14-19`.
+ *
+ * EVERY DEGRADATION IS LOUD AND NON-FATAL: no `llm` service, no model route, an empty
+ * transcript, an unparseable reply, a failed model call - each is one of the twelve
+ * outcome classes (plan section 3.2), and each ends in exactly one byte-stable ledger
+ * line (plan section 6.7). Nothing here throws into the emitter, and nothing here throws
+ * into the maintenance task.
+ */
 import Path from "node:path";
 
 import { Service, type Context } from "@deepseek-ai/cordis";
@@ -1083,9 +1084,10 @@ export default class SkillLearnService extends Service {
 	}
 }
 
-// The compiled package version (Source/Variable/Version, built in by the ESBuild
-// define) - NOT a loader key: the contract's names are unchanged (the class
-// form's default export with static inject/Config), and Version is a standalone
-// named export, not on the class
-// (`Classic/packages/plugin-dsh-lesson-review/Source/Library.ts:696-701`).
+/**
+ * The compiled package version (Source/Variable/Version, built in by the ESBuild define)
+ * - NOT a loader key: the contract's names are unchanged (the class form's default
+ * export with static inject/Config), and Version is a standalone named export, not on
+ * the class (`Classic/packages/plugin-dsh-lesson-review/Source/Library.ts:696-701`).
+ */
 export { Version };

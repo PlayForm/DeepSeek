@@ -1,23 +1,30 @@
-// Source/Test/Harness.ts - the shared test harness for the BATCH-EDIT tests:
-// the fake ctx (tools registration capture, ctx listener capture, the
-// reflect.provide capture, the effect runner, logger capture, the DISTINCT
-// root object with its own on/emit capture, a content-backed fake fs with
-// version tokens) + the REAL @playform/plugin-dsh-factory instance from its
-// built Target + the REAL batch-edit apply from its built Target - the
-// family fake-ctx + real-factory harness pattern, written ONCE per package
-// and imported by every test folder. Each folder process gets a fresh set,
-// so every folder is standalone-green.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO FAKE CLOCK by default: the machine ids and the op counters are the
-// plugin's own deterministic counters; the commit deadline is driven by a
-// per-test patched Date.now (the folder restores it), so the no-timer rule
-// holds everywhere.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the batch-edit tests: the fake ctx, the real
+ * factory instance and the real batch-edit apply.
+ *
+ * @remarks
+ * The fake ctx carries tools registration capture, ctx listener capture, the
+ * reflect.provide capture, the effect runner, logger capture, the distinct
+ * root object with its own on/emit capture, and a content-backed fake fs
+ * with version tokens; the real @playform/plugin-dsh-factory instance comes
+ * from its built Target, as does the real batch-edit apply. This is the
+ * family fake-ctx + real-factory harness pattern, written once per package
+ * and imported by every test folder. Each folder process gets a fresh set,
+ * so every folder is standalone-green.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually
+ * wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * No fake clock by default: the machine ids and the op counters are the
+ * plugin's own deterministic counters; the commit deadline is driven by a
+ * per-test patched Date.now (the folder restores it), so the no-timer rule
+ * holds everywhere.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

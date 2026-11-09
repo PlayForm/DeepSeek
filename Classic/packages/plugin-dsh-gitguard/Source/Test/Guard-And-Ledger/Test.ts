@@ -1,8 +1,15 @@
-// Source/Test/Guard-And-Ledger/Test.ts - the listener behavior: the refusal
-// replaces the dispatch (next() deliberately not called), the allow path
-// passes through, the payload-shape extraction, the exclusion match, the
-// fail-open contract, the byte-exact refusal and ledger lines in both the
-// logger and durable forms, and the zero file-content guarantee.
+/**
+ * @module Test
+ *
+ * One singular test of the git-guard's listener behavior.
+ *
+ * @remarks
+ * The test covers the refusal replacing the dispatch (`next()` deliberately
+ * not called), the allow path passing through, the payload-shape extraction,
+ * the exclusion match, the fail-open contract, the byte-exact refusal and
+ * ledger lines in both the logger and durable forms, and the zero
+ * file-content guarantee.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

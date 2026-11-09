@@ -1,8 +1,14 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the monitor
-// hook: the shared block's defaults in the schema and on the built State, the
-// override landing on `Allow`, and the proof that the package has NO gated
-// action - a record action (the watch entry) proceeds under the shipped
-// defaults, writes no file and refuses nothing.
+/**
+ * @module Test
+ *
+ * One singular test of THE POLICY BLOCK (D6) on the monitor hook.
+ *
+ * @remarks
+ * The test covers the shared block's defaults in the schema and on the built
+ * State, the override landing on `Allow`, and the proof that the package has
+ * NO gated action - a record action (the watch entry) proceeds under the
+ * shipped defaults, writes no file and refuses nothing.
+ */
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";

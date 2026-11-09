@@ -1,8 +1,16 @@
-// Source/Test/Watch-And-Storage/Test.ts - the invalidation seam and the
-// storage domain: the fs/observed listener through the real root Wire (the
-// guard chain with its byte-exact lines), the domain spec, the persistence,
-// the restart recovery with the continued sequence, the loud open failure,
-// the absent facility, and the zero-fs purity.
+/**
+ * @module Test
+ *
+ * The invalidation seam and the storage domain of the workspace-evidence
+ * plugin, covered in one singular test.
+ *
+ * @remarks
+ * The test covers the invalidation seam and the storage domain: the
+ * fs/observed listener through the real root Wire (the guard chain with its
+ * byte-exact lines), the domain spec, the persistence, the restart recovery
+ * with the continued sequence, the loud open failure, the absent facility,
+ * and the zero-fs purity.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

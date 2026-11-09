@@ -1,11 +1,16 @@
-// Programmatic — the DEFAULT update mode: the npm-check-updates LIBRARY
-// (declared as a bundle dependency; the harness auto-installs plugin
-// dependencies into the profile) via run(...) in-process inside the detached
-// update continuation — no external binary. THE npm-check-updates library is
-// one of the two standing exemptions: it is the one external capability this
-// plugin uses. Ledger lines go through the FACTORY (State.Factory.Append —
-// the continuation runs in the host process, so the lines land in the same
-// ledger directly instead of the old child's inherited fd).
+/**
+ * @module Programmatic
+ *
+ * The default update mode: the npm-check-updates library via run(...) in-process.
+ *
+ * @remarks
+ * The library is declared as a bundle dependency; the harness auto-installs plugin
+ * dependencies into the profile. The function runs inside the detached update continuation -
+ * no external binary. THE npm-check-updates library is one of the two standing exemptions: it
+ * is the one external capability this plugin uses. Ledger lines go through the FACTORY
+ * (State.Factory.Append - the continuation runs in the host process, so the lines land in the
+ * same ledger directly instead of the old child's inherited fd).
+ */
 import { join as Join } from "node:path";
 
 import type Invocation from "@Interface/Invocation.js";
@@ -32,7 +37,7 @@ export default async (
 	}
 	const Default = Library?.["default"] as Record<string, unknown> | undefined;
 	// CJS-with-default packages (npm-check-updates): access `run` defensively
-	// (Mod.run ?? Mod.default?.run) — a live-verified pitfall.
+	// (Mod.run ?? Mod.default?.run) - a live-verified pitfall.
 	const Run = (Library?.["run"] ?? Default?.["run"] ?? Default) as
 		((Options: Record<string, unknown>) => Promise<unknown>) | undefined;
 	switch (true) {

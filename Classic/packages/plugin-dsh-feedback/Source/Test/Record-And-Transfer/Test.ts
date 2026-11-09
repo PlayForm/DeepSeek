@@ -1,7 +1,13 @@
-// Source/Test/Record-And-Transfer/Test.ts - the council record and the
-// transfer: the constructor wiring, the record with its journal event and
-// the cap, the restore (same agent, newer block), the mechanical Push hop,
-// the no-ops (disabled, same session, chain cap), and the Render format.
+/**
+ * @module Test
+ *
+ * Exercises the council record and the transfer.
+ *
+ * @remarks
+ * Covers the constructor wiring, the record with its journal event and the cap, the restore (same
+ * agent, newer block), the mechanical Push hop, the no-ops (disabled, same session, chain cap), and
+ * the Render format.
+ */
 import assert from "node:assert/strict";
 import {
 	Block,

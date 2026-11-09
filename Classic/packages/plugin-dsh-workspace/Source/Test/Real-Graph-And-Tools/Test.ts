@@ -1,10 +1,15 @@
-// Source/Test/Real-Graph-And-Tools/Test.ts - the FIVE tools over a REAL
-// populated graph (not FakeGraph): the real workspace-graph service is
-// constructed from its built Target, indexed over a deterministic file map
-// through `indexWorkspace`, and then addressed through workspace_index,
-// workspace_map, workspace_find, workspace_expand and workspace_context. Every
-// assertion reads real ids, real spans, real fingerprints and the real
-// indexRevision - the consumer chain the empty graph could never prove.
+/**
+ * @module Test
+ *
+ * Exercises the FIVE tools over a REAL populated graph (not FakeGraph).
+ *
+ * @remarks
+ * The real workspace-graph service is constructed from its built Target, indexed over a
+ * deterministic file map through `indexWorkspace`, and then addressed through workspace_index,
+ * workspace_map, workspace_find, workspace_expand and workspace_context. Every assertion reads real
+ * ids, real spans, real fingerprints and the real indexRevision - the consumer chain the empty
+ * graph could never prove.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

@@ -1,9 +1,16 @@
-// Source/Test/Cache/Test.ts - THE CACHE EFFICIENCY (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 16.4): the share of a file's surface-weighted
-// input tokens the prompt cache served - the cached tokens over the cached
-// plus uncached input, each call weighted by the share of its surface the
-// file occupied - the measurable half of "did reading this file make the
-// later edit cheaper".
+/**
+ * @module Test
+ *
+ * One singular test of THE CACHE EFFICIENCY (Documentation/Plans/
+ * COST-TRACK-PLUGIN.md section 16.4).
+ *
+ * @remarks
+ * The metric is the share of a file's surface-weighted input tokens the
+ * prompt cache served - the cached tokens over the cached plus uncached
+ * input, each call weighted by the share of its surface the file occupied -
+ * the measurable half of "did reading this file make the later edit
+ * cheaper".
+ */
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";

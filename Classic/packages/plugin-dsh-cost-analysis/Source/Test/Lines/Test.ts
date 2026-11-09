@@ -1,8 +1,15 @@
-// Source/Test/Lines/Test.ts - THE CHURN (Documentation/Plans/
-// COST-TRACK-PLUGIN.md sections 16.2 and 17.3): every edit tool call
-// produces hunks, the ledger stores each one in the Edit table, and the
-// analysis sums the lines a file's hunks added and removed, counts the
-// hunks, and divides the file's allocated cost by its added lines.
+/**
+ * @module Test
+ *
+ * One singular test of THE CHURN (Documentation/Plans/COST-TRACK-PLUGIN.md
+ * sections 16.2 and 17.3).
+ *
+ * @remarks
+ * Every edit tool call produces hunks, the ledger stores each one in the
+ * Edit table, and the analysis sums the lines a file's hunks added and
+ * removed, counts the hunks, and divides the file's allocated cost by its
+ * added lines.
+ */
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";

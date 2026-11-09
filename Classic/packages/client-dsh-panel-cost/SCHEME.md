@@ -5,8 +5,10 @@
 - The engine is `@playform/plugin-dsh-cost`: it provides the `cost` service
   (`session(sessionId, rows)` returning the envelope) and exports its contract at
   `@playform/plugin-dsh-cost/service`. This package is UI and transport only.
-- The host route is `GET /api/playform-cost/session?session=<id>&rows=<n>`, answered from that
-  service. The panel injects `webServer` so the loader orders its row after the harness web server.
+- The host routes are `GET /api/playform-cost/session` (the envelope, optionally pinned to a
+  valuation), `GET /api/playform-cost/catalogs`, `GET /api/playform-cost/rates` and
+  `POST /api/playform-cost/publish` (a new pricing revision; recorded usage is never touched). The
+  panel injects `webServer` so the loader orders its row after the harness web server.
 - The ledger stays read-only from the engine's side: the service opens it with `readOnly: true` per
   call, and no route in this package writes to the database.
 - The browser never reads the ledger directly: it fetches the route, and a failed answer renders the

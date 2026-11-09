@@ -1,9 +1,16 @@
-// Source/Test/Effectiveness/Test.ts - THE COST PER SURVIVING LINE
-// (Documentation/Plans/COST-TRACK-PLUGIN.md section 16.4, with the verdict
-// of section 14): a file whose Verdict.State is 'changed' in the window pays
-// its allocated cost over the lines its edit hunks added, while a file whose
-// verdict is only 'read' yields no row - the read-before-edit effectiveness
-// question, answered per file.
+/**
+ * @module Test
+ *
+ * One singular test of THE COST PER SURVIVING LINE
+ * (Documentation/Plans/COST-TRACK-PLUGIN.md section 16.4, with the verdict
+ * of section 14).
+ *
+ * @remarks
+ * A file whose Verdict.State is 'changed' in the window pays its allocated
+ * cost over the lines its edit hunks added, while a file whose verdict is
+ * only 'read' yields no row - the read-before-edit effectiveness question,
+ * answered per file.
+ */
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";

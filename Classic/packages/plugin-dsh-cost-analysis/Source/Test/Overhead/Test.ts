@@ -1,7 +1,14 @@
-// Source/Test/Overhead/Test.ts - THE EXPLORATION SHARE (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 12): the money a call spent that no file paid
-// for - the Allocation rows with FileId IS NULL - over the session's total,
-// so the ratio is 1 when nothing is attributed and 0 when everything is.
+/**
+ * @module Test
+ *
+ * One singular test of THE EXPLORATION SHARE (Documentation/Plans/
+ * COST-TRACK-PLUGIN.md section 12).
+ *
+ * @remarks
+ * The metric is the money a call spent that no file paid for - the
+ * Allocation rows with FileId IS NULL - over the session's total, so the
+ * ratio is 1 when nothing is attributed and 0 when everything is.
+ */
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";

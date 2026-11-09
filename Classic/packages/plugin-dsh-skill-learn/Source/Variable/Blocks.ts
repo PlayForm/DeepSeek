@@ -1,35 +1,37 @@
-// Blocks - the two prompt texts of the review, byte-stable ASCII, copied
-// character for character from plan section 5
-// (Documentation/Plans/SKILL-LEARN-PLUGIN.md:305-379). The smoke asserts them
-// byte for byte, so nothing here may be reflowed, re-worded, or generated.
-//
-// PROVENANCE: the text is the Hermes background review's five prompt blocks
-// translated onto this harness's corpus, with the three changes the plan
-// states: the memory-routing block is dropped because this plugin owns no
-// memory store and never writes the agreement; the tool-iteration and
-// whitelist instructions are dropped because there is no tool loop; and the
-// four questions, the section order, and the naming law are named through the
-// corpus standard rather than restated
-// (`agent/background_review.py:370-389`, `:401-428`, `:431-454`, `:456-525`,
-// `:527-577`; `Temporary/Research/Hermes-Review-Prompt.md:344-511`). The
-// source's em dashes are ASCII hyphens, per the standard's ASCII rule.
-//
-// WHY THE TEXT IS A CONSTANT AND NOT GENERATED: the prompt is the contract the
-// strict parser enforces. A generated prompt drifts from the parser silently; a
-// constant one can be diffed, and `Prompt(1)` and `Prompt(2)` are then provably
-// the same text up to the closing schema section rather than merely intended
-// to be.
-//
-// WHY TEMPLATE LITERALS: the text is copied verbatim, with no escaping and no
-// line-by-line string concatenation to get wrong. The four sections are joined
-// by one blank line, which is exactly the separator the plan's block uses, so
-// `PromptOne` reproduces plan section 5 in full and `PromptTwo` is the same
-// text with the first-request section removed.
-//
-// WHY NO PLACEHOLDER: the operation bound is stated as "eight" and the parser
-// enforces the configured `maxOperations`, which defaults to 8 and may only be
-// lowered, so the parser is stricter than the text rather than the text wrong
-// (plan section 5, closing paragraph).
+/**
+ * @module Blocks
+ *
+ * The two prompt texts of the review, byte-stable ASCII, copied character for character
+ * from plan section 5 (Documentation/Plans/SKILL-LEARN-PLUGIN.md:305-379). The smoke
+ * asserts them byte for byte, so nothing here may be reflowed, re-worded, or generated.
+ *
+ * @remarks
+ * PROVENANCE: the text is the Hermes background review's five prompt blocks translated
+ * onto this harness's corpus, with the three changes the plan states: the memory-routing
+ * block is dropped because this plugin owns no memory store and never writes the
+ * agreement; the tool-iteration and whitelist instructions are dropped because there is
+ * no tool loop; and the four questions, the section order, and the naming law are named
+ * through the corpus standard rather than restated
+ * (`agent/background_review.py:370-389`, `:401-428`, `:431-454`, `:456-525`, `:527-577`;
+ * `Temporary/Research/Hermes-Review-Prompt.md:344-511`). The source's em dashes are
+ * ASCII hyphens, per the standard's ASCII rule.
+ *
+ * WHY THE TEXT IS A CONSTANT AND NOT GENERATED: the prompt is the contract the strict
+ * parser enforces. A generated prompt drifts from the parser silently; a constant one
+ * can be diffed, and `Prompt(1)` and `Prompt(2)` are then provably the same text up to
+ * the closing schema section rather than merely intended to be.
+ *
+ * WHY TEMPLATE LITERALS: the text is copied verbatim, with no escaping and no
+ * line-by-line string concatenation to get wrong. The four sections are joined by one
+ * blank line, which is exactly the separator the plan's block uses, so `PromptOne`
+ * reproduces plan section 5 in full and `PromptTwo` is the same text with the
+ * first-request section removed.
+ *
+ * WHY NO PLACEHOLDER: the operation bound is stated as "eight" and the parser enforces
+ * the configured `maxOperations`, which defaults to 8 and may only be lowered, so the
+ * parser is stricter than the text rather than the text wrong (plan section 5, closing
+ * paragraph).
+ */
 
 /** Everything both phases share: the task, the content rules, the limits, and the reply form. */
 export const Body = `You are the background skill learner of a DeepSeek Harness session. The session you are reading has already ended. Your job is to leave the skill corpus of this profile a little better than you found it, and then to stop.

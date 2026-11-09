@@ -1,8 +1,13 @@
-// Source/Test/Batch-Outcome/Test.ts - THE BATCH OUTCOME: the caller-side
-// orchestration integration the plan defers. An outcome (applied / rejected /
-// denied / expired) is appended to the session's journal AND to the summary's
-// outcome ring, the ring is bounded, and a disabled service or a proposal-less
-// report records nothing.
+/**
+ * @module Test
+ *
+ * Exercises THE BATCH OUTCOME, the caller-side orchestration integration the plan defers.
+ *
+ * @remarks
+ * An outcome (applied / rejected / denied / expired) is appended to the session's journal AND to the
+ * summary's outcome ring, the ring is bounded, and a disabled service or a proposal-less report
+ * records nothing.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

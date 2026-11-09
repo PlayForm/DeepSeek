@@ -1,13 +1,22 @@
-// Source/Test/Volatile-Live-Flip/Test.ts - one singular test: the P10
-// volatile live-flip and the files scope gate - the replacement arriving as
-// a hand-built stable volatile cell and being refreshed in place by the
-// factory's loader/volatile-update dispatch (no remount, identity
-// preserved, the next tool call picking up the new value), and the
-// scopes.files gate turning the tool off and back on live.
-// Runs standalone (`node Target/Test/Volatile-Live-Flip/Test.js`) AND under
-// the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/plugin-dsh-normalize-file: the fake ctx + the REAL
-// factory + the REAL normalize-file apply, from the Harness.
+/**
+ * @module Test
+ *
+ * The P10 volatile live-flip and the files scope gate of
+ * @playform/plugin-dsh-normalize-file, covered in one singular smoke.
+ *
+ * @remarks
+ * The test covers the P10 volatile live-flip and the files scope gate: the
+ * replacement arriving as a hand-built stable volatile cell and being
+ * refreshed in place by the factory's loader/volatile-update dispatch (no
+ * remount, identity preserved, the next tool call picking up the new value),
+ * and the scopes.files gate turning the tool off and back on live.
+ *
+ * The file runs standalone (`node Target/Test/Volatile-Live-Flip/Test.js`)
+ * and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * The unit smoke runs the fake ctx + the real factory + the real
+ * normalize-file apply, from the Harness.
+ */
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Ledger } from "../Harness.js";
 

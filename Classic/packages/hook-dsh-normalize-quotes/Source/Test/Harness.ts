@@ -1,15 +1,21 @@
-// Source/Test/Harness.ts — the shared test harness for the quotes flavor's
-// per-test folders: the fake ctx + the REAL factory instance + the REAL
-// quotes apply, written ONCE per package and imported by every test folder
-// (the seams are the source suite's, Classic/smokes/quotes-smoke.mjs, moved
-// verbatim — the .mjs suite duplicates its harness per file; here it is one
-// file).
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly (the negative control for the harness
-// itself); prepublishOnly.sh gates the build on it. Imported as a library,
-// this module only exports.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the quotes flavor's per-test folders: the fake
+ * ctx + the real factory instance + the real quotes apply.
+ *
+ * @remarks
+ * The harness is written once per package and imported by every test folder
+ * (the seams are the source suite's, Classic/smokes/quotes-smoke.mjs, moved
+ * verbatim - the .mjs suite duplicates its harness per file; here it is one
+ * file).
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly (the negative control for the harness
+ * itself); prepublishOnly.sh gates the build on it. Imported as a library,
+ * this module only exports.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import type { Context as CordisContext } from "@deepseek-ai/cordis";

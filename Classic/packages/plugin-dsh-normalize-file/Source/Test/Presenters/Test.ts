@@ -1,12 +1,21 @@
-// Source/Test/Presenters/Test.ts - one singular test: the presenters (pure,
-// outcome-metadata driven) - the call-time generic card and the file
-// location, the presentationMeta projection for a changed outcome, the diff
-// card with the real before/after, and the no-op and error cases that
-// produce no card. Runs standalone (`node
-// Target/Test/Presenters/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/plugin-dsh-normalize-file: the fake ctx + the REAL
-// factory + the REAL normalize-file apply, from the Harness.
+/**
+ * @module Test
+ *
+ * The presenters of @playform/plugin-dsh-normalize-file, covered in one
+ * singular smoke.
+ *
+ * @remarks
+ * The test covers the presenters (pure, outcome-metadata driven): the
+ * call-time generic card and the file location, the presentationMeta
+ * projection for a changed outcome, the diff card with the real
+ * before/after, and the no-op and error cases that produce no card.
+ *
+ * The file runs standalone (`node Target/Test/Presenters/Test.js`) and under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * The unit smoke runs the fake ctx + the real factory + the real
+ * normalize-file apply, from the Harness.
+ */
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Ledger } from "../Harness.js";
 

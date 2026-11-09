@@ -1,13 +1,20 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the
-// evidence service: the shared block's defaults in the schema and on the
-// built State (`Allow`), the per-action override, and the service's
-// read-only posture - its own action classes (read and record) are
-// automatic, so it has NO gated action and no verdict can refuse a call.
-//
-// The representative action is `validate` (the record class): the cheapest
-// real call in the service's surface, run against the enabled mount with the
-// fake fs, which proves the automatic posture lets it proceed AND that the
-// call touches no file content.
+/**
+ * @module Test
+ *
+ * The policy block (D6) of the workspace-evidence service, covered in one
+ * singular test.
+ *
+ * @remarks
+ * The test covers the shared block's defaults in the schema and on the built
+ * State (`Allow`), the per-action override, and the service's read-only
+ * posture - its own action classes (read and record) are automatic, so it
+ * has no gated action and no verdict can refuse a call.
+ *
+ * The representative action is `validate` (the record class): the cheapest
+ * real call in the service's surface, run against the enabled mount with the
+ * fake fs, which proves the automatic posture lets it proceed and that the
+ * call touches no file content.
+ */
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";

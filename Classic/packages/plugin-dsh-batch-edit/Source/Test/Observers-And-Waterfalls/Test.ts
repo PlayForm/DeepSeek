@@ -1,10 +1,17 @@
-// Source/Test/Observers-And-Waterfalls/Test.ts - the observers and the
-// waterfalls: the fs/observed stale-halt observer (synchronous cell flipper
-// with the govern marker skip and the silence invariant), the advisory bash
-// intercept and the pre-step pass-through waterfalls (next() first, the
-// downstream decision returned unchanged), the deadline overflow with the
-// jobs hub and its typed jobId handle (and the halted degradation without
-// one), and the presentation purity.
+/**
+ * @module Test
+ *
+ * The observers and the waterfalls of the batch-edit plugin, covered in one
+ * singular test.
+ *
+ * @remarks
+ * The test covers the fs/observed stale-halt observer (synchronous cell
+ * flipper with the govern marker skip and the silence invariant), the
+ * advisory bash intercept and the pre-step pass-through waterfalls (next()
+ * first, the downstream decision returned unchanged), the deadline overflow
+ * with the jobs hub and its typed jobId handle (and the halted degradation
+ * without one), and the presentation purity.
+ */
 import assert from "node:assert/strict";
 import * as Present from "../../../Target/Function/Present.js";
 import {

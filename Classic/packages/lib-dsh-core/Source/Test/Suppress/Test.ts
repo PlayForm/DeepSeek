@@ -1,9 +1,17 @@
-// Source/Test/Suppress/Test.ts - one singular test: the byte-identical
-// suppression-line composer - the three shapes (continuation error, listener
-// error with a string cause, empty-message error still composes the line).
-// Runs standalone (`node Target/Test/Suppress/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/lib-dsh-core: the REAL built entry only.
+/**
+ * @module Test
+ *
+ * One singular test of the byte-identical suppression-line composer.
+ *
+ * @remarks
+ * The test covers the three shapes: the continuation error, the listener
+ * error with a string cause, and the empty-message error that still composes
+ * the line.
+ *
+ * The file runs standalone (`node Target/Test/Suppress/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit
+ * smoke of `@playform/lib-dsh-core`: the REAL built entry only.
+ */
 import assert from "node:assert/strict";
 
 import { Suppress } from "../../../Target/Library.js";

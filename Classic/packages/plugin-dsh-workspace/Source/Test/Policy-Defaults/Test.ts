@@ -1,13 +1,17 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the
-// workspace agent: the shared block's defaults in the schema and on the built
-// State, the per-key override landing on `State.Allow`, the proof that the
-// package has NO gated action (every action class it uses decides "auto" and
-// the mount writes no policy/held line), and a representative read-only tool
-// still proceeding under the shipped defaults while writing no file.
-//
-// The workspace agent is a pure consumer: no gate, no Decide call in the
-// plugin itself. The block is the shared posture, and this folder proves it is
-// real config, not dead text.
+/**
+ * @module Test
+ *
+ * Exercises THE POLICY BLOCK (D6) on the workspace agent.
+ *
+ * @remarks
+ * Covers the shared block's defaults in the schema and on the built State, the per-key override
+ * landing on `State.Allow`, the proof that the package has NO gated action (every action class it
+ * uses decides "auto" and the mount writes no policy/held line), and a representative read-only
+ * tool still proceeding under the shipped defaults while writing no file.
+ *
+ * The workspace agent is a pure consumer: no gate, no Decide call in the plugin itself. The block
+ * is the shared posture, and this folder proves it is real config, not dead text.
+ */
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";

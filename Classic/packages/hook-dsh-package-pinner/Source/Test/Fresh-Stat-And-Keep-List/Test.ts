@@ -1,13 +1,22 @@
-// Source/Test/Fresh-Stat-And-Keep-List/Test.ts - one singular test: the
-// fresh-stat write basis (a file advanced between the observation and the
-// chain is incorporated, not clobbered; a racing write after the fresh stat
-// still fails safely, contained logger-only) and the keep-list discovery (the
-// dir sidecar, the global policyFile union, the registry-co-located sidecar,
-// the unreadable sidecar, the configured-but-absent global, and the P3
-// interlock: chain pins are never stripped, no ping-pong).
-// Runs standalone (`node Target/Test/Fresh-Stat-And-Keep-List/Test.js`) AND
-// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-package-pinner.
+/**
+ * @module Test
+ *
+ * The fresh-stat write basis and the keep-list discovery of
+ * @playform/hook-dsh-package-pinner, covered in one singular test.
+ *
+ * @remarks
+ * The test covers the fresh-stat write basis (a file advanced between the
+ * observation and the chain is incorporated, not clobbered; a racing write
+ * after the fresh stat still fails safely, contained logger-only) and the
+ * keep-list discovery (the dir sidecar, the global policyFile union, the
+ * registry-co-located sidecar, the unreadable sidecar, the
+ * configured-but-absent global, and the P3 interlock: chain pins are never
+ * stripped, no ping-pong).
+ *
+ * The file runs standalone (`node Target/Test/Fresh-Stat-And-Keep-List/
+ * Test.js`) and under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns
+ * it).
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";

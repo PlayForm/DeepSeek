@@ -1,8 +1,15 @@
-// Source/Test/Commit-And-Ops/Test.ts - the commit path: the two-phase
-// commit with its byte-exact ledger lines, the write through the factory's
-// executor with the replaceIfVersion intent, the governed-basename re-route
-// through Factory.Govern, the stale halt, the strict-mode error, the
-// designed no-op silence, the atomic gate, and the op executor / diff units.
+/**
+ * @module Test
+ *
+ * The commit path of the batch-edit plugin, covered in one singular test.
+ *
+ * @remarks
+ * The test covers the two-phase commit with its byte-exact ledger lines, the
+ * write through the factory's executor with the replaceIfVersion intent, the
+ * governed-basename re-route through Factory.Govern, the stale halt, the
+ * strict-mode error, the designed no-op silence, the atomic gate, and the op
+ * executor / diff units.
+ */
 import assert from "node:assert/strict";
 import * as Ops from "../../../Target/Function/Ops.js";
 import {

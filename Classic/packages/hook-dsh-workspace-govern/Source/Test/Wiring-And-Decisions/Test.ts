@@ -1,9 +1,14 @@
-// Source/Test/Wiring-And-Decisions/Test.ts - the loader contract, the service
-// registration, the cold-mount idle-forever posture, the activation proof,
-// the fail-loud validation, and the gate decisions through the real service:
-// the four independent means-checks, the policy override (and "allow" as
-// never a bypass), the fail-open recovery table with its byte-exact
-// recovery line, the decision ring, and the byte-exact decision lines.
+/**
+ * @module Test
+ *
+ * Exercises the loader contract and the gate decisions through the real service.
+ *
+ * @remarks
+ * Covers the service registration, the cold-mount idle-forever posture, the activation proof, the
+ * fail-loud validation, the four independent means-checks, the policy override (and "allow" as
+ * never a bypass), the fail-open recovery table with its byte-exact recovery line, the decision
+ * ring, and the byte-exact decision lines.
+ */
 import assert from "node:assert/strict";
 import {
 	Check,

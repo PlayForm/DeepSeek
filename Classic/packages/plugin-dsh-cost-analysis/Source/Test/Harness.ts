@@ -1,9 +1,16 @@
-// Source/Test/Harness.ts - the shared test harness for the cost analysis
-// plugin's smokes: the counter with Check/CheckAsync/Finish and the FAKE ctx
-// with a FAKE pluginFactory (State/Append), a command registry, a logger, the
-// listener seam, the effect seam and the get accessor - the surfaces the
-// plugin entry consumes. It never imports the ledger package: the analysis
-// plugin reads a ledger file, it does not load the ledger's code.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the cost analysis plugin's smokes.
+ *
+ * @remarks
+ * The harness carries the counter with Check/CheckAsync/Finish and the FAKE
+ * ctx with a FAKE pluginFactory (State/Append), a command registry, a
+ * logger, the listener seam, the effect seam and the get accessor - the
+ * surfaces the plugin entry consumes. It never imports the ledger package:
+ * the analysis plugin reads a ledger file, it does not load the ledger's
+ * code.
+ */
 import assert from "node:assert/strict";
 
 import Plugin from "../../Target/Library.js";

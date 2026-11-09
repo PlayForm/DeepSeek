@@ -932,34 +932,31 @@ var IsRevision = (Candidate) => {
   return typeof Shape.RevisionId === "number" && Number.isFinite(Shape.RevisionId);
 };
 var Normalize = (Body) => {
-  switch (true) {
-    case (typeof Body !== "object" || Body === null):
-      return Refused("the publish route answered a malformed answer");
-    default: {
-      const Answer = Body;
-      const Found = Answer.revision;
-      switch (true) {
-        case (Answer.ok === true && IsRevision(Found)):
-          return {
-            ok: true,
-            revision: Found,
-            code: "ok",
-            message: null,
-            path: PublishPath
-          };
-        case (Answer.ok === false && typeof Answer.message === "string"):
-          return {
-            ok: false,
-            revision: null,
-            code: typeof Answer.code === "string" ? Answer.code : "error",
-            message: Answer.message,
-            path: typeof Answer.path === "string" ? Answer.path : PublishPath
-          };
-        default:
-          return Refused("the publish route answered a malformed answer");
-      }
-    }
+  if (typeof Body !== "object" || Body === null) {
+    return Refused("the publish route answered a malformed answer");
   }
+  const Answer = Body;
+  const Found = Answer.revision;
+  if (Answer.ok === true && IsRevision(Found)) {
+    return {
+      ok: true,
+      revision: Found,
+      code: "ok",
+      message: null,
+      path: PublishPath
+    };
+  }
+  const Line = Answer.message;
+  if (Answer.ok === false && typeof Line === "string") {
+    return {
+      ok: false,
+      revision: null,
+      code: typeof Answer.code === "string" ? Answer.code : "error",
+      message: Line,
+      path: typeof Answer.path === "string" ? Answer.path : PublishPath
+    };
+  }
+  return Refused("the publish route answered a malformed answer");
 };
 function Publish(Request) {
   if (typeof fetch !== "function") {
@@ -2393,16 +2390,13 @@ var Build = (Book, Drafts, t) => {
   let Problem = null;
   for (const Source of Book) {
     const Draft = Drafts[Source.RateRowId];
-    switch (true) {
-      case Draft === void 0:
-        Rows.push(Row(Source));
-        continue;
-      default: {
-        const MergedOne = Merged(Source, Draft, t);
-        Problem = Problem === null ? MergedOne.Problem : Problem;
-        Rows.push(MergedOne.Row);
-      }
+    if (Draft === void 0) {
+      Rows.push(Row(Source));
+      continue;
     }
+    const MergedOne = Merged(Source, Draft, t);
+    Problem = Problem === null ? MergedOne.Problem : Problem;
+    Rows.push(MergedOne.Row);
   }
   return { Rows, Problem };
 };
@@ -2415,21 +2409,13 @@ var Newest = (Revisions, CatalogId) => {
   return Found;
 };
 var Comparison = (Envelope) => {
-  switch (true) {
-    case Envelope.ok !== true:
-      return void 0;
-    default: {
-      const Block2 = Envelope.valuation;
-      switch (true) {
-        case Block2 === void 0:
-          return void 0;
-        case (typeof Block2.recorded !== "number" || typeof Block2.revised !== "number" || typeof Block2.difference !== "number"):
-          return void 0;
-        default:
-          return Block2;
-      }
-    }
+  if (Envelope.ok !== true) return void 0;
+  const Block2 = Envelope.valuation;
+  if (Block2 === void 0) return void 0;
+  if (typeof Block2.recorded !== "number" || typeof Block2.revised !== "number" || typeof Block2.difference !== "number") {
+    return void 0;
   }
+  return Block2;
 };
 var Picker = (Label, Value2, Options, OnPick) => (0, import_react5.createElement)(
   "label",
@@ -2654,123 +2640,108 @@ function PricingSettings(Props) {
       Done(Catalogs());
     }).then((Answer) => {
       SetListing(Answer);
-      switch (true) {
-        case !Adopt:
-          return;
-        default: {
-          const First = Answer.catalogs[0];
-          switch (true) {
-            case First === void 0:
-              SetCatalogId(null);
-              SetRevisionId(null);
-              return;
-            default:
-              SetCatalogId(First.CatalogId);
-              SetRevisionId(Newest(Answer.revisions, First.CatalogId));
-          }
-        }
+      if (!Adopt) return;
+      const First = Answer.catalogs[0];
+      if (First === void 0) {
+        SetCatalogId(null);
+        SetRevisionId(null);
+        return;
       }
+      SetCatalogId(First.CatalogId);
+      SetRevisionId(Newest(Answer.revisions, First.CatalogId));
     }).catch(() => void 0);
   }, []);
   (0, import_react5.useEffect)(() => {
     Read(true);
   }, [Read]);
   (0, import_react5.useEffect)(() => {
-    const Stated = RevisionId;
     let Live = true;
-    switch (true) {
-      case Stated === null:
-        SetBook([]);
-        SetReading("idle");
-        return () => {
-          Live = false;
-        };
-      default:
-        SetReading("loading");
-        new Promise((Done) => {
-          Done(Rates(Stated));
-        }).then((Rows) => {
-          if (!Live) return;
-          SetBook(Rows);
-          SetReading("idle");
-        }).catch(() => {
-          if (!Live) return;
-          SetReading("failed");
-        });
-        return () => {
-          Live = false;
-        };
+    if (RevisionId === null) {
+      SetBook([]);
+      SetReading("idle");
+      return () => {
+        Live = false;
+      };
     }
+    const Stated = RevisionId;
+    SetReading("loading");
+    new Promise((Done) => {
+      Done(Rates(Stated));
+    }).then((Rows) => {
+      if (!Live) return;
+      SetBook(Rows);
+      SetReading("idle");
+    }).catch(() => {
+      if (!Live) return;
+      SetReading("failed");
+    });
+    return () => {
+      Live = false;
+    };
   }, [RevisionId, Attempt]);
   const Dirty = Object.keys(Drafts).length > 0;
   (0, import_react5.useEffect)(() => {
-    const Stated = RevisionId;
     let Live = true;
-    switch (true) {
-      case Stated === null:
-      case Dirty:
-      case Props.sessionId === "":
-        SetPreview({
-          Phase: "idle",
-          Block: null,
-          Unpriced: 0,
-          Currency: "USD",
-          Message: null
-        });
-        return () => {
-          Live = false;
-        };
-      default:
-        SetPreview({
-          Phase: "loading",
-          Block: null,
-          Unpriced: 0,
-          Currency: "USD",
-          Message: null
-        });
-        new Promise((Done) => {
-          Done(
-            Fetch(Props.sessionId, Props.rows, {
-              basis: "corrected",
-              revisionId: Stated
-            })
-          );
-        }).then((Envelope) => {
-          if (!Live) return;
-          const Block2 = Comparison(Envelope);
-          switch (true) {
-            case Block2 !== void 0:
-              SetPreview({
-                Phase: "ready",
-                Block: Block2,
-                Unpriced: typeof Envelope.summary?.unpriced === "number" ? Envelope.summary.unpriced : 0,
-                Currency: typeof Envelope.currency === "string" && Envelope.currency !== "" ? Envelope.currency : "USD",
-                Message: null
-              });
-              return;
-            default:
-              SetPreview({
-                Phase: "failed",
-                Block: null,
-                Unpriced: 0,
-                Currency: "USD",
-                Message: Envelope.ok === false ? Envelope.message : null
-              });
-          }
-        }).catch(() => {
-          if (!Live) return;
-          SetPreview({
-            Phase: "failed",
-            Block: null,
-            Unpriced: 0,
-            Currency: "USD",
-            Message: null
-          });
-        });
-        return () => {
-          Live = false;
-        };
+    if (RevisionId === null || Dirty || Props.sessionId === "") {
+      SetPreview({
+        Phase: "idle",
+        Block: null,
+        Unpriced: 0,
+        Currency: "USD",
+        Message: null
+      });
+      return () => {
+        Live = false;
+      };
     }
+    const Stated = RevisionId;
+    SetPreview({
+      Phase: "loading",
+      Block: null,
+      Unpriced: 0,
+      Currency: "USD",
+      Message: null
+    });
+    new Promise((Done) => {
+      Done(
+        Fetch(Props.sessionId, Props.rows, {
+          basis: "corrected",
+          revisionId: Stated
+        })
+      );
+    }).then((Envelope) => {
+      if (!Live) return;
+      const Block2 = Comparison(Envelope);
+      if (Block2 !== void 0) {
+        SetPreview({
+          Phase: "ready",
+          Block: Block2,
+          Unpriced: typeof Envelope.summary?.unpriced === "number" ? Envelope.summary.unpriced : 0,
+          Currency: typeof Envelope.currency === "string" && Envelope.currency !== "" ? Envelope.currency : "USD",
+          Message: null
+        });
+        return;
+      }
+      SetPreview({
+        Phase: "failed",
+        Block: null,
+        Unpriced: 0,
+        Currency: "USD",
+        Message: Envelope.ok === false ? Envelope.message : null
+      });
+    }).catch(() => {
+      if (!Live) return;
+      SetPreview({
+        Phase: "failed",
+        Block: null,
+        Unpriced: 0,
+        Currency: "USD",
+        Message: null
+      });
+    });
+    return () => {
+      Live = false;
+    };
   }, [Props.sessionId, Props.rows, RevisionId, Dirty]);
   const Listed = Listing === null ? [] : Listing.catalogs;
   const Revisions = Listing === null ? [] : Listing.revisions;
@@ -2818,37 +2789,22 @@ function PricingSettings(Props) {
   }, []);
   const Change = (0, import_react5.useCallback)(
     (Patch) => {
-      switch (true) {
-        case Editing === null:
-          return;
-        default: {
-          const Source = Book.find((One) => One.RateRowId === Editing);
-          switch (true) {
-            case Source === void 0:
-              return;
-            default: {
-              const Base = Drafts[Editing] ?? DraftOf(Source);
-              SetDrafts({ ...Drafts, [Editing]: { ...Base, ...Patch } });
-            }
-          }
-        }
-      }
+      if (Editing === null) return;
+      const Source = Book.find((One) => One.RateRowId === Editing);
+      if (Source === void 0) return;
+      const Base = Drafts[Editing] ?? DraftOf(Source);
+      SetDrafts({ ...Drafts, [Editing]: { ...Base, ...Patch } });
     },
     [Editing, Book, Drafts]
   );
   const Revert = (0, import_react5.useCallback)(() => {
-    switch (true) {
-      case Editing === null:
-        return;
-      default: {
-        const Next = {};
-        for (const [Key, Value2] of Object.entries(Drafts)) {
-          if (Number(Key) === Editing) continue;
-          Next[Number(Key)] = Value2;
-        }
-        SetDrafts(Next);
-      }
+    if (Editing === null) return;
+    const Next = {};
+    for (const [Key, Value2] of Object.entries(Drafts)) {
+      if (Number(Key) === Editing) continue;
+      Next[Number(Key)] = Value2;
     }
+    SetDrafts(Next);
   }, [Editing, Drafts]);
   const Retry = (0, import_react5.useCallback)(() => {
     SetAttempt((Current2) => Current2 + 1);
@@ -2856,14 +2812,10 @@ function PricingSettings(Props) {
   const Drafted = Build(Book, Drafts, t);
   const Blocked = Publishing || CatalogId === null || RevisionId === null || Book.length === 0 || Reason.trim() === "" || Drafted.Problem !== null;
   const OutcomeLine = (() => {
-    switch (true) {
-      case Outcome !== null:
-        return Outcome.Kind === "published" ? t("pricing.published", { revision: Outcome.RevisionId ?? 0 }) : Outcome.Message;
-      case Reason.trim() === "":
-        return t("pricing.problem.reason");
-      default:
-        return Drafted.Problem;
+    if (Outcome !== null) {
+      return Outcome.Kind === "published" ? t("pricing.published", { revision: Outcome.RevisionId ?? 0 }) : Outcome.Message;
     }
+    return Reason.trim() === "" ? t("pricing.problem.reason") : Drafted.Problem;
   })();
   const Publish2 = () => {
     const Stated = Reason.trim();
@@ -2911,28 +2863,26 @@ function PricingSettings(Props) {
         }).then((Reply) => {
           SetPublishing(false);
           const Revision = Reply.revision;
-          switch (true) {
-            case Revision === null:
-              SetOutcome({
-                Kind: "failed",
-                RevisionId: null,
-                Message: Reply.message
-              });
-              return;
-            default:
-              SetOutcome({
-                Kind: "published",
-                RevisionId: Revision.RevisionId,
-                Message: null
-              });
-              SetDrafts({});
-              SetEditing(null);
-              SetReason("");
-              SetRevisionId(Revision.RevisionId);
-              Read(false);
-              if (Props.onPublished !== void 0)
-                Props.onPublished(Revision.RevisionId);
+          if (Revision === null) {
+            SetOutcome({
+              Kind: "failed",
+              RevisionId: null,
+              Message: Reply.message
+            });
+            return;
           }
+          SetOutcome({
+            Kind: "published",
+            RevisionId: Revision.RevisionId,
+            Message: null
+          });
+          SetDrafts({});
+          SetEditing(null);
+          SetReason("");
+          SetRevisionId(Revision.RevisionId);
+          Read(false);
+          if (Props.onPublished !== void 0)
+            Props.onPublished(Revision.RevisionId);
         }).catch((Caught) => {
           SetPublishing(false);
           SetOutcome({
@@ -3063,16 +3013,19 @@ function PricingSettings(Props) {
   })();
   const EditingRow = Editing === null ? void 0 : Book.find((One) => One.RateRowId === Editing);
   const Current = EditingRow === void 0 ? null : Drafts[EditingRow.RateRowId] ?? DraftOf(EditingRow);
-  const FormBlock = EditingRow === void 0 || Current === null ? null : Form({
-    Row: EditingRow,
-    Current,
-    Reason,
-    OnChange: Change,
-    OnReason: SetReason,
-    OnRevert: Revert,
-    OnDone: Close,
-    t
-  });
+  const FormBlock = (() => {
+    if (EditingRow === void 0 || Current === null) return null;
+    return Form({
+      Row: EditingRow,
+      Current,
+      Reason,
+      OnChange: Change,
+      OnReason: SetReason,
+      OnRevert: Revert,
+      OnDone: Close,
+      t
+    });
+  })();
   const PreviewBody = (() => {
     switch (Preview.Phase) {
       case "idle":
@@ -3100,59 +3053,57 @@ function PricingSettings(Props) {
         );
       default: {
         const Block2 = Preview.Block;
-        switch (true) {
-          case Block2 === null:
-            return (0, import_react5.createElement)(
-              "div",
-              { className: "playform-cost-block-empty" },
-              t("pricing.preview.failed")
-            );
-          default:
-            return (0, import_react5.createElement)(
-              "div",
-              { className: "playform-cost-block-body" },
-              (0, import_react5.createElement)(
-                "div",
-                {
-                  className: "playform-cost-controls",
-                  title: t("pricing.preview.title", {
-                    revision: Block2.revisionId
-                  })
-                },
-                (0, import_react5.createElement)(
-                  "span",
-                  { className: "playform-cost-control-label" },
-                  t("valuation.recorded", {
-                    value: Price(Block2.recorded, Preview.Currency)
-                  })
-                ),
-                (0, import_react5.createElement)(
-                  "span",
-                  { className: "playform-cost-control-label" },
-                  t("valuation.revised", {
-                    value: Price(Block2.revised, Preview.Currency)
-                  })
-                ),
-                (0, import_react5.createElement)(
-                  "span",
-                  { className: "playform-cost-control-label" },
-                  t("valuation.difference", {
-                    value: Price(Block2.difference, Preview.Currency)
-                  })
-                ),
-                (0, import_react5.createElement)(
-                  "span",
-                  {
-                    className: "playform-cost-control-label",
-                    title: t("pricing.preview.unpriced.title")
-                  },
-                  t("pricing.preview.unpriced", {
-                    count: Count(Preview.Unpriced)
-                  })
-                )
-              )
-            );
+        if (Block2 === null) {
+          return (0, import_react5.createElement)(
+            "div",
+            { className: "playform-cost-block-empty" },
+            t("pricing.preview.failed")
+          );
         }
+        return (0, import_react5.createElement)(
+          "div",
+          { className: "playform-cost-block-body" },
+          (0, import_react5.createElement)(
+            "div",
+            {
+              className: "playform-cost-controls",
+              title: t("pricing.preview.title", {
+                revision: Block2.revisionId
+              })
+            },
+            (0, import_react5.createElement)(
+              "span",
+              { className: "playform-cost-control-label" },
+              t("valuation.recorded", {
+                value: Price(Block2.recorded, Preview.Currency)
+              })
+            ),
+            (0, import_react5.createElement)(
+              "span",
+              { className: "playform-cost-control-label" },
+              t("valuation.revised", {
+                value: Price(Block2.revised, Preview.Currency)
+              })
+            ),
+            (0, import_react5.createElement)(
+              "span",
+              { className: "playform-cost-control-label" },
+              t("valuation.difference", {
+                value: Price(Block2.difference, Preview.Currency)
+              })
+            ),
+            (0, import_react5.createElement)(
+              "span",
+              {
+                className: "playform-cost-control-label",
+                title: t("pricing.preview.unpriced.title")
+              },
+              t("pricing.preview.unpriced", {
+                count: Count(Preview.Unpriced)
+              })
+            )
+          )
+        );
       }
     }
   })();
@@ -3173,8 +3124,8 @@ function PricingSettings(Props) {
         (0, import_react5.createElement)(
           "span",
           { className: "playform-cost-block-meta" },
-          CatalogLabel === "" ? t("pricing.empty") : `${CatalogLabel} - ${t("valuation.revision", {
-            revision: RevisionId ?? 0
+          CatalogLabel === "" ? t("pricing.empty") : RevisionId === null ? CatalogLabel : `${CatalogLabel} - ${t("valuation.revision", {
+            revision: RevisionId
           })}`
         )
       ),

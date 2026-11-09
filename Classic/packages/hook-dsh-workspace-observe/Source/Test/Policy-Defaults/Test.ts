@@ -1,9 +1,13 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the
-// workspace-observe hook: the shared block's defaults in the schema and on
-// the built State (`Allow` - the factory's shared `Policy` is the global
-// policy file path), the override, the package's no-gated-action posture, and
-// the RECORD action still proceeding under the shipped defaults with zero
-// file writes.
+/**
+ * @module Test
+ *
+ * Exercises THE POLICY BLOCK (D6) on the workspace-observe hook.
+ *
+ * @remarks
+ * Covers the shared block's defaults in the schema and on the built State (`Allow` - the factory's
+ * shared `Policy` is the global policy file path), the override, the package's no-gated-action
+ * posture, and the RECORD action still proceeding under the shipped defaults with zero file writes.
+ */
 import assert from "node:assert/strict";
 
 import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";

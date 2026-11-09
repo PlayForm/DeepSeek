@@ -1,39 +1,43 @@
-// Curate - the deterministic lifecycle pass: the always-on half of the Hermes
-// curator, with the model-gated consolidation pass left opt-in and out of this
-// module (Function/Consolidate.ts).
-//
-// IT RUNS ON THE USAGE STORE ALONE AND COSTS NO TOKENS, which is why it is the
-// default posture: a corpus that only ever grows is a corpus nobody loads, and
-// ageing it needs no model's opinion.
-//
-// THE RULES ARE R1-R10 OF SECTION 7.1 (SKILL-LEARN-PLUGIN.md:523-542), and two of
-// the ten do not survive:
-//
-//   R1  pinned -> continue, no write and no seeding
-//   R2  ABSENT: Hermes protects a skill a cron job names (cron/jobs.py:3385-3400);
-//       this harness exposes no skill-reference store, so `Pin` is the protection
-//       and the absence is stated rather than faked (SKILL-LEARN-PLUGIN.md:530)
-//   R3  no clock yet -> seed `firstSeenAt`, count `seeded`, continue
-//   R4  ABSENT: the bundled zero-use re-anchor has no subject, because bundled
-//       roots are out of jurisdiction in v1 (SKILL-LEARN-PLUGIN.md:532)
-//   R5  the anchor is `lastActivityAt` or `createdAt`, never `now`
-//   R6  zero use inside the grace floor -> force `active`, then continue
-//   R7  archive at `archiveAfterDays`
-//   R8  stale at `staleAfterDays`
-//   R9  reactivate a stale skill whose anchor moved back inside the cutoff
-//   R10 archived is terminal: no arm reaches it, and only `Restore` leaves it
-//
-// R1-R6 ARE CONTINUE GUARDS AND R7-R9 ARE ONE CHAIN, so at most one transition
-// happens per skill per pass (Hermes-Curator-Pass.md:109). The order is semantic:
-// the pin must precede seeding, and the archive must precede the stale.
-//
-// THE THRESHOLDS ARE FLOORED AT ONE DAY: a cutoff at or past now would transition
-// the whole corpus on one bad config (agent/curator.py:122-135).
-//
-// EVERY WRITE RE-CHECKS THE PREDICATE, which is the second gate: the report is a
-// view and the predicate is the contract (tools/skill_usage.py:433-445), and the
-// archive re-checks a third time before it copies anything
-// (tools/skill_usage.py:620-632).
+/**
+ * @module Curate
+ *
+ * The deterministic lifecycle pass: the always-on half of the Hermes curator, with
+ * the model-gated consolidation pass left opt-in and out of this module
+ * (`Function/Consolidate.ts`).
+ *
+ * @remarks
+ * IT RUNS ON THE USAGE STORE ALONE AND COSTS NO TOKENS, which is why it is the default
+ * posture: a corpus that only ever grows is a corpus nobody loads, and ageing it needs
+ * no model's opinion.
+ *
+ * THE RULES ARE R1-R10 OF SECTION 7.1 (SKILL-LEARN-PLUGIN.md:523-542), and two of the
+ * ten do not survive:
+ *
+ * - R1 - pinned -> continue, no write and no seeding
+ * - R2 - ABSENT: Hermes protects a skill a cron job names (cron/jobs.py:3385-3400);
+ *   this harness exposes no skill-reference store, so `Pin` is the protection and the
+ *   absence is stated rather than faked (SKILL-LEARN-PLUGIN.md:530)
+ * - R3 - no clock yet -> seed `firstSeenAt`, count `seeded`, continue
+ * - R4 - ABSENT: the bundled zero-use re-anchor has no subject, because bundled roots
+ *   are out of jurisdiction in v1 (SKILL-LEARN-PLUGIN.md:532)
+ * - R5 - the anchor is `lastActivityAt` or `createdAt`, never `now`
+ * - R6 - zero use inside the grace floor -> force `active`, then continue
+ * - R7 - archive at `archiveAfterDays`
+ * - R8 - stale at `staleAfterDays`
+ * - R9 - reactivate a stale skill whose anchor moved back inside the cutoff
+ * - R10 - archived is terminal: no arm reaches it, and only `Restore` leaves it
+ *
+ * R1-R6 ARE CONTINUE GUARDS AND R7-R9 ARE ONE CHAIN, so at most one transition happens
+ * per skill per pass (Hermes-Curator-Pass.md:109). The order is semantic: the pin must
+ * precede seeding, and the archive must precede the stale.
+ *
+ * THE THRESHOLDS ARE FLOORED AT ONE DAY: a cutoff at or past now would transition the
+ * whole corpus on one bad config (agent/curator.py:122-135).
+ *
+ * EVERY WRITE RE-CHECKS THE PREDICATE, which is the second gate: the report is a view
+ * and the predicate is the contract (tools/skill_usage.py:433-445), and the archive
+ * re-checks a third time before it copies anything (tools/skill_usage.py:620-632).
+ */
 import Path from "node:path";
 
 import Archive from "@Function/Archive.js";

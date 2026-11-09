@@ -1,14 +1,21 @@
-// Source/Test/Overpass/Test.ts - one singular test: the OVERPASS ARM of the
-// comment filter - the registration facts (the two listeners, the prepend
-// ordering, the deliberate `read`/`ccr_retrieve` targeting), the envelope
-// strip (prefixes and footer preserved, the byte-exact ledger line, the
-// omission notice), the string guard, the unknown-extension identity, the
-// ccr_retrieve target, the exemption list, the N=0 no-op, the CCR marker
-// guard, the fail-open on a thrown transform, and the notice-off variant.
-// Runs standalone (`node Target/Test/Overpass/Test.js`) AND under the
-// aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/hook-dsh-comment-filter: the fake ctx + the REAL
-// factory + the REAL comment-filter apply, from the Harness.
+/**
+ * @module Test
+ *
+ * One singular test of the OVERPASS ARM of the comment filter.
+ *
+ * @remarks
+ * The test covers the registration facts (the two listeners, the prepend
+ * ordering, the deliberate `read`/`ccr_retrieve` targeting), the envelope
+ * strip (prefixes and footer preserved, the byte-exact ledger line, the
+ * omission notice), the string guard, the unknown-extension identity, the
+ * `ccr_retrieve` target, the exemption list, the N=0 no-op, the CCR marker
+ * guard, the fail-open on a thrown transform, and the notice-off variant.
+ *
+ * The file runs standalone (`node Target/Test/Overpass/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit
+ * smoke of `@playform/hook-dsh-comment-filter`: the fake ctx + the REAL
+ * factory + the REAL comment-filter apply, from the Harness.
+ */
 import assert from "node:assert/strict";
 
 import { Check, Finish, Ledger, Make, MakeCounter, Rm, Validate } from "../Harness.js";

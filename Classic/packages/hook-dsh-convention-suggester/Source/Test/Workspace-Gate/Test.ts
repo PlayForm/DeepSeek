@@ -1,9 +1,15 @@
-// Source/Test/Workspace-Gate/Test.ts - the workspace gate against the fake
-// ctx and REAL temp trees: (a) a call path with NO `.git`/`package.json` root
-// and no session cwd abstains `foreign-workspace`; (b) a call inside a temp
-// root that carries `.git` emits the HISTORY note naming the companions the
-// session touched right after the anchor, and the same root with no history
-// abstains `no-history`.
+/**
+ * @module Test
+ *
+ * The workspace gate of the convention-suggester against the fake ctx and
+ * real temp trees.
+ *
+ * @remarks
+ * A call path with no `.git`/`package.json` root and no session cwd abstains
+ * `foreign-workspace`; a call inside a temp root that carries `.git` emits
+ * the history note naming the companions the session touched right after the
+ * anchor, and the same root with no history abstains `no-history`.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

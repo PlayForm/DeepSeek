@@ -1,19 +1,26 @@
-// Record - one usage record: the thirteen fields the lifecycle and the report
-// read, keyed by skill name in the store and never stored inside a SKILL.md.
-//
-// `createdBy` is a POLICY FLAG, not a provenance claim: it answers "may
-// autonomous curation archive this?", not "who wrote it". A foreground create
-// has no path that would set the `learn` marker in this release, so the marker
-// exists in the vocabulary and opens no jurisdiction.
-//
-// The stamps are ISO-8601 strings rather than epoch numbers because the ledger,
-// the snapshot manifest, and the report are read by people, and one date format
-// across all four files is worth more than the arithmetic.
-//
-// `createdAt` and `lastActivityAt` are readonly for different reasons: the
-// creation stamp is history and must never be rewritten, and `lastActivityAt`
-// is derived at read time from the two activity stamps and never persisted, so
-// a writer that set it would be writing a value the next read recomputes.
+/**
+ * @module Record
+ *
+ * One usage record: the thirteen fields the lifecycle and the report read, keyed by
+ * skill name in the store and never stored inside a `SKILL.md`.
+ *
+ * @remarks
+ * `createdBy` is a POLICY FLAG, not a provenance claim: it answers "may autonomous
+ * curation archive this?", not "who wrote it". A foreground create has no path that
+ * would set the `learn` marker in this release, so the marker exists in the vocabulary
+ * and opens no jurisdiction.
+ *
+ * The stamps are ISO-8601 strings rather than epoch numbers because the ledger, the
+ * snapshot manifest, and the report are read by people, and one date format across all
+ * four files is worth more than the arithmetic.
+ *
+ * `createdAt` and `lastActivityAt` are readonly for different reasons: the creation
+ * stamp is history and must never be rewritten, and `lastActivityAt` is derived at read
+ * time from the two activity stamps and never persisted, so a writer that set it would
+ * be writing a value the next read recomputes.
+ */
+
+/** The one usage record. */
 export default interface Record {
 	/** The curation opt-in policy flag; only `"agent"` opens jurisdiction. */
 	readonly createdBy: null | "agent" | "learn";

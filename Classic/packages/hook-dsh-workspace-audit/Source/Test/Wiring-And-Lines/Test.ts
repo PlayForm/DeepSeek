@@ -1,9 +1,17 @@
-// Source/Test/Wiring-And-Lines/Test.ts - the wiring and the recorder: the
-// loader contract (apply returns nothing), the IDLE-forever cold mount, the
-// root-context registration with the distinct root identity, the service
-// registered from apply, the activation proof, the OutcomeEvidence recording
-// (the monotonic sequence, the parent pointer, success vs failure), the
-// guard chain, the malformed-event containment, and the fail-loud validation.
+/**
+ * @module Test
+ *
+ * The wiring and the recorder of the workspace-audit plugin, covered in one
+ * singular test.
+ *
+ * @remarks
+ * The test covers the loader contract (apply returns nothing), the
+ * IDLE-forever cold mount, the root-context registration with the distinct
+ * root identity, the service registered from apply, the activation proof,
+ * the OutcomeEvidence recording (the monotonic sequence, the parent pointer,
+ * success vs failure), the guard chain, the malformed-event containment, and
+ * the fail-loud validation.
+ */
 import assert from "node:assert/strict";
 import {
 	Boot,

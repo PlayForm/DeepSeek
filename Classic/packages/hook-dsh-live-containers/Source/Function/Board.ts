@@ -1,17 +1,23 @@
-// Board - the planted-block surface (CAN-2, I5 PLANTED-LEASE;
-// IMPLEMENTATION-DESIGN.md sections 3.4, 4.4 as amended). A planted block is
-// a LEASE: the board declares its reporters and a window of N consecutive
-// parent turns without a foldable report from a running member; on expiry the
-// block SELF-DECLARES the stale row - and that declaration IS the CAN-4
-// delegation-stall failsafe trigger (the engine consumes lease.declared; no
-// parallel timer).
-//
-// STATE: the board lives in the parent's per-agent state (keyed on the
-// agent's session id) - it dies with the agent; no orphan boards survive.
-//
-// RENDER SURFACES (I5 1.3): the standing section carries running boards; the
-// stale declarations are section changes at the next parent request. There is
-// no completion-style dynamic context for boards - a board is RUNNING state.
+/**
+ * @module Board
+ *
+ * The planted-block surface (CAN-2, I5 PLANTED-LEASE; IMPLEMENTATION-DESIGN.md
+ * sections 3.4, 4.4 as amended).
+ *
+ * @remarks
+ * A planted block is a LEASE: the board declares its reporters and a window
+ * of N consecutive parent turns without a foldable report from a running
+ * member; on expiry the block SELF-DECLARES the stale row - and that
+ * declaration IS the CAN-4 delegation-stall failsafe trigger (the engine
+ * consumes `lease.declared`; no parallel timer).
+ *
+ * STATE: the board lives in the parent's per-agent state (keyed on the
+ * agent's session id) - it dies with the agent; no orphan boards survive.
+ *
+ * RENDER SURFACES (I5 1.3): the standing section carries running boards; the
+ * stale declarations are section changes at the next parent request. There is
+ * no completion-style dynamic context for boards - a board is RUNNING state.
+ */
 import Clock from "@Function/Clock.js";
 import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
 import * as Policy from "@Function/Policy.js";

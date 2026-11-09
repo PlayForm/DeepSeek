@@ -1,8 +1,13 @@
-// Source/Test/Policy-Defaults/Test.ts - THE POLICY BLOCK (D6) on the
-// ingester: the shared block's defaults in the schema and on the built State
-// (`State.Config.policy` - the class form has no factory State), the
-// override, and the writer's `approve` posture (the decision's approval IS
-// the gate).
+/**
+ * @module Test
+ *
+ * Exercises THE POLICY BLOCK (D6) on the ingester.
+ *
+ * @remarks
+ * Covers the shared block's defaults in the schema and on the built State (`State.Config.policy` -
+ * the class form has no factory State), the override, and the writer's `approve` posture (the
+ * decision's approval IS the gate).
+ */
 import assert from "node:assert/strict";
 
 import { Build, Check, Finish, Ingester, MakeCounter } from "../Harness.js";

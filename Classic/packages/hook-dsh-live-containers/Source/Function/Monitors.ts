@@ -1,19 +1,25 @@
-// Monitors - the live file monitor engine (the FILE-MONITOR design sections
-// 3-6). The fs/observed observer (L11), the checkpoint scan (the debounce,
-// the deadline, the slow schedule, the retirement - no real timers), the
-// check dispatch through the SHIPPED G2 wrapper (one wrapper, two callers),
-// the settle fold, the per-agent stanza part, and the enrollment bookkeeping.
-//
-// THE FAIL-OPEN ENVELOPE (the R3 point 7, hard): every listener path is
-// wrapped - never throws into the fs/observed dispatch, the jobs events or
-// the assemble waterfall; a dispatch start failure keeps the band's
-// last-known result and renders STALE (the version moved); a renderer
-// failure skips the stanza and logs.
-//
-// THE HONESTY CLUSTER (the R3 points 1/2/7, hard): a clean glyph renders
-// ONLY from an observed settle with exit 0 of the exact check set for the
-// exact version with provenance "live"; a settle-less version bump NEVER
-// renders clean; the linked-governance check never produces a verdict.
+/**
+ * @module Monitors
+ *
+ * The live file monitor engine (the FILE-MONITOR design sections 3-6).
+ *
+ * @remarks
+ * The `fs/observed` observer (L11), the checkpoint scan (the debounce, the
+ * deadline, the slow schedule, the retirement - no real timers), the check
+ * dispatch through the SHIPPED G2 wrapper (one wrapper, two callers), the
+ * settle fold, the per-agent stanza part, and the enrollment bookkeeping.
+ *
+ * THE FAIL-OPEN ENVELOPE (the R3 point 7, hard): every listener path is
+ * wrapped - never throws into the `fs/observed` dispatch, the jobs events or
+ * the assemble waterfall; a dispatch start failure keeps the band's
+ * last-known result and renders STALE (the version moved); a renderer
+ * failure skips the stanza and logs.
+ *
+ * THE HONESTY CLUSTER (the R3 points 1/2/7, hard): a clean glyph renders
+ * ONLY from an observed settle with exit 0 of the exact check set for the
+ * exact version with provenance "live"; a settle-less version bump NEVER
+ * renders clean; the linked-governance check never produces a verdict.
+ */
 import { basename as Base, dirname as Parent } from "node:path";
 
 import * as Band from "@Function/Band.js";

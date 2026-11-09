@@ -1,9 +1,16 @@
-// Source/Test/Service-And-Storage/Test.ts - the service surface and the
-// storage domain: the manual line recording, the IntentAssessment loop
-// closer, the chain and ring views, the ring cap with its byte-exact drop
-// line, the domain spec, the persistence, the restart recovery with the
-// continued sequence, the absent facility (silent skip), the loud open
-// failure, and the effect's disposer closing the handle.
+/**
+ * @module Test
+ *
+ * The service surface and the storage domain of the workspace-audit plugin,
+ * covered in one singular test.
+ *
+ * @remarks
+ * The test covers the manual line recording, the IntentAssessment loop
+ * closer, the chain and ring views, the ring cap with its byte-exact drop
+ * line, the domain spec, the persistence, the restart recovery with the
+ * continued sequence, the absent facility (silent skip), the loud open
+ * failure, and the effect's disposer closing the handle.
+ */
 import assert from "node:assert/strict";
 import {
 	Boot,

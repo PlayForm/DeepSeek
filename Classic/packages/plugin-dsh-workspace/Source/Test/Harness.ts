@@ -1,23 +1,26 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE agent
-// tests: the fake ctx (tools registration capture, ctx listener capture with
-// the loader/volatile-update listener, reflect.provide capture, the effect
-// runner, logger capture, the throwing fs purity seam, the DISTINCT root
-// object) + the REAL @playform/plugin-dsh-factory instance from its built
-// Target + the REAL workspace apply from its built Target + a deterministic
-// FAKE graph standing in for the injected workspaceGraph service - the
-// family fake-ctx + real-factory harness pattern, written ONCE per package
-// and imported by every test folder. Each folder process gets a fresh set,
-// so every folder is standalone-green.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop for every folder's
-// fixture).
-//
-// NO FAKE CLOCK: the plugin has no clock dependency on the tool path (the
-// packet's tokens are a pure character count, the graph revision is a
-// fixture string) - the no-wall-clock rule holds without a time seam.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the WORKSPACE agent tests: the fake ctx (tools registration capture,
+ * ctx listener capture with the loader/volatile-update listener, reflect.provide capture, the
+ * effect runner, logger capture, the throwing fs purity seam, the DISTINCT root object) plus the
+ * REAL @playform/plugin-dsh-factory instance from its built Target plus the REAL workspace apply
+ * from its built Target plus a deterministic FAKE graph standing in for the injected
+ * workspaceGraph service - the family fake-ctx + real-factory harness pattern, written ONCE per
+ * package and imported by every test folder.
+ *
+ * @remarks
+ * Each folder process gets a fresh set, so every folder is standalone-green.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the counter through one
+ * deliberate pass + one deliberate failure and exits 0 only when both are counted exactly, then
+ * proves the fake ctx actually wires the plugin (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * NO FAKE CLOCK: the plugin has no clock dependency on the tool path (the packet's tokens are a
+ * pure character count, the graph revision is a fixture string) - the no-wall-clock rule holds
+ * without a time seam.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

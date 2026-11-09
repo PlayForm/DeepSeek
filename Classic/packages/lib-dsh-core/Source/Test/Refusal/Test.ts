@@ -1,9 +1,17 @@
-// Source/Test/Refusal/Test.ts - one singular test: the shared refusal guard -
-// only the declared dependency sections may differ; a non-dependency section
-// change is refused with the byte-identical refusal line.
-// Runs standalone (`node Target/Test/Refusal/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/lib-dsh-core: the REAL built entry only.
+/**
+ * @module Test
+ *
+ * One singular test of the shared refusal guard.
+ *
+ * @remarks
+ * The test covers the sections-only rule: only the declared dependency
+ * sections may differ; a non-dependency section change is refused with the
+ * byte-identical refusal line.
+ *
+ * The file runs standalone (`node Target/Test/Refusal/Test.js`) AND under the
+ * aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit smoke
+ * of `@playform/lib-dsh-core`: the REAL built entry only.
+ */
 import assert from "node:assert/strict";
 
 import { Refusal, Section } from "../../../Target/Library.js";

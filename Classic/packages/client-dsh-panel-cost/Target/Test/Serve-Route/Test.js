@@ -3,13 +3,14 @@ import { Check, Finish, MakeCounter, Make, Plugin } from "../Harness.js";
 const runTest = () => {
   const Count = MakeCounter();
   const Run = Make();
-  Check(Count, "S1: three routes, session then catalogs then rates", () => {
+  Check(Count, "S1: four routes, session, catalogs, rates, publish", () => {
     assert.deepEqual(
       Run.Provided.routes.map((Route) => Route.path),
       [
         "/api/playform-cost/session",
         "/api/playform-cost/catalogs",
-        "/api/playform-cost/rates"
+        "/api/playform-cost/rates",
+        "/api/playform-cost/publish"
       ]
     );
   });
@@ -42,9 +43,9 @@ const runTest = () => {
     assert.equal(Parsed.calls.length, 0);
     assert.match(Parsed.message, /no session id/);
   });
-  Check(Count, "S3: the port saw the three registrations and nothing else", () => {
-    assert.equal(Run.Provided.routes.length, 3);
-    assert.equal(Run.Server.Seen.n, 3);
+  Check(Count, "S3: the port saw the four registrations and nothing else", () => {
+    assert.equal(Run.Provided.routes.length, 4);
+    assert.equal(Run.Server.Seen.n, 4);
     assert.equal(typeof Run.Provided.routes[0].handler, "function");
   });
   const Bare = Make({ none: true, defer: true });

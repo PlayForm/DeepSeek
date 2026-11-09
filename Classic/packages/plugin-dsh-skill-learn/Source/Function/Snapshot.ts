@@ -1,23 +1,27 @@
-// Snapshot - the whole-tree manifest, its rotation, and the blob sweep.
-//
-// A SNAPSHOT NAMES CONTENT INSTEAD OF COPYING IT. Every file's bytes already live
-// in the blob store, so a snapshot of an unchanged corpus costs one small JSON
-// file, and a rotation can drop a manifest without losing a byte that a retained
-// ledger row still references (SKILL-LEARN-PLUGIN.md:596-609,
-// Interface/Snapshot.ts:1-12).
-//
-// THE CORPUS IS READ THROUGH `ctx.fs`, never through `node:fs`: the walk is a read
-// of skill paths, and the sanctioned `node:fs` use is bounded to the state root
-// and the blob root (SKILL-LEARN-PLUGIN.md:401-406). The manifests and the blobs
-// are the plugin's own bookkeeping and are written with `node:fs`.
-//
-// THE ROTATION DELETES THE PLUGIN'S OWN SNAPSHOTS AND BLOBS, NEVER A SKILL. That
-// is the one place the word delete appears in this design, and it is bounded to
-// `<snapshotRoot>` and `<blobRoot>` (SKILL-LEARN-PLUGIN.md:609).
-//
-// A BLOB YOUNGER THAN ONE HOUR SURVIVES THE SWEEP even when nothing references it,
-// because a capture may be in flight before its row exists
-// (tools/skill_ledger.py:485-497).
+/**
+ * @module Snapshot
+ *
+ * The whole-tree manifest, its rotation, and the blob sweep.
+ *
+ * @remarks
+ * A SNAPSHOT NAMES CONTENT INSTEAD OF COPYING IT. Every file's bytes already live in
+ * the blob store, so a snapshot of an unchanged corpus costs one small JSON file, and a
+ * rotation can drop a manifest without losing a byte that a retained ledger row still
+ * references (SKILL-LEARN-PLUGIN.md:596-609, Interface/Snapshot.ts:1-12).
+ *
+ * THE CORPUS IS READ THROUGH `ctx.fs`, never through `node:fs`: the walk is a read of
+ * skill paths, and the sanctioned `node:fs` use is bounded to the state root and the
+ * blob root (SKILL-LEARN-PLUGIN.md:401-406). The manifests and the blobs are the
+ * plugin's own bookkeeping and are written with `node:fs`.
+ *
+ * THE ROTATION DELETES THE PLUGIN'S OWN SNAPSHOTS AND BLOBS, NEVER A SKILL. That is the
+ * one place the word delete appears in this design, and it is bounded to
+ * `<snapshotRoot>` and `<blobRoot>` (SKILL-LEARN-PLUGIN.md:609).
+ *
+ * A BLOB YOUNGER THAN ONE HOUR SURVIVES THE SWEEP even when nothing references it,
+ * because a capture may be in flight before its row exists
+ * (tools/skill_ledger.py:485-497).
+ */
 import FileSystem from "node:fs/promises";
 import Path from "node:path";
 

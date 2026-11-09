@@ -1,19 +1,25 @@
-// Source/Test/Harness.ts - the shared test harness for the COMMENT FILTER
-// tests: the fake ctx (on capture, get returning the REAL
-// @playform/plugin-dsh-factory instance from its built Target, logger
-// capture) + the REAL comment-filter apply (from the built Target) - the
-// seams from the source suite, written ONCE per package and imported by every
-// test folder. The ctx carries the emit/effect/root seams too: the factory's
-// State builder probes the OPTIONAL subprocess service through `ctx.get` (a
-// throwing probe is an absent service) and registers its volatile-refresh
-// listener on the same ctx, and the ledger writes through `ctx.logger`.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually wires
-// apply (the vacuously-green backstop for every folder's fixture);
-// prepublishOnly.sh gates the build on it. Imported as a library, this module
-// only exports.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the COMMENT FILTER tests.
+ *
+ * @remarks
+ * The harness pairs the fake ctx (listener capture, `get` returning the REAL
+ * `@playform/plugin-dsh-factory` instance from its built Target, logger
+ * capture) with the REAL comment-filter apply from the built Target - the
+ * seams from the source suite, written ONCE per package and imported by every
+ * test folder. The ctx carries the emit/effect/root seams too: the factory's
+ * State builder probes the OPTIONAL subprocess service through `ctx.get` (a
+ * throwing probe is an absent service) and registers its volatile-refresh
+ * listener on the same ctx, and the ledger writes through `ctx.logger`.
+ *
+ * The standalone selfcheck `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass + one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the fake ctx actually wires
+ * apply (the vacuously-green backstop for every folder's fixture);
+ * `prepublishOnly.sh` gates the build on it. Imported as a library, this
+ * module only exports.
+ */
 import assert from "node:assert/strict";
 import { rmSync } from "node:fs";
 import CommentFilter from "../../Target/Library.js";

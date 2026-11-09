@@ -1,18 +1,20 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE-AUTHORITY
-// tests: the fake ctx (the logger capture, the fs purity capture, no root
-// wiring - the authority registers no listener) + the REAL
-// @playform/plugin-dsh-factory instance from its built Target + the REAL
-// workspace-authority apply from its built Target - the family fake-ctx +
-// real-factory harness pattern, written ONCE per package and imported by
-// every test folder.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the fake ctx actually
-// wires the plugin (the vacuously-green backstop).
-//
-// NO FAKE CLOCK: the sequence is the service's own monotonic counter; the
-// expiry tests mutate the stored records' timestamps instead of waiting.
+/**
+ * @module Harness
+ *
+ * The shared test harness for the WORKSPACE-AUTHORITY tests: the fake ctx (the logger capture, the
+ * fs purity capture, no root wiring - the authority registers no listener) plus the REAL
+ * @playform/plugin-dsh-factory instance from its built Target plus the REAL workspace-authority
+ * apply from its built Target - the family fake-ctx + real-factory harness pattern, written ONCE
+ * per package and imported by every test folder.
+ *
+ * @remarks
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the counter through one
+ * deliberate pass + one deliberate failure and exits 0 only when both are counted exactly, then
+ * proves the fake ctx actually wires the plugin (the vacuously-green backstop).
+ *
+ * NO FAKE CLOCK: the sequence is the service's own monotonic counter; the expiry tests mutate the
+ * stored records' timestamps instead of waiting.
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as OS from "node:os";

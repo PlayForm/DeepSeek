@@ -1,9 +1,16 @@
-// Source/Test/Credit/Test.ts - THE READ CREDIT (Documentation/Plans/
-// COST-TRACK-PLUGIN.md section 11, Ring C): reading a file warms the prompt
-// cache, so every later call whose surface carries it pays the cache-read
-// rate instead of the full input rate - the drain stores that saving on the
-// Call row (Call.CacheSaving) and the analysis credits it to the file in
-// proportion to the share of the surface the file occupied.
+/**
+ * @module Test
+ *
+ * One singular test of THE READ CREDIT (Documentation/Plans/
+ * COST-TRACK-PLUGIN.md section 11, Ring C).
+ *
+ * @remarks
+ * Reading a file warms the prompt cache, so every later call whose surface
+ * carries it pays the cache-read rate instead of the full input rate - the
+ * drain stores that saving on the Call row (Call.CacheSaving) and the
+ * analysis credits it to the file in proportion to the share of the surface
+ * the file occupied.
+ */
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";

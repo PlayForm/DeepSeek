@@ -472,6 +472,16 @@ export const MigrationPricing: readonly string[] = [
 	SeedRevision,
 	SeedRateRow,
 	SeedValuation,
+	// A v1-v4 ledger carries the pre-fan-out-fix view text, which repeats a
+	// call's tokens once per allocation row; recreate the three aggregates
+	// from the current definitions so an upgraded ledger reports correct
+	// tokens. DROP before CREATE because the rung runs on an existing file.
+	"DROP VIEW IF EXISTS ModelCost;",
+	"DROP VIEW IF EXISTS SessionCost;",
+	"DROP VIEW IF EXISTS ClientCost;",
+	ModelCost,
+	SessionCost,
+	ClientCost,
 	"PRAGMA user_version = 5;",
 ];
 

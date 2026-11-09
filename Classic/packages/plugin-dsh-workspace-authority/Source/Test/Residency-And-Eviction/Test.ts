@@ -1,7 +1,12 @@
-// Source/Test/Residency-And-Eviction/Test.ts - the residency record and the
-// disposition pass: the weight-only-ranks rule, the five dispositions, the
-// two shields (the open lease and the active capability, with the revocation
-// grace), the byte-exact disposition lines, and the purity.
+/**
+ * @module Test
+ *
+ * Exercises the residency record and the disposition pass.
+ *
+ * @remarks
+ * Covers the weight-only-ranks rule, the five dispositions, the two shields (the open lease and the
+ * active capability, with the revocation grace), the byte-exact disposition lines, and the purity.
+ */
 import assert from "node:assert/strict";
 import { Check, Finish, LinesWith, Make, MakeCounter, Validate, rm } from "../Harness.js";
 

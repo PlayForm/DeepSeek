@@ -1,36 +1,41 @@
-// Archive - the neutralize-and-copy archive, and its restore.
-//
-// THERE IS NO MOVE AND NO DELETE IN THE SEAM (dsh-fs/lib/types/index.d.ts:61-240),
-// so an archive is a COPY PLUS A NEUTRALIZATION, and together they preserve the
-// bytes and take the skill out of the model's catalog
-// (SKILL-LEARN-PLUGIN.md:552-572):
-//
-//   1. COPY every file of the skill package into `<archiveRoot>/<name>/` with
-//      `createIfAbsent`, so an existing archive is never overwritten and a
-//      collision takes the `<name>-<YYYYMMDDHHMMSS>` suffix.
-//   2. NEUTRALIZE the live `SKILL.md` with `replaceIfVersion`, adding
-//      `disable-model-invocation: true` to the frontmatter: the loader honors the
-//      key and the `skill` tool filters on it, so the catalog stops offering the
-//      skill while the bytes stay where they are.
-//
-// The live package never moves, and that is the honest reading of a seam that
-// cannot move a file: the corpus keeps the bytes, the catalog stops offering
-// them, and `Restore` puts the frontmatter back. Reaching for `node:fs.rename`
-// instead would put a skill move outside the governed seam the rest of this
-// design is built on, and an interrupted move would leave two copies with no
-// record of which is live (SKILL-LEARN-PLUGIN.md:568-572).
-//
-// RESTORE REVERSES IT: read the archived `SKILL.md`, drop the
-// `disable-model-invocation` line, and write the live path with
-// `replaceIfVersion`. It refuses a name outside `skillsRoot`, and it refuses a
-// live file that is not the neutralized copy, because overwriting a live skill
-// would clobber bytes this pass never took (tools/skill_usage.py:647-671).
-//
-// THE COPY IS TEXT ONLY, AND THAT IS A LIMIT OF THE SEAM, NOT A CHOICE: `ctx.fs`
-// writes text, so a package that carries a binary asset cannot be copied at all.
-// Such a package is left unarchived with a reported failure rather than copied
-// with a hole in it, because an archive that silently drops a file is worse than
-// a skill the curator cannot age.
+/**
+ * @module Archive
+ *
+ * The neutralize-and-copy archive, and its restore.
+ *
+ * @remarks
+ * THERE IS NO MOVE AND NO DELETE IN THE SEAM (dsh-fs/lib/types/index.d.ts:61-240),
+ * so an archive is a COPY PLUS A NEUTRALIZATION, and together they preserve the
+ * bytes and take the skill out of the model's catalog
+ * (SKILL-LEARN-PLUGIN.md:552-572):
+ *
+ * - COPY every file of the skill package into `<archiveRoot>/<name>/` with
+ *   `createIfAbsent`, so an existing archive is never overwritten and a collision
+ *   takes the `<name>-<YYYYMMDDHHMMSS>` suffix.
+ * - NEUTRALIZE the live `SKILL.md` with `replaceIfVersion`, adding
+ *   `disable-model-invocation: true` to the frontmatter: the loader honors the key
+ *   and the `skill` tool filters on it, so the catalog stops offering the skill
+ *   while the bytes stay where they are.
+ *
+ * The live package never moves, and that is the honest reading of a seam that cannot
+ * move a file: the corpus keeps the bytes, the catalog stops offering them, and
+ * `Restore` puts the frontmatter back. Reaching for `node:fs.rename` instead would
+ * put a skill move outside the governed seam the rest of this design is built on,
+ * and an interrupted move would leave two copies with no record of which is live
+ * (SKILL-LEARN-PLUGIN.md:568-572).
+ *
+ * RESTORE REVERSES IT: read the archived `SKILL.md`, drop the
+ * `disable-model-invocation` line, and write the live path with `replaceIfVersion`.
+ * It refuses a name outside `skillsRoot`, and it refuses a live file that is not the
+ * neutralized copy, because overwriting a live skill would clobber bytes this pass
+ * never took (tools/skill_usage.py:647-671).
+ *
+ * THE COPY IS TEXT ONLY, AND THAT IS A LIMIT OF THE SEAM, NOT A CHOICE: `ctx.fs`
+ * writes text, so a package that carries a binary asset cannot be copied at all.
+ * Such a package is left unarchived with a reported failure rather than copied with
+ * a hole in it, because an archive that silently drops a file is worse than a skill
+ * the curator cannot age.
+ */
 import Path from "node:path";
 
 import type { Touched } from "@Function/Ledger.js";

@@ -425,23 +425,19 @@ const Newest = (Revisions: readonly Revision[], CatalogId: number): number | nul
 // field: a malformed body must not throw and must not render a half-filled
 // comparison.
 const Comparison = (Envelope: CostResponse): Valuation | undefined => {
-	switch (true) {
-		case Envelope.ok !== true:
-			return undefined;
-		default: {
-			const Block = Envelope.valuation;
-			switch (true) {
-				case Block === undefined:
-					return undefined;
-				case typeof Block.recorded !== "number" ||
-					typeof Block.revised !== "number" ||
-					typeof Block.difference !== "number":
-					return undefined;
-				default:
-					return Block;
-			}
-		}
+	// Early returns, because the narrowing has to survive into the figure
+	// checks; a switch (true) arm cannot carry it.
+	if (Envelope.ok !== true) return undefined;
+	const Block = Envelope.valuation;
+	if (Block === undefined) return undefined;
+	if (
+		typeof Block.recorded !== "number" ||
+		typeof Block.revised !== "number" ||
+		typeof Block.difference !== "number"
+	) {
+		return undefined;
 	}
+	return Block;
 };
 
 // Picker - one native select of the settings block: the house pattern for an
@@ -850,8 +846,7 @@ export default function PricingSettings(
 								? Envelope.summary.unpriced
 								: 0,
 						Currency:
-							typeof Envelope.currency === "string" &&
-							Envelope.currency !== ""
+							typeof Envelope.currency === "string" && Envelope.currency !== ""
 								? Envelope.currency
 								: "USD",
 						Message: null,
@@ -1065,8 +1060,7 @@ export default function PricingSettings(
 						SetReason("");
 						SetRevisionId(Revision.RevisionId);
 						Read(false);
-						if (Props.onPublished !== undefined)
-							Props.onPublished(Revision.RevisionId);
+						if (Props.onPublished !== undefined) Props.onPublished(Revision.RevisionId);
 					})
 					.catch((Caught) => {
 						SetPublishing(false);
@@ -1211,19 +1205,21 @@ export default function PricingSettings(
 	const EditingRow = Editing === null ? undefined : Book.find((One) => One.RateRowId === Editing);
 	const Current =
 		EditingRow === undefined ? null : (Drafts[EditingRow.RateRowId] ?? DraftOf(EditingRow));
-	const FormBlock =
-		EditingRow === undefined || Current === null
-			? null
-			: Form({
-					Row: EditingRow,
-					Current,
-					Reason,
-					OnChange: Change,
-					OnReason: SetReason,
-					OnRevert: Revert,
-					OnDone: Close,
-					t,
-				});
+	const FormBlock = ((): ReturnType<typeof createElement> | null => {
+		// Early return, because the narrowing has to survive into the form's
+		// props; a conditional expression cannot carry it here.
+		if (EditingRow === undefined || Current === null) return null;
+		return Form({
+			Row: EditingRow,
+			Current,
+			Reason,
+			OnChange: Change,
+			OnReason: SetReason,
+			OnRevert: Revert,
+			OnDone: Close,
+			t,
+		});
+	})();
 
 	// The impact preview: the four figures under the selected revision, or
 	// the one line of the state the pane is in.
@@ -1258,59 +1254,59 @@ export default function PricingSettings(
 				);
 			default: {
 				const Block = Preview.Block;
-				switch (true) {
-					case Block === null:
-						return createElement(
-							"div",
-							{ className: "playform-cost-block-empty" },
-							t("pricing.preview.failed"),
-						);
-					default:
-						return createElement(
-							"div",
-							{ className: "playform-cost-block-body" },
-							createElement(
-								"div",
-								{
-									className: "playform-cost-controls",
-									title: t("pricing.preview.title", {
-										revision: Block.revisionId,
-									}),
-								},
-								createElement(
-									"span",
-									{ className: "playform-cost-control-label" },
-									t("valuation.recorded", {
-										value: Price(Block.recorded, Preview.Currency),
-									}),
-								),
-								createElement(
-									"span",
-									{ className: "playform-cost-control-label" },
-									t("valuation.revised", {
-										value: Price(Block.revised, Preview.Currency),
-									}),
-								),
-								createElement(
-									"span",
-									{ className: "playform-cost-control-label" },
-									t("valuation.difference", {
-										value: Price(Block.difference, Preview.Currency),
-									}),
-								),
-								createElement(
-									"span",
-									{
-										className: "playform-cost-control-label",
-										title: t("pricing.preview.unpriced.title"),
-									},
-									t("pricing.preview.unpriced", {
-										count: Count(Preview.Unpriced),
-									}),
-								),
-							),
-						);
+				// Early return, because the narrowing has to survive into the
+				// four figures; a switch (true) arm cannot carry it.
+				if (Block === null) {
+					return createElement(
+						"div",
+						{ className: "playform-cost-block-empty" },
+						t("pricing.preview.failed"),
+					);
 				}
+				return createElement(
+					"div",
+					{ className: "playform-cost-block-body" },
+					createElement(
+						"div",
+						{
+							className: "playform-cost-controls",
+							title: t("pricing.preview.title", {
+								revision: Block.revisionId,
+							}),
+						},
+						createElement(
+							"span",
+							{ className: "playform-cost-control-label" },
+							t("valuation.recorded", {
+								value: Price(Block.recorded, Preview.Currency),
+							}),
+						),
+						createElement(
+							"span",
+							{ className: "playform-cost-control-label" },
+							t("valuation.revised", {
+								value: Price(Block.revised, Preview.Currency),
+							}),
+						),
+						createElement(
+							"span",
+							{ className: "playform-cost-control-label" },
+							t("valuation.difference", {
+								value: Price(Block.difference, Preview.Currency),
+							}),
+						),
+						createElement(
+							"span",
+							{
+								className: "playform-cost-control-label",
+								title: t("pricing.preview.unpriced.title"),
+							},
+							t("pricing.preview.unpriced", {
+								count: Count(Preview.Unpriced),
+							}),
+						),
+					),
+				);
 			}
 		}
 	})();
@@ -1334,9 +1330,11 @@ export default function PricingSettings(
 					{ className: "playform-cost-block-meta" },
 					CatalogLabel === ""
 						? t("pricing.empty")
-						: `${CatalogLabel} - ${t("valuation.revision", {
-								revision: RevisionId ?? 0,
-							})}`,
+						: RevisionId === null
+							? CatalogLabel
+							: `${CatalogLabel} - ${t("valuation.revision", {
+									revision: RevisionId,
+								})}`,
 				),
 			),
 			createElement("div", { className: "playform-cost-block-sub" }, t("pricing.notice")),

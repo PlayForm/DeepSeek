@@ -1,13 +1,20 @@
-// Source/Test/Replace/Test.ts - one singular test: the two replacement
-// mechanics - Replace (the generic class-to-string replacer: match+count,
-// count 0, literal $& insertion, lastIndex untouched) and ReplaceMap (the
-// char-to-char map replacer: the Quotes + Fullwidth flavors, literal values,
-// count 0). The two mechanics share one folder (the merged smallest pair of
-// the source suite's sections 6 + 7); each keeps its own Check with the
-// source suite's ok label verbatim.
-// Runs standalone (`node Target/Test/Replace/Test.js`) AND under the aggregate
-// (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/lib-dsh-core: the REAL built entry only.
+/**
+ * @module Test
+ *
+ * One singular test of the two replacement mechanics.
+ *
+ * @remarks
+ * The test covers Replace (the generic class-to-string replacer:
+ * match+count, count 0, literal `$&` insertion, lastIndex untouched) and
+ * ReplaceMap (the char-to-char map replacer: the Quotes + Fullwidth flavors,
+ * literal values, count 0). The two mechanics share one folder (the merged
+ * smallest pair of the source suite's sections 6 + 7); each keeps its own
+ * Check with the source suite's ok label verbatim.
+ *
+ * The file runs standalone (`node Target/Test/Replace/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). It is a unit
+ * smoke of `@playform/lib-dsh-core`: the REAL built entry only.
+ */
 import assert from "node:assert/strict";
 
 import { Dashes, Fullwidth, Quotes, Replace, ReplaceMap } from "../../../Target/Library.js";

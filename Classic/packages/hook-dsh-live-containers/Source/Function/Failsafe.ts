@@ -1,21 +1,28 @@
-// Failsafe - the CAN-4 engine's remaining scenarios (IMPLEMENTATION-DESIGN.md
-// section 6). The other scenarios live where their truth is: the hang + the
-// live-timeout in Board.ScanDeadlines, the delegation stall in Board
-// (the I5 lease: the declaration IS the trigger), the admission guard in
-// Policy, the retry loop in Detach, and the section collapse for the phase-1
-// frames in Render. This module owns the DRIFT guard (scenario 4) and the
-// wave-2 section-collapse pass (scenario 8), plus the channel discipline.
-//
-// THE CHANNELS (04 section 2, in escalating loudness): 1 ledger only (the
-// default), 2 log warn, 3 behavior change only, 4 model-visible note, 5
-// user-visible through surfaces the user already reads. The engine is a PURE
-// OBSERVER of task shape (live jobs, boards, detached calls, ages, output
-// rates, counts) - no message CONTENT is read for trigger evaluation.
-//
-// SAFETY (04 section 5): every action is fail-open wrapped; the layer can
-// NEVER deny a call, drop content, or cancel a job because of its own
-// internal error; killing goes through the registry's kill, gated behind
-// hangAction/config; `failsafes: "off"` is the default even when enabled.
+/**
+ * @module Failsafe
+ *
+ * The CAN-4 engine's remaining scenarios (IMPLEMENTATION-DESIGN.md section
+ * 6).
+ *
+ * @remarks
+ * The other scenarios live where their truth is: the hang + the live-timeout
+ * in `Board.ScanDeadlines`, the delegation stall in Board (the I5 lease: the
+ * declaration IS the trigger), the admission guard in Policy, the retry loop
+ * in Detach, and the section collapse for the phase-1 frames in Render. This
+ * module owns the DRIFT guard (scenario 4) and the wave-2 section-collapse
+ * pass (scenario 8), plus the channel discipline.
+ *
+ * THE CHANNELS (04 section 2, in escalating loudness): 1 ledger only (the
+ * default), 2 log warn, 3 behavior change only, 4 model-visible note, 5
+ * user-visible through surfaces the user already reads. The engine is a PURE
+ * OBSERVER of task shape (live jobs, boards, detached calls, ages, output
+ * rates, counts) - no message CONTENT is read for trigger evaluation.
+ *
+ * SAFETY (04 section 5): every action is fail-open wrapped; the layer can
+ * NEVER deny a call, drop content, or cancel a job because of its own
+ * internal error; killing goes through the registry's kill, gated behind
+ * `hangAction`/config; `failsafes: "off"` is the default even when enabled.
+ */
 import Clock from "@Function/Clock.js";
 import type { Log } from "@Function/Render.js";
 import type State from "@Interface/State.js";

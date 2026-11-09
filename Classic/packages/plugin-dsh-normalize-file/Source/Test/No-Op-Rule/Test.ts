@@ -1,15 +1,26 @@
-// Source/Test/No-Op-Rule/Test.ts - one singular test: the N=0 no-op rule -
-// normalizing an already-normalized file (count 0, changed=false, NO write,
-// NO waterfall, NO emit, NO count line, NO journal record, the file left
-// byte-identical, no before/after in the outcome) and a clean file that is a
-// no-op from the start. The suite's journal arithmetic is cumulative on the
-// factory-level PendingJournal, so this folder replays Run 1b's write as a
-// silent fixture first - every check below is byte-verbatim and the counts
-// reproduce the source suite's values when run standalone OR under the
-// aggregate. Runs standalone (`node Target/Test/No-Op-Rule/Test.js`) AND
-// under the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
-// Unit smoke of @playform/plugin-dsh-normalize-file: the fake ctx + the REAL
-// factory + the REAL normalize-file apply, from the Harness.
+/**
+ * @module Test
+ *
+ * The N=0 no-op rule of @playform/plugin-dsh-normalize-file, covered in one
+ * singular smoke.
+ *
+ * @remarks
+ * The test covers the N=0 no-op rule: normalizing an already-normalized file
+ * (count 0, changed=false, no write, no waterfall, no emit, no count line,
+ * no journal record, the file left byte-identical, no before/after in the
+ * outcome) and a clean file that is a no-op from the start.
+ *
+ * The suite's journal arithmetic is cumulative on the factory-level
+ * PendingJournal, so this folder replays Run 1b's write as a silent fixture
+ * first - every check below is byte-verbatim and the counts reproduce the
+ * source suite's values when run standalone or under the aggregate.
+ *
+ * The file runs standalone (`node Target/Test/No-Op-Rule/Test.js`) and under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it).
+ *
+ * The unit smoke runs the fake ctx + the real factory + the real
+ * normalize-file apply, from the Harness.
+ */
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Make, Rm, Validate, Furnace, Ledger } from "../Harness.js";
 

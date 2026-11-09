@@ -1,10 +1,15 @@
-// Source/Test/Storage-Domain/Test.ts - the storage-domain PRIMARY store and
-// the JSON fallback: the byte-exact domain spec (name/version/layout/tables,
-// NO compatibleVersions), the open, the per-mutation round-trip (Record and
-// Decay write the KV records), the explicit Save (every pattern plus the meta
-// timestamp), the reopen (restart) restoring the registry, the absent-facility
-// fallback still writing and reading the JSON snapshot, and the
-// domain-version failure mode (a loud line, then the JSON fallback).
+/**
+ * @module Test
+ *
+ * Exercises the storage-domain PRIMARY store and the JSON fallback.
+ *
+ * @remarks
+ * Covers the byte-exact domain spec (name/version/layout/tables, NO compatibleVersions), the open,
+ * the per-mutation round-trip (Record and Decay write the KV records), the explicit Save (every
+ * pattern plus the meta timestamp), the reopen (restart) restoring the registry, the absent-facility
+ * fallback still writing and reading the JSON snapshot, and the domain-version failure mode (a loud
+ * line, then the JSON fallback).
+ */
 import assert from "node:assert/strict";
 import * as FileSystem from "node:fs";
 import * as Path from "node:path";
