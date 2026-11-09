@@ -18,7 +18,7 @@
 			"kind": "client",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "fc134cc8be37bc882a447e40f77dccc283c2d55f40d7c341139418990c51581d",
+			"seed": "0865fbd814b2d6b275cb0610653a3cd87a80a768d401b5ded15cf78dc6579f74",
 			"grammar": "quatrefoil",
 			"order": 4,
 			"arms": 4,
@@ -27,8 +27,8 @@
 			"rim": "scallop",
 			"mode": "single",
 			"hash": {
-				"mono": "30794beca061ba60e790f7c37965229fcdeec328d44acd102916921ff01d5208",
-				"colour": "9ef07ba4b43b41ff77fb996615d38104c16de15a2600ca576f41452372ec3efb"
+				"mono": "8c5b8ee4d9931f5f565500d9c8ef7049edf2f490aa9ae07b4203b77de3f4d7f5",
+				"colour": "391f1722ad953ca1147f264933a19815e8083fb9480c83a0787a0892acc1f01a"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/client-dsh-panel-cost.svg",

@@ -1,0 +1,1 @@
+import e from"../Trace.js";var a={id:"adapter-plugin-dsh-cost",bundle:"@playform/plugin-dsh-cost",namespace:"plugin-dsh-cost",title:"cost",order:80,slot:"playform.panel.section",activation:"enabled",traceKinds:e.kinds};export{a as default};

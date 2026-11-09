@@ -35,8 +35,8 @@ const runTest = () => {
   }
   {
     const Run = Make();
-    Check(Count, "S3: the thirteen adapters inject exactly the section child slot", () => {
-      assert.equal((Run.Injects[SECTION] ?? []).length, 13);
+    Check(Count, "S3: the fifteen adapters inject exactly the section child slot", () => {
+      assert.equal((Run.Injects[SECTION] ?? []).length, 15);
       assert.equal(Run.Injects[OVERLAY], void 0);
     });
     const Records = Run.OpenSlot(SECTION);
@@ -66,7 +66,14 @@ const runTest = () => {
           { name: SECTION, id: "adapter-hook-dsh-package-governor", order: 50, locale: NAMESPACE },
           { name: SECTION, id: "adapter-hook-dsh-package-pinner", order: 55, locale: NAMESPACE },
           { name: SECTION, id: "adapter-hook-dsh-cargo-governor", order: 60, locale: NAMESPACE },
-          { name: SECTION, id: "adapter-hook-dsh-ccr", order: 70, locale: NAMESPACE }
+          { name: SECTION, id: "adapter-hook-dsh-ccr", order: 70, locale: NAMESPACE },
+          { name: SECTION, id: "adapter-plugin-dsh-cost", order: 80, locale: NAMESPACE },
+          {
+            name: SECTION,
+            id: "adapter-plugin-dsh-cost-analysis",
+            order: 85,
+            locale: NAMESPACE
+          }
         ]
       );
       for (const Record of Records) {
@@ -94,7 +101,9 @@ const runTest = () => {
           ["@playform/hook-dsh-package-governor", "hook-dsh-package-governor", SECTION],
           ["@playform/hook-dsh-package-pinner", "hook-dsh-package-pinner", SECTION],
           ["@playform/hook-dsh-cargo-governor", "hook-dsh-cargo-governor", SECTION],
-          ["@playform/hook-dsh-ccr", "hook-dsh-ccr", SECTION]
+          ["@playform/hook-dsh-ccr", "hook-dsh-ccr", SECTION],
+          ["@playform/plugin-dsh-cost", "plugin-dsh-cost", SECTION],
+          ["@playform/plugin-dsh-cost-analysis", "plugin-dsh-cost-analysis", SECTION]
         ]
       );
       assert.equal(Faces[0].ports.registry, Run.Provided["playformFamilyPanel"]);
@@ -175,7 +184,9 @@ const runTest = () => {
           "adapter-hook-dsh-package-governor",
           "adapter-hook-dsh-package-pinner",
           "adapter-hook-dsh-cargo-governor",
-          "adapter-hook-dsh-ccr"
+          "adapter-hook-dsh-ccr",
+          "adapter-plugin-dsh-cost",
+          "adapter-plugin-dsh-cost-analysis"
         ]
       );
     });

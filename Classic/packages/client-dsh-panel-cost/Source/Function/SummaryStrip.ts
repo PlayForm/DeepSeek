@@ -6,7 +6,7 @@ import Price from "@Function/Price";
 import Rate from "@Function/Rate";
 import type CostSummary from "@Interface/Summary";
 import type { Translate } from "@Interface/Translate";
-import { Fragment, createElement } from "react";
+import { createElement, Fragment } from "react";
 
 const TopFileLimit = 5;
 
@@ -43,7 +43,9 @@ export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeo
 	const t = Props.t;
 	const Tag =
 		typeof Summary.currency === "string" && Summary.currency !== "" ? Summary.currency : "USD";
-	const Currencies: readonly unknown[] = Array.isArray(Summary.currencies) ? Summary.currencies : [];
+	const Currencies: readonly unknown[] = Array.isArray(Summary.currencies)
+		? Summary.currencies
+		: [];
 	const Raw: readonly TopFile[] = Array.isArray(Summary.topFiles) ? Summary.topFiles : [];
 	const TopFiles = Raw.slice(0, TopFileLimit);
 	const Hit = typeof Summary.cacheHit === "number" ? Summary.cacheHit : null;
@@ -88,7 +90,9 @@ export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeo
 					{ className: "playform-cost-control-label" },
 					Currencies.length > 1
 						? t("money.mixed", {
-								currencies: Currencies.map((Name) => Text(Name)).filter((Name) => Name !== "").join(", "),
+								currencies: Currencies.map((Name) => Text(Name))
+									.filter((Name) => Name !== "")
+									.join(", "),
 							})
 						: t("money.currency", { currency: Tag }),
 				),
@@ -104,7 +108,11 @@ export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeo
 						)
 					: createElement(
 							"button",
-							{ type: "button", className: "playform-cost-button-off", disabled: true },
+							{
+								type: "button",
+								className: "playform-cost-button-off",
+								disabled: true,
+							},
 							t("expand.all"),
 						),
 			),

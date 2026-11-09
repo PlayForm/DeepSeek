@@ -47,8 +47,8 @@ semantics, because the ledger writes no latency, first-token, or tool-duration c
 `GET /api/playform-cost/session?session=<id>&rows=<n>` answers one JSON envelope. `code` is `ok`
 when the ledger was read, `session` when the query carries no session id (the ledger is never
 opened), `unavailable` when the ledger file cannot be opened, and `error` for any other read
-failure. Every failure keeps the same envelope shape, so the browser renders a state line instead
-of a broken table.
+failure. Every failure keeps the same envelope shape, so the browser renders a state line instead of
+a broken table.
 
 ## Tests
 

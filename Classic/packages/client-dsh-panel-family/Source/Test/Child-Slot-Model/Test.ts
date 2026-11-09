@@ -1,6 +1,6 @@
 // Source/Test/Child-Slot-Model/Test.ts - the v4.1 CHILD-SLOT model, proven
 // against the real built client apply: both panels declare their child slots
-// in the registration's `children` table, the thirteen shipped adapters
+// in the registration's `children` table, the fifteen shipped adapters
 // inject the section slot and register one child each with its manifest
 // through the inject face, and the slot-aware registry enforces one adapter
 // per bundle per slot (the documented refusal line), maps a legacy `mount`
@@ -54,8 +54,8 @@ export const runTest = (): number => {
 	// declares, with the manifest + ports carried through the inject face.
 	{
 		const Run = Make();
-		Check(Count, "S3: the thirteen adapters inject exactly the section child slot", () => {
-			assert.equal((Run.Injects[SECTION] ?? []).length, 13);
+		Check(Count, "S3: the fifteen adapters inject exactly the section child slot", () => {
+			assert.equal((Run.Injects[SECTION] ?? []).length, 15);
 			assert.equal(Run.Injects[OVERLAY], undefined);
 		});
 		const Records = Run.OpenSlot(SECTION);
@@ -86,6 +86,13 @@ export const runTest = (): number => {
 					{ name: SECTION, id: "adapter-hook-dsh-package-pinner", order: 55, locale: NAMESPACE },
 					{ name: SECTION, id: "adapter-hook-dsh-cargo-governor", order: 60, locale: NAMESPACE },
 					{ name: SECTION, id: "adapter-hook-dsh-ccr", order: 70, locale: NAMESPACE },
+					{ name: SECTION, id: "adapter-plugin-dsh-cost", order: 80, locale: NAMESPACE },
+					{
+						name: SECTION,
+						id: "adapter-plugin-dsh-cost-analysis",
+						order: 85,
+						locale: NAMESPACE,
+					},
 				],
 			);
 			for (const Record of Records) {
@@ -114,6 +121,8 @@ export const runTest = (): number => {
 					["@playform/hook-dsh-package-pinner", "hook-dsh-package-pinner", SECTION],
 					["@playform/hook-dsh-cargo-governor", "hook-dsh-cargo-governor", SECTION],
 					["@playform/hook-dsh-ccr", "hook-dsh-ccr", SECTION],
+					["@playform/plugin-dsh-cost", "plugin-dsh-cost", SECTION],
+					["@playform/plugin-dsh-cost-analysis", "plugin-dsh-cost-analysis", SECTION],
 				],
 			);
 			assert.equal(Faces[0].ports.registry, Run.Provided["playformFamilyPanel"]);
@@ -201,6 +210,8 @@ export const runTest = (): number => {
 					"adapter-hook-dsh-package-pinner",
 					"adapter-hook-dsh-cargo-governor",
 					"adapter-hook-dsh-ccr",
+					"adapter-plugin-dsh-cost",
+					"adapter-plugin-dsh-cost-analysis",
 				],
 			);
 		});

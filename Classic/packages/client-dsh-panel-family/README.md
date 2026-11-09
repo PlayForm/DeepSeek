@@ -7,7 +7,7 @@
 This package is the central panel package of the UI family, and it uses the **v4.1 child-slot
 model** (Documentation/Plans/Completion-Spec/04-CLIENT.md, Documentation/Plans/UI-FAMILY-V4-1.md).
 
-It owns the panel contract, the slot-aware registry, the adapter contract, and the thirteen
+It owns the panel contract, the slot-aware registry, the adapter contract, and the fifteen
 per-bundle adapters.
 
 It renders what the adapters contribute and nothing else.
@@ -205,7 +205,7 @@ the Test build and the harness selfcheck.
 | `Registry-And-Sections` | 7 PASS  | the slot-aware registry body (add/replace/order/subscribe/open/disposer)                                                                                                                                                                                                                                     |
 | `Child-Slot-Model`      | 10 PASS | both panels' declarations, the adapters' child registrations and inject faces, the duplicate refusal, the mount-to-slot map, the slot filter, the ownership release, the renderSlot wiring                                                                                                                   |
 | `Reference-Adapter`     | 14 PASS | the static/live status, the tail and the ring seed, the activation override, the schema-derived form, the secret field, the volatile write, the plain write and its audit line, the two refusals, the bridge resolution, the roster                                                                          |
-| `All-Adapters`          | 9 PASS  | the thirteen-manifest roster (slot/bundle/order/activation/trace vocabulary), the thirteen adapter effects and section registrations, each form's representative volatile and plain fields, the two write routes on the new adapters, and the built bundle executed through a fake `window.__ModuleLoader__` |
+| `All-Adapters`          | 9 PASS  | the fifteen-manifest roster (slot/bundle/order/activation/trace vocabulary), the fifteen adapter effects and section registrations, each form's representative volatile and plain fields, the two write routes on the new adapters, and the built bundle executed through a fake `window.__ModuleLoader__` |
 
 ## What it is not
 

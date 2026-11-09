@@ -50,12 +50,12 @@ through a fake `window.__ModuleLoader__` and registers the same fifteen adapters
   through a fake `window.__ModuleLoader__`, with one row that carries the
   package id, a factory whose exports carry the same `inject`/`apply` as the
   ESM client half, and those exports applied to a fake client ctx register the
-  same thirteen adapter effects, because the bundle is the servable surface and
+  same fifteen adapter effects, because the bundle is the servable surface and
   must register the full roster too.
 
 ## Fixtures
 
-The shared Harness supplies the real built `@Function/*` modules and the thirteen
+The shared Harness supplies the real built `@Function/*` modules and the fifteen
 real `@Variable/Reference/*` manifests.
 
 The schemas are real Schemastery instances that mirror the `Variable/Config.ts` shape
@@ -67,7 +67,7 @@ capture every write and every registration.
 ## Expected strings (byte-exact)
 
 `client-dsh-panel-family: plain-field write hook-dsh-package-governor strict`,
-`window.__ModuleLoader__.load({`, the thirteen
+`window.__ModuleLoader__.load({`, the fifteen
 `panel: adapter adapter-*` effect labels.
 
 ## Expected count

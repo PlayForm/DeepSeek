@@ -7,12 +7,12 @@ import CountShort from "@Function/CountShort";
 import Price from "@Function/Price";
 import Rate from "@Function/Rate";
 import Stamp from "@Function/Stamp";
-import Dash from "@Variable/Dash";
 import type CostBuckets from "@Interface/Buckets";
 import type CostFile from "@Interface/File";
 import type CostStep from "@Interface/Step";
 import type CostTokens from "@Interface/Tokens";
 import type { Translate } from "@Interface/Translate";
+import Dash from "@Variable/Dash";
 import { createElement } from "react";
 
 const CacheMissThreshold = 0.5;

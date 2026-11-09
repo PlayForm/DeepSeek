@@ -14,7 +14,7 @@ bundle per slot.
 - S2: the overlay panel registration (`shell.overlay`, id
   `playform-family-overlay`) declares `playform.panel.overlay` as a `list`/`root`
   child slot, which is the second panel.
-- S3: the thirteen shipped adapters inject exactly `playform.panel.section`, and
+- S3: the fifteen shipped adapters inject exactly `playform.panel.section`, and
   nothing injects the overlay slot.
 - S4: each adapter registers one child with its exact identity: the normalize
   adapter (order 10), the tool-coach adapter (order 30), the suggester adapter

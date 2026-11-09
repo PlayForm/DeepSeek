@@ -251,7 +251,9 @@ if (InvokedDirectly) {
       "panel: adapter adapter-hook-dsh-package-governor",
       "panel: adapter adapter-hook-dsh-package-pinner",
       "panel: adapter adapter-hook-dsh-cargo-governor",
-      "panel: adapter adapter-hook-dsh-ccr"
+      "panel: adapter adapter-hook-dsh-ccr",
+      "panel: adapter adapter-plugin-dsh-cost",
+      "panel: adapter adapter-plugin-dsh-cost-analysis"
     ]);
     assert.equal(Run.Locale.length, 1);
     assert.deepEqual(Object.keys(Run.Injects), [

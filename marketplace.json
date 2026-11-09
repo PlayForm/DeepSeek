@@ -84,11 +84,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794198609,
+					"publishTimestamp": 1794201456,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "7ca3dea463c582a241e9385bf1759d855ce82c3d",
+						"commit": "b9036edaeba43290ad6715323ab43f3cbb9edfc9",
 						"path": "Classic/packages/client-dsh-panel-cost"
 					},
 					"engines": {}
@@ -2872,11 +2872,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794198609,
+					"publishTimestamp": 1794199152,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "7ca3dea463c582a241e9385bf1759d855ce82c3d",
+						"commit": "374e322dd782527a9225651f88c3fbbb0725e9a5",
 						"path": "EffectTS/packages/ets-plugin-dsh-pass-on"
 					},
 					"engines": {}

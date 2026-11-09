@@ -5,11 +5,11 @@ import Cells from "@Function/Cells";
 import CountShort from "@Function/CountShort";
 import Price from "@Function/Price";
 import Rate from "@Function/Rate";
-import Dash from "@Variable/Dash";
 import type CostBuckets from "@Interface/Buckets";
 import type CostSummary from "@Interface/Summary";
 import type CostTokens from "@Interface/Tokens";
 import type { Translate } from "@Interface/Translate";
+import Dash from "@Variable/Dash";
 import { createElement } from "react";
 
 type TotalsRowProps = {
@@ -116,7 +116,12 @@ export default function TotalsRow(Props: TotalsRowProps): ReturnType<typeof crea
 		),
 		createElement("td", { className: Metric }),
 		TokenCell(Metric, typeof Tokens.total === "number" ? Tokens.total : 0),
-		CacheCell(Metric, Tokens, typeof Summary.cacheHit === "number" ? Summary.cacheHit : null, t),
+		CacheCell(
+			Metric,
+			Tokens,
+			typeof Summary.cacheHit === "number" ? Summary.cacheHit : null,
+			t,
+		),
 		Cells.Money({ Cell: Metric, Value: Cost.cacheRead, Currency: Tag }),
 		Cells.Money({ Cell: Metric, Value: Cost.input, Currency: Tag }),
 		Cells.Money({ Cell: Metric, Value: Cost.output, Currency: Tag }),

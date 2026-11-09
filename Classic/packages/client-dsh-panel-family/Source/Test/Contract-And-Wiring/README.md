@@ -18,8 +18,8 @@ built `Target/Client.js` and the fake client context.
   `ctx.reflect.provide` and carries the six contract methods.
 - C6: the effect labels are byte-exact and in order: `panel: dictionaries`,
   `panel: trace source`, `panel: family tab`, `panel: overlay mount`, and the
-  thirteen adapter labels `panel: adapter <id>`, with the three references
-  first and then the ten that copied their pattern.
+  fifteen adapter labels `panel: adapter <id>`, with the three references
+  first and then the twelve that copied their pattern.
 - C7: the locale registration is captured once with the byte-exact namespace
   `client-dsh-panel-family` and both dictionaries (en and zh), byte-identical
   to `Variable/Locale-*.json`, which holds the strings of the panel plus the

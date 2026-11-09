@@ -709,6 +709,30 @@ var Ccr_default = {
   traceKinds: Trace_default.kinds
 };
 
+// Source/Variable/Reference/Cost.ts
+var Cost_default = {
+  id: "adapter-plugin-dsh-cost",
+  bundle: "@playform/plugin-dsh-cost",
+  namespace: "plugin-dsh-cost",
+  title: "cost",
+  order: 80,
+  slot: "playform.panel.section",
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
+// Source/Variable/Reference/CostAnalysis.ts
+var CostAnalysis_default = {
+  id: "adapter-plugin-dsh-cost-analysis",
+  bundle: "@playform/plugin-dsh-cost-analysis",
+  namespace: "plugin-dsh-cost-analysis",
+  title: "cost-analysis",
+  order: 85,
+  slot: "playform.panel.section",
+  activation: "enabled",
+  traceKinds: Trace_default.kinds
+};
+
 // Source/Variable/Reference/Ellipsis.ts
 var Ellipsis_default = {
   id: "adapter-hook-dsh-normalize-ellipsis",
@@ -862,7 +886,9 @@ function Reference(ctx, Ports) {
     PackageGovernor_default,
     PackagePinner_default,
     CargoGovernor_default,
-    Ccr_default
+    Ccr_default,
+    Cost_default,
+    CostAnalysis_default
   ]) {
     Adapter(ctx, Ports, Section2);
   }

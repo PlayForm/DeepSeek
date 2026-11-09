@@ -23,13 +23,14 @@ interface HTMLElement {
 interface HTMLDivElement {
 	scrollTop: number;
 	scrollHeight: number;
-	querySelectorAll(selectors: string): { forEach(callback: (element: HTMLElement) => void): void };
+	querySelectorAll(selectors: string): {
+		forEach(callback: (element: HTMLElement) => void): void;
+	};
 }
 
 declare const IntersectionObserver: {
-	new (
-		callback: (
-			entries: Array<{ isIntersecting: boolean; target: HTMLElement }>,
-		) => void,
-	): { observe(target: unknown): void; disconnect(): void };
+	new (callback: (entries: Array<{ isIntersecting: boolean; target: HTMLElement }>) => void): {
+		observe(target: unknown): void;
+		disconnect(): void;
+	};
 };

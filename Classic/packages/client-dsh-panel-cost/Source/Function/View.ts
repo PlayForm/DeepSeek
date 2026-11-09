@@ -12,12 +12,12 @@ import SummaryStrip from "@Function/SummaryStrip";
 import Table from "@Function/Table";
 import TotalsRow from "@Function/TotalsRow";
 import TurnRow from "@Function/TurnRow";
-import EN_DICTIONARY from "@Variable/Locale-en.json";
 import type CostResponse from "@Interface/Response";
 import type CostSnapshot from "@Interface/Snapshot";
-import type CostTurn from "@Interface/Turn";
 import type { Translate } from "@Interface/Translate";
+import type CostTurn from "@Interface/Turn";
 import type ViewProps from "@Interface/View";
+import EN_DICTIONARY from "@Variable/Locale-en.json";
 import { createElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const DefaultRows = 200;
@@ -135,7 +135,9 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 					return;
 				}
 				switch (true) {
-					case Previous !== null && Calls.length === Previous && Response.truncated === true:
+					case Previous !== null &&
+						Calls.length === Previous &&
+						Response.truncated === true:
 						SetOlder("failed");
 						break;
 					default:
@@ -253,7 +255,8 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 
 	const LoadOlder = useCallback(() => {
 		const Scroll = ScrollRef.current;
-		if (Scroll !== null) Pending.current = { Height: Scroll.scrollHeight, Top: Scroll.scrollTop };
+		if (Scroll !== null)
+			Pending.current = { Height: Scroll.scrollHeight, Top: Scroll.scrollTop };
 		Growing.current = true;
 		SetOlder("loading");
 		SetRows((Current) => Math.min(MaxRows, Current * LoadOlderFactor));
@@ -267,7 +270,8 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 	const TurnScale = useMemo(() => {
 		if (Snapshot === null) return 0;
 		const Seen = Visible.current;
-		const Source = Seen.size > 0 ? Snapshot.turns.filter((Turn) => Seen.has(Turn.turn)) : Snapshot.turns;
+		const Source =
+			Seen.size > 0 ? Snapshot.turns.filter((Turn) => Seen.has(Turn.turn)) : Snapshot.turns;
 		let Top = 0;
 		for (const Turn of Source) {
 			const Money = Turn.cost?.total;
@@ -315,7 +319,9 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 										: "playform-cost-chip",
 									onClick: () => ToggleAllSteps(Turn.turn),
 								},
-								All ? t("steps.all", { total: Total }) : t("steps.tail", { limit: StepLimit }),
+								All
+									? t("steps.all", { total: Total })
+									: t("steps.tail", { limit: StepLimit }),
 							),
 						),
 					),
@@ -430,8 +436,7 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 		default:
 			break;
 	}
-	if (Phase === "loading" || Snapshot === null)
-		return Shell([Line(t("loading"), true)], null);
+	if (Phase === "loading" || Snapshot === null) return Shell([Line(t("loading"), true)], null);
 	if (Snapshot.turns.length === 0)
 		return Shell(
 			[Line(t("empty"), false)],

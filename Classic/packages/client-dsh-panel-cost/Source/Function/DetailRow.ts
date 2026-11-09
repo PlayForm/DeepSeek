@@ -72,7 +72,10 @@ const Block = (
 		Body.push(
 			createElement(
 				"span",
-				{ key: "lines", className: Added > 0 ? "playform-cost-added" : "playform-cost-removed" },
+				{
+					key: "lines",
+					className: Added > 0 ? "playform-cost-added" : "playform-cost-removed",
+				},
 				t("detail.lines", { added: Count(Added), removed: Count(Removed) }),
 			),
 		);
@@ -113,13 +116,18 @@ const Block = (
 				{ className: "playform-cost-block-meta" },
 				t("detail.allocation", {
 					direct: Price(typeof File.direct === "number" ? File.direct : 0, Currency),
-					amortized: Price(typeof File.amortized === "number" ? File.amortized : 0, Currency),
+					amortized: Price(
+						typeof File.amortized === "number" ? File.amortized : 0,
+						Currency,
+					),
 				}),
 			),
 			createElement(
 				"span",
 				{ className: "playform-cost-block-meta" },
-				t("bar.total", { value: Price(typeof File.total === "number" ? File.total : 0, Currency) }),
+				t("bar.total", {
+					value: Price(typeof File.total === "number" ? File.total : 0, Currency),
+				}),
 			),
 			Touched
 				? createElement(
@@ -134,16 +142,27 @@ const Block = (
 			Kind !== ""
 				? createElement(
 						"span",
-						{ className: "playform-cost-pill", title: t("detail.kind", { kind: Kind }) },
+						{
+							className: "playform-cost-pill",
+							title: t("detail.kind", { kind: Kind }),
+						},
 						Kind,
 					)
 				: null,
 			Tool !== ""
-				? createElement("span", { className: "playform-cost-block-meta" }, t("detail.tool", { tool: Tool }))
+				? createElement(
+						"span",
+						{ className: "playform-cost-block-meta" },
+						t("detail.tool", { tool: Tool }),
+					)
 				: null,
 		),
 		Body.length === 0
-			? createElement("div", { className: "playform-cost-block-empty" }, t("detail.allocationOnly"))
+			? createElement(
+					"div",
+					{ className: "playform-cost-block-empty" },
+					t("detail.allocationOnly"),
+				)
 			: createElement("div", { className: "playform-cost-block-body" }, Body),
 	);
 };
@@ -202,8 +221,14 @@ export default function DetailRow(Props: DetailRowProps): ReturnType<typeof crea
 					createElement(
 						"span",
 						{ className: "playform-cost-bucket", key: Item.Field },
-						createElement("span", { className: `playform-cost-bucket-dot ${Item.Dot}` }),
-						createElement("span", { className: "playform-cost-bucket-label" }, t(Item.Label)),
+						createElement("span", {
+							className: `playform-cost-bucket-dot ${Item.Dot}`,
+						}),
+						createElement(
+							"span",
+							{ className: "playform-cost-bucket-label" },
+							t(Item.Label),
+						),
 						createElement(
 							"span",
 							{ className: "playform-cost-bucket-value" },
@@ -213,7 +238,11 @@ export default function DetailRow(Props: DetailRowProps): ReturnType<typeof crea
 				),
 			),
 			Files.length === 0
-				? createElement("div", { className: "playform-cost-block-empty" }, t("detail.empty"))
+				? createElement(
+						"div",
+						{ className: "playform-cost-block-empty" },
+						t("detail.empty"),
+					)
 				: Shown.map((File, Index) => Block(File, Index, Tag, t)),
 			Files.length > DetailFileLimit
 				? createElement(

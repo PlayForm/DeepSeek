@@ -6,11 +6,11 @@ import CountShort from "@Function/CountShort";
 import Price from "@Function/Price";
 import Rate from "@Function/Rate";
 import Stamp from "@Function/Stamp";
-import Dash from "@Variable/Dash";
 import type CostBuckets from "@Interface/Buckets";
 import type CostTokens from "@Interface/Tokens";
-import type CostTurn from "@Interface/Turn";
 import type { Translate } from "@Interface/Translate";
+import type CostTurn from "@Interface/Turn";
+import Dash from "@Variable/Dash";
 import { createElement } from "react";
 
 const CacheMissThreshold = 0.5;

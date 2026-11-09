@@ -8,9 +8,9 @@ import CountShort from "@Function/CountShort";
 import Lines from "@Function/Lines";
 import Price from "@Function/Price";
 import Share from "@Function/Share";
-import Dash from "@Variable/Dash";
 import type CostBuckets from "@Interface/Buckets";
 import type { Translate } from "@Interface/Translate";
+import Dash from "@Variable/Dash";
 import { createElement } from "react";
 
 const FilePillLimit = 3;
@@ -226,9 +226,15 @@ const Files = (Props: FilesCellProps): ReturnType<typeof createElement> => {
 									className: "playform-cost-pill",
 									...(Pill.Lines === null || Pill.Lines === 0
 										? {}
-										: { title: Props.t("files.lines", { lines: Lines(Pill.Lines) }) }),
+										: {
+												title: Props.t("files.lines", {
+													lines: Lines(Pill.Lines),
+												}),
+											}),
 								},
-								createElement("span", { className: `playform-cost-dot ${ToneClass(Pill.Tone)}` }),
+								createElement("span", {
+									className: `playform-cost-dot ${ToneClass(Pill.Tone)}`,
+								}),
 								Pill.Name,
 							),
 						),
@@ -246,7 +252,9 @@ const Files = (Props: FilesCellProps): ReturnType<typeof createElement> => {
 										className: "playform-cost-pill playform-cost-pill-muted",
 										title: Props.t("files.saving.title"),
 									},
-									Props.t("files.saving", { value: Price(Props.Saving, Props.Currency) }),
+									Props.t("files.saving", {
+										value: Price(Props.Saving, Props.Currency),
+									}),
 								)
 							: null,
 					),
@@ -275,7 +283,11 @@ const Money = (Props: MoneyCellProps): ReturnType<typeof createElement> =>
 			className: Props.Cell,
 			...(Props.Title === undefined ? {} : { title: Props.Title }),
 		},
-		createElement("span", { className: "playform-cost-money" }, Price(Props.Value, Props.Currency)),
+		createElement(
+			"span",
+			{ className: "playform-cost-money" },
+			Price(Props.Value, Props.Currency),
+		),
 	);
 
 const Alloc = (Props: AllocCellProps): ReturnType<typeof createElement> =>
@@ -301,7 +313,11 @@ const Alloc = (Props: AllocCellProps): ReturnType<typeof createElement> =>
 			: Dash,
 	);
 
-const Segment = (Key: string, Class: string, Value: number): ReturnType<typeof createElement> | null =>
+const Segment = (
+	Key: string,
+	Class: string,
+	Value: number,
+): ReturnType<typeof createElement> | null =>
 	Value > 0
 		? createElement("span", {
 				key: Key,

@@ -159,7 +159,7 @@ The body does six things:
    and rendering it through `renderSlot`.
 5. `ctx.effect` - the `shell.overlay` panel `playform-family-overlay`, declaring
    `playform.panel.overlay` and rendering it through `renderSlot`.
-6. `ctx.effect` per shipped adapter (thirteen) - `panel: adapter <id>` (the registry entry and the
+6. `ctx.effect` per shipped adapter (fifteen) - `panel: adapter <id>` (the registry entry and the
    child registration).
 
 Everything unwinds with the plugin.
@@ -186,7 +186,7 @@ client-dsh-panel-family: plain-field secret refused for <namespace>
   harness, and type-checks the Test tree.
 - The five smoke folders hold the counts: `Contract-And-Wiring` 13 PASS, `Registry-And-Sections` 7
   PASS, `Child-Slot-Model` 10 PASS, `Reference-Adapter` 14 PASS, and `All-Adapters` 9 PASS, which
-  covers the thirteen-manifest roster, the forms, the two write routes, and the built bundle
+  covers the fifteen-manifest roster, the forms, the two write routes, and the built bundle
   executed through a fake `window.__ModuleLoader__`.
 
 ## 11. The EffectTS twin
