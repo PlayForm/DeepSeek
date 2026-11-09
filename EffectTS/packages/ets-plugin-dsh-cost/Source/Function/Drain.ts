@@ -6,23 +6,49 @@
 // price row in force at the call's own time, with the cache split's
 // CacheSaving), the Touch rows per tool/call (written the moment their Call
 // row exists, pending until then, each with its Stage and ReadBeforeEdit
-// derived from the file's own prior touches in the session), the ContextMass
-// rows from the surface replay (which now splits the cached prefix from the
-// uncached remainder), the Allocation rows from the attribution model
+// derived from the file's own prior touches in the session; a search's
+// argument names a scope, so its pending set stays empty until the tool/result
+// arrives and its discovered paths become one read touch each), the
+// ContextMass rows from the surface replay (which now splits the cached prefix
+// from the uncached remainder), the Allocation rows from the attribution model
 // (allocated when the step ends, or at the end of the batch as the safety
 // net), the Verdict row per (session, file) when the session ends, and the
 // session Cursor advanced to the highest sequence folded. The call's own
 // pricing dimensions (section 17.1) - Mode, Region and the resolved tier -
-// are written on the Call row, and the cache split's CacheSaving is
-// measured against the modifier-adjusted rates (section 17.2). The v4 grain
-// rides the same fold: the Edit rows per touch (section 17.3), read from the
-// tool call's own arguments, and the telemetry columns on the Call row
-// (section 17.4), read from the batch's records up to each message. Every
-// insert
-// is INSERT OR IGNORE against the DDL's unique keys (the Verdict is
-// REPLACE), so draining the same events twice writes the same rows and no
-// duplicates. The drain never throws into the parallel dispatch: one failed
-// batch rolls back whole and logs one line.
+// are written on the Call row, and the cache split's CacheSaving is measured
+// against the modifier-adjusted rates (section 17.2). The v4 grain rides the
+// same fold: the Edit rows per touch (section 17.3), read from the tool call's
+// own arguments, and the telemetry columns on the Call row (section 17.4),
+// read from the batch's records up to each message. The file versions ride it
+// too (E7, the research's section 4): a read result's rendered text becomes
+// the FileVersion row its read touch binds to, a write's own content becomes
+// the after version row while its touch binds to the version the file held
+// before it, and every touch without confirmable content - a patch, a batch
+// operation, a several-file write, a failed or unreadable result - keeps a
+// NULL VersionId instead of a guess. The hash is the SHA-256 of the exact
+// content, and a row already recorded for the same bytes is reused, so an
+// unchanged file never accumulates versions and a replay never duplicates one.
+// That version evidence is also the revert signal (B6b, the research's section
+// 5): a mutating touch whose written content resolves to a version row
+// recorded earlier than the touch - and not to the version the file held just
+// now - is staged as a revert, because the file went back to an earlier
+// content hash, and its file's verdict records "reverted" rather than
+// "changed"; a touch with no before version or no confirmable after content
+// keeps the signal false instead of guessing. Every insert is INSERT OR IGNORE
+// against the DDL's unique keys (the Verdict is REPLACE), so draining the same
+// events twice writes the same rows and no duplicates. The drain never throws
+// into the parallel dispatch: one failed batch rolls back whole, restores its
+// session's in-memory replay state, logs one line and reports false - the
+// flush handler owns the acknowledgement and decides the retry, so a batch
+// that never committed stays queued. The fold also runs in a replay-only mode
+// (E2, A2 section 1.4): it walks the events exactly as the booking fold does -
+// the surface buffer, the pending touch sets, the awaiting calls, the per-file
+// histories, the per-file versions, the per-file restoration flags, the read
+// targets and the folded set all advance - but it writes no row, advances no
+// cursor and never touches the capture queue, so a partially processed session
+// can rebuild the state a continuous run would hold before it books the events
+// past its cursor.
+import { createHash } from "node:crypto";
 import { basename } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 
@@ -37,7 +63,7 @@ import Mass from "./Mass.js";
 import Price from "./Price.js";
 import StageOf from "./Stage.js";
 import Telemetry from "./Telemetry.js";
-import Touch from "./Touch.js";
+import Touch, { Content, Rendered, Search } from "./Touch.js";
 
 type EventRecord = {
 	type?: unknown;
@@ -60,15 +86,27 @@ type Costed = {
 // One parsed file interaction, exactly what the arguments parser returns.
 type TouchRow = { Path: string; Kind: "read" | "write" | "edit" | "delete" | "search" };
 
-// One tool/call's touches, waiting for the Call row they attach to.
+// One tool/call's touches, waiting for the Call row they attach to. A
+// search-family call's set is deferred: it stays empty until the tool/result
+// that completes the call supplies the discovered files, so Resolved marks
+// whether the set is final and CallId pairs the call with its result.
 type PendingCall = {
 	CallKey: string;
+	CallId: string;
 	Tool: string;
 	Arguments: string;
 	Seq: number;
 	At: number;
+	Resolved: boolean;
 	Touched: readonly TouchRow[];
 };
+
+// One read call waiting for its result (E7): the file the call's arguments
+// named and the key its touch row carries, so the result's rendered text binds
+// to the exact file that produced it - the result names the call, never the
+// file. Only a call that reads exactly one file is remembered, because one
+// result body is one file's content.
+type Reading = { CallKey: string; Path: string };
 
 // One priced call, waiting for the step's touches to be complete.
 type AwaitedCall = {
@@ -84,10 +122,65 @@ type AwaitedCall = {
 	CachedSurface: number;
 };
 
+// One session's in-memory replay state, copied before a fold and put back
+// when the transaction rolls back: the surface buffer every later call's mass
+// is replayed over, the pending touch sets, the awaiting calls, the per-file
+// ordered touch kinds, the per-file version each fold has observed (so a
+// later touch binds to the version the file actually held), the restoration
+// flag of each file's latest mutating touch (so the session's verdict is
+// written from the same evidence its stages were), the read calls still
+// waiting for their result, and the calls this drain has already folded.
+type ReplayState = {
+	Surfaces: unknown[];
+	Histories: Map<string, string[]>;
+	Pending: Map<string, PendingCall[]>;
+	Awaiting: Map<string, AwaitedCall>;
+	Versions: Map<string, number>;
+	Restorations: Map<string, boolean>;
+	Readings: Map<string, Reading>;
+	Folded: number[];
+};
+
+// The fold's mode: Replay rebuilds one session's in-memory replay state from
+// an already-booked prefix and books nothing - no row, no cursor advance, no
+// capture-queue acknowledgement. Every caller that omits it books, which is
+// the live flush and the whole of the backfill's booking pass.
+type FoldMode = { Replay?: boolean };
+
 // The mutating kinds: the touches whose stage the classifier reads as an
 // edit (section 16.1) and whose presence makes a file's verdict "changed".
 const WriteKind = (Kind: string): boolean =>
 	Kind === "write" || Kind === "edit" || Kind === "delete" || Kind === "move";
+
+// The call a tool/result event belongs to: the tool-role message's own source
+// callId (the shape the live log records), else its toolCallId, else the
+// event's own callId - "" when the record carries none.
+const OriginOf = (Data: Record<string, unknown>): string => {
+	const Message = Data["message"];
+	const Named =
+		Message !== null && typeof Message === "object"
+			? (Message as Record<string, unknown>)
+			: undefined;
+	const Source = Named?.["source"];
+	const Held =
+		Source !== null && typeof Source === "object"
+			? (Source as Record<string, unknown>)["callId"]
+			: undefined;
+	const Candidate = Held ?? Named?.["toolCallId"] ?? Data["callId"];
+	return typeof Candidate === "string" ? Candidate : "";
+};
+
+// Whether a tool result reports a failure: the log's own error code on the
+// result record (the field the telemetry reads). A failed read returns an
+// error message, never the file's text, so it is never a version.
+const Failed = (Data: Record<string, unknown>): boolean => {
+	const Failure = Data["error"];
+	if (Failure === null || typeof Failure !== "object") {
+		return false;
+	}
+	const Code = (Failure as Record<string, unknown>)["code"];
+	return typeof Code === "string" && Code.length > 0;
+};
 
 // The cache split's saving (section 2.2 and section 11's ring C): the reads
 // the cache made cheaper, minus the cache-write premium when the provider
@@ -106,17 +199,34 @@ const Saving = (
 	return Read - Write;
 };
 
+// One file version's content evidence (E7, the research's section 4): the
+// SHA-256 of the exact content the touch saw, its UTF-8 encoded byte length -
+// never a JavaScript string length, which undercounts every non-ASCII
+// character - and its line count, counted the edit grain's way (a non-empty
+// body is its newline count plus one, so one line reads as one line and an
+// empty body as none). The digest is content-addressed: the same bytes always
+// produce the same hash, so a version row is reusable rather than repeatable.
+const Fingerprint = (Body: string): { Hash: string; Bytes: number; Lines: number } => ({
+	Hash: createHash("sha256").update(Body, "utf8").digest("hex"),
+	Bytes: Buffer.byteLength(Body, "utf8"),
+	Lines: Body.length > 0 ? Body.split("\n").length : 0,
+});
+
 // One file's verdict at session end (section 14): a file whose last
 // write-kind touch is a revert is "reverted", a file with any write-kind
-// touch is "changed", a file with only read-kind touches is "read".
-const VerdictOf = (Kinds: readonly string[]): string => {
+// touch is "changed", a file with only read-kind touches is "read". The
+// restoration flag is the same evidence the touch's stage was classified
+// with (B6b), so a session that returns a file to an earlier content hash
+// records "reverted" rather than "changed" - and a file with no version
+// evidence keeps "changed", never a guess.
+const VerdictOf = (Kinds: readonly string[], Restored: boolean): string => {
 	const Last = Kinds.reduce((Found, Kind, Index) => (WriteKind(Kind) ? Index : Found), -1);
 	switch (true) {
 		case Last < 0:
 			return "read";
 		default: {
 			const Current = Kinds[Last] ?? "";
-			const Staged = StageOf(Kinds.slice(0, Last), Current, false);
+			const Staged = StageOf(Kinds.slice(0, Last), Current, Restored);
 			return Staged === "revert" ? "reverted" : "changed";
 		}
 	}
@@ -201,9 +311,26 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 	const InsertFile = Database.prepare(
 		"INSERT OR IGNORE INTO File (ProjectId, Path, FirstSeenAt) VALUES (?, ?, ?)",
 	);
+	const SelectVersion = Database.prepare(
+		"SELECT VersionId FROM FileVersion WHERE FileId = ? AND Hash = ?",
+	);
+	const SelectVersionObserved = Database.prepare(
+		"SELECT ObservedAt FROM FileVersion WHERE VersionId = ?",
+	);
+	const SelectLatestVersion = Database.prepare(
+		"SELECT VersionId FROM FileVersion WHERE FileId = ? AND ObservedAt <= ? " +
+			"ORDER BY ObservedAt DESC, VersionId DESC LIMIT 1",
+	);
+	const InsertVersion = Database.prepare(
+		"INSERT INTO FileVersion (FileId, Hash, Bytes, Lines, ObservedAt) VALUES (?, ?, ?, ?, ?)",
+	);
+	const BindVersion = Database.prepare(
+		"UPDATE Touch SET VersionId = ? WHERE SessionId = ? AND CallKey = ? AND FileId = ? " +
+			"AND VersionId IS NULL",
+	);
 	const InsertTouch = Database.prepare(
-		"INSERT OR IGNORE INTO Touch (CallId, SessionId, Turn, Step, CallKey, Tool, FileId, Kind, Stage, ReadBeforeEdit, Seq, At) " +
-			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+		"INSERT OR IGNORE INTO Touch (CallId, SessionId, Turn, Step, CallKey, Tool, FileId, VersionId, Kind, Stage, ReadBeforeEdit, Seq, At) " +
+			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 	);
 	const SelectTouchId = Database.prepare(
 		"SELECT TouchId FROM Touch WHERE SessionId = ? AND CallKey = ? AND FileId = ?",
@@ -231,14 +358,61 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 
 	// The per-session replay state, held across flushes: the surface buffer
 	// every later call's mass is replayed over (bounded by the session's own
-	// length), the pending touch sets, the awaiting calls, and the per-file
+	// length), the pending touch sets, the awaiting calls, the per-file
 	// ordered touch kinds every later touch's stage and the session's
-	// verdicts read (section 16.1).
+	// verdicts read (section 16.1), the version each fold has observed for a
+	// file (so a touch binds to what the file actually held), the
+	// restoration flag each file's latest mutating touch set (so the verdict
+	// reads the same evidence the stage did), and the read calls still
+	// waiting for the result that carries their text.
 	const Surfaces = new Map<string, unknown[]>();
 	const Pending = new Map<string, Map<string, PendingCall[]>>();
 	const Awaiting = new Map<string, Map<string, AwaitedCall>>();
 	const Histories = new Map<string, Map<string, string[]>>();
+	const Versions = new Map<string, Map<string, number>>();
+	const Restorations = new Map<string, Map<string, boolean>>();
+	const Readings = new Map<string, Map<string, Reading>>();
 	const Folded = new Set<number>();
+
+	// The replay state a failed fold must not keep: the transaction rolled the
+	// ledger back, so the in-memory buffers roll back with it and the retry
+	// sees exactly the state the failed attempt saw. A kept duplicate would
+	// double the surface mass, replay the touch kinds twice and mark calls
+	// folded that the rollback erased - the insert guards would then skip the
+	// very rows the retry must write.
+	const Snapshot = (SessionId: string): ReplayState => ({
+		Surfaces: [...(Surfaces.get(SessionId) ?? [])],
+		Histories: new Map(
+			Array.from(
+				Histories.get(SessionId) ?? new Map<string, string[]>(),
+				([Path, Kinds]) => [Path, [...Kinds]] as const,
+			),
+		),
+		Pending: new Map(
+			Array.from(
+				Pending.get(SessionId) ?? new Map<string, PendingCall[]>(),
+				([Key, Queued]) => [Key, [...Queued]] as const,
+			),
+		),
+		Awaiting: new Map(Awaiting.get(SessionId) ?? new Map<string, AwaitedCall>()),
+		Versions: new Map(Versions.get(SessionId) ?? new Map<string, number>()),
+		Restorations: new Map(Restorations.get(SessionId) ?? new Map<string, boolean>()),
+		Readings: new Map(Readings.get(SessionId) ?? new Map<string, Reading>()),
+		Folded: [...Folded],
+	});
+	const Restore = (SessionId: string, Held: ReplayState): void => {
+		Surfaces.set(SessionId, Held.Surfaces);
+		Histories.set(SessionId, Held.Histories);
+		Pending.set(SessionId, Held.Pending);
+		Awaiting.set(SessionId, Held.Awaiting);
+		Versions.set(SessionId, Held.Versions);
+		Restorations.set(SessionId, Held.Restorations);
+		Readings.set(SessionId, Held.Readings);
+		Folded.clear();
+		for (const CallId of Held.Folded) {
+			Folded.add(CallId);
+		}
+	};
 
 	// One assistant/message's usage record, read from the event's own fields:
 	// the TokenUsage buckets (a missing bucket is null, charged at zero) and
@@ -292,17 +466,25 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 		};
 	};
 
-	return (Session: unknown, Events: readonly unknown[]): void => {
+	return (Session: unknown, Events: readonly unknown[], Mode?: FoldMode): boolean => {
 		try {
+			// The replay-only mode (E2): the walk rebuilds the session's
+			// state from the prefix the cursor already booked and must not
+			// book it again, so every write, the cursor and the transaction
+			// are skipped below while the fold itself runs unchanged.
+			const ReplayOnly = Mode?.Replay === true;
 			const Records = (Events as EventRecord[]).filter(
 				(Event) => Event !== null && typeof Event === "object" && Event.type !== undefined,
 			);
+			// Nothing to fold: a batch of untyped records or one with no
+			// session identity can never commit, so it is reported as folded
+			// (the handler acknowledges it) instead of retried forever.
 			if (Records.length === 0) {
-				return;
+				return true;
 			}
 			const SessionId = Identify(Session, Records);
 			if (SessionId === undefined) {
-				return;
+				return true;
 			}
 			let Cwd = process.cwd();
 			const SubjectCwd = (Session as { cwd?: unknown } | undefined)?.cwd;
@@ -324,12 +506,25 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 				if (Project !== undefined) {
 					return Project;
 				}
-				InsertClient.run(Config.client);
+				// The replay pass resolves the existing dimensions only: the
+				// client and the project rows were written by the booking
+				// fold the cursor records, so creating them is a write.
+				switch (true) {
+					case ReplayOnly:
+						break;
+					default:
+						InsertClient.run(Config.client);
+				}
 				const Client = SelectClient.get(Config.client) as { ClientId: unknown } | undefined;
 				if (typeof Client?.ClientId !== "number") {
 					return undefined;
 				}
-				InsertProject.run(Client.ClientId, basename(Cwd), Cwd);
+				switch (true) {
+					case ReplayOnly:
+						break;
+					default:
+						InsertProject.run(Client.ClientId, basename(Cwd), Cwd);
+				}
 				const Found = SelectProject.get(Cwd) as { ProjectId: unknown } | undefined;
 				Project = typeof Found?.ProjectId === "number" ? Found.ProjectId : undefined;
 				return Project;
@@ -363,27 +558,41 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 				const CreatedRaw = Pick("createdAt");
 				const Created =
 					typeof CreatedRaw === "number" ? Math.round(CreatedRaw) : Math.round(At);
-				UpsertSession.run(
-					SessionId,
-					ProjectOf() ?? null,
-					typeof Parent === "string" ? Parent : null,
-					typeof Origin === "string" ? Origin : null,
-					Depth,
-					typeof Preset === "string" ? Preset : null,
-					Next,
-					typeof Title === "string" ? Title : null,
-					Created,
-				);
+				// The replay pass keeps the session's cwd in memory - the
+				// tool arguments resolve against it - and writes no dimension
+				// row: the session was adopted when the prefix was booked.
+				switch (true) {
+					case ReplayOnly:
+						break;
+					default:
+						UpsertSession.run(
+							SessionId,
+							ProjectOf() ?? null,
+							typeof Parent === "string" ? Parent : null,
+							typeof Origin === "string" ? Origin : null,
+							Depth,
+							typeof Preset === "string" ? Preset : null,
+							Next,
+							typeof Title === "string" ? Title : null,
+							Created,
+						);
+				}
 			};
 
 			// The file dimension: one path of the session's project, created on
 			// first sight; the id, or null when the project could not resolve.
+			// The replay pass resolves the existing row and creates nothing.
 			const Filed = (Path: string, At: number): number | null => {
 				const ProjectId = ProjectOf();
 				if (ProjectId === undefined) {
 					return null;
 				}
-				InsertFile.run(ProjectId, Path, Math.round(At));
+				switch (true) {
+					case ReplayOnly:
+						break;
+					default:
+						InsertFile.run(ProjectId, Path, Math.round(At));
+				}
 				const Found = SelectFile.get(ProjectId, Path) as { FileId: unknown } | undefined;
 				return typeof Found?.FileId === "number" ? Found.FileId : null;
 			};
@@ -394,6 +603,74 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 				return typeof Found?.CallId === "number" ? Found.CallId : undefined;
 			};
 
+			// The version this session's fold now knows the file to hold: every
+			// later touch of the file binds to it as its before version, so a
+			// reverted file binds to the content it actually went back to
+			// rather than to the newest row the table happens to hold.
+			const Remember = (Path: string, VersionId: number): void => {
+				const Held = Versions.get(SessionId) ?? new Map<string, number>();
+				Held.set(Path, VersionId);
+				Versions.set(SessionId, Held);
+			};
+
+			// The restoration signal of the file's latest mutating touch
+			// (B6b): the verdict at the session boundary reads it, so a file
+			// whose last write-kind touch went back to an earlier recorded
+			// version records "reverted". A mutating touch with no version
+			// evidence clears the flag, because the verdict speaks for the
+			// last such touch and never inherits an older signal.
+			const RememberRestoration = (Path: string, Restored: boolean): void => {
+				const Held = Restorations.get(SessionId) ?? new Map<string, boolean>();
+				Held.set(Path, Restored);
+				Restorations.set(SessionId, Held);
+			};
+
+			// The file's latest known version before one touch: the version
+			// this session's fold recorded last - the read version, or the
+			// previous write's after version - else the newest row the ledger
+			// holds at or before the touch's own time, so a session resumed in
+			// another process still binds to what the ledger knows. Nothing
+			// known is NULL, never a guess.
+			const PriorVersion = (Path: string, FileId: number, At: number): number | null => {
+				const Held = Versions.get(SessionId)?.get(Path);
+				if (typeof Held === "number") {
+					return Held;
+				}
+				const Found = SelectLatestVersion.get(FileId, Math.round(At)) as
+					{ VersionId: unknown } | undefined;
+				return typeof Found?.VersionId === "number" ? Found.VersionId : null;
+			};
+
+			// One content version's row: the file's version for these exact
+			// bytes, the existing row when the same bytes were already recorded
+			// (the hash is content-addressed, so an unchanged file never
+			// accumulates rows), else a new row at the observed time. The
+			// replay pass resolves the committed row and writes nothing, so a
+			// replay never duplicates a version.
+			const VersionOf = (FileId: number, Body: string, At: number): number | undefined => {
+				const Print = Fingerprint(Body);
+				const Found = SelectVersion.get(FileId, Print.Hash) as
+					{ VersionId: unknown } | undefined;
+				if (typeof Found?.VersionId === "number") {
+					return Found.VersionId;
+				}
+				switch (true) {
+					case ReplayOnly:
+						return undefined;
+					default:
+						InsertVersion.run(
+							FileId,
+							Print.Hash,
+							Print.Bytes,
+							Print.Lines,
+							Math.round(At),
+						);
+				}
+				const Held = SelectVersion.get(FileId, Print.Hash) as
+					{ VersionId: unknown } | undefined;
+				return typeof Held?.VersionId === "number" ? Held.VersionId : undefined;
+			};
+
 			const WriteTouches = (
 				CallId: number,
 				Turn: number,
@@ -402,58 +679,120 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 			): void => {
 				const History = Histories.get(SessionId) ?? new Map<string, string[]>();
 				Histories.set(SessionId, History);
+				// the edit grain (section 17.3) is parsed once per tool call:
+				// a non-edit tool's arguments parse to no rows, so the insert
+				// below is skipped
+				const Hunks = Edit(Entry.Tool, Entry.Arguments, Entry.At);
+				// the file's own new text (E7): a write's arguments carry the
+				// whole content the tool writes, and only a call that names one
+				// file has a single result to hash. A patch, a batch operation
+				// and a several-file write leave Written undefined, so their
+				// touches keep a NULL version rather than a guess.
+				const Written =
+					Entry.Touched.length === 1 ? Content(Entry.Tool, Entry.Arguments) : undefined;
 				for (const Row of Entry.Touched) {
 					const FileId = Filed(Row.Path, Entry.At);
 					if (FileId === null) {
 						continue;
 					}
+					// the version binding (E7): the after version the written
+					// content makes, recorded the same way a read's is, and the
+					// version the file held BEFORE this touch - the read
+					// version, or the previous write's after version. The
+					// replay pass resolves both without writing a row.
+					let Version: number | null = null;
+					let Restored = false;
+					if (Written !== undefined) {
+						Version = PriorVersion(Row.Path, FileId, Entry.At);
+						const After = VersionOf(FileId, Written, Entry.At);
+						if (After !== undefined) {
+							Remember(Row.Path, After);
+							// the restoration signal (B6b, the research's
+							// section 5): the written content is a revert when
+							// its version row was recorded BEFORE this touch
+							// and is not the row of the content the file held
+							// just now - the file went back to an earlier
+							// content hash. A row this touch created carries
+							// the touch's own time, so it is never evidence;
+							// the row id below the before version proves the
+							// recording order even when both share a clock
+							// tick. No before version, no after row or no
+							// earlier record leaves the signal false.
+							const Observed = SelectVersionObserved.get(After) as
+								{ ObservedAt: unknown } | undefined;
+							const Recorded =
+								typeof Observed?.ObservedAt === "number"
+									? Observed.ObservedAt
+									: Entry.At;
+							Restored =
+								Version !== null &&
+								After !== Version &&
+								(After < Version || Recorded < Entry.At);
+						}
+					}
 					// the stage and the read-before-edit flag (section 16.1):
 					// derived from the file's own prior touch kinds in this
-					// session. The restore signal is not carried by the current
-					// log shape, so the classifier's revert rule is fed false
-					// until a hash-aware touch arrives - the Verdict's reverted
-					// state recomputes when one does.
+					// session and the restoration signal above, so a write
+					// that returns the file to an earlier content hash is
+					// staged as a revert rather than an edit.
 					const Prior = History.get(Row.Path) ?? [];
-					const Staged = StageOf(Prior, Row.Kind, false);
+					const Staged = StageOf(Prior, Row.Kind, Restored);
 					const Read =
 						WriteKind(Row.Kind) && Prior.some((Kind) => Kind === "read") ? 1 : 0;
-					InsertTouch.run(
-						CallId,
-						SessionId,
-						Math.round(Turn),
-						Math.round(Step),
-						Entry.CallKey,
-						Entry.Tool,
-						FileId,
-						Row.Kind,
-						Staged,
-						Read,
-						Entry.Seq,
-						Entry.At,
-					);
+					// the verdict's copy of the signal: every mutating touch
+					// replaces it, so the session boundary reads the flag of
+					// the file's LAST write-kind touch and never an older one.
+					if (WriteKind(Row.Kind)) {
+						RememberRestoration(Row.Path, Restored);
+					}
+					switch (true) {
+						case ReplayOnly:
+							break;
+						default:
+							InsertTouch.run(
+								CallId,
+								SessionId,
+								Math.round(Turn),
+								Math.round(Step),
+								Entry.CallKey,
+								Entry.Tool,
+								FileId,
+								Version,
+								Row.Kind,
+								Staged,
+								Read,
+								Entry.Seq,
+								Entry.At,
+							);
+					}
 					const Seen = History.get(Row.Path) ?? [];
 					Seen.push(Row.Kind);
 					History.set(Row.Path, Seen);
-					// the edit grain (section 17.3): the hunks the tool call
-					// produced, read from its own arguments and inserted
-					// against the touch they belong to - a non-edit tool's
-					// arguments parse to no rows, so the insert is skipped
+					// the hunks themselves, inserted against the touch they
+					// belong to - a non-edit tool's arguments parse to no
+					// rows, so the insert is skipped. The replay pass records
+					// the kind above and writes no edit row.
 					const Held = SelectTouchId.get(SessionId, Entry.CallKey, FileId) as
 						{ TouchId: unknown } | undefined;
 					const TouchId = typeof Held?.TouchId === "number" ? Held.TouchId : undefined;
 					if (TouchId === undefined) {
 						continue;
 					}
-					for (const Hunk of Edit(Entry.Tool, Entry.Arguments, Entry.At)) {
-						InsertEdit.run(
-							TouchId,
-							Hunk.Ordinal,
-							Hunk.LinesAdded,
-							Hunk.LinesRemoved,
-							Hunk.BytesAdded,
-							Hunk.BytesRemoved,
-							Hunk.At,
-						);
+					for (const Hunk of Hunks) {
+						switch (true) {
+							case ReplayOnly:
+								break;
+							default:
+								InsertEdit.run(
+									TouchId,
+									Hunk.Ordinal,
+									Hunk.LinesAdded,
+									Hunk.LinesRemoved,
+									Hunk.BytesAdded,
+									Hunk.BytesRemoved,
+									Hunk.At,
+								);
+						}
 					}
 				}
 			};
@@ -467,9 +806,112 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 				Pending.set(SessionId, BySession);
 			};
 
+			// The discovered files of one search result: the pending search
+			// call the result belongs to (its callId when both carry one, else
+			// the first unresolved search call of the step) takes the result's
+			// own paths as its touches - so the files a search found, not the
+			// scope it searched, are what the ledger records. A result that
+			// names no pending search call, a result for a non-search tool and
+			// an unreadable result leave the pending set as it was: the parser
+			// yields no touch and nothing is guessed.
+			const Discover = (Turn: number, Step: number, Data: Record<string, unknown>): void => {
+				const Queued = Pending.get(SessionId)?.get(
+					`${Math.round(Turn)}:${Math.round(Step)}`,
+				);
+				if (Queued === undefined) {
+					return;
+				}
+				const CallId = OriginOf(Data);
+				for (const Entry of Queued) {
+					switch (true) {
+						case Entry.Resolved:
+						case !Search(Entry.Tool):
+							continue;
+						case CallId.length > 0 &&
+							Entry.CallId.length > 0 &&
+							Entry.CallId !== CallId:
+							continue;
+						default:
+					}
+					Entry.Touched = Touch(Entry.Tool, Entry.Arguments, Cwd, Data);
+					Entry.Resolved = true;
+					return;
+				}
+			};
+
+			// The read call's target, remembered until its result arrives: the
+			// result names the call, never the file, so this map is what pairs
+			// the returned text with the file that produced it. A call that
+			// reads several files, a search (whose files are the result's own)
+			// and a call with no callId record nothing, so their results are
+			// never attributed.
+			const Recall = (Entry: PendingCall, Rows: readonly TouchRow[]): void => {
+				if (Rows.length !== 1) {
+					return;
+				}
+				const Row = Rows[0];
+				if (Row === undefined) {
+					return;
+				}
+				switch (true) {
+					case Row.Kind !== "read":
+					case Entry.CallId.length === 0:
+						return;
+					default: {
+						const Held = Readings.get(SessionId) ?? new Map<string, Reading>();
+						Held.set(Entry.CallId, { CallKey: Entry.CallKey, Path: Row.Path });
+						Readings.set(SessionId, Held);
+					}
+				}
+			};
+
+			// One read result's own evidence (E7, the research's section 4):
+			// the rendered text the model received is the file's content at
+			// that moment, so it becomes a version row and the read touch binds
+			// to the version it actually saw. The pairing is the result's own
+			// callId; a result that names no remembered read call, a failed
+			// result and a result with no text record nothing, so the touch
+			// keeps a NULL version rather than a guess.
+			const Observe = (Data: Record<string, unknown>, At: number): void => {
+				const Origin = OriginOf(Data);
+				if (Origin.length === 0) {
+					return;
+				}
+				const Held = Readings.get(SessionId);
+				const Target = Held?.get(Origin);
+				if (Target === undefined) {
+					return;
+				}
+				Held?.delete(Origin);
+				if (Failed(Data)) {
+					return;
+				}
+				const Body = Rendered(Data);
+				if (Body === undefined) {
+					return;
+				}
+				const FileId = Filed(Target.Path, At);
+				if (FileId === null) {
+					return;
+				}
+				const Version = VersionOf(FileId, Body, At);
+				if (Version === undefined) {
+					return;
+				}
+				Remember(Target.Path, Version);
+				switch (true) {
+					case ReplayOnly:
+						break;
+					default:
+						BindVersion.run(Version, SessionId, Target.CallKey, FileId);
+				}
+			};
+
 			// The pending touches resolved: a pending set is written the moment
 			// its Call row exists - at the tool result that completes the call,
-			// or at the assistant message that writes the call row.
+			// or at the assistant message that writes the call row. A search
+			// still waiting for its result keeps its place, so the result of a
+			// parallel call never drops it.
 			const Release = (Turn: number, Step: number): void => {
 				const BySession = Pending.get(SessionId);
 				const Key = `${Math.round(Turn)}:${Math.round(Step)}`;
@@ -481,10 +923,23 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 				if (CallId === undefined) {
 					return;
 				}
+				const Held: PendingCall[] = [];
 				for (const Entry of Queued) {
-					WriteTouches(CallId, Turn, Step, Entry);
+					switch (true) {
+						case !Entry.Resolved:
+							Held.push(Entry);
+							break;
+						default:
+							WriteTouches(CallId, Turn, Step, Entry);
+					}
 				}
-				BySession?.delete(Key);
+				switch (true) {
+					case Held.length === 0:
+						BySession?.delete(Key);
+						break;
+					default:
+						BySession?.set(Key, Held);
+				}
 			};
 
 			const Await = (Entry: AwaitedCall): void => {
@@ -500,60 +955,72 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 			// repeated fold a no-op, so a step that ends twice is never
 			// double-counted.
 			const Fold = (Entry: AwaitedCall): void => {
-				if (Folded.has(Entry.CallId) || SelectAllocated.get(Entry.CallId) !== undefined) {
-					Folded.add(Entry.CallId);
-					return;
-				}
-				const Touched: Touched[] = [];
-				for (const Row of SelectTouches.all(Entry.CallId) as {
-					Kind: unknown;
-					BytesDelta: unknown;
-					Path: unknown;
-				}[]) {
-					if (typeof Row.Path !== "string" || typeof Row.Kind !== "string") {
-						continue;
+				switch (true) {
+					case Folded.has(Entry.CallId):
+						return;
+					// the replay pass rebuilds the folded set only: the
+					// allocation row was committed with the cursor whose
+					// prefix is being replayed, so there is nothing to write
+					case ReplayOnly:
+						Folded.add(Entry.CallId);
+						return;
+					case SelectAllocated.get(Entry.CallId) !== undefined:
+						Folded.add(Entry.CallId);
+						return;
+					default: {
+						const Touched: Touched[] = [];
+						for (const Row of SelectTouches.all(Entry.CallId) as {
+							Kind: unknown;
+							BytesDelta: unknown;
+							Path: unknown;
+						}[]) {
+							if (typeof Row.Path !== "string" || typeof Row.Kind !== "string") {
+								continue;
+							}
+							Touched.push({
+								SessionId,
+								Turn: Entry.Turn,
+								Step: Entry.Step,
+								Seq: 0,
+								CallKey: "",
+								Tool: "",
+								Path: Row.Path,
+								Kind: Row.Kind as Touched["Kind"],
+								BytesBefore: null,
+								BytesAfter: null,
+								BytesDelta:
+									typeof Row.BytesDelta === "number" ? Row.BytesDelta : null,
+							});
+						}
+						const Rows = Allocate(
+							Entry.Usage,
+							Entry.Costed,
+							Touched,
+							{
+								Surface: Entry.Surface,
+								PerPath: Entry.PerPath,
+								Cached: Entry.Cached,
+								CachedSurface: Entry.CachedSurface,
+							},
+							Config,
+						);
+						for (const Row of Rows) {
+							const FileId = Row.Path === null ? null : Filed(Row.Path, Entry.At);
+							InsertAllocation.run(
+								Entry.CallId,
+								FileId,
+								Row.DirectCost,
+								Row.AmortizedCost,
+								Math.round(Row.ContextTokens),
+								Math.round(Row.SurfaceTokens),
+								Row.Weight,
+								Row.Method,
+								Entry.At,
+							);
+						}
+						Folded.add(Entry.CallId);
 					}
-					Touched.push({
-						SessionId,
-						Turn: Entry.Turn,
-						Step: Entry.Step,
-						Seq: 0,
-						CallKey: "",
-						Tool: "",
-						Path: Row.Path,
-						Kind: Row.Kind as Touched["Kind"],
-						BytesBefore: null,
-						BytesAfter: null,
-						BytesDelta: typeof Row.BytesDelta === "number" ? Row.BytesDelta : null,
-					});
 				}
-				const Rows = Allocate(
-					Entry.Usage,
-					Entry.Costed,
-					Touched,
-					{
-						Surface: Entry.Surface,
-						PerPath: Entry.PerPath,
-						Cached: Entry.Cached,
-						CachedSurface: Entry.CachedSurface,
-					},
-					Config,
-				);
-				for (const Row of Rows) {
-					const FileId = Row.Path === null ? null : Filed(Row.Path, Entry.At);
-					InsertAllocation.run(
-						Entry.CallId,
-						FileId,
-						Row.DirectCost,
-						Row.AmortizedCost,
-						Math.round(Row.ContextTokens),
-						Math.round(Row.SurfaceTokens),
-						Row.Weight,
-						Row.Method,
-						Entry.At,
-					);
-				}
-				Folded.add(Entry.CallId);
 			};
 
 			const Priced = (
@@ -567,7 +1034,16 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 			};
 
 			// --- the fold: one transaction over the whole batch ---------------
-			Database.exec("BEGIN IMMEDIATE");
+			// The replay-only pass takes no transaction (it writes nothing) but
+			// keeps the same snapshot, so a failure inside it puts the state
+			// back exactly as the booking fold's rollback does.
+			const Before = Snapshot(SessionId);
+			switch (true) {
+				case ReplayOnly:
+					break;
+				default:
+					Database.exec("BEGIN IMMEDIATE");
+			}
 			try {
 				for (let Index = 0; Index < Records.length; Index++) {
 					const Record = Records[Index];
@@ -576,7 +1052,9 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 					}
 					const Seq = typeof Record.seq === "number" ? Record.seq : -1;
 					if (Seq >= 0) {
-						if (Seq <= LastSeq) {
+						// The cursor skip is the booking boundary; the replay
+						// pass walks exactly the prefix that boundary covers.
+						if (!ReplayOnly && Seq <= LastSeq) {
 							continue;
 						}
 						if (Seq > Reached) {
@@ -605,20 +1083,28 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 							const Arguments =
 								typeof Data["arguments"] === "string" ? Data["arguments"] : "";
 							const Rows = Touch(Name, Arguments, Cwd);
-							if (Rows.length === 0) {
+							// a search's argument is a scope, not a file: its
+							// touches arrive with the result that completes it
+							const Deferred = Search(Name);
+							if (Rows.length === 0 && !Deferred) {
 								break;
 							}
 							const Entry: PendingCall = {
 								CallKey:
 									Seq >= 0 ? String(Seq) : `${TurnOfCall}/${StepOfCall}/${Name}`,
+								CallId: typeof Data["callId"] === "string" ? Data["callId"] : "",
 								Tool: Name,
 								Arguments,
 								Seq: Seq >= 0 ? Seq : 0,
 								At: Math.round(At),
+								Resolved: !Deferred,
 								Touched: Rows,
 							};
+							Recall(Entry, Rows);
 							const CallId = Called(TurnOfCall, StepOfCall);
-							if (CallId === undefined) {
+							// a deferred search waits for its result even when
+							// the Call row already exists
+							if (CallId === undefined || Deferred) {
 								Pend(TurnOfCall, StepOfCall, Entry);
 							} else {
 								WriteTouches(CallId, TurnOfCall, StepOfCall, Entry);
@@ -626,11 +1112,16 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 							break;
 						}
 						case Type === "tool/result": {
-							// the call completed: its pending touches are final
-							Release(
-								typeof Data["turn"] === "number" ? Data["turn"] : Turn,
-								typeof Data["step"] === "number" ? Data["step"] : 0,
-							);
+							// the call completed: its discovered files (a search)
+							// and its pending touches are final, and a read's
+							// rendered text is the version it saw
+							const TurnOfResult =
+								typeof Data["turn"] === "number" ? Data["turn"] : Turn;
+							const StepOfResult =
+								typeof Data["step"] === "number" ? Data["step"] : 0;
+							Discover(TurnOfResult, StepOfResult, Data);
+							Release(TurnOfResult, StepOfResult);
+							Observe(Data, At);
 							break;
 						}
 						case Type === "assistant/message": {
@@ -708,52 +1199,62 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 								Measured.LatencyMs !== null && Measured.LatencyMs > 0
 									? Usage.OutputTokens / (Measured.LatencyMs / 1000)
 									: null;
-							InsertCall.run(
-								SessionId,
-								Usage.Turn,
-								Usage.Step,
-								Usage.Seq,
-								Usage.Provider,
-								Usage.Model,
-								Priced(Usage.Provider, Usage.Model, Rate.EffectiveFrom),
-								Usage.InputTokens,
-								Usage.OutputTokens,
-								Usage.CacheReadTokens ?? 0,
-								Usage.CacheWriteTokens ?? 0,
-								Usage.ReasoningTokens ?? 0,
-								Usage.TotalTokens,
-								Costed.Input,
-								Costed.Output,
-								Costed.CacheRead,
-								Costed.CacheWrite,
-								Costed.Reasoning,
-								Costed.Total,
-								Costed.Currency,
-								Surface,
-								Saved,
-								Usage.At,
-								Usage.Mode ?? "standard",
-								Usage.Region ?? null,
-								Rate.EffectiveFrom === 0 ? null : Rate.TierFrom,
-								Measured.LatencyMs,
-								Measured.FirstTokenMs,
-								PerSecond,
-								Measured.Attempts,
-								Measured.ErrorCode,
-								Measured.ContextWindow,
-								Measured.Utilization,
-							);
+							switch (true) {
+								case ReplayOnly:
+									break;
+								default:
+									InsertCall.run(
+										SessionId,
+										Usage.Turn,
+										Usage.Step,
+										Usage.Seq,
+										Usage.Provider,
+										Usage.Model,
+										Priced(Usage.Provider, Usage.Model, Rate.EffectiveFrom),
+										Usage.InputTokens,
+										Usage.OutputTokens,
+										Usage.CacheReadTokens ?? 0,
+										Usage.CacheWriteTokens ?? 0,
+										Usage.ReasoningTokens ?? 0,
+										Usage.TotalTokens,
+										Costed.Input,
+										Costed.Output,
+										Costed.CacheRead,
+										Costed.CacheWrite,
+										Costed.Reasoning,
+										Costed.Total,
+										Costed.Currency,
+										Surface,
+										Saved,
+										Usage.At,
+										Usage.Mode ?? "standard",
+										Usage.Region ?? null,
+										Rate.EffectiveFrom === 0 ? null : Rate.TierFrom,
+										Measured.LatencyMs,
+										Measured.FirstTokenMs,
+										PerSecond,
+										Measured.Attempts,
+										Measured.ErrorCode,
+										Measured.ContextWindow,
+										Measured.Utilization,
+									);
+							}
 							const CallId = Called(Usage.Turn, Usage.Step);
 							if (CallId === undefined) {
 								break;
 							}
 							Release(Usage.Turn, Usage.Step);
-							for (const [Path, Tokens] of PerPath) {
-								const FileId = Filed(Path, Usage.At);
-								if (FileId === null) {
-									continue;
-								}
-								InsertMass.run(CallId, FileId, Tokens);
+							switch (true) {
+								case ReplayOnly:
+									break;
+								default:
+									for (const [Path, Tokens] of PerPath) {
+										const FileId = Filed(Path, Usage.At);
+										if (FileId === null) {
+											continue;
+										}
+										InsertMass.run(CallId, FileId, Tokens);
+									}
 							}
 							Await({
 								CallId,
@@ -784,26 +1285,37 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 						}
 						case Type === "session/disposed" || Type === "turn/end": {
 							// the session boundary (section 14): the Verdict row
-							// per (session, file) from the touch kinds seen so
-							// far - REPLACE keeps the latest end's state, so a
-							// mid-session turn's premature row is corrected by
-							// the final one and the verdict stays recomputable
-							// from Touch alone
-							const Over = Histories.get(SessionId);
-							if (Over !== undefined) {
-								for (const [Path, Kinds] of Over) {
-									const FileId = Filed(Path, At);
-									if (FileId === null) {
-										continue;
+							// per (session, file) from the touch kinds and the
+							// restoration signal seen so far - REPLACE keeps
+							// the latest end's state, so a mid-session turn's
+							// premature row is corrected by the final one and
+							// the verdict stays recomputable from Touch alone.
+							// The replay pass keeps the histories and writes no
+							// verdict: the booking fold replaces the row when
+							// the session really ends.
+							switch (true) {
+								case ReplayOnly:
+									break;
+								default: {
+									const Over = Histories.get(SessionId);
+									if (Over !== undefined) {
+										for (const [Path, Kinds] of Over) {
+											const FileId = Filed(Path, At);
+											if (FileId === null) {
+												continue;
+											}
+											const Restored =
+												Restorations.get(SessionId)?.get(Path) === true;
+											InsertVerdict.run(
+												SessionId,
+												FileId,
+												VerdictOf(Kinds, Restored),
+												0,
+												0,
+												Math.round(At),
+											);
+										}
 									}
-									InsertVerdict.run(
-										SessionId,
-										FileId,
-										VerdictOf(Kinds),
-										0,
-										0,
-										Math.round(At),
-									);
 								}
 							}
 							break;
@@ -842,16 +1354,37 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 					}
 					Awaiting.delete(SessionId);
 				}
-				if (Reached > LastSeq) {
-					WriteCursor.run(SessionId, Reached, Date.now());
+				// The cursor is the booking boundary: the replay pass never
+				// moves it, so the booking fold that follows starts exactly
+				// where the last committed batch ended.
+				switch (true) {
+					case ReplayOnly:
+						break;
+					default: {
+						if (Reached > LastSeq) {
+							WriteCursor.run(SessionId, Reached, Date.now());
+						}
+						Database.exec("COMMIT");
+					}
 				}
-				Database.exec("COMMIT");
+				return true;
 			} catch (Failure) {
-				try {
-					Database.exec("ROLLBACK");
-				} catch {
-					/* the transaction may have already ended */
+				switch (true) {
+					case ReplayOnly:
+						break;
+					default:
+						try {
+							Database.exec("ROLLBACK");
+						} catch {
+							/* the transaction may have already ended */
+						}
 				}
+				// The ledger rolled back, so the session's replay state rolls
+				// back too: the retry must recompute the same rows, not skip
+				// them against a set of calls that no longer exist. A failed
+				// replay pass restores the same way, so the session is never
+				// booked from a half-reconstructed state.
+				Restore(SessionId, Before);
 				throw Failure;
 			}
 		} catch (Failure) {
@@ -866,6 +1399,9 @@ export default (Context: Context, Database: DatabaseSync, Config: Config) => {
 			} catch {
 				/* silence above all */
 			}
+			// The flush handler owns the acknowledgement: false keeps the
+			// batch queued, so its bounded retry folds it again.
+			return false;
 		}
 	};
 };

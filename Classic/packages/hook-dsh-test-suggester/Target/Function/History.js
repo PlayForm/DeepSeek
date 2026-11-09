@@ -1,1 +1,1 @@
-import{ProjectionKey as r}from"../Variable/Projection.js";var s=(o,t)=>{try{if(t==null)return[];const e=o.get?.("sessionProjections")?.stateOf?.(t,r);return Array.isArray(e?.Touches)?e.Touches:[]}catch{return[]}};export{s as default};
+import{ProjectionKey as r}from"@Variable/Projection.js";var s=(o,t)=>{try{if(t==null)return[];const e=o.get?.("sessionProjections")?.stateOf?.(t,r);return Array.isArray(e?.Touches)?e.Touches:[]}catch{return[]}};export{s as default};

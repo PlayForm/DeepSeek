@@ -8,7 +8,9 @@ declare module "@deepseek-ai/dsh-llm" {
         };
     }
 }
-/** Bind a notice summary to the harness's 120-char limit (ellipsized). */
+/**
+ * Bind a notice summary to the harness's 120-char limit (ellipsized).
+ */
 export declare const BoundSummary: (Summary: string) => string;
 /**
  * Build the note TEXT: one line of family and confidence, the capped

@@ -1085,8 +1085,8 @@
 			"rim": "diamond",
 			"mode": "traced",
 			"hash": {
-				"mono": "628d9914010a743861a61ab8c0c5ed7f8d8e59abe4160e5f43af9f24a266a9eb",
-				"colour": "2cbd2fe0b76abac4445a2ff6110dcd57da5b656f30d197fcae19896eb9f16e5c"
+				"mono": "733b4a181af8b8439c8c4eb530b179fd7fb824876d27cf048628d863fd2793ab",
+				"colour": "fd8f0b2b5aebaf65df4b64798193a514658bbe615c5e298f23f64800e40704b0"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/ets-plugin-dsh-cost.svg",
