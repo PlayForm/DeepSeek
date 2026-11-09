@@ -5,9 +5,10 @@
 // file - a fresh file (user_version 0) takes every DDL statement AND its
 // version stamp inside ONE transaction, so a crash can never leave a complete
 // schema stamped version zero; a v1 ledger runs the v2,
-// v3 and v4 rungs of the ladder (sections 14, 17.6, 17.3 and 17.4), a v2
-// ledger runs the v3 and v4 rungs, a v3 ledger runs the v4 rung alone, and
-// version 4 opens as-is. A file stamped ABOVE this build's version is
+// v3, v4 and v5 rungs of the ladder (sections 14, 17.6, 17.3, 17.4 and the
+// valuation model), a v2 ledger runs the v3, v4 and v5 rungs, a v3 ledger
+// runs the v4 and v5 rungs, a v4 ledger runs the v5 rung alone, and version
+// 5 opens as-is. A file stamped ABOVE this build's version is
 // rejected with one actionable line instead of being opened as though it
 // were compatible (section 1.7). The
 // import is the static `node:sqlite` core module (DatabaseSync), which needs
@@ -19,13 +20,13 @@ import { DatabaseSync } from "node:sqlite";
 import { Expand } from "@playform/lib-dsh-core";
 
 import type Config from "../Interface/Config.js";
-import Ddl, { Migration, MigrationFactor, MigrationTelemetry } from "./Schema.js";
+import Ddl, { Migration, MigrationFactor, MigrationPricing, MigrationTelemetry } from "./Schema.js";
 
 // The schema version this build writes and understands: the ladder's top
 // rung. A fresh file is stamped with it inside the transaction that creates
 // its tables, and a file stamped above it belongs to a newer build.
-const Supported = 4;
-const Stamp = "PRAGMA user_version = 4;";
+const Supported = 5;
+const Stamp = "PRAGMA user_version = 5;";
 
 export default (Config: Config): { Database: DatabaseSync; Close(): void } => {
 	// The tilde expansion (lib-dsh-core's Expand): a config-supplied path is
@@ -52,13 +53,14 @@ export default (Config: Config): { Database: DatabaseSync; Close(): void } => {
 
 	// The schema, guarded by user_version (sections 3, 14, 17.6, 17.3, 17.4
 	// and 1.7): a fresh file takes the whole DDL and its version stamp inside
-	// ONE transaction; a v1 ledger runs the three migration rungs in order
-	// (v1 to v2, then v2 to v3, then v3 to v4), a v2 ledger runs the v3 and
-	// v4 rungs, a v3 ledger runs only the v4 rung - each rung inside its own
-	// transaction, whose last statement is the rung's stamp itself. A failed
-	// statement rolls the whole rung back - the ledger never opens
-	// half-built, and the ladder never skips a rung. A file stamped above
-	// this build's version is refused, never opened as compatible.
+	// ONE transaction; a v1 ledger runs the four migration rungs in order
+	// (v1 to v2, then v2 to v3, then v3 to v4, then v4 to v5), a v2 ledger
+	// runs the v3, v4 and v5 rungs, a v3 ledger runs the v4 and v5 rungs, a
+	// v4 ledger runs only the v5 rung - each rung inside its own transaction,
+	// whose last statement is the rung's stamp itself. A failed statement
+	// rolls the whole rung back - the ledger never opens half-built, and the
+	// ladder never skips a rung. A file stamped above this build's version is
+	// refused, never opened as compatible.
 	const Row = Database.prepare("PRAGMA user_version").get() as { user_version: number };
 	const Rung = (Statements: readonly string[]): void => {
 		Database.exec("BEGIN TRANSACTION");
@@ -91,13 +93,19 @@ export default (Config: Config): { Database: DatabaseSync; Close(): void } => {
 			Rung(Migration);
 			Rung(MigrationFactor);
 			Rung(MigrationTelemetry);
+			Rung(MigrationPricing);
 			break;
 		case Row.user_version === 2:
 			Rung(MigrationFactor);
 			Rung(MigrationTelemetry);
+			Rung(MigrationPricing);
 			break;
 		case Row.user_version === 3:
 			Rung(MigrationTelemetry);
+			Rung(MigrationPricing);
+			break;
+		case Row.user_version === 4:
+			Rung(MigrationPricing);
 			break;
 		default:
 	}
