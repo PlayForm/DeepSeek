@@ -1,50 +1,55 @@
-// Library - the entry module of the LESSON-REVIEW service
-// (@playform/plugin-dsh-lesson-review), the self-improvement review of the
-// family. Loader contract: the CLASS form, mirroring the pattern service -
-// `export default class LessonService extends Service` with
-// `super(Context, "lesson")`, registered immediately on construction. The ONLY
-// named export is the Config schema (the loader validates it at load; also
-// attached as a static for the class-form reading) - every other module is a
-// nameless default export and each service method is a thin delegate.
-//
-// THE SERVICE SURFACE (ctx.lesson):
-//
-//   Configure(options)        - apply validated config knobs (volatile cells)
-//   Tick(agent)               - advance the nudge counter; { due, count }
-//   Reset(agent)              - clear one agent's counter
-//   Digest(messages)          - the bounded digest (Function/Digest)
-//   Prompt(focus?)            - the byte-stable review prompt
-//   Parse(reply)              - the strict reply parse (Function/Parse)
-//   Judge(proposal)           - the deterministic acceptance rules
-//   Snapshot(agent)           - the live-session projection (Function/Snapshot)
-//   Review(input)             - ONE review: digest -> llm -> parse -> judge ->
-//                               apply/queue -> report -> ledger
-//   Curate(now?)              - the deterministic staleness/archive pass
-//   Status()                  - counts (total/active/stale/archived/pinned/pending)
-//   Pin(name) / Unpin(name)   - the lifecycle exemption
-//   Restore(name)             - move an archived skill back and reactivate it
-//   Archive(name)             - archive one skill now (the manual pass)
-//   Pending()                 - the queued proposals awaiting acceptance
-//   Accept(name)              - land one queued proposal
-//   Save() / Flush()          - the store flush (the smoke seam)
-//
-// THE REVIEW NEVER TOUCHES THE LIVE TURN. It runs from the true idle phase
-// (the caller's `agent.runMaintenance`), it receives a SNAPSHOT rather than
-// reading the session, and its model call is ONE hand-built `ctx.llm.stream`
-// request that carries no agent-loop marker - so the harness cannot mistake it
-// for a loop request, and its cost is one bounded digest plus one reply.
-//
-// THE REVIEW PROPOSES BY DEFAULT. `policy.write` is the shipped `approve`, so
-// an accepted operation is QUEUED (`~/.dsh/lesson/pending.jsonl`) and lands
-// only through `Accept`. `policy.write: auto` is the opt-in that lets a run
-// land its own operations, and even then the judge's rules and the exact-file
-// fence still apply. Agreement operations are ALWAYS queued: the service never
-// writes the user's `AGENTS.md`.
-//
-// EVERY DEGRADATION IS LOUD AND NON-FATAL: no `llm` service, no model route, a
-// disabled service, an unparseable reply, a failed model call - each returns
-// an outcome class and writes one ledger line, and none of them throws into the
-// caller's maintenance task.
+/**
+ * @module Library
+ *
+ * The entry module of the LESSON-REVIEW service (@playform/plugin-dsh-lesson-review), the self-improvement review of the family.
+ *
+ * @remarks
+ * Loader contract: the CLASS form, mirroring the pattern service -
+ * `export default class LessonService extends Service` with
+ * `super(Context, "lesson")`, registered immediately on construction. The
+ * ONLY named export is the Config schema (the loader validates it at load;
+ * also attached as a static for the class-form reading) - every other module
+ * is a nameless default export and each service method is a thin delegate.
+ *
+ * THE SERVICE SURFACE (ctx.lesson):
+ *
+ * - Configure(options) - apply validated config knobs (volatile cells)
+ * - Tick(agent) - advance the nudge counter; { due, count }
+ * - Reset(agent) - clear one agent's counter
+ * - Digest(messages) - the bounded digest (Function/Digest)
+ * - Prompt(focus?) - the byte-stable review prompt
+ * - Parse(reply) - the strict reply parse (Function/Parse)
+ * - Judge(proposal) - the deterministic acceptance rules
+ * - Snapshot(agent) - the live-session projection (Function/Snapshot)
+ * - Review(input) - ONE review: digest -> llm -> parse -> judge ->
+ *   apply/queue -> report -> ledger
+ * - Curate(now?) - the deterministic staleness/archive pass
+ * - Status() - counts (total/active/stale/archived/pinned/pending)
+ * - Pin(name) / Unpin(name) - the lifecycle exemption
+ * - Restore(name) - move an archived skill back and reactivate it
+ * - Archive(name) - archive one skill now (the manual pass)
+ * - Pending() - the queued proposals awaiting acceptance
+ * - Accept(name) - land one queued proposal
+ * - Save() / Flush() - the store flush (the smoke seam)
+ *
+ * THE REVIEW NEVER TOUCHES THE LIVE TURN. It runs from the true idle phase
+ * (the caller's `agent.runMaintenance`), it receives a SNAPSHOT rather than
+ * reading the session, and its model call is ONE hand-built `ctx.llm.stream`
+ * request that carries no agent-loop marker - so the harness cannot mistake
+ * it for a loop request, and its cost is one bounded digest plus one reply.
+ *
+ * THE REVIEW PROPOSES BY DEFAULT. `policy.write` is the shipped `approve`,
+ * so an accepted operation is QUEUED (`~/.dsh/lesson/pending.jsonl`) and
+ * lands only through `Accept`. `policy.write: auto` is the opt-in that lets
+ * a run land its own operations, and even then the judge's rules and the
+ * exact-file fence still apply. Agreement operations are ALWAYS queued: the
+ * service never writes the user's `AGENTS.md`.
+ *
+ * EVERY DEGRADATION IS LOUD AND NON-FATAL: no `llm` service, no model
+ * route, a disabled service, an unparseable reply, a failed model call -
+ * each returns an outcome class and writes one ledger line, and none of
+ * them throws into the caller's maintenance task.
+ */
 import { existsSync, readFileSync } from "node:fs";
 import {
 	appendFile as Append,
@@ -75,39 +80,75 @@ import type { ReviewInput, ReviewMessage, ReviewResult } from "./Interface/Revie
 import Definition from "./Variable/Config.js";
 import Version from "./Variable/Version.js";
 
-/** Expand a leading `~` (the family's path convention for every knob). */
+/**
+ * Expand a leading `~` (the family's path convention for every knob).
+ */
 const Expand = (Path: string): string =>
 	Path.startsWith("~") ? Join(OS.homedir(), Path.slice(1)) : Path;
 
-/** The nudge verdict. */
+/**
+ * The nudge verdict.
+ */
 export interface Tick {
-	/** Whether a review is due now. */
+	/**
+	 * Whether a review is due now.
+	 */
 	due: boolean;
 
-	/** The counter's value after this tick. */
+	/**
+	 * The counter's value after this tick.
+	 */
 	count: number;
 }
 
-/** One queued proposal (the pending queue's row). */
+/**
+ * One queued proposal (the pending queue's row).
+ */
 export interface Queued {
-	/** Epoch ms when it was queued. */
+	/**
+	 * Epoch ms when it was queued.
+	 */
 	at: number;
 
-	/** The operation. */
+	/**
+	 * The operation.
+	 */
 	op: Op;
 }
 
-/** The corpus-wide counts. */
+/**
+ * The corpus-wide counts.
+ */
 export interface Status {
+	/**
+	 * Every record in the store.
+	 */
 	total: number;
+	/**
+	 * The records in state `active`.
+	 */
 	active: number;
+	/**
+	 * The records in state `stale`.
+	 */
 	stale: number;
+	/**
+	 * The records in state `archived`.
+	 */
 	archived: number;
+	/**
+	 * The pinned records.
+	 */
 	pinned: number;
+	/**
+	 * The queued proposals awaiting acceptance.
+	 */
 	pending: number;
 }
 
-/** The neutral ledger line builder (module-owned strings, byte-stable). */
+/**
+ * The neutral ledger line builder (module-owned strings, byte-stable).
+ */
 const Line = (Message: string, State: { logFile: string }): string =>
 	`lesson: ${Message} (logFile ${State.logFile})`;
 

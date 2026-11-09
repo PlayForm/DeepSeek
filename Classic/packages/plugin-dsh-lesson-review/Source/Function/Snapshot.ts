@@ -1,39 +1,55 @@
-// Snapshot - the live-session projection: the ONE integration seam of this
-// package, and the only module that reads a harness object it does not own.
-//
-// THE CONTRACT IS "MESSAGES IN", NOT "SESSION OUT". The service's `Review`
-// takes a snapshot (Interface/Review), exactly like the Hermes fork takes
-// `messages_snapshot`; this module is the adapter that produces one from a
-// live agent. Keeping the adapter separate means:
-//
-//   * the review, the digest, the parse, the judge and the apply are all
-//     testable without a session (the smokes pass literal snapshots), and
-//   * the harness-specific read is confined to one guarded function, so a
-//     projection shape that changes upstream cannot take the review down.
-//
-// THE HISTORY READ IS `Session.deriveMessages()` (SCHEME §6): it is the
-// accessor the agent loop itself calls to build the model-visible history, and
-// it is verified against the installed `dsh-session` declarations, so it is the
-// PRIMARY arm. The four surface shapes this module used to probe are kept
-// behind it, in their original order, so an older host that lacks the accessor
-// degrades to them instead of throwing. Every read is guarded; a host that HAS
-// the accessor and throws is reported through `OnFailure` and the caller turns
-// that into `unavailable` with the cause, which is strictly better than
-// reviewing a transcript the reviewer invented. An empty result is NOT an
-// error: the caller reports `unavailable` and the ledger says why.
-//
-// A message's text is read from its content blocks: `text` blocks join, and
-// every other block type is named rather than stringified (a tool-call block
-// stringified into a digest is noise the reviewer would treat as prose).
+/**
+ * @module Snapshot
+ *
+ * The live-session projection: the ONE integration seam of this package, and the only module that reads a harness object it does not own.
+ *
+ * @remarks
+ * THE CONTRACT IS "MESSAGES IN", NOT "SESSION OUT". The service's `Review`
+ * takes a snapshot (Interface/Review), exactly like the Hermes fork takes
+ * `messages_snapshot`; this module is the adapter that produces one from a
+ * live agent. Keeping the adapter separate means:
+ *
+ * - the review, the digest, the parse, the judge and the apply are all
+ *   testable without a session (the smokes pass literal snapshots), and
+ * - the harness-specific read is confined to one guarded function, so a
+ *   projection shape that changes upstream cannot take the review down.
+ *
+ * THE HISTORY READ IS `Session.deriveMessages()` (SCHEME §6): it is the
+ * accessor the agent loop itself calls to build the model-visible history,
+ * and it is verified against the installed `dsh-session` declarations, so
+ * it is the PRIMARY arm. The four surface shapes this module used to probe
+ * are kept behind it, in their original order, so an older host that lacks
+ * the accessor degrades to them instead of throwing. Every read is
+ * guarded; a host that HAS the accessor and throws is reported through
+ * `OnFailure` and the caller turns that into `unavailable` with the cause,
+ * which is strictly better than reviewing a transcript the reviewer
+ * invented. An empty result is NOT an error: the caller reports
+ * `unavailable` and the ledger says why.
+ *
+ * A message's text is read from its content blocks: `text` blocks join, and
+ * every other block type is named rather than stringified (a tool-call
+ * block stringified into a digest is noise the reviewer would treat as
+ * prose).
+ */
 import type { ReviewMessage } from "@Interface/Review.js";
 
-/** The role + content shape any candidate projection is expected to carry. */
+/**
+ * The role + content shape any candidate projection is expected to carry.
+ */
 interface Projected {
+	/**
+	 * The message's role, when the projection carries one.
+	 */
 	role?: unknown;
+	/**
+	 * The message's content, when the projection carries one.
+	 */
 	content?: unknown;
 }
 
-/** The text of one projected message. */
+/**
+ * The text of one projected message.
+ */
 const Text = (Message: Projected): string => {
 	const Content = Message.content;
 	switch (true) {
@@ -58,7 +74,9 @@ const Text = (Message: Projected): string => {
 	}
 };
 
-/** Coerce one candidate list into messages, dropping unreadable rows. */
+/**
+ * Coerce one candidate list into messages, dropping unreadable rows.
+ */
 const Read = (List: unknown): ReviewMessage[] => {
 	switch (true) {
 		case !Array.isArray(List):
@@ -80,7 +98,9 @@ const Read = (List: unknown): ReviewMessage[] => {
 	return Messages;
 };
 
-/** The guarded probe of one candidate accessor. */
+/**
+ * The guarded probe of one candidate accessor.
+ */
 const Probe = (Read_: () => unknown): unknown => {
 	try {
 		return Read_();
@@ -89,7 +109,10 @@ const Probe = (Read_: () => unknown): unknown => {
 	}
 };
 
-/** One guarded member read: a non-object, an absent key, or a throwing getter is `undefined`. */
+/**
+ * One guarded member read: a non-object, an absent key, or a throwing
+ * getter is `undefined`.
+ */
 const Member = (Value: unknown, Key: string): unknown =>
 	Probe(() => {
 		switch (true) {
@@ -100,7 +123,9 @@ const Member = (Value: unknown, Key: string): unknown =>
 		}
 	});
 
-/** One clause naming a thrown value, read through the same guard (no cast). */
+/**
+ * One clause naming a thrown value, read through the same guard (no cast).
+ */
 const Reason = (Thrown: unknown): string => {
 	const Detail = Member(Thrown, "message");
 	switch (true) {

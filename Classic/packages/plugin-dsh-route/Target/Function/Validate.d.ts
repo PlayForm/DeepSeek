@@ -13,6 +13,6 @@
  * - escalation.max must be >= 0 (0 = the ladder is closed even when enabled).
  * - The keyword table's keys must be the three roles.
  */
-import type { KeywordTable, PolicyShape } from "@Interface/Policy.js";
+import type { KeywordTable, PolicyShape } from "../Interface/Policy.js";
 export default _default;
 declare function _default(Policy: PolicyShape, Keywords: KeywordTable): void;

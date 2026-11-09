@@ -18,7 +18,7 @@
  * The hint is model-facing context, not a ledger line: the audit line stays
  * `route <taskType> <source> <provider> <model> <effort>` (Function/Inject).
  */
-import type { Role } from "@Interface/Policy.js";
+import type { Role } from "../Interface/Policy.js";
 /**
  * The hint's opening token (the idempotence marker).
  */

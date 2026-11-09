@@ -1,4 +1,4 @@
-import type { ValuationBasis } from "@Interface/ValuationSelection.js";
+import type { ValuationBasis } from "./ValuationSelection.js";
 export default interface ValuationBlock {
     readonly Basis: ValuationBasis;
     readonly RevisionId: number;

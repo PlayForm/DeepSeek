@@ -1,58 +1,66 @@
-// Storage - the CCR hook's own storage-domain open, recovery and write
-// mirror (pattern P4 of Temporary/Harness-Wave/Plan.md section 6; the
-// shipped sequence copied from
-// hook-dsh-workspace-observe/Source/Function/Storage.ts:51-103).
-//
-// THE DOMAIN: a NEW domain `ccr_store` (version 1, layout per-record,
-// invalidRecords backup-and-skip, ONE table `entries`), NOT extension
-// records in a shared domain (a shared-domain extension would force a
-// version bump whose blast radius is that domain's whole family; the
-// single-layout parser enforces EXACT version equality, so version 1
-// declares no compatible predecessors). The row is the SAME projection the
-// JSONL journal serializes - {hash, type, size, ttlAt, payload}, payload =
-// base64 of the content's JSON serialization (Function/Store.ts:221-228) -
-// so the record schema and both decode paths stay one shape.
-//
-// BEST-EFFORT AND DETACHED: the open is kicked off from the plugin's own
-// effect with `void`, every failure is contained here. An ABSENT facility
-// is a SILENT SKIP (no log line, no record; the store keeps its existing
-// JSONL journal path - the documented recovery fallback for one release). A
-// PRESENT facility whose open fails is LOUD: one best-effort ledger line
-// `storage open failed: <reason>` (the P5 v2 incident posture, never
-// rethrown), and the store keeps its existing file path unchanged.
-//
-// THE RECOVERY (once, on open): the loaded `entries` records seed the
-// store's live map with the Store.Load semantics (createdAt/lastAccessed
-// restart at now, expired records are dropped exactly like the journal
-// compaction). When the table is EMPTY and the old JSONL journal exists,
-// its surviving records seed the domain table FIRST (the one-time
-// migration; the file itself is never rewritten here, so a deployment that
-// never opens the facility keeps working byte-for-byte). Entries the LRU
-// evicts later cannot be deleted through the handle's structural surface
-// (put + entries only, the precedent's shape), so a budget eviction may be
-// resurrected on the next recovery - the store's own TTL sweep and LRU
-// drop it again on the next insert, and no model-visible behavior changes.
-//
-// THE WRITE MIRROR: the store's Put is shadowed with an own-property
-// wrapper (Function/Apply owns State.Store; Function/Store.ts is outside
-// this lane's file list), so every future store insert is put into the
-// domain fire-and-forget while the file journal keeps dual-writing - the
-// fallback stays fresh for one release. The wrapper passes through untouched
-// once the handle is closed.
-//
-// The dynamic imports keep the optional packages off the module-load path
-// (a module-level import of an unresolvable package would crash the whole
-// bundle load - the factory's live-verified pitfall); the type-only
-// devDependencies pin them to the host-era versions.
+/**
+ * @module Storage
+ *
+ * The CCR hook's own storage-domain open, recovery and write mirror.
+ *
+ * @remarks
+ * Pattern P4 of Temporary/Harness-Wave/Plan.md section 6; the shipped
+ * sequence copied from
+ * hook-dsh-workspace-observe/Source/Function/Storage.ts:51-103.
+ *
+ * THE DOMAIN: a NEW domain `ccr_store` (version 1, layout per-record,
+ * invalidRecords backup-and-skip, ONE table `entries`), NOT extension
+ * records in a shared domain (a shared-domain extension would force a
+ * version bump whose blast radius is that domain's whole family; the
+ * single-layout parser enforces EXACT version equality, so version 1
+ * declares no compatible predecessors). The row is the SAME projection the
+ * JSONL journal serializes - {hash, type, size, ttlAt, payload}, payload =
+ * base64 of the content's JSON serialization (Function/Store.ts:221-228) -
+ * so the record schema and both decode paths stay one shape.
+ *
+ * BEST-EFFORT AND DETACHED: the open is kicked off from the plugin's own
+ * effect with `void`, every failure is contained here. An ABSENT facility
+ * is a SILENT SKIP (no log line, no record; the store keeps its existing
+ * JSONL journal path - the documented recovery fallback for one release). A
+ * PRESENT facility whose open fails is LOUD: one best-effort ledger line
+ * `storage open failed: <reason>` (the P5 v2 incident posture, never
+ * rethrown), and the store keeps its existing file path unchanged.
+ *
+ * THE RECOVERY (once, on open): the loaded `entries` records seed the
+ * store's live map with the Store.Load semantics (createdAt/lastAccessed
+ * restart at now, expired records are dropped exactly like the journal
+ * compaction). When the table is EMPTY and the old JSONL journal exists,
+ * its surviving records seed the domain table FIRST (the one-time
+ * migration; the file itself is never rewritten here, so a deployment that
+ * never opens the facility keeps working byte-for-byte). Entries the LRU
+ * evicts later cannot be deleted through the handle's structural surface
+ * (put + entries only, the precedent's shape), so a budget eviction may be
+ * resurrected on the next recovery - the store's own TTL sweep and LRU
+ * drop it again on the next insert, and no model-visible behavior changes.
+ *
+ * THE WRITE MIRROR: the store's Put is shadowed with an own-property
+ * wrapper (Function/Apply owns State.Store; Function/Store.ts is outside
+ * this lane's file list), so every future store insert is put into the
+ * domain fire-and-forget while the file journal keeps dual-writing - the
+ * fallback stays fresh for one release. The wrapper passes through untouched
+ * once the handle is closed.
+ *
+ * The dynamic imports keep the optional packages off the module-load path
+ * (a module-level import of an unresolvable package would crash the whole
+ * bundle load - the factory's live-verified pitfall); the type-only
+ * devDependencies pin them to the host-era versions.
+ */
 import * as FileSystem from "node:fs";
 
 import type { Eviction } from "@Function/Store.js";
 import type Entry from "@Interface/Entry.js";
 import type State from "@Interface/State.js";
 
-/** The structural handle shape (the precedent's view: only `put` and
- *  `entries` are consumed on the tables; `close` is kept for the effect's
- *  disposer). */
+/**
+ * The structural handle shape (the precedent's view: only `put` and
+ * `entries` are consumed on the tables; `close` is kept for the effect's
+ * disposer).
+ */
 type Handle = {
 	close(): Promise<void>;
 	table(name: string): {
@@ -61,11 +69,15 @@ type Handle = {
 	};
 };
 
-/** The currently open domain handle (one per apply; replaced on re-open). */
+/**
+ * The currently open domain handle (one per apply; replaced on re-open).
+ */
 let Current: Handle | undefined;
 
-/** The domain row: the journal projection the JSONL file also serializes -
- *  the store Entry with its content replaced by the base64 payload. */
+/**
+ * The domain row: the journal projection the JSONL file also serializes -
+ * the store Entry with its content replaced by the base64 payload.
+ */
 type Row = {
 	hash: string;
 	type: string;
@@ -74,7 +86,9 @@ type Row = {
 	payload: string;
 };
 
-/** The journal projection encode - byte-identical with Function/Store's. */
+/**
+ * The journal projection encode - byte-identical with Function/Store's.
+ */
 const encode = (Row: Entry): string =>
 	JSON.stringify({
 		hash: Row.hash,
@@ -84,8 +98,10 @@ const encode = (Row: Entry): string =>
 		payload: Buffer.from(JSON.stringify(Row.content), "utf8").toString("base64"),
 	});
 
-/** The inverse of the payload projection; null when the payload is missing
- *  or undecodable. */
+/**
+ * The inverse of the payload projection; null when the payload is missing
+ * or undecodable.
+ */
 const decode = (Payload: unknown): Entry["content"] | null => {
 	try {
 		switch (true) {
@@ -98,8 +114,10 @@ const decode = (Payload: unknown): Entry["content"] | null => {
 	}
 };
 
-/** The structural validation filter (a record that fails it is skipped,
- *  never guessed). */
+/**
+ * The structural validation filter (a record that fails it is skipped,
+ * never guessed).
+ */
 const Valid = (Row: unknown): boolean => {
 	const Record = Row as Partial<Row> | null;
 	return (
@@ -113,10 +131,12 @@ const Valid = (Row: unknown): boolean => {
 	);
 };
 
-/** Seed one validated record into the store's live map (the Store.Load
- *  semantics: createdAt/lastAccessed restart at now, expired records are
- *  dropped like the journal compaction, a hash already loaded by the
- *  store's own boot read is never double-counted). */
+/**
+ * Seed one validated record into the store's live map (the Store.Load
+ * semantics: createdAt/lastAccessed restart at now, expired records are
+ * dropped like the journal compaction, a hash already loaded by the
+ * store's own boot read is never double-counted).
+ */
 const Seed = (State: State, Row: Row): void => {
 	const Now = Date.now();
 	switch (true) {
@@ -142,11 +162,13 @@ const Seed = (State: State, Row: Row): void => {
 	State.Store.Bytes += Loaded.size;
 };
 
-/** The old-file recovery fallback (one release): when the domain table is
- *  EMPTY and the store's expanded journal path exists, its surviving
- *  records seed the domain table (the one-time migration) and the store's
- *  live map. The file itself is never rewritten here - the store's own
- *  boot Load already compacted it before this open runs. */
+/**
+ * The old-file recovery fallback (one release): when the domain table is
+ * EMPTY and the store's expanded journal path exists, its surviving
+ * records seed the domain table (the one-time migration) and the store's
+ * live map. The file itself is never rewritten here - the store's own
+ * boot Load already compacted it before this open runs.
+ */
 const RecoverFile = async (State: State, Handle: Handle): Promise<void> => {
 	const Table = Handle.table("entries");
 	switch (true) {
@@ -201,8 +223,10 @@ const RecoverFile = async (State: State, Handle: Handle): Promise<void> => {
 	}
 };
 
-/** The domain recovery: the loaded records seed the store's live map; a
- *  record that fails validation is skipped, never guessed. */
+/**
+ * The domain recovery: the loaded records seed the store's live map; a
+ * record that fails validation is skipped, never guessed.
+ */
 const RecoverDomain = (State: State, Handle: Handle): void => {
 	for (const [, Row] of Handle.table("entries").entries()) {
 		switch (true) {
@@ -213,8 +237,10 @@ const RecoverDomain = (State: State, Handle: Handle): void => {
 	}
 };
 
-/** The write mirror: one fire-and-forget put per store insert (best-effort,
- *  never on the caller path - the store must never break dispatch). */
+/**
+ * The write mirror: one fire-and-forget put per store insert (best-effort,
+ * never on the caller path - the store must never break dispatch).
+ */
 const Mirror = (Handle: Handle, Row: Entry): void => {
 	try {
 		void Handle.table("entries")
@@ -227,9 +253,11 @@ const Mirror = (Handle: Handle, Row: Entry): void => {
 	}
 };
 
-/** Shadow the store's Put with an own-property wrapper: the original LRU +
- *  TTL + journal behavior runs first, then the mirror. The wrapper becomes
- *  a pass-through once the handle is closed (Current is cleared). */
+/**
+ * Shadow the store's Put with an own-property wrapper: the original LRU +
+ * TTL + journal behavior runs first, then the mirror. The wrapper becomes
+ * a pass-through once the handle is closed (Current is cleared).
+ */
 const ShadowPut = (State: State): void => {
 	const Store = State.Store;
 	const Original = Store.Put.bind(Store);

@@ -1,34 +1,61 @@
-/** One run's record. */
+/**
+ * One run's record.
+ */
 export interface RunReport {
-    /** ISO UTC timestamp of the run. */
+    /**
+     * ISO UTC timestamp of the run.
+     */
     at: string;
-    /** The session the review belongs to ("" when unknown). */
+    /**
+     * The session the review belongs to ("" when unknown).
+     */
     session: string;
-    /** The outcome class (`applied`/`proposed`/`nothing`/`unavailable`/`failed`). */
+    /**
+     * The outcome class (`applied`/`proposed`/`nothing`/`unavailable`/`failed`).
+     */
     outcome: string;
-    /** The provider/model that answered ("" when no call was made). */
+    /**
+     * The provider that answered ("" when no call was made).
+     */
     provider: string;
+    /**
+     * The model that answered ("" when no call was made).
+     */
     model: string;
-    /** The digest's cost shape. */
+    /**
+     * The digest's cost shape.
+     */
     digest: {
         kept: number;
         collapsed: number;
         trimmed: boolean;
     };
-    /** The names that landed in the corpus. */
+    /**
+     * The names that landed in the corpus.
+     */
     applied: string[];
-    /** The names queued for acceptance. */
+    /**
+     * The names queued for acceptance.
+     */
     proposed: string[];
-    /** The refusals, with their rule ids. */
+    /**
+     * The refusals, with their rule ids.
+     */
     rejected: {
         name: string;
         rule: string;
     }[];
-    /** The reviewer's own note, when it wrote one. */
+    /**
+     * The reviewer's own note, when it wrote one.
+     */
     note?: string;
-    /** One clause of detail (a skip reason, a failure's cause). */
+    /**
+     * One clause of detail (a skip reason, a failure's cause).
+     */
     detail?: string;
-    /** Wall time of the review, ms. */
+    /**
+     * Wall time of the review, ms.
+     */
     durationMs: number;
 }
 export default _default;

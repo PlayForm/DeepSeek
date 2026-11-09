@@ -84,11 +84,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794238677,
+					"publishTimestamp": 1794241506,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "c813684631df8041eb1c871564b5fb85268ae06e",
+						"commit": "8986e1c5ffa7927c330a174c8a10ab76e066575b",
 						"path": "Classic/packages/client-dsh-panel-cost"
 					},
 					"engines": {}
@@ -2528,11 +2528,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794238677,
+					"publishTimestamp": 1794241506,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "c813684631df8041eb1c871564b5fb85268ae06e",
+						"commit": "8986e1c5ffa7927c330a174c8a10ab76e066575b",
 						"path": "EffectTS/packages/ets-plugin-dsh-cost"
 					},
 					"engines": {}
@@ -2569,11 +2569,11 @@
 			"versions": [
 				{
 					"version": "0.2.1",
-					"publishTimestamp": 1794235888,
+					"publishTimestamp": 1794241506,
 					"source": {
 						"type": "git",
 						"url": "https://github.com/PlayForm/DeepSeek",
-						"commit": "7d8d327bcd2b0fa4b1f43beb1d7e77e5db7fe39a",
+						"commit": "8986e1c5ffa7927c330a174c8a10ab76e066575b",
 						"path": "EffectTS/packages/ets-plugin-dsh-cost-analysis"
 					},
 					"engines": {}

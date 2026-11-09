@@ -1,7 +1,7 @@
-import type Catalog from "@Interface/Catalog.js";
-import type PricingPreview from "@Interface/PricingPreview.js";
-import type RateRow from "@Interface/RateRow.js";
-import type Revision from "@Interface/Revision.js";
+import type Catalog from "./Catalog.js";
+import type PricingPreview from "./PricingPreview.js";
+import type RateRow from "./RateRow.js";
+import type Revision from "./Revision.js";
 export default interface PricingService {
     catalogs(): readonly Catalog[];
     revisions(CatalogId: number): readonly Revision[];
