@@ -1,3 +1,14 @@
+/**
+ * @module SymbolNode
+ *
+ * One symbol of the semantic model: kind, qualified name, span, fingerprint.
+ *
+ * @remarks
+ * The graph schema v0's Symbol node, V4-1 section 3.1. The v0 TypeScript kinds
+ * (function/class/type/const/interface) plus the any-file kinds the other
+ * adapters declare: `key` (a JSON/YAML key), `heading` (a Markdown heading) and
+ * `dependency` (a package.json dependency name).
+ */
 import type Span from "./Span.js";
 export default interface SymbolNode {
     /** The symbol kind (the v0 TypeScript set plus the any-file kinds). */

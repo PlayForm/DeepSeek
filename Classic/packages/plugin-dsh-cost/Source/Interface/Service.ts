@@ -1,8 +1,10 @@
 // Service - the engine surface the UI package resolves through ctx.get("cost"):
-// the session read that fills the panel's envelope and the file-scoped
+// the session read that fills the panel's envelope, the file-scoped
 // contribution read that answers which conversations paid for one file and
-// what share each one carried. Both read the same ledger read-only; the
-// contribution read returns plain rows, so it carries no envelope.
+// what share each one carried, and the file-scoped call read that answers
+// which calls of one conversation allocated money to that file and what
+// evidence each one carries. All three read the same ledger read-only; the
+// two file-scoped reads return plain rows, so they carry no envelope.
 //
 // THE SESSION READ accepts an optional valuation selection (lane B4d): the
 // basis and the catalog revision the caller wants the recorded usage
@@ -17,10 +19,12 @@
 // catalogs, revisions and rate rows without reaching into Target paths. The
 // re-exports are type-only: the host half imports no engine code at runtime.
 import type CostContributionRow from "./ContributionRow.js";
+import type CostFileCallRow from "./FileCallRow.js";
 import type CostResponse from "./Response.js";
 import type ValuationSelection from "./ValuationSelection.js";
 
 export type { default as Catalog } from "./Catalog.js";
+export type { default as CostFileCallRow } from "./FileCallRow.js";
 export type { default as PricingService } from "./PricingService.js";
 export type { default as RateRow } from "./RateRow.js";
 export type { default as Revision } from "./Revision.js";
@@ -30,4 +34,5 @@ export type { ValuationSelection };
 export default interface CostService {
 	session(SessionId: string, Rows: number, Selection?: ValuationSelection): CostResponse;
 	contributions(Path: string): readonly CostContributionRow[];
+	fileCalls(Path: string, SessionId: string): readonly CostFileCallRow[];
 }

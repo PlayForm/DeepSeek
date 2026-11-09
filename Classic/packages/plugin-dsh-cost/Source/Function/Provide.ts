@@ -1,13 +1,16 @@
 // Provide - the engine services: `cost.session(SessionId, Rows, Selection?)`
 // answers one session's CostResponse from the ledger, `cost.contributions(Path)`
-// answers the conversations that contributed to one file's cost, and
-// `costPricing` (Interface/PricingService.ts, Function/Pricing.ts) answers the
-// versioned catalog surface over the v5 tables - catalogs, revisions and rate
-// rows as reads, `publish` as the one write, and `preview` as the re-pricing
-// that persists nothing. The ledger path is this package's own config default
-// (Variable/Config's `Home(["cost", "ledger.db"])`), never a caller's: the
-// contribution read's argument is a FILE path, not a ledger path, so it is
-// handed to the read and never opened.
+// answers the conversations that contributed to one file's cost,
+// `cost.fileCalls(Path, SessionId)` answers the calls of one conversation that
+// allocated money to that same file (the deeper level of the same
+// file-scoped read), and `costPricing` (Interface/PricingService.ts,
+// Function/Pricing.ts) answers the versioned catalog surface over the v5
+// tables - catalogs, revisions and rate rows as reads, `publish` as the one
+// write, and `preview` as the re-pricing that persists nothing. The ledger
+// path is this package's own config default (Variable/Config's
+// `Home(["cost", "ledger.db"])`), never a caller's: both file-scoped reads
+// take a FILE path and a session id, not a ledger path, so they are handed to
+// the read and never opened.
 //
 // THE READ SERVICE opens the ledger read-only once per call and closes it in a
 // finally, so a failed read never leaks a handle. The package's own
@@ -40,13 +43,14 @@ import { DatabaseSync } from "node:sqlite";
 import type { Context } from "@deepseek-ai/cordis";
 import type Config from "@Interface/Config.js";
 import type CostContributionRow from "@Interface/ContributionRow.js";
+import type CostFileCallRow from "@Interface/FileCallRow.js";
 import type PricingService from "@Interface/PricingService.js";
 import type CostResponse from "@Interface/Response.js";
 import type CostService from "@Interface/Service.js";
 import type ValuationSelection from "@Interface/ValuationSelection.js";
 import { Home } from "@playform/lib-dsh-core";
 
-import Contributions from "./Contributions.js";
+import Contributions, { FileCalls } from "./Contributions.js";
 import Pricing from "./Pricing.js";
 import Reader from "./Reader.js";
 
@@ -129,6 +133,18 @@ export default function Provide(
 					const Ledger = Open(Path);
 					try {
 						return Contributions(Ledger.Database, FilePath);
+					} finally {
+						Ledger.Close();
+					}
+				},
+				fileCalls: (FilePath: string, SessionId: string): readonly CostFileCallRow[] => {
+					// The same posture as the contribution read: the file path
+					// and the session id are the caller's question, the ledger
+					// path is this package's own, and the handle closes in the
+					// finally whether the statement answered rows or none.
+					const Ledger = Open(Path);
+					try {
+						return FileCalls(Ledger.Database, FilePath, SessionId);
 					} finally {
 						Ledger.Close();
 					}

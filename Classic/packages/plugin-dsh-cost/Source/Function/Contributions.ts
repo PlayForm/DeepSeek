@@ -1,32 +1,53 @@
-// Contributions - the engine's second, file-scoped read: for one file path,
-// the conversations that contributed to that file's cost, each with the
+// Contributions - the engine's second, file-scoped read family: for one file
+// path, the conversations that contributed to that file's cost, each with the
 // money it allocated to the file and its share of the file's whole lifetime
-// total. This is the product question the ledger exists to answer (the file,
-// then its conversations, then their calls and models), so the read is one
+// total, and - the deeper level - one conversation's calls that allocated to
+// that same file, each with its own money, tokens, stage and touch evidence.
+// This is the product question the ledger exists to answer (the file, then
+// its conversations, then their calls and models), so each read is one
 // statement and no envelope: the session reader keeps its CostResponse
-// untouched, and a path the ledger does not record answers an empty array
-// rather than a throw. The statement resolves the file by its exact path
-// (File.Path, which the ledger keys per project, so every FileId carrying
-// that path is in scope), aggregates the allocation money per CallId first -
-// a call with several allocation rows for the file cannot fan its money out -
-// then groups those calls by SessionId for the distinct call count, the
-// direct and amortized sums and the first and last call times, joins Session
-// for the title, and carries the file's lifetime total (the same
-// pre-aggregated money over every session) so the reader can divide one group
-// by it. The models are the distinct `Provider/Model` ids of the group's
-// calls, handed over as one JSON array. Every statement reads only; the
-// read-only open lives in Function/Provide, so this module sees the open
-// handle and never a path it resolves itself.
+// untouched, and a path or a session the ledger does not record answers an
+// empty array rather than a throw.
+//
+// THE CONVERSATION READ resolves the file by its exact path (File.Path, which
+// the ledger keys per project, so every FileId carrying that path is in
+// scope), aggregates the allocation money per CallId first - a call with
+// several allocation rows for the file cannot fan its money out - then groups
+// those calls by SessionId for the distinct call count, the direct and
+// amortized sums and the first and last call times, joins Session for the
+// title, and carries the file's lifetime total (the same pre-aggregated money
+// over every session) so the reader can divide one group by it. The models
+// are the distinct `Provider/Model` ids of the group's calls, handed over as
+// one JSON array.
+//
+// THE CALL READ is the same file scope and the same per-call money, narrowed
+// to one conversation: CallScope pins the session, CallMoney collapses the
+// file's Allocation rows to one money row per call, TouchRow collapses the
+// file's Touch rows to one stage and one touched flag per call, and the two
+// meet on CallId in one FROM clause - the money never joins Touch, so a call
+// that touched the file more than once cannot multiply its allocation, and
+// the LEFT JOIN keeps a call that only carried the file (no touch row) in the
+// answer with `touched` false and a null stage. The order is the
+// conversation's own grain: turn, step, then the call id.
+//
+// Every statement reads only; the read-only open lives in Function/Provide,
+// so this module sees the open handle and never a path it resolves itself.
 import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
 
 import type CostContributionRow from "@Interface/ContributionRow.js";
+import type CostFileCallRow from "@Interface/FileCallRow.js";
 
-// The one read-only statement: FileScope pins the path, CallMoney collapses
+// The two read-only statements: FileScope pins the path, CallMoney collapses
 // the Allocation rows to one money row per call, Lifetime sums that same
-// money across every session, and SessionRow groups it by the call's session.
-// The model list is a correlated subquery over the group's calls, so the
-// fan-out the statement avoids in money never returns in the string. The sort
-// is the unrounded total, descending, with the session id as the tiebreak.
+// money across every session, SessionRow groups it by the call's session,
+// and FileCalls joins that same per-call money to the call row and to the
+// per-call touch. TouchRow is the same collapse on the touch side: the touch
+// count is the evidence flag and the stage is the call's own stage word - the
+// greatest name when one call recorded more than one touch of the file, so
+// the row stays one per call and never fans out. The model list is a
+// correlated subquery over the group's calls, so the fan-out the statements
+// avoid in money never returns in the string. The conversation sort is the
+// unrounded total, descending, with the session id as the tiebreak.
 const Query = {
 	Contributions: `WITH FileScope AS (
     SELECT File.FileId AS FileId
@@ -76,26 +97,90 @@ SELECT SessionRow.SessionId AS SessionId,
 FROM SessionRow
 LEFT JOIN Session ON Session.SessionId = SessionRow.SessionId
 ORDER BY SessionRow.Total DESC, SessionRow.SessionId ASC;`,
+
+	FileCalls: `WITH FileScope AS (
+    SELECT File.FileId AS FileId
+    FROM File
+    WHERE File.Path = ?
+),
+CallScope AS (
+    SELECT Call.CallId AS CallId,
+        Call.Turn AS Turn,
+        Call.Step AS Step,
+        Call.At AS At,
+        Call.Provider AS Provider,
+        Call.Model AS Model,
+        Call.InputTokens AS InputTokens,
+        Call.OutputTokens AS OutputTokens,
+        Call.CacheReadTokens AS CacheReadTokens,
+        Call.CacheWriteTokens AS CacheWriteTokens
+    FROM Call
+    WHERE Call.SessionId = ?
+),
+CallMoney AS (
+    SELECT Allocation.CallId AS CallId,
+        SUM(Allocation.DirectCost) AS Direct,
+        SUM(Allocation.AmortizedCost) AS Amortized
+    FROM Allocation
+    JOIN FileScope ON FileScope.FileId = Allocation.FileId
+    JOIN CallScope ON CallScope.CallId = Allocation.CallId
+    GROUP BY Allocation.CallId
+),
+TouchRow AS (
+    SELECT Touch.CallId AS CallId,
+        MAX(Touch.Stage) AS Stage,
+        COUNT(*) AS Touched
+    FROM Touch
+    JOIN FileScope ON FileScope.FileId = Touch.FileId
+    JOIN CallScope ON CallScope.CallId = Touch.CallId
+    GROUP BY Touch.CallId
+)
+SELECT CallScope.CallId AS CallId,
+    CallScope.Turn AS Turn,
+    CallScope.Step AS Step,
+    CallScope.At AS At,
+    CallScope.Provider AS Provider,
+    CallScope.Model AS Model,
+    CallMoney.Direct AS Direct,
+    CallMoney.Amortized AS Amortized,
+    CallMoney.Direct + CallMoney.Amortized AS Total,
+    CallScope.InputTokens AS InputTokens,
+    CallScope.OutputTokens AS OutputTokens,
+    CallScope.CacheReadTokens AS CacheReadTokens,
+    CallScope.CacheWriteTokens AS CacheWriteTokens,
+    TouchRow.Stage AS Stage,
+    COALESCE(TouchRow.Touched, 0) AS Touched
+FROM CallMoney
+JOIN CallScope ON CallScope.CallId = CallMoney.CallId
+LEFT JOIN TouchRow ON TouchRow.CallId = CallMoney.CallId
+ORDER BY CallScope.Turn ASC, CallScope.Step ASC, CallScope.CallId ASC;`,
 } as const;
+
+// The row readers both statements share: every statement of this module hands
+// over the same SQLite value shapes, so the four helpers are defined once and
+// read the same way whichever grain the caller asked for.
+const Text = (Row: Record<string, SQLOutputValue>, Key: string): string | null => {
+	const Value = Row[Key];
+	return typeof Value === "string" ? Value : null;
+};
+
+const Figure = (Row: Record<string, SQLOutputValue>, Key: string): number | null => {
+	const Value = Row[Key];
+	return typeof Value === "number" && Number.isFinite(Value) ? Value : null;
+};
+
+const Stored = (Row: Record<string, SQLOutputValue>, Key: string): number => Figure(Row, Key) ?? 0;
+
+// One money column: the rounding is to the sixth decimal, the precision every
+// report read lands on, so a contribution row agrees with the file row of the
+// session reader and with the report of the same sum, and a call row agrees
+// with the conversation row above it.
+const Round = (Value: number): number => Math.round(Value * 1e6) / 1e6;
 
 export default function Contributions(
 	Database: DatabaseSync,
 	Path: string,
 ): readonly CostContributionRow[] {
-	const Text = (Row: Record<string, SQLOutputValue>, Key: string): string | null => {
-		const Value = Row[Key];
-		return typeof Value === "string" ? Value : null;
-	};
-	const Figure = (Row: Record<string, SQLOutputValue>, Key: string): number | null => {
-		const Value = Row[Key];
-		return typeof Value === "number" && Number.isFinite(Value) ? Value : null;
-	};
-	const Stored = (Row: Record<string, SQLOutputValue>, Key: string): number =>
-		Figure(Row, Key) ?? 0;
-	// One money column: the rounding is to the sixth decimal, the precision
-	// every report read lands on, so a contribution row agrees with the file
-	// row of the session reader and with the report of the same sum.
-	const Round = (Value: number): number => Math.round(Value * 1e6) / 1e6;
 	// The model ids the statement hands over as one JSON array (the provider
 	// and model pair is the id), never split from a comma-joined list, because
 	// a model id may itself carry punctuation the aggregate does not escape.
@@ -130,6 +215,44 @@ export default function Contributions(
 			firstAt: Figure(Row, "FirstAt"),
 			lastAt: Figure(Row, "LastAt"),
 			models: ModelList(Row["Models"]),
+		};
+	});
+}
+
+// FileCalls - the deeper level of the same read: the calls of one
+// conversation that allocated money to one file, in the conversation's own
+// turn and step order. A path the ledger does not record, a session that
+// contributed nothing to that path, and a session that is not recorded at all
+// each answer an empty array, because the statement simply matches no row;
+// nothing here throws and nothing here writes.
+export function FileCalls(
+	Database: DatabaseSync,
+	Path: string,
+	SessionId: string,
+): readonly CostFileCallRow[] {
+	const Rows = Database.prepare(Query.FileCalls).all(Path, SessionId);
+	return Rows.map((Row) => {
+		const Direct = Round(Stored(Row, "Direct"));
+		const Amortized = Round(Stored(Row, "Amortized"));
+		return {
+			callId: Stored(Row, "CallId"),
+			turn: Stored(Row, "Turn"),
+			step: Stored(Row, "Step"),
+			at: Stored(Row, "At"),
+			provider: Text(Row, "Provider") ?? "",
+			model: Text(Row, "Model") ?? "",
+			direct: Direct,
+			amortized: Amortized,
+			total: Round(Direct + Amortized),
+			input: Stored(Row, "InputTokens"),
+			output: Stored(Row, "OutputTokens"),
+			cacheRead: Stored(Row, "CacheReadTokens"),
+			cacheWrite: Stored(Row, "CacheWriteTokens"),
+			stage: Text(Row, "Stage"),
+			// The touch count is the evidence fact: a call with no Touch row
+			// for the file carried it in context and never touched it, and
+			// the statement's COALESCE already turned that null into a zero.
+			touched: Stored(Row, "Touched") > 0,
 		};
 	});
 }

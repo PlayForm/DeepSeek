@@ -1,14 +1,21 @@
-// Package - the package.json adapter (Function/Package): the dependency NAMES
-// are the file's symbols (one kind `dependency` per name, whichever of the
-// four dependency sections declares it first), a later occurrence of the same
-// name is a reference to it (the same dependency listed in `dependencies` and
-// `peerDependencies` is one dependency referenced twice), and the model's
-// `dependencies` list is the names themselves - a package.json's dependencies
-// ARE its dependency graph.
-//
-// This is a FILE adapter (no extension): the basename `package.json` is the
-// registration key, checked before the `.json` extension adapter, so a
-// package.json never falls through to the plain JSON key model.
+/**
+ * @module Package
+ *
+ * The package.json adapter: the dependency NAMES are the file's symbols and the
+ * model's `dependencies` list is the names themselves.
+ *
+ * @remarks
+ * One symbol of kind `dependency` sits per name, whichever of the four
+ * dependency sections declares it first; a later occurrence of the same name is
+ * a reference to it (the same dependency listed in `dependencies` and
+ * `peerDependencies` is one dependency referenced twice), and the model's
+ * `dependencies` list is the names themselves - a package.json's dependencies
+ * ARE its dependency graph.
+ *
+ * This is a FILE adapter (no extension): the basename `package.json` is the
+ * registration key, checked before the `.json` extension adapter, so a
+ * package.json never falls through to the plain JSON key model.
+ */
 import type Adapter from "@Interface/Adapter.js";
 import type ReferenceNode from "@Interface/ReferenceNode.js";
 import type Span from "@Interface/Span.js";

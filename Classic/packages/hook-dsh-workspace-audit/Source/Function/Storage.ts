@@ -17,7 +17,9 @@
 import type Line from "@Interface/Line.js";
 import type State from "@Interface/State.js";
 
-/** The structural validation filter for a persisted line. */
+/**
+ * The structural validation filter for a persisted line.
+ */
 const ValidLine = (Row: unknown): Row is Line => {
 	const Record = Row as Partial<Line> | null;
 	return (

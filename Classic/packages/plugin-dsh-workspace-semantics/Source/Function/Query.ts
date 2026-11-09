@@ -1,6 +1,13 @@
-// Query - the read-only projections (Function/Query): the reference list of
-// one path's model and the service's statistics triple. No I/O, no building,
-// no throwing: an unknown path answers honestly with an empty list.
+/**
+ * @module Query
+ *
+ * The read-only projections: the reference list of one path's model and the
+ * service's statistics triple.
+ *
+ * @remarks
+ * No I/O, no building, no throwing: an unknown path answers honestly with an
+ * empty list.
+ */
 import type ReferenceNode from "@Interface/ReferenceNode.js";
 import type State from "@Interface/State.js";
 

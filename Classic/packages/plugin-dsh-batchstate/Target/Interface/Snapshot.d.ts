@@ -1,3 +1,12 @@
+/**
+ * @module Snapshot
+ *
+ * The full batch snapshot: what getState() returns.
+ *
+ * @remarks
+ * The running lanes, the idle queue (in order), the recent completions, the spliced proposals and
+ * the arbiter gates - the LIVE truth, never the histories.
+ */
 import type Entry from "./Entry.js";
 import type Gate from "./Gate.js";
 import type Member from "./Member.js";

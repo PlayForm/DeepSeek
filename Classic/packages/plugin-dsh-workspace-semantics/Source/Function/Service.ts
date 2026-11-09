@@ -1,20 +1,28 @@
-// Service - the `workspaceSemantics` service (Function/Service): extends the
-// cordis Service base and is REGISTERED FROM APPLY (the loader contract for
-// the object-form plugin: apply constructs the service; the Service base
-// constructor calls ctx.reflect.provide("workspaceSemantics", this), so
-// `ctx.workspaceSemantics` resolves). Declaration merging below gives the
-// typed accessor.
-//
-// The methods are thin delegates (one Function module each):
-//
-//   resolve(path)      - the model for the path, built lazily through the
-//                        file type's adapter (async - it may read the file);
-//   symbol(path, name) - the symbol lookup within the path's model;
-//   references(path)   - the reference list of the path's model;
-//   rename(path, span, to) - the per-adapter rename plan (async; refusal-to-
-//                        guess when the adapter refuses);
-//   adapt(adapter)     - register an any-file adapter (per extension);
-//   statistics()       - { paths, revision, adapters }.
+/**
+ * @module Service
+ *
+ * The `workspaceSemantics` service: extends the cordis Service base and is
+ * REGISTERED FROM APPLY.
+ *
+ * @remarks
+ * The loader contract for the object-form plugin: apply constructs the service;
+ * the Service base constructor calls ctx.reflect.provide("workspaceSemantics",
+ * this), so `ctx.workspaceSemantics` resolves. Declaration merging at the end
+ * of the file gives the typed accessor.
+ *
+ * The methods are thin delegates (one Function module each):
+ *
+ * ```
+ * resolve(path)          - the model for the path, built lazily through the
+ *                          file type's adapter (async - it may read the file);
+ * symbol(path, name)     - the symbol lookup within the path's model;
+ * references(path)       - the reference list of the path's model;
+ * rename(path, span, to) - the per-adapter rename plan (async; refusal-to-guess
+ *                          when the adapter refuses);
+ * adapt(adapter)         - register an any-file adapter (per extension);
+ * statistics()           - { paths, revision, adapters }.
+ * ```
+ */
 import { Service, type Context } from "@deepseek-ai/cordis";
 import Build from "@Function/Build.js";
 import Lookup from "@Function/Lookup.js";

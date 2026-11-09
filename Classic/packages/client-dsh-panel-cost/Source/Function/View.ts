@@ -6,21 +6,42 @@
 // valuation-selection change, folds the envelope, and never throws: a failed
 // fetch, a malformed body, or a missing session id renders a state line.
 //
+// THE PAGE BAND (lane B5c; the research's section 2 navigation and section
+// 8's dynamic list): the toolbar's chips are the workspace's page band -
+// Overview first, then Turns, Files, Contributions and Pricing - and the
+// page is view state whose default is Overview. The valuation control
+// beside the band stays the shell's persistent context outside the page
+// area, and the Files pane keeps its own path, kind, stage and sort
+// filters. The Overview page reads only the envelope the session fetch
+// already folded, so the band adds no request and a page switch never
+// refetches.
+//
 // THE PRICING PANE (lane B4f; the research's A4 sections 1-3 and A6 section
-// 6): the switcher's third chip renders Function/PricingSettings in the same
-// scroll region, under the same toolbar, so the view switcher and the
+// 6): the band's fifth chip renders Function/PricingSettings in the same
+// scroll region, under the same toolbar, so the page band and the
 // valuation control stay reachable while the rate book is open. The pane owns
 // its reads and its draft; the view only hands it the session, the row budget
 // and the callback that pins a freshly published revision as the panel's
 // valuation - which is what makes the recorded views revalue through the
 // selection they already send.
+//
+// THE CONTRIBUTIONS PANE (lane B5b; the research's A1 section 8 and A2
+// section 7): the band's fourth chip renders Function/ContributionsPage
+// in the same scroll region, so the file-to-conversation-to-call product
+// question is one click from the turn table. The pane owns its path, its two
+// reads and its expansion state; the view hands it the path the Files filter
+// already holds, which is what makes a filtered Files table a starting point
+// for the question, and the session's currency, so both panes format money
+// the same way.
 import { Button } from "@deepseek-ai/dsh-client-ui-primitives";
 import Turns, { type TurnsCells } from "@Function/Columns";
+import ContributionsPage from "@Function/ContributionsPage";
 import DetailRow from "@Function/DetailRow";
 import Fetch, { Catalogs, type CatalogAnswer } from "@Function/Fetch";
 import FileFilters, { type Filter } from "@Function/FileFilters";
 import FileTable from "@Function/FileTable";
 import Fold from "@Function/Fold";
+import OverviewPage from "@Function/OverviewPage";
 import PricingSettings from "@Function/PricingSettings";
 import Resolve from "@Function/Resolve";
 import StepRow from "@Function/StepRow";
@@ -212,7 +233,9 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 	const [Attempt, SetAttempt] = useState(0);
 	const [Truncated, SetTruncated] = useState(false);
 	const [Older, SetOlder] = useState<"idle" | "loading" | "failed">("idle");
-	const [Pane, SetPane] = useState<"turns" | "files" | "pricing">("turns");
+	const [Pane, SetPane] = useState<"overview" | "turns" | "files" | "contributions" | "pricing">(
+		"overview",
+	);
 	const [Files, SetFiles] = useState<readonly CostFileRow[]>([]);
 	const [FileFilter, SetFileFilter] = useState<Filter>(FileFilters.Default);
 	const [TurnMode, SetTurnMode] = useState<"newest" | "all" | "none">("newest");
@@ -694,8 +717,8 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 		{ value: "recorded", label: t("valuation.basis.as-recorded") },
 		...(Listing === null ? [] : Choices(Listing, t)),
 	];
-	// The footer is the same bands in every state: the toolbar with the view
-	// switcher and the valuation control, then the session summary, the top
+	// The footer is the same bands in every state: the toolbar with the page
+	// band and the valuation control, then the session summary, the top
 	// files and - only when a basis is selected - the valuation comparison.
 	const Footer = createElement(
 		Fragment,
@@ -710,8 +733,20 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 					role: "group",
 					"aria-label": t("view.switcher"),
 				},
+				Chip(
+					t("view.overview"),
+					Pane === "overview",
+					() => SetPane("overview"),
+					"overview",
+				),
 				Chip(t("view.turns"), Pane === "turns", () => SetPane("turns"), "turns"),
 				Chip(t("view.files"), Pane === "files", () => SetPane("files"), "files"),
+				Chip(
+					t("view.contributions"),
+					Pane === "contributions",
+					() => SetPane("contributions"),
+					"contributions",
+				),
 				Chip(t("view.pricing"), Pane === "pricing", () => SetPane("pricing"), "pricing"),
 			),
 			// The valuation control: a native select, the house pattern for an
@@ -757,8 +792,27 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 			t,
 		}),
 	);
+	// The Overview pane: the session at a glance, the page the band opens on.
+	// It reads the summary the fetch already folded and the valuation block
+	// the same envelope carried, so the page adds no request; a top-file
+	// click reuses the Files drill-down the footer band offers.
+	if (Pane === "overview")
+		return Shell(
+			[
+				createElement(OverviewPage, {
+					key: "overview",
+					Summary: Snapshot.summary,
+					Valuation: Valuation ?? null,
+					Turns: Snapshot.turns.length,
+					Steps: Snapshot.steps,
+					OnOpenFile: OpenFile,
+					t,
+				}),
+			],
+			Footer,
+		);
 	// The Pricing pane: the settings surface in the same scroll region and
-	// under the same toolbar, so the switcher and the valuation control stay
+	// under the same toolbar, so the page band and the valuation control stay
 	// reachable while the rate book is open. The pane reads its own catalogs,
 	// revisions and rate rows, holds the draft locally and publishes through
 	// the one route; the callback pins the new revision, which is what
@@ -771,6 +825,24 @@ export default function View(Props: ViewProps): ReturnType<typeof createElement>
 					sessionId: SessionId,
 					rows: Rows,
 					onPublished: Adopt,
+					t,
+				}),
+			],
+			Footer,
+		);
+	// The Contributions pane: the file-to-conversation-to-call question in the
+	// same scroll region and under the same toolbar. The pane owns its path,
+	// its two reads and its expansion state; the view hands it the path the
+	// Files filter already holds - so a filtered Files table is a starting
+	// point for the question - and the session's currency, so both panes
+	// format money the same way.
+	if (Pane === "contributions")
+		return Shell(
+			[
+				createElement(ContributionsPage, {
+					key: "contributions",
+					path: FileFilter.Path,
+					currency: Currency,
 					t,
 				}),
 			],

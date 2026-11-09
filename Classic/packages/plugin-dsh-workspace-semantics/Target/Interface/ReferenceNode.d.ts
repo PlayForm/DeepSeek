@@ -1,3 +1,11 @@
+/**
+ * @module ReferenceNode
+ *
+ * One reference of the semantic model: who uses X, from where.
+ *
+ * @remarks
+ * The graph schema v0's references edge, collapsed per file.
+ */
 import type Span from "./Span.js";
 export default interface ReferenceNode {
     /** The referenced symbol's qualified name (may be unresolved). */

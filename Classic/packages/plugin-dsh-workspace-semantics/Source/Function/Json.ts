@@ -72,8 +72,8 @@ export default {
 					});
 					break;
 				case keys.has(Token_.text):
-					// A string value that repeats a key of this file: the v0
-					// cross-reference. Any other value references nothing.
+					// A string value that repeats a key of this file: the v0 cross-reference. Any
+					// other value references nothing.
 					references.push({ target: Token_.text, span: Token_.span });
 					break;
 				default:

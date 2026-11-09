@@ -4,9 +4,11 @@
 // open the Files view on that file's path, and the valuation comparison line a
 // selected cost basis adds under those bands (lane B4e; the research's
 // sections 4 and 8): the basis the read was valued under, the recorded and
-// revised totals over the same calls, and their signed difference, titled with
-// the revision and the attribution policy version. Without a valuation block
-// the strip renders exactly the bands it always rendered.
+// revised totals over the same calls, their signed difference, and the count
+// of calls the selected revision could not price, titled with the revision and
+// the attribution policy version. Without a valuation block the strip renders
+// exactly the bands it always rendered.
+import Count from "@Function/Count";
 import CountShort from "@Function/CountShort";
 import Price from "@Function/Price";
 import Rate from "@Function/Rate";
@@ -47,9 +49,26 @@ const Tone = (Path: string): number => {
 	return Hash % 8;
 };
 
+// UnpricedOf - the revision's own unpriced count: how many calls the selected
+// revision could not price, read from the block and never from the recorded
+// summary. A block without a usable figure answers null and the line shows
+// none, because a zero would claim the revision prices every call.
+const UnpricedOf = (Block: CostValuation | null): number | null => {
+	// The optional read narrows in one step; a switch (true) arm cannot carry
+	// the null check into the next arm.
+	const Value = Block?.unpriced;
+	switch (true) {
+		case typeof Value !== "number" || !Number.isFinite(Value):
+			return null;
+		default:
+			return Value;
+	}
+};
+
 export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeof createElement> {
 	const Summary = Props.Summary;
 	const Valuation = Props.Valuation;
+	const Unpriced = UnpricedOf(Valuation);
 	const t = Props.t;
 	const Tag =
 		typeof Summary.currency === "string" && Summary.currency !== "" ? Summary.currency : "USD";
@@ -175,11 +194,12 @@ export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeo
 					}),
 		),
 		// The comparison line: the same recorded usage valued under the
-		// selected basis, with the stored money beside the repriced money and
-		// the signed difference between them. The title names the catalog
-		// revision the read was valued against and the attribution policy
-		// version the ledger declared, so the figure is never an anonymous
-		// total. No block means no band, so the recorded read is unchanged.
+		// selected basis, with the stored money beside the repriced money, the
+		// signed difference between them and the count of calls the selected
+		// revision could not price. The title names the catalog revision the
+		// read was valued against and the attribution policy version the
+		// ledger declared, so the figure is never an anonymous total. No block
+		// means no band, so the recorded read is unchanged.
 		Valuation === null
 			? null
 			: createElement(
@@ -214,6 +234,13 @@ export default function SummaryStrip(Props: SummaryStripProps): ReturnType<typeo
 							{ className: "playform-cost-control-label" },
 							t("valuation.difference", { value: Price(Valuation.difference, Tag) }),
 						),
+						Unpriced === null
+							? null
+							: createElement(
+									"span",
+									{ className: "playform-cost-control-label" },
+									t("valuation.unpriced", { count: Count(Unpriced) }),
+								),
 					),
 				),
 	);

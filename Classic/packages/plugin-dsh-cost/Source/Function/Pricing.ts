@@ -21,12 +21,29 @@
 // anywhere - a duplicate rate, a broken foreign key, an unbound value - rolls
 // the whole thing back, so a failed publish leaves no revision and never a
 // half-written book. The transaction IS the draft state, which is why no row
-// is ever visible with Status 'draft'. The caller's RateRow.RateRowId and
-// RevisionId are placeholders: the ledger assigns both, and the returned
-// Revision carries the new RevisionId. Nothing observed is touched - Price,
-// Call, Allocation, Touch and every other recorded fact stay as captured
-// (research section 3: observed facts are stored once; a pricing catalog is
-// an assumption, and only Revision and RateRow receive rows).
+// is ever visible with Status 'draft'.
+//
+// THE BASE-REVISION GUARD is the concurrency contract (the research's answer
+// 4, "Backend boundary": save against a base revision, and when someone else
+// has published a newer revision, return a conflict instead of silently
+// overwriting their changes). The catalog's head is its newest published
+// Revision by RevisionId - the insert order is the publish order, and this
+// service never writes a draft - so a base that is not the head means someone
+// else published first. The head is read INSIDE the publish transaction,
+// after BEGIN IMMEDIATE takes the write lock, so two publishes against the
+// same base cannot both pass the check. A null base is the first publish, and
+// it is legal only while the catalog is empty; on a catalog that already
+// carries a revision it is the same conflict. The refusal is an Error whose
+// message starts "plugin-dsh-cost: pricing conflict - " and names the base
+// and the head, so the caller can tell it from a validation failure while the
+// interface shape stays as it is and every validation line stays unchanged.
+//
+// The caller's RateRow.RateRowId and RevisionId are placeholders: the ledger
+// assigns both, and the returned Revision carries the new RevisionId.
+// Nothing observed is touched - Price, Call, Allocation, Touch and every
+// other recorded fact stay as captured (research section 3: observed facts
+// are stored once; a pricing catalog is an assumption, and only Revision and
+// RateRow receive rows).
 //
 // THE PREVIEW is the revaluation the research asks for before a publish
 // (section 7: "Preview first; publish a catalog revision second"). It reads
@@ -322,15 +339,17 @@ const CallOf = (Row: Record<string, SQLOutputValue>): CallRow => ({
 	Currency: Text(Row, "Currency") ?? "",
 });
 
-// The eleven statements the service runs: the four reads, the resolution and
-// its family (both against RateRow, the revision's own table), the two
-// integrity checks `publish` makes before it opens its transaction, and the
-// two inserts that transaction holds. The resolution statement mirrors the
-// capture path's Price.Select with ValidFrom in place of EffectiveFrom - the
-// half-open interval, the exact-or-generic mode, region and window, the
-// conditional rows excluded, the floor row of the winning card - and the
-// family statement binds the same provider, model, valid-from, mode, region
-// and window, so a windowed card's bands are read inside that window only.
+// The twelve statements the service runs: the four reads, the resolution and
+// its family (both against RateRow, the revision's own table), the three
+// integrity checks `publish` and `preview` make, the head read that
+// `publish`'s transaction makes, and the two inserts it holds. The resolution
+// statement mirrors the capture path's Price.Select with ValidFrom in place
+// of EffectiveFrom - the half-open interval, the exact-or-generic mode,
+// region and window, the conditional rows excluded, the floor row of the
+// winning card - and the family statement binds the same provider, model,
+// valid-from, mode, region and window, so a windowed card's bands are read
+// inside that window only. The head statement is one catalog's newest
+// published revision, the row a publish must name as its base.
 const Query = {
 	Catalogs: `SELECT CatalogId, Name FROM Catalog ORDER BY CatalogId ASC;`,
 
@@ -377,6 +396,11 @@ ORDER BY TierFrom ASC;`,
 
 	Present: `SELECT RevisionId FROM Revision WHERE RevisionId = ?;`,
 
+	Head: `SELECT RevisionId FROM Revision
+WHERE CatalogId = ? AND Status = 'published'
+ORDER BY RevisionId DESC
+LIMIT 1;`,
+
 	InsertRevision: `INSERT INTO Revision (CatalogId, ParentRevisionId, CreatedAt, Reason, Status)
 VALUES (?, ?, ?, ?, 'published');`,
 
@@ -396,6 +420,7 @@ export default (Database: DatabaseSync, Config: Config): PricingService => {
 	const SelectCatalog = Database.prepare(Query.Catalog);
 	const SelectRevision = Database.prepare(Query.Revision);
 	const SelectPresent = Database.prepare(Query.Present);
+	const SelectHead = Database.prepare(Query.Head);
 	const InsertRevision = Database.prepare(Query.InsertRevision);
 	const InsertRate = Database.prepare(Query.InsertRate);
 
@@ -488,10 +513,13 @@ export default (Database: DatabaseSync, Config: Config): PricingService => {
 	};
 
 	// The one write: validate what a revision must carry, then insert the
-	// revision and its rate rows inside ONE transaction. Every guard runs
-	// before the transaction opens, so a rejected publish never starts one; a
-	// failure inside it rolls back whole, so a failed publish leaves no
-	// revision behind.
+	// revision and its rate rows inside ONE transaction. The validation guards
+	// run before the transaction opens, so a rejected publish never starts
+	// one; the base-revision guard is the one check that must run inside it,
+	// because the head it reads is current only under the write lock. A
+	// failure inside the transaction rolls back whole, so a failed publish
+	// leaves no revision behind, and a refused publish leaves the head the
+	// caller did not name exactly where it was.
 	const Publish = (
 		CatalogId: number,
 		BaseRevisionId: number | null,
@@ -544,8 +572,42 @@ export default (Database: DatabaseSync, Config: Config): PricingService => {
 		// CreatedAt is the second date: the instant the system accepted these
 		// rates, as opposed to ValidFrom, when they apply to usage.
 		const CreatedAt = Date.now();
-		Database.exec("BEGIN TRANSACTION");
+		// BEGIN IMMEDIATE, not a deferred BEGIN: the write lock is taken
+		// before the head is read, so no other publish can commit between the
+		// check and the insert this transaction holds.
+		Database.exec("BEGIN IMMEDIATE");
 		try {
+			// The head: the catalog's newest published revision, read here
+			// because this is the one reading no concurrent publish can slip
+			// past. A base that is not the head means someone else published
+			// first; a null base on a catalog that already carries a revision
+			// is the same conflict, because null is the first publish of an
+			// empty catalog and nothing else.
+			const Head = SelectHead.get(CatalogId);
+			const HeadRevisionId = Head === undefined ? null : Stored(Head, "RevisionId");
+			switch (true) {
+				case HeadRevisionId === BaseRevisionId:
+					break;
+				case BaseRevisionId === null:
+					throw new Error(
+						`plugin-dsh-cost: pricing conflict - catalog ${CatalogId} already carries ` +
+							`revision ${HeadRevisionId} and this publish names no base revision - ` +
+							`name revision ${HeadRevisionId} as the base, because null is the ` +
+							`first publish of an empty catalog`,
+					);
+				case HeadRevisionId === null:
+					throw new Error(
+						`plugin-dsh-cost: pricing conflict - catalog ${CatalogId} carries no ` +
+							`published revision, so base revision ${BaseRevisionId} is not its ` +
+							`head - publish against a published revision of this catalog`,
+					);
+				default:
+					throw new Error(
+						`plugin-dsh-cost: pricing conflict - catalog ${CatalogId} is at ` +
+							`revision ${HeadRevisionId}, not the base revision ${BaseRevisionId} - ` +
+							`reload the catalog and publish against revision ${HeadRevisionId}`,
+					);
+			}
 			const Inserted = InsertRevision.run(CatalogId, BaseRevisionId, CreatedAt, Stated);
 			const RevisionId = Number(Inserted.lastInsertRowid);
 			for (const Row of Rows) {

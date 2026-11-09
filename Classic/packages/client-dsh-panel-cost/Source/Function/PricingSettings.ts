@@ -37,8 +37,9 @@
 // published revision with no unpublished edit; while the draft differs from
 // the book there is no published revision to price it, so the pane says
 // "available after publish" instead of inventing a figure. The unpriced count
-// is the session read's own count of calls the ledger could not price, and
-// its tooltip says so.
+// is the preview's own count of the calls that revision could not price - the
+// recorded summary's count answers a different question - and its tooltip
+// names the revision it belongs to.
 //
 // THE RATE UNIT: every rate is money per 1,000,000 tokens in the row's own
 // currency, and a rate the book does not separately price is a dash with the
@@ -155,7 +156,7 @@ type PublishOutcome = {
 
 // PreviewState - the impact preview's one state record, flat so the renderer
 // reads a field rather than narrowing a union: the phase, the comparison
-// block when one was read, the session's own unpriced count, its currency and
+// block when one was read, the revision's own unpriced count, its currency and
 // the failure line.
 type PreviewState = {
 	readonly Phase: "idle" | "loading" | "ready" | "failed";
@@ -423,7 +424,8 @@ const Newest = (Revisions: readonly Revision[], CatalogId: number): number | nul
 // Comparison - the envelope's valuation block, or undefined when the read
 // carried none. The block is read defensively like every other envelope
 // field: a malformed body must not throw and must not render a half-filled
-// comparison.
+// comparison, so a block without the revision's own unpriced figure is read as
+// absent rather than shown as a zero the revision never claimed.
 const Comparison = (Envelope: CostResponse): Valuation | undefined => {
 	// Early returns, because the narrowing has to survive into the figure
 	// checks; a switch (true) arm cannot carry it.
@@ -433,7 +435,8 @@ const Comparison = (Envelope: CostResponse): Valuation | undefined => {
 	if (
 		typeof Block.recorded !== "number" ||
 		typeof Block.revised !== "number" ||
-		typeof Block.difference !== "number"
+		typeof Block.difference !== "number" ||
+		typeof Block.unpriced !== "number"
 	) {
 		return undefined;
 	}
@@ -841,10 +844,7 @@ export default function PricingSettings(
 					SetPreview({
 						Phase: "ready",
 						Block,
-						Unpriced:
-							typeof Envelope.summary?.unpriced === "number"
-								? Envelope.summary.unpriced
-								: 0,
+						Unpriced: Block.unpriced,
 						Currency:
 							typeof Envelope.currency === "string" && Envelope.currency !== ""
 								? Envelope.currency
@@ -1299,7 +1299,9 @@ export default function PricingSettings(
 							"span",
 							{
 								className: "playform-cost-control-label",
-								title: t("pricing.preview.unpriced.title"),
+								title: t("pricing.preview.unpriced.title", {
+									revision: Block.revisionId,
+								}),
 							},
 							t("pricing.preview.unpriced", {
 								count: Count(Preview.Unpriced),

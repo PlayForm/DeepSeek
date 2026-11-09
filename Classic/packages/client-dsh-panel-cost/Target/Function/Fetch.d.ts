@@ -1,8 +1,9 @@
 import type CostContributionRow from "../Interface/ContributionRow.js";
 import type CostResponse from "../Interface/Response.js";
-import type { Catalog, RateRow, Revision, ValuationSelection } from "@playform/plugin-dsh-cost/service";
+import type { Catalog, CostFileCallRow, RateRow, Revision, ValuationSelection } from "@playform/plugin-dsh-cost/service";
 export default function Fetch(SessionId: string, Rows: number, Selection?: ValuationSelection): Promise<CostResponse>;
 export declare function Contributions(Path: string): Promise<readonly CostContributionRow[]>;
+export declare function FileCalls(Path: string, SessionId: string): Promise<readonly CostFileCallRow[]>;
 export type CatalogAnswer = {
     readonly catalogs: readonly Catalog[];
     readonly revisions: readonly Revision[];

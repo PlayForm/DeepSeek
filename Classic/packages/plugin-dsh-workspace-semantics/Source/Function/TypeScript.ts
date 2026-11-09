@@ -1,11 +1,17 @@
-// TypeScript - the default TypeScript adapter (Function/TypeScript), the
-// seed of the adapter registry. A LIGHT LEXICAL SCAN, deliberately: no
-// language-service dependency in the PoC (ctx.lsp's four read operations
-// carry no rename/WorkspaceEdit; the language adapters deepen in the
-// end-phase). It extracts the v0 symbol kinds from declarations, the
-// references as qualified-name word occurrences outside its own
-// declarations, and the dependencies from import specifiers. The certainty
-// is "true": the scan is deterministic for ordinary content.
+/**
+ * @module TypeScript
+ *
+ * The default TypeScript adapter: the seed of the adapter registry and a light
+ * lexical scan, deliberately.
+ *
+ * @remarks
+ * No language-service dependency in the PoC (ctx.lsp's four read operations
+ * carry no rename/WorkspaceEdit; the language adapters deepen in the
+ * end-phase). The adapter extracts the v0 symbol kinds from declarations, the
+ * references as qualified-name word occurrences outside its own declarations,
+ * and the dependencies from import specifiers. The certainty is "true": the
+ * scan is deterministic for ordinary content.
+ */
 import type Adapter from "@Interface/Adapter.js";
 import type ReferenceNode from "@Interface/ReferenceNode.js";
 import type Span from "@Interface/Span.js";
@@ -34,8 +40,8 @@ export default {
 		const symbols: SymbolNode[] = [];
 		const declared = new Set<string>();
 		for (const Match of text.matchAll(Declaration)) {
-			// The capture groups are always present (the regex has no optional
-			// groups); the guards only satisfy the checker.
+			// The capture groups are always present (the regex has no optional groups); the
+			// guards only satisfy the checker.
 			const Kind = Name[Match[1] ?? ""] as SymbolNode["kind"];
 			const NameToken = Match[2] ?? "";
 			const Index = Match.index ?? 0;
@@ -71,11 +77,10 @@ export default {
 		};
 	},
 	rename(text: string, path: string, span: Span, to: string) {
-		// The identifier at the span is the text slice itself: the caller
-		// points at the use site it wants renamed. Certainty is
-		// "references": the plan rewrites every identifier occurrence whose
-		// head matches, which is the reference list's reach, not an exact
-		// scope analysis.
+		// The identifier at the span is the text slice itself: the caller points at the use
+		// site it wants renamed. Certainty is "references": the plan rewrites every
+		// identifier occurrence whose head matches, which is the reference list's reach,
+		// not an exact scope analysis.
 		const From = text.slice(span.start, span.end);
 		if (!/^[A-Za-z_$][\w$]*$/.test(From)) {
 			return undefined;

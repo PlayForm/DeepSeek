@@ -18,7 +18,9 @@ import type Line from "@Interface/Line.js";
 import type State from "@Interface/State.js";
 
 export default class WorkspaceAudit extends Service {
-	/** The apply-built state the methods read and write. */
+	/**
+	 * The apply-built state the methods read and write.
+	 */
 	State: State;
 
 	constructor(Context: Context, State: State) {
@@ -26,7 +28,9 @@ export default class WorkspaceAudit extends Service {
 		this.State = State;
 	}
 
-	/** Record one line of the traceability graph. */
+	/**
+	 * Record one line of the traceability graph.
+	 */
 	line(Input: {
 		operation: string;
 		parent?: string;
@@ -60,17 +64,23 @@ export default class WorkspaceAudit extends Service {
 		});
 	}
 
-	/** One operation's audit chain, in recording order. */
+	/**
+	 * One operation's audit chain, in recording order.
+	 */
 	chain(Operation: string): Line[] {
 		return Query.Chain(this.State, Operation);
 	}
 
-	/** The ring, newest first (an optional limit slices the head). */
+	/**
+	 * The ring, newest first (an optional limit slices the head).
+	 */
 	lines(Limit?: number): Line[] {
 		return Query.Lines(this.State, Limit);
 	}
 
-	/** The statistics triple. */
+	/**
+	 * The statistics triple.
+	 */
 	statistics(): { operations: number; lines: number; sequence: number } {
 		return Query.Statistics(this.State);
 	}
@@ -79,7 +89,9 @@ export default class WorkspaceAudit extends Service {
 // Declaration merging: the typed accessor on the cordis Context.
 declare module "@deepseek-ai/cordis" {
 	interface Context {
-		/** The workspace-audit hook's service (registered from apply). */
+		/**
+		 * The workspace-audit hook's service (registered from apply).
+		 */
 		workspaceAudit: WorkspaceAudit;
 	}
 }

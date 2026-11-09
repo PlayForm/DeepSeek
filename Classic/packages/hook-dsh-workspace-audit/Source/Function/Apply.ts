@@ -25,7 +25,9 @@ import type FactoryHandle from "@Interface/Factory.js";
 import type State from "@Interface/State.js";
 import { Activate } from "@playform/lib-dsh-core";
 
-/** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
+/**
+ * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
+ */
 const Cell = (Value: unknown): unknown =>
 	typeof (Value as { get?: unknown } | null)?.get === "function"
 		? (Value as { get: () => unknown }).get()

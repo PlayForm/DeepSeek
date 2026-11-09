@@ -1,3 +1,19 @@
+/**
+ * @module Proposal
+ *
+ * The canonical batch proposal as it arrives through the harness inbox (the batch contract of
+ * PASS-ON-AND-INGESTER.md section 2).
+ *
+ * @remarks
+ * Declared STRUCTURALLY: the family's self-contained rule forbids importing the pass-on / decision
+ * packages, so this file is the board's own copy of the contract and the inbox envelope is the only
+ * wire between the packages.
+ *
+ * The shape is the decision contract's fields (id, intent label, targets, operations, preview,
+ * digest, revision, expiresAt, confidence) plus the two the apply path needs: the operations carry
+ * the literal find/replace, and `origin` names the agent whose inbox carried the proposal (the
+ * decision's return address).
+ */
 export interface Target {
     /** Absolute path of the target file. */
     path: string;
@@ -54,7 +70,7 @@ export default interface Proposal {
     expiresAt: number;
     /** The intent's confidence, when the producer supplied it. */
     confidence?: number | undefined;
-    /** The agent whose inbox carried the proposal (the decision's return
-     *  address); absent when the producer could not resolve one. */
+    /** The agent whose inbox carried the proposal (the decision's return address); absent when the
+     * producer could not resolve one. */
     origin?: string | undefined;
 }

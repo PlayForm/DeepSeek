@@ -1,14 +1,15 @@
 // Fetch - the browser half of the data path: the session GET (the route
 // path with the encoded session id and the row budget, answered as a
 // CostResponse), the file-scoped GET that answers the conversations that
-// contributed to one file's cost, the two pricing GETs a settings surface
-// lists (lane B4d): the catalogs with their revisions and one revision's rate
-// rows, and the one pricing POST (lane B4f) that publishes a revision. None
-// of the functions throws: a runtime without fetch, a failed request, a
-// non-JSON answer or a malformed body resolve to the unavailable envelope, to
-// an empty contribution list, to the empty catalog answer, to an empty rate
-// list or to a refused publish answer, so the panel can always render a
-// state. The envelope's `path` names the route, because the browser knows no
+// contributed to one file's cost, the deeper file-scoped GET that answers one
+// conversation's calls that allocated money to that same file, the two
+// pricing GETs a settings surface lists (lane B4d): the catalogs with their
+// revisions and one revision's rate rows, and the one pricing POST (lane B4f)
+// that publishes a revision. None of the functions throws: a runtime without
+// fetch, a failed request, a non-JSON answer or a malformed body resolve to
+// the unavailable envelope, to an empty contribution list, to an empty call
+// list, to the empty catalog answer, to an empty rate list or to a refused
+// publish answer, so the panel can always render a state. The envelope's `path` names the route, because the browser knows no
 // ledger path; the route's own message names the file.
 //
 // THE VALUATION SELECTION (lane B4d; the research's section 8): the session
@@ -22,6 +23,7 @@ import type CostContributionRow from "@Interface/ContributionRow.js";
 import type CostResponse from "@Interface/Response.js";
 import type {
 	Catalog,
+	CostFileCallRow,
 	RateRow,
 	Revision,
 	ValuationSelection,
@@ -199,6 +201,54 @@ export function Contributions(Path: string): Promise<readonly CostContributionRo
 		})
 			.then((Response) => Response.json())
 			.then((Body) => (IsContributionAnswer(Body) ? Body.contributions : []))
+			.catch(() => []);
+	} catch {
+		return Promise.resolve([]);
+	}
+}
+
+// The per-call answer: the engine's call rows for one file and one
+// conversation, unwrapped the same way the contribution answer is - the ok
+// flag and the calls array are the shape the table indexes.
+type FileCallAnswer = {
+	readonly ok: true;
+	readonly calls: readonly CostFileCallRow[];
+};
+
+// IsFileCallAnswer - the per-call answer's guard: the ok flag and a calls
+// array. The rows themselves are read defensively where they render, so the
+// guard stops at the shape the table indexes.
+const IsFileCallAnswer = (Candidate: unknown): Candidate is FileCallAnswer => {
+	if (typeof Candidate !== "object" || Candidate === null) {
+		return false;
+	}
+	const Answer = Candidate as { ok?: unknown; calls?: unknown };
+	return Answer.ok === true && Array.isArray(Answer.calls);
+};
+
+// FileCalls - the deeper file-scoped read: one GET to the same route with the
+// encoded path and the encoded conversation id, answered as the calls of that
+// conversation that allocated money to that file. It never throws: a runtime
+// without fetch, a failed request, a non-JSON answer or a malformed body all
+// resolve to an empty list, so a conversation row that opens always has a
+// state to render.
+export function FileCalls(Path: string, SessionId: string): Promise<readonly CostFileCallRow[]> {
+	if (typeof fetch !== "function") {
+		return Promise.resolve([]);
+	}
+	try {
+		return fetch(
+			`${Route}?file=${encodeURIComponent(Path)}&conversation=${encodeURIComponent(
+				SessionId,
+			)}`,
+			{
+				method: "GET",
+				headers: { accept: "application/json" },
+				cache: "no-store",
+			},
+		)
+			.then((Response) => Response.json())
+			.then((Body) => (IsFileCallAnswer(Body) ? Body.calls : []))
 			.catch(() => []);
 	} catch {
 		return Promise.resolve([]);

@@ -1,21 +1,28 @@
-// Yaml - the YAML adapter (Function/Yaml): the mapping keys are the file's
-// symbols and a plain scalar VALUE that repeats a key's text is a reference to
-// that key (the same v0 cross-reference convention the JSON adapter uses:
-// YAML's identifier space is its keys, so a repeated scalar is the only
-// in-file reference the format offers). Nesting is NOT qualified in v0: the
-// symbol name is the key token.
-//
-// Quoted scalars are not references (the quote style would have to be
-// preserved through a rename); a scalar that carries anything beyond the plain
-// token grammar (a colon, a quote, a trailing comment) is left alone. The
-// spans are the token's exact range, so a rename rewrites the token only.
+/**
+ * @module Yaml
+ *
+ * The YAML adapter: the mapping keys are the file's symbols and a plain scalar
+ * VALUE that repeats a key's text is a reference to that key.
+ *
+ * @remarks
+ * The same v0 cross-reference convention the JSON adapter uses: YAML's
+ * identifier space is its keys, so a repeated scalar is the only in-file
+ * reference the format offers. Nesting is NOT qualified in v0: the symbol name
+ * is the key token.
+ *
+ * Quoted scalars are not references (the quote style would have to be preserved
+ * through a rename); a scalar that carries anything beyond the plain token
+ * grammar (a colon, a quote, a trailing comment) is left alone. The spans are
+ * the token's exact range, so a rename rewrites the token only.
+ */
 import type Adapter from "@Interface/Adapter.js";
 import type ReferenceNode from "@Interface/ReferenceNode.js";
 import type Span from "@Interface/Span.js";
 import type SymbolNode from "@Interface/SymbolNode.js";
 
-/** One mapping key: group 1 is the indent (plus an optional list dash),
- *  group 2 the key token. */
+/**
+ * One mapping key: group 1 is the indent (plus an optional list dash), group 2 the key token.
+ */
 const Key = /^([ \t]*(?:-[ \t]+)?)([A-Za-z0-9_.$-]+)([ \t]*):/gm;
 
 /** One plain scalar value: group 1 is the key prefix, group 2 the value. */

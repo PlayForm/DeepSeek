@@ -20,11 +20,11 @@
 // `valuation` is the one optional field (lane B4d; the research's section 8):
 // the headline comparison a selected cost basis adds beside the recorded
 // money - the basis, the revision it evaluates against, the attribution policy
-// version, when it ran, and the recorded, revised and difference figures over
-// the same session. It is absent when the caller names no basis or asks for
-// 'as-recorded', so the recorded read is byte-identical to the envelope before
-// this lane; when present it never replaces a per-call money field, which
-// stays as recorded.
+// version, when it ran, the recorded, revised and difference figures over the
+// same session, and the calls that revision could not price. It is absent when
+// the caller names no basis or asks for 'as-recorded', so the recorded read is
+// byte-identical to the envelope before this lane; when present it never
+// replaces a per-call money field, which stays as recorded.
 import type CostCall from "@Interface/Call.js";
 import type CostFileRow from "@Interface/FileRow.js";
 import type CostModelRow from "@Interface/ModelRow.js";
@@ -49,14 +49,18 @@ interface Coverage {
 // (lane B4d; the research's sections 4 and 8): which basis was asked for, the
 // catalog revision it evaluates against, the attribution policy version the
 // ledger declares, when the comparison ran, the money the ledger recorded for
-// the session, the money the selected revision gives that same usage, and the
-// difference between the two. It is a comparison block, not the stored
-// Valuation row of Interface/Valuation.ts: nothing is persisted, and the
-// per-call money fields stay as recorded. `recorded` and `revised` cover the
-// same calls - the ones the revision prices in the preview's currency - so
-// `difference` compares like with like. The field is absent, never null, when
-// no selection names a basis and a revision, so the recorded read keeps the
-// exact envelope it had before this lane.
+// the session, the money the selected revision gives that same usage, the
+// difference between the two, and the calls that revision could not price. It
+// is a comparison block, not the stored Valuation row of
+// Interface/Valuation.ts: nothing is persisted, and the per-call money fields
+// stay as recorded. `recorded` and `revised` cover the same calls - the ones
+// the revision prices in the preview's currency - so `difference` compares
+// like with like. `unpriced` is the preview's own count of the calls the
+// selected revision leaves unpriced, never the recorded summary's count: the
+// two figures answer different questions, and a comparison labelled with the
+// recorded count would name the wrong revision. The field is absent, never
+// null, when no selection names a basis and a revision, so the recorded read
+// keeps the exact envelope it had before this lane.
 export interface Valuation {
 	basis: ValuationBasis;
 	revisionId: number;
@@ -65,6 +69,7 @@ export interface Valuation {
 	recorded: number;
 	revised: number;
 	difference: number;
+	unpriced: number;
 }
 
 export default interface CostResponse {

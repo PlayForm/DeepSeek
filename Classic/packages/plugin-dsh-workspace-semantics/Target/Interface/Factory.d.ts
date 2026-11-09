@@ -1,3 +1,20 @@
+/**
+ * @module Factory
+ *
+ * The slice of the factory service the semantics service consumes.
+ *
+ * @remarks
+ * The service holds the injected `pluginFactory` instance and uses: the State
+ * builder (cell unwrap + shared fields + the P10 volatile refresh), the ledger
+ * (logger + appendFileSync, never throws), the exclusion match, and the Wire
+ * registration (the exact `Context.root.on("fs/observed", ...)` posture).
+ * Structural, so any future refactor keeps the consumer honest.
+ *
+ * The typed view of the factory service arrives TYPE-ONLY from the factory
+ * package (erased at build - at runtime the service resolves through the
+ * injector). The augmentation below publishes the `pluginFactory` Context
+ * property, so `ctx.pluginFactory` is typed at every consumption site.
+ */
 import type Factory from "@playform/plugin-dsh-factory";
 declare module "@deepseek-ai/cordis" {
     interface Context {

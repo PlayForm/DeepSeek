@@ -12,11 +12,11 @@
 // `valuation` is the one field this mirror gained for lane B4d: the headline
 // comparison the engine adds when the caller selects a basis and a catalog
 // revision - the basis, the revision, the attribution policy version, when
-// the comparison ran, and the recorded, revised and difference figures over
-// the same session. It is absent when no basis is selected, so the recorded
-// read renders exactly as before; the mirror keeps the union spelled out
-// rather than importing the engine's type, the same way every other field of
-// this package is mirrored.
+// the comparison ran, the recorded, revised and difference figures over the
+// same session, and the count of calls that revision could not price. It is
+// absent when no basis is selected, so the recorded read renders exactly as
+// before; the mirror keeps the union spelled out rather than importing the
+// engine's type, the same way every other field of this package is mirrored.
 import type CostCall from "@Interface/Call.js";
 import type CostFileRow from "@Interface/FileRow.js";
 import type CostModelRow from "@Interface/ModelRow.js";
@@ -26,7 +26,8 @@ import type CostSummary from "@Interface/Summary.js";
 
 // Valuation - the recorded-versus-revised headline of one read. `recorded`
 // and `revised` cover the same calls, so `difference` compares like with like;
-// nothing here replaces a per-call money field.
+// `unpriced` is the count of calls the selected revision could not price, not
+// the recorded summary's count; nothing here replaces a per-call money field.
 export interface Valuation {
 	basis: "as-recorded" | "corrected" | "current" | "scenario";
 	revisionId: number;
@@ -35,6 +36,7 @@ export interface Valuation {
 	recorded: number;
 	revised: number;
 	difference: number;
+	unpriced: number;
 }
 
 export default interface CostResponse {

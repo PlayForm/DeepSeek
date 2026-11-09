@@ -1,10 +1,16 @@
-// Markdown - the Markdown adapter (Function/Markdown): the headings are the
-// file's symbols and the link TARGETS are its references (a link target is a
-// reference by construction, whether it names a local file, a URL or an
-// anchor). The rename renames LINK TARGETS only: a heading rename would need
-// the anchor slug the renderer derives, which is not derivable honestly from
-// the text (the refusal-to-guess rule), so a span that is not a link target is
-// the adapter's `undefined`.
+/**
+ * @module Markdown
+ *
+ * The Markdown adapter: the headings are the file's symbols and the link
+ * TARGETS are its references.
+ *
+ * @remarks
+ * A link target is a reference by construction, whether it names a local file,
+ * a URL or an anchor. The rename renames LINK TARGETS only: a heading rename
+ * would need the anchor slug the renderer derives, which is not derivable
+ * honestly from the text (the refusal-to-guess rule), so a span that is not a
+ * link target is the adapter's `undefined`.
+ */
 import type Adapter from "@Interface/Adapter.js";
 import type ReferenceNode from "@Interface/ReferenceNode.js";
 import type Span from "@Interface/Span.js";

@@ -33,12 +33,12 @@
 // that names both a non-recorded basis and a revision asks the pricing service
 // for its preview over this same session and appends the `valuation` block:
 // the money the ledger recorded, the money that revision gives the same usage,
-// and the difference between the two, beside the basis, the revision, the
-// attribution policy version and when the comparison ran. The preview reads
-// the whole session, not the page budget, so the block is a session headline;
-// per-call money stays as recorded in this lane. A session the ledger does not
-// record answers the failure envelope without a block, because no read
-// happened to compare.
+// the difference between the two, and the count of calls the revision could
+// not price, beside the basis, the revision, the attribution policy version
+// and when the comparison ran. The preview reads the whole session, not the
+// page budget, so the block is a session headline; per-call money stays as
+// recorded in this lane. A session the ledger does not record answers the
+// failure envelope without a block, because no read happened to compare.
 import type { DatabaseSync, SQLOutputValue } from "node:sqlite";
 
 import type CostBuckets from "@Interface/Buckets.js";
@@ -470,7 +470,10 @@ export default function Reader(
 	// the preview's stored money and `revised` its repriced total, both over
 	// the same calls, so `difference` compares like with like; the preview
 	// reads the whole session rather than the page budget, so the block is a
-	// session headline. `policyVersion` is the attribution policy the ledger
+	// session headline. `unpriced` is the preview's own count of the calls the
+	// selected revision could not price, never the recorded summary's count,
+	// because the two figures answer different questions and the comparison
+	// names one revision. `policyVersion` is the attribution policy the ledger
 	// declares - the newest Valuation row, else the newest Allocation method,
 	// else the v5 seed's own fallback - because this lane reallocates nothing
 	// and the recorded split is the ledger's own fact. An absent selection, the
@@ -503,6 +506,7 @@ export default function Reader(
 					recorded: Preview.current,
 					revised: Preview.revised,
 					difference: Preview.difference,
+					unpriced: Preview.unpriced,
 				};
 			}
 		}

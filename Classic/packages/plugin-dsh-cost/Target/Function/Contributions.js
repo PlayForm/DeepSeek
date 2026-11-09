@@ -1,4 +1,4 @@
-const C={Contributions:`WITH FileScope AS (
+const c={Contributions:`WITH FileScope AS (
     SELECT File.FileId AS FileId
     FROM File
     WHERE File.Path = ?
@@ -45,4 +45,59 @@ SELECT SessionRow.SessionId AS SessionId,
         ) AS Model) AS Models
 FROM SessionRow
 LEFT JOIN Session ON Session.SessionId = SessionRow.SessionId
-ORDER BY SessionRow.Total DESC, SessionRow.SessionId ASC;`};function u(S,A){const n=(t,e)=>{const o=t[e];return typeof o=="string"?o:null},s=(t,e)=>{const o=t[e];return typeof o=="number"&&Number.isFinite(o)?o:null},l=(t,e)=>s(t,e)??0,i=t=>Math.round(t*1e6)/1e6,d=t=>{if(typeof t!="string")return[];const e=JSON.parse(t);return Array.isArray(e)?e.filter(o=>typeof o=="string"):[]};return S.prepare(C.Contributions).all(A).map(t=>{const e=i(l(t,"Direct")),o=i(l(t,"Amortized")),r=i(e+o),a=i(l(t,"Lifetime"));return{sessionId:n(t,"SessionId")??"",title:n(t,"Title"),calls:l(t,"Calls"),direct:e,amortized:o,total:r,share:a>0?Math.min(1,Math.max(0,r/a)):0,firstAt:s(t,"FirstAt"),lastAt:s(t,"LastAt"),models:d(t.Models)}})}export{u as default};
+ORDER BY SessionRow.Total DESC, SessionRow.SessionId ASC;`,FileCalls:`WITH FileScope AS (
+    SELECT File.FileId AS FileId
+    FROM File
+    WHERE File.Path = ?
+),
+CallScope AS (
+    SELECT Call.CallId AS CallId,
+        Call.Turn AS Turn,
+        Call.Step AS Step,
+        Call.At AS At,
+        Call.Provider AS Provider,
+        Call.Model AS Model,
+        Call.InputTokens AS InputTokens,
+        Call.OutputTokens AS OutputTokens,
+        Call.CacheReadTokens AS CacheReadTokens,
+        Call.CacheWriteTokens AS CacheWriteTokens
+    FROM Call
+    WHERE Call.SessionId = ?
+),
+CallMoney AS (
+    SELECT Allocation.CallId AS CallId,
+        SUM(Allocation.DirectCost) AS Direct,
+        SUM(Allocation.AmortizedCost) AS Amortized
+    FROM Allocation
+    JOIN FileScope ON FileScope.FileId = Allocation.FileId
+    JOIN CallScope ON CallScope.CallId = Allocation.CallId
+    GROUP BY Allocation.CallId
+),
+TouchRow AS (
+    SELECT Touch.CallId AS CallId,
+        MAX(Touch.Stage) AS Stage,
+        COUNT(*) AS Touched
+    FROM Touch
+    JOIN FileScope ON FileScope.FileId = Touch.FileId
+    JOIN CallScope ON CallScope.CallId = Touch.CallId
+    GROUP BY Touch.CallId
+)
+SELECT CallScope.CallId AS CallId,
+    CallScope.Turn AS Turn,
+    CallScope.Step AS Step,
+    CallScope.At AS At,
+    CallScope.Provider AS Provider,
+    CallScope.Model AS Model,
+    CallMoney.Direct AS Direct,
+    CallMoney.Amortized AS Amortized,
+    CallMoney.Direct + CallMoney.Amortized AS Total,
+    CallScope.InputTokens AS InputTokens,
+    CallScope.OutputTokens AS OutputTokens,
+    CallScope.CacheReadTokens AS CacheReadTokens,
+    CallScope.CacheWriteTokens AS CacheWriteTokens,
+    TouchRow.Stage AS Stage,
+    COALESCE(TouchRow.Touched, 0) AS Touched
+FROM CallMoney
+JOIN CallScope ON CallScope.CallId = CallMoney.CallId
+LEFT JOIN TouchRow ON TouchRow.CallId = CallMoney.CallId
+ORDER BY CallScope.Turn ASC, CallScope.Step ASC, CallScope.CallId ASC;`},s=(o,a)=>{const t=o[a];return typeof t=="string"?t:null},r=(o,a)=>{const t=o[a];return typeof t=="number"&&Number.isFinite(t)?t:null},e=(o,a)=>r(o,a)??0,S=o=>Math.round(o*1e6)/1e6;function u(o,a){const t=l=>{if(typeof l!="string")return[];const i=JSON.parse(l);return Array.isArray(i)?i.filter(n=>typeof n=="string"):[]};return o.prepare(c.Contributions).all(a).map(l=>{const i=S(e(l,"Direct")),n=S(e(l,"Amortized")),C=S(i+n),A=S(e(l,"Lifetime"));return{sessionId:s(l,"SessionId")??"",title:s(l,"Title"),calls:e(l,"Calls"),direct:i,amortized:n,total:C,share:A>0?Math.min(1,Math.max(0,C/A)):0,firstAt:r(l,"FirstAt"),lastAt:r(l,"LastAt"),models:t(l.Models)}})}function I(o,a,t){return o.prepare(c.FileCalls).all(a,t).map(l=>{const i=S(e(l,"Direct")),n=S(e(l,"Amortized"));return{callId:e(l,"CallId"),turn:e(l,"Turn"),step:e(l,"Step"),at:e(l,"At"),provider:s(l,"Provider")??"",model:s(l,"Model")??"",direct:i,amortized:n,total:S(i+n),input:e(l,"InputTokens"),output:e(l,"OutputTokens"),cacheRead:e(l,"CacheReadTokens"),cacheWrite:e(l,"CacheWriteTokens"),stage:s(l,"Stage"),touched:e(l,"Touched")>0}})}export{I as FileCalls,u as default};

@@ -1,5 +1,11 @@
-// ReferenceNode - one reference of the semantic model (the graph schema v0's
-// references edge, collapsed per file): who uses X, from where.
+/**
+ * @module ReferenceNode
+ *
+ * One reference of the semantic model: who uses X, from where.
+ *
+ * @remarks
+ * The graph schema v0's references edge, collapsed per file.
+ */
 import type Span from "@Interface/Span.js";
 
 export default interface ReferenceNode {

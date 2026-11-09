@@ -52,14 +52,13 @@ interface Extra {
 	Proposals: Map<string, Entry>;
 	/** The arbiter gates by name (the Gates block's live truth). */
 	Gates: Map<string, Gate>;
-	/** The message ids already spliced (the live emit and the durable splice
-	 *  of one message must project once), bounded by MaxProposals * 2. */
+	/** The message ids already spliced (the live emit and the durable splice of one message must
+	 * project once), bounded by MaxProposals * 2. */
 	Seen: string[];
-	/** The per-action allowlist (config `policy`, volatile) - the D6 block.
-	 *  Named `Allow` because the factory's shared State already owns `Policy`
-	 *  (the configured global policy file path); the board is a recorder/
-	 *  projection, so its own classes are automatic and the write path stays
-	 *  the shipped `approve`. */
+	/** The per-action allowlist (config `policy`, volatile) - the D6 block. Named `Allow` because
+	 * the factory's shared State already owns `Policy` (the configured global policy file path);
+	 * the board is a recorder/projection, so its own classes are automatic and the write path stays
+	 * the shipped `approve`. */
 	Allow: Allowlist;
 }
 

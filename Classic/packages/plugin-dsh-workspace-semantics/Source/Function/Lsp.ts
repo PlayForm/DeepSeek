@@ -1,28 +1,35 @@
-// Lsp - the PRIMARY TypeScript deepener (Function/Lsp): the harness's LSP
-// seam (`ctx.lsp`, @deepseek-ai/dsh-lsp) answers the scope-resolved
-// `findReferences` query the lexical scanner only approximates. THE SEAM HAS
-// FOUR READ OPERATIONS ONLY - `goToDefinition`, `findReferences`,
-// `goToImplementation`, `hover` - no symbol enumeration and no
-// rename/WorkspaceEdit, so this deepener supplies the REFERENCE SET and the
-// RENAME EDITS derived from it, while the SYMBOLS still come from the lexical
-// adapter's declaration scan.
-//
-// THE API USED (the harness's normalized request/result, never JSON-RPC):
-//
-//   ctx.lsp.query({ operation: "findReferences", filePath, position,
-//                   workspaceRoot }) -> { kind: "locations", locations, ... }
-//
-// with zero-based UTF-16 positions. One query runs per declared symbol (the
-// cursor is the symbol's identifier offset inside its declaration span), and
-// only same-file locations are kept: the semantic model is per file
-// (ReferenceNode carries no path), so a cross-file location cannot be
-// represented honestly and is dropped rather than guessed into the model.
-//
-// THE FALLBACK RULE (Interface/Deepening): an absent seam, a seam with no
-// provider for the extension, a failed query, or a result that is not the
-// `locations` variant is `undefined` - the lexical answer stands. The seam is
-// PROBED (`ctx.get("lsp")`), never injected: the loader contract's `inject`
-// stays ["pluginFactory", "fs"].
+/**
+ * @module Lsp
+ *
+ * The PRIMARY TypeScript deepener: the harness's LSP seam answers the
+ * scope-resolved `findReferences` query the lexical scanner only approximates.
+ *
+ * @remarks
+ * The seam (`ctx.lsp`, @deepseek-ai/dsh-lsp) has FOUR READ OPERATIONS ONLY -
+ * `goToDefinition`, `findReferences`, `goToImplementation`, `hover` - no symbol
+ * enumeration and no rename/WorkspaceEdit, so this deepener supplies the
+ * REFERENCE SET and the RENAME EDITS derived from it, while the SYMBOLS still
+ * come from the lexical adapter's declaration scan.
+ *
+ * THE API USED (the harness's normalized request/result, never JSON-RPC):
+ *
+ * ```
+ * ctx.lsp.query({ operation: "findReferences", filePath, position,
+ *                 workspaceRoot }) -> { kind: "locations", locations, ... }
+ * ```
+ *
+ * with zero-based UTF-16 positions. One query runs per declared symbol (the
+ * cursor is the symbol's identifier offset inside its declaration span), and
+ * only same-file locations are kept: the semantic model is per file
+ * (ReferenceNode carries no path), so a cross-file location cannot be
+ * represented honestly and is dropped rather than guessed into the model.
+ *
+ * THE FALLBACK RULE (Interface/Deepening): an absent seam, a seam with no
+ * provider for the extension, a failed query, or a result that is not the
+ * `locations` variant is `undefined` - the lexical answer stands. The seam is
+ * PROBED (`ctx.get("lsp")`), never injected: the loader contract's `inject`
+ * stays ["pluginFactory", "fs"].
+ */
 import { fileURLToPath } from "node:url";
 
 import type Deepening from "@Interface/Deepening.js";
@@ -165,8 +172,8 @@ export default {
 			case Seam === undefined:
 				return undefined;
 			case Symbols.length === 0:
-				// Nothing to resolve: the lexical list (also empty) stands, and
-				// the seam is never asked a question it cannot answer.
+				// Nothing to resolve: the lexical list (also empty) stands, and the seam is
+				// never asked a question it cannot answer.
 				return undefined;
 			default:
 		}
@@ -176,8 +183,8 @@ export default {
 			const Locations = await Ask(Seam, Root, Path, CursorOf(Text, Locate(Text, Symbol)));
 			switch (true) {
 				case Locations === undefined:
-					// The seam failed mid-file: the whole answer is the lexical
-					// list - never a half-deepened mixture.
+					// The seam failed mid-file: the whole answer is the lexical list - never a
+					// half-deepened mixture.
 					return undefined;
 				default:
 			}
@@ -240,8 +247,8 @@ export default {
 		}
 		switch (true) {
 			case edits.length === 0:
-				// No same-file use sites: the adapter's plan (and its own
-				// refusal) stands rather than an empty plan.
+				// No same-file use sites: the adapter's plan (and its own refusal) stands
+				// rather than an empty plan.
 				return undefined;
 			default:
 		}

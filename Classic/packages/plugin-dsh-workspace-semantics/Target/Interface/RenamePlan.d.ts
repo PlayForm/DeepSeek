@@ -1,3 +1,14 @@
+/**
+ * @module RenamePlan
+ *
+ * The proposed rename edits: NOT an applied write.
+ *
+ * @remarks
+ * The adapter computes the edits from its reference list plus its own symbol
+ * resolution (the V4-1 harness map: "the rename engine computes its edits from
+ * findReferences plus its own symbol resolution"). The plan goes to the operate
+ * proposals; this service never writes a file.
+ */
 import type Span from "./Span.js";
 export default interface RenamePlan {
     /** The path the plan is for. */
@@ -8,7 +19,9 @@ export default interface RenamePlan {
     to: string;
     /** The half-open ranges to rewrite, one per use site. */
     edits: Span[];
-    /** The adapter's declared certainty (the refusal-to-guess rule: an
-     *  adapter that cannot be certain refuses instead of guessing). */
+    /**
+     * The adapter's declared certainty (the refusal-to-guess rule: an adapter that cannot
+     * be certain refuses instead of guessing).
+     */
     certainty: "references" | "exact";
 }

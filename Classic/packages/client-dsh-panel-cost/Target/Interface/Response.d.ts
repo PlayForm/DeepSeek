@@ -12,6 +12,7 @@ export interface Valuation {
     recorded: number;
     revised: number;
     difference: number;
+    unpriced: number;
 }
 export default interface CostResponse {
     ok: boolean;

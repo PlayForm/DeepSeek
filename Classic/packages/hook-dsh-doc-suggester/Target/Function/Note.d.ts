@@ -8,11 +8,14 @@ declare module "@deepseek-ai/dsh-llm" {
         };
     }
 }
-/** Bind a notice summary to the harness's 120-char limit (ellipsized). */
+/**
+ * Bind a notice summary to the harness's 120-char limit (ellipsized).
+ */
 export declare const BoundSummary: (Summary: string) => string;
 /**
- * Build the note TEXT: one line of family and confidence, the capped
- * companion list with one reason each, and the standing caution.
+ * Build the note TEXT: one line of family and confidence, the capped companion list with
+ * one reason each, and the standing caution.
+ *
  * @param Family - the family id.
  * @param Kappa - the confidence, two decimals.
  * @param Candidates - the scored companions (already capped).
@@ -25,6 +28,7 @@ export declare const Text: (Family: string, Kappa: number, Candidates: {
 export default _default;
 /**
  * Build one identified, frozen user-role notice message.
+ *
  * @param Body - the model-facing note text.
  * @param Summary - the one-line account (`<family> <kappa>`).
  */
