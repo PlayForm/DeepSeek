@@ -1,24 +1,3 @@
-// The client-half bundler: emits a harness-shaped client bundle.
-//
-// THE CONTRACT (verified against the harness source):
-// `packages/preset/agent-preset/skills/cordis-plugin-development/templates/
-// decoration/client.js` and `packages/client/tsdown.client.ts`: a client
-// bundle is a CLASSIC script (no ESM imports) that calls
-// `window.__ModuleLoader__.load({ id, factory(require) })`; the factory
-// returns the client plugin module ({ inject, apply, default }), and the
-// injected `require` resolves the module-table externals (react, ...).
-//
-// This function bundles the package's client entry to CJS with esbuild (the
-// package's tsconfig paths resolve the @Function/@Interface/@Variable
-// aliases; the locale JSON is inlined), then wraps the output in the
-// closure-factory envelope above and writes Target/Client.bundle.js.
-// The ESM Target/Client.js stays the dev/test surface; the package's
-// `exports["./client"]` points the module system at the bundle.
-//
-// The bundler also compiles the plugin's `Source/Stylesheet/Plugin.scss` into
-// the bundle through the `Stylesheet` plugin in Source/Function/Stylesheet.ts,
-// which is why the entry is `Source/Bundle.ts` and the ESM half stays
-// style-free.
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import * as Path from "node:path";
 
@@ -26,14 +5,46 @@ import { build } from "esbuild";
 
 import Stylesheet from "./Stylesheet.js";
 
-// The harness module-table seed words: the exact PLATFORM_MODULES list the shell
-// resolves to its own single instance at require time (packages/client/web/
-// src/platform.ts:8-15; the resolution order is modules/src/client/system.ts:
-// 328-351). A specifier on this list stays a bare require in the bundle; every
-// other import is inlined, which is a second copy, not a reuse.
-// Bare package names only: esbuild also externalizes subpaths, and the module
-// system normalizes only "<id>" and "<id>/client" (manifest.ts:218-220), so a
-// subpath would be an unresolvable require at mount.
+/**
+ * @module Bundle
+ *
+ * The client-half bundler: emits a harness-shaped client bundle.
+ *
+ * @remarks
+ * THE CONTRACT (verified against the harness source):
+ * `packages/preset/agent-preset/skills/cordis-plugin-development/templates/
+ * decoration/client.js` and `packages/client/tsdown.client.ts`: a client
+ * bundle is a CLASSIC script (no ESM imports) that calls
+ * `window.__ModuleLoader__.load({ id, factory(require) })`; the factory
+ * returns the client plugin module (`{ inject, apply, default }`), and the
+ * injected `require` resolves the module-table externals (react, ...).
+ *
+ * This function bundles the package's client entry to CJS with esbuild (the
+ * package's tsconfig paths resolve the `@Function`/`@Interface`/`@Variable`
+ * aliases; the locale JSON is inlined), then wraps the output in the
+ * closure-factory envelope above and writes `Target/Client.bundle.js`.
+ *
+ * The ESM `Target/Client.js` stays the dev/test surface; the package's
+ * `exports["./client"]` points the module system at the bundle.
+ *
+ * The bundler also compiles the plugin's `Source/Stylesheet/Plugin.scss` into
+ * the bundle through the `Stylesheet` plugin in
+ * `Source/Function/Stylesheet.ts`, which is why the entry is `Source/Bundle.ts`
+ * and the ESM half stays style-free.
+ */
+
+/**
+ * The harness module-table seed words: the exact PLATFORM_MODULES list the
+ * shell resolves to its own single instance at require time
+ * (`packages/client/web/src/platform.ts:8-15`; the resolution order is
+ * `modules/src/client/system.ts:328-351`). A specifier on this list stays a
+ * bare require in the bundle; every other import is inlined, which is a second
+ * copy, not a reuse.
+ *
+ * Bare package names only: esbuild also externalizes subpaths, and the module
+ * system normalizes only "<id>" and "<id>/client" (`manifest.ts:218-220`), so
+ * a subpath would be an unresolvable require at mount.
+ */
 const PlatformModules = [
 	"react",
 	"react/jsx-runtime",

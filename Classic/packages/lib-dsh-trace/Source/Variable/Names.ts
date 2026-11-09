@@ -1,7 +1,13 @@
-// Names - the trace vocabulary's names: the service name the factory provides
-// (`ctx.trace`) and the event names the family's adapters emit and consume.
-// The library owns the strings; no plugin re-declares them (the one place a
-// new event name is added).
+/**
+ * @module Names
+ *
+ * The trace vocabulary's names are the service name the factory provides
+ * (`ctx.trace`) and the event names the family's adapters emit and consume.
+ *
+ * @remarks
+ * The library owns the strings; no plugin re-declares them, so this module is
+ * the one place a new event name is added.
+ */
 export default {
 	/** The service name the factory provides (`ctx.trace`). */
 	service: "trace",

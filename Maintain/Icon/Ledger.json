@@ -2433,17 +2433,17 @@
 			"kind": "plugin",
 			"tree": "Classic",
 			"version": "0.2.1",
-			"seed": "5df49aa30461382e6251609e1b9a4c04c0dcd53640201c77be4c689709b760b6",
+			"seed": "5c143f79c89ef54da0f83f5c56d0656f6c2586d0b329deec38508aacd611b17d",
 			"grammar": "interlace-tile",
 			"order": 12,
 			"arms": 8,
 			"rings": 3,
 			"orbit": 8,
-			"rim": "woven",
+			"rim": "diamond",
 			"mode": "single",
 			"hash": {
-				"mono": "3d272eeab32c17f859277b972f5eecd69666fae18bc8bcba0018fa8f874cd061",
-				"colour": "f27454a2d3699ff68be51b7e9d3f76e70eb203ef9eb3ca5120aaf88957f564ae"
+				"mono": "0e1d4f827c6cec332af7f33ed28a5b6e9f2f2639cc43d888f182f7e80860ad32",
+				"colour": "795320f01dc25dec56e6a6beb0b9ebc79b619b9aa4ce70d92d3f39ad9c8c0cab"
 			},
 			"path": {
 				"mono": "Maintain/Icon/Asset/Mono/plugin-dsh-cost.svg",

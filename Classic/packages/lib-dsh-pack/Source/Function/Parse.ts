@@ -1,22 +1,30 @@
-// Parse - a STRICT YAML-SUBSET parser for the pack schema. The workspace
-// does not carry the `yaml` package in its own dependency graph (the symbol
-// only resolves through the enclosing machine's pnpm store, which a checkout
-// elsewhere would not have), so the library stays dependency-light and
-// parses the documented subset itself. Supported:
-//
-//   * block mappings (`key: value`, nested by indentation);
-//   * block sequences (`- value`, `- key: value` map items, nested blocks);
-//   * scalars: plain, single-quoted (`''` escapes), double-quoted (JSON
-//     escapes), true/false, null/~, integers and decimals;
-//   * flow sequences of scalars (`[a, b]`), the empty flow `[]` and `{}`;
-//   * comments (`#` at the line start or after whitespace), blank lines,
-//     `---` / `...` document markers.
-//
-// NOT supported (the parser throws a line-numbered error, never guesses):
-// tabs, anchors/aliases (`&name`, `*name`), tags (`!tag`), block scalars
-// (`|`, `>`), non-empty flow mappings (`{a: b}`), multi-document files,
-// duplicate keys, and a sequence map item whose following keys are not
-// aligned under the item's content. Documented in SCHEME.md.
+/**
+ * @module Parse
+ *
+ * A STRICT YAML-SUBSET parser for the pack schema.
+ *
+ * @remarks
+ * The workspace does not carry the `yaml` package in its own dependency graph
+ * (the symbol only resolves through the enclosing machine's pnpm store, which a
+ * checkout elsewhere would not have), so the library stays dependency-light and
+ * parses the documented subset itself.
+ *
+ * Supported:
+ *
+ * - block mappings (`key: value`, nested by indentation);
+ * - block sequences (`- value`, `- key: value` map items, nested blocks);
+ * - scalars: plain, single-quoted (`''` escapes), double-quoted (JSON escapes),
+ *   `true`/`false`, `null`/`~`, integers and decimals;
+ * - flow sequences of scalars (`[a, b]`), the empty flow `[]` and `{}`;
+ * - comments (`#` at the line start or after whitespace), blank lines, `---` /
+ *   `...` document markers.
+ *
+ * NOT supported (the parser throws a line-numbered error, never guesses): tabs,
+ * anchors/aliases (`&name`, `*name`), tags (`!tag`), block scalars (`|`, `>`),
+ * non-empty flow mappings (`{a: b}`), multi-document files, duplicate keys, and
+ * a sequence map item whose following keys are not aligned under the item's
+ * content. Documented in `SCHEME.md`.
+ */
 interface Row {
 	indent: number;
 	text: string;

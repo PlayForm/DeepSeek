@@ -1,23 +1,29 @@
-// Library - the entry module of the PACKS (@playform/lib-dsh-pack): the
-// pure, dependency-light, harness-free workspace-pack library of the
-// suggester family, as named exports (the harness convention - the packs are
-// NOT a plugin bundle: no cordis patch, no loader contract, publishable on
-// its own).
-//
-// Three halves:
-//
-//   Variable - the built-in pack for this monorepo (the union of the six
-//   suggesters' former embedded packs, keyed by `<domain>/<id>`), the default
-//   signature and the two layer locations.
-//
-//   Function - the machinery: the strict YAML-subset parser, the pack reader,
-//   the normalizer, the merge rules, the cycle-guarded extends chain, the
-//   layered resolver, the process memo, the per-domain families projection
-//   and the workspace locator (the gate whose signature comes from the pack).
-//
-//   Interface - the pack schema (Pack, Family, Signal, Target, Indexer,
-//   Policy, Learning), the locator's answer and the resolution seam.
 import Version from "./Variable/Version.js";
+
+/**
+ * @module Library
+ *
+ * The entry module of the PACKS (`@playform/lib-dsh-pack`): the pure,
+ * dependency-light, harness-free workspace-pack library of the suggester
+ * family, as named exports.
+ *
+ * @remarks
+ * The harness convention applies, but the packs are NOT a plugin bundle: no
+ * cordis patch, no loader contract, publishable on its own.
+ *
+ * Three halves:
+ *
+ * - Variable - the built-in pack for this monorepo (the union of the six
+ *   suggesters' former embedded packs, keyed by `<domain>/<id>`), the default
+ *   signature and the two layer locations.
+ * - Function - the machinery: the strict YAML-subset parser, the pack reader,
+ *   the normalizer, the merge rules, the cycle-guarded extends chain, the
+ *   layered resolver, the process memo, the per-domain families projection and
+ *   the workspace locator (the gate whose signature comes from the pack).
+ * - Interface - the pack schema (`Pack`, `Family`, `Signal`, `Target`,
+ *   `Indexer`, `Policy`, `Learning`), the locator's answer and the resolution
+ *   seam.
+ */
 
 export { default as Builtin } from "./Variable/Builtin.js";
 export { default as Signature } from "./Variable/Signature.js";
@@ -53,9 +59,14 @@ export type { default as Located } from "./Interface/Located.js";
 export type { default as Options } from "./Interface/Options.js";
 export type { default as Touch } from "./Interface/Touch.js";
 
-// The compiled package version (Source/Variable/Version, built in by the
-// ESBuild define). This is a LIBRARY, not a plugin bundle: no cordis patch,
-// no loader contract and no Config export - Version sits beside the other
-// named exports rather than after a `Config` export, and the contract's four
-// names do not exist here to keep unchanged.
+/**
+ * The compiled package version (`Source/Variable/Version`, built in by the
+ * ESBuild define).
+ *
+ * @remarks
+ * This is a LIBRARY, not a plugin bundle: no cordis patch, no loader contract
+ * and no `Config` export. `Version` sits beside the other named exports rather
+ * than after a `Config` export, and the loader contract's four names are
+ * absent, which keeps the export surface unchanged.
+ */
 export { Version };

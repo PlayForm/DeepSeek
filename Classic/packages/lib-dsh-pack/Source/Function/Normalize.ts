@@ -1,26 +1,33 @@
-// Normalize - fill a parsed pack's defaults and validate its shape, so the
-// merge and the families projection can rely on a total structure. The
-// defaults are the pack schema's documented ones:
-//
-//   family.id        - the key's last segment (`doc/Plan` -> `Plan`);
-//   family.priority  - 99 (a pack without a priority sorts last);
-//   family.threshold - 0.75;
-//   family.note      - "" (the domains without a caveat);
-//   family.familyGlobs - [];
-//   target.kind      - "";
-//   target.prior     - 0.6;
-//   target.reason    - "";
-//   signal.rule      - "rule";
-//   signal.weight    - 1.
-//
-// A structurally invalid pack throws (a family must be a mapping, a signal a
-// mapping with a string pattern, a target a mapping with a string path); the
-// suggester's fail-open listener catches it, warns, and passes the call
-// through unnoted.
 import type Family from "../Interface/Family.js";
 import type Pack from "../Interface/Pack.js";
 import type Signal from "../Interface/Signal.js";
 import type Target from "../Interface/Target.js";
+
+/**
+ * @module Normalize
+ *
+ * Fill a parsed pack's defaults and validate its shape, so the merge and the
+ * families projection can rely on a total structure.
+ *
+ * @remarks
+ * The defaults are the pack schema's documented ones:
+ *
+ * - `family.id` - the key's last segment (`doc/Plan` -> `Plan`);
+ * - `family.priority` - 99 (a pack without a priority sorts last);
+ * - `family.threshold` - 0.75;
+ * - `family.note` - `""` (the domains without a caveat);
+ * - `family.familyGlobs` - `[]`;
+ * - `target.kind` - `""`;
+ * - `target.prior` - 0.6;
+ * - `target.reason` - `""`;
+ * - `signal.rule` - `"rule"`;
+ * - `signal.weight` - 1.
+ *
+ * A structurally invalid pack throws (a family must be a mapping, a signal a
+ * mapping with a string pattern, a target a mapping with a string path); the
+ * suggester's fail-open listener catches it, warns, and passes the call through
+ * unnoted.
+ */
 
 /** A string field with a fallback. */
 const Text = (Value: unknown, Fallback: string): string =>

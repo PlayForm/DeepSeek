@@ -1,8 +1,14 @@
-// State - the folded state of one session: what the fold (Function/Fold)
-// returns and what a conversation-aware consumer keeps in its cell. The
-// derivation "which files did this step touch" lives in Function/Resolve and
-// appears here as the Touches list and the distinct Files, written once
-// instead of once per plugin.
+/**
+ * @module State
+ *
+ * The folded state of one session: what the fold (`Function/Fold`) returns and
+ * what a conversation-aware consumer keeps in its cell.
+ *
+ * @remarks
+ * The derivation "which files did this step touch" lives in
+ * `Function/Resolve` and appears here as the Touches list and the distinct
+ * Files, written once instead of once per plugin.
+ */
 
 /** One assistant message's model call: the turn and step it ran in, the provider and model, and the usage buckets (a missing `cacheReadTokens` is an unreported bucket, `null`, never guessed). */
 export interface Call {

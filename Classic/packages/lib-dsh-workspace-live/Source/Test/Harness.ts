@@ -1,12 +1,22 @@
-// Source/Test/Harness.ts - the shared test harness for the WORKSPACE-LIVE
-// library tests. The library is NOT a plugin bundle: it has no loader
-// contract, no config and no context - the tests call its PURE functions
-// directly through the real built Target/Library.js named exports, so the
-// harness is only the counter plus the selfcheck (the vacuously-green
-// backstop for every folder's fixture). NO FAKE CLOCK, NO FAKE CTX: nothing
-// here touches a context, the filesystem, or time.
 import assert from "node:assert/strict";
 import * as Library from "../../Target/Library.js";
+
+/**
+ * @module Harness
+ *
+ * The shared test harness for the WORKSPACE-LIVE library tests: the counter,
+ * the three built-function bindings, and the selfcheck.
+ *
+ * @remarks
+ * The library is NOT a plugin bundle: it has no loader contract, no config and
+ * no context - the tests call its PURE functions directly through the real
+ * built `Target/Library.js` named exports, so the harness is only the counter
+ * plus the selfcheck (the vacuously-green backstop for every folder's
+ * fixture).
+ *
+ * NO FAKE CLOCK, NO FAKE CTX: nothing here touches a context, the filesystem,
+ * or time.
+ */
 
 export const Render = Library.Render as (Section: any) => string;
 export const Collapse = Library.Collapse as (Sections: any[], Budget: number) => { text: string; collapsed: boolean }[];
@@ -57,7 +67,7 @@ export const Finish = (Count: Counter, Name: string): number => {
 	return Count.N;
 };
 
-// Standalone entry: `node Target/Test/Harness.js --selfcheck`.
+/** Standalone entry: `node Target/Test/Harness.js --selfcheck`. */
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

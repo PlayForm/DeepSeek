@@ -1,7 +1,15 @@
-// IsEnvelope - the envelope guard: a complete envelope (the five fields, the
-// payload an object). The bus validates what it dispatches; an adapter that
-// receives a foreign value ignores it instead of crashing.
 import type Envelope from "@Interface/Envelope.js";
+
+/**
+ * @module IsEnvelope
+ *
+ * The envelope guard: a complete envelope carries the five fields with an
+ * object payload.
+ *
+ * @remarks
+ * The bus validates what it dispatches, so an adapter that receives a foreign
+ * value ignores it instead of crashing.
+ */
 
 export default (Value: unknown): Value is Envelope => {
 	if (Value === null || typeof Value !== "object") {

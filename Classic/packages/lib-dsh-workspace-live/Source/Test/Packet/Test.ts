@@ -1,9 +1,16 @@
-// Source/Test/Packet/Test.ts - the orientation-packet renderer: the full
-// eight-line grammar byte-exact, the `(none)` placeholders for absent
-// bands, the omitted FOCUS and STALE lines, and the STALE-only-on-difference
-// rule.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Packet } from "../Harness.js";
+
+/**
+ * @module Test
+ *
+ * The orientation-packet renderer's smokes over the built `Packet` export.
+ *
+ * @remarks
+ * The full eight-line grammar byte-exact, the `(none)` placeholders for absent
+ * bands, the omitted FOCUS and STALE lines, and the STALE-only-on-difference
+ * rule.
+ */
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -96,7 +103,7 @@ export const runTest = async (): Promise<number> => {
 	return Finish(Count, "Packet");
 };
 
-// Standalone entry: `node Target/Test/Packet/Test.js`.
+/** Standalone entry: `node Target/Test/Packet/Test.js`. */
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

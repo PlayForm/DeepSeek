@@ -19,6 +19,23 @@ import {
 } from "../../../Target/Library.js";
 import { Check, CheckAsync, Finish, MakeCounter } from "../Harness.js";
 
+/**
+ * @module Test
+ *
+ * One singular test: the trace vocabulary and the detached loop.
+ *
+ * @remarks
+ * The scenario covers the exact names, the envelope completion (bus-assigned
+ * `trace`/`at`, the emitter's supplied values preserved), the two guards, the
+ * coalescing key, the loop's coalescing (ONE run per key, no timer), its
+ * fail-open containment, its disposer, per-key independence, and the fixed ring
+ * bound.
+ *
+ * It runs standalone (`node Target/Test/Loop-And-Vocabulary/Test.js`) AND under
+ * the aggregate (`Maintain/Run/Smokes/Index.mjs` spawns it). This is the unit
+ * smoke of `@playform/lib-dsh-trace`: the REAL built entry only.
+ */
+
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
 

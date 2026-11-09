@@ -1,1 +1,0 @@
-import o from"./Function/Apply.js";import t from"./Variable/Config.js";import p from"./Variable/Version.js";const r="plugin-dsh-cost",e=t,n=["pluginFactory","tokenMeter","commands"],i=o;var f={name:r,apply:i,Config:e,inject:n};export{e as Config,p as Version,i as apply,f as default,n as inject,r as name};

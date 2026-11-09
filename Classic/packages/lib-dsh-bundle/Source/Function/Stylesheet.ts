@@ -1,19 +1,29 @@
-// The stylesheet build step: one sass compile, shared by the client bundler
-// (which turns a plugin's Source/Stylesheet/Plugin.scss into the string its
-// injector mounts) and the material's own publish build (which copies the
-// partials to Target and compiles the base CSS there).
-//
-// The Dart-JS `sass` package crashes on Node 26 the moment it resolves an
-// imported path, so the compiler is sass-embedded.
 import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import * as Path from "node:path";
 
 import type { Plugin } from "esbuild";
 import { compile } from "sass-embedded";
 
-// Every existing `node_modules` directory from `Directory` up to the file
-// system root, nearest first: a standalone package resolves its own
-// dependencies, and a hoisted monorepo resolves the root one.
+/**
+ * @module Stylesheet
+ *
+ * The stylesheet build step: one sass compile, shared by the client bundler and
+ * the material's own publish build.
+ *
+ * @remarks
+ * The client bundler turns a plugin's `Source/Stylesheet/Plugin.scss` into the
+ * string its injector mounts; the material's own publish build copies the
+ * partials to `Target` and compiles the base CSS there.
+ *
+ * The Dart-JS `sass` package crashes on Node 26 the moment it resolves an
+ * imported path, so the compiler is sass-embedded.
+ */
+
+/**
+ * Every existing `node_modules` directory from `Directory` up to the file
+ * system root, nearest first: a standalone package resolves its own
+ * dependencies, and a hoisted monorepo resolves the root one.
+ */
 function Resolve(Directory: string): string[] {
 	const Paths: string[] = [];
 	let Current = Path.resolve(Directory);
@@ -54,9 +64,11 @@ export default function Stylesheet(Directory: string): Plugin {
 	};
 }
 
-// The material's build: its public surface is Target, so the partials are
-// copied there for the plugins' `@use`, and Base.scss compiles to the one CSS
-// artifact a non-sass consumer can read.
+/**
+ * The material's build: its public surface is Target, so the partials are
+ * copied there for the plugins' `@use`, and Base.scss compiles to the one CSS
+ * artifact a non-sass consumer can read.
+ */
 export function Publish(Directory: string): void {
 	const Root = Path.resolve(Directory);
 	const Source = Path.join(Root, "Source/Stylesheet");

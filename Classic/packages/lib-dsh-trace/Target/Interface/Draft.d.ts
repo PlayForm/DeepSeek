@@ -1,3 +1,14 @@
+/**
+ * @module Draft
+ *
+ * What an adapter hands the bus: the envelope's required content without the
+ * bus-assigned fields.
+ *
+ * @remarks
+ * `trace` and `at` are optional: an emitter may supply them (a correlated
+ * chain, a deterministic smoke) and the bus completes the rest
+ * (`Function/Complete`).
+ */
 export default interface Draft {
     /** The event name. */
     kind: string;

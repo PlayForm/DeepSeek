@@ -1,22 +1,28 @@
-// Merge - the pack merge rules (D2, documented in SCHEME.md):
-//
-//   * families merge BY ID (the domain-qualified key): the override's
-//     DECLARED scalar fields replace the base family's; its signals array
-//     replaces; its targets merge BY PATH (a same-path target replaces the
-//     base target in place, a new path appends in override order);
-//   * every other section (signature, indexer, policy, learning, slug,
-//     extends) follows scalars-replace, arrays-replace; a nested section
-//     object merges key by key with the same rule.
-//
-// The layers are merged RAW (before Normalize): an absent field is not a
-// default, so it never overwrites the base. Normalize runs once, on the
-// merged result, and fills the schema defaults there.
-//
-// The override is the LATER layer: the extends chain is the base, then the
-// user layer, then the repo layer.
 import type Family from "../Interface/Family.js";
 import type Pack from "../Interface/Pack.js";
 import type Target from "../Interface/Target.js";
+
+/**
+ * @module Merge
+ *
+ * The pack merge rules (D2, documented in `SCHEME.md`).
+ *
+ * @remarks
+ * - Families merge BY ID (the domain-qualified key): the override's DECLARED
+ *   scalar fields replace the base family's; its signals array replaces; its
+ *   targets merge BY PATH (a same-path target replaces the base target in
+ *   place, a new path appends in override order).
+ * - Every other section (signature, indexer, policy, learning, slug, extends)
+ *   follows scalars-replace, arrays-replace; a nested section object merges key
+ *   by key with the same rule.
+ *
+ * The layers are merged RAW (before `Normalize`): an absent field is not a
+ * default, so it never overwrites the base. `Normalize` runs once, on the merged
+ * result, and fills the schema defaults there.
+ *
+ * The override is the LATER layer: the extends chain is the base, then the user
+ * layer, then the repo layer.
+ */
 
 /** Merge two target lists by path. */
 const MergeTargets = (Base: Target[], Override: Target[]): Target[] => {

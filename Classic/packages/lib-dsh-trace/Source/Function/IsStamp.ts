@@ -1,7 +1,15 @@
-// IsStamp - the `observe/stamp` payload guard: a non-empty path, a version
-// and an origin, all strings. The graph's adapter accepts only a guarded
-// stamp - a malformed payload is ignored (never guessed into a re-index).
 import type Stamp from "@Interface/Stamp.js";
+
+/**
+ * @module IsStamp
+ *
+ * The `observe/stamp` payload guard: a non-empty path, a version and an
+ * origin, all strings.
+ *
+ * @remarks
+ * The graph's adapter accepts only a guarded stamp, so a malformed payload is
+ * ignored and never guessed into a re-index.
+ */
 
 export default (Value: unknown): Value is Stamp => {
 	if (Value === null || typeof Value !== "object") {

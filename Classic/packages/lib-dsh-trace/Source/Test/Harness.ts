@@ -1,18 +1,25 @@
-// Source/Test/Harness.ts - the shared test harness for the TRACE unit tests.
-// The trace is a pure unit: NO fake ctx, NO factory - every test imports the
-// REAL built Target/Library.js of its own bundle only, so the harness here is
-// minimal: the Check counter (one Check per source-suite ok group; the
-// callback carries that group's assertions byte-identical and in source
-// order), the Finish guard, and the async variant for the loop's Flush.
-//
-// Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
-// counter through one deliberate pass + one deliberate failure and exits 0
-// only when both are counted exactly, then proves the detached loop actually
-// runs and coalesces (the vacuously-green backstop for every folder's
-// fixture); prepublishOnly.sh gates the build on it. Imported as a library,
-// this module only exports.
 import assert from "node:assert/strict";
 import { Loop } from "../../Target/Library.js";
+
+/**
+ * @module Harness
+ *
+ * The shared test harness for the TRACE unit tests: the Check counter, the
+ * Finish guard and the async variant for the loop's `Flush`.
+ *
+ * @remarks
+ * The trace is a pure unit: NO fake ctx, NO factory. Every test imports the
+ * REAL built `Target/Library.js` of its own bundle only, so the harness here is
+ * minimal: one Check per source-suite ok group, with the callback carrying that
+ * group's assertions byte-identical and in source order.
+ *
+ * Standalone selfcheck: `node Target/Test/Harness.js --selfcheck` runs the
+ * counter through one deliberate pass and one deliberate failure and exits 0
+ * only when both are counted exactly, then proves the detached loop actually
+ * runs and coalesces (the vacuously-green backstop for every folder's fixture);
+ * `prepublishOnly.sh` gates the build on it. Imported as a library, this module
+ * only exports.
+ */
 
 /**
  * The per-folder counter: `N` = passing checks, `F` = failing checks.

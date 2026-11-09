@@ -1,9 +1,16 @@
-// Families - one suggester domain's families, in priority order. A family
-// lives in the pack under `<domain>/<id>`; the projection drops the other
-// domains, sorts by priority (lower wins) and memoizes the list per pack
-// object and domain, so the hot path allocates once per loaded pack.
 import type Family from "../Interface/Family.js";
 import type Pack from "../Interface/Pack.js";
+
+/**
+ * @module Families
+ *
+ * One suggester domain's families, in priority order.
+ *
+ * @remarks
+ * A family lives in the pack under `<domain>/<id>`; the projection drops the
+ * other domains, sorts by priority (lower wins) and memoizes the list per pack
+ * object and domain, so the hot path allocates once per loaded pack.
+ */
 
 const Cache = new WeakMap<Pack, Map<string, Family[]>>();
 

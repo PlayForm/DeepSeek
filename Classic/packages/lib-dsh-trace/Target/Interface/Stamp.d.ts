@@ -1,3 +1,14 @@
+/**
+ * @module Stamp
+ *
+ * The `observe/stamp` payload: the observation stamp the observe hook records
+ * (the path, the observed version, the origin).
+ *
+ * @remarks
+ * The graph's adapter consumes exactly this shape. The hook's own KV record
+ * adds its monotonic sequence, which the trace does not carry: the sequence
+ * stays the hook's private ledger.
+ */
 export default interface Stamp {
     /** The path as the fs/observed event carried it (`displayPath`). */
     path: string;

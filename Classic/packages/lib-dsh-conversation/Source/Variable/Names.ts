@@ -1,8 +1,14 @@
-// Names - the conversation vocabulary's names: the service name the factory
-// provides (`ctx.conversation`) and the event names the factory's service
-// emits on the bus and the plugins' adapters consume. The library owns the
-// strings; no plugin re-declares them (the one place a new event name is
-// added).
+/**
+ * @module Names
+ *
+ * The conversation vocabulary's names: the service name the factory provides
+ * (`ctx.conversation`) and the event names the factory's service emits on the
+ * bus and the plugins' adapters consume.
+ *
+ * @remarks
+ * The library owns the strings; no plugin re-declares them. This is the one
+ * place a new event name is added.
+ */
 export default {
 	/** The service name the factory provides (`ctx.conversation`). */
 	service: "conversation",

@@ -1,20 +1,31 @@
-// Resolve - the shared touch resolution (the derivation "which files did this
-// step touch", written once instead of once per plugin): one tool/call's name
-// and arguments become the file touches it performs, in argument order,
-// resolved against the session's working directory and normalized. A tool the
-// vocabulary does not map and a malformed or alien arguments value yield no
-// touches; the parser never throws. Both Function/Fold and Function/Emits
-// import this one module - the rule lives here alone. Pure: node:path reads
-// no filesystem, and a relative path with no session cwd resolves to nothing
-// (never the process's own cwd).
 import { resolve } from "node:path";
+
+/**
+ * @module Resolve
+ *
+ * The shared touch resolution: one `tool/call`'s name and arguments become the
+ * file touches it performs, in argument order, resolved against the session's
+ * working directory and normalized.
+ *
+ * @remarks
+ * A tool the vocabulary does not map and a malformed or alien arguments value
+ * yield no touches; the parser never throws.
+ *
+ * Both `Function/Fold` and `Function/Emits` import this one module, so the
+ * rule lives here alone.
+ *
+ * It is pure: `node:path` reads no filesystem, and a relative path with no
+ * session cwd resolves to nothing (never the process's own cwd).
+ */
 
 type Kind = "read" | "write" | "edit" | "delete" | "search";
 
 type Touched = { Path: string; Kind: Kind };
 
-// The tool vocabulary, one kind each; every other tool touches nothing (a
-// tool call the vocabulary cannot attribute to files resolves no touch).
+/**
+ * The tool vocabulary, one kind each; every other tool touches nothing (a tool
+ * call the vocabulary cannot attribute to files resolves no touch).
+ */
 const KindOf = (Tool: string): Kind | undefined => {
 	switch (true) {
 		case Tool === "read":
@@ -32,8 +43,10 @@ const KindOf = (Tool: string): Kind | undefined => {
 	}
 };
 
-// The argument keys that carry file paths: the single-path keys in priority
-// order, then the plural files key (string entries only).
+/**
+ * The argument keys that carry file paths: the single-path keys in priority
+ * order, then the plural files key (string entries only).
+ */
 const Paths = (Args: Record<string, unknown>): string[] => {
 	const Found: string[] = [];
 	for (const Key of ["file_path", "path", "target"] as const) {
@@ -53,10 +66,12 @@ const Paths = (Args: Record<string, unknown>): string[] => {
 	return Found;
 };
 
-// A search tool names a directory or a pattern, not a file: "grep foo src"
-// carries a path the fold would otherwise record as a file touch and rank
-// above the real ones. A basename with no dot is a directory, so a search
-// touch survives only when it names something that looks like a file.
+/**
+ * A search tool names a directory or a pattern, not a file: "grep foo src"
+ * carries a path the fold would otherwise record as a file touch and rank
+ * above the real ones. A basename with no dot is a directory, so a search
+ * touch survives only when it names something that looks like a file.
+ */
 const FileLike = (Path: string): boolean => {
 	const Name = Path.slice(Path.lastIndexOf("/") + 1);
 	return Name.includes(".");

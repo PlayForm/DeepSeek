@@ -1,3 +1,13 @@
+/**
+ * @module Names
+ *
+ * The trace vocabulary's names are the service name the factory provides
+ * (`ctx.trace`) and the event names the family's adapters emit and consume.
+ *
+ * @remarks
+ * The library owns the strings; no plugin re-declares them, so this module is
+ * the one place a new event name is added.
+ */
 declare const _default: {
     /** The service name the factory provides (`ctx.trace`). */
     readonly service: "trace";

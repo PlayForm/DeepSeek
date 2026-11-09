@@ -23,12 +23,16 @@
 // (the engine lane's capture and flush), the human commands, and the `cost`
 // service below.
 //
-// THE ENGINE SERVICE: apply also provides `cost` (Interface/Service.ts,
+// THE ENGINE SERVICES: apply also provides `cost` (Interface/Service.ts,
 // Function/Provide.ts) - one session's rows as the panel's CostResponse, read
-// READ-ONLY from the same ledger. The Cost tab's UI package resolves the
-// service through injection (`ctx.get("cost")`) and imports the shared
-// contract from this package's `./service` entry, so the envelope types have
-// exactly one definition.
+// READ-ONLY from the same ledger - and `costPricing` (Interface/PricingService.ts,
+// Function/Pricing.ts), the versioned pricing-catalog service over the v5
+// tables: catalogs, revisions and rate rows as reads, `publish` as the one
+// write (a published revision and its rate rows, or nothing), and `preview`
+// as the re-pricing that persists nothing. The Cost tab's UI package resolves
+// the services through injection (`ctx.get("cost")`, `ctx.get("costPricing")`),
+// and the `cost` envelope types stay imported from this package's `./service`
+// entry so they have exactly one definition.
 import Apply from "./Function/Apply.js";
 import Definition from "./Variable/Config.js";
 import Version from "./Variable/Version.js";

@@ -216,13 +216,17 @@ export default (Context: Context, Options: Config): void => {
 		};
 	}, "plugin-dsh-cost.ledger()");
 
-	// THE ENGINE SERVICE (the Cost tab's data surface): `cost.session(id,
-	// rows)` answers one session's CostResponse through the read-only reader.
-	// It rides the fiber like every other effect, so a reload removes the
-	// service with the plugin instead of leaving a stale provider behind; the
-	// service opens the ledger READ-ONLY and never touches the write path
-	// above.
-	Context.effect(() => Provide(Context), "plugin-dsh-cost.cost()");
+	// THE ENGINE SERVICES (the Cost tab's data surface): `cost.session(id,
+	// rows)` answers one session's CostResponse through the read-only reader,
+	// and `costPricing` (lane B4c) answers the versioned catalog surface over
+	// the v5 tables - the reads a settings view lists, `publish` as the one
+	// write, and `preview` as the re-pricing that persists nothing. Both ride
+	// the fiber like every other effect, so a reload removes them with the
+	// plugin instead of leaving a stale provider behind; the read service
+	// opens the ledger READ-ONLY and never touches the write path above, while
+	// the pricing service's one write rides the handle that path already
+	// holds, so no second write connection is opened for a publish.
+	Context.effect(() => Provide(Context, Options, Ledger?.Database), "plugin-dsh-cost.cost()");
 
 	// The project: resolved from the session cwd and created on first sight,
 	// billed to the configured client (section 3 - the dimension exists so one

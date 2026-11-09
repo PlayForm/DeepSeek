@@ -1,6 +1,28 @@
-/** What the section presents: the orientation packet, the workspace map, the
+/**
+ * @module Section
+ *
+ * The operational-view section types: `SectionKind`, `Section` and
+ * `PacketView`.
+ *
+ * @remarks
+ * The `SHARED-LIBRARY.md` render/collapse commonality; `LIVE.md` holds that
+ * the presentation is the VISIBLE part and stays STABLE-UNTIL-EVENT - it
+ * re-renders only when an event surfaces a change, never continuously.
+ *
+ * A section is the unit the live view frames: the workspace agent's
+ * operational view, the client panels and the later lens surfaces all emit
+ * THESE shapes, and the render helpers below turn them into text.
+ *
+ * THE STABLE-UNTIL-EVENT CONTRACT carried in the types: every section carries
+ * the `version` it was rendered from (the index revision or the event
+ * sequence the section reflects), so a stale view is detectable and a
+ * re-render is justified only by a version change - never by the clock.
+ */
+/**
+ * What the section presents: the orientation packet, the workspace map, the
  * focus node, the neighbor band, the evidence band, the open questions, the
- * stale marker, or a free-form note. */
+ * stale marker, or a free-form note.
+ */
 export type SectionKind = "packet" | "map" | "focus" | "neighbors" | "evidence" | "open" | "stale" | "note";
 /** One framed section of the operational view. */
 export interface Section {
@@ -15,9 +37,11 @@ export interface Section {
     /** The version the section was rendered from (the staleness stamp). */
     version?: string;
 }
-/** The orientation packet (WORKSPACE-FAMILY-V4-1.md section 3.5): the model
+/**
+ * The orientation packet (`WORKSPACE-FAMILY-V4-1.md` section 3.5): the model
  * orients in a loop (orient -> drill -> act) and the packet is the orient
- * step - bounded, ranked by edge strength, and always versioned. */
+ * step - bounded, ranked by edge strength, and always versioned.
+ */
 export interface PacketView {
     /** The workspace name (the `WORKSPACE` line). */
     workspace: string;

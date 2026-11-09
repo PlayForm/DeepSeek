@@ -8,6 +8,14 @@
 // own: the files it found are the result's. A tool the ledger does not map, a
 // malformed or alien arguments string, and an absent or unreadable result
 // yield no touches; the parser never throws.
+//
+// The same file answers the two questions a content version needs (Backlog
+// E7, the research's section 4): Content is the whole new text a write's
+// arguments carry - exactly what the tool writes, so the file's after content
+// - and Rendered is the text a tool result returned, which is the content the
+// model actually received. Both are undefined when the call or the result
+// does not carry the file's own content, so no caller hashes a request, an
+// error message or a listing as though it were a file.
 import { resolve } from "node:path";
 
 type Kind = "read" | "write" | "edit" | "delete" | "search";
@@ -41,6 +49,32 @@ const KindOf = (Tool: string): Kind | undefined => {
 // are the result's. The classification is KindOf's own, so a tool the
 // vocabulary gains as a search is discovered without a second list.
 export const Search = (Tool: string): boolean => KindOf(Tool) === "search";
+
+// The content a tool call's arguments carry as the file's whole new text: a
+// write's own "content" field is exactly what the tool writes, so it is the
+// one argument a version may hash as the file's after content. Every other
+// tool's arguments carry a request rather than a result - an edit's two
+// fragments, a patch body, a batch's operation table - so they yield
+// undefined, and so does a malformed, alien or non-string content: a caller
+// records no version rather than hashing what it cannot confirm.
+export const Content = (Tool: string, Arguments: string): string | undefined => {
+	switch (true) {
+		case Tool !== "write":
+			return undefined;
+		default:
+	}
+	let Parsed: unknown;
+	try {
+		Parsed = JSON.parse(Arguments);
+	} catch {
+		return undefined;
+	}
+	if (Parsed === null || typeof Parsed !== "object" || Array.isArray(Parsed)) {
+		return undefined;
+	}
+	const Value = (Parsed as Record<string, unknown>)["content"];
+	return typeof Value === "string" ? Value : undefined;
+};
 
 // The argument keys that carry file paths: the single-path keys in priority
 // order, then the plural files key.
@@ -143,12 +177,12 @@ const Text = (Result: unknown): string => {
 	if (Message === null || typeof Message !== "object") {
 		return "";
 	}
-	const Content = (Message as Record<string, unknown>)["content"];
-	if (!Array.isArray(Content)) {
+	const Blocks = (Message as Record<string, unknown>)["content"];
+	if (!Array.isArray(Blocks)) {
 		return "";
 	}
 	const Parts: string[] = [];
-	for (const Block of Content) {
+	for (const Block of Blocks) {
 		if (Block === null || typeof Block !== "object") {
 			continue;
 		}
@@ -158,6 +192,15 @@ const Text = (Result: unknown): string => {
 		}
 	}
 	return Parts.join("\n");
+};
+
+// The rendered text a tool result returned, or undefined when the result
+// carries none: the text blocks of the tool-role message are exactly the
+// content the model received, so an absent or empty body is unreadable
+// evidence rather than an empty file.
+export const Rendered = (Result: unknown): string | undefined => {
+	const Body = Text(Result);
+	return Body.length > 0 ? Body : undefined;
 };
 
 // The file paths a search result's TEXT names: a glob lists one matched path

@@ -1,14 +1,23 @@
-// Source/Test/Fold/Test.ts - the fold's smokes over hand-written event arrays
-// (the conversation spine's section 3.1): a two-step session folds turn, step
-// and both calls with their usage; a tool call with a relative path resolves
-// against the session header's cwd; a grep whose path is a directory produces
-// no file touch; an unknown event shape is skipped without throwing. No ctx,
-// no factory, no fs - the fold is pure.
 import assert from "node:assert/strict";
 import { resolve } from "node:path";
 
 import { Fold } from "../../../Target/Library.js";
 import { Check, Finish, MakeCounter } from "../Harness.js";
+
+/**
+ * @module Test
+ *
+ * The fold's smokes over hand-written event arrays.
+ *
+ * @remarks
+ * The shapes follow the conversation spine's section 3.1. A two-step session
+ * folds turn, step and both calls with their usage; a tool call with a
+ * relative path resolves against the session header's cwd; a grep whose path
+ * is a directory produces no file touch; an unknown event shape is skipped
+ * without throwing.
+ *
+ * No ctx, no factory, no fs - the fold is pure.
+ */
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -145,7 +154,7 @@ export const runTest = async (): Promise<number> => {
 	return Finish(Count, "Fold");
 };
 
-// Standalone entry: `node Target/Test/Fold/Test.js`.
+/** Standalone entry: `node Target/Test/Fold/Test.js`. */
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

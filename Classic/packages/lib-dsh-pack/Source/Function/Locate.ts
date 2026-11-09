@@ -1,14 +1,3 @@
-// Locate - the workspace gate: which workspace root does this call belong
-// to, and which pack governs it? The answer is the first ancestor directory
-// (starting at the call path's directory, or its nearest existing ancestor)
-// that is a workspace CANDIDATE (a repo layer, a user layer for its slug, or
-// the default signature) AND whose resolved pack signature matches.
-//
-// A foreign workspace with a pack resolves (its pack declares its own
-// signature); a foreign workspace without one resolves to undefined and the
-// suggester abstains `foreign-workspace` - the honest silence (D2). The walk
-// is the pre-pack resolver's walk, with the signature now read from the pack
-// (default: Documentation/ARCHIVE-STYLE.md).
 import { existsSync, statSync } from "node:fs";
 import { dirname, isAbsolute, resolve } from "node:path";
 
@@ -18,6 +7,25 @@ import Home from "./Home.js";
 import Load from "./Load.js";
 import Present from "./Present.js";
 import Signature from "./Signature.js";
+
+/**
+ * @module Locate
+ *
+ * The workspace gate: which workspace root does this call belong to, and which
+ * pack governs it?
+ *
+ * @remarks
+ * The answer is the first ancestor directory (starting at the call path's
+ * directory, or its nearest existing ancestor) that is a workspace CANDIDATE (a
+ * repo layer, a user layer for its slug, or the default signature) AND whose
+ * resolved pack signature matches.
+ *
+ * A foreign workspace with a pack resolves (its pack declares its own
+ * signature); a foreign workspace without one resolves to `undefined` and the
+ * suggester abstains `foreign-workspace`, the honest silence (D2). The walk is
+ * the pre-pack resolver's walk, with the signature now read from the pack
+ * (default: `Documentation/ARCHIVE-STYLE.md`).
+ */
 
 /** The nearest existing ancestor of a path (the path itself when it exists). */
 const Anchor = (Start: string): string => {

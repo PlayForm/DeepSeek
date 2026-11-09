@@ -1,9 +1,16 @@
-// Source/Test/Render-And-Collapse/Test.ts - the section framer and the
-// budget collapse: the fixed frame byte-exact (with and without the version
-// stamp), the empty section, the fully-fitting budget, the overflow summary
-// (never a silent drop), and the order preservation.
 import assert from "node:assert/strict";
 import { Check, Finish, MakeCounter, Render, Collapse } from "../Harness.js";
+
+/**
+ * @module Test
+ *
+ * The section framer and the budget collapse's smokes.
+ *
+ * @remarks
+ * The fixed frame byte-exact (with and without the version stamp), the empty
+ * section, the fully-fitting budget, the overflow summary (never a silent
+ * drop), and the order preservation.
+ */
 
 export const runTest = async (): Promise<number> => {
 	const Count = MakeCounter();
@@ -70,7 +77,7 @@ export const runTest = async (): Promise<number> => {
 	return Finish(Count, "Render-And-Collapse");
 };
 
-// Standalone entry: `node Target/Test/Render-And-Collapse/Test.js`.
+/** Standalone entry: `node Target/Test/Render-And-Collapse/Test.js`. */
 const InvokedDirectly =
 	process.argv[1] !== undefined &&
 	import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;

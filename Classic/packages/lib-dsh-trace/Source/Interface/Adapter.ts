@@ -1,10 +1,17 @@
-// Adapter - the trace bus contract an adapter programs against: `emit` a
-// draft, `on` a named event (the returned disposer stops delivery). The
-// service (`ctx.trace`, provided by @playform/plugin-dsh-factory) implements
-// it; every plugin's Source/Trace/ adapter consumes it structurally, so no
-// plugin imports another plugin.
 import type Draft from "./Draft.js";
 import type Envelope from "./Envelope.js";
+
+/**
+ * @module Adapter
+ *
+ * The trace bus contract an adapter programs against: `emit` a draft, `on` a
+ * named event (the returned disposer stops delivery).
+ *
+ * @remarks
+ * The service (`ctx.trace`, provided by `@playform/plugin-dsh-factory`)
+ * implements it; every plugin's `Source/Trace/` adapter consumes it
+ * structurally, so no plugin imports another plugin.
+ */
 
 export default interface Adapter {
 	/** Publish one draft; the bus completes the envelope and dispatches it. */

@@ -1,3 +1,11 @@
+/**
+ * @module Queue
+ *
+ * The detached loop's contract (`Function/Loop`): `Schedule` coalesces a key
+ * into the ONE in-flight task for that key, `Flush` is the promise of the
+ * currently in-flight work (the deterministic smoke seam, never a sleep), and
+ * `Dispose` stops future scheduling and drops the queue.
+ */
 export default interface Queue {
     /** Coalesce one key into its in-flight task; a second call while in flight is dropped. */
     Schedule(Key: string): void;

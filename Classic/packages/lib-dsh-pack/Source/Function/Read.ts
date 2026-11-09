@@ -1,12 +1,19 @@
-// Read - read one pack file and parse it: `.json` through JSON.parse, every
-// other extension through the strict YAML-subset parser. The root must be a
-// mapping; a malformed file throws (the suggester's fail-open listener turns
-// that into a warning and silence).
 import { readFileSync } from "node:fs";
 import { extname } from "node:path";
 
 import type Pack from "../Interface/Pack.js";
 import Parse from "./Parse.js";
+
+/**
+ * @module Read
+ *
+ * Read one pack file and parse it: `.json` through `JSON.parse`, every other
+ * extension through the strict YAML-subset parser.
+ *
+ * @remarks
+ * The root must be a mapping. A malformed file throws, and the suggester's
+ * fail-open listener turns that into a warning and silence.
+ */
 
 export default (Path: string): Pack => {
 	const Text = readFileSync(Path, "utf8");

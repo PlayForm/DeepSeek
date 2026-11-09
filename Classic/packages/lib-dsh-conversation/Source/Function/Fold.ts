@@ -1,19 +1,34 @@
-// Fold - the pure fold: the session log's records, in sequence order, become
-// the conversation state of one session (the conversation spine's section
-// 3.1). It reads exactly the shapes the harness records - session, turn/start,
-// step/start, assistant/message, tool/call - and skips every other shape
-// without throwing. The shared rules are imported, not re-written: the touch
-// derivation is Function/Resolve's and the call fields are Function/Usage's,
-// each imported here and by Function/Emits, so the rule lives in one module
-// and both import it. The fold is pure: no I/O, no clock, no global state.
 import type State from "@Interface/State.js";
 import type { Call, Tool, Touch } from "@Interface/State.js";
 
 import Resolve from "./Resolve.js";
 import Usage from "./Usage.js";
 
-// The field guards: a missing or alien field folds to its zero value, never
-// thrown on (the same guards the projection keeps).
+/**
+ * @module Fold
+ *
+ * The pure fold: the session log's records, in sequence order, become the
+ * conversation state of one session.
+ *
+ * @remarks
+ * The shapes follow the conversation spine's section 3.1.
+ *
+ * It reads exactly the shapes the harness records - `session`, `turn/start`,
+ * `step/start`, `assistant/message`, `tool/call` - and skips every other shape
+ * without throwing.
+ *
+ * The shared rules are imported, not re-written: the touch derivation is
+ * `Function/Resolve`'s and the call fields are `Function/Usage`'s, each
+ * imported here and by `Function/Emits`, so the rule lives in one module and
+ * both import it.
+ *
+ * The fold is pure: no I/O, no clock, no global state.
+ */
+
+/**
+ * The field guards: a missing or alien field folds to its zero value, never
+ * thrown on (the same guards the projection keeps).
+ */
 const TextOf = (Value: unknown): string => (typeof Value === "string" ? Value : "");
 const WholeOf = (Value: unknown): number | null => (typeof Value === "number" ? Value : null);
 

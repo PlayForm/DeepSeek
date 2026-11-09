@@ -1,8 +1,15 @@
-// Placement - the two pack-layer locations (D2): the user layer hangs off
-// the home directory under `.dsh/playform/workspaces/<slug>.<ext>`, the repo
-// layer off the workspace root under `.dsh/pack.<ext>`. The extensions are
-// probed in order; `.yml` is the documented form, `.yaml` and `.json` are
-// accepted so a repo can adopt the schema without a YAML parser.
+/**
+ * @module Placement
+ *
+ * The two pack-layer locations (D2): the user layer hangs off the home
+ * directory under `.dsh/playform/workspaces/<slug>.<ext>`, the repo layer off
+ * the workspace root under `.dsh/pack.<ext>`.
+ *
+ * @remarks
+ * The extensions are probed in order; `.yml` is the documented form, `.yaml`
+ * and `.json` are accepted so a repo can adopt the schema without a YAML
+ * parser.
+ */
 export default {
 	/** The user layer's directory, relative to the home directory. */
 	UserDirectory: ".dsh/playform/workspaces",
