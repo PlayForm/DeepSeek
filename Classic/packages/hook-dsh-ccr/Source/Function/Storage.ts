@@ -273,9 +273,11 @@ const ShadowPut = (State: State): void => {
 	};
 };
 
-/** Open the CCR hook's own domain (best-effort, never awaited by the
- *  caller: an absent facility is the effect's silent skip, a failed open is
- *  the one ledger line below). */
+/**
+ * Open the CCR hook's own domain (best-effort, never awaited by the
+ * caller: an absent facility is the effect's silent skip, a failed open is
+ * the one ledger line below).
+ */
 export default async (State: State, Facility: unknown): Promise<void> => {
 	// A previous handle (an HMR reload re-ran apply) is closed first.
 	const Previous = Current;
@@ -332,8 +334,10 @@ export default async (State: State, Facility: unknown): Promise<void> => {
 	}
 };
 
-/** Close the open handle (the effect's disposer; a no-op when absent or
- *  already closed). */
+/**
+ * Close the open handle (the effect's disposer; a no-op when absent or
+ * already closed).
+ */
 export const Close = (): void => {
 	const Handle = Current;
 	Current = undefined;

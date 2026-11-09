@@ -1,9 +1,9 @@
 import { Service, type Context } from "@deepseek-ai/cordis";
-import type BatchRecord from "@Interface/Batch.js";
-import type EntryRecord from "@Interface/Entry.js";
-import type Result from "@Interface/Result.js";
-import type { RecoveryReport } from "@Interface/Result.js";
-import type State from "@Interface/State.js";
+import type BatchRecord from "../Interface/Batch.js";
+import type EntryRecord from "../Interface/Entry.js";
+import type Result from "../Interface/Result.js";
+import type { RecoveryReport } from "../Interface/Result.js";
+import type State from "../Interface/State.js";
 export default class WorkspaceJournal extends Service {
     /** The apply-built state the methods read and write. */
     State: State;

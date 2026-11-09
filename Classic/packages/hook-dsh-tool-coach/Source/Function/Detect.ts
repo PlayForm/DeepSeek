@@ -1,41 +1,52 @@
-// Detect - the classifier for one judged terminal call (plan Part 3 §3.5
-// step 1 + the adversarial layer Part 2 §2.7). Detection is NEVER exact-match
-// only: command normalization (Function/Normalize) + the pattern rows + an
-// intent-marker scan + a craft library + a catch-all - the pattern table is
-// one input, not the authority.
-//
-// The evaluation order per pipeline (a maximal run of segments joined by `|`,
-// pipelines split on `;`/`&&`/`||`/`&`):
-//   1. CLASSIFY (rows first, then markers) - exemption is an OVERRIDE of a
-//      would-be offense, so the pipeline is classified first;
-//   2. EXEMPT override: if the pipeline's head matches an exemption and the
-//      pipeline would have been flagged, the pipeline is exempt (rule 5: an
-//      exempt head dominates the rest of the pipeline; a bare non-exempt head
-//      like `echo x > tracked.md` still fires);
-//   3. the highest-priority class across all pipelines wins (write > read >
-//      search > discovery > control) - chained segments classify INDIVIDUALLY
-//      (`cat a; sed -i ...` yields one read match and one write match, and the
-//      write match is reported).
-//
-// Markers (plan §2.7b) - class determined by intent, not vocabulary:
-//   - redirect to a real path (`>` / `>>` not to /dev/null) -> write (the
-//     catch-all: novel zero-day forms still land; the redirect wins over an
-//     earlier read-row match because write outranks every other class, e.g.
-//     `cat f | sed s/a/b/ > f` is write);
-//   - decode-then-execute (`base64 -d | sh`, `printf x | sh`, any pipeline
-//     whose last segment is a shell) -> write (payload execution = unreviewed
-//     content);
-//   - `$var` indirection with `-i` (`«var» -i ...`) -> write (craft library);
-//   - `--in-place` anywhere -> write;
-//   - wrappers (sh -c / bash -c / eval / xargs / find -exec) never exempt:
-//     the INNER payload is re-scanned through the same rows.
+/**
+ * @module Detect
+ *
+ * The classifier for one judged terminal call.
+ *
+ * @remarks
+ * Plan Part 3 §3.5 step 1 + the adversarial layer Part 2 §2.7. Detection is
+ * NEVER exact-match only: command normalization (Function/Normalize) + the
+ * pattern rows + an intent-marker scan + a craft library + a catch-all - the
+ * pattern table is one input, not the authority.
+ *
+ * The evaluation order per pipeline (a maximal run of segments joined by `|`,
+ * pipelines split on `;`/`&&`/`||`/`&`):
+ *   1. CLASSIFY (rows first, then markers) - exemption is an OVERRIDE of a
+ *      would-be offense, so the pipeline is classified first;
+ *   2. EXEMPT override: if the pipeline's head matches an exemption and the
+ *      pipeline would have been flagged, the pipeline is exempt (rule 5: an
+ *      exempt head dominates the rest of the pipeline; a bare non-exempt head
+ *      like `echo x > tracked.md` still fires);
+ *   3. the highest-priority class across all pipelines wins (write > read >
+ *      search > discovery > control) - chained segments classify INDIVIDUALLY
+ *      (`cat a; sed -i ...` yields one read match and one write match, and the
+ *      write match is reported).
+ *
+ * Markers (plan §2.7b) - class determined by intent, not vocabulary:
+ *   - redirect to a real path (`>` / `>>` not to /dev/null) -> write (the
+ *     catch-all: novel zero-day forms still land; the redirect wins over an
+ *     earlier read-row match because write outranks every other class, e.g.
+ *     `cat f | sed s/a/b/ > f` is write);
+ *   - decode-then-execute (`base64 -d | sh`, `printf x | sh`, any pipeline
+ *     whose last segment is a shell) -> write (payload execution = unreviewed
+ *     content);
+ *   - `$var` indirection with `-i` (`«var» -i ...`) -> write (craft library);
+ *   - `--in-place` anywhere -> write;
+ *   - wrappers (sh -c / bash -c / eval / xargs / find -exec) never exempt:
+ *     the INNER payload is re-scanned through the same rows.
+ */
+
 import Normalize, { Rank, Segments } from "@Function/Normalize.js";
 import type { CoachRow, Detection, Match } from "@Interface/Execution.js";
 
-/** The command-word position markers that begin a wrapper payload. */
+/**
+ * The command-word position markers that begin a wrapper payload.
+ */
 const WRAPPERS = /^(sh|bash|zsh|dash|eval|source|nice|env|timeout|xargs)\b/;
 
-/** Unwrap one wrapper segment to its inner payload text (or null). */
+/**
+ * Unwrap one wrapper segment to its inner payload text (or null).
+ */
 const Unwrap = (Segment: string): string | null => {
 	const DashC = Segment.match(/(?:^|\s)-c\s+(.*)$/);
 	if (DashC && WRAPPERS.test(Segment)) {
@@ -52,12 +63,19 @@ const Unwrap = (Segment: string): string | null => {
 	return null;
 };
 
-/** The redirect marker: `>` / `>>` followed by a real path token. */
+/**
+ * The redirect marker: `>` / `>>` followed by a real path token.
+ */
 const REDIRECT = />>(?!\s*\/dev\/null\b)(?!\s*\|)\s*\S+|>(?!\s*\/dev\/null\b)(?!\s*\|)\s*\S+/;
-/** Ambiguous in-place flag: safe to catch-all on any segment. */
+
+/**
+ * Ambiguous in-place flag: safe to catch-all on any segment.
+ */
 const IN_PLACE = /--in-place\b/;
 
-/** The craft library (plan §2.7c): obfuscated variant -> class via markers. */
+/**
+ * The craft library (plan §2.7c): obfuscated variant -> class via markers.
+ */
 const CRAFT = (Segment: string): Match | null => {
 	const Indirect = Segment.startsWith("«var»") && /\s-i(?:\.\w+)?\b/.test(Segment);
 	if (Indirect || IN_PLACE.test(Segment) || REDIRECT.test(Segment)) {
@@ -66,7 +84,9 @@ const CRAFT = (Segment: string): Match | null => {
 	return null;
 };
 
-/** Pipe-to-shell payload execution (the decode-then-execute family). */
+/**
+ * Pipe-to-shell payload execution (the decode-then-execute family).
+ */
 const PIPE_TO_SHELL = /(?:^|\|)\s*(sh|bash|zsh|dash|pwsh)\s*$/;
 
 /**

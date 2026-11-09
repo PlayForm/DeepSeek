@@ -1,23 +1,34 @@
-// Compose - the template system (plan Part 3 §3.3/§3.5 step 4). Fills the
-// three templates with the decision's data and the fetched catalog entries.
-//
-// The fill is a SINGLE-PASS scanner over the template: each `${...}` token is
-// read from the ORIGINAL template and replaced with its value; user data
-// (the ${command} fill) is escaped (`${` -> `$${`) BEFORE insertion, so user
-// content can never add an unfilled placeholder, and inserted values are
-// never re-scanned. Any placeholder missing a fetched value degrades to the
-// static line (Variable/Notes.STATIC_TOOL_LINES) - composed output never
-// fails on a fetch gap.
+/**
+ * @module Compose
+ *
+ * The template system: fills the three templates with the decision's data and
+ * the fetched catalog entries.
+ *
+ * @remarks
+ * Plan Part 3 §3.3/§3.5 step 4.
+ *
+ * The fill is a SINGLE-PASS scanner over the template: each `${...}` token is
+ * read from the ORIGINAL template and replaced with its value; user data
+ * (the ${command} fill) is escaped (`${` -> `$${`) BEFORE insertion, so user
+ * content can never add an unfilled placeholder, and inserted values are
+ * never re-scanned. Any placeholder missing a fetched value degrades to the
+ * static line (Variable/Notes.STATIC_TOOL_LINES) - composed output never
+ * fails on a fetch gap.
+ */
 import { Escape } from "@Function/Normalize.js";
 import type { AgentState, Decision, ToolCatalog, ToolEntry } from "@Interface/Execution.js";
 import { STATIC_TOOL_LINES, TRACEABILITY } from "@Variable/Notes.js";
 
-/** The knob values the composers read (the live State values). */
+/**
+ * The knob values the composers read (the live State values).
+ */
 export interface ComposeConfig {
 	maxSectionTools: number;
 }
 
-/** The tool entry a note names, with the static fallback applied. */
+/**
+ * The tool entry a note names, with the static fallback applied.
+ */
 const Entry = (Catalog: ToolCatalog, Name: string): ToolEntry => {
 	const Live = Catalog.tools.get(Name);
 	if (Live) {
@@ -30,7 +41,9 @@ const Entry = (Catalog: ToolCatalog, Name: string): ToolEntry => {
 	};
 };
 
-/** Single-pass template fill (no re-scanning of inserted values). */
+/**
+ * Single-pass template fill (no re-scanning of inserted values).
+ */
 export const Fill = (Template: string, Values: Record<string, string | number>): string => {
 	let Output = "";
 	let Index = 0;
@@ -54,7 +67,9 @@ export const Fill = (Template: string, Values: Record<string, string | number>):
 	return Output;
 };
 
-/** The shared placeholder values for a note about one decision. */
+/**
+ * The shared placeholder values for a note about one decision.
+ */
 const Values = (Decision: Decision, Catalog: ToolCatalog): Record<string, string | number> => {
 	const Match = Decision.match;
 	const Name = Match?.tool ?? "";
@@ -70,15 +85,21 @@ const Values = (Decision: Decision, Catalog: ToolCatalog): Record<string, string
 	};
 };
 
-/** The tier-1 note text (the fetched description line + traceability). */
+/**
+ * The tier-1 note text (the fetched description line + traceability).
+ */
 export const First = (Decision: Decision, Catalog: ToolCatalog, Template: string): string =>
 	Fill(Template, Values(Decision, Catalog));
 
-/** The tier-3 deny reason (the same forbidden phrasing). */
+/**
+ * The tier-3 deny reason (the same forbidden phrasing).
+ */
 export const Denied = (Decision: Decision, Catalog: ToolCatalog, Template: string): string =>
 	Fill(Template, Values(Decision, Catalog));
 
-/** The tier-2 section text (3 fixed rules + the tool table). */
+/**
+ * The tier-2 section text (3 fixed rules + the tool table).
+ */
 export const Persistent = (
 	State: AgentState,
 	Catalog: ToolCatalog,

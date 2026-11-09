@@ -1,4 +1,4 @@
-import type { CoachClass } from "../Interface/Execution.js";
+import type { CoachClass } from "@Interface/Execution.js";
 /** The class priority rank of a class (lower = more severe). */
 export declare const Rank: (Class: CoachClass) => number;
 /** Escape user data before template insertion: `${` becomes `$${`. */

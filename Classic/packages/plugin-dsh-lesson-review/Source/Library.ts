@@ -155,28 +155,44 @@ const Line = (Message: string, State: { logFile: string }): string =>
 export default class LessonService extends Service {
 	static inject: string[] = [];
 
-	/** The loader-contract Config (validated at load; knobs via Configure). */
+	/**
+	 * The loader-contract Config (validated at load; knobs via Configure).
+	 */
 	static Config = Definition;
 
-	/** The knobs: constructor defaults plus the loader's validated config. */
+	/**
+	 * The knobs: constructor defaults plus the loader's validated config.
+	 */
 	private Knobs: Configuration;
 
-	/** The usage store (Function/Usage). */
+	/**
+	 * The usage store (Function/Usage).
+	 */
 	private Usage: Usage;
 
-	/** The ledger sink (best-effort, never throws). */
+	/**
+	 * The ledger sink (best-effort, never throws).
+	 */
 	private Ledger: (Message: string) => void;
 
-	/** The per-agent nudge counters (the agent object is the key). */
+	/**
+	 * The per-agent nudge counters (the agent object is the key).
+	 */
 	private Counters: Map<unknown, number> = new Map();
 
-	/** The store chain: the load and every write, in order. */
+	/**
+	 * The store chain: the load and every write, in order.
+	 */
 	private Chain: Promise<void> = Promise.resolve();
 
-	/** The last projection failure (Function/Snapshot names the cause). */
+	/**
+	 * The last projection failure (Function/Snapshot names the cause).
+	 */
 	private Projection: string | undefined;
 
-	/** The harness context (the optional `llm` probe). */
+	/**
+	 * The harness context (the optional `llm` probe).
+	 */
 	private Context: Context;
 
 	constructor(Context_: Context, Raw?: unknown) {
@@ -218,12 +234,16 @@ export default class LessonService extends Service {
 		});
 	}
 
-	/** Apply the validated config knobs (called by the host on load/volatile). */
+	/**
+	 * Apply the validated config knobs (called by the host on load/volatile).
+	 */
 	Configure(Options: Partial<Configuration>): void {
 		this.Knobs = { ...this.Knobs, ...Options };
 	}
 
-	/** Advance one agent's nudge counter; `due` is true on the interval. */
+	/**
+	 * Advance one agent's nudge counter; `due` is true on the interval.
+	 */
 	Tick(Agent: unknown): Tick {
 		switch (true) {
 			case !this.Knobs.enabled:
@@ -245,17 +265,23 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** Clear one agent's counter (a new session, or a manual reset). */
+	/**
+	 * Clear one agent's counter (a new session, or a manual reset).
+	 */
 	Reset(Agent: unknown): void {
 		this.Counters.delete(Agent);
 	}
 
-	/** The bounded digest of one conversation snapshot. */
+	/**
+	 * The bounded digest of one conversation snapshot.
+	 */
 	Digest(Messages: readonly ReviewMessage[]): DigestResult {
 		return Digest(Messages, this.Knobs.digestTail, this.Knobs.maxInputChars);
 	}
 
-	/** The review prompt (a `promptFile` override wins over the shipped text). */
+	/**
+	 * The review prompt (a `promptFile` override wins over the shipped text).
+	 */
 	Prompt(Focus?: string): string {
 		const Override = this.Knobs.promptFile.trim();
 		switch (true) {
@@ -276,17 +302,23 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** The strict reply parse. */
+	/**
+	 * The strict reply parse.
+	 */
 	Parse(Reply: string): ParseResult {
 		return Parse(Reply, this.Knobs.maxProposals);
 	}
 
-	/** The deterministic acceptance rules, over the live corpus. */
+	/**
+	 * The deterministic acceptance rules, over the live corpus.
+	 */
 	Judge(Proposal_: Proposal) {
 		return Judge(Proposal_, this.Corpus());
 	}
 
-	/** The live-session projection (the integration seam; never throws). */
+	/**
+	 * The live-session projection (the integration seam; never throws).
+	 */
 	Snapshot(Agent: unknown): ReviewMessage[] {
 		this.Projection = undefined;
 		return Snapshot(Agent, (Detail: string): void => {
@@ -294,7 +326,9 @@ export default class LessonService extends Service {
 		});
 	}
 
-	/** One review. Never throws; every degradation is an outcome class. */
+	/**
+	 * One review. Never throws; every degradation is an outcome class.
+	 */
 	async Review(Input: ReviewInput): Promise<ReviewResult> {
 		const Started = Date.now();
 		const Result: ReviewResult = {
@@ -445,7 +479,9 @@ export default class LessonService extends Service {
 		return Result;
 	}
 
-	/** The deterministic lifecycle pass; archives move whole directories. */
+	/**
+	 * The deterministic lifecycle pass; archives move whole directories.
+	 */
 	async Curate(Now: number = Date.now()): Promise<Curation> {
 		switch (true) {
 			case !this.Knobs.enabled:
@@ -484,7 +520,9 @@ export default class LessonService extends Service {
 		return Curation;
 	}
 
-	/** The corpus-wide counts. */
+	/**
+	 * The corpus-wide counts.
+	 */
 	Status(): Status {
 		const All = this.Usage.All();
 		return {
@@ -497,7 +535,9 @@ export default class LessonService extends Service {
 		};
 	}
 
-	/** Pin one entry: no transitions, no review writes. */
+	/**
+	 * Pin one entry: no transitions, no review writes.
+	 */
 	Pin(Name: string): boolean {
 		const Entry_ = this.Usage.Get(Name) ?? Fresh(Name, Date.now(), "user");
 		Entry_.pinned = true;
@@ -506,7 +546,9 @@ export default class LessonService extends Service {
 		return true;
 	}
 
-	/** Unpin one entry. */
+	/**
+	 * Unpin one entry.
+	 */
 	Unpin(Name: string): boolean {
 		const Entry_ = this.Usage.Get(Name);
 		switch (true) {
@@ -520,7 +562,9 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** Move one archived skill back and reactivate its record. */
+	/**
+	 * Move one archived skill back and reactivate its record.
+	 */
 	async Restore(Name: string): Promise<boolean> {
 		const Source = Join(Expand(this.Knobs.archiveRoot), Name);
 		const Target = Join(Expand(this.Knobs.skillsRoot), Name);
@@ -540,7 +584,9 @@ export default class LessonService extends Service {
 		return true;
 	}
 
-	/** Archive one skill now (the manual pass, no model involved). */
+	/**
+	 * Archive one skill now (the manual pass, no model involved).
+	 */
 	async Archive(Name: string): Promise<boolean> {
 		const Moved = await Apply({ op: "archive", name: Name }, this.Knobs);
 		switch (true) {
@@ -559,12 +605,16 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** The queued proposals, oldest first. */
+	/**
+	 * The queued proposals, oldest first.
+	 */
 	Pending(): Queued[] {
 		return this.ReadPending();
 	}
 
-	/** Land one queued proposal by name (the acceptance seam). */
+	/**
+	 * Land one queued proposal by name (the acceptance seam).
+	 */
 	async Accept(Name: string): Promise<boolean> {
 		const Queue = this.ReadPending();
 		const Index = Queue.findIndex((Row) => Row.op.name === Name);
@@ -591,12 +641,16 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** Await the store chain (the smoke seam). */
+	/**
+	 * Await the store chain (the smoke seam).
+	 */
 	async Flush(): Promise<void> {
 		await this.Chain;
 	}
 
-	/** Persist the usage store on the chain. */
+	/**
+	 * Persist the usage store on the chain.
+	 */
 	async Save(): Promise<void> {
 		this.Chain = this.Chain.then(async () => {
 			try {
@@ -612,7 +666,9 @@ export default class LessonService extends Service {
 	// Internals
 	// ------------------------------------------------------------------
 
-	/** The judge's read-only corpus view (the store plus one directory probe). */
+	/**
+	 * The judge's read-only corpus view (the store plus one directory probe).
+	 */
 	private Corpus(): Corpus {
 		const Root = Expand(this.Knobs.skillsRoot);
 		return {
@@ -632,7 +688,9 @@ export default class LessonService extends Service {
 		};
 	}
 
-	/** The review route: the knobs win, then the agent's own options. */
+	/**
+	 * The review route: the knobs win, then the agent's own options.
+	 */
 	private Route(Agent: unknown): { provider: string; model: string } | undefined {
 		const Options = (Agent as { options?: Record<string, unknown> } | undefined)?.options ?? {};
 		const Provider =
@@ -644,7 +702,9 @@ export default class LessonService extends Service {
 		return Provider === "" || Model === "" ? undefined : { provider: Provider, model: Model };
 	}
 
-	/** Queue one operation (one JSON line, appended). */
+	/**
+	 * Queue one operation (one JSON line, appended).
+	 */
 	private async Enqueue(Op: Op, Now: number): Promise<void> {
 		const Row: Queued = { at: Now, op: Op };
 		try {
@@ -656,7 +716,9 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** Read the pending queue (a malformed line is skipped, never fatal). */
+	/**
+	 * Read the pending queue (a malformed line is skipped, never fatal).
+	 */
 	private ReadPending(): Queued[] {
 		let Text: string;
 		try {
@@ -688,7 +750,9 @@ export default class LessonService extends Service {
 		return Rows;
 	}
 
-	/** Rewrite the pending queue (the acceptance path). */
+	/**
+	 * Rewrite the pending queue (the acceptance path).
+	 */
 	private async WritePending(Rows: readonly Queued[]): Promise<void> {
 		try {
 			await Mkdir(Dirname(Expand(this.Knobs.pendingPath)), { recursive: true });
@@ -701,7 +765,9 @@ export default class LessonService extends Service {
 		}
 	}
 
-	/** Write the run report (best-effort). */
+	/**
+	 * Write the run report (best-effort).
+	 */
 	private async Record(
 		Input: ReviewInput,
 		Result: ReviewResult,
@@ -727,7 +793,9 @@ export default class LessonService extends Service {
 		return Report(Expand(this.Knobs.reportsRoot), Report_);
 	}
 
-	/** Finish a review that never reached the model (or failed on the way). */
+	/**
+	 * Finish a review that never reached the model (or failed on the way).
+	 */
 	private async Settle(
 		Input: ReviewInput,
 		Result: ReviewResult,

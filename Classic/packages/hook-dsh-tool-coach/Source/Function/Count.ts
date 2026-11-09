@@ -1,33 +1,42 @@
-// Count - the escalation math (plan Part 3 §3.5 step 2 + the tier ladder in
-// TOOL-COACH-PLAN.md §5). Pure state transition: advances the per-agent
-// counters for one JUDGED call (terminal calls only; non-terminal tools are
-// transparent and never reach this function) and returns the decision. All
-// counters are in JUDGED calls.
-//
-// The state (per agent, in a WeakMap keyed like the repeat-tool-reminder's
-// chains): a sliding `window` of the last `window` judged calls (the offense
-// match or null when the call was clean), the cooldown counter sinceNote, the
-// total offense counter strikesSinceNote, the per-class offense counters
-// classStrikes (tier-3 is armed per class), the clean counter sinceClean, the
-// tier-2 flag, the tier-2 section cache, and the total judged-call clock.
-//
-// Decision precedence (per call):
-//   1. a clean call while tier 2 is on: sinceClean grows; when it reaches
-//      cleanWindow the section turns OFF (tier 2 off);
-//   2. an offense: sinceClean resets, the window and all counters advance;
-//      - tier 1 note when the offense's CLASS has reached `threshold` strikes
-//        within the window AND the cooldown has elapsed since the last note
-//        (both note counters reset - the note IS the last note);
-//      - otherwise, when the class trigger is active but the cooldown has not
-//        elapsed, the call is suppressed (ledger only);
-//      - tier 2 turns ON when total offenses since the last note reach
-//        escalateThreshold (idempotent while on);
-//   3. tier 3 is armed but NOT decided here: the deny fires in the
-//      tools/pre-execute listener (before the call runs) when the offense's
-//      class has reached enforceThreshold strikes since the last note.
+/**
+ * @module Count
+ *
+ * The escalation math: a pure state transition that advances the per-agent
+ * counters for one JUDGED call and returns the decision.
+ *
+ * @remarks
+ * Plan Part 3 §3.5 step 2 + the tier ladder in TOOL-COACH-PLAN.md §5.
+ * Terminal calls only; non-terminal tools are transparent and never reach
+ * this function. All counters are in JUDGED calls.
+ *
+ * The state (per agent, in a WeakMap keyed like the repeat-tool-reminder's
+ * chains): a sliding `window` of the last `window` judged calls (the offense
+ * match or null when the call was clean), the cooldown counter sinceNote, the
+ * total offense counter strikesSinceNote, the per-class offense counters
+ * classStrikes (tier-3 is armed per class), the clean counter sinceClean, the
+ * tier-2 flag, the tier-2 section cache, and the total judged-call clock.
+ *
+ * Decision precedence (per call):
+ *   1. a clean call while tier 2 is on: sinceClean grows; when it reaches
+ *      cleanWindow the section turns OFF (tier 2 off);
+ *   2. an offense: sinceClean resets, the window and all counters advance;
+ *      - tier 1 note when the offense's CLASS has reached `threshold` strikes
+ *        within the window AND the cooldown has elapsed since the last note
+ *        (both note counters reset - the note IS the last note);
+ *      - otherwise, when the class trigger is active but the cooldown has not
+ *        elapsed, the call is suppressed (ledger only);
+ *      - tier 2 turns ON when total offenses since the last note reach
+ *        escalateThreshold (idempotent while on);
+ *   3. tier 3 is armed but NOT decided here: the deny fires in the
+ *      tools/pre-execute listener (before the call runs) when the offense's
+ *      class has reached enforceThreshold strikes since the last note.
+ */
+
 import type { AgentState, CoachClass, Decision, Match } from "@Interface/Execution.js";
 
-/** The per-call knobs Count reads (the live State values, already unwrapped). */
+/**
+ * The per-call knobs Count reads (the live State values, already unwrapped).
+ */
 export interface CountConfig {
 	threshold: number;
 	window: number;
@@ -36,7 +45,9 @@ export interface CountConfig {
 	cleanWindow: number;
 }
 
-/** A fresh per-agent state. */
+/**
+ * A fresh per-agent state.
+ */
 export const FreshState = (): AgentState => ({
 	window: [],
 	sinceNote: Number.MAX_SAFE_INTEGER, // "never noted": the first note needs no cooldown wait
@@ -50,7 +61,9 @@ export const FreshState = (): AgentState => ({
 	lastClass: "write",
 });
 
-/** The per-class offense count within the current window. */
+/**
+ * The per-class offense count within the current window.
+ */
 const ClassWindow = (State: AgentState, Class: CoachClass): number => {
 	let Count = 0;
 	for (const Entry of State.window) {
@@ -61,7 +74,9 @@ const ClassWindow = (State: AgentState, Class: CoachClass): number => {
 	return Count;
 };
 
-/** Total strikes in the current window. */
+/**
+ * Total strikes in the current window.
+ */
 const TotalWindow = (State: AgentState): number => {
 	let Count = 0;
 	for (const Entry of State.window) {
