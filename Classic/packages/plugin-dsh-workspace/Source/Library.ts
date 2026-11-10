@@ -1,4 +1,3 @@
-import Apply from "./Function/Apply.js";
 /**
  * @module Library
  *
@@ -29,6 +28,7 @@ import Apply from "./Function/Apply.js";
  * five tools, and owns no event listeners in v0 - the invisible flow belongs to
  * the sibling hooks (the distribution law).
  */
+import Apply from "./Function/Apply.js";
 import Definition from "./Variable/Config.js";
 import Version from "./Variable/Version.js";
 

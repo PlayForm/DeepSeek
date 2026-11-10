@@ -1,12 +1,18 @@
-// Tool - the `batch_decision` tool (Function/Tool): the one entry point the
-// user interacts with (PASS-ON-AND-INGESTER.md section 5). This file only
-// BUILDS the definition (the CCR Retrieve.ts idiom); the registration call
-// lives in Apply. Verbs:
-//   (no args)          - list pending proposals (id, intent, targets, expiry)
-//   id + approve=true  - approve by user; hand off to the ingester seam
-//   id + approve=false - deny by user
-// Unknown or already-decided ids log and no-op. The tool result is one
-// canonical JSON object; the renderer is pure.
+/**
+ * @module Tool
+ *
+ * The `batch_decision` tool (Function/Tool): the one entry point the user
+ * interacts with (PASS-ON-AND-INGESTER.md section 5).
+ *
+ * @remarks
+ * This file only BUILDS the definition (the CCR Retrieve.ts idiom); the
+ * registration call lives in Apply. Verbs:
+ *   (no args)          - list pending proposals (id, intent, targets, expiry)
+ *   id + approve=true  - approve by user; hand off to the ingester seam
+ *   id + approve=false - deny by user
+ * Unknown or already-decided ids log and no-op. The tool result is one
+ * canonical JSON object; the renderer is pure.
+ */
 import type { Context } from "@deepseek-ai/cordis";
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import Gate from "@Function/Gate.js";

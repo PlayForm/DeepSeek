@@ -1,5 +1,3 @@
-import type { PacketView } from "@Interface/Packet.js";
-
 /**
  * @module Render
  *
@@ -13,6 +11,7 @@ import type { PacketView } from "@Interface/Packet.js";
  * absent bands render the `(none)` placeholder - the grammar is always
  * COMPLETE, never partially omitted. Pure: PacketView in, text out.
  */
+import type { PacketView } from "@Interface/Packet.js";
 
 /**
  * One band of the grammar: tag + entries + the empty placeholder.

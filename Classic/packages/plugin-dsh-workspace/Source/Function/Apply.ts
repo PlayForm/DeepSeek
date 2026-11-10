@@ -1,4 +1,3 @@
-import type { Context } from "@deepseek-ai/cordis";
 /**
  * @module Apply
  *
@@ -22,6 +21,7 @@ import type { Context } from "@deepseek-ai/cordis";
  * graph provides the data, the factory the State builder + the ledger, and
  * tools the registration surface.
  */
+import type { Context } from "@deepseek-ai/cordis";
 import ToolContext from "@Function/ToolContext.js";
 import ToolExpand from "@Function/ToolExpand.js";
 import ToolFind from "@Function/ToolFind.js";

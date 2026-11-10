@@ -1,4 +1,3 @@
-import Packet, { Row } from "@Function/Packet.js";
 /**
  * @module Query
  *
@@ -13,6 +12,7 @@ import Packet, { Row } from "@Function/Packet.js";
  * results can't shuffle between pages). No full file bodies: only ids, paths,
  * spans, kinds.
  */
+import Packet, { Row } from "@Function/Packet.js";
 import RenderPacket from "@Function/Render.js";
 import Role from "@Function/Role.js";
 import type { Node, WorkspaceGraph } from "@Interface/Graph.js";
@@ -23,6 +23,7 @@ import type {
 	MapResult,
 	NodeRow,
 } from "@Interface/Query.js";
+import type State from "@Interface/State.js";
 
 /**
  * Compact one node into the row shape the tools print (the packet module's

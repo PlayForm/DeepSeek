@@ -1,4 +1,3 @@
-import { defineTool } from "@deepseek-ai/dsh-tools";
 /**
  * @module ToolFind
  *
@@ -12,6 +11,7 @@ import { defineTool } from "@deepseek-ai/dsh-tools";
  * page), never by offset. The disabled plugin no-ops to a clear refusal (the
  * IDLE-forever posture).
  */
+import { defineTool } from "@deepseek-ai/dsh-tools";
 import { Find } from "@Function/Query.js";
 import type { NodeKind } from "@Interface/Graph.js";
 import type State from "@Interface/State.js";

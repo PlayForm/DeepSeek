@@ -1,4 +1,3 @@
-import { defineTool, type ToolRunContext } from "@deepseek-ai/dsh-tools";
 /**
  * @module ToolIndex
  *
@@ -27,6 +26,7 @@ import { defineTool, type ToolRunContext } from "@deepseek-ai/dsh-tools";
  * throwing purity guard). The disabled plugin no-ops to the family's byte-exact
  * refusal shape.
  */
+import { defineTool, type ToolRunContext } from "@deepseek-ai/dsh-tools";
 import type State from "@Interface/State.js";
 import type { Log } from "@Interface/State.js";
 

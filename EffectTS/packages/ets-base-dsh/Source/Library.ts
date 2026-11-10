@@ -1,23 +1,28 @@
-// Library - the entry module of the BASE (@playform/ets-base-dsh), the
-// single owner of the shared Effect-TS plumbing of the ets-* group: the
-// runtime wiring (Source/Service - the Context services, the layer graph
-// and the materialize() runtime assembled for the factory shell), the
-// fiber/stream machinery (Source/Stream - the Gate transformer and the pure
-// reducers; Source/Function/Update - the update envelope) and the hook
-// contract types (Source/Interface - the structural contracts the factory
-// re-exports to its consumers). Every ets-* package depends on this base;
-// the ten consumers additionally depend on ets-lib-dsh-core and
-// ets-plugin-dsh-factory. Usable outside the harness entirely (the PlayForm
-// ecosystem).
-//
-// The named exports (the contract surface): the structural types keep the
-// names the factory's consumers already use (State/Options/Gate/Transform/
-// Output/Journal - plus Actor/Jobs for the factory's own modules); the
-// stream machinery keeps the core's public names (Update/Activate/Block/
-// Chunk) with the Gate transformer exposed as `StreamGate` - the Interface
-// contract's `Gate` (the apply decision type) owns the plain name here,
-// exactly as the factory's public API has always used it.
-
+/**
+ * @module Library
+ *
+ * The entry module of the base (@playform/ets-base-dsh), the single owner of
+ * the shared Effect-TS plumbing of the ets-* group.
+ *
+ * @remarks
+ * The export surface and the loader contract: the runtime wiring
+ * (Source/Service - the Context services, the layer graph and the
+ * materialize() runtime assembled for the factory shell), the fiber/stream
+ * machinery (Source/Stream - the Gate transformer and the pure reducers;
+ * Source/Function/Update - the update envelope) and the hook contract types
+ * (Source/Interface - the structural contracts the factory re-exports to its
+ * consumers). Every ets-* package depends on this base; the ten consumers
+ * additionally depend on ets-lib-dsh-core and ets-plugin-dsh-factory. Usable
+ * outside the harness entirely (the PlayForm ecosystem).
+ *
+ * The named exports (the contract surface): the structural types keep the
+ * names the factory's consumers already use (State/Options/Gate/Transform/
+ * Output/Journal - plus Actor/Jobs for the factory's own modules); the stream
+ * machinery keeps the core's public names (Update/Activate/Block/Chunk) with
+ * the Gate transformer exposed as `StreamGate` - the Interface contract's
+ * `Gate` (the apply decision type) owns the plain name here, exactly as the
+ * factory's public API has always used it.
+ */
 // The compiled package version (Source/Variable/Version, built in by the
 // ESBuild define). This package has NO loader contract and NO Config - the
 // version sits beside the other named exports; it is not a loader key.

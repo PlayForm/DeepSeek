@@ -1,15 +1,22 @@
-// Adapter - the adapter contract's wiring half: one call registers a host
-// bundle's adapter in BOTH directions of the v4.1 contribution model.
-//   1. the DATA path: the manifest goes into the slot-aware registry
-//      (playformFamilyPanel), which enforces one adapter per bundle per slot;
-//   2. the REACT path: the client half injects the child slot the manifest
-//      declares and registers one section component there, with the
-//      registration's inject face carrying `{ section, ports }` to the
-//      component (React crosses through slots; data crosses through the
-//      inject face).
-// Both registrations ride ctx.effect, so plugin unload removes the section
-// and its manifest with no residue. This is the template every per-bundle
-// adapter copies into its own client half.
+/**
+ * @module Adapter
+ *
+ * The adapter contract's wiring half: one call registers a host bundle's
+ * adapter in both directions of the v4.1 contribution model.
+ *
+ * @remarks
+ * 1. The data path: the manifest goes into the slot-aware registry
+ *    (playformFamilyPanel), which enforces one adapter per bundle per slot.
+ * 2. The React path: the client half injects the child slot the manifest
+ *    declares and registers one section component there, with the
+ *    registration's inject face carrying `{ section, ports }` to the
+ *    component (React crosses through slots; data crosses through the inject
+ *    face).
+ *
+ * Both registrations ride ctx.effect, so plugin unload removes the section
+ * and its manifest with no residue. This is the template every per-bundle
+ * adapter copies into its own client half.
+ */
 import Section from "@Function/Section.js";
 import type { ClientContext } from "@Interface/Client.js";
 import type { PanelSection } from "@Interface/Panel.js";
@@ -19,7 +26,9 @@ import { createElement } from "react";
 
 const NAMESPACE = "client-dsh-panel-family";
 
-/** The registered component: the slot's inject face + standard props. */
+/**
+ * The registered component: the slot's inject face + standard props.
+ */
 const Component = (props: Record<string, unknown> = {}): unknown =>
 	createElement(Section, props as unknown as Parameters<typeof Section>[0]);
 

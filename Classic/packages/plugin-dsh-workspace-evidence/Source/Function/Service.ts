@@ -1,4 +1,3 @@
-import { Service, type Context } from "@deepseek-ai/cordis";
 /**
  * @module Service
  *
@@ -21,6 +20,7 @@ import { Service, type Context } from "@deepseek-ai/cordis";
  * - `list(status?)` - the objects, optionally filtered by status;
  * - `statistics()` - { validations, fresh, stale, superseded, sequence }.
  */
+import { Service, type Context } from "@deepseek-ai/cordis";
 import Declare from "@Function/Declare.js";
 import Invalidate from "@Function/Invalidate.js";
 import Ledger from "@Function/Ledger.js";

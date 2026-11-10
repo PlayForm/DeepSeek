@@ -1,4 +1,3 @@
-import type State from "@Interface/State.js";
 /**
  * @module Ledger
  *
@@ -10,6 +9,7 @@ import type State from "@Interface/State.js";
  * lines live in Declare and Invalidate). The "Ledger" name is the store ledger
  * in the accounting sense - the recorded evidence, not the log file.
  */
+import type State from "@Interface/State.js";
 import type Validation from "@Interface/Validation.js";
 
 /**

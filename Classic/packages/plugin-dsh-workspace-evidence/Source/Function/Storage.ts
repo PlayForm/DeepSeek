@@ -1,4 +1,3 @@
-import type State from "@Interface/State.js";
 /**
  * @module Storage
  *
@@ -33,6 +32,7 @@ import type State from "@Interface/State.js";
  * load - the factory's live-verified pitfall); the type-only devDeps pin them
  * to the host-era versions.
  */
+import type State from "@Interface/State.js";
 import type Validation from "@Interface/Validation.js";
 
 /**

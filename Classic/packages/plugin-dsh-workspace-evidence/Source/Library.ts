@@ -1,4 +1,3 @@
-import Apply from "./Function/Apply.js";
 /**
  * @module Library
  *
@@ -31,6 +30,7 @@ import Apply from "./Function/Apply.js";
  * `workspaceEvidence` service is a Service subclass in its own module
  * (Function/Service) and is registered from apply.
  */
+import Apply from "./Function/Apply.js";
 import Definition from "./Variable/Config.js";
 import Version from "./Variable/Version.js";
 

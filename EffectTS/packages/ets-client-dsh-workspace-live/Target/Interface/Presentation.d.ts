@@ -1,3 +1,21 @@
+/**
+ * @module Presentation
+ *
+ * What the live view presents.
+ *
+ * @remarks
+ * Documentation/Plans/Workspace-Family/LIVE.md: the presentations of the
+ * Entity/Presentation/Interaction model. The live view NEVER conflates a
+ * running OS process with a managed entity: a representation describes a
+ * managed workspace entity and its latest observed state, not a process.
+ *
+ * A Representation is one presented entity: its stable id, its kind, its
+ * label, the latest event sequence that changed it, and its observed
+ * version. A LiveView snapshot is the ordered list of representations plus
+ * the recent event tail (bounded by the Config maxEvents). The D5 trace tail
+ * the tab also renders is a separate bounded source (Interface/Trace.ts), so
+ * the snapshot shape stays what it always was.
+ */
 export type Representation = {
     id: string;
     kind: "file" | "symbol" | "block" | "test" | "doc";

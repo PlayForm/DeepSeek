@@ -1,4 +1,3 @@
-import type DomainHandle from "@Interface/Domain.js";
 /**
  * @module State
  *
@@ -14,6 +13,7 @@ import type DomainHandle from "@Interface/Domain.js";
  * identity lives in the package name and the `name` export
  * (plugin-dsh-workspace-evidence).
  */
+import type DomainHandle from "@Interface/Domain.js";
 import type FactoryHandle from "@Interface/Factory.js";
 import type Validation from "@Interface/Validation.js";
 import type { Allowlist, State as Base } from "@playform/plugin-dsh-factory";

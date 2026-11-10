@@ -1,7 +1,14 @@
-// Suggester - the reference adapter for the suggester family, represented by
-// hook-dsh-convention-suggester (the pack learner after the completion spec's
-// re-spec). Its schema is fully volatile, so its form writes ride the
-// revision-fenced settings mutate, and the D5 trace feeds its live tail.
+/**
+ * @module Suggester
+ *
+ * The reference adapter for the suggester family, represented by
+ * hook-dsh-convention-suggester (the pack learner after the completion spec's
+ * re-spec).
+ *
+ * @remarks
+ * Its schema is fully volatile, so its form writes ride the revision-fenced
+ * settings mutate, and the D5 trace feeds its live tail.
+ */
 import type { PanelSection } from "@Interface/Panel.js";
 import Trace from "@Variable/Trace.js";
 

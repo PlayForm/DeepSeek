@@ -1,3 +1,15 @@
+/**
+ * @module Config
+ *
+ * The panel package's Schemastery schema (a Variable: one constant built once
+ * at load).
+ *
+ * @remarks
+ * The loader validates it and fills every default, so invalid configuration
+ * fails loud at load. Every knob is volatile - hot edits commit without
+ * remounting (the package is a pure client module, so the client half
+ * re-reads the fields on the next render pass).
+ */
 import Schema from "@deepseek-ai/schemastery";
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     enabled: Schema<boolean, boolean, "volatile-defined">;

@@ -13,7 +13,9 @@ export declare const Config: import("@deepseek-ai/schemastery").default<Schemast
 }>>, "plain">;
 export { Version };
 export declare const inject: string[];
-/** The empty host half - the Loader row exists to serve the client half. */
+/**
+ * The empty host half - the Loader row exists to serve the client half.
+ */
 export declare function apply(): void;
 declare const _default: {
     name: string;

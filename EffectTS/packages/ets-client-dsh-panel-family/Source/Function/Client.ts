@@ -1,27 +1,36 @@
-// Client - the panel package's client half body (Source/Client.ts delegates
-// its apply here). The v4.1 wiring, zero adapter logic of its own:
-//
-//   1. Provide the slot-aware registry service:
-//      ctx.reflect.provide("playformFamilyPanel", the Registry).
-//   2. Register the locale dictionaries and create the live trace tail (the
-//      D5 bus when the host exposes it; the static fallback otherwise).
-//   3. Mount the two PANELS, each DECLARING ITS CHILD SLOT in the
-//      registration's children table (the v4.1 model):
-//        - conversation.view -> playform-family (id, order Config.tabOrder,
-//          session scope) declares playform.panel.section (list, session);
-//        - shell.overlay -> playform-family-overlay declares
-//          playform.panel.overlay (list, root).
-//      The components render their declared child slots through the
-//      renderSlot prop; the registry only supplies the data (the occupancy
-//      count for the empty state, the adapter manifests).
-//   4. Register the thirteen shipped adapters (Function/Reference.ts) - the
-//      three references plus the ten that copied their pattern.
-//
-// The locale strings come through the client locale service (R-UI-1 A6):
-// every visible string routes through ctx.locale (namespace
-// "client-dsh-panel-family", the dictionaries in Variable/Locale-*.json).
-// React arrives via createElement calls (no JSX in this package) and stays
-// an external - the module system's platform seed table resolves it.
+/**
+ * @module Client
+ *
+ * The panel package's client half body (Source/Client.ts delegates its apply
+ * here).
+ *
+ * @remarks
+ * The v4.1 wiring, zero adapter logic of its own:
+ *
+ * 1. Provide the slot-aware registry service:
+ *    ctx.reflect.provide("playformFamilyPanel", the Registry).
+ * 2. Register the locale dictionaries and create the live trace tail (the
+ *    D5 bus when the host exposes it; the static fallback otherwise).
+ * 3. Mount the two panels, each declaring its child slot in the
+ *    registration's children table (the v4.1 model):
+ *
+ *    - conversation.view -> playform-family (id, order Config.tabOrder,
+ *      session scope) declares playform.panel.section (list, session).
+ *    - shell.overlay -> playform-family-overlay declares
+ *      playform.panel.overlay (list, root).
+ *
+ *    The components render their declared child slots through the renderSlot
+ *    prop; the registry only supplies the data (the occupancy count for the
+ *    empty state, the adapter manifests).
+ * 4. Register the thirteen shipped adapters (Function/Reference.ts) - the
+ *    three references plus the ten that copied their pattern.
+ *
+ * The locale strings come through the client locale service (R-UI-1 A6):
+ * every visible string routes through ctx.locale (namespace
+ * "client-dsh-panel-family", the dictionaries in Variable/Locale-*.json).
+ * React arrives via createElement calls (no JSX in this package) and stays
+ * an external - the module system's platform seed table resolves it.
+ */
 import Bridge from "@Function/Bridge.js";
 import Forms from "@Function/Forms.js";
 import Live from "@Function/Live.js";
@@ -39,10 +48,14 @@ import { createElement, useEffect, useState, type ReactNode } from "react";
 
 const NAMESPACE = "client-dsh-panel-family";
 
-/** The renderer's child-slot dispatch prop (PropsRenderSlots). */
+/**
+ * The renderer's child-slot dispatch prop (PropsRenderSlots).
+ */
 type RenderSlot = (name: string, props: object) => ReactNode;
 
-/** The family tab body: the empty state + the declared section child slot. */
+/**
+ * The family tab body: the empty state + the declared section child slot.
+ */
 function FamilyTab(props: {
 	registry: PanelRegistry;
 	renderSlot?: RenderSlot;

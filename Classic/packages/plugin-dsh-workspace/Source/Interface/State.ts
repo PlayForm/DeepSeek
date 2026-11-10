@@ -1,4 +1,3 @@
-import type { NodeKind, WorkspaceGraph } from "@Interface/Graph.js";
 /**
  * @module State
  *
@@ -18,6 +17,7 @@ import type { NodeKind, WorkspaceGraph } from "@Interface/Graph.js";
  * end-phase smokes probe the built State - never a return value from `apply`
  * (the loader treats apply returns specially).
  */
+import type { NodeKind, WorkspaceGraph } from "@Interface/Graph.js";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { Allowlist, State as Shared } from "@playform/plugin-dsh-factory";
 

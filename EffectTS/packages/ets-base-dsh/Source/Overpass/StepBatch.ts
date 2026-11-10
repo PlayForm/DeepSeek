@@ -1,46 +1,55 @@
-// StepBatch - the STEP-BATCH arm of the post-hoc normalization, as a FACTORY
-// over the shared machinery: one `agent/pre-step` waterfall listener per
-// flavor, built from three injected pieces and registered in the flavor's
-// Function/Apply. The arm sees only the INCOMING batch of user-role messages
-// for the step - never the assistant/tool history - and it is the last chance
-// boundary before the model reads them.
-//
-// The parameterization boundary:
-//   * Transform(Text, State) - the flavor's replacement, read PER CALL from
-//     the (volatile-refreshed) State, so a hot-edited replacement lands on
-//     the next batch; the one-argument fullwidth/quotes delegates ignore
-//     State.
-//   * Line - the module's ledger-line composer, REQUIRED: the module owns its
-//     strings, the base owns only the mechanics. Arity is `(Count, Turn,
-//     Step)`.
-//   * Ledger { Append, Journal } - the factory's ledger sink, INJECTED, so
-//     the base never names the factory's type.
-//   * State - the flavor's per-apply state, structurally narrowed here to
-//     the two cells this arm reads (`Scopes.batch`, the one-shot `Overpass`).
-//
-// Semantics:
-//   * next() is ALWAYS awaited first - only an `enter` decision can have its
-//     messages replaced;
-//   * CONTINUOUS mode: while `State.Scopes.batch` is on, every batch is
-//     normalized;
-//   * ONE-SHOT mode: the `normalize-overpass batch` command arms
-//     `State.Overpass` regardless of the scope value; the flag is consumed
-//     by the next batch (cleared after one use);
-//   * both off -> the downstream decision passes through UNTOUCHED;
-//   * TEXT blocks only, with the CCR MARKER GUARD (Overpass/Blocks); never
-//     assistant/tool history;
-//   * N = 0 -> the downstream decision unchanged (no ledger line);
-//   * N > 0 -> `{ ...Decision, messages: <rewritten> }` and the module's
-//     ledger line via Ledger.Append, plus the shared `normalized` journal
-//     event with the scope in the path slot;
-//   * FAIL-OPEN: one try/catch around everything - on any error the
-//     downstream decision is returned UNCHANGED.
-//
-// Pure per call: no module-level state - the one-shot flag lives on the
-// per-apply State object, so an HMR reload resets it cleanly.
+/**
+ * @module StepBatch
+ *
+ * The step-batch arm of the post-hoc normalization: one `agent/pre-step`
+ * waterfall listener per flavor, built over the shared machinery.
+ *
+ * @remarks
+ * A factory over the shared machinery: three injected pieces registered in
+ * the flavor's Function/Apply. The arm sees only the incoming batch of
+ * user-role messages for the step - never the assistant/tool history - and it
+ * is the last chance boundary before the model reads them.
+ *
+ * The parameterization boundary:
+ *
+ * - `Transform(Text, State)` - the flavor's replacement, read per call from
+ *   the (volatile-refreshed) State, so a hot-edited replacement lands on the
+ *   next batch; the one-argument fullwidth/quotes delegates ignore State.
+ * - `Line` - the module's ledger-line composer, required: the module owns its
+ *   strings, the base owns only the mechanics. Arity is `(Count, Turn,
+ *   Step)`.
+ * - `Ledger { Append, Journal }` - the factory's ledger sink, injected, so
+ *   the base never names the factory's type.
+ * - `State` - the flavor's per-apply state, structurally narrowed here to the
+ *   two cells this arm reads (`Scopes.batch`, the one-shot `Overpass`).
+ *
+ * Semantics:
+ *
+ * - `next()` is always awaited first - only an `enter` decision can have its
+ *   messages replaced.
+ * - Continuous mode: while `State.Scopes.batch` is on, every batch is
+ *   normalized.
+ * - One-shot mode: the `normalize-overpass batch` command arms
+ *   `State.Overpass` regardless of the scope value; the flag is consumed by
+ *   the next batch (cleared after one use).
+ * - Both off -> the downstream decision passes through untouched.
+ * - Text blocks only, with the CCR marker guard (Overpass/Blocks); never
+ *   assistant/tool history.
+ * - N = 0 -> the downstream decision unchanged (no ledger line).
+ * - N > 0 -> `{ ...Decision, messages: <rewritten> }` and the module's ledger
+ *   line via Ledger.Append, plus the shared `normalized` journal event with
+ *   the scope in the path slot.
+ * - Fail-open: one try/catch around everything - on any error the downstream
+ *   decision is returned unchanged.
+ *
+ * Pure per call: no module-level state - the one-shot flag lives on the
+ * per-apply State object, so an HMR reload resets it cleanly.
+ */
 import RewriteBlocks from "./Blocks.js";
 
-/** The schema-default scope gates (the fallback for a hand-built config). */
+/**
+ * The schema-default scope gates (the fallback for a hand-built config).
+ */
 const DefaultScopes = {
 	conversation: true,
 	reasoning: true,
@@ -50,7 +59,9 @@ const DefaultScopes = {
 	batch: false,
 };
 
-/** The structural scope cells the arms read (all optional). */
+/**
+ * The structural scope cells the arms read (all optional).
+ */
 type Scopes = {
 	conversation?: boolean | undefined;
 	reasoning?: boolean | undefined;
@@ -60,19 +71,27 @@ type Scopes = {
 	batch?: boolean | undefined;
 };
 
-/** The per-apply state cells the step-batch arm reads. */
+/**
+ * The per-apply state cells the step-batch arm reads.
+ */
 type State = {
 	Scopes?: Scopes | undefined;
 	Overpass?: boolean | undefined;
 };
 
-/** The structural pre-step payload: only the fields the arm reads. */
+/**
+ * The structural pre-step payload: only the fields the arm reads.
+ */
 type Payload = { turn?: unknown; step?: unknown };
 
-/** The structural pre-step decision: the arm only reads `kind`/`messages`. */
+/**
+ * The structural pre-step decision: the arm only reads `kind`/`messages`.
+ */
 type Decision = { kind?: unknown; messages?: readonly unknown[] };
 
-/** The injected ledger sink: the factory's Append/Journal, module-typed. */
+/**
+ * The injected ledger sink: the factory's Append/Journal, module-typed.
+ */
 type Ledger<S> = {
 	Append: (State: S, Line: string) => void;
 	Journal: (State: S, Event: string, Path: string, Value: string) => void;

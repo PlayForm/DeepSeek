@@ -1,4 +1,3 @@
-import Schema from "@deepseek-ai/schemastery";
 /**
  * @module Config
  *
@@ -29,6 +28,7 @@ import Schema from "@deepseek-ai/schemastery";
  * disabled, never appears in the profile's bundles, and enables only by an
  * explicit ACTIVATE.
  */
+import Schema from "@deepseek-ai/schemastery";
 import { Schema as Compose, Policy } from "@playform/plugin-dsh-factory";
 
 const DefaultLogFile = "~/.dsh/playform/plugin-dsh-workspace-evidence.log";

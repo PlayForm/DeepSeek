@@ -1,12 +1,18 @@
-// Stream - the HTTP SSE route that bridges the host's D5 trace bus to the
-// browser. The Workspace tab resolves `ctx.get("trace")` (the client half's
-// re-published face), which in turn needs the host's bus envelopes; this
-// route streams them as `text/event-stream` frames so an EventSource in the
-// panel receives every kind. The bus is read structurally - the same shape
-// Function/Trace.ts already forwards - so the package never imports the
-// trace library. When the bus is absent the stream stays open with one
-// comment frame, so a browser connected before the factory provides the bus
-// picks the flow up the moment a later mount starts writing.
+/**
+ * @module Stream
+ *
+ * The HTTP SSE route that bridges the host's D5 trace bus to the browser.
+ *
+ * @remarks
+ * The Workspace tab resolves `ctx.get("trace")` (the client half's
+ * re-published face), which in turn needs the host's bus envelopes; this
+ * route streams them as `text/event-stream` frames so an EventSource in the
+ * panel receives every kind. The bus is read structurally - the same shape
+ * Function/Trace.ts already forwards - so the package never imports the
+ * trace library. When the bus is absent the stream stays open with one
+ * comment frame, so a browser connected before the factory provides the bus
+ * picks the flow up the moment a later mount starts writing.
+ */
 import type { IncomingMessage, ServerResponse } from "node:http";
 
 import type { Context } from "@deepseek-ai/cordis";

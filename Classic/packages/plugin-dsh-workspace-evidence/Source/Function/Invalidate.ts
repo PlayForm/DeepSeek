@@ -1,5 +1,3 @@
-import type State from "@Interface/State.js";
-
 /**
  * @module Invalidate
  *
@@ -15,6 +13,8 @@ import type State from "@Interface/State.js";
  * Function/Watch) and the service's explicit invalidate(key) - any dependency
  * key, not just a file path.
  */
+import type State from "@Interface/State.js";
+
 export default (State: State, Key: string): number => {
 	let Count = 0;
 	for (const [Id, Object] of State.Store) {

@@ -1,18 +1,23 @@
-// Store - the live view's presentation store. THE STABLE-UNTIL-EVENT
-// CONTRACT (Documentation/Plans/Workspace-Family/LIVE.md): the presentation
-// does NOT re-render continuously - getSnapshot() returns the same object
-// reference until ingest() applies an event or a graph refresh, and only
-// then a new snapshot is emitted to the subscribers. There is no polling
-// and no timer: the machinery behind the view stays invisible; the view
-// presents at the end of the invisible flow.
-//
-// ingest(event) folds a workspace event into the snapshot: the event joins
-// the bounded tail (oldest dropped beyond Config maxEvents), and an event
-// with a path updates (or creates) the representation for that path with
-// the event's sequence. refresh(graph) replaces the representation set from
-// a graph snapshot (the end-phase wiring passes the real
-// ctx.workspaceGraph.snapshot(); the PoC type mirrors it from
-// Interface/Siblings).
+/**
+ * @module Store
+ *
+ * The live view's presentation store.
+ *
+ * @remarks
+ * THE STABLE-UNTIL-EVENT CONTRACT (Documentation/Plans/Workspace-Family/LIVE.md):
+ * the presentation does NOT re-render continuously - getSnapshot() returns the
+ * same object reference until ingest() applies an event or a graph refresh, and
+ * only then a new snapshot is emitted to the subscribers. There is no polling
+ * and no timer: the machinery behind the view stays invisible; the view
+ * presents at the end of the invisible flow.
+ *
+ * ingest(event) folds a workspace event into the snapshot: the event joins the
+ * bounded tail (oldest dropped beyond Config maxEvents), and an event with a
+ * path updates (or creates) the representation for that path with the event's
+ * sequence. refresh(graph) replaces the representation set from a graph
+ * snapshot (the end-phase wiring passes the real ctx.workspaceGraph.snapshot();
+ * the PoC type mirrors it from Interface/Siblings).
+ */
 import type { LiveView, Representation } from "@Interface/Presentation.js";
 import type { GraphSnapshot, WorkspaceEvent } from "@Interface/Siblings.js";
 

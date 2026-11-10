@@ -1,3 +1,6 @@
+/**
+ * The tail result or the rejected/not-found failure.
+ */
 export type TailResult = {
     ok: true;
     namespace: string;

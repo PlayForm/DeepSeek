@@ -1,19 +1,28 @@
-// Client - the client half entry of @playform/client-dsh-workspace-live
-// (the built `./client` export; the module system serves it as a lazy-CJS
-// factory). The named `inject` (required client services: the slots registry
-// and the locale service) and the named `apply(ctx)`; the body lives in
-// Function/Client.ts - this entry is wiring only, and the stylesheet mount
-// lives in Source/Bundle.ts so the ESM half stays style-free.
+/**
+ * @module Client
+ *
+ * The client half entry of `@playform/client-dsh-workspace-live` (the built
+ * `./client` export; the module system serves it as a lazy-CJS factory).
+ *
+ * @remarks
+ * The entry carries the named `inject` (required client services: the slots
+ * registry and the locale service) and the named `apply(ctx)`; the body lives
+ * in `Function/Client.ts` - this entry is wiring only, and the stylesheet mount
+ * lives in `Source/Bundle.ts` so the ESM half stays style-free.
+ */
 import ClientApply from "@Function/Client.js";
 import type { ClientContext } from "@Interface/Client.js";
 
-/** Required client services: the slot registry and the locale service. */
+/**
+ * Required client services: the slot registry and the locale service.
+ */
 export const inject = ["slots", "locale"];
 
 /**
  * Client plugin body: provide the workspaceLive service and mount the
  * workspace-live tab. All registrations ride ctx.effect, so plugin unload
  * removes everything without residue.
+ *
  * @param ctx - client root context.
  */
 export function apply(ctx: ClientContext): void {

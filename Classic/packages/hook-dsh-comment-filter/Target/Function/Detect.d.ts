@@ -38,6 +38,6 @@
  * The shared objects are reused across keys (a table, not 60 copies): the scanner treats them
  * as read-only, and one family object is one auditable vocabulary.
  */
-import type Syntax from "../Interface/Syntax.js";
+import type Syntax from "@Interface/Syntax.js";
 export default _default;
 declare function _default(Path: string): Syntax | undefined;

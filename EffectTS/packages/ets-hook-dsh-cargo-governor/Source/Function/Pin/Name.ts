@@ -1,6 +1,13 @@
-// Name — the `name = value` declaration matcher on one Cargo.toml line:
-// the (quoted or bare) key and the remainder after the equals. Returns null
-// for lines that are not declarations (the scanner skips them).
+/**
+ * @module Name
+ *
+ * The `name = value` declaration matcher on one Cargo.toml line.
+ *
+ * @remarks
+ * It captures the (quoted or bare) key and the remainder after the equals.
+ * Returns null for lines that are not declarations (the scanner skips
+ * them).
+ */
 export default (Rest: string): { key: string; rest: string } | null => {
 	const Match =
 		/^\s*(?:"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)'|([A-Za-z0-9_\-]+))\s*=\s*(.*)$/.exec(Rest);

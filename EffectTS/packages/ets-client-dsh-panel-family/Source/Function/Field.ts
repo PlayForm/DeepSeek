@@ -1,10 +1,16 @@
-// Field - one config-form row: the field label with its write-route marker,
-// the control bound to the field's current value, and the provenance note.
-// The control commits through Apply (volatile -> the settings mutate, plain ->
-// the bridge, secret -> never). A secret field renders the "configured
-// (secret)" marker and NO value: the host redacts secrets and the panel must
-// never display one (UI-FAMILY-V4-1 section 3.4). The row is a pure element
-// builder (no hooks), so the smoke suite can inspect the exact tree.
+/**
+ * @module Field
+ *
+ * One config-form row: the field label with its write-route marker, the
+ * control bound to the field's current value, and the provenance note.
+ *
+ * @remarks
+ * The control commits through Apply (volatile -> the settings mutate, plain
+ * -> the bridge, secret -> never). A secret field renders the "configured
+ * (secret)" marker and no value: the host redacts secrets and the panel must
+ * never display one (UI-FAMILY-V4-1 section 3.4). The row is a pure element
+ * builder (no hooks), so the smoke suite can inspect the exact tree.
+ */
 import Apply from "@Function/Apply.js";
 import type { PanelFormField, PanelFormView } from "@Interface/Form.js";
 import type { PanelSection } from "@Interface/Panel.js";
@@ -12,7 +18,10 @@ import type { PanelPorts } from "@Interface/Ports.js";
 import EN_DICTIONARY from "@Variable/Locale-en.json";
 import { createElement } from "react";
 
-/** Resolve one visible string through the locale service, else the en dictionary. */
+/**
+ * Resolve one visible string through the locale service, else the en
+ * dictionary.
+ */
 const Translate = (T: ((key: string) => string) | undefined, Key: string): string => {
 	switch (true) {
 		case T !== undefined:
@@ -24,7 +33,9 @@ const Translate = (T: ((key: string) => string) | undefined, Key: string): strin
 	}
 };
 
-/** Parse a text control's JSON-shaped value, falling back to the raw text. */
+/**
+ * Parse a text control's JSON-shaped value, falling back to the raw text.
+ */
 const Parse = (Text: string): unknown => {
 	try {
 		return JSON.parse(Text) as unknown;
@@ -33,7 +44,9 @@ const Parse = (Text: string): unknown => {
 	}
 };
 
-/** The write-route marker key of one field. */
+/**
+ * The write-route marker key of one field.
+ */
 const Marker = (Field: PanelFormField, View: PanelFormView): string => {
 	switch (true) {
 		case Field.secret:
@@ -49,7 +62,9 @@ const Marker = (Field: PanelFormField, View: PanelFormView): string => {
 	}
 };
 
-/** The control element for one field (secret fields expose no value). */
+/**
+ * The control element for one field (secret fields expose no value).
+ */
 const Control = (props: {
 	field: PanelFormField;
 	view: PanelFormView;

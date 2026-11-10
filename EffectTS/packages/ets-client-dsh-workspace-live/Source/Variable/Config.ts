@@ -1,6 +1,13 @@
-// Config - the live client's Schemastery schema (a Variable: one constant
-// built once at load; the loader validates it and fills every default, so
-// invalid configuration fails LOUD at load). Every knob is volatile.
+/**
+ * @module Config
+ *
+ * The live client's Schemastery schema.
+ *
+ * @remarks
+ * A Variable: one constant built once at load; the loader validates it and
+ * fills every default, so invalid configuration fails LOUD at load. Every
+ * knob is volatile.
+ */
 import Schema from "@deepseek-ai/schemastery";
 
 export default Schema.object({

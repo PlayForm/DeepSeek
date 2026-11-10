@@ -1,4 +1,3 @@
-import Role from "@Function/Role.js";
 /**
  * @module Packet
  *
@@ -19,6 +18,7 @@ import Role from "@Function/Role.js";
  * - The token estimate is characters / tokenCharsPerToken - no token counter is
  *   injected in v0; the budget enforcement is honest about being an estimate.
  */
+import Role from "@Function/Role.js";
 import type { Edge, Node, WorkspaceGraph } from "@Interface/Graph.js";
 import type { PacketView } from "@Interface/Packet.js";
 import type { NodeRow } from "@Interface/Query.js";

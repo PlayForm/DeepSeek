@@ -1,5 +1,3 @@
-import type State from "@Interface/State.js";
-export default _default;
 /**
  * @module Invalidate
  *
@@ -15,4 +13,6 @@ export default _default;
  * Function/Watch) and the service's explicit invalidate(key) - any dependency
  * key, not just a file path.
  */
+import type State from "../Interface/State.js";
+export default _default;
 declare function _default(State: State, Key: string): number;

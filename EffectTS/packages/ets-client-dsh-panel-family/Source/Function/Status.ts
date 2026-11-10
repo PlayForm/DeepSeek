@@ -1,11 +1,18 @@
-// Status - resolve one adapter's status from its declared static posture and
-// the panel's live trace tail. The tail lines are byte-exact
-// `<kind> <key>` strings, where the key is the envelope's payload path when it
-// carries one (the coalescing key of the D5 contract) and its trace id
-// otherwise. The activation state is the adapter's declared posture unless
-// the NEWEST matching envelope carries `payload.activation` of "enabled" or
-// "disabled" - the one live override the panel honours. Without a trace the
-// status is static and the tail is empty (the documented fallback).
+/**
+ * @module Status
+ *
+ * Resolve one adapter's status from its declared static posture and the
+ * panel's live trace tail.
+ *
+ * @remarks
+ * The tail lines are byte-exact `<kind> <key>` strings, where the key is the
+ * envelope's payload path when it carries one (the coalescing key of the D5
+ * contract) and its trace id otherwise. The activation state is the adapter's
+ * declared posture unless the newest matching envelope carries
+ * `payload.activation` of "enabled" or "disabled" - the one live override the
+ * panel honours. Without a trace the status is static and the tail is empty
+ * (the documented fallback).
+ */
 import type {
 	PanelActivation,
 	PanelEnvelope,
@@ -14,7 +21,9 @@ import type {
 } from "@Interface/Panel.js";
 import type { PanelLive } from "@Interface/Trace.js";
 
-/** The envelope's display key: its payload path, else its trace id. */
+/**
+ * The envelope's display key: its payload path, else its trace id.
+ */
 const Key = (Envelope: PanelEnvelope): string => {
 	const Path = Envelope.payload["path"];
 	switch (true) {
@@ -25,10 +34,14 @@ const Key = (Envelope: PanelEnvelope): string => {
 	}
 };
 
-/** One tail line: the event name and its key. */
+/**
+ * One tail line: the event name and its key.
+ */
 const Line = (Envelope: PanelEnvelope): string => `${Envelope.kind} ${Key(Envelope)}`;
 
-/** The activation override one envelope carries, when it carries one. */
+/**
+ * The activation override one envelope carries, when it carries one.
+ */
 const Activation = (Envelope: PanelEnvelope): PanelActivation | undefined => {
 	const Value = Envelope.payload["activation"];
 	switch (true) {

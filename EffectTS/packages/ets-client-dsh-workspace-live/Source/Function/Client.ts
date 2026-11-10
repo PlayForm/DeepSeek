@@ -1,29 +1,36 @@
-// Client - the live client's client half body (Source/Client.ts delegates
-// its apply here). The wiring:
-//
-//   1. Provide the workspaceLive service (the Store): snapshot / subscribe /
-//      ingest / refresh. The disposer removes the service with the plugin.
-//   2. Register the locale dictionaries and the live trace source: the D5 bus
-//      (`ctx.get("trace")`) is the live source; without it the view is the
-//      documented static state (empty tail, `live: false`), never an error.
-//   3. Mount the conversation.view tab "workspace-live" (order =
-//      Config.tabOrder), rendering the LiveView snapshot and the stored trace
-//      tail (newest first, bounded by Config.maxEvents). When the panel
-//      family is composed (`playformFamilyPanel` present), the tab ADOPTS THE
-//      CHILD-SLOT MODEL: its registration declares `workspace.live.section`
-//      in its `children` table and the component renders it through the
-//      renderer's `renderSlot` prop.
-//   4. When the panel family is composed, register the live section into the
-//      declared child slot; its registration's INJECT face (`{ section,
-//      ports }`) is the data path - the section reads the store and the trace
-//      tail through the ports, never through the context.
-//
-// The stable-until-event rule: the tab re-renders only on a new store
-// snapshot or a new trace envelope; there is no polling and no timer. React
-// arrives via createElement calls (no JSX in this package) and stays
-// external. Locale strings route through the client locale service
-// (namespace "client-dsh-workspace-live"); the visible strings live in
-// Variable/Locale-en.json / Variable/Locale-zh.json.
+/**
+ * @module Client
+ *
+ * The live client's client half body (Source/Client.ts delegates its apply
+ * here).
+ *
+ * @remarks
+ * The wiring:
+ *
+ *   1. Provide the workspaceLive service (the Store): snapshot / subscribe /
+ *      ingest / refresh. The disposer removes the service with the plugin.
+ *   2. Register the locale dictionaries and the live trace source: the D5 bus
+ *      (`ctx.get("trace")`) is the live source; without it the view is the
+ *      documented static state (empty tail, `live: false`), never an error.
+ *   3. Mount the conversation.view tab "workspace-live" (order =
+ *      Config.tabOrder), rendering the LiveView snapshot and the stored trace
+ *      tail (newest first, bounded by Config.maxEvents). When the panel
+ *      family is composed (`playformFamilyPanel` present), the tab ADOPTS THE
+ *      CHILD-SLOT MODEL: its registration declares `workspace.live.section`
+ *      in its `children` table and the component renders it through the
+ *      renderer's `renderSlot` prop.
+ *   4. When the panel family is composed, register the live section into the
+ *      declared child slot; its registration's INJECT face (`{ section,
+ *      ports }`) is the data path - the section reads the store and the trace
+ *      tail through the ports, never through the context.
+ *
+ * The stable-until-event rule: the tab re-renders only on a new store
+ * snapshot or a new trace envelope; there is no polling and no timer. React
+ * arrives via createElement calls (no JSX in this package) and stays
+ * external. Locale strings route through the client locale service
+ * (namespace "client-dsh-workspace-live"); the visible strings live in
+ * Variable/Locale-en.json / Variable/Locale-zh.json.
+ */
 import Section from "@Function/Section.js";
 import StoreFn from "@Function/Store.js";
 import TraceFn from "@Function/Trace.js";
@@ -39,7 +46,9 @@ import { createElement, useEffect, useState, type ReactNode } from "react";
 
 const NAMESPACE = "client-dsh-workspace-live";
 
-/** The panel family's slot-aware registry face (the optional composition). */
+/**
+ * The panel family's slot-aware registry face (the optional composition).
+ */
 type Registry = {
 	register: (section: unknown) => () => void;
 	getVersion: () => number;
@@ -51,7 +60,9 @@ const IsRegistry = (Candidate: unknown): Candidate is Registry =>
 	typeof (Candidate as Registry).register === "function" &&
 	typeof (Candidate as Registry).getVersion === "function";
 
-/** The panel family's registry when the composition carries it. */
+/**
+ * The panel family's registry when the composition carries it.
+ */
 const RegistryOf = (ctx: ClientContext): Registry | undefined => {
 	const Candidate = ctx.get("playformFamilyPanel");
 	switch (true) {
@@ -62,10 +73,14 @@ const RegistryOf = (ctx: ClientContext): Registry | undefined => {
 	}
 };
 
-/** The renderer's child-slot dispatch prop. */
+/**
+ * The renderer's child-slot dispatch prop.
+ */
 type RenderSlot = (name: string, props: object) => ReactNode;
 
-/** The live view tab body: the representations, the trace tail, the child slot. */
+/**
+ * The live view tab body: the representations, the trace tail, the child slot.
+ */
 function LiveTab(props: {
 	store: ReturnType<typeof StoreFn>;
 	trace: LiveTrace;

@@ -1,12 +1,18 @@
-// Section - the section component one adapter registers into its declared
-// child slot. It renders the plugin's STATUS (the activation state and the
-// live trace tail) and its CONFIG FORM (the fields derived from the plugin's
-// schema by Function/Form). The component receives its data through the slot
-// registration's inject face (`{ section, ports }`) plus the renderer's
-// standard locale `t`; it subscribes to the settings mirror and the trace tail
-// for live updates and unwinds every subscription on unmount. With no
-// settings client the form shows the documented "not composed" state; with no
-// trace the status is static - neither is an error.
+/**
+ * @module Section
+ *
+ * The section component one adapter registers into its declared child slot.
+ *
+ * @remarks
+ * It renders the plugin's status (the activation state and the live trace
+ * tail) and its config form (the fields derived from the plugin's schema by
+ * Function/Form). The component receives its data through the slot
+ * registration's inject face (`{ section, ports }`) plus the renderer's
+ * standard locale `t`; it subscribes to the settings mirror and the trace
+ * tail for live updates and unwinds every subscription on unmount. With no
+ * settings client the form shows the documented "not composed" state; with no
+ * trace the status is static - neither is an error.
+ */
 import Field from "@Function/Field.js";
 import Form from "@Function/Form.js";
 import Status from "@Function/Status.js";
@@ -16,7 +22,10 @@ import type { PanelPorts } from "@Interface/Ports.js";
 import EN_DICTIONARY from "@Variable/Locale-en.json";
 import { createElement, useEffect, useState } from "react";
 
-/** Resolve one visible string through the locale service, else the en dictionary. */
+/**
+ * Resolve one visible string through the locale service, else the en
+ * dictionary.
+ */
 const Translate = (T: ((key: string) => string) | undefined, Key: string): string => {
 	switch (true) {
 		case T !== undefined:
@@ -28,7 +37,9 @@ const Translate = (T: ((key: string) => string) | undefined, Key: string): strin
 	}
 };
 
-/** Read the current form view from the settings mirror. */
+/**
+ * Read the current form view from the settings mirror.
+ */
 const Read = (Section: PanelSection, Ports: PanelPorts): PanelFormView => {
 	const Describe = Ports.configForms?.describe().getSnapshot();
 	const View = Describe?.view?.namespaces.find((Entry) => Entry.ns === Section.namespace);
@@ -40,7 +51,10 @@ const Read = (Section: PanelSection, Ports: PanelPorts): PanelFormView => {
 	});
 };
 
-/** The form body: one note per unavailable/loading/empty state, else the rows. */
+/**
+ * The form body: one note per unavailable/loading/empty state, else the
+ * rows.
+ */
 function FormBody(props: {
 	view: PanelFormView;
 	section: PanelSection;

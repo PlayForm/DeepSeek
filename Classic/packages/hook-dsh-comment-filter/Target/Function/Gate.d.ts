@@ -29,7 +29,7 @@
  * carries, which is what makes the `Map<object, string>` stash work. A call with no agent (a
  * bare dispatch) falls back to the last text seen by ANY agent - the documented Global fallback.
  */
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 /**
  * The structural tool execution: only the fields the gate reads.
  */

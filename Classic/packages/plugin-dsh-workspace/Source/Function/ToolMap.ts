@@ -1,4 +1,3 @@
-import { defineTool } from "@deepseek-ai/dsh-tools";
 /**
  * @module ToolMap
  *
@@ -10,6 +9,7 @@ import { defineTool } from "@deepseek-ai/dsh-tools";
  * canonical JSON value; the presenter is pure. The disabled plugin no-ops to a
  * clear refusal (the IDLE-forever posture).
  */
+import { defineTool } from "@deepseek-ai/dsh-tools";
 import { Map } from "@Function/Query.js";
 import type State from "@Interface/State.js";
 import type { Log } from "@Interface/State.js";

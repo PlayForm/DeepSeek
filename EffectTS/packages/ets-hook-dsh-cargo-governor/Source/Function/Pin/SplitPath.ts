@@ -1,7 +1,13 @@
-// SplitPath — split a TOML header's inner content on dots that are not
-// inside quotes, then unquote each segment — producing the same normalized
-// path Function/Decode derives from the parsed document (the surgical
-// rewrite's scanner-state input).
+/**
+ * @module SplitPath
+ *
+ * Split a TOML header's inner content on dots that are not inside quotes.
+ *
+ * @remarks
+ * It then unquotes each segment, producing the same normalized path
+ * Function/Decode derives from the parsed document (the surgical rewrite's
+ * scanner-state input).
+ */
 export default (Inner: string): string[] => {
 	const Parts: string[] = [];
 	let Current = "";
