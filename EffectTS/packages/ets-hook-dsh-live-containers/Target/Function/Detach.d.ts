@@ -1,35 +1,73 @@
+/**
+ * @module Detach
+ *
+ * Transforms a marked command-runner call into a detached job and a fabricated marker
+ * result.
+ *
+ * @remarks
+ * The two-arm transform (G1, IMPLEMENTATION-DESIGN.md section 3.2; Requirements/01
+ * section 12). The pre-execute arm decides + starts the job + tags the exec object; the
+ * execute arm, seeing the tag, returns the fabricated canonical-value result WITHOUT
+ * calling next() - the bash body never runs, and the pipeline renders a SUCCESSFUL
+ * (isError: false) tool result whose text is exactly the marker.
+ *
+ * THE EFFECTIVE-GATE ORDER (I2 section 3, binding): non-detachable -> await marker ->
+ * dedup -> escalation -> policy guards. A marked call to a non-detachable tool is IGNORED
+ * with the I2 4.1 ledger line (never refused); the marker check sits after the class rule
+ * and before dedup/escalation/policy; Policy.Decide runs only for unmarked calls.
+ *
+ * THE FAIL-OPEN RULE (I1 12.2.2, HARD): every branch wrapped; on ANY internal error the
+ * just-started job is killed (`marker-failed`), the tag is removed, the ledger records
+ * `transform failed <tool> -> inline`, and the call runs inline exactly as if the plugin
+ * were not mounted. The listener NEVER denies.
+ */
 import type { PreToolDecision, ToolDispatchExecution, ToolExecution, ToolExecutionResult } from "@deepseek-ai/dsh-tools";
 import type { Log } from "./Render.js";
 import type State from "../Interface/State.js";
-/** The inline marker (design section 4.1, byte-exact):
- * `[live] <job-id> running: <cmd-head> - output pending; proceed reasoning.` */
+/**
+ * The inline marker (design section 4.1, byte-exact): `[live] <job-id> running:
+ * <cmd-head> - output pending; proceed reasoning.`
+ */
 export declare const Marker: (JobID: string, CmdHead: string) => string;
-/** The dedup variant's second line (design section 4.1, byte-exact). */
+/**
+ * The dedup variant's second line (design section 4.1, byte-exact).
+ */
 export declare const AlreadyLine: (JobID: string) => string;
-/** The retry-loop extension's line (design section 6 scenario 5, byte-exact). */
+/**
+ * The retry-loop extension's line (design section 6 scenario 5, byte-exact).
+ */
 export declare const RetryLine: (JobID: string, Attempt: number) => string;
-/** The AWAIT-MARKER detection (I2 section 2): the FIRST-KEY test on the
- * arguments - `{"__await":true` - exactly like the normalize family's
- * first-key marker; no whitespace variants, no JSON re-parse. The parsed-
- * arguments path checks the literal FIRST key with the value exactly true
- * (insertion order); `{"__await":false` is NOT a marker. */
+/**
+ * The AWAIT-MARKER detection (I2 section 2): the FIRST-KEY test on the arguments -
+ * `{"__await":true` - exactly like the normalize family's first-key marker; no whitespace
+ * variants, no JSON re-parse. The parsed-arguments path checks the literal FIRST key with
+ * the value exactly true (insertion order); `{"__await":false` is NOT a marker.
+ */
 export declare const AwaitMarker: (Exec: ToolExecution) => boolean;
-/** The escalation detection: the call carries sandbox_permissions (an
- * escalation request runs through the bash tool's own approval flow). */
+/**
+ * The escalation detection: the call carries sandbox_permissions (an escalation request
+ * runs through the bash tool's own approval flow).
+ */
 export declare const IsEscalation: (Exec: ToolExecution) => boolean;
-/** L2 - tools/pre-execute (waterfall): next() FIRST, then decide. A pass-through
- * branch returns the downstream decision unchanged; a transform branch starts
- * the job, tags the exec, records the per-agent record, and returns the
- * downstream decision (allow) - the interception happens at the execute arm. */
+/**
+ * L2 - tools/pre-execute (waterfall): next() FIRST, then decide. A pass-through branch
+ * returns the downstream decision unchanged; a transform branch starts the job, tags the
+ * exec, records the per-agent record, and returns the downstream decision (allow) - the
+ * interception happens at the execute arm.
+ */
 export declare const PreExecute: (Agent: State, Exec: ToolExecution, Next: () => Promise<PreToolDecision>, Append: Log) => Promise<PreToolDecision>;
-/** L3 - tools/execute (waterfall): next() is NOT called when the tag is
- * present - the fabricated result REPLACES the dispatch (the cordis waterfall
- * veto), validated and rendered through the bash tool's own output contract.
- * The tag lives for exactly one pipeline pass. */
+/**
+ * L3 - tools/execute (waterfall): next() is NOT called when the tag is present - the
+ * fabricated result REPLACES the dispatch (the cordis waterfall veto), validated and
+ * rendered through the bash tool's own output contract. The tag lives for exactly one
+ * pipeline pass.
+ */
 export declare const Execute: (Agent: State, Exec: ToolDispatchExecution, Next: () => Promise<ToolExecutionResult>, Append: Log) => Promise<ToolExecutionResult>;
-/** The post-execute hook: record the inline command's duration for the
- * same-prefix history (the wave-2 observer; a detached call never reaches
- * post-execute because its body never ran - the transform's veto). */
+/**
+ * The post-execute hook: record the inline command's duration for the same-prefix history
+ * (the wave-2 observer; a detached call never reaches post-execute because its body never
+ * ran - the transform's veto).
+ */
 export declare const PostExecute: (Agent: State, Exec: {
     callId: string;
     name: string;
@@ -38,6 +76,8 @@ export declare const PostExecute: (Agent: State, Exec: {
         id?: string;
     } | undefined;
 }) => void;
-/** The start-time stamp for the duration observer (bounded: a long-lived
- * process without settlements cannot grow the map unboundedly). */
+/**
+ * The start-time stamp for the duration observer (bounded: a long-lived process without
+ * settlements cannot grow the map unboundedly).
+ */
 export declare const StampStart: (Agent: State, CallID: string) => void;

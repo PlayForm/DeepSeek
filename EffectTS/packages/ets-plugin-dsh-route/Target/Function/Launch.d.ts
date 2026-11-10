@@ -1,17 +1,23 @@
 import type State from "../Interface/State.js";
-/** One model-facing content block (the fields the hint reads). */
+/**
+ * One model-facing content block (the fields the hint reads).
+ */
 interface Block {
     type?: string | undefined;
     text?: string | undefined;
 }
-/** One step message (the harness's UserMessage, read structurally). */
+/**
+ * One step message (the harness's UserMessage, read structurally).
+ */
 interface Message {
     id?: string | undefined;
     role?: string | undefined;
     content?: readonly Block[] | undefined;
     source?: unknown;
 }
-/** The child agent, read structurally (no harness import). */
+/**
+ * The child agent, read structurally (no harness import).
+ */
 interface Child {
     options?: {
         provider?: string | undefined;
@@ -25,7 +31,9 @@ interface Child {
         } | undefined;
     } | undefined;
 }
-/** The `agent/pre-step` payload. */
+/**
+ * The `agent/pre-step` payload.
+ */
 interface Payload {
     agent: Child;
     messages: readonly Message[];
@@ -33,7 +41,9 @@ interface Payload {
     step: number;
     signal?: AbortSignal | undefined;
 }
-/** The `agent/pre-step` decision. */
+/**
+ * The `agent/pre-step` decision.
+ */
 type Decision = {
     kind: "reject";
 } | {

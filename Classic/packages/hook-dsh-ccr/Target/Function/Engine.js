@@ -1,0 +1,1 @@
+const a=(e,n)=>Math.max(0,Math.floor(e*n/100)),d=(e,n,t,o)=>{const u=Math.max(0,t),i=n-Math.max(0,o);return e.filter(r=>r.turn>u&&r.turn<=i)},h=(e,n,t,o,u,i)=>{const r=e.reduce((s,m)=>s+m.size,0),b=a(t,o);if(!0===(b<=0||r<b))return;const c=d(e,n,u,i);if(!0!==(c.length===0))return{archive:c,bytes:c.reduce((s,m)=>s+m.size,0)}};export{h as Decide,d as Eligible,a as ThresholdBytes};

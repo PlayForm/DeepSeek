@@ -1,3 +1,21 @@
+/**
+ * @module Config
+ *
+ * The validated plugin-config shape the loader hands to `apply`.
+ *
+ * @remarks
+ * Cordis validates the exported Schemastery schema while the plugin loads and
+ * fills every default, so `apply` receives a plain object of exactly this
+ * shape. The schema that produces it lives in Variable/Config.ts; every field
+ * here is a config field (the cordis.yml test - no hardcoded tunables).
+ *
+ * VOLATILE CELLS: `log`, `logFile` (the shared universal cells) plus every
+ * noise-control knob (enabled, threshold, maxCandidates, maxNoteChars,
+ * cooldownCalls, maxNotesPerTurn, intents, emitOn, exclude, learnWindow) are
+ * `.volatile()` in the schema - hot edits commit WITHOUT remounting the
+ * plugin. `historyPath` is structural (the store is loaded once at apply, so
+ * changing it remounts the plugin and reloads the store).
+ */
 export default interface Config {
     /** Ledger enabled - write the durable log file (volatile). */
     log: boolean;

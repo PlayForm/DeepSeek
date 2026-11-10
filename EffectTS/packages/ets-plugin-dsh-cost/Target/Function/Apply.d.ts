@@ -4,19 +4,29 @@ import type Factory from "@playform/ets-plugin-dsh-factory";
 import type Config from "../Interface/Config.js";
 declare module "@deepseek-ai/cordis" {
     interface Context {
-        /** The plugin-factory service (@playform/ets-plugin-dsh-factory). */
+        /**
+         * The plugin-factory service (@playform/ets-plugin-dsh-factory).
+         */
         pluginFactory: Factory;
-        /** The human command registry (@deepseek-ai/dsh-commands). */
+        /**
+         * The human command registry (@deepseek-ai/dsh-commands).
+         */
         commands: Commands;
     }
     interface Events {
-        /** One committed session log event; the subject is the session. */
+        /**
+         * One committed session log event; the subject is the session.
+         */
         "session/event"(Subject: unknown, Event: unknown): void;
-        /** The session's durability checkpoint; the subject is the session. */
+        /**
+         * The session's durability checkpoint; the subject is the session.
+         */
         "session/flush"(Subject: unknown): void;
     }
 }
-/** The structural command-registry surface the plugin registers through. */
+/**
+ * The structural command-registry surface the plugin registers through.
+ */
 interface Commands {
     register(Definition: {
         name: string;

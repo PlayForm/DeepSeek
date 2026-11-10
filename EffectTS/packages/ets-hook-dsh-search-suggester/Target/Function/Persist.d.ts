@@ -1,5 +1,7 @@
 import type { Dismissal, Knowledge, KnowledgeRow } from "../Interface/Execution.js";
-/** The empty knowledge (the cold start). */
+/**
+ * The empty knowledge (the cold start).
+ */
 export declare const Empty: () => Knowledge;
 export default _default;
 /**

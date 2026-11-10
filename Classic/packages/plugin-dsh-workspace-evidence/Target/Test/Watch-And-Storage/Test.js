@@ -1,1 +1,184 @@
-import t from"node:assert/strict";import{Check as s,Finish as u,Fire as o,FakeStorage as c,LinesWith as d,Make as v,MakeCounter as g,OpenStorage as p,Validate as f,rm as h}from"../Harness.js";const r=(a={},e)=>(h(),v(f({logFile:"/nonexistent/evidence.log",enabled:!0,...a}),n=>{e!==void 0&&(n.storageDomain=e.facility??e)})),w=async()=>{const a=g();{const e=r(),n=c();await p(e,n.facility),s(a,"W1: the domain spec is name/version/layout/invalidRecords/two tables",()=>{const i=n.spec;t.equal(i.name,"workspace_evidence"),t.equal(i.version,1),t.equal(i.layout,"per-record"),t.equal(i.invalidRecords,"backup-and-skip"),t.ok(i.tables.validations!==void 0),t.ok(i.tables.meta!==void 0)}),s(a,"W1: the open binds the handle",()=>{t.ok(e.State.Handle!==void 0)})}{const e=r(),n=c();await p(e,n.facility),e.Context.workspaceEvidence.validate("a","reality","s",["k"]);const i=n.tables.get("validations"),l=n.tables.get("meta");s(a,"W2: the validation record lands keyed by id",()=>{t.equal(i.get("a").id,"a"),t.equal(i.get("a").sequence,1)}),s(a,"W2: the sequence lands in the meta table",()=>{t.equal(l.get("__sequence"),1)})}{const e=c(),n={id:"old",kind:"reality",subject:"s",verdict:"unverified",dependencies:[],sequence:4,status:"superseded"};e.seed("validations","live",{id:"live",kind:"intent",subject:"s",verdict:"verified",dependencies:["k"],sequence:3,status:"fresh"}),e.seed("validations","old",n),e.seed("meta","__sequence",5);const i=r({},e.facility);await p(i,e.facility),s(a,"W3: the recovery reloads live records and drops superseded",()=>{t.deepEqual(i.Context.workspaceEvidence.list().map(l=>l.id),["live"])}),s(a,"W3: the sequence continues at the recovered maximum",()=>{const l=i.Context.workspaceEvidence.validate("next","reality","s",[]);t.equal(l.sequence,6)})}{const e=r(),n=c({failOpen:!0});await p(e,n.facility),s(a,"W4: a failed open logs the byte-exact line and degrades",()=>{t.deepEqual(d(e,"storage open failed"),["evidence: storage open failed: storage unavailable"]),t.equal(e.State.Handle,void 0),t.equal(e.Context.workspaceEvidence.statistics().validations,0)})}{const e=r();s(a,"W5: with no facility the effect is a silent skip",()=>{t.deepEqual(e.Effects,["evidence-storage"]),t.equal(e.State.Handle,void 0),t.deepEqual(d(e,"storage open failed"),[]),e.Context.workspaceEvidence.validate("a","reality","s",[]),t.equal(e.Context.workspaceEvidence.statistics().validations,1)})}{const e=r(),n=e.Context.workspaceEvidence;n.validate("a","reality","s",["/p/watched.ts"]),o(e,"/p/watched.ts","present",e.State.Self),s(a,"W6: the service's own actor is ignored",()=>{t.equal(n.check("a"),"fresh"),t.deepEqual(d(e,"own actor"),["evidence: ignored /p/watched.ts (own actor)"])}),o(e,"/repo/node_modules/x.ts"),s(a,"W6: an excluded path is ignored",()=>{t.deepEqual(d(e,"excluded"),["evidence: ignored /repo/node_modules/x.ts (excluded)"])}),o(e,"/p/gone.ts","removed"),s(a,"W6: an absent observation does not invalidate",()=>{t.deepEqual(d(e,"absent observation"),["evidence: ignored /p/gone.ts (absent observation)"])}),o(e,"/p/watched.ts"),s(a,"W6: a present observation invalidates the dependents",()=>{t.equal(n.check("a"),"stale"),t.deepEqual(d(e,"stale a"),["evidence: stale a (dependency /p/watched.ts)"])}),o(e,null,null,void 0),s(a,"W6: a malformed event never throws and is ledgered",()=>{t.deepEqual(d(e,"failed "),["evidence: failed unknown (malformed event: displayPath is not a string)"])})}{const e=r();e.Context.workspaceEvidence.validate("a","reality","s",["k"]),o(e,"/p/x.ts"),s(a,"W7: the fake fs records ZERO writeText and readText calls",()=>{t.equal(e.Fs.writes.length,0),t.equal(e.Fs.reads.length,0)})}{const e=r(),n=e.Context.workspaceEvidence;n.validate("a","reality","s",["/p/x.ts"]),o(e,"/p/x.ts"),o(e,"/p/x.ts"),s(a,"W8: a repeat event with the same version is dropped silently",()=>{t.equal(n.check("a"),"stale"),t.deepEqual(d(e,"stale a"),["evidence: stale a (dependency /p/x.ts)"]),t.deepEqual(d(e,"no stale (dependency /p/x.ts)"),[])}),s(a,"W8: a different version is processed normally",()=>{e.Listeners["fs/observed"]({displayPath:"/p/x.ts",targetKey:"/p/x.ts"},{kind:"present",version:"2"},{agent:{id:"agent-a"}}),t.deepEqual(d(e,"no stale (dependency /p/x.ts)"),["evidence: no stale (dependency /p/x.ts)"])}),s(a,"W8: the same version outside the window is processed again",()=>{const i=Date.now();e.State.Now=()=>i+5e3,e.Listeners["fs/observed"]({displayPath:"/p/x.ts",targetKey:"/p/x.ts"},{kind:"present",version:"2"},{agent:{id:"agent-a"}}),t.equal(d(e,"no stale (dependency /p/x.ts)").length,2)})}return u(a,"Watch-And-Storage")},k=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(k){const a=await w();console.log(`${a} PASS - Watch-And-Storage`)}export{w as runTest};
+import assert from "node:assert/strict";
+import {
+  Check,
+  Finish,
+  Fire,
+  FakeStorage,
+  LinesWith,
+  Make,
+  MakeCounter,
+  OpenStorage,
+  Validate,
+  rm
+} from "../Harness.js";
+const Setup = (Raw = {}, Facility) => {
+  rm();
+  return Make(Validate({ logFile: "/nonexistent/evidence.log", enabled: true, ...Raw }), (Context) => {
+    if (Facility !== void 0) {
+      Context.storageDomain = Facility.facility ?? Facility;
+    }
+  });
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Run = Setup();
+    const Store = FakeStorage();
+    await OpenStorage(Run, Store.facility);
+    Check(Count, "W1: the domain spec is name/version/layout/invalidRecords/two tables", () => {
+      const Spec = Store.spec;
+      assert.equal(Spec.name, "workspace_evidence");
+      assert.equal(Spec.version, 1);
+      assert.equal(Spec.layout, "per-record");
+      assert.equal(Spec.invalidRecords, "backup-and-skip");
+      assert.ok(Spec.tables.validations !== void 0);
+      assert.ok(Spec.tables.meta !== void 0);
+    });
+    Check(Count, "W1: the open binds the handle", () => {
+      assert.ok(Run.State.Handle !== void 0);
+    });
+  }
+  {
+    const Run = Setup();
+    const Store = FakeStorage();
+    await OpenStorage(Run, Store.facility);
+    Run.Context.workspaceEvidence.validate("a", "reality", "s", ["k"]);
+    const Validations = Store.tables.get("validations");
+    const Meta = Store.tables.get("meta");
+    Check(Count, "W2: the validation record lands keyed by id", () => {
+      assert.equal(Validations.get("a").id, "a");
+      assert.equal(Validations.get("a").sequence, 1);
+    });
+    Check(Count, "W2: the sequence lands in the meta table", () => {
+      assert.equal(Meta.get("__sequence"), 1);
+    });
+  }
+  {
+    const Store = FakeStorage();
+    const Superseded = { id: "old", kind: "reality", subject: "s", verdict: "unverified", dependencies: [], sequence: 4, status: "superseded" };
+    Store.seed("validations", "live", { id: "live", kind: "intent", subject: "s", verdict: "verified", dependencies: ["k"], sequence: 3, status: "fresh" });
+    Store.seed("validations", "old", Superseded);
+    Store.seed("meta", "__sequence", 5);
+    const Second = Setup({}, Store.facility);
+    await OpenStorage(Second, Store.facility);
+    Check(Count, "W3: the recovery reloads live records and drops superseded", () => {
+      assert.deepEqual(Second.Context.workspaceEvidence.list().map((Object) => Object.id), ["live"]);
+    });
+    Check(Count, "W3: the sequence continues at the recovered maximum", () => {
+      const Record = Second.Context.workspaceEvidence.validate("next", "reality", "s", []);
+      assert.equal(Record.sequence, 6);
+    });
+  }
+  {
+    const Run = Setup();
+    const Store = FakeStorage({ failOpen: true });
+    await OpenStorage(Run, Store.facility);
+    Check(Count, "W4: a failed open logs the byte-exact line and degrades", () => {
+      assert.deepEqual(LinesWith(Run, "storage open failed"), [
+        "evidence: storage open failed: storage unavailable"
+      ]);
+      assert.equal(Run.State.Handle, void 0);
+      assert.equal(Run.Context.workspaceEvidence.statistics().validations, 0);
+    });
+  }
+  {
+    const Run = Setup();
+    Check(Count, "W5: with no facility the effect is a silent skip", () => {
+      assert.deepEqual(Run.Effects, ["evidence-storage"]);
+      assert.equal(Run.State.Handle, void 0);
+      assert.deepEqual(LinesWith(Run, "storage open failed"), []);
+      Run.Context.workspaceEvidence.validate("a", "reality", "s", []);
+      assert.equal(Run.Context.workspaceEvidence.statistics().validations, 1);
+    });
+  }
+  {
+    const Run = Setup();
+    const Service = Run.Context.workspaceEvidence;
+    Service.validate("a", "reality", "s", ["/p/watched.ts"]);
+    Fire(Run, "/p/watched.ts", "present", Run.State.Self);
+    Check(Count, "W6: the service's own actor is ignored", () => {
+      assert.equal(Service.check("a"), "fresh");
+      assert.deepEqual(LinesWith(Run, "own actor"), [
+        "evidence: ignored /p/watched.ts (own actor)"
+      ]);
+    });
+    Fire(Run, "/repo/node_modules/x.ts");
+    Check(Count, "W6: an excluded path is ignored", () => {
+      assert.deepEqual(LinesWith(Run, "excluded"), [
+        "evidence: ignored /repo/node_modules/x.ts (excluded)"
+      ]);
+    });
+    Fire(Run, "/p/gone.ts", "removed");
+    Check(Count, "W6: an absent observation does not invalidate", () => {
+      assert.deepEqual(LinesWith(Run, "absent observation"), [
+        "evidence: ignored /p/gone.ts (absent observation)"
+      ]);
+    });
+    Fire(Run, "/p/watched.ts");
+    Check(Count, "W6: a present observation invalidates the dependents", () => {
+      assert.equal(Service.check("a"), "stale");
+      assert.deepEqual(LinesWith(Run, "stale a"), [
+        "evidence: stale a (dependency /p/watched.ts)"
+      ]);
+    });
+    Fire(Run, null, null, void 0);
+    Check(Count, "W6: a malformed event never throws and is ledgered", () => {
+      assert.deepEqual(LinesWith(Run, "failed "), [
+        "evidence: failed unknown (malformed event: displayPath is not a string)"
+      ]);
+    });
+  }
+  {
+    const Run = Setup();
+    Run.Context.workspaceEvidence.validate("a", "reality", "s", ["k"]);
+    Fire(Run, "/p/x.ts");
+    Check(Count, "W7: the fake fs records ZERO writeText and readText calls", () => {
+      assert.equal(Run.Fs.writes.length, 0);
+      assert.equal(Run.Fs.reads.length, 0);
+    });
+  }
+  {
+    const Run = Setup();
+    const Service = Run.Context.workspaceEvidence;
+    Service.validate("a", "reality", "s", ["/p/x.ts"]);
+    Fire(Run, "/p/x.ts");
+    Fire(Run, "/p/x.ts");
+    Check(Count, "W8: a repeat event with the same version is dropped silently", () => {
+      assert.equal(Service.check("a"), "stale");
+      assert.deepEqual(LinesWith(Run, "stale a"), [
+        "evidence: stale a (dependency /p/x.ts)"
+      ]);
+      assert.deepEqual(LinesWith(Run, "no stale (dependency /p/x.ts)"), []);
+    });
+    Check(Count, "W8: a different version is processed normally", () => {
+      Run.Listeners["fs/observed"](
+        { displayPath: "/p/x.ts", targetKey: "/p/x.ts" },
+        { kind: "present", version: "2" },
+        { agent: { id: "agent-a" } }
+      );
+      assert.deepEqual(LinesWith(Run, "no stale (dependency /p/x.ts)"), [
+        "evidence: no stale (dependency /p/x.ts)"
+      ]);
+    });
+    Check(Count, "W8: the same version outside the window is processed again", () => {
+      const Base = Date.now();
+      Run.State.Now = () => Base + 5e3;
+      Run.Listeners["fs/observed"](
+        { displayPath: "/p/x.ts", targetKey: "/p/x.ts" },
+        { kind: "present", version: "2" },
+        { agent: { id: "agent-a" } }
+      );
+      assert.equal(LinesWith(Run, "no stale (dependency /p/x.ts)").length, 2);
+    });
+  }
+  return Finish(Count, "Watch-And-Storage");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Watch-And-Storage`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

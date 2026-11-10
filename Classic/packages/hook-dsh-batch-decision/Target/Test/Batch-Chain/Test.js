@@ -1,2 +1,261 @@
-import t from"node:assert/strict";import{createHash as B}from"node:crypto";import*as b from"node:fs";import*as L from"node:os";import*as h from"node:path";import j from"../../../../plugin-dsh-batchstate/Target/Library.js";import D from"../../../../plugin-dsh-factory/Target/Library.js";import A from"../../../../plugin-dsh-feedback/Target/Library.js";import $ from"../../../../plugin-dsh-ingester/Target/Library.js";import O from"../../../../plugin-dsh-pass-on/Target/Library.js";import R from"../../../Target/Library.js";const F=r=>B("sha256").update(r).digest("hex"),u=b.mkdtempSync(h.join(L.tmpdir(),"batch-chain-")),a={board:h.join(u,"batchstate.log"),hook:h.join(u,"batch-decision.log"),passOn:h.join(u,"pass-on.log"),ingester:h.join(u,"ingester.log"),feedback:h.join(u,"feedback.log"),state:h.join(u,"state.json"),target:h.join(u,"repo","pkg.json")},v=r=>{try{return b.readFileSync(r,"utf8").split(`
-`).filter(Boolean).map(o=>JSON.parse(o))}catch{return[]}},H=r=>{const o={[a.target]:r},f={files:o,edits:[],resolve:async s=>({targetKey:s,displayPath:s}),stat:async s=>{const d=o[s.displayPath];return d===void 0?void 0:{version:F(d),type:"file"}},readText:async s=>o[s.displayPath],editText:async(s,d,c)=>{f.edits.push([s.displayPath,d.oldString]);const y=o[s.displayPath];if(y===void 0||!y.includes(d.oldString)||F(y)!==c.version)throw new Error("FS_STALE_VERSION");const p=y.replace(d.oldString,d.newString);return o[s.displayPath]=p,{operation:"update",version:F(p)}}};return f},N=async()=>{const r={N:0,F:0},o=(e,n)=>{r.N++;try{n(),console.log(`PASS - ${e}`)}catch(l){r.F++,console.log(`FAIL - ${e}`),console.log(l instanceof Error?l.message:String(l))}},f='{"name": "c", "version": "1.0.0"}';b.mkdirSync(h.dirname(a.target),{recursive:!0}),b.writeFileSync(a.target,f,"utf8");const s=H(f),d={},c=[],y={},p={},C=[];let g;const w=(e,n)=>{d[e]=[...d[e]??[],n]},m=(e,...n)=>{for(const l of d[e]??[])try{l(...n)}catch{}},k=[],_={get:e=>e==="agent-a"?{id:"agent-a",inject:n=>{k.push(n),m("session/event",{id:"agent-a"},{type:"agent/inbox/spliced",data:{target:"next-step",start:0,inserted:[n]}}),m("agent/inbox/inserted",{agent:{id:"agent-a"},message:n})}}:void 0,list:()=>[],currentInitiator:()=>{}};g={pluginFactory:new D({reflect:{provide:()=>{}}}),logger:{info:e=>c.push(e),warn:e=>c.push(`WARN: ${e}`),error:e=>c.push(`ERROR: ${e}`)},on:w,emit:m,get:e=>p[e],tools:{register:e=>(C.push(e),()=>!0)},fs:s,root:{on:w,emit:m},reflect:{provide:(e,n)=>(y[e]=n??!0,p[e]=n,g[e]=n,()=>!0)}},p.agents=_,j.apply(g,j.Config({logFile:a.board,enabled:!0,stateFile:a.state}));const x=g.batchstate,P=new O(g,O.Config({logFile:a.passOn,root:u,enabled:!0})),S=new $(g,$.Config({logFile:a.ingester,enabled:!0})),q=new A(g,A.Config({logFile:a.feedback,enabled:!0}));p.passOn=P,p.ingester=S,p.feedback=q,R.apply(g,R.Config({logFile:a.hook,enabled:!0,autoApprove:"off",allowlist:[],maxAutoTargets:5,minConfidence:.8,pendingTtlMs:36e5}));const I=g.__hookDshBatchDecisionState,T=C.find(e=>e.name==="batch_decision"),i=P.Prepare({kind:"version-bump",targets:[a.target],params:{version:"2.0.0"}},"agent-a");o("C1: the pass-on prepared the batch and delivered it into the inbox",()=>{t.equal(i.targets.length,1),t.equal(k.length,1),t.ok(k[0].content[0].text.startsWith(`[BATCH PROPOSAL - ${i.id}]`))}),o("C2: the board spliced the proposal with the byte-exact line",()=>{const e=x.getProposals()[0];t.equal(e.proposal.id,i.id),t.equal(e.status,"proposed"),t.ok(c.includes(`batchstate: proposal ${i.id} spliced (intent version-bump, targets 1, rev 1, origin agent-a)`))}),o("C3: the decision hook recorded the proposal and the ingester holds it",()=>{t.equal(I.Pending.get(i.id).proposal.targets.length,1),t.ok(c.includes(`hook-dsh-batch-decision: proposal ${i.id} recorded (intent version-bump, targets 1, rev 1)`)),t.equal(S.Proposals().length,1)});const E=await T.execute({id:i.id,approve:!0},{});if(await S.WhenIdle(),o("C4: the approval applied the change through the content fence",()=>{t.equal(E.kind,"approved"),t.equal(s.files[a.target],'{"name": "c", "version": "2.0.0"}');const e=v(a.ingester).filter(n=>n.event==="applied");t.equal(e.length,1),t.equal(e[0].path,a.target)}),o("C5: the decision reached the board through the inbox",()=>{t.equal(x.getProposals()[0].status,"approved"),t.ok(c.includes(`batchstate: proposal ${i.id} decided approved (by user)`)),t.ok(c.includes(`hook-dsh-batch-decision: inbox ${i.id}: delivered to agent-a`))}),o("C6: the hook logged the decision and the ingester handoff byte-exactly",()=>{t.ok(c.includes(`hook-dsh-batch-decision: decision approved ${i.id} (by user)`)),t.ok(c.includes(`hook-dsh-batch-decision: handoff ${i.id}: applied 1, conflicts 0, recovery 0`))}),o("C7: the batch outcome fed the feedback journal and summary",()=>{const e=v(a.feedback).find(l=>l.event==="batch");t.deepEqual([e.session,e.agentId,e.proposal,e.outcome,e.detail],["agent-a","agent-a",i.id,"applied","applied 1, conflicts 0, recovery 0"]);const n=q.Summary("agent-a");t.deepEqual(n.outcomes.map(l=>[l.proposal,l.outcome]),[[i.id,"applied"]])}),o("C8: the same decision was applied exactly once (the claim held)",()=>{t.equal(s.edits.length,1),t.equal(v(a.ingester).filter(e=>e.event==="applied").length,1)}),o("C9: the delivery journaled the inbox handoff byte-exactly",()=>{const e=v(a.passOn).filter(n=>n.event==="delivered");t.equal(e.length,1),t.equal(e[0].note,"inbox agent-a"),t.equal(e[0].proposal,i.id)}),r.F!==0)throw new Error(`Batch-Chain: ${r.F} failed check(s)`);return r.N},W=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(W){const r=await N();console.log(`${r} PASS - Batch-Chain`)}export{N as runTest};
+import assert from "node:assert/strict";
+import { createHash as Hash } from "node:crypto";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import BatchState from "../../../../plugin-dsh-batchstate/Target/Library.js";
+import FactoryClass from "../../../../plugin-dsh-factory/Target/Library.js";
+import Feedback from "../../../../plugin-dsh-feedback/Target/Library.js";
+import Ingester from "../../../../plugin-dsh-ingester/Target/Library.js";
+import PassOn from "../../../../plugin-dsh-pass-on/Target/Library.js";
+import Plugin from "../../../Target/Library.js";
+const Sha = (Content) => Hash("sha256").update(Content).digest("hex");
+const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "batch-chain-"));
+const Files = {
+  board: Path.join(Root, "batchstate.log"),
+  hook: Path.join(Root, "batch-decision.log"),
+  passOn: Path.join(Root, "pass-on.log"),
+  ingester: Path.join(Root, "ingester.log"),
+  feedback: Path.join(Root, "feedback.log"),
+  state: Path.join(Root, "state.json"),
+  target: Path.join(Root, "repo", "pkg.json")
+};
+const Lines = (File) => {
+  try {
+    return FileSystem.readFileSync(File, "utf8").split("\n").filter(Boolean).map((Line) => JSON.parse(Line));
+  } catch {
+    return [];
+  }
+};
+const FakeFs = (Content) => {
+  const Files_ = { [Files.target]: Content };
+  const Fs = {
+    files: Files_,
+    edits: [],
+    resolve: async (P) => ({ targetKey: P, displayPath: P }),
+    stat: async (Target) => {
+      const Text = Files_[Target.displayPath];
+      return Text === void 0 ? void 0 : { version: Sha(Text), type: "file" };
+    },
+    readText: async (Target) => Files_[Target.displayPath],
+    editText: async (Target, Edit, Guard) => {
+      Fs.edits.push([Target.displayPath, Edit.oldString]);
+      const Text = Files_[Target.displayPath];
+      if (Text === void 0 || !Text.includes(Edit.oldString) || Sha(Text) !== Guard.version) {
+        throw new Error("FS_STALE_VERSION");
+      }
+      const Next = Text.replace(Edit.oldString, Edit.newString);
+      Files_[Target.displayPath] = Next;
+      return { operation: "update", version: Sha(Next) };
+    }
+  };
+  return Fs;
+};
+const runTest = async () => {
+  const Count = { N: 0, F: 0 };
+  const Check = (Label, Assertions) => {
+    Count.N++;
+    try {
+      Assertions();
+      console.log(`PASS - ${Label}`);
+    } catch (_Error) {
+      Count.F++;
+      console.log(`FAIL - ${Label}`);
+      console.log(_Error instanceof Error ? _Error.message : String(_Error));
+    }
+  };
+  const Content = '{"name": "c", "version": "1.0.0"}';
+  FileSystem.mkdirSync(Path.dirname(Files.target), { recursive: true });
+  FileSystem.writeFileSync(Files.target, Content, "utf8");
+  const Fs = FakeFs(Content);
+  const Listeners = {};
+  const Lines_ = [];
+  const Provided = {};
+  const Services = {};
+  const Registered = [];
+  let Context;
+  const On = (Name, Listener) => {
+    Listeners[Name] = [...Listeners[Name] ?? [], Listener];
+  };
+  const Emit = (Name, ...Args) => {
+    for (const Listener of Listeners[Name] ?? []) {
+      try {
+        Listener(...Args);
+      } catch {
+      }
+    }
+  };
+  const Injected = [];
+  const Agents = {
+    get: (Id) => Id === "agent-a" ? {
+      id: "agent-a",
+      inject: (Message) => {
+        Injected.push(Message);
+        Emit("session/event", { id: "agent-a" }, {
+          type: "agent/inbox/spliced",
+          data: { target: "next-step", start: 0, inserted: [Message] }
+        });
+        Emit("agent/inbox/inserted", { agent: { id: "agent-a" }, message: Message });
+      }
+    } : void 0,
+    list: () => [],
+    currentInitiator: () => void 0
+  };
+  Context = {
+    pluginFactory: new FactoryClass({ reflect: { provide: () => void 0 } }),
+    logger: {
+      info: (M) => Lines_.push(M),
+      warn: (M) => Lines_.push(`WARN: ${M}`),
+      error: (M) => Lines_.push(`ERROR: ${M}`)
+    },
+    on: On,
+    emit: Emit,
+    get: (Name) => Services[Name],
+    tools: {
+      register: (Definition) => {
+        Registered.push(Definition);
+        return () => true;
+      }
+    },
+    fs: Fs,
+    root: { on: On, emit: Emit },
+    reflect: {
+      provide: (Name, Value) => {
+        Provided[Name] = Value ?? true;
+        Services[Name] = Value;
+        Context[Name] = Value;
+        return () => true;
+      }
+    }
+  };
+  Services["agents"] = Agents;
+  BatchState.apply(
+    Context,
+    BatchState.Config({
+      logFile: Files.board,
+      enabled: true,
+      stateFile: Files.state
+    })
+  );
+  const Board = Context.batchstate;
+  const Pass = new PassOn(
+    Context,
+    PassOn.Config({ logFile: Files.passOn, root: Root, enabled: true })
+  );
+  const Ingest = new Ingester(
+    Context,
+    Ingester.Config({ logFile: Files.ingester, enabled: true })
+  );
+  const Council = new Feedback(
+    Context,
+    Feedback.Config({ logFile: Files.feedback, enabled: true })
+  );
+  Services["passOn"] = Pass;
+  Services["ingester"] = Ingest;
+  Services["feedback"] = Council;
+  Plugin.apply(
+    Context,
+    Plugin.Config({
+      logFile: Files.hook,
+      enabled: true,
+      autoApprove: "off",
+      allowlist: [],
+      maxAutoTargets: 5,
+      minConfidence: 0.8,
+      pendingTtlMs: 36e5
+    })
+  );
+  const Hook = Context.__hookDshBatchDecisionState;
+  const Tool = Registered.find((One) => One.name === "batch_decision");
+  const Prepared = Pass.Prepare(
+    { kind: "version-bump", targets: [Files.target], params: { version: "2.0.0" } },
+    "agent-a"
+  );
+  Check("C1: the pass-on prepared the batch and delivered it into the inbox", () => {
+    assert.equal(Prepared.targets.length, 1);
+    assert.equal(Injected.length, 1);
+    assert.ok(Injected[0].content[0].text.startsWith(`[BATCH PROPOSAL - ${Prepared.id}]`));
+  });
+  Check("C2: the board spliced the proposal with the byte-exact line", () => {
+    const Entry = Board.getProposals()[0];
+    assert.equal(Entry.proposal.id, Prepared.id);
+    assert.equal(Entry.status, "proposed");
+    assert.ok(
+      Lines_.includes(
+        `batchstate: proposal ${Prepared.id} spliced (intent version-bump, targets 1, rev 1, origin agent-a)`
+      )
+    );
+  });
+  Check("C3: the decision hook recorded the proposal and the ingester holds it", () => {
+    assert.equal(Hook.Pending.get(Prepared.id).proposal.targets.length, 1);
+    assert.ok(
+      Lines_.includes(
+        `hook-dsh-batch-decision: proposal ${Prepared.id} recorded (intent version-bump, targets 1, rev 1)`
+      )
+    );
+    assert.equal(Ingest.Proposals().length, 1);
+  });
+  const Decided = await Tool.execute({ id: Prepared.id, approve: true }, {});
+  await Ingest.WhenIdle();
+  Check("C4: the approval applied the change through the content fence", () => {
+    assert.equal(Decided.kind, "approved");
+    assert.equal(Fs.files[Files.target], '{"name": "c", "version": "2.0.0"}');
+    const Applied = Lines(Files.ingester).filter((Line) => Line.event === "applied");
+    assert.equal(Applied.length, 1);
+    assert.equal(Applied[0].path, Files.target);
+  });
+  Check("C5: the decision reached the board through the inbox", () => {
+    assert.equal(Board.getProposals()[0].status, "approved");
+    assert.ok(
+      Lines_.includes(`batchstate: proposal ${Prepared.id} decided approved (by user)`)
+    );
+    assert.ok(
+      Lines_.includes(`hook-dsh-batch-decision: inbox ${Prepared.id}: delivered to agent-a`)
+    );
+  });
+  Check("C6: the hook logged the decision and the ingester handoff byte-exactly", () => {
+    assert.ok(
+      Lines_.includes(`hook-dsh-batch-decision: decision approved ${Prepared.id} (by user)`)
+    );
+    assert.ok(
+      Lines_.includes(
+        `hook-dsh-batch-decision: handoff ${Prepared.id}: applied 1, conflicts 0, recovery 0`
+      )
+    );
+  });
+  Check("C7: the batch outcome fed the feedback journal and summary", () => {
+    const Outcome = Lines(Files.feedback).find((Line) => Line.event === "batch");
+    assert.deepEqual(
+      [Outcome.session, Outcome.agentId, Outcome.proposal, Outcome.outcome, Outcome.detail],
+      ["agent-a", "agent-a", Prepared.id, "applied", "applied 1, conflicts 0, recovery 0"]
+    );
+    const Summary = Council.Summary("agent-a");
+    assert.deepEqual(
+      Summary.outcomes.map((One) => [One.proposal, One.outcome]),
+      [[Prepared.id, "applied"]]
+    );
+  });
+  Check("C8: the same decision was applied exactly once (the claim held)", () => {
+    assert.equal(Fs.edits.length, 1);
+    assert.equal(Lines(Files.ingester).filter((Line) => Line.event === "applied").length, 1);
+  });
+  Check("C9: the delivery journaled the inbox handoff byte-exactly", () => {
+    const Delivered = Lines(Files.passOn).filter((Line) => Line.event === "delivered");
+    assert.equal(Delivered.length, 1);
+    assert.equal(Delivered[0].note, "inbox agent-a");
+    assert.equal(Delivered[0].proposal, Prepared.id);
+  });
+  if (Count.F !== 0) {
+    throw new Error(`Batch-Chain: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Batch-Chain`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

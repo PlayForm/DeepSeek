@@ -8,11 +8,14 @@ declare module "@deepseek-ai/dsh-llm" {
         };
     }
 }
-/** Bind a notice summary to the harness's 120-char limit (ellipsized). */
+/**
+ * Bind a notice summary to the harness's 120-char limit (ellipsized).
+ */
 export declare const BoundSummary: (Summary: string) => string;
 export default _default;
 /**
  * Build one identified, frozen user-role notice message.
+ *
  * @param Text - the model-facing note text.
  * @param Summary - the one-line account (`<Intent> <k>`).
  */

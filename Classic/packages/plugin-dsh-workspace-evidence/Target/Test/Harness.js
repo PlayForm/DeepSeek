@@ -1,2 +1,231 @@
-import u from"node:assert/strict";import*as g from"node:fs";import*as S from"node:os";import*as F from"node:path";import d from"../../Target/Library.js";import b from"../../../plugin-dsh-factory/Target/Library.js";const R=()=>({N:0,F:0}),f=(n,e,t)=>{n.N++;try{t(),console.log(`PASS - ${e}`)}catch(s){n.F++,console.log(`FAIL - ${e}`),console.log(s instanceof Error?s.message:String(s))}},N=(n,e)=>{if(n.F!==0)throw new Error(`${e}: ${n.F} failed check(s)`);return n.N},E=g.mkdtempSync(F.join(S.tmpdir(),"workspace-evidence-smoke-")),y=F.join(E,"evidence.log"),L=()=>{try{g.rmSync(y)}catch{}},C=()=>(()=>{try{return g.readFileSync(y,"utf8").split(`
-`).filter(Boolean)}catch{return[]}})(),M=new b({reflect:{provide:()=>{}}}),O=()=>{const n={writes:[],reads:[]};return n.writeText=async(...e)=>{throw n.writes.push(e),new Error("writeText must never be called")},n.readText=async(...e)=>{throw n.reads.push(e),new Error("readText must never be called")},n},W=(n={})=>{const e={spec:void 0,tables:new Map,failOpen:n.failOpen===!0};return e.facility={open:async t=>{if(e.failOpen)throw new Error("storage unavailable");return e.spec=t,{close:async()=>{e.closed=!0},table:s=>{e.tables.has(s)||e.tables.set(s,new Map);const o=e.tables.get(s);return{put:async(i,l)=>{o.set(i,l)},entries:()=>o.entries(),keys:()=>o.keys(),get:i=>o.get(i),delete:async i=>o.delete(i),get size(){return o.size}}}}}},e.seed=(t,s,o)=>{e.tables.has(t)||e.tables.set(t,new Map),e.tables.get(t).set(s,o)},e},P=(n,e)=>{const t={},s={},o=[],i=[],l={},w=[],k=[],h=[],m={on:(r,a)=>(h.push(r),t[r]=a,()=>!0)},x=O();let c;c={pluginFactory:M,fs:x,logger:{info:r=>{o.push(r)},warn:r=>{i.push(r)}},on:(r,a)=>(s[r]=a,()=>!0),get:r=>c[r],effect:(r,a)=>{w.push(a??"unnamed");const v=r();return typeof v=="function"&&k.push(v),()=>!0},root:m,reflect:{provide:(r,a)=>(l[r]=a??!0,c[r]=a,()=>!0)}};const p={Context:c,Root:m,Listeners:t,CtxListeners:s,Lines:o,Warns:i,Provided:l,Effects:w,Disposers:k,RootNames:h,Raw:n,Fs:x};return e?.(c,p),p.Returned=d.apply(c,n),p.State=c.__pluginDshWorkspaceEvidenceState,p},$=n=>d.Config({...n}),I=(n,e,t="present",s={agent:{id:"agent-a"}})=>{n.Listeners["fs/observed"](e===null?null:{displayPath:e,targetKey:e},t===null?null:{kind:t,version:"1"},s)},_=(n,e)=>n.Lines.filter(t=>t.includes(e)),j=n=>C().filter(e=>e.includes(n)),z=async(n,e)=>{await(await import("../../Target/Function/Storage.js")).default(n.State,e)},q=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(q){const n=R();f(n,"selfcheck: a passing assertion counts as PASS",()=>{u.equal(1,1)}),f(n,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{u.equal(1,2)}),L();const e=P($({logFile:y,enabled:!0}));f(n,"selfcheck: the fake ctx registers the plugin's apply-time wiring",()=>{u.equal(e.Returned,void 0),u.ok(e.Provided.workspaceEvidence!==void 0),u.ok(e.State!==void 0),u.deepEqual(e.RootNames,["fs/observed"]),u.deepEqual(e.Effects,["evidence-storage"])}),n.N===3&&n.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${n.N}, F=${n.F})`),process.exitCode=1)}export{f as Check,O as FakeFs,W as FakeStorage,N as Finish,I as Fire,M as Furnace,y as Ledger,C as LedgerLines,j as LedgerWith,_ as LinesWith,P as Make,R as MakeCounter,z as OpenStorage,d as Plugin,E as Root,$ as Validate,L as rm};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "workspace-evidence-smoke-"));
+const Ledger = Path.join(Root, "evidence.log");
+const rm = () => {
+  try {
+    FileSystem.rmSync(Ledger);
+  } catch {
+  }
+};
+const LedgerLines = () => (() => {
+  try {
+    return FileSystem.readFileSync(Ledger, "utf8").split("\n").filter(Boolean);
+  } catch {
+    return [];
+  }
+})();
+const Furnace = new FactoryClass({
+  reflect: { provide: () => void 0 }
+});
+const FakeFs = () => {
+  const Fs = {
+    writes: [],
+    reads: []
+  };
+  Fs.writeText = async (...Parts) => {
+    Fs.writes.push(Parts);
+    throw new Error("writeText must never be called");
+  };
+  Fs.readText = async (...Parts) => {
+    Fs.reads.push(Parts);
+    throw new Error("readText must never be called");
+  };
+  return Fs;
+};
+const FakeStorage = (Options = {}) => {
+  const Store = {
+    spec: void 0,
+    tables: /* @__PURE__ */ new Map(),
+    failOpen: Options.failOpen === true
+  };
+  Store.facility = {
+    open: async (Specification) => {
+      if (Store.failOpen) {
+        throw new Error("storage unavailable");
+      }
+      Store.spec = Specification;
+      return {
+        close: async () => {
+          Store.closed = true;
+        },
+        table: (Name) => {
+          if (!Store.tables.has(Name)) {
+            Store.tables.set(Name, /* @__PURE__ */ new Map());
+          }
+          const Rows = Store.tables.get(Name);
+          return {
+            put: async (Key, Value) => {
+              Rows.set(Key, Value);
+            },
+            entries: () => Rows.entries(),
+            keys: () => Rows.keys(),
+            get: (Key) => Rows.get(Key),
+            delete: async (Key) => Rows.delete(Key),
+            get size() {
+              return Rows.size;
+            }
+          };
+        }
+      };
+    }
+  };
+  Store.seed = (Name, Key, Value) => {
+    if (!Store.tables.has(Name)) {
+      Store.tables.set(Name, /* @__PURE__ */ new Map());
+    }
+    Store.tables.get(Name).set(Key, Value);
+  };
+  return Store;
+};
+const Make = (Raw, Attach) => {
+  const Listeners = {};
+  const CtxListeners = {};
+  const Lines = [];
+  const Warns = [];
+  const Provided = {};
+  const Effects = [];
+  const Disposers = [];
+  const RootNames = [];
+  const Root2 = {
+    on: (Name, Listener) => {
+      RootNames.push(Name);
+      Listeners[Name] = Listener;
+      return () => true;
+    }
+  };
+  const Fs = FakeFs();
+  let Context;
+  Context = {
+    pluginFactory: Furnace,
+    fs: Fs,
+    logger: {
+      info: (Message) => {
+        Lines.push(Message);
+      },
+      warn: (Message) => {
+        Warns.push(Message);
+      }
+    },
+    on: (Name, Listener) => {
+      CtxListeners[Name] = Listener;
+      return () => true;
+    },
+    get: (Name) => Context[Name],
+    effect: (Setup, Label) => {
+      Effects.push(Label ?? "unnamed");
+      const Disposer = Setup();
+      if (typeof Disposer === "function") {
+        Disposers.push(Disposer);
+      }
+      return () => true;
+    },
+    root: Root2,
+    reflect: {
+      provide: (Name, Value) => {
+        Provided[Name] = Value ?? true;
+        Context[Name] = Value;
+        return () => true;
+      }
+    }
+  };
+  const Run = {
+    Context,
+    Root: Root2,
+    Listeners,
+    CtxListeners,
+    Lines,
+    Warns,
+    Provided,
+    Effects,
+    Disposers,
+    RootNames,
+    Raw,
+    Fs
+  };
+  Attach?.(Context, Run);
+  Run.Returned = Plugin.apply(Context, Raw);
+  Run.State = Context.__pluginDshWorkspaceEvidenceState;
+  return Run;
+};
+const Validate = (Raw) => Plugin.Config({ ...Raw });
+const Fire = (Run, Path2, Kind = "present", Actor = { agent: { id: "agent-a" } }) => {
+  Run.Listeners["fs/observed"](
+    Path2 === null ? null : { displayPath: Path2, targetKey: Path2 },
+    Kind === null ? null : { kind: Kind, version: "1" },
+    Actor
+  );
+};
+const LinesWith = (Run, Needle) => Run.Lines.filter((Line) => Line.includes(Needle));
+const LedgerWith = (Needle) => LedgerLines().filter((Line) => Line.includes(Needle));
+const OpenStorage = async (Run, Facility) => {
+  const Storage = await import("../../Target/Function/Storage.js");
+  await Storage.default(Run.State, Facility);
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  rm();
+  const Run = Make(Validate({ logFile: Ledger, enabled: true }));
+  Check(Count, "selfcheck: the fake ctx registers the plugin's apply-time wiring", () => {
+    assert.equal(Run.Returned, void 0);
+    assert.ok(Run.Provided.workspaceEvidence !== void 0);
+    assert.ok(Run.State !== void 0);
+    assert.deepEqual(Run.RootNames, ["fs/observed"]);
+    assert.deepEqual(Run.Effects, ["evidence-storage"]);
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  Check,
+  FakeFs,
+  FakeStorage,
+  Finish,
+  Fire,
+  Furnace,
+  Ledger,
+  LedgerLines,
+  LedgerWith,
+  LinesWith,
+  Make,
+  MakeCounter,
+  OpenStorage,
+  Plugin,
+  Root,
+  Validate,
+  rm
+};
+//# sourceMappingURL=Harness.js.map

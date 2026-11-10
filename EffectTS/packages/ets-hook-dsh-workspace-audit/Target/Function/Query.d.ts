@@ -1,10 +1,25 @@
+/**
+ * @module Query
+ *
+ * The read paths: one operation's chain, the ring, and the statistics
+ * triple.
+ *
+ * @remarks
+ * Pure reads over the in-memory structures.
+ */
 import type Line from "../Interface/Line.js";
 import type State from "../Interface/State.js";
-/** One operation's audit chain, in recording order. */
+/**
+ * One operation's audit chain, in recording order.
+ */
 export declare const Chain: (State: State, Operation: string) => Line[];
-/** The ring, newest first (an optional limit slices the head). */
+/**
+ * The ring, newest first (an optional limit slices the head).
+ */
 export declare const Lines: (State: State, Limit?: number) => Line[];
-/** The statistics triple. */
+/**
+ * The statistics triple.
+ */
 export declare const Statistics: (State: State) => {
     operations: number;
     lines: number;

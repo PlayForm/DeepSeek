@@ -1,4 +1,7 @@
 import Version from "./Variable/Version.js";
+/**
+ * The plugin's loader name.
+ */
 export declare const name = "plugin-dsh-cost";
 export declare const Config: import("@deepseek-ai/schemastery").default<Schemastery.ObjectS<NoInfer<{
     enabled: import("@deepseek-ai/schemastery").default<boolean, boolean, "defined">;

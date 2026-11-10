@@ -1,20 +1,27 @@
-// Service - the `workspaceEvidence` service (Function/Service): extends the
-// cordis Service base and is REGISTERED FROM APPLY (the loader contract for
-// the object-form plugin: apply constructs the service; the Service base
-// constructor calls ctx.reflect.provide("workspaceEvidence", this), so
-// `ctx.workspaceEvidence` resolves). Declaration merging below gives the
-// typed accessor.
-//
-// The methods are thin delegates (one Function module each):
-//
-//   validate(id, kind, subject, dependencies, verdict?)
-//                      - record one validation object (the claim's proof
-//                        record; a revalidation supersedes the old object);
-//   check(id)           - the object's current status or undefined;
-//   invalidate(key)     - the Acar seam: mark every object depending on the
-//                        key stale (explicit form of the fs/observed seam);
-//   list(status?)       - the objects, optionally filtered by status;
-//   statistics()        - { validations, fresh, stale, superseded, sequence }.
+/**
+ * @module Service
+ *
+ * The `workspaceEvidence` service: a thin delegate class over the Function
+ * modules of the evidence plugin.
+ *
+ * @remarks
+ * Extends the cordis Service base and is REGISTERED FROM APPLY (the loader
+ * contract for the object-form plugin: apply constructs the service; the
+ * Service base constructor calls ctx.reflect.provide("workspaceEvidence",
+ * this), so `ctx.workspaceEvidence` resolves). Declaration merging below
+ * gives the typed accessor.
+ *
+ * The methods are thin delegates (one Function module each):
+ *
+ * - validate(id, kind, subject, dependencies, verdict?) - record one
+ *   validation object (the claim's proof record; a revalidation supersedes
+ *   the old object);
+ * - check(id) - the object's current status or undefined;
+ * - invalidate(key) - the Acar seam: mark every object depending on the key
+ *   stale (explicit form of the fs/observed seam);
+ * - list(status?) - the objects, optionally filtered by status;
+ * - statistics() - { validations, fresh, stale, superseded, sequence }.
+ */
 import { Service, type Context } from "@deepseek-ai/cordis";
 import Declare from "@Function/Declare.js";
 import Invalidate from "@Function/Invalidate.js";

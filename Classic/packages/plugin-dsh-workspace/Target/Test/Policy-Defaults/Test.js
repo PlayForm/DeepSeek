@@ -1,1 +1,93 @@
-import a from"node:assert/strict";import{Decide as c}from"../../../../plugin-dsh-factory/Target/Library.js";import{Check as r,CheckAsync as m,Finish as f,Ledger as o,Make as i,MakeCounter as w,rm as p,StandardGraph as n,Tool as g,Validate as l}from"../Harness.js";const d={read:"auto",index:"auto",record:"auto",suggest:"auto",write:"approve",commit:"approve",spawn:"approve",message:"auto"},y=async()=>{const t=w();r(t,"P1: the workspace's schema fills the D6 policy defaults",()=>{const e=l({logFile:o,enabled:!0});a.deepEqual(e.policy.get(),d,"the composed block carries the defaults")}),r(t,"P1: the built State carries the block on Allow",()=>{const e=i(l({logFile:o,enabled:!0}),n());a.deepEqual(e.State.Allow,d,"the apply maps policy -> Allow")}),r(t,"P1: a policy override lands on the built State",()=>{const e=i(l({logFile:o,enabled:!0,policy:{read:"approve"}}),n());a.deepEqual(e.State.Allow,{...d,read:"approve"},"the override replaces read and keeps the rest")});{p();const e=i(l({logFile:o,enabled:!0}),n());r(t,"P2: the workspace's action classes all decide auto",()=>{a.equal(c(e.State.Allow,"read"),"auto","read is automatic"),a.equal(c(e.State.Allow,"index"),"auto","index is automatic"),a.equal(c(e.State.Allow,"record"),"auto","record is automatic"),a.equal(e.Lines.some(s=>s.includes("policy")||s.includes("held")),!1,"no policy or held line on the mount")})}{p();const e=i(l({logFile:o,enabled:!0}),n()),s=g(e,"workspace_map");await m(t,"P3: workspace_map still proceeds under the shipped defaults and writes no file",async()=>{const u=await s.execute({},{});a.equal(u.indexRevision,"rev-1","the reply is produced"),a.equal(u.files,2,"the map answers from the graph"),a.equal(u.modules.length,2,"the modules are rendered"),a.equal(e.Lines.some(h=>h.includes("disabled")),!1,"no refusal line"),a.equal(e.Fs.writes.length,0,"zero file writes")})}return f(t,"Policy-Defaults")},k=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(k){const t=await y();console.log(`${t} PASS - Policy-Defaults`)}export{y as runTest};
+import assert from "node:assert/strict";
+import { Decide } from "../../../../plugin-dsh-factory/Target/Library.js";
+import {
+  Check,
+  CheckAsync,
+  Finish,
+  Ledger,
+  Make,
+  MakeCounter,
+  rm,
+  StandardGraph,
+  Tool,
+  Validate
+} from "../Harness.js";
+const Defaults = {
+  read: "auto",
+  index: "auto",
+  record: "auto",
+  suggest: "auto",
+  write: "approve",
+  commit: "approve",
+  spawn: "approve",
+  message: "auto"
+};
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    Check(Count, "P1: the workspace's schema fills the D6 policy defaults", () => {
+      const Config = Validate({ logFile: Ledger, enabled: true });
+      assert.deepEqual(Config.policy.get(), Defaults, "the composed block carries the defaults");
+    });
+    Check(Count, "P1: the built State carries the block on Allow", () => {
+      const Run = Make(Validate({ logFile: Ledger, enabled: true }), StandardGraph());
+      assert.deepEqual(Run.State.Allow, Defaults, "the apply maps policy -> Allow");
+    });
+    Check(Count, "P1: a policy override lands on the built State", () => {
+      const Run = Make(
+        Validate({ logFile: Ledger, enabled: true, policy: { read: "approve" } }),
+        StandardGraph()
+      );
+      assert.deepEqual(
+        Run.State.Allow,
+        { ...Defaults, read: "approve" },
+        "the override replaces read and keeps the rest"
+      );
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }), StandardGraph());
+    Check(Count, "P2: the workspace's action classes all decide auto", () => {
+      assert.equal(Decide(Run.State.Allow, "read"), "auto", "read is automatic");
+      assert.equal(Decide(Run.State.Allow, "index"), "auto", "index is automatic");
+      assert.equal(Decide(Run.State.Allow, "record"), "auto", "record is automatic");
+      assert.equal(
+        Run.Lines.some((Line) => Line.includes("policy") || Line.includes("held")),
+        false,
+        "no policy or held line on the mount"
+      );
+    });
+  }
+  {
+    rm();
+    const Run = Make(Validate({ logFile: Ledger, enabled: true }), StandardGraph());
+    const Map = Tool(Run, "workspace_map");
+    await CheckAsync(
+      Count,
+      "P3: workspace_map still proceeds under the shipped defaults and writes no file",
+      async () => {
+        const Result = await Map.execute({}, {});
+        assert.equal(Result.indexRevision, "rev-1", "the reply is produced");
+        assert.equal(Result.files, 2, "the map answers from the graph");
+        assert.equal(Result.modules.length, 2, "the modules are rendered");
+        assert.equal(
+          Run.Lines.some((Line) => Line.includes("disabled")),
+          false,
+          "no refusal line"
+        );
+        assert.equal(Run.Fs.writes.length, 0, "zero file writes");
+      }
+    );
+  }
+  return Finish(Count, "Policy-Defaults");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Policy-Defaults`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

@@ -64,25 +64,45 @@ export default class Feedback extends Service {
     }>>, "plain">;
     private State;
     constructor(Context: Context, Config: Config);
-    /** Store a block (the agent's own completion footer) in its session's
-     *  record and journal the event. */
+    /**
+     * Store a block (the agent's own completion footer) in its session's
+     * record and journal the event.
+     */
     Record(Block: FeedbackBlock): void;
-    /** The mechanical transfer hop: forward the block to the parent session's
-     *  record, one hop added to the TRANSFERRED chain. */
+    /**
+     * The mechanical transfer hop: forward the block to the parent session's
+     * record, one hop added to the TRANSFERRED chain.
+     */
     Push(Block: FeedbackBlock, ParentSession: string): void;
-    /** The parent's append: add a delta observation to a stored block. */
+    /**
+     * The parent's append: add a delta observation to a stored block.
+     */
     Delta(Session: string, AgentId: string, Text: string): FeedbackBlock | null;
-    /** The recipient's optional read: record `read-at <reader>` on a block. */
+    /**
+     * The recipient's optional read: record `read-at <reader>` on a block.
+     */
     Read(Session: string, AgentId: string, Reader: string): FeedbackBlock | null;
-    /** The council view: the session's aggregate signals. */
+    /**
+     * The council view: the session's aggregate signals.
+     */
     Summary(Session: string): Summary;
-    /** Record one batch outcome (applied / rejected / denied / expired) into
-     *  the session's journal and summary - the caller-side orchestration
-     *  integration the plan defers (the ingester is the outcome's owner). */
+    /**
+     * Record one batch outcome (applied / rejected / denied / expired) into
+     * the session's journal and summary - the caller-side orchestration
+     * integration the plan defers (the ingester is the outcome's owner).
+     */
     Outcome(Session: string, AgentId: string, Proposal: string, Outcome_: string, Detail: string): Outcome | null;
-    /** Render one block in the transfer format (the queue integration's
-     *  footer builder). */
+    /**
+     * Render one block in the transfer format (the queue integration's
+     * footer builder).
+     */
     Render(Block: FeedbackBlock): string;
 }
 export { BLOCK as BlockMarker };
+/**
+ * The compiled package version (Source/Variable/Version, built in by the
+ * ESBuild define) - NOT a loader key: the contract's names are unchanged
+ * (the class form's default export with static inject/Config), and Version
+ * sits beside the other named exports, not on the class.
+ */
 export { Version };

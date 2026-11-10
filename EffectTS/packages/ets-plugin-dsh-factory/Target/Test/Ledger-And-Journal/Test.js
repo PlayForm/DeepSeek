@@ -1,2 +1,282 @@
-import n from"node:assert/strict";import{readFileSync as S,statSync as P}from"node:fs";import*as q from"node:path";import{Check as J,CheckAsync as k,Finish as C,MakeCounter as T,Make as L,TempRoot as x,FactoryClass as z}from"../Harness.js";const O=async()=>{const u=T(),v=L(null,{files:{}}),t=v.Context,{effects:l,services:c,loggerLines:A}=v,b=x("factory-smoke-"),d=q.join(b,"ledger.log"),e=new z(t),F={get:()=>["write","edit"]},m=e.State(t,{log:!0,logFile:d,policyFile:"",exclude:["x"],mutationTools:F,strict:!1,sections:["dependencies"]},{module:"smoke-flavor",fields:{Section:"sections",Strict:"strict"}});return J(u,"Append: [ISO] line + logger prefix + Enabled gate + never throws",()=>{e.Append(m,"smoke ledger line");const s=S(d,"utf8").split(`
-`).filter(Boolean);n.match(s.at(-1),/^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] smoke ledger line$/),n.equal(A.info.at(-1),"smoke-flavor: smoke ledger line");const i=e.State(t,{logFile:d,log:!1},{module:"f"}),a=P(d).size;n.doesNotThrow(()=>e.Append(i,"disabled line")),n.equal(P(d).size,a,"Enabled=false \u2192 no file append"),n.doesNotThrow(()=>e.Append(i,"bad ledger path"),"never throws")}),J(u,"Journal: pre-bind buffer sink + per-State fallback + storage failure contained (silent skip)",()=>{n.doesNotThrow(()=>e.Journal(m,"activated","","proof")),n.equal(e.PendingJournal.length,1,"queued into the pre-bind buffer"),n.deepEqual(e.PendingJournal[0],{event:"activated",path:"",detail:"proof",at:e.PendingJournal[0].at}),n.equal(m.Queue.length,0,"the per-State queue stays empty while the buffer is live");const s=e.PendingJournal;e.PendingJournal=void 0,n.doesNotThrow(()=>{m.Journal=()=>{throw new Error("storage broke")},e.Journal(m,"governed","/p","v")}),e.PendingJournal=s}),await k(u,"Attach: P1 controller + P2 disposal + P5 open/drain/silent-skip/close",async()=>{e.PendingJournal=[],e.SharedJournal=void 0,e.SharedJournals=void 0;const s=[],i=[];c.jobs={attachController:o=>(s.push(o),()=>i.push(o))};const a=e.State(t,{logFile:d},{module:"smoke-flavor"}),w=new AbortController;a.Inflight.set("k1",{controller:w}),l.length=0,e.Attach(t,{state:a,name:"smoke-flavor"});const _=l.map(o=>o[0]);n.deepEqual(_,["smoke-flavor-jobs","smoke-flavor-inflight","smoke-flavor-storage"]),n.deepEqual(s,["smoke-flavor"],"P1: jobs controller attached");const D=l.find(o=>o[0]==="smoke-flavor-inflight")[1];D(),n.equal(w.signal.aborted,!0,"P2: unload aborts the in-flight pass"),n.equal(a.Inflight.size,0,"P2: map cleared");const g=e.State(t,{logFile:d},{module:"smoke-flavor"});l.length=0,e.Attach(t,{state:g,name:"smoke-flavor"});const I=l.find(o=>o[0]==="smoke-flavor-storage")[1];g.Journal("activated","","queued"),n.equal(g.Queue.length,0,"P5 absent: sink retired \u2014 no queue growth"),I();const p=[];let y=!1,r=null;c.storageDomain={open:async o=>(r=o,{close:async()=>{y=!0},table:()=>({put:async(E,j)=>p.push([E,j])})})};const f=e.State(t,{logFile:d},{module:"smoke-flavor"});f.Journal("activated","","pre-open record"),l.length=0,e.Attach(t,{state:f,name:"smoke-flavor"}),await new Promise(o=>setImmediate(()=>setImmediate(o))),n.equal(f.Queue.length,0,"pre-open queue drained"),n.equal(r&&r.name,"package_governance","P5 spec: the SHARED package_governance domain"),n.equal(r&&r.version,2,"P5 spec: domain VERSION 2 (item #8 - 'normalized' is a new event name, so a version bump)"),n.ok(r&&r.tables&&r.tables.events,"P5 spec: declares the events table"),n.deepEqual(r.tables.events.valueSchema.shape.event.options,["activated","governed","dispatched","update-failed","excluded","normalized"],"P5 spec: v2 event vocabulary ('normalized' included)"),n.equal(r.layout,"per-record","P5 spec: per-record LAYOUT (the v1\u2192v2 self-migration path)"),n.deepEqual(r.compatibleVersions,[1],"P5 spec: compatibleVersions [1] - the legacy v1 stamp migrates"),n.equal(r.invalidRecords,"backup-and-skip","P5 spec: backup-and-skip - one corrupt record cannot brick the open"),n.equal(p.length,1,"record flowed to the domain table"),n.equal(p[0][1].event,"activated"),n.equal(p[0][1].detail,"pre-open record"),f.Journal("governed","/p.json","fresh-v2"),await new Promise(o=>setImmediate(o)),n.equal(p.length,2,"live records flow after open"),l.find(o=>o[0]==="smoke-flavor-storage")[1](),await new Promise(o=>setImmediate(o)),n.equal(y,!0,"P5 disposer closes the domain")}),await k(u,"Attach: P5 failed open \u2192 loud ledger line, no throw, no sink bound",async()=>{c.storageDomain={open:async()=>{throw new Error("version-mismatch")}},e.SharedJournal=void 0,e.SharedJournals=void 0,e.PendingJournal=[];const s=q.join(b,"fail-ledger.log"),i=e.State(t,{log:!0,logFile:s},{module:"smoke-flavor"});l.length=0,e.Attach(t,{state:i,name:"smoke-flavor"}),await new Promise(a=>setImmediate(()=>setImmediate(a))),n.equal(i.Domain,void 0,"P5 failed open: no domain handle bound"),n.equal(e.SharedJournal,void 0,"P5 failed open: no shared sink bound"),n.ok(S(s,"utf8").includes("storage journal open failed: version-mismatch"),"P5 failed open: the LOUD ledger line (best-effort, never rethrown)")}),await k(u,"Attach: P5 journalDomain option \u2192 the State's own domain name",async()=>{let s=null;c.storageDomain={open:async a=>(s=a,{close:async()=>{},table:()=>({put:async()=>{}})})},e.SharedJournal=void 0,e.SharedJournals=void 0,e.PendingJournal=[],c.pluginFactory=e;const i=e.State(t,{logFile:d},{module:"smoke-flavor",journalDomain:"hook_dsh_package_pinner"});n.equal(i.JournalDomain,"hook_dsh_package_pinner","the journalDomain option transfers to State.JournalDomain"),l.length=0,e.Attach(t,{state:i,name:"smoke-flavor"}),await new Promise(a=>setImmediate(()=>setImmediate(a))),n.equal(s&&s.name,"hook_dsh_package_pinner","P5 spec: the module's own distinct domain name (unit-name rule: lowercase/digits/underscores)"),n.ok(e.SharedJournals?.get("hook_dsh_package_pinner"),"the custom-domain open registers its sink in SharedJournals under its own domain key"),n.equal(e.SharedJournals?.get("package_governance"),void 0,"the custom-domain open does not register under the default domain key"),n.equal(e.SharedJournal,void 0,"a custom-domain open leaves the legacy SharedJournal slot unbound"),l.find(a=>a[0]==="smoke-flavor-storage")[1](),await new Promise(a=>setImmediate(a))}),C(u,"Ledger-And-Journal")},R=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(R){const u=await O();console.log(`${u} PASS - Ledger-And-Journal`)}export{O as runTest};
+import assert from "node:assert/strict";
+import { readFileSync, statSync } from "node:fs";
+import * as Path from "node:path";
+import {
+  Check,
+  CheckAsync,
+  Finish,
+  MakeCounter,
+  Make,
+  TempRoot,
+  FactoryClass
+} from "../Harness.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  const Fake = Make(null, { files: {} });
+  const ctx = Fake.Context;
+  const { effects, services, loggerLines } = Fake;
+  const Root = TempRoot("factory-smoke-");
+  const Ledger = Path.join(Root, "ledger.log");
+  const factory = new FactoryClass(ctx);
+  const volatileCell = { get: () => ["write", "edit"] };
+  const st1 = factory.State(
+    ctx,
+    {
+      log: true,
+      logFile: Ledger,
+      policyFile: "",
+      exclude: ["x"],
+      mutationTools: volatileCell,
+      strict: false,
+      sections: ["dependencies"]
+    },
+    { module: "smoke-flavor", fields: { Section: "sections", Strict: "strict" } }
+  );
+  {
+    const Sub = "Append: [ISO] line + logger prefix + Enabled gate + never throws";
+    {
+      Check(Count, Sub, () => {
+        factory.Append(st1, "smoke ledger line");
+        const lines = readFileSync(Ledger, "utf8").split("\n").filter(Boolean);
+        assert.match(
+          lines.at(-1),
+          /^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] smoke ledger line$/
+        );
+        assert.equal(loggerLines.info.at(-1), "smoke-flavor: smoke ledger line");
+        const stOff = factory.State(ctx, { logFile: Ledger, log: false }, { module: "f" });
+        const sizeBefore = statSync(Ledger).size;
+        assert.doesNotThrow(() => factory.Append(stOff, "disabled line"));
+        assert.equal(statSync(Ledger).size, sizeBefore, "Enabled=false \u2192 no file append");
+        assert.doesNotThrow(() => factory.Append(stOff, "bad ledger path"), "never throws");
+      });
+    }
+  }
+  {
+    const Sub = "Journal: pre-bind buffer sink + per-State fallback + storage failure contained (silent skip)";
+    {
+      Check(Count, Sub, () => {
+        assert.doesNotThrow(() => factory.Journal(st1, "activated", "", "proof"));
+        assert.equal(factory.PendingJournal.length, 1, "queued into the pre-bind buffer");
+        assert.deepEqual(factory.PendingJournal[0], {
+          event: "activated",
+          path: "",
+          detail: "proof",
+          at: factory.PendingJournal[0].at
+        });
+        assert.equal(st1.Queue.length, 0, "the per-State queue stays empty while the buffer is live");
+        const BufferBackup = factory.PendingJournal;
+        factory.PendingJournal = void 0;
+        assert.doesNotThrow(() => {
+          st1.Journal = () => {
+            throw new Error("storage broke");
+          };
+          factory.Journal(st1, "governed", "/p", "v");
+        });
+        factory.PendingJournal = BufferBackup;
+      });
+    }
+  }
+  {
+    const Sub = "Attach: P1 controller + P2 disposal + P5 open/drain/silent-skip/close";
+    {
+      await CheckAsync(Count, Sub, async () => {
+        factory.PendingJournal = [];
+        factory.SharedJournal = void 0;
+        factory.SharedJournals = void 0;
+        const controllers = [];
+        const detached = [];
+        services["jobs"] = {
+          attachController: (name) => {
+            controllers.push(name);
+            return () => detached.push(name);
+          }
+        };
+        const stA = factory.State(ctx, { logFile: Ledger }, { module: "smoke-flavor" });
+        const flight = new AbortController();
+        stA.Inflight.set("k1", { controller: flight });
+        effects.length = 0;
+        factory.Attach(ctx, { state: stA, name: "smoke-flavor" });
+        const labels = effects.map((e) => e[0]);
+        assert.deepEqual(labels, [
+          "smoke-flavor-jobs",
+          "smoke-flavor-inflight",
+          "smoke-flavor-storage"
+        ]);
+        assert.deepEqual(controllers, ["smoke-flavor"], "P1: jobs controller attached");
+        const inflightEffect = effects.find((e) => e[0] === "smoke-flavor-inflight")[1];
+        inflightEffect();
+        assert.equal(flight.signal.aborted, true, "P2: unload aborts the in-flight pass");
+        assert.equal(stA.Inflight.size, 0, "P2: map cleared");
+        const stS = factory.State(ctx, { logFile: Ledger }, { module: "smoke-flavor" });
+        effects.length = 0;
+        factory.Attach(ctx, { state: stS, name: "smoke-flavor" });
+        const storageDispose = effects.find((e) => e[0] === "smoke-flavor-storage")[1];
+        stS.Journal("activated", "", "queued");
+        assert.equal(stS.Queue.length, 0, "P5 absent: sink retired \u2014 no queue growth");
+        storageDispose();
+        const records = [];
+        let domainClosed = false;
+        let domainSpec = null;
+        services["storageDomain"] = {
+          open: async (spec) => {
+            domainSpec = spec;
+            return {
+              close: async () => {
+                domainClosed = true;
+              },
+              table: () => ({
+                put: async (k, v) => records.push([k, v])
+              })
+            };
+          }
+        };
+        const stD = factory.State(ctx, { logFile: Ledger }, { module: "smoke-flavor" });
+        stD.Journal("activated", "", "pre-open record");
+        effects.length = 0;
+        factory.Attach(ctx, { state: stD, name: "smoke-flavor" });
+        await new Promise((r) => setImmediate(() => setImmediate(r)));
+        assert.equal(stD.Queue.length, 0, "pre-open queue drained");
+        assert.equal(
+          domainSpec && domainSpec.name,
+          "package_governance",
+          "P5 spec: the SHARED package_governance domain"
+        );
+        assert.equal(
+          domainSpec && domainSpec.version,
+          2,
+          "P5 spec: domain VERSION 2 (item #8 - 'normalized' is a new event name, so a version bump)"
+        );
+        assert.ok(
+          domainSpec && domainSpec.tables && domainSpec.tables.events,
+          "P5 spec: declares the events table"
+        );
+        assert.deepEqual(
+          domainSpec.tables.events.valueSchema.shape.event.options,
+          ["activated", "governed", "dispatched", "update-failed", "excluded", "normalized"],
+          "P5 spec: v2 event vocabulary ('normalized' included)"
+        );
+        assert.equal(
+          domainSpec.layout,
+          "per-record",
+          "P5 spec: per-record LAYOUT (the v1\u2192v2 self-migration path)"
+        );
+        assert.deepEqual(
+          domainSpec.compatibleVersions,
+          [1],
+          "P5 spec: compatibleVersions [1] - the legacy v1 stamp migrates"
+        );
+        assert.equal(
+          domainSpec.invalidRecords,
+          "backup-and-skip",
+          "P5 spec: backup-and-skip - one corrupt record cannot brick the open"
+        );
+        assert.equal(records.length, 1, "record flowed to the domain table");
+        assert.equal(records[0][1].event, "activated");
+        assert.equal(records[0][1].detail, "pre-open record");
+        stD.Journal("governed", "/p.json", "fresh-v2");
+        await new Promise((r) => setImmediate(r));
+        assert.equal(records.length, 2, "live records flow after open");
+        effects.find((e) => e[0] === "smoke-flavor-storage")[1]();
+        await new Promise((r) => setImmediate(r));
+        assert.equal(domainClosed, true, "P5 disposer closes the domain");
+      });
+    }
+  }
+  {
+    const Sub = "Attach: P5 failed open \u2192 loud ledger line, no throw, no sink bound";
+    {
+      await CheckAsync(Count, Sub, async () => {
+        services["storageDomain"] = {
+          open: async () => {
+            throw new Error("version-mismatch");
+          }
+        };
+        factory.SharedJournal = void 0;
+        factory.SharedJournals = void 0;
+        factory.PendingJournal = [];
+        const failLedger = Path.join(Root, "fail-ledger.log");
+        const stFail = factory.State(
+          ctx,
+          { log: true, logFile: failLedger },
+          { module: "smoke-flavor" }
+        );
+        effects.length = 0;
+        factory.Attach(ctx, { state: stFail, name: "smoke-flavor" });
+        await new Promise((r) => setImmediate(() => setImmediate(r)));
+        assert.equal(stFail.Domain, void 0, "P5 failed open: no domain handle bound");
+        assert.equal(factory.SharedJournal, void 0, "P5 failed open: no shared sink bound");
+        assert.ok(
+          readFileSync(failLedger, "utf8").includes("storage journal open failed: version-mismatch"),
+          "P5 failed open: the LOUD ledger line (best-effort, never rethrown)"
+        );
+      });
+    }
+  }
+  {
+    const Sub = "Attach: P5 journalDomain option \u2192 the State's own domain name";
+    {
+      await CheckAsync(Count, Sub, async () => {
+        let optSpec = null;
+        services["storageDomain"] = {
+          open: async (spec) => {
+            optSpec = spec;
+            return {
+              close: async () => {
+              },
+              table: () => ({ put: async () => {
+              } })
+            };
+          }
+        };
+        factory.SharedJournal = void 0;
+        factory.SharedJournals = void 0;
+        factory.PendingJournal = [];
+        services["pluginFactory"] = factory;
+        const stOpt = factory.State(
+          ctx,
+          { logFile: Ledger },
+          { module: "smoke-flavor", journalDomain: "hook_dsh_package_pinner" }
+        );
+        assert.equal(
+          stOpt.JournalDomain,
+          "hook_dsh_package_pinner",
+          "the journalDomain option transfers to State.JournalDomain"
+        );
+        effects.length = 0;
+        factory.Attach(ctx, { state: stOpt, name: "smoke-flavor" });
+        await new Promise((r) => setImmediate(() => setImmediate(r)));
+        assert.equal(
+          optSpec && optSpec.name,
+          "hook_dsh_package_pinner",
+          "P5 spec: the module's own distinct domain name (unit-name rule: lowercase/digits/underscores)"
+        );
+        assert.ok(
+          factory.SharedJournals?.get("hook_dsh_package_pinner"),
+          "the custom-domain open registers its sink in SharedJournals under its own domain key"
+        );
+        assert.equal(
+          factory.SharedJournals?.get("package_governance"),
+          void 0,
+          "the custom-domain open does not register under the default domain key"
+        );
+        assert.equal(
+          factory.SharedJournal,
+          void 0,
+          "a custom-domain open leaves the legacy SharedJournal slot unbound"
+        );
+        effects.find((e) => e[0] === "smoke-flavor-storage")[1]();
+        await new Promise((r) => setImmediate(r));
+      });
+    }
+  }
+  return Finish(Count, "Ledger-And-Journal");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Ledger-And-Journal`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

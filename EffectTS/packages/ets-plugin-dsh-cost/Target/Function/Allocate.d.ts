@@ -2,6 +2,9 @@ import type Allocation from "../Interface/Allocation.js";
 import type Config from "../Interface/Config.js";
 import type Touch from "../Interface/Touch.js";
 import type Usage from "../Interface/Usage.js";
+/**
+ * One priced call.
+ */
 type Costed = {
     Input: number;
     Output: number;
@@ -11,6 +14,9 @@ type Costed = {
     Total: number;
     Currency: string;
 };
+/**
+ * One step's context masses over the touched files.
+ */
 type Massed = {
     Surface: number;
     PerPath: Map<string, number>;

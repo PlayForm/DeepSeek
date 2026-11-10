@@ -1,20 +1,27 @@
-// Apply - the plugin entry function: fail-loud validation, the State build
-// (the factory's cell unwrap + the P10 volatile refresh), the service
-// registration (Function/Service - `workspaceContext`, constructed here so
-// `ctx.workspaceContext` resolves), the activation proof, the trace adapter
-// (consume `graph/invalidated` to invalidate the packet memo - wired only
-// after the enabled gate), the tool registration, and the optional token-meter
-// probe (V4-1 section 4: the orientation budget uses ctx.tokenMeter where
-// available).
-//
-// THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
-// and the bundle patch row). A cold mount logs `disabled (enabled=false)`,
-// registers the service (it answers honestly from whatever the graph
-// provides), and registers no tool.
-//
-// The function returns NOTHING (the loader contract: a returned value
-// silently kills event delivery). The test probe is the
-// `ctx.__pluginDshWorkspaceContextState` attachment.
+/**
+ * @module Apply
+ *
+ * The plugin entry function: validation, the State build, the service, the
+ * activation proof, the trace adapter, the tool and the token-meter probe.
+ *
+ * @remarks
+ * Fail-loud validation, then the State build (the factory's cell unwrap +
+ * the P10 volatile refresh), the service registration (Function/Service -
+ * `workspaceContext`, constructed here so `ctx.workspaceContext` resolves),
+ * the activation proof, the trace adapter (consume `graph/invalidated` to
+ * invalidate the packet memo - wired only after the enabled gate), the tool
+ * registration, and the optional token-meter probe (V4-1 section 4: the
+ * orientation budget uses ctx.tokenMeter where available).
+ *
+ * THE IDLE-FOREVER POSTURE: `enabled` defaults to false (the schema default
+ * and the bundle patch row). A cold mount logs `disabled (enabled=false)`,
+ * registers the service (it answers honestly from whatever the graph
+ * provides), and registers no tool.
+ *
+ * The function returns NOTHING (the loader contract: a returned value
+ * silently kills event delivery). The test probe is the
+ * `ctx.__pluginDshWorkspaceContextState` attachment.
+ */
 import type { Context } from "@deepseek-ai/cordis";
 import ServiceClass from "@Function/Service.js";
 import Tool from "@Function/Tool.js";
@@ -25,14 +32,18 @@ import { Activate } from "@playform/ets-base-dsh";
 
 import Adapter from "../Trace/Adapter.js";
 
-/** Unwrap one possibly-volatile config cell (`{ get }` reference or value). */
+/**
+ * Unwrap one possibly-volatile config cell (`{ get }` reference or value).
+ */
 const Cell = (Value: unknown): unknown =>
 	typeof (Value as { get?: unknown } | null)?.get === "function"
 		? (Value as { get: () => unknown }).get()
 		: Value;
 
-/** The fail-loud validation; runs BEFORE the State build so an invalid
- * config throws at load, never silently defaults. */
+/**
+ * The fail-loud validation; runs BEFORE the State build so an invalid
+ * config throws at load, never silently defaults.
+ */
 const Validate = (Options: unknown): void => {
 	const Raw = (Options ?? {}) as Record<string, unknown>;
 	const Fail = (Message: string): never => {

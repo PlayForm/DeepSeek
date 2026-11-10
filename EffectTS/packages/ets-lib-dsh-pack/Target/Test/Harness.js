@@ -1,1 +1,81 @@
-import n from"node:assert/strict";import*as i from"node:fs";import*as l from"node:os";import*as c from"node:path";import*as t from"../../Target/Library.js";const m=()=>({N:0,F:0}),a=(e,o,s)=>{e.N++;try{s(),console.log(`PASS - ${o}`)}catch(r){e.F++,console.log(`FAIL - ${o}`),console.log(r instanceof Error?r.message:String(r))}},g=async(e,o,s)=>{e.N++;try{await s(),console.log(`PASS - ${o}`)}catch(r){e.F++,console.log(`FAIL - ${o}`),console.log(r instanceof Error?r.message:String(r))}},d=(e,o)=>{if(e.F!==0)throw new Error(`${o}: ${e.F} failed check(s)`);return e.N},f=e=>i.mkdtempSync(c.join(l.tmpdir(),e)),h=(e,o,s="x")=>{const r=c.join(e,o);return i.mkdirSync(c.dirname(r),{recursive:!0}),i.writeFileSync(r,s,"utf8"),r},F=e=>{i.rmSync(e,{recursive:!0,force:!0})},u=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(u){const e=m();a(e,"selfcheck: a passing assertion counts as PASS",()=>{n.equal(1,1)}),a(e,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{n.equal(1,2)}),a(e,"selfcheck: the built library loads, the built-in projects and the locator resolves",()=>{n.equal(Object.keys(t.Builtin.families??{}).length,31),n.equal(t.Families(t.Builtin,"doc").length,7),n.equal(t.Families(t.Builtin,"search").length,10),n.deepEqual(t.Parse("a: 1"),{a:1});const o=i.mkdtempSync(c.join(l.tmpdir(),"pack-selfcheck-home-")),s=t.Locate("Documentation/INDEX.md",void 0,{home:o});n.notEqual(s,void 0),n.equal(s?.pack,t.Builtin)}),e.N===3&&e.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${e.N}, F=${e.F})`),process.exitCode=1)}export{a as Check,g as CheckAsync,F as Drop,d as Finish,t as Library,m as MakeCounter,h as Put,f as Tree};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import * as Library from "../../Target/Library.js";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const Tree = (Prefix) => FileSystem.mkdtempSync(Path.join(OS.tmpdir(), Prefix));
+const Put = (Root, Relative, Body = "x") => {
+  const Full = Path.join(Root, Relative);
+  FileSystem.mkdirSync(Path.dirname(Full), { recursive: true });
+  FileSystem.writeFileSync(Full, Body, "utf8");
+  return Full;
+};
+const Drop = (Full) => {
+  FileSystem.rmSync(Full, { recursive: true, force: true });
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  Check(Count, "selfcheck: the built library loads, the built-in projects and the locator resolves", () => {
+    assert.equal(Object.keys(Library.Builtin.families ?? {}).length, 31);
+    assert.equal(Library.Families(Library.Builtin, "doc").length, 7);
+    assert.equal(Library.Families(Library.Builtin, "search").length, 10);
+    assert.deepEqual(Library.Parse("a: 1"), { a: 1 });
+    const Home = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "pack-selfcheck-home-"));
+    const Located = Library.Locate("Documentation/INDEX.md", void 0, { home: Home });
+    assert.notEqual(Located, void 0);
+    assert.equal(Located?.pack, Library.Builtin);
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  Check,
+  CheckAsync,
+  Drop,
+  Finish,
+  Library,
+  MakeCounter,
+  Put,
+  Tree
+};
+//# sourceMappingURL=Harness.js.map

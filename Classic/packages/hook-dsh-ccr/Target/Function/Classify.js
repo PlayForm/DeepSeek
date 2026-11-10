@@ -1,0 +1,2 @@
+const s=e=>{const t=e.filter(r=>r.type==="text").map(r=>r.text);return!0===t.length>0?t.join(`
+`):JSON.stringify(e)};var a=(e,t,r)=>{if(!0===t)return"error";switch(e){case"bash":return"terminal";case"grep":case"search":return"grep";case"glob":case"list":return"paths";case"read":return"file";case"web_fetch":case"web_search":return"web"}return!0===n(s(r))?"json":"default"};const n=e=>{switch(!0){case e.length===0:return!1;case(e[0]!=="{"&&e[0]!=="["):return!1}try{const t=JSON.parse(e);return typeof t=="object"&&t!==null}catch{return!1}};export{s as Text,a as default};

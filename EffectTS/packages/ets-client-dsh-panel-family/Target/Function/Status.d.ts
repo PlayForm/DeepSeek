@@ -13,6 +13,6 @@
  * panel honours. Without a trace the status is static and the tail is empty
  * (the documented fallback).
  */
-import type { PanelSection, PanelStatus } from "@Interface/Panel.js";
-import type { PanelLive } from "@Interface/Trace.js";
+import type { PanelSection, PanelStatus } from "../Interface/Panel.js";
+import type { PanelLive } from "../Interface/Trace.js";
 export default function Status(Section: PanelSection, Live: PanelLive | undefined): PanelStatus;

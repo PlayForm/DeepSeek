@@ -1,3 +1,6 @@
+/**
+ * The shipped DEFAULT policy (the routing table's three roles).
+ */
 export declare const DEFAULT_POLICY: {
     coder: {
         provider: string;

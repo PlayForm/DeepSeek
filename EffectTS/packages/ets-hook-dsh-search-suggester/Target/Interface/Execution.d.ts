@@ -1,104 +1,236 @@
+/**
+ * @module Execution
+ *
+ * The suggester's domain types: the pack (the intents, their signals and
+ * their target sets, plan section 3.6/8.2), the call view, the detection, the
+ * scored candidates, and the learned knowledge shape.
+ *
+ * @remarks
+ * These are the SELF-CONTAINED PoC declarations: the pack is data, and the
+ * end-phase extraction (the core pattern service after two consumers) moves
+ * these definitions, never their shapes.
+ *
+ * One intent = one pack row:
+ *
+ *   id        - the intent kind (X of Searchable<X>);
+ *   priority  - lower wins when two fire on one call (destructive first);
+ *   threshold - the intent's own gate (destructive: 0.85, the rest 0.75);
+ *   signals   - the rule table (plan R1-R11): a compiled-on-apply regex and
+ *               the evidence weight each match contributes;
+ *   targets   - the ordered candidate set: a path or glob, a prior, a digest
+ *               hint, and the one reason phrase the model reads;
+ *   familyGlobs - the long-tail families appended as one aggregate row;
+ *   note      - the pack row's one-phrase caveat (absent when the domain has
+ *               none; the search note keeps its standing caution instead).
+ *
+ * THE SYNTHETIC History ROW the post-execute listener builds from the
+ * session's own tool calls is a FULL row of the same shape (the pack
+ * library's `Family`), so the existing Detect/Filter/Score pipeline judges it
+ * exactly like a resolved pack's family.
+ */
 export interface Signal {
-    /** The rule id (plan R1-R13) this row implements. */
+    /**
+     * The rule id (plan R1-R13) this row implements.
+     */
     rule: string;
-    /** The regex source, compiled once at apply. */
+    /**
+     * The regex source, compiled once at apply.
+     */
     pattern: string;
-    /** The evidence weight a match contributes. */
+    /**
+     * The evidence weight a match contributes.
+     */
     weight: number;
-    /** Optional extra weight source: "context" (the user text) or "loop" (the ring). */
+    /**
+     * Optional extra weight source: "context" (the user text) or "loop" (the
+     * ring).
+     */
     source?: string;
 }
 export interface Target {
-    /** The candidate path or glob. */
+    /**
+     * The candidate path or glob.
+     */
     path: string;
-    /** The candidate kind ("manifest", "literal", "family", ...). */
+    /**
+     * The candidate kind ("manifest", "literal", "family", ...).
+     */
     kind: string;
-    /** The prior: 1.0 canonical, 0.6 family, 0.3 fallback. */
+    /**
+     * The prior: 1.0 canonical, 0.6 family, 0.3 fallback.
+     */
     prior: number;
-    /** The digest hint - the short literal the generated index will verify (end-phase P2). */
+    /**
+     * The digest hint - the short literal the generated index will verify
+     * (end-phase P2).
+     */
     digest?: string;
-    /** The one reason phrase the model reads. */
+    /**
+     * The one reason phrase the model reads.
+     */
     reason: string;
-    /** True when the row is a long-tail family glob with a count. */
+    /**
+     * True when the row is a long-tail family glob with a count.
+     */
     family?: boolean;
 }
 export interface Intent {
-    /** The intent kind (X). */
+    /**
+     * The intent kind (X).
+     */
     id: string;
-    /** Lower wins when two intents fire on one call. */
+    /**
+     * Lower wins when two intents fire on one call.
+     */
     priority: number;
-    /** The intent's own gate (destructive: 0.85). */
+    /**
+     * The intent's own gate (destructive: 0.85).
+     */
     threshold: number;
-    /** The rule table (plan R1-R13). */
+    /**
+     * The rule table (plan R1-R13).
+     */
     signals: Signal[];
-    /** The ordered candidate set. */
+    /**
+     * The ordered candidate set.
+     */
     targets: Target[];
-    /** The long-tail family globs. */
+    /**
+     * The long-tail family globs.
+     */
     familyGlobs: string[];
-    /** The pack row's one-phrase caveat (the pack library's row carries it; the search note prints its own standing caution). */
+    /**
+     * The pack row's one-phrase caveat (the pack library's row carries it; the
+     * search note prints its own standing caution).
+     */
     note?: string;
 }
-/** One judged call, reduced to what the classifier reads. */
+/**
+ * One judged call, reduced to what the classifier reads.
+ */
 export interface CallView {
-    /** The tool name. */
+    /**
+     * The tool name.
+     */
     name: string;
-    /** The classified text: the grep/glob pattern, the read file_path, or the first search-shaped bash segment. */
+    /**
+     * The classified text: the grep/glob pattern, the read file_path, or the
+     * first search-shaped bash segment.
+     */
     text: string;
-    /** The path the call names (the read file_path, the grep path/include), or "". */
+    /**
+     * The path the call names (the read file_path, the grep path/include), or
+     * "".
+     */
     path: string;
 }
-/** One detection: the winning intent, the runner-up within 0.1, the evidence sum, and the context/loop bonuses. */
+/**
+ * One detection: the winning intent, the runner-up within 0.1, the evidence
+ * sum, and the context/loop bonuses.
+ */
 export interface Detection {
-    /** The winning intent (highest priority among matches). */
+    /**
+     * The winning intent (highest priority among matches).
+     */
     intent: Intent;
-    /** The runner-up, folded into one note only when its k is within 0.1. */
+    /**
+     * The runner-up, folded into one note only when its k is within 0.1.
+     */
     second?: Intent;
-    /** The sum of matched signal weights (before the bias). */
+    /**
+     * The sum of matched signal weights (before the bias).
+     */
     evidence: number;
-    /** The context bonus (plan R12). */
+    /**
+     * The context bonus (plan R12).
+     */
     context: number;
-    /** The loop bonus (plan R13). */
+    /**
+     * The loop bonus (plan R13).
+     */
     loop: number;
 }
-/** One scored candidate (plan section 3.7). */
+/**
+ * One scored candidate (plan section 3.7).
+ */
 export interface Candidate {
-    /** The candidate path or glob. */
+    /**
+     * The candidate path or glob.
+     */
     path: string;
-    /** The candidate kind. */
+    /**
+     * The candidate kind.
+     */
     kind: string;
-    /** The one reason phrase. */
+    /**
+     * The one reason phrase.
+     */
     reason: string;
-    /** The aggregate row's family count (family rows only). */
+    /**
+     * The aggregate row's family count (family rows only).
+     */
     count?: number;
-    /** The candidate score (not the intent's k). */
+    /**
+     * The candidate score (not the intent's k).
+     */
     score: number;
 }
-/** The gate's verdict (plan section 3.1 emit / section 2.4 abstain). */
+/**
+ * The gate's verdict (plan section 3.1 emit / section 2.4 abstain).
+ */
 export interface Verdict {
-    /** "emit" passes every gate; "suppress" is a cooled/deduped/capped would-be note; "abstain" is below threshold, ambiguous, or empty. */
+    /**
+     * "emit" passes every gate; "suppress" is a cooled/deduped/capped
+     * would-be note; "abstain" is below threshold, ambiguous, or empty.
+     */
     action: "emit" | "suppress" | "abstain";
-    /** The abstention/suppression reason (the ledger line's middle segment). */
+    /**
+     * The abstention/suppression reason (the ledger line's middle segment).
+     */
     reason: string;
-    /** The intent's confidence k. */
+    /**
+     * The intent's confidence k.
+     */
     kappa: number;
-    /** The ordered, capped candidate list (emit only). */
+    /**
+     * The ordered, capped candidate list (emit only).
+     */
     candidates: Candidate[];
 }
-/** The learned knowledge file's shape (plan section 5.2, schema 1). */
+/**
+ * The learned knowledge file's shape (plan section 5.2, schema 1).
+ */
 export interface Knowledge {
-    /** The schema version. */
+    /**
+     * The schema version.
+     */
     schema: number;
-    /** Per intent, per candidate path: the count, the followed count, the last seen timestamp. */
+    /**
+     * Per intent, per candidate path: the count, the followed count, the last
+     * seen timestamp.
+     */
     intents: Record<string, Record<string, KnowledgeRow>>;
-    /** The journal (the last 2000 entries, a ring). */
+    /**
+     * The journal (the last 2000 entries, a ring).
+     */
     journal: KnowledgeEntry[];
-    /** The durable dismissals (the `suggestion_dismiss` tool's record, pruned on read). */
+    /**
+     * The durable dismissals (the `suggestion_dismiss` tool's record, pruned
+     * on read).
+     */
     dismissals: Dismissal[];
-    /** True once the offline seed ran (Function/Seed); the rows keep their own marker. */
+    /**
+     * True once the offline seed ran (Function/Seed); the rows keep their own
+     * marker.
+     */
     seed?: boolean;
-    /** The epoch-seconds timestamp of the last seed run. */
+    /**
+     * The epoch-seconds timestamp of the last seed run.
+     */
     seededAt?: number;
-    /** The stats counters. */
+    /**
+     * The stats counters.
+     */
     stats: {
         emitted: number;
         followed: number;
@@ -106,42 +238,79 @@ export interface Knowledge {
         dismissed: number;
     };
 }
-/** One recorded dismissal (the plan's section 5.2 dismissals row). */
+/**
+ * One recorded dismissal (the plan's section 5.2 dismissals row).
+ */
 export interface Dismissal {
-    /** The dismissed suggestion family (the intent id). */
+    /**
+     * The dismissed suggestion family (the intent id).
+     */
     intent: string;
-    /** The dismissed candidate path; absent means the whole family. */
+    /**
+     * The dismissed candidate path; absent means the whole family.
+     */
     path?: string;
-    /** The epoch-seconds expiry: at or after it the dismissal is forgotten. */
+    /**
+     * The epoch-seconds expiry: at or after it the dismissal is forgotten.
+     */
     until: number;
 }
-/** One learned candidate row. */
+/**
+ * One learned candidate row.
+ */
 export interface KnowledgeRow {
-    /** Times this candidate was in an emitted set for the intent. */
+    /**
+     * Times this candidate was in an emitted set for the intent.
+     */
     count: number;
-    /** Times the model actually touched it. */
+    /**
+     * Times the model actually touched it.
+     */
     followed: number;
-    /** The last seen timestamp (epoch seconds). */
+    /**
+     * The last seen timestamp (epoch seconds).
+     */
     lastSeen: number;
-    /** True when the row came from the offline seed (the online counts move on top). */
+    /**
+     * True when the row came from the offline seed (the online counts move on
+     * top).
+     */
     seed?: boolean;
 }
-/** One journal entry. */
+/**
+ * One journal entry.
+ */
 export interface KnowledgeEntry {
-    /** The journal id ("sug-<8hex>"). */
+    /**
+     * The journal id ("sug-<8hex>").
+     */
     id: string;
-    /** The intent. */
+    /**
+     * The intent.
+     */
     intent: string;
-    /** The judged call's id. */
+    /**
+     * The judged call's id.
+     */
     call: string;
-    /** The epoch-seconds timestamp. */
+    /**
+     * The epoch-seconds timestamp.
+     */
     at: number;
-    /** The confidence. */
+    /**
+     * The confidence.
+     */
     kappa: number;
-    /** The emitted candidate paths. */
+    /**
+     * The emitted candidate paths.
+     */
     candidates: string[];
-    /** The outcome. */
+    /**
+     * The outcome.
+     */
     outcome: "followed" | "ignored" | "dismissed";
-    /** The candidate the model chose (followed only). */
+    /**
+     * The candidate the model chose (followed only).
+     */
     followedBy?: string;
 }

@@ -1,0 +1,1 @@
+var n={format(t,r,e){return`<<<CCR:${t}|${r}|${e}>>>`},parse(t){const r=/^<<<CCR:([0-9a-f]{24})\|([a-z]+)\|(\d+)>>>$/.exec(t.trim());return!0===(r===null)?null:{hash:r[1]??"",type:r[2]??"",size:Number(r[3]??0)}}};export{n as default};

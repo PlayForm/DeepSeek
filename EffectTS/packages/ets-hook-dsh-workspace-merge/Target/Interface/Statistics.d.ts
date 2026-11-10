@@ -1,3 +1,8 @@
+/**
+ * @module Statistics
+ *
+ * The merge hook's honest counts.
+ */
 export default interface Statistics {
     batches: number;
     applied: number;

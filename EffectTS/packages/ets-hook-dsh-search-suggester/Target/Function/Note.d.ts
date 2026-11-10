@@ -1,4 +1,8 @@
 import type { UserMessage } from "@deepseek-ai/dsh-llm";
+/**
+ * The suggester's own source kind, declared in the suggester's own module
+ * (the MessageSourceMap vocabulary is merge-extensible by design).
+ */
 declare module "@deepseek-ai/dsh-llm" {
     interface MessageSourceMap {
         "search-suggester": {
@@ -8,7 +12,9 @@ declare module "@deepseek-ai/dsh-llm" {
         };
     }
 }
-/** Bind a notice summary to the harness's 120-char limit (ellipsized). */
+/**
+ * Bind a notice summary to the harness's 120-char limit (ellipsized).
+ */
 export declare const BoundSummary: (Summary: string) => string;
 /**
  * Build the note TEXT (plan section 7): one line of intent, the capped

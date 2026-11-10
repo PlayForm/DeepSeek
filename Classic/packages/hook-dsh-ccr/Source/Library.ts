@@ -74,7 +74,3 @@ export const inject = ["pluginFactory", "tools"];
 export const apply = Apply;
 
 export default { name, apply, Config, inject };
-
-export const apply = Apply;
-
-export default { name, apply, Config, inject };

@@ -1,0 +1,1 @@
+import e from"./Table.js";var o=n=>{const i=n.companions[0];return[`decided ${n.family}`,n.kappa.toFixed(2),`${n.companions.length} companions`,i===void 0?"none":i.path,i===void 0?"none":e(i.heuristics),`weights ${e(n.weights)}`,`store=${n.store}`].join(" ")};export{o as default};

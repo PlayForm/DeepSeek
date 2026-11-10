@@ -1536,9 +1536,9 @@ var VersionRow = (Row2, Current, t) => {
         className: Cell,
         title: Touched === 0 ? t("contributions.version.column.touches.none.title") : t("contributions.version.column.touches.title", {
           touches: Count(Touched),
-          kinds: List.map((Kind) => Word(`files.touch.${Kind}`, Kind, t)).join(
-            ", "
-          ),
+          kinds: List.map(
+            (Kind) => Word(`files.touch.${Kind}`, Kind, t)
+          ).join(", "),
           first: Stamp(Epoch(Row2.firstAt)),
           last: Stamp(Epoch(Row2.lastAt))
         })

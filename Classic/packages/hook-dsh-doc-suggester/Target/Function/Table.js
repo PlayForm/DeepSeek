@@ -1,0 +1,1 @@
+var t=i=>[`scope=${i.scope.toFixed(2)}`,`graph=${i.graph.toFixed(2)}`,`prior=${i.prior.toFixed(2)}`,`literal=${i.literal.toFixed(2)}`,`history=${i.history.toFixed(2)}`,`accept=${i.accept.toFixed(2)}`].join(",");export{t as default};

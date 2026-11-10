@@ -1,1 +1,38 @@
-import s from"node:assert/strict";import{Check as o,Finish as n,MakeCounter as t}from"../Harness.js";import{Suppress as r}from"../../../Target/Library.js";const p=async()=>{const e=t();return o(e,"Suppress: the suppression-line composer (module/kind/cause)",()=>{s.equal(r("package-governor","continuation",new Error("boom")),"package-governor: continuation error (suppressed): boom","the continuation shape"),s.equal(r("package-pinner","listener","x"),"package-pinner: listener error (suppressed): x","the listener shape with a string cause"),s.equal(r("cargo-governor","listener",new Error(""))==="cargo-governor: listener error (suppressed): "||r("cargo-governor","listener",new Error("")).includes("(suppressed):"),!0,"an empty-message error still composes the suppressed line")}),n(e,"Suppress")},a=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(a){const e=await p();console.log(`${e} PASS - Suppress`)}export{p as runTest};
+import assert from "node:assert/strict";
+import { Check, Finish, MakeCounter } from "../Harness.js";
+import { Suppress } from "../../../Target/Library.js";
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    const Sub = "Suppress: the suppression-line composer (module/kind/cause)";
+    {
+      Check(Count, Sub, () => {
+        assert.equal(
+          Suppress("package-governor", "continuation", new Error("boom")),
+          "package-governor: continuation error (suppressed): boom",
+          "the continuation shape"
+        );
+        assert.equal(
+          Suppress("package-pinner", "listener", "x"),
+          "package-pinner: listener error (suppressed): x",
+          "the listener shape with a string cause"
+        );
+        assert.equal(
+          Suppress("cargo-governor", "listener", new Error("")) === "cargo-governor: listener error (suppressed): " || Suppress("cargo-governor", "listener", new Error("")).includes("(suppressed):"),
+          true,
+          "an empty-message error still composes the suppressed line"
+        );
+      });
+    }
+  }
+  return Finish(Count, "Suppress");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Suppress`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map

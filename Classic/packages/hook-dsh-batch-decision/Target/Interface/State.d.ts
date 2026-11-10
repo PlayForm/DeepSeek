@@ -12,7 +12,7 @@
  * `Now` is the clock seam (the smoke's fake-clock requirement, the live-containers precedent):
  * when set, every time read goes through it.
  */
-import type { BatchDecision, BatchProposal } from "@Interface/Batch.js";
+import type { BatchDecision, BatchProposal } from "./Batch.js";
 import type Factory from "@playform/plugin-dsh-factory";
 import type { Allowlist, State as Shared } from "@playform/plugin-dsh-factory";
 /**

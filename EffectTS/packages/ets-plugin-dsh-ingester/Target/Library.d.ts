@@ -59,14 +59,26 @@ export default class Ingester extends Service {
     }>>, "plain">;
     private State;
     constructor(Context: Context, Config: Config);
-    /** Apply an approved proposal, per target, in order, version-fenced
-     *  (the honest BatchResult; a conflict never silently overwrites; one
-     *  apply per proposal however many callers ask). */
+    /**
+     * Apply an approved proposal, per target, in order, version-fenced
+     * (the honest BatchResult; a conflict never silently overwrites; one
+     * apply per proposal however many callers ask).
+     */
     Apply(Proposal: Proposal, Decision: Decision): Promise<Result | null>;
-    /** Await every in-flight apply (the flush seam: no sleeps in the smokes,
-     *  no timers in the hot path). */
+    /**
+     * Await every in-flight apply (the flush seam: no sleeps in the smokes,
+     * no timers in the hot path).
+     */
     WhenIdle(): Promise<void>;
-    /** The recorded proposals (the decision consumer's read). */
+    /**
+     * The recorded proposals (the decision consumer's read).
+     */
     Proposals(): Proposal[];
 }
+/**
+ * The compiled package version (Source/Variable/Version, built in by the
+ * ESBuild define) - NOT a loader key: the contract's names are unchanged
+ * (the class form's default export with static inject/Config), and Version
+ * is a standalone named export, not on the class.
+ */
 export { Version };

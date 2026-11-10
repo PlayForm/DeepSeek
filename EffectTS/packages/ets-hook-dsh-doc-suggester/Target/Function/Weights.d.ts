@@ -1,3 +1,20 @@
+/**
+ * @module Weights
+ *
+ * The pickable-weight resolver: the config's enabled list plus its weight
+ * table, resolved to the EFFECTIVE table the score and the decision record
+ * use (completion spec D8: "every heuristic and every decision pickable").
+ *
+ * @remarks
+ * - A name NOT in the enabled list is dropped: its effective weight is 0.
+ * - A name in the list takes the config's weight, else the default table's.
+ * - A config name outside the six known heuristics is ignored (the schema
+ *   cannot know the vocabulary, so the resolver owns it).
+ *
+ * The resolver runs per judged call (the config cells are volatile), so a
+ * hot edit to `heuristics` or `weights` lands on the next call without a
+ * remount.
+ */
 import type { HeuristicValues } from "../Interface/Decision.js";
 export default _default;
 declare function _default(

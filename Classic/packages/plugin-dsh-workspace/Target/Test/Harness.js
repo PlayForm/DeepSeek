@@ -1,2 +1,369 @@
-import k from"node:assert/strict";import*as x from"node:fs";import*as R from"node:os";import*as b from"node:path";import w from"../../Target/Library.js";import L from"../../../plugin-dsh-factory/Target/Library.js";import E from"../../../plugin-dsh-workspace-graph/Target/Library.js";const $=()=>({N:0,F:0}),F=(e,r,o)=>{e.N++;try{o(),console.log(`PASS - ${r}`)}catch(c){e.F++,console.log(`FAIL - ${r}`),console.log(c instanceof Error?c.message:String(c))}},z=async(e,r,o)=>{e.N++;try{await o(),console.log(`PASS - ${r}`)}catch(c){e.F++,console.log(`FAIL - ${r}`),console.log(c instanceof Error?c.message:String(c))}},B=(e,r)=>{if(e.F!==0)throw new Error(`${r}: ${e.F} failed check(s)`);return e.N},G=x.mkdtempSync(b.join(R.tmpdir(),"workspace-smoke-")),S=b.join(G,"workspace.log"),C=()=>{try{x.rmSync(S)}catch{}},N=()=>(()=>{try{return x.readFileSync(S,"utf8").split(`
-`).filter(Boolean)}catch{return[]}})(),H=e=>N().filter(r=>r.includes(e)),W=new L({reflect:{provide:()=>{}}}),A=e=>{const o=e.replace(/[.+^${}()|[\]\\]/g,"\\$&").replace(/\*\*\//g,"(?:.*/)?").replace(/\*\*/g,".*").replace(/\*/g,"[^/]*").replace(/\?/g,".");return new RegExp(`^${o}$`)},T=(e=[],r=[],o="rev-1")=>{const c=n=>{let s=e.filter(i=>{if(n.kind!==void 0&&i.kind!==n.kind||n.name!==void 0&&i.name!==n.name)return!1;if(n.pattern!==void 0){const a=A(n.pattern);if(!a.test(i.id)&&!(i.path!==void 0&&a.test(i.path)))return!1}return!0});return n.limit!==void 0&&(s=s.slice(0,n.limit)),s},u=n=>r.filter(s=>s.from===n);return Object.assign({indexFile:n=>Promise.resolve({path:String(n),status:"indexed",nodes:0,edges:0}),indexWorkspace:(n,s)=>Promise.resolve({indexed:0,skipped:0,failed:0,files:e.filter(i=>i.kind==="File").length}),removeFile:n=>Promise.resolve(!0),getNode:n=>e.find(s=>s.id===n),find:c,expand:(n,s)=>{const i=s?.depth??1,a=s?.kinds,d=new Set([n]),g=[n],y=[],l=[];for(let h=0;h<i;h++){const t=[];for(const p of g)for(const m of u(p))if(!(a!==void 0&&!a.includes(m.kind))&&(l.push(m),!d.has(m.to))){d.add(m.to),t.push(m.to);const v=e.find(P=>P.id===m.to);v!==void 0&&y.push(v)}g.splice(0,g.length,...t)}return{nodes:y,edges:l}},snapshot:()=>({indexRevision:o,nodes:e,edges:r}),statistics:()=>({files:e.filter(n=>n.kind==="File").length,nodes:e.length,edges:r.length,indexRevision:o})},{graph:{nodes:e,edges:r}})},_=()=>{const e=(r,o,c,u={})=>({id:r,kind:o,path:c,fingerprint:`fp-${r}`,version:"1",...u});return T([e("File:src/a.ts","File","src/a.ts",{span:{startLine:1,endLine:20}}),e("File:src/b.ts","File","src/b.ts",{span:{startLine:1,endLine:4}}),e("Doc:src/a.ts","DocSection","src/a.ts",{name:"Module A"}),e("Symbol:a","Symbol","src/a.ts",{name:"aFn",span:{startLine:1,endLine:9}}),e("Symbol:b","Symbol","src/b.ts",{name:"bFn",span:{startLine:1,endLine:4}})],[{kind:"contains",from:"File:src/a.ts",to:"Symbol:a"},{kind:"contains",from:"File:src/b.ts",to:"Symbol:b"},{kind:"imports",from:"File:src/a.ts",to:"File:src/b.ts"}])},U=(e,r={})=>{const o=Object.keys(e),c=n=>{const s=e[n];return s!==void 0?{version:"v1",type:"file",size:s.length}:o.some(i=>i.startsWith(`${n}/`))?{version:"v1",type:"directory",size:0}:void 0},f={fs:{resolve:async n=>({targetKey:n,displayPath:n}),stat:async n=>c(String(n.displayPath)),readText:async n=>{const s=e[String(n.displayPath)];if(s===void 0)throw new Error("vanished");return s},listDir:async n=>{const s=String(n.displayPath).replace(/\/$/,""),i=new Set;for(const a of o)a.startsWith(`${s}/`)&&i.add(a.slice(s.length+1).split("/")[0]);return[...i].sort((a,d)=>a.localeCompare(d)).map(a=>{const d=`${s}/${a}`,g=c(d);return{name:a,type:g?.type??"other",target:{targetKey:d,displayPath:d}}})},contains:(n,s)=>{const i=String(n.displayPath),a=String(s.displayPath);return a===i||a.startsWith(`${i}/`)},writeText:async()=>{throw new Error("writeText must never be called")}},logger:{info:()=>{},warn:()=>{},error:()=>{}},reflect:{provide:()=>{}}};return f.root=f,new E(f,E.Config({enabled:!0,...r}))},O=(e,r)=>{const o=[],c={},u={},f=[],n=[],s=[],i={},a=[],d={resolves:[],stats:[],reads:[],writes:[]},g={...d,resolve:async t=>{throw d.resolves.push(t),new Error("resolve must never be called")},stat:async t=>{throw d.stats.push(t?.displayPath??String(t)),new Error("stat must never be called")},readText:async t=>{throw d.reads.push(t?.displayPath??String(t)),new Error("readText must never be called")},writeText:async t=>{throw d.writes.push(t?.displayPath??String(t)),new Error("writeText must never be called")}},y={on:(t,p)=>(u[t]=p,()=>!0),emit:(t,...p)=>{f.push([t,...p])}};let l;l={pluginFactory:W,workspaceGraph:r,tools:{register:t=>(o.push(t),()=>!0)},fs:g,logger:{info:t=>{n.push(t)},warn:t=>{s.push(t)}},on:(t,p)=>(c[t]=p,()=>!0),get:t=>l[t],effect:(t,p)=>(a.push(p??"unnamed"),t(),()=>!0),root:y,reflect:{provide:(t,p)=>(i[t]=p??!0,l[t]=p,()=>!0)}};const h={Context:l,Root:y,RootListeners:u,RootEmits:f,CtxListeners:c,Lines:n,Warns:s,Provided:i,Effects:a,Registered:o,Raw:e,Fs:g,Graph:r};return h.Returned=w.apply(l,e),h.State=l.__pluginDshWorkspaceState,h},K=e=>w.Config({...e}),V=(e,r)=>e.Registered.find(o=>o.name===r),D=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(D){const e=$();F(e,"selfcheck: a passing assertion counts as PASS",()=>{k.equal(1,1)}),F(e,"selfcheck: a failing assertion counts as FAIL (expected)",()=>{k.equal(1,2)}),C();const r=O(K({logFile:S,enabled:!0}),_());F(e,"selfcheck: the fake ctx registers the five tools",()=>{k.deepEqual(r.Registered.map(o=>o.name),["workspace_map","workspace_find","workspace_expand","workspace_context","workspace_index"]),k.ok(r.State!==void 0),k.deepEqual(r.Lines,["plugin-dsh-workspace: activated (bundle 0.2.1, tools=5)"])}),e.N===3&&e.F===1?console.log("Harness selfcheck OK"):(console.log(`Harness selfcheck BROKEN (N=${e.N}, F=${e.F})`),process.exitCode=1)}export{F as Check,z as CheckAsync,T as FakeGraph,B as Finish,W as Furnace,S as Ledger,N as LedgerLines,H as LedgerWith,O as Make,$ as MakeCounter,w as Plugin,U as RealGraph,G as Root,_ as StandardGraph,V as Tool,K as Validate,C as rm};
+import assert from "node:assert/strict";
+import * as FileSystem from "node:fs";
+import * as OS from "node:os";
+import * as Path from "node:path";
+import Plugin from "../../Target/Library.js";
+import FactoryClass from "../../../plugin-dsh-factory/Target/Library.js";
+import GraphClass from "../../../plugin-dsh-workspace-graph/Target/Library.js";
+const MakeCounter = () => ({ N: 0, F: 0 });
+const Check = (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const CheckAsync = async (Count, Label, Assertions) => {
+  Count.N++;
+  try {
+    await Assertions();
+    console.log(`PASS - ${Label}`);
+  } catch (_Error) {
+    Count.F++;
+    console.log(`FAIL - ${Label}`);
+    console.log(_Error instanceof Error ? _Error.message : String(_Error));
+  }
+};
+const Finish = (Count, Name) => {
+  if (Count.F !== 0) {
+    throw new Error(`${Name}: ${Count.F} failed check(s)`);
+  }
+  return Count.N;
+};
+const Root = FileSystem.mkdtempSync(Path.join(OS.tmpdir(), "workspace-smoke-"));
+const Ledger = Path.join(Root, "workspace.log");
+const rm = () => {
+  try {
+    FileSystem.rmSync(Ledger);
+  } catch {
+  }
+};
+const LedgerLines = () => (() => {
+  try {
+    return FileSystem.readFileSync(Ledger, "utf8").split("\n").filter(Boolean);
+  } catch {
+    return [];
+  }
+})();
+const LedgerWith = (Needle) => LedgerLines().filter((Line) => Line.includes(Needle));
+const Furnace = new FactoryClass({
+  reflect: { provide: () => void 0 }
+});
+const Glob = (Pattern) => {
+  const Escaped = Pattern.replace(/[.+^${}()|[\]\\]/g, "\\$&");
+  const Source = Escaped.replace(/\*\*\//g, "(?:.*/)?").replace(/\*\*/g, ".*").replace(/\*/g, "[^/]*").replace(/\?/g, ".");
+  return new RegExp(`^${Source}$`);
+};
+const FakeGraph = (Nodes = [], Edges = [], Revision = "rev-1") => {
+  const Find = (Query) => {
+    let Matched = Nodes.filter((Node_) => {
+      if (Query.kind !== void 0 && Node_.kind !== Query.kind) {
+        return false;
+      }
+      if (Query.name !== void 0 && Node_.name !== Query.name) {
+        return false;
+      }
+      if (Query.pattern !== void 0) {
+        const Pattern = Glob(Query.pattern);
+        if (!Pattern.test(Node_.id) && !(Node_.path !== void 0 && Pattern.test(Node_.path))) {
+          return false;
+        }
+      }
+      return true;
+    });
+    if (Query.limit !== void 0) {
+      Matched = Matched.slice(0, Query.limit);
+    }
+    return Matched;
+  };
+  const Outgoing = (Id) => Edges.filter((Edge_) => Edge_.from === Id);
+  const Self = {
+    indexFile: (_Path) => Promise.resolve({ path: String(_Path), status: "indexed", nodes: 0, edges: 0 }),
+    // The fake graph does not walk a filesystem: the five-tool folder over a
+    // REAL populated graph (Real-Graph-And-Tools) covers the indexing
+    // trigger; here the summary is the fixed fixture's file count.
+    indexWorkspace: (_Root, _Options) => Promise.resolve({
+      indexed: 0,
+      skipped: 0,
+      failed: 0,
+      files: Nodes.filter((Node_) => Node_.kind === "File").length
+    }),
+    removeFile: (_Path) => Promise.resolve(true),
+    getNode: (Id) => Nodes.find((Node_) => Node_.id === Id),
+    find: Find,
+    expand: (Id, Options) => {
+      const Depth = Options?.depth ?? 1;
+      const Wanted = Options?.kinds;
+      const Seen = /* @__PURE__ */ new Set([Id]);
+      const Frontier = [Id];
+      const Found = [];
+      const FoundEdges = [];
+      for (let Level = 0; Level < Depth; Level++) {
+        const Next = [];
+        for (const Current of Frontier) {
+          for (const Edge_ of Outgoing(Current)) {
+            if (Wanted !== void 0 && !Wanted.includes(Edge_.kind)) {
+              continue;
+            }
+            FoundEdges.push(Edge_);
+            if (!Seen.has(Edge_.to)) {
+              Seen.add(Edge_.to);
+              Next.push(Edge_.to);
+              const Node_ = Nodes.find((N) => N.id === Edge_.to);
+              if (Node_ !== void 0) {
+                Found.push(Node_);
+              }
+            }
+          }
+        }
+        Frontier.splice(0, Frontier.length, ...Next);
+      }
+      return { nodes: Found, edges: FoundEdges };
+    },
+    snapshot: () => ({ indexRevision: Revision, nodes: Nodes, edges: Edges }),
+    statistics: () => ({
+      files: Nodes.filter((Node_) => Node_.kind === "File").length,
+      nodes: Nodes.length,
+      edges: Edges.length,
+      indexRevision: Revision
+    })
+  };
+  return Object.assign(Self, { graph: { nodes: Nodes, edges: Edges } });
+};
+const StandardGraph = () => {
+  const Node = (Id, Kind, Path2, Extra = {}) => ({
+    id: Id,
+    kind: Kind,
+    path: Path2,
+    fingerprint: `fp-${Id}`,
+    version: "1",
+    ...Extra
+  });
+  return FakeGraph(
+    [
+      Node("File:src/a.ts", "File", "src/a.ts", { span: { startLine: 1, endLine: 20 } }),
+      Node("File:src/b.ts", "File", "src/b.ts", { span: { startLine: 1, endLine: 4 } }),
+      Node("Doc:src/a.ts", "DocSection", "src/a.ts", { name: "Module A" }),
+      Node("Symbol:a", "Symbol", "src/a.ts", { name: "aFn", span: { startLine: 1, endLine: 9 } }),
+      Node("Symbol:b", "Symbol", "src/b.ts", { name: "bFn", span: { startLine: 1, endLine: 4 } })
+    ],
+    [
+      { kind: "contains", from: "File:src/a.ts", to: "Symbol:a" },
+      { kind: "contains", from: "File:src/b.ts", to: "Symbol:b" },
+      { kind: "imports", from: "File:src/a.ts", to: "File:src/b.ts" }
+    ]
+  );
+};
+const RealGraph = (Files, Options = {}) => {
+  const Names = Object.keys(Files);
+  const Info = (Display) => {
+    const Text = Files[Display];
+    if (Text !== void 0) {
+      return { version: "v1", type: "file", size: Text.length };
+    }
+    return Names.some((Key) => Key.startsWith(`${Display}/`)) ? { version: "v1", type: "directory", size: 0 } : void 0;
+  };
+  const Fs = {
+    resolve: async (Path_) => ({ targetKey: Path_, displayPath: Path_ }),
+    stat: async (Target) => Info(String(Target.displayPath)),
+    readText: async (Target) => {
+      const Text = Files[String(Target.displayPath)];
+      if (Text === void 0) {
+        throw new Error("vanished");
+      }
+      return Text;
+    },
+    listDir: async (Target) => {
+      const Directory = String(Target.displayPath).replace(/\/$/, "");
+      const Found = /* @__PURE__ */ new Set();
+      for (const Key of Names) {
+        if (!Key.startsWith(`${Directory}/`)) {
+          continue;
+        }
+        Found.add(Key.slice(Directory.length + 1).split("/")[0]);
+      }
+      return [...Found].sort((Left, Right) => Left.localeCompare(Right)).map((Name) => {
+        const Display = `${Directory}/${Name}`;
+        const Meta = Info(Display);
+        return {
+          name: Name,
+          type: Meta?.type ?? "other",
+          target: { targetKey: Display, displayPath: Display }
+        };
+      });
+    },
+    contains: (Parent, Child) => {
+      const Left = String(Parent.displayPath);
+      const Right = String(Child.displayPath);
+      return Right === Left || Right.startsWith(`${Left}/`);
+    },
+    writeText: async () => {
+      throw new Error("writeText must never be called");
+    }
+  };
+  const GraphContext = {
+    fs: Fs,
+    logger: { info: () => void 0, warn: () => void 0, error: () => void 0 },
+    reflect: { provide: () => void 0 }
+  };
+  GraphContext.root = GraphContext;
+  return new GraphClass(GraphContext, GraphClass.Config({ enabled: true, ...Options }));
+};
+const Make = (Raw, Graph) => {
+  const Registered = [];
+  const CtxListeners = {};
+  const RootListeners = {};
+  const RootEmits = [];
+  const Lines = [];
+  const Warns = [];
+  const Provided = {};
+  const Effects = [];
+  const Fs = {
+    resolves: [],
+    stats: [],
+    reads: [],
+    writes: []
+  };
+  const ThrowFs = {
+    ...Fs,
+    resolve: async (P) => {
+      Fs.resolves.push(P);
+      throw new Error("resolve must never be called");
+    },
+    stat: async (T) => {
+      Fs.stats.push(T?.displayPath ?? String(T));
+      throw new Error("stat must never be called");
+    },
+    readText: async (T) => {
+      Fs.reads.push(T?.displayPath ?? String(T));
+      throw new Error("readText must never be called");
+    },
+    writeText: async (T) => {
+      Fs.writes.push(T?.displayPath ?? String(T));
+      throw new Error("writeText must never be called");
+    }
+  };
+  const Root2 = {
+    on: (Name, Listener) => {
+      RootListeners[Name] = Listener;
+      return () => true;
+    },
+    emit: (Name, ...Args) => {
+      RootEmits.push([Name, ...Args]);
+    }
+  };
+  let Context;
+  Context = {
+    pluginFactory: Furnace,
+    workspaceGraph: Graph,
+    tools: {
+      register: (Definition) => {
+        Registered.push(Definition);
+        return () => true;
+      }
+    },
+    fs: ThrowFs,
+    logger: {
+      info: (M) => {
+        Lines.push(M);
+      },
+      warn: (M) => {
+        Warns.push(M);
+      }
+    },
+    on: (Name, Listener) => {
+      CtxListeners[Name] = Listener;
+      return () => true;
+    },
+    get: (Name) => Context[Name],
+    effect: (Setup, Label) => {
+      Effects.push(Label ?? "unnamed");
+      Setup();
+      return () => true;
+    },
+    root: Root2,
+    reflect: {
+      provide: (Name, Value) => {
+        Provided[Name] = Value ?? true;
+        Context[Name] = Value;
+        return () => true;
+      }
+    }
+  };
+  const Run = {
+    Context,
+    Root: Root2,
+    RootListeners,
+    RootEmits,
+    CtxListeners,
+    Lines,
+    Warns,
+    Provided,
+    Effects,
+    Registered,
+    Raw,
+    Fs: ThrowFs,
+    Graph
+  };
+  Run.Returned = Plugin.apply(Context, Raw);
+  Run.State = Context.__pluginDshWorkspaceState;
+  return Run;
+};
+const Validate = (Raw) => Plugin.Config({ ...Raw });
+const Tool = (Run, Name) => Run.Registered.find((Definition) => Definition.name === Name);
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Count = MakeCounter();
+  Check(Count, "selfcheck: a passing assertion counts as PASS", () => {
+    assert.equal(1, 1);
+  });
+  Check(Count, "selfcheck: a failing assertion counts as FAIL (expected)", () => {
+    assert.equal(1, 2);
+  });
+  rm();
+  const Run = Make(Validate({ logFile: Ledger, enabled: true }), StandardGraph());
+  Check(Count, "selfcheck: the fake ctx registers the five tools", () => {
+    assert.deepEqual(
+      Run.Registered.map((Definition) => Definition.name),
+      [
+        "workspace_map",
+        "workspace_find",
+        "workspace_expand",
+        "workspace_context",
+        "workspace_index"
+      ]
+    );
+    assert.ok(Run.State !== void 0);
+    assert.deepEqual(Run.Lines, [`plugin-dsh-workspace: activated (bundle ${"0.2.1"}, tools=5)`]);
+  });
+  if (Count.N === 3 && Count.F === 1) {
+    console.log("Harness selfcheck OK");
+  } else {
+    console.log(`Harness selfcheck BROKEN (N=${Count.N}, F=${Count.F})`);
+    process.exitCode = 1;
+  }
+}
+export {
+  Check,
+  CheckAsync,
+  FakeGraph,
+  Finish,
+  Furnace,
+  Ledger,
+  LedgerLines,
+  LedgerWith,
+  Make,
+  MakeCounter,
+  Plugin,
+  RealGraph,
+  Root,
+  StandardGraph,
+  Tool,
+  Validate,
+  rm
+};
+//# sourceMappingURL=Harness.js.map

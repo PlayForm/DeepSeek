@@ -1,8 +1,14 @@
-// Ledger - the read side of the store (Function/Ledger): the status check,
-// the filtered list, and the statistics. Pure reads over the State map; no
-// writes, no ledger lines (the append-side lines live in Declare and
-// Invalidate). The "Ledger" name is the store ledger in the accounting
-// sense - the recorded evidence, not the log file.
+/**
+ * @module Ledger
+ *
+ * The read side of the store: the status check, the filtered list and the
+ * statistics.
+ *
+ * @remarks
+ * Pure reads over the State map; no writes, no ledger lines (the append-side
+ * lines live in Declare and Invalidate). The "Ledger" name is the store
+ * ledger in the accounting sense - the recorded evidence, not the log file.
+ */
 import type State from "@Interface/State.js";
 import type Validation from "@Interface/Validation.js";
 

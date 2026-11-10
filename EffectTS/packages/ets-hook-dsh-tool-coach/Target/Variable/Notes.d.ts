@@ -1,10 +1,37 @@
-/** The fs/observed traceability one-liner (code-authoring/SKILL.md:39-46). */
+/**
+ * @module Notes
+ *
+ * The three coaching templates (the plan's Part 3 §3.3, verbatim), the static
+ * tool-line fallback table, and the traceability one-liner.
+ *
+ * @remarks
+ * Every template is filled by Function/Compose with a single-pass placeholder
+ * scanner: known placeholders are replaced, user data is escaped (`${` ->
+ * `$${`) BEFORE insertion, so composed output never gains a NEW unfilled
+ * placeholder (the plan's D1 discipline).
+ *
+ * Placeholders (Part 3 §3.3): ${command} (offending command segment, first
+ * 200 chars), ${class}, ${count}, ${traceability}, ${tool.name},
+ * ${tool.description} (fetched first sentence), ${tool.param} (primary
+ * parameter key), ${table} (the tier-2 tool-table rows, composed by the
+ * builder - the plan's verbatim table row `| ${tool.name} |
+ * ${tool.description} |` is the row template the composer repeats).
+ */
+/**
+ * The fs/observed traceability one-liner (code-authoring/SKILL.md:39-46).
+ */
 export declare const TRACEABILITY = "terminal edits produce no fs/observed event, so the governor/pinner/normalize plugins never see them";
-/** The tier-1 note (NOTE_FIRST), verbatim. */
+/**
+ * The tier-1 note (NOTE_FIRST), verbatim.
+ */
 export declare const NOTE_FIRST = "Tool-coach note (strike ${count}, ${class}-class bash pattern):\n- \"${command}\" is forbidden for file content. Use the ${tool.name} tool instead.\n- ${tool.name}: ${tool.description} (key parameter: ${tool.param}).\n- ${traceability}.\nThe terminal runs COMMANDS (builds, tests, git, package managers); the tools handle CONTENT.";
-/** The tier-2 persistent section template (NOTE_PERSISTENT), verbatim. */
+/**
+ * The tier-2 persistent section template (NOTE_PERSISTENT), verbatim.
+ */
 export declare const NOTE_PERSISTENT = "Tool discipline (persistent, from tool-coach):\n- NEVER read file content through the terminal: \"${command}-style\" commands \u2014 use the read and grep/glob tools.\n- NEVER mutate file content through the terminal: ${command}-style commands \u2014 use the write and edit tools.\n- The terminal is for COMMANDS (builds, tests, git, package managers).\nMapped tools:\n| tool | purpose |\n| --- | --- |\n${table}";
-/** The tier-3 deny reason (NOTE_DENIED), verbatim. */
+/**
+ * The tier-3 deny reason (NOTE_DENIED), verbatim.
+ */
 export declare const NOTE_DENIED = "Blocked by tool-coach: \"${command}\" is forbidden (${class}-class bash pattern). Use the ${tool.name} tool for this operation instead \u2014 ${tool.description} (key parameter: ${tool.param}). Then rerun only the legitimate command parts (build/test/git), if any.";
 /**
  * One static tool line: the fallback first-sentence description (plan Part 1
@@ -13,10 +40,17 @@ export declare const NOTE_DENIED = "Blocked by tool-coach: \"${command}\" is for
  * mapped tool is absent from the registry - a note NEVER fails the waterfall.
  */
 export interface StaticToolLine {
-    /** The fallback first-sentence description. */
+    /**
+     * The fallback first-sentence description.
+     */
     description: string;
-    /** The fallback key parameter name. */
+    /**
+     * The fallback key parameter name.
+     */
     param: string;
 }
-/** The static fallback table (Variable/Notes.ts, derived from plan Part 1 §1.2). */
+/**
+ * The static fallback table (Variable/Notes.ts, derived from plan Part 1
+ * §1.2).
+ */
 export declare const STATIC_TOOL_LINES: Record<string, StaticToolLine>;

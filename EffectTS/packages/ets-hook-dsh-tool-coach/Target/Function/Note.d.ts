@@ -1,4 +1,8 @@
 import type { UserMessage } from "@deepseek-ai/dsh-llm";
+/**
+ * The coach's own source kind, declared in the coach's own module (the
+ * MessageSourceMap vocabulary is merge-extensible by design).
+ */
 declare module "@deepseek-ai/dsh-llm" {
     interface MessageSourceMap {
         "tool-coach": {
@@ -8,7 +12,9 @@ declare module "@deepseek-ai/dsh-llm" {
         };
     }
 }
-/** Bind a notice summary to the harness's 120-char limit (ellipsized). */
+/**
+ * Bind a notice summary to the harness's 120-char limit (ellipsized).
+ */
 export declare const BoundSummary: (Summary: string) => string;
 export default _default;
 /**

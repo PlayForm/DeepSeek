@@ -1,4 +1,32 @@
+/**
+ * @module Config
+ *
+ * The plugin's Schemastery Config schema (a Variable: one constant built
+ * once at load).
+ *
+ * @remarks
+ * Cordis validates the exported schema while the plugin loads and fills
+ * every default, so invalid configuration fails LOUD at load instead of
+ * silently falling back per-field, and `apply` receives a validated plain
+ * config object. The shape this schema produces is Interface/Config.ts.
+ *
+ * The required price-row columns use `.required()` so a malformed row fails
+ * at load (schemastery's "missing required value"); the three optional rates
+ * stay optional - an absent rate is an unpriced bucket (charged at zero),
+ * not an error. The shipped `prices` default is the three-row price book;
+ * each row's own `effectiveFrom`/`currency` defaults fill in at validation.
+ * The factor layer's arrays (section 17): `modifiers` ships the four mode
+ * multipliers and `priceWindows` the time-of-day windows (empty by
+ * default).
+ *
+ * This is one of the modules in the tree with a runtime import of
+ * @deepseek-ai/schemastery (the schema must be a real schemastery instance -
+ * the loader consumes it through the Standard Schema `~standard` interface).
+ */
 import Schema from "@deepseek-ai/schemastery";
+/**
+ * The plugin's Config schema, built once at load.
+ */
 declare const _default: Schema<Schemastery.ObjectS<NoInfer<{
     enabled: Schema<boolean, boolean, "defined">;
     databasePath: Schema<string, string, "defined">;

@@ -1,1 +1,357 @@
-import e from"node:assert/strict";import l from"@deepseek-ai/schemastery";import{Check as n,Finish as T,Make as p,MakeBridge as y,MakeCounter as N,MakeForms as S,MakeTrace as P}from"../Harness.js";const m=(await import("@Function/Apply.js")).default,q=(await import("@Function/Bridge.js")).default,W=(await import("@Function/Field.js")).default,w=(await import("@Function/Form.js")).default,k=(await import("@Function/Live.js")).default,u=(await import("@Function/Status.js")).default,r=(await import("@Variable/Reference/Normalize.js")).default,V=(await import("@Variable/Reference/Suggester.js")).default,z=(await import("@Variable/Reference/ToolCoach.js")).default,M=l.object({logFile:l.string().default("~/.dsh/playform/ets-hook-dsh-normalize-dash.log").volatile(),replacement:l.string().default("-").volatile(),normalizeReasoning:l.boolean().default(!0),normalizeToolArguments:l.boolean().default(!1),scopes:l.object({conversation:l.boolean().default(!0),reasoning:l.boolean().default(!0)}).volatile(),toolResultsExempt:l.array(l.string()).default(["read"]).volatile()}),f={ns:"hook-dsh-normalize-dash",schema:M.toJSON(),value:{logFile:"~/.dsh/playform/ets-hook-dsh-normalize-dash.log",replacement:"~",normalizeReasoning:!1,normalizeToolArguments:!0,scopes:{conversation:!0,reasoning:!1},toolResultsExempt:["read","edit"]},base:{replacement:"-",normalizeReasoning:!0},user:{replacement:"~",normalizeReasoning:!1},revision:7},j=l.object({enabled:l.boolean().default(!0).volatile(),threshold:l.number().default(3).volatile(),enforce:l.union(["off","write","all"]).default("off").volatile()}),x={ns:"hook-dsh-tool-coach",schema:j.toJSON(),value:{enabled:!0,threshold:3,enforce:"off"},revision:4},I=l.object({token:l.string().role("secret"),label:l.string().default("x")}),g={ns:"hook-dsh-secret-test",schema:I.toJSON(),value:{token:"hunter2",label:"x"},revision:2},J=()=>k(void 0,[]),v=(o={})=>{const a=[],t=[];return{registry:{register:()=>()=>{},unregister:()=>{},entries:()=>[],subscribe:()=>()=>{},getVersion:()=>0,open:()=>{}},live:o.live??J(),open:()=>{},log:{info:s=>a.push(s),warn:s=>t.push(s)},...o.configForms===void 0?{}:{configForms:o.configForms},...o.bridge===void 0?{}:{bridge:o.bridge},Info:a,Warn:t}},h=(o,a,t=!0)=>w(o,{view:a,writable:!0,available:!0,bridge:t}),i=(o,a)=>o.fields.find(t=>t.label===a),L=async()=>{const o=N();{n(o,"A1: without a trace the status is the static activation",()=>{e.deepEqual(u(r,void 0),{bundle:"@playform/ets-hook-dsh-normalize-dash",activation:"enabled",live:!1,tail:[]})});const a=P(),t=k(a,["observe/stamp","graph/indexed","graph/invalidated"]);a.emit("observe/stamp",{path:"src/a.ts"}),n(o,"A2: an exposed trace makes the status live and fills the tail",()=>{e.deepEqual(u(r,t),{bundle:"@playform/ets-hook-dsh-normalize-dash",activation:"enabled",live:!0,tail:["observe/stamp src/a.ts"]})}),a.emit("graph/indexed",{path:"src/b.ts"}),a.emit("graph/invalidated",{path:"src/c.ts"}),n(o,"A3: the tail is newest first and byte-exact",()=>{e.deepEqual(u(r,t).tail,["graph/invalidated src/c.ts","graph/indexed src/b.ts","observe/stamp src/a.ts"])}),n(o,"A3b: a late-attached trace seeds the tail from its ring",()=>{const s=k(a,["observe/stamp","graph/indexed","graph/invalidated"]);e.deepEqual(u(r,s).tail,["graph/invalidated src/c.ts","graph/indexed src/b.ts","observe/stamp src/a.ts"])}),a.emit("graph/indexed",{path:"src/d.ts",activation:"disabled"}),n(o,"A4: the newest activation override wins",()=>{e.equal(u(r,t).activation,"disabled"),a.emit("graph/indexed",{path:"src/e.ts",activation:"enabled"}),e.equal(u(r,t).activation,"enabled")})}{const a=h(r,f);n(o,"A5: the form derives every field from the serialized schema",()=>{e.equal(a.namespace,"hook-dsh-normalize-dash"),e.equal(a.status,"ready"),e.equal(a.writable,!0),e.equal(a.bridge,!0),e.equal(a.secret,!1),e.equal(a.revision,7),e.deepEqual(a.fields.map(s=>({label:s.label,type:s.type,volatile:s.volatile,secret:s.secret,overridden:s.overridden})),[{label:"logFile",type:"string",volatile:!0,secret:!1,overridden:!1},{label:"replacement",type:"string",volatile:!0,secret:!1,overridden:!0},{label:"normalizeReasoning",type:"boolean",volatile:!1,secret:!1,overridden:!0},{label:"normalizeToolArguments",type:"boolean",volatile:!1,secret:!1,overridden:!1},{label:"scopes.conversation",type:"boolean",volatile:!0,secret:!1,overridden:!1},{label:"scopes.reasoning",type:"boolean",volatile:!0,secret:!1,overridden:!1},{label:"toolResultsExempt",type:"array",volatile:!0,secret:!1,overridden:!1}]);const t=i(a,"replacement");e.equal(t.value,"~"),e.equal(t.base,"-"),e.deepEqual(t.path,["replacement"]),e.equal(i(a,"normalizeReasoning").value,!1),e.equal(i(a,"normalizeReasoning").base,!0),e.deepEqual(i(a,"toolResultsExempt").value,["read","edit"])}),n(o,"A5b: the form reports the unavailable and loading states",()=>{e.equal(w(r,{writable:!1,available:!1,bridge:!1}).status,"unavailable"),e.equal(w(r,{writable:!1,available:!0,bridge:!1}).status,"loading")})}{const a=h(r,g),t=i(a,"token"),s=W({field:t,view:a,section:r,ports:v()});n(o,"A6: a secret field renders the marker and never the value",()=>{e.equal(a.secret,!0),e.equal(t.secret,!0),e.equal(s.type,"label");const c=s.props.children.find(b=>b?.props?.className==="playform-family-field-secret");e.equal(c.props.children,"configured (secret)"),e.equal(JSON.stringify(s).includes("hunter2"),!1)})}{const a=h(z,x),t=i(a,"enabled"),s=S([x,f,g]),d=v({configForms:s.Forms}),c=await m(d,z,a,t,!1);n(o,"A7: a volatile write rides the revision-fenced mutate",()=>{e.equal(c,!0),e.deepEqual(s.Mutations,[{namespace:"hook-dsh-tool-coach",ops:[{op:"set",path:["enabled"],value:!1}],revision:4}]),e.deepEqual(d.Info,[]),e.deepEqual(d.Warn,[]),e.equal(i(a,"enforce").options.join(","),"off,write,all")})}{const a=h(r,f),t=i(a,"normalizeReasoning"),s=S([f,g]),d=y(),c=v({configForms:s.Forms,bridge:d.Bridge}),b=await m(c,r,a,t,!0);n(o,"A8: a plain write sends the whole config through the bridge",()=>{e.equal(b,!0),e.deepEqual(d.Writes,[{namespace:"hook-dsh-normalize-dash",patch:{logFile:"~/.dsh/playform/ets-hook-dsh-normalize-dash.log",replacement:"~",normalizeReasoning:!0,normalizeToolArguments:!0,scopes:{conversation:!0,reasoning:!1},toolResultsExempt:["read","edit"]}}]),e.deepEqual(c.Info,["client-dsh-panel-family: plain-field write hook-dsh-normalize-dash normalizeReasoning"])});const F=h(r,g),A={...r,namespace:"hook-dsh-secret-test"},E=i(F,"label"),C=await m(c,A,F,E,"y");n(o,"A9: a secret namespace refuses the bridge write",()=>{e.equal(C,!1),e.equal(d.Writes.length,1),e.equal(c.Warn[0],"client-dsh-panel-family: plain-field secret refused for hook-dsh-secret-test")});const R=v({configForms:s.Forms}),B=await m(R,r,a,t,!0);n(o,"A10: a missing bridge refuses with the documented line",()=>{e.equal(B,!1),e.deepEqual(R.Warn,["client-dsh-panel-family: plain-field bridge unavailable for hook-dsh-normalize-dash"])})}{const a=y(),t=y();n(o,"A11: the bridge resolves direct first, then the gateway face",()=>{e.equal(q(p({bridge:a.Bridge}).Ctx),a.Bridge),e.equal(q(p({remote:{playformFamilyPanel:t.Bridge}}).Ctx),t.Bridge),e.equal(q(p().Ctx),void 0)})}{const a=p();n(o,"A12: the three reference adapters lead the shipped roster",()=>{e.deepEqual([r,z,V].map(t=>[t.id,t.bundle,t.namespace,t.order,t.slot]),[["adapter-hook-dsh-normalize-dash","@playform/ets-hook-dsh-normalize-dash","hook-dsh-normalize-dash",10,"playform.panel.section"],["adapter-hook-dsh-tool-coach","@playform/ets-hook-dsh-tool-coach","hook-dsh-tool-coach",30,"playform.panel.section"],["adapter-hook-dsh-convention-suggester","@playform/ets-hook-dsh-convention-suggester","hook-dsh-convention-suggester",40,"playform.panel.section"]]),e.deepEqual(a.Effects.filter(t=>t.startsWith("panel: adapter ")).slice(0,3),["panel: adapter adapter-hook-dsh-normalize-dash","panel: adapter adapter-hook-dsh-tool-coach","panel: adapter adapter-hook-dsh-convention-suggester"])})}return T(o,"Reference-Adapter")},D=process.argv[1]!==void 0&&import.meta.url===(await import("node:url")).pathToFileURL(process.argv[1]).href;if(D){const o=await L();console.log(`${o} PASS - Reference-Adapter`)}export{L as runTest};
+import assert from "node:assert/strict";
+import Schema from "@deepseek-ai/schemastery";
+import {
+  Check,
+  Finish,
+  Make,
+  MakeBridge,
+  MakeCounter,
+  MakeForms,
+  MakeTrace
+} from "../Harness.js";
+const Apply = (await import("../../Function/Apply.js")).default;
+const Bridge = (await import("../../Function/Bridge.js")).default;
+const Field = (await import("../../Function/Field.js")).default;
+const Form = (await import("../../Function/Form.js")).default;
+const Live = (await import("../../Function/Live.js")).default;
+const Status = (await import("../../Function/Status.js")).default;
+const Normalize = (await import("../../Variable/Reference/Normalize.js")).default;
+const Suggester = (await import("../../Variable/Reference/Suggester.js")).default;
+const ToolCoach = (await import("../../Variable/Reference/ToolCoach.js")).default;
+const NormalizeSchema = Schema.object({
+  logFile: Schema.string().default("~/.dsh/playform/ets-hook-dsh-normalize-dash.log").volatile(),
+  replacement: Schema.string().default("-").volatile(),
+  normalizeReasoning: Schema.boolean().default(true),
+  normalizeToolArguments: Schema.boolean().default(false),
+  scopes: Schema.object({
+    conversation: Schema.boolean().default(true),
+    reasoning: Schema.boolean().default(true)
+  }).volatile(),
+  toolResultsExempt: Schema.array(Schema.string()).default(["read"]).volatile()
+});
+const NormalizeView = {
+  ns: "hook-dsh-normalize-dash",
+  schema: NormalizeSchema.toJSON(),
+  value: {
+    logFile: "~/.dsh/playform/ets-hook-dsh-normalize-dash.log",
+    replacement: "~",
+    normalizeReasoning: false,
+    normalizeToolArguments: true,
+    scopes: { conversation: true, reasoning: false },
+    toolResultsExempt: ["read", "edit"]
+  },
+  base: { replacement: "-", normalizeReasoning: true },
+  user: { replacement: "~", normalizeReasoning: false },
+  revision: 7
+};
+const CoachSchema = Schema.object({
+  enabled: Schema.boolean().default(true).volatile(),
+  threshold: Schema.number().default(3).volatile(),
+  enforce: Schema.union(["off", "write", "all"]).default("off").volatile()
+});
+const CoachView = {
+  ns: "hook-dsh-tool-coach",
+  schema: CoachSchema.toJSON(),
+  value: { enabled: true, threshold: 3, enforce: "off" },
+  revision: 4
+};
+const SecretSchema = Schema.object({
+  token: Schema.string().role("secret"),
+  label: Schema.string().default("x")
+});
+const SecretView = {
+  ns: "hook-dsh-secret-test",
+  schema: SecretSchema.toJSON(),
+  value: { token: "hunter2", label: "x" },
+  revision: 2
+};
+const EmptyLive = () => Live(void 0, []);
+const Ports = (Options = {}) => {
+  const Info = [];
+  const Warn = [];
+  return {
+    registry: {
+      register: () => () => void 0,
+      unregister: () => void 0,
+      entries: () => [],
+      subscribe: () => () => void 0,
+      getVersion: () => 0,
+      open: () => void 0
+    },
+    live: Options.live ?? EmptyLive(),
+    open: () => void 0,
+    log: {
+      info: (Message) => Info.push(Message),
+      warn: (Message) => Warn.push(Message)
+    },
+    ...Options.configForms === void 0 ? {} : { configForms: Options.configForms },
+    ...Options.bridge === void 0 ? {} : { bridge: Options.bridge },
+    Info,
+    Warn
+  };
+};
+const Derived = (Section, View, BridgeExposed = true) => Form(Section, {
+  view: View,
+  writable: true,
+  available: true,
+  bridge: BridgeExposed
+});
+const FieldNamed = (View, Label) => View.fields.find((Entry) => Entry.label === Label);
+const runTest = async () => {
+  const Count = MakeCounter();
+  {
+    Check(Count, "A1: without a trace the status is the static activation", () => {
+      assert.deepEqual(Status(Normalize, void 0), {
+        bundle: "@playform/ets-hook-dsh-normalize-dash",
+        activation: "enabled",
+        live: false,
+        tail: []
+      });
+    });
+    const Trace = MakeTrace();
+    const Tail = Live(Trace, ["observe/stamp", "graph/indexed", "graph/invalidated"]);
+    Trace.emit("observe/stamp", { path: "src/a.ts" });
+    Check(Count, "A2: an exposed trace makes the status live and fills the tail", () => {
+      assert.deepEqual(Status(Normalize, Tail), {
+        bundle: "@playform/ets-hook-dsh-normalize-dash",
+        activation: "enabled",
+        live: true,
+        tail: ["observe/stamp src/a.ts"]
+      });
+    });
+    Trace.emit("graph/indexed", { path: "src/b.ts" });
+    Trace.emit("graph/invalidated", { path: "src/c.ts" });
+    Check(Count, "A3: the tail is newest first and byte-exact", () => {
+      assert.deepEqual(Status(Normalize, Tail).tail, [
+        "graph/invalidated src/c.ts",
+        "graph/indexed src/b.ts",
+        "observe/stamp src/a.ts"
+      ]);
+    });
+    Check(Count, "A3b: a late-attached trace seeds the tail from its ring", () => {
+      const Late = Live(Trace, [
+        "observe/stamp",
+        "graph/indexed",
+        "graph/invalidated"
+      ]);
+      assert.deepEqual(Status(Normalize, Late).tail, [
+        "graph/invalidated src/c.ts",
+        "graph/indexed src/b.ts",
+        "observe/stamp src/a.ts"
+      ]);
+    });
+    Trace.emit("graph/indexed", { path: "src/d.ts", activation: "disabled" });
+    Check(Count, "A4: the newest activation override wins", () => {
+      assert.equal(Status(Normalize, Tail).activation, "disabled");
+      Trace.emit("graph/indexed", { path: "src/e.ts", activation: "enabled" });
+      assert.equal(Status(Normalize, Tail).activation, "enabled");
+    });
+  }
+  {
+    const View = Derived(Normalize, NormalizeView);
+    Check(Count, "A5: the form derives every field from the serialized schema", () => {
+      assert.equal(View.namespace, "hook-dsh-normalize-dash");
+      assert.equal(View.status, "ready");
+      assert.equal(View.writable, true);
+      assert.equal(View.bridge, true);
+      assert.equal(View.secret, false);
+      assert.equal(View.revision, 7);
+      assert.deepEqual(
+        View.fields.map((Entry) => ({
+          label: Entry.label,
+          type: Entry.type,
+          volatile: Entry.volatile,
+          secret: Entry.secret,
+          overridden: Entry.overridden
+        })),
+        [
+          { label: "logFile", type: "string", volatile: true, secret: false, overridden: false },
+          { label: "replacement", type: "string", volatile: true, secret: false, overridden: true },
+          { label: "normalizeReasoning", type: "boolean", volatile: false, secret: false, overridden: true },
+          { label: "normalizeToolArguments", type: "boolean", volatile: false, secret: false, overridden: false },
+          { label: "scopes.conversation", type: "boolean", volatile: true, secret: false, overridden: false },
+          { label: "scopes.reasoning", type: "boolean", volatile: true, secret: false, overridden: false },
+          { label: "toolResultsExempt", type: "array", volatile: true, secret: false, overridden: false }
+        ]
+      );
+      const Replacement = FieldNamed(View, "replacement");
+      assert.equal(Replacement.value, "~");
+      assert.equal(Replacement.base, "-");
+      assert.deepEqual(Replacement.path, ["replacement"]);
+      assert.equal(FieldNamed(View, "normalizeReasoning").value, false);
+      assert.equal(FieldNamed(View, "normalizeReasoning").base, true);
+      assert.deepEqual(FieldNamed(View, "toolResultsExempt").value, ["read", "edit"]);
+    });
+    Check(Count, "A5b: the form reports the unavailable and loading states", () => {
+      assert.equal(
+        Form(Normalize, { writable: false, available: false, bridge: false }).status,
+        "unavailable"
+      );
+      assert.equal(
+        Form(Normalize, { writable: false, available: true, bridge: false }).status,
+        "loading"
+      );
+    });
+  }
+  {
+    const View = Derived(Normalize, SecretView);
+    const Secret = FieldNamed(View, "token");
+    const Element = Field({
+      field: Secret,
+      view: View,
+      section: Normalize,
+      ports: Ports()
+    });
+    Check(Count, "A6: a secret field renders the marker and never the value", () => {
+      assert.equal(View.secret, true);
+      assert.equal(Secret.secret, true);
+      assert.equal(Element.type, "label");
+      const Children = Element.props.children;
+      const SecretSpan = Children.find(
+        (Child) => Child?.props?.className === "playform-family-field-secret"
+      );
+      assert.equal(SecretSpan.props.children, "configured (secret)");
+      assert.equal(JSON.stringify(Element).includes("hunter2"), false);
+    });
+  }
+  {
+    const View = Derived(ToolCoach, CoachView);
+    const Enabled = FieldNamed(View, "enabled");
+    const Forms = MakeForms([CoachView, NormalizeView, SecretView]);
+    const PortsWithForms = Ports({ configForms: Forms.Forms });
+    const Accepted = await Apply(PortsWithForms, ToolCoach, View, Enabled, false);
+    Check(Count, "A7: a volatile write rides the revision-fenced mutate", () => {
+      assert.equal(Accepted, true);
+      assert.deepEqual(Forms.Mutations, [
+        {
+          namespace: "hook-dsh-tool-coach",
+          ops: [{ op: "set", path: ["enabled"], value: false }],
+          revision: 4
+        }
+      ]);
+      assert.deepEqual(PortsWithForms.Info, []);
+      assert.deepEqual(PortsWithForms.Warn, []);
+      assert.equal(FieldNamed(View, "enforce").options.join(","), "off,write,all");
+    });
+  }
+  {
+    const View = Derived(Normalize, NormalizeView);
+    const Plain = FieldNamed(View, "normalizeReasoning");
+    const Forms = MakeForms([NormalizeView, SecretView]);
+    const Bridged = MakeBridge();
+    const PortsWithBridge = Ports({
+      configForms: Forms.Forms,
+      bridge: Bridged.Bridge
+    });
+    const Accepted = await Apply(PortsWithBridge, Normalize, View, Plain, true);
+    Check(Count, "A8: a plain write sends the whole config through the bridge", () => {
+      assert.equal(Accepted, true);
+      assert.deepEqual(Bridged.Writes, [
+        {
+          namespace: "hook-dsh-normalize-dash",
+          patch: {
+            logFile: "~/.dsh/playform/ets-hook-dsh-normalize-dash.log",
+            replacement: "~",
+            normalizeReasoning: true,
+            normalizeToolArguments: true,
+            scopes: { conversation: true, reasoning: false },
+            toolResultsExempt: ["read", "edit"]
+          }
+        }
+      ]);
+      assert.deepEqual(PortsWithBridge.Info, [
+        "client-dsh-panel-family: plain-field write hook-dsh-normalize-dash normalizeReasoning"
+      ]);
+    });
+    const SecretForm = Derived(Normalize, SecretView);
+    const SecretSection = { ...Normalize, namespace: "hook-dsh-secret-test" };
+    const SecretPlain = FieldNamed(SecretForm, "label");
+    const Refused = await Apply(
+      PortsWithBridge,
+      SecretSection,
+      SecretForm,
+      SecretPlain,
+      "y"
+    );
+    Check(Count, "A9: a secret namespace refuses the bridge write", () => {
+      assert.equal(Refused, false);
+      assert.equal(Bridged.Writes.length, 1);
+      assert.equal(PortsWithBridge.Warn[0], "client-dsh-panel-family: plain-field secret refused for hook-dsh-secret-test");
+    });
+    const Bare = Ports({ configForms: Forms.Forms });
+    const Missing = await Apply(Bare, Normalize, View, Plain, true);
+    Check(Count, "A10: a missing bridge refuses with the documented line", () => {
+      assert.equal(Missing, false);
+      assert.deepEqual(Bare.Warn, [
+        "client-dsh-panel-family: plain-field bridge unavailable for hook-dsh-normalize-dash"
+      ]);
+    });
+  }
+  {
+    const Direct = MakeBridge();
+    const Remote = MakeBridge();
+    Check(Count, "A11: the bridge resolves direct first, then the gateway face", () => {
+      assert.equal(Bridge(Make({ bridge: Direct.Bridge }).Ctx), Direct.Bridge);
+      assert.equal(
+        Bridge(Make({ remote: { playformFamilyPanel: Remote.Bridge } }).Ctx),
+        Remote.Bridge
+      );
+      assert.equal(Bridge(Make().Ctx), void 0);
+    });
+  }
+  {
+    const Run = Make();
+    Check(Count, "A12: the three reference adapters lead the shipped roster", () => {
+      assert.deepEqual(
+        [Normalize, ToolCoach, Suggester].map((Adapter) => [
+          Adapter.id,
+          Adapter.bundle,
+          Adapter.namespace,
+          Adapter.order,
+          Adapter.slot
+        ]),
+        [
+          [
+            "adapter-hook-dsh-normalize-dash",
+            "@playform/ets-hook-dsh-normalize-dash",
+            "hook-dsh-normalize-dash",
+            10,
+            "playform.panel.section"
+          ],
+          [
+            "adapter-hook-dsh-tool-coach",
+            "@playform/ets-hook-dsh-tool-coach",
+            "hook-dsh-tool-coach",
+            30,
+            "playform.panel.section"
+          ],
+          [
+            "adapter-hook-dsh-convention-suggester",
+            "@playform/ets-hook-dsh-convention-suggester",
+            "hook-dsh-convention-suggester",
+            40,
+            "playform.panel.section"
+          ]
+        ]
+      );
+      assert.deepEqual(
+        Run.Effects.filter((Label) => Label.startsWith("panel: adapter ")).slice(0, 3),
+        [
+          "panel: adapter adapter-hook-dsh-normalize-dash",
+          "panel: adapter adapter-hook-dsh-tool-coach",
+          "panel: adapter adapter-hook-dsh-convention-suggester"
+        ]
+      );
+    });
+  }
+  return Finish(Count, "Reference-Adapter");
+};
+const InvokedDirectly = process.argv[1] !== void 0 && import.meta.url === (await import("node:url")).pathToFileURL(process.argv[1]).href;
+if (InvokedDirectly) {
+  const Pass = await runTest();
+  console.log(`${Pass} PASS - Reference-Adapter`);
+}
+export {
+  runTest
+};
+//# sourceMappingURL=Test.js.map
