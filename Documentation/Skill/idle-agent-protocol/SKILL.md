@@ -113,6 +113,9 @@ activation and not your own investigation.
 ## The laws that still apply
 
 - File content only through the write/raw-write/edit tools (`code-authoring`).
+- The naming law still applies: an acronym is written in capitals in every position (`Llm` is
+  `LLM`, `Amd` is `AMD`), a product name keeps its official spelling (`GitHub`, `vLLM`, `macOS`),
+  and a word is spelled in full.
 - A lane uses only the read, write, and edit tools; it does not run bash, node, git, prettier,
   python, or any other command, and the parent runs the verifiers read-only.
 - Git is checks only unless the spec explicitly says to commit, in which case you stage only your

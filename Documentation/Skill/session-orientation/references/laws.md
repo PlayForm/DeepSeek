@@ -1,6 +1,6 @@
 # The Laws (Short Form, With Owners)
 
-Five laws bind every agent in this repository.
+Six laws bind every agent in this repository.
 
 Each has one owner skill; the owner states the rule, and every other skill points to it.
 
@@ -63,11 +63,23 @@ The smokes assert the strings.
 
 Owner: `plugin-system`. Short form: the strings are the contract.
 
+## 6. The naming law
+
+An acronym is written in capitals in every position, including inside a PascalCase name, so `Llm`
+is `LLM`, `LlmProvider` is `LLMProvider`, and `Amd` is `AMD`.
+
+A product or project name keeps the official spelling that its vendor chose: `GitHub`, `vLLM`,
+`ROCm`, `macOS`, `Node.js`, `JavaScript`, `TypeScript`, `PostHog`, `pnpm`, and `npm`.
+
+A word is spelled in full: `Configuration`, not `Config`; `Documentation`, not `Docs`.
+
+Owner: `code-authoring`. Short form: a name that a reader must decode is wrong.
+
 ## The two verification laws
 
 These are not file rules but they decide when work is done.
 
-## 6. The smoke-arbiter law
+## 7. The smoke-arbiter law
 
 After every package change, the bundle's smoke suite passes with zero assertion changes.
 
@@ -77,7 +89,7 @@ A failing smoke means the change is wrong, not the smoke.
 
 Owner: `smoke-writing`. Short form: the suites judge the change, never the reverse.
 
-## 7. The build-as-verification law (the site)
+## 8. The build-as-verification law (the site)
 
 The site is verified by building it (`cd Site && pnpm prepublishOnly`) and inspecting the built HTML
 and CSS in `Site/Target/`.

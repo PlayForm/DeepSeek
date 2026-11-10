@@ -239,3 +239,7 @@ parent grepped the artifact for each claimed fix.
 The loop depends on `idle-agent-protocol`, `orchestrator-batch`, `task-routing`, `worker-strains`,
 `crawl4ai`, `reference-intake`, `source-pipeline`, and `code-authoring`, and each of those skills
 owns a part of the procedure that this skill only coordinates.
+
+Every file that the loop writes follows `code-authoring`'s naming law: acronyms in capitals (`Llm`
+is `LLM`, `Amd` is `AMD`), product names in their official spelling (`GitHub`, `vLLM`), and full
+words everywhere.

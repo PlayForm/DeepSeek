@@ -30,7 +30,8 @@ Those files are written with `raw-write`, and their characters are never replace
 - Instructional prose that says "this file contains an em dash" and must be true.
 - A byte-faithful copy of an existing file.
 - Do not use for: ordinary prose, code, or docs. Those are ASCII, written with `write`
-  (`code-authoring`).
+  (`code-authoring`), and their names follow that skill's acronym law: `Llm` is `LLM`, `Amd` is
+  `AMD`, and a product name keeps its official spelling.
 
 ## The rules
 

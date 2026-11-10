@@ -15,7 +15,9 @@
 - The session working directory is the workspace named in the runtime context.
 - The file policy (for example `danger-full-access`) governs what the sandbox permits.
 - Content goes through `read`, `write`, `raw-write`, `edit`, `grep`, and `glob`; the terminal runs
-  commands (`code-authoring`).
+  commands (`code-authoring`). Names follow the same law: an acronym is written in capitals (`Llm`
+  is `LLM`, `Amd` is `AMD`), a product name keeps its official spelling (`GitHub`, `vLLM`), and a
+  word is spelled in full.
 - The governed write path fires the live chain; terminal content operations do not.
 
 ## The web

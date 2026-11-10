@@ -110,3 +110,7 @@ A skill that has not changed in a month is either complete or unused, so check w
 ## References
 
 `delivery-workflow`, `request-pack`, `orchestrator-batch`, `worker-strains`, `code-authoring`.
+
+Every rule that this skill distills carries `code-authoring`'s naming law: acronyms in capitals
+(`Llm` is `LLM`, `Amd` is `AMD`), product names in their official spelling (`GitHub`, `vLLM`), and
+full words everywhere.
