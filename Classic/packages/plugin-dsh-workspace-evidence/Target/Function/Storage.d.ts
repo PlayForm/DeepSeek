@@ -32,6 +32,6 @@
  * load - the factory's live-verified pitfall); the type-only devDeps pin them
  * to the host-era versions.
  */
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 export default _default;
 declare function _default(State: State, Facility: unknown): Promise<void>;

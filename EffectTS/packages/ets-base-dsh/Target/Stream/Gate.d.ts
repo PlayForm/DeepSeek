@@ -1,3 +1,76 @@
+/**
+ * @module Gate
+ *
+ * The stream transformer: the Effect-TS v4 hook point of the
+ * stream-normalization family.
+ *
+ * @remarks
+ * The pure reducers (Stream/Chunk, Stream/Block, Stream/Strip) stay
+ * byte-identical; this module lifts them into a real `Stream<A, E, R>` so the
+ * waterfall boundary (docs/subsystems/llm-streaming.md, the plan's boundary
+ * 1) becomes pure adapter code:
+ *
+ * ```ts
+ * Stream.fromAsyncIterable(next(), onError)   the plain harness seam
+ *   .pipe(Gate(Replace, Reasoning, ToolArgs, onCount?))
+ * Stream.toAsyncIterable(stream)              back to the plain seam
+ * ```
+ *
+ * - other Effect transformers pipe directly onto the gate, and the
+ * `llm/stream` listener keeps its plain `(options, next) => AsyncIterable`
+ * signature with no fibers leaked.
+ *
+ * The behavior is equivalent to the Classic per-flavor async-generator
+ * wrapper (hook-dsh-normalize-<flavor>/Source/Function/Normalize.ts), which the
+ * smoke asserts at the reducer level (Stream/Chunk) - this transformer is the
+ * same state machine, expressed with Stream combinators:
+ *
+ * - CHUNK ORDER is preserved: one in, one out, strictly sequential -
+ *   `Stream.flatMap` is sequential by default (an undefined concurrency is
+ *   sequential in Effect v4), and each element fans out through
+ *   `Stream.fromIterable` over a one-element result (the multi-emission hook
+ *   point: a future gate that splits or injects chunks changes only the
+ *   array, not the pipeline).
+ * - UPSTREAM FAILURES PROPAGATE untouched: the reducer is pure and adds no
+ *   error handling, so a failed stream fails the gate stream with the same
+ *   error (the Classic generator's unguarded for-await).
+ * - THE STREAM IS NEVER BUFFERED: each upstream chunk is pulled, reduced and
+ *   emitted before the next pull - consumers see deltas live.
+ * - THE COUNT SUMMARY runs only after a normal completion (the Classic
+ *   post-loop Append): the summary is appended as a final, non-emitting
+ *   section (`Stream.concat` + `Stream.drain(Stream.fromEffect(...))`), so a
+ *   stream abandoned mid-flight never reaches it - a thrown-away stream
+ *   writes no ledger line, byte-identical semantics. With no `OnCount` the
+ *   gate is a pure chunk-to-chunk transformer.
+ *
+ * Per-call raw-marker state - local to this `Stream.suspend` thunk, never
+ * module-level (two concurrent streams must never share the state, an HMR
+ * reload must never inherit stale state, and re-running the same Stream value
+ * re-runs the thunk - fresh state per materialization):
+ *
+ * - `CurrentCall` - the tool-call id whose deltas are currently flowing; the
+ *   id is the per-call state boundary (the real 0.2.0-rc.2 ToolCallDelta
+ *   carries it on every delta, alongside its optional `name`).
+ * - `RawCall` - whether that call opened its arguments with the
+ *   `{"__normalize":false` marker (the FIRST key): a raw call passes through
+ *   the tool-args gate unnormalized - its explicit per-call opt-out - with
+ *   the marker entry itself stripped by the core (Stream/Strip), so the
+ *   executed call carries no unknown key.
+ * - The marker is detected on the first delta of the call - the delta that
+ *   carries the arguments start. A pathologically tiny first delta (shorter
+ *   than the marker) is the documented edge: its split text is invisible to
+ *   the startsWith probe and the call normalizes normally.
+ * - The edit/raw-write/normalize-file exemptions need no state here: the
+ *   core's dispatch (Stream/Chunk) exempts a delta/block whose `name` matches
+ *   on every chunk individually.
+ *
+ * The chunk/block shapes are structural copies of the reducers' internal ones
+ * (the family convention: the shapes are not exported, each consumer compiles
+ * against its own structural copy). The injected `Replace` transform must be
+ * pure and total on any string; `OnCount` receives the stream's total
+ * normalized-character count (marker strips excluded - the reducers keep
+ * count 0 for those) exactly once, after the last chunk.
+ */
 import { Stream } from "effect";
 type BlockShape = {
     type: "text";

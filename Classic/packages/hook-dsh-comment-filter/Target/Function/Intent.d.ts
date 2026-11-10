@@ -28,6 +28,6 @@
  * FAIL-OPEN: anything that throws (a malformed payload, a weird content shape) leaves the
  * previous stash untouched and the decision unchanged - never throw into the waterfall.
  */
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 export default _default;
 declare function _default<Decision>(Payload: unknown, Next: () => Promise<Decision>, State: State): Promise<Decision>;

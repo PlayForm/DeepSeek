@@ -18,7 +18,7 @@
  * ordered by (order, id), optionally filtered to one slot. Every accepted
  * mutation bumps the version and notifies the subscribers.
  */
-import type { LaunchTarget, PanelRegistry } from "../Interface/Panel.js";
+import type { LaunchTarget, PanelRegistry } from "@Interface/Panel.js";
 export default function Registry(Log?: (line: string) => void): PanelRegistry & {
     Open: (target: LaunchTarget) => void;
     AttachOpen: (open: (target: LaunchTarget) => void) => void;

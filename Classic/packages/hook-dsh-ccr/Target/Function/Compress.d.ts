@@ -38,7 +38,7 @@
  * store keeps what the model would have seen.
  */
 import type { ContentBlock } from "@deepseek-ai/dsh-llm";
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 import type { Eviction } from "./Store.js";
 /**
  * The verdict: pass, store-only (auto-expand), or replace (preview + marker).

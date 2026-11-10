@@ -8,7 +8,7 @@
  * signature documentation and the parameter contract live on the transform
  * interface below.
  */
-import type Output from "./Output.js";
+import type Output from "@Interface/Output.js";
 /**
  * The module-supplied pure function at the heart of the detached contained
  * continuation (Function/Continue).

@@ -9,8 +9,8 @@
  * given. Every decision is recorded on the pending entry and logged as one
  * ledger line by the caller; the gate logs nothing.
  */
-import type { BatchDecision, BatchProposal } from "@Interface/Batch.js";
-import type State from "@Interface/State.js";
+import type { BatchDecision, BatchProposal } from "../Interface/Batch.js";
+import type State from "../Interface/State.js";
 export default _default;
 /**
  * Decide one proposal. Returns the recorded decision, or undefined when the

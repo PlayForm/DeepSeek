@@ -1,4 +1,4 @@
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 export default _default;
 /**
  * Open the CCR hook's own domain (best-effort, never awaited by the

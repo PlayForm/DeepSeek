@@ -21,7 +21,7 @@
  * signature with no fibers leaked.
  *
  * The behavior is equivalent to the Classic per-flavor async-generator
- * wrapper (hook-dsh-normalize-*/Source/Function/Normalize.ts), which the
+ * wrapper (hook-dsh-normalize-<flavor>/Source/Function/Normalize.ts), which the
  * smoke asserts at the reducer level (Stream/Chunk) - this transformer is the
  * same state machine, expressed with Stream combinators:
  *

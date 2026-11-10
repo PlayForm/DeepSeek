@@ -38,7 +38,7 @@
  * into a pipeline failure.
  */
 import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 /**
  * The structural tool execution: only the fields the delegate reads.
  */

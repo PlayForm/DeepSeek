@@ -1,0 +1,1 @@
+const x="<<<CCR:";var i=(n,s,u)=>{let r=!1;const a=n.map(t=>{switch(!0){case(t?.type!=="text"||typeof t?.text!="string"):return t;case t.text.includes(x):return t}const e=s(t.text);return!0===(e.count===0)?t:(r=!0,u.value+=e.count,{...t,text:e.text})});return r?a:n};export{i as default};

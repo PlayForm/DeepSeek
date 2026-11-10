@@ -51,7 +51,7 @@
  * The human ledger stays the complete record; the storage journal is the
  * structured, disposable one.
  */
-import type State from "../Interface/State.js";
+import type State from "@Interface/State.js";
 import { Context, Effect, Layer } from "effect";
 /**
  * The P5 events enum - byte-identical order, asserted by the smoke.

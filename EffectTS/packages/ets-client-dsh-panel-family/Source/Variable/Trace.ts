@@ -16,18 +16,28 @@ const Indexed = "graph/indexed";
 const Invalidated = "graph/invalidated";
 
 export default {
-	/** The service name the factory provides on the host (`ctx.trace`). */
+	/**
+	 * The service name the factory provides on the host (`ctx.trace`).
+	 */
 	service: "trace",
 
-	/** The observe hook's recorded stamp (the indexer's first source). */
+	/**
+	 * The observe hook's recorded stamp (the indexer's first source).
+	 */
 	observe: Observe,
 
-	/** The graph stored (or replaced) a file record. */
+	/**
+	 * The graph stored (or replaced) a file record.
+	 */
 	indexed: Indexed,
 
-	/** The graph's record for a path is no longer valid. */
+	/**
+	 * The graph's record for a path is no longer valid.
+	 */
 	invalidated: Invalidated,
 
-	/** The three names an adapter follows when its manifest declares none. */
+	/**
+	 * The three names an adapter follows when its manifest declares none.
+	 */
 	kinds: [Observe, Indexed, Invalidated],
 } as const;

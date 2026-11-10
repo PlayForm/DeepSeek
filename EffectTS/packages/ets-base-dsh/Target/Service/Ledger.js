@@ -1,0 +1,1 @@
+import{Context as a,Effect as e,Layer as d}from"effect";import p from"../Function/Append.js";class o extends a.Service()("dsh.factory.Ledger"){}const c=()=>d.succeed(o,{append:(t,r)=>e.asVoid(e.exit(e.sync(()=>p(t,r)).pipe(e.withSpan("dsh.ledger.append",{attributes:{module:t.Module}}))))});export{o as Ledger,c as layer};

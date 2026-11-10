@@ -1,0 +1,1 @@
+import{Context as a,Effect as s,Layer as o}from"effect";import p from"../Function/Write.js";class f extends a.Service()("dsh.factory.Write"){}const m=()=>o.succeed(f,{write:(e,t,r,i)=>p(e,t,r,i??{}).pipe(s.withSpan("dsh.write",{attributes:{target:t.displayPath}}))});export{f as Write,m as layer};

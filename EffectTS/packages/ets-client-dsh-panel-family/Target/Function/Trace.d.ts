@@ -12,5 +12,5 @@
  * documented static fallback - the panel never throws over an absent trace.
  */
 import type { Context } from "@deepseek-ai/cordis";
-import type { PanelTrace } from "../Interface/Trace.js";
+import type { PanelTrace } from "@Interface/Trace.js";
 export default function Trace(ctx: Context): PanelTrace | undefined;
