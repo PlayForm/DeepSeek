@@ -1,10 +1,3 @@
-// Pack - the embedded pattern-pack types (SEARCH-SUGGESTER-PLUGIN.md §8.2,
-// the pack-as-data contract; the convention consumer's projection per §9.4).
-// This hook is a suggester-family CONSUMER that carries its own private pack
-// (the two-consumer extraction rule: no shared core service until the family
-// proves two consumers; an explicit repo/user pack is the data). The types here
-// are the contract both the classifier (Function/Detect) and the note
-// builder consume.
 /**
  * @module Pack
  *

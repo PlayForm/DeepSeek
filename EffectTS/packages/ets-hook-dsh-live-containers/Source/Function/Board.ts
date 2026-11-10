@@ -1,17 +1,23 @@
-// Board - the planted-block surface (CAN-2, I5 PLANTED-LEASE;
-// IMPLEMENTATION-DESIGN.md sections 3.4, 4.4 as amended). A planted block is
-// a LEASE: the board declares its reporters and a window of N consecutive
-// parent turns without a foldable report from a running member; on expiry the
-// block SELF-DECLARES the stale row - and that declaration IS the CAN-4
-// delegation-stall failsafe trigger (the engine consumes lease.declared; no
-// parallel timer).
-//
-// STATE: the board lives in the parent's per-agent state (keyed on the
-// agent's session id) - it dies with the agent; no orphan boards survive.
-//
-// RENDER SURFACES (I5 1.3): the standing section carries running boards; the
-// stale declarations are section changes at the next parent request. There is
-// no completion-style dynamic context for boards - a board is RUNNING state.
+/**
+ * @module Board
+ *
+ * Opens, folds and renders the planted-block boards of the live-container surface.
+ *
+ * @remarks
+ * The planted-block surface (CAN-2, I5 PLANTED-LEASE; IMPLEMENTATION-DESIGN.md sections
+ * 3.4, 4.4 as amended). A planted block is a LEASE: the board declares its reporters and
+ * a window of N consecutive parent turns without a foldable report from a running
+ * member; on expiry the block SELF-DECLARES the stale row - and that declaration IS the
+ * CAN-4 delegation-stall failsafe trigger (the engine consumes lease.declared; no
+ * parallel timer).
+ *
+ * STATE: the board lives in the parent's per-agent state (keyed on the agent's session
+ * id) - it dies with the agent; no orphan boards survive.
+ *
+ * RENDER SURFACES (I5 1.3): the standing section carries running boards; the stale
+ * declarations are section changes at the next parent request. There is no
+ * completion-style dynamic context for boards - a board is RUNNING state.
+ */
 import Clock from "@Function/Clock.js";
 import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
 import * as Policy from "@Function/Policy.js";
@@ -19,16 +25,22 @@ import type { Log } from "@Function/Render.js";
 import type { BoardMember, BoardState, JobEvent, LeaseEntry } from "@Interface/Events.js";
 import type State from "@Interface/State.js";
 
-/** The byte length of one string. */
+/**
+ * The byte length of one string.
+ */
 const Bytes = (Text: string): number => Buffer.byteLength(Text, "utf8");
 
-/** Cap one string to N bytes, single line (the row payload cap). */
+/**
+ * Cap one string to N bytes, single line (the row payload cap).
+ */
 const Cap = (Text: string, Maximum: number): string => {
 	const Cut = Text.split("\n")[0] ?? "";
 	return Cut.length > Maximum ? Cut.slice(0, Maximum) : Cut;
 };
 
-/** The boards of one agent. */
+/**
+ * The boards of one agent.
+ */
 export const For = (Agent: State, AgentID: string): Map<string, BoardState> => {
 	const Existing = Agent.Boards.get(AgentID);
 	if (Existing !== undefined) {
@@ -39,7 +51,9 @@ export const For = (Agent: State, AgentID: string): Map<string, BoardState> => {
 	return Fresh;
 };
 
-/** The fresh member row. */
+/**
+ * The fresh member row.
+ */
 const NewMember = (AgentID: string): BoardMember => ({
 	agentId: AgentID,
 	status: "running",
@@ -49,8 +63,10 @@ const NewMember = (AgentID: string): BoardMember => ({
 	settledAt: undefined,
 });
 
-/** Open one board (the live_plant path). The ledger order: plant opened
- * first, then the enrollments (I5: enrollment opens the lease entries). */
+/**
+ * Open one board (the live_plant path). The ledger order: plant opened first, then the
+ * enrollments (I5: enrollment opens the lease entries).
+ */
 export const Open = (
 	Agent: State,
 	AgentID: string,
@@ -107,8 +123,10 @@ export const Open = (
 	return Board;
 };
 
-/** Enroll one member with the FULL lease window (I5 5.3: a late enrollee
- * gets the full window; the board's open time does not eat the grace). */
+/**
+ * Enroll one member with the FULL lease window (I5 5.3: a late enrollee gets the full
+ * window; the board's open time does not eat the grace).
+ */
 export const Enroll = (Agent: State, Board: BoardState, AgentID: string, Append: Log): boolean => {
 	if (Board.members.some((Member) => Member.agentId === AgentID)) {
 		return false;
@@ -131,11 +149,13 @@ export const Enroll = (Agent: State, Board: BoardState, AgentID: string, Append:
 	return true;
 };
 
-/** Fold one explicit report (the L7 pickup; the grammar is checked by the
- * caller): `[live-report] <plantId> <agentId> <status> <payload>`. Idempotent
- * per (plantId, agentId, turn): a second report resets the same lease entry
- * and shows the newest payload (I5 5.1); the coalescing window (I5 6.1)
- * allows one lease reset per reportRateMs. */
+/**
+ * Fold one explicit report (the L7 pickup; the grammar is checked by the caller):
+ * `[live-report] <plantId> <agentId> <status> <payload>`. Idempotent per (plantId,
+ * agentId, turn): a second report resets the same lease entry and shows the newest
+ * payload (I5 5.1); the coalescing window (I5 6.1) allows one lease reset per
+ * reportRateMs.
+ */
 export const Report = (
 	Agent: State,
 	Board: BoardState,
@@ -225,8 +245,10 @@ export const Report = (
 	Append(`report ${Board.id} ${AgentID} (${Bytes(Payload)} bytes)`);
 };
 
-/** The L6 settle hook: a child job's settlement flips the member's row (the
- * board truth source, carriers 1-2). Jobs owned by member sessions only. */
+/**
+ * The L6 settle hook: a child job's settlement flips the member's row (the board truth
+ * source, carriers 1-2). Jobs owned by member sessions only.
+ */
 export const OnSettled = (Agent: State, Event: JobEvent, Append: Log): void => {
 	if (Event.type !== "settled") {
 		return;
@@ -274,11 +296,13 @@ export const OnSettled = (Agent: State, Event: JobEvent, Append: Log): void => {
 	}
 };
 
-/** The parent-turn hook (the lease decrement, I5 2.2): one assemble pass = one
- * parent turn. A member whose last report predates the PREVIOUS assemble pass
- * had no foldable report in the last turn window and decrements; any report
- * folded since resets to the full window. The declaration renders in the SAME
- * assembly's frame (the decrement runs before render). */
+/**
+ * The parent-turn hook (the lease decrement, I5 2.2): one assemble pass = one parent
+ * turn. A member whose last report predates the PREVIOUS assemble pass had no foldable
+ * report in the last turn window and decrements; any report folded since resets to the
+ * full window. The declaration renders in the SAME assembly's frame (the decrement runs
+ * before render).
+ */
 export const OnTurn = (Agent: State, AgentID: string, Append: Log): void => {
 	const At = Clock(Agent);
 	for (const [, Board] of For(Agent, AgentID)) {
@@ -325,14 +349,18 @@ export const OnTurn = (Agent: State, AgentID: string, Append: Log): void => {
 	}
 };
 
-/** The stale declaration row (I5 3.1, byte-exact). */
+/**
+ * The stale declaration row (I5 3.1, byte-exact).
+ */
 export const StaleRow = (AgentID: string, Turns: number): string =>
 	`[stale]     ${AgentID} - unreported for ${Turns} parent turns; re-dispatch or mark failed`;
 
-/** The failsafe hook (I5 4.1): the declaration IS the trigger - on prune,
- * drop the member from the expect count (only after the stale row rendered
- * at least one assembly, I5 4.2). The prune is the lease's only automatic
- * modification and counts against failsafesPerTurn (I5 4.3). */
+/**
+ * The failsafe hook (I5 4.1): the declaration IS the trigger - on prune, drop the member
+ * from the expect count (only after the stale row rendered at least one assembly, I5
+ * 4.2). The prune is the lease's only automatic modification and counts against
+ * failsafesPerTurn (I5 4.3).
+ */
 export const FailsafeStall = (Agent: State, AgentID: string, Append: Log): void => {
 	if (Agent.Failsafes !== "on" || Agent.Plant.stallAction !== "prune") {
 		return;
@@ -362,13 +390,16 @@ export const FailsafeStall = (Agent: State, AgentID: string, Append: Log): void 
 	}
 };
 
-/** The row label padding: label then spaces to column 12 (I5 3.1). */
+/**
+ * The row label padding: label then spaces to column 12 (I5 3.1).
+ */
 const Row = (Label: string, Body: string): string =>
 	`${Label}${" ".repeat(Math.max(1, 12 - Label.length))}${Body}`;
 
-/** The `[live-report] monitored` outcome word -> the row's outcome text (the
- * design section 8: the outcome word first, the path is the rest of the
- * payload). */
+/**
+ * The `[live-report] monitored` outcome word -> the row's outcome text (the design
+ * section 8: the outcome word first, the path is the rest of the payload).
+ */
 const MONITORED_OUTCOMES: Record<string, string> = {
 	clean: "clean (\u2204)",
 	problem: "problem (!)",
@@ -378,7 +409,9 @@ const MONITORED_OUTCOMES: Record<string, string> = {
 	denied: "check denied (sandbox) (x)",
 };
 
-/** The agent-board frame (D2 4.4 + I5, byte-exact). */
+/**
+ * The agent-board frame (D2 4.4 + I5, byte-exact).
+ */
 export const Frame = (Agent: State, Board: BoardState, Separator: string): string => {
 	const At = Clock(Agent);
 
@@ -509,14 +542,18 @@ export const Frame = (Agent: State, Board: BoardState, Separator: string): strin
 	return Lines.join("\n");
 };
 
-/** The closing line (I5 7.2, byte-exact variants). */
+/**
+ * The closing line (I5 7.2, byte-exact variants).
+ */
 export const ClosingLine = (Board: BoardState, Seconds: number): string =>
 	Board.pruned > 0
 		? `board closed: ${Board.members.filter((Member) => Member.status === "done").length}/${Board.expect} done, ${Board.pruned} pruned stale in ${Seconds}s`
 		: `board closed: ${Board.members.filter((Member) => Member.status === "done").length}/${Board.expect} done in ${Seconds}s`;
 
-/** The standing-section contribution for one agent, as SEPARATE frames (the
- * collapse pass needs per-frame granularity). Returns [] when nothing renders. */
+/**
+ * The standing-section contribution for one agent, as SEPARATE frames (the collapse pass
+ * needs per-frame granularity). Returns [] when nothing renders.
+ */
 export const SectionParts = (
 	Agent: State,
 	AgentID: string,
@@ -584,9 +621,11 @@ export const SectionParts = (
 	return [];
 };
 
-/** The standing-section contribution for one agent (the wave-2 body): the
- * header caveat + fleet line, the live-job frames, the board frames. Returns
- * "" when nothing renders (the phase-1 section is then byte-identical). */
+/**
+ * The standing-section contribution for one agent (the wave-2 body): the header caveat +
+ * fleet line, the live-job frames, the board frames. Returns "" when nothing renders
+ * (the phase-1 section is then byte-identical).
+ */
 export const SectionBody = (
 	Agent: State,
 	AgentID: string,
@@ -594,9 +633,11 @@ export const SectionBody = (
 	Append: Log,
 ): string => SectionParts(Agent, AgentID, Separator, Append).join("\n");
 
-/** The deadline scan: the live-timeout kill (J7) and the hang failsafe (F1).
- * Called at every assemble pass and on every jobs event - the checkpoint
- * design (no real timers; the next event is the bound). */
+/**
+ * The deadline scan: the live-timeout kill (J7) and the hang failsafe (F1). Called at
+ * every assemble pass and on every jobs event - the checkpoint design (no real timers;
+ * the next event is the bound).
+ */
 export const ScanDeadlines = (Agent: State, Append: Log): void => {
 	const At = Clock(Agent);
 	for (const [AgentID, Records] of Agent.Detached) {

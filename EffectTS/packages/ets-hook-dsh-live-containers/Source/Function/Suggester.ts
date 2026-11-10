@@ -1,28 +1,38 @@
-// Suggester - the CAN-5 mini-conversation suggester (I6 SUGGESTER-CONFIGURED;
-// IMPLEMENTATION-DESIGN.md sections 2.6, 3.8, 4.5 as amended). The suggester
-// does not suggest a template NAME; it suggests a CONFIGURED block: a one-shot
-// detached subagent receives the request excerpt + the compressed catalog +
-// the task facts, and returns a strict JSON suggestion carrying the template
-// id and the opening variables (expectAgents / steps - the frozen v1 token
-// grammar, I6 R1). The suggestion arrives AS A PLANTED BLOCK (the "plant"
-// mode) or as the plain note (the "section" tier), and the main conversation
-// accepts or dismisses it with a ONE-WORD command on live_container_set.
-//
-// PRIVACY (ratified): default "redact" for every route (the first 200 chars
-// of the request plus its length); "verbatim" only by explicit config, with
-// the SCHEME disclosure as the consent surface.
-//
-// CONTAINMENT: the suggestion runs DETACHED; a spawn/timeout/parse failure
-// produces ONLY a ledger line, never a conversation artifact, never a retry
-// within the same turn. With suggester "off" nothing spawns (the zero-subagent
-// guarantee, provable by the smoke harness's spawn counter).
+/**
+ * @module Suggester
+ *
+ * Spawns a one-shot detached subagent that proposes a configured block and stores its
+ * verdict.
+ *
+ * @remarks
+ * The CAN-5 mini-conversation suggester (I6 SUGGESTER-CONFIGURED;
+ * IMPLEMENTATION-DESIGN.md sections 2.6, 3.8, 4.5 as amended). The suggester does not
+ * suggest a template NAME; it suggests a CONFIGURED block: a one-shot detached subagent
+ * receives the request excerpt + the compressed catalog + the task facts, and returns a
+ * strict JSON suggestion carrying the template id and the opening variables
+ * (expectAgents / steps - the frozen v1 token grammar, I6 R1). The suggestion arrives AS
+ * A PLANTED BLOCK (the "plant" mode) or as the plain note (the "section" tier), and the
+ * main conversation accepts or dismisses it with a ONE-WORD command on
+ * live_container_set.
+ *
+ * PRIVACY (ratified): default "redact" for every route (the first 200 chars of the
+ * request plus its length); "verbatim" only by explicit config, with the SCHEME
+ * disclosure as the consent surface.
+ *
+ * CONTAINMENT: the suggestion runs DETACHED; a spawn/timeout/parse failure produces ONLY
+ * a ledger line, never a conversation artifact, never a retry within the same turn. With
+ * suggester "off" nothing spawns (the zero-subagent guarantee, provable by the smoke
+ * harness's spawn counter).
+ */
 import Clock from "@Function/Clock.js";
 import type { Log } from "@Function/Render.js";
 import type { BoardState, Suggestion } from "@Interface/Events.js";
 import type State from "@Interface/State.js";
 import { Compressed, Entry } from "@Variable/Catalog.js";
 
-/** The suggestion id grammar (I6 3.3): `sug-<4 hex>`, per-agent-keyed. */
+/**
+ * The suggestion id grammar (I6 3.3): `sug-<4 hex>`, per-agent-keyed.
+ */
 export const NewID = (): string => {
 	const Hex = Math.floor(Math.random() * 0x10000)
 		.toString(16)
@@ -30,12 +40,16 @@ export const NewID = (): string => {
 	return `sug-${Hex}`;
 };
 
-/** The skip words (I6 6.1): the user is driving manually. */
+/**
+ * The skip words (I6 6.1): the user is driving manually.
+ */
 const SKIP_WORDS: readonly string[] = ["live container", "plant", "suggestion"];
 
-/** The gate (I6 6.1, conjunctive): first user message of a turn AND length
- * >= suggestGateMinChars AND no skip word AND the rate cap allows it AND at
- * most one suggestion per user turn. */
+/**
+ * The gate (I6 6.1, conjunctive): first user message of a turn AND length >=
+ * suggestGateMinChars AND no skip word AND the rate cap allows it AND at most one
+ * suggestion per user turn.
+ */
 export const Gate = (
 	Agent: State,
 	AgentID: string,
@@ -66,9 +80,10 @@ export const Gate = (
 	return true;
 };
 
-/** The request excerpt (I6 section 2): "redact" sends the first 200 chars
- * plus the total length; "verbatim" forwards the whole excerpt capped at
- * maxPromptBytes. */
+/**
+ * The request excerpt (I6 section 2): "redact" sends the first 200 chars plus the total
+ * length; "verbatim" forwards the whole excerpt capped at maxPromptBytes.
+ */
 export const Excerpt = (Agent: State, Text: string): string => {
 	if (Agent.SuggesterPrivacy === "verbatim") {
 		return Text.length > Agent.MaximumPromptBytes
@@ -81,8 +96,10 @@ export const Excerpt = (Agent: State, Text: string): string => {
 	return `${Text.slice(0, 200)} [truncated, ${Text.length} chars]`;
 };
 
-/** The composed prompt (I6 section 2): the excerpt + the compressed catalog +
- * the task facts the plugin already holds. */
+/**
+ * The composed prompt (I6 section 2): the excerpt + the compressed catalog + the task
+ * facts the plugin already holds.
+ */
 export const Compose = (Agent: State, AgentID: string, Text: string): string => {
 	const Records = Agent.Detached.get(AgentID);
 	let LiveJobs = 0;
@@ -110,8 +127,10 @@ export const Compose = (Agent: State, AgentID: string, Text: string): string => 
 	].join("\n");
 };
 
-/** Parse the mini-model's answer (I6 section 2): strict JSON; a parse
- * failure, a missing field, or an unknown templateId -> no suggestion. */
+/**
+ * Parse the mini-model's answer (I6 section 2): strict JSON; a parse failure, a missing
+ * field, or an unknown templateId -> no suggestion.
+ */
 export interface ParsedSuggestion {
 	fit: "yes" | "no" | "unknown";
 	templateId: string;
@@ -170,9 +189,11 @@ export const Parse = (Output: unknown): ParsedSuggestion | undefined => {
 	}
 };
 
-/** Clamp the tokens to legal bounds (I6 3.2): the plugin never trusts the
- * mini-model; out-of-range or malformed tokens clamp to the nearest legal
- * value and each clamp is ledgered. Returns the clamped tokens. */
+/**
+ * Clamp the tokens to legal bounds (I6 3.2): the plugin never trusts the mini-model;
+ * out-of-range or malformed tokens clamp to the nearest legal value and each clamp is
+ * ledgered. Returns the clamped tokens.
+ */
 export const Clamp = (
 	ID: string,
 	TemplateID: string,
@@ -213,8 +234,10 @@ export const Clamp = (
 	return Clamped;
 };
 
-/** Store a suggestion (the parse success path); the id is assigned by the
- * caller before the clamping. */
+/**
+ * Store a suggestion (the parse success path); the id is assigned by the caller before
+ * the clamping.
+ */
 export const Store = (
 	Agent: State,
 	AgentID: string,
@@ -265,8 +288,10 @@ export const Store = (
 	return Suggestion_;
 };
 
-/** The board module's Open, bound at registration (avoids a top-level import
- * cycle: Board imports nothing from Suggester). */
+/**
+ * The board module's Open, bound at registration (avoids a top-level import cycle: Board
+ * imports nothing from Suggester).
+ */
 type BoardOpenFn = (
 	Agent: State,
 	AgentID: string,
@@ -279,13 +304,17 @@ type BoardOpenFn = (
 ) => BoardState;
 let BoardOpen: BoardOpenFn | undefined;
 
-/** Bind the board module's Open (called once from Apply). */
+/**
+ * Bind the board module's Open (called once from Apply).
+ */
 export const BindBoard = (Open_: BoardOpenFn): void => {
 	BoardOpen = Open_;
 };
 
-/** The dormant planted block (I6 5.5): the header carries the accept verb;
- * accept=<sid> activates it; dismiss=<sid> withdraws it. */
+/**
+ * The dormant planted block (I6 5.5): the header carries the accept verb; accept=<sid>
+ * activates it; dismiss=<sid> withdraws it.
+ */
 const PlantDormant = (
 	Agent: State,
 	AgentID: string,
@@ -311,8 +340,10 @@ const PlantDormant = (
 	Board.suggestionId = Suggestion_.id;
 };
 
-/** The spawn (I6 1.1): one detached one-shot subagent per qualifying turn on
- * the exploration strain's route. Failures produce ONLY a ledger line. */
+/**
+ * The spawn (I6 1.1): one detached one-shot subagent per qualifying turn on the
+ * exploration strain's route. Failures produce ONLY a ledger line.
+ */
 export const Spawn = (
 	Agent: State,
 	AgentID: string,
@@ -380,8 +411,10 @@ export const Spawn = (
 	}
 };
 
-/** The pre-step hook (the I6 6.1 trigger): evaluate the gate on a new user
- * message and spawn when it passes. Called from the L8 listener. */
+/**
+ * The pre-step hook (the I6 6.1 trigger): evaluate the gate on a new user message and
+ * spawn when it passes. Called from the L8 listener.
+ */
 export const OnUserMessage = (
 	Agent: State,
 	AgentID: string,
@@ -406,7 +439,9 @@ export const OnUserMessage = (
 	}
 };
 
-/** The configured-block suggestion frame (I6 section 4, byte-exact). */
+/**
+ * The configured-block suggestion frame (I6 section 4, byte-exact).
+ */
 export const Frame = (Agent: State, Suggestion_: Suggestion, Separator: string): string => {
 	const Catalog = Entry(Suggestion_.templateId);
 	const Lines: string[] = [
@@ -427,7 +462,9 @@ export const Frame = (Agent: State, Suggestion_: Suggestion, Separator: string):
 	return Lines.join("\n");
 };
 
-/** The plain note (D2 4.5 verbatim, the "section" tier). */
+/**
+ * The plain note (D2 4.5 verbatim, the "section" tier).
+ */
 export const PlainFrame = (Suggestion_: Suggestion, Separator: string): string =>
 	[
 		`${Separator} LIVE SUGGESTION (from a small helper model; act only if useful) ${Separator}`,
@@ -437,8 +474,10 @@ export const PlainFrame = (Suggestion_: Suggestion, Separator: string): string =
 		`${Separator} END LIVE SUGGESTION ${Separator}`,
 	].join("\n");
 
-/** The standing-section contribution for the suggestions of one agent (the
- * one-assembly window: render once, then withdraw with the expiry line). */
+/**
+ * The standing-section contribution for the suggestions of one agent (the one-assembly
+ * window: render once, then withdraw with the expiry line).
+ */
 export const SectionBody = (
 	Agent: State,
 	AgentID: string,
@@ -482,8 +521,10 @@ export const SectionBody = (
 	return Parts.join("\n");
 };
 
-/** Accept one suggestion (I6 5.1): instantiate the stored, clamped
- * configuration verbatim. Returns the ledger line. */
+/**
+ * Accept one suggestion (I6 5.1): instantiate the stored, clamped configuration
+ * verbatim. Returns the ledger line.
+ */
 export const Accept = (Agent: State, AgentID: string, ID: string, Append: Log): string => {
 	const PerAgent = Agent.Suggestions.get(AgentID);
 	const Suggestion_ = PerAgent?.get(ID);
@@ -539,8 +580,10 @@ export const Accept = (Agent: State, AgentID: string, ID: string, Append: Log): 
 	return `suggestion accepted ${ID} (${Suggestion_.templateId})`;
 };
 
-/** Dismiss one suggestion (I6 5.2/5.3/5.5): the frame or dormant block
- * withdraws with the distinct ledger line. */
+/**
+ * Dismiss one suggestion (I6 5.2/5.3/5.5): the frame or dormant block withdraws with the
+ * distinct ledger line.
+ */
 export const Dismiss = (
 	Agent: State,
 	AgentID: string,

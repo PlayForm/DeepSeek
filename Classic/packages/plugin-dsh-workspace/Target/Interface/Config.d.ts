@@ -16,7 +16,7 @@
  * WAVE-1-BRIEF.md section 4.5 - the distribution law: each package's Config its
  * own).
  */
-import type { NodeKind } from "@Interface/Graph.js";
+import type { NodeKind } from "./Graph.js";
 import type { Allowlist } from "@playform/plugin-dsh-factory";
 /**
  * The agent's config (the family's surface knobs, all volatile).

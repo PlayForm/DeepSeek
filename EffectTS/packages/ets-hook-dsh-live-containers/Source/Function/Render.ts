@@ -1,27 +1,35 @@
-// Render - the substitution engine and the section builder (research section
-// 3 + IMPLEMENTATION-DESIGN.md section 3.1, phase 1). {{token}} replace ONLY
-// - no eval, no expressions, no `new Function` (research section 5: the
-// programmable stage routes evaluation through the ptc-runtime later; v1 has
-// no evaluation path at all, provable by grep in the smoke suite). An
-// unknown token renders LITERALLY and logs `render unknown <id> <token>` -
-// never a failure (the harness's own unresolved-variable failure must never
-// be inherited; this section is contributed with interpolate: false, so only
-// this engine touches its tokens).
-//
-// Every enabled block renders inside the FIXED frame so the model cannot
-// mistake it for harness state:
-//
-//   --- LIVE CONTAINER <id> (recomputed each request; not harness state) ---
-//   <rendered body>
-//   --- END LIVE CONTAINER <id> ---
-//
-// (the dashes come from config `separator`, default `---`). The section body
-// is one frame per rendered block, joined with newlines; when it exceeds
-// config `sectionBudgetBytes`, the OLDEST frames collapse to one-line
-// summaries - never silently dropped (ledger `failsafe section-collapse <n>`).
-//
-// Fail-open: a render failure skips the block and logs
-// `render failed <id> -> skipped`; the assembly still resolves.
+/**
+ * @module Render
+ *
+ * Substitutes tokens into block templates and builds the live section body.
+ *
+ * @remarks
+ * The substitution engine and the section builder (research section 3 +
+ * IMPLEMENTATION-DESIGN.md section 3.1, phase 1). {{token}} replace ONLY - no eval, no
+ * expressions, no `new Function` (research section 5: the programmable stage routes
+ * evaluation through the ptc-runtime later; v1 has no evaluation path at all, provable by
+ * grep in the smoke suite). An unknown token renders LITERALLY and logs `render unknown
+ * <id> <token>` - never a failure (the harness's own unresolved-variable failure must
+ * never be inherited; this section is contributed with interpolate: false, so only this
+ * engine touches its tokens).
+ *
+ * Every enabled block renders inside the FIXED frame so the model cannot mistake it for
+ * harness state:
+ *
+ * ```
+ * --- LIVE CONTAINER <id> (recomputed each request; not harness state) ---
+ * <rendered body>
+ * --- END LIVE CONTAINER <id> ---
+ * ```
+ *
+ * (the dashes come from config `separator`, default `---`). The section body is one frame
+ * per rendered block, joined with newlines; when it exceeds config
+ * `sectionBudgetBytes`, the OLDEST frames collapse to one-line summaries - never silently
+ * dropped (ledger `failsafe section-collapse <n>`).
+ *
+ * Fail-open: a render failure skips the block and logs `render failed <id> -> skipped`;
+ * the assembly still resolves.
+ */
 import Clock from "@Function/Clock.js";
 import { Table } from "@Function/Counters.js";
 import {
@@ -33,18 +41,25 @@ import {
 } from "@Interface/Execution.js";
 import type State from "@Interface/State.js";
 
-/** The ledger sink Apply passes down (Factory.Append with the State bound). */
+/**
+ * The ledger sink Apply passes down (Factory.Append with the State bound).
+ */
 export type Log = (Message: string) => void;
 
-/** The strict {{token}} grammar: one replace pass, no nesting, no expressions. */
+/**
+ * The strict {{token}} grammar: one replace pass, no nesting, no expressions.
+ */
 const Token = /\{\{([^{}]+)\}\}/g;
 
-/** The bytes of one string (the ledger's (<len> bytes) values). */
+/**
+ * The bytes of one string (the ledger's (<len> bytes) values).
+ */
 const Bytes = (Text: string): number => Buffer.byteLength(Text, "utf8");
 
-/** Substitute {{token}} groups from the variable table. A token the table
- * does not resolve stays literal and logs `render unknown <id> <token>`
- * (once per token per pass). */
+/**
+ * Substitute {{token}} groups from the variable table. A token the table does not resolve
+ * stays literal and logs `render unknown <id> <token>` (once per token per pass).
+ */
 export const Substitute = (Template: string, Vars: Variables, ID: string, Append: Log): string => {
 	const Unknown = new Set<string>();
 	const Text = Template.replace(Token, (Whole, Name: string) => {
@@ -64,16 +79,22 @@ export const Substitute = (Template: string, Vars: Variables, ID: string, Append
 	return Text;
 };
 
-/** The fixed frame around one block body (the model-facing contract). */
+/**
+ * The fixed frame around one block body (the model-facing contract).
+ */
 export const Frame = (Separator: string, ID: string, Body: string): string =>
 	`${Separator} LIVE CONTAINER ${ID} (recomputed each request; not harness state) ${Separator}\n${Body}\n${Separator} END LIVE CONTAINER ${ID} ${Separator}`;
 
-/** The one-line summary a collapsed frame leaves behind (never silent). */
+/**
+ * The one-line summary a collapsed frame leaves behind (never silent).
+ */
 const Summary = (Separator: string, ID: string, Length: number): string =>
 	`${Separator} LIVE CONTAINER ${ID} (collapsed, ${Length} bytes; not harness state) ${Separator}`;
 
-/** The built-in tokens each kind resolves (phase 1; `template` resolves the
- * whole table). Per-block `vars` override the built-ins. */
+/**
+ * The built-in tokens each kind resolves (phase 1; `template` resolves the whole table).
+ * Per-block `vars` override the built-ins.
+ */
 const KindTokens: Record<string, readonly string[] | undefined> = {
 	time: ["time", "date", "tz"],
 	counter: ["messageCount", "turnCount", "sinceLastTool"],
@@ -82,7 +103,9 @@ const KindTokens: Record<string, readonly string[] | undefined> = {
 	note: [],
 };
 
-/** The per-kind variable view (a VIEW of the shared table - no recompute). */
+/**
+ * The per-kind variable view (a VIEW of the shared table - no recompute).
+ */
 const View = (Kind: string, Table_: Variables, Own: Record<string, string>): Variables => {
 	const Allowed = KindTokens[Kind];
 	const Vars: Variables = {};
@@ -98,8 +121,10 @@ const View = (Kind: string, Table_: Variables, Own: Record<string, string>): Var
 	return { ...Vars, ...Own };
 };
 
-/** Render one block to its frame, or null when the kind is not renderable
- * in phase 1 (the wave-2 kinds skip - reason "unknown kind"). */
+/**
+ * Render one block to its frame, or null when the kind is not renderable in phase 1 (the
+ * wave-2 kinds skip - reason "unknown kind").
+ */
 export const RenderBlock = (
 	Agent: State,
 	Block: BlockSpecification,
@@ -117,8 +142,10 @@ export const RenderBlock = (
 	return Frame(Agent.Separator, Block.id, Text);
 };
 
-/** Whether the block is stale (needs a re-render) under its trigger and the
- * section refresh policy. */
+/**
+ * Whether the block is stale (needs a re-render) under its trigger and the section
+ * refresh policy.
+ */
 const Stale = (Agent: State, Block: BlockSpecification, Scope: AgentState): boolean => {
 	const Cache = Scope.blocks.get(Block.id);
 	switch (Block.trigger) {
@@ -138,8 +165,10 @@ const Stale = (Agent: State, Block: BlockSpecification, Scope: AgentState): bool
 	}
 };
 
-/** The skip decision outside the render path (config-shaped, not state).
- * Only the phase-1 kinds render; the wave-2 kinds skip until C2's engine. */
+/**
+ * The skip decision outside the render path (config-shaped, not state). Only the phase-1
+ * kinds render; the wave-2 kinds skip until C2's engine.
+ */
 const SkipReason = (Block: BlockSpecification): string | null => {
 	switch (true) {
 		case !(RENDERED_KINDS as readonly string[]).includes(Block.kind):
@@ -153,8 +182,9 @@ const SkipReason = (Block: BlockSpecification): string | null => {
 	}
 };
 
-/** One skip, logged only when the reason changes (the ledger stays quiet on
- * steady state). */
+/**
+ * One skip, logged only when the reason changes (the ledger stays quiet on steady state).
+ */
 const Skip = (Scope: AgentState, ID: string, Reason: string, Append: Log): void => {
 	const Previous = Scope.skips.get(ID);
 	switch (Previous) {
@@ -166,9 +196,11 @@ const Skip = (Scope: AgentState, ID: string, Reason: string, Append: Log): void 
 	}
 };
 
-/** Build the section body for one assembly (research section 3: "the
- * system-prompt/assemble 'live section'"). Returns the body text, or ""
- * when nothing renders (Apply then appends NO section at all). */
+/**
+ * Build the section body for one assembly (research section 3: "the
+ * system-prompt/assemble 'live section'"). Returns the body text, or "" when nothing
+ * renders (Apply then appends NO section at all).
+ */
 export default (Agent: State, Scope: AgentState, Label: string, Append: Log): string => {
 	const At = Clock(Agent);
 	const Frames: (FrameRow | null)[] = [];
@@ -273,9 +305,11 @@ export default (Agent: State, Scope: AgentState, Label: string, Append: Log): st
 	}
 };
 
-/** The fresh-check the assemble listener runs BEFORE building (the global
- * cache hit: nothing is dirty, the TTL has not expired - return the cached
- * body unchanged, no ledger line). */
+/**
+ * The fresh-check the assemble listener runs BEFORE building (the global cache hit:
+ * nothing is dirty, the TTL has not expired - return the cached body unchanged, no ledger
+ * line).
+ */
 export const Cached = (Agent: State, Scope: AgentState): string | null => {
 	switch (Agent.Refresh) {
 		case "ttl":

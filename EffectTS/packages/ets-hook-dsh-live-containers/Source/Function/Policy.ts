@@ -1,55 +1,77 @@
-// Policy - the per-call detach decision engine (IMPLEMENTATION-DESIGN.md
-// sections 3.2, 5.1-5.2; Requirements/01 sections 5 + 12). Pure functions over
-// the plugin's own state - no I/O, no eval.
-//
-// THE COMMAND-ONLY DETACH RULE (I1 12.1, HARD): the transform detaches ONLY
-// the command-executing tools. The content-mutating family - write, edit,
-// raw-write, normalize-file - is PERMANENTLY NON-DETACHABLE, hardcoded here
-// and checked FIRST: rejected even when mode is "all" or the tool is listed in
-// selectedTools. Read-only observation tools are out of the default detach set
-// and may detach under "selected" only.
-//
-// THE EFFECTIVE-GATE ORDER (I2 section 3, binding):
-//   DETACH = TRANSFORM_ON
-//          AND NOT NON_DETACHABLE(tool)    (this file, checked FIRST)
-//          AND NOT AWAIT_MARKER(call)      (Detach.ts, after the class rule)
-//          AND NOT DEDUP_LIVE(agent, call) (Detach.ts)
-//          AND NOT ESCALATION(call)        (Detach.ts)
-//          AND POLICY_DECIDE(...)          (this file's guards, last)
-// This file owns the classification, the dedup key, the mode logic and the
-// guard rails (capacity, minLatencyMs, interactive, meta-budget). Detach.ts
-// owns the marker check and the waterfall branches.
-//
-// All time reads go through the State's clock seam (the smoke's fake clock).
+/**
+ * @module Policy
+ *
+ * Decides per call whether the command-runner transform may detach it.
+ *
+ * @remarks
+ * The per-call detach decision engine (IMPLEMENTATION-DESIGN.md sections 3.2, 5.1-5.2;
+ * Requirements/01 sections 5 + 12). Pure functions over the plugin's own state - no I/O,
+ * no eval.
+ *
+ * THE COMMAND-ONLY DETACH RULE (I1 12.1, HARD): the transform detaches ONLY the
+ * command-executing tools. The content-mutating family - write, edit, raw-write,
+ * normalize-file - is PERMANENTLY NON-DETACHABLE, hardcoded here and checked FIRST:
+ * rejected even when mode is "all" or the tool is listed in selectedTools. Read-only
+ * observation tools are out of the default detach set and may detach under "selected"
+ * only.
+ *
+ * THE EFFECTIVE-GATE ORDER (I2 section 3, binding):
+ *
+ * ```
+ * DETACH = TRANSFORM_ON
+ *        AND NOT NON_DETACHABLE(tool)    (this file, checked FIRST)
+ *        AND NOT AWAIT_MARKER(call)      (Detach.ts, after the class rule)
+ *        AND NOT DEDUP_LIVE(agent, call) (Detach.ts)
+ *        AND NOT ESCALATION(call)        (Detach.ts)
+ *        AND POLICY_DECIDE(...)          (this file's guards, last)
+ * ```
+ *
+ * This file owns the classification, the dedup key, the mode logic and the guard rails
+ * (capacity, minLatencyMs, interactive, meta-budget). Detach.ts owns the marker check and
+ * the waterfall branches.
+ *
+ * All time reads go through the State's clock seam (the smoke's fake clock).
+ */
 import Clock from "@Function/Clock.js";
 import type State from "@Interface/State.js";
 import type { DetachConfig } from "@Interface/State.js";
 
-/** The permanently non-detachable content-mutating family (I1 12.1, HARD -
- * hardcoded, never config; rejected even under "all" and "selected"). */
+/**
+ * The permanently non-detachable content-mutating family (I1 12.1, HARD - hardcoded,
+ * never config; rejected even under "all" and "selected").
+ */
 export const NON_DETACHABLE: readonly string[] = ["write", "edit", "raw-write", "normalize-file"];
 
-/** The command-runner family the transform wraps by default (I1 12.1: bash,
- * pwsh, and the family whose Exec is a spawned subprocess; this harness ships
- * the bash tool, so the base set is bash - selectedTools may add more). */
+/**
+ * The command-runner family the transform wraps by default (I1 12.1: bash, pwsh, and the
+ * family whose Exec is a spawned subprocess; this harness ships the bash tool, so the
+ * base set is bash - selectedTools may add more).
+ */
 export const COMMAND_RUNNERS: readonly string[] = ["bash"];
 
-/** The inline-deadline cap liveTimeoutMs must respect (the I1 12.2 rule keyed
- * on the bash executor's inline default). */
+/**
+ * The inline-deadline cap liveTimeoutMs must respect (the I1 12.2 rule keyed on the bash
+ * executor's inline default).
+ */
 export const INLINE_DEADLINE_MS = 120000;
 
-/** Whether the tool belongs to the permanently non-detachable family. */
+/**
+ * Whether the tool belongs to the permanently non-detachable family.
+ */
 export const IsNonDetachable = (Tool: string): boolean => NON_DETACHABLE.includes(Tool);
 
-/** Whether the tool is a command runner the producer can re-dispatch: the
- * hardcoded base family, or a tool the "selected" allowlist names (the
- * non-detachable family is rejected BEFORE this is ever consulted). */
+/**
+ * Whether the tool is a command runner the producer can re-dispatch: the hardcoded base
+ * family, or a tool the "selected" allowlist names (the non-detachable family is rejected
+ * BEFORE this is ever consulted).
+ */
 export const IsDetachableTool = (Tool: string, Detach: DetachConfig): boolean =>
 	COMMAND_RUNNERS.includes(Tool) || Detach.selectedTools.includes(Tool);
 
-/** The conservative interactive detector (01 section 9 edge case 2): a
- * command that reads from stdin without a redirected source cannot run in a
- * background ring - inline. */
+/**
+ * The conservative interactive detector (01 section 9 edge case 2): a command that reads
+ * from stdin without a redirected source cannot run in a background ring - inline.
+ */
 export const IsInteractive = (Command: string): boolean => {
 	const Text = Command.trim();
 	if (/(^|\||;|&&)\s*read\s/.test(Text)) {
@@ -67,9 +89,11 @@ export const IsInteractive = (Command: string): boolean => {
 	return false;
 };
 
-/** The dedup key (design section 5.2): (agent id, normalized command, resolved
- * workdir). Normalized = trim + collapse runs of whitespace + strip leading
- * `cd x && ` prefixes whose target equals the resolved workdir. */
+/**
+ * The dedup key (design section 5.2): (agent id, normalized command, resolved workdir).
+ * Normalized = trim + collapse runs of whitespace + strip leading `cd x && ` prefixes
+ * whose target equals the resolved workdir.
+ */
 export const DedupKey = (AgentID: string, Command: string, Workdir: string | undefined): string => {
 	let Normalized = Command.trim().replace(/\s+/g, " ");
 	if (Workdir !== undefined) {
@@ -85,17 +109,20 @@ export const DedupKey = (AgentID: string, Command: string, Workdir: string | und
 	return `${AgentID}\u0000${Normalized}\u0000${Workdir ?? ""}`;
 };
 
-/** The command prefix the long-running history keys on (the first two words:
- * `cargo build`, `npm install` - cheap and pure-observer). */
+/**
+ * The command prefix the long-running history keys on (the first two words: `cargo
+ * build`, `npm install` - cheap and pure-observer).
+ */
 export const CommandPrefix = (Command: string): string => {
 	const Words = Command.trim().replace(/\s+/g, " ").split(" ");
 	return Words.slice(0, 2).join(" ") || Command.trim();
 };
 
-/** Record one inline command's duration into the per-agent, per-prefix history
- * (the wave-2 observer feeding the long-running heuristic; an awaited call's
- * duration is recorded like any inline call - the I2 7.7 honesty rule, no
- * marker-based exclusion). */
+/**
+ * Record one inline command's duration into the per-agent, per-prefix history (the wave-2
+ * observer feeding the long-running heuristic; an awaited call's duration is recorded
+ * like any inline call - the I2 7.7 honesty rule, no marker-based exclusion).
+ */
 export const RecordDuration = (
 	Agent: State,
 	AgentID: string,
@@ -114,7 +141,9 @@ export const RecordDuration = (
 	Agent.History.set(AgentID, PerAgent);
 };
 
-/** The same-prefix history average (undefined when no history). */
+/**
+ * The same-prefix history average (undefined when no history).
+ */
 export const HistoryAverage = (
 	Agent: State,
 	AgentID: string,
@@ -127,13 +156,17 @@ export const HistoryAverage = (
 	return Series.reduce((Sum, Value) => Sum + Value, 0) / Series.length;
 };
 
-/** Whether the command matches any long-running marker (substring match on
- * the command line, the I1 heuristic's cheap shape). */
+/**
+ * Whether the command matches any long-running marker (substring match on the command
+ * line, the I1 heuristic's cheap shape).
+ */
 export const MatchesMarker = (Command: string, Markers: readonly string[]): boolean =>
 	Markers.some((Marker) => Marker.length > 0 && Command.includes(Marker));
 
-/** Whether the command matches any selected pattern (regex allowlist; a
- * malformed pattern matches nothing - fail-open). */
+/**
+ * Whether the command matches any selected pattern (regex allowlist; a malformed pattern
+ * matches nothing - fail-open).
+ */
 export const MatchesPattern = (Command: string, Patterns: readonly string[]): boolean =>
 	Patterns.some((Pattern) => {
 		try {
@@ -143,7 +176,9 @@ export const MatchesPattern = (Command: string, Patterns: readonly string[]): bo
 		}
 	});
 
-/** The per-agent live-job count for the admission guard. */
+/**
+ * The per-agent live-job count for the admission guard.
+ */
 export const LiveCount = (Agent: State, AgentID: string): number => {
 	const Records = Agent.Detached.get(AgentID);
 	if (Records === undefined) {
@@ -158,9 +193,11 @@ export const LiveCount = (Agent: State, AgentID: string): number => {
 	return Count;
 };
 
-/** The per-turn meta-budget bookkeeping (design section 6 scenario 7): the
- * meta-budget bounds the layer's automatic modifications - the detach
- * transform and the failsafe actions - per agent per turn. */
+/**
+ * The per-turn meta-budget bookkeeping (design section 6 scenario 7): the meta-budget
+ * bounds the layer's automatic modifications - the detach transform and the failsafe
+ * actions - per agent per turn.
+ */
 export const BudgetEntry = (
 	Agent: State,
 	AgentID: string,
@@ -175,25 +212,33 @@ export const BudgetEntry = (
 	return Fresh;
 };
 
-/** The per-agent failsafe meta-budget check: true when a modification may
- * proceed; false means pass-through for the rest of the turn. */
+/**
+ * The per-agent failsafe meta-budget check: true when a modification may proceed; false
+ * means pass-through for the rest of the turn.
+ */
 export const WithinBudget = (Agent: State, AgentID: string, Turn: number): boolean =>
 	BudgetEntry(Agent, AgentID, Turn).used < Agent.FailsafesPerTurn;
 
-/** Spend one unit of the meta-budget (call only after the action happened). */
+/**
+ * Spend one unit of the meta-budget (call only after the action happened).
+ */
 export const SpendBudget = (Agent: State, AgentID: string, Turn: number): void => {
 	BudgetEntry(Agent, AgentID, Turn).used += 1;
 };
 
-/** Whether the meta-budget just ran out (the one summary line per turn). */
+/**
+ * Whether the meta-budget just ran out (the one summary line per turn).
+ */
 export const BudgetExhausted = (Agent: State, AgentID: string, Turn: number): boolean => {
 	const Entry = Agent.MetadataBudget.get(AgentID);
 	return Entry !== undefined && Entry.turn === Turn && Entry.used >= Agent.FailsafesPerTurn;
 };
 
-/** The fail-loud config checks (design section 2.3): mode "all" FAILS LOUD at
- * load unless allRequiresConfirm is true; liveTimeoutMs is validated against
- * the composition contract. */
+/**
+ * The fail-loud config checks (design section 2.3): mode "all" FAILS LOUD at load unless
+ * allRequiresConfirm is true; liveTimeoutMs is validated against the composition
+ * contract.
+ */
 export const CheckDetachConfig = (Detach: DetachConfig): void => {
 	if (Detach.mode === "all" && !Detach.allRequiresConfirm) {
 		throw new Error(
@@ -207,8 +252,10 @@ export const CheckDetachConfig = (Detach: DetachConfig): void => {
 	}
 };
 
-/** The full policy decision for one unmarked command-runner call (design
- * section 3.2 step 6; every guard is a pass-through + ledger, never a deny). */
+/**
+ * The full policy decision for one unmarked command-runner call (design section 3.2 step
+ * 6; every guard is a pass-through + ledger, never a deny).
+ */
 export type Decision =
 	{ detach: true; reason: string } | { detach: false; reason: string; ledger: string };
 
@@ -268,6 +315,8 @@ export const Decide = (
 	}
 };
 
-/** The elapsed seconds a standing frame shows (clock-driven). */
+/**
+ * The elapsed seconds a standing frame shows (clock-driven).
+ */
 export const ElapsedSeconds = (Agent: State, From: number): number =>
 	Math.max(0, Math.round((Clock(Agent) - From) / 1000));

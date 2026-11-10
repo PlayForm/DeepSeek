@@ -1,20 +1,26 @@
-// Detach - the two-arm transform (G1, IMPLEMENTATION-DESIGN.md section 3.2;
-// Requirements/01 section 12). The pre-execute arm decides + starts the job +
-// tags the exec object; the execute arm, seeing the tag, returns the
-// fabricated canonical-value result WITHOUT calling next() - the bash body
-// never runs, and the pipeline renders a SUCCESSFUL (isError: false) tool
-// result whose text is exactly the marker.
-//
-// THE EFFECTIVE-GATE ORDER (I2 section 3, binding):
-//   non-detachable -> await marker -> dedup -> escalation -> policy guards
-// A marked call to a non-detachable tool is IGNORED with the I2 4.1 ledger
-// line (never refused); the marker check sits after the class rule and before
-// dedup/escalation/policy; Policy.Decide runs only for unmarked calls.
-//
-// THE FAIL-OPEN RULE (I1 12.2.2, HARD): every branch wrapped; on ANY internal
-// error the just-started job is killed (`marker-failed`), the tag is removed,
-// the ledger records `transform failed <tool> -> inline`, and the call runs
-// inline exactly as if the plugin were not mounted. The listener NEVER denies.
+/**
+ * @module Detach
+ *
+ * Transforms a marked command-runner call into a detached job and a fabricated marker
+ * result.
+ *
+ * @remarks
+ * The two-arm transform (G1, IMPLEMENTATION-DESIGN.md section 3.2; Requirements/01
+ * section 12). The pre-execute arm decides + starts the job + tags the exec object; the
+ * execute arm, seeing the tag, returns the fabricated canonical-value result WITHOUT
+ * calling next() - the bash body never runs, and the pipeline renders a SUCCESSFUL
+ * (isError: false) tool result whose text is exactly the marker.
+ *
+ * THE EFFECTIVE-GATE ORDER (I2 section 3, binding): non-detachable -> await marker ->
+ * dedup -> escalation -> policy guards. A marked call to a non-detachable tool is IGNORED
+ * with the I2 4.1 ledger line (never refused); the marker check sits after the class rule
+ * and before dedup/escalation/policy; Policy.Decide runs only for unmarked calls.
+ *
+ * THE FAIL-OPEN RULE (I1 12.2.2, HARD): every branch wrapped; on ANY internal error the
+ * just-started job is killed (`marker-failed`), the tag is removed, the ledger records
+ * `transform failed <tool> -> inline`, and the call runs inline exactly as if the plugin
+ * were not mounted. The listener NEVER denies.
+ */
 import type {
 	PreToolDecision,
 	ToolDispatchExecution,
@@ -28,24 +34,31 @@ import type { Log } from "@Function/Render.js";
 import type { DetachRecord, ShellSpecification, TagRecord } from "@Interface/Events.js";
 import type State from "@Interface/State.js";
 
-/** The inline marker (design section 4.1, byte-exact):
- * `[live] <job-id> running: <cmd-head> - output pending; proceed reasoning.` */
+/**
+ * The inline marker (design section 4.1, byte-exact): `[live] <job-id> running:
+ * <cmd-head> - output pending; proceed reasoning.`
+ */
 export const Marker = (JobID: string, CmdHead: string): string =>
 	`[live] ${JobID} running: ${CmdHead} - output pending; proceed reasoning.`;
 
-/** The dedup variant's second line (design section 4.1, byte-exact). */
+/**
+ * The dedup variant's second line (design section 4.1, byte-exact).
+ */
 export const AlreadyLine = (JobID: string): string =>
 	`[live] already running as ${JobID}; job_output ${JobID} to check.`;
 
-/** The retry-loop extension's line (design section 6 scenario 5, byte-exact). */
+/**
+ * The retry-loop extension's line (design section 6 scenario 5, byte-exact).
+ */
 export const RetryLine = (JobID: string, Attempt: number): string =>
 	`[live] already running as ${JobID} (${Attempt}rd attempt) - use job_output.`;
 
-/** The AWAIT-MARKER detection (I2 section 2): the FIRST-KEY test on the
- * arguments - `{"__await":true` - exactly like the normalize family's
- * first-key marker; no whitespace variants, no JSON re-parse. The parsed-
- * arguments path checks the literal FIRST key with the value exactly true
- * (insertion order); `{"__await":false` is NOT a marker. */
+/**
+ * The AWAIT-MARKER detection (I2 section 2): the FIRST-KEY test on the arguments -
+ * `{"__await":true` - exactly like the normalize family's first-key marker; no whitespace
+ * variants, no JSON re-parse. The parsed-arguments path checks the literal FIRST key with
+ * the value exactly true (insertion order); `{"__await":false` is NOT a marker.
+ */
 export const AwaitMarker = (Exec: ToolExecution): boolean => {
 	const Args = Exec.arguments;
 	if (typeof Args === "string") {
@@ -59,8 +72,10 @@ export const AwaitMarker = (Exec: ToolExecution): boolean => {
 	return false;
 };
 
-/** The escalation detection: the call carries sandbox_permissions (an
- * escalation request runs through the bash tool's own approval flow). */
+/**
+ * The escalation detection: the call carries sandbox_permissions (an escalation request
+ * runs through the bash tool's own approval flow).
+ */
 export const IsEscalation = (Exec: ToolExecution): boolean => {
 	const Args = (Exec.arguments ?? null) as Record<string, unknown> | null;
 	if (Args === null || typeof Args !== "object") {
@@ -69,29 +84,37 @@ export const IsEscalation = (Exec: ToolExecution): boolean => {
 	return typeof Args["sandbox_permissions"] === "string";
 };
 
-/** The command argument of a command-runner call. */
+/**
+ * The command argument of a command-runner call.
+ */
 const CommandOf = (Exec: ToolExecution): string => {
 	const Args = (Exec.arguments ?? {}) as Record<string, unknown>;
 	const Value = Args["command"];
 	return typeof Value === "string" ? Value : "";
 };
 
-/** Extract the timeout the fabricated result reports (the call's own
- * timeoutMs, or the configured liveTimeoutMs). */
+/**
+ * Extract the timeout the fabricated result reports (the call's own timeoutMs, or the
+ * configured liveTimeoutMs).
+ */
 const TimeoutOf = (Exec: ToolExecution, Fallback: number): number => {
 	const Args = (Exec.arguments ?? {}) as Record<string, unknown>;
 	const Value = Args["timeoutMs"];
 	return typeof Value === "number" && Number.isFinite(Value) && Value > 0 ? Value : Fallback;
 };
 
-/** The per-agent turn number the meta-budget keys on (the assemble-pass count
- * is the admission count; zero before the first assemble). */
+/**
+ * The per-agent turn number the meta-budget keys on (the assemble-pass count is the
+ * admission count; zero before the first assemble).
+ */
 const TurnOf = (Agent: State, AgentID: string): number => Agent.TurnCounts.get(AgentID) ?? 0;
 
-/** The fail-open unwind for the two arms: kill the half-started job, untag,
- * drop the record, ledger both lines. Never throws. `StartedJobID` is the
- * just-started job of the failing pass (the half-detached guard: a failure
- * between start and tag still kills the job). */
+/**
+ * The fail-open unwind for the two arms: kill the half-started job, untag, drop the
+ * record, ledger both lines. Never throws. `StartedJobID` is the just-started job of the
+ * failing pass (the half-detached guard: a failure between start and tag still kills the
+ * job).
+ */
 const Unwind = (
 	Agent: State,
 	Exec: ToolExecution,
@@ -125,10 +148,12 @@ const Unwind = (
 	}
 };
 
-/** L2 - tools/pre-execute (waterfall): next() FIRST, then decide. A pass-through
- * branch returns the downstream decision unchanged; a transform branch starts
- * the job, tags the exec, records the per-agent record, and returns the
- * downstream decision (allow) - the interception happens at the execute arm. */
+/**
+ * L2 - tools/pre-execute (waterfall): next() FIRST, then decide. A pass-through branch
+ * returns the downstream decision unchanged; a transform branch starts the job, tags the
+ * exec, records the per-agent record, and returns the downstream decision (allow) - the
+ * interception happens at the execute arm.
+ */
 export const PreExecute = async (
 	Agent: State,
 	Exec: ToolExecution,
@@ -305,10 +330,12 @@ export const PreExecute = async (
 	}
 };
 
-/** L3 - tools/execute (waterfall): next() is NOT called when the tag is
- * present - the fabricated result REPLACES the dispatch (the cordis waterfall
- * veto), validated and rendered through the bash tool's own output contract.
- * The tag lives for exactly one pipeline pass. */
+/**
+ * L3 - tools/execute (waterfall): next() is NOT called when the tag is present - the
+ * fabricated result REPLACES the dispatch (the cordis waterfall veto), validated and
+ * rendered through the bash tool's own output contract. The tag lives for exactly one
+ * pipeline pass.
+ */
 export const Execute = async (
 	Agent: State,
 	Exec: ToolDispatchExecution,
@@ -365,9 +392,11 @@ export const Execute = async (
 	}
 };
 
-/** The post-execute hook: record the inline command's duration for the
- * same-prefix history (the wave-2 observer; a detached call never reaches
- * post-execute because its body never ran - the transform's veto). */
+/**
+ * The post-execute hook: record the inline command's duration for the same-prefix history
+ * (the wave-2 observer; a detached call never reaches post-execute because its body never
+ * ran - the transform's veto).
+ */
 export const PostExecute = (
 	Agent: State,
 	Exec: { callId: string; name: string; arguments: unknown; agent?: { id?: string } | undefined },
@@ -390,8 +419,10 @@ export const PostExecute = (
 	Policy.RecordDuration(Agent, Exec.agent.id, Command, Math.max(0, Clock(Agent) - Started));
 };
 
-/** The start-time stamp for the duration observer (bounded: a long-lived
- * process without settlements cannot grow the map unboundedly). */
+/**
+ * The start-time stamp for the duration observer (bounded: a long-lived process without
+ * settlements cannot grow the map unboundedly).
+ */
 export const StampStart = (Agent: State, CallID: string): void => {
 	if (Agent.CallStarts.size > 256) {
 		Agent.CallStarts.clear();

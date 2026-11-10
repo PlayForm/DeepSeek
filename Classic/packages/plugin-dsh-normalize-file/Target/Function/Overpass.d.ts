@@ -29,7 +29,7 @@
  * bundle order; the core's marker guard makes any load order safe.
  */
 import type { PostToolDecision } from "@deepseek-ai/dsh-tools";
-import type State from "@Interface/State.js";
+import type State from "../Interface/State.js";
 /**
  * The schema-default scopes (the fallback for a hand-built config).
  */

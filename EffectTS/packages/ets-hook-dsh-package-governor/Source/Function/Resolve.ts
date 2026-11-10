@@ -1,12 +1,18 @@
-// Resolve — host-side update-policy path resolution. Order: the configured
-// global policyFile → the file's own directory → co-located with the
-// discovered registry → "" (the built-in default, handled inside the update
-// job when no policy file resolves).
-//
-// Exemption (documented): `existsSync` probes on auxiliary discovery files
-// only (update-policy.json sidecars) — part of the policy-discovery
-// calculation, same exemption as Function/Discover. The governed manifest is
-// never touched here.
+/**
+ * @module Resolve
+ *
+ * Resolves the host-side update-policy path.
+ *
+ * @remarks
+ * Order: the configured global policyFile -> the file's own directory ->
+ * co-located with the discovered registry -> "" (the built-in default, handled
+ * inside the update job when no policy file resolves).
+ *
+ * Exemption (documented): `existsSync` probes on auxiliary discovery files only
+ * (update-policy.json sidecars) - part of the policy-discovery calculation,
+ * same exemption as Function/Discover. The governed manifest is never touched
+ * here.
+ */
 import * as FileSystem from "node:fs";
 import { join as Join, dirname as Parent } from "node:path";
 

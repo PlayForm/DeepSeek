@@ -1,20 +1,30 @@
-// Match - does a judged call name one of a note's companions? The
-// follow-through's only lookup (completion spec 03-SUGGESTERS section 2: "a
-// named companion subsequently touched").
-//
-// The pack mixes three path bases (repo-relative, package-relative and
-// sibling globs), and a call path may be absolute or cwd-relative, so the
-// rules mirror the existence filter's and the search consumer's graph match:
-//
-//   * a literal companion matches an equal call path or one ENDING in
-//     `/<companion>` (the absolute form of a relative companion);
-//   * a `*/<rest>` glob matches a call path ending in `/<rest>` (any package);
-//   * any other glob is a segment-anchored regex (`**/` = any depth,
-//     `*` = one segment).
-/** Escape one literal glob segment for a RegExp. */
+/**
+ * @module Match
+ *
+ * Does a judged call name one of a note's companions? The follow-through's
+ * only lookup (completion spec 03-SUGGESTERS section 2: "a named companion
+ * subsequently touched").
+ *
+ * @remarks
+ * The pack mixes three path bases (repo-relative, package-relative and
+ * sibling globs), and a call path may be absolute or cwd-relative, so the
+ * rules mirror the existence filter's and the search consumer's graph match:
+ * - A literal companion matches an equal call path or one ENDING in
+ *   `/<companion>` (the absolute form of a relative companion).
+ * - A `*` then `/<rest>` glob matches a call path ending in `/<rest>` (any
+ *   package).
+ * - Any other glob is a segment-anchored regex (a double star then a slash =
+ *   any depth, `*` = one segment).
+ */
+
+/**
+ * Escape one literal glob segment for a RegExp.
+ */
 const Escape = (Text: string): string => Text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-/** A glob translated to a segment-anchored RegExp. */
+/**
+ * A glob translated to a segment-anchored RegExp.
+ */
 const Pattern = (Glob: string): RegExp => {
 	const Body = Glob.split("**/")
 		.map((Part) => Part.split("*").map(Escape).join("[^/]*"))

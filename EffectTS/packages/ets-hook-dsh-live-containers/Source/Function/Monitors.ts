@@ -1,19 +1,26 @@
-// Monitors - the live file monitor engine (the FILE-MONITOR design sections
-// 3-6). The fs/observed observer (L11), the checkpoint scan (the debounce,
-// the deadline, the slow schedule, the retirement - no real timers), the
-// check dispatch through the SHIPPED G2 wrapper (one wrapper, two callers),
-// the settle fold, the per-agent stanza part, and the enrollment bookkeeping.
-//
-// THE FAIL-OPEN ENVELOPE (the R3 point 7, hard): every listener path is
-// wrapped - never throws into the fs/observed dispatch, the jobs events or
-// the assemble waterfall; a dispatch start failure keeps the band's
-// last-known result and renders STALE (the version moved); a renderer
-// failure skips the stanza and logs.
-//
-// THE HONESTY CLUSTER (the R3 points 1/2/7, hard): a clean glyph renders
-// ONLY from an observed settle with exit 0 of the exact check set for the
-// exact version with provenance "live"; a settle-less version bump NEVER
-// renders clean; the linked-governance check never produces a verdict.
+/**
+ * @module Monitors
+ *
+ * Runs the live file monitor engine: observation, checkpoint scans, check dispatch, and
+ * the stanza part.
+ *
+ * @remarks
+ * The live file monitor engine (the FILE-MONITOR design sections 3-6). The fs/observed
+ * observer (L11), the checkpoint scan (the debounce, the deadline, the slow schedule, the
+ * retirement - no real timers), the check dispatch through the SHIPPED G2 wrapper (one
+ * wrapper, two callers), the settle fold, the per-agent stanza part, and the enrollment
+ * bookkeeping.
+ *
+ * THE FAIL-OPEN ENVELOPE (the R3 point 7, hard): every listener path is wrapped - never
+ * throws into the fs/observed dispatch, the jobs events or the assemble waterfall; a
+ * dispatch start failure keeps the band's last-known result and renders STALE (the
+ * version moved); a renderer failure skips the stanza and logs.
+ *
+ * THE HONESTY CLUSTER (the R3 points 1/2/7, hard): a clean glyph renders ONLY from an
+ * observed settle with exit 0 of the exact check set for the exact version with
+ * provenance "live"; a settle-less version bump NEVER renders clean; the
+ * linked-governance check never produces a verdict.
+ */
 import { basename as Base, dirname as Parent } from "node:path";
 
 import * as Band from "@Function/Band.js";
@@ -31,30 +38,39 @@ import type {
 } from "@Interface/Events.js";
 import type State from "@Interface/State.js";
 
-/** The structural fs/observed types (the factory's Wire signature, verified
- * against @deepseek-ai/dsh-fs; kept minimal - only the fields this module
- * reads). */
+/**
+ * The structural fs/observed types (the factory's Wire signature, verified against
+ * @deepseek-ai/dsh-fs; kept minimal - only the fields this module reads).
+ */
 export type FsTarget = { displayPath?: unknown; targetKey?: unknown } | undefined;
 export type FSObservation = { kind?: unknown; version?: unknown } | undefined;
 
-/** The checkpoint phases: "event" runs the debounce dispatch and the
- * deadline scan; "assemble" adds the slow schedule and the retirement scan. */
+/**
+ * The checkpoint phases: "event" runs the debounce dispatch and the deadline scan;
+ * "assemble" adds the slow schedule and the retirement scan.
+ */
 export type Phase = "event" | "assemble";
 
-/** The writer display of an actor: the writing exec's agent id, "-" when absent. */
+/**
+ * The writer display of an actor: the writing exec's agent id, "-" when absent.
+ */
 const WriterOf = (Actor: object | undefined): string => {
 	const ID = (Actor as { agent?: { id?: unknown } | undefined } | undefined)?.agent?.id;
 	return typeof ID === "string" && ID.length > 0 ? ID : "-";
 };
 
-/** The owning agent of an observed write: the writing exec's agent id, or
- * the phase-1 unowned label. */
+/**
+ * The owning agent of an observed write: the writing exec's agent id, or the phase-1
+ * unowned label.
+ */
 const AgentOf = (Actor: object | undefined): string => {
 	const ID = (Actor as { agent?: { id?: unknown } | undefined } | undefined)?.agent?.id;
 	return typeof ID === "string" && ID.length > 0 ? ID : "(unowned)";
 };
 
-/** Enroll (or refresh) one file in an agent's monitor set. Returns the entry. */
+/**
+ * Enroll (or refresh) one file in an agent's monitor set. Returns the entry.
+ */
 export const Enroll = (
 	State: State,
 	AgentID: string,
@@ -108,9 +124,11 @@ export const Enroll = (
 	return Entry;
 };
 
-/** L11 - the fs/observed observer (registered through the factory's Wire on
- * the ROOT context, so every write the harness emits is heard). Pure
- * observer, fail-open, NEVER throws into the dispatch. */
+/**
+ * L11 - the fs/observed observer (registered through the factory's Wire on the ROOT
+ * context, so every write the harness emits is heard). Pure observer, fail-open, NEVER
+ * throws into the dispatch.
+ */
 export const OnObserved = (
 	State: State,
 	Target: FsTarget,
@@ -197,9 +215,11 @@ export const OnObserved = (
 	}
 };
 
-/** Substitute the command template's tokens (the Render.ts-style replace
- * ONLY, no eval): {{path}}, {{basename}}, {{dir}}; an unresolved token
- * renders literally and logs `render unknown <setId> <token>`. */
+/**
+ * Substitute the command template's tokens (the Render.ts-style replace ONLY, no eval):
+ * {{path}}, {{basename}}, {{dir}}; an unresolved token renders literally and logs `render
+ * unknown <setId> <token>`.
+ */
 const Substitute = (Template: string, Path: string, SetID: string, Append: Log): string => {
 	const Unknown = new Set<string>();
 	const Out = Template.replace(/\{\{([^{}]+)\}\}/g, (Whole, Name: string) => {
@@ -221,8 +241,10 @@ const Substitute = (Template: string, Path: string, SetID: string, Append: Log):
 	return Out;
 };
 
-/** An empty tail stub for the in-flight reservation record (the placeholder
- * never settles and is replaced or removed before any render reads it). */
+/**
+ * An empty tail stub for the in-flight reservation record (the placeholder never settles
+ * and is replaced or removed before any render reads it).
+ */
 const EmptyTail = (): TailBuffer => ({
 	Stdout: "",
 	Stderr: "",
@@ -230,13 +252,14 @@ const EmptyTail = (): TailBuffer => ({
 	Render: () => "",
 });
 
-/** Dispatch one check job through the SHIPPED G2 wrapper (the R3 brief
- * point 6's "one wrapper, two callers" is literal - NO second execution
- * path). Returns the job id, or undefined when the start failed (the
- * fail-open envelope: the pending record stays dropped, the band keeps its
- * last-known result and renders STALE at the next request). The dispatch
- * RESERVES one admission slot for the in-flight start (the async gap would
- * otherwise let every pending set pass the admission check at once). */
+/**
+ * Dispatch one check job through the SHIPPED G2 wrapper (the R3 brief point 6's "one
+ * wrapper, two callers" is literal - NO second execution path). Returns the job id, or
+ * undefined when the start failed (the fail-open envelope: the pending record stays
+ * dropped, the band keeps its last-known result and renders STALE at the next request).
+ * The dispatch RESERVES one admission slot for the in-flight start (the async gap would
+ * otherwise let every pending set pass the admission check at once).
+ */
 export const Dispatch = async (
 	State: State,
 	AgentID: string,
@@ -303,12 +326,16 @@ export const Dispatch = async (
 	return Started.jobId;
 };
 
-/** The job label: the first 80 bytes (the design's label cap). */
+/**
+ * The job label: the first 80 bytes (the design's label cap).
+ */
 const Label = (Text: string): string => (Text.length > 80 ? Text.slice(0, 80) : Text);
 
-/** The checkpoint scan (called at every checkpoint, fail-open): the deadline
- * scan at every phase; the debounce dispatch at every phase; the slow
- * schedule and the retirement scan at the assemble phase only. */
+/**
+ * The checkpoint scan (called at every checkpoint, fail-open): the deadline scan at every
+ * phase; the debounce dispatch at every phase; the slow schedule and the retirement scan
+ * at the assemble phase only.
+ */
 export const Scan = (State: State, Append: Log, Phase: Phase): void => {
 	try {
 		if (!State.On || State.MonitorOn !== "on") {
@@ -420,9 +447,10 @@ export const Scan = (State: State, Append: Log, Phase: Phase): void => {
 	}
 };
 
-/** The L6 settle fold (runs BEFORE Board.OnSettled - the monitors claim
- * their jobs first). Only the plugin's own registry is folded; the record
- * is deleted after the fold. */
+/**
+ * The L6 settle fold (runs BEFORE Board.OnSettled - the monitors claim their jobs first).
+ * Only the plugin's own registry is folded; the record is deleted after the fold.
+ */
 export const OnSettled = (State: State, Event: unknown, Append: Log): void => {
 	try {
 		const Settled = Event as
@@ -510,9 +538,11 @@ export const OnSettled = (State: State, Event: unknown, Append: Log): void => {
 	}
 };
 
-/** The monitors-board fold (the design section 8, channel a): a member's
- * monitor settle feeds every monitors board whose members include the owner
- * - the row is the monitored file. */
+/**
+ * The monitors-board fold (the design section 8, channel a): a member's monitor settle
+ * feeds every monitors board whose members include the owner - the row is the monitored
+ * file.
+ */
 const FoldBoards = (
 	State: State,
 	Record: { agentId: string; path: string },
@@ -547,11 +577,12 @@ const FoldBoards = (
 	}
 };
 
-/** The standing-section contribution for one agent: ONE part - the whole
- * monitors stanza (header + summary band first + the band frames, the
- * overflow collapsed lines and the retirement closing lines). Returns []
- * when nothing renders (the section body is then byte-identical with the
- * wave-2 behavior). */
+/**
+ * The standing-section contribution for one agent: ONE part - the whole monitors stanza
+ * (header + summary band first + the band frames, the overflow collapsed lines and the
+ * retirement closing lines). Returns [] when nothing renders (the section body is then
+ * byte-identical with the wave-2 behavior).
+ */
 export const SectionParts = (
 	State: State,
 	AgentID: string,

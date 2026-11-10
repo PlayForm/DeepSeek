@@ -11,6 +11,6 @@
  * absent bands render the `(none)` placeholder - the grammar is always
  * COMPLETE, never partially omitted. Pure: PacketView in, text out.
  */
-import type { PacketView } from "@Interface/Packet.js";
+import type { PacketView } from "../Interface/Packet.js";
 export default _default;
 declare function _default(View: PacketView): string;

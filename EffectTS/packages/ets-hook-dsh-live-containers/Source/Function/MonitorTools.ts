@@ -1,15 +1,19 @@
-// MonitorTools - the two monitor tool surfaces (the FILE-MONITOR design
-// section 9; the Plant.ts defineTool idiom). Read-only semantics, never a
-// write path: the tools enroll, list, opt out and dispatch checks - they
-// never gate or deny an edit and never touch file content.
-//
-//   live_monitor        - enroll a path (the effective classification), the
-//                         per-glob opt-out, the list of enrolled files, and
-//                         the parent-into-child target agent;
-//   live_monitor_check  - the deep check: the full check set once, bypassing
-//                         the debounce, admission-guarded; the model reads
-//                         the full ring via job_output (the job id is in the
-//                         output text).
+/**
+ * @module MonitorTools
+ *
+ * Builds the two monitor tool surfaces: enrollment/listing and the deep check.
+ *
+ * @remarks
+ * The two monitor tool surfaces (the FILE-MONITOR design section 9; the Plant.ts
+ * defineTool idiom). Read-only semantics, never a write path: the tools enroll, list, opt
+ * out and dispatch checks - they never gate or deny an edit and never touch file content.
+ *
+ * - `live_monitor` - enroll a path (the effective classification), the per-glob opt-out,
+ *   the list of enrolled files, and the parent-into-child target agent;
+ * - `live_monitor_check` - the deep check: the full check set once, bypassing the
+ *   debounce, admission-guarded; the model reads the full ring via job_output (the job id
+ *   is in the output text).
+ */
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import * as Band from "@Function/Band.js";
 import Clock from "@Function/Clock.js";
@@ -19,13 +23,17 @@ import * as Storage from "@Function/Storage.js";
 import * as Watchlist from "@Function/Watchlist.js";
 import type State from "@Interface/State.js";
 
-/** The caller's agent id from the exec. */
+/**
+ * The caller's agent id from the exec.
+ */
 const CallerOf = (Exec: unknown): string => {
 	const ID = (Exec as { agent?: { id?: unknown } | undefined } | undefined)?.agent?.id;
 	return typeof ID === "string" && ID.length > 0 ? ID : "";
 };
 
-/** Build the live_monitor tool definition. */
+/**
+ * Build the live_monitor tool definition.
+ */
 export const Monitor = (Agent: State, Append: Log) =>
 	defineTool({
 		name: "live_monitor",
@@ -160,7 +168,9 @@ export const Monitor = (Agent: State, Append: Log) =>
 		},
 	});
 
-/** Build the live_monitor_check tool definition. */
+/**
+ * Build the live_monitor_check tool definition.
+ */
 export const Check = (Agent: State, Append: Log) =>
 	defineTool({
 		name: "live_monitor_check",

@@ -1,44 +1,62 @@
-// Band - the byte-exact renderer of the monitor stanza (the FILE-MONITOR
-// design section 6 - the C3 implements to these bytes). Pure functions over
-// the per-agent monitor state; no I/O, no eval.
-//
-// THE GLYPHS: U+2204 THERE DOES NOT EXIST (clean) and U+2205 EMPTY SET
-// (not-run-yet) are written in source as the escaped forms - the family's
-// escape discipline - and rendered as the characters. `!` problem, `~`
-// stale, `x` infrastructure.
-//
-// THE KV-CACHE HONESTY: no relative ages anywhere in the stanza - the check
-// time is HH:MM:SS and the staleness is derived per render from the raw
-// version tokens, so the text changes only on the events of the design
-// section 5.2 set (the retirement closing line is the one documented
-// exception - a terminal one-time change).
+/**
+ * @module Band
+ *
+ * Renders the monitor stanza's bands byte-exactly from the per-agent monitor state.
+ *
+ * @remarks
+ * The byte-exact renderer of the monitor stanza (the FILE-MONITOR design section 6 - the
+ * C3 implements to these bytes). Pure functions over the per-agent monitor state; no I/O,
+ * no eval.
+ *
+ * THE GLYPHS: U+2204 THERE DOES NOT EXIST (clean) and U+2205 EMPTY SET (not-run-yet) are
+ * written in source as the escaped forms - the family's escape discipline - and rendered
+ * as the characters. `!` problem, `~` stale, `x` infrastructure.
+ *
+ * THE KV-CACHE HONESTY: no relative ages anywhere in the stanza - the check time is
+ * HH:MM:SS and the staleness is derived per render from the raw version tokens, so the
+ * text changes only on the events of the design section 5.2 set (the retirement closing
+ * line is the one documented exception - a terminal one-time change).
+ */
 import { StartedAt as JobsStartedAt } from "@Function/Jobs.js";
 import type { CheckResult, MonitorEntry } from "@Interface/Events.js";
 import type State from "@Interface/State.js";
 
-/** The clean glyph: U+2204 THERE DOES NOT EXIST (the escaped source form). */
+/**
+ * The clean glyph: U+2204 THERE DOES NOT EXIST (the escaped source form).
+ */
 const CLEAN = "\u2204";
-/** The not-run-yet glyph: U+2205 EMPTY SET (the escaped source form). */
+/**
+ * The not-run-yet glyph: U+2205 EMPTY SET (the escaped source form).
+ */
 const EMPTY = "\u2205";
 
-/** The bytes of one string. */
+/**
+ * The bytes of one string.
+ */
 export const Bytes = (Text: string): number => Buffer.byteLength(Text, "utf8");
 
-/** The version display: the raw token verbatim when <= 12 bytes, else the
- * first 12 bytes + "..". The staleness comparison ALWAYS uses the raw
- * tokens - this is display only. */
+/**
+ * The version display: the raw token verbatim when <= 12 bytes, else the first 12 bytes
+ * + "..". The staleness comparison ALWAYS uses the raw tokens - this is display only.
+ */
 export const VersionDisplay = (Version: string): string =>
 	Version.length <= 12 ? Version : `${Version.slice(0, 12)}..`;
 
-/** The writer display: "-" when absent. */
+/**
+ * The writer display: "-" when absent.
+ */
 export const Writer = (Writer: string | undefined): string =>
 	typeof Writer === "string" && Writer.length > 0 ? Writer : "-";
 
-/** One result's state (the worst-state order: stale > problem > infra >
- * clean > not-run-yet). */
+/**
+ * One result's state (the worst-state order: stale > problem > infra > clean >
+ * not-run-yet).
+ */
 export type ResultState = "stale" | "problem" | "infra" | "clean" | "not-run";
 
-/** The state rank (higher = worse; not-run is the weakest). */
+/**
+ * The state rank (higher = worse; not-run is the weakest).
+ */
 const RANK: Record<ResultState, number> = {
 	stale: 4,
 	problem: 3,
@@ -47,8 +65,10 @@ const RANK: Record<ResultState, number> = {
 	"not-run": 0,
 };
 
-/** The outcome part of a result line (the glyph phrase; the `(recovered)`
- * marker rides the outcome text - design section 6.2). */
+/**
+ * The outcome part of a result line (the glyph phrase; the `(recovered)` marker rides the
+ * outcome text - design section 6.2).
+ */
 const OutcomePart = (Result: CheckResult): string => {
 	const Recovered = Result.provenance === "recovered" ? " (recovered)" : "";
 	if (Result.infra === "sandbox") {
@@ -63,7 +83,9 @@ const OutcomePart = (Result: CheckResult): string => {
 	return `clean (${CLEAN})${Recovered}`;
 };
 
-/** The facts part of a result line (the checked/exit details). */
+/**
+ * The facts part of a result line (the checked/exit details).
+ */
 const FactsPart = (Result: CheckResult): string => {
 	const Base = `checked ${JobsStartedAt(Result.ranAt)} v${VersionDisplay(Result.checkedVersion)} by ${Writer(Result.writer)}`;
 	if (Result.infra === "sandbox") {
@@ -75,7 +97,9 @@ const FactsPart = (Result: CheckResult): string => {
 	return `${Base} | exit ${Result.exit === null ? "null" : Result.exit}`;
 };
 
-/** The state of one result (stale is decided by the caller). */
+/**
+ * The state of one result (stale is decided by the caller).
+ */
 const StateOf = (Result: CheckResult): ResultState => {
 	if (Result.infra !== null) {
 		return "infra";
@@ -86,16 +110,18 @@ const StateOf = (Result: CheckResult): ResultState => {
 	return "clean";
 };
 
-/** One line of the band frame, with the set it came from (undefined for the
- * linked and not-run lines) and its state. Forms (design section 6.2,
- * byte-exact):
+/**
+ * One line of the band frame, with the set it came from (undefined for the linked and
+ * not-run lines) and its state. Forms (design section 6.2, byte-exact):
  *
- *   live, fresh:           <outcome> | <facts>
- *   live, version-stale:   ~ STALE (file changed after check) | <outcome> | <facts> | now v<current>
- *   recovered, fresh:      <outcome> | <facts> | not re-checked this session
- *   recovered, time-stale: ~ STALE (not re-checked this session) | <facts>
- *   recovered, version-stale:
- *                          ~ STALE (file changed after check) | <outcome> | <facts> | now v<current>
+ * ```
+ * live, fresh:           <outcome> | <facts>
+ * live, version-stale:   ~ STALE (file changed after check) | <outcome> | <facts> | now v<current>
+ * recovered, fresh:      <outcome> | <facts> | not re-checked this session
+ * recovered, time-stale: ~ STALE (not re-checked this session) | <facts>
+ * recovered, version-stale:
+ *                        ~ STALE (file changed after check) | <outcome> | <facts> | now v<current>
+ * ```
  */
 export const ResultLine = (
 	State: State,
@@ -126,23 +152,31 @@ export const ResultLine = (
 	return { text: `${Outcome} | ${Facts}`, state: StateOf(Result) };
 };
 
-/** The linked-governance line for a check set that is linked and never runs
- * (design section 6.1 - never a fabricated governance verdict). The observed
- * facts come from the entry's own version truth. */
+/**
+ * The linked-governance line for a check set that is linked and never runs (design
+ * section 6.1 - never a fabricated governance verdict). The observed facts come from the
+ * entry's own version truth.
+ */
 export const LinkedLine = (Entry: MonitorEntry): string =>
 	`${EMPTY} (linked governance; no re-run) | observed v${VersionDisplay(Entry.lastVersion ?? "")} by ${Writer(Entry.lastWriter)} at ${JobsStartedAt(Entry.lastObservedAt ?? Entry.enrolledAt)}`;
 
-/** The not-run-yet line for a check set that has never run (design section
- * 6.1). `WithNoChecks` appends the honest `checks: none` clause. */
+/**
+ * The not-run-yet line for a check set that has never run (design section 6.1).
+ * `WithNoChecks` appends the honest `checks: none` clause.
+ */
 export const NotRunLine = (Entry: MonitorEntry, WithNoChecks: boolean): string =>
 	`not run yet (${EMPTY}?) | enrolled ${JobsStartedAt(Entry.enrolledAt)} by ${Writer(Entry.lastWriter)}${WithNoChecks ? " | checks: none" : ""}`;
 
-/** One assembled line of the band body. */
+/**
+ * One assembled line of the band body.
+ */
 type BodyLine = { set: string | undefined; text: string; state: ResultState };
 
-/** The band body lines for one entry: one per check set - a linked set the
- * linked form, a set with a result the result line, a set with no result the
- * not-run-yet form - plus the `checks: none` line for an entry with no sets. */
+/**
+ * The band body lines for one entry: one per check set - a linked set the linked form, a
+ * set with a result the result line, a set with no result the not-run-yet form - plus
+ * the `checks: none` line for an entry with no sets.
+ */
 const Body = (State: State, Entry: MonitorEntry, Now: number): BodyLine[] => {
 	const ByID = new Map<string, CheckResult>();
 	for (const Result of Entry.checks) {
@@ -168,7 +202,9 @@ const Body = (State: State, Entry: MonitorEntry, Now: number): BodyLine[] => {
 	return Lines;
 };
 
-/** The band frame's parts without the cap decisions. */
+/**
+ * The band frame's parts without the cap decisions.
+ */
 const Parts = (
 	Entry: MonitorEntry,
 	Separator: string,
@@ -181,18 +217,18 @@ const Parts = (
 	`${Separator} END MONITOR ${Entry.path} ${Separator}`,
 ];
 
-/** One band frame for one entry (design section 6.1). The primary
- * (worst-state) line first; ties keep the set order. The tail block rides
- * only when the primary line carries a problem outcome (a non-zero exit - a
- * stale wrapping a problem keeps the tail). Honesty bound: a clean glyph
- * renders ONLY from an observed settle with exit 0 of the exact check set
- * for the exact version with provenance "live" - a settle-less version bump
- * renders STALE (the false-pass guard).
+/**
+ * One band frame for one entry (design section 6.1). The primary (worst-state) line
+ * first; ties keep the set order. The tail block rides only when the primary line
+ * carries a problem outcome (a non-zero exit - a stale wrapping a problem keeps the
+ * tail). Honesty bound: a clean glyph renders ONLY from an observed settle with exit 0 of
+ * the exact check set for the exact version with provenance "live" - a settle-less
+ * version bump renders STALE (the false-pass guard).
  *
- * The band cap: the composer truncates the tail first (it is already
- * 2 KiB-capped), then the oldest (lowest-priority) set lines, to fit
- * `State.Monitor.bandCapBytes`; never silently dropped - the caller records
- * the cut. */
+ * The band cap: the composer truncates the tail first (it is already 2 KiB-capped), then
+ * the oldest (lowest-priority) set lines, to fit `State.Monitor.bandCapBytes`; never
+ * silently dropped - the caller records the cut.
+ */
 export const Frame = (
 	State: State,
 	Entry: MonitorEntry,
@@ -238,7 +274,9 @@ export const Frame = (
 	return { frame: Parts(Entry, Separator, Texts, Tail).join("\n"), truncated: Truncated };
 };
 
-/** The full-frame byte count of an entry (the collapsed line's value). */
+/**
+ * The full-frame byte count of an entry (the collapsed line's value).
+ */
 const FullFrameBytes = (
 	State: State,
 	Entry: MonitorEntry,
@@ -254,13 +292,17 @@ const FullFrameBytes = (
 		).join("\n"),
 	);
 
-/** The retirement closing line (design section 6.1; rendered once, then the
- * band withdraws). */
+/**
+ * The retirement closing line (design section 6.1; rendered once, then the band
+ * withdraws).
+ */
 export const Closing = (Entry: MonitorEntry, Separator: string, Now: number): string =>
 	`${Separator} MONITOR ${Entry.path} (retired; not touched for ${Math.max(0, Math.round((Now - (Entry.lastObservedAt ?? Entry.enrolledAt)) / 1000))}s) ${Separator}`;
 
-/** The overflow collapsed form (design section 6.1; one line per overflowed
- * file - never silently dropped). */
+/**
+ * The overflow collapsed form (design section 6.1; one line per overflowed file - never
+ * silently dropped).
+ */
 export const Collapsed = (
 	State: State,
 	Entry: MonitorEntry,
@@ -269,9 +311,10 @@ export const Collapsed = (
 ): string =>
 	`${Separator} MONITOR ${Entry.path} (collapsed, ${FullFrameBytes(State, Entry, Separator, Now)} bytes) ${Separator}`;
 
-/** The primary state of one entry (the worst across its check sets; an
- * entry with no results is not-run). Used by the summary band and the
- * live_monitor list. */
+/**
+ * The primary state of one entry (the worst across its check sets; an entry with no
+ * results is not-run). Used by the summary band and the live_monitor list.
+ */
 export const PrimaryState = (State: State, Entry: MonitorEntry, Now: number): ResultState => {
 	let Worst: ResultState = "not-run";
 	for (const Line of Body(State, Entry, Now)) {
@@ -282,9 +325,10 @@ export const PrimaryState = (State: State, Entry: MonitorEntry, Now: number): Re
 	return Worst;
 };
 
-/** The primary line's text of one entry (the live_monitor list's one-liner):
- * the primary (worst-state) line's text, or the not-run-yet form when no
- * set ever ran. */
+/**
+ * The primary line's text of one entry (the live_monitor list's one-liner): the primary
+ * (worst-state) line's text, or the not-run-yet form when no set ever ran.
+ */
 export const PrimaryText = (State: State, Entry: MonitorEntry, Now: number): string => {
 	const Lines = Body(State, Entry, Now);
 	let Best: BodyLine | undefined;
@@ -296,9 +340,10 @@ export const PrimaryText = (State: State, Entry: MonitorEntry, Now: number): str
 	return Best !== undefined ? Best.text : NotRunLine(Entry, Entry.sets.length === 0);
 };
 
-/** The primary glyph character of one entry (the summary band's source):
- * the stale state dominates, then problem, then infra, then clean, then
- * not-run-yet. */
+/**
+ * The primary glyph character of one entry (the summary band's source): the stale state
+ * dominates, then problem, then infra, then clean, then not-run-yet.
+ */
 export const PrimaryGlyph = (State: State, Entry: MonitorEntry, Now: number): string => {
 	switch (PrimaryState(State, Entry, Now)) {
 		case "stale":
@@ -314,11 +359,12 @@ export const PrimaryGlyph = (State: State, Entry: MonitorEntry, Now: number): st
 	}
 };
 
-/** The summary band (design section 6.1; pinned - the R3 example's counts
- * were internally loose, this form is self-consistent and the smoke asserts
- * the sum). Each enrolled file contributes its primary glyph; `<total>` =
- * clean + problem + stale + not-run + infra; the trailing phrase's four
- * counts mirror the parenthetical's. */
+/**
+ * The summary band (design section 6.1; pinned - the R3 example's counts were internally
+ * loose, this form is self-consistent and the smoke asserts the sum). Each enrolled file
+ * contributes its primary glyph; `<total>` = clean + problem + stale + not-run + infra;
+ * the trailing phrase's four counts mirror the parenthetical's.
+ */
 export const Summary = (State: State, Entries: MonitorEntry[], Now: number): string => {
 	let Clean = 0;
 	let Problem = 0;
@@ -347,9 +393,10 @@ export const Summary = (State: State, Entries: MonitorEntry[], Now: number): str
 	return `monitors: ${Entries.length} (${CLEAN}${Clean} !${Problem} ~${Stale} ${EMPTY}${NotRun} x${Infra}) - ${Problem} problem, ${Stale} stale, ${NotRun} not run, ${Infra} infra`;
 };
 
-/** The monitors stanza (design section 6.1; ONE part - header + summary band
- * FIRST + the band frames, the overflow collapsed lines and the retirement
- * closing lines). */
+/**
+ * The monitors stanza (design section 6.1; ONE part - header + summary band FIRST + the
+ * band frames, the overflow collapsed lines and the retirement closing lines).
+ */
 export const Stanza = (Separator: string, SummaryLine: string, Frames: string[]): string =>
 	[
 		`${Separator} MONITORS (file checks; not harness state) ${Separator}`,
@@ -358,8 +405,10 @@ export const Stanza = (Separator: string, SummaryLine: string, Frames: string[])
 		`${Separator} END MONITORS ${Separator}`,
 	].join("\n");
 
-/** The outcome text for one settled result (the monitors board row and the
- * `[live-report] monitored` fold: the file's outcome text, `clean (∄)` etc.). */
+/**
+ * The outcome text for one settled result (the monitors board row and the
+ * `[live-report] monitored` fold: the file's outcome text, `clean (∄)` etc.).
+ */
 export const OutcomeText = (Result: CheckResult): string => {
 	if (Result.infra === "sandbox") {
 		return "check denied (sandbox) (x)";

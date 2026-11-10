@@ -10,5 +10,3 @@
 const Version: string = process.env["VERSION_PACKAGE"] ?? "0.0.0";
 
 export default Version;
-
-export default Version;

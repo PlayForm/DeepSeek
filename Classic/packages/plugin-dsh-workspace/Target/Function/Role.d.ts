@@ -1,4 +1,4 @@
-import type { WorkspaceGraph } from "@Interface/Graph.js";
+import type { WorkspaceGraph } from "../Interface/Graph.js";
 export default _default;
 /**
  * @module Role
